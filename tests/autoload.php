@@ -8,11 +8,14 @@ spl_autoload_register(
         if ($classes === null) {
             $classes = array(
                 'brera\\poc\\edgetoedgetest' => '/Integration/EdgeToEdgeTest.php',
+                'brera\\poc\\httpsurltest' => '/Unit/HttpsUrlTest.php',
+                'brera\\poc\\httptest' => '/Unit/HttpUrlTest.php',
                 'brera\\poc\\inmemorydomaineventqueuetest' => '/Unit/InMemoryDomainEventQueueTest.php',
                 'brera\\poc\\inmemoryproductrepositorytest' => '/Unit/InMemoryProductRepositoryTest.php',
                 'brera\\poc\\productidtest' => '/Unit/ProductIdTest.php',
                 'brera\\poc\\producttest' => '/Unit/ProductTest.php',
-                'brera\\poc\\skustub' => '/Integration/stubs/SkuStub.php'
+                'brera\\poc\\skustub' => '/Integration/stubs/SkuStub.php',
+                'brera\\poc\\urltest' => '/Unit/UrlTest.php'
             );
         }
         $cn = strtolower($class);
