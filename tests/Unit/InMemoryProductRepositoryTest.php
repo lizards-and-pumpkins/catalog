@@ -6,7 +6,8 @@ namespace Brera\PoC;
 /**
  * Class InMemoryProductRepositoryTest
  * @package Brera\PoC
- * @covers InMemoryProductRepository
+ * @covers \Brera\PoC\InMemoryProductRepository
+ * @uses \Brera\PoC\Product
  */
 class InMemoryProductRepositoryTest extends \PHPUnit_Framework_TestCase
 {
