@@ -12,6 +12,7 @@ spl_autoload_register(
                 'brera\\poc\\httptest' => '/Unit/HttpUrlTest.php',
                 'brera\\poc\\inmemorydomaineventqueuetest' => '/Unit/InMemoryDomainEventQueueTest.php',
                 'brera\\poc\\inmemoryproductrepositorytest' => '/Unit/InMemoryProductRepositoryTest.php',
+                'brera\\poc\\keyvaluestorekeygeneratortest' => '/KeyValueStoreKeyGeneratorTest.php',
                 'brera\\poc\\productidtest' => '/Unit/ProductIdTest.php',
                 'brera\\poc\\producttest' => '/Unit/ProductTest.php',
                 'brera\\poc\\skustub' => '/Integration/stubs/SkuStub.php',
