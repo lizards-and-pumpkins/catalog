@@ -39,9 +39,8 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
      */
     public function pageRequestShouldDisplayAProduct()
     {
-        /** @var HttpUrl $url */
-        $url = Url::fromString('http://example.com/seo-url');
-        $request = HttpRequest::fromParameters('GET', $url);
+        $httpUrl = Url::fromString('http://example.com/seo-url');
+        $request = HttpRequest::fromParameters('GET', $httpUrl);
         
         $router = new HttpRouterChain();
         $router->register(new ProductSeoUrlRouter());

@@ -12,9 +12,10 @@ class ProductSeoUrlRouter implements HttpRouter
      */
     public function route(HttpRequest $request)
     {
+        // inject the key value store
         // get product if from data pool reader based on request url
         // pass product id to product detail page as constructor argument
         
-        return new ProductDetailPage();
+        return new ProductDetailPage($productId);
     }
 } 

@@ -22,6 +22,8 @@ class DomainEventConsumer
 
     /**
      * @param DomainEventQueue $queue
+     * @param DomainEventHandlerLocator $locator
+     * @param Logger $logger
      */
     public function __construct(DomainEventQueue $queue, DomainEventHandlerLocator $locator, Logger $logger)
     {

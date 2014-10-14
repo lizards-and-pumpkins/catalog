@@ -19,7 +19,7 @@ abstract class HttpRequest
 
     public static function fromGlobalState()
     {
-        throw new \Exception('Lazy Developer');
+        throw new \Exception('Need to implement');
     }
 
     /**

@@ -30,12 +30,12 @@ class InMemoryDomainEventQueue implements \Countable, DomainEventQueue
 
     /**
      * @return DomainEvent
-     * @throws \RuntimeException
+     * @throws \UnderflowException
      */
     public function next()
     {
         if (empty($this->queue)) {
-            throw new \RuntimeException('Trying to get next message of an empty queue');
+            throw new \UnderflowException('Trying to get next message of an empty queue');
         }
         return array_shift($this->queue);
     }

@@ -29,12 +29,15 @@ abstract class Url
 
     /**
      * @param string $url
-     * @return Url
+     * @return HttpUrl
      */
     public static function fromString($url)
     {
-        // Todo: switch for https/http $url
-        return new HttpUrl($url);
+        if (strtolower(substr($url, 0, 5)) === 'https') {
+            return new HttpsUrl($url);
+        } else {
+            return new HttpUrl($url);
+        }
     }
 
     /**
