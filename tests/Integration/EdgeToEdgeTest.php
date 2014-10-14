@@ -2,12 +2,16 @@
 
 namespace Brera\PoC;
 
+/**
+ * Class EdgeToEdgeTest
+ * @package Brera\PoC
+ */
 class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function edgeToEdge()
+    public function createProductDomainEventShouldRenderAProduct()
     {
         $sku = new SkuStub('test');
         $productId = ProductId::fromSku($sku);
@@ -28,5 +32,21 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         
         $this->assertContains((string) $sku, $html);
         $this->assertContains($productName, $html);
+    }
+
+    /**
+     * @test
+     */
+    public function pageRequestShouldDisplayAProduct()
+    {
+        /** @var HttpUrl $url */
+        $url = Url::fromString('http://example.com/seo-url');
+        $request = HttpRequest::fromParameters('GET', $url);
+        
+        $router = new HttpRouterChain();
+        $router->register(new ProductSeoUrlRouter());
+        $requestHandler = $router->route($request);
+        $response = $requestHandler->process($request);
+        
     }
 }

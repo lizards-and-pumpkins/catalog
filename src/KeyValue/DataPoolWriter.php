@@ -37,4 +37,16 @@ class DataPoolWriter
             $html
         );
     }
+
+    /**
+     * @param ProductId $productId
+     * @param string $seoUrl
+     */
+    public function setProductIdBySeoUrl(ProductId $productId, $seoUrl)
+    {
+        $this->keyValueStore->set(
+            $this->keyGenerator->createPocProductSeoUrlToIdKey($productId),
+            $seoUrl
+        );
+    }
 } 

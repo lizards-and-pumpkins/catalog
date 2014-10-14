@@ -18,4 +18,9 @@ class KeyValueStoreKeyGenerator
     {
         return 'html_product_poc_' . $productId;
     }
+
+    public function createPocProductSeoUrlToIdKey(HttpUrl $url)
+    {
+        return 'seo_' . $url->getPath();
+    }
 }

@@ -9,6 +9,7 @@ spl_autoload_register(
             $classes = array(
                 'brera\\poc\\datapoolreader' => '/KeyValue/DataPoolReader.php',
                 'brera\\poc\\datapoolwriter' => '/KeyValue/DataPoolWriter.php',
+                'brera\\poc\\defaulthttpresponse' => '/DefaultHttpResponse.php',
                 'brera\\poc\\domainevent' => '/DomainEvent.php',
                 'brera\\poc\\domaineventconsumer' => '/DomainEventConsumer.php',
                 'brera\\poc\\domaineventhandler' => '/DomainEventHandler.php',
@@ -16,6 +17,15 @@ spl_autoload_register(
                 'brera\\poc\\domaineventhandlerlocator' => '/DomainEventHandlerLocator.php',
                 'brera\\poc\\domaineventqueue' => '/Queue/DomainEventQueue.php',
                 'brera\\poc\\failedtoreadfromdomaineventqueuemessage' => '/FailedToReadFromDomainEventQueueMessage.php',
+                'brera\\poc\\httpgetrequest' => '/HttpGetRequest.php',
+                'brera\\poc\\httppostrequest' => '/HttpPostRequest.php',
+                'brera\\poc\\httprequest' => '/HttpRequest.php',
+                'brera\\poc\\httprequesthandler' => '/HttpRequestHandler.php',
+                'brera\\poc\\httpresponse' => '/HttpResponse.php',
+                'brera\\poc\\httprouter' => '/HttpRouter.php',
+                'brera\\poc\\httprouterchain' => '/HttpRouterChain.php',
+                'brera\\poc\\httpsurl' => '/HttpsUrl.php',
+                'brera\\poc\\httpurl' => '/HttpUrl.php',
                 'brera\\poc\\inmemorydomaineventqueue' => '/Queue/InMemoryDomainEventQueue.php',
                 'brera\\poc\\inmemorykeyvaluestore' => '/KeyValue/InMemoryKeyValueStore.php',
                 'brera\\poc\\inmemorylogger' => '/InMemoryLogger.php',
@@ -30,11 +40,16 @@ spl_autoload_register(
                 'brera\\poc\\product' => '/Product/Product.php',
                 'brera\\poc\\productcreateddomainevent' => '/ProductCreatedDomainEvent.php',
                 'brera\\poc\\productcreateddomaineventhandler' => '/ProductCreatedDomainEventHandler.php',
+                'brera\\poc\\productdetailpage' => '/ProductDetailPage.php',
                 'brera\\poc\\productid' => '/Product/ProductId.php',
                 'brera\\poc\\productnotfoundexception' => '/Product/ProductNotFoundException.php',
                 'brera\\poc\\productrenderer' => '/Renderer/ProductRenderer.php',
                 'brera\\poc\\productrepository' => '/Product/ProductRepository.php',
-                'brera\\poc\\sku' => '/Product/Sku.php'
+                'brera\\poc\\productseourlrouter' => '/ProductSeoUrlRouter.php',
+                'brera\\poc\\sku' => '/Product/Sku.php',
+                'brera\\poc\\unabletorouterequestexception' => '/UnableToRouteRequestException.php',
+                'brera\\poc\\unsupportedrequestmethodexception' => '/UnsupportedRequestMethodException.php',
+                'brera\\poc\\url' => '/Url.php'
             );
         }
         $cn = strtolower($class);

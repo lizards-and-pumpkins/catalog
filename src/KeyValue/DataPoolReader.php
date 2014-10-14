@@ -29,4 +29,19 @@ class DataPoolReader
         );
     }
 
+    /**
+     * @param HttpUrl $url
+     * @return mixed
+     */
+    public function getProductIdBySeoUrl(HttpUrl $url)
+    {
+        $key = $this->keyValueStoreKeyGenerator->createPocProductSeoUrlToIdKey($url);
+        return $this->keyValueStore->get($key);
+    }
+    
+    public function hasProductSeoUrl(HttpUrl $url)
+    {
+        $key = $this->keyValueStoreKeyGenerator->createPocProductSeoUrlToIdKey($url);
+        return $this->keyValueStore->has($key);
+    }
 } 
