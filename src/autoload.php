@@ -48,6 +48,7 @@ spl_autoload_register(
                 'brera\\poc\\productseourlrouter' => '/ProductSeoUrlRouter.php',
                 'brera\\poc\\sku' => '/Product/Sku.php',
                 'brera\\poc\\unabletorouterequestexception' => '/UnableToRouteRequestException.php',
+                'brera\\poc\\unknownprotocolexception' => '/UnknownProtocolException.php',
                 'brera\\poc\\unsupportedrequestmethodexception' => '/UnsupportedRequestMethodException.php',
                 'brera\\poc\\url' => '/Url.php'
             );

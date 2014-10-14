@@ -29,14 +29,20 @@ abstract class Url
 
     /**
      * @param string $url
-     * @return HttpUrl
+     *
+     * @return Url
+     * @throws UnknownProtocolException
      */
     public static function fromString($url)
     {
-        if (strtolower(substr($url, 0, 5)) === 'https') {
-            return new HttpsUrl($url);
-        } else {
-            return new HttpUrl($url);
+        $protocol = parse_url($url, PHP_URL_SCHEME);
+        switch ($protocol) {
+            case 'https':
+                return new HttpsUrl($url);
+            case 'http':
+                return new HttpUrl($url);
+            default:
+                throw new UnknownProtocolException();
         }
     }
 
