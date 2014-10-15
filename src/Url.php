@@ -42,7 +42,7 @@ abstract class Url
             case 'http':
                 return new HttpUrl($url);
             default:
-                throw new UnknownProtocolException();
+                throw new UnknownProtocolException(sprintf('Protocol can not be handled "%s"', $protocol));
         }
     }
 
