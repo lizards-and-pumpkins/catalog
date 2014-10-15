@@ -7,6 +7,7 @@ namespace Brera\PoC;
  *
  * @package Brera\PoC
  * @covers  \Brera\PoC\HttpsUrl
+ * @uses    \Brera\PoC\HttpUrl
  */
 class HttpsUrlTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,6 +17,9 @@ class HttpsUrlTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldBeEncrypted()
     {
-        $this->assertTrue(HttpUrl::fromString('https://example.com/path')->isProtocolEncrypted());
+        $httpsUrl = HttpUrl::fromString('https://example.com/path');
+
+        $this->assertInstanceOf(HttpsUrl::class, $httpsUrl);
+        $this->assertTrue($httpsUrl->isProtocolEncrypted());
     }
 }
