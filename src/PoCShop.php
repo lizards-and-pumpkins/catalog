@@ -4,7 +4,7 @@
 namespace Brera\PoC;
 
 
-class PoCWebsite extends Website
+class PoCShop extends Shop
 {
     /**
      * @return MasterFactory

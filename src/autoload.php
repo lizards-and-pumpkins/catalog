@@ -43,8 +43,9 @@ spl_autoload_register(
                 'brera\\poc\\masterfactorytrait' => '/MasterFactoryTrait.php',
                 'brera\\poc\\nomasterfactorysetexception' => '/NoMasterFactorySetException.php',
                 'brera\\poc\\pocmasterfactory' => '/PoCMasterFactory.php',
+                'brera\\poc\\pocproductprojector' => '/PoCProductProjector.php',
                 'brera\\poc\\pocproductrenderer' => '/Renderer/PoCProductRenderer.php',
-                'brera\\poc\\pocwebsite' => '/PoCWebsite.php',
+                'brera\\poc\\pocshop' => '/PoCShop.php',
                 'brera\\poc\\product' => '/Product/Product.php',
                 'brera\\poc\\productcreateddomainevent' => '/ProductCreatedDomainEvent.php',
                 'brera\\poc\\productcreateddomaineventhandler' => '/ProductCreatedDomainEventHandler.php',
@@ -54,14 +55,14 @@ spl_autoload_register(
                 'brera\\poc\\productrenderer' => '/Renderer/ProductRenderer.php',
                 'brera\\poc\\productrepository' => '/Product/ProductRepository.php',
                 'brera\\poc\\productseourlrouter' => '/ProductSeoUrlRouter.php',
+                'brera\\poc\\shop' => '/Shop.php',
                 'brera\\poc\\singleinstanceregistry' => '/SingleInstanceRegistry.php',
                 'brera\\poc\\singleinstanceregistrytrait' => '/SingleInstanceRegistryTrait.php',
                 'brera\\poc\\sku' => '/Product/Sku.php',
                 'brera\\poc\\unabletorouterequestexception' => '/Http/UnableToRouteRequestException.php',
                 'brera\\poc\\undefinedfactorymethodexception' => '/Http/UndefinedFactoryMethodException.php',
                 'brera\\poc\\unknownprotocolexception' => '/Http/UnknownProtocolException.php',
-                'brera\\poc\\unsupportedrequestmethodexception' => '/Http/UnsupportedRequestMethodException.php',
-                'brera\\poc\\website' => '/Website.php'
+                'brera\\poc\\unsupportedrequestmethodexception' => '/Http/UnsupportedRequestMethodException.php'
             );
         }
         $cn = strtolower($class);

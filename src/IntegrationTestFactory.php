@@ -32,11 +32,16 @@ class IntegrationTestFactory implements Factory
      */
     public function createProductCreatedDomainEventHandler(ProductCreatedDomainEvent $event)
     {
-        return new ProductCreatedDomainEventHandler($event, 
-            $this->createProductRenderer(), 
+        return new ProductCreatedDomainEventHandler(
+            $event,
             $this->getMasterFactory()->getProductRepository(), 
-            $this->getMasterFactory()->createDataPoolWriter()
+            $this->getMasterFactory()->createProductProjector()
         );
+    }
+    
+    public function createProductProjector()
+    {
+        return new PoCProductProjector($this->createProductRenderer(), $this->createDataPoolWriter());
     }
 
     /**

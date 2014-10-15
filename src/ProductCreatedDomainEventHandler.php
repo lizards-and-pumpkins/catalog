@@ -12,31 +12,28 @@ class ProductCreatedDomainEventHandler implements DomainEventHandler
     private $event;
 
     /**
-     * @var ProductRenderer
-     */
-    private $renderer;
-
-    /**
      * @var ProductRepository
      */
     private $repository;
 
     /**
-     * @var DataPoolWriter
+     * @var PoCProductProjector
      */
-    private $dataPoolWriter;
+    private $projector;
 
+    /**
+     * @param ProductCreatedDomainEvent $event
+     * @param ProductRepository $repository
+     */
     public function __construct(
         ProductCreatedDomainEvent $event,
-        ProductRenderer $renderer,
         ProductRepository $repository,
-        DataPoolWriter $dataPoolWriter
+        PoCProductProjector $projector
     )
     {
         $this->event = $event;
-        $this->renderer = $renderer;
         $this->repository = $repository;
-        $this->dataPoolWriter = $dataPoolWriter;
+        $this->projector = $projector;
     }
 
     /**
@@ -46,7 +43,7 @@ class ProductCreatedDomainEventHandler implements DomainEventHandler
     {
         $productId = $this->event->getProductId();
         $product = $this->repository->findById($productId);
-        $html = $this->renderer->render($product);
-        $this->dataPoolWriter->setPoCProductHtml($productId, $html);
+        $this->projector->project($product);
     }
 } 
+

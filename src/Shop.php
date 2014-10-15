@@ -4,7 +4,7 @@
 namespace Brera\PoC;
 
 
-abstract class Website
+abstract class Shop
 {
     /**
      * @var MasterFactory

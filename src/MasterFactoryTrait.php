@@ -22,7 +22,7 @@ trait MasterFactoryTrait
             if (substr($name, 0, 6) != 'create' && substr($name, 0, 3) != 'get') {
                 continue;
             }
-
+            
             $this->methods[$name] = $factory;
         }
 

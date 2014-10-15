@@ -59,7 +59,7 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $dataPoolWriter->setProductIdBySeoUrl($productId, $httpUrl);
         $dataPoolWriter->setPoCProductHtml($productId, $html);
 
-        $website = new PoCWebsite($request, $factory);
+        $website = new PoCShop($request, $factory);
         $response = $website->run(false);
         
         $this->assertContains($html, $response->getBody());
