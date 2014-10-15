@@ -35,6 +35,6 @@ class DefaultHttpResponse implements HttpResponse
      */
     public function send()
     {
-        // todo do something!
+        echo $this->getBody();
     }
 } 
