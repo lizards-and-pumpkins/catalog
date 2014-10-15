@@ -7,7 +7,7 @@ namespace Brera\Poc;
  *
  * @package Brera\Poc
  * @covers  \Brera\Poc\KeyValueStoreKeyGenerator
- * @uses \Brera\PoC\Url
+ * @uses    \Brera\PoC\Url
  */
 class KeyValueStoreKeyGeneratorTest extends \PHPUnit_Framework_TestCase
 {
@@ -38,23 +38,13 @@ class KeyValueStoreKeyGeneratorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     *
+     * write data provider which provides name and create function so we just need one method to test _ALL_ key methods
      */
     public function itShouldGenerateTwoDifferentKeysForDifferentProductIds()
     {
-        $productId1 = $this->getMockBuilder(ProductId::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $productId2 = $this->getMockBuilder(ProductId::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $productId1->expects($this->any())
-            ->method('__toString')
-            ->willReturn('1');
-        $productId2->expects($this->any())
-            ->method('__toString')
-            ->willReturn('2');
+        $productId1 = $this->createProductId('1');
+        $productId2 = $this->createProductId('2');
 
         $key1 = $this->keyGenerator->createPoCProductHtmlKey($productId1);
         $key2 = $this->keyGenerator->createPoCProductHtmlKey($productId2);
@@ -91,4 +81,19 @@ class KeyValueStoreKeyGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($key1 == $key2);
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createProductId($id)
+    {
+        $productId1 = $this->getMockBuilder(ProductId::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $productId1->expects($this->any())
+            ->method('__toString')
+            ->willReturn($id);
+
+        return $productId1;
+    }
 }
