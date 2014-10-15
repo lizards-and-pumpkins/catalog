@@ -7,7 +7,7 @@ namespace Brera\Poc;
  *
  * @package Brera\Poc
  * @covers  \Brera\Poc\KeyValueStoreKeyGenerator
- * @uses    \Brera\PoC\Url
+ * @uses    \Brera\PoC\HttpUrl
  */
 class KeyValueStoreKeyGeneratorTest extends \PHPUnit_Framework_TestCase
 {
