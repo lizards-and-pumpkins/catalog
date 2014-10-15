@@ -17,7 +17,7 @@ spl_autoload_register(
                 'brera\\poc\\productidtest' => '/Unit/ProductIdTest.php',
                 'brera\\poc\\producttest' => '/Unit/ProductTest.php',
                 'brera\\poc\\skustub' => '/Integration/stubs/SkuStub.php',
-                'brera\\poc\\urltest' => '/Unit/UrlTest.php'
+                'brera\\poc\\urltest' => '/Unit/HttpUrlTest.php'
             );
         }
         $cn = strtolower($class);

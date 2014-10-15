@@ -2,7 +2,7 @@
 
 namespace Brera\PoC;
 
-class UnknownProtocolException extends \InvalidArgumentException
+class UnknownProtocolException extends \OutOfBoundsException
 {
 
 }

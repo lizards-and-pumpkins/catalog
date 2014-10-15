@@ -7,22 +7,15 @@ namespace Brera\PoC;
  *
  * @package Brera\PoC
  * @covers  \Brera\PoC\HttpsUrl
- * @covers  \Brera\PoC\Url
  */
-class HttpsUrlTest extends UrlTest
+class HttpsUrlTest extends \PHPUnit_Framework_TestCase
 {
-    protected $urlString = 'https://example.com/path';
-
-    public function setUp()
-    {
-        $this->httpUrl = HttpUrl::fromString($this->urlString);
-    }
 
     /**
      * @test
      */
-    public function checkSecurity()
+    public function itShouldBeEncrypted()
     {
-        $this->assertTrue($this->httpUrl->isProtocolEncrypted());
+        $this->assertTrue(HttpUrl::fromString('https://example.com/path')->isProtocolEncrypted());
     }
 }

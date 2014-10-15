@@ -58,7 +58,7 @@ class KeyValueStoreKeyGeneratorTest extends \PHPUnit_Framework_TestCase
     public function itShouldGenerateAStringAsPocProductSeoUrlToIdKey()
     {
         /* @var $url HttpUrl */
-        $url = Url::fromString('http://example.com/path');
+        $url = HttpUrl::fromString('http://example.com/path');
 
         $this->assertInternalType('string',
             $this->keyGenerator->createPocProductSeoUrlToIdKey($url)
@@ -71,9 +71,9 @@ class KeyValueStoreKeyGeneratorTest extends \PHPUnit_Framework_TestCase
     public function itShouldGenerateTwoDifferentKeysForPocProductSeoUrlToIdKey()
     {
         /* @var $url1 HttpUrl */
-        $url1 = Url::fromString('http://example.com/path1');
+        $url1 = HttpUrl::fromString('http://example.com/path1');
         /* @var $url2 HttpUrl */
-        $url2 = Url::fromString('http://example.com/path2');
+        $url2 = HttpUrl::fromString('http://example.com/path2');
 
         $key1 = $this->keyGenerator->createPocProductSeoUrlToIdKey($url1);
         $key2 = $this->keyGenerator->createPocProductSeoUrlToIdKey($url2);

@@ -7,15 +7,33 @@ namespace Brera\PoC;
 class ProductSeoUrlRouter implements HttpRouter
 {
     /**
+     * @var DataPoolReader
+     */
+    private $dataPoolReader;
+
+    /**
+     * @var MasterFactory
+     */
+    private $factory;
+    
+    public function __construct(DataPoolReader $dataPoolReader, MasterFactory $factory)
+    {
+        $this->dataPoolReader = $dataPoolReader;
+        $this->factory = $factory;
+    }
+
+    /**
      * @param HttpRequest $request
      * @return HttpRequestHandler
      */
     public function route(HttpRequest $request)
     {
-        // inject the key value store
-        // get product if from data pool reader based on request url
-        // pass product id to product detail page as constructor argument
-        
-        return new ProductDetailPage($productId);
+        if (!$this->dataPoolReader->hasProductSeoUrl($request->getUrl())) {
+            return null;
+        }
+
+        $productId = $this->dataPoolReader->getProductIdBySeoUrl($request->getUrl());
+
+        return $this->factory->createProductDetailPage($productId);
     }
 } 

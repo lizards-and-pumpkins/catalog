@@ -16,7 +16,9 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $sku = new SkuStub('test');
         $productId = ProductId::fromSku($sku);
         $productName = 'test product name';
-        $factory = new IntegrationTestFactory();
+        
+        $factory = new PoCMasterFactory();
+        $factory->register(new IntegrationTestFactory());
 
         $repository = $factory->getProductRepository();
         $repository->createProduct($productId, $productName);
@@ -39,13 +41,31 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
      */
     public function pageRequestShouldDisplayAProduct()
     {
-        $httpUrl = Url::fromString('http://example.com/seo-url');
-        $request = HttpRequest::fromParameters('GET', $httpUrl);
+        $html = '<p>some html</p>';
         
+        $httpUrl = HttpUrl::fromString('http://example.com/seo-url');
+        $request = HttpRequest::fromParameters('GET', $httpUrl);
+
+        $sku = new SkuStub('test');
+        $productId = ProductId::fromSku($sku);
+
+        $factory = new PoCMasterFactory();
+        $factory->register(new IntegrationTestFactory());
+        $factory->register(new FrontendFactory());
+
+        $dataPoolWriter = $factory->createDataPoolWriter();
+        $dataPoolWriter->setProductIdBySeoUrl($productId, $httpUrl);
+        $dataPoolWriter->setPoCProductHtml($productId, $html);
+
         $router = new HttpRouterChain();
-        $router->register(new ProductSeoUrlRouter());
+        $router->register($factory->createProductSeoUrlRouter());
         $requestHandler = $router->route($request);
-        $response = $requestHandler->process($request);
+        $html = $requestHandler->process();
+        
+        $response = new DefaultHttpResponse();
+        $response->setBody($html);
+        
+        $this->assertContains($html, $response->getBody());
         
     }
 }

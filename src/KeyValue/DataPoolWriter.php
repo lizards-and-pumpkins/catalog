@@ -40,13 +40,13 @@ class DataPoolWriter
 
     /**
      * @param ProductId $productId
-     * @param string $seoUrl
+     * @param HttpUrl $seoUrl
      */
-    public function setProductIdBySeoUrl(ProductId $productId, $seoUrl)
+    public function setProductIdBySeoUrl(ProductId $productId, HttpUrl $seoUrl)
     {
         $this->keyValueStore->set(
-            $this->keyGenerator->createPocProductSeoUrlToIdKey($productId),
-            $seoUrl
+            $this->keyGenerator->createPocProductSeoUrlToIdKey($seoUrl),
+            $productId
         );
     }
 } 

@@ -4,7 +4,7 @@
 namespace Brera\PoC;
 
 
-class UnsupportedRequestMethodException extends \InvalidArgumentException
+class UnsupportedRequestMethodException extends \OutOfBoundsException
 {
     
 } 

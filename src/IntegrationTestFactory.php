@@ -2,8 +2,10 @@
 
 namespace Brera\PoC;
 
-class IntegrationTestFactory
+class IntegrationTestFactory implements Factory 
 {
+    use FactoryTrait;
+    
     /**
      * @var ProductRepository
      */
@@ -32,8 +34,8 @@ class IntegrationTestFactory
     {
         return new ProductCreatedDomainEventHandler($event, 
             $this->createProductRenderer(), 
-            $this->getProductRepository(), 
-            $this->createDataPoolWriter()
+            $this->getMasterFactory()->getProductRepository(), 
+            $this->getMasterFactory()->createDataPoolWriter()
         );
     }
 
@@ -75,7 +77,7 @@ class IntegrationTestFactory
     /**
      * @return DataPoolWriter
      */
-    private function createDataPoolWriter()
+    public function createDataPoolWriter()
     {
         return new DataPoolWriter($this->getKeyValueStore(), $this->createKeyGenerator());
     }
@@ -112,7 +114,7 @@ class IntegrationTestFactory
      */
     public function createDomainEventConsumer()
     {
-        return new DomainEventConsumer($this->getEventQueue(), $this->createDomainEventHandlerLocator(), $this->getLogger());
+        return new DomainEventConsumer($this->getMasterFactory()->getEventQueue(), $this->getMasterFactory()->createDomainEventHandlerLocator(), $this->getLogger());
     }
 
     /**
