@@ -1,10 +1,13 @@
 <?php
 
+namespace Brera\PoC\Tests\Unit;
 
-namespace Brera\PoC;
+use Brera\PoC\Product\InMemoryProductRepository,
+    Brera\PoC\Product\Product,
+    Brera\PoC\Product\ProductNotFoundException,
+    Brera\Poc\Product\ProductId;
 
 /**
- * Class InMemoryProductRepositoryTest
  * @package Brera\PoC
  * @covers \Brera\PoC\InMemoryProductRepository
  * @uses \Brera\PoC\Product
@@ -47,7 +50,7 @@ class InMemoryProductRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Brera\PoC\ProductNotFoundException
+     * @expectedException ProductNotFoundException
      */
     public function itShouldThrowAnExceptionIfAProductCantBeFound()
     {

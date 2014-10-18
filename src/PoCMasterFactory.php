@@ -1,17 +1,16 @@
 <?php
 
-
 namespace Brera\PoC;
 
 /**
  * Interface PoCMasterFactory
  * @package Brera\PoC
  *
- * @method DataPoolWriter createDataPoolWriter
- * @method DataPoolReader createDataPoolReader
+ * @method KeyValue\DataPoolWriter createDataPoolWriter
+ * @method KeyValue\DataPoolReader createDataPoolReader
  * @method ProductSeoUrlRouter createProductSeoUrlRouter
- * @method ProductRepository getProductRepository
- * @method DomainEventQueue getEventQueue
+ * @method Product\ProductRepository getProductRepository
+ * @method Queue\DomainEventQueue getEventQueue
  * @method DomainEventConsumer createDomainEventConsumer
  */
 class PoCMasterFactory implements MasterFactory

@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\Poc;
+namespace Brera\Poc\Tests\Unit;
 
 /**
  * Class KeyValueStoreKeyGeneratorTest

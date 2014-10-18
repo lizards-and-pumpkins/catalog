@@ -1,11 +1,20 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera\PoC\Tests\Unit;
+
+require __DIR__ . '/../Integration/stubs/SkuStub.php';
+
+use Brera\PoC\KeyValue\DataPoolReader,
+    Brera\Poc\KeyValue\KeyValueStore,
+    Brera\Poc\KeyValue\KeyValueStoreKeyGenerator,
+    Brera\PoC\Integration\stubs\SkuStub,
+    Brera\PoC\Product\ProductId,
+    Brera\PoC\Http\HttpUrl;
 
 /**
- * @covers \Brera\PoC\DataPoolReader
- * @uses   \Brera\PoC\ProductId
- * @uses   \Brera\PoC\HttpUrl
+ * @covers \Brera\PoC\KeyValue\DataPoolReader
+ * @uses \Brera\PoC\Product\ProductId
+ * @uses \Brera\PoC\Http\HttpUrl
  */
 class DataPoolReaderTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,14 +36,9 @@ class DataPoolReaderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->keyValueStore = $this->getMock(KeyValueStore::class);
-        $this->keyValueStoreKeyGenerator = $this->getMock(
-            KeyValueStoreKeyGenerator::class
-        );
+        $this->keyValueStoreKeyGenerator = $this->getMock(KeyValueStoreKeyGenerator::class);
 
-        $this->dataPoolReader = new DataPoolReader(
-            $this->keyValueStore,
-            $this->keyValueStoreKeyGenerator
-        );
+        $this->dataPoolReader = new DataPoolReader($this->keyValueStore, $this->keyValueStoreKeyGenerator);
     }
 
     /**
@@ -49,7 +53,7 @@ class DataPoolReaderTest extends \PHPUnit_Framework_TestCase
 
         $this->keyValueStoreKeyGenerator->expects($this->once())
             ->method('createPoCProductHtmlKey')
-            ->willReturn((string)$productId);
+            ->willReturn((string) $productId);
 
         $this->keyValueStore->expects($this->once())
             ->method('get')

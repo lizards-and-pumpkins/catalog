@@ -1,9 +1,11 @@
 <?php
-namespace Brera\Poc;
+
+namespace Brera\Poc\Tests\Unit;
+
+use Brera\PoC\KeyValue\InMemoryKeyValueStore,
+    Brera\PoC\KeyValue\KeyNotFoundException;
 
 /**
- * Class InMemoryKeyValueStoreTest
- *
  * @package Brera\Poc
  * @covers  Brera\PoC\InMemoryKeyValueStore
  */
@@ -47,7 +49,7 @@ class InMemoryKeyValueStoreTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Brera\PoC\KeyNotFoundException
+     * @expectedException KeyNotFoundException
      */
     public function itShouldThrowAnExcptionWhenValueIsNotSet()
     {

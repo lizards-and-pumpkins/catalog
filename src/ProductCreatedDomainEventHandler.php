@@ -1,8 +1,8 @@
 <?php
 
-
 namespace Brera\PoC;
 
+use Brera\PoC\Product\ProductRepository;
 
 class ProductCreatedDomainEventHandler implements DomainEventHandler
 {
@@ -46,4 +46,3 @@ class ProductCreatedDomainEventHandler implements DomainEventHandler
         $this->projector->project($product);
     }
 } 
-

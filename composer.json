@@ -1,0 +1,25 @@
+{
+    "name": "brera/proof-of-concept",
+    "description": "Brera Proof Of Concept",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Vinai Kopp",
+            "email": "vinai@brera.io"
+        },
+        {
+            "name": "Tim Bezhashvyly",
+            "email": "tim@brera.io"
+        },
+        {
+            "name": "Fabian Blechsmidt",
+            "email": "fabian@brera.io"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "4.*"
+    },
+    "autoload" : {
+        "psr-4": { "Brera\\PoC\\": "src/" }
+    }
+}

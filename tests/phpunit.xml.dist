@@ -22,7 +22,7 @@
         timeoutForLargeTests="60"
         strict="true"
         verbose="false">
-    <testsuite name="Brera Queue Library Unit Tests">
+    <testsuite name="Brera Proof Of Concept Tests">
         <directory>./Unit</directory>
     </testsuite>
     <filter>

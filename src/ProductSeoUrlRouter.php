@@ -1,8 +1,11 @@
 <?php
 
-
 namespace Brera\PoC;
 
+use Brera\PoC\Http\HttpRouter,
+    Brera\PoC\KeyValue\DataPoolReader,
+    Brera\PoC\Http\HttpRequest,
+    Brera\PoC\Http\HttpRequestHandler;
 
 class ProductSeoUrlRouter implements HttpRouter
 {

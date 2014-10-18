@@ -1,8 +1,8 @@
 <?php
 
-
 namespace Brera\PoC;
 
+use Brera\Poc\Product\ProductId;
 
 class ProductCreatedDomainEvent implements DomainEvent
 {

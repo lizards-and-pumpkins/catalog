@@ -1,10 +1,11 @@
 <?php
 
+namespace Brera\PoC\Tests\Unit;
 
-namespace Brera\PoC;
+use Brera\PoC\Queue\InMemoryDomainEventQueue,
+    Brera\PoC\DomainEvent;
 
 /**
- * Class InMemoryDomainEventQueueTest
  * @package Brera\PoC
  * @covers \Brera\PoC\InMemoryDomainEventQueue
  */

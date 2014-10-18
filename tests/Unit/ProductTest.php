@@ -1,6 +1,9 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera\PoC\Tests\Unit;
+
+use Brera\PoC\Product\Product,
+    Brera\Poc\Product\ProductId;
 
 /**
  * Class ProductTest

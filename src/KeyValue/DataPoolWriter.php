@@ -1,8 +1,9 @@
 <?php
 
+namespace Brera\PoC\KeyValue;
 
-namespace Brera\PoC;
-
+use Brera\Poc\Product\ProductId,
+    Brera\PoC\Http\HttpUrl;
 
 class DataPoolWriter
 {

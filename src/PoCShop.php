@@ -1,8 +1,8 @@
 <?php
 
-
 namespace Brera\PoC;
 
+use Brera\PoC\Http\HttpRouterChain;
 
 class PoCShop extends Shop
 {

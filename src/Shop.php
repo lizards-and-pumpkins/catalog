@@ -1,8 +1,10 @@
 <?php
 
-
 namespace Brera\PoC;
 
+use Brera\PoC\Http\HttpRequest,
+    Brera\PoC\Http\HttpResponse,
+    Brera\PoC\Http\HttpRouterChain;
 
 abstract class Shop
 {

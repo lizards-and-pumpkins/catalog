@@ -1,8 +1,9 @@
 <?php
 
+namespace Brera\PoC\KeyValue;
 
-namespace Brera\PoC;
-
+use Brera\Poc\Product\ProductId,
+    Brera\PoC\Http\HttpUrl;
 
 class DataPoolReader
 {
@@ -24,9 +25,8 @@ class DataPoolReader
 
     public function getPoCProductHtml(ProductId $productId)
     {
-        return $this->keyValueStore->get(
-            $this->keyValueStoreKeyGenerator->createPoCProductHtmlKey($productId)
-        );
+        $key = $this->keyValueStoreKeyGenerator->createPoCProductHtmlKey($productId);
+        return $this->keyValueStore->get($key);
     }
 
     /**

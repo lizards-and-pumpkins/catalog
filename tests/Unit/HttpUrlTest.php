@@ -1,6 +1,9 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera\PoC\Tests\Unit;
+
+use Brera\PoC\Http\HttpUrl,
+    Brera\PoC\Http\UnknownProtocolException;
 
 /**
  * Class HttpUrlTest
@@ -60,7 +63,7 @@ class HttpUrlTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Brera\PoC\UnknownProtocolException
+     * @expectedException UnknownProtocolException
      * @test
      */
     public function itShouldThrowExceptionForNonHttp()
@@ -84,5 +87,4 @@ class HttpUrlTest extends \PHPUnit_Framework_TestCase
     {
         HttpUrl::fromString('this is not a valid url');
     }
-
 }

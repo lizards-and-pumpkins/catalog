@@ -1,8 +1,8 @@
 <?php
 
+namespace Brera\PoC\Renderer;
 
-namespace Brera\PoC;
-
+use Brera\PoC\Product\Product;
 
 class PoCProductRenderer implements ProductRenderer
 {

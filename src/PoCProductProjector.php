@@ -1,8 +1,10 @@
 <?php
 
-
 namespace Brera\PoC;
 
+use Brera\PoC\Renderer\ProductRenderer,
+    Brera\PoC\KeyValue\DataPoolWriter,
+    Brera\PoC\Product\Product;
 
 class PoCProductProjector
 {
