@@ -1,8 +1,6 @@
 <?php
 
-
-namespace Brera\PoC;
-
+namespace Brera\PoC\Http;
 
 class HttpUrl
 {

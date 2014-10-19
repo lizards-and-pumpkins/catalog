@@ -1,8 +1,8 @@
 <?php
 
-
 namespace Brera\PoC;
 
+use Brera\PoC\Http\HttpResponse;
 
 class DefaultHttpResponse implements HttpResponse
 {

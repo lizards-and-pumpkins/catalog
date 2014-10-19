@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Brera\PoC;
-
 
 class FailedToReadFromDomainEventQueueMessage implements LogMessage
 {
@@ -11,6 +9,9 @@ class FailedToReadFromDomainEventQueueMessage implements LogMessage
      */
     private $exception;
 
+    /**
+     * @param \Exception $exception
+     */
     public function __construct(\Exception $exception)
     {
         $this->exception = $exception;

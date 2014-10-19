@@ -1,13 +1,16 @@
 <?php
 
-namespace Brera\Poc;
+namespace Brera\PoC\KeyValue;
+
+use Brera\PoC\Product\ProductId;
+use Brera\PoC\Http\HttpUrl;
 
 /**
  * Class KeyValueStoreKeyGeneratorTest
  *
- * @package Brera\Poc
- * @covers  \Brera\Poc\KeyValueStoreKeyGenerator
- * @uses    \Brera\PoC\HttpUrl
+ * @package Brera\PoC
+ * @covers  \Brera\PoC\KeyValue\KeyValueStoreKeyGenerator
+ * @uses    \Brera\PoC\Http\HttpUrl
  */
 class KeyValueStoreKeyGeneratorTest extends \PHPUnit_Framework_TestCase
 {
@@ -55,28 +58,28 @@ class KeyValueStoreKeyGeneratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldGenerateAStringAsPocProductSeoUrlToIdKey()
+    public function itShouldGenerateAStringAsPoCProductSeoUrlToIdKey()
     {
         /* @var $url HttpUrl */
         $url = HttpUrl::fromString('http://example.com/path');
 
         $this->assertInternalType('string',
-            $this->keyGenerator->createPocProductSeoUrlToIdKey($url)
+            $this->keyGenerator->createPoCProductSeoUrlToIdKey($url)
         );
     }
 
     /**
      * @test
      */
-    public function itShouldGenerateTwoDifferentKeysForPocProductSeoUrlToIdKey()
+    public function itShouldGenerateTwoDifferentKeysForPoCProductSeoUrlToIdKey()
     {
         /* @var $url1 HttpUrl */
         $url1 = HttpUrl::fromString('http://example.com/path1');
         /* @var $url2 HttpUrl */
         $url2 = HttpUrl::fromString('http://example.com/path2');
 
-        $key1 = $this->keyGenerator->createPocProductSeoUrlToIdKey($url1);
-        $key2 = $this->keyGenerator->createPocProductSeoUrlToIdKey($url2);
+        $key1 = $this->keyGenerator->createPoCProductSeoUrlToIdKey($url1);
+        $key2 = $this->keyGenerator->createPoCProductSeoUrlToIdKey($url2);
 
         $this->assertFalse($key1 == $key2);
     }

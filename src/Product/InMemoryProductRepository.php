@@ -1,7 +1,6 @@
 <?php
 
-
-namespace Brera\PoC;
+namespace Brera\PoC\Product;
 
 class InMemoryProductRepository implements ProductRepository
 {

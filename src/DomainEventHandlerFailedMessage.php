@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Brera\PoC;
-
 
 class DomainEventHandlerFailedMessage implements LogMessage
 {
@@ -16,6 +14,10 @@ class DomainEventHandlerFailedMessage implements LogMessage
      */
     private $exception;
 
+    /**
+     * @param DomainEvent $domainEvent
+     * @param \Exception $exception
+     */
     public function __construct(DomainEvent $domainEvent, \Exception $exception)
     {
         $this->domainEvent = $domainEvent;

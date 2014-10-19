@@ -9,4 +9,4 @@ interface Logger
      * @return null
      */
     public function log(LogMessage $message);
-} 
+}

@@ -2,6 +2,17 @@
 
 namespace Brera\PoC;
 
+use Brera\PoC\Product\ProductRepository;
+use Brera\PoC\KeyValue\KeyValueStore;
+use Brera\PoC\Queue\DomainEventQueue;
+use Brera\PoC\Renderer\PoCProductRenderer;
+use Brera\PoC\Product\InMemoryProductRepository;
+use Brera\PoC\KeyValue\DataPoolWriter;
+use Brera\PoC\KeyValue\InMemoryKeyValueStore;
+use Brera\PoC\KeyValue\KeyValueStoreKeyGenerator;
+use Brera\PoC\Queue\InMemoryDomainEventQueue;
+use Brera\PoC\KeyValue\DataPoolReader;
+
 class IntegrationTestFactory implements Factory 
 {
     use FactoryTrait;
@@ -119,7 +130,10 @@ class IntegrationTestFactory implements Factory
      */
     public function createDomainEventConsumer()
     {
-        return new DomainEventConsumer($this->getMasterFactory()->getEventQueue(), $this->getMasterFactory()->createDomainEventHandlerLocator(), $this->getLogger());
+        return new DomainEventConsumer(
+            $this->getMasterFactory()->getEventQueue(),
+            $this->getMasterFactory()->createDomainEventHandlerLocator(), $this->getLogger()
+        );
     }
 
     /**

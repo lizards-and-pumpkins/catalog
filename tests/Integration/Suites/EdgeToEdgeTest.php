@@ -1,6 +1,18 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera\PoC\Tests\Integration;
+
+require __DIR__ . '/stubs/SkuStub.php';
+
+use Brera\PoC\Integration\stubs\SkuStub,
+    Brera\PoC\Product\ProductId,
+    Brera\PoC\PoCMasterFactory,
+    Brera\PoC\IntegrationTestFactory,
+    Brera\PoC\ProductCreatedDomainEvent,
+    Brera\PoC\Http\HttpUrl,
+    Brera\PoC\Http\HttpRequest,
+    Brera\PoC\FrontendFactory,
+    Brera\PoC\PoCWebFront;
 
 /**
  * Class EdgeToEdgeTest
@@ -59,7 +71,7 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $dataPoolWriter->setProductIdBySeoUrl($productId, $httpUrl);
         $dataPoolWriter->setPoCProductHtml($productId, $html);
 
-        $website = new PoCShop($request, $factory);
+        $website = new PoCWebFront($request, $factory);
         $response = $website->run(false);
         
         $this->assertContains($html, $response->getBody());

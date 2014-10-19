@@ -1,8 +1,6 @@
 <?php
 
-
-namespace Brera\PoC;
-
+namespace Brera\PoC\KeyValue;
 
 interface KeyValueStore
 {
@@ -24,5 +22,5 @@ interface KeyValueStore
      */
     public function has($key);
     
-    // TODO: multiSet und multiGet
+    // TODO: Implement multiSet and multiGet
 } 

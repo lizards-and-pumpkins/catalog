@@ -1,12 +1,9 @@
 <?php
 
-
-namespace Brera\PoC;
-
+namespace Brera\PoC\Http;
 
 interface HttpResponse
 {
-
     /**
      * @return string
      */

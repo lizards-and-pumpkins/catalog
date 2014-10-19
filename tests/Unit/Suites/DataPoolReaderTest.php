@@ -1,11 +1,14 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera\PoC\KeyValue;
+
+use Brera\PoC\Product\ProductId;
+use Brera\PoC\Http\HttpUrl;
 
 /**
- * @covers \Brera\PoC\DataPoolReader
- * @uses   \Brera\PoC\ProductId
- * @uses   \Brera\PoC\HttpUrl
+ * @covers \Brera\PoC\KeyValue\DataPoolReader
+ * @uses \Brera\PoC\Product\ProductId
+ * @uses \Brera\PoC\Http\HttpUrl
  */
 class DataPoolReaderTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,14 +30,9 @@ class DataPoolReaderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->keyValueStore = $this->getMock(KeyValueStore::class);
-        $this->keyValueStoreKeyGenerator = $this->getMock(
-            KeyValueStoreKeyGenerator::class
-        );
+        $this->keyValueStoreKeyGenerator = $this->getMock(KeyValueStoreKeyGenerator::class);
 
-        $this->dataPoolReader = new DataPoolReader(
-            $this->keyValueStore,
-            $this->keyValueStoreKeyGenerator
-        );
+        $this->dataPoolReader = new DataPoolReader($this->keyValueStore, $this->keyValueStoreKeyGenerator);
     }
 
     /**
@@ -44,12 +42,13 @@ class DataPoolReaderTest extends \PHPUnit_Framework_TestCase
     {
         $value = '<p>html</p>';
 
-        $skuStub = new SkuStub('test');
-        $productId = ProductId::fromSku($skuStub);
+        $productId = $this->getMockBuilder(ProductId::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->keyValueStoreKeyGenerator->expects($this->once())
             ->method('createPoCProductHtmlKey')
-            ->willReturn((string)$productId);
+            ->willReturn((string) $productId);
 
         $this->keyValueStore->expects($this->once())
             ->method('get')
@@ -72,7 +71,7 @@ class DataPoolReaderTest extends \PHPUnit_Framework_TestCase
         $value = 'test';
 
         $this->keyValueStoreKeyGenerator->expects($this->once())
-            ->method('createPocProductSeoUrlToIdKey')
+            ->method('createPoCProductSeoUrlToIdKey')
             ->willReturn($key);
 
         $this->keyValueStore->expects($this->once())
@@ -95,7 +94,7 @@ class DataPoolReaderTest extends \PHPUnit_Framework_TestCase
         $key = 'seo_url_' . $urlString;
 
         $this->keyValueStoreKeyGenerator->expects($this->once())
-            ->method('createPocProductSeoUrlToIdKey')
+            ->method('createPoCProductSeoUrlToIdKey')
             ->willReturn($key);
 
         $this->keyValueStore->expects($this->once())

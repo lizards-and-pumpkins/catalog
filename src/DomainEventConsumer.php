@@ -1,7 +1,8 @@
 <?php
 
-
 namespace Brera\PoC;
+
+use Brera\PoC\Queue\DomainEventQueue;
 
 class DomainEventConsumer
 {

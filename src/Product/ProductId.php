@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\Poc;
+namespace Brera\PoC\Product;
 
 class ProductId
 {

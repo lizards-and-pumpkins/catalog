@@ -1,12 +1,11 @@
 <?php
 
-
-namespace Brera\PoC;
+namespace Brera\PoC\Product;
 
 /**
  * Class ProductIdTest
- * @package Brera\PoC
- * @covers \Brera\PoC\ProductId
+ * @package \Brera\PoC
+ * @covers \Brera\PoC\Product\ProductId
  */
 class ProductIdTest extends \PHPUnit_Framework_TestCase
 {

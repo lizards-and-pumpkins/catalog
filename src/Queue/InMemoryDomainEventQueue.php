@@ -1,8 +1,8 @@
 <?php
 
+namespace Brera\PoC\Queue;
 
-namespace Brera\PoC;
-
+use Brera\PoC\DomainEvent;
 
 class InMemoryDomainEventQueue implements \Countable, DomainEventQueue
 {

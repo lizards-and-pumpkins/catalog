@@ -1,5 +1,8 @@
 <?php
-namespace Brera\PoC;
+
+namespace Brera\PoC\Queue;
+
+use Brera\PoC\DomainEvent;
 
 interface DomainEventQueue
 {

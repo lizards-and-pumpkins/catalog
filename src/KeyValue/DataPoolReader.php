@@ -1,8 +1,9 @@
 <?php
 
+namespace Brera\PoC\KeyValue;
 
-namespace Brera\PoC;
-
+use Brera\PoC\Product\ProductId;
+use Brera\PoC\Http\HttpUrl;
 
 class DataPoolReader
 {
@@ -16,17 +17,24 @@ class DataPoolReader
      */
     private $keyValueStoreKeyGenerator;
 
+    /**
+     * @param KeyValueStore $keyValueStore
+     * @param KeyValueStoreKeyGenerator $keyValueStoreKeyGenerator
+     */
     function __construct(KeyValueStore $keyValueStore, KeyValueStoreKeyGenerator $keyValueStoreKeyGenerator)
     {
         $this->keyValueStore = $keyValueStore;
         $this->keyValueStoreKeyGenerator = $keyValueStoreKeyGenerator;
     }
 
+    /**
+     * @param ProductId $productId
+     * @return mixed
+     */
     public function getPoCProductHtml(ProductId $productId)
     {
-        return $this->keyValueStore->get(
-            $this->keyValueStoreKeyGenerator->createPoCProductHtmlKey($productId)
-        );
+        $key = $this->keyValueStoreKeyGenerator->createPoCProductHtmlKey($productId);
+        return $this->keyValueStore->get($key);
     }
 
     /**
@@ -35,13 +43,17 @@ class DataPoolReader
      */
     public function getProductIdBySeoUrl(HttpUrl $url)
     {
-        $key = $this->keyValueStoreKeyGenerator->createPocProductSeoUrlToIdKey($url);
+        $key = $this->keyValueStoreKeyGenerator->createPoCProductSeoUrlToIdKey($url);
         return $this->keyValueStore->get($key);
     }
-    
+
+    /**
+     * @param HttpUrl $url
+     * @return bool
+     */
     public function hasProductSeoUrl(HttpUrl $url)
     {
-        $key = $this->keyValueStoreKeyGenerator->createPocProductSeoUrlToIdKey($url);
+        $key = $this->keyValueStoreKeyGenerator->createPoCProductSeoUrlToIdKey($url);
         return $this->keyValueStore->has($key);
     }
 } 

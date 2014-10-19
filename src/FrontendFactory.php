@@ -1,11 +1,16 @@
 <?php
 
-namespace Brera\Poc;
+namespace Brera\PoC;
+
+use Brera\PoC\Product\ProductId;
 
 class FrontendFactory implements Factory
 {
     use FactoryTrait;
 
+    /**
+     * @return ProductSeoUrlRouter
+     */
     public function createProductSeoUrlRouter()
     {
         return new ProductSeoUrlRouter(
@@ -14,6 +19,10 @@ class FrontendFactory implements Factory
         );
     }
 
+    /**
+     * @param ProductId $productId
+     * @return ProductDetailHtmlPage
+     */
     public function createProductDetailPage(ProductId $productId)
     {
         return new ProductDetailHtmlPage(

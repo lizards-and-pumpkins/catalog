@@ -22,12 +22,7 @@
         timeoutForLargeTests="60"
         strict="true"
         verbose="false">
-    <testsuite name="Brera Queue Library Unit Tests">
-        <directory>./Unit</directory>
+    <testsuite name="Brera Proof Of Concept Integration Tests">
+        <directory>.</directory>
     </testsuite>
-    <filter>
-        <whitelist>
-            <directory>../src</directory>
-        </whitelist>
-    </filter>
 </phpunit>

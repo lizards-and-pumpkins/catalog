@@ -1,9 +1,6 @@
 <?php
 
-
-namespace Brera\PoC;
-
-
+namespace Brera\PoC\Http;
 
 abstract class HttpRequest
 {
@@ -12,6 +9,9 @@ abstract class HttpRequest
      */
     private $url;
 
+    /**
+     * @param HttpUrl $url
+     */
     public function __construct(HttpUrl $url)
     {
         $this->url = $url;
@@ -19,7 +19,7 @@ abstract class HttpRequest
 
     public static function fromGlobalState()
     {
-        throw new \Exception('Need to implement');
+        /* TODO: Implement */
     }
 
     /**

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Brera\PoC;
-
 
 class DomainEventHandlerLocator
 {
@@ -25,7 +23,7 @@ class DomainEventHandlerLocator
      */
     public function getHandlerFor(DomainEvent $event)
     {
-        // todo: switch, throw exception if not found a matching handler
+        // TODO: Switch, throw exception if not found a matching handler
         return $this->factory->createProductCreatedDomainEventHandler($event);
     }
 } 

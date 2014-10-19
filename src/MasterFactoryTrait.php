@@ -9,6 +9,9 @@ trait MasterFactoryTrait
      */
     private $methods = [];
 
+    /**
+     * @param Factory $factory
+     */
     final public function register(Factory $factory)
     {
         foreach ((new \ReflectionObject($factory))->getMethods() as $method) {
@@ -29,6 +32,11 @@ trait MasterFactoryTrait
         $factory->setMasterFactory($this);
     }
 
+    /**
+     * @param $method
+     * @param $parameters
+     * @return mixed
+     */
     final public function __call($method, $parameters)
     {
         if (!isset($this->methods[$method])) {
