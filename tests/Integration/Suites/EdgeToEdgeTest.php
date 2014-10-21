@@ -12,7 +12,7 @@ use Brera\PoC\Integration\stubs\SkuStub,
     Brera\PoC\Http\HttpUrl,
     Brera\PoC\Http\HttpRequest,
     Brera\Poc\FrontendFactory,
-    Brera\PoC\PoCShop;
+    Brera\PoC\PoCWebFront;
 
 /**
  * Class EdgeToEdgeTest
@@ -136,7 +136,7 @@ Flasher abnehmbar.&#13;</description>
         $dataPoolWriter->setProductIdBySeoUrl($productId, $httpUrl);
         $dataPoolWriter->setPoCProductHtml($productId, $html);
 
-        $website = new PoCShop($request, $factory);
+        $website = new PoCWebFront($request, $factory);
         $response = $website->run(false);
 
         $this->assertContains($html, $response->getBody());
