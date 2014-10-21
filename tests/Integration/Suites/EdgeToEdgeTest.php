@@ -19,6 +19,9 @@ use Brera\PoC\ProductImportDomainEvent;
  */
 class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
 {
+	/**
+	 * @test
+	 */
     public function importProductDomainEventShouldRenderAProduct()
     {
         $factory = new PoCMasterFactory();
@@ -32,13 +35,13 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $xml = '<product>
   <sku>118235-251</sku>
   <_type>simple</_type>
-  <_category>Laufshop/Shop,Laufshop/Herren/Laufzubeh&ouml;r,Laufshop/Damen/Laufzubeh&ouml;r</_category>
+  <_category>Laufshop/Shop,Laufshop/Herren/Laufzubehör,Laufshop/Damen/Laufzubehör</_category>
   <description>Pro Touch LED Armflasher&lt;br /&gt;&#13;
 &lt;br /&gt;&#13;
 LED Armflasher mit elastischem Band und Flasher mit variabler Blinkfolge,&#13;
 Flasher abnehmbar.&#13;</description>
   <name>LED Armflasher</name>
-  <short_description>Pro Touch LED Armflasher Laufzubeh&ouml;r Leuchten Damen,Herren</short_description>
+  <short_description>Pro Touch LED Armflasher Laufzubehör Leuchten Damen,Herren</short_description>
   <price>12.95</price>
   <tax_class_id>5</tax_class_id>
   <status>1</status>
@@ -58,7 +61,7 @@ Flasher abnehmbar.&#13;</description>
   <brand>Pro Touch</brand>
   <series>LED Armflasher</series>
   <gender>Damen</gender>
-  <product_group>Laufzubeh&ouml;r</product_group>
+  <product_group>Laufzubehör</product_group>
   <style>Leuchten</style>
   <size/>
   <base_price_amount/>
