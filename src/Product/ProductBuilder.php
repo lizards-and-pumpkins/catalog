@@ -16,7 +16,7 @@ class ProductBuilder
 		$parser = xml_parser_create();
 		xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
 		xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 1);
-		xml_parse_into_struct($parser, $xml, $values, $tags);
+		xml_parse_into_struct($parser, $xml, $values);
 		xml_parser_free($parser);
 
 		foreach ($values as $value) {
