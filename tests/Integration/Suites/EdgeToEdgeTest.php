@@ -4,7 +4,7 @@ namespace Brera\PoC\Tests\Integration;
 
 require __DIR__ . '/stubs/SkuStub.php';
 
-use Brera\PoC\Integration\stubs\SkuStub,
+use Brera\PoC\Integration\stubs\SkuStub;
 use Brera\PoC\Product\ProductId;
 use Brera\PoC\PoCMasterFactory;
 use Brera\PoC\IntegrationTestFactory;
