@@ -1,10 +1,8 @@
 <?php
 
-namespace Brera\PoC\Integration\stubs;
+namespace Brera\PoC\Product;
 
-use Brera\PoC\Product\Sku;
-
-class SkuStub implements Sku
+class PoCSku implements Sku
 {
     /**
      * @var string

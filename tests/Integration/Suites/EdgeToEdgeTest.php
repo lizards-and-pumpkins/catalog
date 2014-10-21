@@ -2,9 +2,7 @@
 
 namespace Brera\PoC\Tests\Integration;
 
-require __DIR__ . '/stubs/SkuStub.php';
-
-use Brera\PoC\Integration\stubs\SkuStub;
+use Brera\PoC\Product\PoCSku;
 use Brera\PoC\Product\ProductId;
 use Brera\PoC\PoCMasterFactory;
 use Brera\PoC\IntegrationTestFactory;
@@ -27,7 +25,7 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $factory->register(new IntegrationTestFactory());
 
 
-        $sku = new SkuStub('118235-251');
+        $sku = new PoCSku('118235-251');
         $productId = ProductId::fromSku($sku);
         $productName = 'LED Armflasher';
         
@@ -91,7 +89,7 @@ Flasher abnehmbar.&#13;</description>
      */
     public function createProductDomainEventShouldRenderAProduct()
     {
-        $sku = new SkuStub('test');
+        $sku = new PoCSku('test');
         $productId = ProductId::fromSku($sku);
         $productName = 'test product name';
 
@@ -126,7 +124,7 @@ Flasher abnehmbar.&#13;</description>
         $httpUrl = HttpUrl::fromString('http://example.com/seo-url');
         $request = HttpRequest::fromParameters('GET', $httpUrl);
 
-        $sku = new SkuStub('test');
+        $sku = new PoCSku('test');
         $productId = ProductId::fromSku($sku);
 
         $factory = new PoCMasterFactory();
