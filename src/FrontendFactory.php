@@ -2,8 +2,6 @@
 
 namespace Brera\PoC;
 
-use Brera\PoC\Product\ProductId;
-
 use Brera\Poc\Product\ProductId;
 
 class FrontendFactory implements Factory
