@@ -5,15 +5,15 @@ namespace Brera\PoC\Tests\Integration;
 require __DIR__ . '/stubs/SkuStub.php';
 
 use Brera\PoC\Integration\stubs\SkuStub,
-    Brera\Poc\Product\ProductId,
-    Brera\PoC\PoCMasterFactory,
-    Brera\PoC\IntegrationTestFactory,
-    Brera\PoC\ProductCreatedDomainEvent,
-    Brera\PoC\Http\HttpUrl,
-    Brera\PoC\Http\HttpRequest,
-    Brera\Poc\FrontendFactory,
-    Brera\PoC\PoCWebFront,
-	Brera\PoC\ProductImportDomainEvent;
+use Brera\PoC\Product\ProductId;
+use Brera\PoC\PoCMasterFactory;
+use Brera\PoC\IntegrationTestFactory;
+use Brera\PoC\ProductCreatedDomainEvent;
+use Brera\PoC\Http\HttpUrl;
+use Brera\PoC\Http\HttpRequest;
+use Brera\PoC\FrontendFactory;
+use Brera\PoC\PoCWebFront;
+use Brera\PoC\ProductImportDomainEvent;
 
 /**
  * Class EdgeToEdgeTest
