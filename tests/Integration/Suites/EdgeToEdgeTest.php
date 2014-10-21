@@ -12,7 +12,8 @@ use Brera\PoC\Integration\stubs\SkuStub,
     Brera\PoC\Http\HttpUrl,
     Brera\PoC\Http\HttpRequest,
     Brera\Poc\FrontendFactory,
-    Brera\PoC\PoCWebFront;
+    Brera\PoC\PoCWebFront,
+	Brera\PoC\ProductImportDomainEvent;
 
 /**
  * Class EdgeToEdgeTest
