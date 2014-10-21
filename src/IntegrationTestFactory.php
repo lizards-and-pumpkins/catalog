@@ -2,6 +2,7 @@
 
 namespace Brera\PoC;
 
+use Brera\PoC\Product\ProductBuilder;
 use Brera\PoC\Product\ProductRepository;
 use Brera\PoC\KeyValue\KeyValueStore;
 use Brera\PoC\Queue\DomainEventQueue;
@@ -59,15 +60,26 @@ class IntegrationTestFactory implements Factory
 	{
 		return new ProductImportDomainEventHandler(
 			$event,
-			$this->getMasterFactory()->getProductRepository(),
+			$this->getMasterFactory()->getProductBuilder(),
 			$this->getMasterFactory()->createProductProjector()
 		);
 	}
 
+	/**
+	 * @return PoCProductProjector
+	 */
 	public function createProductProjector()
     {
         return new PoCProductProjector($this->createProductRenderer(), $this->createDataPoolWriter());
     }
+
+	/**
+	 * @return ProductBuilder
+	 */
+	public function getProductBuilder()
+	{
+		return new ProductBuilder();
+	}
 
     /**
      * @return DomainEventHandlerLocator
