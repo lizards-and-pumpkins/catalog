@@ -38,6 +38,7 @@ class IntegrationTestFactory implements Factory
     private $logger;
 
     /**
+     * TODO: This method can be safely deleted
      * @param ProductCreatedDomainEvent $event
      * @return ProductCreatedDomainEventHandler
      */
@@ -49,8 +50,21 @@ class IntegrationTestFactory implements Factory
             $this->getMasterFactory()->createProductProjector()
         );
     }
-    
-    public function createProductProjector()
+
+	/**
+	 * @param ProductImportDomainEvent $event
+	 * @return ProductCreatedDomainEventHandler
+	 */
+	public function createProductImportDomainEventHandler(ProductImportDomainEvent $event)
+	{
+		return new ProductImportDomainEventHandler(
+			$event,
+			$this->getMasterFactory()->getProductRepository(),
+			$this->getMasterFactory()->createProductProjector()
+		);
+	}
+
+	public function createProductProjector()
     {
         return new PoCProductProjector($this->createProductRenderer(), $this->createDataPoolWriter());
     }
