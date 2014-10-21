@@ -4,7 +4,7 @@ namespace Brera\PoC;
 
 use Brera\PoC\Http\HttpRouterChain;
 
-class PoCShop extends Shop
+class PoCWebFront extends WebFront
 {
     /**
      * @return MasterFactory

@@ -2,8 +2,8 @@
 
 namespace Brera\PoC\KeyValue;
 
-use Brera\Poc\Product\ProductId,
-    Brera\PoC\Http\HttpUrl;
+use Brera\PoC\Product\ProductId;
+use Brera\PoC\Http\HttpUrl;
 
 class KeyValueStoreKeyGenerator
 {
@@ -24,7 +24,7 @@ class KeyValueStoreKeyGenerator
      * @param HttpUrl $url
      * @return string
      */
-    public function createPocProductSeoUrlToIdKey(HttpUrl $url)
+    public function createPoCProductSeoUrlToIdKey(HttpUrl $url)
     {
         return 'seo_' . $url->getPath();
     }

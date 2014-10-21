@@ -2,11 +2,11 @@
 
 namespace Brera\PoC;
 
-use Brera\PoC\Http\HttpRequest,
-    Brera\PoC\Http\HttpResponse,
-    Brera\PoC\Http\HttpRouterChain;
+use Brera\PoC\Http\HttpRequest;
+use Brera\PoC\Http\HttpResponse;
+use Brera\PoC\Http\HttpRouterChain;
 
-abstract class Shop
+abstract class WebFront
 {
     /**
      * @var MasterFactory
@@ -46,6 +46,7 @@ abstract class Shop
         // TODO add response locator to differ between Json, html, ...
         
         // TODO put response creation into factory, response depends on http version!
+
         $response = new DefaultHttpResponse();
         $response->setBody($content);
 
@@ -87,7 +88,7 @@ abstract class Shop
             throw new \InvalidArgumentException(
                 sprintf(
                     'Factory is not of type MasterFactory but "%s"',
-                    $this->getExceptionMessageClassnameRepresentation($this->masterFactory)
+                    $this->getExceptionMessageClassNameRepresentation($this->masterFactory)
                 )
             );
         }
@@ -98,7 +99,7 @@ abstract class Shop
     /**
      * @return string
      */
-    private function getExceptionMessageClassnameRepresentation($value)
+    private function getExceptionMessageClassNameRepresentation($value)
     {
         if (is_object($value)) {
             return get_class($value);

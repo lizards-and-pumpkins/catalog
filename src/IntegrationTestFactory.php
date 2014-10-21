@@ -2,16 +2,16 @@
 
 namespace Brera\PoC;
 
-use Brera\PoC\Product\ProductRepository,
-    Brera\PoC\KeyValue\KeyValueStore,
-    Brera\PoC\Queue\DomainEventQueue,
-    Brera\PoC\Renderer\PoCProductRenderer,
-    Brera\PoC\Product\InMemoryProductRepository,
-    Brera\PoC\KeyValue\DataPoolWriter,
-    Brera\PoC\KeyValue\InMemoryKeyValueStore,
-    Brera\PoC\KeyValue\KeyValueStoreKeyGenerator,
-    Brera\PoC\Queue\InMemoryDomainEventQueue,
-    Brera\PoC\KeyValue\DataPoolReader;
+use Brera\PoC\Product\ProductRepository;
+use Brera\PoC\KeyValue\KeyValueStore;
+use Brera\PoC\Queue\DomainEventQueue;
+use Brera\PoC\Renderer\PoCProductRenderer;
+use Brera\PoC\Product\InMemoryProductRepository;
+use Brera\PoC\KeyValue\DataPoolWriter;
+use Brera\PoC\KeyValue\InMemoryKeyValueStore;
+use Brera\PoC\KeyValue\KeyValueStoreKeyGenerator;
+use Brera\PoC\Queue\InMemoryDomainEventQueue;
+use Brera\PoC\KeyValue\DataPoolReader;
 
 class IntegrationTestFactory implements Factory 
 {

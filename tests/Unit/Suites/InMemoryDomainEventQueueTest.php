@@ -1,13 +1,12 @@
 <?php
 
-namespace Brera\PoC\Tests\Unit;
+namespace Brera\PoC\Queue;
 
-use Brera\PoC\Queue\InMemoryDomainEventQueue,
-    Brera\PoC\DomainEvent;
+use Brera\PoC\DomainEvent;
 
 /**
- * @package Brera\PoC
- * @covers \Brera\PoC\InMemoryDomainEventQueue
+ * @package \Brera\PoC
+ * @covers \Brera\PoC\Queue\InMemoryDomainEventQueue
  */
 class InMemoryDomainEventQueueTest extends \PHPUnit_Framework_TestCase
 {
@@ -70,5 +69,5 @@ class InMemoryDomainEventQueueTest extends \PHPUnit_Framework_TestCase
         $this->queue->next();
     }
     
-    // test it should return the events in the correct order
+    /* TODO: test it should return the events in the correct order */
 } 

@@ -2,7 +2,6 @@
 
 namespace Brera\PoC\Product;
 
-
 interface Sku
 {
     /**

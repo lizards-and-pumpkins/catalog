@@ -2,8 +2,8 @@
 
 namespace Brera\PoC\KeyValue;
 
-use Brera\Poc\Product\ProductId,
-    Brera\PoC\Http\HttpUrl;
+use Brera\PoC\Product\ProductId;
+use Brera\PoC\Http\HttpUrl;
 
 class DataPoolWriter
 {
@@ -46,7 +46,7 @@ class DataPoolWriter
     public function setProductIdBySeoUrl(ProductId $productId, HttpUrl $seoUrl)
     {
         $this->keyValueStore->set(
-            $this->keyGenerator->createPocProductSeoUrlToIdKey($seoUrl),
+            $this->keyGenerator->createPoCProductSeoUrlToIdKey($seoUrl),
             $productId
         );
     }

@@ -2,10 +2,10 @@
 
 namespace Brera\PoC;
 
-use Brera\Poc\Product\ProductId,
-    Brera\PoC\KeyValue\DataPoolReader,
-    Brera\PoC\Http\HttpResponse,
-    Brera\PoC\Http\HttpRequestHandler;
+use Brera\PoC\Product\ProductId;
+use Brera\PoC\KeyValue\DataPoolReader;
+use Brera\PoC\Http\HttpResponse;
+use Brera\PoC\Http\HttpRequestHandler;
 
 class ProductDetailHtmlPage implements HttpRequestHandler
 {
@@ -19,6 +19,10 @@ class ProductDetailHtmlPage implements HttpRequestHandler
      */
     private $dataPoolReader;
 
+    /**
+     * @param ProductId $productId
+     * @param DataPoolReader $dataPoolReader
+     */
     public function __construct(ProductId $productId, DataPoolReader $dataPoolReader)
     {
         $this->productId = $productId;
@@ -33,5 +37,4 @@ class ProductDetailHtmlPage implements HttpRequestHandler
         $html = $this->dataPoolReader->getPoCProductHtml($this->productId);
         return $html;
     }
-
 } 

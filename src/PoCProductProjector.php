@@ -2,9 +2,9 @@
 
 namespace Brera\PoC;
 
-use Brera\PoC\Renderer\ProductRenderer,
-    Brera\PoC\KeyValue\DataPoolWriter,
-    Brera\PoC\Product\Product;
+use Brera\PoC\Renderer\ProductRenderer;
+use Brera\PoC\KeyValue\DataPoolWriter;
+use Brera\PoC\Product\Product;
 
 class PoCProductProjector
 {
@@ -18,10 +18,11 @@ class PoCProductProjector
      */
     private $dataPoolWriter;
 
-    public function __construct(
-        ProductRenderer $renderer,
-        DataPoolWriter $dataPoolWriter
-    )
+    /**
+     * @param ProductRenderer $renderer
+     * @param DataPoolWriter $dataPoolWriter
+     */
+    public function __construct(ProductRenderer $renderer, DataPoolWriter $dataPoolWriter)
     {
         $this->renderer = $renderer;
         $this->dataPoolWriter = $dataPoolWriter;

@@ -2,7 +2,7 @@
 
 namespace Brera\PoC;
 
-use Brera\Poc\Product\ProductId;
+use Brera\PoC\Product\ProductId;
 
 class ProductCreatedDomainEvent implements DomainEvent
 {
@@ -11,6 +11,9 @@ class ProductCreatedDomainEvent implements DomainEvent
      */
     private $productId;
 
+    /**
+     * @param ProductId $productId
+     */
     function __construct(ProductId $productId)
     {
         $this->productId = $productId;

@@ -1,15 +1,9 @@
 <?php
 
-namespace Brera\PoC\Tests\Unit;
+namespace Brera\PoC\KeyValue;
 
-require __DIR__ . '/../Integration/stubs/SkuStub.php';
-
-use Brera\PoC\KeyValue\DataPoolReader,
-    Brera\Poc\KeyValue\KeyValueStore,
-    Brera\Poc\KeyValue\KeyValueStoreKeyGenerator,
-    Brera\PoC\Integration\stubs\SkuStub,
-    Brera\PoC\Product\ProductId,
-    Brera\PoC\Http\HttpUrl;
+use Brera\PoC\Product\ProductId;
+use Brera\PoC\Http\HttpUrl;
 
 /**
  * @covers \Brera\PoC\KeyValue\DataPoolReader
@@ -48,8 +42,9 @@ class DataPoolReaderTest extends \PHPUnit_Framework_TestCase
     {
         $value = '<p>html</p>';
 
-        $skuStub = new SkuStub('test');
-        $productId = ProductId::fromSku($skuStub);
+        $productId = $this->getMockBuilder(ProductId::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->keyValueStoreKeyGenerator->expects($this->once())
             ->method('createPoCProductHtmlKey')
@@ -76,7 +71,7 @@ class DataPoolReaderTest extends \PHPUnit_Framework_TestCase
         $value = 'test';
 
         $this->keyValueStoreKeyGenerator->expects($this->once())
-            ->method('createPocProductSeoUrlToIdKey')
+            ->method('createPoCProductSeoUrlToIdKey')
             ->willReturn($key);
 
         $this->keyValueStore->expects($this->once())
@@ -99,7 +94,7 @@ class DataPoolReaderTest extends \PHPUnit_Framework_TestCase
         $key = 'seo_url_' . $urlString;
 
         $this->keyValueStoreKeyGenerator->expects($this->once())
-            ->method('createPocProductSeoUrlToIdKey')
+            ->method('createPoCProductSeoUrlToIdKey')
             ->willReturn($key);
 
         $this->keyValueStore->expects($this->once())

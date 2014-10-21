@@ -4,7 +4,6 @@ namespace Brera\PoC\Http;
 
 interface HttpResponse
 {
-
     /**
      * @return string
      */
