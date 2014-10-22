@@ -17,9 +17,22 @@ abstract class HttpRequest
         $this->url = $url;
     }
 
+	/**
+	 * @return HttpRequest
+	 */
     public static function fromGlobalState()
     {
-        /* TODO: Implement */
+	    $requestMethod = $_SERVER['REQUEST_METHOD'];
+
+	    $protocol = 'http';
+	    if ($_SERVER['HTTPS']) {
+		    $protocol = 'https';
+	    }
+
+	    $url = HttpUrl::fromString($protocol . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+
+	    /* TODO: Decouple */
+	    return self::fromParameters($requestMethod, $url);
     }
 
     /**

@@ -7,6 +7,7 @@ require_once __DIR__ . '/AbstractHttpRequest.php';
 /**
  * @covers \Brera\PoC\Http\HttpPostRequest
  * @covers \Brera\PoC\Http\HttpRequest
+ * @uses \Brera\PoC\Http\HttpUrl
  */
 class HttpPostRequestTest extends AbstractHttpRequest
 {

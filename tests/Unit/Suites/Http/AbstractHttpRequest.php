@@ -31,10 +31,31 @@ class AbstractHttpRequest extends \PHPUnit_Framework_TestCase
 	{
 		$stubHttpUrl = $this->getStubHttpUrl();
 
-		$result = HttpRequest::fromParameters('PUT', $stubHttpUrl);
+		HttpRequest::fromParameters('PUT', $stubHttpUrl);
+	}
 
-		$this->assertInstanceOf(HttpPostRequest::class, $result);
+	/**
+	 * @test
+	 */
+	public function itShouldReturnAnHttpRequestFromAGlobalState()
+	{
+		$this->setUpGlobalState();
 
+		$result = HttpRequest::fromGlobalState();
+
+		$this->assertInstanceOf(HttpGetRequest::class, $result);
+	}
+
+	/**
+	 * @test
+	 */
+	public function itShouldReturnAnHttpRequestFromAGlobalStateOfASecureUrl()
+	{
+		$this->setUpGlobalState(true);
+
+		$result = HttpRequest::fromGlobalState();
+
+		$this->assertInstanceOf(HttpGetRequest::class, $result);
 	}
 
 	protected function getStubHttpUrl()
@@ -43,5 +64,13 @@ class AbstractHttpRequest extends \PHPUnit_Framework_TestCase
 		                    ->disableOriginalConstructor()
 		                    ->getMock();
 		return $stubHttpUrl;
+	}
+
+	private function setUpGlobalState($isSecure = false)
+	{
+		$_SERVER['REQUEST_METHOD'] = 'GET';
+		$_SERVER['HTTPS'] = $isSecure;
+		$_SERVER['HTTP_HOST'] = 'example.com';
+		$_SERVER['REQUEST_URI'] = '/';
 	}
 }
