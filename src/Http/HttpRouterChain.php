@@ -7,7 +7,7 @@ class HttpRouterChain implements HttpRouter
     /**
      * @var HttpRouter[]
      */
-    private $routers;
+    private $routers = array();
 
     /**
      * @param HttpRequest $request
