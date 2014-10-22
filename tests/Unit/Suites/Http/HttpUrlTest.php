@@ -3,9 +3,6 @@
 namespace Brera\PoC\Http;
 
 /**
- * Class HttpUrlTest
- *
- * @package \Brera\PoC
  * @covers  \Brera\PoC\Http\HttpUrl
  */
 class HttpUrlTest extends \PHPUnit_Framework_TestCase

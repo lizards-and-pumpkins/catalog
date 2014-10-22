@@ -5,7 +5,6 @@ namespace Brera\PoC\Queue;
 use Brera\PoC\DomainEvent;
 
 /**
- * @package \Brera\PoC
  * @covers \Brera\PoC\Queue\InMemoryDomainEventQueue
  */
 class InMemoryDomainEventQueueTest extends \PHPUnit_Framework_TestCase

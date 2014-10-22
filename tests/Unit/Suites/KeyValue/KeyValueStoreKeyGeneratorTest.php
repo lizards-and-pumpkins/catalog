@@ -6,9 +6,6 @@ use Brera\PoC\Product\ProductId;
 use Brera\PoC\Http\HttpUrl;
 
 /**
- * Class KeyValueStoreKeyGeneratorTest
- *
- * @package Brera\PoC
  * @covers  \Brera\PoC\KeyValue\KeyValueStoreKeyGenerator
  * @uses    \Brera\PoC\Http\HttpUrl
  */

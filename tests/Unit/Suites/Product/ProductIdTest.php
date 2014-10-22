@@ -3,8 +3,6 @@
 namespace Brera\PoC\Product;
 
 /**
- * Class ProductIdTest
- * @package \Brera\PoC
  * @covers \Brera\PoC\Product\ProductId
  */
 class ProductIdTest extends \PHPUnit_Framework_TestCase

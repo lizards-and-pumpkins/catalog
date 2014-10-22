@@ -13,10 +13,6 @@ use Brera\PoC\FrontendFactory;
 use Brera\PoC\PoCWebFront;
 use Brera\PoC\ProductImportDomainEvent;
 
-/**
- * Class EdgeToEdgeTest
- * @package Brera\PoC
- */
 class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
 {
 	/**

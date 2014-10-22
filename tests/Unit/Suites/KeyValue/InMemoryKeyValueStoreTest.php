@@ -3,7 +3,6 @@
 namespace Brera\PoC\KeyValue;
 
 /**
- * @package \Brera\PoC
  * @covers  \Brera\PoC\KeyValue\InMemoryKeyValueStore
  */
 class InMemoryKeyValueStoreTest extends \PHPUnit_Framework_TestCase
