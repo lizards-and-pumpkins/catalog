@@ -53,7 +53,7 @@ while (! feof($f)) {
         if (in_array($field, $ignoreFields)) {
             continue;
         }
-        $attribute = $dom->createElement($field, htmlentities($row[$i]));
+        $attribute = $dom->createElement($field, $row[$i]);
         $product->appendChild($attribute);
     }
     echo $dom->saveXML($product) . PHP_EOL;
