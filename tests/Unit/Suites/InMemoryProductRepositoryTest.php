@@ -51,6 +51,15 @@ class InMemoryProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $stubProductId = $this->getStubProductId();
         $this->repository->findById($stubProductId);
     }
+
+	/**
+	 * @test
+	 */
+	public function itShouldReturnNull()
+	{
+		$result = $this->repository->commit();
+		$this->assertNull($result);
+	}
     
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject
