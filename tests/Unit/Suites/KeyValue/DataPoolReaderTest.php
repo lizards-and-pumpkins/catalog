@@ -2,26 +2,15 @@
 
 namespace Brera\PoC\KeyValue;
 
-use Brera\PoC\Product\ProductId;
-use Brera\PoC\Http\HttpUrl;
+require_once __DIR__ . '/AbstractDataPool.php';
 
 /**
  * @covers \Brera\PoC\KeyValue\DataPoolReader
  * @uses \Brera\PoC\Product\ProductId
  * @uses \Brera\PoC\Http\HttpUrl
  */
-class DataPoolReaderTest extends \PHPUnit_Framework_TestCase
+class DataPoolReaderTest extends AbstractDataPool
 {
-    /**
-     * @var KeyValueStore|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubKeyValueStore;
-
-    /**
-     * @var KeyValueStoreKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubKeyGenerator;
-
     /**
      * @var DataPoolReader
      */
@@ -29,8 +18,7 @@ class DataPoolReaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubKeyValueStore = $this->getMock(KeyValueStore::class);
-        $this->stubKeyGenerator = $this->getMock(KeyValueStoreKeyGenerator::class);
+	    parent::setUp();
 
         $this->dataPoolReader = new DataPoolReader($this->stubKeyValueStore, $this->stubKeyGenerator);
     }
@@ -41,18 +29,10 @@ class DataPoolReaderTest extends \PHPUnit_Framework_TestCase
     public function shouldReturnPoCProductHtmlBasedOnKeyFromKeyValueStorage()
     {
         $value = '<p>html</p>';
+        $productId = $this->getStubProductId();
 
-        $productId = $this->getMockBuilder(ProductId::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->stubKeyGenerator->expects($this->once())
-            ->method('createPoCProductHtmlKey')
-            ->willReturn((string) $productId);
-
-        $this->stubKeyValueStore->expects($this->once())
-            ->method('get')
-            ->willReturn($value);
+	    $this->addStubMethodToStubKeyGenerator('createPoCProductHtmlKey');
+	    $this->addGetMethodToStubKeyValueStore($value);
 
         $html = $this->dataPoolReader->getPoCProductHtml($productId);
 
@@ -64,19 +44,11 @@ class DataPoolReaderTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnProductIdBySeoUrl()
     {
-        $urlString = 'http://example.com/path';
-        $url = HttpUrl::fromString($urlString);
-
-        $key = 'seo_url_' . $urlString;
         $value = 'test';
+	    $url = $this->getDummyUrl();
 
-        $this->stubKeyGenerator->expects($this->once())
-            ->method('createPoCProductSeoUrlToIdKey')
-            ->willReturn($key);
-
-        $this->stubKeyValueStore->expects($this->once())
-            ->method('get')
-            ->willReturn($value);
+	    $this->addStubMethodToStubKeyGenerator('createPoCProductSeoUrlToIdKey');
+	    $this->addGetMethodToStubKeyValueStore($value);
 
         $productId = $this->dataPoolReader->getProductIdBySeoUrl($url);
 
@@ -88,18 +60,10 @@ class DataPoolReaderTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnIfTheSeoUrlKeyExists()
     {
-        $urlString = 'http://example.com/path';
-        $url = HttpUrl::fromString($urlString);
+	    $url = $this->getDummyUrl();
 
-        $key = 'seo_url_' . $urlString;
-
-        $this->stubKeyGenerator->expects($this->once())
-            ->method('createPoCProductSeoUrlToIdKey')
-            ->willReturn($key);
-
-        $this->stubKeyValueStore->expects($this->once())
-            ->method('has')
-            ->willReturn(true);
+	    $this->addStubMethodToStubKeyGenerator('createPoCProductSeoUrlToIdKey');
+	    $this->addHasMethodToStubKeyValueStore(true);
 
         $this->assertTrue($this->dataPoolReader->hasProductSeoUrl($url));
     }
