@@ -15,12 +15,12 @@ class DataPoolReaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var KeyValueStore|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $keyValueStore;
+    private $stubKeyValueStore;
 
     /**
      * @var KeyValueStoreKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $keyValueStoreKeyGenerator;
+    private $stubKeyGenerator;
 
     /**
      * @var DataPoolReader
@@ -29,10 +29,10 @@ class DataPoolReaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->keyValueStore = $this->getMock(KeyValueStore::class);
-        $this->keyValueStoreKeyGenerator = $this->getMock(KeyValueStoreKeyGenerator::class);
+        $this->stubKeyValueStore = $this->getMock(KeyValueStore::class);
+        $this->stubKeyGenerator = $this->getMock(KeyValueStoreKeyGenerator::class);
 
-        $this->dataPoolReader = new DataPoolReader($this->keyValueStore, $this->keyValueStoreKeyGenerator);
+        $this->dataPoolReader = new DataPoolReader($this->stubKeyValueStore, $this->stubKeyGenerator);
     }
 
     /**
@@ -46,11 +46,11 @@ class DataPoolReaderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->keyValueStoreKeyGenerator->expects($this->once())
+        $this->stubKeyGenerator->expects($this->once())
             ->method('createPoCProductHtmlKey')
             ->willReturn((string) $productId);
 
-        $this->keyValueStore->expects($this->once())
+        $this->stubKeyValueStore->expects($this->once())
             ->method('get')
             ->willReturn($value);
 
@@ -70,11 +70,11 @@ class DataPoolReaderTest extends \PHPUnit_Framework_TestCase
         $key = 'seo_url_' . $urlString;
         $value = 'test';
 
-        $this->keyValueStoreKeyGenerator->expects($this->once())
+        $this->stubKeyGenerator->expects($this->once())
             ->method('createPoCProductSeoUrlToIdKey')
             ->willReturn($key);
 
-        $this->keyValueStore->expects($this->once())
+        $this->stubKeyValueStore->expects($this->once())
             ->method('get')
             ->willReturn($value);
 
@@ -93,11 +93,11 @@ class DataPoolReaderTest extends \PHPUnit_Framework_TestCase
 
         $key = 'seo_url_' . $urlString;
 
-        $this->keyValueStoreKeyGenerator->expects($this->once())
+        $this->stubKeyGenerator->expects($this->once())
             ->method('createPoCProductSeoUrlToIdKey')
             ->willReturn($key);
 
-        $this->keyValueStore->expects($this->once())
+        $this->stubKeyValueStore->expects($this->once())
             ->method('has')
             ->willReturn(true);
 
