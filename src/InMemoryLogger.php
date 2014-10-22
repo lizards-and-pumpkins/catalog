@@ -2,18 +2,22 @@
 
 namespace Brera\PoC;
 
-class InMemoryLogger implements Logger
+use Psr\Log\AbstractLogger;
+
+class InMemoryLogger extends AbstractLogger
 {
     /**
      * @var LogMessage[]
      */
     private $messages = [];
 
-    /**
-     * @param LogMessage $message
-     * @return null
-     */
-    public function log(LogMessage $message)
+	/**
+	 * @param mixed $level
+	 * @param string $message
+	 * @param array $context
+	 * @return null
+	 */
+    public function log($level, $message, array $context = array())
     {
         $this->messages[] = $message;
     }
