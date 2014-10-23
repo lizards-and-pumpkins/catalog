@@ -13,6 +13,7 @@ use Brera\PoC\KeyValue\InMemoryKeyValueStore;
 use Brera\PoC\KeyValue\KeyValueStoreKeyGenerator;
 use Brera\PoC\Queue\InMemoryDomainEventQueue;
 use Brera\PoC\KeyValue\DataPoolReader;
+use Psr\Log\LoggerInterface;
 
 class IntegrationTestFactory implements Factory 
 {
@@ -34,7 +35,7 @@ class IntegrationTestFactory implements Factory
     private $eventQueue;
 
     /**
-     * @var Logger
+     * @var LoggerInterface
      */
     private $logger;
 
