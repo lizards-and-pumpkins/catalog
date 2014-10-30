@@ -2,33 +2,22 @@
 
 namespace Brera\PoC\Http;
 
+use League\Url\UrlImmutable;
+use League\Url\AbstractUrl;
+
 class HttpUrl
 {
     /**
-     * @var string
+     * @var \League\Url\AbstractUrl
      */
     private $url;
 
     /**
-     * @param string $url
+     * @param \League\Url\AbstractUrl $url
      */
-    protected function __construct($url)
+    protected function __construct(AbstractUrl $url)
     {
         $this->url = $url;
-    }
-
-    /**
-     * @param string $url
-     * @return string
-     * @throws \InvalidArgumentException
-     */
-    private static function detectProtocol($url)
-    {
-        $protocol = strstr($url, ':', true);
-        if (false === $protocol) {
-            throw new \InvalidArgumentException(sprintf('No protocol detected in URL "%s"', $url));
-        }
-        return $protocol;
     }
 
     /**
@@ -40,22 +29,19 @@ class HttpUrl
     }
 
     /**
-     * @param string $url
+     * @param string $urlString
      *
      * @return HttpUrl
      * @throws UnknownProtocolException
      */
-    public static function fromString($url)
+    public static function fromString($urlString)
     {
-        $protocol = self::detectProtocol($url);
-        switch ($protocol) {
-            case 'https':
-                return new HttpsUrl($url);
-            case 'http':
-                return new HttpUrl($url);
-            default:
-                throw new UnknownProtocolException(sprintf('Protocol can not be handled "%s"', $protocol));
+        try {
+            $url = UrlImmutable::createFromUrl($urlString);
+        } catch (\RuntimeException $e) {
+            throw new \InvalidArgumentException($e->getMessage());
         }
+        return self::createHttpUrlBasedOnSchema($url);
     }
 
     /**
@@ -71,11 +57,24 @@ class HttpUrl
      */
     public function getPath()
     {
-        $path = parse_url($this->url, \PHP_URL_PATH);
-        if (null === $path) {
-            return '/';
+        $path = $this->url->getPath();
+        return '/' . $path;
+    }
+
+    /**
+     * @param \League\Url\AbstractUrl $url
+     * @return HttpUrl
+     * @throws UnknownProtocolException
+     */
+    private static function createHttpUrlBasedOnSchema(AbstractUrl $url)
+    {
+        switch ($url->getScheme()) {
+            case 'https':
+                return new HttpsUrl($url);
+            case 'http':
+                return new HttpUrl($url);
+            default:
+                throw new UnknownProtocolException(sprintf('Protocol can not be handled "%s"', $url->getScheme()));
         }
-        
-        return $path;
     }
 } 
