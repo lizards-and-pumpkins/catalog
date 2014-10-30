@@ -4,6 +4,7 @@ namespace Brera\PoC\KeyValue;
 
 use Brera\PoC\Product\ProductId;
 use Brera\PoC\Http\HttpUrl;
+use Brera\PoC\Product\PoCSku;
 
 class DataPoolReader
 {
@@ -44,7 +45,10 @@ class DataPoolReader
     public function getProductIdBySeoUrl(HttpUrl $url)
     {
         $key = $this->keyValueStoreKeyGenerator->createPoCProductSeoUrlToIdKey($url);
-        return $this->keyValueStore->get($key);
+        $skuString = $this->keyValueStore->get($key);
+	    $sku = new PoCSku($skuString);
+
+	    return ProductId::fromSku($sku);
     }
 
     /**

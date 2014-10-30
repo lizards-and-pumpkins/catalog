@@ -2,6 +2,8 @@
 
 namespace Brera\PoC\KeyValue;
 
+use Brera\PoC\Product\ProductId;
+
 require_once __DIR__ . '/AbstractDataPool.php';
 
 /**
@@ -53,6 +55,7 @@ class DataPoolReaderTest extends AbstractDataPool
         $productId = $this->dataPoolReader->getProductIdBySeoUrl($url);
 
         $this->assertEquals($value, $productId);
+	    $this->assertInstanceOf(ProductId::class, $productId);
     }
 
     /**
