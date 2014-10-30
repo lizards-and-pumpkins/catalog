@@ -57,8 +57,9 @@ class HttpUrl
      */
     public function getPath()
     {
+        /** @var \League\Url\Components\Path $path */
         $path = $this->url->getPath();
-        return '/' . $path;
+        return $path->getUriComponent();
     }
 
     /**
