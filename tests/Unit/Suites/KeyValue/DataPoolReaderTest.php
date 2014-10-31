@@ -10,6 +10,7 @@ require_once __DIR__ . '/AbstractDataPool.php';
  * @covers \Brera\PoC\KeyValue\DataPoolReader
  * @uses \Brera\PoC\Product\ProductId
  * @uses \Brera\PoC\Http\HttpUrl
+ * @uses \Brera\PoC\Product\PoCSku
  */
 class DataPoolReaderTest extends AbstractDataPool
 {
