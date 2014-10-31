@@ -40,7 +40,7 @@ class DataPoolReader
 
     /**
      * @param HttpUrl $url
-     * @return mixed
+     * @return ProductId
      */
     public function getProductIdBySeoUrl(HttpUrl $url)
     {

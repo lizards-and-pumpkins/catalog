@@ -17,7 +17,7 @@ interface KeyValueStore
     public function get($key);
 
     /**
-     * @param $key
+     * @param string $key
      * @return bool
      */
     public function has($key);

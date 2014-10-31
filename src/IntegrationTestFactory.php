@@ -55,7 +55,7 @@ class IntegrationTestFactory implements Factory
 
 	/**
 	 * @param ProductImportDomainEvent $event
-	 * @return ProductCreatedDomainEventHandler
+	 * @return ProductImportDomainEventHandler
 	 */
 	public function createProductImportDomainEventHandler(ProductImportDomainEvent $event)
 	{

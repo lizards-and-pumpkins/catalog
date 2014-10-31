@@ -18,7 +18,7 @@ class CredisKeyValueStore implements KeyValueStore
 
 	/**
      * @param string $key
-     * @return mixed
+     * @return bool|string
      * @throws KeyNotFoundException
      */
     public function get($key)
