@@ -10,7 +10,6 @@ class ProductBuilder
 	 */
 	public function createProductFromXml($xml)
 	{
-		$productId = '';
 		$name = '';
 
 		$parser = xml_parser_create();
