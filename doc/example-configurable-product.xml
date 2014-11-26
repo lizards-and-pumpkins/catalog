@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<product type="configurable">
+    <sku>218765-333</sku>
+    <name>adiPure 360</name>
+    <categories website="ru_de, ru_en">
+        <category>men-running-shoes</category>
+        <category>specials</category>
+    </categories>
+    <short_description lang="de_DE,en_US"><![CDATA[<div>Adidas adiPure 360</div>
+    
+<li>Techfit bietet Unterstützung in den wichtigen Bereichen.</li>
+<li>Technisierte Maschen: Die ungleichmäßige Maschenstruktur vereint dichte und offene Maschen.</li>
+<li>Flex Grooves: Flexibilität für ein natürliches Laufgefühl.</li>
+<li>Nahtloses textiles und Hightech-Obermaterial aus Mesh</li>
+<li>Dichteres und offeneres Mesh-Muster für Stützung und Atmungsaktivität, wo es gebraucht wird.</li>
+<li>Komfortables Synthetikfutter</li>
+<li>Ultraweiches, wasserfestes SUPERCLOUD EVA-Fußbett für schnelltrocknenden Komfort</li>
+<li>Flex-Rillen für einen angenehmen und natürlichen Lauf</li>
+<li>ABRIEBFESTE Gummiaußensohle</li>
+]]></short_description>
+    <price>89.95</price>
+    <tax_class_id>5</tax_class_id>
+    <inventory>
+        <qty>12</qty>
+        <is_in_stock>1</is_in_stock>
+        <backorders>1</backorders>
+    </inventory>
+    <images>
+        <image identifier="main-shoe-picture">
+            <file>products/218765/218765-333.1.png</file>
+            <label lang="de_DE,en_US">The main image label for this shoe</label>
+        </image>
+        <image identifier="drawing">
+            <file lang="de_DE">products/218765/218765-333.2de.png</file>
+            <file lang="en_US">products/218765/218765-333.2en.png</file>
+            <label>Der Text zum zweiten Bild</label>
+        </image>
+        <image identifier="small">
+            <file lang="de_DE,en_US">products/218765/218765-333.3.png</file>
+            <label>Yet another image label</label>
+        </image>
+    </images>
+    <image_main>main-shoe-picture</image_main>
+    <image_listing>small</image_listing>
+    <image_thumbnail>small</image_thumbnail>
+    <associated_products>
+        <child sku="218765-333-1">
+            <color>
+                <label lang="en_US">Red</label>
+                <label lang="de_DE">Rot</label>
+            </color>
+            <size>
+                <label>US 12.5 - EU 47</label>
+            </size>
+        </child>
+        <child sku="218765-333-2">
+            <color>
+                <label lang="en_US">Red</label>
+                <label lang="de_DE">Rot</label>
+            </color>
+            <size>
+                <label>US 12 - EU 46</label>
+            </size>
+        </child>
+        <child sku="218765-333-3">
+            <color>
+                <label lang="en_US">Red</label>
+                <label lang="de_DE">Rot</label>
+            </color>
+            <size>
+                <label>US 11.5 - EU 45</label>
+            </size>
+        </child>
+        <child sku="218765-333-4">
+            <color>
+                <label lang="en_US">Red</label>
+                <label lang="de_DE">Rot</label>
+            </color>
+            <size>
+                <label>US 10 - EU 43</label>
+            </size>
+        </child>
+        <child sku="218765-333-5">
+            <color>
+                <label lang="en_US">Blue</label>
+                <label lang="de_DE">Blau</label>
+            </color>
+            <size>
+                <label>US 12.5 - EU 47</label>
+            </size>
+        </child>
+        <child sku="218765-333-6">
+            <color>
+                <label lang="en_US">Blue</label>
+                <label lang="de_DE">Blau</label>
+            </color>
+            <size>
+                <label>US 12 - EU 46</label>
+            </size>
+        </child>
+        <child sku="218765-333-7">
+            <color>
+                <label lang="en_US">Blue</label>
+                <label lang="de_DE">Blau</label>
+            </color>
+            <size>
+                <label>US 11.5 - EU 45</label>
+            </size>
+        </child>
+    </associated_products>
+</product>
