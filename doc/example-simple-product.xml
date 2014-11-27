@@ -1,8 +1,6 @@
 <?xml version="1.0"?>
 <product type="simple">
     <sku>118235-251</sku>
-    <name lang="de_DE">LED Arm-Signallampe</name>
-    <name lang="en_US">LED Armflasher</name>
     <categories website="ru_de">
         <category>men-accessoires</category>
         <category>women-accessoires</category>
@@ -12,24 +10,20 @@
         <category>men</category>
         <category>woman</category>
     </categories>
-    <short_description lang="de_DE,en_US"><![CDATA[Pro Touch LED Armflasher<br />&#13;
-<br />&#13;
-LED Armflasher mit elastischem Band und Flasher mit variabler Blinkfolge,&#13;
-Flasher abnehmbar.&#13;]]></short_description>
     <price website="ru_de">12.95</price>
     <price website="ru_en">11.45</price>
     <special_price website="ru_de">11.95</special_price>
-    <weight>11.2</weight>
+    
     <tax_class_id>5</tax_class_id>
     <inventory>
         <qty>5</qty>
         <is_in_stock>1</is_in_stock>
         <backorders>0</backorders>
     </inventory>
-    <images>
+    <assets>
         <image identifier="main">
             <file>products/118235/118235-251.1.png</file>
-            <label lang="de_DE,en_US">The main image label</label>
+            <label>The main image label</label>
         </image>
         <image identifier="small" gallery="false">
             <file>products/118235/118235-251.2.png</file>
@@ -41,8 +35,20 @@ Flasher abnehmbar.&#13;]]></short_description>
             <file lang="de_US">products/118235/118235-251.2us.png</file>
             <label>A secondary image label</label>
         </image>
-    </images>
-    <image_main>main</image_main>
-    <image_listing>main</image_listing>
-    <image_thumbnail>small</image_thumbnail>
+    </assets>
+    <attributes>
+        <attribute code="name" lang="de_DE">LED Arm-Signallampe</attribute>
+        <attribute code="name" lang="en_US">LED Armflasher</attribute>
+        <attribute code="image_main">main</attribute>
+        <attribute code="image_listing">main</attribute>
+        <attribute code="image_thumbnail">small</attribute>
+        <attribtue code="weight">11.2</attribtue>
+        <attribute code="short_description" lang="de_DE"><![CDATA[Pro Touch LED Armflasher<br />&#13;
+<br />&#13;
+LED Armflasher mit elastischem Band und Flasher mit variabler Blinkfolge,&#13;
+Flasher abnehmbar.&#13;]]></attribute>
+        <attribute code="short_description" lang="en_US"><![CDATA[Pro Touch LED Armflasher<br />&#13;
+<br />&#13;
+LED Armflasher with elastic Band and Flasher&#13;]]></attribute>
+    </attributes>
 </product>

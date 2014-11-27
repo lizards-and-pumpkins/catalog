@@ -1,12 +1,11 @@
 <?xml version="1.0"?>
 <product type="configurable">
     <sku>218765-333</sku>
-    <name>adiPure 360</name>
-    <categories website="ru_de, ru_en">
+    <categories>
         <category>men-running-shoes</category>
         <category>specials</category>
     </categories>
-    <short_description lang="de_DE,en_US"><![CDATA[<div>Adidas adiPure 360</div>
+    <short_description><![CDATA[<div>Adidas adiPure 360</div>
     
 <li>Techfit bietet Unterstützung in den wichtigen Bereichen.</li>
 <li>Technisierte Maschen: Die ungleichmäßige Maschenstruktur vereint dichte und offene Maschen.</li>
@@ -25,10 +24,11 @@
         <is_in_stock>1</is_in_stock>
         <backorders>1</backorders>
     </inventory>
-    <images>
+    <assets>
         <image identifier="main-shoe-picture">
             <file>products/218765/218765-333.1.png</file>
-            <label lang="de_DE,en_US">The main image label for this shoe</label>
+            <label>Das Hauptbild</label>
+            <label lang="en_US">The main image label for this shoe</label>
         </image>
         <image identifier="drawing">
             <file lang="de_DE">products/218765/218765-333.2de.png</file>
@@ -36,76 +36,91 @@
             <label>Der Text zum zweiten Bild</label>
         </image>
         <image identifier="small">
-            <file lang="de_DE,en_US">products/218765/218765-333.3.png</file>
+            <file lang="en_US">products/218765/218765-333.3.png</file>
             <label>Yet another image label</label>
         </image>
-    </images>
-    <image_main>main-shoe-picture</image_main>
-    <image_listing>small</image_listing>
-    <image_thumbnail>small</image_thumbnail>
+    </assets>
+    <attributes>
+        <attribute code="name">adiPure 360</attribute>
+        <attribute code="image_main">main-shoe-picture</attribute>
+        <attribute code="image_listing">small</attribute>
+        <attribute code="image_thumbnail">small</attribute>
+    </attributes>
     <associated_products>
         <child sku="218765-333-1">
-            <color>
-                <label lang="en_US">Red</label>
-                <label lang="de_DE">Rot</label>
-            </color>
-            <size>
-                <label>US 12.5 - EU 47</label>
-            </size>
+            <attributes>
+                <attribute code="color">
+                    <label lang="en_US">Red</label>
+                    <label lang="de_DE">Rot</label>
+                </attribute>
+                <attribute code="size">
+                    <label>US 12.5 - EU 47</label>
+                </attribute>
+            </attributes>
         </child>
         <child sku="218765-333-2">
-            <color>
-                <label lang="en_US">Red</label>
-                <label lang="de_DE">Rot</label>
-            </color>
-            <size>
-                <label>US 12 - EU 46</label>
-            </size>
+            <attributes>
+                <attribute code="color">
+                    <label lang="en_US">Red</label>
+                    <label lang="de_DE">Rot</label>
+                </attribute>
+                <attribute code="size">
+                    <label>US 12 - EU 46</label>
+                </attribute>
+            </attributes>
         </child>
         <child sku="218765-333-3">
-            <color>
-                <label lang="en_US">Red</label>
-                <label lang="de_DE">Rot</label>
-            </color>
-            <size>
-                <label>US 11.5 - EU 45</label>
-            </size>
+            <attributes>
+                <attribute code="color">
+                    <label lang="en_US">Red</label>
+                    <label lang="de_DE">Rot</label>
+                </attribute>
+                <attribute code="size">
+                    <label>US 11.5 - EU 45</label>
+                </attribute>
+            </attributes>
         </child>
         <child sku="218765-333-4">
-            <color>
-                <label lang="en_US">Red</label>
-                <label lang="de_DE">Rot</label>
-            </color>
-            <size>
-                <label>US 10 - EU 43</label>
-            </size>
+            <attributes>
+                <attribute code="color">
+                    <label lang="en_US">Red</label>
+                    <label lang="de_DE">Rot</label>
+                </attribute>
+                <attribute code="size">
+                    <label>US 10 - EU 43</label>
+                </attribute>
+            </attributes>
         </child>
         <child sku="218765-333-5">
-            <color>
-                <label lang="en_US">Blue</label>
-                <label lang="de_DE">Blau</label>
-            </color>
-            <size>
-                <label>US 12.5 - EU 47</label>
-            </size>
+            <attributes>
+                <attribute code="color">
+                    <label lang="en_US">Blue</label>
+                    <label lang="de_DE">Blau</label>
+                </attribute>
+                <attribute code="size">
+                    <label>US 12.5 - EU 47</label>
+                </attribute>
+            </attributes>
         </child>
         <child sku="218765-333-6">
-            <color>
-                <label lang="en_US">Blue</label>
-                <label lang="de_DE">Blau</label>
-            </color>
-            <size>
-                <label>US 12 - EU 46</label>
-            </size>
+            <attributes>
+                <attribute code="color">
+                    <label lang="en_US">Blue</label>
+                    <label lang="de_DE">Blau</label>
+                </attribute>
+                <attribute code="size">
+                    <label>US 12 - EU 46</label>
+                </attribute>
+            </attributes>
         </child>
         <child sku="218765-333-7">
-            <color>
+            <attribute code="color">
                 <label lang="en_US">Blue</label>
                 <label lang="de_DE">Blau</label>
-            </color>
-            <size>
+            </attribute>
+            <attribute code="size">
                 <label>US 11.5 - EU 45</label>
-            </size>
+            </attribute>
         </child>
     </associated_products>
 </product>
