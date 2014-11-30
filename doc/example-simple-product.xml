@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<product type="simple">
-    <sku>118235-251</sku>
+<product type="simple" sku="118235-251" visible="true">
+    <url_key lang="de_DE">led-arm-signallampe</url_key>
+    <url_key lang="de_DE">led-armflasher</url_key>
     <categories website="ru_de">
         <category>men-accessoires</category>
         <category>women-accessoires</category>
@@ -10,11 +11,14 @@
         <category>men</category>
         <category>woman</category>
     </categories>
-    <price website="ru_de">12.95</price>
-    <price website="ru_en">11.45</price>
-    <special_price website="ru_de">11.95</special_price>
-    
-    <tax_class_id>5</tax_class_id>
+    <prices>
+        <price website="ru_de">12.95</price>
+        <price website="ru_en">11.45</price>
+        <special_price website="ru_de">11.95</special_price>
+    </prices>
+    <tax_class_ids>
+        <tax_class_id>5</tax_class_id>
+    </tax_class_ids>
     <inventory>
         <qty>5</qty>
         <is_in_stock>1</is_in_stock>
