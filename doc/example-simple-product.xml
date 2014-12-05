@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<product type="simple" sku="118235-251" visible="true">
+<product xmlns="http://brera.io" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://brera.io simple-product.xsd" type="simple" sku="118235-251" visible="true">
     <url_key lang="de_DE">led-arm-signallampe</url_key>
     <url_key lang="de_DE">led-armflasher</url_key>
     <categories website="ru_de">
@@ -21,8 +22,8 @@
     </tax_class_ids>
     <inventory>
         <qty>5</qty>
-        <is_in_stock>1</is_in_stock>
-        <backorders>0</backorders>
+        <is_in_stock>true</is_in_stock>
+        <backorders>true</backorders>
     </inventory>
     <assets>
         <image identifier="main">
@@ -46,7 +47,7 @@
         <attribute code="image_main">main</attribute>
         <attribute code="image_listing">main</attribute>
         <attribute code="image_thumbnail">small</attribute>
-        <attribtue code="weight">11.2</attribtue>
+        <attribute code="weight">11.2</attribute>
         <attribute code="short_description" lang="de_DE"><![CDATA[Pro Touch LED Armflasher<br />&#13;
 <br />&#13;
 LED Armflasher mit elastischem Band und Flasher mit variabler Blinkfolge,&#13;
