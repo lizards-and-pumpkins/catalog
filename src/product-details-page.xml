@@ -2,7 +2,7 @@
 <!-- Sort of a layout of a Product Details Page main snippet. This is definitely wrong but there must be a start. -->
 <!-- TODO: Add XSD -->
 <layout>
-    <page renderer="" template="templates/layouts/1column.phtml">
+    <page template="templates/layouts/1column.phtml">
         <header renderer="" />
         <global_messages renderer="" />
         <!--

@@ -9,13 +9,13 @@
         blocks into it
 
         -->
-        <product_details_page layout="product-details-page.xml" />
+        <product_details_page renderer="" layout="product-details-page.xml" />
 
         <!--
 
         Just a single child snippet so far
 
         -->
-        <availability_and_price layout="" />
+        <availability_and_price renderer="" layout="" />
     </snippets>
 </config>
