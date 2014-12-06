@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<product type="configurable" sku="218765-333" visible="true">
+<product xmlns="http://brera.io" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://brera.io product.xsd" type="configurable" sku="218765-333" visible="true">
     <url_key>adipure-360</url_key>
     <categories>
         <category>men-running-shoes</category>
@@ -13,8 +14,8 @@
     </tax_class_ids>
     <inventory>
         <qty>12</qty>
-        <is_in_stock>1</is_in_stock>
-        <backorders>1</backorders>
+        <is_in_stock>true</is_in_stock>
+        <backorders>true</backorders>
     </inventory>
     <assets>
         <image identifier="main-shoe-picture">
@@ -57,7 +58,7 @@
         <product sku="218765-333-1" visible="false">
             <inventory>
                 <qty>1200</qty>
-                <is_in_stock>1</is_in_stock>
+                <is_in_stock>true</is_in_stock>
             </inventory>
             <attributes>
                 <attribute code="color">
@@ -72,7 +73,7 @@
         <product sku="218765-333-2" visible="false">
             <inventory>
                 <qty>750</qty>
-                <is_in_stock>1</is_in_stock>
+                <is_in_stock>true</is_in_stock>
             </inventory>
             <attributes>
                 <attribute code="color">
@@ -87,7 +88,7 @@
         <product sku="218765-333-3" visible="false">
             <inventory>
                 <qty>5544</qty>
-                <is_in_stock>1</is_in_stock>
+                <is_in_stock>true</is_in_stock>
             </inventory>
             <attributes>
                 <attribute code="color">
@@ -102,7 +103,7 @@
         <product sku="218765-333-4" visible="false">
             <inventory>
                 <qty>40</qty>
-                <is_in_stock>1</is_in_stock>
+                <is_in_stock>true</is_in_stock>
             </inventory>
             <attributes>
                 <attribute code="color">
@@ -117,7 +118,7 @@
         <product sku="218765-333-5" visible="false">
             <inventory>
                 <qty>126</qty>
-                <is_in_stock>1</is_in_stock>
+                <is_in_stock>true</is_in_stock>
             </inventory>
             <attributes>
                 <attribute code="color">
@@ -131,7 +132,7 @@
         </product>
         <product sku="218765-333-6" visible="false">
             <inventory>
-                <is_in_stock>0</is_in_stock>
+                <is_in_stock>false</is_in_stock>
             </inventory>
             <attributes>
                 <attribute code="color">
@@ -146,15 +147,17 @@
         <product sku="218765-333-7" visible="false">
             <inventory>
                 <qty>2</qty>
-                <is_in_stock>1</is_in_stock>
+                <is_in_stock>true</is_in_stock>
             </inventory>
-            <attribute code="color">
-                <label lang="en_US">Blue</label>
-                <label lang="de_DE">Blau</label>
-            </attribute>
-            <attribute code="size">
-                <label>US 11.5 - EU 45</label>
-            </attribute>
+            <attributes>
+                <attribute code="color">
+                    <label lang="en_US">Blue</label>
+                    <label lang="de_DE">Blau</label>
+                </attribute>
+                <attribute code="size">
+                    <label>US 11.5 - EU 45</label>
+                </attribute>
+            </attributes>
         </product>
     </associated_products>
 </product>

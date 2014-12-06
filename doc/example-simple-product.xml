@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <product xmlns="http://brera.io" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://brera.io simple-product.xsd" type="simple" sku="118235-251" visible="true">
+        xsi:schemaLocation="http://brera.io product.xsd" type="simple" sku="118235-251" visible="true">
     <url_key lang="de_DE">led-arm-signallampe</url_key>
     <url_key lang="de_DE">led-armflasher</url_key>
     <categories website="ru_de">
@@ -23,7 +23,7 @@
     <inventory>
         <qty>5</qty>
         <is_in_stock>true</is_in_stock>
-        <backorders>true</backorders>
+        <backorders>false</backorders>
     </inventory>
     <assets>
         <image identifier="main">
