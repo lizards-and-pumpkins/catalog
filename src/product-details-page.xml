@@ -3,8 +3,8 @@
 <!-- TODO: Add XSD -->
 <layout>
     <page template="templates/layouts/1column.phtml">
-        <header renderer="" />
-        <global_messages renderer="" />
+        <header renderer="" layout="" />
+        <global_messages renderer="" layout="" />
         <!--
 
         Me personally I would like to make breadcrumbs a separate component which somehow will be able to squeeze its
@@ -12,7 +12,7 @@
 
         -->
         <breadcrunbs />
-        <image_gallery renderer="" />
+        <image_gallery renderer="" layout="" />
         <!--
 
         Same as breadcrumbs. Should be a separate component.
@@ -38,6 +38,6 @@
 
         -->
         <recently_viewed_products />
-        <footer renderer=""/>
+        <footer renderer="" layout="" />
     </page>
 </layout>
