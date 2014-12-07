@@ -71,7 +71,7 @@ class IntegrationTestFactory implements Factory
 	 */
 	public function createProductProjector()
     {
-        return new PoCProductProjector($this->createProductRenderer(), $this->createDataPoolWriter());
+        return new PoCProductProjector($this->createProductRenderers(), $this->createDataPoolWriter());
     }
 
 	/**
@@ -91,11 +91,13 @@ class IntegrationTestFactory implements Factory
     }
 
     /**
-     * @return PoCProductRenderer
+     * @return PoCProductRenderer[]
      */
-    private function createProductRenderer()
+    private function createProductRenderers()
     {
-        return new PoCProductRenderer();
+	    /* TODO: Read list of renderer classes from config.xml, instantiate them put into an array */
+
+        return array(new PoCProductRenderer());
     }
 
     /**
@@ -205,4 +207,4 @@ class IntegrationTestFactory implements Factory
     {
         return new InMemoryLogger();
     }
-} 
+}

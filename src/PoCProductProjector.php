@@ -9,9 +9,9 @@ use Brera\PoC\Product\Product;
 class PoCProductProjector
 {
     /**
-     * @var ProductRenderer
+     * @var ProductRenderer[]
      */
-    private $renderer;
+    private $renderers;
 
     /**
      * @var DataPoolWriter
@@ -19,12 +19,12 @@ class PoCProductProjector
     private $dataPoolWriter;
 
     /**
-     * @param ProductRenderer $renderer
+     * @param ProductRenderer[] $renderers
      * @param DataPoolWriter $dataPoolWriter
      */
-    public function __construct(ProductRenderer $renderer, DataPoolWriter $dataPoolWriter)
+    public function __construct($renderers, DataPoolWriter $dataPoolWriter)
     {
-        $this->renderer = $renderer;
+        $this->renderers = $renderers;
         $this->dataPoolWriter = $dataPoolWriter;
     }
 
@@ -33,9 +33,11 @@ class PoCProductProjector
      */
     public function project(Product $product)
     {
-        // The projector renderer could be used even on the frontend.
-        // The renderer is decoupled from the data storage and display.
-        $html = $this->renderer->render($product);
-        $this->dataPoolWriter->setPoCProductHtml($product->getId(), $html);
+	    foreach ($this->renderers as $renderer) {
+		    // The projector renderer could be used even on the frontend.
+		    // The renderer is decoupled from the data storage and display.
+		    $html = $renderer->render($product);
+		    $this->dataPoolWriter->setPoCProductHtml($product->getId(), $html);
+	    }
     }
 }
