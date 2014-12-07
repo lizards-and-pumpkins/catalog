@@ -13,7 +13,7 @@ class ProductBuilder
 		$name = '';
 
 		libxml_clear_errors();
-		libxml_use_internal_errors(true);
+		$internal = libxml_use_internal_errors(true);
 
 		$document = (new \DOMDocument);
 		$document->loadXML($xml);
@@ -21,6 +21,8 @@ class ProductBuilder
 		if (!empty(libxml_get_errors())) {
 			throw new InvalidImportDataException();
 		}
+
+		libxml_use_internal_errors($internal);
 
 		$xpath = new \DOMXPath($document);
 
