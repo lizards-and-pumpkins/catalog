@@ -12,20 +12,23 @@ class ProductBuilder
 	{
 		$name = '';
 
-		$parser = xml_parser_create();
-		xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
-		xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 1);
-		xml_parse_into_struct($parser, $xml, $values);
-		xml_parser_free($parser);
+		libxml_clear_errors();
+		libxml_use_internal_errors(true);
 
-		foreach ($values as $value) {
-			if ('sku' === $value['tag']) {
-				$sku = new PoCSku($value['value']);
-				$productId = ProductId::fromSku($sku);
-			}
+		$document = (new \DOMDocument);
+		$document->loadXML($xml);
 
-			if ('name' === $value['tag']) {
-				$name = $value['value'];
+		if (!empty(libxml_get_errors())) {
+			throw new InvalidImportDataException();
+		}
+
+		$xpath = new \DOMXPath($document);
+
+		if ($skuNode = $xpath->query('//product/sku')->item(0)) {
+			$sku = new PoCSku($skuNode->nodeValue);
+			$productId = ProductId::fromSku($sku);
+			if ($nameNode = $xpath->query('//product/name')->item(0)) {
+				$name = $nameNode->nodeValue;
 			}
 		}
 

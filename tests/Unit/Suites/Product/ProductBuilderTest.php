@@ -67,9 +67,19 @@ Flasher abnehmbar.&#13;</description>
 	 * @test
 	 * @expectedException \Brera\PoC\Product\InvalidImportDataException
 	 */
-	public function itShouldThrowInvalidImportDataException()
+	public function itShouldThrowAnExceptionInCaseOfInvalidXml()
 	{
 		$xml = 'not a valid XML string';
+		(new ProductBuilder())->createProductFromXml($xml);
+	}
+
+	/**
+	 * @test
+	 * @expectedException \Brera\PoC\Product\InvalidImportDataException
+	 */
+	public function itShouldThrowAnExceptionInCaseOfXmlHasNoEssentialData()
+	{
+		$xml = '<?xml version="1.0"?><node />';
 		(new ProductBuilder())->createProductFromXml($xml);
 	}
 }
