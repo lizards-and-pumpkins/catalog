@@ -38,7 +38,7 @@ class PoCProductProjectorTest extends \PHPUnit_Framework_TestCase
 			->method('getId')
 			->willReturn($stubProductId);
 
-		$projector = new PoCProductProjector($stubProductRenderer, $stubDataPoolWriter);
+		$projector = new ProductProjector($stubProductRenderer, $stubDataPoolWriter);
 		$projector->project($stubProduct);
 	}
 }

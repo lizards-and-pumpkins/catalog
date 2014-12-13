@@ -30,7 +30,7 @@ class ProductImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 			->method('createProductFromXml')
 			->willReturn($stubProduct);
 
-		$stubProjector = $this->getMockBuilder(PoCProductProjector::class)
+		$stubProjector = $this->getMockBuilder(ProductProjector::class)
 			->disableOriginalConstructor()
 			->getMock();
 		$stubProjector->expects($this->once())

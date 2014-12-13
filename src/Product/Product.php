@@ -16,7 +16,7 @@ class Product
 
     /**
      * @param ProductId $id
-     * @param string $name
+     * @param string    $name
      */
     public function __construct(ProductId $id, $name)
     {

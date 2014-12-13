@@ -17,7 +17,7 @@ class ProductCreatedDomainEventHandler implements DomainEventHandler
     private $repository;
 
     /**
-     * @var PoCProductProjector
+     * @var ProductProjector
      */
     private $projector;
 
@@ -28,7 +28,7 @@ class ProductCreatedDomainEventHandler implements DomainEventHandler
     public function __construct(
         ProductCreatedDomainEvent $event,
         ProductRepository $repository,
-        PoCProductProjector $projector
+        ProductProjector $projector
     )
     {
         $this->event = $event;

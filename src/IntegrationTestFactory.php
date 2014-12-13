@@ -67,11 +67,11 @@ class IntegrationTestFactory implements Factory
 	}
 
 	/**
-	 * @return PoCProductProjector
+	 * @return ProductProjector
 	 */
 	public function createProductProjector()
     {
-        return new PoCProductProjector($this->createProductRenderer(), $this->createDataPoolWriter());
+        return new ProductProjector($this->createProductRenderer(), $this->createDataPoolWriter());
     }
 
 	/**

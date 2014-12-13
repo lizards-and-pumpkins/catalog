@@ -17,12 +17,12 @@ class ProductImportDomainEventHandler implements DomainEventHandler
 	private $productBuilder;
 
 	/**
-	 * @var PoCProductProjector
+	 * @var ProductProjector
 	 */
 	private $projector;
 
 	public function __construct(
-		ProductImportDomainEvent $event, ProductBuilder $productBuilder, PoCProductProjector $projector
+		ProductImportDomainEvent $event, ProductBuilder $productBuilder, ProductProjector $projector
 	)
 	{
 		$this->event = $event;

@@ -36,7 +36,7 @@ class ProductCreatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 			->method('findById')
 			->willReturn($stubProduct);
 
-		$stubProjector = $this->getMockBuilder(PoCProductProjector::class)
+		$stubProjector = $this->getMockBuilder(ProductProjector::class)
 			->disableOriginalConstructor()
 			->getMock();
 		$stubProjector->expects($this->once())

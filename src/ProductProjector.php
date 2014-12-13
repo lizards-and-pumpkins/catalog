@@ -6,7 +6,7 @@ use Brera\PoC\Renderer\ProductRenderer;
 use Brera\PoC\KeyValue\DataPoolWriter;
 use Brera\PoC\Product\Product;
 
-class PoCProductProjector
+class ProductProjector
 {
     /**
      * @var ProductRenderer
