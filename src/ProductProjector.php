@@ -34,9 +34,13 @@ class ProductProjector
      */
     public function project(Product $product, Environment $environment)
     {
-        $productSnippetResultList = $this->rendererCollection->render(
+        $snippetResultList = $this->rendererCollection->render(
             $product, $environment
         );
-        $this->dataPoolWriter->writeSnippetResultList($productSnippetResultList);
+        $this->dataPoolWriter->writeSnippetResultList($snippetResultList);
+    }
+
+    public function merge(){
+        
     }
 }
