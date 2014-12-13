@@ -2,16 +2,15 @@
 
 namespace Brera\PoC;
 
-use Brera\PoC\Renderer\ProductRenderer;
 use Brera\PoC\KeyValue\DataPoolWriter;
 use Brera\PoC\Product\Product;
 
 class ProductProjector
 {
     /**
-     * @var ProductRenderer
+     * @var ProductSnippetRendererCollection
      */
-    private $renderer;
+    private $rendererCollection;
 
     /**
      * @var DataPoolWriter
@@ -19,23 +18,25 @@ class ProductProjector
     private $dataPoolWriter;
 
     /**
-     * @param ProductRenderer $renderer
-     * @param DataPoolWriter $dataPoolWriter
+     * @param ProductSnippetRendererCollection $rendererCollection
+     * @param DataPoolWriter                   $dataPoolWriter
      */
-    public function __construct(ProductRenderer $renderer, DataPoolWriter $dataPoolWriter)
-    {
-        $this->renderer = $renderer;
+    public function __construct(
+        ProductSnippetRendererCollection $rendererCollection,
+        DataPoolWriter $dataPoolWriter
+    ) {
+        $this->rendererCollection = $rendererCollection;
         $this->dataPoolWriter = $dataPoolWriter;
     }
 
     /**
      * @param Product $product
      */
-    public function project(Product $product)
+    public function project(Product $product, Environment $environment)
     {
-        // The projector renderer could be used even on the frontend.
-        // The renderer is decoupled from the data storage and display.
-        $html = $this->renderer->render($product);
-        $this->dataPoolWriter->setPoCProductHtml($product->getId(), $html);
+        $productSnippetResultList = $this->rendererCollection->render(
+            $product, $environment
+        );
+        $this->dataPoolWriter->writeSnippetResultList($productSnippetResultList);
     }
 }
