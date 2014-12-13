@@ -5,11 +5,11 @@ namespace Brera\PoC;
 class DataVersionTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @param $emptyVersion
+     *
      * @test
      * @expectedException \Brera\PoC\EmptyVersionException
      * @dataProvider emptyVersionProvider
-     *
-     * @param $emptyVersion
      */
     public function itShouldThrowOnEmptyVersion($emptyVersion)
     {
@@ -47,5 +47,16 @@ class DataVersionTest extends \PHPUnit_Framework_TestCase
             [true],
             [false],
         ];
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnVersion()
+    {
+        $version = '1.0';
+        $dataVersion = DataVersion::fromVersionString($version);
+        $this->assertSame($version, (string)$dataVersion);
+        $this->assertSame($version, $dataVersion->getVersion());
     }
 }
