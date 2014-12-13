@@ -8,10 +8,11 @@ use Brera\PoC\Product\Product;
 
 class PoCProductProjector
 {
+	/* TODO: Replace array with RendererCollection */
     /**
-     * @var ProductRenderer
+     * @var ProductRenderer[]
      */
-    private $renderer;
+    private $renderers;
 
     /**
      * @var DataPoolWriter
@@ -19,12 +20,12 @@ class PoCProductProjector
     private $dataPoolWriter;
 
     /**
-     * @param ProductRenderer $renderer
+     * @param ProductRenderer[] $renderers
      * @param DataPoolWriter $dataPoolWriter
      */
-    public function __construct(ProductRenderer $renderer, DataPoolWriter $dataPoolWriter)
+    public function __construct($renderers, DataPoolWriter $dataPoolWriter)
     {
-        $this->renderer = $renderer;
+        $this->renderers = $renderers;
         $this->dataPoolWriter = $dataPoolWriter;
     }
 
@@ -33,9 +34,27 @@ class PoCProductProjector
      */
     public function project(Product $product)
     {
-        // The projector renderer could be used even on the frontend.
-        // The renderer is decoupled from the data storage and display.
-        $html = $this->renderer->render($product);
-        $this->dataPoolWriter->setPoCProductHtml($product->getId(), $html);
+	    /* TODO: Looping is done inside of RendererCollection. Projector just calls render() on RendererCollection. */
+
+	    foreach ($this->renderers as $renderer) {
+		    // The projector renderer could be used even on the frontend.
+		    // The renderer is decoupled from the data storage and display.
+
+		    /* TODO: Make renderer return list of snippet outputs */
+
+		    $html = $renderer->render($product);
+
+		    /* TODO: Loop through returned results and put each to data pool */
+
+		    $this->dataPoolWriter->setPoCProductHtml($product->getId(), $html);
+	    }
     }
 }
+
+/**
+ *
+ * - Key generation goes from DataPoll writer to Snippet
+ * - Then projector injects the list of snippets into DataPoolWriter
+ * - And DataPool writer gets key and content from each snippet and puts it into key/value storage
+ *
+ */

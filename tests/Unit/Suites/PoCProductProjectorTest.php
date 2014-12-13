@@ -18,7 +18,7 @@ class PoCProductProjectorTest extends \PHPUnit_Framework_TestCase
 	public function itShouldSetProductHtmlOnDataPoolWriter()
 	{
 		$stubProductRenderer = $this->getMock(ProductRenderer::class);
-		$stubProductRenderer->expects($this->once())
+		$stubProductRenderer->expects($this->atLeastOnce())
 			->method('render');
 
 		$stubProductId = $this->getMockBuilder(ProductId::class)
@@ -28,7 +28,7 @@ class PoCProductProjectorTest extends \PHPUnit_Framework_TestCase
 		$stubDataPoolWriter = $this->getMockBuilder(DataPoolWriter::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$stubDataPoolWriter->expects($this->once())
+		$stubDataPoolWriter->expects($this->atLeastOnce())
 			->method('setPoCProductHtml');
 
 		$stubProduct = $this->getMockBuilder(Product::class)
@@ -38,7 +38,7 @@ class PoCProductProjectorTest extends \PHPUnit_Framework_TestCase
 			->method('getId')
 			->willReturn($stubProductId);
 
-		$projector = new PoCProductProjector($stubProductRenderer, $stubDataPoolWriter);
+		$projector = new PoCProductProjector(array($stubProductRenderer), $stubDataPoolWriter);
 		$projector->project($stubProduct);
 	}
 }

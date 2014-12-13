@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!-- Sort of a configuration for Product Details Page component. This is definitely wrong but there must be a start. -->
+<!-- TODO: Add XSD -->
+<config>
+    <snippets>
+        <!--
+
+        Lets assume this current business implementation needs full page to be store as a snippet and hole-punch minor
+        blocks into it
+
+        -->
+        <product_details_page renderer="Brera\PoC\Renderer\PoCProductRenderer" layout="product-details-page.xml" />
+
+        <!--
+
+        Just a single child snippet so far
+
+        -->
+        <availability_and_price renderer="" layout="" />
+    </snippets>
+</config>
