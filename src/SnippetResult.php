@@ -23,7 +23,9 @@ class SnippetResult
     public static function create($key, $content)
     {
         if (!is_string($key) || !preg_match(self::KEY_PATTERN, $key)) {
-            throw new InvalidKeyException();
+            throw new InvalidKeyException(
+                sprintf('Key "%s" is invalid.', $key)
+        );
         }
 
         return new self($key, (string)$content);
