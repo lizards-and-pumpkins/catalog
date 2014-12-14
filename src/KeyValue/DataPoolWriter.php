@@ -4,6 +4,8 @@ namespace Brera\PoC\KeyValue;
 
 use Brera\PoC\Product\ProductId;
 use Brera\PoC\Http\HttpUrl;
+use Brera\PoC\SnippetResult;
+use Brera\PoC\SnippetResultList;
 
 class DataPoolWriter
 {
@@ -25,6 +27,17 @@ class DataPoolWriter
     {
         $this->keyValueStore = $keyValueStore;
         $this->keyGenerator = $keyGenerator;
+    }
+
+    /**
+     * @param SnippetResultList $snippetResultList
+     */
+    public function writeSnippetResultList(SnippetResultList $snippetResultList)
+    {
+        /** @var SnippetResult $snippetResult */
+        foreach ($snippetResultList as $snippetResult) {
+            $this->keyValueStore->set($snippetResult->getKey(), $snippetResult->getContent());
+        }
     }
 
     /**
