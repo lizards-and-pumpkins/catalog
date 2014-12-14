@@ -29,6 +29,12 @@ class ProductImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 		$stubProductBuilder->expects($this->once())
 			->method('createProductFromXml')
 			->willReturn($stubProduct);
+		
+		$stubEnvironmentBuilder = $this->getMock(
+				EnvironmentBuilder::class, ['createEnvironmentFromXml']
+		);
+		$stubEnvironmentBuilder->expects($this->any())->method('createEnvironmentFromXml')
+			->willReturn($this->getMock(Environment::class));
 
 		$stubProjector = $this->getMockBuilder(ProductProjector::class)
 			->disableOriginalConstructor()
@@ -36,6 +42,11 @@ class ProductImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 		$stubProjector->expects($this->once())
 			->method('project');
 
-		(new ProductImportDomainEventHandler($stubDomainEvent, $stubProductBuilder, $stubProjector))->process();
+		(new ProductImportDomainEventHandler(
+			$stubDomainEvent, 
+			$stubProductBuilder,
+			$stubEnvironmentBuilder,
+			$stubProjector)
+		)->process();
 	}
 }
