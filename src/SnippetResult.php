@@ -24,8 +24,8 @@ class SnippetResult
     {
         if (!is_string($key) || !preg_match(self::KEY_PATTERN, $key)) {
             throw new InvalidKeyException(
-                sprintf('Key "%s" is invalid.', $key)
-        );
+                sprintf('Key "%s" is invalid.', (is_scalar($key) ? $key : gettype($key)))
+            );
         }
 
         return new self($key, (string)$content);
