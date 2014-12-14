@@ -132,8 +132,17 @@ class ProductSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
                 [$this->identicalTo($stubSnippetResultListFromRenderer2)]
             );
 
-        $this->rendererCollection->render(
-            $stubProduct, $stubEnvironment
-        );
+        $this->rendererCollection->render($stubProduct, $stubEnvironment);
+    }
+
+    /**
+     * @test
+     * @expectedException \Brera\Poc\InvalidProjectionDataSourceType
+     */
+    public function itShouldThrowAnExceptionIfTheDataSourceObjectTypeIsNotProduct()
+    {
+        $invalidDataSource = $this->getMock(ProjectionSourceData::class);
+        $stubEnvironment = $this->getMock(Environment::class);
+        $this->rendererCollection->render($invalidDataSource, $stubEnvironment);
     }
 }

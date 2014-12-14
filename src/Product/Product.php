@@ -2,7 +2,9 @@
 
 namespace Brera\PoC\Product;
 
-class Product
+use Brera\PoC\ProjectionSourceData;
+
+class Product implements ProjectionSourceData
 {
     /**
      * @var ProductId

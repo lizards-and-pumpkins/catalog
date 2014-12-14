@@ -2,35 +2,43 @@
 
 namespace Brera\PoC;
 
-use Brera\PoC\Product\Product;
-
-class HardcodedProductSnippetRendererCollection
+class HardcodedProductSnippetRendererCollection extends ProductSnippetRendererCollection
 {
-
     /**
      * @var SnippetResultList
      */
     private $snippetResultList;
+    
     /**
-     * @var ProductSnippetRenderer[]
+     * @var SnippetRenderer[]
      */
-    private $renderer;
+    private $renderers;
 
+    /**
+     * @param array $renderer
+     * @param SnippetResultList $snippetResultList
+     */
     public function __construct(
         array $renderer,
         SnippetResultList $snippetResultList
     ) {
         $this->snippetResultList = $snippetResultList;
-        $this->renderer = $renderer;
+        $this->renderers = $renderer;
     }
 
-    public function render(Product $product, Environment $environment)
+    /**
+     * @return SnippetResultList
+     */
+    protected function getSnippetResultList()
     {
-        foreach ($this->renderer as $renderer) {
-            $this->snippetResultList
-                ->merge($renderer->render($product, $environment));
-        }
-
         return $this->snippetResultList;
+    }
+
+    /**
+     * @return SnippetRenderer[]
+     */
+    protected function getSnippetRenderers()
+    {
+        return $this->renderers;
     }
 }

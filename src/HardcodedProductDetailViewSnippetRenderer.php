@@ -30,17 +30,27 @@ class HardcodedProductDetailViewSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param Product     $product
+     * @param ProjectionSourceData|Product $product
      * @param Environment $environment
      *
      * @return SnippetResultList
      */
-    public function render($product, Environment $environment)
+    public function render(ProjectionSourceData $product, Environment $environment)
     {
         if (!($product instanceof Product)) {
             throw new InvalidArgumentException('First argument must be instance of Product.');
         }
 
+        return $this->renderProduct($product, $environment);
+    }
+
+    /**
+     * @param Product $product
+     * @param Environment $environment
+     * @return SnippetResultList
+     */
+    private function renderProduct(Product $product, Environment $environment)
+    {
         $snippet = SnippetResult::create(
             $this->getKey($product, $environment),
             $this->getContent($product, $environment)
@@ -50,11 +60,21 @@ class HardcodedProductDetailViewSnippetRenderer implements SnippetRenderer
         return $this->resultList;
     }
 
+    /**
+     * @param Product $product
+     * @param Environment $environment
+     * @return string
+     */
     private function getContent(Product $product, Environment $environment)
     {
-        return 'this is a string';
+        return '<div>' . htmlentities($product->getName()) . '</div>';
     }
 
+    /**
+     * @param Product $product
+     * @param Environment $environment
+     * @return string
+     */
     private function getKey(Product $product, Environment $environment)
     {
         return $this->keyGenerator->getKey($product, $environment);

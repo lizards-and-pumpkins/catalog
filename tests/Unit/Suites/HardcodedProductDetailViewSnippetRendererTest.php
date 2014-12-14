@@ -50,10 +50,11 @@ class HardcodedProductDetailViewSnippetRendererTest
      */
     public function itShouldOnlyAcceptProductsForRendering()
     {
+        $invalidSourceObject = $this->getMock(ProjectionSourceData::class);
         $stubEnvironment = $this->getMockBuilder(VersionedEnvironment::class)
             ->disableOriginalConstructor()->getMock();
 
-        $this->snippetRenderer->render(new \stdClass(), $stubEnvironment);
+        $this->snippetRenderer->render($invalidSourceObject, $stubEnvironment);
     }
 
     /**
@@ -66,8 +67,9 @@ class HardcodedProductDetailViewSnippetRendererTest
         $stubEnvironment = $this->getMockBuilder(VersionedEnvironment::class)
             ->disableOriginalConstructor()->getMock();
 
-        $result = $this->snippetRenderer->render($stubProduct,
-            $stubEnvironment);
+        $result = $this->snippetRenderer->render(
+            $stubProduct, $stubEnvironment
+        );
         $this->assertSame($this->mockSnippetResultList, $result);
     }
 

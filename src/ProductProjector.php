@@ -5,7 +5,7 @@ namespace Brera\PoC;
 use Brera\PoC\KeyValue\DataPoolWriter;
 use Brera\PoC\Product\Product;
 
-class ProductProjector
+class ProductProjector implements Projector
 {
     /**
      * @var ProductSnippetRendererCollection
@@ -19,7 +19,7 @@ class ProductProjector
 
     /**
      * @param ProductSnippetRendererCollection $rendererCollection
-     * @param DataPoolWriter                   $dataPoolWriter
+     * @param DataPoolWriter $dataPoolWriter
      */
     public function __construct(
         ProductSnippetRendererCollection $rendererCollection,
@@ -30,17 +30,27 @@ class ProductProjector
     }
 
     /**
-     * @param Product $product
+     * @param Product|ProjectionSourceData $product
+     * @param Environment $environment
+     * @throws InvalidProjectionDataSourceType
      */
-    public function project(Product $product, Environment $environment)
+    public function project(ProjectionSourceData $product, Environment $environment)
+    {
+        if (!($product instanceof Product)) {
+            throw new InvalidProjectionDataSourceType('First argument must be instance of Product.');
+        }
+        $this->projectProduct($product, $environment);
+    }
+
+    /**
+     * @param Product $product
+     * @param Environment $environment
+     */
+    private function projectProduct(Product $product, Environment $environment)
     {
         $snippetResultList = $this->rendererCollection->render(
             $product, $environment
         );
         $this->dataPoolWriter->writeSnippetResultList($snippetResultList);
-    }
-
-    public function merge(){
-        
     }
 }
