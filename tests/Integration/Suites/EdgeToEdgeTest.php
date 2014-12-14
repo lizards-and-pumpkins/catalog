@@ -6,7 +6,6 @@ use Brera\PoC\Product\PoCSku;
 use Brera\PoC\Product\ProductId;
 use Brera\PoC\PoCMasterFactory;
 use Brera\PoC\IntegrationTestFactory;
-use Brera\PoC\ProductCreatedDomainEvent;
 use Brera\PoC\Http\HttpUrl;
 use Brera\PoC\Http\HttpRequest;
 use Brera\PoC\FrontendFactory;
@@ -72,36 +71,6 @@ Flasher abnehmbar.&#13;</description>
 
         $queue = $factory->getEventQueue();
         $queue->add(new ProductImportDomainEvent($xml));
-
-        $consumer = $factory->createDomainEventConsumer();
-        $consumer->process(1);
-
-        $reader = $factory->createDataPoolReader();
-        $html = $reader->getPoCProductHtml($productId);
-
-        $this->assertContains((string)$sku, $html);
-        $this->assertContains($productName, $html);
-    }
-
-    /**
-     * @test
-     */
-    public function createProductDomainEventShouldRenderAProduct()
-    {
-        $sku = new PoCSku('test');
-        $productId = ProductId::fromSku($sku);
-        $productName = 'test product name';
-
-
-        // TODO refactor and create application for backend
-        $factory = new PoCMasterFactory();
-        $factory->register(new IntegrationTestFactory());
-
-        $repository = $factory->getProductRepository();
-        $repository->createProduct($productId, $productName);
-
-        $queue = $factory->getEventQueue();
-        $queue->add(new ProductCreatedDomainEvent($productId));
 
         $consumer = $factory->createDomainEventConsumer();
         $consumer->process(1);

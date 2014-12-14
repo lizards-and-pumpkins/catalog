@@ -39,20 +39,6 @@ class IntegrationTestFactory implements Factory
      */
     private $logger;
 
-    /**
-     * TODO: This method can be safely deleted
-     * @param ProductCreatedDomainEvent $event
-     * @return ProductCreatedDomainEventHandler
-     */
-    public function createProductCreatedDomainEventHandler(ProductCreatedDomainEvent $event)
-    {
-        return new ProductCreatedDomainEventHandler(
-            $event,
-            $this->getMasterFactory()->getProductRepository(), 
-            $this->getMasterFactory()->createProductProjector()
-        );
-    }
-
 	/**
 	 * @param ProductImportDomainEvent $event
 	 * @return ProductImportDomainEventHandler

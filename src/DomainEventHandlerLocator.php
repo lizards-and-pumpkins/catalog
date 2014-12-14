@@ -27,10 +27,6 @@ class DomainEventHandlerLocator
 	    $eventClass = get_class($event);
 
 	    switch ($eventClass) {
-		    /* TODO: This node can be safely deleted */
-		    case ProductCreatedDomainEvent::class :
-			    return $this->factory->createProductCreatedDomainEventHandler($event);
-
 		    case ProductImportDomainEvent::class :
 			    return $this->factory->createProductImportDomainEventHandler($event);
 	    }
