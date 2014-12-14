@@ -2,25 +2,34 @@
 
 namespace Brera\PoC;
 
-class EnvironmentBuilderTest extends \PHPUnit_Framework_TestCase
+class VersionedEnvironmentBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var EnvironmentBuilder
+     * @var VersionedEnvironmentBuilder
      */
     private $builder;
 
     public function setUp()
     {
-        $this->builder = new EnvironmentBuilder(DataVersion::fromVersionString('1'));
+        $version = DataVersion::fromVersionString('1');
+        $this->builder = new VersionedEnvironmentBuilder($version);
     }
 
     /**
      * @test
      */
-    public function itShouldReturnAnEnvironment()
+    public function itShouldBeAnEnvironmentBuilder()
+    {
+        $this->assertInstanceOf(EnvironmentBuilder::class, $this->builder);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnAVersionedEnvironment()
     {
         $dummyXml = '<data></data>';
         $result = $this->builder->createEnvironmentFromXml($dummyXml);
-        $this->assertInstanceOf(Environment::class, $result);
+        $this->assertInstanceOf(VersionedEnvironment::class, $result);
     }
 }

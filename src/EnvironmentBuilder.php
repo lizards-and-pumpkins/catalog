@@ -2,20 +2,11 @@
 
 namespace Brera\PoC;
 
-class EnvironmentBuilder
+interface EnvironmentBuilder
 {
     /**
-     * @var DataVersion
+     * @param string $xmlString
+     * @return Environment
      */
-    private $dataVersion;
-
-    public function __construct(DataVersion $dataVersion)
-    {
-        $this->dataVersion = $dataVersion;
-    }
-    
-    public function createEnvironmentFromXml($xmlString)
-    {
-        return new VersionedEnvironment($this->dataVersion);
-    }
+    public function createEnvironmentFromXml($xmlString);
 }

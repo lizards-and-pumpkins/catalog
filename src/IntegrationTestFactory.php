@@ -48,6 +48,7 @@ class IntegrationTestFactory implements Factory
 		return new ProductImportDomainEventHandler(
 			$event,
 			$this->getMasterFactory()->getProductBuilder(),
+            $this->getMasterFactory()->getEnvironmentBuilder(),
 			$this->getMasterFactory()->createProductProjector()
 		);
 	}
@@ -67,6 +68,13 @@ class IntegrationTestFactory implements Factory
 	{
 		return new ProductBuilder();
 	}
+
+    public function getEnvironmentBuilder()
+    {
+        // todo: add mechanism to inject data version number to use
+        $version = DataVersion::fromVersionString('1');
+        return new VersionedEnvironmentBuilder($version);
+    }
 
     /**
      * @return DomainEventHandlerLocator

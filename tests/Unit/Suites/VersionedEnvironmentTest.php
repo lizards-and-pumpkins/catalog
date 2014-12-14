@@ -18,6 +18,14 @@ class VersionedEnvironmentTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @class
+     */
+    public function itShouldBeAnEnvironment()
+    {
+        $this->assertInstanceOf(Environment::class, $this->environment);
+    }
+
+    /**
      * @test
      */
     public function itShouldHaveAVersion()

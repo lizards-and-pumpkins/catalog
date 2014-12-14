@@ -22,14 +22,14 @@ class ProductImportDomainEventHandler implements DomainEventHandler
 	private $projector;
 	
 	/**
-	 * @var EnvironmentBuilder
+	 * @var VersionedEnvironmentBuilder
 	 */
 	private $environmentBuilder;
 
 	public function __construct(
 		ProductImportDomainEvent $event, 
 		ProductBuilder $productBuilder, 
-		EnvironmentBuilder $environmentBuilder, 
+		VersionedEnvironmentBuilder $environmentBuilder, 
 		ProductProjector $projector
 	)
 	{

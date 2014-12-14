@@ -30,7 +30,7 @@ class ProductImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('createProductFromXml')
             ->willReturn($stubProduct);
 
-        $stubEnvironmentBuilder = $this->getMockBuilder(EnvironmentBuilder::class)
+        $stubEnvironmentBuilder = $this->getMockBuilder(VersionedEnvironmentBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
         $stubEnvironmentBuilder->expects($this->any())->method('createEnvironmentFromXml')
