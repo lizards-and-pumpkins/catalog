@@ -51,7 +51,45 @@ class IntegrationTestFactory implements Factory
 	 */
 	public function createProductProjector()
     {
-        return new ProductProjector($this->createProductRenderer(), $this->createDataPoolWriter());
+        return new ProductProjector($this->createProductSnippetRendererCollection(), $this->createDataPoolWriter());
+    }
+
+    /**
+     * @return HardcodedProductSnippetRendererCollection
+     */
+    public function createProductSnippetRendererCollection()
+    {
+        $rendererList = [$this->getMasterFactory()->createHardcodedProductDetailViewSnippetRenderer()];
+        return new HardcodedProductSnippetRendererCollection(
+            $rendererList, $this->getMasterFactory()->createSnippetResultList()
+        );
+    }
+
+    /**
+     * @return SnippetResultList
+     */
+    public function createSnippetResultList()
+    {
+        return new SnippetResultList();
+    }
+
+    /**
+     * @return HardcodedProductDetailViewSnippetRenderer
+     */
+    public function createHardcodedProductDetailViewSnippetRenderer()
+    {
+        return new HardcodedProductDetailViewSnippetRenderer(
+            $this->getMasterFactory()->createSnippetResultList(),
+            $this->getMasterFactory()->createHardcodedProductDetailViewSnippetKeyGenerator()
+        );
+    }
+
+    /**
+     * @return HardcodedProductDetailViewSnippetKeyGenerator
+     */
+    public function createHardcodedProductDetailViewSnippetKeyGenerator()
+    {
+        return new HardcodedProductDetailViewSnippetKeyGenerator();
     }
 
 	/**

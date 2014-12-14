@@ -29,7 +29,7 @@ class ProductImportDomainEventHandler implements DomainEventHandler
 	public function __construct(
 		ProductImportDomainEvent $event, 
 		ProductBuilder $productBuilder, 
-		VersionedEnvironmentBuilder $environmentBuilder, 
+		EnvironmentBuilder $environmentBuilder, 
 		ProductProjector $projector
 	)
 	{
