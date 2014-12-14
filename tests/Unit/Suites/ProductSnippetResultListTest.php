@@ -28,7 +28,7 @@ class SnippetResultListTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldAddASnippetResult()
     {
-        $snippet = $this->getMock(SnippetResult::class);
+        $snippet = SnippetResult::create('test', 'test');
         $this->resultList->add($snippet);
         $this->assertEquals(1, $this->resultList->count());
     }
@@ -46,7 +46,7 @@ class SnippetResultListTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnASnippet()
     {
-        $snippet = $this->getMock(SnippetResult::class);
+        $snippet = SnippetResult::create('test', 'test');
         $this->resultList->add($snippet);
         $this->assertContains($snippet, $this->resultList->getIterator());
     }
@@ -56,10 +56,10 @@ class SnippetResultListTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldMergeTwoLists()
     {
-        $snippet = $this->getMock(SnippetResult::class);
+        $snippet = SnippetResult::create('test', 'test');
         $this->resultList->add($snippet);
 
-        $snippet2 = $this->getMock(SnippetResult::class);
+        $snippet2 = SnippetResult::create('test', 'test');
         $resultList2 = new SnippetResultList();
         $resultList2->add($snippet2);
 
