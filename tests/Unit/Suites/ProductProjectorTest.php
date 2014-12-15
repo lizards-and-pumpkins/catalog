@@ -6,7 +6,8 @@ use Brera\PoC\KeyValue\DataPoolWriter;
 use Brera\PoC\Product\Product;
 
 /**
- * @covers \Brera\PoC\PoCProductProjector
+ * @covers \Brera\PoC\ProductProjector
+ * @uses \Brera\PoC\ProductSnippetRendererCollection
  */
 class ProductProjectorTest extends \PHPUnit_Framework_TestCase
 {
