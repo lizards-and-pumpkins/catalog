@@ -3,11 +3,9 @@
 namespace Brera\PoC;
 
 use Brera\PoC\Product\ProductBuilder;
-use Brera\PoC\Product\ProductRepository;
 use Brera\PoC\KeyValue\KeyValueStore;
 use Brera\PoC\Queue\DomainEventQueue;
 use Brera\PoC\Renderer\PoCProductRenderer;
-use Brera\PoC\Product\InMemoryProductRepository;
 use Brera\PoC\KeyValue\DataPoolWriter;
 use Brera\PoC\KeyValue\InMemoryKeyValueStore;
 use Brera\PoC\KeyValue\KeyValueStoreKeyGenerator;
@@ -19,11 +17,6 @@ class IntegrationTestFactory implements Factory
 {
     use FactoryTrait;
     
-    /**
-     * @var ProductRepository
-     */
-    private $productRepository;
-
     /**
      * @var KeyValueStore
      */
@@ -90,25 +83,6 @@ class IntegrationTestFactory implements Factory
     private function createProductRenderer()
     {
         return new PoCProductRenderer();
-    }
-
-    /**
-     * @return InMemoryProductRepository|ProductRepository
-     */
-    public function getProductRepository()
-    {
-        if (null === $this->productRepository) {
-            $this->productRepository = $this->createProductRepository();
-        }
-        return $this->productRepository;
-    }
-
-    /**
-     * @return InMemoryProductRepository
-     */
-    private function createProductRepository()
-    {
-        return new InMemoryProductRepository();
     }
 
     /**
