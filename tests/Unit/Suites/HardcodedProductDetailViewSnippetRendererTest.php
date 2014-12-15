@@ -3,6 +3,7 @@
 namespace Brera\PoC;
 
 use Brera\PoC\Product\Product;
+use Brera\PoC\Product\ProductId;
 
 class HardcodedProductDetailViewSnippetRendererTest
     extends \PHPUnit_Framework_TestCase
@@ -16,6 +17,10 @@ class HardcodedProductDetailViewSnippetRendererTest
      * @var SnippetResultList|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockSnippetResultList;
+
+    /**
+     * @var HardcodedProductDetailViewSnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
+     */
     private $mockKeyGenerator;
 
     public function setUp()
@@ -50,7 +55,9 @@ class HardcodedProductDetailViewSnippetRendererTest
      */
     public function itShouldOnlyAcceptProductsForRendering()
     {
-        $invalidSourceObject = $this->getMock(ProjectionSourceData::class);
+        $invalidSourceObject = $this->getMockBuilder(ProjectionSourceData::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $stubEnvironment = $this->getMockBuilder(VersionedEnvironment::class)
             ->disableOriginalConstructor()->getMock();
 
@@ -62,8 +69,8 @@ class HardcodedProductDetailViewSnippetRendererTest
      */
     public function itShouldReturnASnippetResultList()
     {
-        $stubProduct = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()->getMock();
+        $stubProduct = $this->getStubProduct();
+        
         $stubEnvironment = $this->getMockBuilder(VersionedEnvironment::class)
             ->disableOriginalConstructor()->getMock();
 
@@ -78,21 +85,59 @@ class HardcodedProductDetailViewSnippetRendererTest
      */
     public function itShouldAddOneOrMoreSnippetToTheSnippetList()
     {
-        $stubProduct = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()->getMock();
+        $stubProduct = $this->getStubProduct();
+        
         $stubEnvironment = $this->getMockBuilder(VersionedEnvironment::class)
             ->disableOriginalConstructor()->getMock();
 
         $this->mockSnippetResultList->expects($this->atLeastOnce())
             ->method('add')->with($this->isInstanceOf(SnippetResult::class));
 
-        $this->snippetRenderer->render($stubProduct,
-            $stubEnvironment);
+        $this->snippetRenderer->render($stubProduct, $stubEnvironment);
     }
 
+    /**
+     * @test
+     */
     public function itShouldRenderAProductDetailView()
     {
-        // TODO
-        $this->markTestIncomplete();
+        $productIdString = 'test-123';
+        $productNameString = 'Test Name';
+        $stubProduct = $this->getStubProduct();
+        $stubProduct->getId()->expects($this->any())
+            ->method('getId')->willReturn($productIdString);
+        $stubProduct->getId()->expects($this->any())
+            ->method('__toString')->willReturn($productIdString);
+        $stubProduct->expects($this->any())
+            ->method('getName')->willReturn($productNameString);
+
+        $stubEnvironment = $this->getMockBuilder(VersionedEnvironment::class)
+            ->disableOriginalConstructor()->getMock();
+
+        $transport = '';
+        $this->mockSnippetResultList->expects($this->atLeastOnce())->method('add')
+            ->willReturnCallback(function($snippetResult) use (&$transport) {
+                $transport = $snippetResult;
+            });
+
+        $this->snippetRenderer->render($stubProduct, $stubEnvironment);
+        
+        /** @var $transport SnippetResult */
+        $expected = "<div>$productNameString ($productIdString)</div>";
+        $this->assertEquals($expected, $transport->getContent());
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|Product
+     */
+    private function getStubProduct()
+    {
+        $stubProductId = $this->getMockBuilder(ProductId::class)
+            ->disableOriginalConstructor()->getMock();
+        $stubProduct = $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()->getMock();
+        $stubProduct->expects($this->any())->method('getId')
+            ->willReturn($stubProductId);
+        return $stubProduct;
     }
 }

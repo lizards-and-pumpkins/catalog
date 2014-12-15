@@ -11,6 +11,7 @@ use Brera\PoC\Http\HttpRequest;
 use Brera\PoC\FrontendFactory;
 use Brera\PoC\PoCWebFront;
 use Brera\PoC\ProductImportDomainEvent;
+use Brera\Poc\HardcodedProductDetailViewSnippetKeyGenerator;
 
 class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
 {
@@ -71,12 +72,17 @@ Flasher abnehmbar.&#13;</description>
 
         $queue = $factory->getEventQueue();
         $queue->add(new ProductImportDomainEvent($xml));
-
+        
         $consumer = $factory->createDomainEventConsumer();
-        $consumer->process(1);
-
+        $numberOfMessages = 1;
+        $consumer->process($numberOfMessages);
+        
         $reader = $factory->createDataPoolReader();
-        $html = $reader->getPoCProductHtml($productId);
+        /** @var HardcodedProductDetailViewSnippetKeyGenerator $keyGenerator */
+        $keyGenerator = $factory->createProductDetailViewSnippetKeyGenerator();
+        $environment = $factory->getEnvironmentBuilder()->createEnvironmentFromXml($xml);
+        $html = $reader->getSnippet($keyGenerator->getKeyForEnvironment($productId, $environment));
+        //$html = $reader->getPoCProductHtml($productId);
 
         $this->assertContains((string)$sku, $html);
         $this->assertContains($productName, $html);

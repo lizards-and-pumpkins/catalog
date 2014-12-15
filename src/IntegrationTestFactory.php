@@ -59,7 +59,7 @@ class IntegrationTestFactory implements Factory
      */
     public function createProductSnippetRendererCollection()
     {
-        $rendererList = [$this->getMasterFactory()->createHardcodedProductDetailViewSnippetRenderer()];
+        $rendererList = [$this->getMasterFactory()->createProductDetailViewSnippetRenderer()];
         return new HardcodedProductSnippetRendererCollection(
             $rendererList, $this->getMasterFactory()->createSnippetResultList()
         );
@@ -76,18 +76,18 @@ class IntegrationTestFactory implements Factory
     /**
      * @return HardcodedProductDetailViewSnippetRenderer
      */
-    public function createHardcodedProductDetailViewSnippetRenderer()
+    public function createProductDetailViewSnippetRenderer()
     {
         return new HardcodedProductDetailViewSnippetRenderer(
             $this->getMasterFactory()->createSnippetResultList(),
-            $this->getMasterFactory()->createHardcodedProductDetailViewSnippetKeyGenerator()
+            $this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator()
         );
     }
 
     /**
      * @return HardcodedProductDetailViewSnippetKeyGenerator
      */
-    public function createHardcodedProductDetailViewSnippetKeyGenerator()
+    public function createProductDetailViewSnippetKeyGenerator()
     {
         return new HardcodedProductDetailViewSnippetKeyGenerator();
     }

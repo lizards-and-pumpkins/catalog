@@ -29,6 +29,15 @@ class DataPoolReader
     }
 
     /**
+     * @param string $key
+     * @return mixed
+     */
+    public function getSnippet($key)
+    {
+        return $this->keyValueStore->get($key);
+    }
+
+    /**
      * @param ProductId $productId
      * @return mixed
      */

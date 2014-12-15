@@ -4,6 +4,7 @@ namespace Brera\PoC;
 
 
 use Brera\PoC\Product\Product;
+use Brera\PoC\Product\ProductId;
 use Psr\Log\InvalidArgumentException;
 
 class HardcodedProductDetailViewSnippetRenderer implements SnippetRenderer
@@ -18,13 +19,14 @@ class HardcodedProductDetailViewSnippetRenderer implements SnippetRenderer
     private $keyGenerator;
 
     /**
-     * @param SnippetResultList                             $resultList
+     * @param SnippetResultList $resultList
      * @param HardcodedProductDetailViewSnippetKeyGenerator $keyGenerator
      */
     public function __construct(
         SnippetResultList $resultList,
         HardcodedProductDetailViewSnippetKeyGenerator $keyGenerator
-    ) {
+    )
+    {
         $this->resultList = $resultList;
         $this->keyGenerator = $keyGenerator;
     }
@@ -52,7 +54,7 @@ class HardcodedProductDetailViewSnippetRenderer implements SnippetRenderer
     private function renderProduct(Product $product, Environment $environment)
     {
         $snippet = SnippetResult::create(
-            $this->getKey($product, $environment),
+            $this->getKey($product->getId(), $environment),
             $this->getContent($product, $environment)
         );
         $this->resultList->add($snippet);
@@ -67,16 +69,20 @@ class HardcodedProductDetailViewSnippetRenderer implements SnippetRenderer
      */
     private function getContent(Product $product, Environment $environment)
     {
-        return '<div>' . htmlentities($product->getName()) . '</div>';
+        return sprintf(
+            '<div>%s (%s)</div>',
+            htmlentities($product->getName()), 
+            $product->getId()
+        );
     }
 
     /**
-     * @param Product $product
+     * @param ProductId $productId
      * @param Environment $environment
      * @return string
      */
-    private function getKey(Product $product, Environment $environment)
+    private function getKey(ProductId $productId, Environment $environment)
     {
-        return $this->keyGenerator->getKey($product, $environment);
+        return $this->keyGenerator->getKeyForEnvironment($productId, $environment);
     }
 }
