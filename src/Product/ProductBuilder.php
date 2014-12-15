@@ -15,7 +15,8 @@ class ProductBuilder
 		libxml_clear_errors();
 		$internal = libxml_use_internal_errors(true);
 
-		$document = (new \DOMDocument);
+		$document = new \DOMDocument;
+		$document->preserveWhiteSpace = false;
 		$document->loadXML($xml);
 
 		if (!empty(libxml_get_errors())) {
@@ -25,11 +26,13 @@ class ProductBuilder
 		libxml_use_internal_errors($internal);
 
 		$xpath = new \DOMXPath($document);
+		$xpath->registerNamespace('p', 'http://brera.io');
 
-		if ($skuNode = $xpath->query('//product/sku')->item(0)) {
-			$sku = new PoCSku($skuNode->nodeValue);
+		/** @var \DOMElement $productNode */
+		if ($productNode = $xpath->query('p:product')->item(0)) {
+			$sku = new PoCSku($productNode->getAttribute('sku'));
 			$productId = ProductId::fromSku($sku);
-			if ($nameNode = $xpath->query('//product/name')->item(0)) {
+			if ($nameNode = $xpath->query('p:attributes/p:attribute[@code="name"]', $productNode)->item(0)) {
 				$name = $nameNode->nodeValue;
 			}
 		}
