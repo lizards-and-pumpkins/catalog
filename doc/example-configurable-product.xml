@@ -1,48 +1,49 @@
 <?xml version="1.0"?>
-<product xmlns="http://brera.io" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://brera.io product.xsd" type="configurable" sku="218765-333" visible="true">
-    <url_key>adipure-360</url_key>
-    <categories>
-        <category>men-running-shoes</category>
-        <category>specials</category>
-    </categories>
-    <prices>
-        <price>89.95</price>
-    </prices>
-    <tax_class_ids>
-        <tax_class_id>5</tax_class_id>
-    </tax_class_ids>
-    <inventory>
-        <qty>12</qty>
-        <is_in_stock>true</is_in_stock>
-        <backorders>true</backorders>
-    </inventory>
-    <assets>
-        <image identifier="main-shoe-picture">
-            <file>products/218765/218765-333.1.png</file>
-            <label lang="de_DE">Das Hauptbild</label>
-            <label lang="en_US">The main image label for this shoe</label>
-        </image>
-        <image identifier="drawing">
-            <file lang="de_DE">products/218765/218765-333.2de.png</file>
-            <file lang="en_US">products/218765/218765-333.2en.png</file>
-            <label>Der Text zum zweiten Bild</label>
-        </image>
-        <image identifier="small">
-            <file>products/218765/218765-333.3.png</file>
-            <label>Yet another image label</label>
-        </image>
-        <pdf>
-            <file>guarantee-document.pdf</file>
-        </pdf>
-    </assets>
-    <attributes>
-        <attribute code="name">adiPure 360</attribute>
-        <attribute code="image_main">main-shoe-picture</attribute>
-        <attribute code="image_listing">small</attribute>
-        <attribute code="image_thumbnail">small</attribute>
-        <attribute code="short_description"><![CDATA[<div>Adidas adiPure 360</div>
-    
+<products xmlns="http://brera.io" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://brera.io product.xsd">
+    <product type="configurable" sku="218765-333" visible="true">
+        <url_key>adipure-360</url_key>
+        <categories>
+            <category>men-running-shoes</category>
+            <category>specials</category>
+        </categories>
+        <prices>
+            <price>89.95</price>
+        </prices>
+        <tax_class_ids>
+            <tax_class_id>5</tax_class_id>
+        </tax_class_ids>
+        <inventory>
+            <qty>12</qty>
+            <is_in_stock>true</is_in_stock>
+            <backorders>true</backorders>
+        </inventory>
+        <assets>
+            <image identifier="main-shoe-picture">
+                <file>products/218765/218765-333.1.png</file>
+                <label lang="de_DE">Das Hauptbild</label>
+                <label lang="en_US">The main image label for this shoe</label>
+            </image>
+            <image identifier="drawing">
+                <file lang="de_DE">products/218765/218765-333.2de.png</file>
+                <file lang="en_US">products/218765/218765-333.2en.png</file>
+                <label>Der Text zum zweiten Bild</label>
+            </image>
+            <image identifier="small">
+                <file>products/218765/218765-333.3.png</file>
+                <label>Yet another image label</label>
+            </image>
+            <pdf>
+                <file>guarantee-document.pdf</file>
+            </pdf>
+        </assets>
+        <attributes>
+            <attribute code="name">adiPure 360</attribute>
+            <attribute code="image_main">main-shoe-picture</attribute>
+            <attribute code="image_listing">small</attribute>
+            <attribute code="image_thumbnail">small</attribute>
+            <attribute code="short_description"><![CDATA[<div>Adidas adiPure 360</div>
+
 <li>Techfit bietet Unterstützung in den wichtigen Bereichen.</li>
 <li>Technisierte Maschen: Die ungleichmäßige Maschenstruktur vereint dichte und offene Maschen.</li>
 <li>Flex Grooves: Flexibilität für ein natürliches Laufgefühl.</li>
@@ -53,111 +54,112 @@
 <li>Flex-Rillen für einen angenehmen und natürlichen Lauf</li>
 <li>ABRIEBFESTE Gummiaußensohle</li>
 ]]></attribute>
-    </attributes>
-    <associated_products>
-        <product sku="218765-333-1" visible="false">
-            <inventory>
-                <qty>1200</qty>
-                <is_in_stock>true</is_in_stock>
-            </inventory>
-            <attributes>
-                <attribute code="color">
-                    <label lang="en_US">Red</label>
-                    <label lang="de_DE">Rot</label>
-                </attribute>
-                <attribute code="size">
-                    <label>US 12.5 - EU 47</label>
-                </attribute>
-            </attributes>
-        </product>
-        <product sku="218765-333-2" visible="false">
-            <inventory>
-                <qty>750</qty>
-                <is_in_stock>true</is_in_stock>
-            </inventory>
-            <attributes>
-                <attribute code="color">
-                    <label lang="en_US">Red</label>
-                    <label lang="de_DE">Rot</label>
-                </attribute>
-                <attribute code="size">
-                    <label>US 12 - EU 46</label>
-                </attribute>
-            </attributes>
-        </product>
-        <product sku="218765-333-3" visible="false">
-            <inventory>
-                <qty>5544</qty>
-                <is_in_stock>true</is_in_stock>
-            </inventory>
-            <attributes>
-                <attribute code="color">
-                    <label lang="en_US">Red</label>
-                    <label lang="de_DE">Rot</label>
-                </attribute>
-                <attribute code="size">
-                    <label>US 11.5 - EU 45</label>
-                </attribute>
-            </attributes>
-        </product>
-        <product sku="218765-333-4" visible="false">
-            <inventory>
-                <qty>40</qty>
-                <is_in_stock>true</is_in_stock>
-            </inventory>
-            <attributes>
-                <attribute code="color">
-                    <label lang="en_US">Red</label>
-                    <label lang="de_DE">Rot</label>
-                </attribute>
-                <attribute code="size">
-                    <label>US 10 - EU 43</label>
-                </attribute>
-            </attributes>
-        </product>
-        <product sku="218765-333-5" visible="false">
-            <inventory>
-                <qty>126</qty>
-                <is_in_stock>true</is_in_stock>
-            </inventory>
-            <attributes>
-                <attribute code="color">
-                    <label lang="en_US">Blue</label>
-                    <label lang="de_DE">Blau</label>
-                </attribute>
-                <attribute code="size">
-                    <label>US 12.5 - EU 47</label>
-                </attribute>
-            </attributes>
-        </product>
-        <product sku="218765-333-6" visible="false">
-            <inventory>
-                <is_in_stock>false</is_in_stock>
-            </inventory>
-            <attributes>
-                <attribute code="color">
-                    <label lang="en_US">Blue</label>
-                    <label lang="de_DE">Blau</label>
-                </attribute>
-                <attribute code="size">
-                    <label>US 12 - EU 46</label>
-                </attribute>
-            </attributes>
-        </product>
-        <product sku="218765-333-7" visible="false">
-            <inventory>
-                <qty>2</qty>
-                <is_in_stock>true</is_in_stock>
-            </inventory>
-            <attributes>
-                <attribute code="color">
-                    <label lang="en_US">Blue</label>
-                    <label lang="de_DE">Blau</label>
-                </attribute>
-                <attribute code="size">
-                    <label>US 11.5 - EU 45</label>
-                </attribute>
-            </attributes>
-        </product>
-    </associated_products>
-</product>
+        </attributes>
+        <associated_products>
+            <product sku="218765-333-1" visible="false">
+                <inventory>
+                    <qty>1200</qty>
+                    <is_in_stock>true</is_in_stock>
+                </inventory>
+                <attributes>
+                    <attribute code="color">
+                        <label lang="en_US">Red</label>
+                        <label lang="de_DE">Rot</label>
+                    </attribute>
+                    <attribute code="size">
+                        <label>US 12.5 - EU 47</label>
+                    </attribute>
+                </attributes>
+            </product>
+            <product sku="218765-333-2" visible="false">
+                <inventory>
+                    <qty>750</qty>
+                    <is_in_stock>true</is_in_stock>
+                </inventory>
+                <attributes>
+                    <attribute code="color">
+                        <label lang="en_US">Red</label>
+                        <label lang="de_DE">Rot</label>
+                    </attribute>
+                    <attribute code="size">
+                        <label>US 12 - EU 46</label>
+                    </attribute>
+                </attributes>
+            </product>
+            <product sku="218765-333-3" visible="false">
+                <inventory>
+                    <qty>5544</qty>
+                    <is_in_stock>true</is_in_stock>
+                </inventory>
+                <attributes>
+                    <attribute code="color">
+                        <label lang="en_US">Red</label>
+                        <label lang="de_DE">Rot</label>
+                    </attribute>
+                    <attribute code="size">
+                        <label>US 11.5 - EU 45</label>
+                    </attribute>
+                </attributes>
+            </product>
+            <product sku="218765-333-4" visible="false">
+                <inventory>
+                    <qty>40</qty>
+                    <is_in_stock>true</is_in_stock>
+                </inventory>
+                <attributes>
+                    <attribute code="color">
+                        <label lang="en_US">Red</label>
+                        <label lang="de_DE">Rot</label>
+                    </attribute>
+                    <attribute code="size">
+                        <label>US 10 - EU 43</label>
+                    </attribute>
+                </attributes>
+            </product>
+            <product sku="218765-333-5" visible="false">
+                <inventory>
+                    <qty>126</qty>
+                    <is_in_stock>true</is_in_stock>
+                </inventory>
+                <attributes>
+                    <attribute code="color">
+                        <label lang="en_US">Blue</label>
+                        <label lang="de_DE">Blau</label>
+                    </attribute>
+                    <attribute code="size">
+                        <label>US 12.5 - EU 47</label>
+                    </attribute>
+                </attributes>
+            </product>
+            <product sku="218765-333-6" visible="false">
+                <inventory>
+                    <is_in_stock>false</is_in_stock>
+                </inventory>
+                <attributes>
+                    <attribute code="color">
+                        <label lang="en_US">Blue</label>
+                        <label lang="de_DE">Blau</label>
+                    </attribute>
+                    <attribute code="size">
+                        <label>US 12 - EU 46</label>
+                    </attribute>
+                </attributes>
+            </product>
+            <product sku="218765-333-7" visible="false">
+                <inventory>
+                    <qty>2</qty>
+                    <is_in_stock>true</is_in_stock>
+                </inventory>
+                <attributes>
+                    <attribute code="color">
+                        <label lang="en_US">Blue</label>
+                        <label lang="de_DE">Blau</label>
+                    </attribute>
+                    <attribute code="size">
+                        <label>US 11.5 - EU 45</label>
+                    </attribute>
+                </attributes>
+            </product>
+        </associated_products>
+    </product>
+</products>
