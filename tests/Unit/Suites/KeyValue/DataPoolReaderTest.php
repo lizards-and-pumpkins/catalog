@@ -29,6 +29,19 @@ class DataPoolReaderTest extends AbstractDataPool
     /**
      * @test
      */
+    public function itShouldReturnASnippetIfItExists()
+    {
+        $testValue = '<p>html</p>';
+        $testKey = 'test';
+        
+        $this->addGetMethodToStubKeyValueStore($testValue);
+
+        $this->assertEquals($testValue, $this->dataPoolReader->getSnippet($testKey));
+    }
+
+    /**
+     * @test
+     */
     public function shouldReturnPoCProductHtmlBasedOnKeyFromKeyValueStorage()
     {
         $value = '<p>html</p>';

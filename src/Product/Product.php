@@ -2,7 +2,9 @@
 
 namespace Brera\PoC\Product;
 
-class Product
+use Brera\PoC\ProjectionSourceData;
+
+class Product implements ProjectionSourceData
 {
     /**
      * @var ProductId
@@ -16,7 +18,7 @@ class Product
 
     /**
      * @param ProductId $id
-     * @param string $name
+     * @param string    $name
      */
     public function __construct(ProductId $id, $name)
     {

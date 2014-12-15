@@ -3,11 +3,9 @@
 namespace Brera\PoC;
 
 use Brera\PoC\Product\ProductBuilder;
-use Brera\PoC\Product\ProductRepository;
 use Brera\PoC\KeyValue\KeyValueStore;
 use Brera\PoC\Queue\DomainEventQueue;
 use Brera\PoC\Renderer\PoCProductRenderer;
-use Brera\PoC\Product\InMemoryProductRepository;
 use Brera\PoC\KeyValue\DataPoolWriter;
 use Brera\PoC\KeyValue\InMemoryKeyValueStore;
 use Brera\PoC\KeyValue\KeyValueStoreKeyGenerator;
@@ -19,11 +17,6 @@ class IntegrationTestFactory implements Factory
 {
     use FactoryTrait;
     
-    /**
-     * @var ProductRepository
-     */
-    private $productRepository;
-
     /**
      * @var KeyValueStore
      */
@@ -39,20 +32,6 @@ class IntegrationTestFactory implements Factory
      */
     private $logger;
 
-    /**
-     * TODO: This method can be safely deleted
-     * @param ProductCreatedDomainEvent $event
-     * @return ProductCreatedDomainEventHandler
-     */
-    public function createProductCreatedDomainEventHandler(ProductCreatedDomainEvent $event)
-    {
-        return new ProductCreatedDomainEventHandler(
-            $event,
-            $this->getMasterFactory()->getProductRepository(), 
-            $this->getMasterFactory()->createProductProjector()
-        );
-    }
-
 	/**
 	 * @param ProductImportDomainEvent $event
 	 * @return ProductImportDomainEventHandler
@@ -62,16 +41,55 @@ class IntegrationTestFactory implements Factory
 		return new ProductImportDomainEventHandler(
 			$event,
 			$this->getMasterFactory()->getProductBuilder(),
+            $this->getMasterFactory()->getEnvironmentBuilder(),
 			$this->getMasterFactory()->createProductProjector()
 		);
 	}
 
 	/**
-	 * @return PoCProductProjector
+	 * @return ProductProjector
 	 */
 	public function createProductProjector()
     {
-        return new PoCProductProjector($this->createProductRenderer(), $this->createDataPoolWriter());
+        return new ProductProjector($this->createProductSnippetRendererCollection(), $this->createDataPoolWriter());
+    }
+
+    /**
+     * @return HardcodedProductSnippetRendererCollection
+     */
+    public function createProductSnippetRendererCollection()
+    {
+        $rendererList = [$this->getMasterFactory()->createProductDetailViewSnippetRenderer()];
+        return new HardcodedProductSnippetRendererCollection(
+            $rendererList, $this->getMasterFactory()->createSnippetResultList()
+        );
+    }
+
+    /**
+     * @return SnippetResultList
+     */
+    public function createSnippetResultList()
+    {
+        return new SnippetResultList();
+    }
+
+    /**
+     * @return HardcodedProductDetailViewSnippetRenderer
+     */
+    public function createProductDetailViewSnippetRenderer()
+    {
+        return new HardcodedProductDetailViewSnippetRenderer(
+            $this->getMasterFactory()->createSnippetResultList(),
+            $this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator()
+        );
+    }
+
+    /**
+     * @return HardcodedProductDetailViewSnippetKeyGenerator
+     */
+    public function createProductDetailViewSnippetKeyGenerator()
+    {
+        return new HardcodedProductDetailViewSnippetKeyGenerator();
     }
 
 	/**
@@ -81,6 +99,13 @@ class IntegrationTestFactory implements Factory
 	{
 		return new ProductBuilder();
 	}
+
+    public function getEnvironmentBuilder()
+    {
+        // todo: add mechanism to inject data version number to use
+        $version = DataVersion::fromVersionString('1');
+        return new VersionedEnvironmentBuilder($version);
+    }
 
     /**
      * @return DomainEventHandlerLocator
@@ -96,25 +121,6 @@ class IntegrationTestFactory implements Factory
     private function createProductRenderer()
     {
         return new PoCProductRenderer();
-    }
-
-    /**
-     * @return InMemoryProductRepository|ProductRepository
-     */
-    public function getProductRepository()
-    {
-        if (null === $this->productRepository) {
-            $this->productRepository = $this->createProductRepository();
-        }
-        return $this->productRepository;
-    }
-
-    /**
-     * @return InMemoryProductRepository
-     */
-    private function createProductRepository()
-    {
-        return new InMemoryProductRepository();
     }
 
     /**
