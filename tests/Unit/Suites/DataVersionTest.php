@@ -2,6 +2,9 @@
 
 namespace Brera\PoC;
 
+/**
+ * @covers Brera\PoC\DataVersion
+ */
 class DataVersionTest extends \PHPUnit_Framework_TestCase
 {
     /**
