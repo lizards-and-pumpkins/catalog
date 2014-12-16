@@ -7,6 +7,7 @@ namespace Brera\PoC\Product;
  * @uses \Brera\PoC\Product\Product
  * @uses \Brera\PoC\Product\ProductId
  * @uses \Brera\PoC\Product\PoCSku
+ * @uses \Brera\PoC\PoCDomParser
  */
 class ProductBuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,16 +22,6 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
 		$product = $builder->createProductFromXml($xml);
 
 		$this->assertInstanceOf(Product::class, $product);
-	}
-
-	/**
-	 * @test
-	 * @expectedException \Brera\PoC\Product\InvalidImportDataException
-	 */
-	public function itShouldThrowAnExceptionInCaseOfInvalidXml()
-	{
-		$xml = 'not a valid XML string';
-		(new ProductBuilder())->createProductFromXml($xml);
 	}
 
 	/**

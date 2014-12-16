@@ -2,6 +2,8 @@
 
 namespace Brera\PoC\Product;
 
+use Brera\PoC\PoCDomParser;
+
 class ProductBuilder
 {
 	/**
@@ -11,28 +13,12 @@ class ProductBuilder
 	public function createProductFromXml($xml)
 	{
 		$name = '';
+		$parser = new PoCDomParser($xml);
 
-		libxml_clear_errors();
-		$internal = libxml_use_internal_errors(true);
-
-		$document = new \DOMDocument;
-		$document->preserveWhiteSpace = false;
-		$document->loadXML($xml);
-
-		if (!empty(libxml_get_errors())) {
-			throw new InvalidImportDataException();
-		}
-
-		libxml_use_internal_errors($internal);
-
-		$xpath = new \DOMXPath($document);
-		$xpath->registerNamespace('p', 'http://brera.io');
-
-		/** @var \DOMElement $productNode */
-		if ($productNode = $xpath->query('p:product')->item(0)) {
+		if ($productNode = $parser->getXPathNode('product', null, true)) {
 			$sku = new PoCSku($productNode->getAttribute('sku'));
 			$productId = ProductId::fromSku($sku);
-			if ($nameNode = $xpath->query('p:attributes/p:attribute[@code="name"]', $productNode)->item(0)) {
+			if ($nameNode = $parser->getXPathNode('attributes/attribute[@code="name"]', $productNode, true)) {
 				$name = $nameNode->nodeValue;
 			}
 		}
