@@ -12,17 +12,17 @@ class PoCDomParser implements DomParser
 	/**
 	 * @var \DOMXPath
 	 */
-	private $xpath;
+	private $xPathEngine;
 
 	/**
 	 * @var string
 	 */
-	private $prefix;
+	private $namespacePrefix;
 
 	/**
 	 * @var string
 	 */
-	private $defaultPrefix = 'uniqueDomParserPrefix';
+	private $namespacePrefixDefault = 'uniqueDomParserPrefix';
 
 	public function __construct($xmlString)
 	{
@@ -47,8 +47,8 @@ class PoCDomParser implements DomParser
 	public function getXPathNode($xPathString)
 	{
 		$this->initialiseXPath();
-		$xPathString = $this->prepareXPathString($xPathString);
-		$nodeList = $this->xpath->query($xPathString);
+		$xPathString = $this->addNamespacePrefixesToXPathString($xPathString);
+		$nodeList = $this->xPathEngine->query($xPathString);
 
 		return $nodeList;
 	}
@@ -66,22 +66,32 @@ class PoCDomParser implements DomParser
 
 	private function initialiseXPath()
 	{
-		$this->xpath = new \DOMXPath($this->document);
+		$this->xPathEngine = new \DOMXPath($this->document);
 
-		if ($namespaceUri = $this->document->documentElement->lookupNamespaceUri(null)) {
-			$this->xpath->registerNamespace($this->defaultPrefix, $namespaceUri);
-			$this->prefix = $this->defaultPrefix;
+		if ($namespaceUri = $this->getNamespaceUri()) {
+			$this->xPathEngine->registerNamespace($this->namespacePrefixDefault, $namespaceUri);
+			$this->namespacePrefix = $this->namespacePrefixDefault;
 		}
+	}
+
+	/**
+	 * @return string
+	 */
+	private function getNamespaceUri()
+	{
+		$namespaceUri = $this->document->documentElement->lookupNamespaceUri(null);
+
+		return $namespaceUri;
 	}
 
 	/**
 	 * @param $xPathString
 	 * @return string
 	 */
-	private function prepareXPathString($xPathString)
+	private function addNamespacePrefixesToXPathString($xPathString)
 	{
-		if ($this->prefix) {
-			$xPathString = $this->prefix . ':' . str_replace('/', '/' . $this->prefix . ':', $xPathString);
+		if ($this->namespacePrefix) {
+			return $this->namespacePrefix . ':' . str_replace('/', '/' . $this->namespacePrefix . ':', $xPathString);
 		}
 
 		return $xPathString;
