@@ -42,22 +42,26 @@ class PoCDomParser implements DomParser
 
 	/**
 	 * @param string $xPathString
-	 * @param null $contextNode
-	 * @param bool $getFirstNode
-	 * @return \DOMElement|\DOMNodeList|null
+	 * @return \DOMNodeList
 	 */
-	public function getXPathNode($xPathString, $contextNode = null, $getFirstNode = false)
+	public function getXPathNode($xPathString)
 	{
 		$this->initialiseXPath();
 		$xPathString = $this->prepareXPathString($xPathString);
-
-		$nodeList = $this->xpath->query($xPathString, $contextNode);
-
-		if (1 == $nodeList->length || $getFirstNode) {
-			return $nodeList->item(0);
-		}
+		$nodeList = $this->xpath->query($xPathString);
 
 		return $nodeList;
+	}
+
+	/**
+	 * @param string $xPathString
+	 * @return \DOMElement|null
+	 */
+	public function getXPathFirstElementOfANode($xPathString)
+	{
+		$nodeList = $this->getXPathNode($xPathString);
+
+		return $nodeList->item(0);
 	}
 
 	private function initialiseXPath()

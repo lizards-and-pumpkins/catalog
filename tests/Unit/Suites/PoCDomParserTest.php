@@ -16,8 +16,8 @@ class PoCDomParserTest extends \PHPUnit_Framework_TestCase
 		$parser = new PoCDomParser($xml);
 		$result = $parser->getXPathNode('child/grandChild');
 
-		$this->assertInstanceOf(\DOMElement::class, $result);
-		$this->assertEquals('foo', $result->nodeValue);
+		$this->assertInstanceOf(\DOMNodeList::class, $result);
+		$this->assertEquals('foo', $result->item(0)->nodeValue);
 	}
 
 	/**
@@ -29,8 +29,8 @@ class PoCDomParserTest extends \PHPUnit_Framework_TestCase
 		$parser = new PoCDomParser($xml);
 		$result = $parser->getXPathNode('child');
 
-		$this->assertInstanceOf(\DOMElement::class, $result);
-		$this->assertEquals('foo', $result->nodeValue);
+		$this->assertInstanceOf(\DOMNodeList::class, $result);
+		$this->assertEquals('foo', $result->item(0)->nodeValue);
 	}
 
 	/**
@@ -49,28 +49,26 @@ class PoCDomParserTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function itShouldReturnNullIfNodeIsNotFoundAndFirstElementOfAListIsRequested()
+	public function itShouldReturnFirstElementOfANode()
 	{
-		$xml = '<root></root>';
+		$xml = '<root><child>foo</child><child>bar</child></root>';
 		$parser = new PoCDomParser($xml);
-		$result = $parser->getXPathNode('child', null, true);
+		$result = $parser->getXPathFirstElementOfANode('child');
 
-		$this->assertNull($result);
+		$this->assertInstanceOf(\DOMElement::class, $result);
+		$this->assertEquals('foo', $result->nodeValue);
 	}
 
 	/**
 	 * @test
 	 */
-	public function itShouldReturnRequestedDomNodeRelativeToOtherNode()
+	public function itShouldReturnNullIfNoFirstElementIsFound()
 	{
-		$xml = '<root><child><grandChild>foo</grandChild></child></root>';
+		$xml = '<root></root>';
 		$parser = new PoCDomParser($xml);
+		$result = $parser->getXPathFirstElementOfANode('child');
 
-		$childNode = $parser->getXPathNode('child');
-		$result = $parser->getXPathNode('grandChild', $childNode);
-
-		$this->assertInstanceOf(\DOMElement::class, $result);
-		$this->assertEquals('foo', $result->nodeValue);
+		$this->assertNull($result);
 	}
 
 	/**

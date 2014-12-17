@@ -15,10 +15,10 @@ class ProductBuilder
 		$name = '';
 		$parser = new PoCDomParser($xml);
 
-		if ($productNode = $parser->getXPathNode('product', null, true)) {
+		if ($productNode = $parser->getXPathFirstElementOfANode('product')) {
 			$sku = new PoCSku($productNode->getAttribute('sku'));
 			$productId = ProductId::fromSku($sku);
-			if ($nameNode = $parser->getXPathNode('attributes/attribute[@code="name"]', $productNode, true)) {
+			if ($nameNode = $parser->getXPathFirstElementOfANode('product[1]/attributes/attribute[@code="name"]')) {
 				$name = $nameNode->nodeValue;
 			}
 		}
