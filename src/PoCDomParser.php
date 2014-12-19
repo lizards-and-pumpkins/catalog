@@ -91,7 +91,7 @@ class PoCDomParser implements DomParser
 	private function addNamespacePrefixesToXPathString($xPathString)
 	{
 		if ($this->namespacePrefix) {
-			return $this->namespacePrefix . ':' . str_replace('/', '/' . $this->namespacePrefix . ':', $xPathString);
+			$xPathString = preg_replace('/(\/|^)([^@])/', '$1' . $this->namespacePrefix . ':$2', $xPathString);
 		}
 
 		return $xPathString;
