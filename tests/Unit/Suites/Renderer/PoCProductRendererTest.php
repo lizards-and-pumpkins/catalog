@@ -26,7 +26,7 @@ class PoCProductRendererTest extends \PHPUnit_Framework_TestCase
 			->method('getId')
 			->willReturn($stubProductId);
 		$stubProduct->expects($this->once())
-			->method('getAttribute')
+			->method('getAttributeValue')
 			->with('name')
 			->willReturn($stubProductName);
 

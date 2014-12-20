@@ -12,6 +12,6 @@ class PoCProductRenderer implements ProductRenderer
      */
     public function render(Product $product)
     {
-        return sprintf('<p>%s: %s</p>', $product->getId(), $product->getAttribute('name'));
+        return sprintf('<p>%s: %s</p>', $product->getId(), $product->getAttributeValue('name'));
     }
 } 

@@ -56,6 +56,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 		    ->with('name')
 		    ->willReturn($this->testName);
 
-        $this->assertSame($this->testName, $this->product->getAttribute('name'));
+        $this->assertSame($this->testName, $this->product->getAttributeValue('name'));
     }
 }

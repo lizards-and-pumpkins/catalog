@@ -71,7 +71,7 @@ class HardcodedProductDetailViewSnippetRenderer implements SnippetRenderer
     {
         return sprintf(
             '<div>%s (%s)</div>',
-            htmlentities($product->getAttribute('name')),
+            htmlentities($product->getAttributeValue('name')),
             $product->getId()
         );
     }

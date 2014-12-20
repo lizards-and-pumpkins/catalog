@@ -38,7 +38,7 @@ class Product implements ProjectionSourceData
 	 * @param $code
 	 * @return mixed|null
 	 */
-    public function getAttribute($code)
+    public function getAttributeValue($code)
     {
 	    /* TODO: Implement environment support */
 	    $environment = [];

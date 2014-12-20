@@ -109,7 +109,7 @@ class HardcodedProductDetailViewSnippetRendererTest
         $stubProduct->getId()->expects($this->any())
             ->method('__toString')->willReturn($productIdString);
         $stubProduct->expects($this->any())
-            ->method('getAttribute')
+            ->method('getAttributeValue')
 	        ->with('name')
 	        ->willReturn($productNameString);
 
