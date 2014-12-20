@@ -12,18 +12,18 @@ class Product implements ProjectionSourceData
     private $id;
 
     /**
-     * @var string
+     * @var ProductAttributeList
      */
-    private $name;
+    private $attributes;
 
     /**
      * @param ProductId $id
-     * @param string    $name
+     * @param ProductAttributeList $attributes
      */
-    public function __construct(ProductId $id, $name)
+    public function __construct(ProductId $id, ProductAttributeList $attributes)
     {
         $this->id = $id;
-        $this->name = $name;
+        $this->attributes = $attributes;
     }
 
     /**
@@ -34,11 +34,15 @@ class Product implements ProjectionSourceData
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+	/**
+	 * @param $code
+	 * @return mixed|null
+	 */
+    public function getAttribute($code)
     {
-        return $this->name;
+	    /* TODO: Implement environment support */
+	    $environment = [];
+
+        return $this->attributes->getAttribute($code, $environment);
     }
-} 
+}

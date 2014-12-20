@@ -8,6 +8,8 @@ namespace Brera\PoC\Product;
  * @uses \Brera\PoC\Product\ProductId
  * @uses \Brera\PoC\Product\PoCSku
  * @uses \Brera\PoC\PoCDomParser
+ * @uses \Brera\PoC\Product\ProductAttribute
+ * @uses \Brera\PoC\Product\ProductAttributeList
  */
 class ProductBuilderTest extends \PHPUnit_Framework_TestCase
 {

@@ -11,7 +11,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      * @var string
      */
     private $testName = 'test';
-    
+
     /**
      * @var ProductId|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -21,13 +21,20 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      * @var Product
      */
     private $product;
+
+	/**
+	 * @var ProductAttributeList|\PHPUnit_Framework_MockObject_MockObject
+	 */
+	private $stubProductAttributeList;
     
     public function setUp()
     {
         $this->stubProductId = $this->getMockBuilder(ProductId::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->product = new Product($this->stubProductId, $this->testName);
+	    $this->stubProductAttributeList = $this->getMock(ProductAttributeList::class);
+
+	    $this->product = new Product($this->stubProductId, $this->stubProductAttributeList);
     }
 
     /**
@@ -44,6 +51,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnTheName()
     {
-        $this->assertSame($this->testName, $this->product->getName());
+	    $this->stubProductAttributeList->expects($this->once())
+		    ->method('getAttribute')
+		    ->with('name')
+		    ->willReturn($this->testName);
+
+        $this->assertSame($this->testName, $this->product->getAttribute('name'));
     }
-} 
+}

@@ -109,7 +109,9 @@ class HardcodedProductDetailViewSnippetRendererTest
         $stubProduct->getId()->expects($this->any())
             ->method('__toString')->willReturn($productIdString);
         $stubProduct->expects($this->any())
-            ->method('getName')->willReturn($productNameString);
+            ->method('getAttribute')
+	        ->with('name')
+	        ->willReturn($productNameString);
 
         $stubEnvironment = $this->getMockBuilder(VersionedEnvironment::class)
             ->disableOriginalConstructor()->getMock();

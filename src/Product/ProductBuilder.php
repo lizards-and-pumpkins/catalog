@@ -12,21 +12,24 @@ class ProductBuilder
 	 */
 	public function createProductFromXml($xml)
 	{
-		$name = '';
 		$parser = new PoCDomParser($xml);
 
-		if ($productNode = $parser->getXPathFirstElementOfANode('product')) {
-			$sku = new PoCSku($productNode->getAttribute('sku'));
-			$productId = ProductId::fromSku($sku);
-			if ($nameNode = $parser->getXPathFirstElementOfANode('product[1]/attributes/attribute[@code="name"]')) {
-				$name = $nameNode->nodeValue;
-			}
-		}
+		$skuNode = $parser->getXPathFirstElementOfANode('product[1]/@sku');
 
-		if (empty($productId) || empty($name)) {
+		if (!$skuNode || !$skuNode->nodeValue) {
 			throw new InvalidImportDataException();
 		}
 
-		return new Product($productId, $name);
+		$sku = new PoCSku($skuNode->nodeValue);
+		$productId = ProductId::fromSku($sku);
+
+		$attributeList = new ProductAttributeList();
+		$attributeNodeList = $parser->getXPathNode('product[1]/attributes/attribute');
+		foreach ($attributeNodeList as $attributeNode) {
+			$attribute = ProductAttribute::fromDomElement($attributeNode);
+			$attributeList->add($attribute);
+		}
+
+		return new Product($productId, $attributeList);
 	}
 }
