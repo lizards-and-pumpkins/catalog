@@ -10,7 +10,7 @@ interface Attribute
 	public function getCode();
 
 	/**
-	 * @return mixed
+	 * @return string
 	 */
 	public function getValue();
 

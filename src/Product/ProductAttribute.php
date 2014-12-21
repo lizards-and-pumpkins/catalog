@@ -18,7 +18,7 @@ class ProductAttribute implements Attribute
 	private $environment;
 
 	/**
-	 * @var mixed
+	 * @var string
 	 */
 	private $value;
 
@@ -65,7 +65,7 @@ class ProductAttribute implements Attribute
 	}
 
 	/**
-	 * @return mixed
+	 * @return string
 	 */
 	public function getValue()
 	{
