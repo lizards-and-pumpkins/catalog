@@ -13,11 +13,6 @@
             <category>men</category>
             <category>woman</category>
         </categories>
-        <prices>
-            <price website="ru_de">12.95</price>
-            <price website="ru_en">11.45</price>
-            <special_price website="ru_de">11.95</special_price>
-        </prices>
         <tax_class_ids>
             <tax_class_id>5</tax_class_id>
         </tax_class_ids>
@@ -45,6 +40,9 @@
         <attributes>
             <attribute code="name" lang="de_DE">LED Arm-Signallampe</attribute>
             <attribute code="name" lang="en_US">LED Armflasher</attribute>
+            <attribute code="price" customer_group="retail" website="ru_de">12.95</attribute>
+            <attribute code="price" website="ru_en">11.45</attribute>
+            <attribute code="special_price" website="ru_de">11.95</attribute>
             <attribute code="image_main">main</attribute>
             <attribute code="image_listing">main</attribute>
             <attribute code="image_thumbnail">small</attribute>

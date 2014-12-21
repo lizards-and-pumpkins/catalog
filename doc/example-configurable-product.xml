@@ -7,9 +7,6 @@
             <category>men-running-shoes</category>
             <category>specials</category>
         </categories>
-        <prices>
-            <price>89.95</price>
-        </prices>
         <tax_class_ids>
             <tax_class_id>5</tax_class_id>
         </tax_class_ids>
@@ -39,6 +36,7 @@
         </assets>
         <attributes>
             <attribute code="name">adiPure 360</attribute>
+            <attribute code="price">12.95</attribute>
             <attribute code="image_main">main-shoe-picture</attribute>
             <attribute code="image_listing">small</attribute>
             <attribute code="image_thumbnail">small</attribute>
