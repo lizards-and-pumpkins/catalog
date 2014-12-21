@@ -21,6 +21,28 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
+	public function itShouldReturnTrueIfAttributeWithGivenCodeExists()
+	{
+		$this->domElement->setAttribute('code', 'name');
+		$attribute = ProductAttribute::fromDomElement($this->domElement);
+
+		$this->assertTrue($attribute->hasCode('name'));
+	}
+
+	/**
+	 * @test
+	 */
+	public function itShouldReturnFalseIfAttributeWithGivenCodeDoesNotExist()
+	{
+		$this->domElement->setAttribute('code', 'name');
+		$attribute = ProductAttribute::fromDomElement($this->domElement);
+
+		$this->assertFalse($attribute->hasCode('price'));
+	}
+
+	/**
+	 * @test
+	 */
 	public function itShouldReturnAttributeCode()
 	{
 		$this->domElement->setAttribute('code', 'name');

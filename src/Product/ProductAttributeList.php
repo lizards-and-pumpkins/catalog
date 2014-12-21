@@ -17,7 +17,7 @@ class ProductAttributeList
 	/**
 	 * @param string $code
 	 * @param array $environment
-	 * @return null
+	 * @return string|null
 	 */
 	public function getAttribute($code, $environment = [])
 	{
@@ -27,7 +27,7 @@ class ProductAttributeList
 		}
 
 		foreach ($this->attributes as $attribute) {
-			if ($attribute->getCode() === $code) {
+			if ($attribute->hasCode($code)) {
 
 				/* TODO: Implement closest environment match */
 

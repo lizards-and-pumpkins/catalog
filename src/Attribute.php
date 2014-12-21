@@ -5,6 +5,12 @@ namespace Brera\PoC;
 interface Attribute
 {
 	/**
+	 * @param string $codeExpectation
+	 * @return bool
+	 */
+	public function hasCode($codeExpectation);
+
+	/**
 	 * @return string
 	 */
 	public function getCode();

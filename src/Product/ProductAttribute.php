@@ -65,6 +65,15 @@ class ProductAttribute implements Attribute
 	}
 
 	/**
+	 * @param string $codeExpectation
+	 * @return bool
+	 */
+	public function hasCode($codeExpectation)
+	{
+		return $codeExpectation == $this->code;
+	}
+
+	/**
 	 * @return string
 	 */
 	public function getValue()
