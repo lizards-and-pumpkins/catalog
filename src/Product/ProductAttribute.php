@@ -25,12 +25,12 @@ class ProductAttribute implements Attribute
 	/**
 	 * @param $code
 	 * @param $value
-	 * @param array $environment
+	 * @param array $environmentData
 	 */
-	private function __construct($code, $value, $environment = array())
+	private function __construct($code, $value, array $environmentData = [])
 	{
 		$this->code = $code;
-		$this->environment = $environment;
+		$this->environment = $environmentData;
 		$this->value = $value;
 	}
 
