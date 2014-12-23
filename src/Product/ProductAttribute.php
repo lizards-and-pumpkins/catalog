@@ -3,7 +3,7 @@
 namespace Brera\PoC\Product;
 
 use Brera\PoC\Attribute;
-use Brera\PoC\InvalidAttributeCodeException;
+use Brera\PoC\FirstCharOfAttributeCodeIsNotAlphabeticException;
 
 class ProductAttribute implements Attribute
 {
@@ -38,8 +38,8 @@ class ProductAttribute implements Attribute
 	{
 		$code = $node->getAttribute('code');
 
-		if (empty($code)) {
-			throw new InvalidAttributeCodeException();
+		if (!strlen($code) || !ctype_alpha(substr($code, 0, 1))) {
+			throw new FirstCharOfAttributeCodeIsNotAlphabeticException();
 		}
 
 		$value = $node->nodeValue;

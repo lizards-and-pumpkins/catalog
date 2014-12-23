@@ -83,10 +83,29 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * @test
-	 * @expectedException \Brera\PoC\InvalidAttributeCodeException
+	 * @expectedException \Brera\PoC\FirstCharOfAttributeCodeIsNotAlphabeticException
+	 * @dataProvider invalidAttributeCodeProvider
+	 * @param $invalidAttributeCode
 	 */
-	public function itShouldThrowAnExceptionIfAttributeHasNoCode()
+	public function itShouldThrowAnExceptionIfAttributeCodeStartWithNonAlphabeticCharacter($invalidAttributeCode)
 	{
+		if (!is_null($invalidAttributeCode)) {
+			$this->domElement->setAttribute('code', $invalidAttributeCode);
+		}
+
 		ProductAttribute::fromDomElement($this->domElement);
+	}
+
+	public function invalidAttributeCodeProvider()
+	{
+		return [
+			[null],
+			[''],
+			[' '],
+			['1'],
+			['-bar'],
+			['2foo'],
+			["\nbaz"]
+		];
 	}
 }
