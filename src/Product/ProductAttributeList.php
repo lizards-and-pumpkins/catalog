@@ -9,6 +9,10 @@ class ProductAttributeList
 	 */
 	private $attributes = [];
 
+	/**
+	 * @param ProductAttribute $attribute
+	 * @return void
+	 */
 	public function add(ProductAttribute $attribute)
 	{
 		array_push($this->attributes, $attribute);
@@ -36,5 +40,21 @@ class ProductAttributeList
 		}
 
 		return null;
+	}
+
+	/**
+	 * @param \DOMNodeList $nodeList
+	 * @return ProductAttributeList
+	 */
+	public static function fromDomNodeList(\DOMNodeList $nodeList)
+	{
+		$attributeList = new self();
+
+		foreach ($nodeList as $node) {
+			$attribute = ProductAttribute::fromDomElement($node);
+			$attributeList->add($attribute);
+		}
+
+		return $attributeList;
 	}
 }

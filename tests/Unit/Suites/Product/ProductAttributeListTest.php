@@ -54,4 +54,21 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertNull($value);
 	}
+
+	/**
+	 * @test
+	 */
+	public function itShouldCreateAttributeListFromXmlNodeList()
+	{
+		$document = new \DOMDocument();
+		$element = $document->createElement('foo', 'bar');
+		$element->setAttribute('code', 'name');
+		$document->appendChild($element);
+		$nodeList = $document->getElementsByTagName('foo');
+
+		$attributeList = ProductAttributeList::fromDomNodeList($nodeList);
+		$attributeValue = $attributeList->getAttribute('name');
+
+		$this->assertEquals('bar', $attributeValue);
+	}
 }

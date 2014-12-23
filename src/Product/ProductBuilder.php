@@ -23,12 +23,8 @@ class ProductBuilder
 		$sku = PoCSku::fromString($skuNode->nodeValue);
 		$productId = ProductId::fromSku($sku);
 
-		$attributeList = new ProductAttributeList();
 		$attributeNodeList = $parser->getXPathNode('product[1]/attributes/attribute');
-		foreach ($attributeNodeList as $attributeNode) {
-			$attribute = ProductAttribute::fromDomElement($attributeNode);
-			$attributeList->add($attribute);
-		}
+		$attributeList = ProductAttributeList::fromDomNodeList($attributeNodeList);
 
 		return new Product($productId, $attributeList);
 	}
