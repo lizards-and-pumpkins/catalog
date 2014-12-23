@@ -14,18 +14,23 @@ class ProductBuilder
 	{
 		$parser = new PoCDomParser($xml);
 
-		$skuNode = $parser->getXPathFirstElementOfANode('product[1]/@sku');
-
-		if (!$skuNode || !$skuNode->nodeValue) {
-			throw new InvalidImportDataException();
-		}
-
-		$sku = PoCSku::fromString($skuNode->nodeValue);
+		$skuNodeList = $parser->getXPathNode('product[1]/@sku');
+		$skuString = $this->getSkuStringFromDomNodeList($skuNodeList);
+		$sku = PoCSku::fromString($skuString);
 		$productId = ProductId::fromSku($sku);
 
 		$attributeNodeList = $parser->getXPathNode('product[1]/attributes/attribute');
 		$attributeList = ProductAttributeList::fromDomNodeList($attributeNodeList);
 
 		return new Product($productId, $attributeList);
+	}
+
+	private function getSkuStringFromDomNodeList(\DOMNodeList $nodeList)
+	{
+		if (1 !== $nodeList->length) {
+			throw new InvalidNumberOfSkusPerImportedProductException();
+		}
+
+		return $nodeList->item(0)->nodeValue;
 	}
 }

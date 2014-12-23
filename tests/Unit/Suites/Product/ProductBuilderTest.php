@@ -28,7 +28,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * @test
-	 * @expectedException \Brera\PoC\Product\InvalidImportDataException
+	 * @expectedException \Brera\PoC\Product\InvalidNumberOfSkusPerImportedProductException
 	 */
 	public function itShouldThrowAnExceptionInCaseOfXmlHasNoEssentialData()
 	{
