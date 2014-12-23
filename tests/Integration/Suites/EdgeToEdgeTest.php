@@ -23,8 +23,7 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $factory = new PoCMasterFactory();
         $factory->register(new IntegrationTestFactory());
 
-
-        $sku = new PoCSku('118235-251');
+        $sku = PoCSku::fromString('118235-251');
         $productId = ProductId::fromSku($sku);
         $productName = 'LED Arm-Signallampe';
         
@@ -58,7 +57,7 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $httpUrl = HttpUrl::fromString('http://example.com/seo-url');
         $request = HttpRequest::fromParameters('GET', $httpUrl);
 
-        $sku = new PoCSku('test');
+        $sku = PoCSku::fromString('test');
         $productId = ProductId::fromSku($sku);
 
         $factory = new PoCMasterFactory();

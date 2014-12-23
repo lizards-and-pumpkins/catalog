@@ -24,7 +24,7 @@ class PoCSku implements Sku
 	 */
 	public static function fromString($skuString)
 	{
-		if (is_string($skuString)) {
+		if (is_string($skuString) || (is_object($skuString) && method_exists($skuString, '__toString'))) {
 			$skuString = trim($skuString);
 		}
 
