@@ -34,7 +34,6 @@ class DataVersionTest extends \PHPUnit_Framework_TestCase
      * @test
      * @expectedException \Brera\PoC\InvalidVersionException
      * @dataProvider invalidVersionProvider
-     *
      */
     public function itShouldThrownOnInvalidVersion($invalidVersion)
     {

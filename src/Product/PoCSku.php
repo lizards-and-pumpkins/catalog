@@ -10,12 +10,30 @@ class PoCSku implements Sku
     private $sku;
 
     /**
-     * @param string $sku
+     * @param string $skuString
      */
-    public function __construct($sku)
+    private function __construct($skuString)
     {
-        $this->sku = $sku;
+        $this->sku = $skuString;
     }
+
+	/**
+	 * @param string $skuString
+	 * @throws InvalidSkuException
+	 * @return PoCSku
+	 */
+	public static function fromString($skuString)
+	{
+		if (is_string($skuString)) {
+			$skuString = trim($skuString);
+		}
+
+		if ((!is_string($skuString) && !is_int($skuString) && !is_float($skuString)) || empty($skuString)) {
+			throw new InvalidSkuException();
+		}
+
+		return new self($skuString);
+	}
 
     /**
      * @return string

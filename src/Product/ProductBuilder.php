@@ -20,7 +20,7 @@ class ProductBuilder
 			throw new InvalidImportDataException();
 		}
 
-		$sku = new PoCSku($skuNode->nodeValue);
+		$sku = PoCSku::fromString($skuNode->nodeValue);
 		$productId = ProductId::fromSku($sku);
 
 		$attributeList = new ProductAttributeList();

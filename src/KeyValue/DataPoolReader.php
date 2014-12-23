@@ -55,7 +55,7 @@ class DataPoolReader
     {
         $key = $this->keyValueStoreKeyGenerator->createPoCProductSeoUrlToIdKey($url);
         $skuString = $this->keyValueStore->get($key);
-	    $sku = new PoCSku($skuString);
+	    $sku = PoCSku::fromString($skuString);
 
 	    return ProductId::fromSku($sku);
     }
