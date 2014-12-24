@@ -8,11 +8,6 @@ namespace Brera\PoC\Product;
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var string
-     */
-    private $testName = 'test';
-
-    /**
      * @var ProductId|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubProductId;
@@ -51,11 +46,20 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnTheName()
     {
+	    $testName = 'test-name';
+
+	    $stubProductAttribute = $this->getMockBuilder(ProductAttribute::class)
+	        ->disableOriginalConstructor()
+	        ->getMock();
+	    $stubProductAttribute->expects($this->once())
+		    ->method('getValue')
+		    ->willReturn($testName);
+
 	    $this->stubProductAttributeList->expects($this->once())
 		    ->method('getAttribute')
 		    ->with('name')
-		    ->willReturn($this->testName);
+		    ->willReturn($stubProductAttribute);
 
-        $this->assertSame($this->testName, $this->product->getAttributeValue('name'));
+        $this->assertSame($testName, $this->product->getAttributeValue('name'));
     }
 }

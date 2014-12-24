@@ -22,7 +22,7 @@ class ProductAttributeList
 	 * @param string $code
 	 * @param array $environment
 	 * @throws ProductAttributeNotFoundException
-	 * @return string
+	 * @return ProductAttribute
 	 */
 	public function getAttribute($code, $environment = [])
 	{
@@ -35,7 +35,7 @@ class ProductAttributeList
 
 				/* TODO: Implement closest environment match */
 
-				return $attribute->getValue();
+				return $attribute;
 			}
 		}
 

@@ -43,6 +43,8 @@ class Product implements ProjectionSourceData
 	    /* TODO: Implement environment support */
 	    $environment = [];
 
-        return $this->attributes->getAttribute($code, $environment);
+	    $attribute = $this->attributes->getAttribute($code, $environment);
+
+        return $attribute->getValue();
     }
 }

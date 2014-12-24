@@ -30,9 +30,9 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
 		$attribute = ProductAttribute::fromDomElement($domElement);
 
 		$this->attributeList->add($attribute);
-		$value = $this->attributeList->getAttribute('foo');
+		$result = $this->attributeList->getAttribute('foo');
 
-		$this->assertEquals('bar', $value);
+		$this->assertEquals('bar', $result->getValue());
 	}
 
 	/**
@@ -65,8 +65,8 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
 		$nodeList = $document->getElementsByTagName('foo');
 
 		$attributeList = ProductAttributeList::fromDomNodeList($nodeList);
-		$attributeValue = $attributeList->getAttribute('name');
+		$attribute = $attributeList->getAttribute('name');
 
-		$this->assertEquals('bar', $attributeValue);
+		$this->assertEquals('bar', $attribute->getValue());
 	}
 }
