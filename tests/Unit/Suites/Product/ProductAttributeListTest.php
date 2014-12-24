@@ -37,22 +37,20 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * @test
+	 * @expectedException \Brera\PoC\Product\ProductAttributeNotFoundException
 	 */
-	public function itShouldReturnNullIfBlankCodeIsProvided()
+	public function itShouldThrownAnExceptionIfBlankCodeIsProvided()
 	{
-		$value = $this->attributeList->getAttribute('');
-
-		$this->assertNull($value);
+		$this->attributeList->getAttribute('');
 	}
 
 	/**
 	 * @test
+	 * @expectedException \Brera\PoC\Product\ProductAttributeNotFoundException
 	 */
-	public function itShouldReturnNullIfNoAttributeWithGivenCodeIsSet()
+	public function itShouldThrownAnExceptionIfNoAttributeWithGivenCodeIsSet()
 	{
-		$value = $this->attributeList->getAttribute('foo');
-
-		$this->assertNull($value);
+		$this->attributeList->getAttribute('foo');
 	}
 
 	/**

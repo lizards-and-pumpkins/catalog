@@ -21,13 +21,13 @@ class ProductAttributeList
 	/**
 	 * @param string $code
 	 * @param array $environment
-	 * @return string|null
+	 * @throws ProductAttributeNotFoundException
+	 * @return string
 	 */
 	public function getAttribute($code, $environment = [])
 	{
 		if (empty($code)) {
-			/* TODO: Maybe trow a logical error instead? */
-			return null;
+			throw new ProductAttributeNotFoundException();
 		}
 
 		foreach ($this->attributes as $attribute) {
@@ -39,7 +39,7 @@ class ProductAttributeList
 			}
 		}
 
-		return null;
+		throw new ProductAttributeNotFoundException();
 	}
 
 	/**
