@@ -48,31 +48,6 @@ class PoCDomParserTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * @test
-	 */
-	public function itShouldReturnFirstElementOfANode()
-	{
-		$xml = '<root><child>foo</child><child>bar</child></root>';
-		$parser = new PoCDomParser($xml);
-		$result = $parser->getXPathFirstElementOfANode('child');
-
-		$this->assertInstanceOf(\DOMElement::class, $result);
-		$this->assertEquals('foo', $result->nodeValue);
-	}
-
-	/**
-	 * @test
-	 */
-	public function itShouldReturnNullIfNoFirstElementIsFound()
-	{
-		$xml = '<root></root>';
-		$parser = new PoCDomParser($xml);
-		$result = $parser->getXPathFirstElementOfANode('child');
-
-		$this->assertNull($result);
-	}
-
-	/**
-	 * @test
 	 * @expectedException \OutOfBoundsException
 	 */
 	public function itShouldThrowAnErrorIfXmlIsNotValid()
