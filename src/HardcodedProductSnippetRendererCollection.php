@@ -15,15 +15,13 @@ class HardcodedProductSnippetRendererCollection extends ProductSnippetRendererCo
     private $renderers;
 
     /**
-     * @param array $renderer
+     * @param array $renderers
      * @param SnippetResultList $snippetResultList
      */
-    public function __construct(
-        array $renderer,
-        SnippetResultList $snippetResultList
-    ) {
-        $this->snippetResultList = $snippetResultList;
-        $this->renderers = $renderer;
+    public function __construct(array $renderers, SnippetResultList $snippetResultList)
+    {
+        $this->renderers = $renderers;
+	    $this->snippetResultList = $snippetResultList;
     }
 
     /**

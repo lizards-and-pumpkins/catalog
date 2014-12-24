@@ -2,7 +2,6 @@
 
 namespace Brera\PoC;
 
-
 use Brera\PoC\Product\Product;
 use Brera\PoC\Product\ProductId;
 use Psr\Log\InvalidArgumentException;
