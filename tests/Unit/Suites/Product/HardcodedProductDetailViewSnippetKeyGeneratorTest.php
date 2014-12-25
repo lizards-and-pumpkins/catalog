@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera\PoC\Product;
 
-use Brera\PoC\Product\ProductId;
+use Brera\PoC\Environment;
 
 class HardcodedProductDetailViewSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
 {

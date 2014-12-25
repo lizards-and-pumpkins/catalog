@@ -2,6 +2,8 @@
 
 namespace Brera\PoC;
 
+use Brera\PoC\Product\ProductImportDomainEvent;
+
 class DomainEventHandlerLocator
 {
     /**

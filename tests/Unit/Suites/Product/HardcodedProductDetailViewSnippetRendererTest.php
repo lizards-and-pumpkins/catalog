@@ -1,9 +1,12 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera\PoC\Product;
 
-use Brera\PoC\Product\Product;
-use Brera\PoC\Product\ProductId;
+use Brera\PoC\SnippetResultList;
+use Brera\PoC\ProjectionSourceData;
+use Brera\PoC\SnippetRenderer;
+use Brera\PoC\VersionedEnvironment;
+use Brera\PoC\SnippetResult;
 
 class HardcodedProductDetailViewSnippetRendererTest
     extends \PHPUnit_Framework_TestCase
@@ -51,7 +54,7 @@ class HardcodedProductDetailViewSnippetRendererTest
     /**
      * @test
      *
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Brera\PoC\Product\InvalidArgumentException
      */
     public function itShouldOnlyAcceptProductsForRendering()
     {

@@ -1,8 +1,11 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera\PoC\Product;
 
-use Brera\PoC\Product\Product;
+use Brera\PoC\SnippetRenderer;
+use Brera\PoC\SnippetResultList;
+use Brera\PoC\ProjectionSourceData;
+use Brera\PoC\Environment;
 
 class ProductSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
 {

@@ -3,6 +3,8 @@
 namespace Brera\PoC;
 
 use Brera\PoC\Product\ProductId;
+use Brera\PoC\Product\ProductSeoUrlRouter;
+use Brera\PoC\Product\ProductDetailHtmlPage;
 
 class FrontendFactory implements Factory
 {

@@ -1,6 +1,8 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera\PoC\Product;
+
+use Brera\PoC\DomainEvent;
 
 class ProductImportDomainEvent implements DomainEvent
 {

@@ -11,6 +11,12 @@ use Brera\PoC\KeyValue\InMemoryKeyValueStore;
 use Brera\PoC\KeyValue\KeyValueStoreKeyGenerator;
 use Brera\PoC\Queue\InMemoryDomainEventQueue;
 use Brera\PoC\KeyValue\DataPoolReader;
+use Brera\PoC\Product\ProductImportDomainEvent;
+use Brera\PoC\Product\ProductImportDomainEventHandler;
+use Brera\PoC\Product\ProductProjector;
+use Brera\PoC\Product\HardcodedProductDetailViewSnippetRenderer;
+use Brera\PoC\Product\HardcodedProductDetailViewSnippetKeyGenerator;
+use Brera\PoC\Product\HardcodedProductSnippetRendererCollection;
 use Psr\Log\LoggerInterface;
 
 class IntegrationTestFactory implements Factory 

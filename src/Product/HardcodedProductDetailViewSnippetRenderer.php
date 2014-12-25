@@ -1,10 +1,12 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera\PoC\Product;
 
-use Brera\PoC\Product\Product;
-use Brera\PoC\Product\ProductId;
-use Psr\Log\InvalidArgumentException;
+use Brera\PoC\SnippetRenderer;
+use Brera\PoC\SnippetResultList;
+use Brera\PoC\ProjectionSourceData;
+use Brera\PoC\Environment;
+use Brera\PoC\SnippetResult;
 
 class HardcodedProductDetailViewSnippetRenderer implements SnippetRenderer
 {
@@ -33,7 +35,7 @@ class HardcodedProductDetailViewSnippetRenderer implements SnippetRenderer
     /**
      * @param ProjectionSourceData|Product $product
      * @param Environment $environment
-     *
+     * @trows InvalidArgumentException
      * @return SnippetResultList
      */
     public function render(ProjectionSourceData $product, Environment $environment)

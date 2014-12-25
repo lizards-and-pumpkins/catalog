@@ -1,8 +1,7 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera\PoC\Product;
 
-use Brera\PoC\Product\ProductId;
 use Brera\PoC\KeyValue\DataPoolReader;
 use Brera\PoC\Http\HttpResponse;
 use Brera\PoC\Http\HttpRequestHandler;

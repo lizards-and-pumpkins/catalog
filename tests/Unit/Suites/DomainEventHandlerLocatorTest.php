@@ -2,9 +2,12 @@
 
 namespace Brera\PoC;
 
+use Brera\PoC\Product\ProductImportDomainEvent;
+use Brera\PoC\Product\ProductImportDomainEventHandler;
+
 /**
  * @covers \Brera\PoC\DomainEventHandlerLocator
- * @uses \Brera\PoC\ProductImportDomainEvent
+ * @uses \Brera\PoC\Product\ProductImportDomainEvent
  */
 class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 {

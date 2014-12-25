@@ -1,6 +1,9 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera\PoC\Product;
+
+use Brera\PoC\SnippetResultList;
+use Brera\PoC\SnippetRenderer;
 
 class HardcodedProductSnippetRendererCollection extends ProductSnippetRendererCollection
 {

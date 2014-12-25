@@ -1,13 +1,16 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera\PoC\Product;
 
 use Brera\PoC\KeyValue\DataPoolWriter;
-use Brera\PoC\Product\Product;
+use Brera\PoC\SnippetResultList;
+use Brera\PoC\SnippetRendererCollection;
+use Brera\PoC\Environment;
+use Brera\PoC\ProjectionSourceData;
 
 /**
- * @covers \Brera\PoC\ProductProjector
- * @uses \Brera\PoC\ProductSnippetRendererCollection
+ * @covers \Brera\PoC\Product\ProductProjector
+ * @uses \Brera\PoC\Product\ProductSnippetRendererCollection
  */
 class ProductProjectorTest extends \PHPUnit_Framework_TestCase
 {

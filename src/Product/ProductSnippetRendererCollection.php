@@ -1,8 +1,13 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera\PoC\Product;
 
-use Brera\PoC\Product\Product;
+use Brera\PoC\SnippetRendererCollection;
+use Brera\PoC\ProjectionSourceData;
+use Brera\PoC\Environment;
+use Brera\PoC\SnippetResultList;
+use Brera\PoC\InvalidProjectionDataSourceType;
+use Brera\PoC\SnippetRenderer;
 
 abstract class ProductSnippetRendererCollection implements SnippetRendererCollection
 {

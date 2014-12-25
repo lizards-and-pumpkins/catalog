@@ -1,8 +1,10 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera\PoC\Product;
 
-use Brera\PoC\Product\ProductId;
+use Brera\PoC\SnippetKeyGenerator;
+use Brera\PoC\Environment;
+use Brera\PoC\InvalidSnippetKeyIdentifierException;
 
 class HardcodedProductDetailViewSnippetKeyGenerator implements SnippetKeyGenerator
 {
@@ -11,6 +13,7 @@ class HardcodedProductDetailViewSnippetKeyGenerator implements SnippetKeyGenerat
     /**
      * @param mixed|ProductId $productId
      * @param Environment $environment
+     * @throws InvalidSnippetKeyIdentifierException
      * @return string
      */
     public function getKeyForEnvironment($productId, Environment $environment)

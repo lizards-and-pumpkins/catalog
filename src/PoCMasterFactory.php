@@ -8,7 +8,7 @@ namespace Brera\PoC;
  *
  * @method KeyValue\DataPoolWriter createDataPoolWriter
  * @method KeyValue\DataPoolReader createDataPoolReader
- * @method ProductSeoUrlRouter createProductSeoUrlRouter
+ * @method Product\ProductSeoUrlRouter createProductSeoUrlRouter
  * @method Queue\DomainEventQueue getEventQueue
  * @method DomainEventConsumer createDomainEventConsumer
  */
