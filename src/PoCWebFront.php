@@ -2,6 +2,7 @@
 
 namespace Brera\PoC;
 
+use Brera\PoC\Api\ApiRequestHandlerChain;
 use Brera\PoC\Http\HttpRouterChain;
 
 class PoCWebFront extends WebFront
@@ -29,7 +30,7 @@ class PoCWebFront extends WebFront
      */
     protected function registerRouters(HttpRouterChain $router)
     {
+	    $router->register($this->getMasterFactory()->createApiRouter());
         $router->register($this->getMasterFactory()->createProductSeoUrlRouter());
     }
-
-} 
+}
