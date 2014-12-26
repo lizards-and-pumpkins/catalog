@@ -2,7 +2,6 @@
 
 namespace Brera\PoC;
 
-use Brera\PoC\Api\ApiRequestHandlerChain;
 use Brera\PoC\Http\HttpRouterChain;
 
 class PoCWebFront extends WebFront
