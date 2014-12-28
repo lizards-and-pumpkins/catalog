@@ -19,4 +19,34 @@ class ProductImportDomainEventTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertEquals($xml, $result);
 	}
+
+	/**
+	 * @test
+	 */
+	public function itShouldReturnSerializedXml()
+	{
+		$xml = '<?xml version="1.0"?><rootNode></rootNode>';
+		$serializedXml = serialize($xml);
+
+		$domainEvent = new ProductImportDomainEvent($xml);
+		$result = $domainEvent->serialize();
+
+		$this->assertSame($serializedXml, $result);
+	}
+
+	/**
+	 * @test
+	 */
+	public function itShouldUnserializeSerializedXmlAndSetItBackOnDomainEvent()
+	{
+		$xml = '<?xml version="1.0"?><rootNode></rootNode>';
+
+		$domainEvent = new ProductImportDomainEvent($xml);
+		$serializedDomainEvent = $domainEvent->serialize();
+
+		$newDomainEvent = new ProductImportDomainEvent('');
+		$newDomainEvent->unserialize($serializedDomainEvent);
+
+		$this->assertSame($xml, $newDomainEvent->getXml());
+	}
 }

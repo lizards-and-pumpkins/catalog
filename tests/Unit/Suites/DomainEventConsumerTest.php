@@ -2,7 +2,7 @@
 
 namespace Brera\PoC;
 
-use Brera\PoC\Queue\DomainEventQueue;
+use Brera\PoC\Queue\Queue;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -34,7 +34,7 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
 
 	protected function setUp()
 	{
-		$this->stubQueue = $this->getMock(DomainEventQueue::class);
+		$this->stubQueue = $this->getMock(Queue::class);
 		$this->stubLocator = $this->getMockBuilder(DomainEventHandlerLocator::class)
 		                          ->disableOriginalConstructor()
 		                          ->getMock();

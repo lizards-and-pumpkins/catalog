@@ -2,12 +2,10 @@
 
 namespace Brera\PoC\Queue;
 
-use Brera\PoC\DomainEvent;
-
-class InMemoryDomainEventQueue implements \Countable, DomainEventQueue
+class InMemoryQueue implements \Countable, Queue
 {
     /**
-     * @var DomainEvent[]
+     * @var array
      */
     private $queue = [];
 
@@ -20,16 +18,21 @@ class InMemoryDomainEventQueue implements \Countable, DomainEventQueue
     }
 
     /**
-     * @param DomainEvent $event
+     * @param mixed $data
+     * @throws NotSerializable
      * @return null
      */
-    public function add(DomainEvent $event)
+    public function add($data)
     {
-        $this->queue[] = $event;
+	    if (!$data instanceof \Serializable) {
+		    throw new NotSerializable();
+	    }
+
+	    $this->queue[] = serialize($data);
     }
 
     /**
-     * @return DomainEvent
+     * @return mixed
      * @throws \UnderflowException
      */
     public function next()
@@ -37,6 +40,9 @@ class InMemoryDomainEventQueue implements \Countable, DomainEventQueue
         if (empty($this->queue)) {
             throw new \UnderflowException('Trying to get next message of an empty queue');
         }
-        return array_shift($this->queue);
+
+	    $data = array_shift($this->queue);
+
+	    return unserialize($data);
     }
 } 

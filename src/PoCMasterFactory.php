@@ -9,7 +9,7 @@ namespace Brera\PoC;
  * @method KeyValue\DataPoolWriter createDataPoolWriter
  * @method KeyValue\DataPoolReader createDataPoolReader
  * @method Product\ProductSeoUrlRouter createProductSeoUrlRouter
- * @method Queue\DomainEventQueue getEventQueue
+ * @method Queue\Queue getEventQueue
  * @method DomainEventConsumer createDomainEventConsumer
  */
 class PoCMasterFactory implements MasterFactory

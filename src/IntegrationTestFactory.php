@@ -4,12 +4,12 @@ namespace Brera\PoC;
 
 use Brera\PoC\Product\ProductBuilder;
 use Brera\PoC\KeyValue\KeyValueStore;
-use Brera\PoC\Queue\DomainEventQueue;
+use Brera\PoC\Queue\Queue;
 use Brera\PoC\Renderer\PoCProductRenderer;
 use Brera\PoC\KeyValue\DataPoolWriter;
 use Brera\PoC\KeyValue\InMemoryKeyValueStore;
 use Brera\PoC\KeyValue\KeyValueStoreKeyGenerator;
-use Brera\PoC\Queue\InMemoryDomainEventQueue;
+use Brera\PoC\Queue\InMemoryQueue;
 use Brera\PoC\KeyValue\DataPoolReader;
 use Brera\PoC\Product\ProductImportDomainEvent;
 use Brera\PoC\Product\ProductImportDomainEventHandler;
@@ -29,7 +29,7 @@ class IntegrationTestFactory implements Factory
     private $keyValueStore;
 
     /**
-     * @var DomainEventQueue
+     * @var Queue
      */
     private $eventQueue;
 
@@ -176,7 +176,7 @@ class IntegrationTestFactory implements Factory
     }
 
     /**
-     * @return DomainEventQueue|InMemoryDomainEventQueue
+     * @return Queue|InMemoryQueue
      */
     public function getEventQueue()
     {
@@ -187,11 +187,11 @@ class IntegrationTestFactory implements Factory
     }
 
     /**
-     * @return InMemoryDomainEventQueue
+     * @return InMemoryQueue
      */
     private function createEventQueue()
     {
-        return new InMemoryDomainEventQueue();
+        return new InMemoryQueue();
     }
 
     /**

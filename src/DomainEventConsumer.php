@@ -2,13 +2,13 @@
 
 namespace Brera\PoC;
 
-use Brera\PoC\Queue\DomainEventQueue;
+use Brera\PoC\Queue\Queue;
 use Psr\Log\LoggerInterface;
 
 class DomainEventConsumer
 {
     /**
-     * @var DomainEventQueue
+     * @var Queue
      */
     private $queue;
 
@@ -23,11 +23,11 @@ class DomainEventConsumer
     private $logger;
 
     /**
-     * @param DomainEventQueue $queue
+     * @param Queue $queue
      * @param DomainEventHandlerLocator $locator
      * @param LoggerInterface $logger
      */
-    public function __construct(DomainEventQueue $queue, DomainEventHandlerLocator $locator, LoggerInterface $logger)
+    public function __construct(Queue $queue, DomainEventHandlerLocator $locator, LoggerInterface $logger)
     {
         $this->queue = $queue;
         $this->handlerLocator = $locator;

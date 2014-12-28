@@ -2,9 +2,7 @@
 
 namespace Brera\PoC\Queue;
 
-use Brera\PoC\DomainEvent;
-
-interface DomainEventQueue
+interface Queue
 {
     /**
      * @return int
@@ -12,13 +10,13 @@ interface DomainEventQueue
     public function count();
 
     /**
-     * @param DomainEvent $event
+     * @param mixed $data
      * @return null
      */
-    public function add(DomainEvent $event);
+    public function add($data);
 
     /**
-     * @return DomainEvent
+     * @return mixed
      */
     public function next();
 }
