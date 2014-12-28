@@ -37,7 +37,7 @@ class ProductImportDomainEvent implements DomainEvent, \Serializable
 
 	/**
 	 * @param string $xml
-	 * @return ProductImportDomainEvent
+	 * @return null
 	 */
 	public function unserialize($xml)
 	{
