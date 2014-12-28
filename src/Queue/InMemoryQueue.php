@@ -19,13 +19,13 @@ class InMemoryQueue implements \Countable, Queue
 
     /**
      * @param mixed $data
-     * @throws NotSerializable
+     * @throws NotSerializableException
      * @return null
      */
     public function add($data)
     {
 	    if (!$data instanceof \Serializable) {
-		    throw new NotSerializable();
+		    throw new NotSerializableException();
 	    }
 
 	    $this->queue[] = serialize($data);

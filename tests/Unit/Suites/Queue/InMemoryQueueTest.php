@@ -27,7 +27,7 @@ class InMemoryQueueTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * @test
-	 * @expectedException \Brera\PoC\Queue\NotSerializable
+	 * @expectedException \Brera\PoC\Queue\NotSerializableException
 	 */
 	public function itShouldThrowNotSerializableException()
 	{
