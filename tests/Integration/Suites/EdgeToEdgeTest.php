@@ -27,7 +27,7 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $productId = ProductId::fromSku($sku);
         $productName = 'LED Arm-Signallampe';
         
-        $xml = file_get_contents('../../doc/example-simple-product.xml');
+        $xml = file_get_contents('example-simple-product.xml', FILE_USE_INCLUDE_PATH);
 
         $queue = $factory->getEventQueue();
         $queue->add(new ProductImportDomainEvent($xml));

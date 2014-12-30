@@ -18,7 +18,8 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function itShouldCreateAProductFromXml()
 	{
-		$xml = file_get_contents('../../doc/example-simple-product.xml');
+//		die(__DIR__);
+		$xml = file_get_contents('example-simple-product.xml', FILE_USE_INCLUDE_PATH);
 
 		$builder = new ProductBuilder();
 		$product = $builder->createProductFromXml($xml);

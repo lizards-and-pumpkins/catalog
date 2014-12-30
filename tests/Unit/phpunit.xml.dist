@@ -30,4 +30,8 @@
             <directory>../../src</directory>
         </whitelist>
     </filter>
+    <php>
+        <includePath>../../doc</includePath>
+        <includePath>doc</includePath>
+    </php>
 </phpunit>

@@ -25,4 +25,8 @@
     <testsuite name="Brera Proof Of Concept Integration Tests">
         <directory>.</directory>
     </testsuite>
+    <php>
+        <includePath>../../doc</includePath>
+        <includePath>doc</includePath>
+    </php>
 </phpunit>
