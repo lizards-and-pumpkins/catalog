@@ -5,7 +5,7 @@ namespace Brera\PoC\KeyValue;
 class InMemoryKeyValueStore implements KeyValueStore
 {
     /**
-     * @var mixed[]
+     * @var array
      */
     private $store = [];
 
