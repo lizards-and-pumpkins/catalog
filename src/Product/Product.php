@@ -36,7 +36,7 @@ class Product implements ProjectionSourceData
 
 	/**
 	 * @param $code
-	 * @return mixed|null
+	 * @return string
 	 */
     public function getAttributeValue($code)
     {
