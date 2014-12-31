@@ -28,16 +28,25 @@ class DataVersion
         return new self($version);
     }
 
+	/**
+	 * @param string $version
+	 */
     private function __construct($version)
     {
         $this->version = $version;
     }
 
+	/**
+	 * @return string
+	 */
     public function __toString()
     {
         return (string)$this->getVersion();
     }
 
+	/**
+	 * @return string
+	 */
     public function getVersion()
     {
         return $this->version;

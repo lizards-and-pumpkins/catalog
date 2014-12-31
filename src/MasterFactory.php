@@ -6,7 +6,7 @@ interface MasterFactory
 {
     /**
      * @param Factory $factory
-     * @return mixed
+     * @return null
      */
     public function register(Factory $factory);
 }

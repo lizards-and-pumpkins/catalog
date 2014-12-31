@@ -25,7 +25,7 @@ class PoCDomParser implements DomParser
 	private $namespacePrefixDefault = 'uniqueDomParserPrefix';
 
 	/**
-	 * @param $xmlString
+	 * @param string $xmlString
 	 */
 	public function __construct($xmlString)
 	{

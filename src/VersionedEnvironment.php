@@ -8,11 +8,17 @@ class VersionedEnvironment implements Environment
      */
     private $version;
 
+	/**
+	 * @param DataVersion $version
+	 */
     public function __construct(DataVersion $version)
     {
         $this->version = $version;
     }
 
+	/**
+	 * @return DataVersion
+	 */
     public function getVersion()
     {
         return $this->version;
