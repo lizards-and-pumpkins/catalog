@@ -23,8 +23,8 @@ class ProductAttribute implements Attribute
 	private $value;
 
 	/**
-	 * @param $code
-	 * @param $value
+	 * @param string $code
+	 * @param string $value
 	 * @param array $environmentData
 	 */
 	private function __construct($code, $value, array $environmentData = [])
@@ -34,6 +34,11 @@ class ProductAttribute implements Attribute
 		$this->value = $value;
 	}
 
+	/**
+	 * @param \DOMElement $node
+	 * @throws FirstCharOfAttributeCodeIsNotAlphabeticException
+	 * @return ProductAttribute
+	 */
 	public static function fromDomElement(\DOMElement $node)
 	{
 		$code = $node->getAttribute('code');
