@@ -6,7 +6,7 @@
     <xs:element name="products">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="product">
+                <xs:element name="product" maxOccurs="unbounded">
                     <xs:complexType>
                         <xs:complexContent>
                             <xs:extension base="abstractProduct">

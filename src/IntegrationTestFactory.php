@@ -2,6 +2,8 @@
 
 namespace Brera\PoC;
 
+use Brera\PoC\Product\CatalogImportDomainEvent;
+use Brera\PoC\Product\CatalogImportDomainEventHandler;
 use Brera\PoC\Product\ProductBuilder;
 use Brera\PoC\KeyValue\KeyValueStore;
 use Brera\PoC\Queue\Queue;
@@ -49,6 +51,19 @@ class IntegrationTestFactory implements Factory
 			$this->getMasterFactory()->getProductBuilder(),
             $this->getMasterFactory()->getEnvironmentBuilder(),
 			$this->getMasterFactory()->createProductProjector()
+		);
+	}
+
+	/**
+	 * @param CatalogImportDomainEvent $event
+	 * @return CatalogImportDomainEventHandler
+	 */
+	public function createCatalogImportDomainEventHandler(CatalogImportDomainEvent $event)
+	{
+		return new CatalogImportDomainEventHandler(
+			$event,
+			$this->getMasterFactory()->getProductBuilder(),
+			$this->getMasterFactory()->getEventQueue()
 		);
 	}
 

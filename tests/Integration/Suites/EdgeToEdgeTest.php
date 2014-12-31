@@ -2,6 +2,7 @@
 
 namespace Brera\PoC\Tests\Integration;
 
+use Brera\PoC\Product\CatalogImportDomainEvent;
 use Brera\PoC\Product\PoCSku;
 use Brera\PoC\Product\ProductId;
 use Brera\PoC\PoCMasterFactory;
@@ -27,16 +28,16 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $productId = ProductId::fromSku($sku);
         $productName = 'LED Arm-Signallampe';
         
-        $xml = file_get_contents('example-simple-product.xml', FILE_USE_INCLUDE_PATH);
+        $xml = file_get_contents('product.xml', FILE_USE_INCLUDE_PATH);
 
         $queue = $factory->getEventQueue();
-        $queue->add(new ProductImportDomainEvent($xml));
-        
+	    $queue->add(new CatalogImportDomainEvent($xml));
+
         $consumer = $factory->createDomainEventConsumer();
-        $numberOfMessages = 1;
+        $numberOfMessages = 3;
         $consumer->process($numberOfMessages);
-        
-        $reader = $factory->createDataPoolReader();
+
+	    $reader = $factory->createDataPoolReader();
         /** @var HardcodedProductDetailViewSnippetKeyGenerator $keyGenerator */
         $keyGenerator = $factory->createProductDetailViewSnippetKeyGenerator();
         $environment = $factory->getEnvironmentBuilder()->createEnvironmentFromXml($xml);

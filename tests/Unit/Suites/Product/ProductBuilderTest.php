@@ -14,15 +14,27 @@ namespace Brera\PoC\Product;
 class ProductBuilderTest extends \PHPUnit_Framework_TestCase
 {
 	/**
+	 * @var ProductBuilder
+	 */
+	private $builder;
+
+	protected function setUp()
+	{
+		$this->builder = new ProductBuilder();
+	}
+
+	/**
 	 * @test
 	 */
 	public function itShouldCreateAProductFromXml()
 	{
-//		die(__DIR__);
-		$xml = file_get_contents('example-simple-product.xml', FILE_USE_INCLUDE_PATH);
+		$xml = file_get_contents('product.xml', FILE_USE_INCLUDE_PATH);
+		$domDocument = new \DOMDocument();
+		$domDocument->loadXML($xml);
+		$firstNode = $domDocument->getElementsByTagName('product')->item(0);
+		$firstNodeXml = $domDocument->saveXML($firstNode);
 
-		$builder = new ProductBuilder();
-		$product = $builder->createProductFromXml($xml);
+		$product = $this->builder->createProductFromXml($firstNodeXml);
 
 		$this->assertInstanceOf(Product::class, $product);
 	}
@@ -35,5 +47,16 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
 	{
 		$xml = '<?xml version="1.0"?><node />';
 		(new ProductBuilder())->createProductFromXml($xml);
+	}
+
+	/**
+	 * @test
+	 */
+	public function itShouldReturnAnArray()
+	{
+		$xml = file_get_contents('product.xml', FILE_USE_INCLUDE_PATH);
+		$result = $this->builder->getProductXmlArray($xml);
+
+		$this->assertTrue(is_array($result));
 	}
 }

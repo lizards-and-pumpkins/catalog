@@ -2,6 +2,7 @@
 
 namespace Brera\PoC;
 
+use Brera\PoC\Product\CatalogImportDomainEvent;
 use Brera\PoC\Product\ProductImportDomainEvent;
 
 class DomainEventHandlerLocator
@@ -31,6 +32,9 @@ class DomainEventHandlerLocator
 	    switch ($eventClass) {
 		    case ProductImportDomainEvent::class :
 			    return $this->factory->createProductImportDomainEventHandler($event);
+
+		    case CatalogImportDomainEvent::class :
+			    return $this->factory->createCatalogImportDomainEventHandler($event);
 	    }
 
 	    throw new UnableToFindDomainEventHandlerException(

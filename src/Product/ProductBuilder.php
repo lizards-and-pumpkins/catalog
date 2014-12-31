@@ -14,17 +14,38 @@ class ProductBuilder
 	{
 		$parser = new PoCDomParser($xml);
 
-		$skuNodeList = $parser->getXPathNode('product[1]/@sku');
+		$skuNodeList = $parser->getXPathNode('//product/@sku');
 		$skuString = $this->getSkuStringFromDomNodeList($skuNodeList);
 		$sku = PoCSku::fromString($skuString);
 		$productId = ProductId::fromSku($sku);
 
-		$attributeNodeList = $parser->getXPathNode('product[1]/attributes/attribute');
+		$attributeNodeList = $parser->getXPathNode('//product/attributes/attribute');
 		$attributeList = ProductAttributeList::fromDomNodeList($attributeNodeList);
 
 		return new Product($productId, $attributeList);
 	}
 
+	/**
+	 * @param string $xml
+	 * @return array
+	 */
+	public function getProductXmlArray($xml)
+	{
+		$parser = new PoCDomParser($xml);
+		$productNodesArray = [];
+
+		$productNodes = $parser->getXPathNode('product');
+		foreach ($productNodes as $productNode) {
+			$productNodesArray[] = $parser->getDomNodeXml($productNode);
+		}
+
+		return $productNodesArray;
+	}
+
+	/**
+	 * @param \DOMNodeList $nodeList
+	 * @return string
+	 */
 	private function getSkuStringFromDomNodeList(\DOMNodeList $nodeList)
 	{
 		if (1 !== $nodeList->length) {
