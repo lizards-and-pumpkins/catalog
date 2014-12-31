@@ -24,6 +24,9 @@ class PoCDomParser implements DomParser
 	 */
 	private $namespacePrefixDefault = 'uniqueDomParserPrefix';
 
+	/**
+	 * @param $xmlString
+	 */
 	public function __construct($xmlString)
 	{
 		libxml_clear_errors();
@@ -53,6 +56,9 @@ class PoCDomParser implements DomParser
 		return $nodeList;
 	}
 
+	/**
+	 * @return null
+	 */
 	private function initialiseXPath()
 	{
 		$this->xPathEngine = new \DOMXPath($this->document);
@@ -74,7 +80,7 @@ class PoCDomParser implements DomParser
 	}
 
 	/**
-	 * @param $xPathString
+	 * @param string $xPathString
 	 * @return string
 	 */
 	private function addNamespacePrefixesToXPathString($xPathString)
