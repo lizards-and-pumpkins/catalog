@@ -57,6 +57,15 @@ class PoCDomParser implements DomParser
 	}
 
 	/**
+	 * @param \DOMNode $domNode
+	 * @return string
+	 */
+	public function getDomNodeXml($domNode)
+	{
+		return $this->document->saveXML($domNode);
+	}
+
+	/**
 	 * @return null
 	 */
 	private function initialiseXPath()

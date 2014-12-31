@@ -94,4 +94,18 @@ class PoCDomParserTest extends \PHPUnit_Framework_TestCase
 		$this->assertInstanceOf(\DOMNodeList::class, $result);
 		$this->assertEquals('foo', $result->item(0)->nodeValue);
 	}
+
+	/**
+	 * @test
+	 */
+	public function itShouldReturnXmlRepresentationOfADomNode()
+	{
+		$xml = '<root><node/></root>';
+		$parser = new PoCDomParser($xml);
+
+		$node = $parser->getXPathNode('node');
+		$result = $parser->getDomNodeXml($node->item(0));
+
+		$this->assertEquals('<node/>', $result);
+	}
 }
