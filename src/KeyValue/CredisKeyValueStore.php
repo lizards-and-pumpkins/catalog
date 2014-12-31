@@ -33,6 +33,7 @@ class CredisKeyValueStore implements KeyValueStore
     /**
      * @param string $key
      * @param mixed $value
+     * @return null
      */
     public function set($key, $value)
     {
@@ -47,4 +48,22 @@ class CredisKeyValueStore implements KeyValueStore
     {
 	    return (bool) $this->client->exists($key);
     }
+
+	/**
+	 * @param array $keys
+	 * @return mixed
+	 */
+	public function multiGet(array $keys)
+	{
+		return $this->client->mGet($keys);
+	}
+
+	/**
+	 * @param array $items
+	 * @return null
+	 */
+	public function multiSet(array $items)
+	{
+		$this->client->mSet($items);
+	}
 }

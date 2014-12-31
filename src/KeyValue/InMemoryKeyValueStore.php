@@ -25,6 +25,7 @@ class InMemoryKeyValueStore implements KeyValueStore
     /**
      * @param string $key
      * @param mixed $value
+     * @return null
      */
     public function set($key, $value)
     {
@@ -39,4 +40,30 @@ class InMemoryKeyValueStore implements KeyValueStore
     {
         return array_key_exists($key, $this->store);
     }
+
+	/**
+	 * @param array $keys
+	 * @return mixed
+	 */
+	public function multiGet(array $keys)
+	{
+		$foundValues = [];
+
+		foreach ($keys as $key) {
+			if (array_key_exists($key, $this->store)) {
+				$foundValues[] = $this->store[$key];
+			}
+		}
+
+		return $foundValues;
+	}
+
+	/**
+	 * @param array $items
+	 * @return null
+	 */
+	public function multiSet(array $items)
+	{
+		$this->store = array_merge($this->store, $items);
+	}
 } 

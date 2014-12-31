@@ -22,6 +22,16 @@ interface KeyValueStore
      * @return bool
      */
     public function has($key);
-    
-    // TODO: Implement multiSet and multiGet
-} 
+
+	/**
+	 * @param array $keys
+	 * @return mixed
+	 */
+    public function multiGet(array $keys);
+
+	/**
+	 * @param array $items
+	 * @return null
+	 */
+	public function multiSet(array $items);
+}

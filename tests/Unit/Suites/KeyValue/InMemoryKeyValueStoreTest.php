@@ -47,8 +47,23 @@ class InMemoryKeyValueStoreTest extends \PHPUnit_Framework_TestCase
      * @test
      * @expectedException \Brera\PoC\KeyValue\KeyNotFoundException
      */
-    public function itShouldThrowAnExcptionWhenValueIsNotSet()
+    public function itShouldThrowAnExceptionWhenValueIsNotSet()
     {
         $this->store->get('not set key');
     }
+
+	/**
+	 * @test
+	 */
+	public function itShouldSetAndGetMultipleKeys()
+	{
+		$keys = array('key1', 'key2');
+		$values = array('foo', 'bar');
+		$items = array_combine($keys, $values);
+
+		$this->store->multiSet($items);
+		$result = $this->store->multiGet($keys);
+
+		$this->assertSame($values, $result);
+	}
 }
