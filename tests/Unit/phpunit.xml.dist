@@ -31,7 +31,7 @@
         </whitelist>
     </filter>
     <php>
-        <includePath>../../doc</includePath>
-        <includePath>doc</includePath>
+        <includePath>../../data</includePath>
+        <includePath>data</includePath>
     </php>
 </phpunit>
