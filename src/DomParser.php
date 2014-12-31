@@ -6,7 +6,7 @@ interface DomParser
 {
 	/**
 	 * @param string $xPathString
-	 * @return \DOMElement|\DOMNodeList|null
+	 * @return \DOMNodeList
 	 */
 	public function getXPathNode($xPathString);
 }
