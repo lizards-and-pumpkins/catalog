@@ -45,7 +45,7 @@ class FileKeyValueStore implements KeyValueStore
 	public function get($key)
 	{
 		if (!$this->has($key)) {
-			throw new KeyNotFoundException();
+			throw new KeyNotFoundException(sprintf('Key not found "%s"', $key));
 		}
 
 		return file_get_contents($this->getFilePathByKey($key));
