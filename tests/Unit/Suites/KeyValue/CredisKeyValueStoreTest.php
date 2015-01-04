@@ -22,7 +22,7 @@ class CredisKeyValueStoreTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
 	    $this->stubClient = $this->getMockBuilder(Credis_Client::class)
-	        ->setMethods(array('get', 'set', 'exists'))
+	        ->setMethods(array('get', 'set', 'exists', 'mGet', 'mSet'))
 	        ->getMock();
         $this->store = new CredisKeyValueStore($this->stubClient);
     }
@@ -48,7 +48,7 @@ class CredisKeyValueStoreTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldNotHasBeforeSettingAValue()
+    public function itShouldReturnTrueOnlyAfterValueIsSet()
     {
         $key = 'key';
         $value = 'value';
@@ -81,7 +81,15 @@ class CredisKeyValueStoreTest extends \PHPUnit_Framework_TestCase
 		$values = array('foo', 'bar');
 		$items = array_combine($keys, $values);
 
+		$this->stubClient->expects($this->once())
+		                 ->method('mSet');
+
 		$this->store->multiSet($items);
+
+		$this->stubClient->expects($this->once())
+		                 ->method('mGet')
+		                 ->willReturn($values);
+
 		$result = $this->store->multiGet($keys);
 
 		$this->assertSame($values, $result);
