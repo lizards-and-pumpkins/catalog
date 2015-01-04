@@ -22,7 +22,7 @@ class CredisKeyValueStoreTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
 	    $this->stubClient = $this->getMockBuilder(Credis_Client::class)
-	        ->setMethods(array('get', 'set', 'exists', 'mGet', 'mSet'))
+	        ->setMethods(['get', 'set', 'exists', 'mGet', 'mSet'])
 	        ->getMock();
         $this->store = new CredisKeyValueStore($this->stubClient);
     }
@@ -77,8 +77,8 @@ class CredisKeyValueStoreTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function itShouldSetAndGetMultipleKeys()
 	{
-		$keys = array('key1', 'key2');
-		$values = array('foo', 'bar');
+		$keys = ['key1', 'key2'];
+		$values = ['foo', 'bar'];
 		$items = array_combine($keys, $values);
 
 		$this->stubClient->expects($this->once())

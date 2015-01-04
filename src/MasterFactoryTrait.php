@@ -43,6 +43,6 @@ trait MasterFactoryTrait
             throw new UndefinedFactoryMethodException(sprintf('Unknown method "%s"', $method));
         }
 
-        return call_user_func_array(array($this->methods[$method], $method), $parameters);
+        return call_user_func_array([$this->methods[$method], $method], $parameters);
     }
 }

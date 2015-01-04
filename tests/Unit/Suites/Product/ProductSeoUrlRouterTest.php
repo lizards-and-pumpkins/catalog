@@ -35,7 +35,7 @@ class ProductSeoUrlRouterTest extends \PHPUnit_Framework_TestCase
 
 		$this->stubMasterFactory = $this->getMockBuilder(MasterFactory::class)
 		                          ->disableOriginalConstructor()
-		                          ->setMethods(array('register', 'createProductDetailPage'))
+		                          ->setMethods(['register', 'createProductDetailPage'])
 		                          ->getMock();
 
 		$this->productSeoUrlRouter = new ProductSeoUrlRouter($this->stubDataPoolReader, $this->stubMasterFactory);

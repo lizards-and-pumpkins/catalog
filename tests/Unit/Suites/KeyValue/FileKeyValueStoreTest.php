@@ -69,8 +69,8 @@ class FileKeyValueStoreTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function itShouldSetAndGetMultipleKeys()
 	{
-		$keys = array('key1', 'key2');
-		$values = array('foo', 'bar');
+		$keys = ['key1', 'key2'];
+		$values = ['foo', 'bar'];
 		$items = array_combine($keys, $values);
 
 		$this->store->multiSet($items);

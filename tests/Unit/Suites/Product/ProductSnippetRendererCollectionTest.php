@@ -32,14 +32,9 @@ class ProductSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->stubSnippetResultList
-            = $this->getMock(SnippetResultList::class, array('merge'));
-
-        $this->mockRenderer = $this->getMock(SnippetRenderer::class,
-            array('render'));
-
-        $this->mockRenderer2 = $this->getMock(SnippetRenderer::class,
-            array('render'));
+        $this->stubSnippetResultList = $this->getMock(SnippetResultList::class, ['merge']);
+        $this->mockRenderer = $this->getMock(SnippetRenderer::class, ['render']);
+        $this->mockRenderer2 = $this->getMock(SnippetRenderer::class, ['render']);
 
         $this->rendererCollection = new HardcodedProductSnippetRendererCollection(
             [$this->mockRenderer, $this->mockRenderer2],

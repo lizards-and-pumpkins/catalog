@@ -28,11 +28,10 @@ class HardcodedProductDetailViewSnippetRendererTest
 
     public function setUp()
     {
-        $this->mockKeyGenerator
-            = $this->getMock(HardcodedProductDetailViewSnippetKeyGenerator::class,
-            array('getKey'));
+        $this->mockKeyGenerator = $this->getMock(HardcodedProductDetailViewSnippetKeyGenerator::class, ['getKey']);
 
-        $this->mockKeyGenerator->expects($this->any())->method('getKey')
+        $this->mockKeyGenerator->expects($this->any())
+	        ->method('getKey')
             ->willReturn('test');
 
         $this->mockSnippetResultList = $this->getMock(SnippetResultList::class);

@@ -25,7 +25,7 @@ class CatalogImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 			'<?xml version="1.0?><rootNode>some xml</rootNode>',
 			'<?xml version="1.0?><rootNode>some other xml</rootNode>'
 		];
-		$stubProductBuilder = $this->getMock(ProductBuilder::class, array('getProductXmlArray'));
+		$stubProductBuilder = $this->getMock(ProductBuilder::class, ['getProductXmlArray']);
 		$stubProductBuilder->expects($this->once())
 			->method('getProductXmlArray')
 			->willReturn($productXmlArray);

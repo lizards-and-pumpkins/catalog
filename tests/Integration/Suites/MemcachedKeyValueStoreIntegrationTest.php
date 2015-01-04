@@ -13,7 +13,7 @@ class MemcachedKeyValueStoreIntegrationTest extends \PHPUnit_Framework_TestCase
 	{
 		$client = new \Memcached();
 		$client->addServer('localhost', 11211);
-		$client->deleteMulti(array('foo', 'key1', 'key2'));
+		$client->deleteMulti(['foo', 'key1', 'key2']);
 
 		$this->keyValueStore = new MemcachedKeyValueStore($client);
 	}
@@ -34,8 +34,8 @@ class MemcachedKeyValueStoreIntegrationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function itShouldSetAndGetMultipleValues()
 	{
-		$keys = array('key1', 'key2');
-		$values = array('foo', 'bar');
+		$keys = ['key1', 'key2'];
+		$values = ['foo', 'bar'];
 		$items = array_combine($keys, $values);
 
 		$this->keyValueStore->multiSet($items);

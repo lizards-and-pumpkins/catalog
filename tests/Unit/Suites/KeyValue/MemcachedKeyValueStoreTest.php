@@ -20,7 +20,7 @@ class MemcachedKeyValueStoreTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
 	    $this->stubClient = $this->getMockBuilder(\Memcached::class)
-	        ->setMethods(array('get', 'set', 'setMulti', 'getMulti', 'getResultCode'))
+	        ->setMethods(['get', 'set', 'setMulti', 'getMulti', 'getResultCode'])
 	        ->getMock();
         $this->store = new MemcachedKeyValueStore($this->stubClient);
     }
@@ -69,8 +69,8 @@ class MemcachedKeyValueStoreTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function itShouldSetAndGetMultipleKeys()
 	{
-		$keys = array('key1', 'key2');
-		$values = array('foo', 'bar');
+		$keys = ['key1', 'key2'];
+		$values = ['foo', 'bar'];
 		$items = array_combine($keys, $values);
 
 		$this->stubClient->expects($this->once())

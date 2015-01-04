@@ -17,7 +17,7 @@ class InMemoryLogger extends AbstractLogger
 	 * @param array $context
 	 * @return null
 	 */
-    public function log($level, $message, array $context = array())
+    public function log($level, $message, array $context = [])
     {
         $this->messages[] = $message;
     }

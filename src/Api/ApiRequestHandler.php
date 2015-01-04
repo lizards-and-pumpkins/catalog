@@ -13,7 +13,7 @@ abstract class ApiRequestHandler implements HttpRequestHandler
 
 	public function process()
 	{
-		return call_user_func(array($this, $this->action));
+		return call_user_func([$this, $this->action]);
 	}
 
 	/**
