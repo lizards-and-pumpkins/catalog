@@ -65,7 +65,7 @@ class CredisKeyValueStoreTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Brera\PoC\KeyValue\KeyNotFoundException
+     * @expectedException \Brera\Lib\KeyValue\KeyNotFoundException
      */
     public function itShouldThrowAnExceptionWhenValueIsNotSet()
     {

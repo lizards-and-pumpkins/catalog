@@ -17,6 +17,8 @@
         }
     ],
     "require": {
+        "brera/lib-key-value-store-interface": "dev-master",
+        "brera/lib-key-value-store": "dev-master",
         "psr/log": "dev-master",
         "league/url": "3.1.1",
         "colinmollenhour/credis": "1.5"
@@ -26,5 +28,15 @@
     },
     "autoload" : {
         "psr-4": { "Brera\\PoC\\": "src/" }
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:brera/lib-key-value-store-interface.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@github.com:brera/lib-key-value-store.git"
+        }
+    ]
 }

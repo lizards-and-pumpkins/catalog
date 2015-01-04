@@ -3,6 +3,8 @@
 namespace Brera\PoC\KeyValue;
 
 use Credis_Client;
+use Brera\Lib\KeyValue\KeyValueStore;
+use Brera\Lib\KeyValue\KeyNotFoundException;
 
 class CredisKeyValueStore implements KeyValueStore
 {

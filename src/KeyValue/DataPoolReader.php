@@ -5,6 +5,7 @@ namespace Brera\PoC\KeyValue;
 use Brera\PoC\Product\ProductId;
 use Brera\PoC\Http\HttpUrl;
 use Brera\PoC\Product\PoCSku;
+use Brera\Lib\KeyValue\KeyValueStore;
 
 class DataPoolReader
 {
