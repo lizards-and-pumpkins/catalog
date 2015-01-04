@@ -2,7 +2,7 @@
 
 namespace Brera\PoC\Product;
 
-use Brera\Poc\Queue\Queue;
+use Brera\Lib\Queue\Queue;
 use Brera\PoC\DomainEventHandler;
 
 class CatalogImportDomainEventHandler implements DomainEventHandler

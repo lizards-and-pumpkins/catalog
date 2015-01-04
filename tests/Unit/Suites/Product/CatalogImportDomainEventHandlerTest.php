@@ -2,7 +2,7 @@
 
 namespace Brera\PoC\Product;
 
-use Brera\PoC\Queue\Queue;
+use Brera\Lib\Queue\Queue;
 
 /**
  * @covers Brera\PoC\Product\CatalogImportDomainEventHandler

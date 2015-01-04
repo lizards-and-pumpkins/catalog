@@ -11,7 +11,6 @@ use Brera\PoC\Http\HttpUrl;
 use Brera\PoC\Http\HttpRequest;
 use Brera\PoC\FrontendFactory;
 use Brera\PoC\PoCWebFront;
-use Brera\PoC\Product\ProductImportDomainEvent;
 use Brera\PoC\Product\HardcodedProductDetailViewSnippetKeyGenerator;
 
 class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
