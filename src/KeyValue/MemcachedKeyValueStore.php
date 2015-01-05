@@ -52,7 +52,7 @@ class MemcachedKeyValueStore implements KeyValueStore
 
 	/**
 	 * @param array $keys
-	 * @return mixed
+	 * @return array
 	 */
 	public function multiGet(array $keys)
 	{

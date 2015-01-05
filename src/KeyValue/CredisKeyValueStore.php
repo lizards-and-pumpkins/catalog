@@ -51,7 +51,7 @@ class CredisKeyValueStore implements KeyValueStore
 
 	/**
 	 * @param array $keys
-	 * @return mixed
+	 * @return array
 	 */
 	public function multiGet(array $keys)
 	{
