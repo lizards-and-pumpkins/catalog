@@ -26,6 +26,7 @@
         <directory>.</directory>
     </testsuite>
     <php>
+        <!-- Depending on location of PHPUnit binary the relative path to data directory can be different -->
         <includePath>../../data</includePath>
         <includePath>data</includePath>
     </php>
