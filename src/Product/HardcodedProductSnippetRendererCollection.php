@@ -18,7 +18,7 @@ class HardcodedProductSnippetRendererCollection extends ProductSnippetRendererCo
     private $renderers;
 
     /**
-     * @param array $renderers
+     * @param SnippetRenderer[] $renderers
      * @param SnippetResultList $snippetResultList
      */
     public function __construct(array $renderers, SnippetResultList $snippetResultList)
