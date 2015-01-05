@@ -1,8 +1,6 @@
 <?php
 
 namespace Brera\PoC\KeyValue;
-use Brera\Lib\KeyValue\KeyValueStore;
-use Brera\Lib\KeyValue\KeyNotFoundException;
 
 class MemcachedKeyValueStore implements KeyValueStore
 {

@@ -57,7 +57,7 @@ class MemcachedKeyValueStoreTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Brera\Lib\KeyValue\KeyNotFoundException
+     * @expectedException \Brera\PoC\KeyValue\KeyNotFoundException
      */
     public function itShouldThrowAnExceptionWhenValueIsNotSet()
     {

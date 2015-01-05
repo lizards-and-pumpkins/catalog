@@ -6,7 +6,6 @@ use Brera\PoC\Product\ProductId;
 use Brera\PoC\Http\HttpUrl;
 use Brera\PoC\SnippetResult;
 use Brera\PoC\SnippetResultList;
-use Brera\Lib\KeyValue\KeyValueStore;
 
 class DataPoolWriter
 {

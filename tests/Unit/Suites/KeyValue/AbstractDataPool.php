@@ -4,7 +4,6 @@ namespace Brera\PoC\KeyValue;
 
 use Brera\PoC\Product\ProductId;
 use Brera\PoC\Http\HttpUrl;
-use Brera\Lib\KeyValue\KeyValueStore;
 
 class AbstractDataPool extends \PHPUnit_Framework_TestCase
 {

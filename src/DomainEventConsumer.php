@@ -2,7 +2,7 @@
 
 namespace Brera\PoC;
 
-use Brera\Lib\Queue\Queue;
+use Brera\PoC\Queue\Queue;
 use Psr\Log\LoggerInterface;
 
 class DomainEventConsumer

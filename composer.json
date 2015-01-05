@@ -17,9 +17,7 @@
         }
     ],
     "require": {
-        "brera/lib-key-value-store-interface": "dev-master",
         "brera/lib-key-value-store": "dev-master",
-        "brera/lib-queue-interface": "dev-master",
         "brera/lib-queue": "dev-master",
         "psr/log": "dev-master",
         "league/url": "3.1.1",
@@ -34,15 +32,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "git@github.com:brera/lib-key-value-store-interface.git"
-        },
-        {
-            "type": "vcs",
             "url": "git@github.com:brera/lib-key-value-store.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@github.com:brera/lib-queue-interface.git"
         },
         {
             "type": "vcs",
