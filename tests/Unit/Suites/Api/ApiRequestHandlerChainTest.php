@@ -29,7 +29,7 @@ class ApiRequestHandlerChainTest extends \PHPUnit_Framework_TestCase
 		$this->requestHandlerChain->register($requestHandlerCode, $stubApiRequestHandler);
 		$result = $this->requestHandlerChain->getApiRequestHandler($requestHandlerCode);
 
-		$this->assertInstanceOf(ApiRequestHandler::class, $result);
+		$this->assertSame($stubApiRequestHandler, $result);
 	}
 
 	/**
