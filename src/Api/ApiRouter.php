@@ -3,6 +3,7 @@
 namespace Brera\Api;
 
 use Brera\Http\HttpRequest;
+use Brera\Http\HttpRequestHandler;
 use Brera\Http\HttpRouter;
 
 class ApiRouter implements HttpRouter
@@ -21,7 +22,7 @@ class ApiRouter implements HttpRouter
 
 	/**
 	 * @param HttpRequest $request
-	 * @return ApiRequestHandler|null
+	 * @return HttpRequestHandler|null
 	 */
 	public function route(HttpRequest $request)
 	{
@@ -35,13 +36,6 @@ class ApiRouter implements HttpRouter
 
 		$requestHandlerCode = array_shift($urlToken);
 		$apiRequestHandler = $this->requestHandlerChain->getApiRequestHandler($requestHandlerCode);
-
-		$method = array_shift($urlToken);
-		if (!method_exists($apiRequestHandler, $method)) {
-			return null;
-		}
-
-		$apiRequestHandler->setMethod($method);
 
 		return $apiRequestHandler;
 	}

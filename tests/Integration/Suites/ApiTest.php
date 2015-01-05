@@ -16,7 +16,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function itShouldReturnApiJsonResponse()
 	{
-		$httpUrl = HttpUrl::fromString('http://example.com/api/product/import');
+		$httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
 		$request = HttpRequest::fromParameters('GET', $httpUrl);
 
 		$factory = new PoCMasterFactory();

@@ -2,23 +2,25 @@
 
 namespace Brera\Api;
 
+use Brera\Http\HttpRequestHandler;
+
 class ApiRequestHandlerChain
 {
 	private $requestHandlers = [];
 
 	/**
 	 * @param string $code
-	 * @param ApiRequestHandler $requestHandler
+	 * @param HttpRequestHandler $requestHandler
 	 * @return void
 	 */
-	public function register($code, ApiRequestHandler $requestHandler)
+	public function register($code, HttpRequestHandler $requestHandler)
 	{
 		$this->requestHandlers[$code] = $requestHandler;
 	}
 
 	/**
 	 * @param string $code
-	 * @return ApiRequestHandler|null
+	 * @return HttpRequestHandler|null
 	 */
 	public function getApiRequestHandler($code)
 	{

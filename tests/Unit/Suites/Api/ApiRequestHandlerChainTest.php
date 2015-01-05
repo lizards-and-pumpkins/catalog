@@ -2,6 +2,8 @@
 
 namespace Brera\Api;
 
+use Brera\Http\HttpRequestHandler;
+
 /**
  * @covers Brera\Api\ApiRequestHandlerChain
  */
@@ -24,7 +26,7 @@ class ApiRequestHandlerChainTest extends \PHPUnit_Framework_TestCase
 	{
 		$requestHandlerCode = 'foo';
 
-		$stubApiRequestHandler = $this->getMock(ApiRequestHandler::class);
+		$stubApiRequestHandler = $this->getMock(HttpRequestHandler::class, ['process']);
 
 		$this->requestHandlerChain->register($requestHandlerCode, $stubApiRequestHandler);
 		$result = $this->requestHandlerChain->getApiRequestHandler($requestHandlerCode);

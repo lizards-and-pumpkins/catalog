@@ -3,11 +3,12 @@
 namespace Brera\Api;
 
 use Brera\Http\HttpRequest;
+use Brera\Http\HttpRequestHandler;
 use Brera\Http\HttpUrl;
 
 /**
  * @covers \Brera\Api\ApiRouter
- * @uses \Brera\Api\ApiRequestHandler
+ * @uses \Brera\Http\HttpRequestHandler
  */
 class ApiRouterTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,7 +38,7 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
 			->getMock();
 		$stubUrl->expects($this->once())
 			->method('getPath')
-			->willReturn('foo/bar/baz');
+			->willReturn('foo/bar');
 
 		$stubHttpRequest = $this->getStubHttpRequest();
 		$stubHttpRequest->expects($this->once())
@@ -57,7 +58,7 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
 		                ->getMock();
 		$stubUrl->expects($this->once())
 		        ->method('getPath')
-		        ->willReturn('api/foo/bar');
+		        ->willReturn('api/foo');
 
 		$stubHttpRequest = $this->getStubHttpRequest();
 		$stubHttpRequest->expects($this->once())
@@ -77,14 +78,14 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
 		                ->getMock();
 		$stubUrl->expects($this->once())
 		        ->method('getPath')
-		        ->willReturn('api/foo/bar');
+		        ->willReturn('api/foo');
 
 		$stubHttpRequest = $this->getStubHttpRequest();
 		$stubHttpRequest->expects($this->once())
 		                ->method('getUrl')
 		                ->willReturn($stubUrl);
 
-		$stubApiRequestHandler = $this->getMock(ApiRequestHandler::class, ['bar']);
+		$stubApiRequestHandler = $this->getMock(HttpRequestHandler::class, ['process']);
 
 		$this->stubApiRequestHandlerChain->expects($this->once())
 			->method('getApiRequestHandler')
@@ -92,7 +93,7 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
 
 		$result = $this->apiRouter->route($stubHttpRequest);
 
-		$this->assertInstanceOf(ApiRequestHandler::class, $result);
+		$this->assertInstanceOf(HttpRequestHandler::class, $result);
 	}
 
 	/**

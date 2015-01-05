@@ -4,7 +4,7 @@ namespace Brera;
 
 use Brera\Api\ApiRequestHandlerChain;
 use Brera\Api\ApiRouter;
-use Brera\Product\ProductApiRequestHandler;
+use Brera\Product\CatalogImportApiRequestHandler;
 use Brera\Product\ProductId;
 use Brera\Product\ProductSeoUrlRouter;
 use Brera\Product\ProductDetailHtmlPage;
@@ -52,14 +52,16 @@ class FrontendFactory implements Factory
 	 */
 	protected function registerApiRequestHandlers(ApiRequestHandlerChain $requestHandlerChain)
 	{
-		$requestHandlerChain->register('product', $this->getMasterFactory()->createProductApiRequestHandler());
+		$requestHandlerChain->register(
+			'catalog_import', $this->getMasterFactory()->createCatalogImportApiRequestHandler()
+		);
 	}
 
 	/**
-	 * @return ProductApiRequestHandler
+	 * @return CatalogImportApiRequestHandler
 	 */
-	public function createProductApiRequestHandler()
+	public function createCatalogImportApiRequestHandler()
 	{
-		return new ProductApiRequestHandler();
+		return new CatalogImportApiRequestHandler();
 	}
 }
