@@ -1,14 +1,14 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera;
 
-use Brera\PoC\Queue\Queue;
+use Brera\Queue\Queue;
 use Psr\Log\LoggerInterface;
 
 /**
- * @covers \Brera\PoC\DomainEventConsumer
- * @uses \Brera\PoC\DomainEventHandlerFailedMessage
- * @uses \Brera\PoC\FailedToReadFromDomainEventQueueMessage
+ * @covers \Brera\DomainEventConsumer
+ * @uses \Brera\DomainEventHandlerFailedMessage
+ * @uses \Brera\FailedToReadFromDomainEventQueueMessage
  */
 class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
 {

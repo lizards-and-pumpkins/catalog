@@ -1,10 +1,10 @@
 <?php
 
-namespace Brera\PoC\Product;
+namespace Brera\Product;
 
-use Brera\PoC\KeyValue\DataPoolReader;
-use Brera\PoC\Http\HttpResponse;
-use Brera\PoC\Http\HttpRequestHandler;
+use Brera\KeyValue\DataPoolReader;
+use Brera\Http\HttpResponse;
+use Brera\Http\HttpRequestHandler;
 
 class ProductDetailHtmlPage implements HttpRequestHandler
 {

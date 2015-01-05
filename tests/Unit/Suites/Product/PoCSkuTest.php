@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\PoC\Product;
+namespace Brera\Product;
 
 /**
- * @covers \Brera\PoC\Product\PoCSku
+ * @covers \Brera\Product\PoCSku
  */
 class PoCSkuTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,7 +30,7 @@ class PoCSkuTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * @test
-	 * @expectedException \Brera\PoC\Product\InvalidSkuException
+	 * @expectedException \Brera\Product\InvalidSkuException
 	 * @dataProvider invalidSkuProvider
 	 * @param $invalidSku
 	 */

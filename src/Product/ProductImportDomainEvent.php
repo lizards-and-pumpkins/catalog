@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera\PoC\Product;
+namespace Brera\Product;
 
-use Brera\PoC\DomainEvent;
+use Brera\DomainEvent;
 
 class ProductImportDomainEvent implements DomainEvent, \Serializable
 {

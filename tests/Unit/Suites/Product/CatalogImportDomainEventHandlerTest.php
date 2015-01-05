@@ -1,12 +1,12 @@
 <?php
 
-namespace Brera\PoC\Product;
+namespace Brera\Product;
 
-use Brera\PoC\Queue\Queue;
+use Brera\Queue\Queue;
 
 /**
- * @covers Brera\PoC\Product\CatalogImportDomainEventHandler
- * @uses Brera\PoC\Product\ProductImportDomainEvent
+ * @covers Brera\Product\CatalogImportDomainEventHandler
+ * @uses Brera\Product\ProductImportDomainEvent
  */
 class CatalogImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {

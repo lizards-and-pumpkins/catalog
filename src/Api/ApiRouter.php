@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\PoC\Api;
+namespace Brera\Api;
 
-use Brera\PoC\Http\HttpRequest;
-use Brera\PoC\Http\HttpRouter;
+use Brera\Http\HttpRequest;
+use Brera\Http\HttpRouter;
 
 class ApiRouter implements HttpRouter
 {

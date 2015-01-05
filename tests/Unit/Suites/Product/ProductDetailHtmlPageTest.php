@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera\PoC\Product;
+namespace Brera\Product;
 
-use Brera\PoC\KeyValue\DataPoolReader;
+use Brera\KeyValue\DataPoolReader;
 
 /**
- * @covers \Brera\PoC\Product\ProductDetailHtmlPage
+ * @covers \Brera\Product\ProductDetailHtmlPage
  */
 class ProductDetailHtmlPageTest extends \PHPUnit_Framework_TestCase
 {

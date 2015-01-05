@@ -1,13 +1,13 @@
 <?php
 
-namespace Brera\PoC\Api;
+namespace Brera\Api;
 
-use Brera\PoC\Http\HttpRequest;
-use Brera\PoC\Http\HttpUrl;
+use Brera\Http\HttpRequest;
+use Brera\Http\HttpUrl;
 
 /**
- * @covers \Brera\PoC\Api\ApiRouter
- * @uses \Brera\PoC\Api\ApiRequestHandler
+ * @covers \Brera\Api\ApiRouter
+ * @uses \Brera\Api\ApiRequestHandler
  */
 class ApiRouterTest extends \PHPUnit_Framework_TestCase
 {

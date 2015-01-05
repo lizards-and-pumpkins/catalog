@@ -1,13 +1,13 @@
 <?php
 
-namespace Brera\PoC\KeyValue;
+namespace Brera\KeyValue;
 
-use Brera\PoC\Product\ProductId;
-use Brera\PoC\Http\HttpUrl;
+use Brera\Product\ProductId;
+use Brera\Http\HttpUrl;
 
 /**
- * @covers  \Brera\PoC\KeyValue\KeyValueStoreKeyGenerator
- * @uses    \Brera\PoC\Http\HttpUrl
+ * @covers  \Brera\KeyValue\KeyValueStoreKeyGenerator
+ * @uses    \Brera\Http\HttpUrl
  */
 class KeyValueStoreKeyGeneratorTest extends \PHPUnit_Framework_TestCase
 {

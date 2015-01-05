@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera\PoC\Http;
+namespace Brera\Http;
 
 /**
- * @covers \Brera\PoC\Http\HttpsUrl
- * @covers \Brera\PoC\Http\HttpUrl
- * @uses \Brera\PoC\Http\HttpUrl
+ * @covers \Brera\Http\HttpsUrl
+ * @covers \Brera\Http\HttpUrl
+ * @uses \Brera\Http\HttpUrl
  */
 class HttpsUrlTest extends \PHPUnit_Framework_TestCase
 {

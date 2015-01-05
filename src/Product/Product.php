@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera\PoC\Product;
+namespace Brera\Product;
 
-use Brera\PoC\ProjectionSourceData;
+use Brera\ProjectionSourceData;
 
 class Product implements ProjectionSourceData
 {

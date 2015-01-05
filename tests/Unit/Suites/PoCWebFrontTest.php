@@ -1,12 +1,12 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera;
 
-use Brera\PoC\Http\HttpRequest;
+use Brera\Http\HttpRequest;
 
 /**
- * @covers \Brera\PoC\PoCWebFront
- * @covers \Brera\PoC\WebFront
+ * @covers \Brera\PoCWebFront
+ * @covers \Brera\WebFront
  */
 class PoCWebFrontTest extends \PHPUnit_Framework_TestCase
 {

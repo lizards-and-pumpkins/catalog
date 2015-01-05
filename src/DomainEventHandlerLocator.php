@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera;
 
-use Brera\PoC\Product\CatalogImportDomainEvent;
-use Brera\PoC\Product\ProductImportDomainEvent;
+use Brera\Product\CatalogImportDomainEvent;
+use Brera\Product\ProductImportDomainEvent;
 
 class DomainEventHandlerLocator
 {

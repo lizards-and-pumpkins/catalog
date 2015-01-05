@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\PoC\KeyValue;
+namespace Brera\KeyValue;
 
 class MemcachedKeyValueStoreIntegrationTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\PoC\Product;
+namespace Brera\Product;
 
 class InvalidArgumentException extends \LogicException
 {

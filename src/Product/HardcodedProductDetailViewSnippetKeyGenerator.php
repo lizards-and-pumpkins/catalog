@@ -1,10 +1,10 @@
 <?php
 
-namespace Brera\PoC\Product;
+namespace Brera\Product;
 
-use Brera\PoC\SnippetKeyGenerator;
-use Brera\PoC\Environment;
-use Brera\PoC\InvalidSnippetKeyIdentifierException;
+use Brera\SnippetKeyGenerator;
+use Brera\Environment;
+use Brera\InvalidSnippetKeyIdentifierException;
 
 class HardcodedProductDetailViewSnippetKeyGenerator implements SnippetKeyGenerator
 {

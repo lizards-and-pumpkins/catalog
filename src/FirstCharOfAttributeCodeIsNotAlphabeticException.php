@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Brera\PoC;
+namespace Brera;
 
 
 class FirstCharOfAttributeCodeIsNotAlphabeticException extends \OutOfBoundsException

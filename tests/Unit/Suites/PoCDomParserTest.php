@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera;
 
 /**
- * @covers Brera\PoC\PoCDomParser
+ * @covers Brera\PoCDomParser
  */
 class PoCDomParserTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Brera\PoC\Product;
+namespace Brera\Product;
 
 /**
- * @covers \Brera\PoC\Product\ProductApiRequestHandler
- * @covers \Brera\PoC\Api\ApiRequestHandler
+ * @covers \Brera\Product\ProductApiRequestHandler
+ * @covers \Brera\Api\ApiRequestHandler
  */
 class ProductApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {

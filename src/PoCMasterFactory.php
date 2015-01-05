@@ -1,10 +1,10 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera;
 
 /**
  * Interface PoCMasterFactory
- * @package Brera\PoC
+ * @package Brera
  *
  * @method KeyValue\DataPoolWriter createDataPoolWriter
  * @method KeyValue\DataPoolReader createDataPoolReader

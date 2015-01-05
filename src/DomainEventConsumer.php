@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera;
 
-use Brera\PoC\Queue\Queue;
+use Brera\Queue\Queue;
 use Psr\Log\LoggerInterface;
 
 class DomainEventConsumer

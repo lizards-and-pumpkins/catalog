@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\PoC\Api;
+namespace Brera\Api;
 
 class ApiRequestHandlerChain
 {

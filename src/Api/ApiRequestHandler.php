@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera\PoC\Api;
+namespace Brera\Api;
 
-use Brera\PoC\Http\HttpRequestHandler;
+use Brera\Http\HttpRequestHandler;
 
 abstract class ApiRequestHandler implements HttpRequestHandler
 {

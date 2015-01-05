@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\PoC\Product;
+namespace Brera\Product;
 
-use Brera\PoC\Attribute;
-use Brera\PoC\FirstCharOfAttributeCodeIsNotAlphabeticException;
+use Brera\Attribute;
+use Brera\FirstCharOfAttributeCodeIsNotAlphabeticException;
 
 class ProductAttribute implements Attribute
 {

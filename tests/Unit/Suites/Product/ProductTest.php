@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\PoC\Product;
+namespace Brera\Product;
 
 /**
- * @covers \Brera\PoC\Product\Product
+ * @covers \Brera\Product\Product
  */
 class ProductTest extends \PHPUnit_Framework_TestCase
 {

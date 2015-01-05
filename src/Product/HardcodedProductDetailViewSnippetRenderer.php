@@ -1,12 +1,12 @@
 <?php
 
-namespace Brera\PoC\Product;
+namespace Brera\Product;
 
-use Brera\PoC\SnippetRenderer;
-use Brera\PoC\SnippetResultList;
-use Brera\PoC\ProjectionSourceData;
-use Brera\PoC\Environment;
-use Brera\PoC\SnippetResult;
+use Brera\SnippetRenderer;
+use Brera\SnippetResultList;
+use Brera\ProjectionSourceData;
+use Brera\Environment;
+use Brera\SnippetResult;
 
 class HardcodedProductDetailViewSnippetRenderer implements SnippetRenderer
 {

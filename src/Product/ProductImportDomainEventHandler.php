@@ -1,10 +1,10 @@
 <?php
 
-namespace Brera\PoC\Product;
+namespace Brera\Product;
 
-use Brera\PoC\DomainEventHandler;
-use Brera\PoC\EnvironmentBuilder;
-use Brera\PoC\VersionedEnvironmentBuilder;
+use Brera\DomainEventHandler;
+use Brera\EnvironmentBuilder;
+use Brera\VersionedEnvironmentBuilder;
 
 class ProductImportDomainEventHandler implements DomainEventHandler
 {

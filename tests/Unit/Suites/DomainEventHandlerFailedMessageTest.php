@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera;
 
 /**
- * @covers \Brera\PoC\DomainEventHandlerFailedMessage
+ * @covers \Brera\DomainEventHandlerFailedMessage
  */
 class DomainEventHandlerFailedMessageTest extends \PHPUnit_Framework_TestCase
 {

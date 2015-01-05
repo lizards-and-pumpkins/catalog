@@ -1,12 +1,12 @@
 <?php
 
-namespace Brera\PoC\Product;
+namespace Brera\Product;
 
-use Brera\PoC\Http\HttpRouter;
-use Brera\PoC\KeyValue\DataPoolReader;
-use Brera\PoC\Http\HttpRequest;
-use Brera\PoC\Http\HttpRequestHandler;
-use Brera\PoC\MasterFactory;
+use Brera\Http\HttpRouter;
+use Brera\KeyValue\DataPoolReader;
+use Brera\Http\HttpRequest;
+use Brera\Http\HttpRequestHandler;
+use Brera\MasterFactory;
 
 class ProductSeoUrlRouter implements HttpRouter
 {

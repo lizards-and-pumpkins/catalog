@@ -1,10 +1,10 @@
 <?php
 
-namespace Brera\PoC\Product;
+namespace Brera\Product;
 
 /**
- * @covers \Brera\PoC\Product\ProductAttributeList
- * @uses \Brera\PoC\Product\ProductAttribute
+ * @covers \Brera\Product\ProductAttributeList
+ * @uses \Brera\Product\ProductAttribute
  */
 class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,7 +37,7 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * @test
-	 * @expectedException \Brera\PoC\Product\ProductAttributeNotFoundException
+	 * @expectedException \Brera\Product\ProductAttributeNotFoundException
 	 */
 	public function itShouldThrownAnExceptionIfBlankCodeIsProvided()
 	{
@@ -46,7 +46,7 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * @test
-	 * @expectedException \Brera\PoC\Product\ProductAttributeNotFoundException
+	 * @expectedException \Brera\Product\ProductAttributeNotFoundException
 	 */
 	public function itShouldThrownAnExceptionIfNoAttributeWithGivenCodeIsSet()
 	{

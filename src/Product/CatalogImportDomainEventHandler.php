@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\PoC\Product;
+namespace Brera\Product;
 
-use Brera\PoC\Queue\Queue;
-use Brera\PoC\DomainEventHandler;
+use Brera\Queue\Queue;
+use Brera\DomainEventHandler;
 
 class CatalogImportDomainEventHandler implements DomainEventHandler
 {

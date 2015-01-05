@@ -1,12 +1,12 @@
 <?php
 
-namespace Brera\PoC\Product;
+namespace Brera\Product;
 
-use Brera\PoC\VersionedEnvironmentBuilder;
-use Brera\PoC\Environment;
+use Brera\VersionedEnvironmentBuilder;
+use Brera\Environment;
 
 /**
- * @covers \Brera\PoC\Product\ProductImportDomainEventHandler
+ * @covers \Brera\Product\ProductImportDomainEventHandler
  */
 class ProductImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {

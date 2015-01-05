@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera;
 
 class SnippetResultList implements \Countable, \IteratorAggregate
 {

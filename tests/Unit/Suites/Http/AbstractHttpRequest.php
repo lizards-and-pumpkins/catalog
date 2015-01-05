@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\PoC\Http;
+namespace Brera\Http;
 
 class AbstractHttpRequest extends \PHPUnit_Framework_TestCase
 {
@@ -24,7 +24,7 @@ class AbstractHttpRequest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * @test
-	 * @expectedException \Brera\PoC\Http\UnsupportedRequestMethodException
+	 * @expectedException \Brera\Http\UnsupportedRequestMethodException
 	 * @expectedExceptionMessage Unsupported request method: "PUT"
 	 */
 	public function itShouldThrowUnsupportedRequestMethodException()

@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera\PoC\Product;
+namespace Brera\Product;
 
-use Brera\PoC\SnippetRenderer;
-use Brera\PoC\SnippetResultList;
-use Brera\PoC\ProjectionSourceData;
-use Brera\PoC\Environment;
+use Brera\SnippetRenderer;
+use Brera\SnippetResultList;
+use Brera\ProjectionSourceData;
+use Brera\Environment;
 
 class ProductSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
 {
@@ -135,7 +135,7 @@ class ProductSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Brera\Poc\InvalidProjectionDataSourceType
+     * @expectedException \Brera\InvalidProjectionDataSourceType
      */
     public function itShouldThrowAnExceptionIfTheDataSourceObjectTypeIsNotProduct()
     {

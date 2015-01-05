@@ -1,17 +1,17 @@
 <?php
 
-namespace Brera\PoC\Tests\Integration;
+namespace Brera\Tests\Integration;
 
-use Brera\PoC\Product\CatalogImportDomainEvent;
-use Brera\PoC\Product\PoCSku;
-use Brera\PoC\Product\ProductId;
-use Brera\PoC\PoCMasterFactory;
-use Brera\PoC\IntegrationTestFactory;
-use Brera\PoC\Http\HttpUrl;
-use Brera\PoC\Http\HttpRequest;
-use Brera\PoC\FrontendFactory;
-use Brera\PoC\PoCWebFront;
-use Brera\PoC\Product\HardcodedProductDetailViewSnippetKeyGenerator;
+use Brera\Product\CatalogImportDomainEvent;
+use Brera\Product\PoCSku;
+use Brera\Product\ProductId;
+use Brera\PoCMasterFactory;
+use Brera\IntegrationTestFactory;
+use Brera\Http\HttpUrl;
+use Brera\Http\HttpRequest;
+use Brera\FrontendFactory;
+use Brera\PoCWebFront;
+use Brera\Product\HardcodedProductDetailViewSnippetKeyGenerator;
 
 class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
 {

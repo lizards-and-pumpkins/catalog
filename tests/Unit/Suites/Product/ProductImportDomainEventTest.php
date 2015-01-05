@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\PoC\Product;
+namespace Brera\Product;
 
 /**
- * @covers \Brera\PoC\Product\ProductImportDomainEvent
+ * @covers \Brera\Product\ProductImportDomainEvent
  */
 class ProductImportDomainEventTest extends \PHPUnit_Framework_TestCase
 {

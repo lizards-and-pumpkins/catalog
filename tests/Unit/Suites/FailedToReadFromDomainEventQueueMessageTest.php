@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera;
 
 /**
- * @covers \Brera\PoC\FailedToReadFromDomainEventQueueMessage
+ * @covers \Brera\FailedToReadFromDomainEventQueueMessage
  */
 class FailedToReadFromDomainEventQueueMessageTest extends \PHPUnit_Framework_TestCase
 {

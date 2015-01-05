@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\PoC\Queue;
+namespace Brera\Queue;
 
 class NotSerializableException extends \LogicException
 {

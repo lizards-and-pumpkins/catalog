@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera;
 
 interface SnippetKeyGenerator
 {

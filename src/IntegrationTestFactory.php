@@ -1,24 +1,24 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera;
 
-use Brera\PoC\Product\CatalogImportDomainEvent;
-use Brera\PoC\Product\CatalogImportDomainEventHandler;
-use Brera\PoC\Product\ProductBuilder;
-use Brera\PoC\KeyValue\KeyValueStore;
-use Brera\PoC\Queue\Queue;
-use Brera\PoC\Renderer\PoCProductRenderer;
-use Brera\PoC\KeyValue\DataPoolWriter;
-use Brera\PoC\KeyValue\InMemoryKeyValueStore;
-use Brera\PoC\KeyValue\KeyValueStoreKeyGenerator;
-use Brera\PoC\Queue\InMemoryQueue;
-use Brera\PoC\KeyValue\DataPoolReader;
-use Brera\PoC\Product\ProductImportDomainEvent;
-use Brera\PoC\Product\ProductImportDomainEventHandler;
-use Brera\PoC\Product\ProductProjector;
-use Brera\PoC\Product\HardcodedProductDetailViewSnippetRenderer;
-use Brera\PoC\Product\HardcodedProductDetailViewSnippetKeyGenerator;
-use Brera\PoC\Product\HardcodedProductSnippetRendererCollection;
+use Brera\Product\CatalogImportDomainEvent;
+use Brera\Product\CatalogImportDomainEventHandler;
+use Brera\Product\ProductBuilder;
+use Brera\KeyValue\KeyValueStore;
+use Brera\Queue\Queue;
+use Brera\Renderer\PoCProductRenderer;
+use Brera\KeyValue\DataPoolWriter;
+use Brera\KeyValue\InMemory\InMemoryKeyValueStore;
+use Brera\KeyValue\KeyValueStoreKeyGenerator;
+use Brera\Queue\InMemory\InMemoryQueue;
+use Brera\KeyValue\DataPoolReader;
+use Brera\Product\ProductImportDomainEvent;
+use Brera\Product\ProductImportDomainEventHandler;
+use Brera\Product\ProductProjector;
+use Brera\Product\HardcodedProductDetailViewSnippetRenderer;
+use Brera\Product\HardcodedProductDetailViewSnippetKeyGenerator;
+use Brera\Product\HardcodedProductSnippetRendererCollection;
 use Psr\Log\LoggerInterface;
 
 class IntegrationTestFactory implements Factory 

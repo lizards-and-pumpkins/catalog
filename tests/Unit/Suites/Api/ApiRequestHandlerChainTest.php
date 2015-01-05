@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\PoC\Api;
+namespace Brera\Api;
 
 /**
- * @covers Brera\PoC\Api\ApiRequestHandlerChain
+ * @covers Brera\Api\ApiRequestHandlerChain
  */
 class ApiRequestHandlerChainTest extends \PHPUnit_Framework_TestCase
 {

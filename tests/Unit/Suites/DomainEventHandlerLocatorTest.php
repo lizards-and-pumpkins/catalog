@@ -1,13 +1,13 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera;
 
-use Brera\PoC\Product\ProductImportDomainEvent;
-use Brera\PoC\Product\ProductImportDomainEventHandler;
+use Brera\Product\ProductImportDomainEvent;
+use Brera\Product\ProductImportDomainEventHandler;
 
 /**
- * @covers \Brera\PoC\DomainEventHandlerLocator
- * @uses \Brera\PoC\Product\ProductImportDomainEvent
+ * @covers \Brera\DomainEventHandlerLocator
+ * @uses \Brera\Product\ProductImportDomainEvent
  */
 class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -53,7 +53,7 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * @test
-	 * @expectedException \Brera\PoC\UnableToFindDomainEventHandlerException
+	 * @expectedException \Brera\UnableToFindDomainEventHandlerException
 	 */
 	public function itShouldThrowAnExceptionIfNoHandlerIsLocated()
 	{

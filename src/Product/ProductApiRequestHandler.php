@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera\PoC\Product;
+namespace Brera\Product;
 
-use Brera\PoC\Api\ApiRequestHandler;
+use Brera\Api\ApiRequestHandler;
 
 class ProductApiRequestHandler extends ApiRequestHandler
 {

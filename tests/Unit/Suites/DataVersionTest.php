@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera;
 
 /**
- * @covers Brera\PoC\DataVersion
+ * @covers Brera\DataVersion
  */
 class DataVersionTest extends \PHPUnit_Framework_TestCase
 {
@@ -11,7 +11,7 @@ class DataVersionTest extends \PHPUnit_Framework_TestCase
      * @param $emptyVersion
      *
      * @test
-     * @expectedException \Brera\PoC\EmptyVersionException
+     * @expectedException \Brera\EmptyVersionException
      * @dataProvider emptyVersionProvider
      */
     public function itShouldThrowOnEmptyVersion($emptyVersion)
@@ -32,7 +32,7 @@ class DataVersionTest extends \PHPUnit_Framework_TestCase
      * @param $invalidVersion
      *
      * @test
-     * @expectedException \Brera\PoC\InvalidVersionException
+     * @expectedException \Brera\InvalidVersionException
      * @dataProvider invalidVersionProvider
      */
     public function itShouldThrownOnInvalidVersion($invalidVersion)

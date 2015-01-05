@@ -1,10 +1,10 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera;
 
-use Brera\PoC\Http\HttpRequest;
-use Brera\PoC\Http\HttpResponse;
-use Brera\PoC\Http\HttpRouterChain;
+use Brera\Http\HttpRequest;
+use Brera\Http\HttpResponse;
+use Brera\Http\HttpRouterChain;
 
 abstract class WebFront
 {

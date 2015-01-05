@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera\PoC\KeyValue;
+namespace Brera\KeyValue;
 
 use Credis_Client;
 
 /**
- * @covers  \Brera\PoC\KeyValue\CRedisKeyValueStore
+ * @covers  \Brera\KeyValue\CRedisKeyValueStore
  */
 class CredisKeyValueStoreTest extends \PHPUnit_Framework_TestCase
 {
@@ -65,7 +65,7 @@ class CredisKeyValueStoreTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Brera\PoC\KeyValue\KeyNotFoundException
+     * @expectedException \Brera\KeyValue\KeyNotFoundException
      */
     public function itShouldThrowAnExceptionWhenValueIsNotSet()
     {

@@ -1,15 +1,15 @@
 <?php
 
-namespace Brera\PoC\Product;
+namespace Brera\Product;
 
 /**
- * @covers \Brera\PoC\Product\ProductBuilder
- * @uses \Brera\PoC\Product\Product
- * @uses \Brera\PoC\Product\ProductId
- * @uses \Brera\PoC\Product\PoCSku
- * @uses \Brera\PoC\PoCDomParser
- * @uses \Brera\PoC\Product\ProductAttribute
- * @uses \Brera\PoC\Product\ProductAttributeList
+ * @covers \Brera\Product\ProductBuilder
+ * @uses \Brera\Product\Product
+ * @uses \Brera\Product\ProductId
+ * @uses \Brera\Product\PoCSku
+ * @uses \Brera\PoCDomParser
+ * @uses \Brera\Product\ProductAttribute
+ * @uses \Brera\Product\ProductAttributeList
  */
 class ProductBuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -41,7 +41,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * @test
-	 * @expectedException \Brera\PoC\Product\InvalidNumberOfSkusPerImportedProductException
+	 * @expectedException \Brera\Product\InvalidNumberOfSkusPerImportedProductException
 	 */
 	public function itShouldThrowAnExceptionInCaseOfXmlHasNoEssentialData()
 	{

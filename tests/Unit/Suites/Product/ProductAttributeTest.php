@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\PoC\Product;
+namespace Brera\Product;
 
 /**
- * @covers \Brera\PoC\Product\ProductAttribute
+ * @covers \Brera\Product\ProductAttribute
  */
 class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 {
@@ -83,7 +83,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * @test
-	 * @expectedException \Brera\PoC\FirstCharOfAttributeCodeIsNotAlphabeticException
+	 * @expectedException \Brera\FirstCharOfAttributeCodeIsNotAlphabeticException
 	 * @dataProvider invalidAttributeCodeProvider
 	 * @param $invalidAttributeCode
 	 */

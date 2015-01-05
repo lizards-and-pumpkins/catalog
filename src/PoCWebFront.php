@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera;
 
-use Brera\PoC\Http\HttpRouterChain;
+use Brera\Http\HttpRouterChain;
 
 class PoCWebFront extends WebFront
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera;
 
 class VersionedEnvironmentTest extends \PHPUnit_Framework_TestCase
 {

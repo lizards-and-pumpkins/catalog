@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera;
 
 class SnippetResultTest extends \PHPUnit_Framework_TestCase
 {
@@ -9,7 +9,7 @@ class SnippetResultTest extends \PHPUnit_Framework_TestCase
      *
      * @test
      * @dataProvider invalidKeyProvider
-     * @expectedException \Brera\PoC\InvalidKeyException
+     * @expectedException \Brera\InvalidKeyException
      */
     public function itShouldThrowOnInvalidKey($invalidKey)
     {

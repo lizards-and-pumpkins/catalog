@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\PoC\KeyValue;
+namespace Brera\KeyValue;
 
 class CredisKeyValueStoreIntegrationTest extends \PHPUnit_Framework_TestCase
 {

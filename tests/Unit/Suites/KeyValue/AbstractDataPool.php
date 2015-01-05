@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\PoC\KeyValue;
+namespace Brera\KeyValue;
 
-use Brera\PoC\Product\ProductId;
-use Brera\PoC\Http\HttpUrl;
+use Brera\Product\ProductId;
+use Brera\Http\HttpUrl;
 
 class AbstractDataPool extends \PHPUnit_Framework_TestCase
 {

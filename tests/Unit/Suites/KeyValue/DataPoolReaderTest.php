@@ -1,16 +1,16 @@
 <?php
 
-namespace Brera\PoC\KeyValue;
+namespace Brera\KeyValue;
 
-use Brera\PoC\Product\ProductId;
+use Brera\Product\ProductId;
 
 require_once __DIR__ . '/AbstractDataPool.php';
 
 /**
- * @covers \Brera\PoC\KeyValue\DataPoolReader
- * @uses \Brera\PoC\Product\ProductId
- * @uses \Brera\PoC\Http\HttpUrl
- * @uses \Brera\PoC\Product\PoCSku
+ * @covers \Brera\KeyValue\DataPoolReader
+ * @uses \Brera\Product\ProductId
+ * @uses \Brera\Http\HttpUrl
+ * @uses \Brera\Product\PoCSku
  */
 class DataPoolReaderTest extends AbstractDataPool
 {

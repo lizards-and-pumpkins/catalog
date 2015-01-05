@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\PoC\Http;
+namespace Brera\Http;
 
 /**
- * @covers  \Brera\PoC\Http\HttpUrl
+ * @covers  \Brera\Http\HttpUrl
  */
 class HttpUrlTest extends \PHPUnit_Framework_TestCase
 {
@@ -57,7 +57,7 @@ class HttpUrlTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Brera\PoC\Http\UnknownProtocolException
+     * @expectedException \Brera\Http\UnknownProtocolException
      * @test
      */
     public function itShouldThrowExceptionForNonHttp()

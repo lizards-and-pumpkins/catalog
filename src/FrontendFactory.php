@@ -1,13 +1,13 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera;
 
-use Brera\PoC\Api\ApiRequestHandlerChain;
-use Brera\PoC\Api\ApiRouter;
-use Brera\PoC\Product\ProductApiRequestHandler;
-use Brera\PoC\Product\ProductId;
-use Brera\PoC\Product\ProductSeoUrlRouter;
-use Brera\PoC\Product\ProductDetailHtmlPage;
+use Brera\Api\ApiRequestHandlerChain;
+use Brera\Api\ApiRouter;
+use Brera\Product\ProductApiRequestHandler;
+use Brera\Product\ProductId;
+use Brera\Product\ProductSeoUrlRouter;
+use Brera\Product\ProductDetailHtmlPage;
 
 class FrontendFactory implements Factory
 {

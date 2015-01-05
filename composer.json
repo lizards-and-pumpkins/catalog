@@ -27,7 +27,7 @@
         "phpunit/phpunit": "4.*"
     },
     "autoload" : {
-        "psr-4": { "Brera\\PoC\\": "src/" }
+        "psr-4": { "Brera\\": "src/" }
     },
     "repositories": [
         {

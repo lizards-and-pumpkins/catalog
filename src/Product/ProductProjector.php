@@ -1,12 +1,12 @@
 <?php
 
-namespace Brera\PoC\Product;
+namespace Brera\Product;
 
-use Brera\PoC\KeyValue\DataPoolWriter;
-use Brera\PoC\Projector;
-use Brera\PoC\ProjectionSourceData;
-use Brera\PoC\Environment;
-use Brera\PoC\InvalidProjectionDataSourceType;
+use Brera\KeyValue\DataPoolWriter;
+use Brera\Projector;
+use Brera\ProjectionSourceData;
+use Brera\Environment;
+use Brera\InvalidProjectionDataSourceType;
 
 class ProductProjector implements Projector
 {

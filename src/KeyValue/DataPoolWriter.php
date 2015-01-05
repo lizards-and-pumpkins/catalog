@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera\PoC\KeyValue;
+namespace Brera\KeyValue;
 
-use Brera\PoC\Product\ProductId;
-use Brera\PoC\Http\HttpUrl;
-use Brera\PoC\SnippetResult;
-use Brera\PoC\SnippetResultList;
+use Brera\Product\ProductId;
+use Brera\Http\HttpUrl;
+use Brera\SnippetResult;
+use Brera\SnippetResultList;
 
 class DataPoolWriter
 {

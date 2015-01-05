@@ -1,5 +1,5 @@
 <?php
-namespace Brera\PoC;
+namespace Brera;
 
 interface SnippetRenderer
 {

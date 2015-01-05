@@ -1,13 +1,13 @@
 <?php
 
-namespace Brera\PoC\Tests\Integration;
+namespace Brera\Tests\Integration;
 
-use Brera\PoC\FrontendFactory;
-use Brera\PoC\Http\HttpRequest;
-use Brera\PoC\Http\HttpUrl;
-use Brera\PoC\IntegrationTestFactory;
-use Brera\PoC\PoCMasterFactory;
-use Brera\PoC\PoCWebFront;
+use Brera\FrontendFactory;
+use Brera\Http\HttpRequest;
+use Brera\Http\HttpUrl;
+use Brera\IntegrationTestFactory;
+use Brera\PoCMasterFactory;
+use Brera\PoCWebFront;
 
 class ApiTest extends \PHPUnit_Framework_TestCase
 {

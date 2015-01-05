@@ -1,10 +1,10 @@
 <?php
 
-namespace Brera\PoC\KeyValue;
+namespace Brera\KeyValue;
 
-use Brera\PoC\Product\ProductId;
-use Brera\PoC\Http\HttpUrl;
-use Brera\PoC\Product\PoCSku;
+use Brera\Product\ProductId;
+use Brera\Http\HttpUrl;
+use Brera\Product\PoCSku;
 
 class DataPoolReader
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera\PoC\Product;
+namespace Brera\Product;
 
-use Brera\PoC\PoCDomParser;
+use Brera\PoCDomParser;
 
 class ProductBuilder
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera\PoC\Product;
+namespace Brera\Product;
 
-use Brera\PoC\Environment;
+use Brera\Environment;
 
 class HardcodedProductDetailViewSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,7 +31,7 @@ class HardcodedProductDetailViewSnippetKeyGeneratorTest extends \PHPUnit_Framewo
 
     /**
      * @test
-     * @expectedException \Brera\PoC\InvalidSnippetKeyIdentifierException
+     * @expectedException \Brera\InvalidSnippetKeyIdentifierException
      */
     public function itShouldOnlyAllowProductIdIdentifiers()
     {

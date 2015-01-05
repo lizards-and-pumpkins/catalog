@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\PoC\KeyValue;
+namespace Brera\KeyValue;
 
 /**
- * @covers  \Brera\PoC\KeyValue\MemcachedKeyValueStore
+ * @covers  \Brera\KeyValue\MemcachedKeyValueStore
  */
 class MemcachedKeyValueStoreTest extends \PHPUnit_Framework_TestCase
 {
@@ -57,7 +57,7 @@ class MemcachedKeyValueStoreTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Brera\PoC\KeyValue\KeyNotFoundException
+     * @expectedException \Brera\KeyValue\KeyNotFoundException
      */
     public function itShouldThrowAnExceptionWhenValueIsNotSet()
     {

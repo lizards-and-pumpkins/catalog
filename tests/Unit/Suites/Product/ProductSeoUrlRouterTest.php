@@ -1,14 +1,14 @@
 <?php
 
-namespace Brera\PoC\Product;
+namespace Brera\Product;
 
-use Brera\PoC\KeyValue\DataPoolReader;
-use Brera\PoC\Http\HttpRequest;
-use Brera\PoC\Http\HttpUrl;
-use Brera\PoC\MasterFactory;
+use Brera\KeyValue\DataPoolReader;
+use Brera\Http\HttpRequest;
+use Brera\Http\HttpUrl;
+use Brera\MasterFactory;
 
 /**
- * @covers \Brera\PoC\Product\ProductSeoUrlRouter
+ * @covers \Brera\Product\ProductSeoUrlRouter
  */
 class ProductSeoUrlRouterTest extends \PHPUnit_Framework_TestCase
 {

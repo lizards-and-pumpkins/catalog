@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera;
 
 class UndefinedFactoryMethodException extends \BadMethodCallException
 {
