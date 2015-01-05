@@ -85,12 +85,4 @@ class ProductAttribute implements Attribute
 	{
 		return $this->value;
 	}
-
-	/**
-	 * @return array
-	 */
-	public function getEnvironment()
-	{
-		return $this->environment;
-	}
 }

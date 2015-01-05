@@ -65,24 +65,6 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * @test
-	 */
-	public function itShouldReturnAttributeEnvironment()
-	{
-		$this->domElement->setAttribute('code', 'name');
-		$this->domElement->setAttribute('lang', 'cs_CZ');
-		$this->domElement->setAttribute('website', 'bar');
-		$attribute = ProductAttribute::fromDomElement($this->domElement);
-
-		$environmentExpectation = [
-			'lang'      => 'cs_CZ',
-			'website'    => 'bar'
-		];
-
-		$this->assertSame($environmentExpectation, $attribute->getEnvironment());
-	}
-
-	/**
-	 * @test
 	 * @expectedException \Brera\FirstCharOfAttributeCodeIsNotAlphabeticException
 	 * @dataProvider invalidAttributeCodeProvider
 	 * @param $invalidAttributeCode
