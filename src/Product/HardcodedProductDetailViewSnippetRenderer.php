@@ -35,7 +35,7 @@ class HardcodedProductDetailViewSnippetRenderer implements SnippetRenderer
     /**
      * @param ProjectionSourceData|Product $product
      * @param Environment $environment
-     * @trows InvalidArgumentException
+     * @throws InvalidArgumentException
      * @return SnippetResultList
      */
     public function render(ProjectionSourceData $product, Environment $environment)
