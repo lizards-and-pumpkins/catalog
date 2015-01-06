@@ -29,7 +29,9 @@ class PoCSku implements Sku
 		}
 
 		if ((!is_string($skuString) && !is_int($skuString) && !is_float($skuString)) || empty($skuString)) {
-			throw new InvalidSkuException();
+			throw new InvalidSkuException(
+				'Expecting integer, decimal, non-empty string or an object convertible to non-empty string.'
+			);
 		}
 
 		return new self($skuString);
@@ -42,5 +44,4 @@ class PoCSku implements Sku
     {
         return (string) $this->sku;
     }
-
 }
