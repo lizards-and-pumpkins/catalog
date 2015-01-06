@@ -31,12 +31,8 @@
     },
     "repositories": [
         {
-            "type": "vcs",
-            "url": "git@github.com:brera/lib-key-value-store.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@github.com:brera/lib-queue.git"
+            "type": "composer",
+            "url": "http://packages.brera.io"
         }
     ],
     "minimum-stability": "dev",
