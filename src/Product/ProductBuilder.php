@@ -14,12 +14,12 @@ class ProductBuilder
 	{
 		$parser = new DomDocumentXPathParser($xml);
 
-		$skuNode = $parser->getXPathNode('//product/@sku');
+		$skuNode = $parser->getXmlNodesArrayByXPath('//product/@sku');
 		$skuString = $this->getSkuStringFromDomNodeArray($skuNode);
 		$sku = PoCSku::fromString($skuString);
 		$productId = ProductId::fromSku($sku);
 
-		$attributeNodes = $parser->getXPathNode('//product/attributes/attribute');
+		$attributeNodes = $parser->getXmlNodesArrayByXPath('//product/attributes/attribute');
 		$attributeList = ProductAttributeList::fromArray($attributeNodes);
 
 		return new Product($productId, $attributeList);

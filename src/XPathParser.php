@@ -5,14 +5,14 @@ namespace Brera;
 interface XPathParser
 {
 	/**
-	 * @param string $xPathString
+	 * @param string $xPath
 	 * @return array
 	 */
-	public function getXPathNode($xPathString);
+	public function getXmlNodesArrayByXPath($xPath);
 
 	/**
-	 * @param string $xPathString
+	 * @param string $xPath
 	 * @return array
 	 */
-	public function getXPathNodeXml($xPathString);
+	public function getXmlNodesRawXmlArrayByXPath($xPath);
 }

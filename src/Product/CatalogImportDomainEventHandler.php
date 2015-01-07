@@ -28,7 +28,7 @@ class CatalogImportDomainEventHandler implements DomainEventHandler
 	{
 		$xml = $this->event->getXml();
 
-		$productNodesXml = (new DomDocumentXPathParser($xml))->getXPathNodeXml('product');
+		$productNodesXml = (new DomDocumentXPathParser($xml))->getXmlNodesRawXmlArrayByXPath('product');
 		foreach ($productNodesXml as $productXml) {
 			$this->eventQueue->add(new ProductImportDomainEvent($productXml));
 		}

@@ -14,7 +14,7 @@ class DomDocumentXPathParserTest extends \PHPUnit_Framework_TestCase
 	{
 		$xml = '<root><child><grandChild>foo</grandChild></child></root>';
 		$parser = new DomDocumentXPathParser($xml);
-		$result = $parser->getXPathNode('child/grandChild');
+		$result = $parser->getXmlNodesArrayByXPath('child/grandChild');
 
 		$this->assertEquals('foo', $result[0]['value']);
 	}
@@ -26,7 +26,7 @@ class DomDocumentXPathParserTest extends \PHPUnit_Framework_TestCase
 	{
 		$xml = '<root xmlns="http://www.w3.org/2001/XMLSchema-instance"><child>foo</child></root>';
 		$parser = new DomDocumentXPathParser($xml);
-		$result = $parser->getXPathNode('child');
+		$result = $parser->getXmlNodesArrayByXPath('child');
 
 		$this->assertSame('foo', $result[0]['value']);
 	}
@@ -38,7 +38,7 @@ class DomDocumentXPathParserTest extends \PHPUnit_Framework_TestCase
 	{
 		$xml = '<root><child>foo</child><child>bar</child></root>';
 		$parser = new DomDocumentXPathParser($xml);
-		$result = $parser->getXPathNode('child');
+		$result = $parser->getXmlNodesArrayByXPath('child');
 		$expectation = [
 			['attributes' => [], 'value' => 'foo'],
 			['attributes' => [], 'value' => 'bar']
@@ -54,7 +54,7 @@ class DomDocumentXPathParserTest extends \PHPUnit_Framework_TestCase
 	{
 		$xml = '<root><child bar="baz" qux="waldo">foo</child></root>';
 		$parser = new DomDocumentXPathParser($xml);
-		$result = $parser->getXPathNode('child');
+		$result = $parser->getXmlNodesArrayByXPath('child');
 		$expectation = [[
 			'attributes'    => ['bar' => 'baz', 'qux' => 'waldo'],
 			'value'         => 'foo'
@@ -70,7 +70,7 @@ class DomDocumentXPathParserTest extends \PHPUnit_Framework_TestCase
 	{
 		$xml = '<root><child>foo</child><child>bar</child></root>';
 		$parser = new DomDocumentXPathParser($xml);
-		$result = $parser->getXPathNodeXml('child');
+		$result = $parser->getXmlNodesRawXmlArrayByXPath('child');
 		$expectation = ['<child>foo</child>', '<child>bar</child>'];
 
 		$this->assertSame($expectation, $result);
@@ -93,7 +93,7 @@ class DomDocumentXPathParserTest extends \PHPUnit_Framework_TestCase
 	{
 		$xml = '<root xmlns="http://www.w3.org/2001/XMLSchema-instance"><child foo="bar" /></root>';
 		$parser = new DomDocumentXPathParser($xml);
-		$result = $parser->getXPathNode('child/@foo');
+		$result = $parser->getXmlNodesArrayByXPath('child/@foo');
 
 		$this->assertSame('bar', $result[0]['value']);
 	}
@@ -105,7 +105,7 @@ class DomDocumentXPathParserTest extends \PHPUnit_Framework_TestCase
 	{
 		$xml = '<root xmlns="http://www.w3.org/2001/XMLSchema-instance"><child>foo</child></root>';
 		$parser = new DomDocumentXPathParser($xml);
-		$result = $parser->getXPathNode('/root/child');
+		$result = $parser->getXmlNodesArrayByXPath('/root/child');
 
 		$this->assertSame('foo', $result[0]['value']);
 	}
@@ -117,7 +117,7 @@ class DomDocumentXPathParserTest extends \PHPUnit_Framework_TestCase
 	{
 		$xml = '<root xmlns="http://www.w3.org/2001/XMLSchema-instance"><child>foo</child></root>';
 		$parser = new DomDocumentXPathParser($xml);
-		$result = $parser->getXPathNode('/*/child');
+		$result = $parser->getXmlNodesArrayByXPath('/*/child');
 
 		$this->assertSame('foo', $result[0]['value']);
 	}

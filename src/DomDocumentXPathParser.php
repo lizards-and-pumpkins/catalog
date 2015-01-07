@@ -51,13 +51,13 @@ class DomDocumentXPathParser implements XPathParser
 	}
 
 	/**
-	 * @param string $xPathString
+	 * @param string $xPath
 	 * @return array
 	 */
-	public function getXPathNode($xPathString)
+	public function getXmlNodesArrayByXPath($xPath)
 	{
 		$nodeArray = [];
-		$nodeList = $this->getXPathNodeList($xPathString);
+		$nodeList = $this->getDomNodeListByXPath($xPath);
 
 		foreach ($nodeList as $node) {
 			$nodeArray[] = [
@@ -70,13 +70,13 @@ class DomDocumentXPathParser implements XPathParser
 	}
 
 	/**
-	 * @param string $xPathString
+	 * @param string $xPath
 	 * @return array
 	 */
-	public function getXPathNodeXml($xPathString)
+	public function getXmlNodesRawXmlArrayByXPath($xPath)
 	{
 		$nodeXmlArray = [];
-		$nodeList = $this->getXPathNodeList($xPathString);
+		$nodeList = $this->getDomNodeListByXPath($xPath);
 
 		foreach ($nodeList as $node) {
 			$nodeXmlArray[] = $this->document->saveXML($node);
@@ -86,13 +86,13 @@ class DomDocumentXPathParser implements XPathParser
 	}
 
 	/**
-	 * @param $xPathString
+	 * @param $xPath
 	 * @return \DOMNodeList
 	 */
-	private function getXPathNodeList($xPathString)
+	private function getDomNodeListByXPath($xPath)
 	{
-		$xPathString = $this->addNamespacePrefixesToXPathString($xPathString);
-		$nodeList = $this->xPathEngine->query($xPathString);
+		$xPath = $this->addNamespacePrefixesToXPathString($xPath);
+		$nodeList = $this->xPathEngine->query($xPath);
 
 		return $nodeList;
 	}
