@@ -47,15 +47,7 @@ class ProductAttribute implements Attribute
 			throw new FirstCharOfAttributeCodeIsNotAlphabeticException();
 		}
 
-		$environment = [];
-
-		foreach ($node['attributes'] as $key => $value) {
-			if ('code' === $key) {
-				continue;
-			}
-
-			$environment[$key] = $value;
-		}
+		$environment = array_diff_key($node['attributes'], ['code' => $code]);
 
 		return new self($code, $node['value'], $environment);
 	}
