@@ -14,72 +14,73 @@ use Brera\ProjectionSourceData;
  */
 class ProductProjectorTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var ProductProjector
-     */
-    private $projector;
-    
-    /**
-     * @var SnippetResultList|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubSnippetResultList;
+	/**
+	 * @var ProductProjector
+	 */
+	private $projector;
 
-    /**
-     * @var DataPoolWriter|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubDataPoolWriter;
+	/**
+	 * @var SnippetResultList|\PHPUnit_Framework_MockObject_MockObject
+	 */
+	private $stubSnippetResultList;
 
-    /**
-     * @var SnippetRendererCollection|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubProductSnippetRendererCollection;
+	/**
+	 * @var DataPoolWriter|\PHPUnit_Framework_MockObject_MockObject
+	 */
+	private $stubDataPoolWriter;
 
-    public function setUp()
-    {
-        $this->stubSnippetResultList = $this->getMock(SnippetResultList::class);
-        $this->stubDataPoolWriter = $this->getMockBuilder(DataPoolWriter::class)
-            ->setMethods(['writeSnippetResultList'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->stubProductSnippetRendererCollection = $this->getMockBuilder(
-                ProductSnippetRendererCollection::class
-        )->getMockForAbstractClass();
-        $this->stubProductSnippetRendererCollection->expects($this->any())
-            ->method('getSnippetResultList')
-            ->willReturn($this->stubSnippetResultList);
+	/**
+	 * @var SnippetRendererCollection|\PHPUnit_Framework_MockObject_MockObject
+	 */
+	private $stubProductSnippetRendererCollection;
 
-        $this->projector = new ProductProjector(
-            $this->stubProductSnippetRendererCollection,
-            $this->stubDataPoolWriter
-        );
-    }
-    /**
-     * @test
-     */
-    public function itShouldSetSnippetResultListOnDataPoolWriter()
-    {
-        $this->stubDataPoolWriter->expects($this->once())
-            ->method('writeSnippetResultList')
-            ->with($this->stubSnippetResultList);
+	public function setUp()
+	{
+		$this->stubSnippetResultList = $this->getMock(SnippetResultList::class);
+		$this->stubDataPoolWriter = $this->getMockBuilder(DataPoolWriter::class)
+			->setMethods(['writeSnippetResultList'])
+			->disableOriginalConstructor()
+			->getMock();
+		$this->stubProductSnippetRendererCollection = $this->getMockBuilder(
+			ProductSnippetRendererCollection::class
+		)->getMockForAbstractClass();
+		$this->stubProductSnippetRendererCollection->expects($this->any())
+			->method('getSnippetResultList')
+			->willReturn($this->stubSnippetResultList);
 
-        $stubProduct = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        
-        $stubEnvironment = $this->getMock(Environment::class);
+		$this->projector = new ProductProjector(
+			$this->stubProductSnippetRendererCollection,
+			$this->stubDataPoolWriter
+		);
+	}
 
-        $this->projector->project($stubProduct, $stubEnvironment);
-    }
+	/**
+	 * @test
+	 */
+	public function itShouldSetSnippetResultListOnDataPoolWriter()
+	{
+		$this->stubDataPoolWriter->expects($this->once())
+			->method('writeSnippetResultList')
+			->with($this->stubSnippetResultList);
 
-    /**
-     * @test
-     * @expectedException \Brera\InvalidProjectionDataSourceType
-     */
-    public function itShouldThrowIfTheDataSourceTypeIsNotProduct()
-    {
-        $stubEnvironment = $this->getMock(Environment::class);
-        $invalidDataSourceType = $this->getMock(ProjectionSourceData::class);
+		$stubProduct = $this->getMockBuilder(Product::class)
+			->disableOriginalConstructor()
+			->getMock();
 
-        $this->projector->project($invalidDataSourceType, $stubEnvironment);
-    }
+		$stubEnvironment = $this->getMock(Environment::class);
+
+		$this->projector->project($stubProduct, $stubEnvironment);
+	}
+
+	/**
+	 * @test
+	 * @expectedException \Brera\InvalidProjectionDataSourceType
+	 */
+	public function itShouldThrowIfTheDataSourceTypeIsNotProduct()
+	{
+		$stubEnvironment = $this->getMock(Environment::class);
+		$invalidDataSourceType = $this->getMock(ProjectionSourceData::class);
+
+		$this->projector->project($invalidDataSourceType, $stubEnvironment);
+	}
 }

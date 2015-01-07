@@ -6,9 +6,9 @@ use Brera\Product\Product;
 
 interface ProductRenderer
 {
-    /**
-     * @param Product $product
-     * @return string
-     */
-    public function render(Product $product);
+	/**
+	 * @param Product $product
+	 * @return string
+	 */
+	public function render(Product $product);
 }

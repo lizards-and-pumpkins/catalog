@@ -8,65 +8,67 @@ use Brera\Product\PoCSku;
 
 class DataPoolReader
 {
-    /**
-     * @var KeyValueStore
-     */
-    private $keyValueStore;
+	/**
+	 * @var KeyValueStore
+	 */
+	private $keyValueStore;
 
-    /**
-     * @var KeyValueStoreKeyGenerator
-     */
-    private $keyValueStoreKeyGenerator;
+	/**
+	 * @var KeyValueStoreKeyGenerator
+	 */
+	private $keyValueStoreKeyGenerator;
 
-    /**
-     * @param KeyValueStore $keyValueStore
-     * @param KeyValueStoreKeyGenerator $keyValueStoreKeyGenerator
-     */
-    function __construct(KeyValueStore $keyValueStore, KeyValueStoreKeyGenerator $keyValueStoreKeyGenerator)
-    {
-        $this->keyValueStore = $keyValueStore;
-        $this->keyValueStoreKeyGenerator = $keyValueStoreKeyGenerator;
-    }
+	/**
+	 * @param KeyValueStore $keyValueStore
+	 * @param KeyValueStoreKeyGenerator $keyValueStoreKeyGenerator
+	 */
+	function __construct(KeyValueStore $keyValueStore, KeyValueStoreKeyGenerator $keyValueStoreKeyGenerator)
+	{
+		$this->keyValueStore = $keyValueStore;
+		$this->keyValueStoreKeyGenerator = $keyValueStoreKeyGenerator;
+	}
 
-    /**
-     * @param string $key
-     * @return mixed
-     */
-    public function getSnippet($key)
-    {
-        return $this->keyValueStore->get($key);
-    }
+	/**
+	 * @param string $key
+	 * @return mixed
+	 */
+	public function getSnippet($key)
+	{
+		return $this->keyValueStore->get($key);
+	}
 
-    /**
-     * @param ProductId $productId
-     * @return mixed
-     */
-    public function getPoCProductHtml(ProductId $productId)
-    {
-        $key = $this->keyValueStoreKeyGenerator->createPoCProductHtmlKey($productId);
-        return $this->keyValueStore->get($key);
-    }
+	/**
+	 * @param ProductId $productId
+	 * @return mixed
+	 */
+	public function getPoCProductHtml(ProductId $productId)
+	{
+		$key = $this->keyValueStoreKeyGenerator->createPoCProductHtmlKey($productId);
 
-    /**
-     * @param HttpUrl $url
-     * @return ProductId
-     */
-    public function getProductIdBySeoUrl(HttpUrl $url)
-    {
-        $key = $this->keyValueStoreKeyGenerator->createPoCProductSeoUrlToIdKey($url);
-        $skuString = $this->keyValueStore->get($key);
-	    $sku = PoCSku::fromString($skuString);
+		return $this->keyValueStore->get($key);
+	}
 
-	    return ProductId::fromSku($sku);
-    }
+	/**
+	 * @param HttpUrl $url
+	 * @return ProductId
+	 */
+	public function getProductIdBySeoUrl(HttpUrl $url)
+	{
+		$key = $this->keyValueStoreKeyGenerator->createPoCProductSeoUrlToIdKey($url);
+		$skuString = $this->keyValueStore->get($key);
+		$sku = PoCSku::fromString($skuString);
 
-    /**
-     * @param HttpUrl $url
-     * @return bool
-     */
-    public function hasProductSeoUrl(HttpUrl $url)
-    {
-        $key = $this->keyValueStoreKeyGenerator->createPoCProductSeoUrlToIdKey($url);
-        return $this->keyValueStore->has($key);
-    }
+		return ProductId::fromSku($sku);
+	}
+
+	/**
+	 * @param HttpUrl $url
+	 * @return bool
+	 */
+	public function hasProductSeoUrl(HttpUrl $url)
+	{
+		$key = $this->keyValueStoreKeyGenerator->createPoCProductSeoUrlToIdKey($url);
+
+		return $this->keyValueStore->has($key);
+	}
 } 

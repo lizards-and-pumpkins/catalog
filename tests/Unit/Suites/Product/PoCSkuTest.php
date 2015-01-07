@@ -25,7 +25,7 @@ class PoCSkuTest extends \PHPUnit_Framework_TestCase
 		$skuString = 'sku-string';
 		$sku = PoCSku::fromString($skuString);
 
-		$this->assertSame($skuString, (string) $sku);
+		$this->assertSame($skuString, (string)$sku);
 	}
 
 	/**
@@ -43,7 +43,7 @@ class PoCSkuTest extends \PHPUnit_Framework_TestCase
 	{
 		return [
 			[null],
-			[array()],
+			[[]],
 			[new \stdClass()],
 			[true],
 			[false],

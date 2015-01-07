@@ -21,24 +21,24 @@ use Brera\Product\HardcodedProductDetailViewSnippetKeyGenerator;
 use Brera\Product\HardcodedProductSnippetRendererCollection;
 use Psr\Log\LoggerInterface;
 
-class IntegrationTestFactory implements Factory 
+class IntegrationTestFactory implements Factory
 {
-    use FactoryTrait;
-    
-    /**
-     * @var KeyValueStore
-     */
-    private $keyValueStore;
+	use FactoryTrait;
 
-    /**
-     * @var Queue
-     */
-    private $eventQueue;
+	/**
+	 * @var KeyValueStore
+	 */
+	private $keyValueStore;
 
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
+	/**
+	 * @var Queue
+	 */
+	private $eventQueue;
+
+	/**
+	 * @var LoggerInterface
+	 */
+	private $logger;
 
 	/**
 	 * @param ProductImportDomainEvent $event
@@ -49,7 +49,7 @@ class IntegrationTestFactory implements Factory
 		return new ProductImportDomainEventHandler(
 			$event,
 			$this->getMasterFactory()->getProductBuilder(),
-            $this->getMasterFactory()->getEnvironmentBuilder(),
+			$this->getMasterFactory()->getEnvironmentBuilder(),
 			$this->getMasterFactory()->createProductProjector()
 		);
 	}
@@ -67,47 +67,48 @@ class IntegrationTestFactory implements Factory
 	 * @return ProductProjector
 	 */
 	public function createProductProjector()
-    {
-        return new ProductProjector($this->createProductSnippetRendererCollection(), $this->createDataPoolWriter());
-    }
+	{
+		return new ProductProjector($this->createProductSnippetRendererCollection(), $this->createDataPoolWriter());
+	}
 
-    /**
-     * @return HardcodedProductSnippetRendererCollection
-     */
-    public function createProductSnippetRendererCollection()
-    {
-        $rendererList = [$this->getMasterFactory()->createProductDetailViewSnippetRenderer()];
-        return new HardcodedProductSnippetRendererCollection(
-            $rendererList, $this->getMasterFactory()->createSnippetResultList()
-        );
-    }
+	/**
+	 * @return HardcodedProductSnippetRendererCollection
+	 */
+	public function createProductSnippetRendererCollection()
+	{
+		$rendererList = [$this->getMasterFactory()->createProductDetailViewSnippetRenderer()];
 
-    /**
-     * @return SnippetResultList
-     */
-    public function createSnippetResultList()
-    {
-        return new SnippetResultList();
-    }
+		return new HardcodedProductSnippetRendererCollection(
+			$rendererList, $this->getMasterFactory()->createSnippetResultList()
+		);
+	}
 
-    /**
-     * @return HardcodedProductDetailViewSnippetRenderer
-     */
-    public function createProductDetailViewSnippetRenderer()
-    {
-        return new HardcodedProductDetailViewSnippetRenderer(
-            $this->getMasterFactory()->createSnippetResultList(),
-            $this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator()
-        );
-    }
+	/**
+	 * @return SnippetResultList
+	 */
+	public function createSnippetResultList()
+	{
+		return new SnippetResultList();
+	}
 
-    /**
-     * @return HardcodedProductDetailViewSnippetKeyGenerator
-     */
-    public function createProductDetailViewSnippetKeyGenerator()
-    {
-        return new HardcodedProductDetailViewSnippetKeyGenerator();
-    }
+	/**
+	 * @return HardcodedProductDetailViewSnippetRenderer
+	 */
+	public function createProductDetailViewSnippetRenderer()
+	{
+		return new HardcodedProductDetailViewSnippetRenderer(
+			$this->getMasterFactory()->createSnippetResultList(),
+			$this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator()
+		);
+	}
+
+	/**
+	 * @return HardcodedProductDetailViewSnippetKeyGenerator
+	 */
+	public function createProductDetailViewSnippetKeyGenerator()
+	{
+		return new HardcodedProductDetailViewSnippetKeyGenerator();
+	}
 
 	/**
 	 * @return ProductBuilder
@@ -117,115 +118,119 @@ class IntegrationTestFactory implements Factory
 		return new ProductBuilder();
 	}
 
-    public function getEnvironmentBuilder()
-    {
-        // todo: add mechanism to inject data version number to use
-        $version = DataVersion::fromVersionString('1');
-        return new VersionedEnvironmentBuilder($version);
-    }
+	public function getEnvironmentBuilder()
+	{
+		/* TODO: Add mechanism to inject data version number to use */
+		$version = DataVersion::fromVersionString('1');
 
-    /**
-     * @return DomainEventHandlerLocator
-     */
-    public function createDomainEventHandlerLocator()
-    {
-        return new DomainEventHandlerLocator($this);
-    }
+		return new VersionedEnvironmentBuilder($version);
+	}
 
-    /**
-     * @return PoCProductRenderer
-     */
-    private function createProductRenderer()
-    {
-        return new PoCProductRenderer();
-    }
+	/**
+	 * @return DomainEventHandlerLocator
+	 */
+	public function createDomainEventHandlerLocator()
+	{
+		return new DomainEventHandlerLocator($this);
+	}
 
-    /**
-     * @return DataPoolWriter
-     */
-    public function createDataPoolWriter()
-    {
-        return new DataPoolWriter($this->getKeyValueStore(), $this->createKeyGenerator());
-    }
+	/**
+	 * @return PoCProductRenderer
+	 */
+	private function createProductRenderer()
+	{
+		return new PoCProductRenderer();
+	}
 
-    /**
-     * @return InMemoryKeyValueStore|KeyValueStore
-     */
-    private function getKeyValueStore()
-    {
-        if (null === $this->keyValueStore) {
-            $this->keyValueStore = $this->createKeyValueStore();
-        }
-        return $this->keyValueStore;
-    }
+	/**
+	 * @return DataPoolWriter
+	 */
+	public function createDataPoolWriter()
+	{
+		return new DataPoolWriter($this->getKeyValueStore(), $this->createKeyGenerator());
+	}
 
-    /**
-     * @return InMemoryKeyValueStore
-     */
-    private function createKeyValueStore()
-    {
-        return new InMemoryKeyValueStore();
-    }
+	/**
+	 * @return InMemoryKeyValueStore|KeyValueStore
+	 */
+	private function getKeyValueStore()
+	{
+		if (null === $this->keyValueStore) {
+			$this->keyValueStore = $this->createKeyValueStore();
+		}
 
-    /**
-     * @return KeyValueStoreKeyGenerator
-     */
-    private function createKeyGenerator()
-    {
-        return new KeyValueStoreKeyGenerator();
-    }
+		return $this->keyValueStore;
+	}
 
-    /**
-     * @return DomainEventConsumer
-     */
-    public function createDomainEventConsumer()
-    {
-        return new DomainEventConsumer(
-            $this->getMasterFactory()->getEventQueue(),
-            $this->getMasterFactory()->createDomainEventHandlerLocator(), $this->getLogger()
-        );
-    }
+	/**
+	 * @return InMemoryKeyValueStore
+	 */
+	private function createKeyValueStore()
+	{
+		return new InMemoryKeyValueStore();
+	}
 
-    /**
-     * @return Queue|InMemoryQueue
-     */
-    public function getEventQueue()
-    {
-        if (null === $this->eventQueue) {
-            $this->eventQueue = $this->createEventQueue();
-        }
-        return $this->eventQueue;
-    }
+	/**
+	 * @return KeyValueStoreKeyGenerator
+	 */
+	private function createKeyGenerator()
+	{
+		return new KeyValueStoreKeyGenerator();
+	}
 
-    /**
-     * @return InMemoryQueue
-     */
-    private function createEventQueue()
-    {
-        return new InMemoryQueue();
-    }
+	/**
+	 * @return DomainEventConsumer
+	 */
+	public function createDomainEventConsumer()
+	{
+		return new DomainEventConsumer(
+			$this->getMasterFactory()->getEventQueue(),
+			$this->getMasterFactory()->createDomainEventHandlerLocator(), $this->getLogger()
+		);
+	}
 
-    /**
-     * @return DataPoolReader
-     */
-    public function createDataPoolReader()
-    {
-        return new DataPoolReader($this->getKeyValueStore(), $this->createKeyGenerator());
-    }
+	/**
+	 * @return Queue|InMemoryQueue
+	 */
+	public function getEventQueue()
+	{
+		if (null === $this->eventQueue) {
+			$this->eventQueue = $this->createEventQueue();
+		}
 
-    private function getLogger()
-    {
-        if (null === $this->logger) {
-            $this->logger = $this->createLogger();
-        }
-        return $this->logger;
-    }
+		return $this->eventQueue;
+	}
 
-    /**
-     * @return InMemoryLogger
-     */
-    private function createLogger()
-    {
-        return new InMemoryLogger();
-    }
+	/**
+	 * @return InMemoryQueue
+	 */
+	private function createEventQueue()
+	{
+		return new InMemoryQueue();
+	}
+
+	/**
+	 * @return DataPoolReader
+	 */
+	public function createDataPoolReader()
+	{
+		return new DataPoolReader($this->getKeyValueStore(), $this->createKeyGenerator());
+	}
+
+	private function getLogger()
+	{
+		if (null === $this->logger) {
+			$this->logger = $this->createLogger();
+		}
+
+		return $this->logger;
+	}
+
+	/**
+	 * @return InMemoryLogger
+	 */
+	private function createLogger()
+	{
+		return new InMemoryLogger();
+	}
 } 

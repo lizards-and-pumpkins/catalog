@@ -4,8 +4,8 @@ namespace Brera;
 
 /**
  * Interface PoCMasterFactory
- * @package Brera
  *
+ * @package Brera
  * @method KeyValue\DataPoolWriter createDataPoolWriter
  * @method KeyValue\DataPoolReader createDataPoolReader
  * @method Product\ProductSeoUrlRouter createProductSeoUrlRouter
@@ -14,5 +14,5 @@ namespace Brera;
  */
 class PoCMasterFactory implements MasterFactory
 {
-    use MasterFactoryTrait;
+	use MasterFactoryTrait;
 } 

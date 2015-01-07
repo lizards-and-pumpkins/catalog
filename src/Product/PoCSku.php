@@ -4,18 +4,18 @@ namespace Brera\Product;
 
 class PoCSku implements Sku
 {
-    /**
-     * @var string
-     */
-    private $sku;
+	/**
+	 * @var string
+	 */
+	private $sku;
 
-    /**
-     * @param string $skuString
-     */
-    private function __construct($skuString)
-    {
-        $this->sku = $skuString;
-    }
+	/**
+	 * @param string $skuString
+	 */
+	private function __construct($skuString)
+	{
+		$this->sku = $skuString;
+	}
 
 	/**
 	 * @param string $skuString
@@ -37,11 +37,11 @@ class PoCSku implements Sku
 		return new self($skuString);
 	}
 
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return (string) $this->sku;
-    }
+	/**
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return (string) $this->sku;
+	}
 }

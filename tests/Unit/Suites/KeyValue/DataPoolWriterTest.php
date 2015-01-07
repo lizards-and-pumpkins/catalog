@@ -33,7 +33,7 @@ class DataPoolWriterTest extends AbstractDataPool
 	{
 		$testContent = 'test-content';
 		$testKey = 'test-key';
-		
+
 		$mockSnippetResult = $this->getMockBuilder(SnippetResult::class)
 			->disableOriginalConstructor()
 			->getMock();
@@ -41,16 +41,16 @@ class DataPoolWriterTest extends AbstractDataPool
 			->willReturn($testContent);
 		$mockSnippetResult->expects($this->once())->method('getKey')
 			->willReturn($testKey);
-		
+
 		$mockSnippetResultList = $this->getMock(SnippetResultList::class);
 		$mockSnippetResultList->expects($this->once())
 			->method('getIterator')
 			->willReturn(new \ArrayIterator([$mockSnippetResult]));
-		
+
 		$this->stubKeyValueStore->expects($this->once())
 			->method('set')
 			->with($testKey, $testContent);
-		
+
 		$this->dataPoolWriter->writeSnippetResultList($mockSnippetResultList);
 	}
 

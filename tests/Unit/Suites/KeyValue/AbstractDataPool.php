@@ -26,35 +26,37 @@ class AbstractDataPool extends \PHPUnit_Framework_TestCase
 	protected function getStubProductId()
 	{
 		$productId = $this->getMockBuilder(ProductId::class)
-		                  ->disableOriginalConstructor()
-		                  ->getMock();
+			->disableOriginalConstructor()
+			->getMock();
+
 		return $productId;
 	}
 
 	protected function addSetMethodToStubKeyValueStore()
 	{
 		$this->stubKeyValueStore->expects($this->once())
-		                        ->method('set');
+			->method('set');
 	}
 
 	protected function addGetMethodToStubKeyValueStore($returnValue)
 	{
 		$this->stubKeyValueStore->expects($this->once())
-		                        ->method('get')
-		                        ->willReturn($returnValue);
+			->method('get')
+			->willReturn($returnValue);
 	}
 
-	protected function addHasMethodToStubKeyValueStore($returnResult){
+	protected function addHasMethodToStubKeyValueStore($returnResult)
+	{
 		$this->stubKeyValueStore->expects($this->once())
-		                        ->method('has')
-		                        ->willReturn($returnResult);
+			->method('has')
+			->willReturn($returnResult);
 	}
 
 	protected function addStubMethodToStubKeyGenerator($method)
 	{
 		$this->stubKeyGenerator->expects($this->once())
-		                       ->method($method)
-		                       ->willReturn('dummy_key');
+			->method($method)
+			->willReturn('dummy_key');
 	}
 
 	protected function getDummyUrl()

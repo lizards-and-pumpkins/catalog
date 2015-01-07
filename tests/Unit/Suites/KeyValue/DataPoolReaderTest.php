@@ -14,74 +14,74 @@ require_once __DIR__ . '/AbstractDataPool.php';
  */
 class DataPoolReaderTest extends AbstractDataPool
 {
-    /**
-     * @var DataPoolReader
-     */
-    private $dataPoolReader;
+	/**
+	 * @var DataPoolReader
+	 */
+	private $dataPoolReader;
 
-    protected function setUp()
-    {
-	    parent::setUp();
+	protected function setUp()
+	{
+		parent::setUp();
 
-        $this->dataPoolReader = new DataPoolReader($this->stubKeyValueStore, $this->stubKeyGenerator);
-    }
+		$this->dataPoolReader = new DataPoolReader($this->stubKeyValueStore, $this->stubKeyGenerator);
+	}
 
-    /**
-     * @test
-     */
-    public function itShouldReturnASnippetIfItExists()
-    {
-        $testValue = '<p>html</p>';
-        $testKey = 'test';
-        
-        $this->addGetMethodToStubKeyValueStore($testValue);
+	/**
+	 * @test
+	 */
+	public function itShouldReturnASnippetIfItExists()
+	{
+		$testValue = '<p>html</p>';
+		$testKey = 'test';
 
-        $this->assertEquals($testValue, $this->dataPoolReader->getSnippet($testKey));
-    }
+		$this->addGetMethodToStubKeyValueStore($testValue);
 
-    /**
-     * @test
-     */
-    public function shouldReturnPoCProductHtmlBasedOnKeyFromKeyValueStorage()
-    {
-        $value = '<p>html</p>';
-        $productId = $this->getStubProductId();
+		$this->assertEquals($testValue, $this->dataPoolReader->getSnippet($testKey));
+	}
 
-	    $this->addStubMethodToStubKeyGenerator('createPoCProductHtmlKey');
-	    $this->addGetMethodToStubKeyValueStore($value);
+	/**
+	 * @test
+	 */
+	public function shouldReturnPoCProductHtmlBasedOnKeyFromKeyValueStorage()
+	{
+		$value = '<p>html</p>';
+		$productId = $this->getStubProductId();
 
-        $html = $this->dataPoolReader->getPoCProductHtml($productId);
+		$this->addStubMethodToStubKeyGenerator('createPoCProductHtmlKey');
+		$this->addGetMethodToStubKeyValueStore($value);
 
-        $this->assertEquals($value, $html);
-    }
+		$html = $this->dataPoolReader->getPoCProductHtml($productId);
 
-    /**
-     * @test
-     */
-    public function itShouldReturnProductIdBySeoUrl()
-    {
-        $value = 'test';
-	    $url = $this->getDummyUrl();
+		$this->assertEquals($value, $html);
+	}
 
-	    $this->addStubMethodToStubKeyGenerator('createPoCProductSeoUrlToIdKey');
-	    $this->addGetMethodToStubKeyValueStore($value);
+	/**
+	 * @test
+	 */
+	public function itShouldReturnProductIdBySeoUrl()
+	{
+		$value = 'test';
+		$url = $this->getDummyUrl();
 
-        $productId = $this->dataPoolReader->getProductIdBySeoUrl($url);
+		$this->addStubMethodToStubKeyGenerator('createPoCProductSeoUrlToIdKey');
+		$this->addGetMethodToStubKeyValueStore($value);
 
-        $this->assertEquals($value, $productId);
-	    $this->assertInstanceOf(ProductId::class, $productId);
-    }
+		$productId = $this->dataPoolReader->getProductIdBySeoUrl($url);
 
-    /**
-     * @test
-     */
-    public function itShouldReturnIfTheSeoUrlKeyExists()
-    {
-	    $url = $this->getDummyUrl();
+		$this->assertEquals($value, $productId);
+		$this->assertInstanceOf(ProductId::class, $productId);
+	}
 
-	    $this->addStubMethodToStubKeyGenerator('createPoCProductSeoUrlToIdKey');
-	    $this->addHasMethodToStubKeyValueStore(true);
+	/**
+	 * @test
+	 */
+	public function itShouldReturnIfTheSeoUrlKeyExists()
+	{
+		$url = $this->getDummyUrl();
 
-        $this->assertTrue($this->dataPoolReader->hasProductSeoUrl($url));
-    }
+		$this->addStubMethodToStubKeyGenerator('createPoCProductSeoUrlToIdKey');
+		$this->addHasMethodToStubKeyValueStore(true);
+
+		$this->assertTrue($this->dataPoolReader->hasProductSeoUrl($url));
+	}
 }

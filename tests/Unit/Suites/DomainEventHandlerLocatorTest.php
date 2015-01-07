@@ -70,12 +70,12 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 	public function itShouldLocateAndReturnCatalogImportDomainEventHandler()
 	{
 		$stubCatalogImportDomainEventHandler = $this->getMockBuilder(CatalogImportDomainEventHandler::class)
-		                                            ->disableOriginalConstructor()
-		                                            ->getMock();
+			->disableOriginalConstructor()
+			->getMock();
 
 		$this->factory->expects($this->once())
-		              ->method('createCatalogImportDomainEventHandler')
-		              ->willReturn($stubCatalogImportDomainEventHandler);
+			->method('createCatalogImportDomainEventHandler')
+			->willReturn($stubCatalogImportDomainEventHandler);
 
 		/**
 		 * The real object has to be used here ase getHandlerFor() method will call get_class against it

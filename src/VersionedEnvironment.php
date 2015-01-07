@@ -3,24 +3,24 @@ namespace Brera;
 
 class VersionedEnvironment implements Environment
 {
-    /**
-     * @var DataVersion
-     */
-    private $version;
+	/**
+	 * @var DataVersion
+	 */
+	private $version;
 
 	/**
 	 * @param DataVersion $version
 	 */
-    public function __construct(DataVersion $version)
-    {
-        $this->version = $version;
-    }
+	public function __construct(DataVersion $version)
+	{
+		$this->version = $version;
+	}
 
 	/**
 	 * @return DataVersion
 	 */
-    public function getVersion()
-    {
-        return $this->version;
-    }
+	public function getVersion()
+	{
+		return $this->version;
+	}
 }

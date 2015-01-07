@@ -11,30 +11,30 @@ use Brera\Product\ProductDetailHtmlPage;
 
 class FrontendFactory implements Factory
 {
-    use FactoryTrait;
+	use FactoryTrait;
 
-    /**
-     * @return ProductSeoUrlRouter
-     */
-    public function createProductSeoUrlRouter()
-    {
-        return new ProductSeoUrlRouter(
-            $this->getMasterFactory()->createDataPoolReader(),
-            $this->getMasterFactory()
-        );
-    }
+	/**
+	 * @return ProductSeoUrlRouter
+	 */
+	public function createProductSeoUrlRouter()
+	{
+		return new ProductSeoUrlRouter(
+			$this->getMasterFactory()->createDataPoolReader(),
+			$this->getMasterFactory()
+		);
+	}
 
-    /**
-     * @param ProductId $productId
-     * @return ProductDetailHtmlPage
-     */
-    public function createProductDetailPage(ProductId $productId)
-    {
-        return new ProductDetailHtmlPage(
-            $productId,
-            $this->getMasterFactory()->createDataPoolReader()
-        );
-    }
+	/**
+	 * @param ProductId $productId
+	 * @return ProductDetailHtmlPage
+	 */
+	public function createProductDetailPage(ProductId $productId)
+	{
+		return new ProductDetailHtmlPage(
+			$productId,
+			$this->getMasterFactory()->createDataPoolReader()
+		);
+	}
 
 	/**
 	 * @return ApiRouter

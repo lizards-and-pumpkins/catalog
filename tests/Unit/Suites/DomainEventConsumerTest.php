@@ -36,8 +36,8 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
 	{
 		$this->stubQueue = $this->getMock(Queue::class);
 		$this->stubLocator = $this->getMockBuilder(DomainEventHandlerLocator::class)
-		                          ->disableOriginalConstructor()
-		                          ->getMock();
+			->disableOriginalConstructor()
+			->getMock();
 		$this->stubLogger = $this->getMock(LoggerInterface::class);
 
 		$this->domainEventConsumer = new DomainEventConsumer($this->stubQueue, $this->stubLocator, $this->stubLogger);
@@ -54,8 +54,8 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
 
 		$stubEventHandler = $this->getMock(DomainEventHandler::class);
 		$this->stubLocator->expects($this->exactly($numberOfEventsToProcess))
-		                  ->method('getHandlerFor')
-		                  ->willReturn($stubEventHandler);
+			->method('getHandlerFor')
+			->willReturn($stubEventHandler);
 
 		$this->domainEventConsumer->process($numberOfEventsToProcess);
 	}
@@ -75,7 +75,7 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
 			->willThrowException($stubUnableToFindDomainEventHandlerException);
 
 		$this->stubLogger->expects($this->exactly($numberOfEventsToProcess))
-		                 ->method('error');
+			->method('error');
 
 		$this->domainEventConsumer->process($numberOfEventsToProcess);
 	}
@@ -89,11 +89,11 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
 
 		$stubUnderflowException = $this->getMock(\UnderflowException::class);
 		$this->stubQueue->expects($this->exactly($numberOfEventsToProcess))
-		                ->method('next')
-		                ->willThrowException($stubUnderflowException);
+			->method('next')
+			->willThrowException($stubUnderflowException);
 
 		$this->stubLogger->expects($this->exactly($numberOfEventsToProcess))
-		                 ->method('error');
+			->method('error');
 
 		$this->domainEventConsumer->process($numberOfEventsToProcess);
 	}
@@ -102,7 +102,7 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
 	{
 		$stubDomainEvent = $this->getMock(DomainEvent::class);
 		$this->stubQueue->expects($this->exactly($numberOfEventsToProcess))
-		          ->method('next')
-		          ->willReturn($stubDomainEvent);
+			->method('next')
+			->willReturn($stubDomainEvent);
 	}
 }

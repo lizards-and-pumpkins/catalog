@@ -6,5 +6,5 @@ interface Environment
 	/**
 	 * @return DataVersion
 	 */
-    public function getVersion();
+	public function getVersion();
 }

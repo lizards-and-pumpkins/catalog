@@ -4,9 +4,9 @@ namespace Brera;
 
 interface EnvironmentBuilder
 {
-    /**
-     * @param string $xmlString
-     * @return Environment
-     */
-    public function createEnvironmentFromXml($xmlString);
+	/**
+	 * @param string $xmlString
+	 * @return Environment
+	 */
+	public function createEnvironmentFromXml($xmlString);
 }

@@ -54,16 +54,16 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
 	public function itShouldReturnNullIfNoApiRequestHandlerFound()
 	{
 		$stubUrl = $this->getMockBuilder(HttpUrl::class)
-		                ->disableOriginalConstructor()
-		                ->getMock();
+			->disableOriginalConstructor()
+			->getMock();
 		$stubUrl->expects($this->once())
-		        ->method('getPath')
-		        ->willReturn('api/foo');
+			->method('getPath')
+			->willReturn('api/foo');
 
 		$stubHttpRequest = $this->getStubHttpRequest();
 		$stubHttpRequest->expects($this->once())
-		                ->method('getUrl')
-		                ->willReturn($stubUrl);
+			->method('getUrl')
+			->willReturn($stubUrl);
 
 		$this->assertNull($this->apiRouter->route($stubHttpRequest));
 	}
@@ -74,16 +74,16 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
 	public function itShouldReturnApiRequestHandler()
 	{
 		$stubUrl = $this->getMockBuilder(HttpUrl::class)
-		                ->disableOriginalConstructor()
-		                ->getMock();
+			->disableOriginalConstructor()
+			->getMock();
 		$stubUrl->expects($this->once())
-		        ->method('getPath')
-		        ->willReturn('api/foo');
+			->method('getPath')
+			->willReturn('api/foo');
 
 		$stubHttpRequest = $this->getStubHttpRequest();
 		$stubHttpRequest->expects($this->once())
-		                ->method('getUrl')
-		                ->willReturn($stubUrl);
+			->method('getUrl')
+			->willReturn($stubUrl);
 
 		$stubApiRequestHandler = $this->getMock(HttpRequestHandler::class, ['process']);
 
@@ -102,8 +102,8 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
 	private function getStubHttpRequest()
 	{
 		$stubHttpRequest = $this->getMockBuilder(HttpRequest::class)
-		                        ->disableOriginalConstructor()
-		                        ->getMock();
+			->disableOriginalConstructor()
+			->getMock();
 
 		return $stubHttpRequest;
 	}

@@ -30,13 +30,13 @@ class ProductSeoUrlRouterTest extends \PHPUnit_Framework_TestCase
 	protected function setUp()
 	{
 		$this->stubDataPoolReader = $this->getMockBuilder(DataPoolReader::class)
-		                           ->disableOriginalConstructor()
-		                           ->getMock();
+			->disableOriginalConstructor()
+			->getMock();
 
 		$this->stubMasterFactory = $this->getMockBuilder(MasterFactory::class)
-		                          ->disableOriginalConstructor()
-		                          ->setMethods(['register', 'createProductDetailPage'])
-		                          ->getMock();
+			->disableOriginalConstructor()
+			->setMethods(['register', 'createProductDetailPage'])
+			->getMock();
 
 		$this->productSeoUrlRouter = new ProductSeoUrlRouter($this->stubDataPoolReader, $this->stubMasterFactory);
 	}
@@ -65,8 +65,8 @@ class ProductSeoUrlRouterTest extends \PHPUnit_Framework_TestCase
 	public function itShouldReturnNullIfThereIsNoSeoUrl()
 	{
 		$this->stubDataPoolReader->expects($this->once())
-		                         ->method('hasProductSeoUrl')
-		                         ->willReturn(false);
+			->method('hasProductSeoUrl')
+			->willReturn(false);
 
 		$stubHttpRequest = $this->getStubHttpRequest();
 		$result = $this->productSeoUrlRouter->route($stubHttpRequest);
@@ -77,15 +77,15 @@ class ProductSeoUrlRouterTest extends \PHPUnit_Framework_TestCase
 	private function getStubHttpRequest()
 	{
 		$stubHttpUrl = $this->getMockBuilder(HttpUrl::class)
-		                    ->disableOriginalConstructor()
-		                    ->getMock();
+			->disableOriginalConstructor()
+			->getMock();
 
 		$stubHttpRequest = $this->getMockBuilder(HttpRequest::class)
-		                        ->disableOriginalConstructor()
-		                        ->getMock();
+			->disableOriginalConstructor()
+			->getMock();
 		$stubHttpRequest->expects($this->any())
-		                ->method('getUrl')
-		                ->willReturn($stubHttpUrl);
+			->method('getUrl')
+			->willReturn($stubHttpUrl);
 
 		return $stubHttpRequest;
 	}
