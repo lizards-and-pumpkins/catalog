@@ -27,7 +27,7 @@ class ProductAttributeList
 	public function getAttribute($code, $environment = [])
 	{
 		if (empty($code)) {
-			throw new ProductAttributeNotFoundException();
+			throw new ProductAttributeNotFoundException('Can not get an attribute with blank code.');
 		}
 
 		foreach ($this->attributes as $attribute) {
@@ -39,7 +39,7 @@ class ProductAttributeList
 			}
 		}
 
-		throw new ProductAttributeNotFoundException();
+		throw new ProductAttributeNotFoundException(sprintf('Can not find an attribute with "%s" code.', $code));
 	}
 
 	/**
