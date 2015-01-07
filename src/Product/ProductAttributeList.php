@@ -31,7 +31,7 @@ class ProductAttributeList
 		}
 
 		foreach ($this->attributes as $attribute) {
-			if ($attribute->hasCode($code)) {
+			if ($attribute->isCodeEqualsTo($code)) {
 
 				/* TODO: Implement closest environment match */
 

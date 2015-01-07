@@ -73,7 +73,7 @@ class ProductAttribute implements Attribute
 	 * @param string $codeExpectation
 	 * @return bool
 	 */
-	public function hasCode($codeExpectation)
+	public function isCodeEqualsTo($codeExpectation)
 	{
 		return $codeExpectation == $this->code;
 	}

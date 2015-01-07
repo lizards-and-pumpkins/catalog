@@ -26,7 +26,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 		$this->domElement->setAttribute('code', 'name');
 		$attribute = ProductAttribute::fromDomElement($this->domElement);
 
-		$this->assertTrue($attribute->hasCode('name'));
+		$this->assertTrue($attribute->isCodeEqualsTo('name'));
 	}
 
 	/**
@@ -37,7 +37,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 		$this->domElement->setAttribute('code', 'name');
 		$attribute = ProductAttribute::fromDomElement($this->domElement);
 
-		$this->assertFalse($attribute->hasCode('price'));
+		$this->assertFalse($attribute->isCodeEqualsTo('price'));
 	}
 
 	/**
