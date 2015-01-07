@@ -2,12 +2,15 @@
 
 namespace Brera;
 
+use Brera\Product\CatalogImportDomainEvent;
+use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\ProductImportDomainEvent;
 use Brera\Product\ProductImportDomainEventHandler;
 
 /**
  * @covers \Brera\DomainEventHandlerLocator
  * @uses \Brera\Product\ProductImportDomainEvent
+ * @uses \Brera\Product\CatalogImportDomainEvent
  */
 class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -59,5 +62,29 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 	{
 		$stubDomainEvent = $this->getMock(DomainEvent::class);
 		$this->locator->getHandlerFor($stubDomainEvent);
+	}
+
+	/**
+	 * @test
+	 */
+	public function itShouldLocateAndReturnCatalogImportDomainEventHandler()
+	{
+		$stubCatalogImportDomainEventHandler = $this->getMockBuilder(CatalogImportDomainEventHandler::class)
+		                                            ->disableOriginalConstructor()
+		                                            ->getMock();
+
+		$this->factory->expects($this->once())
+		              ->method('createCatalogImportDomainEventHandler')
+		              ->willReturn($stubCatalogImportDomainEventHandler);
+
+		/**
+		 * The real object has to be used here ase getHandlerFor() method will call get_class against it
+		 */
+		$xml = '<?xml version="1.0"?><rootNode></rootNode>';
+		$productImportDomainEvent = new CatalogImportDomainEvent($xml);
+
+		$result = $this->locator->getHandlerFor($productImportDomainEvent);
+
+		$this->assertInstanceOf(CatalogImportDomainEventHandler::class, $result);
 	}
 }

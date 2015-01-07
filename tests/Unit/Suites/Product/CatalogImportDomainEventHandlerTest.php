@@ -7,6 +7,7 @@ use Brera\Queue\Queue;
 /**
  * @covers Brera\Product\CatalogImportDomainEventHandler
  * @uses Brera\Product\ProductImportDomainEvent
+ * @uses Brera\PoCDomParser
  */
 class CatalogImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,30 +16,20 @@ class CatalogImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function itShouldEmitProductImportDomainEvents()
 	{
+		$xml = file_get_contents('product.xml', FILE_USE_INCLUDE_PATH);
+
 		$stubCatalogImportDomainEvent = $this->getMockBuilder(CatalogImportDomainEvent::class)
 			->disableOriginalConstructor()
 			->getMock();
 		$stubCatalogImportDomainEvent->expects($this->once())
-			->method('getXml');
-
-		$productXmlArray = [
-			'<?xml version="1.0?><rootNode>some xml</rootNode>',
-			'<?xml version="1.0?><rootNode>some other xml</rootNode>'
-		];
-		$stubProductBuilder = $this->getMock(ProductBuilder::class, ['getProductXmlArray']);
-		$stubProductBuilder->expects($this->once())
-			->method('getProductXmlArray')
-			->willReturn($productXmlArray);
+			->method('getXml')
+			->willReturn($xml);
 
 		$stubEventQueue = $this->getMock(Queue::class);
-		$stubEventQueue->expects($this->exactly(count($productXmlArray)))
+		$stubEventQueue->expects($this->atLeastOnce())
 			->method('add');
 
-		$catalogImportDomainEvent = new CatalogImportDomainEventHandler(
-			$stubCatalogImportDomainEvent,
-			$stubProductBuilder,
-			$stubEventQueue
-		);
+		$catalogImportDomainEvent = new CatalogImportDomainEventHandler($stubCatalogImportDomainEvent, $stubEventQueue);
 		$catalogImportDomainEvent->process();
 	}
 }

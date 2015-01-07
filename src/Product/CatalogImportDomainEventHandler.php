@@ -2,6 +2,7 @@
 
 namespace Brera\Product;
 
+use Brera\PoCDomParser;
 use Brera\Queue\Queue;
 use Brera\DomainEventHandler;
 
@@ -13,29 +14,26 @@ class CatalogImportDomainEventHandler implements DomainEventHandler
 	private $event;
 
 	/**
-	 * @var ProductBuilder
-	 */
-	private $productBuilder;
-
-	/**
 	 * @var Queue
 	 */
 	private $eventQueue;
 
-	public function __construct(CatalogImportDomainEvent $event, ProductBuilder $productBuilder, Queue $eventQueue)
+	public function __construct(CatalogImportDomainEvent $event, Queue $eventQueue)
 	{
 		$this->event = $event;
-		$this->productBuilder = $productBuilder;
 		$this->eventQueue = $eventQueue;
 	}
 
 	public function process()
 	{
 		$xml = $this->event->getXml();
-		$productXmlArray = $this->productBuilder->getProductXmlArray($xml);
 
-		foreach ($productXmlArray as $productXml) {
-			$this->eventQueue->add(new ProductImportDomainEvent($productXml));
+		$parser = new PoCDomParser($xml);
+
+		$productNodes = $parser->getXPathNode('product');
+		foreach ($productNodes as $productNode) {
+			$productNode = $parser->getDomNodeXml($productNode);
+			$this->eventQueue->add(new ProductImportDomainEvent($productNode));
 		}
 	}
 } 

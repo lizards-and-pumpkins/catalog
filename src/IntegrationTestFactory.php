@@ -60,11 +60,7 @@ class IntegrationTestFactory implements Factory
 	 */
 	public function createCatalogImportDomainEventHandler(CatalogImportDomainEvent $event)
 	{
-		return new CatalogImportDomainEventHandler(
-			$event,
-			$this->getMasterFactory()->getProductBuilder(),
-			$this->getMasterFactory()->getEventQueue()
-		);
+		return new CatalogImportDomainEventHandler($event, $this->getMasterFactory()->getEventQueue());
 	}
 
 	/**

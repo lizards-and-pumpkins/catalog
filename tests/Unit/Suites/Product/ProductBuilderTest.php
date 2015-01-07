@@ -48,15 +48,4 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
 		$xml = '<?xml version="1.0"?><node />';
 		(new ProductBuilder())->createProductFromXml($xml);
 	}
-
-	/**
-	 * @test
-	 */
-	public function itShouldReturnAnArray()
-	{
-		$xml = file_get_contents('product.xml', FILE_USE_INCLUDE_PATH);
-		$result = $this->builder->getProductXmlArray($xml);
-
-		$this->assertTrue(is_array($result));
-	}
 }

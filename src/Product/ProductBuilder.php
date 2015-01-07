@@ -26,23 +26,6 @@ class ProductBuilder
 	}
 
 	/**
-	 * @param string $xml
-	 * @return array
-	 */
-	public function getProductXmlArray($xml)
-	{
-		$parser = new PoCDomParser($xml);
-		$productNodesArray = [];
-
-		$productNodes = $parser->getXPathNode('product');
-		foreach ($productNodes as $productNode) {
-			$productNodesArray[] = $parser->getDomNodeXml($productNode);
-		}
-
-		return $productNodesArray;
-	}
-
-	/**
 	 * @param \DOMNodeList $nodeList
 	 * @return string
 	 */
