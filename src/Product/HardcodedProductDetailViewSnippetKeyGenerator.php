@@ -11,7 +11,7 @@ class HardcodedProductDetailViewSnippetKeyGenerator implements SnippetKeyGenerat
 	const KEY_PREFIX = 'product_detail_view';
 
 	/**
-	 * @param ProductId $productId
+	 * @param mixed|ProductId $productId
 	 * @param Environment $environment
 	 * @throws InvalidSnippetKeyIdentifierException
 	 * @return string
