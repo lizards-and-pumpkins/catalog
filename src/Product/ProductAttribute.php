@@ -35,30 +35,29 @@ class ProductAttribute implements Attribute
 	}
 
 	/**
-	 * @param \DOMElement $node
+	 * @param array $node
 	 * @throws FirstCharOfAttributeCodeIsNotAlphabeticException
 	 * @return ProductAttribute
 	 */
-	public static function fromDomElement(\DOMElement $node)
+	public static function fromArray(array $node)
 	{
-		$code = $node->getAttribute('code');
+		$code = $node['attributes']['code'];
 
 		if (!strlen($code) || !ctype_alpha(substr($code, 0, 1))) {
 			throw new FirstCharOfAttributeCodeIsNotAlphabeticException();
 		}
 
-		$value = $node->nodeValue;
 		$environment = [];
 
-		foreach ($node->attributes as $attributeCode => $attributeNode) {
-			if ('code' === $attributeCode) {
+		foreach ($node['attributes'] as $key => $value) {
+			if ('code' === $key) {
 				continue;
 			}
 
-			$environment[$attributeCode] = $attributeNode->value;
+			$environment[$key] = $value;
 		}
 
-		return new self($code, $value, $environment);
+		return new self($code, $node['value'], $environment);
 	}
 
 	/**

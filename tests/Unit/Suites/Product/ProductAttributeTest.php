@@ -8,23 +8,14 @@ namespace Brera\Product;
 class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 {
 	/**
-	 * @var \DOMElement
-	 */
-	private $domElement;
-
-	protected function setUp()
-	{
-		$document = new \DOMDocument();
-		$this->domElement = $document->createElement('foo');
-	}
-
-	/**
 	 * @test
 	 */
 	public function itShouldReturnTrueIfAttributeWithGivenCodeExists()
 	{
-		$this->domElement->setAttribute('code', 'name');
-		$attribute = ProductAttribute::fromDomElement($this->domElement);
+		$attribute = ProductAttribute::fromArray([
+			'attributes'    => ['code' => 'name'],
+			'value'         => 'foo'
+		]);
 
 		$this->assertTrue($attribute->isCodeEqualsTo('name'));
 	}
@@ -34,8 +25,10 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function itShouldReturnFalseIfAttributeWithGivenCodeDoesNotExist()
 	{
-		$this->domElement->setAttribute('code', 'name');
-		$attribute = ProductAttribute::fromDomElement($this->domElement);
+		$attribute = ProductAttribute::fromArray([
+			'attributes'    => ['code' => 'name'],
+			'value'         => 'foo'
+		]);
 
 		$this->assertFalse($attribute->isCodeEqualsTo('price'));
 	}
@@ -45,8 +38,10 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function itShouldReturnAttributeCode()
 	{
-		$this->domElement->setAttribute('code', 'name');
-		$attribute = ProductAttribute::fromDomElement($this->domElement);
+		$attribute = ProductAttribute::fromArray([
+			'attributes'    => ['code' => 'name'],
+			'value'         => 'foo'
+		]);
 
 		$this->assertEquals('name', $attribute->getCode());
 	}
@@ -56,11 +51,12 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function itShouldReturnAttributeValue()
 	{
-		$this->domElement->setAttribute('code', 'name');
-		$this->domElement->nodeValue = 'bar';
-		$attribute = ProductAttribute::fromDomElement($this->domElement);
+		$attribute = ProductAttribute::fromArray([
+			'attributes'    => ['code' => 'name'],
+			'value'         => 'foo'
+		]);
 
-		$this->assertEquals('bar', $attribute->getValue());
+		$this->assertEquals('foo', $attribute->getValue());
 	}
 
 	/**
@@ -71,11 +67,10 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function itShouldThrowAnExceptionIfAttributeCodeStartWithNonAlphabeticCharacter($invalidAttributeCode)
 	{
-		if (!is_null($invalidAttributeCode)) {
-			$this->domElement->setAttribute('code', $invalidAttributeCode);
-		}
-
-		ProductAttribute::fromDomElement($this->domElement);
+		ProductAttribute::fromArray([
+			'attributes'    => ['code' => $invalidAttributeCode],
+			'value'         => 'foo'
+		]);
 	}
 
 	public function invalidAttributeCodeProvider()

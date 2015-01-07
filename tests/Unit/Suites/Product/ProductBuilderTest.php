@@ -7,7 +7,7 @@ namespace Brera\Product;
  * @uses \Brera\Product\Product
  * @uses \Brera\Product\ProductId
  * @uses \Brera\Product\PoCSku
- * @uses \Brera\PoCDomParser
+ * @uses \Brera\DomDocumentXPathParser
  * @uses \Brera\Product\ProductAttribute
  * @uses \Brera\Product\ProductAttributeList
  */

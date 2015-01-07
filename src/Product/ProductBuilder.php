@@ -2,7 +2,7 @@
 
 namespace Brera\Product;
 
-use Brera\PoCDomParser;
+use Brera\DomDocumentXPathParser;
 
 class ProductBuilder
 {
@@ -12,29 +12,29 @@ class ProductBuilder
 	 */
 	public function createProductFromXml($xml)
 	{
-		$parser = new PoCDomParser($xml);
+		$parser = new DomDocumentXPathParser($xml);
 
-		$skuNodeList = $parser->getXPathNode('//product/@sku');
-		$skuString = $this->getSkuStringFromDomNodeList($skuNodeList);
+		$skuNode = $parser->getXPathNode('//product/@sku');
+		$skuString = $this->getSkuStringFromDomNodeArray($skuNode);
 		$sku = PoCSku::fromString($skuString);
 		$productId = ProductId::fromSku($sku);
 
-		$attributeNodeList = $parser->getXPathNode('//product/attributes/attribute');
-		$attributeList = ProductAttributeList::fromDomNodeList($attributeNodeList);
+		$attributeNodes = $parser->getXPathNode('//product/attributes/attribute');
+		$attributeList = ProductAttributeList::fromArray($attributeNodes);
 
 		return new Product($productId, $attributeList);
 	}
 
 	/**
-	 * @param \DOMNodeList $nodeList
+	 * @param array $nodeArray
 	 * @return string
 	 */
-	private function getSkuStringFromDomNodeList(\DOMNodeList $nodeList)
+	private function getSkuStringFromDomNodeArray(array $nodeArray)
 	{
-		if (1 !== $nodeList->length) {
+		if (1 !== count($nodeArray)) {
 			throw new InvalidNumberOfSkusPerImportedProductException();
 		}
 
-		return $nodeList->item(0)->nodeValue;
+		return $nodeArray[0]['value'];
 	}
 }

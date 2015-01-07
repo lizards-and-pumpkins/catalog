@@ -5,9 +5,9 @@ namespace Brera\Product;
 use Brera\Queue\Queue;
 
 /**
- * @covers Brera\Product\CatalogImportDomainEventHandler
- * @uses Brera\Product\ProductImportDomainEvent
- * @uses Brera\PoCDomParser
+ * @covers \Brera\Product\CatalogImportDomainEventHandler
+ * @uses \Brera\Product\ProductImportDomainEvent
+ * @uses \Brera\DomDocumentXPathParser
  */
 class CatalogImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {

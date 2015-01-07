@@ -21,13 +21,14 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function itShouldAddAndGetAttributeFromAList()
+	public function itShouldAddAndGetAttributeFromAProductAttributeList()
 	{
-		$document = new \DOMDocument();
-		$domElement = $document->createElement('attribute', 'bar');
-		$domElement->setAttribute('code', 'foo');
+		$attributeArray = [
+			'attributes'    => ['code' => 'foo'],
+			'value'         => 'bar'
+		];
 
-		$attribute = ProductAttribute::fromDomElement($domElement);
+		$attribute = ProductAttribute::fromArray($attributeArray);
 
 		$this->attributeList->add($attribute);
 		$result = $this->attributeList->getAttribute('foo');
@@ -56,15 +57,14 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function itShouldCreateAttributeListFromXmlNodeList()
+	public function itShouldCreateAttributeListFromAttributesArray()
 	{
-		$document = new \DOMDocument();
-		$element = $document->createElement('foo', 'bar');
-		$element->setAttribute('code', 'name');
-		$document->appendChild($element);
-		$nodeList = $document->getElementsByTagName('foo');
+		$attributeArray = [[
+			'attributes'    => ['code'  => 'name'],
+			'value'         => 'bar'
+		]];
 
-		$attributeList = ProductAttributeList::fromDomNodeList($nodeList);
+		$attributeList = ProductAttributeList::fromArray($attributeArray);
 		$attribute = $attributeList->getAttribute('name');
 
 		$this->assertEquals('bar', $attribute->getValue());

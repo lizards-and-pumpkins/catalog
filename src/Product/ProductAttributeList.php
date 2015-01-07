@@ -43,15 +43,15 @@ class ProductAttributeList
 	}
 
 	/**
-	 * @param \DOMNodeList $nodeList
+	 * @param array $nodes
 	 * @return ProductAttributeList
 	 */
-	public static function fromDomNodeList(\DOMNodeList $nodeList)
+	public static function fromArray(array $nodes)
 	{
 		$attributeList = new self();
 
-		foreach ($nodeList as $node) {
-			$attribute = ProductAttribute::fromDomElement($node);
+		foreach ($nodes as $node) {
+			$attribute = ProductAttribute::fromArray($node);
 			$attributeList->add($attribute);
 		}
 
