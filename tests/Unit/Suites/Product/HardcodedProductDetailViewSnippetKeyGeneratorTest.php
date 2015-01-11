@@ -4,6 +4,9 @@ namespace Brera\Product;
 
 use Brera\Environment;
 
+/**
+ * @covers \Brera\Product\HardcodedProductDetailViewSnippetKeyGenerator
+ */
 class HardcodedProductDetailViewSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
 {
 	/**

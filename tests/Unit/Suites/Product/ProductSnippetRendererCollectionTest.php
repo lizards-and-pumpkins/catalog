@@ -7,6 +7,10 @@ use Brera\SnippetResultList;
 use Brera\ProjectionSourceData;
 use Brera\Environment;
 
+/**
+ * @covers \Brera\Product\HardcodedProductSnippetRendererCollection
+ * @covers \Brera\Product\ProductSnippetRendererCollection
+ */
 class ProductSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
 {
 	/**

@@ -2,6 +2,11 @@
 
 namespace Brera;
 
+/**
+ * @covers \Brera\VersionedEnvironmentBuilder
+ * @uses \Brera\DataVersion
+ * @uses \Brera\VersionedEnvironment
+ */
 class VersionedEnvironmentBuilderTest extends \PHPUnit_Framework_TestCase
 {
 	/**
@@ -28,7 +33,7 @@ class VersionedEnvironmentBuilderTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function itShouldReturnAVersionedEnvironment()
 	{
-		$dummyXml = '<data></data>';
+		$dummyXml = '<root />';
 		$result = $this->builder->createEnvironmentFromXml($dummyXml);
 		$this->assertInstanceOf(VersionedEnvironment::class, $result);
 	}

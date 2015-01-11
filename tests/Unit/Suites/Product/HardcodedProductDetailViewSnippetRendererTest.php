@@ -8,8 +8,12 @@ use Brera\SnippetRenderer;
 use Brera\VersionedEnvironment;
 use Brera\SnippetResult;
 
-class HardcodedProductDetailViewSnippetRendererTest
-	extends \PHPUnit_Framework_TestCase
+/**
+ * @covers \Brera\Product\HardcodedProductDetailViewSnippetRenderer
+ * @uses \Brera\SnippetResult
+ * @uses \Brera\Product\HardcodedProductDetailViewSnippetKeyGenerator
+ */
+class HardcodedProductDetailViewSnippetRendererTest	extends \PHPUnit_Framework_TestCase
 {
 	/**
 	 * @var HardcodedProductDetailViewSnippetRenderer

@@ -2,6 +2,9 @@
 
 namespace Brera;
 
+/**
+ * @covers \Brera\SnippetResult
+ */
 class SnippetResultTest extends \PHPUnit_Framework_TestCase
 {
 	/**

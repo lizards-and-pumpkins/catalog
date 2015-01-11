@@ -2,6 +2,9 @@
 
 namespace Brera;
 
+/**
+ * @covers \Brera\VersionedEnvironment
+ */
 class VersionedEnvironmentTest extends \PHPUnit_Framework_TestCase
 {
 	/**
