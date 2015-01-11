@@ -24,7 +24,7 @@ class DataVersion
 			throw new EmptyVersionException();
 		}
 
-		return new self($version);
+		return new self((string) $version);
 	}
 
 	/**
@@ -39,14 +39,6 @@ class DataVersion
 	 * @return string
 	 */
 	public function __toString()
-	{
-		return (string)$this->getVersion();
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getVersion()
 	{
 		return $this->version;
 	}

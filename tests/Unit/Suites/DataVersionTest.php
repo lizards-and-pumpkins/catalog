@@ -57,6 +57,5 @@ class DataVersionTest extends \PHPUnit_Framework_TestCase
 		$version = '1.0';
 		$dataVersion = DataVersion::fromVersionString($version);
 		$this->assertSame($version, (string)$dataVersion);
-		$this->assertSame($version, $dataVersion->getVersion());
 	}
 }
