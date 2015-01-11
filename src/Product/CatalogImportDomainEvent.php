@@ -4,7 +4,7 @@ namespace Brera\Product;
 
 use Brera\DomainEvent;
 
-class CatalogImportDomainEvent implements DomainEvent, \Serializable
+class CatalogImportDomainEvent implements DomainEvent
 {
 	/**
 	 * @var string
@@ -26,20 +26,4 @@ class CatalogImportDomainEvent implements DomainEvent, \Serializable
 	{
 		return $this->xml;
 	}
-
-	/**
-	 * @return string
-	 */
-	public function serialize()
-	{
-		return serialize($this->getXml());
-	}
-
-	/**
-	 * @param string $data
-	 */
-	public function unserialize($data)
-	{
-		$this->xml = unserialize($data);
-	}
-} 
+}
