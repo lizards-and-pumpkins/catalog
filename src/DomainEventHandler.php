@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera;
 
 interface DomainEventHandler
 {
-    /**
-     * @return null
-     */
-    public function process();
+	/**
+	 * @return null
+	 */
+	public function process();
 } 

@@ -1,13 +1,16 @@
 <?php
 
-namespace Brera\PoC\KeyValue;
+namespace Brera\KeyValue;
+
+use Brera\SnippetResult;
+use Brera\SnippetResultList;
 
 require_once __DIR__ . '/AbstractDataPool.php';
 
 /**
- * @covers \Brera\PoC\KeyValue\DataPoolWriter
- * @uses Brera\PoC\Product\ProductId
- * @uses Brera\PoC\Http\HttpUrl
+ * @covers \Brera\KeyValue\DataPoolWriter
+ * @uses Brera\Product\ProductId
+ * @uses Brera\Http\HttpUrl
  */
 class DataPoolWriterTest extends AbstractDataPool
 {
@@ -21,6 +24,34 @@ class DataPoolWriterTest extends AbstractDataPool
 		parent::setUp();
 
 		$this->dataPoolWriter = new DataPoolWriter($this->stubKeyValueStore, $this->stubKeyGenerator);
+	}
+
+	/**
+	 * @test
+	 */
+	public function itShouldWriteASnippetListToTheDataPool()
+	{
+		$testContent = 'test-content';
+		$testKey = 'test-key';
+
+		$mockSnippetResult = $this->getMockBuilder(SnippetResult::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$mockSnippetResult->expects($this->once())->method('getContent')
+			->willReturn($testContent);
+		$mockSnippetResult->expects($this->once())->method('getKey')
+			->willReturn($testKey);
+
+		$mockSnippetResultList = $this->getMock(SnippetResultList::class);
+		$mockSnippetResultList->expects($this->once())
+			->method('getIterator')
+			->willReturn(new \ArrayIterator([$mockSnippetResult]));
+
+		$this->stubKeyValueStore->expects($this->once())
+			->method('set')
+			->with($testKey, $testContent);
+
+		$this->dataPoolWriter->writeSnippetResultList($mockSnippetResultList);
 	}
 
 	/**

@@ -1,40 +1,40 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera;
 
-use Brera\PoC\Http\HttpResponse;
+use Brera\Http\HttpResponse;
 
 class DefaultHttpResponse implements HttpResponse
 {
-    /**
-     * @var string
-     */
-    private $body;
+	/**
+	 * @var string
+	 */
+	private $body;
 
-    /**
-     * @param string $content
-     * @return null
-     */
-    public function setBody($content)
-    {
-        $this->body = $content;
-    }
+	/**
+	 * @param string $content
+	 * @return null
+	 */
+	public function setBody($content)
+	{
+		$this->body = $content;
+	}
 
-    /**
-     * @return string
-     */
-    public function getBody()
-    {
-        return $this->body;
-    }
+	/**
+	 * @return string
+	 */
+	public function getBody()
+	{
+		return $this->body;
+	}
 
-    /**
-     * Sends headers, cookies and afterwards the body to the client
-     *
-     * @return null
-     */
-    public function send()
-    {
-        echo $this->getBody();
-    }
+	/**
+	 * Sends headers, cookies and afterwards the body to the client
+	 *
+	 * @return null
+	 */
+	public function send()
+	{
+		echo $this->getBody();
+	}
 } 

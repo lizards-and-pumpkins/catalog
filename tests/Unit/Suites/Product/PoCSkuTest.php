@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\PoC\Product;
+namespace Brera\Product;
 
 /**
- * @covers \Brera\PoC\Product\PoCSku
+ * @covers \Brera\Product\PoCSku
  */
 class PoCSkuTest extends \PHPUnit_Framework_TestCase
 {
@@ -12,16 +12,45 @@ class PoCSkuTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function itShouldImplementSkuInterface()
 	{
-		$sku = new PoCSku('sku-string');
+		$sku = PoCSku::fromString('sku-string');
+
 		$this->assertInstanceOf(Sku::class, $sku);
 	}
 
 	/**
 	 * @test
 	 */
-	public function itShouldConvertSkuIntoString(){
+	public function itShouldConvertSkuIntoString()
+	{
 		$skuString = 'sku-string';
-		$sku = new PoCSku($skuString);
-		$this->assertSame($skuString, (string) $sku);
+		$sku = PoCSku::fromString($skuString);
+
+		$this->assertSame($skuString, (string)$sku);
+	}
+
+	/**
+	 * @test
+	 * @expectedException \Brera\Product\InvalidSkuException
+	 * @dataProvider invalidSkuProvider
+	 * @param $invalidSku
+	 */
+	public function itShouldThrowAnExceptionIfSkuIsNotValid($invalidSku)
+	{
+		PoCSku::fromString($invalidSku);
+	}
+
+	public function invalidSkuProvider()
+	{
+		return [
+			[null],
+			[[]],
+			[new \stdClass()],
+			[true],
+			[false],
+			[''],
+			['  '],
+			["\n"],
+			["\t"]
+		];
 	}
 }

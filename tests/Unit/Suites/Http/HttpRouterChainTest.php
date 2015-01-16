@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\PoC\Http;
+namespace Brera\Http;
 
 /**
- * @covers Brera\PoC\Http\HttpRouterChain
+ * @covers Brera\Http\HttpRouterChain
  */
 class HttpRouterChainTest extends \PHPUnit_Framework_TestCase
 {
@@ -19,7 +19,7 @@ class HttpRouterChainTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * @test
-	 * @expectedException \Brera\Poc\Http\UnableToRouteRequestException
+	 * @expectedException \Brera\Http\UnableToRouteRequestException
 	 * @expectedExceptionMessage Unable to route a request ""
 	 */
 	public function itShouldThrowUnableToRouteRequestException()
@@ -35,7 +35,7 @@ class HttpRouterChainTest extends \PHPUnit_Framework_TestCase
 	{
 		$stubHttpRouter = $this->getMock(HttpRouter::class);
 
-		$stubHttpRequestHandler = $this->getMock(HttpRequestHandler::class);
+		$stubHttpRequestHandler = $this->getMock(HttpRequestHandler::class, ['process']);
 
 		$stubHttpRouter->expects($this->once())
 			->method('route')
@@ -52,8 +52,9 @@ class HttpRouterChainTest extends \PHPUnit_Framework_TestCase
 	private function getStubHttpRequest()
 	{
 		$stubHttpRequest = $this->getMockBuilder(HttpRequest::class)
-		                        ->disableOriginalConstructor()
-		                        ->getMock();
+			->disableOriginalConstructor()
+			->getMock();
+
 		return $stubHttpRequest;
 	}
 }

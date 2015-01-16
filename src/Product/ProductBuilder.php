@@ -1,6 +1,8 @@
 <?php
 
-namespace Brera\PoC\Product;
+namespace Brera\Product;
+
+use Brera\DomDocumentXPathParser;
 
 class ProductBuilder
 {
@@ -10,29 +12,29 @@ class ProductBuilder
 	 */
 	public function createProductFromXml($xml)
 	{
-		$name = '';
+		$parser = new DomDocumentXPathParser($xml);
 
-		$parser = xml_parser_create();
-		xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
-		xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 1);
-		xml_parse_into_struct($parser, $xml, $values);
-		xml_parser_free($parser);
+		$skuNode = $parser->getXmlNodesArrayByXPath('//product/@sku');
+		$skuString = $this->getSkuStringFromDomNodeArray($skuNode);
+		$sku = PoCSku::fromString($skuString);
+		$productId = ProductId::fromSku($sku);
 
-		foreach ($values as $value) {
-			if ('sku' === $value['tag']) {
-				$sku = new PoCSku($value['value']);
-				$productId = ProductId::fromSku($sku);
-			}
+		$attributeNodes = $parser->getXmlNodesArrayByXPath('//product/attributes/attribute');
+		$attributeList = ProductAttributeList::fromArray($attributeNodes);
 
-			if ('name' === $value['tag']) {
-				$name = $value['value'];
-			}
+		return new Product($productId, $attributeList);
+	}
+
+	/**
+	 * @param array $nodeArray
+	 * @return string
+	 */
+	private function getSkuStringFromDomNodeArray(array $nodeArray)
+	{
+		if (1 !== count($nodeArray)) {
+			throw new InvalidNumberOfSkusPerImportedProductException();
 		}
 
-		if (empty($productId) || empty($name)) {
-			throw new InvalidImportDataException();
-		}
-
-		return new Product($productId, $name);
+		return $nodeArray[0]['value'];
 	}
 }

@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera\PoC\Product;
+namespace Brera\Product;
 
 interface Sku
 {
-    /**
-     * @return string
-     */
-    public function __toString();
+	/**
+	 * @return string
+	 */
+	public function __toString();
 } 

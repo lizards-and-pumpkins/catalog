@@ -1,117 +1,117 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera;
 
-use Brera\PoC\Http\HttpRequest;
-use Brera\PoC\Http\HttpResponse;
-use Brera\PoC\Http\HttpRouterChain;
+use Brera\Http\HttpRequest;
+use Brera\Http\HttpResponse;
+use Brera\Http\HttpRouterChain;
 
 abstract class WebFront
 {
-    /**
-     * @var MasterFactory
-     */
-    private $masterFactory;
+	/**
+	 * @var MasterFactory
+	 */
+	private $masterFactory;
 
-    /**
-     * @var HttpRequest
-     */
-    private $request;
+	/**
+	 * @var HttpRequest
+	 */
+	private $request;
 
-    /**
-     * @param HttpRequest $request
-     * @param MasterFactory $factory
-     */
-    function __construct(HttpRequest $request, MasterFactory $factory = null)
-    {
-        $this->request = $request;
-        $this->masterFactory = $factory;
-    }
+	/**
+	 * @param HttpRequest $request
+	 * @param MasterFactory $factory
+	 */
+	function __construct(HttpRequest $request, MasterFactory $factory = null)
+	{
+		$this->request = $request;
+		$this->masterFactory = $factory;
+	}
 
-    /**
-     * @param bool $isProductive
-     * @return HttpResponse
-     */
-    public function run($isProductive = true)
-    {
-        $this->buildFactory();
+	/**
+	 * @param bool $isProductive
+	 * @return HttpResponse
+	 */
+	public function run($isProductive = true)
+	{
+		$this->buildFactory();
 
-        $router = new HttpRouterChain();
-        $this->registerRouters($router);
+		$router = new HttpRouterChain();
+		$this->registerRouters($router);
 
-        $requestHandler = $router->route($this->request);
+		$requestHandler = $router->route($this->request);
 
-        $content = $requestHandler->process();
+		$content = $requestHandler->process();
 
-        // TODO add response locator to differ between Json, html, ...
-        
-        // TODO put response creation into factory, response depends on http version!
+		// TODO add response locator to differ between Json, html, ...
 
-        $response = new DefaultHttpResponse();
-        $response->setBody($content);
+		// TODO put response creation into factory, response depends on http version!
 
-        if ($isProductive) {
-            $response->send();
-        }
+		$response = new DefaultHttpResponse();
+		$response->setBody($content);
 
-        return $response;
-    }
+		if ($isProductive) {
+			$response->send();
+		}
 
-    /**
-     * @return MasterFactory
-     */
-    abstract protected function createMasterFactory();
+		return $response;
+	}
 
+	/**
+	 * @return MasterFactory
+	 */
+	abstract protected function createMasterFactory();
 
-    /**
-     * @param MasterFactory $factory
-     */
-    abstract protected function registerFactories(MasterFactory $factory);
+	/**
+	 * @param MasterFactory $factory
+	 */
+	abstract protected function registerFactories(MasterFactory $factory);
 
-    /**
-     * @param HttpRouterChain $router
-     */
-    abstract protected function registerRouters(HttpRouterChain $router);
+	/**
+	 * @param HttpRouterChain $router
+	 */
+	abstract protected function registerRouters(HttpRouterChain $router);
 
-    /**
-     * @return null
-     */
-    private function buildFactory()
-    {
-        if (null !== $this->masterFactory) {
-            return null;
-        }
+	/**
+	 * @return null
+	 */
+	private function buildFactory()
+	{
+		if (null !== $this->masterFactory) {
+			return null;
+		}
 
-        $this->masterFactory = $this->createMasterFactory();
+		$this->masterFactory = $this->createMasterFactory();
 
-        if (!($this->masterFactory instanceof MasterFactory)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'Factory is not of type MasterFactory but "%s"',
-                    $this->getExceptionMessageClassNameRepresentation($this->masterFactory)
-                )
-            );
-        }
+		if (!($this->masterFactory instanceof MasterFactory)) {
+			throw new \InvalidArgumentException(
+				sprintf(
+					'Factory is not of type MasterFactory but "%s"',
+					$this->getExceptionMessageClassNameRepresentation($this->masterFactory)
+				)
+			);
+		}
 
-        $this->registerFactories($this->masterFactory);
-    }
+		$this->registerFactories($this->masterFactory);
+	}
 
-    /**
-     * @return string
-     */
-    private function getExceptionMessageClassNameRepresentation($value)
-    {
-        if (is_object($value)) {
-            return get_class($value);
-        }
-        return (string)$value;
-    }
+	/**
+	 * @return string
+	 */
+	private function getExceptionMessageClassNameRepresentation($value)
+	{
+		if (is_object($value)) {
+			return get_class($value);
+		}
 
-    /**
-     * @return MasterFactory
-     */
-    public function getMasterFactory()
-    {
-        return $this->masterFactory;
-    }
+		return (string)$value;
+	}
+
+	/**
+	 * @return MasterFactory
+	 */
+	public function getMasterFactory()
+	{
+		return $this->masterFactory;
+	}
 } 

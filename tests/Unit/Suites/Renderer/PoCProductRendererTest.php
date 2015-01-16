@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera\PoC\Renderer;
+namespace Brera\Renderer;
 
-use Brera\PoC\Product\Product;
+use Brera\Product\Product;
 
 /**
- * @covers \Brera\PoC\Renderer\PoCProductRenderer
+ * @covers \Brera\Renderer\PoCProductRenderer
  */
 class PoCProductRendererTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,7 +26,8 @@ class PoCProductRendererTest extends \PHPUnit_Framework_TestCase
 			->method('getId')
 			->willReturn($stubProductId);
 		$stubProduct->expects($this->once())
-			->method('getName')
+			->method('getAttributeValue')
+			->with('name')
 			->willReturn($stubProductName);
 
 		$renderer = new PoCProductRenderer();

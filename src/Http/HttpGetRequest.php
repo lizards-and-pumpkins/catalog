@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera\PoC\Http;
+namespace Brera\Http;
 
 class HttpGetRequest extends HttpRequest
 {
-    
+
 }

@@ -1,13 +1,16 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera;
 
-use Brera\PoC\Product\ProductId;
+use Brera\Product\CatalogImportDomainEvent;
+use Brera\Product\CatalogImportDomainEventHandler;
+use Brera\Product\ProductImportDomainEvent;
+use Brera\Product\ProductImportDomainEventHandler;
 
 /**
- * @covers \Brera\PoC\DomainEventHandlerLocator
- * @uses \Brera\PoC\ProductImportDomainEvent
- * @uses \Brera\PoC\ProductCreatedDomainEvent
+ * @covers \Brera\DomainEventHandlerLocator
+ * @uses \Brera\Product\ProductImportDomainEvent
+ * @uses \Brera\Product\CatalogImportDomainEvent
  */
 class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -41,7 +44,7 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 			->willReturn($stubProductImportDomainEventHandler);
 
 		/**
-		 * The real object has to be used here ase getHandlerFor() method will call get_class against it
+		 * The real object has to be used here as getHandlerFor() method will call get_class against it
 		 */
 		$xml = '<?xml version="1.0"?><rootNode></rootNode>';
 		$productImportDomainEvent = new ProductImportDomainEvent($xml);
@@ -53,37 +56,35 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * @test
-	 */
-	public function itShouldLocateAndReturnProductCreatedDomainEventHandler()
-	{
-		$stubProductCreatedDomainEventHandler = $this->getMockBuilder(ProductCreatedDomainEventHandler::class)
-		                                            ->disableOriginalConstructor()
-		                                            ->getMock();
-
-		$this->factory->expects($this->once())
-		              ->method('createProductCreatedDomainEventHandler')
-		              ->willReturn($stubProductCreatedDomainEventHandler);
-
-		/**
-		 * The real object has to be used here ase getHandlerFor() method will call get_class against it
-		 */
-		$stubProductId = $this->getMockBuilder(ProductId::class)
-			->disableOriginalConstructor()
-			->getMock();
-		$productCreatedDomainEvent = new ProductCreatedDomainEvent($stubProductId);
-
-		$result = $this->locator->getHandlerFor($productCreatedDomainEvent);
-
-		$this->assertInstanceOf(ProductCreatedDomainEventHandler::class, $result);
-	}
-
-	/**
-	 * @test
-	 * @expectedException \Brera\PoC\UnableToFindDomainEventHandlerException
+	 * @expectedException \Brera\UnableToFindDomainEventHandlerException
 	 */
 	public function itShouldThrowAnExceptionIfNoHandlerIsLocated()
 	{
 		$stubDomainEvent = $this->getMock(DomainEvent::class);
 		$this->locator->getHandlerFor($stubDomainEvent);
+	}
+
+	/**
+	 * @test
+	 */
+	public function itShouldLocateAndReturnCatalogImportDomainEventHandler()
+	{
+		$stubCatalogImportDomainEventHandler = $this->getMockBuilder(CatalogImportDomainEventHandler::class)
+			->disableOriginalConstructor()
+			->getMock();
+
+		$this->factory->expects($this->once())
+			->method('createCatalogImportDomainEventHandler')
+			->willReturn($stubCatalogImportDomainEventHandler);
+
+		/**
+		 * The real object has to be used here as getHandlerFor() method will call get_class against it
+		 */
+		$xml = '<?xml version="1.0"?><rootNode></rootNode>';
+		$productImportDomainEvent = new CatalogImportDomainEvent($xml);
+
+		$result = $this->locator->getHandlerFor($productImportDomainEvent);
+
+		$this->assertInstanceOf(CatalogImportDomainEventHandler::class, $result);
 	}
 }

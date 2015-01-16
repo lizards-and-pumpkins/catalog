@@ -1,0 +1,156 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://brera.io"
+        xmlns="http://brera.io"
+        elementFormDefault="qualified">
+    <xs:element name="products">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="product" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:complexContent>
+                            <xs:extension base="abstractProduct">
+                                <xs:sequence>
+                                    <xs:element name="url_key" maxOccurs="unbounded">
+                                        <xs:complexType>
+                                            <xs:simpleContent>
+                                                <xs:extension base="xs:string">
+                                                    <xs:attribute name="lang" type="xs:string" />
+                                                </xs:extension>
+                                            </xs:simpleContent>
+                                        </xs:complexType>
+                                    </xs:element>
+                                    <xs:element name="categories" maxOccurs="unbounded">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:element name="category" type="xs:string" maxOccurs="unbounded" />
+                                            </xs:sequence>
+                                            <xs:attribute name="website" type="xs:string" />
+                                        </xs:complexType>
+                                    </xs:element>
+                                    <xs:element name="tax_class_ids">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:element name="tax_class_id" type="xs:positiveInteger" maxOccurs="unbounded" />
+                                            </xs:sequence>
+                                        </xs:complexType>
+                                    </xs:element>
+                                    <xs:element name="assets">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:element name="image" maxOccurs="unbounded">
+                                                    <xs:complexType>
+                                                        <xs:sequence>
+                                                            <xs:element name="file" maxOccurs="unbounded">
+                                                                <xs:complexType>
+                                                                    <xs:simpleContent>
+                                                                        <xs:extension base="xs:string">
+                                                                            <xs:attribute name="lang" type="xs:string" />
+                                                                        </xs:extension>
+                                                                    </xs:simpleContent>
+                                                                </xs:complexType>
+                                                            </xs:element>
+                                                            <xs:element name="label" maxOccurs="unbounded">
+                                                                <xs:complexType>
+                                                                    <xs:simpleContent>
+                                                                        <xs:extension base="xs:string">
+                                                                            <xs:attribute name="lang" type="xs:string" />
+                                                                        </xs:extension>
+                                                                    </xs:simpleContent>
+                                                                </xs:complexType>
+                                                            </xs:element>
+                                                        </xs:sequence>
+                                                        <xs:attribute name="identifier" type="xs:string" />
+                                                        <xs:attribute name="gallery" type="xs:boolean" />
+                                                    </xs:complexType>
+                                                </xs:element>
+                                                <xs:element name="pdf" maxOccurs="unbounded" minOccurs="0">
+                                                    <xs:complexType>
+                                                        <xs:sequence>
+                                                            <xs:element name="file" maxOccurs="unbounded">
+                                                                <xs:complexType>
+                                                                    <xs:simpleContent>
+                                                                        <xs:extension base="xs:string">
+                                                                            <xs:attribute name="lang" type="xs:string" />
+                                                                        </xs:extension>
+                                                                    </xs:simpleContent>
+                                                                </xs:complexType>
+                                                            </xs:element>
+                                                        </xs:sequence>
+                                                    </xs:complexType>
+                                                </xs:element>
+                                            </xs:sequence>
+                                        </xs:complexType>
+                                    </xs:element>
+                                    <xs:element name="associated_products" minOccurs="0">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:element name="product" type="abstractProduct" maxOccurs="unbounded" />
+                                            </xs:sequence>
+                                        </xs:complexType>
+                                    </xs:element>
+                                </xs:sequence>
+                                <xs:attribute name="type" use="required">
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="simple" />
+                                            <xs:enumeration value="configurable" />
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <!-- The line below most likely won't. Need XSD 1.1 compliant parser to test. -->
+                                <xs:assert test="if(@type eq 'configurable') then associated_products
+                                     else not(associated_products)" />
+                            </xs:extension>
+                        </xs:complexContent>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="abstractProduct">
+        <xs:all>
+            <xs:element name="inventory" minOccurs="1">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="qty" type="xs:nonNegativeInteger" default="0" minOccurs="0" />
+                        <xs:element name="is_in_stock" type="xs:boolean" />
+                        <xs:element name="backorders" type="xs:boolean" default="false" minOccurs="0" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="attributes">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="attribute" maxOccurs="unbounded">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="label" maxOccurs="unbounded">
+                                        <xs:complexType>
+                                            <xs:simpleContent>
+                                                <xs:extension base="xs:string">
+                                                    <xs:anyAttribute processContents="skip" />
+                                                </xs:extension>
+                                            </xs:simpleContent>
+                                        </xs:complexType>
+                                    </xs:element>
+                                </xs:sequence>
+                                <xs:attribute name="code" type="xs:string" use="required" />
+                                <xs:anyAttribute processContents="skip" />
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:all>
+        <xs:attribute name="sku" type="xs:string" use="required" />
+        <xs:attribute name="visible" type="xs:boolean" use="required" />
+    </xs:complexType>
+
+    <xs:simpleType name="positiveDecimal">
+        <xs:restriction base="xs:decimal">
+            <xs:minExclusive value="0" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

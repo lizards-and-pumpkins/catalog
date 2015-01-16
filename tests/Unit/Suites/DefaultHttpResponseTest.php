@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera;
 
 /**
- * @covers \Brera\PoC\DefaultHttpResponse
+ * @covers \Brera\DefaultHttpResponse
  */
 class DefaultHttpResponseTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,48 +1,48 @@
 <?php
 
-namespace Brera\PoC;
+namespace Brera;
 
 trait MasterFactoryTrait
 {
-    /**
-     * @var array
-     */
-    private $methods = [];
+	/**
+	 * @var array
+	 */
+	private $methods = [];
 
-    /**
-     * @param Factory $factory
-     */
-    final public function register(Factory $factory)
-    {
-        foreach ((new \ReflectionObject($factory))->getMethods() as $method) {
+	/**
+	 * @param Factory $factory
+	 */
+	final public function register(Factory $factory)
+	{
+		foreach ((new \ReflectionObject($factory))->getMethods() as $method) {
 
-            $name = $method->getName();
+			$name = $method->getName();
 
-            if ($method->isProtected() || $method->isPrivate()) {
-                continue;
-            }
+			if ($method->isProtected() || $method->isPrivate()) {
+				continue;
+			}
 
-            if (substr($name, 0, 6) != 'create' && substr($name, 0, 3) != 'get') {
-                continue;
-            }
-            
-            $this->methods[$name] = $factory;
-        }
+			if (substr($name, 0, 6) != 'create' && substr($name, 0, 3) != 'get') {
+				continue;
+			}
 
-        $factory->setMasterFactory($this);
-    }
+			$this->methods[$name] = $factory;
+		}
 
-    /**
-     * @param $method
-     * @param $parameters
-     * @return mixed
-     */
-    final public function __call($method, $parameters)
-    {
-        if (!isset($this->methods[$method])) {
-            throw new UndefinedFactoryMethodException(sprintf('Unknown method "%s"', $method));
-        }
+		$factory->setMasterFactory($this);
+	}
 
-        return call_user_func_array(array($this->methods[$method], $method), $parameters);
-    }
+	/**
+	 * @param $method
+	 * @param $parameters
+	 * @return mixed
+	 */
+	final public function __call($method, $parameters)
+	{
+		if (!isset($this->methods[$method])) {
+			throw new UndefinedFactoryMethodException(sprintf('Unknown method "%s"', $method));
+		}
+
+		return call_user_func_array([$this->methods[$method], $method], $parameters);
+	}
 }

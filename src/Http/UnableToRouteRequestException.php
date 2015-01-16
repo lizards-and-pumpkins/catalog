@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\PoC\Http;
+namespace Brera\Http;
 
 class UnableToRouteRequestException extends \LogicException
 {

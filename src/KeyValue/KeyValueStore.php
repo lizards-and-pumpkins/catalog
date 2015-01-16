@@ -1,26 +1,37 @@
 <?php
 
-namespace Brera\PoC\KeyValue;
+namespace Brera\KeyValue;
 
 interface KeyValueStore
 {
-    /**
-     * @param string $key
-     * @param mixed $value
-     */
-    public function set($key, $value);
+	/**
+	 * @param string $key
+	 * @param mixed $value
+	 * @return null
+	 */
+	public function set($key, $value);
 
-    /**
-     * @param string $key
-     * @return mixed
-     */
-    public function get($key);
+	/**
+	 * @param string $key
+	 * @return mixed
+	 */
+	public function get($key);
 
-    /**
-     * @param string $key
-     * @return bool
-     */
-    public function has($key);
-    
-    // TODO: Implement multiSet and multiGet
-} 
+	/**
+	 * @param string $key
+	 * @return bool
+	 */
+	public function has($key);
+
+	/**
+	 * @param array $keys
+	 * @return array
+	 */
+	public function multiGet(array $keys);
+
+	/**
+	 * @param array $items
+	 * @return null
+	 */
+	public function multiSet(array $items);
+}

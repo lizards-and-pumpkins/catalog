@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\PoC\Http;
+namespace Brera\Http;
 
 class AbstractHttpRequest extends \PHPUnit_Framework_TestCase
 {
@@ -13,8 +13,8 @@ class AbstractHttpRequest extends \PHPUnit_Framework_TestCase
 
 		$stubHttpUrl = $this->getStubHttpUrl();
 		$stubHttpUrl->expects($this->once())
-		            ->method('__toString')
-		            ->willReturn($url);
+			->method('__toString')
+			->willReturn($url);
 
 		$httpRequest = new HttpPostRequest($stubHttpUrl);
 		$result = $httpRequest->getUrl();
@@ -24,7 +24,7 @@ class AbstractHttpRequest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * @test
-	 * @expectedException \Brera\PoC\Http\UnsupportedRequestMethodException
+	 * @expectedException \Brera\Http\UnsupportedRequestMethodException
 	 * @expectedExceptionMessage Unsupported request method: "PUT"
 	 */
 	public function itShouldThrowUnsupportedRequestMethodException()
@@ -61,8 +61,9 @@ class AbstractHttpRequest extends \PHPUnit_Framework_TestCase
 	protected function getStubHttpUrl()
 	{
 		$stubHttpUrl = $this->getMockBuilder(HttpUrl::class)
-		                    ->disableOriginalConstructor()
-		                    ->getMock();
+			->disableOriginalConstructor()
+			->getMock();
+
 		return $stubHttpUrl;
 	}
 

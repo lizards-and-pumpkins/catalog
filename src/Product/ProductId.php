@@ -1,36 +1,36 @@
 <?php
 
-namespace Brera\PoC\Product;
+namespace Brera\Product;
 
 class ProductId
 {
-    /**
-     * @var string
-     */
-    private $id;
+	/**
+	 * @var string
+	 */
+	private $id;
 
-    /**
-     * @param string $id
-     */
-    protected function __construct($id)
-    {
-        $this->id = $id;
-    }
+	/**
+	 * @param string $id
+	 */
+	protected function __construct($id)
+	{
+		$this->id = $id;
+	}
 
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return (string) $this->id;
-    }
+	/**
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return (string)$this->id;
+	}
 
-    /**
-     * @param Sku $sku
-     * @return ProductId
-     */
-    public static function fromSku(Sku $sku)
-    {
-        return new ProductId((string) $sku);
-    }
+	/**
+	 * @param Sku $sku
+	 * @return ProductId
+	 */
+	public static function fromSku(Sku $sku)
+	{
+		return new ProductId((string)$sku);
+	}
 } 
