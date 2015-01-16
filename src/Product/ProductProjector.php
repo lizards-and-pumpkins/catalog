@@ -36,6 +36,7 @@ class ProductProjector implements Projector
 	 * @param Product|ProjectionSourceData $product
 	 * @param Environment $environment
 	 * @throws InvalidProjectionDataSourceType
+	 * @return null
 	 */
 	public function project(ProjectionSourceData $product, Environment $environment)
 	{
