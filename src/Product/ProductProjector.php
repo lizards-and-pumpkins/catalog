@@ -24,10 +24,8 @@ class ProductProjector implements Projector
 	 * @param ProductSnippetRendererCollection $rendererCollection
 	 * @param DataPoolWriter $dataPoolWriter
 	 */
-	public function __construct(
-		ProductSnippetRendererCollection $rendererCollection,
-		DataPoolWriter $dataPoolWriter
-	) {
+	public function __construct(ProductSnippetRendererCollection $rendererCollection, DataPoolWriter $dataPoolWriter)
+	{
 		$this->rendererCollection = $rendererCollection;
 		$this->dataPoolWriter = $dataPoolWriter;
 	}
@@ -52,9 +50,7 @@ class ProductProjector implements Projector
 	 */
 	private function projectProduct(Product $product, Environment $environment)
 	{
-		$snippetResultList = $this->rendererCollection->render(
-			$product, $environment
-		);
+		$snippetResultList = $this->rendererCollection->render($product, $environment);
 		$this->dataPoolWriter->writeSnippetResultList($snippetResultList);
 	}
 }

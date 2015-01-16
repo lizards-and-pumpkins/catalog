@@ -135,14 +135,6 @@ class IntegrationTestFactory implements Factory
 	}
 
 	/**
-	 * @return PoCProductRenderer
-	 */
-	private function createProductRenderer()
-	{
-		return new PoCProductRenderer();
-	}
-
-	/**
 	 * @return DataPoolWriter
 	 */
 	public function createDataPoolWriter()
