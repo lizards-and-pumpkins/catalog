@@ -9,7 +9,7 @@
         blocks into it
 
         -->
-        <product_details_page renderer="Brera\PoC\Renderer\PoCProductRenderer" layout="product-details-page.xml" />
+        <product_details_page renderer="Brera\Renderer\PoCProductRenderer" layout="product-details-page.xml" />
 
         <!--
 
