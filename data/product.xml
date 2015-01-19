@@ -48,20 +48,7 @@ LED Armflasher with elastic Band and Flasher&#13;]]></attribute>
         </attributes>
     </product>
 
-    <product type="configurable" sku="218765-333" visible="true">
-        <url_key>adipure-360</url_key>
-        <categories>
-            <category>men-running-shoes</category>
-            <category>specials</category>
-        </categories>
-        <tax_class_ids>
-            <tax_class_id>5</tax_class_id>
-        </tax_class_ids>
-        <inventory>
-            <qty>12</qty>
-            <is_in_stock>true</is_in_stock>
-            <backorders>true</backorders>
-        </inventory>
+    <product type="configurable" sku="218765-333" visible="true" tax_class_id="5">
         <assets>
             <image identifier="main-shoe-picture">
                 <file>products/218765/218765-333.1.png</file>
@@ -82,6 +69,11 @@ LED Armflasher with elastic Band and Flasher&#13;]]></attribute>
             </pdf>
         </assets>
         <attributes>
+            <attribute code="url_key">adipure-360</attribute>
+            <attribute code="category">men-running-shoes</attribute>
+            <attribute code="category">specials</attribute>
+            <attribute code="stock_qty">5</attribute>
+            <attribute code="backorders">true</attribute>
             <attribute code="name">adiPure 360</attribute>
             <attribute code="price">12.95</attribute>
             <attribute code="image_main">main-shoe-picture</attribute>
@@ -101,12 +93,9 @@ LED Armflasher with elastic Band and Flasher&#13;]]></attribute>
 ]]></attribute>
         </attributes>
         <associated_products>
-            <product sku="218765-333-1" visible="false">
-                <inventory>
-                    <qty>1200</qty>
-                    <is_in_stock>true</is_in_stock>
-                </inventory>
+            <product sku="218765-333-1" visible="false" tax_class_id="5">
                 <attributes>
+                    <attribute code="stock_qty">5</attribute>
                     <attribute code="color">
                         <label lang="en_US">Red</label>
                         <label lang="de_DE">Rot</label>
@@ -116,12 +105,9 @@ LED Armflasher with elastic Band and Flasher&#13;]]></attribute>
                     </attribute>
                 </attributes>
             </product>
-            <product sku="218765-333-2" visible="false">
-                <inventory>
-                    <qty>750</qty>
-                    <is_in_stock>true</is_in_stock>
-                </inventory>
+            <product sku="218765-333-2" visible="false" tax_class_id="5">
                 <attributes>
+                    <attribute code="stock_qty">750</attribute>
                     <attribute code="color">
                         <label lang="en_US">Red</label>
                         <label lang="de_DE">Rot</label>
@@ -131,12 +117,9 @@ LED Armflasher with elastic Band and Flasher&#13;]]></attribute>
                     </attribute>
                 </attributes>
             </product>
-            <product sku="218765-333-3" visible="false">
-                <inventory>
-                    <qty>5544</qty>
-                    <is_in_stock>true</is_in_stock>
-                </inventory>
+            <product sku="218765-333-3" visible="false" tax_class_id="5">
                 <attributes>
+                    <attribute code="stock_qty">45</attribute>
                     <attribute code="color">
                         <label lang="en_US">Red</label>
                         <label lang="de_DE">Rot</label>
@@ -146,12 +129,9 @@ LED Armflasher with elastic Band and Flasher&#13;]]></attribute>
                     </attribute>
                 </attributes>
             </product>
-            <product sku="218765-333-4" visible="false">
-                <inventory>
-                    <qty>40</qty>
-                    <is_in_stock>true</is_in_stock>
-                </inventory>
+            <product sku="218765-333-4" visible="false" tax_class_id="5">
                 <attributes>
+                    <attribute code="stock_qty">5</attribute>
                     <attribute code="color">
                         <label lang="en_US">Red</label>
                         <label lang="de_DE">Rot</label>
@@ -161,12 +141,9 @@ LED Armflasher with elastic Band and Flasher&#13;]]></attribute>
                     </attribute>
                 </attributes>
             </product>
-            <product sku="218765-333-5" visible="false">
-                <inventory>
-                    <qty>126</qty>
-                    <is_in_stock>true</is_in_stock>
-                </inventory>
+            <product sku="218765-333-5" visible="false" tax_class_id="5">
                 <attributes>
+                    <attribute code="stock_qty">5</attribute>
                     <attribute code="color">
                         <label lang="en_US">Blue</label>
                         <label lang="de_DE">Blau</label>
@@ -176,11 +153,9 @@ LED Armflasher with elastic Band and Flasher&#13;]]></attribute>
                     </attribute>
                 </attributes>
             </product>
-            <product sku="218765-333-6" visible="false">
-                <inventory>
-                    <is_in_stock>false</is_in_stock>
-                </inventory>
+            <product sku="218765-333-6" visible="false" tax_class_id="5">
                 <attributes>
+                    <attribute code="stock_qty">5</attribute>
                     <attribute code="color">
                         <label lang="en_US">Blue</label>
                         <label lang="de_DE">Blau</label>
@@ -190,12 +165,9 @@ LED Armflasher with elastic Band and Flasher&#13;]]></attribute>
                     </attribute>
                 </attributes>
             </product>
-            <product sku="218765-333-7" visible="false">
-                <inventory>
-                    <qty>2</qty>
-                    <is_in_stock>true</is_in_stock>
-                </inventory>
+            <product sku="218765-333-7" visible="false" tax_class_id="5">
                 <attributes>
+                    <attribute code="stock_qty">5</attribute>
                     <attribute code="color">
                         <label lang="en_US">Blue</label>
                         <label lang="de_DE">Blau</label>
