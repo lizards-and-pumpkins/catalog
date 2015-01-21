@@ -16,7 +16,9 @@ class XPathParserTest extends \PHPUnit_Framework_TestCase
 		$parser = new XPathParser($xml);
 		$result = $parser->getXmlNodesArrayByXPath('child/grandChild');
 
-		$this->assertEquals('foo', $result[0]['value']);
+		$expectation = [['name' => 'grandChild', 'attributes' => [], 'value' => 'foo']];
+
+		$this->assertEquals($expectation, $result);
 	}
 
 	/**
@@ -28,7 +30,9 @@ class XPathParserTest extends \PHPUnit_Framework_TestCase
 		$parser = new XPathParser($xml);
 		$result = $parser->getXmlNodesArrayByXPath('child');
 
-		$this->assertSame('foo', $result[0]['value']);
+		$expectation = [['name' => 'child', 'attributes' => [], 'value' => 'foo']];
+
+		$this->assertSame($expectation, $result);
 	}
 
 	/**
@@ -39,9 +43,10 @@ class XPathParserTest extends \PHPUnit_Framework_TestCase
 		$xml = '<root><child>foo</child><child>bar</child></root>';
 		$parser = new XPathParser($xml);
 		$result = $parser->getXmlNodesArrayByXPath('child');
+
 		$expectation = [
-			['attributes' => [], 'value' => 'foo'],
-			['attributes' => [], 'value' => 'bar']
+			['name' => 'child', 'attributes' => [], 'value' => 'foo'],
+			['name' => 'child', 'attributes' => [], 'value' => 'bar']
 		];
 
 		$this->assertSame($expectation, $result);
@@ -55,7 +60,9 @@ class XPathParserTest extends \PHPUnit_Framework_TestCase
 		$xml = '<root><child bar="baz" qux="waldo">foo</child></root>';
 		$parser = new XPathParser($xml);
 		$result = $parser->getXmlNodesArrayByXPath('child');
+
 		$expectation = [[
+			'name'          => 'child',
 			'attributes'    => ['bar' => 'baz', 'qux' => 'waldo'],
 			'value'         => 'foo'
 		]];
@@ -71,6 +78,7 @@ class XPathParserTest extends \PHPUnit_Framework_TestCase
 		$xml = '<root><child>foo</child><child>bar</child></root>';
 		$parser = new XPathParser($xml);
 		$result = $parser->getXmlNodesRawXmlArrayByXPath('child');
+
 		$expectation = ['<child>foo</child>', '<child>bar</child>'];
 
 		$this->assertSame($expectation, $result);
@@ -107,7 +115,9 @@ class XPathParserTest extends \PHPUnit_Framework_TestCase
 		$parser = new XPathParser($xml);
 		$result = $parser->getXmlNodesArrayByXPath('/root/child');
 
-		$this->assertSame('foo', $result[0]['value']);
+		$expectation = [['name' => 'child', 'attributes' => [], 'value' => 'foo']];
+
+		$this->assertSame($expectation, $result);
 	}
 
 	/**
@@ -119,7 +129,9 @@ class XPathParserTest extends \PHPUnit_Framework_TestCase
 		$parser = new XPathParser($xml);
 		$result = $parser->getXmlNodesArrayByXPath('/*/child');
 
-		$this->assertSame('foo', $result[0]['value']);
+		$expectation = [['name' => 'child', 'attributes' => [], 'value' => 'foo']];
+
+		$this->assertSame($expectation, $result);
 	}
 
 	/**
@@ -132,9 +144,9 @@ class XPathParserTest extends \PHPUnit_Framework_TestCase
 		$result = $parser->getXmlNodesArrayByXPath('/root');
 
 		$expectation = [[
-			'attributes' => [], 'value' => [
-				['attributes' => [], 'value' => 'foo'],
-				['attributes' => ['baz' => 'qux'], 'value' => 'bar']
+			'name' => 'root', 'attributes' => [], 'value' => [
+				['name' => 'child', 'attributes' => [], 'value' => 'foo'],
+				['name' => 'child', 'attributes' => ['baz' => 'qux'], 'value' => 'bar']
 			]
 		]];
 

@@ -61,6 +61,7 @@ class XPathParser
 
 		foreach ($nodeList as $node) {
 			$nodeArray[] = [
+				'name'          => $node->nodeName,
 				'attributes'    => $this->getNodeAttributesAsArray($node),
 				'value'         => $this->getXmlNodeValue($node)
 			];
@@ -83,6 +84,7 @@ class XPathParser
 
 		foreach ($parent->childNodes as $node) {
 			$value[] = [
+				'name'          => $node->nodeName,
 				'attributes'    => $this->getNodeAttributesAsArray($node),
 				'value'         => $this->getXmlNodeValue($node)
 			];
