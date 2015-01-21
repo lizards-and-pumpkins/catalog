@@ -117,6 +117,17 @@ class DataPoolReaderTest extends AbstractDataPool
     }
 
     /**
+     * @test
+     * @expectedException \RuntimeException
+     *
+     * @dataProvider brokenKeyForSnippetListProvider
+     */
+    public function itShouldOnlyAcceptStringKeysForGetSnippet($key)
+    {
+        $this->dataPoolReader->getSnippet($key);
+    }
+
+    /**
      * @return array
      */
     public function brokenKeyForSnippetListProvider()

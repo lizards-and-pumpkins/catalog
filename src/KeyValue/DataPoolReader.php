@@ -34,6 +34,7 @@ class DataPoolReader
      */
     public function getSnippet($key)
     {
+        $this->checkForValidKey($key);
         return $this->keyValueStore->get($key);
     }
 
@@ -86,6 +87,10 @@ class DataPoolReader
         return $list;
     }
 
+    /**
+     * @param $keys
+     * @return array
+     */
     public function getSnippets($keys)
     {
         if (!is_array($keys)) {
