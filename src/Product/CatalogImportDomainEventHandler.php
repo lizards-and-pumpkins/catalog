@@ -2,7 +2,7 @@
 
 namespace Brera\Product;
 
-use Brera\DomDocumentXPathParser;
+use Brera\XPathParser;
 use Brera\Queue\Queue;
 use Brera\DomainEventHandler;
 
@@ -28,7 +28,7 @@ class CatalogImportDomainEventHandler implements DomainEventHandler
 	{
 		$xml = $this->event->getXml();
 
-		$productNodesXml = (new DomDocumentXPathParser($xml))->getXmlNodesRawXmlArrayByXPath('product');
+		$productNodesXml = (new XPathParser($xml))->getXmlNodesRawXmlArrayByXPath('product');
 		foreach ($productNodesXml as $productXml) {
 			$this->eventQueue->add(new ProductImportDomainEvent($productXml));
 		}
