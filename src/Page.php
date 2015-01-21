@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Brera;
-
 
 use Brera\Http\HttpResponse;
 

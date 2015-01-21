@@ -1,9 +1,16 @@
 <?php
+
 namespace Brera;
 
 use Brera\Http\HttpUrl;
 use Brera\KeyValue\DataPoolReader;
 
+/**
+ * @covers \Brera\PageBuilder
+ * @uses   \Brera\Http\HttpUrl
+ * @uses   \Brera\Page
+ * @uses   \Brera\PageKeyGenerator
+ */
 class PageBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**

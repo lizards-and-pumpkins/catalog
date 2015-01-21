@@ -1,6 +1,10 @@
 <?php
+
 namespace Brera;
 
+/**
+ * @covers \Brera\Page
+ */
 class PageTest extends \PHPUnit_Framework_TestCase
 {
     /**

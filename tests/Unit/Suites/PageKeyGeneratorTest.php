@@ -1,11 +1,13 @@
 <?php
 
-
 namespace Brera;
-
 
 use Brera\Http\HttpUrl;
 
+/**
+ * @covers \Brera\PageKeyGenerator
+ * @uses   \Brera\Http\HttpUrl
+ */
 class PageKeyGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
