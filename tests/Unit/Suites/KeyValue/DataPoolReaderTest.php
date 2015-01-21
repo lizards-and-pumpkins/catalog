@@ -166,6 +166,21 @@ class DataPoolReaderTest extends AbstractDataPool
     /**
      * @test
      */
+    public function itShouldReturnSnippets()
+    {
+        $keyValueStorageReturn = [
+            'key' => 'value',
+            'key2' => 'value2',
+        ];
+        $this->addMultiGetMethodToStubKeyValueStore($keyValueStorageReturn);
+        $snippets = $this->dataPoolReader->getSnippets(['key', 'key2']);
+
+        $this->assertEquals($keyValueStorageReturn, $snippets);
+    }
+
+    /**
+     * @test
+     */
     public function shouldReturnPoCProductHtmlBasedOnKeyFromKeyValueStorage()
     {
         $value = '<p>html</p>';
