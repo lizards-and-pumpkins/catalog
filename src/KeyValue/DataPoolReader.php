@@ -5,7 +5,6 @@ namespace Brera\KeyValue;
 use Brera\Http\HttpUrl;
 use Brera\Product\PoCSku;
 use Brera\Product\ProductId;
-use RuntimeException;
 
 class DataPoolReader
 {
@@ -107,7 +106,7 @@ class DataPoolReader
     private function checkForValidKey($key)
     {
         if (!is_string($key)) {
-            throw new RuntimeException('Key is not of type string.');
+            throw new \RuntimeException('Key is not of type string.');
         }
     }
 
@@ -118,7 +117,7 @@ class DataPoolReader
     private function checkForValidJson($key, $json)
     {
         if (!is_string($json)) {
-            throw new RuntimeException(sprintf('List for key "%s" is no valid JSON - it is not even a string.', $key));
+            throw new \RuntimeException(sprintf('List for key "%s" is no valid JSON - it is not even a string.', $key));
         }
     }
 
@@ -135,7 +134,7 @@ class DataPoolReader
             $list = [];
         }
         if (!is_array($list) || json_last_error() !== JSON_ERROR_NONE) {
-            throw new RuntimeException(sprintf('List for key "%s" is no valid JSON.', $key));
+            throw new \RuntimeException(sprintf('List for key "%s" is no valid JSON.', $key));
         }
 
         return $list;
