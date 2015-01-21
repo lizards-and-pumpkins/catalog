@@ -4,6 +4,8 @@
 namespace Brera;
 
 
+use Brera\Http\HttpUrl;
+
 class PageKeyGenerator
 {
 
@@ -13,24 +15,24 @@ class PageKeyGenerator
      * @todo I like the idea to only add the version and everything else can be
      * @todo done in this first snippet, so it can be just "empty" only containing one palceholder
      *
-     * @param string      $url
+     * @param HttpUrl     $url
      * @param Environment $env
      *
      * @return string
      */
-    public function getKeyForSnippet($url, Environment $env)
+    public function getKeyForSnippet(HttpUrl $url, Environment $env)
     {
         // $path contains the starting /
         return $this->getKey($url, $env);
     }
 
     /**
-     * @param string      $url
+     * @param HttpUrl     $url
      * @param Environment $env
      *
      * @return string
      */
-    public function getKeyForSnippetList($url, Environment $env)
+    public function getKeyForSnippetList(HttpUrl $url, Environment $env)
     {
         return $this->getKey($url, $env) . '_l';
     }
