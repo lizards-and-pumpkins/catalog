@@ -4,7 +4,8 @@
 namespace Brera;
 
 
-use Brera\KeyValue\KeyValueStore;
+use Brera\Http\HttpUrl;
+use Brera\KeyValue\DataPoolReader;
 
 class PageBuilder
 {
@@ -17,23 +18,23 @@ class PageBuilder
      */
     private $environment;
     /**
-     * @var KeyValueStore
+     * @var DataPoolReader
      */
-    private $keyValueStore;
+    private $dataPoolReader;
 
     /**
-     * @param string        $url
-     * @param Environment   $environment
-     * @param KeyValueStore $keyValueStore
+     * @param HttpUrl        $url
+     * @param Environment    $environment
+     * @param DataPoolReader $dataPoolReader
      */
     function __construct(
-        $url,
+        HttpUrl $url,
         Environment $environment,
-        KeyValueStore $keyValueStore
+        DataPoolReader $dataPoolReader
     ) {
         $this->url = $url;
         $this->environment = $environment;
-        $this->keyValueStore = $keyValueStore;
+        $this->dataPoolReader = $dataPoolReader;
     }
 
 
@@ -55,12 +56,12 @@ class PageBuilder
         );
 
         // todo which format is the list?
-        $list = $this->keyValueStore->get($listKey);
+        $firstSnippet = $this->dataPoolReader->getSnippet($snippetKey);
 
-
+        $snippetList = $this->dataPoolReader->getSnippetList($listKey);
 
         $page = new Page();
-        $content = $this->keyValueStore->get($snippetKey);
+        $content = $this->dataPoolReader->get($snippetKey);
         $page->setBody($content);
         return $page;
     }
