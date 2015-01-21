@@ -57,7 +57,7 @@ class PageKeyGeneratorTest extends \PHPUnit_Framework_TestCase
     public function itShouldGenerateAKeyForSnippetListFromAnEnvironmentAndUrl()
     {
         $env = new VersionedEnvironment(DataVersion::fromVersionString('1'));
-        $url = 'http://example.com/product.html';
+        $url = HttpUrl::fromString('http://example.com/product.html');
 
         $this->assertEquals(
             '_product_html_1_l',
