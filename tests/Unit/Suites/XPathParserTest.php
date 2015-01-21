@@ -121,4 +121,23 @@ class XPathParserTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertSame('foo', $result[0]['value']);
 	}
+
+	/**
+	 * @test
+	 */
+	public function itShouldReturnArrayWithNestedXmlNodeRepresentation()
+	{
+		$xml = '<root><child>foo</child><child baz="qux">bar</child></root>';
+		$parser = new XPathParser($xml);
+		$result = $parser->getXmlNodesArrayByXPath('/root');
+
+		$expectation = [[
+			'attributes' => [], 'value' => [
+				['attributes' => [], 'value' => 'foo'],
+				['attributes' => ['baz' => 'qux'], 'value' => 'bar']
+			]
+		]];
+
+		$this->assertSame($expectation, $result);
+	}
 }

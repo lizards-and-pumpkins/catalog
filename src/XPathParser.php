@@ -62,11 +62,33 @@ class XPathParser
 		foreach ($nodeList as $node) {
 			$nodeArray[] = [
 				'attributes'    => $this->getNodeAttributesAsArray($node),
-				'value'         => $node->nodeValue
+				'value'         => $this->getXmlNodeValue($node)
 			];
 		}
 
 		return $nodeArray;
+	}
+
+	/**
+	 * @param \DOMNode $parent
+	 * @return string|array
+	 */
+	private function getXmlNodeValue(\DOMNode $parent)
+	{
+		if (!is_null($parent->firstChild) && XML_ELEMENT_NODE !== $parent->firstChild->nodeType) {
+			return $parent->nodeValue;
+		}
+
+		$value = [];
+
+		foreach ($parent->childNodes as $node) {
+			$value[] = [
+				'attributes'    => $this->getNodeAttributesAsArray($node),
+				'value'         => $this->getXmlNodeValue($node)
+			];
+		}
+
+		return $value;
 	}
 
 	/**
