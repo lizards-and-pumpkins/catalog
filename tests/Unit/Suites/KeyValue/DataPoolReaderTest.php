@@ -54,6 +54,9 @@ class DataPoolReaderTest extends AbstractDataPool
         );
     }
 
+    /**
+     * @return array
+     */
     public function snippetListProvider()
     {
         return [
@@ -106,7 +109,7 @@ class DataPoolReaderTest extends AbstractDataPool
      * @test
      * @expectedException \RuntimeException
      *
-     * @dataProvider brokenStringsProvider
+     * @dataProvider brokenKeyForSnippetListProvider
      */
     public function itShouldOnlyAcceptStringKeyForSnippetList($key)
     {
@@ -116,7 +119,7 @@ class DataPoolReaderTest extends AbstractDataPool
     /**
      * @return array
      */
-    public function brokenStringsProvider()
+    public function brokenKeyForSnippetListProvider()
     {
         return [
             array(new \stdClass()),
@@ -127,7 +130,7 @@ class DataPoolReaderTest extends AbstractDataPool
 
     }
 
-    public function brokenKeysProvider()
+    public function brokenKeysForSnippetsProvider()
     {
         return [
             array(new \stdClass()),
@@ -142,9 +145,9 @@ class DataPoolReaderTest extends AbstractDataPool
      *
      * @expectedException \RuntimeException
      *
-     * @dataProvider brokenKeysProvider
+     * @dataProvider brokenKeysForSnippetsProvider
      */
-    public function itShouldReturnMultipleSnippets($key)
+    public function itShouldOnlyAcceptStringKeysForGetSnippets($key)
     {
         $this->dataPoolReader->getSnippets($key);
     }
