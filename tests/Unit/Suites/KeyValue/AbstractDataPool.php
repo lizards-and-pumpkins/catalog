@@ -58,6 +58,16 @@ class AbstractDataPool extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param $returnValue
+     */
+    protected function addMultiGetMethodToStubKeyValueStore($returnValue)
+    {
+        $this->stubKeyValueStore->expects($this->once())
+            ->method('multiGet')
+            ->willReturn($returnValue);
+    }
+
+    /**
      * @param $returnResult
      */
     protected function addHasMethodToStubKeyValueStore($returnResult)
