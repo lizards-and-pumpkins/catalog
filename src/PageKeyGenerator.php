@@ -8,6 +8,18 @@ use Brera\Http\HttpUrl;
 
 class PageKeyGenerator
 {
+    /**
+     * @var Environment
+     */
+    private $environment;
+
+    /**
+     * @param Environment $environment
+     */
+    function __construct(Environment $environment)
+    {
+        $this->environment = $environment;
+    }
 
     /**
      * @todo logic needs to be implemented and overthink
@@ -16,36 +28,32 @@ class PageKeyGenerator
      * @todo done in this first snippet, so it can be just "empty" only containing one palceholder
      *
      * @param HttpUrl $url
-     * @param Environment $env
      *
      * @return string
      */
-    public function getKeyForPage(HttpUrl $url, Environment $env)
+    public function getKeyForPage(HttpUrl $url)
     {
-        // $path contains the starting /
-        return $this->getKey($url, $env);
+        return $this->getKey($url);
     }
 
     /**
      * @param HttpUrl $url
-     * @param Environment $env
      *
      * @return string
      */
-    public function getKeyForSnippetList(HttpUrl $url, Environment $env)
+    public function getKeyForSnippetList(HttpUrl $url)
     {
-        return $this->getKey($url, $env) . '_l';
+        return $this->getKey($url) . '_l';
     }
 
     /**
      * @param HttpUrl $url
-     * @param Environment $env
-     *
      * @return mixed|string
+     *
      */
-    private function getKey(HttpUrl $url, Environment $env)
+    private function getKey(HttpUrl $url)
     {
-        $key = $url->getPath() . '_' . $env->getVersion();
+        $key = $url->getPath() . '_' . $this->environment->getVersion();
         $key = preg_replace('#[^a-zA-Z0-9]#', '_', $key);
 
         return $key;

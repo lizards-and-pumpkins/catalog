@@ -34,6 +34,9 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private $pageKeyGenerator;
 
+    /**
+     *
+     */
     protected function setUp()
     {
         $this->url = HttpUrl::fromString('http://example.com/product.html');
@@ -45,7 +48,8 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
         $this->dataPoolReader = $this->getMockBuilder(DataPoolReader::class)
             ->disableOriginalConstructor()->getMock();
 
-        $this->pageKeyGenerator = $this->getMock(PageKeyGenerator::class);
+        $this->pageKeyGenerator = $this->getMockBuilder(PageKeyGenerator::class)
+            ->disableOriginalConstructor()->getMock();
         $this->pageKeyGenerator->expects($this->any())->method('getKeyForSnippetList')->willReturn('_product_html_1_l');
         $this->pageKeyGenerator->expects($this->any())->method('getKeyForPage')->willReturn('_product_html_1');
 

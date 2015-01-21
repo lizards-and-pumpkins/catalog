@@ -32,15 +32,15 @@ class PageBuilder
     /**
      * return Page
      * @param HttpUrl $url
-     * @param Environment $environment
+     *
      * @return Page
      */
-    public function buildPage(HttpUrl $url, Environment $environment)
+    public function buildPage(HttpUrl $url)
     {
-        $listKey = $this->keyGenerator->getKeyForSnippetList($url, $environment);
+        $listKey = $this->keyGenerator->getKeyForSnippetList($url);
 
         $childKeys = $this->replacePlaceholdersInKeys($this->dataPoolReader->getChildSnippetKeys($listKey));
-        $firstSnippetKey = $this->replacePlaceholdersInKeys($this->keyGenerator->getKeyForPage($url, $environment));
+        $firstSnippetKey = $this->replacePlaceholdersInKeys($this->keyGenerator->getKeyForPage($url));
 
         $allSnippets = $this->dataPoolReader->getSnippets($childKeys + [$firstSnippetKey => $firstSnippetKey]);
 

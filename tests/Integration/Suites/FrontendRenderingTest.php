@@ -25,10 +25,10 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
         $keyGenerator = new KeyValueStoreKeyGenerator();
         $dataPoolReader = new DataPoolReader($keyValueStore, $keyGenerator);
 
-        $pageKeyGenerator = new PageKeyGenerator();
+        $pageKeyGenerator = new PageKeyGenerator($environment);
 
         $pageBuilder = new PageBuilder($pageKeyGenerator, $dataPoolReader);
-        $page = $pageBuilder->buildPage($url, $environment);
+        $page = $pageBuilder->buildPage($url);
 
         // get the body and compare
         $body = $page->getBody();

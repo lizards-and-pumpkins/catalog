@@ -15,9 +15,15 @@ class PageKeyGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     private $pageKeyGenerator;
 
+    /**
+     *
+     */
     protected function setUp()
     {
-        $this->pageKeyGenerator = new PageKeyGenerator();
+        /** @var \PHPUnit_Framework_MockObject_MockObject|Environment $environment */
+        $environment = $this->getMock(Environment::class);
+        $environment->expects($this->any())->method('getVersion')->willReturn('1');
+        $this->pageKeyGenerator = new PageKeyGenerator($environment);
     }
 
     /**
