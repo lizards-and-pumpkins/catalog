@@ -23,7 +23,9 @@ class PageKeyGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnStrings()
     {
-        $env = new VersionedEnvironment(DataVersion::fromVersionString('1'));
+        $env = $this->getMock(VersionedEnvironment::class);
+        $env->expects($this->any())->method('getVersion')->willReturn('1');
+        
         $url = HttpUrl::fromString('http://example.com/product.html');
 
         $this->assertInternalType(
@@ -42,7 +44,9 @@ class PageKeyGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldGenerateAKeyForSnippetFromAnEnvironmentAndUrl()
     {
-        $env = new VersionedEnvironment(DataVersion::fromVersionString('1'));
+        $env = $this->getMock(VersionedEnvironment::class);
+        $env->expects($this->any())->method('getVersion')->willReturn('1');
+
         $url = HttpUrl::fromString('http://example.com/product.html');
 
         $this->assertEquals(
@@ -56,7 +60,9 @@ class PageKeyGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldGenerateAKeyForSnippetListFromAnEnvironmentAndUrl()
     {
-        $env = new VersionedEnvironment(DataVersion::fromVersionString('1'));
+        $env = $this->getMock(VersionedEnvironment::class);
+        $env->expects($this->any())->method('getVersion')->willReturn('1');
+
         $url = HttpUrl::fromString('http://example.com/product.html');
 
         $this->assertEquals(
