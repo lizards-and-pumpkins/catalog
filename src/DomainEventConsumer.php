@@ -45,7 +45,7 @@ class DomainEventConsumer
 				$domainEvent = $this->queue->next();
 				$this->processDomainEvent($domainEvent);
 			} catch (\Exception $e) {
-				$this->logger->error((new FailedToReadFromDomainEventQueueMessage($e))->getException()->getMessage());
+				$this->logger->error($e->getMessage(), [new FailedToReadFromDomainEventQueueMessage($e)]);
 			}
 		}
 	}
@@ -59,7 +59,7 @@ class DomainEventConsumer
 			$domainEventHandler = $this->handlerLocator->getHandlerFor($domainEvent);
 			$domainEventHandler->process();
 		} catch (\Exception $e) {
-			$this->logger->error((new DomainEventHandlerFailedMessage($domainEvent, $e))->getException()->getMessage());
+			$this->logger->error($e->getMessage(), [new DomainEventHandlerFailedMessage($domainEvent, $e)]);
 		}
 	}
 } 
