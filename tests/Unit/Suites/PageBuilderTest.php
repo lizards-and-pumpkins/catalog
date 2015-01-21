@@ -36,6 +36,8 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnAPage()
     {
+        $this->mockDataPoolReader('', [], []);
+
         $this->assertInstanceOf(Page::class, $this->pageBuilder->buildPage());
     }
 
@@ -45,13 +47,46 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
     public function itShouldGetFirstSnippet()
     {
         $pageContent = 'my page';
-
-        // TODO we should check here the key which is passed
-        $this->dataPoolReader->expects($this->any())->method('getSnippet')
-            ->willReturn($pageContent);
+        $this->mockDataPoolReader($pageContent, [], []);
 
         $page = $this->pageBuilder->buildPage();
         $this->assertEquals($pageContent, $page->getBody());
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReplacePlaceHolderWithoutEnvironmentVariables()
+    {
+        $pageContent = '<html><head>{{snippet head_placeholder}}</head><body>{{snippet body_placeholder}}</body></html>';
+        $this->mockDataPoolReader(
+            $pageContent,
+            ['head_placeholder', 'body_placeholder'],
+            [
+                'head_placeholder' => '<title>My Website!</title>',
+                'body_placeholder' => '<h1>My Website!</h1>'
+            ]
+        );
+
+        $rendererContent = '<html><head><title>My Website!</title></head><body><h1>My Website!</h1></body></html>';
+
+        $page = $this->pageBuilder->buildPage();
+        $this->assertEquals($rendererContent, $page->getBody());
+    }
+
+    /**
+     * @param string $pageContent
+     * @param array $snippetList
+     * @param array $snippets
+     */
+    private function mockDataPoolReader($pageContent, $snippetList, $snippets)
+    {
+        $this->dataPoolReader->expects($this->any())->method('getSnippet')
+            ->willReturn($pageContent);
+        $this->dataPoolReader->expects($this->any())->method('getSnippetList')
+            ->willReturn($snippetList);
+        $this->dataPoolReader->expects($this->any())->method('getSnippets')
+            ->willReturn($snippets);
     }
 
 }
