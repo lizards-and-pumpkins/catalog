@@ -97,8 +97,14 @@ class IntegrationTestFactory implements Factory
 	{
 		return new HardcodedProductDetailViewSnippetRenderer(
 			$this->getMasterFactory()->createSnippetResultList(),
-			$this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator()
+			$this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator(),
+			$this->getMasterFactory()->createLayoutReader()
 		);
+	}
+
+	public function createLayoutReader()
+	{
+		return new LayoutReader();
 	}
 
 	/**
