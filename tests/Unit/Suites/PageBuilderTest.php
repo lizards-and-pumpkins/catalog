@@ -47,7 +47,7 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
         $pageContent = 'my page';
 
         // TODO we should check here the key which is passed
-        $this->dataPoolReader->expects($this->any())->method('get')
+        $this->dataPoolReader->expects($this->any())->method('getSnippet')
             ->willReturn($pageContent);
 
         $page = $this->pageBuilder->buildPage();

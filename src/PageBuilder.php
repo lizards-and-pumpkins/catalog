@@ -23,8 +23,8 @@ class PageBuilder
     private $dataPoolReader;
 
     /**
-     * @param HttpUrl        $url
-     * @param Environment    $environment
+     * @param HttpUrl $url
+     * @param Environment $environment
      * @param DataPoolReader $dataPoolReader
      */
     function __construct(
@@ -55,14 +55,11 @@ class PageBuilder
             $this->url, $this->environment
         );
 
-        // todo which format is the list?
-        $firstSnippet = $this->dataPoolReader->getSnippet($snippetKey);
-
-        $snippetList = $this->dataPoolReader->getSnippetList($listKey);
+        $content = $this->dataPoolReader->getSnippet($snippetKey);
 
         $page = new Page();
-        $content = $this->dataPoolReader->get($snippetKey);
         $page->setBody($content);
+
         return $page;
     }
 }
