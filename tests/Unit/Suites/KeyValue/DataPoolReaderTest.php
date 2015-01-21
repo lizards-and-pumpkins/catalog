@@ -41,6 +41,65 @@ class DataPoolReaderTest extends AbstractDataPool
 
     /**
      * @test
+     *
+     * @dataProvider snippetListProvider
+     */
+    public function itShouldReturnASnippetList($keyValueStorageReturn, $expectedList)
+    {
+        $this->addGetMethodToStubKeyValueStore($keyValueStorageReturn);
+
+        $this->assertEquals(
+            $expectedList,
+            $this->dataPoolReader->getSnippetList('some_key')
+        );
+    }
+
+    public function snippetListProvider()
+    {
+        return [
+            array(
+                json_encode(false),
+                [],
+            ),
+            array(
+                '[]',
+                [],
+            ),
+            array(
+                '{}',
+                [],
+            ),
+            array(
+                json_encode(['test_key1', 'test_key2', 'some_key']),
+                ['test_key1', 'test_key2', 'some_key']
+            ),
+        ];
+    }
+
+    /**
+     * @test
+     * @expectedException \RuntimeException
+     *
+     * @dataProvider brokenJsonProvider
+     */
+    public function itShouldThrowAnExceptionOnBrokenJSON($keyValueStorageReturn)
+    {
+        $this->addGetMethodToStubKeyValueStore($keyValueStorageReturn);
+        $this->dataPoolReader->getSnippetList('some_key');
+    }
+
+    public function brokenJsonProvider()
+    {
+        return [
+            array(new \stdClass()),
+            array([]),
+            array('test'),
+            array(123),
+            array(123.23)
+        ];
+    }
+    /**
+     * @test
      */
     public function shouldReturnPoCProductHtmlBasedOnKeyFromKeyValueStorage()
     {
