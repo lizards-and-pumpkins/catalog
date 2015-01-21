@@ -77,7 +77,7 @@ class DataPoolReader
      * @param $key
      * @return array
      */
-    public function getSnippetList($key)
+    public function getChildSnippetKeys($key)
     {
         $this->checkForValidKey($key);
         $json = $this->keyValueStore->get($key);

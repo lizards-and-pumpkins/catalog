@@ -21,20 +21,37 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
      * @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
      */
     private $dataPoolReader;
+    /**
+     * @var Environment
+     */
+    private $environment;
+    /**
+     * @var HttpUrl
+     */
+    private $url;
+    /**
+     * @var PageKeyGenerator
+     */
+    private $pageKeyGenerator;
 
     protected function setUp()
     {
-        $url = HttpUrl::fromString('http://example.com/product.html');
+        $this->url = HttpUrl::fromString('http://example.com/product.html');
 
-        $environment = $this->getMock(Environment::class);
-        $environment->expects($this->any())->method('getVersion')
+        $this->environment = $this->getMock(Environment::class);
+        $this->environment->expects($this->any())->method('getVersion')
             ->willReturn('1');
 
         $this->dataPoolReader = $this->getMockBuilder(DataPoolReader::class)
             ->disableOriginalConstructor()->getMock();
 
+        $this->pageKeyGenerator = $this->getMock(PageKeyGenerator::class);
+        $this->pageKeyGenerator->expects($this->any())->method('getKeyForSnippetList')->willReturn('_product_html_1_l');
+        $this->pageKeyGenerator->expects($this->any())->method('getKeyForPage')->willReturn('_product_html_1');
+
         $this->pageBuilder = new PageBuilder(
-            $url, $environment, $this->dataPoolReader
+            $this->pageKeyGenerator,
+            $this->dataPoolReader
         );
     }
 
@@ -43,9 +60,9 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnAPage()
     {
-        $this->mockDataPoolReader('', [], []);
+        $this->mockDataPoolReader([], ['_product_html_1' => '']);
 
-        $this->assertInstanceOf(Page::class, $this->pageBuilder->buildPage());
+        $this->assertInstanceOf(Page::class, $this->pageBuilder->buildPage($this->url, $this->environment));
     }
 
     /**
@@ -53,44 +70,40 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldGetFirstSnippet()
     {
-        $pageContent = 'my page';
-        $this->mockDataPoolReader($pageContent, [], []);
+        $pageContent = 'my_page';
+        $this->mockDataPoolReader([], ['_product_html_1' => $pageContent]);
 
-        $page = $this->pageBuilder->buildPage();
+        $page = $this->pageBuilder->buildPage($this->url, $this->environment);
         $this->assertEquals($pageContent, $page->getBody());
     }
 
     /**
      * @test
      */
-    public function itShouldReplacePlaceHolderWithoutEnvironmentVariables()
+    public function itShouldReplacePlaceholderWithoutEnvironmentVariables()
     {
-        $pageContent = '<html><head>{{snippet head_placeholder}}</head><body>{{snippet body_placeholder}}</body></html>';
         $this->mockDataPoolReader(
-            $pageContent,
             ['head_placeholder', 'body_placeholder'],
             [
                 'head_placeholder' => '<title>My Website!</title>',
-                'body_placeholder' => '<h1>My Website!</h1>'
+                'body_placeholder' => '<h1>My Website!</h1>',
+                '_product_html_1' => '<html><head>{{snippet head_placeholder}}</head><body>{{snippet body_placeholder}}</body></html>',
             ]
         );
 
         $rendererContent = '<html><head><title>My Website!</title></head><body><h1>My Website!</h1></body></html>';
 
-        $page = $this->pageBuilder->buildPage();
+        $page = $this->pageBuilder->buildPage($this->url, $this->environment);
         $this->assertEquals($rendererContent, $page->getBody());
     }
 
     /**
-     * @param string $pageContent
      * @param array $snippetList
      * @param array $snippets
      */
-    private function mockDataPoolReader($pageContent, $snippetList, $snippets)
+    private function mockDataPoolReader($snippetList, $snippets)
     {
-        $this->dataPoolReader->expects($this->any())->method('getSnippet')
-            ->willReturn($pageContent);
-        $this->dataPoolReader->expects($this->any())->method('getSnippetList')
+        $this->dataPoolReader->expects($this->any())->method('getChildSnippetKeys')
             ->willReturn($snippetList);
         $this->dataPoolReader->expects($this->any())->method('getSnippets')
             ->willReturn($snippets);

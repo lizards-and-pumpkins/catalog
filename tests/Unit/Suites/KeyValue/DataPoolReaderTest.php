@@ -50,7 +50,7 @@ class DataPoolReaderTest extends AbstractDataPool
 
         $this->assertEquals(
             $expectedList,
-            $this->dataPoolReader->getSnippetList('some_key')
+            $this->dataPoolReader->getChildSnippetKeys('some_key')
         );
     }
 
@@ -88,7 +88,7 @@ class DataPoolReaderTest extends AbstractDataPool
     public function itShouldThrowAnExceptionOnBrokenJSON($keyValueStorageReturn)
     {
         $this->addGetMethodToStubKeyValueStore($keyValueStorageReturn);
-        $this->dataPoolReader->getSnippetList('some_key');
+        $this->dataPoolReader->getChildSnippetKeys('some_key');
     }
 
     /**
@@ -113,7 +113,7 @@ class DataPoolReaderTest extends AbstractDataPool
      */
     public function itShouldOnlyAcceptStringKeyForSnippetList($key)
     {
-        $this->dataPoolReader->getSnippetList($key);
+        $this->dataPoolReader->getChildSnippetKeys($key);
     }
 
     /**

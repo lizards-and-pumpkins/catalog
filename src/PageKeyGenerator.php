@@ -20,7 +20,7 @@ class PageKeyGenerator
      *
      * @return string
      */
-    public function getKeyForSnippet(HttpUrl $url, Environment $env)
+    public function getKeyForPage(HttpUrl $url, Environment $env)
     {
         // $path contains the starting /
         return $this->getKey($url, $env);
@@ -38,15 +38,14 @@ class PageKeyGenerator
     }
 
     /**
-     * @param             $url
+     * @param HttpUrl $url
      * @param Environment $env
      *
      * @return mixed|string
      */
-    private function getKey($url, Environment $env)
+    private function getKey(HttpUrl $url, Environment $env)
     {
-        $path = parse_url($url, PHP_URL_PATH);
-        $key = $path . '_' . $env->getVersion();
+        $key = $url->getPath() . '_' . $env->getVersion();
         $key = preg_replace('#[^a-zA-Z0-9]#', '_', $key);
 
         return $key;

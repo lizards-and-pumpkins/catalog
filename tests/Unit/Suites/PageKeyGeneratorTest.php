@@ -33,7 +33,7 @@ class PageKeyGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInternalType(
             'string',
-            $this->pageKeyGenerator->getKeyForSnippet($url, $env)
+            $this->pageKeyGenerator->getKeyForPage($url, $env)
         );
 
         $this->assertInternalType(
@@ -55,7 +55,7 @@ class PageKeyGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             '_product_html_1',
-            $this->pageKeyGenerator->getKeyForSnippet($url, $env)
+            $this->pageKeyGenerator->getKeyForPage($url, $env)
         );
     }
 
