@@ -88,6 +88,9 @@ class DataPoolReaderTest extends AbstractDataPool
         $this->dataPoolReader->getSnippetList('some_key');
     }
 
+    /**
+     * @return array
+     */
     public function brokenJsonProvider()
     {
         return [
@@ -98,6 +101,33 @@ class DataPoolReaderTest extends AbstractDataPool
             array(123.23)
         ];
     }
+
+    /**
+     * @test
+     * @expectedException \RuntimeException
+     *
+     * @dataProvider brokenStringsProvider
+     */
+    public function itShouldOnlyAcceptStringKeyForSnippetList($keyValueStorageReturn)
+    {
+        $this->addGetMethodToStubKeyValueStore($keyValueStorageReturn);
+        $this->dataPoolReader->getSnippetList('some_key');
+    }
+
+    /**
+     * @return array
+     */
+    public function brokenStringsProvider()
+    {
+        return [
+            array(new \stdClass()),
+            array([]),
+            array(123),
+            array(123.23)
+        ];
+    }
+
+
     /**
      * @test
      */
