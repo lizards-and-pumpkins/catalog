@@ -74,20 +74,61 @@ class DataPoolReader
     }
 
     /**
-     * This method CAN check for
-     *
      * @param $key
-     * @return array|mixed
+     * @return array
      */
     public function getSnippetList($key)
+    {
+        $this->checkForValidKey($key);
+        $json = $this->keyValueStore->get($key);
+        $this->checkForValidJson($key, $json);
+        $list = $this->jsonDecode($key, $json);
+
+        return $list;
+    }
+
+    public function getSnippets($keys)
+    {
+        if (!is_array($keys)) {
+            throw new \RuntimeException(
+                sprintf('multiGet needs an array to operated on, your keys is of type %s.', gettype($keys))
+            );
+        }
+        foreach ($keys as $key) {
+            $this->checkForValidKey($key);
+        }
+
+        return $this->keyValueStore->multiGet($keys);
+    }
+
+    /**
+     * @param $key
+     */
+    private function checkForValidKey($key)
     {
         if (!is_string($key)) {
             throw new RuntimeException('Key is not of type string.');
         }
-        $json = $this->keyValueStore->get($key);
+    }
+
+    /**
+     * @param $key
+     * @param $json
+     */
+    private function checkForValidJson($key, $json)
+    {
         if (!is_string($json)) {
             throw new RuntimeException(sprintf('List for key "%s" is no valid JSON - it is not even a string.', $key));
         }
+    }
+
+    /**
+     * @param $key
+     * @param $json
+     * @return array
+     */
+    private function jsonDecode($key, $json)
+    {
         $list = json_decode($json, true);
 
         if ($list === false) {
@@ -99,4 +140,5 @@ class DataPoolReader
 
         return $list;
     }
+
 }

@@ -108,10 +108,9 @@ class DataPoolReaderTest extends AbstractDataPool
      *
      * @dataProvider brokenStringsProvider
      */
-    public function itShouldOnlyAcceptStringKeyForSnippetList($keyValueStorageReturn)
+    public function itShouldOnlyAcceptStringKeyForSnippetList($key)
     {
-        $this->addGetMethodToStubKeyValueStore($keyValueStorageReturn);
-        $this->dataPoolReader->getSnippetList('some_key');
+        $this->dataPoolReader->getSnippetList($key);
     }
 
     /**
@@ -121,12 +120,34 @@ class DataPoolReaderTest extends AbstractDataPool
     {
         return [
             array(new \stdClass()),
-            array([]),
             array(123),
-            array(123.23)
+            array(123.23),
+            array([]),
+        ];
+
+    }
+
+    public function brokenKeysProvider()
+    {
+        return [
+            array(new \stdClass()),
+            array(123),
+            array(123.23),
+            array('string'),
         ];
     }
 
+    /**
+     * @test
+     *
+     * @expectedException \RuntimeException
+     *
+     * @dataProvider brokenKeysProvider
+     */
+    public function itShouldReturnMultipleSnippets($key)
+    {
+        $this->dataPoolReader->getSnippets($key);
+    }
 
     /**
      * @test
