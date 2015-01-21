@@ -15,7 +15,7 @@ class PageKeyGenerator
      * @todo I like the idea to only add the version and everything else can be
      * @todo done in this first snippet, so it can be just "empty" only containing one palceholder
      *
-     * @param HttpUrl     $url
+     * @param HttpUrl $url
      * @param Environment $env
      *
      * @return string
@@ -27,7 +27,7 @@ class PageKeyGenerator
     }
 
     /**
-     * @param HttpUrl     $url
+     * @param HttpUrl $url
      * @param Environment $env
      *
      * @return string
@@ -46,8 +46,9 @@ class PageKeyGenerator
     private function getKey($url, Environment $env)
     {
         $path = parse_url($url, PHP_URL_PATH);
-        $key = preg_replace('#[^a-zA-Z0-9]#', '_', $path);
-        $key .= '_' . $env->getVersion();
+        $key = $path . '_' . $env->getVersion();
+        $key = preg_replace('#[^a-zA-Z0-9]#', '_', $key);
+
         return $key;
     }
 }
