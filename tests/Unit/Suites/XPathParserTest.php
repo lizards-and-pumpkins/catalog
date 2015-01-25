@@ -152,4 +152,23 @@ class XPathParserTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertSame($expectation, $result);
 	}
+
+	/**
+	 * @test
+	 */
+	public function itShouldRemoveCommentNodesFromDom()
+	{
+		$xml = '<root><!-- comment1 --><child>foo</child><!-- comment2 --><child baz="qux">bar</child></root>';
+		$parser = new XPathParser($xml);
+		$result = $parser->getXmlNodesArrayByXPath('/root');
+
+		$expectation = [[
+			'name' => 'root', 'attributes' => [], 'value' => [
+				['name' => 'child', 'attributes' => [], 'value' => 'foo'],
+				['name' => 'child', 'attributes' => ['baz' => 'qux'], 'value' => 'bar']
+			]
+		]];
+
+		$this->assertSame($expectation, $result);
+	}
 }

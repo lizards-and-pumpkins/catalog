@@ -44,6 +44,8 @@ class XPathParser
 
 		$this->xPathEngine = new \DOMXPath($this->document);
 
+		$this->removeCommentNodes();
+
 		if ($namespaceUri = $this->getNamespaceUri()) {
 			$this->xPathEngine->registerNamespace($this->namespacePrefixDefault, $namespaceUri);
 			$this->namespacePrefix = $this->namespacePrefixDefault;
@@ -161,5 +163,15 @@ class XPathParser
 		}
 
 		return $attributeArray;
+	}
+
+	/**
+	 * @return null
+	 */
+	private function removeCommentNodes()
+	{
+		foreach ($this->xPathEngine->query('//comment()') as $comment) {
+			$comment->parentNode->removeChild($comment);
+		}
 	}
 }
