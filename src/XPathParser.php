@@ -58,41 +58,35 @@ class XPathParser
 	 */
 	public function getXmlNodesArrayByXPath($xPath)
 	{
-		$nodeArray = [];
 		$nodeList = $this->getDomNodeListByXPath($xPath);
 
+		return $this->getDomTreeAsArray($nodeList);
+	}
+
+	/**
+	 * @param \DOMNodeList $nodeList
+	 * @return array
+	 */
+	private function getDomTreeAsArray(\DOMNodeList $nodeList)
+	{
+		$nodeArray = [];
+
 		foreach ($nodeList as $node) {
+
+			$value = $node->nodeValue;
+
+			if (is_a($node->firstChild, '\DOMNode') && XML_ELEMENT_NODE === $node->firstChild->nodeType) {
+				$value = $this->getDomTreeAsArray($node->childNodes);
+			}
+
 			$nodeArray[] = [
 				'name'          => $node->nodeName,
 				'attributes'    => $this->getNodeAttributesAsArray($node),
-				'value'         => $this->getXmlNodeValue($node)
+				'value'         => $value
 			];
 		}
 
 		return $nodeArray;
-	}
-
-	/**
-	 * @param \DOMNode $parent
-	 * @return string|array
-	 */
-	private function getXmlNodeValue(\DOMNode $parent)
-	{
-		if (!is_null($parent->firstChild) && XML_ELEMENT_NODE !== $parent->firstChild->nodeType) {
-			return $parent->nodeValue;
-		}
-
-		$value = [];
-
-		foreach ($parent->childNodes as $node) {
-			$value[] = [
-				'name'          => $node->nodeName,
-				'attributes'    => $this->getNodeAttributesAsArray($node),
-				'value'         => $this->getXmlNodeValue($node)
-			];
-		}
-
-		return $value;
 	}
 
 	/**
