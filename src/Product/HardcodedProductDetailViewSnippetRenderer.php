@@ -2,18 +2,21 @@
 
 namespace Brera\Product;
 
-use Brera\SnippetRenderer;
+use Brera\Renderer\BlockSnippetRenderer;
 use Brera\SnippetResultList;
 use Brera\ProjectionSourceData;
 use Brera\Environment;
 use Brera\SnippetResult;
 
-class HardcodedProductDetailViewSnippetRenderer implements SnippetRenderer
+class HardcodedProductDetailViewSnippetRenderer extends BlockSnippetRenderer
 {
+	const LAYOUT_HANDLE = 'product_details_page';
+
 	/**
 	 * @var SnippetResultList
 	 */
 	private $resultList;
+
 	/**
 	 * @var HardcodedProductDetailViewSnippetKeyGenerator
 	 */
@@ -43,37 +46,13 @@ class HardcodedProductDetailViewSnippetRenderer implements SnippetRenderer
 			throw new InvalidArgumentException('First argument must be instance of Product.');
 		}
 
-		return $this->renderProduct($product, $environment);
-	}
+		$snippetContent = $this->getSnippetContent('theme/layout/' . self::LAYOUT_HANDLE . '.xml', $product);
+		$snippetKey = $this->getKey($product->getId(), $environment);
 
-	/**
-	 * @param Product $product
-	 * @param Environment $environment
-	 * @return SnippetResultList
-	 */
-	private function renderProduct(Product $product, Environment $environment)
-	{
-		$snippet = SnippetResult::create(
-			$this->getKey($product->getId(), $environment),
-			$this->getContent($product, $environment)
-		);
+		$snippet = SnippetResult::create($snippetKey, $snippetContent);
 		$this->resultList->add($snippet);
 
 		return $this->resultList;
-	}
-
-	/**
-	 * @param Product $product
-	 * @param Environment $environment
-	 * @return string
-	 */
-	private function getContent(Product $product, Environment $environment)
-	{
-		return sprintf(
-			'<div>%s (%s)</div>',
-			htmlentities($product->getAttributeValue('name')),
-			$product->getId()
-		);
 	}
 
 	/**

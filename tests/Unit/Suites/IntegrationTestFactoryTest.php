@@ -96,14 +96,4 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertInstanceOf(DomainEventHandlerLocator::class, $result);
 	}
-
-	/**
-	 * @test
-	 */
-	public function itShouldReturnLayoutReader()
-	{
-		$result = $this->factory->createLayoutReader();
-
-		$this->assertInstanceOf(LayoutReader::class, $result);
-	}
 }

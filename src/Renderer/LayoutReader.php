@@ -1,14 +1,14 @@
 <?php
 
-namespace Brera;
+namespace Brera\Renderer;
 
-use DoctrineTest\InstantiatorTestAsset\XMLReaderAsset;
+use Brera\XPathParser;
 
 class LayoutReader
 {
     /**
      * @param string $layoutXmlFilePath
-     * @return array
+     * @return Layout
      */
     public function loadLayoutFromXmlFile($layoutXmlFilePath)
     {
@@ -18,8 +18,8 @@ class LayoutReader
 
         $layoutXml = file_get_contents($layoutXmlFilePath);
         $parser = new XPathParser($layoutXml);
-        $layout = $parser->getXmlNodesArrayByXPath('/*');
+        $layoutArray = $parser->getXmlNodesArrayByXPath('/*');
 
-        return $layout;
+        return Layout::fromArray($layoutArray);
     }
 }

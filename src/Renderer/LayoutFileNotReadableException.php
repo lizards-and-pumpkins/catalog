@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera;
+namespace Brera\Renderer;
 
 class LayoutFileNotReadableException extends \RuntimeException
 {

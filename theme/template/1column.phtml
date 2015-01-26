@@ -1,1 +1,7 @@
-Hi, I'm a 1 column template!
+<?php
+/**
+ * @var \Brera\Product\Block\ProductDetailsPage $this
+ */
+?>
+- Hi, I'm a 1 column template of <?php echo $this->getProduct()->getAttributeValue('name') ?> (<?php echo $this->getProduct()->getId() ?>) product!<br/>
+<?php echo $this->getChildBlock('image_gallery') ?>

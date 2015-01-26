@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <!-- TODO: Add XSD -->
 <snippet name="product_details_page">
-    <block name="product_details_page" class="\Brera\....\Block\ProductDetailsRage" template="1column.phtml">
-        <block name="header" class="\Brera\....\Block\Header"  template="..." />
+    <block name="product_details_page" class="\Brera\Product\Block\ProductDetailsPage" template="theme/template/1column.phtml">
+        <!--block name="header" class="\Brera\....\Block\Header"  template="..." />
         <block name="global_messages" class="\Brera\....\Block\Messages" template="..." />
-        <block name="breadcrumbs" class="\Brera\....\Block\Breadcrumbs" template="..." />
-        <block name="image_gallery" class="\Brera\....\Block\ImageGallery" template="..." />
-        <block name="share_buttons" class="\Brera\....\Block\SocialMediaShareButtons" template="..." />
+        <block name="breadcrumbs" class="\Brera\....\Block\Breadcrumbs" template="..." /-->
+        <block name="image_gallery" class="\Brera\Product\Block\ProductImageGallery" template="theme/template/gallery.phtml" />
+        <!--block name="share_buttons" class="\Brera\....\Block\SocialMediaShareButtons" template="..." />
         <block name="availability_options_price" class="\Brera\....\Block\PriceOptions" template="..." />
-        <block name="footer" class="\Brera\....\Block\Footer" template="..." />
+        <block name="footer" class="\Brera\....\Block\Footer" template="..." /-->
     </block>
 </snippet>
