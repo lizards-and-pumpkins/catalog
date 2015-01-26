@@ -9,7 +9,7 @@
         blocks into it
 
         -->
-        <product_details_page renderer="Brera\Renderer\PoCProductRenderer" layout="product-details-page.xml" />
+        <snippet name="product_details_page" renderer="\Brera\Product\HardcodedProductDetailViewSnippetRenderer" layout="product-details-page.xml" />
 
         <!--
 
