@@ -62,7 +62,7 @@ abstract class BlockSnippetRenderer implements SnippetRenderer
         /** @var Block $blockInstance */
         $blockInstance = new $blockClass($layout, $dataObject);
 
-        if (!is_subclass_of($blockInstance, $this::PARENT_CLASS)) {
+        if (!is_a($blockInstance, $this::PARENT_CLASS)) {
             throw new CanNotInstantiateBlockException(sprintf('%s must extend %s', $blockClass, $this::PARENT_CLASS));
         }
 

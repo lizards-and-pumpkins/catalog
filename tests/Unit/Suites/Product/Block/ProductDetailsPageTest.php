@@ -49,18 +49,9 @@ class ProductDetailsPageTest extends \PHPUnit_Framework_TestCase
             ->with('template')
             ->willReturn('theme/template/1column.phtml');
 
-        $this->stubProduct->expects($this->once())
-            ->method('getId')
-            ->willReturn('test-123');
-
-        $this->stubProduct->expects($this->once())
-            ->method('getAttributeValue')
-            ->with('name')
-            ->willReturn('Test Name');
-
         $result = $this->productDetailsPageBlock->render();
 
-        $this->assertEquals("- Hi, I'm a 1 column template of Test Name (test-123) product!<br/>\n", $result);
+        $this->assertEquals("- Hi, I'm a 1 column template!<br/>\n", $result);
     }
 
     /**
@@ -81,5 +72,15 @@ class ProductDetailsPageTest extends \PHPUnit_Framework_TestCase
         $result = $this->productDetailsPageBlock->getChildBlock('foo');
 
         $this->assertEquals("- And I'm a gallery template.\n", $result);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnProductInstance()
+    {
+        $result = $this->productDetailsPageBlock->getProduct();
+
+        $this->assertInstanceOf(Product::class, $result);
     }
 }

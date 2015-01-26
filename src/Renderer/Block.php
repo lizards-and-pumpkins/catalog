@@ -4,7 +4,7 @@ namespace Brera\Renderer;
 
 use Brera\ProjectionSourceData;
 
-abstract class Block
+class Block
 {
     /**
      * @var Layout
@@ -46,7 +46,7 @@ abstract class Block
 
     /**
      * @param $blockName
-     * @return Block
+     * @return string
      */
     public function getChildBlock($blockName)
     {

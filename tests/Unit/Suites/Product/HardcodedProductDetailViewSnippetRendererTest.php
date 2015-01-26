@@ -137,7 +137,15 @@ class HardcodedProductDetailViewSnippetRendererTest	extends \PHPUnit_Framework_T
 		$this->snippetRenderer->render($stubProduct, $this->stubEnvironment);
 
 		/** @var $transport SnippetResult */
-		$expected = "- Hi, I'm a 1 column template of Test Name (test-123) product!<br/>\n- And I'm a gallery template.\n";
+		$expected = <<<EOT
+- Hi, I'm a 1 column template!<br/>
+Product details page content
+
+Test Name (test-123)
+
+- And I'm a gallery template.
+
+EOT;
 		$this->assertEquals($expected, $transport->getContent());
 	}
 
