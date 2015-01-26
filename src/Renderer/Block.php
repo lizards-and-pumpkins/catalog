@@ -23,14 +23,19 @@ class Block
 
     /**
      * @return string
+     * @throws TemplateFileNotReadableException
      */
     public final function render()
     {
-        /* TODO: Check template file exists and is readable */
+        $templatePath = realpath($this->layout->getAttribute('template'));
+
+        if (!is_readable($templatePath) || is_dir($templatePath)) {
+            throw new TemplateFileNotReadableException();
+        }
 
         ob_start();
 
-        include $this->layout->getAttribute('template');
+        include $templatePath;
 
         return ob_get_clean();
     }
