@@ -85,7 +85,7 @@ class Layout
      * @throws RootElementOfLayoutMustBeAnArrayException
      * @return mixed
      */
-    private function getRootElement(array $layout)
+    private static function getRootElement(array $layout)
     {
         $rootElement = array_shift($layout);
 
