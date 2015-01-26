@@ -56,7 +56,7 @@ abstract class BlockSnippetRenderer implements SnippetRenderer
         }
 
         if (!class_exists($blockClass)) {
-            throw new CanNotInstantiateBlockException(sprintf('Class %s does not exist.'));
+            throw new CanNotInstantiateBlockException(sprintf('Class %s does not exist.', $blockClass));
         }
 
         /** @var Block $blockInstance */
