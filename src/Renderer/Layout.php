@@ -10,7 +10,7 @@ class Layout
     private $nodeName;
 
     /**
-     * @var array
+     * @var string[]
      */
     private $nodeAttributes;
 
