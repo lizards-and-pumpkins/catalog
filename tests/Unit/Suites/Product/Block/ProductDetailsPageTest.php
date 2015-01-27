@@ -3,7 +3,6 @@
 namespace Brera\Product\Block;
 
 use Brera\Product\Product;
-use Brera\Renderer\Layout;
 
 /**
  * @covers \Brera\Product\Block\ProductDetailsPage
@@ -12,31 +11,15 @@ use Brera\Renderer\Layout;
 class ProductDetailsPageTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ProductDetailsPage
-     */
-    private $productDetailsPageBlock;
-
-    /**
-     * @var Layout|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubLayout;
-
-    /**
      * @var Product|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubProduct;
 
     protected function setUp()
     {
-        $this->stubLayout = $this->getMockBuilder(Layout::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->stubProduct = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->productDetailsPageBlock = new ProductDetailsPage($this->stubLayout, $this->stubProduct);
     }
 
     /**
@@ -44,12 +27,8 @@ class ProductDetailsPageTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnBlockOutput()
     {
-        $this->stubLayout->expects($this->once())
-            ->method('getAttribute')
-            ->with('template')
-            ->willReturn('theme/template/1column.phtml');
-
-        $result = $this->productDetailsPageBlock->render();
+        $productDetailsPageBlock = new ProductDetailsPage('theme/template/1column.phtml', $this->stubProduct);
+        $result = $productDetailsPageBlock->render();
 
         $this->assertEquals("- Hi, I'm a 1 column template!<br/>\n", $result);
     }
@@ -59,17 +38,11 @@ class ProductDetailsPageTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldAddChildBlockAndRenderItsContent()
     {
-        $stubChildBlockLayout = $this->getMockBuilder(Layout::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $stubChildBlockLayout->expects($this->any())
-            ->method('getAttribute')
-            ->willReturnMap([['name', 'foo'], ['template', 'theme/template/gallery.phtml']]);
+        $childBlock = new ProductImageGallery('theme/template/gallery.phtml', $this->stubProduct);
+        $productDetailsPageBlock = new ProductDetailsPage('theme/template/1column.phtml', $this->stubProduct);
+        $productDetailsPageBlock->addChildBlock('foo', $childBlock);
 
-        $childBlock = new ProductImageGallery($stubChildBlockLayout, $this->stubProduct);
-        $this->productDetailsPageBlock->addChildBlock($childBlock);
-
-        $result = $this->productDetailsPageBlock->getChildBlock('foo');
+        $result = $productDetailsPageBlock->getChildBlock('foo');
 
         $this->assertEquals("- And I'm a gallery template.\n", $result);
     }
@@ -79,7 +52,8 @@ class ProductDetailsPageTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnProductInstance()
     {
-        $result = $this->productDetailsPageBlock->getProduct();
+        $productDetailsPageBlock = new ProductDetailsPage('foo.phtml', $this->stubProduct);
+        $result = $productDetailsPageBlock->getProduct();
 
         $this->assertInstanceOf(Product::class, $result);
     }

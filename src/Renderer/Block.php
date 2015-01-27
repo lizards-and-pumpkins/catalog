@@ -7,18 +7,18 @@ use Brera\ProjectionSourceData;
 class Block
 {
     /**
-     * @var Layout
+     * @var string
      */
-    private $layout;
+    private $template;
 
     /**
      * @var Block[]
      */
     private $children = [];
 
-    public function __construct(Layout $layout, ProjectionSourceData $dataObject)
+    public function __construct($template, ProjectionSourceData $dataObject)
     {
-        $this->layout = $layout;
+        $this->template = $template;
     }
 
     /**
@@ -27,7 +27,7 @@ class Block
      */
     public final function render()
     {
-        $templatePath = realpath($this->layout->getAttribute('template'));
+        $templatePath = realpath($this->template);
 
         if (!is_readable($templatePath) || is_dir($templatePath)) {
             throw new TemplateFileNotReadableException();
@@ -41,12 +41,13 @@ class Block
     }
 
     /**
+     * @param string $blockNameInLayout
      * @param Block $block
      * @return null
      */
-    public function addChildBlock(Block $block)
+    public function addChildBlock($blockNameInLayout, Block $block)
     {
-        $this->children[$block->layout->getAttribute('name')] = $block;
+        $this->children[$blockNameInLayout] = $block;
     }
 
     /**

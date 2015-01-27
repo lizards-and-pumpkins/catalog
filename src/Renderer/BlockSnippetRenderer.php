@@ -59,8 +59,9 @@ abstract class BlockSnippetRenderer implements SnippetRenderer
             throw new CanNotInstantiateBlockException(sprintf('Class %s does not exist.', $blockClass));
         }
 
+        $blockTemplate = $layout->getAttribute('template');
         /** @var Block $blockInstance */
-        $blockInstance = new $blockClass($layout, $dataObject);
+        $blockInstance = new $blockClass($blockTemplate, $dataObject);
 
         if (!is_a($blockInstance, $this::PARENT_CLASS)) {
             throw new CanNotInstantiateBlockException(sprintf('%s must extend %s', $blockClass, $this::PARENT_CLASS));
@@ -69,8 +70,12 @@ abstract class BlockSnippetRenderer implements SnippetRenderer
         $children = $layout->getPayload();
 
         if (is_array($children)) {
+            /** @var Layout $childBlockLayout */
             foreach ($children as $childBlockLayout) {
-                $blockInstance->addChildBlock($this->createBlock($childBlockLayout, $dataObject));
+                $childBlockNameInLayout = $childBlockLayout->getAttribute('name');
+                $childBlockInstance = $this->createBlock($childBlockLayout, $dataObject);
+
+                $blockInstance->addChildBlock($childBlockNameInLayout, $childBlockInstance);
             }
         }
 

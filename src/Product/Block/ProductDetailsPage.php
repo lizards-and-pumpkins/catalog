@@ -5,7 +5,6 @@ namespace Brera\Product\Block;
 use Brera\Product\Product;
 use Brera\ProjectionSourceData;
 use Brera\Renderer\Block;
-use Brera\Renderer\Layout;
 
 class ProductDetailsPage extends Block
 {
@@ -14,9 +13,9 @@ class ProductDetailsPage extends Block
      */
     private $product;
 
-    public function __construct(Layout $layout, ProjectionSourceData $product)
+    public function __construct($template, ProjectionSourceData $product)
     {
-        parent::__construct($layout, $product);
+        parent::__construct($template, $product);
 
         $this->product = $product;
     }
