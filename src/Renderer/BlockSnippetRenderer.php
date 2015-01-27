@@ -7,8 +7,6 @@ use Brera\SnippetRenderer;
 
 abstract class BlockSnippetRenderer implements SnippetRenderer
 {
-    const PARENT_CLASS = '\Brera\Renderer\Block';
-
     /**
      * @param string $layoutXmlFilePath
      * @param ProjectionSourceData $dataObject
@@ -45,27 +43,16 @@ abstract class BlockSnippetRenderer implements SnippetRenderer
      * @param Layout $layout
      * @param ProjectionSourceData $dataObject
      * @return Block
-     * @throws CanNotInstantiateBlockException
      */
     private function createBlock(Layout $layout, ProjectionSourceData $dataObject)
     {
         $blockClass = $layout->getAttribute('class');
-
-        if (is_null($blockClass)) {
-            throw new CanNotInstantiateBlockException('Block class is not specified.');
-        }
-
-        if (!class_exists($blockClass)) {
-            throw new CanNotInstantiateBlockException(sprintf('Class %s does not exist.', $blockClass));
-        }
-
         $blockTemplate = $layout->getAttribute('template');
+
+        $this->validateBlockClass($blockClass);
+
         /** @var Block $blockInstance */
         $blockInstance = new $blockClass($blockTemplate, $dataObject);
-
-        if (!is_a($blockInstance, $this::PARENT_CLASS)) {
-            throw new CanNotInstantiateBlockException(sprintf('%s must extend %s', $blockClass, $this::PARENT_CLASS));
-        }
 
         $children = $layout->getPayload();
 
@@ -80,5 +67,24 @@ abstract class BlockSnippetRenderer implements SnippetRenderer
         }
 
         return $blockInstance;
+    }
+
+    /**
+     * @param $blockClass
+     * @throws CanNotInstantiateBlockException
+     */
+    private function validateBlockClass($blockClass)
+    {
+        if (is_null($blockClass)) {
+            throw new CanNotInstantiateBlockException('Block class is not specified.');
+        }
+
+        if (!class_exists($blockClass)) {
+            throw new CanNotInstantiateBlockException(sprintf('Class %s does not exist.', $blockClass));
+        }
+
+        if ('\\' . Block::class !== $blockClass && !in_array(Block::class, class_parents($blockClass))) {
+            throw new CanNotInstantiateBlockException(sprintf('%s must extend %s', $blockClass, Block::class));
+        }
     }
 }
