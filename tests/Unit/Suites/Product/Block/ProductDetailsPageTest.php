@@ -42,7 +42,7 @@ class ProductDetailsPageTest extends \PHPUnit_Framework_TestCase
         $productDetailsPageBlock = new ProductDetailsPage('theme/template/1column.phtml', $this->stubProduct);
         $productDetailsPageBlock->addChildBlock('foo', $childBlock);
 
-        $result = $productDetailsPageBlock->getChildBlock('foo');
+        $result = $productDetailsPageBlock->getChildOutput('foo');
 
         $this->assertEquals("- And I'm a gallery template.\n", $result);
     }

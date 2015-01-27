@@ -54,7 +54,7 @@ class Layout
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getAttributes()
     {
@@ -63,7 +63,7 @@ class Layout
 
     /**
      * @param string $attributeCode
-     * @return mixed
+     * @return null|string
      */
     public function getAttribute($attributeCode)
     {

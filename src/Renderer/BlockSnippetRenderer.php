@@ -18,7 +18,7 @@ abstract class BlockSnippetRenderer implements SnippetRenderer
         $layout = $layoutReader->loadLayoutFromXmlFile($layoutXmlFilePath);
 
         $outermostBlockLayout = $this->getOuterMostBlockLayout($layout);
-        $outermostBlock = $this->createBlock($outermostBlockLayout, $dataObject);
+        $outermostBlock = $this->createBlockWithChildren($outermostBlockLayout, $dataObject);
 
         return $outermostBlock->render();
     }
@@ -44,7 +44,7 @@ abstract class BlockSnippetRenderer implements SnippetRenderer
      * @param ProjectionSourceData $dataObject
      * @return Block
      */
-    private function createBlock(Layout $layout, ProjectionSourceData $dataObject)
+    private function createBlockWithChildren(Layout $layout, ProjectionSourceData $dataObject)
     {
         $blockClass = $layout->getAttribute('class');
         $blockTemplate = $layout->getAttribute('template');
@@ -60,7 +60,7 @@ abstract class BlockSnippetRenderer implements SnippetRenderer
             /** @var Layout $childBlockLayout */
             foreach ($nodeValue as $childBlockLayout) {
                 $childBlockNameInLayout = $childBlockLayout->getAttribute('name');
-                $childBlockInstance = $this->createBlock($childBlockLayout, $dataObject);
+                $childBlockInstance = $this->createBlockWithChildren($childBlockLayout, $dataObject);
 
                 $blockInstance->addChildBlock($childBlockNameInLayout, $childBlockInstance);
             }
