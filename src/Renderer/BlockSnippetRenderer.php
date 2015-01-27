@@ -28,14 +28,14 @@ abstract class BlockSnippetRenderer implements SnippetRenderer
     /**
      * @param Layout $layout
      * @return Layout
-     * @throws SnippetShouldHaveJustOneRootBlockException
+     * @throws BlockSnippetRendererShouldHaveJustOneRootBlockException
      */
     private function getOuterMostBlockLayout(Layout $layout)
     {
         $snippetPayload = $layout->getPayload();
 
         if (!is_array($snippetPayload) || 1 !== count($snippetPayload)) {
-            throw new SnippetShouldHaveJustOneRootBlockException();
+            throw new BlockSnippetRendererShouldHaveJustOneRootBlockException();
         }
 
         return $snippetPayload[0];
