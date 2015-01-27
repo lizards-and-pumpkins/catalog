@@ -19,6 +19,16 @@ class LayoutReaderTest extends \PHPUnit_Framework_TestCase
         $this->layoutReader = new LayoutReader();
     }
 
+    protected function tearDown()
+    {
+        $filePath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'some-file-name.xml';
+
+        if (file_exists($filePath) && is_file($filePath)) {
+            chmod($filePath, '600');
+            unlink($filePath);
+        }
+    }
+
     /**
      * @test
      * @expectedException \Brera\Renderer\LayoutFileNotReadableException

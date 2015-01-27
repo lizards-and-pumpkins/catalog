@@ -9,6 +9,16 @@ use Brera\ProjectionSourceData;
  */
 class BlockTest extends \PHPUnit_Framework_TestCase
 {
+    protected function tearDown()
+    {
+        $filePath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'some-file-name.phtml';
+
+        if (file_exists($filePath) && is_file($filePath)) {
+            chmod($filePath, '600');
+            unlink($filePath);
+        }
+    }
+
     /**
      * @test
      * @expectedException \Brera\Renderer\TemplateFileNotReadableException
