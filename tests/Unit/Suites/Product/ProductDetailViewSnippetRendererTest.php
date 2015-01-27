@@ -10,7 +10,7 @@ use Brera\Environment;
 use Brera\SnippetResult;
 
 /**
- * @covers \Brera\Product\HardcodedProductDetailViewSnippetRenderer
+ * @covers \Brera\Product\ProductDetailViewSnippetRenderer
  * @covers \Brera\Renderer\BlockSnippetRenderer
  * @uses \Brera\SnippetResult
  * @uses \Brera\Product\HardcodedProductDetailViewSnippetKeyGenerator
@@ -20,10 +20,10 @@ use Brera\SnippetResult;
  * @uses \Brera\XPathParser
  * @uses \Brera\Renderer\Layout
  */
-class HardcodedProductDetailViewSnippetRendererTest	extends \PHPUnit_Framework_TestCase
+class ProductDetailViewSnippetRendererTest	extends \PHPUnit_Framework_TestCase
 {
 	/**
-	 * @var HardcodedProductDetailViewSnippetRenderer
+	 * @var ProductDetailViewSnippetRenderer
 	 */
 	private $snippetRenderer;
 
@@ -53,7 +53,7 @@ class HardcodedProductDetailViewSnippetRendererTest	extends \PHPUnit_Framework_T
 
 		$this->stubLayoutReader = $this->getMock(LayoutReader::class);
 
-		$this->snippetRenderer = new HardcodedProductDetailViewSnippetRenderer(
+		$this->snippetRenderer = new ProductDetailViewSnippetRenderer(
 			$this->stubSnippetResultList,
 			$stubKeyGenerator,
 			$this->stubLayoutReader

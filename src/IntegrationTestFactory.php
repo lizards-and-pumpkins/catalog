@@ -15,7 +15,7 @@ use Brera\KeyValue\DataPoolReader;
 use Brera\Product\ProductImportDomainEvent;
 use Brera\Product\ProductImportDomainEventHandler;
 use Brera\Product\ProductProjector;
-use Brera\Product\HardcodedProductDetailViewSnippetRenderer;
+use Brera\Product\ProductDetailViewSnippetRenderer;
 use Brera\Product\HardcodedProductDetailViewSnippetKeyGenerator;
 use Brera\Product\HardcodedProductSnippetRendererCollection;
 use Psr\Log\LoggerInterface;
@@ -91,11 +91,11 @@ class IntegrationTestFactory implements Factory
 	}
 
 	/**
-	 * @return HardcodedProductDetailViewSnippetRenderer
+	 * @return ProductDetailViewSnippetRenderer
 	 */
 	public function createProductDetailViewSnippetRenderer()
 	{
-		return new HardcodedProductDetailViewSnippetRenderer(
+		return new ProductDetailViewSnippetRenderer(
 			$this->getMasterFactory()->createSnippetResultList(),
 			$this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator()
 		);

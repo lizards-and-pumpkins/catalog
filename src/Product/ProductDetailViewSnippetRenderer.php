@@ -8,7 +8,7 @@ use Brera\ProjectionSourceData;
 use Brera\Environment;
 use Brera\SnippetResult;
 
-class HardcodedProductDetailViewSnippetRenderer extends BlockSnippetRenderer
+class ProductDetailViewSnippetRenderer extends BlockSnippetRenderer
 {
 	const LAYOUT_HANDLE = 'product_details_page';
 
