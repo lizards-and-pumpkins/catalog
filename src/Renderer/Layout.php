@@ -7,28 +7,30 @@ class Layout
     /**
      * @var string
      */
-    private $name;
+    private $nodeName;
 
     /**
      * @var array
      */
-    private $attributes;
+    private $nodeAttributes;
 
     /**
      * @var mixed
      */
-    private $payload;
+    private $nodeValue;
 
     /**
-     * @param string $name
-     * @param array $attributes
-     * @param mixed $payload
+     * @param $nodeName
+     * @param array $nodeAttributes
+     * @param mixed $nodeValue
+     * @internal param array $attributes
+     * @internal param string $name
      */
-    private function __construct($name, array $attributes, $payload)
+    private function __construct($nodeName, array $nodeAttributes, $nodeValue)
     {
-        $this->name = $name;
-        $this->attributes = $attributes;
-        $this->payload = $payload;
+        $this->nodeName = $nodeName;
+        $this->nodeAttributes = $nodeAttributes;
+        $this->nodeValue = $nodeValue;
     }
 
     /**
@@ -38,17 +40,17 @@ class Layout
     public static function fromArray(array $layoutArray)
     {
         $rootElement = self::getRootElement($layoutArray);
-        $layoutArray = array_merge(['name' => '', 'attributes' => [], 'value' => null], $rootElement);
+        $layoutArray = array_merge(['nodeName' => '', 'attributes' => [], 'value' => null], $rootElement);
 
-        return new self($layoutArray['name'], $layoutArray['attributes'], self::getValue($layoutArray['value']));
+        return new self($layoutArray['nodeName'], $layoutArray['attributes'], self::getValue($layoutArray['value']));
     }
 
     /**
      * @return string
      */
-    public function getName()
+    public function getNodeName()
     {
-        return $this->name;
+        return $this->nodeName;
     }
 
     /**
@@ -56,7 +58,7 @@ class Layout
      */
     public function getAttributes()
     {
-        return $this->attributes;
+        return $this->nodeAttributes;
     }
 
     /**
@@ -65,19 +67,19 @@ class Layout
      */
     public function getAttribute($attributeCode)
     {
-        if (!array_key_exists($attributeCode, $this->attributes)) {
+        if (!array_key_exists($attributeCode, $this->nodeAttributes)) {
             return null;
         }
 
-        return $this->attributes[$attributeCode];
+        return $this->nodeAttributes[$attributeCode];
     }
 
     /**
      * @return mixed
      */
-    public function getPayload()
+    public function getNodeValue()
     {
-        return $this->payload;
+        return $this->nodeValue;
     }
 
     /**
@@ -109,8 +111,8 @@ class Layout
         $values = [];
 
         foreach ($layout as $element) {
-            $element = array_merge(['name' => '', 'attributes' => [], 'value' => null], $element);
-            $values[] = new self($element['name'], $element['attributes'], self::getValue($element['value']));
+            $element = array_merge(['nodeName' => '', 'attributes' => [], 'value' => null], $element);
+            $values[] = new self($element['nodeName'], $element['attributes'], self::getValue($element['value']));
         }
 
         return $values;

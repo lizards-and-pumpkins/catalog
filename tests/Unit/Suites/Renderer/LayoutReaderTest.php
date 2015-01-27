@@ -58,11 +58,11 @@ class LayoutReaderTest extends \PHPUnit_Framework_TestCase
     {
         $snippetLayout = $this->layoutReader->loadLayoutFromXmlFile('theme/layout/product_details_snippet.xml');
         $snippetAttributes = $snippetLayout->getAttributes();
-        $topmostChildBlockLayoutArray = $snippetLayout->getPayload();
+        $topmostChildBlockLayoutArray = $snippetLayout->getNodeValue();
         $topmostChildBlockLayout = array_shift($topmostChildBlockLayoutArray);
         $topmostChildBlockAttributes = $topmostChildBlockLayout->getAttributes();
 
-        $this->assertEquals('snippet', $snippetLayout->getName());
+        $this->assertEquals('snippet', $snippetLayout->getNodeName());
         $this->assertEquals('product_details_snippet', $snippetAttributes['name']);
         $this->assertEquals('theme/template/1column.phtml', $topmostChildBlockAttributes['template']);
     }

@@ -30,13 +30,13 @@ abstract class BlockSnippetRenderer implements SnippetRenderer
      */
     private function getOuterMostBlockLayout(Layout $layout)
     {
-        $snippetPayload = $layout->getPayload();
+        $snippetNodeValue = $layout->getNodeValue();
 
-        if (!is_array($snippetPayload) || 1 !== count($snippetPayload)) {
+        if (!is_array($snippetNodeValue) || 1 !== count($snippetNodeValue)) {
             throw new BlockSnippetRendererShouldHaveJustOneRootBlockException();
         }
 
-        return $snippetPayload[0];
+        return $snippetNodeValue[0];
     }
 
     /**
@@ -54,11 +54,11 @@ abstract class BlockSnippetRenderer implements SnippetRenderer
         /** @var Block $blockInstance */
         $blockInstance = new $blockClass($blockTemplate, $dataObject);
 
-        $children = $layout->getPayload();
+        $nodeValue = $layout->getNodeValue();
 
-        if (is_array($children)) {
+        if (is_array($nodeValue)) {
             /** @var Layout $childBlockLayout */
-            foreach ($children as $childBlockLayout) {
+            foreach ($nodeValue as $childBlockLayout) {
                 $childBlockNameInLayout = $childBlockLayout->getAttribute('name');
                 $childBlockInstance = $this->createBlock($childBlockLayout, $dataObject);
 
