@@ -83,7 +83,7 @@ abstract class BlockSnippetRenderer implements SnippetRenderer
             throw new CanNotInstantiateBlockException(sprintf('Class %s does not exist.', $blockClass));
         }
 
-        if ('\\' . Block::class !== $blockClass && !in_array(Block::class, class_parents($blockClass))) {
+        if (Block::class !== $blockClass && !in_array(Block::class, class_parents($blockClass))) {
             throw new CanNotInstantiateBlockException(sprintf('%s must extend %s', $blockClass, Block::class));
         }
     }

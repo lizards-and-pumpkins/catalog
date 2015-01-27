@@ -9,7 +9,7 @@
         blocks into it
 
         -->
-        <snippet name="product_details_snippet" renderer="\Brera\Product\HardcodedProductDetailViewSnippetRenderer" layout="product-details-page.xml" />
+        <snippet name="product_details_snippet" renderer="Brera\Product\HardcodedProductDetailViewSnippetRenderer" layout="product-details-page.xml" />
 
         <!--
 
