@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- TODO: Add XSD -->
-<snippet name="product_details_page">
-    <block name="product_details_page" class="\Brera\Renderer\Block" template="theme/template/1column.phtml">
+<snippet name="product_details_snippet">
+    <block name="product_details_snippet" class="\Brera\Renderer\Block" template="theme/template/1column.phtml">
         <!--block name="header" class="\Brera\....\Block\Header"  template="..." />
         <block name="global_messages" class="\Brera\....\Block\Messages" template="..." />
         <block name="breadcrumbs" class="\Brera\....\Block\Breadcrumbs" template="..." /-->

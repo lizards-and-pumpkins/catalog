@@ -10,7 +10,7 @@ use Brera\SnippetResult;
 
 class ProductDetailViewSnippetRenderer extends BlockSnippetRenderer
 {
-	const LAYOUT_HANDLE = 'product_details_page';
+	const LAYOUT_HANDLE = 'product_details_snippet';
 
 	/**
 	 * @var SnippetResultList
