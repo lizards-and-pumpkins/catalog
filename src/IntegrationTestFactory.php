@@ -122,7 +122,10 @@ class IntegrationTestFactory implements Factory
 		/* TODO: Add mechanism to inject data version number to use */
 		$version = DataVersion::fromVersionString('1');
 
-		return new VersionedEnvironmentBuilder($version);
+		/* TODO: Read it from configuration file */
+		$themeDirectory = 'theme';
+
+		return new VersionedEnvironmentBuilder($version, $themeDirectory);
 	}
 
 	/**

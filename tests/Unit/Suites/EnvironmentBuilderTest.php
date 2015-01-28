@@ -14,10 +14,15 @@ class VersionedEnvironmentBuilderTest extends \PHPUnit_Framework_TestCase
 	 */
 	private $builder;
 
+	/**
+	 * @var string
+	 */
+	private $themeDirectory = 'foo';
+
 	public function setUp()
 	{
 		$version = DataVersion::fromVersionString('1');
-		$this->builder = new VersionedEnvironmentBuilder($version);
+		$this->builder = new VersionedEnvironmentBuilder($version, $this->themeDirectory);
 	}
 
 	/**
