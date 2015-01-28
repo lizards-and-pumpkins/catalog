@@ -92,6 +92,10 @@ class ProductDetailViewSnippetRendererTest	extends \PHPUnit_Framework_TestCase
 	{
 		$stubProduct = $this->getStubProduct();
 
+		$this->stubEnvironment->expects($this->once())
+			->method('getThemeDirectory')
+			->willReturn('theme');
+
 		$result = $this->snippetRenderer->render($stubProduct, $this->stubEnvironment);
 		$this->assertSame($this->stubSnippetResultList, $result);
 	}
@@ -106,6 +110,10 @@ class ProductDetailViewSnippetRendererTest	extends \PHPUnit_Framework_TestCase
 		$this->stubSnippetResultList->expects($this->atLeastOnce())
 			->method('add')
 			->with($this->isInstanceOf(SnippetResult::class));
+
+		$this->stubEnvironment->expects($this->once())
+			->method('getThemeDirectory')
+			->willReturn('theme');
 
 		$this->snippetRenderer->render($stubProduct, $this->stubEnvironment);
 	}
@@ -133,6 +141,10 @@ class ProductDetailViewSnippetRendererTest	extends \PHPUnit_Framework_TestCase
 			->willReturnCallback(function ($snippetResult) use (&$transport) {
 				$transport = $snippetResult;
 			});
+
+		$this->stubEnvironment->expects($this->once())
+			->method('getThemeDirectory')
+			->willReturn('theme');
 
 		$this->snippetRenderer->render($stubProduct, $this->stubEnvironment);
 

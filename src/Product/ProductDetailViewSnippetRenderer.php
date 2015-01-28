@@ -46,7 +46,12 @@ class ProductDetailViewSnippetRenderer extends BlockSnippetRenderer
 			throw new InvalidArgumentException('First argument must be instance of Product.');
 		}
 
-		$snippetContent = $this->getSnippetContent('theme/layout/' . self::LAYOUT_HANDLE . '.xml', $product);
+		$themeDirectory = $environment->getThemeDirectory();
+
+		$snippetContent = $this->getSnippetContent(
+			$themeDirectory . '/layout/' . self::LAYOUT_HANDLE . '.xml',
+			$product
+		);
 		$snippetKey = $this->getKey($product->getId(), $environment);
 
 		$snippet = SnippetResult::create($snippetKey, $snippetContent);
