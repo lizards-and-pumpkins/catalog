@@ -42,7 +42,7 @@ class ProductDetailViewSnippetRendererTest	extends \PHPUnit_Framework_TestCase
 	 */
 	private $stubLayoutReader;
 
-	public function setUp()
+	protected function setUp()
 	{
 		$stubKeyGenerator = $this->getMock(HardcodedProductDetailViewSnippetKeyGenerator::class, ['getKey']);
 		$stubKeyGenerator->expects($this->any())
@@ -62,6 +62,13 @@ class ProductDetailViewSnippetRendererTest	extends \PHPUnit_Framework_TestCase
 		$this->stubEnvironment = $this->getMockBuilder(Environment::class)
 			->disableOriginalConstructor()
 			->getMock();
+
+		$this->createTemporaryLayoutFile();
+	}
+
+	protected function tearDown()
+	{
+		$this->removeTemporaryLayoutFile();
 	}
 
 	/**
@@ -94,7 +101,7 @@ class ProductDetailViewSnippetRendererTest	extends \PHPUnit_Framework_TestCase
 
 		$this->stubEnvironment->expects($this->once())
 			->method('getThemeDirectory')
-			->willReturn('theme');
+			->willReturn(sys_get_temp_dir());
 
 		$result = $this->snippetRenderer->render($stubProduct, $this->stubEnvironment);
 		$this->assertSame($this->stubSnippetResultList, $result);
@@ -113,7 +120,7 @@ class ProductDetailViewSnippetRendererTest	extends \PHPUnit_Framework_TestCase
 
 		$this->stubEnvironment->expects($this->once())
 			->method('getThemeDirectory')
-			->willReturn('theme');
+			->willReturn(sys_get_temp_dir());
 
 		$this->snippetRenderer->render($stubProduct, $this->stubEnvironment);
 	}
@@ -144,7 +151,7 @@ class ProductDetailViewSnippetRendererTest	extends \PHPUnit_Framework_TestCase
 
 		$this->stubEnvironment->expects($this->once())
 			->method('getThemeDirectory')
-			->willReturn('theme');
+			->willReturn(sys_get_temp_dir());
 
 		$this->snippetRenderer->render($stubProduct, $this->stubEnvironment);
 
@@ -179,5 +186,56 @@ EOT;
 			->willReturn($stubProductId);
 
 		return $stubProduct;
+	}
+
+	/**
+	 * @return null
+	 */
+	private function createTemporaryLayoutFile()
+	{
+		$layoutDirectoryPath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'layout';
+
+		if (!file_exists($layoutDirectoryPath) || !is_dir($layoutDirectoryPath)) {
+			mkdir($layoutDirectoryPath);
+		}
+
+		$layoutFilePath = $layoutDirectoryPath . DIRECTORY_SEPARATOR . 'product_details_snippet.xml';
+
+		if (file_exists($layoutFilePath)) {
+			unlink($layoutFilePath);
+		}
+
+		$fileContent = <<<EOX
+<?xml version="1.0"?>
+<snippet>
+    <block name="product_details_snippet" class="Brera\Renderer\Block" template="theme/template/1column.phtml">
+        <block name="content" class="Brera\Product\Block\ProductDetailsPage" template="theme/template/view.phtml">
+            <block name="image_gallery" class="Brera\Product\Block\ProductImageGallery" template="theme/template/gallery.phtml" />
+        </block>
+    </block>
+</snippet>
+EOX;
+
+		file_put_contents($layoutFilePath, $fileContent);
+	}
+
+	/**
+	 * @return null
+	 */
+	private function removeTemporaryLayoutFile()
+	{
+		$layoutDirectoryPath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'layout';
+
+		if (!file_exists($layoutDirectoryPath) || !is_dir($layoutDirectoryPath)) {
+			return null;
+		}
+
+		$layoutFilePath = $layoutDirectoryPath . DIRECTORY_SEPARATOR . 'product_details_snippet.xml';
+
+		if (file_exists($layoutFilePath)) {
+			unlink($layoutFilePath);
+		}
+
+		rmdir($layoutDirectoryPath);
 	}
 }
