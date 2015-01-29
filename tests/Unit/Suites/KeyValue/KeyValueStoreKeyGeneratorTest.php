@@ -79,7 +79,8 @@ class KeyValueStoreKeyGeneratorTest extends \PHPUnit_Framework_TestCase
 		$url = HttpUrl::fromString('http://example.com/path');
 		$key = $this->keyGenerator->createPoCProductSeoUrlToIdKey($url);
 
-		$this->assertNotContains(DIRECTORY_SEPARATOR, $key);
+		$this->assertNotContains('/', $key);
+        $this->assertNotContains('\\', $key);
 	}
 
 	/**
