@@ -16,7 +16,7 @@ class PageKeyGeneratorTest extends \PHPUnit_Framework_TestCase
     private $pageKeyGenerator;
 
     /**
-     *
+     * @return null
      */
     protected function setUp()
     {
@@ -39,7 +39,7 @@ class PageKeyGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInternalType(
             'string',
-            $this->pageKeyGenerator->getKeyForPage($url, $env)
+            $this->pageKeyGenerator->getKeyForUrl($url, $env)
         );
 
         $this->assertInternalType(
@@ -61,7 +61,7 @@ class PageKeyGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             '_product_html_1',
-            $this->pageKeyGenerator->getKeyForPage($url, $env)
+            $this->pageKeyGenerator->getKeyForUrl($url, $env)
         );
     }
 

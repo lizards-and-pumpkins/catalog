@@ -32,7 +32,6 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
         $pageBuilder = new PageBuilder($pageKeyGenerator, $dataPoolReader);
         $page = $pageBuilder->buildPage($url);
 
-        // get the body and compare
         $body = $page->getBody();
         $expected = '<html><head><title>Page Title</title></head><body><h1>Headline</h1></body></html>';
 
@@ -41,7 +40,7 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param KeyValueStore $keyValueStore
-     * @return null
+     * @return void
      */
     private function addBaseSnippetAndListToKeyValueStorage(KeyValueStore $keyValueStore)
     {
@@ -51,7 +50,7 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param KeyValueStore $keyValueStore
-     * @return null
+     * @return void
      */
     private function addSnippetsForReplacementToTheKeyValueStorage(KeyValueStore $keyValueStore)
     {

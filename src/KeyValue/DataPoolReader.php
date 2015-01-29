@@ -30,11 +30,11 @@ class DataPoolReader
 
     /**
      * @param string $key
-     * @return mixed
+     * @return string
      */
     public function getSnippet($key)
     {
-        $this->checkForValidKey($key);
+        $this->validateKey($key);
         return $this->keyValueStore->get($key);
     }
 
@@ -74,14 +74,14 @@ class DataPoolReader
     }
 
     /**
-     * @param $key
-     * @return array
+     * @param string $key
+     * @return string[]
      */
     public function getChildSnippetKeys($key)
     {
-        $this->checkForValidKey($key);
+        $this->validateKey($key);
         $json = $this->keyValueStore->get($key);
-        $this->checkForValidJson($key, $json);
+        $this->validateJson($key, $json);
         $list = $this->jsonDecode($key, $json);
 
         return $list;
@@ -89,7 +89,7 @@ class DataPoolReader
 
     /**
      * @param $keys
-     * @return array
+     * @return string[]
      */
     public function getSnippets($keys)
     {
@@ -99,16 +99,16 @@ class DataPoolReader
             );
         }
         foreach ($keys as $key) {
-            $this->checkForValidKey($key);
+            $this->validateKey($key);
         }
 
         return $this->keyValueStore->multiGet($keys);
     }
 
     /**
-     * @param $key
+     * @param string $key
      */
-    private function checkForValidKey($key)
+    private function validateKey($key)
     {
         if (!is_string($key)) {
             throw new \RuntimeException('Key is not of type string.');
@@ -116,10 +116,10 @@ class DataPoolReader
     }
 
     /**
-     * @param $key
-     * @param $json
+     * @param string $key
+     * @param string $json
      */
-    private function checkForValidJson($key, $json)
+    private function validateJson($key, $json)
     {
         if (!is_string($json)) {
             throw new \RuntimeException(sprintf('List for key "%s" is no valid JSON - it is not even a string.', $key));
@@ -127,9 +127,9 @@ class DataPoolReader
     }
 
     /**
-     * @param $key
-     * @param $json
-     * @return array
+     * @param string $key
+     * @param string $json
+     * @return string[]
      */
     private function jsonDecode($key, $json)
     {

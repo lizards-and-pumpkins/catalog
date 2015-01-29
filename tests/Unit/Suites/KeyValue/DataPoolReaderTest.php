@@ -4,7 +4,7 @@ namespace Brera\KeyValue;
 
 use Brera\Product\ProductId;
 
-require_once __DIR__ . '/AbstractDataPool.php';
+require_once __DIR__ . '/AbstractDataPoolTest.php';
 
 /**
  * @covers \Brera\KeyValue\DataPoolReader
@@ -12,7 +12,7 @@ require_once __DIR__ . '/AbstractDataPool.php';
  * @uses   \Brera\Http\HttpUrl
  * @uses   \Brera\Product\PoCSku
  */
-class DataPoolReaderTest extends AbstractDataPool
+class DataPoolReaderTest extends AbstractDataPoolTest
 {
     /**
      * @var DataPoolReader
@@ -85,9 +85,9 @@ class DataPoolReaderTest extends AbstractDataPool
      *
      * @dataProvider brokenJsonProvider
      */
-    public function itShouldThrowAnExceptionOnBrokenJSON($keyValueStorageReturn)
+    public function itShouldThrowAnExceptionOnBrokenJSON($brokenJson)
     {
-        $this->addGetMethodToStubKeyValueStore($keyValueStorageReturn);
+        $this->addGetMethodToStubKeyValueStore($brokenJson);
         $this->dataPoolReader->getChildSnippetKeys('some_key');
     }
 

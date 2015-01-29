@@ -5,7 +5,7 @@ namespace Brera\KeyValue;
 use Brera\Http\HttpUrl;
 use Brera\Product\ProductId;
 
-class AbstractDataPool extends \PHPUnit_Framework_TestCase
+abstract class AbstractDataPoolTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var KeyValueStore|\PHPUnit_Framework_MockObject_MockObject
@@ -18,7 +18,7 @@ class AbstractDataPool extends \PHPUnit_Framework_TestCase
     protected $stubKeyGenerator;
 
     /**
-     *
+     * @return null
      */
     protected function setUp()
     {
@@ -39,7 +39,7 @@ class AbstractDataPool extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     *
+     * @return null
      */
     protected function addSetMethodToStubKeyValueStore()
     {
@@ -48,7 +48,7 @@ class AbstractDataPool extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $returnValue
+     * @param string $returnValue
      */
     protected function addGetMethodToStubKeyValueStore($returnValue)
     {
@@ -58,7 +58,7 @@ class AbstractDataPool extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $returnValue
+     * @param string[] $returnValue
      */
     protected function addMultiGetMethodToStubKeyValueStore($returnValue)
     {
@@ -68,7 +68,7 @@ class AbstractDataPool extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $returnResult
+     * @param boolean $returnResult
      */
     protected function addHasMethodToStubKeyValueStore($returnResult)
     {
@@ -78,7 +78,7 @@ class AbstractDataPool extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $method
+     * @param string $method
      */
     protected function addStubMethodToStubKeyGenerator($method)
     {

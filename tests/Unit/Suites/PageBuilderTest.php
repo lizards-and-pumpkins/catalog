@@ -38,6 +38,9 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private $pageKeyGenerator;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->url = HttpUrl::fromString('http://example.com/product.html');
@@ -188,8 +191,8 @@ EOH;
     }
 
     /**
-     * @param array $snippetList
-     * @param array $snippets
+     * @param string[] $snippetList
+     * @param string[] $snippets
      */
     private function mockDataPoolReader($snippetList, $snippets)
     {

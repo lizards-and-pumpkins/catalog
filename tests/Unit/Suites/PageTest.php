@@ -12,6 +12,9 @@ class PageTest extends \PHPUnit_Framework_TestCase
      */
     private $page;
 
+    /**
+     * @return null
+     */
     protected function setUp()
     {
         $this->page = new Page();

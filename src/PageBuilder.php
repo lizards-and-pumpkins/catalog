@@ -30,13 +30,15 @@ class PageBuilder
     /**
      * @param HttpUrl $url
      * @return Page
+     *
+     * @todo deconstruct
      */
     public function buildPage(HttpUrl $url)
     {
         $listKey = $this->keyGenerator->getKeyForSnippetList($url);
 
         $childKeys = $this->replacePlaceholdersInKeys($this->dataPoolReader->getChildSnippetKeys($listKey));
-        $firstSnippetKey = $this->replacePlaceholdersInKeys($this->keyGenerator->getKeyForPage($url));
+        $firstSnippetKey = $this->replacePlaceholdersInKey($this->keyGenerator->getKeyForUrl($url));
 
         $allSnippets = $this->dataPoolReader->getSnippets($childKeys + [$firstSnippetKey => $firstSnippetKey]);
 
@@ -55,25 +57,34 @@ class PageBuilder
     }
 
     /**
-     * Take the snippet keys and fill in all placeholders
-     *
-     * @param array|string $snippetKeys
-     * @return array|string
+     * @param string[] $snippetKeys
+     * @return string[]
      */
-    private function replacePlaceholdersInKeys($snippetKeys)
+    private function replacePlaceholdersInKeys(array $snippetKeys)
     {
-        if (is_array($snippetKeys)) {
-
-        } elseif (is_string($snippetKeys)) {
-
+        foreach ($snippetKeys as &$key) {
+            $key = $this->replacePlaceholdersInKey($key);
         }
 
         return $snippetKeys;
     }
 
     /**
-     * @param array $snippetKeys
-     * @return array
+     * @todo Take the snippet keys and fill in all placeholders
+     *
+     * @param string $snippetKey
+     * @return string
+     */
+    private function replacePlaceholdersInKey($snippetKey)
+    {
+        return $snippetKey;
+    }
+
+    /**
+     * @todo have object which builts placeholders
+     *
+     * @param string[] $snippetKeys
+     * @return string[]
      */
     private function buildPlaceholdersFromKeys(array $snippetKeys)
     {
@@ -87,11 +98,9 @@ class PageBuilder
     }
 
     /**
-     * Changes keys and values, then replaces the snippet keys with the placeholders and flips it back
-     *
-     * @param array $snippetKeys
-     * @param array $snippets
-     * @return array
+     * @param string[] $snippetKeys
+     * @param string[] $snippets
+     * @return string[]
      */
     private function mergePlaceholderAndSnippets(array $snippetKeys, array $snippets)
     {
@@ -105,8 +114,23 @@ class PageBuilder
      */
     private function injectSnippetsIntoContent($content, array $snippets)
     {
+        $content = $this->replaceAsLongAsSomethingIsReplaced($content, $snippets);
+
+        return $content;
+    }
+
+    /**
+     * @todo at the moment it doesn't make any difference in the tests whether the return is inside or outside of the loop - WHY!?!
+     *
+     * @param $content
+     * @param string[] $snippets
+     * @return string
+     */
+    private function replaceAsLongAsSomethingIsReplaced($content, array $snippets)
+    {
         do {
             $content = str_replace(array_keys($snippets), array_values($snippets), $content, $count);
+            echo '';
         } while ($count);
 
         return $content;
