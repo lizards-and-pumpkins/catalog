@@ -1,9 +1,11 @@
 <?php
+
 namespace Brera;
 
 use Brera\Http\HttpUrl;
 use Brera\KeyValue\DataPoolReader;
 use Brera\KeyValue\InMemory\InMemoryKeyValueStore;
+use Brera\KeyValue\KeyValueStore;
 use Brera\KeyValue\KeyValueStoreKeyGenerator;
 
 class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
@@ -32,26 +34,28 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
 
         // get the body and compare
         $body = $page->getBody();
-        $expected = '<html><head><title>Mein Titel!</title></head><body><h1>Headline</h1></body></html>';
+        $expected = '<html><head><title>Page Title</title></head><body><h1>Headline</h1></body></html>';
 
         $this->assertEquals($expected, $body);
     }
 
     /**
-     * @param $keyValueStore
+     * @param KeyValueStore $keyValueStore
+     * @return null
      */
-    private function addBaseSnippetAndListToKeyValueStorage($keyValueStore)
+    private function addBaseSnippetAndListToKeyValueStorage(KeyValueStore $keyValueStore)
     {
         $keyValueStore->set('_product1_1_0', '<html><head>{{snippet head}}</head><body>{{snippet body}}</body></html>');
         $keyValueStore->set('_product1_1_0_l', json_encode(['head', 'body']));
     }
 
     /**
-     * @param $keyValueStore
+     * @param KeyValueStore $keyValueStore
+     * @return null
      */
-    private function addSnippetsForReplacementToTheKeyValueStorage($keyValueStore)
+    private function addSnippetsForReplacementToTheKeyValueStorage(KeyValueStore $keyValueStore)
     {
-        $keyValueStore->set('head', '<title>Mein Titel!</title>');
+        $keyValueStore->set('head', '<title>Page Title</title>');
         $keyValueStore->set('body', '<h1>Headline</h1>');
     }
 }
