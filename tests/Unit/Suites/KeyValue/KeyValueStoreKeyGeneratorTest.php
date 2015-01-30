@@ -7,92 +7,96 @@ use Brera\Http\HttpUrl;
 
 /**
  * @covers \Brera\KeyValue\KeyValueStoreKeyGenerator
- * @uses \Brera\Http\HttpUrl
+ * @uses   \Brera\Http\HttpUrl
  */
 class KeyValueStoreKeyGeneratorTest extends \PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var KeyValueStoreKeyGenerator
-	 */
-	private $keyGenerator;
+    /**
+     * @var KeyValueStoreKeyGenerator
+     */
+    private $keyGenerator;
 
-	public function setUp()
-	{
-		$this->keyGenerator = new KeyValueStoreKeyGenerator();
-	}
+    public function setUp()
+    {
+        $this->keyGenerator = new KeyValueStoreKeyGenerator();
+    }
 
-	/**
-	 * @test
-	 */
-	public function itShouldGenerateAStringAsPoCProductHtmlKey()
-	{
-		/* @var $productId ProductId */
-		$productId = $this->getMockBuilder(ProductId::class)
-			->disableOriginalConstructor()
-			->getMock();
+    /**
+     * @test
+     */
+    public function itShouldGenerateAStringAsPoCProductHtmlKey()
+    {
+        $stubProductId = $this->createProductId('');
+        $key = $this->keyGenerator->createPoCProductHtmlKey($stubProductId);
 
-		$this->assertInternalType('string',
-			$this->keyGenerator->createPoCProductHtmlKey($productId)
-		);
-	}
+        $this->assertInternalType('string', $key);
+    }
 
-	/**
-	 * @test
-	 * write data provider which provides name and create function so we just need one method to test _ALL_ key methods
-	 */
-	public function itShouldGenerateTwoDifferentKeysForDifferentProductIds()
-	{
-		$productId1 = $this->createProductId('1');
-		$productId2 = $this->createProductId('2');
+    /**
+     * @test
+     */
+    public function itShouldGenerateTwoDifferentKeysForDifferentProductIds()
+    {
+        $productId1 = $this->createProductId('foo');
+        $productId2 = $this->createProductId('bar');
 
-		$key1 = $this->keyGenerator->createPoCProductHtmlKey($productId1);
-		$key2 = $this->keyGenerator->createPoCProductHtmlKey($productId2);
+        $key1 = $this->keyGenerator->createPoCProductHtmlKey($productId1);
+        $key2 = $this->keyGenerator->createPoCProductHtmlKey($productId2);
 
-		$this->assertFalse($key1 == $key2);
-	}
+        $this->assertFalse($key1 == $key2);
+    }
 
-	/**
-	 * @test
-	 */
-	public function itShouldGenerateAStringAsPoCProductSeoUrlToIdKey()
-	{
-		/* @var $url HttpUrl */
-		$url = HttpUrl::fromString('http://example.com/path');
+    /**
+     * @test
+     */
+    public function itShouldGenerateAStringAsPoCProductSeoUrlToIdKey()
+    {
+        $url = HttpUrl::fromString('http://example.com/path');
+        $key = $this->keyGenerator->createPoCProductSeoUrlToIdKey($url);
 
-		$this->assertInternalType('string',
-			$this->keyGenerator->createPoCProductSeoUrlToIdKey($url)
-		);
-	}
+        $this->assertInternalType('string', $key);
+    }
 
-	/**
-	 * @test
-	 */
-	public function itShouldGenerateTwoDifferentKeysForPoCProductSeoUrlToIdKey()
-	{
-		/* @var $url1 HttpUrl */
-		$url1 = HttpUrl::fromString('http://example.com/path1');
-		/* @var $url2 HttpUrl */
-		$url2 = HttpUrl::fromString('http://example.com/path2');
+    /**
+     * @test
+     */
+    public function itShouldGenerateTwoDifferentKeysForPoCProductSeoUrlToIdKey()
+    {
+        $url1 = HttpUrl::fromString('http://example.com/path1');
+        $url2 = HttpUrl::fromString('http://example.com/path2');
 
-		$key1 = $this->keyGenerator->createPoCProductSeoUrlToIdKey($url1);
-		$key2 = $this->keyGenerator->createPoCProductSeoUrlToIdKey($url2);
+        $key1 = $this->keyGenerator->createPoCProductSeoUrlToIdKey($url1);
+        $key2 = $this->keyGenerator->createPoCProductSeoUrlToIdKey($url2);
 
-		$this->assertFalse($key1 == $key2);
-	}
+        $this->assertFalse($key1 == $key2);
+    }
 
-	/**
-	 * @return \PHPUnit_Framework_MockObject_MockObject
-	 */
-	private function createProductId($id)
-	{
-		$productId1 = $this->getMockBuilder(ProductId::class)
-			->disableOriginalConstructor()
-			->getMock();
+    /**
+     * @test
+     */
+    public function itShouldNotGenerateKeysWithDirectorySeparator()
+    {
+        $url = HttpUrl::fromString('http://example.com/path');
+        $key = $this->keyGenerator->createPoCProductSeoUrlToIdKey($url);
 
-		$productId1->expects($this->any())
-			->method('__toString')
-			->willReturn($id);
+        $this->assertNotContains('/', $key);
+        $this->assertNotContains('\\', $key);
+    }
 
-		return $productId1;
-	}
+    /**
+     * @param string $id
+     * @return ProductId|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createProductId($id)
+    {
+        $stubProductId = $this->getMockBuilder(ProductId::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $stubProductId->expects($this->any())
+            ->method('__toString')
+            ->willReturn($id);
+
+        return $stubProductId;
+    }
 }
