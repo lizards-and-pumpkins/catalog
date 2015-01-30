@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Brera;
-
 
 use Brera\Http\HttpUrl;
 use Brera\KeyValue\DataPoolReader;
@@ -13,6 +11,7 @@ class PageBuilder
      * @var DataPoolReader
      */
     private $dataPoolReader;
+
     /**
      * @var PageKeyGenerator
      */
@@ -28,11 +27,8 @@ class PageBuilder
         $this->keyGenerator = $keyGenerator;
     }
 
-
     /**
-     * return Page
      * @param HttpUrl $url
-     *
      * @return Page
      */
     public function buildPage(HttpUrl $url)
@@ -82,6 +78,7 @@ class PageBuilder
     private function buildPlaceholdersFromKeys(array $snippetKeys)
     {
         $placeholders = [];
+
         foreach ($snippetKeys as $key) {
             $placeholders[$key] = "{{snippet $key}}";
         }
@@ -101,10 +98,14 @@ class PageBuilder
         return array_combine($snippetKeys, $snippets);
     }
 
-    private function injectSnippetsIntoContent($content, $snippets)
+    /**
+     * @param string $content
+     * @param string[] $snippets
+     * @return string
+     */
+    private function injectSnippetsIntoContent($content, array $snippets)
     {
         do {
-            // replace, as long something is replaced
             $content = str_replace(array_keys($snippets), array_values($snippets), $content, $count);
         } while ($count);
 

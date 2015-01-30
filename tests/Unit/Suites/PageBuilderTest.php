@@ -165,14 +165,39 @@ EOH;
     }
 
     /**
+     * @test
+     */
+    public function itShouldReplacePlaceholderRegardlessOfSnippetOrder()
+    {
+        $this->mockDataPoolReader(
+            ['body_placeholder', 'deep_1', 'deep_3', 'deep_2', 'deep_4'],
+            [
+                'body_placeholder' => '<h1>My Website!</h1>{{snippet deep_1}}',
+                'deep_1'           => 'deep1{{snippet deep_2}}',
+                'deep_3'           => 'deep3{{snippet deep_4}}',
+                'deep_2'           => 'deep2{{snippet deep_3}}',
+                'deep_4'           => false,
+                '_product_html_1'  => '<html><body>{{snippet body_placeholder}}</body></html>'
+            ]
+        );
+
+        $rendererContent = '<html><body><h1>My Website!</h1>deep1deep2deep3</body></html>';
+
+        $page = $this->pageBuilder->buildPage($this->url, $this->environment);
+        $this->assertEquals($rendererContent, $page->getBody());
+    }
+
+    /**
      * @param array $snippetList
      * @param array $snippets
      */
     private function mockDataPoolReader($snippetList, $snippets)
     {
-        $this->dataPoolReader->expects($this->any())->method('getChildSnippetKeys')
+        $this->dataPoolReader->expects($this->any())
+            ->method('getChildSnippetKeys')
             ->willReturn($snippetList);
-        $this->dataPoolReader->expects($this->any())->method('getSnippets')
+        $this->dataPoolReader->expects($this->any())
+            ->method('getSnippets')
             ->willReturn($snippets);
     }
 }
