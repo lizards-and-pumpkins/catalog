@@ -8,14 +8,14 @@ use Brera\Product\ProductImportDomainEvent;
 class DomainEventHandlerLocator
 {
 	/**
-	 * @var IntegrationTestFactory
+	 * @var DomainEventFactory
 	 */
 	private $factory;
 
 	/**
-	 * @param IntegrationTestFactory $factory
+	 * @param DomainEventFactory $factory
 	 */
-	public function __construct(IntegrationTestFactory $factory)
+	public function __construct(DomainEventFactory $factory)
 	{
 		$this->factory = $factory;
 	}
