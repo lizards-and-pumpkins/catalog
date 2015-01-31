@@ -3,8 +3,74 @@
  * @var \Brera\Product\Block\ProductDetailsPage $this
  */
 ?>
-Product details page content
+<?php
 
-<?php echo $this->getProduct()->getAttributeValue('name') ?> (<?php echo $this->getProduct()->getId() ?>)
+$_maxQty = 5;
 
-<?php echo $this->getChildOutput('image_gallery') ?>
+?>
+<div id="productView" class="configurable" itemscope itemtype="http://schema.org/Product">
+    <form action="<!-- echo $this->getAddToCartUrl($_product) -->" method="post" id="product_addtocart_form">
+        <div class="no-display">
+            <input type="hidden" name="product" value="<?php echo $this->getProduct()->getId() ?>" />
+            <input type="hidden" name="related_product" id="related-products-field" value="" />
+        </div>
+        <div class="product-essential">
+            <div class="product-img-box">
+                <?php echo $this->getChildOutput('image_gallery') ?>
+            </div>
+            <div class="product-shop">
+                <div class="top">
+                    <div class="product-title">
+                        <div class="product-title-infos">
+                            <h1 itemprop="name"><?php echo $this->getProduct()->getAttributeValue('name') ?></h1>
+                            <p class="similarProducts">More by <a href="" itemprop="brand">$brandName</a></p>
+                        </div>
+                        <div class="cc"></div>
+                    </div>
+                    <div class="articleInformations">
+                        <p class="articleNumber">SKU# <?php //echo $this->getProduct()->getAttributeValue('sku') ?></p>
+                        <meta itemprop="sku" content="<?php //echo $this->getProduct()->getAttributeValue('sku') ?>" />
+                    </div>
+
+                    <div class="socialSharing cc en_US">
+                        <div class="item twitterLike"><a href="https://twitter.com/share" class="twitter-share-button">Tweet</a></div>
+                        <div class="item g-plusone" data-size="medium"></div>
+                        <div class="item fb-like" data-href="<!-- echo $this->getProductUrl($_product) -->" data-send="true" data-layout="button_count" data-width="200" data-show-faces="false" data-action="recommend"></div>
+                        <div class="item print"><a href="javascript:" onclick="window.print()">Print <img src="<?php //echo $this->getSkinUrl('images/icons/printico.gif') ?>" alt="print" /></a></div>
+                        <div class="cc"></div>
+                    </div>
+                </div>
+
+                <div class="product-main-info">
+                    <?php //echo $this->getChildHtml('product_type_data') ?>
+                </div>
+
+                <div class="product-controls">
+                    <?php if (1) : //$_product->isSaleable()): ?>
+                        <fieldset class="selects">
+
+                            <div class="input-box qty-box">
+                                <select name="qty" id="qty">
+                                    <?php for ($i = 1; $i <= $_maxQty; $i++): ?>
+                                        <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                                    <?php endfor; ?>
+                                </select>
+                            </div>
+                            <div class="clearer"></div>
+                        </fieldset>
+
+                        <button type="submit" title="Add to Cart">Add to Cart</button>
+                    <?php endif ?>
+
+                    <div class="clearer"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <?php //echo $this->getChildHtml('other'); ?>
+    <?php //echo $this->getChildHtml('product_additional_data') ?>
+
+</div>
+
+<div id="fb-root"></div>

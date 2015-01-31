@@ -1,7 +1,30 @@
 <?php
 /**
- * @var \Brera\Product\Block\ProductDetailsPage $this
+ * @var \Brera\Renderer\Block $this
  */
 ?>
-- Hi, I'm a 1 column template!<br/>
-<?php echo $this->getChildOutput('content') ?>
+<!DOCTYPE html>
+<html>
+<head>
+    <?php echo $this->getChildOutput('head') ?>
+</head>
+<body>
+<div class="wrapper 1column">
+    <?php echo $this->getChildOutput('global_notices') ?>
+    <div class="page">
+        <?php echo $this->getChildOutput('header') ?>
+        <div class="main-container col1-layout">
+            <div class="main">
+                <div class="col-main">
+                    <?php echo $this->getChildOutput('breadcrumbsContainer') ?>
+                    <?php echo $this->getChildOutput('global_messages') ?>
+                    <?php echo $this->getChildOutput('content') ?>
+                </div>
+            </div>
+        </div>
+        <?php echo $this->getChildOutput('footer') ?>
+        <?php echo $this->getChildOutput('before_body_end') ?>
+    </div>
+</div>
+</body>
+</html>
