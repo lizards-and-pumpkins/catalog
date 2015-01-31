@@ -1,0 +1,11 @@
+.catalog-category-view #breadcrumbs { margin-left: -217px }
+#breadcrumbs { margin-left: 20px }
+#breadcrumbs div { display: inline }
+a.back-link, #breadcrumbs { font-size: 11px; margin-bottom: 20px }
+.link-back-container { height: 16px }
+
+@media (max-width: 767px) {
+    #breadcrumbs { margin-left: 10px }
+    .catalog-category-view #breadcrumbs { margin-left: 0 }
+    .link-back-container { display: none }
+}

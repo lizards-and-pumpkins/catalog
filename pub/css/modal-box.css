@@ -1,0 +1,4 @@
+.modal-box-overlay { position: absolute; top: 0; left: 0; background-color: #000000; z-index: 7770; opacity: .7 }
+.modal-popup { background-color: #ffffff; position: fixed; z-index: 7777 }
+.modal-popup > div { margin: 20px; overflow: auto }
+.popup-close { width: 36px; height: 36px; background-image: url('../../images/sandfox/modal-box/close.png'); position: absolute; z-index: 72; top: -18px; right: -18px }

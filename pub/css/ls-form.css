@@ -1,0 +1,54 @@
+/* Global form elements */
+
+/* Box */
+.input-box { border: #cfcfcf 1px solid; border-radius: 2px 2px 2px 2px; -moz-border-radius: 2px 2px 2px 2px; -webkit-border-radius:2px 2px 2px 2px; padding: 0 5px 0 15px; background: #ffffff }
+
+/* Global */
+input[type=text], input[type=password], textarea { width: 100%; font-size: 13px; border: none; background: transparent }
+
+/* Text field */
+input[type=text], input[type=password] { padding: 6px 0 5px 0 }
+
+/* Text area */
+textarea { min-height: 150px; resize: none; margin: 7px 0; font-family: Arial, Verdana, Helvetica, sans-serif }
+
+/* Checkbox, radio */
+.formFieldsContainer .row .checker, .formFieldsContainer .row .radio { float: left; display: block }
+
+/* Button */
+button { padding:5px 20px; font-family: GeogrotesqueRegular, Helvetica, Arial, sans-serif; font-size: 22px; color: #fff; cursor: pointer; font-weight: normal; border-radius: 2px 2px 2px 2px; -moz-border-radius: 2px 2px 2px 2px; -webkit-border-radius:2px 2px 2px 2px }
+button {
+    border: 1px solid #e36d11;
+    background: -moz-linear-gradient(top, #eb9c19 0%, #e36d11 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eb9c19), color-stop(100%,#e36d11)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #eb9c19 0%,#e36d11 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #eb9c19 0%,#e36d11 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #eb9c19 0%,#e36d11 100%); /* IE10+ */
+    background: linear-gradient(top, #eb9c19 0%,#e36d11 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eb9c19', endColorstr='#e36d11',GradientType=0 ); /* IE6-9 */
+}
+button:disabled {
+    cursor: default;
+    border-color: #999999;
+    background: #c6c6c6;
+    background: -moz-linear-gradient(top,  #c6c6c6 0%, #838383 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#c6c6c6), color-stop(100%,#838383));
+    background: -webkit-linear-gradient(top,  #c6c6c6 0%,#838383 100%);
+    background: -o-linear-gradient(top,  #c6c6c6 0%,#838383 100%);
+    background: -ms-linear-gradient(top,  #c6c6c6 0%,#838383 100%);
+    background: linear-gradient(top,  #c6c6c6 0%,#838383 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c6c6c6', endColorstr='#838383',GradientType=0 );
+}
+/* IE8 will cough up one it will see :disabled and will ignore the complete selector so it has to be duplicated */
+button.disabled {
+    cursor: default;
+    border-color: #999999;
+    background: #c6c6c6;
+    background: -moz-linear-gradient(top,  #c6c6c6 0%, #838383 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#c6c6c6), color-stop(100%,#838383));
+    background: -webkit-linear-gradient(top,  #c6c6c6 0%,#838383 100%);
+    background: -o-linear-gradient(top,  #c6c6c6 0%,#838383 100%);
+    background: -ms-linear-gradient(top,  #c6c6c6 0%,#838383 100%);
+    background: linear-gradient(top,  #c6c6c6 0%,#838383 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c6c6c6', endColorstr='#838383',GradientType=0 );
+}
