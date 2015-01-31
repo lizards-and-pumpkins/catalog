@@ -11,7 +11,7 @@ $_maxQty = 5;
 <div id="productView" class="configurable" itemscope itemtype="http://schema.org/Product">
     <form action="<!-- echo $this->getAddToCartUrl($_product) -->" method="post" id="product_addtocart_form">
         <div class="no-display">
-            <input type="hidden" name="product" value="<?php echo $this->getProduct()->getId() ?>" />
+            <input type="hidden" name="product" value="<?php echo $this->getProductId() ?>" />
             <input type="hidden" name="related_product" id="related-products-field" value="" />
         </div>
         <div class="product-essential">
@@ -22,27 +22,70 @@ $_maxQty = 5;
                 <div class="top">
                     <div class="product-title">
                         <div class="product-title-infos">
-                            <h1 itemprop="name"><?php echo $this->getProduct()->getAttributeValue('name') ?></h1>
-                            <p class="similarProducts">More by <a href="" itemprop="brand">$brandName</a></p>
+                            <h1 itemprop="name"><?php echo $this->getProductAttributeValue('name') ?></h1>
+                            <p class="similarProducts">
+                                <?php echo $this->__('More by') ?> <a href="" itemprop="brand"><?php echo $this->getProductAttributeValue('brand')?></a>
+                            </p>
                         </div>
                         <div class="cc"></div>
                     </div>
                     <div class="articleInformations">
-                        <p class="articleNumber">SKU# <?php //echo $this->getProduct()->getAttributeValue('sku') ?></p>
-                        <meta itemprop="sku" content="<?php //echo $this->getProduct()->getAttributeValue('sku') ?>" />
+                        <p class="articleNumber"><?php echo $this->__('SKU# ') ?> <?php echo $this->getProductId() ?></p>
+                        <meta itemprop="sku" content="<?php echo $this->getProductId() ?>" />
                     </div>
 
                     <div class="socialSharing cc en_US">
                         <div class="item twitterLike"><a href="https://twitter.com/share" class="twitter-share-button">Tweet</a></div>
                         <div class="item g-plusone" data-size="medium"></div>
                         <div class="item fb-like" data-href="<!-- echo $this->getProductUrl($_product) -->" data-send="true" data-layout="button_count" data-width="200" data-show-faces="false" data-action="recommend"></div>
-                        <div class="item print"><a href="javascript:" onclick="window.print()">Print <img src="<?php //echo $this->getSkinUrl('images/icons/printico.gif') ?>" alt="print" /></a></div>
+                        <div class="item print"><a href="javascript:" onclick="window.print()"><?php echo $this->__('Print') ?> <img src="images/icons/printico.gif" alt="print" /></a></div>
                         <div class="cc"></div>
                     </div>
                 </div>
 
                 <div class="product-main-info">
-                    <?php //echo $this->getChildHtml('product_type_data') ?>
+                    <div class="main-information">
+                        <?php if ($_gender = $this->getProductAttributeValue('gender')) : ?>
+                            <p><strong><?php echo $this->__('Gender') ?>:</strong> <?php echo $_gender ?></p>
+                        <?php endif ?>
+
+                        <?php if (($_style = $this->getProductAttributeValue('style')) && $this->__('No') != $_style) : ?>
+                            <p><strong><?php echo $this->__('Style') ?>:</strong> <?php echo $_style ?></p>
+                        <?php endif ?>
+
+                        <?php if (1) : //$_product->isSaleable() && $this->hasOptions()): ?>
+                            <p class="size">
+                                <strong><?php echo $this->__('Selected size') ?>: </strong>
+                                <span class="selectedSize"><?php echo $this->__('Choose size') ?></span>
+                            </p>
+                            <p class="availability">
+                                <strong><?php echo $this->__('Availability:') ?> </strong>
+                                <span class="availability choose"><?php echo $this->__('Choose size') ?></span>
+                                <span class="availability true"><?php echo $this->__('In Stock') ?></span>
+                                <span class="availability false"><?php echo $this->__('not available') ?></span>
+                                <span class="info"><?php echo $this->__('Versandinfo'); ?></span>
+                            </p>
+                        <?php else: ?>
+                            <?php if (1) : //$_product->isSaleable() && $stockItem->getQty() > 0): ?>
+                                <p class="availability"><strong><?php echo $this->__('Availability:') ?></strong> <span class="true"><?php echo $this->__('In stock') ?></span> <span class="info"><?php echo $this->__('Versandinfo') ?></span></p>
+                            <?php elseif (0) : //$_product->isSaleable() && $stockItem->getBackorders() > 0): ?>
+                                <p class="availability"><strong><?php echo $this->__('Availability:') ?></strong> <span class="true"><?php echo $this->__('3-5 days after order') ?></span> <span class="info"><?php echo $this->__('Versandinfo'); ?></span></p>
+                            <?php else: ?>
+                                <?php $schemaOrgStockStatus = 'OutOfStock' ?>
+                                <p class="availability"><strong><?php echo $this->__('Availability:') ?></strong> <span class="false"><?php echo $this->__('Out of stock') ?></span> <span class="info"><?php echo $this->__('Versandinfo'); ?></span></p>
+                            <?php endif ?>
+                        <?php endif ?>
+                    </div>
+
+                    <div class="price-information" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
+                        <meta itemprop="priceCurrency" content="EUR" />
+                        <meta itemprop="availability" itemtype="http://schema.org/ItemAvailability" content="http://schema.org/available"/>
+
+                        <div class="tax-information">
+                            <?php echo $this->__('inkl. MwSt, zzgl. Versandkosten'); ?>
+                        </div>
+                    </div>
+                    <div class="cc"></div>
                 </div>
 
                 <div class="product-controls">
@@ -59,7 +102,7 @@ $_maxQty = 5;
                             <div class="clearer"></div>
                         </fieldset>
 
-                        <button type="submit" title="Add to Cart">Add to Cart</button>
+                        <button type="submit" title="Add to Cart"><?php echo $this->__('Add to Cart') ?></button>
                     <?php endif ?>
 
                     <div class="clearer"></div>
