@@ -23,7 +23,7 @@
         </inventory>
         <assets>
             <image identifier="main">
-                <file>products/118235/118235-251.1.png</file>
+                <file>products/2013_pro_touch_118235-251.jpg</file>
                 <label>The main image label</label>
             </image>
             <image identifier="small" gallery="false">
@@ -47,14 +47,16 @@
             <attribute code="image_listing">main</attribute>
             <attribute code="image_thumbnail">small</attribute>
             <attribute code="weight">11.2</attribute>
-            <attribute code="short_description" lang="de_DE"><![CDATA[Pro Touch LED Armflasher<br />&#13;
-<br />&#13;
-LED Armflasher mit elastischem Band und Flasher mit variabler Blinkfolge,&#13;
-Flasher abnehmbar.&#13;]]></attribute>
-            <attribute code="short_description" lang="en_US"><![CDATA[Pro Touch LED Armflasher<br />&#13;
-<br />&#13;
-LED Armflasher with elastic Band and Flasher&#13;]]></attribute>
-            <attribute code="brand">Some Brand</attribute>
+            <attribute code="description" lang="de_DE"><![CDATA[Pro Touch LED Armflasher<br />
+<br />
+LED Armflasher mit elastischem Band und Flasher mit variabler Blinkfolge,
+Flasher abnehmbar.]]></attribute>
+            <attribute code="description" lang="en_US"><![CDATA[Pro Touch LED Armflasher<br />
+<br />
+LED Armflasher with elastic Band and Flasher]]></attribute>
+            <attribute code="brand">Pro Touch</attribute>
+            <attribute code="style">Leuchten</attribute>
+            <attribute code="gender">Damen, Herren</attribute>
         </attributes>
     </product>
 

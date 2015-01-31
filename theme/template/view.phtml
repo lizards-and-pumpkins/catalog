@@ -6,6 +6,8 @@
 <?php
 
 $_maxQty = 5;
+$brand = $this->getProductAttributeValue('brand');
+$brandLogo = strtolower(preg_replace('/\W/', '_', trim($brand))) . '.png';
 
 ?>
 <div id="productView" class="configurable" itemscope itemtype="http://schema.org/Product">
@@ -21,10 +23,11 @@ $_maxQty = 5;
             <div class="product-shop">
                 <div class="top">
                     <div class="product-title">
+                        <img class="product-image" src="images/logos/<?php echo $brandLogo ?>" width="95" />
                         <div class="product-title-infos">
                             <h1 itemprop="name"><?php echo $this->getProductAttributeValue('name') ?></h1>
                             <p class="similarProducts">
-                                <?php echo $this->__('More by') ?> <a href="" itemprop="brand"><?php echo $this->getProductAttributeValue('brand')?></a>
+                                <?php echo $this->__('More by') ?> <a href="" itemprop="brand"><?php echo $brand ?></a>
                             </p>
                         </div>
                         <div class="cc"></div>
@@ -49,11 +52,11 @@ $_maxQty = 5;
                             <p><strong><?php echo $this->__('Gender') ?>:</strong> <?php echo $_gender ?></p>
                         <?php endif ?>
 
-                        <?php if (($_style = $this->getProductAttributeValue('style')) && $this->__('No') != $_style) : ?>
+                        <?php if (($_style = $this->getProductAttributeValue('style'))) : ?>
                             <p><strong><?php echo $this->__('Style') ?>:</strong> <?php echo $_style ?></p>
                         <?php endif ?>
 
-                        <?php if (1) : //$_product->isSaleable() && $this->hasOptions()): ?>
+                        <?php if (0) : //$_product->isSaleable() && $this->hasOptions()): ?>
                             <p class="size">
                                 <strong><?php echo $this->__('Selected size') ?>: </strong>
                                 <span class="selectedSize"><?php echo $this->__('Choose size') ?></span>
@@ -111,8 +114,22 @@ $_maxQty = 5;
         </div>
     </form>
 
-    <?php //echo $this->getChildHtml('other'); ?>
-    <?php //echo $this->getChildHtml('product_additional_data') ?>
+    [ All Models ]<br/><br/>
+
+    <div class="product-collateral">
+        <ul class="tabs">
+            <li><a href="#description"><?php echo $this->__('Description') ?></a></li>
+            <li><a href="#additional-information"><?php echo $this->__('Additional Information') ?></a></li>
+        </ul>
+        <div id="description" class="tab-content" itemprop="description">
+            <?php echo $this->getProductAttributeValue('description') ?>
+        </div>
+        <div id="additional-information" class="tab-content">
+            [ TODO ]
+        </div>
+    </div>
+
+    <br/>[ Recently Viewed Products ]
 
 </div>
 
