@@ -40,7 +40,7 @@ EOX;
 
         $fileContent = 'Product details page content
 
-<?php echo $this->getProduct()->getAttributeValue(\'name\') ?> (<?php echo $this->getProduct()->getId() ?>)
+<?php echo $this->getProductAttributeValue(\'name\') ?> (<?php echo $this->getProductId() ?>)
 
 <?php echo $this->getChildOutput(\'image_gallery\') ?>
 ';

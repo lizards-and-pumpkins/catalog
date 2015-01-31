@@ -68,11 +68,31 @@ class ProductDetailsPageTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldReturnProductInstance()
+    public function itShouldReturnProductAttributeValue()
     {
-        $productDetailsPageBlock = new ProductDetailsPage('foo.phtml', $this->stubProduct);
-        $result = $productDetailsPageBlock->getProduct();
+        $this->stubProduct->expects($this->once())
+            ->method('getAttributeValue')
+            ->with('name')
+            ->willReturn('foo');
 
-        $this->assertInstanceOf(Product::class, $result);
+        $productDetailsPageBlock = new ProductDetailsPage('bar.phtml', $this->stubProduct);
+        $result = $productDetailsPageBlock->getProductAttributeValue('name');
+
+        $this->assertEquals('foo', $result);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnProductId()
+    {
+        $this->stubProduct->expects($this->once())
+            ->method('getId')
+            ->willReturn('foo');
+
+        $productDetailsPageBlock = new ProductDetailsPage('bar.phtml', $this->stubProduct);
+        $result = $productDetailsPageBlock->getProductId();
+
+        $this->assertEquals('foo', $result);
     }
 }
