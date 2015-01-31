@@ -76,4 +76,13 @@ class Block
 
         return $this->children[$blockName]->render();
     }
+
+    /**
+     * @param string $string
+     * @return string
+     */
+    public function __($string)
+    {
+        return $string;
+    }
 }
