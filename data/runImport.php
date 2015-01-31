@@ -11,7 +11,7 @@ use Brera\SampleFactory;
 $factory = new PoCMasterFactory();
 $factory->register(new SampleFactory());
 
-$xml = file_get_contents('sample-data/product.xml');
+$xml = file_get_contents('data/product.xml');
 
 $queue = $factory->getEventQueue();
 $queue->add(new CatalogImportDomainEvent($xml));
