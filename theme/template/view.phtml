@@ -5,7 +5,7 @@
 ?>
 <?php
 
-$_maxQty = 5;
+$maxQty = 5; // Temporary hardcoded
 $brand = $this->getProductAttributeValue('brand');
 $brandLogo = strtolower(preg_replace('/\W/', '_', trim($brand))) . '.png';
 
@@ -79,12 +79,7 @@ $brandLogo = strtolower(preg_replace('/\W/', '_', trim($brand))) . '.png';
                     </div>
 
                     <div class="price-information" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
-                        <meta itemprop="priceCurrency" content="EUR" />
-                        <meta itemprop="availability" itemtype="http://schema.org/ItemAvailability" content="http://schema.org/available"/>
-
-                        <div class="tax-information">
-                            <?php echo $this->__('inkl. MwSt, zzgl. Versandkosten'); ?>
-                        </div>
+                        {{snippet price}}
                     </div>
                 </div>
 
@@ -94,7 +89,7 @@ $brandLogo = strtolower(preg_replace('/\W/', '_', trim($brand))) . '.png';
 
                             <div class="input-box qty-box">
                                 <select name="qty" id="qty">
-                                    <?php for ($i = 1; $i <= $_maxQty; $i++): ?>
+                                    <?php for ($i = 1; $i <= $maxQty; $i++): ?>
                                         <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
                                     <?php endfor; ?>
                                 </select>
@@ -111,7 +106,7 @@ $brandLogo = strtolower(preg_replace('/\W/', '_', trim($brand))) . '.png';
         </div>
     </form>
 
-    [ All Models ]<br/><br/>
+    {{snippet all-models}}<br/><br/>
 
     <div class="product-collateral">
         <ul class="tabs">
