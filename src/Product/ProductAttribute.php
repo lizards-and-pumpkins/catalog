@@ -23,7 +23,7 @@ class ProductAttribute implements Attribute
 
 	/**
 	 * @param string $code
-	 * @param string $value
+	 * @param string|ProductAttributeList $value
 	 * @param array $environmentData
 	 */
 	private function __construct($code, $value, array $environmentData = [])
