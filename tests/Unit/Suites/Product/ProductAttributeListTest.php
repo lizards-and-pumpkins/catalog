@@ -24,7 +24,8 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
 	public function itShouldAddAndGetAttributeFromAProductAttributeList()
 	{
 		$attributeArray = [
-			'attributes'    => ['code' => 'foo'],
+			'nodeName'      => 'foo',
+			'attributes'    => [],
 			'value'         => 'bar'
 		];
 
@@ -60,12 +61,13 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
 	public function itShouldCreateAttributeListFromAttributesArray()
 	{
 		$attributeArray = [[
-			'attributes'    => ['code'  => 'name'],
+			'nodeName'      => 'foo',
+			'attributes'    => [],
 			'value'         => 'bar'
 		]];
 
 		$attributeList = ProductAttributeList::fromArray($attributeArray);
-		$attribute = $attributeList->getAttribute('name');
+		$attribute = $attributeList->getAttribute('foo');
 
 		$this->assertEquals('bar', $attribute->getValue());
 	}

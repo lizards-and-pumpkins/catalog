@@ -13,11 +13,12 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 	public function itShouldReturnTrueIfAttributeWithGivenCodeExists()
 	{
 		$attribute = ProductAttribute::fromArray([
-			'attributes'    => ['code' => 'name'],
-			'value'         => 'foo'
+			'nodeName'      => 'foo',
+			'attributes'    => [],
+			'value'         => 'bar'
 		]);
 
-		$this->assertTrue($attribute->isCodeEqualsTo('name'));
+		$this->assertTrue($attribute->isCodeEqualsTo('foo'));
 	}
 
 	/**
@@ -26,11 +27,12 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 	public function itShouldReturnFalseIfAttributeWithGivenCodeDoesNotExist()
 	{
 		$attribute = ProductAttribute::fromArray([
-			'attributes'    => ['code' => 'name'],
-			'value'         => 'foo'
+			'nodeName'      => 'foo',
+			'attributes'    => [],
+			'value'         => 'bar'
 		]);
 
-		$this->assertFalse($attribute->isCodeEqualsTo('price'));
+		$this->assertFalse($attribute->isCodeEqualsTo('baz'));
 	}
 
 	/**
@@ -39,11 +41,12 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 	public function itShouldReturnAttributeCode()
 	{
 		$attribute = ProductAttribute::fromArray([
-			'attributes'    => ['code' => 'name'],
-			'value'         => 'foo'
+			'nodeName'      => 'foo',
+			'attributes'    => [],
+			'value'         => 'bar'
 		]);
 
-		$this->assertEquals('name', $attribute->getCode());
+		$this->assertEquals('foo', $attribute->getCode());
 	}
 
 	/**
@@ -52,37 +55,11 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 	public function itShouldReturnAttributeValue()
 	{
 		$attribute = ProductAttribute::fromArray([
-			'attributes'    => ['code' => 'name'],
-			'value'         => 'foo'
+			'nodeName'      => 'foo',
+			'attributes'    => [],
+			'value'         => 'bar'
 		]);
 
-		$this->assertEquals('foo', $attribute->getValue());
-	}
-
-	/**
-	 * @test
-	 * @expectedException \Brera\FirstCharOfAttributeCodeIsNotAlphabeticException
-	 * @dataProvider invalidAttributeCodeProvider
-	 * @param $invalidAttributeCode
-	 */
-	public function itShouldThrowAnExceptionIfAttributeCodeStartWithNonAlphabeticCharacter($invalidAttributeCode)
-	{
-		ProductAttribute::fromArray([
-			'attributes'    => ['code' => $invalidAttributeCode],
-			'value'         => 'foo'
-		]);
-	}
-
-	public function invalidAttributeCodeProvider()
-	{
-		return [
-			[null],
-			[''],
-			[' '],
-			['1'],
-			['-bar'],
-			['2foo'],
-			["\nbaz"]
-		];
+		$this->assertEquals('bar', $attribute->getValue());
 	}
 }

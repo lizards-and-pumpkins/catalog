@@ -3,7 +3,6 @@
 namespace Brera\Product;
 
 use Brera\Attribute;
-use Brera\FirstCharOfAttributeCodeIsNotAlphabeticException;
 
 class ProductAttribute implements Attribute
 {
@@ -36,20 +35,11 @@ class ProductAttribute implements Attribute
 
 	/**
 	 * @param array $node
-	 * @throws FirstCharOfAttributeCodeIsNotAlphabeticException
 	 * @return ProductAttribute
 	 */
 	public static function fromArray(array $node)
 	{
-		$code = $node['attributes']['code'];
-
-		if (!strlen($code) || !ctype_alpha(substr($code, 0, 1))) {
-			throw new FirstCharOfAttributeCodeIsNotAlphabeticException();
-		}
-
-		$environment = array_diff_key($node['attributes'], ['code' => $code]);
-
-		return new self($code, $node['value'], $environment);
+		return new self($node['nodeName'], $node['value'], $node['attributes']);
 	}
 
 	/**

@@ -2,7 +2,7 @@
 <products xmlns="http://brera.io" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://brera.io product.xsd">
     <product type="simple" sku="118235-251" visible="true" tax_class_id="5">
-        <assets>
+        <attributes>
             <image identifier="main">
                 <file>products/2013_pro_touch_118235-251.jpg</file>
                 <label>The main image label</label>
@@ -17,42 +17,40 @@
                 <file lang="de_US">products/118235/118235-251.2us.png</file>
                 <label>A secondary image label</label>
             </image>
-        </assets>
-        <attributes>
-            <attribute code="category" website="ru_de">men</attribute>
-            <attribute code="category" website="ru_de">women</attribute>
-            <attribute code="category" website="ru_de">men-accessories</attribute>
-            <attribute code="category" website="ru_de">women-accessories</attribute>
-            <attribute code="category" website="ru_en">men-accessories</attribute>
-            <attribute code="category" website="ru_en">women-accessories</attribute>
-            <attribute code="stock_qty">5</attribute>
-            <attribute code="backorders">true</attribute>
-            <attribute code="url_key" lang="de_DE">led-arm-signallampe</attribute>
-            <attribute code="url_key" lang="en_US">led-armflasher</attribute>
-            <attribute code="name" lang="de_DE">LED Arm-Signallampe</attribute>
-            <attribute code="name" lang="en_US">LED Armflasher</attribute>
-            <attribute code="price" customer_group="retail" website="ru_de">12.95</attribute>
-            <attribute code="price" website="ru_en">11.45</attribute>
-            <attribute code="special_price" website="ru_de">11.95</attribute>
-            <attribute code="image_main">main</attribute>
-            <attribute code="image_listing">main</attribute>
-            <attribute code="image_thumbnail">small</attribute>
-            <attribute code="weight">11.2</attribute>
-            <attribute code="description" lang="de_DE"><![CDATA[Pro Touch LED Armflasher<br />
+            <category website="ru_de">men</category>
+            <category website="ru_de">women</category>
+            <category website="ru_de">men-accessories</category>
+            <category website="ru_de">women-accessories</category>
+            <category website="ru_en">men-accessories</category>
+            <category website="ru_en">women-accessories</category>
+            <stock_qty>5</stock_qty>
+            <backorders>true</backorders>
+            <url_key lang="de_DE">led-arm-signallampe</url_key>
+            <url_key lang="en_US">led-armflasher</url_key>
+            <name lang="de_DE">LED Arm-Signallampe</name>
+            <name lang="en_US">LED Armflasher</name>
+            <price customer_group="retail" website="ru_de">12.95</price>
+            <price website="ru_en">11.45</price>
+            <special_price website="ru_de">11.95</special_price>
+            <image_main>main</image_main>
+            <image_listing>main</image_listing>
+            <image_thumbnail>small</image_thumbnail>
+            <weight>11.2</weight>
+            <description lang="de_DE"><![CDATA[Pro Touch LED Armflasher<br />
 <br />
 LED Armflasher mit elastischem Band und Flasher mit variabler Blinkfolge,
-Flasher abnehmbar.]]></attribute>
-            <attribute code="description" lang="en_US"><![CDATA[Pro Touch LED Armflasher<br />
+Flasher abnehmbar.]]></description>
+            <description lang="en_US"><![CDATA[Pro Touch LED Armflasher<br />
 <br />
-LED Armflasher with elastic Band and Flasher]]></attribute>
-            <attribute code="brand">Pro Touch</attribute>
-            <attribute code="style">Leuchten</attribute>
-            <attribute code="gender">Damen, Herren</attribute>
+LED Armflasher with elastic Band and Flasher]]></description>
+            <brand>Pro Touch</brand>
+            <style>Leuchten</style>
+            <gender>Damen, Herren</gender>
         </attributes>
     </product>
 
     <product type="configurable" sku="218765-333" visible="true" tax_class_id="5">
-        <assets>
+        <attributes>
             <image identifier="main-shoe-picture">
                 <file>products/218765/218765-333.1.png</file>
                 <label lang="de_DE">Das Hauptbild</label>
@@ -70,19 +68,17 @@ LED Armflasher with elastic Band and Flasher]]></attribute>
             <pdf>
                 <file>guarantee-document.pdf</file>
             </pdf>
-        </assets>
-        <attributes>
-            <attribute code="url_key">adipure-360</attribute>
-            <attribute code="category">men-running-shoes</attribute>
-            <attribute code="category">specials</attribute>
-            <attribute code="stock_qty">5</attribute>
-            <attribute code="backorders">true</attribute>
-            <attribute code="name">adiPure 360</attribute>
-            <attribute code="price">12.95</attribute>
-            <attribute code="image_main">main-shoe-picture</attribute>
-            <attribute code="image_listing">small</attribute>
-            <attribute code="image_thumbnail">small</attribute>
-            <attribute code="short_description"><![CDATA[<div>Adidas adiPure 360</div>
+            <url_key>adipure-360</url_key>
+            <category>men-running-shoes</category>
+            <category>specials</category>
+            <stock_qty>5</stock_qty>
+            <backorders>true</backorders>
+            <name>adiPure 360</name>
+            <price>12.95</price>
+            <image_main>main-shoe-picture</image_main>
+            <image_listing>small</image_listing>
+            <image_thumbnail>small</image_thumbnail>
+            <short_description><![CDATA[<div>Adidas adiPure 360</div>
 
 <li>Techfit bietet Unterstützung in den wichtigen Bereichen.</li>
 <li>Technisierte Maschen: Die ungleichmäßige Maschenstruktur vereint dichte und offene Maschen.</li>
@@ -93,91 +89,91 @@ LED Armflasher with elastic Band and Flasher]]></attribute>
 <li>Ultraweiches, wasserfestes SUPERCLOUD EVA-Fußbett für schnelltrocknenden Komfort</li>
 <li>Flex-Rillen für einen angenehmen und natürlichen Lauf</li>
 <li>ABRIEBFESTE Gummiaußensohle</li>
-]]></attribute>
+]]></short_description>
         </attributes>
         <associated_products>
             <product sku="218765-333-1" visible="false" tax_class_id="5">
                 <attributes>
-                    <attribute code="stock_qty">5</attribute>
-                    <attribute code="color">
+                    <stock_qty>5</stock_qty>
+                    <color>
                         <label lang="en_US">Red</label>
                         <label lang="de_DE">Rot</label>
-                    </attribute>
-                    <attribute code="size">
+                    </color>
+                    <size>
                         <label>US 12.5 - EU 47</label>
-                    </attribute>
+                    </size>
                 </attributes>
             </product>
             <product sku="218765-333-2" visible="false" tax_class_id="5">
                 <attributes>
-                    <attribute code="stock_qty">750</attribute>
-                    <attribute code="color">
+                    <stock_qty>750</stock_qty>
+                    <color>
                         <label lang="en_US">Red</label>
                         <label lang="de_DE">Rot</label>
-                    </attribute>
-                    <attribute code="size">
+                    </color>
+                    <size>
                         <label>US 12 - EU 46</label>
-                    </attribute>
+                    </size>
                 </attributes>
             </product>
             <product sku="218765-333-3" visible="false" tax_class_id="5">
                 <attributes>
-                    <attribute code="stock_qty">45</attribute>
-                    <attribute code="color">
+                    <stock_qty>45</stock_qty>
+                    <color>
                         <label lang="en_US">Red</label>
                         <label lang="de_DE">Rot</label>
-                    </attribute>
-                    <attribute code="size">
+                    </color>
+                    <size>
                         <label>US 11.5 - EU 45</label>
-                    </attribute>
+                    </size>
                 </attributes>
             </product>
             <product sku="218765-333-4" visible="false" tax_class_id="5">
                 <attributes>
-                    <attribute code="stock_qty">5</attribute>
-                    <attribute code="color">
+                    <stock_qty>5</stock_qty>
+                    <color>
                         <label lang="en_US">Red</label>
                         <label lang="de_DE">Rot</label>
-                    </attribute>
-                    <attribute code="size">
+                    </color>
+                    <size>
                         <label>US 10 - EU 43</label>
-                    </attribute>
+                    </size>
                 </attributes>
             </product>
             <product sku="218765-333-5" visible="false" tax_class_id="5">
                 <attributes>
-                    <attribute code="stock_qty">5</attribute>
-                    <attribute code="color">
+                    <stock_qty>5</stock_qty>
+                    <color>
                         <label lang="en_US">Blue</label>
                         <label lang="de_DE">Blau</label>
-                    </attribute>
-                    <attribute code="size">
+                    </color>
+                    <size>
                         <label>US 12.5 - EU 47</label>
-                    </attribute>
+                    </size>
                 </attributes>
             </product>
             <product sku="218765-333-6" visible="false" tax_class_id="5">
                 <attributes>
-                    <attribute code="stock_qty">5</attribute>
-                    <attribute code="color">
+                    <stock_qty>5</stock_qty>
+                    <color>
                         <label lang="en_US">Blue</label>
                         <label lang="de_DE">Blau</label>
-                    </attribute>
-                    <attribute code="size">
+                    </color>
+                    <size>
                         <label>US 12 - EU 46</label>
-                    </attribute>
+                    </size>
                 </attributes>
             </product>
             <product sku="218765-333-7" visible="false" tax_class_id="5">
                 <attributes>
-                    <attribute code="stock_qty">5</attribute>
-                    <attribute code="color">
+                    <stock_qty>5</stock_qty>
+                    <color>
                         <label lang="en_US">Blue</label>
                         <label lang="de_DE">Blau</label>
-                    </attribute>
-                    <attribute code="size">
+                    </color>
+                    <size>
                         <label>US 11.5 - EU 45</label>
-                    </attribute>
+                    </size>
                 </attributes>
             </product>
         </associated_products>
