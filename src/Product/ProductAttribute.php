@@ -39,7 +39,26 @@ class ProductAttribute implements Attribute
 	 */
 	public static function fromArray(array $node)
 	{
-		return new self($node['nodeName'], $node['value'], $node['attributes']);
+		return new self($node['nodeName'], self::getValueRecursive($node['value']), $node['attributes']);
+	}
+
+	/**
+	 * @param $nodeValue
+	 * @return string|ProductAttributeList
+	 */
+	public static function getValueRecursive($nodeValue)
+	{
+		if (!is_array($nodeValue)) {
+			return $nodeValue;
+		}
+
+		$list = new ProductAttributeList();
+
+		foreach ($nodeValue as $node) {
+			$list->add(new self($node['nodeName'], self::getValueRecursive($node['value']), $node['attributes']));
+		}
+
+		return $list;
 	}
 
 	/**
@@ -60,7 +79,7 @@ class ProductAttribute implements Attribute
 	}
 
 	/**
-	 * @return string
+	 * @return string|ProductAttributeList
 	 */
 	public function getValue()
 	{
