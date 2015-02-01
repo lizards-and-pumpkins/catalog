@@ -30,19 +30,17 @@ $brandLogo = strtolower(preg_replace('/\W/', '_', trim($brand))) . '.png';
                                 <?php echo $this->__('More by') ?> <a href="" itemprop="brand"><?php echo $brand ?></a>
                             </p>
                         </div>
-                        <div class="cc"></div>
                     </div>
                     <div class="articleInformations">
                         <p class="articleNumber"><?php echo $this->__('SKU# ') ?> <?php echo $this->getProductId() ?></p>
                         <meta itemprop="sku" content="<?php echo $this->getProductId() ?>" />
                     </div>
 
-                    <div class="socialSharing cc en_US">
+                    <div class="socialSharing en_US">
                         <div class="item twitterLike"><a href="https://twitter.com/share" class="twitter-share-button">Tweet</a></div>
                         <div class="item g-plusone" data-size="medium"></div>
                         <div class="item fb-like" data-href="<!-- echo $this->getProductUrl($_product) -->" data-send="true" data-layout="button_count" data-width="200" data-show-faces="false" data-action="recommend"></div>
                         <div class="item print"><a href="javascript:" onclick="window.print()"><?php echo $this->__('Print') ?> <img src="images/icons/printico.gif" alt="print" /></a></div>
-                        <div class="cc"></div>
                     </div>
                 </div>
 
@@ -88,7 +86,6 @@ $brandLogo = strtolower(preg_replace('/\W/', '_', trim($brand))) . '.png';
                             <?php echo $this->__('inkl. MwSt, zzgl. Versandkosten'); ?>
                         </div>
                     </div>
-                    <div class="cc"></div>
                 </div>
 
                 <div class="product-controls">

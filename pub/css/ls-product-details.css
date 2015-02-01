@@ -11,7 +11,6 @@ body.catalog-product-view div.wrapper {background-color: #fff;}
 .product-shop .price-box .retail-price { font-size: 17px; text-decoration: line-through; }
 #product-attribute-specs-table .retail-price { text-decoration: line-through; }
 .product-shop .price-box .regular-price { font-weight: bold; font-size: 21px; }
-.product-shop .product-name h1 { font-size: 16px; font-weight: 400; width: 220px; text-transform:none; } /* width added by Fabrizio to avoid longer article names to be pushed below the price */
 .product-shop .artikel-nummer { font-size: 11px; margin: -3px 0 0 0; }
 .product-shop .delivery { color: #3d9b35; }
 .product-shop .note { line-height: 16px; }
@@ -34,7 +33,7 @@ body.catalog-product-view div.wrapper {background-color: #fff;}
  .slideshow object { width:125px; height:20px; }
  div.panorama,
  div.youTubeHolder { position: absolute; left:5px; top:5px; height: 340px; overflow: hidden; }
- div.product-shop h1 { font-size: 13px; font-weight: normal; margin: 0; padding: 0; color: #000; width: 215px; }
+ .product-shop h1 { font-size: inherit }
  .product-shop div.top div.informations { position: absolute; top:60px; right:20px; }
  div.product-shop div.top div.informations div.price-box p.retail-price span.price { font-size: 18px; }
  div.product-shop div.top div.informations div.price-box p.regular-price span.price { font-weight: normal; font-size: 24px; }
@@ -52,7 +51,7 @@ body.catalog-product-view div.wrapper {background-color: #fff;}
 div.product-shop div.price-box p.regular-price { font-size: 24px; font-weight: normal;}
 
 /* Social buttons */
-.socialSharing { padding-top: 15px }
+.socialSharing { padding-top: 15px; clear: both }
 .socialSharing .item { float:left }
 .socialSharing div.item:first-child { margin-left: 0 }
 .socialSharing div.item.twitterLike { margin-right: -35px }
@@ -98,6 +97,10 @@ div.selector span { text-overflow: clip }
 #alertLayer { display: none }
 #recently-viewed { position: relative }
 
+div.main-image-area-wrapper object#yt { z-index: 19998; position: relative; margin-top: 29px }
+div.product-view.cycles div.main-image-area-wrapper object#yt { margin-top: 0 }
+div.main-image-area-wrapper object#swf { height:340px !important }
+
 /* Tablet */
 @media (max-width: 974px) {
     .product-shop { width: auto }
@@ -139,3 +142,6 @@ div.selector span { text-overflow: clip }
     .product-img-box .flexslider { display: block }
     .main-image-area-wrapper, .more-views, div.slideshow { display: none }
 }
+
+/* Clearer */
+.product-shop .product-title:after, .socialSharing:after, .product-main-info:after { content: ""; display: block; height: 0; clear: both; visibility: hidden }

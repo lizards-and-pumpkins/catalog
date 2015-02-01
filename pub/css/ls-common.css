@@ -1,7 +1,11 @@
-/* TODO: styles.css, csf-base.css and other common elements have to be merged in here (after they got cleaned) */
-
-html { background-color: #EAEAEA }
+html { font-size: 13px; font-family: Verdana, Arial, Helvetica, sans-serif }
 a { color: #37a3d4; text-decoration: none }
+
+.header { margin: 0 auto; width: 975px; position: relative }
+.main { margin: 0 auto; width: 975px; padding: 15px 0 42px }
+.footer-container { background: #f2f2f2 }
+.footer { margin: 0 auto; width: 953px; overflow: hidden; padding: 35px 11px 55px 11px }
+
 .footer-block dt { color: #37a3d4; }
 .block-text h4 { color: #37a3d4; }
 .products-grid .you-save { color: #37a3d4; }
@@ -11,6 +15,8 @@ a { color: #37a3d4; text-decoration: none }
 .swipe-container li { display: table-cell }
 .swipe-container .products-grid li { float: none; width: auto }
 .swipe-container .products-grid li .grid-cell-container { border-bottom: none; width: 213px }
+
+h1 { font-size: 26px; font-weight: normal; color: #323232; text-transform: uppercase }
 
 /* jScrollPane overrides */
 .jspVerticalBar { width: 17px }
@@ -177,6 +183,9 @@ nav { clear: both; color: #ffffff }
 .info-banner-inner-container { width: 975px; margin: 0 auto; background: url("../images/icon-star.png") no-repeat left center }
 .info-banner-text-container { text-align: center; font-family: 'GeogrotesqueMedium', serif;  font-size: 15px; padding: 8px 24px; background: url("../images/icon-star.png") no-repeat right center }
 
+/* Placeholder fix */
+.placeholder { color: #aaaaaa }
+
 /* Supplementary stuff */
 
 /* Fonts */
@@ -221,4 +230,6 @@ nav { clear: both; color: #ffffff }
 }
 
 /* Clearer */
-.nav .brands-logos:after { content: ""; display: block; height: 0; clear: both; visibility: hidden }
+.clearer:after, .c:after, .columns:after, .content form p:after, .form-list li:after, .nav:after, .nav:before,
+#navPlaceholder > ul:after, .phone-bar:after, #phoneMenuPlaceholder ul:after, #newsletterForm:after,
+#layeredNavPlaceholder:after, .header-panel:after, .nav .brands-logos:after { content: ""; display: block; height: 0; clear: both; visibility: hidden }
