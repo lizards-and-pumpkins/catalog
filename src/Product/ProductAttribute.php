@@ -17,7 +17,7 @@ class ProductAttribute implements Attribute
 	private $environment;
 
 	/**
-	 * @var string
+	 * @var string|ProductAttributeList
 	 */
 	private $value;
 
