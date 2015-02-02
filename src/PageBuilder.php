@@ -38,12 +38,12 @@ class PageBuilder
         $snippetListKey = $this->keyGenerator->getKeyForSnippetList($url);
 
         $childSnippetKeys = $this->replacePlaceholdersInKeys($this->dataPoolReader->getChildSnippetKeys($snippetListKey));
-        $firstSnippetKey = $this->replacePlaceholdersInKey($this->keyGenerator->getKeyForUrl($url));
+        $rootSnippetKey = $this->replacePlaceholdersInKey($this->keyGenerator->getKeyForUrl($url));
 
-        $allSnippets = $this->dataPoolReader->getSnippets($childSnippetKeys + [$firstSnippetKey => $firstSnippetKey]);
+        $allSnippets = $this->dataPoolReader->getSnippets($childSnippetKeys + [$rootSnippetKey => $rootSnippetKey]);
 
-        $content = $allSnippets[$firstSnippetKey];
-        unset($allSnippets[$firstSnippetKey]);
+        $content = $allSnippets[$rootSnippetKey];
+        unset($allSnippets[$rootSnippetKey]);
         $childSnippets = $allSnippets;
 
         $snippets = $this->mergePlaceholderAndSnippets($this->buildPlaceholdersFromKeys($childSnippetKeys), $childSnippets);
