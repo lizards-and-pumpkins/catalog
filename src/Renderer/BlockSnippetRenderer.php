@@ -79,7 +79,7 @@ abstract class BlockSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param $blockClass
+     * @param string $blockClass
      * @throws CanNotInstantiateBlockException
      */
     private function validateBlockClass($blockClass)
