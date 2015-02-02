@@ -109,7 +109,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
 			->willReturn(sys_get_temp_dir());
 
 		$result = $this->snippetRenderer->render($stubProduct, $this->stubEnvironment);
-		$this->assertSame($this->stubSnippetResultList, $result);
+		$this->assertSame($this->mockSnippetResultList, $result);
 	}
 
     /**
@@ -148,7 +148,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
             ->willReturn($productNameString);
 
 		$transport = '';
-		$this->stubSnippetResultList->expects($this->once())
+		$this->mockSnippetResultList->expects($this->once())
 			->method('add')
 			->willReturnCallback(function ($snippetResult) use (&$transport) {
 				$transport = $snippetResult;
