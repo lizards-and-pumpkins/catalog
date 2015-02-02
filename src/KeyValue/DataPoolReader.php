@@ -122,7 +122,11 @@ class DataPoolReader
     private function validateJson($key, $json)
     {
         if (!is_string($json)) {
-            throw new \RuntimeException(sprintf('List for key "%s" is no valid JSON - it is not even a string.', $key));
+            throw new \RuntimeException(
+                sprintf(
+                    'Expected the value for key "%s" to be a string containing JSON but found "%s".',
+                    $key, gettype($json))
+            );
         }
     }
 
