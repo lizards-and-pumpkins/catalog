@@ -138,16 +138,16 @@ class DataPoolReader
      */
     private function decodeJsonArray($key, $json)
     {
-        $list = json_decode($json, true);
+        $result = json_decode($json, true);
 
-        if ($list === false) {
-            $list = [];
+        if ($result === false) {
+            $result = [];
         }
-        if (!is_array($list) || json_last_error() !== JSON_ERROR_NONE) {
+        if (!is_array($result) || json_last_error() !== JSON_ERROR_NONE) {
             throw new \RuntimeException(sprintf('List for key "%s" is no valid JSON.', $key));
         }
 
-        return $list;
+        return $result;
     }
 
 }
