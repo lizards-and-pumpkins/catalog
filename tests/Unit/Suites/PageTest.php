@@ -8,6 +8,10 @@ namespace Brera;
 class PageTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var string
+     */
+    private $testedBody;
+    /**
      * @var Page
      */
     private $page;
@@ -17,7 +21,8 @@ class PageTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->page = new Page();
+        $this->testedBody = 'my cool body';
+        $this->page = new Page($this->testedBody);
     }
 
     /**
@@ -25,9 +30,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnASetBody()
     {
-        $testedBody = 'my cool body';
-        $this->page->setBody($testedBody);
-        $this->assertEquals($testedBody, $this->page->getBody());
+        $this->assertEquals($this->testedBody, $this->page->getBody());
     }
 
     /**
@@ -35,11 +38,43 @@ class PageTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldEchoTheBodyOnSend()
     {
-        $testedBody = 'my cool body';
-        $this->page->setBody($testedBody);
         ob_start();
         $this->page->send();
         $buffer = ob_get_clean();
-        $this->assertEquals($testedBody, $buffer);
+        $this->assertEquals($this->testedBody, $buffer);
+    }
+
+    /**
+     * @test
+     * @dataProvider noStringProvider
+     * @expectedException \InvalidArgumentException
+     */
+    public function itShouldThrowAnExceptionIfNoString($noString)
+    {
+        new Page($noString);
+    }
+
+    public function noStringProvider()
+    {
+        return [
+            array(
+                new \stdClass()
+            ),
+            array(
+                123
+            ),
+            array(
+                1.01
+            ),
+            array(
+                []
+            ),
+            array(
+                true
+            ),
+            array(
+                false
+            )
+        ];
     }
 }
