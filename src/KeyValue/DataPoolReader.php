@@ -83,7 +83,7 @@ class DataPoolReader
         $this->validateKey($key);
         $json = $this->keyValueStore->get($key);
         $this->validateJson($key, $json);
-        $list = $this->jsonDecode($key, $json);
+        $list = $this->decodeJsonArray($key, $json);
 
         return $list;
     }
@@ -136,7 +136,7 @@ class DataPoolReader
      * @param string $json
      * @return string[]
      */
-    private function jsonDecode($key, $json)
+    private function decodeJsonArray($key, $json)
     {
         $list = json_decode($json, true);
 
