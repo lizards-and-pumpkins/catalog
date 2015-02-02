@@ -109,7 +109,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
      * @test
      * @expectedException \RuntimeException
      *
-     * @dataProvider brokenKeyForSnippetListProvider
+     * @dataProvider invalidKeyProvider
      */
     public function itShouldOnlyAcceptStringKeyForSnippetList($key)
     {
@@ -120,7 +120,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
      * @test
      * @expectedException \RuntimeException
      *
-     * @dataProvider brokenKeyForSnippetListProvider
+     * @dataProvider invalidKeyProvider
      */
     public function itShouldOnlyAcceptStringKeysForGetSnippet($key)
     {
@@ -130,7 +130,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     /**
      * @return array
      */
-    public function brokenKeyForSnippetListProvider()
+    public function invalidKeyProvider()
     {
         return [
             array(new \stdClass()),
