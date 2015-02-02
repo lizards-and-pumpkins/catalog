@@ -35,18 +35,18 @@ class PageBuilder
      */
     public function buildPage(HttpUrl $url)
     {
-        $listKey = $this->keyGenerator->getKeyForSnippetList($url);
+        $snippetListKey = $this->keyGenerator->getKeyForSnippetList($url);
 
-        $childKeys = $this->replacePlaceholdersInKeys($this->dataPoolReader->getChildSnippetKeys($listKey));
+        $childSnippetKeys = $this->replacePlaceholdersInKeys($this->dataPoolReader->getChildSnippetKeys($snippetListKey));
         $firstSnippetKey = $this->replacePlaceholdersInKey($this->keyGenerator->getKeyForUrl($url));
 
-        $allSnippets = $this->dataPoolReader->getSnippets($childKeys + [$firstSnippetKey => $firstSnippetKey]);
+        $allSnippets = $this->dataPoolReader->getSnippets($childSnippetKeys + [$firstSnippetKey => $firstSnippetKey]);
 
         $content = $allSnippets[$firstSnippetKey];
         unset($allSnippets[$firstSnippetKey]);
         $childSnippets = $allSnippets;
 
-        $snippets = $this->mergePlaceholderAndSnippets($this->buildPlaceholdersFromKeys($childKeys), $childSnippets);
+        $snippets = $this->mergePlaceholderAndSnippets($this->buildPlaceholdersFromKeys($childSnippetKeys), $childSnippets);
 
         $content = $this->injectSnippetsIntoContent($content, $snippets);
 
