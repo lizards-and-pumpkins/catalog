@@ -266,7 +266,7 @@ function adjustDetailsToWidth() {
     var currentWidth = jQuery(window).width(),
     /* Maybe it makes sense to initialize variables on load only ? */
         phoneTitlePlaceholder = jQuery('#phoneTitlePlaceholder'),
-        productTitle = jQuery('.product-title-infos h1'),
+        productTitle = jQuery('.product-title-info h1'),
         brandLogo = jQuery('.product-title img'),
         socialIcons = jQuery('.socialSharing'),
         productTopContainer = jQuery('.product-shop > .top'),
@@ -337,7 +337,7 @@ function adjustDetailsToWidth() {
         /* Hide "send" part of FB buttons block if not yet hidden */
         fbEnsureInit(processFbButton);
     } else {
-        var originalTitleContainer = jQuery('.product-title-infos');
+        var originalTitleContainer = jQuery('.product-title-info');
 
         /* Move product title back if required */
         if (!productTitle.length) {

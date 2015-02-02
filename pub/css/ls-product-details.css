@@ -15,7 +15,6 @@ body.catalog-product-view div.wrapper {background-color: #fff;}
 .product-shop .delivery { color: #3d9b35; }
 .product-shop .note { line-height: 16px; }
 .product-img-box { float: left }
-.product-img-box a { border: none; }
 .more-views { overflow: hidden; width: 366px; position:relative; top:3px; height:50px; padding: 0; float: left; margin-top: 0 }
 .more-views li { float: left; list-style: none; padding: 0 1px 0 0; }
 .more-views a { display: block; margin-right: 1px; background-color: #fff; cursor: pointer }
@@ -26,7 +25,7 @@ body.catalog-product-view div.wrapper {background-color: #fff;}
 .product-collateral .tabs a.active { border-color: #37A3E2; background-color: #f0f0f0; border-bottom: #f0f0f0 solid 1px }
 .product-collateral .tab-content { background: #f0f0f0; padding: 20px 30px }
 
-.product-shop .product-title .product-image, .product-shop .product-title .product-title-infos { float: left }
+.product-shop .product-title img { float: left }
 .product-shop .similarProducts { font-size: 11px; margin-top: 5px }
 
  .slideshow { position: absolute; top:20px; left: 227px; z-index:10; }

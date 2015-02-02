@@ -23,8 +23,8 @@ $brandLogo = strtolower(preg_replace('/\W/', '_', trim($brand))) . '.png';
             <div class="product-shop">
                 <div class="top">
                     <div class="product-title">
-                        <img class="product-image" src="images/logos/<?php echo $brandLogo ?>" width="95" />
-                        <div class="product-title-infos">
+                        <img src="images/logos/<?php echo $brandLogo ?>" width="95" />
+                        <div class="product-title-info">
                             <h1 itemprop="name"><?php echo $this->getProductAttributeValue('name') ?></h1>
                             <p class="similarProducts">
                                 <?php echo $this->__('More by') ?> <a href="" itemprop="brand"><?php echo $brand ?></a>

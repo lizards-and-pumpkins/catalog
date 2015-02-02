@@ -16,7 +16,7 @@ textarea { min-height: 150px; resize: none; margin: 7px 0; font-family: Arial, V
 .formFieldsContainer .row .checker, .formFieldsContainer .row .radio { float: left; display: block }
 
 /* Button */
-button { padding:5px 20px; font-family: GeogrotesqueRegular, Helvetica, Arial, sans-serif; font-size: 22px; color: #fff; cursor: pointer; font-weight: normal; border-radius: 2px 2px 2px 2px; -moz-border-radius: 2px 2px 2px 2px; -webkit-border-radius:2px 2px 2px 2px }
+button { padding: 5px 20px; font-family: GeogrotesqueRegular, Helvetica, Arial, sans-serif; font-size: 22px; color: #ffffff; cursor: pointer; font-weight: normal; border-radius: 2px }
 button {
     border: 1px solid #e36d11;
     background: -moz-linear-gradient(top, #eb9c19 0%, #e36d11 100%); /* FF3.6+ */
