@@ -11,6 +11,7 @@ use Brera\Product\ProductAttributeList;
 /**
  * @covers \Brera\Product\Block\ProductImageGallery
  * @uses \Brera\Renderer\Block
+ * @uses \Brera\Image
  */
 class ProductImageGalleryTest extends \PHPUnit_Framework_TestCase
 {
