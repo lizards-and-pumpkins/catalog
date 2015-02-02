@@ -89,7 +89,7 @@ class Layout
      */
     private static function getValue($layout)
     {
-        if (!is_array($layout)) {
+        if (!self::hasChildNodes($layout)) {
             return $layout;
         }
 
@@ -101,5 +101,14 @@ class Layout
         }
 
         return $values;
+    }
+
+    /**
+     * @param string|array $layout
+     * @return bool
+     */
+    private static function hasChildNodes($layout)
+    {
+        return is_array($layout);
     }
 }
