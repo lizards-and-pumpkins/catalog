@@ -60,7 +60,7 @@ class Layout
     }
 
     /**
-     * @return mixed
+     * @return string|Layout
      */
     public function getNodeValue()
     {
@@ -70,7 +70,7 @@ class Layout
     /**
      * @param array $layout
      * @throws RootElementOfLayoutMustBeAnArrayException
-     * @return mixed
+     * @return array
      */
     private static function getRootElement(array $layout)
     {
@@ -85,7 +85,7 @@ class Layout
 
     /**
      * @param mixed $layout
-     * @return mixed
+     * @return string|Layout
      */
     private static function getValue($layout)
     {
