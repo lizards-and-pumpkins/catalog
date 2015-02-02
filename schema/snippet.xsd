@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://brera.io"
+        xmlns="http://brera.io"
+        elementFormDefault="qualified">
+    <xs:element name="snippet">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="block" type="block" maxOccurs="unbounded" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:complexType name="block">
+        <xs:sequence>
+            <xs:element name="block" type="block" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required" />
+        <xs:attribute name="class" type="xs:string" use="required" />
+        <xs:attribute name="template" type="xs:string" use="required" />
+    </xs:complexType>
+</xs:schema>
