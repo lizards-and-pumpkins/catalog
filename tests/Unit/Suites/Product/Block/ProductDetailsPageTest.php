@@ -3,6 +3,7 @@
 namespace Brera\Product\Block;
 
 use Brera\Product\Product;
+use Brera\Product\ProductAttributeNotFoundException;
 use Brera\Renderer\ThemeTestTrait;
 
 require_once __DIR__ . '/../../Renderer/ThemeTestTrait.php';
@@ -79,6 +80,23 @@ class ProductDetailsPageTest extends \PHPUnit_Framework_TestCase
         $result = $productDetailsPageBlock->getProductAttributeValue('name');
 
         $this->assertEquals('foo', $result);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnEmptyStringIfAttributeIsNotFound()
+    {
+        $stubException = $this->getMock(ProductAttributeNotFoundException::class);
+
+        $this->stubProduct->expects($this->once())
+            ->method('getAttributeValue')
+            ->willThrowException($stubException);
+
+        $productDetailsPageBlock = new ProductDetailsPage('foo.phtml', $this->stubProduct);
+        $result = $productDetailsPageBlock->getProductAttributeValue('bar');
+
+        $this->assertEquals('', $result);
     }
 
     /**
