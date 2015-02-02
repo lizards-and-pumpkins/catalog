@@ -10,20 +10,18 @@ class Layout
     private $nodeAttributes;
 
     /**
-     * @var mixed
+     * @var string|Layout[]
      */
-    private $nodeValue;
+    private $nodeChildren;
 
     /**
      * @param array $nodeAttributes
-     * @param mixed $nodeValue
-     * @internal param array $attributes
-     * @internal param string $name
+     * @param string|array $nodeChildren
      */
-    private function __construct(array $nodeAttributes, $nodeValue)
+    private function __construct(array $nodeAttributes, $nodeChildren)
     {
         $this->nodeAttributes = $nodeAttributes;
-        $this->nodeValue = $nodeValue;
+        $this->nodeChildren = $nodeChildren;
     }
 
     /**
@@ -60,11 +58,11 @@ class Layout
     }
 
     /**
-     * @return string|Layout
+     * @return string|Layout[]
      */
-    public function getNodeValue()
+    public function getNodeChildren()
     {
-        return $this->nodeValue;
+        return $this->nodeChildren;
     }
 
     /**
@@ -85,7 +83,7 @@ class Layout
 
     /**
      * @param mixed $layout
-     * @return string|Layout
+     * @return string|Layout[]
      */
     private static function getValue($layout)
     {

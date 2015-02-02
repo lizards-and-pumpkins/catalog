@@ -23,7 +23,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $snippetLayout = Layout::fromArray($layoutArray);
 
         $this->assertEquals(['name' => 'foo'], $snippetLayout->getAttributes());
-        $this->assertContainsOnly(Layout::class, $snippetLayout->getNodeValue());
+        $this->assertContainsOnly(Layout::class, $snippetLayout->getNodeChildren());
     }
 
     /**
