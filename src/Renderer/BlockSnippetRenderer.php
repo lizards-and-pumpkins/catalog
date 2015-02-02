@@ -54,11 +54,11 @@ abstract class BlockSnippetRenderer implements SnippetRenderer
         /** @var Block $blockInstance */
         $blockInstance = new $blockClass($blockTemplate, $dataObject);
 
-        $nodeValue = $layout->getNodeChildren();
+        $nodeChildren = $layout->getNodeChildren();
 
-        if (is_array($nodeValue)) {
+        if ($this->hasChildren($nodeChildren)) {
             /** @var Layout $childBlockLayout */
-            foreach ($nodeValue as $childBlockLayout) {
+            foreach ($nodeChildren as $childBlockLayout) {
                 $childBlockNameInLayout = $childBlockLayout->getAttribute('name');
                 $childBlockInstance = $this->createBlockWithChildren($childBlockLayout, $dataObject);
 
@@ -67,6 +67,15 @@ abstract class BlockSnippetRenderer implements SnippetRenderer
         }
 
         return $blockInstance;
+    }
+
+    /**
+     * @param string|Layout[] $node
+     * @return bool
+     */
+    private function hasChildren($node)
+    {
+        return is_array($node);
     }
 
     /**
