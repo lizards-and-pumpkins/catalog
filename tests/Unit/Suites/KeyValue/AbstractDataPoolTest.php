@@ -18,7 +18,7 @@ abstract class AbstractDataPoolTest extends \PHPUnit_Framework_TestCase
     protected $stubKeyGenerator;
 
     /**
-     * @return null
+     * @return void
      */
     protected function setUp()
     {
@@ -39,7 +39,7 @@ abstract class AbstractDataPoolTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return null
+     * @return void
      */
     protected function addSetMethodToStubKeyValueStore()
     {
