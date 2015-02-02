@@ -31,7 +31,7 @@ class Layout
     public static function fromArray(array $layoutArray)
     {
         $rootElement = self::getRootElement($layoutArray);
-        $layoutArray = array_merge(['attributes' => [], 'value' => null], $rootElement);
+        $layoutArray = array_merge(['attributes' => [], 'value' => ''], $rootElement);
 
         return new self($layoutArray['attributes'], self::getValue($layoutArray['value']));
     }
@@ -94,7 +94,7 @@ class Layout
         $values = [];
 
         foreach ($layout as $element) {
-            $element = array_merge(['attributes' => [], 'value' => null], $element);
+            $element = array_merge(['attributes' => [], 'value' => ''], $element);
             $values[] = new self($element['attributes'], self::getValue($element['value']));
         }
 
