@@ -82,7 +82,7 @@ class Layout
     }
 
     /**
-     * @param mixed $layout
+     * @param string|array $layout
      * @return string|Layout[]
      */
     private static function getValue($layout)
