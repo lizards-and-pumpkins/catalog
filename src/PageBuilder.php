@@ -50,8 +50,7 @@ class PageBuilder
 
         $content = $this->injectSnippetsIntoContent($content, $snippets);
 
-        $page = new Page();
-        $page->setBody($content);
+        $page = new Page($content);
 
         return $page;
     }
