@@ -99,7 +99,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldAddOneOrMoreSnippetToTheSnippetList()
+    public function itShouldAddOneOrMoreSnippetsToTheSnippetList()
     {
         $stubProduct = $this->getStubProduct();
 
