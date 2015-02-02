@@ -61,7 +61,7 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
             ->method('getKeyForSnippetList')
             ->willReturn('_product_html_1_l');
         $this->pageKeyGenerator->expects($this->any())
-            ->method('getKeyForPage')
+            ->method('getKeyForUrl')
             ->willReturn('_product_html_1');
 
         $this->pageBuilder = new PageBuilder($this->pageKeyGenerator, $this->dataPoolReader);
