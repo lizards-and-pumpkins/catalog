@@ -34,11 +34,25 @@ class Page implements HttpResponse
     }
 
     /**
-     * Sends headers, cookies and afterwards the body to the client
-     *
-     * @return null
+     * @return void
      */
     public function send()
+    {
+        $this->sendHeaders();
+        $this->sendBody();
+    }
+
+    /**
+     * @return void
+     */
+    private function sendHeaders()
+    {
+    }
+
+    /**
+     * @return void
+     */
+    private function sendBody()
     {
         echo $this->body;
     }
