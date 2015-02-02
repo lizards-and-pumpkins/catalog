@@ -13,10 +13,8 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     public function itShouldCreateLayoutFromArray()
     {
         $layoutArray = [[
-            'nodeName'      => 'snippet',
             'attributes'    => ['name' => 'foo'],
             'value'         => [[
-                'nodeName'      => 'block',
                 'attributes'    => ['class' => 'bar', 'template' => 'baz'],
                 'value'         => 'qux'
             ]]
@@ -24,7 +22,6 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
         $snippetLayout = Layout::fromArray($layoutArray);
 
-        $this->assertEquals('snippet', $snippetLayout->getNodeName());
         $this->assertEquals(['name' => 'foo'], $snippetLayout->getAttributes());
         $this->assertContainsOnly(Layout::class, $snippetLayout->getNodeValue());
     }
@@ -35,7 +32,6 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     public function itShouldReturnAnAttributeValue()
     {
         $layoutArray = [[
-            'nodeName'      => 'snippet',
             'attributes'    => ['name' => 'foo'],
             'value'         => 'bar'
         ]];
@@ -51,7 +47,6 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     public function itShouldReturnNullIfLayoutAttributeIsNotSet()
     {
         $layoutArray = [[
-            'nodeName'      => 'foo',
             'attributes'    => [],
             'value'         => 'bar'
         ]];

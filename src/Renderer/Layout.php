@@ -5,11 +5,6 @@ namespace Brera\Renderer;
 class Layout
 {
     /**
-     * @var string
-     */
-    private $nodeName;
-
-    /**
      * @var string[]
      */
     private $nodeAttributes;
@@ -20,15 +15,13 @@ class Layout
     private $nodeValue;
 
     /**
-     * @param $nodeName
      * @param array $nodeAttributes
      * @param mixed $nodeValue
      * @internal param array $attributes
      * @internal param string $name
      */
-    private function __construct($nodeName, array $nodeAttributes, $nodeValue)
+    private function __construct(array $nodeAttributes, $nodeValue)
     {
-        $this->nodeName = $nodeName;
         $this->nodeAttributes = $nodeAttributes;
         $this->nodeValue = $nodeValue;
     }
@@ -40,17 +33,9 @@ class Layout
     public static function fromArray(array $layoutArray)
     {
         $rootElement = self::getRootElement($layoutArray);
-        $layoutArray = array_merge(['nodeName' => '', 'attributes' => [], 'value' => null], $rootElement);
+        $layoutArray = array_merge(['attributes' => [], 'value' => null], $rootElement);
 
-        return new self($layoutArray['nodeName'], $layoutArray['attributes'], self::getValue($layoutArray['value']));
-    }
-
-    /**
-     * @return string
-     */
-    public function getNodeName()
-    {
-        return $this->nodeName;
+        return new self($layoutArray['attributes'], self::getValue($layoutArray['value']));
     }
 
     /**
@@ -111,8 +96,8 @@ class Layout
         $values = [];
 
         foreach ($layout as $element) {
-            $element = array_merge(['nodeName' => '', 'attributes' => [], 'value' => null], $element);
-            $values[] = new self($element['nodeName'], $element['attributes'], self::getValue($element['value']));
+            $element = array_merge(['attributes' => [], 'value' => null], $element);
+            $values[] = new self($element['attributes'], self::getValue($element['value']));
         }
 
         return $values;

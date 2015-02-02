@@ -71,7 +71,6 @@ class LayoutReaderTest extends \PHPUnit_Framework_TestCase
         $topmostChildBlockLayout = array_shift($topmostChildBlockLayoutArray);
         $topmostChildBlockAttributes = $topmostChildBlockLayout->getAttributes();
 
-        $this->assertEquals('snippet', $snippetLayout->getNodeName());
         $this->assertEquals('theme/template/1column.phtml', $topmostChildBlockAttributes['template']);
     }
 }
