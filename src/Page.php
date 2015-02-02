@@ -17,18 +17,6 @@ class Page implements HttpResponse
     }
 
     /**
-     * @param string $content
-     *
-     * @todo remove method to make this object immutable -> remove method from interface
-     *
-     * @return null
-     */
-    public function setBody($content)
-    {
-        $this->body = $content;
-    }
-
-    /**
      * Sends headers, cookies and afterwards the body to the client
      *
      * @return null
