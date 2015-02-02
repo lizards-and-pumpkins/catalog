@@ -24,7 +24,7 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
     private $dataPoolReader;
 
     /**
-     * @var Environment
+     * @var Environment|\PHPUnit_Framework_MockObject_MockObject
      */
     private $environment;
 
@@ -34,7 +34,7 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
     private $url;
 
     /**
-     * @var PageKeyGenerator
+     * @var PageKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $pageKeyGenerator;
 
