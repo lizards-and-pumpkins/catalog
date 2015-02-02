@@ -30,7 +30,7 @@ class ProductDetailViewSnippetRendererTest	extends \PHPUnit_Framework_TestCase
 	/**
 	 * @var SnippetResultList|\PHPUnit_Framework_MockObject_MockObject
 	 */
-	private $stubSnippetResultList;
+	private $mockSnippetResultList;
 
 	/**
 	 * @var Environment|\PHPUnit_Framework_MockObject_MockObject
@@ -49,12 +49,12 @@ class ProductDetailViewSnippetRendererTest	extends \PHPUnit_Framework_TestCase
 			->method('getKey')
 			->willReturn('test');
 
-		$this->stubSnippetResultList = $this->getMock(SnippetResultList::class);
+		$this->mockSnippetResultList = $this->getMock(SnippetResultList::class);
 
 		$this->stubLayoutReader = $this->getMock(LayoutReader::class);
 
 		$this->snippetRenderer = new ProductDetailViewSnippetRenderer(
-			$this->stubSnippetResultList,
+			$this->mockSnippetResultList,
 			$stubKeyGenerator,
 			$this->stubLayoutReader
 		);
@@ -93,7 +93,7 @@ class ProductDetailViewSnippetRendererTest	extends \PHPUnit_Framework_TestCase
 		$stubProduct = $this->getStubProduct();
 
 		$result = $this->snippetRenderer->render($stubProduct, $this->stubEnvironment);
-		$this->assertSame($this->stubSnippetResultList, $result);
+		$this->assertSame($this->mockSnippetResultList, $result);
 	}
 
 	/**
@@ -103,7 +103,7 @@ class ProductDetailViewSnippetRendererTest	extends \PHPUnit_Framework_TestCase
 	{
 		$stubProduct = $this->getStubProduct();
 
-		$this->stubSnippetResultList->expects($this->atLeastOnce())
+		$this->mockSnippetResultList->expects($this->atLeastOnce())
 			->method('add')
 			->with($this->isInstanceOf(SnippetResult::class));
 
@@ -128,7 +128,7 @@ class ProductDetailViewSnippetRendererTest	extends \PHPUnit_Framework_TestCase
 			->willReturn($productNameString);
 
 		$transport = '';
-		$this->stubSnippetResultList->expects($this->once())
+		$this->mockSnippetResultList->expects($this->once())
 			->method('add')
 			->willReturnCallback(function ($snippetResult) use (&$transport) {
 				$transport = $snippetResult;
