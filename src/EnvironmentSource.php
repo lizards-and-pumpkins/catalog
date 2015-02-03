@@ -51,7 +51,6 @@ class EnvironmentSource
         if (!$this->ifVersionIsASpecifiedPart($partsToExtract)) {
             $partsToExtract[] = VersionedEnvironment::KEY;
         }
-        //return $this->getAllPossibleCombinations($partsToExtract);
         return $this->getAllPossibleCombinationsRecursively($partsToExtract);
     }
 
@@ -103,12 +102,12 @@ class EnvironmentSource
     private function buildRecursively(array $set)
     {
         if (!$set) {
-            return array(array());
+            return [[]];
         }
         $key = key($set);
         $subset = array_shift($set);
         $cartesianSubset = $this->buildRecursively($set);
-        $result = array();
+        $result = [];
         foreach ($subset as $value) {
             foreach ($cartesianSubset as $p) {
                 $p[$key] = $value;

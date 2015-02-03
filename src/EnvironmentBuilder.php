@@ -7,17 +7,17 @@ namespace Brera;
 class EnvironmentBuilder
 {
     /**
-     * @param array $environments
-     * @return array
+     * @param array $environmentSourceDataSets
+     * @return Environment[]
      * @throws EnvironmentDecoratorNotFoundException
      */
-    public function getEnvironments(array $environments)
+    public function getEnvironments(array $environmentSourceDataSets)
     {
         $result = [];
-        foreach ($environments as $environmentData) {
-            $versionedEnvironment = new VersionedEnvironment($environmentData);
+        foreach ($environmentSourceDataSets as $environmentSourceDataSet) {
+            $versionedEnvironment = new VersionedEnvironment($environmentSourceDataSet);
             $environment = $versionedEnvironment;
-            foreach ($environmentData as $key => $value) {
+            foreach ($environmentSourceDataSet as $key => $value) {
                 if ($key == $versionedEnvironment->getCode()) {
                     continue;
                 }
@@ -27,8 +27,9 @@ class EnvironmentBuilder
                         sprintf('No environment decorator found for key "%s"', $key)
                     );
                 }
-                $result[] = new $decoratorClass($environment, $environmentData);
+                $environment = new $decoratorClass($environment, $environmentSourceDataSet);
             }
+            $result[] = $environment;
         }
         return $result;
     }

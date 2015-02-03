@@ -2,6 +2,7 @@
 
 namespace Brera\Tests\Integration;
 
+use Brera\EnvironmentSource;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\PoCSku;
 use Brera\Product\ProductId;
@@ -39,9 +40,11 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
 		$reader = $factory->createDataPoolReader();
 		/** @var HardcodedProductDetailViewSnippetKeyGenerator $keyGenerator */
 		$keyGenerator = $factory->createProductDetailViewSnippetKeyGenerator();
-		$environment = $factory->getEnvironmentBuilder()->createEnvironmentFromXml($xml);
-		$html = $reader->getSnippet($keyGenerator->getKeyForEnvironment($productId, $environment));
-		//$html = $reader->getPoCProductHtml($productId);
+		/** @var EnvironmentSource $environmentSource */
+		$environmentSource = $factory->getEnvironmentSourceBuilder()->createFromXml($xml);
+		$environment = $environmentSource->extractEnvironments(['version'])[0];
+		$key = $keyGenerator->getKeyForEnvironment($productId, $environment);
+		$html = $reader->getSnippet($key);
 
 		$this->assertContains((string)$sku, $html);
 		$this->assertContains($productName, $html);
