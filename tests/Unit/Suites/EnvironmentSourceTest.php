@@ -23,7 +23,7 @@ class EnvironmentSourceTest extends \PHPUnit_Framework_TestCase
         $this->stubEnvironmentBuilder->expects($this->any())
             ->method('getEnvironments')
             ->willReturn([]);
-        $environments = [VersionedEnvironment::KEY => [1]];
+        $environments = [VersionedEnvironment::CODE => [1]];
         $this->environmentSource = new EnvironmentSource($environments, $this->stubEnvironmentBuilder);
     }
 
@@ -58,7 +58,7 @@ class EnvironmentSourceTest extends \PHPUnit_Framework_TestCase
             array(['version' => [1]], [],[['version' => 1]]),
             array(
                 [
-                    VersionedEnvironment::KEY => [1],
+                    VersionedEnvironment::CODE => [1],
                     'foo' => ['a']
                 ],
                 ['foo'],
@@ -68,7 +68,7 @@ class EnvironmentSourceTest extends \PHPUnit_Framework_TestCase
             ),
             array(
                 [
-                    VersionedEnvironment::KEY => [1],
+                    VersionedEnvironment::CODE => [1],
                     'foo' => ['a', 'b']
                 ],
                 ['foo'],
@@ -79,7 +79,7 @@ class EnvironmentSourceTest extends \PHPUnit_Framework_TestCase
             ),
             array(
                 [
-                    VersionedEnvironment::KEY => [1, 2],
+                    VersionedEnvironment::CODE => [1, 2],
                     'foo' => ['a', 'b']
                 ],
                 ['foo'],

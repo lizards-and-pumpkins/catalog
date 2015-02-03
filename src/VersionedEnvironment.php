@@ -3,7 +3,7 @@ namespace Brera;
 
 class VersionedEnvironment implements Environment
 {
-	const KEY = 'version';
+	const CODE = 'version';
 	
 	/**
 	 * @var DataVersion
@@ -15,7 +15,7 @@ class VersionedEnvironment implements Environment
 	 */
 	public function __construct(array $environmentSource)
 	{
-		$this->version = $environmentSource[self::KEY];
+		$this->version = $environmentSource[self::CODE];
 	}
 
 	/**
@@ -29,6 +29,6 @@ class VersionedEnvironment implements Environment
 
 	public function getCode()
 	{
-		return self::KEY;
+		return self::CODE;
 	}
 }

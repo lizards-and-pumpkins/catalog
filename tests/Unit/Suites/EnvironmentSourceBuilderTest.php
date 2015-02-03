@@ -67,7 +67,7 @@ class EnvironmentSourceBuilderTest extends \PHPUnit_Framework_TestCase
         $sourceEnv = $this->environmentSourceBuilder->createFromXml(
             '<product><attributes><attribute code="test">true</attribute></attributes></product>'
         );
-        $this->assertSame([VersionedEnvironment::KEY], $sourceEnv->getEnvironmentPartKeys());
+        $this->assertSame([VersionedEnvironment::CODE], $sourceEnv->getEnvironmentPartKeys());
     }
 
     /**
@@ -81,7 +81,7 @@ class EnvironmentSourceBuilderTest extends \PHPUnit_Framework_TestCase
 </attributes></product>
 EOX
         );
-        $this->assertSame(['foo', VersionedEnvironment::KEY], $sourceEnv->getEnvironmentPartKeys());
+        $this->assertSame(['foo', VersionedEnvironment::CODE], $sourceEnv->getEnvironmentPartKeys());
     }
 
     /**
@@ -95,7 +95,7 @@ EOX
 </attributes></product>
 EOX
         );
-        $this->assertSame(['foo', 'baz', VersionedEnvironment::KEY], $sourceEnv->getEnvironmentPartKeys());
+        $this->assertSame(['foo', 'baz', VersionedEnvironment::CODE], $sourceEnv->getEnvironmentPartKeys());
     }
 
     /**
@@ -110,7 +110,7 @@ EOX
 </attributes></product>
 EOX
         );
-        $this->assertSame(['foo', VersionedEnvironment::KEY], $sourceEnv->getEnvironmentPartKeys());
+        $this->assertSame(['foo', VersionedEnvironment::CODE], $sourceEnv->getEnvironmentPartKeys());
     }
 
     /**
@@ -125,7 +125,7 @@ EOX
 </attributes></product>
 EOX
         );
-        $this->assertSame(['foo', 'baz', VersionedEnvironment::KEY], $sourceEnv->getEnvironmentPartKeys());
+        $this->assertSame(['foo', 'baz', VersionedEnvironment::CODE], $sourceEnv->getEnvironmentPartKeys());
     }
 
     /**

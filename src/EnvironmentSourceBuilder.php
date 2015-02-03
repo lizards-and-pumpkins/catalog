@@ -30,7 +30,7 @@ class EnvironmentSourceBuilder
     {
         $this->validateXmlString($xml);
         $environments = $this->extractAttributesFromXml($xml);
-        $environments[VersionedEnvironment::KEY][] = $this->dataVersion;
+        $environments[VersionedEnvironment::CODE][] = $this->dataVersion;
         return new EnvironmentSource($environments, $this->environmentBuilder);
     }
 
