@@ -27,7 +27,7 @@ class EnvironmentBuilderTest extends \PHPUnit_Framework_TestCase
         $environments = [
             [VersionedEnvironment::KEY => 1, 'foo' => 'bar'],
         ];
-        $result = $this->builder->getEnvironments($environments);
+        $this->builder->getEnvironments($environments);
     }
 
     /**
@@ -39,6 +39,7 @@ class EnvironmentBuilderTest extends \PHPUnit_Framework_TestCase
             [VersionedEnvironment::KEY => 1],
         ];
         $result = $this->builder->getEnvironments($environments);
+        $this->assertCount(1, $result);
         $this->assertContainsOnlyInstancesOf(Environment::class, $result);
     }
 }
