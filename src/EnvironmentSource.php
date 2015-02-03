@@ -49,7 +49,7 @@ class EnvironmentSource
     private function extractCartesianProductOfEnvironmentsAsArray(array $partsToExtract)
     {
         if (!$this->ifVersionIsASpecifiedPart($partsToExtract)) {
-            $partsToExtract[] = VersionedEnvironment::KEY;
+            $partsToExtract[] = VersionedEnvironment::CODE;
         }
         return $this->getAllPossibleCombinationsRecursively($partsToExtract);
     }
@@ -60,7 +60,7 @@ class EnvironmentSource
      */
     private function ifVersionIsASpecifiedPart(array $partsToExtract)
     {
-        return in_array(VersionedEnvironment::KEY, $partsToExtract);
+        return in_array(VersionedEnvironment::CODE, $partsToExtract);
     }
 
     /**

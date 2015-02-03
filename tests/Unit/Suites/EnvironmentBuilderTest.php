@@ -25,7 +25,7 @@ class EnvironmentBuilderTest extends \PHPUnit_Framework_TestCase
     public function itShouldThrowAnExceptionForNonExistingCode()
     {
         $environments = [
-            [VersionedEnvironment::KEY => 1, 'foo' => 'bar'],
+            [VersionedEnvironment::CODE => 1, 'foo' => 'bar'],
         ];
         $this->builder->getEnvironments($environments);
     }
@@ -36,7 +36,7 @@ class EnvironmentBuilderTest extends \PHPUnit_Framework_TestCase
     public function itShouldReturnEnvironmentsForGiveParts()
     {
         $environments = [
-            [VersionedEnvironment::KEY => 1],
+            [VersionedEnvironment::CODE => 1],
         ];
         $result = $this->builder->getEnvironments($environments);
         $this->assertCount(1, $result);
