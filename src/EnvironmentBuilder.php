@@ -1,12 +1,10 @@
 <?php
 
+
 namespace Brera;
 
-interface EnvironmentBuilder
+
+class EnvironmentLocator
 {
-	/**
-	 * @param string $xmlString
-	 * @return Environment
-	 */
-	public function createEnvironmentFromXml($xmlString);
+
 }
