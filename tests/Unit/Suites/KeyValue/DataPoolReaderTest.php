@@ -4,84 +4,223 @@ namespace Brera\KeyValue;
 
 use Brera\Product\ProductId;
 
-require_once __DIR__ . '/AbstractDataPool.php';
+require_once __DIR__ . '/AbstractDataPoolTest.php';
 
 /**
  * @covers \Brera\KeyValue\DataPoolReader
- * @uses \Brera\Product\ProductId
- * @uses \Brera\Http\HttpUrl
- * @uses \Brera\Product\PoCSku
+ * @uses   \Brera\Product\ProductId
+ * @uses   \Brera\Http\HttpUrl
+ * @uses   \Brera\Product\PoCSku
  */
-class DataPoolReaderTest extends AbstractDataPool
+class DataPoolReaderTest extends AbstractDataPoolTest
 {
-	/**
-	 * @var DataPoolReader
-	 */
-	private $dataPoolReader;
+    /**
+     * @var DataPoolReader
+     */
+    private $dataPoolReader;
 
-	protected function setUp()
-	{
-		parent::setUp();
+    protected function setUp()
+    {
+        parent::setUp();
 
-		$this->dataPoolReader = new DataPoolReader($this->stubKeyValueStore, $this->stubKeyGenerator);
-	}
+        $this->dataPoolReader = new DataPoolReader($this->stubKeyValueStore, $this->stubKeyGenerator);
+    }
 
-	/**
-	 * @test
-	 */
-	public function itShouldReturnASnippetIfItExists()
-	{
-		$testValue = '<p>html</p>';
-		$testKey = 'test';
+    /**
+     * @test
+     */
+    public function itShouldReturnASnippetIfItExists()
+    {
+        $testValue = '<p>html</p>';
+        $testKey = 'test';
 
-		$this->addGetMethodToStubKeyValueStore($testValue);
+        $this->addGetMethodToStubKeyValueStore($testValue);
 
-		$this->assertEquals($testValue, $this->dataPoolReader->getSnippet($testKey));
-	}
+        $this->assertEquals($testValue, $this->dataPoolReader->getSnippet($testKey));
+    }
 
-	/**
-	 * @test
-	 */
-	public function shouldReturnPoCProductHtmlBasedOnKeyFromKeyValueStorage()
-	{
-		$value = '<p>html</p>';
-		$productId = $this->getStubProductId();
+    /**
+     * @test
+     *
+     * @dataProvider snippetListProvider
+     */
+    public function itShouldReturnASnippetList($keyValueStorageReturn, $expectedList)
+    {
+        $this->addGetMethodToStubKeyValueStore($keyValueStorageReturn);
 
-		$this->addStubMethodToStubKeyGenerator('createPoCProductHtmlKey');
-		$this->addGetMethodToStubKeyValueStore($value);
+        $this->assertEquals(
+            $expectedList,
+            $this->dataPoolReader->getChildSnippetKeys('some_key')
+        );
+    }
 
-		$html = $this->dataPoolReader->getPoCProductHtml($productId);
+    /**
+     * @return array
+     */
+    public function snippetListProvider()
+    {
+        return [
+            array(
+                json_encode(false),
+                [],
+            ),
+            array(
+                '[]',
+                [],
+            ),
+            array(
+                '{}',
+                [],
+            ),
+            array(
+                json_encode(['test_key1', 'test_key2', 'some_key']),
+                ['test_key1', 'test_key2', 'some_key']
+            ),
+        ];
+    }
 
-		$this->assertEquals($value, $html);
-	}
+    /**
+     * @test
+     * @expectedException \RuntimeException
+     *
+     * @dataProvider brokenJsonProvider
+     */
+    public function itShouldThrowAnExceptionOnBrokenJSON($brokenJson)
+    {
+        $this->addGetMethodToStubKeyValueStore($brokenJson);
+        $this->dataPoolReader->getChildSnippetKeys('some_key');
+    }
 
-	/**
-	 * @test
-	 */
-	public function itShouldReturnProductIdBySeoUrl()
-	{
-		$value = 'test';
-		$url = $this->getDummyUrl();
+    /**
+     * @return array
+     */
+    public function brokenJsonProvider()
+    {
+        return [
+            array(new \stdClass()),
+            array([]),
+            array('test'),
+            array(123),
+            array(123.23)
+        ];
+    }
 
-		$this->addStubMethodToStubKeyGenerator('createPoCProductSeoUrlToIdKey');
-		$this->addGetMethodToStubKeyValueStore($value);
+    /**
+     * @test
+     * @expectedException \RuntimeException
+     *
+     * @dataProvider invalidKeyProvider
+     */
+    public function itShouldOnlyAcceptStringKeyForSnippetList($key)
+    {
+        $this->dataPoolReader->getChildSnippetKeys($key);
+    }
 
-		$productId = $this->dataPoolReader->getProductIdBySeoUrl($url);
+    /**
+     * @test
+     * @expectedException \RuntimeException
+     *
+     * @dataProvider invalidKeyProvider
+     */
+    public function itShouldOnlyAcceptStringKeysForGetSnippet($key)
+    {
+        $this->dataPoolReader->getSnippet($key);
+    }
 
-		$this->assertEquals($value, $productId);
-		$this->assertInstanceOf(ProductId::class, $productId);
-	}
+    /**
+     * @return array
+     */
+    public function invalidKeyProvider()
+    {
+        return [
+            array(new \stdClass()),
+            array(123),
+            array(123.23),
+            array([]),
+        ];
 
-	/**
-	 * @test
-	 */
-	public function itShouldReturnIfTheSeoUrlKeyExists()
-	{
-		$url = $this->getDummyUrl();
+    }
 
-		$this->addStubMethodToStubKeyGenerator('createPoCProductSeoUrlToIdKey');
-		$this->addHasMethodToStubKeyValueStore(true);
+    public function brokenKeysForSnippetsProvider()
+    {
+        return [
+            array(new \stdClass()),
+            array(123),
+            array(123.23),
+            array('string'),
+        ];
+    }
 
-		$this->assertTrue($this->dataPoolReader->hasProductSeoUrl($url));
-	}
+    /**
+     * @test
+     *
+     * @expectedException \RuntimeException
+     *
+     * @dataProvider brokenKeysForSnippetsProvider
+     */
+    public function itShouldOnlyAcceptStringKeysForGetSnippets($key)
+    {
+        $this->dataPoolReader->getSnippets($key);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnSnippets()
+    {
+        $keyValueStorageReturn = [
+            'key' => 'value',
+            'key2' => 'value2',
+        ];
+        $this->addMultiGetMethodToStubKeyValueStore($keyValueStorageReturn);
+        $snippets = $this->dataPoolReader->getSnippets(['key', 'key2']);
+
+        $this->assertEquals($keyValueStorageReturn, $snippets);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnPoCProductHtmlBasedOnKeyFromKeyValueStorage()
+    {
+        $value = '<p>html</p>';
+        $productId = $this->getStubProductId();
+
+        $this->addStubMethodToStubKeyGenerator('createPoCProductHtmlKey');
+        $this->addGetMethodToStubKeyValueStore($value);
+
+        $html = $this->dataPoolReader->getPoCProductHtml($productId);
+
+        $this->assertEquals($value, $html);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnProductIdBySeoUrl()
+    {
+        $value = 'test';
+        $url = $this->getDummyUrl();
+
+        $this->addStubMethodToStubKeyGenerator('createPoCProductSeoUrlToIdKey');
+        $this->addGetMethodToStubKeyValueStore($value);
+
+        $productId = $this->dataPoolReader->getProductIdBySeoUrl($url);
+
+        $this->assertEquals($value, $productId);
+        $this->assertInstanceOf(ProductId::class, $productId);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnIfTheSeoUrlKeyExists()
+    {
+        $url = $this->getDummyUrl();
+
+        $this->addStubMethodToStubKeyGenerator('createPoCProductSeoUrlToIdKey');
+        $this->addHasMethodToStubKeyValueStore(true);
+
+        $this->assertTrue($this->dataPoolReader->hasProductSeoUrl($url));
+    }
 }
