@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<snippet xmlns="http://brera.io" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://brera.io ../../schema/snippet.xsd">
+    <block name="product_details_snippet" class="Brera\Renderer\Block" template="theme/template/1column.phtml">
+        <!--block name="header" class="Brera\....\Block\Header"  template="..." />
+        <block name="global_messages" class="Brera\....\Block\Messages" template="..." />
+        <block name="breadcrumbs" class="Brera\....\Block\Breadcrumbs" template="..." /-->
+        <block name="content" class="Brera\Product\Block\ProductDetailsPage" template="theme/template/view.phtml">
+            <block name="image_gallery" class="Brera\Product\Block\ProductImageGallery" template="theme/template/gallery.phtml" />
+        </block>
+        <!--block name="share_buttons" class="Brera\....\Block\SocialMediaShareButtons" template="..." />
+        <block name="availability_options_price" class="Brera\....\Block\PriceOptions" template="..." />
+        <block name="footer" class="Brera\....\Block\Footer" template="..." /-->
+    </block>
+</snippet>

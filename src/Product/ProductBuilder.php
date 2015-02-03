@@ -2,7 +2,7 @@
 
 namespace Brera\Product;
 
-use Brera\DomDocumentXPathParser;
+use Brera\XPathParser;
 
 class ProductBuilder
 {
@@ -12,7 +12,7 @@ class ProductBuilder
 	 */
 	public function createProductFromXml($xml)
 	{
-		$parser = new DomDocumentXPathParser($xml);
+		$parser = new XPathParser($xml);
 
 		$skuNode = $parser->getXmlNodesArrayByXPath('//product/@sku');
 		$skuString = $this->getSkuStringFromDomNodeArray($skuNode);

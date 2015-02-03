@@ -1,0 +1,10 @@
+<?php
+/**
+ * @var \Brera\Product\Block\ProductDetailsPage $this
+ */
+?>
+Product details page content
+
+<?php echo $this->getProduct()->getAttributeValue('name') ?> (<?php echo $this->getProduct()->getId() ?>)
+
+<?php echo $this->getChildOutput('image_gallery') ?>
