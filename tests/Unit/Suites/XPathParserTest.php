@@ -38,6 +38,65 @@ class XPathParserTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
+	public function itShouldReturnRequestedDomNodeRelativeToACurrentNode()
+	{
+		$xml = '<root xmlns="http://www.w3.org/2001/XMLSchema-instance"><foo><bar>baz</bar></foo></root>';
+		$parser = new XPathParser($xml);
+		$result = $parser->getXmlNodesArrayByXPath('//foo/bar');
+
+		$expectation = [['nodeName' => 'bar', 'attributes' => [], 'value' => 'baz']];
+
+		$this->assertSame($expectation, $result);
+	}
+
+	/**
+	 * @test
+	 */
+	public function itShouldReturnCurrentDomNode()
+	{
+		$xml = '<root xmlns="http://www.w3.org/2001/XMLSchema-instance"><foo>bar</foo></root>';
+		$parser = new XPathParser($xml);
+		$result = $parser->getXmlNodesArrayByXPath('.');
+
+		$expectation = [[
+			'nodeName'      => 'root',
+			'attributes'    => [],
+			'value'         => [[
+				'nodeName'      => 'foo',
+				'attributes'    => [],
+				'value'         => 'bar'
+			]]
+		]];
+
+		$this->assertSame($expectation, $result);
+	}
+
+
+	/**
+	 * @test
+	 */
+	public function itShouldReturnParentDomNode()
+	{
+		$xml = '<root xmlns="http://www.w3.org/2001/XMLSchema-instance"><foo>bar</foo></root>';
+		$parser = new XPathParser($xml);
+		$result = $parser->getXmlNodesArrayByXPath('//foo/..');
+
+		$expectation = [[
+			'nodeName'      => 'root',
+			'attributes'    => [],
+			'value'         => [[
+				'nodeName'      => 'foo',
+				'attributes'    => [],
+				'value'         => 'bar'
+			]]
+		]];
+
+		$this->assertSame($expectation, $result);
+	}
+
+	/**
+	 * @test
+	 */
 	public function itShouldReturnMultipleNodeArrays()
 	{
 		$xml = '<root><child>foo</child><child>bar</child></root>';
