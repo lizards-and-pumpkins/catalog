@@ -1,40 +1,28 @@
 <?php
 
+
 namespace Brera;
 
 /**
- * @covers \Brera\VersionedEnvironmentBuilder
- * @uses \Brera\DataVersion
- * @uses \Brera\VersionedEnvironment
+ * @covers \Brera\EnvironmentLocator
  */
-class VersionedEnvironmentBuilderTest extends \PHPUnit_Framework_TestCase
+class EnvironmentLocatorTest extends \PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var VersionedEnvironmentBuilder
-	 */
-	private $builder;
+    /**
+     * @var EnvironmentLocator
+     */
+    private $locator;
 
-	public function setUp()
-	{
-		$version = DataVersion::fromVersionString('1');
-		$this->builder = new VersionedEnvironmentBuilder($version);
-	}
+    protected function setUp()
+    {
+        $this->locator = new EnvironmentLocator();
+    }
 
-	/**
-	 * @test
-	 */
-	public function itShouldBeAnEnvironmentBuilder()
-	{
-		$this->assertInstanceOf(EnvironmentBuilder::class, $this->builder);
-	}
-
-	/**
-	 * @test
-	 */
-	public function itShouldReturnAVersionedEnvironment()
-	{
-		$dummyXml = '<root />';
-		$result = $this->builder->createEnvironmentFromXml($dummyXml);
-		$this->assertInstanceOf(VersionedEnvironment::class, $result);
-	}
+    /**
+     * @test
+     */
+    public function itShould()
+    {
+        
+    }
 }
