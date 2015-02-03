@@ -68,11 +68,11 @@ class ProductDetailsPageTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldReturnProductInstance()
+    public function itShouldReturnProduct()
     {
         $productDetailsPageBlock = new ProductDetailsPage('foo.phtml', $this->stubProduct);
         $result = $productDetailsPageBlock->getProduct();
 
-        $this->assertInstanceOf(Product::class, $result);
+        $this->assertSame($this->stubProduct, $result);
     }
 }

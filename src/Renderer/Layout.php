@@ -5,32 +5,23 @@ namespace Brera\Renderer;
 class Layout
 {
     /**
-     * @var string
-     */
-    private $nodeName;
-
-    /**
      * @var string[]
      */
     private $nodeAttributes;
 
     /**
-     * @var mixed
+     * @var string|Layout[]
      */
-    private $nodeValue;
+    private $nodeChildren;
 
     /**
-     * @param $nodeName
      * @param array $nodeAttributes
-     * @param mixed $nodeValue
-     * @internal param array $attributes
-     * @internal param string $name
+     * @param string|array $nodeChildren
      */
-    private function __construct($nodeName, array $nodeAttributes, $nodeValue)
+    private function __construct(array $nodeAttributes, $nodeChildren)
     {
-        $this->nodeName = $nodeName;
         $this->nodeAttributes = $nodeAttributes;
-        $this->nodeValue = $nodeValue;
+        $this->nodeChildren = $nodeChildren;
     }
 
     /**
@@ -40,17 +31,9 @@ class Layout
     public static function fromArray(array $layoutArray)
     {
         $rootElement = self::getRootElement($layoutArray);
-        $layoutArray = array_merge(['nodeName' => '', 'attributes' => [], 'value' => null], $rootElement);
+        $layoutArray = array_merge(['attributes' => [], 'value' => ''], $rootElement);
 
-        return new self($layoutArray['nodeName'], $layoutArray['attributes'], self::getValue($layoutArray['value']));
-    }
-
-    /**
-     * @return string
-     */
-    public function getNodeName()
-    {
-        return $this->nodeName;
+        return new self($layoutArray['attributes'], self::getValue($layoutArray['value']));
     }
 
     /**
@@ -75,17 +58,17 @@ class Layout
     }
 
     /**
-     * @return mixed
+     * @return string|Layout[]
      */
-    public function getNodeValue()
+    public function getNodeChildren()
     {
-        return $this->nodeValue;
+        return $this->nodeChildren;
     }
 
     /**
      * @param array $layout
      * @throws RootElementOfLayoutMustBeAnArrayException
-     * @return mixed
+     * @return array
      */
     private static function getRootElement(array $layout)
     {
@@ -99,22 +82,31 @@ class Layout
     }
 
     /**
-     * @param mixed $layout
-     * @return mixed
+     * @param string|array $layout
+     * @return string|Layout[]
      */
     private static function getValue($layout)
     {
-        if (!is_array($layout)) {
+        if (!self::hasChildNodes($layout)) {
             return $layout;
         }
 
         $values = [];
 
         foreach ($layout as $element) {
-            $element = array_merge(['nodeName' => '', 'attributes' => [], 'value' => null], $element);
-            $values[] = new self($element['nodeName'], $element['attributes'], self::getValue($element['value']));
+            $element = array_merge(['attributes' => [], 'value' => ''], $element);
+            $values[] = new self($element['attributes'], self::getValue($element['value']));
         }
 
         return $values;
+    }
+
+    /**
+     * @param string|array $layout
+     * @return bool
+     */
+    private static function hasChildNodes($layout)
+    {
+        return is_array($layout);
     }
 }

@@ -5,14 +5,14 @@ namespace Brera\KeyValue;
 use Brera\SnippetResult;
 use Brera\SnippetResultList;
 
-require_once __DIR__ . '/AbstractDataPool.php';
+require_once __DIR__ . '/AbstractDataPoolTest.php';
 
 /**
  * @covers \Brera\KeyValue\DataPoolWriter
  * @uses Brera\Product\ProductId
  * @uses Brera\Http\HttpUrl
  */
-class DataPoolWriterTest extends AbstractDataPool
+class DataPoolWriterTest extends AbstractDataPoolTest
 {
 	/**
 	 * @var DataPoolWriter
