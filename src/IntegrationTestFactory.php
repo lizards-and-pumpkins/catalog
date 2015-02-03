@@ -117,12 +117,12 @@ class IntegrationTestFactory implements Factory, DomainEventFactory
 		return new ProductBuilder();
 	}
 
-	public function getEnvironmentBuilder()
+	public function getEnvironmentSourceBuilder()
 	{
 		/* TODO: Add mechanism to inject data version number to use */
 		$version = DataVersion::fromVersionString('1');
 
-		return new VersionedEnvironmentBuilder($version);
+		return new EnvironmentSourceBuilder($version);
 	}
 
 	/**

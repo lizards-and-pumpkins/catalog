@@ -80,16 +80,6 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function itShouldReturnEnvironmentBuilder()
-	{
-		$result = $this->factory->getEnvironmentBuilder();
-
-		$this->assertInstanceOf(EnvironmentBuilder::class, $result);
-	}
-
-	/**
-	 * @test
-	 */
 	public function isShouldCreateDomainEventHandlerLocator()
 	{
 		$result = $this->factory->createDomainEventHandlerLocator();
