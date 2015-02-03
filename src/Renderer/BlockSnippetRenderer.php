@@ -96,4 +96,18 @@ abstract class BlockSnippetRenderer implements SnippetRenderer
             throw new CanNotInstantiateBlockException(sprintf('%s must extend %s', $blockClass, Block::class));
         }
     }
+
+
+    /**
+     * @return string
+     */
+    protected function getPathToLayoutXmlFile()
+    {
+        return 'theme/layout/' . $this->getSnippetLayoutHandle() . '.xml';
+    }
+
+    /**
+     * @return string
+     */
+    abstract protected function getSnippetLayoutHandle();
 }

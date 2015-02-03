@@ -17,25 +17,14 @@ class VersionedEnvironmentTest extends \PHPUnit_Framework_TestCase
 		$mockDataVersion = $this->getMockBuilder(DataVersion::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$this->environment = new VersionedEnvironment($mockDataVersion);
-	}
-
-	/**
-	 * @class
-	 */
-	public function itShouldBeAnEnvironment()
-	{
-		$this->assertInstanceOf(Environment::class, $this->environment);
+		$this->environment = new VersionedEnvironment([VersionedEnvironment::KEY => $mockDataVersion]);
 	}
 
 	/**
 	 * @test
 	 */
-	public function itShouldHaveAVersion()
+	public function itShouldBeAnEnvironment()
 	{
-		$this->assertInstanceOf(
-			DataVersion::class,
-			$this->environment->getVersion()
-		);
+		$this->assertInstanceOf(Environment::class, $this->environment);
 	}
 }

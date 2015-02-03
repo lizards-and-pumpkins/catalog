@@ -4,6 +4,7 @@
 namespace Brera;
 
 
-class EnvironmentDecoratorNotFoundException {
+class EnvironmentDecoratorNotFoundException extends \OutOfBoundsException
+{
 
 }

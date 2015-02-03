@@ -4,25 +4,41 @@
 namespace Brera;
 
 /**
- * @covers \Brera\EnvironmentLocator
+ * @covers \Brera\EnvironmentBuilder
  */
-class EnvironmentLocatorTest extends \PHPUnit_Framework_TestCase
+class EnvironmentBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var EnvironmentLocator
+     * @var EnvironmentBuilder
      */
-    private $locator;
+    private $builder;
 
     protected function setUp()
     {
-        $this->locator = new EnvironmentLocator();
+        $this->builder = new EnvironmentBuilder();
+    }
+
+    /**
+     * @test
+     * @expectedException \Brera\EnvironmentDecoratorNotFoundException
+     */
+    public function itShouldThrowAnExceptionForNonExistingCode()
+    {
+        $environments = [
+            [VersionedEnvironment::KEY => 1, 'foo' => 'bar'],
+        ];
+        $result = $this->builder->getEnvironments($environments);
     }
 
     /**
      * @test
      */
-    public function itShould()
+    public function itShouldReturnEnvironmentsForGiveParts()
     {
-        
+        $environments = [
+            [VersionedEnvironment::KEY => 1],
+        ];
+        $result = $this->builder->getEnvironments($environments);
+        $this->assertContainsOnlyInstancesOf(Environment::class, $result);
     }
 }

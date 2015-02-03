@@ -4,6 +4,7 @@
 namespace Brera;
 
 
-class InputXmlIsEmptyStringException {
+class InputXmlIsEmptyStringException extends \InvalidArgumentException
+{
 
 }

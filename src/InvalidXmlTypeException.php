@@ -4,6 +4,7 @@
 namespace Brera;
 
 
-class InvalidXmlTypeException {
-
+class InvalidXmlTypeException extends \InvalidArgumentException
+{
+    
 }
