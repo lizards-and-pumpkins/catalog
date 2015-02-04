@@ -23,14 +23,6 @@ class EnvironmentSource
     }
 
     /**
-     * @return string[]
-     */
-    public function getEnvironmentPartKeys()
-    {
-        return array_keys($this->environmentMatrix);
-    }
-
-    /**
      * @param string $part
      * @return array
      */
@@ -70,17 +62,6 @@ class EnvironmentSource
     private function getEnvironmentsThatAreRequestedAndExistInTheSource(array $partsToExtract)
     {
         return array_intersect_key($this->environmentMatrix, array_flip($partsToExtract));
-    }
-
-    /**
-     * @param $presentEnvironments
-     * @return mixed
-     */
-    private function getNumberOfSpecificEnvironments($presentEnvironments)
-    {
-        return array_reduce($presentEnvironments, function ($result, $parts) {
-            return $result * count($parts);
-        }, 1);
     }
 
     /**

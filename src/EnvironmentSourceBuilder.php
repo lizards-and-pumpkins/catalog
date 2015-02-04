@@ -58,7 +58,7 @@ class EnvironmentSourceBuilder
 
         $attributes = $parser->getXmlNodesArrayByXPath('//product/attributes/attribute');
         foreach ($attributes as $attribute) {
-            if (!isset($attribute['attributes'])) {
+            if (empty($attribute['attributes'])) {
                 continue;
             }
             foreach ($attribute['attributes'] as $key => $value) {

@@ -9,9 +9,15 @@ namespace Brera;
 class EnvironmentSourceTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var int
+     */
+    private $testVersion = [1];
+    
+    /**
      * @var EnvironmentBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubEnvironmentBuilder;
+    
     /**
      * @var EnvironmentSource
      */
@@ -23,7 +29,7 @@ class EnvironmentSourceTest extends \PHPUnit_Framework_TestCase
         $this->stubEnvironmentBuilder->expects($this->any())
             ->method('getEnvironments')
             ->willReturn([]);
-        $environments = [VersionedEnvironment::CODE => [1]];
+        $environments = [VersionedEnvironment::CODE => $this->testVersion];
         $this->environmentSource = new EnvironmentSource($environments, $this->stubEnvironmentBuilder);
     }
 
@@ -91,5 +97,22 @@ class EnvironmentSourceTest extends \PHPUnit_Framework_TestCase
                 ]
             )
         ];
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnTheEnvironmentValuesForAGivenPart()
+    {
+        $result = $this->environmentSource->getEnvironmentValuesForPart(VersionedEnvironment::CODE);
+        $this->assertSame($this->testVersion, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnAnEmptyArrayForANonExistentEnvironmentPart()
+    {
+        $this->assertSame([], $this->environmentSource->getEnvironmentValuesForPart('non-existent'));
     }
 }
