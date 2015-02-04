@@ -86,4 +86,14 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertInstanceOf(DomainEventHandlerLocator::class, $result);
 	}
+
+	/**
+	 * @test
+	 */
+	public function itShouldReturnThemeLocator()
+	{
+	    $result = $this->factory->createThemeLocator();
+
+		$this->assertInstanceOf(ThemeLocator::class, $result);
+	}
 }

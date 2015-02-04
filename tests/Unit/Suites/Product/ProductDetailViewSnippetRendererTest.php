@@ -3,13 +3,13 @@
 namespace Brera\Product;
 
 use Brera\EnvironmentSource;
-use Brera\Renderer\LayoutReader;
 use Brera\Renderer\ThemeTestTrait;
 use Brera\SnippetResultList;
 use Brera\ProjectionSourceData;
 use Brera\SnippetRenderer;
 use Brera\Environment;
 use Brera\SnippetResult;
+use Brera\ThemeLocator;
 
 require_once __DIR__ . '/../Renderer/ThemeTestTrait.php';
 
@@ -39,7 +39,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
     private $mockSnippetResultList;
 
     /**
-     * @var Environment|\PHPUnit_Framework_MockObject_MockObject
+     * @var EnvironmentSource|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubEnvironmentSource;
 
@@ -49,9 +49,9 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
     private $stubEnvironment;
 
     /**
-     * @var LayoutReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var ThemeLocator|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubLayoutReader;
+    private $stubThemeLocator;
 
     public function setUp()
     {
@@ -62,12 +62,15 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
         $this->mockSnippetResultList = $this->getMock(SnippetResultList::class);
 
-        $this->stubLayoutReader = $this->getMock(LayoutReader::class);
+        $this->stubThemeLocator = $this->getMock(ThemeLocator::class);
+        $this->stubThemeLocator->expects($this->any())
+            ->method('getThemeDirectoryForEnvironment')
+            ->willReturn(sys_get_temp_dir());
 
         $this->snippetRenderer = new ProductDetailViewSnippetRenderer(
             $this->mockSnippetResultList,
             $stubKeyGenerator,
-            $this->stubLayoutReader
+            $this->stubThemeLocator
         );
 
         $this->stubEnvironment = $this->getMockBuilder(Environment::class)

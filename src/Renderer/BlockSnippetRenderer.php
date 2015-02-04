@@ -2,11 +2,45 @@
 
 namespace Brera\Renderer;
 
+use Brera\Environment;
 use Brera\ProjectionSourceData;
+use Brera\SnippetKeyGenerator;
 use Brera\SnippetRenderer;
+use Brera\SnippetResultList;
+use Brera\ThemeLocator;
 
 abstract class BlockSnippetRenderer implements SnippetRenderer
 {
+    /**
+     * @var SnippetResultList
+     */
+    protected $resultList;
+
+    /**
+     * @var SnippetKeyGenerator
+     */
+    protected $keyGenerator;
+
+    /**
+     * @var ThemeLocator
+     */
+    protected $themeLocator;
+
+    /**
+     * @param SnippetResultList $resultList
+     * @param SnippetKeyGenerator $keyGenerator
+     * @param ThemeLocator $themeLocator
+     */
+    public function __construct(
+        SnippetResultList $resultList,
+        SnippetKeyGenerator $keyGenerator,
+        ThemeLocator $themeLocator
+    ) {
+        $this->resultList = $resultList;
+        $this->keyGenerator = $keyGenerator;
+        $this->themeLocator = $themeLocator;
+    }
+
     /**
      * @param string $layoutXmlFilePath
      * @param ProjectionSourceData $dataObject
@@ -97,13 +131,15 @@ abstract class BlockSnippetRenderer implements SnippetRenderer
         }
     }
 
-
     /**
+     * @param Environment $environment
      * @return string
      */
-    protected function getPathToLayoutXmlFile()
+    protected function getPathToLayoutXmlFile(Environment $environment)
     {
-        return 'theme/layout/' . $this->getSnippetLayoutHandle() . '.xml';
+        $themeDirectory = $this->themeLocator->getThemeDirectoryForEnvironment($environment);
+
+        return $themeDirectory . '/layout/' . $this->getSnippetLayoutHandle() . '.xml';
     }
 
     /**
