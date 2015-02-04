@@ -23,7 +23,7 @@ class EnvironmentBuilder
     {
         $versionedEnvironment = new VersionedEnvironment($environmentSourceDataSet);
         $codes = array_diff(array_keys($environmentSourceDataSet), [VersionedEnvironment::CODE]);
-        return array_reduce($codes, function($environment, $code) use ($environmentSourceDataSet) {
+        return array_reduce($codes, function ($environment, $code) use ($environmentSourceDataSet) {
             return $this->createEnvironmentDecorator($environment, $code, $environmentSourceDataSet);
         }, $versionedEnvironment);
     }
@@ -36,7 +36,7 @@ class EnvironmentBuilder
      */
     private function createEnvironmentDecorator(Environment $environment, $code, array $environmentSourceDataSet)
     {
-        $decoratorClass = $this->locateDecoratorClass($code);
+        $decoratorClass = $this->getDecoratorClass($code);
         return new $decoratorClass($environment, $environmentSourceDataSet);
     }
 
@@ -44,7 +44,7 @@ class EnvironmentBuilder
      * @param string $code
      * @return string
      */
-    private function locateDecoratorClass($code)
+    private function getDecoratorClass($code)
     {
         $decoratorClass = ucfirst($this->removeUnderscores($code)) . 'EnvironmentDecorator';
         $qualifiedDecoratorClass = "\\Brera\\$decoratorClass";

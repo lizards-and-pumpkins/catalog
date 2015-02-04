@@ -7,8 +7,6 @@ namespace Brera;
  * @covers \Brera\EnvironmentBuilder
  * @uses   \Brera\VersionedEnvironment
  * @uses   \Brera\EnvironmentDecorator
- * @uses   \Brera\InvalidTestStubEnvironmentDecorator
- * @uses   \Brera\ValidTestStubEnvironmentDecorator
  */
 class EnvironmentBuilderTest extends \PHPUnit_Framework_TestCase
 {

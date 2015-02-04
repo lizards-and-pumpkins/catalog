@@ -35,7 +35,9 @@ class EnvironmentSourceBuilder
     }
 
     /**
-     * @param $xml
+     * @param string $xml
+     * @throws InvalidXmlTypeException
+     * @throws InputXmlIsEmptyStringException
      */
     private function validateXmlString($xml)
     {
