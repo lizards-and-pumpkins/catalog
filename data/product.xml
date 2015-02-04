@@ -167,6 +167,8 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 <attributes>
                     <stock_qty>5</stock_qty>
                     <color>
+                    <attribute code="stock_qty">5</attribute>
+                    <attribute code="color">
                         <label lang="en_US">Blue</label>
                         <label lang="de_DE">Blau</label>
                     </color>

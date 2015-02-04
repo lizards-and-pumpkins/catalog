@@ -3,8 +3,7 @@
 namespace Brera\Product;
 
 use Brera\DomainEventHandler;
-use Brera\EnvironmentBuilder;
-use Brera\VersionedEnvironmentBuilder;
+use Brera\EnvironmentSourceBuilder;
 
 class ProductImportDomainEventHandler implements DomainEventHandler
 {
@@ -24,20 +23,20 @@ class ProductImportDomainEventHandler implements DomainEventHandler
 	private $projector;
 
 	/**
-	 * @var VersionedEnvironmentBuilder
+	 * @var EnvironmentSourceBuilder
 	 */
-	private $environmentBuilder;
+	private $environmentSourceBuilder;
 
 	public function __construct(
 		ProductImportDomainEvent $event,
 		ProductBuilder $productBuilder,
-		EnvironmentBuilder $environmentBuilder,
+		EnvironmentSourceBuilder $environmentSourceBuilder,
 		ProductProjector $projector
 	) {
 		$this->event = $event;
 		$this->productBuilder = $productBuilder;
 		$this->projector = $projector;
-		$this->environmentBuilder = $environmentBuilder;
+		$this->environmentSourceBuilder = $environmentSourceBuilder;
 	}
 
 	/**
@@ -47,7 +46,7 @@ class ProductImportDomainEventHandler implements DomainEventHandler
 	{
 		$xml = $this->event->getXml();
 		$product = $this->productBuilder->createProductFromXml($xml);
-		$environment = $this->environmentBuilder->createEnvironmentFromXml($xml);
+		$environment = $this->environmentSourceBuilder->createFromXml($xml);
 		$this->projector->project($product, $environment);
 	}
 } 

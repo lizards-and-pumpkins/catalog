@@ -15,15 +15,12 @@ class PageKeyGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     private $pageKeyGenerator;
 
-    /**
-     * @return null
-     */
     protected function setUp()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|Environment $environment */
-        $environment = $this->getMock(Environment::class);
-        $environment->expects($this->any())->method('getVersion')->willReturn('1');
-        $this->pageKeyGenerator = new PageKeyGenerator($environment);
+        $stubEnv = $this->getMockBuilder(Environment::class)->disableOriginalConstructor()->getMock();
+        $stubEnv->expects($this->any())->method('getValue')->with('version')->willReturn('1');
+        $this->pageKeyGenerator = new PageKeyGenerator($stubEnv);
     }
 
     /**
@@ -31,20 +28,16 @@ class PageKeyGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnStrings()
     {
-        /* @var $env VersionedEnvironment|\PHPUnit_Framework_MockObject_MockObject */
-        $env = $this->getMockBuilder(VersionedEnvironment::class)->disableOriginalConstructor()->getMock();
-        $env->expects($this->any())->method('getVersion')->willReturn('1');
-
         $url = HttpUrl::fromString('http://example.com/product.html');
 
         $this->assertInternalType(
             'string',
-            $this->pageKeyGenerator->getKeyForUrl($url, $env)
+            $this->pageKeyGenerator->getKeyForUrl($url)
         );
 
         $this->assertInternalType(
             'string',
-            $this->pageKeyGenerator->getKeyForSnippetList($url, $env)
+            $this->pageKeyGenerator->getKeyForSnippetList($url)
         );
     }
 
@@ -53,15 +46,11 @@ class PageKeyGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldGenerateAKeyForSnippetFromAnEnvironmentAndUrl()
     {
-        /* @var $env VersionedEnvironment|\PHPUnit_Framework_MockObject_MockObject */
-        $env = $this->getMockBuilder(VersionedEnvironment::class)->disableOriginalConstructor()->getMock();
-        $env->expects($this->any())->method('getVersion')->willReturn('1');
-
         $url = HttpUrl::fromString('http://example.com/product.html');
 
         $this->assertEquals(
             '_product_html_1',
-            $this->pageKeyGenerator->getKeyForUrl($url, $env)
+            $this->pageKeyGenerator->getKeyForUrl($url)
         );
     }
 
@@ -70,15 +59,11 @@ class PageKeyGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldGenerateAKeyForSnippetListFromAnEnvironmentAndUrl()
     {
-        /* @var $env VersionedEnvironment|\PHPUnit_Framework_MockObject_MockObject */
-        $env = $this->getMockBuilder(VersionedEnvironment::class)->disableOriginalConstructor()->getMock();
-        $env->expects($this->any())->method('getVersion')->willReturn('1');
-
         $url = HttpUrl::fromString('http://example.com/product.html');
 
         $this->assertEquals(
             '_product_html_1_l',
-            $this->pageKeyGenerator->getKeyForSnippetList($url, $env)
+            $this->pageKeyGenerator->getKeyForSnippetList($url)
         );
     }
 }

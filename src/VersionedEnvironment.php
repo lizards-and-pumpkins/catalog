@@ -3,39 +3,49 @@ namespace Brera;
 
 class VersionedEnvironment implements Environment
 {
+	const CODE = 'version';
+	
 	/**
 	 * @var DataVersion
 	 */
 	private $version;
 
 	/**
-	 * @var string
+	 * @param array $environmentSource
 	 */
-	private $themeDirectory;
-
-	/**
-	 * @param DataVersion $version
-	 * @param $themeDirectory
-	 */
-	public function __construct(DataVersion $version, $themeDirectory)
+	public function __construct(array $environmentSource)
 	{
-		$this->version = $version;
-		$this->themeDirectory = $themeDirectory;
+		$this->version = $environmentSource[self::CODE];
 	}
 
 	/**
-	 * @return DataVersion
+	 * @param string $code
+	 * @return string
+	 *® @throws EnvironmentCodeNotFoundException
 	 */
-	public function getVersion()
+	public function getValue($code)
 	{
-		return $this->version;
+		if (self::CODE !== $code) {
+			throw new EnvironmentCodeNotFoundException(sprintf(
+				 "No value was not found in the current environment for the code '%s'", $code
+			));
+		}
+		return (string) $this->version;
+	}
+
+	/**
+	 * @return string[]
+	 */
+	public function getSupportedCodes()
+	{
+		return [$this->getId()];
 	}
 
 	/**
 	 * @return string
 	 */
-	public function getThemeDirectory()
+	public function getId()
 	{
-		return $this->themeDirectory;
+		return self::CODE;
 	}
 }
