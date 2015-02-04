@@ -118,11 +118,17 @@ class IntegrationTestFactory implements Factory, DomainEventFactory
 		return new ProductBuilder();
 	}
 
+	/**
+	 * @return ThemeLocator
+	 */
 	public function createThemeLocator()
 	{
 		return new ThemeLocator();
 	}
 
+	/**
+	 * @return EnvironmentSourceBuilder
+	 */
 	public function getEnvironmentSourceBuilder()
 	{
 		/* TODO: Add mechanism to inject data version number to use */
@@ -131,6 +137,9 @@ class IntegrationTestFactory implements Factory, DomainEventFactory
 		return new EnvironmentSourceBuilder($version, $this->createEnvironmentBuilder());
 	}
 
+	/**
+	 * @return EnvironmentBuilder
+	 */
 	public function createEnvironmentBuilder()
 	{
 		return new EnvironmentBuilder();
