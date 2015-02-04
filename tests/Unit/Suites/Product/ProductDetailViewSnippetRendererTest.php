@@ -34,11 +34,6 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
 	private $snippetRenderer;
 
     /**
-     * @var ProductDetailViewSnippetRenderer
-     */
-    private $snippetRenderer;
-
-    /**
      * @var SnippetResultList|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockSnippetResultList;
