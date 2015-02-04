@@ -4,11 +4,16 @@ namespace Brera\Renderer;
 
 trait ThemeTestTrait
 {
+    private $uniquePathToken;
+
     /**
      * @return void
      */
     private function createTemporaryThemeFiles()
     {
+        $themeDirectory = $this->getThemeDirectoryPath();
+        $this->createDirectory($themeDirectory);
+
         $layoutDirectoryPath = $this->getLayoutDirectoryPath();
         $this->createDirectory($layoutDirectoryPath);
 
@@ -53,11 +58,8 @@ EOX;
      */
     private function removeTemporaryThemeFiles()
     {
-        $layoutDirectoryPath = $this->getLayoutDirectoryPath();
-        $this->removeDirectoryAndItsContent($layoutDirectoryPath);
-
-        $templateDirectoryPath = $this->getTemplateDirectoryPath();
-        $this->removeDirectoryAndItsContent($templateDirectoryPath);
+        $themeDirectoryPath = $this->getThemeDirectoryPath();
+        $this->removeDirectoryAndItsContent($themeDirectoryPath);
     }
 
     /**
@@ -65,7 +67,7 @@ EOX;
      */
     private function getLayoutDirectoryPath()
     {
-        return sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'layout';
+        return $this->getThemeDirectoryPath() . DIRECTORY_SEPARATOR . 'layout';
     }
 
     /**
@@ -73,7 +75,15 @@ EOX;
      */
     private function getTemplateDirectoryPath()
     {
-        return sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'template';
+        return $this->getThemeDirectoryPath() . DIRECTORY_SEPARATOR . 'template';
+    }
+
+    /**
+     * @return string
+     */
+    private function getThemeDirectoryPath()
+    {
+        return sys_get_temp_dir() . DIRECTORY_SEPARATOR . $this->getUniquePathToken();
     }
 
     /**
@@ -119,5 +129,17 @@ EOX;
         }
 
         rmdir($directoryPath);
+    }
+
+    /**
+     * @return string
+     */
+    private function getUniquePathToken()
+    {
+        if (empty($this->uniquePathToken)) {
+            $this->uniquePathToken = uniqid();
+        }
+
+        return $this->uniquePathToken;
     }
 }

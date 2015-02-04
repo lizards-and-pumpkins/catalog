@@ -55,6 +55,8 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        $this->createTemporaryThemeFiles();
+
         $stubKeyGenerator = $this->getMock(HardcodedProductDetailViewSnippetKeyGenerator::class, ['getKey']);
         $stubKeyGenerator->expects($this->any())
             ->method('getKey')
@@ -65,7 +67,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->stubThemeLocator = $this->getMock(ThemeLocator::class);
         $this->stubThemeLocator->expects($this->any())
             ->method('getThemeDirectoryForEnvironment')
-            ->willReturn(sys_get_temp_dir());
+            ->willReturn($this->getThemeDirectoryPath());
 
         $this->snippetRenderer = new ProductDetailViewSnippetRenderer(
             $this->mockSnippetResultList,
@@ -82,8 +84,6 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->stubEnvironmentSource->expects($this->any())->method('extractEnvironments')
             ->willReturn([$this->stubEnvironment]);
-
-        $this->createTemporaryThemeFiles();
     }
 
     protected function tearDown()
