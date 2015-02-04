@@ -21,13 +21,30 @@ class VersionedEnvironment implements Environment
 	/**
 	 * @param string $code
 	 * @return string
+	 *® @throws EnvironmentCodeNotFoundException
 	 */
 	public function getValue($code)
 	{
+		if (self::CODE !== $code) {
+			throw new EnvironmentCodeNotFoundException(sprintf(
+				 "No value was not found in the current environment for the code '%s'", $code
+			));
+		}
 		return (string) $this->version;
 	}
 
-	public function getCode()
+	/**
+	 * @return string[]
+	 */
+	public function getSupportedCodes()
+	{
+		return [$this->getId()];
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getId()
 	{
 		return self::CODE;
 	}

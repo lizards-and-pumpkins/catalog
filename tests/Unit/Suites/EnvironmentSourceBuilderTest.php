@@ -3,7 +3,13 @@
 
 namespace Brera;
 
-
+/**
+ * @covers \Brera\EnvironmentSourceBuilder
+ * @uses   \Brera\EnvironmentSource
+ * @uses   \Brera\DataVersion
+ * @uses   \Brera\EnvironmentBuilder
+ * @uses   \Brera\XPathParser
+ */
 class EnvironmentSourceBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -17,7 +23,7 @@ class EnvironmentSourceBuilderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $stubVersion->expects($this->any())->method('__toString')->willReturn('1');
-        
+
         $stubBuilder = $this->getMock(EnvironmentBuilder::class);
         $this->environmentSourceBuilder = new EnvironmentSourceBuilder($stubVersion, $stubBuilder);
     }
@@ -67,7 +73,7 @@ class EnvironmentSourceBuilderTest extends \PHPUnit_Framework_TestCase
         $sourceEnv = $this->environmentSourceBuilder->createFromXml(
             '<product><attributes><attribute code="test">true</attribute></attributes></product>'
         );
-        $this->assertSame([VersionedEnvironment::CODE], $sourceEnv->getEnvironmentPartKeys());
+        $this->assertEnvironmentPartCodesSame([VersionedEnvironment::CODE], $sourceEnv);
     }
 
     /**
@@ -81,7 +87,7 @@ class EnvironmentSourceBuilderTest extends \PHPUnit_Framework_TestCase
 </attributes></product>
 EOX
         );
-        $this->assertSame(['foo', VersionedEnvironment::CODE], $sourceEnv->getEnvironmentPartKeys());
+        $this->assertEnvironmentPartCodesSame(['foo', VersionedEnvironment::CODE], $sourceEnv);
     }
 
     /**
@@ -95,7 +101,7 @@ EOX
 </attributes></product>
 EOX
         );
-        $this->assertSame(['foo', 'baz', VersionedEnvironment::CODE], $sourceEnv->getEnvironmentPartKeys());
+        $this->assertEnvironmentPartCodesSame(['foo', 'baz', VersionedEnvironment::CODE], $sourceEnv);
     }
 
     /**
@@ -110,7 +116,7 @@ EOX
 </attributes></product>
 EOX
         );
-        $this->assertSame(['foo', VersionedEnvironment::CODE], $sourceEnv->getEnvironmentPartKeys());
+        $this->assertEnvironmentPartCodesSame(['foo', VersionedEnvironment::CODE], $sourceEnv);
     }
 
     /**
@@ -125,7 +131,7 @@ EOX
 </attributes></product>
 EOX
         );
-        $this->assertSame(['foo', 'baz', VersionedEnvironment::CODE], $sourceEnv->getEnvironmentPartKeys());
+        $this->assertEnvironmentPartCodesSame(['foo', 'baz', VersionedEnvironment::CODE], $sourceEnv);
     }
 
     /**
@@ -141,5 +147,26 @@ EOX
 EOX
         );
         $this->assertSame(['bar', 'baz'], $sourceEnv->getEnvironmentValuesForPart('foo'));
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldSkipAttributeNodesWithNoAttributes()
+    {
+        $sourceEnv = $this->environmentSourceBuilder->createFromXml(<<<EOX
+<product><attributes>
+    <attribute>true</attribute>
+</attributes></product>
+EOX
+        );
+        $this->assertEnvironmentPartCodesSame([VersionedEnvironment::CODE], $sourceEnv);
+    }
+
+    private function assertEnvironmentPartCodesSame($expected, EnvironmentSource $sourceEnv, $message = '')
+    {
+        $property = new \ReflectionProperty($sourceEnv, 'environmentMatrix');
+        $property->setAccessible(true);
+        $this->assertEquals($expected, array_keys($property->getValue($sourceEnv)), $message);
     }
 }
