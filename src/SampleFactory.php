@@ -48,7 +48,7 @@ class SampleFactory implements Factory, DomainEventFactory
         return new ProductImportDomainEventHandler(
             $event,
             $this->getMasterFactory()->getProductBuilder(),
-            $this->getMasterFactory()->getEnvironmentBuilder(),
+            $this->getMasterFactory()->getEnvironmentSourceBuilder(),
             $this->getMasterFactory()->createProductProjector()
         );
     }
