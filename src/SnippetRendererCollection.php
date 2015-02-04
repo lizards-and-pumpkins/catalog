@@ -6,9 +6,9 @@ interface SnippetRendererCollection
 {
 	/**
 	 * @param ProjectionSourceData $dataObject
-	 * @param Environment $environment
+	 * @param EnvironmentSource $environment
 	 * @return SnippetResultList
 	 * @throws InvalidProjectionDataSourceType
 	 */
-	public function render(ProjectionSourceData $dataObject, Environment $environment);
+	public function render(ProjectionSourceData $dataObject, EnvironmentSource $environment);
 }

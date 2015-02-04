@@ -5,8 +5,8 @@ interface SnippetRenderer
 {
 	/**
 	 * @param ProjectionSourceData $dataObject
-	 * @param Environment $environment
+	 * @param EnvironmentSource $environment
 	 * @return SnippetResultList
 	 */
-	public function render(ProjectionSourceData $dataObject, Environment $environment);
+	public function render(ProjectionSourceData $dataObject, EnvironmentSource $environment);
 }
