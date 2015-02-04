@@ -134,7 +134,7 @@ class XPathParser
 	private function addNamespacePrefixesToXPathString($xPathString)
 	{
 		if ($this->namespacePrefix) {
-			$xPathString = preg_replace('/(\/|^)([^@])/', '$1' . $this->namespacePrefix . ':$2', $xPathString);
+			$xPathString = preg_replace('/(\/\/?|^)([^@.+])/', '$1' . $this->namespacePrefix . ':$2', $xPathString);
 		}
 
 		return $xPathString;
