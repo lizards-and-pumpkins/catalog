@@ -5,7 +5,7 @@ namespace Brera\Renderer;
 trait ThemeTestTrait
 {
     /**
-     * @return null
+     * @return void
      */
     private function createTemporaryThemeFiles()
     {
@@ -40,16 +40,16 @@ EOX;
 
         $fileContent = 'Product details page content
 
-<?php echo $this->getProduct()->getAttributeValue(\'name\') ?> (<?php echo $this->getProduct()->getId() ?>)
+<?= $this->getProduct()->getAttributeValue(\'name\') ?> (<?= $this->getProduct()->getId() ?>)
 
-<?php echo $this->getChildOutput(\'image_gallery\') ?>
+<?= $this->getChildOutput(\'image_gallery\') ?>
 ';
         $filePath = $templateDirectoryPath . DIRECTORY_SEPARATOR . 'view.phtml';
         $this->createFile($filePath, $fileContent);
     }
 
     /**
-     * @return null
+     * @return void
      */
     private function removeTemporaryThemeFiles()
     {
@@ -78,7 +78,7 @@ EOX;
 
     /**
      * @param string $directoryPath
-     * @return null
+     * @return void
      */
     private function createDirectory($directoryPath)
     {
@@ -90,7 +90,7 @@ EOX;
     /**
      * @param string $filePath
      * @param string $fileContent
-     * @return null
+     * @return void
      */
     private function createFile($filePath, $fileContent)
     {
@@ -103,7 +103,7 @@ EOX;
 
     /**
      * @param $directoryPath
-     * @return null
+     * @return void
      */
     private function removeDirectoryAndItsContent($directoryPath)
     {

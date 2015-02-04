@@ -17,7 +17,7 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
     public function itShouldRenderAPageFromAUrlWithoutVariablesInSnippets()
     {
         $url = HttpUrl::fromString('http://example.com/product1');
-        $environment = new VersionedEnvironment(DataVersion::fromVersionString('1.0'), 'theme');
+        $environment = new VersionedEnvironment(DataVersion::fromVersionString('1.0'));
 
         $keyValueStore = new InMemoryKeyValueStore();
 

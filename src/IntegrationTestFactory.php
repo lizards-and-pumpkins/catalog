@@ -122,10 +122,7 @@ class IntegrationTestFactory implements Factory, DomainEventFactory
 		/* TODO: Add mechanism to inject data version number to use */
 		$version = DataVersion::fromVersionString('1');
 
-		/* TODO: Read it from configuration file */
-		$themeDirectory = 'theme';
-
-		return new VersionedEnvironmentBuilder($version, $themeDirectory);
+		return new VersionedEnvironmentBuilder($version);
 	}
 
 	/**

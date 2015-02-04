@@ -9,19 +9,13 @@ class VersionedEnvironmentBuilder implements EnvironmentBuilder
 	 */
 	private $dataVersion;
 
-	/**
-	 * @var string
-	 */
-	private $themeDirectory;
-
-	public function __construct(DataVersion $dataVersion, $themeDirectory)
+	public function __construct(DataVersion $dataVersion)
 	{
 		$this->dataVersion = $dataVersion;
-		$this->themeDirectory = $themeDirectory;
 	}
 
 	public function createEnvironmentFromXml($xmlString)
 	{
-		return new VersionedEnvironment($this->dataVersion, $this->themeDirectory);
+		return new VersionedEnvironment($this->dataVersion);
 	}
 }

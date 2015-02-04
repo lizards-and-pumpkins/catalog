@@ -25,12 +25,12 @@ require_once __DIR__ . '/../Renderer/ThemeTestTrait.php';
  */
 class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
-	use ThemeTestTrait;
+    use ThemeTestTrait;
 
-	/**
-	 * @var ProductDetailViewSnippetRenderer
-	 */
-	private $snippetRenderer;
+    /**
+     * @var ProductDetailViewSnippetRenderer
+     */
+    private $snippetRenderer;
 
     /**
      * @var SnippetResultList|\PHPUnit_Framework_MockObject_MockObject
@@ -64,25 +64,25 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
             $this->stubLayoutReader
         );
 
-		$this->stubEnvironment = $this->getMockBuilder(Environment::class)
-			->disableOriginalConstructor()
-			->getMock();
+        $this->stubEnvironment = $this->getMockBuilder(Environment::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-		$this->createTemporaryThemeFiles();
-	}
+        $this->createTemporaryThemeFiles();
+    }
 
-	protected function tearDown()
-	{
-		$this->removeTemporaryThemeFiles();
-	}
+    protected function tearDown()
+    {
+        $this->removeTemporaryThemeFiles();
+    }
 
-	/**
-	 * @test
-	 */
-	public function itShouldImplementSnippetRenderer()
-	{
-		$this->assertInstanceOf(SnippetRenderer::class, $this->snippetRenderer);
-	}
+    /**
+     * @test
+     */
+    public function itShouldImplementSnippetRenderer()
+    {
+        $this->assertInstanceOf(SnippetRenderer::class, $this->snippetRenderer);
+    }
 
     /**
      * @test
@@ -104,13 +104,9 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
     {
         $stubProduct = $this->getStubProduct();
 
-		$this->stubEnvironment->expects($this->once())
-			->method('getThemeDirectory')
-			->willReturn(sys_get_temp_dir());
-
-		$result = $this->snippetRenderer->render($stubProduct, $this->stubEnvironment);
-		$this->assertSame($this->mockSnippetResultList, $result);
-	}
+        $result = $this->snippetRenderer->render($stubProduct, $this->stubEnvironment);
+        $this->assertSame($this->mockSnippetResultList, $result);
+    }
 
     /**
      * @test
@@ -123,12 +119,8 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
             ->method('add')
             ->with($this->isInstanceOf(SnippetResult::class));
 
-		$this->stubEnvironment->expects($this->once())
-			->method('getThemeDirectory')
-			->willReturn(sys_get_temp_dir());
-
-		$this->snippetRenderer->render($stubProduct, $this->stubEnvironment);
-	}
+        $this->snippetRenderer->render($stubProduct, $this->stubEnvironment);
+    }
 
     /**
      * @test
@@ -147,16 +139,12 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
             ->with('name')
             ->willReturn($productNameString);
 
-		$transport = '';
-		$this->mockSnippetResultList->expects($this->once())
-			->method('add')
-			->willReturnCallback(function ($snippetResult) use (&$transport) {
-				$transport = $snippetResult;
-			});
-
-		$this->stubEnvironment->expects($this->once())
-			->method('getThemeDirectory')
-			->willReturn(sys_get_temp_dir());
+        $transport = '';
+        $this->mockSnippetResultList->expects($this->once())
+            ->method('add')
+            ->willReturnCallback(function ($snippetResult) use (&$transport) {
+                $transport = $snippetResult;
+            });
 
         $this->snippetRenderer->render($stubProduct, $this->stubEnvironment);
 

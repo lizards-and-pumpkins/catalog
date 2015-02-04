@@ -9,18 +9,11 @@ class VersionedEnvironment implements Environment
 	private $version;
 
 	/**
-	 * @var string
-	 */
-	private $themeDirectory;
-
-	/**
 	 * @param DataVersion $version
-	 * @param $themeDirectory
 	 */
-	public function __construct(DataVersion $version, $themeDirectory)
+	public function __construct(DataVersion $version)
 	{
 		$this->version = $version;
-		$this->themeDirectory = $themeDirectory;
 	}
 
 	/**
@@ -29,13 +22,5 @@ class VersionedEnvironment implements Environment
 	public function getVersion()
 	{
 		return $this->version;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getThemeDirectory()
-	{
-		return $this->themeDirectory;
 	}
 }
