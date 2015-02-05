@@ -230,4 +230,28 @@ class XPathParserTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertSame($expectation, $result);
 	}
+
+	/**
+	 * @test
+	 */
+	public function itShouldSelectAllAttributes()
+	{
+		$xml = <<<EOX
+<root xmlns="http://www.w3.org/2001/XMLSchema-instance">
+	<child>
+		<grandChild foo="bar" />
+	</child>
+	<child baz="qux" />
+</root>
+EOX;
+		$parser = new XPathParser($xml);
+		$result = $parser->getXmlNodesArrayByXPath('//@*');
+
+		$expectation = [
+			['nodeName' => 'foo', 'attributes' => ['foo' => 'bar'], 'value' => 'bar'],
+			['nodeName' => 'baz', 'attributes' => ['baz' => 'qux'], 'value' => 'qux']
+		];
+
+		$this->assertSame($expectation, $result);
+	}
 }
