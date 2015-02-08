@@ -3,7 +3,7 @@
 
 namespace Brera\Environment;
 
-require __DIR__ . '/EnvironmentDecoratorTestAbstract.php';
+require_once __DIR__ . '/EnvironmentDecoratorTestAbstract.php';
 
 /**
  * @covers \Brera\Environment\WebsiteEnvironmentDecorator
