@@ -12,7 +12,7 @@ use Brera\Product\ProductBuilder;
  * @uses \Brera\Queue\InMemory\InMemoryQueue
  * @uses \Brera\Product\ProductBuilder
  * @uses \Brera\DataVersion
- * @uses \Brera\VersionedEnvironmentBuilder
+ * @uses \Brera\Environment\EnvironmentBuilder
  * @uses \Brera\DomainEventHandlerLocator
  */
 class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
@@ -75,16 +75,6 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
 		$result = $this->factory->getProductBuilder();
 
 		$this->assertInstanceOf(ProductBuilder::class, $result);
-	}
-
-	/**
-	 * @test
-	 */
-	public function itShouldReturnEnvironmentBuilder()
-	{
-		$result = $this->factory->getEnvironmentBuilder();
-
-		$this->assertInstanceOf(EnvironmentBuilder::class, $result);
 	}
 
 	/**

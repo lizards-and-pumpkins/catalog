@@ -5,7 +5,7 @@ namespace Brera\Product;
 use Brera\KeyValue\DataPoolWriter;
 use Brera\Projector;
 use Brera\ProjectionSourceData;
-use Brera\Environment;
+use Brera\Environment\EnvironmentSource;
 use Brera\InvalidProjectionDataSourceType;
 
 class ProductProjector implements Projector
@@ -32,11 +32,10 @@ class ProductProjector implements Projector
 
 	/**
 	 * @param Product|ProjectionSourceData $product
-	 * @param Environment $environment
-	 * @throws InvalidProjectionDataSourceType
+	 * @param EnvironmentSource $environment
 	 * @return null
 	 */
-	public function project(ProjectionSourceData $product, Environment $environment)
+	public function project(ProjectionSourceData $product, EnvironmentSource $environment)
 	{
 		if (!($product instanceof Product)) {
 			throw new InvalidProjectionDataSourceType('First argument must be instance of Product.');
@@ -46,9 +45,9 @@ class ProductProjector implements Projector
 
 	/**
 	 * @param Product $product
-	 * @param Environment $environment
+	 * @param EnvironmentSource $environment
 	 */
-	private function projectProduct(Product $product, Environment $environment)
+	private function projectProduct(Product $product, EnvironmentSource $environment)
 	{
 		$snippetResultList = $this->rendererCollection->render($product, $environment);
 		$this->dataPoolWriter->writeSnippetResultList($snippetResultList);

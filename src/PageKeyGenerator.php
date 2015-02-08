@@ -4,6 +4,8 @@
 namespace Brera;
 
 
+use Brera\Environment\Environment;
+use Brera\Environment\VersionedEnvironment;
 use Brera\Http\HttpUrl;
 
 class PageKeyGenerator
@@ -28,7 +30,7 @@ class PageKeyGenerator
      */
     public function getKeyForUrl(HttpUrl $url)
     {
-        $key = $url->getPath() . '_' . $this->environment->getVersion();
+        $key = $url->getPath() . '_' . $this->environment->getValue(VersionedEnvironment::CODE);
         $key = preg_replace('#[^a-zA-Z0-9]#', '_', $key);
 
         return $key;

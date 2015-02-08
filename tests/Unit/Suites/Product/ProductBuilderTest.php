@@ -28,7 +28,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function itShouldCreateAProductFromXml()
 	{
-		$xml = file_get_contents('data/product.xml');
+		$xml = file_get_contents(__DIR__ . '/../../../shared-fixture/product.xml');
 		$domDocument = new \DOMDocument();
 		$domDocument->loadXML($xml);
 		$firstNode = $domDocument->getElementsByTagName('product')->item(0);
@@ -42,6 +42,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 * @expectedException \Brera\Product\InvalidNumberOfSkusPerImportedProductException
+	 * @expectedExceptionMessage There must be exactly one SKU in the imported product XML
 	 */
 	public function itShouldThrowAnExceptionInCaseOfXmlHasNoEssentialData()
 	{

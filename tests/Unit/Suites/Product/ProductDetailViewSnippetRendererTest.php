@@ -2,11 +2,12 @@
 
 namespace Brera\Product;
 
+use Brera\Environment\EnvironmentSource;
+use Brera\Environment\Environment;
 use Brera\Renderer\LayoutReader;
 use Brera\SnippetResultList;
 use Brera\ProjectionSourceData;
 use Brera\SnippetRenderer;
-use Brera\Environment;
 use Brera\SnippetResult;
 
 /**
@@ -31,6 +32,11 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
      * @var SnippetResultList|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockSnippetResultList;
+
+    /**
+     * @var Environment|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubEnvironmentSource;
 
     /**
      * @var Environment|\PHPUnit_Framework_MockObject_MockObject
@@ -62,6 +68,12 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->stubEnvironment = $this->getMockBuilder(Environment::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->stubEnvironmentSource = $this->getMockBuilder(EnvironmentSource::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->stubEnvironmentSource->expects($this->any())->method('extractEnvironments')
+            ->willReturn([$this->stubEnvironment]);
     }
 
     /**
@@ -82,7 +94,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->snippetRenderer->render($invalidSourceObject, $this->stubEnvironment);
+        $this->snippetRenderer->render($invalidSourceObject, $this->stubEnvironmentSource);
     }
 
     /**
@@ -92,7 +104,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
     {
         $stubProduct = $this->getStubProduct();
 
-        $result = $this->snippetRenderer->render($stubProduct, $this->stubEnvironment);
+        $result = $this->snippetRenderer->render($stubProduct, $this->stubEnvironmentSource);
         $this->assertSame($this->mockSnippetResultList, $result);
     }
 
@@ -107,7 +119,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
             ->method('add')
             ->with($this->isInstanceOf(SnippetResult::class));
 
-        $this->snippetRenderer->render($stubProduct, $this->stubEnvironment);
+        $this->snippetRenderer->render($stubProduct, $this->stubEnvironmentSource);
     }
 
     /**
@@ -134,7 +146,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
                 $transport = $snippetResult;
             });
 
-        $this->snippetRenderer->render($stubProduct, $this->stubEnvironment);
+        $this->snippetRenderer->render($stubProduct, $this->stubEnvironmentSource);
 
         /** @var $transport SnippetResult */
         $expected = <<<EOT

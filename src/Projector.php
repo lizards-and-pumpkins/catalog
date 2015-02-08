@@ -2,13 +2,15 @@
 
 namespace Brera;
 
+use Brera\Environment\EnvironmentSource;
+
 interface Projector
 {
 	/**
 	 * @param ProjectionSourceData $dataObject
-	 * @param Environment $environment
+	 * @param EnvironmentSource $environment
 	 * @throws InvalidProjectionDataSourceType
 	 * @return null
 	 */
-	public function project(ProjectionSourceData $dataObject, Environment $environment);
+	public function project(ProjectionSourceData $dataObject, EnvironmentSource $environment);
 }

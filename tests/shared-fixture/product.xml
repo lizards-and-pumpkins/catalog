@@ -1,26 +1,7 @@
 <?xml version="1.0"?>
 <products xmlns="http://brera.io" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://brera.io product.xsd">
-    <product type="simple" sku="118235-251" visible="true">
-        <url_key lang="de_DE">led-arm-signallampe</url_key>
-        <url_key lang="de_DE">led-armflasher</url_key>
-        <categories website="ru_de">
-            <category>men-accessoires</category>
-            <category>women-accessoires</category>
-        </categories>
-        <categories website="ru_en">
-            <category>Running shop/Shop</category>
-            <category>men</category>
-            <category>woman</category>
-        </categories>
-        <tax_class_ids>
-            <tax_class_id>5</tax_class_id>
-        </tax_class_ids>
-        <inventory>
-            <qty>5</qty>
-            <is_in_stock>true</is_in_stock>
-            <backorders>false</backorders>
-        </inventory>
+        xsi:schemaLocation="http://brera.io ../../data/product.xsd">
+    <product type="simple" sku="118235-251" visible="true" tax_class_id="5">
         <assets>
             <image identifier="main">
                 <file>products/118235/118235-251.1.png</file>
@@ -38,6 +19,16 @@
             </image>
         </assets>
         <attributes>
+            <attribute code="category" website="ru_de">men</attribute>
+            <attribute code="category" website="ru_de">women</attribute>
+            <attribute code="category" website="ru_de">men-accessories</attribute>
+            <attribute code="category" website="ru_de">women-accessories</attribute>
+            <attribute code="category" website="ru_en">men-accessories</attribute>
+            <attribute code="category" website="ru_en">women-accessories</attribute>
+            <attribute code="stock_qty">5</attribute>
+            <attribute code="backorders">true</attribute>
+            <attribute code="url_key" lang="de_DE">led-arm-signallampe</attribute>
+            <attribute code="url_key" lang="en_US">led-armflasher</attribute>
             <attribute code="name" lang="de_DE">LED Arm-Signallampe</attribute>
             <attribute code="name" lang="en_US">LED Armflasher</attribute>
             <attribute code="price" customer_group="retail" website="ru_de">12.95</attribute>
@@ -57,20 +48,7 @@ LED Armflasher with elastic Band and Flasher&#13;]]></attribute>
         </attributes>
     </product>
 
-    <product type="configurable" sku="218765-333" visible="true">
-        <url_key>adipure-360</url_key>
-        <categories>
-            <category>men-running-shoes</category>
-            <category>specials</category>
-        </categories>
-        <tax_class_ids>
-            <tax_class_id>5</tax_class_id>
-        </tax_class_ids>
-        <inventory>
-            <qty>12</qty>
-            <is_in_stock>true</is_in_stock>
-            <backorders>true</backorders>
-        </inventory>
+    <product type="configurable" sku="218765-333" visible="true" tax_class_id="5">
         <assets>
             <image identifier="main-shoe-picture">
                 <file>products/218765/218765-333.1.png</file>
@@ -91,6 +69,11 @@ LED Armflasher with elastic Band and Flasher&#13;]]></attribute>
             </pdf>
         </assets>
         <attributes>
+            <attribute code="url_key">adipure-360</attribute>
+            <attribute code="category">men-running-shoes</attribute>
+            <attribute code="category">specials</attribute>
+            <attribute code="stock_qty">5</attribute>
+            <attribute code="backorders">true</attribute>
             <attribute code="name">adiPure 360</attribute>
             <attribute code="price">12.95</attribute>
             <attribute code="image_main">main-shoe-picture</attribute>
@@ -110,12 +93,9 @@ LED Armflasher with elastic Band and Flasher&#13;]]></attribute>
 ]]></attribute>
         </attributes>
         <associated_products>
-            <product sku="218765-333-1" visible="false">
-                <inventory>
-                    <qty>1200</qty>
-                    <is_in_stock>true</is_in_stock>
-                </inventory>
+            <product sku="218765-333-1" visible="false" tax_class_id="5">
                 <attributes>
+                    <attribute code="stock_qty">5</attribute>
                     <attribute code="color">
                         <label lang="en_US">Red</label>
                         <label lang="de_DE">Rot</label>
@@ -125,12 +105,9 @@ LED Armflasher with elastic Band and Flasher&#13;]]></attribute>
                     </attribute>
                 </attributes>
             </product>
-            <product sku="218765-333-2" visible="false">
-                <inventory>
-                    <qty>750</qty>
-                    <is_in_stock>true</is_in_stock>
-                </inventory>
+            <product sku="218765-333-2" visible="false" tax_class_id="5">
                 <attributes>
+                    <attribute code="stock_qty">750</attribute>
                     <attribute code="color">
                         <label lang="en_US">Red</label>
                         <label lang="de_DE">Rot</label>
@@ -140,12 +117,9 @@ LED Armflasher with elastic Band and Flasher&#13;]]></attribute>
                     </attribute>
                 </attributes>
             </product>
-            <product sku="218765-333-3" visible="false">
-                <inventory>
-                    <qty>5544</qty>
-                    <is_in_stock>true</is_in_stock>
-                </inventory>
+            <product sku="218765-333-3" visible="false" tax_class_id="5">
                 <attributes>
+                    <attribute code="stock_qty">45</attribute>
                     <attribute code="color">
                         <label lang="en_US">Red</label>
                         <label lang="de_DE">Rot</label>
@@ -155,12 +129,9 @@ LED Armflasher with elastic Band and Flasher&#13;]]></attribute>
                     </attribute>
                 </attributes>
             </product>
-            <product sku="218765-333-4" visible="false">
-                <inventory>
-                    <qty>40</qty>
-                    <is_in_stock>true</is_in_stock>
-                </inventory>
+            <product sku="218765-333-4" visible="false" tax_class_id="5">
                 <attributes>
+                    <attribute code="stock_qty">5</attribute>
                     <attribute code="color">
                         <label lang="en_US">Red</label>
                         <label lang="de_DE">Rot</label>
@@ -170,12 +141,9 @@ LED Armflasher with elastic Band and Flasher&#13;]]></attribute>
                     </attribute>
                 </attributes>
             </product>
-            <product sku="218765-333-5" visible="false">
-                <inventory>
-                    <qty>126</qty>
-                    <is_in_stock>true</is_in_stock>
-                </inventory>
+            <product sku="218765-333-5" visible="false" tax_class_id="5">
                 <attributes>
+                    <attribute code="stock_qty">5</attribute>
                     <attribute code="color">
                         <label lang="en_US">Blue</label>
                         <label lang="de_DE">Blau</label>
@@ -185,11 +153,9 @@ LED Armflasher with elastic Band and Flasher&#13;]]></attribute>
                     </attribute>
                 </attributes>
             </product>
-            <product sku="218765-333-6" visible="false">
-                <inventory>
-                    <is_in_stock>false</is_in_stock>
-                </inventory>
+            <product sku="218765-333-6" visible="false" tax_class_id="5">
                 <attributes>
+                    <attribute code="stock_qty">5</attribute>
                     <attribute code="color">
                         <label lang="en_US">Blue</label>
                         <label lang="de_DE">Blau</label>
@@ -199,12 +165,9 @@ LED Armflasher with elastic Band and Flasher&#13;]]></attribute>
                     </attribute>
                 </attributes>
             </product>
-            <product sku="218765-333-7" visible="false">
-                <inventory>
-                    <qty>2</qty>
-                    <is_in_stock>true</is_in_stock>
-                </inventory>
+            <product sku="218765-333-7" visible="false" tax_class_id="5">
                 <attributes>
+                    <attribute code="stock_qty">5</attribute>
                     <attribute code="color">
                         <label lang="en_US">Blue</label>
                         <label lang="de_DE">Blau</label>

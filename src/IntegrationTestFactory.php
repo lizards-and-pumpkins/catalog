@@ -2,6 +2,8 @@
 
 namespace Brera;
 
+use Brera\Environment\EnvironmentBuilder;
+use Brera\Environment\EnvironmentSourceBuilder;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\ProductBuilder;
@@ -48,7 +50,7 @@ class IntegrationTestFactory implements Factory, DomainEventFactory
 		return new ProductImportDomainEventHandler(
 			$event,
 			$this->getMasterFactory()->getProductBuilder(),
-			$this->getMasterFactory()->getEnvironmentBuilder(),
+			$this->getMasterFactory()->createEnvironmentSourceBuilder(),
 			$this->getMasterFactory()->createProductProjector()
 		);
 	}
@@ -117,12 +119,17 @@ class IntegrationTestFactory implements Factory, DomainEventFactory
 		return new ProductBuilder();
 	}
 
-	public function getEnvironmentBuilder()
+	public function createEnvironmentSourceBuilder()
 	{
 		/* TODO: Add mechanism to inject data version number to use */
 		$version = DataVersion::fromVersionString('1');
 
-		return new VersionedEnvironmentBuilder($version);
+		return new EnvironmentSourceBuilder($version, $this->getMasterFactory()->createEnvironmentBuilder());
+	}
+
+	public function createEnvironmentBuilder()
+	{
+		return new EnvironmentBuilder();
 	}
 
 	/**

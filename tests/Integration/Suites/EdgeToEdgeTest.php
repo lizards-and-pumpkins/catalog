@@ -2,6 +2,7 @@
 
 namespace Brera\Tests\Integration;
 
+use Brera\Environment\EnvironmentSource;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\PoCSku;
 use Brera\Product\ProductId;
@@ -27,7 +28,7 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
 		$productId = ProductId::fromSku($sku);
 		$productName = 'LED Arm-Signallampe';
 
-		$xml = file_get_contents('data/product.xml');
+		$xml = file_get_contents(__DIR__ . '/../../shared-fixture/product.xml');
 
 		$queue = $factory->getEventQueue();
 		$queue->add(new CatalogImportDomainEvent($xml));
@@ -39,9 +40,11 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
 		$reader = $factory->createDataPoolReader();
 		/** @var HardcodedProductDetailViewSnippetKeyGenerator $keyGenerator */
 		$keyGenerator = $factory->createProductDetailViewSnippetKeyGenerator();
-		$environment = $factory->getEnvironmentBuilder()->createEnvironmentFromXml($xml);
-		$html = $reader->getSnippet($keyGenerator->getKeyForEnvironment($productId, $environment));
-		//$html = $reader->getPoCProductHtml($productId);
+		/** @var EnvironmentSource $environmentSource */
+		$environmentSource = $factory->createEnvironmentSourceBuilder()->createFromXml($xml);
+		$environment = $environmentSource->extractEnvironments(['version'])[0];
+		$key = $keyGenerator->getKeyForEnvironment($productId, $environment);
+		$html = $reader->getSnippet($key);
 
 		$this->assertContains((string)$sku, $html);
 		$this->assertContains($productName, $html);
