@@ -2,10 +2,10 @@
 
 namespace Brera\Product;
 
+use Brera\Environment\EnvironmentSource;
 use Brera\KeyValue\DataPoolWriter;
 use Brera\SnippetResultList;
 use Brera\SnippetRendererCollection;
-use Brera\EnvironmentSource;
 use Brera\ProjectionSourceData;
 
 /**

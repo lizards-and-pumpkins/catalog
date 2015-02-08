@@ -2,7 +2,7 @@
 
 namespace Brera\Renderer;
 
-use Brera\Environment;
+use Brera\Environment\Environment;
 use Brera\ProjectionSourceData;
 use Brera\SnippetKeyGenerator;
 use Brera\SnippetRenderer;

@@ -3,9 +3,9 @@
 namespace Brera\Product;
 
 use Brera\SnippetKeyGenerator;
-use Brera\Environment;
 use Brera\InvalidSnippetKeyIdentifierException;
-use Brera\VersionedEnvironment;
+use Brera\Environment\Environment;
+use Brera\Environment\VersionedEnvironment;
 
 class HardcodedProductDetailViewSnippetKeyGenerator implements SnippetKeyGenerator
 {

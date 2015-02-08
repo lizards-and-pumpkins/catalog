@@ -5,7 +5,7 @@ namespace Brera\Product;
 use Brera\SnippetRenderer;
 use Brera\SnippetResultList;
 use Brera\ProjectionSourceData;
-use Brera\EnvironmentSource;
+use Brera\Environment\EnvironmentSource;
 
 /**
  * @covers \Brera\Product\HardcodedProductSnippetRendererCollection

@@ -1,11 +1,16 @@
 <?php
 
 
-namespace Brera;
+namespace Brera\Environment;
 
 
 class EnvironmentBuilder
 {
+    /**
+     * @var string[]
+     */
+    private $registeredEnvironmentDecorators = [];
+
     /**
      * @param array $environmentSourceDataSets
      * @return Environment[]
@@ -13,6 +18,16 @@ class EnvironmentBuilder
     public function getEnvironments(array $environmentSourceDataSets)
     {
         return array_map([$this, 'createDecoratedEnvironmentSet'], $environmentSourceDataSets);
+    }
+
+    /**
+     * @param string $code
+     * @param string $environmentDecoratorClass
+     */
+    public function registerEnvironmentDecorator($code, $environmentDecoratorClass)
+    {
+        $this->validateDecoratorClass($code, $environmentDecoratorClass);
+        $this->registeredEnvironmentDecorators[$code] = $environmentDecoratorClass;
     }
 
     /**
@@ -46,28 +61,40 @@ class EnvironmentBuilder
      */
     private function getDecoratorClass($code)
     {
+        return array_key_exists($code, $this->registeredEnvironmentDecorators) ?
+            $this->registeredEnvironmentDecorators[$code] :
+            $this->getDefaultEnvironmentDecoratorClass($code);
+    }
+
+    /**
+     * @param string $code
+     * @return string
+     */
+    private function getDefaultEnvironmentDecoratorClass($code)
+    {
         $decoratorClass = ucfirst($this->removeUnderscores($code)) . 'EnvironmentDecorator';
-        $qualifiedDecoratorClass = "\\Brera\\$decoratorClass";
-        $this->validateDecoratorClass($qualifiedDecoratorClass, $code);
+        $qualifiedDecoratorClass = "\\Brera\\Environment\\$decoratorClass";
+        $this->validateDecoratorClass($code, $qualifiedDecoratorClass);
+        $this->registerEnvironmentDecorator($code, $qualifiedDecoratorClass);
         return $qualifiedDecoratorClass;
     }
 
     /**
-     * @param string $qualifiedClassName
      * @param string $code
+     * @param string $qualifiedClassName
      * @throws EnvironmentDecoratorNotFoundException
      * @throws InvalidEnvironmentDecoratorClassException
      */
-    private function validateDecoratorClass($qualifiedClassName, $code)
+    private function validateDecoratorClass($code, $qualifiedClassName)
     {
         if (!class_exists($qualifiedClassName)) {
             throw new EnvironmentDecoratorNotFoundException(
-                sprintf('No environment decorator found for code "%s"', $code)
+                sprintf('Environment decorator class "%s" not found for code "%s"', $qualifiedClassName, $code)
             );
         }
         if (!in_array(EnvironmentDecorator::class, class_parents($qualifiedClassName))) {
             throw new InvalidEnvironmentDecoratorClassException(sprintf(
-                'Environment Decorator class "%s" does not extend \Brera\EnvironmentDecorator', $qualifiedClassName
+                'Environment Decorator class "%s" does not extend \\Brera\\Environment\\EnvironmentDecorator', $qualifiedClassName
             ));
         }
     }

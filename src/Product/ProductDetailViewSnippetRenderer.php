@@ -2,11 +2,11 @@
 
 namespace Brera\Product;
 
+use Brera\Environment\Environment;
+use Brera\Environment\EnvironmentSource;
 use Brera\Renderer\BlockSnippetRenderer;
-use Brera\EnvironmentSource;
 use Brera\SnippetResultList;
 use Brera\ProjectionSourceData;
-use Brera\Environment;
 use Brera\SnippetResult;
 
 class ProductDetailViewSnippetRenderer extends BlockSnippetRenderer

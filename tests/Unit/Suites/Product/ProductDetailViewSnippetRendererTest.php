@@ -2,14 +2,14 @@
 
 namespace Brera\Product;
 
-use Brera\EnvironmentSource;
-use Brera\Renderer\ThemeTestTrait;
+use Brera\Environment\EnvironmentSource;
+use Brera\Environment\Environment;
 use Brera\SnippetResultList;
 use Brera\ProjectionSourceData;
 use Brera\SnippetRenderer;
-use Brera\Environment;
 use Brera\SnippetResult;
 use Brera\ThemeLocator;
+use Brera\Renderer\ThemeTestTrait;
 
 require_once __DIR__ . '/../Renderer/ThemeTestTrait.php';
 

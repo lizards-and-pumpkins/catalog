@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Brera;
+namespace Brera\Environment;
 
 
 class InvalidEnvironmentDecoratorClassException extends \RuntimeException
