@@ -2,7 +2,7 @@
 
 namespace Brera\Tests\Integration;
 
-use Brera\EnvironmentSource;
+use Brera\Environment\EnvironmentSource;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\PoCSku;
 use Brera\Product\ProductId;
