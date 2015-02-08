@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Brera;
+namespace Brera\Environment;
 
 /**
- * @covers \Brera\EnvironmentSource
+ * @covers \Brera\Environment\EnvironmentSource
  */
 class EnvironmentSourceTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Brera;
+namespace Brera\Environment;
 
 
 abstract class EnvironmentDecorator implements Environment

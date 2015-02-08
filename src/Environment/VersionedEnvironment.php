@@ -1,5 +1,7 @@
 <?php
-namespace Brera;
+namespace Brera\Environment;
+
+use Brera\DataVersion;
 
 class VersionedEnvironment implements Environment
 {

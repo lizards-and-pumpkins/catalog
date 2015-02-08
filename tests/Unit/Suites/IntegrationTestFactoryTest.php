@@ -12,7 +12,7 @@ use Brera\Product\ProductBuilder;
  * @uses \Brera\Queue\InMemory\InMemoryQueue
  * @uses \Brera\Product\ProductBuilder
  * @uses \Brera\DataVersion
- * @uses \Brera\EnvironmentBuilder
+ * @uses \Brera\Environment\EnvironmentBuilder
  * @uses \Brera\DomainEventHandlerLocator
  */
 class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase

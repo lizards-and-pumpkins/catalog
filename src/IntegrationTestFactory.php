@@ -2,6 +2,8 @@
 
 namespace Brera;
 
+use Brera\Environment\EnvironmentBuilder;
+use Brera\Environment\EnvironmentSourceBuilder;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\ProductBuilder;

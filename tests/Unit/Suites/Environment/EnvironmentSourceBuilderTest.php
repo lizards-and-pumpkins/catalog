@@ -1,13 +1,15 @@
 <?php
 
 
-namespace Brera;
+namespace Brera\Environment;
+
+use Brera\DataVersion;
 
 /**
- * @covers \Brera\EnvironmentSourceBuilder
- * @uses   \Brera\EnvironmentSource
+ * @covers \Brera\Environment\EnvironmentSourceBuilder
+ * @uses   \Brera\Environment\EnvironmentSource
+ * @uses   \Brera\Environment\EnvironmentBuilder
  * @uses   \Brera\DataVersion
- * @uses   \Brera\EnvironmentBuilder
  * @uses   \Brera\XPathParser
  */
 class EnvironmentSourceBuilderTest extends \PHPUnit_Framework_TestCase

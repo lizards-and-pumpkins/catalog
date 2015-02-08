@@ -2,12 +2,12 @@
 
 namespace Brera\Product;
 
-use Brera\EnvironmentSource;
+use Brera\Environment\EnvironmentSource;
+use Brera\Environment\Environment;
 use Brera\Renderer\LayoutReader;
 use Brera\SnippetResultList;
 use Brera\ProjectionSourceData;
 use Brera\SnippetRenderer;
-use Brera\Environment;
 use Brera\SnippetResult;
 
 /**

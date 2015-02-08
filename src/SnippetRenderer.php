@@ -1,6 +1,8 @@
 <?php
 namespace Brera;
 
+use Brera\Environment\EnvironmentSource;
+
 interface SnippetRenderer
 {
 	/**

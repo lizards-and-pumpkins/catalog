@@ -2,8 +2,8 @@
 
 namespace Brera\Product;
 
-use Brera\EnvironmentSourceBuilder;
-use Brera\EnvironmentSource;
+use Brera\Environment\EnvironmentSource;
+use Brera\Environment\EnvironmentSourceBuilder;
 
 /**
  * @covers \Brera\Product\ProductImportDomainEventHandler

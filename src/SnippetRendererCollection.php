@@ -2,6 +2,8 @@
 
 namespace Brera;
 
+use Brera\Environment\EnvironmentSource;
+
 interface SnippetRendererCollection
 {
 	/**

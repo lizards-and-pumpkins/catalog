@@ -1,12 +1,12 @@
 <?php
 
 
-namespace Brera;
+namespace Brera\Environment;
 
 /**
- * @covers \Brera\EnvironmentBuilder
- * @uses   \Brera\VersionedEnvironment
- * @uses   \Brera\EnvironmentDecorator
+ * @covers \Brera\Environment\EnvironmentBuilder
+ * @uses   \Brera\Environment\VersionedEnvironment
+ * @uses   \Brera\Environment\EnvironmentDecorator
  */
 class EnvironmentBuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,7 +22,7 @@ class EnvironmentBuilderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Brera\EnvironmentDecoratorNotFoundException
+     * @expectedException \Brera\Environment\EnvironmentDecoratorNotFoundException
      */
     public function itShouldThrowAnExceptionForNonExistingCode()
     {
@@ -34,7 +34,7 @@ class EnvironmentBuilderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Brera\InvalidEnvironmentDecoratorClassException
+     * @expectedException \Brera\Environment\InvalidEnvironmentDecoratorClassException
      */
     public function itShouldThrowExceptionForNonEnvironmentDecoratorClass()
     {

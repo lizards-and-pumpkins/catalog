@@ -3,7 +3,7 @@
 namespace Brera\Product;
 
 use Brera\DomainEventHandler;
-use Brera\EnvironmentSourceBuilder;
+use Brera\Environment\EnvironmentSourceBuilder;
 
 class ProductImportDomainEventHandler implements DomainEventHandler
 {

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Brera;
+namespace Brera\Environment;
 
 
 class EnvironmentBuilder
@@ -47,7 +47,7 @@ class EnvironmentBuilder
     private function getDecoratorClass($code)
     {
         $decoratorClass = ucfirst($this->removeUnderscores($code)) . 'EnvironmentDecorator';
-        $qualifiedDecoratorClass = "\\Brera\\$decoratorClass";
+        $qualifiedDecoratorClass = "\\Brera\\Environment\\$decoratorClass";
         $this->validateDecoratorClass($qualifiedDecoratorClass, $code);
         return $qualifiedDecoratorClass;
     }

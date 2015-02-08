@@ -1,11 +1,11 @@
 <?php
 
 
-namespace Brera;
+namespace Brera\Environment;
 
 /**
- * @covers   \Brera\EnvironmentDecorator
- * @covers   \Brera\TestConcreteEnvironmentDecorator
+ * @covers   \Brera\Environment\EnvironmentDecorator
+ * @covers   \Brera\Environment\TestConcreteEnvironmentDecorator
  */
 class EnvironmentDecoratorTest extends \PHPUnit_Framework_TestCase
 {
@@ -50,7 +50,7 @@ class EnvironmentDecoratorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Brera\EnvironmentCodeNotFoundException
+     * @expectedException \Brera\Environment\EnvironmentCodeNotFoundException
      * @expectedExceptionMessage No value found in the environment source data for the code
      */
     public function itShouldThrowAnExceptionIfTheValueIsNotFoundInTheSourceData()

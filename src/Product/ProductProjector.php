@@ -5,7 +5,7 @@ namespace Brera\Product;
 use Brera\KeyValue\DataPoolWriter;
 use Brera\Projector;
 use Brera\ProjectionSourceData;
-use Brera\EnvironmentSource;
+use Brera\Environment\EnvironmentSource;
 use Brera\InvalidProjectionDataSourceType;
 
 class ProductProjector implements Projector
