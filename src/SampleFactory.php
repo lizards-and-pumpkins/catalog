@@ -48,7 +48,7 @@ class SampleFactory implements Factory, DomainEventFactory
         return new ProductImportDomainEventHandler(
             $event,
             $this->getMasterFactory()->getProductBuilder(),
-            $this->getMasterFactory()->getEnvironmentBuilder(),
+            $this->getMasterFactory()->getEnvironmentSourceBuilder(),
             $this->getMasterFactory()->createProductProjector()
         );
     }
@@ -97,7 +97,8 @@ class SampleFactory implements Factory, DomainEventFactory
     {
         return new ProductDetailViewSnippetRenderer(
             $this->getMasterFactory()->createSnippetResultList(),
-            $this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator()
+            $this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator(),
+            $this->getMasterFactory()->createThemeLocator()
         );
     }
 
@@ -117,15 +118,31 @@ class SampleFactory implements Factory, DomainEventFactory
         return new ProductBuilder();
     }
 
-    public function getEnvironmentBuilder()
+    /**
+     * @return ThemeLocator
+     */
+    public function createThemeLocator()
+    {
+        return new ThemeLocator();
+    }
+
+    /**
+     * @return EnvironmentSourceBuilder
+     */
+    public function getEnvironmentSourceBuilder()
     {
         /* TODO: Add mechanism to inject data version number to use */
         $version = DataVersion::fromVersionString('1');
 
-        /* TODO: Read it from configuration file */
-        $themeDirectory = 'theme';
+        return new EnvironmentSourceBuilder($version, $this->createEnvironmentBuilder());
+    }
 
-        return new VersionedEnvironmentBuilder($version, $themeDirectory);
+    /**
+     * @return EnvironmentBuilder
+     */
+    public function createEnvironmentBuilder()
+    {
+        return new EnvironmentBuilder();
     }
 
     /**

@@ -2,6 +2,8 @@
 
 namespace Brera;
 
+use Brera\Environment\EnvironmentBuilder;
+use Brera\Environment\EnvironmentSourceBuilder;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\ProductBuilder;
@@ -48,7 +50,7 @@ class IntegrationTestFactory implements Factory, DomainEventFactory
 		return new ProductImportDomainEventHandler(
 			$event,
 			$this->getMasterFactory()->getProductBuilder(),
-			$this->getMasterFactory()->getEnvironmentBuilder(),
+			$this->getMasterFactory()->createEnvironmentSourceBuilder(),
 			$this->getMasterFactory()->createProductProjector()
 		);
 	}
@@ -97,7 +99,8 @@ class IntegrationTestFactory implements Factory, DomainEventFactory
 	{
 		return new ProductDetailViewSnippetRenderer(
 			$this->getMasterFactory()->createSnippetResultList(),
-			$this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator()
+			$this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator(),
+			$this->getMasterFactory()->createThemeLocator()
 		);
 	}
 
@@ -117,15 +120,31 @@ class IntegrationTestFactory implements Factory, DomainEventFactory
 		return new ProductBuilder();
 	}
 
-	public function getEnvironmentBuilder()
+	/**
+	 * @return ThemeLocator
+	 */
+	public function createThemeLocator()
+	{
+		return new ThemeLocator();
+	}
+
+	/**
+	 * @return EnvironmentSourceBuilder
+	 */
+	public function createEnvironmentSourceBuilder()
 	{
 		/* TODO: Add mechanism to inject data version number to use */
 		$version = DataVersion::fromVersionString('1');
 
-		/* TODO: Read it from configuration file */
-		$themeDirectory = 'theme';
+		return new EnvironmentSourceBuilder($version, $this->getMasterFactory()->createEnvironmentBuilder());
+	}
 
-		return new VersionedEnvironmentBuilder($version, $themeDirectory);
+	/**
+	 * @return EnvironmentBuilder
+	 */
+	public function createEnvironmentBuilder()
+	{
+		return new EnvironmentBuilder();
 	}
 
 	/**

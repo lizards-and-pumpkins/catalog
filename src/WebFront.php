@@ -96,6 +96,7 @@ abstract class WebFront
 	}
 
 	/**
+	 * @param $value
 	 * @return string
 	 */
 	private function getExceptionMessageClassNameRepresentation($value)

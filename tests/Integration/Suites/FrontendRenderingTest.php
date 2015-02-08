@@ -2,6 +2,7 @@
 
 namespace Brera;
 
+use Brera\Environment\VersionedEnvironment;
 use Brera\Http\HttpUrl;
 use Brera\KeyValue\DataPoolReader;
 use Brera\KeyValue\InMemory\InMemoryKeyValueStore;
@@ -14,10 +15,10 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
      * @test
      * @return void
      */
-    public function itShouldRenderAPageFromAUrlWithoutVariablesInSnippets()
+    public function itShouldRenderAPageFromAnUrlWithoutVariablesInSnippets()
     {
         $url = HttpUrl::fromString('http://example.com/product1');
-        $environment = new VersionedEnvironment(DataVersion::fromVersionString('1.0'), 'theme');
+        $environment = new VersionedEnvironment([VersionedEnvironment::CODE => DataVersion::fromVersionString('1.0')]);
 
         $keyValueStore = new InMemoryKeyValueStore();
 

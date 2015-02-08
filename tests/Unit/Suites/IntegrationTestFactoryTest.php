@@ -12,7 +12,7 @@ use Brera\Product\ProductBuilder;
  * @uses \Brera\Queue\InMemory\InMemoryQueue
  * @uses \Brera\Product\ProductBuilder
  * @uses \Brera\DataVersion
- * @uses \Brera\VersionedEnvironmentBuilder
+ * @uses \Brera\Environment\EnvironmentBuilder
  * @uses \Brera\DomainEventHandlerLocator
  */
 class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
@@ -80,20 +80,10 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 */
-	public function itShouldReturnEnvironmentBuilder()
+	public function itShouldReturnThemeLocator()
 	{
-		$result = $this->factory->getEnvironmentBuilder();
+	    $result = $this->factory->createThemeLocator();
 
-		$this->assertInstanceOf(EnvironmentBuilder::class, $result);
-	}
-
-	/**
-	 * @test
-	 */
-	public function isShouldCreateDomainEventHandlerLocator()
-	{
-		$result = $this->factory->createDomainEventHandlerLocator();
-
-		$this->assertInstanceOf(DomainEventHandlerLocator::class, $result);
+		$this->assertInstanceOf(ThemeLocator::class, $result);
 	}
 }

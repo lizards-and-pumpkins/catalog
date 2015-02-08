@@ -3,8 +3,9 @@
 namespace Brera\Product;
 
 use Brera\SnippetKeyGenerator;
-use Brera\Environment;
 use Brera\InvalidSnippetKeyIdentifierException;
+use Brera\Environment\Environment;
+use Brera\Environment\VersionedEnvironment;
 
 class HardcodedProductDetailViewSnippetKeyGenerator implements SnippetKeyGenerator
 {
@@ -35,6 +36,6 @@ class HardcodedProductDetailViewSnippetKeyGenerator implements SnippetKeyGenerat
 	 */
 	private function getKeyForProductIdInEnvironment(ProductId $productId, Environment $environment)
 	{
-		return sprintf('%s_%s_%s', self::KEY_PREFIX, $environment->getVersion(), $productId);
+		return sprintf('%s_%s_%s', self::KEY_PREFIX, $environment->getValue(VersionedEnvironment::CODE), $productId);
 	}
 }
