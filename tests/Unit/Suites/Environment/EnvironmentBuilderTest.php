@@ -81,6 +81,38 @@ class EnvironmentBuilderTest extends \PHPUnit_Framework_TestCase
             'consecutive underscores end' => ['consecutive_underscores__', 'consecutiveUnderscores'],
         ];
     }
+
+    /**
+     * @test
+     * @expectedException \Brera\Environment\EnvironmentDecoratorNotFoundException
+     */
+    public function itShouldThrowAnExceptionWhenAddingANonExistentClass()
+    {
+        $this->builder->registerEnvironmentDecorator('test', 'Non\\Existent\\DecoratorClass');
+    }
+
+    /**
+     * @test
+     * @expectedException \Brera\Environment\InvalidEnvironmentDecoratorClassException
+     */
+    public function itShouldThrowAnExceptionWhenAddingAnInvalidDecoratorClass()
+    {
+        $this->builder->registerEnvironmentDecorator('test', InvalidTestStubEnvironmentDecorator::class);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldAllowRegisteringEnvironmentCodesToClasses()
+    {
+        $this->builder->registerEnvironmentDecorator('test', ValidTestStubEnvironmentDecorator::class);
+        $environments = [
+            [VersionedEnvironment::CODE => 1, 'test' => 'dummy'],
+        ];
+        $result = $this->builder->getEnvironments($environments);
+        $this->assertCount(1, $result);
+        $this->assertContainsOnlyInstancesOf(Environment::class, $result);
+    }
 }
 
 class InvalidTestStubEnvironmentDecorator
