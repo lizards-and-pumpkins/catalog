@@ -50,7 +50,7 @@ class IntegrationTestFactory implements Factory, DomainEventFactory
 		return new ProductImportDomainEventHandler(
 			$event,
 			$this->getMasterFactory()->getProductBuilder(),
-			$this->getMasterFactory()->getEnvironmentSourceBuilder(),
+			$this->getMasterFactory()->createEnvironmentSourceBuilder(),
 			$this->getMasterFactory()->createProductProjector()
 		);
 	}
@@ -119,12 +119,12 @@ class IntegrationTestFactory implements Factory, DomainEventFactory
 		return new ProductBuilder();
 	}
 
-	public function getEnvironmentSourceBuilder()
+	public function createEnvironmentSourceBuilder()
 	{
 		/* TODO: Add mechanism to inject data version number to use */
 		$version = DataVersion::fromVersionString('1');
 
-		return new EnvironmentSourceBuilder($version, $this->createEnvironmentBuilder());
+		return new EnvironmentSourceBuilder($version, $this->getMasterFactory()->createEnvironmentBuilder());
 	}
 
 	public function createEnvironmentBuilder()
