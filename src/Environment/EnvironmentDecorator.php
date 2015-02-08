@@ -65,7 +65,7 @@ abstract class EnvironmentDecorator implements Environment
      */
     public final function getSupportedCodes()
     {
-        return array_merge($this->component->getSupportedCodes(), [$this->getCode()]);
+        return array_merge([$this->getCode()], $this->component->getSupportedCodes());
     }
 
     /**
