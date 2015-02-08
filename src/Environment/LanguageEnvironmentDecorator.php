@@ -6,7 +6,7 @@ namespace Brera\Environment;
 
 class LanguageEnvironmentDecorator extends EnvironmentDecorator
 {
-    const CODE = 'lang';
+    const CODE = 'language';
     
     /**
      * @return string
