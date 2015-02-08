@@ -1,9 +1,11 @@
 <?php
 
-namespace Brera;
+namespace Brera\Environment;
+
+use Brera\DataVersion;
 
 /**
- * @covers \Brera\VersionedEnvironment
+ * @covers \Brera\Environment\VersionedEnvironment
  */
 class VersionedEnvironmentTest extends \PHPUnit_Framework_TestCase
 {
@@ -43,7 +45,7 @@ class VersionedEnvironmentTest extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * @test
-	 * @expectedException \Brera\EnvironmentCodeNotFoundException
+	 * @expectedException \Brera\Environment\EnvironmentCodeNotFoundException
 	 * @expectedExceptionMessage No value was not found in the current environment for the code 'foo'
 	 */
 	public function itShouldThrowAnExceptionWhenGettingTheValueWithANonmatchingCode()

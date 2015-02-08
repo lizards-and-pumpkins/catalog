@@ -13,7 +13,6 @@ class Page implements HttpResponse
 
     /**
      * @param string $body
-     * @return Page
      */
     public function __construct($body)
     {

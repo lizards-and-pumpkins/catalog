@@ -2,12 +2,12 @@
 
 namespace Brera\Product;
 
-use Brera\EnvironmentSource;
-use Brera\Renderer\ThemeTestTrait;
+use Brera\Environment\EnvironmentSource;
+use Brera\Environment\Environment;
+use Brera\Renderer\LayoutReader;
 use Brera\SnippetResultList;
 use Brera\ProjectionSourceData;
 use Brera\SnippetRenderer;
-use Brera\Environment;
 use Brera\SnippetResult;
 use Brera\ThemeLocator;
 
@@ -40,6 +40,11 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @var EnvironmentSource|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubEnvironmentSource;
+
+    /**
+     * @var Environment|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubEnvironmentSource;
 

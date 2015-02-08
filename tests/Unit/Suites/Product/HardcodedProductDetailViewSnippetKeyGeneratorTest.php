@@ -2,7 +2,7 @@
 
 namespace Brera\Product;
 
-use Brera\Environment;
+use Brera\Environment\Environment;
 
 /**
  * @covers \Brera\Product\HardcodedProductDetailViewSnippetKeyGenerator

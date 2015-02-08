@@ -16,7 +16,7 @@ class CatalogImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function itShouldEmitProductImportDomainEvents()
 	{
-		$xml = file_get_contents('data/product.xml');
+		$xml = file_get_contents(__DIR__ . '/../../../shared-fixture/product.xml');
 
 		$stubCatalogImportDomainEvent = $this->getMockBuilder(CatalogImportDomainEvent::class)
 			->disableOriginalConstructor()

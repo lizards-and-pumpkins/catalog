@@ -2,16 +2,39 @@
 
 namespace Brera\Product;
 
+use Brera\Environment\Environment;
+use Brera\Environment\EnvironmentSource;
 use Brera\Renderer\BlockSnippetRenderer;
 use Brera\EnvironmentSource;
 use Brera\SnippetResultList;
 use Brera\ProjectionSourceData;
-use Brera\Environment;
 use Brera\SnippetResult;
 
 class ProductDetailViewSnippetRenderer extends BlockSnippetRenderer
 {
     const LAYOUT_HANDLE = 'product_details_snippet';
+
+    /**
+     * @var SnippetResultList
+     */
+    private $resultList;
+
+    /**
+     * @var HardcodedProductDetailViewSnippetKeyGenerator
+     */
+    private $keyGenerator;
+
+    /**
+     * @param SnippetResultList $resultList
+     * @param HardcodedProductDetailViewSnippetKeyGenerator $keyGenerator
+     */
+    public function __construct(
+        SnippetResultList $resultList,
+        HardcodedProductDetailViewSnippetKeyGenerator $keyGenerator
+    ) {
+        $this->resultList = $resultList;
+        $this->keyGenerator = $keyGenerator;
+    }
 
     /**
      * @param ProjectionSourceData|Product $product
@@ -48,10 +71,8 @@ class ProductDetailViewSnippetRenderer extends BlockSnippetRenderer
      */
     private function renderProductInEnvironment(Product $product, Environment $environment)
     {
-        $layoutXmlPath = $this->getPathToLayoutXmlFile($environment);
-        $snippetContent = $this->getSnippetContent($layoutXmlPath, $product);
+        $snippetContent = $this->getSnippetContent($this->getPathToLayoutXmlFile(), $product);
         $snippetKey = $this->getKey($product->getId(), $environment);
-
         return SnippetResult::create($snippetKey, $snippetContent);
     }
 

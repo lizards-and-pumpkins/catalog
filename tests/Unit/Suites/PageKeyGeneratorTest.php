@@ -2,6 +2,7 @@
 
 namespace Brera;
 
+use Brera\Environment\Environment;
 use Brera\Http\HttpUrl;
 
 /**
@@ -18,9 +19,9 @@ class PageKeyGeneratorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|Environment $environment */
-        $stubEnv = $this->getMockBuilder(Environment::class)->disableOriginalConstructor()->getMock();
-        $stubEnv->expects($this->any())->method('getValue')->with('version')->willReturn('1');
-        $this->pageKeyGenerator = new PageKeyGenerator($stubEnv);
+        $stubEnvironment = $this->getMockBuilder(Environment::class)->disableOriginalConstructor()->getMock();
+        $stubEnvironment->expects($this->any())->method('getValue')->with('version')->willReturn('1');
+        $this->pageKeyGenerator = new PageKeyGenerator($stubEnvironment);
     }
 
     /**
