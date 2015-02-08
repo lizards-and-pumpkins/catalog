@@ -41,7 +41,7 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
 		/** @var HardcodedProductDetailViewSnippetKeyGenerator $keyGenerator */
 		$keyGenerator = $factory->createProductDetailViewSnippetKeyGenerator();
 		/** @var EnvironmentSource $environmentSource */
-		$environmentSource = $factory->getEnvironmentSourceBuilder()->createFromXml($xml);
+		$environmentSource = $factory->createEnvironmentSourceBuilder()->createFromXml($xml);
 		$environment = $environmentSource->extractEnvironments(['version'])[0];
 		$key = $keyGenerator->getKeyForEnvironment($productId, $environment);
 		$html = $reader->getSnippet($key);
