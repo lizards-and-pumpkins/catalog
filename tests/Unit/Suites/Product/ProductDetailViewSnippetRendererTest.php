@@ -4,12 +4,12 @@ namespace Brera\Product;
 
 use Brera\Environment\EnvironmentSource;
 use Brera\Environment\Environment;
-use Brera\Renderer\LayoutReader;
 use Brera\SnippetResultList;
 use Brera\ProjectionSourceData;
 use Brera\SnippetRenderer;
 use Brera\SnippetResult;
 use Brera\ThemeLocator;
+use Brera\Renderer\ThemeTestTrait;
 
 require_once __DIR__ . '/../Renderer/ThemeTestTrait.php';
 
@@ -40,11 +40,6 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @var EnvironmentSource|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubEnvironmentSource;
-
-    /**
-     * @var Environment|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubEnvironmentSource;
 

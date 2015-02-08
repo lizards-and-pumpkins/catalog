@@ -120,12 +120,15 @@ class IntegrationTestFactory implements Factory, DomainEventFactory
 		return new ProductBuilder();
 	}
 
-	public function createEnvironmentSourceBuilder()
+	/**
+	 * @return ThemeLocator
+	 */
+	public function createThemeLocator()
 	{
 		return new ThemeLocator();
 	}
 
-	public function getEnvironmentSourceBuilder()
+	public function createEnvironmentSourceBuilder()
 	{
 		/* TODO: Add mechanism to inject data version number to use */
 		$version = DataVersion::fromVersionString('1');
