@@ -32,7 +32,7 @@ class ProductBuilder
 	private function getSkuStringFromDomNodeArray(array $nodeArray)
 	{
 		if (1 !== count($nodeArray)) {
-			throw new InvalidNumberOfSkusPerImportedProductException();
+			throw new InvalidNumberOfSkusPerImportedProductException('There must be exactly one SKU in the imported product XML');
 		}
 
 		return $nodeArray[0]['value'];

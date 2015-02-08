@@ -42,6 +42,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @test
 	 * @expectedException \Brera\Product\InvalidNumberOfSkusPerImportedProductException
+	 * @expectedExceptionMessage There must be exactly one SKU in the imported product XML
 	 */
 	public function itShouldThrowAnExceptionInCaseOfXmlHasNoEssentialData()
 	{
