@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <products xmlns="http://brera.io" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://brera.io ../../../../data/product.xsd">
+        xsi:schemaLocation="http://brera.io ../../data/product.xsd">
     <product type="simple" sku="118235-251" visible="true" tax_class_id="5">
         <assets>
             <image identifier="main">
