@@ -9,7 +9,11 @@ namespace Brera;
  */
 class EnvironmentDecoratorTest extends \PHPUnit_Framework_TestCase
 {
-    private $testComponentCode = 'component-code';
+    /**
+     * @var string
+     */
+    private $testDecoratedComponentCode = 'component-code';
+    
     /**
      * @var string
      */
@@ -30,7 +34,7 @@ class EnvironmentDecoratorTest extends \PHPUnit_Framework_TestCase
         $this->mockEnvironment = $this->getMock(Environment::class);
         $this->mockEnvironment->expects($this->any())
             ->method('getSupportedCodes')
-            ->willReturn([$this->testComponentCode]);
+            ->willReturn([$this->testDecoratedComponentCode]);
         $this->decorator = new TestConcreteEnvironmentDecorator(
             $this->mockEnvironment, $this->testSourceData
         );
@@ -74,8 +78,8 @@ class EnvironmentDecoratorTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockEnvironment->expects($this->once())
             ->method('getValue')
-            ->with($this->testComponentCode);
-        $this->decorator->getValue($this->testComponentCode);
+            ->with($this->testDecoratedComponentCode);
+        $this->decorator->getValue($this->testDecoratedComponentCode);
     }
 
     /**
@@ -86,7 +90,7 @@ class EnvironmentDecoratorTest extends \PHPUnit_Framework_TestCase
         $mockEnvironment = $this->getMock(Environment::class);
         $mockEnvironment->expects($this->once())
             ->method('getSupportedCodes')
-            ->willReturn([$this->testComponentCode]);
+            ->willReturn([$this->testDecoratedComponentCode]);
         $decorator = new TestConcreteEnvironmentDecorator(
             $mockEnvironment, [TestConcreteEnvironmentDecorator::CODE => $this->testSourceData]
         );
