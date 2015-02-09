@@ -9,9 +9,9 @@ use Brera\ProjectionSourceData;
 use Brera\SnippetRenderer;
 use Brera\SnippetResult;
 use Brera\ThemeLocator;
-use Brera\Renderer\ThemeTestTrait;
+use Brera\Renderer\ThemeProductRenderingTestTrait;
 
-require_once __DIR__ . '/../Renderer/ThemeTestTrait.php';
+require_once __DIR__ . '/../Renderer/ThemeProductRenderingTestTrait.php';
 
 /**
  * @covers \Brera\Product\ProductDetailViewSnippetRenderer
@@ -26,7 +26,7 @@ require_once __DIR__ . '/../Renderer/ThemeTestTrait.php';
  */
 class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
-    use ThemeTestTrait;
+    use ThemeProductRenderingTestTrait;
 
     /**
      * @var ProductDetailViewSnippetRenderer

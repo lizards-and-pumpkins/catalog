@@ -2,7 +2,7 @@
 
 namespace Brera\Renderer;
 
-trait ThemeTestTrait
+trait ThemeProductRenderingTestTrait
 {
     private $uniquePathToken;
 
