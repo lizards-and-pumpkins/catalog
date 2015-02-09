@@ -21,7 +21,7 @@ class PageBuilder
      * @param PageKeyGenerator $keyGenerator
      * @param DataPoolReader $dataPoolReader
      */
-    function __construct(PageKeyGenerator $keyGenerator, DataPoolReader $dataPoolReader)
+    public function __construct(PageKeyGenerator $keyGenerator, DataPoolReader $dataPoolReader)
     {
         $this->dataPoolReader = $dataPoolReader;
         $this->keyGenerator = $keyGenerator;
@@ -37,7 +37,9 @@ class PageBuilder
     {
         $snippetListKey = $this->keyGenerator->getKeyForSnippetList($url);
 
-        $childSnippetKeys = $this->replacePlaceholdersInKeys($this->dataPoolReader->getChildSnippetKeys($snippetListKey));
+        $childSnippetKeys = $this->replacePlaceholdersInKeys(
+            $this->dataPoolReader->getChildSnippetKeys($snippetListKey)
+        );
         $rootSnippetKey = $this->replacePlaceholdersInKey($this->keyGenerator->getKeyForUrl($url));
 
         $allSnippets = $this->dataPoolReader->getSnippets($childSnippetKeys + [$rootSnippetKey => $rootSnippetKey]);
@@ -46,7 +48,10 @@ class PageBuilder
         unset($allSnippets[$rootSnippetKey]);
         $childSnippets = $allSnippets;
 
-        $snippets = $this->mergePlaceholderAndSnippets($this->buildPlaceholdersFromKeys($childSnippetKeys), $childSnippets);
+        $snippets = $this->mergePlaceholderAndSnippets(
+            $this->buildPlaceholdersFromKeys($childSnippetKeys),
+            $childSnippets
+        );
 
         $content = $this->injectSnippetsIntoContent($content, $snippets);
 
@@ -119,7 +124,8 @@ class PageBuilder
     }
 
     /**
-     * @todo at the moment it doesn't make any difference in the tests whether the return is inside or outside of the loop - WHY!?!
+     * @todo at the moment it doesn't make any difference in the tests whether the return
+     * @todo is inside or outside of the loop - WHY!?!
      *
      * @param $content
      * @param string[] $snippets

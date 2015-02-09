@@ -3,7 +3,6 @@
 
 namespace Brera\Environment;
 
-
 class WebsiteEnvironmentDecorator extends EnvironmentDecorator
 {
     const CODE = 'website';

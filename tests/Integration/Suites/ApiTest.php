@@ -12,22 +12,22 @@ use Brera\PoCWebFront;
 
 class ApiTest extends \PHPUnit_Framework_TestCase
 {
-	/**
-	 * @test
-	 */
-	public function itShouldReturnApiJsonResponse()
-	{
-		$httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
-		$request = HttpRequest::fromParameters('GET', $httpUrl);
+    /**
+     * @test
+     */
+    public function itShouldReturnApiJsonResponse()
+    {
+        $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
+        $request = HttpRequest::fromParameters('GET', $httpUrl);
 
-		$factory = new PoCMasterFactory();
-		$factory->register(new FrontendFactory());
-		$factory->register(new CommonFactory());
-		$factory->register(new IntegrationTestFactory());
+        $factory = new PoCMasterFactory();
+        $factory->register(new FrontendFactory());
+        $factory->register(new CommonFactory());
+        $factory->register(new IntegrationTestFactory());
 
-		$website = new PoCWebFront($request, $factory);
-		$response = $website->run(false);
+        $website = new PoCWebFront($request, $factory);
+        $response = $website->run(false);
 
-		$this->assertEquals('"dummy response"', $response->getBody());
-	}
-} 
+        $this->assertEquals('"dummy response"', $response->getBody());
+    }
+}

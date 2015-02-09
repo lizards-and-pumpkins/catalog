@@ -5,4 +5,4 @@ namespace Brera;
 interface LogMessage
 {
 
-} 
+}

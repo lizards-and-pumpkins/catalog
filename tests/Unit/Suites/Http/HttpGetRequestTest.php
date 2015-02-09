@@ -11,15 +11,15 @@ require_once __DIR__ . '/AbstractHttpRequest.php';
  */
 class HttpGetRequestTest extends AbstractHttpRequest
 {
-	/**
-	 * @test
-	 */
-	public function itShouldReturnAGetRequest()
-	{
-		$stubHttpUrl = $this->getStubHttpUrl();
+    /**
+     * @test
+     */
+    public function itShouldReturnAGetRequest()
+    {
+        $stubHttpUrl = $this->getStubHttpUrl();
 
-		$result = HttpRequest::fromParameters('GET', $stubHttpUrl);
+        $result = HttpRequest::fromParameters('GET', $stubHttpUrl);
 
-		$this->assertInstanceOf(HttpGetRequest::class, $result);
-	}
+        $this->assertInstanceOf(HttpGetRequest::class, $result);
+    }
 }

@@ -3,7 +3,6 @@
 
 namespace Brera\Environment;
 
-
 class LanguageEnvironmentDecorator extends EnvironmentDecorator
 {
     const CODE = 'language';

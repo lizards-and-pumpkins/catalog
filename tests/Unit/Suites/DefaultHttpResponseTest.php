@@ -7,39 +7,39 @@ namespace Brera;
  */
 class DefaultHttpResponseTest extends \PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var DefaultHttpResponse
-	 */
-	private $defaultHttpResponse;
+    /**
+     * @var DefaultHttpResponse
+     */
+    private $defaultHttpResponse;
 
-	public function setUp()
-	{
-		$this->defaultHttpResponse = new DefaultHttpResponse();
-	}
+    public function setUp()
+    {
+        $this->defaultHttpResponse = new DefaultHttpResponse();
+    }
 
-	/**
-	 * @test
-	 */
-	public function itShouldSetAndRetrieveABody()
-	{
-		$body = 'dummy';
+    /**
+     * @test
+     */
+    public function itShouldSetAndRetrieveABody()
+    {
+        $body = 'dummy';
 
-		$this->defaultHttpResponse->setBody($body);
-		$result = $this->defaultHttpResponse->getBody();
+        $this->defaultHttpResponse->setBody($body);
+        $result = $this->defaultHttpResponse->getBody();
 
-		$this->assertEquals($body, $result);
-	}
+        $this->assertEquals($body, $result);
+    }
 
-	/**
-	 * @test
-	 */
-	public function itShouldEchoTheBody()
-	{
-		$body = 'dummy';
+    /**
+     * @test
+     */
+    public function itShouldEchoTheBody()
+    {
+        $body = 'dummy';
 
-		$this->defaultHttpResponse->setBody($body);
-		$this->defaultHttpResponse->send();
+        $this->defaultHttpResponse->setBody($body);
+        $this->defaultHttpResponse->send();
 
-		$this->expectOutputString($body);
-	}
+        $this->expectOutputString($body);
+    }
 }

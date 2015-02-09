@@ -14,5 +14,5 @@ namespace Brera;
  */
 class PoCMasterFactory implements MasterFactory
 {
-	use MasterFactoryTrait;
-} 
+    use MasterFactoryTrait;
+}

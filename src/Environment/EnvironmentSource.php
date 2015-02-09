@@ -3,7 +3,6 @@
 
 namespace Brera\Environment;
 
-
 class EnvironmentSource
 {
     /**
@@ -76,7 +75,7 @@ class EnvironmentSource
 
     /**
      * Thanks Jonathan H. Wage for https://gist.github.com/jwage/11193216
-     * 
+     *
      * @param array $set
      * @return array
      */

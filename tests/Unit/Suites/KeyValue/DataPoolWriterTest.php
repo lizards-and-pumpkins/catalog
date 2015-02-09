@@ -14,71 +14,71 @@ require_once __DIR__ . '/AbstractDataPoolTest.php';
  */
 class DataPoolWriterTest extends AbstractDataPoolTest
 {
-	/**
-	 * @var DataPoolWriter
-	 */
-	private $dataPoolWriter;
+    /**
+     * @var DataPoolWriter
+     */
+    private $dataPoolWriter;
 
-	protected function setUp()
-	{
-		parent::setUp();
+    protected function setUp()
+    {
+        parent::setUp();
 
-		$this->dataPoolWriter = new DataPoolWriter($this->stubKeyValueStore, $this->stubKeyGenerator);
-	}
+        $this->dataPoolWriter = new DataPoolWriter($this->stubKeyValueStore, $this->stubKeyGenerator);
+    }
 
-	/**
-	 * @test
-	 */
-	public function itShouldWriteASnippetListToTheDataPool()
-	{
-		$testContent = 'test-content';
-		$testKey = 'test-key';
+    /**
+     * @test
+     */
+    public function itShouldWriteASnippetListToTheDataPool()
+    {
+        $testContent = 'test-content';
+        $testKey = 'test-key';
 
-		$mockSnippetResult = $this->getMockBuilder(SnippetResult::class)
-			->disableOriginalConstructor()
-			->getMock();
-		$mockSnippetResult->expects($this->once())->method('getContent')
-			->willReturn($testContent);
-		$mockSnippetResult->expects($this->once())->method('getKey')
-			->willReturn($testKey);
+        $mockSnippetResult = $this->getMockBuilder(SnippetResult::class)
+        ->disableOriginalConstructor()
+        ->getMock();
+        $mockSnippetResult->expects($this->once())->method('getContent')
+        ->willReturn($testContent);
+        $mockSnippetResult->expects($this->once())->method('getKey')
+        ->willReturn($testKey);
 
-		$mockSnippetResultList = $this->getMock(SnippetResultList::class);
-		$mockSnippetResultList->expects($this->once())
-			->method('getIterator')
-			->willReturn(new \ArrayIterator([$mockSnippetResult]));
+        $mockSnippetResultList = $this->getMock(SnippetResultList::class);
+        $mockSnippetResultList->expects($this->once())
+        ->method('getIterator')
+        ->willReturn(new \ArrayIterator([$mockSnippetResult]));
 
-		$this->stubKeyValueStore->expects($this->once())
-			->method('set')
-			->with($testKey, $testContent);
+        $this->stubKeyValueStore->expects($this->once())
+        ->method('set')
+        ->with($testKey, $testContent);
 
-		$this->dataPoolWriter->writeSnippetResultList($mockSnippetResultList);
-	}
+        $this->dataPoolWriter->writeSnippetResultList($mockSnippetResultList);
+    }
 
-	/**
-	 * @test
-	 */
-	public function itShouldStoreProductHtmlWithAProductIdKey()
-	{
-		$html = '<p>html</p>';
-		$productId = $this->getStubProductId();
+    /**
+     * @test
+     */
+    public function itShouldStoreProductHtmlWithAProductIdKey()
+    {
+        $html = '<p>html</p>';
+        $productId = $this->getStubProductId();
 
-		$this->addStubMethodToStubKeyGenerator('createPoCProductHtmlKey');
-		$this->addSetMethodToStubKeyValueStore();
+        $this->addStubMethodToStubKeyGenerator('createPoCProductHtmlKey');
+        $this->addSetMethodToStubKeyValueStore();
 
-		$this->dataPoolWriter->setPoCProductHtml($productId, $html);
-	}
+        $this->dataPoolWriter->setPoCProductHtml($productId, $html);
+    }
 
-	/**
-	 * @test
-	 */
-	public function itShouldStoreSeoUrlWithAProductIdKey()
-	{
-		$productId = $this->getStubProductId();
-		$seoUrl = $this->getDummyUrl();
+    /**
+     * @test
+     */
+    public function itShouldStoreSeoUrlWithAProductIdKey()
+    {
+        $productId = $this->getStubProductId();
+        $seoUrl = $this->getDummyUrl();
 
-		$this->addStubMethodToStubKeyGenerator('createPoCProductSeoUrlToIdKey');
-		$this->addSetMethodToStubKeyValueStore();
+        $this->addStubMethodToStubKeyGenerator('createPoCProductSeoUrlToIdKey');
+        $this->addSetMethodToStubKeyValueStore();
 
-		$this->dataPoolWriter->setProductIdBySeoUrl($productId, $seoUrl);
-	}
+        $this->dataPoolWriter->setProductIdBySeoUrl($productId, $seoUrl);
+    }
 }

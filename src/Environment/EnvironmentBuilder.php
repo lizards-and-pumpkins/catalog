@@ -3,7 +3,6 @@
 
 namespace Brera\Environment;
 
-
 class EnvironmentBuilder
 {
     /**
@@ -94,7 +93,8 @@ class EnvironmentBuilder
         }
         if (!in_array(EnvironmentDecorator::class, class_parents($qualifiedClassName))) {
             throw new InvalidEnvironmentDecoratorClassException(sprintf(
-                'Environment Decorator class "%s" does not extend \\Brera\\Environment\\EnvironmentDecorator', $qualifiedClassName
+                'Environment Decorator class "%s" does not extend \\Brera\\Environment\\EnvironmentDecorator',
+                $qualifiedClassName
             ));
         }
     }

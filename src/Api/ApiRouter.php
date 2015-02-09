@@ -8,35 +8,35 @@ use Brera\Http\HttpRouter;
 
 class ApiRouter implements HttpRouter
 {
-	const API_URL_PREFIX = 'api';
+    const API_URL_PREFIX = 'api';
 
-	/**
-	 * @var ApiRequestHandlerChain
-	 */
-	private $requestHandlerChain;
+    /**
+     * @var ApiRequestHandlerChain
+     */
+    private $requestHandlerChain;
 
-	public function __construct(ApiRequestHandlerChain $requestHandlerChain)
-	{
-		$this->requestHandlerChain = $requestHandlerChain;
-	}
+    public function __construct(ApiRequestHandlerChain $requestHandlerChain)
+    {
+        $this->requestHandlerChain = $requestHandlerChain;
+    }
 
-	/**
-	 * @param HttpRequest $request
-	 * @return HttpRequestHandler|null
-	 */
-	public function route(HttpRequest $request)
-	{
-		$urlPath = trim($request->getUrl()->getPath(), DIRECTORY_SEPARATOR);
+    /**
+     * @param HttpRequest $request
+     * @return HttpRequestHandler|null
+     */
+    public function route(HttpRequest $request)
+    {
+        $urlPath = trim($request->getUrl()->getPath(), DIRECTORY_SEPARATOR);
 
-		$urlToken = explode(DIRECTORY_SEPARATOR, $urlPath);
+        $urlToken = explode(DIRECTORY_SEPARATOR, $urlPath);
 
-		if ($this::API_URL_PREFIX !== array_shift($urlToken)) {
-			return null;
-		}
+        if ($this::API_URL_PREFIX !== array_shift($urlToken)) {
+            return null;
+        }
 
-		$requestHandlerCode = array_shift($urlToken);
-		$apiRequestHandler = $this->requestHandlerChain->getApiRequestHandler($requestHandlerCode);
+        $requestHandlerCode = array_shift($urlToken);
+        $apiRequestHandler = $this->requestHandlerChain->getApiRequestHandler($requestHandlerCode);
 
-		return $apiRequestHandler;
-	}
-} 
+        return $apiRequestHandler;
+    }
+}

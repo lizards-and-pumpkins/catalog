@@ -4,19 +4,19 @@ namespace Brera;
 
 interface Attribute
 {
-	/**
-	 * @param string $codeExpectation
-	 * @return bool
-	 */
-	public function isCodeEqualsTo($codeExpectation);
+    /**
+     * @param string $codeExpectation
+     * @return bool
+     */
+    public function isCodeEqualsTo($codeExpectation);
 
-	/**
-	 * @return string
-	 */
-	public function getCode();
+    /**
+     * @return string
+     */
+    public function getCode();
 
-	/**
-	 * @return mixed
-	 */
-	public function getValue();
+    /**
+     * @return mixed
+     */
+    public function getValue();
 }

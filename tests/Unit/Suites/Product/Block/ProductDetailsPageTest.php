@@ -42,7 +42,8 @@ class ProductDetailsPageTest extends \PHPUnit_Framework_TestCase
     {
         $templateDirectoryPath = $this->getTemplateDirectoryPath();
         $productDetailsPageBlock = new ProductDetailsPage(
-            $templateDirectoryPath . '/1column.phtml', $this->stubProduct
+            $templateDirectoryPath . '/1column.phtml',
+            $this->stubProduct
         );
         $result = $productDetailsPageBlock->render();
 
@@ -57,7 +58,8 @@ class ProductDetailsPageTest extends \PHPUnit_Framework_TestCase
         $templateDirectoryPath = $this->getTemplateDirectoryPath();
         $childBlock = new ProductImageGallery($templateDirectoryPath . '/gallery.phtml', $this->stubProduct);
         $productDetailsPageBlock = new ProductDetailsPage(
-            $templateDirectoryPath . '/1column.phtml', $this->stubProduct
+            $templateDirectoryPath . '/1column.phtml',
+            $this->stubProduct
         );
         $productDetailsPageBlock->addChildBlock('foo', $childBlock);
 

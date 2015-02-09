@@ -7,13 +7,13 @@ namespace Brera\Product;
  */
 class CatalogImportApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
-	/**
-	 * @test
-	 */
-	public function itShouldCallProtectedMethodOfConcreteClass()
-	{
-		$result = (new CatalogImportApiRequestHandler())->process();
+    /**
+     * @test
+     */
+    public function itShouldCallProtectedMethodOfConcreteClass()
+    {
+        $result = (new CatalogImportApiRequestHandler())->process();
 
-		$this->assertEquals('"dummy response"', $result);
-	}
+        $this->assertEquals('"dummy response"', $result);
+    }
 }

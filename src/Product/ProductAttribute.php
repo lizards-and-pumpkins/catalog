@@ -17,50 +17,50 @@ class ProductAttribute implements Attribute
      */
     private $environment;
 
-	/**
-	 * @var string|ProductAttributeList
-	 */
-	private $value;
+    /**
+     * @var string|ProductAttributeList
+     */
+    private $value;
 
-	/**
-	 * @param string $code
-	 * @param string|ProductAttributeList $value
-	 * @param array $environmentData
-	 */
-	private function __construct($code, $value, array $environmentData = [])
-	{
-		$this->code = $code;
-		$this->environment = $environmentData;
-		$this->value = $value;
-	}
+    /**
+     * @param string $code
+     * @param string|ProductAttributeList $value
+     * @param array $environmentData
+     */
+    private function __construct($code, $value, array $environmentData = [])
+    {
+        $this->code = $code;
+        $this->environment = $environmentData;
+        $this->value = $value;
+    }
 
-	/**
-	 * @param array $node
-	 * @return ProductAttribute
-	 */
-	public static function fromArray(array $node)
-	{
-		return new self($node['nodeName'], self::getValueRecursive($node['value']), $node['attributes']);
-	}
+    /**
+     * @param array $node
+     * @return ProductAttribute
+     */
+    public static function fromArray(array $node)
+    {
+        return new self($node['nodeName'], self::getValueRecursive($node['value']), $node['attributes']);
+    }
 
-	/**
-	 * @param array|string $nodeValue
-	 * @return string|ProductAttributeList
-	 */
-	private static function getValueRecursive($nodeValue)
-	{
-		if (!is_array($nodeValue)) {
-			return $nodeValue;
-		}
+    /**
+     * @param array|string $nodeValue
+     * @return string|ProductAttributeList
+     */
+    private static function getValueRecursive($nodeValue)
+    {
+        if (!is_array($nodeValue)) {
+            return $nodeValue;
+        }
 
-		$list = new ProductAttributeList();
+        $list = new ProductAttributeList();
 
-		foreach ($nodeValue as $node) {
-			$list->add(new self($node['nodeName'], self::getValueRecursive($node['value']), $node['attributes']));
-		}
+        foreach ($nodeValue as $node) {
+            $list->add(new self($node['nodeName'], self::getValueRecursive($node['value']), $node['attributes']));
+        }
 
-		return $list;
-	}
+        return $list;
+    }
 
     /**
      * @return string
@@ -93,12 +93,16 @@ class ProductAttribute implements Attribute
      */
     public function getMatchScoreForEnvironment(Environment $environment)
     {
-        return array_reduce($environment->getSupportedCodes(),
+        return array_reduce(
+            $environment->getSupportedCodes(),
             function ($score, $environmentCode) use ($environment) {
                 return $score + $this->getScoreIfEnvironmentIsSetAndMatches(
-                    $environmentCode, $environment
+                    $environmentCode,
+                    $environment
                 );
-            }, 0);
+            },
+            0
+        );
     }
 
     /**
