@@ -1,65 +1,77 @@
 <?php
 
+
 namespace Brera\Product;
+
+use Brera\ProjectionSourceData;
 
 /**
  * @covers \Brera\Product\Product
  */
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var ProductId|\PHPUnit_Framework_MockObject_MockObject
-	 */
-	private $stubProductId;
+    /**
+     * @var Product
+     */
+    private $product;
 
-	/**
-	 * @var Product
-	 */
-	private $product;
+    /**
+     * @var ProductId|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubProductId;
 
-	/**
-	 * @var ProductAttributeList|\PHPUnit_Framework_MockObject_MockObject
-	 */
-	private $stubProductAttributeList;
+    /**
+     * @var ProductAttributeList|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubProductAttributeList;
 
-	public function setUp()
-	{
-		$this->stubProductId = $this->getMockBuilder(ProductId::class)
-			->disableOriginalConstructor()
-			->getMock();
-		$this->stubProductAttributeList = $this->getMock(ProductAttributeList::class);
+    public function setUp()
+    {
 
-		$this->product = new Product($this->stubProductId, $this->stubProductAttributeList);
-	}
+        $this->stubProductId = $this->getMockBuilder(ProductId::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->stubProductAttributeList = $this->getMock(ProductAttributeList::class);
+        $this->product = new Product($this->stubProductId, $this->stubProductAttributeList);
+    }
 
-	/**
-	 * @test
-	 */
-	public function itShouldReturnTheProductId()
-	{
-		$result = $this->product->getId();
-		$this->assertSame($this->stubProductId, $result);
-	}
+    /**
+     * @test
+     */
+    public function itShouldImplementProjectionSourceData()
+    {
+        $this->assertInstanceOf(ProjectionSourceData::class, $this->product);
+    }
 
-	/**
-	 * @test
-	 */
-	public function itShouldReturnTheName()
-	{
-		$testName = 'test-name';
+    /**
+     * @test
+     */
+    public function itShouldReturnTheProductId()
+    {
+        $result = $this->product->getId();
+        $this->assertSame($this->stubProductId, $result);
+    }
 
-		$stubProductAttribute = $this->getMockBuilder(ProductAttribute::class)
-			->disableOriginalConstructor()
-			->getMock();
-		$stubProductAttribute->expects($this->once())
-			->method('getValue')
-			->willReturn($testName);
+    /**
+     * @test
+     */
+    public function itShouldReturnAnAttributeValue()
+    {
+        $testAttributeValue = 'test-name';
+        $testAttributeCode = 'name';
 
-		$this->stubProductAttributeList->expects($this->once())
-			->method('getAttribute')
-			->with('name')
-			->willReturn($stubProductAttribute);
+        $stubProductAttribute = $this->getMockBuilder(ProductAttribute::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $stubProductAttribute->expects($this->once())
+            ->method('getValue')
+            ->willReturn($testAttributeValue);
 
-		$this->assertSame($testName, $this->product->getAttributeValue('name'));
-	}
+        $this->stubProductAttributeList->expects($this->once())
+            ->method('getAttribute')
+            ->with($testAttributeCode)
+            ->willReturn($stubProductAttribute);
+
+        $this->assertSame($testAttributeValue, $this->product->getAttributeValue($testAttributeCode));
+    }
 }

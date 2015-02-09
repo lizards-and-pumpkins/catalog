@@ -2,6 +2,7 @@
 
 namespace Brera\Product\Block;
 
+use Brera\Product\ProductSource;
 use Brera\Product\ProductAttributeNotFoundException;
 use Brera\Renderer\Block;
 
@@ -35,7 +36,7 @@ class ProductDetailsPage extends Block
     }
 
     /**
-     * @return \Brera\Product\Product
+     * @return ProductSource
      */
     private function getProduct()
     {

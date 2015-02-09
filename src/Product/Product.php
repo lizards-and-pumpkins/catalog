@@ -6,45 +6,36 @@ use Brera\ProjectionSourceData;
 
 class Product implements ProjectionSourceData
 {
-	/**
-	 * @var ProductId
-	 */
-	private $id;
+    /**
+     * @var ProductId
+     */
+    private $productId;
+    
+    /**
+     * @var ProductAttributeList
+     */
+    private $attributeList;
 
-	/**
-	 * @var ProductAttributeList
-	 */
-	private $attributes;
+    public function __construct(ProductId $productId, ProductAttributeList $attributeList)
+    {
+        $this->productId = $productId;
+        $this->attributeList = $attributeList;
+    }
 
-	/**
-	 * @param ProductId $id
-	 * @param ProductAttributeList $attributes
-	 */
-	public function __construct(ProductId $id, ProductAttributeList $attributes)
-	{
-		$this->id = $id;
-		$this->attributes = $attributes;
-	}
+    /**
+     * @return ProductId
+     */
+    public function getId()
+    {
+        return $this->productId;
+    }
 
-	/**
-	 * @return ProductId
-	 */
-	public function getId()
-	{
-		return $this->id;
-	}
-
-	/**
-	 * @param string $code
-	 * @return ProductAttributeList|string
-	 */
-	public function getAttributeValue($code)
-	{
-		/* TODO: Implement environment support */
-		$environment = [];
-
-		$attribute = $this->attributes->getAttribute($code, $environment);
-
-		return $attribute->getValue();
-	}
+    /**
+     * @param string $attributeCode
+     * @return string
+     */
+    public function getAttributeValue($attributeCode)
+    {
+        return $this->attributeList->getAttribute($attributeCode)->getValue();
+    }
 }

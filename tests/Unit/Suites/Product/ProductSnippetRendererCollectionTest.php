@@ -56,7 +56,7 @@ class ProductSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
         $this->mockRenderer2->expects($this->any())->method('render')
             ->willReturn($this->getMock(SnippetResultList::class));
 
-        $stubProduct = $this->getMockBuilder(Product::class)
+        $stubProduct = $this->getMockBuilder(ProductSource::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -80,7 +80,7 @@ class ProductSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldDelegateRenderingToSnippetRenderers()
     {
-        $stubProduct = $this->getMockBuilder(Product::class)
+        $stubProduct = $this->getMockBuilder(ProductSource::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -109,7 +109,7 @@ class ProductSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldMergeTheRestultsOfTheRenderers()
     {
-        $stubProduct = $this->getMockBuilder(Product::class)
+        $stubProduct = $this->getMockBuilder(ProductSource::class)
             ->disableOriginalConstructor()
             ->getMock();
 
