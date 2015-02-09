@@ -6,6 +6,7 @@ use Brera\FrontendFactory;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpUrl;
 use Brera\CommonFactory;
+use Brera\IntegrationTestFactory;
 use Brera\PoCMasterFactory;
 use Brera\PoCWebFront;
 
@@ -22,6 +23,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
 		$factory = new PoCMasterFactory();
 		$factory->register(new FrontendFactory());
 		$factory->register(new CommonFactory());
+		$factory->register(new IntegrationTestFactory());
 
 		$website = new PoCWebFront($request, $factory);
 		$response = $website->run(false);

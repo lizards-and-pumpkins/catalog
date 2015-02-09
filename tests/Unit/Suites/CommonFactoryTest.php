@@ -30,26 +30,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldCreateDataPoolWriter()
-    {
-        $result = $this->factory->createDataPoolWriter();
-
-        $this->assertInstanceOf(DataPoolWriter::class, $result);
-    }
-
-    /**
-     * @test
-     */
-    public function itShouldReturnInMemoryQueue()
-    {
-        $result = $this->factory->getEventQueue();
-
-        $this->assertInstanceOf(InMemoryQueue::class, $result);
-    }
-
-    /**
-     * @test
-     */
     public function itShouldCreateSnippetResultList()
     {
         $result = $this->factory->createSnippetResultList();

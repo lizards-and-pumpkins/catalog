@@ -10,9 +10,7 @@ use Brera\Product\ProductSourceBuilder;
 use Brera\KeyValue\KeyValueStore;
 use Brera\Queue\Queue;
 use Brera\KeyValue\DataPoolWriter;
-use Brera\KeyValue\InMemory\InMemoryKeyValueStore;
 use Brera\KeyValue\KeyValueStoreKeyGenerator;
-use Brera\Queue\InMemory\InMemoryQueue;
 use Brera\KeyValue\DataPoolReader;
 use Brera\Product\ProductImportDomainEvent;
 use Brera\Product\ProductImportDomainEventHandler;
@@ -69,7 +67,10 @@ class CommonFactory implements Factory, DomainEventFactory
 	 */
 	public function createProductProjector()
 	{
-		return new ProductProjector($this->createProductSnippetRendererCollection(), $this->createDataPoolWriter());
+		return new ProductProjector(
+			$this->createProductSnippetRendererCollection(),
+			$this->getMasterFactory()->createDataPoolWriter()
+		);
 	}
 
 	/**
@@ -158,23 +159,15 @@ class CommonFactory implements Factory, DomainEventFactory
 	}
 
 	/**
-	 * @return InMemoryKeyValueStore|KeyValueStore
+	 * @return KeyValueStore
 	 */
 	private function getKeyValueStore()
 	{
 		if (null === $this->keyValueStore) {
-			$this->keyValueStore = $this->createKeyValueStore();
+			$this->keyValueStore = $this->getMasterFactory()->createKeyValueStore();
 		}
 
 		return $this->keyValueStore;
-	}
-
-	/**
-	 * @return InMemoryKeyValueStore
-	 */
-	private function createKeyValueStore()
-	{
-		return new InMemoryKeyValueStore();
 	}
 
 	/**
@@ -197,23 +190,15 @@ class CommonFactory implements Factory, DomainEventFactory
 	}
 
 	/**
-	 * @return Queue|InMemoryQueue
+	 * @return Queue
 	 */
 	public function getEventQueue()
 	{
 		if (null === $this->eventQueue) {
-			$this->eventQueue = $this->createEventQueue();
+			$this->eventQueue = $this->getMasterFactory()->createEventQueue();
 		}
 
 		return $this->eventQueue;
-	}
-
-	/**
-	 * @return InMemoryQueue
-	 */
-	private function createEventQueue()
-	{
-		return new InMemoryQueue();
 	}
 
 	/**
@@ -224,20 +209,15 @@ class CommonFactory implements Factory, DomainEventFactory
 		return new DataPoolReader($this->getKeyValueStore(), $this->createKeyGenerator());
 	}
 
+	/**
+	 * @return LoggerInterface
+	 */
 	private function getLogger()
 	{
 		if (null === $this->logger) {
-			$this->logger = $this->createLogger();
+			$this->logger = $this->getMasterFactory()->createLogger();
 		}
 
 		return $this->logger;
-	}
-
-	/**
-	 * @return InMemoryLogger
-	 */
-	private function createLogger()
-	{
-		return new InMemoryLogger();
 	}
 } 
