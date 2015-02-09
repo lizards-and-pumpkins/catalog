@@ -44,7 +44,7 @@ class ProductAttribute implements Attribute
 	}
 
 	/**
-	 * @param $nodeValue
+	 * @param array|string $nodeValue
 	 * @return string|ProductAttributeList
 	 */
 	private static function getValueRecursive($nodeValue)
