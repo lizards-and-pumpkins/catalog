@@ -182,4 +182,48 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $result = $this->commonFactory->createDataPoolReader();
         $this->assertInstanceOf(DataPoolReader::class, $result);
     }
+
+    /**
+     * @test
+     * @expectedException \Brera\UndefinedFactoryMethodException
+     * @expectedExceptionMessage Unable to create KeyValueStore. Is the factory registered?
+     */
+    public function itShouldThrowAnExceptionWithHelpfulMessageIfNoKeyValueStoreFactoryIsRegistered()
+    {
+        $masterFactory = new PoCMasterFactory();
+        $commonFactory = new CommonFactory();
+        $masterFactory->register($commonFactory);
+
+        $commonFactory->createDataPoolReader();
+    }
+
+    /**
+     * @test
+     * @expectedException \Brera\UndefinedFactoryMethodException
+     * @expectedExceptionMessage Unable to create EventQueue. Is the factory registered?
+     */
+    public function itShouldThrowAnExceptionWithHelpfulMessageIfNoEventQueueFactoryIsRegistered()
+    {
+        $masterFactory = new PoCMasterFactory();
+        $commonFactory = new CommonFactory();
+        $masterFactory->register($commonFactory);
+
+        $commonFactory->getEventQueue();
+    }
+
+    /**
+     * @test
+     * @expectedException \Brera\UndefinedFactoryMethodException
+     * @expectedExceptionMessage Unable to create Logger. Is the factory registered?
+     */
+    public function itShouldThrowAnExceptionWithHelpfulMessageIfNoLoggerFactoryIsRegistered()
+    {
+        $masterFactory = new PoCMasterFactory();
+        $commonFactory = new CommonFactory();
+        $masterFactory->register($commonFactory);
+        
+        $method = new \ReflectionMethod($commonFactory, 'getLogger');
+        $method->setAccessible(true);
+        $method->invoke($commonFactory);
+    }
 }
