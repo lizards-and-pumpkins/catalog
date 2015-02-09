@@ -28,10 +28,10 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
     use ThemeTestTrait;
 
-	/**
-	 * @var ProductDetailViewSnippetRenderer
-	 */
-	private $snippetRenderer;
+    /**
+     * @var ProductDetailViewSnippetRenderer
+     */
+    private $snippetRenderer;
 
     /**
      * @var SnippetResultList|\PHPUnit_Framework_MockObject_MockObject
@@ -143,7 +143,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
     public function itShouldRenderBlockContent()
     {
         $stubEnvironment = $this->getMock(Environment::class);
-        
+
         $productIdString = 'test-123';
         $productNameString = 'Test Name';
         $stubProductSource = $this->getStubProductSource();
@@ -156,12 +156,12 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
             ->with('name')
             ->willReturn($productNameString);
 
-		$transport = '';
-		$this->mockSnippetResultList->expects($this->once())
-			->method('add')
-			->willReturnCallback(function ($snippetResult) use (&$transport) {
-				$transport = $snippetResult;
-			});
+        $transport = '';
+        $this->mockSnippetResultList->expects($this->once())
+            ->method('add')
+            ->willReturnCallback(function ($snippetResult) use (&$transport) {
+                $transport = $snippetResult;
+            });
 
         $this->snippetRenderer->render($stubProductSource, $this->stubEnvironmentSource);
 
@@ -186,11 +186,11 @@ EOT;
         $stubProductId = $this->getMockBuilder(ProductId::class)
             ->disableOriginalConstructor()
             ->getMock();
-        
+
         $stubProduct = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
-        
+
         $stubProduct->expects($this->any())
             ->method('getId')
             ->willReturn($stubProductId);
