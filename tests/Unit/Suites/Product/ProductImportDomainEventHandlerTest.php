@@ -15,7 +15,7 @@ class ProductImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function itShouldTriggerAProjection()
 	{
-		$stubProduct = $this->getMockBuilder(Product::class)
+		$stubProduct = $this->getMockBuilder(ProductSource::class)
 			->disableOriginalConstructor()
 			->getMock();
 
@@ -25,7 +25,7 @@ class ProductImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 		$stubDomainEvent->expects($this->once())
 			->method('getXml');
 
-		$stubProductBuilder = $this->getMock(ProductBuilder::class);
+		$stubProductBuilder = $this->getMock(ProductSourceBuilder::class);
 		$stubProductBuilder->expects($this->once())
 			->method('createProductFromXml')
 			->willReturn($stubProduct);

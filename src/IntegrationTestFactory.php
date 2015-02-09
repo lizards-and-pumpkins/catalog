@@ -6,7 +6,7 @@ use Brera\Environment\EnvironmentBuilder;
 use Brera\Environment\EnvironmentSourceBuilder;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
-use Brera\Product\ProductBuilder;
+use Brera\Product\ProductSourceBuilder;
 use Brera\KeyValue\KeyValueStore;
 use Brera\Queue\Queue;
 use Brera\KeyValue\DataPoolWriter;
@@ -113,11 +113,11 @@ class IntegrationTestFactory implements Factory, DomainEventFactory
 	}
 
 	/**
-	 * @return ProductBuilder
+	 * @return ProductSourceBuilder
 	 */
 	public function getProductBuilder()
 	{
-		return new ProductBuilder();
+		return new ProductSourceBuilder();
 	}
 
 	/**

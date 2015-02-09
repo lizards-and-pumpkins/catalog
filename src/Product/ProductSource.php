@@ -5,7 +5,7 @@ namespace Brera\Product;
 use Brera\Environment\Environment;
 use Brera\ProjectionSourceData;
 
-class Product implements ProjectionSourceData
+class ProductSource implements ProjectionSourceData
 {
 	/**
 	 * @var ProductId

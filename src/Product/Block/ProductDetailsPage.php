@@ -2,13 +2,13 @@
 
 namespace Brera\Product\Block;
 
-use Brera\Product\Product;
+use Brera\Product\ProductSource;
 use Brera\Renderer\Block;
 
 class ProductDetailsPage extends Block
 {
     /**
-     * @return Product
+     * @return ProductSource
      */
     public function getProduct()
     {

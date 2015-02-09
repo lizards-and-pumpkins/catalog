@@ -180,7 +180,7 @@ EOT;
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Product
+     * @return \PHPUnit_Framework_MockObject_MockObject|ProductSource
      */
     private function getStubProduct()
     {
@@ -188,7 +188,7 @@ EOT;
             ->disableOriginalConstructor()
             ->getMock();
 
-        $stubProduct = $this->getMockBuilder(Product::class)
+        $stubProduct = $this->getMockBuilder(ProductSource::class)
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -13,7 +13,7 @@ class ProductImportDomainEventHandler implements DomainEventHandler
 	private $event;
 
 	/**
-	 * @var ProductBuilder
+	 * @var ProductSourceBuilder
 	 */
 	private $productBuilder;
 
@@ -29,7 +29,7 @@ class ProductImportDomainEventHandler implements DomainEventHandler
 
 	public function __construct(
 		ProductImportDomainEvent $event,
-		ProductBuilder $productBuilder,
+		ProductSourceBuilder $productBuilder,
 		EnvironmentSourceBuilder $environmentSourceBuilder,
 		ProductProjector $projector
 	) {

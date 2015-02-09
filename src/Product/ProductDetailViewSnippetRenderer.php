@@ -14,14 +14,14 @@ class ProductDetailViewSnippetRenderer extends BlockSnippetRenderer
     const LAYOUT_HANDLE = 'product_details_snippet';
 
     /**
-     * @param ProjectionSourceData|Product $product
+     * @param ProjectionSourceData|ProductSource $product
      * @param EnvironmentSource $environmentSource
      * @throws InvalidArgumentException
      * @return SnippetResultList
      */
     public function render(ProjectionSourceData $product, EnvironmentSource $environmentSource)
     {
-        if (!($product instanceof Product)) {
+        if (!($product instanceof ProductSource)) {
             throw new InvalidArgumentException('First argument must be instance of Product.');
         }
         $this->renderProduct($product, $environmentSource);
@@ -30,10 +30,10 @@ class ProductDetailViewSnippetRenderer extends BlockSnippetRenderer
     }
 
     /**
-     * @param Product $product
+     * @param ProductSource $product
      * @param EnvironmentSource $environmentSource
      */
-    private function renderProduct(Product $product, EnvironmentSource $environmentSource)
+    private function renderProduct(ProductSource $product, EnvironmentSource $environmentSource)
     {
         foreach ($environmentSource->extractEnvironments($this->getEnvironmentParts()) as $environment) {
             $snippet = $this->renderProductInEnvironment($product, $environment);
@@ -42,11 +42,11 @@ class ProductDetailViewSnippetRenderer extends BlockSnippetRenderer
     }
 
     /**
-     * @param Product $product
+     * @param ProductSource $product
      * @param Environment $environment
      * @return SnippetResult
      */
-    private function renderProductInEnvironment(Product $product, Environment $environment)
+    private function renderProductInEnvironment(ProductSource $product, Environment $environment)
     {
         $productInEnvironment = $product->getProductForEnvironment($environment);
         $layoutXmlPath = $this->getPathToLayoutXmlFile($environment);

@@ -4,11 +4,11 @@ namespace Brera\Product;
 
 use Brera\XPathParser;
 
-class ProductBuilder
+class ProductSourceBuilder
 {
 	/**
 	 * @param string $xml
-	 * @return Product
+	 * @return ProductSource
 	 */
 	public function createProductFromXml($xml)
 	{
@@ -22,7 +22,7 @@ class ProductBuilder
 		$attributeNodes = $parser->getXmlNodesArrayByXPath('//product/attributes/attribute');
 		$attributeList = ProductAttributeList::fromArray($attributeNodes);
 
-		return new Product($productId, $attributeList);
+		return new ProductSource($productId, $attributeList);
 	}
 
 	/**
