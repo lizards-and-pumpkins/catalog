@@ -142,7 +142,7 @@ class CommonFactory implements Factory, DomainEventFactory
      */
     public function createEnvironmentSourceBuilder()
     {
-     /* TODO: Add mechanism to inject data version number to use */
+        /* TODO: Add mechanism to inject data version number to use */
         $version = DataVersion::fromVersionString('1');
 
         return new EnvironmentSourceBuilder($version, $this->getMasterFactory()->createEnvironmentBuilder());
@@ -174,11 +174,18 @@ class CommonFactory implements Factory, DomainEventFactory
 
     /**
      * @return KeyValueStore
+     * @throws UndefinedFactoryMethodException
      */
     private function getKeyValueStore()
     {
         if (null === $this->keyValueStore) {
-            $this->keyValueStore = $this->getMasterFactory()->createKeyValueStore();
+            try {
+                $this->keyValueStore = $this->getMasterFactory()->createKeyValueStore();
+            } catch (UndefinedFactoryMethodException $e) {
+                throw new UndefinedFactoryMethodException(
+                    "Unable to create KeyValueStore. Is the factory registered? " . $e->getMessage()
+                );
+            }
         }
 
         return $this->keyValueStore;
@@ -206,11 +213,18 @@ class CommonFactory implements Factory, DomainEventFactory
 
     /**
      * @return Queue
+     * @throws UndefinedFactoryMethodException
      */
     public function getEventQueue()
     {
         if (null === $this->eventQueue) {
-            $this->eventQueue = $this->getMasterFactory()->createEventQueue();
+            try {
+                $this->eventQueue = $this->getMasterFactory()->createEventQueue();
+            } catch (UndefinedFactoryMethodException $e) {
+                throw new UndefinedFactoryMethodException(
+                    "Unable to create EventQueue. Is the factory registered? " . $e->getMessage()
+                );
+            }
         }
 
         return $this->eventQueue;
@@ -226,11 +240,18 @@ class CommonFactory implements Factory, DomainEventFactory
 
     /**
      * @return LoggerInterface
+     * @throws UndefinedFactoryMethodException
      */
     private function getLogger()
     {
         if (null === $this->logger) {
-            $this->logger = $this->getMasterFactory()->createLogger();
+            try {
+                $this->logger = $this->getMasterFactory()->createLogger();
+            } catch (UndefinedFactoryMethodException $e) {
+                throw new UndefinedFactoryMethodException(
+                    "Unable to create Logger. Is the factory registered? " . $e->getMessage()
+                );
+            }
         }
 
         return $this->logger;
