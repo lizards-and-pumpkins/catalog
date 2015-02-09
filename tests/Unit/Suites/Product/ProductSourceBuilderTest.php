@@ -3,24 +3,24 @@
 namespace Brera\Product;
 
 /**
- * @covers \Brera\Product\ProductBuilder
- * @uses \Brera\Product\Product
+ * @covers \Brera\Product\ProductSourceBuilder
+ * @uses \Brera\Product\ProductSource
  * @uses \Brera\Product\ProductId
  * @uses \Brera\Product\PoCSku
  * @uses \Brera\XPathParser
  * @uses \Brera\Product\ProductAttribute
  * @uses \Brera\Product\ProductAttributeList
  */
-class ProductBuilderTest extends \PHPUnit_Framework_TestCase
+class ProductSourceBuilderTest extends \PHPUnit_Framework_TestCase
 {
 	/**
-	 * @var ProductBuilder
+	 * @var ProductSourceBuilder
 	 */
 	private $builder;
 
 	protected function setUp()
 	{
-		$this->builder = new ProductBuilder();
+		$this->builder = new ProductSourceBuilder();
 	}
 
 	/**
@@ -34,9 +34,9 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
 		$firstNode = $domDocument->getElementsByTagName('product')->item(0);
 		$firstNodeXml = $domDocument->saveXML($firstNode);
 
-		$product = $this->builder->createProductFromXml($firstNodeXml);
+		$product = $this->builder->createProductSourceFromXml($firstNodeXml);
 
-		$this->assertInstanceOf(Product::class, $product);
+		$this->assertInstanceOf(ProductSource::class, $product);
 	}
 
 	/**
@@ -47,6 +47,6 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
 	public function itShouldThrowAnExceptionInCaseOfXmlHasNoEssentialData()
 	{
 		$xml = '<?xml version="1.0"?><node />';
-		(new ProductBuilder())->createProductFromXml($xml);
+		(new ProductSourceBuilder())->createProductSourceFromXml($xml);
 	}
 }

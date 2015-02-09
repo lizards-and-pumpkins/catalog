@@ -14,29 +14,30 @@ class ProductDetailViewSnippetRenderer extends BlockSnippetRenderer
     const LAYOUT_HANDLE = 'product_details_snippet';
 
     /**
-     * @param ProjectionSourceData|Product $product
+     * @param ProjectionSourceData|ProductSource $productSource
      * @param EnvironmentSource $environmentSource
      * @throws InvalidArgumentException
      * @return SnippetResultList
      */
-    public function render(ProjectionSourceData $product, EnvironmentSource $environmentSource)
+    public function render(ProjectionSourceData $productSource, EnvironmentSource $environmentSource)
     {
-        if (!($product instanceof Product)) {
+        if (!($productSource instanceof ProductSource)) {
             throw new InvalidArgumentException('First argument must be instance of Product.');
         }
-        $this->renderProduct($product, $environmentSource);
+        $this->renderProduct($productSource, $environmentSource);
 
         return $this->resultList;
     }
 
     /**
-     * @param Product $product
+     * @param ProductSource $productSource
      * @param EnvironmentSource $environmentSource
      */
-    private function renderProduct(Product $product, EnvironmentSource $environmentSource)
+    private function renderProduct(ProductSource $productSource, EnvironmentSource $environmentSource)
     {
         foreach ($environmentSource->extractEnvironments($this->getEnvironmentParts()) as $environment) {
-            $snippet = $this->renderProductInEnvironment($product, $environment);
+            $productInEnvironment = $productSource->getProductForEnvironment($environment);
+            $snippet = $this->renderProductInEnvironment($productInEnvironment, $environment);
             $this->resultList->add($snippet);
         }
     }
@@ -51,7 +52,6 @@ class ProductDetailViewSnippetRenderer extends BlockSnippetRenderer
         $layoutXmlPath = $this->getPathToLayoutXmlFile($environment);
         $snippetContent = $this->getSnippetContent($layoutXmlPath, $product);
         $snippetKey = $this->getKey($product->getId(), $environment);
-
         return SnippetResult::create($snippetKey, $snippetContent);
     }
 

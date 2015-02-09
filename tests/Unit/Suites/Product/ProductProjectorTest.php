@@ -63,7 +63,7 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
 			->method('writeSnippetResultList')
 			->with($this->stubSnippetResultList);
 
-		$stubProduct = $this->getMockBuilder(Product::class)
+		$stubProduct = $this->getMockBuilder(ProductSource::class)
 			->disableOriginalConstructor()
 			->getMock();
 

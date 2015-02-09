@@ -4,13 +4,13 @@ namespace Brera;
 
 use Brera\KeyValue\DataPoolWriter;
 use Brera\Queue\InMemory\InMemoryQueue;
-use Brera\Product\ProductBuilder;
+use Brera\Product\ProductSourceBuilder;
 
 /**
  * @covers \Brera\IntegrationTestFactory
  * @uses   \Brera\KeyValue\DataPoolWriter
  * @uses   \Brera\Queue\InMemory\InMemoryQueue
- * @uses   \Brera\Product\ProductBuilder
+ * @uses   \Brera\Product\ProductSourceBuilder
  * @uses   \Brera\DataVersion
  * @uses   \Brera\Environment\EnvironmentBuilder
  * @uses   \Brera\DomainEventHandlerLocator
@@ -72,9 +72,9 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnProductBuilder()
     {
-        $result = $this->factory->getProductBuilder();
+        $result = $this->factory->createProductSourceBuilder();
 
-        $this->assertInstanceOf(ProductBuilder::class, $result);
+        $this->assertInstanceOf(ProductSourceBuilder::class, $result);
     }
 
     /**
