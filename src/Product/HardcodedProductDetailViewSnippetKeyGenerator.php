@@ -38,7 +38,7 @@ class HardcodedProductDetailViewSnippetKeyGenerator implements SnippetKeyGenerat
 	{
 		return sprintf(
 			'_%s_%s',
-            preg_replace('#[^a-zA-Z0-9]#', '_', $product->getAttributeValue('url_key', $environment)),
+            preg_replace('#[^a-zA-Z0-9]#', '_', $product->getAttributeValue('url_key')),
 			$environment->getValue(VersionedEnvironment::CODE)
         );
 	}
