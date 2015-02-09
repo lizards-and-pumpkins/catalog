@@ -42,6 +42,7 @@ class CommonFactory implements Factory, DomainEventFactory
 	/**
 	 * @param ProductImportDomainEvent $event
 	 * @return ProductImportDomainEventHandler
+	 * @todo: move to catalog factory
 	 */
 	public function createProductImportDomainEventHandler(ProductImportDomainEvent $event)
 	{
@@ -56,6 +57,7 @@ class CommonFactory implements Factory, DomainEventFactory
 	/**
 	 * @param CatalogImportDomainEvent $event
 	 * @return CatalogImportDomainEventHandler
+	 * @todo: move to catalog factory
 	 */
 	public function createCatalogImportDomainEventHandler(CatalogImportDomainEvent $event)
 	{
@@ -64,6 +66,7 @@ class CommonFactory implements Factory, DomainEventFactory
 
 	/**
 	 * @return ProductProjector
+	 * @todo: move to catalog factory
 	 */
 	public function createProductProjector()
 	{
@@ -75,6 +78,7 @@ class CommonFactory implements Factory, DomainEventFactory
 
 	/**
 	 * @return HardcodedProductSnippetRendererCollection
+	 * @todo: move to catalog factory
 	 */
 	public function createProductSnippetRendererCollection()
 	{
@@ -95,6 +99,7 @@ class CommonFactory implements Factory, DomainEventFactory
 
 	/**
 	 * @return ProductDetailViewSnippetRenderer
+	 * @todo: move to catalog factory
 	 */
 	public function createProductDetailViewSnippetRenderer()
 	{
@@ -107,6 +112,7 @@ class CommonFactory implements Factory, DomainEventFactory
 
 	/**
 	 * @return HardcodedProductDetailViewSnippetKeyGenerator
+	 * @todo: move to catalog factory
 	 */
 	public function createProductDetailViewSnippetKeyGenerator()
 	{
@@ -115,6 +121,7 @@ class CommonFactory implements Factory, DomainEventFactory
 
 	/**
 	 * @return ProductSourceBuilder
+	 * @todo: move to catalog factory
 	 */
 	public function createProductSourceBuilder()
 	{
@@ -129,6 +136,9 @@ class CommonFactory implements Factory, DomainEventFactory
 		return new ThemeLocator();
 	}
 
+	/**
+	 * @return EnvironmentSourceBuilder
+	 */
 	public function createEnvironmentSourceBuilder()
 	{
 		/* TODO: Add mechanism to inject data version number to use */
@@ -137,6 +147,9 @@ class CommonFactory implements Factory, DomainEventFactory
 		return new EnvironmentSourceBuilder($version, $this->getMasterFactory()->createEnvironmentBuilder());
 	}
 
+	/**
+	 * @return EnvironmentBuilder
+	 */
 	public function createEnvironmentBuilder()
 	{
 		return new EnvironmentBuilder();
