@@ -47,7 +47,7 @@ class ProductAttribute implements Attribute
 	 * @param $nodeValue
 	 * @return string|ProductAttributeList
 	 */
-	public static function getValueRecursive($nodeValue)
+	private static function getValueRecursive($nodeValue)
 	{
 		if (!is_array($nodeValue)) {
 			return $nodeValue;
