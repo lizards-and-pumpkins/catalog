@@ -3,6 +3,9 @@
 namespace Brera\Product\Block;
 
 use Brera\Product\Product;
+use Brera\Renderer\ThemeTestTrait;
+
+require_once __DIR__ . '/../../Renderer/ThemeTestTrait.php';
 
 /**
  * @covers \Brera\Product\Block\ProductDetailsPage
@@ -10,6 +13,8 @@ use Brera\Product\Product;
  */
 class ProductDetailsPageTest extends \PHPUnit_Framework_TestCase
 {
+    use ThemeTestTrait;
+
     /**
      * @var Product|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -20,6 +25,13 @@ class ProductDetailsPageTest extends \PHPUnit_Framework_TestCase
         $this->stubProduct = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->createTemporaryThemeFiles();
+    }
+
+    protected function tearDown()
+    {
+        $this->removeTemporaryThemeFiles();
     }
 
     /**
@@ -27,7 +39,10 @@ class ProductDetailsPageTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnBlockOutput()
     {
-        $productDetailsPageBlock = new ProductDetailsPage('theme/template/1column.phtml', $this->stubProduct);
+        $templateDirectoryPath = $this->getTemplateDirectoryPath();
+        $productDetailsPageBlock = new ProductDetailsPage(
+            $templateDirectoryPath . '/1column.phtml', $this->stubProduct
+        );
         $result = $productDetailsPageBlock->render();
 
         $this->assertEquals("- Hi, I'm a 1 column template!<br/>\n", $result);
@@ -38,8 +53,11 @@ class ProductDetailsPageTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldAddChildBlockAndRenderItsContent()
     {
-        $childBlock = new ProductImageGallery('theme/template/gallery.phtml', $this->stubProduct);
-        $productDetailsPageBlock = new ProductDetailsPage('theme/template/1column.phtml', $this->stubProduct);
+        $templateDirectoryPath = $this->getTemplateDirectoryPath();
+        $childBlock = new ProductImageGallery($templateDirectoryPath . '/gallery.phtml', $this->stubProduct);
+        $productDetailsPageBlock = new ProductDetailsPage(
+            $templateDirectoryPath . '/1column.phtml', $this->stubProduct
+        );
         $productDetailsPageBlock->addChildBlock('foo', $childBlock);
 
         $result = $productDetailsPageBlock->getChildOutput('foo');

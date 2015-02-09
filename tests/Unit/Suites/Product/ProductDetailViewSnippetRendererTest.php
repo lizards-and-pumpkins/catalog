@@ -4,11 +4,14 @@ namespace Brera\Product;
 
 use Brera\Environment\EnvironmentSource;
 use Brera\Environment\Environment;
-use Brera\Renderer\LayoutReader;
 use Brera\SnippetResultList;
 use Brera\ProjectionSourceData;
 use Brera\SnippetRenderer;
 use Brera\SnippetResult;
+use Brera\ThemeLocator;
+use Brera\Renderer\ThemeTestTrait;
+
+require_once __DIR__ . '/../Renderer/ThemeTestTrait.php';
 
 /**
  * @covers \Brera\Product\ProductDetailViewSnippetRenderer
@@ -23,6 +26,8 @@ use Brera\SnippetResult;
  */
 class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
+    use ThemeTestTrait;
+
     /**
      * @var ProductDetailViewSnippetRenderer
      */
@@ -34,7 +39,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
     private $mockSnippetResultList;
 
     /**
-     * @var Environment|\PHPUnit_Framework_MockObject_MockObject
+     * @var EnvironmentSource|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubEnvironmentSource;
 
@@ -44,12 +49,14 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
     private $stubEnvironment;
 
     /**
-     * @var LayoutReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var ThemeLocator|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubLayoutReader;
+    private $stubThemeLocator;
 
     public function setUp()
     {
+        $this->createTemporaryThemeFiles();
+
         $stubKeyGenerator = $this->getMock(HardcodedProductDetailViewSnippetKeyGenerator::class, ['getKey']);
         $stubKeyGenerator->expects($this->any())
             ->method('getKey')
@@ -57,12 +64,15 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
         $this->mockSnippetResultList = $this->getMock(SnippetResultList::class);
 
-        $this->stubLayoutReader = $this->getMock(LayoutReader::class);
+        $this->stubThemeLocator = $this->getMock(ThemeLocator::class);
+        $this->stubThemeLocator->expects($this->any())
+            ->method('getThemeDirectoryForEnvironment')
+            ->willReturn($this->getThemeDirectoryPath());
 
         $this->snippetRenderer = new ProductDetailViewSnippetRenderer(
             $this->mockSnippetResultList,
             $stubKeyGenerator,
-            $this->stubLayoutReader
+            $this->stubThemeLocator
         );
 
         $this->stubEnvironment = $this->getMockBuilder(Environment::class)
@@ -74,6 +84,11 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->stubEnvironmentSource->expects($this->any())->method('extractEnvironments')
             ->willReturn([$this->stubEnvironment]);
+    }
+
+    protected function tearDown()
+    {
+        $this->removeTemporaryThemeFiles();
     }
 
     /**

@@ -99,7 +99,8 @@ class IntegrationTestFactory implements Factory, DomainEventFactory
 	{
 		return new ProductDetailViewSnippetRenderer(
 			$this->getMasterFactory()->createSnippetResultList(),
-			$this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator()
+			$this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator(),
+			$this->getMasterFactory()->createThemeLocator()
 		);
 	}
 
@@ -117,6 +118,14 @@ class IntegrationTestFactory implements Factory, DomainEventFactory
 	public function getProductBuilder()
 	{
 		return new ProductBuilder();
+	}
+
+	/**
+	 * @return ThemeLocator
+	 */
+	public function createThemeLocator()
+	{
+		return new ThemeLocator();
 	}
 
 	public function createEnvironmentSourceBuilder()
