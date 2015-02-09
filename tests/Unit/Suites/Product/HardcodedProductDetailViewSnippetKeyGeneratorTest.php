@@ -24,12 +24,12 @@ class HardcodedProductDetailViewSnippetKeyGeneratorTest extends \PHPUnit_Framewo
 	 */
 	public function itShouldReturnAString()
 	{
-		$stubProductId = $this->getMockBuilder(ProductId::class)
+		$stubProduct = $this->getMockBuilder(Product::class)
 			->disableOriginalConstructor()
 			->getMock();
 		$mockEnvironment = $this->getMock(Environment::class);
 
-		$this->assertInternalType('string', $this->keyGenerator->getKeyForEnvironment($stubProductId, $mockEnvironment));
+		$this->assertInternalType('string', $this->keyGenerator->getKeyForEnvironment($stubProduct, $mockEnvironment));
 	}
 
 	/**
