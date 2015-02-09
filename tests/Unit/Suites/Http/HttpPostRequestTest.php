@@ -2,8 +2,6 @@
 
 namespace Brera\Http;
 
-require_once __DIR__ . '/AbstractHttpRequest.php';
-
 /**
  * @covers \Brera\Http\HttpPostRequest
  * @covers \Brera\Http\HttpRequest

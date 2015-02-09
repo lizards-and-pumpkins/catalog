@@ -4,8 +4,6 @@ namespace Brera\KeyValue;
 
 use Brera\Product\ProductId;
 
-require_once __DIR__ . '/AbstractDataPoolTest.php';
-
 /**
  * @covers \Brera\KeyValue\DataPoolReader
  * @uses   \Brera\Product\ProductId

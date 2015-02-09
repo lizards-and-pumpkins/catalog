@@ -11,8 +11,6 @@ use Brera\SnippetResult;
 use Brera\ThemeLocator;
 use Brera\Renderer\ThemeProductRenderingTestTrait;
 
-require_once __DIR__ . '/../Renderer/ThemeProductRenderingTestTrait.php';
-
 /**
  * @covers \Brera\Product\ProductDetailViewSnippetRenderer
  * @covers \Brera\Renderer\BlockSnippetRenderer

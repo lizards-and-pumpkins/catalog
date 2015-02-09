@@ -5,8 +5,6 @@ namespace Brera\KeyValue;
 use Brera\SnippetResult;
 use Brera\SnippetResultList;
 
-require_once __DIR__ . '/AbstractDataPoolTest.php';
-
 /**
  * @covers \Brera\KeyValue\DataPoolWriter
  * @uses Brera\Product\ProductId

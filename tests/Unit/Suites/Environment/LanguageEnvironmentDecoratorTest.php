@@ -3,8 +3,6 @@
 
 namespace Brera\Environment;
 
-require_once __DIR__ . '/EnvironmentDecoratorTestAbstract.php';
-
 /**
  * @covers \Brera\Environment\LanguageEnvironmentDecorator
  * @covers \Brera\Environment\EnvironmentDecorator

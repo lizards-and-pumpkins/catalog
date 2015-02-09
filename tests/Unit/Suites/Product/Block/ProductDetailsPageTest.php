@@ -6,8 +6,6 @@ use Brera\Product\ProductSource;
 use Brera\Product\ProductAttributeNotFoundException;
 use Brera\Renderer\ThemeProductRenderingTestTrait;
 
-require_once __DIR__ . '/../../Renderer/ThemeProductRenderingTestTrait.php';
-
 /**
  * @covers \Brera\Product\Block\ProductDetailsPage
  * @covers \Brera\Renderer\Block
