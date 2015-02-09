@@ -84,13 +84,12 @@ class ProductAttribute implements Attribute
      */
     public function getMatchScoreForEnvironment(Environment $environment)
     {
-        $result = array_reduce($environment->getSupportedCodes(),
+        return array_reduce($environment->getSupportedCodes(),
             function ($score, $environmentCode) use ($environment) {
                 return $score + $this->getScoreIfEnvironmentIsSetAndMatches(
                     $environmentCode, $environment
                 );
             }, 0);
-        return $result;
     }
 
     /**
