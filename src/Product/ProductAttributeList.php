@@ -91,8 +91,10 @@ class ProductAttributeList
         $attributesForEnvironment = [];
         foreach ($this->attributeCodes as $code) {
             $attributesForCode = $this->getAttributesForCode($code);
-            $attributesForEnvironment[] = $this->getBestMatchingAttributeForEnvironment($attributesForCode,
-                $environment);
+            $attributesForEnvironment[] = $this->getBestMatchingAttributeForEnvironment(
+                $attributesForCode,
+                $environment
+            );
         }
         return $attributesForEnvironment;
     }

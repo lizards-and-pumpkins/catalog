@@ -20,16 +20,16 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
         $this->attributeList = new ProductAttributeList();
     }
 
-	/**
-	 * @test
-	 */
-	public function itShouldAddAndGetAttributeFromAProductAttributeList()
-	{
-		$attributeArray = [
-			'nodeName'      => 'foo',
-			'attributes'    => [],
-			'value'         => 'bar'
-		];
+    /**
+     * @test
+     */
+    public function itShouldAddAndGetAttributeFromAProductAttributeList()
+    {
+        $attributeArray = [
+        'nodeName'      => 'foo',
+        'attributes'    => [],
+        'value'         => 'bar'
+        ];
 
         $attribute = ProductAttribute::fromArray($attributeArray);
 
@@ -57,19 +57,19 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
         $this->attributeList->getAttribute('foo');
     }
 
-	/**
-	 * @test
-	 */
-	public function itShouldCreateAttributeListFromAttributesArray()
-	{
-		$attributeArray = [[
-			'nodeName'      => 'foo',
-			'attributes'    => [],
-			'value'         => 'bar'
-		]];
+    /**
+     * @test
+     */
+    public function itShouldCreateAttributeListFromAttributesArray()
+    {
+        $attributeArray = [[
+        'nodeName'      => 'foo',
+        'attributes'    => [],
+        'value'         => 'bar'
+        ]];
 
-		$attributeList = ProductAttributeList::fromArray($attributeArray);
-		$attribute = $attributeList->getAttribute('foo');
+        $attributeList = ProductAttributeList::fromArray($attributeArray);
+        $attribute = $attributeList->getAttribute('foo');
 
         $this->assertEquals('bar', $attribute->getValue());
     }
@@ -100,13 +100,18 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
      * @dataProvider extractAttributesDataProvider
      */
     public function itShouldExtractAttributeValuesForAGivenEnvironment(
-        $websiteCodeA, $websiteCodeB, $websiteCodeC,
-        $langA, $langB, $langC,
-        $valueA, $valueB, $valueC,
+        $websiteCodeA,
+        $websiteCodeB,
+        $websiteCodeC,
+        $langA,
+        $langB,
+        $langC,
+        $valueA,
+        $valueB,
+        $valueC,
         $environmentReturnValueMap,
         $expected
-    )
-    {
+    ) {
         $attributeCode = 'name';
         $attributesArray = [
             [

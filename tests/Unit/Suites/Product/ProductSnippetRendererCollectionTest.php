@@ -65,7 +65,8 @@ class ProductSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $snippetResultList = $this->rendererCollection->render(
-            $stubProduct, $stubEnvironment
+            $stubProduct,
+            $stubEnvironment
         );
         $this->assertInstanceOf(
             SnippetResultList::class,
@@ -100,7 +101,8 @@ class ProductSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
             ->willReturn($stubSnippetResultListFromRenderer);
 
         $this->rendererCollection->render(
-            $stubProduct, $stubEnvironment
+            $stubProduct,
+            $stubEnvironment
         );
     }
 

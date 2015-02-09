@@ -22,7 +22,7 @@ class DataPoolReader
      * @param KeyValueStore $keyValueStore
      * @param KeyValueStoreKeyGenerator $keyValueStoreKeyGenerator
      */
-    function __construct(KeyValueStore $keyValueStore, KeyValueStoreKeyGenerator $keyValueStoreKeyGenerator)
+    public function __construct(KeyValueStore $keyValueStore, KeyValueStoreKeyGenerator $keyValueStoreKeyGenerator)
     {
         $this->keyValueStore = $keyValueStore;
         $this->keyValueStoreKeyGenerator = $keyValueStoreKeyGenerator;
@@ -126,7 +126,9 @@ class DataPoolReader
             throw new \RuntimeException(
                 sprintf(
                     'Expected the value for key "%s" to be a string containing JSON but found "%s".',
-                    $key, gettype($json))
+                    $key,
+                    gettype($json)
+                )
             );
         }
     }
@@ -149,5 +151,4 @@ class DataPoolReader
 
         return $result;
     }
-
 }

@@ -39,7 +39,7 @@ class EnvironmentBuilderTest extends \PHPUnit_Framework_TestCase
     public function itShouldThrowExceptionForNonEnvironmentDecoratorClass()
     {
         $environments = [
-            [VersionedEnvironment::CODE => 1, 'invalid_test_stub' => 'dummy'],
+            [VersionedEnvironment::CODE => 1, 'stub_invalid_test' => 'dummy'],
         ];
         $this->builder->getEnvironments($environments);
     }
@@ -50,7 +50,7 @@ class EnvironmentBuilderTest extends \PHPUnit_Framework_TestCase
     public function itShouldReturnEnvironmentsForGiveParts()
     {
         $environments = [
-            [VersionedEnvironment::CODE => 1, 'valid_test_stub' => 'dummy'],
+            [VersionedEnvironment::CODE => 1, 'stub_valid_test' => 'dummy'],
         ];
         $result = $this->builder->getEnvironments($environments);
         $this->assertCount(1, $result);
@@ -97,7 +97,7 @@ class EnvironmentBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldThrowAnExceptionWhenAddingAnInvalidDecoratorClass()
     {
-        $this->builder->registerEnvironmentDecorator('test', InvalidTestStubEnvironmentDecorator::class);
+        $this->builder->registerEnvironmentDecorator('test', StubInvalidTestEnvironmentDecorator::class);
     }
 
     /**
@@ -105,33 +105,12 @@ class EnvironmentBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldAllowRegisteringEnvironmentCodesToClasses()
     {
-        $this->builder->registerEnvironmentDecorator('test', ValidTestStubEnvironmentDecorator::class);
+        $this->builder->registerEnvironmentDecorator('test', StubValidTestEnvironmentDecorator::class);
         $environments = [
             [VersionedEnvironment::CODE => 1, 'test' => 'dummy'],
         ];
         $result = $this->builder->getEnvironments($environments);
         $this->assertCount(1, $result);
         $this->assertContainsOnlyInstancesOf(Environment::class, $result);
-    }
-}
-
-class InvalidTestStubEnvironmentDecorator
-{
-
-}
-
-class ValidTestStubEnvironmentDecorator extends EnvironmentDecorator
-{
-    protected function getValueFromEnvironment()
-    {
-        return '';
-    }
-
-    /**
-     * @return string
-     */
-    protected function getCode()
-    {
-        return 'valid_test_stub';
     }
 }

@@ -6,8 +6,8 @@ use Brera\Http\HttpRequestHandler;
 
 class CatalogImportApiRequestHandler implements HttpRequestHandler
 {
-	public function process()
-	{
-		return json_encode('dummy response');
-	}
+    public function process()
+    {
+        return json_encode('dummy response');
+    }
 }

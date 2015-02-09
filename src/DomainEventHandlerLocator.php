@@ -7,38 +7,38 @@ use Brera\Product\ProductImportDomainEvent;
 
 class DomainEventHandlerLocator
 {
-	/**
-	 * @var DomainEventFactory
-	 */
-	private $factory;
+    /**
+     * @var DomainEventFactory
+     */
+    private $factory;
 
-	/**
-	 * @param DomainEventFactory $factory
-	 */
-	public function __construct(DomainEventFactory $factory)
-	{
-		$this->factory = $factory;
-	}
+    /**
+     * @param DomainEventFactory $factory
+     */
+    public function __construct(DomainEventFactory $factory)
+    {
+        $this->factory = $factory;
+    }
 
-	/**
-	 * @param DomainEvent $event
-	 * @return DomainEventHandler
-	 * @throws UnableToFindDomainEventHandlerException
-	 */
-	public function getHandlerFor(DomainEvent $event)
-	{
-		$eventClass = get_class($event);
+    /**
+     * @param DomainEvent $event
+     * @return DomainEventHandler
+     * @throws UnableToFindDomainEventHandlerException
+     */
+    public function getHandlerFor(DomainEvent $event)
+    {
+        $eventClass = get_class($event);
 
-		switch ($eventClass) {
-			case ProductImportDomainEvent::class :
-				return $this->factory->createProductImportDomainEventHandler($event);
+        switch ($eventClass) {
+            case ProductImportDomainEvent::class:
+                return $this->factory->createProductImportDomainEventHandler($event);
 
-			case CatalogImportDomainEvent::class :
-				return $this->factory->createCatalogImportDomainEventHandler($event);
-		}
+            case CatalogImportDomainEvent::class:
+                return $this->factory->createCatalogImportDomainEventHandler($event);
+        }
 
-		throw new UnableToFindDomainEventHandlerException(
-			sprintf('Unable to find a handler for %s domain event', $eventClass)
-		);
-	}
-} 
+        throw new UnableToFindDomainEventHandlerException(
+            sprintf('Unable to find a handler for %s domain event', $eventClass)
+        );
+    }
+}

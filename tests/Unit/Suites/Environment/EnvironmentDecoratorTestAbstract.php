@@ -27,7 +27,8 @@ abstract class EnvironmentDecoratorTestAbstract extends \PHPUnit_Framework_TestC
             ->method('getSupportedCodes')
             ->willReturn([$this->decoratedComponentCode]);
         $this->decorator = $this->createEnvironmentDecoratorUnderTest(
-            $this->mockDecoratedEnvironment, $this->getStubEnvironmentData()
+            $this->mockDecoratedEnvironment,
+            $this->getStubEnvironmentData()
         );
     }
 
@@ -37,7 +38,8 @@ abstract class EnvironmentDecoratorTestAbstract extends \PHPUnit_Framework_TestC
      * @return EnvironmentDecorator
      */
     abstract protected function createEnvironmentDecoratorUnderTest(
-        Environment $stubEnvironment, array $stubEnvironmentData
+        Environment $stubEnvironment,
+        array $stubEnvironmentData
     );
 
 
@@ -54,7 +56,7 @@ abstract class EnvironmentDecoratorTestAbstract extends \PHPUnit_Framework_TestC
     /**
      * @return Environment|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected final function getMockDecoratedEnvironment()
+    final protected function getMockDecoratedEnvironment()
     {
         return $this->mockDecoratedEnvironment;
     }
@@ -62,7 +64,7 @@ abstract class EnvironmentDecoratorTestAbstract extends \PHPUnit_Framework_TestC
     /**
      * @return EnvironmentDecorator
      */
-    protected final function getEnvironmentDecoratorUnderTest()
+    final protected function getEnvironmentDecoratorUnderTest()
     {
         return $this->decorator;
     }
@@ -70,7 +72,7 @@ abstract class EnvironmentDecoratorTestAbstract extends \PHPUnit_Framework_TestC
     /**
      * @test
      */
-    public final function itShouldBeAnEnvironment()
+    final public function itShouldBeAnEnvironment()
     {
         $this->assertInstanceOf(Environment::class, $this->getEnvironmentDecoratorUnderTest());
     }
@@ -80,7 +82,7 @@ abstract class EnvironmentDecoratorTestAbstract extends \PHPUnit_Framework_TestC
      * @expectedException \Brera\Environment\EnvironmentCodeNotFoundException
      * @expectedExceptionMessage No value found in the environment source data for the code
      */
-    public final function itShouldThrowAnExceptionIfTheValueIsNotFoundInTheSourceData()
+    final public function itShouldThrowAnExceptionIfTheValueIsNotFoundInTheSourceData()
     {
         $decorator = $this->createEnvironmentDecoratorUnderTest($this->getMockDecoratedEnvironment(), []);
         $decorator->getValue($this->getDecoratorUnderTestCode());
@@ -89,7 +91,7 @@ abstract class EnvironmentDecoratorTestAbstract extends \PHPUnit_Framework_TestC
     /**
      * @test
      */
-    public final function itShouldDelegateToComponentIfCodeDoesNotMatch()
+    final public function itShouldDelegateToComponentIfCodeDoesNotMatch()
     {
         $this->getMockDecoratedEnvironment()->expects($this->once())
             ->method('getValue')
@@ -101,7 +103,7 @@ abstract class EnvironmentDecoratorTestAbstract extends \PHPUnit_Framework_TestC
     /**
      * @test
      */
-    public final function itShouldDelegateToComponentToFetchSupportedCodes()
+    final public function itShouldDelegateToComponentToFetchSupportedCodes()
     {
         /** @var Environment|\PHPUnit_Framework_MockObject_MockObject $mockDecoratedEnvironment */
         $mockDecoratedEnvironment = $this->getMock(Environment::class);
@@ -109,7 +111,8 @@ abstract class EnvironmentDecoratorTestAbstract extends \PHPUnit_Framework_TestC
             ->method('getSupportedCodes')
             ->willReturn([$this->decoratedComponentCode]);
         $decorator = $this->createEnvironmentDecoratorUnderTest(
-            $mockDecoratedEnvironment, $this->getStubEnvironmentData()
+            $mockDecoratedEnvironment,
+            $this->getStubEnvironmentData()
         );
         
         $decorator->getSupportedCodes();
@@ -118,7 +121,7 @@ abstract class EnvironmentDecoratorTestAbstract extends \PHPUnit_Framework_TestC
     /**
      * @test
      */
-    public final function itShouldAddItsCodeToTheSupportedCodesArray()
+    final public function itShouldAddItsCodeToTheSupportedCodesArray()
     {
         $this->assertContains(
             $this->getDecoratorUnderTestCode(),
@@ -129,7 +132,7 @@ abstract class EnvironmentDecoratorTestAbstract extends \PHPUnit_Framework_TestC
     /**
      * @test
      */
-    public final function itShouldReturnTheSourceData()
+    final public function itShouldReturnTheSourceData()
     {
         $method = new \ReflectionMethod($this->decorator, 'getSourceData');
         $method->setAccessible(true);

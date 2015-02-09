@@ -10,47 +10,48 @@ use Brera\Environment\EnvironmentSourceBuilder;
  */
 class ProductImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
-	/**
-	 * @test
-	 */
-	public function itShouldTriggerAProjection()
-	{
-		$stubProduct = $this->getMockBuilder(ProductSource::class)
-			->disableOriginalConstructor()
-			->getMock();
+    /**
+     * @test
+     */
+    public function itShouldTriggerAProjection()
+    {
+        $stubProduct = $this->getMockBuilder(ProductSource::class)
+        ->disableOriginalConstructor()
+        ->getMock();
 
-		$stubDomainEvent = $this->getMockBuilder(ProductImportDomainEvent::class)
-			->disableOriginalConstructor()
-			->getMock();
-		$stubDomainEvent->expects($this->once())
-			->method('getXml');
+        $stubDomainEvent = $this->getMockBuilder(ProductImportDomainEvent::class)
+        ->disableOriginalConstructor()
+        ->getMock();
+        $stubDomainEvent->expects($this->once())
+        ->method('getXml');
 
-		$stubProductBuilder = $this->getMock(ProductSourceBuilder::class);
-		$stubProductBuilder->expects($this->once())
-			->method('createProductSourceFromXml')
-			->willReturn($stubProduct);
+        $stubProductBuilder = $this->getMock(ProductSourceBuilder::class);
+        $stubProductBuilder->expects($this->once())
+        ->method('createProductSourceFromXml')
+        ->willReturn($stubProduct);
 
-		$stubEnvironmentSource = $this->getMockBuilder(EnvironmentSource::class)
-			->disableOriginalConstructor()
-			->getMock();
-		
-		$stubEnvironmentSourceBuilder = $this->getMockBuilder(EnvironmentSourceBuilder::class)
-			->disableOriginalConstructor()
-			->getMock();
-		$stubEnvironmentSourceBuilder->expects($this->any())->method('createFromXml')
-			->willReturn($stubEnvironmentSource);
+        $stubEnvironmentSource = $this->getMockBuilder(EnvironmentSource::class)
+        ->disableOriginalConstructor()
+        ->getMock();
+        
+        $stubEnvironmentSourceBuilder = $this->getMockBuilder(EnvironmentSourceBuilder::class)
+        ->disableOriginalConstructor()
+        ->getMock();
+        $stubEnvironmentSourceBuilder->expects($this->any())->method('createFromXml')
+        ->willReturn($stubEnvironmentSource);
 
-		$stubProjector = $this->getMockBuilder(ProductProjector::class)
-			->disableOriginalConstructor()
-			->getMock();
-		$stubProjector->expects($this->once())
-			->method('project');
+        $stubProjector = $this->getMockBuilder(ProductProjector::class)
+        ->disableOriginalConstructor()
+        ->getMock();
+        $stubProjector->expects($this->once())
+        ->method('project');
 
-		(new ProductImportDomainEventHandler(
-			$stubDomainEvent,
-			$stubProductBuilder,
-			$stubEnvironmentSourceBuilder,
-			$stubProjector)
-		)->process();
-	}
+        (new ProductImportDomainEventHandler(
+            $stubDomainEvent,
+            $stubProductBuilder,
+            $stubEnvironmentSourceBuilder,
+            $stubProjector
+        )
+        )->process();
+    }
 }

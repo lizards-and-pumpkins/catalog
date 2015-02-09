@@ -21,7 +21,7 @@ class Block
      */
     private $children = [];
 
-    public final function __construct($template, ProjectionSourceData $dataObject)
+    final public function __construct($template, ProjectionSourceData $dataObject)
     {
         $this->template = $template;
         $this->dataObject = $dataObject;
@@ -30,7 +30,7 @@ class Block
     /**
      * @return ProjectionSourceData
      */
-    protected final function getDataObject()
+    final protected function getDataObject()
     {
         return $this->dataObject;
     }
@@ -39,7 +39,7 @@ class Block
      * @return string
      * @throws TemplateFileNotReadableException
      */
-    public final function render()
+    final public function render()
     {
         $templatePath = realpath($this->template);
 
@@ -59,7 +59,7 @@ class Block
      * @param Block $block
      * @return null
      */
-    public final function addChildBlock($blockNameInLayout, Block $block)
+    final public function addChildBlock($blockNameInLayout, Block $block)
     {
         $this->children[$blockNameInLayout] = $block;
     }
@@ -68,7 +68,7 @@ class Block
      * @param $blockName
      * @return string
      */
-    public final function getChildOutput($blockName)
+    final public function getChildOutput($blockName)
     {
         if (!array_key_exists($blockName, $this->children)) {
             return '';

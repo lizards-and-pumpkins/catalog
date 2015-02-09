@@ -2,8 +2,6 @@
 
 namespace Brera\Http;
 
-require_once __DIR__ . '/AbstractHttpRequest.php';
-
 /**
  * @covers \Brera\Http\HttpPostRequest
  * @covers \Brera\Http\HttpRequest
@@ -11,15 +9,15 @@ require_once __DIR__ . '/AbstractHttpRequest.php';
  */
 class HttpPostRequestTest extends AbstractHttpRequest
 {
-	/**
-	 * @test
-	 */
-	public function itShouldReturnAPostRequest()
-	{
-		$stubHttpUrl = $this->getStubHttpUrl();
+    /**
+     * @test
+     */
+    public function itShouldReturnAPostRequest()
+    {
+        $stubHttpUrl = $this->getStubHttpUrl();
 
-		$result = HttpRequest::fromParameters('POST', $stubHttpUrl);
+        $result = HttpRequest::fromParameters('POST', $stubHttpUrl);
 
-		$this->assertInstanceOf(HttpPostRequest::class, $result);
-	}
+        $this->assertInstanceOf(HttpPostRequest::class, $result);
+    }
 }

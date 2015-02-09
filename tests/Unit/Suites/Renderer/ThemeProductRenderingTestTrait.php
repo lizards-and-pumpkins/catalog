@@ -24,7 +24,9 @@ trait ThemeProductRenderingTestTrait
 <snippet>
     <block name="product_details_snippet" class="Brera\Renderer\Block" template="{{path}}/1column.phtml">
         <block name="content" class="Brera\Product\Block\ProductDetailsPage" template="{{path}}/view.phtml">
-            <block name="image_gallery" class="Brera\Product\Block\ProductImageGallery" template="{{path}}/gallery.phtml" />
+            <block name="image_gallery"
+                   class="Brera\Product\Block\ProductImageGallery"
+                   template="{{path}}/gallery.phtml" />
         </block>
     </block>
 </snippet>
@@ -117,7 +119,7 @@ EOX;
         $files = new \RecursiveIteratorIterator($directoryIterator, \RecursiveIteratorIterator::CHILD_FIRST);
 
         foreach ($files as $file) {
-            if ($file->isDir()){
+            if ($file->isDir()) {
                 rmdir($file->getRealPath());
             } else {
                 unlink($file->getRealPath());

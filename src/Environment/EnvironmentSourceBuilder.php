@@ -3,7 +3,6 @@
 
 namespace Brera\Environment;
 
-
 use Brera\DataVersion;
 use Brera\InputXmlIsEmptyStringException;
 use Brera\InvalidXmlTypeException;

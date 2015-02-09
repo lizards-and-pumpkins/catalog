@@ -3,7 +3,6 @@
 
 namespace Brera\Environment;
 
-
 abstract class EnvironmentDecorator implements Environment
 {
     /**
@@ -26,7 +25,7 @@ abstract class EnvironmentDecorator implements Environment
      * @param string $code
      * @return string
      */
-    public final function getValue($code)
+    final public function getValue($code)
     {
         if ($this->getCode() === $code) {
             return $this->getValueFromEnvironment();
@@ -49,7 +48,8 @@ abstract class EnvironmentDecorator implements Environment
     {
         if (! array_key_exists($this->getCode(), $this->sourceData)) {
             throw new EnvironmentCodeNotFoundException(sprintf(
-                'No value found in the environment source data for the code "%s"', $this->getCode()
+                'No value found in the environment source data for the code "%s"',
+                $this->getCode()
             ));
         }
         return $this->sourceData[$this->getCode()];
@@ -63,7 +63,7 @@ abstract class EnvironmentDecorator implements Environment
     /**
      * @return string[]
      */
-    public final function getSupportedCodes()
+    final public function getSupportedCodes()
     {
         return array_merge([$this->getCode()], $this->component->getSupportedCodes());
     }
@@ -79,7 +79,7 @@ abstract class EnvironmentDecorator implements Environment
     /**
      * @return array
      */
-    protected final function getSourceData()
+    final protected function getSourceData()
     {
         return $this->sourceData;
     }
