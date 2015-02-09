@@ -15,7 +15,6 @@ use Brera\Http\HttpUrl;
 use Brera\Http\HttpRequest;
 use Brera\FrontendFactory;
 use Brera\PoCWebFront;
-use Brera\Product\HardcodedProductDetailViewSnippetKeyGenerator;
 use Brera\SnippetResult;
 use Brera\SnippetResultList;
 
