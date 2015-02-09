@@ -7,7 +7,7 @@ use Brera\Queue\InMemory\InMemoryQueue;
 use Brera\Product\ProductSourceBuilder;
 
 /**
- * @covers \Brera\IntegrationTestFactory
+ * @covers \Brera\CommonFactory
  * @uses   \Brera\KeyValue\DataPoolWriter
  * @uses   \Brera\Queue\InMemory\InMemoryQueue
  * @uses   \Brera\Product\ProductSourceBuilder
@@ -15,16 +15,16 @@ use Brera\Product\ProductSourceBuilder;
  * @uses   \Brera\Environment\EnvironmentBuilder
  * @uses   \Brera\DomainEventHandlerLocator
  */
-class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
+class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var IntegrationTestFactory
+     * @var CommonFactory
      */
     private $factory;
 
     protected function setUp()
     {
-        $this->factory = new IntegrationTestFactory();
+        $this->factory = new CommonFactory();
     }
 
     /**

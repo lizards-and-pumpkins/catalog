@@ -5,7 +5,7 @@ namespace Brera\Tests\Integration;
 use Brera\FrontendFactory;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpUrl;
-use Brera\IntegrationTestFactory;
+use Brera\CommonFactory;
 use Brera\PoCMasterFactory;
 use Brera\PoCWebFront;
 
@@ -21,7 +21,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
 
 		$factory = new PoCMasterFactory();
 		$factory->register(new FrontendFactory());
-		$factory->register(new IntegrationTestFactory());
+		$factory->register(new CommonFactory());
 
 		$website = new PoCWebFront($request, $factory);
 		$response = $website->run(false);

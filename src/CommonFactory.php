@@ -22,7 +22,7 @@ use Brera\Product\HardcodedProductDetailViewSnippetKeyGenerator;
 use Brera\Product\HardcodedProductSnippetRendererCollection;
 use Psr\Log\LoggerInterface;
 
-class IntegrationTestFactory implements Factory, DomainEventFactory
+class CommonFactory implements Factory, DomainEventFactory
 {
 	use FactoryTrait;
 

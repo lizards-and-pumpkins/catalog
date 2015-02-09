@@ -7,7 +7,7 @@ use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\PoCSku;
 use Brera\Product\ProductId;
 use Brera\PoCMasterFactory;
-use Brera\IntegrationTestFactory;
+use Brera\CommonFactory;
 use Brera\Http\HttpUrl;
 use Brera\Http\HttpRequest;
 use Brera\FrontendFactory;
@@ -22,7 +22,7 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
 	public function importProductDomainEventShouldRenderAProduct()
 	{
 		$factory = new PoCMasterFactory();
-		$factory->register(new IntegrationTestFactory());
+		$factory->register(new CommonFactory());
 
 		$sku = PoCSku::fromString('118235-251');
 		$productId = ProductId::fromSku($sku);
@@ -65,7 +65,7 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
 
 		$factory = new PoCMasterFactory();
 		$factory->register(new FrontendFactory());
-		$factory->register(new IntegrationTestFactory());
+		$factory->register(new CommonFactory());
 
 		$dataPoolWriter = $factory->createDataPoolWriter();
 		$dataPoolWriter->setProductIdBySeoUrl($productId, $httpUrl);
