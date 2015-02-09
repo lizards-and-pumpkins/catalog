@@ -16,7 +16,7 @@ interface Attribute
 	public function getCode();
 
 	/**
-	 * @return string
+	 * @return mixed
 	 */
 	public function getValue();
 }

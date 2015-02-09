@@ -70,10 +70,10 @@ class EnvironmentSourceBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldOnlyContainTheVersionIfThereAreNoAttributesWithEnvironmentValues()
+    public function itShouldOnlyContainTheVersionIfThereAreNoAttributes()
     {
         $sourceEnv = $this->environmentSourceBuilder->createFromXml(
-            '<product><attributes><attribute code="test">true</attribute></attributes></product>'
+            '<product><attributes><foo>true</foo></attributes></product>'
         );
         $this->assertEnvironmentPartCodesSame([VersionedEnvironment::CODE], $sourceEnv);
     }
@@ -83,13 +83,10 @@ class EnvironmentSourceBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldCollectASingleEnvironmentPart()
     {
-        $sourceEnv = $this->environmentSourceBuilder->createFromXml(<<<EOX
-<product><attributes>
-    <attribute code="test" foo="bar">true</attribute>
-</attributes></product>
-EOX
+        $sourceEnv = $this->environmentSourceBuilder->createFromXml(
+            '<product><attributes><foo baz="bar">true</foo></attributes></product>'
         );
-        $this->assertEnvironmentPartCodesSame(['foo', VersionedEnvironment::CODE], $sourceEnv);
+        $this->assertEnvironmentPartCodesSame(['baz', VersionedEnvironment::CODE], $sourceEnv);
     }
 
     /**
@@ -97,11 +94,8 @@ EOX
      */
     public function itShouldCollectTwoEnvironmentsFromTheSameAttribute()
     {
-        $sourceEnv = $this->environmentSourceBuilder->createFromXml(<<<EOX
-<product><attributes>
-    <attribute code="test" foo="bar" baz="qux">true</attribute>
-</attributes></product>
-EOX
+        $sourceEnv = $this->environmentSourceBuilder->createFromXml(
+            '<product><attributes><attribute foo="bar" baz="qux">true</attribute></attributes></product>'
         );
         $this->assertEnvironmentPartCodesSame(['foo', 'baz', VersionedEnvironment::CODE], $sourceEnv);
     }
@@ -111,12 +105,8 @@ EOX
      */
     public function itShouldCombineTheSameEnvironmentsFromTwoAttributes()
     {
-        $sourceEnv = $this->environmentSourceBuilder->createFromXml(<<<EOX
-<product><attributes>
-    <attribute code="test1" foo="bar">true</attribute>
-    <attribute code="test2" foo="baz">true</attribute>
-</attributes></product>
-EOX
+        $sourceEnv = $this->environmentSourceBuilder->createFromXml(
+            '<product><attributes><test1 foo="bar">true</test1><test2 foo="baz">true</test2></attributes></product>'
         );
         $this->assertEnvironmentPartCodesSame(['foo', VersionedEnvironment::CODE], $sourceEnv);
     }
@@ -126,12 +116,8 @@ EOX
      */
     public function itShouldCollectDifferentEnvironmentsFromTwoAttributes()
     {
-        $sourceEnv = $this->environmentSourceBuilder->createFromXml(<<<EOX
-<product><attributes>
-    <attribute code="test1" foo="bar">true</attribute>
-    <attribute code="test2" baz="qux">true</attribute>
-</attributes></product>
-EOX
+        $sourceEnv = $this->environmentSourceBuilder->createFromXml(
+            '<product><attributes><test1 foo="bar">true</test1><test2 baz="qux">true</test2></attributes></product>'
         );
         $this->assertEnvironmentPartCodesSame(['foo', 'baz', VersionedEnvironment::CODE], $sourceEnv);
     }
@@ -141,28 +127,10 @@ EOX
      */
     public function itShouldCollectTheEnvironmentValues()
     {
-        $sourceEnv = $this->environmentSourceBuilder->createFromXml(<<<EOX
-<product><attributes>
-    <attribute code="test1" foo="bar">true</attribute>
-    <attribute code="test2" foo="baz">true</attribute>
-</attributes></product>
-EOX
+        $sourceEnv = $this->environmentSourceBuilder->createFromXml(
+            '<product><attributes><test1 foo="bar">true</test1><test2 foo="baz">true</test2></attributes></product>'
         );
         $this->assertSame(['bar', 'baz'], $sourceEnv->getEnvironmentValuesForPart('foo'));
-    }
-
-    /**
-     * @test
-     */
-    public function itShouldSkipAttributeNodesWithNoAttributes()
-    {
-        $sourceEnv = $this->environmentSourceBuilder->createFromXml(<<<EOX
-<product><attributes>
-    <attribute>true</attribute>
-</attributes></product>
-EOX
-        );
-        $this->assertEnvironmentPartCodesSame([VersionedEnvironment::CODE], $sourceEnv);
     }
 
     private function assertEnvironmentPartCodesSame($expected, EnvironmentSource $sourceEnv, $message = '')

@@ -25,7 +25,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldThrowAnExceptionIfTemplateFileDoesNotExist()
     {
-        $stubDataObject = $this->getMock(ProjectionSourceData::class);
+        $stubDataObject = $this->getStubProjectionSourceData();
         $block = new Block('foo.phtml', $stubDataObject);
         $block->render();
     }
@@ -41,9 +41,29 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         touch($filePath);
         chmod($filePath, 000);
 
-        $stubDataObject = $this->getMock(ProjectionSourceData::class);
+        $stubDataObject = $this->getStubProjectionSourceData();
 
         $block = new Block($filePath, $stubDataObject);
         $block->render();
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnSameString()
+    {
+        $stubDataObject = $this->getStubProjectionSourceData();
+        $block = new Block('foo.phtml', $stubDataObject);
+        $result = $block->__('foo');
+
+        $this->assertEquals('foo', $result);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|ProjectionSourceData
+     */
+    private function getStubProjectionSourceData()
+    {
+        return $this->getMock(ProjectionSourceData::class);
     }
 }

@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://brera.io"
+        xmlns="http://brera.io"
+        elementFormDefault="qualified">
+    <xs:element name="products">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="product" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:complexContent>
+                            <xs:extension base="abstractProduct">
+                                <xs:sequence>
+                                    <xs:element name="associated_products" minOccurs="0">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:element name="product" type="abstractProduct" maxOccurs="unbounded" />
+                                            </xs:sequence>
+                                        </xs:complexType>
+                                    </xs:element>
+                                </xs:sequence>
+                                <xs:attribute name="type" use="required">
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="simple" />
+                                            <xs:enumeration value="configurable" />
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <!-- The line below most likely won't work. Need XSD 1.1 compliant parser to test. -->
+                                <xs:assert test="if(@type eq 'configurable') then associated_products
+                                     else not(associated_products)" />
+                            </xs:extension>
+                        </xs:complexContent>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="abstractProduct">
+        <xs:all>
+            <xs:element name="attributes">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:any />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:all>
+        <xs:attribute name="sku" type="xs:string" use="required" />
+        <xs:attribute name="visible" type="xs:boolean" use="required" />
+        <xs:attribute name="tax_class_id" type="xs:integer" use="required" />
+    </xs:complexType>
+
+    <xs:simpleType name="positiveDecimal">
+        <xs:restriction base="xs:decimal">
+            <xs:minExclusive value="0" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

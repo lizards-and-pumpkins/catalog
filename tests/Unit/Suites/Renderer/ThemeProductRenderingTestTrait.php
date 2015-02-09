@@ -2,7 +2,7 @@
 
 namespace Brera\Renderer;
 
-trait ThemeTestTrait
+trait ThemeProductRenderingTestTrait
 {
     private $uniquePathToken;
 
@@ -45,7 +45,7 @@ EOX;
 
         $fileContent = 'Product details page content
 
-<?= $this->getProduct()->getAttributeValue(\'name\') ?> (<?= $this->getProduct()->getId() ?>)
+<?= $this->getProductAttributeValue(\'name\') ?> (<?= $this->getProductId() ?>)
 
 <?= $this->getChildOutput(\'image_gallery\') ?>
 ';

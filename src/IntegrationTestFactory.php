@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Brera;
-
 
 use Brera\KeyValue\InMemory\InMemoryKeyValueStore;
 use Brera\Queue\InMemory\InMemoryQueue;

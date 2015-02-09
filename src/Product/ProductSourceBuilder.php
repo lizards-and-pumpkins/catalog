@@ -19,7 +19,7 @@ class ProductSourceBuilder
 		$sku = PoCSku::fromString($skuString);
 		$productId = ProductId::fromSku($sku);
 
-		$attributeNodes = $parser->getXmlNodesArrayByXPath('//product/attributes/attribute');
+		$attributeNodes = $parser->getXmlNodesArrayByXPath('//product/attributes/*');
 		$attributeList = ProductAttributeList::fromArray($attributeNodes);
 
 		return new ProductSource($productId, $attributeList);

@@ -1,0 +1,20 @@
+/* Global form elements */
+
+/* Box */
+.input-box { border: #cfcfcf 1px solid; border-radius: 2px 2px 2px 2px; -moz-border-radius: 2px 2px 2px 2px; -webkit-border-radius:2px 2px 2px 2px; padding: 0 5px 0 15px; background: #ffffff }
+
+/* Global */
+input[type=text], input[type=password], textarea { width: 100%; font-size: 13px; border: none; background: transparent }
+
+/* Text field */
+input[type=text], input[type=password] { padding: 6px 0 5px 0 }
+
+/* Text area */
+textarea { min-height: 150px; resize: none; margin: 7px 0; font-family: Arial, Verdana, Helvetica, sans-serif }
+
+/* Checkbox, radio */
+.formFieldsContainer .row .checker, .formFieldsContainer .row .radio { float: left; display: block }
+
+/* Button */
+button { padding: 6px 21px; font-family: GeogrotesqueRegular, Helvetica, Arial, sans-serif; font-size: 22px; color: #fff; cursor: pointer; font-weight: normal; border-radius: 2px; border: none; background-color: #e46d06 }
+button:disabled, button.disabled { background-color: #999999 }

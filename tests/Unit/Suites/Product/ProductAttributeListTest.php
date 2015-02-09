@@ -20,15 +20,16 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
         $this->attributeList = new ProductAttributeList();
     }
 
-    /**
-     * @test
-     */
-    public function itShouldAddAndGetAttributeFromAProductAttributeList()
-    {
-        $attributeArray = [
-            'attributes' => ['code' => 'foo'],
-            'value' => 'bar'
-        ];
+	/**
+	 * @test
+	 */
+	public function itShouldAddAndGetAttributeFromAProductAttributeList()
+	{
+		$attributeArray = [
+			'nodeName'      => 'foo',
+			'attributes'    => [],
+			'value'         => 'bar'
+		];
 
         $attribute = ProductAttribute::fromArray($attributeArray);
 
@@ -56,20 +57,19 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
         $this->attributeList->getAttribute('foo');
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateAttributeListFromAttributesArray()
-    {
-        $attributeArray = [
-            [
-                'attributes' => ['code' => 'name'],
-                'value' => 'bar'
-            ]
-        ];
+	/**
+	 * @test
+	 */
+	public function itShouldCreateAttributeListFromAttributesArray()
+	{
+		$attributeArray = [[
+			'nodeName'      => 'foo',
+			'attributes'    => [],
+			'value'         => 'bar'
+		]];
 
-        $attributeList = ProductAttributeList::fromArray($attributeArray);
-        $attribute = $attributeList->getAttribute('name');
+		$attributeList = ProductAttributeList::fromArray($attributeArray);
+		$attribute = $attributeList->getAttribute('foo');
 
         $this->assertEquals('bar', $attribute->getValue());
     }
@@ -81,8 +81,9 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     {
         $attributeArray = [
             [
-                'attributes' => ['code' => 'name', 'website' => 'test'],
-                'value' => 'foo'
+                'nodeName'      => 'name',
+                'attributes'    => ['website' => 'test'],
+                'value'         => 'foo'
             ]
         ];
 
@@ -109,21 +110,25 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
         $attributeCode = 'name';
         $attributesArray = [
             [
-                'attributes' => ['code' => $attributeCode, 'website' => $websiteCodeA, 'language' => $langA],
-                'value' => $valueA
+                'nodeName'      => $attributeCode,
+                'attributes'    => ['website' => $websiteCodeA, 'language' => $langA],
+                'value'         => $valueA
             ],
             [
-                'attributes' => ['code' => $attributeCode, 'website' => $websiteCodeB, 'language' => $langB],
-                'value' => $valueB
+                'nodeName'      => $attributeCode,
+                'attributes'    => ['website' => $websiteCodeB, 'language' => $langB],
+                'value'         => $valueB
             ],
             [
-                'attributes' => ['code' => $attributeCode, 'website' => $websiteCodeC, 'language' => $langC],
-                'value' => $valueC
+                'nodeName'      => $attributeCode,
+                'attributes'    => ['website' => $websiteCodeC, 'language' => $langC],
+                'value'         => $valueC
             ],
         ];
         $attributeList = ProductAttributeList::fromArray($attributesArray);
         $stubEnvironment = $this->getStubEnvironmentWithReturnValueMap($environmentReturnValueMap);
         $resultList = $attributeList->getAttributesForEnvironment($stubEnvironment);
+
         $this->assertEquals($expected, $resultList->getAttribute($attributeCode)->getValue());
     }
 

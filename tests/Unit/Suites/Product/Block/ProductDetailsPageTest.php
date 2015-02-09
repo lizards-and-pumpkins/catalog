@@ -3,9 +3,10 @@
 namespace Brera\Product\Block;
 
 use Brera\Product\ProductSource;
-use Brera\Renderer\ThemeTestTrait;
+use Brera\Product\ProductAttributeNotFoundException;
+use Brera\Renderer\ThemeProductRenderingTestTrait;
 
-require_once __DIR__ . '/../../Renderer/ThemeTestTrait.php';
+require_once __DIR__ . '/../../Renderer/ThemeProductRenderingTestTrait.php';
 
 /**
  * @covers \Brera\Product\Block\ProductDetailsPage
@@ -13,7 +14,7 @@ require_once __DIR__ . '/../../Renderer/ThemeTestTrait.php';
  */
 class ProductDetailsPageTest extends \PHPUnit_Framework_TestCase
 {
-    use ThemeTestTrait;
+    use ThemeProductRenderingTestTrait;
 
     /**
      * @var ProductSource|\PHPUnit_Framework_MockObject_MockObject
@@ -68,11 +69,48 @@ class ProductDetailsPageTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldReturnProduct()
+    public function itShouldReturnProductAttributeValue()
     {
-        $productDetailsPageBlock = new ProductDetailsPage('foo.phtml', $this->stubProduct);
-        $result = $productDetailsPageBlock->getProduct();
+        $this->stubProduct->expects($this->once())
+            ->method('getAttributeValue')
+            ->with('name')
+            ->willReturn('foo');
 
-        $this->assertSame($this->stubProduct, $result);
+        $productDetailsPageBlock = new ProductDetailsPage('bar.phtml', $this->stubProduct);
+        $result = $productDetailsPageBlock->getProductAttributeValue('name');
+
+        $this->assertEquals('foo', $result);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnEmptyStringIfAttributeIsNotFound()
+    {
+        $stubException = $this->getMock(ProductAttributeNotFoundException::class);
+
+        $this->stubProduct->expects($this->once())
+            ->method('getAttributeValue')
+            ->willThrowException($stubException);
+
+        $productDetailsPageBlock = new ProductDetailsPage('foo.phtml', $this->stubProduct);
+        $result = $productDetailsPageBlock->getProductAttributeValue('bar');
+
+        $this->assertEquals('', $result);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnProductId()
+    {
+        $this->stubProduct->expects($this->once())
+            ->method('getId')
+            ->willReturn('foo');
+
+        $productDetailsPageBlock = new ProductDetailsPage('bar.phtml', $this->stubProduct);
+        $result = $productDetailsPageBlock->getProductId();
+
+        $this->assertEquals('foo', $result);
     }
 }

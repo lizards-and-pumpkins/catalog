@@ -63,17 +63,11 @@ class EnvironmentSourceBuilder
         $environments = [];
         $parser = new XPathParser($xml);
 
-        $attributes = $parser->getXmlNodesArrayByXPath('//product/attributes/attribute');
+        $attributes = $parser->getXmlNodesArrayByXPath('//product/attributes//@*');
         foreach ($attributes as $attribute) {
-            if (empty($attribute['attributes'])) {
-                continue;
-            }
-            foreach ($attribute['attributes'] as $key => $value) {
-                if ($key != 'code') {
-                    $environments[$key][] = $value;
-                }
-            }
+            $environments[$attribute['nodeName']][] = $attribute['value'];
         }
+
         return $environments;
     }
 }

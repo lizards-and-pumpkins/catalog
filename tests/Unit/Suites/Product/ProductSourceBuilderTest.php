@@ -37,6 +37,8 @@ class ProductSourceBuilderTest extends \PHPUnit_Framework_TestCase
 		$product = $this->builder->createProductSourceFromXml($firstNodeXml);
 
 		$this->assertInstanceOf(ProductSource::class, $product);
+		$this->assertEquals('118235-251', $product->getId());
+		$this->assertEquals('11.95', $product->getAttributeValue('special_price'));
 	}
 
 	/**

@@ -6,6 +6,7 @@ use Brera\Environment\Environment;
 
 /**
  * @covers \Brera\Product\ProductAttribute
+ * @uses \Brera\Product\ProductAttributeList
  */
 class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,11 +16,12 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 	public function itShouldReturnTrueIfAttributeWithGivenCodeExists()
 	{
 		$attribute = ProductAttribute::fromArray([
-			'attributes'    => ['code' => 'name'],
-			'value'         => 'foo'
+			'nodeName'      => 'foo',
+			'attributes'    => [],
+			'value'         => 'bar'
 		]);
 
-		$this->assertTrue($attribute->isCodeEqualsTo('name'));
+		$this->assertTrue($attribute->isCodeEqualsTo('foo'));
 	}
 
 	/**
@@ -28,11 +30,12 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 	public function itShouldReturnFalseIfAttributeWithGivenCodeDoesNotExist()
 	{
 		$attribute = ProductAttribute::fromArray([
-			'attributes'    => ['code' => 'name'],
-			'value'         => 'foo'
+			'nodeName'      => 'foo',
+			'attributes'    => [],
+			'value'         => 'bar'
 		]);
 
-		$this->assertFalse($attribute->isCodeEqualsTo('price'));
+		$this->assertFalse($attribute->isCodeEqualsTo('baz'));
 	}
 
 	/**
@@ -41,11 +44,12 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 	public function itShouldReturnAttributeCode()
 	{
 		$attribute = ProductAttribute::fromArray([
-			'attributes'    => ['code' => 'name'],
-			'value'         => 'foo'
+			'nodeName'      => 'foo',
+			'attributes'    => [],
+			'value'         => 'bar'
 		]);
 
-		$this->assertEquals('name', $attribute->getCode());
+		$this->assertEquals('foo', $attribute->getCode());
 	}
 
 	/**
@@ -54,38 +58,42 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 	public function itShouldReturnAttributeValue()
 	{
 		$attribute = ProductAttribute::fromArray([
-			'attributes'    => ['code' => 'name'],
-			'value'         => 'foo'
+			'nodeName'      => 'foo',
+			'attributes'    => [],
+			'value'         => 'bar'
 		]);
 
-		$this->assertEquals('foo', $attribute->getValue());
+		$this->assertEquals('bar', $attribute->getValue());
 	}
 
 	/**
 	 * @test
-	 * @expectedException \Brera\FirstCharOfAttributeCodeIsNotAlphabeticException
-	 * @dataProvider invalidAttributeCodeProvider
-	 * @param $invalidAttributeCode
 	 */
-	public function itShouldThrowAnExceptionIfAttributeCodeStartWithNonAlphabeticCharacter($invalidAttributeCode)
+	public function itShouldReturnAttributeWithSubAttribute()
 	{
-		ProductAttribute::fromArray([
-			'attributes'    => ['code' => $invalidAttributeCode],
-			'value'         => 'foo'
+		$attribute = ProductAttribute::fromArray([
+			'nodeName'      => 'foo',
+			'attributes'    => [],
+			'value'         => [
+				[
+					'nodeName'      => 'bar',
+					'attributes'    => [],
+					'value'         => 1
+				],
+				[
+					'nodeName'      => 'baz',
+					'attributes'    => [],
+					'value'         => 2
+				]
+			]
 		]);
-	}
 
-	public function invalidAttributeCodeProvider()
-	{
-		return [
-			[null],
-			[''],
-			[' '],
-			['1'],
-			['-bar'],
-			['2foo'],
-			["\nbaz"]
-		];
+		/** @var ProductAttributeList $attributeValue */
+		$attributeValue = $attribute->getValue();
+
+		$this->assertInstanceOf(ProductAttributeList::class, $attributeValue);
+		$this->assertEquals(1, $attributeValue->getAttribute('bar')->getValue());
+		$this->assertEquals(2, $attributeValue->getAttribute('baz')->getValue());
 	}
 
 	/**
@@ -95,8 +103,9 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 	private function createProductAttributeWithArray(array $attributeEnvironment)
 	{
 		return ProductAttribute::fromArray([
-			'attributes' => $attributeEnvironment,
-			'value' => 'dummy-test-value'
+			'nodeName'      => 'name',
+			'attributes'    => $attributeEnvironment,
+			'value'         => 'dummy-test-value'
 		]);
 	}
 
@@ -121,7 +130,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function itShouldReturnAnIntegerMatchScore()
 	{
-		$attribute = $this->createProductAttributeWithArray(['code' => 'name']);
+		$attribute = $this->createProductAttributeWithArray([]);
 		$stubEnvironment = $this->getEnvironmentMockWithReturnValueMap([]);
 		$this->assertInternalType('int', $attribute->getMatchScoreForEnvironment($stubEnvironment));
 	}
@@ -132,9 +141,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 	public function itShouldReturn1ForTheMatchScoreForAnEnvironmentWith1Match()
 	{
 		$testWebsiteCode = 'foo';
-		$attribute = $this->createProductAttributeWithArray([
-			'code' => 'name', 'website' => $testWebsiteCode, 'language' => 'bar'
-		]);
+		$attribute = $this->createProductAttributeWithArray(['website' => $testWebsiteCode, 'language' => 'bar']);
 		$stubEnvironment = $this->getEnvironmentMockWithReturnValueMap([
 			['website', $testWebsiteCode],
 			['version', '1'],
@@ -150,7 +157,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 		$testWebsiteCode = 'foo';
 		$testLanguageCode = 'bar';
 		$attribute = $this->createProductAttributeWithArray([
-			'code' => 'name', 'website' => $testWebsiteCode, 'language' => $testLanguageCode
+			'website' => $testWebsiteCode, 'language' => $testLanguageCode
 		]);
 		$stubEnvironment = $this->getEnvironmentMockWithReturnValueMap([
 			['website', $testWebsiteCode],
@@ -165,9 +172,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function itShouldReturn0ForTheMatchScoreForAnEnvironmentWithNoMatches()
 	{
-		$attribute = $this->createProductAttributeWithArray([
-			'code' => 'name', 'website' => 'foo', 'language' => 'bar'
-		]);
+		$attribute = $this->createProductAttributeWithArray(['website' => 'foo', 'language' => 'bar']);
 		$stubEnvironment = $this->getEnvironmentMockWithReturnValueMap([
 			['website', 'buz'],
 			['language', 'qux'],
@@ -182,9 +187,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 	public function itShouldReturn1ForTheMatchScoreForAnEnvironmentWith1MatchAnd1Miss()
 	{
 		$testLanguageCode = 'bar';
-		$attribute = $this->createProductAttributeWithArray([
-			'code' => 'name', 'website' => 'foo', 'language' => $testLanguageCode
-		]);
+		$attribute = $this->createProductAttributeWithArray(['website' => 'foo', 'language' => $testLanguageCode]);
 		$stubEnvironment = $this->getEnvironmentMockWithReturnValueMap([
 			['website', 'buz'],
 			['language', $testLanguageCode],

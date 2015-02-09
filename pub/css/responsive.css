@@ -1,0 +1,112 @@
+.swipe-prev, .swipe-next { width: 38px; height: 53px; position: absolute; top: 99px; z-index: 10; cursor: pointer; opacity: 0; -webkit-transition: all .3s ease }
+.swipe-next { background: url(../images/arrow-next.png); right: 0 }
+.swipe-prev { background: url(../images/arrow-prev.png); left: 0 }
+
+.col-main .std p img { max-width: 100% }
+
+/* Homepage slider wrap */
+.slider-wrap { float: right; width:66%; position: relative; left: 68%; overflow: hidden }
+
+/* Homepage columns */
+.home-container-2 { float: left; width: 100%; position: relative }
+.home-container-1 { float: left; width: 100%; position: relative; right: 68% }
+
+/* Phone bar */
+.phone-bar { display: none }
+#phoneMenuPlaceholder { display: none }
+.num-items { display: inline-block; color: #ffffff; border-radius: 7px; background-color: #e46d06; font-size: 11px; padding: 1px 4px; margin-left: 4px }
+
+/* Tablet */
+@media (max-width: 974px) {
+    .main, .header, .footer, .footer-block-info, .info-banner-inner-container { width: auto }
+    .main-container .main { padding-left: 10px; padding-right: 10px; width: auto }
+    .logo { padding-left: 10px }
+    .social { height: auto }
+    .social .text h3 { margin-top: 10px }
+    .footer-block { margin-right: 20px }
+    .footer-block.long ul { display: none }
+    .footer-block.long button { display: block; font-family: 'GeogrotesqueMedium', serif; background: #e5e5e5 url("../images/icon-footer-arrow.png") no-repeat right; border: none; width: 100%; text-align: left; padding: 5px 10px; font-size: 14px; margin-top: 10px }
+    .footer-block.last h3 { margin-top: 10px }
+    #phoneMenuPlaceholder { display: none }
+    .flex-control-nav { display: none }
+    .cms_header_small { display: none }
+    .nav .brands-logos .brand-logos-title, #navPlaceholder .brands-logos .brand-logos-title { float: none; padding: 0 }
+
+    /* Login/Register */
+    .customer-account-login .main .account-login, .customer-account-login .main .account-create { margin: 0; width: 49% !important; }
+    .customer-account-login .main .account-create { float: right }
+    .customer-account-login .main ul.messages { width: 100% }
+    /* TODO: Register success page */
+
+    /* Forgot password page */
+    .customer-account-forgotpassword .main-container .main form, div.formContainer { width: 100% }
+
+    /* CMS pages */
+    .cms-page-view .col-left { display: none }
+    .cms-page-view .col2-left-layout .col-main { float: none; width: auto }
+    .cms-page-view #breadcrumbs { position: static }
+
+    /* Contact us */
+    .contacts-index-index .formContainer { width: auto }
+
+    /* Newsletter page */
+    #newsletter-validate-detail .row, #newsletter-validate-detail .buttons-set { float: none }
+    #newsletter-validate-detail .row { margin: 0 0 10px 0; width: auto }
+
+    /*CMS Home Page*/
+    .banner-wrap img { width: 100% }
+}
+
+/* Phone */
+@media (max-width: 767px) {
+    .col-main { clear: both }
+    .cms-index-index .main-container .main { padding-left: 0; padding-right: 0 }
+    #topSellerTabLinks { margin-left: 10px }
+    .social { width: auto; clear: both; margin: 0 0 30px 0 }
+    .cms-index-index .social { margin-left: 10px }
+    .social.first { margin-top: 30px }
+    .social .inner-container { padding: 0; border: none; height: auto }
+    .social .text { width: 200px }
+    .social .text h3 { margin-top: 0 }
+    .footer-block, .footer-block.last { clear: both; width: 100%; margin-bottom: 10px }
+    .footer-block ul { display: none; height: auto; max-height: 138px; margin-left: 10px }
+    .footer-block h3 { font-family: 'GeogrotesqueMedium', serif; background: #e5e5e5 url("../images/icon-footer-arrow.png") no-repeat right; padding: 5px 10px; font-size: 14px; margin: 0; border: none }
+    .footer-block.long button { display: none }
+    .footer-block.last h3 { margin-top: 0 }
+    #search_mini_form { display: none }
+    .logo { margin: 0; padding: 0; text-align: left }
+    .logo img { margin: 10px; }
+    .header .nav { padding-top: 0; display: table; width: 100%; border-top: #5ac0ec solid 1px; border-bottom: #1280ac solid 1px }
+    .header .nav.first { border-top: none }
+    .header .nav.last { border-bottom: none }
+    .header .nav > li { display: table-cell; float: none; text-align: center }
+    .header .nav > li.hover > ul { left: -9999px }
+    .phone-bar { display: block; clear: both; background: #228bb6 }
+    .phone-bar li { float: left; width: 20%; text-align: center; padding: 6px 0 }
+    .phone-bar li a { display: block; border-right: #21719f solid 1px; padding: 5px 0 }
+    .phone-bar li.active { background-color: #0b4e76 }
+    .phone-bar li.active a { border-color: #0b4e76 }
+    .phone-bar li.last { width: 19% }
+    .phone-bar li.last a { border: none }
+    #phoneMenuPlaceholder { display: block }
+    #phoneMenuPlaceholder .content { background: #ffffff; padding: 6px 15px; height: 32px }
+    #phoneMenuPlaceholder a { margin: 8px 5px; display: inline-block }
+    #phoneMenuPlaceholder .lang-fr, #phoneMenuPlaceholder .lang-en, #phoneMenuPlaceholder .lang-de { padding-left: 25px }
+    #phoneMenuPlaceholder #search_mini_form { display: block; position: static; width: auto }
+    #phoneMenuPlaceholder #search_mini_form input { width: 100% }
+    #phoneMenuPlaceholder > ul > li { float: left; width:20%; height: 10px }
+    #phoneMenuPlaceholder > ul > li.active { background: url("../images/phone-menu-arrow.png") no-repeat center }
+    .lang-ru_en, .lang-st_en, .lang-cy_en, .lang-ru_fr, .lang-st_fr, .lang-cy_fr, .lang-ru_de, .lang-st_de, .lang-cy_de, .lang-ru_es { padding-left: 25px }
+    .home-container-1 { background-color: transparent }
+    #searchPanel { display: none }
+
+    /* Login page */
+    .customer-account-login .main .account-login, .customer-account-login .main .account-create { float: none; width: 100% !important; }
+
+    .header-panel { position: absolute; right: 0; top: 7px }
+    .header-panel > a, .header-panel > span, .header-panel span.sep { display: none }
+
+    /*CMS Home Page*/
+    .banner-wrap { left: 0 }
+    .banner-wrap, .slider-wrap { float: none; width: 100%; margin-top: 25px; height: auto }
+}
