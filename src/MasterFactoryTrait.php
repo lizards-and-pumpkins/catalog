@@ -4,7 +4,6 @@ namespace Brera;
 
 trait MasterFactoryTrait
 {
-
     /**
      * @var array
      */

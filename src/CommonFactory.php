@@ -174,6 +174,7 @@ class CommonFactory implements Factory, DomainEventFactory
 
     /**
      * @return KeyValueStore
+     * @throws UndefinedFactoryMethodException
      */
     private function getKeyValueStore()
     {
@@ -212,6 +213,7 @@ class CommonFactory implements Factory, DomainEventFactory
 
     /**
      * @return Queue
+     * @throws UndefinedFactoryMethodException
      */
     public function getEventQueue()
     {
@@ -238,6 +240,7 @@ class CommonFactory implements Factory, DomainEventFactory
 
     /**
      * @return LoggerInterface
+     * @throws UndefinedFactoryMethodException
      */
     private function getLogger()
     {
