@@ -32,7 +32,7 @@ class Product implements ProjectionSourceData
 
     /**
      * @param string $attributeCode
-     * @return string
+     * @return string|ProductAttributeList
      */
     public function getAttributeValue($attributeCode)
     {

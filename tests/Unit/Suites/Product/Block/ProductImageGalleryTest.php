@@ -4,25 +4,25 @@ namespace Unit\Suites\Product\Block;
 
 use Brera\Image;
 use Brera\Product\Block\ProductImageGallery;
-use Brera\Product\Product;
+use Brera\Product\ProductSource;
 use Brera\Product\ProductAttribute;
 use Brera\Product\ProductAttributeList;
 
 /**
  * @covers \Brera\Product\Block\ProductImageGallery
- * @uses \Brera\Renderer\Block
- * @uses \Brera\Image
+ * @uses   \Brera\Renderer\Block
+ * @uses   \Brera\Image
  */
 class ProductImageGalleryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductSource|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubProduct;
+    private $stubProductSource;
 
     protected function setUp()
     {
-        $this->stubProduct = $this->getMockBuilder(Product::class)
+        $this->stubProductSource = $this->getMockBuilder(ProductSource::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -51,14 +51,14 @@ class ProductImageGalleryTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $stubAttributeList->expects($this->exactly(2))
             ->method('getAttribute')
-            ->willReturnMap([['file', [], $stubFileAttribute], ['label', [], $stubLabelAttribute]]);
+            ->willReturnMap([['file', $stubFileAttribute], ['label', $stubLabelAttribute]]);
 
-        $this->stubProduct->expects($this->once())
+        $this->stubProductSource->expects($this->once())
             ->method('getAttributeValue')
             ->with('image')
             ->willReturn($stubAttributeList);
 
-        $block = new ProductImageGallery('foo.phtml', $this->stubProduct);
+        $block = new ProductImageGallery('foo.phtml', $this->stubProductSource);
         $result = $block->getMainProductImage();
 
         $this->assertInstanceOf(Image::class, $result);

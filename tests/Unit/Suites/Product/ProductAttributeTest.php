@@ -103,8 +103,9 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 	private function createProductAttributeWithArray(array $attributeEnvironment)
 	{
 		return ProductAttribute::fromArray([
-			'attributes' => $attributeEnvironment,
-			'value' => 'dummy-test-value'
+			'nodeName'      => 'name',
+			'attributes'    => $attributeEnvironment,
+			'value'         => 'dummy-test-value'
 		]);
 	}
 
@@ -129,7 +130,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function itShouldReturnAnIntegerMatchScore()
 	{
-		$attribute = $this->createProductAttributeWithArray(['code' => 'name']);
+		$attribute = $this->createProductAttributeWithArray([]);
 		$stubEnvironment = $this->getEnvironmentMockWithReturnValueMap([]);
 		$this->assertInternalType('int', $attribute->getMatchScoreForEnvironment($stubEnvironment));
 	}
@@ -140,9 +141,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 	public function itShouldReturn1ForTheMatchScoreForAnEnvironmentWith1Match()
 	{
 		$testWebsiteCode = 'foo';
-		$attribute = $this->createProductAttributeWithArray([
-			'code' => 'name', 'website' => $testWebsiteCode, 'language' => 'bar'
-		]);
+		$attribute = $this->createProductAttributeWithArray(['website' => $testWebsiteCode, 'language' => 'bar']);
 		$stubEnvironment = $this->getEnvironmentMockWithReturnValueMap([
 			['website', $testWebsiteCode],
 			['version', '1'],
@@ -158,7 +157,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 		$testWebsiteCode = 'foo';
 		$testLanguageCode = 'bar';
 		$attribute = $this->createProductAttributeWithArray([
-			'code' => 'name', 'website' => $testWebsiteCode, 'language' => $testLanguageCode
+			'website' => $testWebsiteCode, 'language' => $testLanguageCode
 		]);
 		$stubEnvironment = $this->getEnvironmentMockWithReturnValueMap([
 			['website', $testWebsiteCode],
@@ -173,9 +172,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function itShouldReturn0ForTheMatchScoreForAnEnvironmentWithNoMatches()
 	{
-		$attribute = $this->createProductAttributeWithArray([
-			'code' => 'name', 'website' => 'foo', 'language' => 'bar'
-		]);
+		$attribute = $this->createProductAttributeWithArray(['website' => 'foo', 'language' => 'bar']);
 		$stubEnvironment = $this->getEnvironmentMockWithReturnValueMap([
 			['website', 'buz'],
 			['language', 'qux'],
@@ -190,9 +187,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 	public function itShouldReturn1ForTheMatchScoreForAnEnvironmentWith1MatchAnd1Miss()
 	{
 		$testLanguageCode = 'bar';
-		$attribute = $this->createProductAttributeWithArray([
-			'code' => 'name', 'website' => 'foo', 'language' => $testLanguageCode
-		]);
+		$attribute = $this->createProductAttributeWithArray(['website' => 'foo', 'language' => $testLanguageCode]);
 		$stubEnvironment = $this->getEnvironmentMockWithReturnValueMap([
 			['website', 'buz'],
 			['language', $testLanguageCode],

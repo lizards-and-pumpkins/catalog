@@ -18,10 +18,10 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
     {
         $xml = <<<EOX
 <product sku="test"><attributes>
-    <attribute code="name" website="web1" language="lang1">web1-lang1</attribute>
-    <attribute code="name" website="web1" language="lang2">web1-lang2</attribute>
-    <attribute code="name" website="web2" language="lang1">web2-lang1</attribute>
-    <attribute code="name" website="web2" language="lang2">web2-lang2</attribute>
+    <name website="web1" language="lang1">web1-lang1</name>
+    <name website="web1" language="lang2">web1-lang2</name>
+    <name website="web2" language="lang1">web2-lang1</name>
+    <name website="web2" language="lang2">web2-lang2</name>
 </attributes></product>
 EOX;
         $factory = new PoCMasterFactory();
