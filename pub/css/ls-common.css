@@ -202,3 +202,9 @@ nav { clear: both; color: #ffffff }
 .clearer:after, .c:after, .columns:after, .content form p:after, .form-list li:after, .nav:after, .nav:before,
 #navPlaceholder > ul:after, .phone-bar:after, #phoneMenuPlaceholder ul:after, #newsletterForm:after,
 #layeredNavPlaceholder:after, .header-panel:after, .nav .brands-logos:after { content: ""; display: block; height: 0; clear: both; visibility: hidden }
+
+/* Print */
+@media print {
+    * { background: none !important; text-align: left !important }
+    .header-container, .footer-container, .toolbar { display: none !important }
+}
