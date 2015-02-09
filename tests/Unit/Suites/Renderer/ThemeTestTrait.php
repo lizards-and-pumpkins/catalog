@@ -34,7 +34,7 @@ EOX;
         $this->createFile($filePath, $fileContent);
 
         $fileContent = '- Hi, I\'m a 1 column template!<br/>
-<?php echo $this->getChildOutput(\'content\') ?>
+<?= $this->getChildOutput(\'content\') ?>
 ';
         $filePath = $templateDirectoryPath . DIRECTORY_SEPARATOR . '1column.phtml';
         $this->createFile($filePath, $fileContent);
@@ -104,10 +104,6 @@ EOX;
      */
     private function createFile($filePath, $fileContent)
     {
-        if (file_exists($filePath)) {
-            unlink($filePath);
-        }
-
         file_put_contents($filePath, $fileContent);
     }
 
