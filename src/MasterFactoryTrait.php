@@ -33,11 +33,11 @@ trait MasterFactoryTrait
 	}
 
 	/**
-	 * @param $method
-	 * @param $parameters
+	 * @param string $method
+	 * @param array $parameters
 	 * @return mixed
 	 */
-	final public function __call($method, $parameters)
+	final public function __call($method, array $parameters)
 	{
 		if (!isset($this->methods[$method])) {
 			throw new UndefinedFactoryMethodException(sprintf('Unknown method "%s"', $method));

@@ -2,11 +2,11 @@
 
 namespace Brera\Product\Block;
 
-use Brera\Product\Product;
+use Brera\Product\ProductSource;
 use Brera\Product\ProductAttributeNotFoundException;
-use Brera\Renderer\ThemeTestTrait;
+use Brera\Renderer\ThemeProductRenderingTestTrait;
 
-require_once __DIR__ . '/../../Renderer/ThemeTestTrait.php';
+require_once __DIR__ . '/../../Renderer/ThemeProductRenderingTestTrait.php';
 
 /**
  * @covers \Brera\Product\Block\ProductDetailsPage
@@ -14,16 +14,16 @@ require_once __DIR__ . '/../../Renderer/ThemeTestTrait.php';
  */
 class ProductDetailsPageTest extends \PHPUnit_Framework_TestCase
 {
-    use ThemeTestTrait;
+    use ThemeProductRenderingTestTrait;
 
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductSource|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubProduct;
 
     protected function setUp()
     {
-        $this->stubProduct = $this->getMockBuilder(Product::class)
+        $this->stubProduct = $this->getMockBuilder(ProductSource::class)
             ->disableOriginalConstructor()
             ->getMock();
 

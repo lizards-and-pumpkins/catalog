@@ -14,7 +14,7 @@
 /* Phone bar */
 .phone-bar { display: none }
 #phoneMenuPlaceholder { display: none }
-.num-items { display: inline-block; color: #ffffff; border-radius: 7px 7px 7px 7px; -moz-border-radius: 7px 7px 7px 7px;  -webkit-border-radius: 7px 7px 7px 7px; font-size: 11px; padding: 1px 4px; margin-left: 4px }
+.num-items { display: inline-block; color: #ffffff; border-radius: 7px; background-color: #e46d06; font-size: 11px; padding: 1px 4px; margin-left: 4px }
 
 /* Tablet */
 @media (max-width: 974px) {

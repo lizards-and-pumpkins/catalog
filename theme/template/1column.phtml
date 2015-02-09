@@ -6,24 +6,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <?php echo $this->getChildOutput('head') ?>
+    <?= $this->getChildOutput('head') ?>
 </head>
 <body>
 <div class="wrapper 1column">
-    <?php echo $this->getChildOutput('global_notices') ?>
+    <?= $this->getChildOutput('global_notices') ?>
     <div class="page">
-        <?php echo $this->getChildOutput('header') ?>
+        <?= $this->getChildOutput('header') ?>
         <div class="main-container col1-layout">
             <div class="main">
                 <div class="col-main">
-                    <?php echo $this->getChildOutput('breadcrumbsContainer') ?>
-                    <?php echo $this->getChildOutput('global_messages') ?>
-                    <?php echo $this->getChildOutput('content') ?>
+                    <?= $this->getChildOutput('breadcrumbsContainer') ?>
+                    <?= $this->getChildOutput('global_messages') ?>
+                    <?= $this->getChildOutput('content') ?>
                 </div>
             </div>
         </div>
-        <?php echo $this->getChildOutput('footer') ?>
-        <?php echo $this->getChildOutput('before_body_end') ?>
+        <?= $this->getChildOutput('footer') ?>
+        <?= $this->getChildOutput('before_body_end') ?>
     </div>
 </div>
 </body>

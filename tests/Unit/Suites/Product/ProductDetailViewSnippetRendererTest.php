@@ -9,9 +9,9 @@ use Brera\ProjectionSourceData;
 use Brera\SnippetRenderer;
 use Brera\SnippetResult;
 use Brera\ThemeLocator;
-use Brera\Renderer\ThemeTestTrait;
+use Brera\Renderer\ThemeProductRenderingTestTrait;
 
-require_once __DIR__ . '/../Renderer/ThemeTestTrait.php';
+require_once __DIR__ . '/../Renderer/ThemeProductRenderingTestTrait.php';
 
 /**
  * @covers \Brera\Product\ProductDetailViewSnippetRenderer
@@ -26,12 +26,12 @@ require_once __DIR__ . '/../Renderer/ThemeTestTrait.php';
  */
 class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
-    use ThemeTestTrait;
+    use ThemeProductRenderingTestTrait;
 
-	/**
-	 * @var ProductDetailViewSnippetRenderer
-	 */
-	private $snippetRenderer;
+    /**
+     * @var ProductDetailViewSnippetRenderer
+     */
+    private $snippetRenderer;
 
     /**
      * @var SnippetResultList|\PHPUnit_Framework_MockObject_MockObject
@@ -117,9 +117,9 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnASnippetResultList()
     {
-        $stubProduct = $this->getStubProduct();
+        $stubProductSource = $this->getStubProductSource();
 
-        $result = $this->snippetRenderer->render($stubProduct, $this->stubEnvironmentSource);
+        $result = $this->snippetRenderer->render($stubProductSource, $this->stubEnvironmentSource);
         $this->assertSame($this->mockSnippetResultList, $result);
     }
 
@@ -128,13 +128,13 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldAddOneOrMoreSnippetsToTheSnippetList()
     {
-        $stubProduct = $this->getStubProduct();
+        $stubProductSource = $this->getStubProductSource();
 
         $this->mockSnippetResultList->expects($this->atLeastOnce())
             ->method('add')
             ->with($this->isInstanceOf(SnippetResult::class));
 
-        $this->snippetRenderer->render($stubProduct, $this->stubEnvironmentSource);
+        $this->snippetRenderer->render($stubProductSource, $this->stubEnvironmentSource);
     }
 
     /**
@@ -142,26 +142,28 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldRenderBlockContent()
     {
+        $stubEnvironment = $this->getMock(Environment::class);
+
         $productIdString = 'test-123';
         $productNameString = 'Test Name';
-        $stubProduct = $this->getStubProduct();
-        $stubProduct->getId()->expects($this->any())
+        $stubProductSource = $this->getStubProductSource();
+        $stubProductSource->getId()->expects($this->any())
             ->method('getId')->willReturn($productIdString);
-        $stubProduct->getId()->expects($this->any())
+        $stubProductSource->getId()->expects($this->any())
             ->method('__toString')->willReturn($productIdString);
-        $stubProduct->expects($this->any())
+        $stubProductSource->getProductForEnvironment($stubEnvironment)->expects($this->any())
             ->method('getAttributeValue')
             ->with('name')
             ->willReturn($productNameString);
 
-		$transport = '';
-		$this->mockSnippetResultList->expects($this->once())
-			->method('add')
-			->willReturnCallback(function ($snippetResult) use (&$transport) {
-				$transport = $snippetResult;
-			});
+        $transport = '';
+        $this->mockSnippetResultList->expects($this->once())
+            ->method('add')
+            ->willReturnCallback(function ($snippetResult) use (&$transport) {
+                $transport = $snippetResult;
+            });
 
-        $this->snippetRenderer->render($stubProduct, $this->stubEnvironmentSource);
+        $this->snippetRenderer->render($stubProductSource, $this->stubEnvironmentSource);
 
         /** @var $transport SnippetResult */
         $expected = <<<EOT
@@ -177,9 +179,9 @@ EOT;
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Product
+     * @return \PHPUnit_Framework_MockObject_MockObject|ProductSource
      */
-    private function getStubProduct()
+    private function getStubProductSource()
     {
         $stubProductId = $this->getMockBuilder(ProductId::class)
             ->disableOriginalConstructor()
@@ -193,6 +195,18 @@ EOT;
             ->method('getId')
             ->willReturn($stubProductId);
 
-        return $stubProduct;
+        $stubProductSource = $this->getMockBuilder(ProductSource::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $stubProductSource->expects($this->any())
+            ->method('getId')
+            ->willReturn($stubProductId);
+
+        $stubProductSource->expects($this->any())
+            ->method('getProductForEnvironment')
+            ->willReturn($stubProduct);
+
+        return $stubProductSource;
     }
 }
