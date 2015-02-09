@@ -2,8 +2,9 @@
 
 namespace Brera\Environment;
 
-use Brera\PoCMasterFactory;
 use Brera\IntegrationTestFactory;
+use Brera\PoCMasterFactory;
+use Brera\CommonFactory;
 use Brera\Product\ProductSourceBuilder;
 
 /**
@@ -25,7 +26,8 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
 </attributes></product>
 EOX;
         $factory = new PoCMasterFactory();
-        $factory->register(new IntegrationTestFactory());
+        $factory->register(new CommonFactory());
+        $factory->register(new IntegrationTestFactory()); // is this needed?
         /** @var EnvironmentSourceBuilder $environmentSourceBuilder */
         $environmentSourceBuilder = $factory->createEnvironmentSourceBuilder();
         /** @var ProductSourceBuilder $productSourceBuilder */
