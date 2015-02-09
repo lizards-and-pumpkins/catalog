@@ -27,7 +27,7 @@ class ProductImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 
 		$stubProductBuilder = $this->getMock(ProductSourceBuilder::class);
 		$stubProductBuilder->expects($this->once())
-			->method('createProductFromXml')
+			->method('createProductSourceFromXml')
 			->willReturn($stubProduct);
 
 		$stubEnvironmentSource = $this->getMockBuilder(EnvironmentSource::class)

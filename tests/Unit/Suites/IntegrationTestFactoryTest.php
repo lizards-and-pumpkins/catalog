@@ -72,7 +72,7 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnProductBuilder()
     {
-        $result = $this->factory->getProductBuilder();
+        $result = $this->factory->createProductSourceBuilder();
 
         $this->assertInstanceOf(ProductSourceBuilder::class, $result);
     }

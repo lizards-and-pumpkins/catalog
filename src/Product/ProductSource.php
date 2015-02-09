@@ -37,7 +37,7 @@ class ProductSource implements ProjectionSourceData
 
 	/**
 	 * @param Environment $environment
-	 * @return $this
+	 * @return Product
 	 */
 	public function getProductForEnvironment(Environment $environment)
 	{

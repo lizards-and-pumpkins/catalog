@@ -34,7 +34,7 @@ class ProductSourceBuilderTest extends \PHPUnit_Framework_TestCase
 		$firstNode = $domDocument->getElementsByTagName('product')->item(0);
 		$firstNodeXml = $domDocument->saveXML($firstNode);
 
-		$product = $this->builder->createProductFromXml($firstNodeXml);
+		$product = $this->builder->createProductSourceFromXml($firstNodeXml);
 
 		$this->assertInstanceOf(ProductSource::class, $product);
 	}
@@ -47,6 +47,6 @@ class ProductSourceBuilderTest extends \PHPUnit_Framework_TestCase
 	public function itShouldThrowAnExceptionInCaseOfXmlHasNoEssentialData()
 	{
 		$xml = '<?xml version="1.0"?><node />';
-		(new ProductSourceBuilder())->createProductFromXml($xml);
+		(new ProductSourceBuilder())->createProductSourceFromXml($xml);
 	}
 }

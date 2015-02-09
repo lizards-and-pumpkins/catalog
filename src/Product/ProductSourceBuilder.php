@@ -10,7 +10,7 @@ class ProductSourceBuilder
 	 * @param string $xml
 	 * @return ProductSource
 	 */
-	public function createProductFromXml($xml)
+	public function createProductSourceFromXml($xml)
 	{
 		$parser = new XPathParser($xml);
 

@@ -49,7 +49,7 @@ class IntegrationTestFactory implements Factory, DomainEventFactory
 	{
 		return new ProductImportDomainEventHandler(
 			$event,
-			$this->getMasterFactory()->getProductBuilder(),
+			$this->getMasterFactory()->createProductSourceBuilder(),
 			$this->getMasterFactory()->createEnvironmentSourceBuilder(),
 			$this->getMasterFactory()->createProductProjector()
 		);
@@ -115,7 +115,7 @@ class IntegrationTestFactory implements Factory, DomainEventFactory
 	/**
 	 * @return ProductSourceBuilder
 	 */
-	public function getProductBuilder()
+	public function createProductSourceBuilder()
 	{
 		return new ProductSourceBuilder();
 	}
