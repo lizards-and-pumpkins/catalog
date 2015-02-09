@@ -20,11 +20,10 @@ class ProductAttributeList
 
 	/**
 	 * @param string $code
-	 * @param array $environment
 	 * @throws ProductAttributeNotFoundException
 	 * @return ProductAttribute
 	 */
-	public function getAttribute($code, $environment = [])
+	public function getAttribute($code)
 	{
 		if (empty($code)) {
 			throw new ProductAttributeNotFoundException('Can not get an attribute with blank code.');

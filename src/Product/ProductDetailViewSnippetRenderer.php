@@ -48,10 +48,10 @@ class ProductDetailViewSnippetRenderer extends BlockSnippetRenderer
      */
     private function renderProductInEnvironment(Product $product, Environment $environment)
     {
+        $productInEnvironment = $product->getProductForEnvironment($environment);
         $layoutXmlPath = $this->getPathToLayoutXmlFile($environment);
-        $snippetContent = $this->getSnippetContent($layoutXmlPath, $product);
-        $snippetKey = $this->getKey($product->getId(), $environment);
-
+        $snippetContent = $this->getSnippetContent($layoutXmlPath, $productInEnvironment);
+        $snippetKey = $this->getKey($productInEnvironment->getId(), $environment);
         return SnippetResult::create($snippetKey, $snippetContent);
     }
 

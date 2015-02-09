@@ -2,6 +2,7 @@
 
 namespace Brera\Product;
 
+use Brera\Environment\Environment;
 use Brera\ProjectionSourceData;
 
 class Product implements ProjectionSourceData
@@ -40,11 +41,18 @@ class Product implements ProjectionSourceData
 	 */
 	public function getAttributeValue($code)
 	{
-		/* TODO: Implement environment support */
-		$environment = [];
-
-		$attribute = $this->attributes->getAttribute($code, $environment);
+		$attribute = $this->attributes->getAttribute($code);
 
 		return $attribute->getValue();
+	}
+
+	/**
+	 * @param Environment $environment
+	 * @return $this
+	 */
+	public function getProductForEnvironment(Environment $environment)
+	{
+		/** @todo: return Product containing only data matching the given environment */
+		return $this;
 	}
 }

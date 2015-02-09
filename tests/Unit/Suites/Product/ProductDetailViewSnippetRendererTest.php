@@ -153,6 +153,9 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
             ->method('getAttributeValue')
             ->with('name')
             ->willReturn($productNameString);
+        $stubProduct->expects($this->any())
+            ->method('extractForEnvironment')
+            ->willReturnSelf();
 
         $transport = '';
         $this->mockSnippetResultList->expects($this->once())
@@ -192,6 +195,10 @@ EOT;
         $stubProduct->expects($this->any())
             ->method('getId')
             ->willReturn($stubProductId);
+
+        $stubProduct->expects($this->any())
+            ->method('getProductForEnvironment')
+            ->willReturnSelf();
 
         return $stubProduct;
     }

@@ -13,16 +13,16 @@ abstract class ProductSnippetRendererCollection implements SnippetRendererCollec
 {
 	/**
 	 * @param ProjectionSourceData $product
-	 * @param EnvironmentSource $environment
+	 * @param EnvironmentSource $environmentSource
 	 * @return SnippetResultList
 	 */
-	final public function render(ProjectionSourceData $product, EnvironmentSource $environment)
+	final public function render(ProjectionSourceData $product, EnvironmentSource $environmentSource)
 	{
 		if (!($product instanceof Product)) {
 			throw new InvalidProjectionDataSourceType('First argument must be instance of Product.');
 		}
 
-		return $this->renderProduct($product, $environment);
+		return $this->renderProduct($product, $environmentSource);
 	}
 
 	/**
