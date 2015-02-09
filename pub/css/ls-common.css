@@ -38,7 +38,7 @@ h1 { font-size: 26px; font-weight: normal; color: #323232; text-transform: upper
 #search_mini_form button:disabled { cursor: default }
 /* IE8 will cough up once it will see :disabled and will ignore the complete selector so it has to be duplicated */
 #search_mini_form button.disabled { cursor: default }
-#search_mini_form button .search-button-image { background: url('../images/icons/icons-36-white.png') -1216px -4px; height: 30px; width: 48px; display: block }
+#search_mini_form button .search-button-image { background: url('../images/icons/icons-36-white.png') -1216px -4px; height: 32px; width: 50px; display: block }
 
 .search-autocomplete { top: 42px; z-index: 200 }
 .search-autocomplete ul { border: 1px solid #ccc; border-top: none; width: 299px; overflow: hidden; position: absolute; left: -17px; background: #ffffff }
@@ -52,7 +52,7 @@ h1 { font-size: 26px; font-weight: normal; color: #323232; text-transform: upper
 .logo { float: left; margin: 19px 40px 28px 0 }
 .logo strong { display: none }
 #searchPanel { float: left; margin-top: 39px }
-.header-container { background: #33aadb url(../images/header-bg.jpg) repeat-x bottom }
+.header-container { background-color: #33aadb }
 .header-panel { padding: 8px 5px 0 16px; white-space: nowrap; font-size: 11px }
 .header-panel > * { float: right; display: block }
 .header-panel > a { padding: 2px; color: #09486d }
@@ -196,7 +196,7 @@ nav { clear: both; color: #ffffff }
 @font-face { font-family: 'GeogrotesqueUltraLight'; src: url('../fonts/geogtq-ul-webfont.eot'); src: url('../fonts/geogtq-ul-webfont.eot?#iefix') format('embedded-opentype'), url('../fonts/geogtq-ul-webfont.woff') format('woff'), url('../fonts/geogtq-ul-webfont.ttf') format('truetype'), url('../fonts/geogtq-ul-webfont.svg#GeogrotesqueUltraLight') format('svg'); font-weight: normal; font-style: normal }
 
 /* Rounded borders */
-.roundedBorder { border-radius: 2px 2px 2px 2px; -moz-border-radius: 2px 2px 2px 2px;  -webkit-border-radius:2px 2px 2px 2px }
+.roundedBorder { border-radius: 2px }
 
 /* Clearer */
 .clearer:after, .c:after, .columns:after, .content form p:after, .form-list li:after, .nav:after, .nav:before,
