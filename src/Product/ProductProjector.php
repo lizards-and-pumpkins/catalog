@@ -31,25 +31,25 @@ class ProductProjector implements Projector
 	}
 
 	/**
-	 * @param ProductSource|ProjectionSourceData $product
+	 * @param ProductSource|ProjectionSourceData $productSource
 	 * @param EnvironmentSource $environmentSource
 	 * @return null
 	 */
-	public function project(ProjectionSourceData $product, EnvironmentSource $environmentSource)
+	public function project(ProjectionSourceData $productSource, EnvironmentSource $environmentSource)
 	{
-		if (!($product instanceof ProductSource)) {
+		if (!($productSource instanceof ProductSource)) {
 			throw new InvalidProjectionDataSourceType('First argument must be instance of Product.');
 		}
-		$this->projectProduct($product, $environmentSource);
+		$this->projectProduct($productSource, $environmentSource);
 	}
 
 	/**
-	 * @param ProductSource $product
+	 * @param ProductSource $productSource
 	 * @param EnvironmentSource $environmentSource
 	 */
-	private function projectProduct(ProductSource $product, EnvironmentSource $environmentSource)
+	private function projectProduct(ProductSource $productSource, EnvironmentSource $environmentSource)
 	{
-		$snippetResultList = $this->rendererCollection->render($product, $environmentSource);
+		$snippetResultList = $this->rendererCollection->render($productSource, $environmentSource);
 		$this->dataPoolWriter->writeSnippetResultList($snippetResultList);
 	}
 }

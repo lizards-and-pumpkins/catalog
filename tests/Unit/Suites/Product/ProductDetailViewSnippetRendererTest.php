@@ -117,9 +117,9 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnASnippetResultList()
     {
-        $stubProduct = $this->getStubProduct();
+        $stubProductSource = $this->getStubProductSource();
 
-        $result = $this->snippetRenderer->render($stubProduct, $this->stubEnvironmentSource);
+        $result = $this->snippetRenderer->render($stubProductSource, $this->stubEnvironmentSource);
         $this->assertSame($this->mockSnippetResultList, $result);
     }
 
@@ -128,13 +128,13 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldAddOneOrMoreSnippetsToTheSnippetList()
     {
-        $stubProduct = $this->getStubProduct();
+        $stubProductSource = $this->getStubProductSource();
 
         $this->mockSnippetResultList->expects($this->atLeastOnce())
             ->method('add')
             ->with($this->isInstanceOf(SnippetResult::class));
 
-        $this->snippetRenderer->render($stubProduct, $this->stubEnvironmentSource);
+        $this->snippetRenderer->render($stubProductSource, $this->stubEnvironmentSource);
     }
 
     /**
@@ -142,20 +142,19 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldRenderBlockContent()
     {
+        $stubEnvironment = $this->getMock(Environment::class);
+        
         $productIdString = 'test-123';
         $productNameString = 'Test Name';
-        $stubProduct = $this->getStubProduct();
-        $stubProduct->getId()->expects($this->any())
+        $stubProductSource = $this->getStubProductSource();
+        $stubProductSource->getId()->expects($this->any())
             ->method('getId')->willReturn($productIdString);
-        $stubProduct->getId()->expects($this->any())
+        $stubProductSource->getId()->expects($this->any())
             ->method('__toString')->willReturn($productIdString);
-        $stubProduct->expects($this->any())
+        $stubProductSource->getProductForEnvironment($stubEnvironment)->expects($this->any())
             ->method('getAttributeValue')
             ->with('name')
             ->willReturn($productNameString);
-        $stubProduct->expects($this->any())
-            ->method('extractForEnvironment')
-            ->willReturnSelf();
 
         $transport = '';
         $this->mockSnippetResultList->expects($this->once())
@@ -164,7 +163,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
                 $transport = $snippetResult;
             });
 
-        $this->snippetRenderer->render($stubProduct, $this->stubEnvironmentSource);
+        $this->snippetRenderer->render($stubProductSource, $this->stubEnvironmentSource);
 
         /** @var $transport SnippetResult */
         $expected = <<<EOT
@@ -182,24 +181,32 @@ EOT;
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|ProductSource
      */
-    private function getStubProduct()
+    private function getStubProductSource()
     {
         $stubProductId = $this->getMockBuilder(ProductId::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $stubProduct = $this->getMockBuilder(ProductSource::class)
+        
+        $stubProduct = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
-
+        
         $stubProduct->expects($this->any())
             ->method('getId')
             ->willReturn($stubProductId);
 
-        $stubProduct->expects($this->any())
-            ->method('getProductForEnvironment')
-            ->willReturnSelf();
+        $stubProductSource = $this->getMockBuilder(ProductSource::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        return $stubProduct;
+        $stubProductSource->expects($this->any())
+            ->method('getId')
+            ->willReturn($stubProductId);
+
+        $stubProductSource->expects($this->any())
+            ->method('getProductForEnvironment')
+            ->willReturn($stubProduct);
+
+        return $stubProductSource;
     }
 }

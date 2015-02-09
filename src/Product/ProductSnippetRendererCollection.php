@@ -12,17 +12,17 @@ use Brera\SnippetRenderer;
 abstract class ProductSnippetRendererCollection implements SnippetRendererCollection
 {
 	/**
-	 * @param ProjectionSourceData $product
+	 * @param ProjectionSourceData $productSource
 	 * @param EnvironmentSource $environmentSource
 	 * @return SnippetResultList
 	 */
-	final public function render(ProjectionSourceData $product, EnvironmentSource $environmentSource)
+	final public function render(ProjectionSourceData $productSource, EnvironmentSource $environmentSource)
 	{
-		if (!($product instanceof ProductSource)) {
+		if (!($productSource instanceof ProductSource)) {
 			throw new InvalidProjectionDataSourceType('First argument must be instance of Product.');
 		}
 
-		return $this->renderProduct($product, $environmentSource);
+		return $this->renderProduct($productSource, $environmentSource);
 	}
 
 	/**
@@ -36,16 +36,16 @@ abstract class ProductSnippetRendererCollection implements SnippetRendererCollec
 	abstract protected function getSnippetRenderers();
 
 	/**
-	 * @param ProductSource $product
-	 * @param EnvironmentSource $environment
+	 * @param ProductSource $productSource
+	 * @param EnvironmentSource $environmentSource
 	 * @return SnippetResultList
 	 */
-	private function renderProduct(ProductSource $product, EnvironmentSource $environment)
+	private function renderProduct(ProductSource $productSource, EnvironmentSource $environmentSource)
 	{
 		$snippetResultList = $this->getSnippetResultList();
 		if ($rendererList = $this->getSnippetRenderers()) {
 			foreach ($rendererList as $renderer) {
-				$snippetResultList->merge($renderer->render($product, $environment));
+				$snippetResultList->merge($renderer->render($productSource, $environmentSource));
 			}
 		}
 

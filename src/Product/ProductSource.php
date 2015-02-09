@@ -36,18 +36,6 @@ class ProductSource implements ProjectionSourceData
 	}
 
 	/**
-	 * @param string $code
-	 * @return string
-	 * @todo: remove this method
-	 */
-	public function getAttributeValue($code)
-	{
-		$attribute = $this->attributes->getAttribute($code);
-
-		return $attribute->getValue();
-	}
-
-	/**
 	 * @param Environment $environment
 	 * @return $this
 	 */
