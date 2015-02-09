@@ -38,6 +38,7 @@ class ProductSource implements ProjectionSourceData
 	/**
 	 * @param string $code
 	 * @return string
+	 * @todo: remove this method
 	 */
 	public function getAttributeValue($code)
 	{
@@ -52,7 +53,7 @@ class ProductSource implements ProjectionSourceData
 	 */
 	public function getProductForEnvironment(Environment $environment)
 	{
-		/** @todo: return Product containing only data matching the given environment */
-		return $this;
+		$attributes = $this->attributes->getAttributesForEnvironment($environment);
+		return new Product($this->getId(), $attributes);
 	}
 }

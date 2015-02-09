@@ -2,6 +2,8 @@
 
 namespace Brera\Product;
 
+use Brera\Environment\Environment;
+
 /**
  * @covers \Brera\Product\ProductSource
  */
@@ -15,21 +17,21 @@ class ProductSourceTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @var ProductSource
 	 */
-	private $product;
+	private $productSource;
 
 	/**
 	 * @var ProductAttributeList|\PHPUnit_Framework_MockObject_MockObject
 	 */
-	private $stubProductAttributeList;
+	private $mockProductAttributeList;
 
 	public function setUp()
 	{
 		$this->stubProductId = $this->getMockBuilder(ProductId::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$this->stubProductAttributeList = $this->getMock(ProductAttributeList::class);
+		$this->mockProductAttributeList = $this->getMock(ProductAttributeList::class, ['getAttributesForEnvironment']);
 
-		$this->product = new ProductSource($this->stubProductId, $this->stubProductAttributeList);
+		$this->productSource = new ProductSource($this->stubProductId, $this->mockProductAttributeList);
 	}
 
 	/**
@@ -37,29 +39,22 @@ class ProductSourceTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function itShouldReturnTheProductId()
 	{
-		$result = $this->product->getId();
+		$result = $this->productSource->getId();
 		$this->assertSame($this->stubProductId, $result);
 	}
 
 	/**
 	 * @test
 	 */
-	public function itShouldReturnTheName()
+	public function itShouldReturnAProductForAnEnvironment()
 	{
-		$testName = 'test-name';
-
-		$stubProductAttribute = $this->getMockBuilder(ProductAttribute::class)
-			->disableOriginalConstructor()
-			->getMock();
-		$stubProductAttribute->expects($this->once())
-			->method('getValue')
-			->willReturn($testName);
-
-		$this->stubProductAttributeList->expects($this->once())
-			->method('getAttribute')
-			->with('name')
-			->willReturn($stubProductAttribute);
-
-		$this->assertSame($testName, $this->product->getAttributeValue('name'));
+		/** @var Environment|\PHPUnit_Framework_MockObject_MockObject $stubEnvironment */
+		$stubEnvironment = $this->getMock(Environment::class);
+		$this->mockProductAttributeList->expects($this->once())
+			->method('getAttributesForEnvironment')
+			->with($stubEnvironment)
+			->willReturn($this->mockProductAttributeList);
+		$result = $this->productSource->getProductForEnvironment($stubEnvironment);
+		$this->assertInstanceOf(Product::class, $result);
 	}
 }
