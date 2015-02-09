@@ -146,15 +146,21 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
         $productIdString = 'test-123';
         $productNameString = 'Test Name';
+        $productUrlKey = 'test-123';
+
         $stubProductSource = $this->getStubProductSource();
         $stubProductSource->getId()->expects($this->any())
-            ->method('getId')->willReturn($productIdString);
+            ->method('getId')
+            ->willReturn($productIdString);
         $stubProductSource->getId()->expects($this->any())
-            ->method('__toString')->willReturn($productIdString);
+            ->method('__toString')
+            ->willReturn($productIdString);
         $stubProductSource->getProductForEnvironment($stubEnvironment)->expects($this->any())
             ->method('getAttributeValue')
-            ->with('name')
-            ->willReturn($productNameString);
+            ->willReturnMap([
+                ['name', $productNameString],
+                ['url_key', $productUrlKey]
+            ]);
 
         $transport = '';
         $this->mockSnippetResultList->expects($this->once())

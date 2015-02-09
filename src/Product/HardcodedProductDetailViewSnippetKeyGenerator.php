@@ -12,30 +12,34 @@ class HardcodedProductDetailViewSnippetKeyGenerator implements SnippetKeyGenerat
 	const KEY_PREFIX = 'product_detail_view';
 
 	/**
-	 * @param mixed|ProductId $productId
+	 * @param mixed|Product $product
 	 * @param Environment $environment
 	 * @throws InvalidSnippetKeyIdentifierException
 	 * @return string
 	 */
-	public function getKeyForEnvironment($productId, Environment $environment)
+	public function getKeyForEnvironment($product, Environment $environment)
 	{
-		if (!($productId instanceof ProductId)) {
+		if (!($product instanceof Product)) {
 			throw new InvalidSnippetKeyIdentifierException(sprintf(
-				'Expected instance of ProductId, but got "%s"',
-				is_scalar($productId) ? $productId : gettype($productId)
+				'Expected instance of Product, but got "%s"',
+				is_scalar($product) ? $product : get_class($product)
 			));
 		}
 
-		return $this->getKeyForProductIdInEnvironment($productId, $environment);
+		return $this->getKeyForProductIdInEnvironment($product, $environment);
 	}
 
 	/**
-	 * @param ProductId $productId
+	 * @param Product $product
 	 * @param Environment $environment
 	 * @return string
 	 */
-	private function getKeyForProductIdInEnvironment(ProductId $productId, Environment $environment)
+	private function getKeyForProductIdInEnvironment(Product $product, Environment $environment)
 	{
-		return sprintf('%s_%s_%s', self::KEY_PREFIX, $environment->getValue(VersionedEnvironment::CODE), $productId);
+		return sprintf(
+			'_%s_%s',
+            preg_replace('#[^a-zA-Z0-9]#', '_', $product->getAttributeValue('url_key')),
+			$environment->getValue(VersionedEnvironment::CODE)
+        );
 	}
 }

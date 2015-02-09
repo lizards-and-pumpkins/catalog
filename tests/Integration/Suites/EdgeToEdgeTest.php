@@ -4,6 +4,8 @@ namespace Brera\Tests\Integration;
 
 use Brera\Environment\EnvironmentSource;
 use Brera\IntegrationTestFactory;
+use Brera\PageBuilder;
+use Brera\PageKeyGenerator;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\PoCSku;
 use Brera\Product\ProductId;
@@ -13,7 +15,8 @@ use Brera\Http\HttpUrl;
 use Brera\Http\HttpRequest;
 use Brera\FrontendFactory;
 use Brera\PoCWebFront;
-use Brera\Product\HardcodedProductDetailViewSnippetKeyGenerator;
+use Brera\SnippetResult;
+use Brera\SnippetResultList;
 
 class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,9 +29,12 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
 		$factory->register(new CommonFactory());
 		$factory->register(new IntegrationTestFactory());
 
-		$sku = PoCSku::fromString('118235-251');
-		$productId = ProductId::fromSku($sku);
-		$productName = 'LED Arm-Signallampe';
+		/* Temporary hack to mock snippet list */
+		$snippetResult = SnippetResult::create('_led_arm_signallampe_1_l', '[]');
+		$snippetResultList = new SnippetResultList();
+		$snippetResultList->add($snippetResult);
+		$dataPoolWriter = $factory->createDataPoolWriter();
+		$dataPoolWriter->writeSnippetResultList($snippetResultList);
 
 		$xml = file_get_contents(__DIR__ . '/../../shared-fixture/product.xml');
 
@@ -39,17 +45,20 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
 		$numberOfMessages = 3;
 		$consumer->process($numberOfMessages);
 
-		$reader = $factory->createDataPoolReader();
-		/** @var HardcodedProductDetailViewSnippetKeyGenerator $keyGenerator */
-		$keyGenerator = $factory->createProductDetailViewSnippetKeyGenerator();
 		/** @var EnvironmentSource $environmentSource */
 		$environmentSource = $factory->createEnvironmentSourceBuilder()->createFromXml($xml);
 		$environment = $environmentSource->extractEnvironments(['version'])[0];
-		$key = $keyGenerator->getKeyForEnvironment($productId, $environment);
-		$html = $reader->getSnippet($key);
+		$url = HttpUrl::fromString('http://example.com/led_arm_signallampe');
 
-		$this->assertContains((string)$sku, $html);
-		$this->assertContains($productName, $html);
+		$pageKeyGenerator = new PageKeyGenerator($environment);
+		$dataPoolReader = $factory->createDataPoolReader();
+
+		$pageBuilder = new PageBuilder($pageKeyGenerator, $dataPoolReader);
+		$page = $pageBuilder->buildPage($url);
+		$html = $page->getBody();
+
+		$this->assertContains('118235-251', $html);
+		$this->assertContains('LED Arm-Signallampe', $html);
 	}
 
 	/**
