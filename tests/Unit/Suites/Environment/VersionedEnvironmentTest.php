@@ -48,7 +48,7 @@ class VersionedEnvironmentTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Brera\Environment\EnvironmentCodeNotFoundException
      * @expectedExceptionMessage No value was not found in the current environment for the code 'foo'
      */
-    public function itShouldThrowAnExceptionWhenGettingTheValueWithANonmatchingCode()
+    public function itShouldThrowAnExceptionWhenGettingTheValueWithANonMatchingCode()
     {
         $this->versionedEnvironment->getValue('foo');
     }
@@ -77,6 +77,7 @@ class VersionedEnvironmentTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnTheVersionIdentifier()
     {
-        $this->assertEquals(VersionedEnvironment::CODE, $this->versionedEnvironment->getId());
+        $expected = VersionedEnvironment::CODE . $this->testVersionValue;
+        $this->assertEquals($expected, $this->versionedEnvironment->getId());
     }
 }

@@ -41,7 +41,7 @@ class VersionedEnvironment implements Environment
      */
     public function getSupportedCodes()
     {
-        return [$this->getId()];
+        return [self::CODE];
     }
 
     /**
@@ -49,6 +49,6 @@ class VersionedEnvironment implements Environment
      */
     public function getId()
     {
-        return self::CODE;
+        return self::CODE . $this->version;
     }
 }
