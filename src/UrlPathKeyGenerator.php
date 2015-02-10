@@ -21,4 +21,11 @@ interface UrlPathKeyGenerator
      * @return string
      */
     public function getUrlKeyForUrlInEnvironment(HttpUrl $url, Environment $environment);
+
+    /**
+     * @param string $rootSnippetKey
+     * @return string
+     * @todo this is not the right class, move to a better place
+     */
+    public function getChildSnippetListKey($rootSnippetKey);
 }

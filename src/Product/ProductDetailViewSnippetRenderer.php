@@ -44,7 +44,9 @@ class ProductDetailViewSnippetRenderer extends BlockSnippetRenderer
             $productInEnvironment = $productSource->getProductForEnvironment($environment);
             $contentSnippet = $this->renderProductInEnvironment($productInEnvironment, $environment);
             $urlSnippet = $this->getProductUrlKeySnippet($contentSnippet, $productInEnvironment, $environment);
+            $childSnippetListSnippet = $this->getChildSnippetListSnippet($contentSnippet);
             $this->getSnippetResultList()->add($contentSnippet);
+            $this->getSnippetResultList()->add($childSnippetListSnippet);
             $this->getSnippetResultList()->add($urlSnippet);
         }
     }
@@ -81,6 +83,17 @@ class ProductDetailViewSnippetRenderer extends BlockSnippetRenderer
     {
         $snippetKey = $this->getUrlSnippetKey($product->getAttributeValue('url_key'), $environment);
         $snippetContent = $targetSnippet->getKey();
+        return SnippetResult::create($snippetKey, $snippetContent);
+    }
+
+    /**
+     * @param SnippetResult $targetSnippet
+     * @return SnippetResult
+     */
+    private function getChildSnippetListSnippet(SnippetResult $targetSnippet)
+    {
+        $snippetKey = $this->getUrlPathKeyGenerator()->getChildSnippetListKey($targetSnippet->getKey());
+        $snippetContent = json_encode([$snippetKey]);
         return SnippetResult::create($snippetKey, $snippetContent);
     }
 

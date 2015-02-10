@@ -185,10 +185,7 @@ class UrlKeyRequestHandler implements HttpRequestHandler
      */
     private function getUrlSnippetKey()
     {
-        return $this->urlPathKeyGenerator->getUrlKeyForPathInEnvironment(
-            $this->url->getPath(),
-            $this->environment
-        );
+        return $this->urlPathKeyGenerator->getUrlKeyForUrlInEnvironment($this->url, $this->environment);
     }
 
     /**
@@ -197,8 +194,9 @@ class UrlKeyRequestHandler implements HttpRequestHandler
      */
     private function getChildSnippetKeys($rootSnippetKey)
     {
+        $childSnippetListKey = $this->urlPathKeyGenerator->getChildSnippetListKey($rootSnippetKey);
         $childSnippetKeys = $this->replacePlaceholdersInKeys(
-            $this->dataPoolReader->getChildSnippetKeys($rootSnippetKey . '_l')
+            $this->dataPoolReader->getChildSnippetKeys($childSnippetListKey)
         );
         return $childSnippetKeys;
     }

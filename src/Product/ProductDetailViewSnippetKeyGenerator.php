@@ -4,9 +4,10 @@ namespace Brera\Product;
 
 use Brera\InvalidSnippetKeyIdentifierException;
 use Brera\Environment\Environment;
+use Brera\PoCUrlPathKeyGenerator;
 use Brera\SnippetKeyGenerator;
 
-class ProductDetailViewSnippetKeyGenerator implements SnippetKeyGenerator
+class ProductDetailViewSnippetKeyGenerator extends PoCUrlPathKeyGenerator implements SnippetKeyGenerator
 {
     const KEY_PREFIX = 'product_detail_view';
 

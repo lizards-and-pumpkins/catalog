@@ -3,7 +3,6 @@
 namespace Brera;
 
 use Brera\Environment\EnvironmentSource;
-use Brera\Environment\VersionedEnvironment;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\PoCSku;
 use Brera\Product\ProductId;
@@ -56,10 +55,8 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
     public function itShouldMakeAnImportedProductAccessibleFromTheFrontend()
     {
         $dataVersion = '1';
-        
-        $factory = new PoCMasterFactory();
-        $factory->register(new CommonFactory());
-        $factory->register(new IntegrationTestFactory());
+
+        $factory = $this->prepareMasterFactory();
         $factory->register(new FrontendFactory());
 
         $xml = file_get_contents(__DIR__ . '/../../shared-fixture/product.xml');
@@ -71,22 +68,19 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $numberOfMessages = 3;
         $consumer->process($numberOfMessages);
         
-        //$reader = $factory->createDataPoolReader();
+        $urlKey = (new XPathParser($xml))->getXmlNodesArrayByXPath('/*/product/attributes/url_key')[0];
         
-        $productUrlKeys = (new XPathParser($xml))->getXmlNodesArrayByXPath('/*/product/attributes/url_key');
-        foreach ($productUrlKeys as $urlKey) {
-            $environment = $factory->createEnvironmentBuilder()->getEnvironments([
-                ['version' => $dataVersion, 'website' => 'ru_de', 'language' => $urlKey['attributes']['language']]
-            ])[0];
-            
-            $httpUrl = HttpUrl::fromString('http://example.com/' . $urlKey['value']);
-            $request = HttpRequest::fromParameters('GET', $httpUrl);
+        $environment = $factory->createEnvironmentBuilder()->getEnvironments([
+            ['version' => $dataVersion, 'website' => 'ru_de', 'language' => $urlKey['attributes']['language']]
+        ])[0];
+        
+        $httpUrl = HttpUrl::fromString('http://example.com/' . $urlKey['value']);
+        $request = HttpRequest::fromParameters('GET', $httpUrl);
 
-            $website = new PoCWebFront($request, $environment, $factory);
-            $response = $website->runWithoutSendingResponse();
+        $website = new PoCWebFront($request, $environment, $factory);
+        $response = $website->runWithoutSendingResponse();
 
-            $this->assertContains('<body>', $response->getBody());
-        }
+        $this->assertContains('<body>', $response->getBody());
     }
 
     /**

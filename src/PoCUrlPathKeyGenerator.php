@@ -9,6 +9,16 @@ use Brera\Http\HttpUrl;
 class PoCUrlPathKeyGenerator implements UrlPathKeyGenerator
 {
     /**
+     * @param HttpUrl $url
+     * @param Environment $environment
+     * @return string
+     */
+    public function getUrlKeyForUrlInEnvironment(HttpUrl $url, Environment $environment)
+    {
+        return $this->getUrlKeyForPathInEnvironment($url->getPath(), $environment);
+    }
+
+    /**
      * @param string $path
      * @param Environment $environment
      * @return string
@@ -27,14 +37,14 @@ class PoCUrlPathKeyGenerator implements UrlPathKeyGenerator
     {
         return ('/' === $path{0} ? '' : '/') . $path;
     }
-    
+
     /**
-     * @param HttpUrl $url
-     * @param Environment $environment
+     * @param string $rootSnippetKey
      * @return string
+     * @todo this is not the right class, move to a better place
      */
-    public function getUrlKeyForUrlInEnvironment(HttpUrl $url, Environment $environment)
+    public function getChildSnippetListKey($rootSnippetKey)
     {
-        return $this->getUrlKeyForPathInEnvironment($url->getPath(), $environment);
+        return $rootSnippetKey . '_l';
     }
 }

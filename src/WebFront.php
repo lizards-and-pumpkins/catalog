@@ -58,16 +58,10 @@ abstract class WebFront
 
         $requestHandler = $router->route($this->request, $this->environment);
 
-        $content = $requestHandler->process();
-
-        // TODO add response locator to differ between Json, html, ...
-
         // TODO put response creation into factory, response depends on http version!
+        
+        return $requestHandler->process();
 
-        $response = new DefaultHttpResponse();
-        $response->setBody($content);
-
-        return $response;
     }
 
     /**

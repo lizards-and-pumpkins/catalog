@@ -4,6 +4,7 @@
 namespace Brera;
 
 use Brera\Environment\Environment;
+use Brera\Http\HttpUrl;
 
 /**
  * @covers \Brera\PoCUrlPathKeyGenerator
@@ -24,13 +25,21 @@ class PoCUrlPathKeyGeneratorTest extends \PHPUnit_Framework_TestCase
      * @test
      * @dataProvider urlKeyDataProvider
      */
-    public function itShouldCreateUrlKeySnippetKeys($path, $expected)
+    public function itShouldCreateUrlKeySnippetForAGivenPath($path, $expected)
     {
+        $stubUrl = $this->getMockBuilder(HttpUrl::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $stubUrl->expects($this->any())
+            ->method('getPath')
+            ->willReturn($path);
+        
         $mockEnvironment = $this->getMock(Environment::class);
         $mockEnvironment->expects($this->any())
             ->method('getId')
             ->willReturn('v1');
-        $result = $this->keyGenerator->getUrlKeyForPathInEnvironment($path, $mockEnvironment);
+        $result = $this->keyGenerator->getUrlKeyForUrlInEnvironment($stubUrl, $mockEnvironment);
+        
         $this->assertEquals($expected . '_v1', $result, "Unexpected url snippet key for path {$path}");
     }
 
