@@ -10,7 +10,9 @@ $mainImage = $this->getMainProductImage();
 ?>
 <div class="main-image-area-wrapper">
     <div id="wrap" style="top:0; position:relative">
-        <a id="main-image" href="<?= $mainImage->getSrc() ?>" class="main-image-area image-zoom cloud-zoom" rel="" style="cursor: move; position: relative; display: block;"><img src="<?= $mainImage->getSrc() ?>" height="340" width="365" itemprop="image"  alt="<?= $mainImage->getLabel() ?>"/></a>
+        <a href="<?= $mainImage->getSrc() ?>" class="main-image-area">
+            <img src="<?= $mainImage->getSrc() ?>" height="340" width="365" itemprop="image"  alt="<?= $mainImage->getLabel() ?>"/>
+        </a>
         <div class="mousetrap" style="z-index: 9; position: absolute; width: 365px; height: 340px; left: 0; top: 0; cursor: move;"></div>
     </div>
 </div>

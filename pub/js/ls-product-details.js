@@ -1,14 +1,12 @@
 jQuery(function ($) {
 
     var ProductDetails = {
-        cloudZoomHeight: 389,
-        cloudZoomWidth: 600,
 
         initiate: function () {
             if (!$('div#productView').length) return;
             ProductDetails.fixIOS5Bug();
             ProductDetails.initiateTabs();
-            ProductDetails.initiateCloudZoom();
+            ProductDetails.initiateZoom();
             ProductDetails.initiateSocialMediaItems();
             ProductDetails.observeSizeDropDown();
             ProductDetails.initiateFullScreenImageViewer();
@@ -61,71 +59,17 @@ jQuery(function ($) {
                 new ModalBox().show(Mage.baseUrl + 'common/index/index/?identifier=versandinfo');
             });
         },
-        /**
-         * Does a check if there are product images and if the first image
-         * has the right dimensions, if so enables the Cloud Zoom functionality
-         */
-        initiateCloudZoom: function () {
-            if ($('a.cloud-zoom').length || $('div#productView div.product-essential div.product-img-box div.more-views a').length) {
-                var zoomImagePath = $('a#main-image').attr('href');
-                zoomImagePath = ($.browser.webkit || $.browser.msie) ? zoomImagePath + '?' + new Date().getTime() : zoomImagePath;
-                var zoomImageWidth, zoomImageHeight;
-                // Creates a temporary image from the main one in order to read the dimensions of that one
-                $('<img/>').attr('src', zoomImagePath).load(function () {
-                    zoomImageWidth = this.width;
-                    zoomImageHeight = this.height;
-                    if (zoomImageWidth >= ProductDetails.cloudZoomWidth || zoomImageHeight >= ProductDetails.cloudZoomHeight) {
-                        ProductDetails.enableCloudZoom();
-                    } else {
-                        $('a#main-image').removeAttr('href');
-                        $('div#productView div.product-essential div.product-img-box div.more-views a.cloud-zoom-gallery').each(ProductDetails.cloudZoomGaleryItemAlternativeClickHandlerInitiator);
-                    }
-                });
-            }
-        },
-        enableCloudZoom: function () {
-            var cloudZoomParameters = {position: 'inside'};
-            if (APPLICATION_MANAGER_SETTINGS.CURRENT_SHOP !== 'cy') {
-                cloudZoomParameters = {
-                    zoomWidth: ProductDetails.cloudZoomWidth,
-                    zoomHeight: ProductDetails.cloudZoomHeight,
-                    position: 'right'
-                };
-                var cloudZoomSuplementaryParameters = $.browser.msie ? {
-                    adjustX: 10,
-                    adjustY: 5,
-                    appendTo: 'div#productView'
-                } : {adjustX: 5};
-                $.extend(cloudZoomParameters, cloudZoomSuplementaryParameters);
-            }
-            $('a#main-image').css('cursor', 'move');
-            $('a.cloud-zoom, a.cloud-zoom-gallery').CloudZoom(cloudZoomParameters);
-            $('.cloud-zoom-gallery').bind('pre-gallery-switch', ProductDetails.resetImageContainer);
-        },
-        /**
-         * Alternative image switcher function, if the medias are to small
-         */
-        cloudZoomGaleryItemAlternativeClickHandlerInitiator: function () {
-            $(this).data('href', $(this).attr('href'));
-            $(this).removeAttr('href');
-            $('a#main-image').css({height: ProductDetails.mediaHeight});
-            var mainImage = $('a#main-image img');
-            $(this).click(function () {
-                mainImage.css({opacity: 0});
-                var imageToLoad = ($.browser.webkit || $.browser.msie) ? $(this).data('href') + '?' + new Date().getTime() : $(this).data('href');
-                mainImage.attr('src', imageToLoad);
-                mainImage.bind('load', ProductDetails.cloudZoomGaleryItemsAlternativeClickHandlerInitiatorImageLoadeHandler);
-                ProductDetails.resetImageContainer();
+
+        initiateZoom: function () {
+            $('.main-image-area').jqzoom({
+                'zoomWidth': 595,
+                'zoomHeight': 389,
+                'xOffset': 5,
+                'title': false,
+                'preloadText': ""
             });
         },
-        cloudZoomGaleryItemsAlternativeClickHandlerInitiatorImageLoadeHandler: function (event) {
-            var mainImage = $('a#main-image img');
-            mainImage.unbind('load', ProductDetails.cloudZoomGaleryItemsAlternativeClickHandlerInitiatorImageLoadeHandler);
-            var imageHeight = mainImage.height();
-            var imageMarginTop = (ProductDetails.mediaHeight - imageHeight) * .5;
-            mainImage.css({marginTop: imageMarginTop});
-            mainImage.stop(true, false).animate({opacity: 1});
-        },
+
         initiateFullScreenImageViewer: function () {
             if (typeof(slideshowSwf) == 'undefined') return;
             $('div#productView div.slideshow').flash({
