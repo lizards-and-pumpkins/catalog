@@ -25,6 +25,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Environment\EnvironmentSourceBuilder
  * @uses   \Brera\DomainEventConsumer
  * @uses   \Brera\DomainEventHandlerLocator
+ * @uses   \Brera\UrlPathKeyGenerator
  * @uses   \Brera\Renderer\BlockSnippetRenderer
  * @uses   \Brera\Product\ProductSourceBuilder
  * @uses   \Brera\Product\ProductProjector
@@ -81,7 +82,15 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $result = $this->commonFactory->createProductProjector();
         $this->assertInstanceOf(ProductProjector::class, $result);
     }
-    
+
+    /**
+     * @test
+     */
+    public function itShouldCreateAnUrlPathKeyGenerator()
+    {
+        $result = $this->commonFactory->createUrlPathKeyGenerator();
+        $this->assertInstanceOf(UrlPathKeyGenerator::class, $result);
+    }
     
 
     /**

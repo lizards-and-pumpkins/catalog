@@ -6,7 +6,7 @@ use Brera\Product\ProductSource;
 use Brera\Product\ProductAttributeNotFoundException;
 use Brera\Renderer\Block;
 
-class ProductDetailsPage extends Block
+class ProductDetailsPageBlock extends Block
 {
     /**
      * @param string $attributeCode

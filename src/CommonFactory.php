@@ -82,12 +82,21 @@ class CommonFactory implements Factory, DomainEventFactory
      */
     public function createProductSnippetRendererCollection()
     {
-        $rendererList = [$this->getMasterFactory()->createProductDetailViewSnippetRenderer()];
-
         return new ProductSnippetRendererCollection(
-            $rendererList,
+            $this->getProductSnippetRendererList(),
             $this->getMasterFactory()->createSnippetResultList()
         );
+    }
+
+    /**
+     * @return SnippetRenderer[]
+     * @todo: move to catalog factory
+     */
+    private function getProductSnippetRendererList()
+    {
+        return [
+            $this->getMasterFactory()->createProductDetailViewSnippetRenderer(),
+        ];
     }
 
     /**
@@ -107,8 +116,17 @@ class CommonFactory implements Factory, DomainEventFactory
         return new ProductDetailViewSnippetRenderer(
             $this->getMasterFactory()->createSnippetResultList(),
             $this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator(),
+            $this->getMasterFactory()->createUrlPathKeyGenerator(),
             $this->getMasterFactory()->createThemeLocator()
         );
+    }
+
+    /**
+     * @return PoCUrlPathKeyGenerator
+     */
+    public function createUrlPathKeyGenerator()
+    {
+        return new PoCUrlPathKeyGenerator();
     }
 
     /**

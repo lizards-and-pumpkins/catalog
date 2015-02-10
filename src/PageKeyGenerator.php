@@ -34,14 +34,4 @@ class PageKeyGenerator
 
         return $key;
     }
-
-    /**
-     * @param HttpUrl $url
-     *
-     * @return string
-     */
-    public function getKeyForSnippetList(HttpUrl $url)
-    {
-        return $this->getKeyForUrl($url) . '_l';
-    }
 }

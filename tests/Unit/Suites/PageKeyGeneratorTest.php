@@ -35,11 +35,6 @@ class PageKeyGeneratorTest extends \PHPUnit_Framework_TestCase
             'string',
             $this->pageKeyGenerator->getKeyForUrl($url)
         );
-
-        $this->assertInternalType(
-            'string',
-            $this->pageKeyGenerator->getKeyForSnippetList($url)
-        );
     }
 
     /**
@@ -52,19 +47,6 @@ class PageKeyGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             '_product_html_1',
             $this->pageKeyGenerator->getKeyForUrl($url)
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function itShouldGenerateAKeyForSnippetListFromAnEnvironmentAndUrl()
-    {
-        $url = HttpUrl::fromString('http://example.com/product.html');
-
-        $this->assertEquals(
-            '_product_html_1_l',
-            $this->pageKeyGenerator->getKeyForSnippetList($url)
         );
     }
 }

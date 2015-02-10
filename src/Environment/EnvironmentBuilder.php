@@ -11,7 +11,7 @@ class EnvironmentBuilder
     private $registeredEnvironmentDecorators = [];
 
     /**
-     * @param array $environmentSourceDataSets
+     * @param string[] $environmentSourceDataSets
      * @return Environment[]
      */
     public function getEnvironments(array $environmentSourceDataSets)

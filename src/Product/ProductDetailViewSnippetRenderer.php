@@ -29,6 +29,11 @@ class ProductDetailViewSnippetRenderer extends BlockSnippetRenderer
         return $this->getSnippetResultList();
     }
 
+    final protected function getSnippetLayoutHandle()
+    {
+        return self::LAYOUT_HANDLE;
+    }
+
     /**
      * @param ProductSource $productSource
      * @param EnvironmentSource $environmentSource
@@ -37,8 +42,10 @@ class ProductDetailViewSnippetRenderer extends BlockSnippetRenderer
     {
         foreach ($environmentSource->extractEnvironments($this->getEnvironmentParts()) as $environment) {
             $productInEnvironment = $productSource->getProductForEnvironment($environment);
-            $snippet = $this->renderProductInEnvironment($productInEnvironment, $environment);
-            $this->getSnippetResultList()->add($snippet);
+            $contentSnippet = $this->renderProductInEnvironment($productInEnvironment, $environment);
+            $urlSnippet = $this->getProductUrlKeySnippet($contentSnippet, $productInEnvironment, $environment);
+            $this->getSnippetResultList()->add($contentSnippet);
+            $this->getSnippetResultList()->add($urlSnippet);
         }
     }
 
@@ -51,7 +58,29 @@ class ProductDetailViewSnippetRenderer extends BlockSnippetRenderer
     {
         $layoutXmlPath = $this->getPathToLayoutXmlFile($environment);
         $snippetContent = $this->getSnippetContent($layoutXmlPath, $product);
-        $snippetKey = $this->getKey($product->getId(), $environment);
+        $snippetKey = $this->getContentSnippetKey($product->getId(), $environment);
+        return SnippetResult::create($snippetKey, $snippetContent);
+    }
+
+    /**
+     * @return array
+     */
+    private function getEnvironmentParts()
+    {
+        // todo: get environment parts from outermost block
+        return ['version', 'website', 'language'];
+    }
+
+    /**
+     * @param SnippetResult $targetSnippet
+     * @param Product $product
+     * @param Environment $environment
+     * @return SnippetResult
+     */
+    private function getProductUrlKeySnippet(SnippetResult $targetSnippet, Product $product, Environment $environment)
+    {
+        $snippetKey = $this->getUrlSnippetKey($product->getAttributeValue('url_key'), $environment);
+        $snippetContent = $targetSnippet->getKey();
         return SnippetResult::create($snippetKey, $snippetContent);
     }
 
@@ -60,21 +89,18 @@ class ProductDetailViewSnippetRenderer extends BlockSnippetRenderer
      * @param Environment $environment
      * @return string
      */
-    private function getKey(ProductId $productId, Environment $environment)
+    private function getContentSnippetKey(ProductId $productId, Environment $environment)
     {
-        return $this->getKeyGenerator()->getKeyForEnvironment($productId, $environment);
+        return $this->getSnippetKeyGenerator()->getKeyForEnvironment($productId, $environment);
     }
 
     /**
-     * @return array
+     * @param string $urlKey
+     * @param Environment $environment
+     * @return string
      */
-    private function getEnvironmentParts()
+    private function getUrlSnippetKey($urlKey, Environment $environment)
     {
-        return [];
-    }
-
-    protected function getSnippetLayoutHandle()
-    {
-        return self::LAYOUT_HANDLE;
+        return $this->getUrlPathKeyGenerator()->getUrlKeyForPathInEnvironment($urlKey, $environment);
     }
 }

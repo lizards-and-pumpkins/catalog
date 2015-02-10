@@ -49,6 +49,6 @@ class VersionedEnvironment implements Environment
      */
     public function getId()
     {
-        return self::CODE . $this->version;
+        return 'v:' . $this->version;
     }
 }

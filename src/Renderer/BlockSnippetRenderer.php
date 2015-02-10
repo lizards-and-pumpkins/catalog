@@ -8,6 +8,7 @@ use Brera\SnippetKeyGenerator;
 use Brera\SnippetRenderer;
 use Brera\SnippetResultList;
 use Brera\ThemeLocator;
+use Brera\UrlPathKeyGenerator;
 
 abstract class BlockSnippetRenderer implements SnippetRenderer
 {
@@ -19,7 +20,12 @@ abstract class BlockSnippetRenderer implements SnippetRenderer
     /**
      * @var SnippetKeyGenerator
      */
-    private $keyGenerator;
+    private $snippetKeyGenerator;
+
+    /**
+     * @var UrlPathKeyGenerator
+     */
+    private $urlPathKeyGenerator;
 
     /**
      * @var ThemeLocator
@@ -28,16 +34,19 @@ abstract class BlockSnippetRenderer implements SnippetRenderer
 
     /**
      * @param SnippetResultList $resultList
-     * @param SnippetKeyGenerator $keyGenerator
+     * @param SnippetKeyGenerator $snippetKeyGenerator
+     * @param UrlPathKeyGenerator $urlPathKeyGenerator
      * @param ThemeLocator $themeLocator
      */
     public function __construct(
         SnippetResultList $resultList,
-        SnippetKeyGenerator $keyGenerator,
+        SnippetKeyGenerator $snippetKeyGenerator,
+        UrlPathKeyGenerator $urlPathKeyGenerator,
         ThemeLocator $themeLocator
     ) {
         $this->resultList = $resultList;
-        $this->keyGenerator = $keyGenerator;
+        $this->snippetKeyGenerator = $snippetKeyGenerator;
+        $this->urlPathKeyGenerator = $urlPathKeyGenerator;
         $this->themeLocator = $themeLocator;
     }
 
@@ -148,9 +157,9 @@ abstract class BlockSnippetRenderer implements SnippetRenderer
     /**
      * @return SnippetKeyGenerator
      */
-    final protected function getKeyGenerator()
+    final protected function getSnippetKeyGenerator()
     {
-        return $this->keyGenerator;
+        return $this->snippetKeyGenerator;
     }
 
     /**
@@ -159,5 +168,13 @@ abstract class BlockSnippetRenderer implements SnippetRenderer
     final protected function getSnippetResultList()
     {
         return $this->resultList;
+    }
+
+    /**
+     * @return UrlPathKeyGenerator
+     */
+    final public function getUrlPathKeyGenerator()
+    {
+        return $this->urlPathKeyGenerator;
     }
 }

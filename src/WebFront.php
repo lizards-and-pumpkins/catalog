@@ -2,6 +2,7 @@
 
 namespace Brera;
 
+use Brera\Environment\Environment;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpResponse;
 use Brera\Http\HttpRouterChain;
@@ -17,42 +18,54 @@ abstract class WebFront
      * @var HttpRequest
      */
     private $request;
+    
+    /**
+     * @var Environment
+     */
+    private $environment;
 
     /**
      * @param HttpRequest $request
+     * @param Environment $environment
      * @param MasterFactory $factory
      */
-    public function __construct(HttpRequest $request, MasterFactory $factory = null)
+    public function __construct(HttpRequest $request, Environment $environment, MasterFactory $factory = null)
     {
         $this->request = $request;
+        $this->environment = $environment;
         $this->masterFactory = $factory;
     }
 
     /**
-     * @param bool $isProductive
      * @return HttpResponse
      */
-    public function run($isProductive = true)
+    public function run()
     {
-        $this->buildFactory();
+        $response = $this->runWithoutSendingResponse();
+        $response->send();
+        return $response;
+    }
+
+    /**
+     * @return HttpResponse
+     */
+    public function runWithoutSendingResponse()
+    {
+        $this->buildFactoryIfItWasNotInjected();
 
         $router = new HttpRouterChain();
         $this->registerRouters($router);
 
-        $requestHandler = $router->route($this->request);
+        $requestHandler = $router->route($this->request, $this->environment);
 
         $content = $requestHandler->process();
 
-     // TODO add response locator to differ between Json, html, ...
+        // TODO add response locator to differ between Json, html, ...
 
-     // TODO put response creation into factory, response depends on http version!
+        // TODO put response creation into factory, response depends on http version!
 
         $response = new DefaultHttpResponse();
         $response->setBody($content);
-
-        if ($isProductive) {
-            $response->send();
-        }
 
         return $response;
     }
@@ -60,12 +73,12 @@ abstract class WebFront
     /**
      * @return MasterFactory
      */
-    abstract protected function createMasterFactory();
+    abstract protected function createMasterFactoryIfNotInjected();
 
     /**
      * @param MasterFactory $factory
      */
-    abstract protected function registerFactories(MasterFactory $factory);
+    abstract protected function registerFactoriesIfMasterFactoryWasNotInjected(MasterFactory $factory);
 
     /**
      * @param HttpRouterChain $router
@@ -75,13 +88,13 @@ abstract class WebFront
     /**
      * @return null
      */
-    private function buildFactory()
+    private function buildFactoryIfItWasNotInjected()
     {
         if (null !== $this->masterFactory) {
             return null;
         }
 
-        $this->masterFactory = $this->createMasterFactory();
+        $this->masterFactory = $this->createMasterFactoryIfNotInjected();
 
         if (!($this->masterFactory instanceof MasterFactory)) {
             throw new \InvalidArgumentException(
@@ -92,7 +105,7 @@ abstract class WebFront
             );
         }
 
-        $this->registerFactories($this->masterFactory);
+        $this->registerFactoriesIfMasterFactoryWasNotInjected($this->masterFactory);
     }
 
     /**
@@ -114,5 +127,21 @@ abstract class WebFront
     public function getMasterFactory()
     {
         return $this->masterFactory;
+    }
+
+    /**
+     * @return Environment
+     */
+    final protected function getEnvironment()
+    {
+        return $this->environment;
+    }
+
+    /**
+     * @return HttpRequest
+     */
+    final protected function getRequest()
+    {
+        return $this->request;
     }
 }
