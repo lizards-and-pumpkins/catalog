@@ -10,7 +10,8 @@
         convertErrorsToExceptions="true"
         convertNoticesToExceptions="true"
         convertWarningsToExceptions="true"
-        forceCoversAnnotation="true"
+        forceCoversAnnotation="false"
+        checkForUnintentionallyCoveredCode="false"
         mapTestClassNameToCoveredClassName="false"
         processIsolation="false"
         stopOnError="false"
@@ -20,9 +21,13 @@
         timeoutForSmallTests="1"
         timeoutForMediumTests="10"
         timeoutForLargeTests="60"
-        checkForUnintentionallyCoveredCode="false"
         verbose="false">
-    <testsuite name="Brera Proof Of Concept Integration Tests">
-        <directory>.</directory>
+    <testsuite name="Brera Integration Tests">
+        <directory>Suites</directory>
     </testsuite>
+    <filter>
+        <whitelist>
+            <directory>../../src</directory>
+        </whitelist>
+    </filter>
 </phpunit>
