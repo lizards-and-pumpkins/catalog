@@ -6,6 +6,7 @@ use Brera\Environment\EnvironmentBuilder;
 use Brera\Environment\EnvironmentSourceBuilder;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
+use Brera\Product\ProductSnippetRendererCollection;
 use Brera\Product\ProductSourceBuilder;
 use Brera\KeyValue\KeyValueStore;
 use Brera\Queue\Queue;
@@ -17,7 +18,6 @@ use Brera\Product\ProductImportDomainEventHandler;
 use Brera\Product\ProductProjector;
 use Brera\Product\ProductDetailViewSnippetRenderer;
 use Brera\Product\HardcodedProductDetailViewSnippetKeyGenerator;
-use Brera\Product\HardcodedProductSnippetRendererCollection;
 use Psr\Log\LoggerInterface;
 
 class CommonFactory implements Factory, DomainEventFactory
@@ -77,14 +77,14 @@ class CommonFactory implements Factory, DomainEventFactory
     }
 
     /**
-     * @return HardcodedProductSnippetRendererCollection
+     * @return ProductSnippetRendererCollection
      * @todo: move to catalog factory
      */
     public function createProductSnippetRendererCollection()
     {
         $rendererList = [$this->getMasterFactory()->createProductDetailViewSnippetRenderer()];
 
-        return new HardcodedProductSnippetRendererCollection(
+        return new ProductSnippetRendererCollection(
             $rendererList,
             $this->getMasterFactory()->createSnippetResultList()
         );

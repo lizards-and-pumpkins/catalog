@@ -10,7 +10,7 @@ use Brera\ProjectionSourceData;
 
 /**
  * @covers \Brera\Product\ProductProjector
- * @uses \Brera\Product\ProductSnippetRendererCollection
+ * @uses   \Brera\Product\ProductSnippetRendererCollection
  */
 class ProductProjectorTest extends \PHPUnit_Framework_TestCase
 {
@@ -38,15 +38,16 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubSnippetResultList = $this->getMock(SnippetResultList::class);
         $this->stubDataPoolWriter = $this->getMockBuilder(DataPoolWriter::class)
-        ->setMethods(['writeSnippetResultList'])
-        ->disableOriginalConstructor()
-        ->getMock();
-        $this->stubProductSnippetRendererCollection = $this->getMockBuilder(
-            ProductSnippetRendererCollection::class
-        )->getMockForAbstractClass();
+            ->setMethods(['writeSnippetResultList'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->stubProductSnippetRendererCollection = $this->getMockBuilder(ProductSnippetRendererCollection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->stubProductSnippetRendererCollection->expects($this->any())
-        ->method('getSnippetResultList')
-        ->willReturn($this->stubSnippetResultList);
+            ->method('render')
+            ->willReturn($this->stubSnippetResultList);
 
         $this->projector = new ProductProjector(
             $this->stubProductSnippetRendererCollection,
@@ -60,16 +61,16 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
     public function itShouldSetSnippetResultListOnDataPoolWriter()
     {
         $this->stubDataPoolWriter->expects($this->once())
-        ->method('writeSnippetResultList')
-        ->with($this->stubSnippetResultList);
+            ->method('writeSnippetResultList')
+            ->with($this->stubSnippetResultList);
 
         $stubProduct = $this->getMockBuilder(ProductSource::class)
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $stubEnvironment = $this->getMockBuilder(EnvironmentSource::class)
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->projector->project($stubProduct, $stubEnvironment);
     }
@@ -81,8 +82,8 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
     public function itShouldThrowIfTheDataSourceTypeIsNotProduct()
     {
         $stubEnvironment = $this->getMockBuilder(EnvironmentSource::class)
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $invalidDataSourceType = $this->getMock(ProjectionSourceData::class);
 
         $this->projector->project($invalidDataSourceType, $stubEnvironment);
