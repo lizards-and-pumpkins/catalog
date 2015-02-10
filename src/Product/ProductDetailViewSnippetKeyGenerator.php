@@ -36,6 +36,6 @@ class ProductDetailViewSnippetKeyGenerator implements SnippetKeyGenerator
      */
     private function getKeyForProductIdInEnvironment(ProductId $productId, Environment $environment)
     {
-        return sprintf('%s_%s_%s', self::KEY_PREFIX, $environment->getValue(VersionedEnvironment::CODE), $productId);
+        return sprintf('%s_%s_%s', self::KEY_PREFIX, $productId, $environment->getId());
     }
 }
