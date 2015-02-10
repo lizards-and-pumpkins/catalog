@@ -17,7 +17,7 @@ use Brera\Product\ProductImportDomainEvent;
 use Brera\Product\ProductImportDomainEventHandler;
 use Brera\Product\ProductProjector;
 use Brera\Product\ProductDetailViewSnippetRenderer;
-use Brera\Product\HardcodedProductDetailViewSnippetKeyGenerator;
+use Brera\Product\ProductDetailViewSnippetKeyGenerator;
 use Psr\Log\LoggerInterface;
 
 class CommonFactory implements Factory, DomainEventFactory
@@ -112,12 +112,12 @@ class CommonFactory implements Factory, DomainEventFactory
     }
 
     /**
-     * @return HardcodedProductDetailViewSnippetKeyGenerator
+     * @return ProductDetailViewSnippetKeyGenerator
      * @todo: move to catalog factory
      */
     public function createProductDetailViewSnippetKeyGenerator()
     {
-        return new HardcodedProductDetailViewSnippetKeyGenerator();
+        return new ProductDetailViewSnippetKeyGenerator();
     }
 
     /**

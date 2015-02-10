@@ -23,7 +23,7 @@ class ProductSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
     private $mockRenderer2;
 
     /**
-     * @var HardcodedProductSnippetRendererCollection
+     * @var ProductSnippetRendererCollection
      */
     private $rendererCollection;
 

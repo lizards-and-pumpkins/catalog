@@ -15,7 +15,7 @@ use Brera\Renderer\ThemeProductRenderingTestTrait;
  * @covers \Brera\Product\ProductDetailViewSnippetRenderer
  * @covers \Brera\Renderer\BlockSnippetRenderer
  * @uses   \Brera\SnippetResult
- * @uses   \Brera\Product\HardcodedProductDetailViewSnippetKeyGenerator
+ * @uses   \Brera\Product\ProductDetailViewSnippetKeyGenerator
  * @uses   \Brera\Product\Block\ProductDetailsPage
  * @uses   \Brera\Renderer\LayoutReader
  * @uses   \Brera\Renderer\Block
@@ -55,7 +55,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
     {
         $this->createTemporaryThemeFiles();
 
-        $stubKeyGenerator = $this->getMock(HardcodedProductDetailViewSnippetKeyGenerator::class, ['getKey']);
+        $stubKeyGenerator = $this->getMock(ProductDetailViewSnippetKeyGenerator::class, ['getKey']);
         $stubKeyGenerator->expects($this->any())
             ->method('getKey')
             ->willReturn('test');

@@ -26,7 +26,7 @@ class ProductDetailViewSnippetRenderer extends BlockSnippetRenderer
         }
         $this->renderProduct($productSource, $environmentSource);
 
-        return $this->resultList;
+        return $this->getSnippetResultList();
     }
 
     /**
@@ -38,7 +38,7 @@ class ProductDetailViewSnippetRenderer extends BlockSnippetRenderer
         foreach ($environmentSource->extractEnvironments($this->getEnvironmentParts()) as $environment) {
             $productInEnvironment = $productSource->getProductForEnvironment($environment);
             $snippet = $this->renderProductInEnvironment($productInEnvironment, $environment);
-            $this->resultList->add($snippet);
+            $this->getSnippetResultList()->add($snippet);
         }
     }
 
@@ -62,7 +62,7 @@ class ProductDetailViewSnippetRenderer extends BlockSnippetRenderer
      */
     private function getKey(ProductId $productId, Environment $environment)
     {
-        return $this->keyGenerator->getKeyForEnvironment($productId, $environment);
+        return $this->getKeyGenerator()->getKeyForEnvironment($productId, $environment);
     }
 
     /**

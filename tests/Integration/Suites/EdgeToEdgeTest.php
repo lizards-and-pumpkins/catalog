@@ -8,7 +8,7 @@ use Brera\Product\PoCSku;
 use Brera\Product\ProductId;
 use Brera\Http\HttpUrl;
 use Brera\Http\HttpRequest;
-use Brera\Product\HardcodedProductDetailViewSnippetKeyGenerator;
+use Brera\Product\ProductDetailViewSnippetKeyGenerator;
 
 class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,7 +35,7 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $consumer->process($numberOfMessages);
 
         $reader = $factory->createDataPoolReader();
-        /** @var HardcodedProductDetailViewSnippetKeyGenerator $keyGenerator */
+        /** @var ProductDetailViewSnippetKeyGenerator $keyGenerator */
         $keyGenerator = $factory->createProductDetailViewSnippetKeyGenerator();
         /** @var EnvironmentSource $environmentSource */
         $environmentSource = $factory->createEnvironmentSourceBuilder()->createFromXml($xml);

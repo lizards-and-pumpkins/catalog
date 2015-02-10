@@ -28,7 +28,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Renderer\BlockSnippetRenderer
  * @uses   \Brera\Product\ProductSourceBuilder
  * @uses   \Brera\Product\ProductProjector
- * @uses   \Brera\Product\HardcodedProductSnippetRendererCollection
+ * @uses   \Brera\Product\ProductSnippetRendererCollection
  * @uses   \Brera\Product\ProductImportDomainEventHandler
  * @uses   \Brera\Product\ProductImportDomainEvent
  * @uses   \Brera\Product\CatalogImportDomainEvent
