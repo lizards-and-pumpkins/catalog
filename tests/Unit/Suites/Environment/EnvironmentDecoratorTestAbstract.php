@@ -64,7 +64,7 @@ abstract class EnvironmentDecoratorTestAbstract extends \PHPUnit_Framework_TestC
     /**
      * @return EnvironmentDecorator
      */
-    final protected function getEnvironmentDecoratorUnderTest()
+    final protected function getDecoratorUnderTest()
     {
         return $this->decorator;
     }
@@ -74,7 +74,7 @@ abstract class EnvironmentDecoratorTestAbstract extends \PHPUnit_Framework_TestC
      */
     final public function itShouldBeAnEnvironment()
     {
-        $this->assertInstanceOf(Environment::class, $this->getEnvironmentDecoratorUnderTest());
+        $this->assertInstanceOf(Environment::class, $this->getDecoratorUnderTest());
     }
 
     /**
@@ -96,7 +96,7 @@ abstract class EnvironmentDecoratorTestAbstract extends \PHPUnit_Framework_TestC
         $this->getMockDecoratedEnvironment()->expects($this->once())
             ->method('getValue')
             ->with($this->decoratedComponentCode);
-        $this->getEnvironmentDecoratorUnderTest()->getValue($this->decoratedComponentCode);
+        $this->getDecoratorUnderTest()->getValue($this->decoratedComponentCode);
     }
 
 
@@ -125,7 +125,7 @@ abstract class EnvironmentDecoratorTestAbstract extends \PHPUnit_Framework_TestC
     {
         $this->assertContains(
             $this->getDecoratorUnderTestCode(),
-            $this->getEnvironmentDecoratorUnderTest()->getSupportedCodes()
+            $this->getDecoratorUnderTest()->getSupportedCodes()
         );
     }
 
@@ -139,23 +139,29 @@ abstract class EnvironmentDecoratorTestAbstract extends \PHPUnit_Framework_TestC
         $result = $method->invoke($this->decorator);
         $this->assertEquals($this->getStubEnvironmentData(), $result);
     }
-    
+
     /**
      * @test
      */
-    public function itShouldReturnTheIdentifier()
+    public function itShouldIncludeTheComponentIdInTheIdentifier()
     {
-        $this->defaultGetIdentifierImplementationTest();
+        $expected = $this->decoratedComponentCode . '123';
+        $this->mockDecoratedEnvironment->expects($this->once())
+            ->method('getId')
+            ->willReturn($expected);
+        $this->assertContains($expected, $this->getDecoratorUnderTest()->getId());
     }
 
-    private function defaultGetIdentifierImplementationTest()
+    /**
+     * @test
+     */
+    public function itShouldReturnAnIdentifierContainingTheCodeAndValue()
     {
-        $this->assertEquals(
-            $this->getDecoratorUnderTestCode(),
-            $this->getEnvironmentDecoratorUnderTest()->getId()
-        );
+        $code = $this->getDecoratorUnderTestCode();
+        $expected = $code . $this->getDecoratorUnderTest()->getValue($code);
+        $this->assertContains($expected, $this->getDecoratorUnderTest()->getId());
     }
-
+    
     /**
      * @test
      */
@@ -170,7 +176,7 @@ abstract class EnvironmentDecoratorTestAbstract extends \PHPUnit_Framework_TestC
         $stubEnvironmentData = $this->getStubEnvironmentData();
         $this->assertSame(
             $stubEnvironmentData[$code],
-            $this->getEnvironmentDecoratorUnderTest()->getValue($code)
+            $this->getDecoratorUnderTest()->getValue($code)
         );
     }
 }
