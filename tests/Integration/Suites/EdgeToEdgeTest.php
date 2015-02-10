@@ -1,18 +1,13 @@
 <?php
 
-namespace Brera\Tests\Integration;
+namespace Brera;
 
 use Brera\Environment\EnvironmentSource;
-use Brera\IntegrationTestFactory;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\PoCSku;
 use Brera\Product\ProductId;
-use Brera\PoCMasterFactory;
-use Brera\CommonFactory;
 use Brera\Http\HttpUrl;
 use Brera\Http\HttpRequest;
-use Brera\FrontendFactory;
-use Brera\PoCWebFront;
 use Brera\Product\HardcodedProductDetailViewSnippetKeyGenerator;
 
 class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
@@ -78,5 +73,42 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $response = $website->run(false);
 
         $this->assertContains($html, $response->getBody());
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldMakeAnImportedProductAccessibleFromTheFrontend()
+    {
+        $dataVersion = 123;
+        
+        $factory = new PoCMasterFactory();
+        $factory->register(new CommonFactory());
+        $factory->register(new IntegrationTestFactory());
+        $factory->register(new FrontendFactory());
+
+        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/product.xml');
+
+        $queue = $factory->getEventQueue();
+        $queue->add(new CatalogImportDomainEvent($xml));
+
+        $consumer = $factory->createDomainEventConsumer();
+        $numberOfMessages = 3;
+        $consumer->process($numberOfMessages);
+        
+        $productUrlKeys = (new XPathParser($xml))->getXmlNodesArrayByXPath('/*/product/attributes/url_key');
+        foreach ($productUrlKeys as $urlKey) {
+            $environment = $factory->createEnvironmentBuilder()->getEnvironments([
+                array_merge($urlKey['attributes'], ['version' => $dataVersion])
+            ])[0];
+            
+            $httpUrl = HttpUrl::fromString('http://example.com/' . $urlKey['value']);
+            $request = HttpRequest::fromParameters('GET', $httpUrl);
+
+            $website = new PoCWebFront($request, $factory);
+            $response = $website->run(false);
+
+            $this->assertContains('<body>', $response->getBody());
+        }
     }
 }
