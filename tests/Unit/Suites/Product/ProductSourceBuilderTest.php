@@ -43,6 +43,28 @@ class ProductSourceBuilderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @expectedException \Brera\Product\ProductAttributeNotFoundException
+     * @expectedExceptionMessage Can not find an attribute with code "size".
+     */
+    public function itShouldCreateAProductFromXmlIgnoringAssociatedProductsAndTheirAttributes()
+    {
+        $xml = file_get_contents(__DIR__ . '/../../../shared-fixture/product.xml');
+        $domDocument = new \DOMDocument();
+        $domDocument->loadXML($xml);
+        $firstNode = $domDocument->getElementsByTagName('product')->item(1);
+        $firstNodeXml = $domDocument->saveXML($firstNode);
+
+        $product = $this->builder->createProductSourceFromXml($firstNodeXml);
+
+        $this->assertInstanceOf(ProductSource::class, $product);
+        $this->assertEquals('218765-333', $product->getId());
+        $this->assertEquals('12.95', $product->getAttributeValue('price'));
+
+        $product->getAttributeValue('size');
+    }
+
+    /**
+     * @test
      * @expectedException \Brera\Product\InvalidNumberOfSkusPerImportedProductException
      * @expectedExceptionMessage There must be exactly one SKU in the imported product XML
      */
