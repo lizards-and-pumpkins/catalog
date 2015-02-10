@@ -7,9 +7,6 @@ use Brera\PoCMasterFactory;
 use Brera\CommonFactory;
 use Brera\Product\ProductSourceBuilder;
 
-/**
- * @coversNothing
- */
 class EnvironmentTest extends \PHPUnit_Framework_TestCase
 {
     /**
