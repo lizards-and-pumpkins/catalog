@@ -14,12 +14,12 @@ class ProductSourceBuilder
     {
         $parser = new XPathParser($xml);
 
-        $skuNode = $parser->getXmlNodesArrayByXPath('//product/@sku');
+        $skuNode = $parser->getXmlNodesArrayByXPath('/product/@sku');
         $skuString = $this->getSkuStringFromDomNodeArray($skuNode);
         $sku = PoCSku::fromString($skuString);
         $productId = ProductId::fromSku($sku);
 
-        $attributeNodes = $parser->getXmlNodesArrayByXPath('//product/attributes/*');
+        $attributeNodes = $parser->getXmlNodesArrayByXPath('/product/attributes/*');
         $attributeList = ProductAttributeList::fromArray($attributeNodes);
 
         return new ProductSource($productId, $attributeList);
