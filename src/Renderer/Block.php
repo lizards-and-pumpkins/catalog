@@ -81,8 +81,10 @@ class Block
      * @param string $string
      * @return string
      */
+    // @codingStandardsIgnoreStart
     public function __($string)
     {
+        // @codingStandardsIgnoreEnd
         return $string;
     }
 }
