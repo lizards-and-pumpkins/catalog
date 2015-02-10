@@ -22,8 +22,8 @@
         timeoutForLargeTests="60"
         checkForUnintentionallyCoveredCode="true"
         verbose="false">
-    <testsuite name="Brera Proof Of Concept Unit Tests">
-        <directory>.</directory>
+    <testsuite name="Brera Unit Tests">
+        <directory>Suites</directory>
     </testsuite>
     <filter>
         <whitelist>
