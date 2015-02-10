@@ -179,13 +179,7 @@ class CommonFactory implements Factory, DomainEventFactory
     private function getKeyValueStore()
     {
         if (null === $this->keyValueStore) {
-            try {
-                $this->keyValueStore = $this->getMasterFactory()->createKeyValueStore();
-            } catch (UndefinedFactoryMethodException $e) {
-                throw new UndefinedFactoryMethodException(
-                    "Unable to create KeyValueStore. Is the factory registered? " . $e->getMessage()
-                );
-            }
+            $this->keyValueStore = $this->callExternalCreateMethod('KeyValueStore');
         }
 
         return $this->keyValueStore;
@@ -218,13 +212,7 @@ class CommonFactory implements Factory, DomainEventFactory
     public function getEventQueue()
     {
         if (null === $this->eventQueue) {
-            try {
-                $this->eventQueue = $this->getMasterFactory()->createEventQueue();
-            } catch (UndefinedFactoryMethodException $e) {
-                throw new UndefinedFactoryMethodException(
-                    "Unable to create EventQueue. Is the factory registered? " . $e->getMessage()
-                );
-            }
+            $this->eventQueue = $this->callExternalCreateMethod('EventQueue');
         }
 
         return $this->eventQueue;
@@ -245,15 +233,26 @@ class CommonFactory implements Factory, DomainEventFactory
     private function getLogger()
     {
         if (null === $this->logger) {
-            try {
-                $this->logger = $this->getMasterFactory()->createLogger();
-            } catch (UndefinedFactoryMethodException $e) {
-                throw new UndefinedFactoryMethodException(
-                    "Unable to create Logger. Is the factory registered? " . $e->getMessage()
-                );
-            }
+            $this->logger = $this->callExternalCreateMethod('Logger');
         }
 
         return $this->logger;
+    }
+
+    /**
+     * @param string $targetObjectName
+     * @return object
+     * @throws UndefinedFactoryMethodException
+     */
+    private function callExternalCreateMethod($targetObjectName)
+    {
+        try {
+            $instance = $this->getMasterFactory()->{'create' . $targetObjectName}();
+        } catch (UndefinedFactoryMethodException $e) {
+            throw new UndefinedFactoryMethodException(
+                "Unable to create {$targetObjectName}. Is the factory registered? " . $e->getMessage()
+            );
+        }
+        return $instance;
     }
 }
