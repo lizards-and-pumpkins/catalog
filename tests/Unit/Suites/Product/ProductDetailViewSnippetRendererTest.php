@@ -65,6 +65,10 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $stubUrlKeyGenerator->expects($this->any())
             ->method('getUrlKeyForPathInEnvironment')
             ->willReturn('dummy');
+        
+        $stubUrlKeyGenerator->expects($this->any())
+            ->method('getChildSnippetListKey')
+            ->willReturn('dummy');
 
         $this->mockSnippetResultList = $this->getMock(SnippetResultList::class);
 
