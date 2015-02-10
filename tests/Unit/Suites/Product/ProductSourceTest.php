@@ -6,6 +6,7 @@ use Brera\Environment\Environment;
 
 /**
  * @covers \Brera\Product\ProductSource
+ * @uses \Brera\Product\Product
  */
 class ProductSourceTest extends \PHPUnit_Framework_TestCase
 {

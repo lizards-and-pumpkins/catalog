@@ -15,12 +15,24 @@ use Brera\Queue\Queue;
 
 /**
  * @covers \Brera\CommonFactory
- * @uses   \Brera\KeyValue\DataPoolWriter
- * @uses   \Brera\Queue\InMemory\InMemoryQueue
- * @uses   \Brera\Product\ProductSourceBuilder
  * @uses   \Brera\DataVersion
+ * @uses   \Brera\FactoryTrait
+ * @uses   \Brera\MasterFactoryTrait
+ * @uses   \Brera\IntegrationTestFactory
+ * @uses   \Brera\KeyValue\DataPoolWriter
+ * @uses   \Brera\KeyValue\DataPoolReader
  * @uses   \Brera\Environment\EnvironmentBuilder
+ * @uses   \Brera\Environment\EnvironmentSourceBuilder
+ * @uses   \Brera\DomainEventConsumer
  * @uses   \Brera\DomainEventHandlerLocator
+ * @uses   \Brera\Renderer\BlockSnippetRenderer
+ * @uses   \Brera\Product\ProductSourceBuilder
+ * @uses   \Brera\Product\ProductProjector
+ * @uses   \Brera\Product\HardcodedProductSnippetRendererCollection
+ * @uses   \Brera\Product\ProductImportDomainEventHandler
+ * @uses   \Brera\Product\ProductImportDomainEvent
+ * @uses   \Brera\Product\CatalogImportDomainEvent
+ * @uses   \Brera\Product\CatalogImportDomainEventHandler
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {

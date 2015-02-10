@@ -4,12 +4,12 @@ namespace Brera\Product;
 
 /**
  * @covers \Brera\Product\ProductSourceBuilder
- * @uses \Brera\Product\ProductSource
- * @uses \Brera\Product\ProductId
- * @uses \Brera\Product\PoCSku
- * @uses \Brera\XPathParser
- * @uses \Brera\Product\ProductAttribute
- * @uses \Brera\Product\ProductAttributeList
+ * @uses   \Brera\Product\ProductSource
+ * @uses   \Brera\Product\ProductId
+ * @uses   \Brera\Product\PoCSku
+ * @uses   \Brera\XPathParser
+ * @uses   \Brera\Product\ProductAttribute
+ * @uses   \Brera\Product\ProductAttributeList
  */
 class ProductSourceBuilderTest extends \PHPUnit_Framework_TestCase
 {

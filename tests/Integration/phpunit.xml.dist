@@ -20,6 +20,7 @@
         timeoutForSmallTests="1"
         timeoutForMediumTests="10"
         timeoutForLargeTests="60"
+        checkForUnintentionallyCoveredCode="true"
         verbose="false">
     <testsuite name="Brera Proof Of Concept Integration Tests">
         <directory>.</directory>
