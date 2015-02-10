@@ -14,17 +14,17 @@ abstract class BlockSnippetRenderer implements SnippetRenderer
     /**
      * @var SnippetResultList
      */
-    protected $resultList;
+    private $resultList;
 
     /**
      * @var SnippetKeyGenerator
      */
-    protected $keyGenerator;
+    private $keyGenerator;
 
     /**
      * @var ThemeLocator
      */
-    protected $themeLocator;
+    private $themeLocator;
 
     /**
      * @param SnippetResultList $resultList
@@ -146,4 +146,20 @@ abstract class BlockSnippetRenderer implements SnippetRenderer
      * @return string
      */
     abstract protected function getSnippetLayoutHandle();
+
+    /**
+     * @return SnippetKeyGenerator
+     */
+    final protected function getKeyGenerator()
+    {
+        return $this->keyGenerator;
+    }
+
+    /**
+     * @return SnippetResultList
+     */
+    final protected function getSnippetResultList()
+    {
+        return $this->resultList;
+    }
 }
