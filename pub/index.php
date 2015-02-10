@@ -18,13 +18,12 @@ $factory->register(new FrontendFactory());
 $factory->register(new CommonFactory());
 $factory->register(new SampleFactory());
 
-$dataPoolReader = $factory->createDataPoolReader();
-
-$pageKeyGenerator = new PageKeyGenerator($environment);
-$pageBuilder = new PageBuilder($pageKeyGenerator, $dataPoolReader);
-$page = $pageBuilder->buildPage($url);
+/** @var UrlKeyRouter $router */
+$router = $factory->createUrlKeyRouter();
+$requestHandler = $router->route($request, $environment);
+$page = $requestHandler->process();
 
 echo $page->getBody();
 
-//$website = new PoCWebFront($request, $factory);
+//$website = new PoCWebFront($request, $environment, $factory);
 //$website->run();

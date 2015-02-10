@@ -29,13 +29,11 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
         $keyGenerator = new KeyValueStoreKeyGenerator();
         $dataPoolReader = new DataPoolReader($keyValueStore, $keyGenerator);
 
-        $pageKeyGenerator = new PageKeyGenerator($environment);
         $urlPathKeyGenerator = new PoCUrlPathKeyGenerator();
 
         $pageBuilder = new UrlKeyRequestHandler(
             $url,
             $environment,
-            $pageKeyGenerator,
             $urlPathKeyGenerator,
             $dataPoolReader
         );

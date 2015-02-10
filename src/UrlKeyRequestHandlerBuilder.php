@@ -27,11 +27,9 @@ class UrlKeyRequestHandlerBuilder
 
     public function create(HttpUrl $url, Environment $environment)
     {
-        $pageKeyGenerator = new PageKeyGenerator($environment);
         return new UrlKeyRequestHandler(
             $url,
             $environment,
-            $pageKeyGenerator,
             $this->urlPathKeyGenerator,
             $this->dataPoolReader
         );

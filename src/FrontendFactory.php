@@ -4,12 +4,7 @@ namespace Brera;
 
 use Brera\Api\ApiRequestHandlerChain;
 use Brera\Api\ApiRouter;
-use Brera\Environment\Environment;
-use Brera\Http\HttpUrl;
 use Brera\Product\CatalogImportApiRequestHandler;
-use Brera\Product\ProductId;
-use Brera\Product\ProductSeoUrlRouter;
-use Brera\Product\ProductDetailHtmlPage;
 
 class FrontendFactory implements Factory
 {
@@ -51,15 +46,6 @@ class FrontendFactory implements Factory
     public function createUrlKeyRouter()
     {
         return new UrlKeyRouter($this->createUrlKeyRequestHandlerBuilder());
-    }
-
-    /**
-     * @param Environment $environment
-     * @return PageKeyGenerator
-     */
-    public function createPageKeyGenerator(Environment $environment)
-    {
-        return new PageKeyGenerator($environment);
     }
 
     private function createUrlKeyRequestHandlerBuilder()

@@ -16,7 +16,6 @@ use Brera\Product\CatalogImportApiRequestHandler;
  * @uses   \Brera\CommonFactory
  * @uses   \Brera\UrlKeyRouter
  * @uses   \Brera\UrlKeyRequestHandlerBuilder
- * @uses   \Brera\PageKeyGenerator
  * @uses   \Brera\KeyValue\DataPoolReader
  * @uses   \Brera\Api\ApiRouter
  * @uses   \Brera\Api\ApiRequestHandlerChain
@@ -66,15 +65,5 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
         $stubEnvironment = $this->getMock(Environment::class);
         $result = $this->frontendFactory->createUrlKeyRouter($stubHttpUrl, $stubEnvironment);
         $this->assertInstanceOf(UrlKeyRouter::class, $result);
-    }
-
-    /**
-     * @test
-     */
-    public function itShouldReturnAPageKeyGenerator()
-    {
-        $stubEnvironment = $this->getMock(Environment::class);
-        $result = $this->frontendFactory->createPageKeyGenerator($stubEnvironment);
-        $this->assertInstanceOf(PageKeyGenerator::class, $result);
     }
 }

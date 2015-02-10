@@ -16,11 +16,6 @@ class UrlKeyRequestHandler implements HttpRequestHandler
     private $dataPoolReader;
 
     /**
-     * @var PageKeyGenerator
-     */
-    private $pageKeyGenerator;
-
-    /**
      * @var UrlPathKeyGenerator
      */
     private $urlPathKeyGenerator;
@@ -43,20 +38,17 @@ class UrlKeyRequestHandler implements HttpRequestHandler
     /**
      * @param HttpUrl $url
      * @param Environment $environment
-     * @param PageKeyGenerator $keyGenerator
      * @param UrlPathKeyGenerator $urlPathKeyGenerator
      * @param DataPoolReader $dataPoolReader
      */
     public function __construct(
         HttpUrl $url,
         Environment $environment,
-        PageKeyGenerator $keyGenerator,
         UrlPathKeyGenerator $urlPathKeyGenerator,
         DataPoolReader $dataPoolReader
     ) {
         $this->url = $url;
         $this->environment = $environment;
-        $this->pageKeyGenerator = $keyGenerator;
         $this->urlPathKeyGenerator = $urlPathKeyGenerator;
         $this->dataPoolReader = $dataPoolReader;
     }
@@ -86,9 +78,9 @@ class UrlKeyRequestHandler implements HttpRequestHandler
             $childSnippets
         );
 
-        $rootSnippet = $this->injectSnippetsIntoContent($rootSnippet, $snippetKeysValueArray);
+        $content = $this->injectSnippetsIntoContent($rootSnippet, $snippetKeysValueArray);
 
-        return new Page($rootSnippet);
+        return new Page($content);
     }
 
     /**

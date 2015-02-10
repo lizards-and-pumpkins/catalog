@@ -11,7 +11,6 @@ use Brera\KeyValue\KeyNotFoundException;
  * @covers \Brera\UrlKeyRequestHandler
  * @uses   \Brera\Http\HttpUrl
  * @uses   \Brera\Page
- * @uses   \Brera\PageKeyGenerator
  */
 class UrlKeyRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -36,11 +35,6 @@ class UrlKeyRequestHandlerTest extends \PHPUnit_Framework_TestCase
     private $url;
 
     /**
-     * @var PageKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $mockPageKeyGenerator;
-
-    /**
      * @var UrlPathKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockUrlPathKeyGenerator;
@@ -60,13 +54,6 @@ class UrlKeyRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->mockDataPoolReader = $this->getMockBuilder(DataPoolReader::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->mockPageKeyGenerator = $this->getMockBuilder(PageKeyGenerator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->mockPageKeyGenerator->expects($this->any())
-            ->method('getKeyForSnippetList')
-            ->willReturn('dummy_child_snippets_key_list_key');
         
         $this->mockUrlPathKeyGenerator = $this->getMock(UrlPathKeyGenerator::class);
         $this->mockUrlPathKeyGenerator->expects($this->any())
@@ -76,7 +63,6 @@ class UrlKeyRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->urlKeyRequestHandler = new UrlKeyRequestHandler(
             $this->url,
             $this->mockEnvironment,
-            $this->mockPageKeyGenerator,
             $this->mockUrlPathKeyGenerator,
             $this->mockDataPoolReader
         );
