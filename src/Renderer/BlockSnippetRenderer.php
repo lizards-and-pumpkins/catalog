@@ -95,7 +95,6 @@ abstract class BlockSnippetRenderer implements SnippetRenderer
             foreach ($nodeChildren as $childBlockLayout) {
                 $childBlockNameInLayout = $childBlockLayout->getAttribute('name');
                 $childBlockInstance = $this->createBlockWithChildren($childBlockLayout, $dataObject);
-
                 $blockInstance->addChildBlock($childBlockNameInLayout, $childBlockInstance);
             }
         }
@@ -135,10 +134,9 @@ abstract class BlockSnippetRenderer implements SnippetRenderer
      * @param Environment $environment
      * @return string
      */
-    protected function getPathToLayoutXmlFile(Environment $environment)
+    final protected function getPathToLayoutXmlFile(Environment $environment)
     {
         $themeDirectory = $this->themeLocator->getThemeDirectoryForEnvironment($environment);
-
         return $themeDirectory . '/layout/' . $this->getSnippetLayoutHandle() . '.xml';
     }
 
