@@ -25,7 +25,7 @@ abstract class HttpRequest
         $requestMethod = $_SERVER['REQUEST_METHOD'];
 
         $protocol = 'http';
-        if ($_SERVER['HTTPS']) {
+        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']) {
             $protocol = 'https';
         }
 
