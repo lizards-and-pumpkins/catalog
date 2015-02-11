@@ -25,7 +25,9 @@ class EnvironmentSourceTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->stubEnvironmentBuilder = $this->getMock(EnvironmentBuilder::class);
+        $this->stubEnvironmentBuilder = $this->getMockBuilder(EnvironmentBuilder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->stubEnvironmentBuilder->expects($this->any())
             ->method('getEnvironments')
             ->willReturn([]);

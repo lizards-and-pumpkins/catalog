@@ -3,26 +3,20 @@
 
 namespace Brera\Environment;
 
-use Brera\DataVersion;
 use Brera\InputXmlIsEmptyStringException;
 use Brera\InvalidXmlTypeException;
 use Brera\XPathParser;
 
 class EnvironmentSourceBuilder
 {
-    /**
-     * @var DataVersion
-     */
-    private $dataVersion;
 
     /**
      * @var EnvironmentBuilder
      */
     private $environmentBuilder;
 
-    public function __construct(DataVersion $dataVersion, EnvironmentBuilder $environmentBuilder)
+    public function __construct(EnvironmentBuilder $environmentBuilder)
     {
-        $this->dataVersion = $dataVersion;
         $this->environmentBuilder = $environmentBuilder;
     }
     
@@ -34,7 +28,6 @@ class EnvironmentSourceBuilder
     {
         $this->validateXmlString($xml);
         $environments = $this->extractAttributesFromXml($xml);
-        $environments[VersionedEnvironment::CODE][] = $this->dataVersion;
         return new EnvironmentSource($environments, $this->environmentBuilder);
     }
 

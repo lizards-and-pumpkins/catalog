@@ -2,6 +2,7 @@
 
 namespace Brera;
 
+use Brera\Http\HttpRequest;
 use Brera\Http\HttpRouterChain;
 
 class PoCWebFront extends WebFront
@@ -15,13 +16,23 @@ class PoCWebFront extends WebFront
     }
 
     /**
+     * @return HttpRequest
+     */
+    protected function createEnvironment(HttpRequest $request)
+    {
+        $environmentBuilder = $this->getMasterFactory()->createEnvironmentBuilder();
+        return $environmentBuilder->getEnvironment(
+            ['website' => 'ru_de', 'language' => 'de_DE']
+        );
+    }
+
+    /**
      * @param MasterFactory $factory
      */
     protected function registerFactoriesIfMasterFactoryWasNotInjected(MasterFactory $factory)
     {
-        // Left empty on purpose because injected via bootstrap for PoC
-        //$factory->register(new FrontendFactory());
-        //$factory->register(new IntegrationTestFactory());
+        $factory->register(new CommonFactory());
+        $factory->register(new FrontendFactory());
     }
 
     /**

@@ -146,6 +146,7 @@ abstract class BlockSnippetRenderer implements SnippetRenderer
     final protected function getPathToLayoutXmlFile(Environment $environment)
     {
         $themeDirectory = $this->themeLocator->getThemeDirectoryForEnvironment($environment);
+        
         return $themeDirectory . '/layout/' . $this->getSnippetLayoutHandle() . '.xml';
     }
 

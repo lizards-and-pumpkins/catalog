@@ -24,7 +24,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
 EOX;
         $factory = new PoCMasterFactory();
         $factory->register(new CommonFactory());
-        $factory->register(new IntegrationTestFactory()); // is this needed?
+        $factory->register(new IntegrationTestFactory());
         /** @var EnvironmentSourceBuilder $environmentSourceBuilder */
         $environmentSourceBuilder = $factory->createEnvironmentSourceBuilder();
         /** @var ProductSourceBuilder $productSourceBuilder */

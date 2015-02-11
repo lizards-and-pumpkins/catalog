@@ -175,4 +175,56 @@ class DataPoolReaderTest extends AbstractDataPoolTest
 
         $this->assertEquals($keyValueStorageReturn, $snippets);
     }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnFalseIfASnippetKeyIsNotInTheStore()
+    {
+        $this->stubKeyValueStore->expects($this->once())
+            ->method('has')
+            ->with('test')
+            ->willReturn(false);
+        $this->assertFalse($this->dataPoolReader->hasSnippet('test'));
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnTrueIfASnippetKeyIsInTheStore()
+    {
+        $this->stubKeyValueStore->expects($this->once())
+            ->method('has')
+            ->with('test')
+            ->willReturn(true);
+        $this->assertTrue($this->dataPoolReader->hasSnippet('test'));
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnNegativeOneIfTheCurrentVersionIsNotSet()
+    {
+        $this->stubKeyValueStore->expects($this->once())
+            ->method('has')
+            ->with('current_version')
+            ->willReturn(false);
+        $this->assertSame('-1', $this->dataPoolReader->getCurrentVersion());
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnTheCurrentVersion()
+    {
+        $this->stubKeyValueStore->expects($this->once())
+            ->method('has')
+            ->with('current_version')
+            ->willReturn(true);
+        $this->stubKeyValueStore->expects($this->once())
+            ->method('get')
+            ->with('current_version')
+            ->willReturn('123');
+        $this->assertSame('123', $this->dataPoolReader->getCurrentVersion());
+    }
 }

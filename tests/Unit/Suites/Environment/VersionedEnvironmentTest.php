@@ -32,7 +32,7 @@ class VersionedEnvironmentTest extends \PHPUnit_Framework_TestCase
         $this->stubDataVersion->expects($this->any())
         ->method('__toString')
         ->willReturn($this->testVersionValue);
-        $this->versionedEnvironment = new VersionedEnvironment([VersionedEnvironment::CODE => $this->stubDataVersion]);
+        $this->versionedEnvironment = new VersionedEnvironment($this->stubDataVersion);
     }
 
     /**

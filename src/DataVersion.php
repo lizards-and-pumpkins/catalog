@@ -18,11 +18,11 @@ class DataVersion
     public static function fromVersionString($version)
     {
         if (!is_string($version) && !is_int($version) && !is_float($version)) {
-            throw new InvalidVersionException();
+            throw new InvalidVersionException('The specified version is invalid');
         }
 
         if (empty($version)) {
-            throw new EmptyVersionException();
+            throw new EmptyVersionException('The specified version is empty');
         }
 
         return new self((string) $version);
