@@ -14,18 +14,11 @@ class DataPoolReader
     private $keyValueStore;
 
     /**
-     * @var KeyValueStoreKeyGenerator
-     */
-    private $keyValueStoreKeyGenerator;
-
-    /**
      * @param KeyValueStore $keyValueStore
-     * @param KeyValueStoreKeyGenerator $keyValueStoreKeyGenerator
      */
-    public function __construct(KeyValueStore $keyValueStore, KeyValueStoreKeyGenerator $keyValueStoreKeyGenerator)
+    public function __construct(KeyValueStore $keyValueStore)
     {
         $this->keyValueStore = $keyValueStore;
-        $this->keyValueStoreKeyGenerator = $keyValueStoreKeyGenerator;
     }
 
     /**

@@ -25,9 +25,7 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
         $this->addBaseSnippetAndListToKeyValueStorage($keyValueStore);
         $this->addSnippetsForReplacementToTheKeyValueStorage($keyValueStore);
 
-        // UNUSED
-        $keyGenerator = new KeyValueStoreKeyGenerator();
-        $dataPoolReader = new DataPoolReader($keyValueStore, $keyGenerator);
+        $dataPoolReader = new DataPoolReader($keyValueStore);
 
         $urlPathKeyGenerator = new PoCUrlPathKeyGenerator();
 
