@@ -1,8 +1,8 @@
 <?php
 
-require_once '../vendor/autoload.php';
+$baseDir = __DIR__ . '/..';
 
-chdir(__DIR__ . '/..');
+require_once $baseDir . '/vendor/autoload.php';
 
 use Brera\CommonFactory;
 use Brera\Product\CatalogImportDomainEvent;
@@ -13,7 +13,7 @@ $factory = new PoCMasterFactory();
 $factory->register(new CommonFactory());
 $factory->register(new SampleFactory());
 
-$xml = file_get_contents('tests/shared-fixture/product.xml');
+$xml = file_get_contents($baseDir . '/tests/shared-fixture/product.xml');
 
 $queue = $factory->getEventQueue();
 $queue->add(new CatalogImportDomainEvent($xml));
