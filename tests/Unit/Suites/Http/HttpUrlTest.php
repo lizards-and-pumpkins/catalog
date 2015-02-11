@@ -87,9 +87,12 @@ class HttpUrlTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldExcludeDirectoryPathFromUrl()
     {
+        $originalScriptName = $_SERVER['SCRIPT_NAME'];
         $_SERVER['SCRIPT_NAME'] = '/path/to/index.php';
 
         $url = HttpUrl::fromString('http://www.example.com/path/to/some-page');
+
+        $_SERVER['SCRIPT_NAME'] = $originalScriptName;
 
         $this->assertEquals('/some-page', $url->getPath());
     }
