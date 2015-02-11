@@ -4,6 +4,7 @@ namespace Brera\Product;
 
 /**
  * @covers \Brera\Product\CatalogImportApiRequestHandler
+ * @uses   \Brera\DefaultHttpResponse
  */
 class CatalogImportApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,6 +15,6 @@ class CatalogImportApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $result = (new CatalogImportApiRequestHandler())->process();
 
-        $this->assertEquals('"dummy response"', $result);
+        $this->assertEquals('"dummy response"', $result->getBody());
     }
 }

@@ -4,6 +4,7 @@ namespace Brera;
 
 use Brera\Environment\EnvironmentBuilder;
 use Brera\Environment\EnvironmentSourceBuilder;
+use Brera\Http\ResourceNotFoundRouter;
 use Brera\KeyValue\DataPoolReader;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
@@ -12,6 +13,7 @@ use Brera\Product\ProductImportDomainEventHandler;
 use Brera\Product\ProductProjector;
 use Brera\Product\ProductSourceBuilder;
 use Brera\Queue\Queue;
+use Psr\Log\LoggerInterface;
 
 /**
  * @covers \Brera\CommonFactory
@@ -25,10 +27,11 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Environment\EnvironmentSourceBuilder
  * @uses   \Brera\DomainEventConsumer
  * @uses   \Brera\DomainEventHandlerLocator
+ * @uses   \Brera\UrlPathKeyGenerator
  * @uses   \Brera\Renderer\BlockSnippetRenderer
  * @uses   \Brera\Product\ProductSourceBuilder
  * @uses   \Brera\Product\ProductProjector
- * @uses   \Brera\Product\HardcodedProductSnippetRendererCollection
+ * @uses   \Brera\Product\ProductSnippetRendererCollection
  * @uses   \Brera\Product\ProductImportDomainEventHandler
  * @uses   \Brera\Product\ProductImportDomainEvent
  * @uses   \Brera\Product\CatalogImportDomainEvent
@@ -81,7 +84,15 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $result = $this->commonFactory->createProductProjector();
         $this->assertInstanceOf(ProductProjector::class, $result);
     }
-    
+
+    /**
+     * @test
+     */
+    public function itShouldCreateAnUrlPathKeyGenerator()
+    {
+        $result = $this->commonFactory->createUrlPathKeyGenerator();
+        $this->assertInstanceOf(UrlPathKeyGenerator::class, $result);
+    }
     
 
     /**
@@ -233,9 +244,27 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $masterFactory = new PoCMasterFactory();
         $commonFactory = new CommonFactory();
         $masterFactory->register($commonFactory);
-        
-        $method = new \ReflectionMethod($commonFactory, 'getLogger');
-        $method->setAccessible(true);
-        $method->invoke($commonFactory);
+
+        $commonFactory->getLogger();
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnTheLoggerInstance()
+    {
+        $resultA = $this->commonFactory->getLogger();
+        $resultB = $this->commonFactory->getLogger();
+        $this->assertInstanceOf(LoggerInterface::class, $resultA);
+        $this->assertSame($resultA, $resultB);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnAResourceNotFoundRouter()
+    {
+        $result = $this->commonFactory->createResourceNotFoundRouter();
+        $this->assertInstanceOf(ResourceNotFoundRouter::class, $result);
     }
 }

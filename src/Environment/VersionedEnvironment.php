@@ -13,11 +13,11 @@ class VersionedEnvironment implements Environment
     private $version;
 
     /**
-     * @param array $environmentSource
+     * @param DataVersion $version
      */
-    public function __construct(array $environmentSource)
+    public function __construct(DataVersion $version)
     {
-        $this->version = $environmentSource[self::CODE];
+        $this->version = $version;
     }
 
     /**
@@ -49,6 +49,6 @@ class VersionedEnvironment implements Environment
      */
     public function getId()
     {
-        return self::CODE . $this->version;
+        return 'v:' . $this->version;
     }
 }

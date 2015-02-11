@@ -21,7 +21,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     {
         parent::setUp();
 
-        $this->dataPoolReader = new DataPoolReader($this->stubKeyValueStore, $this->stubKeyGenerator);
+        $this->dataPoolReader = new DataPoolReader($this->stubKeyValueStore);
     }
 
     /**
@@ -179,46 +179,52 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     /**
      * @test
      */
-    public function shouldReturnPoCProductHtmlBasedOnKeyFromKeyValueStorage()
+    public function itShouldReturnFalseIfASnippetKeyIsNotInTheStore()
     {
-        $value = '<p>html</p>';
-        $productId = $this->getStubProductId();
-
-        $this->addStubMethodToStubKeyGenerator('createPoCProductHtmlKey');
-        $this->addGetMethodToStubKeyValueStore($value);
-
-        $html = $this->dataPoolReader->getPoCProductHtml($productId);
-
-        $this->assertEquals($value, $html);
+        $this->stubKeyValueStore->expects($this->once())
+            ->method('has')
+            ->with('test')
+            ->willReturn(false);
+        $this->assertFalse($this->dataPoolReader->hasSnippet('test'));
     }
 
     /**
      * @test
      */
-    public function itShouldReturnProductIdBySeoUrl()
+    public function itShouldReturnTrueIfASnippetKeyIsInTheStore()
     {
-        $value = 'test';
-        $url = $this->getDummyUrl();
-
-        $this->addStubMethodToStubKeyGenerator('createPoCProductSeoUrlToIdKey');
-        $this->addGetMethodToStubKeyValueStore($value);
-
-        $productId = $this->dataPoolReader->getProductIdBySeoUrl($url);
-
-        $this->assertEquals($value, $productId);
-        $this->assertInstanceOf(ProductId::class, $productId);
+        $this->stubKeyValueStore->expects($this->once())
+            ->method('has')
+            ->with('test')
+            ->willReturn(true);
+        $this->assertTrue($this->dataPoolReader->hasSnippet('test'));
     }
 
     /**
      * @test
      */
-    public function itShouldReturnIfTheSeoUrlKeyExists()
+    public function itShouldReturnNegativeOneIfTheCurrentVersionIsNotSet()
     {
-        $url = $this->getDummyUrl();
+        $this->stubKeyValueStore->expects($this->once())
+            ->method('has')
+            ->with('current_version')
+            ->willReturn(false);
+        $this->assertSame('-1', $this->dataPoolReader->getCurrentDataVersion());
+    }
 
-        $this->addStubMethodToStubKeyGenerator('createPoCProductSeoUrlToIdKey');
-        $this->addHasMethodToStubKeyValueStore(true);
-
-        $this->assertTrue($this->dataPoolReader->hasProductSeoUrl($url));
+    /**
+     * @test
+     */
+    public function itShouldReturnTheCurrentVersion()
+    {
+        $this->stubKeyValueStore->expects($this->once())
+            ->method('has')
+            ->with('current_version')
+            ->willReturn(true);
+        $this->stubKeyValueStore->expects($this->once())
+            ->method('get')
+            ->with('current_version')
+            ->willReturn('123');
+        $this->assertSame('123', $this->dataPoolReader->getCurrentDataVersion());
     }
 }

@@ -21,7 +21,7 @@ class DataPoolWriterTest extends AbstractDataPoolTest
     {
         parent::setUp();
 
-        $this->dataPoolWriter = new DataPoolWriter($this->stubKeyValueStore, $this->stubKeyGenerator);
+        $this->dataPoolWriter = new DataPoolWriter($this->stubKeyValueStore);
     }
 
     /**
@@ -50,33 +50,5 @@ class DataPoolWriterTest extends AbstractDataPoolTest
         ->with($testKey, $testContent);
 
         $this->dataPoolWriter->writeSnippetResultList($mockSnippetResultList);
-    }
-
-    /**
-     * @test
-     */
-    public function itShouldStoreProductHtmlWithAProductIdKey()
-    {
-        $html = '<p>html</p>';
-        $productId = $this->getStubProductId();
-
-        $this->addStubMethodToStubKeyGenerator('createPoCProductHtmlKey');
-        $this->addSetMethodToStubKeyValueStore();
-
-        $this->dataPoolWriter->setPoCProductHtml($productId, $html);
-    }
-
-    /**
-     * @test
-     */
-    public function itShouldStoreSeoUrlWithAProductIdKey()
-    {
-        $productId = $this->getStubProductId();
-        $seoUrl = $this->getDummyUrl();
-
-        $this->addStubMethodToStubKeyGenerator('createPoCProductSeoUrlToIdKey');
-        $this->addSetMethodToStubKeyValueStore();
-
-        $this->dataPoolWriter->setProductIdBySeoUrl($productId, $seoUrl);
     }
 }

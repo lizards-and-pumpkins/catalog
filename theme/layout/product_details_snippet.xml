@@ -6,7 +6,7 @@
         <block name="header" class="Brera\Renderer\Block" template="theme/template/header.phtml" />
         <!--block name="global_messages" class="Brera\....\Block\Messages" template="..." /-->
         <!--block name="breadcrumbs" class="Brera\....\Block\Breadcrumbs" template="..." /-->
-        <block name="content" class="Brera\Product\Block\ProductDetailsPage" template="theme/template/view.phtml">
+        <block name="content" class="Brera\Product\Block\ProductDetailsPageBlock" template="theme/template/view.phtml">
             <block name="image_gallery" class="Brera\Product\Block\ProductImageGallery" template="theme/template/gallery.phtml" />
             <!--block name="share_buttons" class="Brera\....\Block\SocialMediaShareButtons" template="..." /-->
             <!--block name="availability_options_price" class="Brera\....\Block\PriceOptions" template="..." /-->

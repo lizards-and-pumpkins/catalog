@@ -10,13 +10,14 @@ use Brera\SnippetRenderer;
 use Brera\SnippetResult;
 use Brera\ThemeLocator;
 use Brera\Renderer\ThemeProductRenderingTestTrait;
+use Brera\UrlPathKeyGenerator;
 
 /**
  * @covers \Brera\Product\ProductDetailViewSnippetRenderer
  * @covers \Brera\Renderer\BlockSnippetRenderer
  * @uses   \Brera\SnippetResult
- * @uses   \Brera\Product\HardcodedProductDetailViewSnippetKeyGenerator
- * @uses   \Brera\Product\Block\ProductDetailsPage
+ * @uses   \Brera\Product\ProductDetailViewSnippetKeyGenerator
+ * @uses   \Brera\Product\Block\ProductDetailsPageBlock
  * @uses   \Brera\Renderer\LayoutReader
  * @uses   \Brera\Renderer\Block
  * @uses   \Brera\XPathParser
@@ -55,10 +56,19 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
     {
         $this->createTemporaryThemeFiles();
 
-        $stubKeyGenerator = $this->getMock(HardcodedProductDetailViewSnippetKeyGenerator::class, ['getKey']);
-        $stubKeyGenerator->expects($this->any())
-            ->method('getKey')
-            ->willReturn('test');
+        $stubSnippetKeyGenerator = $this->getMock(ProductDetailViewSnippetKeyGenerator::class);
+        $stubSnippetKeyGenerator->expects($this->any())
+            ->method('getKeyForEnvironment')
+            ->willReturn('dummy');
+        
+        $stubUrlKeyGenerator = $this->getMock(UrlPathKeyGenerator::class);
+        $stubUrlKeyGenerator->expects($this->any())
+            ->method('getUrlKeyForPathInEnvironment')
+            ->willReturn('dummy');
+        
+        $stubUrlKeyGenerator->expects($this->any())
+            ->method('getChildSnippetListKey')
+            ->willReturn('dummy');
 
         $this->mockSnippetResultList = $this->getMock(SnippetResultList::class);
 
@@ -69,7 +79,8 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
         $this->snippetRenderer = new ProductDetailViewSnippetRenderer(
             $this->mockSnippetResultList,
-            $stubKeyGenerator,
+            $stubSnippetKeyGenerator,
+            $stubUrlKeyGenerator,
             $this->stubThemeLocator
         );
 
@@ -149,16 +160,20 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
             ->method('getId')->willReturn($productIdString);
         $stubProductSource->getId()->expects($this->any())
             ->method('__toString')->willReturn($productIdString);
-        $stubProductSource->getProductForEnvironment($stubEnvironment)->expects($this->any())
+        /** @var \PHPUnit_Framework_MockObject_MockObject|Product $mockProduct */
+        $mockProduct = $stubProductSource->getProductForEnvironment($stubEnvironment);
+        $mockProduct->expects($this->any())
             ->method('getAttributeValue')
-            ->with('name')
-            ->willReturn($productNameString);
+            ->willReturnMap([
+                ['name', $productNameString],
+                ['url_key', 'dummy'],
+            ]);
 
-        $transport = '';
-        $this->mockSnippetResultList->expects($this->once())
+        $transport = [];
+        $this->mockSnippetResultList->expects($this->atLeastOnce())
             ->method('add')
             ->willReturnCallback(function ($snippetResult) use (&$transport) {
-                $transport = $snippetResult;
+                $transport[] = $snippetResult;
             });
 
         $this->snippetRenderer->render($stubProductSource, $this->stubEnvironmentSource);
@@ -173,7 +188,7 @@ Test Name (test-123)
 - And I'm a gallery template.
 
 EOT;
-        $this->assertEquals($expected, $transport->getContent());
+        $this->assertEquals($expected, $transport[0]->getContent());
     }
 
     /**

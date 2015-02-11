@@ -18,21 +18,24 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
     public function itShouldRenderAPageFromAnUrlWithoutVariablesInSnippets()
     {
         $url = HttpUrl::fromString('http://example.com/product1');
-        $environment = new VersionedEnvironment([VersionedEnvironment::CODE => DataVersion::fromVersionString('1.0')]);
+        $environment = new VersionedEnvironment(DataVersion::fromVersionString('1.0'));
 
         $keyValueStore = new InMemoryKeyValueStore();
 
         $this->addBaseSnippetAndListToKeyValueStorage($keyValueStore);
         $this->addSnippetsForReplacementToTheKeyValueStorage($keyValueStore);
 
-        // UNUSED
-        $keyGenerator = new KeyValueStoreKeyGenerator();
-        $dataPoolReader = new DataPoolReader($keyValueStore, $keyGenerator);
+        $dataPoolReader = new DataPoolReader($keyValueStore);
 
-        $pageKeyGenerator = new PageKeyGenerator($environment);
+        $urlPathKeyGenerator = new PoCUrlPathKeyGenerator();
 
-        $pageBuilder = new PageBuilder($pageKeyGenerator, $dataPoolReader);
-        $page = $pageBuilder->buildPage($url);
+        $pageBuilder = new UrlKeyRequestHandler(
+            $url,
+            $environment,
+            $urlPathKeyGenerator,
+            $dataPoolReader
+        );
+        $page = $pageBuilder->process();
 
         $body = $page->getBody();
         $expected = '<html><head><title>Page Title</title></head><body><h1>Headline</h1></body></html>';
@@ -46,8 +49,18 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
      */
     private function addBaseSnippetAndListToKeyValueStorage(KeyValueStore $keyValueStore)
     {
-        $keyValueStore->set('_product1_1_0', '<html><head>{{snippet head}}</head><body>{{snippet body}}</body></html>');
-        $keyValueStore->set('_product1_1_0_l', json_encode(['head', 'body']));
+        $keyValueStore->set(
+            '_product1_v:1_0',
+            'test_root_key'
+        );
+        $keyValueStore->set(
+            'test_root_key',
+            '<html><head>{{snippet head}}</head><body>{{snippet body}}</body></html>'
+        );
+        $keyValueStore->set(
+            'test_root_key_l',
+            json_encode(['head', 'body'])
+        );
     }
 
     /**

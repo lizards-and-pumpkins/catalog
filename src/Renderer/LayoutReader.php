@@ -13,7 +13,10 @@ class LayoutReader
     public function loadLayoutFromXmlFile($layoutXmlFilePath)
     {
         if (!is_readable($layoutXmlFilePath) || is_dir($layoutXmlFilePath)) {
-            throw new LayoutFileNotReadableException();
+            throw new LayoutFileNotReadableException(sprintf(
+                'The layout file "%s" is not readable.',
+                $layoutXmlFilePath
+            ));
         }
 
         $layoutXml = file_get_contents($layoutXmlFilePath);

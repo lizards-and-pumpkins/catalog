@@ -5,18 +5,18 @@ namespace Brera\Product;
 use Brera\Environment\Environment;
 
 /**
- * @covers \Brera\Product\HardcodedProductDetailViewSnippetKeyGenerator
+ * @covers \Brera\Product\ProductDetailViewSnippetKeyGenerator
  */
-class HardcodedProductDetailViewSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
+class ProductDetailViewSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var HardcodedProductDetailViewSnippetKeyGenerator
+     * @var ProductDetailViewSnippetKeyGenerator
      */
     private $keyGenerator;
 
     public function setUp()
     {
-        $this->keyGenerator = new HardcodedProductDetailViewSnippetKeyGenerator();
+        $this->keyGenerator = new ProductDetailViewSnippetKeyGenerator();
     }
 
     /**

@@ -9,23 +9,37 @@ use Brera\Product\ProductId;
 class DataPoolReader
 {
     /**
+     * @var string
+     */
+    private $currentDataVersionKey = 'current_version';
+
+    /**
+     * @var string
+     */
+    private $currentDataVersionDefault = '-1';
+    
+    /**
      * @var KeyValueStore
      */
     private $keyValueStore;
 
     /**
-     * @var KeyValueStoreKeyGenerator
-     */
-    private $keyValueStoreKeyGenerator;
-
-    /**
      * @param KeyValueStore $keyValueStore
-     * @param KeyValueStoreKeyGenerator $keyValueStoreKeyGenerator
      */
-    public function __construct(KeyValueStore $keyValueStore, KeyValueStoreKeyGenerator $keyValueStoreKeyGenerator)
+    public function __construct(KeyValueStore $keyValueStore)
     {
         $this->keyValueStore = $keyValueStore;
-        $this->keyValueStoreKeyGenerator = $keyValueStoreKeyGenerator;
+    }
+
+    /**
+     * @param string $key
+     * @return bool
+     */
+    public function hasSnippet($key)
+    {
+        $this->validateKey($key);
+        
+        return $this->keyValueStore->has($key);
     }
 
     /**
@@ -37,41 +51,6 @@ class DataPoolReader
         $this->validateKey($key);
 
         return $this->keyValueStore->get($key);
-    }
-
-    /**
-     * @param ProductId $productId
-     * @return mixed
-     */
-    public function getPoCProductHtml(ProductId $productId)
-    {
-        $key = $this->keyValueStoreKeyGenerator->createPoCProductHtmlKey($productId);
-
-        return $this->keyValueStore->get($key);
-    }
-
-    /**
-     * @param HttpUrl $url
-     * @return ProductId
-     */
-    public function getProductIdBySeoUrl(HttpUrl $url)
-    {
-        $key = $this->keyValueStoreKeyGenerator->createPoCProductSeoUrlToIdKey($url);
-        $skuString = $this->keyValueStore->get($key);
-        $sku = PoCSku::fromString($skuString);
-
-        return ProductId::fromSku($sku);
-    }
-
-    /**
-     * @param HttpUrl $url
-     * @return bool
-     */
-    public function hasProductSeoUrl(HttpUrl $url)
-    {
-        $key = $this->keyValueStoreKeyGenerator->createPoCProductSeoUrlToIdKey($url);
-
-        return $this->keyValueStore->has($key);
     }
 
     /**
@@ -150,5 +129,16 @@ class DataPoolReader
         }
 
         return $result;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrentDataVersion()
+    {
+        if (! $this->keyValueStore->has($this->currentDataVersionKey)) {
+            return $this->currentDataVersionDefault;
+        }
+        return $this->keyValueStore->get($this->currentDataVersionKey);
     }
 }

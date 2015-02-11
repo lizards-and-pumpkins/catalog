@@ -12,7 +12,7 @@ interface HttpResponse
     /**
      * Sends headers, cookies and afterwards the body to the client
      *
-     * @return null
+     * @return void
      */
     public function send();
 }

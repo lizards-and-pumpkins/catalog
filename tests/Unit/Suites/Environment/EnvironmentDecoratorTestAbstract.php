@@ -145,7 +145,7 @@ abstract class EnvironmentDecoratorTestAbstract extends \PHPUnit_Framework_TestC
      */
     public function itShouldIncludeTheComponentIdInTheIdentifier()
     {
-        $expected = $this->decoratedComponentCode . '123';
+        $expected = $this->decoratedComponentCode . ':123';
         $this->mockDecoratedEnvironment->expects($this->once())
             ->method('getId')
             ->willReturn($expected);
@@ -158,7 +158,7 @@ abstract class EnvironmentDecoratorTestAbstract extends \PHPUnit_Framework_TestC
     public function itShouldReturnAnIdentifierContainingTheCodeAndValue()
     {
         $code = $this->getDecoratorUnderTestCode();
-        $expected = $code . $this->getDecoratorUnderTest()->getValue($code);
+        $expected = $code . ':' . $this->getDecoratorUnderTest()->getValue($code);
         $this->assertContains($expected, $this->getDecoratorUnderTest()->getId());
     }
     

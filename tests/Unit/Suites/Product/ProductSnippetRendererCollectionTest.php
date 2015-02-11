@@ -8,7 +8,6 @@ use Brera\ProjectionSourceData;
 use Brera\Environment\EnvironmentSource;
 
 /**
- * @covers \Brera\Product\HardcodedProductSnippetRendererCollection
  * @covers \Brera\Product\ProductSnippetRendererCollection
  */
 class ProductSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
@@ -24,7 +23,7 @@ class ProductSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
     private $mockRenderer2;
 
     /**
-     * @var HardcodedProductSnippetRendererCollection
+     * @var ProductSnippetRendererCollection
      */
     private $rendererCollection;
 
@@ -39,7 +38,7 @@ class ProductSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
         $this->mockRenderer = $this->getMock(SnippetRenderer::class, ['render']);
         $this->mockRenderer2 = $this->getMock(SnippetRenderer::class, ['render']);
 
-        $this->rendererCollection = new HardcodedProductSnippetRendererCollection(
+        $this->rendererCollection = new ProductSnippetRendererCollection(
             [$this->mockRenderer, $this->mockRenderer2],
             $this->stubSnippetResultList
         );

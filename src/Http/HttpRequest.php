@@ -25,13 +25,13 @@ abstract class HttpRequest
         $requestMethod = $_SERVER['REQUEST_METHOD'];
 
         $protocol = 'http';
-        if ($_SERVER['HTTPS']) {
+        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']) {
             $protocol = 'https';
         }
 
         $url = HttpUrl::fromString($protocol . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
 
-     /* TODO: Decouple */
+        /* TODO: Decouple */
         return self::fromParameters($requestMethod, $url);
     }
 

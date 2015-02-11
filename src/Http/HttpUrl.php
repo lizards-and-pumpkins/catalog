@@ -25,7 +25,7 @@ class HttpUrl
      */
     public function __toString()
     {
-        return (string)$this->url;
+        return (string) $this->url;
     }
 
     /**
@@ -64,6 +64,18 @@ class HttpUrl
     }
 
     /**
+     * @return string
+     */
+    public function getPathRelativeToWebFront()
+    {
+        /** @var \League\Url\Components\Path $path */
+        $path = $this->url->getPath();
+        $path->remove($this->getDirectoryPathRelativeToDocumentRoot());
+
+        return $path->getUriComponent();
+    }
+
+    /**
      * @param \League\Url\AbstractUrl $url
      * @return HttpUrl
      * @throws UnknownProtocolException
@@ -78,5 +90,13 @@ class HttpUrl
             default:
                 throw new UnknownProtocolException(sprintf('Protocol can not be handled "%s"', $url->getScheme()));
         }
+    }
+
+    /**
+     * @return string
+     */
+    private function getDirectoryPathRelativeToDocumentRoot()
+    {
+        return preg_replace('#/[^/]*$#', '', $_SERVER['SCRIPT_NAME']);
     }
 }

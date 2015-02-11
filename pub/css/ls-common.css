@@ -18,17 +18,6 @@ a { color: #37a3d4; text-decoration: none }
 
 h1 { font-size: 26px; font-weight: normal; color: #323232; text-transform: uppercase }
 
-/* jScrollPane overrides */
-.jspVerticalBar { width: 17px }
-.jspVerticalBar .jspArrow { height: 17px; }
-.jspVerticalBar .jspArrow:focus { outline: none }
-.jspVerticalBar .jspArrowUp { background: transparent url(../images/scroll_up.gif) no-repeat top left; padding-top: 1px }
-.jspVerticalBar .jspArrowDown { background: transparent url(../images/scroll_down.gif) no-repeat top left; padding-top: 1px }
-.jspTrack { background-color: #e0e0e0 }
-.jspContainer { overflow:hidden; position: relative; z-index:1 }
-.scroll-pane { max-height: 200px; overflow: auto }
-.jspDrag { background: url("../images/jspDrag.gif") no-repeat scroll 0 center #37A3D4 }
-
 /* Main search form */
 #search_mini_form { width: 367px }
 #search_mini_form .input-box { position: relative; padding-right: 48px }

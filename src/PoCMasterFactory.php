@@ -2,14 +2,14 @@
 
 namespace Brera;
 
+use Brera\Environment\EnvironmentBuilder;
+
 /**
- * Interface PoCMasterFactory
- *
- * @package Brera
  * @method KeyValue\DataPoolWriter createDataPoolWriter
  * @method KeyValue\DataPoolReader createDataPoolReader
- * @method Product\ProductSeoUrlRouter createProductSeoUrlRouter
  * @method Queue\Queue getEventQueue
+ * @method EnvironmentBuilder createEnvironmentBuilder
+ * @method EnvironmentBuilder createEnvironmentBuilderWithVersion
  * @method DomainEventConsumer createDomainEventConsumer
  */
 class PoCMasterFactory implements MasterFactory

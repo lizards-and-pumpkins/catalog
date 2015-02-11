@@ -9,46 +9,52 @@ use Brera\SnippetResultList;
 use Brera\InvalidProjectionDataSourceType;
 use Brera\SnippetRenderer;
 
-abstract class ProductSnippetRendererCollection implements SnippetRendererCollection
+class ProductSnippetRendererCollection implements SnippetRendererCollection
 {
+    /**
+     * @var SnippetResultList
+     */
+    private $snippetResultList;
+
+    /**
+     * @var SnippetRenderer[]
+     */
+    private $renderers = [];
+
+    /**
+     * @param SnippetRenderer[] $renderers
+     * @param SnippetResultList $snippetResultList
+     */
+    public function __construct(array $renderers, SnippetResultList $snippetResultList)
+    {
+        $this->renderers = $renderers;
+        $this->snippetResultList = $snippetResultList;
+    }
+    
     /**
      * @param ProjectionSourceData $productSource
      * @param EnvironmentSource $environmentSource
      * @return SnippetResultList
      */
-    final public function render(ProjectionSourceData $productSource, EnvironmentSource $environmentSource)
+    public function render(ProjectionSourceData $productSource, EnvironmentSource $environmentSource)
     {
         if (!($productSource instanceof ProductSource)) {
             throw new InvalidProjectionDataSourceType('First argument must be instance of Product.');
         }
-
-        return $this->renderProduct($productSource, $environmentSource);
+        
+        $this->renderProduct($productSource, $environmentSource);
+        return $this->snippetResultList;
     }
-
-    /**
-     * @return SnippetResultList
-     */
-    abstract protected function getSnippetResultList();
-
-    /**
-     * @return SnippetRenderer[]
-     */
-    abstract protected function getSnippetRenderers();
 
     /**
      * @param ProductSource $productSource
      * @param EnvironmentSource $environmentSource
-     * @return SnippetResultList
+     * @return void
      */
     private function renderProduct(ProductSource $productSource, EnvironmentSource $environmentSource)
     {
-        $snippetResultList = $this->getSnippetResultList();
-        if ($rendererList = $this->getSnippetRenderers()) {
-            foreach ($rendererList as $renderer) {
-                $snippetResultList->merge($renderer->render($productSource, $environmentSource));
-            }
+        foreach ($this->renderers as $renderer) {
+            $this->snippetResultList->merge($renderer->render($productSource, $environmentSource));
         }
-
-        return $snippetResultList;
     }
 }

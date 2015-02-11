@@ -13,17 +13,11 @@ abstract class AbstractDataPoolTest extends \PHPUnit_Framework_TestCase
     protected $stubKeyValueStore;
 
     /**
-     * @var KeyValueStoreKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $stubKeyGenerator;
-
-    /**
      * @return void
      */
     protected function setUp()
     {
         $this->stubKeyValueStore = $this->getMock(KeyValueStore::class);
-        $this->stubKeyGenerator = $this->getMock(KeyValueStoreKeyGenerator::class);
     }
 
     /**
@@ -75,16 +69,6 @@ abstract class AbstractDataPoolTest extends \PHPUnit_Framework_TestCase
         $this->stubKeyValueStore->expects($this->once())
             ->method('has')
             ->willReturn($returnResult);
-    }
-
-    /**
-     * @param string $method
-     */
-    protected function addStubMethodToStubKeyGenerator($method)
-    {
-        $this->stubKeyGenerator->expects($this->once())
-            ->method($method)
-            ->willReturn('dummy_key');
     }
 
     /**

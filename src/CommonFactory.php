@@ -4,20 +4,20 @@ namespace Brera;
 
 use Brera\Environment\EnvironmentBuilder;
 use Brera\Environment\EnvironmentSourceBuilder;
+use Brera\Http\ResourceNotFoundRouter;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
+use Brera\Product\ProductSnippetRendererCollection;
 use Brera\Product\ProductSourceBuilder;
 use Brera\KeyValue\KeyValueStore;
 use Brera\Queue\Queue;
 use Brera\KeyValue\DataPoolWriter;
-use Brera\KeyValue\KeyValueStoreKeyGenerator;
 use Brera\KeyValue\DataPoolReader;
 use Brera\Product\ProductImportDomainEvent;
 use Brera\Product\ProductImportDomainEventHandler;
 use Brera\Product\ProductProjector;
 use Brera\Product\ProductDetailViewSnippetRenderer;
-use Brera\Product\HardcodedProductDetailViewSnippetKeyGenerator;
-use Brera\Product\HardcodedProductSnippetRendererCollection;
+use Brera\Product\ProductDetailViewSnippetKeyGenerator;
 use Psr\Log\LoggerInterface;
 
 class CommonFactory implements Factory, DomainEventFactory
@@ -77,17 +77,26 @@ class CommonFactory implements Factory, DomainEventFactory
     }
 
     /**
-     * @return HardcodedProductSnippetRendererCollection
+     * @return ProductSnippetRendererCollection
      * @todo: move to catalog factory
      */
     public function createProductSnippetRendererCollection()
     {
-        $rendererList = [$this->getMasterFactory()->createProductDetailViewSnippetRenderer()];
-
-        return new HardcodedProductSnippetRendererCollection(
-            $rendererList,
+        return new ProductSnippetRendererCollection(
+            $this->getProductSnippetRendererList(),
             $this->getMasterFactory()->createSnippetResultList()
         );
+    }
+
+    /**
+     * @return SnippetRenderer[]
+     * @todo: move to catalog factory
+     */
+    private function getProductSnippetRendererList()
+    {
+        return [
+            $this->getMasterFactory()->createProductDetailViewSnippetRenderer(),
+        ];
     }
 
     /**
@@ -107,17 +116,26 @@ class CommonFactory implements Factory, DomainEventFactory
         return new ProductDetailViewSnippetRenderer(
             $this->getMasterFactory()->createSnippetResultList(),
             $this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator(),
+            $this->getMasterFactory()->createUrlPathKeyGenerator(),
             $this->getMasterFactory()->createThemeLocator()
         );
     }
 
     /**
-     * @return HardcodedProductDetailViewSnippetKeyGenerator
+     * @return PoCUrlPathKeyGenerator
+     */
+    public function createUrlPathKeyGenerator()
+    {
+        return new PoCUrlPathKeyGenerator();
+    }
+
+    /**
+     * @return ProductDetailViewSnippetKeyGenerator
      * @todo: move to catalog factory
      */
     public function createProductDetailViewSnippetKeyGenerator()
     {
-        return new HardcodedProductDetailViewSnippetKeyGenerator();
+        return new ProductDetailViewSnippetKeyGenerator();
     }
 
     /**
@@ -142,10 +160,7 @@ class CommonFactory implements Factory, DomainEventFactory
      */
     public function createEnvironmentSourceBuilder()
     {
-        /* TODO: Add mechanism to inject data version number to use */
-        $version = DataVersion::fromVersionString('1');
-
-        return new EnvironmentSourceBuilder($version, $this->getMasterFactory()->createEnvironmentBuilder());
+        return new EnvironmentSourceBuilder($this->getMasterFactory()->createEnvironmentBuilder());
     }
 
     /**
@@ -153,7 +168,24 @@ class CommonFactory implements Factory, DomainEventFactory
      */
     public function createEnvironmentBuilder()
     {
-        return new EnvironmentBuilder();
+        $version = $this->getCurrentDataVersion();
+        return $this->createEnvironmentBuilderWithVersion(DataVersion::fromVersionString($version));
+    }
+
+    /**
+     * @param DataVersion $version
+     * @return EnvironmentBuilder
+     */
+    public function createEnvironmentBuilderWithVersion(DataVersion $version)
+    {
+        return new EnvironmentBuilder($version);
+    }
+
+    private function getCurrentDataVersion()
+    {
+        /** @var DataPoolReader $dataPoolReader */
+        $dataPoolReader = $this->getMasterFactory()->createDataPoolReader();
+        return $dataPoolReader->getCurrentDataVersion();
     }
 
     /**
@@ -169,7 +201,7 @@ class CommonFactory implements Factory, DomainEventFactory
      */
     public function createDataPoolWriter()
     {
-        return new DataPoolWriter($this->getKeyValueStore(), $this->createKeyGenerator());
+        return new DataPoolWriter($this->getKeyValueStore());
     }
 
     /**
@@ -183,14 +215,6 @@ class CommonFactory implements Factory, DomainEventFactory
         }
 
         return $this->keyValueStore;
-    }
-
-    /**
-     * @return KeyValueStoreKeyGenerator
-     */
-    private function createKeyGenerator()
-    {
-        return new KeyValueStoreKeyGenerator();
     }
 
     /**
@@ -223,14 +247,14 @@ class CommonFactory implements Factory, DomainEventFactory
      */
     public function createDataPoolReader()
     {
-        return new DataPoolReader($this->getKeyValueStore(), $this->createKeyGenerator());
+        return new DataPoolReader($this->getKeyValueStore());
     }
 
     /**
      * @return LoggerInterface
      * @throws UndefinedFactoryMethodException
      */
-    private function getLogger()
+    public function getLogger()
     {
         if (null === $this->logger) {
             $this->logger = $this->callExternalCreateMethod('Logger');
@@ -250,9 +274,17 @@ class CommonFactory implements Factory, DomainEventFactory
             $instance = $this->getMasterFactory()->{'create' . $targetObjectName}();
         } catch (UndefinedFactoryMethodException $e) {
             throw new UndefinedFactoryMethodException(
-                "Unable to create {$targetObjectName}. Is the factory registered? " . $e->getMessage()
+                sprintf('Unable to create %s. Is the factory registered? %s', $targetObjectName, $e->getMessage())
             );
         }
         return $instance;
+    }
+
+    /**
+     * @return ResourceNotFoundRouter
+     */
+    public function createResourceNotFoundRouter()
+    {
+        return new ResourceNotFoundRouter();
     }
 }

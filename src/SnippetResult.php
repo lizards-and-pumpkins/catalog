@@ -4,11 +4,13 @@ namespace Brera;
 
 class SnippetResult
 {
-    const KEY_PATTERN = '#^[a-zA-Z0-9_\-]+$#';
+    const KEY_PATTERN = '#^[a-zA-Z0-9:_\-]+$#';
+    
     /**
      * @var string
      */
     private $key;
+    
     /**
      * @var string
      */
@@ -27,7 +29,7 @@ class SnippetResult
             );
         }
 
-        return new self($key, (string)$content);
+        return new self($key, (string) $content);
     }
 
     /**

@@ -8,36 +8,45 @@ use Brera\SnippetKeyGenerator;
 use Brera\SnippetRenderer;
 use Brera\SnippetResultList;
 use Brera\ThemeLocator;
+use Brera\UrlPathKeyGenerator;
 
 abstract class BlockSnippetRenderer implements SnippetRenderer
 {
     /**
      * @var SnippetResultList
      */
-    protected $resultList;
+    private $resultList;
 
     /**
      * @var SnippetKeyGenerator
      */
-    protected $keyGenerator;
+    private $snippetKeyGenerator;
+
+    /**
+     * @var UrlPathKeyGenerator
+     */
+    private $urlPathKeyGenerator;
 
     /**
      * @var ThemeLocator
      */
-    protected $themeLocator;
+    private $themeLocator;
 
     /**
      * @param SnippetResultList $resultList
-     * @param SnippetKeyGenerator $keyGenerator
+     * @param SnippetKeyGenerator $snippetKeyGenerator
+     * @param UrlPathKeyGenerator $urlPathKeyGenerator
      * @param ThemeLocator $themeLocator
      */
     public function __construct(
         SnippetResultList $resultList,
-        SnippetKeyGenerator $keyGenerator,
+        SnippetKeyGenerator $snippetKeyGenerator,
+        UrlPathKeyGenerator $urlPathKeyGenerator,
         ThemeLocator $themeLocator
     ) {
         $this->resultList = $resultList;
-        $this->keyGenerator = $keyGenerator;
+        $this->snippetKeyGenerator = $snippetKeyGenerator;
+        $this->urlPathKeyGenerator = $urlPathKeyGenerator;
         $this->themeLocator = $themeLocator;
     }
 
@@ -95,7 +104,6 @@ abstract class BlockSnippetRenderer implements SnippetRenderer
             foreach ($nodeChildren as $childBlockLayout) {
                 $childBlockNameInLayout = $childBlockLayout->getAttribute('name');
                 $childBlockInstance = $this->createBlockWithChildren($childBlockLayout, $dataObject);
-
                 $blockInstance->addChildBlock($childBlockNameInLayout, $childBlockInstance);
             }
         }
@@ -135,10 +143,10 @@ abstract class BlockSnippetRenderer implements SnippetRenderer
      * @param Environment $environment
      * @return string
      */
-    protected function getPathToLayoutXmlFile(Environment $environment)
+    final protected function getPathToLayoutXmlFile(Environment $environment)
     {
         $themeDirectory = $this->themeLocator->getThemeDirectoryForEnvironment($environment);
-
+        
         return $themeDirectory . '/layout/' . $this->getSnippetLayoutHandle() . '.xml';
     }
 
@@ -146,4 +154,28 @@ abstract class BlockSnippetRenderer implements SnippetRenderer
      * @return string
      */
     abstract protected function getSnippetLayoutHandle();
+
+    /**
+     * @return SnippetKeyGenerator
+     */
+    final protected function getSnippetKeyGenerator()
+    {
+        return $this->snippetKeyGenerator;
+    }
+
+    /**
+     * @return SnippetResultList
+     */
+    final protected function getSnippetResultList()
+    {
+        return $this->resultList;
+    }
+
+    /**
+     * @return UrlPathKeyGenerator
+     */
+    final public function getUrlPathKeyGenerator()
+    {
+        return $this->urlPathKeyGenerator;
+    }
 }

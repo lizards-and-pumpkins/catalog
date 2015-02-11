@@ -2,6 +2,7 @@
 
 namespace Brera;
 
+use Brera\Environment\Environment;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpResponse;
 use Brera\Http\HttpRouterChain;
@@ -19,6 +20,11 @@ abstract class WebFront
     private $request;
 
     /**
+     * @var Environment
+     */
+    private $environment;
+
+    /**
      * @param HttpRequest $request
      * @param MasterFactory $factory
      */
@@ -29,43 +35,53 @@ abstract class WebFront
     }
 
     /**
-     * @param bool $isProductive
      * @return HttpResponse
      */
-    public function run($isProductive = true)
+    public function run()
     {
-        $this->buildFactory();
-
-        $router = new HttpRouterChain();
-        $this->registerRouters($router);
-
-        $requestHandler = $router->route($this->request);
-
-        $content = $requestHandler->process();
-
-     // TODO add response locator to differ between Json, html, ...
-
-     // TODO put response creation into factory, response depends on http version!
-
-        $response = new DefaultHttpResponse();
-        $response->setBody($content);
-
-        if ($isProductive) {
-            $response->send();
-        }
-
+        $response = $this->runWithoutSendingResponse();
+        $response->send();
         return $response;
+    }
+
+    /**
+     * @return HttpResponse
+     */
+    public function runWithoutSendingResponse()
+    {
+        $this->buildFactoryIfItWasNotInjected();
+        $this->buildEnvironment();
+
+        $routerChain = new HttpRouterChain();
+        $this->registerRouters($routerChain);
+
+        $requestHandler = $routerChain->route($this->request, $this->environment);
+
+        // TODO put response creation into factory, response depends on http version!
+
+        return $requestHandler->process();
+    }
+
+    final public function registerFactory(Factory $factory)
+    {
+        $this->buildFactoryIfItWasNotInjected();
+        $this->masterFactory->register($factory);
     }
 
     /**
      * @return MasterFactory
      */
-    abstract protected function createMasterFactory();
+    abstract protected function createMasterFactoryIfNotInjected();
+
+    /**
+     * @return HttpRequest
+     */
+    abstract protected function createEnvironment(HttpRequest $request);
 
     /**
      * @param MasterFactory $factory
      */
-    abstract protected function registerFactories(MasterFactory $factory);
+    abstract protected function registerFactoriesIfMasterFactoryWasNotInjected(MasterFactory $factory);
 
     /**
      * @param HttpRouterChain $router
@@ -73,26 +89,73 @@ abstract class WebFront
     abstract protected function registerRouters(HttpRouterChain $router);
 
     /**
-     * @return null
+     * @return void
      */
-    private function buildFactory()
+    private function buildFactoryIfItWasNotInjected()
     {
         if (null !== $this->masterFactory) {
-            return null;
+            return;
         }
 
-        $this->masterFactory = $this->createMasterFactory();
+        $this->masterFactory = $this->createMasterFactoryIfNotInjected();
+        $this->validateMasterFactory();
+        $this->registerFactoriesIfMasterFactoryWasNotInjected($this->masterFactory);
+    }
 
+    /**
+     * @return MasterFactory
+     */
+    public function getMasterFactory()
+    {
+        return $this->masterFactory;
+    }
+
+    /**
+     * @return Environment
+     */
+    final protected function getEnvironment()
+    {
+        return $this->environment;
+    }
+
+    /**
+     * @return HttpRequest
+     */
+    final protected function getRequest()
+    {
+        return $this->request;
+    }
+
+    /**
+     * @throws \InvalidArgumentException
+     */
+    private function validateMasterFactory()
+    {
         if (!($this->masterFactory instanceof MasterFactory)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'Factory is not of type MasterFactory but "%s"',
-                    $this->getExceptionMessageClassNameRepresentation($this->masterFactory)
-                )
-            );
+            throw new \InvalidArgumentException(sprintf(
+                'Factory is not of type MasterFactory but "%s"',
+                $this->getExceptionMessageClassNameRepresentation($this->masterFactory)
+            ));
         }
+    }
 
-        $this->registerFactories($this->masterFactory);
+    private function buildEnvironment()
+    {
+        $this->environment = $this->createEnvironment($this->request);
+        $this->validateEnvironment();
+    }
+
+    /**
+     * @throws \InvalidArgumentException
+     */
+    private function validateEnvironment()
+    {
+        if (!($this->environment instanceof Environment)) {
+            throw new \InvalidArgumentException(sprintf(
+                'Environment is not of type Environment but "%s"',
+                $this->getExceptionMessageClassNameRepresentation($this->environment)
+            ));
+        }
     }
 
     /**
@@ -105,14 +168,10 @@ abstract class WebFront
             return get_class($value);
         }
 
-        return (string)$value;
-    }
+        if (is_null($value)) {
+            return 'NULL';
+        }
 
-    /**
-     * @return MasterFactory
-     */
-    public function getMasterFactory()
-    {
-        return $this->masterFactory;
+        return (string) $value;
     }
 }
