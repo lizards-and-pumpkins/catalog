@@ -46,7 +46,7 @@ class EnvironmentSourceBuilder
     private function validateXmlString($xml)
     {
         if (!is_string($xml)) {
-            throw new InvalidXmlTypeException("The XML data has to be passed as a string");
+            throw new InvalidXmlTypeException('The XML data has to be passed as a string');
         }
         if (empty($xml)) {
             throw new InputXmlIsEmptyStringException('The input XML data is empty.');

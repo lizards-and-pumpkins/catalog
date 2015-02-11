@@ -2,13 +2,14 @@
 
 namespace Brera\Api;
 
+use Brera\Environment\Environment;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
 use Brera\Http\HttpUrl;
 
 /**
  * @covers \Brera\Api\ApiRouter
- * @uses \Brera\Http\HttpRequestHandler
+ * @uses   \Brera\Http\HttpRequestHandler
  */
 class ApiRouterTest extends \PHPUnit_Framework_TestCase
 {
@@ -34,18 +35,20 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
     public function itShouldReturnNullIfUrlIsNotLeadByApiPrefix()
     {
         $stubUrl = $this->getMockBuilder(HttpUrl::class)
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $stubUrl->expects($this->once())
-        ->method('getPath')
-        ->willReturn('foo/bar');
+            ->method('getPath')
+            ->willReturn('foo/bar');
 
         $stubHttpRequest = $this->getStubHttpRequest();
         $stubHttpRequest->expects($this->once())
-        ->method('getUrl')
-        ->willReturn($stubUrl);
+            ->method('getUrl')
+            ->willReturn($stubUrl);
+        
+        $stubEnvironment = $this->getMock(Environment::class);
 
-        $this->assertNull($this->apiRouter->route($stubHttpRequest));
+        $this->assertNull($this->apiRouter->route($stubHttpRequest, $stubEnvironment));
     }
 
     /**
@@ -54,18 +57,20 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
     public function itShouldReturnNullIfNoApiRequestHandlerFound()
     {
         $stubUrl = $this->getMockBuilder(HttpUrl::class)
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $stubUrl->expects($this->once())
-        ->method('getPath')
-        ->willReturn('api/foo');
+            ->method('getPath')
+            ->willReturn('api/foo');
 
         $stubHttpRequest = $this->getStubHttpRequest();
         $stubHttpRequest->expects($this->once())
-        ->method('getUrl')
-        ->willReturn($stubUrl);
+            ->method('getUrl')
+            ->willReturn($stubUrl);
 
-        $this->assertNull($this->apiRouter->route($stubHttpRequest));
+        $stubEnvironment = $this->getMock(Environment::class);
+        
+        $this->assertNull($this->apiRouter->route($stubHttpRequest, $stubEnvironment));
     }
 
     /**
@@ -74,24 +79,26 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
     public function itShouldReturnApiRequestHandler()
     {
         $stubUrl = $this->getMockBuilder(HttpUrl::class)
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $stubUrl->expects($this->once())
-        ->method('getPath')
-        ->willReturn('api/foo');
+            ->method('getPath')
+            ->willReturn('api/foo');
 
         $stubHttpRequest = $this->getStubHttpRequest();
         $stubHttpRequest->expects($this->once())
-        ->method('getUrl')
-        ->willReturn($stubUrl);
+            ->method('getUrl')
+            ->willReturn($stubUrl);
 
         $stubApiRequestHandler = $this->getMock(HttpRequestHandler::class, ['process']);
 
         $this->stubApiRequestHandlerChain->expects($this->once())
-        ->method('getApiRequestHandler')
-        ->willReturn($stubApiRequestHandler);
+            ->method('getApiRequestHandler')
+            ->willReturn($stubApiRequestHandler);
 
-        $result = $this->apiRouter->route($stubHttpRequest);
+        $stubEnvironment = $this->getMock(Environment::class);
+        
+        $result = $this->apiRouter->route($stubHttpRequest, $stubEnvironment);
 
         $this->assertInstanceOf(HttpRequestHandler::class, $result);
     }
@@ -102,8 +109,8 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
     private function getStubHttpRequest()
     {
         $stubHttpRequest = $this->getMockBuilder(HttpRequest::class)
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         return $stubHttpRequest;
     }

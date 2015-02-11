@@ -33,7 +33,7 @@ class ProductProjector implements Projector
     /**
      * @param ProductSource|ProjectionSourceData $productSource
      * @param EnvironmentSource $environmentSource
-     * @return null
+     * @return void
      */
     public function project(ProjectionSourceData $productSource, EnvironmentSource $environmentSource)
     {

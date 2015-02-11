@@ -1,19 +1,14 @@
 <?php
 
-namespace Brera\Tests\Integration;
+namespace Brera;
 
 use Brera\Environment\EnvironmentSource;
-use Brera\IntegrationTestFactory;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\PoCSku;
 use Brera\Product\ProductId;
-use Brera\PoCMasterFactory;
-use Brera\CommonFactory;
 use Brera\Http\HttpUrl;
 use Brera\Http\HttpRequest;
-use Brera\FrontendFactory;
-use Brera\PoCWebFront;
-use Brera\Product\HardcodedProductDetailViewSnippetKeyGenerator;
+use Brera\Product\ProductDetailViewSnippetKeyGenerator;
 
 class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,9 +17,7 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
      */
     public function importProductDomainEventShouldRenderAProduct()
     {
-        $factory = new PoCMasterFactory();
-        $factory->register(new CommonFactory());
-        $factory->register(new IntegrationTestFactory());
+        $factory = $this->prepareMasterFactory();
 
         $sku = PoCSku::fromString('118235-251');
         $productId = ProductId::fromSku($sku);
@@ -38,14 +31,18 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $consumer = $factory->createDomainEventConsumer();
         $numberOfMessages = 3;
         $consumer->process($numberOfMessages);
-
+        
         $reader = $factory->createDataPoolReader();
-        /** @var HardcodedProductDetailViewSnippetKeyGenerator $keyGenerator */
+        
+        /** @var ProductDetailViewSnippetKeyGenerator $keyGenerator */
         $keyGenerator = $factory->createProductDetailViewSnippetKeyGenerator();
+        
         /** @var EnvironmentSource $environmentSource */
         $environmentSource = $factory->createEnvironmentSourceBuilder()->createFromXml($xml);
-        $environment = $environmentSource->extractEnvironments(['version'])[0];
+        $environment = $environmentSource->extractEnvironments(['version', 'website', 'language'])[0];
+        
         $key = $keyGenerator->getKeyForEnvironment($productId, $environment);
+        
         $html = $reader->getSnippet($key);
 
         $this->assertContains((string)$sku, $html);
@@ -55,28 +52,45 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function pageRequestShouldDisplayAProduct()
+    public function itShouldMakeAnImportedProductAccessibleFromTheFrontend()
     {
-        $html = '<p>some html</p>';
+        $dataVersion = '1';
 
-        $httpUrl = HttpUrl::fromString('http://example.com/seo-url');
+        $factory = $this->prepareMasterFactory();
+        $factory->register(new FrontendFactory());
+
+        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/product.xml');
+
+        $queue = $factory->getEventQueue();
+        $queue->add(new CatalogImportDomainEvent($xml));
+
+        $consumer = $factory->createDomainEventConsumer();
+        $numberOfMessages = 3;
+        $consumer->process($numberOfMessages);
+        
+        $urlKey = (new XPathParser($xml))->getXmlNodesArrayByXPath('/*/product/attributes/url_key')[0];
+        
+        $environment = $factory->createEnvironmentBuilder()->getEnvironments([
+            ['version' => $dataVersion, 'website' => 'ru_de', 'language' => $urlKey['attributes']['language']]
+        ])[0];
+        
+        $httpUrl = HttpUrl::fromString('http://example.com/' . $urlKey['value']);
         $request = HttpRequest::fromParameters('GET', $httpUrl);
 
-        $sku = PoCSku::fromString('test');
-        $productId = ProductId::fromSku($sku);
+        $website = new PoCWebFront($request, $environment, $factory);
+        $response = $website->runWithoutSendingResponse();
 
+        $this->assertContains('<body>', $response->getBody());
+    }
+
+    /**
+     * @return PoCMasterFactory
+     */
+    private function prepareMasterFactory()
+    {
         $factory = new PoCMasterFactory();
-        $factory->register(new FrontendFactory());
         $factory->register(new CommonFactory());
         $factory->register(new IntegrationTestFactory());
-
-        $dataPoolWriter = $factory->createDataPoolWriter();
-        $dataPoolWriter->setProductIdBySeoUrl($productId, $httpUrl);
-        $dataPoolWriter->setPoCProductHtml($productId, $html);
-
-        $website = new PoCWebFront($request, $factory);
-        $response = $website->run(false);
-
-        $this->assertContains($html, $response->getBody());
+        return $factory;
     }
 }

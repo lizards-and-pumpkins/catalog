@@ -73,7 +73,7 @@ abstract class EnvironmentDecorator implements Environment
      */
     public function getId()
     {
-        return $this->getCode() . $this->getValueFromEnvironment() . '_' . $this->component->getId();
+        return $this->getCode() . ':' . $this->getValueFromEnvironment() . '_' . $this->component->getId();
     }
 
     /**

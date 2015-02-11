@@ -9,7 +9,7 @@ class PoCWebFront extends WebFront
     /**
      * @return MasterFactory
      */
-    protected function createMasterFactory()
+    protected function createMasterFactoryIfNotInjected()
     {
         return new PoCMasterFactory();
     }
@@ -17,11 +17,11 @@ class PoCWebFront extends WebFront
     /**
      * @param MasterFactory $factory
      */
-    protected function registerFactories(MasterFactory $factory)
+    protected function registerFactoriesIfMasterFactoryWasNotInjected(MasterFactory $factory)
     {
-        $factory->register(new FrontendFactory());
-     // live implementation
-     // $factory->register(new IntegrationTestFactory());
+        // Left empty on purpose because injected via bootstrap for PoC
+        //$factory->register(new FrontendFactory());
+        //$factory->register(new IntegrationTestFactory());
     }
 
     /**
@@ -30,6 +30,9 @@ class PoCWebFront extends WebFront
     protected function registerRouters(HttpRouterChain $router)
     {
         $router->register($this->getMasterFactory()->createApiRouter());
-        $router->register($this->getMasterFactory()->createProductSeoUrlRouter());
+        $router->register($this->getMasterFactory()->createUrlKeyRouter(
+            $this->getRequest()->getUrl(),
+            $this->getEnvironment()
+        ));
     }
 }

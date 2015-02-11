@@ -6,6 +6,7 @@ use Brera\Environment\EnvironmentBuilder;
 use Brera\Environment\EnvironmentSourceBuilder;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
+use Brera\Product\ProductSnippetRendererCollection;
 use Brera\Product\ProductSourceBuilder;
 use Brera\KeyValue\KeyValueStore;
 use Brera\Queue\Queue;
@@ -16,8 +17,7 @@ use Brera\Product\ProductImportDomainEvent;
 use Brera\Product\ProductImportDomainEventHandler;
 use Brera\Product\ProductProjector;
 use Brera\Product\ProductDetailViewSnippetRenderer;
-use Brera\Product\HardcodedProductDetailViewSnippetKeyGenerator;
-use Brera\Product\HardcodedProductSnippetRendererCollection;
+use Brera\Product\ProductDetailViewSnippetKeyGenerator;
 use Psr\Log\LoggerInterface;
 
 class CommonFactory implements Factory, DomainEventFactory
@@ -77,17 +77,26 @@ class CommonFactory implements Factory, DomainEventFactory
     }
 
     /**
-     * @return HardcodedProductSnippetRendererCollection
+     * @return ProductSnippetRendererCollection
      * @todo: move to catalog factory
      */
     public function createProductSnippetRendererCollection()
     {
-        $rendererList = [$this->getMasterFactory()->createProductDetailViewSnippetRenderer()];
-
-        return new HardcodedProductSnippetRendererCollection(
-            $rendererList,
+        return new ProductSnippetRendererCollection(
+            $this->getProductSnippetRendererList(),
             $this->getMasterFactory()->createSnippetResultList()
         );
+    }
+
+    /**
+     * @return SnippetRenderer[]
+     * @todo: move to catalog factory
+     */
+    private function getProductSnippetRendererList()
+    {
+        return [
+            $this->getMasterFactory()->createProductDetailViewSnippetRenderer(),
+        ];
     }
 
     /**
@@ -107,17 +116,26 @@ class CommonFactory implements Factory, DomainEventFactory
         return new ProductDetailViewSnippetRenderer(
             $this->getMasterFactory()->createSnippetResultList(),
             $this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator(),
+            $this->getMasterFactory()->createUrlPathKeyGenerator(),
             $this->getMasterFactory()->createThemeLocator()
         );
     }
 
     /**
-     * @return HardcodedProductDetailViewSnippetKeyGenerator
+     * @return PoCUrlPathKeyGenerator
+     */
+    public function createUrlPathKeyGenerator()
+    {
+        return new PoCUrlPathKeyGenerator();
+    }
+
+    /**
+     * @return ProductDetailViewSnippetKeyGenerator
      * @todo: move to catalog factory
      */
     public function createProductDetailViewSnippetKeyGenerator()
     {
-        return new HardcodedProductDetailViewSnippetKeyGenerator();
+        return new ProductDetailViewSnippetKeyGenerator();
     }
 
     /**

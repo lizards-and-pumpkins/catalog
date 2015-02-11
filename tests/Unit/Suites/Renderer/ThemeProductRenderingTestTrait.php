@@ -23,7 +23,7 @@ trait ThemeProductRenderingTestTrait
         $fileContent = <<<EOX
 <snippet>
     <block name="product_details_snippet" class="Brera\Renderer\Block" template="{{path}}/1column.phtml">
-        <block name="content" class="Brera\Product\Block\ProductDetailsPage" template="{{path}}/view.phtml">
+        <block name="content" class="Brera\Product\Block\ProductDetailsPageBlock" template="{{path}}/view.phtml">
             <block name="image_gallery"
                    class="Brera\Product\Block\ProductImageGallery"
                    template="{{path}}/gallery.phtml" />

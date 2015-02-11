@@ -11,13 +11,13 @@
             <image>
                 <show_in_gallery>false</show_in_gallery>
                 <file>products/118235/118235-251.2.png</file>
-                <label lang="de_DE">Der Text zum zweiten Bild</label>
-                <label lang="en_US">A secondary image label</label>
+                <label language="de_DE">Der Text zum zweiten Bild</label>
+                <label language="en_US">A secondary image label</label>
             </image>
             <image>
                 <main_listing>true</main_listing>
-                <file lang="de_DE">products/118235/118235-251.2de.png</file>
-                <file lang="de_US">products/118235/118235-251.2us.png</file>
+                <file language="de_DE">products/118235/118235-251.2de.png</file>
+                <file language="de_US">products/118235/118235-251.2us.png</file>
                 <label>A secondary image label</label>
             </image>
             <category website="ru_de">men</category>
@@ -28,19 +28,19 @@
             <category website="ru_en">women-accessories</category>
             <stock_qty>5</stock_qty>
             <backorders>true</backorders>
-            <url_key lang="de_DE">led-arm-signallampe</url_key>
-            <url_key lang="en_US">led-armflasher</url_key>
-            <name lang="de_DE">LED Arm-Signallampe</name>
-            <name lang="en_US">LED Armflasher</name>
+            <url_key language="de_DE">led-arm-signallampe</url_key>
+            <url_key language="en_US">led-armflasher</url_key>
+            <name language="de_DE">LED Arm-Signallampe</name>
+            <name language="en_US">LED Armflasher</name>
             <price customer_group="retail" website="ru_de">12.95</price>
             <price website="ru_en">11.45</price>
             <special_price website="ru_de">11.95</special_price>
             <weight>11.2</weight>
-            <description lang="de_DE"><![CDATA[Pro Touch LED Armflasher<br />
+            <description language="de_DE"><![CDATA[Pro Touch LED Armflasher<br />
 <br />
 LED Armflasher mit elastischem Band und Flasher mit variabler Blinkfolge,
 Flasher abnehmbar.]]></description>
-            <description lang="en_US"><![CDATA[Pro Touch LED Armflasher<br />
+            <description language="en_US"><![CDATA[Pro Touch LED Armflasher<br />
 <br />
 LED Armflasher with elastic Band and Flasher]]></description>
             <brand>Pro Touch</brand>
@@ -54,12 +54,12 @@ LED Armflasher with elastic Band and Flasher]]></description>
             <image>
                 <main>true</main>
                 <file>products/218765/218765-333.1.png</file>
-                <label lang="de_DE">Das Hauptbild</label>
-                <label lang="en_US">The main image label for this shoe</label>
+                <label language="de_DE">Das Hauptbild</label>
+                <label language="en_US">The main image label for this shoe</label>
             </image>
             <image>
-                <file lang="de_DE">products/218765/218765-333.2de.png</file>
-                <file lang="en_US">products/218765/218765-333.2en.png</file>
+                <file language="de_DE">products/218765/218765-333.2de.png</file>
+                <file language="en_US">products/218765/218765-333.2en.png</file>
                 <label>Der Text zum zweiten Bild</label>
             </image>
             <image>
@@ -95,8 +95,8 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 <attributes>
                     <stock_qty>5</stock_qty>
                     <color>
-                        <label lang="en_US">Red</label>
-                        <label lang="de_DE">Rot</label>
+                        <label language="en_US">Red</label>
+                        <label language="de_DE">Rot</label>
                     </color>
                     <size>
                         <label>US 12.5 - EU 47</label>
@@ -107,8 +107,8 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 <attributes>
                     <stock_qty>750</stock_qty>
                     <color>
-                        <label lang="en_US">Red</label>
-                        <label lang="de_DE">Rot</label>
+                        <label language="en_US">Red</label>
+                        <label language="de_DE">Rot</label>
                     </color>
                     <size>
                         <label>US 12 - EU 46</label>
@@ -119,8 +119,8 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 <attributes>
                     <stock_qty>45</stock_qty>
                     <color>
-                        <label lang="en_US">Red</label>
-                        <label lang="de_DE">Rot</label>
+                        <label language="en_US">Red</label>
+                        <label language="de_DE">Rot</label>
                     </color>
                     <size>
                         <label>US 11.5 - EU 45</label>
@@ -131,8 +131,8 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 <attributes>
                     <stock_qty>5</stock_qty>
                     <color>
-                        <label lang="en_US">Red</label>
-                        <label lang="de_DE">Rot</label>
+                        <label language="en_US">Red</label>
+                        <label language="de_DE">Rot</label>
                     </color>
                     <size>
                         <label>US 10 - EU 43</label>
@@ -143,8 +143,8 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 <attributes>
                     <stock_qty>5</stock_qty>
                     <color>
-                        <label lang="en_US">Blue</label>
-                        <label lang="de_DE">Blau</label>
+                        <label language="en_US">Blue</label>
+                        <label language="de_DE">Blau</label>
                     </color>
                     <size>
                         <label>US 12.5 - EU 47</label>
@@ -155,8 +155,8 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 <attributes>
                     <stock_qty>5</stock_qty>
                     <color>
-                        <label lang="en_US">Blue</label>
-                        <label lang="de_DE">Blau</label>
+                        <label language="en_US">Blue</label>
+                        <label language="de_DE">Blau</label>
                     </color>
                     <size>
                         <label>US 12 - EU 46</label>
@@ -167,8 +167,8 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 <attributes>
                     <stock_qty>5</stock_qty>
                     <color>
-                        <label lang="en_US">Blue</label>
-                        <label lang="de_DE">Blau</label>
+                        <label language="en_US">Blue</label>
+                        <label language="de_DE">Blau</label>
                     </color>
                     <size>
                         <label>US 11.5 - EU 45</label>

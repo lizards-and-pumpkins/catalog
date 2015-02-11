@@ -2,6 +2,7 @@
 
 namespace Brera\Api;
 
+use Brera\Environment\Environment;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
 use Brera\Http\HttpRouter;
@@ -22,9 +23,10 @@ class ApiRouter implements HttpRouter
 
     /**
      * @param HttpRequest $request
+     * @param Environment $environment
      * @return HttpRequestHandler|null
      */
-    public function route(HttpRequest $request)
+    public function route(HttpRequest $request, Environment $environment)
     {
         $urlPath = trim($request->getUrl()->getPath(), DIRECTORY_SEPARATOR);
 

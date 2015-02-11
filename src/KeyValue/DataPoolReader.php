@@ -40,41 +40,6 @@ class DataPoolReader
     }
 
     /**
-     * @param ProductId $productId
-     * @return mixed
-     */
-    public function getPoCProductHtml(ProductId $productId)
-    {
-        $key = $this->keyValueStoreKeyGenerator->createPoCProductHtmlKey($productId);
-
-        return $this->keyValueStore->get($key);
-    }
-
-    /**
-     * @param HttpUrl $url
-     * @return ProductId
-     */
-    public function getProductIdBySeoUrl(HttpUrl $url)
-    {
-        $key = $this->keyValueStoreKeyGenerator->createPoCProductSeoUrlToIdKey($url);
-        $skuString = $this->keyValueStore->get($key);
-        $sku = PoCSku::fromString($skuString);
-
-        return ProductId::fromSku($sku);
-    }
-
-    /**
-     * @param HttpUrl $url
-     * @return bool
-     */
-    public function hasProductSeoUrl(HttpUrl $url)
-    {
-        $key = $this->keyValueStoreKeyGenerator->createPoCProductSeoUrlToIdKey($url);
-
-        return $this->keyValueStore->has($key);
-    }
-
-    /**
      * @param string $key
      * @return string[]
      */

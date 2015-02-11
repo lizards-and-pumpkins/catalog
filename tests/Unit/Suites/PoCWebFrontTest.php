@@ -2,6 +2,7 @@
 
 namespace Brera;
 
+use Brera\Environment\Environment;
 use Brera\Http\HttpRequest;
 
 /**
@@ -21,8 +22,9 @@ class PoCWebFrontTest extends \PHPUnit_Framework_TestCase
         ->disableOriginalConstructor()
         ->getMock();
         $stubMasterFactory = $this->getMock(MasterFactory::class);
+        $stubEnvironment = $this->getMock(Environment::class);
 
-        $this->pocWebFront = new PoCWebFront($stubHttpRequest, $stubMasterFactory);
+        $this->pocWebFront = new PoCWebFront($stubHttpRequest, $stubEnvironment, $stubMasterFactory);
     }
 
     /**

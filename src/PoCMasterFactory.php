@@ -3,9 +3,6 @@
 namespace Brera;
 
 /**
- * Interface PoCMasterFactory
- *
- * @package Brera
  * @method KeyValue\DataPoolWriter createDataPoolWriter
  * @method KeyValue\DataPoolReader createDataPoolReader
  * @method Product\ProductSeoUrlRouter createProductSeoUrlRouter
