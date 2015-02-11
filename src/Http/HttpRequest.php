@@ -31,7 +31,7 @@ abstract class HttpRequest
 
         $url = HttpUrl::fromString($protocol . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
 
-     /* TODO: Decouple */
+        /* TODO: Decouple */
         return self::fromParameters($requestMethod, $url);
     }
 
