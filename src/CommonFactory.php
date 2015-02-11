@@ -202,7 +202,7 @@ class CommonFactory implements Factory, DomainEventFactory
      */
     public function createDataPoolWriter()
     {
-        return new DataPoolWriter($this->getKeyValueStore(), $this->createKeyGenerator());
+        return new DataPoolWriter($this->getKeyValueStore());
     }
 
     /**
@@ -216,14 +216,6 @@ class CommonFactory implements Factory, DomainEventFactory
         }
 
         return $this->keyValueStore;
-    }
-
-    /**
-     * @return KeyValueStoreKeyGenerator
-     */
-    private function createKeyGenerator()
-    {
-        return new KeyValueStoreKeyGenerator();
     }
 
     /**
@@ -256,7 +248,7 @@ class CommonFactory implements Factory, DomainEventFactory
      */
     public function createDataPoolReader()
     {
-        return new DataPoolReader($this->getKeyValueStore(), $this->createKeyGenerator());
+        return new DataPoolReader($this->getKeyValueStore());
     }
 
     /**

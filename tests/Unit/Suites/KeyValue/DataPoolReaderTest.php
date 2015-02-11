@@ -21,7 +21,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     {
         parent::setUp();
 
-        $this->dataPoolReader = new DataPoolReader($this->stubKeyValueStore, $this->stubKeyGenerator);
+        $this->dataPoolReader = new DataPoolReader($this->stubKeyValueStore);
     }
 
     /**
