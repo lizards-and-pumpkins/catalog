@@ -4,7 +4,7 @@ namespace Brera;
 
 use Brera\Environment\EnvironmentBuilder;
 use Brera\Environment\EnvironmentSourceBuilder;
-use Brera\Http\Default404Router;
+use Brera\Http\ResourceNotFoundRouter;
 use Brera\KeyValue\DataPoolReader;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
@@ -252,9 +252,9 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldReturnADefault404Router()
+    public function itShouldReturnAResourceNotFoundRouter()
     {
-        $result = $this->commonFactory->createDefault404Router();
-        $this->assertInstanceOf(Default404Router::class, $result);
+        $result = $this->commonFactory->createResourceNotFoundRouter();
+        $this->assertInstanceOf(ResourceNotFoundRouter::class, $result);
     }
 }

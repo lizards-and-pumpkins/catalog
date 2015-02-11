@@ -4,7 +4,7 @@ namespace Brera;
 
 use Brera\Environment\EnvironmentBuilder;
 use Brera\Environment\EnvironmentSourceBuilder;
-use Brera\Http\Default404Router;
+use Brera\Http\ResourceNotFoundRouter;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\ProductSnippetRendererCollection;
@@ -282,10 +282,10 @@ class CommonFactory implements Factory, DomainEventFactory
     }
 
     /**
-     * @return Default404Router
+     * @return ResourceNotFoundRouter
      */
-    public function createDefault404Router()
+    public function createResourceNotFoundRouter()
     {
-        return new Default404Router();
+        return new ResourceNotFoundRouter();
     }
 }

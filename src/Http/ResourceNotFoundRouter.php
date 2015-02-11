@@ -5,7 +5,7 @@ namespace Brera\Http;
 
 use Brera\Environment\Environment;
 
-class Default404Router implements HttpRouter
+class ResourceNotFoundRouter implements HttpRouter
 {
     /**
      * @param HttpRequest $request
@@ -14,6 +14,6 @@ class Default404Router implements HttpRouter
      */
     public function route(HttpRequest $request, Environment $environment)
     {
-        return new Default404RequestHandler();
+        return new ResourceNotFoundRequestHandler();
     }
 }

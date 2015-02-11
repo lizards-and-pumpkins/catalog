@@ -6,24 +6,24 @@ namespace Brera\Http;
 use Brera\Environment\Environment;
 
 /**
- * @covers \Brera\Http\Default404Router
+ * @covers \Brera\Http\ResourceNotFoundRouter
  */
-class Default404RouterTest extends \PHPUnit_Framework_TestCase
+class ResoruceNotFoundRouterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Default404Router
+     * @var ResourceNotFoundRouter
      */
     private $router;
 
     public function setUp()
     {
-        $this->router = new Default404Router();
+        $this->router = new ResourceNotFoundRouter();
     }
 
     /**
      * @test
      */
-    public function itShouldAlwaysReturnA404RequestHandler()
+    public function itShouldReturnAResourceNotFoundRequestHandler()
     {
         $stubRequest = $this->getMockBuilder(HttpRequest::class)
             ->disableOriginalConstructor()->getMock();

@@ -3,7 +3,7 @@
 
 namespace Brera\Http;
 
-class Default404RequestHandler implements HttpRequestHandler
+class ResourceNotFoundRequestHandler implements HttpRequestHandler
 {
     /**
      * @return HttpResponse

@@ -4,18 +4,18 @@
 namespace Brera\Http;
 
 /**
- * @covers \Brera\Http\Default404RequestHandler
+ * @covers \Brera\Http\ResourceNotFoundRequestHandler
  */
-class Default404RequestHandlerTest extends \PHPUnit_Framework_TestCase
+class ResourceNotFoundRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Default404RequestHandler
+     * @var ResourceNotFoundRequestHandler
      */
     private $requestHandler;
 
     public function setUp()
     {
-        $this->requestHandler = new Default404RequestHandler();
+        $this->requestHandler = new ResourceNotFoundRequestHandler();
     }
 
     /**
