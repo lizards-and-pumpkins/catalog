@@ -4,6 +4,7 @@ namespace Brera;
 
 use Brera\Environment\EnvironmentBuilder;
 use Brera\Environment\EnvironmentSourceBuilder;
+use Brera\KeyValue\KeyNotFoundException;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\ProductSnippetRendererCollection;
@@ -160,10 +161,7 @@ class CommonFactory implements Factory, DomainEventFactory
      */
     public function createEnvironmentSourceBuilder()
     {
-        /* TODO: Add mechanism to inject data version number to use */
-        $version = DataVersion::fromVersionString('1');
-
-        return new EnvironmentSourceBuilder($version, $this->getMasterFactory()->createEnvironmentBuilder());
+        return new EnvironmentSourceBuilder($this->getMasterFactory()->createEnvironmentBuilder());
     }
 
     /**
@@ -171,7 +169,24 @@ class CommonFactory implements Factory, DomainEventFactory
      */
     public function createEnvironmentBuilder()
     {
-        return new EnvironmentBuilder();
+        $version = $this->getCurrentVersion();
+        return $this->createEnvironmentBuilderWithVersion(DataVersion::fromVersionString($version));
+    }
+
+    /**
+     * @param DataVersion $version
+     * @return EnvironmentBuilder
+     */
+    public function createEnvironmentBuilderWithVersion(DataVersion $version)
+    {
+        return new EnvironmentBuilder($version);
+    }
+
+    private function getCurrentVersion()
+    {
+        /** @var DataPoolReader $dataPoolReader */
+        $dataPoolReader = $this->getMasterFactory()->createDataPoolReader();
+        return $dataPoolReader->getCurrentVersion();
     }
 
     /**

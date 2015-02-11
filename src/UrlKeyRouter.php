@@ -23,13 +23,15 @@ class UrlKeyRouter implements HttpRouter
     /**
      * @param HttpRequest $request
      * @param Environment $environment
-     * @return HttpRequestHandler
+     * @return HttpRequestHandler|null
      */
     public function route(HttpRequest $request, Environment $environment)
     {
         $urlKeyRequestHandler = $this->urlKeyRequestHandlerBuilder->create($request->getUrl(), $environment);
-        if ($urlKeyRequestHandler->canProcess()) {
-            return $urlKeyRequestHandler;
+        if (! $urlKeyRequestHandler->canProcess()) {
+            return null;
         }
+        
+        return $urlKeyRequestHandler;
     }
 }

@@ -30,6 +30,17 @@ class DataPoolReader
 
     /**
      * @param string $key
+     * @return bool
+     */
+    public function hasSnippet($key)
+    {
+        $this->validateKey($key);
+        
+        return $this->keyValueStore->has($key);
+    }
+
+    /**
+     * @param string $key
      * @return string
      */
     public function getSnippet($key)
@@ -115,5 +126,18 @@ class DataPoolReader
         }
 
         return $result;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrentVersion()
+    {
+        $currentVersionKey = 'current_version';
+        $currentVersionNotSet = '-1';
+        if (! $this->keyValueStore->has($currentVersionKey)) {
+            return $currentVersionNotSet;
+        }
+        return $this->keyValueStore->get($currentVersionKey);
     }
 }

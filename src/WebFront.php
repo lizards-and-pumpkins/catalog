@@ -18,7 +18,7 @@ abstract class WebFront
      * @var HttpRequest
      */
     private $request;
-    
+
     /**
      * @var Environment
      */
@@ -26,13 +26,11 @@ abstract class WebFront
 
     /**
      * @param HttpRequest $request
-     * @param Environment $environment
      * @param MasterFactory $factory
      */
-    public function __construct(HttpRequest $request, Environment $environment, MasterFactory $factory = null)
+    public function __construct(HttpRequest $request, MasterFactory $factory = null)
     {
         $this->request = $request;
-        $this->environment = $environment;
         $this->masterFactory = $factory;
     }
 
@@ -52,22 +50,33 @@ abstract class WebFront
     public function runWithoutSendingResponse()
     {
         $this->buildFactoryIfItWasNotInjected();
+        $this->buildEnvironment();
 
-        $router = new HttpRouterChain();
-        $this->registerRouters($router);
+        $routerChain = new HttpRouterChain();
+        $this->registerRouters($routerChain);
 
-        $requestHandler = $router->route($this->request, $this->environment);
+        $requestHandler = $routerChain->route($this->request, $this->environment);
 
         // TODO put response creation into factory, response depends on http version!
-        
-        return $requestHandler->process();
 
+        return $requestHandler->process();
+    }
+
+    final public function registerFactory(Factory $factory)
+    {
+        $this->buildFactoryIfItWasNotInjected();
+        $this->masterFactory->register($factory);
     }
 
     /**
      * @return MasterFactory
      */
     abstract protected function createMasterFactoryIfNotInjected();
+
+    /**
+     * @return HttpRequest
+     */
+    abstract protected function createEnvironment(HttpRequest $request);
 
     /**
      * @param MasterFactory $factory
@@ -80,39 +89,17 @@ abstract class WebFront
     abstract protected function registerRouters(HttpRouterChain $router);
 
     /**
-     * @return null
+     * @return void
      */
     private function buildFactoryIfItWasNotInjected()
     {
         if (null !== $this->masterFactory) {
-            return null;
+            return;
         }
 
         $this->masterFactory = $this->createMasterFactoryIfNotInjected();
-
-        if (!($this->masterFactory instanceof MasterFactory)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'Factory is not of type MasterFactory but "%s"',
-                    $this->getExceptionMessageClassNameRepresentation($this->masterFactory)
-                )
-            );
-        }
-
+        $this->validateMasterFactory();
         $this->registerFactoriesIfMasterFactoryWasNotInjected($this->masterFactory);
-    }
-
-    /**
-     * @param mixed $value
-     * @return string
-     */
-    private function getExceptionMessageClassNameRepresentation($value)
-    {
-        if (is_object($value)) {
-            return get_class($value);
-        }
-
-        return (string)$value;
     }
 
     /**
@@ -137,5 +124,53 @@ abstract class WebFront
     final protected function getRequest()
     {
         return $this->request;
+    }
+
+    /**
+     * @throws \InvalidArgumentException
+     */
+    private function validateMasterFactory()
+    {
+        if (!($this->masterFactory instanceof MasterFactory)) {
+            throw new \InvalidArgumentException(sprintf(
+                'Factory is not of type MasterFactory but "%s"',
+                $this->getExceptionMessageClassNameRepresentation($this->masterFactory)
+            ));
+        }
+    }
+
+    private function buildEnvironment()
+    {
+        $this->environment = $this->createEnvironment($this->request);
+        $this->validateEnvironment();
+    }
+
+    /**
+     * @throws \InvalidArgumentException
+     */
+    private function validateEnvironment()
+    {
+        if (!($this->environment instanceof Environment)) {
+            throw new \InvalidArgumentException(sprintf(
+                'Environment is not of type Environment but "%s"',
+                $this->getExceptionMessageClassNameRepresentation($this->environment)
+            ));
+        }
+    }
+
+    /**
+     * @param mixed $value
+     * @return string
+     */
+    private function getExceptionMessageClassNameRepresentation($value)
+    {
+        if (is_object($value)) {
+            return get_class($value);
+        }
+        if (is_null($value)) {
+            return 'NULL';
+        }
+
+        return (string)$value;
     }
 }

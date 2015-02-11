@@ -19,12 +19,11 @@ class PoCWebFrontTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $stubHttpRequest = $this->getMockBuilder(HttpRequest::class)
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $stubMasterFactory = $this->getMock(MasterFactory::class);
-        $stubEnvironment = $this->getMock(Environment::class);
 
-        $this->pocWebFront = new PoCWebFront($stubHttpRequest, $stubEnvironment, $stubMasterFactory);
+        $this->pocWebFront = new PoCWebFront($stubHttpRequest, $stubMasterFactory);
     }
 
     /**

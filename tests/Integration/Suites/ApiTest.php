@@ -21,12 +21,8 @@ class ApiTest extends \PHPUnit_Framework_TestCase
         $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
         $request = HttpRequest::fromParameters('GET', $httpUrl);
 
-        $factory = new PoCMasterFactory();
-        $factory->register(new FrontendFactory());
-        $factory->register(new CommonFactory());
-        $factory->register(new IntegrationTestFactory());
-
-        $website = new PoCWebFront($request, new VersionedEnvironment(['version' => '1']), $factory);
+        $website = new PoCWebFront($request);
+        $website->registerFactory(new IntegrationTestFactory());
         $response = $website->runWithoutSendingResponse();
 
         $this->assertEquals('"dummy response"', $response->getBody());

@@ -3,20 +3,57 @@
 
 namespace Brera\Environment;
 
+use Brera\DataVersion;
+use Brera\Http\HttpRequest;
+
 class EnvironmentBuilder
 {
     /**
      * @var string[]
      */
     private $registeredEnvironmentDecorators = [];
+    /**
+     * @var
+     */
+    private $dataVersion;
 
     /**
-     * @param string[] $environmentSourceDataSets
+     * @param DataVersion $dataVersion
+     */
+    public function __construct(DataVersion $dataVersion)
+    {
+        $this->dataVersion = $dataVersion;
+    }
+
+    /**
+     * @param HttpRequest $request
+     * @return Environment
+     */
+    public function createFromRequest(HttpRequest $request)
+    {
+        return $this->getEnvironment(['website' => 'ru_de', 'language' => 'de_DE']);
+    }
+
+    /**
+     * @param string[] $environmentDataSets
      * @return Environment[]
      */
-    public function getEnvironments(array $environmentSourceDataSets)
+    public function getEnvironments(array $environmentDataSets)
     {
-        return array_map([$this, 'createDecoratedEnvironmentSet'], $environmentSourceDataSets);
+        return array_map([$this, 'getEnvironment'], $environmentDataSets);
+    }
+
+    /**
+     * @param array $environmentDataSet
+     * @return Environment
+     */
+    public function getEnvironment(array $environmentDataSet)
+    {
+        $versionedEnvironment = new VersionedEnvironment($this->dataVersion);
+        $codes = array_diff(array_keys($environmentDataSet), [VersionedEnvironment::CODE]);
+        return array_reduce($codes, function ($environment, $code) use ($environmentDataSet) {
+            return $this->createEnvironmentDecorator($environment, $code, $environmentDataSet);
+        }, $versionedEnvironment);
     }
 
     /**
@@ -27,19 +64,6 @@ class EnvironmentBuilder
     {
         $this->validateDecoratorClass($code, $environmentDecoratorClass);
         $this->registeredEnvironmentDecorators[$code] = $environmentDecoratorClass;
-    }
-
-    /**
-     * @param array $environmentSourceDataSet
-     * @return Environment
-     */
-    private function createDecoratedEnvironmentSet(array $environmentSourceDataSet)
-    {
-        $versionedEnvironment = new VersionedEnvironment($environmentSourceDataSet);
-        $codes = array_diff(array_keys($environmentSourceDataSet), [VersionedEnvironment::CODE]);
-        return array_reduce($codes, function ($environment, $code) use ($environmentSourceDataSet) {
-            return $this->createEnvironmentDecorator($environment, $code, $environmentSourceDataSet);
-        }, $versionedEnvironment);
     }
 
     /**

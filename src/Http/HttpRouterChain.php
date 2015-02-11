@@ -15,6 +15,7 @@ class HttpRouterChain implements HttpRouter
      * @param HttpRequest $request
      * @param Environment $environment
      * @return HttpRequestHandler
+     * @throws UnableToRouteRequestException
      */
     public function route(HttpRequest $request, Environment $environment)
     {

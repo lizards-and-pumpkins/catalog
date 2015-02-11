@@ -3,8 +3,6 @@
 
 namespace Brera\Environment;
 
-use Brera\DataVersion;
-
 /**
  * @covers \Brera\Environment\EnvironmentSourceBuilder
  * @uses   \Brera\Environment\EnvironmentSource
@@ -21,13 +19,10 @@ class EnvironmentSourceBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $stubVersion = $this->getMockBuilder(DataVersion::class)
+        $stubBuilder = $this->getMockBuilder(EnvironmentBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $stubVersion->expects($this->any())->method('__toString')->willReturn('1');
-
-        $stubBuilder = $this->getMock(EnvironmentBuilder::class);
-        $this->environmentSourceBuilder = new EnvironmentSourceBuilder($stubVersion, $stubBuilder);
+        $this->environmentSourceBuilder = new EnvironmentSourceBuilder($stubBuilder);
     }
 
     /**
@@ -70,12 +65,12 @@ class EnvironmentSourceBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldOnlyContainTheVersionIfThereAreNoAttributes()
+    public function itShouldbeEmptyIfThereAreNoAttributes()
     {
         $sourceEnv = $this->environmentSourceBuilder->createFromXml(
             '<product><attributes><foo>true</foo></attributes></product>'
         );
-        $this->assertEnvironmentPartCodesSame([VersionedEnvironment::CODE], $sourceEnv);
+        $this->assertEnvironmentPartCodesSame([], $sourceEnv);
     }
 
     /**
@@ -86,7 +81,7 @@ class EnvironmentSourceBuilderTest extends \PHPUnit_Framework_TestCase
         $sourceEnv = $this->environmentSourceBuilder->createFromXml(
             '<product><attributes><foo baz="bar">true</foo></attributes></product>'
         );
-        $this->assertEnvironmentPartCodesSame(['baz', VersionedEnvironment::CODE], $sourceEnv);
+        $this->assertEnvironmentPartCodesSame(['baz'], $sourceEnv);
     }
 
     /**
@@ -97,7 +92,7 @@ class EnvironmentSourceBuilderTest extends \PHPUnit_Framework_TestCase
         $sourceEnv = $this->environmentSourceBuilder->createFromXml(
             '<product><attributes><attribute foo="bar" baz="qux">true</attribute></attributes></product>'
         );
-        $this->assertEnvironmentPartCodesSame(['foo', 'baz', VersionedEnvironment::CODE], $sourceEnv);
+        $this->assertEnvironmentPartCodesSame(['foo', 'baz'], $sourceEnv);
     }
 
     /**
@@ -108,7 +103,7 @@ class EnvironmentSourceBuilderTest extends \PHPUnit_Framework_TestCase
         $sourceEnv = $this->environmentSourceBuilder->createFromXml(
             '<product><attributes><test1 foo="bar">true</test1><test2 foo="baz">true</test2></attributes></product>'
         );
-        $this->assertEnvironmentPartCodesSame(['foo', VersionedEnvironment::CODE], $sourceEnv);
+        $this->assertEnvironmentPartCodesSame(['foo'], $sourceEnv);
     }
 
     /**
@@ -119,7 +114,7 @@ class EnvironmentSourceBuilderTest extends \PHPUnit_Framework_TestCase
         $sourceEnv = $this->environmentSourceBuilder->createFromXml(
             '<product><attributes><test1 foo="bar">true</test1><test2 baz="qux">true</test2></attributes></product>'
         );
-        $this->assertEnvironmentPartCodesSame(['foo', 'baz', VersionedEnvironment::CODE], $sourceEnv);
+        $this->assertEnvironmentPartCodesSame(['foo', 'baz'], $sourceEnv);
     }
 
     /**

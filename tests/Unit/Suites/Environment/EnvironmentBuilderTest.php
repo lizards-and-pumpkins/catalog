@@ -3,10 +3,14 @@
 
 namespace Brera\Environment;
 
+use Brera\DataVersion;
+use Brera\Http\HttpRequest;
+
 /**
  * @covers \Brera\Environment\EnvironmentBuilder
  * @uses   \Brera\Environment\VersionedEnvironment
  * @uses   \Brera\Environment\EnvironmentDecorator
+ * @uses   \Brera\DataVersion
  */
 class EnvironmentBuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,7 +21,7 @@ class EnvironmentBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->builder = new EnvironmentBuilder();
+        $this->builder = new EnvironmentBuilder(DataVersion::fromVersionString('1'));
     }
 
     /**
@@ -26,10 +30,8 @@ class EnvironmentBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldThrowAnExceptionForNonExistingCode()
     {
-        $environments = [
-            [VersionedEnvironment::CODE => 1, 'foo' => 'bar'],
-        ];
-        $this->builder->getEnvironments($environments);
+        $environments = ['foo' => 'bar'];
+        $this->builder->getEnvironment($environments);
     }
 
     /**
@@ -38,10 +40,8 @@ class EnvironmentBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldThrowExceptionForNonEnvironmentDecoratorClass()
     {
-        $environments = [
-            [VersionedEnvironment::CODE => 1, 'stub_invalid_test' => 'dummy'],
-        ];
-        $this->builder->getEnvironments($environments);
+        $environments = ['stub_invalid_test' => 'dummy'];
+        $this->builder->getEnvironment($environments);
     }
 
     /**
@@ -50,7 +50,7 @@ class EnvironmentBuilderTest extends \PHPUnit_Framework_TestCase
     public function itShouldReturnEnvironmentsForGiveParts()
     {
         $environments = [
-            [VersionedEnvironment::CODE => 1, 'stub_valid_test' => 'dummy'],
+            ['stub_valid_test' => 'dummy'],
         ];
         $result = $this->builder->getEnvironments($environments);
         $this->assertCount(1, $result);
@@ -107,10 +107,22 @@ class EnvironmentBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $this->builder->registerEnvironmentDecorator('test', StubValidTestEnvironmentDecorator::class);
         $environments = [
-            [VersionedEnvironment::CODE => 1, 'test' => 'dummy'],
+            ['test' => 'dummy'],
         ];
         $result = $this->builder->getEnvironments($environments);
         $this->assertCount(1, $result);
         $this->assertContainsOnlyInstancesOf(Environment::class, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldCreateAnEnvironmentFromARequest()
+    {
+        $stubRequest = $this->getMockBuilder(HttpRequest::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $result = $this->builder->createFromRequest($stubRequest);
+        $this->assertInstanceOf(Environment::class, $result);
     }
 }

@@ -17,7 +17,7 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
      */
     public function importProductDomainEventShouldRenderAProduct()
     {
-        $factory = $this->prepareMasterFactory();
+        $factory = $this->prepareIntegrationTestMasterFactory();
 
         $sku = PoCSku::fromString('118235-251');
         $productId = ProductId::fromSku($sku);
@@ -54,10 +54,7 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldMakeAnImportedProductAccessibleFromTheFrontend()
     {
-        $dataVersion = '1';
-
-        $factory = $this->prepareMasterFactory();
-        $factory->register(new FrontendFactory());
+        $factory = $this->prepareIntegrationTestMasterFactory();
 
         $xml = file_get_contents(__DIR__ . '/../../shared-fixture/product.xml');
 
@@ -70,27 +67,38 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         
         $urlKey = (new XPathParser($xml))->getXmlNodesArrayByXPath('/*/product/attributes/url_key')[0];
         
-        $environment = $factory->createEnvironmentBuilder()->getEnvironments([
-            ['version' => $dataVersion, 'website' => 'ru_de', 'language' => $urlKey['attributes']['language']]
-        ])[0];
-        
         $httpUrl = HttpUrl::fromString('http://example.com/' . $urlKey['value']);
         $request = HttpRequest::fromParameters('GET', $httpUrl);
 
-        $website = new PoCWebFront($request, $environment, $factory);
+        $website = new PoCWebFront($request, $factory);
         $response = $website->runWithoutSendingResponse();
 
         $this->assertContains('<body>', $response->getBody());
     }
 
     /**
+     * @test
+     * @expectedException \Brera\Http\UnableToRouteRequestException
+     */
+    public function itShouldThrowAnUnableToRouteRequestException()
+    {
+        $url = HttpUrl::fromString('http://example.com/non/existent/path');
+        $request = HttpRequest::fromParameters('GET', $url);
+
+        $website = new PoCWebFront($request);
+        $website->registerFactory(new IntegrationTestFactory());
+        $website->runWithoutSendingResponse();
+    }
+
+    /**
      * @return PoCMasterFactory
      */
-    private function prepareMasterFactory()
+    private function prepareIntegrationTestMasterFactory()
     {
         $factory = new PoCMasterFactory();
         $factory->register(new CommonFactory());
         $factory->register(new IntegrationTestFactory());
+        $factory->register(new FrontendFactory());
         return $factory;
     }
 }
