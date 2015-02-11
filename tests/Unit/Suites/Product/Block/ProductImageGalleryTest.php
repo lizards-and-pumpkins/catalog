@@ -4,7 +4,7 @@ namespace Unit\Suites\Product\Block;
 
 use Brera\Image;
 use Brera\Product\Block\ProductImageGallery;
-use Brera\Product\ProductSource;
+use Brera\Product\Product;
 use Brera\Product\ProductAttribute;
 use Brera\Product\ProductAttributeList;
 
@@ -16,13 +16,13 @@ use Brera\Product\ProductAttributeList;
 class ProductImageGalleryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ProductSource|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubProductSource;
 
     protected function setUp()
     {
-        $this->stubProductSource = $this->getMockBuilder(ProductSource::class)
+        $this->stubProductSource = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
