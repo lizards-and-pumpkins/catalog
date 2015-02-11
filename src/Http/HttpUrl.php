@@ -59,6 +59,7 @@ class HttpUrl
     {
         /** @var \League\Url\Components\Path $path */
         $path = $this->url->getPath();
+        $path->remove($this->getDirectoryPathRelativeToDocumentRoot());
 
         return $path->getUriComponent();
     }
@@ -78,5 +79,10 @@ class HttpUrl
             default:
                 throw new UnknownProtocolException(sprintf('Protocol can not be handled "%s"', $url->getScheme()));
         }
+    }
+
+    private function getDirectoryPathRelativeToDocumentRoot()
+    {
+        return preg_replace('#/[^/]*$#', '', $_SERVER['SCRIPT_NAME']);
     }
 }

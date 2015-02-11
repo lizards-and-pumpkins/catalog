@@ -81,4 +81,16 @@ class HttpUrlTest extends \PHPUnit_Framework_TestCase
     {
         HttpUrl::fromString('this is not a valid url');
     }
+
+    /**
+     * @test
+     */
+    public function itShouldExcludeDirectoryPathFromUrl()
+    {
+        $_SERVER['SCRIPT_NAME'] = '/path/to/index.php';
+
+        $url = HttpUrl::fromString('http://www.example.com/path/to/some-page');
+
+        $this->assertEquals('/some-page', $url->getPath());
+    }
 }

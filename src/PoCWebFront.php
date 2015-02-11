@@ -2,6 +2,7 @@
 
 namespace Brera;
 
+use Brera\Environment\EnvironmentBuilder;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRouterChain;
 
@@ -20,7 +21,9 @@ class PoCWebFront extends WebFront
      */
     protected function createEnvironment(HttpRequest $request)
     {
+        /** @var EnvironmentBuilder $environmentBuilder */
         $environmentBuilder = $this->getMasterFactory()->createEnvironmentBuilder();
+
         return $environmentBuilder->getEnvironment(
             ['website' => 'ru_de', 'language' => 'de_DE']
         );
