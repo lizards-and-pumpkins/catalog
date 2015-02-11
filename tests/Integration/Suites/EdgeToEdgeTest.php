@@ -3,6 +3,7 @@
 namespace Brera;
 
 use Brera\Environment\EnvironmentSource;
+use Brera\Http\HttpResourceNotFoundResponse;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\PoCSku;
 use Brera\Product\ProductId;
@@ -78,16 +79,16 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Brera\Http\UnableToRouteRequestException
      */
-    public function itShouldThrowAnUnableToRouteRequestException()
+    public function itShouldReturnAHttpResourceNotFoundResponse()
     {
         $url = HttpUrl::fromString('http://example.com/non/existent/path');
         $request = HttpRequest::fromParameters('GET', $url);
 
         $website = new PoCWebFront($request);
         $website->registerFactory(new IntegrationTestFactory());
-        $website->runWithoutSendingResponse();
+        $response = $website->runWithoutSendingResponse();
+        $this->assertInstanceOf(HttpResourceNotFoundResponse::class, $response);
     }
 
     /**

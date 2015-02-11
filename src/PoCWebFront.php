@@ -48,5 +48,6 @@ class PoCWebFront extends WebFront
             $this->getRequest()->getUrl(),
             $this->getEnvironment()
         ));
+        $router->register($this->getMasterFactory()->createResourceNotFoundRouter());
     }
 }
