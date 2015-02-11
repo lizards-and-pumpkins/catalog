@@ -21,3 +21,14 @@ $queue->add(new CatalogImportDomainEvent($xml));
 $consumer = $factory->createDomainEventConsumer();
 $numberOfMessages = 3;
 $consumer->process($numberOfMessages);
+
+$messages = $factory->getLogger()->getMessages();
+if (count($messages)) {
+    echo "Log message(s):\n";
+    foreach ($messages as $message) {
+        echo "\t" . $message;
+        if (substr($message, -1) !== PHP_EOL) {
+            echo PHP_EOL;
+        }
+    }
+}

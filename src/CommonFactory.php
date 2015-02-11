@@ -254,7 +254,7 @@ class CommonFactory implements Factory, DomainEventFactory
      * @return LoggerInterface
      * @throws UndefinedFactoryMethodException
      */
-    private function getLogger()
+    public function getLogger()
     {
         if (null === $this->logger) {
             $this->logger = $this->callExternalCreateMethod('Logger');

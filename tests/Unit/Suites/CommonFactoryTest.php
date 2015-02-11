@@ -13,6 +13,7 @@ use Brera\Product\ProductImportDomainEventHandler;
 use Brera\Product\ProductProjector;
 use Brera\Product\ProductSourceBuilder;
 use Brera\Queue\Queue;
+use Psr\Log\LoggerInterface;
 
 /**
  * @covers \Brera\CommonFactory
@@ -243,10 +244,19 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $masterFactory = new PoCMasterFactory();
         $commonFactory = new CommonFactory();
         $masterFactory->register($commonFactory);
-        
-        $method = new \ReflectionMethod($commonFactory, 'getLogger');
-        $method->setAccessible(true);
-        $method->invoke($commonFactory);
+
+        $commonFactory->getLogger();
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnTheLoggerInstance()
+    {
+        $resultA = $this->commonFactory->getLogger();
+        $resultB = $this->commonFactory->getLogger();
+        $this->assertInstanceOf(LoggerInterface::class, $resultA);
+        $this->assertSame($resultA, $resultB);
     }
 
     /**
