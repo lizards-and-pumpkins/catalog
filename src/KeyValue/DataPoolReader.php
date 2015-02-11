@@ -9,6 +9,16 @@ use Brera\Product\ProductId;
 class DataPoolReader
 {
     /**
+     * @var string
+     */
+    private $currentDataVersionKey = 'current_version';
+
+    /**
+     * @var string
+     */
+    private $currentDataVersionDefault = '-1';
+    
+    /**
      * @var KeyValueStore
      */
     private $keyValueStore;
@@ -124,13 +134,11 @@ class DataPoolReader
     /**
      * @return string
      */
-    public function getCurrentVersion()
+    public function getCurrentDataVersion()
     {
-        $currentVersionKey = 'current_version';
-        $currentVersionNotSet = '-1';
-        if (! $this->keyValueStore->has($currentVersionKey)) {
-            return $currentVersionNotSet;
+        if (! $this->keyValueStore->has($this->currentDataVersionKey)) {
+            return $this->currentDataVersionDefault;
         }
-        return $this->keyValueStore->get($currentVersionKey);
+        return $this->keyValueStore->get($this->currentDataVersionKey);
     }
 }

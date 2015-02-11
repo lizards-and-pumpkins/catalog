@@ -186,7 +186,7 @@ class CommonFactory implements Factory, DomainEventFactory
     {
         /** @var DataPoolReader $dataPoolReader */
         $dataPoolReader = $this->getMasterFactory()->createDataPoolReader();
-        return $dataPoolReader->getCurrentVersion();
+        return $dataPoolReader->getCurrentDataVersion();
     }
 
     /**

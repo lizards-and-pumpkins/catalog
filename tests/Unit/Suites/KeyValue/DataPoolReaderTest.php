@@ -209,7 +209,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
             ->method('has')
             ->with('current_version')
             ->willReturn(false);
-        $this->assertSame('-1', $this->dataPoolReader->getCurrentVersion());
+        $this->assertSame('-1', $this->dataPoolReader->getCurrentDataVersion());
     }
 
     /**
@@ -225,6 +225,6 @@ class DataPoolReaderTest extends AbstractDataPoolTest
             ->method('get')
             ->with('current_version')
             ->willReturn('123');
-        $this->assertSame('123', $this->dataPoolReader->getCurrentVersion());
+        $this->assertSame('123', $this->dataPoolReader->getCurrentDataVersion());
     }
 }
