@@ -169,7 +169,7 @@ class CommonFactory implements Factory, DomainEventFactory
      */
     public function createEnvironmentBuilder()
     {
-        $version = $this->getCurrentVersion();
+        $version = $this->getCurrentDataVersion();
         return $this->createEnvironmentBuilderWithVersion(DataVersion::fromVersionString($version));
     }
 
@@ -182,11 +182,11 @@ class CommonFactory implements Factory, DomainEventFactory
         return new EnvironmentBuilder($version);
     }
 
-    private function getCurrentVersion()
+    private function getCurrentDataVersion()
     {
         /** @var DataPoolReader $dataPoolReader */
         $dataPoolReader = $this->getMasterFactory()->createDataPoolReader();
-        return $dataPoolReader->getCurrentVersion();
+        return $dataPoolReader->getCurrentDataVersion();
     }
 
     /**
