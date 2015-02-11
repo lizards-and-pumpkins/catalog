@@ -96,7 +96,7 @@ class EnvironmentBuilder
     private function getDefaultEnvironmentDecoratorClass($code)
     {
         $decoratorClass = ucfirst($this->removeUnderscores($code)) . 'EnvironmentDecorator';
-        $qualifiedDecoratorClass = "\\Brera\\Environment\\$decoratorClass";
+        $qualifiedDecoratorClass = '\\Brera\\Environment\\' . $decoratorClass;
         $this->validateDecoratorClass($code, $qualifiedDecoratorClass);
         $this->registerEnvironmentDecorator($code, $qualifiedDecoratorClass);
         return $qualifiedDecoratorClass;

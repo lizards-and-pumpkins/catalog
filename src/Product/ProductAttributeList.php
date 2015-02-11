@@ -107,7 +107,7 @@ class ProductAttributeList
     {
         $attributesForCode = [];
         foreach ($this->attributes as $attribute) {
-            if ($attribute->getCode() == $code) {
+            if ($attribute->getCode() === $code) {
                 $attributesForCode[] = $attribute;
             }
         }

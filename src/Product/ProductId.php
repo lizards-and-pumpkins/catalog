@@ -22,7 +22,7 @@ class ProductId
      */
     public function __toString()
     {
-        return (string)$this->id;
+        return (string) $this->id;
     }
 
     /**
@@ -31,6 +31,6 @@ class ProductId
      */
     public static function fromSku(Sku $sku)
     {
-        return new ProductId((string)$sku);
+        return new ProductId((string) $sku);
     }
 }

@@ -12,7 +12,6 @@ use Brera\Product\ProductSourceBuilder;
 use Brera\KeyValue\KeyValueStore;
 use Brera\Queue\Queue;
 use Brera\KeyValue\DataPoolWriter;
-use Brera\KeyValue\KeyValueStoreKeyGenerator;
 use Brera\KeyValue\DataPoolReader;
 use Brera\Product\ProductImportDomainEvent;
 use Brera\Product\ProductImportDomainEventHandler;
@@ -275,7 +274,7 @@ class CommonFactory implements Factory, DomainEventFactory
             $instance = $this->getMasterFactory()->{'create' . $targetObjectName}();
         } catch (UndefinedFactoryMethodException $e) {
             throw new UndefinedFactoryMethodException(
-                "Unable to create {$targetObjectName}. Is the factory registered? " . $e->getMessage()
+                sprintf('Unable to create %s. Is the factory registered? %s', $targetObjectName, $e->getMessage())
             );
         }
         return $instance;

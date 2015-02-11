@@ -118,7 +118,7 @@ class UrlKeyRequestHandler implements HttpRequestHandler
         $placeholders = [];
 
         foreach ($snippetKeys as $key) {
-            $placeholders[$key] = "{{snippet $key}}";
+            $placeholders[$key] = sprintf('{{snippet %s}}', $key);
         }
 
         return $placeholders;

@@ -29,7 +29,7 @@ class SnippetResult
             );
         }
 
-        return new self($key, (string)$content);
+        return new self($key, (string) $content);
     }
 
     /**
