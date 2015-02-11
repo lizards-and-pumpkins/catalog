@@ -99,7 +99,7 @@ class EnvironmentSource
 
     /**
      * @param array $partsToExtract
-     * @return array
+     * @return Environment[]
      */
     public function extractEnvironments(array $partsToExtract)
     {
