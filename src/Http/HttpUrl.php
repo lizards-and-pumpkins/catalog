@@ -59,6 +59,17 @@ class HttpUrl
     {
         /** @var \League\Url\Components\Path $path */
         $path = $this->url->getPath();
+
+        return $path->getUriComponent();
+    }
+
+    /**
+     * @return string
+     */
+    public function getPathRelativeToWebFront()
+    {
+        /** @var \League\Url\Components\Path $path */
+        $path = $this->url->getPath();
         $path->remove($this->getDirectoryPathRelativeToDocumentRoot());
 
         return $path->getUriComponent();

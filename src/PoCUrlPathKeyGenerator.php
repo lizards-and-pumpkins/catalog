@@ -15,7 +15,7 @@ class PoCUrlPathKeyGenerator implements UrlPathKeyGenerator
      */
     public function getUrlKeyForUrlInEnvironment(HttpUrl $url, Environment $environment)
     {
-        return $this->getUrlKeyForPathInEnvironment($url->getPath(), $environment);
+        return $this->getUrlKeyForPathInEnvironment($url->getPathRelativeToWebFront(), $environment);
     }
 
     /**

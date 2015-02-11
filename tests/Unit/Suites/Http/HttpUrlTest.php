@@ -91,9 +91,10 @@ class HttpUrlTest extends \PHPUnit_Framework_TestCase
         $_SERVER['SCRIPT_NAME'] = '/path/to/index.php';
 
         $url = HttpUrl::fromString('http://www.example.com/path/to/some-page');
+        $result = $url->getPathRelativeToWebFront();
 
         $_SERVER['SCRIPT_NAME'] = $originalScriptName;
 
-        $this->assertEquals('/some-page', $url->getPath());
+        $this->assertEquals('/some-page', $result);
     }
 }

@@ -31,7 +31,7 @@ class PoCUrlPathKeyGeneratorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $stubUrl->expects($this->any())
-            ->method('getPath')
+            ->method('getPathRelativeToWebFront')
             ->willReturn($path);
         
         $mockEnvironment = $this->getMock(Environment::class);
