@@ -1,3 +1,5 @@
+# Example .htaccess file for use in the document root (usually the pub/ directory).
+
 <IfModule mod_rewrite.c>
     Options +FollowSymLinks
     RewriteEngine on
