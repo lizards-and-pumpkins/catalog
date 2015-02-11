@@ -81,6 +81,9 @@ class HttpUrl
         }
     }
 
+    /**
+     * @return string
+     */
     private function getDirectoryPathRelativeToDocumentRoot()
     {
         return preg_replace('#/[^/]*$#', '', $_SERVER['SCRIPT_NAME']);
