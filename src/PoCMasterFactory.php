@@ -10,6 +10,7 @@ use Brera\Environment\EnvironmentBuilder;
  * @method Queue\Queue getEventQueue
  * @method EnvironmentBuilder createEnvironmentBuilder
  * @method EnvironmentBuilder createEnvironmentBuilderWithVersion
+ * @method DomainEventConsumer createDomainEventConsumer
  */
 class PoCMasterFactory implements MasterFactory
 {
