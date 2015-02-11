@@ -2,7 +2,7 @@
 
 namespace Brera\Product\Block;
 
-use Brera\Product\ProductSource;
+use Brera\Product\Product;
 use Brera\Product\ProductAttributeNotFoundException;
 use Brera\Renderer\ThemeProductRenderingTestTrait;
 
@@ -15,13 +15,13 @@ class ProductDetailsPageBlockTest extends \PHPUnit_Framework_TestCase
     use ThemeProductRenderingTestTrait;
 
     /**
-     * @var ProductSource|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubProduct;
 
     protected function setUp()
     {
-        $this->stubProduct = $this->getMockBuilder(ProductSource::class)
+        $this->stubProduct = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 

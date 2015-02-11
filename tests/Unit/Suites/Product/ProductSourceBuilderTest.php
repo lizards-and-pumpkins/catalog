@@ -33,9 +33,23 @@ class ProductSourceBuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param mixed $expected
+     * @param ProductSource $productSource
+     * @param string $attributeCode
+     */
+    private function assertProductAttributeValueEquals($expected, ProductSource $productSource, $attributeCode)
+    {
+        $property = new \ReflectionProperty($productSource, 'attributes');
+        $property->setAccessible(true);
+        /** @var ProductAttributeList $attributeList */
+        $attributeList = $property->getValue($productSource);
+        $this->assertEquals($expected, $attributeList->getAttribute($attributeCode)->getValue());
+    }
+
+    /**
      * @test
      */
-    public function itShouldCreateAProductFromXml()
+    public function itShouldCreateAProductSourceFromXml()
     {
         /** @var \DOMElement $firstNode */
         $firstNode = $this->domDocument->getElementsByTagName('product')->item(0);
@@ -44,17 +58,17 @@ class ProductSourceBuilderTest extends \PHPUnit_Framework_TestCase
 
         $firstNodeXml = $this->domDocument->saveXML($firstNode);
 
-        $product = $this->builder->createProductSourceFromXml($firstNodeXml);
+        $productSource = $this->builder->createProductSourceFromXml($firstNodeXml);
 
-        $this->assertInstanceOf(ProductSource::class, $product);
-        $this->assertEquals($expectedSku, $product->getId());
-        $this->assertEquals($expectedAttribute, $product->getAttributeValue('special_price'));
+        $this->assertInstanceOf(ProductSource::class, $productSource);
+        $this->assertEquals($expectedSku, $productSource->getId());
+        $this->assertProductAttributeValueEquals($expectedAttribute, $productSource, 'special_price');
     }
 
     /**
      * @test
      */
-    public function itShouldCreateAProductFromXmlIgnoringAssociatedProducts()
+    public function itShouldCreateAProductSourceFromXmlIgnoringAssociatedProducts()
     {
         /** @var \DOMElement $secondNode */
         $secondNode = $this->domDocument->getElementsByTagName('product')->item(1);
@@ -62,11 +76,11 @@ class ProductSourceBuilderTest extends \PHPUnit_Framework_TestCase
         $expectedAttribute = $secondNode->getElementsByTagName('price')->item(0)->nodeValue;
 
         $secondNodeXml = $this->domDocument->saveXML($secondNode);
-        $product = $this->builder->createProductSourceFromXml($secondNodeXml);
+        $productSource = $this->builder->createProductSourceFromXml($secondNodeXml);
 
-        $this->assertInstanceOf(ProductSource::class, $product);
-        $this->assertEquals($expectedSku, $product->getId());
-        $this->assertEquals($expectedAttribute, $product->getAttributeValue('price'));
+        $this->assertInstanceOf(ProductSource::class, $productSource);
+        $this->assertEquals($expectedSku, $productSource->getId());
+        $this->assertProductAttributeValueEquals($expectedAttribute, $productSource, 'price');
     }
 
     /**
@@ -74,14 +88,14 @@ class ProductSourceBuilderTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Brera\Product\ProductAttributeNotFoundException
      * @expectedExceptionMessage Can not find an attribute with code "size".
      */
-    public function itShouldCreateAProductFromXmlIgnoringAssociatedProductsAttributes()
+    public function itShouldCreateAProductSourceFromXmlIgnoringAssociatedProductsAttributes()
     {
         /** @var \DOMElement $secondNode */
         $secondNode = $this->domDocument->getElementsByTagName('product')->item(1);
         $secondNodeXml = $this->domDocument->saveXML($secondNode);
 
-        $product = $this->builder->createProductSourceFromXml($secondNodeXml);
-        $product->getAttributeValue('size');
+        $productSource = $this->builder->createProductSourceFromXml($secondNodeXml);
+        $this->assertProductAttributeValueEquals('nothing', $productSource, 'size');
     }
 
     /**
