@@ -25,7 +25,7 @@ class PoCUrlPathKeyGenerator implements UrlPathKeyGenerator
      */
     public function getUrlKeyForPathInEnvironment($path, Environment $environment)
     {
-        $key = $this->prependSlashIfMissing((string)$path) . '_' . $environment->getId();
+        $key = $this->prependSlashIfMissing((string) $path) . '_' . $environment->getId();
         return preg_replace('#[^a-z0-9:_-]#i', '_', $key);
     }
 

@@ -167,10 +167,11 @@ abstract class WebFront
         if (is_object($value)) {
             return get_class($value);
         }
+
         if (is_null($value)) {
             return 'NULL';
         }
 
-        return (string)$value;
+        return (string) $value;
     }
 }

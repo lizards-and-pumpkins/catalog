@@ -21,7 +21,7 @@ trait MasterFactoryTrait
                 continue;
             }
 
-            if (substr($name, 0, 6) != 'create' && substr($name, 0, 3) != 'get') {
+            if ('create' !== substr($name, 0, 6) && 'get' !== substr($name, 0, 3)) {
                 continue;
             }
 
