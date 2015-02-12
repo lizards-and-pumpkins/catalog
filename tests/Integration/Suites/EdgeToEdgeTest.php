@@ -16,7 +16,7 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function importProductDomainEventShouldRenderAProduct()
+    public function importProductDomainEventShouldPutProductToKeyValueStoreAndSearchIndex()
     {
         $factory = $this->prepareIntegrationTestMasterFactory();
 
@@ -33,7 +33,7 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $numberOfMessages = 3;
         $consumer->process($numberOfMessages);
         
-        $reader = $factory->createDataPoolReader();
+        $dataPoolReader = $factory->createDataPoolReader();
         
         /** @var ProductDetailViewSnippetKeyGenerator $keyGenerator */
         $keyGenerator = $factory->createProductDetailViewSnippetKeyGenerator();
@@ -43,11 +43,16 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $environment = $environmentSource->extractEnvironments(['version', 'website', 'language'])[0];
         
         $key = $keyGenerator->getKeyForEnvironment($productId, $environment);
-        
-        $html = $reader->getSnippet($key);
+        $html = $dataPoolReader->getSnippet($key);
+
+        $searchEngineReader = $factory->createSearchEngineReader();
+        $searchResults = $searchEngineReader->getSearchResults('led');
 
         $this->assertContains((string)$sku, $html);
         $this->assertContains($productName, $html);
+        $this->assertContains(
+            ['product_id' => $productId->__toString(), 'name' => $productName, 'version' => -1], $searchResults
+        );
     }
 
     /**

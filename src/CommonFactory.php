@@ -20,6 +20,8 @@ use Brera\Product\ProductProjector;
 use Brera\Product\ProductDetailViewSnippetRenderer;
 use Brera\Product\ProductDetailViewSnippetKeyGenerator;
 use Brera\SearchEngine\InMemorySearchEngine;
+use Brera\SearchEngine\SearchEngine;
+use Brera\SearchEngine\SearchEngineReader;
 use Psr\Log\LoggerInterface;
 
 class CommonFactory implements Factory, DomainEventFactory
@@ -40,6 +42,11 @@ class CommonFactory implements Factory, DomainEventFactory
      * @var LoggerInterface
      */
     private $logger;
+
+    /**
+     * @var SearchEngine
+     */
+    private $searchEngine;
 
     /**
      * @param ProductImportDomainEvent $event
@@ -254,6 +261,14 @@ class CommonFactory implements Factory, DomainEventFactory
     }
 
     /**
+     * @return SearchEngineReader
+     */
+    public function createSearchEngineReader()
+    {
+        return new SearchEngineReader($this->getSearchEngine());
+    }
+
+    /**
      * @return LoggerInterface
      * @throws UndefinedFactoryMethodException
      */
@@ -307,16 +322,20 @@ class CommonFactory implements Factory, DomainEventFactory
      * @return InMemorySearchEngine
      * @todo: move to catalog factory
      */
-    public function getSearchEngine()
+    private function getSearchEngine()
     {
-        return new InMemorySearchEngine();
+        if (is_null($this->searchEngine)) {
+            $this->searchEngine = new InMemorySearchEngine();
+        }
+
+        return $this->searchEngine;
     }
 
     /**
      * return string[]
      * @todo: move to catalog factory
      */
-    public function getListOfAttributesToBePutIntoSearchEngine()
+    private function getListOfAttributesToBePutIntoSearchEngine()
     {
         return ['name'];
     }

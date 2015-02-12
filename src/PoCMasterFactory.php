@@ -11,6 +11,7 @@ use Brera\Environment\EnvironmentBuilder;
  * @method EnvironmentBuilder createEnvironmentBuilder
  * @method EnvironmentBuilder createEnvironmentBuilderWithVersion
  * @method DomainEventConsumer createDomainEventConsumer
+ * @method SearchEngine\SearchEngineReader createSearchEngineReader
  */
 class PoCMasterFactory implements MasterFactory
 {
