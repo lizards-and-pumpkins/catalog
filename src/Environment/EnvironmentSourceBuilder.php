@@ -48,7 +48,7 @@ class EnvironmentSourceBuilder
 
     /**
      * @param string $xml
-     * @return array
+     * @return string[]
      */
     private function extractAttributesFromXml($xml)
     {

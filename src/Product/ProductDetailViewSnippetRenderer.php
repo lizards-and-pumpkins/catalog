@@ -65,7 +65,7 @@ class ProductDetailViewSnippetRenderer extends BlockSnippetRenderer
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     private function getEnvironmentParts()
     {

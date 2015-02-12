@@ -68,7 +68,7 @@ class Layout
     /**
      * @param array $layout
      * @throws RootElementOfLayoutMustBeAnArrayException
-     * @return array
+     * @return array[]
      */
     private static function getRootElement(array $layout)
     {
