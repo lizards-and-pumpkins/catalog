@@ -77,7 +77,7 @@ abstract class EnvironmentDecorator implements Environment
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     final protected function getSourceData()
     {

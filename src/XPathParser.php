@@ -54,7 +54,7 @@ class XPathParser
 
     /**
      * @param string $xPath
-     * @return array
+     * @return array[]
      */
     public function getXmlNodesArrayByXPath($xPath)
     {
@@ -65,7 +65,7 @@ class XPathParser
 
     /**
      * @param \DOMNodeList $nodeList
-     * @return array
+     * @return array[]
      */
     private function getDomTreeAsArray(\DOMNodeList $nodeList)
     {
@@ -90,7 +90,7 @@ class XPathParser
 
     /**
      * @param string $xPath
-     * @return array
+     * @return string[]
      */
     public function getXmlNodesRawXmlArrayByXPath($xPath)
     {
@@ -141,7 +141,7 @@ class XPathParser
 
     /**
      * @param \DOMNode $node
-     * @return array
+     * @return string[]
      */
     private function getNodeAttributesAsArray(\DOMNode $node)
     {
