@@ -7,6 +7,7 @@ use Brera\Environment\EnvironmentSourceBuilder;
 use Brera\Http\ResourceNotFoundRouter;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
+use Brera\Product\ProductSearchIndexer;
 use Brera\Product\ProductSnippetRendererCollection;
 use Brera\Product\ProductSourceBuilder;
 use Brera\KeyValue\KeyValueStore;
@@ -18,6 +19,7 @@ use Brera\Product\ProductImportDomainEventHandler;
 use Brera\Product\ProductProjector;
 use Brera\Product\ProductDetailViewSnippetRenderer;
 use Brera\Product\ProductDetailViewSnippetKeyGenerator;
+use Brera\SearchEngine\InMemorySearchEngine;
 use Psr\Log\LoggerInterface;
 
 class CommonFactory implements Factory, DomainEventFactory
@@ -50,7 +52,8 @@ class CommonFactory implements Factory, DomainEventFactory
             $event,
             $this->getMasterFactory()->createProductSourceBuilder(),
             $this->getMasterFactory()->createEnvironmentSourceBuilder(),
-            $this->getMasterFactory()->createProductProjector()
+            $this->getMasterFactory()->createProductProjector(),
+            $this->getMasterFactory()->createProductSearchIndexer()
         );
     }
 
@@ -286,5 +289,35 @@ class CommonFactory implements Factory, DomainEventFactory
     public function createResourceNotFoundRouter()
     {
         return new ResourceNotFoundRouter();
+    }
+
+    /**
+     * @return ProductSearchIndexer
+     * @todo: move to catalog factory
+     */
+    public function createProductSearchIndexer()
+    {
+        return new ProductSearchIndexer(
+            $this->getSearchEngine(),
+            $this->getListOfAttributesToBePutIntoSearchEngine()
+        );
+    }
+
+    /**
+     * @return InMemorySearchEngine
+     * @todo: move to catalog factory
+     */
+    public function getSearchEngine()
+    {
+        return new InMemorySearchEngine();
+    }
+
+    /**
+     * return string[]
+     * @todo: move to catalog factory
+     */
+    public function getListOfAttributesToBePutIntoSearchEngine()
+    {
+        return ['name'];
     }
 }

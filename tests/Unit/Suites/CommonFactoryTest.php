@@ -13,6 +13,7 @@ use Brera\Product\ProductImportDomainEventHandler;
 use Brera\Product\ProductProjector;
 use Brera\Product\ProductSourceBuilder;
 use Brera\Queue\Queue;
+use Brera\SearchEngine\InMemorySearchEngine;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -36,6 +37,7 @@ use Psr\Log\LoggerInterface;
  * @uses   \Brera\Product\ProductImportDomainEvent
  * @uses   \Brera\Product\CatalogImportDomainEvent
  * @uses   \Brera\Product\CatalogImportDomainEventHandler
+ * @uses   \Brera\Product\ProductSearchIndexer
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -266,5 +268,21 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createResourceNotFoundRouter();
         $this->assertInstanceOf(ResourceNotFoundRouter::class, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnInMemorySearchEngine()
+    {
+        $this->assertInstanceOf(InMemorySearchEngine::class, $this->commonFactory->getSearchEngine());
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnArrayOfStrings()
+    {
+        $this->assertContainsOnly('string', $this->commonFactory->getListOfAttributesToBePutIntoSearchEngine());
     }
 }

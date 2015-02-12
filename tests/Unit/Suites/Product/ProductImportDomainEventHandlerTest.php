@@ -13,9 +13,9 @@ class ProductImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldTriggerAProjection()
+    public function itShouldTriggerProjectionAndSearchIndexing()
     {
-        $stubProduct = $this->getMockBuilder(ProductSource::class)
+        $stubProductSource = $this->getMockBuilder(ProductSource::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -28,7 +28,7 @@ class ProductImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
         $stubProductBuilder = $this->getMock(ProductSourceBuilder::class);
         $stubProductBuilder->expects($this->once())
             ->method('createProductSourceFromXml')
-            ->willReturn($stubProduct);
+            ->willReturn($stubProductSource);
 
         $stubEnvironmentSource = $this->getMockBuilder(EnvironmentSource::class)
             ->disableOriginalConstructor()
@@ -44,13 +44,22 @@ class ProductImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $stubProjector->expects($this->once())
-            ->method('project');
+            ->method('project')
+            ->with($stubProductSource, $stubEnvironmentSource);
+
+        $stubSearchIndexer = $this->getMockBuilder(ProductSearchIndexer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $stubSearchIndexer->expects($this->once())
+            ->method('index')
+            ->with($stubProductSource, $stubEnvironmentSource);
 
         (new ProductImportDomainEventHandler(
             $stubDomainEvent,
             $stubProductBuilder,
             $stubEnvironmentSourceBuilder,
-            $stubProjector
+            $stubProjector,
+            $stubSearchIndexer
         )
         )->process();
     }
