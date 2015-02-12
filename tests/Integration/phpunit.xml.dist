@@ -21,6 +21,9 @@
         timeoutForSmallTests="1"
         timeoutForMediumTests="10"
         timeoutForLargeTests="60"
+        beStrictAboutTestsThatDoNotTestAnything="true"
+        beStrictAboutOutputDuringTests="true"
+        beStrictAboutTestSize="true"
         verbose="false">
     <testsuite name="Brera Integration Tests">
         <directory>Suites</directory>
