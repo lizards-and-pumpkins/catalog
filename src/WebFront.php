@@ -51,8 +51,9 @@ abstract class WebFront
     {
         $this->buildFactoryIfItWasNotInjected();
         $this->buildEnvironment();
-
-        $routerChain = new HttpRouterChain();
+        
+        /** @var HttpRouterChain $routerChain */
+        $routerChain = $this->getMasterFactory()->createHttpRouterChain();
         $this->registerRouters($routerChain);
 
         $requestHandler = $routerChain->route($this->request, $this->environment);

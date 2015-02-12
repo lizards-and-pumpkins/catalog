@@ -5,6 +5,7 @@ namespace Brera;
 use Brera\Environment\EnvironmentBuilder;
 use Brera\Environment\EnvironmentSourceBuilder;
 use Brera\Http\ResourceNotFoundRouter;
+use Brera\Http\HttpRouterChain;
 use Brera\KeyValue\DataPoolReader;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
@@ -17,8 +18,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * @covers \Brera\CommonFactory
+ * @covers \Brera\FactoryTrait
  * @uses   \Brera\DataVersion
- * @uses   \Brera\FactoryTrait
  * @uses   \Brera\MasterFactoryTrait
  * @uses   \Brera\IntegrationTestFactory
  * @uses   \Brera\KeyValue\DataPoolWriter
@@ -50,7 +51,15 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $masterFactory->register(new IntegrationTestFactory());
         $this->commonFactory = new CommonFactory();
         $masterFactory->register($this->commonFactory);
-        
+    }
+
+    /**
+     * @test
+     * @expectedException \Brera\NoMasterFactorySetException
+     */
+    public function itShouldThrowAnExceptionIfNoMasterFactoryIsSet()
+    {
+        (new CommonFactory())->createEnvironmentSourceBuilder();
     }
 
     /**
@@ -267,4 +276,15 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $result = $this->commonFactory->createResourceNotFoundRouter();
         $this->assertInstanceOf(ResourceNotFoundRouter::class, $result);
     }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnAHttpRouterChain()
+    {
+        $result = $this->commonFactory->createHttpRouterChain();
+        $this->assertInstanceOf(HttpRouterChain::class, $result);
+    }
+    
+    
 }
