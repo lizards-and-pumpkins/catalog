@@ -69,14 +69,17 @@ abstract class BlockSnippetRenderer implements SnippetRenderer
     /**
      * @param Layout $layout
      * @return Layout
-     * @throws BlockSnippetRendererShouldHaveJustOneRootBlockException
+     * @throws BlockSnippetRendererMustHaveOneRootBlockException
      */
     private function getOuterMostBlockLayout(Layout $layout)
     {
         $snippetNodeValue = $layout->getNodeChildren();
 
         if (!is_array($snippetNodeValue) || 1 !== count($snippetNodeValue)) {
-            throw new BlockSnippetRendererShouldHaveJustOneRootBlockException();
+            throw new BlockSnippetRendererMustHaveOneRootBlockException(sprintf(
+                'Exactly one root block must be assigned to BlockSnippetRenderer "%s"',
+                $this->getSnippetLayoutHandle()
+            ));
         }
 
         return $snippetNodeValue[0];
@@ -131,11 +134,12 @@ abstract class BlockSnippetRenderer implements SnippetRenderer
         }
 
         if (!class_exists($blockClass)) {
-            throw new CanNotInstantiateBlockException(sprintf('Class %s does not exist.', $blockClass));
+            throw new CanNotInstantiateBlockException(sprintf('Block class does not exist "%s".', $blockClass));
         }
 
         if (Block::class !== $blockClass && !in_array(Block::class, class_parents($blockClass))) {
-            throw new CanNotInstantiateBlockException(sprintf('%s must extend %s', $blockClass, Block::class));
+            $message = sprintf('Block class "%s" must extend "%s"', $blockClass, Block::class);
+            throw new CanNotInstantiateBlockException(sprintf($message));
         }
     }
 
