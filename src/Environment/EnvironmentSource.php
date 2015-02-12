@@ -98,13 +98,13 @@ class EnvironmentSource
     }
 
     /**
-     * @param array $partsToExtract
+     * @param string[] $partsToExtract
      * @return Environment[]
      */
     public function extractEnvironments(array $partsToExtract)
     {
         $variations = $this->extractCartesianProductOfEnvironmentsAsArray($partsToExtract);
-        return $this->environmentBuilder->getEnvironments($variations);
 
+        return $this->environmentBuilder->getEnvironments($variations);
     }
 }
