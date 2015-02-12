@@ -19,6 +19,7 @@ use Brera\Product\ProductProjector;
 use Brera\Product\ProductDetailViewSnippetRenderer;
 use Brera\Product\ProductDetailViewSnippetKeyGenerator;
 use Psr\Log\LoggerInterface;
+use Brera\Http\HttpRouterChain;
 
 class CommonFactory implements Factory, DomainEventFactory
 {
@@ -286,5 +287,13 @@ class CommonFactory implements Factory, DomainEventFactory
     public function createResourceNotFoundRouter()
     {
         return new ResourceNotFoundRouter();
+    }
+
+    /**
+     * @return HttpRouterChain
+     */
+    public function createHttpRouterChain()
+    {
+        return new HttpRouterChain();
     }
 }
