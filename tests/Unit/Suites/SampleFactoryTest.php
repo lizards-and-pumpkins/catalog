@@ -3,36 +3,36 @@
 
 namespace Brera\Tests\Integration;
 
-use Brera\IntegrationTestFactory;
+use Brera\KeyValue\File\FileKeyValueStore;
+use Brera\SampleFactory;
 use Brera\InMemoryLogger;
-use Brera\KeyValue\InMemory\InMemoryKeyValueStore;
 use Brera\Queue\InMemory\InMemoryQueue;
 use Brera\SearchEngine\InMemorySearchEngine;
 
 /**
- * @covers \Brera\IntegrationTestFactory
+ * @covers \Brera\SampleFactory
  * @uses   \Brera\InMemoryLogger
- * @uses   \Brera\KeyValue\InMemory\InMemoryKeyValueStore
+ * @uses   \Brera\KeyValue\File\FileKeyValueStore
  * @uses   \Brera\Queue\InMemory\InMemoryQueue
  */
-class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
+class SampleFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var IntegrationTestFactory
+     * @var SampleFactory
      */
     private $factory;
 
     public function setUp()
     {
-        $this->factory = new IntegrationTestFactory();
+        $this->factory = new SampleFactory();
     }
 
     /**
      * @test
      */
-    public function itShouldCreateAnInMemoryKeyValueStore()
+    public function itShouldCreateAFileKeyValueStore()
     {
-        $this->assertInstanceOf(InMemoryKeyValueStore::class, $this->factory->createKeyValueStore());
+        $this->assertInstanceOf(FileKeyValueStore::class, $this->factory->createKeyValueStore());
     }
 
     /**

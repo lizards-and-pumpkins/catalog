@@ -19,7 +19,6 @@ use Brera\Product\ProductImportDomainEventHandler;
 use Brera\Product\ProductProjector;
 use Brera\Product\ProductDetailViewSnippetRenderer;
 use Brera\Product\ProductDetailViewSnippetKeyGenerator;
-use Brera\SearchEngine\InMemorySearchEngine;
 use Brera\SearchEngine\SearchEngine;
 use Brera\SearchEngine\SearchEngineReader;
 use Psr\Log\LoggerInterface;
@@ -328,13 +327,12 @@ class CommonFactory implements Factory, DomainEventFactory
     }
 
     /**
-     * @return InMemorySearchEngine
-     * @todo: move to catalog factory
+     * @return SearchEngine
      */
     private function getSearchEngine()
     {
         if (is_null($this->searchEngine)) {
-            $this->searchEngine = new InMemorySearchEngine();
+            $this->searchEngine = $this->callExternalCreateMethod('SearchEngine');
         }
 
         return $this->searchEngine;

@@ -4,6 +4,7 @@ namespace Brera;
 
 use Brera\KeyValue\InMemory\InMemoryKeyValueStore;
 use Brera\Queue\InMemory\InMemoryQueue;
+use Brera\SearchEngine\InMemorySearchEngine;
 
 class IntegrationTestFactory implements Factory
 {
@@ -31,5 +32,13 @@ class IntegrationTestFactory implements Factory
     public function createLogger()
     {
         return new InMemoryLogger();
+    }
+
+    /**
+     * @return InMemorySearchEngine
+     */
+    public function createSearchEngine()
+    {
+        return new InMemorySearchEngine();
     }
 }
