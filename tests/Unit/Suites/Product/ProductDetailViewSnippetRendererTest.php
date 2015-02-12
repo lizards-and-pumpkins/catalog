@@ -4,6 +4,7 @@ namespace Brera\Product;
 
 use Brera\Environment\EnvironmentSource;
 use Brera\Environment\Environment;
+use Brera\Renderer\Block;
 use Brera\SnippetResultList;
 use Brera\ProjectionSourceData;
 use Brera\SnippetRenderer;
@@ -192,6 +193,68 @@ EOT;
     }
 
     /**
+     * @test
+     * @dataProvider invalidLayoutXmlProvider
+     * @expectedException \Brera\Renderer\BlockSnippetRendererMustHaveOneRootBlockException
+     * @expectedExceptionMessage Exactly one root block must be assigned to BlockSnippetRenderer
+     */
+    public function itShouldThrowAnExceptionIfThereIsMoreThenOneRootBlock($notOneRootBlockXml)
+    {
+        $this->setContentsOfLayoutXmlFile($notOneRootBlockXml);
+        $stubProductSource = $this->getStubProductSource();
+        $this->snippetRenderer->render($stubProductSource, $this->stubEnvironmentSource);
+    }
+
+    public function invalidLayoutXmlProvider()
+    {
+        return [
+            ['<layout></layout>'],
+            ['<layout><block></block><block></block></layout>'],
+        ];
+    }
+
+    /**
+     * @test
+     * @expectedException \Brera\Renderer\CanNotInstantiateBlockException
+     * @expectedExceptionMessage Block class is not specified.
+     */
+    public function itShouldThrowAnExceptionIfThereIsNoBlockClassDefined()
+    {
+        $this->setContentsOfLayoutXmlFile('<layout><block></block></layout>');
+        $stubProductSource = $this->getStubProductSource();
+        $this->snippetRenderer->render($stubProductSource, $this->stubEnvironmentSource);
+    }
+
+
+    /**
+     * @test
+     * @expectedException \Brera\Renderer\CanNotInstantiateBlockException
+     * @expectedExceptionMessage Block class does not exist
+     */
+    public function itShouldThrowAnExceptionIfAnInvalidBlockClassIsSpecified()
+    {
+        $this->setContentsOfLayoutXmlFile('<layout><block class="Foo\\Bar"></block></layout>');
+        $stubProductSource = $this->getStubProductSource();
+        $this->snippetRenderer->render($stubProductSource, $this->stubEnvironmentSource);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldThrowAnExceptionIfANonBlockClassWasSpecified()
+    {
+        $nonBlockClass = __CLASS__;
+        $this->setExpectedException(
+            \Brera\Renderer\CanNotInstantiateBlockException::class,
+            sprintf('Block class "%s" must extend "%s"', $nonBlockClass, Block::class)
+        );
+        $this->setContentsOfLayoutXmlFile('<layout><block class="' . $nonBlockClass . '"></block></layout>');
+        $stubProductSource = $this->getStubProductSource();
+        $this->snippetRenderer->render($stubProductSource, $this->stubEnvironmentSource);
+    }
+    
+
+    /**
      * @return \PHPUnit_Framework_MockObject_MockObject|ProductSource
      */
     private function getStubProductSource()
@@ -221,5 +284,15 @@ EOT;
             ->willReturn($stubProduct);
 
         return $stubProductSource;
+    }
+
+    /**
+     * @param string $layoutFileContent
+     */
+    private function setContentsOfLayoutXmlFile($layoutFileContent)
+    {
+        $snippetLayoutHandle = ProductDetailViewSnippetRenderer::LAYOUT_HANDLE;
+        $file = $this->getThemeDirectoryPath() . '/layout/' . $snippetLayoutHandle . '.xml';
+        file_put_contents($file, $layoutFileContent);
     }
 }

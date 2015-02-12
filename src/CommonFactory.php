@@ -23,6 +23,7 @@ use Brera\SearchEngine\InMemorySearchEngine;
 use Brera\SearchEngine\SearchEngine;
 use Brera\SearchEngine\SearchEngineReader;
 use Psr\Log\LoggerInterface;
+use Brera\Http\HttpRouterChain;
 
 class CommonFactory implements Factory, DomainEventFactory
 {
@@ -304,6 +305,14 @@ class CommonFactory implements Factory, DomainEventFactory
     public function createResourceNotFoundRouter()
     {
         return new ResourceNotFoundRouter();
+    }
+
+    /**
+     * @return HttpRouterChain
+     */
+    public function createHttpRouterChain()
+    {
+        return new HttpRouterChain();
     }
 
     /**
