@@ -6,8 +6,8 @@ namespace Brera\Tests\Integration;
 use Brera\IntegrationTestFactory;
 use Brera\InMemoryLogger;
 use Brera\KeyValue\InMemory\InMemoryKeyValueStore;
+use Brera\KeyValue\InMemorySearchEngine;
 use Brera\Queue\InMemory\InMemoryQueue;
-use Brera\SearchEngine\InMemorySearchEngine;
 
 /**
  * @covers \Brera\IntegrationTestFactory

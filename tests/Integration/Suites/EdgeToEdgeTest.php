@@ -45,14 +45,11 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $key = $keyGenerator->getKeyForEnvironment($productId, $environment);
         $html = $dataPoolReader->getSnippet($key);
 
-        $searchEngineReader = $factory->createSearchEngineReader();
-        $searchResults = $searchEngineReader->getSearchResults('led');
+        $searchResults = $dataPoolReader->getSearchResults('led', $environment);
 
         $this->assertContains((string)$sku, $html);
         $this->assertContains($productName, $html);
-        $this->assertContains(
-            ['product_id' => $productId->__toString(), 'name' => $productName, 'version' => -1], $searchResults
-        );
+        $this->assertContains($productId, $searchResults);
     }
 
     /**

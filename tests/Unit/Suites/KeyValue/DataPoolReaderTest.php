@@ -2,6 +2,7 @@
 
 namespace Brera\KeyValue;
 
+use Brera\Environment\Environment;
 use Brera\Product\ProductId;
 
 /**
@@ -21,7 +22,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     {
         parent::setUp();
 
-        $this->dataPoolReader = new DataPoolReader($this->stubKeyValueStore);
+        $this->dataPoolReader = new DataPoolReader($this->stubKeyValueStore, $this->stubSearchEngine);
     }
 
     /**
@@ -58,22 +59,22 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     public function snippetListProvider()
     {
         return [
-            array(
+            [
                 json_encode(false),
                 [],
-            ),
-            array(
+            ],
+            [
                 '[]',
                 [],
-            ),
-            array(
+            ],
+            [
                 '{}',
                 [],
-            ),
-            array(
+            ],
+            [
                 json_encode(['test_key1', 'test_key2', 'some_key']),
                 ['test_key1', 'test_key2', 'some_key']
-            ),
+            ],
         ];
     }
 
@@ -95,11 +96,11 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     public function brokenJsonProvider()
     {
         return [
-            array(new \stdClass()),
-            array([]),
-            array('test'),
-            array(123),
-            array(123.23)
+            [new \stdClass()],
+            [[]],
+            ['test'],
+            [123],
+            [123.23]
         ];
     }
 
@@ -131,10 +132,10 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     public function invalidKeyProvider()
     {
         return [
-            array(new \stdClass()),
-            array(123),
-            array(123.23),
-            array([]),
+            [new \stdClass()],
+            [123],
+            [123.23],
+            [[]],
         ];
 
     }
@@ -142,10 +143,10 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     public function brokenKeysForSnippetsProvider()
     {
         return [
-            array(new \stdClass()),
-            array(123),
-            array(123.23),
-            array('string'),
+            [new \stdClass()],
+            [123],
+            [123.23],
+            ['string'],
         ];
     }
 
@@ -226,5 +227,18 @@ class DataPoolReaderTest extends AbstractDataPoolTest
             ->with('current_version')
             ->willReturn('123');
         $this->assertSame('123', $this->dataPoolReader->getCurrentDataVersion());
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldGetSearchResultsFromSearchEngine()
+    {
+        $stubEnvironment = $this->getMock(Environment::class);
+
+        $this->stubSearchEngine->expects($this->once())
+            ->method('query');
+
+        $this->dataPoolReader->getSearchResults('foo', $stubEnvironment);
     }
 }

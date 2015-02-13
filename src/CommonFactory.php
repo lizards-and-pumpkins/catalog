@@ -5,6 +5,7 @@ namespace Brera;
 use Brera\Environment\EnvironmentBuilder;
 use Brera\Environment\EnvironmentSourceBuilder;
 use Brera\Http\ResourceNotFoundRouter;
+use Brera\KeyValue\SearchEngine;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\ProductSearchDocumentBuilder;
@@ -19,8 +20,6 @@ use Brera\Product\ProductImportDomainEventHandler;
 use Brera\Product\ProductProjector;
 use Brera\Product\ProductDetailViewSnippetRenderer;
 use Brera\Product\ProductDetailViewSnippetKeyGenerator;
-use Brera\SearchEngine\SearchEngine;
-use Brera\SearchEngine\SearchEngineReader;
 use Psr\Log\LoggerInterface;
 use Brera\Http\HttpRouterChain;
 
@@ -82,6 +81,7 @@ class CommonFactory implements Factory, DomainEventFactory
     {
         return new ProductProjector(
             $this->createProductSnippetRendererCollection(),
+            $this->createProductSearchDocumentBuilder(),
             $this->getMasterFactory()->createDataPoolWriter()
         );
     }
@@ -211,7 +211,7 @@ class CommonFactory implements Factory, DomainEventFactory
      */
     public function createDataPoolWriter()
     {
-        return new DataPoolWriter($this->getKeyValueStore());
+        return new DataPoolWriter($this->getKeyValueStore(), $this->getSearchEngine());
     }
 
     /**
@@ -257,15 +257,7 @@ class CommonFactory implements Factory, DomainEventFactory
      */
     public function createDataPoolReader()
     {
-        return new DataPoolReader($this->getKeyValueStore());
-    }
-
-    /**
-     * @return SearchEngineReader
-     */
-    public function createSearchEngineReader()
-    {
-        return new SearchEngineReader($this->getSearchEngine());
+        return new DataPoolReader($this->getKeyValueStore(), $this->getSearchEngine());
     }
 
     /**
@@ -320,10 +312,7 @@ class CommonFactory implements Factory, DomainEventFactory
      */
     public function createProductSearchDocumentBuilder()
     {
-        return new ProductSearchDocumentBuilder(
-            $this->getSearchEngine(),
-            $this->getListOfAttributesToBePutIntoSearchEngine()
-        );
+        return new ProductSearchDocumentBuilder($this->getListOfAttributesToBePutIntoSearchEngine());
     }
 
     /**

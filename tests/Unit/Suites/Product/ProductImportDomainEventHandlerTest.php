@@ -13,7 +13,7 @@ class ProductImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldTriggerProjectionAndSearchIndexing()
+    public function itShouldTriggerProjection()
     {
         $stubProductSource = $this->getMockBuilder(ProductSource::class)
             ->disableOriginalConstructor()
@@ -47,19 +47,11 @@ class ProductImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('project')
             ->with($stubProductSource, $stubEnvironmentSource);
 
-        $stubSearchIndexer = $this->getMockBuilder(ProductSearchDocumentBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $stubSearchIndexer->expects($this->once())
-            ->method('aggregate')
-            ->with($stubProductSource, $stubEnvironmentSource);
-
         (new ProductImportDomainEventHandler(
             $stubDomainEvent,
             $stubProductBuilder,
             $stubEnvironmentSourceBuilder,
-            $stubProjector,
-            $stubSearchIndexer
+            $stubProjector
         )
         )->process();
     }

@@ -10,13 +10,13 @@ class SearchDocumentField
     private $key;
 
     /**
-     * @var string
+     * @var mixed
      */
     private $value;
 
     /**
      * @param string $key
-     * @param string $value
+     * @param mixed $value
      */
     public function __construct($key, $value)
     {
@@ -27,7 +27,7 @@ class SearchDocumentField
         }
 
         $this->key = (string) $key;
-        $this->value = (string) $value;
+        $this->value = $value;
     }
 
     /**
@@ -39,7 +39,7 @@ class SearchDocumentField
     }
 
     /**
-     * @return string
+     * @return mixed
      */
     public function getValue()
     {

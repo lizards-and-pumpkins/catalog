@@ -4,6 +4,8 @@ namespace Brera\Product;
 
 use Brera\Environment\EnvironmentSource;
 use Brera\KeyValue\DataPoolWriter;
+use Brera\KeyValue\SearchDocumentBuilder;
+use Brera\KeyValue\SearchDocumentCollection;
 use Brera\SnippetResultList;
 use Brera\SnippetRendererCollection;
 use Brera\ProjectionSourceData;
@@ -25,6 +27,11 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
     private $stubSnippetResultList;
 
     /**
+     * @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubSearchDocumentCollection;
+
+    /**
      * @var DataPoolWriter|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubDataPoolWriter;
@@ -34,11 +41,19 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
      */
     private $stubProductSnippetRendererCollection;
 
+    /**
+     * @var SearchDocumentBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubSearchDocumentBuilder;
+
     public function setUp()
     {
         $this->stubSnippetResultList = $this->getMock(SnippetResultList::class);
         $this->stubDataPoolWriter = $this->getMockBuilder(DataPoolWriter::class)
-            ->setMethods(['writeSnippetResultList'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->stubSearchDocumentCollection = $this->getMockBuilder(SearchDocumentCollection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -49,8 +64,13 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
             ->method('render')
             ->willReturn($this->stubSnippetResultList);
 
+        $this->stubSearchDocumentBuilder = $this->getMockBuilder(ProductSearchDocumentBuilder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->projector = new ProductProjector(
             $this->stubProductSnippetRendererCollection,
+            $this->stubSearchDocumentBuilder,
             $this->stubDataPoolWriter
         );
     }
@@ -58,11 +78,18 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldSetSnippetResultListOnDataPoolWriter()
+    public function itShouldSetSnippetResultListAndSearchDocumentOnDataPoolWriter()
     {
+        $this->stubSearchDocumentBuilder->expects($this->once())
+            ->method('aggregate')
+            ->willReturn($this->stubSearchDocumentCollection);
+
         $this->stubDataPoolWriter->expects($this->once())
             ->method('writeSnippetResultList')
             ->with($this->stubSnippetResultList);
+        $this->stubDataPoolWriter->expects($this->once())
+            ->method('writeSearchDocumentCollection')
+            ->with($this->stubSearchDocumentCollection);
 
         $stubProduct = $this->getMockBuilder(ProductSource::class)
             ->disableOriginalConstructor()

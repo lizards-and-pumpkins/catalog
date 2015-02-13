@@ -5,28 +5,35 @@ namespace Brera\Product;
 use Brera\Environment\Environment;
 use Brera\Environment\EnvironmentSource;
 use Brera\KeyValue\SearchDocumentBuilder;
-use Brera\SearchEngine\SearchEngine;
+use Brera\KeyValue\SearchDocumentCollection;
+use Brera\ProjectionSourceData;
 
 /**
  * @covers \Brera\Product\ProductSearchDocumentBuilder
+ * @uses   \Brera\KeyValue\SearchDocument
+ * @uses   \Brera\KeyValue\SearchDocumentCollection
+ * @uses   \Brera\KeyValue\SearchDocumentField
+ * @uses   \Brera\KeyValue\SearchDocumentFieldCollection
  */
 class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var SearchEngine|\PHPUnit_Framework_MockObject_MockObject
+     * @var EnvironmentSource|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubSearchEngine;
+    private $stubEnvironmentSource;
 
     /**
      * @var ProductSearchDocumentBuilder
      */
-    private $searchIndexer;
+    private $searchDocumentBuilder;
 
     protected function setUp()
     {
-        $this->stubSearchEngine = $this->getMock(SearchEngine::class);
+        $this->stubEnvironmentSource = $this->getMockBuilder(EnvironmentSource::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->searchIndexer = new ProductSearchDocumentBuilder($this->stubSearchEngine, ['name']);
+        $this->searchDocumentBuilder = new ProductSearchDocumentBuilder(['name']);
     }
 
     /**
@@ -34,38 +41,25 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldImplementSearchIndexer()
     {
-        $this->assertInstanceOf(SearchDocumentBuilder::class, $this->searchIndexer);
+        $this->assertInstanceOf(SearchDocumentBuilder::class, $this->searchDocumentBuilder);
     }
 
     /**
      * @test
      */
-    public function itShouldAddEntryWithProductIdAndNameToSearchIndex()
+    public function itShouldReturnSearchDocumentCollection()
     {
         $stubEnvironment = $this->getMockBuilder(Environment::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $stubEnvironment->expects($this->atLeastOnce())
-            ->method('getSupportedCodes')
-            ->willReturn(['version']);
-        $stubEnvironment->expects($this->atLeastOnce())
-            ->method('getValue')
-            ->with('version')
-            ->willReturn(-1);
 
-        $stubEnvironmentSource = $this->getMockBuilder(EnvironmentSource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $stubEnvironmentSource->expects($this->atLeastOnce())
+        $this->stubEnvironmentSource->expects($this->atLeastOnce())
             ->method('extractEnvironments')
             ->willReturn([$stubEnvironment]);
 
         $stubProductId = $this->getMockBuilder(ProductId::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $stubProductId->expects($this->atLeastOnce())
-            ->method('__toString')
-            ->willReturn('foo');
 
         $stubProduct = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
@@ -86,14 +80,19 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
             ->with($stubEnvironment)
             ->willReturn($stubProduct);
 
-        $this->stubSearchEngine->expects($this->once())
-            ->method('addMultiToIndex')
-            ->with([[
-                'product_id'    => 'foo',
-                'name'          => 'bar',
-                'version'       => -1
-            ]]);
+        $result = $this->searchDocumentBuilder->aggregate($stubProductSource, $this->stubEnvironmentSource);
 
-        $this->searchIndexer->aggregate($stubProductSource, $stubEnvironmentSource);
+        $this->assertInstanceOf(SearchDocumentCollection::class, $result);
+    }
+
+    /**
+     * @test
+     * @expectedException \Brera\InvalidProjectionDataSourceType
+     */
+    public function itShouldThrowAnExceptionIfTheDataSourceObjectTypeIsNotProduct()
+    {
+        $invalidDataSource = $this->getMock(ProjectionSourceData::class);
+
+        $this->searchDocumentBuilder->aggregate($invalidDataSource, $this->stubEnvironmentSource);
     }
 }

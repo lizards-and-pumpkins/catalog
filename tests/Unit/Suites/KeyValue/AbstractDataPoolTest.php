@@ -13,11 +13,17 @@ abstract class AbstractDataPoolTest extends \PHPUnit_Framework_TestCase
     protected $stubKeyValueStore;
 
     /**
+     * @var SearchEngine|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $stubSearchEngine;
+
+    /**
      * @return void
      */
     protected function setUp()
     {
         $this->stubKeyValueStore = $this->getMock(KeyValueStore::class);
+        $this->stubSearchEngine = $this->getMock(SearchEngine::class);
     }
 
     /**

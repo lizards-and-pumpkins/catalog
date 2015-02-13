@@ -4,94 +4,75 @@ namespace Brera\Product;
 
 use Brera\Environment\Environment;
 use Brera\Environment\EnvironmentSource;
+use Brera\InvalidProjectionDataSourceType;
+use Brera\KeyValue\SearchDocument;
 use Brera\KeyValue\SearchDocumentBuilder;
+use Brera\KeyValue\SearchDocumentCollection;
+use Brera\KeyValue\SearchDocumentFieldCollection;
 use Brera\ProjectionSourceData;
-use Brera\SearchEngine\SearchEngine;
 
 class ProductSearchDocumentBuilder implements SearchDocumentBuilder
 {
-    /**
-     * @var SearchEngine
-     */
-    private $searchEngine;
-
     /**
      * @var string[]
      */
     private $attributesSchema;
 
     /**
-     * @param SearchEngine $searchEngine
      * @param string[] $attributesSchema
      */
-    public function __construct(SearchEngine $searchEngine, array $attributesSchema)
+    public function __construct(array $attributesSchema)
     {
-        $this->searchEngine = $searchEngine;
         $this->attributesSchema = $attributesSchema;
     }
 
     /**
      * @param ProjectionSourceData $productSource
      * @param EnvironmentSource $environmentSource
+     * @return SearchDocumentCollection
+     * @throws InvalidProjectionDataSourceType
      */
     public function aggregate(ProjectionSourceData $productSource, EnvironmentSource $environmentSource)
     {
-        $productIndices = [];
-
-        foreach ($environmentSource->extractEnvironments([]) as $environment) {
-            $productIndices[] = $this->getProductIndexDataForEnvironment($productSource, $environment);
+        if (!($productSource instanceof ProductSource)) {
+            throw new InvalidProjectionDataSourceType('First argument must be instance of Product.');
         }
 
-        $this->searchEngine->addMultiToIndex($productIndices);
+        $collection = new SearchDocumentCollection();
+
+        foreach ($environmentSource->extractEnvironments([]) as $environment) {
+            $document = $this->createSearchDocument($productSource, $environment);
+            $collection->add($document);
+        }
+
+        return $collection;
     }
 
     /**
      * @param ProductSource $productSource
      * @param Environment $environment
-     * @return array
+     * @return SearchDocument
      */
-    private function getProductIndexDataForEnvironment(ProductSource $productSource, Environment $environment)
+    private function createSearchDocument(ProductSource $productSource, Environment $environment)
     {
-        $productInEnvironment = $productSource->getProductForEnvironment($environment);
+        $product = $productSource->getProductForEnvironment($environment);
+        $fieldsCollection = $this->createSearchDocumentFieldsCollection($product);
 
-        $productId = ['product_id' => $productInEnvironment->getId()->__toString()];
-        $productAttributes = $this->getProductAttributes($productInEnvironment);
-        $environmentPartsMap = $this->getEnvironmentPartsMap($environment);
-
-        return array_merge($productId, $productAttributes, $environmentPartsMap);
+        return new SearchDocument($fieldsCollection, $environment, $product->getId());
     }
 
     /**
-     * @param Product $productInEnvironment
-     * @return string[]
+     * @param Product $product
+     * @return SearchDocumentFieldCollection
      */
-    private function getProductAttributes(Product $productInEnvironment)
+    private function createSearchDocumentFieldsCollection(Product $product)
     {
         $attributesMap = [];
 
         foreach ($this->attributesSchema as $attributeCode) {
-            try {
-                $attributesMap[$attributeCode] = $productInEnvironment->getAttributeValue($attributeCode);
-            } catch (\Exception $e) {
-
-            }
+            $attributesMap[$attributeCode] = $product->getAttributeValue($attributeCode);
         }
 
-        return $attributesMap;
-    }
-
-    /**
-     * @param Environment $environment
-     * @return string[]
-     */
-    private function getEnvironmentPartsMap(Environment $environment)
-    {
-        $environmentPartsMap = [];
-
-        foreach ($environment->getSupportedCodes() as $environmentCode) {
-            $environmentPartsMap[$environmentCode] = $environment->getValue($environmentCode);
-        }
-
-        return $environmentPartsMap;
+        return SearchDocumentFieldCollection::fromArray($attributesMap);
     }
 }

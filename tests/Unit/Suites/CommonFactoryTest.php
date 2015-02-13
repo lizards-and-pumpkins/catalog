@@ -14,7 +14,6 @@ use Brera\Product\ProductImportDomainEventHandler;
 use Brera\Product\ProductProjector;
 use Brera\Product\ProductSourceBuilder;
 use Brera\Queue\Queue;
-use Brera\SearchEngine\SearchEngineReader;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -39,7 +38,6 @@ use Psr\Log\LoggerInterface;
  * @uses   \Brera\Product\CatalogImportDomainEvent
  * @uses   \Brera\Product\CatalogImportDomainEventHandler
  * @uses   \Brera\Product\ProductSearchDocumentBuilder
- * @uses   \Brera\SearchEngine\SearchEngineReader
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -278,14 +276,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createResourceNotFoundRouter();
         $this->assertInstanceOf(ResourceNotFoundRouter::class, $result);
-    }
-
-    /**
-     * @test
-     */
-    public function itShouldReturnSearchEngineReader()
-    {
-        $this->assertInstanceOf(SearchEngineReader::class, $this->commonFactory->createSearchEngineReader());
     }
 
     /**

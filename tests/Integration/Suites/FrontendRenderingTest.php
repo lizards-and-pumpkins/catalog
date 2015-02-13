@@ -6,6 +6,7 @@ use Brera\Environment\VersionedEnvironment;
 use Brera\Http\HttpUrl;
 use Brera\KeyValue\DataPoolReader;
 use Brera\KeyValue\InMemory\InMemoryKeyValueStore;
+use Brera\KeyValue\InMemorySearchEngine;
 use Brera\KeyValue\KeyValueStore;
 use Brera\KeyValue\KeyValueStoreKeyGenerator;
 
@@ -21,11 +22,12 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
         $environment = new VersionedEnvironment(DataVersion::fromVersionString('1.0'));
 
         $keyValueStore = new InMemoryKeyValueStore();
+        $searchEngine = new InMemorySearchEngine();
 
         $this->addBaseSnippetAndListToKeyValueStorage($keyValueStore);
         $this->addSnippetsForReplacementToTheKeyValueStorage($keyValueStore);
 
-        $dataPoolReader = new DataPoolReader($keyValueStore);
+        $dataPoolReader = new DataPoolReader($keyValueStore, $searchEngine);
 
         $urlPathKeyGenerator = new PoCUrlPathKeyGenerator();
 

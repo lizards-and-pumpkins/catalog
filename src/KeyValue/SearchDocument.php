@@ -36,7 +36,7 @@ class SearchDocument
     /**
      * @return SearchDocumentFieldCollection
      */
-    public function getFields()
+    public function getFieldsCollection()
     {
         return $this->fields;
     }

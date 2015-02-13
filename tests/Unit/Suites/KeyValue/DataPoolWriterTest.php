@@ -21,7 +21,7 @@ class DataPoolWriterTest extends AbstractDataPoolTest
     {
         parent::setUp();
 
-        $this->dataPoolWriter = new DataPoolWriter($this->stubKeyValueStore);
+        $this->dataPoolWriter = new DataPoolWriter($this->stubKeyValueStore, $this->stubSearchEngine);
     }
 
     /**
@@ -50,5 +50,19 @@ class DataPoolWriterTest extends AbstractDataPoolTest
         ->with($testKey, $testContent);
 
         $this->dataPoolWriter->writeSnippetResultList($mockSnippetResultList);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldWriteSearchDocumentCollectionToTheDataPool()
+    {
+        $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class);
+
+        $this->stubSearchEngine->expects($this->once())
+            ->method('addSearchDocumentCollection')
+            ->with($stubSearchDocumentCollection);
+
+        $this->dataPoolWriter->writeSearchDocumentCollection($stubSearchDocumentCollection);
     }
 }

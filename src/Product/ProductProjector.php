@@ -16,17 +16,28 @@ class ProductProjector implements Projector
     private $rendererCollection;
 
     /**
+     * @var ProductSearchDocumentBuilder
+     */
+    private $searchDocumentBuilder;
+
+    /**
      * @var DataPoolWriter
      */
     private $dataPoolWriter;
 
     /**
      * @param ProductSnippetRendererCollection $rendererCollection
+     * @param ProductSearchDocumentBuilder $searchDocumentBuilder
      * @param DataPoolWriter $dataPoolWriter
      */
-    public function __construct(ProductSnippetRendererCollection $rendererCollection, DataPoolWriter $dataPoolWriter)
+    public function __construct(
+        ProductSnippetRendererCollection $rendererCollection,
+        ProductSearchDocumentBuilder $searchDocumentBuilder,
+        DataPoolWriter $dataPoolWriter
+    )
     {
         $this->rendererCollection = $rendererCollection;
+        $this->searchDocumentBuilder = $searchDocumentBuilder;
         $this->dataPoolWriter = $dataPoolWriter;
     }
 
@@ -54,5 +65,8 @@ class ProductProjector implements Projector
     {
         $snippetResultList = $this->rendererCollection->render($productSource, $environmentSource);
         $this->dataPoolWriter->writeSnippetResultList($snippetResultList);
+
+        $searchDocument = $this->searchDocumentBuilder->aggregate($productSource, $environmentSource);
+        $this->dataPoolWriter->writeSearchDocumentCollection($searchDocument);
     }
 }

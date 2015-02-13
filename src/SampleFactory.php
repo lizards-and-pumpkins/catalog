@@ -3,8 +3,8 @@
 namespace Brera;
 
 use Brera\KeyValue\File\FileKeyValueStore;
+use Brera\KeyValue\InMemorySearchEngine;
 use Brera\Queue\InMemory\InMemoryQueue;
-use Brera\SearchEngine\InMemorySearchEngine;
 
 class SampleFactory implements Factory
 {

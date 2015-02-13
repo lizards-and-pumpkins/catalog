@@ -2,9 +2,7 @@
 
 namespace Brera\KeyValue;
 
-use Brera\Http\HttpUrl;
-use Brera\Product\PoCSku;
-use Brera\Product\ProductId;
+use Brera\Environment\Environment;
 
 class DataPoolReader
 {
@@ -24,11 +22,17 @@ class DataPoolReader
     private $keyValueStore;
 
     /**
+     * @var SearchEngine
+     */
+    private $searchEngine;
+
+    /**
      * @param KeyValueStore $keyValueStore
      */
-    public function __construct(KeyValueStore $keyValueStore)
+    public function __construct(KeyValueStore $keyValueStore, SearchEngine $searchEngine)
     {
         $this->keyValueStore = $keyValueStore;
+        $this->searchEngine = $searchEngine;
     }
 
     /**
@@ -140,5 +144,15 @@ class DataPoolReader
             return $this->currentDataVersionDefault;
         }
         return $this->keyValueStore->get($this->currentDataVersionKey);
+    }
+
+    /**
+     * @param string $queryString
+     * @param Environment $environment
+     * @return mixed[]
+     */
+    public function getSearchResults($queryString, Environment $environment)
+    {
+        return $this->searchEngine->query($queryString, $environment);
     }
 }
