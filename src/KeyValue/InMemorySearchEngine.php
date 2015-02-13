@@ -7,7 +7,7 @@ use Brera\Environment\Environment;
 class InMemorySearchEngine implements SearchEngine
 {
     /**
-     * @var array
+     * @var mixed[]
      */
     private $index = [];
 
