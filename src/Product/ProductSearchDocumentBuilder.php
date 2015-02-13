@@ -16,14 +16,14 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
     /**
      * @var string[]
      */
-    private $attributesSchema;
+    private $searchableAttributeCodes;
 
     /**
-     * @param string[] $attributesSchema
+     * @param string[] $searchableAttributeCodes
      */
-    public function __construct(array $attributesSchema)
+    public function __construct(array $searchableAttributeCodes)
     {
-        $this->attributesSchema = $attributesSchema;
+        $this->searchableAttributeCodes = $searchableAttributeCodes;
     }
 
     /**
@@ -40,7 +40,7 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
 
         $collection = new SearchDocumentCollection();
 
-        foreach ($environmentSource->extractEnvironments([]) as $environment) {
+        foreach ($environmentSource->extractEnvironments(['version', 'website', 'language']) as $environment) {
             $document = $this->createSearchDocument($productSource, $environment);
             $collection->add($document);
         }
@@ -69,7 +69,7 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
     {
         $attributesMap = [];
 
-        foreach ($this->attributesSchema as $attributeCode) {
+        foreach ($this->searchableAttributeCodes as $attributeCode) {
             $attributesMap[$attributeCode] = $product->getAttributeValue($attributeCode);
         }
 
