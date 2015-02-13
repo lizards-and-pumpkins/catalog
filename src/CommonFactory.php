@@ -7,7 +7,7 @@ use Brera\Environment\EnvironmentSourceBuilder;
 use Brera\Http\ResourceNotFoundRouter;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
-use Brera\Product\ProductSearchIndexer;
+use Brera\Product\ProductSearchDocumentBuilder;
 use Brera\Product\ProductSnippetRendererCollection;
 use Brera\Product\ProductSourceBuilder;
 use Brera\KeyValue\KeyValueStore;
@@ -60,7 +60,7 @@ class CommonFactory implements Factory, DomainEventFactory
             $this->getMasterFactory()->createProductSourceBuilder(),
             $this->getMasterFactory()->createEnvironmentSourceBuilder(),
             $this->getMasterFactory()->createProductProjector(),
-            $this->getMasterFactory()->createProductSearchIndexer()
+            $this->getMasterFactory()->createProductSearchDocumentBuilder()
         );
     }
 
@@ -315,12 +315,12 @@ class CommonFactory implements Factory, DomainEventFactory
     }
 
     /**
-     * @return ProductSearchIndexer
+     * @return ProductSearchDocumentBuilder
      * @todo: move to catalog factory
      */
-    public function createProductSearchIndexer()
+    public function createProductSearchDocumentBuilder()
     {
-        return new ProductSearchIndexer(
+        return new ProductSearchDocumentBuilder(
             $this->getSearchEngine(),
             $this->getListOfAttributesToBePutIntoSearchEngine()
         );

@@ -23,7 +23,7 @@ class ProductImportDomainEventHandler implements DomainEventHandler
     private $projector;
 
     /**
-     * @var ProductSearchIndexer
+     * @var ProductSearchDocumentBuilder
      */
     private $searchIndexer;
 
@@ -37,7 +37,7 @@ class ProductImportDomainEventHandler implements DomainEventHandler
         ProductSourceBuilder $productSourceBuilder,
         EnvironmentSourceBuilder $environmentSourceBuilder,
         ProductProjector $projector,
-        ProductSearchIndexer $searchIndexer
+        ProductSearchDocumentBuilder $searchIndexer
     ) {
         $this->event = $event;
         $this->productSourceBuilder = $productSourceBuilder;
@@ -56,6 +56,6 @@ class ProductImportDomainEventHandler implements DomainEventHandler
         $environmentSource = $this->environmentSourceBuilder->createFromXml($xml);
 
         $this->projector->project($productSource, $environmentSource);
-        $this->searchIndexer->index($productSource, $environmentSource);
+        $this->searchIndexer->aggregate($productSource, $environmentSource);
     }
 }

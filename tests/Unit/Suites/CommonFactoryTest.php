@@ -14,7 +14,6 @@ use Brera\Product\ProductImportDomainEventHandler;
 use Brera\Product\ProductProjector;
 use Brera\Product\ProductSourceBuilder;
 use Brera\Queue\Queue;
-use Brera\SearchEngine\InMemorySearchEngine;
 use Brera\SearchEngine\SearchEngineReader;
 use Psr\Log\LoggerInterface;
 
@@ -39,7 +38,7 @@ use Psr\Log\LoggerInterface;
  * @uses   \Brera\Product\ProductImportDomainEvent
  * @uses   \Brera\Product\CatalogImportDomainEvent
  * @uses   \Brera\Product\CatalogImportDomainEventHandler
- * @uses   \Brera\Product\ProductSearchIndexer
+ * @uses   \Brera\Product\ProductSearchDocumentBuilder
  * @uses   \Brera\SearchEngine\SearchEngineReader
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase

@@ -4,13 +4,13 @@ namespace Brera\Product;
 
 use Brera\Environment\Environment;
 use Brera\Environment\EnvironmentSource;
+use Brera\KeyValue\SearchDocumentBuilder;
 use Brera\SearchEngine\SearchEngine;
-use Brera\SearchIndexer;
 
 /**
- * @covers \Brera\Product\ProductSearchIndexer
+ * @covers \Brera\Product\ProductSearchDocumentBuilder
  */
-class ProductSearchIndexerTest extends \PHPUnit_Framework_TestCase
+class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var SearchEngine|\PHPUnit_Framework_MockObject_MockObject
@@ -18,7 +18,7 @@ class ProductSearchIndexerTest extends \PHPUnit_Framework_TestCase
     private $stubSearchEngine;
 
     /**
-     * @var ProductSearchIndexer
+     * @var ProductSearchDocumentBuilder
      */
     private $searchIndexer;
 
@@ -26,7 +26,7 @@ class ProductSearchIndexerTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubSearchEngine = $this->getMock(SearchEngine::class);
 
-        $this->searchIndexer = new ProductSearchIndexer($this->stubSearchEngine, ['name']);
+        $this->searchIndexer = new ProductSearchDocumentBuilder($this->stubSearchEngine, ['name']);
     }
 
     /**
@@ -34,7 +34,7 @@ class ProductSearchIndexerTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldImplementSearchIndexer()
     {
-        $this->assertInstanceOf(SearchIndexer::class, $this->searchIndexer);
+        $this->assertInstanceOf(SearchDocumentBuilder::class, $this->searchIndexer);
     }
 
     /**
@@ -94,6 +94,6 @@ class ProductSearchIndexerTest extends \PHPUnit_Framework_TestCase
                 'version'       => -1
             ]]);
 
-        $this->searchIndexer->index($stubProductSource, $stubEnvironmentSource);
+        $this->searchIndexer->aggregate($stubProductSource, $stubEnvironmentSource);
     }
 }

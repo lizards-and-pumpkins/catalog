@@ -4,6 +4,7 @@ namespace Brera\KeyValue;
 
 /**
  * @covers \Brera\KeyValue\SearchDocumentFieldCollection
+ * @uses   \Brera\KeyValue\SearchDocumentField
  */
 class SearchDocumentFieldCollectionTest extends \PHPUnit_Framework_TestCase
 {

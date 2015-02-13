@@ -4,10 +4,11 @@ namespace Brera\Product;
 
 use Brera\Environment\Environment;
 use Brera\Environment\EnvironmentSource;
+use Brera\KeyValue\SearchDocumentBuilder;
+use Brera\ProjectionSourceData;
 use Brera\SearchEngine\SearchEngine;
-use Brera\SearchIndexer;
 
-class ProductSearchIndexer implements SearchIndexer
+class ProductSearchDocumentBuilder implements SearchDocumentBuilder
 {
     /**
      * @var SearchEngine
@@ -30,11 +31,10 @@ class ProductSearchIndexer implements SearchIndexer
     }
 
     /**
-     * @param ProductSource $productSource
+     * @param ProjectionSourceData $productSource
      * @param EnvironmentSource $environmentSource
-     * @return void
      */
-    public function index(ProductSource $productSource, EnvironmentSource $environmentSource)
+    public function aggregate(ProjectionSourceData $productSource, EnvironmentSource $environmentSource)
     {
         $productIndices = [];
 

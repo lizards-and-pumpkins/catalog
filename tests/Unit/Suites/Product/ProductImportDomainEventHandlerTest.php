@@ -47,11 +47,11 @@ class ProductImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('project')
             ->with($stubProductSource, $stubEnvironmentSource);
 
-        $stubSearchIndexer = $this->getMockBuilder(ProductSearchIndexer::class)
+        $stubSearchIndexer = $this->getMockBuilder(ProductSearchDocumentBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
         $stubSearchIndexer->expects($this->once())
-            ->method('index')
+            ->method('aggregate')
             ->with($stubProductSource, $stubEnvironmentSource);
 
         (new ProductImportDomainEventHandler(
