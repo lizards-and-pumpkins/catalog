@@ -12,6 +12,7 @@
         convertWarningsToExceptions="true"
         forceCoversAnnotation="true"
         mapTestClassNameToCoveredClassName="false"
+        checkForUnintentionallyCoveredCode="true"
         processIsolation="false"
         stopOnError="false"
         stopOnFailure="false"
@@ -20,7 +21,9 @@
         timeoutForSmallTests="1"
         timeoutForMediumTests="10"
         timeoutForLargeTests="60"
-        checkForUnintentionallyCoveredCode="true"
+        beStrictAboutTestSize="false"
+        beStrictAboutTestsThatDoNotTestAnything="true"
+        beStrictAboutOutputDuringTests="true"
         verbose="false">
     <testsuite name="Brera Unit Tests">
         <directory>Suites</directory>
