@@ -29,11 +29,13 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $searchableAttributeCodes = ['name'];
+
         $this->stubEnvironmentSource = $this->getMockBuilder(EnvironmentSource::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->searchDocumentBuilder = new ProductSearchDocumentBuilder(['name']);
+        $this->searchDocumentBuilder = new ProductSearchDocumentBuilder($searchableAttributeCodes);
     }
 
     /**
