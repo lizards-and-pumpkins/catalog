@@ -41,7 +41,7 @@ class InMemorySearchEngine implements SearchEngine
 
         /** @var SearchDocument $searchDocument */
         foreach ($this->index as $searchDocument) {
-            if ($environment !== $searchDocument->getEnvironment()) {
+            if ($environment != $searchDocument->getEnvironment()) {
                 continue;
             }
 

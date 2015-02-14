@@ -158,13 +158,14 @@ class InMemorySearchEngineTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnOnlyMatchesWithMatchingEnvironments()
     {
-        $stubEnvironment2 = $this->getMock(Environment::class);
-
         $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => 'bar']);
         $this->prepareStubSearchDocument(
             $this->stubSearchDocument, $this->stubEnvironment, $stubFieldsCollection, 'payload1'
         );
 
+        $stubEnvironment2 = $this->getMock(Environment::class);
+        $stubEnvironment2->expects($this->never())
+            ->method('someDummyExpectationToMakeObjectDifferent');
         $this->prepareStubSearchDocument($this->stubSearchDocument2, $stubEnvironment2);
 
         $this->stubSearchDocumentCollection->expects($this->any())
