@@ -7,7 +7,7 @@ use Brera\Environment\Environment;
 interface SearchEngine
 {
     /**
-     * @param searchDocument $searchDocument
+     * @param SearchDocument $searchDocument
      * @return void
      */
     public function addSearchDocument(searchDocument $searchDocument);
