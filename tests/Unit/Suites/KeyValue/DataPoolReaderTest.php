@@ -3,7 +3,6 @@
 namespace Brera\KeyValue;
 
 use Brera\Environment\Environment;
-use Brera\Product\ProductId;
 
 /**
  * @covers \Brera\KeyValue\DataPoolReader
@@ -59,22 +58,10 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     public function snippetListProvider()
     {
         return [
-            [
-                json_encode(false),
-                [],
-            ],
-            [
-                '[]',
-                [],
-            ],
-            [
-                '{}',
-                [],
-            ],
-            [
-                json_encode(['test_key1', 'test_key2', 'some_key']),
-                ['test_key1', 'test_key2', 'some_key']
-            ],
+            [json_encode(false), []],
+            ['[]', []],
+            ['{}', []],
+            [json_encode(['test_key1', 'test_key2', 'some_key']), ['test_key1', 'test_key2', 'some_key']],
         ];
     }
 
