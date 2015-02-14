@@ -5,7 +5,7 @@ namespace Brera;
 use Brera\Environment\VersionedEnvironment;
 use Brera\Http\HttpUrl;
 use Brera\DataPool\DataPoolReader;
-use Brera\KeyValue\InMemory\InMemoryKeyValueStore;
+use Brera\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
 use Brera\DataPool\SearchEngine\InMemorySearchEngine;
 use Brera\DataPool\KeyValue\KeyValueStore;
 
