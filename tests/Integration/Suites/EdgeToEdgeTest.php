@@ -47,9 +47,9 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
 
         $searchResults = $dataPoolReader->getSearchResults('led', $environment);
 
-        $this->assertContains((string)$sku, $html);
+        $this->assertContains((string) $sku, $html);
         $this->assertContains($productName, $html);
-        $this->assertContains($productId, $searchResults);
+        $this->assertContains($productId, $searchResults, '', false, false);
     }
 
     /**
