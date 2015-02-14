@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\KeyValue;
+namespace Brera\DataPool\KeyValue;
 
 class KeyValueStoreNotAvailableException extends \RuntimeException
 {

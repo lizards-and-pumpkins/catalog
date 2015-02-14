@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\KeyValue;
+namespace Brera\DataPool\SearchEngine;
 
 class InvalidSearchDocumentFieldKeyException extends \InvalidArgumentException
 {

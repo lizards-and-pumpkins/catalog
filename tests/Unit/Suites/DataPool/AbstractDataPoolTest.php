@@ -1,7 +1,9 @@
 <?php
 
-namespace Brera\KeyValue;
+namespace Brera\DataPool;
 
+use Brera\DataPool\KeyValue\KeyValueStore;
+use Brera\DataPool\SearchEngine\SearchEngine;
 use Brera\Http\HttpUrl;
 use Brera\Product\ProductId;
 

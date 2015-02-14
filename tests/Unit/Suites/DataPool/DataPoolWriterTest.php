@@ -1,12 +1,13 @@
 <?php
 
-namespace Brera\KeyValue;
+namespace Brera\DataPool;
 
+use Brera\DataPool\SearchEngine\SearchDocumentCollection;
 use Brera\SnippetResult;
 use Brera\SnippetResultList;
 
 /**
- * @covers \Brera\KeyValue\DataPoolWriter
+ * @covers \Brera\DataPool\DataPoolWriter
  * @uses Brera\Product\ProductId
  * @uses Brera\Http\HttpUrl
  */

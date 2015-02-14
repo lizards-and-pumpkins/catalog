@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera\KeyValue;
+namespace Brera\DataPool;
 
 use Brera\Environment\Environment;
 
 /**
- * @covers \Brera\KeyValue\DataPoolReader
+ * @covers \Brera\DataPool\DataPoolReader
  * @uses   \Brera\Product\ProductId
  * @uses   \Brera\Http\HttpUrl
  * @uses   \Brera\Product\PoCSku

@@ -3,16 +3,16 @@
 
 namespace Brera\Tests\Integration;
 
+use Brera\DataPool\SearchEngine\InMemorySearchEngine;
 use Brera\IntegrationTestFactory;
 use Brera\InMemoryLogger;
-use Brera\KeyValue\InMemory\InMemoryKeyValueStore;
-use Brera\KeyValue\InMemorySearchEngine;
+use Brera\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
 use Brera\Queue\InMemory\InMemoryQueue;
 
 /**
  * @covers \Brera\IntegrationTestFactory
  * @uses   \Brera\InMemoryLogger
- * @uses   \Brera\KeyValue\InMemory\InMemoryKeyValueStore
+ * @uses   \Brera\DataPool\KeyValue\InMemory\InMemoryKeyValueStore
  * @uses   \Brera\Queue\InMemory\InMemoryQueue
  */
 class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase

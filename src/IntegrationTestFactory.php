@@ -2,8 +2,8 @@
 
 namespace Brera;
 
-use Brera\KeyValue\InMemory\InMemoryKeyValueStore;
-use Brera\KeyValue\InMemorySearchEngine;
+use Brera\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
+use Brera\DataPool\SearchEngine\InMemorySearchEngine;
 use Brera\Queue\InMemory\InMemoryQueue;
 
 class IntegrationTestFactory implements Factory

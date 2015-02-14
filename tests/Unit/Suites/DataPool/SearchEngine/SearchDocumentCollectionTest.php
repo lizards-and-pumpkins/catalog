@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\KeyValue;
+namespace Brera\DataPool\SearchEngine;
 
 /**
- * @covers \Brera\KeyValue\SearchDocumentCollection
+ * @covers \Brera\DataPool\SearchEngine\SearchDocumentCollection
  */
 class SearchDocumentCollectionTest extends \PHPUnit_Framework_TestCase
 {

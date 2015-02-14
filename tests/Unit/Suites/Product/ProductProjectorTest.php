@@ -3,9 +3,9 @@
 namespace Brera\Product;
 
 use Brera\Environment\EnvironmentSource;
-use Brera\KeyValue\DataPoolWriter;
-use Brera\KeyValue\SearchDocumentBuilder;
-use Brera\KeyValue\SearchDocumentCollection;
+use Brera\DataPool\DataPoolWriter;
+use Brera\DataPool\SearchEngine\SearchDocumentBuilder;
+use Brera\DataPool\SearchEngine\SearchDocumentCollection;
 use Brera\SnippetResultList;
 use Brera\SnippetRendererCollection;
 use Brera\ProjectionSourceData;

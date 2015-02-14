@@ -5,10 +5,10 @@ namespace Brera\Product;
 use Brera\Environment\Environment;
 use Brera\Environment\EnvironmentSource;
 use Brera\InvalidProjectionDataSourceType;
-use Brera\KeyValue\SearchDocument;
-use Brera\KeyValue\SearchDocumentBuilder;
-use Brera\KeyValue\SearchDocumentCollection;
-use Brera\KeyValue\SearchDocumentFieldCollection;
+use Brera\DataPool\SearchEngine\SearchDocument;
+use Brera\DataPool\SearchEngine\SearchDocumentBuilder;
+use Brera\DataPool\SearchEngine\SearchDocumentCollection;
+use Brera\DataPool\SearchEngine\SearchDocumentFieldCollection;
 use Brera\ProjectionSourceData;
 
 class ProductSearchDocumentBuilder implements SearchDocumentBuilder

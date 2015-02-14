@@ -34,7 +34,7 @@ use Brera\Http\HttpUrl;
  * @uses   \Brera\Environment\EnvironmentBuilder
  * @uses   \Brera\Api\ApiRouter
  * @uses   \Brera\Api\ApiRequestHandlerChain
- * @uses   \Brera\KeyValue\DataPoolReader
+ * @uses   \Brera\DataPool\DataPoolReader
  */
 class PoCWebFrontTest extends \PHPUnit_Framework_TestCase
 {

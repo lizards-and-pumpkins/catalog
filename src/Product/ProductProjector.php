@@ -2,7 +2,7 @@
 
 namespace Brera\Product;
 
-use Brera\KeyValue\DataPoolWriter;
+use Brera\DataPool\DataPoolWriter;
 use Brera\Projector;
 use Brera\ProjectionSourceData;
 use Brera\Environment\EnvironmentSource;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\KeyValue;
+namespace Brera\DataPool\SearchEngine;
 
 class SearchDocumentField
 {
@@ -17,6 +17,7 @@ class SearchDocumentField
     /**
      * @param string $key
      * @param mixed $value
+     * @throws InvalidSearchDocumentFieldKeyException
      */
     public function __construct($key, $value)
     {

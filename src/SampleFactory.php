@@ -2,8 +2,8 @@
 
 namespace Brera;
 
-use Brera\KeyValue\File\FileKeyValueStore;
-use Brera\KeyValue\InMemorySearchEngine;
+use Brera\DataPool\KeyValue\File\FileKeyValueStore;
+use Brera\DataPool\SearchEngine\InMemorySearchEngine;
 use Brera\Queue\InMemory\InMemoryQueue;
 
 class SampleFactory implements Factory

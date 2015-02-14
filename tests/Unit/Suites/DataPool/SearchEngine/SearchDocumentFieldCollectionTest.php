@@ -1,10 +1,10 @@
 <?php
 
-namespace Brera\KeyValue;
+namespace Brera\DataPool\SearchEngine;
 
 /**
- * @covers \Brera\KeyValue\SearchDocumentFieldCollection
- * @uses   \Brera\KeyValue\SearchDocumentField
+ * @covers \Brera\DataPool\SearchEngine\SearchDocumentFieldCollection
+ * @uses   \Brera\DataPool\SearchEngine\SearchDocumentField
  */
 class SearchDocumentFieldCollectionTest extends \PHPUnit_Framework_TestCase
 {

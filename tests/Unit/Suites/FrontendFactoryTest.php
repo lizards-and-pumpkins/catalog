@@ -16,7 +16,7 @@ use Brera\Product\CatalogImportApiRequestHandler;
  * @uses   \Brera\CommonFactory
  * @uses   \Brera\UrlKeyRouter
  * @uses   \Brera\UrlKeyRequestHandlerBuilder
- * @uses   \Brera\KeyValue\DataPoolReader
+ * @uses   \Brera\DataPool\DataPoolReader
  * @uses   \Brera\Api\ApiRouter
  * @uses   \Brera\Api\ApiRequestHandlerChain
  */

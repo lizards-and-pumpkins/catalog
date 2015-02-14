@@ -5,7 +5,7 @@ namespace Brera;
 
 use Brera\Environment\Environment;
 use Brera\Http\HttpUrl;
-use Brera\KeyValue\DataPoolReader;
+use Brera\DataPool\DataPoolReader;
 
 class UrlKeyRequestHandlerBuilder
 {

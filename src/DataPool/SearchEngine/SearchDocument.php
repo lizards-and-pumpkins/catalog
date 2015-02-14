@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\KeyValue;
+namespace Brera\DataPool\SearchEngine;
 
 use Brera\Environment\Environment;
 

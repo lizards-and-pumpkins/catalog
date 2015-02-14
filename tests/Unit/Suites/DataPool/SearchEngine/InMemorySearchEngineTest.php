@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera\KeyValue;
+namespace Brera\DataPool\SearchEngine;
 
 use Brera\Environment\Environment;
 
 /**
- * @covers \Brera\KeyValue\InMemorySearchEngine
+ * @covers \Brera\DataPool\SearchEngine\InMemorySearchEngine
  */
 class InMemorySearchEngineTest extends \PHPUnit_Framework_TestCase
 {

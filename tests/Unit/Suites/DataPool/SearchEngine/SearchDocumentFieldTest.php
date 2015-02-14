@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\KeyValue;
+namespace Brera\DataPool\SearchEngine;
 
 /**
- * @covers \Brera\KeyValue\SearchDocumentField
+ * @covers \Brera\DataPool\SearchEngine\SearchDocumentField
  */
 class SearchDocumentFieldTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,13 +23,13 @@ class SearchDocumentFieldTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Brera\KeyValue\InvalidSearchDocumentFieldKeyException
+     * @expectedException \Brera\DataPool\SearchEngine\InvalidSearchDocumentFieldKeyException
      * @param $invalidKey
      * @dataProvider invalidKeyProvider
      */
     public function itShouldThrowAnExceptionIfInvalidKeyIsSpecified($invalidKey)
     {
-        new SearchDocumentField('', 'foo');
+        new SearchDocumentField($invalidKey, 'foo');
     }
 
     public function invalidKeyProvider()

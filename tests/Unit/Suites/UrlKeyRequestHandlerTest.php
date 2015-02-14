@@ -4,8 +4,8 @@ namespace Brera;
 
 use Brera\Environment\Environment;
 use Brera\Http\HttpUrl;
-use Brera\KeyValue\DataPoolReader;
-use Brera\KeyValue\KeyNotFoundException;
+use Brera\DataPool\DataPoolReader;
+use Brera\DataPool\KeyValue\KeyNotFoundException;
 
 /**
  * @covers \Brera\UrlKeyRequestHandler

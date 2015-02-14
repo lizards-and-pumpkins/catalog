@@ -1,7 +1,9 @@
 <?php
 
-namespace Brera\KeyValue;
+namespace Brera\DataPool;
 
+use Brera\DataPool\KeyValue\KeyValueStore;
+use Brera\DataPool\SearchEngine\SearchEngine;
 use Brera\Environment\Environment;
 
 class DataPoolReader
@@ -28,6 +30,7 @@ class DataPoolReader
 
     /**
      * @param KeyValueStore $keyValueStore
+     * @param SearchEngine $searchEngine
      */
     public function __construct(KeyValueStore $keyValueStore, SearchEngine $searchEngine)
     {

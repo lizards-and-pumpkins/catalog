@@ -3,8 +3,8 @@
 
 namespace Brera\Tests\Integration;
 
-use Brera\KeyValue\File\FileKeyValueStore;
-use Brera\KeyValue\InMemorySearchEngine;
+use Brera\DataPool\KeyValue\File\FileKeyValueStore;
+use Brera\DataPool\SearchEngine\InMemorySearchEngine;
 use Brera\SampleFactory;
 use Brera\InMemoryLogger;
 use Brera\Queue\InMemory\InMemoryQueue;
@@ -12,7 +12,7 @@ use Brera\Queue\InMemory\InMemoryQueue;
 /**
  * @covers \Brera\SampleFactory
  * @uses   \Brera\InMemoryLogger
- * @uses   \Brera\KeyValue\File\FileKeyValueStore
+ * @uses   \Brera\DataPool\KeyValue\File\FileKeyValueStore
  * @uses   \Brera\Queue\InMemory\InMemoryQueue
  */
 class SampleFactoryTest extends \PHPUnit_Framework_TestCase

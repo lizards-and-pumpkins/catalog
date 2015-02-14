@@ -4,16 +4,16 @@ namespace Brera\Product;
 
 use Brera\Environment\Environment;
 use Brera\Environment\EnvironmentSource;
-use Brera\KeyValue\SearchDocumentBuilder;
-use Brera\KeyValue\SearchDocumentCollection;
+use Brera\DataPool\SearchEngine\SearchDocumentBuilder;
+use Brera\DataPool\SearchEngine\SearchDocumentCollection;
 use Brera\ProjectionSourceData;
 
 /**
  * @covers \Brera\Product\ProductSearchDocumentBuilder
- * @uses   \Brera\KeyValue\SearchDocument
- * @uses   \Brera\KeyValue\SearchDocumentCollection
- * @uses   \Brera\KeyValue\SearchDocumentField
- * @uses   \Brera\KeyValue\SearchDocumentFieldCollection
+ * @uses   \Brera\DataPool\SearchEngine\SearchDocument
+ * @uses   \Brera\DataPool\SearchEngine\SearchDocumentCollection
+ * @uses   \Brera\DataPool\SearchEngine\SearchDocumentField
+ * @uses   \Brera\DataPool\SearchEngine\SearchDocumentFieldCollection
  */
 class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
 {

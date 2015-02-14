@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera\KeyValue;
+namespace Brera\DataPool\SearchEngine;
 
 use Brera\Environment\Environment;
 
 /**
- * @covers \Brera\KeyValue\SearchDocument
+ * @covers \Brera\DataPool\SearchEngine\SearchDocument
  */
 class SearchDocumentTest extends \PHPUnit_Framework_TestCase
 {
