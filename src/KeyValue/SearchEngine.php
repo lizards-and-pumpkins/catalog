@@ -10,7 +10,7 @@ interface SearchEngine
      * @param SearchDocument $searchDocument
      * @return void
      */
-    public function addSearchDocument(searchDocument $searchDocument);
+    public function addSearchDocument(SearchDocument $searchDocument);
 
     /**
      * @param SearchDocumentCollection $searchDocumentCollection
