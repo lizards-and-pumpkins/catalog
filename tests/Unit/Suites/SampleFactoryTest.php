@@ -58,4 +58,12 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(InMemorySearchEngine::class, $this->factory->createSearchEngine());
     }
+
+    /**
+     * @test
+     */
+    public function itShouldCreateSearchableAttributeCodesArray()
+    {
+        $this->assertInternalType('array', $this->factory->createSearchableAttributeCodes());
+    }
 }

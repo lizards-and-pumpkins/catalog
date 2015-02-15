@@ -48,6 +48,11 @@ class CommonFactory implements Factory, DomainEventFactory
     private $searchEngine;
 
     /**
+     * @var string[]
+     */
+    private $searchableAttributeCodes;
+
+    /**
      * @param ProductImportDomainEvent $event
      * @return ProductImportDomainEventHandler
      * @todo: move to catalog factory
@@ -308,11 +313,21 @@ class CommonFactory implements Factory, DomainEventFactory
 
     /**
      * @return ProductSearchDocumentBuilder
-     * @todo: move to catalog factory
      */
     public function createProductSearchDocumentBuilder()
     {
-        return new ProductSearchDocumentBuilder($this->getListOfAttributesToBePutIntoSearchEngine());
+        return new ProductSearchDocumentBuilder(
+            $this->getSearchableAttributeCodes()
+        );
+    }
+
+    private function getSearchableAttributeCodes()
+    {
+        if (is_null($this->searchableAttributeCodes)) {
+            $this->searchableAttributeCodes = $this->callExternalCreateMethod('SearchableAttributeCodes');
+        }
+
+        return $this->searchableAttributeCodes;
     }
 
     /**
@@ -325,14 +340,5 @@ class CommonFactory implements Factory, DomainEventFactory
         }
 
         return $this->searchEngine;
-    }
-
-    /**
-     * return string[]
-     * @todo: move to catalog factory
-     */
-    private function getListOfAttributesToBePutIntoSearchEngine()
-    {
-        return ['name'];
     }
 }

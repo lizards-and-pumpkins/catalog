@@ -41,4 +41,12 @@ class SampleFactory implements Factory
     {
         return new InMemorySearchEngine();
     }
+
+    /**
+     * return string[]
+     */
+    public function createSearchableAttributeCodes()
+    {
+        return ['name'];
+    }
 }
