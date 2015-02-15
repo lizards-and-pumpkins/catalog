@@ -25,13 +25,13 @@ interface KeyValueStore
 
     /**
      * @param array $keys
-     * @return array
+     * @return mixed[]
      */
     public function multiGet(array $keys);
 
     /**
      * @param array $items
-     * @return null
+     * @return void
      */
     public function multiSet(array $items);
 }

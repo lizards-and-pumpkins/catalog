@@ -23,7 +23,7 @@ class EnvironmentSource
 
     /**
      * @param string $part
-     * @return array
+     * @return array[]
      */
     public function getEnvironmentValuesForPart($part)
     {
@@ -35,7 +35,7 @@ class EnvironmentSource
 
     /**
      * @param array $partsToExtract
-     * @return array
+     * @return array[]
      */
     private function extractCartesianProductOfEnvironmentsAsArray(array $partsToExtract)
     {
@@ -56,7 +56,7 @@ class EnvironmentSource
 
     /**
      * @param array $partsToExtract
-     * @return array
+     * @return mixed[]
      */
     private function getEnvironmentsThatAreRequestedAndExistInTheSource(array $partsToExtract)
     {
@@ -65,7 +65,7 @@ class EnvironmentSource
 
     /**
      * @param array $partsToExtract
-     * @return array
+     * @return array[]
      */
     private function getAllPossibleCombinationsRecursively(array $partsToExtract)
     {
@@ -77,7 +77,7 @@ class EnvironmentSource
      * Thanks Jonathan H. Wage for https://gist.github.com/jwage/11193216
      *
      * @param array $set
-     * @return array
+     * @return array[]
      */
     private function buildRecursively(array $set)
     {

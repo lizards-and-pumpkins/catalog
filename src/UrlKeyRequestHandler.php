@@ -204,7 +204,7 @@ class UrlKeyRequestHandler implements HttpRequestHandler
     /**
      * @param string $rootSnippetKey
      * @param array $childSnippetKeys
-     * @return array
+     * @return string[]
      */
     private function getSnippetsFromKeys($rootSnippetKey, array $childSnippetKeys)
     {

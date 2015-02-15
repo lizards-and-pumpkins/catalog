@@ -84,7 +84,7 @@ class ProductAttributeList
 
     /**
      * @param Environment $environment
-     * @return array
+     * @return ProductAttribute[]
      */
     private function extractAttributesForEnvironment(Environment $environment)
     {
