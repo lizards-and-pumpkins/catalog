@@ -15,7 +15,7 @@ class SearchDocumentFieldTest extends \PHPUnit_Framework_TestCase
         $key = 'foo';
         $value = 'bar';
 
-        $searchDocumentField = searchDocumentField::fromKeyAndValue($key, $value);
+        $searchDocumentField = SearchDocumentField::fromKeyAndValue($key, $value);
 
         $this->assertEquals($key, $searchDocumentField->getKey());
         $this->assertEquals($value, $searchDocumentField->getValue());
@@ -24,7 +24,7 @@ class SearchDocumentFieldTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * @expectedException \Brera\DataPool\SearchEngine\InvalidSearchDocumentFieldKeyException
-     * @param $invalidKey
+     * @param mixed $invalidKey
      * @dataProvider invalidKeyProvider
      */
     public function itShouldThrowAnExceptionIfInvalidKeyIsSpecified($invalidKey)
