@@ -49,7 +49,7 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
 
         $this->assertContains((string) $sku, $html);
         $this->assertContains($productName, $html);
-        $this->assertContains($productId, $searchResults, '', false, false);
+        $this->assertContains((string) $productId, $searchResults, '', false, false);
     }
 
     /**

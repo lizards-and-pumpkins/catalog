@@ -17,20 +17,20 @@ class SearchDocument
     private $environment;
 
     /**
-     * @var mixed
+     * @var string
      */
     private $content;
 
     /**
      * @param SearchDocumentFieldCollection $fields
      * @param Environment $environment
-     * @param mixed $content
+     * @param string $content
      */
     public function __construct(SearchDocumentFieldCollection $fields, Environment $environment, $content)
     {
         $this->fields = $fields;
         $this->environment = $environment;
-        $this->content = $content;
+        $this->content = (string) $content;
     }
 
     /**
@@ -50,7 +50,7 @@ class SearchDocument
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getContent()
     {

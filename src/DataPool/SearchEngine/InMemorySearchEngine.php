@@ -33,7 +33,7 @@ class InMemorySearchEngine implements SearchEngine
     /**
      * @param string $queryString
      * @param Environment $environment
-     * @return mixed[]
+     * @return string[]
      */
     public function query($queryString, Environment $environment)
     {

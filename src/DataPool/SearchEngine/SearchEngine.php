@@ -21,7 +21,7 @@ interface SearchEngine
     /**
      * @param string $queryString
      * @param Environment $environment
-     * @return array
+     * @return string[]
      */
     public function query($queryString, Environment $environment);
 }
