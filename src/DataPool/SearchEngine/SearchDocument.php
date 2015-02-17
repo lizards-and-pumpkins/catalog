@@ -19,18 +19,18 @@ class SearchDocument
     /**
      * @var mixed
      */
-    private $payload;
+    private $content;
 
     /**
      * @param SearchDocumentFieldCollection $fields
      * @param Environment $environment
-     * @param mixed $payload
+     * @param mixed $content
      */
-    public function __construct(SearchDocumentFieldCollection $fields, Environment $environment, $payload)
+    public function __construct(SearchDocumentFieldCollection $fields, Environment $environment, $content)
     {
         $this->fields = $fields;
         $this->environment = $environment;
-        $this->payload = $payload;
+        $this->content = $content;
     }
 
     /**
@@ -52,8 +52,8 @@ class SearchDocument
     /**
      * @return mixed
      */
-    public function getPayload()
+    public function getContent()
     {
-        return $this->payload;
+        return $this->content;
     }
 }

@@ -18,12 +18,12 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $stubEnvironment = $this->getMock(Environment::class);
-        $payload = 'foo';
+        $content = 'foo';
 
-        $searchDocument = new SearchDocument($stubDocumentFieldsCollection, $stubEnvironment, $payload);
+        $searchDocument = new SearchDocument($stubDocumentFieldsCollection, $stubEnvironment, $content);
 
         $this->assertSame($stubDocumentFieldsCollection, $searchDocument->getFieldsCollection());
         $this->assertSame($stubEnvironment, $searchDocument->getEnvironment());
-        $this->assertSame($payload, $searchDocument->getPayload());
+        $this->assertSame($content, $searchDocument->getContent());
     }
 }
