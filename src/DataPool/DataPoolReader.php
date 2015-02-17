@@ -152,7 +152,7 @@ class DataPoolReader
     /**
      * @param string $queryString
      * @param Context $context
-     * @return mixed[]
+     * @return string[]
      */
     public function getSearchResults($queryString, Context $context)
     {
