@@ -5,14 +5,16 @@ namespace Brera;
 use Brera\Environment\EnvironmentBuilder;
 use Brera\Environment\EnvironmentSourceBuilder;
 use Brera\Http\ResourceNotFoundRouter;
+use Brera\DataPool\SearchEngine\SearchEngine;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
+use Brera\Product\ProductSearchDocumentBuilder;
 use Brera\Product\ProductSnippetRendererCollection;
 use Brera\Product\ProductSourceBuilder;
-use Brera\KeyValue\KeyValueStore;
+use Brera\DataPool\KeyValue\KeyValueStore;
 use Brera\Queue\Queue;
-use Brera\KeyValue\DataPoolWriter;
-use Brera\KeyValue\DataPoolReader;
+use Brera\DataPool\DataPoolWriter;
+use Brera\DataPool\DataPoolReader;
 use Brera\Product\ProductImportDomainEvent;
 use Brera\Product\ProductImportDomainEventHandler;
 use Brera\Product\ProductProjector;
@@ -41,6 +43,11 @@ class CommonFactory implements Factory, DomainEventFactory
     private $logger;
 
     /**
+     * @var SearchEngine
+     */
+    private $searchEngine;
+
+    /**
      * @param ProductImportDomainEvent $event
      * @return ProductImportDomainEventHandler
      * @todo: move to catalog factory
@@ -51,7 +58,8 @@ class CommonFactory implements Factory, DomainEventFactory
             $event,
             $this->getMasterFactory()->createProductSourceBuilder(),
             $this->getMasterFactory()->createEnvironmentSourceBuilder(),
-            $this->getMasterFactory()->createProductProjector()
+            $this->getMasterFactory()->createProductProjector(),
+            $this->getMasterFactory()->createProductSearchDocumentBuilder()
         );
     }
 
@@ -73,6 +81,7 @@ class CommonFactory implements Factory, DomainEventFactory
     {
         return new ProductProjector(
             $this->createProductSnippetRendererCollection(),
+            $this->createProductSearchDocumentBuilder(),
             $this->getMasterFactory()->createDataPoolWriter()
         );
     }
@@ -202,7 +211,7 @@ class CommonFactory implements Factory, DomainEventFactory
      */
     public function createDataPoolWriter()
     {
-        return new DataPoolWriter($this->getKeyValueStore());
+        return new DataPoolWriter($this->getKeyValueStore(), $this->getSearchEngine());
     }
 
     /**
@@ -248,7 +257,7 @@ class CommonFactory implements Factory, DomainEventFactory
      */
     public function createDataPoolReader()
     {
-        return new DataPoolReader($this->getKeyValueStore());
+        return new DataPoolReader($this->getKeyValueStore(), $this->getSearchEngine());
     }
 
     /**
@@ -295,5 +304,25 @@ class CommonFactory implements Factory, DomainEventFactory
     public function createHttpRouterChain()
     {
         return new HttpRouterChain();
+    }
+
+    /**
+     * @return ProductSearchDocumentBuilder
+     */
+    public function createProductSearchDocumentBuilder()
+    {
+        return new ProductSearchDocumentBuilder($this->getMasterFactory()->getSearchableAttributeCodes());
+    }
+
+    /**
+     * @return SearchEngine
+     */
+    private function getSearchEngine()
+    {
+        if (is_null($this->searchEngine)) {
+            $this->searchEngine = $this->callExternalCreateMethod('SearchEngine');
+        }
+
+        return $this->searchEngine;
     }
 }

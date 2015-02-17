@@ -6,7 +6,7 @@ use Brera\Environment\EnvironmentBuilder;
 use Brera\Environment\EnvironmentSourceBuilder;
 use Brera\Http\ResourceNotFoundRouter;
 use Brera\Http\HttpRouterChain;
-use Brera\KeyValue\DataPoolReader;
+use Brera\DataPool\DataPoolReader;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\ProductImportDomainEvent;
@@ -22,8 +22,8 @@ use Psr\Log\LoggerInterface;
  * @uses   \Brera\DataVersion
  * @uses   \Brera\MasterFactoryTrait
  * @uses   \Brera\IntegrationTestFactory
- * @uses   \Brera\KeyValue\DataPoolWriter
- * @uses   \Brera\KeyValue\DataPoolReader
+ * @uses   \Brera\DataPool\DataPoolWriter
+ * @uses   \Brera\DataPool\DataPoolReader
  * @uses   \Brera\Environment\EnvironmentBuilder
  * @uses   \Brera\Environment\EnvironmentSourceBuilder
  * @uses   \Brera\DomainEventConsumer
@@ -37,6 +37,7 @@ use Psr\Log\LoggerInterface;
  * @uses   \Brera\Product\ProductImportDomainEvent
  * @uses   \Brera\Product\CatalogImportDomainEvent
  * @uses   \Brera\Product\CatalogImportDomainEventHandler
+ * @uses   \Brera\Product\ProductSearchDocumentBuilder
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {

@@ -5,8 +5,8 @@ namespace Brera;
 use Brera\Environment\EnvironmentBuilder;
 
 /**
- * @method KeyValue\DataPoolWriter createDataPoolWriter
- * @method KeyValue\DataPoolReader createDataPoolReader
+ * @method DataPool\DataPoolWriter createDataPoolWriter
+ * @method DataPool\DataPoolReader createDataPoolReader
  * @method Queue\Queue getEventQueue
  * @method EnvironmentBuilder createEnvironmentBuilder
  * @method EnvironmentBuilder createEnvironmentBuilderWithVersion

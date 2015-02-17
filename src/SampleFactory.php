@@ -2,7 +2,8 @@
 
 namespace Brera;
 
-use Brera\KeyValue\File\FileKeyValueStore;
+use Brera\DataPool\KeyValue\File\FileKeyValueStore;
+use Brera\DataPool\SearchEngine\InMemorySearchEngine;
 use Brera\Queue\InMemory\InMemoryQueue;
 
 class SampleFactory implements Factory
@@ -31,5 +32,21 @@ class SampleFactory implements Factory
     public function createLogger()
     {
         return new InMemoryLogger();
+    }
+
+    /**
+     * @return InMemorySearchEngine
+     */
+    public function createSearchEngine()
+    {
+        return new InMemorySearchEngine();
+    }
+
+    /**
+     * return string[]
+     */
+    public function getSearchableAttributeCodes()
+    {
+        return ['name'];
     }
 }

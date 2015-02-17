@@ -13,38 +13,39 @@ class ProductImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldTriggerAProjection()
+    public function itShouldTriggerProjection()
     {
-        $stubProduct = $this->getMockBuilder(ProductSource::class)
-        ->disableOriginalConstructor()
-        ->getMock();
+        $stubProductSource = $this->getMockBuilder(ProductSource::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $stubDomainEvent = $this->getMockBuilder(ProductImportDomainEvent::class)
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $stubDomainEvent->expects($this->once())
-        ->method('getXml');
+            ->method('getXml');
 
         $stubProductBuilder = $this->getMock(ProductSourceBuilder::class);
         $stubProductBuilder->expects($this->once())
-        ->method('createProductSourceFromXml')
-        ->willReturn($stubProduct);
+            ->method('createProductSourceFromXml')
+            ->willReturn($stubProductSource);
 
         $stubEnvironmentSource = $this->getMockBuilder(EnvironmentSource::class)
-        ->disableOriginalConstructor()
-        ->getMock();
-        
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $stubEnvironmentSourceBuilder = $this->getMockBuilder(EnvironmentSourceBuilder::class)
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $stubEnvironmentSourceBuilder->expects($this->any())->method('createFromXml')
-        ->willReturn($stubEnvironmentSource);
+            ->willReturn($stubEnvironmentSource);
 
         $stubProjector = $this->getMockBuilder(ProductProjector::class)
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $stubProjector->expects($this->once())
-        ->method('project');
+            ->method('project')
+            ->with($stubProductSource, $stubEnvironmentSource);
 
         (new ProductImportDomainEventHandler(
             $stubDomainEvent,

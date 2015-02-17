@@ -35,8 +35,8 @@ class ProductImportDomainEventHandler implements DomainEventHandler
     ) {
         $this->event = $event;
         $this->productSourceBuilder = $productSourceBuilder;
-        $this->projector = $projector;
         $this->environmentSourceBuilder = $environmentSourceBuilder;
+        $this->projector = $projector;
     }
 
     /**
@@ -47,6 +47,7 @@ class ProductImportDomainEventHandler implements DomainEventHandler
         $xml = $this->event->getXml();
         $productSource = $this->productSourceBuilder->createProductSourceFromXml($xml);
         $environmentSource = $this->environmentSourceBuilder->createFromXml($xml);
+
         $this->projector->project($productSource, $environmentSource);
     }
 }
