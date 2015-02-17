@@ -2,8 +2,8 @@
 
 namespace Brera\Product;
 
-use Brera\Environment\Environment;
-use Brera\Environment\EnvironmentSource;
+use Brera\Context\Context;
+use Brera\Context\ContextSource;
 use Brera\InvalidProjectionDataSourceType;
 use Brera\DataPool\SearchEngine\SearchDocument;
 use Brera\DataPool\SearchEngine\SearchDocumentBuilder;
@@ -28,11 +28,11 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
 
     /**
      * @param ProjectionSourceData $productSource
-     * @param EnvironmentSource $environmentSource
+     * @param ContextSource $contextSource
      * @return SearchDocumentCollection
      * @throws InvalidProjectionDataSourceType
      */
-    public function aggregate(ProjectionSourceData $productSource, EnvironmentSource $environmentSource)
+    public function aggregate(ProjectionSourceData $productSource, ContextSource $contextSource)
     {
         if (!($productSource instanceof ProductSource)) {
             throw new InvalidProjectionDataSourceType('First argument must be instance of ProductSource.');
@@ -40,8 +40,8 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
 
         $collection = new SearchDocumentCollection();
 
-        foreach ($environmentSource->extractEnvironments(['version', 'website', 'language']) as $environment) {
-            $document = $this->createSearchDocument($productSource, $environment);
+        foreach ($contextSource->extractContexts(['version', 'website', 'language']) as $context) {
+            $document = $this->createSearchDocument($productSource, $context);
             $collection->add($document);
         }
 
@@ -50,15 +50,15 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
 
     /**
      * @param ProductSource $productSource
-     * @param Environment $environment
+     * @param Context $context
      * @return SearchDocument
      */
-    private function createSearchDocument(ProductSource $productSource, Environment $environment)
+    private function createSearchDocument(ProductSource $productSource, Context $context)
     {
-        $product = $productSource->getProductForEnvironment($environment);
+        $product = $productSource->getProductForContext($context);
         $fieldsCollection = $this->createSearchDocumentFieldsCollection($product);
 
-        return new SearchDocument($fieldsCollection, $environment, $product->getId());
+        return new SearchDocument($fieldsCollection, $context, $product->getId());
     }
 
     /**

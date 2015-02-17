@@ -1,34 +1,34 @@
 <?php
 
 
-namespace Brera\Environment;
+namespace Brera\Context;
 
 use Brera\InputXmlIsEmptyStringException;
 use Brera\InvalidXmlTypeException;
 use Brera\XPathParser;
 
-class EnvironmentSourceBuilder
+class ContextSourceBuilder
 {
 
     /**
-     * @var EnvironmentBuilder
+     * @var ContextBuilder
      */
-    private $environmentBuilder;
+    private $contextBuilder;
 
-    public function __construct(EnvironmentBuilder $environmentBuilder)
+    public function __construct(ContextBuilder $contextBuilder)
     {
-        $this->environmentBuilder = $environmentBuilder;
+        $this->contextBuilder = $contextBuilder;
     }
     
     /**
      * @param string $xml
-     * @return EnvironmentSource
+     * @return ContextSource
      */
     public function createFromXml($xml)
     {
         $this->validateXmlString($xml);
-        $environments = $this->extractAttributesFromXml($xml);
-        return new EnvironmentSource($environments, $this->environmentBuilder);
+        $contexts = $this->extractAttributesFromXml($xml);
+        return new ContextSource($contexts, $this->contextBuilder);
     }
 
     /**
@@ -52,14 +52,14 @@ class EnvironmentSourceBuilder
      */
     private function extractAttributesFromXml($xml)
     {
-        $environments = [];
+        $contexts = [];
         $parser = new XPathParser($xml);
 
         $attributes = $parser->getXmlNodesArrayByXPath('//product/attributes//@*');
         foreach ($attributes as $attribute) {
-            $environments[$attribute['nodeName']][] = $attribute['value'];
+            $contexts[$attribute['nodeName']][] = $attribute['value'];
         }
 
-        return $environments;
+        return $contexts;
     }
 }

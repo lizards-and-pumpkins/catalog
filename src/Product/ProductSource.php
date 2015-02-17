@@ -2,7 +2,7 @@
 
 namespace Brera\Product;
 
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 use Brera\ProjectionSourceData;
 
 class ProductSource implements ProjectionSourceData
@@ -36,12 +36,12 @@ class ProductSource implements ProjectionSourceData
     }
 
     /**
-     * @param Environment $environment
+     * @param Context $context
      * @return Product
      */
-    public function getProductForEnvironment(Environment $environment)
+    public function getProductForContext(Context $context)
     {
-        $attributes = $this->attributes->getAttributesForEnvironment($environment);
+        $attributes = $this->attributes->getAttributesForContext($context);
         return new Product($this->getId(), $attributes);
     }
 }

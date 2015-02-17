@@ -1,9 +1,9 @@
 <?php
-namespace Brera\Environment;
+namespace Brera\Context;
 
 use Brera\DataVersion;
 
-class VersionedEnvironment implements Environment
+class VersionedContext implements Context
 {
     const CODE = 'version';
     
@@ -23,13 +23,13 @@ class VersionedEnvironment implements Environment
     /**
      * @param string $code
      * @return string
-     *® @throws EnvironmentCodeNotFoundException
+     *® @throws ContextCodeNotFoundException
      */
     public function getValue($code)
     {
         if (self::CODE !== $code) {
-            throw new EnvironmentCodeNotFoundException(sprintf(
-                "No value was not found in the current environment for the code '%s'",
+            throw new ContextCodeNotFoundException(sprintf(
+                "No value was not found in the current context for the code '%s'",
                 $code
             ));
         }

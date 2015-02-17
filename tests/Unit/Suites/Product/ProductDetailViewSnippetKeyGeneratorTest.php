@@ -2,7 +2,7 @@
 
 namespace Brera\Product;
 
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 
 /**
  * @covers \Brera\Product\ProductDetailViewSnippetKeyGenerator
@@ -27,11 +27,11 @@ class ProductDetailViewSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCa
         $stubProductId = $this->getMockBuilder(ProductId::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $mockEnvironment = $this->getMock(Environment::class);
+        $mockContext = $this->getMock(Context::class);
 
         $this->assertInternalType(
             'string',
-            $this->keyGenerator->getKeyForEnvironment($stubProductId, $mockEnvironment)
+            $this->keyGenerator->getKeyForContext($stubProductId, $mockContext)
         );
     }
 
@@ -42,8 +42,8 @@ class ProductDetailViewSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCa
     public function itShouldOnlyAllowProductIdIdentifiers()
     {
         $notAProductId = 1;
-        $mockEnvironment = $this->getMock(Environment::class);
+        $mockContext = $this->getMock(Context::class);
 
-        $this->keyGenerator->getKeyForEnvironment($notAProductId, $mockEnvironment);
+        $this->keyGenerator->getKeyForContext($notAProductId, $mockContext);
     }
 }

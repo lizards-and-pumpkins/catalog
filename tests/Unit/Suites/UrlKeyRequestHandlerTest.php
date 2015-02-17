@@ -2,7 +2,7 @@
 
 namespace Brera;
 
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 use Brera\Http\HttpUrl;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\KeyNotFoundException;
@@ -25,9 +25,9 @@ class UrlKeyRequestHandlerTest extends \PHPUnit_Framework_TestCase
     private $mockDataPoolReader;
 
     /**
-     * @var Environment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockEnvironment;
+    private $mockContext;
 
     /**
      * @var HttpUrl
@@ -46,8 +46,8 @@ class UrlKeyRequestHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->url = HttpUrl::fromString('http://example.com/product.html');
 
-        $this->mockEnvironment = $this->getMock(Environment::class);
-        $this->mockEnvironment->expects($this->any())
+        $this->mockContext = $this->getMock(Context::class);
+        $this->mockContext->expects($this->any())
             ->method('getVersion')
             ->willReturn('1');
 
@@ -57,12 +57,12 @@ class UrlKeyRequestHandlerTest extends \PHPUnit_Framework_TestCase
         
         $this->mockUrlPathKeyGenerator = $this->getMock(UrlPathKeyGenerator::class);
         $this->mockUrlPathKeyGenerator->expects($this->any())
-            ->method('getUrlKeyForPathInEnvironment')
+            ->method('getUrlKeyForPathInContext')
             ->willReturn('dummy-url-key');
 
         $this->urlKeyRequestHandler = new UrlKeyRequestHandler(
             $this->url,
-            $this->mockEnvironment,
+            $this->mockContext,
             $this->mockUrlPathKeyGenerator,
             $this->mockDataPoolReader
         );
@@ -92,7 +92,7 @@ class UrlKeyRequestHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldReplacePlaceholderWithoutEnvironmentVariables()
+    public function itShouldReplacePlaceholderWithoutContextVariables()
     {
         $this->stubDataPoolReaderMethods(
             'root_key',
@@ -115,7 +115,7 @@ EOH
     /**
      * @test
      */
-    public function itShouldReplacePlaceholderWithoutEnvironmentVariablesDeeperThanTwo()
+    public function itShouldReplacePlaceholderWithoutContextVariablesDeeperThanTwo()
     {
         $this->stubDataPoolReaderMethods(
             'root_key',
@@ -143,7 +143,7 @@ EOH;
     /**
      * @test
      */
-    public function itShouldReplacePlaceholderWithoutEnvironmentVariablesDeeperThanTwoAndDoNotCareAboutMissingSnippets()
+    public function itShouldReplacePlaceholderWithoutContextVariablesDeeperThanTwoAndDoNotCareAboutMissingSnippets()
     {
         $this->stubDataPoolReaderMethods(
             '_product_html_1',

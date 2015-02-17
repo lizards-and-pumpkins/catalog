@@ -5,7 +5,7 @@ namespace Brera\Product;
 use Brera\SnippetRenderer;
 use Brera\SnippetResultList;
 use Brera\ProjectionSourceData;
-use Brera\Environment\EnvironmentSource;
+use Brera\Context\ContextSource;
 
 /**
  * @covers \Brera\Product\ProductSnippetRendererCollection
@@ -59,13 +59,13 @@ class ProductSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $stubEnvironment = $this->getMockBuilder(EnvironmentSource::class)
+        $stubContext = $this->getMockBuilder(ContextSource::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $snippetResultList = $this->rendererCollection->render(
             $stubProduct,
-            $stubEnvironment
+            $stubContext
         );
         $this->assertInstanceOf(
             SnippetResultList::class,
@@ -84,7 +84,7 @@ class ProductSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $stubEnvironment = $this->getMockBuilder(EnvironmentSource::class)
+        $stubContext = $this->getMockBuilder(ContextSource::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -92,16 +92,16 @@ class ProductSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
             = $this->getMock(SnippetResultList::class);
 
         $this->mockRenderer->expects($this->once())->method('render')
-            ->with($stubProduct, $stubEnvironment)
+            ->with($stubProduct, $stubContext)
             ->willReturn($stubSnippetResultListFromRenderer);
 
         $this->mockRenderer2->expects($this->once())->method('render')
-            ->with($stubProduct, $stubEnvironment)
+            ->with($stubProduct, $stubContext)
             ->willReturn($stubSnippetResultListFromRenderer);
 
         $this->rendererCollection->render(
             $stubProduct,
-            $stubEnvironment
+            $stubContext
         );
     }
 
@@ -114,7 +114,7 @@ class ProductSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $stubEnvironment = $this->getMockBuilder(EnvironmentSource::class)
+        $stubContext = $this->getMockBuilder(ContextSource::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -125,11 +125,11 @@ class ProductSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
             = $this->getMock(SnippetResultList::class);
 
         $this->mockRenderer->expects($this->any())->method('render')
-            ->with($stubProduct, $stubEnvironment)
+            ->with($stubProduct, $stubContext)
             ->willReturn($stubSnippetResultListFromRenderer);
 
         $this->mockRenderer2->expects($this->any())->method('render')
-            ->with($stubProduct, $stubEnvironment)
+            ->with($stubProduct, $stubContext)
             ->willReturn($stubSnippetResultListFromRenderer2);
 
         $this->stubSnippetResultList->expects($this->exactly(2))
@@ -139,7 +139,7 @@ class ProductSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
                 [$this->identicalTo($stubSnippetResultListFromRenderer2)]
             );
 
-        $this->rendererCollection->render($stubProduct, $stubEnvironment);
+        $this->rendererCollection->render($stubProduct, $stubContext);
     }
 
     /**
@@ -149,8 +149,8 @@ class ProductSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
     public function itShouldThrowAnExceptionIfTheDataSourceObjectTypeIsNotProduct()
     {
         $invalidDataSource = $this->getMock(ProjectionSourceData::class);
-        $stubEnvironment = $this->getMockBuilder(EnvironmentSource::class)
+        $stubContext = $this->getMockBuilder(ContextSource::class)
             ->disableOriginalConstructor()->getMock();
-        $this->rendererCollection->render($invalidDataSource, $stubEnvironment);
+        $this->rendererCollection->render($invalidDataSource, $stubContext);
     }
 }

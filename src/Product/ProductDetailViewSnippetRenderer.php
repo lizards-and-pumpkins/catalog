@@ -2,8 +2,8 @@
 
 namespace Brera\Product;
 
-use Brera\Environment\Environment;
-use Brera\Environment\EnvironmentSource;
+use Brera\Context\Context;
+use Brera\Context\ContextSource;
 use Brera\Renderer\BlockSnippetRenderer;
 use Brera\SnippetResultList;
 use Brera\ProjectionSourceData;
@@ -15,16 +15,16 @@ class ProductDetailViewSnippetRenderer extends BlockSnippetRenderer
 
     /**
      * @param ProjectionSourceData|ProductSource $productSource
-     * @param EnvironmentSource $environmentSource
+     * @param ContextSource $contextSource
      * @throws InvalidArgumentException
      * @return SnippetResultList
      */
-    public function render(ProjectionSourceData $productSource, EnvironmentSource $environmentSource)
+    public function render(ProjectionSourceData $productSource, ContextSource $contextSource)
     {
         if (!($productSource instanceof ProductSource)) {
             throw new InvalidArgumentException('First argument must be instance of Product.');
         }
-        $this->renderProduct($productSource, $environmentSource);
+        $this->renderProduct($productSource, $contextSource);
 
         return $this->getSnippetResultList();
     }
@@ -36,14 +36,14 @@ class ProductDetailViewSnippetRenderer extends BlockSnippetRenderer
 
     /**
      * @param ProductSource $productSource
-     * @param EnvironmentSource $environmentSource
+     * @param ContextSource $contextSource
      */
-    private function renderProduct(ProductSource $productSource, EnvironmentSource $environmentSource)
+    private function renderProduct(ProductSource $productSource, ContextSource $contextSource)
     {
-        foreach ($environmentSource->extractEnvironments($this->getEnvironmentParts()) as $environment) {
-            $productInEnvironment = $productSource->getProductForEnvironment($environment);
-            $contentSnippet = $this->renderProductInEnvironment($productInEnvironment, $environment);
-            $urlSnippet = $this->getProductUrlKeySnippet($contentSnippet, $productInEnvironment, $environment);
+        foreach ($contextSource->extractContexts($this->getContextParts()) as $context) {
+            $productInContext = $productSource->getProductForContext($context);
+            $contentSnippet = $this->renderProductInContext($productInContext, $context);
+            $urlSnippet = $this->getProductUrlKeySnippet($contentSnippet, $productInContext, $context);
             $childSnippetListSnippet = $this->getChildSnippetListSnippet($contentSnippet);
             $this->getSnippetResultList()->add($contentSnippet);
             $this->getSnippetResultList()->add($childSnippetListSnippet);
@@ -53,35 +53,35 @@ class ProductDetailViewSnippetRenderer extends BlockSnippetRenderer
 
     /**
      * @param Product $product
-     * @param Environment $environment
+     * @param Context $context
      * @return SnippetResult
      */
-    private function renderProductInEnvironment(Product $product, Environment $environment)
+    private function renderProductInContext(Product $product, Context $context)
     {
-        $layoutXmlPath = $this->getPathToLayoutXmlFile($environment);
+        $layoutXmlPath = $this->getPathToLayoutXmlFile($context);
         $snippetContent = $this->getSnippetContent($layoutXmlPath, $product);
-        $snippetKey = $this->getContentSnippetKey($product->getId(), $environment);
+        $snippetKey = $this->getContentSnippetKey($product->getId(), $context);
         return SnippetResult::create($snippetKey, $snippetContent);
     }
 
     /**
      * @return string[]
      */
-    private function getEnvironmentParts()
+    private function getContextParts()
     {
-        // todo: get environment parts from outermost block
+        // todo: get context parts from outermost block
         return ['version', 'website', 'language'];
     }
 
     /**
      * @param SnippetResult $targetSnippet
      * @param Product $product
-     * @param Environment $environment
+     * @param Context $context
      * @return SnippetResult
      */
-    private function getProductUrlKeySnippet(SnippetResult $targetSnippet, Product $product, Environment $environment)
+    private function getProductUrlKeySnippet(SnippetResult $targetSnippet, Product $product, Context $context)
     {
-        $snippetKey = $this->getUrlSnippetKey($product->getAttributeValue('url_key'), $environment);
+        $snippetKey = $this->getUrlSnippetKey($product->getAttributeValue('url_key'), $context);
         $snippetContent = $targetSnippet->getKey();
         return SnippetResult::create($snippetKey, $snippetContent);
     }
@@ -99,21 +99,21 @@ class ProductDetailViewSnippetRenderer extends BlockSnippetRenderer
 
     /**
      * @param ProductId $productId
-     * @param Environment $environment
+     * @param Context $context
      * @return string
      */
-    private function getContentSnippetKey(ProductId $productId, Environment $environment)
+    private function getContentSnippetKey(ProductId $productId, Context $context)
     {
-        return $this->getSnippetKeyGenerator()->getKeyForEnvironment($productId, $environment);
+        return $this->getSnippetKeyGenerator()->getKeyForContext($productId, $context);
     }
 
     /**
      * @param string $urlKey
-     * @param Environment $environment
+     * @param Context $context
      * @return string
      */
-    private function getUrlSnippetKey($urlKey, Environment $environment)
+    private function getUrlSnippetKey($urlKey, Context $context)
     {
-        return $this->getUrlPathKeyGenerator()->getUrlKeyForPathInEnvironment($urlKey, $environment);
+        return $this->getUrlPathKeyGenerator()->getUrlKeyForPathInContext($urlKey, $context);
     }
 }

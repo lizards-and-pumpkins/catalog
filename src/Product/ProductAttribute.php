@@ -3,7 +3,7 @@
 namespace Brera\Product;
 
 use Brera\Attribute;
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 
 class ProductAttribute implements Attribute
 {
@@ -15,7 +15,7 @@ class ProductAttribute implements Attribute
     /**
      * @var array
      */
-    private $environment;
+    private $context;
 
     /**
      * @var string|ProductAttributeList
@@ -25,12 +25,12 @@ class ProductAttribute implements Attribute
     /**
      * @param string $code
      * @param string|ProductAttributeList $value
-     * @param array $environmentData
+     * @param array $contextData
      */
-    private function __construct($code, $value, array $environmentData = [])
+    private function __construct($code, $value, array $contextData = [])
     {
         $this->code = $code;
-        $this->environment = $environmentData;
+        $this->context = $contextData;
         $this->value = $value;
     }
 
@@ -88,17 +88,17 @@ class ProductAttribute implements Attribute
     }
 
     /**
-     * @param Environment $environment
+     * @param Context $context
      * @return int
      */
-    public function getMatchScoreForEnvironment(Environment $environment)
+    public function getMatchScoreForContext(Context $context)
     {
         return array_reduce(
-            $environment->getSupportedCodes(),
-            function ($score, $environmentCode) use ($environment) {
-                return $score + $this->getScoreIfEnvironmentIsSetAndMatches(
-                    $environmentCode,
-                    $environment
+            $context->getSupportedCodes(),
+            function ($score, $contextCode) use ($context) {
+                return $score + $this->getScoreIfContextIsSetAndMatches(
+                    $contextCode,
+                    $context
                 );
             },
             0
@@ -106,24 +106,24 @@ class ProductAttribute implements Attribute
     }
 
     /**
-     * @param string $environmentCode
-     * @param Environment $environment
+     * @param string $contextCode
+     * @param Context $context
      * @return int
      */
-    private function getScoreIfEnvironmentIsSetAndMatches($environmentCode, Environment $environment)
+    private function getScoreIfContextIsSetAndMatches($contextCode, Context $context)
     {
-        return array_key_exists($environmentCode, $this->environment) ?
-            $this->getScoreIfEnvironmentMatches($environmentCode, $environment) :
+        return array_key_exists($contextCode, $this->context) ?
+            $this->getScoreIfContextMatches($contextCode, $context) :
             0;
     }
 
     /**
-     * @param Environment $environment
+     * @param Context $context
      * @return int
      */
-    private function getScoreIfEnvironmentMatches($environmentCode, Environment $environment)
+    private function getScoreIfContextMatches($contextCode, Context $context)
     {
-        return $environment->getValue($environmentCode) === $this->environment[$environmentCode] ?
+        return $context->getValue($contextCode) === $this->context[$contextCode] ?
             1 :
             0;
     }

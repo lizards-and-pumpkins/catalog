@@ -1,12 +1,12 @@
 <?php
 
 
-namespace Brera\Environment;
+namespace Brera\Context;
 
 /**
- * @covers \Brera\Environment\EnvironmentSource
+ * @covers \Brera\Context\ContextSource
  */
-class EnvironmentSourceTest extends \PHPUnit_Framework_TestCase
+class ContextSourceTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var int
@@ -14,25 +14,25 @@ class EnvironmentSourceTest extends \PHPUnit_Framework_TestCase
     private $testVersion = [1];
     
     /**
-     * @var EnvironmentBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubEnvironmentBuilder;
+    private $stubContextBuilder;
     
     /**
-     * @var EnvironmentSource
+     * @var ContextSource
      */
-    private $environmentSource;
+    private $contextSource;
 
     public function setUp()
     {
-        $this->stubEnvironmentBuilder = $this->getMockBuilder(EnvironmentBuilder::class)
+        $this->stubContextBuilder = $this->getMockBuilder(ContextBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->stubEnvironmentBuilder->expects($this->any())
-            ->method('getEnvironments')
+        $this->stubContextBuilder->expects($this->any())
+            ->method('getContexts')
             ->willReturn([]);
-        $environments = [VersionedEnvironment::CODE => $this->testVersion];
-        $this->environmentSource = new EnvironmentSource($environments, $this->stubEnvironmentBuilder);
+        $contexts = [VersionedContext::CODE => $this->testVersion];
+        $this->contextSource = new ContextSource($contexts, $this->stubContextBuilder);
     }
 
     /**
@@ -40,23 +40,23 @@ class EnvironmentSourceTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnAnArray()
     {
-        $result = $this->environmentSource->extractEnvironments([]);
+        $result = $this->contextSource->extractContexts([]);
         $this->assertInternalType('array', $result);
     }
 
     /**
      * @test
-     * @param array $environmentMatrix
+     * @param array $contextMatrix
      * @param array $requested
      * @param array $expected
      * @dataProvider cartesianProductTestProvider
      */
-    public function itShouldReturnTheCartesianProductOf(array $environmentMatrix, array $requested, array $expected)
+    public function itShouldReturnTheCartesianProductOf(array $contextMatrix, array $requested, array $expected)
     {
-        $environmentSource = new EnvironmentSource($environmentMatrix, $this->stubEnvironmentBuilder);
-        $method = new \ReflectionMethod($environmentSource, 'extractCartesianProductOfEnvironmentsAsArray');
+        $contextSource = new ContextSource($contextMatrix, $this->stubContextBuilder);
+        $method = new \ReflectionMethod($contextSource, 'extractCartesianProductOfContextsAsArray');
         $method->setAccessible(true);
-        $invoke = $method->invoke($environmentSource, $requested);
+        $invoke = $method->invoke($contextSource, $requested);
         $this->assertEquals($expected, $invoke);
     }
 
@@ -66,7 +66,7 @@ class EnvironmentSourceTest extends \PHPUnit_Framework_TestCase
             array(['version' => [1]], [],[['version' => 1]]),
             array(
                 [
-                    VersionedEnvironment::CODE => [1],
+                    VersionedContext::CODE => [1],
                     'foo' => ['a']
                 ],
                 ['foo'],
@@ -76,7 +76,7 @@ class EnvironmentSourceTest extends \PHPUnit_Framework_TestCase
             ),
             array(
                 [
-                    VersionedEnvironment::CODE => [1],
+                    VersionedContext::CODE => [1],
                     'foo' => ['a', 'b']
                 ],
                 ['foo'],
@@ -87,7 +87,7 @@ class EnvironmentSourceTest extends \PHPUnit_Framework_TestCase
             ),
             array(
                 [
-                    VersionedEnvironment::CODE => [1, 2],
+                    VersionedContext::CODE => [1, 2],
                     'foo' => ['a', 'b']
                 ],
                 ['foo'],
@@ -104,17 +104,17 @@ class EnvironmentSourceTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldReturnTheEnvironmentValuesForAGivenPart()
+    public function itShouldReturnTheContextValuesForAGivenPart()
     {
-        $result = $this->environmentSource->getEnvironmentValuesForPart(VersionedEnvironment::CODE);
+        $result = $this->contextSource->getContextValuesForPart(VersionedContext::CODE);
         $this->assertSame($this->testVersion, $result);
     }
 
     /**
      * @test
      */
-    public function itShouldReturnAnEmptyArrayForANonExistentEnvironmentPart()
+    public function itShouldReturnAnEmptyArrayForANonExistentContextPart()
     {
-        $this->assertSame([], $this->environmentSource->getEnvironmentValuesForPart('non-existent'));
+        $this->assertSame([], $this->contextSource->getContextValuesForPart('non-existent'));
     }
 }

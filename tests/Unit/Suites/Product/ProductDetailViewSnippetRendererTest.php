@@ -2,8 +2,8 @@
 
 namespace Brera\Product;
 
-use Brera\Environment\EnvironmentSource;
-use Brera\Environment\Environment;
+use Brera\Context\ContextSource;
+use Brera\Context\Context;
 use Brera\Renderer\Block;
 use Brera\SnippetResultList;
 use Brera\ProjectionSourceData;
@@ -39,14 +39,14 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
     private $mockSnippetResultList;
 
     /**
-     * @var EnvironmentSource|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextSource|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubEnvironmentSource;
+    private $stubContextSource;
 
     /**
-     * @var Environment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubEnvironment;
+    private $stubContext;
 
     /**
      * @var ThemeLocator|\PHPUnit_Framework_MockObject_MockObject
@@ -59,12 +59,12 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
         $stubSnippetKeyGenerator = $this->getMock(ProductDetailViewSnippetKeyGenerator::class);
         $stubSnippetKeyGenerator->expects($this->any())
-            ->method('getKeyForEnvironment')
+            ->method('getKeyForContext')
             ->willReturn('dummy');
         
         $stubUrlKeyGenerator = $this->getMock(UrlPathKeyGenerator::class);
         $stubUrlKeyGenerator->expects($this->any())
-            ->method('getUrlKeyForPathInEnvironment')
+            ->method('getUrlKeyForPathInContext')
             ->willReturn('dummy');
         
         $stubUrlKeyGenerator->expects($this->any())
@@ -75,7 +75,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
         $this->stubThemeLocator = $this->getMock(ThemeLocator::class);
         $this->stubThemeLocator->expects($this->any())
-            ->method('getThemeDirectoryForEnvironment')
+            ->method('getThemeDirectoryForContext')
             ->willReturn($this->getThemeDirectoryPath());
 
         $this->snippetRenderer = new ProductDetailViewSnippetRenderer(
@@ -85,15 +85,15 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
             $this->stubThemeLocator
         );
 
-        $this->stubEnvironment = $this->getMockBuilder(Environment::class)
+        $this->stubContext = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->stubEnvironmentSource = $this->getMockBuilder(EnvironmentSource::class)
+        $this->stubContextSource = $this->getMockBuilder(ContextSource::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->stubEnvironmentSource->expects($this->any())->method('extractEnvironments')
-            ->willReturn([$this->stubEnvironment]);
+        $this->stubContextSource->expects($this->any())->method('extractContexts')
+            ->willReturn([$this->stubContext]);
     }
 
     protected function tearDown()
@@ -119,7 +119,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->snippetRenderer->render($invalidSourceObject, $this->stubEnvironmentSource);
+        $this->snippetRenderer->render($invalidSourceObject, $this->stubContextSource);
     }
 
     /**
@@ -129,7 +129,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
     {
         $stubProductSource = $this->getStubProductSource();
 
-        $result = $this->snippetRenderer->render($stubProductSource, $this->stubEnvironmentSource);
+        $result = $this->snippetRenderer->render($stubProductSource, $this->stubContextSource);
         $this->assertSame($this->mockSnippetResultList, $result);
     }
 
@@ -144,7 +144,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
             ->method('add')
             ->with($this->isInstanceOf(SnippetResult::class));
 
-        $this->snippetRenderer->render($stubProductSource, $this->stubEnvironmentSource);
+        $this->snippetRenderer->render($stubProductSource, $this->stubContextSource);
     }
 
     /**
@@ -152,7 +152,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldRenderBlockContent()
     {
-        $stubEnvironment = $this->getMock(Environment::class);
+        $stubContext = $this->getMock(Context::class);
 
         $productIdString = 'test-123';
         $productNameString = 'Test Name';
@@ -162,7 +162,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $stubProductSource->getId()->expects($this->any())
             ->method('__toString')->willReturn($productIdString);
         /** @var \PHPUnit_Framework_MockObject_MockObject|Product $mockProduct */
-        $mockProduct = $stubProductSource->getProductForEnvironment($stubEnvironment);
+        $mockProduct = $stubProductSource->getProductForContext($stubContext);
         $mockProduct->expects($this->any())
             ->method('getAttributeValue')
             ->willReturnMap([
@@ -177,7 +177,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
                 $transport[] = $snippetResult;
             });
 
-        $this->snippetRenderer->render($stubProductSource, $this->stubEnvironmentSource);
+        $this->snippetRenderer->render($stubProductSource, $this->stubContextSource);
 
         /** @var $transport SnippetResult */
         $expected = <<<EOT
@@ -202,7 +202,7 @@ EOT;
     {
         $this->setContentsOfLayoutXmlFile($notOneRootBlockXml);
         $stubProductSource = $this->getStubProductSource();
-        $this->snippetRenderer->render($stubProductSource, $this->stubEnvironmentSource);
+        $this->snippetRenderer->render($stubProductSource, $this->stubContextSource);
     }
 
     public function invalidLayoutXmlProvider()
@@ -222,7 +222,7 @@ EOT;
     {
         $this->setContentsOfLayoutXmlFile('<layout><block></block></layout>');
         $stubProductSource = $this->getStubProductSource();
-        $this->snippetRenderer->render($stubProductSource, $this->stubEnvironmentSource);
+        $this->snippetRenderer->render($stubProductSource, $this->stubContextSource);
     }
 
 
@@ -235,7 +235,7 @@ EOT;
     {
         $this->setContentsOfLayoutXmlFile('<layout><block class="Foo\\Bar"></block></layout>');
         $stubProductSource = $this->getStubProductSource();
-        $this->snippetRenderer->render($stubProductSource, $this->stubEnvironmentSource);
+        $this->snippetRenderer->render($stubProductSource, $this->stubContextSource);
     }
 
     /**
@@ -250,7 +250,7 @@ EOT;
         );
         $this->setContentsOfLayoutXmlFile('<layout><block class="' . $nonBlockClass . '"></block></layout>');
         $stubProductSource = $this->getStubProductSource();
-        $this->snippetRenderer->render($stubProductSource, $this->stubEnvironmentSource);
+        $this->snippetRenderer->render($stubProductSource, $this->stubContextSource);
     }
     
 
@@ -280,7 +280,7 @@ EOT;
             ->willReturn($stubProductId);
 
         $stubProductSource->expects($this->any())
-            ->method('getProductForEnvironment')
+            ->method('getProductForContext')
             ->willReturn($stubProduct);
 
         return $stubProductSource;

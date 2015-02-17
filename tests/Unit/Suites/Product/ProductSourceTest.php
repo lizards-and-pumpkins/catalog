@@ -2,7 +2,7 @@
 
 namespace Brera\Product;
 
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 
 /**
  * @covers \Brera\Product\ProductSource
@@ -30,7 +30,7 @@ class ProductSourceTest extends \PHPUnit_Framework_TestCase
         $this->stubProductId = $this->getMockBuilder(ProductId::class)
         ->disableOriginalConstructor()
         ->getMock();
-        $this->mockProductAttributeList = $this->getMock(ProductAttributeList::class, ['getAttributesForEnvironment']);
+        $this->mockProductAttributeList = $this->getMock(ProductAttributeList::class, ['getAttributesForContext']);
 
         $this->productSource = new ProductSource($this->stubProductId, $this->mockProductAttributeList);
     }
@@ -47,15 +47,15 @@ class ProductSourceTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldReturnAProductForAnEnvironment()
+    public function itShouldReturnAProductForAnContext()
     {
-        /** @var Environment|\PHPUnit_Framework_MockObject_MockObject $stubEnvironment */
-        $stubEnvironment = $this->getMock(Environment::class);
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
+        $stubContext = $this->getMock(Context::class);
         $this->mockProductAttributeList->expects($this->once())
-        ->method('getAttributesForEnvironment')
-        ->with($stubEnvironment)
+        ->method('getAttributesForContext')
+        ->with($stubContext)
         ->willReturn($this->mockProductAttributeList);
-        $result = $this->productSource->getProductForEnvironment($stubEnvironment);
+        $result = $this->productSource->getProductForContext($stubContext);
         $this->assertInstanceOf(Product::class, $result);
     }
 }

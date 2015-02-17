@@ -2,7 +2,7 @@
 
 namespace Brera\DataPool\SearchEngine;
 
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 
 interface SearchEngine
 {
@@ -20,8 +20,8 @@ interface SearchEngine
 
     /**
      * @param string $queryString
-     * @param Environment $environment
+     * @param Context $context
      * @return string[]
      */
-    public function query($queryString, Environment $environment);
+    public function query($queryString, Context $context);
 }

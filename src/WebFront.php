@@ -2,7 +2,7 @@
 
 namespace Brera;
 
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpResponse;
 use Brera\Http\HttpRouterChain;
@@ -20,9 +20,9 @@ abstract class WebFront
     private $request;
 
     /**
-     * @var Environment
+     * @var Context
      */
-    private $environment;
+    private $context;
 
     /**
      * @param HttpRequest $request
@@ -50,13 +50,13 @@ abstract class WebFront
     public function runWithoutSendingResponse()
     {
         $this->buildFactoryIfItWasNotInjected();
-        $this->buildEnvironment();
+        $this->buildContext();
         
         /** @var HttpRouterChain $routerChain */
         $routerChain = $this->getMasterFactory()->createHttpRouterChain();
         $this->registerRouters($routerChain);
 
-        $requestHandler = $routerChain->route($this->request, $this->environment);
+        $requestHandler = $routerChain->route($this->request, $this->context);
 
         // TODO put response creation into factory, response depends on http version!
 
@@ -77,7 +77,7 @@ abstract class WebFront
     /**
      * @return HttpRequest
      */
-    abstract protected function createEnvironment(HttpRequest $request);
+    abstract protected function createContext(HttpRequest $request);
 
     /**
      * @param MasterFactory $factory
@@ -112,11 +112,11 @@ abstract class WebFront
     }
 
     /**
-     * @return Environment
+     * @return Context
      */
-    final protected function getEnvironment()
+    final protected function getContext()
     {
-        return $this->environment;
+        return $this->context;
     }
 
     /**
@@ -140,21 +140,21 @@ abstract class WebFront
         }
     }
 
-    private function buildEnvironment()
+    private function buildContext()
     {
-        $this->environment = $this->createEnvironment($this->request);
-        $this->validateEnvironment();
+        $this->context = $this->createContext($this->request);
+        $this->validateContext();
     }
 
     /**
      * @throws \InvalidArgumentException
      */
-    private function validateEnvironment()
+    private function validateContext()
     {
-        if (!($this->environment instanceof Environment)) {
+        if (!($this->context instanceof Context)) {
             throw new \InvalidArgumentException(sprintf(
-                'Environment is not of type Environment but "%s"',
-                $this->getExceptionMessageClassNameRepresentation($this->environment)
+                'Context is not of type Context but "%s"',
+                $this->getExceptionMessageClassNameRepresentation($this->context)
             ));
         }
     }

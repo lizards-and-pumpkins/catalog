@@ -2,7 +2,7 @@
 
 namespace Brera\Http;
 
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 
 class HttpRouterChain implements HttpRouter
 {
@@ -13,14 +13,14 @@ class HttpRouterChain implements HttpRouter
 
     /**
      * @param HttpRequest $request
-     * @param Environment $environment
+     * @param Context $context
      * @return HttpRequestHandler
      * @throws UnableToRouteRequestException
      */
-    public function route(HttpRequest $request, Environment $environment)
+    public function route(HttpRequest $request, Context $context)
     {
         foreach ($this->routers as $router) {
-            $handler = $router->route($request, $environment);
+            $handler = $router->route($request, $context);
             if (null !== $handler) {
                 return $handler;
             }

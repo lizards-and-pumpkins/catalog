@@ -1,18 +1,18 @@
 <?php
 
-namespace Brera\Environment;
+namespace Brera\Context;
 
 use Brera\IntegrationTestFactory;
 use Brera\PoCMasterFactory;
 use Brera\CommonFactory;
 use Brera\Product\ProductSourceBuilder;
 
-class EnvironmentTest extends \PHPUnit_Framework_TestCase
+class ContextTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function itShouldCreateTheDecoratedEnvironmentSet()
+    public function itShouldCreateTheDecoratedContextSet()
     {
         $xml = <<<EOX
 <product sku="test"><attributes>
@@ -25,27 +25,27 @@ EOX;
         $factory = new PoCMasterFactory();
         $factory->register(new CommonFactory());
         $factory->register(new IntegrationTestFactory());
-        /** @var EnvironmentSourceBuilder $environmentSourceBuilder */
-        $environmentSourceBuilder = $factory->createEnvironmentSourceBuilder();
+        /** @var ContextSourceBuilder $contextSourceBuilder */
+        $contextSourceBuilder = $factory->createContextSourceBuilder();
         /** @var ProductSourceBuilder $productSourceBuilder */
         $productSourceBuilder = $factory->createProductSourceBuilder();
-        /** @var EnvironmentSource $environmentSource */
-        $environmentSource = $environmentSourceBuilder->createFromXml($xml);
+        /** @var ContextSource $contextSource */
+        $contextSource = $contextSourceBuilder->createFromXml($xml);
         $productSource = $productSourceBuilder->createProductSourceFromXml($xml);
         $codes = ['website', 'language', 'version'];
         $extractedValues = [];
-        $environmentCounter = 0;
-        /** @var Environment $environment */
-        foreach ($environmentSource->extractEnvironments($codes) as $environment) {
-            $environmentCounter++;
-            $this->assertEquals($codes, $environment->getSupportedCodes());
-            $expected = $environment->getValue('website') . '-' . $environment->getValue('language');
-            $product = $productSource->getProductForEnvironment($environment);
+        $contextCounter = 0;
+        /** @var Context $context */
+        foreach ($contextSource->extractContexts($codes) as $context) {
+            $contextCounter++;
+            $this->assertEquals($codes, $context->getSupportedCodes());
+            $expected = $context->getValue('website') . '-' . $context->getValue('language');
+            $product = $productSource->getProductForContext($context);
             $attributeValue = $product->getAttributeValue('name');
             $this->assertEquals($expected, $attributeValue);
             $extractedValues[] = $attributeValue;
         }
-        $this->assertEquals(4 * 4, $environmentCounter, "The cartesian product of environment values should be 16.");
+        $this->assertEquals(4 * 4, $contextCounter, "The cartesian product of context values should be 16.");
         $this->assertCount(4, array_unique($extractedValues), "There should be 4 unique values.");
     }
 }

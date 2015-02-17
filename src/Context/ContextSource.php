@@ -1,46 +1,46 @@
 <?php
 
 
-namespace Brera\Environment;
+namespace Brera\Context;
 
-class EnvironmentSource
+class ContextSource
 {
     /**
      * @var array
      */
-    private $environmentMatrix;
+    private $contextMatrix;
 
     /**
-     * @var EnvironmentBuilder
+     * @var ContextBuilder
      */
-    private $environmentBuilder;
+    private $contextBuilder;
 
-    public function __construct(array $environmentMatrix, EnvironmentBuilder $environmentBuilder)
+    public function __construct(array $contextMatrix, ContextBuilder $contextBuilder)
     {
-        $this->environmentMatrix = $environmentMatrix;
-        $this->environmentBuilder = $environmentBuilder;
+        $this->contextMatrix = $contextMatrix;
+        $this->contextBuilder = $contextBuilder;
     }
 
     /**
      * @param string $part
      * @return array[]
      */
-    public function getEnvironmentValuesForPart($part)
+    public function getContextValuesForPart($part)
     {
-        if (!array_key_exists($part, $this->environmentMatrix)) {
+        if (!array_key_exists($part, $this->contextMatrix)) {
             return [];
         }
-        return $this->environmentMatrix[$part];
+        return $this->contextMatrix[$part];
     }
 
     /**
      * @param array $partsToExtract
      * @return array[]
      */
-    private function extractCartesianProductOfEnvironmentsAsArray(array $partsToExtract)
+    private function extractCartesianProductOfContextsAsArray(array $partsToExtract)
     {
         if (!$this->ifVersionIsASpecifiedPart($partsToExtract)) {
-            $partsToExtract[] = VersionedEnvironment::CODE;
+            $partsToExtract[] = VersionedContext::CODE;
         }
         return $this->getAllPossibleCombinationsRecursively($partsToExtract);
     }
@@ -51,16 +51,16 @@ class EnvironmentSource
      */
     private function ifVersionIsASpecifiedPart(array $partsToExtract)
     {
-        return in_array(VersionedEnvironment::CODE, $partsToExtract);
+        return in_array(VersionedContext::CODE, $partsToExtract);
     }
 
     /**
      * @param array $partsToExtract
      * @return mixed[]
      */
-    private function getEnvironmentsThatAreRequestedAndExistInTheSource(array $partsToExtract)
+    private function getContextsThatAreRequestedAndExistInTheSource(array $partsToExtract)
     {
-        return array_intersect_key($this->environmentMatrix, array_flip($partsToExtract));
+        return array_intersect_key($this->contextMatrix, array_flip($partsToExtract));
     }
 
     /**
@@ -69,8 +69,8 @@ class EnvironmentSource
      */
     private function getAllPossibleCombinationsRecursively(array $partsToExtract)
     {
-        $presentEnvironments = $this->getEnvironmentsThatAreRequestedAndExistInTheSource($partsToExtract);
-        return $this->buildRecursively($presentEnvironments);
+        $presentContexts = $this->getContextsThatAreRequestedAndExistInTheSource($partsToExtract);
+        return $this->buildRecursively($presentContexts);
     }
 
     /**
@@ -99,12 +99,12 @@ class EnvironmentSource
 
     /**
      * @param string[] $partsToExtract
-     * @return Environment[]
+     * @return Context[]
      */
-    public function extractEnvironments(array $partsToExtract)
+    public function extractContexts(array $partsToExtract)
     {
-        $variations = $this->extractCartesianProductOfEnvironmentsAsArray($partsToExtract);
+        $variations = $this->extractCartesianProductOfContextsAsArray($partsToExtract);
 
-        return $this->environmentBuilder->getEnvironments($variations);
+        return $this->contextBuilder->getContexts($variations);
     }
 }

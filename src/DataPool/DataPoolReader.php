@@ -4,7 +4,7 @@ namespace Brera\DataPool;
 
 use Brera\DataPool\KeyValue\KeyValueStore;
 use Brera\DataPool\SearchEngine\SearchEngine;
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 
 class DataPoolReader
 {
@@ -151,11 +151,11 @@ class DataPoolReader
 
     /**
      * @param string $queryString
-     * @param Environment $environment
+     * @param Context $context
      * @return mixed[]
      */
-    public function getSearchResults($queryString, Environment $environment)
+    public function getSearchResults($queryString, Context $context)
     {
-        return $this->searchEngine->query($queryString, $environment);
+        return $this->searchEngine->query($queryString, $context);
     }
 }

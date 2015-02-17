@@ -2,7 +2,7 @@
 
 namespace Brera\Renderer;
 
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 use Brera\ProjectionSourceData;
 use Brera\SnippetKeyGenerator;
 use Brera\SnippetRenderer;
@@ -144,12 +144,12 @@ abstract class BlockSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param Environment $environment
+     * @param Context $context
      * @return string
      */
-    final protected function getPathToLayoutXmlFile(Environment $environment)
+    final protected function getPathToLayoutXmlFile(Context $context)
     {
-        $themeDirectory = $this->themeLocator->getThemeDirectoryForEnvironment($environment);
+        $themeDirectory = $this->themeLocator->getThemeDirectoryForContext($context);
         
         return $themeDirectory . '/layout/' . $this->getSnippetLayoutHandle() . '.xml';
     }

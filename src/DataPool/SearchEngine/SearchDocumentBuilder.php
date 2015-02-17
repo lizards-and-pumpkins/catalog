@@ -2,14 +2,14 @@
 
 namespace Brera\DataPool\SearchEngine;
 
-use Brera\Environment\EnvironmentSource;
+use Brera\Context\ContextSource;
 use Brera\ProjectionSourceData;
 
 interface SearchDocumentBuilder
 {
     /**
      * @param ProjectionSourceData $projectionSourceData
-     * @param EnvironmentSource $environmentSource
+     * @param ContextSource $contextSource
      */
-    public function aggregate(ProjectionSourceData $projectionSourceData, EnvironmentSource $environmentSource);
+    public function aggregate(ProjectionSourceData $projectionSourceData, ContextSource $contextSource);
 }

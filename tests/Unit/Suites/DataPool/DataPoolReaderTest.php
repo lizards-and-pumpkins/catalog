@@ -2,7 +2,7 @@
 
 namespace Brera\DataPool;
 
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 
 /**
  * @covers \Brera\DataPool\DataPoolReader
@@ -221,11 +221,11 @@ class DataPoolReaderTest extends AbstractDataPoolTest
      */
     public function itShouldGetSearchResultsFromSearchEngine()
     {
-        $stubEnvironment = $this->getMock(Environment::class);
+        $stubContext = $this->getMock(Context::class);
 
         $this->stubSearchEngine->expects($this->once())
             ->method('query');
 
-        $this->dataPoolReader->getSearchResults('foo', $stubEnvironment);
+        $this->dataPoolReader->getSearchResults('foo', $stubContext);
     }
 }

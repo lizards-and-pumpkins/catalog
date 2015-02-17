@@ -2,7 +2,7 @@
 
 namespace Brera\DataPool\SearchEngine;
 
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 
 /**
  * @covers \Brera\DataPool\SearchEngine\SearchDocument
@@ -17,13 +17,13 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
         $stubDocumentFieldsCollection = $this->getMockBuilder(SearchDocumentFieldCollection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $stubEnvironment = $this->getMock(Environment::class);
+        $stubContext = $this->getMock(Context::class);
         $content = 'foo';
 
-        $searchDocument = new SearchDocument($stubDocumentFieldsCollection, $stubEnvironment, $content);
+        $searchDocument = new SearchDocument($stubDocumentFieldsCollection, $stubContext, $content);
 
         $this->assertSame($stubDocumentFieldsCollection, $searchDocument->getFieldsCollection());
-        $this->assertSame($stubEnvironment, $searchDocument->getEnvironment());
+        $this->assertSame($stubContext, $searchDocument->getContext());
         $this->assertSame($content, $searchDocument->getContent());
     }
 }

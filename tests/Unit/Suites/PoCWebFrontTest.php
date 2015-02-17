@@ -2,8 +2,8 @@
 
 namespace Brera;
 
-use Brera\Environment\EnvironmentBuilder;
-use Brera\Environment\Environment;
+use Brera\Context\ContextBuilder;
+use Brera\Context\Context;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRouterChain;
 use Brera\Http\HttpRouter;
@@ -27,11 +27,11 @@ use Brera\Http\HttpUrl;
  * @uses   \Brera\Http\ResourceNotFoundRouter
  * @uses   \Brera\Http\ResourceNotFoundRequestHandler
  * @uses   \Brera\Http\HttpRouterChain
- * @uses   \Brera\Environment\EnvironmentDecorator
- * @uses   \Brera\Environment\WebsiteEnvironmentDecorator
- * @uses   \Brera\Environment\LanguageEnvironmentDecorator
- * @uses   \Brera\Environment\VersionedEnvironment
- * @uses   \Brera\Environment\EnvironmentBuilder
+ * @uses   \Brera\Context\ContextDecorator
+ * @uses   \Brera\Context\WebsiteContextDecorator
+ * @uses   \Brera\Context\LanguageContextDecorator
+ * @uses   \Brera\Context\VersionedContext
+ * @uses   \Brera\Context\ContextBuilder
  * @uses   \Brera\Api\ApiRouter
  * @uses   \Brera\Api\ApiRequestHandlerChain
  * @uses   \Brera\DataPool\DataPoolReader
@@ -52,12 +52,12 @@ class PoCWebFrontTest extends \PHPUnit_Framework_TestCase
     {
         $routerFactoryMethods = ['createApiRouter', 'createUrlKeyRouter', 'createResourceNotFoundRouter'];
         $stubFactoryMethods = array_merge(
-            [ 'createEnvironmentBuilder', 'createHttpRouterChain', 'register'],
+            [ 'createContextBuilder', 'createHttpRouterChain', 'register'],
             $routerFactoryMethods
         );
         
         $stubMasterFactory = $this->getMock(MasterFactory::class, $stubFactoryMethods);
-        $stubEnvironmentBuilder = $this->getMock(EnvironmentBuilder::class, [], [], '', false);
+        $stubContextBuilder = $this->getMock(ContextBuilder::class, [], [], '', false);
         $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
         $mockRouterChain = $this->getMock(HttpRouterChain::class);
         $mockHttpRequestHandler = $this->getMock(HttpRequestHandler::class);
@@ -70,11 +70,11 @@ class PoCWebFrontTest extends \PHPUnit_Framework_TestCase
         }, $routerFactoryMethods);
 
         $stubMasterFactory->expects($this->any())
-            ->method('createEnvironmentBuilder')
-            ->willReturn($stubEnvironmentBuilder);
-        $stubEnvironmentBuilder->expects($this->any())
-            ->method('getEnvironment')
-            ->willReturn($this->getMock(Environment::class));
+            ->method('createContextBuilder')
+            ->willReturn($stubContextBuilder);
+        $stubContextBuilder->expects($this->any())
+            ->method('getContext')
+            ->willReturn($this->getMock(Context::class));
 
         $stubMasterFactory->expects($this->any())
             ->method('createHttpRouterChain')

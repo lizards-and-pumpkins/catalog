@@ -2,7 +2,7 @@
 
 namespace Brera\DataPool\SearchEngine;
 
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 
 class InMemorySearchEngine implements SearchEngine
 {
@@ -32,16 +32,16 @@ class InMemorySearchEngine implements SearchEngine
 
     /**
      * @param string $queryString
-     * @param Environment $environment
+     * @param Context $context
      * @return string[]
      */
-    public function query($queryString, Environment $environment)
+    public function query($queryString, Context $context)
     {
         $results = [];
 
         /** @var SearchDocument $searchDocument */
         foreach ($this->index as $searchDocument) {
-            if ($environment != $searchDocument->getEnvironment()) {
+            if ($context != $searchDocument->getContext()) {
                 continue;
             }
 

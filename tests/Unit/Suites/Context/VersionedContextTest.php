@@ -1,13 +1,13 @@
 <?php
 
-namespace Brera\Environment;
+namespace Brera\Context;
 
 use Brera\DataVersion;
 
 /**
- * @covers \Brera\Environment\VersionedEnvironment
+ * @covers \Brera\Context\VersionedContext
  */
-class VersionedEnvironmentTest extends \PHPUnit_Framework_TestCase
+class VersionedContextTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var string
@@ -15,9 +15,9 @@ class VersionedEnvironmentTest extends \PHPUnit_Framework_TestCase
     private $testVersionValue = '1';
     
     /**
-     * @var VersionedEnvironment
+     * @var VersionedContext
      */
-    private $versionedEnvironment;
+    private $versionedContext;
 
     /**
      * @var DataVersion|\PHPUnit_Framework_MockObject_MockObject
@@ -32,25 +32,25 @@ class VersionedEnvironmentTest extends \PHPUnit_Framework_TestCase
         $this->stubDataVersion->expects($this->any())
         ->method('__toString')
         ->willReturn($this->testVersionValue);
-        $this->versionedEnvironment = new VersionedEnvironment($this->stubDataVersion);
+        $this->versionedContext = new VersionedContext($this->stubDataVersion);
     }
 
     /**
      * @test
      */
-    public function itShouldBeAnEnvironment()
+    public function itShouldBeAnContext()
     {
-        $this->assertInstanceOf(Environment::class, $this->versionedEnvironment);
+        $this->assertInstanceOf(Context::class, $this->versionedContext);
     }
 
     /**
      * @test
-     * @expectedException \Brera\Environment\EnvironmentCodeNotFoundException
-     * @expectedExceptionMessage No value was not found in the current environment for the code 'foo'
+     * @expectedException \Brera\Context\ContextCodeNotFoundException
+     * @expectedExceptionMessage No value was not found in the current context for the code 'foo'
      */
     public function itShouldThrowAnExceptionWhenGettingTheValueWithANonMatchingCode()
     {
-        $this->versionedEnvironment->getValue('foo');
+        $this->versionedContext->getValue('foo');
     }
 
     /**
@@ -58,7 +58,7 @@ class VersionedEnvironmentTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnTheVersionForTheValue()
     {
-        $result = $this->versionedEnvironment->getValue(VersionedEnvironment::CODE);
+        $result = $this->versionedContext->getValue(VersionedContext::CODE);
         $this->assertEquals($this->testVersionValue, $result);
     }
 
@@ -67,9 +67,9 @@ class VersionedEnvironmentTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldAddTheVersionCodeToTheListOfSupportedCodes()
     {
-        $result = $this->versionedEnvironment->getSupportedCodes();
+        $result = $this->versionedContext->getSupportedCodes();
         $this->assertInternalType('array', $result);
-        $this->assertContains(VersionedEnvironment::CODE, $result);
+        $this->assertContains(VersionedContext::CODE, $result);
     }
 
     /**
@@ -78,6 +78,6 @@ class VersionedEnvironmentTest extends \PHPUnit_Framework_TestCase
     public function itShouldReturnTheVersionIdentifier()
     {
         $expected = 'v:' . $this->testVersionValue;
-        $this->assertEquals($expected, $this->versionedEnvironment->getId());
+        $this->assertEquals($expected, $this->versionedContext->getId());
     }
 }

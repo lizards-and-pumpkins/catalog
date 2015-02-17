@@ -2,8 +2,8 @@
 
 namespace Brera;
 
-use Brera\Environment\EnvironmentBuilder;
-use Brera\Environment\EnvironmentSourceBuilder;
+use Brera\Context\ContextBuilder;
+use Brera\Context\ContextSourceBuilder;
 use Brera\Http\ResourceNotFoundRouter;
 use Brera\Http\HttpRouterChain;
 use Brera\DataPool\DataPoolReader;
@@ -24,8 +24,8 @@ use Psr\Log\LoggerInterface;
  * @uses   \Brera\IntegrationTestFactory
  * @uses   \Brera\DataPool\DataPoolWriter
  * @uses   \Brera\DataPool\DataPoolReader
- * @uses   \Brera\Environment\EnvironmentBuilder
- * @uses   \Brera\Environment\EnvironmentSourceBuilder
+ * @uses   \Brera\Context\ContextBuilder
+ * @uses   \Brera\Context\ContextSourceBuilder
  * @uses   \Brera\DomainEventConsumer
  * @uses   \Brera\DomainEventHandlerLocator
  * @uses   \Brera\UrlPathKeyGenerator
@@ -60,7 +60,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldThrowAnExceptionIfNoMasterFactoryIsSet()
     {
-        (new CommonFactory())->createEnvironmentSourceBuilder();
+        (new CommonFactory())->createContextSourceBuilder();
     }
 
     /**
@@ -146,19 +146,19 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldCreateAnEnvironmentSourceBuilder()
+    public function itShouldCreateAnContextSourceBuilder()
     {
-        $result = $this->commonFactory->createEnvironmentSourceBuilder();
-        $this->assertInstanceOf(EnvironmentSourceBuilder::class, $result);
+        $result = $this->commonFactory->createContextSourceBuilder();
+        $this->assertInstanceOf(ContextSourceBuilder::class, $result);
     }
 
     /**
      * @test
      */
-    public function itShouldCreateAnEnvironmentBuilder()
+    public function itShouldCreateAnContextBuilder()
     {
-        $result = $this->commonFactory->createEnvironmentBuilder();
-        $this->assertInstanceOf(EnvironmentBuilder::class, $result);
+        $result = $this->commonFactory->createContextBuilder();
+        $this->assertInstanceOf(ContextBuilder::class, $result);
     }
 
     /**

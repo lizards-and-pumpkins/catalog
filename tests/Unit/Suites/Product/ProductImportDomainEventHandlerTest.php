@@ -2,8 +2,8 @@
 
 namespace Brera\Product;
 
-use Brera\Environment\EnvironmentSource;
-use Brera\Environment\EnvironmentSourceBuilder;
+use Brera\Context\ContextSource;
+use Brera\Context\ContextSourceBuilder;
 
 /**
  * @covers \Brera\Product\ProductImportDomainEventHandler
@@ -30,27 +30,27 @@ class ProductImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('createProductSourceFromXml')
             ->willReturn($stubProductSource);
 
-        $stubEnvironmentSource = $this->getMockBuilder(EnvironmentSource::class)
+        $stubContextSource = $this->getMockBuilder(ContextSource::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $stubEnvironmentSourceBuilder = $this->getMockBuilder(EnvironmentSourceBuilder::class)
+        $stubContextSourceBuilder = $this->getMockBuilder(ContextSourceBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $stubEnvironmentSourceBuilder->expects($this->any())->method('createFromXml')
-            ->willReturn($stubEnvironmentSource);
+        $stubContextSourceBuilder->expects($this->any())->method('createFromXml')
+            ->willReturn($stubContextSource);
 
         $stubProjector = $this->getMockBuilder(ProductProjector::class)
             ->disableOriginalConstructor()
             ->getMock();
         $stubProjector->expects($this->once())
             ->method('project')
-            ->with($stubProductSource, $stubEnvironmentSource);
+            ->with($stubProductSource, $stubContextSource);
 
         (new ProductImportDomainEventHandler(
             $stubDomainEvent,
             $stubProductBuilder,
-            $stubEnvironmentSourceBuilder,
+            $stubContextSourceBuilder,
             $stubProjector
         )
         )->process();

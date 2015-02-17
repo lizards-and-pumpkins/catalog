@@ -2,7 +2,7 @@
 
 namespace Brera;
 
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 use Brera\Http\HttpRequestHandler;
 use Brera\Http\HttpUrl;
 use Brera\DataPool\DataPoolReader;
@@ -21,9 +21,9 @@ class UrlKeyRequestHandler implements HttpRequestHandler
     private $urlPathKeyGenerator;
 
     /**
-     * @var Environment
+     * @var Context
      */
-    private $environment;
+    private $context;
 
     /**
      * @var HttpUrl
@@ -37,18 +37,18 @@ class UrlKeyRequestHandler implements HttpRequestHandler
 
     /**
      * @param HttpUrl $url
-     * @param Environment $environment
+     * @param Context $context
      * @param UrlPathKeyGenerator $urlPathKeyGenerator
      * @param DataPoolReader $dataPoolReader
      */
     public function __construct(
         HttpUrl $url,
-        Environment $environment,
+        Context $context,
         UrlPathKeyGenerator $urlPathKeyGenerator,
         DataPoolReader $dataPoolReader
     ) {
         $this->url = $url;
-        $this->environment = $environment;
+        $this->context = $context;
         $this->urlPathKeyGenerator = $urlPathKeyGenerator;
         $this->dataPoolReader = $dataPoolReader;
     }
@@ -185,7 +185,7 @@ class UrlKeyRequestHandler implements HttpRequestHandler
      */
     private function getUrlSnippetKey()
     {
-        return $this->urlPathKeyGenerator->getUrlKeyForUrlInEnvironment($this->url, $this->environment);
+        return $this->urlPathKeyGenerator->getUrlKeyForUrlInContext($this->url, $this->context);
     }
 
     /**

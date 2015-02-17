@@ -1,14 +1,14 @@
 <?php
 namespace Brera;
 
-use Brera\Environment\EnvironmentSource;
+use Brera\Context\ContextSource;
 
 interface SnippetRenderer
 {
     /**
      * @param ProjectionSourceData $dataObject
-     * @param EnvironmentSource $environmentSource
+     * @param ContextSource $contextSource
      * @return SnippetResultList
      */
-    public function render(ProjectionSourceData $dataObject, EnvironmentSource $environmentSource);
+    public function render(ProjectionSourceData $dataObject, ContextSource $contextSource);
 }

@@ -3,16 +3,16 @@
 
 namespace Brera\Http;
 
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 
 class ResourceNotFoundRouter implements HttpRouter
 {
     /**
      * @param HttpRequest $request
-     * @param Environment $environment
+     * @param Context $context
      * @return HttpRequestHandler
      */
-    public function route(HttpRequest $request, Environment $environment)
+    public function route(HttpRequest $request, Context $context)
     {
         return new ResourceNotFoundRequestHandler();
     }

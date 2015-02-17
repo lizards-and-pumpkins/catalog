@@ -2,7 +2,7 @@
 
 namespace Brera\Api;
 
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
 use Brera\Http\HttpUrl;
@@ -46,9 +46,9 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
             ->method('getUrl')
             ->willReturn($stubUrl);
         
-        $stubEnvironment = $this->getMock(Environment::class);
+        $stubContext = $this->getMock(Context::class);
 
-        $this->assertNull($this->apiRouter->route($stubHttpRequest, $stubEnvironment));
+        $this->assertNull($this->apiRouter->route($stubHttpRequest, $stubContext));
     }
 
     /**
@@ -68,9 +68,9 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
             ->method('getUrl')
             ->willReturn($stubUrl);
 
-        $stubEnvironment = $this->getMock(Environment::class);
+        $stubContext = $this->getMock(Context::class);
         
-        $this->assertNull($this->apiRouter->route($stubHttpRequest, $stubEnvironment));
+        $this->assertNull($this->apiRouter->route($stubHttpRequest, $stubContext));
     }
 
     /**
@@ -96,9 +96,9 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
             ->method('getApiRequestHandler')
             ->willReturn($stubApiRequestHandler);
 
-        $stubEnvironment = $this->getMock(Environment::class);
+        $stubContext = $this->getMock(Context::class);
         
-        $result = $this->apiRouter->route($stubHttpRequest, $stubEnvironment);
+        $result = $this->apiRouter->route($stubHttpRequest, $stubContext);
 
         $this->assertInstanceOf(HttpRequestHandler::class, $result);
     }

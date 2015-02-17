@@ -2,7 +2,7 @@
 
 namespace Brera\Product;
 
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 
 /**
  * @covers \Brera\Product\ProductAttributeList
@@ -88,10 +88,10 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
         ];
 
         $attributeList = ProductAttributeList::fromArray($attributeArray);
-        $stubEnvironment = $this->getMock(Environment::class);
+        $stubContext = $this->getMock(Context::class);
         $this->assertInstanceOf(
             ProductAttributeList::class,
-            $attributeList->getAttributesForEnvironment($stubEnvironment)
+            $attributeList->getAttributesForContext($stubContext)
         );
     }
 
@@ -99,7 +99,7 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
      * @test
      * @dataProvider extractAttributesDataProvider
      */
-    public function itShouldExtractAttributeValuesForAGivenEnvironment(
+    public function itShouldExtractAttributeValuesForAGivenContext(
         $websiteCodeA,
         $websiteCodeB,
         $websiteCodeC,
@@ -109,7 +109,7 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
         $valueA,
         $valueB,
         $valueC,
-        $environmentReturnValueMap,
+        $contextReturnValueMap,
         $expected
     ) {
         $attributeCode = 'name';
@@ -131,8 +131,8 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
             ],
         ];
         $attributeList = ProductAttributeList::fromArray($attributesArray);
-        $stubEnvironment = $this->getStubEnvironmentWithReturnValueMap($environmentReturnValueMap);
-        $resultList = $attributeList->getAttributesForEnvironment($stubEnvironment);
+        $stubContext = $this->getStubContextWithReturnValueMap($contextReturnValueMap);
+        $resultList = $attributeList->getAttributesForContext($stubContext);
 
         $this->assertEquals($expected, $resultList->getAttribute($attributeCode)->getValue());
     }
@@ -175,15 +175,15 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
      * @param array $returnValueMap
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function getStubEnvironmentWithReturnValueMap(array $returnValueMap)
+    private function getStubContextWithReturnValueMap(array $returnValueMap)
     {
-        $stubEnvironment = $this->getMock(Environment::class);
-        $stubEnvironment->expects($this->any())
+        $stubContext = $this->getMock(Context::class);
+        $stubContext->expects($this->any())
             ->method('getSupportedCodes')
             ->willReturn(array_column($returnValueMap, 0));
-        $stubEnvironment->expects($this->any())
+        $stubContext->expects($this->any())
             ->method('getValue')
             ->willReturnMap($returnValueMap);
-        return $stubEnvironment;
+        return $stubContext;
     }
 }

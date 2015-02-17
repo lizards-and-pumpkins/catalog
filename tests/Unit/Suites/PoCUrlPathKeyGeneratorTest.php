@@ -3,7 +3,7 @@
 
 namespace Brera;
 
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 use Brera\Http\HttpUrl;
 
 /**
@@ -34,11 +34,11 @@ class PoCUrlPathKeyGeneratorTest extends \PHPUnit_Framework_TestCase
             ->method('getPathRelativeToWebFront')
             ->willReturn($path);
         
-        $mockEnvironment = $this->getMock(Environment::class);
-        $mockEnvironment->expects($this->any())
+        $mockContext = $this->getMock(Context::class);
+        $mockContext->expects($this->any())
             ->method('getId')
             ->willReturn('v1');
-        $result = $this->keyGenerator->getUrlKeyForUrlInEnvironment($stubUrl, $mockEnvironment);
+        $result = $this->keyGenerator->getUrlKeyForUrlInContext($stubUrl, $mockContext);
         
         $this->assertEquals($expected . '_v1', $result, "Unexpected url snippet key for path {$path}");
     }

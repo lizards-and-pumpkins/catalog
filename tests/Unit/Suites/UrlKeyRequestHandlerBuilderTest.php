@@ -3,7 +3,7 @@
 
 namespace Brera;
 
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 use Brera\Http\HttpUrl;
 use Brera\DataPool\DataPoolReader;
 
@@ -33,8 +33,8 @@ class UrlKeyRequestHandlerBuilderTest extends \PHPUnit_Framework_TestCase
         $stubUrl = $this->getMockBuilder(HttpUrl::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $stubEnvironment = $this->getMock(Environment::class);
-        $result = $this->builder->create($stubUrl, $stubEnvironment);
+        $stubContext = $this->getMock(Context::class);
+        $result = $this->builder->create($stubUrl, $stubContext);
         $this->assertInstanceOf(UrlKeyRequestHandler::class, $result);
     }
 }

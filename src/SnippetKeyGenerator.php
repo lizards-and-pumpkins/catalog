@@ -2,14 +2,14 @@
 
 namespace Brera;
 
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 
 interface SnippetKeyGenerator
 {
     /**
      * @param mixed $identifier
-     * @param Environment $environment
+     * @param Context $context
      * @return string
      */
-    public function getKeyForEnvironment($identifier, Environment $environment);
+    public function getKeyForContext($identifier, Context $context);
 }
