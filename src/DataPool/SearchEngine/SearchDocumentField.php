@@ -10,7 +10,7 @@ class SearchDocumentField
     private $key;
 
     /**
-     * @var mixed
+     * @var string
      */
     private $value;
 
@@ -26,7 +26,7 @@ class SearchDocumentField
 
     /**
      * @param string $key
-     * @param mixed $value
+     * @param string $value
      * @return SearchDocumentField
      * @throws InvalidSearchDocumentFieldKeyException
      */
@@ -38,7 +38,7 @@ class SearchDocumentField
             );
         }
 
-        return new self((string) $key, $value);
+        return new self((string) $key, (string) $value);
     }
 
     /**
@@ -50,7 +50,7 @@ class SearchDocumentField
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getValue()
     {
