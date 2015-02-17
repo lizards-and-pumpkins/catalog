@@ -300,7 +300,7 @@ class InMemorySearchEngineTest extends \PHPUnit_Framework_TestCase
         }
 
         if (!is_null($content)) {
-            $stubSearchDocument->expects($this->once())
+            $stubSearchDocument->expects($this->any())
                 ->method('getContent')
                 ->willReturn($content);
         }

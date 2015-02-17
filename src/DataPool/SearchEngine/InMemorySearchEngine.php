@@ -48,8 +48,11 @@ class InMemorySearchEngine implements SearchEngine
             $searchDocumentFieldsCollection = $searchDocument->getFieldsCollection();
 
             foreach ($searchDocumentFieldsCollection->getFields() as $field) {
-                if (false !== stripos($field->getValue(), $queryString)) {
-                    array_push($results, $searchDocument->getContent());
+
+                if (!in_array($searchDocument->getContent(), $results)) {
+                    if (false !== stripos($field->getValue(), $queryString)) {
+                        array_push($results, $searchDocument->getContent());
+                    }
                 }
             }
         }
