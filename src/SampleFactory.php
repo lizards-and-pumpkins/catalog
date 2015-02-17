@@ -45,7 +45,7 @@ class SampleFactory implements Factory
     /**
      * return string[]
      */
-    public function createSearchableAttributeCodes()
+    public function getSearchableAttributeCodes()
     {
         return ['name'];
     }

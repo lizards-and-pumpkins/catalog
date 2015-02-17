@@ -316,18 +316,7 @@ class CommonFactory implements Factory, DomainEventFactory
      */
     public function createProductSearchDocumentBuilder()
     {
-        return new ProductSearchDocumentBuilder(
-            $this->getSearchableAttributeCodes()
-        );
-    }
-
-    private function getSearchableAttributeCodes()
-    {
-        if (is_null($this->searchableAttributeCodes)) {
-            $this->searchableAttributeCodes = $this->callExternalCreateMethod('SearchableAttributeCodes');
-        }
-
-        return $this->searchableAttributeCodes;
+        return new ProductSearchDocumentBuilder($this->getMasterFactory()->getSearchableAttributeCodes());
     }
 
     /**

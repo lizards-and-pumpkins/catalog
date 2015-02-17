@@ -64,6 +64,6 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldCreateSearchableAttributeCodesArray()
     {
-        $this->assertInternalType('array', $this->factory->createSearchableAttributeCodes());
+        $this->assertInternalType('array', $this->factory->getSearchableAttributeCodes());
     }
 }
