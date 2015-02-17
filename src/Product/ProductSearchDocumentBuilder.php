@@ -35,7 +35,7 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
     public function aggregate(ProjectionSourceData $productSource, EnvironmentSource $environmentSource)
     {
         if (!($productSource instanceof ProductSource)) {
-            throw new InvalidProjectionDataSourceType('First argument must be instance of Product.');
+            throw new InvalidProjectionDataSourceType('First argument must be instance of ProductSource.');
         }
 
         $collection = new SearchDocumentCollection();

@@ -105,6 +105,7 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * @expectedException \Brera\InvalidProjectionDataSourceType
+     * @expectedExceptionMessage First argument must be instance of ProductSource.
      */
     public function itShouldThrowIfTheDataSourceTypeIsNotProduct()
     {

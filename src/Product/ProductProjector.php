@@ -50,7 +50,7 @@ class ProductProjector implements Projector
     public function project(ProjectionSourceData $productSource, EnvironmentSource $environmentSource)
     {
         if (!($productSource instanceof ProductSource)) {
-            throw new InvalidProjectionDataSourceType('First argument must be instance of Product.');
+            throw new InvalidProjectionDataSourceType('First argument must be instance of ProductSource.');
         }
 
         $this->projectProduct($productSource, $environmentSource);
