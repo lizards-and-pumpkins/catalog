@@ -26,7 +26,7 @@ class SearchDocumentFieldCollection
         $fields = [];
 
         foreach ($fieldsArray as $key => $val) {
-            $fields[] = new SearchDocumentField($key, $val);
+            $fields[] = SearchDocumentField::fromKeyAndValue($key, $val);
         }
 
         return new self($fields);

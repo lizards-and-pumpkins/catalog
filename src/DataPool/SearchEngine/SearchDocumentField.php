@@ -16,10 +16,21 @@ class SearchDocumentField
 
     /**
      * @param string $key
+     * @param string $value
+     */
+    private function __construct($key, $value)
+    {
+        $this->key = $key;
+        $this->value = $value;
+    }
+
+    /**
+     * @param string $key
      * @param mixed $value
+     * @return SearchDocumentField
      * @throws InvalidSearchDocumentFieldKeyException
      */
-    public function __construct($key, $value)
+    public static function fromKeyAndValue($key, $value)
     {
         if (!is_string($key) || !strlen($key) || !ctype_alpha($key{0})) {
             throw new InvalidSearchDocumentFieldKeyException(
@@ -27,8 +38,7 @@ class SearchDocumentField
             );
         }
 
-        $this->key = (string) $key;
-        $this->value = $value;
+        return new self((string) $key, $value);
     }
 
     /**
