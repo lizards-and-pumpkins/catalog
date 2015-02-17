@@ -206,6 +206,32 @@ class InMemorySearchEngineTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @test
+     */
+    public function itShouldReturnUniqueEntries()
+    {
+        $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => 'barbarism']);
+        $this->prepareStubSearchDocument(
+            $this->stubSearchDocument, $this->stubEnvironment, $stubFieldsCollection, 'content1'
+        );
+
+        $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['baz' => 'cabaret']);
+        $this->prepareStubSearchDocument(
+            $this->stubSearchDocument2, $this->stubEnvironment, $stubFieldsCollection, 'content1'
+        );
+
+        $this->stubSearchDocumentCollection->expects($this->any())
+            ->method('getDocuments')
+            ->willReturn([$this->stubSearchDocument, $this->stubSearchDocument2]);
+
+        $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
+
+        $result = $this->searchEngine->query('bar', $this->stubEnvironment);
+
+        $this->assertEquals(['content1'], $result);
+    }
+
+    /**
      * @param string[] $fieldsMap
      * @return SearchDocumentFieldCollection|\PHPUnit_Framework_MockObject_MockObject
      */

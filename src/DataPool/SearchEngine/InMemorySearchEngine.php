@@ -54,6 +54,6 @@ class InMemorySearchEngine implements SearchEngine
             }
         }
 
-        return $results;
+        return array_unique($results);
     }
 }
