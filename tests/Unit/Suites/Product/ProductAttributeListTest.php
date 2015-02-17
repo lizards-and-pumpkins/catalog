@@ -140,7 +140,7 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     public function extractAttributesDataProvider()
     {
         return [
-            'only-web-in-env' => [
+            'only-web-in-context' => [
                 'webA', 'webB', 'webC', // website codes
                 'lang', 'lang', 'lang', // language codes
                 'AAA', 'BBB', 'CCC', // attribute values

@@ -67,10 +67,10 @@ class ContextSourceBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldbeEmptyIfThereAreNoAttributes()
     {
-        $sourceEnv = $this->contextSourceBuilder->createFromXml(
+        $sourceContext = $this->contextSourceBuilder->createFromXml(
             '<product><attributes><foo>true</foo></attributes></product>'
         );
-        $this->assertContextPartCodesSame([], $sourceEnv);
+        $this->assertContextPartCodesSame([], $sourceContext);
     }
 
     /**
@@ -78,10 +78,10 @@ class ContextSourceBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldCollectASingleContextPart()
     {
-        $sourceEnv = $this->contextSourceBuilder->createFromXml(
+        $sourceContext = $this->contextSourceBuilder->createFromXml(
             '<product><attributes><foo baz="bar">true</foo></attributes></product>'
         );
-        $this->assertContextPartCodesSame(['baz'], $sourceEnv);
+        $this->assertContextPartCodesSame(['baz'], $sourceContext);
     }
 
     /**
@@ -89,10 +89,10 @@ class ContextSourceBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldCollectTwoContextsFromTheSameAttribute()
     {
-        $sourceEnv = $this->contextSourceBuilder->createFromXml(
+        $sourceContext = $this->contextSourceBuilder->createFromXml(
             '<product><attributes><attribute foo="bar" baz="qux">true</attribute></attributes></product>'
         );
-        $this->assertContextPartCodesSame(['foo', 'baz'], $sourceEnv);
+        $this->assertContextPartCodesSame(['foo', 'baz'], $sourceContext);
     }
 
     /**
@@ -100,10 +100,10 @@ class ContextSourceBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldCombineTheSameContextsFromTwoAttributes()
     {
-        $sourceEnv = $this->contextSourceBuilder->createFromXml(
+        $sourceContext = $this->contextSourceBuilder->createFromXml(
             '<product><attributes><test1 foo="bar">true</test1><test2 foo="baz">true</test2></attributes></product>'
         );
-        $this->assertContextPartCodesSame(['foo'], $sourceEnv);
+        $this->assertContextPartCodesSame(['foo'], $sourceContext);
     }
 
     /**
@@ -111,10 +111,10 @@ class ContextSourceBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldCollectDifferentContextsFromTwoAttributes()
     {
-        $sourceEnv = $this->contextSourceBuilder->createFromXml(
+        $sourceContext = $this->contextSourceBuilder->createFromXml(
             '<product><attributes><test1 foo="bar">true</test1><test2 baz="qux">true</test2></attributes></product>'
         );
-        $this->assertContextPartCodesSame(['foo', 'baz'], $sourceEnv);
+        $this->assertContextPartCodesSame(['foo', 'baz'], $sourceContext);
     }
 
     /**
@@ -122,16 +122,16 @@ class ContextSourceBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldCollectTheContextValues()
     {
-        $sourceEnv = $this->contextSourceBuilder->createFromXml(
+        $sourceContext = $this->contextSourceBuilder->createFromXml(
             '<product><attributes><test1 foo="bar">true</test1><test2 foo="baz">true</test2></attributes></product>'
         );
-        $this->assertSame(['bar', 'baz'], $sourceEnv->getContextValuesForPart('foo'));
+        $this->assertSame(['bar', 'baz'], $sourceContext->getContextValuesForPart('foo'));
     }
 
-    private function assertContextPartCodesSame($expected, ContextSource $sourceEnv, $message = '')
+    private function assertContextPartCodesSame($expected, ContextSource $sourceContext, $message = '')
     {
-        $property = new \ReflectionProperty($sourceEnv, 'contextMatrix');
+        $property = new \ReflectionProperty($sourceContext, 'contextMatrix');
         $property->setAccessible(true);
-        $this->assertEquals($expected, array_keys($property->getValue($sourceEnv)), $message);
+        $this->assertEquals($expected, array_keys($property->getValue($sourceContext)), $message);
     }
 }
