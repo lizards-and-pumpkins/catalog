@@ -23,7 +23,7 @@
         checkForUnintentionallyCoveredCode="true"
         beStrictAboutTestsThatDoNotTestAnything="true"
         beStrictAboutOutputDuringTests="true"
-        beStrictAboutTestSize="true"
+        beStrictAboutTestSize="false"
         verbose="false">
     <testsuite name="Brera Unit Tests">
         <directory>Suites</directory>
