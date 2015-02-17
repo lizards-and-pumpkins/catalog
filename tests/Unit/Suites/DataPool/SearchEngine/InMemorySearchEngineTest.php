@@ -81,7 +81,7 @@ class InMemorySearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $this->searchEngine->addSearchDocument($this->stubSearchDocument);
 
-        $result = $this->searchEngine->query('qux', $this->stubEnvironment);
+        $result = $this->searchEngine->query('baz', $this->stubEnvironment);
 
         $this->assertCount(0, $result);
     }
@@ -91,16 +91,18 @@ class InMemorySearchEngineTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldAddEntryIntoIndexAndThenFindIt()
     {
+        $searchDocumentContent = 'qux';
+
         $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => 'bar']);
         $this->prepareStubSearchDocument(
-            $this->stubSearchDocument, $this->stubEnvironment, $stubFieldsCollection, 'qux'
+            $this->stubSearchDocument, $this->stubEnvironment, $stubFieldsCollection, $searchDocumentContent
         );
 
         $this->searchEngine->addSearchDocument($this->stubSearchDocument);
 
         $result = $this->searchEngine->query('bar', $this->stubEnvironment);
 
-        $this->assertEquals(['qux'], $result);
+        $this->assertEquals([$searchDocumentContent], $result);
     }
 
     /**
