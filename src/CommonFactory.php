@@ -48,11 +48,6 @@ class CommonFactory implements Factory, DomainEventFactory
     private $searchEngine;
 
     /**
-     * @var string[]
-     */
-    private $searchableAttributeCodes;
-
-    /**
      * @param ProductImportDomainEvent $event
      * @return ProductImportDomainEventHandler
      * @todo: move to catalog factory
