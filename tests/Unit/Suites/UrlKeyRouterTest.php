@@ -3,7 +3,7 @@
 
 namespace Brera;
 
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRouter;
 use Brera\Http\HttpUrl;
@@ -56,8 +56,8 @@ class UrlKeyRouterTest extends \PHPUnit_Framework_TestCase
             ->method('canProcess')
             ->willReturn(false);
         $stubRequest = $this->getStubRequest();
-        $stubEnvironment = $this->getMock(Environment::class);
-        $this->assertNull($this->router->route($stubRequest, $stubEnvironment));
+        $stubContext = $this->getMock(Context::class);
+        $this->assertNull($this->router->route($stubRequest, $stubContext));
     }
 
     /**
@@ -69,8 +69,8 @@ class UrlKeyRouterTest extends \PHPUnit_Framework_TestCase
             ->method('canProcess')
             ->willReturn(true);
         $stubRequest = $this->getStubRequest();
-        $stubEnvironment = $this->getMock(Environment::class);
-        $this->assertSame($this->mockUrlKeyRequestHandler, $this->router->route($stubRequest, $stubEnvironment));
+        $stubContext = $this->getMock(Context::class);
+        $this->assertSame($this->mockUrlKeyRequestHandler, $this->router->route($stubRequest, $stubContext));
     }
 
     /**

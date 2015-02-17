@@ -2,8 +2,8 @@
 
 namespace Brera;
 
-use Brera\Environment\EnvironmentBuilder;
-use Brera\Environment\EnvironmentSourceBuilder;
+use Brera\Context\ContextBuilder;
+use Brera\Context\ContextSourceBuilder;
 use Brera\Http\ResourceNotFoundRouter;
 use Brera\DataPool\SearchEngine\SearchEngine;
 use Brera\Product\CatalogImportDomainEvent;
@@ -57,7 +57,7 @@ class CommonFactory implements Factory, DomainEventFactory
         return new ProductImportDomainEventHandler(
             $event,
             $this->getMasterFactory()->createProductSourceBuilder(),
-            $this->getMasterFactory()->createEnvironmentSourceBuilder(),
+            $this->getMasterFactory()->createContextSourceBuilder(),
             $this->getMasterFactory()->createProductProjector(),
             $this->getMasterFactory()->createProductSearchDocumentBuilder()
         );
@@ -166,29 +166,29 @@ class CommonFactory implements Factory, DomainEventFactory
     }
 
     /**
-     * @return EnvironmentSourceBuilder
+     * @return ContextSourceBuilder
      */
-    public function createEnvironmentSourceBuilder()
+    public function createContextSourceBuilder()
     {
-        return new EnvironmentSourceBuilder($this->getMasterFactory()->createEnvironmentBuilder());
+        return new ContextSourceBuilder($this->getMasterFactory()->createContextBuilder());
     }
 
     /**
-     * @return EnvironmentBuilder
+     * @return ContextBuilder
      */
-    public function createEnvironmentBuilder()
+    public function createContextBuilder()
     {
         $version = $this->getCurrentDataVersion();
-        return $this->createEnvironmentBuilderWithVersion(DataVersion::fromVersionString($version));
+        return $this->createContextBuilderWithVersion(DataVersion::fromVersionString($version));
     }
 
     /**
      * @param DataVersion $version
-     * @return EnvironmentBuilder
+     * @return ContextBuilder
      */
-    public function createEnvironmentBuilderWithVersion(DataVersion $version)
+    public function createContextBuilderWithVersion(DataVersion $version)
     {
-        return new EnvironmentBuilder($version);
+        return new ContextBuilder($version);
     }
 
     private function getCurrentDataVersion()

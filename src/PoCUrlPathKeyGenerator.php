@@ -3,29 +3,29 @@
 
 namespace Brera;
 
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 use Brera\Http\HttpUrl;
 
 class PoCUrlPathKeyGenerator implements UrlPathKeyGenerator
 {
     /**
      * @param HttpUrl $url
-     * @param Environment $environment
+     * @param Context $context
      * @return string
      */
-    public function getUrlKeyForUrlInEnvironment(HttpUrl $url, Environment $environment)
+    public function getUrlKeyForUrlInContext(HttpUrl $url, Context $context)
     {
-        return $this->getUrlKeyForPathInEnvironment($url->getPathRelativeToWebFront(), $environment);
+        return $this->getUrlKeyForPathInContext($url->getPathRelativeToWebFront(), $context);
     }
 
     /**
      * @param string $path
-     * @param Environment $environment
+     * @param Context $context
      * @return string
      */
-    public function getUrlKeyForPathInEnvironment($path, Environment $environment)
+    public function getUrlKeyForPathInContext($path, Context $context)
     {
-        $key = $this->prependSlashIfMissing((string) $path) . '_' . $environment->getId();
+        $key = $this->prependSlashIfMissing((string) $path) . '_' . $context->getId();
         return preg_replace('#[^a-z0-9:_-]#i', '_', $key);
     }
 

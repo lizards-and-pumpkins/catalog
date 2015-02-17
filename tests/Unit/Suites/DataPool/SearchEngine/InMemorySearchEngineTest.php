@@ -2,7 +2,7 @@
 
 namespace Brera\DataPool\SearchEngine;
 
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 
 /**
  * @covers \Brera\DataPool\SearchEngine\InMemorySearchEngine
@@ -30,9 +30,9 @@ class InMemorySearchEngineTest extends \PHPUnit_Framework_TestCase
     private $stubSearchDocumentCollection;
 
     /**
-     * @var Environment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubEnvironment;
+    private $stubContext;
 
     protected function setUp()
     {
@@ -48,7 +48,7 @@ class InMemorySearchEngineTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->stubEnvironment = $this->getMock(Environment::class);
+        $this->stubContext = $this->getMock(Context::class);
 
         $this->searchEngine = new InMemorySearchEngine();
     }
@@ -66,7 +66,7 @@ class InMemorySearchEngineTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnAnEmptyArrayWhateverIsAskedIfIndexIsEmpty()
     {
-        $result = $this->searchEngine->query('bar', $this->stubEnvironment);
+        $result = $this->searchEngine->query('bar', $this->stubContext);
 
         $this->assertCount(0, $result);
     }
@@ -78,12 +78,12 @@ class InMemorySearchEngineTest extends \PHPUnit_Framework_TestCase
     {
         $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => 'bar']);
         $this->prepareStubSearchDocument(
-            $this->stubSearchDocument, $this->stubEnvironment, $stubFieldsCollection, null
+            $this->stubSearchDocument, $this->stubContext, $stubFieldsCollection, null
         );
 
         $this->searchEngine->addSearchDocument($this->stubSearchDocument);
 
-        $result = $this->searchEngine->query('baz', $this->stubEnvironment);
+        $result = $this->searchEngine->query('baz', $this->stubContext);
 
         $this->assertCount(0, $result);
     }
@@ -96,12 +96,12 @@ class InMemorySearchEngineTest extends \PHPUnit_Framework_TestCase
         $searchDocumentContent = 'qux';
         $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => 'bar']);
         $this->prepareStubSearchDocument(
-            $this->stubSearchDocument, $this->stubEnvironment, $stubFieldsCollection, $searchDocumentContent
+            $this->stubSearchDocument, $this->stubContext, $stubFieldsCollection, $searchDocumentContent
         );
 
         $this->searchEngine->addSearchDocument($this->stubSearchDocument);
 
-        $result = $this->searchEngine->query('bar', $this->stubEnvironment);
+        $result = $this->searchEngine->query('bar', $this->stubContext);
 
         $this->assertEquals([$searchDocumentContent], $result);
     }
@@ -114,13 +114,13 @@ class InMemorySearchEngineTest extends \PHPUnit_Framework_TestCase
         $searchDocument1Content = 'content1';
         $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => 'bar']);
         $this->prepareStubSearchDocument(
-            $this->stubSearchDocument, $this->stubEnvironment, $stubFieldsCollection, $searchDocument1Content
+            $this->stubSearchDocument, $this->stubContext, $stubFieldsCollection, $searchDocument1Content
         );
 
         $searchDocument2Content = 'content2';
         $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['baz' => 'bar']);
         $this->prepareStubSearchDocument(
-            $this->stubSearchDocument2, $this->stubEnvironment, $stubFieldsCollection, $searchDocument2Content
+            $this->stubSearchDocument2, $this->stubContext, $stubFieldsCollection, $searchDocument2Content
         );
 
         $this->stubSearchDocumentCollection->expects($this->any())
@@ -129,7 +129,7 @@ class InMemorySearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
 
-        $result = $this->searchEngine->query('bar', $this->stubEnvironment);
+        $result = $this->searchEngine->query('bar', $this->stubContext);
 
         $this->assertEquals([$searchDocument1Content, $searchDocument2Content], $result);
     }
@@ -142,12 +142,12 @@ class InMemorySearchEngineTest extends \PHPUnit_Framework_TestCase
         $searchDocumentContent = 'content';
         $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => 'bar']);
         $this->prepareStubSearchDocument(
-            $this->stubSearchDocument, $this->stubEnvironment, $stubFieldsCollection, $searchDocumentContent
+            $this->stubSearchDocument, $this->stubContext, $stubFieldsCollection, $searchDocumentContent
         );
 
         $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['baz' => 'quz']);
         $this->prepareStubSearchDocument(
-            $this->stubSearchDocument2, $this->stubEnvironment, $stubFieldsCollection, null
+            $this->stubSearchDocument2, $this->stubContext, $stubFieldsCollection, null
         );
 
         $this->stubSearchDocumentCollection->expects($this->any())
@@ -156,7 +156,7 @@ class InMemorySearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
 
-        $result = $this->searchEngine->query('bar', $this->stubEnvironment);
+        $result = $this->searchEngine->query('bar', $this->stubContext);
 
         $this->assertEquals([$searchDocumentContent], $result);
     }
@@ -164,18 +164,18 @@ class InMemorySearchEngineTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldReturnOnlyMatchesWithMatchingEnvironments()
+    public function itShouldReturnOnlyMatchesWithMatchingContexts()
     {
         $searchDocumentContent = 'content';
         $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => 'bar']);
         $this->prepareStubSearchDocument(
-            $this->stubSearchDocument, $this->stubEnvironment, $stubFieldsCollection, $searchDocumentContent
+            $this->stubSearchDocument, $this->stubContext, $stubFieldsCollection, $searchDocumentContent
         );
 
-        $stubEnvironment2 = $this->getMock(Environment::class);
-        $stubEnvironment2->expects($this->never())
+        $stubContext2 = $this->getMock(Context::class);
+        $stubContext2->expects($this->never())
             ->method('someDummyExpectationToMakeObjectDifferent');
-        $this->prepareStubSearchDocument($this->stubSearchDocument2, $stubEnvironment2, null, null);
+        $this->prepareStubSearchDocument($this->stubSearchDocument2, $stubContext2, null, null);
 
         $this->stubSearchDocumentCollection->expects($this->any())
             ->method('getDocuments')
@@ -183,7 +183,7 @@ class InMemorySearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
 
-        $result = $this->searchEngine->query('bar', $this->stubEnvironment);
+        $result = $this->searchEngine->query('bar', $this->stubContext);
 
         $this->assertEquals([$searchDocumentContent], $result);
     }
@@ -196,13 +196,13 @@ class InMemorySearchEngineTest extends \PHPUnit_Framework_TestCase
         $searchDocument1Content = 'content1';
         $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => 'barbarism']);
         $this->prepareStubSearchDocument(
-            $this->stubSearchDocument, $this->stubEnvironment, $stubFieldsCollection, $searchDocument1Content
+            $this->stubSearchDocument, $this->stubContext, $stubFieldsCollection, $searchDocument1Content
         );
 
         $searchDocument2Content = 'content2';
         $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['baz' => 'cabaret']);
         $this->prepareStubSearchDocument(
-            $this->stubSearchDocument2, $this->stubEnvironment, $stubFieldsCollection, $searchDocument2Content
+            $this->stubSearchDocument2, $this->stubContext, $stubFieldsCollection, $searchDocument2Content
         );
 
         $this->stubSearchDocumentCollection->expects($this->any())
@@ -211,7 +211,7 @@ class InMemorySearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
 
-        $result = $this->searchEngine->query('bar', $this->stubEnvironment);
+        $result = $this->searchEngine->query('bar', $this->stubContext);
 
         $this->assertEquals([$searchDocument1Content, $searchDocument2Content], $result);
     }
@@ -225,12 +225,12 @@ class InMemorySearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => 'barbarism']);
         $this->prepareStubSearchDocument(
-            $this->stubSearchDocument, $this->stubEnvironment, $stubFieldsCollection, $searchDocumentContent
+            $this->stubSearchDocument, $this->stubContext, $stubFieldsCollection, $searchDocumentContent
         );
 
         $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['baz' => 'cabaret']);
         $this->prepareStubSearchDocument(
-            $this->stubSearchDocument2, $this->stubEnvironment, $stubFieldsCollection, $searchDocumentContent
+            $this->stubSearchDocument2, $this->stubContext, $stubFieldsCollection, $searchDocumentContent
         );
 
         $this->stubSearchDocumentCollection->expects($this->any())
@@ -239,7 +239,7 @@ class InMemorySearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
 
-        $result = $this->searchEngine->query('bar', $this->stubEnvironment);
+        $result = $this->searchEngine->query('bar', $this->stubContext);
 
         $this->assertEquals([$searchDocumentContent], $result);
     }
@@ -278,20 +278,20 @@ class InMemorySearchEngineTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param \PHPUnit_Framework_MockObject_MockObject $stubSearchDocument
-     * @param \PHPUnit_Framework_MockObject_MockObject $stubEnvironment
+     * @param \PHPUnit_Framework_MockObject_MockObject $stubContext
      * @param \PHPUnit_Framework_MockObject_MockObject|null $stubSearchDocumentFieldCollection
      * @param mixed $content
      */
     private function prepareStubSearchDocument(
         \PHPUnit_Framework_MockObject_MockObject $stubSearchDocument,
-        \PHPUnit_Framework_MockObject_MockObject $stubEnvironment,
+        \PHPUnit_Framework_MockObject_MockObject $stubContext,
         \PHPUnit_Framework_MockObject_MockObject $stubSearchDocumentFieldCollection = null,
         $content = null
     )
     {
         $stubSearchDocument->expects($this->once())
-            ->method('getEnvironment')
-            ->willReturn($stubEnvironment);
+            ->method('getContext')
+            ->willReturn($stubContext);
 
         if (!is_null($stubSearchDocumentFieldCollection)) {
             $stubSearchDocument->expects($this->once())

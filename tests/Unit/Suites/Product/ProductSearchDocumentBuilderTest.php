@@ -2,8 +2,8 @@
 
 namespace Brera\Product;
 
-use Brera\Environment\Environment;
-use Brera\Environment\EnvironmentSource;
+use Brera\Context\Context;
+use Brera\Context\ContextSource;
 use Brera\DataPool\SearchEngine\SearchDocumentBuilder;
 use Brera\DataPool\SearchEngine\SearchDocumentCollection;
 use Brera\ProjectionSourceData;
@@ -18,9 +18,9 @@ use Brera\ProjectionSourceData;
 class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var EnvironmentSource|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextSource|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubEnvironmentSource;
+    private $stubContextSource;
 
     /**
      * @var ProductSearchDocumentBuilder
@@ -31,7 +31,7 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $searchableAttributeCodes = ['name'];
 
-        $this->stubEnvironmentSource = $this->getMockBuilder(EnvironmentSource::class)
+        $this->stubContextSource = $this->getMockBuilder(ContextSource::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -51,13 +51,13 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnSearchDocumentCollection()
     {
-        $stubEnvironment = $this->getMockBuilder(Environment::class)
+        $stubContext = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->stubEnvironmentSource->expects($this->atLeastOnce())
-            ->method('extractEnvironments')
-            ->willReturn([$stubEnvironment]);
+        $this->stubContextSource->expects($this->atLeastOnce())
+            ->method('extractContexts')
+            ->willReturn([$stubContext]);
 
         $stubProductId = $this->getMockBuilder(ProductId::class)
             ->disableOriginalConstructor()
@@ -78,11 +78,11 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $stubProductSource->expects($this->atLeastOnce())
-            ->method('getProductForEnvironment')
-            ->with($stubEnvironment)
+            ->method('getProductForContext')
+            ->with($stubContext)
             ->willReturn($stubProduct);
 
-        $result = $this->searchDocumentBuilder->aggregate($stubProductSource, $this->stubEnvironmentSource);
+        $result = $this->searchDocumentBuilder->aggregate($stubProductSource, $this->stubContextSource);
 
         $this->assertInstanceOf(SearchDocumentCollection::class, $result);
     }
@@ -96,6 +96,6 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $invalidDataSource = $this->getMock(ProjectionSourceData::class);
 
-        $this->searchDocumentBuilder->aggregate($invalidDataSource, $this->stubEnvironmentSource);
+        $this->searchDocumentBuilder->aggregate($invalidDataSource, $this->stubContextSource);
     }
 }

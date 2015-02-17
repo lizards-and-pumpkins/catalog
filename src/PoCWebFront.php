@@ -2,7 +2,7 @@
 
 namespace Brera;
 
-use Brera\Environment\EnvironmentBuilder;
+use Brera\Context\ContextBuilder;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRouterChain;
 
@@ -19,12 +19,12 @@ class PoCWebFront extends WebFront
     /**
      * @return HttpRequest
      */
-    protected function createEnvironment(HttpRequest $request)
+    protected function createContext(HttpRequest $request)
     {
-        /** @var EnvironmentBuilder $environmentBuilder */
-        $environmentBuilder = $this->getMasterFactory()->createEnvironmentBuilder();
+        /** @var ContextBuilder $contextBuilder */
+        $contextBuilder = $this->getMasterFactory()->createContextBuilder();
 
-        return $environmentBuilder->getEnvironment(
+        return $contextBuilder->getContext(
             ['website' => 'ru_de', 'language' => 'de_DE']
         );
     }
@@ -46,7 +46,7 @@ class PoCWebFront extends WebFront
         $router->register($this->getMasterFactory()->createApiRouter());
         $router->register($this->getMasterFactory()->createUrlKeyRouter(
             $this->getRequest()->getUrl(),
-            $this->getEnvironment()
+            $this->getContext()
         ));
         $router->register($this->getMasterFactory()->createResourceNotFoundRouter());
     }

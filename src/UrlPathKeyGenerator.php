@@ -3,24 +3,24 @@
 
 namespace Brera;
 
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 use Brera\Http\HttpUrl;
 
 interface UrlPathKeyGenerator
 {
     /**
      * @param string $path
-     * @param Environment $environment
+     * @param Context $context
      * @return string
      */
-    public function getUrlKeyForPathInEnvironment($path, Environment $environment);
+    public function getUrlKeyForPathInContext($path, Context $context);
 
     /**
      * @param HttpUrl $url
-     * @param Environment $environment
+     * @param Context $context
      * @return string
      */
-    public function getUrlKeyForUrlInEnvironment(HttpUrl $url, Environment $environment);
+    public function getUrlKeyForUrlInContext(HttpUrl $url, Context $context);
 
     /**
      * @param string $rootSnippetKey

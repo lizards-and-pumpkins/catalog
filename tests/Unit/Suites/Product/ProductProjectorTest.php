@@ -2,7 +2,7 @@
 
 namespace Brera\Product;
 
-use Brera\Environment\EnvironmentSource;
+use Brera\Context\ContextSource;
 use Brera\DataPool\DataPoolWriter;
 use Brera\DataPool\SearchEngine\SearchDocumentBuilder;
 use Brera\DataPool\SearchEngine\SearchDocumentCollection;
@@ -95,11 +95,11 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $stubEnvironment = $this->getMockBuilder(EnvironmentSource::class)
+        $stubContext = $this->getMockBuilder(ContextSource::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->projector->project($stubProduct, $stubEnvironment);
+        $this->projector->project($stubProduct, $stubContext);
     }
 
     /**
@@ -109,11 +109,11 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldThrowIfTheDataSourceTypeIsNotProduct()
     {
-        $stubEnvironment = $this->getMockBuilder(EnvironmentSource::class)
+        $stubContext = $this->getMockBuilder(ContextSource::class)
             ->disableOriginalConstructor()
             ->getMock();
         $invalidDataSourceType = $this->getMock(ProjectionSourceData::class);
 
-        $this->projector->project($invalidDataSourceType, $stubEnvironment);
+        $this->projector->project($invalidDataSourceType, $stubContext);
     }
 }

@@ -3,7 +3,7 @@
 
 namespace Brera;
 
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 use Brera\Http\HttpUrl;
 use Brera\DataPool\DataPoolReader;
 
@@ -25,11 +25,11 @@ class UrlKeyRequestHandlerBuilder
         $this->dataPoolReader = $dataPoolReader;
     }
 
-    public function create(HttpUrl $url, Environment $environment)
+    public function create(HttpUrl $url, Context $context)
     {
         return new UrlKeyRequestHandler(
             $url,
-            $environment,
+            $context,
             $this->urlPathKeyGenerator,
             $this->dataPoolReader
         );

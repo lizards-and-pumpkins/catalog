@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera\Environment;
+namespace Brera\Context;
 
-interface Environment
+interface Context
 {
     /**
      * @return string

@@ -2,7 +2,7 @@
 
 namespace Brera;
 
-use Brera\Environment\VersionedEnvironment;
+use Brera\Context\VersionedContext;
 use Brera\Http\HttpUrl;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
@@ -18,7 +18,7 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
     public function itShouldRenderAPageFromAnUrlWithoutVariablesInSnippets()
     {
         $url = HttpUrl::fromString('http://example.com/product1');
-        $environment = new VersionedEnvironment(DataVersion::fromVersionString('1.0'));
+        $context = new VersionedContext(DataVersion::fromVersionString('1.0'));
 
         $keyValueStore = new InMemoryKeyValueStore();
         $searchEngine = new InMemorySearchEngine();
@@ -32,7 +32,7 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
 
         $pageBuilder = new UrlKeyRequestHandler(
             $url,
-            $environment,
+            $context,
             $urlPathKeyGenerator,
             $dataPoolReader
         );

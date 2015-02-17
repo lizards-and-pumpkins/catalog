@@ -3,7 +3,7 @@
 
 namespace Brera;
 
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
 use Brera\Http\HttpRouter;
@@ -22,12 +22,12 @@ class UrlKeyRouter implements HttpRouter
 
     /**
      * @param HttpRequest $request
-     * @param Environment $environment
+     * @param Context $context
      * @return HttpRequestHandler|null
      */
-    public function route(HttpRequest $request, Environment $environment)
+    public function route(HttpRequest $request, Context $context)
     {
-        $urlKeyRequestHandler = $this->urlKeyRequestHandlerBuilder->create($request->getUrl(), $environment);
+        $urlKeyRequestHandler = $this->urlKeyRequestHandlerBuilder->create($request->getUrl(), $context);
         if (! $urlKeyRequestHandler->canProcess()) {
             return null;
         }

@@ -1,60 +1,60 @@
 <?php
 
 
-namespace Brera\Environment;
+namespace Brera\Context;
 
 use Brera\DataVersion;
 use Brera\Http\HttpRequest;
 
 /**
- * @covers \Brera\Environment\EnvironmentBuilder
- * @uses   \Brera\Environment\VersionedEnvironment
- * @uses   \Brera\Environment\EnvironmentDecorator
+ * @covers \Brera\Context\ContextBuilder
+ * @uses   \Brera\Context\VersionedContext
+ * @uses   \Brera\Context\ContextDecorator
  * @uses   \Brera\DataVersion
  */
-class EnvironmentBuilderTest extends \PHPUnit_Framework_TestCase
+class ContextBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var EnvironmentBuilder
+     * @var ContextBuilder
      */
     private $builder;
 
     protected function setUp()
     {
-        $this->builder = new EnvironmentBuilder(DataVersion::fromVersionString('1'));
+        $this->builder = new ContextBuilder(DataVersion::fromVersionString('1'));
     }
 
     /**
      * @test
-     * @expectedException \Brera\Environment\EnvironmentDecoratorNotFoundException
+     * @expectedException \Brera\Context\ContextDecoratorNotFoundException
      */
     public function itShouldThrowAnExceptionForNonExistingCode()
     {
-        $environments = ['foo' => 'bar'];
-        $this->builder->getEnvironment($environments);
+        $contexts = ['foo' => 'bar'];
+        $this->builder->getContext($contexts);
     }
 
     /**
      * @test
-     * @expectedException \Brera\Environment\InvalidEnvironmentDecoratorClassException
+     * @expectedException \Brera\Context\InvalidContextDecoratorClassException
      */
-    public function itShouldThrowExceptionForNonEnvironmentDecoratorClass()
+    public function itShouldThrowExceptionForNonContextDecoratorClass()
     {
-        $environments = ['stub_invalid_test' => 'dummy'];
-        $this->builder->getEnvironment($environments);
+        $contexts = ['stub_invalid_test' => 'dummy'];
+        $this->builder->getContext($contexts);
     }
 
     /**
      * @test
      */
-    public function itShouldReturnEnvironmentsForGiveParts()
+    public function itShouldReturnContextsForGiveParts()
     {
-        $environments = [
+        $contexts = [
             ['stub_valid_test' => 'dummy'],
         ];
-        $result = $this->builder->getEnvironments($environments);
+        $result = $this->builder->getContexts($contexts);
         $this->assertCount(1, $result);
-        $this->assertContainsOnlyInstancesOf(Environment::class, $result);
+        $this->assertContainsOnlyInstancesOf(Context::class, $result);
     }
 
     /**
@@ -84,45 +84,45 @@ class EnvironmentBuilderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Brera\Environment\EnvironmentDecoratorNotFoundException
+     * @expectedException \Brera\Context\ContextDecoratorNotFoundException
      */
     public function itShouldThrowAnExceptionWhenAddingANonExistentClass()
     {
-        $this->builder->registerEnvironmentDecorator('test', 'Non\\Existent\\DecoratorClass');
+        $this->builder->registerContextDecorator('test', 'Non\\Existent\\DecoratorClass');
     }
 
     /**
      * @test
-     * @expectedException \Brera\Environment\InvalidEnvironmentDecoratorClassException
+     * @expectedException \Brera\Context\InvalidContextDecoratorClassException
      */
     public function itShouldThrowAnExceptionWhenAddingAnInvalidDecoratorClass()
     {
-        $this->builder->registerEnvironmentDecorator('test', StubInvalidTestEnvironmentDecorator::class);
+        $this->builder->registerContextDecorator('test', StubInvalidTestContextDecorator::class);
     }
 
     /**
      * @test
      */
-    public function itShouldAllowRegisteringEnvironmentCodesToClasses()
+    public function itShouldAllowRegisteringContextCodesToClasses()
     {
-        $this->builder->registerEnvironmentDecorator('test', StubValidTestEnvironmentDecorator::class);
-        $environments = [
+        $this->builder->registerContextDecorator('test', StubValidTestContextDecorator::class);
+        $contexts = [
             ['test' => 'dummy'],
         ];
-        $result = $this->builder->getEnvironments($environments);
+        $result = $this->builder->getContexts($contexts);
         $this->assertCount(1, $result);
-        $this->assertContainsOnlyInstancesOf(Environment::class, $result);
+        $this->assertContainsOnlyInstancesOf(Context::class, $result);
     }
 
     /**
      * @test
      */
-    public function itShouldCreateAnEnvironmentFromARequest()
+    public function itShouldCreateAnContextFromARequest()
     {
         $stubRequest = $this->getMockBuilder(HttpRequest::class)
             ->disableOriginalConstructor()
             ->getMock();
         $result = $this->builder->createFromRequest($stubRequest);
-        $this->assertInstanceOf(Environment::class, $result);
+        $this->assertInstanceOf(Context::class, $result);
     }
 }

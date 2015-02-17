@@ -2,7 +2,7 @@
 
 namespace Brera\Http;
 
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 
 /**
  * @covers Brera\Http\HttpRouterChain
@@ -27,8 +27,8 @@ class HttpRouterChainTest extends \PHPUnit_Framework_TestCase
     public function itShouldThrowUnableToRouteRequestException()
     {
         $stubHttpRequest = $this->getStubHttpRequest();
-        $stubEnvironment = $this->getMock(Environment::class);
-        $this->routerChain->route($stubHttpRequest, $stubEnvironment);
+        $stubContext = $this->getMock(Context::class);
+        $this->routerChain->route($stubHttpRequest, $stubContext);
     }
 
     /**
@@ -46,10 +46,10 @@ class HttpRouterChainTest extends \PHPUnit_Framework_TestCase
 
         $stubHttpRequest = $this->getStubHttpRequest();
         
-        $stubEnvironment = $this->getMock(Environment::class);
+        $stubContext = $this->getMock(Context::class);
 
         $this->routerChain->register($stubHttpRouter);
-        $handler = $this->routerChain->route($stubHttpRequest, $stubEnvironment);
+        $handler = $this->routerChain->route($stubHttpRequest, $stubContext);
 
         $this->assertNotNull($handler);
     }

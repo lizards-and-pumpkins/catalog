@@ -2,7 +2,7 @@
 
 namespace Brera;
 
-use Brera\Environment\EnvironmentSource;
+use Brera\Context\ContextSource;
 use Brera\Http\HttpResourceNotFoundResponse;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\PoCSku;
@@ -38,14 +38,14 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         /** @var ProductDetailViewSnippetKeyGenerator $keyGenerator */
         $keyGenerator = $factory->createProductDetailViewSnippetKeyGenerator();
         
-        /** @var EnvironmentSource $environmentSource */
-        $environmentSource = $factory->createEnvironmentSourceBuilder()->createFromXml($xml);
-        $environment = $environmentSource->extractEnvironments(['version', 'website', 'language'])[0];
+        /** @var ContextSource $contextSource */
+        $contextSource = $factory->createContextSourceBuilder()->createFromXml($xml);
+        $context = $contextSource->extractContexts(['version', 'website', 'language'])[0];
         
-        $key = $keyGenerator->getKeyForEnvironment($productId, $environment);
+        $key = $keyGenerator->getKeyForContext($productId, $context);
         $html = $dataPoolReader->getSnippet($key);
 
-        $searchResults = $dataPoolReader->getSearchResults('led', $environment);
+        $searchResults = $dataPoolReader->getSearchResults('led', $context);
 
         $this->assertContains((string) $sku, $html);
         $this->assertContains($productName, $html);

@@ -2,7 +2,7 @@
 
 namespace Brera\Product;
 
-use Brera\Environment\EnvironmentSource;
+use Brera\Context\ContextSource;
 use Brera\SnippetRendererCollection;
 use Brera\ProjectionSourceData;
 use Brera\SnippetResultList;
@@ -33,28 +33,28 @@ class ProductSnippetRendererCollection implements SnippetRendererCollection
     
     /**
      * @param ProjectionSourceData $productSource
-     * @param EnvironmentSource $environmentSource
+     * @param ContextSource $contextSource
      * @return SnippetResultList
      */
-    public function render(ProjectionSourceData $productSource, EnvironmentSource $environmentSource)
+    public function render(ProjectionSourceData $productSource, ContextSource $contextSource)
     {
         if (!($productSource instanceof ProductSource)) {
             throw new InvalidProjectionDataSourceType('First argument must be instance of Product.');
         }
         
-        $this->renderProduct($productSource, $environmentSource);
+        $this->renderProduct($productSource, $contextSource);
         return $this->snippetResultList;
     }
 
     /**
      * @param ProductSource $productSource
-     * @param EnvironmentSource $environmentSource
+     * @param ContextSource $contextSource
      * @return void
      */
-    private function renderProduct(ProductSource $productSource, EnvironmentSource $environmentSource)
+    private function renderProduct(ProductSource $productSource, ContextSource $contextSource)
     {
         foreach ($this->renderers as $renderer) {
-            $this->snippetResultList->merge($renderer->render($productSource, $environmentSource));
+            $this->snippetResultList->merge($renderer->render($productSource, $contextSource));
         }
     }
 }

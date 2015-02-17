@@ -2,7 +2,7 @@
 
 namespace Brera;
 
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 
 /**
  * @covers \Brera\ThemeLocator
@@ -14,10 +14,10 @@ class ThemeLocatorTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnHardcodedThemeDirectory()
     {
-        $stubEnvironment = $this->getMock(Environment::class);
+        $stubContext = $this->getMock(Context::class);
 
         $locator = new ThemeLocator();
-        $result = $locator->getThemeDirectoryForEnvironment($stubEnvironment);
+        $result = $locator->getThemeDirectoryForContext($stubContext);
 
         $this->assertEquals('theme', $result);
     }

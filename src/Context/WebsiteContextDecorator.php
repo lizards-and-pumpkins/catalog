@@ -1,11 +1,11 @@
 <?php
 
 
-namespace Brera\Environment;
+namespace Brera\Context;
 
-class LanguageEnvironmentDecorator extends EnvironmentDecorator
+class WebsiteContextDecorator extends ContextDecorator
 {
-    const CODE = 'language';
+    const CODE = 'website';
     
     /**
      * @return string

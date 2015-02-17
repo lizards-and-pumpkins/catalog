@@ -5,7 +5,7 @@ namespace Brera\Product;
 use Brera\DataPool\DataPoolWriter;
 use Brera\Projector;
 use Brera\ProjectionSourceData;
-use Brera\Environment\EnvironmentSource;
+use Brera\Context\ContextSource;
 use Brera\InvalidProjectionDataSourceType;
 
 class ProductProjector implements Projector
@@ -43,30 +43,30 @@ class ProductProjector implements Projector
 
     /**
      * @param ProductSource|ProjectionSourceData $productSource
-     * @param EnvironmentSource $environmentSource
+     * @param ContextSource $contextSource
      * @return void
      * @throws InvalidProjectionDataSourceType
      */
-    public function project(ProjectionSourceData $productSource, EnvironmentSource $environmentSource)
+    public function project(ProjectionSourceData $productSource, ContextSource $contextSource)
     {
         if (!($productSource instanceof ProductSource)) {
             throw new InvalidProjectionDataSourceType('First argument must be instance of ProductSource.');
         }
 
-        $this->projectProduct($productSource, $environmentSource);
+        $this->projectProduct($productSource, $contextSource);
     }
 
     /**
      * @param ProductSource $productSource
-     * @param EnvironmentSource $environmentSource
+     * @param ContextSource $contextSource
      * @return void
      */
-    private function projectProduct(ProductSource $productSource, EnvironmentSource $environmentSource)
+    private function projectProduct(ProductSource $productSource, ContextSource $contextSource)
     {
-        $snippetResultList = $this->rendererCollection->render($productSource, $environmentSource);
+        $snippetResultList = $this->rendererCollection->render($productSource, $contextSource);
         $this->dataPoolWriter->writeSnippetResultList($snippetResultList);
 
-        $searchDocument = $this->searchDocumentBuilder->aggregate($productSource, $environmentSource);
+        $searchDocument = $this->searchDocumentBuilder->aggregate($productSource, $contextSource);
         $this->dataPoolWriter->writeSearchDocumentCollection($searchDocument);
     }
 }

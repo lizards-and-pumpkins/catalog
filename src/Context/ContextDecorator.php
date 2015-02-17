@@ -1,12 +1,12 @@
 <?php
 
 
-namespace Brera\Environment;
+namespace Brera\Context;
 
-abstract class EnvironmentDecorator implements Environment
+abstract class ContextDecorator implements Context
 {
     /**
-     * @var Environment
+     * @var Context
      */
     private $component;
     
@@ -15,7 +15,7 @@ abstract class EnvironmentDecorator implements Environment
      */
     private $sourceData;
 
-    public function __construct(Environment $component, array $sourceData)
+    public function __construct(Context $component, array $sourceData)
     {
         $this->component = $component;
         $this->sourceData = $sourceData;
@@ -28,7 +28,7 @@ abstract class EnvironmentDecorator implements Environment
     final public function getValue($code)
     {
         if ($this->getCode() === $code) {
-            return $this->getValueFromEnvironment();
+            return $this->getValueFromContext();
         }
         return $this->component->getValue($code);
     }
@@ -36,19 +36,19 @@ abstract class EnvironmentDecorator implements Environment
     /**
      * @return string
      */
-    protected function getValueFromEnvironment()
+    protected function getValueFromContext()
     {
-        return $this->defaultGetValueFromEnvironmentImplementation();
+        return $this->defaultGetValueFromContextImplementation();
     }
 
     /**
      * @return string
      */
-    private function defaultGetValueFromEnvironmentImplementation()
+    private function defaultGetValueFromContextImplementation()
     {
         if (! array_key_exists($this->getCode(), $this->sourceData)) {
-            throw new EnvironmentCodeNotFoundException(sprintf(
-                'No value found in the environment source data for the code "%s"',
+            throw new ContextCodeNotFoundException(sprintf(
+                'No value found in the context source data for the code "%s"',
                 $this->getCode()
             ));
         }
@@ -73,7 +73,7 @@ abstract class EnvironmentDecorator implements Environment
      */
     public function getId()
     {
-        return $this->getCode() . ':' . $this->getValueFromEnvironment() . '_' . $this->component->getId();
+        return $this->getCode() . ':' . $this->getValueFromContext() . '_' . $this->component->getId();
     }
 
     /**

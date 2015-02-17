@@ -1,10 +1,10 @@
 <?php
 
-namespace Brera\Environment;
+namespace Brera\Context;
 
-class StubValidTestEnvironmentDecorator extends EnvironmentDecorator
+class StubValidTestContextDecorator extends ContextDecorator
 {
-    protected function getValueFromEnvironment()
+    protected function getValueFromContext()
     {
         return '';
     }

@@ -3,7 +3,7 @@
 
 namespace Brera\Http;
 
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 
 /**
  * @covers \Brera\Http\ResourceNotFoundRouter
@@ -27,8 +27,8 @@ class ResoruceNotFoundRouterTest extends \PHPUnit_Framework_TestCase
     {
         $stubRequest = $this->getMockBuilder(HttpRequest::class)
             ->disableOriginalConstructor()->getMock();
-        $stubEnvironment = $this->getMock(Environment::class);
-        $result = $this->router->route($stubRequest, $stubEnvironment);
+        $stubContext = $this->getMock(Context::class);
+        $result = $this->router->route($stubRequest, $stubContext);
         $this->assertInstanceOf(HttpRequestHandler::class, $result);
     }
 }

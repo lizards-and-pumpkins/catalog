@@ -3,7 +3,7 @@
 namespace Brera\Product;
 
 use Brera\InvalidSnippetKeyIdentifierException;
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 use Brera\PoCUrlPathKeyGenerator;
 use Brera\SnippetKeyGenerator;
 
@@ -13,11 +13,11 @@ class ProductDetailViewSnippetKeyGenerator extends PoCUrlPathKeyGenerator implem
 
     /**
      * @param mixed|ProductId $productId
-     * @param Environment $environment
+     * @param Context $context
      * @throws InvalidSnippetKeyIdentifierException
      * @return string
      */
-    public function getKeyForEnvironment($productId, Environment $environment)
+    public function getKeyForContext($productId, Context $context)
     {
         if (!($productId instanceof ProductId)) {
             throw new InvalidSnippetKeyIdentifierException(sprintf(
@@ -26,16 +26,16 @@ class ProductDetailViewSnippetKeyGenerator extends PoCUrlPathKeyGenerator implem
             ));
         }
 
-        return $this->getKeyForProductIdInEnvironment($productId, $environment);
+        return $this->getKeyForProductIdInContext($productId, $context);
     }
 
     /**
      * @param ProductId $productId
-     * @param Environment $environment
+     * @param Context $context
      * @return string
      */
-    private function getKeyForProductIdInEnvironment(ProductId $productId, Environment $environment)
+    private function getKeyForProductIdInContext(ProductId $productId, Context $context)
     {
-        return sprintf('%s_%s_%s', self::KEY_PREFIX, $productId, $environment->getId());
+        return sprintf('%s_%s_%s', self::KEY_PREFIX, $productId, $context->getId());
     }
 }

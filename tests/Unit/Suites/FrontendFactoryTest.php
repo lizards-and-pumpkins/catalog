@@ -3,7 +3,7 @@
 namespace Brera;
 
 use Brera\Api\ApiRouter;
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 use Brera\Http\HttpUrl;
 use Brera\Product\CatalogImportApiRequestHandler;
 
@@ -62,8 +62,8 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
         $stubHttpUrl = $this->getMockBuilder(HttpUrl::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $stubEnvironment = $this->getMock(Environment::class);
-        $result = $this->frontendFactory->createUrlKeyRouter($stubHttpUrl, $stubEnvironment);
+        $stubContext = $this->getMock(Context::class);
+        $result = $this->frontendFactory->createUrlKeyRouter($stubHttpUrl, $stubContext);
         $this->assertInstanceOf(UrlKeyRouter::class, $result);
     }
 }

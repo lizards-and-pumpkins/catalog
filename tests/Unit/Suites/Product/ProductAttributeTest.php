@@ -2,7 +2,7 @@
 
 namespace Brera\Product;
 
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 
 /**
  * @covers \Brera\Product\ProductAttribute
@@ -97,14 +97,14 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $attributeEnvironment
+     * @param $attributeContext
      * @return ProductAttribute
      */
-    private function createProductAttributeWithArray(array $attributeEnvironment)
+    private function createProductAttributeWithArray(array $attributeContext)
     {
         return ProductAttribute::fromArray([
         'nodeName'      => 'name',
-        'attributes'    => $attributeEnvironment,
+        'attributes'    => $attributeContext,
         'value'         => 'dummy-test-value'
         ]);
     }
@@ -113,16 +113,16 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
      * @param $returnValueMap
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function getEnvironmentMockWithReturnValueMap(array $returnValueMap)
+    private function getContextMockWithReturnValueMap(array $returnValueMap)
     {
-        $stubEnvironment = $this->getMock(Environment::class);
-        $stubEnvironment->expects($this->any())
+        $stubContext = $this->getMock(Context::class);
+        $stubContext->expects($this->any())
         ->method('getSupportedCodes')
         ->willReturn(array_column($returnValueMap, 0));
-        $stubEnvironment->expects($this->any())
+        $stubContext->expects($this->any())
         ->method('getValue')
         ->willReturnMap($returnValueMap);
-        return $stubEnvironment;
+        return $stubContext;
     }
 
     /**
@@ -131,68 +131,68 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     public function itShouldReturnAnIntegerMatchScore()
     {
         $attribute = $this->createProductAttributeWithArray([]);
-        $stubEnvironment = $this->getEnvironmentMockWithReturnValueMap([]);
-        $this->assertInternalType('int', $attribute->getMatchScoreForEnvironment($stubEnvironment));
+        $stubContext = $this->getContextMockWithReturnValueMap([]);
+        $this->assertInternalType('int', $attribute->getMatchScoreForContext($stubContext));
     }
 
     /**
      * @test
      */
-    public function itShouldReturn1ForTheMatchScoreForAnEnvironmentWith1Match()
+    public function itShouldReturn1ForTheMatchScoreForAnContextWith1Match()
     {
         $testWebsiteCode = 'foo';
         $attribute = $this->createProductAttributeWithArray(['website' => $testWebsiteCode, 'language' => 'bar']);
-        $stubEnvironment = $this->getEnvironmentMockWithReturnValueMap([
+        $stubContext = $this->getContextMockWithReturnValueMap([
         ['website', $testWebsiteCode],
         ['version', '1'],
         ]);
-        $this->assertSame(1, $attribute->getMatchScoreForEnvironment($stubEnvironment));
+        $this->assertSame(1, $attribute->getMatchScoreForContext($stubContext));
     }
 
     /**
      * @test
      */
-    public function itShouldReturn2ForTheMatchScoreForAnEnvironmentWith2Matches()
+    public function itShouldReturn2ForTheMatchScoreForAnContextWith2Matches()
     {
         $testWebsiteCode = 'foo';
         $testLanguageCode = 'bar';
         $attribute = $this->createProductAttributeWithArray([
         'website' => $testWebsiteCode, 'language' => $testLanguageCode
         ]);
-        $stubEnvironment = $this->getEnvironmentMockWithReturnValueMap([
+        $stubContext = $this->getContextMockWithReturnValueMap([
         ['website', $testWebsiteCode],
         ['language', $testLanguageCode],
         ['version', '1'],
         ]);
-        $this->assertSame(2, $attribute->getMatchScoreForEnvironment($stubEnvironment));
+        $this->assertSame(2, $attribute->getMatchScoreForContext($stubContext));
     }
 
     /**
      * @test
      */
-    public function itShouldReturn0ForTheMatchScoreForAnEnvironmentWithNoMatches()
+    public function itShouldReturn0ForTheMatchScoreForAnContextWithNoMatches()
     {
         $attribute = $this->createProductAttributeWithArray(['website' => 'foo', 'language' => 'bar']);
-        $stubEnvironment = $this->getEnvironmentMockWithReturnValueMap([
+        $stubContext = $this->getContextMockWithReturnValueMap([
         ['website', 'buz'],
         ['language', 'qux'],
         ['version', '1'],
         ]);
-        $this->assertSame(0, $attribute->getMatchScoreForEnvironment($stubEnvironment));
+        $this->assertSame(0, $attribute->getMatchScoreForContext($stubContext));
     }
 
     /**
      * @test
      */
-    public function itShouldReturn1ForTheMatchScoreForAnEnvironmentWith1MatchAnd1Miss()
+    public function itShouldReturn1ForTheMatchScoreForAnContextWith1MatchAnd1Miss()
     {
         $testLanguageCode = 'bar';
         $attribute = $this->createProductAttributeWithArray(['website' => 'foo', 'language' => $testLanguageCode]);
-        $stubEnvironment = $this->getEnvironmentMockWithReturnValueMap([
+        $stubContext = $this->getContextMockWithReturnValueMap([
         ['website', 'buz'],
         ['language', $testLanguageCode],
         ['version', '1'],
         ]);
-        $this->assertSame(1, $attribute->getMatchScoreForEnvironment($stubEnvironment));
+        $this->assertSame(1, $attribute->getMatchScoreForContext($stubContext));
     }
 }

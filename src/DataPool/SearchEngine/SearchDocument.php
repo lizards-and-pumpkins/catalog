@@ -2,7 +2,7 @@
 
 namespace Brera\DataPool\SearchEngine;
 
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 
 class SearchDocument
 {
@@ -12,9 +12,9 @@ class SearchDocument
     private $fields;
 
     /**
-     * @var Environment
+     * @var Context
      */
-    private $environment;
+    private $context;
 
     /**
      * @var string
@@ -23,13 +23,13 @@ class SearchDocument
 
     /**
      * @param SearchDocumentFieldCollection $fields
-     * @param Environment $environment
+     * @param Context $context
      * @param string $content
      */
-    public function __construct(SearchDocumentFieldCollection $fields, Environment $environment, $content)
+    public function __construct(SearchDocumentFieldCollection $fields, Context $context, $content)
     {
         $this->fields = $fields;
-        $this->environment = $environment;
+        $this->context = $context;
         $this->content = (string) $content;
     }
 
@@ -42,11 +42,11 @@ class SearchDocument
     }
 
     /**
-     * @return Environment
+     * @return Context
      */
-    public function getEnvironment()
+    public function getContext()
     {
-        return $this->environment;
+        return $this->context;
     }
 
     /**

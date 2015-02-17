@@ -2,15 +2,15 @@
 
 namespace Brera;
 
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 
 class ThemeLocator
 {
     /**
-     * @param Environment $environment
+     * @param Context $context
      * @return string
      */
-    public function getThemeDirectoryForEnvironment(Environment $environment)
+    public function getThemeDirectoryForContext(Context $context)
     {
         return 'theme';
     }

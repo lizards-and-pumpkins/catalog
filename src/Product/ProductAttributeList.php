@@ -2,7 +2,7 @@
 
 namespace Brera\Product;
 
-use Brera\Environment\Environment;
+use Brera\Context\Context;
 
 class ProductAttributeList
 {
@@ -73,30 +73,30 @@ class ProductAttributeList
     }
 
     /**
-     * @param Environment $environment
+     * @param Context $context
      * @return ProductAttributeList
      */
-    public function getAttributesForEnvironment(Environment $environment)
+    public function getAttributesForContext(Context $context)
     {
-        $extractedAttributes = $this->extractAttributesForEnvironment($environment);
+        $extractedAttributes = $this->extractAttributesForContext($context);
         return $this->createAttributeListFromAttributeArray($extractedAttributes);
     }
 
     /**
-     * @param Environment $environment
+     * @param Context $context
      * @return ProductAttribute[]
      */
-    private function extractAttributesForEnvironment(Environment $environment)
+    private function extractAttributesForContext(Context $context)
     {
-        $attributesForEnvironment = [];
+        $attributesForContext = [];
         foreach ($this->attributeCodes as $code) {
             $attributesForCode = $this->getAttributesForCode($code);
-            $attributesForEnvironment[] = $this->getBestMatchingAttributeForEnvironment(
+            $attributesForContext[] = $this->getBestMatchingAttributeForContext(
                 $attributesForCode,
-                $environment
+                $context
             );
         }
-        return $attributesForEnvironment;
+        return $attributesForContext;
     }
 
     /**
@@ -116,32 +116,32 @@ class ProductAttributeList
 
     /**
      * @param ProductAttribute[] $productAttributes
-     * @param Environment $environment
+     * @param Context $context
      * @return ProductAttribute
      */
-    private function getBestMatchingAttributeForEnvironment(array $productAttributes, Environment $environment)
+    private function getBestMatchingAttributeForContext(array $productAttributes, Context $context)
     {
         /** @var ProductAttribute $carry */
-        return array_reduce($productAttributes, function ($carry, ProductAttribute $attribute) use ($environment) {
+        return array_reduce($productAttributes, function ($carry, ProductAttribute $attribute) use ($context) {
             return is_null($carry) ?
                 $attribute :
-                $this->returnMostMatchingAttributeForEnvironment($environment, $carry, $attribute);
+                $this->returnMostMatchingAttributeForContext($context, $carry, $attribute);
         }, null);
     }
 
     /**
-     * @param Environment $environment
+     * @param Context $context
      * @param ProductAttribute $attributeA
      * @param ProductAttribute $attributeB
      * @return ProductAttribute
      */
-    private function returnMostMatchingAttributeForEnvironment(
-        Environment $environment,
+    private function returnMostMatchingAttributeForContext(
+        Context $context,
         ProductAttribute $attributeA,
         ProductAttribute $attributeB
     ) {
-        $scoreB = $attributeB->getMatchScoreForEnvironment($environment);
-        $scoreA = $attributeA->getMatchScoreForEnvironment($environment);
+        $scoreB = $attributeB->getMatchScoreForContext($context);
+        $scoreA = $attributeA->getMatchScoreForContext($context);
         return $scoreB > $scoreA ?
             $attributeB :
             $attributeA;
