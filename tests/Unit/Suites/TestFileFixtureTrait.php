@@ -139,7 +139,7 @@ trait TestFileFixtureTrait
     private function validateFileDoesNotExist($file)
     {
         if (file_exists($file)) {
-            throw new \RuntimeException(sprintf('Fixture file "%s" already exists', $file));
+            throw new \RuntimeException(sprintf('Fixture file already exists: "%s"', $file));
         }
     }
 
