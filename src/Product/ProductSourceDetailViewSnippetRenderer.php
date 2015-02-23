@@ -29,6 +29,10 @@ class ProductSourceDetailViewSnippetRenderer implements SnippetRenderer
      */
     private $productInContextRenderer;
 
+    /**
+     * @param SnippetResultList $snippetResultList
+     * @param ProductInContextDetailViewSnippetRenderer $productInContextRenderer
+     */
     public function __construct(
         SnippetResultList $snippetResultList,
         ProductInContextDetailViewSnippetRenderer $productInContextRenderer
@@ -40,16 +44,13 @@ class ProductSourceDetailViewSnippetRenderer implements SnippetRenderer
     /**
      * @param ProjectionSourceData|ProductSource $productSource
      * @param ContextSource $contextSource
-     * @throws InvalidArgumentException
      * @return SnippetResultList
      */
     public function render(ProjectionSourceData $productSource, ContextSource $contextSource)
     {
-        if (!($productSource instanceof ProductSource)) {
-            throw new InvalidArgumentException('First argument must be instance of Product.');
-        }
-        $this->productSource = $productSource;
-        $this->contextSource = $contextSource;
+        $this->validateProjectionSourceData($productSource);
+        $this->initProperties($productSource, $contextSource);
+        
         $this->createProductDetailViewSnippets();
 
         return $this->snippetResultList;
@@ -70,5 +71,27 @@ class ProductSourceDetailViewSnippetRenderer implements SnippetRenderer
     private function getContextParts()
     {
         return ['version', 'website', 'language'];
+    }
+
+    /**
+     * @param ProjectionSourceData $productSource
+     * @throws InvalidArgumentException
+     */
+    private function validateProjectionSourceData(ProjectionSourceData $productSource)
+    {
+        if (!($productSource instanceof ProductSource)) {
+            throw new InvalidArgumentException('First argument must be instance of Product.');
+        }
+    }
+
+    /**
+     * @param ProjectionSourceData $productSource
+     * @param ContextSource $contextSource
+     */
+    private function initProperties(ProjectionSourceData $productSource, ContextSource $contextSource)
+    {
+        $this->productSource = $productSource;
+        $this->contextSource = $contextSource;
+        $this->snippetResultList->clear();
     }
 }

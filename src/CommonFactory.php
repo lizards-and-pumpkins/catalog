@@ -145,6 +145,9 @@ class CommonFactory implements Factory, DomainEventFactory
         );
     }
 
+    /**
+     * @return ProductDetailViewBlockRenderer
+     */
     public function createProductDetailViewBlockRenderer()
     {
         return new ProductDetailViewBlockRenderer(
@@ -154,6 +157,9 @@ class CommonFactory implements Factory, DomainEventFactory
         );
     }
 
+    /**
+     * @return BlockStructure
+     */
     public function createBlockStructure()
     {
         return new BlockStructure();

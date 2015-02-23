@@ -34,6 +34,11 @@ class ProductInContextDetailViewSnippetRenderer
      */
     private $keyGenerator;
 
+    /**
+     * @param SnippetResultList $snippetResultList
+     * @param ProductDetailViewBlockRenderer $blockRenderer
+     * @param ProductDetailViewSnippetKeyGenerator $keyGenerator
+     */
     public function __construct(
         SnippetResultList $snippetResultList,
         ProductDetailViewBlockRenderer $blockRenderer,
@@ -42,16 +47,6 @@ class ProductInContextDetailViewSnippetRenderer
         $this->snippetResultList = $snippetResultList;
         $this->blockRenderer = $blockRenderer;
         $this->keyGenerator = $keyGenerator;
-        /*
-         * ProductSourceDetailViewSnippetRenderer:
-         *     SnippetList + ProductInContextDetailViewSnippetRenderer + (ProductSource + ContextSource)
-         * ProductInContextDetailViewSnippetRenderer:
-         *     SnippetList + BlockRenderer + KeyGenerator + (Product + Context)
-         * BlockRenderer:
-         *     ThemeLocator + BlockStructure + Layout + (Product + Context)
-         * Blocks
-         *     Product + Context + BlockRenderer
-         */
     }
     
     /**
@@ -77,7 +72,10 @@ class ProductInContextDetailViewSnippetRenderer
         
         $this->snippetResultList->add($pageMetaDataSnippet);
     }
-    
+
+    /**
+     * @return SnippetResult
+     */
     private function getProductDetailPageMetaSnippet()
     {
         $rootBlockName = $this->blockRenderer->getRootSnippetCode();

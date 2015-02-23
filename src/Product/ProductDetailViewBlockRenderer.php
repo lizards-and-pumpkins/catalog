@@ -27,6 +27,11 @@ class ProductDetailViewBlockRenderer extends BlockRenderer
      */
     private $context;
 
+    /**
+     * @param SnippetResultList $snippetResultList
+     * @param ThemeLocator $themeLocator
+     * @param BlockStructure $blockStructure
+     */
     public function __construct(
         SnippetResultList $snippetResultList,
         ThemeLocator $themeLocator,
@@ -34,16 +39,6 @@ class ProductDetailViewBlockRenderer extends BlockRenderer
     ) {
         parent::__construct($themeLocator, $blockStructure);
         $this->snippetResultList = $snippetResultList;
-        /*
-         * ProductSourceDetailViewSnippetRenderer:
-         *     SnippetList + ProductInContextDetailViewSnippetRenderer + (ProductSource + ContextSource)
-         * ProductInContextDetailViewSnippetRenderer:
-         *     SnippetList + BlockRenderer + KeyGenerator + (Product + Context)
-         * BlockRenderer:
-         *     ThemeLocator + BlockStructure + Layout + (Product + Context)
-         * Blocks
-         *     Product + Context + BlockRenderer
-         */
     }
     
     /**
@@ -55,6 +50,7 @@ class ProductDetailViewBlockRenderer extends BlockRenderer
     {
         $this->product = $product;
         $this->context = $context;
+        $this->snippetResultList->clear();
         
         $contentSnippet = $this->getContentSnippet();
         $childSnippetListSnippet = $this->getChildSnippetListSnippet($contentSnippet);

@@ -21,8 +21,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
      * @var BlockRenderer|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockBlockRenderer;
-
-
+    
     public function setUp()
     {
         $this->mockBlockRenderer = $this->getMockBuilder(BlockRenderer::class)
