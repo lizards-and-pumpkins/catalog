@@ -8,13 +8,48 @@ class BlockStructure
     /**
      * @var Block[]
      */
-    private $blocks;
+    private $blocks = [];
 
     /**
      * @var array[]
      */
     private $blockChildren = [];
 
+
+    /**
+     * @param Block $blockInstance
+     */
+    public function addBlock(Block $blockInstance)
+    {
+        $this->blocks[$blockInstance->getBlockName()] = $blockInstance;
+    }
+
+    /**
+     * @param string $parentName
+     * @param Block $childBlockInstance
+     */
+    public function setParentBlock($parentName, Block $childBlockInstance)
+    {
+        if (!$this->hasBlock($parentName)) {
+            throw new BlockDoesNotExistException(sprintf(
+                'Can\'t set the parent for child block "%s": parent block "%s" is unknown',
+                $childBlockInstance->getBlockName(),
+                $parentName
+            ));
+        }
+        if (! $this->hasChildBlock($parentName, $childBlockInstance->getBlockName())) {
+            $this->blockChildren[$parentName][] = $childBlockInstance->getBlockName();
+        }
+    }
+
+    /**
+     * @param string $blockName
+     * @return bool
+     */
+    public function hasBlock($blockName)
+    {
+        return array_key_exists($blockName, $this->blocks);
+    }
 
     /**
      * @param string $parentName
@@ -33,6 +68,18 @@ class BlockStructure
     }
 
     /**
+     * @param string $blockName
+     * @return Block
+     */
+    public function getBlock($blockName)
+    {
+        if (!array_key_exists($blockName, $this->blocks)) {
+            throw new BlockDoesNotExistException(sprintf('Block does not exist: "%s"', $blockName));
+        }
+        return $this->blocks[$blockName];
+    }
+
+    /**
      * @param string $parentName
      * @param string $childName
      * @return string
@@ -48,52 +95,5 @@ class BlockStructure
             ));
         }
         return $this->getBlock($childName);
-    }
-
-    /**
-     * @param string $blockName
-     * @return Block
-     */
-    public function getBlock($blockName)
-    {
-        if (!array_key_exists($blockName, $this->blocks)) {
-            throw new BlockDoesNotExistException(sprintf('Block does not exist: "%s"', $blockName));
-        }
-        return $this->blocks[$blockName];
-    }
-
-    /**
-     * @param string $parentName
-     * @param Block $childBlockInstance
-     */
-    public function setParentBlock($parentName, Block $childBlockInstance)
-    {
-        if (!$this->hasBlock($parentName)) {
-            throw new BlockDoesNotExistException(sprintf(
-                'Parent block "%s" does not exist for block "%s"',
-                $parentName,
-                $childBlockInstance->getBlockName()
-            ));
-        }
-        if (! $this->hasChildBlock($parentName, $childBlockInstance->getBlockName())) {
-            $this->blockChildren[$parentName][] = $childBlockInstance->getBlockName();
-        }
-    }
-
-    /**
-     * @param string $blockName
-     * @return bool
-     */
-    public function hasBlock($blockName)
-    {
-        return array_key_exists($blockName, $this->blocks);
-    }
-
-    /**
-     * @param Block $blockInstance
-     */
-    public function addBlock(Block $blockInstance)
-    {
-        $this->blocks[$blockInstance->getBlockName()] = $blockInstance;
     }
 }
