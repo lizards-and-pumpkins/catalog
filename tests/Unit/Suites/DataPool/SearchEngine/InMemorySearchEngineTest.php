@@ -7,10 +7,11 @@ namespace Brera\DataPool\SearchEngine;
  */
 class InMemorySearchEngineTest extends AbstractSearchEngineTest
 {
-    protected function setUp()
+    /**
+     * @return SearchEngine
+     */
+    protected function createSearchEngineInstance()
     {
-        parent::setUp();
-
-        $this->searchEngine = new InMemorySearchEngine();
+        return new InMemorySearchEngine();
     }
 }

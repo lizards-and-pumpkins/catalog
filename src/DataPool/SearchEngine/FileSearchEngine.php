@@ -11,19 +11,34 @@ class FileSearchEngine implements SearchEngine
      */
     private $storagePath;
 
-    public function __construct($storagePath = null)
+    private function __construct($storagePath)
     {
-        if (is_null($storagePath)) {
-            $storagePath = sys_get_temp_dir();
-        }
-
         if (!is_writable($storagePath)) {
             throw new SearchEngineNotAvailableException(sprintf(
-                'Directory "%s" is not writable by the filesystem search engine.', $storagePath
+                'Directory "%s" is not writable by the filesystem search engine.', realpath($storagePath)
             ));
         }
 
         $this->storagePath = $storagePath;
+    }
+
+    /**
+     * @param $storagePath
+     * @return FileSearchEngine
+     */
+    public static function withPath($storagePath)
+    {
+        return new self($storagePath);
+    }
+
+    /**
+     * @return FileSearchEngine
+     */
+    public static function withDefaultPath()
+    {
+        $defaultPath = sys_get_temp_dir();
+
+        return new self($defaultPath);
     }
 
     /**
@@ -32,7 +47,7 @@ class FileSearchEngine implements SearchEngine
      */
     public function addSearchDocument(SearchDocument $searchDocument)
     {
-        file_put_contents($this->storagePath . DIRECTORY_SEPARATOR . uniqid(), serialize($searchDocument));
+        file_put_contents($this->storagePath . '/' . uniqid(), serialize($searchDocument));
     }
 
     /**
@@ -58,12 +73,12 @@ class FileSearchEngine implements SearchEngine
 
         $directoryIterator = new \DirectoryIterator($this->storagePath);
 
-        foreach ($directoryIterator as $file) {
-            if (! $file->isFile()) {
+        foreach ($directoryIterator as $entry) {
+            if (! $entry->isFile()) {
                 continue;
             }
 
-            $filePath = $this->storagePath . DIRECTORY_SEPARATOR . $file->getFilename();
+            $filePath = $this->storagePath . '/' . $entry->getFilename();
 
             /** @var SearchDocument $searchDocument */
             $searchDocument = unserialize(file_get_contents($filePath));

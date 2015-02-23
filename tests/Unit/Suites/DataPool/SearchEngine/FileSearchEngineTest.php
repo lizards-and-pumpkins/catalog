@@ -12,15 +12,6 @@ class FileSearchEngineTest extends AbstractSearchEngineTest
      */
     private $temporaryStorage;
 
-    protected function setUp()
-    {
-        parent::setUp();
-
-        $this->prepareTemporaryStorage();
-
-        $this->searchEngine = new FileSearchEngine($this->temporaryStorage);
-    }
-
     protected function tearDown()
     {
         $this->removeDirectoryAndItsContent($this->temporaryStorage);
@@ -32,7 +23,7 @@ class FileSearchEngineTest extends AbstractSearchEngineTest
      */
     public function itShouldThrowAnExceptionIfSearchEngineStorageDirIsNotWritable()
     {
-        new FileSearchEngine('foo');
+        FileSearchEngine::withPath('non-existing-path');
     }
 
     /**
@@ -40,9 +31,19 @@ class FileSearchEngineTest extends AbstractSearchEngineTest
      */
     public function itShouldNotFailIfNoStorageDirectoryIsSpecified()
     {
-        $searchEngine = new FileSearchEngine();
+        $searchEngine = FileSearchEngine::withDefaultPath();
 
         $this->assertInstanceOf(SearchEngine::class, $searchEngine);
+    }
+
+    /**
+     * @return SearchEngine
+     */
+    protected function createSearchEngineInstance()
+    {
+        $this->prepareTemporaryStorage();
+
+        return FileSearchEngine::withPath($this->temporaryStorage);
     }
 
     /**

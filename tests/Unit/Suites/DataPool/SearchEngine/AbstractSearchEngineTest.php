@@ -7,11 +7,6 @@ use Brera\Context\Context;
 abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var SearchEngine
-     */
-    protected $searchEngine;
-
-    /**
      * @var SearchDocument|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $stubSearchDocument;
@@ -31,6 +26,11 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
      */
     protected $stubContext;
 
+    /**
+     * @var SearchEngine
+     */
+    private $searchEngine;
+
     protected function setUp()
     {
         $this->stubSearchDocument = $this->getMockBuilder(SearchDocument::class)
@@ -46,6 +46,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->stubContext = $this->getMock(Context::class);
+
+        $this->searchEngine = $this->createSearchEngineInstance();
     }
 
     /**
@@ -238,6 +240,11 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals([$searchDocumentContent], $result);
     }
+
+    /**
+     * @return SearchEngine
+     */
+    abstract protected function createSearchEngineInstance();
 
     /**
      * @param string[] $fieldsMap
