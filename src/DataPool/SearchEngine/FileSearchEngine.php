@@ -11,7 +11,7 @@ class FileSearchEngine implements SearchEngine
      */
     private $storagePath;
 
-    private function __construct($storagePath)
+    private final function __construct($storagePath)
     {
         if (!is_writable($storagePath)) {
             throw new SearchEngineNotAvailableException(sprintf(
