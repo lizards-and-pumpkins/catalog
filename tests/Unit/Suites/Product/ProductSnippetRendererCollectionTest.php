@@ -144,7 +144,7 @@ class ProductSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Brera\InvalidProjectionDataSourceType
+     * @expectedException \Brera\InvalidProjectionDataSourceTypeException
      */
     public function itShouldThrowAnExceptionIfTheDataSourceObjectTypeIsNotProduct()
     {

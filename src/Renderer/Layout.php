@@ -66,6 +66,14 @@ class Layout
     }
 
     /**
+     * @return bool
+     */
+    public function hasChildren()
+    {
+        return is_array($this->nodeChildren);
+    }
+
+    /**
      * @param array $layout
      * @throws RootElementOfLayoutMustBeAnArrayException
      * @return array[]

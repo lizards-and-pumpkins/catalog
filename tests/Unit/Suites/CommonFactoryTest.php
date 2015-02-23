@@ -29,7 +29,7 @@ use Psr\Log\LoggerInterface;
  * @uses   \Brera\DomainEventConsumer
  * @uses   \Brera\DomainEventHandlerLocator
  * @uses   \Brera\UrlPathKeyGenerator
- * @uses   \Brera\Renderer\BlockSnippetRenderer
+ * @uses   \Brera\Renderer\BlockRenderer
  * @uses   \Brera\Product\ProductSourceBuilder
  * @uses   \Brera\Product\ProductProjector
  * @uses   \Brera\Product\ProductSnippetRendererCollection
@@ -38,6 +38,9 @@ use Psr\Log\LoggerInterface;
  * @uses   \Brera\Product\CatalogImportDomainEvent
  * @uses   \Brera\Product\CatalogImportDomainEventHandler
  * @uses   \Brera\Product\ProductSearchDocumentBuilder
+ * @uses   \Brera\Product\ProductInContextDetailViewSnippetRenderer
+ * @uses   \Brera\Product\ProductSourceDetailViewSnippetRenderer
+ * @uses   \Brera\Product\ProductDetailViewBlockRenderer
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {

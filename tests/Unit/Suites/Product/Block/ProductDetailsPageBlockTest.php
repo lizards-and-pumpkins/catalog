@@ -4,66 +4,50 @@ namespace Brera\Product\Block;
 
 use Brera\Product\Product;
 use Brera\Product\ProductAttributeNotFoundException;
-use Brera\Renderer\ThemeProductRenderingTestTrait;
+use Brera\Product\ProductDetailViewBlockRenderer;
+use Brera\TestFileFixtureTrait;
+use Brera\Renderer\Block;
 
 /**
  * @covers \Brera\Product\Block\ProductDetailsPageBlock
- * @covers \Brera\Renderer\Block
+ * @uses   \Brera\Renderer\Block
  */
 class ProductDetailsPageBlockTest extends \PHPUnit_Framework_TestCase
 {
-    use ThemeProductRenderingTestTrait;
+    use TestFileFixtureTrait;
 
     /**
      * @var Product|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubProduct;
 
+    /**
+     * @var ProductInContextDetailViewSnippetRenderer|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubRenderer;
+
     protected function setUp()
     {
-        $this->stubProduct = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->createTemporaryThemeFiles();
+        $this->stubRenderer = $this->getMock(ProductDetailViewBlockRenderer::class, [], [], '', false);
+        $this->stubProduct = $this->getMock(Product::class, [], [], '', false);
     }
 
-    protected function tearDown()
+    /**
+     * @return ProductDetailsPageBlock
+     */
+    private function createInstance()
     {
-        $this->removeTemporaryThemeFiles();
+        $template = 'dummy-template.phtml';
+        $blockName = 'test-name';
+        return new ProductDetailsPageBlock($this->stubRenderer, $template, $blockName, $this->stubProduct);
     }
 
     /**
      * @test
      */
-    public function itShouldReturnBlockOutput()
+    public function itShouldBeABlock()
     {
-        $templateDirectoryPath = $this->getTemplateDirectoryPath();
-        $productDetailsPageBlock = new ProductDetailsPageBlock(
-            $templateDirectoryPath . '/1column.phtml',
-            $this->stubProduct
-        );
-        $result = $productDetailsPageBlock->render();
-
-        $this->assertEquals("- Hi, I'm a 1 column template!<br/>\n", $result);
-    }
-
-    /**
-     * @test
-     */
-    public function itShouldAddChildBlockAndRenderItsContent()
-    {
-        $templateDirectoryPath = $this->getTemplateDirectoryPath();
-        $childBlock = new ProductImageGallery($templateDirectoryPath . '/gallery.phtml', $this->stubProduct);
-        $productDetailsPageBlock = new ProductDetailsPageBlock(
-            $templateDirectoryPath . '/1column.phtml',
-            $this->stubProduct
-        );
-        $productDetailsPageBlock->addChildBlock('foo', $childBlock);
-
-        $result = $productDetailsPageBlock->getChildOutput('foo');
-
-        $this->assertEquals("- And I'm a gallery template.\n", $result);
+        $this->assertInstanceOf(Block::class, $this->createInstance());
     }
 
     /**
@@ -71,15 +55,16 @@ class ProductDetailsPageBlockTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnProductAttributeValue()
     {
+        $attributeCode = 'name';
+        $attributeValue = 'foo';
         $this->stubProduct->expects($this->once())
             ->method('getAttributeValue')
-            ->with('name')
-            ->willReturn('foo');
+            ->with($attributeCode)
+            ->willReturn($attributeValue);
 
-        $productDetailsPageBlock = new ProductDetailsPageBlock('bar.phtml', $this->stubProduct);
-        $result = $productDetailsPageBlock->getProductAttributeValue('name');
+        $block = $this->createInstance();
 
-        $this->assertEquals('foo', $result);
+        $this->assertEquals($attributeValue, $block->getProductAttributeValue($attributeCode));
     }
 
     /**
@@ -89,14 +74,15 @@ class ProductDetailsPageBlockTest extends \PHPUnit_Framework_TestCase
     {
         $stubException = $this->getMock(ProductAttributeNotFoundException::class);
 
+        $attributeCode = 'bar';
         $this->stubProduct->expects($this->once())
             ->method('getAttributeValue')
+            ->with($attributeCode)
             ->willThrowException($stubException);
 
-        $productDetailsPageBlock = new ProductDetailsPageBlock('foo.phtml', $this->stubProduct);
-        $result = $productDetailsPageBlock->getProductAttributeValue('bar');
-
-        $this->assertEquals('', $result);
+        $productDetailsPageBlock = $this->createInstance();
+        $result = $productDetailsPageBlock->getProductAttributeValue($attributeCode);
+        $this->assertSame('', $result);
     }
 
     /**
@@ -108,7 +94,7 @@ class ProductDetailsPageBlockTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->willReturn('foo');
 
-        $productDetailsPageBlock = new ProductDetailsPageBlock('bar.phtml', $this->stubProduct);
+        $productDetailsPageBlock = $this->createInstance();
         $result = $productDetailsPageBlock->getProductId();
 
         $this->assertEquals('foo', $result);

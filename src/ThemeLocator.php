@@ -2,16 +2,26 @@
 
 namespace Brera;
 
-use Brera\Context\Context;
+use Brera\Renderer\LayoutReader;
 
 class ThemeLocator
 {
     /**
-     * @param Context $context
      * @return string
      */
-    public function getThemeDirectoryForContext(Context $context)
+    public function getThemeDirectory()
     {
         return 'theme';
+    }
+
+    /**
+     * @param string $layoutHandle
+     * @return string
+     */
+    public function getLayoutForHandle($layoutHandle)
+    {
+        $layoutFile = $this->getThemeDirectory() . '/layout/' . $layoutHandle. '.xml';
+        $reader = new LayoutReader();
+        return $reader->loadLayoutFromXmlFile($layoutFile);
     }
 }

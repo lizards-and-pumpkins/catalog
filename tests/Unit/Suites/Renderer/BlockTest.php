@@ -3,20 +3,63 @@
 namespace Brera\Renderer;
 
 use Brera\ProjectionSourceData;
+use Brera\TestFileFixtureTrait;
 
 /**
  * @covers \Brera\Renderer\Block
  */
 class BlockTest extends \PHPUnit_Framework_TestCase
 {
-    protected function tearDown()
-    {
-        $filePath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'some-file-name.phtml';
+    use TestFileFixtureTrait;
 
-        if (file_exists($filePath) && is_file($filePath)) {
-            chmod($filePath, '600');
-            unlink($filePath);
-        }
+    /**
+     * @var ProjectionSourceData|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubDataObject;
+
+    /**
+     * @var BlockRenderer|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockBlockRenderer;
+    
+    public function setUp()
+    {
+        $this->mockBlockRenderer = $this->getMockBuilder(BlockRenderer::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getLayoutHandle', 'getChildBlockOutput'])
+            ->getMock();
+        $this->stubDataObject = $this->getMock(ProjectionSourceData::class);
+    }
+    
+    /**
+     * @param string $template
+     * @param string $blockName
+     * @return Block
+     */
+    private function createBlockInstance($template, $blockName)
+    {
+        return new Block($this->mockBlockRenderer, $template, $blockName, $this->stubDataObject);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnTheBlocksName()
+    {
+        $blockName = 'test-block-name';
+        $instance = $this->createBlockInstance('test-template.phtml', $blockName);
+        $this->assertEquals($blockName, $instance->getBlockName());
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnTheDataObject()
+    {
+        $block = $this->createBlockInstance('test-template.phtml', 'test-block-name');
+        $method = new \ReflectionMethod($block, 'getDataObject');
+        $method->setAccessible(true);
+        $this->assertSame($this->stubDataObject, $method->invoke($block));
     }
 
     /**
@@ -25,8 +68,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldThrowAnExceptionIfTemplateFileDoesNotExist()
     {
-        $stubDataObject = $this->getStubProjectionSourceData();
-        $block = new Block('foo.phtml', $stubDataObject);
+        $block = $this->createBlockInstance('test-template.phtml', 'test-block-name');
         $block->render();
     }
 
@@ -36,34 +78,48 @@ class BlockTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldThrowAnExceptionIfTemplateFileIsNotReadable()
     {
-        $filePath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'some-file-name.phtml';
+        $templateFilePath = $this->getUniqueTempDir() . '/test-template.phtml';
+        
+        $this->createFixtureFile($templateFilePath, '', 0000);
 
-        touch($filePath);
-        chmod($filePath, 000);
-
-        $stubDataObject = $this->getStubProjectionSourceData();
-
-        $block = new Block($filePath, $stubDataObject);
+        $block = $this->createBlockInstance($templateFilePath, 'test-block-name');
         $block->render();
     }
 
     /**
      * @test
      */
-    public function itShouldReturnSameString()
+    public function itShouldReturnSameStringAsTranslation()
     {
-        $stubDataObject = $this->getStubProjectionSourceData();
-        $block = new Block('foo.phtml', $stubDataObject);
+        $block = $this->createBlockInstance('test-template.phtml', 'test-block-name');
         $result = $block->__('foo');
 
         $this->assertEquals('foo', $result);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ProjectionSourceData
+     * @test
      */
-    private function getStubProjectionSourceData()
+    public function itShouldRenderTheTemplate()
     {
-        return $this->getMock(ProjectionSourceData::class);
+        $template = $this->getUniqueTempDir() . '/test-template.phtml';
+        $templateContent = 'The template content';
+        $this->createFixtureFile($template, $templateContent);
+        $block = $this->createBlockInstance($template, $templateContent);
+        $this->assertEquals($templateContent, $block->render());
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldDelegateToTheBlockRendererToGetChildBlockOutput()
+    {
+        $blockName = 'test-block-name';
+        $childName = 'child-name';
+        $this->mockBlockRenderer->expects($this->once())
+            ->method('getChildBlockOutput')
+            ->with($blockName, $childName);
+        $block = $this->createBlockInstance('template.phtml', $blockName);
+        $block->getChildOutput($childName);
     }
 }

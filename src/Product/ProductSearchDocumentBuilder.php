@@ -4,7 +4,7 @@ namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\Context\ContextSource;
-use Brera\InvalidProjectionDataSourceType;
+use Brera\InvalidProjectionDataSourceTypeException;
 use Brera\DataPool\SearchEngine\SearchDocument;
 use Brera\DataPool\SearchEngine\SearchDocumentBuilder;
 use Brera\DataPool\SearchEngine\SearchDocumentCollection;
@@ -30,12 +30,12 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
      * @param ProjectionSourceData $productSource
      * @param ContextSource $contextSource
      * @return SearchDocumentCollection
-     * @throws InvalidProjectionDataSourceType
+     * @throws InvalidProjectionDataSourceTypeException
      */
     public function aggregate(ProjectionSourceData $productSource, ContextSource $contextSource)
     {
         if (!($productSource instanceof ProductSource)) {
-            throw new InvalidProjectionDataSourceType('First argument must be instance of ProductSource.');
+            throw new InvalidProjectionDataSourceTypeException('First argument must be instance of ProductSource.');
         }
 
         $collection = new SearchDocumentCollection();
