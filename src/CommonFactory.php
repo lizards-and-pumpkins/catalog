@@ -151,7 +151,6 @@ class CommonFactory implements Factory, DomainEventFactory
     public function createProductDetailViewBlockRenderer()
     {
         return new ProductDetailViewBlockRenderer(
-            $this->getMasterFactory()->createSnippetResultList(),
             $this->getMasterFactory()->createThemeLocator(),
             $this->getMasterFactory()->createBlockStructure()
         );

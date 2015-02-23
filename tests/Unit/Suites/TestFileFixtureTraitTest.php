@@ -3,6 +3,9 @@
 
 namespace Brera;
 
+/**
+ * @covers \Brera\TestFileFixtureTrait
+ */
 class TestFileFixtureTraitTest extends \PHPUnit_Framework_TestCase
 {
     use TestFileFixtureTrait;

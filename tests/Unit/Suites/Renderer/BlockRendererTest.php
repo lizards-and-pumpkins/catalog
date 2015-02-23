@@ -3,45 +3,27 @@
 
 namespace Brera\Renderer;
 
-use Brera\Context\Context;
-use Brera\ProjectionSourceData;
 use Brera\Renderer\Stubs\StubBlock;
 use Brera\Renderer\Stubs\StubBlockRenderer;
-use Brera\TestFileFixtureTrait;
 use Brera\ThemeLocator;
 
 /**
  * @covers \Brera\Renderer\BlockRenderer
  * @uses   \Brera\Renderer\Block
+ * @uses   \Brera\Renderer\BlockStructure
  */
-class BlockRendererTest extends \PHPUnit_Framework_TestCase
+class BlockRendererTest extends BlockRendererTestAbstract
 {
-    use TestFileFixtureTrait;
-
     /**
-     * @var BlockRenderer
+     * @param ThemeLocator|\PHPUnit_Framework_MockObject_MockObject $stubThemeLocator
+     * @param BlockStructure $stubBlockStructure
+     * @return StubBlockRenderer
      */
-    private $blockRenderer;
-
-    /**
-     * @var ThemeLocator|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubThemeLocator;
-
-    /**
-     * @var Layout|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubLayout;
-
-    protected function setUp()
-    {
-        $this->stubThemeLocator = $this->getMock(ThemeLocator::class);
-        $this->stubLayout = $this->getMock(Layout::class, [], [], '', false);
-        $this->stubThemeLocator->expects($this->any())
-            ->method('getLayoutForHandle')
-            ->willReturn($this->stubLayout);
-        $this->stubBlockStructure = new BlockStructure();
-        $this->blockRenderer = new StubBlockRenderer($this->stubThemeLocator, $this->stubBlockStructure);
+    protected function createRendererInstance(
+        \PHPUnit_Framework_MockObject_MockObject $stubThemeLocator,
+        BlockStructure $stubBlockStructure
+    ) {
+        return new StubBlockRenderer($stubThemeLocator, $stubBlockStructure);
     }
 
     /**
@@ -50,10 +32,10 @@ class BlockRendererTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldThrowAnExceptionIfNoRootBlockIsDefined()
     {
-        $this->stubLayout->expects($this->any())
+        $this->getStubLayout()->expects($this->any())
             ->method('getNodeChildren')
             ->willReturn([]);
-        $this->blockRenderer->render($this->getStubDataObject(), $this->getStubContext());
+        $this->getBlockRenderer()->render($this->getStubDataObject(), $this->getStubContext());
     }
 
     /**
@@ -62,10 +44,10 @@ class BlockRendererTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldThrowAnExceptionIfMoreThenOneRootBlockIsDefined()
     {
-        $this->stubLayout->expects($this->any())
+        $this->getStubLayout()->expects($this->any())
             ->method('getNodeChildren')
             ->willReturn([['test-dummy-1'], ['test-dummy-2']]);
-        $this->blockRenderer->render($this->getStubDataObject(), $this->getStubContext());
+        $this->getBlockRenderer()->render($this->getStubDataObject(), $this->getStubContext());
     }
 
     /**
@@ -76,7 +58,7 @@ class BlockRendererTest extends \PHPUnit_Framework_TestCase
     public function itShouldThrowAnExceptionIfNoBlockClassIsSpecified()
     {
         $this->addStubRootBlock(null, 'dummy-template');
-        $this->blockRenderer->render($this->getStubDataObject(), $this->getStubContext());
+        $this->getBlockRenderer()->render($this->getStubDataObject(), $this->getStubContext());
     }
 
     /**
@@ -87,7 +69,7 @@ class BlockRendererTest extends \PHPUnit_Framework_TestCase
     public function itShouldThrowAnExceptionIfTheClassDoesNotExist()
     {
         $this->addStubRootBlock('None\\Existing\\BlockClass', 'dummy-template');
-        $this->blockRenderer->render($this->getStubDataObject(), $this->getStubContext());
+        $this->getBlockRenderer()->render($this->getStubDataObject(), $this->getStubContext());
     }
 
     /**
@@ -101,7 +83,7 @@ class BlockRendererTest extends \PHPUnit_Framework_TestCase
             sprintf('Block class "%s" must extend "%s"', $nonBlockClass, Block::class)
         );
         $this->addStubRootBlock($nonBlockClass, 'dummy-template');
-        $this->blockRenderer->render($this->getStubDataObject(), $this->getStubContext());
+        $this->getBlockRenderer()->render($this->getStubDataObject(), $this->getStubContext());
     }
 
     /**
@@ -113,7 +95,7 @@ class BlockRendererTest extends \PHPUnit_Framework_TestCase
         $templateContent = 'test template content';
         $this->createFixtureFile($template, $templateContent);
         $this->addStubRootBlock(StubBlock::class, $template);
-        $result = $this->blockRenderer->render($this->getStubDataObject(), $this->getStubContext());
+        $result = $this->getBlockRenderer()->render($this->getStubDataObject(), $this->getStubContext());
         $this->assertEquals($templateContent, $result);
     }
 
@@ -136,7 +118,7 @@ class BlockRendererTest extends \PHPUnit_Framework_TestCase
         $rootBlock = $this->addStubRootBlock(StubBlock::class, $rootTemplate);
         $this->addChildLayoutToStubBlock($rootBlock, StubBlock::class, $childTemplate, $childBlockName);
 
-        $result = $this->blockRenderer->render($this->getStubDataObject(), $this->getStubContext());
+        $result = $this->getBlockRenderer()->render($this->getStubDataObject(), $this->getStubContext());
         $this->assertEquals($combinedTemplateContent, $result);
     }
 
@@ -153,9 +135,9 @@ class BlockRendererTest extends \PHPUnit_Framework_TestCase
         $rootTemplate = $this->getUniqueTempDir() . '/root-template.php';
         $this->createFixtureFile($rootTemplate, $rootTemplateContent);
 
-        $rootBlock = $this->addStubRootBlock(StubBlock::class, $rootTemplate);
+        $this->addStubRootBlock(StubBlock::class, $rootTemplate);
 
-        $result = $this->blockRenderer->render($this->getStubDataObject(), $this->getStubContext());
+        $result = $this->getBlockRenderer()->render($this->getStubDataObject(), $this->getStubContext());
         $this->assertEquals($templateContentWithChildPlaceholder, $result);
     }
 
@@ -166,7 +148,7 @@ class BlockRendererTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldThrowAnExceptionIfTheListOfNestedSnippetsIsFetchedBeforeRendering()
     {
-        $this->blockRenderer->getNestedSnippetCodes();
+        $this->getBlockRenderer()->getNestedSnippetCodes();
     }
 
     /**
@@ -183,10 +165,10 @@ class BlockRendererTest extends \PHPUnit_Framework_TestCase
         $rootTemplate = $this->getUniqueTempDir() . '/root-template.php';
         $this->createFixtureFile($rootTemplate, $rootTemplateContent);
 
-        $rootBlock = $this->addStubRootBlock(StubBlock::class, $rootTemplate);
+        $this->addStubRootBlock(StubBlock::class, $rootTemplate);
 
-        $this->blockRenderer->render($this->getStubDataObject(), $this->getStubContext());
-        $this->assertEquals([$childBlockName1, $childBlockName2], $this->blockRenderer->getNestedSnippetCodes());
+        $this->getBlockRenderer()->render($this->getStubDataObject(), $this->getStubContext());
+        $this->assertEquals([$childBlockName1, $childBlockName2], $this->getBlockRenderer()->getNestedSnippetCodes());
     }
 
     /**
@@ -194,74 +176,19 @@ class BlockRendererTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnTheLayoutHandleAsTheRootSnippetCode()
     {
-        $this->assertEquals(StubBlockRenderer::LAYOUT_HANDLE, $this->blockRenderer->getRootSnippetCode());
+        $this->assertEquals(StubBlockRenderer::LAYOUT_HANDLE, $this->getBlockRenderer()->getRootSnippetCode());
     }
 
     /**
-     * @return ProjectionSourceData|\PHPUnit_Framework_MockObject_MockObject
+     * @test
      */
-    private function getStubDataObject()
+    public function itShouldReturnTheDataObjectPassedToRender()
     {
-        return $this->getMock(ProjectionSourceData::class);
-    }
-
-    /**
-     * @return Context|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getStubContext()
-    {
-        return $this->getMock(Context::class, [], [], '', false);
-    }
-
-    /**
-     * @param $className
-     * @param $template
-     * @return Layout|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function addStubRootBlock($className, $template)
-    {
-        return $this->addChildLayoutToStubBlock($this->stubLayout, $className, $template);
-    }
-
-    /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $stubBlock
-     * @param string $className
-     * @param string $template
-     * @param string $childBlockName
-     * @return Layout|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function addChildLayoutToStubBlock(
-        \PHPUnit_Framework_MockObject_MockObject $stubBlock,
-        $className,
-        $template,
-        $childBlockName = ''
-    ) {
-        $stubChild = $this->createStubBlockLayout($className, $template, $childBlockName);
-        $stubBlock->expects($this->any())
-            ->method('getNodeChildren')
-            ->willReturn([$stubChild]);
-        $stubBlock->expects($this->any())
-            ->method('hasChildren')
-            ->willReturn(true);
-        return $stubChild;
-    }
-
-    /**
-     * @param string $className
-     * @param string $template
-     * @param string $nameInLayout
-     * @return Layout|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubBlockLayout($className, $template, $nameInLayout = '')
-    {
-        $stubBlockLayout = $this->getMock(Layout::class, [], [], '', false);
-        $stubBlockLayout->expects($this->any())
-            ->method('getAttribute')
-            ->willReturnMap([
-                ['class', $className],
-                ['template', $template],
-                ['name', $nameInLayout],
-            ]);
-        return $stubBlockLayout;
+        $stubDataObject = $this->getStubDataObject();
+        $template = $this->getUniqueTempDir() . '/template.phtml';
+        $this->createFixtureFile($template, '');
+        $this->addStubRootBlock(StubBlock::class, $template);
+        $this->getBlockRenderer()->render($stubDataObject, $this->getStubContext());
+        $this->assertSame($stubDataObject, $this->getBlockRenderer()->getDataObject());
     }
 }

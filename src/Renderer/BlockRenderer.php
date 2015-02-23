@@ -51,6 +51,11 @@ abstract class BlockRenderer
     }
 
     /**
+     * @return string
+     */
+    abstract protected function getLayoutHandle();
+
+    /**
      * @param ProjectionSourceData $dataObject
      * @param Context $context
      * @return string
@@ -67,9 +72,12 @@ abstract class BlockRenderer
     }
 
     /**
-     * @return string
+     * @return ProjectionSourceData
      */
-    abstract protected function getLayoutHandle();
+    final public function getDataObject()
+    {
+        return $this->dataObject;
+    }
 
     /**
      * @return Layout

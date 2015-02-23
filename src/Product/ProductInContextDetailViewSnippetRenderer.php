@@ -58,8 +58,8 @@ class ProductInContextDetailViewSnippetRenderer
     {
         $this->product = $product;
         $this->context = $context;
-
         $this->snippetResultList->clear();
+        
         $this->addProductDetailViewSnippetsToSnippetResultList();
         
         return $this->snippetResultList;
@@ -67,9 +67,12 @@ class ProductInContextDetailViewSnippetRenderer
     
     private function addProductDetailViewSnippetsToSnippetResultList()
     {
-        $this->snippetResultList->merge($this->blockRenderer->render($this->product, $this->context));
-        $pageMetaDataSnippet = $this->getProductDetailPageMetaSnippet();
+        $content = $this->blockRenderer->render($this->product, $this->context);
+        $key = $this->keyGenerator->getKeyForContext($this->product->getId(), $this->context);
+        $contentSnippet = SnippetResult::create($key, $content);
+        $this->snippetResultList->add($contentSnippet);
         
+        $pageMetaDataSnippet = $this->getProductDetailPageMetaSnippet();
         $this->snippetResultList->add($pageMetaDataSnippet);
     }
 
@@ -78,16 +81,25 @@ class ProductInContextDetailViewSnippetRenderer
      */
     private function getProductDetailPageMetaSnippet()
     {
+        $snippetKey = $this->keyGenerator->getUrlKeyForPathInContext(
+            $this->product->getAttributeValue('url_key'),
+            $this->context
+        );
+        $metaData = $this->getPageMetaData();
+        return SnippetResult::create($snippetKey, json_encode($metaData));
+    }
+
+    /**
+     * @return array
+     */
+    private function getPageMetaData()
+    {
         $rootBlockName = $this->blockRenderer->getRootSnippetCode();
         $metaData = [
             'source_id' => $this->product->getId(),
             'root_snippet_key' => $rootBlockName,
             'page_snippet_keys' => array_merge([$rootBlockName], $this->blockRenderer->getNestedSnippetCodes())
         ];
-        $snippetKey = $this->keyGenerator->getUrlKeyForPathInContext(
-            $this->product->getAttributeValue('url_key'),
-            $this->context
-        );
-        return SnippetResult::create($snippetKey, json_encode($metaData));
+        return $metaData;
     }
 }
