@@ -15,14 +15,14 @@ class ProductDetailsPageBlock extends Block
      */
     public function getProductAttributeValue($attributeCode)
     {
-        $product = $this->getProduct();
-
         try {
-            return $product->getAttributeValue($attributeCode);
+            $product = $this->getProduct();
+            $value = $product->getAttributeValue($attributeCode);
         } catch (ProductAttributeNotFoundException $e) {
             /* TODO: Log */
-            return '';
+            $value = '';
         }
+        return $value;
     }
 
     /**
@@ -30,9 +30,7 @@ class ProductDetailsPageBlock extends Block
      */
     public function getProductId()
     {
-        $product = $this->getProduct();
-
-        return $product->getId();
+        return $this->getProduct()->getId();
     }
 
     /**

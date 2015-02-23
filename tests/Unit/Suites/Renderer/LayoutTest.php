@@ -12,17 +12,21 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldCreateLayoutFromArray()
     {
-        $layoutArray = [[
-            'attributes'    => ['name' => 'foo'],
-            'value'         => [[
-                'attributes'    => ['class' => 'bar', 'template' => 'baz'],
-                'value'         => 'qux'
-            ]]
-        ]];
+        $layoutArray = [
+            [
+                'attributes' => ['name' => 'a-block'],
+                'value' => [
+                    [
+                        'attributes' => ['class' => 'bar', 'template' => 'baz'],
+                        'value' => 'a-child'
+                    ]
+                ]
+            ]
+        ];
 
         $snippetLayout = Layout::fromArray($layoutArray);
 
-        $this->assertEquals(['name' => 'foo'], $snippetLayout->getAttributes());
+        $this->assertEquals(['name' => 'a-block'], $snippetLayout->getAttributes());
         $this->assertContainsOnly(Layout::class, $snippetLayout->getNodeChildren());
     }
 
@@ -31,10 +35,12 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnAnAttributeValue()
     {
-        $layoutArray = [[
-            'attributes'    => ['name' => 'foo'],
-            'value'         => 'bar'
-        ]];
+        $layoutArray = [
+            [
+                'attributes' => ['name' => 'foo'],
+                'value' => 'bar'
+            ]
+        ];
 
         $snippet = Layout::fromArray($layoutArray);
 
@@ -46,10 +52,12 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnNullIfLayoutAttributeIsNotSet()
     {
-        $layoutArray = [[
-            'attributes'    => [],
-            'value'         => 'bar'
-        ]];
+        $layoutArray = [
+            [
+                'attributes' => [],
+                'value' => 'bar'
+            ]
+        ];
 
         $snippet = Layout::fromArray($layoutArray);
 
@@ -63,5 +71,42 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     public function itShouldThrowAnExceptionIfRootElementIsNotAnArray()
     {
         Layout::fromArray(['foo']);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnFalseIfThereAreNoChildren()
+    {
+        $layoutArray = [
+            [
+                'attributes' => ['name' => 'a-block'],
+                'value' => ''
+            ]
+        ];
+
+        $layout = Layout::fromArray($layoutArray);
+        $this->assertFalse($layout->hasChildren());
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnTrueIfThereAreChildren()
+    {
+        $layoutArray = [
+            [
+                'attributes' => ['name' => 'a-block'],
+                'value' => [
+                    [
+                        'attributes' => ['name' => 'a-child', 'class' => 'bar', 'template' => 'baz'],
+                        'value' => ''
+                    ]
+                ]
+            ]
+        ];
+
+        $layout = Layout::fromArray($layoutArray);
+        $this->assertTrue($layout->hasChildren());
     }
 }

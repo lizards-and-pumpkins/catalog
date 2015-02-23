@@ -6,7 +6,7 @@ use Brera\Context\ContextSource;
 use Brera\SnippetRendererCollection;
 use Brera\ProjectionSourceData;
 use Brera\SnippetResultList;
-use Brera\InvalidProjectionDataSourceType;
+use Brera\InvalidProjectionDataSourceTypeException;
 use Brera\SnippetRenderer;
 
 class ProductSnippetRendererCollection implements SnippetRendererCollection
@@ -39,7 +39,7 @@ class ProductSnippetRendererCollection implements SnippetRendererCollection
     public function render(ProjectionSourceData $productSource, ContextSource $contextSource)
     {
         if (!($productSource instanceof ProductSource)) {
-            throw new InvalidProjectionDataSourceType('First argument must be instance of Product.');
+            throw new InvalidProjectionDataSourceTypeException('First argument must be instance of Product.');
         }
         
         $this->renderProduct($productSource, $contextSource);

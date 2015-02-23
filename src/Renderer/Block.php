@@ -17,14 +17,36 @@ class Block
     private $dataObject;
 
     /**
-     * @var Block[]
+     * @var BlockRenderer
      */
-    private $children = [];
+    private $blockRenderer;
 
-    final public function __construct($template, ProjectionSourceData $dataObject)
+    /**
+     * @var string
+     */
+    private $blockName;
+
+    /**
+     * @param BlockRenderer $blockRenderer
+     * @param string $template
+     * @param $name
+     * @param ProjectionSourceData $dataObject
+     * @todo  Decouple from template rendering logic
+     */
+    final public function __construct(BlockRenderer $blockRenderer, $template, $name, ProjectionSourceData $dataObject)
     {
+        $this->blockRenderer = $blockRenderer;
         $this->template = $template;
+        $this->blockName = $name;
         $this->dataObject = $dataObject;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBlockName()
+    {
+        return $this->blockName;
     }
 
     /**
@@ -44,7 +66,9 @@ class Block
         $templatePath = realpath($this->template);
 
         if (!is_readable($templatePath) || is_dir($templatePath)) {
-            throw new TemplateFileNotReadableException($templatePath);
+            throw new TemplateFileNotReadableException(
+                sprintf('The template path is not readable: "%s"', $this->template)
+            );
         }
 
         ob_start();
@@ -55,26 +79,12 @@ class Block
     }
 
     /**
-     * @param string $blockNameInLayout
-     * @param Block $block
-     * @return null
-     */
-    final public function addChildBlock($blockNameInLayout, Block $block)
-    {
-        $this->children[$blockNameInLayout] = $block;
-    }
-
-    /**
-     * @param $blockName
+     * @param $childName
      * @return string
      */
-    final public function getChildOutput($blockName)
+    final public function getChildOutput($childName)
     {
-        if (!array_key_exists($blockName, $this->children)) {
-            return '';
-        }
-
-        return $this->children[$blockName]->render();
+        return $this->blockRenderer->getChildBlockOutput($this->blockName, $childName);
     }
 
     /**

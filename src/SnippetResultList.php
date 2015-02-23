@@ -6,6 +6,11 @@ class SnippetResultList implements \Countable, \IteratorAggregate
 {
     private $snippets = [];
 
+    public function clear()
+    {
+        $this->snippets = [];
+    }
+
     public function add(SnippetResult $snippet)
     {
         $this->snippets[] = $snippet;

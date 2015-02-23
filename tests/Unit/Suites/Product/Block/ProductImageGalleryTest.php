@@ -1,9 +1,9 @@
 <?php
 
-namespace Unit\Suites\Product\Block;
+namespace Brera\Product\Block;
 
 use Brera\Image;
-use Brera\Product\Block\ProductImageGallery;
+use Brera\Product\ProductDetailViewBlockRenderer;
 use Brera\Product\Product;
 use Brera\Product\ProductAttribute;
 use Brera\Product\ProductAttributeList;
@@ -18,13 +18,27 @@ class ProductImageGalleryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Product|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubProductSource;
+    private $stubProduct;
+
+    /**
+     * @var ProductDetailViewBlockRenderer|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubRenderer;
 
     protected function setUp()
     {
-        $this->stubProductSource = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->stubRenderer = $this->getMock(ProductDetailViewBlockRenderer::class, [], [], '', false);
+        $this->stubProduct = $this->getMock(Product::class, [], [], '', false);
+    }
+
+    /**
+     * @return ProductImageGallery
+     */
+    private function createInstance()
+    {
+        $template = 'dummy-template.phtml';
+        $blockName = 'test-name';
+        return new ProductImageGallery($this->stubRenderer, $template, $blockName, $this->stubProduct);
     }
 
     /**
@@ -32,33 +46,27 @@ class ProductImageGalleryTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnMainProductImage()
     {
-        $stubFileAttribute = $this->getMockBuilder(ProductAttribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $stubFileAttribute = $this->getMock(ProductAttribute::class, [], [], '', false);
         $stubFileAttribute->expects($this->once())
             ->method('getValue')
             ->willReturn('foo.png');
 
-        $stubLabelAttribute = $this->getMockBuilder(ProductAttribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $stubLabelAttribute = $this->getMock(ProductAttribute::class, [], [], '', false);
         $stubLabelAttribute->expects($this->once())
             ->method('getValue')
             ->willReturn('bar');
 
-        $stubAttributeList = $this->getMockBuilder(ProductAttributeList::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $stubAttributeList->expects($this->exactly(2))
+        $stubAttributeList = $this->getMock(ProductAttributeList::class, [], [], '', false);
+        $stubAttributeList->expects($this->atLeastOnce())
             ->method('getAttribute')
             ->willReturnMap([['file', $stubFileAttribute], ['label', $stubLabelAttribute]]);
 
-        $this->stubProductSource->expects($this->once())
+        $this->stubProduct->expects($this->once())
             ->method('getAttributeValue')
             ->with('image')
             ->willReturn($stubAttributeList);
 
-        $block = new ProductImageGallery('foo.phtml', $this->stubProductSource);
+        $block = $this->createInstance();
         $result = $block->getMainProductImage();
 
         $this->assertInstanceOf(Image::class, $result);

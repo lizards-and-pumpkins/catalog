@@ -89,7 +89,7 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Brera\InvalidProjectionDataSourceType
+     * @expectedException \Brera\InvalidProjectionDataSourceTypeException
      * @expectedExceptionMessage First argument must be instance of ProductSource.
      */
     public function itShouldThrowAnExceptionIfTheDataSourceObjectTypeIsNotProduct()

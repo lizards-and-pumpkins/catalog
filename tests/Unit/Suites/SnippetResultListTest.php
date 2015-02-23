@@ -73,4 +73,16 @@ class SnippetResultListTest extends \PHPUnit_Framework_TestCase
         $this->assertContains($snippet, $this->resultList->getIterator());
         $this->assertContains($snippet2, $this->resultList->getIterator());
     }
+
+    /**
+     * @test
+     */
+    public function itShouldClearTheList()
+    {
+        $snippet = SnippetResult::create('test', 'test');
+        $this->resultList->add($snippet);
+        $this->assertEquals(1, $this->resultList->count());
+        $this->resultList->clear();
+        $this->assertEquals(0, $this->resultList->count());
+    }
 }

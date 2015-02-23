@@ -15,9 +15,13 @@ class ProductImageGallery extends Block
     {
         $product = $this->getProduct();
 
-        $images = $product->getAttributeValue('image');
-        $imageFile = $images->getAttribute('file');
-        $imageLabel = $images->getAttribute('label');
+        /**
+         * getAttributeValue should always return a string.
+         * For images, it would be better to have a dedicated method, for example getImage or getAsset
+         */
+        $image = $product->getAttributeValue('image');
+        $imageFile = $image->getAttribute('file');
+        $imageLabel = $image->getAttribute('label');
 
         return new Image($imageFile->getValue(), $imageLabel->getValue());
     }
