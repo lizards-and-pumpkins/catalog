@@ -71,34 +71,58 @@ class FileSearchEngine implements SearchEngine
     {
         $results = [];
 
+        $searchDocuments = $this->getSearchDocuments();
+
+        foreach ($searchDocuments as $searchDocument) {
+            if ($context != $searchDocument->getContext()) {
+                continue;
+            }
+
+            if ($this->searchDocumentHasMatchingFields($searchDocument, $queryString)) {
+                array_push($results, $searchDocument->getContent());
+            }
+        }
+
+        return array_unique($results);
+    }
+
+    /**
+     * @return SearchDocument[]
+     */
+    private function getSearchDocuments()
+    {
+        $searchDocuments = [];
+
         $directoryIterator = new \DirectoryIterator($this->storagePath);
 
         foreach ($directoryIterator as $entry) {
-            if (! $entry->isFile()) {
+            if (!$entry->isFile()) {
                 continue;
             }
 
             $filePath = $this->storagePath . '/' . $entry->getFilename();
 
-            /** @var SearchDocument $searchDocument */
-            $searchDocument = unserialize(file_get_contents($filePath));
-
-            if ($context != $searchDocument->getContext()) {
-                continue;
-            }
-
-            $searchDocumentFieldsCollection = $searchDocument->getFieldsCollection();
-
-            foreach ($searchDocumentFieldsCollection->getFields() as $field) {
-
-                if (!in_array($searchDocument->getContent(), $results)) {
-                    if (false !== stripos($field->getValue(), $queryString)) {
-                        array_push($results, $searchDocument->getContent());
-                    }
-                }
-            }
+            $searchDocuments[] = unserialize(file_get_contents($filePath));
         }
 
-        return $results;
+        return $searchDocuments;
+    }
+
+    /**
+     * @param SearchDocument $searchDocument
+     * @param $queryString
+     * @return boolean
+     */
+    private function searchDocumentHasMatchingFields(SearchDocument $searchDocument, $queryString)
+    {
+        $searchDocumentFields = $searchDocument->getFieldsCollection()->getFields();
+        $isMatchingFieldFound = false;
+
+        while (!$isMatchingFieldFound && list(, $field) = each($searchDocumentFields)) {
+            /** @var SearchDocumentField $field */
+            $isMatchingFieldFound = false !== stripos($field->getValue(), $queryString);
+        }
+
+        return $isMatchingFieldFound;
     }
 }
