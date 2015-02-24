@@ -9,6 +9,8 @@ namespace Brera\Renderer;
  */
 class LayoutReaderTest extends \PHPUnit_Framework_TestCase
 {
+    use ThemeProductRenderingTestTrait;
+
     /**
      * @var LayoutReader
      */
@@ -17,16 +19,13 @@ class LayoutReaderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->layoutReader = new LayoutReader();
+
+        $this->createTemporaryThemeFiles();
     }
 
     protected function tearDown()
     {
-        $filePath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'some-file-name.xml';
-
-        if (file_exists($filePath) && is_file($filePath)) {
-            chmod($filePath, '600');
-            unlink($filePath);
-        }
+        $this->removeTemporaryThemeFiles();
     }
 
     /**
@@ -44,11 +43,7 @@ class LayoutReaderTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldThrowExceptionIfFileIsNotReadable()
     {
-        $filePath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'some-file-name.xml';
-
-        touch($filePath);
-        chmod($filePath, 000);
-
+        $filePath = $this->getLayoutDirectoryPath() . '/not-readable.xml';
         $this->layoutReader->loadLayoutFromXmlFile($filePath);
     }
 
@@ -66,11 +61,15 @@ class LayoutReaderTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnLayout()
     {
-        $snippetLayout = $this->layoutReader->loadLayoutFromXmlFile('theme/layout/product_details_snippet.xml');
+        $layoutFile = $this->getLayoutDirectoryPath() . '/product_details_snippet.xml';
+        $snippetLayout = $this->layoutReader->loadLayoutFromXmlFile($layoutFile);
+
         $topmostChildBlockLayoutArray = $snippetLayout->getNodeChildren();
         $topmostChildBlockLayout = array_shift($topmostChildBlockLayoutArray);
         $topmostChildBlockAttributes = $topmostChildBlockLayout->getAttributes();
 
-        $this->assertEquals('theme/template/1column.phtml', $topmostChildBlockAttributes['template']);
+        $expectedTemplatePath = $this->getTemplateDirectoryPath() . '/1column.phtml';
+
+        $this->assertEquals($expectedTemplatePath, $topmostChildBlockAttributes['template']);
     }
 }
