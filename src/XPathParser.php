@@ -35,10 +35,7 @@ class XPathParser
         $this->document = new \DOMDocument;
         $this->document->preserveWhiteSpace = false;
         $this->document->loadXML($xmlString);
-
-        if (!empty(libxml_get_errors())) {
-            throw new \OutOfBoundsException();
-        }
+        $this->validateNoErrors();
 
         libxml_use_internal_errors($internal);
 
@@ -165,6 +162,21 @@ class XPathParser
     {
         foreach ($this->xPathEngine->query('//comment()') as $comment) {
             $comment->parentNode->removeChild($comment);
+        }
+    }
+
+    /**
+     * @throws \OutOfBoundsException
+     */
+    private function validateNoErrors()
+    {
+        $errors = libxml_get_errors();
+        if (!empty($errors)) {
+            $message = '';
+            foreach ($errors as $error) {
+                $message .= sprintf('XML error on line %d: %s', $error->line, $error->message);
+            }
+            throw new \OutOfBoundsException($message);
         }
     }
 }
