@@ -64,6 +64,7 @@ abstract class BlockRenderer
     {
         $this->dataObject = $dataObject;
         $this->context = $context;
+        $this->missingBlockNames = [];
 
         $outermostBlockLayout = $this->getOuterMostBlockLayout();
         $this->outermostBlock = $this->createBlockWithChildrenRecursively($outermostBlockLayout);
