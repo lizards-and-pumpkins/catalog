@@ -32,17 +32,17 @@ trait ThemeProductRenderingTestTrait
 </snippet>
 EOX;
         $fileContent = str_replace('{{path}}', $templateDirectoryPath, $fileContent);
-        $filePath = $layoutDirectoryPath . DIRECTORY_SEPARATOR . 'product_details_snippet.xml';
+        $filePath = $layoutDirectoryPath . '/product_details_snippet.xml';
         $this->createFile($filePath, $fileContent);
 
         $fileContent = '- Hi, I\'m a 1 column template!<br/>
 <?= $this->getChildOutput(\'content\') ?>
 ';
-        $filePath = $templateDirectoryPath . DIRECTORY_SEPARATOR . '1column.phtml';
+        $filePath = $templateDirectoryPath . '/1column.phtml';
         $this->createFile($filePath, $fileContent);
 
         $fileContent = '- And I\'m a gallery template.' . "\n";
-        $filePath = $templateDirectoryPath . DIRECTORY_SEPARATOR . 'gallery.phtml';
+        $filePath = $templateDirectoryPath . '/gallery.phtml';
         $this->createFile($filePath, $fileContent);
 
         $fileContent = 'Product details page content
@@ -51,8 +51,10 @@ EOX;
 
 <?= $this->getChildOutput(\'image_gallery\') ?>
 ';
-        $filePath = $templateDirectoryPath . DIRECTORY_SEPARATOR . 'view.phtml';
+        $filePath = $templateDirectoryPath . '/view.phtml';
         $this->createFile($filePath, $fileContent);
+
+        $this->createNotReadableLayoutFile();
     }
 
     /**
@@ -60,6 +62,8 @@ EOX;
      */
     private function removeTemporaryThemeFiles()
     {
+        $this->resetNotReadableLayoutFilePermissions();
+
         $themeDirectoryPath = $this->getThemeDirectoryPath();
         $this->removeDirectoryAndItsContent($themeDirectoryPath);
     }
@@ -69,7 +73,7 @@ EOX;
      */
     private function getLayoutDirectoryPath()
     {
-        return $this->getThemeDirectoryPath() . DIRECTORY_SEPARATOR . 'layout';
+        return $this->getThemeDirectoryPath() . '/layout';
     }
 
     /**
@@ -77,7 +81,7 @@ EOX;
      */
     private function getTemplateDirectoryPath()
     {
-        return $this->getThemeDirectoryPath() . DIRECTORY_SEPARATOR . 'template';
+        return $this->getThemeDirectoryPath() . '/template';
     }
 
     /**
@@ -85,7 +89,7 @@ EOX;
      */
     private function getThemeDirectoryPath()
     {
-        return sys_get_temp_dir() . DIRECTORY_SEPARATOR . $this->getUniquePathToken();
+        return sys_get_temp_dir() . '/' . $this->getUniquePathToken();
     }
 
     /**
@@ -139,5 +143,18 @@ EOX;
         }
 
         return $this->uniquePathToken;
+    }
+
+    private function createNotReadableLayoutFile()
+    {
+        $filePath = $this->getLayoutDirectoryPath() . '/not-readable.xml';
+        $this->createFile($filePath, '');
+        chmod($filePath, 000);
+    }
+
+    private function resetNotReadableLayoutFilePermissions()
+    {
+        $filePath = $this->getLayoutDirectoryPath() . '/not-readable.xml';
+        chmod($filePath, 600);
     }
 }
