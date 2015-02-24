@@ -66,7 +66,7 @@ class LayoutReaderTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnLayout()
     {
-        $snippetLayout = $this->layoutReader->loadLayoutFromXmlFile('theme/layout/product_details_snippet.xml');
+        $snippetLayout = $this->layoutReader->loadLayoutFromXmlFile('theme/layout/product_detail_view.xml');
         $topmostChildBlockLayoutArray = $snippetLayout->getNodeChildren();
         $topmostChildBlockLayout = array_shift($topmostChildBlockLayoutArray);
         $topmostChildBlockAttributes = $topmostChildBlockLayout->getAttributes();
