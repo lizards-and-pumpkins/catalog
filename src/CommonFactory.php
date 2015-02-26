@@ -141,7 +141,8 @@ class CommonFactory implements Factory, DomainEventFactory
         return new ProductInContextDetailViewSnippetRenderer(
             $this->getMasterFactory()->createSnippetResultList(),
             $this->getMasterFactory()->createProductDetailViewBlockRenderer(),
-            $this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator()
+            $this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator(),
+            $this->getMasterFactory()->createUrlPathKeyGenerator()
         );
     }
 

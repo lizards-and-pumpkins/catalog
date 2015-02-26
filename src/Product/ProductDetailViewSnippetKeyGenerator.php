@@ -7,10 +7,8 @@ use Brera\Context\Context;
 use Brera\PoCUrlPathKeyGenerator;
 use Brera\SnippetKeyGenerator;
 
-class ProductDetailViewSnippetKeyGenerator extends PoCUrlPathKeyGenerator implements SnippetKeyGenerator
+class ProductDetailViewSnippetKeyGenerator implements SnippetKeyGenerator
 {
-    const KEY_PREFIX = 'product_detail_view';
-
     /**
      * @param mixed|ProductId $productId
      * @param Context $context
@@ -36,6 +34,6 @@ class ProductDetailViewSnippetKeyGenerator extends PoCUrlPathKeyGenerator implem
      */
     private function getKeyForProductIdInContext(ProductId $productId, Context $context)
     {
-        return sprintf('%s_%s_%s', self::KEY_PREFIX, $productId, $context->getId());
+        return sprintf('%s_%s_%s', ProductInContextDetailViewSnippetRenderer::CODE, $productId, $context->getId());
     }
 }

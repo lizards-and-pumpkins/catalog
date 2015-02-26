@@ -6,6 +6,7 @@ namespace Brera\Product;
 use Brera\Context\Context;
 use Brera\SnippetResultList;
 use Brera\TestFileFixtureTrait;
+use Brera\UrlPathKeyGenerator;
 
 /**
  * @covers \Brera\Product\ProductInContextDetailViewSnippetRenderer
@@ -26,14 +27,19 @@ class ProductInContextDetailViewSnippetRendererTest extends \PHPUnit_Framework_T
     private $mockSnippetResultList;
 
     /**
-     * @var ProductDetailViewBlockRenderer
+     * @var ProductDetailViewBlockRenderer||\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubProductDetailViewBlockRenderer;
 
     /**
-     * @var ProductDetailViewSnippetKeyGenerator
+     * @var ProductDetailViewSnippetKeyGenerator||\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubProductDetailViewSnippetKeyGenerator;
+
+    /**
+     * @var UrlPathKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubUrlPathKeyGenerator;
 
     protected function setUp()
     {
@@ -51,13 +57,15 @@ class ProductInContextDetailViewSnippetRendererTest extends \PHPUnit_Framework_T
         $this->stubProductDetailViewSnippetKeyGenerator->expects($this->any())
             ->method('getKeyForContext')
             ->willReturn('stub-content-key');
-        $this->stubProductDetailViewSnippetKeyGenerator->expects($this->any())
+        $this->stubUrlPathKeyGenerator = $this->getMock(UrlPathKeyGenerator::class);
+        $this->stubUrlPathKeyGenerator->expects($this->any())
             ->method('getUrlKeyForPathInContext')
             ->willReturn('stub-url-key');
         $this->renderer = new ProductInContextDetailViewSnippetRenderer(
             $this->mockSnippetResultList,
             $this->stubProductDetailViewBlockRenderer,
-            $this->stubProductDetailViewSnippetKeyGenerator
+            $this->stubProductDetailViewSnippetKeyGenerator,
+            $this->stubUrlPathKeyGenerator
         );
     }
 
@@ -86,9 +94,9 @@ class ProductInContextDetailViewSnippetRendererTest extends \PHPUnit_Framework_T
         $result = $method->invoke($this->renderer);
         $this->assertInternalType('array', $result);
         $this->assertCount(3, $result);
-        foreach (['source_id', 'root_snippet_key', 'page_snippet_keys'] as $index) {
+        foreach (['source_id', 'root_snippet_code', 'page_snippet_codes'] as $index) {
             $this->assertTrue(
-                array_key_exists('source_id', $result),
+                array_key_exists($index, $result),
                 sprintf('The expected page meta data item "%s" is not set', $index)
             );
         }

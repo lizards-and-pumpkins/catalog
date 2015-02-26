@@ -5,6 +5,7 @@ namespace Brera;
 
 /**
  * @covers \Brera\SnippetKeyGeneratorLocator
+ * @uses   \Brera\GenericSnippetKeyGenerator
  */
 class SnippetKeyGeneratorLocatorTest extends \PHPUnit_Framework_TestCase
 {
