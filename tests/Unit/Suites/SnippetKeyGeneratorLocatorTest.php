@@ -34,8 +34,29 @@ class SnippetKeyGeneratorLocatorTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnADefaultKeyGeneratorForAnUnknownCode()
     {
-        $this->markTestSkipped();
         $result = $this->locator->getKeyGeneratorForSnippetCode('test');
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldBePossibleToRegisterKeyGeneratorForSnippetCodes()
+    {
+        $testSnippetCode = 'test_snippet_code';
+        $stubKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $this->locator->register($testSnippetCode, $stubKeyGenerator);
+        $this->assertSame($stubKeyGenerator, $this->locator->getKeyGeneratorForSnippetCode($testSnippetCode));
+    }
+
+    /**
+     * @test
+     * @expectedException \Brera\InvalidSnippetCodeException
+     * @expectedExceptionMessage Expected snippet code to be a string
+     */
+    public function itShouldThrowAnExceptionWhenRegisteringANonStringSnippetCode()
+    {
+        $stubKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $this->locator->register(123, $stubKeyGenerator);
     }
 }
