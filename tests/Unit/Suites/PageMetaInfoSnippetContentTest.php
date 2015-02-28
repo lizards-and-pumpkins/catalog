@@ -24,7 +24,11 @@ class PageMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->pageMetaInfo = PageMetaInfoSnippetContent::create($this->sourceId, $this->rootSnippetCode, [$this->rootSnippetCode]);
+        $this->pageMetaInfo = PageMetaInfoSnippetContent::create(
+            $this->sourceId,
+            $this->rootSnippetCode,
+            [$this->rootSnippetCode]
+        );
     }
 
     /**
@@ -78,7 +82,10 @@ class PageMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCase
     {
         $rootSnippetCode = 'root-snippet-code';
         $pageMetaInfo = PageMetaInfoSnippetContent::create('123', $rootSnippetCode, []);
-        $this->assertContains($rootSnippetCode, $pageMetaInfo->getInfo()[PageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES]);
+        $this->assertContains(
+            $rootSnippetCode,
+            $pageMetaInfo->getInfo()[PageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES]
+        );
     }
 
     /**

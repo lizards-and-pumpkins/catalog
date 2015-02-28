@@ -76,7 +76,10 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $searchDocumentContent = 'qux';
         $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => 'bar']);
         $this->prepareStubSearchDocument(
-            $this->stubSearchDocument, $this->stubContext, $stubFieldsCollection, $searchDocumentContent
+            $this->stubSearchDocument,
+            $this->stubContext,
+            $stubFieldsCollection,
+            $searchDocumentContent
         );
 
         $this->searchEngine->addSearchDocument($this->stubSearchDocument);
@@ -93,7 +96,10 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     {
         $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => 'bar']);
         $this->prepareStubSearchDocument(
-            $this->stubSearchDocument, $this->stubContext, $stubFieldsCollection, null
+            $this->stubSearchDocument,
+            $this->stubContext,
+            $stubFieldsCollection,
+            null
         );
 
         $this->searchEngine->addSearchDocument($this->stubSearchDocument);
@@ -111,13 +117,19 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $searchDocument1Content = 'content1';
         $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => 'bar']);
         $this->prepareStubSearchDocument(
-            $this->stubSearchDocument, $this->stubContext, $stubFieldsCollection, $searchDocument1Content
+            $this->stubSearchDocument,
+            $this->stubContext,
+            $stubFieldsCollection,
+            $searchDocument1Content
         );
 
         $searchDocument2Content = 'content2';
         $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['baz' => 'bar']);
         $this->prepareStubSearchDocument(
-            $this->stubSearchDocument2, $this->stubContext, $stubFieldsCollection, $searchDocument2Content
+            $this->stubSearchDocument2,
+            $this->stubContext,
+            $stubFieldsCollection,
+            $searchDocument2Content
         );
 
         $this->stubSearchDocumentCollection->expects($this->any())
@@ -139,12 +151,18 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $searchDocumentContent = 'content';
         $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => 'bar']);
         $this->prepareStubSearchDocument(
-            $this->stubSearchDocument, $this->stubContext, $stubFieldsCollection, $searchDocumentContent
+            $this->stubSearchDocument,
+            $this->stubContext,
+            $stubFieldsCollection,
+            $searchDocumentContent
         );
 
         $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['baz' => 'quz']);
         $this->prepareStubSearchDocument(
-            $this->stubSearchDocument2, $this->stubContext, $stubFieldsCollection, null
+            $this->stubSearchDocument2,
+            $this->stubContext,
+            $stubFieldsCollection,
+            null
         );
 
         $this->stubSearchDocumentCollection->expects($this->any())
@@ -166,7 +184,10 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $searchDocumentContent = 'content';
         $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => 'bar']);
         $this->prepareStubSearchDocument(
-            $this->stubSearchDocument, $this->stubContext, $stubFieldsCollection, $searchDocumentContent
+            $this->stubSearchDocument,
+            $this->stubContext,
+            $stubFieldsCollection,
+            $searchDocumentContent
         );
 
         $stubContext2 = $this->getMock(Context::class);
@@ -193,13 +214,19 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $searchDocument1Content = 'content1';
         $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => 'barbarism']);
         $this->prepareStubSearchDocument(
-            $this->stubSearchDocument, $this->stubContext, $stubFieldsCollection, $searchDocument1Content
+            $this->stubSearchDocument,
+            $this->stubContext,
+            $stubFieldsCollection,
+            $searchDocument1Content
         );
 
         $searchDocument2Content = 'content2';
         $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['baz' => 'cabaret']);
         $this->prepareStubSearchDocument(
-            $this->stubSearchDocument2, $this->stubContext, $stubFieldsCollection, $searchDocument2Content
+            $this->stubSearchDocument2,
+            $this->stubContext,
+            $stubFieldsCollection,
+            $searchDocument2Content
         );
 
         $this->stubSearchDocumentCollection->expects($this->any())
@@ -222,12 +249,18 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => 'barbarism']);
         $this->prepareStubSearchDocument(
-            $this->stubSearchDocument, $this->stubContext, $stubFieldsCollection, $searchDocumentContent
+            $this->stubSearchDocument,
+            $this->stubContext,
+            $stubFieldsCollection,
+            $searchDocumentContent
         );
 
         $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['baz' => 'cabaret']);
         $this->prepareStubSearchDocument(
-            $this->stubSearchDocument2, $this->stubContext, $stubFieldsCollection, $searchDocumentContent
+            $this->stubSearchDocument2,
+            $this->stubContext,
+            $stubFieldsCollection,
+            $searchDocumentContent
         );
 
         $this->stubSearchDocumentCollection->expects($this->any())
@@ -289,8 +322,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         \PHPUnit_Framework_MockObject_MockObject $stubContext,
         \PHPUnit_Framework_MockObject_MockObject $stubSearchDocumentFieldCollection = null,
         $content = null
-    )
-    {
+    ) {
         $stubSearchDocument->expects($this->any())
             ->method('getContext')
             ->willReturn($stubContext);
