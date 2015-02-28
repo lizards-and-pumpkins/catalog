@@ -19,14 +19,14 @@ class PageMetaInfoSnippetContent
     private $rootSnippetCode;
 
     /**
-     * @var array
+     * @var string[]
      */
     private $pageSnippetCodes;
 
     /**
      * @param string $sourceId
      * @param string $rootSnippetCode
-     * @param array $pageSnippetCodes
+     * @param string[] $pageSnippetCodes
      */
     private function __construct($sourceId, $rootSnippetCode, array $pageSnippetCodes)
     {
