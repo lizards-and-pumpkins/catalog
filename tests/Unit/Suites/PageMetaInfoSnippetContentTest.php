@@ -13,7 +13,7 @@ class PageMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCase
     private $pageMetaInfo;
 
     /**
-     * @var
+     * @var string
      */
     private $rootSnippetCode = 'root-snippet-code';
 
@@ -96,6 +96,15 @@ class PageMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCase
         $pageMetaInfo = PageMetaInfoSnippetContent::fromJson(json_encode($this->pageMetaInfo->getInfo()));
         $this->assertInstanceOf(PageMetaInfoSnippetContent::class, $pageMetaInfo);
     }
+    
+    /**
+     * @test
+     * @expectedException \OutOfBoundsException
+     */
+    public function itShouldThrowAnExceptionInCaseOfJsonErrors()
+    {
+        PageMetaInfoSnippetContent::fromJson('malformed-json');
+    }
 
     /**
      * @test
@@ -112,6 +121,9 @@ class PageMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(PageMetaInfoSnippetContent::class, $pageMetaInfo);
     }
 
+    /**
+     * @return array[]
+     */
     public function pageInfoArrayKeyProvider()
     {
         return [
