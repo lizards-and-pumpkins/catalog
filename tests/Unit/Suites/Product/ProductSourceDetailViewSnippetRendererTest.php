@@ -7,7 +7,6 @@ use Brera\Context\Context;
 use Brera\SnippetResultList;
 use Brera\ProjectionSourceData;
 use Brera\SnippetRenderer;
-use Brera\Renderer\ThemeProductRenderingTestTrait;
 
 /**
  * @covers \Brera\Product\ProductSourceDetailViewSnippetRenderer
@@ -20,8 +19,6 @@ use Brera\Renderer\ThemeProductRenderingTestTrait;
  */
 class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
-    use ThemeProductRenderingTestTrait;
-
     /**
      * @var ProductSourceDetailViewSnippetRenderer
      */
