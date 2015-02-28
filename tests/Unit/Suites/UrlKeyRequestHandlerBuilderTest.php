@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Brera;
 
 use Brera\Context\Context;
@@ -8,6 +7,10 @@ use Brera\Http\HttpUrl;
 use Brera\DataPool\DataPoolReader;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @covers \Brera\UrlKeyRequestHandlerBuilder
+ * @uses \Brera\UrlKeyRequestHandler
+ */
 class UrlKeyRequestHandlerBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -17,14 +20,11 @@ class UrlKeyRequestHandlerBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $stubUrlPathKeyGenerator = $this->getMockBuilder(UrlPathKeyGenerator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $stubUrlPathKeyGenerator = $this->getMock(UrlPathKeyGenerator::class, [], [], '', false);
         $stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
-        $stubDataPoolReader = $this->getMockBuilder(DataPoolReader::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $stubDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
         $stubLogger = $this->getMock(LoggerInterface::class);
+
         $this->builder = new UrlKeyRequestHandlerBuilder(
             $stubUrlPathKeyGenerator,
             $stubSnippetKeyGeneratorLocator,
@@ -38,11 +38,11 @@ class UrlKeyRequestHandlerBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldCreateAnUrlKeyRequestHandler()
     {
-        $stubUrl = $this->getMockBuilder(HttpUrl::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $stubUrl = $this->getMock(HttpUrl::class, [], [], '', false);
         $stubContext = $this->getMock(Context::class);
+
         $result = $this->builder->create($stubUrl, $stubContext);
+
         $this->assertInstanceOf(UrlKeyRequestHandler::class, $result);
     }
 }
