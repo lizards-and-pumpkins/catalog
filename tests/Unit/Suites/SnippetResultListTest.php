@@ -4,7 +4,7 @@ namespace Brera;
 
 /**
  * @covers \Brera\SnippetResultList
- * @uses \Brera\SnippetResult
+ * @uses   \Brera\SnippetResult
  */
 class SnippetResultListTest extends \PHPUnit_Framework_TestCase
 {

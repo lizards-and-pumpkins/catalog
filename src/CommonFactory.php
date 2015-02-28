@@ -349,6 +349,14 @@ class CommonFactory implements Factory, DomainEventFactory
     }
 
     /**
+     * @return SnippetKeyGeneratorLocator
+     */
+    public function createSnippetKeyGeneratorLocator()
+    {
+        return new SnippetKeyGeneratorLocator();
+    }
+
+    /**
      * @return SearchEngine
      */
     private function getSearchEngine()

@@ -130,7 +130,7 @@ class BlockRendererTest extends BlockRendererTestAbstract
         $childBlockName = 'child-block';
         $outputChildBlockStatement = '<?= $this->getChildOutput("' . $childBlockName . '") ?>';
         $rootTemplateContent = 'Root template with ::' . $outputChildBlockStatement . '::';
-        $templateContentWithChildPlaceholder = 'Root template with ::{{' . $childBlockName . '}}::';
+        $templateContentWithChildPlaceholder = 'Root template with ::{{snippet ' . $childBlockName . '}}::';
 
         $rootTemplate = $this->getUniqueTempDir() . '/root-template.php';
         $this->createFixtureFile($rootTemplate, $rootTemplateContent);

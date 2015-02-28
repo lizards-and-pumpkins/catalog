@@ -4,6 +4,7 @@
 namespace Brera\Product;
 
 use Brera\Context\Context;
+use Brera\PageMetaInfoSnippetContent;
 use Brera\SnippetResult;
 use Brera\SnippetResultList;
 use Brera\UrlPathKeyGenerator;
@@ -106,11 +107,11 @@ class ProductInContextDetailViewSnippetRenderer
     private function getPageMetaData()
     {
         $rootBlockName = $this->blockRenderer->getRootSnippetCode();
-        $metaData = [
-            'source_id' => $this->product->getId(),
-            'root_snippet_code' => $rootBlockName,
-            'page_snippet_codes' => array_merge([$rootBlockName], $this->blockRenderer->getNestedSnippetCodes())
-        ];
-        return $metaData;
+        $pageMetaInfo = PageMetaInfoSnippetContent::create(
+            (string) $this->product->getId(),
+            $rootBlockName,
+            $this->blockRenderer->getNestedSnippetCodes()
+        );
+        return $pageMetaInfo->getInfo();
     }
 }
