@@ -141,7 +141,8 @@ class CommonFactory implements Factory, DomainEventFactory
         return new ProductInContextDetailViewSnippetRenderer(
             $this->getMasterFactory()->createSnippetResultList(),
             $this->getMasterFactory()->createProductDetailViewBlockRenderer(),
-            $this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator()
+            $this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator(),
+            $this->getMasterFactory()->createUrlPathKeyGenerator()
         );
     }
 
@@ -345,6 +346,14 @@ class CommonFactory implements Factory, DomainEventFactory
     public function createProductSearchDocumentBuilder()
     {
         return new ProductSearchDocumentBuilder($this->getMasterFactory()->getSearchableAttributeCodes());
+    }
+
+    /**
+     * @return SnippetKeyGeneratorLocator
+     */
+    public function createSnippetKeyGeneratorLocator()
+    {
+        return new SnippetKeyGeneratorLocator();
     }
 
     /**

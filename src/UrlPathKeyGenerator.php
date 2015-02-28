@@ -21,11 +21,4 @@ interface UrlPathKeyGenerator
      * @return string
      */
     public function getUrlKeyForUrlInContext(HttpUrl $url, Context $context);
-
-    /**
-     * @param string $rootSnippetKey
-     * @return string
-     * @todo this is not the right class, move to a better place
-     */
-    public function getChildSnippetListKey($rootSnippetKey);
 }

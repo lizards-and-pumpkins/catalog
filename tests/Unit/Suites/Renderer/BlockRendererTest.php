@@ -130,7 +130,7 @@ class BlockRendererTest extends BlockRendererTestAbstract
         $childBlockName = 'child-block';
         $outputChildBlockStatement = '<?= $this->getChildOutput("' . $childBlockName . '") ?>';
         $rootTemplateContent = 'Root template with ::' . $outputChildBlockStatement . '::';
-        $templateContentWithChildPlaceholder = 'Root template with ::{{' . $childBlockName . '}}::';
+        $templateContentWithChildPlaceholder = 'Root template with ::{{snippet ' . $childBlockName . '}}::';
 
         $rootTemplate = $this->getUniqueTempDir() . '/root-template.php';
         $this->createFixtureFile($rootTemplate, $rootTemplateContent);
@@ -167,6 +167,29 @@ class BlockRendererTest extends BlockRendererTestAbstract
 
         $this->addStubRootBlock(StubBlock::class, $rootTemplate);
 
+        $this->getBlockRenderer()->render($this->getStubDataObject(), $this->getStubContext());
+        $this->assertEquals([$childBlockName1, $childBlockName2], $this->getBlockRenderer()->getNestedSnippetCodes());
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnAFreshListOfMissingChildrenBlockNamesIfRenderIsCalledTwice()
+    {
+        $childBlockName1 = 'child-block1';
+        $childBlockName2 = 'child-block2';
+        $outputChildBlockStatement1 = '<?= $this->getChildOutput("' . $childBlockName1 . '") ?>';
+        $outputChildBlockStatement2 = '<?= $this->getChildOutput("' . $childBlockName2 . '") ?>';
+        $rootTemplateContent = '::' . $outputChildBlockStatement1 . $outputChildBlockStatement2 . '::';
+
+        $rootTemplate = $this->getUniqueTempDir() . '/root-template.php';
+        $this->createFixtureFile($rootTemplate, $rootTemplateContent);
+
+        $this->addStubRootBlock(StubBlock::class, $rootTemplate);
+
+        $this->getBlockRenderer()->render($this->getStubDataObject(), $this->getStubContext());
+        $this->assertEquals([$childBlockName1, $childBlockName2], $this->getBlockRenderer()->getNestedSnippetCodes());
+        
         $this->getBlockRenderer()->render($this->getStubDataObject(), $this->getStubContext());
         $this->assertEquals([$childBlockName1, $childBlockName2], $this->getBlockRenderer()->getNestedSnippetCodes());
     }

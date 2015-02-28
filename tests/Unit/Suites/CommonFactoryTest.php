@@ -289,6 +289,4 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $result = $this->commonFactory->createHttpRouterChain();
         $this->assertInstanceOf(HttpRouterChain::class, $result);
     }
-    
-    
 }

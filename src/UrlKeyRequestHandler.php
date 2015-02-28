@@ -7,6 +7,7 @@ use Brera\Http\HttpRequestHandler;
 use Brera\Http\HttpUrl;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\KeyNotFoundException;
+use Psr\Log\LoggerInterface;
 
 class UrlKeyRequestHandler implements HttpRequestHandler
 {
@@ -33,30 +34,61 @@ class UrlKeyRequestHandler implements HttpRequestHandler
     /**
      * @var string
      */
-    private $rootSnippetKey;
+    private $rootSnippetCode;
+
+    /**
+     * @var string[]
+     */
+    private $snippetCodesToKeyMap;
+
+    /**
+     * @var string
+     */
+    private $pageSourceObjectId;
+
+    /**
+     * @var SnippetKeyGeneratorLocator
+     */
+    private $keyGeneratorLocator;
+
+    /**
+     * @var string[]
+     */
+    private $snippets;
+    
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * @param HttpUrl $url
      * @param Context $context
      * @param UrlPathKeyGenerator $urlPathKeyGenerator
+     * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
      * @param DataPoolReader $dataPoolReader
+     * @param LoggerInterface $logger
      */
     public function __construct(
         HttpUrl $url,
         Context $context,
         UrlPathKeyGenerator $urlPathKeyGenerator,
-        DataPoolReader $dataPoolReader
+        SnippetKeyGeneratorLocator $keyGeneratorLocator,
+        DataPoolReader $dataPoolReader,
+        LoggerInterface $logger
     ) {
         $this->url = $url;
         $this->context = $context;
         $this->urlPathKeyGenerator = $urlPathKeyGenerator;
         $this->dataPoolReader = $dataPoolReader;
+        $this->keyGeneratorLocator = $keyGeneratorLocator;
+        $this->logger = $logger;
     }
 
     public function canProcess()
     {
         try {
-            $this->getRootSnippetKey();
+            $this->getRootSnippetCode();
             return true;
         } catch (KeyNotFoundException $e) {
             return false;
@@ -65,73 +97,118 @@ class UrlKeyRequestHandler implements HttpRequestHandler
 
     /**
      * @return Page
-     * @todo deconstruct
      */
     public function process()
     {
-        $rootSnippetKey = $this->getRootSnippetKey();
-        $childSnippetKeys = $this->getChildSnippetKeys($rootSnippetKey);
-        list($rootSnippet, $childSnippets) = $this->getSnippetsFromKeys($rootSnippetKey, $childSnippetKeys);
+        $this->loadPageMetaInfo();
+        $this->loadSnippets();
+        $this->logMissingSnippetCodes();
+        list($rootSnippet, $childSnippets) = $this->separateRootAndChildSnippets();
+        
+        
+        $childSnippetsCodes = $this->getLoadedChildSnippetCodes();
+        $childSnippetCodesToContentMap = $this->mergePlaceholderAndSnippets($childSnippetsCodes, $childSnippets);
 
-        $snippetKeysValueArray = $this->mergePlaceholderAndSnippets(
-            $this->buildPlaceholdersFromKeys($childSnippetKeys),
-            $childSnippets
-        );
+        $content = $this->injectSnippetsIntoContent($rootSnippet, $childSnippetCodesToContentMap);
 
-        $content = $this->injectSnippetsIntoContent($rootSnippet, $snippetKeysValueArray);
-
-        return new Page($content);
+        return new Page(($content));
     }
 
     /**
-     * @param string[] $snippetKeys
+     * @return void
+     */
+    private function loadPageMetaInfo()
+    {
+        if (is_null($this->rootSnippetCode)) {
+            $pageUrlPathKey = $this->getPageMetaInfoSnippetKey();
+            $snippetJson = $this->dataPoolReader->getSnippet($pageUrlPathKey);
+            $metaInfo = PageMetaInfoSnippetContent::fromJson($snippetJson);
+            $this->initPropertiesFromMetaInfo($metaInfo);
+        }
+    }
+
+    /**
+     * @param PageMetaInfoSnippetContent $metaInfo
+     */
+    private function initPropertiesFromMetaInfo(PageMetaInfoSnippetContent $metaInfo)
+    {
+        $this->pageSourceObjectId = $metaInfo->getSourceId();
+        $this->rootSnippetCode = $metaInfo->getRootSnippetCode();
+
+        $snippetCodes = $metaInfo->getPageSnippetCodes();
+        $this->snippetCodesToKeyMap = array_combine(
+            $snippetCodes,
+            array_map([$this, 'getSnippetKeyInContext'], $snippetCodes)
+        );
+    }
+
+    /**
      * @return string[]
      */
-    private function replacePlaceholdersInKeys(array $snippetKeys)
+    private function getSnippetKeysInContext()
     {
-        // What is this for? (comment from vinai)
-        foreach ($snippetKeys as &$key) {
-            $key = $this->replacePlaceholdersInKey($key);
-        }
-
-        return $snippetKeys;
+        return array_values($this->snippetCodesToKeyMap);
     }
 
     /**
      * @param string $key
      * @return string
      */
-    private function replacePlaceholdersInKey($key)
+    private function getSnippetKeyInContext($key)
     {
-        // What is this for? (comment from vinai)
-        return $key;
+        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode($key);
+        return $keyGenerator->getKeyForContext($this->pageSourceObjectId, $this->context);
     }
 
     /**
-     * @todo have object which builds placeholders
-     *
-     * @param string[] $snippetKeys
      * @return string[]
      */
-    private function buildPlaceholdersFromKeys(array $snippetKeys)
+    private function loadSnippets()
     {
-        $placeholders = [];
-
-        foreach ($snippetKeys as $key) {
-            $placeholders[$key] = sprintf('{{snippet %s}}', $key);
-        }
-
-        return $placeholders;
+        $keys = $this->getSnippetKeysInContext();
+        $this->snippets = $this->dataPoolReader->getSnippets($keys);
     }
 
     /**
-     * @param string[] $snippetKeys
+     * @return string[]
+     */
+    private function separateRootAndChildSnippets()
+    {
+        $rootSnippetKey = $this->getRootSnippetKey();
+        $rootSnippet = $this->getSnippetByKey($rootSnippetKey);
+        $childSnippets = array_diff_key($this->snippets, [$rootSnippetKey => $rootSnippet]);
+        return [$rootSnippet, $childSnippets];
+    }
+
+    /**
+     * @param string[] $snippetCodes
      * @param string[] $snippets
      * @return string[]
      */
-    private function mergePlaceholderAndSnippets(array $snippetKeys, array $snippets)
+    private function mergePlaceholderAndSnippets(array $snippetCodes, array $snippets)
     {
-        return array_combine($snippetKeys, $snippets);
+        $snippetPlaceholders = $this->buildPlaceholdersFromCodes($snippetCodes);
+        return array_combine($snippetPlaceholders, $snippets);
+    }
+
+    /**
+     * @param string[] $snippetCodes
+     * @return string[]
+     */
+    private function buildPlaceholdersFromCodes(array $snippetCodes)
+    {
+        return array_map([$this, 'buildPlaceholderFromCode'], $snippetCodes);
+    }
+
+    /**
+     * @param string $code
+     * @return string
+     * @todo: delegate placeholder creation (and also use the delegate during import)
+     * @see Brera\Renderer\BlockRenderer::getBlockPlaceholder()
+     */
+    private function buildPlaceholderFromCode($code)
+    {
+        return sprintf('{{snippet %s}}', $code);
     }
 
     /**
@@ -141,7 +218,9 @@ class UrlKeyRequestHandler implements HttpRequestHandler
      */
     private function injectSnippetsIntoContent($content, array $snippets)
     {
-        return $this->replaceAsLongAsSomethingIsReplaced($content, $snippets);
+        return $this->removePlaceholders(
+            $this->replaceAsLongAsSomethingIsReplaced($content, $snippets)
+        );
     }
 
     /**
@@ -162,57 +241,93 @@ class UrlKeyRequestHandler implements HttpRequestHandler
     }
 
     /**
+     * @param string $content
      * @return string
      */
-    private function getRootSnippetKey()
+    public function removePlaceholders($content)
     {
-        $this->memoizeRootSnippetKeyFromDataPool();
-        return $this->rootSnippetKey;
-    }
-
-    /**
-     * @return void
-     */
-    private function memoizeRootSnippetKeyFromDataPool()
-    {
-        if (is_null($this->rootSnippetKey)) {
-            $this->rootSnippetKey = $this->dataPoolReader->getSnippet($this->getUrlSnippetKey());
-        }
+        $pattern = $this->buildPlaceholderFromCode('[^}]*');
+        return preg_replace('/' . $pattern . '/', '', $content);
     }
 
     /**
      * @return string
      */
-    private function getUrlSnippetKey()
+    private function getRootSnippetCode()
+    {
+        $this->loadPageMetaInfo();
+        return $this->rootSnippetCode;
+    }
+
+    /**
+     * @return string
+     */
+    private function getPageMetaInfoSnippetKey()
     {
         return $this->urlPathKeyGenerator->getUrlKeyForUrlInContext($this->url, $this->context);
     }
 
     /**
-     * @param string $rootSnippetKey
      * @return string[]
      */
-    private function getChildSnippetKeys($rootSnippetKey)
+    private function getLoadedChildSnippetCodes()
     {
-        $childSnippetListKey = $this->urlPathKeyGenerator->getChildSnippetListKey($rootSnippetKey);
-        $childSnippetKeys = $this->replacePlaceholdersInKeys(
-            $this->dataPoolReader->getChildSnippetKeys($childSnippetListKey)
-        );
-        return $childSnippetKeys;
+        return array_filter(array_keys($this->snippetCodesToKeyMap), function ($code) {
+            return $code !== $this->rootSnippetCode &&
+            array_key_exists($this->snippetCodesToKeyMap[$code], $this->snippets);
+        });
     }
 
     /**
-     * @param string $rootSnippetKey
-     * @param array $childSnippetKeys
+     * @return string
+     */
+    private function getRootSnippetKey()
+    {
+        $generator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode($this->rootSnippetCode);
+        return $generator->getKeyForContext($this->pageSourceObjectId, $this->context);
+    }
+
+    /**
+     * @param string $snippetKey
+     * @return string
+     * @throws InvalidPageMetaSnippetException
+     */
+    private function getSnippetByKey($snippetKey)
+    {
+        if (!array_key_exists($snippetKey, $this->snippets)) {
+            throw new InvalidPageMetaSnippetException(sprintf(
+                'Snippet not available' .
+                ' (key "%s", source id "%s", context "%s")',
+                $snippetKey,
+                $this->pageSourceObjectId,
+                $this->context->getId()
+            ));
+        }
+        return $this->snippets[$snippetKey];
+    }
+
+    private function logMissingSnippetCodes()
+    {
+        $missingSnippetCodes = $this->getMissingSnippetCodes();
+        if (count($missingSnippetCodes) > 0) {
+            $this->logger->notice(sprintf(
+                'Snippets listed in the page meta information where not loaded from the data pool (%s")',
+                implode(', ', $missingSnippetCodes)
+            ), ['context' => $this->context]);
+        }
+    }
+
+    /**
      * @return string[]
      */
-    private function getSnippetsFromKeys($rootSnippetKey, array $childSnippetKeys)
+    private function getMissingSnippetCodes()
     {
-        $rootSnippetArray = [$rootSnippetKey => $rootSnippetKey];
-        $allSnippets = $this->dataPoolReader->getSnippets($childSnippetKeys + $rootSnippetArray);
-
-        $content = $allSnippets[$rootSnippetKey];
-        $childSnippets = array_diff_key($allSnippets, $rootSnippetArray);
-        return array($content, $childSnippets);
+        $missingSnippetCodes = [];
+        foreach ($this->snippetCodesToKeyMap as $code => $key) {
+            if (!array_key_exists($key, $this->snippets)) {
+                $missingSnippetCodes[] = $code;
+            }
+        }
+        return $missingSnippetCodes;
     }
 }

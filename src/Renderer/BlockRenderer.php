@@ -64,6 +64,7 @@ abstract class BlockRenderer
     {
         $this->dataObject = $dataObject;
         $this->context = $context;
+        $this->missingBlockNames = [];
 
         $outermostBlockLayout = $this->getOuterMostBlockLayout();
         $this->outermostBlock = $this->createBlockWithChildrenRecursively($outermostBlockLayout);
@@ -202,9 +203,11 @@ abstract class BlockRenderer
     /**
      * @param string $blockName
      * @return string
+     * @todo use delegate to generate the placeholder string
+     * @see \Brera\UrlKeyRequestHandler::buildPlaceholdersFromCodes()
      */
     private function getBlockPlaceholder($blockName)
     {
-        return '{{' . $blockName . '}}';
+        return '{{snippet ' . $blockName . '}}';
     }
 }

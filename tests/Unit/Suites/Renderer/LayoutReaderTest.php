@@ -2,6 +2,8 @@
 
 namespace Brera\Renderer;
 
+use Brera\TestFileFixtureTrait;
+
 /**
  * @covers Brera\Renderer\LayoutReader
  * @uses Brera\XPathParser
@@ -9,6 +11,8 @@ namespace Brera\Renderer;
  */
 class LayoutReaderTest extends \PHPUnit_Framework_TestCase
 {
+    use TestFileFixtureTrait;
+    
     /**
      * @var LayoutReader
      */
@@ -17,16 +21,6 @@ class LayoutReaderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->layoutReader = new LayoutReader();
-    }
-
-    protected function tearDown()
-    {
-        $filePath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'some-file-name.xml';
-
-        if (file_exists($filePath) && is_file($filePath)) {
-            chmod($filePath, '600');
-            unlink($filePath);
-        }
     }
 
     /**
@@ -46,8 +40,7 @@ class LayoutReaderTest extends \PHPUnit_Framework_TestCase
     {
         $filePath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'some-file-name.xml';
 
-        touch($filePath);
-        chmod($filePath, 000);
+        $this->createFixtureFile($filePath, '', 0000);
 
         $this->layoutReader->loadLayoutFromXmlFile($filePath);
     }
@@ -66,11 +59,20 @@ class LayoutReaderTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnLayout()
     {
-        $snippetLayout = $this->layoutReader->loadLayoutFromXmlFile('theme/layout/product_details_snippet.xml');
+        $layoutFile = $this->getUniqueTempDir() . '/test_layout.xml';
+        $layoutXML = <<<EOX
+<?xml version="1.0"?>
+<snippet>
+    <block name="test_block" class="Brera\Renderer\Block" template="some/template.phtml"/>
+</snippet>
+EOX;
+        $this->createFixtureFile($layoutFile, $layoutXML);
+
+        $snippetLayout = $this->layoutReader->loadLayoutFromXmlFile($layoutFile);
         $topmostChildBlockLayoutArray = $snippetLayout->getNodeChildren();
         $topmostChildBlockLayout = array_shift($topmostChildBlockLayoutArray);
         $topmostChildBlockAttributes = $topmostChildBlockLayout->getAttributes();
 
-        $this->assertEquals('theme/template/1column.phtml', $topmostChildBlockAttributes['template']);
+        $this->assertEquals('some/template.phtml', $topmostChildBlockAttributes['template']);
     }
 }

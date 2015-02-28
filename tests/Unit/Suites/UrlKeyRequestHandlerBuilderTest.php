@@ -6,6 +6,7 @@ namespace Brera;
 use Brera\Context\Context;
 use Brera\Http\HttpUrl;
 use Brera\DataPool\DataPoolReader;
+use Psr\Log\LoggerInterface;
 
 class UrlKeyRequestHandlerBuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -19,10 +20,17 @@ class UrlKeyRequestHandlerBuilderTest extends \PHPUnit_Framework_TestCase
         $stubUrlPathKeyGenerator = $this->getMockBuilder(UrlPathKeyGenerator::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $stubDataPoolReader =$this->getMockBuilder(DataPoolReader::class)
+        $stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
+        $stubDataPoolReader = $this->getMockBuilder(DataPoolReader::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->builder = new UrlKeyRequestHandlerBuilder($stubUrlPathKeyGenerator, $stubDataPoolReader);
+        $stubLogger = $this->getMock(LoggerInterface::class);
+        $this->builder = new UrlKeyRequestHandlerBuilder(
+            $stubUrlPathKeyGenerator,
+            $stubSnippetKeyGeneratorLocator,
+            $stubDataPoolReader,
+            $stubLogger
+        );
     }
 
     /**

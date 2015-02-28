@@ -60,13 +60,4 @@ class PoCUrlPathKeyGeneratorTest extends \PHPUnit_Framework_TestCase
             ['$&"#', '_____'],
         ];
     }
-
-    /**
-     * @test
-     */
-    public function itShouldReturnTheSnippetChildKeyListKey()
-    {
-        $key = 'test';
-        $this->assertEquals($key . '_l', $this->keyGenerator->getChildSnippetListKey($key));
-    }
 }

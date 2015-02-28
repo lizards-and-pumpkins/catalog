@@ -4,12 +4,15 @@
 namespace Brera\Product;
 
 use Brera\Context\Context;
+use Brera\SnippetResult;
 use Brera\SnippetResultList;
 use Brera\TestFileFixtureTrait;
+use Brera\UrlPathKeyGenerator;
 
 /**
  * @covers \Brera\Product\ProductInContextDetailViewSnippetRenderer
  * @uses   \Brera\SnippetResult
+ * @uses   \Brera\PageMetaInfoSnippetContent
  */
 class ProductInContextDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,14 +29,19 @@ class ProductInContextDetailViewSnippetRendererTest extends \PHPUnit_Framework_T
     private $mockSnippetResultList;
 
     /**
-     * @var ProductDetailViewBlockRenderer
+     * @var ProductDetailViewBlockRenderer||\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubProductDetailViewBlockRenderer;
 
     /**
-     * @var ProductDetailViewSnippetKeyGenerator
+     * @var ProductDetailViewSnippetKeyGenerator||\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubProductDetailViewSnippetKeyGenerator;
+
+    /**
+     * @var UrlPathKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubUrlPathKeyGenerator;
 
     protected function setUp()
     {
@@ -45,19 +53,24 @@ class ProductInContextDetailViewSnippetRendererTest extends \PHPUnit_Framework_T
             ->method('render')
             ->willReturn('dummy content');
         $this->stubProductDetailViewBlockRenderer->expects($this->any())
+            ->method('getRootSnippetCode')
+            ->willReturn('dummy root block code');
+        $this->stubProductDetailViewBlockRenderer->expects($this->any())
             ->method('getNestedSnippetCodes')
             ->willReturn([]);
         $this->stubProductDetailViewSnippetKeyGenerator = $this->getMock(ProductDetailViewSnippetKeyGenerator::class);
         $this->stubProductDetailViewSnippetKeyGenerator->expects($this->any())
             ->method('getKeyForContext')
             ->willReturn('stub-content-key');
-        $this->stubProductDetailViewSnippetKeyGenerator->expects($this->any())
+        $this->stubUrlPathKeyGenerator = $this->getMock(UrlPathKeyGenerator::class);
+        $this->stubUrlPathKeyGenerator->expects($this->any())
             ->method('getUrlKeyForPathInContext')
             ->willReturn('stub-url-key');
         $this->renderer = new ProductInContextDetailViewSnippetRenderer(
             $this->mockSnippetResultList,
             $this->stubProductDetailViewBlockRenderer,
-            $this->stubProductDetailViewSnippetKeyGenerator
+            $this->stubProductDetailViewSnippetKeyGenerator,
+            $this->stubUrlPathKeyGenerator
         );
     }
 
@@ -68,6 +81,7 @@ class ProductInContextDetailViewSnippetRendererTest extends \PHPUnit_Framework_T
     {
         $this->mockSnippetResultList->expects($this->exactly(2))->method('add');
         $stubProduct = $this->getMock(Product::class, [], [], '', false);
+        $stubProduct->expects($this->any())->method('getId')->willReturn(2);
         $stubContext = $this->getMock(Context::class, [], [], '', false);
         $this->renderer->render($stubProduct, $stubContext);
     }
@@ -75,22 +89,17 @@ class ProductInContextDetailViewSnippetRendererTest extends \PHPUnit_Framework_T
     /**
      * @test
      */
-    public function itShouldBuildThePageMetadataArray()
+    public function itShouldContainJson()
     {
         $stubProduct = $this->getMock(Product::class, [], [], '', false);
+        $stubProduct->expects($this->any())->method('getId')->willReturn(2);
         $stubContext = $this->getMock(Context::class, [], [], '', false);
         $this->renderer->render($stubProduct, $stubContext);
 
-        $method = new \ReflectionMethod($this->renderer, 'getPageMetaData');
+        $method = new \ReflectionMethod($this->renderer, 'getProductDetailPageMetaSnippet');
         $method->setAccessible(true);
+        /** @var SnippetResult $result */
         $result = $method->invoke($this->renderer);
-        $this->assertInternalType('array', $result);
-        $this->assertCount(3, $result);
-        foreach (['source_id', 'root_snippet_key', 'page_snippet_keys'] as $index) {
-            $this->assertTrue(
-                array_key_exists('source_id', $result),
-                sprintf('The expected page meta data item "%s" is not set', $index)
-            );
-        }
+        $this->assertInternalType('array', json_decode($result->getContent(), true));
     }
 }

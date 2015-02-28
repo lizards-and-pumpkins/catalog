@@ -37,14 +37,4 @@ class PoCUrlPathKeyGenerator implements UrlPathKeyGenerator
     {
         return preg_replace('#^([^/])#', '/$1', $path);
     }
-
-    /**
-     * @param string $rootSnippetKey
-     * @return string
-     * @todo this is not the right class, move to a better place
-     */
-    public function getChildSnippetListKey($rootSnippetKey)
-    {
-        return $rootSnippetKey . '_l';
-    }
 }

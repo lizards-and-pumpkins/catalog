@@ -34,8 +34,7 @@ class ProductProjector implements Projector
         ProductSnippetRendererCollection $rendererCollection,
         ProductSearchDocumentBuilder $searchDocumentBuilder,
         DataPoolWriter $dataPoolWriter
-    )
-    {
+    ) {
         $this->rendererCollection = $rendererCollection;
         $this->searchDocumentBuilder = $searchDocumentBuilder;
         $this->dataPoolWriter = $dataPoolWriter;

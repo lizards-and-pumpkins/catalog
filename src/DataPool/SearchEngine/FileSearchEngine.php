@@ -11,11 +11,12 @@ class FileSearchEngine implements SearchEngine
      */
     private $storagePath;
 
-    private final function __construct($storagePath)
+    final private function __construct($storagePath)
     {
         if (!is_writable($storagePath)) {
             throw new SearchEngineNotAvailableException(sprintf(
-                'Directory "%s" is not writable by the filesystem search engine.', realpath($storagePath)
+                'Directory "%s" is not writable by the filesystem search engine.',
+                realpath($storagePath)
             ));
         }
 

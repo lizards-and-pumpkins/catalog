@@ -6,14 +6,33 @@ use Brera\Context\Context;
 use Brera\Http\HttpUrl;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\KeyNotFoundException;
+use Psr\Log\LoggerInterface;
 
 /**
  * @covers \Brera\UrlKeyRequestHandler
  * @uses   \Brera\Http\HttpUrl
  * @uses   \Brera\Page
+ * @uses   \Brera\SnippetKeyGeneratorLocator
+ * @uses   \Brera\PageMetaInfoSnippetContent
+ * @uses   \Brera\GenericSnippetKeyGenerator
  */
 class UrlKeyRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var int
+     */
+    private $sourceIdFixture = 1;
+
+    /**
+     * @var string
+     */
+    private $contextIdFixture = 'v12';
+
+    /**
+     * @var string
+     */
+    private $urlPathKeyFixture = 'dummy-url-key';
+
     /**
      * @var UrlKeyRequestHandler
      */
@@ -27,7 +46,17 @@ class UrlKeyRequestHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Context|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockContext;
+    private $stubContext;
+
+    /**
+     * @var UrlPathKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockUrlPathKeyGenerator;
+
+    /**
+     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubLogger;
 
     /**
      * @var HttpUrl
@@ -35,9 +64,9 @@ class UrlKeyRequestHandlerTest extends \PHPUnit_Framework_TestCase
     private $url;
 
     /**
-     * @var UrlPathKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var SnippetKeyGeneratorLocator
      */
-    private $mockUrlPathKeyGenerator;
+    private $snippetKeyGeneratorLocator;
 
     /**
      * @return void
@@ -46,25 +75,29 @@ class UrlKeyRequestHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->url = HttpUrl::fromString('http://example.com/product.html');
 
-        $this->mockContext = $this->getMock(Context::class);
-        $this->mockContext->expects($this->any())
-            ->method('getVersion')
-            ->willReturn('1');
+        $this->stubContext = $this->getMock(Context::class);
+        $this->stubContext->expects($this->any())->method('getId')->willReturn($this->contextIdFixture);
+
+        $this->mockUrlPathKeyGenerator = $this->getMock(UrlPathKeyGenerator::class);
+        $this->mockUrlPathKeyGenerator->expects($this->any())
+            ->method('getUrlKeyForUrlInContext')
+            ->willReturn($this->urlPathKeyFixture);
+
+        $this->snippetKeyGeneratorLocator = new SnippetKeyGeneratorLocator();
 
         $this->mockDataPoolReader = $this->getMockBuilder(DataPoolReader::class)
             ->disableOriginalConstructor()
             ->getMock();
         
-        $this->mockUrlPathKeyGenerator = $this->getMock(UrlPathKeyGenerator::class);
-        $this->mockUrlPathKeyGenerator->expects($this->any())
-            ->method('getUrlKeyForPathInContext')
-            ->willReturn('dummy-url-key');
+        $this->stubLogger = $this->getMock(LoggerInterface::class);
 
         $this->urlKeyRequestHandler = new UrlKeyRequestHandler(
             $this->url,
-            $this->mockContext,
+            $this->stubContext,
             $this->mockUrlPathKeyGenerator,
-            $this->mockDataPoolReader
+            $this->snippetKeyGeneratorLocator,
+            $this->mockDataPoolReader,
+            $this->stubLogger
         );
     }
 
@@ -73,101 +106,81 @@ class UrlKeyRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnAPage()
     {
-        $this->stubDataPoolReaderMethods('root_key', [], ['root_key' => '']);
+        $rootSnippetCode = 'root-snippet';
+        $rootSnippetContent = 'Stub Content';
+        $childSnippetMap = [];
+
+        $this->setDataPoolFixture($rootSnippetCode, $rootSnippetContent, $childSnippetMap);
         $this->assertInstanceOf(Page::class, $this->urlKeyRequestHandler->process());
     }
 
     /**
      * @test
      */
-    public function itShouldGetFirstSnippet()
+    public function itShouldReplacePlaceholderWithoutNestedPlaceholders()
     {
-        $pageContent = 'my_page';
-        $this->stubDataPoolReaderMethods('root_key', [], ['root_key' => $pageContent]);
+        $rootSnippetCode = 'root-snippet';
+        $rootSnippetContent = '<html><head>{{snippet head}}</head><body>{{snippet body}}</body></html>';
+        $headContent = '<title>My Website!</title>';
+        $bodyContent = '<h1>My Website!</h1>';
+        $childSnippetMap = ['head' => $headContent, 'body' => $bodyContent];
+
+        $this->setDataPoolFixture($rootSnippetCode, $rootSnippetContent, $childSnippetMap);
+
+        $expectedContent = '<html><head>' . $headContent . '</head><body>' . $bodyContent . '</body></html>';
 
         $page = $this->urlKeyRequestHandler->process();
-        $this->assertEquals($pageContent, $page->getBody());
+        $this->assertEquals($expectedContent, $page->getBody());
     }
 
     /**
      * @test
      */
-    public function itShouldReplacePlaceholderWithoutContextVariables()
+    public function itShouldReplacePlaceholderWithNestedPlaceholdersDeeperThanTwo()
     {
-        $this->stubDataPoolReaderMethods(
-            'root_key',
-            ['head_placeholder', 'body_placeholder'],
-            [
-                'head_placeholder' => '<title>My Website!</title>',
-                'body_placeholder' => '<h1>My Website!</h1>',
-                'root_key'  => <<<EOH
-<html><head>{{snippet head_placeholder}}</head><body>{{snippet body_placeholder}}</body></html>
-EOH
-            ]
-        );
+        $rootSnippetCode = 'root-snippet';
+        $rootSnippetContent = '<html><head>{{snippet head}}</head><body>{{snippet body}}</body></html>';
+        $childSnippetMap = [
+            'head' => '<title>My Website!</title>',
+            'body' => '<h1>My Website!</h1>{{snippet nesting-level1}}',
+            'nesting-level1' => 'child1{{snippet nesting-level2}}',
+            'nesting-level2' => 'child2{{snippet nesting-level3}}',
+            'nesting-level3' => 'child3',
+        ];
 
-        $rendererContent = '<html><head><title>My Website!</title></head><body><h1>My Website!</h1></body></html>';
+        $this->setDataPoolFixture($rootSnippetCode, $rootSnippetContent, $childSnippetMap);
 
-        $page = $this->urlKeyRequestHandler->process();
-        $this->assertEquals($rendererContent, $page->getBody());
-    }
-
-    /**
-     * @test
-     */
-    public function itShouldReplacePlaceholderWithoutContextVariablesDeeperThanTwo()
-    {
-        $this->stubDataPoolReaderMethods(
-            'root_key',
-            ['head_placeholder', 'body_placeholder', 'deep_1', 'deep_2', 'deep_3'],
-            [
-                'head_placeholder' => '<title>My Website!</title>',
-                'body_placeholder' => '<h1>My Website!</h1>{{snippet deep_1}}',
-                'deep_1'           => 'deep1{{snippet deep_2}}',
-                'deep_2'           => 'deep2{{snippet deep_3}}',
-                'deep_3'           => 'deep3',
-                'root_key'  => <<<EOH
-<html><head>{{snippet head_placeholder}}</head><body>{{snippet body_placeholder}}</body></html>
-EOH
-            ]
-        );
-
-        $rendererContent = <<<EOH
-<html><head><title>My Website!</title></head><body><h1>My Website!</h1>deep1deep2deep3</body></html>
+        $expectedContent = <<<EOH
+<html><head><title>My Website!</title></head><body><h1>My Website!</h1>child1child2child3</body></html>
 EOH;
 
         $page = $this->urlKeyRequestHandler->process();
-        $this->assertEquals($rendererContent, $page->getBody());
+        $this->assertEquals($expectedContent, $page->getBody());
     }
 
     /**
      * @test
      */
-    public function itShouldReplacePlaceholderWithoutContextVariablesDeeperThanTwoAndDoNotCareAboutMissingSnippets()
+    public function itShouldReplacePlaceholderWithNestedPlaceholdersAndDoNotCareAboutMissingSnippets()
     {
-        $this->stubDataPoolReaderMethods(
-            '_product_html_1',
-            ['head_placeholder', 'body_placeholder', 'deep_1', 'deep_2', 'deep_3', 'deep_4'],
-            [
-                'head_placeholder' => '<title>My Website!</title>',
-                'body_placeholder' => '<h1>My Website!</h1>{{snippet deep_1}}',
-                'deep_1'           => 'deep1{{snippet deep_2}}',
-                'deep_2'           => 'deep2{{snippet deep_3}}',
-                'deep_3'           => 'deep3{{snippet deep_4}}',
-                'deep_4'           => false,
-                '_product_html_1'  => <<<EOH
-<html><head>{{snippet head_placeholder}}</head><body>{{snippet body_placeholder}}</body></html>
-EOH
-            ]
-        );
+        $rootSnippetCode = 'root-snippet';
+        $rootSnippetContent = '<html><head>{{snippet head}}</head><body>{{snippet body}}</body></html>';
+        $childSnippetMap = [
+            'head' => '<title>My Website!</title>',
+            'body' => '<h1>My Website!</h1>{{snippet nesting-level1}}',
+            'nesting-level1' => 'child1{{snippet nesting-level2}}',
+            'nesting-level2' => 'child2{{snippet nesting-level3}}',
+            'nesting-level3' => 'child3{{snippet nesting-level4}}',
+        ];
 
-        $rendererContent = <<<EOH
-<html><head><title>My Website!</title></head><body><h1>My Website!</h1>deep1deep2deep3</body></html>
+        $this->setDataPoolFixture($rootSnippetCode, $rootSnippetContent, $childSnippetMap);
+
+        $expectedContent = <<<EOH
+<html><head><title>My Website!</title></head><body><h1>My Website!</h1>child1child2child3</body></html>
 EOH;
 
-
         $page = $this->urlKeyRequestHandler->process();
-        $this->assertEquals($rendererContent, $page->getBody());
+        $this->assertEquals($expectedContent, $page->getBody());
     }
 
     /**
@@ -175,41 +188,21 @@ EOH;
      */
     public function itShouldReplacePlaceholderRegardlessOfSnippetOrder()
     {
-        $this->stubDataPoolReaderMethods(
-            '_product_html_1',
-            ['body_placeholder', 'deep_1', 'deep_3', 'deep_2', 'deep_4'],
-            [
-                'body_placeholder' => '<h1>My Website!</h1>{{snippet deep_1}}',
-                'deep_1'           => 'deep1{{snippet deep_2}}',
-                'deep_3'           => 'deep3{{snippet deep_4}}',
-                'deep_2'           => 'deep2{{snippet deep_3}}',
-                'deep_4'           => false,
-                '_product_html_1'  => '<html><body>{{snippet body_placeholder}}</body></html>'
-            ]
-        );
+        $rootSnippetCode = 'root-snippet';
+        $rootSnippetContent = '<html><body>{{snippet body}}</body></html>';
+        $childSnippetMap = [
+            'body' => '<h1>My Website!</h1>{{snippet nesting-level1}}',
+            'nesting-level1' => 'child1{{snippet nesting-level2}}',
+            'nesting-level3' => 'child3{{snippet nesting-level4}}',
+            'nesting-level2' => 'child2{{snippet nesting-level3}}',
+        ];
 
-        $rendererContent = '<html><body><h1>My Website!</h1>deep1deep2deep3</body></html>';
+        $this->setDataPoolFixture($rootSnippetCode, $rootSnippetContent, $childSnippetMap);
+
+        $expectedContent = '<html><body><h1>My Website!</h1>child1child2child3</body></html>';
 
         $page = $this->urlKeyRequestHandler->process();
-        $this->assertEquals($rendererContent, $page->getBody());
-    }
-
-    /**
-     * @param string $rootSnippetKey
-     * @param string[] $snippetKeyList
-     * @param string[] $snippetContent
-     */
-    private function stubDataPoolReaderMethods($rootSnippetKey, $snippetKeyList, $snippetContent)
-    {
-        $this->mockDataPoolReader->expects($this->any())
-            ->method('getSnippet')
-            ->willReturn($rootSnippetKey);
-        $this->mockDataPoolReader->expects($this->any())
-            ->method('getChildSnippetKeys')
-            ->willReturn($snippetKeyList);
-        $this->mockDataPoolReader->expects($this->any())
-            ->method('getSnippets')
-            ->willReturn($snippetContent);
+        $this->assertEquals($expectedContent, $page->getBody());
     }
 
     /**
@@ -228,9 +221,108 @@ EOH;
      */
     public function itShouldReturnTrueIfTheUrlKeySnippetIsKnown()
     {
-        $this->mockDataPoolReader->expects($this->once())
-            ->method('getSnippet')
-            ->willReturn('test');
+        $rootSnippetCode = 'root-snippet';
+        $rootSnippetContent = 'Dummy Content';
+        $childSnippetMap = [];
+
+        $this->setDataPoolFixture($rootSnippetCode, $rootSnippetContent, $childSnippetMap);
         $this->assertTrue($this->urlKeyRequestHandler->canProcess());
+    }
+
+    /**
+     * @test
+     * @expectedException \Brera\InvalidPageMetaSnippetException
+     */
+    public function itShouldThrowAnExceptionIfTheRootSnippetContentIsNotFound()
+    {
+        $rootSnippetCode = 'root-snippet';
+        $childSnippetCodes = ['child1'];
+        $allSnippetCodes = [];
+        $allSnippetContent = [];
+        $this->setPageMetaInfoFixture($rootSnippetCode, $childSnippetCodes);
+        $this->setPageContentSnippetFixture($allSnippetCodes, $allSnippetContent);
+        $this->urlKeyRequestHandler->process();
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldLogIfChildSnippetContentIsNotFound()
+    {
+        $rootSnippetCode = 'root-snippet';
+        $childSnippetCodes = ['child1'];
+        $allSnippetCodes = [$rootSnippetCode];
+        $allSnippetContent = ['Dummy Root Content'];
+        $this->setPageMetaInfoFixture($rootSnippetCode, $childSnippetCodes);
+        $this->setPageContentSnippetFixture($allSnippetCodes, $allSnippetContent);
+        $this->stubLogger->expects($this->once())
+            ->method('notice');
+        $this->urlKeyRequestHandler->process();
+    }
+
+    /**
+     * @param string $rootSnippetCode
+     * @param string $rootSnippetContent
+     * @param string[] $childSnippetMap
+     */
+    private function setDataPoolFixture($rootSnippetCode, $rootSnippetContent, array $childSnippetMap)
+    {
+        $allSnippetCodes = array_merge([$rootSnippetCode], array_keys($childSnippetMap));
+        $allSnippetContent = array_merge([$rootSnippetContent], array_values($childSnippetMap));
+        $this->setPageMetaInfoFixture($rootSnippetCode, $allSnippetCodes);
+        $this->setPageContentSnippetFixture($allSnippetCodes, $allSnippetContent);
+    }
+
+    /**
+     * @param string $rootSnippetCode
+     * @param string[] $allSnippetCodes
+     * @return mixed[]
+     */
+    private function buildStubPageMetaInfo($rootSnippetCode, array $allSnippetCodes)
+    {
+        $pageMetaInfo = [
+            PageMetaInfoSnippetContent::KEY_SOURCE_ID => $this->sourceIdFixture,
+            PageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE => $rootSnippetCode,
+            PageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => $allSnippetCodes
+        ];
+        return $pageMetaInfo;
+    }
+
+    /**
+     * @param string $snippetCode
+     * @return string
+     */
+    private function getStubSnippetKey($snippetCode)
+    {
+        return $snippetCode . '_' . $this->sourceIdFixture . '_' . $this->contextIdFixture;
+    }
+
+    /**
+     * @param string $rootSnippetCode
+     * @param array $allSnippetCodes
+     */
+    private function setPageMetaInfoFixture($rootSnippetCode, array $allSnippetCodes)
+    {
+        $pageMetaInfo = $this->buildStubPageMetaInfo($rootSnippetCode, $allSnippetCodes);
+
+        $this->mockDataPoolReader->expects($this->any())
+            ->method('getSnippet')
+            ->with($this->urlPathKeyFixture)
+            ->willReturn(json_encode($pageMetaInfo));
+    }
+
+    /**
+     * @param string[] $allSnippetCodes
+     * @param string[] $allSnippetContent
+     */
+    private function setPageContentSnippetFixture(array $allSnippetCodes, array $allSnippetContent)
+    {
+        $allSnippetKeys = array_map(function ($code) {
+            return $this->getStubSnippetKey($code);
+        }, $allSnippetCodes);
+        $pageSnippetKeyMap = array_combine($allSnippetKeys, $allSnippetContent);
+        $this->mockDataPoolReader->expects($this->any())
+            ->method('getSnippets')
+            ->willReturn($pageSnippetKeyMap);
     }
 }

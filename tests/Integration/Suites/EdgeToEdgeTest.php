@@ -10,6 +10,8 @@ use Brera\Product\ProductId;
 use Brera\Http\HttpUrl;
 use Brera\Http\HttpRequest;
 use Brera\Product\ProductDetailViewSnippetKeyGenerator;
+use Psr\Log\AbstractLogger;
+use Psr\Log\LoggerInterface;
 
 class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
 {
@@ -32,6 +34,13 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $consumer = $factory->createDomainEventConsumer();
         $numberOfMessages = 3;
         $consumer->process($numberOfMessages);
+        
+        /** @var AbstractLogger $log */
+        $log = $factory->getLogger();
+        $messages = $log->getMessages();
+        if (! empty($messages)) {
+            $this->fail(implode(PHP_EOL, $messages));
+        }
         
         $dataPoolReader = $factory->createDataPoolReader();
         
