@@ -61,7 +61,7 @@ div.product-shop div.price-box p.regular-price { font-size: 24px; font-weight: n
 .socialSharing div.gplus-container { float:left; width: 200px }
 .socialSharing .print { float: right; font-size: 11px }
 
-#recently-viewed-products { position: relative }
+#recently-viewed-products { position: relative; display: none }
 #recently-viewed-products .heading { margin-bottom: 15px }
 
 form#product_addtocart_form { position: relative; display:block; z-index: 2; }

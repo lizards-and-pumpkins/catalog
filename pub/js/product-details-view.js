@@ -209,9 +209,8 @@ jQuery(document).ready(function () {
         var recentlyViewedProductsListHtml = brera.recentlyViewedProducts.getRecentlyViewedProductsHtml(product['sku']);
 
         if (recentlyViewedProductsListHtml) {
-            jQuery('#recently-viewed-products').find('.swipe-container').eq(0)
-                .html(recentlyViewedProductsListHtml)
-                .show();
+            jQuery('#recently-viewed-products').show()
+                .find('.swipe-container').eq(0).html(recentlyViewedProductsListHtml);
         }
 
         brera.recentlyViewedProducts.addProductIntoLocalStorage(product);
