@@ -343,10 +343,10 @@ function recalculateMainMenu()
 
 function processLoginLogoutMetaLinks()
 {
-    var selectorToHide = '#meta-menu-login-link';
+    var selectorToHide = '#meta-menu-logout-link';
 
     if (getStoredMagentoValue('isCustomerLoggedIn')) {
-        selectorToHide = '#meta-menu-logout-link';
+        selectorToHide = '#meta-menu-login-link';
     }
 
     jQuery(selectorToHide).hide();
