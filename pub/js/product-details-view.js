@@ -204,6 +204,18 @@ jQuery(function ($) {
 jQuery(document).ready(function () {
     adjustDetailsToWidth();
     jQuery(window).bind('resize orientationchange', adjustDetailsToWidth);
+
+    if (typeof product != 'undefined') {
+        var recentlyViewedProductsListHtml = brera.recentlyViewedProducts.getRecentlyViewedProductsHtml(product['sku']);
+
+        if (recentlyViewedProductsListHtml) {
+            jQuery('#recently-viewed-products').find('.swipe-container').eq(0)
+                .html(recentlyViewedProductsListHtml)
+                .show();
+        }
+
+        brera.recentlyViewedProducts.addProductIntoLocalStorage(product);
+    }
 });
 
 function adjustDetailsToWidth() {

@@ -1,26 +1,5 @@
 var brera = brera || {};
 
-brera.localStorage = {
-
-    get: function(key) {
-
-        if (typeof localStorage == 'undefined') {
-            return null;
-        }
-
-        return JSON.parse(localStorage.getItem(key));
-    },
-
-    set: function(key, value) {
-
-        try {
-            localStorage.setItem(key, JSON.stringify(value));
-        } catch (e) {
-            /* Some browsers are not allowing local storage access in private mode. */
-        }
-    }
-};
-
 brera.recentlyViewedProducts = {
 
     storageKey: 'recently-viewed-products',
@@ -80,18 +59,3 @@ brera.recentlyViewedProducts = {
         return newList
     }
 };
-
-jQuery(document).ready(function() {
-
-    if (typeof product != 'undefined') {
-        var recentlyViewedProductsListHtml = brera.recentlyViewedProducts.getRecentlyViewedProductsHtml(product['sku']);
-
-        if (recentlyViewedProductsListHtml) {
-            jQuery('#recently-viewed-products').find('.swipe-container').eq(0)
-                .html(recentlyViewedProductsListHtml)
-                .show();
-        }
-
-        brera.recentlyViewedProducts.addProductIntoLocalStorage(product);
-    }
-});
