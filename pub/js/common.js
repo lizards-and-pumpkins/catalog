@@ -28,6 +28,9 @@ jQuery(document).ready(function() {
 
     adjustToWidth();
     jQuery(window).bind('resize orientationchange', adjustToWidth);
+
+    processLoginLogoutMetaLinks();
+    processCartMetaInfo();
 });
 
 /**
@@ -336,4 +339,41 @@ function recalculateMainMenu()
             }
         })
     });
+}
+
+function processLoginLogoutMetaLinks()
+{
+    var selectorToHide = '#meta-menu-logout-link';
+
+    if (getStoredMagentoValue('isCustomerLoggedIn')) {
+        selectorToHide = '#meta-menu-login-link';
+    }
+
+    jQuery(selectorToHide).hide();
+}
+
+function processCartMetaInfo()
+{
+    var cartNumItems = getStoredMagentoValue('cartNumItems');
+
+    if (cartNumItems) {
+        jQuery('#meta-menu-cart-num-items').html(cartNumItems);
+    }
+
+    var cartTotal = getStoredMagentoValue('cartTotal');
+
+    if (cartTotal) {
+        jQuery('#meta-menu-cart-total').html(cartTotal);
+    }
+}
+
+function getStoredMagentoValue(key)
+{
+    if (typeof localStorage == 'undefined' || typeof localStorage['breraTransport'] == 'undefined') {
+        return null;
+    }
+
+    var breraTransport = JSON.parse(localStorage['breraTransport']);
+
+    return breraTransport[key];
 }
