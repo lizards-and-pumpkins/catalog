@@ -28,19 +28,25 @@ use Psr\Log\LoggerInterface;
  * @uses   \Brera\Context\ContextSourceBuilder
  * @uses   \Brera\DomainEventConsumer
  * @uses   \Brera\DomainEventHandlerLocator
+ * @uses   \Brera\RootSnippetChangedDomainEvent
+ * @uses   \Brera\RootSnippetChangedDomainEventHandler
+ * @uses   \Brera\RootSnippetProjector
  * @uses   \Brera\UrlPathKeyGenerator
  * @uses   \Brera\Renderer\BlockRenderer
  * @uses   \Brera\Product\ProductSourceBuilder
  * @uses   \Brera\Product\ProductProjector
  * @uses   \Brera\Product\ProductSnippetRendererCollection
- * @uses   \Brera\Product\ProductImportDomainEventHandler
  * @uses   \Brera\Product\ProductImportDomainEvent
+ * @uses   \Brera\Product\ProductImportDomainEventHandler
  * @uses   \Brera\Product\CatalogImportDomainEvent
  * @uses   \Brera\Product\CatalogImportDomainEventHandler
  * @uses   \Brera\Product\ProductSearchDocumentBuilder
  * @uses   \Brera\Product\ProductInContextDetailViewSnippetRenderer
  * @uses   \Brera\Product\ProductSourceDetailViewSnippetRenderer
  * @uses   \Brera\Product\ProductDetailViewBlockRenderer
+ * @uses   \Brera\Product\ProductListingSnippetRenderer
+ * @uses   \Brera\GenericSnippetKeyGenerator
+ * @uses   \Brera\RootSnippetRendererCollection
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -86,6 +92,17 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $catalogImportDomainEvent = new CatalogImportDomainEvent('<xml></xml>');
         $result = $this->commonFactory->createCatalogImportDomainEventHandler($catalogImportDomainEvent);
         $this->assertInstanceOf(CatalogImportDomainEventHandler::class, $result);
+    }
+
+    /**
+     * @test
+     * @todo Move to catalog factory test
+     */
+    public function itShouldCreateARootSnippetChangedDomainEventHandler()
+    {
+        $rootSnippetChangedDomainEvent = new RootSnippetChangedDomainEvent('<xml></xml>');
+        $result = $this->commonFactory->createRootSnippetChangedDomainEventHandler($rootSnippetChangedDomainEvent);
+        $this->assertInstanceOf(RootSnippetChangedDomainEventHandler::class, $result);
     }
 
     /**

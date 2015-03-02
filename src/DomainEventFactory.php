@@ -20,4 +20,10 @@ interface DomainEventFactory
      * @return CatalogImportDomainEventHandler
      */
     public function createCatalogImportDomainEventHandler(CatalogImportDomainEvent $event);
+
+    /**
+     * @param RootSnippetChangedDomainEvent $event
+     * @return RootSnippetChangedDomainEventHandler
+     */
+    public function createRootSnippetChangedDomainEventHandler(RootSnippetChangedDomainEvent $event);
 }

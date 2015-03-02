@@ -10,6 +10,8 @@ use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\ProductDetailViewBlockRenderer;
 use Brera\Product\ProductInContextDetailViewSnippetRenderer;
+use Brera\Product\ProductListingBlockRenderer;
+use Brera\Product\ProductListingSnippetRenderer;
 use Brera\Product\ProductSearchDocumentBuilder;
 use Brera\Product\ProductSnippetRendererCollection;
 use Brera\Product\ProductSourceBuilder;
@@ -77,6 +79,29 @@ class CommonFactory implements Factory, DomainEventFactory
     }
 
     /**
+     * @param RootSnippetChangedDomainEvent $event
+     * @return RootSnippetChangedDomainEventHandler
+     * @todo: move to catalog factory
+     */
+    public function createRootSnippetChangedDomainEventHandler(RootSnippetChangedDomainEvent $event)
+    {
+        return new RootSnippetChangedDomainEventHandler(
+            $event,
+            $this->getMasterFactory()->createRootSnippetProjector(),
+            $this->getMasterFactory()->createRootSnippetSource(),
+            $this->getMasterFactory()->createContextSourceBuilder()
+        );
+    }
+
+    /**
+     * @return RootSnippetSource
+     */
+    public function createRootSnippetSource()
+    {
+        return new RootSnippetSource();
+    }
+
+    /**
      * @return ProductProjector
      * @todo: move to catalog factory
      */
@@ -110,6 +135,66 @@ class CommonFactory implements Factory, DomainEventFactory
         return [
             $this->getMasterFactory()->createProductSourceDetailViewSnippetRenderer(),
         ];
+    }
+
+    /**
+     * @return RootSnippetProjector
+     */
+    public function createRootSnippetProjector()
+    {
+        return new RootSnippetProjector(
+            $this->createRootSnippetRendererCollection(),
+            $this->getMasterFactory()->createDataPoolWriter()
+        );
+    }
+
+    /**
+     * @return RootSnippetRendererCollection
+     */
+    public function createRootSnippetRendererCollection()
+    {
+        return new RootSnippetRendererCollection(
+            $this->getRootSnippetRendererList(),
+            $this->getMasterFactory()->createSnippetResultList()
+        );
+    }
+
+    /**
+     * @return SnippetRenderer[]
+     */
+    public function getRootSnippetRendererList()
+    {
+        return [
+            $this->getMasterFactory()->createProductListingSnippetRenderer(),
+        ];
+    }
+
+    /**
+     * @return ProductListingSnippetRenderer
+     */
+    public function createProductListingSnippetRenderer()
+    {
+        return new ProductListingSnippetRenderer(
+            $this->getMasterFactory()->createSnippetResultList(),
+            $this->getMasterFactory()->createGenericSnippetKeyGenerator(),
+            $this->getMasterFactory()->createProductListingBlockRenderer()
+        );
+    }
+
+    /**
+     * @return GenericSnippetKeyGenerator
+     */
+    public function createGenericSnippetKeyGenerator()
+    {
+        return new GenericSnippetKeyGenerator('product_listing');
+    }
+
+    public function createProductListingBlockRenderer()
+    {
+        return new ProductListingBlockRenderer(
+            $this->getMasterFactory()->createThemeLocator(),
+            $this->getMasterFactory()->createBlockStructure()
+        );
     }
 
     /**

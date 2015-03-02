@@ -2,23 +2,19 @@
 
 namespace Brera;
 
-use Brera\Context\ContextSource;
 use Brera\Http\HttpResourceNotFoundResponse;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\PoCSku;
 use Brera\Product\ProductId;
 use Brera\Http\HttpUrl;
 use Brera\Http\HttpRequest;
-use Brera\Product\ProductDetailViewSnippetKeyGenerator;
-use Psr\Log\AbstractLogger;
-use Psr\Log\LoggerInterface;
 
 class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function importProductDomainEventShouldPutProductToKeyValueStoreAndSearchIndex()
+    public function itShouldPutProductToKeyValueStoreAndSearchIndex()
     {
         $factory = $this->prepareIntegrationTestMasterFactory();
 
@@ -35,7 +31,6 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $numberOfMessages = 3;
         $consumer->process($numberOfMessages);
         
-        /** @var AbstractLogger $log */
         $log = $factory->getLogger();
         $messages = $log->getMessages();
         if (! empty($messages)) {
@@ -43,11 +38,8 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         }
         
         $dataPoolReader = $factory->createDataPoolReader();
-        
-        /** @var ProductDetailViewSnippetKeyGenerator $keyGenerator */
         $keyGenerator = $factory->createProductDetailViewSnippetKeyGenerator();
         
-        /** @var ContextSource $contextSource */
         $contextSource = $factory->createContextSourceBuilder()->createFromXml($xml);
         $context = $contextSource->extractContexts(['version', 'website', 'language'])[0];
         
@@ -59,6 +51,40 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $this->assertContains((string) $sku, $html);
         $this->assertContains($productName, $html);
         $this->assertContains((string) $productId, $searchResults, '', false, false);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldPutProductListingRootSnippetIntoKeyValueStore()
+    {
+        $factory = $this->prepareIntegrationTestMasterFactory();
+
+        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.xml');
+
+        $queue = $factory->getEventQueue();
+        $queue->add(new RootSnippetChangedDomainEvent($xml));
+
+        $consumer = $factory->createDomainEventConsumer();
+        $numberOfMessages = 1;
+        $consumer->process($numberOfMessages);
+
+        $log = $factory->getLogger();
+        $messages = $log->getMessages();
+        if (! empty($messages)) {
+            $this->fail(implode(PHP_EOL, $messages));
+        }
+
+        $dataPoolReader = $factory->createDataPoolReader();
+        $keyGenerator = $factory->createGenericSnippetKeyGenerator();
+
+        $contextSource = $factory->createContextSourceBuilder()->createFromXml($xml);
+        $context = $contextSource->extractContexts(['version', 'website', 'language'])[0];
+
+        $key = $keyGenerator->getKeyForContext('product_listing', $context);
+        $html = $dataPoolReader->getSnippet($key);
+
+        $this->assertContains('LIST TEMPLATE', $html);
     }
 
     /**

@@ -108,7 +108,7 @@ class ProductSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldMergeTheRestultsOfTheRenderers()
+    public function itShouldMergeTheResultsOfTheRenderers()
     {
         $stubProduct = $this->getMockBuilder(ProductSource::class)
             ->disableOriginalConstructor()

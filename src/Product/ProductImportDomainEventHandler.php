@@ -27,6 +27,12 @@ class ProductImportDomainEventHandler implements DomainEventHandler
      */
     private $contextSourceBuilder;
 
+    /**
+     * @param ProductImportDomainEvent $event
+     * @param ProductSourceBuilder $productSourceBuilder
+     * @param ContextSourceBuilder $contextSourceBuilder
+     * @param ProductProjector $projector
+     */
     public function __construct(
         ProductImportDomainEvent $event,
         ProductSourceBuilder $productSourceBuilder,
@@ -39,9 +45,6 @@ class ProductImportDomainEventHandler implements DomainEventHandler
         $this->projector = $projector;
     }
 
-    /**
-     * @return null
-     */
     public function process()
     {
         $xml = $this->event->getXml();
