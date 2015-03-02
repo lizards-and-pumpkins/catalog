@@ -1,3 +1,199 @@
+define([
+    'local-storage',
+    'lib/jquery.jscrollpane.min',
+    'lib/jquery.mousewheel',
+    'lib/jquery.uniform.min'
+], function(storage) {
+
+    jQuery(document).ready(function() {
+
+        jQuery('select, input[type=checkbox], input[type=radio]').not('#productListFilter input[type=checkbox], .alertPopUp select').uniform({selectAutoWidth: false});
+
+        nav = jQuery('.nav');
+        nav.children().each(function(index) {
+            navItemsOriginalWidth[index] = jQuery(this).width();
+        });
+        nav.find('li a').each(function() {
+            if (jQuery(this).next().length > 0) {
+                jQuery(this).addClass('parent');
+            }
+        });
+        var phoneMenu = jQuery('.phone-bar');
+        phoneMenuSize = phoneMenu.find('li').length;
+
+        /* Set phone menu item width */
+        var cellWidth = Math.round(100/phoneMenuSize);
+        jQuery('#phoneMenuPlaceholder').find('li').width(cellWidth + '%');
+        phoneMenu.find('li').width(cellWidth + '%').last().addClass('last').width((cellWidth - 1) + '%');
+
+        adjustToPageWidth();
+        jQuery(window).bind('resize orientationchange', adjustToPageWidth);
+
+        processLoginLogoutMetaLinks();
+        processCartMetaInfo();
+    });
+
+    function processLoginLogoutMetaLinks() {
+
+        var selectorToHide = '#meta-menu-logout-link';
+
+        if (storage.get('isCustomerLoggedIn')) {
+            selectorToHide = '#meta-menu-login-link';
+        }
+
+        jQuery(selectorToHide).hide();
+    }
+
+    function processCartMetaInfo() {
+
+        var cartNumItems = storage.get('cartNumItems');
+
+        if (cartNumItems) {
+            jQuery('#meta-menu-cart-num-items').html(cartNumItems);
+        }
+
+        var cartTotal = storage.get('cartTotal');
+
+        if (cartTotal) {
+            jQuery('#meta-menu-cart-total').html(cartTotal);
+        }
+    }
+
+    function adjustToPageWidth() {
+        var currentWidth = jQuery(window).width(),
+            placeholder = jQuery('#navPlaceholder'),
+            bannerBlockLeft = jQuery('.banner-wrap');
+
+        if (currentWidth < siteFullWidth) {
+            /* Create sub-menu placeholder if not exists */
+            if(!placeholder.length) {
+                placeholder = jQuery('<div id="navPlaceholder"></div>').insertAfter(nav);
+            }
+
+            nav.find('li').unbind('mouseenter mouseleave');
+            nav.find('li a.parent').unbind('click').bind('click', function(e) {
+                // must be attached to anchor element to prevent bubbling
+                e.preventDefault();
+                var parentLi = jQuery(this).parent('li');
+                parentLi.toggleClass('hover');
+
+                /* Loop through sub-menus and open/close appropriate */
+                toggleMobileNav(parentLi, placeholder);
+            });
+
+            /* Initialize stores and languages */
+            if (!store && phoneMenuSize > 3) {
+                store = initializeListObject('store');
+            }
+
+            if (!lang && phoneMenuSize > 4) {
+                lang = initializeListObject('lang');
+            }
+        } else {
+            nav.find('li')
+                .removeClass('hover')
+                .unbind('mouseenter mouseleave')
+                .bind('mouseenter', function() {
+                    jQuery(this).addClass('hover');
+                })
+                .bind('mouseleave', function() {
+                    jQuery(this).removeClass('hover');
+                })
+                .find('a')
+                .unbind('click');
+            placeholder.remove();
+        }
+
+        if (currentWidth < tabletWidth) {
+
+            /* By default set selected meta-menu item to search */
+            if (!currentPhoneMenuItem || currentPhoneMenuItem == 'search') {
+                currentPhoneMenuItem = null;
+                togglePhoneBlock('search');
+            }
+
+            /* Observe click on footer menu headings. Unbind first to avoid multiple bindings. */
+            jQuery('.footer-block h3').unbind('click', toggleFooterBlockPhone)
+                .click(toggleFooterBlockPhone);
+
+            /* Move newsletter block under top-sellers (only for home) */
+            if (!bannerBlockLeft.hasClass('downtown')){
+                bannerBlockLeft.insertAfter(jQuery('#topsellerTabs')).addClass('downtown');
+            }
+        } else {
+            /* Remove observer from footer menu headings and apply jScrollPane */
+            jQuery('.footer-block h3').unbind('click', toggleFooterBlockPhone);
+            jQuery('.footer-block.long ul').jScrollPane({ showArrows: true });
+
+            /* Append the search back if needed */
+            var searchPanel = jQuery('#searchPanel');
+            if (!searchPanel.find('#search_mini_form').length) {
+                searchPanel.append(jQuery('#search_mini_form'));
+            }
+
+            /* Move newsletter box back */
+            if (bannerBlockLeft.hasClass('downtown')) {
+                bannerBlockLeft.insertAfter(jQuery('.slider-wrap')).removeClass('downtown');
+            }
+        }
+
+        recalculateMainMenu();
+
+        /* Handle main navigation soft wrapping. This has to be done after placeholder is created */
+        if (Math.ceil(nav.eq(0).width() / currentWidth) != nav.length || nav.eq(0).width() > currentWidth) {
+
+            /* Move all menu items to a temporary storage */
+            var temp_storage = jQuery('<ul class="temp-storage"></ul>');
+            nav.children().each(function() {
+                temp_storage.append(jQuery(this));
+            });
+            temp_storage.insertAfter(nav);
+
+            /* Kill all menus */
+            nav.remove();
+
+            /* Create new menu(s) */
+            var widthSoFar = 0,
+                newNav,
+                last;
+            temp_storage.children().each(function(index) {
+                jQuery(this).removeClass('first last');
+                if (!widthSoFar) {
+                    newNav = jQuery('<ul class="nav"></ul>');
+                    jQuery(this).addClass('first');
+                }
+                if (index == 0) {
+                    newNav.addClass('first');
+                }
+                if (index == navItemsOriginalWidth.length - 1) {
+                    newNav.addClass('last');
+                }
+                widthSoFar += navItemsOriginalWidth[index];
+                /* We are checking the width with the next element because if current element wider then the current
+                 * view-port it will result in infinite loop */
+                last = widthSoFar + navItemsOriginalWidth[index + 1] > currentWidth || typeof navItemsOriginalWidth[index + 1] == 'undefined';
+                if (last) {
+                    jQuery(this).addClass('last');
+                }
+                newNav.append(jQuery(this));
+                if (last) {
+                    widthSoFar = 0;
+                    newNav.insertBefore(temp_storage);
+                }
+            });
+
+            /* Kill temporary storage */
+            jQuery('.temp-storage').remove();
+
+            /* Initiate new menu(s) var */
+            nav = jQuery('.nav');
+        }
+
+        /* Handle swiping containers */
+        toggleSwipingArrows('.swipe-container', 'ul');
+    }
+});
+
 var nav,
     tabletWidth = 768,
     siteFullWidth = 975,
@@ -7,168 +203,6 @@ var nav,
     menuItemPosition = { search: 2, lang: 3, store: 4 },
     navItemsOriginalWidth = [],
     phoneMenuSize;
-
-jQuery(document).ready(function() {
-    nav = jQuery('.nav');
-    nav.children().each(function(index) {
-        navItemsOriginalWidth[index] = jQuery(this).width();
-    });
-    nav.find('li a').each(function() {
-        if (jQuery(this).next().length > 0) {
-            jQuery(this).addClass('parent');
-        }
-    });
-    var phoneMenu = jQuery('.phone-bar');
-    phoneMenuSize = phoneMenu.find('li').length;
-
-    /* Set phone menu item width */
-    var cellWidth = Math.round(100/phoneMenuSize);
-    jQuery('#phoneMenuPlaceholder').find('li').width(cellWidth + '%');
-    phoneMenu.find('li').width(cellWidth + '%').last().addClass('last').width((cellWidth - 1) + '%');
-
-    adjustToWidth();
-    jQuery(window).bind('resize orientationchange', adjustToWidth);
-
-    processLoginLogoutMetaLinks();
-    processCartMetaInfo();
-});
-
-/**
- * Make adjustments to the page elements either on load or resize
- */
-function adjustToWidth() {
-    var currentWidth = jQuery(window).width(),
-        placeholder = jQuery('#navPlaceholder'),
-        bannerBlockLeft = jQuery('.banner-wrap');
-
-    if (currentWidth < siteFullWidth) {
-        /* Create sub-menu placeholder if not exists */
-        if(!placeholder.length) {
-            placeholder = jQuery('<div id="navPlaceholder"></div>').insertAfter(nav);
-        }
-
-        nav.find('li').unbind('mouseenter mouseleave');
-        nav.find('li a.parent').unbind('click').bind('click', function(e) {
-            // must be attached to anchor element to prevent bubbling
-            e.preventDefault();
-            var parentLi = jQuery(this).parent('li');
-            parentLi.toggleClass('hover');
-
-            /* Loop through sub-menus and open/close appropriate */
-            toggleMobileNav(parentLi, placeholder);
-        });
-
-        /* Initialize stores and languages */
-        if (!store && phoneMenuSize > 3) {
-            store = initializeListObject('store');
-        }
-
-        if (!lang && phoneMenuSize > 4) {
-            lang = initializeListObject('lang');
-        }
-    } else {
-        nav.find('li')
-            .removeClass('hover')
-            .unbind('mouseenter mouseleave')
-            .bind('mouseenter', function() {
-                jQuery(this).addClass('hover');
-            })
-            .bind('mouseleave', function() {
-                jQuery(this).removeClass('hover');
-            })
-            .find('a')
-            .unbind('click');
-        placeholder.remove();
-    }
-
-    if (currentWidth < tabletWidth) {
-
-        /* By default set selected meta-menu item to search */
-        if (!currentPhoneMenuItem || currentPhoneMenuItem == 'search') {
-            currentPhoneMenuItem = null;
-            togglePhoneBlock('search');
-        }
-
-        /* Observe click on footer menu headings. Unbind first to avoid multiple bindings. */
-        jQuery('.footer-block h3').unbind('click', toggleFooterBlockPhone)
-            .click(toggleFooterBlockPhone);
-
-        /* Move newsletter block under top-sellers (only for home) */
-        if (!bannerBlockLeft.hasClass('downtown')){
-            bannerBlockLeft.insertAfter(jQuery('#topsellerTabs')).addClass('downtown');
-        }
-    } else {
-        /* Remove observer from footer menu headings and apply jScrollPane */
-        jQuery('.footer-block h3').unbind('click', toggleFooterBlockPhone);
-        jQuery('.footer-block.long ul').jScrollPane({ showArrows: true });
-
-        /* Append the search back if needed */
-        var searchPanel = jQuery('#searchPanel');
-        if (!searchPanel.find('#search_mini_form').length) {
-            searchPanel.append(jQuery('#search_mini_form'));
-        }
-
-        /* Move newsletter box back */
-        if (bannerBlockLeft.hasClass('downtown')) {
-            bannerBlockLeft.insertAfter(jQuery('.slider-wrap')).removeClass('downtown');
-        }
-    }
-
-    recalculateMainMenu();
-
-    /* Handle main navigation soft wrapping. This has to be done after placeholder is created */
-    if (Math.ceil(nav.eq(0).width() / currentWidth) != nav.length || nav.eq(0).width() > currentWidth) {
-
-        /* Move all menu items to a temporary storage */
-        var temp_storage = jQuery('<ul class="temp-storage"></ul>');
-        nav.children().each(function() {
-            temp_storage.append(jQuery(this));
-        });
-        temp_storage.insertAfter(nav);
-
-        /* Kill all menus */
-        nav.remove();
-
-        /* Create new menu(s) */
-        var widthSoFar = 0,
-            newNav,
-            last;
-        temp_storage.children().each(function(index) {
-            jQuery(this).removeClass('first last');
-            if (!widthSoFar) {
-                newNav = jQuery('<ul class="nav"></ul>');
-                jQuery(this).addClass('first');
-            }
-            if (index == 0) {
-                newNav.addClass('first');
-            }
-            if (index == navItemsOriginalWidth.length - 1) {
-                newNav.addClass('last');
-            }
-            widthSoFar += navItemsOriginalWidth[index];
-            /* We are checking the width with the next element because if current element wider then the current
-             * view-port it will result in infinite loop */
-            last = widthSoFar + navItemsOriginalWidth[index + 1] > currentWidth || typeof navItemsOriginalWidth[index + 1] == 'undefined';
-            if (last) {
-                jQuery(this).addClass('last');
-            }
-            newNav.append(jQuery(this));
-            if (last) {
-                widthSoFar = 0;
-                newNav.insertBefore(temp_storage);
-            }
-        });
-
-        /* Kill temporary storage */
-        jQuery('.temp-storage').remove();
-
-        /* Initiate new menu(s) var */
-        nav = jQuery('.nav');
-    }
-
-    /* Handle swiping containers */
-    toggleSwipingArrows('.swipe-container', 'ul');
-}
 
 /**
  * Toggles footer blocks in phone mode.
@@ -339,41 +373,4 @@ function recalculateMainMenu()
             }
         })
     });
-}
-
-function processLoginLogoutMetaLinks()
-{
-    var selectorToHide = '#meta-menu-logout-link';
-
-    if (getStoredMagentoValue('isCustomerLoggedIn')) {
-        selectorToHide = '#meta-menu-login-link';
-    }
-
-    jQuery(selectorToHide).hide();
-}
-
-function processCartMetaInfo()
-{
-    var cartNumItems = getStoredMagentoValue('cartNumItems');
-
-    if (cartNumItems) {
-        jQuery('#meta-menu-cart-num-items').html(cartNumItems);
-    }
-
-    var cartTotal = getStoredMagentoValue('cartTotal');
-
-    if (cartTotal) {
-        jQuery('#meta-menu-cart-total').html(cartTotal);
-    }
-}
-
-function getStoredMagentoValue(key)
-{
-    if (typeof localStorage == 'undefined' || typeof localStorage['breraTransport'] == 'undefined') {
-        return null;
-    }
-
-    var breraTransport = JSON.parse(localStorage['breraTransport']);
-
-    return breraTransport[key];
 }

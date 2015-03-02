@@ -1,61 +1,61 @@
-var brera = brera || {};
+define(['local-storage'], function(storage) {
+    return {
 
-brera.recentlyViewedProducts = {
+        storageKey: 'recently-viewed-products',
+        numProducts: 4,
 
-    storageKey: 'recently-viewed-products',
-    numProducts: 4,
+        addProductIntoLocalStorage: function(product) {
 
-    addProductIntoLocalStorage: function(product) {
-
-        if (typeof product == 'undefined') {
-            return;
-        }
-
-        var recentlyViewedProducts = brera.localStorage.get(this.storageKey) || [];
-
-        recentlyViewedProducts = this.removeProductFromListBySku(recentlyViewedProducts, product['sku']);
-        recentlyViewedProducts.unshift(product);
-
-        if (recentlyViewedProducts.length > this.numProducts + 1) {
-            recentlyViewedProducts.shift();
-        }
-
-        brera.localStorage.set(this.storageKey, recentlyViewedProducts);
-    },
-
-    getRecentlyViewedProductsHtml: function(currentProductSku) {
-
-        var products = brera.localStorage.get(this.storageKey);
-
-        if (!products.length) {
-            return '';
-        }
-
-        var productsList = jQuery('<ul/>').addClass('products-grid');
-
-        for (var i = 0; i < products.length && productsList.length <= this.numProducts; i++) {
-            if (products[i]['sku'] == currentProductSku) {
-                continue;
+            if (typeof product == 'undefined') {
+                return;
             }
 
-            productsList.append(jQuery(products[i]['html']));
-        }
+            var recentlyViewedProducts = storage.get(this.storageKey) || [];
 
-        productsList.find('li').last().addClass('last');
+            recentlyViewedProducts = this.removeProductFromListBySku(recentlyViewedProducts, product['sku']);
+            recentlyViewedProducts.unshift(product);
 
-        return jQuery('<div/>').append(productsList).html();
-    },
-
-    removeProductFromListBySku: function(list, sku) {
-
-        var newList = [];
-
-        for (var i = 0; i < list.length; i++) {
-            if (list[i]['sku'] != sku) {
-                newList.push(list[i]);
+            if (recentlyViewedProducts.length > this.numProducts + 1) {
+                recentlyViewedProducts.shift();
             }
-        }
 
-        return newList
+            storage.set(this.storageKey, recentlyViewedProducts);
+        },
+
+        getRecentlyViewedProductsHtml: function(currentProduct) {
+
+            var products = storage.get(this.storageKey);
+
+            if (!products.hasOwnProperty('length') || !products.length) {
+                return '';
+            }
+
+            var productsList = jQuery('<ul/>').addClass('products-grid');
+
+            for (var i = 0; i < products.length && productsList.length <= this.numProducts; i++) {
+                if (currentProduct.hasOwnProperty('sku') && products[i]['sku'] == currentProduct['sku']) {
+                    continue;
+                }
+
+                productsList.append(jQuery(products[i]['html']));
+            }
+
+            productsList.find('li').last().addClass('last');
+
+            return jQuery('<div/>').append(productsList).html();
+        },
+
+        removeProductFromListBySku: function(list, sku) {
+
+            var newList = [];
+
+            for (var i = 0; i < list.length; i++) {
+                if (list[i]['sku'] != sku) {
+                    newList.push(list[i]);
+                }
+            }
+
+            return newList
+        }
     }
-};
+});
