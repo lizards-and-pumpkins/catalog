@@ -43,7 +43,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine
 
         return array_unique($results);
     }
-    
+
     /**
      * @param Context $queryContext
      * @param SearchDocument $searchDocument
@@ -86,7 +86,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine
         $searchDocumentFieldsCollection = $searchDocument->getFieldsCollection();
         foreach ($searchDocumentFieldsCollection->getFields() as $field) {
             if (false !== stripos($field->getValue(), $queryString)) {
-                array_push($results, $searchDocument->getContent());
+                $results[] = $searchDocument->getContent();
             }
         }
         return $results;
