@@ -41,7 +41,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine
             $results = array_merge($results, $this->findMatchingDocumentFields($queryString, $searchDocument));
         }
 
-        return array_unique($results);
+        return array_unique($results, SORT_LOCALE_STRING);
     }
 
     /**
