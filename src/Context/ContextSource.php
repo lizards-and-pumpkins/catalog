@@ -6,7 +6,7 @@ namespace Brera\Context;
 class ContextSource
 {
     /**
-     * @var array
+     * @var array[]
      */
     private $contextMatrix;
 
@@ -15,6 +15,10 @@ class ContextSource
      */
     private $contextBuilder;
 
+    /**
+     * @param array[] $contextMatrix
+     * @param ContextBuilder $contextBuilder
+     */
     public function __construct(array $contextMatrix, ContextBuilder $contextBuilder)
     {
         $this->contextMatrix = $contextMatrix;
@@ -34,7 +38,26 @@ class ContextSource
     }
 
     /**
-     * @param array $partsToExtract
+     * @param string[] $partsToExtract
+     * @return Context[]
+     */
+    public function extractContextsForParts(array $partsToExtract)
+    {
+        $variations = $this->extractCartesianProductOfContextsAsArray($partsToExtract);
+
+        return $this->contextBuilder->getContexts($variations);
+    }
+
+    /**
+     * @return Context[]
+     */
+    public function getAllAvailableContexts()
+    {
+        return $this->extractContextsForParts(array_keys($this->contextMatrix));
+    }
+
+    /**
+     * @param string[] $partsToExtract
      * @return array[]
      */
     private function extractCartesianProductOfContextsAsArray(array $partsToExtract)
@@ -46,7 +69,7 @@ class ContextSource
     }
 
     /**
-     * @param array $partsToExtract
+     * @param string[] $partsToExtract
      * @return bool
      */
     private function ifVersionIsASpecifiedPart(array $partsToExtract)
@@ -55,7 +78,7 @@ class ContextSource
     }
 
     /**
-     * @param array $partsToExtract
+     * @param string[] $partsToExtract
      * @return mixed[]
      */
     private function getContextsThatAreRequestedAndExistInTheSource(array $partsToExtract)
@@ -64,7 +87,7 @@ class ContextSource
     }
 
     /**
-     * @param array $partsToExtract
+     * @param string[] $partsToExtract
      * @return array[]
      */
     private function getAllPossibleCombinationsRecursively(array $partsToExtract)
@@ -87,6 +110,17 @@ class ContextSource
         $key = key($set);
         $subset = array_shift($set);
         $cartesianSubset = $this->buildRecursively($set);
+        return $this->addSubsetToResult($subset, $cartesianSubset, $key);
+    }
+
+    /**
+     * @param array[] $subset
+     * @param string[] $cartesianSubset
+     * @param string $key
+     * @return array[]
+     */
+    private function addSubsetToResult(array $subset, array $cartesianSubset, $key)
+    {
         $result = [];
         foreach ($subset as $value) {
             foreach ($cartesianSubset as $p) {
@@ -95,16 +129,5 @@ class ContextSource
             }
         }
         return $result;
-    }
-
-    /**
-     * @param string[] $partsToExtract
-     * @return Context[]
-     */
-    public function extractContexts(array $partsToExtract)
-    {
-        $variations = $this->extractCartesianProductOfContextsAsArray($partsToExtract);
-
-        return $this->contextBuilder->getContexts($variations);
     }
 }

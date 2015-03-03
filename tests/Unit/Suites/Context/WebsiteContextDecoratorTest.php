@@ -14,7 +14,7 @@ class WebsiteContextDecoratorTest extends ContextDecoratorTestAbstract
      */
     protected function getDecoratorUnderTestCode()
     {
-        return WebsiteContextDecorator::CODE;
+        return 'website';
     }
 
     /**

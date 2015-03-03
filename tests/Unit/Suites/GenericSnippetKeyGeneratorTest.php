@@ -22,7 +22,7 @@ class GenericSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->keyGenerator = new GenericSnippetKeyGenerator($this->testSnippetCode);
+        $this->keyGenerator = new GenericSnippetKeyGenerator($this->testSnippetCode, ['dummy-context-part']);
     }
 
     /**
@@ -40,7 +40,7 @@ class GenericSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldThrowAnExceptionIfTheSnippetCodeIsNoString($invalidSnippetType)
     {
-        new GenericSnippetKeyGenerator($invalidSnippetType);
+        new GenericSnippetKeyGenerator($invalidSnippetType, ['dummy-context-part']);
     }
 
     /**
@@ -88,5 +88,15 @@ class GenericSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
             ->willReturn($testContextId);
         $result = $this->keyGenerator->getKeyForContext(123, $stubContext);
         $this->assertContains($testContextId, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnTheRequiredContextParts()
+    {
+        $result = $this->keyGenerator->getContextParts();
+        $this->assertInternalType('array', $result);
+        $this->assertContainsOnly('string', $result);
     }
 }

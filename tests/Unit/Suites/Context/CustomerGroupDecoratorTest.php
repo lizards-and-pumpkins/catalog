@@ -4,17 +4,17 @@
 namespace Brera\Context;
 
 /**
- * @covers \Brera\Context\LanguageContextDecorator
+ * @covers \Brera\Context\CustomerGroupContextDecorator
  * @covers \Brera\Context\ContextDecorator
  */
-class LanguageContextDecoratorTest extends ContextDecoratorTestAbstract
+class CustomerGroupContextDecoratorTest extends ContextDecoratorTestAbstract
 {
     /**
      * @return string
      */
     protected function getDecoratorUnderTestCode()
     {
-        return 'language';
+        return 'customer_group';
     }
 
     /**
@@ -22,16 +22,16 @@ class LanguageContextDecoratorTest extends ContextDecoratorTestAbstract
      */
     protected function getStubContextData()
     {
-        return [$this->getDecoratorUnderTestCode() => 'test-language'];
+        return [$this->getDecoratorUnderTestCode() => 'test-customer-group-code'];
     }
     
     /**
      * @param Context $stubContext
      * @param array $stubContextData
-     * @return LanguageContextDecorator
+     * @return CustomerGroupContextDecorator
      */
     protected function createContextDecoratorUnderTest(Context $stubContext, array $stubContextData)
     {
-        return new LanguageContextDecorator($stubContext, $stubContextData);
+        return new CustomerGroupContextDecorator($stubContext, $stubContextData);
     }
 }

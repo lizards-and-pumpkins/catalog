@@ -5,13 +5,13 @@ namespace Brera\Context;
 
 class WebsiteContextDecorator extends ContextDecorator
 {
-    const CODE = 'website';
+    private $code = 'website';
     
     /**
      * @return string
      */
     protected function getCode()
     {
-        return self::CODE;
+        return $this->code;
     }
 }

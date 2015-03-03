@@ -3,7 +3,15 @@
 
 namespace Brera\Context;
 
-
-class CustomerGroupContextDecorator {
-
+class CustomerGroupContextDecorator extends ContextDecorator
+{
+    private $code = 'customer_group';
+    
+    /**
+     * @return string
+     */
+    protected function getCode()
+    {
+        return $this->code;
+    }
 }
