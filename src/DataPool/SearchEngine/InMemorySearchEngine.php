@@ -32,16 +32,16 @@ class InMemorySearchEngine implements SearchEngine
 
     /**
      * @param string $queryString
-     * @param Context $context
+     * @param Context $queryContext
      * @return string[]
      */
-    public function query($queryString, Context $context)
+    public function query($queryString, Context $queryContext)
     {
         $results = [];
 
         /** @var SearchDocument $searchDocument */
         foreach ($this->index as $searchDocument) {
-            if ($context != $searchDocument->getContext()) {
+            if (!$this->hasMatchingContext($queryContext, $searchDocument)) {
                 continue;
             }
 
@@ -57,5 +57,34 @@ class InMemorySearchEngine implements SearchEngine
         }
 
         return array_unique($results);
+    }
+
+    /**
+     * @param Context $queryContext
+     * @param SearchDocument $searchDocument
+     * @return bool
+     */
+    private function hasMatchingContext(Context $queryContext, SearchDocument $searchDocument)
+    {
+        foreach ($queryContext->getSupportedCodes() as $code) {
+            $documentContext = $searchDocument->getContext();
+            if ($documentContext->supportsCode($code)) {
+                if (!$this->hasMatchingContextValue($queryContext, $documentContext, $code)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @param Context $queryContext
+     * @param Context $documentContext
+     * @param string $code
+     * @return bool
+     */
+    private function hasMatchingContextValue(Context $queryContext, Context $documentContext, $code)
+    {
+        return $queryContext->getValue($code) === $documentContext->getValue($code);
     }
 }

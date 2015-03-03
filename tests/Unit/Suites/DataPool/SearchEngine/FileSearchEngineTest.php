@@ -61,7 +61,7 @@ class FileSearchEngineTest extends AbstractSearchEngineTest
     }
 
     /**
-     * @param $directoryPath
+     * @param string $directoryPath
      * @return void
      */
     private function removeDirectoryAndItsContent($directoryPath)
