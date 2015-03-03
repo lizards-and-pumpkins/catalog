@@ -38,10 +38,10 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine
                 continue;
             }
 
-            $results = array_merge($results, $this->findMatchingDocumentFields($queryString, $searchDocument));
+            $results = $this->findMatchingDocumentFields($queryString, $searchDocument, $results);
         }
 
-        return array_unique($results, SORT_LOCALE_STRING);
+        return $results;
     }
 
     /**
@@ -78,14 +78,15 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine
     /**
      * @param string $queryString
      * @param SearchDocument $searchDocument
+     * @param string[] $results
      * @return string[]
      */
-    private function findMatchingDocumentFields($queryString, SearchDocument $searchDocument)
+    private function findMatchingDocumentFields($queryString, SearchDocument $searchDocument, array $results)
     {
-        $results = [];
         $searchDocumentFieldsCollection = $searchDocument->getFieldsCollection();
+        $content = $searchDocument->getContent();
         foreach ($searchDocumentFieldsCollection->getFields() as $field) {
-            if (false !== stripos($field->getValue(), $queryString)) {
+            if (! in_array($content, $results) && false !== stripos($field->getValue(), $queryString)) {
                 $results[] = $searchDocument->getContent();
             }
         }
