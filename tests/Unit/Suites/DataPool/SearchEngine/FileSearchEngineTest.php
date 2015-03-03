@@ -4,6 +4,7 @@ namespace Brera\DataPool\SearchEngine;
 
 /**
  * @covers \Brera\DataPool\SearchEngine\FileSearchEngine
+ * @covers \Brera\DataPool\SearchEngine\IntegrationTestSearchEngineAbstract
  */
 class FileSearchEngineTest extends AbstractSearchEngineTest
 {
