@@ -55,7 +55,7 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         ->willReturn($stubProductImportDomainEventHandler);
 
         /**
-         * The real object has to be used here as getHandlerFor() method will call get_class against it
+         * The real object has to be used here as getHandlerFor method will call get_class against it
          */
         $productImportDomainEvent = new ProductImportDomainEvent('<xml/>');
 
@@ -78,7 +78,7 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         ->willReturn($stubCatalogImportDomainEventHandler);
 
         /**
-         * The real object has to be used here as getHandlerFor() method will call get_class against it
+         * The real object has to be used here as getHandlerFor method will call get_class against it
          */
         $catalogImportDomainEvent = new CatalogImportDomainEvent('<xml/>');
 
@@ -101,7 +101,7 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
             ->willReturn($stubRootSnippetChangedDomainEventHandler);
 
         /**
-         * The real object has to be used here as getHandlerFor() method will call get_class against it
+         * The real object has to be used here as getHandlerFor method will call get_class against it
          */
         $rootSnippetChangedDomainEvent = new RootSnippetChangedDomainEvent('<xml/>');
 
