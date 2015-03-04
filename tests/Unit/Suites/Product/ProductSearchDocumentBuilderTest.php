@@ -56,7 +56,7 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->stubContextSource->expects($this->atLeastOnce())
-            ->method('extractContexts')
+            ->method('getAllAvailableContexts')
             ->willReturn([$stubContext]);
 
         $stubProductId = $this->getMockBuilder(ProductId::class)

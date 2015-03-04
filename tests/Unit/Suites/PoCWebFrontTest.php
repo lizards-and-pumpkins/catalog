@@ -75,6 +75,9 @@ class PoCWebFrontTest extends \PHPUnit_Framework_TestCase
         $stubContextBuilder->expects($this->any())
             ->method('getContext')
             ->willReturn($this->getMock(Context::class));
+        $stubContextBuilder->expects($this->any())
+            ->method('createFromRequest')
+            ->willReturn($this->getMock(Context::class));
 
         $stubMasterFactory->expects($this->any())
             ->method('createHttpRouterChain')

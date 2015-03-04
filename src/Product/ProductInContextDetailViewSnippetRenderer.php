@@ -114,4 +114,12 @@ class ProductInContextDetailViewSnippetRenderer
         );
         return $pageMetaInfo->getInfo();
     }
+
+    /**
+     * @return string[]
+     */
+    public function getContextParts()
+    {
+        return $this->snippetKeyGenerator->getContextParts();
+    }
 }

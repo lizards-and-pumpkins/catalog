@@ -23,10 +23,7 @@ class PoCWebFront extends WebFront
     {
         /** @var ContextBuilder $contextBuilder */
         $contextBuilder = $this->getMasterFactory()->createContextBuilder();
-
-        return $contextBuilder->getContext(
-            ['website' => 'ru_de', 'language' => 'de_DE']
-        );
+        return $contextBuilder->createFromRequest($request);
     }
 
     /**

@@ -75,7 +75,7 @@ abstract class WebFront
     abstract protected function createMasterFactoryIfNotInjected();
 
     /**
-     * @return HttpRequest
+     * @param HttpRequest $request
      */
     abstract protected function createContext(HttpRequest $request);
 

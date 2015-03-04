@@ -11,6 +11,8 @@ namespace Brera;
  * @method Context\ContextBuilder createContextBuilderWithVersion
  * @method Context\ContextSourceBuilder createContextSourceBuilder
  * @method DomainEventConsumer createDomainEventConsumer
+ * @method SnippetKeyGeneratorLocator getSnippetKeyGeneratorLocator
+ * @method AbstractLogger getLogger
  * @method Product\ProductDetailViewSnippetKeyGenerator createProductDetailViewSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createGenericSnippetKeyGenerator
  */

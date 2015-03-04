@@ -11,16 +11,23 @@ class SnippetKeyGeneratorLocator
     private $keyGenerators = [];
 
     /**
+     * @var string[]
+     * @todo Make injectable
+     */
+    private $contextParts = ['website', 'language', 'version'];
+
+    /**
      * @param string $snippetCode
      * @return GenericSnippetKeyGenerator
      */
     public function getKeyGeneratorForSnippetCode($snippetCode)
     {
         $this->validateSnippetCode($snippetCode);
-        if (array_key_exists($snippetCode, $this->keyGenerators)) {
-            return $this->keyGenerators[$snippetCode];
+        if (!array_key_exists($snippetCode, $this->keyGenerators)) {
+            $this->keyGenerators[$snippetCode] = new GenericSnippetKeyGenerator($snippetCode, $this->contextParts);
         }
-        return new GenericSnippetKeyGenerator($snippetCode);
+
+        return $this->keyGenerators[$snippetCode];
     }
 
     /**

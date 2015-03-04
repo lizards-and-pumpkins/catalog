@@ -38,19 +38,35 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         }
         
         $dataPoolReader = $factory->createDataPoolReader();
-        $keyGenerator = $factory->createProductDetailViewSnippetKeyGenerator();
         
+        $keyGeneratorLocator = $factory->getSnippetKeyGeneratorLocator();
+        $keyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('product_detail_view');
+
         $contextSource = $factory->createContextSourceBuilder()->createFromXml($xml);
-        $context = $contextSource->extractContexts(['version', 'website', 'language'])[0];
+        $context = $contextSource->extractContextsForParts($keyGenerator->getContextParts())[0];
         
         $key = $keyGenerator->getKeyForContext($productId, $context);
         $html = $dataPoolReader->getSnippet($key);
 
         $searchResults = $dataPoolReader->getSearchResults('led', $context);
 
-        $this->assertContains((string) $sku, $html);
-        $this->assertContains($productName, $html);
-        $this->assertContains((string) $productId, $searchResults, '', false, false);
+        $this->assertContains(
+            (string) $sku,
+            $html,
+            sprintf('The result page HTML does not contain the expected sku "%s"', $sku)
+        );
+        $this->assertContains(
+            $productName,
+            $html,
+            sprintf('The result page HTML does not contain the expected product name "%s"', $productName)
+        );
+        $this->assertContains(
+            (string) $productId,
+            $searchResults,
+            sprintf('The search result does not contain the expected product ID "%s"', $productId),
+            false,
+            false
+        );
     }
 
     /**

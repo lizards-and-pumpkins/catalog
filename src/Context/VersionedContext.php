@@ -51,4 +51,13 @@ class VersionedContext implements Context
     {
         return 'v:' . $this->version;
     }
+
+    /**
+     * @param string $code
+     * @return bool
+     */
+    public function supportsCode($code)
+    {
+        return $code == self::CODE;
+    }
 }

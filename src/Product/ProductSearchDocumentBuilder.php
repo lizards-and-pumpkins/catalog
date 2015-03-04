@@ -40,7 +40,7 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
 
         $collection = new SearchDocumentCollection();
 
-        foreach ($contextSource->extractContexts(['version', 'website', 'language']) as $context) {
+        foreach ($contextSource->getAllAvailableContexts() as $context) {
             $document = $this->createSearchDocument($productSource, $context);
             $collection->add($document);
         }

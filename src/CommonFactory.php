@@ -53,6 +53,11 @@ class CommonFactory implements Factory, DomainEventFactory
     private $searchEngine;
 
     /**
+     * @var SnippetKeyGeneratorLocator
+     */
+    private $snippetKeyGeneratorLocator;
+
+    /**
      * @param ProductImportDomainEvent $event
      * @return ProductImportDomainEventHandler
      * @todo: move to catalog factory
@@ -439,6 +444,17 @@ class CommonFactory implements Factory, DomainEventFactory
     public function createSnippetKeyGeneratorLocator()
     {
         return new SnippetKeyGeneratorLocator();
+    }
+
+    /**
+     * @return SnippetKeyGeneratorLocator
+     */
+    public function getSnippetKeyGeneratorLocator()
+    {
+        if (is_null($this->snippetKeyGeneratorLocator)) {
+            $this->snippetKeyGeneratorLocator = $this->createSnippetKeyGeneratorLocator();
+        }
+        return $this->snippetKeyGeneratorLocator;
     }
 
     /**

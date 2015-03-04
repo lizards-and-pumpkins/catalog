@@ -46,6 +46,9 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->stubContext = $this->getMock(Context::class);
+        $this->stubContext->expects($this->any())->method('getSupportedCodes')->willReturn(['dummy-part']);
+        $this->stubContext->expects($this->any())->method('supportsCode')->with('dummy-part')->willReturn(true);
+        $this->stubContext->expects($this->any())->method('getValue')->with('dummy-part')->willReturn('dummy-value');
 
         $this->searchEngine = $this->createSearchEngineInstance();
     }
@@ -61,7 +64,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldReturnAnEmptyArrayWhateverIsAskedIfIndexIsEmpty()
+    public function itShouldReturnAnEmptyArrayWhateverIsQueriedIfIndexIsEmpty()
     {
         $result = $this->searchEngine->query('bar', $this->stubContext);
 
@@ -181,19 +184,33 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnOnlyMatchesWithMatchingContexts()
     {
-        $searchDocumentContent = 'content';
+        $contextPartCode = 'dummy-part';
+        $stubDocument1Context = $this->getMock(Context::class);
+        $stubDocument1Context->expects($this->any())->method('getValue')->willReturn('value-1');
+        $stubDocument1Context->expects($this->any())->method('supportsCode')->willReturn(true);
+
+        $stubDocument2Context = $this->getMock(Context::class);
+        $stubDocument2Context->expects($this->any())->method('getValue')->willReturn('value-2');
+        $stubDocument2Context->expects($this->any())->method('supportsCode')->willReturn(true);
+
+        $stubQueryContext = $this->getMock(Context::class);
+        $stubQueryContext->expects($this->any())->method('getSupportedCodes')->willReturn([$contextPartCode]);
+        $stubQueryContext->expects($this->any())->method('getValue')->willReturn('value-2');
+
         $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => 'bar']);
         $this->prepareStubSearchDocument(
             $this->stubSearchDocument,
-            $this->stubContext,
+            $stubDocument1Context,
             $stubFieldsCollection,
-            $searchDocumentContent
+            'content1'
         );
-
-        $stubContext2 = $this->getMock(Context::class);
-        $stubContext2->expects($this->never())
-            ->method('someDummyExpectationToMakeObjectDifferent');
-        $this->prepareStubSearchDocument($this->stubSearchDocument2, $stubContext2, null, null);
+        $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => 'bar']);
+        $this->prepareStubSearchDocument(
+            $this->stubSearchDocument2,
+            $stubDocument2Context,
+            $stubFieldsCollection,
+            'content2'
+        );
 
         $this->stubSearchDocumentCollection->expects($this->any())
             ->method('getDocuments')
@@ -201,9 +218,135 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
 
-        $result = $this->searchEngine->query('bar', $this->stubContext);
+        $result = $this->searchEngine->query('bar', $stubQueryContext);
 
-        $this->assertEquals([$searchDocumentContent], $result);
+        $this->assertEquals(['content2'], $result);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldMatchPartialContexts()
+    {
+        $stubDocument1Context = $this->getMock(Context::class);
+        $stubDocument1Context->expects($this->any())->method('getValue')
+            ->willReturnMap([
+                ['part1', 'value1'],
+                ['part2', 'value2'],
+            ]);
+        $stubDocument1Context->expects($this->any())->method('supportsCode')->willReturn(true);
+
+        $stubDocument2Context = $this->getMock(Context::class);
+        $stubDocument2Context->expects($this->any())->method('getValue')
+            ->willReturnMap([
+                ['part1', 'value1'],
+                ['part2', 'value2'],
+            ]);
+        $stubDocument2Context->expects($this->any())->method('supportsCode')->willReturn(true);
+
+        $stubQueryContext = $this->getMock(Context::class);
+        $stubQueryContext->expects($this->any())->method('getSupportedCodes')->willReturn(['part2']);
+        $stubQueryContext->expects($this->any())->method('getValue')->willReturn('value2');
+
+        $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => 'bar']);
+        $this->prepareStubSearchDocument(
+            $this->stubSearchDocument,
+            $stubDocument1Context,
+            $stubFieldsCollection,
+            'content1'
+        );
+        $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => 'bar']);
+        $this->prepareStubSearchDocument(
+            $this->stubSearchDocument2,
+            $stubDocument2Context,
+            $stubFieldsCollection,
+            'content2'
+        );
+
+        $this->stubSearchDocumentCollection->expects($this->any())
+            ->method('getDocuments')
+            ->willReturn([$this->stubSearchDocument, $this->stubSearchDocument2]);
+
+        $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
+
+        $result = $this->searchEngine->query('bar', $stubQueryContext);
+
+        $this->assertEquals(['content1', 'content2'], $result);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldIgnoreContextPartsFromTheQueryThatAreNotInTheSearchDocumentContext()
+    {
+        $contextPartCode = 'dummy-part';
+        $stubQueryContext = $this->getMock(Context::class);
+        $stubQueryContext->expects($this->once())->method('getSupportedCodes')
+            ->willReturn([$contextPartCode . '1', $contextPartCode . '2']);
+        $stubQueryContext->expects($this->any())->method('getValue')
+            ->willReturnMap([
+                [$contextPartCode . '1', 'value1'],
+                [$contextPartCode . '2', 'value2'],
+            ]);
+
+        $stubDocumentContext = $this->getMock(Context::class);
+        $stubDocumentContext->expects($this->any())->method('supportsCode')
+            ->willReturnMap([
+                [$contextPartCode . '1', false],
+                [$contextPartCode . '2', true],
+            ]);
+        $stubDocumentContext->expects($this->any())->method('getValue')
+            ->with($contextPartCode . '2')->willReturn('value2');
+
+        $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => 'bar']);
+        $this->prepareStubSearchDocument(
+            $this->stubSearchDocument,
+            $stubDocumentContext,
+            $stubFieldsCollection,
+            'content'
+        );
+
+        $this->stubSearchDocumentCollection->expects($this->any())
+            ->method('getDocuments')
+            ->willReturn([$this->stubSearchDocument]);
+
+        $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
+
+        $result = $this->searchEngine->query('bar', $stubQueryContext);
+
+        $this->assertEquals(['content'], $result);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldNotMatchIfNoContextPartIsSupported()
+    {
+        $contextPartCode = 'dummy-part';
+        $stubQueryContext = $this->getMock(Context::class);
+        $stubQueryContext->expects($this->any())->method('getSupportedCodes')->willReturn([$contextPartCode]);
+
+        $stubDocumentContext = $this->getMock(Context::class);
+        $stubDocumentContext->expects($this->any())->method('supportsCode')->with($contextPartCode)->willReturn(false);
+        $stubDocumentContext->expects($this->never())->method('getValue');
+
+        $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => 'bar']);
+        $this->prepareStubSearchDocument(
+            $this->stubSearchDocument,
+            $stubDocumentContext,
+            $stubFieldsCollection,
+            'content'
+        );
+
+        $this->stubSearchDocumentCollection->expects($this->any())
+            ->method('getDocuments')
+            ->willReturn([$this->stubSearchDocument]);
+
+        $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
+
+        $result = $this->searchEngine->query('bar', $stubQueryContext);
+
+        $this->assertEquals([], $result, 'Expected no search results.');
     }
 
     /**
