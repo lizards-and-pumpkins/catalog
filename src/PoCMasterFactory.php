@@ -4,7 +4,6 @@ namespace Brera;
 
 use Brera\Context\ContextBuilder;
 use Brera\Context\ContextSourceBuilder;
-use Psr\Log\AbstractLogger;
 
 /**
  * @method DataPool\DataPoolWriter createDataPoolWriter
@@ -14,7 +13,7 @@ use Psr\Log\AbstractLogger;
  * @method ContextBuilder createContextBuilderWithVersion
  * @method DomainEventConsumer createDomainEventConsumer
  * @method SnippetKeyGeneratorLocator getSnippetKeyGeneratorLocator
- * @method AbstractLogger getLogger
+ * @method Logger getLogger
  * @method ContextSourceBuilder createContextSourceBuilder
  */
 class PoCMasterFactory implements MasterFactory

@@ -7,7 +7,6 @@ use Brera\Http\HttpRequestHandler;
 use Brera\Http\HttpUrl;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\KeyNotFoundException;
-use Psr\Log\LoggerInterface;
 
 class UrlKeyRequestHandler implements HttpRequestHandler
 {
@@ -57,7 +56,7 @@ class UrlKeyRequestHandler implements HttpRequestHandler
     private $snippets;
     
     /**
-     * @var LoggerInterface
+     * @var Logger
      */
     private $logger;
 
@@ -67,7 +66,7 @@ class UrlKeyRequestHandler implements HttpRequestHandler
      * @param UrlPathKeyGenerator $urlPathKeyGenerator
      * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
      * @param DataPoolReader $dataPoolReader
-     * @param LoggerInterface $logger
+     * @param Logger $logger
      */
     public function __construct(
         HttpUrl $url,
@@ -75,7 +74,7 @@ class UrlKeyRequestHandler implements HttpRequestHandler
         UrlPathKeyGenerator $urlPathKeyGenerator,
         SnippetKeyGeneratorLocator $keyGeneratorLocator,
         DataPoolReader $dataPoolReader,
-        LoggerInterface $logger
+        Logger $logger
     ) {
         $this->url = $url;
         $this->context = $context;
@@ -103,8 +102,8 @@ class UrlKeyRequestHandler implements HttpRequestHandler
         $this->loadPageMetaInfo();
         $this->loadSnippets();
         $this->logMissingSnippetCodes();
+
         list($rootSnippet, $childSnippets) = $this->separateRootAndChildSnippets();
-        
         
         $childSnippetsCodes = $this->getLoadedChildSnippetCodes();
         $childSnippetCodesToContentMap = $this->mergePlaceholderAndSnippets($childSnippetsCodes, $childSnippets);
@@ -310,10 +309,7 @@ class UrlKeyRequestHandler implements HttpRequestHandler
     {
         $missingSnippetCodes = $this->getMissingSnippetCodes();
         if (count($missingSnippetCodes) > 0) {
-            $this->logger->notice(sprintf(
-                'Snippets listed in the page meta information where not loaded from the data pool (%s")',
-                implode(', ', $missingSnippetCodes)
-            ), ['context' => $this->context]);
+            $this->logger->log(new MissingSnippetCodeMessage($missingSnippetCodes));
         }
     }
 

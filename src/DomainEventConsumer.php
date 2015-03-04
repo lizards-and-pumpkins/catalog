@@ -3,7 +3,6 @@
 namespace Brera;
 
 use Brera\Queue\Queue;
-use Psr\Log\LoggerInterface;
 
 class DomainEventConsumer
 {
@@ -18,16 +17,16 @@ class DomainEventConsumer
     private $handlerLocator;
 
     /**
-     * @var LoggerInterface
+     * @var Logger
      */
     private $logger;
 
     /**
      * @param Queue $queue
      * @param DomainEventHandlerLocator $locator
-     * @param LoggerInterface $logger
+     * @param Logger $logger
      */
-    public function __construct(Queue $queue, DomainEventHandlerLocator $locator, LoggerInterface $logger)
+    public function __construct(Queue $queue, DomainEventHandlerLocator $locator, Logger $logger)
     {
         $this->queue = $queue;
         $this->handlerLocator = $locator;
@@ -45,7 +44,7 @@ class DomainEventConsumer
                 $domainEvent = $this->queue->next();
                 $this->processDomainEvent($domainEvent);
             } catch (\Exception $e) {
-                $this->logger->error($e->getMessage(), [new FailedToReadFromDomainEventQueueMessage($e)]);
+                $this->logger->log(new FailedToReadFromDomainEventQueueMessage($e));
             }
         }
     }
@@ -59,7 +58,7 @@ class DomainEventConsumer
             $domainEventHandler = $this->handlerLocator->getHandlerFor($domainEvent);
             $domainEventHandler->process();
         } catch (\Exception $e) {
-            $this->logger->error($e->getMessage(), [new DomainEventHandlerFailedMessage($domainEvent, $e)]);
+            $this->logger->log(new DomainEventHandlerFailedMessage($domainEvent, $e));
         }
     }
 }

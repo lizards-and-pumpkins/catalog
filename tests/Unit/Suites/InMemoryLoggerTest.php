@@ -12,13 +12,13 @@ class InMemoryLoggerTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldStoreMessageInMemory()
     {
-        $message = 'test-message';
+        $stubLogMessage = $this->getMock(LogMessage::class);
 
         $logger = new InMemoryLogger();
-        $logger->log(null, $message);
+        $logger->log($stubLogMessage);
 
         $messages = $logger->getMessages();
 
-        $this->assertContains($message, $messages);
+        $this->assertContains($stubLogMessage, $messages);
     }
 }

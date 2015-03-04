@@ -1,12 +1,10 @@
 <?php
 
-
 namespace Brera;
 
 use Brera\Context\Context;
 use Brera\Http\HttpUrl;
 use Brera\DataPool\DataPoolReader;
-use Psr\Log\LoggerInterface;
 
 class UrlKeyRequestHandlerBuilder
 {
@@ -26,7 +24,7 @@ class UrlKeyRequestHandlerBuilder
     private $keyGeneratorLocator;
     
     /**
-     * @var LoggerInterface
+     * @var Logger
      */
     private $logger;
 
@@ -34,7 +32,7 @@ class UrlKeyRequestHandlerBuilder
         UrlPathKeyGenerator $urlPathKeyGenerator,
         SnippetKeyGeneratorLocator $keyGeneratorLocator,
         DataPoolReader $dataPoolReader,
-        LoggerInterface $logger
+        Logger $logger
     ) {
         $this->urlPathKeyGenerator = $urlPathKeyGenerator;
         $this->dataPoolReader = $dataPoolReader;

@@ -19,7 +19,6 @@
     "require": {
         "brera/lib-key-value-store": "dev-master",
         "brera/lib-queue": "dev-master",
-        "psr/log": "dev-master",
         "league/url": "3.1.1"
     },
     "require-dev": {
