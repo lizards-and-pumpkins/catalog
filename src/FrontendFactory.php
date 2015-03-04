@@ -48,6 +48,9 @@ class FrontendFactory implements Factory
         return new UrlKeyRouter($this->createUrlKeyRequestHandlerBuilder());
     }
 
+    /**
+     * @return UrlKeyRequestHandlerBuilder
+     */
     private function createUrlKeyRequestHandlerBuilder()
     {
         return new UrlKeyRequestHandlerBuilder(

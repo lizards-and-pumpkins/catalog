@@ -14,7 +14,6 @@ use Brera\Product\ProductImportDomainEventHandler;
 use Brera\Product\ProductProjector;
 use Brera\Product\ProductSourceBuilder;
 use Brera\Queue\Queue;
-use Psr\Log\LoggerInterface;
 
 /**
  * @covers \Brera\CommonFactory
@@ -285,7 +284,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $resultA = $this->commonFactory->getLogger();
         $resultB = $this->commonFactory->getLogger();
-        $this->assertInstanceOf(LoggerInterface::class, $resultA);
+        $this->assertInstanceOf(Logger::class, $resultA);
         $this->assertSame($resultA, $resultB);
     }
 

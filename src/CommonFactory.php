@@ -25,7 +25,6 @@ use Brera\Product\ProductProjector;
 use Brera\Product\ProductSourceDetailViewSnippetRenderer;
 use Brera\Product\ProductDetailViewSnippetKeyGenerator;
 use Brera\Renderer\BlockStructure;
-use Psr\Log\LoggerInterface;
 use Brera\Http\HttpRouterChain;
 
 class CommonFactory implements Factory, DomainEventFactory
@@ -43,7 +42,7 @@ class CommonFactory implements Factory, DomainEventFactory
     private $eventQueue;
 
     /**
-     * @var LoggerInterface
+     * @var Logger
      */
     private $logger;
 
@@ -385,7 +384,7 @@ class CommonFactory implements Factory, DomainEventFactory
     }
 
     /**
-     * @return LoggerInterface
+     * @return Logger
      * @throws UndefinedFactoryMethodException
      */
     public function getLogger()

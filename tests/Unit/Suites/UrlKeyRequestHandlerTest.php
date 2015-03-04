@@ -6,7 +6,6 @@ use Brera\Context\Context;
 use Brera\Http\HttpUrl;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\KeyNotFoundException;
-use Psr\Log\LoggerInterface;
 
 /**
  * @covers \Brera\UrlKeyRequestHandler
@@ -15,6 +14,7 @@ use Psr\Log\LoggerInterface;
  * @uses   \Brera\SnippetKeyGeneratorLocator
  * @uses   \Brera\PageMetaInfoSnippetContent
  * @uses   \Brera\GenericSnippetKeyGenerator
+ * @uses   \Brera\MissingSnippetCodeMessage
  */
 class UrlKeyRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -54,7 +54,7 @@ class UrlKeyRequestHandlerTest extends \PHPUnit_Framework_TestCase
     private $mockUrlPathKeyGenerator;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var Logger|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubLogger;
 
@@ -89,7 +89,7 @@ class UrlKeyRequestHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         
-        $this->stubLogger = $this->getMock(LoggerInterface::class);
+        $this->stubLogger = $this->getMock(Logger::class);
 
         $this->urlKeyRequestHandler = new UrlKeyRequestHandler(
             $this->url,
@@ -256,7 +256,7 @@ EOH;
         $this->setPageMetaInfoFixture($rootSnippetCode, $childSnippetCodes);
         $this->setPageContentSnippetFixture($allSnippetCodes, $allSnippetContent);
         $this->stubLogger->expects($this->once())
-            ->method('notice');
+            ->method('log');
         $this->urlKeyRequestHandler->process();
     }
 
