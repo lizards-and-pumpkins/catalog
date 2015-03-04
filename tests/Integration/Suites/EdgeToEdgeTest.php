@@ -14,7 +14,7 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldPutProductToKeyValueStoreAndSearchIndex()
+    public function importProductDomainEventShouldPutProductToKeyValueStoreAndSearchIndex()
     {
         $factory = $this->prepareIntegrationTestMasterFactory();
 
@@ -72,7 +72,7 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldPutProductListingRootSnippetIntoKeyValueStore()
+    public function rootSnippetChangedDomainEventShouldPutProductListingRootSnippetIntoKeyValueStore()
     {
         $factory = $this->prepareIntegrationTestMasterFactory();
 
