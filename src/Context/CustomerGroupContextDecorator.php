@@ -3,9 +3,9 @@
 
 namespace Brera\Context;
 
-class WebsiteContextDecorator extends ContextDecorator
+class CustomerGroupContextDecorator extends ContextDecorator
 {
-    private $code = 'website';
+    private $code = 'customer_group';
     
     /**
      * @return string

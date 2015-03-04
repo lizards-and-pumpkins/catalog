@@ -83,4 +83,13 @@ abstract class ContextDecorator implements Context
     {
         return $this->sourceData;
     }
+
+    /**
+     * @param string $code
+     * @return bool
+     */
+    public function supportsCode($code)
+    {
+        return $this->getCode() === $code || $this->component->supportsCode($code);
+    }
 }

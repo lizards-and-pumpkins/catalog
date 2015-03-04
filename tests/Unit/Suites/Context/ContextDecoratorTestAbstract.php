@@ -169,6 +169,27 @@ abstract class ContextDecoratorTestAbstract extends \PHPUnit_Framework_TestCase
     {
         $this->defaultGetValueImplementationTest();
     }
+    
+    /**
+     * @test
+     */
+    public function itShouldSupportTheVersionCode()
+    {
+        $code = $this->getDecoratorUnderTestCode();
+        $this->assertTrue($this->getDecoratorUnderTest()->supportsCode($code));
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldDelegateToComponentIfCodeNotSupported()
+    {
+        $code = 'dummy-part';
+        $this->mockDecoratedContext->expects($this->once())
+            ->method('supportsCode')
+            ->with($code);
+        $this->getDecoratorUnderTest()->supportsCode($code);
+    }
 
     private function defaultGetValueImplementationTest()
     {

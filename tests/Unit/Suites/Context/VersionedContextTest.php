@@ -80,4 +80,20 @@ class VersionedContextTest extends \PHPUnit_Framework_TestCase
         $expected = 'v:' . $this->testVersionValue;
         $this->assertEquals($expected, $this->versionedContext->getId());
     }
+
+    /**
+     * @test
+     */
+    public function itShouldSupportTheVersionCode()
+    {
+        $this->assertTrue($this->versionedContext->supportsCode(VersionedContext::CODE));
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldNotSupportCodesOtherThenVersion()
+    {
+        $this->assertFalse($this->versionedContext->supportsCode('foo'));
+    }
 }

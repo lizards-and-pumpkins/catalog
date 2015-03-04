@@ -2,12 +2,10 @@
 
 namespace Brera\DataPool\SearchEngine;
 
-use Brera\Context\Context;
-
-class InMemorySearchEngine implements SearchEngine
+class InMemorySearchEngine extends IntegrationTestSearchEngineAbstract
 {
     /**
-     * @var mixed[]
+     * @var SearchDocument[]
      */
     private $index = [];
 
@@ -20,42 +18,10 @@ class InMemorySearchEngine implements SearchEngine
     }
 
     /**
-     * @param SearchDocumentCollection $searchDocumentCollection
-     * @return void
+     * @return SearchDocument[]
      */
-    public function addSearchDocumentCollection(SearchDocumentCollection $searchDocumentCollection)
+    protected function getSearchDocuments()
     {
-        foreach ($searchDocumentCollection->getDocuments() as $searchDocument) {
-            $this->addSearchDocument($searchDocument);
-        }
-    }
-
-    /**
-     * @param string $queryString
-     * @param Context $context
-     * @return string[]
-     */
-    public function query($queryString, Context $context)
-    {
-        $results = [];
-
-        /** @var SearchDocument $searchDocument */
-        foreach ($this->index as $searchDocument) {
-            if ($context != $searchDocument->getContext()) {
-                continue;
-            }
-
-            $searchDocumentFieldsCollection = $searchDocument->getFieldsCollection();
-
-            foreach ($searchDocumentFieldsCollection->getFields() as $field) {
-                if (!in_array($searchDocument->getContent(), $results)) {
-                    if (false !== stripos($field->getValue(), $queryString)) {
-                        array_push($results, $searchDocument->getContent());
-                    }
-                }
-            }
-        }
-
-        return array_unique($results);
+        return $this->index;
     }
 }

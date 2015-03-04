@@ -9,15 +9,15 @@ namespace Brera\Context;
 class ContextSourceTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var int
+     * @var int[]
      */
     private $testVersion = [1];
-    
+
     /**
      * @var ContextBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubContextBuilder;
-    
+
     /**
      * @var ContextSource
      */
@@ -25,14 +25,21 @@ class ContextSourceTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->stubContextBuilder = $this->getMockBuilder(ContextBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->stubContextBuilder = $this->getMock(ContextBuilder::class, [], [], '', false);
         $this->stubContextBuilder->expects($this->any())
             ->method('getContexts')
             ->willReturn([]);
+        $this->contextSource = $this->createContextSourceInstance($this->stubContextBuilder);
+    }
+
+    /**
+     * @param ContextBuilder|\PHPUnit_Framework_MockObject_MockObject $contextBuilder
+     * @return ContextSource
+     */
+    private function createContextSourceInstance($contextBuilder)
+    {
         $contexts = [VersionedContext::CODE => $this->testVersion];
-        $this->contextSource = new ContextSource($contexts, $this->stubContextBuilder);
+        return new ContextSource($contexts, $contextBuilder);
     }
 
     /**
@@ -40,7 +47,7 @@ class ContextSourceTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnAnArray()
     {
-        $result = $this->contextSource->extractContexts([]);
+        $result = $this->contextSource->extractContextsForParts([]);
         $this->assertInternalType('array', $result);
     }
 
@@ -56,8 +63,8 @@ class ContextSourceTest extends \PHPUnit_Framework_TestCase
         $contextSource = new ContextSource($contextMatrix, $this->stubContextBuilder);
         $method = new \ReflectionMethod($contextSource, 'extractCartesianProductOfContextsAsArray');
         $method->setAccessible(true);
-        $invoke = $method->invoke($contextSource, $requested);
-        $this->assertEquals($expected, $invoke);
+        $result = $method->invoke($contextSource, $requested);
+        $this->assertEquals($expected, $result);
     }
 
     public function cartesianProductTestProvider()
@@ -97,7 +104,70 @@ class ContextSourceTest extends \PHPUnit_Framework_TestCase
                     ['foo' => 'a', 'version' => 2],
                     ['foo' => 'b', 'version' => 2],
                 ]
-            )
+            ),
+            array(
+                [
+                    VersionedContext::CODE => [1, 2],
+                    'foo' => ['a', 'b'],
+                    'bar' => ['x', 'y'],
+                ],
+                ['foo', 'bar'],
+                [
+                    ['foo' => 'a', 'version' => 1, 'bar' => 'x'],
+                    ['foo' => 'a', 'version' => 1, 'bar' => 'y'],
+                    ['foo' => 'b', 'version' => 1, 'bar' => 'x'],
+                    ['foo' => 'b', 'version' => 1, 'bar' => 'y'],
+                    ['foo' => 'a', 'version' => 2, 'bar' => 'x'],
+                    ['foo' => 'a', 'version' => 2, 'bar' => 'y'],
+                    ['foo' => 'b', 'version' => 2, 'bar' => 'x'],
+                    ['foo' => 'b', 'version' => 2, 'bar' => 'y'],
+                ]
+            ),
+            array(
+                [
+                    VersionedContext::CODE => [1, 2],
+                    'foo' => ['a', 'b', 'c'],
+                ],
+                ['foo'],
+                [
+                    ['foo' => 'a', 'version' => 1],
+                    ['foo' => 'b', 'version' => 1],
+                    ['foo' => 'c', 'version' => 1],
+                    ['foo' => 'a', 'version' => 2],
+                    ['foo' => 'b', 'version' => 2],
+                    ['foo' => 'c', 'version' => 2],
+                ]
+            ),
+            array(
+                [
+                    VersionedContext::CODE => [1, 2, 3],
+                    'foo' => ['a', 'b', 'c'],
+                ],
+                ['foo'],
+                [
+                    ['foo' => 'a', 'version' => 1],
+                    ['foo' => 'b', 'version' => 1],
+                    ['foo' => 'c', 'version' => 1],
+                    ['foo' => 'a', 'version' => 2],
+                    ['foo' => 'b', 'version' => 2],
+                    ['foo' => 'c', 'version' => 2],
+                    ['foo' => 'a', 'version' => 3],
+                    ['foo' => 'b', 'version' => 3],
+                    ['foo' => 'c', 'version' => 3],
+                ]
+            ),
+            array(
+                [
+                    VersionedContext::CODE => [1, 2],
+                    'foo' => ['a'],
+                    'bar' => ['x', 'y', 'z'],
+                ],
+                ['foo'],
+                [
+                    ['foo' => 'a', 'version' => 1],
+                    ['foo' => 'a', 'version' => 2],
+                ]
+            ),
         ];
     }
 
@@ -116,5 +186,18 @@ class ContextSourceTest extends \PHPUnit_Framework_TestCase
     public function itShouldReturnAnEmptyArrayForANonExistentContextPart()
     {
         $this->assertSame([], $this->contextSource->getContextValuesForPart('non-existent'));
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnAllPossibleCombinations()
+    {
+        $stubContextBuilder = $this->getMock(ContextBuilder::class, [], [], '', false);
+        $stubContextBuilder->expects($this->once())
+            ->method('getContexts')
+            ->with([[VersionedContext::CODE => reset($this->testVersion)]]);
+        $contextSource = $this->createContextSourceInstance($stubContextBuilder);
+        $contextSource->getAllAvailableContexts();
     }
 }

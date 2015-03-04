@@ -4,6 +4,7 @@ namespace Brera\DataPool\SearchEngine;
 
 /**
  * @covers \Brera\DataPool\SearchEngine\FileSearchEngine
+ * @covers \Brera\DataPool\SearchEngine\IntegrationTestSearchEngineAbstract
  */
 class FileSearchEngineTest extends AbstractSearchEngineTest
 {
@@ -61,7 +62,7 @@ class FileSearchEngineTest extends AbstractSearchEngineTest
     }
 
     /**
-     * @param $directoryPath
+     * @param string $directoryPath
      * @return void
      */
     private function removeDirectoryAndItsContent($directoryPath)

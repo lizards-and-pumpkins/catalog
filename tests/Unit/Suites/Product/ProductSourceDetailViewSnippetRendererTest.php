@@ -52,7 +52,10 @@ class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_Test
         $this->mockProductInContextDetailViewRenderer->expects($this->any())
             ->method('render')
             ->willReturn($this->mockSnippetResultList);
-
+        $this->mockProductInContextDetailViewRenderer->expects($this->any())
+            ->method('getContextParts')
+            ->willReturn(['version']);
+        
 
         $this->snippetRenderer = new ProductSourceDetailViewSnippetRenderer(
             $this->mockSnippetResultList,
@@ -66,7 +69,7 @@ class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_Test
         $this->stubContextSource = $this->getMockBuilder(ContextSource::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->stubContextSource->expects($this->any())->method('extractContexts')
+        $this->stubContextSource->expects($this->any())->method('extractContextsForParts')
             ->willReturn([$this->stubContext]);
     }
 

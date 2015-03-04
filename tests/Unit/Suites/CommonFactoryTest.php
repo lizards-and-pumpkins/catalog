@@ -289,13 +289,15 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $result = $this->commonFactory->createHttpRouterChain();
         $this->assertInstanceOf(HttpRouterChain::class, $result);
     }
-    
+
     /**
      * @test
      */
-    public function itShouldReturnASnippetKeyGeneratorLocator()
+    public function itShouldAlwaysReturnTheSameKeyGenratorLocatorViaGetter()
     {
-        $result = $this->commonFactory->createSnippetKeyGeneratorLocator();
-        $this->assertInstanceOf(SnippetKeyGeneratorLocator::class, $result);
+        $result1 = $this->commonFactory->getSnippetKeyGeneratorLocator();
+        $result2 = $this->commonFactory->getSnippetKeyGeneratorLocator();
+        $this->assertInstanceOf(SnippetKeyGeneratorLocator::class, $result1);
+        $this->assertSame($result1, $result2);
     }
 }

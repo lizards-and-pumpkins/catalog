@@ -34,9 +34,9 @@ class ProductInContextDetailViewSnippetRendererTest extends \PHPUnit_Framework_T
     private $stubProductDetailViewBlockRenderer;
 
     /**
-     * @var ProductDetailViewSnippetKeyGenerator||\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductDetailViewSnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubProductDetailViewSnippetKeyGenerator;
+    private $mockProductDetailViewSnippetKeyGenerator;
 
     /**
      * @var UrlPathKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
@@ -58,8 +58,8 @@ class ProductInContextDetailViewSnippetRendererTest extends \PHPUnit_Framework_T
         $this->stubProductDetailViewBlockRenderer->expects($this->any())
             ->method('getNestedSnippetCodes')
             ->willReturn([]);
-        $this->stubProductDetailViewSnippetKeyGenerator = $this->getMock(ProductDetailViewSnippetKeyGenerator::class);
-        $this->stubProductDetailViewSnippetKeyGenerator->expects($this->any())
+        $this->mockProductDetailViewSnippetKeyGenerator = $this->getMock(ProductDetailViewSnippetKeyGenerator::class);
+        $this->mockProductDetailViewSnippetKeyGenerator->expects($this->any())
             ->method('getKeyForContext')
             ->willReturn('stub-content-key');
         $this->stubUrlPathKeyGenerator = $this->getMock(UrlPathKeyGenerator::class);
@@ -69,7 +69,7 @@ class ProductInContextDetailViewSnippetRendererTest extends \PHPUnit_Framework_T
         $this->renderer = new ProductInContextDetailViewSnippetRenderer(
             $this->mockSnippetResultList,
             $this->stubProductDetailViewBlockRenderer,
-            $this->stubProductDetailViewSnippetKeyGenerator,
+            $this->mockProductDetailViewSnippetKeyGenerator,
             $this->stubUrlPathKeyGenerator
         );
     }
@@ -101,5 +101,15 @@ class ProductInContextDetailViewSnippetRendererTest extends \PHPUnit_Framework_T
         /** @var SnippetResult $result */
         $result = $method->invoke($this->renderer);
         $this->assertInternalType('array', json_decode($result->getContent(), true));
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldDelegateToTheKeyGeneratorToFetchTheContextParts()
+    {
+        $this->mockProductDetailViewSnippetKeyGenerator->expects($this->once())
+            ->method('getContextParts');
+        $this->renderer->getContextParts();
     }
 }

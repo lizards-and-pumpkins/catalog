@@ -19,4 +19,10 @@ interface Context
      * @return string[]
      */
     public function getSupportedCodes();
+
+    /**
+     * @param string $code
+     * @return bool
+     */
+    public function supportsCode($code);
 }

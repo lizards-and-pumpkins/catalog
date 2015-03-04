@@ -36,7 +36,7 @@ EOX;
         $extractedValues = [];
         $contextCounter = 0;
         /** @var Context $context */
-        foreach ($contextSource->extractContexts($codes) as $context) {
+        foreach ($contextSource->extractContextsForParts($codes) as $context) {
             $contextCounter++;
             $this->assertEquals($codes, $context->getSupportedCodes());
             $expected = $context->getValue('website') . '-' . $context->getValue('language');
