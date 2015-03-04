@@ -2,9 +2,7 @@
 
 namespace Brera;
 
-use Psr\Log\AbstractLogger;
-
-class InMemoryLogger extends AbstractLogger
+class InMemoryLogger implements Logger
 {
     /**
      * @var LogMessage[]
@@ -12,12 +10,9 @@ class InMemoryLogger extends AbstractLogger
     private $messages = [];
 
     /**
-     * @param mixed $level
-     * @param string $message
-     * @param array $context
-     * @return null
+     * @param LogMessage $message
      */
-    public function log($level, $message, array $context = [])
+    public function log(LogMessage $message)
     {
         $this->messages[] = $message;
     }

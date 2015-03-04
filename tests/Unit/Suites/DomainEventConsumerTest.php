@@ -3,7 +3,6 @@
 namespace Brera;
 
 use Brera\Queue\Queue;
-use Psr\Log\LoggerInterface;
 
 /**
  * @covers \Brera\DomainEventConsumer
@@ -38,7 +37,7 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
         $this->stubLocator = $this->getMockBuilder(DomainEventHandlerLocator::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->stubLogger = $this->getMock(LoggerInterface::class);
+        $this->stubLogger = $this->getMock(Logger::class);
 
         $this->domainEventConsumer = new DomainEventConsumer($this->stubQueue, $this->stubLocator, $this->stubLogger);
     }
@@ -75,7 +74,7 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
             ->willThrowException($stubUnableToFindDomainEventHandlerException);
 
         $this->stubLogger->expects($this->exactly($numberOfEventsToProcess))
-            ->method('error');
+            ->method('log');
 
         $this->domainEventConsumer->process($numberOfEventsToProcess);
     }
@@ -93,7 +92,7 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
             ->willThrowException($stubUnderflowException);
 
         $this->stubLogger->expects($this->exactly($numberOfEventsToProcess))
-            ->method('error');
+            ->method('log');
 
         $this->domainEventConsumer->process($numberOfEventsToProcess);
     }
