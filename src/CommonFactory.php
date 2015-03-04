@@ -166,7 +166,7 @@ class CommonFactory implements Factory, DomainEventFactory
     /**
      * @return SnippetRenderer[]
      */
-    public function getRootSnippetRendererList()
+    private function getRootSnippetRendererList()
     {
         return [
             $this->getMasterFactory()->createProductListingSnippetRenderer(),
