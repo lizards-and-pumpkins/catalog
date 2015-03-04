@@ -95,7 +95,7 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $keyGenerator = $factory->createGenericSnippetKeyGenerator();
 
         $contextSource = $factory->createContextSourceBuilder()->createFromXml($xml);
-        $context = $contextSource->extractContexts(['version', 'website', 'language'])[0];
+        $context = $contextSource->getAllAvailableContexts()[0];
 
         $key = $keyGenerator->getKeyForContext('product_listing', $context);
         $html = $dataPoolReader->getSnippet($key);

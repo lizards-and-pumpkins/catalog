@@ -48,7 +48,7 @@ class ProductListingSnippetRenderer implements SnippetRenderer
      */
     public function render(ProjectionSourceData $dataObject, ContextSource $contextSource)
     {
-        foreach ($contextSource->extractContexts($this->getContextParts()) as $context) {
+        foreach ($contextSource->getAllAvailableContexts() as $context) {
             $content = $this->blockRenderer->render($dataObject, $context);
             /* TODO: Put list related identifier (e.g. num products per page) */
             $key = $this->snippetKeyGenerator->getKeyForContext('product_listing', $context);
@@ -57,13 +57,5 @@ class ProductListingSnippetRenderer implements SnippetRenderer
         }
 
         return $this->snippetResultList;
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getContextParts()
-    {
-        return ['version', 'website', 'language'];
     }
 }

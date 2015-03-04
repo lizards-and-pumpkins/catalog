@@ -40,7 +40,7 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
         $mockContextSource = $this->getMock(ContextSource::class, [], [], '', false);
         $mockContextSource->expects($this->atLeastOnce())
-            ->method('extractContexts')
+            ->method('getAllAvailableContexts')
             ->willReturn([$stubContext]);
 
         $snippetRenderer = new ProductListingSnippetRenderer(
