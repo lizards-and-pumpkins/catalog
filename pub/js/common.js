@@ -1,7 +1,7 @@
 define([
     'local-storage',
     'lib/jquery.jscrollpane.min',
-    'lib/jquery.mousewheel',
+    'lib/jquery.mousewheel.min',
     'lib/jquery.uniform.min'
 ], function(storage) {
 

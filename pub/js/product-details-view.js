@@ -1,7 +1,7 @@
 require([
     'common',
     'recently-viewed-products',
-    'lib/jquery.jqzoom-2.2.min',
+    'lib/jquery.jqzoom.min',
     'lib/jquery.uniform.min'
 ], function(common, recentlyViewedProducts) {
 

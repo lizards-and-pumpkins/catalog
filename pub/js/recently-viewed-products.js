@@ -1,4 +1,4 @@
-define(['local-storage'], function(storage) {
+define(['local-storage', 'jquery'], function(storage) {
     return {
 
         storageKey: 'recently-viewed-products',
