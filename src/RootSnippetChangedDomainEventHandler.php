@@ -37,8 +37,7 @@ class RootSnippetChangedDomainEventHandler implements DomainEventHandler
         RootSnippetProjector $projector,
         ProjectionSourceData $projectionSourceData,
         ContextSourceBuilder $contextSourceBuilder
-    )
-    {
+    ) {
         $this->projector = $projector;
         $this->contextSourceBuilder = $contextSourceBuilder;
         $this->projectionSourceData = $projectionSourceData;

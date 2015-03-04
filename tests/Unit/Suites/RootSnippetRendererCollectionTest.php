@@ -31,7 +31,8 @@ class RootSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
             ->willReturn($stubSnippetResultList);
 
         $rootSnippetRendererCollection = new RootSnippetRendererCollection(
-            [$mockSnippetRenderer], $mockSnippetResultList
+            [$mockSnippetRenderer],
+            $mockSnippetResultList
         );
 
         $result = $rootSnippetRendererCollection->render($stubProjectionSourceData, $stubContextSource);

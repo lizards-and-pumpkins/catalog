@@ -44,7 +44,9 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$stubContext]);
 
         $snippetRenderer = new ProductListingSnippetRenderer(
-            $mockSnippetResultList, $mockSnippetKeyGenerator, $mockBlockRenderer
+            $mockSnippetResultList,
+            $mockSnippetKeyGenerator,
+            $mockBlockRenderer
         );
 
         $result = $snippetRenderer->render($stubProjectionSourceData, $mockContextSource);

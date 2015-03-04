@@ -32,7 +32,10 @@ class RootSnippetChangedDomainEventHandlerTest extends \PHPUnit_Framework_TestCa
             ->willReturn($stubContextSource);
 
         (new RootSnippetChangedDomainEventHandler(
-            $mockRootSnippetChangedDomainEvent, $mockProjector, $stubProjectionSourceData, $mockContextSourceBuilder
+            $mockRootSnippetChangedDomainEvent,
+            $mockProjector,
+            $stubProjectionSourceData,
+            $mockContextSourceBuilder
         ))->process();
     }
 }

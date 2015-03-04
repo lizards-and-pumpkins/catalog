@@ -33,9 +33,10 @@ class ProductListingSnippetRenderer implements SnippetRenderer
      * @param BlockRenderer $blockRenderer
      */
     public function __construct(
-        SnippetResultList $snippetResultList, SnippetKeyGenerator $snippetKeyGenerator, BlockRenderer $blockRenderer
-    )
-    {
+        SnippetResultList $snippetResultList,
+        SnippetKeyGenerator $snippetKeyGenerator,
+        BlockRenderer $blockRenderer
+    ) {
         $this->snippetResultList = $snippetResultList;
         $this->snippetKeyGenerator = $snippetKeyGenerator;
         $this->blockRenderer = $blockRenderer;
