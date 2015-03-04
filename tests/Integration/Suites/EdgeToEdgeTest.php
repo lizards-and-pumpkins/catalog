@@ -100,7 +100,9 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $key = $keyGenerator->getKeyForContext('product_listing', $context);
         $html = $dataPoolReader->getSnippet($key);
 
-        $this->assertContains('LIST TEMPLATE', $html);
+        $expectation = file_get_contents(__DIR__ . '/../../../theme/template/list.phtml');
+
+        $this->assertContains($expectation, $html);
     }
 
     /**

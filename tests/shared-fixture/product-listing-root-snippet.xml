@@ -1,4 +1,6 @@
 <?xml version="1.0"?>
-<root>
-
-</root>
+<contexts>
+    <context website="ru_de"/>
+    <context language="de_DE"/>
+    <context language="en_EN"/>
+</contexts>
