@@ -92,7 +92,7 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         }
 
         $dataPoolReader = $factory->createDataPoolReader();
-        $keyGenerator = $factory->createGenericSnippetKeyGenerator();
+        $keyGenerator = $factory->createProductListingSnippetKeyGenerator();
 
         $contextSource = $factory->createContextSourceBuilder()->createFromXml($xml);
         $context = $contextSource->getAllAvailableContexts()[0];

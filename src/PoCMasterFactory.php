@@ -14,7 +14,7 @@ namespace Brera;
  * @method SnippetKeyGeneratorLocator getSnippetKeyGeneratorLocator
  * @method AbstractLogger getLogger
  * @method Product\ProductDetailViewSnippetKeyGenerator createProductDetailViewSnippetKeyGenerator
- * @method GenericSnippetKeyGenerator createGenericSnippetKeyGenerator
+ * @method GenericSnippetKeyGenerator createProductListingSnippetKeyGenerator
  */
 class PoCMasterFactory implements MasterFactory
 {

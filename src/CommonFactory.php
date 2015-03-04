@@ -181,7 +181,7 @@ class CommonFactory implements Factory, DomainEventFactory
     {
         return new ProductListingSnippetRenderer(
             $this->getMasterFactory()->createSnippetResultList(),
-            $this->getMasterFactory()->createGenericSnippetKeyGenerator(),
+            $this->getMasterFactory()->createProductListingSnippetKeyGenerator(),
             $this->getMasterFactory()->createProductListingBlockRenderer()
         );
     }
@@ -189,7 +189,7 @@ class CommonFactory implements Factory, DomainEventFactory
     /**
      * @return GenericSnippetKeyGenerator
      */
-    public function createGenericSnippetKeyGenerator()
+    public function createProductListingSnippetKeyGenerator()
     {
         return new GenericSnippetKeyGenerator('product_listing', ['website', 'language', 'version']);
     }
