@@ -8,15 +8,14 @@ a { color: #37a3d4; text-decoration: none }
 
 .footer-block dt { color: #37a3d4; }
 .block-text h4 { color: #37a3d4; }
-.products-grid .you-save { color: #37a3d4; }
+.you-save { color: #37a3d4; }
 
 .swipe-container { overflow-x: auto }
 .swipe-container ul { display: table }
 .swipe-container li { display: table-cell }
-.swipe-container .products-grid li { float: none; width: auto }
-.swipe-container .products-grid li .grid-cell-container { border-bottom: none; width: 213px }
 
 h1 { font-size: 26px; font-weight: normal; color: #323232; text-transform: uppercase }
+.heading { color: #323232; font-family: GeogrotesqueRegular, Helvetica, Arial, sans-serif; font-size: 26px }
 
 /* Main search form */
 #search_mini_form { width: 367px }
@@ -83,26 +82,6 @@ nav { clear: both; color: #ffffff }
 #navPlaceholder .brands-logos a { display: inline-block; margin: 10px 10px 0 }
 #navPlaceholder .brands-glossary a { margin: 2px 2px 12px }
 .nav .button, #navPlaceholder .button { background: #ffffff; color: #000000; border-color: #bdc3cc }
-
-/* Products grid elements which are commonly used */
-.products-grid { overflow: hidden }
-.products-grid li { list-style: none; float: left;  width: 33%; position: relative; margin-bottom: -1px }
-.products-grid li.item { background-position: 99% 1px; background-repeat: no-repeat }
-.products-grid li .grid-cell-container { padding: 25px 15px 20px 15px; height: 196px; border-bottom: 1px solid #eaeaea; border-right: 1px solid #eaeaea }
-.products-grid li.last .grid-cell-container { border-right: none }
-.products-grid .product-image { display: block; margin: 0 0 10px 0 }
-.products-grid .price-box { float: right; text-align: right; margin: 0 0 0 10px; min-height: 44px }
-.products-grid .product-name { font: bold 14px/22px Verdana, sans-serif; color: #323232; margin: 0 0 5px 0; position: relative }
-.products-grid .retail-price { text-decoration: line-through; position: relative; margin-bottom: 5px }
-.products-grid .regular-price, .products-grid .special-price { font-size: 15px; font-weight: bold; position: absolute; bottom: 23px; right: 14px }
-.products-grid .regular-price { position: static }
-#bestseller-scroller .products-grid .regular-price, #bestseller-scroller .products-grid .special-price { font-size: 14px }
-.products-grid .regular-price a { color: #000 }
-.products-grid .you-save { color: #ac3f07 }
-.products-grid .product-category { margin-bottom: 7px }
-.products-grid .product-category a { color: #000 }
-.products-grid li h2.product-name { width: 220px; text-overflow: ellipsis }
-.products-grid li span.new-product { background:#3CABD9; color: #FFF; font-family:GeogrotesqueRegular, Helvetica, Arial, sans-serif; font-size:1.2em; overflow:hidden; padding:3px 7px; text-transform:uppercase; position:absolute; left:0; top:0; vertical-align:baseline }
 
 /* Footer blocks */
 .footer-block { font-size: 10px; width: 171px; margin: 0 25px 0 0 }

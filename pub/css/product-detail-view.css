@@ -1,8 +1,19 @@
+@import "ekomi.css";
+@import "common.css";
+@import "ls-form.css";
+@import "product-grid.css";
+@import "responsive.css";
+@import "styles.css";
+@import "uniform.default.css";
+@import "lib/jquery.jscrollpane.css";
+@import "lib/jquery.jqzoom.css";
+
 .product-essential:after, #phoneTitlePlaceholder:after { content: ""; display: block; height: 0; clear: both; visibility: hidden }
 
 body.catalog-product-view div.wrapper {background-color: #fff;}
 
-.product-essential { padding: 5px; margin: 0 0 17px 0; position: relative; background: #f0f0f0 }
+.product-essential { padding: 5px; position: relative; background: #f0f0f0 }
+.product-collateral { margin: 30px 0 }
 
 .product-shop { float: right; width: 550px; padding: 15px 10px 0 0 }
 .product-shop .top { border-bottom: 1px solid #fff; margin-bottom: 10px; padding-bottom: 15px }
@@ -60,7 +71,8 @@ div.product-shop div.price-box p.regular-price { font-size: 24px; font-weight: n
 .socialSharing div.gplus-container { float:left; width: 200px }
 .socialSharing .print { float: right; font-size: 11px }
 
-#recently-viewed .block-title { margin-bottom: 10px; }
+#recently-viewed-products { position: relative; display: none }
+#recently-viewed-products .heading { margin-bottom: 15px }
 
 form#product_addtocart_form { position: relative; display:block; z-index: 2; }
 
@@ -94,7 +106,6 @@ form#product_addtocart_form { position: relative; display:block; z-index: 2; }
 div.selector span { text-overflow: clip }
 
 #alertLayer { display: none }
-#recently-viewed { position: relative }
 
 div.main-image-area-wrapper object#yt { z-index: 19998; position: relative; margin-top: 29px }
 div.product-view.cycles div.main-image-area-wrapper object#yt { margin-top: 0 }
@@ -112,10 +123,6 @@ div.main-image-area-wrapper object#swf { height:340px !important }
     .socialSharing .print { clear: both; float: left; margin: 17px 0 10px 0 }
     .socialSharing .cc { clear: none }
     .socialSharing.fr_FR div.item.fb-like { clear: both; margin: 5px 0 0 0 }
-
-    .block-title { margin: 0 10px }
-    #recently-viewed ul.products-grid { display: table }
-    #recently-viewed ul.products-grid > li { display: table-cell; float: none; width: auto }
 }
 
 /* Phone */
