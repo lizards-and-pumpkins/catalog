@@ -27,8 +27,8 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Context\ContextSourceBuilder
  * @uses   \Brera\DomainEventConsumer
  * @uses   \Brera\DomainEventHandlerLocator
- * @uses   \Brera\RootSnippetChangedDomainEvent
- * @uses   \Brera\RootSnippetChangedDomainEventHandler
+ * @uses   \Brera\RootTemplateChangedDomainEvent
+ * @uses   \Brera\RootTemplateChangedDomainEventHandler
  * @uses   \Brera\RootSnippetProjector
  * @uses   \Brera\UrlPathKeyGenerator
  * @uses   \Brera\Renderer\BlockRenderer
@@ -97,11 +97,11 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
      * @test
      * @todo Move to catalog factory test
      */
-    public function itShouldCreateARootSnippetChangedDomainEventHandler()
+    public function itShouldCreateARootTemplateChangedDomainEventHandler()
     {
-        $rootSnippetChangedDomainEvent = new RootSnippetChangedDomainEvent('<xml></xml>');
-        $result = $this->commonFactory->createRootSnippetChangedDomainEventHandler($rootSnippetChangedDomainEvent);
-        $this->assertInstanceOf(RootSnippetChangedDomainEventHandler::class, $result);
+        $rootTemplateChangedDomainEvent = new RootTemplateChangedDomainEvent('<xml></xml>');
+        $result = $this->commonFactory->createRootTemplateChangedDomainEventHandler($rootTemplateChangedDomainEvent);
+        $this->assertInstanceOf(RootTemplateChangedDomainEventHandler::class, $result);
     }
 
     /**

@@ -4,10 +4,10 @@ namespace Brera;
 
 use Brera\Context\ContextSourceBuilder;
 
-class RootSnippetChangedDomainEventHandler implements DomainEventHandler
+class RootTemplateChangedDomainEventHandler implements DomainEventHandler
 {
     /**
-     * @var RootSnippetChangedDomainEvent
+     * @var RootTemplateChangedDomainEvent
      */
     private $event;
 
@@ -27,13 +27,13 @@ class RootSnippetChangedDomainEventHandler implements DomainEventHandler
     private $contextSourceBuilder;
 
     /**
-     * @param RootSnippetChangedDomainEvent $event
+     * @param RootTemplateChangedDomainEvent $event
      * @param RootSnippetProjector $projector
      * @param ProjectionSourceData $projectionSourceData
      * @param ContextSourceBuilder $contextSourceBuilder
      */
     public function __construct(
-        RootSnippetChangedDomainEvent $event,
+        RootTemplateChangedDomainEvent $event,
         RootSnippetProjector $projector,
         ProjectionSourceData $projectionSourceData,
         ContextSourceBuilder $contextSourceBuilder

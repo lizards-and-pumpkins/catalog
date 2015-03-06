@@ -22,8 +22,8 @@ interface DomainEventFactory
     public function createCatalogImportDomainEventHandler(CatalogImportDomainEvent $event);
 
     /**
-     * @param RootSnippetChangedDomainEvent $event
-     * @return RootSnippetChangedDomainEventHandler
+     * @param RootTemplateChangedDomainEvent $event
+     * @return RootTemplateChangedDomainEventHandler
      */
-    public function createRootSnippetChangedDomainEventHandler(RootSnippetChangedDomainEvent $event);
+    public function createRootTemplateChangedDomainEventHandler(RootTemplateChangedDomainEvent $event);
 }

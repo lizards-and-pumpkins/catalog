@@ -83,13 +83,13 @@ class CommonFactory implements Factory, DomainEventFactory
     }
 
     /**
-     * @param RootSnippetChangedDomainEvent $event
-     * @return RootSnippetChangedDomainEventHandler
+     * @param RootTemplateChangedDomainEvent $event
+     * @return RootTemplateChangedDomainEventHandler
      * @todo: move to catalog factory
      */
-    public function createRootSnippetChangedDomainEventHandler(RootSnippetChangedDomainEvent $event)
+    public function createRootTemplateChangedDomainEventHandler(RootTemplateChangedDomainEvent $event)
     {
-        return new RootSnippetChangedDomainEventHandler(
+        return new RootTemplateChangedDomainEventHandler(
             $event,
             $this->getMasterFactory()->createRootSnippetProjector(),
             $this->getMasterFactory()->createRootSnippetSource(),

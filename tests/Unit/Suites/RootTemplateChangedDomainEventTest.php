@@ -3,9 +3,9 @@
 namespace Brera;
 
 /**
- * @covers \Brera\RootSnippetChangedDomainEvent
+ * @covers \Brera\RootTemplateChangedDomainEvent
  */
-class RootSnippetChangedDomainEventTest extends \PHPUnit_Framework_TestCase
+class RootTemplateChangedDomainEventTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
@@ -14,7 +14,7 @@ class RootSnippetChangedDomainEventTest extends \PHPUnit_Framework_TestCase
     {
         $xml = '<root></root>';
 
-        $event = new RootSnippetChangedDomainEvent($xml);
+        $event = new RootTemplateChangedDomainEvent($xml);
         $result = $event->getXml();
 
         $this->assertEquals($xml, $result);

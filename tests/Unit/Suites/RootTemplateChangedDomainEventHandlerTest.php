@@ -6,9 +6,9 @@ use Brera\Context\ContextSource;
 use Brera\Context\ContextSourceBuilder;
 
 /**
- * @covers \Brera\RootSnippetChangedDomainEventHandler
+ * @covers \Brera\RootTemplateChangedDomainEventHandler
  */
-class RootSnippetChangedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
+class RootTemplateChangedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
@@ -18,8 +18,8 @@ class RootSnippetChangedDomainEventHandlerTest extends \PHPUnit_Framework_TestCa
         $stubProjectionSourceData = $this->getMock(ProjectionSourceData::class);
         $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
 
-        $mockRootSnippetChangedDomainEvent = $this->getMock(RootSnippetChangedDomainEvent::class, [], [], '', false);
-        $mockRootSnippetChangedDomainEvent->expects($this->once())
+        $mockRootTemplateChangedDomainEvent = $this->getMock(RootTemplateChangedDomainEvent::class, [], [], '', false);
+        $mockRootTemplateChangedDomainEvent->expects($this->once())
             ->method('getXml');
 
         $mockProjector = $this->getMock(RootSnippetProjector::class, [], [], '', false);
@@ -31,8 +31,8 @@ class RootSnippetChangedDomainEventHandlerTest extends \PHPUnit_Framework_TestCa
             ->method('createFromXml')
             ->willReturn($stubContextSource);
 
-        (new RootSnippetChangedDomainEventHandler(
-            $mockRootSnippetChangedDomainEvent,
+        (new RootTemplateChangedDomainEventHandler(
+            $mockRootTemplateChangedDomainEvent,
             $mockProjector,
             $stubProjectionSourceData,
             $mockContextSourceBuilder

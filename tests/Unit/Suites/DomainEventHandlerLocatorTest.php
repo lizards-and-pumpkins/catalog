@@ -9,7 +9,7 @@ use Brera\Product\ProductImportDomainEventHandler;
 
 /**
  * @covers \Brera\DomainEventHandlerLocator
- * @uses \Brera\RootSnippetChangedDomainEvent
+ * @uses \Brera\RootTemplateChangedDomainEvent
  * @uses \Brera\Product\ProductImportDomainEvent
  * @uses \Brera\Product\CatalogImportDomainEvent
  */
@@ -90,23 +90,23 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldLocateAndReturnRootSnippetChangedDomainEventHandler()
+    public function itShouldLocateAndReturnRootTemplateChangedDomainEventHandler()
     {
-        $stubRootSnippetChangedDomainEventHandler = $this->getMockBuilder(RootSnippetChangedDomainEventHandler::class)
+        $stubRootTemplateChangedDomainEventHandler = $this->getMockBuilder(RootTemplateChangedDomainEventHandler::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->factory->expects($this->once())
-            ->method('createRootSnippetChangedDomainEventHandler')
-            ->willReturn($stubRootSnippetChangedDomainEventHandler);
+            ->method('createRootTemplateChangedDomainEventHandler')
+            ->willReturn($stubRootTemplateChangedDomainEventHandler);
 
         /**
          * The real object has to be used here as getHandlerFor method will call get_class against it
          */
-        $rootSnippetChangedDomainEvent = new RootSnippetChangedDomainEvent('<xml/>');
+        $rootTemplateChangedDomainEvent = new RootTemplateChangedDomainEvent('<xml/>');
 
-        $result = $this->locator->getHandlerFor($rootSnippetChangedDomainEvent);
+        $result = $this->locator->getHandlerFor($rootTemplateChangedDomainEvent);
 
-        $this->assertInstanceOf(RootSnippetChangedDomainEventHandler::class, $result);
+        $this->assertInstanceOf(RootTemplateChangedDomainEventHandler::class, $result);
     }
 }
