@@ -7,21 +7,21 @@ class RootTemplateChangedDomainEvent implements DomainEvent
     /**
      * @var string
      */
-    private $xml;
+    private $layoutHandle;
 
     /**
-     * @param string $xml
+     * @param string $layoutHandle
      */
-    public function __construct($xml)
+    public function __construct($layoutHandle)
     {
-        $this->xml = $xml;
+        $this->layoutHandle = $layoutHandle;
     }
 
     /**
      * @return string
      */
-    public function getXml()
+    public function getLayoutHandle()
     {
-        return $this->xml;
+        return $this->layoutHandle;
     }
 }

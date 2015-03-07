@@ -10,13 +10,13 @@ class RootTemplateChangedDomainEventTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldReturnImportXml()
+    public function itShouldReturnSnippetLayoutHandle()
     {
-        $xml = '<root></root>';
+        $layoutHandle = 'foo';
+        $event = new RootTemplateChangedDomainEvent($layoutHandle);
 
-        $event = new RootTemplateChangedDomainEvent($xml);
-        $result = $event->getXml();
+        $result = $event->getLayoutHandle();
 
-        $this->assertEquals($xml, $result);
+        $this->assertEquals($layoutHandle, $result);
     }
 }
