@@ -4,7 +4,6 @@ namespace Brera;
 
 use Brera\Context\ContextBuilder;
 use Brera\Context\ContextSource;
-use Brera\Context\ContextSourceBuilder;
 use Brera\Http\ResourceNotFoundRouter;
 use Brera\DataPool\SearchEngine\SearchEngine;
 use Brera\Product\CatalogImportDomainEvent;
