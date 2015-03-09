@@ -46,7 +46,7 @@ class RootTemplateChangedDomainEventHandler implements DomainEventHandler
 
     public function process()
     {
-        $rootSnippetSource = $this->rootSnippetSourceBuilder->createFromXml($this->event->getLayoutHandle());
+        $rootSnippetSource = $this->rootSnippetSourceBuilder->createFromXml($this->event->getXml());
 
         $this->projector->project($rootSnippetSource, $this->contextSource);
     }

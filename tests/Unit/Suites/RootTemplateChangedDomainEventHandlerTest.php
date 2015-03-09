@@ -17,7 +17,7 @@ class RootTemplateChangedDomainEventHandlerTest extends \PHPUnit_Framework_TestC
 
         $mockRootTemplateChangedDomainEvent = $this->getMock(RootTemplateChangedDomainEvent::class, [], [], '', false);
         $mockRootTemplateChangedDomainEvent->expects($this->once())
-            ->method('getLayoutHandle');
+            ->method('getXml');
 
         $mockRootSnippetSourceBuilder = $this->getMock(RootSnippetSourceListBuilder::class, [], [], '', false);
         $mockRootSnippetSourceBuilder->expects($this->once())

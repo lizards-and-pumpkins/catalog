@@ -15,7 +15,7 @@ class RootTemplateChangedDomainEventTest extends \PHPUnit_Framework_TestCase
         $layoutHandle = 'foo';
         $event = new RootTemplateChangedDomainEvent($layoutHandle);
 
-        $result = $event->getLayoutHandle();
+        $result = $event->getXml();
 
         $this->assertEquals($layoutHandle, $result);
     }
