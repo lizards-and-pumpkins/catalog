@@ -8,33 +8,65 @@ namespace Brera;
 class RootSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var SnippetRenderer|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockSnippetRenderer;
+
+    /**
+     * @var SnippetResultList|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockSnippetResultList;
+
+    /**
+     * @var RootSnippetRendererCollection
+     */
+    private $rootSnippetRendererCollection;
+
+    protected function setUp()
+    {
+        $this->mockSnippetRenderer = $this->getMock(SnippetRenderer::class);
+
+        $this->mockSnippetResultList = $this->getMock(SnippetResultList::class);
+
+        $this->rootSnippetRendererCollection = new RootSnippetRendererCollection(
+            [$this->mockSnippetRenderer],
+            $this->mockSnippetResultList
+        );
+    }
+
+    /**
      * @test
      */
     public function itShouldReturnSnippetResultsList()
     {
-        $stubProjectionSourceData = $this->getMock(ProjectionSourceData::class);
+        $stubRootSnippetSourceList = $this->getMock(RootSnippetSourceList::class, [], [], '', false);
         $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
         $stubSnippetResultList = $this->getMock(SnippetResultList::class);
 
-        $mockSnippetRenderer = $this->getMock(SnippetRenderer::class);
-        $mockSnippetRenderer->expects($this->once())
+        $this->mockSnippetRenderer->expects($this->once())
             ->method('render')
-            ->with($stubProjectionSourceData, $stubContextSource)
+            ->with($stubRootSnippetSourceList, $stubContextSource)
             ->willReturn($stubSnippetResultList);
 
-        $mockSnippetResultList = $this->getMock(SnippetResultList::class);
-        $mockSnippetResultList->expects($this->once())
+        $this->mockSnippetResultList->expects($this->once())
             ->method('merge')
             ->with($stubSnippetResultList)
             ->willReturn($stubSnippetResultList);
 
-        $rootSnippetRendererCollection = new RootSnippetRendererCollection(
-            [$mockSnippetRenderer],
-            $mockSnippetResultList
-        );
-
-        $result = $rootSnippetRendererCollection->render($stubProjectionSourceData, $stubContextSource);
+        $result = $this->rootSnippetRendererCollection->render($stubRootSnippetSourceList, $stubContextSource);
 
         $this->assertEquals($stubSnippetResultList, $result);
+    }
+
+    /**
+     * @test
+     * @expectedException \Brera\InvalidProjectionDataSourceTypeException
+     */
+    public function itShouldThrowAnExceptionIfProjectionDataIsNotAnInstanceOfRootSnippetSourceList()
+    {
+        $stubProjectionSourceData = $this->getMock(ProjectionSourceData::class);
+        $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
+
+        $this->rootSnippetRendererCollection->render($stubProjectionSourceData, $stubContextSource);
     }
 }
