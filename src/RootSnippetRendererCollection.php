@@ -27,20 +27,20 @@ class RootSnippetRendererCollection implements SnippetRendererCollection
     }
 
     /**
-     * @param ProjectionSourceData $dataObject
+     * @param ProjectionSourceData $rootSnippetSourceList
      * @param ContextSource $contextSource
      * @return SnippetResultList
      */
-    public function render(ProjectionSourceData $dataObject, ContextSource $contextSource)
+    public function render(ProjectionSourceData $rootSnippetSourceList, ContextSource $contextSource)
     {
-        if (!($dataObject instanceof RootSnippetSourceList)) {
+        if (!($rootSnippetSourceList instanceof RootSnippetSourceList)) {
             throw new InvalidProjectionDataSourceTypeException(
                 'First argument must be instance of RootSnippetSourceList.'
             );
         }
 
         foreach ($this->renderers as $renderer) {
-            $this->snippetResultList->merge($renderer->render($dataObject, $contextSource));
+            $this->snippetResultList->merge($renderer->render($rootSnippetSourceList, $contextSource));
         }
 
         return $this->snippetResultList;

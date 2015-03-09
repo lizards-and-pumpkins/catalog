@@ -3,6 +3,7 @@
 namespace Brera;
 
 use Brera\Context\Context;
+use Brera\Context\VersionedContext;
 
 /**
  * @covers \Brera\RootSnippetSourceList
@@ -13,17 +14,21 @@ class RootSnippetSourceListTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldReturnArrayOfRootSnippetSources()
+    public function itShouldReturnNumbersOfItemsPertPageForGivenContext()
     {
         $stubContext = $this->getMock(Context::class);
+        $stubContext2 = $this->getMock(VersionedContext::class, [], [], '', false);
+
         $sourceDataPairs = [
-            ['context' => $stubContext, 'numItemsPerPage' => 1]
+            ['context' => $stubContext, 'numItemsPerPage' => 10],
+            ['context' => $stubContext2, 'numItemsPerPage' => 20],
+            ['context' => $stubContext, 'numItemsPerPage' => 30],
         ];
         $rootSnippetSourceList = RootSnippetSourceList::fromArray($sourceDataPairs);
 
-        $result = $rootSnippetSourceList->getSources();
+        $result = $rootSnippetSourceList->getNumItemsPrePageForContext($stubContext);
 
-        $this->assertContainsOnly(RootSnippetSource::class, $result);
+        $this->assertSame([10, 30], $result);
     }
 
     /**
