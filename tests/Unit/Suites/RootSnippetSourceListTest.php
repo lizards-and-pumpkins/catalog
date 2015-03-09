@@ -6,6 +6,7 @@ use Brera\Context\Context;
 
 /**
  * @covers \Brera\RootSnippetSourceList
+ * @uses   \Brera\RootSnippetSource
  */
 class RootSnippetSourceListTest extends \PHPUnit_Framework_TestCase
 {

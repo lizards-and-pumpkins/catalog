@@ -99,11 +99,11 @@ class CommonFactory implements Factory, DomainEventFactory
     }
 
     /**
-     * @return RootSnippetSourceBuilder
+     * @return RootSnippetSourceListBuilder
      */
     public function createRootSnippetSourceBuilder()
     {
-        return new RootSnippetSourceBuilder();
+        return new RootSnippetSourceListBuilder($this->getMasterFactory()->createContextBuilder());
     }
 
     /**

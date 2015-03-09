@@ -4,7 +4,6 @@ namespace Brera;
 
 use Brera\Context\ContextBuilder;
 use Brera\Context\ContextSource;
-use Brera\Context\ContextSourceBuilder;
 use Brera\Http\ResourceNotFoundRouter;
 use Brera\Http\HttpRouterChain;
 use Brera\DataPool\DataPoolReader;
@@ -47,6 +46,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Product\ProductListingSnippetRenderer
  * @uses   \Brera\GenericSnippetKeyGenerator
  * @uses   \Brera\RootSnippetRendererCollection
+ * @uses   \Brera\RootSnippetSourceListBuilder
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {

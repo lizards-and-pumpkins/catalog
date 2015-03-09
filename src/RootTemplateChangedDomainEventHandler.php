@@ -12,7 +12,7 @@ class RootTemplateChangedDomainEventHandler implements DomainEventHandler
     private $event;
 
     /**
-     * @var RootSnippetSourceBuilder
+     * @var RootSnippetSourceListBuilder
      */
     private $rootSnippetSourceBuilder;
 
@@ -28,13 +28,13 @@ class RootTemplateChangedDomainEventHandler implements DomainEventHandler
 
     /**
      * @param RootTemplateChangedDomainEvent $event
-     * @param RootSnippetSourceBuilder $rootSnippetSourceBuilder
+     * @param RootSnippetSourceListBuilder $rootSnippetSourceBuilder
      * @param ContextSource $contextSource
      * @param RootSnippetProjector $projector
      */
     public function __construct(
         RootTemplateChangedDomainEvent $event,
-        RootSnippetSourceBuilder $rootSnippetSourceBuilder,
+        RootSnippetSourceListBuilder $rootSnippetSourceBuilder,
         ContextSource $contextSource,
         RootSnippetProjector $projector
     ) {
