@@ -5,7 +5,7 @@ namespace Brera\Product;
 use Brera\SnippetRenderer;
 use Brera\SnippetResultList;
 use Brera\ProjectionSourceData;
-use Brera\Context\ContextSource;
+use Brera\SampleContextSource;
 
 /**
  * @covers \Brera\Product\ProductSnippetRendererCollection
@@ -59,7 +59,7 @@ class ProductSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $stubContext = $this->getMockBuilder(ContextSource::class)
+        $stubContext = $this->getMockBuilder(SampleContextSource::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -84,7 +84,7 @@ class ProductSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $stubContext = $this->getMockBuilder(ContextSource::class)
+        $stubContext = $this->getMockBuilder(SampleContextSource::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -114,7 +114,7 @@ class ProductSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $stubContext = $this->getMockBuilder(ContextSource::class)
+        $stubContext = $this->getMockBuilder(SampleContextSource::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -149,7 +149,7 @@ class ProductSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
     public function itShouldThrowAnExceptionIfTheDataSourceObjectTypeIsNotProduct()
     {
         $invalidDataSource = $this->getMock(ProjectionSourceData::class);
-        $stubContext = $this->getMockBuilder(ContextSource::class)
+        $stubContext = $this->getMockBuilder(SampleContextSource::class)
             ->disableOriginalConstructor()->getMock();
         $this->rendererCollection->render($invalidDataSource, $stubContext);
     }

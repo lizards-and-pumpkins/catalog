@@ -42,8 +42,8 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $keyGeneratorLocator = $factory->getSnippetKeyGeneratorLocator();
         $keyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('product_detail_view');
 
-        $contextSource = $factory->createContextSourceBuilder()->createFromXml($xml);
-        $context = $contextSource->extractContextsForParts($keyGenerator->getContextParts())[0];
+        $contextSource = $factory->createContextSource();
+        $context = $contextSource->getAllAvailableContexts()[0];
         
         $key = $keyGenerator->getKeyForContext($productId, $context);
         $html = $dataPoolReader->getSnippet($key);
@@ -94,7 +94,7 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $dataPoolReader = $factory->createDataPoolReader();
         $keyGenerator = $factory->createProductListingSnippetKeyGenerator();
 
-        $contextSource = $factory->createContextSourceBuilder()->createFromXml($xml);
+        $contextSource = $factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[0];
 
         $key = $keyGenerator->getKeyForContext('product_listing', $context);

@@ -3,6 +3,7 @@
 namespace Brera;
 
 use Brera\Context\ContextBuilder;
+use Brera\Context\ContextSource;
 use Brera\Context\ContextSourceBuilder;
 use Brera\Http\ResourceNotFoundRouter;
 use Brera\Http\HttpRouterChain;
@@ -24,7 +25,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\DataPool\DataPoolWriter
  * @uses   \Brera\DataPool\DataPoolReader
  * @uses   \Brera\Context\ContextBuilder
- * @uses   \Brera\Context\ContextSourceBuilder
+ * @uses   \Brera\Context\ContextSource
  * @uses   \Brera\DomainEventConsumer
  * @uses   \Brera\DomainEventHandlerLocator
  * @uses   \Brera\RootTemplateChangedDomainEvent
@@ -68,7 +69,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldThrowAnExceptionIfNoMasterFactoryIsSet()
     {
-        (new CommonFactory())->createContextSourceBuilder();
+        (new CommonFactory())->createDomainEventConsumer();
     }
 
     /**
@@ -165,10 +166,11 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldCreateAnContextSourceBuilder()
+    public function itShouldCreateAnContextSource()
     {
-        $result = $this->commonFactory->createContextSourceBuilder();
-        $this->assertInstanceOf(ContextSourceBuilder::class, $result);
+        $result = $this->commonFactory->createContextSource();
+
+        $this->assertInstanceOf(ContextSource::class, $result);
     }
 
     /**

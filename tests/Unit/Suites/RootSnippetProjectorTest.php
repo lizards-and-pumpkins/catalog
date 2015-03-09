@@ -2,7 +2,6 @@
 
 namespace Brera;
 
-use Brera\Context\ContextSource;
 use Brera\DataPool\DataPoolWriter;
 
 /**
@@ -16,7 +15,7 @@ class RootSnippetProjectorTest extends \PHPUnit_Framework_TestCase
     public function itShouldWriteSnippetResultCollectionIntoDataPool()
     {
         $stubDataObject = $this->getMock(ProjectionSourceData::class);
-        $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
+        $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
         $stubSnippetResultsList = $this->getMock(SnippetResultList::class);
 
         $mockSnippetRendererCollection = $this->getMock(SnippetRendererCollection::class, [], [], '', false);

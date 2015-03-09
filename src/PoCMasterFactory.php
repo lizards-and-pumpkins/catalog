@@ -8,10 +8,10 @@ namespace Brera;
  * @method Queue\Queue getEventQueue
  * @method Context\ContextBuilder createContextBuilder
  * @method Context\ContextBuilder createContextBuilderWithVersion
- * @method Context\ContextSourceBuilder createContextSourceBuilder
+ * @method Context\ContextSource createContextSource
  * @method DomainEventConsumer createDomainEventConsumer
  * @method SnippetKeyGeneratorLocator getSnippetKeyGeneratorLocator
- * @method Logger getLogger
+ * @method InMemoryLogger getLogger
  * @method Product\ProductDetailViewSnippetKeyGenerator createProductDetailViewSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createProductListingSnippetKeyGenerator
  */

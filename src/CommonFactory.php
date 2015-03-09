@@ -3,6 +3,7 @@
 namespace Brera;
 
 use Brera\Context\ContextBuilder;
+use Brera\Context\ContextSource;
 use Brera\Context\ContextSourceBuilder;
 use Brera\Http\ResourceNotFoundRouter;
 use Brera\DataPool\SearchEngine\SearchEngine;
@@ -66,7 +67,7 @@ class CommonFactory implements Factory, DomainEventFactory
         return new ProductImportDomainEventHandler(
             $event,
             $this->getMasterFactory()->createProductSourceBuilder(),
-            $this->getMasterFactory()->createContextSourceBuilder(),
+            $this->getMasterFactory()->createContextSource(),
             $this->getMasterFactory()->createProductProjector(),
             $this->getMasterFactory()->createProductSearchDocumentBuilder()
         );
@@ -91,18 +92,18 @@ class CommonFactory implements Factory, DomainEventFactory
     {
         return new RootTemplateChangedDomainEventHandler(
             $event,
-            $this->getMasterFactory()->createRootSnippetProjector(),
-            $this->getMasterFactory()->createRootSnippetSource(),
-            $this->getMasterFactory()->createContextSourceBuilder()
+            $this->getMasterFactory()->createRootSnippetSourceBuilder(),
+            $this->getMasterFactory()->createContextSource(),
+            $this->getMasterFactory()->createRootSnippetProjector()
         );
     }
 
     /**
-     * @return RootSnippetSource
+     * @return RootSnippetSourceBuilder
      */
-    public function createRootSnippetSource()
+    public function createRootSnippetSourceBuilder()
     {
-        return new RootSnippetSource();
+        return new RootSnippetSourceBuilder();
     }
 
     /**
@@ -289,11 +290,13 @@ class CommonFactory implements Factory, DomainEventFactory
     }
 
     /**
-     * @return ContextSourceBuilder
+     * @return ContextSource
      */
-    public function createContextSourceBuilder()
+    public function createContextSource()
     {
-        return new ContextSourceBuilder($this->getMasterFactory()->createContextBuilder());
+        /* TODO: Move to sample factory */
+
+        return new SampleContextSource($this->getMasterFactory()->createContextBuilder());
     }
 
     /**

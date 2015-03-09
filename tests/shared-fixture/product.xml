@@ -20,12 +20,12 @@
                 <file language="de_US">products/118235/118235-251.2us.png</file>
                 <label>A secondary image label</label>
             </image>
-            <category website="ru_de">men</category>
-            <category website="ru_de">women</category>
-            <category website="ru_de">men-accessories</category>
-            <category website="ru_de">women-accessories</category>
-            <category website="ru_en">men-accessories</category>
-            <category website="ru_en">women-accessories</category>
+            <category website="ru" language="de_DE">men</category>
+            <category website="ru" language="de_DE">women</category>
+            <category website="ru" language="de_DE">men-accessories</category>
+            <category website="ru" language="de_DE">women-accessories</category>
+            <category website="ru" language="en_US">men-accessories</category>
+            <category website="ru" language="en_US">women-accessories</category>
             <stock_qty>5</stock_qty>
             <backorders>true</backorders>
             <url_key language="de_DE">led-arm-signallampe</url_key>
@@ -33,8 +33,8 @@
             <name language="de_DE">LED Arm-Signallampe</name>
             <name language="en_US">LED Armflasher</name>
             <price customer_group="retail" website="ru_de">12.95</price>
-            <price website="ru_en">11.45</price>
-            <special_price website="ru_de">11.95</special_price>
+            <price website="ru">11.45</price>
+            <special_price website="ru">11.95</special_price>
             <weight>11.2</weight>
             <description language="de_DE"><![CDATA[Pro Touch LED Armflasher<br />
 <br />

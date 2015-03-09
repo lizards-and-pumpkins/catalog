@@ -2,7 +2,7 @@
 
 namespace Brera;
 
-use Brera\Context\ContextSourceBuilder;
+use Brera\Context\ContextSource;
 
 class RootTemplateChangedDomainEventHandler implements DomainEventHandler
 {
@@ -12,42 +12,42 @@ class RootTemplateChangedDomainEventHandler implements DomainEventHandler
     private $event;
 
     /**
+     * @var RootSnippetSourceBuilder
+     */
+    private $rootSnippetSourceBuilder;
+
+    /**
+     * @var ContextSource
+     */
+    private $contextSource;
+
+    /**
      * @var RootSnippetProjector
      */
     private $projector;
 
     /**
-     * @var ProjectionSourceData
-     */
-    private $projectionSourceData;
-
-    /**
-     * @var ContextSourceBuilder
-     */
-    private $contextSourceBuilder;
-
-    /**
      * @param RootTemplateChangedDomainEvent $event
+     * @param RootSnippetSourceBuilder $rootSnippetSourceBuilder
+     * @param ContextSource $contextSource
      * @param RootSnippetProjector $projector
-     * @param ProjectionSourceData $projectionSourceData
-     * @param ContextSourceBuilder $contextSourceBuilder
      */
     public function __construct(
         RootTemplateChangedDomainEvent $event,
-        RootSnippetProjector $projector,
-        ProjectionSourceData $projectionSourceData,
-        ContextSourceBuilder $contextSourceBuilder
+        RootSnippetSourceBuilder $rootSnippetSourceBuilder,
+        ContextSource $contextSource,
+        RootSnippetProjector $projector
     ) {
         $this->projector = $projector;
-        $this->contextSourceBuilder = $contextSourceBuilder;
-        $this->projectionSourceData = $projectionSourceData;
+        $this->rootSnippetSourceBuilder = $rootSnippetSourceBuilder;
+        $this->contextSource = $contextSource;
         $this->event = $event;
     }
 
     public function process()
     {
-        $contextSource = $this->contextSourceBuilder->createFromXml($this->event->getXml());
+        $rootSnippetSource = $this->rootSnippetSourceBuilder->createFromXml($this->event->getLayoutHandle());
 
-        $this->projector->project($this->projectionSourceData, $contextSource);
+        $this->projector->project($rootSnippetSource, $this->contextSource);
     }
 }

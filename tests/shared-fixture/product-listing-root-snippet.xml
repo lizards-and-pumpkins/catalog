@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
-<contexts>
-    <context website="ru_de"/>
-    <context language="de_DE"/>
-    <context language="en_EN"/>
-</contexts>
+<listings>
+    <products_per_page>
+        <number website="ru" language="de_DE">60</number>
+        <number website="ru" language="de_DE">120</number>
+        <number website="ru" language="en_US">60</number>
+        <number website="ru" language="en_US">120</number>
+    </products_per_page>
+</listings>

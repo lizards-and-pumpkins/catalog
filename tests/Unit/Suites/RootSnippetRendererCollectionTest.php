@@ -2,8 +2,6 @@
 
 namespace Brera;
 
-use Brera\Context\ContextSource;
-
 /**
  * @covers \Brera\RootSnippetRendererCollection
  */
@@ -15,7 +13,7 @@ class RootSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
     public function itShouldReturnSnippetResultsList()
     {
         $stubProjectionSourceData = $this->getMock(ProjectionSourceData::class);
-        $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
+        $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
         $stubSnippetResultList = $this->getMock(SnippetResultList::class);
 
         $mockSnippetRenderer = $this->getMock(SnippetRenderer::class);

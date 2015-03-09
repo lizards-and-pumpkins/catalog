@@ -2,8 +2,7 @@
 
 namespace Brera\Product;
 
-use Brera\Context\ContextSource;
-use Brera\Context\ContextSourceBuilder;
+use Brera\SampleContextSource;
 
 /**
  * @covers \Brera\Product\ProductImportDomainEventHandler
@@ -15,13 +14,9 @@ class ProductImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldTriggerProjection()
     {
-        $stubProductSource = $this->getMockBuilder(ProductSource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $stubProductSource = $this->getMock(ProductSource::class, [], [], '', false);
 
-        $stubDomainEvent = $this->getMockBuilder(ProductImportDomainEvent::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $stubDomainEvent = $this->getMock(ProductImportDomainEvent::class, [], [], '', false);
         $stubDomainEvent->expects($this->once())
             ->method('getXml');
 
@@ -30,19 +25,9 @@ class ProductImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('createProductSourceFromXml')
             ->willReturn($stubProductSource);
 
-        $stubContextSource = $this->getMockBuilder(ContextSource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
 
-        $stubContextSourceBuilder = $this->getMockBuilder(ContextSourceBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $stubContextSourceBuilder->expects($this->any())->method('createFromXml')
-            ->willReturn($stubContextSource);
-
-        $stubProjector = $this->getMockBuilder(ProductProjector::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $stubProjector = $this->getMock(ProductProjector::class, [], [], '', false);
         $stubProjector->expects($this->once())
             ->method('project')
             ->with($stubProductSource, $stubContextSource);
@@ -50,7 +35,7 @@ class ProductImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
         (new ProductImportDomainEventHandler(
             $stubDomainEvent,
             $stubProductBuilder,
-            $stubContextSourceBuilder,
+            $stubContextSource,
             $stubProjector
         )
         )->process();

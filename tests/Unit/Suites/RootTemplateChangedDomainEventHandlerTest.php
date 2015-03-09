@@ -2,9 +2,6 @@
 
 namespace Brera;
 
-use Brera\Context\ContextSource;
-use Brera\Context\ContextSourceBuilder;
-
 /**
  * @covers \Brera\RootTemplateChangedDomainEventHandler
  */
@@ -15,27 +12,28 @@ class RootTemplateChangedDomainEventHandlerTest extends \PHPUnit_Framework_TestC
      */
     public function itShouldTriggerProjection()
     {
-        $stubProjectionSourceData = $this->getMock(ProjectionSourceData::class);
-        $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
+        $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
+        $stubRootSnippetSource = $this->getMock(RootSnippetSource::class);
 
         $mockRootTemplateChangedDomainEvent = $this->getMock(RootTemplateChangedDomainEvent::class, [], [], '', false);
         $mockRootTemplateChangedDomainEvent->expects($this->once())
-            ->method('getXml');
+            ->method('getLayoutHandle');
+
+        $mockRootSnippetSourceBuilder = $this->getMock(RootSnippetSourceBuilder::class, [], [], '', false);
+        $mockRootSnippetSourceBuilder->expects($this->once())
+            ->method('createFromXml')
+            ->willReturn($stubRootSnippetSource);
 
         $mockProjector = $this->getMock(RootSnippetProjector::class, [], [], '', false);
         $mockProjector->expects($this->once())
-            ->method('project');
-
-        $mockContextSourceBuilder = $this->getMock(ContextSourceBuilder::class, [], [], '', false);
-        $mockContextSourceBuilder->expects($this->once())
-            ->method('createFromXml')
-            ->willReturn($stubContextSource);
+            ->method('project')
+            ->with($stubRootSnippetSource, $stubContextSource);
 
         (new RootTemplateChangedDomainEventHandler(
             $mockRootTemplateChangedDomainEvent,
-            $mockProjector,
-            $stubProjectionSourceData,
-            $mockContextSourceBuilder
+            $mockRootSnippetSourceBuilder,
+            $stubContextSource,
+            $mockProjector
         ))->process();
     }
 }
