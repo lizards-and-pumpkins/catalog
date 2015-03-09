@@ -10,10 +10,8 @@ class RootSnippetSourceTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldImplementProjectionSourceData()
+    public function itShouldReturnRootSnippetSourceContextAndNumberOfItemsPerPage()
     {
-        $rootSnippetSource = new RootSnippetSource();
-
-        $this->assertInstanceOf(ProjectionSourceData::class, $rootSnippetSource);
+        $this->markTestIncomplete();
     }
 }

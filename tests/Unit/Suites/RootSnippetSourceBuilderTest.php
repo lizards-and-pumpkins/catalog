@@ -8,15 +8,13 @@ namespace Brera;
 class RootSnippetSourceBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \DOMDocument
+     * @var RootSnippetSourceBuilder
      */
-    private $domDocument;
+    private $rootSnippetSourceBuilder;
 
     protected function setUp()
     {
-        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.xml');
-        $this->domDocument = new \DOMDocument();
-        $this->domDocument->loadXML($xml);
+        $this->rootSnippetSourceBuilder = new RootSnippetSourceBuilder();
     }
 
     /**
@@ -24,7 +22,9 @@ class RootSnippetSourceBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldCreateARootSnippetSourceFromXml()
     {
-        $rootSnippetSource = RootSnippetSourceBuilder::createFromXml($this->domDocument);
+        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.xml');
+
+        $rootSnippetSource = $this->rootSnippetSourceBuilder->createFromXml($xml);
 
         $this->assertInstanceOf(RootSnippetSource::class, $rootSnippetSource);
     }

@@ -2,7 +2,7 @@
 
 namespace Brera;
 
-class RootSnippetSource implements ProjectionSourceData
+class RootSnippetSource
 {
 
 }

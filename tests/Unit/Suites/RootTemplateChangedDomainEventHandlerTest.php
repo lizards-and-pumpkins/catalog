@@ -13,7 +13,7 @@ class RootTemplateChangedDomainEventHandlerTest extends \PHPUnit_Framework_TestC
     public function itShouldTriggerProjection()
     {
         $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
-        $stubRootSnippetSource = $this->getMock(RootSnippetSource::class);
+        $stubRootSnippetSourceList = $this->getMock(RootSnippetSourceList::class, [], [], '', false);
 
         $mockRootTemplateChangedDomainEvent = $this->getMock(RootTemplateChangedDomainEvent::class, [], [], '', false);
         $mockRootTemplateChangedDomainEvent->expects($this->once())
@@ -22,12 +22,12 @@ class RootTemplateChangedDomainEventHandlerTest extends \PHPUnit_Framework_TestC
         $mockRootSnippetSourceBuilder = $this->getMock(RootSnippetSourceBuilder::class, [], [], '', false);
         $mockRootSnippetSourceBuilder->expects($this->once())
             ->method('createFromXml')
-            ->willReturn($stubRootSnippetSource);
+            ->willReturn($stubRootSnippetSourceList);
 
         $mockProjector = $this->getMock(RootSnippetProjector::class, [], [], '', false);
         $mockProjector->expects($this->once())
             ->method('project')
-            ->with($stubRootSnippetSource, $stubContextSource);
+            ->with($stubRootSnippetSourceList, $stubContextSource);
 
         (new RootTemplateChangedDomainEventHandler(
             $mockRootTemplateChangedDomainEvent,
