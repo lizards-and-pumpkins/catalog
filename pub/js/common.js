@@ -1,9 +1,9 @@
 define([
-    'local-storage',
+    'cookie',
     'lib/jquery.jscrollpane.min',
     'lib/jquery.mousewheel.min',
     'lib/jquery.uniform.min'
-], function(storage) {
+], function(cookie) {
 
     jQuery(document).ready(function() {
 
@@ -37,7 +37,7 @@ define([
 
         var selectorToHide = '#meta-menu-logout-link';
 
-        if (storage.get('isCustomerLoggedIn')) {
+        if (cookie.getJsonValue('breraTransport', 'isCustomerLoggedIn')) {
             selectorToHide = '#meta-menu-login-link';
         }
 
@@ -46,13 +46,13 @@ define([
 
     function processCartMetaInfo() {
 
-        var cartNumItems = storage.get('cartNumItems');
+        var cartNumItems = cookie.getJsonValue('breraTransport', 'cartNumItems');
 
         if (cartNumItems) {
             jQuery('#meta-menu-cart-num-items').html(cartNumItems);
         }
 
-        var cartTotal = storage.get('cartTotal');
+        var cartTotal = cookie.getJsonValue('breraTransport', 'cartTotal');
 
         if (cartTotal) {
             jQuery('#meta-menu-cart-total').html(cartTotal);
