@@ -11,17 +11,11 @@ class GenericSnippetKeyGenerator implements SnippetKeyGenerator
      * @var string
      */
     private $snippetCode;
-    
-    /**
-     * @var string[]
-     */
-    private $contextParts;
 
     /**
      * @param string $snippetCode
-     * @param string[] $contextParts
      */
-    public function __construct($snippetCode, array $contextParts)
+    public function __construct($snippetCode)
     {
         if (! is_string($snippetCode)) {
             throw new InvalidSnippetCodeException(sprintf(
@@ -30,7 +24,6 @@ class GenericSnippetKeyGenerator implements SnippetKeyGenerator
             ));
         }
         $this->snippetCode = $snippetCode;
-        $this->contextParts = $contextParts;
     }
     
     /**
@@ -66,13 +59,5 @@ class GenericSnippetKeyGenerator implements SnippetKeyGenerator
     private function getStringRepresentationOfIdentifier($identifier)
     {
         return (string) $identifier;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getContextParts()
-    {
-        return $this->contextParts;
     }
 }
