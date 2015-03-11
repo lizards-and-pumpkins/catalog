@@ -4,7 +4,6 @@ namespace Brera\Product;
 
 use Brera\InvalidSnippetKeyIdentifierException;
 use Brera\Context\Context;
-use Brera\PoCUrlPathKeyGenerator;
 use Brera\SnippetKeyGenerator;
 
 class ProductDetailViewSnippetKeyGenerator implements SnippetKeyGenerator
