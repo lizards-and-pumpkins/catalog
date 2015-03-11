@@ -12,9 +12,4 @@ interface SnippetKeyGenerator
      * @return string
      */
     public function getKeyForContext($identifier, Context $context);
-
-    /**
-     * @return string[]
-     */
-    public function getContextParts();
 }

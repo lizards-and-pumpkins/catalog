@@ -271,7 +271,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->searchEngine->query('bar', $stubQueryContext);
 
-        $this->assertEquals(['content1', 'content2'], $result);
+        $this->assertArraysHasEqualElements(['content1', 'content2'], $result);
     }
 
     /**
@@ -477,5 +477,10 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $stubSearchDocument->expects($this->any())
             ->method('getContent')
             ->willReturn($content);
+    }
+
+    private function assertArraysHasEqualElements($array1, $array2)
+    {
+        $this->assertEmpty(array_diff($array1, $array2));
     }
 }

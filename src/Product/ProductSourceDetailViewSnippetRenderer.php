@@ -58,19 +58,11 @@ class ProductSourceDetailViewSnippetRenderer implements SnippetRenderer
 
     private function createProductDetailViewSnippets()
     {
-        foreach ($this->contextSource->extractContextsForParts($this->getContextParts()) as $context) {
+        foreach ($this->contextSource->getAllAvailableContexts() as $context) {
             $productInContext = $this->productSource->getProductForContext($context);
             $inContextSnippetResultList = $this->productInContextRenderer->render($productInContext, $context);
             $this->snippetResultList->merge($inContextSnippetResultList);
         }
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getContextParts()
-    {
-        return $this->productInContextRenderer->getContextParts();
     }
 
     /**

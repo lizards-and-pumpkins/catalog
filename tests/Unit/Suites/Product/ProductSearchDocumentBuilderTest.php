@@ -3,7 +3,7 @@
 namespace Brera\Product;
 
 use Brera\Context\Context;
-use Brera\Context\ContextSource;
+use Brera\SampleContextSource;
 use Brera\DataPool\SearchEngine\SearchDocumentBuilder;
 use Brera\DataPool\SearchEngine\SearchDocumentCollection;
 use Brera\ProjectionSourceData;
@@ -18,7 +18,7 @@ use Brera\ProjectionSourceData;
 class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ContextSource|\PHPUnit_Framework_MockObject_MockObject
+     * @var SampleContextSource|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubContextSource;
 
@@ -31,7 +31,7 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $searchableAttributeCodes = ['name'];
 
-        $this->stubContextSource = $this->getMockBuilder(ContextSource::class)
+        $this->stubContextSource = $this->getMockBuilder(SampleContextSource::class)
             ->disableOriginalConstructor()
             ->getMock();
 

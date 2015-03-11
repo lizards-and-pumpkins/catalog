@@ -32,7 +32,7 @@ class ContextBuilder
      */
     public function createFromRequest(HttpRequest $request)
     {
-        return $this->getContext(['website' => 'ru_de', 'language' => 'de_DE']);
+        return $this->getContext(['website' => 'ru', 'language' => 'de_DE']);
     }
 
     /**

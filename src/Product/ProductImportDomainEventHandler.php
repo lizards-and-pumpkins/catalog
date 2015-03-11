@@ -2,8 +2,8 @@
 
 namespace Brera\Product;
 
+use Brera\Context\ContextSource;
 use Brera\DomainEventHandler;
-use Brera\Context\ContextSourceBuilder;
 
 class ProductImportDomainEventHandler implements DomainEventHandler
 {
@@ -23,31 +23,33 @@ class ProductImportDomainEventHandler implements DomainEventHandler
     private $projector;
 
     /**
-     * @var ContextSourceBuilder
+     * @var ContextSource
      */
-    private $contextSourceBuilder;
+    private $contextSource;
 
+    /**
+     * @param ProductImportDomainEvent $event
+     * @param ProductSourceBuilder $productSourceBuilder
+     * @param ContextSource $contextSource
+     * @param ProductProjector $projector
+     */
     public function __construct(
         ProductImportDomainEvent $event,
         ProductSourceBuilder $productSourceBuilder,
-        ContextSourceBuilder $contextSourceBuilder,
+        ContextSource $contextSource,
         ProductProjector $projector
     ) {
         $this->event = $event;
         $this->productSourceBuilder = $productSourceBuilder;
-        $this->contextSourceBuilder = $contextSourceBuilder;
+        $this->contextSource = $contextSource;
         $this->projector = $projector;
     }
 
-    /**
-     * @return null
-     */
     public function process()
     {
         $xml = $this->event->getXml();
         $productSource = $this->productSourceBuilder->createProductSourceFromXml($xml);
-        $contextSource = $this->contextSourceBuilder->createFromXml($xml);
 
-        $this->projector->project($productSource, $contextSource);
+        $this->projector->project($productSource, $this->contextSource);
     }
 }

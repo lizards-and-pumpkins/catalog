@@ -20,4 +20,10 @@ interface DomainEventFactory
      * @return CatalogImportDomainEventHandler
      */
     public function createCatalogImportDomainEventHandler(CatalogImportDomainEvent $event);
+
+    /**
+     * @param RootTemplateChangedDomainEvent $event
+     * @return RootTemplateChangedDomainEventHandler
+     */
+    public function createRootTemplateChangedDomainEventHandler(RootTemplateChangedDomainEvent $event);
 }

@@ -17,7 +17,8 @@ class PoCWebFront extends WebFront
     }
 
     /**
-     * @return HttpRequest
+     * @param HttpRequest $request
+     * @return Context\Context
      */
     protected function createContext(HttpRequest $request)
     {

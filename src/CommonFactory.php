@@ -3,13 +3,15 @@
 namespace Brera;
 
 use Brera\Context\ContextBuilder;
-use Brera\Context\ContextSourceBuilder;
+use Brera\Context\ContextSource;
 use Brera\Http\ResourceNotFoundRouter;
 use Brera\DataPool\SearchEngine\SearchEngine;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\ProductDetailViewBlockRenderer;
 use Brera\Product\ProductInContextDetailViewSnippetRenderer;
+use Brera\Product\ProductListingBlockRenderer;
+use Brera\Product\ProductListingSnippetRenderer;
 use Brera\Product\ProductSearchDocumentBuilder;
 use Brera\Product\ProductSnippetRendererCollection;
 use Brera\Product\ProductSourceBuilder;
@@ -64,7 +66,7 @@ class CommonFactory implements Factory, DomainEventFactory
         return new ProductImportDomainEventHandler(
             $event,
             $this->getMasterFactory()->createProductSourceBuilder(),
-            $this->getMasterFactory()->createContextSourceBuilder(),
+            $this->getMasterFactory()->createContextSource(),
             $this->getMasterFactory()->createProductProjector(),
             $this->getMasterFactory()->createProductSearchDocumentBuilder()
         );
@@ -78,6 +80,29 @@ class CommonFactory implements Factory, DomainEventFactory
     public function createCatalogImportDomainEventHandler(CatalogImportDomainEvent $event)
     {
         return new CatalogImportDomainEventHandler($event, $this->getMasterFactory()->getEventQueue());
+    }
+
+    /**
+     * @param RootTemplateChangedDomainEvent $event
+     * @return RootTemplateChangedDomainEventHandler
+     * @todo: move to catalog factory
+     */
+    public function createRootTemplateChangedDomainEventHandler(RootTemplateChangedDomainEvent $event)
+    {
+        return new RootTemplateChangedDomainEventHandler(
+            $event,
+            $this->getMasterFactory()->createRootSnippetSourceBuilder(),
+            $this->getMasterFactory()->createContextSource(),
+            $this->getMasterFactory()->createRootSnippetProjector()
+        );
+    }
+
+    /**
+     * @return RootSnippetSourceListBuilder
+     */
+    public function createRootSnippetSourceBuilder()
+    {
+        return new RootSnippetSourceListBuilder($this->getMasterFactory()->createContextBuilder());
     }
 
     /**
@@ -114,6 +139,66 @@ class CommonFactory implements Factory, DomainEventFactory
         return [
             $this->getMasterFactory()->createProductSourceDetailViewSnippetRenderer(),
         ];
+    }
+
+    /**
+     * @return RootSnippetProjector
+     */
+    public function createRootSnippetProjector()
+    {
+        return new RootSnippetProjector(
+            $this->createRootSnippetRendererCollection(),
+            $this->getMasterFactory()->createDataPoolWriter()
+        );
+    }
+
+    /**
+     * @return RootSnippetRendererCollection
+     */
+    public function createRootSnippetRendererCollection()
+    {
+        return new RootSnippetRendererCollection(
+            $this->getRootSnippetRendererList(),
+            $this->getMasterFactory()->createSnippetResultList()
+        );
+    }
+
+    /**
+     * @return SnippetRenderer[]
+     */
+    private function getRootSnippetRendererList()
+    {
+        return [
+            $this->getMasterFactory()->createProductListingSnippetRenderer(),
+        ];
+    }
+
+    /**
+     * @return ProductListingSnippetRenderer
+     */
+    public function createProductListingSnippetRenderer()
+    {
+        return new ProductListingSnippetRenderer(
+            $this->getMasterFactory()->createSnippetResultList(),
+            $this->getMasterFactory()->createProductListingSnippetKeyGenerator(),
+            $this->getMasterFactory()->createProductListingBlockRenderer()
+        );
+    }
+
+    /**
+     * @return GenericSnippetKeyGenerator
+     */
+    public function createProductListingSnippetKeyGenerator()
+    {
+        return new GenericSnippetKeyGenerator('product_listing', ['website', 'language', 'version']);
+    }
+
+    public function createProductListingBlockRenderer()
+    {
+        return new ProductListingBlockRenderer(
+            $this->getMasterFactory()->createThemeLocator(),
+            $this->getMasterFactory()->createBlockStructure()
+        );
     }
 
     /**
@@ -204,11 +289,13 @@ class CommonFactory implements Factory, DomainEventFactory
     }
 
     /**
-     * @return ContextSourceBuilder
+     * @return ContextSource
      */
-    public function createContextSourceBuilder()
+    public function createContextSource()
     {
-        return new ContextSourceBuilder($this->getMasterFactory()->createContextBuilder());
+        /* TODO: Move to sample factory */
+
+        return new SampleContextSource($this->getMasterFactory()->createContextBuilder());
     }
 
     /**

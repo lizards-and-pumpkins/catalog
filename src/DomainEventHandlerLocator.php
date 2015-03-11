@@ -35,6 +35,9 @@ class DomainEventHandlerLocator
 
             case CatalogImportDomainEvent::class:
                 return $this->factory->createCatalogImportDomainEventHandler($event);
+
+            case RootTemplateChangedDomainEvent::class:
+                return $this->factory->createRootTemplateChangedDomainEventHandler($event);
         }
 
         throw new UnableToFindDomainEventHandlerException(

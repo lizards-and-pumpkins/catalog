@@ -9,6 +9,7 @@ use Brera\Product\ProductImportDomainEventHandler;
 
 /**
  * @covers \Brera\DomainEventHandlerLocator
+ * @uses \Brera\RootTemplateChangedDomainEvent
  * @uses \Brera\Product\ProductImportDomainEvent
  * @uses \Brera\Product\CatalogImportDomainEvent
  */
@@ -20,7 +21,7 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
     private $locator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var CommonFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $factory;
 
@@ -28,6 +29,16 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->factory = $this->getMock(CommonFactory::class);
         $this->locator = new DomainEventHandlerLocator($this->factory);
+    }
+
+    /**
+     * @test
+     * @expectedException \Brera\UnableToFindDomainEventHandlerException
+     */
+    public function itShouldThrowAnExceptionIfNoHandlerIsLocated()
+    {
+        $stubDomainEvent = $this->getMock(DomainEvent::class);
+        $this->locator->getHandlerFor($stubDomainEvent);
     }
 
     /**
@@ -44,24 +55,13 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         ->willReturn($stubProductImportDomainEventHandler);
 
         /**
-         * The real object has to be used here as getHandlerFor() method will call get_class against it
+         * The real object has to be used here as getHandlerFor method will call get_class against it
          */
-        $xml = '<?xml version="1.0"?><rootNode></rootNode>';
-        $productImportDomainEvent = new ProductImportDomainEvent($xml);
+        $productImportDomainEvent = new ProductImportDomainEvent('<xml/>');
 
         $result = $this->locator->getHandlerFor($productImportDomainEvent);
 
         $this->assertInstanceOf(ProductImportDomainEventHandler::class, $result);
-    }
-
-    /**
-     * @test
-     * @expectedException \Brera\UnableToFindDomainEventHandlerException
-     */
-    public function itShouldThrowAnExceptionIfNoHandlerIsLocated()
-    {
-        $stubDomainEvent = $this->getMock(DomainEvent::class);
-        $this->locator->getHandlerFor($stubDomainEvent);
     }
 
     /**
@@ -78,13 +78,35 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         ->willReturn($stubCatalogImportDomainEventHandler);
 
         /**
-         * The real object has to be used here as getHandlerFor() method will call get_class against it
+         * The real object has to be used here as getHandlerFor method will call get_class against it
          */
-        $xml = '<?xml version="1.0"?><rootNode></rootNode>';
-        $productImportDomainEvent = new CatalogImportDomainEvent($xml);
+        $catalogImportDomainEvent = new CatalogImportDomainEvent('<xml/>');
 
-        $result = $this->locator->getHandlerFor($productImportDomainEvent);
+        $result = $this->locator->getHandlerFor($catalogImportDomainEvent);
 
         $this->assertInstanceOf(CatalogImportDomainEventHandler::class, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldLocateAndReturnRootTemplateChangedDomainEventHandler()
+    {
+        $stubRootTemplateChangedDomainEventHandler = $this->getMockBuilder(RootTemplateChangedDomainEventHandler::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->factory->expects($this->once())
+            ->method('createRootTemplateChangedDomainEventHandler')
+            ->willReturn($stubRootTemplateChangedDomainEventHandler);
+
+        /**
+         * The real object has to be used here as getHandlerFor method will call get_class against it
+         */
+        $rootTemplateChangedDomainEvent = new RootTemplateChangedDomainEvent('<xml/>');
+
+        $result = $this->locator->getHandlerFor($rootTemplateChangedDomainEvent);
+
+        $this->assertInstanceOf(RootTemplateChangedDomainEventHandler::class, $result);
     }
 }

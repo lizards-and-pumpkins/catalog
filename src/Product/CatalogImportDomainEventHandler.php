@@ -18,6 +18,10 @@ class CatalogImportDomainEventHandler implements DomainEventHandler
      */
     private $eventQueue;
 
+    /**
+     * @param CatalogImportDomainEvent $event
+     * @param Queue $eventQueue
+     */
     public function __construct(CatalogImportDomainEvent $event, Queue $eventQueue)
     {
         $this->event = $event;

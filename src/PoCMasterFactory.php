@@ -2,19 +2,18 @@
 
 namespace Brera;
 
-use Brera\Context\ContextBuilder;
-use Brera\Context\ContextSourceBuilder;
-
 /**
  * @method DataPool\DataPoolWriter createDataPoolWriter
  * @method DataPool\DataPoolReader createDataPoolReader
  * @method Queue\Queue getEventQueue
- * @method ContextBuilder createContextBuilder
- * @method ContextBuilder createContextBuilderWithVersion
+ * @method Context\ContextBuilder createContextBuilder
+ * @method Context\ContextBuilder createContextBuilderWithVersion
+ * @method Context\ContextSource createContextSource
  * @method DomainEventConsumer createDomainEventConsumer
  * @method SnippetKeyGeneratorLocator getSnippetKeyGeneratorLocator
- * @method Logger getLogger
- * @method ContextSourceBuilder createContextSourceBuilder
+ * @method InMemoryLogger getLogger
+ * @method Product\ProductDetailViewSnippetKeyGenerator createProductDetailViewSnippetKeyGenerator
+ * @method GenericSnippetKeyGenerator createProductListingSnippetKeyGenerator
  */
 class PoCMasterFactory implements MasterFactory
 {

@@ -3,7 +3,7 @@
 namespace Brera;
 
 use Brera\Context\ContextBuilder;
-use Brera\Context\ContextSourceBuilder;
+use Brera\Context\ContextSource;
 use Brera\Http\ResourceNotFoundRouter;
 use Brera\Http\HttpRouterChain;
 use Brera\DataPool\DataPoolReader;
@@ -24,22 +24,29 @@ use Brera\Queue\Queue;
  * @uses   \Brera\DataPool\DataPoolWriter
  * @uses   \Brera\DataPool\DataPoolReader
  * @uses   \Brera\Context\ContextBuilder
- * @uses   \Brera\Context\ContextSourceBuilder
+ * @uses   \Brera\Context\ContextSource
  * @uses   \Brera\DomainEventConsumer
  * @uses   \Brera\DomainEventHandlerLocator
+ * @uses   \Brera\RootTemplateChangedDomainEvent
+ * @uses   \Brera\RootTemplateChangedDomainEventHandler
+ * @uses   \Brera\RootSnippetProjector
  * @uses   \Brera\UrlPathKeyGenerator
  * @uses   \Brera\Renderer\BlockRenderer
  * @uses   \Brera\Product\ProductSourceBuilder
  * @uses   \Brera\Product\ProductProjector
  * @uses   \Brera\Product\ProductSnippetRendererCollection
- * @uses   \Brera\Product\ProductImportDomainEventHandler
  * @uses   \Brera\Product\ProductImportDomainEvent
+ * @uses   \Brera\Product\ProductImportDomainEventHandler
  * @uses   \Brera\Product\CatalogImportDomainEvent
  * @uses   \Brera\Product\CatalogImportDomainEventHandler
  * @uses   \Brera\Product\ProductSearchDocumentBuilder
  * @uses   \Brera\Product\ProductInContextDetailViewSnippetRenderer
  * @uses   \Brera\Product\ProductSourceDetailViewSnippetRenderer
  * @uses   \Brera\Product\ProductDetailViewBlockRenderer
+ * @uses   \Brera\Product\ProductListingSnippetRenderer
+ * @uses   \Brera\GenericSnippetKeyGenerator
+ * @uses   \Brera\RootSnippetRendererCollection
+ * @uses   \Brera\RootSnippetSourceListBuilder
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -62,7 +69,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldThrowAnExceptionIfNoMasterFactoryIsSet()
     {
-        (new CommonFactory())->createContextSourceBuilder();
+        (new CommonFactory())->createDomainEventConsumer();
     }
 
     /**
@@ -85,6 +92,17 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $catalogImportDomainEvent = new CatalogImportDomainEvent('<xml></xml>');
         $result = $this->commonFactory->createCatalogImportDomainEventHandler($catalogImportDomainEvent);
         $this->assertInstanceOf(CatalogImportDomainEventHandler::class, $result);
+    }
+
+    /**
+     * @test
+     * @todo Move to catalog factory test
+     */
+    public function itShouldCreateARootTemplateChangedDomainEventHandler()
+    {
+        $rootTemplateChangedDomainEvent = new RootTemplateChangedDomainEvent('<xml></xml>');
+        $result = $this->commonFactory->createRootTemplateChangedDomainEventHandler($rootTemplateChangedDomainEvent);
+        $this->assertInstanceOf(RootTemplateChangedDomainEventHandler::class, $result);
     }
 
     /**
@@ -148,10 +166,11 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldCreateAnContextSourceBuilder()
+    public function itShouldCreateAnContextSource()
     {
-        $result = $this->commonFactory->createContextSourceBuilder();
-        $this->assertInstanceOf(ContextSourceBuilder::class, $result);
+        $result = $this->commonFactory->createContextSource();
+
+        $this->assertInstanceOf(ContextSource::class, $result);
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace Brera\Product;
 
-use Brera\Context\ContextSource;
+use Brera\SampleContextSource;
 use Brera\Context\Context;
 use Brera\SnippetResultList;
 use Brera\ProjectionSourceData;
@@ -30,7 +30,7 @@ class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_Test
     private $mockSnippetResultList;
 
     /**
-     * @var ContextSource|\PHPUnit_Framework_MockObject_MockObject
+     * @var SampleContextSource|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubContextSource;
 
@@ -66,10 +66,10 @@ class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_Test
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->stubContextSource = $this->getMockBuilder(ContextSource::class)
+        $this->stubContextSource = $this->getMockBuilder(SampleContextSource::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->stubContextSource->expects($this->any())->method('extractContextsForParts')
+        $this->stubContextSource->expects($this->any())->method('getAllAvailableContexts')
             ->willReturn([$this->stubContext]);
     }
 

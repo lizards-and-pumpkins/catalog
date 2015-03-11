@@ -33,20 +33,6 @@ class ProductSourceBuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param mixed $expected
-     * @param ProductSource $productSource
-     * @param string $attributeCode
-     */
-    private function assertProductAttributeValueEquals($expected, ProductSource $productSource, $attributeCode)
-    {
-        $property = new \ReflectionProperty($productSource, 'attributes');
-        $property->setAccessible(true);
-        /** @var ProductAttributeList $attributeList */
-        $attributeList = $property->getValue($productSource);
-        $this->assertEquals($expected, $attributeList->getAttribute($attributeCode)->getValue());
-    }
-
-    /**
      * @test
      */
     public function itShouldCreateAProductSourceFromXml()
@@ -107,5 +93,19 @@ class ProductSourceBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $xml = '<?xml version="1.0"?><node />';
         (new ProductSourceBuilder())->createProductSourceFromXml($xml);
+    }
+
+    /**
+     * @param mixed $expected
+     * @param ProductSource $productSource
+     * @param string $attributeCode
+     */
+    private function assertProductAttributeValueEquals($expected, ProductSource $productSource, $attributeCode)
+    {
+        $property = new \ReflectionProperty($productSource, 'attributes');
+        $property->setAccessible(true);
+        /** @var ProductAttributeList $attributeList */
+        $attributeList = $property->getValue($productSource);
+        $this->assertEquals($expected, $attributeList->getAttribute($attributeCode)->getValue());
     }
 }
