@@ -8,7 +8,7 @@ use Brera\Context\Context;
 class GenericSnippetKeyGenerator implements SnippetKeyGenerator
 {
     /**
-     * @var
+     * @var string
      */
     private $snippetCode;
     
