@@ -2,6 +2,7 @@
 
 namespace Brera\Product;
 
+use Brera\Context\Context;
 use Brera\ProjectionSourceData;
 use Brera\SampleContextSource;
 use Brera\SnippetRenderer;
@@ -15,14 +16,14 @@ abstract class AbstractProductSnippetRendererTest extends \PHPUnit_Framework_Tes
     protected $snippetRenderer;
 
     /**
-     * @var SampleContextSource|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $mockContextSource;
-
-    /**
      * @var SnippetResultList|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $mockSnippetResultList;
+
+    /**
+     * @var SampleContextSource|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockContextSource;
 
     /**
      * @test
@@ -66,6 +67,38 @@ abstract class AbstractProductSnippetRendererTest extends \PHPUnit_Framework_Tes
             ->with($this->isInstanceOf(SnippetResultList::class));
 
         $this->snippetRenderer->render($stubProductSource, $this->mockContextSource);
+    }
+
+    /**
+     * @param string $rendererClass
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getProductInContextRendererMock($rendererClass)
+    {
+        $mockProductInContextRenderer = $this->getMock($rendererClass, [], [], '', false);
+        $mockProductInContextRenderer->expects($this->any())
+            ->method('render')
+            ->willReturn($this->mockSnippetResultList);
+        $mockProductInContextRenderer->expects($this->any())
+            ->method('getContextParts')
+            ->willReturn(['version']);
+
+        return $mockProductInContextRenderer;
+    }
+
+    protected function initMockContextSource()
+    {
+        $stubContext = $this->getMock(Context::class, [], [], '', false);
+
+        $this->mockContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
+        $this->mockContextSource->expects($this->any())
+            ->method('getAllAvailableContexts')
+            ->willReturn([$stubContext]);
+    }
+
+    protected function initMockSnippetResultList()
+    {
+        $this->mockSnippetResultList = $this->getMock(SnippetResultList::class);
     }
 
     /**
