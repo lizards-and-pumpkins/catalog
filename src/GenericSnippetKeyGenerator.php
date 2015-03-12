@@ -8,14 +8,13 @@ use Brera\Context\Context;
 class GenericSnippetKeyGenerator implements SnippetKeyGenerator
 {
     /**
-     * @var string
-     */
-    private $snippetCode;
-
-    /**
      * @param string $snippetCode
+     * @param mixed $identifier
+     * @param Context $context
+     * @return string
+     * @throws InvalidSnippetCodeException
      */
-    public function __construct($snippetCode)
+    public function getKeyForContext($snippetCode, $identifier, Context $context)
     {
         if (! is_string($snippetCode)) {
             throw new InvalidSnippetCodeException(sprintf(
@@ -23,19 +22,10 @@ class GenericSnippetKeyGenerator implements SnippetKeyGenerator
                 $this->getSnippetCodeRepresentationForErrorMessage($snippetCode)
             ));
         }
-        $this->snippetCode = $snippetCode;
-    }
-    
-    /**
-     * @param mixed $identifier
-     * @param Context $context
-     * @return string
-     */
-    public function getKeyForContext($identifier, Context $context)
-    {
+
         return sprintf(
             '%s_%s_%s',
-            $this->snippetCode,
+            $snippetCode,
             $this->getStringRepresentationOfIdentifier($identifier),
             $context->getId()
         );

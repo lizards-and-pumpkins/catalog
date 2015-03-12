@@ -34,7 +34,7 @@ class ProductInContextDetailViewSnippetRenderer
     private $blockRenderer;
     
     /**
-     * @var ProductDetailViewSnippetKeyGenerator
+     * @var ProductSnippetKeyGenerator
      */
     private $snippetKeyGenerator;
     
@@ -46,13 +46,13 @@ class ProductInContextDetailViewSnippetRenderer
     /**
      * @param SnippetResultList $snippetResultList
      * @param ProductDetailViewBlockRenderer $blockRenderer
-     * @param ProductDetailViewSnippetKeyGenerator $snippetKeyGenerator
+     * @param ProductSnippetKeyGenerator $snippetKeyGenerator
      * @param UrlPathKeyGenerator $urlKeyGenerator
      */
     public function __construct(
         SnippetResultList $snippetResultList,
         ProductDetailViewBlockRenderer $blockRenderer,
-        ProductDetailViewSnippetKeyGenerator $snippetKeyGenerator,
+        ProductSnippetKeyGenerator $snippetKeyGenerator,
         UrlPathKeyGenerator $urlKeyGenerator
     ) {
         $this->snippetResultList = $snippetResultList;
@@ -80,7 +80,7 @@ class ProductInContextDetailViewSnippetRenderer
     private function addProductDetailViewSnippetsToSnippetResultList()
     {
         $content = $this->blockRenderer->render($this->product, $this->context);
-        $key = $this->snippetKeyGenerator->getKeyForContext($this->product->getId(), $this->context);
+        $key = $this->snippetKeyGenerator->getKeyForContext(self::CODE, $this->product->getId(), $this->context);
         $contentSnippet = SnippetResult::create($key, $content);
         $this->snippetResultList->add($contentSnippet);
         

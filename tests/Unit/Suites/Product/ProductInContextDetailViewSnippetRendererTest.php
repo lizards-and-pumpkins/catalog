@@ -34,7 +34,7 @@ class ProductInContextDetailViewSnippetRendererTest extends \PHPUnit_Framework_T
     private $stubProductDetailViewBlockRenderer;
 
     /**
-     * @var ProductDetailViewSnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductSnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockProductDetailViewSnippetKeyGenerator;
 
@@ -58,7 +58,7 @@ class ProductInContextDetailViewSnippetRendererTest extends \PHPUnit_Framework_T
         $this->stubProductDetailViewBlockRenderer->expects($this->any())
             ->method('getNestedSnippetCodes')
             ->willReturn([]);
-        $this->mockProductDetailViewSnippetKeyGenerator = $this->getMock(ProductDetailViewSnippetKeyGenerator::class);
+        $this->mockProductDetailViewSnippetKeyGenerator = $this->getMock(ProductSnippetKeyGenerator::class);
         $this->mockProductDetailViewSnippetKeyGenerator->expects($this->any())
             ->method('getKeyForContext')
             ->willReturn('stub-content-key');

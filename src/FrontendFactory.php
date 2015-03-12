@@ -55,7 +55,7 @@ class FrontendFactory implements Factory
     {
         return new UrlKeyRequestHandlerBuilder(
             $this->getMasterFactory()->createUrlPathKeyGenerator(),
-            $this->getMasterFactory()->createSnippetKeyGeneratorLocator(),
+            $this->getMasterFactory()->getSnippetKeyGenerator(),
             $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->getLogger()
         );

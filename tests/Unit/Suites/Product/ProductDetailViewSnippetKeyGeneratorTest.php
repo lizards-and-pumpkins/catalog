@@ -10,13 +10,13 @@ use Brera\Context\Context;
 class ProductDetailViewSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ProductDetailViewSnippetKeyGenerator
+     * @var ProductSnippetKeyGenerator
      */
     private $keyGenerator;
 
     public function setUp()
     {
-        $this->keyGenerator = new ProductDetailViewSnippetKeyGenerator();
+        $this->keyGenerator = new ProductSnippetKeyGenerator();
     }
 
     /**
@@ -24,15 +24,12 @@ class ProductDetailViewSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCa
      */
     public function itShouldReturnAString()
     {
-        $stubProductId = $this->getMockBuilder(ProductId::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $mockContext = $this->getMock(Context::class);
+        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
+        $stubContext = $this->getMock(Context::class);
 
-        $this->assertInternalType(
-            'string',
-            $this->keyGenerator->getKeyForContext($stubProductId, $mockContext)
-        );
+        $result = $this->keyGenerator->getKeyForContext('foo', $stubProductId, $stubContext);
+
+        $this->assertInternalType('string', $result);
     }
 
     /**
@@ -44,6 +41,6 @@ class ProductDetailViewSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCa
         $notAProductId = 1;
         $mockContext = $this->getMock(Context::class);
 
-        $this->keyGenerator->getKeyForContext($notAProductId, $mockContext);
+        $this->keyGenerator->getKeyForContext('foo', $notAProductId, $mockContext);
     }
 }

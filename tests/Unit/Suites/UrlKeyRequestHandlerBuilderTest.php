@@ -20,13 +20,13 @@ class UrlKeyRequestHandlerBuilderTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $stubUrlPathKeyGenerator = $this->getMock(UrlPathKeyGenerator::class, [], [], '', false);
-        $stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
+        $stubSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $stubDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
         $stubLogger = $this->getMock(Logger::class);
 
         $this->builder = new UrlKeyRequestHandlerBuilder(
             $stubUrlPathKeyGenerator,
-            $stubSnippetKeyGeneratorLocator,
+            $stubSnippetKeyGenerator,
             $stubDataPoolReader,
             $stubLogger
         );

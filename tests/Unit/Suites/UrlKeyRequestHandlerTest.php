@@ -11,9 +11,8 @@ use Brera\DataPool\KeyValue\KeyNotFoundException;
  * @covers \Brera\UrlKeyRequestHandler
  * @uses   \Brera\Http\HttpUrl
  * @uses   \Brera\Page
- * @uses   \Brera\SnippetKeyGeneratorLocator
+ * @uses   \Brera\SnippetKeyGenerator
  * @uses   \Brera\PageMetaInfoSnippetContent
- * @uses   \Brera\GenericSnippetKeyGenerator
  * @uses   \Brera\MissingSnippetCodeMessage
  */
 class UrlKeyRequestHandlerTest extends \PHPUnit_Framework_TestCase
@@ -37,6 +36,11 @@ class UrlKeyRequestHandlerTest extends \PHPUnit_Framework_TestCase
      * @var UrlKeyRequestHandler
      */
     private $urlKeyRequestHandler;
+
+    /**
+     * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockSnippetKeyGenerator;
 
     /**
      * @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
@@ -63,14 +67,6 @@ class UrlKeyRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private $url;
 
-    /**
-     * @var SnippetKeyGeneratorLocator
-     */
-    private $snippetKeyGeneratorLocator;
-
-    /**
-     * @return void
-     */
     protected function setUp()
     {
         $this->url = HttpUrl::fromString('http://example.com/product.html');
@@ -83,19 +79,17 @@ class UrlKeyRequestHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('getUrlKeyForUrlInContext')
             ->willReturn($this->urlPathKeyFixture);
 
-        $this->snippetKeyGeneratorLocator = new SnippetKeyGeneratorLocator();
+        $this->mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
 
-        $this->mockDataPoolReader = $this->getMockBuilder(DataPoolReader::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        
+        $this->mockDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
+
         $this->stubLogger = $this->getMock(Logger::class);
 
         $this->urlKeyRequestHandler = new UrlKeyRequestHandler(
             $this->url,
             $this->stubContext,
             $this->mockUrlPathKeyGenerator,
-            $this->snippetKeyGeneratorLocator,
+            $this->mockSnippetKeyGenerator,
             $this->mockDataPoolReader,
             $this->stubLogger
         );
@@ -109,6 +103,10 @@ class UrlKeyRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $rootSnippetCode = 'root-snippet';
         $rootSnippetContent = 'Stub Content';
         $childSnippetMap = [];
+
+        $this->mockSnippetKeyGenerator->expects($this->any())
+            ->method('getKeyForContext')
+            ->willReturn($this->getStubSnippetKey($rootSnippetCode));
 
         $this->setDataPoolFixture($rootSnippetCode, $rootSnippetContent, $childSnippetMap);
         $this->assertInstanceOf(Page::class, $this->urlKeyRequestHandler->process());
@@ -128,6 +126,10 @@ class UrlKeyRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->setDataPoolFixture($rootSnippetCode, $rootSnippetContent, $childSnippetMap);
 
         $expectedContent = '<html><head>' . $headContent . '</head><body>' . $bodyContent . '</body></html>';
+
+        $this->mockSnippetKeyGenerator->expects($this->any())
+            ->method('getKeyForContext')
+            ->willReturn($this->getStubSnippetKey($rootSnippetCode));
 
         $page = $this->urlKeyRequestHandler->process();
         $this->assertEquals($expectedContent, $page->getBody());
@@ -154,6 +156,10 @@ class UrlKeyRequestHandlerTest extends \PHPUnit_Framework_TestCase
 <html><head><title>My Website!</title></head><body><h1>My Website!</h1>child1child2child3</body></html>
 EOH;
 
+        $this->mockSnippetKeyGenerator->expects($this->any())
+            ->method('getKeyForContext')
+            ->willReturn($this->getStubSnippetKey($rootSnippetCode));
+
         $page = $this->urlKeyRequestHandler->process();
         $this->assertEquals($expectedContent, $page->getBody());
     }
@@ -179,6 +185,10 @@ EOH;
 <html><head><title>My Website!</title></head><body><h1>My Website!</h1>child1child2child3</body></html>
 EOH;
 
+        $this->mockSnippetKeyGenerator->expects($this->any())
+            ->method('getKeyForContext')
+            ->willReturn($this->getStubSnippetKey($rootSnippetCode));
+
         $page = $this->urlKeyRequestHandler->process();
         $this->assertEquals($expectedContent, $page->getBody());
     }
@@ -200,6 +210,10 @@ EOH;
         $this->setDataPoolFixture($rootSnippetCode, $rootSnippetContent, $childSnippetMap);
 
         $expectedContent = '<html><body><h1>My Website!</h1>child1child2child3</body></html>';
+
+        $this->mockSnippetKeyGenerator->expects($this->any())
+            ->method('getKeyForContext')
+            ->willReturn($this->getStubSnippetKey($rootSnippetCode));
 
         $page = $this->urlKeyRequestHandler->process();
         $this->assertEquals($expectedContent, $page->getBody());
@@ -257,6 +271,14 @@ EOH;
         $this->setPageContentSnippetFixture($allSnippetCodes, $allSnippetContent);
         $this->stubLogger->expects($this->once())
             ->method('log');
+
+        $this->mockSnippetKeyGenerator->expects($this->any())
+            ->method('getKeyForContext')
+            ->willReturnMap([
+                [$rootSnippetCode, $this->sourceIdFixture, $this->stubContext, $this->getStubSnippetKey($rootSnippetCode)],
+                [$childSnippetCodes[0], $this->sourceIdFixture, $this->stubContext, $this->getStubSnippetKey($childSnippetCodes[0])]
+            ]);
+
         $this->urlKeyRequestHandler->process();
     }
 

@@ -46,9 +46,9 @@ class UrlKeyRequestHandler implements HttpRequestHandler
     private $pageSourceObjectId;
 
     /**
-     * @var SnippetKeyGeneratorLocator
+     * @var SnippetKeyGenerator
      */
-    private $keyGeneratorLocator;
+    private $snippetKeyGenerator;
 
     /**
      * @var string[]
@@ -64,7 +64,7 @@ class UrlKeyRequestHandler implements HttpRequestHandler
      * @param HttpUrl $url
      * @param Context $context
      * @param UrlPathKeyGenerator $urlPathKeyGenerator
-     * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
+     * @param SnippetKeyGenerator $keyGenerator
      * @param DataPoolReader $dataPoolReader
      * @param Logger $logger
      */
@@ -72,7 +72,7 @@ class UrlKeyRequestHandler implements HttpRequestHandler
         HttpUrl $url,
         Context $context,
         UrlPathKeyGenerator $urlPathKeyGenerator,
-        SnippetKeyGeneratorLocator $keyGeneratorLocator,
+        SnippetKeyGenerator $keyGenerator,
         DataPoolReader $dataPoolReader,
         Logger $logger
     ) {
@@ -80,7 +80,7 @@ class UrlKeyRequestHandler implements HttpRequestHandler
         $this->context = $context;
         $this->urlPathKeyGenerator = $urlPathKeyGenerator;
         $this->dataPoolReader = $dataPoolReader;
-        $this->keyGeneratorLocator = $keyGeneratorLocator;
+        $this->snippetKeyGenerator = $keyGenerator;
         $this->logger = $logger;
     }
 
@@ -155,8 +155,7 @@ class UrlKeyRequestHandler implements HttpRequestHandler
      */
     private function getSnippetKeyInContext($key)
     {
-        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode($key);
-        return $keyGenerator->getKeyForContext($this->pageSourceObjectId, $this->context);
+        return $this->snippetKeyGenerator->getKeyForContext($key, $this->pageSourceObjectId, $this->context);
     }
 
     /**
@@ -282,8 +281,7 @@ class UrlKeyRequestHandler implements HttpRequestHandler
      */
     private function getRootSnippetKey()
     {
-        $generator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode($this->rootSnippetCode);
-        return $generator->getKeyForContext($this->pageSourceObjectId, $this->context);
+        return $this->snippetKeyGenerator->getKeyForContext($this->rootSnippetCode, $this->pageSourceObjectId, $this->context);
     }
 
     /**

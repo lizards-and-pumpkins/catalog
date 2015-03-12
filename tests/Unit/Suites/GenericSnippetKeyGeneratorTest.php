@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Brera;
 
 use Brera\Context\Context;
@@ -20,9 +19,15 @@ class GenericSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     private $keyGenerator;
 
+    /**
+     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockContext;
+
     public function setUp()
     {
-        $this->keyGenerator = new GenericSnippetKeyGenerator($this->testSnippetCode);
+        $this->mockContext = $this->getMock(Context::class);
+        $this->keyGenerator = new GenericSnippetKeyGenerator();
     }
 
     /**
@@ -40,7 +45,7 @@ class GenericSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldThrowAnExceptionIfTheSnippetCodeIsNoString($invalidSnippetType)
     {
-        new GenericSnippetKeyGenerator($invalidSnippetType);
+        $this->keyGenerator->getKeyForContext($invalidSnippetType, 123, $this->mockContext);
     }
 
     /**
@@ -61,8 +66,7 @@ class GenericSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnAKeyIncludingTheHandle()
     {
-        $stubContext = $this->getMock(Context::class);
-        $result = $this->keyGenerator->getKeyForContext(123, $stubContext);
+        $result = $this->keyGenerator->getKeyForContext($this->testSnippetCode, 123, $this->mockContext);
         $this->assertContains($this->testSnippetCode, $result);
     }
 
@@ -71,8 +75,7 @@ class GenericSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldIncludeTheSpecifiedIdentifierInTheReturnedKey()
     {
-        $stubContext = $this->getMock(Context::class);
-        $result = $this->keyGenerator->getKeyForContext(123, $stubContext);
+        $result = $this->keyGenerator->getKeyForContext($this->testSnippetCode, 123, $this->mockContext);
         $this->assertContains('123', $result);
     }
 
@@ -82,11 +85,13 @@ class GenericSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
     public function itShouldIncludeTheContextIdentifierInTheReturnedKey()
     {
         $testContextId = 'test-context-id';
-        $stubContext = $this->getMock(Context::class);
-        $stubContext->expects($this->any())
+
+        $this->mockContext->expects($this->any())
             ->method('getId')
             ->willReturn($testContextId);
-        $result = $this->keyGenerator->getKeyForContext(123, $stubContext);
+
+        $result = $this->keyGenerator->getKeyForContext($this->testSnippetCode, 123, $this->mockContext);
+
         $this->assertContains($testContextId, $result);
     }
 }

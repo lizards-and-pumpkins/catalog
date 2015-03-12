@@ -97,7 +97,7 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $contextSource = $factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[0];
 
-        $key = $keyGenerator->getKeyForContext('product_listing_60', $context);
+        $key = $keyGenerator->getKeyForContext('product_listing', 60, $context);
         $html = $dataPoolReader->getSnippet($key);
 
         $expectation = file_get_contents(__DIR__ . '/../../../theme/template/list.phtml');

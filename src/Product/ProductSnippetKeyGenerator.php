@@ -6,15 +6,16 @@ use Brera\InvalidSnippetKeyIdentifierException;
 use Brera\Context\Context;
 use Brera\SnippetKeyGenerator;
 
-class ProductDetailViewSnippetKeyGenerator implements SnippetKeyGenerator
+class ProductSnippetKeyGenerator implements SnippetKeyGenerator
 {
     /**
+     * @param string $snippetCode
      * @param mixed|ProductId $productId
      * @param Context $context
-     * @throws InvalidSnippetKeyIdentifierException
      * @return string
+     * @throws InvalidSnippetKeyIdentifierException
      */
-    public function getKeyForContext($productId, Context $context)
+    public function getKeyForContext($snippetCode, $productId, Context $context)
     {
         if (!($productId instanceof ProductId)) {
             throw new InvalidSnippetKeyIdentifierException(sprintf(
@@ -23,16 +24,17 @@ class ProductDetailViewSnippetKeyGenerator implements SnippetKeyGenerator
             ));
         }
 
-        return $this->getKeyForProductIdInContext($productId, $context);
+        return $this->getKeyForProductIdInContext($snippetCode, $productId, $context);
     }
 
     /**
+     * @param string $snippetCode
      * @param ProductId $productId
      * @param Context $context
      * @return string
      */
-    private function getKeyForProductIdInContext(ProductId $productId, Context $context)
+    private function getKeyForProductIdInContext($snippetCode, ProductId $productId, Context $context)
     {
-        return sprintf('%s_%s_%s', ProductInContextDetailViewSnippetRenderer::CODE, $productId, $context->getId());
+        return sprintf('%s_%s_%s', $snippetCode, $productId, $context->getId());
     }
 }

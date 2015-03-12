@@ -10,9 +10,9 @@ namespace Brera;
  * @method Context\ContextBuilder createContextBuilderWithVersion
  * @method Context\ContextSource createContextSource
  * @method DomainEventConsumer createDomainEventConsumer
- * @method SnippetKeyGeneratorLocator getSnippetKeyGeneratorLocator
+ * @method SnippetKeyGenerator getSnippetKeyGenerator
  * @method InMemoryLogger getLogger
- * @method Product\ProductDetailViewSnippetKeyGenerator createProductDetailViewSnippetKeyGenerator
+ * @method Product\ProductSnippetKeyGenerator createProductDetailViewSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createProductListingSnippetKeyGenerator
  */
 class PoCMasterFactory implements MasterFactory

@@ -23,7 +23,7 @@ use Brera\Product\ProductImportDomainEvent;
 use Brera\Product\ProductImportDomainEventHandler;
 use Brera\Product\ProductProjector;
 use Brera\Product\ProductSourceDetailViewSnippetRenderer;
-use Brera\Product\ProductDetailViewSnippetKeyGenerator;
+use Brera\Product\ProductSnippetKeyGenerator;
 use Brera\Renderer\BlockStructure;
 use Brera\Http\HttpRouterChain;
 
@@ -52,9 +52,9 @@ class CommonFactory implements Factory, DomainEventFactory
     private $searchEngine;
 
     /**
-     * @var SnippetKeyGeneratorLocator
+     * @var SnippetKeyGenerator
      */
-    private $snippetKeyGeneratorLocator;
+    private $snippetKeyGenerator;
 
     /**
      * @param ProductImportDomainEvent $event
@@ -190,7 +190,7 @@ class CommonFactory implements Factory, DomainEventFactory
      */
     public function createProductListingSnippetKeyGenerator()
     {
-        return new GenericSnippetKeyGenerator('product_listing', ['website', 'language', 'version']);
+        return new GenericSnippetKeyGenerator();
     }
 
     public function createProductListingBlockRenderer()
@@ -263,12 +263,12 @@ class CommonFactory implements Factory, DomainEventFactory
     }
 
     /**
-     * @return ProductDetailViewSnippetKeyGenerator
+     * @return ProductSnippetKeyGenerator
      * @todo: move to catalog factory
      */
     public function createProductDetailViewSnippetKeyGenerator()
     {
-        return new ProductDetailViewSnippetKeyGenerator();
+        return new ProductSnippetKeyGenerator();
     }
 
     /**
@@ -440,22 +440,22 @@ class CommonFactory implements Factory, DomainEventFactory
     }
 
     /**
-     * @return SnippetKeyGeneratorLocator
+     * @return SnippetKeyGenerator
      */
-    public function createSnippetKeyGeneratorLocator()
+    public function createSnippetKeyGenerator()
     {
-        return new SnippetKeyGeneratorLocator();
+        return new GenericSnippetKeyGenerator();
     }
 
     /**
-     * @return SnippetKeyGeneratorLocator
+     * @return SnippetKeyGenerator
      */
-    public function getSnippetKeyGeneratorLocator()
+    public function getSnippetKeyGenerator()
     {
-        if (is_null($this->snippetKeyGeneratorLocator)) {
-            $this->snippetKeyGeneratorLocator = $this->createSnippetKeyGeneratorLocator();
+        if (is_null($this->snippetKeyGenerator)) {
+            $this->snippetKeyGenerator = $this->createSnippetKeyGenerator();
         }
-        return $this->snippetKeyGeneratorLocator;
+        return $this->snippetKeyGenerator;
     }
 
     /**
