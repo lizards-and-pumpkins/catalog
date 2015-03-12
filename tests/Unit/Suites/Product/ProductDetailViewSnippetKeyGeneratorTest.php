@@ -5,7 +5,7 @@ namespace Brera\Product;
 use Brera\Context\Context;
 
 /**
- * @covers \Brera\Product\ProductDetailViewSnippetKeyGenerator
+ * @covers \Brera\Product\ProductSnippetKeyGenerator
  */
 class ProductDetailViewSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
 {

@@ -47,6 +47,8 @@ use Brera\Queue\Queue;
  * @uses   \Brera\GenericSnippetKeyGenerator
  * @uses   \Brera\RootSnippetRendererCollection
  * @uses   \Brera\RootSnippetSourceListBuilder
+ * @uses   \Brera\Product\ProductSourceInListingSnippetRenderer
+ * @uses   \Brera\Product\ProductInContextInListingSnippetRenderer
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
