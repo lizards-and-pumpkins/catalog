@@ -34,18 +34,22 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $log = $factory->getLogger();
         $messages = $log->getMessages();
         if (! empty($messages)) {
-            $this->fail(implode(PHP_EOL, $messages));
+            $messagesString = '';
+            foreach ($messages as $message) {
+                $messagesString .= $message->getException() . PHP_EOL;
+            }
+
+            $this->fail($messagesString);
         }
         
         $dataPoolReader = $factory->createDataPoolReader();
         
-        $keyGeneratorLocator = $factory->getSnippetKeyGeneratorLocator();
-        $keyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('product_detail_view');
+        $keyGenerator = $factory->getSnippetKeyGenerator();
 
         $contextSource = $factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[0];
         
-        $key = $keyGenerator->getKeyForContext($productId, $context);
+        $key = $keyGenerator->getKeyForContext('product_detail_view', $productId, $context);
         $html = $dataPoolReader->getSnippet($key);
 
         $searchResults = $dataPoolReader->getSearchResults('led', $context);

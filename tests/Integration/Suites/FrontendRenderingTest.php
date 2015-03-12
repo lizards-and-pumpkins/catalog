@@ -21,7 +21,7 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
     {
         $url = HttpUrl::fromString('http://example.com/product1');
         $context = new VersionedContext(DataVersion::fromVersionString('1.0'));
-        $snippetKeyGeneratorLocator = new SnippetKeyGeneratorLocator();
+        $snippetKeyGenerator = new GenericSnippetKeyGenerator();
         $urlPathKeyGenerator = new PoCUrlPathKeyGenerator();
 
         $keyValueStore = new InMemoryKeyValueStore();
@@ -29,7 +29,7 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
 
         $this->addPageMetaInfoFixtureToKeyValueStorage(
             $keyValueStore,
-            $snippetKeyGeneratorLocator,
+            $snippetKeyGenerator,
             $urlPathKeyGenerator,
             $context
         );
@@ -43,7 +43,7 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
             $url,
             $context,
             $urlPathKeyGenerator,
-            $snippetKeyGeneratorLocator,
+            $snippetKeyGenerator,
             $dataPoolReader,
             $logger
         );
@@ -61,14 +61,13 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
      */
     private function addPageMetaInfoFixtureToKeyValueStorage(
         KeyValueStore $keyValueStore,
-        SnippetKeyGeneratorLocator $snippetKeyGeneratorLocator,
+        SnippetKeyGenerator $snippetKeyGenerator,
         UrlPathKeyGenerator $urlPathKeyGenerator,
         Context $context
     ) {
         $rootSnippetCode = 'root-snippet';
-        $snippetKeyGenerator = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($rootSnippetCode);
         $keyValueStore->set(
-            $snippetKeyGenerator->getKeyForContext($this->sourceId, $context),
+            $snippetKeyGenerator->getKeyForContext($rootSnippetCode, $this->sourceId, $context),
             '<html><head>{{snippet head}}</head><body>{{snippet body}}</body></html>'
         );
         $pageMetaInfo = PageMetaInfoSnippetContent::create(
@@ -79,11 +78,9 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
 
         $urlPathKey = $urlPathKeyGenerator->getUrlKeyForPathInContext('/product1', $context);
         $keyValueStore->set($urlPathKey, json_encode($pageMetaInfo->getInfo()));
-        $headSnippetKeyGenerator = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode('head');
-        $key = $headSnippetKeyGenerator->getKeyForContext($this->sourceId, $context);
+        $key = $snippetKeyGenerator->getKeyForContext('head', $this->sourceId, $context);
         $keyValueStore->set($key, '<title>Page Title</title>');
-        $bodySnippetKeyGenerator = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode('body');
-        $key = $bodySnippetKeyGenerator->getKeyForContext($this->sourceId, $context);
+        $key = $snippetKeyGenerator->getKeyForContext('body', $this->sourceId, $context);
         $keyValueStore->set($key, '<h1>Headline</h1>');
     }
 }
