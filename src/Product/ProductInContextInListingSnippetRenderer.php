@@ -8,7 +8,7 @@ use Brera\SnippetResultList;
 
 class ProductInContextInListingSnippetRenderer
 {
-    const CODE = 'product_in_list';
+    const CODE = 'product_in_listing';
     
     /**
      * @var Product

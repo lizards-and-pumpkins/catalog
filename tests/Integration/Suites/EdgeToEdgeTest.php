@@ -31,17 +31,9 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $numberOfMessages = 3;
         $consumer->process($numberOfMessages);
         
-        $log = $factory->getLogger();
-        $messages = $log->getMessages();
-        if (! empty($messages)) {
-            $messagesString = '';
-            foreach ($messages as $message) {
-                $messagesString .= $message->getException() . PHP_EOL;
-            }
+        $logger = $factory->getLogger();
+        $this->flushErrorsIfAny($logger);
 
-            $this->fail($messagesString);
-        }
-        
         $dataPoolReader = $factory->createDataPoolReader();
         
         $keyGenerator = $factory->getSnippetKeyGenerator();
@@ -51,8 +43,6 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         
         $key = $keyGenerator->getKeyForContext('product_detail_view', $productId, $context);
         $html = $dataPoolReader->getSnippet($key);
-
-        $searchResults = $dataPoolReader->getSearchResults('led', $context);
 
         $this->assertContains(
             (string) $sku,
@@ -64,6 +54,23 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
             $html,
             sprintf('The result page HTML does not contain the expected product name "%s"', $productName)
         );
+
+        $key = $keyGenerator->getKeyForContext('product_in_listing', $productId, $context);
+        $html = $dataPoolReader->getSnippet($key);
+
+        $this->assertContains(
+            (string) $sku,
+            $html,
+            sprintf('Product in listing snippet HTML does not contain the expected sku "%s"', $sku)
+        );
+        $this->assertContains(
+            $productName,
+            $html,
+            sprintf('Product in listing snippet HTML does not contain the expected product name "%s"', $productName)
+        );
+
+        $searchResults = $dataPoolReader->getSearchResults('led', $context);
+
         $this->assertContains(
             (string) $productId,
             $searchResults,
@@ -89,11 +96,8 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $numberOfMessages = 1;
         $consumer->process($numberOfMessages);
 
-        $log = $factory->getLogger();
-        $messages = $log->getMessages();
-        if (! empty($messages)) {
-            $this->fail(implode(PHP_EOL, $messages));
-        }
+        $logger = $factory->getLogger();
+        $this->flushErrorsIfAny($logger);
 
         $dataPoolReader = $factory->createDataPoolReader();
         $keyGenerator = $factory->createProductListingSnippetKeyGenerator();
@@ -160,5 +164,21 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $factory->register(new IntegrationTestFactory());
         $factory->register(new FrontendFactory());
         return $factory;
+    }
+
+    /**
+     * @param Logger $logger
+     */
+    private function flushErrorsIfAny(Logger $logger)
+    {
+        $messages = $logger->getMessages();
+        if (! empty($messages)) {
+            $messagesString = '';
+            foreach ($messages as $message) {
+                $messagesString .= $message->getException() . PHP_EOL;
+            }
+
+            $this->fail($messagesString);
+        }
     }
 }
