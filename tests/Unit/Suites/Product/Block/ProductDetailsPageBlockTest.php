@@ -22,7 +22,7 @@ class ProductDetailsPageBlockTest extends \PHPUnit_Framework_TestCase
     private $stubProduct;
 
     /**
-     * @var ProductInContextDetailViewSnippetRenderer|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductDetailViewBlockRenderer|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubRenderer;
 
