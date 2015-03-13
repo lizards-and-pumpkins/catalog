@@ -18,9 +18,20 @@ class FailedToReadFromDomainEventQueueMessage implements LogMessage
     }
 
     /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return sprintf(
+            "Failed to read from domain event queue message with following exception:\n\n%s",
+            $this->exception->getMessage()
+        );
+    }
+
+    /**
      * @return \Exception
      */
-    public function getException()
+    public function getContext()
     {
         return $this->exception;
     }

@@ -25,17 +25,21 @@ class DomainEventHandlerFailedMessage implements LogMessage
     }
 
     /**
-     * @return DomainEvent
+     * @return string
      */
-    public function getDomainEvent()
+    public function __toString()
     {
-        return $this->domainEvent;
+        return sprintf(
+            "Failure during processing %s domain event with following message:\n\n%s",
+            get_class($this->domainEvent),
+            $this->exception->getMessage()
+        );
     }
 
     /**
-     * @return \Exception
+     * @return mixed[]
      */
-    public function getException()
+    public function getContext()
     {
         return $this->exception;
     }

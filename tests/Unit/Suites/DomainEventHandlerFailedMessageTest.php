@@ -8,14 +8,9 @@ namespace Brera;
 class DomainEventHandlerFailedMessageTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Exception
      */
-    private $stubDomainEvent;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubException;
+    private $exception;
 
     /**
      * @var DomainEventHandlerFailedMessage
@@ -24,19 +19,23 @@ class DomainEventHandlerFailedMessageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubDomainEvent = $this->getMock(DomainEvent::class);
-        $this->stubException = $this->getMock(\Exception::class);
+        $stubDomainEvent = $this->getMockBuilder(DomainEvent::class)
+            ->setMockClassName('DomainEvent')
+            ->getMock();
 
-        $this->message = new DomainEventHandlerFailedMessage($this->stubDomainEvent, $this->stubException);
+        $this->exception = new \Exception('foo');
+
+        $this->message = new DomainEventHandlerFailedMessage($stubDomainEvent, $this->exception);
     }
 
     /**
      * @test
      */
-    public function itShouldReturnDomainEvent()
+    public function itShouldReturnLogMessage()
     {
-        $result = $this->message->getDomainEvent();
-        $this->assertInstanceOf(DomainEvent::class, $result);
+        $expectation = "Failure during processing DomainEvent domain event with following message:\n\nfoo";
+
+        $this->assertEquals($expectation, (string) $this->message);
     }
 
     /**
@@ -44,7 +43,8 @@ class DomainEventHandlerFailedMessageTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnAnException()
     {
-        $result = $this->message->getException();
-        $this->assertInstanceOf(\Exception::class, $result);
+        $result = $this->message->getContext();
+
+        $this->assertSame($this->exception, $result);
     }
 }
