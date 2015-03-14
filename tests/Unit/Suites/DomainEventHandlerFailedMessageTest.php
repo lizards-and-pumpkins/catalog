@@ -10,7 +10,7 @@ class DomainEventHandlerFailedMessageTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Exception
      */
-    private $exception;
+    private $stubException;
 
     /**
      * @var DomainEventHandlerFailedMessage
@@ -23,9 +23,9 @@ class DomainEventHandlerFailedMessageTest extends \PHPUnit_Framework_TestCase
             ->setMockClassName('DomainEvent')
             ->getMock();
 
-        $this->exception = new \Exception('foo');
+        $this->stubException = new \Exception('foo');
 
-        $this->message = new DomainEventHandlerFailedMessage($stubDomainEvent, $this->exception);
+        $this->message = new DomainEventHandlerFailedMessage($stubDomainEvent, $this->stubException);
     }
 
     /**
@@ -45,6 +45,6 @@ class DomainEventHandlerFailedMessageTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->message->getContext();
 
-        $this->assertSame($this->exception, $result);
+        $this->assertSame(['exception' => $this->stubException], $result);
     }
 }

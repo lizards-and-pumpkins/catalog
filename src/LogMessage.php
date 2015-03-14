@@ -10,7 +10,7 @@ interface LogMessage
     public function __toString();
 
     /**
-     * @return mixed
+     * @return mixed[]
      */
     public function getContext();
 }

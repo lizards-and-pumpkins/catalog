@@ -41,6 +41,6 @@ class DomainEventHandlerFailedMessage implements LogMessage
      */
     public function getContext()
     {
-        return $this->exception;
+        return ['exception' => $this->exception];
     }
 }

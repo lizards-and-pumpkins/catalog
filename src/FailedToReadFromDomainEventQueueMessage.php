@@ -29,10 +29,10 @@ class FailedToReadFromDomainEventQueueMessage implements LogMessage
     }
 
     /**
-     * @return \Exception
+     * @return mixed[]
      */
     public function getContext()
     {
-        return $this->exception;
+        return ['exception' => $this->exception];
     }
 }

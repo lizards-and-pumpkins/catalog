@@ -15,13 +15,12 @@ class FailedToReadFromDomainEventQueueMessageTest extends \PHPUnit_Framework_Tes
     /**
      * @var \Exception
      */
-    private $exception;
+    private $stubException;
 
     protected function setUp()
     {
-        $this->exception = new \Exception('foo');
-        $this->message = new FailedToReadFromDomainEventQueueMessage($this->exception);
-
+        $this->stubException = new \Exception('foo');
+        $this->message = new FailedToReadFromDomainEventQueueMessage($this->stubException);
     }
 
     /**
@@ -43,6 +42,6 @@ class FailedToReadFromDomainEventQueueMessageTest extends \PHPUnit_Framework_Tes
     {
         $result = $this->message->getContext();
 
-        $this->assertSame($this->exception, $result);
+        $this->assertSame(['exception' => $this->stubException], $result);
     }
 }
