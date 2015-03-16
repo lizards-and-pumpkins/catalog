@@ -161,6 +161,45 @@ abstract class ContextDecoratorTestAbstract extends \PHPUnit_Framework_TestCase
         $expected = $code . ':' . $this->getDecoratorUnderTest()->getValue($code);
         $this->assertContains($expected, $this->getDecoratorUnderTest()->getId());
     }
+
+    /**
+     * @test
+     */
+    public function itShouldNotIncludeTheDecoratorIdInThePartialIdIfNotRequested()
+    {
+        $code = $this->getDecoratorUnderTestCode();
+        $expected = $code . ':' . $this->getDecoratorUnderTest()->getValue($code);
+        $this->assertNotContains($expected, $this->getDecoratorUnderTest()->getIdForParts([]));
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldIncludeTheDecoratorIdInThePartialIdIfRequested()
+    {
+        $code = $this->getDecoratorUnderTestCode();
+        $expected = $code . ':' . $this->getDecoratorUnderTest()->getValue($code);
+        $result = $this->getDecoratorUnderTest()->getIdForParts([$this->getDecoratorUnderTestCode()]);
+        $this->assertContains($expected, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldDelegateToTheComponentToBuildThePartialId()
+    {
+        $code = $this->getDecoratorUnderTestCode();
+        $decoratorId = $code . ':' . $this->getDecoratorUnderTest()->getValue($code);
+        $componentId = 'foo:bar';
+        
+        $this->mockDecoratedContext->expects($this->once())->method('getIdForParts')
+            ->willReturn('foo:bar');
+        $result = $this->getDecoratorUnderTest()->getIdForParts([
+            $this->getDecoratorUnderTestCode(),
+            $this->decoratedComponentCode
+        ]);
+        $this->assertEquals($decoratorId . '_' . $componentId, $result);
+    }
     
     /**
      * @test

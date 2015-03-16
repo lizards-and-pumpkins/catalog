@@ -83,8 +83,8 @@ class GenericSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $testContextId = 'test-context-id';
         $stubContext = $this->getMock(Context::class);
-        $stubContext->expects($this->any())
-            ->method('getId')
+        $stubContext->expects($this->once())
+            ->method('getIdForParts')
             ->willReturn($testContextId);
         $result = $this->keyGenerator->getKeyForContext(123, $stubContext);
         $this->assertContains($testContextId, $result);
@@ -95,7 +95,7 @@ class GenericSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnTheRequiredContextParts()
     {
-        $result = $this->keyGenerator->getContextParts();
+        $result = $this->keyGenerator->getContextPartsUsedForKey();
         $this->assertInternalType('array', $result);
         $this->assertContainsOnly('string', $result);
     }

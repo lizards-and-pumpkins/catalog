@@ -40,9 +40,9 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Product\CatalogImportDomainEvent
  * @uses   \Brera\Product\CatalogImportDomainEventHandler
  * @uses   \Brera\Product\ProductSearchDocumentBuilder
- * @uses   \Brera\Product\ProductInContextDetailViewSnippetRenderer
  * @uses   \Brera\Product\ProductSourceDetailViewSnippetRenderer
  * @uses   \Brera\Product\ProductDetailViewBlockRenderer
+ * @uses   \Brera\Product\ProductDetailViewInContextSnippetRenderer
  * @uses   \Brera\Product\ProductListingSnippetRenderer
  * @uses   \Brera\GenericSnippetKeyGenerator
  * @uses   \Brera\RootSnippetRendererCollection
@@ -306,16 +306,5 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createHttpRouterChain();
         $this->assertInstanceOf(HttpRouterChain::class, $result);
-    }
-
-    /**
-     * @test
-     */
-    public function itShouldAlwaysReturnTheSameKeyGenratorLocatorViaGetter()
-    {
-        $result1 = $this->commonFactory->getSnippetKeyGeneratorLocator();
-        $result2 = $this->commonFactory->getSnippetKeyGeneratorLocator();
-        $this->assertInstanceOf(SnippetKeyGeneratorLocator::class, $result1);
-        $this->assertSame($result1, $result2);
     }
 }

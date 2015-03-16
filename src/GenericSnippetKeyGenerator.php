@@ -44,7 +44,7 @@ class GenericSnippetKeyGenerator implements SnippetKeyGenerator
             '%s_%s_%s',
             $this->snippetCode,
             $this->getStringRepresentationOfIdentifier($identifier),
-            $context->getId()
+            $context->getIdForParts($this->getContextPartsUsedForKey())
         );
     }
 
@@ -71,7 +71,7 @@ class GenericSnippetKeyGenerator implements SnippetKeyGenerator
     /**
      * @return string[]
      */
-    public function getContextParts()
+    public function getContextPartsUsedForKey()
     {
         return $this->contextParts;
     }

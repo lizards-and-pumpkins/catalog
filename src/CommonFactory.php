@@ -9,7 +9,7 @@ use Brera\DataPool\SearchEngine\SearchEngine;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\ProductDetailViewBlockRenderer;
-use Brera\Product\ProductInContextDetailViewSnippetRenderer;
+use Brera\Product\ProductDetailViewInContextSnippetRenderer;
 use Brera\Product\ProductListingBlockRenderer;
 use Brera\Product\ProductListingSnippetRenderer;
 use Brera\Product\ProductSearchDocumentBuilder;
@@ -23,7 +23,6 @@ use Brera\Product\ProductImportDomainEvent;
 use Brera\Product\ProductImportDomainEventHandler;
 use Brera\Product\ProductProjector;
 use Brera\Product\ProductSourceDetailViewSnippetRenderer;
-use Brera\Product\ProductDetailViewSnippetKeyGenerator;
 use Brera\Renderer\BlockStructure;
 use Brera\Http\HttpRouterChain;
 
@@ -50,11 +49,6 @@ class CommonFactory implements Factory, DomainEventFactory
      * @var SearchEngine
      */
     private $searchEngine;
-
-    /**
-     * @var SnippetKeyGeneratorLocator
-     */
-    private $snippetKeyGeneratorLocator;
 
     /**
      * @param ProductImportDomainEvent $event
@@ -217,17 +211,17 @@ class CommonFactory implements Factory, DomainEventFactory
     {
         return new ProductSourceDetailViewSnippetRenderer(
             $this->getMasterFactory()->createSnippetResultList(),
-            $this->getMasterFactory()->createProductInContextDetailViewSnippetRenderer()
+            $this->getMasterFactory()->createProductDetailViewInContextSnippetRenderer()
         );
     }
 
     /**
-     * @return ProductInContextDetailViewSnippetRenderer
+     * @return ProductDetailViewInContextSnippetRenderer
      * @todo: move to catalog factory
      */
-    public function createProductInContextDetailViewSnippetRenderer()
+    public function createProductDetailViewInContextSnippetRenderer()
     {
-        return new ProductInContextDetailViewSnippetRenderer(
+        return new ProductDetailViewInContextSnippetRenderer(
             $this->getMasterFactory()->createSnippetResultList(),
             $this->getMasterFactory()->createProductDetailViewBlockRenderer(),
             $this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator(),
@@ -247,6 +241,15 @@ class CommonFactory implements Factory, DomainEventFactory
     }
 
     /**
+     * @return SnippetKeyGenerator
+     * @todo: move to catalog factory
+     */
+    public function createProductDetailViewSnippetKeyGenerator()
+    {
+        return new GenericSnippetKeyGenerator('product_detail_view', ['website', 'language']);
+    }
+
+    /**
      * @return BlockStructure
      */
     public function createBlockStructure()
@@ -260,15 +263,6 @@ class CommonFactory implements Factory, DomainEventFactory
     public function createUrlPathKeyGenerator()
     {
         return new PoCUrlPathKeyGenerator();
-    }
-
-    /**
-     * @return ProductDetailViewSnippetKeyGenerator
-     * @todo: move to catalog factory
-     */
-    public function createProductDetailViewSnippetKeyGenerator()
-    {
-        return new ProductDetailViewSnippetKeyGenerator();
     }
 
     /**
@@ -437,25 +431,6 @@ class CommonFactory implements Factory, DomainEventFactory
     public function createProductSearchDocumentBuilder()
     {
         return new ProductSearchDocumentBuilder($this->getMasterFactory()->getSearchableAttributeCodes());
-    }
-
-    /**
-     * @return SnippetKeyGeneratorLocator
-     */
-    public function createSnippetKeyGeneratorLocator()
-    {
-        return new SnippetKeyGeneratorLocator();
-    }
-
-    /**
-     * @return SnippetKeyGeneratorLocator
-     */
-    public function getSnippetKeyGeneratorLocator()
-    {
-        if (is_null($this->snippetKeyGeneratorLocator)) {
-            $this->snippetKeyGeneratorLocator = $this->createSnippetKeyGeneratorLocator();
-        }
-        return $this->snippetKeyGeneratorLocator;
     }
 
     /**
