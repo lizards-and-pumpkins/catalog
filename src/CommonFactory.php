@@ -51,11 +51,6 @@ class CommonFactory implements Factory, DomainEventFactory
     private $searchEngine;
 
     /**
-     * @var SnippetKeyGeneratorLocator
-     */
-    private $snippetKeyGeneratorLocator;
-
-    /**
      * @param ProductImportDomainEvent $event
      * @return ProductImportDomainEventHandler
      * @todo: move to catalog factory
@@ -436,30 +431,6 @@ class CommonFactory implements Factory, DomainEventFactory
     public function createProductSearchDocumentBuilder()
     {
         return new ProductSearchDocumentBuilder($this->getMasterFactory()->getSearchableAttributeCodes());
-    }
-
-    /**
-     * @return SnippetKeyGeneratorLocator
-     */
-    public function createSnippetKeyGeneratorLocator()
-    {
-        $snippetKeyGeneratorLocator = new SnippetKeyGeneratorLocator();
-        $snippetKeyGeneratorLocator->register(
-            'product_detail_view',
-            $this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator()
-        );
-        return $snippetKeyGeneratorLocator;
-    }
-
-    /**
-     * @return SnippetKeyGeneratorLocator
-     */
-    public function getSnippetKeyGeneratorLocator()
-    {
-        if (is_null($this->snippetKeyGeneratorLocator)) {
-            $this->snippetKeyGeneratorLocator = $this->createSnippetKeyGeneratorLocator();
-        }
-        return $this->snippetKeyGeneratorLocator;
     }
 
     /**

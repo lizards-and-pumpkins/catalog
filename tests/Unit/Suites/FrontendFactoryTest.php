@@ -68,4 +68,15 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
         $result = $this->frontendFactory->createUrlKeyRouter($stubHttpUrl, $stubContext);
         $this->assertInstanceOf(UrlKeyRouter::class, $result);
     }
+
+    /**
+     * @test
+     */
+    public function itShouldAlwaysReturnTheSameKeyGeneratorLocatorViaGetter()
+    {
+        $result1 = $this->frontendFactory->getSnippetKeyGeneratorLocator();
+        $result2 = $this->frontendFactory->getSnippetKeyGeneratorLocator();
+        $this->assertInstanceOf(SnippetKeyGeneratorLocator::class, $result1);
+        $this->assertSame($result1, $result2);
+    }
 }
