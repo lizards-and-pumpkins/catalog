@@ -142,19 +142,6 @@ class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_Test
         $mockContextSource->expects($this->once())->method('getAllAvailableContexts')->with($contextParts)
             ->willReturn([$this->getMock(Context::class)]);
         
-//        $mockProductDetailViewInContextRenderer = $this->prophesize(ProductDetailViewInContextSnippetRenderer::class);
-//        $mockProductDetailViewInContextRenderer->getContextParts()->shouldBeCalledTimes(1)->willReturn($contextParts);
-//        $mockProductDetailViewInContextRenderer->render()->willReturn($this->mockSnippetResultList);
-//        
-//        $stubContext = $this->prophesize(Context::class);
-//        $mockContextSource = $this->prophesize(ContextSource::class);
-//        $mockContextSource->getAllAvailableContexts()->shouldBeCalled()->willReturn($stubContext->reveal());
-//
-//        $productSourceSnippetRenderer = new ProductSourceDetailViewSnippetRenderer(
-//            $this->mockSnippetResultList,
-//            $mockProductDetailViewInContextRenderer->reveal()
-//        );
-
         $productSourceSnippetRenderer = new ProductSourceDetailViewSnippetRenderer(
             $this->mockSnippetResultList,
             $mockProductDetailViewInContextRenderer
