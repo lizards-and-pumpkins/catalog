@@ -8,6 +8,12 @@ interface Context
      * @return string
      */
     public function getId();
+
+    /**
+     * @param string[] $requestedParts
+     * @return string
+     */
+    public function getIdForParts(array $requestedParts);
     
     /**
      * @param string $code

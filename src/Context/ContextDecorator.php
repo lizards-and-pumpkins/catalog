@@ -9,7 +9,7 @@ abstract class ContextDecorator implements Context
      * @var Context
      */
     private $component;
-    
+
     /**
      * @var array
      */
@@ -46,7 +46,7 @@ abstract class ContextDecorator implements Context
      */
     private function defaultGetValueFromContextImplementation()
     {
-        if (! array_key_exists($this->getCode(), $this->sourceData)) {
+        if (!array_key_exists($this->getCode(), $this->sourceData)) {
             throw new ContextCodeNotFoundException(sprintf(
                 'No value found in the context source data for the code "%s"',
                 $this->getCode()
@@ -73,7 +73,7 @@ abstract class ContextDecorator implements Context
      */
     public function getId()
     {
-        return $this->getCode() . ':' . $this->getValueFromContext() . '_' . $this->component->getId();
+        return $this->buildIdString() . '_' . $this->component->getId();
     }
 
     /**
@@ -84,6 +84,7 @@ abstract class ContextDecorator implements Context
         return $this->sourceData;
     }
 
+
     /**
      * @param string $code
      * @return bool
@@ -91,5 +92,38 @@ abstract class ContextDecorator implements Context
     public function supportsCode($code)
     {
         return $this->getCode() === $code || $this->component->supportsCode($code);
+    }
+
+    /**
+     * @return string
+     */
+    private function buildIdString()
+    {
+        return $this->getCode() . ':' . $this->getValueFromContext();
+    }
+
+    /**
+     * @param string[] $requestedParts
+     * @return string
+     */
+    public function getIdForParts(array $requestedParts)
+    {
+        $componentPartialId = $this->component->getIdForParts($requestedParts);
+        $myPartialId = $this->getMyIdIfRequested($requestedParts);
+        $separator = $myPartialId && $componentPartialId ?
+            '_' :
+            '';
+        return $myPartialId . $separator . $componentPartialId;
+    }
+
+    /**
+     * @param string[] $requestedParts
+     * @return string
+     */
+    private function getMyIdIfRequested(array $requestedParts)
+    {
+        return in_array($this->getCode(), $requestedParts) ?
+            $this->buildIdString() :
+            '';
     }
 }
