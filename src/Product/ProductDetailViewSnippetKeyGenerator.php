@@ -36,4 +36,12 @@ class ProductDetailViewSnippetKeyGenerator implements SnippetKeyGenerator
     {
         return sprintf('%s_%s_%s', ProductDetailViewInContextSnippetRenderer::CODE, $productId, $context->getId());
     }
+
+    /**
+     * @return string[]
+     */
+    public function getContextPartsUsedForKey()
+    {
+        return ['website'];
+    }
 }

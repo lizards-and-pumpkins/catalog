@@ -46,4 +46,15 @@ class ProductDetailViewSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCa
 
         $this->keyGenerator->getKeyForContext($notAProductId, $mockContext);
     }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnTheUsedContextParts()
+    {
+        $result = $this->keyGenerator->getContextPartsUsedForKey();
+        $this->assertInternalType('array', $result);
+        $this->assertContainsOnly('string', $result);
+        $this->assertGreaterThanOrEqual(1, count($result));
+    }
 }

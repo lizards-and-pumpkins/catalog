@@ -102,4 +102,16 @@ class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_T
         $result = $method->invoke($this->renderer);
         $this->assertInternalType('array', json_decode($result->getContent(), true));
     }
+
+    /**
+     * @test
+     */
+    public function itShouldDelegateToTheKeyGeneratorToFetchTheContextParts()
+    {
+        $testContextParts = ['version', 'website', 'language'];
+        $this->mockProductDetailViewSnippetKeyGenerator->expects($this->once())->method('getContextPartsUsedForKey')
+            ->willReturn($testContextParts);
+        
+        $this->assertSame($testContextParts, $this->renderer->getUsedContextParts());
+    }
 }

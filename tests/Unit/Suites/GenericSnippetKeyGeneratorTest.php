@@ -95,7 +95,7 @@ class GenericSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnTheRequiredContextParts()
     {
-        $result = $this->keyGenerator->getContextParts();
+        $result = $this->keyGenerator->getContextPartsUsedForKey();
         $this->assertInternalType('array', $result);
         $this->assertContainsOnly('string', $result);
     }

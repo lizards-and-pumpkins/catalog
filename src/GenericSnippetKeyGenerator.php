@@ -71,7 +71,7 @@ class GenericSnippetKeyGenerator implements SnippetKeyGenerator
     /**
      * @return string[]
      */
-    public function getContextParts()
+    public function getContextPartsUsedForKey()
     {
         return $this->contextParts;
     }

@@ -2,6 +2,7 @@
 
 namespace Brera\Product;
 
+use Brera\Context\Context;
 use Brera\Context\ContextSource;
 use Brera\SnippetRenderer;
 use Brera\SnippetResultList;
@@ -58,11 +59,20 @@ class ProductSourceDetailViewSnippetRenderer implements SnippetRenderer
 
     private function createProductDetailViewSnippets()
     {
-        foreach ($this->contextSource->getAllAvailableContexts() as $context) {
+        foreach ($this->getContextList() as $context) {
             $productInContext = $this->productSource->getProductForContext($context);
             $inContextSnippetResultList = $this->productInContextRenderer->render($productInContext, $context);
             $this->snippetResultList->merge($inContextSnippetResultList);
         }
+    }
+
+    /**
+     * @return Context[]
+     */
+    private function getContextList()
+    {
+        $parts = $this->productInContextRenderer->getUsedContextParts();
+        return $this->contextSource->getAllAvailableContexts($parts);
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Brera\Product;
 
+use Brera\Context\ContextSource;
 use Brera\SampleContextSource;
 use Brera\Context\Context;
 use Brera\SnippetResultList;
@@ -22,7 +23,7 @@ class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_Test
     /**
      * @var ProductSourceDetailViewSnippetRenderer
      */
-    private $snippetRenderer;
+    private $productSourceSnippetRenderer;
 
     /**
      * @var SnippetResultList|\PHPUnit_Framework_MockObject_MockObject
@@ -57,7 +58,7 @@ class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_Test
             ->willReturn(['version']);
         
 
-        $this->snippetRenderer = new ProductSourceDetailViewSnippetRenderer(
+        $this->productSourceSnippetRenderer = new ProductSourceDetailViewSnippetRenderer(
             $this->mockSnippetResultList,
             $this->mockProductDetailViewInContextRenderer
         );
@@ -78,7 +79,7 @@ class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_Test
      */
     public function itShouldImplementSnippetRenderer()
     {
-        $this->assertInstanceOf(SnippetRenderer::class, $this->snippetRenderer);
+        $this->assertInstanceOf(SnippetRenderer::class, $this->productSourceSnippetRenderer);
     }
 
     /**
@@ -92,7 +93,7 @@ class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_Test
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->snippetRenderer->render($invalidSourceObject, $this->stubContextSource);
+        $this->productSourceSnippetRenderer->render($invalidSourceObject, $this->stubContextSource);
     }
 
     /**
@@ -102,7 +103,7 @@ class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_Test
     {
         $stubProductSource = $this->getStubProductSource();
 
-        $result = $this->snippetRenderer->render($stubProductSource, $this->stubContextSource);
+        $result = $this->productSourceSnippetRenderer->render($stubProductSource, $this->stubContextSource);
         $this->assertSame($this->mockSnippetResultList, $result);
     }
 
@@ -117,7 +118,49 @@ class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_Test
             ->method('merge')
             ->with($this->isInstanceOf(SnippetResultList::class));
 
-        $this->snippetRenderer->render($stubProductSource, $this->stubContextSource);
+        $this->productSourceSnippetRenderer->render($stubProductSource, $this->stubContextSource);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldRequestTheUsedContextPartsFromTheSnippetRendererAndPassThemToTheContextBuilder()
+    {
+        $contextParts = ['version', 'website', 'language'];
+
+        $mockProductDetailViewInContextRenderer =
+            $this->getMock(ProductDetailViewInContextSnippetRenderer::class, [], [], '', false);
+        $mockProductDetailViewInContextRenderer->expects($this->once())->method('getUsedContextParts')
+            ->willReturn($contextParts);
+        $mockProductDetailViewInContextRenderer->expects($this->atLeastOnce())->method('render')
+            ->willReturn($this->mockSnippetResultList);
+        
+        $mockContextSource = $this->getMockBuilder(ContextSource::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getAllAvailableContexts'])
+            ->getMockForAbstractClass();
+        $mockContextSource->expects($this->once())->method('getAllAvailableContexts')->with($contextParts)
+            ->willReturn([$this->getMock(Context::class)]);
+        
+//        $mockProductDetailViewInContextRenderer = $this->prophesize(ProductDetailViewInContextSnippetRenderer::class);
+//        $mockProductDetailViewInContextRenderer->getContextParts()->shouldBeCalledTimes(1)->willReturn($contextParts);
+//        $mockProductDetailViewInContextRenderer->render()->willReturn($this->mockSnippetResultList);
+//        
+//        $stubContext = $this->prophesize(Context::class);
+//        $mockContextSource = $this->prophesize(ContextSource::class);
+//        $mockContextSource->getAllAvailableContexts()->shouldBeCalled()->willReturn($stubContext->reveal());
+//
+//        $productSourceSnippetRenderer = new ProductSourceDetailViewSnippetRenderer(
+//            $this->mockSnippetResultList,
+//            $mockProductDetailViewInContextRenderer->reveal()
+//        );
+
+        $productSourceSnippetRenderer = new ProductSourceDetailViewSnippetRenderer(
+            $this->mockSnippetResultList,
+            $mockProductDetailViewInContextRenderer
+        );
+
+        $productSourceSnippetRenderer->render($this->getStubProductSource(), $mockContextSource);
     }
 
     /**
