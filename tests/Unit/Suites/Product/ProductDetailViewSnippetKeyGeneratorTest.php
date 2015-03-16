@@ -14,8 +14,14 @@ class ProductDetailViewSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCa
      */
     private $keyGenerator;
 
+    /**
+     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockContext;
+
     public function setUp()
     {
+        $this->mockContext = $this->getMock(Context::class);
         $this->keyGenerator = new ProductDetailViewSnippetKeyGenerator();
     }
 
@@ -24,14 +30,11 @@ class ProductDetailViewSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCa
      */
     public function itShouldReturnAString()
     {
-        $stubProductId = $this->getMockBuilder(ProductId::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $mockContext = $this->getMock(Context::class);
+        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
 
         $this->assertInternalType(
             'string',
-            $this->keyGenerator->getKeyForContext($stubProductId, $mockContext)
+            $this->keyGenerator->getKeyForContext($stubProductId, $this->mockContext)
         );
     }
 
@@ -42,9 +45,8 @@ class ProductDetailViewSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCa
     public function itShouldOnlyAllowProductIdIdentifiers()
     {
         $notAProductId = 1;
-        $mockContext = $this->getMock(Context::class);
 
-        $this->keyGenerator->getKeyForContext($notAProductId, $mockContext);
+        $this->keyGenerator->getKeyForContext($notAProductId, $this->mockContext);
     }
 
     /**
@@ -56,5 +58,22 @@ class ProductDetailViewSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCa
         $this->assertInternalType('array', $result);
         $this->assertContainsOnly('string', $result);
         $this->assertGreaterThanOrEqual(1, count($result));
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldDelegateToTheContextToBuildTheContextKey()
+    {
+        $testContextKey = 'dummy-context-key';
+        $this->mockContext->expects($this->once())
+            ->method('getIdForParts')
+            ->with($this->keyGenerator->getContextPartsUsedForKey())
+            ->willReturn($testContextKey);
+
+        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
+
+        $result = $this->keyGenerator->getKeyForContext($stubProductId, $this->mockContext);
+        $this->assertContains($testContextKey, $result);
     }
 }
