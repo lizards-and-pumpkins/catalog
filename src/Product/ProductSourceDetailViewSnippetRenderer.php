@@ -25,17 +25,17 @@ class ProductSourceDetailViewSnippetRenderer implements SnippetRenderer
     private $snippetResultList;
 
     /**
-     * @var ProductInContextDetailViewSnippetRenderer
+     * @var ProductDetailViewInContextSnippetRenderer
      */
     private $productInContextRenderer;
 
     /**
      * @param SnippetResultList $snippetResultList
-     * @param ProductInContextDetailViewSnippetRenderer $productInContextRenderer
+     * @param ProductDetailViewInContextSnippetRenderer $productInContextRenderer
      */
     public function __construct(
         SnippetResultList $snippetResultList,
-        ProductInContextDetailViewSnippetRenderer $productInContextRenderer
+        ProductDetailViewInContextSnippetRenderer $productInContextRenderer
     ) {
         $this->snippetResultList = $snippetResultList;
         $this->productInContextRenderer = $productInContextRenderer;

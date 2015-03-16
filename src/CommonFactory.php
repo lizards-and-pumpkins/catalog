@@ -9,7 +9,7 @@ use Brera\DataPool\SearchEngine\SearchEngine;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\ProductDetailViewBlockRenderer;
-use Brera\Product\ProductInContextDetailViewSnippetRenderer;
+use Brera\Product\ProductDetailViewInContextSnippetRenderer;
 use Brera\Product\ProductListingBlockRenderer;
 use Brera\Product\ProductListingSnippetRenderer;
 use Brera\Product\ProductSearchDocumentBuilder;
@@ -217,17 +217,17 @@ class CommonFactory implements Factory, DomainEventFactory
     {
         return new ProductSourceDetailViewSnippetRenderer(
             $this->getMasterFactory()->createSnippetResultList(),
-            $this->getMasterFactory()->createProductInContextDetailViewSnippetRenderer()
+            $this->getMasterFactory()->createProductDetailViewInContextSnippetRenderer()
         );
     }
 
     /**
-     * @return ProductInContextDetailViewSnippetRenderer
+     * @return ProductDetailViewInContextSnippetRenderer
      * @todo: move to catalog factory
      */
-    public function createProductInContextDetailViewSnippetRenderer()
+    public function createProductDetailViewInContextSnippetRenderer()
     {
-        return new ProductInContextDetailViewSnippetRenderer(
+        return new ProductDetailViewInContextSnippetRenderer(
             $this->getMasterFactory()->createSnippetResultList(),
             $this->getMasterFactory()->createProductDetailViewBlockRenderer(),
             $this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator(),

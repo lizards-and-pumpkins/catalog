@@ -40,9 +40,9 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Product\CatalogImportDomainEvent
  * @uses   \Brera\Product\CatalogImportDomainEventHandler
  * @uses   \Brera\Product\ProductSearchDocumentBuilder
- * @uses   \Brera\Product\ProductInContextDetailViewSnippetRenderer
  * @uses   \Brera\Product\ProductSourceDetailViewSnippetRenderer
  * @uses   \Brera\Product\ProductDetailViewBlockRenderer
+ * @uses   \Brera\Product\ProductDetailViewInContextSnippetRenderer
  * @uses   \Brera\Product\ProductListingSnippetRenderer
  * @uses   \Brera\GenericSnippetKeyGenerator
  * @uses   \Brera\RootSnippetRendererCollection

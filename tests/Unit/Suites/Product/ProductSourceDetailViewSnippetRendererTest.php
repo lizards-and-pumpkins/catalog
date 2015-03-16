@@ -40,14 +40,14 @@ class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_Test
     private $stubContext;
 
     /**
-     * @var ProductInContextDetailViewSnippetRenderer|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductDetailViewInContextSnippetRenderer|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockProductInContextDetailViewRenderer;
 
     protected function setUp()
     {
         $this->mockSnippetResultList = $this->getMock(SnippetResultList::class);
-        $rendererClass = ProductInContextDetailViewSnippetRenderer::class;
+        $rendererClass = ProductDetailViewInContextSnippetRenderer::class;
         $this->mockProductInContextDetailViewRenderer = $this->getMock($rendererClass, [], [], '', false);
         $this->mockProductInContextDetailViewRenderer->expects($this->any())
             ->method('render')
