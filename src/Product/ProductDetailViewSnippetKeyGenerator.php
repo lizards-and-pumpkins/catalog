@@ -43,6 +43,6 @@ class ProductDetailViewSnippetKeyGenerator implements SnippetKeyGenerator
      */
     public function getContextPartsUsedForKey()
     {
-        return ['website'];
+        return ['website', 'language'];
     }
 }
