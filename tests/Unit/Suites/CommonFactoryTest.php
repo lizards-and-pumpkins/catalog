@@ -45,6 +45,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Product\ProductDetailViewInContextSnippetRenderer
  * @uses   \Brera\Product\ProductListingSnippetRenderer
  * @uses   \Brera\GenericSnippetKeyGenerator
+ * @uses   \Brera\SnippetKeyGeneratorLocator
  * @uses   \Brera\RootSnippetRendererCollection
  * @uses   \Brera\RootSnippetSourceListBuilder
  */

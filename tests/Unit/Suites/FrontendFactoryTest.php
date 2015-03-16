@@ -19,6 +19,8 @@ use Brera\Product\CatalogImportApiRequestHandler;
  * @uses   \Brera\DataPool\DataPoolReader
  * @uses   \Brera\Api\ApiRouter
  * @uses   \Brera\Api\ApiRequestHandlerChain
+ * @uses   \Brera\SnippetKeyGeneratorLocator
+ * @uses   \Brera\GenericSnippetKeyGenerator
  */
 class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
 {
