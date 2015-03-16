@@ -5,6 +5,7 @@ namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\PageMetaInfoSnippetContent;
+use Brera\SnippetKeyGenerator;
 use Brera\SnippetResult;
 use Brera\SnippetResultList;
 use Brera\UrlPathKeyGenerator;
@@ -34,7 +35,7 @@ class ProductDetailViewInContextSnippetRenderer
     private $blockRenderer;
     
     /**
-     * @var ProductDetailViewSnippetKeyGenerator
+     * @var SnippetKeyGenerator
      */
     private $snippetKeyGenerator;
     
@@ -46,13 +47,13 @@ class ProductDetailViewInContextSnippetRenderer
     /**
      * @param SnippetResultList $snippetResultList
      * @param ProductDetailViewBlockRenderer $blockRenderer
-     * @param ProductDetailViewSnippetKeyGenerator $snippetKeyGenerator
+     * @param SnippetKeyGenerator $snippetKeyGenerator
      * @param UrlPathKeyGenerator $urlKeyGenerator
      */
     public function __construct(
         SnippetResultList $snippetResultList,
         ProductDetailViewBlockRenderer $blockRenderer,
-        ProductDetailViewSnippetKeyGenerator $snippetKeyGenerator,
+        SnippetKeyGenerator $snippetKeyGenerator,
         UrlPathKeyGenerator $urlKeyGenerator
     ) {
         $this->snippetResultList = $snippetResultList;
