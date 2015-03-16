@@ -9,9 +9,6 @@ abstract class ContextSource
      */
     private $contextBuilder;
 
-    /**
-     * @param ContextBuilder $contextBuilder
-     */
     public function __construct(ContextBuilder $contextBuilder)
     {
         $this->contextBuilder = $contextBuilder;
@@ -45,15 +42,38 @@ abstract class ContextSource
      */
     private function getContextMatrixForParts(array $requestedParts)
     {
+        $aggregatedResult = array();
         $flippedRequestedParts = array_flip($requestedParts);
-        $extractRequestedParts = function (array $contextSourceRecord) use ($flippedRequestedParts) {
-            return array_intersect_key($contextSourceRecord, $flippedRequestedParts);
-        };
-        $removeDupes = function(array $result, array $record) {
-            return in_array($record, $result) ?
-                $result :
-                array_merge($result, [$record]);
-        };
-        return array_reduce(array_map($extractRequestedParts, $this->getContextMatrix()), $removeDupes, []);
+        foreach ($this->getContextMatrix() as $contextSourceRecord) {
+            $matchingParts = $this->extractMatchingParts($contextSourceRecord, $flippedRequestedParts);
+            $aggregatedResult = $this->addExtractedContextToAggregateIfNotAlreadyPresent(
+                $matchingParts,
+                $aggregatedResult
+            );
+        }
+        return $aggregatedResult;
+    }
+
+    /**
+     * @param string[] $contextSourceRecord
+     * @param string[] $flippedRequestedParts
+     * @return string[]
+     */
+    private function extractMatchingParts($contextSourceRecord, $flippedRequestedParts)
+    {
+        return array_intersect_key($contextSourceRecord, $flippedRequestedParts);
+    }
+
+    /**
+     * @param string[] $matchingContextParts
+     * @param array[] $aggregatedResult
+     * @return array[]
+     */
+    private function addExtractedContextToAggregateIfNotAlreadyPresent($matchingContextParts, $aggregatedResult)
+    {
+        if (!in_array($matchingContextParts, $aggregatedResult)) {
+            $aggregatedResult[] = $matchingContextParts;
+        }
+        return $aggregatedResult;
     }
 }
