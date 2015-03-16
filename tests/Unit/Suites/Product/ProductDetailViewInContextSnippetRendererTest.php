@@ -4,6 +4,7 @@
 namespace Brera\Product;
 
 use Brera\Context\Context;
+use Brera\SnippetKeyGenerator;
 use Brera\SnippetResult;
 use Brera\SnippetResultList;
 use Brera\TestFileFixtureTrait;
@@ -34,9 +35,9 @@ class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_T
     private $stubProductDetailViewBlockRenderer;
 
     /**
-     * @var ProductDetailViewSnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockProductDetailViewSnippetKeyGenerator;
+    private $mockSnippetKeyGenerator;
 
     /**
      * @var UrlPathKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
@@ -58,8 +59,8 @@ class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_T
         $this->stubProductDetailViewBlockRenderer->expects($this->any())
             ->method('getNestedSnippetCodes')
             ->willReturn([]);
-        $this->mockProductDetailViewSnippetKeyGenerator = $this->getMock(ProductDetailViewSnippetKeyGenerator::class);
-        $this->mockProductDetailViewSnippetKeyGenerator->expects($this->any())
+        $this->mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $this->mockSnippetKeyGenerator->expects($this->any())
             ->method('getKeyForContext')
             ->willReturn('stub-content-key');
         $this->stubUrlPathKeyGenerator = $this->getMock(UrlPathKeyGenerator::class);
@@ -69,7 +70,7 @@ class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_T
         $this->renderer = new ProductDetailViewInContextSnippetRenderer(
             $this->mockSnippetResultList,
             $this->stubProductDetailViewBlockRenderer,
-            $this->mockProductDetailViewSnippetKeyGenerator,
+            $this->mockSnippetKeyGenerator,
             $this->stubUrlPathKeyGenerator
         );
     }
@@ -109,7 +110,7 @@ class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_T
     public function itShouldDelegateToTheKeyGeneratorToFetchTheContextParts()
     {
         $testContextParts = ['version', 'website', 'language'];
-        $this->mockProductDetailViewSnippetKeyGenerator->expects($this->once())->method('getContextPartsUsedForKey')
+        $this->mockSnippetKeyGenerator->expects($this->once())->method('getContextPartsUsedForKey')
             ->willReturn($testContextParts);
         
         $this->assertSame($testContextParts, $this->renderer->getUsedContextParts());

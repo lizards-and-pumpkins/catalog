@@ -23,7 +23,6 @@ use Brera\Product\ProductImportDomainEvent;
 use Brera\Product\ProductImportDomainEventHandler;
 use Brera\Product\ProductProjector;
 use Brera\Product\ProductSourceDetailViewSnippetRenderer;
-use Brera\Product\ProductDetailViewSnippetKeyGenerator;
 use Brera\Renderer\BlockStructure;
 use Brera\Http\HttpRouterChain;
 
@@ -247,7 +246,7 @@ class CommonFactory implements Factory, DomainEventFactory
     }
 
     /**
-     * @return ProductDetailViewSnippetKeyGenerator
+     * @return SnippetKeyGenerator
      * @todo: move to catalog factory
      */
     public function createProductDetailViewSnippetKeyGenerator()
