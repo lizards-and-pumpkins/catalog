@@ -8,14 +8,40 @@ namespace Brera;
 class FailedToReadFromDomainEventQueueMessageTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var FailedToReadFromDomainEventQueueMessage
+     */
+    private $message;
+
+    /**
+     * @var \Exception
+     */
+    private $stubException;
+
+    protected function setUp()
+    {
+        $this->stubException = new \Exception('foo');
+        $this->message = new FailedToReadFromDomainEventQueueMessage($this->stubException);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnLogMessage()
+    {
+        $result = (string) $this->message;
+        $expectation = "Failed to read from domain event queue message with following exception:\n\nfoo";
+
+        $this->assertEquals($expectation, $result);
+
+    }
+
+    /**
      * @test
      */
     public function itShouldReturnAnException()
     {
-        $stubException = $this->getMock(\Exception::class);
-        $message = new FailedToReadFromDomainEventQueueMessage($stubException);
-        $result = $message->getException();
+        $result = $this->message->getContext();
 
-        $this->assertInstanceOf(\Exception::class, $result);
+        $this->assertSame(['exception' => $this->stubException], $result);
     }
 }

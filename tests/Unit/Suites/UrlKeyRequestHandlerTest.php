@@ -72,7 +72,7 @@ class UrlKeyRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->url = HttpUrl::fromString('http://example.com/product.html');
 
         $this->stubContext = $this->getMock(Context::class);
-        $this->stubContext->expects($this->any())->method('getId')->willReturn($this->contextIdFixture);
+        $this->stubContext->expects($this->any())->method('getIdForParts')->willReturn($this->contextIdFixture);
 
         $this->mockUrlPathKeyGenerator = $this->getMock(UrlPathKeyGenerator::class);
         $this->mockUrlPathKeyGenerator->expects($this->any())

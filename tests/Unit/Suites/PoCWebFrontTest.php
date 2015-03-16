@@ -21,6 +21,8 @@ use Brera\Http\HttpUrl;
  * @uses   \Brera\IntegrationTestFactory
  * @uses   \Brera\DataVersion
  * @uses   \Brera\PoCUrlPathKeyGenerator
+ * @uses   \Brera\SnippetKeyGeneratorLocator
+ * @uses   \Brera\GenericSnippetKeyGenerator
  * @uses   \Brera\UrlKeyRouter
  * @uses   \Brera\UrlKeyRequestHandler
  * @uses   \Brera\UrlKeyRequestHandlerBuilder

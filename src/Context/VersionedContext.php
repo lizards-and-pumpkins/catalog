@@ -53,6 +53,17 @@ class VersionedContext implements Context
     }
 
     /**
+     * @param string[] $requestedParts
+     * @return string
+     */
+    public function getIdForParts(array $requestedParts)
+    {
+        return in_array(self::CODE, $requestedParts) ?
+            $this->getId() :
+            '';
+    }
+
+    /**
      * @param string $code
      * @return bool
      */
@@ -60,4 +71,6 @@ class VersionedContext implements Context
     {
         return $code == self::CODE;
     }
+
+
 }

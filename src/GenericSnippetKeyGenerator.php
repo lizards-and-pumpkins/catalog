@@ -8,13 +8,20 @@ use Brera\Context\Context;
 class GenericSnippetKeyGenerator implements SnippetKeyGenerator
 {
     /**
-     * @param string $snippetCode
-     * @param mixed $identifier
-     * @param Context $context
-     * @return string
-     * @throws InvalidSnippetCodeException
+     * @var
      */
-    public function getKeyForContext($snippetCode, $identifier, Context $context)
+    private $snippetCode;
+    
+    /**
+     * @var string[]
+     */
+    private $contextParts;
+
+    /**
+     * @param string $snippetCode
+     * @param string[] $contextParts
+     */
+    public function __construct($snippetCode, array $contextParts)
     {
         if (! is_string($snippetCode)) {
             throw new InvalidSnippetCodeException(sprintf(
@@ -22,12 +29,22 @@ class GenericSnippetKeyGenerator implements SnippetKeyGenerator
                 $this->getSnippetCodeRepresentationForErrorMessage($snippetCode)
             ));
         }
-
+        $this->snippetCode = $snippetCode;
+        $this->contextParts = $contextParts;
+    }
+    
+    /**
+     * @param mixed $identifier
+     * @param Context $context
+     * @return string
+     */
+    public function getKeyForContext($identifier, Context $context)
+    {
         return sprintf(
             '%s_%s_%s',
-            $snippetCode,
+            $this->snippetCode,
             $this->getStringRepresentationOfIdentifier($identifier),
-            $context->getId()
+            $context->getIdForParts($this->getContextPartsUsedForKey())
         );
     }
 
@@ -49,5 +66,13 @@ class GenericSnippetKeyGenerator implements SnippetKeyGenerator
     private function getStringRepresentationOfIdentifier($identifier)
     {
         return (string) $identifier;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getContextPartsUsedForKey()
+    {
+        return $this->contextParts;
     }
 }

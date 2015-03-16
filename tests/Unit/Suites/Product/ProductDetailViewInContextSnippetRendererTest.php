@@ -4,22 +4,23 @@
 namespace Brera\Product;
 
 use Brera\Context\Context;
+use Brera\SnippetKeyGenerator;
 use Brera\SnippetResult;
 use Brera\SnippetResultList;
 use Brera\TestFileFixtureTrait;
 use Brera\UrlPathKeyGenerator;
 
 /**
- * @covers \Brera\Product\ProductInContextDetailViewSnippetRenderer
+ * @covers \Brera\Product\ProductDetailViewInContextSnippetRenderer
  * @uses   \Brera\SnippetResult
  * @uses   \Brera\PageMetaInfoSnippetContent
  */
-class ProductInContextDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
+class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
     use TestFileFixtureTrait;
 
     /**
-     * @var ProductInContextDetailViewSnippetRenderer
+     * @var ProductDetailViewInContextSnippetRenderer
      */
     private $renderer;
 
@@ -34,9 +35,9 @@ class ProductInContextDetailViewSnippetRendererTest extends \PHPUnit_Framework_T
     private $stubProductDetailViewBlockRenderer;
 
     /**
-     * @var ProductSnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockProductDetailViewSnippetKeyGenerator;
+    private $mockSnippetKeyGenerator;
 
     /**
      * @var UrlPathKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
@@ -58,8 +59,8 @@ class ProductInContextDetailViewSnippetRendererTest extends \PHPUnit_Framework_T
         $this->stubProductDetailViewBlockRenderer->expects($this->any())
             ->method('getNestedSnippetCodes')
             ->willReturn([]);
-        $this->mockProductDetailViewSnippetKeyGenerator = $this->getMock(ProductSnippetKeyGenerator::class);
-        $this->mockProductDetailViewSnippetKeyGenerator->expects($this->any())
+        $this->mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $this->mockSnippetKeyGenerator->expects($this->any())
             ->method('getKeyForContext')
             ->willReturn('stub-content-key');
         $this->stubUrlPathKeyGenerator = $this->getMock(UrlPathKeyGenerator::class);
@@ -101,5 +102,17 @@ class ProductInContextDetailViewSnippetRendererTest extends \PHPUnit_Framework_T
         /** @var SnippetResult $result */
         $result = $method->invoke($this->renderer);
         $this->assertInternalType('array', json_decode($result->getContent(), true));
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldDelegateToTheKeyGeneratorToFetchTheContextParts()
+    {
+        $testContextParts = ['version', 'website', 'language'];
+        $this->mockSnippetKeyGenerator->expects($this->once())->method('getContextPartsUsedForKey')
+            ->willReturn($testContextParts);
+        
+        $this->assertSame($testContextParts, $this->renderer->getUsedContextParts());
     }
 }

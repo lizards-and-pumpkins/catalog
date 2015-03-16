@@ -11,6 +11,11 @@ class FrontendFactory implements Factory
     use FactoryTrait;
 
     /**
+     * @var SnippetKeyGeneratorLocator
+     */
+    private $snippetKeyGeneratorLocator;
+
+    /**
      * @return ApiRouter
      */
     public function createApiRouter()
@@ -55,9 +60,33 @@ class FrontendFactory implements Factory
     {
         return new UrlKeyRequestHandlerBuilder(
             $this->getMasterFactory()->createUrlPathKeyGenerator(),
-            $this->getMasterFactory()->getSnippetKeyGenerator(),
+            $this->getMasterFactory()->getSnippetKeyGeneratorLocator(),
             $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->getLogger()
         );
+    }
+
+    /**
+     * @return SnippetKeyGeneratorLocator
+     */
+    public function createSnippetKeyGeneratorLocator()
+    {
+        $snippetKeyGeneratorLocator = new SnippetKeyGeneratorLocator();
+        $snippetKeyGeneratorLocator->register(
+            'product_detail_view',
+            $this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator()
+        );
+        return $snippetKeyGeneratorLocator;
+    }
+
+    /**
+     * @return SnippetKeyGeneratorLocator
+     */
+    public function getSnippetKeyGeneratorLocator()
+    {
+        if (is_null($this->snippetKeyGeneratorLocator)) {
+            $this->snippetKeyGeneratorLocator = $this->createSnippetKeyGeneratorLocator();
+        }
+        return $this->snippetKeyGeneratorLocator;
     }
 }

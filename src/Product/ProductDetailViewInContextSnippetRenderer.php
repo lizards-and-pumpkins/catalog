@@ -5,11 +5,12 @@ namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\PageMetaInfoSnippetContent;
+use Brera\SnippetKeyGenerator;
 use Brera\SnippetResult;
 use Brera\SnippetResultList;
 use Brera\UrlPathKeyGenerator;
 
-class ProductInContextDetailViewSnippetRenderer
+class ProductDetailViewInContextSnippetRenderer
 {
     const CODE = 'product_detail_view';
     
@@ -34,7 +35,7 @@ class ProductInContextDetailViewSnippetRenderer
     private $blockRenderer;
     
     /**
-     * @var ProductSnippetKeyGenerator
+     * @var SnippetKeyGenerator
      */
     private $snippetKeyGenerator;
     
@@ -46,13 +47,13 @@ class ProductInContextDetailViewSnippetRenderer
     /**
      * @param SnippetResultList $snippetResultList
      * @param ProductDetailViewBlockRenderer $blockRenderer
-     * @param ProductSnippetKeyGenerator $snippetKeyGenerator
+     * @param SnippetKeyGenerator $snippetKeyGenerator
      * @param UrlPathKeyGenerator $urlKeyGenerator
      */
     public function __construct(
         SnippetResultList $snippetResultList,
         ProductDetailViewBlockRenderer $blockRenderer,
-        ProductSnippetKeyGenerator $snippetKeyGenerator,
+        SnippetKeyGenerator $snippetKeyGenerator,
         UrlPathKeyGenerator $urlKeyGenerator
     ) {
         $this->snippetResultList = $snippetResultList;
@@ -80,7 +81,7 @@ class ProductInContextDetailViewSnippetRenderer
     private function addProductDetailViewSnippetsToSnippetResultList()
     {
         $content = $this->blockRenderer->render($this->product, $this->context);
-        $key = $this->snippetKeyGenerator->getKeyForContext(self::CODE, $this->product->getId(), $this->context);
+        $key = $this->snippetKeyGenerator->getKeyForContext($this->product->getId(), $this->context);
         $contentSnippet = SnippetResult::create($key, $content);
         $this->snippetResultList->add($contentSnippet);
         
@@ -113,5 +114,13 @@ class ProductInContextDetailViewSnippetRenderer
             $this->blockRenderer->getNestedSnippetCodes()
         );
         return $pageMetaInfo->getInfo();
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getUsedContextParts()
+    {
+        return $this->snippetKeyGenerator->getContextPartsUsedForKey();
     }
 }
