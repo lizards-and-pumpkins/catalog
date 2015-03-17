@@ -21,7 +21,7 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
     {
         $url = HttpUrl::fromString('http://example.com/product1');
         $context = new VersionedContext(DataVersion::fromVersionString('1.0'));
-        $snippetKeyGenerator = new SnippetKeyGeneratorLocator();
+        $snippetKeyGeneratorLocator = new SnippetKeyGeneratorLocator();
         $urlPathKeyGenerator = new PoCUrlPathKeyGenerator();
 
         $keyValueStore = new InMemoryKeyValueStore();
@@ -29,7 +29,7 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
 
         $this->addPageMetaInfoFixtureToKeyValueStorage(
             $keyValueStore,
-            $snippetKeyGenerator,
+            $snippetKeyGeneratorLocator,
             $urlPathKeyGenerator,
             $context
         );
@@ -43,7 +43,7 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
             $url,
             $context,
             $urlPathKeyGenerator,
-            $snippetKeyGenerator,
+            $snippetKeyGeneratorLocator,
             $dataPoolReader,
             $logger
         );
