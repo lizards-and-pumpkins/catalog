@@ -32,7 +32,7 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $consumer->process($numberOfMessages);
         
         $logger = $factory->getLogger();
-        $this->flushErrorsIfAny($logger);
+        $this->failIfMessagesWhereLogged($logger);
 
         $dataPoolReader = $factory->createDataPoolReader();
 
@@ -99,7 +99,7 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $consumer->process($numberOfMessages);
 
         $logger = $factory->getLogger();
-        $this->flushErrorsIfAny($logger);
+        $this->failIfMessagesWhereLogged($logger);
 
         $dataPoolReader = $factory->createDataPoolReader();
 
@@ -173,7 +173,7 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
     /**
      * @param Logger $logger
      */
-    private function flushErrorsIfAny(Logger $logger)
+    private function failIfMessagesWhereLogged(Logger $logger)
     {
         $messages = $logger->getMessages();
 
