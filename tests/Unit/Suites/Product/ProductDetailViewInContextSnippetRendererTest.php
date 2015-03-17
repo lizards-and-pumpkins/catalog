@@ -67,10 +67,10 @@ class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_T
         $this->stubUrlPathKeyGenerator->expects($this->any())
             ->method('getUrlKeyForPathInContext')
             ->willReturn('stub-url-key');
-        $this->renderer = new ProductInContextDetailViewSnippetRenderer(
+        $this->renderer = new ProductDetailViewInContextSnippetRenderer(
             $this->mockSnippetResultList,
             $this->stubProductDetailViewBlockRenderer,
-            $this->mockProductDetailViewSnippetKeyGenerator,
+            $this->mockSnippetKeyGenerator,
             $this->stubUrlPathKeyGenerator
         );
     }

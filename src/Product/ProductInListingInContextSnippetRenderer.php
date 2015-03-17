@@ -3,10 +3,11 @@
 namespace Brera\Product;
 
 use Brera\Context\Context;
+use Brera\SnippetKeyGenerator;
 use Brera\SnippetResult;
 use Brera\SnippetResultList;
 
-class ProductInContextInListingSnippetRenderer
+class ProductInListingInContextSnippetRenderer
 {
     const CODE = 'product_in_listing';
     
@@ -31,19 +32,19 @@ class ProductInContextInListingSnippetRenderer
     private $blockRenderer;
     
     /**
-     * @var ProductSnippetKeyGenerator
+     * @var SnippetKeyGenerator
      */
     private $snippetKeyGenerator;
 
     /**
      * @param SnippetResultList $snippetResultList
      * @param ProductInListingBlockRenderer $blockRenderer
-     * @param ProductSnippetKeyGenerator $snippetKeyGenerator
+     * @param SnippetKeyGenerator $snippetKeyGenerator
      */
     public function __construct(
         SnippetResultList $snippetResultList,
         ProductInListingBlockRenderer $blockRenderer,
-        ProductSnippetKeyGenerator $snippetKeyGenerator
+        SnippetKeyGenerator $snippetKeyGenerator
     ) {
         $this->snippetResultList = $snippetResultList;
         $this->blockRenderer = $blockRenderer;
@@ -69,8 +70,16 @@ class ProductInContextInListingSnippetRenderer
     private function addProductInListingSnippetsToSnippetResultList()
     {
         $content = $this->blockRenderer->render($this->product, $this->context);
-        $key = $this->snippetKeyGenerator->getKeyForContext(self::CODE, $this->product->getId(), $this->context);
+        $key = $this->snippetKeyGenerator->getKeyForContext($this->product->getId(), $this->context);
         $contentSnippet = SnippetResult::create($key, $content);
         $this->snippetResultList->add($contentSnippet);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getUsedContextParts()
+    {
+        return $this->snippetKeyGenerator->getContextPartsUsedForKey();
     }
 }

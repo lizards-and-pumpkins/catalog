@@ -46,15 +46,15 @@ class UrlKeyRequestHandler implements HttpRequestHandler
     private $pageSourceObjectId;
 
     /**
-     * @var SnippetKeyGenerator
+     * @var SnippetKeyGeneratorLocator
      */
-    private $snippetKeyGenerator;
+    private $keyGeneratorLocator;
 
     /**
      * @var string[]
      */
     private $snippets;
-    
+
     /**
      * @var Logger
      */
@@ -64,7 +64,7 @@ class UrlKeyRequestHandler implements HttpRequestHandler
      * @param HttpUrl $url
      * @param Context $context
      * @param UrlPathKeyGenerator $urlPathKeyGenerator
-     * @param SnippetKeyGenerator $keyGenerator
+     * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
      * @param DataPoolReader $dataPoolReader
      * @param Logger $logger
      */
@@ -72,7 +72,7 @@ class UrlKeyRequestHandler implements HttpRequestHandler
         HttpUrl $url,
         Context $context,
         UrlPathKeyGenerator $urlPathKeyGenerator,
-        SnippetKeyGenerator $keyGenerator,
+        SnippetKeyGeneratorLocator $keyGeneratorLocator,
         DataPoolReader $dataPoolReader,
         Logger $logger
     ) {
@@ -80,7 +80,7 @@ class UrlKeyRequestHandler implements HttpRequestHandler
         $this->context = $context;
         $this->urlPathKeyGenerator = $urlPathKeyGenerator;
         $this->dataPoolReader = $dataPoolReader;
-        $this->snippetKeyGenerator = $keyGenerator;
+        $this->keyGeneratorLocator = $keyGeneratorLocator;
         $this->logger = $logger;
     }
 
@@ -104,7 +104,7 @@ class UrlKeyRequestHandler implements HttpRequestHandler
         $this->logMissingSnippetCodes();
 
         list($rootSnippet, $childSnippets) = $this->separateRootAndChildSnippets();
-        
+
         $childSnippetsCodes = $this->getLoadedChildSnippetCodes();
         $childSnippetCodesToContentMap = $this->mergePlaceholderAndSnippets($childSnippetsCodes, $childSnippets);
 
@@ -155,7 +155,8 @@ class UrlKeyRequestHandler implements HttpRequestHandler
      */
     private function getSnippetKeyInContext($key)
     {
-        return $this->snippetKeyGenerator->getKeyForContext($key, $this->pageSourceObjectId, $this->context);
+        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode($key);
+        return $keyGenerator->getKeyForContext($this->pageSourceObjectId, $this->context);
     }
 
     /**
@@ -224,7 +225,6 @@ class UrlKeyRequestHandler implements HttpRequestHandler
     /**
      * @todo at the moment it doesn't make any difference in the tests whether the return
      * @todo is inside or outside of the loop - WHY!?!
-     *
      * @param $content
      * @param string[] $snippets
      * @return string
@@ -272,7 +272,7 @@ class UrlKeyRequestHandler implements HttpRequestHandler
     {
         return array_filter(array_keys($this->snippetCodesToKeyMap), function ($code) {
             return $code !== $this->rootSnippetCode &&
-            array_key_exists($this->snippetCodesToKeyMap[$code], $this->snippets);
+                   array_key_exists($this->snippetCodesToKeyMap[$code], $this->snippets);
         });
     }
 
@@ -281,7 +281,8 @@ class UrlKeyRequestHandler implements HttpRequestHandler
      */
     private function getRootSnippetKey()
     {
-        return $this->snippetKeyGenerator->getKeyForContext($this->rootSnippetCode, $this->pageSourceObjectId, $this->context);
+        $generator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode($this->rootSnippetCode);
+        return $generator->getKeyForContext($this->pageSourceObjectId, $this->context);
     }
 
     /**

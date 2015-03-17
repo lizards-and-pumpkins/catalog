@@ -2,6 +2,7 @@
 
 namespace Brera\Product;
 
+use Brera\Context\Context;
 use Brera\Context\ContextSource;
 use Brera\ProjectionSourceData;
 use Brera\SnippetRenderer;
@@ -25,17 +26,17 @@ class ProductSourceInListingSnippetRenderer implements SnippetRenderer
     private $snippetResultList;
 
     /**
-     * @var ProductInContextInListingSnippetRenderer
+     * @var ProductInListingInContextSnippetRenderer
      */
     private $productInContextRenderer;
 
     /**
      * @param SnippetResultList $snippetResultList
-     * @param ProductInContextInListingSnippetRenderer $productInContextRenderer
+     * @param ProductInListingInContextSnippetRenderer $productInContextRenderer
      */
     public function __construct(
         SnippetResultList $snippetResultList,
-        ProductInContextInListingSnippetRenderer $productInContextRenderer
+        ProductInListingInContextSnippetRenderer $productInContextRenderer
     ) {
         $this->snippetResultList = $snippetResultList;
         $this->productInContextRenderer = $productInContextRenderer;
@@ -58,11 +59,20 @@ class ProductSourceInListingSnippetRenderer implements SnippetRenderer
 
     private function createProductInListingSnippets()
     {
-        foreach ($this->contextSource->getAllAvailableContexts() as $context) {
+        foreach ($this->getContextList() as $context) {
             $productInContext = $this->productSource->getProductForContext($context);
             $inContextSnippetResultList = $this->productInContextRenderer->render($productInContext, $context);
             $this->snippetResultList->merge($inContextSnippetResultList);
         }
+    }
+
+    /**
+     * @return Context[]
+     */
+    private function getContextList()
+    {
+        $parts = $this->productInContextRenderer->getUsedContextParts();
+        return $this->contextSource->getAllAvailableContexts($parts);
     }
 
     /**

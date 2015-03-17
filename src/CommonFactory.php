@@ -10,7 +10,7 @@ use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\ProductDetailViewBlockRenderer;
 use Brera\Product\ProductDetailViewInContextSnippetRenderer;
-use Brera\Product\ProductInContextInListingSnippetRenderer;
+use Brera\Product\ProductInListingInContextSnippetRenderer;
 use Brera\Product\ProductInListingBlockRenderer;
 use Brera\Product\ProductListingBlockRenderer;
 use Brera\Product\ProductListingSnippetRenderer;
@@ -52,11 +52,6 @@ class CommonFactory implements Factory, DomainEventFactory
      * @var SearchEngine
      */
     private $searchEngine;
-
-    /**
-     * @var SnippetKeyGeneratorLocator
-     */
-    private $snippetKeyGeneratorLocator;
 
     /**
      * @param ProductImportDomainEvent $event
@@ -260,14 +255,6 @@ class CommonFactory implements Factory, DomainEventFactory
     }
 
     /**
-     * @return BlockStructure
-     */
-    public function createBlockStructure()
-    {
-        return new BlockStructure();
-    }
-
-    /**
      * @return ProductSourceInListingSnippetRenderer
      * @todo: move to catalog factory
      */
@@ -280,12 +267,12 @@ class CommonFactory implements Factory, DomainEventFactory
     }
 
     /**
-     * @return ProductInContextInListingSnippetRenderer
+     * @return ProductInListingInContextSnippetRenderer
      * @todo: move to catalog factory
      */
     public function createProductInContextInListingSnippetRenderer()
     {
-        return new ProductInContextInListingSnippetRenderer(
+        return new ProductInListingInContextSnippetRenderer(
             $this->getMasterFactory()->createSnippetResultList(),
             $this->getMasterFactory()->createProductInListingBlockRenderer(),
             $this->getMasterFactory()->createProductInListingSnippetKeyGenerator()
@@ -304,12 +291,12 @@ class CommonFactory implements Factory, DomainEventFactory
     }
 
     /**
-     * @return ProductSnippetKeyGenerator
+     * @return SnippetKeyGenerator
      * @todo: move to catalog factory
      */
     public function createProductInListingSnippetKeyGenerator()
     {
-        return new ProductSnippetKeyGenerator();
+        return new GenericSnippetKeyGenerator('product_in_listing', ['website', 'language']);
     }
 
     /**
@@ -501,7 +488,7 @@ class CommonFactory implements Factory, DomainEventFactory
      */
     private function getSearchEngine()
     {
-        if (is_null($this->searchEngine)) {
+        if (null === $this->searchEngine) {
             $this->searchEngine = $this->callExternalCreateMethod('SearchEngine');
         }
 

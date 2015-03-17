@@ -21,7 +21,7 @@ class UrlKeyRequestHandlerBuilder
     /**
      * @var SnippetKeyGenerator
      */
-    private $keyGenerator;
+    private $keyGeneratorLocator;
     
     /**
      * @var Logger
@@ -30,13 +30,13 @@ class UrlKeyRequestHandlerBuilder
 
     public function __construct(
         UrlPathKeyGenerator $urlPathKeyGenerator,
-        SnippetKeyGenerator $keyGenerator,
+        SnippetKeyGeneratorLocator $keyGeneratorLocator,
         DataPoolReader $dataPoolReader,
         Logger $logger
     ) {
         $this->urlPathKeyGenerator = $urlPathKeyGenerator;
         $this->dataPoolReader = $dataPoolReader;
-        $this->keyGenerator = $keyGenerator;
+        $this->keyGeneratorLocator = $keyGeneratorLocator;
         $this->logger = $logger;
     }
 
@@ -46,7 +46,7 @@ class UrlKeyRequestHandlerBuilder
             $url,
             $context,
             $this->urlPathKeyGenerator,
-            $this->keyGenerator,
+            $this->keyGeneratorLocator,
             $this->dataPoolReader,
             $this->logger
         );

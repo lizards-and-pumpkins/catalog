@@ -14,7 +14,7 @@ class ProductSourceInListingSnippetRendererTest extends AbstractProductSnippetRe
 
         $this->snippetRenderer = new ProductSourceInListingSnippetRenderer(
             $this->mockSnippetResultList,
-            $this->getProductInContextRendererMock(ProductInContextInListingSnippetRenderer::class)
+            $this->getProductInContextRendererMock(ProductInListingInContextSnippetRenderer::class)
         );
     }
 }

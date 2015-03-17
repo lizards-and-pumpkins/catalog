@@ -36,7 +36,7 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $mockSnippetKeyGenerator->expects($this->atLeastOnce())
             ->method('getKeyForContext')
-            ->with('product_listing', $numItemsPerPage, $stubContext)
+            ->with($numItemsPerPage, $stubContext)
             ->willReturn('foo');
 
         $mockBlockRenderer = $this->getMock(ProductListingBlockRenderer::class, [], [], '', false);

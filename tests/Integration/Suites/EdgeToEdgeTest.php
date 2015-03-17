@@ -35,13 +35,14 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $this->flushErrorsIfAny($logger);
 
         $dataPoolReader = $factory->createDataPoolReader();
-        
-        $keyGenerator = $factory->getSnippetKeyGenerator();
+
+        $keyGeneratorLocator = $factory->getSnippetKeyGeneratorLocator();
 
         $contextSource = $factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[0];
-        
-        $key = $keyGenerator->getKeyForContext('product_detail_view', $productId, $context);
+
+        $keyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('product_detail_view');
+        $key = $keyGenerator->getKeyForContext($productId, $context);
         $html = $dataPoolReader->getSnippet($key);
 
         $this->assertContains(
@@ -55,7 +56,8 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
             sprintf('The result page HTML does not contain the expected product name "%s"', $productName)
         );
 
-        $key = $keyGenerator->getKeyForContext('product_in_listing', $productId, $context);
+        $keyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('product_in_listing');
+        $key = $keyGenerator->getKeyForContext($productId, $context);
         $html = $dataPoolReader->getSnippet($key);
 
         $this->assertContains(
@@ -100,12 +102,14 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $this->flushErrorsIfAny($logger);
 
         $dataPoolReader = $factory->createDataPoolReader();
-        $keyGenerator = $factory->createProductListingSnippetKeyGenerator();
+
+        $keyGeneratorLocator = $factory->getSnippetKeyGeneratorLocator();
+        $keyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('product_listing');
 
         $contextSource = $factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[0];
 
-        $key = $keyGenerator->getKeyForContext('product_listing', 60, $context);
+        $key = $keyGenerator->getKeyForContext('60', $context);
         $html = $dataPoolReader->getSnippet($key);
 
         $expectation = file_get_contents(__DIR__ . '/../../../theme/template/list.phtml');
@@ -172,13 +176,10 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
     private function flushErrorsIfAny(Logger $logger)
     {
         $messages = $logger->getMessages();
-        if (! empty($messages)) {
-            $messagesString = '';
-            foreach ($messages as $message) {
-                $messagesString .= $message->getException() . PHP_EOL;
-            }
 
-            $this->fail($messagesString);
+        if (!empty($messages)) {
+            $messageString = implode(PHP_EOL, $messages);
+            $this->fail($messageString);
         }
     }
 }

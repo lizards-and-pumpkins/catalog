@@ -48,7 +48,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\RootSnippetRendererCollection
  * @uses   \Brera\RootSnippetSourceListBuilder
  * @uses   \Brera\Product\ProductSourceInListingSnippetRenderer
- * @uses   \Brera\Product\ProductInContextInListingSnippetRenderer
+ * @uses   \Brera\Product\ProductInListingInContextSnippetRenderer
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -144,20 +144,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createProductDetailViewSnippetKeyGenerator();
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
-    }
-
-    /**
-     * @test
-     * @todo Move to catalog factory test
-     */
-    public function itShouldReturnTheSameSnippetKeyGeneratorInstance()
-    {
-        $resultA = $this->commonFactory->getSnippetKeyGenerator();
-        $resultB = $this->commonFactory->getSnippetKeyGenerator();
-
-        $this->assertInstanceOf(SnippetKeyGenerator::class, $resultA);
-        $this->assertSame($resultA, $resultB);
-
     }
 
     /**
