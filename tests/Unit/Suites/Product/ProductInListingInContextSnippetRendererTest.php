@@ -5,7 +5,6 @@ namespace Brera\Product;
 use Brera\Context\Context;
 use Brera\SnippetKeyGenerator;
 use Brera\SnippetResultList;
-use Brera\TestFileFixtureTrait;
 
 /**
  * @covers \Brera\Product\ProductInListingInContextSnippetRenderer
@@ -13,8 +12,6 @@ use Brera\TestFileFixtureTrait;
  */
 class ProductInListingInContextSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
-    use TestFileFixtureTrait;
-
     /**
      * @var ProductInListingInContextSnippetRenderer
      */
