@@ -49,11 +49,11 @@ class SnippetKeyGeneratorLocator
 
     /**
      * @param string $snippetCode
-     * @param SnippetKeyGenerator $stubKeyGenerator
+     * @param SnippetKeyGenerator $snippetKeyGenerator
      */
-    public function register($snippetCode, SnippetKeyGenerator $stubKeyGenerator)
+    public function register($snippetCode, SnippetKeyGenerator $snippetKeyGenerator)
     {
         $this->validateSnippetCode($snippetCode);
-        $this->keyGenerators[$snippetCode] = $stubKeyGenerator;
+        $this->keyGenerators[$snippetCode] = $snippetKeyGenerator;
     }
 }

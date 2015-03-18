@@ -76,6 +76,15 @@ class FrontendFactory implements Factory
             'product_detail_view',
             $this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator()
         );
+        $snippetKeyGeneratorLocator->register(
+            'product_in_listing',
+            $this->getMasterFactory()->createProductInListingSnippetKeyGenerator()
+        );
+        $snippetKeyGeneratorLocator->register(
+            'product_listing',
+            $this->getMasterFactory()->createProductListingSnippetKeyGenerator()
+        );
+
         return $snippetKeyGeneratorLocator;
     }
 

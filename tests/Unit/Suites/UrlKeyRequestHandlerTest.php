@@ -88,7 +88,7 @@ class UrlKeyRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->mockDataPoolReader = $this->getMockBuilder(DataPoolReader::class)
             ->disableOriginalConstructor()
             ->getMock();
-        
+
         $this->stubLogger = $this->getMock(Logger::class);
 
         $this->urlKeyRequestHandler = new UrlKeyRequestHandler(

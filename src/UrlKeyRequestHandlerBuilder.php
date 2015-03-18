@@ -19,7 +19,7 @@ class UrlKeyRequestHandlerBuilder
     private $dataPoolReader;
     
     /**
-     * @var SnippetKeyGeneratorLocator
+     * @var SnippetKeyGenerator
      */
     private $keyGeneratorLocator;
     

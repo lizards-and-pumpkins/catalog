@@ -10,12 +10,15 @@ use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\ProductDetailViewBlockRenderer;
 use Brera\Product\ProductDetailViewInContextSnippetRenderer;
+use Brera\Product\ProductInListingInContextSnippetRenderer;
+use Brera\Product\ProductInListingBlockRenderer;
 use Brera\Product\ProductListingBlockRenderer;
 use Brera\Product\ProductListingSnippetRenderer;
 use Brera\Product\ProductSearchDocumentBuilder;
 use Brera\Product\ProductSnippetRendererCollection;
 use Brera\Product\ProductSourceBuilder;
 use Brera\DataPool\KeyValue\KeyValueStore;
+use Brera\Product\ProductSourceInListingSnippetRenderer;
 use Brera\Queue\Queue;
 use Brera\DataPool\DataPoolWriter;
 use Brera\DataPool\DataPoolReader;
@@ -132,6 +135,7 @@ class CommonFactory implements Factory, DomainEventFactory
     {
         return [
             $this->getMasterFactory()->createProductSourceDetailViewSnippetRenderer(),
+            $this->getMasterFactory()->createProductSourceInListingSnippetRenderer()
         ];
     }
 
@@ -231,6 +235,7 @@ class CommonFactory implements Factory, DomainEventFactory
 
     /**
      * @return ProductDetailViewBlockRenderer
+     * @todo: move to catalog factory
      */
     public function createProductDetailViewBlockRenderer()
     {
@@ -247,6 +252,51 @@ class CommonFactory implements Factory, DomainEventFactory
     public function createProductDetailViewSnippetKeyGenerator()
     {
         return new GenericSnippetKeyGenerator('product_detail_view', ['website', 'language']);
+    }
+
+    /**
+     * @return ProductSourceInListingSnippetRenderer
+     * @todo: move to catalog factory
+     */
+    public function createProductSourceInListingSnippetRenderer()
+    {
+        return new ProductSourceInListingSnippetRenderer(
+            $this->getMasterFactory()->createSnippetResultList(),
+            $this->getMasterFactory()->createProductInContextInListingSnippetRenderer()
+        );
+    }
+
+    /**
+     * @return ProductInListingInContextSnippetRenderer
+     * @todo: move to catalog factory
+     */
+    public function createProductInContextInListingSnippetRenderer()
+    {
+        return new ProductInListingInContextSnippetRenderer(
+            $this->getMasterFactory()->createSnippetResultList(),
+            $this->getMasterFactory()->createProductInListingBlockRenderer(),
+            $this->getMasterFactory()->createProductInListingSnippetKeyGenerator()
+        );
+    }
+
+    /**
+     * @return ProductInListingBlockRenderer
+     */
+    public function createProductInListingBlockRenderer()
+    {
+        return new ProductInListingBlockRenderer(
+            $this->getMasterFactory()->createThemeLocator(),
+            $this->getMasterFactory()->createBlockStructure()
+        );
+    }
+
+    /**
+     * @return SnippetKeyGenerator
+     * @todo: move to catalog factory
+     */
+    public function createProductInListingSnippetKeyGenerator()
+    {
+        return new GenericSnippetKeyGenerator('product_in_listing', ['website', 'language']);
     }
 
     /**
@@ -438,7 +488,7 @@ class CommonFactory implements Factory, DomainEventFactory
      */
     private function getSearchEngine()
     {
-        if (is_null($this->searchEngine)) {
+        if (null === $this->searchEngine) {
             $this->searchEngine = $this->callExternalCreateMethod('SearchEngine');
         }
 

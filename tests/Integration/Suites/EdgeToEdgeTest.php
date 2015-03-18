@@ -31,24 +31,19 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $numberOfMessages = 3;
         $consumer->process($numberOfMessages);
         
-        $log = $factory->getLogger();
-        $messages = $log->getMessages();
-        if (! empty($messages)) {
-            $this->fail(implode(PHP_EOL, $messages));
-        }
-        
+        $logger = $factory->getLogger();
+        $this->failIfMessagesWhereLogged($logger);
+
         $dataPoolReader = $factory->createDataPoolReader();
-        
+
         $keyGeneratorLocator = $factory->getSnippetKeyGeneratorLocator();
-        $keyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('product_detail_view');
 
         $contextSource = $factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[0];
-        
+
+        $keyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('product_detail_view');
         $key = $keyGenerator->getKeyForContext($productId, $context);
         $html = $dataPoolReader->getSnippet($key);
-
-        $searchResults = $dataPoolReader->getSearchResults('led', $context);
 
         $this->assertContains(
             (string) $sku,
@@ -60,6 +55,24 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
             $html,
             sprintf('The result page HTML does not contain the expected product name "%s"', $productName)
         );
+
+        $keyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('product_in_listing');
+        $key = $keyGenerator->getKeyForContext($productId, $context);
+        $html = $dataPoolReader->getSnippet($key);
+
+        $this->assertContains(
+            (string) $sku,
+            $html,
+            sprintf('Product in listing snippet HTML does not contain the expected sku "%s"', $sku)
+        );
+        $this->assertContains(
+            $productName,
+            $html,
+            sprintf('Product in listing snippet HTML does not contain the expected product name "%s"', $productName)
+        );
+
+        $searchResults = $dataPoolReader->getSearchResults('led', $context);
+
         $this->assertContains(
             (string) $productId,
             $searchResults,
@@ -85,19 +98,18 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $numberOfMessages = 1;
         $consumer->process($numberOfMessages);
 
-        $log = $factory->getLogger();
-        $messages = $log->getMessages();
-        if (! empty($messages)) {
-            $this->fail(implode(PHP_EOL, $messages));
-        }
+        $logger = $factory->getLogger();
+        $this->failIfMessagesWhereLogged($logger);
 
         $dataPoolReader = $factory->createDataPoolReader();
-        $keyGenerator = $factory->createProductListingSnippetKeyGenerator();
+
+        $keyGeneratorLocator = $factory->getSnippetKeyGeneratorLocator();
+        $keyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('product_listing');
 
         $contextSource = $factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[0];
 
-        $key = $keyGenerator->getKeyForContext('product_listing_60', $context);
+        $key = $keyGenerator->getKeyForContext('60', $context);
         $html = $dataPoolReader->getSnippet($key);
 
         $expectation = file_get_contents(__DIR__ . '/../../../theme/template/list.phtml');
@@ -156,5 +168,18 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $factory->register(new IntegrationTestFactory());
         $factory->register(new FrontendFactory());
         return $factory;
+    }
+
+    /**
+     * @param Logger $logger
+     */
+    private function failIfMessagesWhereLogged(Logger $logger)
+    {
+        $messages = $logger->getMessages();
+
+        if (!empty($messages)) {
+            $messageString = implode(PHP_EOL, $messages);
+            $this->fail($messageString);
+        }
     }
 }

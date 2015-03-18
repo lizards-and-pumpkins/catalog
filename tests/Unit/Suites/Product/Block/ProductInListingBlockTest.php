@@ -4,15 +4,15 @@ namespace Brera\Product\Block;
 
 use Brera\Product\Product;
 use Brera\Product\ProductAttributeNotFoundException;
-use Brera\Product\ProductDetailViewBlockRenderer;
+use Brera\Product\ProductInListingBlockRenderer;
 use Brera\TestFileFixtureTrait;
 use Brera\Renderer\Block;
 
 /**
- * @covers \Brera\Product\Block\ProductDetailsPageBlock
+ * @covers \Brera\Product\Block\ProductInListingBlock
  * @uses   \Brera\Renderer\Block
  */
-class ProductDetailsPageBlockTest extends \PHPUnit_Framework_TestCase
+class ProductInListingBlockTest extends \PHPUnit_Framework_TestCase
 {
     use TestFileFixtureTrait;
 
@@ -22,24 +22,24 @@ class ProductDetailsPageBlockTest extends \PHPUnit_Framework_TestCase
     private $stubProduct;
 
     /**
-     * @var ProductDetailViewBlockRenderer|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductInListingBlockRenderer|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubRenderer;
 
     protected function setUp()
     {
-        $this->stubRenderer = $this->getMock(ProductDetailViewBlockRenderer::class, [], [], '', false);
+        $this->stubRenderer = $this->getMock(ProductInListingBlockRenderer::class, [], [], '', false);
         $this->stubProduct = $this->getMock(Product::class, [], [], '', false);
     }
 
     /**
-     * @return ProductDetailsPageBlock
+     * @return ProductInListingBlock
      */
     private function createInstance()
     {
         $template = 'dummy-template.phtml';
         $blockName = 'test-name';
-        return new ProductDetailsPageBlock($this->stubRenderer, $template, $blockName, $this->stubProduct);
+        return new ProductInListingBlock($this->stubRenderer, $template, $blockName, $this->stubProduct);
     }
 
     /**
@@ -80,8 +80,8 @@ class ProductDetailsPageBlockTest extends \PHPUnit_Framework_TestCase
             ->with($attributeCode)
             ->willThrowException($stubException);
 
-        $productDetailsPageBlock = $this->createInstance();
-        $result = $productDetailsPageBlock->getProductAttributeValue($attributeCode);
+        $productInListingBlock = $this->createInstance();
+        $result = $productInListingBlock->getProductAttributeValue($attributeCode);
         $this->assertSame('', $result);
     }
 
@@ -94,8 +94,8 @@ class ProductDetailsPageBlockTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->willReturn('foo');
 
-        $productDetailsPageBlock = $this->createInstance();
-        $result = $productDetailsPageBlock->getProductId();
+        $productInListingBlock = $this->createInstance();
+        $result = $productInListingBlock->getProductId();
 
         $this->assertEquals('foo', $result);
     }

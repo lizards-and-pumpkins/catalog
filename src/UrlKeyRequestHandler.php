@@ -54,7 +54,7 @@ class UrlKeyRequestHandler implements HttpRequestHandler
      * @var string[]
      */
     private $snippets;
-    
+
     /**
      * @var Logger
      */
@@ -104,7 +104,7 @@ class UrlKeyRequestHandler implements HttpRequestHandler
         $this->logMissingSnippetCodes();
 
         list($rootSnippet, $childSnippets) = $this->separateRootAndChildSnippets();
-        
+
         $childSnippetsCodes = $this->getLoadedChildSnippetCodes();
         $childSnippetCodesToContentMap = $this->mergePlaceholderAndSnippets($childSnippetsCodes, $childSnippets);
 
@@ -225,7 +225,6 @@ class UrlKeyRequestHandler implements HttpRequestHandler
     /**
      * @todo at the moment it doesn't make any difference in the tests whether the return
      * @todo is inside or outside of the loop - WHY!?!
-     *
      * @param $content
      * @param string[] $snippets
      * @return string
@@ -273,7 +272,7 @@ class UrlKeyRequestHandler implements HttpRequestHandler
     {
         return array_filter(array_keys($this->snippetCodesToKeyMap), function ($code) {
             return $code !== $this->rootSnippetCode &&
-            array_key_exists($this->snippetCodesToKeyMap[$code], $this->snippets);
+                   array_key_exists($this->snippetCodesToKeyMap[$code], $this->snippets);
         });
     }
 
