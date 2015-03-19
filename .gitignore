@@ -1,2 +1,6 @@
 /vendor/
 /composer.lock
+/build/*
+!/build/build.xml
+!/build/phpdox.xml
+!/build/phpmd.xml
