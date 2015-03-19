@@ -26,6 +26,8 @@
     <target name="clean"
             unless="clean.done"
             description="Cleanup build artifacts">
+        <delete dir="${projectdir}/vendor"/>
+        <delete file="${projectdir}/composer.lock"/>
         <delete dir="${projectdir}/build/api"/>
         <delete dir="${projectdir}/build/coverage"/>
         <delete dir="${projectdir}/build/logs"/>
@@ -46,6 +48,28 @@
         <property name="prepare.done" value="true"/>
     </target>
 
+    <target name="download-composer" description="Downloads composer.phar (when it does not exist or is older than 30 days)">
+        <tstamp>
+            <format property="thirty.days.ago" pattern="MM/dd/yyyy hh:mm aa" offset="-30" unit="day"/>
+        </tstamp>
+        <delete>
+            <fileset dir="${projectdir}">
+                <include name="composer.phar" />
+                <date datetime="${thirty.days.ago}" when="before"/>
+            </fileset>
+        </delete>
+        <get src="https://getcomposer.org/composer.phar" dest="${projectdir}/composer.phar" skipexisting="true"/>
+    </target>
+
+    <target name="composer"
+            depends="prepare,download-composer"
+            description="Install dependencies with Composer">
+        <exec executable="php" dir="${projectdir}">
+            <arg value="composer.phar"/>
+            <arg value="install"/>
+        </exec>
+    </target>
+
     <target name="lint" description="Perform syntax check of sourcecode files">
         <apply executable="php" failonerror="true">
             <arg value="-l" />
@@ -63,6 +87,7 @@
     </target>
 
     <target name="phploc"
+            depends="composer"
             description="Measure project size using PHPLOC and print human readable output. Intended for usage on the command line.">
         <exec executable="${toolsdir}phploc">
             <arg value="--count-tests" />
@@ -72,7 +97,7 @@
     </target>
 
     <target name="phploc-ci"
-            depends="prepare"
+            depends="prepare,composer"
             description="Measure project size using PHPLOC and log result in CSV and XML format. Intended for usage within a continuous integration environment.">
         <exec executable="${toolsdir}phploc">
             <arg value="--count-tests" />
@@ -86,7 +111,7 @@
     </target>
 
     <target name="pdepend"
-            depends="prepare"
+            depends="prepare,composer"
             description="Calculate software metrics using PHP_Depend and log result in XML format. Intended for usage within a continuous integration environment.">
         <exec executable="${toolsdir}pdepend">
             <arg value="--jdepend-xml=${projectdir}/build/logs/jdepend.xml" />
@@ -97,6 +122,7 @@
     </target>
 
     <target name="phpmd"
+            depends="composer"
             description="Perform project mess detection using PHPMD and print human readable output. Intended for usage on the command line before committing.">
         <exec executable="${toolsdir}phpmd">
             <arg path="${projectdir}/src" />
@@ -106,7 +132,7 @@
     </target>
 
     <target name="phpmd-ci"
-            depends="prepare"
+            depends="prepare,composer"
             description="Perform project mess detection using PHPMD and log result in XML format. Intended for usage within a continuous integration environment.">
         <exec executable="${toolsdir}phpmd">
             <arg path="${projectdir}/src" />
@@ -118,6 +144,7 @@
     </target>
 
     <target name="phpcs"
+            depends="composer"
             description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.">
         <exec executable="${toolsdir}phpcs">
             <arg value="--standard=${projectdir}/vendor/brera/coding-standards/src/Brera/" />
@@ -129,7 +156,7 @@
     </target>
 
     <target name="phpcs-ci"
-            depends="prepare"
+            depends="prepare,composer"
             description="Find coding standard violations using PHP_CodeSniffer and log result in XML format. Intended for usage within a continuous integration environment.">
         <exec executable="${toolsdir}phpcs" output="/dev/null">
             <arg value="--report=checkstyle" />
@@ -143,6 +170,7 @@
     </target>
 
     <target name="phpcpd"
+            depends="composer"
             description="Find duplicate code using PHPCPD and print human readable output. Intended for usage on the command line before committing.">
         <exec executable="${toolsdir}phpcpd">
             <arg path="${projectdir}/src" />
@@ -150,7 +178,7 @@
     </target>
 
     <target name="phpcpd-ci"
-            depends="prepare"
+            depends="prepare,composer"
             description="Find duplicate code using PHPCPD and log result in XML format. Intended for usage within a continuous integration environment.">
         <exec executable="${toolsdir}phpcpd">
             <arg value="--log-pmd" />
@@ -165,7 +193,7 @@
     </target>
 
     <target name="unit-tests"
-            depends="prepare"
+            depends="prepare,composer"
             description="Run unit tests with PHPUnit">
         <exec executable="${toolsdir}phpunit" failonerror="true">
             <arg value="--configuration"/>
@@ -176,12 +204,15 @@
             <arg path="${projectdir}/build/logs/clover.xml"/>
             <arg value="--coverage-crap4j"/>
             <arg path="${projectdir}/build/logs/crap4j.xml"/>
+            <arg value="--coverage-xml"/>
+            <arg path="${projectdir}/build/logs/coverage"/>
             <arg value="--log-junit"/>
             <arg path="${projectdir}/build/logs/junit.xml"/>
         </exec>
     </target>
 
     <target name="integration-tests"
+            depends="composer"
             description="Run integration tests with PHPUnit">
         <exec executable="${toolsdir}phpunit" failonerror="true">
             <arg value="--configuration"/>
@@ -190,11 +221,8 @@
     </target>
 
     <target name="phpdox"
-            depends="phploc-ci,phpcs-ci,phpmd-ci"
+            depends="composer,phploc-ci,phpcs-ci,phpmd-ci,unit-tests"
             description="Generate project documentation using phpDox">
-        <exec executable="${toolsdir}phpdox" dir="${projectdir}/build/phpdox">
-            <arg value="--file"/>
-            <arg path="${projectdir}/build/phpdox.xml"/>
-        </exec>
+        <exec executable="${toolsdir}phpdox" dir="${projectdir}/build"/>
     </target>
 </project>
