@@ -14,8 +14,8 @@ use Brera\Product\CatalogImportApiRequestHandler;
  * @uses   \Brera\PoCMasterFactory
  * @uses   \Brera\IntegrationTestFactory
  * @uses   \Brera\CommonFactory
- * @uses   \Brera\UrlKeyRouter
- * @uses   \Brera\UrlKeyRequestHandlerBuilder
+ * @uses   \Brera\ProductDetailViewRouter
+ * @uses   \Brera\ProductDetailViewRequestHandlerBuilder
  * @uses   \Brera\DataPool\DataPoolReader
  * @uses   \Brera\Api\ApiRouter
  * @uses   \Brera\Api\ApiRequestHandlerChain
@@ -61,12 +61,10 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnAnUrlKeyRouter()
     {
-        $stubHttpUrl = $this->getMockBuilder(HttpUrl::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $stubHttpUrl = $this->getMock(HttpUrl::class, [], [], '', false);
         $stubContext = $this->getMock(Context::class);
         $result = $this->frontendFactory->createUrlKeyRouter($stubHttpUrl, $stubContext);
-        $this->assertInstanceOf(UrlKeyRouter::class, $result);
+        $this->assertInstanceOf(ProductDetailViewRouter::class, $result);
     }
 
     /**

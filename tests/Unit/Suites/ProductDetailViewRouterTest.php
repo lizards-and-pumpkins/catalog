@@ -8,36 +8,36 @@ use Brera\Http\HttpRouter;
 use Brera\Http\HttpUrl;
 
 /**
- * @covers \Brera\UrlKeyRouter
+ * @covers \Brera\ProductDetailViewRouter
  * @uses \Brera\Http\HttpUrl
  */
-class UrlKeyRouterTest extends \PHPUnit_Framework_TestCase
+class ProductDetailViewRouterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var UrlKeyRouter
+     * @var ProductDetailViewRouter
      */
     private $router;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|UrlKeyRequestHandlerBuilder
+     * @var \PHPUnit_Framework_MockObject_MockObject|ProductDetailViewRequestHandlerBuilder
      */
     private $mockUrlKeyRequestHandlerBuilder;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|UrlKeyRequestHandler
+     * @var \PHPUnit_Framework_MockObject_MockObject|ProductDetailViewRequestHandler
      */
     private $mockUrlKeyRequestHandler;
 
     public function setUp()
     {
-        $this->mockUrlKeyRequestHandler = $this->getMock(UrlKeyRequestHandler::class, [], [], '', false);
+        $this->mockUrlKeyRequestHandler = $this->getMock(ProductDetailViewRequestHandler::class, [], [], '', false);
 
-        $this->mockUrlKeyRequestHandlerBuilder = $this->getMock(UrlKeyRequestHandlerBuilder::class, [], [], '', false);
+        $this->mockUrlKeyRequestHandlerBuilder = $this->getMock(ProductDetailViewRequestHandlerBuilder::class, [], [], '', false);
         $this->mockUrlKeyRequestHandlerBuilder->expects($this->any())
             ->method('create')
             ->willReturn($this->mockUrlKeyRequestHandler);
 
-        $this->router = new UrlKeyRouter($this->mockUrlKeyRequestHandlerBuilder);
+        $this->router = new ProductDetailViewRouter($this->mockUrlKeyRequestHandlerBuilder);
     }
 
     /**

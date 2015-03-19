@@ -46,19 +46,19 @@ class FrontendFactory implements Factory
     }
 
     /**
-     * @return UrlKeyRouter
+     * @return ProductDetailViewRouter
      */
     public function createUrlKeyRouter()
     {
-        return new UrlKeyRouter($this->createUrlKeyRequestHandlerBuilder());
+        return new ProductDetailViewRouter($this->createUrlKeyRequestHandlerBuilder());
     }
 
     /**
-     * @return UrlKeyRequestHandlerBuilder
+     * @return ProductDetailViewRequestHandlerBuilder
      */
     private function createUrlKeyRequestHandlerBuilder()
     {
-        return new UrlKeyRequestHandlerBuilder(
+        return new ProductDetailViewRequestHandlerBuilder(
             $this->getMasterFactory()->createUrlPathKeyGenerator(),
             $this->getMasterFactory()->getSnippetKeyGeneratorLocator(),
             $this->getMasterFactory()->createDataPoolReader(),

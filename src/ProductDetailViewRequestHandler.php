@@ -8,7 +8,7 @@ use Brera\Http\HttpUrl;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\KeyNotFoundException;
 
-class UrlKeyRequestHandler implements HttpRequestHandler
+class ProductDetailViewRequestHandler implements HttpRequestHandler
 {
     /**
      * @var DataPoolReader

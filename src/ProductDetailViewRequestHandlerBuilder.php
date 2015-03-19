@@ -6,7 +6,7 @@ use Brera\Context\Context;
 use Brera\Http\HttpUrl;
 use Brera\DataPool\DataPoolReader;
 
-class UrlKeyRequestHandlerBuilder
+class ProductDetailViewRequestHandlerBuilder
 {
     /**
      * @var UrlPathKeyGenerator
@@ -42,7 +42,7 @@ class UrlKeyRequestHandlerBuilder
 
     public function create(HttpUrl $url, Context $context)
     {
-        return new UrlKeyRequestHandler(
+        return new ProductDetailViewRequestHandler(
             $url,
             $context,
             $this->urlPathKeyGenerator,

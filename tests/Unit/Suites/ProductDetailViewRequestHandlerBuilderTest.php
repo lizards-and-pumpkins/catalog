@@ -7,13 +7,13 @@ use Brera\Http\HttpUrl;
 use Brera\DataPool\DataPoolReader;
 
 /**
- * @covers \Brera\UrlKeyRequestHandlerBuilder
- * @uses \Brera\UrlKeyRequestHandler
+ * @covers \Brera\ProductDetailViewRequestHandlerBuilder
+ * @uses \Brera\ProductDetailViewRequestHandler
  */
-class UrlKeyRequestHandlerBuilderTest extends \PHPUnit_Framework_TestCase
+class ProductDetailViewRequestHandlerBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var UrlKeyRequestHandlerBuilder
+     * @var ProductDetailViewRequestHandlerBuilder
      */
     private $builder;
 
@@ -24,7 +24,7 @@ class UrlKeyRequestHandlerBuilderTest extends \PHPUnit_Framework_TestCase
         $stubDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
         $stubLogger = $this->getMock(Logger::class);
 
-        $this->builder = new UrlKeyRequestHandlerBuilder(
+        $this->builder = new ProductDetailViewRequestHandlerBuilder(
             $stubUrlPathKeyGenerator,
             $stubSnippetKeyGeneratorLocator,
             $stubDataPoolReader,
@@ -42,6 +42,6 @@ class UrlKeyRequestHandlerBuilderTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->builder->create($stubUrl, $stubContext);
 
-        $this->assertInstanceOf(UrlKeyRequestHandler::class, $result);
+        $this->assertInstanceOf(ProductDetailViewRequestHandler::class, $result);
     }
 }

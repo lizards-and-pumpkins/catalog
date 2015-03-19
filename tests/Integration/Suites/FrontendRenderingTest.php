@@ -39,7 +39,7 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
 
         $logger = new InMemoryLogger();
 
-        $pageBuilder = new UrlKeyRequestHandler(
+        $pageBuilder = new ProductDetailViewRequestHandler(
             $url,
             $context,
             $urlPathKeyGenerator,

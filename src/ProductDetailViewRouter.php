@@ -8,14 +8,14 @@ use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
 use Brera\Http\HttpRouter;
 
-class UrlKeyRouter implements HttpRouter
+class ProductDetailViewRouter implements HttpRouter
 {
     /**
-     * @var UrlKeyRequestHandlerBuilder
+     * @var ProductDetailViewRequestHandlerBuilder
      */
     private $urlKeyRequestHandlerBuilder;
 
-    public function __construct(UrlKeyRequestHandlerBuilder $urlKeyRequestHandlerBuilder)
+    public function __construct(ProductDetailViewRequestHandlerBuilder $urlKeyRequestHandlerBuilder)
     {
         $this->urlKeyRequestHandlerBuilder = $urlKeyRequestHandlerBuilder;
     }
