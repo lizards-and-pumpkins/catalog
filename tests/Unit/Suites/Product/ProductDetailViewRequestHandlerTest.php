@@ -1,14 +1,19 @@
 <?php
 
-namespace Brera;
+namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\Http\HttpUrl;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\KeyNotFoundException;
+use Brera\Logger;
+use Brera\Page;
+use Brera\PageMetaInfoSnippetContent;
+use Brera\SnippetKeyGeneratorLocator;
+use Brera\UrlPathKeyGenerator;
 
 /**
- * @covers \Brera\UrlKeyRequestHandler
+ * @covers \Brera\Product\ProductDetailViewRequestHandler
  * @uses   \Brera\Http\HttpUrl
  * @uses   \Brera\Page
  * @uses   \Brera\SnippetKeyGeneratorLocator
@@ -16,7 +21,7 @@ use Brera\DataPool\KeyValue\KeyNotFoundException;
  * @uses   \Brera\GenericSnippetKeyGenerator
  * @uses   \Brera\MissingSnippetCodeMessage
  */
-class UrlKeyRequestHandlerTest extends \PHPUnit_Framework_TestCase
+class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var int
@@ -34,7 +39,7 @@ class UrlKeyRequestHandlerTest extends \PHPUnit_Framework_TestCase
     private $urlPathKeyFixture = 'dummy-url-key';
 
     /**
-     * @var UrlKeyRequestHandler
+     * @var ProductDetailViewRequestHandler
      */
     private $urlKeyRequestHandler;
 
@@ -91,7 +96,7 @@ class UrlKeyRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->stubLogger = $this->getMock(Logger::class);
 
-        $this->urlKeyRequestHandler = new UrlKeyRequestHandler(
+        $this->urlKeyRequestHandler = new ProductDetailViewRequestHandler(
             $this->url,
             $this->stubContext,
             $this->mockUrlPathKeyGenerator,

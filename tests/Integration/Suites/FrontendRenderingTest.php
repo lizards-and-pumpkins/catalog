@@ -9,6 +9,7 @@ use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
 use Brera\DataPool\SearchEngine\InMemorySearchEngine;
 use Brera\DataPool\KeyValue\KeyValueStore;
+use Brera\Product\ProductDetailViewRequestHandler;
 
 class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,7 +40,7 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
 
         $logger = new InMemoryLogger();
 
-        $pageBuilder = new UrlKeyRequestHandler(
+        $pageBuilder = new ProductDetailViewRequestHandler(
             $url,
             $context,
             $urlPathKeyGenerator,

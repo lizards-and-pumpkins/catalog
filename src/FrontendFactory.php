@@ -5,6 +5,8 @@ namespace Brera;
 use Brera\Api\ApiRequestHandlerChain;
 use Brera\Api\ApiRouter;
 use Brera\Product\CatalogImportApiRequestHandler;
+use Brera\Product\ProductDetailViewRequestHandlerBuilder;
+use Brera\Product\ProductDetailViewRouter;
 
 class FrontendFactory implements Factory
 {
@@ -46,19 +48,19 @@ class FrontendFactory implements Factory
     }
 
     /**
-     * @return UrlKeyRouter
+     * @return ProductDetailViewRouter
      */
     public function createUrlKeyRouter()
     {
-        return new UrlKeyRouter($this->createUrlKeyRequestHandlerBuilder());
+        return new ProductDetailViewRouter($this->createUrlKeyRequestHandlerBuilder());
     }
 
     /**
-     * @return UrlKeyRequestHandlerBuilder
+     * @return ProductDetailViewRequestHandlerBuilder
      */
     private function createUrlKeyRequestHandlerBuilder()
     {
-        return new UrlKeyRequestHandlerBuilder(
+        return new ProductDetailViewRequestHandlerBuilder(
             $this->getMasterFactory()->createUrlPathKeyGenerator(),
             $this->getMasterFactory()->getSnippetKeyGeneratorLocator(),
             $this->getMasterFactory()->createDataPoolReader(),
