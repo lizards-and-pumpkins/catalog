@@ -4,3 +4,4 @@
 !/build/build.xml
 !/build/phpdox.xml
 !/build/phpmd.xml
+!/build/README.md
