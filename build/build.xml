@@ -79,7 +79,7 @@
             <arg value="--log-csv" />
             <arg path="${projectdir}/build/logs/phploc.csv" />
             <arg value="--log-xml" />
-            <arg path="${projectdir}/logs/phploc.xml" />
+            <arg path="${projectdir}/build/logs/phploc.xml" />
             <arg path="${projectdir}/src" />
             <arg path="${projectdir}/tests" />
         </exec>
@@ -182,7 +182,6 @@
     </target>
 
     <target name="integration-tests"
-            depends="prepare"
             description="Run integration tests with PHPUnit">
         <exec executable="${toolsdir}phpunit" failonerror="true">
             <arg value="--configuration"/>
