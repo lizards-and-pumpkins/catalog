@@ -15,7 +15,7 @@ class SampleFactory implements Factory
      */
     public function createKeyValueStore()
     {
-        return new FileKeyValueStore();
+        return new FileKeyValueStore(sys_get_temp_dir());
     }
 
     /**
