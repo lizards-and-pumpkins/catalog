@@ -1,10 +1,14 @@
 <?php
 
-namespace Brera;
+namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\Http\HttpUrl;
 use Brera\DataPool\DataPoolReader;
+use Brera\Logger;
+use Brera\SnippetKeyGenerator;
+use Brera\SnippetKeyGeneratorLocator;
+use Brera\UrlPathKeyGenerator;
 
 class ProductDetailViewRequestHandlerBuilder
 {

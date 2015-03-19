@@ -6,6 +6,7 @@ use Brera\Api\ApiRouter;
 use Brera\Context\Context;
 use Brera\Http\HttpUrl;
 use Brera\Product\CatalogImportApiRequestHandler;
+use Brera\Product\ProductDetailViewRouter;
 
 /**
  * @covers \Brera\FrontendFactory
@@ -14,8 +15,8 @@ use Brera\Product\CatalogImportApiRequestHandler;
  * @uses   \Brera\PoCMasterFactory
  * @uses   \Brera\IntegrationTestFactory
  * @uses   \Brera\CommonFactory
- * @uses   \Brera\ProductDetailViewRouter
- * @uses   \Brera\ProductDetailViewRequestHandlerBuilder
+ * @uses   \Brera\Product\ProductDetailViewRouter
+ * @uses   \Brera\Product\ProductDetailViewRequestHandlerBuilder
  * @uses   \Brera\DataPool\DataPoolReader
  * @uses   \Brera\Api\ApiRouter
  * @uses   \Brera\Api\ApiRequestHandlerChain

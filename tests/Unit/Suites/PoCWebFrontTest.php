@@ -23,9 +23,9 @@ use Brera\Http\HttpUrl;
  * @uses   \Brera\PoCUrlPathKeyGenerator
  * @uses   \Brera\SnippetKeyGeneratorLocator
  * @uses   \Brera\GenericSnippetKeyGenerator
- * @uses   \Brera\ProductDetailViewRouter
- * @uses   \Brera\ProductDetailViewRequestHandler
- * @uses   \Brera\ProductDetailViewRequestHandlerBuilder
+ * @uses   \Brera\Product\ProductDetailViewRouter
+ * @uses   \Brera\Product\ProductDetailViewRequestHandler
+ * @uses   \Brera\Product\ProductDetailViewRequestHandlerBuilder
  * @uses   \Brera\Http\ResourceNotFoundRouter
  * @uses   \Brera\Http\ResourceNotFoundRequestHandler
  * @uses   \Brera\Http\HttpRouterChain

@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera;
+namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\Http\HttpRequest;
@@ -8,7 +8,7 @@ use Brera\Http\HttpRouter;
 use Brera\Http\HttpUrl;
 
 /**
- * @covers \Brera\ProductDetailViewRouter
+ * @covers \Brera\Product\ProductDetailViewRouter
  * @uses \Brera\Http\HttpUrl
  */
 class ProductDetailViewRouterTest extends \PHPUnit_Framework_TestCase

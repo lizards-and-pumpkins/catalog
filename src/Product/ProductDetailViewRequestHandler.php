@@ -1,12 +1,19 @@
 <?php
 
-namespace Brera;
+namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\Http\HttpRequestHandler;
 use Brera\Http\HttpUrl;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\KeyNotFoundException;
+use Brera\InvalidPageMetaSnippetException;
+use Brera\Logger;
+use Brera\MissingSnippetCodeMessage;
+use Brera\Page;
+use Brera\PageMetaInfoSnippetContent;
+use Brera\SnippetKeyGeneratorLocator;
+use Brera\UrlPathKeyGenerator;
 
 class ProductDetailViewRequestHandler implements HttpRequestHandler
 {

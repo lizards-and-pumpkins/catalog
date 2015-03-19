@@ -1,14 +1,19 @@
 <?php
 
-namespace Brera;
+namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\Http\HttpUrl;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\KeyNotFoundException;
+use Brera\Logger;
+use Brera\Page;
+use Brera\PageMetaInfoSnippetContent;
+use Brera\SnippetKeyGeneratorLocator;
+use Brera\UrlPathKeyGenerator;
 
 /**
- * @covers \Brera\ProductDetailViewRequestHandler
+ * @covers \Brera\Product\ProductDetailViewRequestHandler
  * @uses   \Brera\Http\HttpUrl
  * @uses   \Brera\Page
  * @uses   \Brera\SnippetKeyGeneratorLocator

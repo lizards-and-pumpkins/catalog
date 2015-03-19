@@ -1,14 +1,17 @@
 <?php
 
-namespace Brera;
+namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\Http\HttpUrl;
 use Brera\DataPool\DataPoolReader;
+use Brera\Logger;
+use Brera\SnippetKeyGeneratorLocator;
+use Brera\UrlPathKeyGenerator;
 
 /**
- * @covers \Brera\ProductDetailViewRequestHandlerBuilder
- * @uses \Brera\ProductDetailViewRequestHandler
+ * @covers \Brera\Product\ProductDetailViewRequestHandlerBuilder
+ * @uses \Brera\Product\ProductDetailViewRequestHandler
  */
 class ProductDetailViewRequestHandlerBuilderTest extends \PHPUnit_Framework_TestCase
 {

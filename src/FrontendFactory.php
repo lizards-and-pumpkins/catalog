@@ -5,6 +5,8 @@ namespace Brera;
 use Brera\Api\ApiRequestHandlerChain;
 use Brera\Api\ApiRouter;
 use Brera\Product\CatalogImportApiRequestHandler;
+use Brera\Product\ProductDetailViewRequestHandlerBuilder;
+use Brera\Product\ProductDetailViewRouter;
 
 class FrontendFactory implements Factory
 {
