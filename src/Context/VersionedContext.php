@@ -23,7 +23,7 @@ class VersionedContext implements Context
     /**
      * @param string $code
      * @return string
-     *® @throws ContextCodeNotFoundException
+     * @throws ContextCodeNotFoundException
      */
     public function getValue($code)
     {

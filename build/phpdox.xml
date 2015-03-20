@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<phpdox xmlns="http://xml.phpdox.net/config" silent="false">
+    <project name="brera" source="../src/" workdir="./phpdox">
+        <collector publiconly="true" backend="parser" />
+
+        <generator output="./api">
+            <enrich base="./logs">
+                <source type="build" />
+                <source type="git">
+                    <history enabled="true" limit="15" />
+                </source>
+                <source type="checkstyle" /> 
+                <source type="pmd" />
+                <source type="phploc" />
+                <source type="phpunit">
+                    <coverage path="coverage" />
+                </source>
+            </enrich>
+            <build engine="html" enabled="true">
+                <file extension="html" />
+            </build>
+        </generator>
+    </project>
+</phpdox>
