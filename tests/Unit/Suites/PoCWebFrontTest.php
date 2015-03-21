@@ -26,6 +26,9 @@ use Brera\Http\HttpUrl;
  * @uses   \Brera\Product\ProductDetailViewRouter
  * @uses   \Brera\Product\ProductDetailViewRequestHandler
  * @uses   \Brera\Product\ProductDetailViewRequestHandlerBuilder
+ * @uses   \Brera\Product\ProductListingRouter
+ * @uses   \Brera\Product\ProductListingRequestHandler
+ * @uses   \Brera\Product\ProductListingRequestHandlerBuilder
  * @uses   \Brera\Http\ResourceNotFoundRouter
  * @uses   \Brera\Http\ResourceNotFoundRequestHandler
  * @uses   \Brera\Http\HttpRouterChain
@@ -52,7 +55,13 @@ class PoCWebFrontTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $routerFactoryMethods = ['createApiRouter', 'createUrlKeyRouter', 'createResourceNotFoundRouter'];
+        $routerFactoryMethods = [
+            'createApiRouter',
+            'createProductDetailViewRouter',
+            'createProductListingRouter',
+            'createResourceNotFoundRouter'
+        ];
+
         $stubFactoryMethods = array_merge(
             [ 'createContextBuilder', 'createHttpRouterChain', 'register'],
             $routerFactoryMethods

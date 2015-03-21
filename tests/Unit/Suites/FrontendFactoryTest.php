@@ -7,6 +7,7 @@ use Brera\Context\Context;
 use Brera\Http\HttpUrl;
 use Brera\Product\CatalogImportApiRequestHandler;
 use Brera\Product\ProductDetailViewRouter;
+use Brera\Product\ProductListingRouter;
 
 /**
  * @covers \Brera\FrontendFactory
@@ -17,6 +18,8 @@ use Brera\Product\ProductDetailViewRouter;
  * @uses   \Brera\CommonFactory
  * @uses   \Brera\Product\ProductDetailViewRouter
  * @uses   \Brera\Product\ProductDetailViewRequestHandlerBuilder
+ * @uses   \Brera\Product\ProductListingRouter
+ * @uses   \Brera\Product\ProductListingRequestHandlerBuilder
  * @uses   \Brera\DataPool\DataPoolReader
  * @uses   \Brera\Api\ApiRouter
  * @uses   \Brera\Api\ApiRequestHandlerChain
@@ -60,12 +63,19 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldReturnAnUrlKeyRouter()
+    public function itShouldReturnProductDetailViewRouter()
     {
-        $stubHttpUrl = $this->getMock(HttpUrl::class, [], [], '', false);
-        $stubContext = $this->getMock(Context::class);
-        $result = $this->frontendFactory->createUrlKeyRouter($stubHttpUrl, $stubContext);
+        $result = $this->frontendFactory->createProductDetailViewRouter();
         $this->assertInstanceOf(ProductDetailViewRouter::class, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnProductListingRouter()
+    {
+        $result = $this->frontendFactory->createProductListingRouter();
+        $this->assertInstanceOf(ProductListingRouter::class, $result);
     }
 
     /**

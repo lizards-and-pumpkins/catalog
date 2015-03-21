@@ -7,6 +7,8 @@ use Brera\Api\ApiRouter;
 use Brera\Product\CatalogImportApiRequestHandler;
 use Brera\Product\ProductDetailViewRequestHandlerBuilder;
 use Brera\Product\ProductDetailViewRouter;
+use Brera\Product\ProductListingRequestHandlerBuilder;
+use Brera\Product\ProductListingRouter;
 
 class FrontendFactory implements Factory
 {
@@ -50,17 +52,38 @@ class FrontendFactory implements Factory
     /**
      * @return ProductDetailViewRouter
      */
-    public function createUrlKeyRouter()
+    public function createProductDetailViewRouter()
     {
-        return new ProductDetailViewRouter($this->createUrlKeyRequestHandlerBuilder());
+        return new ProductDetailViewRouter($this->createProductDetailViewRequestHandlerBuilder());
+    }
+
+    /**
+     * @return ProductListingRouter
+     */
+    public function createProductListingRouter()
+    {
+        return new ProductListingRouter($this->createProductListingRequestHandlerBuilder());
     }
 
     /**
      * @return ProductDetailViewRequestHandlerBuilder
      */
-    private function createUrlKeyRequestHandlerBuilder()
+    private function createProductDetailViewRequestHandlerBuilder()
     {
         return new ProductDetailViewRequestHandlerBuilder(
+            $this->getMasterFactory()->createUrlPathKeyGenerator(),
+            $this->getMasterFactory()->getSnippetKeyGeneratorLocator(),
+            $this->getMasterFactory()->createDataPoolReader(),
+            $this->getMasterFactory()->getLogger()
+        );
+    }
+
+    /**
+     * @return ProductListingRequestHandlerBuilder
+     */
+    private function createProductListingRequestHandlerBuilder()
+    {
+        return new ProductListingRequestHandlerBuilder(
             $this->getMasterFactory()->createUrlPathKeyGenerator(),
             $this->getMasterFactory()->getSnippetKeyGeneratorLocator(),
             $this->getMasterFactory()->createDataPoolReader(),
