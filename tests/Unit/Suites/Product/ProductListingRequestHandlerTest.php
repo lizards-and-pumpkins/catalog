@@ -3,7 +3,7 @@
 namespace Brera\Product;
 
 /**
- * @covers \Brera\Product\ProductDetailViewRequestHandler
+ * @covers \Brera\Product\ProductListingRequestHandler
  * @uses   \Brera\Http\HttpUrl
  * @uses   \Brera\Page
  * @uses   \Brera\SnippetKeyGeneratorLocator
@@ -11,11 +11,14 @@ namespace Brera\Product;
  * @uses   \Brera\GenericSnippetKeyGenerator
  * @uses   \Brera\MissingSnippetCodeMessage
  */
-class ProductDetailViewRequestHandlerTest extends AbstractRequestHandlerTest
+class ProductListingRequestHandlerTest extends AbstractRequestHandlerTest
 {
+    /**
+     * @return ProductListingRequestHandler
+     */
     protected function createRequestHandlerInstance()
     {
-        return new ProductDetailViewRequestHandler(
+        return new ProductListingRequestHandler(
             $this->url,
             $this->stubContext,
             $this->mockUrlPathKeyGenerator,
