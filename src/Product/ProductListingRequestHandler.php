@@ -301,8 +301,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
     {
         if (!array_key_exists($snippetKey, $this->snippets)) {
             throw new InvalidPageMetaSnippetException(sprintf(
-                'Snippet not available' .
-                ' (key "%s", source id "%s", context "%s")',
+                'Snippet not available (key "%s", source id "%s", context "%s")',
                 $snippetKey,
                 $this->pageSourceObjectId,
                 $this->context->getId()
