@@ -230,8 +230,6 @@ class ProductListingRequestHandler implements HttpRequestHandler
     }
 
     /**
-     * @todo at the moment it doesn't make any difference in the tests whether the return
-     * @todo is inside or outside of the loop - WHY!?!
      * @param $content
      * @param string[] $snippets
      * @return string
