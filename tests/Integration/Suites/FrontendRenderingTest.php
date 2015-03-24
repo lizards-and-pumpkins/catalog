@@ -58,7 +58,9 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param KeyValueStore $keyValueStore
-     * @return void
+     * @param SnippetKeyGeneratorLocator $snippetKeyGeneratorLocator
+     * @param UrlPathKeyGenerator $urlPathKeyGenerator
+     * @param Context $context
      */
     private function addPageMetaInfoFixtureToKeyValueStorage(
         KeyValueStore $keyValueStore,
