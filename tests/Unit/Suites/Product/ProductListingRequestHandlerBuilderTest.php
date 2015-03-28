@@ -11,7 +11,8 @@ use Brera\UrlPathKeyGenerator;
 
 /**
  * @covers \Brera\Product\ProductListingRequestHandlerBuilder
- * @uses \Brera\Product\ProductListingRequestHandler
+ * @uses   \Brera\AbstractHttpRequestHandler
+ * @uses   \Brera\Product\ProductListingRequestHandler
  */
 class ProductListingRequestHandlerBuilderTest extends \PHPUnit_Framework_TestCase
 {

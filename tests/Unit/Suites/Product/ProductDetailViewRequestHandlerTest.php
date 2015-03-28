@@ -4,6 +4,7 @@ namespace Brera\Product;
 
 /**
  * @covers \Brera\Product\ProductDetailViewRequestHandler
+ * @covers \Brera\AbstractHttpRequestHandler
  * @uses   \Brera\Http\HttpUrl
  * @uses   \Brera\Page
  * @uses   \Brera\SnippetKeyGeneratorLocator

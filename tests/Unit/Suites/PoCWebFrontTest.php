@@ -14,6 +14,7 @@ use Brera\Http\HttpUrl;
 /**
  * @covers \Brera\PoCWebFront
  * @covers \Brera\WebFront
+ * @uses   \Brera\AbstractHttpRequestHandler
  * @uses   \Brera\FactoryTrait
  * @uses   \Brera\MasterFactoryTrait
  * @uses   \Brera\FrontendFactory
