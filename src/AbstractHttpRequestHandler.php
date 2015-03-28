@@ -13,17 +13,17 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
     /**
      * @var UrlPathKeyGenerator
      */
-    protected $urlPathKeyGenerator;
+    private $urlPathKeyGenerator;
 
     /**
      * @var Context
      */
-    protected $context;
+    private $context;
 
     /**
      * @var HttpUrl
      */
-    protected $url;
+    private $httpUrl;
 
     /**
      * @var DataPoolReader
@@ -60,14 +60,6 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
      */
     private $logger;
 
-    /**
-     * @param HttpUrl $url
-     * @param Context $context
-     * @param UrlPathKeyGenerator $urlPathKeyGenerator
-     * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
-     * @param DataPoolReader $dataPoolReader
-     * @param Logger $logger
-     */
     public function __construct(
         HttpUrl $url,
         Context $context,
@@ -76,7 +68,7 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
         DataPoolReader $dataPoolReader,
         Logger $logger
     ) {
-        $this->url = $url;
+        $this->httpUrl = $url;
         $this->context = $context;
         $this->urlPathKeyGenerator = $urlPathKeyGenerator;
         $this->dataPoolReader = $dataPoolReader;
@@ -84,6 +76,9 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
         $this->logger = $logger;
     }
 
+    /**
+     * @return bool
+     */
     public function canProcess()
     {
         try {
@@ -114,21 +109,64 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
     }
 
     /**
-     * @return void
+     * @return SnippetKeyGeneratorLocator
      */
+    protected function getKeyGeneratorLocator()
+    {
+        return $this->keyGeneratorLocator;
+    }
+
+    /**
+     * @return HttpUrl
+     */
+    protected function getHttpUrl()
+    {
+        return $this->httpUrl;
+    }
+
+    /**
+     * @return Context
+     */
+    protected function getContext()
+    {
+        return $this->context;
+    }
+
+    /**
+     * @return UrlPathKeyGenerator
+     */
+    protected function getUrlPathKeyGenerator()
+    {
+        return $this->urlPathKeyGenerator;
+    }
+
+    /**
+     * @param string $key
+     * @return string
+     */
+    abstract protected function getSnippetKeyInContext($key);
+
+    /**
+     * @param string $snippetJson
+     * @return PageMetaInfoSnippetContent
+     */
+    abstract protected function createPageMetaInfoInstance($snippetJson);
+
+    /**
+     * @return string
+     */
+    abstract protected function getPageMetaInfoSnippetKey();
+
     private function loadPageMetaInfo()
     {
         if (is_null($this->rootSnippetCode)) {
             $pageUrlPathKey = $this->getPageMetaInfoSnippetKey();
             $snippetJson = $this->dataPoolReader->getSnippet($pageUrlPathKey);
-            $metaInfo = PageMetaInfoSnippetContent::fromJson($snippetJson);
+            $metaInfo = $this->createPageMetaInfoInstance($snippetJson);
             $this->initPropertiesFromMetaInfo($metaInfo);
         }
     }
 
-    /**
-     * @param PageMetaInfoSnippetContent $metaInfo
-     */
     private function initPropertiesFromMetaInfo(PageMetaInfoSnippetContent $metaInfo)
     {
         $this->pageSourceObjectId = $metaInfo->getSourceId();
@@ -149,19 +187,6 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
         return array_values($this->snippetCodesToKeyMap);
     }
 
-    /**
-     * @param string $key
-     * @return string
-     */
-    private function getSnippetKeyInContext($key)
-    {
-        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode($key);
-        return $keyGenerator->getKeyForContext($this->pageSourceObjectId, $this->context);
-    }
-
-    /**
-     * @return string[]
-     */
     private function loadSnippets()
     {
         $keys = $this->getSnippetKeysInContext();
@@ -224,6 +249,16 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
 
     /**
      * @param string $content
+     * @return string
+     */
+    private function removePlaceholders($content)
+    {
+        $pattern = $this->buildPlaceholderFromCode('[^}]*');
+        return preg_replace('/' . $pattern . '/', '', $content);
+    }
+
+    /**
+     * @param string $content
      * @param string[] $snippets
      * @return string
      */
@@ -237,16 +272,6 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
     }
 
     /**
-     * @param string $content
-     * @return string
-     */
-    public function removePlaceholders($content)
-    {
-        $pattern = $this->buildPlaceholderFromCode('[^}]*');
-        return preg_replace('/' . $pattern . '/', '', $content);
-    }
-
-    /**
      * @return string
      */
     private function getRootSnippetCode()
@@ -254,11 +279,6 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
         $this->loadPageMetaInfo();
         return $this->rootSnippetCode;
     }
-
-    /**
-     * @return string
-     */
-    abstract protected function getPageMetaInfoSnippetKey();
 
     /**
      * @return string[]
