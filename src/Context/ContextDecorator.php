@@ -15,6 +15,10 @@ abstract class ContextDecorator implements Context
      */
     private $sourceData;
 
+    /**
+     * @param Context $component
+     * @param mixed[] $sourceData
+     */
     public function __construct(Context $component, array $sourceData)
     {
         $this->component = $component;

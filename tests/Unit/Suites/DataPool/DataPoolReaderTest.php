@@ -21,7 +21,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     {
         parent::setUp();
 
-        $this->dataPoolReader = new DataPoolReader($this->stubKeyValueStore, $this->stubSearchEngine);
+        $this->dataPoolReader = new DataPoolReader($this->getStubKeyValueStore(), $this->getStubSearchEngine());
     }
 
     /**
@@ -169,7 +169,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
      */
     public function itShouldReturnFalseIfASnippetKeyIsNotInTheStore()
     {
-        $this->stubKeyValueStore->expects($this->once())
+        $this->getStubKeyValueStore()->expects($this->once())
             ->method('has')
             ->with('test')
             ->willReturn(false);
@@ -181,7 +181,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
      */
     public function itShouldReturnTrueIfASnippetKeyIsInTheStore()
     {
-        $this->stubKeyValueStore->expects($this->once())
+        $this->getStubKeyValueStore()->expects($this->once())
             ->method('has')
             ->with('test')
             ->willReturn(true);
@@ -193,7 +193,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
      */
     public function itShouldReturnNegativeOneIfTheCurrentVersionIsNotSet()
     {
-        $this->stubKeyValueStore->expects($this->once())
+        $this->getStubKeyValueStore()->expects($this->once())
             ->method('has')
             ->with('current_version')
             ->willReturn(false);
@@ -205,11 +205,11 @@ class DataPoolReaderTest extends AbstractDataPoolTest
      */
     public function itShouldReturnTheCurrentVersion()
     {
-        $this->stubKeyValueStore->expects($this->once())
+        $this->getStubKeyValueStore()->expects($this->once())
             ->method('has')
             ->with('current_version')
             ->willReturn(true);
-        $this->stubKeyValueStore->expects($this->once())
+        $this->getStubKeyValueStore()->expects($this->once())
             ->method('get')
             ->with('current_version')
             ->willReturn('123');
@@ -223,7 +223,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     {
         $stubContext = $this->getMock(Context::class);
 
-        $this->stubSearchEngine->expects($this->once())
+        $this->getStubSearchEngine()->expects($this->once())
             ->method('query');
 
         $this->dataPoolReader->getSearchResults('foo', $stubContext);

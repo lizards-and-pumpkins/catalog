@@ -9,7 +9,6 @@ use Brera\Http\HttpUrl;
 use Brera\Logger;
 use Brera\PageMetaInfoSnippetContent;
 use Brera\SnippetKeyGeneratorLocator;
-use Brera\UrlPathKeyGenerator;
 
 class ProductDetailViewRequestHandler extends AbstractHttpRequestHandler
 {

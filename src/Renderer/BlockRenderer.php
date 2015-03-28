@@ -38,10 +38,6 @@ abstract class BlockRenderer
      */
     private $outermostBlock;
 
-    /**
-     * @param ThemeLocator $themeLocator
-     * @param BlockStructure $blockStructure
-     */
     public function __construct(
         ThemeLocator $themeLocator,
         BlockStructure $blockStructure

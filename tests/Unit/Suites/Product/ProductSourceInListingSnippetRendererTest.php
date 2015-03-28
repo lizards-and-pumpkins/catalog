@@ -7,13 +7,13 @@ namespace Brera\Product;
  */
 class ProductSourceInListingSnippetRendererTest extends AbstractProductSnippetRendererTest
 {
-    protected function setUp()
+    /**
+     * @return ProductSourceInListingSnippetRenderer
+     */
+    protected function createSnippetRendererUnderTest()
     {
-        $this->initMockContextSource();
-        $this->initMockSnippetResultList();
-
-        $this->snippetRenderer = new ProductSourceInListingSnippetRenderer(
-            $this->mockSnippetResultList,
+        return new ProductSourceInListingSnippetRenderer(
+            $this->getMockSnippetResultList(),
             $this->getProductInContextRendererMock(ProductInListingInContextSnippetRenderer::class)
         );
     }

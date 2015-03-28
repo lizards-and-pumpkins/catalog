@@ -12,10 +12,6 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine
      */
     abstract protected function getSearchDocuments();
 
-    /**
-     * @param SearchDocumentCollection $searchDocumentCollection
-     * @return void
-     */
     final public function addSearchDocumentCollection(SearchDocumentCollection $searchDocumentCollection)
     {
         foreach ($searchDocumentCollection->getDocuments() as $searchDocument) {

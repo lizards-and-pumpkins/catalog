@@ -20,11 +20,11 @@ class ProductListingRequestHandlerTest extends AbstractRequestHandlerTest
     protected function createRequestHandlerInstance()
     {
         return new ProductListingRequestHandler(
-            $this->urlPathKeyFixture,
-            $this->stubContext,
-            $this->snippetKeyGeneratorLocator,
-            $this->mockDataPoolReader,
-            $this->stubLogger
+            $this->getUrlPathKeyFixture(),
+            $this->getStubContext(),
+            $this->getSnippetKeyGeneratorLocator(),
+            $this->getMockDataPoolReader(),
+            $this->getStubLogger()
         );
     }
 }

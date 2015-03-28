@@ -13,17 +13,46 @@ abstract class AbstractProductSnippetRendererTest extends \PHPUnit_Framework_Tes
     /**
      * @var SnippetRenderer
      */
-    protected $snippetRenderer;
+    private $snippetRenderer;
 
     /**
      * @var SnippetResultList|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $mockSnippetResultList;
+    private $mockSnippetResultList;
 
     /**
      * @var SampleContextSource|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockContextSource;
+
+    protected function setUp()
+    {
+        $this->initMockContextSource();
+        $this->initMockSnippetResultList();
+
+        $this->snippetRenderer = $this->createSnippetRendererUnderTest();
+    }
+
+    /**
+     * @return SnippetRenderer
+     */
+    abstract protected function createSnippetRendererUnderTest();
+
+    /**
+     * @return SnippetRenderer
+     */
+    protected function getSnipperRendererUnderTest()
+    {
+        return $this->snippetRenderer;
+    }
+    
+    /**
+     * @return SnippetResultList|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getMockSnippetResultList()
+    {
+        return $this->mockSnippetResultList;
+    }
 
     /**
      * @test

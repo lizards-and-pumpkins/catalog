@@ -28,7 +28,7 @@ abstract class AbstractRequestHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    protected $urlPathKeyFixture = 'dummy-url-key';
+    private $urlPathKeyFixture = 'dummy-url-key';
 
     /**
      * @var ProductDetailViewRequestHandler
@@ -38,22 +38,22 @@ abstract class AbstractRequestHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $mockDataPoolReader;
+    private $mockDataPoolReader;
 
     /**
      * @var Context|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stubContext;
+    private $stubContext;
 
     /**
      * @var Logger|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stubLogger;
+    private $stubLogger;
 
     /**
      * @var SnippetKeyGeneratorLocator
      */
-    protected $snippetKeyGeneratorLocator;
+    private $snippetKeyGeneratorLocator;
 
     protected function setUp()
     {
@@ -67,6 +67,46 @@ abstract class AbstractRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->stubLogger = $this->getMock(Logger::class);
 
         $this->requestHandler = $this->createRequestHandlerInstance();
+    }
+
+    /**
+     * @return Logger|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getStubLogger()
+    {
+        return $this->stubLogger;
+    }
+
+    /**
+     * @return DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getMockDataPoolReader()
+    {
+        return $this->mockDataPoolReader;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getUrlPathKeyFixture()
+    {
+        return $this->urlPathKeyFixture;
+    }
+
+    /**
+     * @return Context|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getStubContext()
+    {
+        return $this->stubContext;
+    }
+
+    /**
+     * @return SnippetKeyGeneratorLocator
+     */
+    protected function getSnippetKeyGeneratorLocator()
+    {
+        return $this->snippetKeyGeneratorLocator;
     }
 
     /**

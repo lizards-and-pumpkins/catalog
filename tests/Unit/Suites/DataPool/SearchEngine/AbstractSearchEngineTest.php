@@ -9,22 +9,22 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     /**
      * @var SearchDocument|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stubSearchDocument;
+    private $stubSearchDocument;
 
     /**
      * @var SearchDocument|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stubSearchDocument2;
+    private $stubSearchDocument2;
 
     /**
      * @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stubSearchDocumentCollection;
+    private $stubSearchDocumentCollection;
 
     /**
      * @var Context|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stubContext;
+    private $stubContext;
 
     /**
      * @var SearchEngine
