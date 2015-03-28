@@ -44,12 +44,16 @@ class ProductListingRequestHandlerBuilder
         $this->logger = $logger;
     }
 
+    /**
+     * @param HttpUrl $url
+     * @param Context $context
+     * @return ProductListingRequestHandler
+     */
     public function create(HttpUrl $url, Context $context)
     {
         return new ProductListingRequestHandler(
-            $url,
+            $this->urlPathKeyGenerator->getUrlKeyForUrlInContext($url, $context),
             $context,
-            $this->urlPathKeyGenerator,
             $this->keyGeneratorLocator,
             $this->dataPoolReader,
             $this->logger

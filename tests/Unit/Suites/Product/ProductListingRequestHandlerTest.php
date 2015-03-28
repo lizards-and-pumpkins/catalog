@@ -20,9 +20,8 @@ class ProductListingRequestHandlerTest extends AbstractRequestHandlerTest
     protected function createRequestHandlerInstance()
     {
         return new ProductListingRequestHandler(
-            $this->url,
+            $this->urlPathKeyFixture,
             $this->stubContext,
-            $this->mockUrlPathKeyGenerator,
             $this->snippetKeyGeneratorLocator,
             $this->mockDataPoolReader,
             $this->stubLogger

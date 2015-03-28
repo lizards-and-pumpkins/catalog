@@ -46,41 +46,21 @@ abstract class AbstractRequestHandlerTest extends \PHPUnit_Framework_TestCase
     protected $stubContext;
 
     /**
-     * @var UrlPathKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $mockUrlPathKeyGenerator;
-
-    /**
      * @var Logger|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $stubLogger;
-
-    /**
-     * @var HttpUrl
-     */
-    protected $url;
 
     /**
      * @var SnippetKeyGeneratorLocator
      */
     protected $snippetKeyGeneratorLocator;
 
-    /**
-     * @return void
-     */
     protected function setUp()
     {
-        $this->url = HttpUrl::fromString('http://example.com/category.html');
-
         $this->stubContext = $this->getMock(Context::class);
         $this->stubContext->expects($this->any())
             ->method('getIdForParts')
             ->willReturn($this->contextIdFixture);
-
-        $this->mockUrlPathKeyGenerator = $this->getMock(UrlPathKeyGenerator::class);
-        $this->mockUrlPathKeyGenerator->expects($this->any())
-            ->method('getUrlKeyForUrlInContext')
-            ->willReturn($this->urlPathKeyFixture);
 
         $this->snippetKeyGeneratorLocator = new SnippetKeyGeneratorLocator();
         $this->mockDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
