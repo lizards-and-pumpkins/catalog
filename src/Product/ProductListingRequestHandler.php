@@ -230,7 +230,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
     }
 
     /**
-     * @param $content
+     * @param string $content
      * @param string[] $snippets
      * @return string
      */
