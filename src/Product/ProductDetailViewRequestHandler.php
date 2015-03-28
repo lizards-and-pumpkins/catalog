@@ -117,7 +117,7 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
 
         $content = $this->injectSnippetsIntoContent($rootSnippet, $childSnippetCodesToContentMap);
 
-        return new Page(($content));
+        return new Page($content);
     }
 
     /**
