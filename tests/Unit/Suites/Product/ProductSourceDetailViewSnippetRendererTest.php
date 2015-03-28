@@ -54,7 +54,7 @@ class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_Test
             ->method('render')
             ->willReturn($this->mockSnippetResultList);
         $this->mockProductDetailViewInContextRenderer->expects($this->any())
-            ->method('getContextParts')
+            ->method('getUsedContextParts')
             ->willReturn(['version']);
         
 
@@ -63,14 +63,11 @@ class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_Test
             $this->mockProductDetailViewInContextRenderer
         );
 
-        $this->stubContext = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->stubContext = $this->getMock(Context::class, [], [], '', false);
 
-        $this->stubContextSource = $this->getMockBuilder(SampleContextSource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->stubContextSource->expects($this->any())->method('getAllAvailableContexts')
+        $this->stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
+        $this->stubContextSource->expects($this->any())
+            ->method('getContextsForParts')
             ->willReturn([$this->stubContext]);
     }
 
@@ -130,16 +127,20 @@ class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_Test
 
         $mockProductDetailViewInContextRenderer =
             $this->getMock(ProductDetailViewInContextSnippetRenderer::class, [], [], '', false);
-        $mockProductDetailViewInContextRenderer->expects($this->once())->method('getUsedContextParts')
+        $mockProductDetailViewInContextRenderer->expects($this->once())
+            ->method('getUsedContextParts')
             ->willReturn($contextParts);
-        $mockProductDetailViewInContextRenderer->expects($this->atLeastOnce())->method('render')
+        $mockProductDetailViewInContextRenderer->expects($this->atLeastOnce())
+            ->method('render')
             ->willReturn($this->mockSnippetResultList);
         
         $mockContextSource = $this->getMockBuilder(ContextSource::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAllAvailableContexts'])
+            ->setMethods(['getContextsForParts'])
             ->getMockForAbstractClass();
-        $mockContextSource->expects($this->once())->method('getAllAvailableContexts')->with($contextParts)
+        $mockContextSource->expects($this->once())
+            ->method('getContextsForParts')
+            ->with($contextParts)
             ->willReturn([$this->getMock(Context::class)]);
         
         $productSourceSnippetRenderer = new ProductSourceDetailViewSnippetRenderer(
