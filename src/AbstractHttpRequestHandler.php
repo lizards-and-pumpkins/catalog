@@ -2,33 +2,12 @@
 
 namespace Brera;
 
-use Brera\Context\Context;
 use Brera\Http\HttpRequestHandler;
-use Brera\Http\HttpUrl;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\KeyNotFoundException;
 
 abstract class AbstractHttpRequestHandler implements HttpRequestHandler
 {
-    /**
-     * @var UrlPathKeyGenerator
-     */
-    private $urlPathKeyGenerator;
-
-    /**
-     * @var Context
-     */
-    private $context;
-
-    /**
-     * @var HttpUrl
-     */
-    private $httpUrl;
-
-    /**
-     * @var DataPoolReader
-     */
-    private $dataPoolReader;
 
     /**
      * @var string
@@ -41,40 +20,9 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
     private $snippetCodesToKeyMap;
 
     /**
-     * @var string
-     */
-    private $pageSourceObjectId;
-
-    /**
-     * @var SnippetKeyGeneratorLocator
-     */
-    private $keyGeneratorLocator;
-
-    /**
      * @var string[]
      */
     private $snippets;
-
-    /**
-     * @var Logger
-     */
-    private $logger;
-
-    public function __construct(
-        HttpUrl $url,
-        Context $context,
-        UrlPathKeyGenerator $urlPathKeyGenerator,
-        SnippetKeyGeneratorLocator $keyGeneratorLocator,
-        DataPoolReader $dataPoolReader,
-        Logger $logger
-    ) {
-        $this->httpUrl = $url;
-        $this->context = $context;
-        $this->urlPathKeyGenerator = $urlPathKeyGenerator;
-        $this->dataPoolReader = $dataPoolReader;
-        $this->keyGeneratorLocator = $keyGeneratorLocator;
-        $this->logger = $logger;
-    }
 
     /**
      * @return bool
@@ -109,42 +57,9 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
     }
 
     /**
-     * @return SnippetKeyGeneratorLocator
-     */
-    protected function getKeyGeneratorLocator()
-    {
-        return $this->keyGeneratorLocator;
-    }
-
-    /**
-     * @return HttpUrl
-     */
-    protected function getHttpUrl()
-    {
-        return $this->httpUrl;
-    }
-
-    /**
-     * @return Context
-     */
-    protected function getContext()
-    {
-        return $this->context;
-    }
-
-    /**
-     * @return UrlPathKeyGenerator
-     */
-    protected function getUrlPathKeyGenerator()
-    {
-        return $this->urlPathKeyGenerator;
-    }
-
-    /**
-     * @param string $key
      * @return string
      */
-    abstract protected function getSnippetKeyInContext($key);
+    abstract protected function getPageMetaInfoSnippetKey();
 
     /**
      * @param string $snippetJson
@@ -153,15 +68,32 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
     abstract protected function createPageMetaInfoInstance($snippetJson);
 
     /**
+     * @param string $snippetKey
      * @return string
      */
-    abstract protected function getPageMetaInfoSnippetKey();
+    abstract protected function getSnippetKeyInContext($snippetKey);
+
+    /**
+     * @param string $snippetKey
+     * @return string string
+     */
+    abstract protected function formatSnippetNotAvailableErrorMessage($snippetKey);
+
+    /**
+     * @return DataPoolReader
+     */
+    abstract protected function getDataPoolReader();
+
+    /**
+     * @return Logger
+     */
+    abstract protected function getLogger();
 
     private function loadPageMetaInfo()
     {
         if (is_null($this->rootSnippetCode)) {
             $pageUrlPathKey = $this->getPageMetaInfoSnippetKey();
-            $snippetJson = $this->dataPoolReader->getSnippet($pageUrlPathKey);
+            $snippetJson = $this->getDataPoolReader()->getSnippet($pageUrlPathKey);
             $metaInfo = $this->createPageMetaInfoInstance($snippetJson);
             $this->initPropertiesFromMetaInfo($metaInfo);
         }
@@ -169,7 +101,6 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
 
     private function initPropertiesFromMetaInfo(PageMetaInfoSnippetContent $metaInfo)
     {
-        $this->pageSourceObjectId = $metaInfo->getSourceId();
         $this->rootSnippetCode = $metaInfo->getRootSnippetCode();
 
         $snippetCodes = $metaInfo->getPageSnippetCodes();
@@ -190,7 +121,7 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
     private function loadSnippets()
     {
         $keys = $this->getSnippetKeysInContext();
-        $this->snippets = $this->dataPoolReader->getSnippets($keys);
+        $this->snippets = $this->getDataPoolReader()->getSnippets($keys);
     }
 
     /**
@@ -296,8 +227,7 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
      */
     private function getRootSnippetKey()
     {
-        $generator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode($this->rootSnippetCode);
-        return $generator->getKeyForContext($this->pageSourceObjectId, $this->context);
+        return $this->getSnippetKeyInContext($this->rootSnippetCode);
     }
 
     /**
@@ -308,12 +238,7 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
     private function getSnippetByKey($snippetKey)
     {
         if (!array_key_exists($snippetKey, $this->snippets)) {
-            throw new InvalidPageMetaSnippetException(sprintf(
-                'Snippet not available (key "%s", source id "%s", context "%s")',
-                $snippetKey,
-                $this->pageSourceObjectId,
-                $this->context->getId()
-            ));
+            throw new InvalidPageMetaSnippetException($this->formatSnippetNotAvailableErrorMessage($snippetKey));
         }
         return $this->snippets[$snippetKey];
     }
@@ -322,7 +247,7 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
     {
         $missingSnippetCodes = $this->getMissingSnippetCodes();
         if (count($missingSnippetCodes) > 0) {
-            $this->logger->log(new MissingSnippetCodeMessage($missingSnippetCodes));
+            $this->getLogger()->log(new MissingSnippetCodeMessage($missingSnippetCodes));
         }
     }
 
