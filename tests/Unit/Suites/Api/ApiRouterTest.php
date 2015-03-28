@@ -90,7 +90,7 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
             ->method('getUrl')
             ->willReturn($stubUrl);
 
-        $stubApiRequestHandler = $this->getMock(HttpRequestHandler::class, ['process']);
+        $stubApiRequestHandler = $this->getMock(HttpRequestHandler::class);
 
         $this->stubApiRequestHandlerChain->expects($this->once())
             ->method('getApiRequestHandler')

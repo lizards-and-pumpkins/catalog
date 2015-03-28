@@ -14,12 +14,14 @@ namespace Brera\Product;
  */
 class ProductDetailViewRequestHandlerTest extends AbstractRequestHandlerTest
 {
+    /**
+     * @return ProductDetailViewRequestHandler
+     */
     protected function createRequestHandlerInstance()
     {
         return new ProductDetailViewRequestHandler(
-            $this->url,
+            $this->urlPathKeyFixture,
             $this->stubContext,
-            $this->mockUrlPathKeyGenerator,
             $this->snippetKeyGeneratorLocator,
             $this->mockDataPoolReader,
             $this->stubLogger

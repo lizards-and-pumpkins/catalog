@@ -28,7 +28,7 @@ abstract class AbstractRequestHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    private $urlPathKeyFixture = 'dummy-url-key';
+    protected $urlPathKeyFixture = 'dummy-url-key';
 
     /**
      * @var ProductDetailViewRequestHandler

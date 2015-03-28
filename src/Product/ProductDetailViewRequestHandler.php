@@ -29,9 +29,9 @@ class ProductDetailViewRequestHandler extends AbstractHttpRequestHandler
     private $context;
 
     /**
-     * @var UrlPathKeyGenerator
+     * @var string
      */
-    private $urlPathKeyGenerator;
+    private $pageMetaInfoSnippetKey;
 
     /**
      * @var SnippetKeyGeneratorLocator
@@ -48,17 +48,22 @@ class ProductDetailViewRequestHandler extends AbstractHttpRequestHandler
      */
     private $logger;
 
+    /**
+     * @param string $pageMetaInfoSnippetKey
+     * @param Context $context
+     * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
+     * @param DataPoolReader $dataPoolReader
+     * @param Logger $logger
+     */
     public function __construct(
-        HttpUrl $url,
+        $pageMetaInfoSnippetKey,
         Context $context,
-        UrlPathKeyGenerator $urlPathKeyGenerator,
         SnippetKeyGeneratorLocator $keyGeneratorLocator,
         DataPoolReader $dataPoolReader,
         Logger $logger
     ) {
-        $this->httpUrl = $url;
+        $this->pageMetaInfoSnippetKey = $pageMetaInfoSnippetKey;
         $this->context = $context;
-        $this->urlPathKeyGenerator = $urlPathKeyGenerator;
         $this->dataPoolReader = $dataPoolReader;
         $this->keyGeneratorLocator = $keyGeneratorLocator;
         $this->logger = $logger;
@@ -69,7 +74,7 @@ class ProductDetailViewRequestHandler extends AbstractHttpRequestHandler
      */
     final protected function getPageMetaInfoSnippetKey()
     {
-        return $this->urlPathKeyGenerator->getUrlKeyForUrlInContext($this->httpUrl, $this->context);
+        return $this->pageMetaInfoSnippetKey;
     }
 
     /**
