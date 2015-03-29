@@ -241,6 +241,9 @@ class CommonFactory implements Factory, DomainEventFactory
         return new GenericSnippetKeyGenerator('product_listing', ['website', 'language', 'version']);
     }
 
+    /**
+     * @return ProductListingBlockRenderer
+     */
     public function createProductListingBlockRenderer()
     {
         return new ProductListingBlockRenderer(

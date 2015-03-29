@@ -76,7 +76,7 @@ class ProductDetailViewRequestHandler extends AbstractHttpRequestHandler
      * @param string $snippetCode
      * @return string
      */
-    final protected function getSnippetKeyForContext($snippetCode)
+    final protected function getSnippetKey($snippetCode)
     {
         $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
         return $keyGenerator->getKeyForContext($this->context, ['product_id' => $this->productId]);

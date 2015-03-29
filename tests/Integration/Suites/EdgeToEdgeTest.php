@@ -41,33 +41,33 @@ class EdgeToEdgeTestAbstract extends AbstractIntegrationTest
         $contextSource = $factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[0];
 
-        $keyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('product_detail_view');
-        $key = $keyGenerator->getKeyForContext($context, ['product_id' => $productId]);
-        $html = $dataPoolReader->getSnippet($key);
+        $productDetailViewKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('product_detail_view');
+        $productDetailViewKey = $productDetailViewKeyGenerator->getKeyForContext($context, ['product_id' => $productId]);
+        $productDetailViewHtml = $dataPoolReader->getSnippet($productDetailViewKey);
 
         $this->assertContains(
             (string) $sku,
-            $html,
+            $productDetailViewHtml,
             sprintf('The result page HTML does not contain the expected sku "%s"', $sku)
         );
         $this->assertContains(
             $productName,
-            $html,
+            $productDetailViewHtml,
             sprintf('The result page HTML does not contain the expected product name "%s"', $productName)
         );
 
-//        $keyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('product_in_listing');
-//        $key = $keyGenerator->getKeyForContext($context);
-//        $html = $dataPoolReader->getSnippet($key);
+//        $listingPageKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('product_in_listing');
+//        $listingPageKey = $listingPageKeyGenerator->getKeyForContext($context);
+//        $productListingHtml = $dataPoolReader->getSnippet($listingPageKey);
 //
 //        $this->assertContains(
 //            (string) $sku,
-//            $html,
+//            $productListingHtml,
 //            sprintf('Product in listing snippet HTML does not contain the expected sku "%s"', $sku)
 //        );
 //        $this->assertContains(
 //            $productName,
-//            $html,
+//            $productListingHtml,
 //            sprintf('Product in listing snippet HTML does not contain the expected product name "%s"', $productName)
 //        );
 

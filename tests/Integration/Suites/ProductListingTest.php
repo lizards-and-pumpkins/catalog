@@ -3,12 +3,8 @@
 namespace Brera;
 
 use Brera\Context\Context;
-use Brera\Context\ContextBuilder;
-use Brera\DataPool\DataPoolReader;
-use Brera\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
-use Brera\DataPool\KeyValue\KeyValueStore;
-use Brera\DataPool\SearchEngine\InMemorySearchEngine;
 use Brera\Http\HttpUrl;
+use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\ProductListingMetaInfoSnippetContent;
 use Brera\Product\ProductListingRequestHandler;
 use Brera\Product\ProductListingSavedDomainEvent;
@@ -16,37 +12,39 @@ use Brera\Product\ProductListingSnippetRenderer;
 
 class ProductListingTestAbstract extends AbstractIntegrationTest
 {
-    private $dummyProductInListingContent = 'A Dummy Product In A Listing';
     private $testUrl = 'http://example.com/men-accessories';
 
+    /**
+     * @var PoCMasterFactory
+     */
+    private $factory;
+
+    protected function setUp()
+    {
+        $this->factory = $this->prepareIntegrationTestMasterFactory();
+    }
+    
     /**
      * @test
      */
     public function itShouldPutAProductListingMetaSnippetIntoDataPool()
     {
-        $factory = $this->prepareIntegrationTestMasterFactory();
-
+        $this->addProductListingCriteriaDomainDomainEventFixture();
+        $this->processDomainEvents(1);
+        
         /* TODO: Fetch URL key from XML */
         $urlKey = 'men-accessories';
-        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing.xml');
 
-        $queue = $factory->getEventQueue();
-        $queue->add(new ProductListingSavedDomainEvent($xml));
-
-        $consumer = $factory->createDomainEventConsumer();
-        $numberOfMessages = 1;
-        $consumer->process($numberOfMessages);
-
-        $logger = $factory->getLogger();
+        $logger = $this->factory->getLogger();
         $this->failIfMessagesWhereLogged($logger);
 
-        $contextSource = $factory->createContextSource();
+        $contextSource = $this->factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[1];
 
         $url = HttpUrl::fromString('http://example.com/' . $urlKey);
         $metaInfoSnippetKey = (new PoCUrlPathKeyGenerator())->getUrlKeyForUrlInContext($url, $context);
 
-        $dataPoolReader = $factory->createDataPoolReader();
+        $dataPoolReader = $this->factory->createDataPoolReader();
 
         $expectedMetaInfoContent = $this->getStubMetaInfo();
 
@@ -61,61 +59,63 @@ class ProductListingTestAbstract extends AbstractIntegrationTest
      */
     public function itShouldReturnProductListingPageHtml()
     {
-        $keyValueStore = new InMemoryKeyValueStore();
-        $dataPoolReader = new DataPoolReader($keyValueStore, new InMemorySearchEngine());
-        
-        $contextBuilder = new ContextBuilder(DataVersion::fromVersionString('1.0'));
-        $context = $contextBuilder->getContext(['website' => 'ru', 'language' => 'de_DE']);
-        $pageMetaInfoSnippetKey = $this->getPageMetaInfoSnippetKey($context);
-        $this->writeProductListingFixturesIntoKeyValueStore($keyValueStore, $context);
+        $this->addRootTemplateChangedDomainEventToSetupProductListingFixture();
+        $this->addProductImportDomainEventToSetUpProductFixture();
+        $this->addProductListingCriteriaDomainDomainEventFixture();
 
-        $productListingRequestHandler = $this->getProductListingRequestHandler(
-            $pageMetaInfoSnippetKey,
-            $context,
-            $dataPoolReader
+        $this->processDomainEvents(5);
+        
+        $this->factory->getSnippetKeyGeneratorLocator()->register(
+            ProductListingSnippetRenderer::CODE,
+            $this->factory->createProductListingSnippetKeyGenerator()
         );
+        
+        $productListingRequestHandler = $this->getProductListingRequestHandler();
         $page = $productListingRequestHandler->process();
         $body = $page->getBody();
 
+        // @todo: read from XML
+        $productName = 'LED Armflasher';
         $expectedContentWithProductInListingPutIntoRootSnippet =
-            '<div>' . $this->dummyProductInListingContent . '</div>';
+            '<div>' . $productName . '</div>';
 
-        $this->assertEquals($expectedContentWithProductInListingPutIntoRootSnippet, $body);
+        $this->assertContains($expectedContentWithProductInListingPutIntoRootSnippet, $body);
+    }
+    
+    private function addRootTemplateChangedDomainEventToSetupProductListingFixture()
+    {
+        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.xml');
+        $queue = $this->factory->getEventQueue();
+        $queue->add(new RootTemplateChangedDomainEvent($xml));
     }
 
-    private function writeProductListingFixturesIntoKeyValueStore(KeyValueStore $keyValueStore, Context $context)
+    private function addProductImportDomainEventToSetUpProductFixture()
     {
-        $productListingMetaDataSnippetKey = $this->getPageMetaInfoSnippetKey($context);
-        $productInListingSnippetCode = 'product_in_listing_118235-251';
-        
-        $productListingMetaDataSnippetContent = json_encode([
-            ProductListingMetaInfoSnippetContent::KEY_CRITERIA => [],
-            PageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE =>  'product_listing',
-            PageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => [$productInListingSnippetCode]
-        ]);
-        $keyValueStore->set($productListingMetaDataSnippetKey, $productListingMetaDataSnippetContent);
+        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/product.xml');
+        $queue = $this->factory->getEventQueue();
+        $queue->add(new CatalogImportDomainEvent($xml));
+    }
 
-        $productListingRootSnippetKey = 'product_listing_' . $context->getId();
-        $productListingRootSnippetContent = '<div>{{snippet product_1}}</div>';
-        $keyValueStore->set($productListingRootSnippetKey, $productListingRootSnippetContent);
-
-        $productInListingSnippetKey = $productInListingSnippetCode . '_' . $context->getId();
-        $keyValueStore->set($productInListingSnippetKey, $this->dummyProductInListingContent);
+    private function addProductListingCriteriaDomainDomainEventFixture()
+    {
+        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing.xml');
+        $queue = $this->factory->getEventQueue();
+        $queue->add(new ProductListingSavedDomainEvent($xml));
     }
 
     /**
-     * @param string $pageMetaInfoSnippetKey
-     * @param Context $context
-     * @param DataPoolReader $dataPoolReader
      * @return ProductListingRequestHandler
      */
-    private function getProductListingRequestHandler($pageMetaInfoSnippetKey, $context, $dataPoolReader)
+    private function getProductListingRequestHandler()
     {
+        $contextBuilder = $this->factory->createContextBuilder();
+        $context = $contextBuilder->getContext(['website' => 'ru', 'language' => 'en_US']);
+
         return new ProductListingRequestHandler(
-            $pageMetaInfoSnippetKey,
+            $this->getPageMetaInfoSnippetKey($context),
             $context,
-            new SnippetKeyGeneratorLocator(),
-            $dataPoolReader,
+            $this->factory->getSnippetKeyGeneratorLocator(),
+            $this->factory->createDataPoolReader(),
             new InMemoryLogger()
         );
     }
@@ -142,5 +142,14 @@ class ProductListingTestAbstract extends AbstractIntegrationTest
         );
 
         return $metaSnippetContent->getInfo();
+    }
+
+    /**
+     * @param int $numberOfMessages
+     */
+    private function processDomainEvents($numberOfMessages)
+    {
+        $consumer = $this->factory->createDomainEventConsumer();
+        $consumer->process($numberOfMessages);
     }
 }

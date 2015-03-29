@@ -43,12 +43,6 @@ class ProductDetailViewInContextSnippetRenderer
      */
     private $urlKeyGenerator;
 
-    /**
-     * @param SnippetResultList $snippetResultList
-     * @param ProductDetailViewBlockRenderer $blockRenderer
-     * @param ProductDetailSnippetKeyGenerator $snippetKeyGenerator
-     * @param UrlPathKeyGenerator $urlKeyGenerator
-     */
     public function __construct(
         SnippetResultList $snippetResultList,
         ProductDetailViewBlockRenderer $blockRenderer,
@@ -105,7 +99,7 @@ class ProductDetailViewInContextSnippetRenderer
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     private function getPageMetaData()
     {

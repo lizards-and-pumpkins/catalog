@@ -72,7 +72,7 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
      * @param string $snippetCode
      * @return string
      */
-    abstract protected function getSnippetKeyForContext($snippetCode);
+    abstract protected function getSnippetKey($snippetCode);
 
     /**
      * @param string $snippetKey
@@ -118,7 +118,7 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
     private function getSnippetKeyDefaultingToEmpty($snippetCode)
     {
         try {
-            return $this->getSnippetKeyForContext($snippetCode);
+            return $this->getSnippetKey($snippetCode);
         } catch (\Exception $e) {
             return '';
         }
