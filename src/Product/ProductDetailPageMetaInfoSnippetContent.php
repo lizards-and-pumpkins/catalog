@@ -7,13 +7,11 @@ use Brera\PageMetaInfoSnippetContent;
 class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetContent
 {
     const KEY_PRODUCT_ID = 'product_id';
-    const KEY_ROOT_SNIPPET_CODE = 'root_snippet_code';
-    const KEY_PAGE_SNIPPET_CODES = 'page_snippet_codes';
 
     /**
      * @var string
      */
-    private $sourceId;
+    private $productId;
 
     /**
      * @var string
@@ -32,7 +30,7 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
      */
     private function __construct($sourceId, $rootSnippetCode, array $pageSnippetCodes)
     {
-        $this->sourceId = $sourceId;
+        $this->productId = $sourceId;
         $this->rootSnippetCode = $rootSnippetCode;
         $this->pageSnippetCodes = $pageSnippetCodes;
     }
@@ -114,7 +112,7 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
     public function getInfo()
     {
         return [
-            self::KEY_PRODUCT_ID => $this->sourceId,
+            self::KEY_PRODUCT_ID => $this->productId,
             self::KEY_ROOT_SNIPPET_CODE => $this->rootSnippetCode,
             self::KEY_PAGE_SNIPPET_CODES => $this->pageSnippetCodes
         ];
@@ -151,7 +149,7 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
      */
     public function getSourceId()
     {
-        return $this->sourceId;
+        return $this->productId;
     }
 
     /**

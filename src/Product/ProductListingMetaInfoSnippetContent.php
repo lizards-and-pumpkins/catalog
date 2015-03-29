@@ -7,8 +7,6 @@ use Brera\PageMetaInfoSnippetContent;
 class ProductListingMetaInfoSnippetContent implements PageMetaInfoSnippetContent
 {
     const KEY_CRITERIA = 'product_selection_criteria';
-    const KEY_ROOT_SNIPPET_CODE = 'root_snippet_code';
-    const KEY_PAGE_SNIPPET_CODES = 'page_snippet_codes';
 
     /**
      * @var string

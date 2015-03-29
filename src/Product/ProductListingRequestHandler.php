@@ -82,7 +82,8 @@ class ProductListingRequestHandler extends AbstractHttpRequestHandler
     final protected function getSnippetKeyForContext($snippetCode)
     {
         $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
-        return $keyGenerator->getKeyForContext($this->context);
+        $params = ['selection_criteria' => $this->selectionCriteria];
+        return $keyGenerator->getKeyForContext($this->context, $params);
     }
 
     /**
