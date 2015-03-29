@@ -11,11 +11,50 @@ use Brera\DataPool\SearchEngine\InMemorySearchEngine;
 use Brera\Http\HttpUrl;
 use Brera\Product\ProductListingMetaInfoSnippetContent;
 use Brera\Product\ProductListingRequestHandler;
+use Brera\Product\ProductListingSavedDomainEvent;
+use Brera\Product\ProductListingSnippetRenderer;
 
-class ProductListingTest extends \PHPUnit_Framework_TestCase
+class ProductListingTestAbstract extends AbstractIntegrationTest
 {
     private $dummyProductInListingContent = 'A Dummy Product In A Listing';
     private $testUrl = 'http://example.com/men-accessories';
+
+    /**
+     * @test
+     */
+    public function itShouldPutAProductListingMetaSnippetIntoDataPool()
+    {
+        $factory = $this->prepareIntegrationTestMasterFactory();
+
+        /* TODO: Fetch URL key from XML */
+        $urlKey = 'men-accessories';
+        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing.xml');
+
+        $queue = $factory->getEventQueue();
+        $queue->add(new ProductListingSavedDomainEvent($xml));
+
+        $consumer = $factory->createDomainEventConsumer();
+        $numberOfMessages = 1;
+        $consumer->process($numberOfMessages);
+
+        $logger = $factory->getLogger();
+        $this->failIfMessagesWhereLogged($logger);
+
+        $contextSource = $factory->createContextSource();
+        $context = $contextSource->getAllAvailableContexts()[1];
+
+        $url = HttpUrl::fromString('http://example.com/' . $urlKey);
+        $metaInfoSnippetKey = (new PoCUrlPathKeyGenerator())->getUrlKeyForUrlInContext($url, $context);
+
+        $dataPoolReader = $factory->createDataPoolReader();
+
+        $expectedMetaInfoContent = $this->getStubMetaInfo();
+
+        $metaInfoSnippet = $dataPoolReader->getSnippet($metaInfoSnippetKey);
+        $decodedMetaInfoSnippet = json_decode($metaInfoSnippet, true);
+
+        $this->assertSame($expectedMetaInfoContent, $decodedMetaInfoSnippet);
+    }
 
     /**
      * @test
@@ -89,5 +128,19 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
     {
         $url = HttpUrl::fromString($this->testUrl);
         return (new PoCUrlPathKeyGenerator())->getUrlKeyForUrlInContext($url, $context);
+    }
+
+    /**
+     * @return mixed[]
+     */
+    private function getStubMetaInfo()
+    {
+        $metaSnippetContent = ProductListingMetaInfoSnippetContent::create(
+            ['category' => 'men-accessories'],
+            ProductListingSnippetRenderer::CODE,
+            []
+        );
+
+        return $metaSnippetContent->getInfo();
     }
 }

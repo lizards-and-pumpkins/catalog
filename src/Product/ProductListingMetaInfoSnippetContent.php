@@ -86,10 +86,7 @@ class ProductListingMetaInfoSnippetContent implements PageMetaInfoSnippetContent
     {
         $result = json_decode($json, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new \OutOfBoundsException(sprintf(
-                'JSON decode error: %s',
-                json_last_error_msg()
-            ));
+            throw new \OutOfBoundsException(sprintf('JSON decode error: %s', json_last_error_msg()));
         }
         return $result;
     }

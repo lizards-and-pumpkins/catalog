@@ -15,7 +15,7 @@ class ProductListingSourceBuilderTest extends \PHPUnit_Framework_TestCase
     public function itShouldCreateAProductListingSourceFromXml()
     {
         $xml = <<<EOX
-<listing url_key="men-accessories" website="ru_de" language="en_US">
+<listing url_key="men-accessories" website="ru" language="en_US">
     <category>men-accessories</category>
 </listing>
 EOX;
@@ -28,7 +28,7 @@ EOX;
         $attributes = $this->getObjectProperty($productListingSource, 'criteria');
 
         $expectedUrlKey = 'men-accessories';
-        $expectedContextData = ['website' => 'ru_de', 'language' => 'en_US'];
+        $expectedContextData = ['website' => 'ru', 'language' => 'en_US'];
         $expectedCriteria = ['category' => 'men-accessories'];
 
         $this->assertInstanceOf(ProductListingSource::class, $productListingSource);

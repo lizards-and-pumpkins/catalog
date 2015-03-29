@@ -2,9 +2,6 @@
 
 namespace Brera\Product;
 
-use Brera\Context\ContextSource;
-use Brera\Projector;
-
 /**
  * @covers \Brera\Product\ProductListingSavedDomainEventHandler
  */
@@ -26,19 +23,13 @@ class ProductListingSavedDomainEventHandlerTest extends \PHPUnit_Framework_TestC
             ->method('createProductListingSourceFromXml')
             ->willReturn($stubProductListingSource);
 
-        $stubContextSource = $this->getMockBuilder(ContextSource::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getContextMatrix'])
-            ->getMock();
-
-        $mockProjector = $this->getMock(Projector::class);
+        $mockProjector = $this->getMock(ProductListingProjector::class, [], [], '', false);
         $mockProjector->expects($this->once())
             ->method('project');
 
         (new ProductListingSavedDomainEventHandler(
             $mockDomainEvent,
             $mockProductListingSourceBuilder,
-            $stubContextSource,
             $mockProjector
         ))->process();
     }

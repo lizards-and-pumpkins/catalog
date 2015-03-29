@@ -1,6 +1,4 @@
 <?xml version="1.0"?>
-<listings>
-    <listing url_key="men-accessories" website="ru_de" language="en_US">
-        <category>men-accessories</category>
-    </listing>
-</listings>
+<listing url_key="men-accessories" website="ru" language="en_US">
+    <category>men-accessories</category>
+</listing>

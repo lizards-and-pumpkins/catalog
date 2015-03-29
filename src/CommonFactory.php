@@ -13,7 +13,12 @@ use Brera\Product\ProductDetailViewInContextSnippetRenderer;
 use Brera\Product\ProductInListingInContextSnippetRenderer;
 use Brera\Product\ProductInListingBlockRenderer;
 use Brera\Product\ProductListingBlockRenderer;
+use Brera\Product\ProductListingCriteriaSnippetRenderer;
+use Brera\Product\ProductListingProjector;
+use Brera\Product\ProductListingSavedDomainEvent;
+use Brera\Product\ProductListingSavedDomainEventHandler;
 use Brera\Product\ProductListingSnippetRenderer;
+use Brera\Product\ProductListingSourceBuilder;
 use Brera\Product\ProductSearchDocumentBuilder;
 use Brera\Product\ProductDetailSnippetKeyGenerator;
 use Brera\Product\ProductSnippetRendererCollection;
@@ -96,11 +101,33 @@ class CommonFactory implements Factory, DomainEventFactory
     }
 
     /**
+     * @param ProductListingSavedDomainEvent $event
+     * @return ProductListingSavedDomainEventHandler
+     * @todo: move to catalog factory
+     */
+    public function createProductListingSavedDomainEventHandler(ProductListingSavedDomainEvent $event)
+    {
+        return new ProductListingSavedDomainEventHandler(
+            $event,
+            $this->getMasterFactory()->createProductListingSourceBuilder(),
+            $this->getMasterFactory()->createProductListingProjector()
+        );
+    }
+
+    /**
      * @return RootSnippetSourceListBuilder
      */
     public function createRootSnippetSourceBuilder()
     {
         return new RootSnippetSourceListBuilder($this->getMasterFactory()->createContextBuilder());
+    }
+
+    /**
+     * @return ProductListingSourceBuilder
+     */
+    public function createProductListingSourceBuilder()
+    {
+        return new ProductListingSourceBuilder();
     }
 
     /**
@@ -170,6 +197,28 @@ class CommonFactory implements Factory, DomainEventFactory
         return [
             $this->getMasterFactory()->createProductListingSnippetRenderer(),
         ];
+    }
+
+    /**
+     * @return ProductListingProjector
+     */
+    public function createProductListingProjector()
+    {
+        return new ProductListingProjector(
+            $this->getMasterFactory()->createProductListingPageMetaInfoSnippetRenderer(),
+            $this->getMasterFactory()->createDataPoolWriter()
+        );
+    }
+
+    /**
+     * @return ProductListingCriteriaSnippetRenderer
+     */
+    public function createProductListingPageMetaInfoSnippetRenderer()
+    {
+        return new ProductListingCriteriaSnippetRenderer(
+            $this->getMasterFactory()->createUrlPathKeyGenerator(),
+            $this->getMasterFactory()->createContextBuilder()
+        );
     }
 
     /**

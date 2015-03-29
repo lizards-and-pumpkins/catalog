@@ -40,4 +40,20 @@ class ProductListingSource implements ProjectionSourceData
     {
         return $this->urlKey;
     }
+
+    /**
+     * @return string[]
+     */
+    public function getContextData()
+    {
+        return $this->contextData;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    public function getCriteria()
+    {
+        return $this->criteria;
+    }
 }
