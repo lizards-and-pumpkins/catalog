@@ -2,7 +2,6 @@
 
 namespace Brera\Product;
 
-use Brera\Context\ContextSource;
 use Brera\DataPool\DataPoolWriter;
 use Brera\InvalidProjectionDataSourceTypeException;
 use Brera\ProjectionSourceData;
