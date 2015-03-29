@@ -2,7 +2,6 @@
 
 namespace Brera;
 
-use Brera\Context\Context;
 use Brera\Http\HttpRequestHandler;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\KeyNotFoundException;
