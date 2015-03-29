@@ -1,14 +1,14 @@
 <?php
 
-namespace Brera;
+namespace Brera\Product;
 
 /**
- * @covers \Brera\PageMetaInfoSnippetContent
+ * @covers \Brera\Product\ProductDetailPageMetaInfoSnippetContent
  */
-class PageMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCase
+class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var PageMetaInfoSnippetContent
+     * @var ProductDetailPageMetaInfoSnippetContent
      */
     private $pageMetaInfo;
 
@@ -24,7 +24,7 @@ class PageMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->pageMetaInfo = PageMetaInfoSnippetContent::create(
+        $this->pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::create(
             $this->sourceId,
             $this->rootSnippetCode,
             [$this->rootSnippetCode]
@@ -45,9 +45,9 @@ class PageMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCase
     public function itShouldContainTheExpectedArrayKeysInTheJsonContent()
     {
         $keys = [
-            PageMetaInfoSnippetContent::KEY_SOURCE_ID,
-            PageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE,
-            PageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES
+            ProductDetailPageMetaInfoSnippetContent::KEY_PRODUCT_ID,
+            ProductDetailPageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE,
+            ProductDetailPageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES
         ];
         foreach ($keys as $key) {
             $this->assertTrue(
@@ -63,7 +63,7 @@ class PageMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldThrowAnExceptionIfTheSourceIdIsNotScalar()
     {
-        PageMetaInfoSnippetContent::create([], 'test', []);
+        ProductDetailPageMetaInfoSnippetContent::create([], 'test', []);
     }
 
     /**
@@ -72,7 +72,7 @@ class PageMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldThrowAnExceptionIfTheRootSnippetCodeIsNoString()
     {
-        PageMetaInfoSnippetContent::create(123, 1.0, []);
+        ProductDetailPageMetaInfoSnippetContent::create(123, 1.0, []);
     }
 
     /**
@@ -81,10 +81,10 @@ class PageMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCase
     public function itShouldAddTheRootSnippetCodeToTheSnippetCodeListIfNotPresent()
     {
         $rootSnippetCode = 'root-snippet-code';
-        $pageMetaInfo = PageMetaInfoSnippetContent::create('123', $rootSnippetCode, []);
+        $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::create('123', $rootSnippetCode, []);
         $this->assertContains(
             $rootSnippetCode,
-            $pageMetaInfo->getInfo()[PageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES]
+            $pageMetaInfo->getInfo()[ProductDetailPageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES]
         );
     }
 
@@ -93,8 +93,8 @@ class PageMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldHaveAFromJsonConstructor()
     {
-        $pageMetaInfo = PageMetaInfoSnippetContent::fromJson(json_encode($this->pageMetaInfo->getInfo()));
-        $this->assertInstanceOf(PageMetaInfoSnippetContent::class, $pageMetaInfo);
+        $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::fromJson(json_encode($this->pageMetaInfo->getInfo()));
+        $this->assertInstanceOf(ProductDetailPageMetaInfoSnippetContent::class, $pageMetaInfo);
     }
     
     /**
@@ -103,7 +103,7 @@ class PageMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldThrowAnExceptionInCaseOfJsonErrors()
     {
-        PageMetaInfoSnippetContent::fromJson('malformed-json');
+        ProductDetailPageMetaInfoSnippetContent::fromJson('malformed-json');
     }
 
     /**
@@ -117,8 +117,7 @@ class PageMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCase
     {
         $pageInfo = $this->pageMetaInfo->getInfo();
         unset($pageInfo[$key]);
-        $pageMetaInfo = PageMetaInfoSnippetContent::fromJson(json_encode($pageInfo));
-        $this->assertInstanceOf(PageMetaInfoSnippetContent::class, $pageMetaInfo);
+        ProductDetailPageMetaInfoSnippetContent::fromJson(json_encode($pageInfo));
     }
 
     /**
@@ -127,9 +126,9 @@ class PageMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCase
     public function pageInfoArrayKeyProvider()
     {
         return [
-            [PageMetaInfoSnippetContent::KEY_SOURCE_ID],
-            [PageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE],
-            [PageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES],
+            [ProductDetailPageMetaInfoSnippetContent::KEY_PRODUCT_ID],
+            [ProductDetailPageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE],
+            [ProductDetailPageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES],
         ];
     }
 

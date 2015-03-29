@@ -32,18 +32,17 @@ class GenericSnippetKeyGenerator implements SnippetKeyGenerator
         $this->snippetCode = $snippetCode;
         $this->contextParts = $contextParts;
     }
-    
+
     /**
-     * @param mixed $identifier
      * @param Context $context
+     * @param array $data
      * @return string
      */
-    public function getKeyForContext($identifier, Context $context)
+    public function getKeyForContext(Context $context, array $data = [])
     {
         return sprintf(
-            '%s_%s_%s',
+            '%s_%s',
             $this->snippetCode,
-            $this->getStringRepresentationOfIdentifier($identifier),
             $context->getIdForParts($this->getContextPartsUsedForKey())
         );
     }
@@ -57,15 +56,6 @@ class GenericSnippetKeyGenerator implements SnippetKeyGenerator
         return is_scalar($snippetCode) ?
             (string) $snippetCode :
             gettype($snippetCode);
-    }
-
-    /**
-     * @param mixed $identifier
-     * @return string
-     */
-    private function getStringRepresentationOfIdentifier($identifier)
-    {
-        return (string) $identifier;
     }
 
     /**

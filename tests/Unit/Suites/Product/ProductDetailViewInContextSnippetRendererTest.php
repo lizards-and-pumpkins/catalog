@@ -13,7 +13,7 @@ use Brera\UrlPathKeyGenerator;
 /**
  * @covers \Brera\Product\ProductDetailViewInContextSnippetRenderer
  * @uses   \Brera\SnippetResult
- * @uses   \Brera\PageMetaInfoSnippetContent
+ * @uses   \Brera\Product\ProductDetailPageMetaInfoSnippetContent
  */
 class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
@@ -59,7 +59,7 @@ class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_T
         $this->stubProductDetailViewBlockRenderer->expects($this->any())
             ->method('getNestedSnippetCodes')
             ->willReturn([]);
-        $this->mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $this->mockSnippetKeyGenerator = $this->getMock(ProductDetailSnippetKeyGenerator::class);
         $this->mockSnippetKeyGenerator->expects($this->any())
             ->method('getKeyForContext')
             ->willReturn('stub-content-key');

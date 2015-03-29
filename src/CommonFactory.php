@@ -15,6 +15,7 @@ use Brera\Product\ProductInListingBlockRenderer;
 use Brera\Product\ProductListingBlockRenderer;
 use Brera\Product\ProductListingSnippetRenderer;
 use Brera\Product\ProductSearchDocumentBuilder;
+use Brera\Product\ProductDetailSnippetKeyGenerator;
 use Brera\Product\ProductSnippetRendererCollection;
 use Brera\Product\ProductSourceBuilder;
 use Brera\DataPool\KeyValue\KeyValueStore;
@@ -251,7 +252,7 @@ class CommonFactory implements Factory, DomainEventFactory
      */
     public function createProductDetailViewSnippetKeyGenerator()
     {
-        return new GenericSnippetKeyGenerator('product_detail_view', ['website', 'language']);
+        return new ProductDetailSnippetKeyGenerator();
     }
 
     /**

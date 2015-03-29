@@ -4,7 +4,6 @@
 namespace Brera\Product;
 
 use Brera\Context\Context;
-use Brera\PageMetaInfoSnippetContent;
 use Brera\SnippetKeyGenerator;
 use Brera\SnippetResult;
 use Brera\SnippetResultList;
@@ -37,7 +36,7 @@ class ProductDetailViewInContextSnippetRenderer
     /**
      * @var SnippetKeyGenerator
      */
-    private $snippetKeyGenerator;
+    private $productSnippetKeyGenerator;
     
     /**
      * @var UrlPathKeyGenerator
@@ -47,18 +46,18 @@ class ProductDetailViewInContextSnippetRenderer
     /**
      * @param SnippetResultList $snippetResultList
      * @param ProductDetailViewBlockRenderer $blockRenderer
-     * @param SnippetKeyGenerator $snippetKeyGenerator
+     * @param ProductDetailSnippetKeyGenerator $snippetKeyGenerator
      * @param UrlPathKeyGenerator $urlKeyGenerator
      */
     public function __construct(
         SnippetResultList $snippetResultList,
         ProductDetailViewBlockRenderer $blockRenderer,
-        SnippetKeyGenerator $snippetKeyGenerator,
+        ProductDetailSnippetKeyGenerator $snippetKeyGenerator,
         UrlPathKeyGenerator $urlKeyGenerator
     ) {
         $this->snippetResultList = $snippetResultList;
         $this->blockRenderer = $blockRenderer;
-        $this->snippetKeyGenerator = $snippetKeyGenerator;
+        $this->productSnippetKeyGenerator = $snippetKeyGenerator;
         $this->urlKeyGenerator = $urlKeyGenerator;
     }
     
@@ -81,7 +80,10 @@ class ProductDetailViewInContextSnippetRenderer
     private function addProductDetailViewSnippetsToSnippetResultList()
     {
         $content = $this->blockRenderer->render($this->product, $this->context);
-        $key = $this->snippetKeyGenerator->getKeyForContext($this->product->getId(), $this->context);
+        $key = $this->productSnippetKeyGenerator->getKeyForContext(
+            $this->context,
+            ['product_id' => $this->product->getId()]
+        );
         $contentSnippet = SnippetResult::create($key, $content);
         $this->snippetResultList->add($contentSnippet);
         
@@ -108,7 +110,7 @@ class ProductDetailViewInContextSnippetRenderer
     private function getPageMetaData()
     {
         $rootBlockName = $this->blockRenderer->getRootSnippetCode();
-        $pageMetaInfo = PageMetaInfoSnippetContent::create(
+        $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::create(
             (string) $this->product->getId(),
             $rootBlockName,
             $this->blockRenderer->getNestedSnippetCodes()
@@ -121,6 +123,6 @@ class ProductDetailViewInContextSnippetRenderer
      */
     public function getUsedContextParts()
     {
-        return $this->snippetKeyGenerator->getContextPartsUsedForKey();
+        return $this->productSnippetKeyGenerator->getContextPartsUsedForKey();
     }
 }

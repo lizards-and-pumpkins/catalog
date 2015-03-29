@@ -5,9 +5,7 @@ namespace Brera\Product;
 use Brera\AbstractHttpRequestHandler;
 use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
-use Brera\Http\HttpUrl;
 use Brera\Logger;
-use Brera\PageMetaInfoSnippetContent;
 use Brera\SnippetKeyGeneratorLocator;
 
 class ProductDetailViewRequestHandler extends AbstractHttpRequestHandler
@@ -16,11 +14,6 @@ class ProductDetailViewRequestHandler extends AbstractHttpRequestHandler
      * @var ProductId
      */
     private $productId;
-
-    /**
-     * @var HttpUrl
-     */
-    private $httpUrl;
 
     /**
      * @var Context
@@ -69,35 +62,33 @@ class ProductDetailViewRequestHandler extends AbstractHttpRequestHandler
     }
 
     /**
+     * @param string $snippetJson
+     * @return ProductDetailPageMetaInfoSnippetContent
+     */
+    final protected function createPageMetaInfoInstance($snippetJson)
+    {
+        $metaInfo = ProductDetailPageMetaInfoSnippetContent::fromJson($snippetJson);
+        $this->productId = $metaInfo->getSourceId();
+        return $metaInfo;
+    }
+
+    /**
+     * @param string $snippetCode
+     * @return string
+     */
+    final protected function getSnippetKeyForContext($snippetCode)
+    {
+        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
+        return $keyGenerator->getKeyForContext($this->context, ['product_id' => $this->productId]);
+    }
+
+    /**
      * @return string
      */
     final protected function getPageMetaInfoSnippetKey()
     {
         return $this->pageMetaInfoSnippetKey;
     }
-
-    /**
-     * @param string $snippetJson
-     * @return PageMetaInfoSnippetContent
-     */
-    final protected function createPageMetaInfoInstance($snippetJson)
-    {
-        $metaInfo = PageMetaInfoSnippetContent::fromJson($snippetJson);
-        $this->productId = $metaInfo->getSourceId();
-        return $metaInfo;
-    }
-
-    /**
-     * @param string $key
-     * @return string
-     */
-    final protected function getSnippetKeyInContext($key)
-    {
-        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode($key);
-        return $keyGenerator->getKeyForContext($this->productId, $this->context);
-    }
-
-
 
     /**
      * @param string $snippetKey

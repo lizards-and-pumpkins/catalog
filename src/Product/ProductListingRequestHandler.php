@@ -5,33 +5,20 @@ namespace Brera\Product;
 use Brera\AbstractHttpRequestHandler;
 use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
-use Brera\Http\HttpUrl;
 use Brera\Logger;
-use Brera\PageMetaInfoSnippetContent;
 use Brera\SnippetKeyGeneratorLocator;
-use Brera\UrlPathKeyGenerator;
 
 class ProductListingRequestHandler extends AbstractHttpRequestHandler
 {
     /**
      * @var string
      */
-    private $listingTypeId;
-
-    /**
-     * @var HttpUrl
-     */
-    private $httpUrl;
+    private $selectionCriteria;
 
     /**
      * @var Context
      */
     private $context;
-
-    /**
-     * @var UrlPathKeyGenerator
-     */
-    private $urlPathKeyGenerator;
 
     /**
      * @var SnippetKeyGeneratorLocator
@@ -76,26 +63,26 @@ class ProductListingRequestHandler extends AbstractHttpRequestHandler
     {
         return $this->pageMetaInfoSnippetKey;
     }
-
-    /**
-     * @param string $key
-     * @return string
-     */
-    final protected function getSnippetKeyInContext($key)
-    {
-        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode($key);
-        return $keyGenerator->getKeyForContext($this->listingTypeId, $this->context);
-    }
-
+    
     /**
      * @param string $snippetJson
-     * @return PageMetaInfoSnippetContent
+     * @return ProductListingMetaInfoSnippetContent
      */
     final protected function createPageMetaInfoInstance($snippetJson)
     {
-        $metaInfo = PageMetaInfoSnippetContent::fromJson($snippetJson);
-        $this->listingTypeId = $metaInfo->getSourceId();
+        $metaInfo = ProductListingMetaInfoSnippetContent::fromJson($snippetJson);
+        $this->selectionCriteria = $metaInfo->getSelectionCriteria();
         return $metaInfo;
+    }
+
+    /**
+     * @param string $snippetCode
+     * @return string
+     */
+    final protected function getSnippetKeyForContext($snippetCode)
+    {
+        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
+        return $keyGenerator->getKeyForContext($this->context);
     }
 
     /**
@@ -107,7 +94,7 @@ class ProductListingRequestHandler extends AbstractHttpRequestHandler
         return sprintf(
             'Snippet not available (key "%s", listing type id "%s", context "%s")',
             $snippetKey,
-            $this->listingTypeId,
+            implode('|', $this->selectionCriteria),
             $this->context->getId()
         );
     }

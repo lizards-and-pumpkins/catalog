@@ -2,6 +2,7 @@
 
 namespace Brera;
 
+use Brera\Context\Context;
 use Brera\Http\HttpRequestHandler;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\KeyNotFoundException;
@@ -68,10 +69,10 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
     abstract protected function createPageMetaInfoInstance($snippetJson);
 
     /**
-     * @param string $snippetKey
+     * @param string $snippetCode
      * @return string
      */
-    abstract protected function getSnippetKeyInContext($snippetKey);
+    abstract protected function getSnippetKeyForContext($snippetCode);
 
     /**
      * @param string $snippetKey
@@ -106,8 +107,21 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
         $snippetCodes = $metaInfo->getPageSnippetCodes();
         $this->snippetCodesToKeyMap = array_combine(
             $snippetCodes,
-            array_map([$this, 'getSnippetKeyInContext'], $snippetCodes)
+            array_map([$this, 'getSnippetKeyDefaultingToEmpty'], $snippetCodes)
         );
+    }
+
+    /**
+     * @param string $snippetCode
+     * @return string
+     */
+    private function getSnippetKeyDefaultingToEmpty($snippetCode)
+    {
+        try {
+            return $this->getSnippetKeyForContext($snippetCode);
+        } catch (\Exception $e) {
+            return '';
+        }
     }
 
     /**
@@ -227,7 +241,7 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
      */
     private function getRootSnippetKey()
     {
-        return $this->getSnippetKeyInContext($this->rootSnippetCode);
+        return $this->getSnippetKeyDefaultingToEmpty($this->rootSnippetCode);
     }
 
     /**

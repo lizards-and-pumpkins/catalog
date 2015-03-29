@@ -31,9 +31,8 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
         $logger = new InMemoryLogger();
 
         $pageBuilder = new ProductListingRequestHandler(
-            $url,
+            $urlPathKeyGenerator->getUrlKeyForUrlInContext($url, $context),
             $context,
-            $urlPathKeyGenerator,
             $snippetKeyGeneratorLocator,
             $dataPoolReader,
             $logger
@@ -50,7 +49,7 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
     {
         $productListingMetaDataSnippetKey = '_men-accessories_v:1_0';
         $productListingMetaDataSnippetContent = '{
-            "source_id": "",
+            "product_selection_criteria": [],
             "root_snippet_code": "product_listing",
             "page_snippet_codes": ["product_in_listing_118235-251_language:de_DE_website:ru"]
         }';

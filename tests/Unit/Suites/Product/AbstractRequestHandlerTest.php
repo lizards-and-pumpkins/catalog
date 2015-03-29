@@ -4,22 +4,20 @@ namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\Http\HttpRequestHandler;
-use Brera\Http\HttpUrl;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\KeyNotFoundException;
 use Brera\Logger;
 use Brera\Page;
-use Brera\PageMetaInfoSnippetContent;
+use Brera\SnippetKeyGenerator;
 use Brera\SnippetKeyGeneratorLocator;
-use Brera\UrlPathKeyGenerator;
 
 abstract class AbstractRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var int
+     * @var string
      */
-    private $sourceIdFixture = 1;
-
+    private $testRootSnippetCode = 'root-snippet';
+    
     /**
      * @var string
      */
@@ -62,11 +60,26 @@ abstract class AbstractRequestHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('getIdForParts')
             ->willReturn($this->contextIdFixture);
 
-        $this->snippetKeyGeneratorLocator = new SnippetKeyGeneratorLocator();
+        $this->snippetKeyGeneratorLocator = $this->createKeyGeneratorLocatorMock();
+        
+        
         $this->mockDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
         $this->stubLogger = $this->getMock(Logger::class);
 
         $this->requestHandler = $this->createRequestHandlerInstance();
+    }
+
+    /**
+     * @return SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    abstract protected function getKeyGeneratorMock();
+
+    /**
+     * @return string
+     */
+    protected function getTestRootSnippetCode()
+    {
+        return $this->testRootSnippetCode;
     }
 
     /**
@@ -151,7 +164,6 @@ abstract class AbstractRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReplacePlaceholderWithNestedPlaceholdersDeeperThanTwo()
     {
-        $rootSnippetCode = 'root-snippet';
         $rootSnippetContent = '<html><head>{{snippet head}}</head><body>{{snippet body}}</body></html>';
         $childSnippetMap = [
             'head' => '<title>My Website!</title>',
@@ -161,7 +173,7 @@ abstract class AbstractRequestHandlerTest extends \PHPUnit_Framework_TestCase
             'nesting-level3' => 'child3',
         ];
 
-        $this->setDataPoolFixture($rootSnippetCode, $rootSnippetContent, $childSnippetMap);
+        $this->setDataPoolFixture($this->testRootSnippetCode, $rootSnippetContent, $childSnippetMap);
 
         $expectedContent = <<<EOH
 <html><head><title>My Website!</title></head><body><h1>My Website!</h1>child1child2child3</body></html>
@@ -176,7 +188,6 @@ EOH;
      */
     public function itShouldReplacePlaceholderWithNestedPlaceholdersAndDoNotCareAboutMissingSnippets()
     {
-        $rootSnippetCode = 'root-snippet';
         $rootSnippetContent = '<html><head>{{snippet head}}</head><body>{{snippet body}}</body></html>';
         $childSnippetMap = [
             'head' => '<title>My Website!</title>',
@@ -186,7 +197,7 @@ EOH;
             'nesting-level3' => 'child3{{snippet nesting-level4}}',
         ];
 
-        $this->setDataPoolFixture($rootSnippetCode, $rootSnippetContent, $childSnippetMap);
+        $this->setDataPoolFixture($this->testRootSnippetCode, $rootSnippetContent, $childSnippetMap);
 
         $expectedContent = <<<EOH
 <html><head><title>My Website!</title></head><body><h1>My Website!</h1>child1child2child3</body></html>
@@ -201,7 +212,6 @@ EOH;
      */
     public function itShouldReplacePlaceholderRegardlessOfSnippetOrder()
     {
-        $rootSnippetCode = 'root-snippet';
         $rootSnippetContent = '<html><body>{{snippet body}}</body></html>';
         $childSnippetMap = [
             'body' => '<h1>My Website!</h1>{{snippet nesting-level1}}',
@@ -210,7 +220,7 @@ EOH;
             'nesting-level2' => 'child2{{snippet nesting-level3}}',
         ];
 
-        $this->setDataPoolFixture($rootSnippetCode, $rootSnippetContent, $childSnippetMap);
+        $this->setDataPoolFixture($this->testRootSnippetCode, $rootSnippetContent, $childSnippetMap);
 
         $expectedContent = '<html><body><h1>My Website!</h1>child1child2child3</body></html>';
 
@@ -234,11 +244,10 @@ EOH;
      */
     public function itShouldReturnTrueIfTheUrlKeySnippetIsKnown()
     {
-        $rootSnippetCode = 'root-snippet';
         $rootSnippetContent = 'Dummy Content';
         $childSnippetMap = [];
 
-        $this->setDataPoolFixture($rootSnippetCode, $rootSnippetContent, $childSnippetMap);
+        $this->setDataPoolFixture($this->testRootSnippetCode, $rootSnippetContent, $childSnippetMap);
         $this->assertTrue($this->requestHandler->canProcess());
     }
 
@@ -248,11 +257,10 @@ EOH;
      */
     public function itShouldThrowAnExceptionIfTheRootSnippetContentIsNotFound()
     {
-        $rootSnippetCode = 'root-snippet';
         $childSnippetCodes = ['child1'];
         $allSnippetCodes = [];
         $allSnippetContent = [];
-        $this->setPageMetaInfoFixture($rootSnippetCode, $childSnippetCodes);
+        $this->setPageMetaInfoFixture($this->testRootSnippetCode, $childSnippetCodes);
         $this->setPageContentSnippetFixture($allSnippetCodes, $allSnippetContent);
         $this->requestHandler->process();
     }
@@ -262,11 +270,10 @@ EOH;
      */
     public function itShouldLogIfChildSnippetContentIsNotFound()
     {
-        $rootSnippetCode = 'root-snippet';
         $childSnippetCodes = ['child1'];
-        $allSnippetCodes = [$rootSnippetCode];
+        $allSnippetCodes = [$this->testRootSnippetCode];
         $allSnippetContent = ['Dummy Root Content'];
-        $this->setPageMetaInfoFixture($rootSnippetCode, $childSnippetCodes);
+        $this->setPageMetaInfoFixture($this->testRootSnippetCode, $childSnippetCodes);
         $this->setPageContentSnippetFixture($allSnippetCodes, $allSnippetContent);
         $this->stubLogger->expects($this->once())
             ->method('log');
@@ -291,24 +298,7 @@ EOH;
      * @param string[] $allSnippetCodes
      * @return mixed[]
      */
-    private function buildStubPageMetaInfo($rootSnippetCode, array $allSnippetCodes)
-    {
-        $pageMetaInfo = [
-            PageMetaInfoSnippetContent::KEY_SOURCE_ID => $this->sourceIdFixture,
-            PageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE => $rootSnippetCode,
-            PageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => $allSnippetCodes
-        ];
-        return $pageMetaInfo;
-    }
-
-    /**
-     * @param string $snippetCode
-     * @return string
-     */
-    private function getStubSnippetKey($snippetCode)
-    {
-        return $snippetCode . '_' . $this->sourceIdFixture . '_' . $this->contextIdFixture;
-    }
+    abstract protected function buildStubPageMetaInfo($rootSnippetCode, array $allSnippetCodes);
 
     /**
      * @param string $rootSnippetCode
@@ -330,12 +320,37 @@ EOH;
      */
     private function setPageContentSnippetFixture(array $allSnippetCodes, array $allSnippetContent)
     {
-        $allSnippetKeys = array_map(function ($code) {
-            return $this->getStubSnippetKey($code);
-        }, $allSnippetCodes);
+        $allSnippetKeys = array_map([$this, 'getStubSnippetKey'], $allSnippetCodes);
         $pageSnippetKeyMap = array_combine($allSnippetKeys, $allSnippetContent);
         $this->mockDataPoolReader->expects($this->any())
             ->method('getSnippets')
             ->willReturn($pageSnippetKeyMap);
+    }
+
+    /**
+     * @param string $snippetCode
+     * @return string
+     */
+    protected function getStubSnippetKey($snippetCode)
+    {
+        $keyGenerator = $this->getSnippetKeyGeneratorLocator()->getKeyGeneratorForSnippetCode($snippetCode);
+        return $keyGenerator->getKeyForContext($this->getStubContext());
+    }
+
+    /**
+     * @return SnippetKeyGeneratorLocator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createKeyGeneratorLocatorMock()
+    {
+        $fixedKeyGeneratorFactoryFunction = function ($fixedKey) {
+            $stubKeyGenerator = $this->getKeyGeneratorMock();
+            $stubKeyGenerator->expects($this->any())->method('getKeyForContext')->willReturn($fixedKey);
+            return $stubKeyGenerator;
+        };
+        
+        $snippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class, [], [], '', false);
+        $snippetKeyGeneratorLocator->expects($this->any())->method('getKeyGeneratorForSnippetCode')
+            ->willReturnCallback($fixedKeyGeneratorFactoryFunction);
+        return $snippetKeyGeneratorLocator;
     }
 }
