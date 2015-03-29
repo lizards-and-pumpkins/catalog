@@ -4,7 +4,6 @@ namespace Brera;
 
 use Brera\Context\Context;
 use Brera\Context\ContextBuilder;
-use Brera\Context\VersionedContext;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
 use Brera\DataPool\KeyValue\KeyValueStore;
@@ -16,6 +15,7 @@ use Brera\Product\ProductListingRequestHandler;
 class ProductListingTest extends \PHPUnit_Framework_TestCase
 {
     private $dummyProductInListingContent = 'A Dummy Product In A Listing';
+    private $testUrl = 'http://example.com/men-accessories';
 
     /**
      * @test
@@ -24,14 +24,14 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
     {
         $keyValueStore = new InMemoryKeyValueStore();
         $dataPoolReader = new DataPoolReader($keyValueStore, new InMemorySearchEngine());
-
+        
         $contextBuilder = new ContextBuilder(DataVersion::fromVersionString('1.0'));
         $context = $contextBuilder->getContext(['website' => 'ru', 'language' => 'de_DE']);
+        $pageMetaInfoSnippetKey = $this->getPageMetaInfoSnippetKey($context);
         $this->writeProductListingFixturesIntoKeyValueStore($keyValueStore, $context);
 
-        $url = HttpUrl::fromString('http://example.com/men-accessories');
         $productListingRequestHandler = $this->getProductListingRequestHandler(
-            (new PoCUrlPathKeyGenerator())->getUrlKeyForUrlInContext($url, $context),
+            $pageMetaInfoSnippetKey,
             $context,
             $dataPoolReader
         );
@@ -46,15 +46,13 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
 
     private function writeProductListingFixturesIntoKeyValueStore(KeyValueStore $keyValueStore, Context $context)
     {
-        $productListingMetaDataSnippetKey = '_men-accessories_' . $context->getId();
-        $productInListingKeyPrefix = 'product_in_listing_118235-251';
+        $productListingMetaDataSnippetKey = $this->getPageMetaInfoSnippetKey($context);
+        $productInListingSnippetCode = 'product_in_listing_118235-251';
         
         $productListingMetaDataSnippetContent = json_encode([
             ProductListingMetaInfoSnippetContent::KEY_CRITERIA => [],
             PageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE =>  'product_listing',
-            PageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => [
-                $productInListingKeyPrefix . '_language:de_DE_website:ru'
-            ]
+            PageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => [$productInListingSnippetCode]
         ]);
         $keyValueStore->set($productListingMetaDataSnippetKey, $productListingMetaDataSnippetContent);
 
@@ -62,7 +60,7 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
         $productListingRootSnippetContent = '<div>{{snippet product_1}}</div>';
         $keyValueStore->set($productListingRootSnippetKey, $productListingRootSnippetContent);
 
-        $productInListingSnippetKey = $productInListingKeyPrefix . '_language:de_DE_website:ru_' . $context->getId();
+        $productInListingSnippetKey = $productInListingSnippetCode . '_' . $context->getId();
         $keyValueStore->set($productInListingSnippetKey, $this->dummyProductInListingContent);
     }
 
@@ -72,7 +70,7 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
      * @param DataPoolReader $dataPoolReader
      * @return ProductListingRequestHandler
      */
-    protected function getProductListingRequestHandler($pageMetaInfoSnippetKey, $context, $dataPoolReader)
+    private function getProductListingRequestHandler($pageMetaInfoSnippetKey, $context, $dataPoolReader)
     {
         return new ProductListingRequestHandler(
             $pageMetaInfoSnippetKey,
@@ -81,5 +79,15 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
             $dataPoolReader,
             new InMemoryLogger()
         );
+    }
+
+    /**
+     * @param Context $context
+     * @return string
+     */
+    private function getPageMetaInfoSnippetKey(Context $context)
+    {
+        $url = HttpUrl::fromString($this->testUrl);
+        return (new PoCUrlPathKeyGenerator())->getUrlKeyForUrlInContext($url, $context);
     }
 }
