@@ -18,7 +18,7 @@ class WebsiteContextDecoratorTest extends ContextDecoratorTestAbstract
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     protected function getStubContextData()
     {

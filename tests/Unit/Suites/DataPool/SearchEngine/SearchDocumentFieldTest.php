@@ -32,6 +32,9 @@ class SearchDocumentFieldTest extends \PHPUnit_Framework_TestCase
         SearchDocumentField::fromKeyAndValue($invalidKey, 'foo');
     }
 
+    /**
+     * @return mixed[]
+     */
     public function invalidKeyProvider()
     {
         return [

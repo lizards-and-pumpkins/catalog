@@ -68,6 +68,9 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $method->invoke($this->builder, $testCode));
     }
 
+    /**
+     * @return mixed[]
+     */
     public function underscoreCodeDataProvider()
     {
         return [

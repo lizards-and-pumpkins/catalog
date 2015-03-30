@@ -7,6 +7,9 @@ use Brera\Http\HttpRequestHandler;
 
 class CatalogImportApiRequestHandler implements HttpRequestHandler
 {
+    /**
+     * @return DefaultHttpResponse
+     */
     public function process()
     {
         // todo: change to json response

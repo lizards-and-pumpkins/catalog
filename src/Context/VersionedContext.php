@@ -71,6 +71,4 @@ class VersionedContext implements Context
     {
         return $code == self::CODE;
     }
-
-
 }

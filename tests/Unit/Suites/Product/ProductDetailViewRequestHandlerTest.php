@@ -73,9 +73,6 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private $snippetKeyGeneratorLocator;
 
-    /**
-     * @return void
-     */
     protected function setUp()
     {
         $this->url = HttpUrl::fromString('http://example.com/product.html');

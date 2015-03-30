@@ -43,7 +43,7 @@ class IntegrationTestFactory implements Factory
     }
 
     /**
-     * return string[]
+     * @return string[]
      */
     public function getSearchableAttributeCodes()
     {

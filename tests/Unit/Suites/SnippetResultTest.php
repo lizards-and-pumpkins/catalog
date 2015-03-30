@@ -19,6 +19,9 @@ class SnippetResultTest extends \PHPUnit_Framework_TestCase
         SnippetResult::create($invalidKey, $content);
     }
 
+    /**
+     * @return mixed[]
+     */
     public function invalidKeyProvider()
     {
         return [
@@ -45,6 +48,9 @@ class SnippetResultTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(SnippetResult::class, $result);
     }
 
+    /**
+     * @return string[]
+     */
     public function validKeyProvider()
     {
         return [

@@ -9,7 +9,7 @@ use Brera\Http\HttpUrl;
 
 /**
  * @covers \Brera\Product\ProductDetailViewRouter
- * @uses \Brera\Http\HttpUrl
+ * @uses   \Brera\Http\HttpUrl
  */
 class ProductDetailViewRouterTest extends \PHPUnit_Framework_TestCase
 {
@@ -32,7 +32,13 @@ class ProductDetailViewRouterTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockUrlKeyRequestHandler = $this->getMock(ProductDetailViewRequestHandler::class, [], [], '', false);
 
-        $this->mockUrlKeyRequestHandlerBuilder = $this->getMock(ProductDetailViewRequestHandlerBuilder::class, [], [], '', false);
+        $this->mockUrlKeyRequestHandlerBuilder = $this->getMock(
+            ProductDetailViewRequestHandlerBuilder::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->mockUrlKeyRequestHandlerBuilder->expects($this->any())
             ->method('create')
             ->willReturn($this->mockUrlKeyRequestHandler);
@@ -57,6 +63,7 @@ class ProductDetailViewRouterTest extends \PHPUnit_Framework_TestCase
             ->method('canProcess')
             ->willReturn(false);
         $stubRequest = $this->getStubRequest();
+        /* @var $stubContext Context|\PHPUnit_Framework_MockObject_MockObject */
         $stubContext = $this->getMock(Context::class);
         $this->assertNull($this->router->route($stubRequest, $stubContext));
     }
@@ -70,12 +77,13 @@ class ProductDetailViewRouterTest extends \PHPUnit_Framework_TestCase
             ->method('canProcess')
             ->willReturn(true);
         $stubRequest = $this->getStubRequest();
+        /* @var $stubContext Context|\PHPUnit_Framework_MockObject_MockObject */
         $stubContext = $this->getMock(Context::class);
         $this->assertSame($this->mockUrlKeyRequestHandler, $this->router->route($stubRequest, $stubContext));
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit_Framework_MockObject_MockObject|HttpRequest
      */
     private function getStubRequest()
     {

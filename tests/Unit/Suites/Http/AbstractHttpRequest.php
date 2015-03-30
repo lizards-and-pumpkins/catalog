@@ -58,6 +58,9 @@ class AbstractHttpRequest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(HttpGetRequest::class, $result);
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|HttpUrl
+     */
     protected function getStubHttpUrl()
     {
         $stubHttpUrl = $this->getMockBuilder(HttpUrl::class)
@@ -67,6 +70,9 @@ class AbstractHttpRequest extends \PHPUnit_Framework_TestCase
         return $stubHttpUrl;
     }
 
+    /**
+     * @param bool $isSecure
+     */
     private function setUpGlobalState($isSecure = false)
     {
         $_SERVER['REQUEST_METHOD'] = 'GET';

@@ -9,6 +9,9 @@ class SearchDocumentCollection
      */
     private $documents = [];
 
+    /**
+     * @param SearchDocument $document
+     */
     public function add(SearchDocument $document)
     {
         array_push($this->documents, $document);

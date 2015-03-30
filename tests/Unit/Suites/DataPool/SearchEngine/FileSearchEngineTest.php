@@ -47,9 +47,6 @@ class FileSearchEngineTest extends AbstractSearchEngineTest
         return FileSearchEngine::withPath($this->temporaryStorage);
     }
 
-    /**
-     * @return void
-     */
     private function prepareTemporaryStorage()
     {
         $this->temporaryStorage = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'brera-search-engine-storage';

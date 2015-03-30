@@ -18,16 +18,16 @@ class LanguageContextDecoratorTest extends ContextDecoratorTestAbstract
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     protected function getStubContextData()
     {
         return [$this->getDecoratorUnderTestCode() => 'test-language'];
     }
-    
+
     /**
      * @param Context $stubContext
-     * @param array $stubContextData
+     * @param mixed[] $stubContextData
      * @return LanguageContextDecorator
      */
     protected function createContextDecoratorUnderTest(Context $stubContext, array $stubContextData)

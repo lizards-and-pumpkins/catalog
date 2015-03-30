@@ -19,9 +19,6 @@ abstract class AbstractDataPoolTest extends \PHPUnit_Framework_TestCase
      */
     protected $stubSearchEngine;
 
-    /**
-     * @return void
-     */
     protected function setUp()
     {
         $this->stubKeyValueStore = $this->getMock(KeyValueStore::class);
@@ -40,9 +37,6 @@ abstract class AbstractDataPoolTest extends \PHPUnit_Framework_TestCase
         return $productId;
     }
 
-    /**
-     * @return void
-     */
     protected function addSetMethodToStubKeyValueStore()
     {
         $this->stubKeyValueStore->expects($this->once())

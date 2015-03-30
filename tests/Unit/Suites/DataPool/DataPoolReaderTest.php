@@ -53,7 +53,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function snippetListProvider()
     {
@@ -78,7 +78,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function brokenJsonProvider()
     {
@@ -114,7 +114,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function invalidKeyProvider()
     {
@@ -127,6 +127,9 @@ class DataPoolReaderTest extends AbstractDataPoolTest
 
     }
 
+    /**
+     * @return mixed[]
+     */
     public function brokenKeysForSnippetsProvider()
     {
         return [

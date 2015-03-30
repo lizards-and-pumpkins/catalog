@@ -203,11 +203,11 @@ abstract class BlockRenderer
     /**
      * @param string $blockName
      * @return string
-     * @todo use delegate to generate the placeholder string
      * @see \Brera\UrlKeyRequestHandler::buildPlaceholdersFromCodes()
      */
     private function getBlockPlaceholder($blockName)
     {
+        // TODO use delegate to generate the placeholder string
         return '{{snippet ' . $blockName . '}}';
     }
 }

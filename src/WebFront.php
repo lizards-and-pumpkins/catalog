@@ -63,6 +63,9 @@ abstract class WebFront
         return $requestHandler->process();
     }
 
+    /**
+     * @param Factory $factory
+     */
     final public function registerFactory(Factory $factory)
     {
         $this->buildFactoryIfItWasNotInjected();
@@ -89,9 +92,6 @@ abstract class WebFront
      */
     abstract protected function registerRouters(HttpRouterChain $router);
 
-    /**
-     * @return void
-     */
     private function buildFactoryIfItWasNotInjected()
     {
         if (null !== $this->masterFactory) {

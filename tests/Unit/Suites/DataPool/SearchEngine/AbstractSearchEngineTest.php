@@ -479,6 +479,10 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             ->willReturn($content);
     }
 
+    /**
+     * @param mixed[] $array1
+     * @param mixed[] $array2
+     */
     private function assertArraysHasEqualElements($array1, $array2)
     {
         $this->assertEmpty(array_diff($array1, $array2));

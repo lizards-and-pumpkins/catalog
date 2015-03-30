@@ -155,9 +155,6 @@ class XPathParser
         return $attributeArray;
     }
 
-    /**
-     * @return null
-     */
     private function removeCommentNodes()
     {
         foreach ($this->xPathEngine->query('//comment()') as $comment) {

@@ -91,6 +91,9 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
         $this->logger = $logger;
     }
 
+    /**
+     * @return bool
+     */
     public function canProcess()
     {
         try {
@@ -120,9 +123,6 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
         return new Page(($content));
     }
 
-    /**
-     * @return void
-     */
     private function loadPageMetaInfo()
     {
         if (is_null($this->rootSnippetCode)) {
@@ -166,9 +166,6 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
         return $keyGenerator->getKeyForContext($this->pageSourceObjectId, $this->context);
     }
 
-    /**
-     * @return string[]
-     */
     private function loadSnippets()
     {
         $keys = $this->getSnippetKeysInContext();
@@ -209,11 +206,11 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
     /**
      * @param string $code
      * @return string
-     * @todo: delegate placeholder creation (and also use the delegate during import)
      * @see Brera\Renderer\BlockRenderer::getBlockPlaceholder()
      */
     private function buildPlaceholderFromCode($code)
     {
+        // TODO delegate placeholder creation (and also use the delegate during import)
         return sprintf('{{snippet %s}}', $code);
     }
 
@@ -230,14 +227,14 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
     }
 
     /**
-     * @todo at the moment it doesn't make any difference in the tests whether the return
-     * @todo is inside or outside of the loop - WHY!?!
      * @param $content
      * @param string[] $snippets
      * @return string
      */
     private function replaceAsLongAsSomethingIsReplaced($content, array $snippets)
     {
+        // TODO  at the moment it doesn't make any difference in the tests whether the return is inside or outside of
+        // TODO the loop - WHY!?!
         do {
             $content = str_replace(array_keys($snippets), array_values($snippets), $content, $count);
         } while ($count);

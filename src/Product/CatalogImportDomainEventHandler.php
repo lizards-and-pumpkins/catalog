@@ -2,9 +2,9 @@
 
 namespace Brera\Product;
 
-use Brera\XPathParser;
-use Brera\Queue\Queue;
 use Brera\DomainEventHandler;
+use Brera\Queue\Queue;
+use Brera\XPathParser;
 
 class CatalogImportDomainEventHandler implements DomainEventHandler
 {

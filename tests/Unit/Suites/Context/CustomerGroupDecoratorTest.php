@@ -18,7 +18,7 @@ class CustomerGroupContextDecoratorTest extends ContextDecoratorTestAbstract
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     protected function getStubContextData()
     {

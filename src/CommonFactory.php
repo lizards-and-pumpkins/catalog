@@ -56,10 +56,10 @@ class CommonFactory implements Factory, DomainEventFactory
     /**
      * @param ProductImportDomainEvent $event
      * @return ProductImportDomainEventHandler
-     * @todo: move to catalog factory
      */
     public function createProductImportDomainEventHandler(ProductImportDomainEvent $event)
     {
+        // TODO move to catalog factory
         return new ProductImportDomainEventHandler(
             $event,
             $this->getMasterFactory()->createProductSourceBuilder(),
@@ -72,20 +72,20 @@ class CommonFactory implements Factory, DomainEventFactory
     /**
      * @param CatalogImportDomainEvent $event
      * @return CatalogImportDomainEventHandler
-     * @todo: move to catalog factory
      */
     public function createCatalogImportDomainEventHandler(CatalogImportDomainEvent $event)
     {
+        // TODO move to catalog factory
         return new CatalogImportDomainEventHandler($event, $this->getMasterFactory()->getEventQueue());
     }
 
     /**
      * @param RootTemplateChangedDomainEvent $event
      * @return RootTemplateChangedDomainEventHandler
-     * @todo: move to catalog factory
      */
     public function createRootTemplateChangedDomainEventHandler(RootTemplateChangedDomainEvent $event)
     {
+        // TODO move to catalog factory
         return new RootTemplateChangedDomainEventHandler(
             $event,
             $this->getMasterFactory()->createRootSnippetSourceBuilder(),
@@ -104,10 +104,10 @@ class CommonFactory implements Factory, DomainEventFactory
 
     /**
      * @return ProductProjector
-     * @todo: move to catalog factory
      */
     public function createProductProjector()
     {
+        // TODO move to catalog factory
         return new ProductProjector(
             $this->createProductSnippetRendererCollection(),
             $this->createProductSearchDocumentBuilder(),
@@ -117,10 +117,10 @@ class CommonFactory implements Factory, DomainEventFactory
 
     /**
      * @return ProductSnippetRendererCollection
-     * @todo: move to catalog factory
      */
     public function createProductSnippetRendererCollection()
     {
+        // TODO move to catalog factory
         return new ProductSnippetRendererCollection(
             $this->getProductSnippetRendererList(),
             $this->getMasterFactory()->createSnippetResultList()
@@ -129,10 +129,10 @@ class CommonFactory implements Factory, DomainEventFactory
 
     /**
      * @return SnippetRenderer[]
-     * @todo: move to catalog factory
      */
     private function getProductSnippetRendererList()
     {
+        // TODO move to catalog factory
         return [
             $this->getMasterFactory()->createProductSourceDetailViewSnippetRenderer(),
             $this->getMasterFactory()->createProductSourceInListingSnippetRenderer()
@@ -191,6 +191,9 @@ class CommonFactory implements Factory, DomainEventFactory
         return new GenericSnippetKeyGenerator('product_listing', ['website', 'language', 'version']);
     }
 
+    /**
+     * @return ProductListingBlockRenderer
+     */
     public function createProductListingBlockRenderer()
     {
         return new ProductListingBlockRenderer(
@@ -209,10 +212,10 @@ class CommonFactory implements Factory, DomainEventFactory
 
     /**
      * @return ProductSourceDetailViewSnippetRenderer
-     * @todo: move to catalog factory
      */
     public function createProductSourceDetailViewSnippetRenderer()
     {
+        // TODO move to catalog factory
         return new ProductSourceDetailViewSnippetRenderer(
             $this->getMasterFactory()->createSnippetResultList(),
             $this->getMasterFactory()->createProductDetailViewInContextSnippetRenderer()
@@ -221,10 +224,10 @@ class CommonFactory implements Factory, DomainEventFactory
 
     /**
      * @return ProductDetailViewInContextSnippetRenderer
-     * @todo: move to catalog factory
      */
     public function createProductDetailViewInContextSnippetRenderer()
     {
+        // TODO move to catalog factory
         return new ProductDetailViewInContextSnippetRenderer(
             $this->getMasterFactory()->createSnippetResultList(),
             $this->getMasterFactory()->createProductDetailViewBlockRenderer(),
@@ -235,10 +238,10 @@ class CommonFactory implements Factory, DomainEventFactory
 
     /**
      * @return ProductDetailViewBlockRenderer
-     * @todo: move to catalog factory
      */
     public function createProductDetailViewBlockRenderer()
     {
+        // TODO move to catalog factory
         return new ProductDetailViewBlockRenderer(
             $this->getMasterFactory()->createThemeLocator(),
             $this->getMasterFactory()->createBlockStructure()
@@ -247,19 +250,19 @@ class CommonFactory implements Factory, DomainEventFactory
 
     /**
      * @return SnippetKeyGenerator
-     * @todo: move to catalog factory
      */
     public function createProductDetailViewSnippetKeyGenerator()
     {
+        // TODO move to catalog factory
         return new GenericSnippetKeyGenerator('product_detail_view', ['website', 'language']);
     }
 
     /**
      * @return ProductSourceInListingSnippetRenderer
-     * @todo: move to catalog factory
      */
     public function createProductSourceInListingSnippetRenderer()
     {
+        // TODO move to catalog factory
         return new ProductSourceInListingSnippetRenderer(
             $this->getMasterFactory()->createSnippetResultList(),
             $this->getMasterFactory()->createProductInContextInListingSnippetRenderer()
@@ -268,10 +271,10 @@ class CommonFactory implements Factory, DomainEventFactory
 
     /**
      * @return ProductInListingInContextSnippetRenderer
-     * @todo: move to catalog factory
      */
     public function createProductInContextInListingSnippetRenderer()
     {
+        // TODO move to catalog factory
         return new ProductInListingInContextSnippetRenderer(
             $this->getMasterFactory()->createSnippetResultList(),
             $this->getMasterFactory()->createProductInListingBlockRenderer(),
@@ -292,10 +295,10 @@ class CommonFactory implements Factory, DomainEventFactory
 
     /**
      * @return SnippetKeyGenerator
-     * @todo: move to catalog factory
      */
     public function createProductInListingSnippetKeyGenerator()
     {
+        // TODO move to catalog factory
         return new GenericSnippetKeyGenerator('product_in_listing', ['website', 'language']);
     }
 
@@ -317,10 +320,10 @@ class CommonFactory implements Factory, DomainEventFactory
 
     /**
      * @return ProductSourceBuilder
-     * @todo: move to catalog factory
      */
     public function createProductSourceBuilder()
     {
+        // TODO move to catalog factory
         return new ProductSourceBuilder();
     }
 
@@ -337,8 +340,7 @@ class CommonFactory implements Factory, DomainEventFactory
      */
     public function createContextSource()
     {
-        /* TODO: Move to sample factory */
-
+        // TODO: Move to sample factory
         return new SampleContextSource($this->getMasterFactory()->createContextBuilder());
     }
 
@@ -360,6 +362,9 @@ class CommonFactory implements Factory, DomainEventFactory
         return new ContextBuilder($version);
     }
 
+    /**
+     * @return string
+     */
     private function getCurrentDataVersion()
     {
         /** @var DataPoolReader $dataPoolReader */

@@ -27,6 +27,7 @@ class HttpRouterChainTest extends \PHPUnit_Framework_TestCase
     public function itShouldThrowUnableToRouteRequestException()
     {
         $stubHttpRequest = $this->getStubHttpRequest();
+        /* @var $stubContext Context|\PHPUnit_Framework_MockObject_MockObject */
         $stubContext = $this->getMock(Context::class);
         $this->routerChain->route($stubHttpRequest, $stubContext);
     }
@@ -36,29 +37,34 @@ class HttpRouterChainTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldRouteARequest()
     {
+        /* @var $stubHttpRouter HttpRouter|\PHPUnit_Framework_MockObject_MockObject */
         $stubHttpRouter = $this->getMock(HttpRouter::class);
 
-        $stubHttpRequestHandler = $this->getMock(HttpRequestHandler::class, ['process']);
+        $stubHttpRequestHandler = $this->getMockBuilder(HttpRequestHandler::class)
+            ->setMethods(['process'])
+            ->getMock();
 
         $stubHttpRouter->expects($this->once())
-        ->method('route')
-        ->willReturn($stubHttpRequestHandler);
+            ->method('route')
+            ->willReturn($stubHttpRequestHandler);
 
         $stubHttpRequest = $this->getStubHttpRequest();
-        
+        /* @var $stubContext Context|\PHPUnit_Framework_MockObject_MockObject */
         $stubContext = $this->getMock(Context::class);
 
         $this->routerChain->register($stubHttpRouter);
+
         $handler = $this->routerChain->route($stubHttpRequest, $stubContext);
 
         $this->assertNotNull($handler);
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|HttpRequest
+     */
     private function getStubHttpRequest()
     {
-        $stubHttpRequest = $this->getMockBuilder(HttpRequest::class)
-        ->disableOriginalConstructor()
-        ->getMock();
+        $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
 
         return $stubHttpRequest;
     }

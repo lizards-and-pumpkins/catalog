@@ -39,6 +39,9 @@ class PoCSkuTest extends \PHPUnit_Framework_TestCase
         PoCSku::fromString($invalidSku);
     }
 
+    /**
+     * @return mixed[]
+     */
     public function invalidSkuProvider()
     {
         return [

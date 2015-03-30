@@ -14,6 +14,9 @@ class ProductDetailViewRouter implements HttpRouter
      */
     private $urlKeyRequestHandlerBuilder;
 
+    /**
+     * @param ProductDetailViewRequestHandlerBuilder $urlKeyRequestHandlerBuilder
+     */
     public function __construct(ProductDetailViewRequestHandlerBuilder $urlKeyRequestHandlerBuilder)
     {
         $this->urlKeyRequestHandlerBuilder = $urlKeyRequestHandlerBuilder;

@@ -9,6 +9,9 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
      */
     private $storagePath;
 
+    /**
+     * @param string $storagePath
+     */
     final private function __construct($storagePath)
     {
         if (!is_writable($storagePath)) {
@@ -22,7 +25,7 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
     }
 
     /**
-     * @param $storagePath
+     * @param string $storagePath
      * @return FileSearchEngine
      */
     public static function withPath($storagePath)

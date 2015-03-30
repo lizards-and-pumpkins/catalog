@@ -137,6 +137,9 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $resultList->getAttribute($attributeCode)->getValue());
     }
 
+    /**
+     * @return mixed[]
+     */
     public function extractAttributesDataProvider()
     {
         return [
