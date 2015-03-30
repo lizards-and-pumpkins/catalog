@@ -2,9 +2,9 @@
 
 namespace Brera\Product;
 
-use Brera\AbstractHttpRequestHandler;
 use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
+use Brera\Http\AbstractHttpRequestHandler;
 use Brera\Logger;
 use Brera\SnippetKeyGeneratorLocator;
 
