@@ -1,16 +1,20 @@
 <?php
 
-namespace Brera\Product;
+namespace Brera\Http;
 
 use Brera\Context\Context;
-use Brera\Http\HttpRequestHandler;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\KeyNotFoundException;
 use Brera\Logger;
 use Brera\Page;
+use Brera\PageMetaInfoSnippetContent;
+use Brera\Product\ProductDetailViewRequestHandler;
 use Brera\SnippetKeyGenerator;
 use Brera\SnippetKeyGeneratorLocator;
 
+/**
+ * @todo: Make concrete test case for abstract handler methods. Don't use as base class for real concrete handler tests.
+ */
 abstract class AbstractRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -67,6 +71,14 @@ abstract class AbstractRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->stubLogger = $this->getMock(Logger::class);
 
         $this->requestHandler = $this->createRequestHandlerInstance();
+    }
+
+    /**
+     * @return ProductDetailViewRequestHandler
+     */
+    final protected function getRequestHandlerUnderTest()
+    {
+        return $this->requestHandler;
     }
 
     /**
@@ -281,11 +293,28 @@ EOH;
     }
 
     /**
+     * @test
+     */
+    public function itShouldCallTheHookMethodMergingInTheResult()
+    {
+        $this->setPageContentSnippetFixture(['dummy'], ['dummy' => '']);
+        $stubPageMetaInfo = $this->getMock(PageMetaInfoSnippetContent::class);
+        $stubPageMetaInfo->expects($this->any())
+            ->method('getPageSnippetCodes')
+            ->willReturn([]);
+        $stubPageMetaInfo->expects($this->any())->method('getRootSnippetCode')->willReturn('dummy');
+        $spyRequestHandler = new HttpRequestHandlerSpy($this->mockDataPoolReader, $this->stubLogger, $stubPageMetaInfo);
+        $spyRequestHandler->process();
+        $this->assertTrue($spyRequestHandler->hookWasCalled);
+        $this->assertAttributeContains('content', 'snippets', $spyRequestHandler);
+    }
+
+    /**
      * @param string $rootSnippetCode
      * @param string $rootSnippetContent
      * @param string[] $childSnippetMap
      */
-    private function setDataPoolFixture($rootSnippetCode, $rootSnippetContent, array $childSnippetMap)
+    final protected function setDataPoolFixture($rootSnippetCode, $rootSnippetContent, array $childSnippetMap)
     {
         $allSnippetCodes = array_merge([$rootSnippetCode], array_keys($childSnippetMap));
         $allSnippetContent = array_merge([$rootSnippetContent], array_values($childSnippetMap));
@@ -304,7 +333,7 @@ EOH;
      * @param string $rootSnippetCode
      * @param array $allSnippetCodes
      */
-    private function setPageMetaInfoFixture($rootSnippetCode, array $allSnippetCodes)
+    final protected function setPageMetaInfoFixture($rootSnippetCode, array $allSnippetCodes)
     {
         $pageMetaInfo = $this->buildStubPageMetaInfo($rootSnippetCode, $allSnippetCodes);
 

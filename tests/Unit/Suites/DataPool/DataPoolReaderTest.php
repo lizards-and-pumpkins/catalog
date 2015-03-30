@@ -228,4 +228,13 @@ class DataPoolReaderTest extends AbstractDataPoolTest
 
         $this->dataPoolReader->getSearchResults('foo', $stubContext);
     }
+
+    /**
+     * @test
+     */
+    public function itShouldDelegateCriteriaQueriesToTheSearchEngine()
+    {
+        $this->getStubSearchEngine()->expects($this->once())->method('queryGivenFields');
+        $this->dataPoolReader->getProductIdsMatchingCriteria(['test-field' => 'test-value']);
+    }
 }

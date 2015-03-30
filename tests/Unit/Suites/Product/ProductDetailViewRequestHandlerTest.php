@@ -2,9 +2,11 @@
 
 namespace Brera\Product;
 
+use Brera\Http\AbstractRequestHandlerTest;
+
 /**
  * @covers \Brera\Product\ProductDetailViewRequestHandler
- * @covers \Brera\AbstractHttpRequestHandler
+ * @covers \Brera\Http\AbstractHttpRequestHandler
  * @uses   \Brera\Product\ProductDetailPageMetaInfoSnippetContent
  * @uses   \Brera\Http\HttpUrl
  * @uses   \Brera\Page

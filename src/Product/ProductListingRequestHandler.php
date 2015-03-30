@@ -57,13 +57,28 @@ class ProductListingRequestHandler extends AbstractHttpRequestHandler
     }
 
     /**
+     * @return string[]
+     */
+    protected function getPageSpecificAdditionalSnippetsHook()
+    {
+        $productIds = $this->dataPoolReader->getProductIdsMatchingCriteria($this->selectionCriteria);
+        if (! $productIds) {
+            return [];
+        }
+        $productInListingSnippetKeys = array_map(function ($productId) {
+            return sprintf('product_in_listing_%d', $productId);
+        }, $productIds);
+        return $this->dataPoolReader->getSnippets($productInListingSnippetKeys);
+    }
+
+    /**
      * @return string
      */
     final protected function getPageMetaInfoSnippetKey()
     {
         return $this->pageMetaInfoSnippetKey;
     }
-    
+
     /**
      * @param string $snippetJson
      * @return ProductListingMetaInfoSnippetContent

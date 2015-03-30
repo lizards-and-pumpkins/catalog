@@ -2,7 +2,7 @@
 
 namespace Brera\Http;
 
-class AbstractHttpRequest extends \PHPUnit_Framework_TestCase
+abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test

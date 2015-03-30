@@ -28,10 +28,6 @@ class DataPoolReader
      */
     private $searchEngine;
 
-    /**
-     * @param KeyValueStore $keyValueStore
-     * @param SearchEngine $searchEngine
-     */
     public function __construct(KeyValueStore $keyValueStore, SearchEngine $searchEngine)
     {
         $this->keyValueStore = $keyValueStore;
@@ -157,5 +153,13 @@ class DataPoolReader
     public function getSearchResults($queryString, Context $context)
     {
         return $this->searchEngine->query($queryString, $context);
+    }
+
+    /**
+     * @param string[] $queryCriteria
+     */
+    public function getProductIdsMatchingCriteria(array $queryCriteria)
+    {
+        return $this->searchEngine->queryGivenFields($queryCriteria);
     }
 }

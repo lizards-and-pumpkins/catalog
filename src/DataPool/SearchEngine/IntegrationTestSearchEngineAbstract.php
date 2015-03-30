@@ -40,6 +40,16 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine
         return $results;
     }
 
+
+    /**
+     * @param string[] $queryCriteria
+     * @return string[]
+     */
+    final public function queryGivenFields(array $queryCriteria)
+    {
+        // TODO: Implement queryGivenFields() method.
+    }
+
     /**
      * @param Context $queryContext
      * @param SearchDocument $searchDocument
