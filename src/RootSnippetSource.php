@@ -4,7 +4,7 @@ namespace Brera;
 
 use Brera\Context\Context;
 
-class RootSnippetSource
+class RootSnippetSource implements ProjectionSourceData
 {
     /**
      * @var Context
