@@ -1,11 +1,14 @@
 <?php
+
 namespace Brera\ImageProcessor;
 
 class ImageMagickTest extends ImageProcessorTest
 {
-
-    function getClassName()
+    /**
+     * @return string
+     */
+    final protected function getImageProcessorClassName()
     {
-        return __NAMESPACE__ . '\ImageMagick';
+        return ImageMagicImageProcessor::class;
     }
 }

@@ -7,16 +7,32 @@ abstract class ImageProcessorTest extends \PHPUnit_Framework_TestCase
     /**
      * @var ImageProcessor
      */
-    protected $processor;
+    private $processor;
 
-    const IMAGE = __DIR__ . '/../../../shared-fixture/flower.jpg';
+    const IMAGE_UNDER_TEST = __DIR__ . '/../../../shared-fixture/test_image.jpg';
 
-    abstract function getClassName();
+    /**
+     * @return ImageProcessor
+     */
+    protected function getProcessor()
+    {
+        return $this->processor;
+    }
+
+    /**
+     * @param ImageProcessor $processor
+     */
+    protected function setProcessor($processor)
+    {
+        $this->processor = $processor;
+    }
+
+    abstract protected function getImageProcessorClassName();
 
     protected function setUp()
     {
-        $classname = $this->getClassName();
-        $this->processor = new $classname(self::IMAGE);
+        $imageProcessorClassName = $this->getImageProcessorClassName();
+        $this->setProcessor(new $imageProcessorClassName(self::IMAGE_UNDER_TEST));
     }
 
     /**
@@ -31,10 +47,10 @@ abstract class ImageProcessorTest extends \PHPUnit_Framework_TestCase
      * @test
      * @expectedException \Brera\ImageProcessor\InvalidImageException
      */
-    public function itShouldThrowAnExceptionWhenImagePathIsInvalid()
+    public function itShouldThrowAnExceptionIfImageIsNotReadable()
     {
-        $classname = $this->getClassName();
-        $this->processor = new $classname('some/path/image.jpg');
+        $imageProcessorClassName = $this->getImageProcessorClassName();
+        $imageProcessorClassName::fromFile('some/path/non-existing-image.jpg');
     }
 
     /**
@@ -43,9 +59,9 @@ abstract class ImageProcessorTest extends \PHPUnit_Framework_TestCase
     public function itShouldSaveAProcessedImage()
     {
         $filename = tempnam(sys_get_temp_dir(), 'image_processor_test_');
-        $this->processor->saveAsFile($filename);
+        $this->getProcessor()->saveAsFile($filename);
         $this->assertTrue(is_file($filename));
-        $this->assertEquals(getimagesize($filename), getimagesize(self::IMAGE));
+        $this->assertEquals(getimagesize($filename), getimagesize(self::IMAGE_UNDER_TEST));
     }
 
     protected function tearDown()

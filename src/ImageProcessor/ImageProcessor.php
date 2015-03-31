@@ -1,4 +1,5 @@
 <?php
+
 namespace Brera\ImageProcessor;
 
 interface ImageProcessor

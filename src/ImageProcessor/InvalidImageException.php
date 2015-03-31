@@ -1,8 +1,12 @@
 <?php
+
 namespace Brera\ImageProcessor;
 
 class InvalidImageException extends \Exception
 {
+    /**
+     * @var string
+     */
     private $imagePath;
 
     /**
