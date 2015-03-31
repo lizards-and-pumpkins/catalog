@@ -4,8 +4,6 @@ namespace Brera\ImageProcessor;
 
 abstract class ImageProcessorTest extends \PHPUnit_Framework_TestCase
 {
-    const IMAGE_UNDER_TEST = __DIR__ . '/../../../shared-fixture/test_image.jpg';
-
     /**
      * @var ImageProcessor
      */
@@ -32,7 +30,7 @@ abstract class ImageProcessorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $imageProcessorClassName = $this->getImageProcessorClassName();
-        $this->setProcessor(new $imageProcessorClassName(self::IMAGE_UNDER_TEST));
+        $this->setProcessor($imageProcessorClassName::fromFile($this->getTestImage()));
     }
 
     /**
@@ -62,7 +60,7 @@ abstract class ImageProcessorTest extends \PHPUnit_Framework_TestCase
         $this->processor->resizeToWidth($widthToResize);
         $filename = $this->saveImage();
         list($width, $height) = getimagesize($filename);
-        list($originalWidth, $originalHeight) = getimagesize(self::IMAGE_UNDER_TEST);
+        list($originalWidth, $originalHeight) = getimagesize($this->getTestImage());
         $this->assertEquals($width, $widthToResize);
         $newHeight = ($originalHeight * $width) / $originalWidth;
         $this->assertEquals($height, $newHeight, 'The new height differs more than 1%. ', $newHeight / 100);
@@ -77,7 +75,7 @@ abstract class ImageProcessorTest extends \PHPUnit_Framework_TestCase
         $this->processor->resizeToHeight($heightToResize);
         $filename = $this->saveImage();
         list($width, $height) = getimagesize($filename);
-        list($originalWidth, $originalHeight) = getimagesize(self::IMAGE_UNDER_TEST);
+        list($originalWidth, $originalHeight) = getimagesize($this->getTestImage());
         $this->assertEquals($height, $heightToResize);
         $newWidth = ($originalWidth * $height) / $originalHeight;
         $this->assertEquals($width, $newWidth, 'The new height differs more than 1%. ', $newWidth / 100);
@@ -90,7 +88,7 @@ abstract class ImageProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $filename = $this->saveImage();
         $this->assertTrue(is_file($filename));
-        $this->assertEquals(getimagesize($filename), getimagesize(self::IMAGE_UNDER_TEST));
+        $this->assertEquals(getimagesize($filename), getimagesize($this->getTestImage()));
     }
 
     /**
@@ -102,6 +100,14 @@ abstract class ImageProcessorTest extends \PHPUnit_Framework_TestCase
         $this->getProcessor()->saveAsFile($filename);
 
         return $filename;
+    }
+
+    /**
+     * @return string
+     */
+    private function getTestImage()
+    {
+        return __DIR__ . '/../../../shared-fixture/test_image.jpg';
     }
 
     protected function tearDown()
