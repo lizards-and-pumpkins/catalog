@@ -12,13 +12,11 @@ interface ImageProcessor
 
     /**
      * @param $widthToResize
-     * @return boolean
      */
     public function resizeToWidth($widthToResize);
 
     /**
      * @param $heightToResize
-     * @return boolean
      */
     public function resizeToHeight($heightToResize);
 }

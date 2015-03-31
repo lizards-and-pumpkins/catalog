@@ -2,6 +2,6 @@
 
 namespace Brera\ImageProcessor;
 
-class InvalidImageException extends \Exception
+class InvalidImageException extends \InvalidArgumentException
 {
 }

@@ -46,7 +46,7 @@ class ImageMagicImageProcessor implements ImageProcessor
         }
 
         try {
-        return $this->processor->writeImage($path);
+            return $this->processor->writeImage($path);
         } catch (\ImagickException $e) {
             throw new ImageSaveFailedException($e->getMessage());
         }
@@ -55,16 +55,14 @@ class ImageMagicImageProcessor implements ImageProcessor
 
     /**
      * @param int $widthToResize
-     * @return bool
      */
     public function resizeToWidth($widthToResize)
     {
-        return $this->processor->resizeImage($widthToResize, false, \Imagick::FILTER_LANCZOS, 1);
+        $this->processor->resizeImage($widthToResize, false, \Imagick::FILTER_LANCZOS, 1);
     }
 
     /**
      * @param int $heightToResize
-     * @return boolean
      */
     public function resizeToHeight($heightToResize)
     {
