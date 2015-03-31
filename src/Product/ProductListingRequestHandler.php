@@ -56,19 +56,26 @@ class ProductListingRequestHandler extends AbstractHttpRequestHandler
         $this->logger = $logger;
     }
 
-    /**
-     * @return string[]
-     */
-    protected function getPageSpecificAdditionalSnippetsHook()
+    final protected function mergePageSpecificAdditionalSnippetsHook()
     {
         $productIds = $this->dataPoolReader->getProductIdsMatchingCriteria($this->selectionCriteria);
-        if (! $productIds) {
-            return [];
+        if ($productIds) {
+            $this->addProductsInListingToPage($productIds);
         }
-        $productInListingSnippetKeys = array_map(function ($productId) {
-            return sprintf('product_in_listing_%d', $productId);
-        }, $productIds);
-        return $this->dataPoolReader->getSnippets($productInListingSnippetKeys);
+    }
+
+    /**
+     * @param string[] $productIds
+     */
+    private function addProductsInListingToPage(array $productIds)
+    {
+        $productInListingSnippetKeys = $this->getProductInListingSnippetKeysFromProductIds($productIds);
+        
+        $snippetKeysToContentMap = $this->dataPoolReader->getSnippets($productInListingSnippetKeys);
+        $snippetCodeToKeyMap = $this->getProductInListingSnippetCodeToKeyMap($productInListingSnippetKeys);
+
+        $this->mergeSnippetKeyToContentMap($snippetKeysToContentMap);
+        $this->mergeSnippetCodeToKeyMap($snippetCodeToKeyMap);
     }
 
     /**
@@ -129,5 +136,29 @@ class ProductListingRequestHandler extends AbstractHttpRequestHandler
     final protected function getLogger()
     {
         return $this->logger;
+    }
+
+    /**
+     * @param string[] $productIds
+     * @return string[]
+     */
+    private function getProductInListingSnippetKeysFromProductIds(array $productIds)
+    {
+        return array_map(function ($productId) {
+            return sprintf('product_in_listing_%s', $productId);
+        }, $productIds);
+    }
+
+    /**
+     * @param string[] $productInListingSnippetKeys
+     * @return string[]
+     */
+    private function getProductInListingSnippetCodeToKeyMap($productInListingSnippetKeys)
+    {
+        return array_reduce($productInListingSnippetKeys, function (array $acc, $key) {
+            $snippetCode = sprintf('product_%d', count($acc) + 1);
+            $acc[$snippetCode] = $key;
+            return $acc;
+        }, []);
     }
 }

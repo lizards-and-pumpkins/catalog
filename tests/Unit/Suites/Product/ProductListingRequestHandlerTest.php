@@ -78,18 +78,64 @@ class ProductListingRequestHandlerTest extends AbstractRequestHandlerTest
     public function itShouldLoadTheProductSnippetsFromTheQueryResult()
     {
         $rootSnippetCode = 'root-snippet';
-        $this->setPageMetaInfoFixture($rootSnippetCode, []);
+        $allSnippetCodesInPageExceptProductListing = [];
+        $testMatchingProductIds = ['1'];
+        $productInListingSnippetFixture = ['product_in_listing_1' => 'Product in Listing Content'];
+        $this->setPageMetaInfoFixture($rootSnippetCode, $allSnippetCodesInPageExceptProductListing);
+        $this->setMatchingProductsFixture($testMatchingProductIds);
+        $this->setProductListSnippetsInKeyValueStorageFixture($rootSnippetCode, $productInListingSnippetFixture);
+        
+        $this->getRequestHandlerUnderTest()->process();
+    }
 
-        $this->getMockDataPoolReader()->expects($this->any())->method('getProductIdsMatchingCriteria')
-            ->with($this->testSelectionCriteria)->willReturn([1]);
+    /**
+     * @test
+     */
+    public function itShouldMapTheProductInListSnippetKeysToIncrementingSnippetCodes()
+    {
+        $rootSnippetCode = 'root-snippet';
+        $allSnippetCodesInPageExceptProductListing = [];
+        $testMatchingProductIds = ['id1', 'id2', 'id3'];
+        $productInListingSnippetFixture = [
+            'product_in_listing_id1' => 'Product 1 in Listing Snippet',
+            'product_in_listing_id2' => 'Product 2 in Listing Snippet',
+            'product_in_listing_id3' => 'Product 3 in Listing Snippet',
+        ];
+        $expectedSnippetCodeToKeyMap = [
+            $rootSnippetCode => $rootSnippetCode,
+            'product_1' => 'product_in_listing_id1',
+            'product_2' => 'product_in_listing_id2',
+            'product_3' => 'product_in_listing_id3',
+        ];
+        $this->setPageMetaInfoFixture($rootSnippetCode, $allSnippetCodesInPageExceptProductListing);
+        $this->setMatchingProductsFixture($testMatchingProductIds);
+        $this->setProductListSnippetsInKeyValueStorageFixture($rootSnippetCode, $productInListingSnippetFixture);
 
-        $productInListingSnippetKey = 'product_in_listing_1';
+        $requestHandler = $this->getRequestHandlerUnderTest();
+        $requestHandler->process();
+
+        $this->assertAttributeEquals($expectedSnippetCodeToKeyMap, 'snippetCodesToKeyMap', $requestHandler);
+    }
+
+    /**
+     * @param $testMatchingProductIds
+     */
+    private function setMatchingProductsFixture($testMatchingProductIds)
+    {
+        $this->getMockDataPoolReader()->expects($this->once())->method('getProductIdsMatchingCriteria')
+            ->with($this->testSelectionCriteria)->willReturn($testMatchingProductIds);
+    }
+
+    /**
+     * @param $rootSnippetCode
+     * @param $productInListingSnippetFixture
+     */
+    private function setProductListSnippetsInKeyValueStorageFixture($rootSnippetCode, $productInListingSnippetFixture)
+    {
         $this->getMockDataPoolReader()->expects($this->exactly(2))->method('getSnippets')
             ->willReturnMap([
                 [[$rootSnippetCode], [$rootSnippetCode => 'dummy root snippet content']],
-                [[$productInListingSnippetKey], [$productInListingSnippetKey => 'Product in Listing Content']],
+                [array_keys($productInListingSnippetFixture), $productInListingSnippetFixture],
             ]);
-        
-        $this->getRequestHandlerUnderTest()->process();
     }
 }

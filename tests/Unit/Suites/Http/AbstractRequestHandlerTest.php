@@ -8,7 +8,6 @@ use Brera\DataPool\KeyValue\KeyNotFoundException;
 use Brera\Logger;
 use Brera\Page;
 use Brera\PageMetaInfoSnippetContent;
-use Brera\Product\ProductDetailViewRequestHandler;
 use Brera\SnippetKeyGenerator;
 use Brera\SnippetKeyGeneratorLocator;
 
@@ -33,7 +32,7 @@ abstract class AbstractRequestHandlerTest extends \PHPUnit_Framework_TestCase
     private $urlPathKeyFixture = 'dummy-url-key';
 
     /**
-     * @var ProductDetailViewRequestHandler
+     * @var AbstractHttpRequestHandler
      */
     private $requestHandler;
 
@@ -74,7 +73,7 @@ abstract class AbstractRequestHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return ProductDetailViewRequestHandler
+     * @return AbstractHttpRequestHandler
      */
     final protected function getRequestHandlerUnderTest()
     {
@@ -306,7 +305,6 @@ EOH;
         $spyRequestHandler = new HttpRequestHandlerSpy($this->mockDataPoolReader, $this->stubLogger, $stubPageMetaInfo);
         $spyRequestHandler->process();
         $this->assertTrue($spyRequestHandler->hookWasCalled);
-        $this->assertAttributeContains('content', 'snippets', $spyRequestHandler);
     }
 
     /**

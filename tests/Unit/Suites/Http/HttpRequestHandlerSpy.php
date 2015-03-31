@@ -34,13 +34,9 @@ class HttpRequestHandlerSpy extends AbstractHttpRequestHandler
         $this->pageMetaInfoStub = $meta;
     }
 
-    /**
-     * @return \string[]
-     */
-    protected function getPageSpecificAdditionalSnippetsHook()
+    protected function mergePageSpecificAdditionalSnippetsHook()
     {
         $this->hookWasCalled = true;
-        return ['dummy' => 'content'];
     }
     
     /**
