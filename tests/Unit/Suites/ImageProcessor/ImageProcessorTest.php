@@ -14,6 +14,9 @@ abstract class ImageProcessorTest extends \PHPUnit_Framework_TestCase
      */
     private $imageFileNameForSaving;
 
+    /**
+     * @return string
+     */
     abstract protected function getImageProcessorClassName();
 
     /**
@@ -59,6 +62,9 @@ abstract class ImageProcessorTest extends \PHPUnit_Framework_TestCase
         $this->processor->saveAsFile($invalidPath);
     }
 
+    /**
+     * @return mixed[]
+     */
     public function invalidPathDataProvider()
     {
         return [
