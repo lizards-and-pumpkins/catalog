@@ -2,7 +2,7 @@
 
 namespace Brera\ImageProcessor;
 
-class ImageMagicImageProcessor implements ImageProcessor
+class ImageMagickImageProcessor implements ImageProcessor
 {
     /**
      * @var \Imagick
@@ -19,7 +19,7 @@ class ImageMagicImageProcessor implements ImageProcessor
 
     /**
      * @param string $imagePath
-     * @return ImageMagicImageProcessor
+     * @return ImageMagickImageProcessor
      * @throws InvalidImageException
      */
     public static function fromFile($imagePath)

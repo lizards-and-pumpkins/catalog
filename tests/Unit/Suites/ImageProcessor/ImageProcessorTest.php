@@ -9,28 +9,26 @@ abstract class ImageProcessorTest extends \PHPUnit_Framework_TestCase
      */
     private $processor;
 
+    /**
+     * @var string
+     */
+    private $imageFileNameForSaving;
+
     abstract protected function getImageProcessorClassName();
 
     /**
      * @return ImageProcessor
      */
-    protected function getProcessor()
+    final protected function getProcessor()
     {
         return $this->processor;
-    }
-
-    /**
-     * @param ImageProcessor $processor
-     */
-    protected function setProcessor($processor)
-    {
-        $this->processor = $processor;
     }
 
     protected function setUp()
     {
         $imageProcessorClassName = $this->getImageProcessorClassName();
-        $this->setProcessor($imageProcessorClassName::fromFile($this->getTestImage()));
+        $this->processor = $imageProcessorClassName::fromFile($this->getTestImage());
+        $this->imageFileNameForSaving = tempnam(sys_get_temp_dir(), 'image_processor_test_');
     }
 
     /**
@@ -80,8 +78,8 @@ abstract class ImageProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $widthToResize = 200;
         $this->processor->resizeToWidth($widthToResize);
-        $filename = $this->saveImage();
-        list($width, $height) = getimagesize($filename);
+        $this->assertTrue($this->getProcessor()->saveAsFile($this->imageFileNameForSaving));
+        list($width, $height) = getimagesize($this->imageFileNameForSaving);
         list($originalWidth, $originalHeight) = getimagesize($this->getTestImage());
         $this->assertEquals($width, $widthToResize);
         $newHeight = ($originalHeight * $width) / $originalWidth;
@@ -95,8 +93,8 @@ abstract class ImageProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $heightToResize = 200;
         $this->processor->resizeToHeight($heightToResize);
-        $filename = $this->saveImage();
-        list($width, $height) = getimagesize($filename);
+        $this->assertTrue($this->getProcessor()->saveAsFile($this->imageFileNameForSaving));
+        list($width, $height) = getimagesize($this->imageFileNameForSaving);
         list($originalWidth, $originalHeight) = getimagesize($this->getTestImage());
         $this->assertEquals($height, $heightToResize);
         $newWidth = ($originalWidth * $height) / $originalHeight;
@@ -108,20 +106,9 @@ abstract class ImageProcessorTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldSaveAProcessedImage()
     {
-        $filename = $this->saveImage();
-        $this->assertTrue(is_file($filename));
-        $this->assertEquals(getimagesize($filename), getimagesize($this->getTestImage()));
-    }
-
-    /**
-     * @return string
-     */
-    private function saveImage()
-    {
-        $filename = tempnam(sys_get_temp_dir(), 'image_processor_test_');
-        $this->getProcessor()->saveAsFile($filename);
-
-        return $filename;
+        $this->assertTrue($this->getProcessor()->saveAsFile($this->imageFileNameForSaving));
+        $this->assertTrue(is_file($this->imageFileNameForSaving));
+        $this->assertEquals(getimagesize($this->imageFileNameForSaving), getimagesize($this->getTestImage()));
     }
 
     /**
