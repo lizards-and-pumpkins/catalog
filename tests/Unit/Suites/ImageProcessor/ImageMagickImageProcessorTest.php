@@ -3,7 +3,7 @@
 namespace Brera\ImageProcessor;
 
 /**
- * @covers \Brera\ImageProcessor\ImageMagicImageProcessor
+ * @covers \Brera\ImageProcessor\ImageMagickImageProcessor
  */
 class ImageMagickImageProcessorTest extends ImageProcessorTest
 {
