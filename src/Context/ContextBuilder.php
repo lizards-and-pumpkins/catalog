@@ -17,9 +17,6 @@ class ContextBuilder
      */
     private $dataVersion;
 
-    /**
-     * @param DataVersion $dataVersion
-     */
     public function __construct(DataVersion $dataVersion)
     {
         $this->dataVersion = $dataVersion;

@@ -28,10 +28,6 @@ class DataPoolReader
      */
     private $searchEngine;
 
-    /**
-     * @param KeyValueStore $keyValueStore
-     * @param SearchEngine $searchEngine
-     */
     public function __construct(KeyValueStore $keyValueStore, SearchEngine $searchEngine)
     {
         $this->keyValueStore = $keyValueStore;

@@ -17,9 +17,6 @@ class ProductDetailViewRequestHandlerBuilder
      */
     private $urlPathKeyGenerator;
 
-    /**
-     * @var DataPoolReader
-     */
     private $dataPoolReader;
     
     /**
@@ -32,12 +29,6 @@ class ProductDetailViewRequestHandlerBuilder
      */
     private $logger;
 
-    /**
-     * @param UrlPathKeyGenerator $urlPathKeyGenerator
-     * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
-     * @param DataPoolReader $dataPoolReader
-     * @param Logger $logger
-     */
     public function __construct(
         UrlPathKeyGenerator $urlPathKeyGenerator,
         SnippetKeyGeneratorLocator $keyGeneratorLocator,

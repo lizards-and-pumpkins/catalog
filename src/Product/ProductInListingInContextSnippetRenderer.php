@@ -36,11 +36,6 @@ class ProductInListingInContextSnippetRenderer
      */
     private $snippetKeyGenerator;
 
-    /**
-     * @param SnippetResultList $snippetResultList
-     * @param ProductInListingBlockRenderer $blockRenderer
-     * @param SnippetKeyGenerator $snippetKeyGenerator
-     */
     public function __construct(
         SnippetResultList $snippetResultList,
         ProductInListingBlockRenderer $blockRenderer,

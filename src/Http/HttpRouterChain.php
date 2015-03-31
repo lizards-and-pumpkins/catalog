@@ -28,10 +28,6 @@ class HttpRouterChain implements HttpRouter
         throw new UnableToRouteRequestException(sprintf('Unable to route a request "%s"', $request->getUrl()));
     }
 
-    /**
-     * @param HttpRouter $router
-     * @return null
-     */
     public function register(HttpRouter $router)
     {
         $this->routers[] = $router;

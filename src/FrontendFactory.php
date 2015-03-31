@@ -28,9 +28,6 @@ class FrontendFactory implements Factory
         return new ApiRouter($requestHandlerChain);
     }
 
-    /**
-     * @param ApiRequestHandlerChain $requestHandlerChain
-     */
     protected function registerApiRequestHandlers(ApiRequestHandlerChain $requestHandlerChain)
     {
         $requestHandlerChain->register(

@@ -11,9 +11,6 @@ class SnippetResultList implements \Countable, \IteratorAggregate
         $this->snippets = [];
     }
 
-    /**
-     * @param SnippetResult $snippet
-     */
     public function add(SnippetResult $snippet)
     {
         $this->snippets[] = $snippet;
@@ -35,9 +32,6 @@ class SnippetResultList implements \Countable, \IteratorAggregate
         return new \ArrayIterator($this->snippets);
     }
 
-    /**
-     * @param SnippetResultList $other
-     */
     public function merge(SnippetResultList $other)
     {
         $this->snippets = array_merge(

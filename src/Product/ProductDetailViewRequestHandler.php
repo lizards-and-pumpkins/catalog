@@ -67,14 +67,6 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
      */
     private $logger;
 
-    /**
-     * @param HttpUrl $url
-     * @param Context $context
-     * @param UrlPathKeyGenerator $urlPathKeyGenerator
-     * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
-     * @param DataPoolReader $dataPoolReader
-     * @param Logger $logger
-     */
     public function __construct(
         HttpUrl $url,
         Context $context,
@@ -133,9 +125,6 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
         }
     }
 
-    /**
-     * @param PageMetaInfoSnippetContent $metaInfo
-     */
     private function initPropertiesFromMetaInfo(PageMetaInfoSnippetContent $metaInfo)
     {
         $this->pageSourceObjectId = $metaInfo->getSourceId();

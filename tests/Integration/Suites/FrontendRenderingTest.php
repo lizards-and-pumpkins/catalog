@@ -56,10 +56,6 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $body);
     }
 
-    /**
-     * @param KeyValueStore $keyValueStore
-     * @return void
-     */
     private function addPageMetaInfoFixtureToKeyValueStorage(
         KeyValueStore $keyValueStore,
         SnippetKeyGeneratorLocator $snippetKeyGeneratorLocator,

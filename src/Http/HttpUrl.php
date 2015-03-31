@@ -12,9 +12,6 @@ class HttpUrl
      */
     private $url;
 
-    /**
-     * @param \League\Url\AbstractUrl $url
-     */
     protected function __construct(AbstractUrl $url)
     {
         $this->url = $url;

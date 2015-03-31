@@ -16,10 +16,6 @@ class ProductAttributeList
      */
     private $attributeCodes = [];
 
-    /**
-     * @param ProductAttribute $attribute
-     * @return void
-     */
     public function add(ProductAttribute $attribute)
     {
         array_push($this->attributes, $attribute);

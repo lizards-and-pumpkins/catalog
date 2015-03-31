@@ -16,9 +16,6 @@ class ApiRouter implements HttpRouter
      */
     private $requestHandlerChain;
 
-    /**
-     * @param ApiRequestHandlerChain $requestHandlerChain
-     */
     public function __construct(ApiRequestHandlerChain $requestHandlerChain)
     {
         $this->requestHandlerChain = $requestHandlerChain;

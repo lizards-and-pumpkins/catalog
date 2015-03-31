@@ -12,9 +12,6 @@ class VersionedContext implements Context
      */
     private $version;
 
-    /**
-     * @param DataVersion $version
-     */
     public function __construct(DataVersion $version)
     {
         $this->version = $version;

@@ -17,10 +17,6 @@ class Product implements ProjectionSourceData
      */
     private $attributeList;
 
-    /**
-     * @param ProductId $productId
-     * @param ProductAttributeList $attributeList
-     */
     public function __construct(ProductId $productId, ProductAttributeList $attributeList)
     {
         $this->productId = $productId;

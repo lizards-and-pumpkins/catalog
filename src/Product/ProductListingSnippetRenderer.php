@@ -31,11 +31,6 @@ class ProductListingSnippetRenderer implements SnippetRenderer
      */
     private $blockRenderer;
 
-    /**
-     * @param SnippetResultList $snippetResultList
-     * @param SnippetKeyGenerator $snippetKeyGenerator
-     * @param BlockRenderer $blockRenderer
-     */
     public function __construct(
         SnippetResultList $snippetResultList,
         SnippetKeyGenerator $snippetKeyGenerator,
@@ -60,10 +55,6 @@ class ProductListingSnippetRenderer implements SnippetRenderer
         return $this->snippetResultList;
     }
 
-    /**
-     * @param RootSnippetSourceList $rootSnippetSourceList
-     * @param Context $context
-     */
     private function renderProductListingSnippetsForContext(
         RootSnippetSourceList $rootSnippetSourceList,
         Context $context

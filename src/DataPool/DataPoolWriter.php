@@ -20,20 +20,12 @@ class DataPoolWriter
      */
     private $searchEngine;
 
-    /**
-     * @param KeyValueStore $keyValueStore
-     * @param SearchEngine $searchEngine
-     */
     public function __construct(KeyValueStore $keyValueStore, SearchEngine $searchEngine)
     {
         $this->keyValueStore = $keyValueStore;
         $this->searchEngine = $searchEngine;
     }
 
-    /**
-     * @param SnippetResultList $snippetResultList
-     * @return void
-     */
     public function writeSnippetResultList(SnippetResultList $snippetResultList)
     {
         /** @var SnippetResult $snippetResult */
@@ -42,10 +34,6 @@ class DataPoolWriter
         }
     }
 
-    /**
-     * @param SearchDocumentCollection $searchDocumentCollection
-     * @return void
-     */
     public function writeSearchDocumentCollection(SearchDocumentCollection $searchDocumentCollection)
     {
         $this->searchEngine->addSearchDocumentCollection($searchDocumentCollection);

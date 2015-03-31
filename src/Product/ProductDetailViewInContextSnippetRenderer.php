@@ -44,12 +44,6 @@ class ProductDetailViewInContextSnippetRenderer
      */
     private $urlKeyGenerator;
 
-    /**
-     * @param SnippetResultList $snippetResultList
-     * @param ProductDetailViewBlockRenderer $blockRenderer
-     * @param SnippetKeyGenerator $snippetKeyGenerator
-     * @param UrlPathKeyGenerator $urlKeyGenerator
-     */
     public function __construct(
         SnippetResultList $snippetResultList,
         ProductDetailViewBlockRenderer $blockRenderer,

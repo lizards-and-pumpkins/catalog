@@ -12,9 +12,6 @@ class DomainEventHandlerLocator
      */
     private $factory;
 
-    /**
-     * @param DomainEventFactory $factory
-     */
     public function __construct(DomainEventFactory $factory)
     {
         $this->factory = $factory;
@@ -31,12 +28,15 @@ class DomainEventHandlerLocator
 
         switch ($eventClass) {
             case ProductImportDomainEvent::class:
+                /* @var $event ProductImportDomainEvent */
                 return $this->factory->createProductImportDomainEventHandler($event);
 
             case CatalogImportDomainEvent::class:
+                /* @var $event CatalogImportDomainEvent */
                 return $this->factory->createCatalogImportDomainEventHandler($event);
 
             case RootTemplateChangedDomainEvent::class:
+                /* @var $event RootTemplateChangedDomainEvent */
                 return $this->factory->createRootTemplateChangedDomainEventHandler($event);
         }
 

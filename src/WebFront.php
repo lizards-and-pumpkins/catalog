@@ -24,10 +24,6 @@ abstract class WebFront
      */
     private $context;
 
-    /**
-     * @param HttpRequest $request
-     * @param MasterFactory $factory
-     */
     public function __construct(HttpRequest $request, MasterFactory $factory = null)
     {
         $this->request = $request;
@@ -63,9 +59,6 @@ abstract class WebFront
         return $requestHandler->process();
     }
 
-    /**
-     * @param Factory $factory
-     */
     final public function registerFactory(Factory $factory)
     {
         $this->buildFactoryIfItWasNotInjected();
