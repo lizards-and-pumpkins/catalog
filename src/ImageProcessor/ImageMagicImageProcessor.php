@@ -26,9 +26,7 @@ class ImageMagicImageProcessor implements ImageProcessor
     public static function fromFile($imagePath)
     {
         if (!is_readable($imagePath)) {
-            $exception = new InvalidImageException("File \"$imagePath\" doesn't exist or is not readable.");
-            $exception->setImagePath($imagePath);
-            throw $exception;
+            throw new InvalidImageException("File \"$imagePath\" doesn't exist or is not readable.", $imagePath);
         }
 
         return new self($imagePath);
