@@ -20,7 +20,6 @@ class ImageMagickImageProcessor implements ImageProcessor
     /**
      * @param string $imagePath
      * @return ImageMagickImageProcessor
-     * @throws InvalidImageException
      */
     public static function fromFile($imagePath)
     {
@@ -65,6 +64,7 @@ class ImageMagickImageProcessor implements ImageProcessor
 
     /**
      * @param string $path
+     * @throws InvalidImageException
      */
     private function validatePath($path)
     {
