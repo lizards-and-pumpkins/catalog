@@ -11,9 +11,8 @@ class ImageMagicImageProcessor implements ImageProcessor
 
     /**
      * @param string $imagePath
-     * @throws InvalidImageException
      */
-    public function __construct($imagePath)
+    private function __construct($imagePath)
     {
         $this->processor = new \Imagick($imagePath);
     }
