@@ -19,7 +19,7 @@ class ImageMagicImageProcessor implements ImageProcessor
     }
 
     /**
-     * @param $imagePath
+     * @param string $imagePath
      * @return ImageMagicImageProcessor
      * @throws InvalidImageException
      */
@@ -41,13 +41,17 @@ class ImageMagicImageProcessor implements ImageProcessor
         return $this->processor->writeImage($path);
     }
 
+    /**
+     * @param int $widthToResize
+     * @return bool
+     */
     public function resizeToWidth($widthToResize)
     {
-        $this->processor->resizeImage($widthToResize, false, \Imagick::FILTER_LANCZOS, 1);
+        return $this->processor->resizeImage($widthToResize, false, \Imagick::FILTER_LANCZOS, 1);
     }
 
     /**
-     * @param $heightToResize
+     * @param int $heightToResize
      * @return boolean
      */
     public function resizeToHeight($heightToResize)

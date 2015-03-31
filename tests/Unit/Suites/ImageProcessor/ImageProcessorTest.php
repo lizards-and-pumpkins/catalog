@@ -4,12 +4,14 @@ namespace Brera\ImageProcessor;
 
 abstract class ImageProcessorTest extends \PHPUnit_Framework_TestCase
 {
+    const IMAGE_UNDER_TEST = __DIR__ . '/../../../shared-fixture/test_image.jpg';
+
     /**
      * @var ImageProcessor
      */
     private $processor;
 
-    const IMAGE_UNDER_TEST = __DIR__ . '/../../../shared-fixture/test_image.jpg';
+    abstract protected function getImageProcessorClassName();
 
     /**
      * @return ImageProcessor
@@ -26,8 +28,6 @@ abstract class ImageProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $this->processor = $processor;
     }
-
-    abstract protected function getImageProcessorClassName();
 
     protected function setUp()
     {
