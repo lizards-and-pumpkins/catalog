@@ -37,7 +37,20 @@ class ImageMagicImageProcessor implements ImageProcessor
      */
     public function saveAsFile($path)
     {
+        if (is_scalar($path) && !is_string($path)) {
+            throw new ImageSaveFailedException(sprintf('Image could not be saved, "%s" is not string.', $path));
+        }
+
+        if (!is_string($path)) {
+            throw new ImageSaveFailedException('Image could not be saved, $path is no string.');
+        }
+
+        try {
         return $this->processor->writeImage($path);
+        } catch (\ImagickException $e) {
+            throw new ImageSaveFailedException($e->getMessage());
+        }
+
     }
 
     /**

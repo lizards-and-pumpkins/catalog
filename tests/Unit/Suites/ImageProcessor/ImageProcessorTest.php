@@ -53,6 +53,28 @@ abstract class ImageProcessorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @dataProvider invalidPathDataProvider
+     * @expectedException \Brera\ImageProcessor\ImageSaveFailedException
+     */
+    public function itShouldThrowAnExceptionWhenAnInvalidPathForSavingIsPassed($invalidPath)
+    {
+        $this->processor->saveAsFile($invalidPath);
+    }
+
+    public function invalidPathDataProvider()
+    {
+        return [
+            array([]),
+            array(1),
+            array(''),
+            array(0.00),
+            array(new \stdClass()),
+            array(tmpfile()),
+        ];
+    }
+
+    /**
+     * @test
      */
     public function itShouldResizeAnImageToACertainWidth()
     {
