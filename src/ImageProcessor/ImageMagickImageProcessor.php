@@ -37,13 +37,7 @@ class ImageMagickImageProcessor implements ImageProcessor
      */
     public function saveAsFile($path)
     {
-        if (is_scalar($path) && !is_string($path)) {
-            throw new ImageSaveFailedException(sprintf('Image could not be saved, "%s" is not string.', $path));
-        }
-
-        if (!is_string($path)) {
-            throw new ImageSaveFailedException('Image could not be saved, $path is no string.');
-        }
+        $this->validatePath($path);
 
         try {
             return $this->processor->writeImage($path);
@@ -67,5 +61,19 @@ class ImageMagickImageProcessor implements ImageProcessor
     public function resizeToHeight($heightToResize)
     {
         $this->processor->resizeImage(false, $heightToResize, \Imagick::FILTER_LANCZOS, 1);
+    }
+
+    /**
+     * @param string $path
+     */
+    private function validatePath($path)
+    {
+        if (is_scalar($path) && !is_string($path)) {
+            throw new ImageSaveFailedException(sprintf('Image could not be saved, "%s" is not string.', $path));
+        }
+
+        if (!is_string($path)) {
+            throw new ImageSaveFailedException('Image could not be saved, $path is no string.');
+        }
     }
 }
