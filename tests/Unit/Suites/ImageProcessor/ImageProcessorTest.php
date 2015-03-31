@@ -56,12 +56,52 @@ abstract class ImageProcessorTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function itShouldResizeAnImageToACertainWidth()
+    {
+        $widthToResize = 200;
+        $this->processor->resizeToWidth($widthToResize);
+        $filename = $this->saveImage();
+        list($width, $height) = getimagesize($filename);
+        list($originalWidth, $originalHeight) = getimagesize(self::IMAGE_UNDER_TEST);
+        $this->assertEquals($width, $widthToResize);
+        $newHeight = ($originalHeight * $width) / $originalWidth;
+        $this->assertEquals($height, $newHeight, 'The new height differs more than 1%. ', $newHeight / 100);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldResizeAnImageToACertainHeight()
+    {
+        $heightToResize = 200;
+        $this->processor->resizeToHeight($heightToResize);
+        $filename = $this->saveImage();
+        list($width, $height) = getimagesize($filename);
+        list($originalWidth, $originalHeight) = getimagesize(self::IMAGE_UNDER_TEST);
+        $this->assertEquals($height, $heightToResize);
+        $newWidth = ($originalWidth * $height) / $originalHeight;
+        $this->assertEquals($width, $newWidth, 'The new height differs more than 1%. ', $newWidth / 100);
+    }
+
+    /**
+     * @test
+     */
     public function itShouldSaveAProcessedImage()
+    {
+        $filename = $this->saveImage();
+        $this->assertTrue(is_file($filename));
+        $this->assertEquals(getimagesize($filename), getimagesize(self::IMAGE_UNDER_TEST));
+    }
+
+    /**
+     * @return string
+     */
+    private function saveImage()
     {
         $filename = tempnam(sys_get_temp_dir(), 'image_processor_test_');
         $this->getProcessor()->saveAsFile($filename);
-        $this->assertTrue(is_file($filename));
-        $this->assertEquals(getimagesize($filename), getimagesize(self::IMAGE_UNDER_TEST));
+
+        return $filename;
     }
 
     protected function tearDown()
