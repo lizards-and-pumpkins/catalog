@@ -79,7 +79,8 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
             $rootSnippetCode,
             [$rootSnippetCode, 'head', 'body']
         );
-        $urlPathKey = $urlPathKeyGenerator->getUrlKeyForPathInContext('/product1', $context);
+        $urlPathKey = ProductDetailViewInContextSnippetRenderer::CODE . '_'
+            . $urlPathKeyGenerator->getUrlKeyForPathInContext('/product1', $context);
         $keyValueStore->set($urlPathKey, json_encode($pageMetaInfo->getInfo()));
         $headSnippetKeyGenerator = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode('head');
         $key = $headSnippetKeyGenerator->getKeyForContext($context);

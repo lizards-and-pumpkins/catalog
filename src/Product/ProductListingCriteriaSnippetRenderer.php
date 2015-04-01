@@ -46,7 +46,8 @@ class ProductListingCriteriaSnippetRenderer implements SnippetRenderer
         $contextData = $productListingSource->getContextData();
         $context = $this->contextBuilder->getContext($contextData);
 
-        return $this->urlPathKeyGenerator->getUrlKeyForPathInContext($productListingSource->getUrlKey(), $context);
+        $key = $this->urlPathKeyGenerator->getUrlKeyForPathInContext($productListingSource->getUrlKey(), $context);
+        return ProductListingSnippetRenderer::CODE . '_' . $key;
     }
 
     /**

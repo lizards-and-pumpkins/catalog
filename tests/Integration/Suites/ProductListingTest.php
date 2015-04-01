@@ -42,7 +42,8 @@ class ProductListingTest extends AbstractIntegrationTest
         $context = $contextSource->getAllAvailableContexts()[1];
 
         $url = HttpUrl::fromString('http://example.com/' . $urlKey);
-        $metaInfoSnippetKey = (new PoCUrlPathKeyGenerator())->getUrlKeyForUrlInContext($url, $context);
+        $metaInfoSnippetKey =  ProductListingSnippetRenderer::CODE . '_'
+            . (new PoCUrlPathKeyGenerator())->getUrlKeyForUrlInContext($url, $context);
 
         $dataPoolReader = $this->factory->createDataPoolReader();
 

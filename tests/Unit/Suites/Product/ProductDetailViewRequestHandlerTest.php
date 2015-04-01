@@ -109,9 +109,10 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldReturnTheInjectedPageMetaInfoSnippetKey()
+    public function itShouldPrefixThePageMetaInfoSnippetKeyWithTheProductDetailViewSnippetCode()
     {
-        $this->assertSame($this->urlPathKeyFixture, $this->requestHandlerSpy->testGetPageMetaInfoSnippetKey());
+        $expected = ProductDetailViewInContextSnippetRenderer::CODE . '_' . $this->urlPathKeyFixture;
+        $this->assertSame($expected, $this->requestHandlerSpy->testGetPageMetaInfoSnippetKey());
     }
 
     /**

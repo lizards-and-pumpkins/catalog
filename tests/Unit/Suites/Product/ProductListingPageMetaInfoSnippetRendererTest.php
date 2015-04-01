@@ -20,6 +20,21 @@ class ProductListingCriteriaSnippetRendererTest extends \PHPUnit_Framework_TestC
      */
     private $renderer;
 
+    /**
+     * @return ProductListingSource|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getMockProductListingSource()
+    {
+        $mockProductListingSource = $this->getMock(ProductListingSource::class, [], [], '', false);
+        $mockProductListingSource->expects($this->once())
+            ->method('getContextData')
+            ->willReturn([]);
+        $mockProductListingSource->expects($this->once())
+            ->method('getCriteria')
+            ->willReturn([]);
+        return $mockProductListingSource;
+    }
+
     protected function setUp()
     {
         $stubContext = $this->getMock(Context::class);
@@ -49,13 +64,7 @@ class ProductListingCriteriaSnippetRendererTest extends \PHPUnit_Framework_TestC
      */
     public function itShouldReturnSnippetResultWithAValidJsonAsAContent()
     {
-        $mockProductListingSource = $this->getMock(ProductListingSource::class, [], [], '', false);
-        $mockProductListingSource->expects($this->once())
-            ->method('getContextData')
-            ->willReturn([]);
-        $mockProductListingSource->expects($this->once())
-            ->method('getCriteria')
-            ->willReturn([]);
+        $mockProductListingSource = $this->getMockProductListingSource();
 
         $snippetResult = $this->renderer->render($mockProductListingSource);
 
@@ -63,5 +72,18 @@ class ProductListingCriteriaSnippetRendererTest extends \PHPUnit_Framework_TestC
 
         $this->assertInstanceOf(SnippetResult::class, $snippetResult);
         $this->assertEquals(JSON_ERROR_NONE, json_last_error());
+    }
+
+    /**
+     * @test
+     */
+    public function theReturnedResultSnippetKeyShouldHaveTheProductListingSnippetCodePrefix()
+    {
+        $mockProductListingSource = $this->getMockProductListingSource();
+
+        $snippetResult = $this->renderer->render($mockProductListingSource);
+        $expectedPattern = ProductListingSnippetRenderer::CODE . '_%s';
+        $this->assertStringMatchesFormat($expectedPattern, $snippetResult->getKey());
+
     }
 }

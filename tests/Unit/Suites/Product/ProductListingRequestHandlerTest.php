@@ -172,9 +172,10 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldReturnTheInjectedPageMetaInfoSnippetKey()
+    public function itShouldPrependTheInjectedPageMetaInfoSnippetKeyWithTheSnippetCode()
     {
-        $this->assertSame($this->urlPathFixture, $this->requestHandlerSpy->testGetPageMetaInfoSnippetKey());
+        $expected = ProductListingSnippetRenderer::CODE . '_' . $this->urlPathFixture;
+        $this->assertSame($expected, $this->requestHandlerSpy->testGetPageMetaInfoSnippetKey());
     }
 
     /**

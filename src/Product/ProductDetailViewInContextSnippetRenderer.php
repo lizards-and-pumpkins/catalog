@@ -90,18 +90,15 @@ class ProductDetailViewInContextSnippetRenderer
      */
     private function getProductDetailPageMetaSnippet()
     {
-        $snippetKey = $this->urlKeyGenerator->getUrlKeyForPathInContext(
-            $this->product->getAttributeValue('url_key'),
-            $this->context
-        );
-        $metaData = $this->getPageMetaData();
+        $snippetKey = $this->getPageMetaSnippetKey();
+        $metaData = $this->getPageMetaSnippetContent();
         return SnippetResult::create($snippetKey, json_encode($metaData));
     }
 
     /**
      * @return mixed[]
      */
-    private function getPageMetaData()
+    private function getPageMetaSnippetContent()
     {
         $rootBlockName = $this->blockRenderer->getRootSnippetCode();
         $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::create(
@@ -118,5 +115,17 @@ class ProductDetailViewInContextSnippetRenderer
     public function getUsedContextParts()
     {
         return $this->productSnippetKeyGenerator->getContextPartsUsedForKey();
+    }
+
+    /**
+     * @return string
+     */
+    private function getPageMetaSnippetKey()
+    {
+        $snippetKey = $this->urlKeyGenerator->getUrlKeyForPathInContext(
+            $this->product->getAttributeValue('url_key'),
+            $this->context
+        );
+        return self::CODE . '_' . $snippetKey;
     }
 }

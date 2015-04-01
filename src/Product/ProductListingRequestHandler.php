@@ -108,7 +108,7 @@ class ProductListingRequestHandler extends AbstractHttpRequestHandler
      */
     final protected function getPageMetaInfoSnippetKey()
     {
-        return $this->pageMetaInfoSnippetKey;
+        return ProductListingSnippetRenderer::CODE . '_' . $this->pageMetaInfoSnippetKey;
     }
 
     /**
