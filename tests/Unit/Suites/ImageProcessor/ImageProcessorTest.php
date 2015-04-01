@@ -44,11 +44,22 @@ abstract class ImageProcessorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @dataProvider invalidPathDataProvider
+     * @expectedException \Brera\ImageProcessor\InvalidImageException
+     * @param string $invalidPath
+     */
+    public function itShouldThrowAnExceptionOnWronImagePath($invalidPath)
+    {
+        $this->getProcessor()->setImage($invalidPath);
+    }
+
+    /**
+     * @test
      */
     public function itShouldWorkAfterSetFilename()
     {
-        $this->getProcessor()->setImage('');
-        $this->assertEmpty($this->getProcessor()->getImage());
+        $this->getProcessor()->setImage($this->getTestImage2());
+        $this->assertEquals($this->getTestImage2(), $this->getProcessor()->getImage());
 
         $this->getProcessor()->setImage($this->getTestImage());
         $this->assertEquals($this->getProcessor()->getImage(), $this->getTestImage());
@@ -160,6 +171,14 @@ abstract class ImageProcessorTest extends \PHPUnit_Framework_TestCase
     private function getTestImage()
     {
         return __DIR__ . '/../../../shared-fixture/test_image.jpg';
+    }
+
+    /**
+     * @return string
+     */
+    private function getTestImage2()
+    {
+        return __DIR__ . '/../../../shared-fixture/test_image2.jpg';
     }
 
     protected function tearDown()

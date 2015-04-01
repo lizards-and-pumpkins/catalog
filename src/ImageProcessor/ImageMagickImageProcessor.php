@@ -22,6 +22,19 @@ class ImageMagickImageProcessor implements ImageProcessor
         $this->image = $imagePath;
     }
 
+    /**
+     * @param $imagePath
+     */
+    private static function validateImage($imagePath)
+    {
+        if (!is_string($imagePath)) {
+            throw new InvalidImageException(sprintf('Path has to be string.'));
+        }
+        if (!is_readable($imagePath)) {
+            throw new InvalidImageException(sprintf('"File "%s" doesn\'t exist or is not readable', $imagePath));
+        }
+    }
+
     private function reset()
     {
         $this->processor = null;
@@ -33,9 +46,7 @@ class ImageMagickImageProcessor implements ImageProcessor
      */
     public static function fromFile($imagePath)
     {
-        if (!is_readable($imagePath)) {
-            throw new InvalidImageException(sprintf('"File "%s" doesn\'t exist or is not readable', $imagePath));
-        }
+        self::validateImage($imagePath);
 
         return new self($imagePath);
     }
@@ -137,6 +148,8 @@ class ImageMagickImageProcessor implements ImageProcessor
      */
     public function setImage($imagePath)
     {
+        self::validateImage($imagePath);
+
         $this->image = $imagePath;
         $this->reset();
     }
