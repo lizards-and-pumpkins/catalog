@@ -47,7 +47,7 @@ class ImportImageDomainEvent implements DomainEvent
     }
 
     /**
-     * @return string
+     * @return string[]
      */
     public function getImages()
     {

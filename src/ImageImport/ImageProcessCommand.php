@@ -7,6 +7,11 @@ use Brera\ImageProcessor\ImageProcessor;
 class ImageProcessCommand
 {
     /**
+     * @var string[]
+     */
+    private static $forbiddenMethods = array('saveAsFile');
+
+    /**
      * @var mixed[]
      */
     private $instructions;
@@ -35,6 +40,12 @@ class ImageProcessCommand
             if (!in_array($instruction, $methods)) {
                 throw new InvalidInstructionException(
                     sprintf('"The instruction "%s" doesn\'t exist for image processing.', $instruction)
+                );
+            }
+
+            if (in_array($instruction, self::$forbiddenMethods)) {
+                throw new InvalidInstructionException(
+                    sprintf('"The instruction "%s" is not allowed.', $instruction)
                 );
             }
         }

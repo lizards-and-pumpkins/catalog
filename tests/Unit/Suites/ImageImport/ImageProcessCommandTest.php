@@ -17,10 +17,7 @@ class ImageProcessCommandTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->instructions = [
-            array(
-                'resize' => array(200, 200),
-                'saveAsFile' => array('filename.jpg'),
-            )
+            'resize' => array(200, 200),
         ];
 
         $this->command = ImageProcessCommand::createByArray($this->instructions);
