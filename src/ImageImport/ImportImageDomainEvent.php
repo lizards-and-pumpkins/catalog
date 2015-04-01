@@ -3,12 +3,11 @@
 namespace Brera\ImageImport;
 
 use Brera\DomainEvent;
-use Brera\ImageProcessor\InvalidImageException;
 
 class ImportImageDomainEvent implements DomainEvent
 {
     /**
-     * @var string
+     * @var mixed[]
      */
     private $images;
 
@@ -26,24 +25,7 @@ class ImportImageDomainEvent implements DomainEvent
      */
     public static function fromImages(array $images)
     {
-        self::validateImages($images);
-
         return new self($images);
-    }
-
-    /**
-     * @param array $images
-     */
-    private static function validateImages(array $images)
-    {
-        foreach ($images as $image) {
-            if (!is_string($image)) {
-                throw new InvalidImageException('Passed image is no string.');
-            }
-            if (!is_readable($image)) {
-                throw new InvalidImageException(sprintf('Image "%s" is not readable.', $image));
-            }
-        }
     }
 
     /**
