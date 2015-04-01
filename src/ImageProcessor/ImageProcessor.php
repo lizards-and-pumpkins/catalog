@@ -11,12 +11,24 @@ interface ImageProcessor
     public function saveAsFile($filename);
 
     /**
-     * @param $widthToResize
+     * @param int $widthToResize
      */
     public function resizeToWidth($widthToResize);
 
     /**
-     * @param $heightToResize
+     * @param int $heightToResize
      */
     public function resizeToHeight($heightToResize);
+
+    /**
+     * @param int $widthToResize
+     * @param int $heightToResize
+     */
+    public function resize($widthToResize, $heightToResize);
+
+    /**
+     * @param int $widthToResize
+     * @param int $heightToResize
+     */
+    public function resizeToBestFit($widthToResize, $heightToResize);
 }

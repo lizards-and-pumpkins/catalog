@@ -76,4 +76,22 @@ class ImageMagickImageProcessor implements ImageProcessor
             throw new ImageSaveFailedException('Image could not be saved, $path is no string.');
         }
     }
+
+    /**
+     * @param int $widthToResize
+     * @param int $heightToResize
+     */
+    public function resize($widthToResize, $heightToResize)
+    {
+        $this->processor->resizeImage($widthToResize, $heightToResize, \Imagick::FILTER_LANCZOS, 1);
+    }
+
+    /**
+     * @param int $widthToResize
+     * @param int $heightToResize
+     */
+    public function resizeToBestFit($widthToResize, $heightToResize)
+    {
+        $this->processor->resizeImage($widthToResize, $heightToResize, \Imagick::FILTER_LANCZOS, 1, true);
+    }
 }

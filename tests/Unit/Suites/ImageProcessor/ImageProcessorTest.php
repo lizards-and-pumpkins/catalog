@@ -56,6 +56,7 @@ abstract class ImageProcessorTest extends \PHPUnit_Framework_TestCase
      * @test
      * @dataProvider invalidPathDataProvider
      * @expectedException \Brera\ImageProcessor\ImageSaveFailedException
+     * @param string $invalidPath
      */
     public function itShouldThrowAnExceptionWhenAnInvalidPathForSavingIsPassed($invalidPath)
     {
@@ -89,7 +90,37 @@ abstract class ImageProcessorTest extends \PHPUnit_Framework_TestCase
         list($originalWidth, $originalHeight) = getimagesize($this->getTestImage());
         $this->assertEquals($width, $widthToResize);
         $newHeight = ($originalHeight * $width) / $originalWidth;
-        $this->assertEquals($height, $newHeight, 'The new height differs more than 1%. ', $newHeight / 100);
+        $this->assertEquals($height, $newHeight, 'The new height differs more than 1%.', $newHeight / 100);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldResizeAnImage()
+    {
+        $widthToResize = 200;
+        $heightToResize = 200;
+        $this->processor->resize($widthToResize, $heightToResize);
+        $this->assertTrue($this->getProcessor()->saveAsFile($this->imageFileNameForSaving));
+        list($width, $height) = getimagesize($this->imageFileNameForSaving);
+        $this->assertEquals($width, $widthToResize);
+        $this->assertEquals($height, $heightToResize);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldResizeAnImageToBestFit()
+    {
+        $widthToResize = 200;
+        $heightToResize = 200;
+        $this->processor->resizeToBestFit($widthToResize, $heightToResize);
+        $this->assertTrue($this->getProcessor()->saveAsFile($this->imageFileNameForSaving));
+        list($width, $height) = getimagesize($this->imageFileNameForSaving);
+        list($originalWidth, $originalHeight) = getimagesize($this->getTestImage());
+        $this->assertEquals($width, $widthToResize);
+        $newHeight = ($originalHeight * $width) / $originalWidth;
+        $this->assertEquals($height, $newHeight, 'The new height differs more than 1%.', $newHeight / 100);
     }
 
     /**
@@ -104,7 +135,7 @@ abstract class ImageProcessorTest extends \PHPUnit_Framework_TestCase
         list($originalWidth, $originalHeight) = getimagesize($this->getTestImage());
         $this->assertEquals($height, $heightToResize);
         $newWidth = ($originalWidth * $height) / $originalHeight;
-        $this->assertEquals($width, $newWidth, 'The new height differs more than 1%. ', $newWidth / 100);
+        $this->assertEquals($width, $newWidth, 'The new height differs more than 1%.', $newWidth / 100);
     }
 
     /**
@@ -127,9 +158,6 @@ abstract class ImageProcessorTest extends \PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
-        $files = glob(sys_get_temp_dir() . '/image_processor_test_*');
-        foreach ($files as $file) {
-            unlink($file);
-        }
+        unlink($this->imageFileNameForSaving);
     }
 }
