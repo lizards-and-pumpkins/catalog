@@ -125,7 +125,6 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
     {
         $this->rootSnippetCode = $metaInfo->getRootSnippetCode();
 
-        // todo only add snippets where we can generate a valid key
         $snippetCodes = $metaInfo->getPageSnippetCodes();
         $this->snippetCodeToKeyMap = array_combine(
             $snippetCodes,
