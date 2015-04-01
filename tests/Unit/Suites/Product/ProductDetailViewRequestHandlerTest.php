@@ -46,10 +46,10 @@ class ProductDetailViewRequestHandlerTest extends AbstractRequestHandlerTest
     }
 
     /**
-     * @return ProductDetailSnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @return ProductSnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getKeyGeneratorMock()
     {
-        return $this->getMock(ProductDetailSnippetKeyGenerator::class);
+        return $this->getMock(ProductSnippetKeyGenerator::class, [], [], '', false);
     }
 }

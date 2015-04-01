@@ -370,8 +370,13 @@ EOH;
     private function createKeyGeneratorLocatorMock()
     {
         $fixedKeyGeneratorFactoryFunction = function ($fixedKey) {
+            $fixedKeyGeneratorFunction = function(Context $context, array $data = []) use ($fixedKey) {
+                $key = $fixedKey . ($data ? '_' . reset($data) : '');
+                return $key;
+            };
             $stubKeyGenerator = $this->getKeyGeneratorMock();
-            $stubKeyGenerator->expects($this->any())->method('getKeyForContext')->willReturn($fixedKey);
+            $stubKeyGenerator->expects($this->any())->method('getKeyForContext')
+                ->willReturnCallback($fixedKeyGeneratorFunction);
             return $stubKeyGenerator;
         };
         

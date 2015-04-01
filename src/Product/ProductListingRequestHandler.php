@@ -58,7 +58,7 @@ class ProductListingRequestHandler extends AbstractHttpRequestHandler
 
     final protected function mergePageSpecificAdditionalSnippetsHook()
     {
-        $productIds = $this->dataPoolReader->getProductIdsMatchingCriteria($this->selectionCriteria);
+        $productIds = $this->dataPoolReader->getProductIdsMatchingCriteria($this->selectionCriteria, $this->context);
         if ($productIds) {
             $this->addProductsInListingToPage($productIds);
         }
@@ -74,6 +74,7 @@ class ProductListingRequestHandler extends AbstractHttpRequestHandler
         $snippetKeysToContentMap = $this->dataPoolReader->getSnippets($productInListingSnippetKeys);
         $snippetCodeToKeyMap = $this->getProductInListingSnippetCodeToKeyMap($productInListingSnippetKeys);
 
+        // todo: refactor into one method with 2 or 3 arguments
         $this->mergeSnippetKeyToContentMap($snippetKeysToContentMap);
         $this->mergeSnippetCodeToKeyMap($snippetCodeToKeyMap);
     }
@@ -144,8 +145,9 @@ class ProductListingRequestHandler extends AbstractHttpRequestHandler
      */
     private function getProductInListingSnippetKeysFromProductIds(array $productIds)
     {
-        return array_map(function ($productId) {
-            return sprintf('product_in_listing_%s', $productId);
+        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode('product_in_listing');
+        return array_map(function ($productId) use ($keyGenerator) {
+            return $keyGenerator->getKeyForContext($this->context, ['product_id' => $productId]);
         }, $productIds);
     }
 

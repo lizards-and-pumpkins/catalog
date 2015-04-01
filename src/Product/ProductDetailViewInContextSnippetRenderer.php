@@ -46,7 +46,7 @@ class ProductDetailViewInContextSnippetRenderer
     public function __construct(
         SnippetResultList $snippetResultList,
         ProductDetailViewBlockRenderer $blockRenderer,
-        ProductDetailSnippetKeyGenerator $snippetKeyGenerator,
+        ProductSnippetKeyGenerator $snippetKeyGenerator,
         UrlPathKeyGenerator $urlKeyGenerator
     ) {
         $this->snippetResultList = $snippetResultList;

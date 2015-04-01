@@ -10,7 +10,7 @@ use Brera\Product\ProductListingRequestHandler;
 use Brera\Product\ProductListingSavedDomainEvent;
 use Brera\Product\ProductListingSnippetRenderer;
 
-class ProductListingTestAbstract extends AbstractIntegrationTest
+class ProductListingTest extends AbstractIntegrationTest
 {
     private $testUrl = 'http://example.com/men-accessories';
 

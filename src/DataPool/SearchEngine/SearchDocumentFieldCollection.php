@@ -39,4 +39,13 @@ class SearchDocumentFieldCollection
     {
         return $this->fields;
     }
+
+    /**
+     * @param SearchDocumentField $fieldToCheck
+     * @return bool
+     */
+    public function contains(SearchDocumentField $fieldToCheck)
+    {
+        return in_array($fieldToCheck, $this->fields);
+    }
 }

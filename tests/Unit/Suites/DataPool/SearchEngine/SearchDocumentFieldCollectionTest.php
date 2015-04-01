@@ -35,4 +35,27 @@ class SearchDocumentFieldCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(SearchDocumentFieldCollection::class, $collection);
         $this->assertCount(0, $collection->getFields());
     }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnFalseIfNoMatchingFieldIsPresent()
+    {
+        $collection = SearchDocumentFieldCollection::fromArray([]);
+        $fieldToCheck = SearchDocumentField::fromKeyAndValue('test-field-name', 'test-field-value');
+        $this->assertFalse($collection->contains($fieldToCheck));
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnTrueIfAMatchingFieldIsPresent()
+    {
+
+        $testFieldName = 'test-field-name';
+        $testFieldValue = 'test-field-value';
+        $collection = SearchDocumentFieldCollection::fromArray([$testFieldName => $testFieldValue]);
+        $fieldToCheck = SearchDocumentField::fromKeyAndValue($testFieldName, $testFieldValue);
+        $this->assertTrue($collection->contains($fieldToCheck));
+    }
 }

@@ -52,7 +52,7 @@ class ProductListingRequestHandlerTest extends AbstractRequestHandlerTest
     }
     
     /**
-     * @return ProductDetailSnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @return ProductSnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getKeyGeneratorMock()
     {
@@ -79,8 +79,8 @@ class ProductListingRequestHandlerTest extends AbstractRequestHandlerTest
     {
         $rootSnippetCode = 'root-snippet';
         $allSnippetCodesInPageExceptProductListing = [];
-        $testMatchingProductIds = ['1'];
-        $productInListingSnippetFixture = ['product_in_listing_1' => 'Product in Listing Content'];
+        $testMatchingProductIds = ['3'];
+        $productInListingSnippetFixture = ['product_in_listing_3' => 'Product in Listing Content'];
         $this->setPageMetaInfoFixture($rootSnippetCode, $allSnippetCodesInPageExceptProductListing);
         $this->setMatchingProductsFixture($testMatchingProductIds);
         $this->setProductListSnippetsInKeyValueStorageFixture($rootSnippetCode, $productInListingSnippetFixture);

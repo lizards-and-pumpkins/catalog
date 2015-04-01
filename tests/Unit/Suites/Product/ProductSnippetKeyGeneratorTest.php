@@ -7,14 +7,16 @@ use Brera\Context\Context;
 use Brera\SnippetKeyGenerator;
 
 /**
- * @covers \Brera\Product\ProductDetailSnippetKeyGenerator
+ * @covers \Brera\Product\ProductSnippetKeyGenerator
  */
-class ProductDetailSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
+class ProductSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     private $productId = 10;
     
+    private $testSnippetCode = 'product_detail_view';
+
     /**
-     * @var ProductDetailSnippetKeyGenerator
+     * @var ProductSnippetKeyGenerator
      */
     private $keyGenerator;
 
@@ -28,7 +30,7 @@ class ProductDetailSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->keyGenerator = new ProductDetailSnippetKeyGenerator();
+        $this->keyGenerator = new ProductSnippetKeyGenerator($this->testSnippetCode);
     }
 
     /**
@@ -41,9 +43,18 @@ class ProductDetailSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @expectedException \Brera\InvalidSnippetCodeException
+     */
+    public function itShouldThrowAnExceptionIfTheSnippetCodeIsNotAString()
+    {
+        new ProductSnippetKeyGenerator(123);
+    }
+
+    /**
+     * @test
      * @expectedException \Brera\Product\MissingProductIdException
      */
-    public function itShouldThrowAnExceptionIfNoProductIdIsSet()
+    public function itShouldThrowAnExceptionIfNoProductIdIsSpecified()
     {
         $this->keyGenerator->getKeyForContext($this->getMockContext());
     }
@@ -65,7 +76,7 @@ class ProductDetailSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
     public function itShouldIncludeTheSnippetCodeInTheKey()
     {
         $result = $this->keyGenerator->getKeyForContext($this->getMockContext(), ['product_id' => $this->productId]);
-        $this->assertContains('product_detail_view', $result);
+        $this->assertContains($this->testSnippetCode, $result);
     }
 
     /**

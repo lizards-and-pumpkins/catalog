@@ -30,6 +30,7 @@ use Brera\Http\HttpUrl;
  * @uses   \Brera\Product\ProductListingRouter
  * @uses   \Brera\Product\ProductListingRequestHandler
  * @uses   \Brera\Product\ProductListingRequestHandlerBuilder
+ * @uses   \Brera\Product\ProductSnippetKeyGenerator
  * @uses   \Brera\Http\ResourceNotFoundRouter
  * @uses   \Brera\Http\ResourceNotFoundRequestHandler
  * @uses   \Brera\Http\HttpRouterChain

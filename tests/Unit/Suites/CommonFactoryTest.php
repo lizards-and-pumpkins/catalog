@@ -14,6 +14,7 @@ use Brera\Product\ProductImportDomainEventHandler;
 use Brera\Product\ProductListingSavedDomainEvent;
 use Brera\Product\ProductListingSavedDomainEventHandler;
 use Brera\Product\ProductProjector;
+use Brera\Product\ProductSnippetKeyGenerator;
 use Brera\Product\ProductSourceBuilder;
 use Brera\Queue\Queue;
 
@@ -36,6 +37,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Renderer\BlockRenderer
  * @uses   \Brera\Product\ProductSourceBuilder
  * @uses   \Brera\Product\ProductProjector
+ * @uses   \Brera\Product\ProductSnippetKeyGenerator
  * @uses   \Brera\Product\ProductSnippetRendererCollection
  * @uses   \Brera\Product\ProductImportDomainEvent
  * @uses   \Brera\Product\ProductImportDomainEventHandler
@@ -325,5 +327,14 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createHttpRouterChain();
         $this->assertInstanceOf(HttpRouterChain::class, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnAProductSnippetKeyGeneratorInstance()
+    {
+        $result = $this->commonFactory->createProductInListingSnippetKeyGenerator();
+        $this->assertInstanceOf(ProductSnippetKeyGenerator::class, $result);
     }
 }

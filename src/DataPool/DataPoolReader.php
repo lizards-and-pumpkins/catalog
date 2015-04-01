@@ -157,9 +157,11 @@ class DataPoolReader
 
     /**
      * @param string[] $queryCriteria
+     * @param Context $context
+     * @return \string[]
      */
-    public function getProductIdsMatchingCriteria(array $queryCriteria)
+    public function getProductIdsMatchingCriteria(array $queryCriteria, Context $context)
     {
-        return $this->searchEngine->queryGivenFields($queryCriteria);
+        return $this->searchEngine->queryGivenFields($queryCriteria, $context);
     }
 }

@@ -27,7 +27,8 @@ interface SearchEngine
 
     /**
      * @param string[] $queryCriteria
-     * @return string[]
+     * @param Context $context
+     * @return \string[]
      */
-    public function queryGivenFields(array $queryCriteria);
+    public function queryGivenFields(array $queryCriteria, Context $context);
 }

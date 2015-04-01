@@ -20,7 +20,7 @@ use Brera\Product\ProductListingSavedDomainEventHandler;
 use Brera\Product\ProductListingSnippetRenderer;
 use Brera\Product\ProductListingSourceBuilder;
 use Brera\Product\ProductSearchDocumentBuilder;
-use Brera\Product\ProductDetailSnippetKeyGenerator;
+use Brera\Product\ProductSnippetKeyGenerator;
 use Brera\Product\ProductSnippetRendererCollection;
 use Brera\Product\ProductSourceBuilder;
 use Brera\DataPool\KeyValue\KeyValueStore;
@@ -304,7 +304,7 @@ class CommonFactory implements Factory, DomainEventFactory
      */
     public function createProductDetailViewSnippetKeyGenerator()
     {
-        return new ProductDetailSnippetKeyGenerator();
+        return new ProductSnippetKeyGenerator('product_detail_view');
     }
 
     /**
@@ -315,7 +315,7 @@ class CommonFactory implements Factory, DomainEventFactory
     {
         return new ProductSourceInListingSnippetRenderer(
             $this->getMasterFactory()->createSnippetResultList(),
-            $this->getMasterFactory()->createProductInContextInListingSnippetRenderer()
+            $this->getMasterFactory()->createProductInListingInContextSnippetRenderer()
         );
     }
 
@@ -323,7 +323,7 @@ class CommonFactory implements Factory, DomainEventFactory
      * @return ProductInListingInContextSnippetRenderer
      * @todo: move to catalog factory
      */
-    public function createProductInContextInListingSnippetRenderer()
+    public function createProductInListingInContextSnippetRenderer()
     {
         return new ProductInListingInContextSnippetRenderer(
             $this->getMasterFactory()->createSnippetResultList(),
@@ -349,7 +349,7 @@ class CommonFactory implements Factory, DomainEventFactory
      */
     public function createProductInListingSnippetKeyGenerator()
     {
-        return new GenericSnippetKeyGenerator('product_in_listing', ['website', 'language']);
+        return new ProductSnippetKeyGenerator('product_in_listing');
     }
 
     /**

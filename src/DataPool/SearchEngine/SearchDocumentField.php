@@ -34,7 +34,7 @@ class SearchDocumentField
     {
         if (!is_string($key) || !strlen($key) || !ctype_alpha($key{0})) {
             throw new InvalidSearchDocumentFieldKeyException(
-                'Search document filed key must be a string led by a letter'
+                'Search document field key must be a string led by a letter'
             );
         }
 
