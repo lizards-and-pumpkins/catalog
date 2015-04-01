@@ -10,11 +10,21 @@ class ImageMagickImageProcessor implements ImageProcessor
     private $processor;
 
     /**
+     * @var string
+     */
+    private $image;
+
+    /**
      * @param string $imagePath
      */
-    private function __construct($imagePath)
+    private function __construct($imagePath = null)
     {
-        $this->processor = new \Imagick($imagePath);
+        $this->image = $imagePath;
+    }
+
+    private function reset()
+    {
+        $this->processor = null;
     }
 
     /**
@@ -30,6 +40,11 @@ class ImageMagickImageProcessor implements ImageProcessor
         return new self($imagePath);
     }
 
+    public static function fromNothing()
+    {
+        return new self();
+    }
+
     /**
      * @param string $path
      * @return bool
@@ -39,7 +54,7 @@ class ImageMagickImageProcessor implements ImageProcessor
         $this->validatePath($path);
 
         try {
-            return $this->processor->writeImage($path);
+            return $this->getProcessor()->writeImage($path);
         } catch (\ImagickException $e) {
             throw new ImageSaveFailedException($e->getMessage());
         }
@@ -51,7 +66,7 @@ class ImageMagickImageProcessor implements ImageProcessor
      */
     public function resizeToWidth($widthToResize)
     {
-        $this->processor->resizeImage($widthToResize, false, \Imagick::FILTER_LANCZOS, 1);
+        $this->getProcessor()->resizeImage($widthToResize, false, \Imagick::FILTER_LANCZOS, 1);
     }
 
     /**
@@ -59,7 +74,7 @@ class ImageMagickImageProcessor implements ImageProcessor
      */
     public function resizeToHeight($heightToResize)
     {
-        $this->processor->resizeImage(false, $heightToResize, \Imagick::FILTER_LANCZOS, 1);
+        $this->getProcessor()->resizeImage(false, $heightToResize, \Imagick::FILTER_LANCZOS, 1);
     }
 
     /**
@@ -83,7 +98,7 @@ class ImageMagickImageProcessor implements ImageProcessor
      */
     public function resize($widthToResize, $heightToResize)
     {
-        $this->processor->resizeImage($widthToResize, $heightToResize, \Imagick::FILTER_LANCZOS, 1);
+        $this->getProcessor()->resizeImage($widthToResize, $heightToResize, \Imagick::FILTER_LANCZOS, 1);
     }
 
     /**
@@ -92,6 +107,37 @@ class ImageMagickImageProcessor implements ImageProcessor
      */
     public function resizeToBestFit($widthToResize, $heightToResize)
     {
-        $this->processor->resizeImage($widthToResize, $heightToResize, \Imagick::FILTER_LANCZOS, 1, true);
+        $this->getProcessor()->resizeImage($widthToResize, $heightToResize, \Imagick::FILTER_LANCZOS, 1, true);
+    }
+
+    /**
+     * @return \Imagick
+     */
+    private function getProcessor()
+    {
+        if (!($this->processor instanceof \Imagick)) {
+            $this->processor = new \Imagick($this->image);
+        }
+
+        return $this->processor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+
+    /**
+     * @param string $imagePath
+     * @return void
+     */
+    public function setImage($imagePath)
+    {
+        $this->image = $imagePath;
+        $this->reset();
     }
 }

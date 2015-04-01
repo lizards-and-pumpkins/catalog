@@ -5,6 +5,17 @@ namespace Brera\ImageProcessor;
 interface ImageProcessor
 {
     /**
+     * @param string $imagePath
+     * @return void
+     */
+    public function setImage($imagePath);
+
+    /**
+     * @return string
+     */
+    public function getImage();
+
+    /**
      * @param string $filename
      * @return boolean
      */

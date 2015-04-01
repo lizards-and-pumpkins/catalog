@@ -15,9 +15,10 @@ abstract class ImageProcessorTest extends \PHPUnit_Framework_TestCase
     private $imageFileNameForSaving;
 
     /**
+     * @param $imagePath
      * @return string
      */
-    abstract protected function getImageProcessorClassName();
+    abstract protected function getImageProcessor($imagePath);
 
     /**
      * @return ImageProcessor
@@ -29,8 +30,7 @@ abstract class ImageProcessorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $imageProcessorClassName = $this->getImageProcessorClassName();
-        $this->processor = $imageProcessorClassName::fromFile($this->getTestImage());
+        $this->processor = $this->getImageProcessor($this->getTestImage());
         $this->imageFileNameForSaving = tempnam(sys_get_temp_dir(), 'image_processor_test_');
     }
 
@@ -44,12 +44,18 @@ abstract class ImageProcessorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Brera\ImageProcessor\InvalidImageException
      */
-    public function itShouldThrowAnExceptionIfImageIsNotReadable()
+    public function itShouldWorkAfterSetFilename()
     {
-        $imageProcessorClassName = $this->getImageProcessorClassName();
-        $imageProcessorClassName::fromFile('some/path/non-existing-image.jpg');
+        $this->getProcessor()->setImage('');
+        $this->assertEmpty($this->getProcessor()->getImage());
+
+        $this->getProcessor()->setImage($this->getTestImage());
+        $this->assertEquals($this->getProcessor()->getImage(), $this->getTestImage());
+
+        $this->getProcessor()->saveAsFile($this->imageFileNameForSaving);
+        $this->assertTrue(is_file($this->imageFileNameForSaving));
+        $this->assertEquals(getimagesize($this->imageFileNameForSaving), getimagesize($this->getTestImage()));
     }
 
     /**
