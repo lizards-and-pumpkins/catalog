@@ -56,7 +56,7 @@ class ProductListingRequestHandler extends AbstractHttpRequestHandler
         $this->logger = $logger;
     }
 
-    final protected function mergePageSpecificAdditionalSnippetsHook()
+    final protected function addPageSpecificAdditionalSnippetsHook()
     {
         $productIds = $this->dataPoolReader->getProductIdsMatchingCriteria($this->selectionCriteria, $this->context);
         if ($productIds) {
@@ -71,12 +71,10 @@ class ProductListingRequestHandler extends AbstractHttpRequestHandler
     {
         $productInListingSnippetKeys = $this->getProductInListingSnippetKeysFromProductIds($productIds);
         
-        $snippetKeysToContentMap = $this->dataPoolReader->getSnippets($productInListingSnippetKeys);
+        $snippetKeyToContentMap = $this->dataPoolReader->getSnippets($productInListingSnippetKeys);
         $snippetCodeToKeyMap = $this->getProductInListingSnippetCodeToKeyMap($productInListingSnippetKeys);
 
-        // todo: refactor into one method with 2 or 3 arguments
-        $this->mergeSnippetKeyToContentMap($snippetKeysToContentMap);
-        $this->mergeSnippetCodeToKeyMap($snippetCodeToKeyMap);
+        $this->addSnippetsToPage($snippetCodeToKeyMap, $snippetKeyToContentMap);
     }
 
     /**

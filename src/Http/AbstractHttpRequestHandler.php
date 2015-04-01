@@ -21,12 +21,12 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
     /**
      * @var string[]
      */
-    private $snippetCodesToKeyMap;
+    private $snippetCodesToKeyMap = [];
 
     /**
      * @var string[]
      */
-    private $snippetKeyToContentMap;
+    private $snippetKeyToContentMap = [];
 
     /**
      * @return bool
@@ -48,7 +48,7 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
     {
         $this->loadPageMetaInfo();
         $this->loadSnippets();
-        $this->mergePageSpecificAdditionalSnippetsHook();
+        $this->addPageSpecificAdditionalSnippetsHook();
         $this->logMissingSnippetCodes();
 
         list($rootSnippet, $childSnippets) = $this->separateRootAndChildSnippets();
@@ -61,25 +61,19 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
         return new Page($content);
     }
 
-    protected function mergePageSpecificAdditionalSnippetsHook()
+    protected function addPageSpecificAdditionalSnippetsHook()
     {
         // Intentionally left empty as a hook method for concrete implementations
     }
 
     /**
+     * @param string[] $snippetCodeToKeyMap
      * @param string[] $snippetKeyToContentMap
      */
-    final protected function mergeSnippetKeyToContentMap(array $snippetKeyToContentMap)
-    {
-        $this->snippetKeyToContentMap = array_merge($this->snippetKeyToContentMap, $snippetKeyToContentMap);
-    }
-
-    /**
-     * @param string[] $snippetCodeToKeyMap
-     */
-    final protected function mergeSnippetCodeToKeyMap(array $snippetCodeToKeyMap)
+    final protected function addSnippetsToPage(array $snippetCodeToKeyMap, array $snippetKeyToContentMap)
     {
         $this->snippetCodesToKeyMap = array_merge($this->snippetCodesToKeyMap, $snippetCodeToKeyMap);
+        $this->snippetKeyToContentMap = array_merge($this->snippetKeyToContentMap, $snippetKeyToContentMap);
     }
 
     /**
