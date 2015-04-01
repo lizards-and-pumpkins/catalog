@@ -8,13 +8,19 @@ class ImageProcessConfiguration implements \IteratorAggregate
      * @var ImageProcessCommand[]
      */
     private $configurations;
+    /**
+     * @var string
+     */
+    private $targetDirectory;
 
     /**
      * @param ImageProcessCommand[] $configurations
+     * @param string $targetDirectory
      */
-    public function __construct(array $configurations)
+    public function __construct(array $configurations, $targetDirectory)
     {
         $this->configurations = $configurations;
+        $this->targetDirectory = $targetDirectory;
     }
 
     /**
@@ -23,5 +29,13 @@ class ImageProcessConfiguration implements \IteratorAggregate
     public function getIterator()
     {
         return new \ArrayIterator($this->configurations);
+    }
+
+    /**
+     * @return string
+     */
+    public function getTargetDirectory()
+    {
+        return $this->targetDirectory;
     }
 }

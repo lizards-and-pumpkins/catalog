@@ -16,13 +16,22 @@ class ImageProcessConfigurationTest extends \PHPUnit_Framework_TestCase
      */
     private $commandStubs = array();
 
+    /**
+     * @var string
+     */
+    private $targetDirectory;
+
     protected function setUp()
     {
+        $this->targetDirectory = '/tmp';
         $stubCommand = $this->getMock(ImageProcessCommand::class, [], [], '', false);
         $stubCommand2 = $this->getMock(ImageProcessCommand::class, [], [], '', false);
         array_push($this->commandStubs, $stubCommand);
         array_push($this->commandStubs, $stubCommand2);
-        $this->configuration = new ImageProcessConfiguration(array($stubCommand, $stubCommand2));
+        $this->configuration = new ImageProcessConfiguration(
+            array($stubCommand, $stubCommand2),
+            $this->targetDirectory
+        );
     }
 
     /**
@@ -31,6 +40,14 @@ class ImageProcessConfigurationTest extends \PHPUnit_Framework_TestCase
     public function itShouldReturnImageProcessCommands()
     {
         $this->assertInstanceOf(\Traversable::class, $this->configuration);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnTargetDirectory()
+    {
+        $this->assertEquals($this->targetDirectory, $this->configuration->getTargetDirectory());
     }
 
     /**
