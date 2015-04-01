@@ -68,7 +68,7 @@ class ProductDetailViewRequestHandler extends AbstractHttpRequestHandler
     final protected function createPageMetaInfoInstance($snippetJson)
     {
         $metaInfo = ProductDetailPageMetaInfoSnippetContent::fromJson($snippetJson);
-        $this->productId = $metaInfo->getSourceId();
+        $this->productId = $metaInfo->getProductId();
         return $metaInfo;
     }
 

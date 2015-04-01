@@ -21,7 +21,7 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
     /**
      * @var string[]
      */
-    private $snippetCodesToKeyMap = [];
+    private $snippetCodeToKeyMap = [];
 
     /**
      * @var string[]
@@ -61,10 +61,12 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
         return new Page($content);
     }
 
+    // @codeCoverageIgnoreStart
     protected function addPageSpecificAdditionalSnippetsHook()
     {
         // Intentionally left empty as a hook method for concrete implementations
     }
+    // @codeCoverageIgnoreEnd
 
     /**
      * @param string[] $snippetCodeToKeyMap
@@ -72,7 +74,7 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
      */
     final protected function addSnippetsToPage(array $snippetCodeToKeyMap, array $snippetKeyToContentMap)
     {
-        $this->snippetCodesToKeyMap = array_merge($this->snippetCodesToKeyMap, $snippetCodeToKeyMap);
+        $this->snippetCodeToKeyMap = array_merge($this->snippetCodeToKeyMap, $snippetCodeToKeyMap);
         $this->snippetKeyToContentMap = array_merge($this->snippetKeyToContentMap, $snippetKeyToContentMap);
     }
 
@@ -125,7 +127,7 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
 
         // todo only add snippets where we can generate a valid key
         $snippetCodes = $metaInfo->getPageSnippetCodes();
-        $this->snippetCodesToKeyMap = array_combine(
+        $this->snippetCodeToKeyMap = array_combine(
             $snippetCodes,
             array_map([$this, 'getSnippetKeyDefaultingToEmpty'], $snippetCodes)
         );
@@ -149,7 +151,7 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
      */
     private function getSnippetKeysInContext()
     {
-        return array_values($this->removeCodesThatCouldNotBeMappedToAKey($this->snippetCodesToKeyMap));
+        return array_values($this->removeCodesThatCouldNotBeMappedToAKey($this->snippetCodeToKeyMap));
     }
 
     /**
@@ -259,9 +261,9 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
      */
     private function getLoadedChildSnippetCodes()
     {
-        return array_filter(array_keys($this->snippetCodesToKeyMap), function ($code) {
+        return array_filter(array_keys($this->snippetCodeToKeyMap), function ($code) {
             return $code !== $this->rootSnippetCode &&
-                   array_key_exists($this->snippetCodesToKeyMap[$code], $this->snippetKeyToContentMap);
+                   array_key_exists($this->snippetCodeToKeyMap[$code], $this->snippetKeyToContentMap);
         });
     }
 
@@ -300,7 +302,7 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
     private function getMissingSnippetCodes()
     {
         $missingSnippetCodes = [];
-        foreach ($this->snippetCodesToKeyMap as $code => $key) {
+        foreach ($this->snippetCodeToKeyMap as $code => $key) {
             if (!array_key_exists($key, $this->snippetKeyToContentMap)) {
                 $missingSnippetCodes[] = $code;
             }

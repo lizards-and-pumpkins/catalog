@@ -2,74 +2,122 @@
 
 namespace Brera\Product;
 
-use Brera\Http\AbstractRequestHandlerTest;
-use Brera\SnippetKeyGenerator;
+use Brera\Context\Context;
+use Brera\DataPool\DataPoolReader;
+use Brera\Logger;
+use Brera\Product\Spies\ProductListingRequestHandlerSpy;
+use Brera\SnippetKeyGeneratorLocator;
 
 /**
  * @covers \Brera\Product\ProductListingRequestHandler
- * @covers \Brera\Http\AbstractHttpRequestHandler
- * @uses   \Brera\Http\HttpUrl
- * @uses   \Brera\Page
- * @uses   \Brera\SnippetKeyGeneratorLocator
- * @uses   \Brera\Product\ProductListingMetaInfoSnippetContent
- * @uses   \Brera\GenericSnippetKeyGenerator
- * @uses   \Brera\MissingSnippetCodeMessage
+ * @uses \Brera\Http\AbstractHttpRequestHandler
+ * @uses \Brera\Product\ProductListingMetaInfoSnippetContent
  */
-class ProductListingRequestHandlerTest extends AbstractRequestHandlerTest
+class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var string
+     */
+    private $urlPathFixture = 'dummy-url-path';
+
+    /**
+     * @var string
+     */
+    private $rootSnippetCode = 'root-snippet-code';
+    
     /**
      * @var string[]
      */
     private $testSelectionCriteria = ['test-attribute' => 'test-value'];
 
     /**
-     * @return ProductListingRequestHandler
+     * @var ProductListingRequestHandlerSpy
      */
-    protected function createRequestHandlerInstance()
+    private $requestHandlerSpy;
+
+    /**
+     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubContext;
+
+    /**
+     * @var SnippetKeyGeneratorLocator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubSnippetKeyGeneratorLocator;
+
+    /**
+     * @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockDataPoolReader;
+
+    /**
+     * @var Logger|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubLogger;
+
+    /**
+     * @param string[] $testMatchingProductIds
+     */
+    private function setMatchingProductsFixture(array $testMatchingProductIds)
     {
-        return new ProductListingRequestHandler(
-            $this->getUrlPathKeyFixture(),
-            $this->getStubContext(),
-            $this->getSnippetKeyGeneratorLocator(),
-            $this->getMockDataPoolReader(),
-            $this->getStubLogger()
-        );
+        $this->mockDataPoolReader->expects($this->once())->method('getProductIdsMatchingCriteria')
+            ->with($this->testSelectionCriteria)->willReturn($testMatchingProductIds);
     }
 
     /**
-     * @param string $rootSnippetCode
-     * @param string[] $allSnippetCodes
-     * @return mixed[]
+     * @param string[] $productInListingSnippetFixture
      */
-    protected function buildStubPageMetaInfo($rootSnippetCode, array $allSnippetCodes)
+    private function setProductListSnippetsInKeyValueStorageFixture(array $productInListingSnippetFixture)
+    {
+        $this->mockDataPoolReader->expects($this->once())->method('getSnippets')
+            ->willReturn($productInListingSnippetFixture);
+    }
+
+    /**
+     * @return string
+     */
+    private function getStubPageMetaInfoJson()
     {
         $pageMetaInfo = [
             ProductListingMetaInfoSnippetContent::KEY_CRITERIA => $this->testSelectionCriteria,
-            ProductDetailPageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE => $rootSnippetCode,
-            ProductDetailPageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => $allSnippetCodes
+            ProductDetailPageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE => $this->rootSnippetCode,
+            ProductDetailPageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => []
         ];
-        return $pageMetaInfo;
-    }
-    
-    /**
-     * @return ProductSnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getKeyGeneratorMock()
-    {
-        return $this->getMock(SnippetKeyGenerator::class);
+        return json_encode($pageMetaInfo);
     }
 
     /**
-     * @test
+     * @return SnippetKeyGeneratorLocator|\PHPUnit_Framework_MockObject_MockObject
      */
-    public function itShouldLoadThePageCriteriaProductsFromTheSearchEngine()
+    private function createKeyGeneratorLocatorFake()
     {
-        $this->setDataPoolFixture('root-snippet', 'no content', []);
-        
-        $this->getMockDataPoolReader()->expects($this->once())->method('getProductIdsMatchingCriteria')
-            ->with($this->testSelectionCriteria)->willReturn([1]);
-        
-        $this->getRequestHandlerUnderTest()->process();
+        $fixedSnippetKeyGeneratorFactory = function ($snippetCode) {
+            $stubSnippetKeyGenerator = $this->getMock(ProductSnippetKeyGenerator::class, [], [], '', false);
+            $stubSnippetKeyGenerator->expects($this->any())->method('getKeyForContext')
+                ->willReturnCallback(function (Context $context, array $data = []) use ($snippetCode) {
+                    return $snippetCode . '_' . reset($data);
+                });
+            return $stubSnippetKeyGenerator;
+        };
+        $stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
+        $stubSnippetKeyGeneratorLocator->expects($this->any())->method('getKeyGeneratorForSnippetCode')
+            ->willReturnCallback($fixedSnippetKeyGeneratorFactory);
+        return $stubSnippetKeyGeneratorLocator;
+    }
+
+    protected function setUp()
+    {
+        $this->stubContext = $this->getMock(Context::class);
+        $this->stubSnippetKeyGeneratorLocator = $this->createKeyGeneratorLocatorFake();
+        $this->mockDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
+        $this->stubLogger = $this->getMock(Logger::class);
+        $this->requestHandlerSpy = new ProductListingRequestHandlerSpy(
+            $this->urlPathFixture,
+            $this->stubContext,
+            $this->stubSnippetKeyGeneratorLocator,
+            $this->mockDataPoolReader,
+            $this->stubLogger
+        );
     }
 
     /**
@@ -77,15 +125,18 @@ class ProductListingRequestHandlerTest extends AbstractRequestHandlerTest
      */
     public function itShouldLoadTheProductSnippetsFromTheQueryResult()
     {
-        $rootSnippetCode = 'root-snippet';
-        $allSnippetCodesInPageExceptProductListing = [];
-        $testMatchingProductIds = ['3'];
-        $productInListingSnippetFixture = ['product_in_listing_3' => 'Product in Listing Content'];
-        $this->setPageMetaInfoFixture($rootSnippetCode, $allSnippetCodesInPageExceptProductListing);
-        $this->setMatchingProductsFixture($testMatchingProductIds);
-        $this->setProductListSnippetsInKeyValueStorageFixture($rootSnippetCode, $productInListingSnippetFixture);
+        $testProductId = 'id55';
+        $expectedSnippetKey = ProductInListingInContextSnippetRenderer::CODE . '_' . $testProductId;
+
+        $this->requestHandlerSpy->testCreatePageMetaInfoInstance($this->getStubPageMetaInfoJson());
+        $this->setMatchingProductsFixture([$testProductId]);
+
+        $this->mockDataPoolReader->expects($this->once())->method('getSnippets')
+            ->with([$expectedSnippetKey])
+            ->willReturn(['dummy_id55' => 'Dummy Content']);
+
+        $this->requestHandlerSpy->testAddPageSpecificAdditionalSnippetsHook();
         
-        $this->getRequestHandlerUnderTest()->process();
     }
 
     /**
@@ -93,8 +144,6 @@ class ProductListingRequestHandlerTest extends AbstractRequestHandlerTest
      */
     public function itShouldMapTheProductInListSnippetKeysToIncrementingSnippetCodes()
     {
-        $rootSnippetCode = 'root-snippet';
-        $allSnippetCodesInPageExceptProductListing = [];
         $testMatchingProductIds = ['id1', 'id2', 'id3'];
         $productInListingSnippetFixture = [
             'product_in_listing_id1' => 'Product 1 in Listing Snippet',
@@ -102,40 +151,93 @@ class ProductListingRequestHandlerTest extends AbstractRequestHandlerTest
             'product_in_listing_id3' => 'Product 3 in Listing Snippet',
         ];
         $expectedSnippetCodeToKeyMap = [
-            $rootSnippetCode => $rootSnippetCode,
             'product_1' => 'product_in_listing_id1',
             'product_2' => 'product_in_listing_id2',
             'product_3' => 'product_in_listing_id3',
         ];
-        $this->setPageMetaInfoFixture($rootSnippetCode, $allSnippetCodesInPageExceptProductListing);
+
+        $this->requestHandlerSpy->testCreatePageMetaInfoInstance($this->getStubPageMetaInfoJson());
+        
         $this->setMatchingProductsFixture($testMatchingProductIds);
-        $this->setProductListSnippetsInKeyValueStorageFixture($rootSnippetCode, $productInListingSnippetFixture);
+        $this->mockDataPoolReader->expects($this->once())->method('getSnippets')
+            ->with(array_keys($productInListingSnippetFixture))
+            ->willReturn($productInListingSnippetFixture);
 
-        $requestHandler = $this->getRequestHandlerUnderTest();
-        $requestHandler->process();
 
-        $this->assertAttributeEquals($expectedSnippetCodeToKeyMap, 'snippetCodesToKeyMap', $requestHandler);
+        $this->requestHandlerSpy->testAddPageSpecificAdditionalSnippetsHook();
+
+        $this->assertAttributeEquals($expectedSnippetCodeToKeyMap, 'snippetCodeToKeyMap', $this->requestHandlerSpy);
     }
 
     /**
-     * @param $testMatchingProductIds
+     * @test
      */
-    private function setMatchingProductsFixture($testMatchingProductIds)
+    public function itShouldReturnTheInjectedPageMetaInfoSnippetKey()
     {
-        $this->getMockDataPoolReader()->expects($this->once())->method('getProductIdsMatchingCriteria')
-            ->with($this->testSelectionCriteria)->willReturn($testMatchingProductIds);
+        $this->assertSame($this->urlPathFixture, $this->requestHandlerSpy->testGetPageMetaInfoSnippetKey());
     }
 
     /**
-     * @param $rootSnippetCode
-     * @param $productInListingSnippetFixture
+     * @test
      */
-    private function setProductListSnippetsInKeyValueStorageFixture($rootSnippetCode, $productInListingSnippetFixture)
+    public function itShouldDelegateToASnippetKeyGeneratorToFetchASnippetKey()
     {
-        $this->getMockDataPoolReader()->expects($this->exactly(2))->method('getSnippets')
-            ->willReturnMap([
-                [[$rootSnippetCode], [$rootSnippetCode => 'dummy root snippet content']],
-                [array_keys($productInListingSnippetFixture), $productInListingSnippetFixture],
-            ]);
+        $testSnippetCode = 'test-snippet-code';
+        $expectedSnippetKeyFixture = 'test-snippet-key';
+        
+        $stubKeyGenerator = $this->getMock(ProductSnippetKeyGenerator::class, [], [], '', false);
+        $stubKeyGenerator->expects($this->once())->method('getKeyForContext')
+            ->with($this->isInstanceOf(Context::class), $this->arrayHasKey('selection_criteria'))
+            ->willReturn($expectedSnippetKeyFixture);
+        $stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
+        $stubSnippetKeyGeneratorLocator->expects($this->once())->method('getKeyGeneratorForSnippetCode')
+            ->with($testSnippetCode)->willReturn($stubKeyGenerator);
+        
+        $requestHandlerSpy = new ProductListingRequestHandlerSpy(
+            $this->urlPathFixture,
+            $this->stubContext,
+            $stubSnippetKeyGeneratorLocator,
+            $this->mockDataPoolReader,
+            $this->stubLogger
+        );
+        $requestHandlerSpy->testCreatePageMetaInfoInstance($this->getStubPageMetaInfoJson());
+
+        $result = $requestHandlerSpy->testGetSnippetKey($testSnippetCode);
+        $this->assertSame($expectedSnippetKeyFixture, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldIncludeSnippetCodeSelectionCriteriaAndContextIdInErrorMessage()
+    {
+        $snippetKey = 'test-snippet-key';
+        $criteria = implode('|', $this->testSelectionCriteria);
+        $contextId = 'test-context-id';
+
+        $this->requestHandlerSpy->testCreatePageMetaInfoInstance($this->getStubPageMetaInfoJson());
+
+        $this->stubContext->expects($this->any())->method('getId')->willReturn($contextId);
+
+        $result = $this->requestHandlerSpy->testFormatSnippetNotAvailableErrorMessage($snippetKey);
+        $this->assertContains($snippetKey, $result);
+        $this->assertContains($criteria, $result);
+        $this->assertContains($contextId, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnTheInjectedDataPoolReader()
+    {
+        $this->assertSame($this->mockDataPoolReader, $this->requestHandlerSpy->testGetDataPoolReader());
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnTheInjectedLogger()
+    {
+        $this->assertSame($this->stubLogger, $this->requestHandlerSpy->testGetLogger());
     }
 }

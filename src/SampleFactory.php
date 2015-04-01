@@ -15,7 +15,11 @@ class SampleFactory implements Factory
      */
     public function createKeyValueStore()
     {
-        return new FileKeyValueStore(sys_get_temp_dir());
+        $storagePath = '/tmp/brera';
+        if (! file_exists($storagePath)) {
+            mkdir($storagePath, 0777, true);
+        }
+        return new FileKeyValueStore($storagePath);
     }
 
     /**

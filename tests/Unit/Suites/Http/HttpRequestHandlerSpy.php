@@ -3,10 +3,10 @@
 
 namespace Brera\Http;
 
-
 use Brera\DataPool\DataPoolReader;
 use Brera\Logger;
 use Brera\PageMetaInfoSnippetContent;
+use Brera\SnippetKeyGenerator;
 
 class HttpRequestHandlerSpy extends AbstractHttpRequestHandler
 {
@@ -14,37 +14,71 @@ class HttpRequestHandlerSpy extends AbstractHttpRequestHandler
      * @var DataPoolReader
      */
     private $dataPoolReader;
-    
+
     /**
      * @var Logger
      */
     private $logger;
-    
+
     public $hookWasCalled = false;
-    
+
     /**
      * @var PageMetaInfoSnippetContent
      */
     private $pageMetaInfoStub;
+    /**
+     * @var
+     */
+    private $pageMetaInfoKey;
 
-    public function __construct(DataPoolReader $dataPoolReader, Logger $logger, PageMetaInfoSnippetContent $meta)
-    {
+    /**
+     * @var \Exception
+     */
+    private $snippetKeyLookupException;
+
+    /**
+     * @param DataPoolReader $dataPoolReader
+     * @param Logger $logger
+     * @param PageMetaInfoSnippetContent $pageMetaInfo
+     * @param string $pageMetaInfoKey
+     */
+    public function __construct(
+        DataPoolReader $dataPoolReader,
+        Logger $logger,
+        PageMetaInfoSnippetContent $pageMetaInfo,
+        $pageMetaInfoKey
+    ) {
         $this->dataPoolReader = $dataPoolReader;
         $this->logger = $logger;
-        $this->pageMetaInfoStub = $meta;
+        $this->pageMetaInfoStub = $pageMetaInfo;
+        $this->pageMetaInfoKey = $pageMetaInfoKey;
     }
 
     protected function addPageSpecificAdditionalSnippetsHook()
     {
         $this->hookWasCalled = true;
     }
-    
+
+    /**
+     * @param array $snippetCodeToKeyMap
+     * @param array $snippetKeyToContentMap
+     */
+    public function testAddSnippetsToPage(array $snippetCodeToKeyMap, array $snippetKeyToContentMap)
+    {
+        $this->addSnippetsToPage($snippetCodeToKeyMap, $snippetKeyToContentMap);
+    }
+
+    public function setThrowExceptionDuringSnippetKeyLookup(\Exception $exception)
+    {
+        $this->snippetKeyLookupException = $exception;
+    }
+
     /**
      * @return string
      */
     protected function getPageMetaInfoSnippetKey()
     {
-        return 'dummy';
+        return $this->pageMetaInfoKey;
     }
 
     /**
@@ -59,10 +93,14 @@ class HttpRequestHandlerSpy extends AbstractHttpRequestHandler
     /**
      * @param string $snippetCode
      * @return string
+     * @throws \Exception
      */
     protected function getSnippetKey($snippetCode)
     {
-        return (string) $snippetCode;
+        if ($this->snippetKeyLookupException) {
+            throw $this->snippetKeyLookupException;
+        }
+        return (string)$snippetCode;
     }
 
     /**

@@ -8,7 +8,7 @@ use Brera\Context\Context;
 /**
  * @covers \Brera\Http\ResourceNotFoundRouter
  */
-class ResoruceNotFoundRouterTest extends \PHPUnit_Framework_TestCase
+class ResourceNotFoundRouterTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ResourceNotFoundRouter

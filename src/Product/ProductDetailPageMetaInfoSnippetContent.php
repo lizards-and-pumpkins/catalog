@@ -147,7 +147,7 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
     /**
      * @return string
      */
-    public function getSourceId()
+    public function getProductId()
     {
         return $this->productId;
     }

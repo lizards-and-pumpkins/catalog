@@ -78,6 +78,32 @@ class ProductListingRequestHandler extends AbstractHttpRequestHandler
     }
 
     /**
+     * @param string[] $productIds
+     * @return string[]
+     */
+    private function getProductInListingSnippetKeysFromProductIds(array $productIds)
+    {
+        $snippetCode = ProductInListingInContextSnippetRenderer::CODE;
+        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
+        return array_map(function ($productId) use ($keyGenerator) {
+            return $keyGenerator->getKeyForContext($this->context, ['product_id' => $productId]);
+        }, $productIds);
+    }
+
+    /**
+     * @param string[] $productInListingSnippetKeys
+     * @return string[]
+     */
+    private function getProductInListingSnippetCodeToKeyMap($productInListingSnippetKeys)
+    {
+        return array_reduce($productInListingSnippetKeys, function (array $acc, $key) {
+            $snippetCode = sprintf('product_%d', count($acc) + 1);
+            $acc[$snippetCode] = $key;
+            return $acc;
+        }, []);
+    }
+
+    /**
      * @return string
      */
     final protected function getPageMetaInfoSnippetKey()
@@ -135,31 +161,5 @@ class ProductListingRequestHandler extends AbstractHttpRequestHandler
     final protected function getLogger()
     {
         return $this->logger;
-    }
-
-    /**
-     * @param string[] $productIds
-     * @return string[]
-     */
-    private function getProductInListingSnippetKeysFromProductIds(array $productIds)
-    {
-        $snippetCode = ProductInListingInContextSnippetRenderer::CODE;
-        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
-        return array_map(function ($productId) use ($keyGenerator) {
-            return $keyGenerator->getKeyForContext($this->context, ['product_id' => $productId]);
-        }, $productIds);
-    }
-
-    /**
-     * @param string[] $productInListingSnippetKeys
-     * @return string[]
-     */
-    private function getProductInListingSnippetCodeToKeyMap($productInListingSnippetKeys)
-    {
-        return array_reduce($productInListingSnippetKeys, function (array $acc, $key) {
-            $snippetCode = sprintf('product_%d', count($acc) + 1);
-            $acc[$snippetCode] = $key;
-            return $acc;
-        }, []);
     }
 }

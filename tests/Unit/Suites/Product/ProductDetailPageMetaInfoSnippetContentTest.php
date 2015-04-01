@@ -137,7 +137,7 @@ class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_Tes
      */
     public function itShouldReturnTheSourceId()
     {
-        $this->assertEquals($this->sourceId, $this->pageMetaInfo->getSourceId());
+        $this->assertEquals($this->sourceId, $this->pageMetaInfo->getProductId());
     }
 
     /**
