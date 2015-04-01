@@ -238,7 +238,10 @@ class CommonFactory implements Factory, DomainEventFactory
      */
     public function createProductListingSnippetKeyGenerator()
     {
-        return new GenericSnippetKeyGenerator('product_listing', ['website', 'language', 'version']);
+        return new GenericSnippetKeyGenerator(
+            ProductListingSnippetRenderer::CODE,
+            ['website', 'language', 'version']
+        );
     }
 
     /**
@@ -349,7 +352,9 @@ class CommonFactory implements Factory, DomainEventFactory
      */
     public function createProductInListingSnippetKeyGenerator()
     {
-        return new ProductSnippetKeyGenerator('product_in_listing');
+        return new ProductSnippetKeyGenerator(
+            ProductInListingInContextSnippetRenderer::CODE
+        );
     }
 
     /**

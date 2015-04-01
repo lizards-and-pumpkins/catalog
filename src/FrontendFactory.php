@@ -5,10 +5,13 @@ namespace Brera;
 use Brera\Api\ApiRequestHandlerChain;
 use Brera\Api\ApiRouter;
 use Brera\Product\CatalogImportApiRequestHandler;
+use Brera\Product\ProductDetailViewInContextSnippetRenderer;
 use Brera\Product\ProductDetailViewRequestHandlerBuilder;
 use Brera\Product\ProductDetailViewRouter;
+use Brera\Product\ProductInListingInContextSnippetRenderer;
 use Brera\Product\ProductListingRequestHandlerBuilder;
 use Brera\Product\ProductListingRouter;
+use Brera\Product\ProductListingSnippetRenderer;
 
 class FrontendFactory implements Factory
 {
@@ -93,17 +96,18 @@ class FrontendFactory implements Factory
      */
     public function createSnippetKeyGeneratorLocator()
     {
+        // todo: replace string constants with class constant references
         $snippetKeyGeneratorLocator = new SnippetKeyGeneratorLocator();
         $snippetKeyGeneratorLocator->register(
-            'product_detail_view',
+            ProductDetailViewInContextSnippetRenderer::CODE,
             $this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator()
         );
         $snippetKeyGeneratorLocator->register(
-            'product_in_listing',
+            ProductInListingInContextSnippetRenderer::CODE,
             $this->getMasterFactory()->createProductInListingSnippetKeyGenerator()
         );
         $snippetKeyGeneratorLocator->register(
-            'product_listing',
+            ProductListingSnippetRenderer::CODE,
             $this->getMasterFactory()->createProductListingSnippetKeyGenerator()
         );
 

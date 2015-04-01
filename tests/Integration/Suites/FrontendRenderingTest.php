@@ -10,6 +10,7 @@ use Brera\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
 use Brera\DataPool\SearchEngine\InMemorySearchEngine;
 use Brera\DataPool\KeyValue\KeyValueStore;
 use Brera\Product\ProductDetailPageMetaInfoSnippetContent;
+use Brera\Product\ProductDetailViewInContextSnippetRenderer;
 use Brera\Product\ProductDetailViewRequestHandler;
 use Brera\Product\ProductSnippetKeyGenerator;
 
@@ -63,7 +64,9 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
         Context $context
     ) {
         $rootSnippetCode = 'root-snippet';
-        $rootSnippetKeyGenerator = new ProductSnippetKeyGenerator('product_detail_view');
+        $rootSnippetKeyGenerator = new ProductSnippetKeyGenerator(
+            ProductDetailViewInContextSnippetRenderer::CODE
+        );
         $snippetKeyGeneratorLocator->register($rootSnippetCode, $rootSnippetKeyGenerator);
         $snippetKeyGeneratorLocator->register('head', new GenericSnippetKeyGenerator('head', []));
         $snippetKeyGeneratorLocator->register('body', new GenericSnippetKeyGenerator('body', []));

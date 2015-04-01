@@ -5,9 +5,12 @@ namespace Brera;
 use Brera\Http\HttpResourceNotFoundResponse;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\PoCSku;
+use Brera\Product\ProductDetailViewInContextSnippetRenderer;
 use Brera\Product\ProductId;
 use Brera\Http\HttpUrl;
 use Brera\Http\HttpRequest;
+use Brera\Product\ProductInListingInContextSnippetRenderer;
+use Brera\Product\ProductListingSnippetRenderer;
 
 class EdgeToEdgeTestAbstract extends AbstractIntegrationTest
 {
@@ -41,7 +44,9 @@ class EdgeToEdgeTestAbstract extends AbstractIntegrationTest
         $contextSource = $factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[0];
 
-        $productDetailViewKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('product_detail_view');
+        $productDetailViewKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
+            ProductDetailViewInContextSnippetRenderer::CODE
+        );
         $productDetailViewKey = $productDetailViewKeyGenerator->getKeyForContext($context, ['product_id' => $productId]);
         $productDetailViewHtml = $dataPoolReader->getSnippet($productDetailViewKey);
 
@@ -56,20 +61,22 @@ class EdgeToEdgeTestAbstract extends AbstractIntegrationTest
             sprintf('The result page HTML does not contain the expected product name "%s"', $productName)
         );
 
-//        $listingPageKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('product_in_listing');
-//        $listingPageKey = $listingPageKeyGenerator->getKeyForContext($context);
-//        $productListingHtml = $dataPoolReader->getSnippet($listingPageKey);
-//
-//        $this->assertContains(
-//            (string) $sku,
-//            $productListingHtml,
-//            sprintf('Product in listing snippet HTML does not contain the expected sku "%s"', $sku)
-//        );
-//        $this->assertContains(
-//            $productName,
-//            $productListingHtml,
-//            sprintf('Product in listing snippet HTML does not contain the expected product name "%s"', $productName)
-//        );
+        $listingPageKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
+            ProductInListingInContextSnippetRenderer::CODE
+        );
+        $listingPageKey = $listingPageKeyGenerator->getKeyForContext($context, ['product_id' => $productId]);
+        $productListingHtml = $dataPoolReader->getSnippet($listingPageKey);
+
+        $this->assertContains(
+            (string) $sku,
+            $productListingHtml,
+            sprintf('Product in listing snippet HTML does not contain the expected sku "%s"', $sku)
+        );
+        $this->assertContains(
+            $productName,
+            $productListingHtml,
+            sprintf('Product in listing snippet HTML does not contain the expected product name "%s"', $productName)
+        );
 
         $searchResults = $dataPoolReader->getSearchResults('led', $context);
 
@@ -104,7 +111,9 @@ class EdgeToEdgeTestAbstract extends AbstractIntegrationTest
         $dataPoolReader = $factory->createDataPoolReader();
 
         $keyGeneratorLocator = $factory->getSnippetKeyGeneratorLocator();
-        $keyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('product_listing');
+        $keyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
+            ProductListingSnippetRenderer::CODE
+        );
 
         $contextSource = $factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[0];
