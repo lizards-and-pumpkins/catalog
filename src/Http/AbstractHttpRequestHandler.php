@@ -123,6 +123,7 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
     {
         $this->rootSnippetCode = $metaInfo->getRootSnippetCode();
 
+        // todo only add snippets where we can generate a valid key
         $snippetCodes = $metaInfo->getPageSnippetCodes();
         $this->snippetCodesToKeyMap = array_combine(
             $snippetCodes,
@@ -148,7 +149,16 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
      */
     private function getSnippetKeysInContext()
     {
-        return array_values($this->snippetCodesToKeyMap);
+        return array_values($this->removeCodesThatCouldNotBeMappedToAKey($this->snippetCodesToKeyMap));
+    }
+
+    /**
+     * @param string[] $snippetKeys
+     * @return string[]
+     */
+    private function removeCodesThatCouldNotBeMappedToAKey(array $snippetKeys)
+    {
+        return array_filter($snippetKeys);
     }
 
     private function loadSnippets()

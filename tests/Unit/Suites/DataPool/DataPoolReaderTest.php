@@ -93,7 +93,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
 
     /**
      * @test
-     * @expectedException \RuntimeException
+     * @expectedException \Brera\DataPool\InvalidKeyValueStoreKeyException
      *
      * @dataProvider invalidKeyProvider
      */
@@ -104,7 +104,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
 
     /**
      * @test
-     * @expectedException \RuntimeException
+     * @expectedException \Brera\DataPool\InvalidKeyValueStoreKeyException
      *
      * @dataProvider invalidKeyProvider
      */
@@ -114,7 +114,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     }
 
     /**
-     * @return array
+     * @return array[]
      */
     public function invalidKeyProvider()
     {
@@ -127,6 +127,9 @@ class DataPoolReaderTest extends AbstractDataPoolTest
 
     }
 
+    /**
+     * @return array[]
+     */
     public function brokenKeysForSnippetsProvider()
     {
         return [
@@ -139,7 +142,6 @@ class DataPoolReaderTest extends AbstractDataPoolTest
 
     /**
      * @test
-     *
      * @expectedException \RuntimeException
      *
      * @dataProvider brokenKeysForSnippetsProvider
@@ -147,6 +149,15 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     public function itShouldOnlyAcceptStringKeysForGetSnippets($key)
     {
         $this->dataPoolReader->getSnippets($key);
+    }
+
+    /**
+     * @test
+     * @expectedException \Brera\DataPool\InvalidKeyValueStoreKeyException
+     */
+    public function itShouldThrowAnExceptionIfTheKeyIsEmpty()
+    {
+        $this->dataPoolReader->getSnippet('');
     }
 
     /**
