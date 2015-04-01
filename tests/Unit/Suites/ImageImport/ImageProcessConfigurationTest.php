@@ -18,8 +18,8 @@ class ImageProcessConfigurationTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $stubCommand = $this->getMock(ImageProcessCommand::class);
-        $stubCommand2 = $this->getMock(ImageProcessCommand::class);
+        $stubCommand = $this->getMock(ImageProcessCommand::class, [], [], '', false);
+        $stubCommand2 = $this->getMock(ImageProcessCommand::class, [], [], '', false);
         array_push($this->commandStubs, $stubCommand);
         array_push($this->commandStubs, $stubCommand2);
         $this->configuration = new ImageProcessConfiguration(array($stubCommand, $stubCommand2));
