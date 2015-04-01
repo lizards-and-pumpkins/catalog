@@ -9,14 +9,37 @@ class ImportImageDomainEventTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
+     * @dataProvider invalidImagesDataProvider
+     * @expectedException \Brera\ImageProcessor\InvalidImageException
+     * @param mixed[] $invalidParameter
      */
-    public function itShouldReturnImageImportXml()
+    public function itShouldThrowAnExceptionIfImageIsNotReadable($invalidParameter)
     {
-        $xml = '<?xml version="1.0"?><rootNode></rootNode>';
+        ImportImageDomainEvent::fromImages($invalidParameter);
+    }
 
-        $domainEvent = new ImportImageDomainEvent($xml);
-        $result = $domainEvent->getXml();
+    /**
+     * @return mixed[]
+     */
+    public function invalidImagesDataProvider()
+    {
+        return [
+            array([0.00]),
+            array([0]),
+            array([new \stdClass()]),
+            array([tmpfile()]),
+            array(['non-existing-images.jpg']),
+        ];
+    }
 
-        $this->assertEquals($xml, $result);
+    /**
+     * @test
+     */
+    public function itShouldReturnPassedImages()
+    {
+        $images = array(__DIR__ . '/../../../shared-fixture/test_image.jpg');
+        $event = ImportImageDomainEvent::fromImages($images);
+        $this->assertInstanceOf(ImportImageDomainEvent::class, $event);
+        $this->assertEquals($images, $event->getImages());
     }
 }
