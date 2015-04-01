@@ -63,7 +63,7 @@ abstract class AbstractRequestHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('getIdForParts')
             ->willReturn($this->contextIdFixture);
 
-        $this->snippetKeyGeneratorLocator = $this->createKeyGeneratorLocatorMock();
+        $this->snippetKeyGeneratorLocator = $this->createKeyGeneratorLocatorFake();
         
         
         $this->mockDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
@@ -367,16 +367,17 @@ EOH;
     /**
      * @return SnippetKeyGeneratorLocator|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createKeyGeneratorLocatorMock()
+    private function createKeyGeneratorLocatorFake()
     {
         $fixedKeyGeneratorFactoryFunction = function ($fixedKey) {
-            $fixedKeyGeneratorFunction = function(Context $context, array $data = []) use ($fixedKey) {
-                $key = $fixedKey . ($data ? '_' . reset($data) : '');
-                return $key;
-            };
             $stubKeyGenerator = $this->getKeyGeneratorMock();
+            $fixedKeyWithDataGeneratorFunction = function(Context $context, array $data = []) use ($fixedKey) {
+                return $fixedKey . ($data && strpos($fixedKey, 'product') !== false ?
+                    '_' . reset($data) :
+                    '');
+            };
             $stubKeyGenerator->expects($this->any())->method('getKeyForContext')
-                ->willReturnCallback($fixedKeyGeneratorFunction);
+                ->willReturnCallback($fixedKeyWithDataGeneratorFunction);
             return $stubKeyGenerator;
         };
         

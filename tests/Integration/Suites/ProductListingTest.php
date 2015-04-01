@@ -77,7 +77,7 @@ class ProductListingTest extends AbstractIntegrationTest
         // @todo: read from XML
         $productName = 'LED Armflasher';
         $expectedContentWithProductInListingPutIntoRootSnippet =
-            '<div>' . $productName . '</div>';
+            'Name: ' . $productName;
 
         $this->assertContains($expectedContentWithProductInListingPutIntoRootSnippet, $body);
     }
