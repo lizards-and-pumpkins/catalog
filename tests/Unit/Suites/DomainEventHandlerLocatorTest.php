@@ -14,6 +14,7 @@ use Brera\Product\ProductImportDomainEventHandler;
  * @uses   \Brera\RootTemplateChangedDomainEvent
  * @uses   \Brera\Product\ProductImportDomainEvent
  * @uses   \Brera\Product\CatalogImportDomainEvent
+ * @uses   \Brera\ImageImport\ImportImageDomainEvent
  */
 class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -136,7 +137,7 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        
+
         $this->factory->expects($this->once())
             ->method('createImportImageDomainEventHandler')
             ->willReturn($stubImportImageDomainEventHandler);
