@@ -2,6 +2,9 @@
 
 namespace Brera\ImageImport;
 
+/**
+ * @covers \Brera\ImageImport\ImageProcessCommand
+ */
 class ImageProcessCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -47,6 +50,20 @@ class ImageProcessCommandTest extends \PHPUnit_Framework_TestCase
     public function itShouldThrowAnExceptionWhenCreatedWithAnUnknownInstructions($config)
     {
         ImageProcessCommand::createByArray($config);
+    }
+
+    /**
+     * @test
+     * @expectedException \Brera\ImageImport\InvalidInstructionException
+     */
+    public function itShouldThrowAnExceptionWhenForbiddenMethodIsUsed()
+    {
+        $instructions = [
+            'resize' => array(200, 200),
+            'saveAsFile' => array(),
+        ];
+
+        ImageProcessCommand::createByArray($instructions);
     }
 
     /**

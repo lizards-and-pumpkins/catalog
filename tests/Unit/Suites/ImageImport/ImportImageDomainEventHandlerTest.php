@@ -4,6 +4,9 @@ namespace Brera\ImageImport;
 
 use Brera\ImageProcessor\ImageProcessor;
 
+/**
+ * @covers \Brera\ImageImport\ImportImageDomainEventHandler
+ */
 class ImportImageDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**

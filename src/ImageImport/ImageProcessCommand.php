@@ -32,7 +32,7 @@ class ImageProcessCommand
     public static function createByArray($config)
     {
         if (!is_array($config)) {
-            throw new InvalidInstructionException('The passed instruction is no array.');
+            throw new InvalidInstructionException('The passed instructions are no array.');
         }
         foreach ($config as $instruction => $parameters) {
             // TODO check the parameters too? The only solution would be Reflection... I don't like.

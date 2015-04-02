@@ -2,6 +2,9 @@
 
 namespace Brera\ImageProcessor;
 
+/**
+ * @covers \Brera\ImageProcessor\ImageProcessor
+ */
 abstract class ImageProcessorTest extends \PHPUnit_Framework_TestCase
 {
     /**
