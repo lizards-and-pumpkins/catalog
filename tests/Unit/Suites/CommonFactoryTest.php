@@ -314,11 +314,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $result = $this->commonFactory->createHttpRouterChain();
         $this->assertInstanceOf(HttpRouterChain::class, $result);
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> a9eb8eb... Issue #58: add ImportImageEventHandler to factory and add tests
 
     /**
      * @test
@@ -327,15 +322,8 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         /* @var $event \PHPUnit_Framework_MockObject_MockObject|ImportImageDomainEvent */
         $event = $this->getMock(ImportImageDomainEvent::class, null, [], '', false);
-<<<<<<< HEAD
 
         $handler = $this->commonFactory->createImportImageDomainEventHandler($event);
         $this->assertInstanceOf(ImportImageDomainEventHandler::class, $handler);
     }
->>>>>>> 5b9875a... Issue #58: asd
-=======
-        $handler = $this->commonFactory->createImportImageDomainEventHandler($event);
-        $this->assertInstanceOf(ImportImageDomainEventHandler::class, $handler);
-    }
->>>>>>> a9eb8eb... Issue #58: add ImportImageEventHandler to factory and add tests
 }
