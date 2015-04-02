@@ -76,11 +76,9 @@ class ProductListingTest extends AbstractIntegrationTest
         $body = $page->getBody();
 
         // @todo: read from XML
-        $productName = 'LED Armflasher';
-        $expectedContentWithProductInListingPutIntoRootSnippet =
-            'Name: ' . $productName;
+        $expectedProductName = 'LED Armflasher';
 
-        $this->assertContains($expectedContentWithProductInListingPutIntoRootSnippet, $body);
+        $this->assertContains($expectedProductName, $body);
     }
     
     private function addRootTemplateChangedDomainEventToSetupProductListingFixture()
