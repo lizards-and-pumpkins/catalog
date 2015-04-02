@@ -528,20 +528,27 @@ class CommonFactory implements Factory, DomainEventFactory
         // TODO get config from somewhere and remove hardcoded
         if (!$this->imageProcessingConfiguration) {
             $instructions1 = [
-                'resize' => array('400'),
+                'resize' => array(400, 800),
             ];
             $instructions2 = [
-                'resizeToWidth' => array('200'),
+                'resizeToWidth' => array(200),
             ];
             $instructions3 = [
-                'resizeToBestFit' => array('400', '300'),
+                'resizeToBestFit' => array(400, 300),
             ];
             $configuration = [
                 ImageProcessCommand::createByArray($instructions1),
                 ImageProcessCommand::createByArray($instructions2),
                 ImageProcessCommand::createByArray($instructions3),
             ];
-            $this->imageProcessingConfiguration = new ImageProcessConfiguration($configuration, sys_get_temp_dir());
+            $targetDirectory = sys_get_temp_dir() . '/brera/';
+            // TODO make sure directory exists, not sure whether this should stay here, if it is not writeable
+            // TODO exception is thrown
+            if(!is_dir($targetDirectory)) {
+                mkdir($targetDirectory, 0777, true);
+            }
+
+            $this->imageProcessingConfiguration = new ImageProcessConfiguration($configuration, $targetDirectory);
         }
 
         return $this->imageProcessingConfiguration;
