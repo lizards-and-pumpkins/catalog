@@ -3,7 +3,7 @@
 namespace Brera;
 
 use Brera\DataPool\KeyValue\File\FileKeyValueStore;
-use Brera\DataPool\SearchEngine\InMemorySearchEngine;
+use Brera\DataPool\SearchEngine\FileSearchEngine;
 use Brera\Queue\InMemory\InMemoryQueue;
 
 class SampleFactory implements Factory
@@ -39,11 +39,11 @@ class SampleFactory implements Factory
     }
 
     /**
-     * @return InMemorySearchEngine
+     * @return FileSearchEngine
      */
     public function createSearchEngine()
     {
-        return new InMemorySearchEngine();
+        return FileSearchEngine::withDefaultPath();
     }
 
     /**
