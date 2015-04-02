@@ -128,7 +128,7 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
             $testContent
         );
         $state = $sourceSearchDocument->getState();
-        $rehydratedSearchDocument = SearchDocument::fromState($state);
+        $rehydratedSearchDocument = SearchDocument::fromMemento($state);
         $this->assertSearchDocumentsEqual($sourceSearchDocument, $rehydratedSearchDocument);
     }
 }

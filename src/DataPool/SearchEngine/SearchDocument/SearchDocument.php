@@ -39,7 +39,7 @@ class SearchDocument implements MementoOriginator
      * @param Memento $memento
      * @return SearchDocument
      */
-    public static function fromState(Memento $memento)
+    public static function fromMemento(Memento $memento)
     {
         return self::createRehydratedSearchDocumentFromState($memento);
     }

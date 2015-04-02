@@ -22,7 +22,7 @@ class VersionedContext implements Context
      * @param Memento $memento
      * @return VersionedContext
      */
-    public static function fromState(Memento $memento)
+    public static function fromMemento(Memento $memento)
     {
         return ContextBuilder::getContextFromMemento($memento);
     }

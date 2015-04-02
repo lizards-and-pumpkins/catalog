@@ -262,7 +262,7 @@ abstract class ContextDecoratorTestAbstract extends \PHPUnit_Framework_TestCase
         $mockContextState->expects($this->any())->method('getVersion')->willReturn('123');
         $mockContextState->expects($this->any())->method('getContextDataSet')->willReturn([]);
         $class = get_class($this->getDecoratorUnderTest());
-        $result = call_user_func($class . '::fromState', $mockContextState);
+        $result = call_user_func($class . '::fromMemento', $mockContextState);
         $this->assertInstanceOf(Context::class, $result);
     }
 }

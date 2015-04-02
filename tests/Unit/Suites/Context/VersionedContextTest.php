@@ -125,7 +125,7 @@ class VersionedContextTest extends \PHPUnit_Framework_TestCase
         $mockContextState = $this->getMock(InternalContextState::class, [], [], '', false);
         $mockContextState->expects($this->any())->method('getVersion')->willReturn($this->testVersionValue);
         $mockContextState->expects($this->any())->method('getContextDataSet')->willReturn([]);
-        $result = VersionedContext::fromState($mockContextState);
+        $result = VersionedContext::fromMemento($mockContextState);
         $this->assertInstanceOf(Context::class, $result);
     }
 }

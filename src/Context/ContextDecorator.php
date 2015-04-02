@@ -138,7 +138,7 @@ abstract class ContextDecorator implements Context
      * @param Memento $memento
      * @return Context
      */
-    public static function fromState(Memento $memento)
+    public static function fromMemento(Memento $memento)
     {
         return ContextBuilder::getContextFromMemento($memento);
     }
