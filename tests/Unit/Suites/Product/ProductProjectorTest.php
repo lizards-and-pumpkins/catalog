@@ -2,10 +2,10 @@
 
 namespace Brera\Product;
 
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use Brera\SampleContextSource;
 use Brera\DataPool\DataPoolWriter;
-use Brera\DataPool\SearchEngine\SearchDocumentBuilder;
-use Brera\DataPool\SearchEngine\SearchDocumentCollection;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilder;
 use Brera\SnippetResultList;
 use Brera\SnippetRendererCollection;
 use Brera\ProjectionSourceData;

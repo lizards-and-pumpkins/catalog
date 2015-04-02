@@ -4,6 +4,8 @@
 namespace Brera\DataPool\SearchEngine;
 
 use Brera\Context\Context;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 
 abstract class IntegrationTestSearchEngineAbstract implements SearchEngine
 {

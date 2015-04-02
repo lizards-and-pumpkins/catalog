@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\DataPool\SearchEngine;
+namespace Brera\DataPool\SearchEngine\SearchDocument;
 
 use Brera\Context\ContextSource;
 use Brera\ProjectionSourceData;

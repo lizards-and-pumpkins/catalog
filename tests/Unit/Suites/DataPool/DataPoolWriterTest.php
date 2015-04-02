@@ -2,7 +2,7 @@
 
 namespace Brera\DataPool;
 
-use Brera\DataPool\SearchEngine\SearchDocumentCollection;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use Brera\SnippetResult;
 use Brera\SnippetResultList;
 

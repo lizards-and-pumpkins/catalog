@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\DataPool\SearchEngine;
+namespace Brera\DataPool\SearchEngine\SearchDocument;
 
 /**
- * @covers \Brera\DataPool\SearchEngine\SearchDocumentField
+ * @covers \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField
  */
 class SearchDocumentFieldTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,7 +23,7 @@ class SearchDocumentFieldTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Brera\DataPool\SearchEngine\InvalidSearchDocumentFieldKeyException
+     * @expectedException \Brera\DataPool\SearchEngine\SearchDocument\InvalidSearchDocumentFieldKeyException
      * @param mixed $invalidKey
      * @dataProvider invalidKeyProvider
      */

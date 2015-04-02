@@ -1,12 +1,12 @@
 <?php
 
-namespace Brera\DataPool\SearchEngine;
+namespace Brera\DataPool\SearchEngine\SearchDocument;
 
 use Brera\Context\Context;
 
 /**
- * @covers \Brera\DataPool\SearchEngine\SearchDocument
- * @uses   \Brera\DataPool\SearchEngine\SearchDocumentField
+ * @covers \Brera\DataPool\SearchEngine\SearchDocument\SearchDocument
+ * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField
  */
 class SearchDocumentTest extends \PHPUnit_Framework_TestCase
 {

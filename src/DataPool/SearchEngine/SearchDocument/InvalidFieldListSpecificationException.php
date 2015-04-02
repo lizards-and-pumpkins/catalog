@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Brera\DataPool\SearchEngine;
+namespace Brera\DataPool\SearchEngine\SearchDocument;
 
 
 class InvalidFieldListSpecificationException extends \InvalidArgumentException

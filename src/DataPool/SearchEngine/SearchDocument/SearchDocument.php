@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\DataPool\SearchEngine;
+namespace Brera\DataPool\SearchEngine\SearchDocument;
 
 use Brera\Context\Context;
 
@@ -80,20 +80,5 @@ class SearchDocument
     {
         $searchField = SearchDocumentField::fromKeyAndValue($fieldName, $fieldValue);
         return $this->fields->contains($searchField);
-    }
-
-    /**
-     * @param mixed[] $fieldNamesAndValuesToCheck
-     * @throws InvalidFieldListSpecificationException
-     */
-    private function validateFieldListSpecification(array $fieldNamesAndValuesToCheck)
-    {
-        array_map(function ($fieldSpecification) {
-            if (!is_array($fieldSpecification)) {
-                throw new InvalidFieldListSpecificationException(sprintf(
-                    'The field list has to specified as an array of arrays with a field name and value pair each'
-                ));
-            }
-        }, $fieldNamesAndValuesToCheck);
     }
 }

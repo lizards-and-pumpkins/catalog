@@ -3,6 +3,10 @@
 namespace Brera\DataPool\SearchEngine;
 
 use Brera\Context\Context;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
 
 abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 {
