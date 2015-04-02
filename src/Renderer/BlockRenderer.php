@@ -49,7 +49,7 @@ abstract class BlockRenderer
     /**
      * @return string
      */
-    abstract protected function getLayoutHandle();
+    abstract public function getLayoutHandle();
 
     /**
      * @param ProjectionSourceData $dataObject

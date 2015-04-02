@@ -9,7 +9,7 @@ class ProductInListingBlockRenderer extends BlockRenderer
     /**
      * @return string
      */
-    protected function getLayoutHandle()
+    public function getLayoutHandle()
     {
         return 'product_in_listing';
     }

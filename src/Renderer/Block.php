@@ -59,6 +59,14 @@ class Block
 
     /**
      * @return string
+     */
+    final public function getLayoutHandle()
+    {
+        return $this->blockRenderer->getLayoutHandle();
+    }
+
+    /**
+     * @return string
      * @throws TemplateFileNotReadableException
      */
     final public function render()
