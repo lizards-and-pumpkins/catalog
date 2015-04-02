@@ -4,9 +4,11 @@ namespace Brera;
 
 use Brera\Context\ContextBuilder;
 use Brera\Context\ContextSource;
-use Brera\Http\ResourceNotFoundRouter;
-use Brera\Http\HttpRouterChain;
 use Brera\DataPool\DataPoolReader;
+use Brera\Http\HttpRouterChain;
+use Brera\Http\ResourceNotFoundRouter;
+use Brera\ImageImport\ImportImageDomainEvent;
+use Brera\ImageImport\ImportImageDomainEventHandler;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\ProductImportDomainEvent;
@@ -49,6 +51,9 @@ use Brera\Queue\Queue;
  * @uses   \Brera\RootSnippetSourceListBuilder
  * @uses   \Brera\Product\ProductSourceInListingSnippetRenderer
  * @uses   \Brera\Product\ProductInListingInContextSnippetRenderer
+ * @uses   \Brera\ImageProcessor\ImageMagickImageProcessor
+ * @uses   \Brera\ImageImport\ImportImageDomainEventHandler
+ * @uses   \Brera\ImageImport\ImageProcessCommand
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -125,7 +130,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $result = $this->commonFactory->createUrlPathKeyGenerator();
         $this->assertInstanceOf(UrlPathKeyGenerator::class, $result);
     }
-    
+
 
     /**
      * @test
@@ -309,4 +314,28 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $result = $this->commonFactory->createHttpRouterChain();
         $this->assertInstanceOf(HttpRouterChain::class, $result);
     }
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> a9eb8eb... Issue #58: add ImportImageEventHandler to factory and add tests
+
+    /**
+     * @test
+     */
+    public function itShouldReturnAImportImageEventDomainHandler()
+    {
+        /* @var $event \PHPUnit_Framework_MockObject_MockObject|ImportImageDomainEvent */
+        $event = $this->getMock(ImportImageDomainEvent::class, null, [], '', false);
+<<<<<<< HEAD
+
+        $handler = $this->commonFactory->createImportImageDomainEventHandler($event);
+        $this->assertInstanceOf(ImportImageDomainEventHandler::class, $handler);
+    }
+>>>>>>> 5b9875a... Issue #58: asd
+=======
+        $handler = $this->commonFactory->createImportImageDomainEventHandler($event);
+        $this->assertInstanceOf(ImportImageDomainEventHandler::class, $handler);
+    }
+>>>>>>> a9eb8eb... Issue #58: add ImportImageEventHandler to factory and add tests
 }

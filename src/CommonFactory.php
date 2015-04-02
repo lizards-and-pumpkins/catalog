@@ -4,30 +4,35 @@ namespace Brera;
 
 use Brera\Context\ContextBuilder;
 use Brera\Context\ContextSource;
-use Brera\Http\ResourceNotFoundRouter;
+use Brera\DataPool\DataPoolReader;
+use Brera\DataPool\DataPoolWriter;
+use Brera\DataPool\KeyValue\KeyValueStore;
 use Brera\DataPool\SearchEngine\SearchEngine;
+use Brera\Http\HttpRouterChain;
+use Brera\Http\ResourceNotFoundRouter;
+use Brera\ImageImport\ImageProcessCommand;
+use Brera\ImageImport\ImageProcessConfiguration;
+use Brera\ImageImport\ImportImageDomainEvent;
+use Brera\ImageImport\ImportImageDomainEventHandler;
+use Brera\ImageProcessor\ImageMagickImageProcessor;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\ProductDetailViewBlockRenderer;
 use Brera\Product\ProductDetailViewInContextSnippetRenderer;
-use Brera\Product\ProductInListingInContextSnippetRenderer;
+use Brera\Product\ProductImportDomainEvent;
+use Brera\Product\ProductImportDomainEventHandler;
 use Brera\Product\ProductInListingBlockRenderer;
+use Brera\Product\ProductInListingInContextSnippetRenderer;
 use Brera\Product\ProductListingBlockRenderer;
 use Brera\Product\ProductListingSnippetRenderer;
+use Brera\Product\ProductProjector;
 use Brera\Product\ProductSearchDocumentBuilder;
 use Brera\Product\ProductSnippetRendererCollection;
 use Brera\Product\ProductSourceBuilder;
-use Brera\DataPool\KeyValue\KeyValueStore;
+use Brera\Product\ProductSourceDetailViewSnippetRenderer;
 use Brera\Product\ProductSourceInListingSnippetRenderer;
 use Brera\Queue\Queue;
-use Brera\DataPool\DataPoolWriter;
-use Brera\DataPool\DataPoolReader;
-use Brera\Product\ProductImportDomainEvent;
-use Brera\Product\ProductImportDomainEventHandler;
-use Brera\Product\ProductProjector;
-use Brera\Product\ProductSourceDetailViewSnippetRenderer;
 use Brera\Renderer\BlockStructure;
-use Brera\Http\HttpRouterChain;
 
 class CommonFactory implements Factory, DomainEventFactory
 {
@@ -52,6 +57,11 @@ class CommonFactory implements Factory, DomainEventFactory
      * @var SearchEngine
      */
     private $searchEngine;
+
+    /**
+     * @var ImageProcessConfiguration
+     */
+    private $imageProcessingConfiguration;
 
     /**
      * @param ProductImportDomainEvent $event
@@ -348,6 +358,7 @@ class CommonFactory implements Factory, DomainEventFactory
     public function createContextBuilder()
     {
         $version = $this->getCurrentDataVersion();
+
         return $this->createContextBuilderWithVersion(DataVersion::fromVersionString($version));
     }
 
@@ -364,6 +375,7 @@ class CommonFactory implements Factory, DomainEventFactory
     {
         /** @var DataPoolReader $dataPoolReader */
         $dataPoolReader = $this->getMasterFactory()->createDataPoolReader();
+
         return $dataPoolReader->getCurrentDataVersion();
     }
 
@@ -456,6 +468,7 @@ class CommonFactory implements Factory, DomainEventFactory
                 sprintf('Unable to create %s. Is the factory registered? %s', $targetObjectName, $e->getMessage())
             );
         }
+
         return $instance;
     }
 
@@ -493,5 +506,53 @@ class CommonFactory implements Factory, DomainEventFactory
         }
 
         return $this->searchEngine;
+    }
+
+    /**
+     * @param ImportImageDomainEvent $event
+     * @return ImportImageDomainEventHandler
+     */
+    public function createImportImageDomainEventHandler(ImportImageDomainEvent $event)
+    {
+        $config = $this->getImageProcessingConfiguration();
+        $imageProcessor = $this->createImageProcessor();
+
+        return new ImportImageDomainEventHandler($config, $event, $imageProcessor);
+    }
+
+    /**
+     * @return ImageProcessConfiguration
+     */
+    private function getImageProcessingConfiguration()
+    {
+        // TODO get config from somewhere and remove hardcoded
+        if (!$this->imageProcessingConfiguration) {
+            $instructions1 = [
+                'resize' => array('400'),
+            ];
+            $instructions2 = [
+                'resizeToWidth' => array('200'),
+            ];
+            $instructions3 = [
+                'resizeToBestFit' => array('400', '300'),
+            ];
+            $configuration = [
+                ImageProcessCommand::createByArray($instructions1),
+                ImageProcessCommand::createByArray($instructions2),
+                ImageProcessCommand::createByArray($instructions3),
+            ];
+            $this->imageProcessingConfiguration = new ImageProcessConfiguration($configuration, sys_get_temp_dir());
+        }
+
+        return $this->imageProcessingConfiguration;
+    }
+
+    /**
+     * @return ImageMagickImageProcessor
+     */
+    private function createImageProcessor()
+    {
+        // TODO get from master factory
+        return ImageMagickImageProcessor::fromNothing();
     }
 }
