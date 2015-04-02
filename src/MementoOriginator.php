@@ -9,7 +9,7 @@ interface MementoOriginator
      * @param Memento $memento
      * @return MementoOriginator
      */
-    public static function fromState(Memento $memento);
+    public static function fromMemento(Memento $memento);
     
     /**
      * @return Memento
