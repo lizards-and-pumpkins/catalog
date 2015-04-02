@@ -10,6 +10,7 @@ use Brera\Renderer\Block;
 
 /**
  * @covers \Brera\Product\Block\ProductInListingBlock
+ * @uses   \Brera\Product\Block\ProductBlock
  * @uses   \Brera\Renderer\Block
  */
 class ProductInListingBlockTest extends \PHPUnit_Framework_TestCase
