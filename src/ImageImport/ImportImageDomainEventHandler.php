@@ -43,15 +43,16 @@ class ImportImageDomainEventHandler implements DomainEventHandler
     }
 
     /**
-     * @param mixed[] $instructions
+     * @param ImageProcessCommand $command
      * @param string $image
      */
-    private function createImageBasedOn($instructions, $image)
+    private function createImageBasedOn($command, $image)
     {
         $this->processor->setImage($image);
         $targetDirectory = $this->config->getTargetDirectory();
-        $directoryBasedOnInstructions = $this->runInstructions($instructions);
+        $directoryBasedOnInstructions = $this->runInstructions($command->getInstructions());
         $filename = basename($image);
+        $this->createTargetDirectoryIfNeeded("$targetDirectory/$directoryBasedOnInstructions");
         $this->processor->saveAsFile("$targetDirectory/$directoryBasedOnInstructions/$filename");
     }
 
@@ -63,12 +64,24 @@ class ImportImageDomainEventHandler implements DomainEventHandler
     {
         $madeChangesToDefineDirectory = '';
         foreach ($instructions as $method => $parameters) {
-            $madeChangesToDefineDirectory .= $method;
+            $madeChangesToDefineDirectory .= $method . implode(',', $parameters);
             call_user_func_array([$this->processor, $method], $parameters);
         }
+        // TODO md5 is a bad idea because no one knows then how the directory name is, but it shortens the dir
+        // TODO and distributes the images based on their processing
         $directory = md5($madeChangesToDefineDirectory);
 
         return $directory;
+    }
+
+    /**
+     * @param string $directory
+     */
+    private function createTargetDirectoryIfNeeded($directory)
+    {
+        if (!is_dir($directory)) {
+            mkdir($directory, 0777, true);
+        }
     }
 }
 

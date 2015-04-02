@@ -64,10 +64,10 @@ class ImportImageDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $targetDirectory = sys_get_temp_dir();
 
-        $configuration = [
-            array('resizeToWidth' => [200]),
-            array('resize' => [400, 400])
-        ];
+        $command = $this->getImageProcessCommand(array('resizeToWidth' => [200]));
+        $command2 = $this->getImageProcessCommand(array('resize' => [400, 400]));
+
+        $configuration = array($command, $command2);
         $iterator = new \ArrayIterator($configuration);
         $images = [
             __DIR__ . '/../../../test_image.jpg',
@@ -96,5 +96,24 @@ class ImportImageDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
         $this->imageProcessor->expects($this->exactly($numberOfImages))->method('resize');
 
         $this->handler->process();
+    }
+
+    /**
+     * @param $configuration
+     * @return ImageProcessCommand|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getImageProcessCommand($configuration)
+    {
+        /* @var $command \PHPUnit_Framework_MockObject_MockObject|ImageProcessCommand */
+        $command = $this->getMockBuilder(ImageProcessCommand::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getInstructions'])
+            ->getMock();
+
+        $command->expects($this->atLeastOnce())
+            ->method('getInstructions')
+            ->willReturn($configuration);
+
+        return $command;
     }
 }
