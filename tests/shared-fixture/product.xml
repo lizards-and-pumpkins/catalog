@@ -53,7 +53,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
         <attributes>
             <image>
                 <main>true</main>
-                <file>products/218765/218765-333.1.png</file>
+                <file>products/m18108_1.jpg</file>
                 <label language="de_DE">Das Hauptbild</label>
                 <label language="en_US">The main image label for this shoe</label>
             </image>
@@ -73,6 +73,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
             <url_key>adipure-360</url_key>
             <category>men-running-shoes</category>
             <category>specials</category>
+            <category website="ru" language="en_US">men-accessories</category>
             <stock_qty>5</stock_qty>
             <backorders>true</backorders>
             <name>adiPure 360</name>
@@ -89,6 +90,9 @@ LED Armflasher with elastic Band and Flasher]]></description>
 <li>Flex-Rillen für einen angenehmen und natürlichen Lauf</li>
 <li>ABRIEBFESTE Gummiaußensohle</li>
 ]]></short_description>
+            <brand>Adidas</brand>
+            <style>Natural-Running (Free)</style>
+            <gender>Herren</gender>
         </attributes>
         <associated_products>
             <product sku="218765-333-1" visible="false" tax_class_id="5">

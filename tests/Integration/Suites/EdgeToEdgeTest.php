@@ -68,11 +68,6 @@ class EdgeToEdgeTestAbstract extends AbstractIntegrationTest
         $productListingHtml = $dataPoolReader->getSnippet($listingPageKey);
 
         $this->assertContains(
-            (string) $sku,
-            $productListingHtml,
-            sprintf('Product in listing snippet HTML does not contain the expected sku "%s"', $sku)
-        );
-        $this->assertContains(
             $productName,
             $productListingHtml,
             sprintf('Product in listing snippet HTML does not contain the expected product name "%s"', $productName)

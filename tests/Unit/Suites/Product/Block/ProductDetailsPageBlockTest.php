@@ -10,6 +10,7 @@ use Brera\Renderer\Block;
 
 /**
  * @covers \Brera\Product\Block\ProductDetailsPageBlock
+ * @covers \Brera\Product\Block\ProductBlock
  * @uses   \Brera\Renderer\Block
  */
 class ProductDetailsPageBlockTest extends \PHPUnit_Framework_TestCase
@@ -30,24 +31,6 @@ class ProductDetailsPageBlockTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubRenderer = $this->getMock(ProductDetailViewBlockRenderer::class, [], [], '', false);
         $this->stubProduct = $this->getMock(Product::class, [], [], '', false);
-    }
-
-    /**
-     * @return ProductDetailsPageBlock
-     */
-    private function createInstance()
-    {
-        $template = 'dummy-template.phtml';
-        $blockName = 'test-name';
-        return new ProductDetailsPageBlock($this->stubRenderer, $template, $blockName, $this->stubProduct);
-    }
-
-    /**
-     * @test
-     */
-    public function itShouldBeABlock()
-    {
-        $this->assertInstanceOf(Block::class, $this->createInstance());
     }
 
     /**
@@ -98,5 +81,23 @@ class ProductDetailsPageBlockTest extends \PHPUnit_Framework_TestCase
         $result = $productDetailsPageBlock->getProductId();
 
         $this->assertEquals('foo', $result);
+    }
+
+    /**
+     * @return ProductDetailsPageBlock
+     */
+    private function createInstance()
+    {
+        $template = 'dummy-template.phtml';
+        $blockName = 'test-name';
+        return new ProductDetailsPageBlock($this->stubRenderer, $template, $blockName, $this->stubProduct);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldBeABlock()
+    {
+        $this->assertInstanceOf(Block::class, $this->createInstance());
     }
 }

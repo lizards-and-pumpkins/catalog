@@ -3,11 +3,34 @@
 namespace Brera\Product\Block;
 
 use Brera\Image;
+use Brera\Product\ProductAttributeNotFoundException;
 use Brera\Product\ProductSource;
 use Brera\Renderer\Block;
 
-class ProductImageGallery extends Block
+abstract class ProductBlock extends Block
 {
+    /**
+     * @param string $attributeCode
+     * @return string
+     * @throws ProductAttributeNotFoundException
+     */
+    public function getProductAttributeValue($attributeCode)
+    {
+        try {
+            $product = $this->getProduct();
+            $value = $product->getAttributeValue($attributeCode);
+        } catch (ProductAttributeNotFoundException $e) {
+            /* TODO: Log */
+            $value = '';
+        }
+        return $value;
+    }
+
+    public function getProductUrl()
+    {
+        return $this->getProductAttributeValue('url_key');
+    }
+
     /**
      * @return Image
      */
@@ -30,7 +53,7 @@ class ProductImageGallery extends Block
     /**
      * @return ProductSource
      */
-    private function getProduct()
+    final protected function getProduct()
     {
         return $this->getDataObject();
     }
