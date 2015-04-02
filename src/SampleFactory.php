@@ -15,10 +15,9 @@ class SampleFactory implements Factory
      */
     public function createKeyValueStore()
     {
-        $storagePath = '/tmp/brera';
-        if (! file_exists($storagePath)) {
-            mkdir($storagePath, 0777, true);
-        }
+        $storagePath = '/tmp/brera/key-value-store';
+        $this->createDirectoryIfNotExists($storagePath);
+
         return new FileKeyValueStore($storagePath);
     }
 
@@ -43,7 +42,10 @@ class SampleFactory implements Factory
      */
     public function createSearchEngine()
     {
-        return FileSearchEngine::withDefaultPath();
+        $searchEngineStoragePath = '/tmp/brera/search-engine';
+        $this->createDirectoryIfNotExists($searchEngineStoragePath);
+
+        return FileSearchEngine::withPath($searchEngineStoragePath);
     }
 
     /**
@@ -52,5 +54,15 @@ class SampleFactory implements Factory
     public function getSearchableAttributeCodes()
     {
         return ['name', 'category'];
+    }
+
+    /**
+     * @param string $path
+     */
+    private function createDirectoryIfNotExists($path)
+    {
+        if (! file_exists($path)) {
+            mkdir($path, 0777, true);
+        }
     }
 }

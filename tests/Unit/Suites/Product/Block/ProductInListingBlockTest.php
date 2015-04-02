@@ -84,19 +84,4 @@ class ProductInListingBlockTest extends \PHPUnit_Framework_TestCase
         $result = $productInListingBlock->getProductAttributeValue($attributeCode);
         $this->assertSame('', $result);
     }
-
-    /**
-     * @test
-     */
-    public function itShouldReturnProductId()
-    {
-        $this->stubProduct->expects($this->once())
-            ->method('getId')
-            ->willReturn('foo');
-
-        $productInListingBlock = $this->createInstance();
-        $result = $productInListingBlock->getProductId();
-
-        $this->assertEquals('foo', $result);
-    }
 }
