@@ -13,6 +13,7 @@ use Brera\Queue\InMemory\InMemoryQueue;
  * @covers \Brera\SampleFactory
  * @uses   \Brera\InMemoryLogger
  * @uses   \Brera\DataPool\KeyValue\File\FileKeyValueStore
+ * @uses   \Brera\DataPool\SearchEngine\FileSearchEngine
  * @uses   \Brera\Queue\InMemory\InMemoryQueue
  */
 class SampleFactoryTest extends \PHPUnit_Framework_TestCase
