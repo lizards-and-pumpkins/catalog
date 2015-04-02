@@ -142,7 +142,7 @@ class EdgeToEdgeTestAbstract extends AbstractIntegrationTest
         $numberOfMessages = 3;
         $consumer->process($numberOfMessages);
         
-        $urlKey = (new XPathParser($xml))->getXmlNodesArrayByXPath('/*/product/attributes/url_key')[0];
+        $urlKey = (new XPathParser($xml))->getXmlNodesArrayByXPath('/*/product/attributes/url_key[@language="en_US"]')[0];
         
         $httpUrl = HttpUrl::fromString('http://example.com/' . $urlKey['value']);
         $request = HttpRequest::fromParameters('GET', $httpUrl);
