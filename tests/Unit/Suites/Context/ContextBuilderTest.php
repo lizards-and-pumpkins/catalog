@@ -68,6 +68,9 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $method->invoke($this->builder, $testCode));
     }
 
+    /**
+     * @return array[]
+     */
     public function underscoreCodeDataProvider()
     {
         return [
@@ -124,5 +127,17 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $result = $this->builder->createFromRequest($stubRequest);
         $this->assertInstanceOf(Context::class, $result);
+    }
+    
+    /**
+     * @test
+     */
+    public function itShouldCreateAContextFromAContextState()
+    {
+        $mockContextState = $this->getMock(InternalContextState::class, [], [], '', false);
+        $mockContextState->expects($this->any())->method('getVersion')->willReturn('123');
+        $mockContextState->expects($this->any())->method('getContextDataSet')->willReturn([]);
+        $instance = ContextBuilder::getContextFromMemento($mockContextState);
+        $this->assertInstanceOf(Context::class, $instance);
     }
 }

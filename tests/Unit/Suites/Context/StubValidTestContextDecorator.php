@@ -4,6 +4,9 @@ namespace Brera\Context;
 
 class StubValidTestContextDecorator extends ContextDecorator
 {
+    /**
+     * @return string
+     */
     protected function getValueFromContext()
     {
         return '';

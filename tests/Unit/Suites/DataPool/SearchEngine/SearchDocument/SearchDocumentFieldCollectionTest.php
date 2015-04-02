@@ -58,4 +58,14 @@ class SearchDocumentFieldCollectionTest extends \PHPUnit_Framework_TestCase
         $fieldToCheck = SearchDocumentField::fromKeyAndValue($testFieldName, $testFieldValue);
         $this->assertTrue($collection->contains($fieldToCheck));
     }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnAnArrayRepresentation()
+    {
+        $searchFieldData = ['test-field-name' => 'test-field-value'];
+        $collection = SearchDocumentFieldCollection::fromArray($searchFieldData);
+        $this->assertSame($searchFieldData, $collection->toArray());
+    }
 }

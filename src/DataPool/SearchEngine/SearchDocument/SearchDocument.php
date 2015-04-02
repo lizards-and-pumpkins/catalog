@@ -3,8 +3,10 @@
 namespace Brera\DataPool\SearchEngine\SearchDocument;
 
 use Brera\Context\Context;
+use Brera\Memento;
+use Brera\MementoOriginator;
 
-class SearchDocument
+class SearchDocument implements MementoOriginator
 {
     /**
      * @var SearchDocumentFieldCollection
@@ -31,6 +33,37 @@ class SearchDocument
         $this->fields = $fields;
         $this->context = $context;
         $this->content = (string) $content;
+    }
+
+    /**
+     * @param Memento $memento
+     * @return SearchDocument
+     */
+    public static function fromState(Memento $memento)
+    {
+        return self::createRehydratedSearchDocumentFromState($memento);
+    }
+
+
+    /**
+     * @param InternalSearchDocumentState $state
+     * @return SearchDocument
+     */
+    private static function createRehydratedSearchDocumentFromState(InternalSearchDocumentState $state)
+    {
+        return new self($state->getFields(), $state->getContext(), $state->getContent());
+    }
+
+    /**
+     * @return SearchDocumentState
+     */
+    public function getState()
+    {
+        return InternalSearchDocumentState::fromSearchDocumentFields(
+            $this->content,
+            $this->fields,
+            $this->context
+        );
     }
 
     /**

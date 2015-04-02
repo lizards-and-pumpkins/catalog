@@ -20,15 +20,13 @@ abstract class ContextDecoratorTestAbstract extends \PHPUnit_Framework_TestCase
      */
     private $decoratedComponentCode = 'decorator-under-test-stub-code';
 
-    public function setUp()
+    private function defaultGetValueImplementationTest()
     {
-        $this->mockDecoratedContext = $this->getMock(Context::class);
-        $this->mockDecoratedContext->expects($this->any())
-            ->method('getSupportedCodes')
-            ->willReturn([$this->decoratedComponentCode]);
-        $this->decorator = $this->createContextDecoratorUnderTest(
-            $this->mockDecoratedContext,
-            $this->getStubContextData()
+        $code = $this->getDecoratorUnderTestCode();
+        $stubContextData = $this->getStubContextData();
+        $this->assertSame(
+            $stubContextData[$code],
+            $this->getDecoratorUnderTest()->getValue($code)
         );
     }
 
@@ -69,6 +67,18 @@ abstract class ContextDecoratorTestAbstract extends \PHPUnit_Framework_TestCase
         return $this->decorator;
     }
 
+    public function setUp()
+    {
+        $this->mockDecoratedContext = $this->getMock(Context::class);
+        $this->mockDecoratedContext->expects($this->any())
+            ->method('getSupportedCodes')
+            ->willReturn([$this->decoratedComponentCode]);
+        $this->decorator = $this->createContextDecoratorUnderTest(
+            $this->mockDecoratedContext,
+            $this->getStubContextData()
+        );
+    }
+
     /**
      * @test
      */
@@ -88,6 +98,7 @@ abstract class ContextDecoratorTestAbstract extends \PHPUnit_Framework_TestCase
         $decorator->getValue($this->getDecoratorUnderTestCode());
     }
 
+
     /**
      * @test
      */
@@ -98,7 +109,6 @@ abstract class ContextDecoratorTestAbstract extends \PHPUnit_Framework_TestCase
             ->with($this->decoratedComponentCode);
         $this->getDecoratorUnderTest()->getValue($this->decoratedComponentCode);
     }
-
 
     /**
      * @test
@@ -114,7 +124,7 @@ abstract class ContextDecoratorTestAbstract extends \PHPUnit_Framework_TestCase
             $mockDecoratedContext,
             $this->getStubContextData()
         );
-        
+
         $decorator->getSupportedCodes();
     }
 
@@ -191,7 +201,7 @@ abstract class ContextDecoratorTestAbstract extends \PHPUnit_Framework_TestCase
         $code = $this->getDecoratorUnderTestCode();
         $decoratorId = $code . ':' . $this->getDecoratorUnderTest()->getValue($code);
         $componentId = 'foo:bar';
-        
+
         $this->mockDecoratedContext->expects($this->once())->method('getIdForParts')
             ->willReturn('foo:bar');
         $result = $this->getDecoratorUnderTest()->getIdForParts([
@@ -200,7 +210,7 @@ abstract class ContextDecoratorTestAbstract extends \PHPUnit_Framework_TestCase
         ]);
         $this->assertEquals($decoratorId . '_' . $componentId, $result);
     }
-    
+
     /**
      * @test
      */
@@ -208,11 +218,11 @@ abstract class ContextDecoratorTestAbstract extends \PHPUnit_Framework_TestCase
     {
         $this->defaultGetValueImplementationTest();
     }
-    
+
     /**
      * @test
      */
-    public function itShouldSupportTheVersionCode()
+    public function itShouldSupportTheDecoratorCode()
     {
         $code = $this->getDecoratorUnderTestCode();
         $this->assertTrue($this->getDecoratorUnderTest()->supportsCode($code));
@@ -230,13 +240,29 @@ abstract class ContextDecoratorTestAbstract extends \PHPUnit_Framework_TestCase
         $this->getDecoratorUnderTest()->supportsCode($code);
     }
 
-    private function defaultGetValueImplementationTest()
+    /**
+     * @test
+     */
+    public function itShouldReturnAContextStateInstance()
     {
-        $code = $this->getDecoratorUnderTestCode();
-        $stubContextData = $this->getStubContextData();
-        $this->assertSame(
-            $stubContextData[$code],
-            $this->getDecoratorUnderTest()->getValue($code)
-        );
+        $this->mockDecoratedContext->expects($this->any())
+            ->method('getValue')
+            ->with(VersionedContext::CODE)
+            ->willReturn('222');
+
+        $this->assertInstanceOf(ContextState::class, $this->getDecoratorUnderTest()->getState());
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnAContextInstance()
+    {
+        $mockContextState = $this->getMock(InternalContextState::class, [], [], '', false);
+        $mockContextState->expects($this->any())->method('getVersion')->willReturn('123');
+        $mockContextState->expects($this->any())->method('getContextDataSet')->willReturn([]);
+        $class = get_class($this->getDecoratorUnderTest());
+        $result = call_user_func($class . '::fromState', $mockContextState);
+        $this->assertInstanceOf(Context::class, $result);
     }
 }

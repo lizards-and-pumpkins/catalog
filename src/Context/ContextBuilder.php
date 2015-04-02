@@ -17,12 +17,20 @@ class ContextBuilder
      */
     private $dataVersion;
 
-    /**
-     * @param DataVersion $dataVersion
-     */
     public function __construct(DataVersion $dataVersion)
     {
         $this->dataVersion = $dataVersion;
+    }
+
+    /**
+     * @param ContextState $contextState
+     * @return Context
+     */
+    public static function getContextFromMemento(ContextState $contextState)
+    {
+        /** @var InternalContextState $contextBuilder */
+        $contextBuilder = (new self(DataVersion::fromVersionString($contextState->getVersion())));
+        return $contextBuilder->getContext($contextState->getContextDataSet());
     }
 
     /**

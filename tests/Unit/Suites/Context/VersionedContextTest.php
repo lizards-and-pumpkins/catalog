@@ -6,6 +6,9 @@ use Brera\DataVersion;
 
 /**
  * @covers \Brera\Context\VersionedContext
+ * @uses   \Brera\Context\InternalContextState
+ * @uses   \Brera\Context\ContextBuilder
+ * @uses   \Brera\DataVersion
  */
 class VersionedContextTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,7 +16,7 @@ class VersionedContextTest extends \PHPUnit_Framework_TestCase
      * @var string
      */
     private $testVersionValue = '1';
-    
+
     /**
      * @var VersionedContext
      */
@@ -27,11 +30,11 @@ class VersionedContextTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->stubDataVersion = $this->getMockBuilder(DataVersion::class)
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->stubDataVersion->expects($this->any())
-        ->method('__toString')
-        ->willReturn($this->testVersionValue);
+            ->method('__toString')
+            ->willReturn($this->testVersionValue);
         $this->versionedContext = new VersionedContext($this->stubDataVersion);
     }
 
@@ -104,5 +107,25 @@ class VersionedContextTest extends \PHPUnit_Framework_TestCase
     public function itShouldNotSupportCodesOtherThenVersion()
     {
         $this->assertFalse($this->versionedContext->supportsCode('foo'));
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnAContextState()
+    {
+        $this->assertInstanceOf(ContextState::class, $this->versionedContext->getState());
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnAContextInstace()
+    {
+        $mockContextState = $this->getMock(InternalContextState::class, [], [], '', false);
+        $mockContextState->expects($this->any())->method('getVersion')->willReturn($this->testVersionValue);
+        $mockContextState->expects($this->any())->method('getContextDataSet')->willReturn([]);
+        $result = VersionedContext::fromState($mockContextState);
+        $this->assertInstanceOf(Context::class, $result);
     }
 }
