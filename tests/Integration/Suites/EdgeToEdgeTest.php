@@ -161,29 +161,4 @@ class EdgeToEdgeTestAbstract extends AbstractIntegrationTest
         $response = $website->runWithoutSendingResponse();
         $this->assertInstanceOf(HttpResourceNotFoundResponse::class, $response);
     }
-
-    /**
-     * @return PoCMasterFactory
-     */
-    private function prepareIntegrationTestMasterFactory()
-    {
-        $factory = new PoCMasterFactory();
-        $factory->register(new CommonFactory());
-        $factory->register(new IntegrationTestFactory());
-        $factory->register(new FrontendFactory());
-        return $factory;
-    }
-
-    /**
-     * @param Logger $logger
-     */
-    private function failIfMessagesWhereLogged(Logger $logger)
-    {
-        $messages = $logger->getMessages();
-
-        if (!empty($messages)) {
-            $messageString = implode(PHP_EOL, $messages);
-            $this->fail($messageString);
-        }
-    }
 }
