@@ -29,7 +29,7 @@ class Block
     /**
      * @param BlockRenderer $blockRenderer
      * @param string $template
-     * @param $name
+     * @param string $name
      * @param ProjectionSourceData $dataObject
      */
     final public function __construct(BlockRenderer $blockRenderer, $template, $name, ProjectionSourceData $dataObject)
@@ -87,7 +87,7 @@ class Block
     }
 
     /**
-     * @param $childName
+     * @param string $childName
      * @return string
      */
     final public function getChildOutput($childName)

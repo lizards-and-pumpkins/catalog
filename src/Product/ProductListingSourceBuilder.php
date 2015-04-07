@@ -7,7 +7,7 @@ use Brera\XPathParser;
 class ProductListingSourceBuilder
 {
     /**
-     * @param string @xml
+     * @param string $xml
      * @return ProductListingSource
      */
     public function createProductListingSourceFromXml($xml)

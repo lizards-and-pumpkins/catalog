@@ -67,7 +67,7 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
     }
 
     /**
-     * @param $sourceId
+     * @param mixed $sourceId
      * @return string
      */
     private static function getNonScalarTypeRepresentation($sourceId)

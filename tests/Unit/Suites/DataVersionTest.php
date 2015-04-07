@@ -8,9 +8,9 @@ namespace Brera;
 class DataVersionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @param $emptyVersion
      * @test
      * @expectedException \Brera\EmptyVersionException
+     * @param mixed $emptyVersion
      * @dataProvider emptyVersionProvider
      */
     public function itShouldThrowOnEmptyVersion($emptyVersion)
@@ -33,7 +33,7 @@ class DataVersionTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * @expectedException \Brera\InvalidVersionException
-     * @param $invalidVersion
+     * @param mixed $invalidVersion
      * @dataProvider invalidVersionProvider
      */
     public function itShouldThrownOnInvalidVersion($invalidVersion)
