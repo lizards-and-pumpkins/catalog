@@ -5,6 +5,9 @@ namespace Brera\DataPool\SearchEngine;
 /**
  * @covers \Brera\DataPool\SearchEngine\FileSearchEngine
  * @covers \Brera\DataPool\SearchEngine\IntegrationTestSearchEngineAbstract
+ * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocument
+ * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField
+ * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection
  */
 class FileSearchEngineTest extends AbstractSearchEngineTest
 {

@@ -94,7 +94,10 @@ class DataPoolReader
     private function validateKey($key)
     {
         if (!is_string($key)) {
-            throw new \RuntimeException('Key is not of type string.');
+            throw new InvalidKeyValueStoreKeyException('The key is not of type string.');
+        }
+        if ('' === $key) {
+            throw new InvalidKeyValueStoreKeyException('The Key/Value storage key "" is invalid');
         }
     }
 
@@ -153,5 +156,15 @@ class DataPoolReader
     public function getSearchResults($queryString, Context $context)
     {
         return $this->searchEngine->query($queryString, $context);
+    }
+
+    /**
+     * @param string[] $queryCriteria
+     * @param Context $context
+     * @return \string[]
+     */
+    public function getProductIdsMatchingCriteria(array $queryCriteria, Context $context)
+    {
+        return $this->searchEngine->queryGivenFields($queryCriteria, $context);
     }
 }

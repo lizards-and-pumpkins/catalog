@@ -3,7 +3,7 @@
 namespace Brera;
 
 use Brera\DataPool\KeyValue\File\FileKeyValueStore;
-use Brera\DataPool\SearchEngine\InMemorySearchEngine;
+use Brera\DataPool\SearchEngine\FileSearchEngine;
 use Brera\Queue\InMemory\InMemoryQueue;
 
 class SampleFactory implements Factory
@@ -15,7 +15,10 @@ class SampleFactory implements Factory
      */
     public function createKeyValueStore()
     {
-        return new FileKeyValueStore(sys_get_temp_dir());
+        $storagePath = '/tmp/brera/key-value-store';
+        $this->createDirectoryIfNotExists($storagePath);
+
+        return new FileKeyValueStore($storagePath);
     }
 
     /**
@@ -35,11 +38,14 @@ class SampleFactory implements Factory
     }
 
     /**
-     * @return InMemorySearchEngine
+     * @return FileSearchEngine
      */
     public function createSearchEngine()
     {
-        return new InMemorySearchEngine();
+        $searchEngineStoragePath = '/tmp/brera/search-engine';
+        $this->createDirectoryIfNotExists($searchEngineStoragePath);
+
+        return FileSearchEngine::withPath($searchEngineStoragePath);
     }
 
     /**
@@ -47,6 +53,16 @@ class SampleFactory implements Factory
      */
     public function getSearchableAttributeCodes()
     {
-        return ['name'];
+        return ['name', 'category'];
+    }
+
+    /**
+     * @param string $path
+     */
+    private function createDirectoryIfNotExists($path)
+    {
+        if (! file_exists($path)) {
+            mkdir($path, 0777, true);
+        }
     }
 }

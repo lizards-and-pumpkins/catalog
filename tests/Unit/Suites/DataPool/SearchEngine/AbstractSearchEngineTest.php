@@ -3,28 +3,32 @@
 namespace Brera\DataPool\SearchEngine;
 
 use Brera\Context\Context;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
 
 abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var SearchDocument|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stubSearchDocument;
+    private $stubSearchDocument;
 
     /**
      * @var SearchDocument|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stubSearchDocument2;
+    private $stubSearchDocument2;
 
     /**
      * @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stubSearchDocumentCollection;
+    private $stubSearchDocumentCollection;
 
     /**
      * @var Context|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stubContext;
+    private $stubContext;
 
     /**
      * @var SearchEngine
@@ -33,6 +37,10 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        // todo:
+        // Do not use SearchDocument mocks because the search engine implementation may discard
+        // document instances for storage and thus any expectations set would always fail.
+        // @see itShouldReturnAnArrayWithOneProductIdWithMatchingCriteria() for an example.
         $this->stubSearchDocument = $this->getMockBuilder(SearchDocument::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -418,6 +426,55 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @test
+     */
+    public function itShouldReturnAnEmptyArrayForEmptySearchCriteria()
+    {
+        $this->assertSame([], $this->searchEngine->queryGivenFields([], $this->stubContext));
+    }
+
+    /**
+     * @test
+     * @expectedException \Brera\DataPool\SearchEngine\InvalidFieldIdentifierException
+     */
+    public function itShouldThrowAnExceptionIfTheFieldNamesAreInvalid()
+    {
+        $invalidFieldName = 1;
+        $this->searchEngine->queryGivenFields([$invalidFieldName => 'dummy-search-term'], $this->stubContext);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnAnEmptyArrayIfNoMatchesAreFound()
+    {
+        $this->assertSame([], $this->searchEngine->queryGivenFields(
+            ['test-field' => 'test-search-term'],
+            $this->stubContext
+        ));
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnAnArrayWithOneProductIdWithMatchingCriteria()
+    {
+        $testProductId = 'id10';
+        $testFieldName = 'test-field-name';
+        $testQueryTerm = 'test-query-term';
+
+        $testFieldCollection = SearchDocumentFieldCollection::fromArray([$testFieldName => $testQueryTerm]);
+        // Do not search document mock because search engine implementation may discard instance
+        // for storage and thus any expectations set always fail.
+        $testSearchDocument = new SearchDocument($testFieldCollection, $this->stubContext, $testProductId);
+        $searchEngine = $this->createSearchEngineInstance();
+        $searchEngine->addSearchDocument($testSearchDocument);
+        
+        $result = $searchEngine->queryGivenFields([$testFieldName => $testQueryTerm], $this->stubContext);
+        $this->assertEquals([$testProductId], $result);
+    }
+
+    /**
      * @return SearchEngine
      */
     abstract protected function createSearchEngineInstance();
@@ -483,7 +540,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
      * @param mixed[] $array1
      * @param mixed[] $array2
      */
-    private function assertArraysHasEqualElements($array1, $array2)
+    private function assertArraysHasEqualElements(array $array1, array $array2)
     {
         $this->assertEmpty(array_diff($array1, $array2));
     }

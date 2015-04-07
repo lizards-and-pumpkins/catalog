@@ -2,6 +2,7 @@
 namespace Brera\Context;
 
 use Brera\DataVersion;
+use Brera\Memento;
 
 class VersionedContext implements Context
 {
@@ -15,6 +16,23 @@ class VersionedContext implements Context
     public function __construct(DataVersion $version)
     {
         $this->version = $version;
+    }
+
+    /**
+     * @param Memento $memento
+     * @return VersionedContext
+     */
+    public static function fromMemento(Memento $memento)
+    {
+        return ContextBuilder::getContextFromMemento($memento);
+    }
+
+    /**
+     * @return Memento
+     */
+    public function getState()
+    {
+        return InternalContextState::fromContextFields($this->version, []);
     }
 
     /**
@@ -59,6 +77,7 @@ class VersionedContext implements Context
             $this->getId() :
             '';
     }
+
 
     /**
      * @param string $code

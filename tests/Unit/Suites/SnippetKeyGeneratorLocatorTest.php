@@ -31,11 +31,11 @@ class SnippetKeyGeneratorLocatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @expectedException \Brera\SnippetKeyGeneratorNotRegisteredException
      */
-    public function itShouldReturnADefaultKeyGeneratorForAnUnknownCode()
+    public function itShouldThrowIfSnippetKeyGeneratorNotKnown()
     {
-        $result = $this->locator->getKeyGeneratorForSnippetCode('test');
-        $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
+        $this->locator->getKeyGeneratorForSnippetCode('test');
     }
 
     /**
@@ -65,6 +65,7 @@ class SnippetKeyGeneratorLocatorTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldAlwaysReturnTheSameInstanceForTheSameSnippetCode()
     {
+        $this->locator->register('test', $this->getMock(SnippetKeyGenerator::class));
         $result1 = $this->locator->getKeyGeneratorForSnippetCode('test');
         $result2 = $this->locator->getKeyGeneratorForSnippetCode('test');
         $this->assertSame($result1, $result2);
@@ -75,6 +76,8 @@ class SnippetKeyGeneratorLocatorTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnDifferentInstancesForDifferentSnippetCodes()
     {
+        $this->locator->register('test1', $this->getMock(SnippetKeyGenerator::class));
+        $this->locator->register('test2', $this->getMock(SnippetKeyGenerator::class));
         $result1 = $this->locator->getKeyGeneratorForSnippetCode('test1');
         $result2 = $this->locator->getKeyGeneratorForSnippetCode('test2');
         $this->assertNotSame($result1, $result2);

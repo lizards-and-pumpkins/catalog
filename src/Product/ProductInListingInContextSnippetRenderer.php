@@ -65,7 +65,7 @@ class ProductInListingInContextSnippetRenderer
     private function addProductInListingSnippetsToSnippetResultList()
     {
         $content = $this->blockRenderer->render($this->product, $this->context);
-        $key = $this->snippetKeyGenerator->getKeyForContext($this->product->getId(), $this->context);
+        $key = $this->snippetKeyGenerator->getKeyForContext($this->context, ['product_id' => $this->product->getId()]);
         $contentSnippet = SnippetResult::create($key, $content);
         $this->snippetResultList->add($contentSnippet);
     }

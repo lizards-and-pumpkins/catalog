@@ -105,22 +105,6 @@ abstract class WebFront
     }
 
     /**
-     * @return Context
-     */
-    final protected function getContext()
-    {
-        return $this->context;
-    }
-
-    /**
-     * @return HttpRequest
-     */
-    final protected function getRequest()
-    {
-        return $this->request;
-    }
-
-    /**
      * @throws \InvalidArgumentException
      */
     private function validateMasterFactory()

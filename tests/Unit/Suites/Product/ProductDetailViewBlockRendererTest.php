@@ -32,12 +32,11 @@ class ProductDetailViewBlockRendererTest extends BlockRendererTestAbstract
     /**
      * @test
      */
-    public function itShouldUseTheLayoutHandleProductDetailView()
+    public function itShouldReturnLayoutHandle()
     {
-        $renderer = $this->getBlockRenderer();
-        $method = new \ReflectionMethod($renderer, 'getLayoutHandle');
-        $method->setAccessible(true);
-        $this->assertEquals('product_detail_view', $method->invoke($renderer));
+        $result = $this->getBlockRenderer()->getLayoutHandle();
+
+        $this->assertEquals('product_detail_view', $result);
     }
 
     /**

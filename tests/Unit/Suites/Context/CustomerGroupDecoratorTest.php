@@ -6,6 +6,10 @@ namespace Brera\Context;
 /**
  * @covers \Brera\Context\CustomerGroupContextDecorator
  * @covers \Brera\Context\ContextDecorator
+ * @uses   \Brera\Context\InternalContextState
+ * @uses   \Brera\Context\ContextBuilder
+ * @uses   \Brera\Context\VersionedContext
+ * @uses   \Brera\DataVersion
  */
 class CustomerGroupContextDecoratorTest extends ContextDecoratorTestAbstract
 {
@@ -24,7 +28,7 @@ class CustomerGroupContextDecoratorTest extends ContextDecoratorTestAbstract
     {
         return [$this->getDecoratorUnderTestCode() => 'test-customer-group-code'];
     }
-    
+
     /**
      * @param Context $stubContext
      * @param array $stubContextData

@@ -3,7 +3,7 @@
 namespace Brera\DataPool;
 
 use Brera\DataPool\KeyValue\KeyValueStore;
-use Brera\DataPool\SearchEngine\SearchDocumentCollection;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use Brera\DataPool\SearchEngine\SearchEngine;
 use Brera\SnippetResult;
 use Brera\SnippetResultList;
@@ -28,10 +28,14 @@ class DataPoolWriter
 
     public function writeSnippetResultList(SnippetResultList $snippetResultList)
     {
-        /** @var SnippetResult $snippetResult */
         foreach ($snippetResultList as $snippetResult) {
-            $this->keyValueStore->set($snippetResult->getKey(), $snippetResult->getContent());
+            $this->writeSnippetResult($snippetResult);
         }
+    }
+
+    public function writeSnippetResult(SnippetResult $snippetResult)
+    {
+        $this->keyValueStore->set($snippetResult->getKey(), $snippetResult->getContent());
     }
 
     public function writeSearchDocumentCollection(SearchDocumentCollection $searchDocumentCollection)

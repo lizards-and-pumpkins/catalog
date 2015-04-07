@@ -36,10 +36,8 @@ class PoCWebFront extends WebFront
     protected function registerRouters(HttpRouterChain $router)
     {
         $router->register($this->getMasterFactory()->createApiRouter());
-        $router->register($this->getMasterFactory()->createUrlKeyRouter(
-            $this->getRequest()->getUrl(),
-            $this->getContext()
-        ));
+        $router->register($this->getMasterFactory()->createProductDetailViewRouter());
+        $router->register($this->getMasterFactory()->createProductListingRouter());
         $router->register($this->getMasterFactory()->createResourceNotFoundRouter());
     }
 }

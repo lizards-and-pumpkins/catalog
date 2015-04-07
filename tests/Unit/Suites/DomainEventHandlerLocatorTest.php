@@ -6,11 +6,14 @@ use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\ProductImportDomainEvent;
 use Brera\Product\ProductImportDomainEventHandler;
+use Brera\Product\ProductListingSavedDomainEvent;
+use Brera\Product\ProductListingSavedDomainEventHandler;
 
 /**
  * @covers \Brera\DomainEventHandlerLocator
  * @uses \Brera\RootTemplateChangedDomainEvent
  * @uses \Brera\Product\ProductImportDomainEvent
+ * @uses \Brera\Product\ProductListingSavedDomainEvent
  * @uses \Brera\Product\CatalogImportDomainEvent
  */
 class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
@@ -108,5 +111,28 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         $result = $this->locator->getHandlerFor($rootTemplateChangedDomainEvent);
 
         $this->assertInstanceOf(RootTemplateChangedDomainEventHandler::class, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldLocateAndReturnProductListingSavedDomainEventHandler()
+    {
+        $stubProductListingSavedDomainEventHandler = $this->getMockBuilder(ProductListingSavedDomainEventHandler::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->factory->expects($this->once())
+            ->method('createProductListingSavedDomainEventHandler')
+            ->willReturn($stubProductListingSavedDomainEventHandler);
+
+        /**
+         * The real object has to be used here as getHandlerFor method will call get_class against it
+         */
+        $productListingSavedDomainEvent = new ProductListingSavedDomainEvent('<xml/>');
+
+        $result = $this->locator->getHandlerFor($productListingSavedDomainEvent);
+
+        $this->assertInstanceOf(ProductListingSavedDomainEventHandler::class, $result);
     }
 }

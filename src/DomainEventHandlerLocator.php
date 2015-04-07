@@ -4,6 +4,7 @@ namespace Brera;
 
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\ProductImportDomainEvent;
+use Brera\Product\ProductListingSavedDomainEvent;
 
 class DomainEventHandlerLocator
 {
@@ -38,6 +39,9 @@ class DomainEventHandlerLocator
             case RootTemplateChangedDomainEvent::class:
                 /* @var $event RootTemplateChangedDomainEvent */
                 return $this->factory->createRootTemplateChangedDomainEventHandler($event);
+
+            case ProductListingSavedDomainEvent::class:
+                return $this->factory->createProductListingSavedDomainEventHandler($event);
         }
 
         throw new UnableToFindDomainEventHandlerException(

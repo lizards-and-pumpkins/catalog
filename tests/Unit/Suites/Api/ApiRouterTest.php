@@ -43,8 +43,7 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
         $stubHttpRequest->expects($this->once())
             ->method('getUrl')
             ->willReturn($stubUrl);
-
-        /** @var \PHPUnit_Framework_MockObject_MockObject|Context $stubContext */
+        
         $stubContext = $this->getMock(Context::class);
 
         $this->assertNull($this->apiRouter->route($stubHttpRequest, $stubContext));
@@ -65,7 +64,6 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
             ->method('getUrl')
             ->willReturn($stubUrl);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|Context $stubContext */
         $stubContext = $this->getMock(Context::class);
 
         $this->assertNull($this->apiRouter->route($stubHttpRequest, $stubContext));
@@ -86,17 +84,14 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
             ->method('getUrl')
             ->willReturn($stubUrl);
 
-        $stubApiRequestHandler = $this->getMockBuilder(HttpRequestHandler::class)
-            ->setMethods(['process'])
-            ->getMock();
+        $stubApiRequestHandler = $this->getMock(HttpRequestHandler::class);
 
         $this->stubApiRequestHandlerChain->expects($this->once())
             ->method('getApiRequestHandler')
             ->willReturn($stubApiRequestHandler);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|Context $stubContext */
         $stubContext = $this->getMock(Context::class);
-
+        
         $result = $this->apiRouter->route($stubHttpRequest, $stubContext);
 
         $this->assertInstanceOf(HttpRequestHandler::class, $result);

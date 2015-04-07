@@ -7,11 +7,11 @@ use Brera\Context\Context;
 interface SnippetKeyGenerator
 {
     /**
-     * @param mixed $identifier
      * @param Context $context
+     * @param array $data
      * @return string
      */
-    public function getKeyForContext($identifier, Context $context);
+    public function getKeyForContext(Context $context, array $data = []);
 
     /**
      * @return string[]

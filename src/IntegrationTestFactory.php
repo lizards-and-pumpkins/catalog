@@ -47,6 +47,6 @@ class IntegrationTestFactory implements Factory
      */
     public function getSearchableAttributeCodes()
     {
-        return ['name'];
+        return ['name', 'category'];
     }
 }

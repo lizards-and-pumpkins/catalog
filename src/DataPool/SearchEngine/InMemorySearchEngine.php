@@ -2,6 +2,8 @@
 
 namespace Brera\DataPool\SearchEngine;
 
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
+
 class InMemorySearchEngine extends IntegrationTestSearchEngineAbstract
 {
     /**

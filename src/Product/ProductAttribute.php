@@ -118,6 +118,7 @@ class ProductAttribute implements Attribute
     }
 
     /**
+     * @param string $contextCode
      * @param Context $context
      * @return int
      */

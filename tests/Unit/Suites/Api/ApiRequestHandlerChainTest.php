@@ -25,10 +25,8 @@ class ApiRequestHandlerChainTest extends \PHPUnit_Framework_TestCase
     public function itShouldReturnARequestHandler()
     {
         $requestHandlerCode = 'foo';
-        /* @var $stubApiRequestHandler HttpRequestHandler|\PHPUnit_Framework_MockObject_MockObject */
-        $stubApiRequestHandler = $this->getMockBuilder(HttpRequestHandler::class)
-            ->setMethods(['process'])
-            ->getMock();
+
+        $stubApiRequestHandler = $this->getMock(HttpRequestHandler::class);
 
         $this->requestHandlerChain->register($requestHandlerCode, $stubApiRequestHandler);
         $result = $this->requestHandlerChain->getApiRequestHandler($requestHandlerCode);

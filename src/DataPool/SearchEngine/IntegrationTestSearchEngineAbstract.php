@@ -4,6 +4,8 @@
 namespace Brera\DataPool\SearchEngine;
 
 use Brera\Context\Context;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 
 abstract class IntegrationTestSearchEngineAbstract implements SearchEngine
 {
@@ -34,10 +36,33 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine
                 continue;
             }
 
-            $results = $this->findMatchingDocumentFields($queryString, $searchDocument, $results);
+            $results = $this->findDocumentsMatchingAnyFields($queryString, $searchDocument, $results);
         }
 
         return $results;
+    }
+
+    /**
+     * @param string[] $queryCriteria
+     * @param Context $context
+     * @return string[]
+     */
+    final public function queryGivenFields(array $queryCriteria, Context $context)
+    {
+        $this->validateSearchCriteria($queryCriteria);
+        $result = [];
+        
+        foreach ($this->getSearchDocuments() as $searchDocument) {
+            // todo: check for matching context
+            if ($searchDocument->hasFieldMatchingOneOf($queryCriteria)) {
+                $content = $searchDocument->getContent();
+                if (! in_array($content, $result)) {
+                    $result[] = $content;
+                }
+            }
+        }
+        
+        return $result;
     }
 
     /**
@@ -77,7 +102,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine
      * @param string[] $results
      * @return string[]
      */
-    private function findMatchingDocumentFields($queryString, SearchDocument $searchDocument, array $results)
+    private function findDocumentsMatchingAnyFields($queryString, SearchDocument $searchDocument, array $results)
     {
         $searchDocumentFieldsCollection = $searchDocument->getFieldsCollection();
         $content = $searchDocument->getContent();
@@ -87,5 +112,21 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine
             }
         }
         return $results;
+    }
+
+    /**
+     * @param string[] $queryCriteria
+     * @throws InvalidFieldIdentifierException
+     */
+    private function validateSearchCriteria(array $queryCriteria)
+    {
+        array_map(function ($fieldName) {
+            if (!is_string($fieldName)) {
+                throw new InvalidFieldIdentifierException(sprintf(
+                    'The query criteria field name must be a string, got "%s"',
+                    $fieldName
+                ));
+            }
+        }, array_keys($queryCriteria));
     }
 }

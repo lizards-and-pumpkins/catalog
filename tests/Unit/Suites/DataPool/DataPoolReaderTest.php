@@ -21,7 +21,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     {
         parent::setUp();
 
-        $this->dataPoolReader = new DataPoolReader($this->stubKeyValueStore, $this->stubSearchEngine);
+        $this->dataPoolReader = new DataPoolReader($this->getStubKeyValueStore(), $this->getStubSearchEngine());
     }
 
     /**
@@ -53,7 +53,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     }
 
     /**
-     * @return mixed[]
+     * @return array[]
      */
     public function snippetListProvider()
     {
@@ -78,7 +78,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     }
 
     /**
-     * @return mixed[]
+     * @return array[]
      */
     public function brokenJsonProvider()
     {
@@ -93,7 +93,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
 
     /**
      * @test
-     * @expectedException \RuntimeException
+     * @expectedException \Brera\DataPool\InvalidKeyValueStoreKeyException
      *
      * @dataProvider invalidKeyProvider
      */
@@ -104,7 +104,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
 
     /**
      * @test
-     * @expectedException \RuntimeException
+     * @expectedException \Brera\DataPool\InvalidKeyValueStoreKeyException
      *
      * @dataProvider invalidKeyProvider
      */
@@ -114,7 +114,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     }
 
     /**
-     * @return mixed[]
+     * @return array[]
      */
     public function invalidKeyProvider()
     {
@@ -128,7 +128,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     }
 
     /**
-     * @return mixed[]
+     * @return array[]
      */
     public function brokenKeysForSnippetsProvider()
     {
@@ -142,14 +142,21 @@ class DataPoolReaderTest extends AbstractDataPoolTest
 
     /**
      * @test
-     *
      * @expectedException \RuntimeException
-     *
      * @dataProvider brokenKeysForSnippetsProvider
      */
     public function itShouldOnlyAcceptStringKeysForGetSnippets($key)
     {
         $this->dataPoolReader->getSnippets($key);
+    }
+
+    /**
+     * @test
+     * @expectedException \Brera\DataPool\InvalidKeyValueStoreKeyException
+     */
+    public function itShouldThrowAnExceptionIfTheKeyIsEmpty()
+    {
+        $this->dataPoolReader->getSnippet('');
     }
 
     /**
@@ -172,7 +179,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
      */
     public function itShouldReturnFalseIfASnippetKeyIsNotInTheStore()
     {
-        $this->stubKeyValueStore->expects($this->once())
+        $this->getStubKeyValueStore()->expects($this->once())
             ->method('has')
             ->with('test')
             ->willReturn(false);
@@ -184,7 +191,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
      */
     public function itShouldReturnTrueIfASnippetKeyIsInTheStore()
     {
-        $this->stubKeyValueStore->expects($this->once())
+        $this->getStubKeyValueStore()->expects($this->once())
             ->method('has')
             ->with('test')
             ->willReturn(true);
@@ -196,7 +203,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
      */
     public function itShouldReturnNegativeOneIfTheCurrentVersionIsNotSet()
     {
-        $this->stubKeyValueStore->expects($this->once())
+        $this->getStubKeyValueStore()->expects($this->once())
             ->method('has')
             ->with('current_version')
             ->willReturn(false);
@@ -208,11 +215,11 @@ class DataPoolReaderTest extends AbstractDataPoolTest
      */
     public function itShouldReturnTheCurrentVersion()
     {
-        $this->stubKeyValueStore->expects($this->once())
+        $this->getStubKeyValueStore()->expects($this->once())
             ->method('has')
             ->with('current_version')
             ->willReturn(true);
-        $this->stubKeyValueStore->expects($this->once())
+        $this->getStubKeyValueStore()->expects($this->once())
             ->method('get')
             ->with('current_version')
             ->willReturn('123');
@@ -226,9 +233,21 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     {
         $stubContext = $this->getMock(Context::class);
 
-        $this->stubSearchEngine->expects($this->once())
+        $this->getStubSearchEngine()->expects($this->once())
             ->method('query');
 
         $this->dataPoolReader->getSearchResults('foo', $stubContext);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldDelegateCriteriaQueriesToTheSearchEngine()
+    {
+        $searchCriteria = ['test-field' => 'test-value'];
+        $stubContext = $this->getMock(Context::class);
+        $this->getStubSearchEngine()->expects($this->once())->method('queryGivenFields')
+            ->with($searchCriteria, $stubContext);
+        $this->dataPoolReader->getProductIdsMatchingCriteria($searchCriteria, $stubContext);
     }
 }

@@ -23,13 +23,24 @@ class ContextBuilder
     }
 
     /**
+     * @param ContextState $contextState
+     * @return Context
+     */
+    public static function getContextFromMemento(ContextState $contextState)
+    {
+        /** @var InternalContextState $contextBuilder */
+        $contextBuilder = (new self(DataVersion::fromVersionString($contextState->getVersion())));
+        return $contextBuilder->getContext($contextState->getContextDataSet());
+    }
+
+    /**
      * @param HttpRequest $request
      * @return Context
      */
     public function createFromRequest(HttpRequest $request)
     {
         // TODO Implement this
-        return $this->getContext(['website' => 'ru', 'language' => 'de_DE']);
+        return $this->getContext(['website' => 'ru', 'language' => 'en_US']);
     }
 
     /**

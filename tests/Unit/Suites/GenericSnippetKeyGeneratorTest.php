@@ -62,18 +62,8 @@ class GenericSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
     public function itShouldReturnAKeyIncludingTheHandle()
     {
         $stubContext = $this->getMock(Context::class);
-        $result = $this->keyGenerator->getKeyForContext(123, $stubContext);
+        $result = $this->keyGenerator->getKeyForContext($stubContext);
         $this->assertContains($this->testSnippetCode, $result);
-    }
-
-    /**
-     * @test
-     */
-    public function itShouldIncludeTheSpecifiedIdentifierInTheReturnedKey()
-    {
-        $stubContext = $this->getMock(Context::class);
-        $result = $this->keyGenerator->getKeyForContext(123, $stubContext);
-        $this->assertContains('123', $result);
     }
 
     /**
@@ -86,7 +76,7 @@ class GenericSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
         $stubContext->expects($this->once())
             ->method('getIdForParts')
             ->willReturn($testContextId);
-        $result = $this->keyGenerator->getKeyForContext(123, $stubContext);
+        $result = $this->keyGenerator->getKeyForContext($stubContext);
         $this->assertContains($testContextId, $result);
     }
 

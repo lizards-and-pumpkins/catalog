@@ -17,4 +17,12 @@ class CatalogImportApiRequestHandler implements HttpRequestHandler
         $response->setBody(json_encode('dummy response'));
         return $response;
     }
+
+    /**
+     * @return bool
+     */
+    public function canProcess()
+    {
+        // TODO: Implement canProcess() method.
+    }
 }

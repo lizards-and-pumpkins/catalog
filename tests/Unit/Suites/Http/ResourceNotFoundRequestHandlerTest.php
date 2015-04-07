@@ -26,4 +26,12 @@ class ResourceNotFoundRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $result = $this->requestHandler->process();
         $this->assertInstanceOf(HttpResourceNotFoundResponse::class, $result);
     }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnTrueForEveryRequest()
+    {
+        $this->assertTrue($this->requestHandler->canProcess());
+    }
 }
