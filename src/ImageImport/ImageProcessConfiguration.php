@@ -5,7 +5,7 @@ namespace Brera\ImageImport;
 class ImageProcessConfiguration implements \IteratorAggregate
 {
     /**
-     * @var ImageProcessCommand[]
+     * @var ImageProcessCommandSequence[]
      */
     private $configurations;
     /**
@@ -14,7 +14,7 @@ class ImageProcessConfiguration implements \IteratorAggregate
     private $targetDirectory;
 
     /**
-     * @param ImageProcessCommand[] $configurations
+     * @param ImageProcessCommandSequence[] $configurations
      * @param string $targetDirectory
      */
     public function __construct(array $configurations, $targetDirectory)
@@ -27,7 +27,7 @@ class ImageProcessConfiguration implements \IteratorAggregate
     }
 
     /**
-     * @return \ArrayIterator|ImageProcessCommand[]
+     * @return \ArrayIterator|ImageProcessCommandSequence[]
      */
     public function getIterator()
     {

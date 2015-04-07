@@ -5,10 +5,10 @@ namespace Brera\ImageImport;
 /**
  * @covers \Brera\ImageImport\ImageProcessCommand
  */
-class ImageProcessCommandTest extends \PHPUnit_Framework_TestCase
+class ImageProcessCommandSequenceTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ImageProcessCommand
+     * @var ImageProcessCommandSequence
      */
     private $command;
 
@@ -23,7 +23,7 @@ class ImageProcessCommandTest extends \PHPUnit_Framework_TestCase
             'resize' => array(200, 200),
         ];
 
-        $this->command = ImageProcessCommand::createByArray($this->instructions);
+        $this->command = ImageProcessCommandSequence::fromArray($this->instructions);
     }
 
     /**
@@ -31,7 +31,7 @@ class ImageProcessCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnAProcessCommand()
     {
-        $this->assertInstanceOf(ImageProcessCommand::class, $this->command);
+        $this->assertInstanceOf(ImageProcessCommandSequence::class, $this->command);
     }
 
     /**
@@ -49,7 +49,7 @@ class ImageProcessCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldThrowAnExceptionWhenCreatedWithAnUnknownInstructions($config)
     {
-        ImageProcessCommand::createByArray($config);
+        ImageProcessCommandSequence::fromArray($config);
     }
 
     /**
@@ -63,7 +63,7 @@ class ImageProcessCommandTest extends \PHPUnit_Framework_TestCase
             'saveAsFile' => array(),
         ];
 
-        ImageProcessCommand::createByArray($instructions);
+        ImageProcessCommandSequence::fromArray($instructions);
     }
 
     /**

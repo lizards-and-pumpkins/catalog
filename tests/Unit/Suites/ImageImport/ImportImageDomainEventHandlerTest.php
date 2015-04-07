@@ -100,12 +100,12 @@ class ImportImageDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param $configuration
-     * @return ImageProcessCommand|\PHPUnit_Framework_MockObject_MockObject
+     * @return ImageProcessCommandSequence|\PHPUnit_Framework_MockObject_MockObject
      */
     private function getImageProcessCommand($configuration)
     {
-        /* @var $command \PHPUnit_Framework_MockObject_MockObject|ImageProcessCommand */
-        $command = $this->getMockBuilder(ImageProcessCommand::class)
+        /* @var $command \PHPUnit_Framework_MockObject_MockObject|ImageProcessCommandSequence */
+        $command = $this->getMockBuilder(ImageProcessCommandSequence::class)
             ->disableOriginalConstructor()
             ->setMethods(['getInstructions'])
             ->getMock();

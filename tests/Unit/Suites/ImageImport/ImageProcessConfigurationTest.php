@@ -12,7 +12,7 @@ class ImageProcessConfigurationTest extends \PHPUnit_Framework_TestCase
      */
     private $configuration;
     /**
-     * @var ImageProcessCommand[]
+     * @var ImageProcessCommandSequence[]
      */
     private $commandStubs = array();
 
@@ -24,8 +24,8 @@ class ImageProcessConfigurationTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->targetDirectory = '/tmp';
-        $stubCommand = $this->getMock(ImageProcessCommand::class, [], [], '', false);
-        $stubCommand2 = $this->getMock(ImageProcessCommand::class, [], [], '', false);
+        $stubCommand = $this->getMock(ImageProcessCommandSequence::class, [], [], '', false);
+        $stubCommand2 = $this->getMock(ImageProcessCommandSequence::class, [], [], '', false);
         array_push($this->commandStubs, $stubCommand);
         array_push($this->commandStubs, $stubCommand2);
         $this->configuration = new ImageProcessConfiguration(
@@ -57,7 +57,7 @@ class ImageProcessConfigurationTest extends \PHPUnit_Framework_TestCase
     public function itShouldThrowAnExceptionWhenTargetDirectoryIsNotWritable()
     {
         $targetDirectory = 'unexisting-not-writeable-directory';
-        $stubCommand = $this->getMock(ImageProcessCommand::class, [], [], '', false);
+        $stubCommand = $this->getMock(ImageProcessCommandSequence::class, [], [], '', false);
         array_push($this->commandStubs, $stubCommand);
         $this->configuration = new ImageProcessConfiguration(
             array($stubCommand),

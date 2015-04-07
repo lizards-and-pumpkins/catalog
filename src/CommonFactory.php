@@ -10,7 +10,7 @@ use Brera\DataPool\KeyValue\KeyValueStore;
 use Brera\DataPool\SearchEngine\SearchEngine;
 use Brera\Http\HttpRouterChain;
 use Brera\Http\ResourceNotFoundRouter;
-use Brera\ImageImport\ImageProcessCommand;
+use Brera\ImageImport\ImageProcessCommandSequence;
 use Brera\ImageImport\ImageProcessConfiguration;
 use Brera\ImageImport\ImportImageDomainEvent;
 use Brera\ImageImport\ImportImageDomainEventHandler;
@@ -527,19 +527,19 @@ class CommonFactory implements Factory, DomainEventFactory
     {
         // TODO get config from somewhere and remove hardcoded
         if (!$this->imageProcessingConfiguration) {
-            $instructions1 = [
+            $commands1 = [
                 'resize' => array(400, 800),
             ];
-            $instructions2 = [
+            $commands2 = [
                 'resizeToWidth' => array(200),
             ];
-            $instructions3 = [
+            $commands3 = [
                 'resizeToBestFit' => array(400, 300),
             ];
             $configuration = [
-                ImageProcessCommand::createByArray($instructions1),
-                ImageProcessCommand::createByArray($instructions2),
-                ImageProcessCommand::createByArray($instructions3),
+                ImageProcessCommandSequence::fromArray($commands1),
+                ImageProcessCommandSequence::fromArray($commands2),
+                ImageProcessCommandSequence::fromArray($commands3),
             ];
             $targetDirectory = sys_get_temp_dir() . '/brera/';
             // TODO make sure directory exists, not sure whether this should stay here, if it is not writeable

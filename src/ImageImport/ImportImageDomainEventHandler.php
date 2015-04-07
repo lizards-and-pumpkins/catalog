@@ -43,7 +43,7 @@ class ImportImageDomainEventHandler implements DomainEventHandler
     }
 
     /**
-     * @param ImageProcessCommand $command
+     * @param ImageProcessCommandSequence $command
      * @param string $image
      */
     private function createImageBasedOn($command, $image)

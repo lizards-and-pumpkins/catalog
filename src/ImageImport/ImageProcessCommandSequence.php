@@ -4,7 +4,7 @@ namespace Brera\ImageImport;
 
 use Brera\ImageProcessor\ImageProcessor;
 
-class ImageProcessCommand
+class ImageProcessCommandSequence
 {
     /**
      * @var string[]
@@ -26,10 +26,10 @@ class ImageProcessCommand
 
     /**
      * @param mixed[] $config
-     * @return ImageProcessCommand
+     * @return ImageProcessCommandSequence
      * @throws InvalidInstructionException
      */
-    public static function createByArray($config)
+    public static function fromArray($config)
     {
         if (!is_array($config)) {
             throw new InvalidInstructionException('The passed instructions are no array.');
