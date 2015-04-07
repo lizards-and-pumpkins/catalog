@@ -26,6 +26,9 @@ abstract class ProductBlock extends Block
         return $value;
     }
 
+    /**
+     * @return string
+     */
     public function getProductUrl()
     {
         return $this->getProductAttributeValue('url_key');

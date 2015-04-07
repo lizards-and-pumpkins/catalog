@@ -25,7 +25,7 @@ class ProductAttribute implements Attribute
     /**
      * @param string $code
      * @param string|ProductAttributeList $value
-     * @param array $contextData
+     * @param mixed[] $contextData
      */
     private function __construct($code, $value, array $contextData = [])
     {
@@ -35,7 +35,7 @@ class ProductAttribute implements Attribute
     }
 
     /**
-     * @param array $node
+     * @param mixed[] $node
      * @return ProductAttribute
      */
     public static function fromArray(array $node)

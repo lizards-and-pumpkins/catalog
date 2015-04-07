@@ -47,7 +47,10 @@ class EdgeToEdgeTestAbstract extends AbstractIntegrationTest
         $productDetailViewKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
             ProductDetailViewInContextSnippetRenderer::CODE
         );
-        $productDetailViewKey = $productDetailViewKeyGenerator->getKeyForContext($context, ['product_id' => $productId]);
+        $productDetailViewKey = $productDetailViewKeyGenerator->getKeyForContext(
+            $context,
+            ['product_id' => $productId]
+        );
         $productDetailViewHtml = $dataPoolReader->getSnippet($productDetailViewKey);
 
         $this->assertContains(
@@ -137,9 +140,9 @@ class EdgeToEdgeTestAbstract extends AbstractIntegrationTest
         $numberOfMessages = 3;
         $consumer->process($numberOfMessages);
         
-        $urlKey = (new XPathParser($xml))->getXmlNodesArrayByXPath('/*/product/attributes/url_key[@language="en_US"]')[0];
+        $urlKeys = (new XPathParser($xml))->getXmlNodesArrayByXPath('/*/product/attributes/url_key[@language="en_US"]');
         
-        $httpUrl = HttpUrl::fromString('http://example.com/' . $urlKey['value']);
+        $httpUrl = HttpUrl::fromString('http://example.com/' . $urlKeys[0]['value']);
         $request = HttpRequest::fromParameters('GET', $httpUrl);
 
         $website = new PoCWebFront($request, $factory);

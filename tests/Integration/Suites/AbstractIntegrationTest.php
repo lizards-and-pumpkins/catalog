@@ -7,7 +7,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
     /**
      * @return PoCMasterFactory
      */
-    protected final function prepareIntegrationTestMasterFactory()
+    final protected function prepareIntegrationTestMasterFactory()
     {
         $factory = new PoCMasterFactory();
         $factory->register(new CommonFactory());
@@ -16,10 +16,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
         return $factory;
     }
 
-    /**
-     * @param Logger $logger
-     */
-    protected final function failIfMessagesWhereLogged(Logger $logger)
+    final protected function failIfMessagesWhereLogged(Logger $logger)
     {
         $messages = $logger->getMessages();
 

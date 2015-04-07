@@ -32,17 +32,14 @@ abstract class ContextDecoratorTestAbstract extends \PHPUnit_Framework_TestCase
 
     /**
      * @param Context|\PHPUnit_Framework_MockObject_MockObject $stubContext
-     * @param array $stubContextData
+     * @param string[] $stubContextData
      * @return ContextDecorator
      */
-    abstract protected function createContextDecoratorUnderTest(
-        Context $stubContext,
-        array $stubContextData
-    );
+    abstract protected function createContextDecoratorUnderTest(Context $stubContext, array $stubContextData);
 
 
     /**
-     * @return mixed[]
+     * @return string[]
      */
     abstract protected function getStubContextData();
 

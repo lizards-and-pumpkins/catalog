@@ -29,7 +29,7 @@ class ProductSnippetKeyGenerator implements SnippetKeyGenerator
     
     /**
      * @param Context $context
-     * @param array $data
+     * @param string[] $data
      * @return string
      */
     public function getKeyForContext(Context $context, array $data = [])

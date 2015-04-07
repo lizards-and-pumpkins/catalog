@@ -54,7 +54,7 @@ class SearchDocumentFieldCollection
      */
     public function toArray()
     {
-        return array_reduce($this->fields, function(array $acc, SearchDocumentField $field) {
+        return array_reduce($this->fields, function (array $acc, SearchDocumentField $field) {
             $acc[$field->getKey()] = $field->getValue();
             return $acc;
         }, []);

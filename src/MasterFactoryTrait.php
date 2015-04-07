@@ -30,7 +30,7 @@ trait MasterFactoryTrait
 
     /**
      * @param string $method
-     * @param array $parameters
+     * @param mixed[] $parameters
      * @return mixed
      * @throws UndefinedFactoryMethodException
      */

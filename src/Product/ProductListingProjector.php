@@ -19,15 +19,10 @@ class ProductListingProjector implements Projector
      */
     private $dataPoolWriter;
 
-    /**
-     * @param ProductListingCriteriaSnippetRenderer $productListingPageMetaInfoSnippetRenderer
-     * @param DataPoolWriter $dataPoolWriter
-     */
     public function __construct(
         ProductListingCriteriaSnippetRenderer $productListingPageMetaInfoSnippetRenderer,
         DataPoolWriter $dataPoolWriter
-    )
-    {
+    ) {
         $this->productListingPageMetaInfoSnippetRenderer = $productListingPageMetaInfoSnippetRenderer;
         $this->dataPoolWriter = $dataPoolWriter;
     }
@@ -47,9 +42,6 @@ class ProductListingProjector implements Projector
         $this->projectProductListing($dataObject);
     }
 
-    /**
-     * @param ProductListingSource $productListingSource
-     */
     private function projectProductListing(ProductListingSource $productListingSource)
     {
         $snippetResult = $this->productListingPageMetaInfoSnippetRenderer->render($productListingSource);

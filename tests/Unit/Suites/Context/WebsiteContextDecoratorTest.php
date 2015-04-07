@@ -31,7 +31,7 @@ class WebsiteContextDecoratorTest extends ContextDecoratorTestAbstract
     
     /**
      * @param Context $stubContext
-     * @param array $stubContextData
+     * @param string[] $stubContextData
      * @return WebsiteContextDecorator
      */
     protected function createContextDecoratorUnderTest(Context $stubContext, array $stubContextData)

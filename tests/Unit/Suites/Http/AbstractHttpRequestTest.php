@@ -13,8 +13,8 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
 
         $stubHttpUrl = $this->getStubHttpUrl();
         $stubHttpUrl->expects($this->once())
-        ->method('__toString')
-        ->willReturn($url);
+            ->method('__toString')
+            ->willReturn($url);
 
         $httpRequest = new HttpPostRequest($stubHttpUrl);
         $result = $httpRequest->getUrl();
@@ -63,11 +63,7 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
      */
     protected function getStubHttpUrl()
     {
-        $stubHttpUrl = $this->getMockBuilder(HttpUrl::class)
-        ->disableOriginalConstructor()
-        ->getMock();
-
-        return $stubHttpUrl;
+        return $this->getMock(HttpUrl::class, [], [], '', false);
     }
 
     /**

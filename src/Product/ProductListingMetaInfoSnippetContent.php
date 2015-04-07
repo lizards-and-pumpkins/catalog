@@ -24,7 +24,7 @@ class ProductListingMetaInfoSnippetContent implements PageMetaInfoSnippetContent
     private $pageSnippetCodes;
 
     /**
-     * @param array $productSelectionCriteria
+     * @param string[] $productSelectionCriteria
      * @param string $rootSnippetCode
      * @param string[] $pageSnippetCodes
      */

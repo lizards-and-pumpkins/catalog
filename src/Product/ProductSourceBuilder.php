@@ -26,7 +26,7 @@ class ProductSourceBuilder
     }
 
     /**
-     * @param array $nodeArray
+     * @param mixed[] $nodeArray
      * @return string
      */
     private function getSkuStringFromDomNodeArray(array $nodeArray)

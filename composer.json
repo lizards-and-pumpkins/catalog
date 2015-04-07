@@ -46,7 +46,7 @@
             "vendor/bin/phpunit -c tests/Unit/phpunit.xml.dist",
             "vendor/bin/phpunit -c tests/Integration/phpunit.xml.dist"
         ],
-        "sniff" : "vendor/bin/phpcs -p --colors --standard=vendor/brera/coding-standards/src/Brera/ src/ tests/"
+        "sniff" : "vendor/bin/phpcs --runtime-set ignore_warnings_on_exit true -p --colors --standard=vendor/brera/coding-standards/src/Brera/ src/ tests/"
     },
     "minimum-stability": "dev",
     "prefer-stable": true

@@ -202,11 +202,12 @@ abstract class AbstractHttpRequestHandler implements HttpRequestHandler
     /**
      * @param string $code
      * @return string
-     * @todo: delegate placeholder creation (and also use the delegate during import)
-     * @see Brera\Renderer\BlockRenderer::getBlockPlaceholder()
      */
     private function buildPlaceholderFromCode($code)
     {
+        // TODO delegate placeholder creation (and also use the delegate during import)
+        // @see Brera\Renderer\BlockRenderer::getBlockPlaceholder()
+
         return sprintf('{{snippet %s}}', $code);
     }
 

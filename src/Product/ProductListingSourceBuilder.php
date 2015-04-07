@@ -37,7 +37,7 @@ class ProductListingSourceBuilder
     }
 
     /**
-     * @param array $nodeArray
+     * @param mixed[] $nodeArray
      * @return string
      */
     private function getUrlKeyStringFromDomNodeArray(array $nodeArray)

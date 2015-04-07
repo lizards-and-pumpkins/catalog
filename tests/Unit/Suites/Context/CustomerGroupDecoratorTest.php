@@ -31,7 +31,7 @@ class CustomerGroupContextDecoratorTest extends ContextDecoratorTestAbstract
 
     /**
      * @param Context $stubContext
-     * @param array $stubContextData
+     * @param string[] $stubContextData
      * @return CustomerGroupContextDecorator
      */
     protected function createContextDecoratorUnderTest(Context $stubContext, array $stubContextData)
