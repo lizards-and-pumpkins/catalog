@@ -9,9 +9,6 @@ trait FactoryTrait
      */
     private $masterFactory;
 
-    /**
-     * @param MasterFactory $masterFactory
-     */
     final public function setMasterFactory(MasterFactory $masterFactory)
     {
         $this->masterFactory = $masterFactory;

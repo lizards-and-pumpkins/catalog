@@ -2,9 +2,9 @@
 
 namespace Brera\Product;
 
-use Brera\XPathParser;
-use Brera\Queue\Queue;
 use Brera\DomainEventHandler;
+use Brera\Queue\Queue;
+use Brera\XPathParser;
 
 class CatalogImportDomainEventHandler implements DomainEventHandler
 {
@@ -18,10 +18,6 @@ class CatalogImportDomainEventHandler implements DomainEventHandler
      */
     private $eventQueue;
 
-    /**
-     * @param CatalogImportDomainEvent $event
-     * @param Queue $eventQueue
-     */
     public function __construct(CatalogImportDomainEvent $event, Queue $eventQueue)
     {
         $this->event = $event;

@@ -31,10 +31,10 @@ class Block
      * @param string $template
      * @param $name
      * @param ProjectionSourceData $dataObject
-     * @todo  Decouple from template rendering logic
      */
     final public function __construct(BlockRenderer $blockRenderer, $template, $name, ProjectionSourceData $dataObject)
     {
+        // TODO Decouple from template rendering logic
         $this->blockRenderer = $blockRenderer;
         $this->template = $template;
         $this->blockName = $name;

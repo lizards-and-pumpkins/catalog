@@ -53,9 +53,6 @@ abstract class AbstractDataPoolTest extends \PHPUnit_Framework_TestCase
         return $productId;
     }
 
-    /**
-     * @return void
-     */
     protected function addSetMethodToStubKeyValueStore()
     {
         $this->stubKeyValueStore->expects($this->once())

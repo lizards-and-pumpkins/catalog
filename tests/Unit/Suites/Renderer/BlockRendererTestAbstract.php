@@ -51,7 +51,10 @@ abstract class BlockRendererTestAbstract extends \PHPUnit_Framework_TestCase
         \PHPUnit_Framework_MockObject_MockObject $stubThemeLocator,
         BlockStructure $stubBlockStructure
     );
-    
+
+    /**
+     * @return Layout|\PHPUnit_Framework_MockObject_MockObject
+     */
     final protected function getStubLayout()
     {
         return $this->stubLayout;

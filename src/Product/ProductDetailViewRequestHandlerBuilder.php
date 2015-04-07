@@ -17,9 +17,6 @@ class ProductDetailViewRequestHandlerBuilder
      */
     private $urlPathKeyGenerator;
 
-    /**
-     * @var DataPoolReader
-     */
     private $dataPoolReader;
     
     /**

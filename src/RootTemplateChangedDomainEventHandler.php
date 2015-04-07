@@ -26,12 +26,6 @@ class RootTemplateChangedDomainEventHandler implements DomainEventHandler
      */
     private $projector;
 
-    /**
-     * @param RootTemplateChangedDomainEvent $event
-     * @param RootSnippetSourceListBuilder $rootSnippetSourceBuilder
-     * @param ContextSource $contextSource
-     * @param RootSnippetProjector $projector
-     */
     public function __construct(
         RootTemplateChangedDomainEvent $event,
         RootSnippetSourceListBuilder $rootSnippetSourceBuilder,

@@ -6,7 +6,7 @@ use Brera\Http\HttpRouter;
 
 /**
  * @covers \Brera\Product\ProductDetailViewRouter
- * @uses \Brera\Http\HttpUrl
+ * @uses   \Brera\Http\HttpUrl
  */
 class ProductDetailViewRouterTest extends AbstractRouterTest
 {

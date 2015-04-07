@@ -16,9 +16,6 @@ class PageTest extends \PHPUnit_Framework_TestCase
      */
     private $page;
 
-    /**
-     * @return null
-     */
     protected function setUp()
     {
         $this->testedBody = 'my cool body';
@@ -54,6 +51,9 @@ class PageTest extends \PHPUnit_Framework_TestCase
         new Page($noString);
     }
 
+    /**
+     * @return mixed[]
+     */
     public function noStringProvider()
     {
         return [

@@ -27,18 +27,12 @@ class PoCWebFront extends WebFront
         return $contextBuilder->createFromRequest($request);
     }
 
-    /**
-     * @param MasterFactory $factory
-     */
     protected function registerFactoriesIfMasterFactoryWasNotInjected(MasterFactory $factory)
     {
         $factory->register(new CommonFactory());
         $factory->register(new FrontendFactory());
     }
 
-    /**
-     * @param HttpRouterChain $router
-     */
     protected function registerRouters(HttpRouterChain $router)
     {
         $router->register($this->getMasterFactory()->createApiRouter());

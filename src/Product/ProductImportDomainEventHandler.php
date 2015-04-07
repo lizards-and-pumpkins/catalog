@@ -27,12 +27,6 @@ class ProductImportDomainEventHandler implements DomainEventHandler
      */
     private $contextSource;
 
-    /**
-     * @param ProductImportDomainEvent $event
-     * @param ProductSourceBuilder $productSourceBuilder
-     * @param ContextSource $contextSource
-     * @param ProductProjector $projector
-     */
     public function __construct(
         ProductImportDomainEvent $event,
         ProductSourceBuilder $productSourceBuilder,

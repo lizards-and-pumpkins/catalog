@@ -11,6 +11,9 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
      */
     private $storagePath;
 
+    /**
+     * @param string $storagePath
+     */
     final private function __construct($storagePath)
     {
         if (!is_writable($storagePath)) {
@@ -24,7 +27,7 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
     }
 
     /**
-     * @param $storagePath
+     * @param string $storagePath
      * @return FileSearchEngine
      */
     public static function withPath($storagePath)
@@ -42,10 +45,6 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
         return new self($defaultPath);
     }
 
-    /**
-     * @param SearchDocument $searchDocument
-     * @return void
-     */
     public function addSearchDocument(SearchDocument $searchDocument)
     {
         file_put_contents($this->storagePath . '/' . uniqid(), serialize($searchDocument));

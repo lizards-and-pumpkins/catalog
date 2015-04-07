@@ -32,25 +32,16 @@ class Page implements HttpResponse
         return $this->body;
     }
 
-    /**
-     * @return void
-     */
     public function send()
     {
         $this->sendHeaders();
         $this->sendBody();
     }
 
-    /**
-     * @return void
-     */
     private function sendHeaders()
     {
     }
 
-    /**
-     * @return void
-     */
     private function sendBody()
     {
         echo $this->body;

@@ -16,11 +16,17 @@ class SnippetResultList implements \Countable, \IteratorAggregate
         $this->snippets[] = $snippet;
     }
 
+    /**
+     * @return int
+     */
     public function count()
     {
         return count($this->snippets);
     }
 
+    /**
+     * @return \ArrayIterator
+     */
     public function getIterator()
     {
         return new \ArrayIterator($this->snippets);

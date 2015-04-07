@@ -9,9 +9,6 @@ class InMemoryLogger implements Logger
      */
     private $messages = [];
 
-    /**
-     * @param LogMessage $message
-     */
     public function log(LogMessage $message)
     {
         $this->messages[] = $message;

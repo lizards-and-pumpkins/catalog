@@ -53,7 +53,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     }
 
     /**
-     * @return array
+     * @return array[]
      */
     public function snippetListProvider()
     {
@@ -78,7 +78,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     }
 
     /**
-     * @return array
+     * @return array[]
      */
     public function brokenJsonProvider()
     {
@@ -143,7 +143,6 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     /**
      * @test
      * @expectedException \RuntimeException
-     *
      * @dataProvider brokenKeysForSnippetsProvider
      */
     public function itShouldOnlyAcceptStringKeysForGetSnippets($key)

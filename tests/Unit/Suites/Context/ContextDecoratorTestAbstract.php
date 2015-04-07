@@ -42,7 +42,7 @@ abstract class ContextDecoratorTestAbstract extends \PHPUnit_Framework_TestCase
 
 
     /**
-     * @return array
+     * @return mixed[]
      */
     abstract protected function getStubContextData();
 

@@ -11,9 +11,6 @@ class InMemorySearchEngine extends IntegrationTestSearchEngineAbstract
      */
     private $index = [];
 
-    /**
-     * @param SearchDocument $searchDocument
-     */
     public function addSearchDocument(SearchDocument $searchDocument)
     {
         array_push($this->index, $searchDocument);

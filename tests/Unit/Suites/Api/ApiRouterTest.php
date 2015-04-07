@@ -34,9 +34,7 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnNullIfUrlIsNotLeadByApiPrefix()
     {
-        $stubUrl = $this->getMockBuilder(HttpUrl::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $stubUrl = $this->getMock(HttpUrl::class, [], [], '', false);
         $stubUrl->expects($this->once())
             ->method('getPath')
             ->willReturn('foo/bar');
@@ -56,9 +54,7 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnNullIfNoApiRequestHandlerFound()
     {
-        $stubUrl = $this->getMockBuilder(HttpUrl::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $stubUrl = $this->getMock(HttpUrl::class, [], [], '', false);
         $stubUrl->expects($this->once())
             ->method('getPath')
             ->willReturn('api/foo');
@@ -69,7 +65,7 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
             ->willReturn($stubUrl);
 
         $stubContext = $this->getMock(Context::class);
-        
+
         $this->assertNull($this->apiRouter->route($stubHttpRequest, $stubContext));
     }
 
@@ -78,9 +74,7 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnApiRequestHandler()
     {
-        $stubUrl = $this->getMockBuilder(HttpUrl::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $stubUrl = $this->getMock(HttpUrl::class, [], [], '', false);
         $stubUrl->expects($this->once())
             ->method('getPath')
             ->willReturn('api/foo');
@@ -108,9 +102,7 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
      */
     private function getStubHttpRequest()
     {
-        $stubHttpRequest = $this->getMockBuilder(HttpRequest::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
 
         return $stubHttpRequest;
     }

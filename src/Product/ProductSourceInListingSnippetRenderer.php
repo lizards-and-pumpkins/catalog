@@ -30,10 +30,6 @@ class ProductSourceInListingSnippetRenderer implements SnippetRenderer
      */
     private $productInContextRenderer;
 
-    /**
-     * @param SnippetResultList $snippetResultList
-     * @param ProductInListingInContextSnippetRenderer $productInContextRenderer
-     */
     public function __construct(
         SnippetResultList $snippetResultList,
         ProductInListingInContextSnippetRenderer $productInContextRenderer
@@ -86,10 +82,6 @@ class ProductSourceInListingSnippetRenderer implements SnippetRenderer
         }
     }
 
-    /**
-     * @param ProjectionSourceData $productSource
-     * @param ContextSource $contextSource
-     */
     private function initProperties(ProjectionSourceData $productSource, ContextSource $contextSource)
     {
         $this->productSource = $productSource;

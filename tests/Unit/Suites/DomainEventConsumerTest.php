@@ -67,11 +67,11 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
         $numberOfEventsToProcess = 1;
 
         $this->addNextMethodToStubDomainEventQueue($numberOfEventsToProcess);
-
-        $stubUnableToFindDomainEventHandlerException = $this->getMock(UnableToFindDomainEventHandlerException::class);
+        /* @var $exception UnableToFindDomainEventHandlerException|\PHPUnit_Framework_MockObject_MockObject */
+        $exception = $this->getMock(UnableToFindDomainEventHandlerException::class);
         $this->stubLocator->expects($this->exactly($numberOfEventsToProcess))
             ->method('getHandlerFor')
-            ->willThrowException($stubUnableToFindDomainEventHandlerException);
+            ->willThrowException($exception);
 
         $this->stubLogger->expects($this->exactly($numberOfEventsToProcess))
             ->method('log');
@@ -85,7 +85,7 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
     public function itShouldWriteLogEntryOnQueueReadFailure()
     {
         $numberOfEventsToProcess = 1;
-
+        /* @var $stubUnderflowException \UnderflowException|\PHPUnit_Framework_MockObject_MockObject */
         $stubUnderflowException = $this->getMock(\UnderflowException::class);
         $this->stubQueue->expects($this->exactly($numberOfEventsToProcess))
             ->method('next')
@@ -97,6 +97,9 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
         $this->domainEventConsumer->process($numberOfEventsToProcess);
     }
 
+    /**
+     * @param int $numberOfEventsToProcess
+     */
     private function addNextMethodToStubDomainEventQueue($numberOfEventsToProcess)
     {
         $stubDomainEvent = $this->getMock(DomainEvent::class);

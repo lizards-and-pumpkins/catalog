@@ -12,7 +12,7 @@ use Brera\UrlPathKeyGenerator;
 class ProductDetailViewInContextSnippetRenderer
 {
     const CODE = 'product_detail_view';
-    
+
     /**
      * @var Product
      */
@@ -32,7 +32,7 @@ class ProductDetailViewInContextSnippetRenderer
      * @var ProductDetailViewBlockRenderer
      */
     private $blockRenderer;
-    
+
     /**
      * @var SnippetKeyGenerator
      */
@@ -65,12 +65,12 @@ class ProductDetailViewInContextSnippetRenderer
         $this->product = $product;
         $this->context = $context;
         $this->snippetResultList->clear();
-        
+
         $this->addProductDetailViewSnippetsToSnippetResultList();
-        
+
         return $this->snippetResultList;
     }
-    
+
     private function addProductDetailViewSnippetsToSnippetResultList()
     {
         $content = $this->blockRenderer->render($this->product, $this->context);
@@ -80,7 +80,7 @@ class ProductDetailViewInContextSnippetRenderer
         );
         $contentSnippet = SnippetResult::create($key, $content);
         $this->snippetResultList->add($contentSnippet);
-        
+
         $pageMetaDataSnippet = $this->getProductDetailPageMetaSnippet();
         $this->snippetResultList->add($pageMetaDataSnippet);
     }

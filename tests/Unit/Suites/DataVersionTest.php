@@ -18,6 +18,9 @@ class DataVersionTest extends \PHPUnit_Framework_TestCase
         DataVersion::fromVersionString($emptyVersion);
     }
 
+    /**
+     * @return mixed[]
+     */
     public function emptyVersionProvider()
     {
         return [
@@ -38,6 +41,9 @@ class DataVersionTest extends \PHPUnit_Framework_TestCase
         DataVersion::fromVersionString($invalidVersion);
     }
 
+    /**
+     * @return mixed[]
+     */
     public function invalidVersionProvider()
     {
         return [
