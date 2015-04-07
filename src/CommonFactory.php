@@ -348,7 +348,6 @@ class CommonFactory implements Factory, DomainEventFactory
 
     /**
      * @return SnippetKeyGenerator
-     * @todo: move to catalog factory
      */
     public function createProductInListingSnippetKeyGenerator()
     {

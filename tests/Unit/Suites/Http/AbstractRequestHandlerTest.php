@@ -34,7 +34,7 @@ final class AbstractRequestHandlerTest extends \PHPUnit_Framework_TestCase
     private $contextIdFixture = 'v12';
 
     /**
-     * @var AbstractHttpRequestHandler
+     * @var HttpRequestHandlerSpy
      */
     private $requestHandler;
 
@@ -73,7 +73,7 @@ final class AbstractRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $rootSnippetCode
-     * @param array $allSnippetCodes
+     * @param string[] $allSnippetCodes
      */
     private function setPageMetaInfoFixture($rootSnippetCode, array $allSnippetCodes)
     {
@@ -90,7 +90,9 @@ final class AbstractRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->stubPageMetaInfo->expects($this->any())
             ->method('getPageSnippetCodes')
             ->willReturn($allSnippetCodes);
-        $this->stubPageMetaInfo->expects($this->any())->method('getRootSnippetCode')->willReturn($rootSnippetCode);
+        $this->stubPageMetaInfo->expects($this->any())
+            ->method('getRootSnippetCode')
+            ->willReturn($rootSnippetCode);
 
     }
 

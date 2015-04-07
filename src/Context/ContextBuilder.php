@@ -44,7 +44,7 @@ class ContextBuilder
     }
 
     /**
-     * @param string[] $contextDataSets
+     * @param array[] $contextDataSets
      * @return Context[]
      */
     public function getContexts(array $contextDataSets)
@@ -53,7 +53,7 @@ class ContextBuilder
     }
 
     /**
-     * @param array $contextDataSet
+     * @param string[] $contextDataSet
      * @return Context
      */
     public function getContext(array $contextDataSet)
@@ -78,7 +78,7 @@ class ContextBuilder
     /**
      * @param Context $context
      * @param string $code
-     * @param array $contextSourceDataSet
+     * @param string[] $contextSourceDataSet
      * @return ContextDecorator
      */
     private function createContextDecorator(Context $context, $code, array $contextSourceDataSet)

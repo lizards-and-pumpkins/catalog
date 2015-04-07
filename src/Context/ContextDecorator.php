@@ -151,5 +151,4 @@ abstract class ContextDecorator implements Context
         $version = DataVersion::fromVersionString($this->getValue(VersionedContext::CODE));
         return InternalContextState::fromContextFields($version, $this->sourceData);
     }
-
 }

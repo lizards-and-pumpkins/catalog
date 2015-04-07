@@ -43,7 +43,7 @@ class ProductAttributeList
     }
 
     /**
-     * @param array $nodes
+     * @param mixed[] $nodes
      * @return ProductAttributeList
      */
     public static function fromArray(array $nodes)

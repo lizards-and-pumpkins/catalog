@@ -25,8 +25,7 @@ class ProductListingSavedDomainEventHandler implements DomainEventHandler
         ProductListingSavedDomainEvent $domainEvent,
         ProductListingSourceBuilder $productListingSourceBuilder,
         ProductListingProjector $projector
-    )
-    {
+    ) {
         $this->domainEvent = $domainEvent;
         $this->productListingSourceBuilder = $productListingSourceBuilder;
         $this->projector = $projector;

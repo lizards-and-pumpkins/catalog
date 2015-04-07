@@ -1,12 +1,10 @@
 <?php
 
-
 namespace Brera\Http;
 
 use Brera\DataPool\DataPoolReader;
 use Brera\Logger;
 use Brera\PageMetaInfoSnippetContent;
-use Brera\SnippetKeyGenerator;
 
 class HttpRequestHandlerSpy extends AbstractHttpRequestHandler
 {
@@ -60,8 +58,8 @@ class HttpRequestHandlerSpy extends AbstractHttpRequestHandler
     }
 
     /**
-     * @param array $snippetCodeToKeyMap
-     * @param array $snippetKeyToContentMap
+     * @param string[] $snippetCodeToKeyMap
+     * @param string[] $snippetKeyToContentMap
      */
     public function testAddSnippetsToPage(array $snippetCodeToKeyMap, array $snippetKeyToContentMap)
     {

@@ -26,9 +26,9 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     public function itShouldAddAndGetAttributeFromAProductAttributeList()
     {
         $attributeArray = [
-        'nodeName'      => 'foo',
-        'attributes'    => [],
-        'value'         => 'bar'
+            'nodeName'      => 'foo',
+            'attributes'    => [],
+            'value'         => 'bar'
         ];
 
         $attribute = ProductAttribute::fromArray($attributeArray);
@@ -63,9 +63,9 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     public function itShouldCreateAttributeListFromAttributesArray()
     {
         $attributeArray = [[
-        'nodeName'      => 'foo',
-        'attributes'    => [],
-        'value'         => 'bar'
+            'nodeName'      => 'foo',
+            'attributes'    => [],
+            'value'         => 'bar'
         ]];
 
         $attributeList = ProductAttributeList::fromArray($attributeArray);
@@ -79,13 +79,11 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnAnAttributeList()
     {
-        $attributeArray = [
-            [
-                'nodeName'      => 'name',
-                'attributes'    => ['website' => 'test'],
-                'value'         => 'foo'
-            ]
-        ];
+        $attributeArray = [[
+            'nodeName'      => 'name',
+            'attributes'    => ['website' => 'test'],
+            'value'         => 'foo'
+        ]];
 
         $attributeList = ProductAttributeList::fromArray($attributeArray);
         $stubContext = $this->getMock(Context::class);
@@ -98,6 +96,17 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * @dataProvider extractAttributesDataProvider
+     * @param string $websiteCodeA
+     * @param string $websiteCodeB
+     * @param string $websiteCodeC
+     * @param string $langA
+     * @param string $langB
+     * @param string $langC
+     * @param string $valueA
+     * @param string $valueB
+     * @param string $valueC
+     * @param string[] $contextReturnValueMap
+     * @param string $expected
      */
     public function itShouldExtractAttributeValuesForAGivenContext(
         $websiteCodeA,
@@ -138,7 +147,7 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return mixed[]
+     * @return array[]
      */
     public function extractAttributesDataProvider()
     {
@@ -175,7 +184,7 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param array $returnValueMap
+     * @param mixed[] $returnValueMap
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function getStubContextWithReturnValueMap(array $returnValueMap)

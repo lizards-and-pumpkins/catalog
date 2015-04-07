@@ -18,9 +18,6 @@ class CatalogImportApiRequestHandler implements HttpRequestHandler
         return $response;
     }
 
-    /**
-     * @return bool
-     */
     public function canProcess()
     {
         // TODO: Implement canProcess() method.
