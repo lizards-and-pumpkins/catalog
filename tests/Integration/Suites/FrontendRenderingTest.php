@@ -9,11 +9,14 @@ use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
 use Brera\DataPool\SearchEngine\InMemorySearchEngine;
 use Brera\DataPool\KeyValue\KeyValueStore;
+use Brera\Product\ProductDetailPageMetaInfoSnippetContent;
+use Brera\Product\ProductDetailViewInContextSnippetRenderer;
 use Brera\Product\ProductDetailViewRequestHandler;
+use Brera\Product\ProductSnippetKeyGenerator;
 
 class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
 {
-    private $sourceId = 333;
+    private $testProductId = 333;
 
     /**
      * @test
@@ -37,13 +40,11 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
 
         $dataPoolReader = new DataPoolReader($keyValueStore, $searchEngine);
 
-
         $logger = new InMemoryLogger();
 
         $pageBuilder = new ProductDetailViewRequestHandler(
-            $url,
+            $urlPathKeyGenerator->getUrlKeyForUrlInContext($url, $context),
             $context,
-            $urlPathKeyGenerator,
             $snippetKeyGeneratorLocator,
             $dataPoolReader,
             $logger
@@ -56,10 +57,6 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $body);
     }
 
-    /**
-     * @param KeyValueStore $keyValueStore
-     * @return void
-     */
     private function addPageMetaInfoFixtureToKeyValueStorage(
         KeyValueStore $keyValueStore,
         SnippetKeyGeneratorLocator $snippetKeyGeneratorLocator,
@@ -67,23 +64,29 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
         Context $context
     ) {
         $rootSnippetCode = 'root-snippet';
-        $snippetKeyGenerator = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($rootSnippetCode);
+        $rootSnippetKeyGenerator = new ProductSnippetKeyGenerator(
+            ProductDetailViewInContextSnippetRenderer::CODE
+        );
+        $snippetKeyGeneratorLocator->register($rootSnippetCode, $rootSnippetKeyGenerator);
+        $snippetKeyGeneratorLocator->register('head', new GenericSnippetKeyGenerator('head', []));
+        $snippetKeyGeneratorLocator->register('body', new GenericSnippetKeyGenerator('body', []));
         $keyValueStore->set(
-            $snippetKeyGenerator->getKeyForContext($this->sourceId, $context),
+            $rootSnippetKeyGenerator->getKeyForContext($context, ['product_id' => $this->testProductId]),
             '<html><head>{{snippet head}}</head><body>{{snippet body}}</body></html>'
         );
-        $pageMetaInfo = PageMetaInfoSnippetContent::create(
-            $this->sourceId,
+        $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::create(
+            $this->testProductId,
             $rootSnippetCode,
             [$rootSnippetCode, 'head', 'body']
         );
-        $urlPathKey = $urlPathKeyGenerator->getUrlKeyForPathInContext('/product1', $context);
+        $urlPathKey = ProductDetailViewInContextSnippetRenderer::CODE . '_'
+            . $urlPathKeyGenerator->getUrlKeyForPathInContext('/product1', $context);
         $keyValueStore->set($urlPathKey, json_encode($pageMetaInfo->getInfo()));
         $headSnippetKeyGenerator = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode('head');
-        $key = $headSnippetKeyGenerator->getKeyForContext($this->sourceId, $context);
+        $key = $headSnippetKeyGenerator->getKeyForContext($context);
         $keyValueStore->set($key, '<title>Page Title</title>');
         $bodySnippetKeyGenerator = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode('body');
-        $key = $bodySnippetKeyGenerator->getKeyForContext($this->sourceId, $context);
+        $key = $bodySnippetKeyGenerator->getKeyForContext($context);
         $keyValueStore->set($key, '<h1>Headline</h1>');
     }
 }

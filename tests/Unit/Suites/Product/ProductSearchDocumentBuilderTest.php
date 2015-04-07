@@ -3,17 +3,17 @@
 namespace Brera\Product;
 
 use Brera\Context\Context;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilder;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use Brera\SampleContextSource;
-use Brera\DataPool\SearchEngine\SearchDocumentBuilder;
-use Brera\DataPool\SearchEngine\SearchDocumentCollection;
 use Brera\ProjectionSourceData;
 
 /**
  * @covers \Brera\Product\ProductSearchDocumentBuilder
- * @uses   \Brera\DataPool\SearchEngine\SearchDocument
- * @uses   \Brera\DataPool\SearchEngine\SearchDocumentCollection
- * @uses   \Brera\DataPool\SearchEngine\SearchDocumentField
- * @uses   \Brera\DataPool\SearchEngine\SearchDocumentFieldCollection
+ * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocument
+ * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection
+ * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField
+ * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection
  */
 class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
 {

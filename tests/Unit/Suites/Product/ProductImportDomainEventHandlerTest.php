@@ -2,7 +2,7 @@
 
 namespace Brera\Product;
 
-use Brera\SampleContextSource;
+use Brera\Context\ContextSource;
 
 /**
  * @covers \Brera\Product\ProductImportDomainEventHandler
@@ -25,7 +25,10 @@ class ProductImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('createProductSourceFromXml')
             ->willReturn($stubProductSource);
 
-        $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
+        $stubContextSource = $this->getMockBuilder(ContextSource::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getContextMatrix'])
+            ->getMock();
 
         $stubProjector = $this->getMock(ProductProjector::class, [], [], '', false);
         $stubProjector->expects($this->once())

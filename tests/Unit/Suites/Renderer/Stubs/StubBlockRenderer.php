@@ -12,7 +12,7 @@ class StubBlockRenderer extends BlockRenderer
     /**
      * @return string
      */
-    protected function getLayoutHandle()
+    final public function getLayoutHandle()
     {
         return self::LAYOUT_HANDLE;
     }

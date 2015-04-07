@@ -38,7 +38,7 @@ class HttpRouterChainTest extends \PHPUnit_Framework_TestCase
     {
         $stubHttpRouter = $this->getMock(HttpRouter::class);
 
-        $stubHttpRequestHandler = $this->getMock(HttpRequestHandler::class, ['process']);
+        $stubHttpRequestHandler = $this->getMock(HttpRequestHandler::class);
 
         $stubHttpRouter->expects($this->once())
         ->method('route')

@@ -17,12 +17,20 @@ class ContextBuilder
      */
     private $dataVersion;
 
-    /**
-     * @param DataVersion $dataVersion
-     */
     public function __construct(DataVersion $dataVersion)
     {
         $this->dataVersion = $dataVersion;
+    }
+
+    /**
+     * @param ContextState $contextState
+     * @return Context
+     */
+    public static function getContextFromMemento(ContextState $contextState)
+    {
+        /** @var InternalContextState $contextBuilder */
+        $contextBuilder = (new self(DataVersion::fromVersionString($contextState->getVersion())));
+        return $contextBuilder->getContext($contextState->getContextDataSet());
     }
 
     /**
@@ -32,7 +40,7 @@ class ContextBuilder
      */
     public function createFromRequest(HttpRequest $request)
     {
-        return $this->getContext(['website' => 'ru', 'language' => 'de_DE']);
+        return $this->getContext(['website' => 'ru', 'language' => 'en_US']);
     }
 
     /**

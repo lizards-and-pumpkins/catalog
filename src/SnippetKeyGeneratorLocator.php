@@ -11,31 +11,20 @@ class SnippetKeyGeneratorLocator
     private $keyGenerators = [];
 
     /**
-     * @var string[]
-     * @todo Make injectable or maybe use ContextSource
-     */
-    private $defaultContextParts = ['website', 'language', 'version'];
-
-    /**
      * @param string $snippetCode
      * @return GenericSnippetKeyGenerator
      */
     public function getKeyGeneratorForSnippetCode($snippetCode)
     {
         $this->validateSnippetCode($snippetCode);
-        if (!array_key_exists($snippetCode, $this->keyGenerators)) {
-            $this->keyGenerators[$snippetCode] = new GenericSnippetKeyGenerator(
-                $snippetCode,
-                $this->defaultContextParts
-            );
-        }
-
+        $this->validateKeyGeneratorForSnippetIsKnown($snippetCode);
         return $this->keyGenerators[$snippetCode];
     }
 
     /**
      * @param string $snippetCode
      * @throws InvalidSnippetCodeException
+     * @throws SnippetKeyGeneratorNotRegisteredException
      */
     private function validateSnippetCode($snippetCode)
     {
@@ -43,6 +32,19 @@ class SnippetKeyGeneratorLocator
             throw new InvalidSnippetCodeException(sprintf(
                 'Expected snippet code to be a string but got "%s"',
                 (is_scalar($snippetCode) ? $snippetCode : gettype($snippetCode))
+            ));
+        }
+    }
+
+    /**
+     * @param string $snippetCode
+     */
+    private function validateKeyGeneratorForSnippetIsKnown($snippetCode)
+    {
+        if (! array_key_exists($snippetCode, $this->keyGenerators)) {
+            throw new SnippetKeyGeneratorNotRegisteredException(sprintf(
+                'No key generator set for snippet "%s"',
+                $snippetCode
             ));
         }
     }

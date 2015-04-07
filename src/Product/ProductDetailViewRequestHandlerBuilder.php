@@ -44,12 +44,16 @@ class ProductDetailViewRequestHandlerBuilder
         $this->logger = $logger;
     }
 
+    /**
+     * @param HttpUrl $url
+     * @param Context $context
+     * @return ProductDetailViewRequestHandler
+     */
     public function create(HttpUrl $url, Context $context)
     {
         return new ProductDetailViewRequestHandler(
-            $url,
+            $this->urlPathKeyGenerator->getUrlKeyForUrlInContext($url, $context),
             $context,
-            $this->urlPathKeyGenerator,
             $this->keyGeneratorLocator,
             $this->dataPoolReader,
             $this->logger

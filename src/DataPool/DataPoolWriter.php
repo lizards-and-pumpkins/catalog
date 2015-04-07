@@ -3,7 +3,7 @@
 namespace Brera\DataPool;
 
 use Brera\DataPool\KeyValue\KeyValueStore;
-use Brera\DataPool\SearchEngine\SearchDocumentCollection;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use Brera\DataPool\SearchEngine\SearchEngine;
 use Brera\SnippetResult;
 use Brera\SnippetResultList;
@@ -20,32 +20,24 @@ class DataPoolWriter
      */
     private $searchEngine;
 
-    /**
-     * @param KeyValueStore $keyValueStore
-     * @param SearchEngine $searchEngine
-     */
     public function __construct(KeyValueStore $keyValueStore, SearchEngine $searchEngine)
     {
         $this->keyValueStore = $keyValueStore;
         $this->searchEngine = $searchEngine;
     }
 
-    /**
-     * @param SnippetResultList $snippetResultList
-     * @return void
-     */
     public function writeSnippetResultList(SnippetResultList $snippetResultList)
     {
-        /** @var SnippetResult $snippetResult */
         foreach ($snippetResultList as $snippetResult) {
-            $this->keyValueStore->set($snippetResult->getKey(), $snippetResult->getContent());
+            $this->writeSnippetResult($snippetResult);
         }
     }
 
-    /**
-     * @param SearchDocumentCollection $searchDocumentCollection
-     * @return void
-     */
+    public function writeSnippetResult(SnippetResult $snippetResult)
+    {
+        $this->keyValueStore->set($snippetResult->getKey(), $snippetResult->getContent());
+    }
+
     public function writeSearchDocumentCollection(SearchDocumentCollection $searchDocumentCollection)
     {
         $this->searchEngine->addSearchDocumentCollection($searchDocumentCollection);

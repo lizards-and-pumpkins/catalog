@@ -10,7 +10,7 @@ class ProductDetailViewBlockRenderer extends BlockRenderer
     /**
      * @return string
      */
-    protected function getLayoutHandle()
+    final public function getLayoutHandle()
     {
         return 'product_detail_view';
     }

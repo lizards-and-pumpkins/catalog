@@ -122,4 +122,21 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $block = $this->createBlockInstance('template.phtml', $blockName);
         $block->getChildOutput($childName);
     }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnLayoutHandle()
+    {
+        $expectedLayoutHandle = 'foo';
+
+        $this->mockBlockRenderer->expects($this->once())
+            ->method('getLayoutHandle')
+            ->willReturn($expectedLayoutHandle);
+
+        $layoutHandle = $this->createBlockInstance('test-template.phtml', 'test-block-name');
+        $result = $layoutHandle->getLayoutHandle();
+
+        $this->assertSame($expectedLayoutHandle, $result);
+    }
 }

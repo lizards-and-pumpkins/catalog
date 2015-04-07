@@ -30,7 +30,7 @@ class ApiRouter implements HttpRouter
     {
         $urlPath = trim($request->getUrl()->getPath(), DIRECTORY_SEPARATOR);
 
-        $urlToken = explode(DIRECTORY_SEPARATOR, $urlPath);
+        $urlToken = explode('/', $urlPath);
 
         if ($this::API_URL_PREFIX !== array_shift($urlToken)) {
             return null;
