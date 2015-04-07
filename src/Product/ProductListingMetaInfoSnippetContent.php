@@ -9,7 +9,7 @@ class ProductListingMetaInfoSnippetContent implements PageMetaInfoSnippetContent
     const KEY_CRITERIA = 'product_selection_criteria';
 
     /**
-     * @var string
+     * @var string[]
      */
     private $selectionCriteria;
 

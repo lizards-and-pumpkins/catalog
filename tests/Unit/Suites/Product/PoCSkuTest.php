@@ -32,7 +32,7 @@ class PoCSkuTest extends \PHPUnit_Framework_TestCase
      * @test
      * @expectedException \Brera\Product\InvalidSkuException
      * @dataProvider invalidSkuProvider
-     * @param $invalidSku
+     * @param mixed $invalidSku
      */
     public function itShouldThrowAnExceptionIfSkuIsNotValid($invalidSku)
     {

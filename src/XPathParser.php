@@ -102,7 +102,7 @@ class XPathParser
     }
 
     /**
-     * @param $xPath
+     * @param string $xPath
      * @return \DOMNodeList
      */
     private function getDomNodeListByXPath($xPath)
