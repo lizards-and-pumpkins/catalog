@@ -9,7 +9,7 @@ class ImageProcessCommandSequence
     /**
      * @var string[]
      */
-    private static $forbiddenMethods = array('saveAsFile');
+    private static $forbiddenMethods = ['saveAsFile'];
 
     /**
      * @var mixed[]
@@ -39,13 +39,13 @@ class ImageProcessCommandSequence
             $methods = get_class_methods(ImageProcessor::class);
             if (!in_array($instruction, $methods)) {
                 throw new InvalidInstructionException(
-                    sprintf('"The instruction "%s" doesn\'t exist for image processing.', $instruction)
+                    sprintf('The instruction "%s" doesn\'t exist for image processing.', $instruction)
                 );
             }
 
             if (in_array($instruction, self::$forbiddenMethods)) {
                 throw new InvalidInstructionException(
-                    sprintf('"The instruction "%s" is not allowed.', $instruction)
+                    sprintf('The instruction "%s" is not allowed.', $instruction)
                 );
             }
         }

@@ -528,13 +528,13 @@ class CommonFactory implements Factory, DomainEventFactory
         // TODO get config from somewhere and remove hardcoded
         if (!$this->imageProcessingConfiguration) {
             $commands1 = [
-                'resize' => array(400, 800),
+                'resize' => [400, 800],
             ];
             $commands2 = [
-                'resizeToWidth' => array(200),
+                'resizeToWidth' => [200],
             ];
             $commands3 = [
-                'resizeToBestFit' => array(400, 300),
+                'resizeToBestFit' => [400, 300],
             ];
             $configuration = [
                 ImageProcessCommandSequence::fromArray($commands1),

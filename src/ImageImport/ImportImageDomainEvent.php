@@ -23,7 +23,7 @@ class ImportImageDomainEvent implements DomainEvent
      * @param string[] $images
      * @return ImportImageDomainEvent
      */
-    public static function fromImages(array $images)
+    public static function fromArray(array $images)
     {
         return new self($images);
     }

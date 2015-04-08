@@ -19,10 +19,10 @@ class ImageProcessConfiguration implements \IteratorAggregate
      */
     public function __construct(array $configurations, $targetDirectory)
     {
-        $this->configurations = $configurations;
         if (!is_dir($targetDirectory) || !is_writeable($targetDirectory)) {
             throw new InvalidConfigurationException('Target directory is no directory or not writable!');
         }
+        $this->configurations = $configurations;
         $this->targetDirectory = $targetDirectory;
     }
 
