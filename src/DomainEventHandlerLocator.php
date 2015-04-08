@@ -5,6 +5,7 @@ namespace Brera;
 use Brera\ImageImport\ImportImageDomainEvent;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\ProductImportDomainEvent;
+use Brera\Product\ProductListingSavedDomainEvent;
 
 class DomainEventHandlerLocator
 {
@@ -13,9 +14,6 @@ class DomainEventHandlerLocator
      */
     private $factory;
 
-    /**
-     * @param DomainEventFactory $factory
-     */
     public function __construct(DomainEventFactory $factory)
     {
         $this->factory = $factory;
@@ -42,10 +40,12 @@ class DomainEventHandlerLocator
             case RootTemplateChangedDomainEvent::class:
                 /* @var $event RootTemplateChangedDomainEvent */
                 return $this->factory->createRootTemplateChangedDomainEventHandler($event);
-
             case ImportImageDomainEvent::class:
                 /* @var $event ImportImageDomainEvent */
                 return $this->factory->createImportImageDomainEventHandler($event);
+            case ProductListingSavedDomainEvent::class:
+                /* @var $event ProductListingSavedDomainEvent */
+                return $this->factory->createProductListingSavedDomainEventHandler($event);
         }
 
         throw new UnableToFindDomainEventHandlerException(

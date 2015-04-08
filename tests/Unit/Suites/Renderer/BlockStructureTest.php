@@ -38,7 +38,11 @@ class BlockStructureTest extends \PHPUnit_Framework_TestCase
             ->willReturn($blockName);
         return $stubBlock;
     }
-    
+
+    /**
+     * @param string $parentName
+     * @param string $childName
+     */
     private function assertParentHasChild($parentName, $childName)
     {
         $property = new \ReflectionProperty($this->blockStructure, 'blockChildren');

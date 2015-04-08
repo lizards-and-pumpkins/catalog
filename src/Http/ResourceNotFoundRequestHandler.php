@@ -12,4 +12,12 @@ class ResourceNotFoundRequestHandler implements HttpRequestHandler
     {
         return new HttpResourceNotFoundResponse();
     }
+
+    /**
+     * @return bool
+     */
+    public function canProcess()
+    {
+        return true;
+    }
 }

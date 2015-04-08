@@ -17,26 +17,34 @@ class ContextBuilder
      */
     private $dataVersion;
 
-    /**
-     * @param DataVersion $dataVersion
-     */
     public function __construct(DataVersion $dataVersion)
     {
         $this->dataVersion = $dataVersion;
     }
 
     /**
-     * @param HttpRequest $request
+     * @param ContextState $contextState
      * @return Context
-     * @todo Implement this
      */
-    public function createFromRequest(HttpRequest $request)
+    public static function getContextFromMemento(ContextState $contextState)
     {
-        return $this->getContext(['website' => 'ru', 'language' => 'de_DE']);
+        /** @var InternalContextState $contextBuilder */
+        $contextBuilder = (new self(DataVersion::fromVersionString($contextState->getVersion())));
+        return $contextBuilder->getContext($contextState->getContextDataSet());
     }
 
     /**
-     * @param string[] $contextDataSets
+     * @param HttpRequest $request
+     * @return Context
+     */
+    public function createFromRequest(HttpRequest $request)
+    {
+        // TODO Implement this
+        return $this->getContext(['website' => 'ru', 'language' => 'en_US']);
+    }
+
+    /**
+     * @param array[] $contextDataSets
      * @return Context[]
      */
     public function getContexts(array $contextDataSets)
@@ -45,7 +53,7 @@ class ContextBuilder
     }
 
     /**
-     * @param array $contextDataSet
+     * @param string[] $contextDataSet
      * @return Context
      */
     public function getContext(array $contextDataSet)
@@ -70,7 +78,7 @@ class ContextBuilder
     /**
      * @param Context $context
      * @param string $code
-     * @param array $contextSourceDataSet
+     * @param string[] $contextSourceDataSet
      * @return ContextDecorator
      */
     private function createContextDecorator(Context $context, $code, array $contextSourceDataSet)

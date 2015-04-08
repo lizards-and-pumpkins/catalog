@@ -46,11 +46,6 @@ class ProductSnippetRendererCollection implements SnippetRendererCollection
         return $this->snippetResultList;
     }
 
-    /**
-     * @param ProductSource $productSource
-     * @param ContextSource $contextSource
-     * @return void
-     */
     private function renderProduct(ProductSource $productSource, ContextSource $contextSource)
     {
         foreach ($this->renderers as $renderer) {

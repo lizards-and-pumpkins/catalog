@@ -17,6 +17,11 @@ a { color: #37a3d4; text-decoration: none }
 h1 { font-size: 26px; font-weight: normal; color: #323232; text-transform: uppercase }
 .heading { color: #323232; font-family: GeogrotesqueRegular, Helvetica, Arial, sans-serif; font-size: 26px }
 
+/* Layout */
+.col2-left-layout .main { display: table }
+.col2-left-layout .main > div { display: table-cell; vertical-align: top }
+.col2-left-layout .col-left { width: 217px }
+
 /* Main search form */
 #search_mini_form { width: 367px }
 #search_mini_form .input-box { position: relative; padding-right: 48px }

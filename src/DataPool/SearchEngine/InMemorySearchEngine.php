@@ -2,6 +2,8 @@
 
 namespace Brera\DataPool\SearchEngine;
 
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
+
 class InMemorySearchEngine extends IntegrationTestSearchEngineAbstract
 {
     /**
@@ -9,9 +11,6 @@ class InMemorySearchEngine extends IntegrationTestSearchEngineAbstract
      */
     private $index = [];
 
-    /**
-     * @param SearchDocument $searchDocument
-     */
     public function addSearchDocument(SearchDocument $searchDocument)
     {
         array_push($this->index, $searchDocument);

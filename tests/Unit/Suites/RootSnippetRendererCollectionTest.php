@@ -24,7 +24,9 @@ class RootSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockSnippetRenderer = $this->getMock(SnippetRenderer::class);
+        $this->mockSnippetRenderer = $this->getMockBuilder(SnippetRenderer::class)
+            ->setMethods(['render'])
+            ->getMock();
 
         $this->mockSnippetResultList = $this->getMock(SnippetResultList::class);
 

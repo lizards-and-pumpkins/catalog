@@ -38,27 +38,29 @@ class HttpRouterChainTest extends \PHPUnit_Framework_TestCase
     {
         $stubHttpRouter = $this->getMock(HttpRouter::class);
 
-        $stubHttpRequestHandler = $this->getMock(HttpRequestHandler::class, ['process']);
+        $stubHttpRequestHandler = $this->getMock(HttpRequestHandler::class);
 
         $stubHttpRouter->expects($this->once())
-        ->method('route')
-        ->willReturn($stubHttpRequestHandler);
+            ->method('route')
+            ->willReturn($stubHttpRequestHandler);
 
         $stubHttpRequest = $this->getStubHttpRequest();
         
         $stubContext = $this->getMock(Context::class);
 
         $this->routerChain->register($stubHttpRouter);
+
         $handler = $this->routerChain->route($stubHttpRequest, $stubContext);
 
         $this->assertNotNull($handler);
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|HttpRequest
+     */
     private function getStubHttpRequest()
     {
-        $stubHttpRequest = $this->getMockBuilder(HttpRequest::class)
-        ->disableOriginalConstructor()
-        ->getMock();
+        $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
 
         return $stubHttpRequest;
     }

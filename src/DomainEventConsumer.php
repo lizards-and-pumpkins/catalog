@@ -21,11 +21,6 @@ class DomainEventConsumer
      */
     private $logger;
 
-    /**
-     * @param Queue $queue
-     * @param DomainEventHandlerLocator $locator
-     * @param Logger $logger
-     */
     public function __construct(Queue $queue, DomainEventHandlerLocator $locator, Logger $logger)
     {
         $this->queue = $queue;
@@ -49,9 +44,6 @@ class DomainEventConsumer
         }
     }
 
-    /**
-     * @param DomainEvent $domainEvent
-     */
     private function processDomainEvent(DomainEvent $domainEvent)
     {
         try {

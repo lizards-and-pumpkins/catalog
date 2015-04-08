@@ -8,6 +8,8 @@ use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\ProductImportDomainEvent;
 use Brera\Product\ProductImportDomainEventHandler;
+use Brera\Product\ProductListingSavedDomainEvent;
+use Brera\Product\ProductListingSavedDomainEventHandler;
 
 /**
  * @covers \Brera\DomainEventHandlerLocator
@@ -15,6 +17,7 @@ use Brera\Product\ProductImportDomainEventHandler;
  * @uses   \Brera\Product\ProductImportDomainEvent
  * @uses   \Brera\Product\CatalogImportDomainEvent
  * @uses   \Brera\ImageImport\ImportImageDomainEvent
+ * @uses   \Brera\Product\ProductListingSavedDomainEvent
  */
 class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -141,7 +144,6 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         $this->factory->expects($this->once())
             ->method('createImportImageDomainEventHandler')
             ->willReturn($stubImportImageDomainEventHandler);
-
         /**
          * The real object has to be used here as getHandlerFor method will call get_class against it
          */
@@ -150,5 +152,25 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         $result = $this->locator->getHandlerFor($ImportImagesDomainEvent);
 
         $this->assertInstanceOf(ImportImageDomainEventHandler::class, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldLocateAndReturnProductListingSavedDomainEventHandler()
+    {
+        $stubProductListingSavedDomainEventHandler = $this->getMockBuilder(ProductListingSavedDomainEventHandler::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->factory->expects($this->once())
+            ->method('createProductListingSavedDomainEventHandler')
+            ->willReturn($stubProductListingSavedDomainEventHandler);
+
+        $productListingSavedDomainEvent = new ProductListingSavedDomainEvent('<xml/>');
+
+        $result = $this->locator->getHandlerFor($productListingSavedDomainEvent);
+
+        $this->assertInstanceOf(ProductListingSavedDomainEventHandler::class, $result);
     }
 }

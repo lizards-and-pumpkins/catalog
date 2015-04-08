@@ -15,10 +15,6 @@ class BlockStructure
      */
     private $blockChildren = [];
 
-
-    /**
-     * @param Block $blockInstance
-     */
     public function addBlock(Block $blockInstance)
     {
         $this->blocks[$blockInstance->getBlockName()] = $blockInstance;

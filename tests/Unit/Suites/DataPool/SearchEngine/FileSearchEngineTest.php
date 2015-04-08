@@ -5,6 +5,9 @@ namespace Brera\DataPool\SearchEngine;
 /**
  * @covers \Brera\DataPool\SearchEngine\FileSearchEngine
  * @covers \Brera\DataPool\SearchEngine\IntegrationTestSearchEngineAbstract
+ * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocument
+ * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField
+ * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection
  */
 class FileSearchEngineTest extends AbstractSearchEngineTest
 {
@@ -47,9 +50,6 @@ class FileSearchEngineTest extends AbstractSearchEngineTest
         return FileSearchEngine::withPath($this->temporaryStorage);
     }
 
-    /**
-     * @return void
-     */
     private function prepareTemporaryStorage()
     {
         $this->temporaryStorage = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'brera-search-engine-storage';

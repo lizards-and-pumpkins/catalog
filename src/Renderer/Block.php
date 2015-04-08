@@ -29,12 +29,12 @@ class Block
     /**
      * @param BlockRenderer $blockRenderer
      * @param string $template
-     * @param $name
+     * @param string $name
      * @param ProjectionSourceData $dataObject
-     * @todo  Decouple from template rendering logic
      */
     final public function __construct(BlockRenderer $blockRenderer, $template, $name, ProjectionSourceData $dataObject)
     {
+        // TODO Decouple from template rendering logic
         $this->blockRenderer = $blockRenderer;
         $this->template = $template;
         $this->blockName = $name;
@@ -59,6 +59,14 @@ class Block
 
     /**
      * @return string
+     */
+    final public function getLayoutHandle()
+    {
+        return $this->blockRenderer->getLayoutHandle();
+    }
+
+    /**
+     * @return string
      * @throws TemplateFileNotReadableException
      */
     final public function render()
@@ -79,7 +87,7 @@ class Block
     }
 
     /**
-     * @param $childName
+     * @param string $childName
      * @return string
      */
     final public function getChildOutput($childName)

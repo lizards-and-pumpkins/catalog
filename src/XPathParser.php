@@ -102,7 +102,7 @@ class XPathParser
     }
 
     /**
-     * @param $xPath
+     * @param string $xPath
      * @return \DOMNodeList
      */
     private function getDomNodeListByXPath($xPath)
@@ -155,9 +155,6 @@ class XPathParser
         return $attributeArray;
     }
 
-    /**
-     * @return null
-     */
     private function removeCommentNodes()
     {
         foreach ($this->xPathEngine->query('//comment()') as $comment) {

@@ -15,8 +15,8 @@ class Layout
     private $nodeChildren;
 
     /**
-     * @param array $nodeAttributes
-     * @param string|array $nodeChildren
+     * @param string[] $nodeAttributes
+     * @param string|mixed[] $nodeChildren
      */
     private function __construct(array $nodeAttributes, $nodeChildren)
     {
@@ -25,7 +25,7 @@ class Layout
     }
 
     /**
-     * @param array $layoutArray
+     * @param mixed[] $layoutArray
      * @return Layout
      */
     public static function fromArray(array $layoutArray)
@@ -74,7 +74,7 @@ class Layout
     }
 
     /**
-     * @param array $layout
+     * @param mixed[] $layout
      * @throws RootElementOfLayoutMustBeAnArrayException
      * @return array[]
      */

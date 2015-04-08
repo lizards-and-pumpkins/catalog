@@ -9,9 +9,6 @@ abstract class HttpRequest
      */
     private $url;
 
-    /**
-     * @param HttpUrl $url
-     */
     public function __construct(HttpUrl $url)
     {
         $this->url = $url;

@@ -16,10 +16,6 @@ class ProductAttributeList
      */
     private $attributeCodes = [];
 
-    /**
-     * @param ProductAttribute $attribute
-     * @return void
-     */
     public function add(ProductAttribute $attribute)
     {
         array_push($this->attributes, $attribute);
@@ -47,7 +43,7 @@ class ProductAttributeList
     }
 
     /**
-     * @param array $nodes
+     * @param mixed[] $nodes
      * @return ProductAttributeList
      */
     public static function fromArray(array $nodes)

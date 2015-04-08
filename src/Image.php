@@ -16,6 +16,10 @@ class Image
      */
     private $label;
 
+    /**
+     * @param string $src
+     * @param string $label
+     */
     public function __construct($src, $label = '')
     {
         $this->src = self::MEDIA_DIR . DIRECTORY_SEPARATOR . $src;

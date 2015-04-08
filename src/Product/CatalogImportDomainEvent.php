@@ -12,7 +12,7 @@ class CatalogImportDomainEvent implements DomainEvent
     private $xml;
 
     /**
-     * @param $xml
+     * @param string $xml
      */
     public function __construct($xml)
     {

@@ -8,6 +8,7 @@ use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\ProductImportDomainEvent;
 use Brera\Product\ProductImportDomainEventHandler;
+use Brera\Product\ProductListingSavedDomainEvent;
 
 interface DomainEventFactory
 {
@@ -34,4 +35,10 @@ interface DomainEventFactory
      * @return ImportImageDomainEventHandler
      */
     public function createImportImageDomainEventHandler(ImportImageDomainEvent $event);
+
+    /*
+     * @param ProductListingSavedDomainEvent $event
+     * @return ProductListingSavedDomainEventHandler
+     */
+    public function createProductListingSavedDomainEventHandler(ProductListingSavedDomainEvent $event);
 }

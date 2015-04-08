@@ -16,15 +16,11 @@ use Brera\ThemeLocator;
  */
 class ProductInListingBlockRendererTest extends BlockRendererTestAbstract
 {
-    /**
-     * @test
-     */
-    public function itShouldUseTheLayoutHandleProductInListing()
+    public function itShouldReturnLayoutHandle()
     {
-        $renderer = $this->getBlockRenderer();
-        $method = new \ReflectionMethod($renderer, 'getLayoutHandle');
-        $method->setAccessible(true);
-        $this->assertEquals('product_in_listing', $method->invoke($renderer));
+        $result = $this->getBlockRenderer()->getLayoutHandle();
+
+        $this->assertEquals('product_in_listing', $result);
     }
 
     /**

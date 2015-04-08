@@ -60,6 +60,9 @@ class ContextSourceTest extends \PHPUnit_Framework_TestCase
         $this->contextSource->getContextsForParts($partsToExtract);
     }
 
+    /**
+     * @return mixed[]
+     */
     public function extractPartsProvider()
     {
         return [

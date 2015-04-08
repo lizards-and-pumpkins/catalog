@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Brera\Renderer;
 
 use Brera\Context\Context;
@@ -51,7 +50,10 @@ abstract class BlockRendererTestAbstract extends \PHPUnit_Framework_TestCase
         \PHPUnit_Framework_MockObject_MockObject $stubThemeLocator,
         BlockStructure $stubBlockStructure
     );
-    
+
+    /**
+     * @return Layout|\PHPUnit_Framework_MockObject_MockObject
+     */
     final protected function getStubLayout()
     {
         return $this->stubLayout;
@@ -82,8 +84,8 @@ abstract class BlockRendererTestAbstract extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $className
-     * @param $template
+     * @param string $className
+     * @param string $template
      * @return Layout|\PHPUnit_Framework_MockObject_MockObject
      */
     final protected function addStubRootBlock($className, $template)

@@ -6,6 +6,10 @@ namespace Brera\Context;
 /**
  * @covers \Brera\Context\LanguageContextDecorator
  * @covers \Brera\Context\ContextDecorator
+ * @uses   \Brera\Context\InternalContextState
+ * @uses   \Brera\Context\ContextBuilder
+ * @uses   \Brera\Context\VersionedContext
+ * @uses   \Brera\DataVersion
  */
 class LanguageContextDecoratorTest extends ContextDecoratorTestAbstract
 {
@@ -18,16 +22,16 @@ class LanguageContextDecoratorTest extends ContextDecoratorTestAbstract
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     protected function getStubContextData()
     {
         return [$this->getDecoratorUnderTestCode() => 'test-language'];
     }
-    
+
     /**
      * @param Context $stubContext
-     * @param array $stubContextData
+     * @param mixed[] $stubContextData
      * @return LanguageContextDecorator
      */
     protected function createContextDecoratorUnderTest(Context $stubContext, array $stubContextData)

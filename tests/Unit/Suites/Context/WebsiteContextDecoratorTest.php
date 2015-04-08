@@ -6,6 +6,10 @@ namespace Brera\Context;
 /**
  * @covers \Brera\Context\WebsiteContextDecorator
  * @covers \Brera\Context\ContextDecorator
+ * @uses   \Brera\Context\InternalContextState
+ * @uses   \Brera\Context\ContextBuilder
+ * @uses   \Brera\Context\VersionedContext
+ * @uses   \Brera\DataVersion
  */
 class WebsiteContextDecoratorTest extends ContextDecoratorTestAbstract
 {
@@ -18,7 +22,7 @@ class WebsiteContextDecoratorTest extends ContextDecoratorTestAbstract
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     protected function getStubContextData()
     {
@@ -27,7 +31,7 @@ class WebsiteContextDecoratorTest extends ContextDecoratorTestAbstract
     
     /**
      * @param Context $stubContext
-     * @param array $stubContextData
+     * @param string[] $stubContextData
      * @return WebsiteContextDecorator
      */
     protected function createContextDecoratorUnderTest(Context $stubContext, array $stubContextData)

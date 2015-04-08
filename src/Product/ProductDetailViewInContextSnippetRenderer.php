@@ -4,7 +4,6 @@
 namespace Brera\Product;
 
 use Brera\Context\Context;
-use Brera\PageMetaInfoSnippetContent;
 use Brera\SnippetKeyGenerator;
 use Brera\SnippetResult;
 use Brera\SnippetResultList;
@@ -13,7 +12,7 @@ use Brera\UrlPathKeyGenerator;
 class ProductDetailViewInContextSnippetRenderer
 {
     const CODE = 'product_detail_view';
-    
+
     /**
      * @var Product
      */
@@ -33,32 +32,26 @@ class ProductDetailViewInContextSnippetRenderer
      * @var ProductDetailViewBlockRenderer
      */
     private $blockRenderer;
-    
+
     /**
      * @var SnippetKeyGenerator
      */
-    private $snippetKeyGenerator;
+    private $productSnippetKeyGenerator;
     
     /**
      * @var UrlPathKeyGenerator
      */
     private $urlKeyGenerator;
 
-    /**
-     * @param SnippetResultList $snippetResultList
-     * @param ProductDetailViewBlockRenderer $blockRenderer
-     * @param SnippetKeyGenerator $snippetKeyGenerator
-     * @param UrlPathKeyGenerator $urlKeyGenerator
-     */
     public function __construct(
         SnippetResultList $snippetResultList,
         ProductDetailViewBlockRenderer $blockRenderer,
-        SnippetKeyGenerator $snippetKeyGenerator,
+        ProductSnippetKeyGenerator $snippetKeyGenerator,
         UrlPathKeyGenerator $urlKeyGenerator
     ) {
         $this->snippetResultList = $snippetResultList;
         $this->blockRenderer = $blockRenderer;
-        $this->snippetKeyGenerator = $snippetKeyGenerator;
+        $this->productSnippetKeyGenerator = $snippetKeyGenerator;
         $this->urlKeyGenerator = $urlKeyGenerator;
     }
     
@@ -72,19 +65,22 @@ class ProductDetailViewInContextSnippetRenderer
         $this->product = $product;
         $this->context = $context;
         $this->snippetResultList->clear();
-        
+
         $this->addProductDetailViewSnippetsToSnippetResultList();
-        
+
         return $this->snippetResultList;
     }
-    
+
     private function addProductDetailViewSnippetsToSnippetResultList()
     {
         $content = $this->blockRenderer->render($this->product, $this->context);
-        $key = $this->snippetKeyGenerator->getKeyForContext($this->product->getId(), $this->context);
+        $key = $this->productSnippetKeyGenerator->getKeyForContext(
+            $this->context,
+            ['product_id' => $this->product->getId()]
+        );
         $contentSnippet = SnippetResult::create($key, $content);
         $this->snippetResultList->add($contentSnippet);
-        
+
         $pageMetaDataSnippet = $this->getProductDetailPageMetaSnippet();
         $this->snippetResultList->add($pageMetaDataSnippet);
     }
@@ -94,21 +90,18 @@ class ProductDetailViewInContextSnippetRenderer
      */
     private function getProductDetailPageMetaSnippet()
     {
-        $snippetKey = $this->urlKeyGenerator->getUrlKeyForPathInContext(
-            $this->product->getAttributeValue('url_key'),
-            $this->context
-        );
-        $metaData = $this->getPageMetaData();
+        $snippetKey = $this->getPageMetaSnippetKey();
+        $metaData = $this->getPageMetaSnippetContent();
         return SnippetResult::create($snippetKey, json_encode($metaData));
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
-    private function getPageMetaData()
+    private function getPageMetaSnippetContent()
     {
         $rootBlockName = $this->blockRenderer->getRootSnippetCode();
-        $pageMetaInfo = PageMetaInfoSnippetContent::create(
+        $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::create(
             (string) $this->product->getId(),
             $rootBlockName,
             $this->blockRenderer->getNestedSnippetCodes()
@@ -121,6 +114,18 @@ class ProductDetailViewInContextSnippetRenderer
      */
     public function getUsedContextParts()
     {
-        return $this->snippetKeyGenerator->getContextPartsUsedForKey();
+        return $this->productSnippetKeyGenerator->getContextPartsUsedForKey();
+    }
+
+    /**
+     * @return string
+     */
+    private function getPageMetaSnippetKey()
+    {
+        $snippetKey = $this->urlKeyGenerator->getUrlKeyForPathInContext(
+            $this->product->getAttributeValue('url_key'),
+            $this->context
+        );
+        return self::CODE . '_' . $snippetKey;
     }
 }

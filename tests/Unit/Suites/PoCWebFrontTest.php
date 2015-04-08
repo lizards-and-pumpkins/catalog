@@ -2,18 +2,19 @@
 
 namespace Brera;
 
-use Brera\Context\ContextBuilder;
 use Brera\Context\Context;
+use Brera\Context\ContextBuilder;
 use Brera\Http\HttpRequest;
-use Brera\Http\HttpRouterChain;
-use Brera\Http\HttpRouter;
 use Brera\Http\HttpRequestHandler;
 use Brera\Http\HttpResponse;
+use Brera\Http\HttpRouter;
+use Brera\Http\HttpRouterChain;
 use Brera\Http\HttpUrl;
 
 /**
  * @covers \Brera\PoCWebFront
  * @covers \Brera\WebFront
+ * @uses   \Brera\Http\AbstractHttpRequestHandler
  * @uses   \Brera\FactoryTrait
  * @uses   \Brera\MasterFactoryTrait
  * @uses   \Brera\FrontendFactory
@@ -26,6 +27,10 @@ use Brera\Http\HttpUrl;
  * @uses   \Brera\Product\ProductDetailViewRouter
  * @uses   \Brera\Product\ProductDetailViewRequestHandler
  * @uses   \Brera\Product\ProductDetailViewRequestHandlerBuilder
+ * @uses   \Brera\Product\ProductListingRouter
+ * @uses   \Brera\Product\ProductListingRequestHandler
+ * @uses   \Brera\Product\ProductListingRequestHandlerBuilder
+ * @uses   \Brera\Product\ProductSnippetKeyGenerator
  * @uses   \Brera\Http\ResourceNotFoundRouter
  * @uses   \Brera\Http\ResourceNotFoundRequestHandler
  * @uses   \Brera\Http\HttpRouterChain
@@ -52,14 +57,24 @@ class PoCWebFrontTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $routerFactoryMethods = ['createApiRouter', 'createUrlKeyRouter', 'createResourceNotFoundRouter'];
+        $routerFactoryMethods = [
+            'createApiRouter',
+            'createProductDetailViewRouter',
+            'createProductListingRouter',
+            'createResourceNotFoundRouter'
+        ];
+
         $stubFactoryMethods = array_merge(
-            [ 'createContextBuilder', 'createHttpRouterChain', 'register'],
+            ['createContextBuilder', 'createHttpRouterChain', 'register'],
             $routerFactoryMethods
         );
-        
-        $stubMasterFactory = $this->getMock(MasterFactory::class, $stubFactoryMethods);
+
+        $stubMasterFactory = $this->getMockBuilder(MasterFactory::class)
+            ->setMethods($stubFactoryMethods)
+            ->getMock();
         $stubContextBuilder = $this->getMock(ContextBuilder::class, [], [], '', false);
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject|HttpRequest $stubHttpRequest */
         $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
         $mockRouterChain = $this->getMock(HttpRouterChain::class);
         $mockHttpRequestHandler = $this->getMock(HttpRequestHandler::class);
@@ -90,7 +105,7 @@ class PoCWebFrontTest extends \PHPUnit_Framework_TestCase
         $mockHttpRequestHandler->expects($this->any())
             ->method('process')
             ->willReturn($this->mockHttpResponse);
-        
+
         $this->webFront = new PoCWebFront($stubHttpRequest, $stubMasterFactory);
     }
 
@@ -119,6 +134,7 @@ class PoCWebFrontTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldCreateAPoCMasterFactory()
     {
+        /** @var \PHPUnit_Framework_MockObject_MockObject|HttpRequest $stubHttpRequest */
         $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
         $stubHttpRequest->expects($this->any())
             ->method('getUrl')

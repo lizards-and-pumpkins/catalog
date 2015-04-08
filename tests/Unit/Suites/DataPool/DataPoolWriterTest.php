@@ -2,14 +2,14 @@
 
 namespace Brera\DataPool;
 
-use Brera\DataPool\SearchEngine\SearchDocumentCollection;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use Brera\SnippetResult;
 use Brera\SnippetResultList;
 
 /**
  * @covers \Brera\DataPool\DataPoolWriter
- * @uses Brera\Product\ProductId
- * @uses Brera\Http\HttpUrl
+ * @uses   Brera\Product\ProductId
+ * @uses   Brera\Http\HttpUrl
  */
 class DataPoolWriterTest extends AbstractDataPoolTest
 {
@@ -20,9 +20,10 @@ class DataPoolWriterTest extends AbstractDataPoolTest
 
     protected function setUp()
     {
+        /* TODO: Refactor */
         parent::setUp();
 
-        $this->dataPoolWriter = new DataPoolWriter($this->stubKeyValueStore, $this->stubSearchEngine);
+        $this->dataPoolWriter = new DataPoolWriter($this->getStubKeyValueStore(), $this->getStubSearchEngine());
     }
 
     /**
@@ -30,25 +31,19 @@ class DataPoolWriterTest extends AbstractDataPoolTest
      */
     public function itShouldWriteASnippetListToTheDataPool()
     {
-        $testContent = 'test-content';
         $testKey = 'test-key';
+        $testContent = 'test-content';
 
-        $mockSnippetResult = $this->getMockBuilder(SnippetResult::class)
-        ->disableOriginalConstructor()
-        ->getMock();
-        $mockSnippetResult->expects($this->once())->method('getContent')
-        ->willReturn($testContent);
-        $mockSnippetResult->expects($this->once())->method('getKey')
-        ->willReturn($testKey);
+        $mockSnippetResult = $this->getMockSnippetResult($testKey, $testContent);
 
         $mockSnippetResultList = $this->getMock(SnippetResultList::class);
         $mockSnippetResultList->expects($this->once())
-        ->method('getIterator')
-        ->willReturn(new \ArrayIterator([$mockSnippetResult]));
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([$mockSnippetResult]));
 
-        $this->stubKeyValueStore->expects($this->once())
-        ->method('set')
-        ->with($testKey, $testContent);
+        $this->getStubKeyValueStore()->expects($this->once())
+            ->method('set')
+            ->with($testKey, $testContent);
 
         $this->dataPoolWriter->writeSnippetResultList($mockSnippetResultList);
     }
@@ -60,10 +55,46 @@ class DataPoolWriterTest extends AbstractDataPoolTest
     {
         $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class);
 
-        $this->stubSearchEngine->expects($this->once())
+        $this->getStubSearchEngine()->expects($this->once())
             ->method('addSearchDocumentCollection')
             ->with($stubSearchDocumentCollection);
 
         $this->dataPoolWriter->writeSearchDocumentCollection($stubSearchDocumentCollection);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldWriteSnippetResultIntoDataPool()
+    {
+        $testKey = 'test-key';
+        $testContent = 'test-content';
+
+        $mockSnippetResult = $this->getMockSnippetResult($testKey, $testContent);
+
+        $this->getStubKeyValueStore()->expects($this->once())
+            ->method('set')
+            ->with($testKey, $testContent);
+
+        $this->dataPoolWriter->writeSnippetResult($mockSnippetResult);
+
+    }
+
+    /**
+     * @param string $mockSnippetKey
+     * @param string $mockSnippetContent
+     * @return SnippetResult|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getMockSnippetResult($mockSnippetKey, $mockSnippetContent)
+    {
+        $mockSnippetResult = $this->getMock(SnippetResult::class, [], [], '', false);
+        $mockSnippetResult->expects($this->once())
+            ->method('getKey')
+            ->willReturn($mockSnippetKey);
+        $mockSnippetResult->expects($this->once())
+            ->method('getContent')
+            ->willReturn($mockSnippetContent);
+
+        return $mockSnippetResult;
     }
 }

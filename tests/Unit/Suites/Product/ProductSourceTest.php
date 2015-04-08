@@ -6,7 +6,7 @@ use Brera\Context\Context;
 
 /**
  * @covers \Brera\Product\ProductSource
- * @uses \Brera\Product\Product
+ * @uses   \Brera\Product\Product
  */
 class ProductSourceTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,10 +27,10 @@ class ProductSourceTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->stubProductId = $this->getMockBuilder(ProductId::class)
-        ->disableOriginalConstructor()
-        ->getMock();
-        $this->mockProductAttributeList = $this->getMock(ProductAttributeList::class, ['getAttributesForContext']);
+        $this->stubProductId = $this->getMock(ProductId::class, [], [], '', false);
+        $this->mockProductAttributeList = $this->getMockBuilder(ProductAttributeList::class)
+            ->setMethods(['getAttributesForContext'])
+            ->getMock();
 
         $this->productSource = new ProductSource($this->stubProductId, $this->mockProductAttributeList);
     }
@@ -52,9 +52,9 @@ class ProductSourceTest extends \PHPUnit_Framework_TestCase
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->getMock(Context::class);
         $this->mockProductAttributeList->expects($this->once())
-        ->method('getAttributesForContext')
-        ->with($stubContext)
-        ->willReturn($this->mockProductAttributeList);
+            ->method('getAttributesForContext')
+            ->with($stubContext)
+            ->willReturn($this->mockProductAttributeList);
         $result = $this->productSource->getProductForContext($stubContext);
         $this->assertInstanceOf(Product::class, $result);
     }

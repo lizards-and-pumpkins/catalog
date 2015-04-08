@@ -38,10 +38,6 @@ abstract class BlockRenderer
      */
     private $outermostBlock;
 
-    /**
-     * @param ThemeLocator $themeLocator
-     * @param BlockStructure $blockStructure
-     */
     public function __construct(
         ThemeLocator $themeLocator,
         BlockStructure $blockStructure
@@ -53,7 +49,7 @@ abstract class BlockRenderer
     /**
      * @return string
      */
-    abstract protected function getLayoutHandle();
+    abstract public function getLayoutHandle();
 
     /**
      * @param ProjectionSourceData $dataObject
@@ -203,11 +199,11 @@ abstract class BlockRenderer
     /**
      * @param string $blockName
      * @return string
-     * @todo use delegate to generate the placeholder string
      * @see \Brera\UrlKeyRequestHandler::buildPlaceholdersFromCodes()
      */
     private function getBlockPlaceholder($blockName)
     {
+        // TODO use delegate to generate the placeholder string
         return '{{snippet ' . $blockName . '}}';
     }
 }

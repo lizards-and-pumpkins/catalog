@@ -9,9 +9,6 @@ trait MasterFactoryTrait
      */
     private $methods = [];
 
-    /**
-     * @param Factory $factory
-     */
     final public function register(Factory $factory)
     {
         foreach ((new \ReflectionObject($factory))->getMethods() as $method) {
@@ -33,7 +30,7 @@ trait MasterFactoryTrait
 
     /**
      * @param string $method
-     * @param array $parameters
+     * @param mixed[] $parameters
      * @return mixed
      * @throws UndefinedFactoryMethodException
      */

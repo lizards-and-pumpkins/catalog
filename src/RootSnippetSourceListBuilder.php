@@ -11,9 +11,6 @@ class RootSnippetSourceListBuilder
      */
     private $contextBuilder;
 
-    /**
-     * @param ContextBuilder $contextBuilder
-     */
     public function __construct(ContextBuilder $contextBuilder)
     {
         $this->contextBuilder = $contextBuilder;

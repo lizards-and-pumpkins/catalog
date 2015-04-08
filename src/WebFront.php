@@ -24,10 +24,6 @@ abstract class WebFront
      */
     private $context;
 
-    /**
-     * @param HttpRequest $request
-     * @param MasterFactory $factory
-     */
     public function __construct(HttpRequest $request, MasterFactory $factory = null)
     {
         $this->request = $request;
@@ -89,9 +85,6 @@ abstract class WebFront
      */
     abstract protected function registerRouters(HttpRouterChain $router);
 
-    /**
-     * @return void
-     */
     private function buildFactoryIfItWasNotInjected()
     {
         if (null !== $this->masterFactory) {
@@ -109,22 +102,6 @@ abstract class WebFront
     public function getMasterFactory()
     {
         return $this->masterFactory;
-    }
-
-    /**
-     * @return Context
-     */
-    final protected function getContext()
-    {
-        return $this->context;
-    }
-
-    /**
-     * @return HttpRequest
-     */
-    final protected function getRequest()
-    {
-        return $this->request;
     }
 
     /**

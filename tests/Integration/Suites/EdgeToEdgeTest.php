@@ -5,11 +5,14 @@ namespace Brera;
 use Brera\Http\HttpResourceNotFoundResponse;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\PoCSku;
+use Brera\Product\ProductDetailViewInContextSnippetRenderer;
 use Brera\Product\ProductId;
 use Brera\Http\HttpUrl;
 use Brera\Http\HttpRequest;
+use Brera\Product\ProductInListingInContextSnippetRenderer;
+use Brera\Product\ProductListingSnippetRenderer;
 
-class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
+class EdgeToEdgeTestAbstract extends AbstractIntegrationTest
 {
     /**
      * @test
@@ -41,33 +44,35 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $contextSource = $factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[0];
 
-        $keyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('product_detail_view');
-        $key = $keyGenerator->getKeyForContext($productId, $context);
-        $html = $dataPoolReader->getSnippet($key);
+        $productDetailViewKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
+            ProductDetailViewInContextSnippetRenderer::CODE
+        );
+        $productDetailViewKey = $productDetailViewKeyGenerator->getKeyForContext(
+            $context,
+            ['product_id' => $productId]
+        );
+        $productDetailViewHtml = $dataPoolReader->getSnippet($productDetailViewKey);
 
         $this->assertContains(
             (string) $sku,
-            $html,
+            $productDetailViewHtml,
             sprintf('The result page HTML does not contain the expected sku "%s"', $sku)
         );
         $this->assertContains(
             $productName,
-            $html,
+            $productDetailViewHtml,
             sprintf('The result page HTML does not contain the expected product name "%s"', $productName)
         );
 
-        $keyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('product_in_listing');
-        $key = $keyGenerator->getKeyForContext($productId, $context);
-        $html = $dataPoolReader->getSnippet($key);
+        $listingPageKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
+            ProductInListingInContextSnippetRenderer::CODE
+        );
+        $listingPageKey = $listingPageKeyGenerator->getKeyForContext($context, ['product_id' => $productId]);
+        $productListingHtml = $dataPoolReader->getSnippet($listingPageKey);
 
         $this->assertContains(
-            (string) $sku,
-            $html,
-            sprintf('Product in listing snippet HTML does not contain the expected sku "%s"', $sku)
-        );
-        $this->assertContains(
             $productName,
-            $html,
+            $productListingHtml,
             sprintf('Product in listing snippet HTML does not contain the expected product name "%s"', $productName)
         );
 
@@ -104,12 +109,14 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $dataPoolReader = $factory->createDataPoolReader();
 
         $keyGeneratorLocator = $factory->getSnippetKeyGeneratorLocator();
-        $keyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('product_listing');
+        $keyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
+            ProductListingSnippetRenderer::CODE
+        );
 
         $contextSource = $factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[0];
 
-        $key = $keyGenerator->getKeyForContext('60', $context);
+        $key = $keyGenerator->getKeyForContext($context);
         $html = $dataPoolReader->getSnippet($key);
 
         $expectation = file_get_contents(__DIR__ . '/../../../theme/template/list.phtml');
@@ -133,9 +140,9 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $numberOfMessages = 3;
         $consumer->process($numberOfMessages);
         
-        $urlKey = (new XPathParser($xml))->getXmlNodesArrayByXPath('/*/product/attributes/url_key')[0];
+        $urlKeys = (new XPathParser($xml))->getXmlNodesArrayByXPath('/*/product/attributes/url_key[@language="en_US"]');
         
-        $httpUrl = HttpUrl::fromString('http://example.com/' . $urlKey['value']);
+        $httpUrl = HttpUrl::fromString('http://example.com/' . $urlKeys[0]['value']);
         $request = HttpRequest::fromParameters('GET', $httpUrl);
 
         $website = new PoCWebFront($request, $factory);
@@ -156,30 +163,5 @@ class EdgeToEdgeTest extends \PHPUnit_Framework_TestCase
         $website->registerFactory(new IntegrationTestFactory());
         $response = $website->runWithoutSendingResponse();
         $this->assertInstanceOf(HttpResourceNotFoundResponse::class, $response);
-    }
-
-    /**
-     * @return PoCMasterFactory
-     */
-    private function prepareIntegrationTestMasterFactory()
-    {
-        $factory = new PoCMasterFactory();
-        $factory->register(new CommonFactory());
-        $factory->register(new IntegrationTestFactory());
-        $factory->register(new FrontendFactory());
-        return $factory;
-    }
-
-    /**
-     * @param Logger $logger
-     */
-    private function failIfMessagesWhereLogged(Logger $logger)
-    {
-        $messages = $logger->getMessages();
-
-        if (!empty($messages)) {
-            $messageString = implode(PHP_EOL, $messages);
-            $this->fail($messageString);
-        }
     }
 }

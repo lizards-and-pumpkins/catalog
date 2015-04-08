@@ -12,20 +12,33 @@ abstract class AbstractDataPoolTest extends \PHPUnit_Framework_TestCase
     /**
      * @var KeyValueStore|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stubKeyValueStore;
+    private $stubKeyValueStore;
 
     /**
      * @var SearchEngine|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stubSearchEngine;
+    private $stubSearchEngine;
 
-    /**
-     * @return void
-     */
     protected function setUp()
     {
         $this->stubKeyValueStore = $this->getMock(KeyValueStore::class);
         $this->stubSearchEngine = $this->getMock(SearchEngine::class);
+    }
+
+    /**
+     * @return SearchEngine|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getStubSearchEngine()
+    {
+        return $this->stubSearchEngine;
+    }
+
+    /**
+     * @return KeyValueStore|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getStubKeyValueStore()
+    {
+        return $this->stubKeyValueStore;
     }
 
     /**
@@ -40,9 +53,6 @@ abstract class AbstractDataPoolTest extends \PHPUnit_Framework_TestCase
         return $productId;
     }
 
-    /**
-     * @return void
-     */
     protected function addSetMethodToStubKeyValueStore()
     {
         $this->stubKeyValueStore->expects($this->once())

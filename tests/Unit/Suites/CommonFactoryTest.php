@@ -13,7 +13,10 @@ use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\ProductImportDomainEvent;
 use Brera\Product\ProductImportDomainEventHandler;
+use Brera\Product\ProductListingSavedDomainEvent;
+use Brera\Product\ProductListingSavedDomainEventHandler;
 use Brera\Product\ProductProjector;
+use Brera\Product\ProductSnippetKeyGenerator;
 use Brera\Product\ProductSourceBuilder;
 use Brera\Queue\Queue;
 
@@ -36,9 +39,14 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Renderer\BlockRenderer
  * @uses   \Brera\Product\ProductSourceBuilder
  * @uses   \Brera\Product\ProductProjector
+ * @uses   \Brera\Product\ProductSnippetKeyGenerator
  * @uses   \Brera\Product\ProductSnippetRendererCollection
  * @uses   \Brera\Product\ProductImportDomainEvent
  * @uses   \Brera\Product\ProductImportDomainEventHandler
+ * @uses   \Brera\Product\ProductListingCriteriaSnippetRenderer
+ * @uses   \Brera\Product\ProductListingProjector
+ * @uses   \Brera\Product\ProductListingSavedDomainEvent
+ * @uses   \Brera\Product\ProductListingSavedDomainEventHandler
  * @uses   \Brera\Product\CatalogImportDomainEvent
  * @uses   \Brera\Product\CatalogImportDomainEventHandler
  * @uses   \Brera\Product\ProductSearchDocumentBuilder
@@ -86,7 +94,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldCreateAProductImportDomainEventHandler()
     {
-        $productImportDomainEvent = new ProductImportDomainEvent('<xml></xml>');
+        $productImportDomainEvent = new ProductImportDomainEvent('<xml/>');
         $result = $this->commonFactory->createProductImportDomainEventHandler($productImportDomainEvent);
         $this->assertInstanceOf(ProductImportDomainEventHandler::class, $result);
     }
@@ -97,7 +105,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldCreateACatalogImportDomainEventHandler()
     {
-        $catalogImportDomainEvent = new CatalogImportDomainEvent('<xml></xml>');
+        $catalogImportDomainEvent = new CatalogImportDomainEvent('<xml/>');
         $result = $this->commonFactory->createCatalogImportDomainEventHandler($catalogImportDomainEvent);
         $this->assertInstanceOf(CatalogImportDomainEventHandler::class, $result);
     }
@@ -108,9 +116,20 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldCreateARootTemplateChangedDomainEventHandler()
     {
-        $rootTemplateChangedDomainEvent = new RootTemplateChangedDomainEvent('<xml></xml>');
+        $rootTemplateChangedDomainEvent = new RootTemplateChangedDomainEvent('<xml/>');
         $result = $this->commonFactory->createRootTemplateChangedDomainEventHandler($rootTemplateChangedDomainEvent);
         $this->assertInstanceOf(RootTemplateChangedDomainEventHandler::class, $result);
+    }
+
+    /**
+     * @test
+     * @todo Move to catalog factory test
+     */
+    public function itShouldCreateAProductListingSavedDomainEventHandler()
+    {
+        $productListingSavedDomainEvent = new ProductListingSavedDomainEvent('<xml/>');
+        $result = $this->commonFactory->createProductListingSavedDomainEventHandler($productListingSavedDomainEvent);
+        $this->assertInstanceOf(ProductListingSavedDomainEventHandler::class, $result);
     }
 
     /**
@@ -326,5 +345,14 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
         $handler = $this->commonFactory->createImportImageDomainEventHandler($event);
         $this->assertInstanceOf(ImportImageDomainEventHandler::class, $handler);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnAProductSnippetKeyGeneratorInstance()
+    {
+        $result = $this->commonFactory->createProductInListingSnippetKeyGenerator();
+        $this->assertInstanceOf(ProductSnippetKeyGenerator::class, $result);
     }
 }

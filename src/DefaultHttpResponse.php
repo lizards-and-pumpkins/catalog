@@ -28,11 +28,6 @@ class DefaultHttpResponse implements HttpResponse
         return $this->body;
     }
 
-    /**
-     * Sends headers, cookies and afterwards the body to the client
-     *
-     * @return null
-     */
     public function send()
     {
         echo $this->getBody();
