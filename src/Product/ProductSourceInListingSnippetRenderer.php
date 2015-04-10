@@ -4,6 +4,7 @@ namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\Context\ContextSource;
+use Brera\InvalidProjectionDataSourceTypeException;
 use Brera\ProjectionSourceData;
 use Brera\SnippetRenderer;
 use Brera\SnippetResultList;
@@ -73,12 +74,12 @@ class ProductSourceInListingSnippetRenderer implements SnippetRenderer
 
     /**
      * @param ProjectionSourceData $productSource
-     * @throws InvalidArgumentException
+     * @throws InvalidProjectionDataSourceTypeException
      */
     private function validateProjectionSourceData(ProjectionSourceData $productSource)
     {
         if (!($productSource instanceof ProductSource)) {
-            throw new InvalidArgumentException('First argument must be instance of Product.');
+            throw new InvalidProjectionDataSourceTypeException('First argument must be instance of ProductSource.');
         }
     }
 

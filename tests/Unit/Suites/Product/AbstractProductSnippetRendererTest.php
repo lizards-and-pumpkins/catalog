@@ -64,7 +64,7 @@ abstract class AbstractProductSnippetRendererTest extends \PHPUnit_Framework_Tes
 
     /**
      * @test
-     * @expectedException \Brera\Product\InvalidArgumentException
+     * @expectedException \Brera\InvalidProjectionDataSourceTypeException
      */
     public function itShouldOnlyAcceptProductsForRendering()
     {
