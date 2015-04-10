@@ -104,7 +104,6 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
         $this->mockProductSource->expects($this->any())
             ->method('getProductForContext')
-            ->with($stubContext)
             ->willReturn($mockProduct);
 
         $this->mockContextSource->expects($this->any())
@@ -113,7 +112,6 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
         $this->mockSnippetKeyGenerator->expects($this->any())
             ->method('getKeyForContext')
-            ->with($stubContext)
             ->willReturn($dummyPriceSnippetKey);
 
         $expectedSnippetResult = SnippetResult::create($dummyPriceSnippetKey, $dummyPriceAttributeValue);

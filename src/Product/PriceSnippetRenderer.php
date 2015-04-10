@@ -2,7 +2,6 @@
 
 namespace Brera\Product;
 
-use Brera\Context\Context;
 use Brera\Context\ContextSource;
 use Brera\SnippetKeyGenerator;
 use Brera\SnippetRenderer;
@@ -50,8 +49,9 @@ class PriceSnippetRenderer implements SnippetRenderer
     {
         $availableContexts = $this->getContextList($contextSource);
         foreach ($availableContexts as $context) {
-            $key = $this->snippetKeyGenerator->getKeyForContext($context);
-            $price = $this->getProductPriceInContext($productSource, $context);
+            $productInContext = $productSource->getProductForContext($context);
+            $key = $this->snippetKeyGenerator->getKeyForContext($context, ['product_id' => $productInContext->getId()]);
+            $price = $productInContext->getAttributeValue($this->priceAttributeCode);
             $snippetResult = SnippetResult::create($key, $price);
             $this->snippetResultList->add($snippetResult);
         }
@@ -69,18 +69,5 @@ class PriceSnippetRenderer implements SnippetRenderer
         $parts = $this->snippetKeyGenerator->getContextPartsUsedForKey();
 
         return $contextSource->getAllAvailableContexts($parts);
-    }
-
-    /**
-     * @param ProductSource $productSource
-     * @param Context $context
-     * @return string
-     */
-    private function getProductPriceInContext(ProductSource $productSource, Context $context)
-    {
-        $productInContext = $productSource->getProductForContext($context);
-        $price = $productInContext->getAttributeValue($this->priceAttributeCode);
-
-        return $price;
     }
 }
