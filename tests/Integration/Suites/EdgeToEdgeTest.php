@@ -24,7 +24,7 @@ class EdgeToEdgeTestAbstract extends AbstractIntegrationTest
         $sku = PoCSku::fromString('118235-251');
         $productId = ProductId::fromSku($sku);
         $productName = 'LED Arm-Signallampe';
-        $productPrice = '12.95';
+        $productPrice = 1295;
 
         $xml = file_get_contents(__DIR__ . '/../../shared-fixture/product.xml');
 
@@ -79,13 +79,9 @@ class EdgeToEdgeTestAbstract extends AbstractIntegrationTest
 
         $priceSnippetKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('price');
         $priceSnippetKey = $priceSnippetKeyGenerator->getKeyForContext($context, ['product_id' => $productId]);
-        $price = $dataPoolReader->getSnippet($priceSnippetKey);
-
-        $this->assertEquals(
-            $productPrice,
-            $price,
-            sprintf('Product price "%s" does not equal expected product price "%s"', $price, $productPrice)
-        );
+        $result = $dataPoolReader->getSnippet($priceSnippetKey);
+        
+        $this->assertEquals($productPrice, $result);
 
         $searchResults = $dataPoolReader->getSearchResults('led', $context);
 

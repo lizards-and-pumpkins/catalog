@@ -11,6 +11,7 @@ use Brera\SnippetResultList;
 
 /**
  * @covers Brera\Product\PriceSnippetRenderer
+ * @uses   Brera\Product\Price
  * @uses   Brera\SnippetResult
  */
 class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
@@ -94,7 +95,7 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
     {
         $stubContext = $this->getMock(Context::class);
         $dummyPriceSnippetKey = 'bar';
-        $dummyPriceAttributeValue = 'baz';
+        $dummyPriceAttributeValue = '1';
 
         $mockProduct = $this->getMock(Product::class, [], [], '', false);
         $mockProduct->expects($this->any())
@@ -114,7 +115,8 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
             ->method('getKeyForContext')
             ->willReturn($dummyPriceSnippetKey);
 
-        $expectedSnippetResult = SnippetResult::create($dummyPriceSnippetKey, $dummyPriceAttributeValue);
+        $dummyPrice = Price::fromString($dummyPriceAttributeValue);
+        $expectedSnippetResult = SnippetResult::create($dummyPriceSnippetKey, $dummyPrice->getAmount());
 
         $this->mockSnippetResultList->expects($this->once())
             ->method('add')
