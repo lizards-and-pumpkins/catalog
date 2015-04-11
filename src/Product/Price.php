@@ -33,7 +33,7 @@ class Price implements Money
             throw new InvalidArgumentException(sprintf('Can not create a price from %s', gettype($amountString)));
         }
 
-        $amountInt = (int) round($amountString, self::NUM_DECIMAL_POINTS) * pow(10, self::NUM_DECIMAL_POINTS);
+        $amountInt = intval(round($amountString, self::NUM_DECIMAL_POINTS) * pow(10, self::NUM_DECIMAL_POINTS));
 
         return new static($amountInt);
     }
