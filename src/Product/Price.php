@@ -37,7 +37,7 @@ class Price implements Money
 
         return new static($amountInt);
     }
-    
+
     /**
      * @return int
      */

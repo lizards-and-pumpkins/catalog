@@ -60,7 +60,6 @@ class PriceSnippetRenderer implements SnippetRenderer
         return $this->snippetResultList;
     }
 
-
     /**
      * @param ContextSource $contextSource
      * @return \Brera\Context\Context[]

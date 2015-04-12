@@ -337,6 +337,9 @@ class CommonFactory implements Factory, DomainEventFactory
         );
     }
 
+    /**
+     * @return PriceSnippetRenderer
+     */
     public function createPriceSnippetRenderer()
     {
         // TODO move to catalog factory
