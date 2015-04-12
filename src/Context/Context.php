@@ -2,9 +2,7 @@
 
 namespace Brera\Context;
 
-use Brera\MementoOriginator;
-
-interface Context extends MementoOriginator
+interface Context
 {
     /**
      * @return string
