@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Brera\Context;
 
 use Brera\DataVersion;
@@ -127,17 +126,5 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $result = $this->builder->createFromRequest($stubRequest);
         $this->assertInstanceOf(Context::class, $result);
-    }
-    
-    /**
-     * @test
-     */
-    public function itShouldCreateAContextFromAContextState()
-    {
-        $mockContextState = $this->getMock(InternalContextState::class, [], [], '', false);
-        $mockContextState->expects($this->any())->method('getVersion')->willReturn('123');
-        $mockContextState->expects($this->any())->method('getContextDataSet')->willReturn([]);
-        $instance = ContextBuilder::getContextFromMemento($mockContextState);
-        $this->assertInstanceOf(Context::class, $instance);
     }
 }

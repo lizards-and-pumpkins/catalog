@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Brera\Context;
 
 abstract class ContextDecoratorTestAbstract extends \PHPUnit_Framework_TestCase
@@ -24,10 +23,7 @@ abstract class ContextDecoratorTestAbstract extends \PHPUnit_Framework_TestCase
     {
         $code = $this->getDecoratorUnderTestCode();
         $stubContextData = $this->getStubContextData();
-        $this->assertSame(
-            $stubContextData[$code],
-            $this->getDecoratorUnderTest()->getValue($code)
-        );
+        $this->assertSame($stubContextData[$code], $this->getDecoratorUnderTest()->getValue($code));
     }
 
     /**
@@ -112,7 +108,6 @@ abstract class ContextDecoratorTestAbstract extends \PHPUnit_Framework_TestCase
      */
     final public function itShouldDelegateToComponentToFetchSupportedCodes()
     {
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $mockDecoratedContext */
         $mockDecoratedContext = $this->getMock(Context::class);
         $mockDecoratedContext->expects($this->once())
             ->method('getSupportedCodes')
@@ -235,31 +230,5 @@ abstract class ContextDecoratorTestAbstract extends \PHPUnit_Framework_TestCase
             ->method('supportsCode')
             ->with($code);
         $this->getDecoratorUnderTest()->supportsCode($code);
-    }
-
-    /**
-     * @test
-     */
-    public function itShouldReturnAContextStateInstance()
-    {
-        $this->mockDecoratedContext->expects($this->any())
-            ->method('getValue')
-            ->with(VersionedContext::CODE)
-            ->willReturn('222');
-
-        $this->assertInstanceOf(ContextState::class, $this->getDecoratorUnderTest()->getState());
-    }
-
-    /**
-     * @test
-     */
-    public function itShouldReturnAContextInstance()
-    {
-        $mockContextState = $this->getMock(InternalContextState::class, [], [], '', false);
-        $mockContextState->expects($this->any())->method('getVersion')->willReturn('123');
-        $mockContextState->expects($this->any())->method('getContextDataSet')->willReturn([]);
-        $class = get_class($this->getDecoratorUnderTest());
-        $result = call_user_func($class . '::fromMemento', $mockContextState);
-        $this->assertInstanceOf(Context::class, $result);
     }
 }
