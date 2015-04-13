@@ -91,7 +91,7 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldReturnSnippetResultListContainingOfASnippetResultWithAGivenKeyAndPrice()
+    public function itShouldReturnSnippetResultListContainingASnippetResultWithAGivenKeyAndPrice()
     {
         $stubContext = $this->getMock(Context::class);
         $dummyPriceSnippetKey = 'bar';
