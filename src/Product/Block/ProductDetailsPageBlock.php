@@ -2,10 +2,6 @@
 
 namespace Brera\Product\Block;
 
-use Brera\Product\ProductSource;
-use Brera\Product\ProductAttributeNotFoundException;
-use Brera\Renderer\Block;
-
 class ProductDetailsPageBlock extends ProductBlock
 {
     /**

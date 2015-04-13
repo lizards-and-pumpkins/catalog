@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Brera\Context;
 
 use Brera\DataVersion;
@@ -20,17 +19,6 @@ class ContextBuilder
     public function __construct(DataVersion $dataVersion)
     {
         $this->dataVersion = $dataVersion;
-    }
-
-    /**
-     * @param ContextState $contextState
-     * @return Context
-     */
-    public static function getContextFromMemento(ContextState $contextState)
-    {
-        /** @var InternalContextState $contextBuilder */
-        $contextBuilder = (new self(DataVersion::fromVersionString($contextState->getVersion())));
-        return $contextBuilder->getContext($contextState->getContextDataSet());
     }
 
     /**

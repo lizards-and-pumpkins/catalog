@@ -1,10 +1,6 @@
 <?php
 
-
 namespace Brera\Context;
-
-use Brera\DataVersion;
-use Brera\Memento;
 
 abstract class ContextDecorator implements Context
 {
@@ -132,23 +128,5 @@ abstract class ContextDecorator implements Context
         return in_array($this->getCode(), $requestedParts) ?
             $this->buildIdString() :
             '';
-    }
-
-    /**
-     * @param Memento $memento
-     * @return Context
-     */
-    public static function fromMemento(Memento $memento)
-    {
-        return ContextBuilder::getContextFromMemento($memento);
-    }
-
-    /**
-     * @return ContextState
-     */
-    public function getState()
-    {
-        $version = DataVersion::fromVersionString($this->getValue(VersionedContext::CODE));
-        return InternalContextState::fromContextFields($version, $this->sourceData);
     }
 }
