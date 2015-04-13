@@ -49,12 +49,7 @@ class PriceSnippetRenderer implements SnippetRenderer
     {
         $availableContexts = $this->getContextList($contextSource);
         foreach ($availableContexts as $context) {
-            $productInContext = $productSource->getProductForContext($context);
-            $key = $this->snippetKeyGenerator->getKeyForContext($context, ['product_id' => $productInContext->getId()]);
-            $priceString = $productInContext->getAttributeValue($this->priceAttributeCode);
-            $price = Price::fromString($priceString);
-            $snippetResult = SnippetResult::create($key, $price->getAmount());
-            $this->snippetResultList->add($snippetResult);
+            $this->renderProductPriceInContext($productSource, $context);
         }
 
         return $this->snippetResultList;
@@ -69,5 +64,19 @@ class PriceSnippetRenderer implements SnippetRenderer
         $parts = $this->snippetKeyGenerator->getContextPartsUsedForKey();
 
         return $contextSource->getAllAvailableContexts($parts);
+    }
+
+    /**
+     * @param ProductSource $productSource
+     * @param $context
+     */
+    private function renderProductPriceInContext(ProductSource $productSource, $context)
+    {
+        $productInContext = $productSource->getProductForContext($context);
+        $key = $this->snippetKeyGenerator->getKeyForContext($context, ['product_id' => $productInContext->getId()]);
+        $priceString = $productInContext->getAttributeValue($this->priceAttributeCode);
+        $price = Price::fromString($priceString);
+        $snippetResult = SnippetResult::create($key, $price->getAmount());
+        $this->snippetResultList->add($snippetResult);
     }
 }
