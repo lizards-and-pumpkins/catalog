@@ -19,7 +19,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Brera\Product\InvalidArgumentException
+     * @expectedException \Brera\Product\InvalidPriceSourceException
      * @expectedExceptionMessage Can not create a price from integer
      */
     public function itShouldThrowAnExceptionIfNonStringArgumentIsPassed()
@@ -29,7 +29,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Brera\Product\InvalidArgumentException
+     * @expectedException \Brera\Product\InvalidPriceSourceException
      * @expectedExceptionMessage Can not create a price from string
      */
     public function itShouldThrowAnExceptionIfNonIntegerArgumentIsPassed()

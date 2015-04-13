@@ -17,7 +17,7 @@ class Price implements Money
     public function __construct($amount)
     {
         if (!is_int($amount)) {
-            throw new InvalidArgumentException(sprintf('Can not create a price from %s', gettype($amount)));
+            throw new InvalidPriceSourceException(sprintf('Can not create a price from %s', gettype($amount)));
         }
 
         $this->amount = $amount;
@@ -30,7 +30,7 @@ class Price implements Money
     public static function fromString($amountString)
     {
         if (!is_string($amountString)) {
-            throw new InvalidArgumentException(sprintf('Can not create a price from %s', gettype($amountString)));
+            throw new InvalidPriceSourceException(sprintf('Can not create a price from %s', gettype($amountString)));
         }
 
         $amountInt = intval(round($amountString, self::NUM_DECIMAL_POINTS) * pow(10, self::NUM_DECIMAL_POINTS));
