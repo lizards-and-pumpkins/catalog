@@ -89,18 +89,15 @@ nav { clear: both; color: #ffffff }
 .nav .button, #navPlaceholder .button { background: #ffffff; color: #000000; border-color: #bdc3cc }
 
 /* Footer blocks */
-.footer-block { font-size: 10px; width: 171px; margin: 0 25px 0 0 }
-.footer-block ul { height: 138px; overflow: hidden; }
+.footer-block { float: left; font-size: 10px; width: 171px }
+.footer-block ul { height: 138px; overflow: hidden; margin-right: 25px }
 .footer-block ul li:first-child { margin-top: 10px; }
-.footer .scroll-pane ul { overflow: auto; }
-.footer-block.last { width: 169px; margin: 0 }
-.footer-block-info {clear:left; float:left; margin-top:30px; position:relative; width:953px; }
-.footer-block-info span {font: 10px Verdana; color: #a0a0a0}
-.footer-block dt { color: #ac3f07; font-weight: bold; }
-.footer-block a { color: #323232; border-color: #323232; font-size: 10px; letter-spacing: .075em; }
-.footer-block li { list-style: none; margin-bottom: 9px; }
-.footer-block h3 { border-bottom: 1px solid black; font-size: 10px; }
-.footer-block.long button { display: none }
+.footer-block-info { clear: both; padding-top: 30px; font-size: 10px; color: #a0a0a0 }
+.footer-block a { color: #323232; border-color: #323232; font-size: 10px; letter-spacing: .075em }
+.footer-block li { list-style: none; margin-bottom: 9px }
+.footer-block .footer-block-title { border-bottom: 1px solid black; font-size: 10px; font-weight: bold; margin-right: 25px }
+.footer-block-wide { float: left; width: 365px }
+.footer-block-wide img { margin-bottom: 21px }
 
 /* Footer Social */
 .social { width: 25%; margin: 50px 0 }
