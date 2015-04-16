@@ -23,14 +23,16 @@
     .logo { padding-left: 10px }
     .social { height: auto }
     .social .text h3 { margin-top: 10px }
-    .footer-block { margin-right: 20px }
-    .footer-block.long ul { display: none }
-    .footer-block.long button { display: block; font-family: 'GeogrotesqueMedium', serif; background: #e5e5e5 url("../images/icon-footer-arrow.png") no-repeat right; border: none; width: 100%; text-align: left; padding: 5px 10px; font-size: 14px; margin-top: 10px }
-    .footer-block.last h3 { margin-top: 10px }
     #phoneMenuPlaceholder { display: none }
     .flex-control-nav { display: none }
     .cms_header_small { display: none }
     .nav .brands-logos .brand-logos-title, #navPlaceholder .brands-logos .brand-logos-title { float: none; padding: 0 }
+
+    /* Footer blocks */
+    .footer-block { width: 33% }
+    .footer-block ul, .footer-block .footer-block-title { margin-right: 20px }
+    .footer-block-wide { float: none; clear: both; width: auto }
+    .footer-block-wide img { margin: 21px 5px 0 }
 
     /* Login/Register */
     .customer-account-login .main .account-login, .customer-account-login .main .account-create { margin: 0; width: 49% !important; }
@@ -68,11 +70,6 @@
     .social .inner-container { padding: 0; border: none; height: auto }
     .social .text { width: 200px }
     .social .text h3 { margin-top: 0 }
-    .footer-block, .footer-block.last { clear: both; width: 100%; margin-bottom: 10px }
-    .footer-block ul { display: none; height: auto; max-height: 138px; margin-left: 10px }
-    .footer-block h3 { font-family: 'GeogrotesqueMedium', serif; background: #e5e5e5 url("../images/icon-footer-arrow.png") no-repeat right; padding: 5px 10px; font-size: 14px; margin: 0; border: none }
-    .footer-block.long button { display: none }
-    .footer-block.last h3 { margin-top: 0 }
     #search_mini_form { display: none }
     .logo { margin: 0; padding: 0; text-align: left }
     .logo img { margin: 10px; }
@@ -99,6 +96,11 @@
     .lang-ru_en, .lang-st_en, .lang-cy_en, .lang-ru_fr, .lang-st_fr, .lang-cy_fr, .lang-ru_de, .lang-st_de, .lang-cy_de, .lang-ru_es { padding-left: 25px }
     .home-container-1 { background-color: transparent }
     #searchPanel { display: none }
+
+    /* Footer blocks */
+    .footer-block { clear: both; width: 100%; margin-bottom: 10px }
+    .footer-block ul { height: auto; max-height: 138px; margin-left: 10px }
+    .footer-block .footer-block-title { font-family: 'GeogrotesqueMedium', serif; background: #e5e5e5 url("../images/icon-footer-arrow.png") no-repeat right; padding: 5px 10px; font-size: 14px; margin: 0; border: none }
 
     /* Login page */
     .customer-account-login .main .account-login, .customer-account-login .main .account-create { float: none; width: 100% !important; }

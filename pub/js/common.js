@@ -1,9 +1,4 @@
-define([
-    'cookie',
-    'lib/jquery.jscrollpane.min',
-    'lib/jquery.mousewheel.min',
-    'lib/jquery.uniform.min'
-], function(cookie) {
+define(['cookie', 'lib/jquery.uniform.min'], function(cookie) {
 
     jQuery(document).ready(function() {
 
@@ -113,17 +108,18 @@ define([
             }
 
             /* Observe click on footer menu headings. Unbind first to avoid multiple bindings. */
-            jQuery('.footer-block h3').unbind('click', toggleFooterBlockPhone)
-                .click(toggleFooterBlockPhone);
+            jQuery('.footer-block .footer-block-title').unbind('click', toggleFooterBlockPhone)
+                .bind('click', toggleFooterBlockPhone)
+                .next().hide();
 
-            /* Move newsletter block under top-sellers (only for home) */
+            /* Move left banner block under top-sellers (only for home) */
             if (!bannerBlockLeft.hasClass('downtown')){
                 bannerBlockLeft.insertAfter(jQuery('#topsellerTabs')).addClass('downtown');
             }
         } else {
-            /* Remove observer from footer menu headings and apply jScrollPane */
-            jQuery('.footer-block h3').unbind('click', toggleFooterBlockPhone);
-            jQuery('.footer-block.long ul').jScrollPane({ showArrows: true });
+            /* Remove observer from footer menu headings */
+            jQuery('.footer-block .footer-block-title').unbind('click', toggleFooterBlockPhone)
+                .next().show();
 
             /* Append the search back if needed */
             var searchPanel = jQuery('#searchPanel');
@@ -131,7 +127,7 @@ define([
                 searchPanel.append(jQuery('#search_mini_form'));
             }
 
-            /* Move newsletter box back */
+            /* Move left banner block back */
             if (bannerBlockLeft.hasClass('downtown')) {
                 bannerBlockLeft.insertAfter(jQuery('.slider-wrap')).removeClass('downtown');
             }
@@ -211,7 +207,7 @@ var nav,
  */
 function toggleFooterBlockPhone()
 {
-        jQuery(this).next().toggle().jScrollPane({ showArrows: true });
+        jQuery(this).next().toggle();
 }
 
 function toggleMobileNav(parentLi, placeholder)
@@ -227,15 +223,6 @@ function toggleMobileNav(parentLi, placeholder)
             jQuery(this).removeClass('hover');
         }
     });
-}
-
-function toggleFooterBlock(attributeCode)
-{
-    var list = jQuery('#footer-list-' + attributeCode);
-    list.toggle().jScrollPane({ showArrows: true });
-
-    jQuery('.footer-block.last').css('margin-left', jQuery('#footer-list-brand').css('display') == 'none' ? 0 : '575px');
-    jQuery('#footer-button-' + attributeCode).text(list.css('display') == 'none' ? Translator.translate('Show all') : Translator.translate('Hide all'));
 }
 
 function togglePhoneBlock(blockType)
