@@ -33,7 +33,7 @@ class Price implements Money
             throw new InvalidPriceSourceException(sprintf('Can not create a price from %s', gettype($amountString)));
         }
 
-        $amountInt = intval(round($amountString, self::NUM_DECIMAL_POINTS) * pow(10, self::NUM_DECIMAL_POINTS));
+        $amountInt = self::convertStringPriceIntoInt($amountString, self::NUM_DECIMAL_POINTS);
 
         return new static($amountInt);
     }
@@ -44,5 +44,18 @@ class Price implements Money
     public function getAmount()
     {
         return $this->amount;
+    }
+
+    /**
+     * @param string $amountString
+     * @param int $numDecimalPoints
+     * @return int
+     */
+    private static function convertStringPriceIntoInt($amountString, $numDecimalPoints)
+    {
+        $base = pow(10, $numDecimalPoints);
+        $priceFloat = round($amountString, $numDecimalPoints);
+
+        return intval($priceFloat * $base);
     }
 }
