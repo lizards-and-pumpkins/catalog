@@ -8,6 +8,7 @@ use Brera\Http\ResourceNotFoundRouter;
 use Brera\DataPool\SearchEngine\SearchEngine;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
+use Brera\Product\PriceSnippetRenderer;
 use Brera\Product\ProductDetailViewBlockRenderer;
 use Brera\Product\ProductDetailViewInContextSnippetRenderer;
 use Brera\Product\ProductInListingInContextSnippetRenderer;
@@ -163,7 +164,8 @@ class CommonFactory implements Factory, DomainEventFactory
         // TODO move to catalog factory
         return [
             $this->getMasterFactory()->createProductSourceDetailViewSnippetRenderer(),
-            $this->getMasterFactory()->createProductSourceInListingSnippetRenderer()
+            $this->getMasterFactory()->createProductSourceInListingSnippetRenderer(),
+            $this->getMasterFactory()->createPriceSnippetRenderer(),
         ];
     }
 
@@ -336,6 +338,19 @@ class CommonFactory implements Factory, DomainEventFactory
     }
 
     /**
+     * @return PriceSnippetRenderer
+     */
+    public function createPriceSnippetRenderer()
+    {
+        // TODO move to catalog factory
+        return new PriceSnippetRenderer(
+            $this->getMasterFactory()->createSnippetResultList(),
+            $this->getMasterFactory()->createPriceSnippetKeyGenerator(),
+            $this->getMasterFactory()->getRegularPriceSnippetKey()
+        );
+    }
+
+    /**
      * @return ProductInListingBlockRenderer
      */
     public function createProductInListingBlockRenderer()
@@ -352,9 +367,16 @@ class CommonFactory implements Factory, DomainEventFactory
     public function createProductInListingSnippetKeyGenerator()
     {
         // TODO move to catalog factory
-        return new ProductSnippetKeyGenerator(
-            ProductInListingInContextSnippetRenderer::CODE
-        );
+        return new ProductSnippetKeyGenerator(ProductInListingInContextSnippetRenderer::CODE);
+    }
+
+    /**
+     * @return SnippetKeyGenerator
+     */
+    public function createPriceSnippetKeyGenerator()
+    {
+        // TODO move to catalog factory
+        return new ProductSnippetKeyGenerator($this->getMasterFactory()->getRegularPriceSnippetKey());
     }
 
     /**
@@ -553,5 +575,13 @@ class CommonFactory implements Factory, DomainEventFactory
         }
 
         return $this->searchEngine;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRegularPriceSnippetKey()
+    {
+        return 'price';
     }
 }

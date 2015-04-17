@@ -39,14 +39,14 @@ class ProductSnippetRendererCollection implements SnippetRendererCollection
     public function render(ProjectionSourceData $productSource, ContextSource $contextSource)
     {
         if (!($productSource instanceof ProductSource)) {
-            throw new InvalidProjectionDataSourceTypeException('First argument must be instance of Product.');
+            throw new InvalidProjectionDataSourceTypeException('First argument must be instance of ProductSource.');
         }
         
-        $this->renderProduct($productSource, $contextSource);
+        $this->renderSnippet($productSource, $contextSource);
         return $this->snippetResultList;
     }
 
-    private function renderProduct(ProductSource $productSource, ContextSource $contextSource)
+    private function renderSnippet(ProductSource $productSource, ContextSource $contextSource)
     {
         foreach ($this->renderers as $renderer) {
             $this->snippetResultList->merge($renderer->render($productSource, $contextSource));

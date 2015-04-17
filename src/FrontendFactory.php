@@ -110,6 +110,10 @@ class FrontendFactory implements Factory
             ProductListingSnippetRenderer::CODE,
             $this->getMasterFactory()->createProductListingSnippetKeyGenerator()
         );
+        $snippetKeyGeneratorLocator->register(
+            $this->getMasterFactory()->getRegularPriceSnippetKey(),
+            $this->getMasterFactory()->createPriceSnippetKeyGenerator()
+        );
 
         return $snippetKeyGeneratorLocator;
     }
