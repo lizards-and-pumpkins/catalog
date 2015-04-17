@@ -98,7 +98,7 @@ $save = 0;
                     </div>
 
                     <div class="price-information" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
-                        {{snippet price}}
+                        <?= $this->getChildOutput('price') ?>
                     </div>
                 </div>
 
@@ -125,7 +125,7 @@ $save = 0;
         </div>
     </form>
 
-    {{snippet all-models}}
+    <?= $this->getChildOutput('all-models') ?>
 
     <div class="product-collateral">
         <ul class="tabs">
@@ -151,7 +151,7 @@ $save = 0;
         html += '<div class="grid-cell-container">';
         html += '<a href="<?php /* TODO: Product URL */ ?>" class="product-image"><img src="<?php /* TODO: 188x115 thumbnail URL */ ?>" width="188" height="115" alt="<?= $this->getProductAttributeValue('name') ?>" /></a>';
         html += '<h2 class="product-name"><a href="<?php /* TODO: Product URL */ ?>"><?= $this->getProductAttributeValue('name') ?></a></h2>';
-        html += '<a href="<?php /* TODO: Product URL */ ?>">{{snippet price}}</a>';
+        html += '<a href="<?php /* TODO: Product URL */ ?>"><?= $this->getChildOutput('price') ?></a>';
         <?php if ($gender) : ?>
         html += '<p class="product-category"><a href="<?php /* TODO: Product URL */ ?>"><?= is_array($gender) ? implode(',', $gender) : $gender ?></a></p>';
         <?php endif; ?>
