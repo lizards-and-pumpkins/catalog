@@ -346,7 +346,7 @@ class CommonFactory implements Factory, DomainEventFactory
         return new PriceSnippetRenderer(
             $this->getMasterFactory()->createSnippetResultList(),
             $this->getMasterFactory()->createPriceSnippetKeyGenerator(),
-            'price'
+            $this->getMasterFactory()->getRegularPriceSnippetKey()
         );
     }
 
@@ -376,7 +376,7 @@ class CommonFactory implements Factory, DomainEventFactory
     public function createPriceSnippetKeyGenerator()
     {
         // TODO move to catalog factory
-        return new ProductSnippetKeyGenerator('price');
+        return new ProductSnippetKeyGenerator($this->getMasterFactory()->getRegularPriceSnippetKey());
     }
 
     /**
@@ -575,5 +575,13 @@ class CommonFactory implements Factory, DomainEventFactory
         }
 
         return $this->searchEngine;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRegularPriceSnippetKey()
+    {
+        return 'price';
     }
 }
