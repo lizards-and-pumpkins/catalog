@@ -72,9 +72,8 @@ class FrontendFactory implements Factory
     {
         return new ProductDetailViewRequestHandlerBuilder(
             $this->getMasterFactory()->createUrlPathKeyGenerator(),
-            $this->getMasterFactory()->getSnippetKeyGeneratorLocator(),
             $this->getMasterFactory()->createDataPoolReader(),
-            $this->getMasterFactory()->getLogger()
+            $this->getMasterFactory()->createPageBuilder()
         );
     }
 
@@ -127,5 +126,17 @@ class FrontendFactory implements Factory
             $this->snippetKeyGeneratorLocator = $this->createSnippetKeyGeneratorLocator();
         }
         return $this->snippetKeyGeneratorLocator;
+    }
+
+    /**
+     * @return PageBuilder
+     */
+    public function createPageBuilder()
+    {
+        return new PageBuilder(
+            $this->getMasterFactory()->createDataPoolReader(),
+            $this->getMasterFactory()->getSnippetKeyGeneratorLocator(),
+            $this->getMasterFactory()->getLogger()
+        );
     }
 }

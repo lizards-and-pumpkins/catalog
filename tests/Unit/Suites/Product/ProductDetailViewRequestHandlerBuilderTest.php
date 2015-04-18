@@ -6,12 +6,12 @@ use Brera\Context\Context;
 use Brera\Http\HttpUrl;
 use Brera\DataPool\DataPoolReader;
 use Brera\Logger;
+use Brera\PageBuilder;
 use Brera\SnippetKeyGeneratorLocator;
 use Brera\UrlPathKeyGenerator;
 
 /**
  * @covers \Brera\Product\ProductDetailViewRequestHandlerBuilder
- * @uses   \Brera\Http\AbstractHttpRequestHandler
  * @uses   \Brera\Product\ProductDetailViewRequestHandler
  */
 class ProductDetailViewRequestHandlerBuilderTest extends \PHPUnit_Framework_TestCase
@@ -19,20 +19,18 @@ class ProductDetailViewRequestHandlerBuilderTest extends \PHPUnit_Framework_Test
     /**
      * @var ProductDetailViewRequestHandlerBuilder
      */
-    private $builder;
+    private $handlerBuilder;
 
     public function setUp()
     {
         $stubUrlPathKeyGenerator = $this->getMock(UrlPathKeyGenerator::class, [], [], '', false);
-        $stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
         $stubDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
-        $stubLogger = $this->getMock(Logger::class);
-
-        $this->builder = new ProductDetailViewRequestHandlerBuilder(
+        $stubPageBuilder = $this->getMock(PageBuilder::class, [], [], '', false);
+        
+        $this->handlerBuilder = new ProductDetailViewRequestHandlerBuilder(
             $stubUrlPathKeyGenerator,
-            $stubSnippetKeyGeneratorLocator,
             $stubDataPoolReader,
-            $stubLogger
+            $stubPageBuilder
         );
     }
 
@@ -44,7 +42,7 @@ class ProductDetailViewRequestHandlerBuilderTest extends \PHPUnit_Framework_Test
         $stubUrl = $this->getMock(HttpUrl::class, [], [], '', false);
         $stubContext = $this->getMock(Context::class);
 
-        $result = $this->builder->create($stubUrl, $stubContext);
+        $result = $this->handlerBuilder->create($stubUrl, $stubContext);
 
         $this->assertInstanceOf(ProductDetailViewRequestHandler::class, $result);
     }

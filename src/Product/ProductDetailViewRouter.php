@@ -14,9 +14,9 @@ class ProductDetailViewRouter implements HttpRouter
      */
     private $productDetailViewRequestHandlerBuilder;
 
-    public function __construct(ProductDetailViewRequestHandlerBuilder $urlKeyRequestHandlerBuilder)
+    public function __construct(ProductDetailViewRequestHandlerBuilder $productDetailViewRequestHandlerBuilder)
     {
-        $this->productDetailViewRequestHandlerBuilder = $urlKeyRequestHandlerBuilder;
+        $this->productDetailViewRequestHandlerBuilder = $productDetailViewRequestHandlerBuilder;
     }
 
     /**
@@ -26,11 +26,11 @@ class ProductDetailViewRouter implements HttpRouter
      */
     public function route(HttpRequest $request, Context $context)
     {
-        $urlKeyRequestHandler = $this->productDetailViewRequestHandlerBuilder->create($request->getUrl(), $context);
-        if (! $urlKeyRequestHandler->canProcess()) {
+        $handler = $this->productDetailViewRequestHandlerBuilder->create($request->getUrl(), $context);
+        if (! $handler->canProcess()) {
             return null;
         }
         
-        return $urlKeyRequestHandler;
+        return $handler;
     }
 }
