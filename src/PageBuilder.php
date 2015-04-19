@@ -61,17 +61,10 @@ class PageBuilder
     {
         $this->context = $context;
         $this->keyGeneratorParams = $keyGeneratorParams;
-        $this->initPropertiesFromMetaInfo($metaInfo);
+        $this->initFromMetaInfo($metaInfo);
         $this->loadSnippets();
-        
-        $this->logMissingSnippetCodes();
-
-        list($rootSnippet, $childSnippets) = $this->separateRootAndChildSnippets();
-
-        $childSnippetsCodes = $this->getLoadedChildSnippetCodes();
-        $childSnippetCodesToContentMap = $this->mergePlaceholderAndSnippets($childSnippetsCodes, $childSnippets);
-
-        $content = $this->injectSnippetsIntoContent($rootSnippet, $childSnippetCodesToContentMap);
+        $this->logMissingSnippets();
+        $content = $this->buildPageContent();
 
         return new Page($content);
     }
@@ -86,10 +79,9 @@ class PageBuilder
         $this->snippetKeyToContentMap = array_merge($this->snippetKeyToContentMap, $snippetKeyToContentMap);
     }
 
-    private function initPropertiesFromMetaInfo(PageMetaInfoSnippetContent $metaInfo)
+    private function initFromMetaInfo(PageMetaInfoSnippetContent $metaInfo)
     {
         $this->rootSnippetCode = $metaInfo->getRootSnippetCode();
-
         $snippetCodes = $this->addRootSnippetCodeToPageSnippetCodesIfMissing($metaInfo->getPageSnippetCodes());
         $this->snippetCodeToKeyMap = array_merge($this->snippetCodeToKeyMap, array_combine(
             $snippetCodes,
@@ -137,18 +129,18 @@ class PageBuilder
         return array_filter($snippetKeys);
     }
 
-    private function logMissingSnippetCodes()
+    private function logMissingSnippets()
     {
-        $missingSnippetCodes = $this->getMissingSnippetCodes();
+        $missingSnippetCodes = $this->getNotLoadedSnippetCodes();
         if (count($missingSnippetCodes) > 0) {
-            $this->logger->log(new MissingSnippetCodeMessage($missingSnippetCodes));
+            $this->logger->log(new MissingSnippetCodeMessage($missingSnippetCodes, ['context' => $this->context]));
         }
     }
 
     /**
      * @return string[]
      */
-    private function getMissingSnippetCodes()
+    private function getNotLoadedSnippetCodes()
     {
         $missingSnippetCodes = [];
         foreach ($this->snippetCodeToKeyMap as $code => $key) {
@@ -158,24 +150,27 @@ class PageBuilder
         }
         return $missingSnippetCodes;
     }
+    
+    /**
+     * @return string
+     */
+    private function buildPageContent()
+    {
+        list($rootSnippet, $childSnippets) = $this->separateRootAndChildSnippets();
+        $childSnippetsCodes = $this->getLoadedChildSnippetCodes();
+        $childSnippetCodesToContentMap = $this->mergePlaceholderAndSnippets($childSnippetsCodes, $childSnippets);
+        return $this->injectSnippetsIntoContent($rootSnippet, $childSnippetCodesToContentMap);
+    }
 
     /**
      * @return string[]
      */
     private function separateRootAndChildSnippets()
     {
-        $rootSnippetKey = $this->getRootSnippetKey();
+        $rootSnippetKey = $this->snippetCodeToKeyMap[$this->rootSnippetCode];
         $rootSnippet = $this->getSnippetByKey($rootSnippetKey);
         $childSnippets = array_diff_key($this->snippetKeyToContentMap, [$rootSnippetKey => $rootSnippet]);
         return [$rootSnippet, $childSnippets];
-    }
-
-    /**
-     * @return string
-     */
-    private function getRootSnippetKey()
-    {
-        return $this->snippetCodeToKeyMap[$this->rootSnippetCode];
     }
 
     /**
@@ -242,7 +237,7 @@ class PageBuilder
     private function buildPlaceholderFromCode($code)
     {
         // TODO delegate placeholder creation (and also use the delegate during import)
-        // @see Brera\Renderer\BlockRenderer::getBlockPlaceholder()
+        /** @see Brera\Renderer\BlockRenderer::getBlockPlaceholder() **/
 
         return sprintf('{{snippet %s}}', $code);
     }
@@ -293,7 +288,6 @@ class PageBuilder
         }
         return $snippetCodes;
     }
-
 }
 
 
