@@ -161,7 +161,7 @@ class DataPoolReader
     /**
      * @param string[] $queryCriteria
      * @param Context $context
-     * @return \string[]
+     * @return string[]
      */
     public function getProductIdsMatchingCriteria(array $queryCriteria, Context $context)
     {

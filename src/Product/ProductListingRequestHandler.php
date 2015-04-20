@@ -91,11 +91,10 @@ class ProductListingRequestHandler implements HttpRequestHandler
     private function loadPageMetaInfoSnippet()
     {
         if (is_null($this->pageMetaInfo)) {
+            $this->pageMetaInfo = false;
             $json = $this->getPageMetaInfoJsonIfExists();
             if ($json) {
                 $this->pageMetaInfo = ProductListingMetaInfoSnippetContent::fromJson($json);
-            } else {
-                $this->pageMetaInfo = false;
             }
         }
     }
@@ -117,7 +116,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
     {
         $productIds = $this->getProductListingProductIds();
 
-        if (!$productIds) {
+        if (empty($productIds)) {
             return;
         }
 
