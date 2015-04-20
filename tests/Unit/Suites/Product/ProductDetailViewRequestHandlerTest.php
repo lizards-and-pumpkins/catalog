@@ -4,23 +4,33 @@ namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
-use Brera\Logger;
-use Brera\PageMetaInfoSnippetContent;
-use Brera\Product\Spies\ProductDetailViewRequestHandlerSpy;
-use Brera\SnippetKeyGeneratorLocator;
+use Brera\DataPool\KeyValue\KeyNotFoundException;
+use Brera\Http\HttpRequestHandler;
+use Brera\Page;
+use Brera\PageBuilder;
 
 /**
- * @covers \Brera\Product\ProductDetailViewRequestHandler
- * @uses   \Brera\Product\ProductDetailPageMetaInfoSnippetContent
+ * @covers Brera\Product\ProductDetailViewRequestHandler
+ * @uses   Brera\Product\ProductDetailPageMetaInfoSnippetContent
  */
 class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    private $urlPathKeyFixture = 'dummy-url-key';
+    /**
+     * @var ProductDetailViewRequestHandler
+     */
+    private $requestHandler;
 
     /**
-     * @var ProductDetailViewRequestHandlerSpy
+     * @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $requestHandlerSpy;
+    private $stubDataPoolReader;
+
+    private $testUrlPathKey = 'stub-meta-info-key';
+
+    /**
+     * @var string
+     */
+    private $testMetaInfoKey;
 
     /**
      * @var Context|\PHPUnit_Framework_MockObject_MockObject
@@ -28,126 +38,107 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
     private $stubContext;
 
     /**
-     * @var SnippetKeyGeneratorLocator|\PHPUnit_Framework_MockObject_MockObject
+     * @var string
      */
-    private $mockSnippetKeyGeneratorLocator;
+    private $testMetaInfoSnippetJson;
 
     /**
-     * @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var PageBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubDataPoolReader;
-
-    /**
-     * @var Logger|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubLogger;
-
-    /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $fakeKeyGeneratorLocator
-     * @return SnippetKeyGeneratorLocator|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function fakeSnippetKeyGeneratorLocator(\PHPUnit_Framework_MockObject_MockObject $fakeKeyGeneratorLocator)
-    {
-        $fixedKeyGeneratorMockFactory = function ($snippetCode) {
-            $keyGenerator = $this->getMock(ProductSnippetKeyGenerator::class, [], [], '', false);
-            $keyGenerator->expects($this->once())->method('getKeyForContext')->willReturn($snippetCode);
-            return $keyGenerator;
-        };
-        $fakeKeyGeneratorLocator->expects($this->once())->method('getKeyGeneratorForSnippetCode')
-            ->willReturnCallback($fixedKeyGeneratorMockFactory);
-        return $fakeKeyGeneratorLocator;
-    }
-
-    /**
-     * @param string $productId
-     * @return string
-     */
-    private function getStubMetaInfoJsonForProductId($productId)
-    {
-        $stubPageMetaInfo = [
-            ProductDetailPageMetaInfoSnippetContent::KEY_PRODUCT_ID => $productId,
-            PageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE => 'dummy-root-snippet',
-            PageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => []
-        ];
-        return json_encode($stubPageMetaInfo);
-    }
+    private $stubPageBuilder;
+    
+    private $testProductId = '123';
 
     protected function setUp()
     {
-        $this->stubContext = $this->getMock(Context::class);
-        $this->mockSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
+        $this->testMetaInfoKey = 'product_detail_view_' . $this->testUrlPathKey;
+        $this->testMetaInfoSnippetJson = json_encode(ProductDetailPageMetaInfoSnippetContent::create(
+            $this->testProductId,
+            'root-snippet-code',
+            ['child-snippet1']
+        )->getInfo());
         $this->stubDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
-        $this->stubLogger = $this->getMock(Logger::class);
-        $this->requestHandlerSpy = new ProductDetailViewRequestHandlerSpy(
-            $this->urlPathKeyFixture,
+        $this->stubContext = $this->getMock(Context::class);
+        $this->stubPageBuilder = $this->getMock(PageBuilder::class, [], [], '', false);
+        $this->requestHandler = new ProductDetailViewRequestHandler(
+            $this->testUrlPathKey,
             $this->stubContext,
-            $this->mockSnippetKeyGeneratorLocator,
             $this->stubDataPoolReader,
-            $this->stubLogger
+            $this->stubPageBuilder
         );
     }
 
     /**
      * @test
      */
-    public function itShouldReturnProductDetailPageMetaInfoContent()
+    public function itShouldBeARequestHandler()
     {
-        $json = $this->getStubMetaInfoJsonForProductId('id55');
-        $result = $this->requestHandlerSpy->testCreatePageMetaInfoInstance($json);
-        $this->assertInstanceOf(ProductDetailPageMetaInfoSnippetContent::class, $result);
+        $this->assertInstanceOf(HttpRequestHandler::class, $this->requestHandler);
     }
 
     /**
      * @test
      */
-    public function itShouldDelegateToTheSnippetKeyGeneratorLocatorToFetchASnippetKey()
+    public function itShouldReturnFalseIfThePageMetaInfoContentSnippetCanNotBeLoaded()
     {
-        $this->fakeSnippetKeyGeneratorLocator($this->mockSnippetKeyGeneratorLocator);
-        $this->requestHandlerSpy->testGetSnippetKey('test');
+        $exception = new KeyNotFoundException();
+        $this->stubDataPoolReader->expects($this->any())->method('getSnippet')->willThrowException($exception);
+        $this->assertFalse($this->requestHandler->canProcess());
     }
 
     /**
      * @test
      */
-    public function itShouldPrefixThePageMetaInfoSnippetKeyWithTheProductDetailViewSnippetCode()
+    public function itShouldReturnTrueIfThePageMetaInfoContentSnippetCanBeLoaded()
     {
-        $expected = ProductDetailViewInContextSnippetRenderer::CODE . '_' . $this->urlPathKeyFixture;
-        $this->assertSame($expected, $this->requestHandlerSpy->testGetPageMetaInfoSnippetKey());
+        $this->stubDataPoolReader->method('getSnippet')->willReturnMap([
+            [$this->testMetaInfoKey, $this->testMetaInfoSnippetJson]
+        ]);
+        $this->assertTrue($this->requestHandler->canProcess());
+    }
+
+    /**
+     * @test
+     * @expectedException \Brera\Http\UnableToHandleRequestException
+     * @expectedExceptionMessage Unable to handle request
+     */
+    public function itShouldThrowIfProcessWithoutMetaInfoContentIsCalled()
+    {
+        $this->requestHandler->process();
     }
 
     /**
      * @test
      */
-    public function itShouldIncludeSnippetCodeProductIdAndContextIdInErrorMessage()
+    public function itShouldCreateAPageMetaInfoSnippet()
     {
-        $snippetKey = 'test-snippet-key';
-        $productId = 'id55';
-        $contextId = 'test-context-id';
+        $this->stubDataPoolReader->method('getSnippet')->willReturnMap([
+            [$this->testMetaInfoKey, $this->testMetaInfoSnippetJson]
+        ]);
 
-        $json = $this->getStubMetaInfoJsonForProductId($productId);
-        $this->requestHandlerSpy->testCreatePageMetaInfoInstance($json);
+        $this->requestHandler->process();
         
-        $this->stubContext->expects($this->any())->method('getId')->willReturn($contextId);
+        $this->assertAttributeInstanceOf(
+            ProductDetailPageMetaInfoSnippetContent::class,
+            'pageMetaInfo',
+            $this->requestHandler
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnAPage()
+    {
+        $this->stubDataPoolReader->method('getSnippet')->willReturnMap([
+            [$this->testMetaInfoKey, $this->testMetaInfoSnippetJson]
+        ]);
+        $this->stubPageBuilder->method('buildPage')->with(
+            $this->anything(),
+            $this->anything(),
+            ['product_id' => $this->testProductId]
+        )->willReturn($this->getMock(Page::class, [], [], '', false));
         
-        $result = $this->requestHandlerSpy->testFormatSnippetNotAvailableErrorMessage($snippetKey);
-        $this->assertContains($snippetKey, $result);
-        $this->assertContains($productId, $result);
-        $this->assertContains($contextId, $result);
-    }
-
-    /**
-     * @test
-     */
-    public function itShouldReturnTheInjectedDataPoolReader()
-    {
-        $this->assertSame($this->stubDataPoolReader, $this->requestHandlerSpy->testGetDataPoolReader());
-    }
-
-    /**
-     * @test
-     */
-    public function itShouldReturnTheInjectedLogger()
-    {
-        $this->assertSame($this->stubLogger, $this->requestHandlerSpy->testGetLogger());
+        $this->assertInstanceOf(Page::class, $this->requestHandler->process());
     }
 }

@@ -24,31 +24,31 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
     private $pageSnippetCodes;
 
     /**
-     * @param string $sourceId
+     * @param string $productId
      * @param string $rootSnippetCode
      * @param string[] $pageSnippetCodes
      */
-    private function __construct($sourceId, $rootSnippetCode, array $pageSnippetCodes)
+    private function __construct($productId, $rootSnippetCode, array $pageSnippetCodes)
     {
-        $this->productId = $sourceId;
+        $this->productId = $productId;
         $this->rootSnippetCode = $rootSnippetCode;
         $this->pageSnippetCodes = $pageSnippetCodes;
     }
 
     /**
-     * @param string $sourceId
+     * @param string $productId
      * @param string $rootSnippetCode
      * @param string[] $pageSnippetCodes
      * @return ProductDetailPageMetaInfoSnippetContent
      */
-    public static function create($sourceId, $rootSnippetCode, array $pageSnippetCodes)
+    public static function create($productId, $rootSnippetCode, array $pageSnippetCodes)
     {
-        self::validateSourceId($sourceId);
+        self::validateProductId($productId);
         self::validateRootSnippetCode($rootSnippetCode);
         if (!in_array($rootSnippetCode, $pageSnippetCodes)) {
             $pageSnippetCodes = array_merge([$rootSnippetCode], $pageSnippetCodes);
         }
-        return new self($sourceId, $rootSnippetCode, $pageSnippetCodes);
+        return new self($productId, $rootSnippetCode, $pageSnippetCodes);
     }
 
     /**
@@ -121,7 +121,7 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
     /**
      * @param mixed $sourceId
      */
-    private static function validateSourceId($sourceId)
+    private static function validateProductId($sourceId)
     {
         if (!is_scalar($sourceId)) {
             throw new \InvalidArgumentException(sprintf(

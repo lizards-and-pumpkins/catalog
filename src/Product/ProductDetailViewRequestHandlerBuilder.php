@@ -6,6 +6,7 @@ use Brera\Context\Context;
 use Brera\Http\HttpUrl;
 use Brera\DataPool\DataPoolReader;
 use Brera\Logger;
+use Brera\PageBuilder;
 use Brera\SnippetKeyGenerator;
 use Brera\SnippetKeyGeneratorLocator;
 use Brera\UrlPathKeyGenerator;
@@ -18,27 +19,20 @@ class ProductDetailViewRequestHandlerBuilder
     private $urlPathKeyGenerator;
 
     private $dataPoolReader;
-    
+
     /**
-     * @var SnippetKeyGenerator
+     * @var PageBuilder
      */
-    private $keyGeneratorLocator;
-    
-    /**
-     * @var Logger
-     */
-    private $logger;
+    private $pageBuilder;
 
     public function __construct(
         UrlPathKeyGenerator $urlPathKeyGenerator,
-        SnippetKeyGeneratorLocator $keyGeneratorLocator,
         DataPoolReader $dataPoolReader,
-        Logger $logger
+        PageBuilder $pageBuilder
     ) {
         $this->urlPathKeyGenerator = $urlPathKeyGenerator;
         $this->dataPoolReader = $dataPoolReader;
-        $this->keyGeneratorLocator = $keyGeneratorLocator;
-        $this->logger = $logger;
+        $this->pageBuilder = $pageBuilder;
     }
 
     /**
@@ -51,9 +45,8 @@ class ProductDetailViewRequestHandlerBuilder
         return new ProductDetailViewRequestHandler(
             $this->urlPathKeyGenerator->getUrlKeyForUrlInContext($url, $context),
             $context,
-            $this->keyGeneratorLocator,
             $this->dataPoolReader,
-            $this->logger
+            $this->pageBuilder
         );
     }
 }
