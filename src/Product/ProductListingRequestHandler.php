@@ -4,26 +4,19 @@ namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
-use Brera\Http\AbstractHttpRequestHandler;
-use Brera\Logger;
+use Brera\DataPool\KeyValue\KeyNotFoundException;
+use Brera\Http\HttpRequestHandler;
+use Brera\Http\HttpResponse;
+use Brera\Http\UnableToHandleRequestException;
+use Brera\PageBuilder;
 use Brera\SnippetKeyGeneratorLocator;
 
-class ProductListingRequestHandler extends AbstractHttpRequestHandler
+class ProductListingRequestHandler implements HttpRequestHandler
 {
     /**
-     * @var string
+     * @var ProductListingMetaInfoSnippetContent
      */
-    private $selectionCriteria;
-
-    /**
-     * @var Context
-     */
-    private $context;
-
-    /**
-     * @var SnippetKeyGeneratorLocator
-     */
-    private $keyGeneratorLocator;
+    private $pageMetaInfo;
 
     /**
      * @var DataPoolReader
@@ -31,50 +24,120 @@ class ProductListingRequestHandler extends AbstractHttpRequestHandler
     private $dataPoolReader;
 
     /**
-     * @var Logger
+     * @var string
      */
-    private $logger;
+    private $metaInfoSnippetKey;
 
     /**
-     * @param string $pageMetaInfoSnippetKey
+     * @var Context
+     */
+    private $context;
+
+    /**
+     * @var PageBuilder
+     */
+    private $pageBuilder;
+
+    /**
+     * @var SnippetKeyGeneratorLocator
+     */
+    private $keyGeneratorLocator;
+
+    /**
+     * @param string $metaInfoSnippetKey
      * @param Context $context
-     * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
      * @param DataPoolReader $dataPoolReader
-     * @param Logger $logger
+     * @param PageBuilder $pageBuilder
+     * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
      */
     public function __construct(
-        $pageMetaInfoSnippetKey,
+        $metaInfoSnippetKey,
         Context $context,
-        SnippetKeyGeneratorLocator $keyGeneratorLocator,
         DataPoolReader $dataPoolReader,
-        Logger $logger
+        PageBuilder $pageBuilder,
+        SnippetKeyGeneratorLocator $keyGeneratorLocator
     ) {
-        $this->context = $context;
-        $this->pageMetaInfoSnippetKey = $pageMetaInfoSnippetKey;
         $this->dataPoolReader = $dataPoolReader;
+        $this->metaInfoSnippetKey = ProductListingSnippetRenderer::CODE . '_' . $metaInfoSnippetKey;
+        $this->context = $context;
+        $this->pageBuilder = $pageBuilder;
         $this->keyGeneratorLocator = $keyGeneratorLocator;
-        $this->logger = $logger;
     }
 
-    final protected function addPageSpecificAdditionalSnippetsHook()
+    /**
+     * @return bool
+     */
+    public function canProcess()
     {
-        $productIds = $this->dataPoolReader->getProductIdsMatchingCriteria($this->selectionCriteria, $this->context);
-        if ($productIds) {
-            $this->addProductsInListingToPage($productIds);
+        $this->loadPageMetaInfoSnippet();
+        return (bool)$this->pageMetaInfo;
+    }
+
+    /**
+     * @return HttpResponse
+     * @throws UnableToHandleRequestException
+     */
+    public function process()
+    {
+        if (!$this->canProcess()) {
+            throw new UnableToHandleRequestException('Unable to handle request');
+        }
+
+        $this->addProductsInListingToPageBuilder();
+
+        return $this->pageBuilder->buildPage($this->pageMetaInfo, $this->context, []);
+    }
+
+    private function loadPageMetaInfoSnippet()
+    {
+        if (is_null($this->pageMetaInfo)) {
+            $json = $this->getPageMetaInfoJsonIfExists();
+            if ($json) {
+                $this->pageMetaInfo = ProductListingMetaInfoSnippetContent::fromJson($json);
+            } else {
+                $this->pageMetaInfo = false;
+            }
         }
     }
 
     /**
-     * @param string[] $productIds
+     * @return string
      */
-    private function addProductsInListingToPage(array $productIds)
+    private function getPageMetaInfoJsonIfExists()
     {
+        try {
+            $snippet = $this->dataPoolReader->getSnippet($this->metaInfoSnippetKey);
+        } catch (KeyNotFoundException $e) {
+            $snippet = '';
+        }
+        return $snippet;
+    }
+
+    private function addProductsInListingToPageBuilder()
+    {
+        $productIds = $this->getProductListingProductIds();
+
+        if (!$productIds) {
+            return;
+        }
+
         $productInListingSnippetKeys = $this->getProductInListingSnippetKeysFromProductIds($productIds);
         
         $snippetKeyToContentMap = $this->dataPoolReader->getSnippets($productInListingSnippetKeys);
         $snippetCodeToKeyMap = $this->getProductInListingSnippetCodeToKeyMap($productInListingSnippetKeys);
 
-        $this->addSnippetsToPage($snippetCodeToKeyMap, $snippetKeyToContentMap);
+        $this->pageBuilder->addSnippetsToPage($snippetCodeToKeyMap, $snippetKeyToContentMap);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getProductListingProductIds()
+    {
+        $selectionCriteria = $this->pageMetaInfo->getSelectionCriteria();
+        $productIds = $this->dataPoolReader->getProductIdsMatchingCriteria($selectionCriteria, $this->context);
+
+        return $productIds;
     }
 
     /**
@@ -101,65 +164,5 @@ class ProductListingRequestHandler extends AbstractHttpRequestHandler
             $acc[$snippetCode] = $key;
             return $acc;
         }, []);
-    }
-
-    /**
-     * @return string
-     */
-    final protected function getPageMetaInfoSnippetKey()
-    {
-        return ProductListingSnippetRenderer::CODE . '_' . $this->pageMetaInfoSnippetKey;
-    }
-
-    /**
-     * @param string $snippetJson
-     * @return ProductListingMetaInfoSnippetContent
-     */
-    final protected function createPageMetaInfoInstance($snippetJson)
-    {
-        $metaInfo = ProductListingMetaInfoSnippetContent::fromJson($snippetJson);
-        $this->selectionCriteria = $metaInfo->getSelectionCriteria();
-        return $metaInfo;
-    }
-
-    /**
-     * @param string $snippetCode
-     * @return string
-     */
-    final protected function getSnippetKey($snippetCode)
-    {
-        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
-        $params = ['selection_criteria' => $this->selectionCriteria];
-        return $keyGenerator->getKeyForContext($this->context, $params);
-    }
-
-    /**
-     * @param string $snippetKey
-     * @return string string
-     */
-    final protected function formatSnippetNotAvailableErrorMessage($snippetKey)
-    {
-        return sprintf(
-            'Snippet not available (key "%s", listing type id "%s", context "%s")',
-            $snippetKey,
-            implode('|', $this->selectionCriteria),
-            $this->context->getId()
-        );
-    }
-
-    /**
-     * @return DataPoolReader
-     */
-    final protected function getDataPoolReader()
-    {
-        return $this->dataPoolReader;
-    }
-
-    /**
-     * @return Logger
-     */
-    final protected function getLogger()
-    {
-        return $this->logger;
     }
 }

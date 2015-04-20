@@ -5,10 +5,7 @@ namespace Brera\Product;
 use Brera\Context\Context;
 use Brera\Http\HttpUrl;
 use Brera\DataPool\DataPoolReader;
-use Brera\Logger;
 use Brera\PageBuilder;
-use Brera\SnippetKeyGenerator;
-use Brera\SnippetKeyGeneratorLocator;
 use Brera\UrlPathKeyGenerator;
 
 class ProductDetailViewRequestHandlerBuilder
@@ -18,6 +15,9 @@ class ProductDetailViewRequestHandlerBuilder
      */
     private $urlPathKeyGenerator;
 
+    /**
+     * @var DataPoolReader
+     */
     private $dataPoolReader;
 
     /**
