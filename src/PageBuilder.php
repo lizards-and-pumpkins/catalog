@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Brera;
 
 use Brera\Context\Context;
@@ -289,6 +288,3 @@ class PageBuilder
         return $snippetCodes;
     }
 }
-
-
-

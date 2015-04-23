@@ -109,13 +109,19 @@ class ProductListingTest extends AbstractIntegrationTest
     {
         $contextBuilder = $this->factory->createContextBuilder();
         $context = $contextBuilder->getContext(['website' => 'ru', 'language' => 'en_US']);
+        $dataPoolReader = $this->factory->createDataPoolReader();
+        $pageBuilder = new PageBuilder(
+            $dataPoolReader,
+            $this->factory->getSnippetKeyGeneratorLocator(),
+            $this->factory->getLogger()
+        );
 
         return new ProductListingRequestHandler(
             $this->getPageMetaInfoSnippetKey($context),
             $context,
-            $this->factory->getSnippetKeyGeneratorLocator(),
-            $this->factory->createDataPoolReader(),
-            new InMemoryLogger()
+            $dataPoolReader,
+            $pageBuilder,
+            $this->factory->getSnippetKeyGeneratorLocator()
         );
     }
 
