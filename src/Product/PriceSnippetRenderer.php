@@ -5,15 +5,15 @@ namespace Brera\Product;
 use Brera\Context\ContextSource;
 use Brera\SnippetKeyGenerator;
 use Brera\SnippetRenderer;
-use Brera\SnippetResult;
-use Brera\SnippetResultList;
+use Brera\Snippet;
+use Brera\SnippetList;
 
 class PriceSnippetRenderer implements SnippetRenderer
 {
     /**
-     * @var SnippetResultList
+     * @var SnippetList
      */
-    private $snippetResultList;
+    private $snippetList;
 
     /**
      * @var SnippetKeyGenerator
@@ -26,16 +26,16 @@ class PriceSnippetRenderer implements SnippetRenderer
     private $priceAttributeCode;
 
     /**
-     * @param SnippetResultList $snippetResultList
+     * @param SnippetList $snippetList
      * @param SnippetKeyGenerator $snippetKeyGenerator
      * @param string $priceAttributeCode
      */
     public function __construct(
-        SnippetResultList $snippetResultList,
+        SnippetList $snippetList,
         SnippetKeyGenerator $snippetKeyGenerator,
         $priceAttributeCode
     ) {
-        $this->snippetResultList = $snippetResultList;
+        $this->snippetList = $snippetList;
         $this->snippetKeyGenerator = $snippetKeyGenerator;
         $this->priceAttributeCode = $priceAttributeCode;
     }
@@ -43,7 +43,7 @@ class PriceSnippetRenderer implements SnippetRenderer
     /**
      * @param ProductSource $productSource
      * @param ContextSource $contextSource
-     * @return SnippetResultList
+     * @return SnippetList
      */
     public function render(ProductSource $productSource, ContextSource $contextSource)
     {
@@ -52,7 +52,7 @@ class PriceSnippetRenderer implements SnippetRenderer
             $this->renderProductPriceInContext($productSource, $context);
         }
 
-        return $this->snippetResultList;
+        return $this->snippetList;
     }
 
     /**
@@ -76,7 +76,7 @@ class PriceSnippetRenderer implements SnippetRenderer
         $key = $this->snippetKeyGenerator->getKeyForContext($context, ['product_id' => $productInContext->getId()]);
         $priceString = $productInContext->getAttributeValue($this->priceAttributeCode);
         $price = Price::fromString($priceString);
-        $snippetResult = SnippetResult::create($key, $price->getAmount());
-        $this->snippetResultList->add($snippetResult);
+        $snippet = Snippet::create($key, $price->getAmount());
+        $this->snippetList->add($snippet);
     }
 }

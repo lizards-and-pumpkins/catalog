@@ -3,20 +3,20 @@
 namespace Brera;
 
 /**
- * @covers \Brera\SnippetResult
+ * @covers \Brera\Snippet
  */
-class SnippetResultTest extends \PHPUnit_Framework_TestCase
+class SnippetTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @param mixed $invalidKey
      * @test
-     * @dataProvider invalidKeyProvider
      * @expectedException \Brera\InvalidKeyException
+     * @param mixed $invalidKey
+     * @dataProvider invalidKeyProvider
      */
     public function itShouldThrowOnInvalidKey($invalidKey)
     {
         $content = 'doesn\'t matter';
-        SnippetResult::create($invalidKey, $content);
+        Snippet::create($invalidKey, $content);
     }
 
     /**
@@ -37,15 +37,15 @@ class SnippetResultTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $validKey
      * @test
+     * @param string $validKey
      * @dataProvider validKeyProvider
      */
     public function itShouldAllowValidKey($validKey)
     {
         $content = 'doesn\'t matter';
-        $result = SnippetResult::create($validKey, $content);
-        $this->assertInstanceOf(SnippetResult::class, $result);
+        $result = Snippet::create($validKey, $content);
+        $this->assertInstanceOf(Snippet::class, $result);
     }
 
     /**
@@ -68,7 +68,7 @@ class SnippetResultTest extends \PHPUnit_Framework_TestCase
     {
         $content = 'doesn\'t matter';
         $key = 'key';
-        $result = SnippetResult::create($key, $content);
+        $result = Snippet::create($key, $content);
 
         $this->assertEquals($content, $result->getContent());
         $this->assertEquals($key, $result->getKey());

@@ -5,14 +5,14 @@ namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\SnippetKeyGenerator;
-use Brera\SnippetResult;
-use Brera\SnippetResultList;
+use Brera\Snippet;
+use Brera\SnippetList;
 use Brera\TestFileFixtureTrait;
 use Brera\UrlPathKeyGenerator;
 
 /**
  * @covers \Brera\Product\ProductDetailViewInContextSnippetRenderer
- * @uses   \Brera\SnippetResult
+ * @uses   \Brera\Snippet
  * @uses   \Brera\Product\ProductDetailPageMetaInfoSnippetContent
  */
 class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_TestCase
@@ -25,9 +25,9 @@ class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_T
     private $renderer;
 
     /**
-     * @var SnippetResultList|\PHPUnit_Framework_MockObject_MockObject
+     * @var SnippetList|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockSnippetResultList;
+    private $mockSnippetList;
 
     /**
      * @var ProductDetailViewBlockRenderer||\PHPUnit_Framework_MockObject_MockObject
@@ -46,7 +46,7 @@ class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_T
 
     protected function setUp()
     {
-        $this->mockSnippetResultList = $this->getMock(SnippetResultList::class);
+        $this->mockSnippetList = $this->getMock(SnippetList::class);
         $this->stubProductDetailViewBlockRenderer = $this->getMockBuilder(ProductDetailViewBlockRenderer::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -68,7 +68,7 @@ class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_T
             ->method('getUrlKeyForPathInContext')
             ->willReturn('stub-url-key');
         $this->renderer = new ProductDetailViewInContextSnippetRenderer(
-            $this->mockSnippetResultList,
+            $this->mockSnippetList,
             $this->stubProductDetailViewBlockRenderer,
             $this->mockSnippetKeyGenerator,
             $this->stubUrlPathKeyGenerator
@@ -80,7 +80,7 @@ class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_T
      */
     public function itShouldRenderProductDetailViewSnippets()
     {
-        $this->mockSnippetResultList->expects($this->exactly(2))->method('add');
+        $this->mockSnippetList->expects($this->exactly(2))->method('add');
         $stubProduct = $this->getMock(Product::class, [], [], '', false);
         $stubProduct->expects($this->any())->method('getId')->willReturn(2);
         $stubContext = $this->getMock(Context::class, [], [], '', false);
@@ -99,7 +99,7 @@ class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_T
 
         $method = new \ReflectionMethod($this->renderer, 'getProductDetailPageMetaSnippet');
         $method->setAccessible(true);
-        /** @var SnippetResult $result */
+        /** @var Snippet $result */
         $result = $method->invoke($this->renderer);
         $this->assertInternalType('array', json_decode($result->getContent(), true));
     }

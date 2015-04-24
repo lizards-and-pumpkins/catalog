@@ -3,19 +3,19 @@
 namespace Brera;
 
 /**
- * @covers \Brera\SnippetResultList
- * @uses   \Brera\SnippetResult
+ * @covers \Brera\SnippetList
+ * @uses   \Brera\Snippet
  */
-class SnippetResultListTest extends \PHPUnit_Framework_TestCase
+class SnippetListTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var SnippetResultList
+     * @var SnippetList
      */
     private $resultList;
 
     public function setUp()
     {
-        $this->resultList = new SnippetResultList();
+        $this->resultList = new SnippetList();
     }
 
     /**
@@ -30,9 +30,9 @@ class SnippetResultListTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldAddASnippetResult()
+    public function itShouldAddASnippet()
     {
-        $snippet = SnippetResult::create('test', 'test');
+        $snippet = Snippet::create('test', 'test');
         $this->resultList->add($snippet);
         $this->assertEquals(1, $this->resultList->count());
     }
@@ -50,7 +50,7 @@ class SnippetResultListTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnASnippet()
     {
-        $snippet = SnippetResult::create('test', 'test');
+        $snippet = Snippet::create('test', 'test');
         $this->resultList->add($snippet);
         $this->assertContains($snippet, $this->resultList->getIterator());
     }
@@ -60,11 +60,11 @@ class SnippetResultListTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldMergeTwoLists()
     {
-        $snippet = SnippetResult::create('test', 'test');
+        $snippet = Snippet::create('test', 'test');
         $this->resultList->add($snippet);
 
-        $snippet2 = SnippetResult::create('test', 'test');
-        $resultList2 = new SnippetResultList();
+        $snippet2 = Snippet::create('test', 'test');
+        $resultList2 = new SnippetList();
         $resultList2->add($snippet2);
 
         $this->resultList->merge($resultList2);
@@ -79,7 +79,7 @@ class SnippetResultListTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldClearTheList()
     {
-        $snippet = SnippetResult::create('test', 'test');
+        $snippet = Snippet::create('test', 'test');
         $this->resultList->add($snippet);
         $this->assertEquals(1, $this->resultList->count());
         $this->resultList->clear();

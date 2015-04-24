@@ -13,9 +13,9 @@ class RootSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
     private $mockSnippetRenderer;
 
     /**
-     * @var SnippetResultList|\PHPUnit_Framework_MockObject_MockObject
+     * @var SnippetList|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockSnippetResultList;
+    private $mockSnippetList;
 
     /**
      * @var RootSnippetRendererCollection
@@ -28,36 +28,36 @@ class RootSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['render'])
             ->getMock();
 
-        $this->mockSnippetResultList = $this->getMock(SnippetResultList::class);
+        $this->mockSnippetList = $this->getMock(SnippetList::class);
 
         $this->rootSnippetRendererCollection = new RootSnippetRendererCollection(
             [$this->mockSnippetRenderer],
-            $this->mockSnippetResultList
+            $this->mockSnippetList
         );
     }
 
     /**
      * @test
      */
-    public function itShouldReturnSnippetResultsList()
+    public function itShouldReturnSnippetList()
     {
         $stubRootSnippetSourceList = $this->getMock(RootSnippetSourceList::class, [], [], '', false);
         $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
-        $stubSnippetResultList = $this->getMock(SnippetResultList::class);
+        $stubSnippetList = $this->getMock(SnippetList::class);
 
         $this->mockSnippetRenderer->expects($this->once())
             ->method('render')
             ->with($stubRootSnippetSourceList, $stubContextSource)
-            ->willReturn($stubSnippetResultList);
+            ->willReturn($stubSnippetList);
 
-        $this->mockSnippetResultList->expects($this->once())
+        $this->mockSnippetList->expects($this->once())
             ->method('merge')
-            ->with($stubSnippetResultList)
-            ->willReturn($stubSnippetResultList);
+            ->with($stubSnippetList)
+            ->willReturn($stubSnippetList);
 
         $result = $this->rootSnippetRendererCollection->render($stubRootSnippetSourceList, $stubContextSource);
 
-        $this->assertEquals($stubSnippetResultList, $result);
+        $this->assertEquals($stubSnippetList, $result);
     }
 
     /**

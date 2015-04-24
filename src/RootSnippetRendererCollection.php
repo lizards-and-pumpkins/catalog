@@ -7,9 +7,9 @@ use Brera\Context\ContextSource;
 class RootSnippetRendererCollection implements SnippetRendererCollection
 {
     /**
-     * @var SnippetResultList
+     * @var SnippetList
      */
-    private $snippetResultList;
+    private $snippetList;
 
     /**
      * @var SnippetRenderer[]
@@ -18,18 +18,18 @@ class RootSnippetRendererCollection implements SnippetRendererCollection
 
     /**
      * @param SnippetRenderer[] $renderers
-     * @param SnippetResultList $snippetResultList
+     * @param SnippetList $snippetList
      */
-    public function __construct(array $renderers, SnippetResultList $snippetResultList)
+    public function __construct(array $renderers, SnippetList $snippetList)
     {
         $this->renderers = $renderers;
-        $this->snippetResultList = $snippetResultList;
+        $this->snippetList = $snippetList;
     }
 
     /**
      * @param ProjectionSourceData $rootSnippetSourceList
      * @param ContextSource $contextSource
-     * @return SnippetResultList
+     * @return SnippetList
      */
     public function render(ProjectionSourceData $rootSnippetSourceList, ContextSource $contextSource)
     {
@@ -40,9 +40,9 @@ class RootSnippetRendererCollection implements SnippetRendererCollection
         }
 
         foreach ($this->renderers as $renderer) {
-            $this->snippetResultList->merge($renderer->render($rootSnippetSourceList, $contextSource));
+            $this->snippetList->merge($renderer->render($rootSnippetSourceList, $contextSource));
         }
 
-        return $this->snippetResultList;
+        return $this->snippetList;
     }
 }

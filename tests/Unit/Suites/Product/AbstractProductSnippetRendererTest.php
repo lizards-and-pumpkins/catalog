@@ -6,7 +6,7 @@ use Brera\Context\Context;
 use Brera\ProjectionSourceData;
 use Brera\SampleContextSource;
 use Brera\SnippetRenderer;
-use Brera\SnippetResultList;
+use Brera\SnippetList;
 
 abstract class AbstractProductSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,9 +16,9 @@ abstract class AbstractProductSnippetRendererTest extends \PHPUnit_Framework_Tes
     private $snippetRenderer;
 
     /**
-     * @var SnippetResultList|\PHPUnit_Framework_MockObject_MockObject
+     * @var SnippetList|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockSnippetResultList;
+    private $mockSnippetList;
 
     /**
      * @var SampleContextSource|\PHPUnit_Framework_MockObject_MockObject
@@ -28,7 +28,7 @@ abstract class AbstractProductSnippetRendererTest extends \PHPUnit_Framework_Tes
     protected function setUp()
     {
         $this->initMockContextSource();
-        $this->initMockSnippetResultList();
+        $this->initMockSnippetList();
 
         $this->snippetRenderer = $this->createSnippetRendererUnderTest();
     }
@@ -47,11 +47,11 @@ abstract class AbstractProductSnippetRendererTest extends \PHPUnit_Framework_Tes
     }
     
     /**
-     * @return SnippetResultList|\PHPUnit_Framework_MockObject_MockObject
+     * @return SnippetList|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getMockSnippetResultList()
+    protected function getMockSnippetList()
     {
-        return $this->mockSnippetResultList;
+        return $this->mockSnippetList;
     }
 
     /**
@@ -76,12 +76,12 @@ abstract class AbstractProductSnippetRendererTest extends \PHPUnit_Framework_Tes
     /**
      * @test
      */
-    public function itShouldReturnASnippetResultList()
+    public function itShouldReturnASnippetList()
     {
         $stubProductSource = $this->getStubProductSource();
 
         $result = $this->snippetRenderer->render($stubProductSource, $this->mockContextSource);
-        $this->assertSame($this->mockSnippetResultList, $result);
+        $this->assertSame($this->mockSnippetList, $result);
     }
 
     /**
@@ -91,9 +91,9 @@ abstract class AbstractProductSnippetRendererTest extends \PHPUnit_Framework_Tes
     {
         $stubProductSource = $this->getStubProductSource();
 
-        $this->mockSnippetResultList->expects($this->atLeastOnce())
+        $this->mockSnippetList->expects($this->atLeastOnce())
             ->method('merge')
-            ->with($this->isInstanceOf(SnippetResultList::class));
+            ->with($this->isInstanceOf(SnippetList::class));
 
         $this->snippetRenderer->render($stubProductSource, $this->mockContextSource);
     }
@@ -107,7 +107,7 @@ abstract class AbstractProductSnippetRendererTest extends \PHPUnit_Framework_Tes
         $mockProductInContextRenderer = $this->getMock($rendererClass, [], [], '', false);
         $mockProductInContextRenderer->expects($this->any())
             ->method('render')
-            ->willReturn($this->mockSnippetResultList);
+            ->willReturn($this->mockSnippetList);
         $mockProductInContextRenderer->expects($this->any())
             ->method('getContextParts')
             ->willReturn(['version']);
@@ -125,9 +125,9 @@ abstract class AbstractProductSnippetRendererTest extends \PHPUnit_Framework_Tes
             ->willReturn([$stubContext]);
     }
 
-    protected function initMockSnippetResultList()
+    protected function initMockSnippetList()
     {
-        $this->mockSnippetResultList = $this->getMock(SnippetResultList::class);
+        $this->mockSnippetList = $this->getMock(SnippetList::class);
     }
 
     /**

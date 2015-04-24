@@ -4,8 +4,8 @@ namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\SnippetKeyGenerator;
-use Brera\SnippetResult;
-use Brera\SnippetResultList;
+use Brera\Snippet;
+use Brera\SnippetList;
 
 class ProductInListingInContextSnippetRenderer
 {
@@ -22,9 +22,9 @@ class ProductInListingInContextSnippetRenderer
     private $context;
 
     /**
-     * @var SnippetResultList
+     * @var SnippetList
      */
-    private $snippetResultList;
+    private $snippetList;
 
     /**
      * @var ProductInListingBlockRenderer
@@ -37,11 +37,11 @@ class ProductInListingInContextSnippetRenderer
     private $snippetKeyGenerator;
 
     public function __construct(
-        SnippetResultList $snippetResultList,
+        SnippetList $snippetList,
         ProductInListingBlockRenderer $blockRenderer,
         SnippetKeyGenerator $snippetKeyGenerator
     ) {
-        $this->snippetResultList = $snippetResultList;
+        $this->snippetList = $snippetList;
         $this->blockRenderer = $blockRenderer;
         $this->snippetKeyGenerator = $snippetKeyGenerator;
     }
@@ -49,25 +49,25 @@ class ProductInListingInContextSnippetRenderer
     /**
      * @param Product $product
      * @param Context $context
-     * @return SnippetResultList
+     * @return SnippetList
      */
     public function render(Product $product, Context $context)
     {
         $this->product = $product;
         $this->context = $context;
-        $this->snippetResultList->clear();
+        $this->snippetList->clear();
         
-        $this->addProductInListingSnippetsToSnippetResultList();
+        $this->addProductInListingSnippetsToSnippetList();
         
-        return $this->snippetResultList;
+        return $this->snippetList;
     }
     
-    private function addProductInListingSnippetsToSnippetResultList()
+    private function addProductInListingSnippetsToSnippetList()
     {
         $content = $this->blockRenderer->render($this->product, $this->context);
         $key = $this->snippetKeyGenerator->getKeyForContext($this->context, ['product_id' => $this->product->getId()]);
-        $contentSnippet = SnippetResult::create($key, $content);
-        $this->snippetResultList->add($contentSnippet);
+        $contentSnippet = Snippet::create($key, $content);
+        $this->snippetList->add($contentSnippet);
     }
 
     /**

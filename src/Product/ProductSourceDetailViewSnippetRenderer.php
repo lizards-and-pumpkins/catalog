@@ -6,7 +6,7 @@ use Brera\Context\Context;
 use Brera\Context\ContextSource;
 use Brera\InvalidProjectionDataSourceTypeException;
 use Brera\SnippetRenderer;
-use Brera\SnippetResultList;
+use Brera\SnippetList;
 use Brera\ProjectionSourceData;
 
 class ProductSourceDetailViewSnippetRenderer implements SnippetRenderer
@@ -22,9 +22,9 @@ class ProductSourceDetailViewSnippetRenderer implements SnippetRenderer
     private $contextSource;
 
     /**
-     * @var SnippetResultList
+     * @var SnippetList
      */
-    private $snippetResultList;
+    private $snippetList;
 
     /**
      * @var ProductDetailViewInContextSnippetRenderer
@@ -32,17 +32,17 @@ class ProductSourceDetailViewSnippetRenderer implements SnippetRenderer
     private $productInContextRenderer;
 
     public function __construct(
-        SnippetResultList $snippetResultList,
+        SnippetList $snippetList,
         ProductDetailViewInContextSnippetRenderer $productInContextRenderer
     ) {
-        $this->snippetResultList = $snippetResultList;
+        $this->snippetList = $snippetList;
         $this->productInContextRenderer = $productInContextRenderer;
     }
 
     /**
      * @param ProjectionSourceData|ProductSource $productSource
      * @param ContextSource $contextSource
-     * @return SnippetResultList
+     * @return SnippetList
      */
     public function render(ProjectionSourceData $productSource, ContextSource $contextSource)
     {
@@ -51,15 +51,15 @@ class ProductSourceDetailViewSnippetRenderer implements SnippetRenderer
         
         $this->createProductDetailViewSnippets();
 
-        return $this->snippetResultList;
+        return $this->snippetList;
     }
 
     private function createProductDetailViewSnippets()
     {
         foreach ($this->getContextList() as $context) {
             $productInContext = $this->productSource->getProductForContext($context);
-            $inContextSnippetResultList = $this->productInContextRenderer->render($productInContext, $context);
-            $this->snippetResultList->merge($inContextSnippetResultList);
+            $inContextSnippetList = $this->productInContextRenderer->render($productInContext, $context);
+            $this->snippetList->merge($inContextSnippetList);
         }
     }
 
@@ -87,6 +87,6 @@ class ProductSourceDetailViewSnippetRenderer implements SnippetRenderer
     {
         $this->productSource = $productSource;
         $this->contextSource = $contextSource;
-        $this->snippetResultList->clear();
+        $this->snippetList->clear();
     }
 }
