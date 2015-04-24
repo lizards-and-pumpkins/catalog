@@ -61,7 +61,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Product\ProductInListingInContextSnippetRenderer
  * @uses   \Brera\ImageProcessor\ImageMagickImageProcessor
  * @uses   \Brera\ImageImport\ImportImageDomainEventHandler
- * @uses   \Brera\ImageImport\ImageProcessCommand
+ * @uses   \Brera\ImageImport\ImageProcessCommandSequence
  * @uses   \Brera\ImageImport\ImageProcessConfiguration
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase

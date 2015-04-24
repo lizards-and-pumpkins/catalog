@@ -3,7 +3,7 @@
 namespace Brera\ImageImport;
 
 /**
- * @covers \Brera\ImageImport\ImageProcessCommand
+ * @covers \Brera\ImageImport\ImageProcessCommandSequence
  */
 class ImageProcessCommandSequenceTest extends \PHPUnit_Framework_TestCase
 {
