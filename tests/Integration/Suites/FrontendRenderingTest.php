@@ -45,9 +45,8 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
         $pageBuilder = new ProductDetailViewRequestHandler(
             $urlPathKeyGenerator->getUrlKeyForUrlInContext($url, $context),
             $context,
-            $snippetKeyGeneratorLocator,
             $dataPoolReader,
-            $logger
+            new PageBuilder($dataPoolReader, $snippetKeyGeneratorLocator, $logger)
         );
         $page = $pageBuilder->process();
 

@@ -2,6 +2,8 @@
 
 namespace Brera;
 
+use Brera\Context\Context;
+
 /**
  * @covers \Brera\MissingSnippetCodeMessage
  */
@@ -25,7 +27,7 @@ class MissingSnippetCodeMessageTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->missingSnippetCodes = ['foo', 'bar'];
-        $this->stubContext = ['baz'];
+        $this->stubContext = ['context' => $this->getMock(Context::class)];
 
         $this->message = new MissingSnippetCodeMessage($this->missingSnippetCodes, $this->stubContext);
     }
@@ -35,7 +37,7 @@ class MissingSnippetCodeMessageTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnLogMessage()
     {
-        $expectation = 'Snippets listed in the page meta information where not loaded from the data pool (foo, bar)';
+        $expectation = 'Snippets contained in the page meta information where not loaded from the data pool (foo, bar)';
 
         $this->assertEquals($expectation, (string) $this->message);
     }

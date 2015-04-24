@@ -6,7 +6,6 @@ namespace Brera\Context;
 /**
  * @covers \Brera\Context\LanguageContextDecorator
  * @covers \Brera\Context\ContextDecorator
- * @uses   \Brera\Context\InternalContextState
  * @uses   \Brera\Context\ContextBuilder
  * @uses   \Brera\Context\VersionedContext
  * @uses   \Brera\DataVersion

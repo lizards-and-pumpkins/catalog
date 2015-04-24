@@ -81,7 +81,7 @@ class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_Test
 
     /**
      * @test
-     * @expectedException \Brera\Product\InvalidArgumentException
+     * @expectedException \Brera\InvalidProjectionDataSourceTypeException
      */
     public function itShouldOnlyAcceptProductsForRendering()
     {

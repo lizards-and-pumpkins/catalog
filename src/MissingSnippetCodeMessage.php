@@ -30,7 +30,7 @@ class MissingSnippetCodeMessage implements LogMessage
     public function __toString()
     {
         return sprintf(
-            'Snippets listed in the page meta information where not loaded from the data pool (%s)',
+            'Snippets contained in the page meta information where not loaded from the data pool (%s)',
             implode(', ', $this->missingSnippetCodes)
         );
     }

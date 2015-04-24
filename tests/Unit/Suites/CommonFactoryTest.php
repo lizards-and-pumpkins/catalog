@@ -37,6 +37,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\RootSnippetProjector
  * @uses   \Brera\UrlPathKeyGenerator
  * @uses   \Brera\Renderer\BlockRenderer
+ * @uses   \Brera\Product\PriceSnippetRenderer
  * @uses   \Brera\Product\ProductSourceBuilder
  * @uses   \Brera\Product\ProductProjector
  * @uses   \Brera\Product\ProductSnippetKeyGenerator
