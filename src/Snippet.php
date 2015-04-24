@@ -27,7 +27,7 @@ class Snippet
             throw new InvalidKeyException(sprintf('Key "%s" is invalid.', (is_scalar($key) ? $key : gettype($key))));
         }
 
-        return new self($key, (string) $content);
+        return new self($key, $content);
     }
 
     /**
