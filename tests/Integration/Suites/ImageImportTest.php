@@ -17,7 +17,7 @@ class ImageImportTest extends \PHPUnit_Framework_TestCase
             __DIR__ . '/../../shared-fixture/test_image.jpg',
             __DIR__ . '/../../shared-fixture/test_image2.jpg',
         ];
-        $event = ImportImageDomainEvent::fromArray($images);
+        $event = new ImportImageDomainEvent($images);
 
         $queue = $factory->getEventQueue();
         $queue->add($event);

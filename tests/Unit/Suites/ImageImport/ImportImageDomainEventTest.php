@@ -10,11 +10,11 @@ class ImportImageDomainEventTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldReturnPassedImages()
+    public function itShouldReturnPassedImagePaths()
     {
-        $images = array(__DIR__ . '/../../../shared-fixture/test_image.jpg');
-        $event = ImportImageDomainEvent::fromArray($images);
-        $this->assertInstanceOf(ImportImageDomainEvent::class, $event);
-        $this->assertEquals($images, $event->getImages());
+        $imagePaths = [__DIR__ . '/../../../shared-fixture/test_image.jpg'];
+        $event = new ImportImageDomainEvent($imagePaths);
+
+        $this->assertEquals($imagePaths, $event->getImages());
     }
 }

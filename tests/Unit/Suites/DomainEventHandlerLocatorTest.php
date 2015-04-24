@@ -147,7 +147,7 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         /**
          * The real object has to be used here as getHandlerFor method will call get_class against it
          */
-        $ImportImagesDomainEvent = ImportImageDomainEvent::fromArray([]);
+        $ImportImagesDomainEvent = new ImportImageDomainEvent([]);
 
         $result = $this->locator->getHandlerFor($ImportImagesDomainEvent);
 
