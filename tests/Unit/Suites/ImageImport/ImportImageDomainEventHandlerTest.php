@@ -17,37 +17,30 @@ class ImportImageDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var ImageProcessConfiguration|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubImageProcessConfiguration;
+    private $mockImageProcessConfiguration;
 
     /**
      * @var ImportImageDomainEvent|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubImportImageDomainEvent;
+    private $mockImportImageDomainEvent;
+
     /**
      * @var ImageProcessor|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $imageProcessor;
+    private $mockImageProcessor;
 
     protected function setUp()
     {
-        $this->stubImageProcessConfiguration = $this->getMockBuilder(ImageProcessConfiguration::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getIterator', 'getTargetDirectory'])
-            ->getMock();
-        $this->stubImportImageDomainEvent = $this->getMockBuilder(ImportImageDomainEvent::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getImages'])
-            ->getMock();
-        $this->imageProcessor = $this->getMockBuilder(ImageProcessor::class)
-            ->setMethods([])
-            ->getMock();
+        $this->mockImageProcessConfiguration = $this->getMock(ImageProcessConfiguration::class, [], [], '', false);
+        $this->mockImportImageDomainEvent = $this->getMock(ImportImageDomainEvent::class, [], [], '', false);
+        $this->mockImageProcessor = $this->getMock(ImageProcessor::class, [], [], '', false);
+
         $this->handler = new ImportImageDomainEventHandler(
-            $this->stubImageProcessConfiguration,
-            $this->stubImportImageDomainEvent,
-            $this->imageProcessor
+            $this->mockImageProcessConfiguration,
+            $this->mockImportImageDomainEvent,
+            $this->mockImageProcessor
         );
     }
-
 
     /**
      * @test
@@ -64,36 +57,35 @@ class ImportImageDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $targetDirectory = sys_get_temp_dir();
 
-        $command = $this->getImageProcessCommand(array('resizeToWidth' => [200]));
-        $command2 = $this->getImageProcessCommand(array('resize' => [400, 400]));
+        $command = $this->getImageProcessCommand(['resizeToWidth' => [200]]);
+        $command2 = $this->getImageProcessCommand(['resize' => [400, 400]]);
 
-        $configuration = array($command, $command2);
+        $configuration = [$command, $command2];
         $iterator = new \ArrayIterator($configuration);
         $images = [
             __DIR__ . '/../../../test_image.jpg',
             __DIR__ . '/../../../test_image2.jpg',
         ];
-        $this->stubImportImageDomainEvent->expects($this->atLeastOnce())->method('getImages')->willReturn($images);
+        $this->mockImportImageDomainEvent->expects($this->atLeastOnce())
+            ->method('getImages')
+            ->willReturn($images);
 
-        $this->stubImageProcessConfiguration
-            ->expects($this->atLeastOnce())
+        $this->mockImageProcessConfiguration->expects($this->atLeastOnce())
             ->method('getIterator')
             ->willReturn($iterator);
 
-        $this->stubImageProcessConfiguration
-            ->expects($this->atLeastOnce())
+        $this->mockImageProcessConfiguration->expects($this->atLeastOnce())
             ->method('getTargetDirectory')
             ->willReturn($targetDirectory);
 
         $numberOfImages = count($images);
         $regexTargetDirectoryAndFilename = "#$targetDirectory.*test_image(2?)\.jpg#";
-        $this->imageProcessor
-            ->expects($this->exactly($numberOfImages * count($configuration)))
+        $this->mockImageProcessor->expects($this->exactly($numberOfImages * count($configuration)))
             ->method('saveAsFile')
             ->with($this->matchesRegularExpression($regexTargetDirectoryAndFilename));
 
-        $this->imageProcessor->expects($this->exactly($numberOfImages))->method('resizeToWidth');
-        $this->imageProcessor->expects($this->exactly($numberOfImages))->method('resize');
+        $this->mockImageProcessor->expects($this->exactly($numberOfImages))->method('resizeToWidth');
+        $this->mockImageProcessor->expects($this->exactly($numberOfImages))->method('resize');
 
         $this->handler->process();
     }
