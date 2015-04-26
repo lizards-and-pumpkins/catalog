@@ -2,6 +2,9 @@
 
 namespace Brera\ImageProcessor;
 
+/**
+ * @covers \Brera\ImageProcessor\GdResizeCommand
+ */
 class GdResizeCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
