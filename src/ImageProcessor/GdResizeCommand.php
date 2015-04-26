@@ -27,7 +27,6 @@ class GdResizeCommand implements ImageProcessorCommand
     /**
      * @param string $base64EncodedImageStream
      * @return string
-     * @throws InvalidImageStreamException
      */
     public function execute($base64EncodedImageStream)
     {
@@ -81,6 +80,7 @@ class GdResizeCommand implements ImageProcessorCommand
     /**
      * @param string $imageStream
      * @return mixed[]
+     * @throws InvalidImageStreamException
      */
     private function getImageInfo($imageStream)
     {
