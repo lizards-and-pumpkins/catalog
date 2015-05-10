@@ -4,37 +4,42 @@ namespace Brera;
 
 use Brera\Context\ContextBuilder;
 use Brera\Context\ContextSource;
-use Brera\Http\ResourceNotFoundRouter;
+use Brera\DataPool\DataPoolReader;
+use Brera\DataPool\DataPoolWriter;
+use Brera\DataPool\KeyValue\KeyValueStore;
 use Brera\DataPool\SearchEngine\SearchEngine;
+use Brera\Http\HttpRouterChain;
+use Brera\Http\ResourceNotFoundRouter;
+use Brera\ImageImport\ImageProcessCommandSequence;
+use Brera\ImageImport\ImageProcessConfiguration;
+use Brera\ImageImport\ImportImageDomainEvent;
+use Brera\ImageImport\ImportImageDomainEventHandler;
+use Brera\ImageProcessor\ImageMagickImageProcessor;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\PriceSnippetRenderer;
 use Brera\Product\ProductDetailViewBlockRenderer;
 use Brera\Product\ProductDetailViewInContextSnippetRenderer;
-use Brera\Product\ProductInListingInContextSnippetRenderer;
+use Brera\Product\ProductImportDomainEvent;
+use Brera\Product\ProductImportDomainEventHandler;
 use Brera\Product\ProductInListingBlockRenderer;
+use Brera\Product\ProductInListingInContextSnippetRenderer;
 use Brera\Product\ProductListingBlockRenderer;
 use Brera\Product\ProductListingCriteriaSnippetRenderer;
 use Brera\Product\ProductListingProjector;
 use Brera\Product\ProductListingSavedDomainEvent;
 use Brera\Product\ProductListingSavedDomainEventHandler;
 use Brera\Product\ProductListingSnippetRenderer;
+use Brera\Product\ProductProjector;
 use Brera\Product\ProductListingSourceBuilder;
 use Brera\Product\ProductSearchDocumentBuilder;
 use Brera\Product\ProductSnippetKeyGenerator;
 use Brera\Product\ProductSnippetRendererCollection;
 use Brera\Product\ProductSourceBuilder;
-use Brera\DataPool\KeyValue\KeyValueStore;
+use Brera\Product\ProductSourceDetailViewSnippetRenderer;
 use Brera\Product\ProductSourceInListingSnippetRenderer;
 use Brera\Queue\Queue;
-use Brera\DataPool\DataPoolWriter;
-use Brera\DataPool\DataPoolReader;
-use Brera\Product\ProductImportDomainEvent;
-use Brera\Product\ProductImportDomainEventHandler;
-use Brera\Product\ProductProjector;
-use Brera\Product\ProductSourceDetailViewSnippetRenderer;
 use Brera\Renderer\BlockStructure;
-use Brera\Http\HttpRouterChain;
 
 class CommonFactory implements Factory, DomainEventFactory
 {
@@ -59,6 +64,11 @@ class CommonFactory implements Factory, DomainEventFactory
      * @var SearchEngine
      */
     private $searchEngine;
+
+    /**
+     * @var ImageProcessConfiguration
+     */
+    private $imageProcessingConfiguration;
 
     /**
      * @param ProductImportDomainEvent $event
@@ -427,6 +437,7 @@ class CommonFactory implements Factory, DomainEventFactory
     public function createContextBuilder()
     {
         $version = $this->getCurrentDataVersion();
+
         return $this->createContextBuilderWithVersion(DataVersion::fromVersionString($version));
     }
 
@@ -446,6 +457,7 @@ class CommonFactory implements Factory, DomainEventFactory
     {
         /** @var DataPoolReader $dataPoolReader */
         $dataPoolReader = $this->getMasterFactory()->createDataPoolReader();
+
         return $dataPoolReader->getCurrentDataVersion();
     }
 
@@ -538,6 +550,7 @@ class CommonFactory implements Factory, DomainEventFactory
                 sprintf('Unable to create %s. Is the factory registered? %s', $targetObjectName, $e->getMessage())
             );
         }
+
         return $instance;
     }
 
@@ -583,5 +596,60 @@ class CommonFactory implements Factory, DomainEventFactory
     public function getRegularPriceSnippetKey()
     {
         return 'price';
+    }
+
+    /**
+     * @param ImportImageDomainEvent $event
+     * @return ImportImageDomainEventHandler
+     */
+    public function createImportImageDomainEventHandler(ImportImageDomainEvent $event)
+    {
+        $config = $this->getImageProcessingConfiguration();
+        $imageProcessor = $this->createImageProcessor();
+
+        return new ImportImageDomainEventHandler($config, $event, $imageProcessor);
+    }
+
+    /**
+     * @return ImageProcessConfiguration
+     */
+    private function getImageProcessingConfiguration()
+    {
+        // TODO get config from somewhere and remove hardcoded
+        if (!$this->imageProcessingConfiguration) {
+            $commands1 = [
+                'resize' => [400, 800],
+            ];
+            $commands2 = [
+                'resizeToWidth' => [200],
+            ];
+            $commands3 = [
+                'resizeToBestFit' => [400, 300],
+            ];
+            $configuration = [
+                ImageProcessCommandSequence::fromArray($commands1),
+                ImageProcessCommandSequence::fromArray($commands2),
+                ImageProcessCommandSequence::fromArray($commands3),
+            ];
+            $targetDirectory = sys_get_temp_dir() . '/brera/';
+            // TODO make sure directory exists, not sure whether this should stay here, if it is not writeable
+            // TODO exception is thrown
+            if(!is_dir($targetDirectory)) {
+                mkdir($targetDirectory, 0777, true);
+            }
+
+            $this->imageProcessingConfiguration = new ImageProcessConfiguration($configuration, $targetDirectory);
+        }
+
+        return $this->imageProcessingConfiguration;
+    }
+
+    /**
+     * @return ImageMagickImageProcessor
+     */
+    private function createImageProcessor()
+    {
+        // TODO get from master factory
+        return ImageMagickImageProcessor::fromNothing();
     }
 }

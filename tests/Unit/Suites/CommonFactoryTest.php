@@ -4,9 +4,11 @@ namespace Brera;
 
 use Brera\Context\ContextBuilder;
 use Brera\Context\ContextSource;
-use Brera\Http\ResourceNotFoundRouter;
-use Brera\Http\HttpRouterChain;
 use Brera\DataPool\DataPoolReader;
+use Brera\Http\HttpRouterChain;
+use Brera\Http\ResourceNotFoundRouter;
+use Brera\ImageImport\ImportImageDomainEvent;
+use Brera\ImageImport\ImportImageDomainEventHandler;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\ProductImportDomainEvent;
@@ -58,6 +60,10 @@ use Brera\Queue\Queue;
  * @uses   \Brera\RootSnippetSourceListBuilder
  * @uses   \Brera\Product\ProductSourceInListingSnippetRenderer
  * @uses   \Brera\Product\ProductInListingInContextSnippetRenderer
+ * @uses   \Brera\ImageProcessor\ImageMagickImageProcessor
+ * @uses   \Brera\ImageImport\ImportImageDomainEventHandler
+ * @uses   \Brera\ImageImport\ImageProcessCommandSequence
+ * @uses   \Brera\ImageImport\ImageProcessConfiguration
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -145,7 +151,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $result = $this->commonFactory->createUrlPathKeyGenerator();
         $this->assertInstanceOf(UrlPathKeyGenerator::class, $result);
     }
-    
+
 
     /**
      * @test
@@ -328,6 +334,18 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createHttpRouterChain();
         $this->assertInstanceOf(HttpRouterChain::class, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnAImportImageEventDomainHandler()
+    {
+        /* @var $event \PHPUnit_Framework_MockObject_MockObject|ImportImageDomainEvent */
+        $event = $this->getMock(ImportImageDomainEvent::class, null, [], '', false);
+
+        $handler = $this->commonFactory->createImportImageDomainEventHandler($event);
+        $this->assertInstanceOf(ImportImageDomainEventHandler::class, $handler);
     }
 
     /**
