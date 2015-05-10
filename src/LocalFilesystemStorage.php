@@ -2,7 +2,7 @@
 
 namespace Brera;
 
-class LocalFile implements StaticFile
+class LocalFilesystemStorage implements StaticFileStorage
 {
     /**
      * @param string $path
