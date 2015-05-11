@@ -32,7 +32,7 @@ class LocalFilesystemTest extends \PHPUnit_Framework_TestCase
     {
         $directoryIterator = new \RecursiveDirectoryIterator($this->testDirectory, \FilesystemIterator::SKIP_DOTS);
 
-        foreach(new \RecursiveIteratorIterator($directoryIterator, \RecursiveIteratorIterator::CHILD_FIRST) as $path) {
+        foreach (new \RecursiveIteratorIterator($directoryIterator, \RecursiveIteratorIterator::CHILD_FIRST) as $path) {
             $path->isDir() && !$path->isLink() ? rmdir($path->getPathname()) : unlink($path->getPathname());
         }
 
