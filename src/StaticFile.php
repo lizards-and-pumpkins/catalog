@@ -5,14 +5,14 @@ namespace Brera;
 interface StaticFile
 {
     /**
-     * @param string $path
+     * @param string $fileName
      * @return string
      */
-    public function getFileContents($path);
+    public function getFileContents($fileName);
 
     /**
-     * @param string $path
+     * @param string $fileName
      * @param string $contents
      */
-    public function putFileContents($path, $contents);
+    public function putFileContents($fileName, $contents);
 }
