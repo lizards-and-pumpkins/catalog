@@ -6,6 +6,7 @@ use Brera\Utils\LocalFilesystem;
 
 /**
  * @covers \Brera\LocalImage
+ * @uses \Brera\Utils\LocalFilesystem
  */
 class LocalImageTest extends \PHPUnit_Framework_TestCase
 {
