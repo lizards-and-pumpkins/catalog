@@ -2,7 +2,7 @@
 
 namespace Brera;
 
-interface StaticFileStorage
+interface StaticFile
 {
     /**
      * @param string $path

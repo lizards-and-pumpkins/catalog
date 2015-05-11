@@ -3,12 +3,12 @@
 namespace Brera;
 
 /**
- * @covers \Brera\LocalFilesystemStorage
+ * @covers \Brera\LocalFile
  */
-class LocalFilesystemStorageTest extends \PHPUnit_Framework_TestCase
+class LocalFileTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var LocalFilesystemStorage
+     * @var LocalFile
      */
     private $file;
 
@@ -19,7 +19,7 @@ class LocalFilesystemStorageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->file = new LocalFilesystemStorage();
+        $this->file = new LocalFile();
 
         $this->testFilePath = sys_get_temp_dir() . '/test-file.brera';
         file_put_contents($this->testFilePath, 'foo');
@@ -37,7 +37,7 @@ class LocalFilesystemStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldImplementStaticFileInterface()
     {
-        $this->assertInstanceOf(StaticFileStorage::class, $this->file);
+        $this->assertInstanceOf(StaticFile::class, $this->file);
     }
 
     /**
