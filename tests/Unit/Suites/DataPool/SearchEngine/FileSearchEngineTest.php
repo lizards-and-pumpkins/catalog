@@ -10,6 +10,7 @@ use Brera\Utils\LocalFilesystem;
  * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocument
  * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField
  * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection
+ * @uses   \Brera\Utils\LocalFileSystem
  */
 class FileSearchEngineTest extends AbstractSearchEngineTest
 {
