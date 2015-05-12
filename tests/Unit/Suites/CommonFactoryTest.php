@@ -60,7 +60,6 @@ use Brera\Queue\Queue;
  * @uses   \Brera\RootSnippetSourceListBuilder
  * @uses   \Brera\Product\ProductSourceInListingSnippetRenderer
  * @uses   \Brera\Product\ProductInListingInContextSnippetRenderer
- * @uses   \Brera\Image\ImageMagickImageProcessor
  * @uses   \Brera\Image\ImportImageDomainEventHandler
  * @uses   \Brera\Image\ImageProcessor
  * @uses   \Brera\Image\ImageProcessorCommandSequence

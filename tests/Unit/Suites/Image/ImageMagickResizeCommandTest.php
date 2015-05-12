@@ -4,6 +4,7 @@ namespace Brera\Image;
 
 /**
  * @covers \Brera\Image\ImageMagickResizeCommand
+ * @uses \Brera\Image\ResizeCommandTrait
  */
 class ImageMagickResizeCommandTest extends AbstractResizeCommandTest
 {
