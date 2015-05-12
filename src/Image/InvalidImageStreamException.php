@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\ImageProcessor;
+namespace Brera\Image;
 
 class InvalidImageStreamException extends \InvalidArgumentException
 {

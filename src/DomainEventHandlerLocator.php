@@ -2,7 +2,7 @@
 
 namespace Brera;
 
-use Brera\ImageImport\ImportImageDomainEvent;
+use Brera\Image\ImportImageDomainEvent;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\ProductImportDomainEvent;
 use Brera\Product\ProductListingSavedDomainEvent;

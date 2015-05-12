@@ -10,11 +10,10 @@ use Brera\DataPool\KeyValue\KeyValueStore;
 use Brera\DataPool\SearchEngine\SearchEngine;
 use Brera\Http\HttpRouterChain;
 use Brera\Http\ResourceNotFoundRouter;
-use Brera\ImageImport\ImageProcessCommandSequence;
-use Brera\ImageImport\ImageProcessConfiguration;
-use Brera\ImageImport\ImportImageDomainEvent;
-use Brera\ImageImport\ImportImageDomainEventHandler;
-use Brera\ImageProcessor\ImageMagickImageProcessor;
+use Brera\Image\ImageProcessor;
+use Brera\Image\ImportImageDomainEvent;
+use Brera\Image\ImportImageDomainEventHandler;
+use Brera\Image\ImageProcessorCommandSequence;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\PriceSnippetRenderer;
@@ -604,52 +603,35 @@ class CommonFactory implements Factory, DomainEventFactory
      */
     public function createImportImageDomainEventHandler(ImportImageDomainEvent $event)
     {
-        $config = $this->getImageProcessingConfiguration();
-        $imageProcessor = $this->createImageProcessor();
+        $imageProcessor = $this->getMasterFactory()->createImageProcessor();
 
-        return new ImportImageDomainEventHandler($config, $event, $imageProcessor);
+        return new ImportImageDomainEventHandler($event, $imageProcessor);
     }
 
     /**
-     * @return ImageProcessConfiguration
+     * @return ImageProcessor
      */
-    private function getImageProcessingConfiguration()
+    public function createImageProcessor()
     {
-        // TODO get config from somewhere and remove hardcoded
-        if (!$this->imageProcessingConfiguration) {
-            $commands1 = [
-                'resize' => [400, 800],
-            ];
-            $commands2 = [
-                'resizeToWidth' => [200],
-            ];
-            $commands3 = [
-                'resizeToBestFit' => [400, 300],
-            ];
-            $configuration = [
-                ImageProcessCommandSequence::fromArray($commands1),
-                ImageProcessCommandSequence::fromArray($commands2),
-                ImageProcessCommandSequence::fromArray($commands3),
-            ];
-            $targetDirectory = sys_get_temp_dir() . '/brera/';
-            // TODO make sure directory exists, not sure whether this should stay here, if it is not writeable
-            // TODO exception is thrown
-            if(!is_dir($targetDirectory)) {
-                mkdir($targetDirectory, 0777, true);
-            }
+        $commandSequence = $this->getMasterFactory()->getImageProcessorCommandSequence();
+        $fileStorage = $this->getMasterFactory()->getFileStorage();
 
-            $this->imageProcessingConfiguration = new ImageProcessConfiguration($configuration, $targetDirectory);
-        }
-
-        return $this->imageProcessingConfiguration;
+        return new ImageProcessor($commandSequence, $fileStorage);
     }
 
     /**
-     * @return ImageMagickImageProcessor
+     * @return LocalImage
      */
-    private function createImageProcessor()
+    public function getFileStorage()
     {
-        // TODO get from master factory
-        return ImageMagickImageProcessor::fromNothing();
+        return new LocalImage('', '');
+    }
+
+    /**
+     * @return ImageProcessorCommandSequence
+     */
+    public function getImageProcessorCommandSequence()
+    {
+        return new ImageProcessorCommandSequence();
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Brera;
 
-use Brera\ImageImport\ImportImageDomainEvent;
+use Brera\Image\ImportImageDomainEvent;
 
 class ImageImportTest extends \PHPUnit_Framework_TestCase
 {

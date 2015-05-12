@@ -1,18 +1,10 @@
 <?php
 
-namespace Brera\ImageProcessor;
+namespace Brera\Image;
 
 class GdResizeCommand implements ImageProcessorCommand
 {
-    /**
-     * @var int
-     */
-    private $width;
-
-    /**
-     * @var int
-     */
-    private $height;
+    use ResizeCommandTrait;
 
     /**
      * @param int $width
@@ -25,14 +17,13 @@ class GdResizeCommand implements ImageProcessorCommand
     }
 
     /**
-     * @param string $base64EncodedImageStream
+     * @param string $imageStream
      * @return string
      */
-    public function execute($base64EncodedImageStream)
+    public function execute($imageStream)
     {
         $this->validateImageDimensions();
 
-        $imageStream = base64_decode($base64EncodedImageStream);
         $imageInfo = $this->getImageInfo($imageStream);
 
         $this->validateImageType($imageInfo);
@@ -42,39 +33,7 @@ class GdResizeCommand implements ImageProcessorCommand
 
         imagecopyresampled($resultImage, $image, 0, 0, 0, 0, $this->width, $this->height, $imageInfo[0], $imageInfo[1]);
 
-        $outputImageStream = $this->getOutputImageStream($resultImage, $imageInfo);
-
-        return base64_encode($outputImageStream);
-    }
-
-    /**
-     * @throws InvalidImageDimensionException
-     */
-    private function validateImageDimensions()
-    {
-        if (!is_int($this->width)) {
-            throw new InvalidImageDimensionException(
-                sprintf('Expected integer as image width, got %s.', gettype($this->width))
-            );
-        }
-
-        if (!is_int($this->height)) {
-            throw new InvalidImageDimensionException(
-                sprintf('Expected integer as image height, got %s.', gettype($this->height))
-            );
-        }
-
-        if ($this->width <= 0) {
-            throw new InvalidImageDimensionException(
-                sprintf('Image width should be greater then zero, got %s.', $this->width)
-            );
-        }
-
-        if ($this->height <= 0) {
-            throw new InvalidImageDimensionException(
-                sprintf('Image height should be greater then zero, got %s.', $this->height)
-            );
-        }
+        return $this->getOutputImageStream($resultImage, $imageInfo);
     }
 
     /**

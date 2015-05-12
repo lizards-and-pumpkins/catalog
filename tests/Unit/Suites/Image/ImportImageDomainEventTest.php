@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\ImageImport;
+namespace Brera\Image;
 
 /**
- * @covers \Brera\ImageImport\ImportImageDomainEvent
+ * @covers \Brera\Image\ImportImageDomainEvent
  */
 class ImportImageDomainEventTest extends \PHPUnit_Framework_TestCase
 {

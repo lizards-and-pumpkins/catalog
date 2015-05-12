@@ -7,8 +7,8 @@ use Brera\Context\ContextSource;
 use Brera\DataPool\DataPoolReader;
 use Brera\Http\HttpRouterChain;
 use Brera\Http\ResourceNotFoundRouter;
-use Brera\ImageImport\ImportImageDomainEvent;
-use Brera\ImageImport\ImportImageDomainEventHandler;
+use Brera\Image\ImportImageDomainEvent;
+use Brera\Image\ImportImageDomainEventHandler;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\ProductImportDomainEvent;
@@ -60,10 +60,11 @@ use Brera\Queue\Queue;
  * @uses   \Brera\RootSnippetSourceListBuilder
  * @uses   \Brera\Product\ProductSourceInListingSnippetRenderer
  * @uses   \Brera\Product\ProductInListingInContextSnippetRenderer
- * @uses   \Brera\ImageProcessor\ImageMagickImageProcessor
- * @uses   \Brera\ImageImport\ImportImageDomainEventHandler
- * @uses   \Brera\ImageImport\ImageProcessCommandSequence
- * @uses   \Brera\ImageImport\ImageProcessConfiguration
+ * @uses   \Brera\Image\ImageMagickImageProcessor
+ * @uses   \Brera\Image\ImportImageDomainEventHandler
+ * @uses   \Brera\Image\ImageProcessor
+ * @uses   \Brera\Image\ImageProcessorCommandSequence
+ * @uses   \Brera\LocalImage
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -339,10 +340,10 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldReturnAImportImageEventDomainHandler()
+    public function itShouldReturnAnImportImageEventDomainHandler()
     {
         /* @var $event \PHPUnit_Framework_MockObject_MockObject|ImportImageDomainEvent */
-        $event = $this->getMock(ImportImageDomainEvent::class, null, [], '', false);
+        $event = $this->getMock(ImportImageDomainEvent::class, [], [], '', false);
 
         $handler = $this->commonFactory->createImportImageDomainEventHandler($event);
         $this->assertInstanceOf(ImportImageDomainEventHandler::class, $handler);

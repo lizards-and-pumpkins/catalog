@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\ImageImport;
+namespace Brera\Image;
 
 use Brera\DomainEvent;
 
