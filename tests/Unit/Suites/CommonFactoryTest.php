@@ -61,6 +61,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Product\ProductSourceInListingSnippetRenderer
  * @uses   \Brera\Product\ProductInListingInContextSnippetRenderer
  * @uses   \Brera\Image\ImportImageDomainEventHandler
+ * @uses   \Brera\Image\ImageMagickResizeCommand
  * @uses   \Brera\Image\ImageProcessor
  * @uses   \Brera\Image\ImageProcessorCommandSequence
  * @uses   \Brera\LocalImage

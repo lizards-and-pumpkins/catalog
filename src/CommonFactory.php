@@ -65,9 +65,14 @@ class CommonFactory implements Factory, DomainEventFactory
     private $searchEngine;
 
     /**
-     * @var ImageProcessConfiguration
+     * @var StaticFile
      */
-    private $imageProcessingConfiguration;
+    private $fileStorage;
+
+    /**
+     * @var ImageProcessorCommandSequence
+     */
+    private $imageProcessorCommandSequence;
 
     /**
      * @param ProductImportDomainEvent $event
@@ -603,9 +608,7 @@ class CommonFactory implements Factory, DomainEventFactory
      */
     public function createImportImageDomainEventHandler(ImportImageDomainEvent $event)
     {
-        $imageProcessor = $this->getMasterFactory()->createImageProcessor();
-
-        return new ImportImageDomainEventHandler($event, $imageProcessor);
+        return new ImportImageDomainEventHandler($event, $this->getMasterFactory()->createImageProcessor());
     }
 
     /**
@@ -620,11 +623,15 @@ class CommonFactory implements Factory, DomainEventFactory
     }
 
     /**
-     * @return LocalImage
+     * @return StaticFile
      */
     public function getFileStorage()
     {
-        return new LocalImage('', '');
+        if (null === $this->fileStorage) {
+            $this->fileStorage = $this->callExternalCreateMethod('FileStorage');
+        }
+
+        return $this->fileStorage;
     }
 
     /**
@@ -632,6 +639,10 @@ class CommonFactory implements Factory, DomainEventFactory
      */
     public function getImageProcessorCommandSequence()
     {
-        return new ImageProcessorCommandSequence();
+        if (null === $this->imageProcessorCommandSequence) {
+            $this->imageProcessorCommandSequence = $this->callExternalCreateMethod('ImageProcessorCommandSequence');
+        }
+
+        return $this->imageProcessorCommandSequence;
     }
 }

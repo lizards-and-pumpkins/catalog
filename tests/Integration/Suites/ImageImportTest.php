@@ -3,6 +3,7 @@
 namespace Brera;
 
 use Brera\Image\ImportImageDomainEvent;
+use Brera\Utils\LocalFilesystem;
 
 class ImageImportTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,10 +14,7 @@ class ImageImportTest extends \PHPUnit_Framework_TestCase
     {
         $factory = $this->prepareIntegrationTestMasterFactory();
 
-        $images = [
-            __DIR__ . '/../../shared-fixture/test_image.jpg',
-            __DIR__ . '/../../shared-fixture/test_image2.jpg',
-        ];
+        $images = ['test_image.jpg', 'test_image2.jpg'];
         $event = new ImportImageDomainEvent($images);
 
         $queue = $factory->getEventQueue();
@@ -27,35 +25,26 @@ class ImageImportTest extends \PHPUnit_Framework_TestCase
         $consumer->process($numberOfMessages);
 
         $this->assertEmpty($factory->getLogger()->getMessages());
+
+        foreach ($images as $image) {
+            $filePath = sys_get_temp_dir() . '/' . IntegrationTestFactory::PROCESSED_IMAGES_DIR . '/' . $image;
+            $this->assertTrue(file_exists($filePath));
+
+            $fileInfo = getimagesize($filePath);
+            $this->assertEquals(IntegrationTestFactory::PROCESSED_IMAGE_WIDTH, $fileInfo[0]);
+            $this->assertEquals(IntegrationTestFactory::PROCESSED_IMAGE_HEIGHT, $fileInfo[1]);
+            $this->assertEquals('image/jpeg', $fileInfo['mime']);
+        }
+    }
+
+    protected function setUp()
+    {
+        $this->flushProcessedImagesDir();
     }
 
     protected function tearDown()
     {
-        // TODO value is from commonfactory
-        $dir = sys_get_temp_dir() . '/brera';
-        $this->recursiveRemoveDirectory($dir);
-        mkdir($dir);
-    }
-
-    /**
-     * @param string $dir
-     */
-    protected function recursiveRemoveDirectory($dir)
-    {
-        if (is_dir($dir)) {
-            $objects = scandir($dir);
-            foreach ($objects as $object) {
-                if ($object != "." && $object != "..") {
-                    if (filetype($dir . "/" . $object) == "dir") {
-                        $this->recursiveRemoveDirectory($dir . "/" . $object);
-                    } else {
-                        unlink($dir . "/" . $object);
-                    }
-                }
-            }
-            reset($objects);
-            rmdir($dir);
-        }
+        $this->flushProcessedImagesDir();
     }
 
     /**
@@ -69,5 +58,13 @@ class ImageImportTest extends \PHPUnit_Framework_TestCase
         $factory->register(new FrontendFactory());
 
         return $factory;
+    }
+
+    private function flushProcessedImagesDir()
+    {
+        $localFilesystem = new LocalFilesystem();
+        $processedImagesDir = sys_get_temp_dir() . '/' . IntegrationTestFactory::PROCESSED_IMAGES_DIR;
+        $localFilesystem->removeDirectoryAndItsContent($processedImagesDir);
+        mkdir($processedImagesDir);
     }
 }
