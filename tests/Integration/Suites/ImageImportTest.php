@@ -55,7 +55,6 @@ class ImageImportTest extends \PHPUnit_Framework_TestCase
         $factory = new PoCMasterFactory();
         $factory->register(new CommonFactory());
         $factory->register(new IntegrationTestFactory());
-        $factory->register(new FrontendFactory());
 
         return $factory;
     }
