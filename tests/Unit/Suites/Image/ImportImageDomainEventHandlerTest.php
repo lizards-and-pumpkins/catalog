@@ -46,15 +46,13 @@ class ImportImageDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldPassAllImagesThroughImageProcessor()
     {
-        $images = [__DIR__ . '/../../../test_image.jpg', __DIR__ . '/../../../test_image2.jpg'];
+        $imageFilename = 'test_image.jpg';
 
-        $this->mockImportImageDomainEvent->expects($this->atLeastOnce())
-            ->method('getImages')
-            ->willReturn($images);
+        $this->mockImportImageDomainEvent->expects($this->any())
+            ->method('getImage')
+            ->willReturn($imageFilename);
 
-        $numberOfImages = count($images);
-
-        $this->mockImageProcessor->expects($this->exactly($numberOfImages))
+        $this->mockImageProcessor->expects($this->once())
             ->method('process');
 
         $this->handler->process();

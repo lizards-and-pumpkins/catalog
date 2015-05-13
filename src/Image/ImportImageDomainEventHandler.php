@@ -24,6 +24,6 @@ class ImportImageDomainEventHandler implements DomainEventHandler
 
     public function process()
     {
-        array_map([$this->imageProcessor, 'process'], $this->event->getImages());
+        $this->imageProcessor->process($this->event->getImage());
     }
 }

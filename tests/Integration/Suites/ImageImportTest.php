@@ -15,13 +15,14 @@ class ImageImportTest extends \PHPUnit_Framework_TestCase
         $factory = $this->prepareIntegrationTestMasterFactory();
 
         $images = ['test_image.jpg', 'test_image2.jpg'];
-        $event = new ImportImageDomainEvent($images);
 
         $queue = $factory->getEventQueue();
-        $queue->add($event);
+        foreach ($images as $image) {
+            $queue->add(new ImportImageDomainEvent($image));
+        }
 
         $consumer = $factory->createDomainEventConsumer();
-        $numberOfMessages = 1;
+        $numberOfMessages = count($images);
         $consumer->process($numberOfMessages);
 
         $this->assertEmpty($factory->getLogger()->getMessages());

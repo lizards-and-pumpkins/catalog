@@ -7,23 +7,23 @@ use Brera\DomainEvent;
 class ImportImageDomainEvent implements DomainEvent
 {
     /**
-     * @var string[]
+     * @var string
      */
-    private $images;
+    private $image;
 
     /**
-     * @param string[] $images
+     * @param string $image
      */
-    public function __construct(array $images)
+    public function __construct($image)
     {
-        $this->images = $images;
+        $this->image = $image;
     }
 
     /**
-     * @return string[]
+     * @return string
      */
-    public function getImages()
+    public function getImage()
     {
-        return $this->images;
+        return $this->image;
     }
 }
