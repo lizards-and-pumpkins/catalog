@@ -26,7 +26,7 @@ define(['local_storage', 'jquery'], function(storage) {
 
             var products = storage.get(this.storageKey);
 
-            if (!products.hasOwnProperty('length') || !products.length) {
+            if (null === products || !products.hasOwnProperty('length') || !products.length) {
                 return '';
             }
 
