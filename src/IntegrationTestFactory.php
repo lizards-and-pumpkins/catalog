@@ -63,6 +63,9 @@ class IntegrationTestFactory implements Factory
         return new LocalImage($originalImageDir, $resultImageDir);
     }
 
+    /**
+     * @return ImageProcessorCommandSequence
+     */
     public function createImageProcessorCommandSequence()
     {
         $imageResizeCommand = new ImageMagickResizeCommand(self::PROCESSED_IMAGE_WIDTH, self::PROCESSED_IMAGE_HEIGHT);
