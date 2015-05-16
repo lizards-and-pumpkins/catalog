@@ -2,6 +2,7 @@
 
 namespace Brera\Product;
 
+use Brera\Image\ImportImageDomainEvent;
 use Brera\Queue\Queue;
 
 /**
@@ -12,22 +13,80 @@ use Brera\Queue\Queue;
 class CatalogImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var CatalogImportDomainEventHandler
+     */
+    private $catalogImportDomainEventHandler;
+
+    /**
+     * @var Queue|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockEventQueue;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount
+     */
+    private $eventSpy;
+
+    protected function setUp()
+    {
+        $xml = file_get_contents(__DIR__ . '/../../../shared-fixture/product.xml');
+
+        $mockCatalogImportDomainEvent = $this->getMock(CatalogImportDomainEvent::class, [], [], '', false);
+        $mockCatalogImportDomainEvent->expects($this->any())
+            ->method('getXml')
+            ->willReturn($xml);
+
+        $this->eventSpy = $this->any();
+
+        $this->mockEventQueue = $this->getMock(Queue::class);
+        $this->mockEventQueue->expects($this->eventSpy)
+            ->method('add');
+
+        $this->catalogImportDomainEventHandler = new CatalogImportDomainEventHandler(
+            $mockCatalogImportDomainEvent,
+            $this->mockEventQueue
+        );
+    }
+
+    /**
      * @test
      */
     public function itShouldEmitProductImportDomainEvents()
     {
-        $xml = file_get_contents(__DIR__ . '/../../../shared-fixture/product.xml');
+        $this->catalogImportDomainEventHandler->process();
 
-        $stubCatalogImportDomainEvent = $this->getMock(CatalogImportDomainEvent::class, [], [], '', false);
-        $stubCatalogImportDomainEvent->expects($this->once())
-            ->method('getXml')
-            ->willReturn($xml);
+        $this->assertEventWasAddedToAQueue(ProductImportDomainEvent::class);
+    }
 
-        $stubEventQueue = $this->getMock(Queue::class);
-        $stubEventQueue->expects($this->atLeastOnce())
-            ->method('add');
+    /**
+     * @test
+     */
+    public function itShouldEmitImageImportDomainEvents()
+    {
+        $this->catalogImportDomainEventHandler->process();
 
-        $catalogImportDomainEvent = new CatalogImportDomainEventHandler($stubCatalogImportDomainEvent, $stubEventQueue);
-        $catalogImportDomainEvent->process();
+        $this->assertEventWasAddedToAQueue(ImportImageDomainEvent::class);
+    }
+
+    /**
+     * @param string $eventClass
+     * @return int
+     */
+    private function assertEventWasAddedToAQueue($eventClass)
+    {
+        $numberOfRequiredInvocations = 0;
+
+        /** @var \PHPUnit_Framework_MockObject_Invocation_Object $invocation */
+        foreach ($this->eventSpy->getInvocations() as $invocation) {
+            if ($eventClass === get_class($invocation->parameters[0])) {
+                $numberOfRequiredInvocations++;
+            }
+        }
+
+        $this->assertGreaterThan(
+            0,
+            $numberOfRequiredInvocations,
+            sprintf('Failed to assert that %s was added to event queue.', $eventClass)
+        );
     }
 }
