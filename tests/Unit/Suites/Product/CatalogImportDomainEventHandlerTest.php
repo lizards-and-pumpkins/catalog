@@ -19,11 +19,6 @@ class CatalogImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
     private $catalogImportDomainEventHandler;
 
     /**
-     * @var Queue|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $mockEventQueue;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount
      */
     private $eventSpy;
@@ -39,13 +34,13 @@ class CatalogImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->eventSpy = $this->any();
 
-        $this->mockEventQueue = $this->getMock(Queue::class);
-        $this->mockEventQueue->expects($this->eventSpy)
+        $mockEventQueue = $this->getMock(Queue::class);
+        $mockEventQueue->expects($this->eventSpy)
             ->method('add');
 
         $this->catalogImportDomainEventHandler = new CatalogImportDomainEventHandler(
             $mockCatalogImportDomainEvent,
-            $this->mockEventQueue
+            $mockEventQueue
         );
     }
 
