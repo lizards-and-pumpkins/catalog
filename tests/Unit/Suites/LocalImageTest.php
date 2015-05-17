@@ -59,7 +59,7 @@ class LocalImageTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Brera\CanNotReadFileException
+     * @expectedException \Brera\Utils\FileNotReadableException
      */
     public function itShouldThrowAnExceptionIfFileIsNotReadable()
     {

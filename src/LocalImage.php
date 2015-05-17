@@ -2,6 +2,8 @@
 
 namespace Brera;
 
+use Brera\Utils\FileNotReadableException;
+
 class LocalImage implements StaticFile
 {
     /**
@@ -27,13 +29,14 @@ class LocalImage implements StaticFile
     /**
      * @param string $fileName
      * @return string
+     * @throws FileNotReadableException
      */
     public function getFileContents($fileName)
     {
         $filePath = $this->originalImageDir . '/' . $fileName;
 
         if (!is_file($filePath)) {
-            throw new CanNotReadFileException(sprintf('Can not read %s file', $filePath));
+            throw new FileNotReadableException(sprintf('Can not read %s file', $filePath));
         }
 
         return file_get_contents($filePath);
