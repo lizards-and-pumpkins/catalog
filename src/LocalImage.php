@@ -30,7 +30,13 @@ class LocalImage implements StaticFile
      */
     public function getFileContents($fileName)
     {
-        return file_get_contents($this->originalImageDir . '/' . $fileName);
+        $filePath = $this->originalImageDir . '/' . $fileName;
+
+        if (!is_file($filePath)) {
+            throw new CanNotReadFileException(sprintf('Can not read %s file', $filePath));
+        }
+
+        return file_get_contents($filePath);
     }
 
     /**

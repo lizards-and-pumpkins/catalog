@@ -59,6 +59,15 @@ class LocalImageTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @expectedException \Brera\CanNotReadFileException
+     */
+    public function itShouldThrowAnExceptionIfFileIsNotReadable()
+    {
+        $this->file->getFileContents('/some-non-existing-file');
+    }
+
+    /**
+     * @test
      */
     public function itShouldReturnFileContents()
     {
