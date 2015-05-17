@@ -9,7 +9,7 @@ use Brera\Queue\Queue;
  * @covers \Brera\Product\CatalogImportDomainEventHandler
  * @uses   \Brera\Product\ProductImportDomainEvent
  * @uses   \Brera\Image\ImageImportDomainEvent
- * @uses   \Brera\XPathParser
+ * @uses   \Brera\Utils\XPathParser
  */
 class CatalogImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {

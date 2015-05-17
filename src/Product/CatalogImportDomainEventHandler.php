@@ -5,7 +5,7 @@ namespace Brera\Product;
 use Brera\DomainEventHandler;
 use Brera\Image\ImageImportDomainEvent;
 use Brera\Queue\Queue;
-use Brera\XPathParser;
+use Brera\Utils\XPathParser;
 
 class CatalogImportDomainEventHandler implements DomainEventHandler
 {

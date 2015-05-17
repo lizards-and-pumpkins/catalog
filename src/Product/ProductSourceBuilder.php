@@ -2,7 +2,7 @@
 
 namespace Brera\Product;
 
-use Brera\XPathParser;
+use Brera\Utils\XPathParser;
 
 class ProductSourceBuilder
 {

@@ -8,7 +8,7 @@ use Brera\Renderer\Layout;
  * @covers \Brera\ThemeLocator
  * @uses   \Brera\Renderer\Layout
  * @uses   \Brera\Renderer\LayoutReader
- * @uses   \Brera\XPathParser
+ * @uses   \Brera\Utils\XPathParser
  */
 class ThemeLocatorTest extends \PHPUnit_Framework_TestCase
 {

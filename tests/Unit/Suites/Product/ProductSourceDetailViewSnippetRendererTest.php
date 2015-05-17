@@ -15,7 +15,7 @@ use Brera\SnippetRenderer;
  * @uses   \Brera\Product\Block\ProductDetailsPageBlock
  * @uses   \Brera\Renderer\LayoutReader
  * @uses   \Brera\Renderer\Block
- * @uses   \Brera\XPathParser
+ * @uses   \Brera\Utils\XPathParser
  * @uses   \Brera\Renderer\Layout
  */
 class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase

@@ -4,7 +4,7 @@ namespace Brera\Product;
 
 /**
  * @covers \Brera\Product\ProductListingSourceBuilder
- * @uses   \Brera\XPathParser
+ * @uses   \Brera\Utils\XPathParser
  * @uses   \Brera\Product\ProductListingSource
  */
 class ProductListingSourceBuilderTest extends \PHPUnit_Framework_TestCase

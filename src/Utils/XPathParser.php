@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera;
+namespace Brera\Utils;
 
 class XPathParser
 {
