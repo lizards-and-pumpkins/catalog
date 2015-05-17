@@ -2,8 +2,8 @@
 
 namespace Brera;
 
-use Brera\Image\ImportImageDomainEvent;
-use Brera\Image\ImportImageDomainEventHandler;
+use Brera\Image\ImageImportDomainEvent;
+use Brera\Image\ImageImportDomainEventHandler;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\ProductImportDomainEvent;
@@ -16,7 +16,7 @@ use Brera\Product\ProductListingSavedDomainEventHandler;
  * @uses   \Brera\RootTemplateChangedDomainEvent
  * @uses   \Brera\Product\ProductImportDomainEvent
  * @uses   \Brera\Product\CatalogImportDomainEvent
- * @uses   \Brera\Image\ImportImageDomainEvent
+ * @uses   \Brera\Image\ImageImportDomainEvent
  * @uses   \Brera\Product\ProductListingSavedDomainEvent
  */
 class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
@@ -114,21 +114,21 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldLocateAndReturnImportImageDomainEventHandler()
+    public function itShouldLocateAndReturnImageImportDomainEventHandler()
     {
-        $stubDomainEventHandler = $this->getMock(ImportImageDomainEventHandler::class, [], [], '', false);
+        $stubDomainEventHandler = $this->getMock(ImageImportDomainEventHandler::class, [], [], '', false);
 
         $this->factory->expects($this->once())
-            ->method('createImportImageDomainEventHandler')
+            ->method('createImageImportDomainEventHandler')
             ->willReturn($stubDomainEventHandler);
         /**
          * The real object has to be used here as getHandlerFor method will call get_class against it
          */
-        $ImportImagesDomainEvent = new ImportImageDomainEvent([]);
+        $imagesImportDomainEvent = new ImageImportDomainEvent([]);
 
-        $result = $this->locator->getHandlerFor($ImportImagesDomainEvent);
+        $result = $this->locator->getHandlerFor($imagesImportDomainEvent);
 
-        $this->assertInstanceOf(ImportImageDomainEventHandler::class, $result);
+        $this->assertInstanceOf(ImageImportDomainEventHandler::class, $result);
     }
 
     /**

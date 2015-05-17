@@ -4,10 +4,10 @@ namespace Brera\Image;
 
 use Brera\DomainEventHandler;
 
-class ImportImageDomainEventHandler implements DomainEventHandler
+class ImageImportDomainEventHandler implements DomainEventHandler
 {
     /**
-     * @var ImportImageDomainEvent
+     * @var ImageImportDomainEvent
      */
     private $event;
 
@@ -16,7 +16,7 @@ class ImportImageDomainEventHandler implements DomainEventHandler
      */
     private $imageProcessor;
 
-    public function __construct(ImportImageDomainEvent $event, ImageProcessor $imageProcessor)
+    public function __construct(ImageImportDomainEvent $event, ImageProcessor $imageProcessor)
     {
         $this->event = $event;
         $this->imageProcessor = $imageProcessor;

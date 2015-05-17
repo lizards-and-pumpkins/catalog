@@ -2,7 +2,7 @@
 
 namespace Brera;
 
-use Brera\Image\ImportImageDomainEvent;
+use Brera\Image\ImageImportDomainEvent;
 use Brera\Utils\LocalFilesystem;
 
 class ImageImportTest extends \PHPUnit_Framework_TestCase
@@ -10,7 +10,7 @@ class ImageImportTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function importImageDomainEventShouldProduceImages()
+    public function itShouldImportAndProcessImages()
     {
         $factory = $this->prepareIntegrationTestMasterFactory();
 
@@ -18,7 +18,7 @@ class ImageImportTest extends \PHPUnit_Framework_TestCase
 
         $queue = $factory->getEventQueue();
         foreach ($images as $image) {
-            $queue->add(new ImportImageDomainEvent($image));
+            $queue->add(new ImageImportDomainEvent($image));
         }
 
         $consumer = $factory->createDomainEventConsumer();

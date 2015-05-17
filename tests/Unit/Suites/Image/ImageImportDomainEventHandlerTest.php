@@ -3,19 +3,19 @@
 namespace Brera\Image;
 
 /**
- * @covers \Brera\Image\ImportImageDomainEventHandler
+ * @covers \Brera\Image\ImageImportDomainEventHandler
  */
-class ImportImageDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
+class ImageImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ImportImageDomainEventHandler
+     * @var ImageImportDomainEventHandler
      */
     private $handler;
 
     /**
-     * @var ImportImageDomainEvent|\PHPUnit_Framework_MockObject_MockObject
+     * @var ImageImportDomainEvent|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockImportImageDomainEvent;
+    private $mockImageImportDomainEvent;
 
     /**
      * @var ImageProcessor|\PHPUnit_Framework_MockObject_MockObject
@@ -24,11 +24,11 @@ class ImportImageDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockImportImageDomainEvent = $this->getMock(ImportImageDomainEvent::class, [], [], '', false);
+        $this->mockImageImportDomainEvent = $this->getMock(ImageImportDomainEvent::class, [], [], '', false);
         $this->mockImageProcessor = $this->getMock(ImageProcessor::class, [], [], '', false);
 
-        $this->handler = new ImportImageDomainEventHandler(
-            $this->mockImportImageDomainEvent,
+        $this->handler = new ImageImportDomainEventHandler(
+            $this->mockImageImportDomainEvent,
             $this->mockImageProcessor
         );
     }
@@ -38,7 +38,7 @@ class ImportImageDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldBeAnImageDomainEventHandler()
     {
-        $this->assertInstanceOf(ImportImageDomainEventHandler::class, $this->handler);
+        $this->assertInstanceOf(ImageImportDomainEventHandler::class, $this->handler);
     }
 
     /**
@@ -48,7 +48,7 @@ class ImportImageDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $imageFilename = 'test_image.jpg';
 
-        $this->mockImportImageDomainEvent->expects($this->any())
+        $this->mockImageImportDomainEvent->expects($this->any())
             ->method('getImage')
             ->willReturn($imageFilename);
 

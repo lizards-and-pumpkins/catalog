@@ -2,7 +2,7 @@
 
 namespace Brera;
 
-use Brera\Image\ImportImageDomainEvent;
+use Brera\Image\ImageImportDomainEvent;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\ProductImportDomainEvent;
 use Brera\Product\ProductListingSavedDomainEvent;
@@ -40,9 +40,9 @@ class DomainEventHandlerLocator
             case RootTemplateChangedDomainEvent::class:
                 /* @var $event RootTemplateChangedDomainEvent */
                 return $this->factory->createRootTemplateChangedDomainEventHandler($event);
-            case ImportImageDomainEvent::class:
-                /* @var $event ImportImageDomainEvent */
-                return $this->factory->createImportImageDomainEventHandler($event);
+            case ImageImportDomainEvent::class:
+                /* @var $event ImageImportDomainEvent */
+                return $this->factory->createImageImportDomainEventHandler($event);
             case ProductListingSavedDomainEvent::class:
                 /* @var $event ProductListingSavedDomainEvent */
                 return $this->factory->createProductListingSavedDomainEventHandler($event);

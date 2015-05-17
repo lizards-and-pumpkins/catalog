@@ -2,12 +2,13 @@
 
 namespace Brera\Product;
 
-use Brera\Image\ImportImageDomainEvent;
+use Brera\Image\ImageImportDomainEvent;
 use Brera\Queue\Queue;
 
 /**
  * @covers \Brera\Product\CatalogImportDomainEventHandler
  * @uses   \Brera\Product\ProductImportDomainEvent
+ * @uses   \Brera\Image\ImageImportDomainEvent
  * @uses   \Brera\XPathParser
  */
 class CatalogImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
@@ -65,12 +66,11 @@ class CatalogImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->catalogImportDomainEventHandler->process();
 
-        $this->assertEventWasAddedToAQueue(ImportImageDomainEvent::class);
+        $this->assertEventWasAddedToAQueue(ImageImportDomainEvent::class);
     }
 
     /**
      * @param string $eventClass
-     * @return int
      */
     private function assertEventWasAddedToAQueue($eventClass)
     {
