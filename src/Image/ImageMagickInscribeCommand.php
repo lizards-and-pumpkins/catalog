@@ -70,8 +70,10 @@ class ImageMagickInscribeCommand implements ImageProcessorCommand
     {
         try {
             (new \ImagickPixel())->setColor($this->backgroundColor);
-        } catch (\ImagickException $e) {
-            throw new InvalidColorException($e->getMessage());
+        } catch (\Exception $e) {
+            if ($e instanceof \ImagickException || $e instanceof \ImagickPixelException) {
+                throw new InvalidColorException($e->getMessage());
+            }
         }
     }
 }
