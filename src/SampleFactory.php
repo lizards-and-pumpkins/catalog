@@ -5,7 +5,6 @@ namespace Brera;
 use Brera\DataPool\KeyValue\File\FileKeyValueStore;
 use Brera\DataPool\SearchEngine\FileSearchEngine;
 use Brera\Image\ImageMagickInscribeCommand;
-use Brera\Image\ImageMagickResizeCommand;
 use Brera\Image\ImageProcessor;
 use Brera\Image\ImageProcessorCollection;
 use Brera\Image\ImageProcessorCommandSequence;
