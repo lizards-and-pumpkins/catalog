@@ -20,7 +20,7 @@ use Brera\Queue\InMemory\InMemoryQueue;
  * @uses   \Brera\DataPool\KeyValue\File\FileKeyValueStore
  * @uses   \Brera\DataPool\SearchEngine\FileSearchEngine
  * @uses   \Brera\Queue\InMemory\InMemoryQueue
- * @uses   \Brera\Image\ImageMagickResizeCommand
+ * @uses   \Brera\Image\ImageMagickInscribeCommand
  * @uses   \Brera\Image\ImageProcessor
  * @uses   \Brera\Image\ImageProcessorCollection
  * @uses   \Brera\Image\ImageProcessorCommandSequence

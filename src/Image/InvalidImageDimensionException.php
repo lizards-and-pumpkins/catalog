@@ -2,7 +2,7 @@
 
 namespace Brera\Image;
 
-class InvalidImageDimensionException extends \LogicException
+class InvalidImageDimensionException extends \OutOfBoundsException
 {
 
 }

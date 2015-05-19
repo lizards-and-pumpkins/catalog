@@ -4,6 +4,7 @@ namespace Brera;
 
 use Brera\DataPool\KeyValue\File\FileKeyValueStore;
 use Brera\DataPool\SearchEngine\FileSearchEngine;
+use Brera\Image\ImageMagickInscribeCommand;
 use Brera\Image\ImageMagickResizeCommand;
 use Brera\Image\ImageProcessor;
 use Brera\Image\ImageProcessorCollection;
@@ -135,7 +136,7 @@ class SampleFactory implements Factory
      */
     public function getProductDetailsPageImageProcessorCommandSequence()
     {
-        $imageResizeCommand = new ImageMagickResizeCommand(340, 365);
+        $imageResizeCommand = new ImageMagickInscribeCommand(365, 340, 'white');
 
         $commandSequence = new ImageProcessorCommandSequence();
         $commandSequence->addCommand($imageResizeCommand);
@@ -172,7 +173,7 @@ class SampleFactory implements Factory
      */
     public function getProductListingImageProcessorCommandSequence()
     {
-        $imageResizeCommand = new ImageMagickResizeCommand(188, 115);
+        $imageResizeCommand = new ImageMagickInscribeCommand(188, 115, 'white');
 
         $commandSequence = new ImageProcessorCommandSequence();
         $commandSequence->addCommand($imageResizeCommand);
@@ -209,7 +210,7 @@ class SampleFactory implements Factory
      */
     public function getGalleyThumbnailImageProcessorCommandSequence()
     {
-        $imageResizeCommand = new ImageMagickResizeCommand(48, 48);
+        $imageResizeCommand = new ImageMagickInscribeCommand(48, 48, 'white');
 
         $commandSequence = new ImageProcessorCommandSequence();
         $commandSequence->addCommand($imageResizeCommand);
