@@ -63,6 +63,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Image\ImageImportDomainEventHandler
  * @uses   \Brera\Image\ImageMagickResizeCommand
  * @uses   \Brera\Image\ImageProcessor
+ * @uses   \Brera\Image\ImageProcessorCollection
  * @uses   \Brera\Image\ImageProcessorCommandSequence
  * @uses   \Brera\LocalImage
  */

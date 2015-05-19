@@ -5,6 +5,8 @@ namespace Brera;
 use Brera\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
 use Brera\DataPool\SearchEngine\InMemorySearchEngine;
 use Brera\Image\ImageMagickResizeCommand;
+use Brera\Image\ImageProcessor;
+use Brera\Image\ImageProcessorCollection;
 use Brera\Image\ImageProcessorCommandSequence;
 use Brera\Queue\InMemory\InMemoryQueue;
 
@@ -15,7 +17,7 @@ class IntegrationTestFactory implements Factory
     const PROCESSED_IMAGES_DIR = 'brera/processed-images';
     const PROCESSED_IMAGE_WIDTH = 40;
     const PROCESSED_IMAGE_HEIGHT = 20;
-    
+
     /**
      * @return InMemoryKeyValueStore
      */
@@ -49,9 +51,39 @@ class IntegrationTestFactory implements Factory
     }
 
     /**
+     * @return string[]
+     */
+    public function getSearchableAttributeCodes()
+    {
+        return ['name', 'category'];
+    }
+
+    /**
+     * @return ImageProcessorCollection
+     */
+    public function createImageProcessorCollection()
+    {
+        $processorCollection = new ImageProcessorCollection();
+        $processorCollection->add($this->getMasterFactory()->getImageProcessor());
+
+        return $processorCollection;
+    }
+
+    /**
+     * @return ImageProcessor
+     */
+    public function getImageProcessor()
+    {
+        $commandSequence = $this->getMasterFactory()->getImageProcessorCommandSequence();
+        $fileStorage = $this->getMasterFactory()->getImageFileStorage();
+
+        return new ImageProcessor($commandSequence, $fileStorage);
+    }
+
+    /**
      * @return StaticFile
      */
-    public function createFileStorage()
+    public function getImageFileStorage()
     {
         $originalImageDir = __DIR__ . '/../tests/shared-fixture';
         $resultImageDir = sys_get_temp_dir() . '/' . self::PROCESSED_IMAGES_DIR;
@@ -66,7 +98,7 @@ class IntegrationTestFactory implements Factory
     /**
      * @return ImageProcessorCommandSequence
      */
-    public function createImageProcessorCommandSequence()
+    public function getImageProcessorCommandSequence()
     {
         $imageResizeCommand = new ImageMagickResizeCommand(self::PROCESSED_IMAGE_WIDTH, self::PROCESSED_IMAGE_HEIGHT);
 
@@ -74,13 +106,5 @@ class IntegrationTestFactory implements Factory
         $commandSequence->addCommand($imageResizeCommand);
 
         return $commandSequence;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getSearchableAttributeCodes()
-    {
-        return ['name', 'category'];
     }
 }

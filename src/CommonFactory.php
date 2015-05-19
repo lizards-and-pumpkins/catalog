@@ -10,10 +10,9 @@ use Brera\DataPool\KeyValue\KeyValueStore;
 use Brera\DataPool\SearchEngine\SearchEngine;
 use Brera\Http\HttpRouterChain;
 use Brera\Http\ResourceNotFoundRouter;
-use Brera\Image\ImageProcessor;
 use Brera\Image\ImageImportDomainEvent;
 use Brera\Image\ImageImportDomainEventHandler;
-use Brera\Image\ImageProcessorCommandSequence;
+use Brera\Image\ImageProcessorCollection;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\PriceSnippetRenderer;
@@ -65,14 +64,9 @@ class CommonFactory implements Factory, DomainEventFactory
     private $searchEngine;
 
     /**
-     * @var StaticFile
+     * @var ImageProcessorCollection
      */
-    private $fileStorage;
-
-    /**
-     * @var ImageProcessorCommandSequence
-     */
-    private $imageProcessorCommandSequence;
+    private $imageProcessorCollection;
 
     /**
      * @param ProductImportDomainEvent $event
@@ -608,41 +602,19 @@ class CommonFactory implements Factory, DomainEventFactory
      */
     public function createImageImportDomainEventHandler(ImageImportDomainEvent $event)
     {
-        return new ImageImportDomainEventHandler($event, $this->getMasterFactory()->createImageProcessor());
+        return new ImageImportDomainEventHandler($event, $this->getMasterFactory()->getImageProcessorCollection());
     }
 
-    /**
-     * @return ImageProcessor
-     */
-    public function createImageProcessor()
-    {
-        $commandSequence = $this->getMasterFactory()->getImageProcessorCommandSequence();
-        $fileStorage = $this->getMasterFactory()->getFileStorage();
-
-        return new ImageProcessor($commandSequence, $fileStorage);
-    }
 
     /**
-     * @return StaticFile
+     * @return ImageProcessorCollection
      */
-    public function getFileStorage()
+    public function getImageProcessorCollection()
     {
-        if (null === $this->fileStorage) {
-            $this->fileStorage = $this->callExternalCreateMethod('FileStorage');
+        if (null === $this->imageProcessorCollection) {
+            $this->imageProcessorCollection = $this->callExternalCreateMethod('ImageProcessorCollection');
         }
 
-        return $this->fileStorage;
-    }
-
-    /**
-     * @return ImageProcessorCommandSequence
-     */
-    public function getImageProcessorCommandSequence()
-    {
-        if (null === $this->imageProcessorCommandSequence) {
-            $this->imageProcessorCommandSequence = $this->callExternalCreateMethod('ImageProcessorCommandSequence');
-        }
-
-        return $this->imageProcessorCommandSequence;
+        return $this->imageProcessorCollection;
     }
 }

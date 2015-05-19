@@ -12,18 +12,18 @@ class ImageImportDomainEventHandler implements DomainEventHandler
     private $event;
 
     /**
-     * @var ImageProcessor
+     * @var ImageProcessorCollection
      */
-    private $imageProcessor;
+    private $imageProcessorCollection;
 
-    public function __construct(ImageImportDomainEvent $event, ImageProcessor $imageProcessor)
+    public function __construct(ImageImportDomainEvent $event, ImageProcessorCollection $imageProcessorCollection)
     {
         $this->event = $event;
-        $this->imageProcessor = $imageProcessor;
+        $this->imageProcessorCollection = $imageProcessorCollection;
     }
 
     public function process()
     {
-        $this->imageProcessor->process($this->event->getImage());
+        $this->imageProcessorCollection->process($this->event->getImage());
     }
 }

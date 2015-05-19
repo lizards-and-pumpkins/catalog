@@ -18,18 +18,18 @@ class ImageImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
     private $mockImageImportDomainEvent;
 
     /**
-     * @var ImageProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var ImageProcessorCollection|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockImageProcessor;
+    private $mockImageProcessorCollection;
 
     protected function setUp()
     {
         $this->mockImageImportDomainEvent = $this->getMock(ImageImportDomainEvent::class, [], [], '', false);
-        $this->mockImageProcessor = $this->getMock(ImageProcessor::class, [], [], '', false);
+        $this->mockImageProcessorCollection = $this->getMock(ImageProcessorCollection::class, [], [], '', false);
 
         $this->handler = new ImageImportDomainEventHandler(
             $this->mockImageImportDomainEvent,
-            $this->mockImageProcessor
+            $this->mockImageProcessorCollection
         );
     }
 
@@ -52,7 +52,7 @@ class ImageImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('getImage')
             ->willReturn($imageFilename);
 
-        $this->mockImageProcessor->expects($this->once())
+        $this->mockImageProcessorCollection->expects($this->once())
             ->method('process');
 
         $this->handler->process();
