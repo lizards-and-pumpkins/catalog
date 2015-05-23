@@ -90,12 +90,10 @@ class SampleFactory implements Factory
      */
     public function getEnlargedImageFileStorage()
     {
-        $originalImageDir = __DIR__ . '/../tests/shared-fixture';
-        $resultImageDir = __DIR__ . '/../pub/media/product/original';
-
-        $this->createDirectoryIfNotExists($resultImageDir);
-
-        return new LocalImage($originalImageDir, $resultImageDir);
+        return $this->createLocalImage(
+            __DIR__ . '/../tests/shared-fixture',
+            __DIR__ . '/../pub/media/product/original'
+        );
     }
 
     /**
@@ -122,12 +120,10 @@ class SampleFactory implements Factory
      */
     public function getProductDetailsPageImageFileStorage()
     {
-        $originalImageDir = __DIR__ . '/../tests/shared-fixture';
-        $resultImageDir = __DIR__ . '/../pub/media/product/large';
-
-        $this->createDirectoryIfNotExists($resultImageDir);
-
-        return new LocalImage($originalImageDir, $resultImageDir);
+        return $this->createLocalImage(
+            __DIR__ . '/../tests/shared-fixture',
+            __DIR__ . '/../pub/media/product/large'
+        );
     }
 
     /**
@@ -159,12 +155,10 @@ class SampleFactory implements Factory
      */
     public function getProductListingImageFileStorage()
     {
-        $originalImageDir = __DIR__ . '/../tests/shared-fixture';
-        $resultImageDir = __DIR__ . '/../pub/media/product/medium';
-
-        $this->createDirectoryIfNotExists($resultImageDir);
-
-        return new LocalImage($originalImageDir, $resultImageDir);
+        return $this->createLocalImage(
+            __DIR__ . '/../tests/shared-fixture',
+            __DIR__ . '/../pub/media/product/medium'
+        );
     }
 
     /**
@@ -196,12 +190,10 @@ class SampleFactory implements Factory
      */
     public function getGalleyThumbnailImageFileStorage()
     {
-        $originalImageDir = __DIR__ . '/../tests/shared-fixture';
-        $resultImageDir = __DIR__ . '/../pub/media/product/small';
-
-        $this->createDirectoryIfNotExists($resultImageDir);
-
-        return new LocalImage($originalImageDir, $resultImageDir);
+        return $this->createLocalImage(
+            __DIR__ . '/../tests/shared-fixture',
+            __DIR__ . '/../pub/media/product/small'
+        );
     }
 
     /**
@@ -225,5 +217,17 @@ class SampleFactory implements Factory
         if (!is_dir($path)) {
             mkdir($path, 0777, true);
         }
+    }
+
+    /**
+     * @param string $resultImageDir
+     * @param string $originalImageDir
+     * @return LocalImage
+     */
+    private function createLocalImage($resultImageDir, $originalImageDir)
+    {
+        $this->createDirectoryIfNotExists($resultImageDir);
+
+        return new LocalImage($originalImageDir, $resultImageDir);
     }
 }
