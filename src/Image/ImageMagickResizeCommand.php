@@ -29,7 +29,7 @@ class ImageMagickResizeCommand implements ImageProcessorCommand
 
         try {
             $imagick->readImageBlob($imageStream);
-        } catch(\ImagickException $e) {
+        } catch (\ImagickException $e) {
             throw new InvalidImageStreamException($e->getMessage());
         }
 

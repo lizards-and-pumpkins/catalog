@@ -36,7 +36,7 @@ class ImageMagickInscribeCommand implements ImageProcessorCommand
 
         try {
             $image->readImageBlob($imageStream);
-        } catch(\ImagickException $e) {
+        } catch (\ImagickException $e) {
             throw new InvalidImageStreamException($e->getMessage());
         }
 
