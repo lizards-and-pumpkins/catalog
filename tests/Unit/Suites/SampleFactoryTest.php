@@ -94,7 +94,7 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldCreateEnlargedImageProcessor()
     {
-        $this->assertInstanceOf(ImageProcessor::class, $this->factory->getEnlargedImageProcessor());
+        $this->assertInstanceOf(ImageProcessor::class, $this->factory->getOriginalImageProcessor());
     }
 
     /**
@@ -102,7 +102,7 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldCreateEnlargedImageFileStorage()
     {
-        $this->assertInstanceOf(LocalImage::class, $this->factory->getEnlargedImageFileStorage());
+        $this->assertInstanceOf(LocalImage::class, $this->factory->getOriginalImageFileStorage());
     }
 
     /**
@@ -112,7 +112,7 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(
             ImageProcessorCommandSequence::class,
-            $this->factory->getEnlargedImageProcessorCommandSequence()
+            $this->factory->getOriginalImageProcessorCommandSequence()
         );
     }
 

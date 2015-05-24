@@ -66,7 +66,7 @@ class SampleFactory implements Factory
     public function createImageProcessorCollection()
     {
         $processorCollection = new ImageProcessorCollection();
-        $processorCollection->add($this->getMasterFactory()->getEnlargedImageProcessor());
+        $processorCollection->add($this->getMasterFactory()->getOriginalImageProcessor());
         $processorCollection->add($this->getMasterFactory()->getProductDetailsPageImageProcessor());
         $processorCollection->add($this->getMasterFactory()->getProductListingImageProcessor());
         $processorCollection->add($this->getMasterFactory()->getGalleyThumbnailImageProcessor());
@@ -77,10 +77,10 @@ class SampleFactory implements Factory
     /**
      * @return ImageProcessor
      */
-    public function getEnlargedImageProcessor()
+    public function getOriginalImageProcessor()
     {
-        $commandSequence = $this->getMasterFactory()->getEnlargedImageProcessorCommandSequence();
-        $fileStorage = $this->getMasterFactory()->getEnlargedImageFileStorage();
+        $commandSequence = $this->getMasterFactory()->getOriginalImageProcessorCommandSequence();
+        $fileStorage = $this->getMasterFactory()->getOriginalImageFileStorage();
 
         return new ImageProcessor($commandSequence, $fileStorage);
     }
@@ -88,7 +88,7 @@ class SampleFactory implements Factory
     /**
      * @return StaticFile
      */
-    public function getEnlargedImageFileStorage()
+    public function getOriginalImageFileStorage()
     {
         return $this->createLocalImage(
             __DIR__ . '/../tests/shared-fixture',
@@ -99,7 +99,7 @@ class SampleFactory implements Factory
     /**
      * @return ImageProcessorCommandSequence
      */
-    public function getEnlargedImageProcessorCommandSequence()
+    public function getOriginalImageProcessorCommandSequence()
     {
         return new ImageProcessorCommandSequence();
     }
