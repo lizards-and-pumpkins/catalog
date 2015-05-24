@@ -23,8 +23,11 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubDataPoolReader;
+    private $mockDataPoolReader;
 
+    /**
+     * @var string
+     */
     private $testUrlPathKey = 'stub-meta-info-key';
 
     /**
@@ -46,7 +49,10 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
      * @var PageBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubPageBuilder;
-    
+
+    /**
+     * @var string
+     */
     private $testProductId = '123';
 
     protected function setUp()
@@ -57,13 +63,13 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
             'root-snippet-code',
             ['child-snippet1']
         )->getInfo());
-        $this->stubDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
+        $this->mockDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
         $this->stubContext = $this->getMock(Context::class);
         $this->stubPageBuilder = $this->getMock(PageBuilder::class, [], [], '', false);
         $this->requestHandler = new ProductDetailViewRequestHandler(
             $this->testUrlPathKey,
             $this->stubContext,
-            $this->stubDataPoolReader,
+            $this->mockDataPoolReader,
             $this->stubPageBuilder
         );
     }
@@ -82,7 +88,7 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
     public function itShouldReturnFalseIfThePageMetaInfoContentSnippetCanNotBeLoaded()
     {
         $exception = new KeyNotFoundException();
-        $this->stubDataPoolReader->expects($this->any())->method('getSnippet')->willThrowException($exception);
+        $this->mockDataPoolReader->method('getSnippet')->willThrowException($exception);
         $this->assertFalse($this->requestHandler->canProcess());
     }
 
@@ -91,7 +97,7 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnTrueIfThePageMetaInfoContentSnippetCanBeLoaded()
     {
-        $this->stubDataPoolReader->method('getSnippet')->willReturnMap([
+        $this->mockDataPoolReader->method('getSnippet')->willReturnMap([
             [$this->testMetaInfoKey, $this->testMetaInfoSnippetJson]
         ]);
         $this->assertTrue($this->requestHandler->canProcess());
@@ -112,7 +118,7 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldCreateAPageMetaInfoSnippet()
     {
-        $this->stubDataPoolReader->method('getSnippet')->willReturnMap([
+        $this->mockDataPoolReader->method('getSnippet')->willReturnMap([
             [$this->testMetaInfoKey, $this->testMetaInfoSnippetJson]
         ]);
 
@@ -130,7 +136,7 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnAPage()
     {
-        $this->stubDataPoolReader->method('getSnippet')->willReturnMap([
+        $this->mockDataPoolReader->method('getSnippet')->willReturnMap([
             [$this->testMetaInfoKey, $this->testMetaInfoSnippetJson]
         ]);
         $this->stubPageBuilder->method('buildPage')->with(
