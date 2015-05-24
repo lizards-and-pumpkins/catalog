@@ -11,7 +11,7 @@ class ImageProcessorCollection
 
     public function add(ImageProcessor $processor)
     {
-        array_push($this->processors, $processor);
+        $this->processors[] = $processor;
     }
 
     /**
