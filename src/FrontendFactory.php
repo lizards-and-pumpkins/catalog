@@ -84,9 +84,9 @@ class FrontendFactory implements Factory
     {
         return new ProductListingRequestHandlerBuilder(
             $this->getMasterFactory()->createUrlPathKeyGenerator(),
-            $this->getMasterFactory()->getSnippetKeyGeneratorLocator(),
             $this->getMasterFactory()->createDataPoolReader(),
-            $this->getMasterFactory()->getLogger()
+            $this->getMasterFactory()->createPageBuilder(),
+            $this->getMasterFactory()->getSnippetKeyGeneratorLocator()
         );
     }
 

@@ -5,9 +5,7 @@ namespace Brera\Product;
 use Brera\Context\Context;
 use Brera\Http\HttpUrl;
 use Brera\DataPool\DataPoolReader;
-use Brera\Logger;
 use Brera\PageBuilder;
-use Brera\SnippetKeyGeneratorLocator;
 use Brera\UrlPathKeyGenerator;
 
 /**
@@ -19,7 +17,7 @@ class ProductDetailViewRequestHandlerBuilderTest extends \PHPUnit_Framework_Test
     /**
      * @var ProductDetailViewRequestHandlerBuilder
      */
-    private $handlerBuilder;
+    private $builder;
 
     public function setUp()
     {
@@ -27,7 +25,7 @@ class ProductDetailViewRequestHandlerBuilderTest extends \PHPUnit_Framework_Test
         $stubDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
         $stubPageBuilder = $this->getMock(PageBuilder::class, [], [], '', false);
         
-        $this->handlerBuilder = new ProductDetailViewRequestHandlerBuilder(
+        $this->builder = new ProductDetailViewRequestHandlerBuilder(
             $stubUrlPathKeyGenerator,
             $stubDataPoolReader,
             $stubPageBuilder
@@ -42,7 +40,7 @@ class ProductDetailViewRequestHandlerBuilderTest extends \PHPUnit_Framework_Test
         $stubUrl = $this->getMock(HttpUrl::class, [], [], '', false);
         $stubContext = $this->getMock(Context::class);
 
-        $result = $this->handlerBuilder->create($stubUrl, $stubContext);
+        $result = $this->builder->create($stubUrl, $stubContext);
 
         $this->assertInstanceOf(ProductDetailViewRequestHandler::class, $result);
     }

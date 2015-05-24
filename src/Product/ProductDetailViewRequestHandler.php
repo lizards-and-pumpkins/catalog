@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Brera\Product;
 
 use Brera\Context\Context;
@@ -84,11 +83,10 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
     private function loadPageMetaInfoSnippet()
     {
         if (is_null($this->pageMetaInfo)) {
+            $this->pageMetaInfo = false;
             $json = $this->getPageMetaInfoJsonIfExists();
             if ($json) {
                 $this->pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::fromJson($json);
-            } else {
-                $this->pageMetaInfo = false;
             }
         }
     }
