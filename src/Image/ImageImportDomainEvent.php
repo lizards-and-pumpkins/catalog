@@ -9,14 +9,14 @@ class ImageImportDomainEvent implements DomainEvent
     /**
      * @var string
      */
-    private $image;
+    private $imageFilename;
 
     /**
-     * @param string $image
+     * @param string $imageFilename
      */
-    public function __construct($image)
+    public function __construct($imageFilename)
     {
-        $this->image = $image;
+        $this->imageFilename = $imageFilename;
     }
 
     /**
@@ -24,6 +24,6 @@ class ImageImportDomainEvent implements DomainEvent
      */
     public function getImage()
     {
-        return $this->image;
+        return $this->imageFilename;
     }
 }
