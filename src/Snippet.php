@@ -2,7 +2,7 @@
 
 namespace Brera;
 
-class SnippetResult
+class Snippet
 {
     const KEY_PATTERN = '#^[a-zA-Z0-9:_\-]+$#';
     
@@ -19,14 +19,12 @@ class SnippetResult
     /**
      * @param string $key
      * @param string $content
-     * @return SnippetResult
+     * @return Snippet
      */
     public static function create($key, $content)
     {
         if (!is_string($key) || !preg_match(self::KEY_PATTERN, $key)) {
-            throw new InvalidKeyException(
-                sprintf('Key "%s" is invalid.', (is_scalar($key) ? $key : gettype($key)))
-            );
+            throw new InvalidKeyException(sprintf('Key "%s" is invalid.', (is_scalar($key) ? $key : gettype($key))));
         }
 
         return new self($key, (string) $content);

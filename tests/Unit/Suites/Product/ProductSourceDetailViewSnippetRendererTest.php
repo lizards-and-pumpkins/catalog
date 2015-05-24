@@ -5,13 +5,13 @@ namespace Brera\Product;
 use Brera\Context\ContextSource;
 use Brera\SampleContextSource;
 use Brera\Context\Context;
-use Brera\SnippetResultList;
+use Brera\SnippetList;
 use Brera\ProjectionSourceData;
 use Brera\SnippetRenderer;
 
 /**
  * @covers \Brera\Product\ProductSourceDetailViewSnippetRenderer
- * @uses   \Brera\SnippetResult
+ * @uses   \Brera\Snippet
  * @uses   \Brera\Product\Block\ProductDetailsPageBlock
  * @uses   \Brera\Renderer\LayoutReader
  * @uses   \Brera\Renderer\Block
@@ -26,9 +26,9 @@ class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_Test
     private $productSourceSnippetRenderer;
 
     /**
-     * @var SnippetResultList|\PHPUnit_Framework_MockObject_MockObject
+     * @var SnippetList|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockSnippetResultList;
+    private $mockSnippetList;
 
     /**
      * @var SampleContextSource|\PHPUnit_Framework_MockObject_MockObject
@@ -47,19 +47,19 @@ class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_Test
 
     protected function setUp()
     {
-        $this->mockSnippetResultList = $this->getMock(SnippetResultList::class);
+        $this->mockSnippetList = $this->getMock(SnippetList::class);
         $rendererClass = ProductDetailViewInContextSnippetRenderer::class;
         $this->mockProductDetailViewInContextRenderer = $this->getMock($rendererClass, [], [], '', false);
         $this->mockProductDetailViewInContextRenderer->expects($this->any())
             ->method('render')
-            ->willReturn($this->mockSnippetResultList);
+            ->willReturn($this->mockSnippetList);
         $this->mockProductDetailViewInContextRenderer->expects($this->any())
             ->method('getUsedContextParts')
             ->willReturn(['version']);
         
 
         $this->productSourceSnippetRenderer = new ProductSourceDetailViewSnippetRenderer(
-            $this->mockSnippetResultList,
+            $this->mockSnippetList,
             $this->mockProductDetailViewInContextRenderer
         );
 
@@ -96,12 +96,12 @@ class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_Test
     /**
      * @test
      */
-    public function itShouldReturnASnippetResultList()
+    public function itShouldReturnASnippetList()
     {
         $stubProductSource = $this->getStubProductSource();
 
         $result = $this->productSourceSnippetRenderer->render($stubProductSource, $this->stubContextSource);
-        $this->assertSame($this->mockSnippetResultList, $result);
+        $this->assertSame($this->mockSnippetList, $result);
     }
 
     /**
@@ -111,9 +111,9 @@ class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_Test
     {
         $stubProductSource = $this->getStubProductSource();
 
-        $this->mockSnippetResultList->expects($this->atLeastOnce())
+        $this->mockSnippetList->expects($this->atLeastOnce())
             ->method('merge')
-            ->with($this->isInstanceOf(SnippetResultList::class));
+            ->with($this->isInstanceOf(SnippetList::class));
 
         $this->productSourceSnippetRenderer->render($stubProductSource, $this->stubContextSource);
     }
@@ -132,7 +132,7 @@ class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_Test
             ->willReturn($contextParts);
         $mockProductDetailViewInContextRenderer->expects($this->atLeastOnce())
             ->method('render')
-            ->willReturn($this->mockSnippetResultList);
+            ->willReturn($this->mockSnippetList);
         
         $mockContextSource = $this->getMockBuilder(ContextSource::class)
             ->disableOriginalConstructor()
@@ -144,7 +144,7 @@ class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_Test
             ->willReturn([$this->getMock(Context::class)]);
         
         $productSourceSnippetRenderer = new ProductSourceDetailViewSnippetRenderer(
-            $this->mockSnippetResultList,
+            $this->mockSnippetList,
             $mockProductDetailViewInContextRenderer
         );
 

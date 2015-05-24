@@ -4,11 +4,11 @@ namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\SnippetKeyGenerator;
-use Brera\SnippetResultList;
+use Brera\SnippetList;
 
 /**
  * @covers \Brera\Product\ProductInListingInContextSnippetRenderer
- * @uses   \Brera\SnippetResult
+ * @uses   \Brera\Snippet
  */
 class ProductInListingInContextSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,9 +20,9 @@ class ProductInListingInContextSnippetRendererTest extends \PHPUnit_Framework_Te
     private $renderer;
 
     /**
-     * @var SnippetResultList|\PHPUnit_Framework_MockObject_MockObject
+     * @var SnippetList|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockSnippetResultList;
+    private $mockSnippetList;
 
     /**
      * @var ProductInListingBlockRenderer||\PHPUnit_Framework_MockObject_MockObject
@@ -48,7 +48,7 @@ class ProductInListingInContextSnippetRendererTest extends \PHPUnit_Framework_Te
 
     protected function setUp()
     {
-        $this->mockSnippetResultList = $this->getMock(SnippetResultList::class);
+        $this->mockSnippetList = $this->getMock(SnippetList::class);
 
         $this->stubProductInListingBlockRenderer = $this->getMockBuilder(ProductInListingBlockRenderer::class)
             ->disableOriginalConstructor()
@@ -66,7 +66,7 @@ class ProductInListingInContextSnippetRendererTest extends \PHPUnit_Framework_Te
         $this->mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
 
         $this->renderer = new ProductInListingInContextSnippetRenderer(
-            $this->mockSnippetResultList,
+            $this->mockSnippetList,
             $this->stubProductInListingBlockRenderer,
             $this->mockSnippetKeyGenerator
         );
@@ -81,7 +81,7 @@ class ProductInListingInContextSnippetRendererTest extends \PHPUnit_Framework_Te
             ->method('getKeyForContext')
             ->willReturn('stub-content-key');
         
-        $this->mockSnippetResultList->expects($this->once())->method('add');
+        $this->mockSnippetList->expects($this->once())->method('add');
 
         $stubProduct = $this->getStubProduct();
         $stubContext = $this->getMock(Context::class, [], [], '', false);
