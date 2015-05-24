@@ -8,6 +8,24 @@ namespace Brera\Image;
 class ImageProcessorCommandSequenceTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var ImageProcessorCommandSequence
+     */
+    private $commandSequence;
+
+    protected function setUp()
+    {
+        $this->commandSequence = new ImageProcessorCommandSequence();
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldImplementImageProcessorCommandInterface()
+    {
+        $this->assertInstanceOf(ImageProcessorCommand::class, $this->commandSequence);
+    }
+
+    /**
      * @test
      */
     public function itShouldExecuteAllCommandsOfSequence()
@@ -19,10 +37,9 @@ class ImageProcessorCommandSequenceTest extends \PHPUnit_Framework_TestCase
         $mockCommand2->expects($this->once())
             ->method('execute');
 
-        $commandSequence = new ImageProcessorCommandSequence();
-        $commandSequence->addCommand($mockCommand1);
-        $commandSequence->addCommand($mockCommand2);
+        $this->commandSequence->addCommand($mockCommand1);
+        $this->commandSequence->addCommand($mockCommand2);
 
-        $commandSequence->process('imageFilename');
+        $this->commandSequence->execute('imageBinaryData');
     }
 }

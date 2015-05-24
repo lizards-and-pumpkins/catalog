@@ -27,9 +27,9 @@ class ImageProcessor
      */
     public function process($imageFileName)
     {
-        $imageStream = $this->fileStorage->getFileContents($imageFileName);
+        $imageBinaryData = $this->fileStorage->getFileContents($imageFileName);
 
-        $processedImageStream = $this->commandSequence->process($imageStream);
+        $processedImageStream = $this->commandSequence->execute($imageBinaryData);
 
         $this->fileStorage->putFileContents($imageFileName, $processedImageStream);
     }

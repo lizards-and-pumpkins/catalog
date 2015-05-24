@@ -2,7 +2,7 @@
 
 namespace Brera\Image;
 
-class ImageProcessorCommandSequence
+class ImageProcessorCommandSequence implements ImageProcessorCommand
 {
     /**
      * @var ImageProcessorCommand[]
@@ -15,13 +15,13 @@ class ImageProcessorCommandSequence
     }
 
     /**
-     * @param string $imageStream
+     * @param string $imageBinaryData
      * @return string
      */
-    public function process($imageStream)
+    public function execute($imageBinaryData)
     {
-        return array_reduce($this->commands, function ($carryImageStream, ImageProcessorCommand $command) {
-            return $command->execute($carryImageStream);
-        }, $imageStream);
+        return array_reduce($this->commands, function ($carryImageBinaryData, ImageProcessorCommand $command) {
+            return $command->execute($carryImageBinaryData);
+        }, $imageBinaryData);
     }
 }

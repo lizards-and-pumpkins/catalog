@@ -18,7 +18,7 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
 
         $mockCommandSequence = $this->getMock(ImageProcessorCommandSequence::class, [], [], '', false);
         $mockCommandSequence->expects($this->once())
-            ->method('process');
+            ->method('execute');
 
         $mockFileStorage = $this->getMock(StaticFile::class);
         $mockFileStorage->expects($this->once())
