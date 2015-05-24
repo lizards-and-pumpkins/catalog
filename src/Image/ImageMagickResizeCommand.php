@@ -17,20 +17,20 @@ class ImageMagickResizeCommand implements ImageProcessorCommand
     }
 
     /**
-     * @param string $imageStream
+     * @param string $binaryImageData
      * @return string
-     * @throws InvalidImageStreamException
+     * @throws InvalidBinaryImageDataException
      */
-    public function execute($imageStream)
+    public function execute($binaryImageData)
     {
         $this->validateImageDimensions();
 
         $imagick = new \Imagick();
 
         try {
-            $imagick->readImageBlob($imageStream);
+            $imagick->readImageBlob($binaryImageData);
         } catch (\ImagickException $e) {
-            throw new InvalidImageStreamException($e->getMessage());
+            throw new InvalidBinaryImageDataException($e->getMessage());
         }
 
         $imagick->resizeImage($this->width, $this->height, \Imagick::FILTER_LANCZOS, 1);

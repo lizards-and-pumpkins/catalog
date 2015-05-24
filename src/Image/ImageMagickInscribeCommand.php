@@ -24,10 +24,10 @@ class ImageMagickInscribeCommand implements ImageProcessorCommand
     }
 
     /**
-     * @param string $imageStream
+     * @param string $binaryImageData
      * @return string
      */
-    public function execute($imageStream)
+    public function execute($binaryImageData)
     {
         $this->validateImageDimensions();
         $this->validateBackgroundColor();
@@ -35,9 +35,9 @@ class ImageMagickInscribeCommand implements ImageProcessorCommand
         $image = new \Imagick();
 
         try {
-            $image->readImageBlob($imageStream);
+            $image->readImageBlob($binaryImageData);
         } catch (\ImagickException $e) {
-            throw new InvalidImageStreamException($e->getMessage());
+            throw new InvalidBinaryImageDataException($e->getMessage());
         }
 
         $image->resizeImage($this->width, $this->height, \Imagick::FILTER_LANCZOS, 1, true);

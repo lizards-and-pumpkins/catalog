@@ -5,8 +5,8 @@ namespace Brera\Image;
 interface ImageProcessorCommand
 {
     /**
-     * @param string $imageStream
+     * @param string $binaryImageData
      * @return string
      */
-    public function execute($imageStream);
+    public function execute($binaryImageData);
 }

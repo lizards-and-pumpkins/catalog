@@ -17,36 +17,36 @@ class GdResizeCommand implements ImageProcessorCommand
     }
 
     /**
-     * @param string $imageStream
+     * @param string $binaryImageData
      * @return string
      */
-    public function execute($imageStream)
+    public function execute($binaryImageData)
     {
         $this->validateImageDimensions();
 
-        $imageInfo = $this->getImageInfo($imageStream);
+        $imageInfo = $this->getImageInfo($binaryImageData);
 
         $this->validateImageType($imageInfo);
 
-        $image = imagecreatefromstring($imageStream);
+        $image = imagecreatefromstring($binaryImageData);
         $resultImage = imagecreatetruecolor($this->width, $this->height);
 
         imagecopyresampled($resultImage, $image, 0, 0, 0, 0, $this->width, $this->height, $imageInfo[0], $imageInfo[1]);
 
-        return $this->getOutputImageStream($resultImage, $imageInfo);
+        return $this->getBinaryImageOutput($resultImage, $imageInfo);
     }
 
     /**
-     * @param string $imageStream
+     * @param string $binaryImageData
      * @return mixed[]
-     * @throws InvalidImageStreamException
+     * @throws InvalidBinaryImageDataException
      */
-    private function getImageInfo($imageStream)
+    private function getImageInfo($binaryImageData)
     {
-        $imageInfo = @getimagesizefromstring($imageStream);
+        $imageInfo = @getimagesizefromstring($binaryImageData);
 
         if (false === $imageInfo) {
-            throw new InvalidImageStreamException();
+            throw new InvalidBinaryImageDataException();
         }
 
         return $imageInfo;
@@ -63,14 +63,14 @@ class GdResizeCommand implements ImageProcessorCommand
 
     /**
      * @param mixed[] $imageInfo
-     * @throws InvalidImageStreamException
+     * @throws InvalidBinaryImageDataException
      */
     private function validateImageType(array $imageInfo)
     {
         $saveFunctionName = $this->getSaveFunctionName($imageInfo);
 
         if (!function_exists($saveFunctionName)) {
-            throw new InvalidImageStreamException();
+            throw new InvalidBinaryImageDataException();
         }
     }
 
@@ -79,15 +79,15 @@ class GdResizeCommand implements ImageProcessorCommand
      * @param mixed[] $imageInfo
      * @return string
      */
-    private function getOutputImageStream($image, array $imageInfo)
+    private function getBinaryImageOutput($image, array $imageInfo)
     {
         $saveFunctionName = $this->getSaveFunctionName($imageInfo);
 
         ob_start();
         $saveFunctionName($image);
-        $outputImageStream = ob_get_contents();
+        $binaryImageData = ob_get_contents();
         ob_end_clean();
 
-        return $outputImageStream;
+        return $binaryImageData;
     }
 }

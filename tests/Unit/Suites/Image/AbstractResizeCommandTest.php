@@ -60,7 +60,7 @@ abstract class AbstractResizeCommandTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Brera\Image\InvalidImageStreamException
+     * @expectedException \Brera\Image\InvalidBinaryImageDataException
      */
     public function itShouldFailIfImageStreamIsNotValid()
     {
@@ -70,7 +70,7 @@ abstract class AbstractResizeCommandTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Brera\Image\InvalidImageStreamException
+     * @expectedException \Brera\Image\InvalidBinaryImageDataException
      */
     public function itShouldFailIfImageFormatIsNotSupported()
     {
