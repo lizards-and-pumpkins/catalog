@@ -11,7 +11,7 @@ class ImageProcessorCommandSequence
 
     public function addCommand(ImageProcessorCommand $command)
     {
-        array_push($this->commands, $command);
+        $this->commands[] = $command;
     }
 
     /**
