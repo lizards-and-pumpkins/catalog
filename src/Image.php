@@ -30,9 +30,9 @@ class Image
      * @param string $size
      * @return string
      */
-    public function getSrc($size)
+    public function getPath($size)
     {
-        /* TODO: Re-implement without hard-coding project specific image size label into general purpose class */
+        /* TODO: Re-implement w/o putting project specific data (size label, media dir) into general purpose class */
 
         return self::MEDIA_DIR . '/' . $size . '/' . $this->src;
     }
