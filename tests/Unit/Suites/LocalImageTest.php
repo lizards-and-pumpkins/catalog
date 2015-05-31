@@ -54,7 +54,7 @@ class LocalImageTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldImplementStaticFileInterface()
     {
-        $this->assertInstanceOf(StaticFile::class, $this->file);
+        $this->assertInstanceOf(FileStorage::class, $this->file);
     }
 
     /**

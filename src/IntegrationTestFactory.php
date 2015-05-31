@@ -81,7 +81,7 @@ class IntegrationTestFactory implements Factory
     }
 
     /**
-     * @return StaticFile
+     * @return FileStorage
      */
     public function getImageFileStorage()
     {

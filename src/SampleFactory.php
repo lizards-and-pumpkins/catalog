@@ -86,7 +86,7 @@ class SampleFactory implements Factory
     }
 
     /**
-     * @return StaticFile
+     * @return FileStorage
      */
     public function getOriginalImageFileStorage()
     {
@@ -116,7 +116,7 @@ class SampleFactory implements Factory
     }
 
     /**
-     * @return StaticFile
+     * @return FileStorage
      */
     public function getProductDetailsPageImageFileStorage()
     {
@@ -151,7 +151,7 @@ class SampleFactory implements Factory
     }
 
     /**
-     * @return StaticFile
+     * @return FileStorage
      */
     public function getProductListingImageFileStorage()
     {
@@ -186,7 +186,7 @@ class SampleFactory implements Factory
     }
 
     /**
-     * @return StaticFile
+     * @return FileStorage
      */
     public function getGalleyThumbnailImageFileStorage()
     {

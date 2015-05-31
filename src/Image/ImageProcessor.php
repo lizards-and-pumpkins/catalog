@@ -2,7 +2,7 @@
 
 namespace Brera\Image;
 
-use Brera\StaticFile;
+use Brera\FileStorage;
 
 class ImageProcessor
 {
@@ -12,11 +12,11 @@ class ImageProcessor
     private $commandSequence;
 
     /**
-     * @var StaticFile
+     * @var FileStorage
      */
     private $fileStorage;
 
-    public function __construct(ImageProcessorCommandSequence $commandSequence, StaticFile $fileStorage)
+    public function __construct(ImageProcessorCommandSequence $commandSequence, FileStorage $fileStorage)
     {
         $this->commandSequence = $commandSequence;
         $this->fileStorage = $fileStorage;

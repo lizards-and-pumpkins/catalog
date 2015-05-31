@@ -4,7 +4,7 @@ namespace Brera;
 
 use Brera\Utils\FileNotReadableException;
 
-class LocalImage implements StaticFile
+class LocalImage implements FileStorage
 {
     /**
      * @var string

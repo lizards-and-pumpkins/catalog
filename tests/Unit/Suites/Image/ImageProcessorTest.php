@@ -2,7 +2,7 @@
 
 namespace Brera\Image;
 
-use Brera\StaticFile;
+use Brera\FileStorage;
 
 /**
  * @covers \Brera\Image\ImageProcessor
@@ -20,7 +20,7 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
         $mockCommandSequence->expects($this->once())
             ->method('execute');
 
-        $mockFileStorage = $this->getMock(StaticFile::class);
+        $mockFileStorage = $this->getMock(FileStorage::class);
         $mockFileStorage->expects($this->once())
             ->method('getFileContents')
             ->with($dummyImageFilename);
