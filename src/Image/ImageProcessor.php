@@ -2,7 +2,8 @@
 
 namespace Brera\Image;
 
-use Brera\FileStorage;
+use Brera\FileStorageReader;
+use Brera\FileStorageWriter;
 
 class ImageProcessor
 {
@@ -12,14 +13,23 @@ class ImageProcessor
     private $commandSequence;
 
     /**
-     * @var FileStorage
+     * @var FileStorageReader
      */
-    private $fileStorage;
+    private $reader;
 
-    public function __construct(ImageProcessorCommandSequence $commandSequence, FileStorage $fileStorage)
-    {
+    /**
+     * @var FileStorageWriter
+     */
+    private $writer;
+
+    public function __construct(
+        ImageProcessorCommandSequence $commandSequence,
+        FileStorageReader $reader,
+        FileStorageWriter $writer
+    ) {
         $this->commandSequence = $commandSequence;
-        $this->fileStorage = $fileStorage;
+        $this->reader = $reader;
+        $this->writer = $writer;
     }
 
     /**
@@ -27,10 +37,10 @@ class ImageProcessor
      */
     public function process($imageFileName)
     {
-        $imageBinaryData = $this->fileStorage->getFileContents($imageFileName);
+        $imageBinaryData = $this->reader->getFileContents($imageFileName);
 
         $processedImageStream = $this->commandSequence->execute($imageBinaryData);
 
-        $this->fileStorage->putFileContents($imageFileName, $processedImageStream);
+        $this->writer->putFileContents($imageFileName, $processedImageStream);
     }
 }

@@ -80,20 +80,29 @@ class SampleFactory implements Factory
     public function getOriginalImageProcessor()
     {
         $commandSequence = $this->getMasterFactory()->getOriginalImageProcessorCommandSequence();
-        $fileStorage = $this->getMasterFactory()->getOriginalImageFileStorage();
+        $fileStorageReader = $this->getMasterFactory()->getOriginalImageFileStorageReader();
+        $fileStorageWriter = $this->getMasterFactory()->getOriginalImageFileStorageWriter();
 
-        return new ImageProcessor($commandSequence, $fileStorage);
+        return new ImageProcessor($commandSequence, $fileStorageReader, $fileStorageWriter);
     }
 
     /**
-     * @return FileStorage
+     * @return FileStorageReader
      */
-    public function getOriginalImageFileStorage()
+    public function getOriginalImageFileStorageReader()
     {
-        return $this->createLocalImage(
-            __DIR__ . '/../tests/shared-fixture',
-            __DIR__ . '/../pub/media/product/original'
-        );
+        return new LocalFilesystemStorageReader(__DIR__ . '/../tests/shared-fixture');
+    }
+
+    /**
+     * @return FileStorageWriter
+     */
+    public function getOriginalImageFileStorageWriter()
+    {
+        $resultImageDir = __DIR__ . '/../pub/media/product/original';
+        $this->createDirectoryIfNotExists($resultImageDir);
+
+        return new LocalFilesystemStorageWriter($resultImageDir);
     }
 
     /**
@@ -110,20 +119,29 @@ class SampleFactory implements Factory
     public function getProductDetailsPageImageProcessor()
     {
         $commandSequence = $this->getMasterFactory()->getProductDetailsPageImageProcessorCommandSequence();
-        $fileStorage = $this->getMasterFactory()->getProductDetailsPageImageFileStorage();
+        $fileStorageReader = $this->getMasterFactory()->getProductDetailsPageImageFileStorageReader();
+        $fileStorageWriter = $this->getMasterFactory()->getProductDetailsPageImageFileStorageWriter();
 
-        return new ImageProcessor($commandSequence, $fileStorage);
+        return new ImageProcessor($commandSequence, $fileStorageReader, $fileStorageWriter);
     }
 
     /**
-     * @return FileStorage
+     * @return FileStorageReader
      */
-    public function getProductDetailsPageImageFileStorage()
+    public function getProductDetailsPageImageFileStorageReader()
     {
-        return $this->createLocalImage(
-            __DIR__ . '/../tests/shared-fixture',
-            __DIR__ . '/../pub/media/product/large'
-        );
+        return new LocalFilesystemStorageReader(__DIR__ . '/../tests/shared-fixture');
+    }
+
+    /**
+     * @return FileStorageWriter
+     */
+    public function getProductDetailsPageImageFileStorageWriter()
+    {
+        $resultImageDir = __DIR__ . '/../pub/media/product/large';
+        $this->createDirectoryIfNotExists($resultImageDir);
+
+        return new LocalFilesystemStorageWriter($resultImageDir);
     }
 
     /**
@@ -145,20 +163,29 @@ class SampleFactory implements Factory
     public function getProductListingImageProcessor()
     {
         $commandSequence = $this->getMasterFactory()->getProductListingImageProcessorCommandSequence();
-        $fileStorage = $this->getMasterFactory()->getProductListingImageFileStorage();
+        $fileStorageReader = $this->getMasterFactory()->getProductListingImageFileStorageReader();
+        $fileStorageWriter = $this->getMasterFactory()->getProductListingImageFileStorageWriter();
 
-        return new ImageProcessor($commandSequence, $fileStorage);
+        return new ImageProcessor($commandSequence, $fileStorageReader, $fileStorageWriter);
     }
 
     /**
-     * @return FileStorage
+     * @return FileStorageReader
      */
-    public function getProductListingImageFileStorage()
+    public function getProductListingImageFileStorageReader()
     {
-        return $this->createLocalImage(
-            __DIR__ . '/../tests/shared-fixture',
-            __DIR__ . '/../pub/media/product/medium'
-        );
+        return new LocalFilesystemStorageReader(__DIR__ . '/../tests/shared-fixture');
+    }
+
+    /**
+     * @return FileStorageWriter
+     */
+    public function getProductListingImageFileStorageWriter()
+    {
+        $resultImageDir = __DIR__ . '/../pub/media/product/medium';
+        $this->createDirectoryIfNotExists($resultImageDir);
+
+        return new LocalFilesystemStorageWriter($resultImageDir);
     }
 
     /**
@@ -180,20 +207,29 @@ class SampleFactory implements Factory
     public function getGalleyThumbnailImageProcessor()
     {
         $commandSequence = $this->getMasterFactory()->getGalleyThumbnailImageProcessorCommandSequence();
-        $fileStorage = $this->getMasterFactory()->getGalleyThumbnailImageFileStorage();
+        $fileStorageReader = $this->getMasterFactory()->getGalleyThumbnailImageFileStorageReader();
+        $fileStorageWriter = $this->getMasterFactory()->getGalleyThumbnailImageFileStorageWriter();
 
-        return new ImageProcessor($commandSequence, $fileStorage);
+        return new ImageProcessor($commandSequence, $fileStorageReader, $fileStorageWriter);
     }
 
     /**
-     * @return FileStorage
+     * @return FileStorageReader
      */
-    public function getGalleyThumbnailImageFileStorage()
+    public function getGalleyThumbnailImageFileStorageReader()
     {
-        return $this->createLocalImage(
-            __DIR__ . '/../tests/shared-fixture',
-            __DIR__ . '/../pub/media/product/small'
-        );
+        return new LocalFilesystemStorageReader(__DIR__ . '/../tests/shared-fixture');
+    }
+
+    /**
+     * @return FileStorageWriter
+     */
+    public function getGalleyThumbnailImageFileStorageWriter()
+    {
+        $resultImageDir = __DIR__ . '/../pub/media/product/small';
+        $this->createDirectoryIfNotExists($resultImageDir);
+
+        return new LocalFilesystemStorageWriter($resultImageDir);
     }
 
     /**
@@ -217,17 +253,5 @@ class SampleFactory implements Factory
         if (!is_dir($path)) {
             mkdir($path, 0777, true);
         }
-    }
-
-    /**
-     * @param string $resultImageDir
-     * @param string $originalImageDir
-     * @return LocalImage
-     */
-    private function createLocalImage($resultImageDir, $originalImageDir)
-    {
-        $this->createDirectoryIfNotExists($resultImageDir);
-
-        return new LocalImage($originalImageDir, $resultImageDir);
     }
 }

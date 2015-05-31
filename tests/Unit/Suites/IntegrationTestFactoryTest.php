@@ -10,7 +10,8 @@ use Brera\Image\ImageProcessorCommandSequence;
 use Brera\IntegrationTestFactory;
 use Brera\InMemoryLogger;
 use Brera\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
-use Brera\LocalImage;
+use Brera\LocalFilesystemStorageReader;
+use Brera\LocalFilesystemStorageWriter;
 use Brera\PoCMasterFactory;
 use Brera\Queue\InMemory\InMemoryQueue;
 use Brera\Utils\LocalFilesystem;
@@ -24,7 +25,8 @@ use Brera\Utils\LocalFilesystem;
  * @uses   \Brera\Image\ImageProcessorCollection
  * @uses   \Brera\Image\ImageProcessorCommandSequence
  * @uses   \Brera\InMemoryLogger
- * @uses   \Brera\LocalImage
+ * @uses   \Brera\LocalFilesystemStorageReader
+ * @uses   \Brera\LocalFilesystemStorageWriter
  * @uses   \Brera\MasterFactoryTrait
  * @uses   \Brera\Queue\InMemory\InMemoryQueue
  * @uses   \Brera\Utils\LocalFilesystem
@@ -78,9 +80,17 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldCreateImageFileStorage()
+    public function itShouldCreateLocalFilesystemStorageWriter()
     {
-        $this->assertInstanceOf(LocalImage::class, $this->factory->getImageFileStorage());
+        $this->assertInstanceOf(LocalFilesystemStorageWriter::class, $this->factory->getImageFileStorageWriter());
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldCreateLocalFilesystemStorageReader()
+    {
+        $this->assertInstanceOf(LocalFilesystemStorageReader::class, $this->factory->getImageFileStorageReader());
     }
 
     /**
@@ -92,7 +102,7 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
 
         (new LocalFilesystem())->removeDirectoryAndItsContent($resultImageDir);
 
-        $this->factory->getImageFileStorage();
+        $this->factory->getImageFileStorageWriter();
 
         $this->assertTrue(is_dir($resultImageDir));
     }

@@ -2,7 +2,8 @@
 
 namespace Brera\Image;
 
-use Brera\FileStorage;
+use Brera\FileStorageReader;
+use Brera\FileStorageWriter;
 
 /**
  * @covers \Brera\Image\ImageProcessor
@@ -20,14 +21,17 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
         $mockCommandSequence->expects($this->once())
             ->method('execute');
 
-        $mockFileStorage = $this->getMock(FileStorage::class);
-        $mockFileStorage->expects($this->once())
+        $mockFileStorageReader = $this->getMock(FileStorageReader::class);
+        $mockFileStorageReader->expects($this->once())
             ->method('getFileContents')
             ->with($dummyImageFilename);
-        $mockFileStorage->expects($this->once())
+
+        $mockFileStorageWriter = $this->getMock(FileStorageWriter::class);
+        $mockFileStorageWriter->expects($this->once())
             ->method('putFileContents')
             ->with($dummyImageFilename);
 
-        (new ImageProcessor($mockCommandSequence, $mockFileStorage))->process($dummyImageFilename);
+        $imageProcessor = new ImageProcessor($mockCommandSequence, $mockFileStorageReader, $mockFileStorageWriter);
+        $imageProcessor->process($dummyImageFilename);
     }
 }

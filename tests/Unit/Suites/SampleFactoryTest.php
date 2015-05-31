@@ -7,7 +7,8 @@ use Brera\DataPool\SearchEngine\FileSearchEngine;
 use Brera\Image\ImageProcessor;
 use Brera\Image\ImageProcessorCollection;
 use Brera\Image\ImageProcessorCommandSequence;
-use Brera\LocalImage;
+use Brera\LocalFilesystemStorageReader;
+use Brera\LocalFilesystemStorageWriter;
 use Brera\PoCMasterFactory;
 use Brera\SampleFactory;
 use Brera\InMemoryLogger;
@@ -24,7 +25,8 @@ use Brera\Queue\InMemory\InMemoryQueue;
  * @uses   \Brera\Image\ImageProcessor
  * @uses   \Brera\Image\ImageProcessorCollection
  * @uses   \Brera\Image\ImageProcessorCommandSequence
- * @uses   \Brera\LocalImage
+ * @uses   \Brera\LocalFilesystemStorageReader
+ * @uses   \Brera\LocalFilesystemStorageWriter
  * @uses   \Brera\MasterFactoryTrait
  */
 class SampleFactoryTest extends \PHPUnit_Framework_TestCase
@@ -100,9 +102,23 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldCreateEnlargedImageFileStorage()
+    public function itShouldCreateOriginalImageFileStorageReader()
     {
-        $this->assertInstanceOf(LocalImage::class, $this->factory->getOriginalImageFileStorage());
+        $this->assertInstanceOf(
+            LocalFilesystemStorageReader::class,
+            $this->factory->getOriginalImageFileStorageReader()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldCreateOriginalImageFileStorageWriter()
+    {
+        $this->assertInstanceOf(
+            LocalFilesystemStorageWriter::class,
+            $this->factory->getOriginalImageFileStorageWriter()
+        );
     }
 
     /**
@@ -127,9 +143,23 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldCreateProductDetailsPageImageFileStorage()
+    public function itShouldCreateProductDetailsPageImageFileStorageReader()
     {
-        $this->assertInstanceOf(LocalImage::class, $this->factory->getProductDetailsPageImageFileStorage());
+        $this->assertInstanceOf(
+            LocalFilesystemStorageReader::class,
+            $this->factory->getProductDetailsPageImageFileStorageReader()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldCreateProductDetailsPageImageFileStorageWriter()
+    {
+        $this->assertInstanceOf(
+            LocalFilesystemStorageWriter::class,
+            $this->factory->getProductDetailsPageImageFileStorageWriter()
+        );
     }
 
     /**
@@ -154,9 +184,23 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldCreateProductListingImageFileStorage()
+    public function itShouldCreateProductListingImageFileStorageReader()
     {
-        $this->assertInstanceOf(LocalImage::class, $this->factory->getProductListingImageFileStorage());
+        $this->assertInstanceOf(
+            LocalFilesystemStorageReader::class,
+            $this->factory->getProductListingImageFileStorageReader()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldCreateProductListingImageFileStorageWriter()
+    {
+        $this->assertInstanceOf(
+            LocalFilesystemStorageWriter::class,
+            $this->factory->getProductListingImageFileStorageWriter()
+        );
     }
 
     /**
@@ -181,9 +225,23 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldCreateGalleyThumbnailImageFileStorage()
+    public function itShouldCreateGalleyThumbnailImageFileStorageReader()
     {
-        $this->assertInstanceOf(LocalImage::class, $this->factory->getGalleyThumbnailImageFileStorage());
+        $this->assertInstanceOf(
+            LocalFilesystemStorageReader::class,
+            $this->factory->getGalleyThumbnailImageFileStorageReader()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldCreateGalleyThumbnailImageFileStorageWriter()
+    {
+        $this->assertInstanceOf(
+            LocalFilesystemStorageWriter::class,
+            $this->factory->getGalleyThumbnailImageFileStorageWriter()
+        );
     }
 
     /**

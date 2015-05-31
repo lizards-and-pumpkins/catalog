@@ -75,24 +75,32 @@ class IntegrationTestFactory implements Factory
     public function getImageProcessor()
     {
         $commandSequence = $this->getMasterFactory()->getImageProcessorCommandSequence();
-        $fileStorage = $this->getMasterFactory()->getImageFileStorage();
+        $fileStorageReader = $this->getMasterFactory()->getImageFileStorageReader();
+        $fileStorageWriter = $this->getMasterFactory()->getImageFileStorageWriter();
 
-        return new ImageProcessor($commandSequence, $fileStorage);
+        return new ImageProcessor($commandSequence, $fileStorageReader, $fileStorageWriter);
     }
 
     /**
-     * @return FileStorage
+     * @return FileStorageReader
      */
-    public function getImageFileStorage()
+    public function getImageFileStorageReader()
     {
-        $originalImageDir = __DIR__ . '/../tests/shared-fixture';
+        return new LocalFilesystemStorageReader(__DIR__ . '/../tests/shared-fixture');
+    }
+
+    /**
+     * @return FileStorageWriter
+     */
+    public function getImageFileStorageWriter()
+    {
         $resultImageDir = sys_get_temp_dir() . '/' . self::PROCESSED_IMAGES_DIR;
 
         if (!is_dir($resultImageDir)) {
             mkdir($resultImageDir, 0777, true);
         }
 
-        return new LocalImage($originalImageDir, $resultImageDir);
+        return new LocalFilesystemStorageWriter($resultImageDir);
     }
 
     /**

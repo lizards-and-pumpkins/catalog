@@ -65,7 +65,8 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Image\ImageProcessor
  * @uses   \Brera\Image\ImageProcessorCollection
  * @uses   \Brera\Image\ImageProcessorCommandSequence
- * @uses   \Brera\LocalImage
+ * @uses   \Brera\LocalFilesystemStorageReader
+ * @uses   \Brera\LocalFilesystemStorageWriter
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {

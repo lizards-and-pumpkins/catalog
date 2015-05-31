@@ -26,7 +26,7 @@ class LocalFilesystemStorageReader implements FileStorageReader
     public function getFileContents($relativeFilePath)
     {
         $filePath = $this->getAbsoluteFilePath($relativeFilePath);
-        $this->checkFileIsReadable($filePath);
+        $this->checkIfFileIsReadable($filePath);
 
         return file_get_contents($filePath);
     }
@@ -37,15 +37,14 @@ class LocalFilesystemStorageReader implements FileStorageReader
      */
     private function getAbsoluteFilePath($relativeFilePath)
     {
-        $filePath = $this->baseDirPath . '/' . $relativeFilePath;
-        return $filePath;
+        return $this->baseDirPath . '/' . $relativeFilePath;
     }
 
     /**
      * @param string $filePath
      * @throws FileNotReadableException
      */
-    private function checkFileIsReadable($filePath)
+    private function checkIfFileIsReadable($filePath)
     {
         if (!is_file($filePath)) {
             throw new FileNotReadableException(sprintf('Can not read %s file', $filePath));

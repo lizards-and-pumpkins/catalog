@@ -5,8 +5,8 @@ namespace Brera;
 interface FileStorageReader
 {
     /**
-     * @param string $fileName
+     * @param string $relativeFilePath
      * @return string
      */
-    public function getFileContents($fileName);
+    public function getFileContents($relativeFilePath);
 }
