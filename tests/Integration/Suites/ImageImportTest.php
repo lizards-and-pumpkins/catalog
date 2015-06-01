@@ -64,7 +64,9 @@ class ImageImportTest extends \PHPUnit_Framework_TestCase
     {
         $localFilesystem = new LocalFilesystem();
         $processedImagesDir = sys_get_temp_dir() . '/' . IntegrationTestFactory::PROCESSED_IMAGES_DIR;
-        $localFilesystem->removeDirectoryAndItsContent($processedImagesDir);
+        if (is_dir($processedImagesDir)) {
+            $localFilesystem->removeDirectoryAndItsContent($processedImagesDir);
+        }
         mkdir($processedImagesDir);
     }
 }
