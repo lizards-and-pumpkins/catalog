@@ -9,6 +9,7 @@ use Brera\Product\ProductListingMetaInfoSnippetContent;
 use Brera\Product\ProductListingRequestHandler;
 use Brera\Product\ProductListingSavedDomainEvent;
 use Brera\Product\ProductListingSnippetRenderer;
+use Brera\Utils\XPathParser;
 
 class ProductListingTest extends AbstractIntegrationTest
 {
@@ -75,7 +76,7 @@ class ProductListingTest extends AbstractIntegrationTest
         $page = $productListingRequestHandler->process();
         $body = $page->getBody();
 
-        // @todo: read from XML
+        /* TODO: read from XML */
         $expectedProductName = 'LED Armflasher';
 
         $this->assertContains($expectedProductName, $body);
@@ -90,16 +91,18 @@ class ProductListingTest extends AbstractIntegrationTest
 
     private function addProductImportDomainEventToSetUpProductFixture()
     {
-        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/product.xml');
+        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
         $queue = $this->factory->getEventQueue();
         $queue->add(new CatalogImportDomainEvent($xml));
     }
 
     private function addProductListingCriteriaDomainDomainEventFixture()
     {
-        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing.xml');
+        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
+        $listingNodesRawXml = (new XPathParser($xml))->getXmlNodesRawXmlArrayByXPath('//catalog/listings/listing');
+
         $queue = $this->factory->getEventQueue();
-        $queue->add(new ProductListingSavedDomainEvent($xml));
+        $queue->add(new ProductListingSavedDomainEvent($listingNodesRawXml[0]));
     }
 
     /**

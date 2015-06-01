@@ -8,6 +8,7 @@ use Brera\Queue\Queue;
 /**
  * @covers \Brera\Product\CatalogImportDomainEventHandler
  * @uses   \Brera\Product\ProductImportDomainEvent
+ * @uses   \Brera\Product\ProductListingSavedDomainEvent
  * @uses   \Brera\Image\ImageImportDomainEvent
  * @uses   \Brera\Utils\XPathParser
  */
@@ -25,7 +26,7 @@ class CatalogImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $xml = file_get_contents(__DIR__ . '/../../../shared-fixture/product.xml');
+        $xml = file_get_contents(__DIR__ . '/../../../shared-fixture/catalog.xml');
 
         $mockCatalogImportDomainEvent = $this->getMock(CatalogImportDomainEvent::class, [], [], '', false);
         $mockCatalogImportDomainEvent->expects($this->any())
@@ -52,6 +53,16 @@ class CatalogImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
         $this->catalogImportDomainEventHandler->process();
 
         $this->assertEventWasAddedToAQueue(ProductImportDomainEvent::class);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldEmitProductListingSavedDomainEvents()
+    {
+        $this->catalogImportDomainEventHandler->process();
+
+        $this->assertEventWasAddedToAQueue(ProductListingSavedDomainEvent::class);
     }
 
     /**

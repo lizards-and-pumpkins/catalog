@@ -5,7 +5,6 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use Brera\CommonFactory;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\PoCMasterFactory;
-use Brera\Product\ProductListingSavedDomainEvent;
 use Brera\RootTemplateChangedDomainEvent;
 use Brera\SampleFactory;
 
@@ -18,11 +17,8 @@ $queue = $factory->getEventQueue();
 $xml = file_get_contents(__DIR__ . '/../tests/shared-fixture/product-listing-root-snippet.xml');
 $queue->add(new RootTemplateChangedDomainEvent($xml));
 
-$xml = file_get_contents(__DIR__ . '/../tests/shared-fixture/product.xml');
+$xml = file_get_contents(__DIR__ . '/../tests/shared-fixture/catalog.xml');
 $queue->add(new CatalogImportDomainEvent($xml));
-
-$xml = file_get_contents(__DIR__ . '/../tests/shared-fixture/product-listing.xml');
-$queue->add(new ProductListingSavedDomainEvent($xml));
 
 $consumer = $factory->createDomainEventConsumer();
 $numberOfMessages = 13;
