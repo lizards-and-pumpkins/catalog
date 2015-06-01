@@ -2,9 +2,9 @@
 
 namespace Brera\Image;
 
-class GdResizeCommand implements ImageProcessorCommand
+class GdResizeInstruction implements ImageProcessorInstruction
 {
-    use ResizeCommandTrait;
+    use ResizeInstructionTrait;
 
     /**
      * @param int $width

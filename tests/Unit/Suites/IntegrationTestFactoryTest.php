@@ -6,7 +6,7 @@ namespace Brera\Tests\Integration;
 use Brera\DataPool\SearchEngine\InMemorySearchEngine;
 use Brera\Image\ImageProcessor;
 use Brera\Image\ImageProcessorCollection;
-use Brera\Image\ImageProcessorCommandSequence;
+use Brera\Image\ImageProcessorInstructionSequence;
 use Brera\IntegrationTestFactory;
 use Brera\InMemoryLogger;
 use Brera\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
@@ -20,10 +20,10 @@ use Brera\Utils\LocalFilesystem;
  * @covers \Brera\IntegrationTestFactory
  * @uses   \Brera\DataPool\KeyValue\InMemory\InMemoryKeyValueStore
  * @uses   \Brera\FactoryTrait
- * @uses   \Brera\Image\ImageMagickResizeCommand
+ * @uses   \Brera\Image\ImageMagickResizeInstruction
  * @uses   \Brera\Image\ImageProcessor
  * @uses   \Brera\Image\ImageProcessorCollection
- * @uses   \Brera\Image\ImageProcessorCommandSequence
+ * @uses   \Brera\Image\ImageProcessorInstructionSequence
  * @uses   \Brera\InMemoryLogger
  * @uses   \Brera\LocalFilesystemStorageReader
  * @uses   \Brera\LocalFilesystemStorageWriter
@@ -110,11 +110,11 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldReturnImageProcessorCommandSequence()
+    public function itShouldReturnImageProcessorInstructionSequence()
     {
         $this->assertInstanceOf(
-            ImageProcessorCommandSequence::class,
-            $this->factory->getImageProcessorCommandSequence()
+            ImageProcessorInstructionSequence::class,
+            $this->factory->getImageProcessorInstructionSequence()
         );
     }
 

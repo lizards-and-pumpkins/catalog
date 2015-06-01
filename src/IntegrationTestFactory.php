@@ -4,10 +4,10 @@ namespace Brera;
 
 use Brera\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
 use Brera\DataPool\SearchEngine\InMemorySearchEngine;
-use Brera\Image\ImageMagickResizeCommand;
+use Brera\Image\ImageMagickResizeInstruction;
 use Brera\Image\ImageProcessor;
 use Brera\Image\ImageProcessorCollection;
-use Brera\Image\ImageProcessorCommandSequence;
+use Brera\Image\ImageProcessorInstructionSequence;
 use Brera\Queue\InMemory\InMemoryQueue;
 
 class IntegrationTestFactory implements Factory
@@ -74,11 +74,11 @@ class IntegrationTestFactory implements Factory
      */
     public function getImageProcessor()
     {
-        $commandSequence = $this->getMasterFactory()->getImageProcessorCommandSequence();
+        $instructionSequence = $this->getMasterFactory()->getImageProcessorInstructionSequence();
         $fileStorageReader = $this->getMasterFactory()->getImageFileStorageReader();
         $fileStorageWriter = $this->getMasterFactory()->getImageFileStorageWriter();
 
-        return new ImageProcessor($commandSequence, $fileStorageReader, $fileStorageWriter);
+        return new ImageProcessor($instructionSequence, $fileStorageReader, $fileStorageWriter);
     }
 
     /**
@@ -104,15 +104,18 @@ class IntegrationTestFactory implements Factory
     }
 
     /**
-     * @return ImageProcessorCommandSequence
+     * @return ImageProcessorInstructionSequence
      */
-    public function getImageProcessorCommandSequence()
+    public function getImageProcessorInstructionSequence()
     {
-        $imageResizeCommand = new ImageMagickResizeCommand(self::PROCESSED_IMAGE_WIDTH, self::PROCESSED_IMAGE_HEIGHT);
+        $imageResizeInstruction = new ImageMagickResizeInstruction(
+            self::PROCESSED_IMAGE_WIDTH,
+            self::PROCESSED_IMAGE_HEIGHT
+        );
 
-        $commandSequence = new ImageProcessorCommandSequence();
-        $commandSequence->addCommand($imageResizeCommand);
+        $instructionSequence = new ImageProcessorInstructionSequence();
+        $instructionSequence->addInstruction($imageResizeInstruction);
 
-        return $commandSequence;
+        return $instructionSequence;
     }
 }

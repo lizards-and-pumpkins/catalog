@@ -61,10 +61,10 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Product\ProductSourceInListingSnippetRenderer
  * @uses   \Brera\Product\ProductInListingInContextSnippetRenderer
  * @uses   \Brera\Image\ImageImportDomainEventHandler
- * @uses   \Brera\Image\ImageMagickResizeCommand
+ * @uses   \Brera\Image\ImageMagickResizeInstruction
  * @uses   \Brera\Image\ImageProcessor
  * @uses   \Brera\Image\ImageProcessorCollection
- * @uses   \Brera\Image\ImageProcessorCommandSequence
+ * @uses   \Brera\Image\ImageProcessorInstructionSequence
  * @uses   \Brera\LocalFilesystemStorageReader
  * @uses   \Brera\LocalFilesystemStorageWriter
  */

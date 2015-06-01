@@ -2,9 +2,9 @@
 
 namespace Brera\Image;
 
-class ImageMagickResizeCommand implements ImageProcessorCommand
+class ImageMagickResizeInstruction implements ImageProcessorInstruction
 {
-    use ResizeCommandTrait;
+    use ResizeInstructionTrait;
 
     /**
      * @param int $width

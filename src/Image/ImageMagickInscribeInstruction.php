@@ -2,9 +2,9 @@
 
 namespace Brera\Image;
 
-class ImageMagickInscribeCommand implements ImageProcessorCommand
+class ImageMagickInscribeInstruction implements ImageProcessorInstruction
 {
-    use ResizeCommandTrait;
+    use ResizeInstructionTrait;
 
     /**
      * @var string

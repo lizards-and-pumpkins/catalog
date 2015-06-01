@@ -6,7 +6,7 @@ use Brera\DataPool\KeyValue\File\FileKeyValueStore;
 use Brera\DataPool\SearchEngine\FileSearchEngine;
 use Brera\Image\ImageProcessor;
 use Brera\Image\ImageProcessorCollection;
-use Brera\Image\ImageProcessorCommandSequence;
+use Brera\Image\ImageProcessorInstructionSequence;
 use Brera\LocalFilesystemStorageReader;
 use Brera\LocalFilesystemStorageWriter;
 use Brera\PoCMasterFactory;
@@ -21,10 +21,10 @@ use Brera\Queue\InMemory\InMemoryQueue;
  * @uses   \Brera\DataPool\KeyValue\File\FileKeyValueStore
  * @uses   \Brera\DataPool\SearchEngine\FileSearchEngine
  * @uses   \Brera\Queue\InMemory\InMemoryQueue
- * @uses   \Brera\Image\ImageMagickInscribeCommand
+ * @uses   \Brera\Image\ImageMagickInscribeInstruction
  * @uses   \Brera\Image\ImageProcessor
  * @uses   \Brera\Image\ImageProcessorCollection
- * @uses   \Brera\Image\ImageProcessorCommandSequence
+ * @uses   \Brera\Image\ImageProcessorInstructionSequence
  * @uses   \Brera\LocalFilesystemStorageReader
  * @uses   \Brera\LocalFilesystemStorageWriter
  * @uses   \Brera\MasterFactoryTrait
@@ -124,11 +124,11 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldCreateEnlargedImageProcessorCommandSequence()
+    public function itShouldCreateEnlargedImageProcessorInstructionSequence()
     {
         $this->assertInstanceOf(
-            ImageProcessorCommandSequence::class,
-            $this->factory->getOriginalImageProcessorCommandSequence()
+            ImageProcessorInstructionSequence::class,
+            $this->factory->getOriginalImageProcessorInstructionSequence()
         );
     }
 
@@ -165,11 +165,11 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldCreateProductDetailsPageImageProcessorCommandSequence()
+    public function itShouldCreateProductDetailsPageImageProcessorInstructionSequence()
     {
         $this->assertInstanceOf(
-            ImageProcessorCommandSequence::class,
-            $this->factory->getProductDetailsPageImageProcessorCommandSequence()
+            ImageProcessorInstructionSequence::class,
+            $this->factory->getProductDetailsPageImageProcessorInstructionSequence()
         );
     }
 
@@ -206,11 +206,11 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldCreateProductListingImageProcessorCommandSequence()
+    public function itShouldCreateProductListingImageProcessorInstructionSequence()
     {
         $this->assertInstanceOf(
-            ImageProcessorCommandSequence::class,
-            $this->factory->getProductListingImageProcessorCommandSequence()
+            ImageProcessorInstructionSequence::class,
+            $this->factory->getProductListingImageProcessorInstructionSequence()
         );
     }
 
@@ -247,11 +247,11 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldCreateGalleyThumbnailImageProcessorCommandSequence()
+    public function itShouldCreateGalleyThumbnailImageProcessorInstructionSequence()
     {
         $this->assertInstanceOf(
-            ImageProcessorCommandSequence::class,
-            $this->factory->getGalleyThumbnailImageProcessorCommandSequence()
+            ImageProcessorInstructionSequence::class,
+            $this->factory->getGalleyThumbnailImageProcessorInstructionSequence()
         );
     }
 }

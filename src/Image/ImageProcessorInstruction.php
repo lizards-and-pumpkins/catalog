@@ -2,7 +2,7 @@
 
 namespace Brera\Image;
 
-interface ImageProcessorCommand
+interface ImageProcessorInstruction
 {
     /**
      * @param string $binaryImageData

@@ -17,8 +17,8 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $dummyImageFilename = 'imageFilename';
 
-        $mockCommandSequence = $this->getMock(ImageProcessorCommandSequence::class, [], [], '', false);
-        $mockCommandSequence->expects($this->once())
+        $mockInstructionSequence = $this->getMock(ImageProcessorInstructionSequence::class, [], [], '', false);
+        $mockInstructionSequence->expects($this->once())
             ->method('execute');
 
         $mockFileStorageReader = $this->getMock(FileStorageReader::class);
@@ -31,7 +31,7 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('putFileContents')
             ->with($dummyImageFilename);
 
-        $imageProcessor = new ImageProcessor($mockCommandSequence, $mockFileStorageReader, $mockFileStorageWriter);
+        $imageProcessor = new ImageProcessor($mockInstructionSequence, $mockFileStorageReader, $mockFileStorageWriter);
         $imageProcessor->process($dummyImageFilename);
     }
 }

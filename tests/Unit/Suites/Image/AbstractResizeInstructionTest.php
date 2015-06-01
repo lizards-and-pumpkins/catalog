@@ -2,16 +2,16 @@
 
 namespace Brera\Image;
 
-abstract class AbstractResizeCommandTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractResizeInstructionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function itShouldImplementImageProcessorCommandInterface()
+    public function itShouldImplementImageProcessorInstructionInterface()
     {
         $class = $this->getResizeClassName();
-        $command = new $class(1, 1);
-        $this->assertInstanceOf(ImageProcessorCommand::class, $command);
+        $instruction = new $class(1, 1);
+        $this->assertInstanceOf(ImageProcessorInstruction::class, $instruction);
     }
 
     /**

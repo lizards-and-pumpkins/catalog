@@ -3,18 +3,18 @@
 namespace Brera\Image;
 
 /**
- * @covers \Brera\Image\ImageMagickInscribeCommand
- * @uses   \Brera\Image\ResizeCommandTrait
+ * @covers \Brera\Image\ImageMagickInscribeInstruction
+ * @uses   \Brera\Image\ResizeInstructionTrait
  */
-class ImageMagickInscribeCommandTest extends \PHPUnit_Framework_TestCase
+class ImageMagickInscribeInstructionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function itShouldImplementImageProcessorCommandInterface()
+    public function itShouldImplementImageProcessorInstructionInterface()
     {
-        $command = new ImageMagickInscribeCommand(1, 1, 'none');
-        $this->assertInstanceOf(ImageProcessorCommand::class, $command);
+        $instruction = new ImageMagickInscribeInstruction(1, 1, 'none');
+        $this->assertInstanceOf(ImageProcessorInstruction::class, $instruction);
     }
 
     /**
@@ -24,7 +24,7 @@ class ImageMagickInscribeCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldFailIfWidthIsNotAnInteger()
     {
-        (new ImageMagickInscribeCommand('foo', 1, 'none'))->execute('');
+        (new ImageMagickInscribeInstruction('foo', 1, 'none'))->execute('');
     }
 
     /**
@@ -34,7 +34,7 @@ class ImageMagickInscribeCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldFailIfWidthIsNotPositive()
     {
-        (new ImageMagickInscribeCommand(0, 1, 'none'))->execute('');
+        (new ImageMagickInscribeInstruction(0, 1, 'none'))->execute('');
     }
 
     /**
@@ -44,7 +44,7 @@ class ImageMagickInscribeCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldFailIfHeightIsNotAnInteger()
     {
-        (new ImageMagickInscribeCommand(1, 'foo', 'none'))->execute('');
+        (new ImageMagickInscribeInstruction(1, 'foo', 'none'))->execute('');
     }
 
     /**
@@ -54,7 +54,7 @@ class ImageMagickInscribeCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldFailIfHeightIsNotPositive()
     {
-        (new ImageMagickInscribeCommand(1, -1, 'none'))->execute('');
+        (new ImageMagickInscribeInstruction(1, -1, 'none'))->execute('');
     }
 
     /**
@@ -63,7 +63,7 @@ class ImageMagickInscribeCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldFailIfInvalidBackgroundColorIsSpecified()
     {
-        (new ImageMagickInscribeCommand(1, 1, 'foo'))->execute('');
+        (new ImageMagickInscribeInstruction(1, 1, 'foo'))->execute('');
     }
 
     /**
@@ -72,7 +72,7 @@ class ImageMagickInscribeCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldFailIfImageStreamIsNotValid()
     {
-        (new ImageMagickInscribeCommand(1, 1, 'none'))->execute('');
+        (new ImageMagickInscribeInstruction(1, 1, 'none'))->execute('');
     }
 
     /**
@@ -83,7 +83,7 @@ class ImageMagickInscribeCommandTest extends \PHPUnit_Framework_TestCase
     {
         $imageStream = file_get_contents(__DIR__ . '/../../../shared-fixture/blank.ico');
 
-        (new ImageMagickInscribeCommand(1, 1, 'none'))->execute($imageStream);
+        (new ImageMagickInscribeInstruction(1, 1, 'none'))->execute($imageStream);
     }
 
     /**
@@ -96,7 +96,7 @@ class ImageMagickInscribeCommandTest extends \PHPUnit_Framework_TestCase
 
         $imageStream = file_get_contents(__DIR__ . '/../../../shared-fixture/test_image2.jpg');
 
-        $result = (new ImageMagickInscribeCommand($requiredWidth, $requiredHeight, 'none'))->execute($imageStream);
+        $result = (new ImageMagickInscribeInstruction($requiredWidth, $requiredHeight, 'none'))->execute($imageStream);
         $resultImageInfo = getimagesizefromstring($result);
 
         $this->assertEquals($requiredWidth, $resultImageInfo[0]);
