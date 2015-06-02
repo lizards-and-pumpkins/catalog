@@ -9,17 +9,17 @@ use Brera\Renderer\BlockRenderer;
 use Brera\RootSnippetSourceList;
 use Brera\SnippetKeyGenerator;
 use Brera\SnippetRenderer;
-use Brera\SnippetResult;
-use Brera\SnippetResultList;
+use Brera\Snippet;
+use Brera\SnippetList;
 
 class ProductListingSnippetRenderer implements SnippetRenderer
 {
     const CODE = 'product_listing';
 
     /**
-     * @var SnippetResultList
+     * @var SnippetList
      */
-    private $snippetResultList;
+    private $snippetList;
 
     /**
      * @var SnippetKeyGenerator
@@ -32,11 +32,11 @@ class ProductListingSnippetRenderer implements SnippetRenderer
     private $blockRenderer;
 
     public function __construct(
-        SnippetResultList $snippetResultList,
+        SnippetList $snippetList,
         SnippetKeyGenerator $snippetKeyGenerator,
         BlockRenderer $blockRenderer
     ) {
-        $this->snippetResultList = $snippetResultList;
+        $this->snippetList = $snippetList;
         $this->snippetKeyGenerator = $snippetKeyGenerator;
         $this->blockRenderer = $blockRenderer;
     }
@@ -44,7 +44,7 @@ class ProductListingSnippetRenderer implements SnippetRenderer
     /**
      * @param ProjectionSourceData $rootSnippetSourceList
      * @param ContextSource $contextSource
-     * @return SnippetResultList
+     * @return SnippetList
      */
     public function render(ProjectionSourceData $rootSnippetSourceList, ContextSource $contextSource)
     {
@@ -52,7 +52,7 @@ class ProductListingSnippetRenderer implements SnippetRenderer
             $this->renderProductListingSnippetsForContext($rootSnippetSourceList, $context);
         }
 
-        return $this->snippetResultList;
+        return $this->snippetList;
     }
 
     private function renderProductListingSnippetsForContext(
@@ -64,8 +64,8 @@ class ProductListingSnippetRenderer implements SnippetRenderer
 
         foreach ($numItemsPerPageForContext as $numItemsPerPage) {
             $key = $this->snippetKeyGenerator->getKeyForContext($context, ['items_per_page' => $numItemsPerPage]);
-            $contentSnippet = SnippetResult::create($key, $content);
-            $this->snippetResultList->add($contentSnippet);
+            $contentSnippet = Snippet::create($key, $content);
+            $this->snippetList->add($contentSnippet);
         }
     }
 }

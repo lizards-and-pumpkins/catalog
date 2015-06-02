@@ -4,7 +4,7 @@ namespace Brera\Product;
 
 use Brera\Context\ContextBuilder;
 use Brera\SnippetRenderer;
-use Brera\SnippetResult;
+use Brera\Snippet;
 use Brera\UrlPathKeyGenerator;
 
 class ProductListingCriteriaSnippetRenderer implements SnippetRenderer
@@ -27,14 +27,14 @@ class ProductListingCriteriaSnippetRenderer implements SnippetRenderer
 
     /**
      * @param ProductListingSource $productListingSource
-     * @return SnippetResult
+     * @return Snippet
      */
     public function render(ProductListingSource $productListingSource)
     {
         $metaDataKey = $this->getProductListingMetaDataKey($productListingSource);
         $metaDataContent = $this->getProductListingPageMetaDataContent($productListingSource);
 
-        return SnippetResult::create($metaDataKey, $metaDataContent);
+        return Snippet::create($metaDataKey, $metaDataContent);
     }
 
     /**

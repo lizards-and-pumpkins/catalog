@@ -2,7 +2,7 @@
 
 namespace Brera;
 
-class SnippetResultList implements \Countable, \IteratorAggregate
+class SnippetList implements \Countable, \IteratorAggregate
 {
     private $snippets = [];
 
@@ -11,7 +11,7 @@ class SnippetResultList implements \Countable, \IteratorAggregate
         $this->snippets = [];
     }
 
-    public function add(SnippetResult $snippet)
+    public function add(Snippet $snippet)
     {
         $this->snippets[] = $snippet;
     }
@@ -32,7 +32,7 @@ class SnippetResultList implements \Countable, \IteratorAggregate
         return new \ArrayIterator($this->snippets);
     }
 
-    public function merge(SnippetResultList $other)
+    public function merge(SnippetList $other)
     {
         $this->snippets = array_merge(
             $this->snippets,

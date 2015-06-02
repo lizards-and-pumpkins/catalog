@@ -6,13 +6,13 @@ use Brera\Context\Context;
 use Brera\Context\ContextSource;
 use Brera\SnippetKeyGenerator;
 use Brera\SnippetRenderer;
-use Brera\SnippetResult;
-use Brera\SnippetResultList;
+use Brera\Snippet;
+use Brera\SnippetList;
 
 /**
  * @covers Brera\Product\PriceSnippetRenderer
  * @uses   Brera\Product\Price
- * @uses   Brera\SnippetResult
+ * @uses   Brera\Snippet
  */
 class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
@@ -32,9 +32,9 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
     private $mockContextSource;
 
     /**
-     * @var SnippetResultList|\PHPUnit_Framework_MockObject_MockObject
+     * @var SnippetList|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockSnippetResultList;
+    private $mockSnippetList;
 
     /**
      * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
@@ -48,11 +48,11 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockSnippetResultList = $this->getMock(SnippetResultList::class);
+        $this->mockSnippetList = $this->getMock(SnippetList::class);
         $this->mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
 
         $this->renderer = new PriceSnippetRenderer(
-            $this->mockSnippetResultList,
+            $this->mockSnippetList,
             $this->mockSnippetKeyGenerator,
             $this->dummyPriceAttributeCode
         );
@@ -76,7 +76,7 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldReturnEmptySnippetResultList()
+    public function itShouldReturnEmptySnippetList()
     {
         $this->mockContextSource->expects($this->any())
             ->method('getAllAvailableContexts')
@@ -84,14 +84,14 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->renderer->render($this->mockProductSource, $this->mockContextSource);
 
-        $this->assertInstanceOf(SnippetResultList::class, $result);
+        $this->assertInstanceOf(SnippetList::class, $result);
         $this->assertEmpty($result);
     }
 
     /**
      * @test
      */
-    public function itShouldReturnSnippetResultListContainingASnippetResultWithAGivenKeyAndPrice()
+    public function itShouldReturnSnippetListContainingASnippetWithAGivenKeyAndPrice()
     {
         $stubContext = $this->getMock(Context::class);
         $dummyPriceSnippetKey = 'bar';
@@ -116,11 +116,11 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
             ->willReturn($dummyPriceSnippetKey);
 
         $dummyPrice = Price::fromString($dummyPriceAttributeValue);
-        $expectedSnippetResult = SnippetResult::create($dummyPriceSnippetKey, $dummyPrice->getAmount());
+        $expectedSnippet = Snippet::create($dummyPriceSnippetKey, $dummyPrice->getAmount());
 
-        $this->mockSnippetResultList->expects($this->once())
+        $this->mockSnippetList->expects($this->once())
             ->method('add')
-            ->with($expectedSnippetResult);
+            ->with($expectedSnippet);
 
         $this->renderer->render($this->mockProductSource, $this->mockContextSource);
     }

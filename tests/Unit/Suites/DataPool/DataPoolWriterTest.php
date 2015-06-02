@@ -3,8 +3,8 @@
 namespace Brera\DataPool;
 
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
-use Brera\SnippetResult;
-use Brera\SnippetResultList;
+use Brera\Snippet;
+use Brera\SnippetList;
 
 /**
  * @covers \Brera\DataPool\DataPoolWriter
@@ -34,18 +34,18 @@ class DataPoolWriterTest extends AbstractDataPoolTest
         $testKey = 'test-key';
         $testContent = 'test-content';
 
-        $mockSnippetResult = $this->getMockSnippetResult($testKey, $testContent);
+        $mockSnippet = $this->getMockSnippet($testKey, $testContent);
 
-        $mockSnippetResultList = $this->getMock(SnippetResultList::class);
-        $mockSnippetResultList->expects($this->once())
+        $mockSnippetList = $this->getMock(SnippetList::class);
+        $mockSnippetList->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$mockSnippetResult]));
+            ->willReturn(new \ArrayIterator([$mockSnippet]));
 
         $this->getStubKeyValueStore()->expects($this->once())
             ->method('set')
             ->with($testKey, $testContent);
 
-        $this->dataPoolWriter->writeSnippetResultList($mockSnippetResultList);
+        $this->dataPoolWriter->writeSnippetList($mockSnippetList);
     }
 
     /**
@@ -65,36 +65,36 @@ class DataPoolWriterTest extends AbstractDataPoolTest
     /**
      * @test
      */
-    public function itShouldWriteSnippetResultIntoDataPool()
+    public function itShouldWriteSnippetIntoDataPool()
     {
         $testKey = 'test-key';
         $testContent = 'test-content';
 
-        $mockSnippetResult = $this->getMockSnippetResult($testKey, $testContent);
+        $mockSnippet = $this->getMockSnippet($testKey, $testContent);
 
         $this->getStubKeyValueStore()->expects($this->once())
             ->method('set')
             ->with($testKey, $testContent);
 
-        $this->dataPoolWriter->writeSnippetResult($mockSnippetResult);
+        $this->dataPoolWriter->writeSnippet($mockSnippet);
 
     }
 
     /**
      * @param string $mockSnippetKey
      * @param string $mockSnippetContent
-     * @return SnippetResult|\PHPUnit_Framework_MockObject_MockObject
+     * @return Snippet|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function getMockSnippetResult($mockSnippetKey, $mockSnippetContent)
+    private function getMockSnippet($mockSnippetKey, $mockSnippetContent)
     {
-        $mockSnippetResult = $this->getMock(SnippetResult::class, [], [], '', false);
-        $mockSnippetResult->expects($this->once())
+        $mockSnippet = $this->getMock(Snippet::class, [], [], '', false);
+        $mockSnippet->expects($this->once())
             ->method('getKey')
             ->willReturn($mockSnippetKey);
-        $mockSnippetResult->expects($this->once())
+        $mockSnippet->expects($this->once())
             ->method('getContent')
             ->willReturn($mockSnippetContent);
 
-        return $mockSnippetResult;
+        return $mockSnippet;
     }
 }
