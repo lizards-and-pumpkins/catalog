@@ -21,8 +21,9 @@ $xml = file_get_contents(__DIR__ . '/../tests/shared-fixture/catalog.xml');
 $queue->add(new CatalogImportDomainEvent($xml));
 
 $consumer = $factory->createDomainEventConsumer();
-$numberOfMessages = 13;
-$consumer->process($numberOfMessages);
+while ($queue->count() > 0) {
+    $consumer->process(1);
+}
 
 $messages = $factory->getLogger()->getMessages();
 if (count($messages)) {
