@@ -2,6 +2,8 @@
 
 namespace Brera\Product;
 
+use Brera\DataPool\SearchEngine\SearchCriteria;
+
 /**
  * @covers \Brera\Product\ProductListingSourceBuilder
  * @uses   \Brera\Utils\XPathParser
@@ -15,49 +17,61 @@ class ProductListingSourceBuilderTest extends \PHPUnit_Framework_TestCase
     public function itShouldCreateAProductListingSourceFromXml()
     {
         $xml = <<<EOX
-<listing url_key="men-accessories" website="ru" language="en_US">
-    <category>men-accessories</category>
+<listing url_key="men-accessories" condition="and" website="ru" language="en_US">
+    <category operation="eq">accessories</category>
+    <gender operation="eq">male</gender>
 </listing>
 EOX;
 
-        $builder = new ProductListingSourceBuilder();
-        $productListingSource = $builder->createProductListingSourceFromXml($xml);
+        $productListingSource = (new ProductListingSourceBuilder())->createProductListingSourceFromXml($xml);
 
         $urlKey = $productListingSource->getUrlKey();
-        $context = $this->getObjectProperty($productListingSource, 'contextData');
-        $attributes = $this->getObjectProperty($productListingSource, 'criteria');
-
-        $expectedUrlKey = 'men-accessories';
-        $expectedContextData = ['website' => 'ru', 'language' => 'en_US'];
-        $expectedCriteria = ['category' => 'men-accessories'];
+        $context = $productListingSource->getContextData();
+        $searchCriteria = $productListingSource->getCriteria();
+        $criteria = $searchCriteria->getCriteria();
 
         $this->assertInstanceOf(ProductListingSource::class, $productListingSource);
-        $this->assertEquals($expectedUrlKey, $urlKey);
-        $this->assertEquals($expectedContextData, $context);
-        $this->assertEquals($expectedCriteria, $attributes);
+        $this->assertEquals('men-accessories', $urlKey);
+        $this->assertEquals(['website' => 'ru', 'language' => 'en_US'], $context);
+
+        $this->assertInstanceOf(SearchCriteria::class, $searchCriteria);
+        $this->assertEquals('and', $searchCriteria->getCondition());
+        $this->assertCount(2, $criteria);
+        $this->assertEquals('category', $criteria[0]->getFieldName());
+        $this->assertEquals('accessories', $criteria[0]->getFieldValue());
+        $this->assertEquals('eq', $criteria[0]->getOperation());
+        $this->assertEquals('gender', $criteria[1]->getFieldName());
+        $this->assertEquals('male', $criteria[1]->getFieldValue());
+        $this->assertEquals('eq', $criteria[1]->getOperation());
     }
 
     /**
      * @test
-     * @expectedException \Brera\Product\InvalidNumberOfUrlKeysPerImportedProductListingException
-     * @expectedExceptionMessage There must be exactly one URL key in the imported product listing XML
+     * @expectedException \Brera\Product\MissingUrlKeyXmlAttributeException
      */
-    public function itShouldThrowAnExceptionInCaseOfXmlHasNoEssentialData()
+    public function itShouldFailIfUrlKeyAttributeIsMissing()
     {
-        $xml = '<?xml version="1.0"?><node />';
+        $xml = '<listing />';
         (new ProductListingSourceBuilder())->createProductListingSourceFromXml($xml);
     }
 
     /**
-     * @param ProductListingSource $productSource
-     * @param string $propertyName
-     * @return mixed
+     * @test
+     * @expectedException \Brera\Product\MissingConditionXmlAttributeException
      */
-    private function getObjectProperty(ProductListingSource $productSource, $propertyName)
+    public function itShouldFailIfConditionAttributeOfListingNodeIsMissing()
     {
-        $property = new \ReflectionProperty($productSource, $propertyName);
-        $property->setAccessible(true);
+        $xml = '<listing url_key="foo"/>';
+        (new ProductListingSourceBuilder())->createProductListingSourceFromXml($xml);
+    }
 
-        return $property->getValue($productSource);
+    /**
+     * @test
+     * @expectedException \Brera\Product\MissingCriterionOperationXmlAttributeException
+     */
+    public function itShouldFailIfCriterionNodeDoesNotHaveOperationAttribute()
+    {
+        $xml = '<listing url_key="foo" condition="and"><bar /></listing>';
+        (new ProductListingSourceBuilder())->createProductListingSourceFromXml($xml);
     }
 }

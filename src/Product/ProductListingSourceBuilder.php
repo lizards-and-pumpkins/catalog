@@ -2,6 +2,8 @@
 
 namespace Brera\Product;
 
+use Brera\DataPool\SearchEngine\SearchCriteria;
+use Brera\DataPool\SearchEngine\SearchCriterion;
 use Brera\Utils\XPathParser;
 
 class ProductListingSourceBuilder
@@ -17,37 +19,79 @@ class ProductListingSourceBuilder
         $urlKeyNode = $parser->getXmlNodesArrayByXPath('/listing/@url_key');
         $urlKey = $this->getUrlKeyStringFromDomNodeArray($urlKeyNode);
 
-        $contextData = [];
         $xmlNodeAttributes = $parser->getXmlNodesArrayByXPath('/listing/@*');
+        $contextData = $this->getFormattedContextData($xmlNodeAttributes);
 
-        foreach ($xmlNodeAttributes as $xmlAttribute) {
-            if ('url_key' !== $xmlAttribute['nodeName']) {
-                $contextData[$xmlAttribute['nodeName']] = $xmlAttribute['value'];
-            }
-        }
+        $criteriaConditionNodes = $parser->getXmlNodesArrayByXPath('/listing/@condition');
+        $criteria = $this->createSearchCriteria($criteriaConditionNodes);
 
-        $criteria = [];
         $criteriaNodes = $parser->getXmlNodesArrayByXPath('/listing/*');
 
-        foreach ($criteriaNodes as $attributeNode) {
-            $criteria[$attributeNode['nodeName']] = $attributeNode['value'];
+        foreach ($criteriaNodes as $criterionNode) {
+            $criterion = $this->createCriterion($criterionNode);
+            $criteria->add($criterion);
         }
 
         return new ProductListingSource($urlKey, $contextData, $criteria);
     }
 
     /**
-     * @param mixed[] $nodeArray
+     * @param mixed[] $urlKeyAttributeNode
      * @return string
      */
-    private function getUrlKeyStringFromDomNodeArray(array $nodeArray)
+    private function getUrlKeyStringFromDomNodeArray(array $urlKeyAttributeNode)
     {
-        if (1 !== count($nodeArray)) {
-            throw new InvalidNumberOfUrlKeysPerImportedProductListingException(
-                'There must be exactly one URL key in the imported product listing XML'
-            );
+        if (empty($urlKeyAttributeNode)) {
+            throw new MissingUrlKeyXmlAttributeException();
         }
 
-        return $nodeArray[0]['value'];
+        return $urlKeyAttributeNode[0]['value'];
+    }
+
+    /**
+     * @param array[] $xmlNodeAttributes
+     * @return string[]
+     */
+    private function getFormattedContextData(array $xmlNodeAttributes)
+    {
+        $contextData = [];
+
+        foreach ($xmlNodeAttributes as $xmlAttribute) {
+            if ('url_key' !== $xmlAttribute['nodeName'] && 'condition' !== $xmlAttribute['nodeName']) {
+                $contextData[$xmlAttribute['nodeName']] = $xmlAttribute['value'];
+            }
+        }
+
+        return $contextData;
+    }
+
+    /**
+     * @param array[] $criteriaCondition
+     * @return SearchCriteria
+     */
+    private function createSearchCriteria(array $criteriaCondition)
+    {
+        if (empty($criteriaCondition)) {
+            throw new MissingConditionXmlAttributeException();
+        }
+
+        return SearchCriteria::create($criteriaCondition[0]['value']);
+    }
+
+    /**
+     * @param array[] $criterionNode
+     * @return SearchCriterion
+     */
+    private function createCriterion(array $criterionNode)
+    {
+        if (!isset($criterionNode['attributes']['operation'])) {
+            throw new MissingCriterionOperationXmlAttributeException();
+        }
+
+        return SearchCriterion::create(
+            $criterionNode['nodeName'],
+            $criterionNode['value'],
+            $criterionNode['attributes']['operation']
+        );
     }
 }

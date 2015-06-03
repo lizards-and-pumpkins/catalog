@@ -2,6 +2,8 @@
 
 namespace Brera\Product;
 
+use Brera\DataPool\SearchEngine\SearchCriteria;
+
 /**
  * @covers \Brera\Product\ProductListingSource
  */
@@ -14,7 +16,7 @@ class ProductListingSourceTest extends \PHPUnit_Framework_TestCase
     {
         $stubUrlKey = 'foo';
         $stubContextData = [];
-        $stubCriteria = [];
+        $stubCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
 
         $productListingSource = new ProductListingSource($stubUrlKey, $stubContextData, $stubCriteria);
         $result = $productListingSource->getUrlKey();
@@ -29,7 +31,7 @@ class ProductListingSourceTest extends \PHPUnit_Framework_TestCase
     {
         $stubUrlKey = '';
         $stubContextData = ['foo' => 'bar', 'baz' => 'qux'];
-        $stubCriteria = [];
+        $stubCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
 
         $productListingSource = new ProductListingSource($stubUrlKey, $stubContextData, $stubCriteria);
         $result = $productListingSource->getContextData();
@@ -44,7 +46,7 @@ class ProductListingSourceTest extends \PHPUnit_Framework_TestCase
     {
         $stubUrlKey = '';
         $stubContextData = [];
-        $stubCriteria = ['foo' => 'bar', 'baz' => 'qux'];
+        $stubCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
 
         $productListingSource = new ProductListingSource($stubUrlKey, $stubContextData, $stubCriteria);
         $result = $productListingSource->getCriteria();
