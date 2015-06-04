@@ -13,7 +13,7 @@ class ProductSourceInListingSnippetRendererTest extends AbstractProductSnippetRe
     protected function createSnippetRendererUnderTest()
     {
         return new ProductSourceInListingSnippetRenderer(
-            $this->getMockSnippetResultList(),
+            $this->getMockSnippetList(),
             $this->getProductInContextRendererMock(ProductInListingInContextSnippetRenderer::class)
         );
     }

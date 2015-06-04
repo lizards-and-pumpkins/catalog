@@ -6,13 +6,13 @@ use Brera\Context\Context;
 use Brera\Context\ContextBuilder;
 use Brera\DataPool\SearchEngine\SearchCriteria;
 use Brera\SnippetRenderer;
-use Brera\SnippetResult;
+use Brera\Snippet;
 use Brera\UrlPathKeyGenerator;
 
 /**
  * @covers \Brera\Product\ProductListingCriteriaSnippetRenderer
  * @uses   \Brera\Product\ProductListingMetaInfoSnippetContent
- * @uses   \Brera\SnippetResult
+ * @uses   \Brera\Snippet
  */
 class ProductListingCriteriaSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
@@ -48,15 +48,15 @@ class ProductListingCriteriaSnippetRendererTest extends \PHPUnit_Framework_TestC
     /**
      * @test
      */
-    public function itShouldReturnSnippetResultWithAValidJsonAsAContent()
+    public function itShouldReturnSnippetWithAValidJsonAsAContent()
     {
         $mockProductListingSource = $this->getMockProductListingSource();
 
-        $snippetResult = $this->renderer->render($mockProductListingSource);
+        $snippet = $this->renderer->render($mockProductListingSource);
 
-        json_decode($snippetResult->getContent());
+        json_decode($snippet->getContent());
 
-        $this->assertInstanceOf(SnippetResult::class, $snippetResult);
+        $this->assertInstanceOf(Snippet::class, $snippet);
         $this->assertEquals(JSON_ERROR_NONE, json_last_error());
     }
 
@@ -67,9 +67,9 @@ class ProductListingCriteriaSnippetRendererTest extends \PHPUnit_Framework_TestC
     {
         $mockProductListingSource = $this->getMockProductListingSource();
 
-        $snippetResult = $this->renderer->render($mockProductListingSource);
+        $snippet = $this->renderer->render($mockProductListingSource);
         $expectedPattern = ProductListingSnippetRenderer::CODE . '_%s';
-        $this->assertStringMatchesFormat($expectedPattern, $snippetResult->getKey());
+        $this->assertStringMatchesFormat($expectedPattern, $snippet->getKey());
 
     }
 

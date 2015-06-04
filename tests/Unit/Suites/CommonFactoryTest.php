@@ -159,10 +159,10 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldCreateSnippetResultList()
+    public function itShouldCreateSnippetList()
     {
-        $result = $this->commonFactory->createSnippetResultList();
-        $this->assertInstanceOf(SnippetResultList::class, $result);
+        $result = $this->commonFactory->createSnippetList();
+        $this->assertInstanceOf(SnippetList::class, $result);
     }
 
     /**

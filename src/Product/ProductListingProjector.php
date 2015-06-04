@@ -44,8 +44,8 @@ class ProductListingProjector implements Projector
 
     private function projectProductListing(ProductListingSource $productListingSource)
     {
-        $snippetResult = $this->productListingPageMetaInfoSnippetRenderer->render($productListingSource);
+        $snippet = $this->productListingPageMetaInfoSnippetRenderer->render($productListingSource);
 
-        $this->dataPoolWriter->writeSnippetResult($snippetResult);
+        $this->dataPoolWriter->writeSnippet($snippet);
     }
 }

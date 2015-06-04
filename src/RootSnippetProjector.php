@@ -25,7 +25,7 @@ class RootSnippetProjector implements Projector
 
     public function project(ProjectionSourceData $dataObject, ContextSource $context)
     {
-        $snippetResultList = $this->snippetRendererCollection->render($dataObject, $context);
-        $this->dataPoolWriter->writeSnippetResultList($snippetResultList);
+        $snippetList = $this->snippetRendererCollection->render($dataObject, $context);
+        $this->dataPoolWriter->writeSnippetList($snippetList);
     }
 }

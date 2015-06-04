@@ -5,8 +5,8 @@ namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\SnippetKeyGenerator;
-use Brera\SnippetResult;
-use Brera\SnippetResultList;
+use Brera\Snippet;
+use Brera\SnippetList;
 use Brera\UrlPathKeyGenerator;
 
 class ProductDetailViewInContextSnippetRenderer
@@ -24,9 +24,9 @@ class ProductDetailViewInContextSnippetRenderer
     private $context;
 
     /**
-     * @var SnippetResultList
+     * @var SnippetList
      */
-    private $snippetResultList;
+    private $snippetList;
 
     /**
      * @var ProductDetailViewBlockRenderer
@@ -44,12 +44,12 @@ class ProductDetailViewInContextSnippetRenderer
     private $urlKeyGenerator;
 
     public function __construct(
-        SnippetResultList $snippetResultList,
+        SnippetList $snippetList,
         ProductDetailViewBlockRenderer $blockRenderer,
         ProductSnippetKeyGenerator $snippetKeyGenerator,
         UrlPathKeyGenerator $urlKeyGenerator
     ) {
-        $this->snippetResultList = $snippetResultList;
+        $this->snippetList = $snippetList;
         $this->blockRenderer = $blockRenderer;
         $this->productSnippetKeyGenerator = $snippetKeyGenerator;
         $this->urlKeyGenerator = $urlKeyGenerator;
@@ -58,41 +58,41 @@ class ProductDetailViewInContextSnippetRenderer
     /**
      * @param Product $product
      * @param Context $context
-     * @return SnippetResultList
+     * @return SnippetList
      */
     public function render(Product $product, Context $context)
     {
         $this->product = $product;
         $this->context = $context;
-        $this->snippetResultList->clear();
+        $this->snippetList->clear();
 
-        $this->addProductDetailViewSnippetsToSnippetResultList();
+        $this->addProductDetailViewSnippetsToSnippetList();
 
-        return $this->snippetResultList;
+        return $this->snippetList;
     }
 
-    private function addProductDetailViewSnippetsToSnippetResultList()
+    private function addProductDetailViewSnippetsToSnippetList()
     {
         $content = $this->blockRenderer->render($this->product, $this->context);
         $key = $this->productSnippetKeyGenerator->getKeyForContext(
             $this->context,
             ['product_id' => $this->product->getId()]
         );
-        $contentSnippet = SnippetResult::create($key, $content);
-        $this->snippetResultList->add($contentSnippet);
+        $contentSnippet = Snippet::create($key, $content);
+        $this->snippetList->add($contentSnippet);
 
         $pageMetaDataSnippet = $this->getProductDetailPageMetaSnippet();
-        $this->snippetResultList->add($pageMetaDataSnippet);
+        $this->snippetList->add($pageMetaDataSnippet);
     }
 
     /**
-     * @return SnippetResult
+     * @return Snippet
      */
     private function getProductDetailPageMetaSnippet()
     {
         $snippetKey = $this->getPageMetaSnippetKey();
         $metaData = $this->getPageMetaSnippetContent();
-        return SnippetResult::create($snippetKey, json_encode($metaData));
+        return Snippet::create($snippetKey, json_encode($metaData));
     }
 
     /**

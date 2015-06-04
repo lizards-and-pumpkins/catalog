@@ -6,7 +6,7 @@ use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use Brera\SampleContextSource;
 use Brera\DataPool\DataPoolWriter;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilder;
-use Brera\SnippetResultList;
+use Brera\SnippetList;
 use Brera\SnippetRendererCollection;
 use Brera\ProjectionSourceData;
 
@@ -22,9 +22,9 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
     private $projector;
 
     /**
-     * @var SnippetResultList|\PHPUnit_Framework_MockObject_MockObject
+     * @var SnippetList|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubSnippetResultList;
+    private $stubSnippetList;
 
     /**
      * @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject
@@ -48,14 +48,14 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->stubSnippetResultList = $this->getMock(SnippetResultList::class);
+        $this->stubSnippetList = $this->getMock(SnippetList::class);
         $this->stubDataPoolWriter = $this->getMock(DataPoolWriter::class, [], [], '', false);
         $this->stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
 
         $this->mockRendererCollection = $this->getMock(ProductSnippetRendererCollection::class, [], [], '', false);
         $this->mockRendererCollection->expects($this->any())
             ->method('render')
-            ->willReturn($this->stubSnippetResultList);
+            ->willReturn($this->stubSnippetList);
 
         $this->stubSearchDocumentBuilder = $this->getMock(ProductSearchDocumentBuilder::class, [], [], '', false);
 
@@ -69,15 +69,15 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldSetSnippetResultListAndSearchDocumentOnDataPoolWriter()
+    public function itShouldSetSnippetListAndSearchDocumentOnDataPoolWriter()
     {
         $this->stubSearchDocumentBuilder->expects($this->once())
             ->method('aggregate')
             ->willReturn($this->stubSearchDocumentCollection);
 
         $this->stubDataPoolWriter->expects($this->once())
-            ->method('writeSnippetResultList')
-            ->with($this->stubSnippetResultList);
+            ->method('writeSnippetList')
+            ->with($this->stubSnippetList);
 
         $this->stubDataPoolWriter->expects($this->once())
             ->method('writeSearchDocumentCollection')

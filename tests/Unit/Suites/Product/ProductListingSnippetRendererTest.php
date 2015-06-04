@@ -7,18 +7,18 @@ use Brera\RootSnippetSourceList;
 use Brera\SampleContextSource;
 use Brera\ProjectionSourceData;
 use Brera\SnippetKeyGenerator;
-use Brera\SnippetResultList;
+use Brera\SnippetList;
 
 /**
  * @covers \Brera\Product\ProductListingSnippetRenderer
- * @uses   \Brera\SnippetResult
+ * @uses   \Brera\Snippet
  */
 class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function itShouldReturnSnippetResultList()
+    public function itShouldReturnSnippetList()
     {
         $numItemsPerPage = 10;
         $stubContext = $this->getMock(Context::class);
@@ -29,8 +29,8 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
             ->with($stubContext)
             ->willReturn([$numItemsPerPage]);
 
-        $mockSnippetResultList = $this->getMock(SnippetResultList::class);
-        $mockSnippetResultList->expects($this->atLeastOnce())
+        $mockSnippetList = $this->getMock(SnippetList::class);
+        $mockSnippetList->expects($this->atLeastOnce())
             ->method('add');
 
         $mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
@@ -51,13 +51,13 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$stubContext]);
 
         $snippetRenderer = new ProductListingSnippetRenderer(
-            $mockSnippetResultList,
+            $mockSnippetList,
             $mockSnippetKeyGenerator,
             $mockBlockRenderer
         );
 
         $result = $snippetRenderer->render($mockRootSnippetSourceList, $mockContextSource);
 
-        $this->assertSame($mockSnippetResultList, $result);
+        $this->assertSame($mockSnippetList, $result);
     }
 }

@@ -5,16 +5,16 @@ namespace Brera\Product;
 use Brera\Context\ContextSource;
 use Brera\SnippetRendererCollection;
 use Brera\ProjectionSourceData;
-use Brera\SnippetResultList;
+use Brera\SnippetList;
 use Brera\InvalidProjectionDataSourceTypeException;
 use Brera\SnippetRenderer;
 
 class ProductSnippetRendererCollection implements SnippetRendererCollection
 {
     /**
-     * @var SnippetResultList
+     * @var SnippetList
      */
-    private $snippetResultList;
+    private $snippetList;
 
     /**
      * @var SnippetRenderer[]
@@ -23,18 +23,18 @@ class ProductSnippetRendererCollection implements SnippetRendererCollection
 
     /**
      * @param SnippetRenderer[] $renderers
-     * @param SnippetResultList $snippetResultList
+     * @param SnippetList $snippetList
      */
-    public function __construct(array $renderers, SnippetResultList $snippetResultList)
+    public function __construct(array $renderers, SnippetList $snippetList)
     {
         $this->renderers = $renderers;
-        $this->snippetResultList = $snippetResultList;
+        $this->snippetList = $snippetList;
     }
     
     /**
      * @param ProjectionSourceData $productSource
      * @param ContextSource $contextSource
-     * @return SnippetResultList
+     * @return SnippetList
      */
     public function render(ProjectionSourceData $productSource, ContextSource $contextSource)
     {
@@ -43,13 +43,13 @@ class ProductSnippetRendererCollection implements SnippetRendererCollection
         }
         
         $this->renderSnippet($productSource, $contextSource);
-        return $this->snippetResultList;
+        return $this->snippetList;
     }
 
     private function renderSnippet(ProductSource $productSource, ContextSource $contextSource)
     {
         foreach ($this->renderers as $renderer) {
-            $this->snippetResultList->merge($renderer->render($productSource, $contextSource));
+            $this->snippetList->merge($renderer->render($productSource, $contextSource));
         }
     }
 }

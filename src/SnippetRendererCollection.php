@@ -9,7 +9,7 @@ interface SnippetRendererCollection
     /**
      * @param ProjectionSourceData $dataObject
      * @param ContextSource $context
-     * @return SnippetResultList
+     * @return SnippetList
      * @throws InvalidProjectionDataSourceTypeException
      */
     public function render(ProjectionSourceData $dataObject, ContextSource $context);
