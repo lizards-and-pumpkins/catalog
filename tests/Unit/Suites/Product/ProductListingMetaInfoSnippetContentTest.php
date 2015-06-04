@@ -2,8 +2,12 @@
 
 namespace Brera\Product;
 
+use Brera\DataPool\SearchEngine\SearchCriteria;
+
 /**
  * @covers \Brera\Product\ProductListingMetaInfoSnippetContent
+ * @uses   \Brera\DataPool\SearchEngine\SearchCriteria
+ * @uses   \Brera\DataPool\SearchEngine\SearchCriterion
  */
 class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,12 +22,17 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
     private $rootSnippetCode = 'root-snippet-code';
 
     /**
-     * @var string
+     * @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $selectionCriteria = ['test-attribute' => 'test-value'];
+    private $selectionCriteria;
 
     protected function setUp()
     {
+        $this->selectionCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
+        $this->selectionCriteria->expects($this->any())
+            ->method('jsonSerialize')
+            ->willReturn(['condition' => SearchCriteria::AND_CONDITION, 'criteria' => []]);
+
         $this->pageMetaInfo = ProductListingMetaInfoSnippetContent::create(
             $this->selectionCriteria,
             $this->rootSnippetCode,
@@ -63,7 +72,7 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
      */
     public function itShouldThrowAnExceptionIfTheRootSnippetCodeIsNoString()
     {
-        ProductListingMetaInfoSnippetContent::create([], 1.0, []);
+        ProductListingMetaInfoSnippetContent::create($this->selectionCriteria, 1.0, []);
     }
 
     /**
@@ -72,7 +81,7 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
     public function itShouldAddTheRootSnippetCodeToTheSnippetCodeListIfNotPresent()
     {
         $rootSnippetCode = 'root-snippet-code';
-        $pageMetaInfo = ProductListingMetaInfoSnippetContent::create([], $rootSnippetCode, []);
+        $pageMetaInfo = ProductListingMetaInfoSnippetContent::create($this->selectionCriteria, $rootSnippetCode, []);
         $this->assertContains(
             $rootSnippetCode,
             $pageMetaInfo->getInfo()[ProductListingMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES]
@@ -145,5 +154,145 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
     public function itShouldReturnThePageSnippetCodeList()
     {
         $this->assertInternalType('array', $this->pageMetaInfo->getPageSnippetCodes());
+    }
+
+    /**
+     * @test
+     * @expectedException \Brera\Product\MalformedSearchCriteriaMetaException
+     * @expectedExceptionMessage Missing criteria condition.
+     */
+    public function itShouldFailIfSearchCriteriaConditionIsMissing()
+    {
+        $json = json_encode([
+            ProductListingMetaInfoSnippetContent::KEY_CRITERIA => [],
+            ProductListingMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
+            ProductListingMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
+        ]);
+
+        ProductListingMetaInfoSnippetContent::fromJson($json);
+    }
+
+    /**
+     * @test
+     * @expectedException \Brera\Product\MalformedSearchCriteriaMetaException
+     * @expectedExceptionMessage Malformed criteria.
+     */
+    public function itShouldFailIfSearchCriteriaCriteriaIsMissing()
+    {
+        $json = json_encode([
+            ProductListingMetaInfoSnippetContent::KEY_CRITERIA => ['condition' => ''],
+            ProductListingMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
+            ProductListingMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
+        ]);
+
+        ProductListingMetaInfoSnippetContent::fromJson($json);
+    }
+
+    /**
+     * @test
+     * @expectedException \Brera\Product\MalformedSearchCriteriaMetaException
+     * @expectedExceptionMessage Malformed criterion.
+     */
+    public function itShouldFailIfSearchCriteriaCriterionIsInvalid()
+    {
+        $json = json_encode([
+            ProductListingMetaInfoSnippetContent::KEY_CRITERIA => [
+                'condition' => '',
+                'criteria'  => ['']
+            ],
+            ProductListingMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
+            ProductListingMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
+        ]);
+
+        ProductListingMetaInfoSnippetContent::fromJson($json);
+    }
+
+    /**
+     * @test
+     * @expectedException \Brera\Product\MalformedSearchCriteriaMetaException
+     * @expectedExceptionMessage Missing criterion field name.
+     */
+    public function itShouldFailIfCriterionFieldNameIsMissing()
+    {
+        $json = json_encode([
+            ProductListingMetaInfoSnippetContent::KEY_CRITERIA => [
+                'condition' => '',
+                'criteria'  => [[]]
+            ],
+            ProductListingMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
+            ProductListingMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
+        ]);
+
+        ProductListingMetaInfoSnippetContent::fromJson($json);
+    }
+
+    /**
+     * @test
+     * @expectedException \Brera\Product\MalformedSearchCriteriaMetaException
+     * @expectedExceptionMessage Missing criterion field value.
+     */
+    public function itShouldFailIfCriterionFieldValueIsMissing()
+    {
+        $json = json_encode([
+            ProductListingMetaInfoSnippetContent::KEY_CRITERIA => [
+                'condition' => '',
+                'criteria'  => [
+                    ['fieldName' => 'foo']
+                ]
+            ],
+            ProductListingMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
+            ProductListingMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
+        ]);
+
+        ProductListingMetaInfoSnippetContent::fromJson($json);
+    }
+
+    /**
+     * @test
+     * @expectedException \Brera\Product\MalformedSearchCriteriaMetaException
+     * @expectedExceptionMessage Missing criterion operation.
+     */
+    public function itShouldFailIfCriterionOperationIsMissing()
+    {
+        $json = json_encode([
+            ProductListingMetaInfoSnippetContent::KEY_CRITERIA => [
+                'condition' => '',
+                'criteria'  => [
+                    ['fieldName' => 'foo', 'fieldValue' => 'bar']
+                ]
+            ],
+            ProductListingMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
+            ProductListingMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
+        ]);
+
+        ProductListingMetaInfoSnippetContent::fromJson($json);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldCreateAProductListingMetaInfoWithPassedSearchCriteria()
+    {
+        $fieldName = 'foo';
+        $fieldValue = 'bar';
+        $operation = 'eq';
+
+        $json = json_encode([
+            ProductListingMetaInfoSnippetContent::KEY_CRITERIA => [
+                'condition' => '',
+                'criteria'  => [
+                    ['fieldName' => $fieldName, 'fieldValue' => $fieldValue, 'operation' => $operation]
+                ]
+            ],
+            ProductListingMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
+            ProductListingMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
+        ]);
+
+        $metaSnippetContent = ProductListingMetaInfoSnippetContent::fromJson($json);
+        $criteria = $metaSnippetContent->getSelectionCriteria()->getCriteria();
+
+        $this->assertEquals($fieldName, $criteria[0]->getFieldName());
+        $this->assertEquals($fieldValue, $criteria[0]->getFieldValue());
+        $this->assertEquals($operation, $criteria[0]->getOperation());
     }
 }

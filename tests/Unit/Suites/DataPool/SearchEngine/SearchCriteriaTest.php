@@ -9,6 +9,16 @@ class SearchCriteriaTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
+     */
+    public function itShouldImplementJsonSerializableInterface()
+    {
+        $result = SearchCriteria::create(SearchCriteria::AND_CONDITION);
+
+        $this->assertInstanceOf(\JsonSerializable::class, $result);
+    }
+
+    /**
+     * @test
      * @expectedException \Brera\DataPool\SearchEngine\InvalidCriteriaConditionException
      */
     public function itShouldFailIfCriteriaConditionIsInvalid()
@@ -43,5 +53,19 @@ class SearchCriteriaTest extends \PHPUnit_Framework_TestCase
         $result = $criteria->getCriteria();
 
         $this->assertEquals([$mockCriterion1, $mockCriterion2], $result);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnArrayRepresentationOfACriteria()
+    {
+        $condition = SearchCriteria::AND_CONDITION;
+
+        $criteria = SearchCriteria::create($condition);
+        $result = $criteria->jsonSerialize();
+        $expectation = ['condition' => $condition, 'criteria' => []];
+
+        $this->assertSame($expectation, $result);
     }
 }

@@ -3,6 +3,8 @@
 namespace Brera;
 
 use Brera\Context\Context;
+use Brera\DataPool\SearchEngine\SearchCriteria;
+use Brera\DataPool\SearchEngine\SearchCriterion;
 use Brera\Http\HttpUrl;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\ProductListingMetaInfoSnippetContent;
@@ -13,7 +15,7 @@ use Brera\Utils\XPathParser;
 
 class ProductListingTest extends AbstractIntegrationTest
 {
-    private $testUrl = 'http://example.com/men-accessories';
+    private $testUrl = 'http://example.com/adidas-men-accessories';
 
     /**
      * @var PoCMasterFactory
@@ -33,8 +35,9 @@ class ProductListingTest extends AbstractIntegrationTest
         $this->addProductListingCriteriaDomainDomainEventFixture();
         $this->processDomainEvents(1);
         
-        /* TODO: Fetch URL key from XML */
-        $urlKey = 'men-accessories';
+        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
+        $urlKeyNode = (new XPathParser($xml))->getXmlNodesArrayByXPath('//catalog/listings/listing[1]/@url_key');
+        $urlKey = $urlKeyNode[0]['value'];
 
         $logger = $this->factory->getLogger();
         $this->failIfMessagesWhereLogged($logger);
@@ -47,13 +50,11 @@ class ProductListingTest extends AbstractIntegrationTest
             . (new PoCUrlPathKeyGenerator())->getUrlKeyForUrlInContext($url, $context);
 
         $dataPoolReader = $this->factory->createDataPoolReader();
-
-        $expectedMetaInfoContent = $this->getStubMetaInfo();
-
         $metaInfoSnippet = $dataPoolReader->getSnippet($metaInfoSnippetKey);
-        $decodedMetaInfoSnippet = json_decode($metaInfoSnippet, true);
 
-        $this->assertSame($expectedMetaInfoContent, $decodedMetaInfoSnippet);
+        $expectedMetaInfoContent = json_encode($this->getStubMetaInfo());
+
+        $this->assertSame($expectedMetaInfoContent, $metaInfoSnippet);
     }
 
     /**
@@ -77,9 +78,11 @@ class ProductListingTest extends AbstractIntegrationTest
         $body = $page->getBody();
 
         /* TODO: read from XML */
-        $expectedProductName = 'LED Armflasher';
+        $expectedProductName = 'adiPure 360';
+        $unExpectedProductName = 'LED Armflasher';
 
         $this->assertContains($expectedProductName, $body);
+        $this->assertNotContains($unExpectedProductName, $body);
     }
     
     private function addRootTemplateChangedDomainEventToSetupProductListingFixture()
@@ -99,7 +102,7 @@ class ProductListingTest extends AbstractIntegrationTest
     private function addProductListingCriteriaDomainDomainEventFixture()
     {
         $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
-        $listingNodesRawXml = (new XPathParser($xml))->getXmlNodesRawXmlArrayByXPath('//catalog/listings/listing');
+        $listingNodesRawXml = (new XPathParser($xml))->getXmlNodesRawXmlArrayByXPath('//catalog/listings/listing[1]');
 
         $queue = $this->factory->getEventQueue();
         $queue->add(new ProductListingSavedDomainEvent($listingNodesRawXml[0]));
@@ -143,8 +146,14 @@ class ProductListingTest extends AbstractIntegrationTest
      */
     private function getStubMetaInfo()
     {
+        $searchCriterion1 = SearchCriterion::create('category', 'men-accessories', 'eq');
+        $searchCriterion2 = SearchCriterion::create('brand', 'Adidas', 'eq');
+        $searchCriteria = SearchCriteria::create(SearchCriteria::AND_CONDITION);
+        $searchCriteria->add($searchCriterion1);
+        $searchCriteria->add($searchCriterion2);
+
         $metaSnippetContent = ProductListingMetaInfoSnippetContent::create(
-            ['category' => 'men-accessories'],
+            $searchCriteria,
             ProductListingSnippetRenderer::CODE,
             []
         );

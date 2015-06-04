@@ -27,15 +27,15 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private $searchDocumentBuilder;
 
+    /**
+     * @var string
+     */
+    private $searchableAttributeCode = 'foo';
+
     protected function setUp()
     {
-        $searchableAttributeCodes = ['name'];
-
-        $this->stubContextSource = $this->getMockBuilder(SampleContextSource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->searchDocumentBuilder = new ProductSearchDocumentBuilder($searchableAttributeCodes);
+        $this->stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
+        $this->searchDocumentBuilder = new ProductSearchDocumentBuilder([$this->searchableAttributeCode]);
     }
 
     /**
@@ -51,32 +51,18 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldReturnSearchDocumentCollection()
     {
-        $stubContext = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $stubContext = $this->getMock(Context::class, [], [], '', false);
         $this->stubContextSource->expects($this->atLeastOnce())
             ->method('getAllAvailableContexts')
             ->willReturn([$stubContext]);
 
-        $stubProductId = $this->getMockBuilder(ProductId::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $stubProduct = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $stubProduct->expects($this->atLeastOnce())
-            ->method('getId')
-            ->willReturn($stubProductId);
+        $stubProduct = $this->getMock(Product::class, [], [], '', false);
         $stubProduct->expects($this->atLeastOnce())
             ->method('getAttributeValue')
-            ->with('name')
+            ->with($this->searchableAttributeCode)
             ->willReturn('bar');
 
-        $stubProductSource = $this->getMockBuilder(ProductSource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $stubProductSource = $this->getMock(ProductSource::class, [], [], '', false);
         $stubProductSource->expects($this->atLeastOnce())
             ->method('getProductForContext')
             ->with($stubContext)

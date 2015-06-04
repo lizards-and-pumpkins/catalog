@@ -2,6 +2,8 @@
 
 namespace Brera\Product;
 
+use Brera\DataPool\SearchEngine\SearchCriteria;
+use Brera\DataPool\SearchEngine\SearchCriterion;
 use Brera\PageMetaInfoSnippetContent;
 
 class ProductListingMetaInfoSnippetContent implements PageMetaInfoSnippetContent
@@ -9,7 +11,7 @@ class ProductListingMetaInfoSnippetContent implements PageMetaInfoSnippetContent
     const KEY_CRITERIA = 'product_selection_criteria';
 
     /**
-     * @var string[]
+     * @var SearchCriteria
      */
     private $selectionCriteria;
 
@@ -24,11 +26,11 @@ class ProductListingMetaInfoSnippetContent implements PageMetaInfoSnippetContent
     private $pageSnippetCodes;
 
     /**
-     * @param string[] $productSelectionCriteria
+     * @param SearchCriteria $productSelectionCriteria
      * @param string $rootSnippetCode
      * @param string[] $pageSnippetCodes
      */
-    private function __construct(array $productSelectionCriteria, $rootSnippetCode, array $pageSnippetCodes)
+    private function __construct(SearchCriteria $productSelectionCriteria, $rootSnippetCode, array $pageSnippetCodes)
     {
         $this->selectionCriteria = $productSelectionCriteria;
         $this->rootSnippetCode = $rootSnippetCode;
@@ -36,12 +38,12 @@ class ProductListingMetaInfoSnippetContent implements PageMetaInfoSnippetContent
     }
 
     /**
-     * @param string[] $selectionCriteria
+     * @param SearchCriteria $selectionCriteria
      * @param string $rootSnippetCode
      * @param string[] $pageSnippetCodes
      * @return ProductListingMetaInfoSnippetContent
      */
-    public static function create(array $selectionCriteria, $rootSnippetCode, array $pageSnippetCodes)
+    public static function create(SearchCriteria $selectionCriteria, $rootSnippetCode, array $pageSnippetCodes)
     {
         self::validateRootSnippetCode($rootSnippetCode);
         if (!in_array($rootSnippetCode, $pageSnippetCodes)) {
@@ -58,8 +60,11 @@ class ProductListingMetaInfoSnippetContent implements PageMetaInfoSnippetContent
     {
         $pageInfo = self::decodeJson($json);
         self::validateRequiredKeysArePresent($pageInfo);
+
+        $searchCriteria = self::createSearchCriteriaFromMetaInfo($pageInfo[self::KEY_CRITERIA]);
+
         return static::create(
-            $pageInfo[self::KEY_CRITERIA],
+            $searchCriteria,
             $pageInfo[self::KEY_ROOT_SNIPPET_CODE],
             $pageInfo[self::KEY_PAGE_SNIPPET_CODES]
         );
@@ -117,7 +122,7 @@ class ProductListingMetaInfoSnippetContent implements PageMetaInfoSnippetContent
     }
 
     /**
-     * @return string[]
+     * @return SearchCriteria
      */
     public function getSelectionCriteria()
     {
@@ -138,5 +143,51 @@ class ProductListingMetaInfoSnippetContent implements PageMetaInfoSnippetContent
     public function getPageSnippetCodes()
     {
         return $this->pageSnippetCodes;
+    }
+
+    /**
+     * @param mixed[] $metaInfo
+     * @return SearchCriteria
+     * @throws MalformedSearchCriteriaMetaException
+     */
+    private static function createSearchCriteriaFromMetaInfo(array $metaInfo)
+    {
+        if (!isset($metaInfo['condition'])) {
+            throw new MalformedSearchCriteriaMetaException('Missing criteria condition.');
+        }
+
+        if (!isset($metaInfo['criteria']) || !is_array($metaInfo['criteria'])) {
+            throw new MalformedSearchCriteriaMetaException('Malformed criteria.');
+        }
+
+        $criteria = SearchCriteria::create(SearchCriteria::AND_CONDITION);
+
+        foreach ($metaInfo['criteria'] as $criterionArray) {
+            if (!is_array($criterionArray)) {
+                throw new MalformedSearchCriteriaMetaException('Malformed criterion.');
+            }
+
+            if (!isset($criterionArray['fieldName'])) {
+                throw new MalformedSearchCriteriaMetaException('Missing criterion field name.');
+            }
+
+            if (!isset($criterionArray['fieldValue'])) {
+                throw new MalformedSearchCriteriaMetaException('Missing criterion field value.');
+            }
+
+            if (!isset($criterionArray['operation'])) {
+                throw new MalformedSearchCriteriaMetaException('Missing criterion operation.');
+            }
+
+            $criterion = SearchCriterion::create(
+                $criterionArray['fieldName'],
+                $criterionArray['fieldValue'],
+                $criterionArray['operation']
+            );
+
+            $criteria->add($criterion);
+        }
+
+        return $criteria;
     }
 }

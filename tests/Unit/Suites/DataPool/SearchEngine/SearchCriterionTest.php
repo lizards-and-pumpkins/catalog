@@ -9,6 +9,16 @@ class SearchCriterionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
+     */
+    public function itShouldImplementJsonSerializableInterface()
+    {
+        $result = SearchCriterion::create('foo', 'bar', 'eq');
+
+        $this->assertInstanceOf(\JsonSerializable::class, $result);
+    }
+
+    /**
+     * @test
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Criterion field name should be a string
      */
@@ -51,5 +61,21 @@ class SearchCriterionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($fieldName, $criterion->getFieldName());
         $this->assertEquals($fieldValue, $criterion->getFieldValue());
         $this->assertEquals($operation, $criterion->getOperation());
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldReturnArrayRepresentationOfACriterion()
+    {
+        $fieldName = 'foo';
+        $fieldValue = 'bar';
+        $operation = 'eq';
+
+        $criterion = SearchCriterion::create($fieldName, $fieldValue, $operation);
+        $result = $criterion->jsonSerialize();
+        $expectation = ['fieldName' => $fieldName, 'fieldValue' => $fieldValue, 'operation' => $operation];
+
+        $this->assertSame($expectation, $result);
     }
 }

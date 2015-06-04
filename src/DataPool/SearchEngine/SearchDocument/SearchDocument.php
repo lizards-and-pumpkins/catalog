@@ -3,6 +3,8 @@
 namespace Brera\DataPool\SearchEngine\SearchDocument;
 
 use Brera\Context\Context;
+use Brera\DataPool\SearchEngine\SearchCriteria;
+use Brera\DataPool\SearchEngine\SearchCriterion;
 
 class SearchDocument
 {
@@ -58,27 +60,68 @@ class SearchDocument
     }
 
     /**
-     * @param string[] $fieldNamesAndValuesToCheck
+     * @param SearchCriteria $criteria
      * @return bool
      */
-    public function hasFieldMatchingOneOf(array $fieldNamesAndValuesToCheck)
+    public function isMatchingCriteria(SearchCriteria $criteria)
     {
-        foreach ($fieldNamesAndValuesToCheck as $fieldName => $fieldValue) {
-            if ($this->hasMatchingField($fieldName, $fieldValue)) {
-                return true;
-            }
+        $isMatching = false;
+        $canExitTheLoop = false;
+        $criterionArray = $criteria->getCriteria();
+
+        while (false === $canExitTheLoop && list(, $criterion) = each($criterionArray)) {
+            $isMatching = $this->hasMatchingField($criterion);
+            $canExitTheLoop = (SearchCriteria::OR_CONDITION === $criteria->getCondition() && $isMatching) ||
+                              (SearchCriteria::AND_CONDITION === $criteria->getCondition() && !$isMatching);
         }
-        return false;
+
+        return $isMatching;
     }
 
     /**
-     * @param string $fieldName
-     * @param string $fieldValue
+     * @param SearchCriterion $criterion
      * @return bool
      */
-    public function hasMatchingField($fieldName, $fieldValue)
+    private function hasMatchingField(SearchCriterion $criterion)
     {
-        $searchField = SearchDocumentField::fromKeyAndValue($fieldName, $fieldValue);
-        return $this->fields->contains($searchField);
+        $isMatching = false;
+
+        /** @var SearchDocumentField $field */
+        $fields = $this->fields->getFields();
+
+        while (false === $isMatching && list(, $field) = each($fields)) {
+            if ($field->getKey() !== $criterion->getFieldName()) {
+                continue;
+            }
+
+            $isMatching = $this->searchDocumentFieldMatchesCriterion($criterion, $field);
+        }
+
+        return $isMatching;
+    }
+
+    /**
+     * @param SearchCriterion $criterion
+     * @param SearchDocumentField $field
+     * @return bool
+     */
+    private function searchDocumentFieldMatchesCriterion(SearchCriterion $criterion, SearchDocumentField $field)
+    {
+        switch ($criterion->getOperation()) {
+            case 'eq':
+                return $field->getValue() == $criterion->getFieldValue();
+            case 'neq':
+                return $field->getValue() != $criterion->getFieldValue();
+            case 'gt':
+                return $field->getValue() > $criterion->getFieldValue();
+            case 'gte';
+                return $field->getValue() >= $criterion->getFieldValue();
+            case 'lt':
+                return $field->getValue() < $criterion->getFieldValue();
+            case 'lte':
+                return $field->getValue() <= $criterion->getFieldValue();
+        }
+
+        return false;
     }
 }

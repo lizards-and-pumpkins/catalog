@@ -2,7 +2,7 @@
 
 namespace Brera\DataPool\SearchEngine;
 
-class SearchCriterion
+class SearchCriterion implements \JsonSerializable
 {
     const VALID_OPERATIONS = ['eq', 'neq', 'gt', 'gte', 'lt', 'lte'];
 
@@ -78,5 +78,14 @@ class SearchCriterion
     public function getOperation()
     {
         return $this->operation;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'fieldName'     => $this->fieldName,
+            'fieldValue'    => $this->fieldValue,
+            'operation'     => $this->operation
+        ];
     }
 }

@@ -30,7 +30,6 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine
     {
         $results = [];
 
-        /** @var SearchDocument $searchDocument */
         foreach ($this->getSearchDocuments() as $searchDocument) {
             if (!$this->hasMatchingContext($queryContext, $searchDocument)) {
                 continue;
@@ -43,18 +42,17 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine
     }
 
     /**
-     * @param string[] $queryCriteria
+     * @param SearchCriteria $criteria
      * @param Context $context
      * @return string[]
      */
-    final public function queryGivenFields(array $queryCriteria, Context $context)
+    final public function getContentOfSearchDocumentsMatchingCriteria(SearchCriteria $criteria, Context $context)
     {
-        $this->validateSearchCriteria($queryCriteria);
         $result = [];
         
         foreach ($this->getSearchDocuments() as $searchDocument) {
             // todo: check for matching context
-            if ($searchDocument->hasFieldMatchingOneOf($queryCriteria)) {
+            if ($searchDocument->isMatchingCriteria($criteria)) {
                 $content = $searchDocument->getContent();
                 if (! in_array($content, $result)) {
                     $result[] = $content;
@@ -112,21 +110,5 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine
             }
         }
         return $results;
-    }
-
-    /**
-     * @param string[] $queryCriteria
-     * @throws InvalidFieldIdentifierException
-     */
-    private function validateSearchCriteria(array $queryCriteria)
-    {
-        array_map(function ($fieldName) {
-            if (!is_string($fieldName)) {
-                throw new InvalidFieldIdentifierException(sprintf(
-                    'The query criteria field name must be a string, got "%s"',
-                    $fieldName
-                ));
-            }
-        }, array_keys($queryCriteria));
     }
 }

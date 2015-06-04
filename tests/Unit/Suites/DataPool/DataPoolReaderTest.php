@@ -3,6 +3,8 @@
 namespace Brera\DataPool;
 
 use Brera\Context\Context;
+use Brera\DataPool\SearchEngine\SearchCriteria;
+use Brera\DataPool\SearchEngine\SearchCriterion;
 
 /**
  * @covers \Brera\DataPool\DataPoolReader
@@ -244,10 +246,13 @@ class DataPoolReaderTest extends AbstractDataPoolTest
      */
     public function itShouldDelegateCriteriaQueriesToTheSearchEngine()
     {
-        $searchCriteria = ['test-field' => 'test-value'];
+        $mockCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
         $stubContext = $this->getMock(Context::class);
-        $this->getStubSearchEngine()->expects($this->once())->method('queryGivenFields')
-            ->with($searchCriteria, $stubContext);
-        $this->dataPoolReader->getProductIdsMatchingCriteria($searchCriteria, $stubContext);
+
+        $this->getStubSearchEngine()->expects($this->once())
+            ->method('getContentOfSearchDocumentsMatchingCriteria')
+            ->with($mockCriteria, $stubContext);
+
+        $this->dataPoolReader->getProductIdsMatchingCriteria($mockCriteria, $stubContext);
     }
 }

@@ -8,6 +8,8 @@ use Brera\DataPool\SearchEngine\SearchCriteria;
  * @covers \Brera\Product\ProductListingSourceBuilder
  * @uses   \Brera\Utils\XPathParser
  * @uses   \Brera\Product\ProductListingSource
+ * @uses   \Brera\DataPool\SearchEngine\SearchCriteria
+ * @uses   \Brera\DataPool\SearchEngine\SearchCriterion
  */
 class ProductListingSourceBuilderTest extends \PHPUnit_Framework_TestCase
 {

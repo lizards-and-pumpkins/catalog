@@ -2,7 +2,7 @@
 
 namespace Brera\DataPool\SearchEngine;
 
-class SearchCriteria
+class SearchCriteria implements \JsonSerializable
 {
     const AND_CONDITION = 'and';
     const OR_CONDITION = 'or';
@@ -58,5 +58,16 @@ class SearchCriteria
     public function getCriteria()
     {
         return $this->criteria;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'condition' => $this->condition,
+            'criteria'  => $this->criteria
+        ];
     }
 }
