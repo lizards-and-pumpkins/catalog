@@ -78,7 +78,7 @@ class ProductListingTest extends AbstractIntegrationTest
         $body = $page->getBody();
 
         /* TODO: read from XML */
-        $expectedProductName = 'adiPure 360';
+        $expectedProductName = 'Adilette';
         $unExpectedProductName = 'LED Armflasher';
 
         $this->assertContains($expectedProductName, $body);
