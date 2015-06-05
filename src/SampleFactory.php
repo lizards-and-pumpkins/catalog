@@ -57,7 +57,7 @@ class SampleFactory implements Factory
      */
     public function getSearchableAttributeCodes()
     {
-        return ['name', 'category'];
+        return ['name', 'category', 'brand'];
     }
 
     /**
@@ -91,7 +91,7 @@ class SampleFactory implements Factory
      */
     public function getOriginalImageFileStorageReader()
     {
-        return new LocalFilesystemStorageReader(__DIR__ . '/../tests/shared-fixture');
+        return new LocalFilesystemStorageReader(__DIR__ . '/../tests/shared-fixture/product-images');
     }
 
     /**
@@ -130,7 +130,7 @@ class SampleFactory implements Factory
      */
     public function getProductDetailsPageImageFileStorageReader()
     {
-        return new LocalFilesystemStorageReader(__DIR__ . '/../tests/shared-fixture');
+        return new LocalFilesystemStorageReader(__DIR__ . '/../tests/shared-fixture/product-images');
     }
 
     /**
@@ -174,7 +174,7 @@ class SampleFactory implements Factory
      */
     public function getProductListingImageFileStorageReader()
     {
-        return new LocalFilesystemStorageReader(__DIR__ . '/../tests/shared-fixture');
+        return new LocalFilesystemStorageReader(__DIR__ . '/../tests/shared-fixture/product-images');
     }
 
     /**
@@ -218,7 +218,7 @@ class SampleFactory implements Factory
      */
     public function getGalleyThumbnailImageFileStorageReader()
     {
-        return new LocalFilesystemStorageReader(__DIR__ . '/../tests/shared-fixture');
+        return new LocalFilesystemStorageReader(__DIR__ . '/../tests/shared-fixture/product-images');
     }
 
     /**
