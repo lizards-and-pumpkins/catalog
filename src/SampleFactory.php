@@ -4,10 +4,10 @@ namespace Brera;
 
 use Brera\DataPool\KeyValue\File\FileKeyValueStore;
 use Brera\DataPool\SearchEngine\FileSearchEngine;
-use Brera\Image\ImageMagickInscribeInstruction;
+use Brera\Image\ImageMagickInscribeStrategy;
 use Brera\Image\ImageProcessor;
 use Brera\Image\ImageProcessorCollection;
-use Brera\Image\ImageProcessorInstructionSequence;
+use Brera\Image\ImageProcessingStrategySequence;
 use Brera\Queue\InMemory\InMemoryQueue;
 
 class SampleFactory implements Factory
@@ -79,11 +79,11 @@ class SampleFactory implements Factory
      */
     public function getOriginalImageProcessor()
     {
-        $instructionSequence = $this->getMasterFactory()->getOriginalImageProcessorInstructionSequence();
+        $strategySequence = $this->getMasterFactory()->getOriginalImageProcessingStrategySequence();
         $fileStorageReader = $this->getMasterFactory()->getOriginalImageFileStorageReader();
         $fileStorageWriter = $this->getMasterFactory()->getOriginalImageFileStorageWriter();
 
-        return new ImageProcessor($instructionSequence, $fileStorageReader, $fileStorageWriter);
+        return new ImageProcessor($strategySequence, $fileStorageReader, $fileStorageWriter);
     }
 
     /**
@@ -106,11 +106,11 @@ class SampleFactory implements Factory
     }
 
     /**
-     * @return ImageProcessorInstructionSequence
+     * @return ImageProcessingStrategySequence
      */
-    public function getOriginalImageProcessorInstructionSequence()
+    public function getOriginalImageProcessingStrategySequence()
     {
-        return new ImageProcessorInstructionSequence();
+        return new ImageProcessingStrategySequence();
     }
 
     /**
@@ -118,11 +118,11 @@ class SampleFactory implements Factory
      */
     public function getProductDetailsPageImageProcessor()
     {
-        $instructionSequence = $this->getMasterFactory()->getProductDetailsPageImageProcessorInstructionSequence();
+        $strategySequence = $this->getMasterFactory()->getProductDetailsPageImageProcessingStrategySequence();
         $fileStorageReader = $this->getMasterFactory()->getProductDetailsPageImageFileStorageReader();
         $fileStorageWriter = $this->getMasterFactory()->getProductDetailsPageImageFileStorageWriter();
 
-        return new ImageProcessor($instructionSequence, $fileStorageReader, $fileStorageWriter);
+        return new ImageProcessor($strategySequence, $fileStorageReader, $fileStorageWriter);
     }
 
     /**
@@ -145,16 +145,16 @@ class SampleFactory implements Factory
     }
 
     /**
-     * @return ImageProcessorInstructionSequence
+     * @return ImageProcessingStrategySequence
      */
-    public function getProductDetailsPageImageProcessorInstructionSequence()
+    public function getProductDetailsPageImageProcessingStrategySequence()
     {
-        $imageResizeInstruction = new ImageMagickInscribeInstruction(365, 340, 'white');
+        $imageResizeStrategy = new ImageMagickInscribeStrategy(365, 340, 'white');
 
-        $instructionSequence = new ImageProcessorInstructionSequence();
-        $instructionSequence->addInstruction($imageResizeInstruction);
+        $strategySequence = new ImageProcessingStrategySequence();
+        $strategySequence->add($imageResizeStrategy);
 
-        return $instructionSequence;
+        return $strategySequence;
     }
 
     /**
@@ -162,11 +162,11 @@ class SampleFactory implements Factory
      */
     public function getProductListingImageProcessor()
     {
-        $instructionSequence = $this->getMasterFactory()->getProductListingImageProcessorInstructionSequence();
+        $strategySequence = $this->getMasterFactory()->getProductListingImageProcessingStrategySequence();
         $fileStorageReader = $this->getMasterFactory()->getProductListingImageFileStorageReader();
         $fileStorageWriter = $this->getMasterFactory()->getProductListingImageFileStorageWriter();
 
-        return new ImageProcessor($instructionSequence, $fileStorageReader, $fileStorageWriter);
+        return new ImageProcessor($strategySequence, $fileStorageReader, $fileStorageWriter);
     }
 
     /**
@@ -189,16 +189,16 @@ class SampleFactory implements Factory
     }
 
     /**
-     * @return ImageProcessorInstructionSequence
+     * @return ImageProcessingStrategySequence
      */
-    public function getProductListingImageProcessorInstructionSequence()
+    public function getProductListingImageProcessingStrategySequence()
     {
-        $imageResizeInstruction = new ImageMagickInscribeInstruction(188, 115, 'white');
+        $imageResizeStrategy = new ImageMagickInscribeStrategy(188, 115, 'white');
 
-        $instructionSequence = new ImageProcessorInstructionSequence();
-        $instructionSequence->addInstruction($imageResizeInstruction);
+        $strategySequence = new ImageProcessingStrategySequence();
+        $strategySequence->add($imageResizeStrategy);
 
-        return $instructionSequence;
+        return $strategySequence;
     }
 
     /**
@@ -206,11 +206,11 @@ class SampleFactory implements Factory
      */
     public function getGalleyThumbnailImageProcessor()
     {
-        $instructionSequence = $this->getMasterFactory()->getGalleyThumbnailImageProcessorInstructionSequence();
+        $strategySequence = $this->getMasterFactory()->getGalleyThumbnailImageProcessingStrategySequence();
         $fileStorageReader = $this->getMasterFactory()->getGalleyThumbnailImageFileStorageReader();
         $fileStorageWriter = $this->getMasterFactory()->getGalleyThumbnailImageFileStorageWriter();
 
-        return new ImageProcessor($instructionSequence, $fileStorageReader, $fileStorageWriter);
+        return new ImageProcessor($strategySequence, $fileStorageReader, $fileStorageWriter);
     }
 
     /**
@@ -233,16 +233,16 @@ class SampleFactory implements Factory
     }
 
     /**
-     * @return ImageProcessorInstructionSequence
+     * @return ImageProcessingStrategySequence
      */
-    public function getGalleyThumbnailImageProcessorInstructionSequence()
+    public function getGalleyThumbnailImageProcessingStrategySequence()
     {
-        $imageResizeInstruction = new ImageMagickInscribeInstruction(48, 48, 'white');
+        $imageResizeStrategy = new ImageMagickInscribeStrategy(48, 48, 'white');
 
-        $instructionSequence = new ImageProcessorInstructionSequence();
-        $instructionSequence->addInstruction($imageResizeInstruction);
+        $strategySequence = new ImageProcessingStrategySequence();
+        $strategySequence->add($imageResizeStrategy);
 
-        return $instructionSequence;
+        return $strategySequence;
     }
 
     /**

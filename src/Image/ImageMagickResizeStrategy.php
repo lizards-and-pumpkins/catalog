@@ -2,9 +2,9 @@
 
 namespace Brera\Image;
 
-class ImageMagickResizeInstruction implements ImageProcessorInstruction
+class ImageMagickResizeStrategy implements ImageProcessingStrategy
 {
-    use ResizeInstructionTrait;
+    use ResizeStrategyTrait;
 
     /**
      * @param int $width
@@ -21,7 +21,7 @@ class ImageMagickResizeInstruction implements ImageProcessorInstruction
      * @return string
      * @throws InvalidBinaryImageDataException
      */
-    public function execute($binaryImageData)
+    public function processBinaryImageData($binaryImageData)
     {
         $this->validateImageDimensions();
 

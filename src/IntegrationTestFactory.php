@@ -4,10 +4,10 @@ namespace Brera;
 
 use Brera\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
 use Brera\DataPool\SearchEngine\InMemorySearchEngine;
-use Brera\Image\ImageMagickResizeInstruction;
+use Brera\Image\ImageMagickResizeStrategy;
 use Brera\Image\ImageProcessor;
 use Brera\Image\ImageProcessorCollection;
-use Brera\Image\ImageProcessorInstructionSequence;
+use Brera\Image\ImageProcessingStrategySequence;
 use Brera\Queue\InMemory\InMemoryQueue;
 
 class IntegrationTestFactory implements Factory
@@ -74,11 +74,11 @@ class IntegrationTestFactory implements Factory
      */
     public function getImageProcessor()
     {
-        $instructionSequence = $this->getMasterFactory()->getImageProcessorInstructionSequence();
+        $strategySequence = $this->getMasterFactory()->getImageProcessingStrategySequence();
         $fileStorageReader = $this->getMasterFactory()->getImageFileStorageReader();
         $fileStorageWriter = $this->getMasterFactory()->getImageFileStorageWriter();
 
-        return new ImageProcessor($instructionSequence, $fileStorageReader, $fileStorageWriter);
+        return new ImageProcessor($strategySequence, $fileStorageReader, $fileStorageWriter);
     }
 
     /**
@@ -104,18 +104,18 @@ class IntegrationTestFactory implements Factory
     }
 
     /**
-     * @return ImageProcessorInstructionSequence
+     * @return ImageProcessingStrategySequence
      */
-    public function getImageProcessorInstructionSequence()
+    public function getImageProcessingStrategySequence()
     {
-        $imageResizeInstruction = new ImageMagickResizeInstruction(
+        $imageResizeStrategy = new ImageMagickResizeStrategy(
             self::PROCESSED_IMAGE_WIDTH,
             self::PROCESSED_IMAGE_HEIGHT
         );
 
-        $instructionSequence = new ImageProcessorInstructionSequence();
-        $instructionSequence->addInstruction($imageResizeInstruction);
+        $strategySequence = new ImageProcessingStrategySequence();
+        $strategySequence->add($imageResizeStrategy);
 
-        return $instructionSequence;
+        return $strategySequence;
     }
 }

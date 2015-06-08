@@ -2,7 +2,7 @@
 
 namespace Brera\Image;
 
-trait ResizeInstructionTrait
+trait ResizeStrategyTrait
 {
     /**
      * @var int

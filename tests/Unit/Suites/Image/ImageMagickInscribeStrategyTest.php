@@ -2,16 +2,19 @@
 
 namespace Brera\Image;
 
-abstract class AbstractResizeInstructionTest extends \PHPUnit_Framework_TestCase
+/**
+ * @covers \Brera\Image\ImageMagickInscribeStrategy
+ * @uses   \Brera\Image\ResizeStrategyTrait
+ */
+class ImageMagickInscribeStrategyTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function itShouldImplementImageProcessorInstructionInterface()
+    public function itShouldImplementImageProcessorStrategyInterface()
     {
-        $class = $this->getResizeClassName();
-        $instruction = new $class(1, 1);
-        $this->assertInstanceOf(ImageProcessorInstruction::class, $instruction);
+        $strategy = new ImageMagickInscribeStrategy(1, 1, 'none');
+        $this->assertInstanceOf(ImageProcessingStrategy::class, $strategy);
     }
 
     /**
@@ -21,8 +24,7 @@ abstract class AbstractResizeInstructionTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldFailIfWidthIsNotAnInteger()
     {
-        $class = $this->getResizeClassName();
-        (new $class('foo', 1))->execute('');
+        (new ImageMagickInscribeStrategy('foo', 1, 'none'))->processBinaryImageData('');
     }
 
     /**
@@ -32,8 +34,7 @@ abstract class AbstractResizeInstructionTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldFailIfWidthIsNotPositive()
     {
-        $class = $this->getResizeClassName();
-        (new $class(0, 1))->execute('');
+        (new ImageMagickInscribeStrategy(0, 1, 'none'))->processBinaryImageData('');
     }
 
     /**
@@ -43,8 +44,7 @@ abstract class AbstractResizeInstructionTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldFailIfHeightIsNotAnInteger()
     {
-        $class = $this->getResizeClassName();
-        (new $class(1, 'foo'))->execute('');
+        (new ImageMagickInscribeStrategy(1, 'foo', 'none'))->processBinaryImageData('');
     }
 
     /**
@@ -54,8 +54,16 @@ abstract class AbstractResizeInstructionTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldFailIfHeightIsNotPositive()
     {
-        $class = $this->getResizeClassName();
-        (new $class(1, -1))->execute('');
+        (new ImageMagickInscribeStrategy(1, -1, 'none'))->processBinaryImageData('');
+    }
+
+    /**
+     * @test
+     * @expectedException \Brera\Image\InvalidColorException
+     */
+    public function itShouldFailIfInvalidBackgroundColorIsSpecified()
+    {
+        (new ImageMagickInscribeStrategy(1, 1, 'foo'))->processBinaryImageData('');
     }
 
     /**
@@ -64,8 +72,7 @@ abstract class AbstractResizeInstructionTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldFailIfImageStreamIsNotValid()
     {
-        $class = $this->getResizeClassName();
-        (new $class(1, 1))->execute('');
+        (new ImageMagickInscribeStrategy(1, 1, 'none'))->processBinaryImageData('');
     }
 
     /**
@@ -76,8 +83,7 @@ abstract class AbstractResizeInstructionTest extends \PHPUnit_Framework_TestCase
     {
         $imageStream = file_get_contents(__DIR__ . '/../../../shared-fixture/blank.ico');
 
-        $class = $this->getResizeClassName();
-        (new $class(1, 1))->execute($imageStream);
+        (new ImageMagickInscribeStrategy(1, 1, 'none'))->processBinaryImageData($imageStream);
     }
 
     /**
@@ -85,22 +91,16 @@ abstract class AbstractResizeInstructionTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldResizeImageToGivenDimensions()
     {
-        $requiredImageWidth = 15;
-        $requiredImageHeight = 10;
+        $requiredWidth = 15;
+        $requiredHeight = 10;
 
         $imageStream = file_get_contents(__DIR__ . '/../../../shared-fixture/test_image2.jpg');
 
-        $class = $this->getResizeClassName();
-        $result = (new $class($requiredImageWidth, $requiredImageHeight))->execute($imageStream);
+        $result = (new ImageMagickInscribeStrategy($requiredWidth, $requiredHeight, 'none'))->processBinaryImageData($imageStream);
         $resultImageInfo = getimagesizefromstring($result);
 
-        $this->assertEquals($requiredImageWidth, $resultImageInfo[0]);
-        $this->assertEquals($requiredImageHeight, $resultImageInfo[1]);
+        $this->assertEquals($requiredWidth, $resultImageInfo[0]);
+        $this->assertEquals($requiredHeight, $resultImageInfo[1]);
         $this->assertEquals('image/jpeg', $resultImageInfo['mime']);
     }
-
-    /**
-     * @return string
-     */
-    abstract protected function getResizeClassName();
 }
