@@ -9,10 +9,7 @@ use Brera\Product\ProductSourceBuilder;
 
 class ContextTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itShouldCreateTheDecoratedContextSet()
+    public function testDecoratedContextSetIsCreated()
     {
         $xml = <<<EOX
 <product sku="test"><attributes>
@@ -27,13 +24,12 @@ EOX;
         $factory->register(new IntegrationTestFactory());
         /** @var ProductSourceBuilder $productSourceBuilder */
         $productSourceBuilder = $factory->createProductSourceBuilder();
-        /** @var ContextSource $contextSource */
         $contextSource = $factory->createContextSource();
         $productSource = $productSourceBuilder->createProductSourceFromXml($xml);
         $codes = ['website', 'language', 'version'];
         $extractedValues = [];
         $contextCounter = 0;
-        /** @var Context $context */
+
         foreach ($contextSource->getAllAvailableContexts() as $context) {
             $contextCounter++;
             $this->assertEmpty(array_diff($codes, $context->getSupportedCodes()));
@@ -44,6 +40,6 @@ EOX;
             $extractedValues[] = $attributeValue;
         }
 
-        $this->assertCount(4, array_unique($extractedValues), "There should be 4 unique values.");
+        $this->assertCount(4, array_unique($extractedValues), 'There should be 4 unique values.');
     }
 }
