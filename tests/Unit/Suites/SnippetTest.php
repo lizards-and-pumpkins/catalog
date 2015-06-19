@@ -8,13 +8,13 @@ namespace Brera;
 class SnippetTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @test
-     * @expectedException \Brera\InvalidKeyException
-     * @param mixed $invalidKey
      * @dataProvider invalidKeyProvider
+     * @param mixed $invalidKey
      */
-    public function itShouldThrowOnInvalidKey($invalidKey)
+    public function testExceptionIsThrownOnInvalidKey($invalidKey)
     {
+        $this->setExpectedException(InvalidKeyException::class);
+
         $content = 'doesn\'t matter';
         Snippet::create($invalidKey, $content);
     }
@@ -37,11 +37,10 @@ class SnippetTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @test
      * @param string $validKey
      * @dataProvider validKeyProvider
      */
-    public function itShouldAllowValidKey($validKey)
+    public function testSnippetIsCreatedIfValidKeyIsProvided($validKey)
     {
         $content = 'doesn\'t matter';
         $result = Snippet::create($validKey, $content);
@@ -61,10 +60,7 @@ class SnippetTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @test
-     */
-    public function shouldReturnKeyAndContent()
+    public function testSnippetKeyAndContentAreReturned()
     {
         $content = 'doesn\'t matter';
         $key = 'key';

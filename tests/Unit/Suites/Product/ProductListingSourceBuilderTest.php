@@ -9,10 +9,7 @@ namespace Brera\Product;
  */
 class ProductListingSourceBuilderTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itShouldCreateAProductListingSourceFromXml()
+    public function testProductListingSourceIsCreatedFromXml()
     {
         $xml = <<<EOX
 <listing url_key="men-accessories" website="ru" language="en_US">
@@ -37,13 +34,12 @@ EOX;
         $this->assertEquals($expectedCriteria, $attributes);
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Product\InvalidNumberOfUrlKeysPerImportedProductListingException
-     * @expectedExceptionMessage There must be exactly one URL key in the imported product listing XML
-     */
-    public function itShouldThrowAnExceptionInCaseOfXmlHasNoEssentialData()
+    public function testExceptionIsThrownInCaseXmlHasNoEssentialData()
     {
+        $this->setExpectedException(
+            InvalidNumberOfUrlKeysPerImportedProductListingException::class,
+            'There must be exactly one URL key in the imported product listing XML'
+        );
         $xml = '<?xml version="1.0"?><node />';
         (new ProductListingSourceBuilder())->createProductListingSourceFromXml($xml);
     }

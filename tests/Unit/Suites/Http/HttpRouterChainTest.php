@@ -19,49 +19,29 @@ class HttpRouterChainTest extends \PHPUnit_Framework_TestCase
         $this->routerChain = new HttpRouterChain();
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Http\UnableToRouteRequestException
-     * @expectedExceptionMessage Unable to route a request ""
-     */
-    public function itShouldThrowUnableToRouteRequestException()
+    public function testUnableToRouteRequestExceptionIsThrown()
     {
-        $stubHttpRequest = $this->getStubHttpRequest();
+        $this->setExpectedException(UnableToRouteRequestException::class, 'Unable to route a request ""');
+        $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
         $stubContext = $this->getMock(Context::class);
         $this->routerChain->route($stubHttpRequest, $stubContext);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldRouteARequest()
+    public function testRequestIsRouted()
     {
-        $stubHttpRouter = $this->getMock(HttpRouter::class);
-
+        $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+        $stubContext = $this->getMock(Context::class);
         $stubHttpRequestHandler = $this->getMock(HttpRequestHandler::class);
 
-        $stubHttpRouter->expects($this->once())
+        $mockHttpRouter = $this->getMock(HttpRouter::class);
+        $mockHttpRouter->expects($this->once())
             ->method('route')
             ->willReturn($stubHttpRequestHandler);
 
-        $stubHttpRequest = $this->getStubHttpRequest();
-        
-        $stubContext = $this->getMock(Context::class);
-
-        $this->routerChain->register($stubHttpRouter);
+        $this->routerChain->register($mockHttpRouter);
 
         $handler = $this->routerChain->route($stubHttpRequest, $stubContext);
 
         $this->assertNotNull($handler);
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|HttpRequest
-     */
-    private function getStubHttpRequest()
-    {
-        $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
-
-        return $stubHttpRequest;
     }
 }

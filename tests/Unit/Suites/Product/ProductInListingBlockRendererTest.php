@@ -16,17 +16,13 @@ use Brera\ThemeLocator;
  */
 class ProductInListingBlockRendererTest extends BlockRendererTestAbstract
 {
-    public function itShouldReturnLayoutHandle()
+    public function testLayoutHandleIsReturned()
     {
         $result = $this->getBlockRenderer()->getLayoutHandle();
-
         $this->assertEquals('product_in_listing', $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTheProductPassedToRender()
+    public function testProductPassedToRenderIsReturned()
     {
         $stubProduct = $this->getMock(Product::class, [], [], '', false);
         $stubContext = $this->getStubContext();
@@ -34,6 +30,7 @@ class ProductInListingBlockRendererTest extends BlockRendererTestAbstract
         $this->createFixtureFile($template, '');
         $this->addStubRootBlock(StubBlock::class, $template);
         $this->getBlockRenderer()->render($stubProduct, $stubContext);
+
         $this->assertSame($stubProduct, $this->getBlockRenderer()->getProduct());
     }
 

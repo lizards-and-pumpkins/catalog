@@ -37,73 +37,51 @@ class VersionedContextTest extends \PHPUnit_Framework_TestCase
         $this->versionedContext = new VersionedContext($this->stubDataVersion);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldBeAnContext()
+    public function testContextInterfaceIsImplemented()
     {
         $this->assertInstanceOf(Context::class, $this->versionedContext);
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Context\ContextCodeNotFoundException
-     * @expectedExceptionMessage No value was not found in the current context for the code 'foo'
-     */
-    public function itShouldThrowAnExceptionWhenGettingTheValueWithANonMatchingCode()
+    public function testExceptionIsThrownIfNotMatchingCodeIsPassed()
     {
+        $this->setExpectedException(
+            ContextCodeNotFoundException::class,
+            'No value was not found in the current context for the code \'foo\''
+        );
         $this->versionedContext->getValue('foo');
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTheVersionForTheValue()
+    public function testVersionIsReturnedAsValue()
     {
         $result = $this->versionedContext->getValue(VersionedContext::CODE);
         $this->assertEquals($this->testVersionValue, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldAddTheVersionCodeToTheListOfSupportedCodes()
+    public function testVersionCodeIsAddedToListOfSupportedCodes()
     {
         $result = $this->versionedContext->getSupportedCodes();
         $this->assertInternalType('array', $result);
         $this->assertContains(VersionedContext::CODE, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTheVersionIdentifier()
+    public function testVersionIdentifierIsReturned()
     {
         $expected = 'v:' . $this->testVersionValue;
         $this->assertEquals($expected, $this->versionedContext->getId());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldIncludeTheVersionInTheIdentifierWhenItIsRequested()
+    public function testVersionIsIncludedInIdentifierWhenRequested()
     {
         $expected = 'v:' . $this->testVersionValue;
         $this->assertEquals($expected, $this->versionedContext->getIdForParts([VersionedContext::CODE]));
     }
 
-    /**
-     * @test
-     */
-    public function itShouldSupportTheVersionCode()
+    public function testVersionCodeIsSupported()
     {
         $this->assertTrue($this->versionedContext->supportsCode(VersionedContext::CODE));
     }
 
-    /**
-     * @test
-     */
-    public function itShouldNotSupportCodesOtherThenVersion()
+    public function testCodesOtherThenVersionAreNotSupported()
     {
         $this->assertFalse($this->versionedContext->supportsCode('foo'));
     }

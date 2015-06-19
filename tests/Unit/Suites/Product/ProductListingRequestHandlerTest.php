@@ -6,6 +6,7 @@ use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\KeyNotFoundException;
 use Brera\Http\HttpRequestHandler;
+use Brera\Http\UnableToHandleRequestException;
 use Brera\Page;
 use Brera\PageBuilder;
 use Brera\SnippetKeyGenerator;
@@ -77,28 +78,19 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function itShouldImplementHttpHandler()
+    public function testHttpHandlerInterfaceIsImplemented()
     {
         $this->assertInstanceOf(HttpRequestHandler::class, $this->requestHandler);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnFalseIfThePageMetaInfoContentSnippetCanNotBeLoaded()
+    public function testFalseIsReturnedIfThePageMetaInfoContentSnippetCanNotBeLoaded()
     {
         $exception = new KeyNotFoundException();
         $this->mockDataPoolReader->method('getSnippet')->willThrowException($exception);
         $this->assertFalse($this->requestHandler->canProcess());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTrueIfThePageMetaInfoContentSnippetCanBeLoaded()
+    public function testTrueIsReturnedIfThePageMetaInfoContentSnippetCanBeLoaded()
     {
         $this->mockDataPoolReader->method('getSnippet')->willReturnMap([
             [$this->testMetaInfoKey, $this->testMetaInfoSnippetJson]
@@ -106,20 +98,13 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->requestHandler->canProcess());
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Http\UnableToHandleRequestException
-     * @expectedExceptionMessage Unable to handle request
-     */
-    public function itShouldThrowIfProcessWithoutMetaInfoContentIsCalled()
+    public function testExceptionIsThrownIfProcessWithoutMetaInfoContentIsCalled()
     {
+        $this->setExpectedException(UnableToHandleRequestException::class, 'Unable to handle request');
         $this->requestHandler->process();
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateAPageMetaInfoSnippet()
+    public function testPageMetaInfoSnippetIsCreated()
     {
         $this->mockMetaInfoSnippet();
         $this->requestHandler->process();
@@ -131,10 +116,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnAPage()
+    public function testPageIsReturned()
     {
         $this->mockMetaInfoSnippet();
         $this->mockPageBuilder->method('buildPage')->willReturn($this->getMock(Page::class, [], [], '', false));
@@ -142,10 +124,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Page::class, $this->requestHandler->process());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldAddProductsInListingToPageBuilder()
+    public function testProductsInListingAreAddedToPageBuilder()
     {
         $this->mockDataPoolReader->method('getProductIdsMatchingCriteria')
             ->willReturn(['product_in_listing_id']);

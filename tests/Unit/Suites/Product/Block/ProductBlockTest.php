@@ -35,18 +35,12 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
         $this->productBlock = new ProductBlockTestStub($stubBlockRenderer, 'foo.phtml', 'foo', $this->stubProduct);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldExtendBlockClass()
+    public function testBlockClassIsExtended()
     {
         $this->assertInstanceOf(Block::class, $this->productBlock);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnProductAttributeValue()
+    public function testProductAttributeValueIsReturned()
     {
         $attributeCode = 'name';
         $attributeValue = 'foo';
@@ -58,10 +52,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($attributeValue, $this->productBlock->getProductAttributeValue($attributeCode));
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnEmptyStringIfAttributeIsNotFound()
+    public function testEmptyStringIsReturnedIfAttributeIsNotFound()
     {
         $stubException = $this->getMock(ProductAttributeNotFoundException::class);
 
@@ -75,10 +66,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('', $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnProductUrl()
+    public function testProductUrlIsReturned()
     {
         $urlKey = 'foo';
         $this->stubProduct->expects($this->once())
@@ -91,10 +79,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($urlKey, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnAnImage()
+    public function testInstanceOfImageIsReturned()
     {
         $stubAttribute = $this->getMock(ProductAttribute::class, [], [], '', false);
 

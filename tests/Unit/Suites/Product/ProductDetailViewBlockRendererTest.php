@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Brera\Product;
 
 use Brera\Renderer\BlockRenderer;
@@ -29,20 +28,13 @@ class ProductDetailViewBlockRendererTest extends BlockRendererTestAbstract
         return new ProductDetailViewBlockRenderer($stubThemeLocator, $stubBlockStructure);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnLayoutHandle()
+    public function testLayoutHandleIsReturned()
     {
         $result = $this->getBlockRenderer()->getLayoutHandle();
-
         $this->assertEquals('product_detail_view', $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTheProductPassedToRender()
+    public function testProductPassedToRenderIsReturned()
     {
         $stubProduct = $this->getMock(Product::class, [], [], '', false);
         $stubContext = $this->getStubContext();
@@ -50,6 +42,7 @@ class ProductDetailViewBlockRendererTest extends BlockRendererTestAbstract
         $this->createFixtureFile($template, '');
         $this->addStubRootBlock(StubBlock::class, $template);
         $this->getBlockRenderer()->render($stubProduct, $stubContext);
+
         $this->assertSame($stubProduct, $this->getBlockRenderer()->getProduct());
     }
 }

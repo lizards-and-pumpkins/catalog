@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Brera;
 
 use Brera\Context\Context;
@@ -22,14 +21,13 @@ class PoCUrlPathKeyGeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @test
      * @dataProvider urlKeyDataProvider
+     * @param string $path
+     * @param string $expected
      */
-    public function itShouldCreateUrlKeySnippetForAGivenPath($path, $expected)
+    public function testUrlKeySnippetIsCreatedForGivenPath($path, $expected)
     {
-        $stubUrl = $this->getMockBuilder(HttpUrl::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $stubUrl = $this->getMock(HttpUrl::class, [], [], '', false);
         $stubUrl->expects($this->any())
             ->method('getPathRelativeToWebFront')
             ->willReturn($path);

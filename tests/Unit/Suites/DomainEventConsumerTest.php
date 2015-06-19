@@ -42,10 +42,7 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
         $this->domainEventConsumer = new DomainEventConsumer($this->stubQueue, $this->stubLocator, $this->stubLogger);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCallProcessMethodOfDomainEventHandler()
+    public function testProcessMethodOfDomainEventHandlerIsCalled()
     {
         $numberOfEventsToProcess = 1;
 
@@ -59,10 +56,7 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
         $this->domainEventConsumer->process($numberOfEventsToProcess);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldWriteLogEntryIfLocatorIsNotFound()
+    public function testLogEntryIsWrittenIfLocatorIsNotFound()
     {
         $numberOfEventsToProcess = 1;
 
@@ -79,10 +73,7 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
         $this->domainEventConsumer->process($numberOfEventsToProcess);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldWriteLogEntryOnQueueReadFailure()
+    public function testLogEntryIsWrittenOnQueueReadFailure()
     {
         $numberOfEventsToProcess = 1;
         /* @var $stubUnderflowException \UnderflowException|\PHPUnit_Framework_MockObject_MockObject */

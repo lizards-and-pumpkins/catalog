@@ -32,10 +32,7 @@ class ProductSourceBuilderTest extends \PHPUnit_Framework_TestCase
         $this->domDocument->loadXML($xml);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateAProductSourceFromXml()
+    public function testProductSourceIsCreatedFromXml()
     {
         /** @var \DOMElement $firstNode */
         $firstNode = $this->domDocument->getElementsByTagName('product')->item(0);
@@ -51,10 +48,7 @@ class ProductSourceBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertProductAttributeValueEquals($expectedAttribute, $productSource, 'special_price');
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateAProductSourceFromXmlIgnoringAssociatedProducts()
+    public function testProductSourceIsCreatedFromXmlIgnoringAssociatedProducts()
     {
         /** @var \DOMElement $secondNode */
         $secondNode = $this->domDocument->getElementsByTagName('product')->item(1);
@@ -69,28 +63,26 @@ class ProductSourceBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertProductAttributeValueEquals($expectedAttribute, $productSource, 'price');
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Product\ProductAttributeNotFoundException
-     * @expectedExceptionMessage Can not find an attribute with code "size".
-     */
-    public function itShouldCreateAProductSourceFromXmlIgnoringAssociatedProductsAttributes()
+    public function testProductSourceIsCreatedFromXmlIgnoringAssociatedProductsAttributes()
     {
-        /** @var \DOMElement $secondNode */
         $secondNode = $this->domDocument->getElementsByTagName('product')->item(1);
         $secondNodeXml = $this->domDocument->saveXML($secondNode);
+
+        $this->setExpectedException(
+            ProductAttributeNotFoundException::class,
+            'Can not find an attribute with code "size".'
+        );
 
         $productSource = $this->builder->createProductSourceFromXml($secondNodeXml);
         $this->assertProductAttributeValueEquals('nothing', $productSource, 'size');
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Product\InvalidNumberOfSkusPerImportedProductException
-     * @expectedExceptionMessage There must be exactly one SKU in the imported product XML
-     */
-    public function itShouldThrowAnExceptionInCaseOfXmlHasNoEssentialData()
+    public function testExceptionIsThrownIfXmlHasNoEssentialData()
     {
+        $this->setExpectedException(
+            InvalidNumberOfSkusPerImportedProductException::class,
+            'There must be exactly one SKU in the imported product XML'
+        );
         $xml = '<?xml version="1.0"?><node />';
         (new ProductSourceBuilder())->createProductSourceFromXml($xml);
     }

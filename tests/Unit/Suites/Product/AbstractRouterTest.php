@@ -20,18 +20,12 @@ abstract class AbstractRouterTest extends \PHPUnit_Framework_TestCase
      */
     abstract protected function getMockRequestHandler();
     
-    /**
-     * @test
-     */
-    public function itShouldBeAHttpRouter()
+    public function testHttpRouterInterfaceIsImplemented()
     {
         $this->assertInstanceOf(HttpRouter::class, $this->getRouterUnderTest());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnNullIfTheRequestHandlerIsUnableToProcessRequest()
+    public function testNullIsReturnedIfRequestHandlerIsUnableToProcessRequest()
     {
         $this->getMockRequestHandler()->expects($this->once())
             ->method('canProcess')
@@ -41,10 +35,7 @@ abstract class AbstractRouterTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->getRouterUnderTest()->route($stubRequest, $stubContext));
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTheRequestHandlerIfItIsAbleToProcessRequest()
+    public function testRequestHandlerIsReturnedIfRequestHandlerCanProcessRequest()
     {
         $this->getMockRequestHandler()->expects($this->once())
             ->method('canProcess')

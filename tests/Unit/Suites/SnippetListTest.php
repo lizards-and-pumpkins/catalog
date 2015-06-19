@@ -18,47 +18,33 @@ class SnippetListTest extends \PHPUnit_Framework_TestCase
         $this->resultList = new SnippetList();
     }
 
-    /**
-     * @test
-     */
-    public function itShouldBeEmptyOnCreation()
-    {
-        $this->assertInstanceOf(\Countable::class, $this->resultList);
-        $this->assertEquals(0, $this->resultList->count());
-    }
-
-    /**
-     * @test
-     */
-    public function itShouldAddASnippet()
-    {
-        $snippet = Snippet::create('test', 'test');
-        $this->resultList->add($snippet);
-        $this->assertEquals(1, $this->resultList->count());
-    }
-
-    /**
-     * @test
-     */
-    public function itShouldBeIterable()
+    public function testIteratorAggregateInterfaceIsImplemented()
     {
         $this->assertInstanceOf(\IteratorAggregate::class, $this->resultList);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnASnippet()
+    public function testIsInitiallyEmpty()
+    {
+        $this->assertCount(0, $this->resultList);
+    }
+
+    public function testSnippetIsAdded()
     {
         $snippet = Snippet::create('test', 'test');
         $this->resultList->add($snippet);
+
+        $this->assertEquals(1, $this->resultList->count());
+    }
+
+    public function testSnippetIsReturned()
+    {
+        $snippet = Snippet::create('test', 'test');
+        $this->resultList->add($snippet);
+
         $this->assertContains($snippet, $this->resultList->getIterator());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldMergeTwoLists()
+    public function testTwoSnippetListsAreMerged()
     {
         $snippet = Snippet::create('test', 'test');
         $this->resultList->add($snippet);
@@ -74,14 +60,13 @@ class SnippetListTest extends \PHPUnit_Framework_TestCase
         $this->assertContains($snippet2, $this->resultList->getIterator());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldClearTheList()
+    public function testListIsCleared()
     {
         $snippet = Snippet::create('test', 'test');
+
         $this->resultList->add($snippet);
         $this->assertEquals(1, $this->resultList->count());
+
         $this->resultList->clear();
         $this->assertEquals(0, $this->resultList->count());
     }

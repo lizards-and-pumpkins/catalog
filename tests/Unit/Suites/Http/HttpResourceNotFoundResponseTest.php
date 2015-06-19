@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Brera\Http;
 
 /**
@@ -8,24 +7,12 @@ namespace Brera\Http;
  */
 class HttpResourceNotFoundResponseTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var HttpResourceNotFoundResponse
-     */
-    private $response;
-
-    public function setUp()
-    {
-        $this->response = new HttpResourceNotFoundResponse();
-    }
-
-    /**
-     * @test
-     */
-    public function itShouldSetA404ResponseCode()
+    public function test404ResponseCodeIsSet()
     {
         ob_start();
-        $this->response->send();
+        (new HttpResourceNotFoundResponse())->send();
         ob_end_clean();
+
         $this->assertEquals(404, http_response_code());
     }
 }

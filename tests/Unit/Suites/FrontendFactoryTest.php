@@ -3,8 +3,6 @@
 namespace Brera;
 
 use Brera\Api\ApiRouter;
-use Brera\Context\Context;
-use Brera\Http\HttpUrl;
 use Brera\Product\CatalogImportApiRequestHandler;
 use Brera\Product\ProductDetailViewRouter;
 use Brera\Product\ProductListingRouter;
@@ -44,46 +42,31 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
         $masterFactory->register($this->frontendFactory);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnCatalogImportApiRequestHandler()
+    public function testCatalogImportApiRequestHandlerIsReturned()
     {
         $result = $this->frontendFactory->createCatalogImportApiRequestHandler();
         $this->assertInstanceOf(CatalogImportApiRequestHandler::class, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateAnApiRouter()
+    public function testApiRouterIsReturned()
     {
         $result = $this->frontendFactory->createApiRouter();
         $this->assertInstanceOf(ApiRouter::class, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnProductDetailViewRouter()
+    public function testProductDetailViewRouterIsReturned()
     {
         $result = $this->frontendFactory->createProductDetailViewRouter();
         $this->assertInstanceOf(ProductDetailViewRouter::class, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnProductListingRouter()
+    public function testProductListingRouterIsReturned()
     {
         $result = $this->frontendFactory->createProductListingRouter();
         $this->assertInstanceOf(ProductListingRouter::class, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldAlwaysReturnTheSameKeyGeneratorLocatorViaGetter()
+    public function testSameKeyGeneratorLocatorIsReturnedViaGetter()
     {
         $result1 = $this->frontendFactory->getSnippetKeyGeneratorLocator();
         $result2 = $this->frontendFactory->getSnippetKeyGeneratorLocator();

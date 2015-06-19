@@ -4,10 +4,7 @@ namespace Brera\Http;
 
 abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itShouldReturnAUrl()
+    public function testUrlIsReturned()
     {
         $url = 'http://www.example.com/seo-url/';
 
@@ -22,22 +19,14 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $url);
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Http\UnsupportedRequestMethodException
-     * @expectedExceptionMessage Unsupported request method: "PUT"
-     */
-    public function itShouldThrowUnsupportedRequestMethodException()
+    public function testUnsupportedRequestMethodExceptionIsThrown()
     {
+        $this->setExpectedException(UnsupportedRequestMethodException::class, 'Unsupported request method: "PUT"');
         $stubHttpUrl = $this->getStubHttpUrl();
-
         HttpRequest::fromParameters('PUT', $stubHttpUrl);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnAnHttpRequestFromAGlobalState()
+    public function testHttpIsRequestReturnedFromGlobalState()
     {
         $this->setUpGlobalState();
 
@@ -46,10 +35,7 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(HttpGetRequest::class, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnAnHttpRequestFromAGlobalStateOfASecureUrl()
+    public function testHttpRequestIsReturnedFromGlobalStateOfSecureUrl()
     {
         $this->setUpGlobalState(true);
 

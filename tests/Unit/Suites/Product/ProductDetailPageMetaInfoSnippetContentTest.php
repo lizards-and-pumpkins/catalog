@@ -31,18 +31,12 @@ class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_Tes
         );
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnArray()
+    public function testArrayIsReturned()
     {
         $this->assertInternalType('array', $this->pageMetaInfo->getInfo());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldContainTheExpectedArrayKeysInTheJsonContent()
+    public function testExpectedArrayKeysArePresentInJsonContent()
     {
         $keys = [
             ProductDetailPageMetaInfoSnippetContent::KEY_PRODUCT_ID,
@@ -57,28 +51,19 @@ class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_Tes
         }
     }
 
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     */
-    public function itShouldThrowAnExceptionIfTheSourceIdIsNotScalar()
+    public function testExceptionIsThrownIfTheSourceIdIsNotScalar()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
         ProductDetailPageMetaInfoSnippetContent::create([], 'test', []);
     }
 
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     */
-    public function itShouldThrowAnExceptionIfTheRootSnippetCodeIsNoString()
+    public function testExceptionIsThrownIfRootSnippetCodeIsNoString()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
         ProductDetailPageMetaInfoSnippetContent::create(123, 1.0, []);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldAddTheRootSnippetCodeToTheSnippetCodeListIfNotPresent()
+    public function testRootSnippetCodeIsAddedToSnippetCodeListIfNotPresent()
     {
         $rootSnippetCode = 'root-snippet-code';
         $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::create('123', $rootSnippetCode, []);
@@ -88,33 +73,25 @@ class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_Tes
         );
     }
 
-    /**
-     * @test
-     */
-    public function itShouldHaveAFromJsonConstructor()
+    public function testFromJsonConstructorIsPresent()
     {
         $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::fromJson(json_encode($this->pageMetaInfo->getInfo()));
         $this->assertInstanceOf(ProductDetailPageMetaInfoSnippetContent::class, $pageMetaInfo);
     }
     
-    /**
-     * @test
-     * @expectedException \OutOfBoundsException
-     */
-    public function itShouldThrowAnExceptionInCaseOfJsonErrors()
+    public function testExceptionIsTrownInCaseOfJsonErrors()
     {
+        $this->setExpectedException(\OutOfBoundsException::class);
         ProductDetailPageMetaInfoSnippetContent::fromJson('malformed-json');
     }
 
     /**
-     * @test
      * @dataProvider pageInfoArrayKeyProvider
      * @param string $key
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Missing key in input JSON
      */
-    public function itShouldThrowAnExceptionIfARequiredKeyIsMissing($key)
+    public function testExceptionIsThrownIfRequiredKeyIsMissing($key)
     {
+        $this->setExpectedException(\RuntimeException::class, 'Missing key in input JSON');
         $pageInfo = $this->pageMetaInfo->getInfo();
         unset($pageInfo[$key]);
         ProductDetailPageMetaInfoSnippetContent::fromJson(json_encode($pageInfo));
@@ -132,26 +109,17 @@ class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_Tes
         ];
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTheSourceId()
+    public function testSourceIdIsReturned()
     {
         $this->assertEquals($this->sourceId, $this->pageMetaInfo->getProductId());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTheRootSnippetCode()
+    public function testRootSnippetCodeIsReturned()
     {
         $this->assertEquals($this->rootSnippetCode, $this->pageMetaInfo->getRootSnippetCode());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnThePageSnippetCodeList()
+    public function testPageSnippetCodeListIsReturned()
     {
         $this->assertInternalType('array', $this->pageMetaInfo->getPageSnippetCodes());
     }

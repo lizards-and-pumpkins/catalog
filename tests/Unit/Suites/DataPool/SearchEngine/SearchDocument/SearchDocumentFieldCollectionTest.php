@@ -8,10 +8,7 @@ namespace Brera\DataPool\SearchEngine\SearchDocument;
  */
 class SearchDocumentFieldCollectionTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itShouldCreateCollectionFromArray()
+    public function testCollectionIsCreatedFromArray()
     {
         $fieldsArray = ['foo' => 'bar', 'baz' => 'qux'];
         $collection = SearchDocumentFieldCollection::fromArray($fieldsArray);
@@ -25,10 +22,7 @@ class SearchDocumentFieldCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('qux', $result[1]->getValue());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateAnEmptyCollectionFromEmptyArray()
+    public function testEmptyCollectionIsCreatedFromEmptyArray()
     {
         $collection = SearchDocumentFieldCollection::fromArray([]);
 
@@ -36,20 +30,14 @@ class SearchDocumentFieldCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(0, $collection->getFields());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnFalseIfNoMatchingFieldIsPresent()
+    public function testFalseIsReturnedIfNoMatchingFieldIsPresent()
     {
         $collection = SearchDocumentFieldCollection::fromArray([]);
         $fieldToCheck = SearchDocumentField::fromKeyAndValue('test-field-name', 'test-field-value');
         $this->assertFalse($collection->contains($fieldToCheck));
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTrueIfAMatchingFieldIsPresent()
+    public function testTrueIsReturnedIfAMatchingFieldIsPresent()
     {
 
         $testFieldName = 'test-field-name';
@@ -59,10 +47,7 @@ class SearchDocumentFieldCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($collection->contains($fieldToCheck));
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnAnArrayRepresentation()
+    public function testArrayRepresentationOfSearchDocumentFieldCollectionIsReturned()
     {
         $searchFieldData = ['test-field-name' => 'test-field-value'];
         $collection = SearchDocumentFieldCollection::fromArray($searchFieldData);

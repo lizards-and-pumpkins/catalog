@@ -7,40 +7,24 @@ namespace Brera\Product;
  */
 class PriceTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itShouldImplementMoneyInterface()
+    public function testMoneyInterfaceIsImplemented()
     {
-        $result = new Price(0);
-
-        $this->assertInstanceOf(Money::class, $result);
+        $this->assertInstanceOf(Money::class, new Price(0));
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Product\InvalidPriceSourceException
-     * @expectedExceptionMessage Can not create a price from integer
-     */
-    public function itShouldThrowAnExceptionIfNonStringArgumentIsPassed()
+    public function testExceptionIsThrownIfNonStringArgumentIsPassed()
     {
+        $this->setExpectedException(InvalidPriceSourceException::class, 'Can not create a price from integer');
         Price::fromString(1);
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Product\InvalidPriceSourceException
-     * @expectedExceptionMessage Can not create a price from string
-     */
-    public function itShouldThrowAnExceptionIfNonIntegerArgumentIsPassed()
+    public function testExceptionIsThrownIfNonIntegerArgumentIsPassed()
     {
+        $this->setExpectedException(InvalidPriceSourceException::class, 'Can not create a price from string');
         new Price('1');
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreatePriceFromStringMultiplyingItByTheNumberOfDecimalPoints()
+    public function testPriceIsCreatedFromStringMultiplyingItByTheNumberOfDecimalPoints()
     {
         $price = Price::fromString('1');
         $result = $price->getAmount();

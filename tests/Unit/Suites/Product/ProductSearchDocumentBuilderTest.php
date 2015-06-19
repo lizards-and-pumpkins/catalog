@@ -5,6 +5,7 @@ namespace Brera\Product;
 use Brera\Context\Context;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilder;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
+use Brera\InvalidProjectionDataSourceTypeException;
 use Brera\SampleContextSource;
 use Brera\ProjectionSourceData;
 
@@ -38,34 +39,21 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
         $this->searchDocumentBuilder = new ProductSearchDocumentBuilder($searchableAttributeCodes);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldImplementSearchIndexer()
+    public function testSearchIndexerInterfaceIsImplemented()
     {
         $this->assertInstanceOf(SearchDocumentBuilder::class, $this->searchDocumentBuilder);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnSearchDocumentCollection()
+    public function testSearchDocumentCollectionIsReturned()
     {
-        $stubContext = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $stubContext = $this->getMock(Context::class, [], [], '', false);
         $this->stubContextSource->expects($this->atLeastOnce())
             ->method('getAllAvailableContexts')
             ->willReturn([$stubContext]);
 
-        $stubProductId = $this->getMockBuilder(ProductId::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
 
-        $stubProduct = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $stubProduct = $this->getMock(Product::class, [], [], '', false);
         $stubProduct->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($stubProductId);
@@ -74,9 +62,7 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
             ->with('name')
             ->willReturn('bar');
 
-        $stubProductSource = $this->getMockBuilder(ProductSource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $stubProductSource = $this->getMock(ProductSource::class, [], [], '', false);
         $stubProductSource->expects($this->atLeastOnce())
             ->method('getProductForContext')
             ->with($stubContext)
@@ -87,14 +73,14 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(SearchDocumentCollection::class, $result);
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\InvalidProjectionDataSourceTypeException
-     * @expectedExceptionMessage First argument must be instance of ProductSource.
-     */
-    public function itShouldThrowAnExceptionIfTheDataSourceObjectTypeIsNotProduct()
+    public function testExceptionIsThrownIfTheDataSourceObjectTypeIsNotProduct()
     {
         $invalidDataSource = $this->getMock(ProjectionSourceData::class);
+
+        $this->setExpectedException(
+            InvalidProjectionDataSourceTypeException::class,
+            'First argument must be instance of ProductSource.'
+        );
 
         $this->searchDocumentBuilder->aggregate($invalidDataSource, $this->stubContextSource);
     }

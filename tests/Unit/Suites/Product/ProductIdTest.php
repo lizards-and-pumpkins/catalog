@@ -23,20 +23,14 @@ class ProductIdTest extends \PHPUnit_Framework_TestCase
         $this->productId = ProductId::fromSku($this->stubSku);
     }
 
-    /**
-     * @test
-     */
-    public function itCanBeCreatedFromSku()
+    public function testCanBeCreatedFromSku()
     {
         $this->assertInstanceOf(ProductId::class, $this->productId);
     }
 
-    /**
-     * @test
-     */
-    public function itCanBeConvertedToString()
+    public function testCanBeConvertedToString()
     {
-        $result = (string)$this->productId;
+        $result = (string) $this->productId;
         $this->assertInternalType('string', $result);
     }
 }

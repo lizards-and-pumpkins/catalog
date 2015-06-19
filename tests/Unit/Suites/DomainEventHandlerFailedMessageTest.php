@@ -28,20 +28,14 @@ class DomainEventHandlerFailedMessageTest extends \PHPUnit_Framework_TestCase
         $this->message = new DomainEventHandlerFailedMessage($stubDomainEvent, $this->stubException);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnLogMessage()
+    public function testLogMessageIsReturned()
     {
         $expectation = "Failure during processing DomainEvent domain event with following message:\n\nfoo";
 
         $this->assertEquals($expectation, (string) $this->message);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnAnException()
+    public function testExceptionIsReturned()
     {
         $result = $this->message->getContext();
 

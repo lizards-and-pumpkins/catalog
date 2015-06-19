@@ -3,6 +3,7 @@
 namespace Brera\Product;
 
 use Brera\DataPool\DataPoolWriter;
+use Brera\InvalidProjectionDataSourceTypeException;
 use Brera\ProjectionSourceData;
 use Brera\SampleContextSource;
 use Brera\Snippet;
@@ -45,10 +46,7 @@ class ProductListingProjectorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function itShouldSetProductListingMetaSnippetOnDataPoolWriter()
+    public function testProductListingMetaSnippetIsSetOnDataPoolWriter()
     {
         $stubProductListingSource = $this->getMock(ProductListingSource::class, [], [], '', false);
         $stubContext = $this->getMock(SampleContextSource::class, [], [], '', false);
@@ -65,16 +63,15 @@ class ProductListingProjectorTest extends \PHPUnit_Framework_TestCase
         $this->projector->project($stubProductListingSource, $stubContext);
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\InvalidProjectionDataSourceTypeException
-     * @expectedExceptionMessage First argument must be instance of ProductListingSource.
-     */
-    public function itShouldThrowIfTheDataSourceTypeIsNotProduct()
+    public function testExceptionIsThrownIfTheDataSourceTypeIsNotProduct()
     {
         $stubContext = $this->getMock(SampleContextSource::class, [], [], '', false);
         $invalidDataSourceType = $this->getMock(ProjectionSourceData::class);
 
+        $this->setExpectedException(
+            InvalidProjectionDataSourceTypeException::class,
+            'First argument must be instance of ProductListingSource.'
+        );
         $this->projector->project($invalidDataSourceType, $stubContext);
     }
 }

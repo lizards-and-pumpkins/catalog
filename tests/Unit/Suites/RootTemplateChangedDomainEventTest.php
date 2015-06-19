@@ -7,10 +7,7 @@ namespace Brera;
  */
 class RootTemplateChangedDomainEventTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itShouldReturnSnippetLayoutHandle()
+    public function testSnippetLayoutHandleIsReturned()
     {
         $layoutHandle = 'foo';
         $event = new RootTemplateChangedDomainEvent($layoutHandle);

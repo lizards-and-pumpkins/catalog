@@ -23,30 +23,19 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
         $this->builder = new ContextBuilder(DataVersion::fromVersionString('1'));
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Context\ContextDecoratorNotFoundException
-     */
-    public function itShouldThrowAnExceptionForNonExistingCode()
+    public function testExceptionIsThrownForNonExistingCode()
     {
-        $contexts = ['foo' => 'bar'];
-        $this->builder->getContext($contexts);
+        $this->setExpectedException(ContextDecoratorNotFoundException::class);
+        $this->builder->getContext(['foo' => 'bar']);
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Context\InvalidContextDecoratorClassException
-     */
-    public function itShouldThrowExceptionForNonContextDecoratorClass()
+    public function testExceptionIsThrownForNonContextDecoratorClass()
     {
-        $contexts = ['stub_invalid_test' => 'dummy'];
-        $this->builder->getContext($contexts);
+        $this->setExpectedException(InvalidContextDecoratorClassException::class);
+        $this->builder->getContext(['stub_invalid_test' => 'dummy']);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnContextsForGiveParts()
+    public function testContextsForGivePartsIsReturned()
     {
         $contexts = [
             ['stub_valid_test' => 'dummy'],
@@ -57,10 +46,9 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @test
      * @dataProvider underscoreCodeDataProvider
      */
-    public function itShouldRemoveUnderscoresFromTheKey($testCode, $expected)
+    public function testUnderscoresAreRemovesFromContextKey($testCode, $expected)
     {
         $method = new \ReflectionMethod($this->builder, 'removeUnderscores');
         $method->setAccessible(true);
@@ -84,28 +72,19 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Context\ContextDecoratorNotFoundException
-     */
-    public function itShouldThrowAnExceptionWhenAddingANonExistentClass()
+    public function testExceptionIsThrownIfNonExistentClassIsAdded()
     {
+        $this->setExpectedException(ContextDecoratorNotFoundException::class);
         $this->builder->registerContextDecorator('test', 'Non\\Existent\\DecoratorClass');
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Context\InvalidContextDecoratorClassException
-     */
-    public function itShouldThrowAnExceptionWhenAddingAnInvalidDecoratorClass()
+    public function testExceptionIsThrownIfInvalidDecoratorClassIsAdded()
     {
+        $this->setExpectedException(InvalidContextDecoratorClassException::class);
         $this->builder->registerContextDecorator('test', StubInvalidTestContextDecorator::class);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldAllowRegisteringContextCodesToClasses()
+    public function testContextCodesToClassesAreRegistered()
     {
         $this->builder->registerContextDecorator('test', StubValidTestContextDecorator::class);
         $contexts = [
@@ -116,14 +95,9 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertContainsOnlyInstancesOf(Context::class, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateAnContextFromARequest()
+    public function testContextIsCreatedFromARequest()
     {
-        $stubRequest = $this->getMockBuilder(HttpRequest::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
         $result = $this->builder->createFromRequest($stubRequest);
         $this->assertInstanceOf(Context::class, $result);
     }
