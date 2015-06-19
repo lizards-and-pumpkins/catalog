@@ -131,7 +131,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(SnippetList::class, $result);
     }
 
-    public function testProductDetailViewSnippetSnippetKeyGeneratorIsReturned()
+    public function testProductDetailViewSnippetKeyGeneratorIsReturned()
     {
         /* TODO: Move to catalog factory test */
         $result = $this->commonFactory->createProductDetailViewSnippetKeyGenerator();
