@@ -72,7 +72,7 @@ abstract class ContextDecoratorTestAbstract extends \PHPUnit_Framework_TestCase
         );
     }
 
-    final public function testContextsInterfaceIsImplemented()
+    final public function testContextInterfaceIsImplemented()
     {
         $this->assertInstanceOf(Context::class, $this->getDecoratorUnderTest());
     }
