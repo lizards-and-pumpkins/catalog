@@ -79,9 +79,9 @@ abstract class ContextDecoratorTestAbstract extends \PHPUnit_Framework_TestCase
 
     final public function testExceptionIsThrownIfValueIsNotFoundInSourceData()
     {
-        $this->setExpectedException(
+        $this->setExpectedExceptionRegExp(
             ContextCodeNotFoundException::class,
-            'No value found in the context source data for the code'
+            '/No value found in the context source data for the code "[^\"]+"/'
         );
         $decorator = $this->createContextDecoratorUnderTest($this->getMockDecoratedContext(), []);
         $decorator->getValue($this->getDecoratorUnderTestCode());
