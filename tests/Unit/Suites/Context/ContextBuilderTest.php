@@ -26,7 +26,7 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownForNonExistingCode()
     {
         $this->setExpectedException(ContextDecoratorNotFoundException::class);
-        $this->builder->getContext(['foo' => 'bar']);
+        $this->builder->getContext(['nonExistingContextPartCode' => 'contextPartValue']);
     }
 
     public function testExceptionIsThrownForNonContextDecoratorClass()
