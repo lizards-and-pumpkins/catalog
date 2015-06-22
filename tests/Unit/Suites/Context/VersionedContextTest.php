@@ -28,9 +28,7 @@ class VersionedContextTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->stubDataVersion = $this->getMockBuilder(DataVersion::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->stubDataVersion = $this->getMock(DataVersion::class, [], [], '', false);
         $this->stubDataVersion->expects($this->any())
             ->method('__toString')
             ->willReturn($this->testVersionValue);
@@ -44,11 +42,12 @@ class VersionedContextTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfNotMatchingCodeIsPassed()
     {
+        $contextCode = 'foo';
         $this->setExpectedException(
             ContextCodeNotFoundException::class,
-            'No value was not found in the current context for the code \'foo\''
+            sprintf('No value found in the current context for the code \'%s\'', $contextCode)
         );
-        $this->versionedContext->getValue('foo');
+        $this->versionedContext->getValue($contextCode);
     }
 
     public function testVersionIsReturnedAsValue()
