@@ -185,6 +185,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
 
     public function testCurrentVersionIsReturned()
     {
+        $currentDataVersion = '123';
         $this->getStubKeyValueStore()->expects($this->once())
             ->method('has')
             ->with('current_version')
@@ -192,8 +193,8 @@ class DataPoolReaderTest extends AbstractDataPoolTest
         $this->getStubKeyValueStore()->expects($this->once())
             ->method('get')
             ->with('current_version')
-            ->willReturn('123');
-        $this->assertSame('123', $this->dataPoolReader->getCurrentDataVersion());
+            ->willReturn($currentDataVersion);
+        $this->assertSame($currentDataVersion, $this->dataPoolReader->getCurrentDataVersion());
     }
 
     public function testSearchResultsAreReturnedFromSearchEngine()

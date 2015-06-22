@@ -101,8 +101,10 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     public function testMultipleEntriesAreAddedToIndex()
     {
+        $keyword = 'bar';
+
         $searchDocument1Content = 'content1';
-        $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => 'bar']);
+        $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => $keyword]);
         $this->prepareStubSearchDocument(
             $this->stubSearchDocument,
             $this->stubContext,
@@ -111,7 +113,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         );
 
         $searchDocument2Content = 'content2';
-        $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['baz' => 'bar']);
+        $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['baz' => $keyword]);
         $this->prepareStubSearchDocument(
             $this->stubSearchDocument2,
             $this->stubContext,
@@ -125,7 +127,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
 
-        $result = $this->searchEngine->query('bar', $this->stubContext);
+        $result = $this->searchEngine->query($keyword, $this->stubContext);
 
         $this->assertEmpty(array_diff([$searchDocument1Content, $searchDocument2Content], $result));
     }
@@ -380,16 +382,16 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([$searchDocumentContent], $result);
     }
 
-    public function testEmptyArrayForEmptySearchCriteriaIsReturned()
+    public function testEmptyArrayIsReturnedForEmptySearchCriteria()
     {
         $this->assertSame([], $this->searchEngine->queryGivenFields([], $this->stubContext));
     }
 
-    public function testExceptionIsThrownIfFieldNamesAreInvalid()
+    public function testExceptionIsThrownIfFieldNameIsInteger()
     {
         $this->setExpectedException(InvalidFieldIdentifierException::class);
-        $invalidFieldName = 1;
-        $this->searchEngine->queryGivenFields([$invalidFieldName => 'dummy-search-term'], $this->stubContext);
+        $integerFieldName = 1;
+        $this->searchEngine->queryGivenFields([$integerFieldName => 'dummy-search-term'], $this->stubContext);
     }
 
     public function testEmptyArrayIsReturnedIfNoMatchesAreFound()
