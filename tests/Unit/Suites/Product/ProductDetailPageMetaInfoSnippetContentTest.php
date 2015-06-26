@@ -31,7 +31,7 @@ class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_Tes
         );
     }
 
-    public function testArrayIsReturned()
+    public function testPageMetaInfoIsAnArray()
     {
         $this->assertInternalType('array', $this->pageMetaInfo->getInfo());
     }

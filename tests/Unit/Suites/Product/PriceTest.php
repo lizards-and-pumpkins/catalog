@@ -12,7 +12,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Money::class, new Price(0));
     }
 
-    public function testExceptionIsThrownIfNonStringArgumentIsPassed()
+    public function testExceptionIsThrownIfNonStringArgumentIsPassedToFromStringConstructor()
     {
         $this->setExpectedException(InvalidPriceSourceException::class, 'Can not create a price from integer');
         Price::fromString(1);

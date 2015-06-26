@@ -36,12 +36,8 @@ EOX;
 
     public function testExceptionIsThrownInCaseXmlHasNoEssentialData()
     {
-        $this->setExpectedException(
-            InvalidNumberOfUrlKeysPerImportedProductListingException::class,
-            'There must be exactly one URL key in the imported product listing XML'
-        );
-        $xml = '<?xml version="1.0"?><node />';
-        (new ProductListingSourceBuilder())->createProductListingSourceFromXml($xml);
+        $this->setExpectedException(InvalidNumberOfUrlKeysPerImportedProductListingException::class);
+        (new ProductListingSourceBuilder())->createProductListingSourceFromXml('<?xml version="1.0"?><node />');
     }
 
     /**

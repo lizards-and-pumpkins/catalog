@@ -21,7 +21,7 @@ class HttpRouterChainTest extends \PHPUnit_Framework_TestCase
 
     public function testUnableToRouteRequestExceptionIsThrown()
     {
-        $this->setExpectedException(UnableToRouteRequestException::class, 'Unable to route a request ""');
+        $this->setExpectedException(UnableToRouteRequestException::class);
         $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
         $stubContext = $this->getMock(Context::class);
         $this->routerChain->route($stubHttpRequest, $stubContext);

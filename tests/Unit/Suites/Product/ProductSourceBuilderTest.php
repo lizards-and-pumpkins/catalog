@@ -79,12 +79,8 @@ class ProductSourceBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfXmlHasNoEssentialData()
     {
-        $this->setExpectedException(
-            InvalidNumberOfSkusPerImportedProductException::class,
-            'There must be exactly one SKU in the imported product XML'
-        );
-        $xml = '<?xml version="1.0"?><node />';
-        (new ProductSourceBuilder())->createProductSourceFromXml($xml);
+        $this->setExpectedException(InvalidNumberOfSkusPerImportedProductException::class);
+        (new ProductSourceBuilder())->createProductSourceFromXml('<?xml version="1.0"?><node/>');
     }
 
     /**
