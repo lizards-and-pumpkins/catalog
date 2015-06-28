@@ -11,7 +11,7 @@ use Brera\Context\VersionedContext;
  */
 class RootSnippetSourceListTest extends \PHPUnit_Framework_TestCase
 {
-    public function testNumbersOfItemsPertPageForGivenContextIsReturned()
+    public function testNumbersOfItemsPerPageForGivenContextIsReturned()
     {
         $stubContext = $this->getMock(Context::class);
         $stubContext2 = $this->getMock(VersionedContext::class, [], [], '', false);
