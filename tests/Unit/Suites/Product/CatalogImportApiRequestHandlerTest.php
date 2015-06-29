@@ -4,13 +4,17 @@ namespace Brera\Product;
 
 /**
  * @covers \Brera\Product\CatalogImportApiRequestHandler
+ * @uses   \Brera\Api\ApiRequestHandler
  * @uses   \Brera\DefaultHttpResponse
  */
 class CatalogImportApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testProtectedMethodOfConcreteClassIsCalled()
+    public function testResponseContainsExpectedJson()
     {
-        $result = (new CatalogImportApiRequestHandler())->process();
-        $this->assertEquals('"dummy response"', $result->getBody());
+        $response = (new CatalogImportApiRequestHandler())->process();
+        $result = json_decode($response->getBody());
+        $expectedJson = 'dummy response';
+
+        $this->assertEquals($expectedJson, $result);
     }
 }
