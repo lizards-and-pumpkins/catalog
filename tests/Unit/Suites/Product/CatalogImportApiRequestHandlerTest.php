@@ -9,9 +9,24 @@ namespace Brera\Product;
  */
 class CatalogImportApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var CatalogImportApiRequestHandler
+     */
+    private $apiRequestHandler;
+
+    protected function setUp()
+    {
+        $this->apiRequestHandler = new CatalogImportApiRequestHandler;
+    }
+
+    public function testCanProcessMethodAlwaysReturnsTrue()
+    {
+        $this->assertTrue($this->apiRequestHandler->canProcess());
+    }
+
     public function testResponseContainsExpectedJson()
     {
-        $response = (new CatalogImportApiRequestHandler())->process();
+        $response = $this->apiRequestHandler->process();
         $result = json_decode($response->getBody());
         $expectedJson = 'dummy response';
 

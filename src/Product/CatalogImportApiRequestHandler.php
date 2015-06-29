@@ -11,7 +11,7 @@ class CatalogImportApiRequestHandler extends ApiRequestHandler
      */
     public final function canProcess()
     {
-        // TODO: Implement canProcess() method.
+        return true;
     }
 
     /**
