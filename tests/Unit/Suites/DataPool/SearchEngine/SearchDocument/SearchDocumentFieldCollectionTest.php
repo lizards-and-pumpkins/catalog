@@ -8,10 +8,7 @@ namespace Brera\DataPool\SearchEngine\SearchDocument;
  */
 class SearchDocumentFieldCollectionTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itShouldCreateCollectionFromArray()
+    public function testCollectionIsCreatedFromArray()
     {
         $fieldsArray = ['foo' => 'bar', 'baz' => 'qux'];
         $collection = SearchDocumentFieldCollection::fromArray($fieldsArray);
@@ -25,10 +22,7 @@ class SearchDocumentFieldCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('qux', $result[1]->getValue());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateAnEmptyCollectionFromEmptyArray()
+    public function testEmptyCollectionIsCreatedFromEmptyArray()
     {
         $collection = SearchDocumentFieldCollection::fromArray([]);
 

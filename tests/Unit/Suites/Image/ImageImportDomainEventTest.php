@@ -7,10 +7,7 @@ namespace Brera\Image;
  */
 class ImageImportDomainEventTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itShouldReturnPassedImageFilename()
+    public function testPassedImageFilenameIsReturned()
     {
         $imageFilename = 'test_image.jpg';
         $event = new ImageImportDomainEvent($imageFilename);

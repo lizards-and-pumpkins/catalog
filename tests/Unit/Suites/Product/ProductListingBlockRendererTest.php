@@ -11,10 +11,7 @@ use Brera\ThemeLocator;
  */
 class ProductListingBlockRendererTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itShouldReturnLayoutHandle()
+    public function testLayoutHandleIsReturned()
     {
         $stubThemeLocator = $this->getMock(ThemeLocator::class);
         $stubBlockStructure = $this->getMock(BlockStructure::class);

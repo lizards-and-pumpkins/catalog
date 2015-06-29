@@ -35,10 +35,7 @@ class ContextSourceTest extends \PHPUnit_Framework_TestCase
         $this->contextSource = new StubContextSource($this->stubContextBuilder, $this->testContextMatrix);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnAnArray()
+    public function testArrayIsReturned()
     {
         $this->stubContextBuilder->expects($this->once())
             ->method('getContexts')
@@ -48,10 +45,9 @@ class ContextSourceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @test
      * @dataProvider extractPartsProvider
      */
-    public function itShouldReturnOnlyTheDesiredPartsToTheContextBuilder($partsToExtract, $expectedContextMatrix)
+    public function testOnlyDesiredPartsArePassedToContextBuilder($partsToExtract, $expectedContextMatrix)
     {
         $this->stubContextBuilder->expects($this->once())
             ->method('getContexts')

@@ -65,18 +65,12 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->mockProductSource = $this->getMock(ProductSource::class, [], [], '', false);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldImplementSnippetRendererInterface()
+    public function testSnippetRendererInterfaceIsImplemented()
     {
         $this->assertInstanceOf(SnippetRenderer::class, $this->renderer);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnEmptySnippetList()
+    public function testEmptySnippetListIsReturned()
     {
         $this->mockContextSource->expects($this->any())
             ->method('getAllAvailableContexts')
@@ -88,10 +82,7 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnSnippetListContainingASnippetWithAGivenKeyAndPrice()
+    public function testSnippetListContainingSnippetWithGivenKeyAndPriceIsReturned()
     {
         $stubContext = $this->getMock(Context::class);
         $dummyPriceSnippetKey = 'bar';

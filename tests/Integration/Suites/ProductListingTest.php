@@ -27,10 +27,7 @@ class ProductListingTest extends AbstractIntegrationTest
         $this->factory = $this->prepareIntegrationTestMasterFactory();
     }
     
-    /**
-     * @test
-     */
-    public function itShouldPutAProductListingMetaSnippetIntoDataPool()
+    public function testProductListingMetaSnippetIsWrittenIntoDataPool()
     {
         $this->addProductListingCriteriaDomainDomainEventFixture();
         $this->processDomainEvents(1);
@@ -57,10 +54,7 @@ class ProductListingTest extends AbstractIntegrationTest
         $this->assertSame($expectedMetaInfoContent, $metaInfoSnippet);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnProductListingPageHtml()
+    public function testProductListingPageHtmlIsReturned()
     {
         $this->addRootTemplateChangedDomainEventToSetupProductListingFixture();
         $this->addProductImportDomainEventToSetUpProductFixture();

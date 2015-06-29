@@ -23,41 +23,28 @@ class LayoutReaderTest extends \PHPUnit_Framework_TestCase
         $this->layoutReader = new LayoutReader();
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Renderer\LayoutFileNotReadableException
-     */
-    public function itShouldThrowExceptionIfFileDesNotExist()
+    public function testExceptionIsThrownIfFileDesNotExist()
     {
+        $this->setExpectedException(LayoutFileNotReadableException::class);
         $this->layoutReader->loadLayoutFromXmlFile('some-non-existing-file-name.xml');
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Renderer\LayoutFileNotReadableException
-     */
-    public function itShouldThrowExceptionIfFileIsNotReadable()
+    public function testExceptionIsThrownIfFileIsNotReadable()
     {
         $filePath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'some-file-name.xml';
-
         $this->createFixtureFile($filePath, '', 0000);
+        $this->setExpectedException(LayoutFileNotReadableException::class);
 
         $this->layoutReader->loadLayoutFromXmlFile($filePath);
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Renderer\LayoutFileNotReadableException
-     */
-    public function itShouldThrowExceptionIfPathIsADirectory()
+    public function testExceptionIsThrownIfPathIsADirectory()
     {
+        $this->setExpectedException(LayoutFileNotReadableException::class);
         $this->layoutReader->loadLayoutFromXmlFile(sys_get_temp_dir());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnLayout()
+    public function testLayoutIsReturned()
     {
         $layoutFile = $this->getUniqueTempDir() . '/test_layout.xml';
         $layoutXML = <<<EOX

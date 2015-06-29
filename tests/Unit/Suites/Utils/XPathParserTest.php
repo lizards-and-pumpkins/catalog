@@ -7,10 +7,7 @@ namespace Brera\Utils;
  */
 class XPathParserTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itShouldReturnRequestedDomNodeArrayFromXmlWithNoNamespace()
+    public function testRequestedDomNodeArrayIsReturnedFromXmlWithNoNamespace()
     {
         $xml = '<root><child><grandChild>foo</grandChild></child></root>';
         $parser = new XPathParser($xml);
@@ -21,10 +18,7 @@ class XPathParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectation, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnRequestedDomNodeArrayFromXmlWithNamespace()
+    public function testRequestedDomNodeArrayIsReturnedFromXmlWithNamespace()
     {
         $xml = '<root xmlns="http://www.w3.org/2001/XMLSchema-instance"><child>foo</child></root>';
         $parser = new XPathParser($xml);
@@ -35,10 +29,7 @@ class XPathParserTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expectation, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnRequestedDomNodeRelativeToACurrentNode()
+    public function testRequestedDomNodeRelativeToACurrentNodeIsReturned()
     {
         $xml = '<root xmlns="http://www.w3.org/2001/XMLSchema-instance"><foo><bar>baz</bar></foo></root>';
         $parser = new XPathParser($xml);
@@ -49,90 +40,84 @@ class XPathParserTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expectation, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnCurrentDomNode()
+    public function testCurrentDomNodeIsReturned()
     {
         $xml = '<root xmlns="http://www.w3.org/2001/XMLSchema-instance"><foo>bar</foo></root>';
         $parser = new XPathParser($xml);
         $result = $parser->getXmlNodesArrayByXPath('.');
 
-        $expectation = [[
-        'nodeName'      => 'root',
-        'attributes'    => [],
-        'value'         => [[
-        'nodeName'      => 'foo',
-        'attributes'    => [],
-        'value'         => 'bar'
-        ]]
-        ]];
+        $expectation = [
+            [
+                'nodeName'   => 'root',
+                'attributes' => [],
+                'value'      => [
+                    [
+                        'nodeName'   => 'foo',
+                        'attributes' => [],
+                        'value'      => 'bar'
+                    ]
+                ]
+            ]
+        ];
 
         $this->assertSame($expectation, $result);
     }
 
-
-    /**
-     * @test
-     */
-    public function itShouldReturnParentDomNode()
+    public function testParentDomNodeIsReturned()
     {
         $xml = '<root xmlns="http://www.w3.org/2001/XMLSchema-instance"><foo>bar</foo></root>';
         $parser = new XPathParser($xml);
         $result = $parser->getXmlNodesArrayByXPath('//foo/..');
 
-        $expectation = [[
-        'nodeName'      => 'root',
-        'attributes'    => [],
-        'value'         => [[
-        'nodeName'      => 'foo',
-        'attributes'    => [],
-        'value'         => 'bar'
-        ]]
-        ]];
+        $expectation = [
+            [
+                'nodeName'   => 'root',
+                'attributes' => [],
+                'value'      => [
+                    [
+                        'nodeName'   => 'foo',
+                        'attributes' => [],
+                        'value'      => 'bar'
+                    ]
+                ]
+            ]
+        ];
 
         $this->assertSame($expectation, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnMultipleNodeArrays()
+    public function testMultipleNodeArraysAreReturned()
     {
         $xml = '<root><child>foo</child><child>bar</child></root>';
         $parser = new XPathParser($xml);
         $result = $parser->getXmlNodesArrayByXPath('child');
 
         $expectation = [
-        ['nodeName' => 'child', 'attributes' => [], 'value' => 'foo'],
-        ['nodeName' => 'child', 'attributes' => [], 'value' => 'bar']
+            ['nodeName' => 'child', 'attributes' => [], 'value' => 'foo'],
+            ['nodeName' => 'child', 'attributes' => [], 'value' => 'bar']
         ];
 
         $this->assertSame($expectation, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnArrayOfNodeWithAttributes()
+    public function testArrayOfNodeWithAttributesIsReturned()
     {
         $xml = '<root><child bar="baz" qux="waldo">foo</child></root>';
         $parser = new XPathParser($xml);
         $result = $parser->getXmlNodesArrayByXPath('child');
 
-        $expectation = [[
-        'nodeName'          => 'child',
-        'attributes'    => ['bar' => 'baz', 'qux' => 'waldo'],
-        'value'         => 'foo'
-        ]];
+        $expectation = [
+            [
+                'nodeName'   => 'child',
+                'attributes' => ['bar' => 'baz', 'qux' => 'waldo'],
+                'value'      => 'foo'
+            ]
+        ];
 
         $this->assertSame($expectation, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnNodeXml()
+    public function testNodeXmlIsReturned()
     {
         $xml = '<root><child>foo</child><child>bar</child></root>';
         $parser = new XPathParser($xml);
@@ -143,20 +128,13 @@ class XPathParserTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expectation, $result);
     }
 
-    /**
-     * @test
-     * @expectedException \OutOfBoundsException
-     */
-    public function itShouldThrowAnErrorIfXmlIsNotValid()
+    public function testExceptionIsThrownIfXmlIsNotValid()
     {
-        $xml = '<root xmlns="blah"></root>';
-        (new XPathParser($xml));
+        $this->setExpectedException(\OutOfBoundsException::class);
+        (new XPathParser('<root xmlns="blah"></root>'));
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnANodeAttribute()
+    public function testNodeAttributeIsReturned()
     {
         $xml = '<root xmlns="http://www.w3.org/2001/XMLSchema-instance"><child foo="bar" /></root>';
         $parser = new XPathParser($xml);
@@ -165,10 +143,7 @@ class XPathParserTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('bar', $result[0]['value']);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnANodeByAbsolutePath()
+    public function testNodeIsReturnedByAbsolutePath()
     {
         $xml = '<root xmlns="http://www.w3.org/2001/XMLSchema-instance"><child>foo</child></root>';
         $parser = new XPathParser($xml);
@@ -179,10 +154,7 @@ class XPathParserTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expectation, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldTolerateWildcardsInAPath()
+    public function testWildcardsInPathAreTolerated()
     {
         $xml = '<root xmlns="http://www.w3.org/2001/XMLSchema-instance"><child>foo</child></root>';
         $parser = new XPathParser($xml);
@@ -193,48 +165,47 @@ class XPathParserTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expectation, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnArrayWithNestedXmlNodeRepresentation()
+    public function testArrayWithNestedXmlNodeRepresentationIsReturned()
     {
         $xml = '<root><child>foo</child><child baz="qux">bar</child></root>';
         $parser = new XPathParser($xml);
         $result = $parser->getXmlNodesArrayByXPath('/root');
 
-        $expectation = [[
-        'nodeName' => 'root', 'attributes' => [], 'value' => [
-        ['nodeName' => 'child', 'attributes' => [], 'value' => 'foo'],
-        ['nodeName' => 'child', 'attributes' => ['baz' => 'qux'], 'value' => 'bar']
-        ]
-        ]];
+        $expectation = [
+            [
+                'nodeName'   => 'root',
+                'attributes' => [],
+                'value'      => [
+                    ['nodeName' => 'child', 'attributes' => [], 'value' => 'foo'],
+                    ['nodeName' => 'child', 'attributes' => ['baz' => 'qux'], 'value' => 'bar']
+                ]
+            ]
+        ];
 
         $this->assertSame($expectation, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldRemoveCommentNodesFromDom()
+    public function testCommentNodesAreRemovedFromDom()
     {
         $xml = '<root><!-- comment1 --><child>foo</child><!-- comment2 --><child baz="qux">bar</child></root>';
         $parser = new XPathParser($xml);
         $result = $parser->getXmlNodesArrayByXPath('/root');
 
-        $expectation = [[
-        'nodeName' => 'root', 'attributes' => [], 'value' => [
-        ['nodeName' => 'child', 'attributes' => [], 'value' => 'foo'],
-        ['nodeName' => 'child', 'attributes' => ['baz' => 'qux'], 'value' => 'bar']
-        ]
-        ]];
+        $expectation = [
+            [
+                'nodeName'   => 'root',
+                'attributes' => [],
+                'value'      => [
+                    ['nodeName' => 'child', 'attributes' => [], 'value' => 'foo'],
+                    ['nodeName' => 'child', 'attributes' => ['baz' => 'qux'], 'value' => 'bar']
+                ]
+            ]
+        ];
 
         $this->assertSame($expectation, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldSelectAllAttributes()
+    public function testAllAttributesAreReturned()
     {
         $xml = <<<EOX
 <root xmlns="http://www.w3.org/2001/XMLSchema-instance">
@@ -248,8 +219,8 @@ EOX;
         $result = $parser->getXmlNodesArrayByXPath('//@*');
 
         $expectation = [
-        ['nodeName' => 'foo', 'attributes' => ['foo' => 'bar'], 'value' => 'bar'],
-        ['nodeName' => 'baz', 'attributes' => ['baz' => 'qux'], 'value' => 'qux']
+            ['nodeName' => 'foo', 'attributes' => ['foo' => 'bar'], 'value' => 'bar'],
+            ['nodeName' => 'baz', 'attributes' => ['baz' => 'qux'], 'value' => 'qux']
         ];
 
         $this->assertSame($expectation, $result);

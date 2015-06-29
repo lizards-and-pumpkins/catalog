@@ -3,6 +3,7 @@
 namespace Brera\Product;
 
 use Brera\Context\ContextSource;
+use Brera\InvalidProjectionDataSourceTypeException;
 use Brera\SampleContextSource;
 use Brera\Context\Context;
 use Brera\SnippetList;
@@ -71,32 +72,21 @@ class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_Test
             ->willReturn([$this->stubContext]);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldImplementSnippetRenderer()
+    public function testSnippetRendererInterfaceIsImplemented()
     {
         $this->assertInstanceOf(SnippetRenderer::class, $this->productSourceSnippetRenderer);
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\InvalidProjectionDataSourceTypeException
-     */
-    public function itShouldOnlyAcceptProductsForRendering()
+    public function testOnlyProductsAreAcceptedForRendering()
     {
-        /** @var ProjectionSourceData|\PHPUnit_Framework_MockObject_MockObject $invalidSourceObject */
-        $invalidSourceObject = $this->getMockBuilder(ProjectionSourceData::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $invalidSourceObject = $this->getMock(ProjectionSourceData::class, [], [], '', false);
+
+        $this->setExpectedException(InvalidProjectionDataSourceTypeException::class);
 
         $this->productSourceSnippetRenderer->render($invalidSourceObject, $this->stubContextSource);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnASnippetList()
+    public function testSnippetListIsReturned()
     {
         $stubProductSource = $this->getStubProductSource();
 
@@ -104,10 +94,7 @@ class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_Test
         $this->assertSame($this->mockSnippetList, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldMergeMoreSnippetsToTheSnippetList()
+    public function testSnippetsAreMergedIntoSnippetList()
     {
         $stubProductSource = $this->getStubProductSource();
 
@@ -118,10 +105,7 @@ class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_Test
         $this->productSourceSnippetRenderer->render($stubProductSource, $this->stubContextSource);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldRequestTheUsedContextPartsFromTheSnippetRendererAndPassThemToTheContextBuilder()
+    public function testUsedContextPartsAreRequestedFromSnippetRendererAndPassedToContextBuilder()
     {
         $contextParts = ['version', 'website', 'language'];
 

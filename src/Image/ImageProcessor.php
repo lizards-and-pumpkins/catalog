@@ -8,9 +8,9 @@ use Brera\FileStorageWriter;
 class ImageProcessor
 {
     /**
-     * @var ImageProcessorInstructionSequence
+     * @var ImageProcessingStrategySequence
      */
-    private $instructionSequence;
+    private $strategySequence;
 
     /**
      * @var FileStorageReader
@@ -23,11 +23,11 @@ class ImageProcessor
     private $writer;
 
     public function __construct(
-        ImageProcessorInstructionSequence $instructionSequence,
+        ImageProcessingStrategySequence $strategySequence,
         FileStorageReader $reader,
         FileStorageWriter $writer
     ) {
-        $this->instructionSequence = $instructionSequence;
+        $this->strategySequence = $strategySequence;
         $this->reader = $reader;
         $this->writer = $writer;
     }
@@ -39,7 +39,7 @@ class ImageProcessor
     {
         $imageBinaryData = $this->reader->getFileContents($imageFileName);
 
-        $processedImageStream = $this->instructionSequence->execute($imageBinaryData);
+        $processedImageStream = $this->strategySequence->processBinaryImageData($imageBinaryData);
 
         $this->writer->putFileContents($imageFileName, $processedImageStream);
     }

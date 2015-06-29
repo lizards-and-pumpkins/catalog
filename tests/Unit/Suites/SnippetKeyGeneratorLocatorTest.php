@@ -18,63 +18,47 @@ class SnippetKeyGeneratorLocatorTest extends \PHPUnit_Framework_TestCase
         $this->locator = new SnippetKeyGeneratorLocator();
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\InvalidSnippetCodeException
-     * @expectedExceptionMessage Expected snippet code to be a string
-     */
-    public function itShouldOnlyTakeStringsAsSnippetCodes()
+    public function testExceptionIsThrownIfNonStringSnippetRendererCodeIsPassed()
     {
         $mockSnippetRenderer = $this->getMock(SnippetRenderer::class);
+        $this->setExpectedException(InvalidSnippetCodeException::class, 'Expected snippet code to be a string');
+
         $this->locator->getKeyGeneratorForSnippetCode($mockSnippetRenderer);
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\SnippetKeyGeneratorNotRegisteredException
-     */
-    public function itShouldThrowIfSnippetKeyGeneratorNotKnown()
+    public function testExceptionIsThrownIfSnippetKeyGeneratorNotKnown()
     {
+        $this->setExpectedException(SnippetKeyGeneratorNotRegisteredException::class);
         $this->locator->getKeyGeneratorForSnippetCode('test');
     }
 
-    /**
-     * @test
-     */
-    public function itShouldBePossibleToRegisterKeyGeneratorForSnippetCodes()
+    public function testKeyGeneratorForSnippetCodesAreRegistered()
     {
         $testSnippetCode = 'test_snippet_code';
         $stubKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $this->locator->register($testSnippetCode, $stubKeyGenerator);
+
         $this->assertSame($stubKeyGenerator, $this->locator->getKeyGeneratorForSnippetCode($testSnippetCode));
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\InvalidSnippetCodeException
-     * @expectedExceptionMessage Expected snippet code to be a string
-     */
-    public function itShouldThrowAnExceptionWhenRegisteringANonStringSnippetCode()
+    public function testExceptionIsThrownWhenRegisteringNonStringSnippetCode()
     {
         $stubKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $this->setExpectedException(InvalidSnippetCodeException::class, 'Expected snippet code to be a string');
+
         $this->locator->register(123, $stubKeyGenerator);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldAlwaysReturnTheSameInstanceForTheSameSnippetCode()
+    public function testSameInstanceForSameSnippetCodeIsReturned()
     {
         $this->locator->register('test', $this->getMock(SnippetKeyGenerator::class));
         $result1 = $this->locator->getKeyGeneratorForSnippetCode('test');
         $result2 = $this->locator->getKeyGeneratorForSnippetCode('test');
+
         $this->assertSame($result1, $result2);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnDifferentInstancesForDifferentSnippetCodes()
+    public function testDifferentInstancesAreReturnedForDifferentSnippetCodes()
     {
         $this->locator->register('test1', $this->getMock(SnippetKeyGenerator::class));
         $this->locator->register('test2', $this->getMock(SnippetKeyGenerator::class));

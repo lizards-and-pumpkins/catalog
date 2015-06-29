@@ -26,10 +26,7 @@ class DataPoolWriterTest extends AbstractDataPoolTest
         $this->dataPoolWriter = new DataPoolWriter($this->getStubKeyValueStore(), $this->getStubSearchEngine());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldWriteASnippetListToTheDataPool()
+    public function testSnippetListIsWrittenToDataPool()
     {
         $testKey = 'test-key';
         $testContent = 'test-content';
@@ -48,10 +45,7 @@ class DataPoolWriterTest extends AbstractDataPoolTest
         $this->dataPoolWriter->writeSnippetList($mockSnippetList);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldWriteSearchDocumentCollectionToTheDataPool()
+    public function testSearchDocumentCollectionIsWrittenToDataPool()
     {
         $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class);
 
@@ -62,10 +56,7 @@ class DataPoolWriterTest extends AbstractDataPoolTest
         $this->dataPoolWriter->writeSearchDocumentCollection($stubSearchDocumentCollection);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldWriteSnippetIntoDataPool()
+    public function testSnippetIsWrittenToDataPool()
     {
         $testKey = 'test-key';
         $testContent = 'test-content';

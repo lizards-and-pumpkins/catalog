@@ -1,12 +1,11 @@
 <?php
 
-
 namespace Brera\Tests\Integration;
 
 use Brera\DataPool\SearchEngine\InMemorySearchEngine;
 use Brera\Image\ImageProcessor;
 use Brera\Image\ImageProcessorCollection;
-use Brera\Image\ImageProcessorInstructionSequence;
+use Brera\Image\ImageProcessingStrategySequence;
 use Brera\IntegrationTestFactory;
 use Brera\InMemoryLogger;
 use Brera\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
@@ -20,10 +19,10 @@ use Brera\Utils\LocalFilesystem;
  * @covers \Brera\IntegrationTestFactory
  * @uses   \Brera\DataPool\KeyValue\InMemory\InMemoryKeyValueStore
  * @uses   \Brera\FactoryTrait
- * @uses   \Brera\Image\ImageMagickResizeInstruction
+ * @uses   \Brera\Image\ImageMagickResizeStrategy
  * @uses   \Brera\Image\ImageProcessor
  * @uses   \Brera\Image\ImageProcessorCollection
- * @uses   \Brera\Image\ImageProcessorInstructionSequence
+ * @uses   \Brera\Image\ImageProcessingStrategySequence
  * @uses   \Brera\InMemoryLogger
  * @uses   \Brera\LocalFilesystemStorageReader
  * @uses   \Brera\LocalFilesystemStorageWriter
@@ -45,58 +44,37 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
         $masterFactory->register($this->factory);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateAnInMemoryKeyValueStore()
+    public function testInMemoryKeyValueStoreIsReturned()
     {
         $this->assertInstanceOf(InMemoryKeyValueStore::class, $this->factory->createKeyValueStore());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateAnInMemoryEventQueue()
+    public function testInMemoryEventQueueIsReturned()
     {
         $this->assertInstanceOf(InMemoryQueue::class, $this->factory->createEventQueue());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateAnInMemoryLogger()
+    public function testInMemoryLoggerIsReturned()
     {
         $this->assertInstanceOf(InMemoryLogger::class, $this->factory->createLogger());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateAnInMemorySearchEngine()
+    public function testInMemorySearchEngineIsReturned()
     {
         $this->assertInstanceOf(InMemorySearchEngine::class, $this->factory->createSearchEngine());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateLocalFilesystemStorageWriter()
+    public function testLocalFilesystemStorageWriterIsReturned()
     {
         $this->assertInstanceOf(LocalFilesystemStorageWriter::class, $this->factory->getImageFileStorageWriter());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateLocalFilesystemStorageReader()
+    public function testLocalFilesystemStorageReaderIsReturned()
     {
         $this->assertInstanceOf(LocalFilesystemStorageReader::class, $this->factory->getImageFileStorageReader());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateResizedImagesDirectoryIfItDoesNotExist()
+    public function testResizedImagesDirectoryIsCreated()
     {
         $resultImageDir = sys_get_temp_dir() . '/' . IntegrationTestFactory::PROCESSED_IMAGES_DIR;
 
@@ -107,37 +85,25 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_dir($resultImageDir));
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnImageProcessorInstructionSequence()
+    public function testImageProcessingStrategySequenceIsReturned()
     {
         $this->assertInstanceOf(
-            ImageProcessorInstructionSequence::class,
-            $this->factory->getImageProcessorInstructionSequence()
+            ImageProcessingStrategySequence::class,
+            $this->factory->getImageProcessingStrategySequence()
         );
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateSearchableAttributeCodesArray()
+    public function testArrayOfSearchableAttributeCodesIsReturned()
     {
         $this->assertInternalType('array', $this->factory->getSearchableAttributeCodes());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnImageProcessorCollection()
+    public function testImageProcessorCollectionIsReturned()
     {
         $this->assertInstanceOf(ImageProcessorCollection::class, $this->factory->createImageProcessorCollection());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnImageProcessor()
+    public function testImageProcessorIsReturned()
     {
         $this->assertInstanceOf(ImageProcessor::class, $this->factory->getImageProcessor());
     }

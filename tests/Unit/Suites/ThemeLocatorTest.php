@@ -24,23 +24,18 @@ class ThemeLocatorTest extends \PHPUnit_Framework_TestCase
         $this->locator = new ThemeLocator();
     }
     
-    /**
-     * @test
-     */
-    public function itShouldReturnHardcodedThemeDirectory()
+    public function testHardcodedThemeDirectoryIsReturned()
     {
         $this->assertEquals('theme', $this->locator->getThemeDirectory());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnALayoutObjectforAGivenHandle()
+    public function testLayoutObjectIsReturnedForGivenHandle()
     {
         $layoutHandle = 'test_layout_handle_' . uniqid();
         $layoutFile = $this->locator->getThemeDirectory() . '/layout/' . $layoutHandle . '.xml';
         $this->createFixtureFile($layoutFile, '<layout></layout>');
         $result = $this->locator->getLayoutForHandle($layoutHandle);
+
         $this->assertInstanceOf(Layout::class, $result);
     }
 }

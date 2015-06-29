@@ -26,10 +26,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
         $this->dataPoolReader = new DataPoolReader($this->getStubKeyValueStore(), $this->getStubSearchEngine());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnASnippetIfItExists()
+    public function testSnippetIsReturnedIfExists()
     {
         $testValue = '<p>html</p>';
         $testKey = 'test';
@@ -40,11 +37,9 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     }
 
     /**
-     * @test
-     *
      * @dataProvider snippetListProvider
      */
-    public function itShouldReturnASnippetList($keyValueStorageReturn, $expectedList)
+    public function testSnippetListIsReturned($keyValueStorageReturn, $expectedList)
     {
         $this->addGetMethodToStubKeyValueStore($keyValueStorageReturn);
 
@@ -68,13 +63,11 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     }
 
     /**
-     * @test
-     * @expectedException \RuntimeException
-     *
      * @dataProvider brokenJsonProvider
      */
-    public function itShouldThrowAnExceptionOnBrokenJSON($brokenJson)
+    public function testExceptionIsThrownIfJsonIsBroken($brokenJson)
     {
+        $this->setExpectedException(\RuntimeException::class);
         $this->addGetMethodToStubKeyValueStore($brokenJson);
         $this->dataPoolReader->getChildSnippetKeys('some_key');
     }
@@ -94,24 +87,20 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     }
 
     /**
-     * @test
-     * @expectedException \Brera\DataPool\InvalidKeyValueStoreKeyException
-     *
      * @dataProvider invalidKeyProvider
      */
-    public function itShouldOnlyAcceptStringKeyForSnippetList($key)
+    public function testOnlyStringKeyIsAcceptedForSnippetList($key)
     {
+        $this->setExpectedException(InvalidKeyValueStoreKeyException::class);
         $this->dataPoolReader->getChildSnippetKeys($key);
     }
 
     /**
-     * @test
-     * @expectedException \Brera\DataPool\InvalidKeyValueStoreKeyException
-     *
      * @dataProvider invalidKeyProvider
      */
-    public function itShouldOnlyAcceptStringKeysForGetSnippet($key)
+    public function testOnlyStringKeysAreAcceptedForGetSnippet($key)
     {
+        $this->setExpectedException(InvalidKeyValueStoreKeyException::class);
         $this->dataPoolReader->getSnippet($key);
     }
 
@@ -130,6 +119,15 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     }
 
     /**
+     * @dataProvider brokenKeysForSnippetsProvider
+     */
+    public function testOnlyStringKeysAreAcceptedForGetSnippets($key)
+    {
+        $this->setExpectedException(\RuntimeException::class);
+        $this->dataPoolReader->getSnippets($key);
+    }
+
+    /**
      * @return array[]
      */
     public function brokenKeysForSnippetsProvider()
@@ -142,29 +140,13 @@ class DataPoolReaderTest extends AbstractDataPoolTest
         ];
     }
 
-    /**
-     * @test
-     * @expectedException \RuntimeException
-     * @dataProvider brokenKeysForSnippetsProvider
-     */
-    public function itShouldOnlyAcceptStringKeysForGetSnippets($key)
+    public function testExceptionIsThrownIfTheKeyIsEmpty()
     {
-        $this->dataPoolReader->getSnippets($key);
-    }
-
-    /**
-     * @test
-     * @expectedException \Brera\DataPool\InvalidKeyValueStoreKeyException
-     */
-    public function itShouldThrowAnExceptionIfTheKeyIsEmpty()
-    {
+        $this->setExpectedException(InvalidKeyValueStoreKeyException::class);
         $this->dataPoolReader->getSnippet('');
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnSnippets()
+    public function testSnippetsAreReturned()
     {
         $keyValueStorageReturn = [
             'key' => 'value',
@@ -176,10 +158,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
         $this->assertEquals($keyValueStorageReturn, $snippets);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnFalseIfASnippetKeyIsNotInTheStore()
+    public function testFalseIsReturnedIfASnippetKeyIsNotInTheStore()
     {
         $this->getStubKeyValueStore()->expects($this->once())
             ->method('has')
@@ -188,10 +167,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
         $this->assertFalse($this->dataPoolReader->hasSnippet('test'));
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTrueIfASnippetKeyIsInTheStore()
+    public function testTrueIsReturnedIfASnippetKeyIsInTheStore()
     {
         $this->getStubKeyValueStore()->expects($this->once())
             ->method('has')
@@ -200,10 +176,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
         $this->assertTrue($this->dataPoolReader->hasSnippet('test'));
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnNegativeOneIfTheCurrentVersionIsNotSet()
+    public function testNegativeOneIsReturnedIfTheCurrentVersionIsNotSet()
     {
         $this->getStubKeyValueStore()->expects($this->once())
             ->method('has')
@@ -212,11 +185,9 @@ class DataPoolReaderTest extends AbstractDataPoolTest
         $this->assertSame('-1', $this->dataPoolReader->getCurrentDataVersion());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTheCurrentVersion()
+    public function testCurrentVersionIsReturned()
     {
+        $currentDataVersion = '123';
         $this->getStubKeyValueStore()->expects($this->once())
             ->method('has')
             ->with('current_version')
@@ -224,14 +195,11 @@ class DataPoolReaderTest extends AbstractDataPoolTest
         $this->getStubKeyValueStore()->expects($this->once())
             ->method('get')
             ->with('current_version')
-            ->willReturn('123');
-        $this->assertSame('123', $this->dataPoolReader->getCurrentDataVersion());
+            ->willReturn($currentDataVersion);
+        $this->assertSame($currentDataVersion, $this->dataPoolReader->getCurrentDataVersion());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldGetSearchResultsFromSearchEngine()
+    public function testSearchResultsAreReturnedFromSearchEngine()
     {
         $stubContext = $this->getMock(Context::class);
 
@@ -241,10 +209,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
         $this->dataPoolReader->getSearchResults('foo', $stubContext);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldDelegateCriteriaQueriesToTheSearchEngine()
+    public function testCriteriaQueriesAreDelegatedToSearchEngine()
     {
         $mockCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
         $stubContext = $this->getMock(Context::class);

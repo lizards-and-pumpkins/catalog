@@ -2,9 +2,9 @@
 
 namespace Brera\Image;
 
-class GdResizeInstruction implements ImageProcessorInstruction
+class GdResizeStrategy implements ImageProcessingStrategy
 {
-    use ResizeInstructionTrait;
+    use ResizeStrategyTrait;
 
     /**
      * @param int $width
@@ -20,7 +20,7 @@ class GdResizeInstruction implements ImageProcessorInstruction
      * @param string $binaryImageData
      * @return string
      */
-    public function execute($binaryImageData)
+    public function processBinaryImageData($binaryImageData)
     {
         $this->validateImageDimensions();
 

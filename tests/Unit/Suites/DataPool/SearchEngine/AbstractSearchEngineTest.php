@@ -41,17 +41,9 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         // Do not use SearchDocument mocks because the search engine implementation may discard
         // document instances for storage and thus any expectations set would always fail.
         // @see itShouldReturnAnArrayWithOneProductIdWithMatchingCriteria() for an example.
-        $this->stubSearchDocument = $this->getMockBuilder(SearchDocument::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->stubSearchDocument2 = $this->getMockBuilder(SearchDocument::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->stubSearchDocumentCollection = $this->getMockBuilder(SearchDocumentCollection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->stubSearchDocument = $this->getMock(SearchDocument::class, [], [], '', false);
+        $this->stubSearchDocument2 = $this->getMock(SearchDocument::class, [], [], '', false);
+        $this->stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
 
         $this->stubContext = $this->getMock(Context::class);
         $this->stubContext->expects($this->any())->method('getSupportedCodes')->willReturn(['dummy-part']);
@@ -61,28 +53,18 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine = $this->createSearchEngineInstance();
     }
 
-    /**
-     * @test
-     */
-    public function itShouldImplementSearchEngineInterface()
+    public function testSearchEngineInterfaceIsImplemented()
     {
         $this->assertInstanceOf(SearchEngine::class, $this->searchEngine);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnAnEmptyArrayWhateverIsQueriedIfIndexIsEmpty()
+    public function testEmptyArrayIsReturnedRegardlessOfWhatHasBeenQueriedIfIndexIsEmpty()
     {
         $result = $this->searchEngine->query('bar', $this->stubContext);
-
         $this->assertCount(0, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldAddEntryIntoIndexAndThenFindIt()
+    public function testEntryIsAddedIntoIndexAndThenFound()
     {
         $searchDocumentContent = 'qux';
         $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => 'bar']);
@@ -100,10 +82,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([$searchDocumentContent], $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnAnEmptyArrayIfQueryStringIsNotFoundInIndex()
+    public function testEmptyArrayIsReturnedIfQueryStringIsNotFoundInIndex()
     {
         $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => 'bar']);
         $this->prepareStubSearchDocument(
@@ -120,13 +99,12 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(0, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldAddMultipleEntriesToIndex()
+    public function testMultipleEntriesAreAddedToIndex()
     {
+        $keyword = 'bar';
+
         $searchDocument1Content = 'content1';
-        $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => 'bar']);
+        $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => $keyword]);
         $this->prepareStubSearchDocument(
             $this->stubSearchDocument,
             $this->stubContext,
@@ -135,7 +113,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         );
 
         $searchDocument2Content = 'content2';
-        $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['baz' => 'bar']);
+        $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['baz' => $keyword]);
         $this->prepareStubSearchDocument(
             $this->stubSearchDocument2,
             $this->stubContext,
@@ -149,15 +127,12 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
 
-        $result = $this->searchEngine->query('bar', $this->stubContext);
+        $result = $this->searchEngine->query($keyword, $this->stubContext);
 
         $this->assertEmpty(array_diff([$searchDocument1Content, $searchDocument2Content], $result));
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnOnlyEntriesContainingRequestedString()
+    public function testOnlyEntriesContainingRequestedStringAreReturned()
     {
         $searchDocumentContent = 'content';
         $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => 'bar']);
@@ -187,10 +162,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([$searchDocumentContent], $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnOnlyMatchesWithMatchingContexts()
+    public function testOnlyMatchesWithMatchingContextsAreReturned()
     {
         $contextPartCode = 'dummy-part';
         $stubDocument1Context = $this->getMock(Context::class);
@@ -231,10 +203,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['content2'], $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldMatchPartialContexts()
+    public function testPartialContextsAreMatched()
     {
         $stubDocument1Context = $this->getMock(Context::class);
         $stubDocument1Context->expects($this->any())->method('getValue')
@@ -282,10 +251,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertArraysHasEqualElements(['content1', 'content2'], $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldIgnoreContextPartsFromTheQueryThatAreNotInTheSearchDocumentContext()
+    public function testContextPartsThatAreNotInSearchDocumentContextAreIgnored()
     {
         $contextPartCode = 'dummy-part';
         $stubQueryContext = $this->getMock(Context::class);
@@ -325,10 +291,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['content'], $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldNotMatchIfNoContextPartIsSupported()
+    public function testNoMatchesReturnedIfNoContextPartIsSupported()
     {
         $contextPartCode = 'dummy-part';
         $stubQueryContext = $this->getMock(Context::class);
@@ -357,10 +320,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([], $result, 'Expected no search results.');
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnEntriesContainingRequestedString()
+    public function testEntriesContainingRequestedStringAreReturned()
     {
         $searchDocument1Content = 'content1';
         $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => 'barbarism']);
@@ -391,10 +351,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty(array_diff([$searchDocument1Content, $searchDocument2Content], $result));
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnUniqueEntries()
+    public function testUniqueEntriesAreReturned()
     {
         $searchDocumentContent = 'content';
 
@@ -425,10 +382,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([$searchDocumentContent], $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnAnEmptyArrayForEmptySearchCriteria()
+    public function testEmptyArrayIsReturnedForEmptySearchCriteria()
     {
         $mockCriteria = $this->createMockCriteria(SearchCriteria::OR_CONDITION, []);
 
@@ -437,10 +391,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertSame([], $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnAnEmptyArrayIfNoMatchesAreFound()
+    public function testEmptyArrayIsReturnedIfNoMatchesAreFound()
     {
         $mockCriterion = $this->createMockCriterion('test-field', 'test-search-term', 'eq');
         $mockCriteria = $this->createMockCriteria(SearchCriteria::OR_CONDITION, [$mockCriterion]);
@@ -450,10 +401,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertSame([], $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnAnArrayWithOneProductIdWithMatchingCriteria()
+    public function testArrayWithOneProductIdMatchingCriteriaIsReturned()
     {
         $testProductId = 'id10';
         $testFieldName = 'test-field-name';

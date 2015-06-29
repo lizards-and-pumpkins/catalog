@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Brera\Renderer;
 
 use Brera\Renderer\Stubs\StubBlock;
@@ -26,56 +25,43 @@ class BlockRendererTest extends BlockRendererTestAbstract
         return new StubBlockRenderer($stubThemeLocator, $stubBlockStructure);
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Renderer\BlockRendererMustHaveOneRootBlockException
-     */
-    public function itShouldThrowAnExceptionIfNoRootBlockIsDefined()
+    public function testExceptionIsThrownIfNoRootBlockIsDefined()
     {
         $this->getStubLayout()->expects($this->any())
             ->method('getNodeChildren')
             ->willReturn([]);
+        $this->setExpectedException(BlockRendererMustHaveOneRootBlockException::class);
+
         $this->getBlockRenderer()->render($this->getStubDataObject(), $this->getStubContext());
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Renderer\BlockRendererMustHaveOneRootBlockException
-     */
-    public function itShouldThrowAnExceptionIfMoreThenOneRootBlockIsDefined()
+    public function testExceptionIsThrownIfMoreThenOneRootBlockIsDefined()
     {
         $this->getStubLayout()->expects($this->any())
             ->method('getNodeChildren')
             ->willReturn([['test-dummy-1'], ['test-dummy-2']]);
+        $this->setExpectedException(BlockRendererMustHaveOneRootBlockException::class);
+
         $this->getBlockRenderer()->render($this->getStubDataObject(), $this->getStubContext());
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Renderer\CanNotInstantiateBlockException
-     * @expectedExceptionMessage Block class is not specified.
-     */
-    public function itShouldThrowAnExceptionIfNoBlockClassIsSpecified()
+    public function testExceptionIsThrownIfNoBlockClassIsSpecified()
     {
         $this->addStubRootBlock(null, 'dummy-template');
+        $this->setExpectedException(CanNotInstantiateBlockException::class, 'Block class is not specified.');
+
         $this->getBlockRenderer()->render($this->getStubDataObject(), $this->getStubContext());
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Renderer\CanNotInstantiateBlockException
-     * @expectedExceptionMessage Block class does not exist
-     */
-    public function itShouldThrowAnExceptionIfTheClassDoesNotExist()
+    public function testExceptionIsThrownIfTheClassDoesNotExist()
     {
         $this->addStubRootBlock('None\\Existing\\BlockClass', 'dummy-template');
+        $this->setExpectedException(CanNotInstantiateBlockException::class, 'Block class does not exist');
+
         $this->getBlockRenderer()->render($this->getStubDataObject(), $this->getStubContext());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldThrowAnExceptionIfTheSpecifiedClassIsNotABlock()
+    public function testExceptionIsThrownIfTheSpecifiedClassIsNotABlock()
     {
         $nonBlockClass = __CLASS__;
         $this->setExpectedException(
@@ -86,23 +72,18 @@ class BlockRendererTest extends BlockRendererTestAbstract
         $this->getBlockRenderer()->render($this->getStubDataObject(), $this->getStubContext());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldRenderABlockSpecifiedInLayout()
+    public function testBlockSpecifiedInLayoutIsRendered()
     {
         $template = sys_get_temp_dir() . '/' . uniqid() . '/test-template.php';
         $templateContent = 'test template content';
         $this->createFixtureFile($template, $templateContent);
         $this->addStubRootBlock(StubBlock::class, $template);
         $result = $this->getBlockRenderer()->render($this->getStubDataObject(), $this->getStubContext());
+
         $this->assertEquals($templateContent, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldRenderChildrenRecursively()
+    public function testChildrenBlocksAreRenderedRecursively()
     {
         $childBlockName = 'child-block';
         $outputChildBlockStatement = '<?= $this->getChildOutput("' . $childBlockName . '") ?>';
@@ -119,13 +100,11 @@ class BlockRendererTest extends BlockRendererTestAbstract
         $this->addChildLayoutToStubBlock($rootBlock, StubBlock::class, $childTemplate, $childBlockName);
 
         $result = $this->getBlockRenderer()->render($this->getStubDataObject(), $this->getStubContext());
+
         $this->assertEquals($combinedTemplateContent, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldInsertAPlaceholderIfChildBlockIsMissing()
+    public function testPlaceholderIsInsertedIfChildBlockIsMissing()
     {
         $childBlockName = 'child-block';
         $outputChildBlockStatement = '<?= $this->getChildOutput("' . $childBlockName . '") ?>';
@@ -141,20 +120,16 @@ class BlockRendererTest extends BlockRendererTestAbstract
         $this->assertEquals($templateContentWithChildPlaceholder, $result);
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Renderer\MethodNotYetAvailableException
-     * @expectedExceptionMessage The method "getNestedSnippetCodes()" can not be called before "render()" is executed
-     */
-    public function itShouldThrowAnExceptionIfTheListOfNestedSnippetsIsFetchedBeforeRendering()
+    public function testExceptionIsThrownIfTheListOfNestedSnippetsIsFetchedBeforeRendering()
     {
+        $this->setExpectedException(
+            MethodNotYetAvailableException::class,
+            'The method "getNestedSnippetCodes()" can not be called before "render()" is executed'
+        );
         $this->getBlockRenderer()->getNestedSnippetCodes();
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnAnArrayOfMissingChildBlockNames()
+    public function testArrayOfMissingChildBlockNamesIsReturned()
     {
         $childBlockName1 = 'child-block1';
         $childBlockName2 = 'child-block2';
@@ -171,10 +146,7 @@ class BlockRendererTest extends BlockRendererTestAbstract
         $this->assertEquals([$childBlockName1, $childBlockName2], $this->getBlockRenderer()->getNestedSnippetCodes());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnAFreshListOfMissingChildrenBlockNamesIfRenderIsCalledTwice()
+    public function testFreshListOfMissingChildrenBlockNamesIsReturnedIfRenderIsCalledTwice()
     {
         $childBlockName1 = 'child-block1';
         $childBlockName2 = 'child-block2';
@@ -194,18 +166,12 @@ class BlockRendererTest extends BlockRendererTestAbstract
         $this->assertEquals([$childBlockName1, $childBlockName2], $this->getBlockRenderer()->getNestedSnippetCodes());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTheLayoutHandleAsTheRootSnippetCode()
+    public function testLayoutHandleIsReturnedAsRootSnippetCode()
     {
         $this->assertEquals(StubBlockRenderer::LAYOUT_HANDLE, $this->getBlockRenderer()->getRootSnippetCode());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTheDataObjectPassedToRender()
+    public function testDataObjectPassedToRenderIsReturned()
     {
         $stubDataObject = $this->getStubDataObject();
         $template = $this->getUniqueTempDir() . '/template.phtml';

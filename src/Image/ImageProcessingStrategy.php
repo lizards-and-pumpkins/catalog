@@ -2,11 +2,11 @@
 
 namespace Brera\Image;
 
-interface ImageProcessorInstruction
+interface ImageProcessingStrategy
 {
     /**
      * @param string $binaryImageData
      * @return string
      */
-    public function execute($binaryImageData);
+    public function processBinaryImageData($binaryImageData);
 }

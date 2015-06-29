@@ -13,10 +13,7 @@ use Brera\DataPool\SearchEngine\SearchCriteria;
  */
 class ProductListingSourceBuilderTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itShouldCreateAProductListingSourceFromXml()
+    public function testProductListingSourceIsCreatedFromXml()
     {
         $xml = <<<EOX
 <listing url_key="men-accessories" condition="and" website="ru" language="en_US">

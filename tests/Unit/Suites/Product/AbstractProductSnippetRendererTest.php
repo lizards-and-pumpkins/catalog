@@ -3,6 +3,7 @@
 namespace Brera\Product;
 
 use Brera\Context\Context;
+use Brera\InvalidProjectionDataSourceTypeException;
 use Brera\ProjectionSourceData;
 use Brera\SampleContextSource;
 use Brera\SnippetRenderer;
@@ -54,29 +55,20 @@ abstract class AbstractProductSnippetRendererTest extends \PHPUnit_Framework_Tes
         return $this->mockSnippetList;
     }
 
-    /**
-     * @test
-     */
-    public function itShouldImplementSnippetRenderer()
+    public function testSnippetRendererInterfaceIsImplemented()
     {
         $this->assertInstanceOf(SnippetRenderer::class, $this->snippetRenderer);
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\InvalidProjectionDataSourceTypeException
-     */
-    public function itShouldOnlyAcceptProductsForRendering()
+    public function testOnlyProductsAreAcceptedForRendering()
     {
+        $this->setExpectedException(InvalidProjectionDataSourceTypeException::class);
         $invalidSourceObject = $this->getMock(ProjectionSourceData::class, [], [], '', false);
 
         $this->snippetRenderer->render($invalidSourceObject, $this->mockContextSource);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnASnippetList()
+    public function testSnippetListIsReturned()
     {
         $stubProductSource = $this->getStubProductSource();
 
@@ -84,10 +76,7 @@ abstract class AbstractProductSnippetRendererTest extends \PHPUnit_Framework_Tes
         $this->assertSame($this->mockSnippetList, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldMergeMoreSnippetsToTheSnippetList()
+    public function testSnippetsAreMergedIntoSnippetList()
     {
         $stubProductSource = $this->getStubProductSource();
 

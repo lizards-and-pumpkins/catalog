@@ -32,10 +32,7 @@ class ProductDetailViewRequestHandlerBuilderTest extends \PHPUnit_Framework_Test
         );
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateAnUrlKeyRequestHandler()
+    public function testUrlKeyRequestHandlerIsCreated()
     {
         $stubUrl = $this->getMock(HttpUrl::class, [], [], '', false);
         $stubContext = $this->getMock(Context::class);

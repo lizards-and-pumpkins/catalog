@@ -15,10 +15,7 @@ use Brera\Utils\XPathParser;
 
 class EdgeToEdgeTestAbstract extends AbstractIntegrationTest
 {
-    /**
-     * @test
-     */
-    public function importProductDomainEventShouldPutProductToKeyValueStoreAndSearchIndex()
+    public function testProductDomainEventPutsProductToKeyValueStoreAndSearchIndex()
     {
         $factory = $this->prepareIntegrationTestMasterFactory();
 
@@ -95,10 +92,7 @@ class EdgeToEdgeTestAbstract extends AbstractIntegrationTest
         );
     }
 
-    /**
-     * @test
-     */
-    public function rootTemplateChangedDomainEventShouldPutProductListingRootSnippetIntoKeyValueStore()
+    public function testRootTemplateChangedDomainEventPutsProductListingRootSnippetIntoKeyValueStore()
     {
         $factory = $this->prepareIntegrationTestMasterFactory();
 
@@ -132,10 +126,7 @@ class EdgeToEdgeTestAbstract extends AbstractIntegrationTest
         $this->assertContains($expectation, $html);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldMakeAnImportedProductAccessibleFromTheFrontend()
+    public function testImportedProductIsAccessibleFromTheFrontend()
     {
         $factory = $this->prepareIntegrationTestMasterFactory();
 
@@ -161,10 +152,7 @@ class EdgeToEdgeTestAbstract extends AbstractIntegrationTest
         $this->assertContains('<body>', $response->getBody());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnAHttpResourceNotFoundResponse()
+    public function testHttpResourceNotFoundResponseIsReturned()
     {
         $url = HttpUrl::fromString('http://example.com/non/existent/path');
         $request = HttpRequest::fromParameters('GET', $url);

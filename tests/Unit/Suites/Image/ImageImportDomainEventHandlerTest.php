@@ -33,18 +33,12 @@ class ImageImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function itShouldBeAnImageDomainEventHandler()
+    public function testImageDomainEventHandlerIsReturned()
     {
         $this->assertInstanceOf(ImageImportDomainEventHandler::class, $this->handler);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldPassAllImagesThroughImageProcessor()
+    public function testAllImagesArePassedThroughImageProcessor()
     {
         $imageFilename = 'test_image.jpg';
 

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Brera\Renderer\Stubs;
 
 use Brera\Renderer\BlockRenderer;

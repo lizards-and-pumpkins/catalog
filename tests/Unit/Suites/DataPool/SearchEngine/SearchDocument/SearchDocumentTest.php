@@ -50,20 +50,14 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateSearchDocument()
+    public function testSearchDocumentIsCreated()
     {
         $this->assertSame($this->mockDocumentFieldsCollection, $this->searchDocument->getFieldsCollection());
         $this->assertSame($this->testContext, $this->searchDocument->getContext());
         $this->assertSame($this->content, $this->searchDocument->getContent());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnFalseIfInputArrayIsEmpty()
+    public function testFalseIsReturnedIfInputArrayIsEmpty()
     {
         $mockCriteria = $this->createMockCriteria(SearchCriteria::OR_CONDITION, []);
 

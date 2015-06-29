@@ -50,10 +50,7 @@ class LocalFilesystemTest extends \PHPUnit_Framework_TestCase
         rmdir($this->nonWritableDirectoryPath);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldRemoveDirectoryAndItsContent()
+    public function testDirectoryAndItsContentAreRemoved()
     {
         $directoryPath = $this->testDirectoryPath . '/directory-to-be-removed';
 
@@ -67,21 +64,15 @@ class LocalFilesystemTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(is_dir($directoryPath));
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Utils\DirectoryDoesNotExistException
-     */
-    public function itShouldThrowAnExceptionIfDirectoryDoesNotExist()
+    public function testExceptionIsThrownIfDirectoryDoesNotExist()
     {
+        $this->setExpectedException(DirectoryDoesNotExistException::class);
         $this->filesystem->removeDirectoryAndItsContent('/non-existing-directory');
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Utils\DirectoryNotWritableException
-     */
-    public function itShouldThrowAnExceptionIfDirectoryIsNotWritable()
+    public function testExceptionIsThrownIfDirectoryIsNotWritable()
     {
+        $this->setExpectedException(DirectoryNotWritableException::class);
         $this->filesystem->removeDirectoryAndItsContent($this->nonWritableDirectoryPath);
     }
 }

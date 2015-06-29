@@ -61,10 +61,10 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Product\ProductSourceInListingSnippetRenderer
  * @uses   \Brera\Product\ProductInListingInContextSnippetRenderer
  * @uses   \Brera\Image\ImageImportDomainEventHandler
- * @uses   \Brera\Image\ImageMagickResizeInstruction
+ * @uses   \Brera\Image\ImageMagickResizeStrategy
  * @uses   \Brera\Image\ImageProcessor
  * @uses   \Brera\Image\ImageProcessorCollection
- * @uses   \Brera\Image\ImageProcessorInstructionSequence
+ * @uses   \Brera\Image\ImageProcessingStrategySequence
  * @uses   \Brera\LocalFilesystemStorageReader
  * @uses   \Brera\LocalFilesystemStorageWriter
  */
@@ -83,237 +83,175 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $masterFactory->register($this->commonFactory);
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\NoMasterFactorySetException
-     */
-    public function itShouldThrowAnExceptionIfNoMasterFactoryIsSet()
+    public function testExceptionIsThrownIfNoMasterFactoryIsSet()
     {
+        $this->setExpectedException(NoMasterFactorySetException::class);
         (new CommonFactory())->createDomainEventConsumer();
     }
 
-    /**
-     * @test
-     * @todo Move to catalog factory test
-     */
-    public function itShouldCreateAProductImportDomainEventHandler()
+    public function testProductImportDomainEventHandlerIsReturned()
     {
+        /* TODO: Move to catalog factory test */
         $productImportDomainEvent = new ProductImportDomainEvent('<xml/>');
         $result = $this->commonFactory->createProductImportDomainEventHandler($productImportDomainEvent);
         $this->assertInstanceOf(ProductImportDomainEventHandler::class, $result);
     }
 
-    /**
-     * @test
-     * @todo Move to catalog factory test
-     */
-    public function itShouldCreateACatalogImportDomainEventHandler()
+    public function testCatalogImportDomainEventHandlerIsReturned()
     {
+        /* TODO: Move to catalog factory test */
         $catalogImportDomainEvent = new CatalogImportDomainEvent('<xml/>');
         $result = $this->commonFactory->createCatalogImportDomainEventHandler($catalogImportDomainEvent);
         $this->assertInstanceOf(CatalogImportDomainEventHandler::class, $result);
     }
 
-    /**
-     * @test
-     * @todo Move to catalog factory test
-     */
-    public function itShouldCreateARootTemplateChangedDomainEventHandler()
+    public function testRootTemplateChangedDomainEventHandlerIsReturned()
     {
+        /* TODO: Move to catalog factory test */
         $rootTemplateChangedDomainEvent = new RootTemplateChangedDomainEvent('<xml/>');
         $result = $this->commonFactory->createRootTemplateChangedDomainEventHandler($rootTemplateChangedDomainEvent);
         $this->assertInstanceOf(RootTemplateChangedDomainEventHandler::class, $result);
     }
 
-    /**
-     * @test
-     * @todo Move to catalog factory test
-     */
-    public function itShouldCreateAProductListingSavedDomainEventHandler()
+    public function testProductListingSavedDomainEventHandlerIsReturned()
     {
+        /* TODO: Move to catalog factory test */
         $productListingSavedDomainEvent = new ProductListingSavedDomainEvent('<xml/>');
         $result = $this->commonFactory->createProductListingSavedDomainEventHandler($productListingSavedDomainEvent);
         $this->assertInstanceOf(ProductListingSavedDomainEventHandler::class, $result);
     }
 
-    /**
-     * @test
-     * @todo Move to catalog factory test
-     */
-    public function itShouldCreateAProductProjector()
+    public function testProductProjectorIsReturned()
     {
+        /* TODO: Move to catalog factory test */
         $result = $this->commonFactory->createProductProjector();
         $this->assertInstanceOf(ProductProjector::class, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateAnUrlPathKeyGenerator()
+    public function testUrlPathKeyGeneratorIsReturned()
     {
         $result = $this->commonFactory->createUrlPathKeyGenerator();
         $this->assertInstanceOf(UrlPathKeyGenerator::class, $result);
     }
-
-
-    /**
-     * @test
-     */
-    public function itShouldCreateSnippetList()
+    
+    public function testSnippetListIsReturned()
     {
         $result = $this->commonFactory->createSnippetList();
         $this->assertInstanceOf(SnippetList::class, $result);
     }
 
-    /**
-     * @test
-     * @todo Move to catalog factory test
-     */
-    public function itShouldCreateProductDetailViewSnippetSnippetKeyGenerator()
+    public function testProductDetailViewSnippetKeyGeneratorIsReturned()
     {
+        /* TODO: Move to catalog factory test */
         $result = $this->commonFactory->createProductDetailViewSnippetKeyGenerator();
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
 
-    /**
-     * @test
-     * @todo Move to catalog factory test
-     */
-    public function itShouldReturnProductBuilder()
+    public function testProductBuilderIsReturned()
     {
+        /* TODO: Move to catalog factory test */
         $result = $this->commonFactory->createProductSourceBuilder();
         $this->assertInstanceOf(ProductSourceBuilder::class, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnThemeLocator()
+    public function testThemeLocatorIsReturned()
     {
         $result = $this->commonFactory->createThemeLocator();
         $this->assertInstanceOf(ThemeLocator::class, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateAnContextSource()
+    public function testContextSourceIsReturned()
     {
         $result = $this->commonFactory->createContextSource();
-
         $this->assertInstanceOf(ContextSource::class, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateAnContextBuilder()
+    public function testContextBuilderIsReturned()
     {
         $result = $this->commonFactory->createContextBuilder();
         $this->assertInstanceOf(ContextBuilder::class, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateADomainEventHandlerLocator()
+    public function testDomainEventHandlerLocatorIsReturned()
     {
         $result = $this->commonFactory->createDomainEventHandlerLocator();
         $this->assertInstanceOf(DomainEventHandlerLocator::class, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateADataPoolWriter()
+    public function testDataPoolWriterIsReturned()
     {
         $result = $this->commonFactory->createDomainEventHandlerLocator();
         $this->assertInstanceOf(DomainEventHandlerLocator::class, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateADomainEventConsumer()
+    public function testDomainEventConsumerIsReturned()
     {
         $result = $this->commonFactory->createDomainEventConsumer();
         $this->assertInstanceOf(DomainEventConsumer::class, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnADomainEventQueue()
+    public function testDomainEventQueueIsReturned()
     {
         $result = $this->commonFactory->getEventQueue();
         $this->assertInstanceOf(Queue::class, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldAlwaysReturnTheSameDomainEventQueueInstance()
+    public function testSameDomainEventQueueInstanceIsReturned()
     {
         $result1 = $this->commonFactory->getEventQueue();
         $result2 = $this->commonFactory->getEventQueue();
         $this->assertSame($result1, $result2);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateADataPoolReader()
+    public function testDataPoolReaderIsReturned()
     {
         $result = $this->commonFactory->createDataPoolReader();
         $this->assertInstanceOf(DataPoolReader::class, $result);
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\UndefinedFactoryMethodException
-     * @expectedExceptionMessage Unable to create KeyValueStore. Is the factory registered?
-     */
-    public function itShouldThrowAnExceptionWithHelpfulMessageIfNoKeyValueStoreFactoryIsRegistered()
+    public function testExceptionWithHelpfulMessageIsThrownIfNoKeyValueStoreFactoryIsRegistered()
     {
         $masterFactory = new PoCMasterFactory();
         $commonFactory = new CommonFactory();
         $masterFactory->register($commonFactory);
+
+        $this->setExpectedException(
+            UndefinedFactoryMethodException::class,
+            'Unable to create KeyValueStore. Is the factory registered?'
+        );
 
         $commonFactory->createDataPoolReader();
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\UndefinedFactoryMethodException
-     * @expectedExceptionMessage Unable to create EventQueue. Is the factory registered?
-     */
-    public function itShouldThrowAnExceptionWithHelpfulMessageIfNoEventQueueFactoryIsRegistered()
+    public function testExceptionWithHelpfulMessageIsThrownIfNoEventQueueFactoryIsRegistered()
     {
         $masterFactory = new PoCMasterFactory();
         $commonFactory = new CommonFactory();
         $masterFactory->register($commonFactory);
+
+        $this->setExpectedException(
+            UndefinedFactoryMethodException::class,
+            'Unable to create EventQueue. Is the factory registered?'
+        );
 
         $commonFactory->getEventQueue();
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\UndefinedFactoryMethodException
-     * @expectedExceptionMessage Unable to create Logger. Is the factory registered?
-     */
-    public function itShouldThrowAnExceptionWithHelpfulMessageIfNoLoggerFactoryIsRegistered()
+    public function testExceptionWithHelpfulMessageIsThrownIfNoLoggerFactoryIsRegistered()
     {
         $masterFactory = new PoCMasterFactory();
         $commonFactory = new CommonFactory();
         $masterFactory->register($commonFactory);
 
+        $this->setExpectedException(
+            UndefinedFactoryMethodException::class,
+            'Unable to create Logger. Is the factory registered?'
+        );
+
         $commonFactory->getLogger();
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTheLoggerInstance()
+    public function testLoggerInstanceIsReturned()
     {
         $resultA = $this->commonFactory->getLogger();
         $resultB = $this->commonFactory->getLogger();
@@ -321,28 +259,19 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($resultA, $resultB);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnAResourceNotFoundRouter()
+    public function testResourceNotFoundRouterIsReturned()
     {
         $result = $this->commonFactory->createResourceNotFoundRouter();
         $this->assertInstanceOf(ResourceNotFoundRouter::class, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnAHttpRouterChain()
+    public function testHttpRouterChainIsReturned()
     {
         $result = $this->commonFactory->createHttpRouterChain();
         $this->assertInstanceOf(HttpRouterChain::class, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnAnImageImportEventDomainHandler()
+    public function testImageImportEventDomainHandlerIsReturned()
     {
         /* @var $event \PHPUnit_Framework_MockObject_MockObject|ImageImportDomainEvent */
         $event = $this->getMock(ImageImportDomainEvent::class, [], [], '', false);
@@ -351,10 +280,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ImageImportDomainEventHandler::class, $handler);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnAProductSnippetKeyGeneratorInstance()
+    public function testProductSnippetKeyGeneratorIsReturned()
     {
         $result = $this->commonFactory->createProductInListingSnippetKeyGenerator();
         $this->assertInstanceOf(ProductSnippetKeyGenerator::class, $result);

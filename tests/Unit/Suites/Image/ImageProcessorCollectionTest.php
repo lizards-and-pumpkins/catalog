@@ -7,10 +7,7 @@ namespace Brera\Image;
  */
 class ImageProcessorCollectionTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itShouldProcessAllProcessorsOfACollection()
+    public function testAllProcessorsOfCollectionAreProcessed()
     {
         $processor1 = $this->getMock(ImageProcessor::class, [], [], '', false);
         $processor1->expects($this->once())

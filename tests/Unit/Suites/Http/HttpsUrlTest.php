@@ -9,10 +9,7 @@ namespace Brera\Http;
  */
 class HttpsUrlTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itShouldBeEncrypted()
+    public function testProtocolIsEncrypted()
     {
         $httpsUrl = HttpUrl::fromString('https://example.com/path');
 
