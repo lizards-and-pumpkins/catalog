@@ -38,9 +38,7 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubDocumentFieldsCollection = $this->getMockBuilder(SearchDocumentFieldCollection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->stubDocumentFieldsCollection = $this->getMock(SearchDocumentFieldCollection::class, [], [], '', false);
         $this->testContext = new VersionedContext(DataVersion::fromVersionString('123'));
 
         $this->searchDocument = new SearchDocument(
@@ -50,36 +48,24 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateSearchDocument()
+    public function testSearchDocumentIsCreated()
     {
         $this->assertSame($this->stubDocumentFieldsCollection, $this->searchDocument->getFieldsCollection());
         $this->assertSame($this->testContext, $this->searchDocument->getContext());
         $this->assertSame($this->content, $this->searchDocument->getContent());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnFalseIfInputArrayIsEmpty()
+    public function testFalseIsReturnedIfInputArrayIsEmpty()
     {
         $this->assertFalse($this->searchDocument->hasFieldMatchingOneOf([]));
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnFalseIfNoMatchingFieldIsPresent()
+    public function testFalseIsReturnedIfNoMatchingFieldIsPresent()
     {
         $this->assertFalse($this->searchDocument->hasFieldMatchingOneOf(['field-name' => 'field-value']));
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTrueIfAMatchingFieldIsPresent()
+    public function testTrueIsReturnedIfAMatchingFieldIsPresent()
     {
         $this->stubDocumentFieldsCollection->expects($this->once())->method('contains')
             ->with($this->isInstanceOf(SearchDocumentField::class))

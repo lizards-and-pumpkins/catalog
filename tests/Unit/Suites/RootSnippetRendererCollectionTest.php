@@ -36,10 +36,7 @@ class RootSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnSnippetList()
+    public function testSnippetListIsReturned()
     {
         $stubRootSnippetSourceList = $this->getMock(RootSnippetSourceList::class, [], [], '', false);
         $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
@@ -60,14 +57,12 @@ class RootSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($stubSnippetList, $result);
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\InvalidProjectionDataSourceTypeException
-     */
-    public function itShouldThrowAnExceptionIfProjectionDataIsNotAnInstanceOfRootSnippetSourceList()
+    public function testExceptionIsThrownIfProjectionDataIsNotInstanceOfRootSnippetSourceList()
     {
         $stubProjectionSourceData = $this->getMock(ProjectionSourceData::class);
         $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
+
+        $this->setExpectedException(InvalidProjectionDataSourceTypeException::class);
 
         $this->rootSnippetRendererCollection->render($stubProjectionSourceData, $stubContextSource);
     }

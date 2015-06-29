@@ -7,10 +7,7 @@ namespace Brera\DataPool\SearchEngine\SearchDocument;
  */
 class SearchDocumentFieldTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itShouldSetAndGetDocumentFieldKeyAndValue()
+    public function testDocumentFieldKeyAndValueAreSetAndReturned()
     {
         $key = 'foo';
         $value = 'bar';
@@ -22,13 +19,12 @@ class SearchDocumentFieldTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @test
-     * @expectedException \Brera\DataPool\SearchEngine\SearchDocument\InvalidSearchDocumentFieldKeyException
      * @param mixed $invalidKey
      * @dataProvider invalidKeyProvider
      */
-    public function itShouldThrowAnExceptionIfInvalidKeyIsSpecified($invalidKey)
+    public function testExceptionIsThrownIfInvalidKeyIsSpecified($invalidKey)
     {
+        $this->setExpectedException(InvalidSearchDocumentFieldKeyException::class);
         SearchDocumentField::fromKeyAndValue($invalidKey, 'foo');
     }
 

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Brera;
 
 use Brera\Context\Context;
@@ -25,21 +24,18 @@ class GenericSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->keyGenerator = new GenericSnippetKeyGenerator($this->testSnippetCode, ['dummy-context-part']);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldBeASnippetKeyGenerator()
+    public function testSnippetKeyGeneratorInterfaceIsImplemented()
     {
         $this->assertInstanceOf(SnippetKeyGenerator::class, $this->keyGenerator);
     }
 
     /**
-     * @test
      * @dataProvider invalidTypeSnippetCodeProvider
-     * @expectedException \Brera\InvalidSnippetCodeException
+     * @param mixed $invalidSnippetType
      */
-    public function itShouldThrowAnExceptionIfTheSnippetCodeIsNoString($invalidSnippetType)
+    public function testExceptionIsThrownIfTheSnippetCodeIsNoString($invalidSnippetType)
     {
+        $this->setExpectedException(InvalidSnippetCodeException::class);
         new GenericSnippetKeyGenerator($invalidSnippetType, ['dummy-context-part']);
     }
 
@@ -56,20 +52,15 @@ class GenericSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnAKeyIncludingTheHandle()
+    public function testKeyIncludingHandleIsReturned()
     {
         $stubContext = $this->getMock(Context::class);
         $result = $this->keyGenerator->getKeyForContext($stubContext);
+
         $this->assertContains($this->testSnippetCode, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldIncludeTheContextIdentifierInTheReturnedKey()
+    public function testContextIdentifierIsIncludedInReturnedKey()
     {
         $testContextId = 'test-context-id';
         $stubContext = $this->getMock(Context::class);
@@ -77,13 +68,11 @@ class GenericSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
             ->method('getIdForParts')
             ->willReturn($testContextId);
         $result = $this->keyGenerator->getKeyForContext($stubContext);
+
         $this->assertContains($testContextId, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTheRequiredContextParts()
+    public function testRequiredContextPartsAreReturned()
     {
         $result = $this->keyGenerator->getContextPartsUsedForKey();
         $this->assertInternalType('array', $result);

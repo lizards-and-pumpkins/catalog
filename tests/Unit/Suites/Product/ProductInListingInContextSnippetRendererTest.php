@@ -72,10 +72,7 @@ class ProductInListingInContextSnippetRendererTest extends \PHPUnit_Framework_Te
         );
     }
 
-    /**
-     * @test
-     */
-    public function itShouldRenderProductInListingViewSnippets()
+    public function testProductInListingViewSnippetsAreRendered()
     {
         $this->mockSnippetKeyGenerator->expects($this->any())
             ->method('getKeyForContext')
@@ -89,10 +86,7 @@ class ProductInListingInContextSnippetRendererTest extends \PHPUnit_Framework_Te
         $this->renderer->render($stubProduct, $stubContext);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldDelegateToTheKeyGeneratorToFetchTheContextParts()
+    public function testContextPartsFetchingIsDelegatedToKeyGenerator()
     {
         $testContextParts = ['version', 'website', 'language'];
         $this->mockSnippetKeyGenerator->expects($this->once())->method('getContextPartsUsedForKey')
@@ -101,10 +95,7 @@ class ProductInListingInContextSnippetRendererTest extends \PHPUnit_Framework_Te
         $this->assertSame($testContextParts, $this->renderer->getUsedContextParts());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldPassTheProductIdToTheKeyGenerator()
+    public function testProductIdIsPassedToKeyGenerator()
     {
         $stubContext = $this->getMock(Context::class);
         $stubProduct = $this->getStubProduct();

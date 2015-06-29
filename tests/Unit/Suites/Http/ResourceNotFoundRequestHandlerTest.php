@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Brera\Http;
 
 /**
@@ -18,19 +17,13 @@ class ResourceNotFoundRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->requestHandler = new ResourceNotFoundRequestHandler();
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnAHttpResourceNotFoundResponse()
+    public function testInstanceOfHttpResourceNotFoundResponseIsReturned()
     {
         $result = $this->requestHandler->process();
         $this->assertInstanceOf(HttpResourceNotFoundResponse::class, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTrueForEveryRequest()
+    public function testTrueIsReturnedForEveryRequest()
     {
         $this->assertTrue($this->requestHandler->canProcess());
     }

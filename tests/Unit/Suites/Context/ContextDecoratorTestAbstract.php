@@ -72,30 +72,23 @@ abstract class ContextDecoratorTestAbstract extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    final public function itShouldBeAnContext()
+    final public function testContextInterfaceIsImplemented()
     {
         $this->assertInstanceOf(Context::class, $this->getDecoratorUnderTest());
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Context\ContextCodeNotFoundException
-     * @expectedExceptionMessage No value found in the context source data for the code
-     */
-    final public function itShouldThrowAnExceptionIfTheValueIsNotFoundInTheSourceData()
+    final public function testExceptionIsThrownIfValueIsNotFoundInSourceData()
     {
+        $this->setExpectedExceptionRegExp(
+            ContextCodeNotFoundException::class,
+            '/No value found in the context source data for the code "[^\"]+"/'
+        );
         $decorator = $this->createContextDecoratorUnderTest($this->getMockDecoratedContext(), []);
         $decorator->getValue($this->getDecoratorUnderTestCode());
     }
 
 
-    /**
-     * @test
-     */
-    final public function itShouldDelegateToComponentIfCodeDoesNotMatch()
+    final public function testHandlingIsDelegatedToComponentIfCodeDoesNotMatch()
     {
         $this->getMockDecoratedContext()->expects($this->once())
             ->method('getValue')
@@ -103,38 +96,23 @@ abstract class ContextDecoratorTestAbstract extends \PHPUnit_Framework_TestCase
         $this->getDecoratorUnderTest()->getValue($this->decoratedComponentCode);
     }
 
-    /**
-     * @test
-     */
-    final public function itShouldDelegateToComponentToFetchSupportedCodes()
+    final public function testHandlingIsDelegatedToComponentToFetchSupportedCodes()
     {
         $mockDecoratedContext = $this->getMock(Context::class);
         $mockDecoratedContext->expects($this->once())
             ->method('getSupportedCodes')
             ->willReturn([$this->decoratedComponentCode]);
-        $decorator = $this->createContextDecoratorUnderTest(
-            $mockDecoratedContext,
-            $this->getStubContextData()
-        );
 
+        $decorator = $this->createContextDecoratorUnderTest($mockDecoratedContext, $this->getStubContextData());
         $decorator->getSupportedCodes();
     }
 
-    /**
-     * @test
-     */
-    final public function itShouldAddItsCodeToTheSupportedCodesArray()
+    final public function testCodeIsAddedToSupportedCodesArray()
     {
-        $this->assertContains(
-            $this->getDecoratorUnderTestCode(),
-            $this->getDecoratorUnderTest()->getSupportedCodes()
-        );
+        $this->assertContains($this->getDecoratorUnderTestCode(), $this->getDecoratorUnderTest()->getSupportedCodes());
     }
 
-    /**
-     * @test
-     */
-    final public function itShouldReturnTheSourceData()
+    final public function testSourceDataIsReturned()
     {
         $method = new \ReflectionMethod($this->decorator, 'getSourceData');
         $method->setAccessible(true);
@@ -142,10 +120,7 @@ abstract class ContextDecoratorTestAbstract extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->getStubContextData(), $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldIncludeTheComponentIdInTheIdentifier()
+    public function testComponentIdIsIncludedIntoIdentifier()
     {
         $expected = $this->decoratedComponentCode . ':123';
         $this->mockDecoratedContext->expects($this->once())
@@ -154,30 +129,21 @@ abstract class ContextDecoratorTestAbstract extends \PHPUnit_Framework_TestCase
         $this->assertContains($expected, $this->getDecoratorUnderTest()->getId());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnAnIdentifierContainingTheCodeAndValue()
+    public function testIdentifierContainingCodeAndValueIsReturned()
     {
         $code = $this->getDecoratorUnderTestCode();
         $expected = $code . ':' . $this->getDecoratorUnderTest()->getValue($code);
         $this->assertContains($expected, $this->getDecoratorUnderTest()->getId());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldNotIncludeTheDecoratorIdInThePartialIdIfNotRequested()
+    public function testDecoratorIdIsNotIncludedInPartialIdIfNotRequested()
     {
         $code = $this->getDecoratorUnderTestCode();
         $expected = $code . ':' . $this->getDecoratorUnderTest()->getValue($code);
         $this->assertNotContains($expected, $this->getDecoratorUnderTest()->getIdForParts([]));
     }
 
-    /**
-     * @test
-     */
-    public function itShouldIncludeTheDecoratorIdInThePartialIdIfRequested()
+    public function testDecoratorIdIsIncludedInPartialIdIfRequested()
     {
         $code = $this->getDecoratorUnderTestCode();
         $expected = $code . ':' . $this->getDecoratorUnderTest()->getValue($code);
@@ -185,10 +151,7 @@ abstract class ContextDecoratorTestAbstract extends \PHPUnit_Framework_TestCase
         $this->assertContains($expected, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldDelegateToTheComponentToBuildThePartialId()
+    public function testBuildingPartialIdIsDelegatedToComponent()
     {
         $code = $this->getDecoratorUnderTestCode();
         $decoratorId = $code . ':' . $this->getDecoratorUnderTest()->getValue($code);
@@ -203,27 +166,18 @@ abstract class ContextDecoratorTestAbstract extends \PHPUnit_Framework_TestCase
         $this->assertEquals($decoratorId . '_' . $componentId, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTheValueFromTheContext()
+    public function testValueFromContextIsReturned()
     {
         $this->defaultGetValueImplementationTest();
     }
 
-    /**
-     * @test
-     */
-    public function itShouldSupportTheDecoratorCode()
+    public function testDecoratorCodeIsSupported()
     {
         $code = $this->getDecoratorUnderTestCode();
         $this->assertTrue($this->getDecoratorUnderTest()->supportsCode($code));
     }
 
-    /**
-     * @test
-     */
-    public function itShouldDelegateToComponentIfCodeNotSupported()
+    public function testHandlingIsDelegatedToComponentIfCodeIsNotSupported()
     {
         $code = 'dummy-part';
         $this->mockDecoratedContext->expects($this->once())

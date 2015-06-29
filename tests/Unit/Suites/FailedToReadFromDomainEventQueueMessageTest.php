@@ -23,10 +23,7 @@ class FailedToReadFromDomainEventQueueMessageTest extends \PHPUnit_Framework_Tes
         $this->message = new FailedToReadFromDomainEventQueueMessage($this->stubException);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnLogMessage()
+    public function testLogMessageIsReturned()
     {
         $result = (string) $this->message;
         $expectation = "Failed to read from domain event queue message with following exception:\n\nfoo";
@@ -35,10 +32,7 @@ class FailedToReadFromDomainEventQueueMessageTest extends \PHPUnit_Framework_Tes
 
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnAnException()
+    public function testExceptionIsReturned()
     {
         $result = $this->message->getContext();
 

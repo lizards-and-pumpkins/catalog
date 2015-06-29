@@ -5,7 +5,6 @@ namespace Brera\Product;
 use Brera\Context\Context;
 use Brera\RootSnippetSourceList;
 use Brera\SampleContextSource;
-use Brera\ProjectionSourceData;
 use Brera\SnippetKeyGenerator;
 use Brera\SnippetList;
 
@@ -15,10 +14,7 @@ use Brera\SnippetList;
  */
 class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itShouldReturnSnippetList()
+    public function testSnippetListIsReturned()
     {
         $numItemsPerPage = 10;
         $stubContext = $this->getMock(Context::class);

@@ -9,10 +9,7 @@ use Brera\PoCWebFront;
 
 class ApiTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itShouldReturnApiJsonResponse()
+    public function testApiJsonResponseIsReturned()
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
         $request = HttpRequest::fromParameters('GET', $httpUrl);

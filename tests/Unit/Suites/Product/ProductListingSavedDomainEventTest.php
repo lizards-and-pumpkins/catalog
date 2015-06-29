@@ -7,10 +7,7 @@ namespace Brera\Product;
  */
 class ProductListingSavedDomainEventTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itShouldReturnProductListingXml()
+    public function testProductListingXmlIsReturned()
     {
         $xml = '<?xml version="1.0"?><rootNode></rootNode>';
 

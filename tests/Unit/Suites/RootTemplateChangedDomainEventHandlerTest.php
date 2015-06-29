@@ -7,10 +7,7 @@ namespace Brera;
  */
 class RootTemplateChangedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itShouldTriggerProjection()
+    public function testProjectionIsTriggered()
     {
         $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
         $stubRootSnippetSourceList = $this->getMock(RootSnippetSourceList::class, [], [], '', false);

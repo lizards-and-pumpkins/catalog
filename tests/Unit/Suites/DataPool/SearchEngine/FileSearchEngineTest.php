@@ -21,22 +21,18 @@ class FileSearchEngineTest extends AbstractSearchEngineTest
         $this->removeDirectoryAndItsContent($this->temporaryStorage);
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\DataPool\SearchEngine\SearchEngineNotAvailableException
-     */
-    public function itShouldThrowAnExceptionIfSearchEngineStorageDirIsNotWritable()
+    public function testExceptionIsThrownIfSearchEngineStorageDirIsNotWritable()
     {
+        $this->setExpectedException(
+            SearchEngineNotAvailableException::class,
+            'Directory "" is not writable by the filesystem search engine.'
+        );
         FileSearchEngine::withPath('non-existing-path');
     }
 
-    /**
-     * @test
-     */
-    public function itShouldNotFailIfNoStorageDirectoryIsSpecified()
+    public function testSearchEngineInterfaceIsImplemented()
     {
         $searchEngine = FileSearchEngine::withDefaultPath();
-
         $this->assertInstanceOf(SearchEngine::class, $searchEngine);
     }
 

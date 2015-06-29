@@ -2,8 +2,6 @@
 
 namespace Brera\Product;
 
-use Brera\Http\HttpRouter;
-
 /**
  * @covers \Brera\Product\ProductDetailViewRouter
  * @uses   \Brera\Http\HttpUrl

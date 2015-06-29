@@ -48,7 +48,6 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private $stubPageMetaInfo;
 
-
     /**
      * @var string
      */
@@ -58,6 +57,193 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
      * @var SnippetKeyGeneratorLocator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubSnippetKeyGeneratorLocator;
+
+    protected function setUp()
+    {
+        $this->stubContext = $this->getMock(Context::class);
+        $this->stubContext->method('getIdForParts')
+            ->willReturn($this->contextIdFixture);
+        $this->stubPageMetaInfo = $this->getMock(PageMetaInfoSnippetContent::class);
+
+        $this->mockDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
+        $this->stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
+        $this->fakeSnippetKeyGeneratorLocator($this->stubSnippetKeyGeneratorLocator);
+        $this->stubLogger = $this->getMock(Logger::class);
+
+        $this->pageBuilder = new PageBuilder(
+            $this->mockDataPoolReader,
+            $this->stubSnippetKeyGeneratorLocator,
+            $this->stubLogger
+        );
+    }
+
+    public function testPageIsReturned()
+    {
+        $rootSnippetContent = 'Stub Content';
+        $childSnippetMap = [];
+
+        $this->setDataPoolFixture($this->testRootSnippetCode, $rootSnippetContent, $childSnippetMap);
+        $result = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
+        $this->assertInstanceOf(Page::class, $result);
+    }
+
+    public function testPlaceholderIsReplacedWithoutNestedPlaceholders()
+    {
+        $rootSnippetContent = '<html><head>{{snippet head}}</head><body>{{snippet body}}</body></html>';
+        $headContent = '<title>My Website!</title>';
+        $bodyContent = '<h1>My Website!</h1>';
+        $childSnippetMap = ['head' => $headContent, 'body' => $bodyContent];
+
+        $this->setDataPoolFixture($this->testRootSnippetCode, $rootSnippetContent, $childSnippetMap);
+
+        $expectedContent = '<html><head>' . $headContent . '</head><body>' . $bodyContent . '</body></html>';
+
+        $page = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
+        $this->assertEquals($expectedContent, $page->getBody());
+    }
+
+    public function testPlaceholderIsReplacedWithNestedPlaceholdersDeeperThanTwo()
+    {
+        $rootSnippetContent = '<html><head>{{snippet head}}</head><body>{{snippet body}}</body></html>';
+        $childSnippetMap = [
+            'head' => '<title>My Website!</title>',
+            'body' => '<h1>My Website!</h1>{{snippet nesting-level1}}',
+            'nesting-level1' => 'child1{{snippet nesting-level2}}',
+            'nesting-level2' => 'child2{{snippet nesting-level3}}',
+            'nesting-level3' => 'child3',
+        ];
+
+        $this->setDataPoolFixture($this->testRootSnippetCode, $rootSnippetContent, $childSnippetMap);
+
+        $expectedContent = <<<EOH
+<html><head><title>My Website!</title></head><body><h1>My Website!</h1>child1child2child3</body></html>
+EOH;
+
+        $page = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
+        $this->assertEquals($expectedContent, $page->getBody());
+    }
+
+    public function testPlaceholderIsReplacedWithNestedPlaceholdersAndDoNotCareAboutMissingSnippets()
+    {
+        $rootSnippetContent = '<html><head>{{snippet head}}</head><body>{{snippet body}}</body></html>';
+        $childSnippetMap = [
+            'head' => '<title>My Website!</title>',
+            'body' => '<h1>My Website!</h1>{{snippet nesting-level1}}',
+            'nesting-level1' => 'child1{{snippet nesting-level2}}',
+            'nesting-level2' => 'child2{{snippet nesting-level3}}',
+            'nesting-level3' => 'child3{{snippet nesting-level4}}',
+        ];
+
+        $this->setDataPoolFixture($this->testRootSnippetCode, $rootSnippetContent, $childSnippetMap);
+
+        $expectedContent = <<<EOH
+<html><head><title>My Website!</title></head><body><h1>My Website!</h1>child1child2child3</body></html>
+EOH;
+
+        $page = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
+        $this->assertEquals($expectedContent, $page->getBody());
+    }
+
+    public function testPlaceholderIsReplacedRegardlessOfSnippetOrder()
+    {
+        $rootSnippetContent = '<html><body>{{snippet body}}</body></html>';
+        $childSnippetMap = [
+            'body' => '<h1>My Website!</h1>{{snippet nesting-level1}}',
+            'nesting-level1' => 'child1{{snippet nesting-level2}}',
+            'nesting-level3' => 'child3{{snippet nesting-level4}}',
+            'nesting-level2' => 'child2{{snippet nesting-level3}}',
+        ];
+
+        $this->setDataPoolFixture($this->testRootSnippetCode, $rootSnippetContent, $childSnippetMap);
+
+        $expectedContent = '<html><body><h1>My Website!</h1>child1child2child3</body></html>';
+
+        $page = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
+        $this->assertEquals($expectedContent, $page->getBody());
+    }
+
+    public function testExceptionIsThrownIfTheRootSnippetContentIsNotFound()
+    {
+        $childSnippetCodes = ['child1'];
+        $allSnippetCodes = [];
+        $allSnippetContent = [];
+        $this->setPageMetaInfoFixture($this->testRootSnippetCode, $childSnippetCodes);
+        $this->setPageContentSnippetFixture($allSnippetCodes, $allSnippetContent);
+        $this->setExpectedException(InvalidPageMetaSnippetException::class);
+
+        $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
+    }
+
+    public function testLogIsWrittenIfChildSnippetContentIsNotFound()
+    {
+        $childSnippetCodes = ['child1'];
+        $allSnippetCodes = [$this->testRootSnippetCode];
+        $allSnippetContent = ['Dummy Root Content'];
+        $this->setPageMetaInfoFixture($this->testRootSnippetCode, $childSnippetCodes);
+        $this->setPageContentSnippetFixture($allSnippetCodes, $allSnippetContent);
+        $this->stubLogger->expects($this->once())
+            ->method('log');
+        $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
+    }
+
+    /**
+     * @dataProvider callOrderDataProvider
+     * @param bool $testLoadBeforeAdd
+     */
+    public function testPageSpecificAdditionalSnippetsAreMergedIntoList($testLoadBeforeAdd)
+    {
+        $rootSnippetContent = 'Stub Content';
+        $childSnippetCodeToContentMap = ['child1' => 'Child Content 1'];
+        $snippetCodeToKeyMap = ['test-code' => 'test-key'];
+        $snippetKeyToContentMap = ['test-key' => 'test-content'];
+        $this->setDataPoolFixture($this->testRootSnippetCode, $rootSnippetContent, $childSnippetCodeToContentMap);
+
+        if ($testLoadBeforeAdd) {
+            $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
+            $this->pageBuilder->addSnippetsToPage($snippetCodeToKeyMap, $snippetKeyToContentMap);
+        } else {
+            $this->pageBuilder->addSnippetsToPage($snippetCodeToKeyMap, $snippetKeyToContentMap);
+            $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
+        }
+
+        $this->assertSnippetKeyIsMappedToContent('child1', 'Child Content 1');
+        $this->assertSnippetCodeIsMappedToSnippetKey('test-code', 'test-key');
+        $this->assertSnippetKeyIsMappedToContent('test-key', 'test-content');
+    }
+
+    /**
+     * @return array[]
+     */
+    public function callOrderDataProvider()
+    {
+        return [
+            'load-then-add' => [true],
+            'add-then-load' => [false],
+        ];
+    }
+
+    public function testChildSnippetsAreGracefullyHandledWithNoKeyGenerator()
+    {
+        $stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
+        $this->fakeSnippetKeyGeneratorLocatorForRootOnly($stubSnippetKeyGeneratorLocator);
+
+        $this->pageBuilder = new PageBuilder(
+            $this->mockDataPoolReader,
+            $stubSnippetKeyGeneratorLocator,
+            $this->stubLogger
+        );
+
+        $childSnippetCodes = ['child1'];
+        $this->setPageMetaInfoFixture($this->testRootSnippetCode, $childSnippetCodes);
+        $this->mockDataPoolReader->method('getSnippets')
+            ->willReturn([$this->testRootSnippetCode => 'Dummy Root Content']);
+        $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
+        $this->assertTrue(
+            true,
+            'Dummy assertion. What I want is that the page is built with unregistered key generators ' .
+            'without throwing an exception'
+        );
+    }
 
     /**
      * @param string $snippetCode
@@ -162,7 +348,7 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
         $fakeKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')
             ->willReturnCallback($fixedKeyGeneratorMockFactory);
     }
-    
+
     /**
      * @param \PHPUnit_Framework_MockObject_MockObject $fakeSnippetKeyGeneratorLocator
      */
@@ -181,217 +367,6 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
                     $snippetCode
                 ));
             }
-        );
-    }
-
-    protected function setUp()
-    {
-        $this->stubContext = $this->getMock(Context::class);
-        $this->stubContext->method('getIdForParts')
-            ->willReturn($this->contextIdFixture);
-        $this->stubPageMetaInfo = $this->getMock(PageMetaInfoSnippetContent::class);
-
-        $this->mockDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
-        $this->stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
-        $this->fakeSnippetKeyGeneratorLocator($this->stubSnippetKeyGeneratorLocator);
-        $this->stubLogger = $this->getMock(Logger::class);
-
-        $this->pageBuilder = new PageBuilder(
-            $this->mockDataPoolReader,
-            $this->stubSnippetKeyGeneratorLocator,
-            $this->stubLogger
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function itShouldReturnAPage()
-    {
-        $rootSnippetContent = 'Stub Content';
-        $childSnippetMap = [];
-
-        $this->setDataPoolFixture($this->testRootSnippetCode, $rootSnippetContent, $childSnippetMap);
-        $result = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
-        $this->assertInstanceOf(Page::class, $result);
-    }
-
-    /**
-     * @test
-     */
-    public function itShouldReplacePlaceholderWithoutNestedPlaceholders()
-    {
-        $rootSnippetContent = '<html><head>{{snippet head}}</head><body>{{snippet body}}</body></html>';
-        $headContent = '<title>My Website!</title>';
-        $bodyContent = '<h1>My Website!</h1>';
-        $childSnippetMap = ['head' => $headContent, 'body' => $bodyContent];
-
-        $this->setDataPoolFixture($this->testRootSnippetCode, $rootSnippetContent, $childSnippetMap);
-
-        $expectedContent = '<html><head>' . $headContent . '</head><body>' . $bodyContent . '</body></html>';
-
-        $page = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
-        $this->assertEquals($expectedContent, $page->getBody());
-    }
-
-    /**
-     * @test
-     */
-    public function itShouldReplacePlaceholderWithNestedPlaceholdersDeeperThanTwo()
-    {
-        $rootSnippetContent = '<html><head>{{snippet head}}</head><body>{{snippet body}}</body></html>';
-        $childSnippetMap = [
-            'head' => '<title>My Website!</title>',
-            'body' => '<h1>My Website!</h1>{{snippet nesting-level1}}',
-            'nesting-level1' => 'child1{{snippet nesting-level2}}',
-            'nesting-level2' => 'child2{{snippet nesting-level3}}',
-            'nesting-level3' => 'child3',
-        ];
-
-        $this->setDataPoolFixture($this->testRootSnippetCode, $rootSnippetContent, $childSnippetMap);
-
-        $expectedContent = <<<EOH
-<html><head><title>My Website!</title></head><body><h1>My Website!</h1>child1child2child3</body></html>
-EOH;
-
-        $page = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
-        $this->assertEquals($expectedContent, $page->getBody());
-    }
-
-    /**
-     * @test
-     */
-    public function itShouldReplacePlaceholderWithNestedPlaceholdersAndDoNotCareAboutMissingSnippets()
-    {
-        $rootSnippetContent = '<html><head>{{snippet head}}</head><body>{{snippet body}}</body></html>';
-        $childSnippetMap = [
-            'head' => '<title>My Website!</title>',
-            'body' => '<h1>My Website!</h1>{{snippet nesting-level1}}',
-            'nesting-level1' => 'child1{{snippet nesting-level2}}',
-            'nesting-level2' => 'child2{{snippet nesting-level3}}',
-            'nesting-level3' => 'child3{{snippet nesting-level4}}',
-        ];
-
-        $this->setDataPoolFixture($this->testRootSnippetCode, $rootSnippetContent, $childSnippetMap);
-
-        $expectedContent = <<<EOH
-<html><head><title>My Website!</title></head><body><h1>My Website!</h1>child1child2child3</body></html>
-EOH;
-
-        $page = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
-        $this->assertEquals($expectedContent, $page->getBody());
-    }
-
-    /**
-     * @test
-     */
-    public function itShouldReplacePlaceholderRegardlessOfSnippetOrder()
-    {
-        $rootSnippetContent = '<html><body>{{snippet body}}</body></html>';
-        $childSnippetMap = [
-            'body' => '<h1>My Website!</h1>{{snippet nesting-level1}}',
-            'nesting-level1' => 'child1{{snippet nesting-level2}}',
-            'nesting-level3' => 'child3{{snippet nesting-level4}}',
-            'nesting-level2' => 'child2{{snippet nesting-level3}}',
-        ];
-
-        $this->setDataPoolFixture($this->testRootSnippetCode, $rootSnippetContent, $childSnippetMap);
-
-        $expectedContent = '<html><body><h1>My Website!</h1>child1child2child3</body></html>';
-
-        $page = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
-        $this->assertEquals($expectedContent, $page->getBody());
-    }
-
-    /**
-     * @test
-     * @expectedException \Brera\InvalidPageMetaSnippetException
-     */
-    public function itShouldThrowAnExceptionIfTheRootSnippetContentIsNotFound()
-    {
-        $childSnippetCodes = ['child1'];
-        $allSnippetCodes = [];
-        $allSnippetContent = [];
-        $this->setPageMetaInfoFixture($this->testRootSnippetCode, $childSnippetCodes);
-        $this->setPageContentSnippetFixture($allSnippetCodes, $allSnippetContent);
-        $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
-    }
-
-    /**
-     * @test
-     */
-    public function itShouldLogIfChildSnippetContentIsNotFound()
-    {
-        $childSnippetCodes = ['child1'];
-        $allSnippetCodes = [$this->testRootSnippetCode];
-        $allSnippetContent = ['Dummy Root Content'];
-        $this->setPageMetaInfoFixture($this->testRootSnippetCode, $childSnippetCodes);
-        $this->setPageContentSnippetFixture($allSnippetCodes, $allSnippetContent);
-        $this->stubLogger->expects($this->once())
-            ->method('log');
-        $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
-    }
-
-    /**
-     * @test
-     * @dataProvider callOrderDataProvider
-     * @param bool $testLoadBeforeAdd
-     */
-    public function itShouldMergePageSpecificAdditionalSnippetsIntoTheList($testLoadBeforeAdd)
-    {
-        $rootSnippetContent = 'Stub Content';
-        $childSnippetCodeToContentMap = ['child1' => 'Child Content 1'];
-        $snippetCodeToKeyMap = ['test-code' => 'test-key'];
-        $snippetKeyToContentMap = ['test-key' => 'test-content'];
-        $this->setDataPoolFixture($this->testRootSnippetCode, $rootSnippetContent, $childSnippetCodeToContentMap);
-        
-        if ($testLoadBeforeAdd) {
-            $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
-            $this->pageBuilder->addSnippetsToPage($snippetCodeToKeyMap, $snippetKeyToContentMap);
-        } else {
-            $this->pageBuilder->addSnippetsToPage($snippetCodeToKeyMap, $snippetKeyToContentMap);
-            $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
-        }
-
-        $this->assertSnippetKeyIsMappedToContent('child1', 'Child Content 1');
-        $this->assertSnippetCodeIsMappedToSnippetKey('test-code', 'test-key');
-        $this->assertSnippetKeyIsMappedToContent('test-key', 'test-content');
-    }
-
-    /**
-     * @return array[]
-     */
-    public function callOrderDataProvider()
-    {
-        return [
-            'load-then-add' => [true],
-            'add-then-load' => [false],
-        ];
-    }
-
-    /**
-     * @test
-     */
-    public function itShouldHandleChildSnippetsWithNoKeyGeneratorGracefully()
-    {
-        $stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
-        $this->fakeSnippetKeyGeneratorLocatorForRootOnly($stubSnippetKeyGeneratorLocator);
-
-        $this->pageBuilder = new PageBuilder(
-            $this->mockDataPoolReader,
-            $stubSnippetKeyGeneratorLocator,
-            $this->stubLogger
-        );
-        
-        $childSnippetCodes = ['child1'];
-        $this->setPageMetaInfoFixture($this->testRootSnippetCode, $childSnippetCodes);
-        $this->mockDataPoolReader->method('getSnippets')
-            ->willReturn([$this->testRootSnippetCode => 'Dummy Root Content']);
-        $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
-        $this->assertTrue(
-            true,
-            'Dummy assertion. What I want is that the page is built with unregistered key generators ' .
-            'without throwing an exception'
         );
     }
 }
