@@ -7,10 +7,7 @@ use Brera\Utils\LocalFilesystem;
 
 class ImageImportTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itShouldImportAndProcessImages()
+    public function testImagesAreImportedAndProcessed()
     {
         $factory = $this->prepareIntegrationTestMasterFactory();
 

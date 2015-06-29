@@ -2,6 +2,7 @@
 
 namespace Brera;
 
+use Brera\Utils\FileNotReadableException;
 use Brera\Utils\LocalFilesystem;
 
 /**
@@ -35,27 +36,18 @@ class LocalFilesystemStorageReaderTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    /**
-     * @test
-     */
-    public function itShouldImplementFileStorageReaderInterface()
+    public function testFileStorageReaderInterfaceIsImplemented()
     {
         $this->assertInstanceOf(FileStorageReader::class, $this->reader);
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Utils\FileNotReadableException
-     */
-    public function itShouldThrowAnExceptionIfFileIsNotReadable()
+    public function testExceptionIsThrownIfFileIsNotReadable()
     {
+        $this->setExpectedException(FileNotReadableException::class);
         $this->reader->getFileContents('/some-non-existing-file');
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnFileContents()
+    public function testFileContentsIsReturned()
     {
         $fileName = 'foo';
         $content = 'bar';

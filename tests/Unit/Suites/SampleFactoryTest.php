@@ -68,26 +68,17 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $this->factory->getSearchableAttributeCodes());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateImageProcessorCollection()
+    public function testImageProcessorCollectionIsReturned()
     {
         $this->assertInstanceOf(ImageProcessorCollection::class, $this->factory->createImageProcessorCollection());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateEnlargedImageProcessor()
+    public function testEnlargedImageProcessorIsReturned()
     {
         $this->assertInstanceOf(ImageProcessor::class, $this->factory->getOriginalImageProcessor());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateOriginalImageFileStorageReader()
+    public function testOriginalImageFileStorageReaderIsReturned()
     {
         $this->assertInstanceOf(
             LocalFilesystemStorageReader::class,
@@ -95,10 +86,7 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateOriginalImageFileStorageWriter()
+    public function testOriginalImageFileStorageWriterIsReturned()
     {
         $this->assertInstanceOf(
             LocalFilesystemStorageWriter::class,
@@ -106,10 +94,7 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateEnlargedImageProcessingStrategySequence()
+    public function testEnlargedImageProcessingStrategySequenceIsReturned()
     {
         $this->assertInstanceOf(
             ImageProcessingStrategySequence::class,
@@ -117,18 +102,12 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateProductDetailsPageImageProcessor()
+    public function testProductDetailsPageImageProcessorIsReturned()
     {
         $this->assertInstanceOf(ImageProcessor::class, $this->factory->getProductDetailsPageImageProcessor());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateProductDetailsPageImageFileStorageReader()
+    public function testProductDetailsPageImageFileStorageReaderIsReturned()
     {
         $this->assertInstanceOf(
             LocalFilesystemStorageReader::class,
@@ -136,10 +115,7 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateProductDetailsPageImageFileStorageWriter()
+    public function testProductDetailsPageImageFileStorageWriterIsReturned()
     {
         $this->assertInstanceOf(
             LocalFilesystemStorageWriter::class,
@@ -147,10 +123,7 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateProductDetailsPageImageProcessingStrategySequence()
+    public function testProductDetailsPageImageProcessingStrategySequenceIsReturned()
     {
         $this->assertInstanceOf(
             ImageProcessingStrategySequence::class,
@@ -158,18 +131,12 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateProductListingImageProcessor()
+    public function testProductListingImageProcessorIsReturned()
     {
         $this->assertInstanceOf(ImageProcessor::class, $this->factory->getProductListingImageProcessor());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateProductListingImageFileStorageReader()
+    public function testProductListingImageFileStorageReaderIsReturned()
     {
         $this->assertInstanceOf(
             LocalFilesystemStorageReader::class,
@@ -177,10 +144,7 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateProductListingImageFileStorageWriter()
+    public function testProductListingImageFileStorageWriterIsReturned()
     {
         $this->assertInstanceOf(
             LocalFilesystemStorageWriter::class,
@@ -188,10 +152,7 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateProductListingImageProcessingStrategySequence()
+    public function testProductListingImageProcessingStrategySequenceIsReturned()
     {
         $this->assertInstanceOf(
             ImageProcessingStrategySequence::class,
@@ -199,18 +160,12 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateGalleyThumbnailImageProcessor()
+    public function testGalleyThumbnailImageProcessorIsReturned()
     {
         $this->assertInstanceOf(ImageProcessor::class, $this->factory->getGalleyThumbnailImageProcessor());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateGalleyThumbnailImageFileStorageReader()
+    public function testGalleyThumbnailImageFileStorageReaderIsReturned()
     {
         $this->assertInstanceOf(
             LocalFilesystemStorageReader::class,
@@ -218,10 +173,7 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateGalleyThumbnailImageFileStorageWriter()
+    public function testGalleyThumbnailImageFileStorageWriterIsReturned()
     {
         $this->assertInstanceOf(
             LocalFilesystemStorageWriter::class,
@@ -229,10 +181,7 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateGalleyThumbnailImageProcessingStrategySequence()
+    public function testGalleyThumbnailImageProcessingStrategySequenceIsReturned()
     {
         $this->assertInstanceOf(
             ImageProcessingStrategySequence::class,

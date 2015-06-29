@@ -115,10 +115,7 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ImageImportDomainEventHandler::class, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldLocateAndReturnProductListingSavedDomainEventHandler()
+    public function testProductListingSavedDomainEventHandlerIsLocatedAndReturned()
     {
         $stubDomainEventHandler = $this->getMock(ProductListingSavedDomainEventHandler::class, [], [], '', false);
 

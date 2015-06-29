@@ -10,10 +10,7 @@ use Brera\FileStorageWriter;
  */
 class ImageProcessorTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itShouldProcessImage()
+    public function testImageIsProcessed()
     {
         $dummyImageFilename = 'imageFilename';
 

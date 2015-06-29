@@ -2,6 +2,7 @@
 
 namespace Brera;
 
+use Brera\Utils\FileNotWritableException;
 use Brera\Utils\LocalFilesystem;
 
 /**
@@ -37,28 +38,19 @@ class LocalFilesystemStorageWriterTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    /**
-     * @test
-     */
-    public function itShouldImplementStaticFileInterface()
+    public function testStaticFileInterfaceIsImplemented()
     {
         $this->assertInstanceOf(FileStorageWriter::class, $this->writer);
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Utils\FileNotWritableException
-     */
-    public function itShouldThrownAnExceptionIfDestinationIsNotWritable()
+    public function testExceptionIsThrownIfDestinationIsNotWritable()
     {
+        $this->setExpectedException(FileNotWritableException::class);
         chmod($this->testBaseDirPath, 0000);
         $this->writer->putFileContents('foo', 'bar');
     }
 
-    /**
-     * @test
-     */
-    public function itShouldWriteFileContents()
+    public function testFileContentsIsWritten()
     {
         $fileName = 'foo';
         $content = 'bar';

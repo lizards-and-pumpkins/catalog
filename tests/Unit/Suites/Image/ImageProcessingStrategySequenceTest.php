@@ -17,18 +17,12 @@ class ImageProcessingStrategySequenceTest extends \PHPUnit_Framework_TestCase
         $this->strategySequence = new ImageProcessingStrategySequence();
     }
 
-    /**
-     * @test
-     */
-    public function itShouldImplementImageProcessorStrategyInterface()
+    public function testImageProcessorStrategyInterfaceIsImplemented()
     {
         $this->assertInstanceOf(ImageProcessingStrategy::class, $this->strategySequence);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldExecuteAllStrategiesOfASequence()
+    public function testAllStrategiesOfSequenceAreExecuted()
     {
         $mockStrategy1 = $this->getMock(ImageProcessingStrategy::class);
         $mockStrategy1->expects($this->once())

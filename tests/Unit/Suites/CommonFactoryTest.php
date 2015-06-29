@@ -271,10 +271,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(HttpRouterChain::class, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnAnImageImportEventDomainHandler()
+    public function testImageImportEventDomainHandlerIsReturned()
     {
         /* @var $event \PHPUnit_Framework_MockObject_MockObject|ImageImportDomainEvent */
         $event = $this->getMock(ImageImportDomainEvent::class, [], [], '', false);
