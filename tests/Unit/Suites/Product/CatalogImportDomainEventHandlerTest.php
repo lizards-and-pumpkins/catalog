@@ -52,10 +52,7 @@ class CatalogImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertEventWasAddedToAQueue(ProductImportDomainEvent::class);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldEmitProductListingSavedDomainEvents()
+    public function testProductListingSavedDomainEventsAreEmitted()
     {
         $this->catalogImportDomainEventHandler->process();
 

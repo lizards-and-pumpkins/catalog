@@ -44,33 +44,23 @@ EOX;
         $this->assertEquals('eq', $criteria[1]->getOperation());
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Product\MissingUrlKeyXmlAttributeException
-     */
-    public function itShouldFailIfUrlKeyAttributeIsMissing()
+    public function testExceptionIsThrownIfUrlKeyAttributeIsMissing()
     {
-        $xml = '<listing />';
-        (new ProductListingSourceBuilder())->createProductListingSourceFromXml($xml);
+        $this->setExpectedException(MissingUrlKeyXmlAttributeException::class);
+        (new ProductListingSourceBuilder())->createProductListingSourceFromXml('<listing />');
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Product\MissingConditionXmlAttributeException
-     */
-    public function itShouldFailIfConditionAttributeOfListingNodeIsMissing()
+    public function testExceptionIsThrownIfConditionAttributeOfListingNodeIsMissing()
     {
-        $xml = '<listing url_key="foo"/>';
-        (new ProductListingSourceBuilder())->createProductListingSourceFromXml($xml);
+        $this->setExpectedException(MissingConditionXmlAttributeException::class);
+        (new ProductListingSourceBuilder())->createProductListingSourceFromXml('<listing url_key="foo"/>');
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Product\MissingCriterionOperationXmlAttributeException
-     */
-    public function itShouldFailIfCriterionNodeDoesNotHaveOperationAttribute()
+    public function testExceptionIsThrownIfCriterionNodeDoesNotHaveOperationAttribute()
     {
+        $this->setExpectedException(MissingCriterionOperationXmlAttributeException::class);
         $xml = '<listing url_key="foo" condition="and"><bar /></listing>';
+
         (new ProductListingSourceBuilder())->createProductListingSourceFromXml($xml);
     }
 }

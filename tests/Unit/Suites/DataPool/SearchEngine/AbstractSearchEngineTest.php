@@ -421,10 +421,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([$testProductId], $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnAnArrayWithTwoProductIdsMatchingAnyCriteria()
+    public function testArrayWithTwoProductIdsMatchingAnyCriteriaIsReturned()
     {
         $dummyProductId1 = 'id01';
         $dummyProductId2 = 'id02';
@@ -453,10 +450,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertContains($dummyProductId2, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnAnArrayWithTwoProductIdsMatchingAllCriteria()
+    public function testArrayWithTwoProductIdsMatchingAllCriteriaAreReturned()
     {
         $dummyProductId1 = 'id01';
         $dummyProductId2 = 'id02';

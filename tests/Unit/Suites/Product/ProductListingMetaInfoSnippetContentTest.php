@@ -127,13 +127,10 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
         $this->assertInternalType('array', $this->pageMetaInfo->getPageSnippetCodes());
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Product\MalformedSearchCriteriaMetaException
-     * @expectedExceptionMessage Missing criteria condition.
-     */
-    public function itShouldFailIfSearchCriteriaConditionIsMissing()
+    public function testExceptionIsThrownIfSearchCriteriaConditionIsMissing()
     {
+        $this->setExpectedException(MalformedSearchCriteriaMetaException::class, 'Missing criteria condition.');
+
         $json = json_encode([
             ProductListingMetaInfoSnippetContent::KEY_CRITERIA => [],
             ProductListingMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
@@ -143,13 +140,10 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
         ProductListingMetaInfoSnippetContent::fromJson($json);
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Product\MalformedSearchCriteriaMetaException
-     * @expectedExceptionMessage Malformed criteria.
-     */
-    public function itShouldFailIfSearchCriteriaCriteriaIsMissing()
+    public function testExceptionIsThrownIfSearchCriteriaCriteriaIsMissing()
     {
+        $this->setExpectedException(MalformedSearchCriteriaMetaException::class, 'Malformed criteria.');
+
         $json = json_encode([
             ProductListingMetaInfoSnippetContent::KEY_CRITERIA => ['condition' => ''],
             ProductListingMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
@@ -159,13 +153,10 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
         ProductListingMetaInfoSnippetContent::fromJson($json);
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Product\MalformedSearchCriteriaMetaException
-     * @expectedExceptionMessage Malformed criterion.
-     */
-    public function itShouldFailIfSearchCriteriaCriterionIsInvalid()
+    public function testExceptionIsThrownIfSearchCriteriaCriterionIsInvalid()
     {
+        $this->setExpectedException(MalformedSearchCriteriaMetaException::class, 'Malformed criterion.');
+
         $json = json_encode([
             ProductListingMetaInfoSnippetContent::KEY_CRITERIA => [
                 'condition' => '',
@@ -178,13 +169,10 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
         ProductListingMetaInfoSnippetContent::fromJson($json);
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Product\MalformedSearchCriteriaMetaException
-     * @expectedExceptionMessage Missing criterion field name.
-     */
-    public function itShouldFailIfCriterionFieldNameIsMissing()
+    public function testExceptionIsThrownIfCriterionFieldNameIsMissing()
     {
+        $this->setExpectedException(MalformedSearchCriteriaMetaException::class, 'Missing criterion field name.');
+
         $json = json_encode([
             ProductListingMetaInfoSnippetContent::KEY_CRITERIA => [
                 'condition' => '',
@@ -197,13 +185,10 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
         ProductListingMetaInfoSnippetContent::fromJson($json);
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Product\MalformedSearchCriteriaMetaException
-     * @expectedExceptionMessage Missing criterion field value.
-     */
-    public function itShouldFailIfCriterionFieldValueIsMissing()
+    public function testExceptionIsThrownIfCriterionFieldValueIsMissing()
     {
+        $this->setExpectedException(MalformedSearchCriteriaMetaException::class, 'Missing criterion field value.');
+
         $json = json_encode([
             ProductListingMetaInfoSnippetContent::KEY_CRITERIA => [
                 'condition' => '',
@@ -218,13 +203,10 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
         ProductListingMetaInfoSnippetContent::fromJson($json);
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Product\MalformedSearchCriteriaMetaException
-     * @expectedExceptionMessage Missing criterion operation.
-     */
-    public function itShouldFailIfCriterionOperationIsMissing()
+    public function testExceptionIsThrownIfCriterionOperationIsMissing()
     {
+        $this->setExpectedException(MalformedSearchCriteriaMetaException::class, 'Missing criterion operation.');
+
         $json = json_encode([
             ProductListingMetaInfoSnippetContent::KEY_CRITERIA => [
                 'condition' => '',
@@ -239,10 +221,7 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
         ProductListingMetaInfoSnippetContent::fromJson($json);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateAProductListingMetaInfoWithPassedSearchCriteria()
+    public function testProductListingMetaInfoIsCreatedWithPassedSearchCriteria()
     {
         $fieldName = 'foo';
         $fieldValue = 'bar';

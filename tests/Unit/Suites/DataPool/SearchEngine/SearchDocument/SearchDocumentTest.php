@@ -64,10 +64,7 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->searchDocument->isMatchingCriteria($mockCriteria));
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnFalseSearchDocumentDoesNotContainAFieldWithMatchingName()
+    public function testFalseIsReturnedIfSearchDocumentDoesNotContainAFieldWithMatchingName()
     {
         $dummyFieldValue = 'field-name';
 
@@ -83,10 +80,7 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->searchDocument->isMatchingCriteria($mockCriteria));
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnFalseSearchDocumentDoesNotContainAFieldWithValueEqualsToGivenValue()
+    public function testFalseIsReturnedIfSearchDocumentDoesNotContainAFieldWithValueEqualsToGivenValue()
     {
         $dummyFieldName = 'field-name';
 
@@ -102,10 +96,7 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->searchDocument->isMatchingCriteria($mockCriteria));
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTrueIfSearchDocumentContainsAFieldWithValueEqualsToGivenValue()
+    public function testTrueIsReturnedIfSearchDocumentContainsAFieldWithValueEqualsToGivenValue()
     {
         $dummyFieldName = 'field-name';
         $dummyFieldValue = 'field-value';
@@ -122,10 +113,7 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->searchDocument->isMatchingCriteria($mockCriteria));
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTrueIfSearchDocumentContainsAFieldWithValueNotEqualToGivenValue()
+    public function testTrueIsReturnedIfSearchDocumentContainsAFieldWithValueNotEqualToGivenValue()
     {
         $dummyFieldName = 'field-name';
 
@@ -141,10 +129,7 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->searchDocument->isMatchingCriteria($mockCriteria));
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTrueIfSearchDocumentContainsAFieldWithValueGreaterThenGivenValue()
+    public function testTrueIsReturnedIfSearchDocumentContainsAFieldWithValueGreaterThenGivenValue()
     {
         $dummyFieldName = 'field-name';
 
@@ -160,10 +145,7 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->searchDocument->isMatchingCriteria($mockCriteria));
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTrueIfSearchDocumentContainsAFieldWithValueGreaterOrEqualToGivenValue()
+    public function testTrueIsReturnedIfSearchDocumentContainsAFieldWithValueGreaterOrEqualToGivenValue()
     {
         $dummyFieldName = 'field-name';
 
@@ -179,10 +161,7 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->searchDocument->isMatchingCriteria($mockCriteria));
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTrueIfSearchDocumentContainsAFieldWithValueLessThenGivenValue()
+    public function testTrueIsReturnedIfSearchDocumentContainsAFieldWithValueLessThenGivenValue()
     {
         $dummyFieldName = 'field-name';
 
@@ -198,10 +177,7 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->searchDocument->isMatchingCriteria($mockCriteria));
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTrueIfSearchDocumentContainsAFieldWithValueLessOrEqualToGivenValue()
+    public function testTrueIsReturnedIfSearchDocumentContainsAFieldWithValueLessOrEqualToGivenValue()
     {
         $dummyFieldName = 'field-name';
 
@@ -217,10 +193,7 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->searchDocument->isMatchingCriteria($mockCriteria));
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnFalseIfUnknownSearchDocumentFieldComparisonOperationIsEncountered()
+    public function testFalseIsReturnedIfUnknownSearchDocumentFieldComparisonOperationIsEncountered()
     {
         $mockCriterion = $this->createMockCriterion('field-name', 'field-value', 'unknown-operation');
         $mockCriteria = $this->createMockCriteria(SearchCriteria::OR_CONDITION, [$mockCriterion]);

@@ -7,29 +7,20 @@ namespace Brera\DataPool\SearchEngine;
  */
 class SearchCriteriaTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itShouldImplementJsonSerializableInterface()
+    public function testJsonSerializableInterfaceIsImplemented()
     {
         $result = SearchCriteria::create(SearchCriteria::AND_CONDITION);
 
         $this->assertInstanceOf(\JsonSerializable::class, $result);
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\DataPool\SearchEngine\InvalidCriteriaConditionException
-     */
-    public function itShouldFailIfCriteriaConditionIsInvalid()
+    public function testExeptionIsThrownIfCriteriaConditionIsInvalid()
     {
+        $this->setExpectedException(InvalidCriteriaConditionException::class);
         SearchCriteria::create('foo');
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnCriteriaCondition()
+    public function testCriteriaConditionIsReturned()
     {
         $condition = SearchCriteria::AND_CONDITION;
 
@@ -38,10 +29,7 @@ class SearchCriteriaTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($condition, $criteria->getCondition());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnArrayOfCriteria()
+    public function testCriteriaArrayIsReturned()
     {
         $mockCriterion1 = $this->getMock(SearchCriterion::class, [], [], '', false);
         $mockCriterion2 = $this->getMock(SearchCriterion::class, [], [], '', false);
@@ -55,10 +43,7 @@ class SearchCriteriaTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([$mockCriterion1, $mockCriterion2], $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnArrayRepresentationOfACriteria()
+    public function testArrayRepresentationOfCriteriaIsReturned()
     {
         $condition = SearchCriteria::AND_CONDITION;
 

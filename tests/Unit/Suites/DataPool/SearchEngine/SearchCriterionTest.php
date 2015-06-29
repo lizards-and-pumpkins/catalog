@@ -7,50 +7,32 @@ namespace Brera\DataPool\SearchEngine;
  */
 class SearchCriterionTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itShouldImplementJsonSerializableInterface()
+    public function testJsonSerializableInterfaceIsImplemented()
     {
         $result = SearchCriterion::create('foo', 'bar', 'eq');
 
         $this->assertInstanceOf(\JsonSerializable::class, $result);
     }
 
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Criterion field name should be a string
-     */
-    public function itShouldFailIfFieldNameIsNotValid()
+    public function testExceptionIsThrownIfFieldNameIsNotValid()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Criterion field name should be a string');
         SearchCriterion::create(1, 'bar', 'eq');
     }
 
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Criterion field value should be a string
-     */
-    public function itShouldFailIfFieldValueIsNotValid()
+    public function testExceptionIsThrownIfFieldValueIsNotValid()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Criterion field value should be a string');
         SearchCriterion::create('foo', 1, 'eq');
     }
 
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid criterion operation
-     */
-    public function itShouldFailIfOperationIsNotValid()
+    public function testExceptionIsThrownIfOperationIsNotValid()
     {
+        $this->setExpectedException(\InvalidArgumentException::class, 'Invalid criterion operation');
         SearchCriterion::create('foo', 'bar', 'baz');
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnCriterionData()
+    public function testCriterionDataIsReturned()
     {
         $fieldName = 'foo';
         $fieldValue = 'bar';
@@ -63,10 +45,7 @@ class SearchCriterionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($operation, $criterion->getOperation());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnArrayRepresentationOfACriterion()
+    public function testArrayRepresentationOfCriterionIsReturned()
     {
         $fieldName = 'foo';
         $fieldValue = 'bar';
