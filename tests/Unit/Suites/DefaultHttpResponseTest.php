@@ -42,4 +42,19 @@ class DefaultHttpResponseTest extends \PHPUnit_Framework_TestCase
 
         $this->expectOutputString($body);
     }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testGivenHeaderIsIncludedIntoResponse()
+    {
+        $customHeader = 'Foo: bar';
+
+        $this->defaultHttpResponse->addHeader($customHeader);
+        $this->defaultHttpResponse->send();
+
+        $headers = xdebug_get_headers();
+
+        $this->assertContains($customHeader, $headers);
+    }
 }

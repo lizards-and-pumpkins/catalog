@@ -12,12 +12,25 @@ class DefaultHttpResponse implements HttpResponse
     private $body;
 
     /**
+     * @var string[]
+     */
+    private $headers = [];
+
+    /**
      * @param string $content
      * @return null
      */
     public function setBody($content)
     {
         $this->body = $content;
+    }
+
+    /**
+     * @param string $header
+     */
+    public function addHeader($header)
+    {
+        $this->headers[] = $header;
     }
 
     /**
@@ -30,6 +43,7 @@ class DefaultHttpResponse implements HttpResponse
 
     public function send()
     {
+        array_map('header', $this->headers);
         echo $this->getBody();
     }
 }
