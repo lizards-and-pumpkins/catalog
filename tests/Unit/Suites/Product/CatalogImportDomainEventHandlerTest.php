@@ -11,10 +11,7 @@ use Brera\Queue\Queue;
  */
 class CatalogImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itShouldEmitProductImportDomainEvents()
+    public function testProductImportDomainEventsAreEmitted()
     {
         $xml = file_get_contents(__DIR__ . '/../../../shared-fixture/product.xml');
 

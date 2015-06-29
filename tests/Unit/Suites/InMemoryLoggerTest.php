@@ -7,10 +7,7 @@ namespace Brera;
  */
 class InMemoryLoggerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itShouldStoreMessageInMemory()
+    public function testMessageIsStoredInMemory()
     {
         $stubLogMessage = $this->getMock(LogMessage::class);
 

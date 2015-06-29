@@ -8,13 +8,12 @@ namespace Brera;
 class DataVersionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @test
-     * @expectedException \Brera\EmptyVersionException
-     * @param mixed $emptyVersion
      * @dataProvider emptyVersionProvider
+     * @param mixed $emptyVersion
      */
-    public function itShouldThrowOnEmptyVersion($emptyVersion)
+    public function testExceptionIsThrownIfVersionIsEmpty($emptyVersion)
     {
+        $this->setExpectedException(EmptyVersionException::class);
         DataVersion::fromVersionString($emptyVersion);
     }
 
@@ -31,13 +30,12 @@ class DataVersionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @test
-     * @expectedException \Brera\InvalidVersionException
-     * @param mixed $invalidVersion
      * @dataProvider invalidVersionProvider
+     * @param mixed $invalidVersion
      */
-    public function itShouldThrownOnInvalidVersion($invalidVersion)
+    public function testExceptionIsThrownIfVersionIsInvalid($invalidVersion)
     {
+        $this->setExpectedException(InvalidVersionException::class);
         DataVersion::fromVersionString($invalidVersion);
     }
 
@@ -55,10 +53,7 @@ class DataVersionTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnVersion()
+    public function testVersionIsReturned()
     {
         $version = '1.0';
         $dataVersion = DataVersion::fromVersionString($version);

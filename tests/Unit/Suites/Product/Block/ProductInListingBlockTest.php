@@ -33,10 +33,7 @@ class ProductInListingBlockTest extends \PHPUnit_Framework_TestCase
         $this->block = new ProductInListingBlock($stubRenderer, 'foo.phtml', 'foo', $this->stubProduct);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldBeABlock()
+    public function testBlockClassIsExtended()
     {
         $this->assertInstanceOf(Block::class, $this->block);
     }

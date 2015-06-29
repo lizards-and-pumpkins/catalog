@@ -27,7 +27,7 @@ class VersionedContext implements Context
     {
         if (self::CODE !== $code) {
             throw new ContextCodeNotFoundException(sprintf(
-                "No value was not found in the current context for the code '%s'",
+                'No value found in the current context for the code \'%s\'',
                 $code
             ));
         }

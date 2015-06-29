@@ -1,9 +1,9 @@
 <?php
 
-
 namespace Brera\Product;
 
 use Brera\Context\Context;
+use Brera\InvalidSnippetCodeException;
 use Brera\SnippetKeyGenerator;
 
 /**
@@ -33,36 +33,24 @@ class ProductSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->keyGenerator = new ProductSnippetKeyGenerator($this->testSnippetCode);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldImplementTheSnippetKeyGeneratorInterface()
+    public function testSnippetKeyGeneratorInterfaceIsImplemented()
     {
         $this->assertInstanceOf(SnippetKeyGenerator::class, $this->keyGenerator);
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\InvalidSnippetCodeException
-     */
-    public function itShouldThrowAnExceptionIfTheSnippetCodeIsNotAString()
+    public function testExceptionIsThrownIfTheSnippetCodeIsNotAString()
     {
+        $this->setExpectedException(InvalidSnippetCodeException::class);
         new ProductSnippetKeyGenerator(123);
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Product\MissingProductIdException
-     */
-    public function itShouldThrowAnExceptionIfNoProductIdIsSpecified()
+    public function testExceptionIsThrownIfNoProductIdIsSpecified()
     {
+        $this->setExpectedException(MissingProductIdException::class);
         $this->keyGenerator->getKeyForContext($this->getMockContext());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldUseWebsiteAndLanguageContextParts()
+    public function testWebsiteAndLanguageContextPartsAreUsed()
     {
         $result = $this->keyGenerator->getContextPartsUsedForKey();
         $this->assertInternalType('array', $result);
@@ -70,33 +58,25 @@ class ProductSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('language', $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldIncludeTheSnippetCodeInTheKey()
+    public function testSnippetCodeIsIncludedInTheKey()
     {
         $result = $this->keyGenerator->getKeyForContext($this->getMockContext(), ['product_id' => $this->productId]);
         $this->assertContains($this->testSnippetCode, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldIncludeTheProductIdInTheKey()
+    public function testProductIdIsIncludedInTheKey()
     {
         $result = $this->keyGenerator->getKeyForContext($this->getMockContext(), ['product_id' => $this->productId]);
         $this->assertContains((string) $this->productId, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldIncludeTheContextIdInTheKey()
+    public function testContextIsIncludedIdInTheKey()
     {
         $testContextId = 'test-context-id';
         $mockContext = $this->getMockContext();
         $mockContext->expects($this->once())->method('getId')->willReturn($testContextId);
         $result = $this->keyGenerator->getKeyForContext($mockContext, ['product_id' => $this->productId]);
+
         $this->assertContains($testContextId, $result);
     }
 }

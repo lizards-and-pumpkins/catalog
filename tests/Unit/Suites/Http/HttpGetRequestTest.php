@@ -9,10 +9,7 @@ namespace Brera\Http;
  */
 class HttpGetRequestTest extends AbstractHttpRequestTest
 {
-    /**
-     * @test
-     */
-    public function itShouldReturnAGetRequest()
+    public function testGetRequestIsReturned()
     {
         $stubHttpUrl = $this->getStubHttpUrl();
 

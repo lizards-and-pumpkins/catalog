@@ -7,10 +7,7 @@ namespace Brera\Product;
  */
 class ProductListingSavedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itShouldTriggerProjection()
+    public function testProjectionIsTriggered()
     {
         $stubProductListingSource = $this->getMock(ProductListingSource::class, [], [], '', false);
 

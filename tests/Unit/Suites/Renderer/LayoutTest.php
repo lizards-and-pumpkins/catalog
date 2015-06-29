@@ -7,10 +7,7 @@ namespace Brera\Renderer;
  */
 class LayoutTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itShouldCreateLayoutFromArray()
+    public function testLayoutIsCreatedFromArray()
     {
         $layoutArray = [
             [
@@ -30,10 +27,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $this->assertContainsOnly(Layout::class, $snippetLayout->getNodeChildren());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnAnAttributeValue()
+    public function testAttributeValueIsReturned()
     {
         $layoutArray = [
             [
@@ -47,10 +41,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $snippet->getAttribute('name'));
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnNullIfLayoutAttributeIsNotSet()
+    public function testNullIsReturnedIfLayoutAttributeIsNotSet()
     {
         $layoutArray = [
             [
@@ -64,19 +55,13 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($snippet->getAttribute('name'));
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Renderer\RootElementOfLayoutMustBeAnArrayException
-     */
-    public function itShouldThrowAnExceptionIfRootElementIsNotAnArray()
+    public function testExceptionIsThrownIfRootElementIsNotAnArray()
     {
+        $this->setExpectedException(RootElementOfLayoutMustBeAnArrayException::class);
         Layout::fromArray(['foo']);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnFalseIfThereAreNoChildren()
+    public function testFalseIsReturnedIfThereAreNoChildren()
     {
         $layoutArray = [
             [
@@ -89,10 +74,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($layout->hasChildren());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTrueIfThereAreChildren()
+    public function testTrueIsReturnedIfThereAreChildren()
     {
         $layoutArray = [
             [

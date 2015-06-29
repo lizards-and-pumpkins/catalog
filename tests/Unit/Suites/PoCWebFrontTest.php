@@ -74,7 +74,6 @@ class PoCWebFrontTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $stubContextBuilder = $this->getMock(ContextBuilder::class, [], [], '', false);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|HttpRequest $stubHttpRequest */
         $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
         $mockRouterChain = $this->getMock(HttpRouterChain::class);
         $mockHttpRequestHandler = $this->getMock(HttpRequestHandler::class);
@@ -109,32 +108,21 @@ class PoCWebFrontTest extends \PHPUnit_Framework_TestCase
         $this->webFront = new PoCWebFront($stubHttpRequest, $stubMasterFactory);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnMasterFactory()
+    public function testMasterFactoryIsReturned()
     {
         $result = $this->webFront->getMasterFactory();
         $this->assertInstanceOf(MasterFactory::class, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCallSendOnTheResponse()
+    public function testSendMethodOfResponseIsCalled()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject $factory */
         $this->mockHttpResponse->expects($this->once())
             ->method('send');
         $this->webFront->run();
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateAPoCMasterFactory()
+    public function testPoCMasterFactoryIsReturned()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|HttpRequest $stubHttpRequest */
         $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
         $stubHttpRequest->expects($this->any())
             ->method('getUrl')

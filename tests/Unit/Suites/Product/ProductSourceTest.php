@@ -35,21 +35,14 @@ class ProductSourceTest extends \PHPUnit_Framework_TestCase
         $this->productSource = new ProductSource($this->stubProductId, $this->mockProductAttributeList);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTheProductId()
+    public function testProductIdIsReturned()
     {
         $result = $this->productSource->getId();
         $this->assertSame($this->stubProductId, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnAProductForAnContext()
+    public function testProductForContextIsReturned()
     {
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->getMock(Context::class);
         $this->mockProductAttributeList->expects($this->once())
             ->method('getAttributesForContext')

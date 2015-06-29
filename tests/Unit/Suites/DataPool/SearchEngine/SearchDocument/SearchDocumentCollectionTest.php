@@ -17,23 +17,14 @@ class SearchDocumentCollectionTest extends \PHPUnit_Framework_TestCase
         $this->searchDocumentCollection = new SearchDocumentCollection();
     }
 
-    /**
-     * @test
-     */
-    public function itShouldBeEmpty()
+    public function testIsInitiallyEmpty()
     {
         $this->assertCount(0, $this->searchDocumentCollection->getDocuments());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldAddSearchDocumentToCollection()
+    public function testSearchDocumentIsAddedToCollection()
     {
-        $stubSearchDocument = $this->getMockBuilder(SearchDocument::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $stubSearchDocument = $this->getMock(SearchDocument::class, [], [], '', false);
         $this->searchDocumentCollection->add($stubSearchDocument);
         $result = $this->searchDocumentCollection->getDocuments();
 

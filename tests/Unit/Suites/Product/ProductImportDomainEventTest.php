@@ -7,10 +7,7 @@ namespace Brera\Product;
  */
 class ProductImportDomainEventTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itShouldReturnProductImportXml()
+    public function testProductImportXmlIsReturned()
     {
         $xml = '<?xml version="1.0"?><rootNode></rootNode>';
 

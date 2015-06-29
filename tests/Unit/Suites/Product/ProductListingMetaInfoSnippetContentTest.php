@@ -31,18 +31,12 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
         );
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnArray()
+    public function testArrayIsReturned()
     {
         $this->assertInternalType('array', $this->pageMetaInfo->getInfo());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldContainTheExpectedArrayKeysInTheJsonContent()
+    public function testExpectedArrayKeysArePresentInJsonContent()
     {
         $keys = [
             ProductListingMetaInfoSnippetContent::KEY_CRITERIA,
@@ -57,19 +51,13 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
         }
     }
 
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     */
-    public function itShouldThrowAnExceptionIfTheRootSnippetCodeIsNoString()
+    public function testExceptionIsThrownIfTheRootSnippetCodeIsNoString()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
         ProductListingMetaInfoSnippetContent::create([], 1.0, []);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldAddTheRootSnippetCodeToTheSnippetCodeListIfNotPresent()
+    public function testRootSnippetCodeIsAddedToTheSnippetCodeListIfNotPresent()
     {
         $rootSnippetCode = 'root-snippet-code';
         $pageMetaInfo = ProductListingMetaInfoSnippetContent::create([], $rootSnippetCode, []);
@@ -79,33 +67,25 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
         );
     }
 
-    /**
-     * @test
-     */
-    public function itShouldHaveAFromJsonConstructor()
+    public function testJsonConstructorIsPresent()
     {
         $pageMetaInfo = ProductListingMetaInfoSnippetContent::fromJson(json_encode($this->pageMetaInfo->getInfo()));
         $this->assertInstanceOf(ProductListingMetaInfoSnippetContent::class, $pageMetaInfo);
     }
     
-    /**
-     * @test
-     * @expectedException \OutOfBoundsException
-     */
-    public function itShouldThrowAnExceptionInCaseOfJsonErrors()
+    public function testExceptionIsThrownInCaseOfJsonErrors()
     {
+        $this->setExpectedException(\OutOfBoundsException::class);
         ProductListingMetaInfoSnippetContent::fromJson('malformed-json');
     }
 
     /**
-     * @test
      * @dataProvider pageInfoArrayKeyProvider
      * @param string $key
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Missing key in input JSON
      */
-    public function itShouldThrowAnExceptionIfARequiredKeyIsMissing($key)
+    public function testExceptionIsThrownIfARequiredKeyIsMissing($key)
     {
+        $this->setExpectedException(\RuntimeException::class, 'Missing key in input JSON');
         $pageInfo = $this->pageMetaInfo->getInfo();
         unset($pageInfo[$key]);
         ProductListingMetaInfoSnippetContent::fromJson(json_encode($pageInfo));
@@ -123,26 +103,17 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
         ];
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTheSelectionCriteria()
+    public function testSelectionCriteriaIsReturned()
     {
         $this->assertEquals($this->selectionCriteria, $this->pageMetaInfo->getSelectionCriteria());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTheRootSnippetCode()
+    public function testRootSnippetCodeIsReturned()
     {
         $this->assertEquals($this->rootSnippetCode, $this->pageMetaInfo->getRootSnippetCode());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnThePageSnippetCodeList()
+    public function testPageSnippetCodeListIsReturned()
     {
         $this->assertInternalType('array', $this->pageMetaInfo->getPageSnippetCodes());
     }

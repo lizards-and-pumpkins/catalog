@@ -32,20 +32,14 @@ class MissingSnippetCodeMessageTest extends \PHPUnit_Framework_TestCase
         $this->message = new MissingSnippetCodeMessage($this->missingSnippetCodes, $this->stubContext);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnLogMessage()
+    public function testLogMessageIsReturned()
     {
         $expectation = 'Snippets contained in the page meta information where not loaded from the data pool (foo, bar)';
 
         $this->assertEquals($expectation, (string) $this->message);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnContext()
+    public function testContextIsReturned()
     {
         $result = $this->message->getContext();
 
