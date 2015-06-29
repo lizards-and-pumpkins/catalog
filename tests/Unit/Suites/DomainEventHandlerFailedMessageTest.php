@@ -17,31 +17,33 @@ class DomainEventHandlerFailedMessageTest extends \PHPUnit_Framework_TestCase
      */
     private $message;
 
+    /**
+     * @var string
+     */
+    private $exceptionMessage = 'foo';
+
     protected function setUp()
     {
         $stubDomainEvent = $this->getMockBuilder(DomainEvent::class)
             ->setMockClassName('DomainEvent')
             ->getMock();
 
-        $this->stubException = new \Exception('foo');
+        $this->stubException = new \Exception($this->exceptionMessage);
 
         $this->message = new DomainEventHandlerFailedMessage($stubDomainEvent, $this->stubException);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnLogMessage()
+    public function testLogMessageIsReturned()
     {
-        $expectation = "Failure during processing DomainEvent domain event with following message:\n\nfoo";
+        $expectation = sprintf(
+            "Failure during processing DomainEvent domain event with following message:\n\n%s",
+            $this->exceptionMessage
+        );
 
         $this->assertEquals($expectation, (string) $this->message);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnAnException()
+    public function testExceptionIsReturned()
     {
         $result = $this->message->getContext();
 

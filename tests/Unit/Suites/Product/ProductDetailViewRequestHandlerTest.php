@@ -6,6 +6,7 @@ use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\KeyNotFoundException;
 use Brera\Http\HttpRequestHandler;
+use Brera\Http\UnableToHandleRequestException;
 use Brera\Page;
 use Brera\PageBuilder;
 
@@ -74,28 +75,19 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function itShouldBeARequestHandler()
+    public function testRequestHandlerInterfaceIsImplemented()
     {
         $this->assertInstanceOf(HttpRequestHandler::class, $this->requestHandler);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnFalseIfThePageMetaInfoContentSnippetCanNotBeLoaded()
+    public function testFalseIsReturnedIfPageMetaInfoContentSnippetCanNotBeLoaded()
     {
         $exception = new KeyNotFoundException();
         $this->mockDataPoolReader->method('getSnippet')->willThrowException($exception);
         $this->assertFalse($this->requestHandler->canProcess());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTrueIfThePageMetaInfoContentSnippetCanBeLoaded()
+    public function testTrueIsReturnedIfPageMetaInfoContentSnippetCanBeLoaded()
     {
         $this->mockDataPoolReader->method('getSnippet')->willReturnMap([
             [$this->testMetaInfoKey, $this->testMetaInfoSnippetJson]
@@ -103,20 +95,13 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->requestHandler->canProcess());
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Http\UnableToHandleRequestException
-     * @expectedExceptionMessage Unable to handle request
-     */
-    public function itShouldThrowIfProcessWithoutMetaInfoContentIsCalled()
+    public function testExceptionIsThrownIfProcessWithoutMetaInfoContentIsCalled()
     {
+        $this->setExpectedException(UnableToHandleRequestException::class);
         $this->requestHandler->process();
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateAPageMetaInfoSnippet()
+    public function testPageMetaInfoSnippetIsCreated()
     {
         $this->mockDataPoolReader->method('getSnippet')->willReturnMap([
             [$this->testMetaInfoKey, $this->testMetaInfoSnippetJson]
@@ -131,10 +116,7 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnAPage()
+    public function testPageIsReturned()
     {
         $this->mockDataPoolReader->method('getSnippet')->willReturnMap([
             [$this->testMetaInfoKey, $this->testMetaInfoSnippetJson]

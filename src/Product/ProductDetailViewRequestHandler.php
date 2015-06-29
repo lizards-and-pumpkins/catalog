@@ -71,7 +71,7 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
     public function process()
     {
         if (!$this->canProcess()) {
-            throw new UnableToHandleRequestException('Unable to handle request');
+            throw new UnableToHandleRequestException;
         }
         return $this->pageBuilder->buildPage(
             $this->pageMetaInfo,

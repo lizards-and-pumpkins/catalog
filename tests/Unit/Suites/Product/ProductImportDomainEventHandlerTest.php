@@ -9,10 +9,7 @@ use Brera\Context\ContextSource;
  */
 class ProductImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itShouldTriggerProjection()
+    public function testProjectionIsTriggered()
     {
         $stubProductSource = $this->getMock(ProductSource::class, [], [], '', false);
 

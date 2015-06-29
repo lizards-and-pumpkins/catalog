@@ -28,82 +28,59 @@ class VersionedContextTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->stubDataVersion = $this->getMockBuilder(DataVersion::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->stubDataVersion = $this->getMock(DataVersion::class, [], [], '', false);
         $this->stubDataVersion->expects($this->any())
             ->method('__toString')
             ->willReturn($this->testVersionValue);
         $this->versionedContext = new VersionedContext($this->stubDataVersion);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldBeAnContext()
+    public function testContextInterfaceIsImplemented()
     {
         $this->assertInstanceOf(Context::class, $this->versionedContext);
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Context\ContextCodeNotFoundException
-     * @expectedExceptionMessage No value was not found in the current context for the code 'foo'
-     */
-    public function itShouldThrowAnExceptionWhenGettingTheValueWithANonMatchingCode()
+    public function testExceptionIsThrownIfNotMatchingCodeIsPassed()
     {
-        $this->versionedContext->getValue('foo');
+        $contextCode = 'foo';
+        $this->setExpectedException(
+            ContextCodeNotFoundException::class,
+            sprintf('No value found in the current context for the code \'%s\'', $contextCode)
+        );
+        $this->versionedContext->getValue($contextCode);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTheVersionForTheValue()
+    public function testVersionIsReturnedAsValue()
     {
         $result = $this->versionedContext->getValue(VersionedContext::CODE);
         $this->assertEquals($this->testVersionValue, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldAddTheVersionCodeToTheListOfSupportedCodes()
+    public function testVersionCodeIsAddedToListOfSupportedCodes()
     {
         $result = $this->versionedContext->getSupportedCodes();
         $this->assertInternalType('array', $result);
         $this->assertContains(VersionedContext::CODE, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTheVersionIdentifier()
+    public function testVersionIdentifierIsReturned()
     {
         $expected = 'v:' . $this->testVersionValue;
         $this->assertEquals($expected, $this->versionedContext->getId());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldIncludeTheVersionInTheIdentifierWhenItIsRequested()
+    public function testVersionIsIncludedInIdentifierWhenRequested()
     {
         $expected = 'v:' . $this->testVersionValue;
         $this->assertEquals($expected, $this->versionedContext->getIdForParts([VersionedContext::CODE]));
     }
 
-    /**
-     * @test
-     */
-    public function itShouldSupportTheVersionCode()
+    public function testVersionCodeIsSupported()
     {
         $this->assertTrue($this->versionedContext->supportsCode(VersionedContext::CODE));
     }
 
-    /**
-     * @test
-     */
-    public function itShouldNotSupportCodesOtherThenVersion()
+    public function testCodesOtherThenVersionAreNotSupported()
     {
         $this->assertFalse($this->versionedContext->supportsCode('foo'));
     }

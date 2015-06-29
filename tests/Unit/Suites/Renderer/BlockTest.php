@@ -30,66 +30,46 @@ class BlockTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->stubDataObject = $this->getMock(ProjectionSourceData::class);
     }
-    
-    /**
-     * @param string $template
-     * @param string $blockName
-     * @return Block
-     */
-    private function createBlockInstance($template, $blockName)
-    {
-        return new Block($this->mockBlockRenderer, $template, $blockName, $this->stubDataObject);
-    }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTheBlocksName()
+    public function testBlocksNameIsReturned()
     {
         $blockName = 'test-block-name';
         $instance = $this->createBlockInstance('test-template.phtml', $blockName);
+
         $this->assertEquals($blockName, $instance->getBlockName());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTheDataObject()
+    public function testDataObjectIsReturned()
     {
         $block = $this->createBlockInstance('test-template.phtml', 'test-block-name');
         $method = new \ReflectionMethod($block, 'getDataObject');
         $method->setAccessible(true);
+
         $this->assertSame($this->stubDataObject, $method->invoke($block));
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Renderer\TemplateFileNotReadableException
-     */
-    public function itShouldThrowAnExceptionIfTemplateFileDoesNotExist()
+    public function testExceptionIsThrownIfTemplateFileDoesNotExist()
     {
         $block = $this->createBlockInstance('test-template.phtml', 'test-block-name');
+        $this->setExpectedException(TemplateFileNotReadableException::class);
+
         $block->render();
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Renderer\TemplateFileNotReadableException
-     */
-    public function itShouldThrowAnExceptionIfTemplateFileIsNotReadable()
+    public function testExceptionIsThrownIfTemplateFileIsNotReadable()
     {
         $templateFilePath = $this->getUniqueTempDir() . '/test-template.phtml';
-        
+
         $this->createFixtureFile($templateFilePath, '', 0000);
 
         $block = $this->createBlockInstance($templateFilePath, 'test-block-name');
+
+        $this->setExpectedException(TemplateFileNotReadableException::class);
+
         $block->render();
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnSameStringAsTranslation()
+    public function testSameStringAsTranslationIsReturned()
     {
         $block = $this->createBlockInstance('test-template.phtml', 'test-block-name');
         $result = $block->__('foo');
@@ -97,22 +77,17 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldRenderTheTemplate()
+    public function testTemplateIsReturned()
     {
         $template = $this->getUniqueTempDir() . '/test-template.phtml';
         $templateContent = 'The template content';
         $this->createFixtureFile($template, $templateContent);
         $block = $this->createBlockInstance($template, $templateContent);
+
         $this->assertEquals($templateContent, $block->render());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldDelegateToTheBlockRendererToGetChildBlockOutput()
+    public function testGettingChildBlockOutputIsDelegatedToBlockRenderer()
     {
         $blockName = 'test-block-name';
         $childName = 'child-name';
@@ -123,10 +98,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $block->getChildOutput($childName);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnLayoutHandle()
+    public function testLayoutHandleIsReturned()
     {
         $expectedLayoutHandle = 'foo';
 
@@ -138,5 +110,15 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $result = $layoutHandle->getLayoutHandle();
 
         $this->assertSame($expectedLayoutHandle, $result);
+    }
+
+    /**
+     * @param string $template
+     * @param string $blockName
+     * @return Block
+     */
+    private function createBlockInstance($template, $blockName)
+    {
+        return new Block($this->mockBlockRenderer, $template, $blockName, $this->stubDataObject);
     }
 }

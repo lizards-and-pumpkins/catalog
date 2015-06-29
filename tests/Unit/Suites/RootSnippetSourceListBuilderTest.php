@@ -30,10 +30,7 @@ class RootSnippetSourceListBuilderTest extends \PHPUnit_Framework_TestCase
         $this->rootSnippetSourceListBuilder = new RootSnippetSourceListBuilder($mockContextBuilder);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateARootSnippetSourceListFromXml()
+    public function testRootSnippetSourceListIsCreatedFromXml()
     {
         $xml = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.xml');
 

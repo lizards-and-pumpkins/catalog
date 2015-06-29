@@ -17,10 +17,7 @@ class DefaultHttpResponseTest extends \PHPUnit_Framework_TestCase
         $this->defaultHttpResponse = new DefaultHttpResponse();
     }
 
-    /**
-     * @test
-     */
-    public function itShouldSetAndRetrieveABody()
+    public function testBodyIsSetAndRetrieved()
     {
         $body = 'dummy';
 
@@ -30,10 +27,7 @@ class DefaultHttpResponseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($body, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldEchoTheBody()
+    public function testBodyIsEchoed()
     {
         $body = 'dummy';
 

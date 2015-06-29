@@ -51,18 +51,12 @@ class ProductListingCriteriaSnippetRendererTest extends \PHPUnit_Framework_TestC
         $this->renderer = new ProductListingCriteriaSnippetRenderer($mockUrlPathKeyGenerator, $mockContextBuilder);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldImplementSnippetRendererInterface()
+    public function testSnippetRendererInterfaceIsImplemented()
     {
         $this->assertInstanceOf(SnippetRenderer::class, $this->renderer);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnSnippetWithAValidJsonAsAContent()
+    public function testSnippetWithValidJsonAsContentIsReturned()
     {
         $mockProductListingSource = $this->getMockProductListingSource();
 
@@ -74,10 +68,7 @@ class ProductListingCriteriaSnippetRendererTest extends \PHPUnit_Framework_TestC
         $this->assertEquals(JSON_ERROR_NONE, json_last_error());
     }
 
-    /**
-     * @test
-     */
-    public function theReturnedResultSnippetKeyShouldHaveTheProductListingSnippetCodePrefix()
+    public function testReturnedResultSnippetKeyHasProductListingSnippetCodePrefix()
     {
         $mockProductListingSource = $this->getMockProductListingSource();
 

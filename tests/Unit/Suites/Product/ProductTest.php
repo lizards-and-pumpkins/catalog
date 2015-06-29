@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Brera\Product;
 
 use Brera\ProjectionSourceData;
@@ -27,35 +26,23 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-
-        $this->stubProductId = $this->getMockBuilder(ProductId::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->stubProductId = $this->getMock(ProductId::class, [], [], '', false);
         $this->stubProductAttributeList = $this->getMock(ProductAttributeList::class);
         $this->product = new Product($this->stubProductId, $this->stubProductAttributeList);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldImplementProjectionSourceData()
+    public function testProjectionSourceDataInterfaceIsImplemented()
     {
         $this->assertInstanceOf(ProjectionSourceData::class, $this->product);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnTheProductId()
+    public function testProductIdIsReturned()
     {
         $result = $this->product->getId();
         $this->assertSame($this->stubProductId, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnAnAttributeValue()
+    public function testAttributeValueIsReturned()
     {
         $testAttributeValue = 'test-name';
         $testAttributeCode = 'name';

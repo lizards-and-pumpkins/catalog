@@ -9,10 +9,7 @@ use Brera\Context\Context;
  */
 class RootSnippetSourceTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itShouldReturnRootSnippetSourceContextAndNumberOfItemsPerPage()
+    public function testRootSnippetSourceContextAndNumberOfItemsPerPageAreReturned()
     {
         $stubContext = $this->getMock(Context::class);
         $rootSnippetSource = new RootSnippetSource($stubContext, 1);

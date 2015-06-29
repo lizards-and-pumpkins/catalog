@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Brera\Http;
 
 use Brera\Context\Context;
@@ -10,25 +9,12 @@ use Brera\Context\Context;
  */
 class ResourceNotFoundRouterTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var ResourceNotFoundRouter
-     */
-    private $router;
-
-    public function setUp()
+    public function testInstanceOfResourceNotFoundRequestHandlerIsReturned()
     {
-        $this->router = new ResourceNotFoundRouter();
-    }
-
-    /**
-     * @test
-     */
-    public function itShouldReturnAResourceNotFoundRequestHandler()
-    {
-        $stubRequest = $this->getMockBuilder(HttpRequest::class)
-            ->disableOriginalConstructor()->getMock();
+        $stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
         $stubContext = $this->getMock(Context::class);
-        $result = $this->router->route($stubRequest, $stubContext);
+        $result = (new ResourceNotFoundRouter())->route($stubRequest, $stubContext);
+
         $this->assertInstanceOf(HttpRequestHandler::class, $result);
     }
 }

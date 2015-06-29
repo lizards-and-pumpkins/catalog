@@ -22,32 +22,27 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $this->page = new Page($this->testedBody);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnASetBody()
+    public function testBodyIsReturned()
     {
         $this->assertEquals($this->testedBody, $this->page->getBody());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldEchoTheBodyOnSend()
+    public function testBodyIsEchoed()
     {
         ob_start();
         $this->page->send();
         $buffer = ob_get_clean();
+
         $this->assertEquals($this->testedBody, $buffer);
     }
 
     /**
-     * @test
      * @dataProvider noStringProvider
-     * @expectedException \InvalidArgumentException
+     * @param mixed $noString
      */
-    public function itShouldThrowAnExceptionIfNoString($noString)
+    public function testExceptionIsThrownIfNoString($noString)
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
         new Page($noString);
     }
 
@@ -57,24 +52,12 @@ class PageTest extends \PHPUnit_Framework_TestCase
     public function noStringProvider()
     {
         return [
-            array(
-                new \stdClass()
-            ),
-            array(
-                123
-            ),
-            array(
-                1.01
-            ),
-            array(
-                []
-            ),
-            array(
-                true
-            ),
-            array(
-                false
-            )
+            [new \stdClass()],
+            [123],
+            [1.01],
+            [[]],
+            [true],
+            [false]
         ];
     }
 }

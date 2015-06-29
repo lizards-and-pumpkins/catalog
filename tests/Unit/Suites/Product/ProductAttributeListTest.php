@@ -20,10 +20,7 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
         $this->attributeList = new ProductAttributeList();
     }
 
-    /**
-     * @test
-     */
-    public function itShouldAddAndGetAttributeFromAProductAttributeList()
+    public function testAttributeIsAddedAndRetrievedFromProductAttributeList()
     {
         $attributeArray = [
             'nodeName'      => 'foo',
@@ -39,28 +36,19 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $result->getValue());
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Product\ProductAttributeNotFoundException
-     */
-    public function itShouldThrownAnExceptionIfBlankCodeIsProvided()
+    public function testExceptionIsThrownIfBlankCodeIsProvided()
     {
+        $this->setExpectedException(ProductAttributeNotFoundException::class);
         $this->attributeList->getAttribute('');
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\Product\ProductAttributeNotFoundException
-     */
-    public function itShouldThrownAnExceptionIfNoAttributeWithGivenCodeIsSet()
+    public function testExceptionIsThrownIfNoAttributeWithGivenCodeIsSet()
     {
+        $this->setExpectedException(ProductAttributeNotFoundException::class);
         $this->attributeList->getAttribute('foo');
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateAttributeListFromAttributesArray()
+    public function testAttributeListIsCreatedFromAttributesArray()
     {
         $attributeArray = [[
             'nodeName'      => 'foo',
@@ -74,10 +62,7 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $attribute->getValue());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnAnAttributeList()
+    public function testAttributeListIsReturned()
     {
         $attributeArray = [[
             'nodeName'      => 'name',
@@ -94,7 +79,6 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @test
      * @dataProvider extractAttributesDataProvider
      * @param string $websiteCodeA
      * @param string $websiteCodeB
@@ -108,7 +92,7 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
      * @param string[] $contextReturnValueMap
      * @param string $expected
      */
-    public function itShouldExtractAttributeValuesForAGivenContext(
+    public function testAttributeValuesForAGivenContextAreExtracted(
         $websiteCodeA,
         $websiteCodeB,
         $websiteCodeC,

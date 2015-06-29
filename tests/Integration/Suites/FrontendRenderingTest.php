@@ -18,10 +18,7 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
 {
     private $testProductId = 333;
 
-    /**
-     * @test
-     */
-    public function itShouldRenderAPageFromAnUrlWithoutVariablesInSnippets()
+    public function testPageIsRenderedFromAnUrlWithoutVariablesInSnippets()
     {
         $url = HttpUrl::fromString('http://example.com/product1');
         $context = new VersionedContext(DataVersion::fromVersionString('1.0'));
