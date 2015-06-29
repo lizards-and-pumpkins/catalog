@@ -29,10 +29,7 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
         $this->apiRouter = new ApiRouter($this->stubApiRequestHandlerChain);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnNullIfUrlIsNotLeadByApiPrefix()
+    public function testNullIsReturnedIfUrlIsNotLedByApiPrefix()
     {
         $stubUrl = $this->getMock(HttpUrl::class, [], [], '', false);
         $stubUrl->expects($this->once())
@@ -49,10 +46,7 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->apiRouter->route($stubHttpRequest, $stubContext));
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnNullIfNoApiRequestHandlerFound()
+    public function testNullIsReturnedIfNoApiRequestHandlerIsFound()
     {
         $stubUrl = $this->getMock(HttpUrl::class, [], [], '', false);
         $stubUrl->expects($this->once())
@@ -69,10 +63,7 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->apiRouter->route($stubHttpRequest, $stubContext));
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnApiRequestHandler()
+    public function testApiRequestHandlerIsReturned()
     {
         $stubUrl = $this->getMock(HttpUrl::class, [], [], '', false);
         $stubUrl->expects($this->once())

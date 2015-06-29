@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Brera\Product;
 
 use Brera\Context\Context;
@@ -75,10 +74,7 @@ class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_T
         );
     }
 
-    /**
-     * @test
-     */
-    public function itShouldRenderProductDetailViewSnippets()
+    public function testProductDetailViewSnippetsAreRendered()
     {
         $this->mockSnippetList->expects($this->exactly(2))->method('add');
         $stubProduct = $this->getMock(Product::class, [], [], '', false);
@@ -87,10 +83,7 @@ class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_T
         $this->renderer->render($stubProduct, $stubContext);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldContainJson()
+    public function testContainedJson()
     {
         $stubProduct = $this->getMock(Product::class, [], [], '', false);
         $stubProduct->expects($this->any())->method('getId')->willReturn(2);
@@ -104,10 +97,7 @@ class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_T
         $this->assertInternalType('array', json_decode($result->getContent(), true));
     }
 
-    /**
-     * @test
-     */
-    public function itShouldDelegateToTheKeyGeneratorToFetchTheContextParts()
+    public function testContextPartsFetchingIsDelegatedToKeyGenerator()
     {
         $testContextParts = ['version', 'website', 'language'];
         $this->mockSnippetKeyGenerator->expects($this->once())->method('getContextPartsUsedForKey')

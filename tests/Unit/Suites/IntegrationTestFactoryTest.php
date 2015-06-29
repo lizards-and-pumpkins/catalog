@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Brera\Tests\Integration;
 
 use Brera\DataPool\SearchEngine\InMemorySearchEngine;
@@ -45,34 +44,22 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
         $masterFactory->register($this->factory);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateAnInMemoryKeyValueStore()
+    public function testInMemoryKeyValueStoreIsReturned()
     {
         $this->assertInstanceOf(InMemoryKeyValueStore::class, $this->factory->createKeyValueStore());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateAnInMemoryEventQueue()
+    public function testInMemoryEventQueueIsReturned()
     {
         $this->assertInstanceOf(InMemoryQueue::class, $this->factory->createEventQueue());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateAnInMemoryLogger()
+    public function testInMemoryLoggerIsReturned()
     {
         $this->assertInstanceOf(InMemoryLogger::class, $this->factory->createLogger());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateAnInMemorySearchEngine()
+    public function testInMemorySearchEngineIsReturned()
     {
         $this->assertInstanceOf(InMemorySearchEngine::class, $this->factory->createSearchEngine());
     }
@@ -118,10 +105,7 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateSearchableAttributeCodesArray()
+    public function testArrayOfSearchableAttributeCodesIsReturned()
     {
         $this->assertInternalType('array', $this->factory->getSearchableAttributeCodes());
     }

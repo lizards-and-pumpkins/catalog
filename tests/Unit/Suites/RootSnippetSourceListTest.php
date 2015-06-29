@@ -11,10 +11,7 @@ use Brera\Context\VersionedContext;
  */
 class RootSnippetSourceListTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itShouldReturnNumbersOfItemsPertPageForGivenContext()
+    public function testNumbersOfItemsPerPageForGivenContextIsReturned()
     {
         $stubContext = $this->getMock(Context::class);
         $stubContext2 = $this->getMock(VersionedContext::class, [], [], '', false);
@@ -31,12 +28,7 @@ class RootSnippetSourceListTest extends \PHPUnit_Framework_TestCase
         $this->assertSame([10, 30], $result);
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\InvalidRootSnippetSourceDataException
-     * @expectedExceptionMessage No valid context found in one or more root snippet source data pairs.
-     */
-    public function itShouldThrowAnExceptionIfDataDoesNotHaveAValidContext()
+    public function testExceptionIsThrownIfDataDoesNotHaveValidContext()
     {
         $stubContext = $this->getMock(Context::class);
         $sourceDataPairs = [
@@ -44,20 +36,25 @@ class RootSnippetSourceListTest extends \PHPUnit_Framework_TestCase
             ['context' => 1, 'numItemsPerPage' => 0]
         ];
 
+        $this->setExpectedException(
+            InvalidRootSnippetSourceDataException::class,
+            'No valid context found in one or more root snippet source data pairs.'
+        );
+
         RootSnippetSourceList::fromArray($sourceDataPairs);
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\InvalidRootSnippetSourceDataException
-     * @expectedExceptionMessage No valid number of items per page found in one or more root snippet source data pairs.
-     */
-    public function itShouldThrowAnExceptionIfDataDoesNotHaveAValidNumberOfItemsPerPage()
+    public function testExceptionIsThrownIfDataDoesNotHaveValidNumberOfItemsPerPage()
     {
         $stubContext = $this->getMock(Context::class);
         $sourceDataPairs = [
             ['context' => $stubContext, 'numItemsPerPage' => 'a']
         ];
+
+        $this->setExpectedException(
+            InvalidRootSnippetSourceDataException::class,
+            'No valid number of items per page found in one or more root snippet source data pairs.'
+        );
 
         RootSnippetSourceList::fromArray($sourceDataPairs);
     }

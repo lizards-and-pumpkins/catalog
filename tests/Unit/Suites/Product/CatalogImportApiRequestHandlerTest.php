@@ -8,13 +8,9 @@ namespace Brera\Product;
  */
 class CatalogImportApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itShouldCallProtectedMethodOfConcreteClass()
+    public function testProtectedMethodOfConcreteClassIsCalled()
     {
         $result = (new CatalogImportApiRequestHandler())->process();
-
         $this->assertEquals('"dummy response"', $result->getBody());
     }
 }

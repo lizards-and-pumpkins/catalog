@@ -43,42 +43,27 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
         $masterFactory->register($this->factory);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateAFileKeyValueStore()
+    public function testFileKeyValueStoreIsReturned()
     {
         $this->assertInstanceOf(FileKeyValueStore::class, $this->factory->createKeyValueStore());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateAnInMemorySearchEngine()
+    public function testFileSearchEngineIsReturned()
     {
         $this->assertInstanceOf(FileSearchEngine::class, $this->factory->createSearchEngine());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateAnInMemoryEventQueue()
+    public function testInMemoryEventQueueIsReturned()
     {
         $this->assertInstanceOf(InMemoryQueue::class, $this->factory->createEventQueue());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateAnInMemoryLogger()
+    public function testInMemoryLoggerIsReturned()
     {
         $this->assertInstanceOf(InMemoryLogger::class, $this->factory->createLogger());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldCreateSearchableAttributeCodesArray()
+    public function testArrayOfSearchableAttributeCodesIsReturned()
     {
         $this->assertInternalType('array', $this->factory->getSearchableAttributeCodes());
     }

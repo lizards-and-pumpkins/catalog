@@ -80,7 +80,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
     public function process()
     {
         if (!$this->canProcess()) {
-            throw new UnableToHandleRequestException('Unable to handle request');
+            throw new UnableToHandleRequestException;
         }
 
         $this->addProductsInListingToPageBuilder();

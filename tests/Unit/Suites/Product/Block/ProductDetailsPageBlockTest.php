@@ -31,18 +31,12 @@ class ProductDetailsPageBlockTest extends \PHPUnit_Framework_TestCase
         $this->block = new ProductDetailsPageBlock($stubRenderer, 'foo.phtml', 'foo', $this->stubProduct);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldBeABlock()
+    public function testBlockClassIsExtended()
     {
         $this->assertInstanceOf(Block::class, $this->block);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnProductId()
+    public function testProductIdIsReturned()
     {
         $this->stubProduct->expects($this->once())
             ->method('getId')

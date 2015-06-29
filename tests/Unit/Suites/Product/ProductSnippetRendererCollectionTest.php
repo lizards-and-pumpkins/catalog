@@ -2,6 +2,7 @@
 
 namespace Brera\Product;
 
+use Brera\InvalidProjectionDataSourceTypeException;
 use Brera\ProjectionSourceData;
 use Brera\SampleContextSource;
 use Brera\SnippetRenderer;
@@ -50,10 +51,7 @@ class ProductSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnARenderedSnippetList()
+    public function testRenderedSnippetListIsReturned()
     {
         $this->mockRenderer->expects($this->any())->method('render')
             ->willReturn($this->getMock(SnippetList::class));
@@ -77,10 +75,7 @@ class ProductSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->stubSnippetList, $snippetList);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldDelegateRenderingToSnippetRenderers()
+    public function testRenderingIsDelegatedToSnippetRenderers()
     {
         /* @var $stubProduct \PHPUnit_Framework_MockObject_MockObject|Product */
         $stubProduct = $this->getMock(ProductSource::class, [], [], '', false);
@@ -104,10 +99,7 @@ class ProductSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function itShouldMergeTheResultsOfTheRenderers()
+    public function testResultsOfRenderersAreMerged()
     {
         /* @var $stubProduct \PHPUnit_Framework_MockObject_MockObject|Product */
         $stubProduct = $this->getMock(ProductSource::class, [], [], '', false);
@@ -135,16 +127,12 @@ class ProductSnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
         $this->rendererCollection->render($stubProduct, $stubContextSource);
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\InvalidProjectionDataSourceTypeException
-     */
-    public function itShouldThrowAnExceptionIfTheDataSourceObjectTypeIsNotProduct()
+    public function testExceptionIsThrownIfTheDataSourceObjectTypeIsNotProduct()
     {
-        /* @var $invalidDataSource \PHPUnit_Framework_MockObject_MockObject|ProjectionSourceData */
         $invalidDataSource = $this->getMock(ProjectionSourceData::class);
-        /* @var $stubContextSource \PHPUnit_Framework_MockObject_MockObject|SampleContextSource */
         $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
+
+        $this->setExpectedException(InvalidProjectionDataSourceTypeException::class);
 
         $this->rendererCollection->render($invalidDataSource, $stubContextSource);
     }

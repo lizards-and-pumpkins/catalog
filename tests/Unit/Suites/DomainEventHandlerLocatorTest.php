@@ -13,11 +13,11 @@ use Brera\Product\ProductListingSavedDomainEventHandler;
 
 /**
  * @covers \Brera\DomainEventHandlerLocator
- * @uses   \Brera\RootTemplateChangedDomainEvent
- * @uses   \Brera\Product\ProductImportDomainEvent
- * @uses   \Brera\Product\CatalogImportDomainEvent
  * @uses   \Brera\Image\ImageImportDomainEvent
- * @uses   \Brera\Product\ProductListingSavedDomainEvent
+ * @uses \Brera\RootTemplateChangedDomainEvent
+ * @uses \Brera\Product\ProductImportDomainEvent
+ * @uses \Brera\Product\ProductListingSavedDomainEvent
+ * @uses \Brera\Product\CatalogImportDomainEvent
  */
 class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,21 +37,14 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         $this->locator = new DomainEventHandlerLocator($this->factory);
     }
 
-    /**
-     * @test
-     * @expectedException \Brera\UnableToFindDomainEventHandlerException
-     */
-    public function itShouldThrowAnExceptionIfNoHandlerIsLocated()
+    public function testExceptionIsThrownIfNoHandlerIsLocated()
     {
-        /* @var $stubDomainEvent \PHPUnit_Framework_MockObject_MockObject|DomainEvent */
         $stubDomainEvent = $this->getMock(DomainEvent::class);
+        $this->setExpectedException(UnableToFindDomainEventHandlerException::class);
         $this->locator->getHandlerFor($stubDomainEvent);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldLocateAndReturnProductImportDomainEventHandler()
+    public function testProductImportDomainEventHandlerIsLocatedAndReturned()
     {
         $stubDomainEventHandler = $this->getMock(ProductImportDomainEventHandler::class, [], [], '', false);
 
@@ -69,10 +62,7 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ProductImportDomainEventHandler::class, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldLocateAndReturnCatalogImportDomainEventHandler()
+    public function testCatalogImportDomainEventHandlerIsLocatedAndReturned()
     {
         $stubDomainEventHandler = $this->getMock(CatalogImportDomainEventHandler::class, [], [], '', false);
 
@@ -90,10 +80,7 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(CatalogImportDomainEventHandler::class, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldLocateAndReturnRootTemplateChangedDomainEventHandler()
+    public function testRootTemplateChangedDomainEventHandlerIsLocatedAndReturned()
     {
         $stubDomainEventHandler = $this->getMock(RootTemplateChangedDomainEventHandler::class, [], [], '', false);
 
@@ -111,10 +98,7 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(RootTemplateChangedDomainEventHandler::class, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldLocateAndReturnImageImportDomainEventHandler()
+    public function testImageImportDomainEventHandlerIsLocatedAndReturned()
     {
         $stubDomainEventHandler = $this->getMock(ImageImportDomainEventHandler::class, [], [], '', false);
 

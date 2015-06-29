@@ -7,10 +7,7 @@ namespace Brera\Product;
  */
 class ProductListingSourceTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itShouldReturnProductListingUrlKey()
+    public function testProductListingUrlKeyIsReturned()
     {
         $stubUrlKey = 'foo';
         $stubContextData = [];
@@ -22,10 +19,7 @@ class ProductListingSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($stubUrlKey, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnProductListingContextData()
+    public function testProductListingContextDataIsReturned()
     {
         $stubUrlKey = '';
         $stubContextData = ['foo' => 'bar', 'baz' => 'qux'];
@@ -37,10 +31,7 @@ class ProductListingSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($stubContextData, $result);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnProductListingCriteria()
+    public function testProductListingCriteriaAreReturned()
     {
         $stubUrlKey = '';
         $stubContextData = [];

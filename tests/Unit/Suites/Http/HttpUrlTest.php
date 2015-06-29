@@ -22,70 +22,46 @@ class HttpUrlTest extends \PHPUnit_Framework_TestCase
         $this->url = HttpUrl::fromString($this->urlString);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnPath()
+    public function testPathIsReturned()
     {
         $this->assertEquals('/path', $this->url->getPath());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnSlashAsPathIfNoPathIsGiven()
+    public function testSlashIsReturnedAsPathIfNoPathIsGiven()
     {
         $url = HttpUrl::fromString('http://example.com');
         $this->assertEquals('/', $url->getPath());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldReturnSlashAsPathIfSlashPathIsGiven()
+    public function testSlashIsReturnedAsPathIfSlashPathIsGiven()
     {
         $url = HttpUrl::fromString('http://example.com/');
         $this->assertEquals('/', $url->getPath());
     }
 
-    /**
-     * @test
-     */
-    public function itShouldGiveTheUrlBack()
+    public function testUrlIsReturned()
     {
-        $this->assertEquals($this->urlString, (string)$this->url);
+        $this->assertEquals($this->urlString, (string) $this->url);
     }
 
-    /**
-     * @expectedException \Brera\Http\UnknownProtocolException
-     * @test
-     */
-    public function itShouldThrowExceptionForNonHttp()
+    public function testExceptionIsThrownForNonHttpRequest()
     {
+        $this->setExpectedException(UnknownProtocolException::class);
         HttpUrl::fromString('ftp://user:pass@example.com');
     }
 
-    /**
-     * @test
-     */
-    public function itShouldNotBeEncrypted()
+    public function testProtocolIsNotEncrypted()
     {
         $this->assertFalse($this->url->isProtocolEncrypted());
     }
 
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     */
-    public function itShouldThrowExceptionWhenNoUrlIsPassed()
+    public function testExceptionIsThrownIfNotValidUrlIsPassed()
     {
+        $this->setExpectedException(\InvalidArgumentException::class);
         HttpUrl::fromString('this is not a valid url');
     }
 
-    /**
-     * @test
-     */
-    public function itShouldExcludeDirectoryPathFromUrl()
+    public function testDirectoryPathIsExcludedFromUrl()
     {
         $originalScriptName = $_SERVER['SCRIPT_NAME'];
         $_SERVER['SCRIPT_NAME'] = '/path/to/index.php';

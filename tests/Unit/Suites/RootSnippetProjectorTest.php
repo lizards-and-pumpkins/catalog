@@ -9,10 +9,7 @@ use Brera\DataPool\DataPoolWriter;
  */
 class RootSnippetProjectorTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function itShouldWriteSnippetListIntoDataPool()
+    public function testSnippetListIsWrittenIntoDataPool()
     {
         $stubDataObject = $this->getMock(ProjectionSourceData::class);
         $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
