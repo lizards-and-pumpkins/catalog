@@ -4,13 +4,39 @@ namespace Brera;
 
 use Brera\Context\ContextSource;
 
-interface SnippetRendererCollection
+class SnippetRendererCollection
 {
     /**
-     * @param ProjectionSourceData $dataObject
-     * @param ContextSource $context
-     * @return SnippetList
-     * @throws InvalidProjectionDataSourceTypeException
+     * @var SnippetList
      */
-    public function render(ProjectionSourceData $dataObject, ContextSource $context);
+    private $snippetList;
+
+    /**
+     * @var SnippetRenderer[]
+     */
+    private $renderers = [];
+
+    /**
+     * @param SnippetRenderer[] $renderers
+     * @param SnippetList $snippetList
+     */
+    public function __construct(array $renderers, SnippetList $snippetList)
+    {
+        $this->renderers = $renderers;
+        $this->snippetList = $snippetList;
+    }
+    
+    /**
+     * @param ProjectionSourceData $productSource
+     * @param ContextSource $contextSource
+     * @return SnippetList
+     */
+    public function render(ProjectionSourceData $productSource, ContextSource $contextSource)
+    {
+        foreach ($this->renderers as $renderer) {
+            $this->snippetList->merge($renderer->render($productSource, $contextSource));
+        }
+
+        return $this->snippetList;
+    }
 }

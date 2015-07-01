@@ -68,10 +68,8 @@ class ProductListingProjectorTest extends \PHPUnit_Framework_TestCase
         $stubContext = $this->getMock(SampleContextSource::class, [], [], '', false);
         $invalidDataSourceType = $this->getMock(ProjectionSourceData::class);
 
-        $this->setExpectedException(
-            InvalidProjectionDataSourceTypeException::class,
-            'First argument must be instance of ProductListingSource.'
-        );
+        $this->setExpectedException(InvalidProjectionDataSourceTypeException::class);
+
         $this->projector->project($invalidDataSourceType, $stubContext);
     }
 }

@@ -22,7 +22,6 @@ use Brera\Product\ProductListingSnippetRenderer;
 use Brera\Product\ProductListingSourceBuilder;
 use Brera\Product\ProductSearchDocumentBuilder;
 use Brera\Product\ProductSnippetKeyGenerator;
-use Brera\Product\ProductSnippetRendererCollection;
 use Brera\Product\ProductSourceBuilder;
 use Brera\DataPool\KeyValue\KeyValueStore;
 use Brera\Product\ProductSourceInListingSnippetRenderer;
@@ -138,19 +137,19 @@ class CommonFactory implements Factory, DomainEventFactory
     {
         // TODO move to catalog factory
         return new ProductProjector(
-            $this->createProductSnippetRendererCollection(),
+            $this->createSnippetRendererCollection(),
             $this->createProductSearchDocumentBuilder(),
             $this->getMasterFactory()->createDataPoolWriter()
         );
     }
 
     /**
-     * @return ProductSnippetRendererCollection
+     * @return SnippetRendererCollection
      */
-    public function createProductSnippetRendererCollection()
+    public function createSnippetRendererCollection()
     {
         // TODO move to catalog factory
-        return new ProductSnippetRendererCollection(
+        return new SnippetRendererCollection(
             $this->getProductSnippetRendererList(),
             $this->getMasterFactory()->createSnippetList()
         );
@@ -175,19 +174,8 @@ class CommonFactory implements Factory, DomainEventFactory
     public function createRootSnippetProjector()
     {
         return new RootSnippetProjector(
-            $this->createRootSnippetRendererCollection(),
+            $this->createSnippetRendererCollection(),
             $this->getMasterFactory()->createDataPoolWriter()
-        );
-    }
-
-    /**
-     * @return RootSnippetRendererCollection
-     */
-    public function createRootSnippetRendererCollection()
-    {
-        return new RootSnippetRendererCollection(
-            $this->getRootSnippetRendererList(),
-            $this->getMasterFactory()->createSnippetList()
         );
     }
 

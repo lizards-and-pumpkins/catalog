@@ -39,7 +39,6 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Product\ProductSourceBuilder
  * @uses   \Brera\Product\ProductProjector
  * @uses   \Brera\Product\ProductSnippetKeyGenerator
- * @uses   \Brera\Product\ProductSnippetRendererCollection
  * @uses   \Brera\Product\ProductImportDomainEvent
  * @uses   \Brera\Product\ProductImportDomainEventHandler
  * @uses   \Brera\Product\ProductListingCriteriaSnippetRenderer
@@ -54,7 +53,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Product\ProductDetailViewInContextSnippetRenderer
  * @uses   \Brera\Product\ProductListingSnippetRenderer
  * @uses   \Brera\GenericSnippetKeyGenerator
- * @uses   \Brera\RootSnippetRendererCollection
+ * @uses   \Brera\SnippetRendererCollection
  * @uses   \Brera\RootSnippetSourceListBuilder
  * @uses   \Brera\Product\ProductSourceInListingSnippetRenderer
  * @uses   \Brera\Product\ProductInListingInContextSnippetRenderer
