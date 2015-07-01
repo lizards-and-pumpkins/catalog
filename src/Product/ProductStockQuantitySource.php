@@ -3,8 +3,9 @@
 namespace Brera\Product;
 
 use Brera\Context\Context;
+use Brera\ProjectionSourceData;
 
-class ProductStockQuantitySource
+class ProductStockQuantitySource implements ProjectionSourceData
 {
     /**
      * @var Sku
