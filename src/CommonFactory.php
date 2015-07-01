@@ -137,7 +137,7 @@ class CommonFactory implements Factory, DomainEventFactory
     {
         // TODO move to catalog factory
         return new ProductProjector(
-            $this->createSnippetRendererCollection(),
+            $this->createProductSnippetRendererCollection(),
             $this->createProductSearchDocumentBuilder(),
             $this->getMasterFactory()->createDataPoolWriter()
         );
@@ -146,7 +146,7 @@ class CommonFactory implements Factory, DomainEventFactory
     /**
      * @return SnippetRendererCollection
      */
-    public function createSnippetRendererCollection()
+    public function createProductSnippetRendererCollection()
     {
         // TODO move to catalog factory
         return new SnippetRendererCollection(
@@ -174,8 +174,19 @@ class CommonFactory implements Factory, DomainEventFactory
     public function createRootSnippetProjector()
     {
         return new RootSnippetProjector(
-            $this->createSnippetRendererCollection(),
+            $this->createRootSnippetRendererCollection(),
             $this->getMasterFactory()->createDataPoolWriter()
+        );
+    }
+
+    /**
+     * @return SnippetRendererCollection
+     */
+    public function createRootSnippetRendererCollection()
+    {
+        return new SnippetRendererCollection(
+            $this->getRootSnippetRendererList(),
+            $this->getMasterFactory()->createSnippetList()
         );
     }
 
