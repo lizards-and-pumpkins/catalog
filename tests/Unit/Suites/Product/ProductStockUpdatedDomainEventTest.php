@@ -20,14 +20,14 @@ class ProductStockUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
     private $stubSku;
 
     /**
-     * @var Stock
+     * @var ProductStockQuantity
      */
     private $stubStock;
 
     protected function setUp()
     {
         $this->stubSku = $this->getMock(Sku::class);
-        $this->stubStock = $this->getMock(Stock::class, [], [], '', false);
+        $this->stubStock = $this->getMock(ProductStockQuantity::class, [], [], '', false);
 
         $this->domainEvent = new ProductStockUpdatedDomainEvent($this->stubSku, $this->stubStock);
     }

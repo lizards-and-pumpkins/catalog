@@ -2,7 +2,7 @@
 
 namespace Brera\Product;
 
-class Stock implements Quantity
+class ProductStockQuantity implements Quantity
 {
     const NUM_DECIMAL_POINTS = 0;
 
@@ -27,7 +27,7 @@ class Stock implements Quantity
 
     /**
      * @param string $quantityString
-     * @return Stock
+     * @return ProductStockQuantity
      * @throws InvalidStockSourceException
      */
     public static function fromString($quantityString)

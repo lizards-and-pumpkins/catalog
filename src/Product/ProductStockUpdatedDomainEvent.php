@@ -12,11 +12,11 @@ class ProductStockUpdatedDomainEvent implements DomainEvent
     private $sku;
 
     /**
-     * @var Stock
+     * @var ProductStockQuantity
      */
     private $stock;
 
-    public function __construct(Sku $sku, Stock $stock)
+    public function __construct(Sku $sku, ProductStockQuantity $stock)
     {
         $this->sku = $sku;
         $this->stock = $stock;
@@ -31,7 +31,7 @@ class ProductStockUpdatedDomainEvent implements DomainEvent
     }
 
     /**
-     * @return Stock
+     * @return ProductStockQuantity
      */
     public function getStock()
     {

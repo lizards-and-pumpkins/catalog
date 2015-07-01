@@ -2,6 +2,8 @@
 
 namespace Brera\Product;
 
+use Brera\Context\Context;
+
 class ProductStockQuantitySource
 {
     /**
@@ -10,25 +12,20 @@ class ProductStockQuantitySource
     private $sku;
 
     /**
-     * @var string[]
+     * @var Context
      */
-    private $contextData;
+    private $context;
 
     /**
-     * @var int
+     * @var Quantity
      */
-    private $quantity;
+    private $stock;
 
-    /**
-     * @param Sku $sku
-     * @param string[] $contextData
-     * @param int $quantity
-     */
-    public function __construct(Sku $sku, array $contextData, $quantity)
+    public function __construct(Sku $sku, Context $context, Quantity $stock)
     {
         $this->sku = $sku;
-        $this->contextData = $contextData;
-        $this->quantity = $quantity;
+        $this->context = $context;
+        $this->stock = $stock;
     }
 
     /**
@@ -40,18 +37,18 @@ class ProductStockQuantitySource
     }
 
     /**
-     * @return string[]
+     * @return Context
      */
-    public function getContextData()
+    public function getContext()
     {
-        return $this->contextData;
+        return $this->context;
     }
 
     /**
-     * @return int
+     * @return Quantity
      */
-    public function getQuantity()
+    public function getStock()
     {
-        return $this->quantity;
+        return $this->stock;
     }
 }

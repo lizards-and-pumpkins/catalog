@@ -2,6 +2,8 @@
 
 namespace Brera\Product;
 
+use Brera\Context\Context;
+
 /**
  * @covers \Brera\Product\ProductStockQuantitySource
  */
@@ -10,10 +12,10 @@ class ProductStockQuantitySourceTest extends \PHPUnit_Framework_TestCase
     public function testProductSkuIsReturned()
     {
         $stubSku = $this->getMock(Sku::class);
-        $stubContextData = [];
-        $stubQuantity = 0;
+        $stubContext = $this->getMock(Context::class);
+        $stubQuantity = $this->getMock(Quantity::class);
 
-        $source = new ProductStockQuantitySource($stubSku, $stubContextData, $stubQuantity);
+        $source = new ProductStockQuantitySource($stubSku, $stubContext, $stubQuantity);
         $result = $source->getSku();
 
         $this->assertEquals($stubSku, $result);
@@ -22,23 +24,23 @@ class ProductStockQuantitySourceTest extends \PHPUnit_Framework_TestCase
     public function testProductStockQuantityContextDataIsReturned()
     {
         $stubSku = $this->getMock(Sku::class);
-        $stubContextData = ['foo' => 'bar', 'baz' => 'qux'];
-        $stubQuantity = 0;
+        $stubContext = $this->getMock(Context::class);
+        $stubQuantity = $this->getMock(Quantity::class);
 
-        $source = new ProductStockQuantitySource($stubSku, $stubContextData, $stubQuantity);
-        $result = $source->getContextData();
+        $source = new ProductStockQuantitySource($stubSku, $stubContext, $stubQuantity);
+        $result = $source->getContext();
 
-        $this->assertEquals($stubContextData, $result);
+        $this->assertEquals($stubContext, $result);
     }
 
-    public function testQuantityIsReturned()
+    public function testStockIsReturned()
     {
         $stubSku = $this->getMock(Sku::class);
-        $stubContextData = ['foo' => 'bar', 'baz' => 'qux'];
-        $stubQuantity = 1;
+        $stubContext = $this->getMock(Context::class);
+        $stubQuantity = $this->getMock(Quantity::class);
 
-        $source = new ProductStockQuantitySource($stubSku, $stubContextData, $stubQuantity);
-        $result = $source->getQuantity();
+        $source = new ProductStockQuantitySource($stubSku, $stubContext, $stubQuantity);
+        $result = $source->getStock();
 
         $this->assertEquals($stubQuantity, $result);
     }
