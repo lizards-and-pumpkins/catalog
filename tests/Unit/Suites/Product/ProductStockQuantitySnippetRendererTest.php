@@ -10,7 +10,10 @@ use Brera\SnippetRenderer;
 
 /**
  * @covers \Brera\Product\ProductStockQuantitySnippetRenderer
- * @uses \Brera\SnippetList
+ * @uses   \Brera\Product\ProductId
+ * @uses   \Brera\Product\ProductStockQuantity
+ * @uses   \Brera\SnippetList
+ * @uses   \Brera\Snippet
  */
 class ProductStockQuantitySnippetRendererTest extends \PHPUnit_Framework_TestCase
 {

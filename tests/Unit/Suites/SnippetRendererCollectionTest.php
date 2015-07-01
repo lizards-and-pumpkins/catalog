@@ -3,7 +3,7 @@
 namespace Brera;
 
 /**
- * @covers \Brera\Product\SnippetRendererCollection
+ * @covers \Brera\SnippetRendererCollection
  */
 class SnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
 {
