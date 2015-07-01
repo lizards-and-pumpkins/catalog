@@ -38,9 +38,8 @@ class RootSnippetProjectorTest extends \PHPUnit_Framework_TestCase
         $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
         $stubSnippetList = $this->getMock(SnippetList::class);
 
-        $this->mockSnippetRendererCollection->expects($this->once())
+        $this->mockSnippetRendererCollection->expects($this->any())
             ->method('render')
-            ->with($stubProjectionSourceData, $stubContextSource)
             ->willReturn($stubSnippetList);
 
         $this->mockDataPoolWriter->expects($this->once())
