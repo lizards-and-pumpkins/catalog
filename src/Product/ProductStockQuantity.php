@@ -56,7 +56,7 @@ class ProductStockQuantity implements Quantity
      * @param int $numberOfDecimalPoints
      * @return int
      */
-    private function multiplyByNumberOfDecimalPoints($quantityString, $numberOfDecimalPoints)
+    private static function multiplyByNumberOfDecimalPoints($quantityString, $numberOfDecimalPoints)
     {
         $base = pow(10, $numberOfDecimalPoints);
         $quantityFloat = round($quantityString, $numberOfDecimalPoints);
