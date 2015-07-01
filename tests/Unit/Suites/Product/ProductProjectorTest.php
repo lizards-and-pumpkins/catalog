@@ -12,7 +12,6 @@ use Brera\SnippetRendererCollection;
 
 /**
  * @covers \Brera\Product\ProductProjector
- * @uses   \Brera\Product\ProductSnippetRendererCollection
  */
 class ProductProjectorTest extends \PHPUnit_Framework_TestCase
 {
