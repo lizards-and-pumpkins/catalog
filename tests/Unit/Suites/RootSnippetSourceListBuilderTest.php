@@ -9,7 +9,7 @@ use Brera\Context\ContextBuilder;
  * @covers \Brera\RootSnippetSourceListBuilder
  * @uses   \Brera\RootSnippetSourceList
  * @uses   \Brera\RootSnippetSource
- * @uses   \Brera\XPathParser
+ * @uses   \Brera\Utils\XPathParser
  */
 class RootSnippetSourceListBuilderTest extends \PHPUnit_Framework_TestCase
 {

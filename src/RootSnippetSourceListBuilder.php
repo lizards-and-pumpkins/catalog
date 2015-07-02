@@ -3,6 +3,7 @@
 namespace Brera;
 
 use Brera\Context\ContextBuilder;
+use Brera\Utils\XPathParser;
 
 class RootSnippetSourceListBuilder
 {

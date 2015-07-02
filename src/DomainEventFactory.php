@@ -2,6 +2,8 @@
 
 namespace Brera;
 
+use Brera\Image\ImageImportDomainEvent;
+use Brera\Image\ImageImportDomainEventHandler;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\ProductImportDomainEvent;
@@ -28,6 +30,12 @@ interface DomainEventFactory
      * @return RootTemplateChangedDomainEventHandler
      */
     public function createRootTemplateChangedDomainEventHandler(RootTemplateChangedDomainEvent $event);
+
+    /**
+     * @param ImageImportDomainEvent $event
+     * @return ImageImportDomainEventHandler
+     */
+    public function createImageImportDomainEventHandler(ImageImportDomainEvent $event);
 
     /**
      * @param ProductListingSavedDomainEvent $event

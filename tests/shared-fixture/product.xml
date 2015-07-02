@@ -5,19 +5,19 @@
         <attributes>
             <image>
                 <main>true</main>
-                <file>products/2013_pro_touch_118235-251.jpg</file>
+                <file>2013_pro_touch_118235-251.jpg</file>
                 <label>The main image label</label>
             </image>
             <image>
                 <show_in_gallery>false</show_in_gallery>
-                <file>products/118235/118235-251.2.png</file>
+                <file>118235-251.2.png</file>
                 <label language="de_DE">Der Text zum zweiten Bild</label>
                 <label language="en_US">A secondary image label</label>
             </image>
             <image>
                 <main_listing>true</main_listing>
-                <file language="de_DE">products/118235/118235-251.2de.png</file>
-                <file language="de_US">products/118235/118235-251.2us.png</file>
+                <file language="de_DE">118235-251.2de.png</file>
+                <file language="de_US">118235-251.2us.png</file>
                 <label>A secondary image label</label>
             </image>
             <category website="ru" language="de_DE">men</category>
@@ -53,18 +53,18 @@ LED Armflasher with elastic Band and Flasher]]></description>
         <attributes>
             <image>
                 <main>true</main>
-                <file>products/m18108_1.jpg</file>
+                <file>m18108_1.jpg</file>
                 <label language="de_DE">Das Hauptbild</label>
                 <label language="en_US">The main image label for this shoe</label>
             </image>
             <image>
-                <file language="de_DE">products/218765/218765-333.2de.png</file>
-                <file language="en_US">products/218765/218765-333.2en.png</file>
+                <file language="de_DE">218765-333.2de.png</file>
+                <file language="en_US">218765-333.2en.png</file>
                 <label>Der Text zum zweiten Bild</label>
             </image>
             <image>
                 <main_listing>true</main_listing>
-                <file>products/218765/218765-333.3.png</file>
+                <file>218765-333.3.png</file>
                 <label>Yet another image label</label>
             </image>
             <pdf>

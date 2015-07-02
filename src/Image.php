@@ -4,7 +4,7 @@ namespace Brera;
 
 class Image
 {
-    const MEDIA_DIR = 'media';
+    const MEDIA_DIR = 'media/product';
 
     /**
      * @var string
@@ -22,16 +22,19 @@ class Image
      */
     public function __construct($src, $label = '')
     {
-        $this->src = self::MEDIA_DIR . DIRECTORY_SEPARATOR . $src;
+        $this->src = $src;
         $this->label = $label;
     }
 
     /**
+     * @param string $size
      * @return string
      */
-    public function getSrc()
+    public function getPath($size)
     {
-        return $this->src;
+        /* TODO: Re-implement w/o putting project specific data (size label, media dir) into general purpose class */
+
+        return self::MEDIA_DIR . '/' . $size . '/' . $this->src;
     }
 
     /**

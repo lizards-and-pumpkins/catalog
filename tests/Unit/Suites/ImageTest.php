@@ -10,7 +10,8 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     public function testImagePathIsPrefixedWithMediaDirectory()
     {
         $image = new Image('foo.png');
-        $this->assertEquals(Image::MEDIA_DIR . DIRECTORY_SEPARATOR . 'foo.png', $image->getSrc());
+
+        $this->assertEquals(Image::MEDIA_DIR . '/bar/foo.png', $image->getPath('bar'));
     }
 
     public function testImageLabelIsReturned()

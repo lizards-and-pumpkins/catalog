@@ -11,7 +11,7 @@ define(function() {
             return null;
         },
         getJsonValue: function(cookieKey, jsonKey) {
-            var jsonData = JSON.parse(decodeURIComponent(this.get(cookieKey)));
+            var jsonData = JSON.parse(unescape(this.get(cookieKey)));
 
             if (null === jsonData || !jsonData.hasOwnProperty(jsonKey)) {
                 return '';

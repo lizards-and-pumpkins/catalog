@@ -6,7 +6,7 @@ use Brera\TestFileFixtureTrait;
 
 /**
  * @covers Brera\Renderer\LayoutReader
- * @uses Brera\XPathParser
+ * @uses Brera\Utils\XPathParser
  * @uses Brera\Renderer\Layout
  */
 class LayoutReaderTest extends \PHPUnit_Framework_TestCase
