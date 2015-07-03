@@ -2,7 +2,7 @@
 
 namespace Brera\Renderer;
 
-use Brera\XPathParser;
+use Brera\Utils\XPathParser;
 
 class LayoutReader
 {

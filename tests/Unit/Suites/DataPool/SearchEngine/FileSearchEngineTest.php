@@ -2,12 +2,15 @@
 
 namespace Brera\DataPool\SearchEngine;
 
+use Brera\Utils\LocalFilesystem;
+
 /**
  * @covers \Brera\DataPool\SearchEngine\FileSearchEngine
  * @covers \Brera\DataPool\SearchEngine\IntegrationTestSearchEngineAbstract
  * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocument
  * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField
  * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection
+ * @uses   \Brera\Utils\LocalFileSystem
  */
 class FileSearchEngineTest extends AbstractSearchEngineTest
 {
@@ -18,7 +21,8 @@ class FileSearchEngineTest extends AbstractSearchEngineTest
 
     protected function tearDown()
     {
-        $this->removeDirectoryAndItsContent($this->temporaryStorage);
+        $localFilesystem = new LocalFilesystem();
+        $localFilesystem->removeDirectoryAndItsContent($this->temporaryStorage);
     }
 
     public function testExceptionIsThrownIfSearchEngineStorageDirIsNotWritable()
@@ -51,29 +55,10 @@ class FileSearchEngineTest extends AbstractSearchEngineTest
         $this->temporaryStorage = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'brera-search-engine-storage';
 
         if (file_exists($this->temporaryStorage)) {
-            $this->removeDirectoryAndItsContent($this->temporaryStorage);
+            $localFilesystem = new LocalFilesystem();
+            $localFilesystem->removeDirectoryAndItsContent($this->temporaryStorage);
         }
 
         mkdir($this->temporaryStorage);
-    }
-
-    /**
-     * @param string $directoryPath
-     * @return void
-     */
-    private function removeDirectoryAndItsContent($directoryPath)
-    {
-        $directoryIterator = new \RecursiveDirectoryIterator($directoryPath, \RecursiveDirectoryIterator::SKIP_DOTS);
-        $files = new \RecursiveIteratorIterator($directoryIterator, \RecursiveIteratorIterator::CHILD_FIRST);
-
-        foreach ($files as $file) {
-            if ($file->isDir()) {
-                rmdir($file->getRealPath());
-            } else {
-                unlink($file->getRealPath());
-            }
-        }
-
-        rmdir($directoryPath);
     }
 }

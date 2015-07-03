@@ -2,6 +2,8 @@
 
 namespace Brera;
 
+use Brera\Image\ImageImportDomainEvent;
+use Brera\Image\ImageImportDomainEventHandler;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\ProductImportDomainEvent;
@@ -11,10 +13,11 @@ use Brera\Product\ProductListingSavedDomainEventHandler;
 
 /**
  * @covers \Brera\DomainEventHandlerLocator
- * @uses   \Brera\RootTemplateChangedDomainEvent
- * @uses   \Brera\Product\ProductImportDomainEvent
- * @uses   \Brera\Product\ProductListingSavedDomainEvent
- * @uses   \Brera\Product\CatalogImportDomainEvent
+ * @uses   \Brera\Image\ImageImportDomainEvent
+ * @uses \Brera\RootTemplateChangedDomainEvent
+ * @uses \Brera\Product\ProductImportDomainEvent
+ * @uses \Brera\Product\ProductListingSavedDomainEvent
+ * @uses \Brera\Product\CatalogImportDomainEvent
  */
 class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -95,6 +98,23 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(RootTemplateChangedDomainEventHandler::class, $result);
     }
 
+    public function testImageImportDomainEventHandlerIsLocatedAndReturned()
+    {
+        $stubDomainEventHandler = $this->getMock(ImageImportDomainEventHandler::class, [], [], '', false);
+
+        $this->factory->expects($this->once())
+            ->method('createImageImportDomainEventHandler')
+            ->willReturn($stubDomainEventHandler);
+        /**
+         * The real object has to be used here as getHandlerFor method will call get_class against it
+         */
+        $imagesImportDomainEvent = new ImageImportDomainEvent([]);
+
+        $result = $this->locator->getHandlerFor($imagesImportDomainEvent);
+
+        $this->assertInstanceOf(ImageImportDomainEventHandler::class, $result);
+    }
+
     public function testProductListingSavedDomainEventHandlerIsLocatedAndReturned()
     {
         $stubDomainEventHandler = $this->getMock(ProductListingSavedDomainEventHandler::class, [], [], '', false);
@@ -103,9 +123,6 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
             ->method('createProductListingSavedDomainEventHandler')
             ->willReturn($stubDomainEventHandler);
 
-        /**
-         * The real object has to be used here as getHandlerFor method will call get_class against it
-         */
         $productListingSavedDomainEvent = new ProductListingSavedDomainEvent('<xml/>');
 
         $result = $this->locator->getHandlerFor($productListingSavedDomainEvent);

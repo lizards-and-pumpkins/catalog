@@ -3,8 +3,9 @@
 namespace Brera\Product;
 
 use Brera\DomainEventHandler;
+use Brera\Image\ImageImportDomainEvent;
 use Brera\Queue\Queue;
-use Brera\XPathParser;
+use Brera\Utils\XPathParser;
 
 class CatalogImportDomainEventHandler implements DomainEventHandler
 {
@@ -28,9 +29,29 @@ class CatalogImportDomainEventHandler implements DomainEventHandler
     {
         $xml = $this->event->getXml();
 
+        $this->emitProductImportDomainEvents($xml);
+        $this->emitImageImportDomainEvents($xml);
+    }
+
+    /**
+     * @param string $xml
+     */
+    private function emitProductImportDomainEvents($xml)
+    {
         $productNodesXml = (new XPathParser($xml))->getXmlNodesRawXmlArrayByXPath('product');
         foreach ($productNodesXml as $productXml) {
             $this->eventQueue->add(new ProductImportDomainEvent($productXml));
+        }
+    }
+
+    /**
+     * @param string $xml
+     */
+    private function emitImageImportDomainEvents($xml)
+    {
+        $imageNodes = (new XPathParser($xml))->getXmlNodesArrayByXPath('product/attributes/image/file');
+        foreach ($imageNodes as $imageNode) {
+            $this->eventQueue->add(new ImageImportDomainEvent($imageNode['value']));
         }
     }
 }

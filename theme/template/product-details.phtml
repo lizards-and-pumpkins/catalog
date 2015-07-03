@@ -25,8 +25,8 @@ $save = 0;
             <div class="product-img-box">
                 <div class="main-image-area-wrapper">
                     <div id="wrap" style="top:0; position:relative">
-                        <a href="<?= $mainImage->getSrc() ?>" class="main-image-area">
-                            <img src="<?= $mainImage->getSrc() ?>" height="340" width="365" itemprop="image"  alt="<?= $mainImage->getLabel() ?>"/>
+                        <a href="<?= $mainImage->getPath('original') ?>" class="main-image-area">
+                            <img src="<?= $mainImage->getPath('large') ?>" height="340" width="365" itemprop="image"  alt="<?= $mainImage->getLabel() ?>"/>
                         </a>
                         <div class="mousetrap" style="z-index: 9; position: absolute; width: 365px; height: 340px; left: 0; top: 0; cursor: move;"></div>
                     </div>
@@ -34,7 +34,7 @@ $save = 0;
                 <div class="more-views">
                     <ul>
                         <li>
-                            <a href="http://www.21run.com/media/catalog/product/cache/4/thumbnail/9df78eab33525d08d6e5fb8d27136e95/2/0/2013_pro_touch_118235-251.jpg" title="" class="cloud-zoom-gallery" rel="useZoom: 'main-image', smallImage: 'http://www.21run.com/media/catalog/product/cache/4/thumbnail/365x340/9df78eab33525d08d6e5fb8d27136e95/2/0/2013_pro_touch_118235-251.jpg' "><img src="http://www.21run.com/media/catalog/product/cache/4/thumbnail/48x/9df78eab33525d08d6e5fb8d27136e95/2/0/2013_pro_touch_118235-251.jpg" width="48" height="48" title=""/></a>
+                            <a href="" title=""><img src="<?= $mainImage->getPath('small') ?>" width="48" height="48" title=""/></a>
                         </li>
                     </ul>
                 </div>
