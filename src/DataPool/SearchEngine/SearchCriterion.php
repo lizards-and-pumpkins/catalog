@@ -4,8 +4,6 @@ namespace Brera\DataPool\SearchEngine;
 
 class SearchCriterion implements \JsonSerializable
 {
-    const VALID_OPERATIONS = ['eq', 'neq', 'gt', 'gte', 'lt', 'lte'];
-
     /**
      * @var string
      */
@@ -49,7 +47,7 @@ class SearchCriterion implements \JsonSerializable
             throw new \InvalidArgumentException('Criterion field value should be a string');
         }
 
-        if (!in_array($operation, self::VALID_OPERATIONS)) {
+        if (!in_array($operation, ['eq', 'neq', 'gt', 'gte', 'lt', 'lte'])) {
             throw new \InvalidArgumentException('Invalid criterion operation');
         }
 
