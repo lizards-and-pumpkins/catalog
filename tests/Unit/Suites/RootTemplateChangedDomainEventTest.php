@@ -7,13 +7,13 @@ namespace Brera;
  */
 class RootTemplateChangedDomainEventTest extends \PHPUnit_Framework_TestCase
 {
-    public function testSnippetLayoutHandleIsReturned()
+    public function testPassedInXmlIsReturned()
     {
-        $layoutHandle = 'foo';
-        $event = new RootTemplateChangedDomainEvent($layoutHandle);
+        $xml = 'foo';
 
+        $event = new RootTemplateChangedDomainEvent($xml);
         $result = $event->getXml();
 
-        $this->assertEquals($layoutHandle, $result);
+        $this->assertEquals($xml, $result);
     }
 }

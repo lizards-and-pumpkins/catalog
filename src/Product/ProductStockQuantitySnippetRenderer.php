@@ -2,6 +2,7 @@
 
 namespace Brera\Product;
 
+use Brera\Context\ContextBuilder;
 use Brera\Snippet;
 use Brera\SnippetKeyGenerator;
 use Brera\SnippetList;
@@ -9,19 +10,30 @@ use Brera\SnippetRenderer;
 
 class ProductStockQuantitySnippetRenderer implements SnippetRenderer
 {
+    const CODE = 'product_stock_quantity';
+
     /**
      * @var SnippetKeyGenerator
      */
     private $snippetKeyGenerator;
 
     /**
+     * @var ContextBuilder
+     */
+    private $contextBuilder;
+
+    /**
      * @var SnippetList
      */
     private $snippetList;
 
-    public function __construct(SnippetKeyGenerator $snippetKeyGenerator, SnippetList $snippetList)
-    {
+    public function __construct(
+        SnippetKeyGenerator $snippetKeyGenerator,
+        ContextBuilder $contextBuilder,
+        SnippetList $snippetList
+    ) {
         $this->snippetKeyGenerator = $snippetKeyGenerator;
+        $this->contextBuilder = $contextBuilder;
         $this->snippetList = $snippetList;
     }
 
@@ -42,7 +54,8 @@ class ProductStockQuantitySnippetRenderer implements SnippetRenderer
     private function getSnippetKey(ProductStockQuantitySource $productStockQuantitySource)
     {
         $productId = ProductId::fromSku($productStockQuantitySource->getSku());
-        $context = $productStockQuantitySource->getContext();
+        $contextData = $productStockQuantitySource->getContextData();
+        $context = $this->contextBuilder->getContext($contextData);
 
         $key = $this->snippetKeyGenerator->getKeyForContext($context, ['product_id' => $productId]);
 

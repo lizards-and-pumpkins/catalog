@@ -6,6 +6,7 @@ use Brera\Image\ImageImportDomainEvent;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\ProductImportDomainEvent;
 use Brera\Product\ProductListingSavedDomainEvent;
+use Brera\Product\ProductStockQuantityChangedDomainEvent;
 
 class DomainEventHandlerLocator
 {
@@ -30,22 +31,28 @@ class DomainEventHandlerLocator
 
         switch ($eventClass) {
             case ProductImportDomainEvent::class:
-                /* @var $event ProductImportDomainEvent */
+                /* @var ProductImportDomainEvent $event */
                 return $this->factory->createProductImportDomainEventHandler($event);
 
             case CatalogImportDomainEvent::class:
-                /* @var $event CatalogImportDomainEvent */
+                /* @var CatalogImportDomainEvent $event */
                 return $this->factory->createCatalogImportDomainEventHandler($event);
 
             case RootTemplateChangedDomainEvent::class:
-                /* @var $event RootTemplateChangedDomainEvent */
+                /* @var RootTemplateChangedDomainEvent $event */
                 return $this->factory->createRootTemplateChangedDomainEventHandler($event);
+
             case ImageImportDomainEvent::class:
-                /* @var $event ImageImportDomainEvent */
+                /* @var ImageImportDomainEvent $event */
                 return $this->factory->createImageImportDomainEventHandler($event);
+
             case ProductListingSavedDomainEvent::class:
-                /* @var $event ProductListingSavedDomainEvent */
+                /* @var ProductListingSavedDomainEvent $event */
                 return $this->factory->createProductListingSavedDomainEventHandler($event);
+
+            case ProductStockQuantityChangedDomainEvent::class:
+                /** @var ProductStockQuantityChangedDomainEvent $event */
+                return $this->factory->createProductStockQuantityChangedDomainEventHandler($event);
         }
 
         throw new UnableToFindDomainEventHandlerException(

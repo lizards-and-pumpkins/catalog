@@ -3,6 +3,7 @@
 namespace Brera\Product;
 
 use Brera\Context\Context;
+use Brera\Context\ContextBuilder;
 use Brera\Snippet;
 use Brera\SnippetKeyGenerator;
 use Brera\SnippetList;
@@ -28,6 +29,11 @@ class ProductStockQuantitySnippetRendererTest extends \PHPUnit_Framework_TestCas
     private $mockSnippetKeyGenerator;
 
     /**
+     * @var ContextBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockContextBuilder;
+
+    /**
      * @var SnippetList|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockSnippetList;
@@ -35,10 +41,12 @@ class ProductStockQuantitySnippetRendererTest extends \PHPUnit_Framework_TestCas
     protected function setUp()
     {
         $this->mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $this->mockContextBuilder = $this->getMock(ContextBuilder::class, [], [], '', false);
         $this->mockSnippetList = $this->getMock(SnippetList::class);
 
         $this->renderer = new ProductStockQuantitySnippetRenderer(
             $this->mockSnippetKeyGenerator,
+            $this->mockContextBuilder,
             $this->mockSnippetList
         );
     }
@@ -66,11 +74,15 @@ class ProductStockQuantitySnippetRendererTest extends \PHPUnit_Framework_TestCas
             ->method('getSku')
             ->willReturn($stubSku);
         $mockProductStockQuantitySource->expects($this->any())
-            ->method('getContext')
-            ->willReturn($stubContext);
+            ->method('getContextData')
+            ->willReturn([]);
         $mockProductStockQuantitySource->expects($this->any())
             ->method('getStock')
             ->willReturn($mockStock);
+
+        $this->mockContextBuilder->expects($this->any())
+            ->method('getContext')
+            ->willReturn($stubContext);
 
         $this->mockSnippetKeyGenerator->expects($this->any())
             ->method('getKeyForContext')

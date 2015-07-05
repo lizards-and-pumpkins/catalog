@@ -13,19 +13,24 @@ class ProductStockQuantitySource implements ProjectionSourceData
     private $sku;
 
     /**
-     * @var Context
+     * @var string[]
      */
-    private $context;
+    private $contextData;
 
     /**
      * @var Quantity
      */
     private $stock;
 
-    public function __construct(Sku $sku, Context $context, Quantity $stock)
+    /**
+     * @param Sku $sku
+     * @param string[] $contextData
+     * @param Quantity $stock
+     */
+    public function __construct(Sku $sku, array $contextData, Quantity $stock)
     {
         $this->sku = $sku;
-        $this->context = $context;
+        $this->contextData = $contextData;
         $this->stock = $stock;
     }
 
@@ -38,11 +43,11 @@ class ProductStockQuantitySource implements ProjectionSourceData
     }
 
     /**
-     * @return Context
+     * @return string[]
      */
-    public function getContext()
+    public function getContextData()
     {
-        return $this->context;
+        return $this->contextData;
     }
 
     /**

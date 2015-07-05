@@ -35,10 +35,17 @@ use Brera\Product\ProductSnippetKeyGenerator;
 use Brera\Product\ProductSourceBuilder;
 use Brera\Product\ProductSourceDetailViewSnippetRenderer;
 use Brera\Product\ProductSourceInListingSnippetRenderer;
+use Brera\Product\ProductStockQuantityChangedDomainEvent;
+use Brera\Product\ProductStockQuantityChangedDomainEventHandler;
+use Brera\Product\ProductStockQuantityProjector;
+use Brera\Product\ProductStockQuantitySnippetRenderer;
+use Brera\Product\ProductStockQuantitySourceBuilder;
+use Brera\Product\ProjectProductStockQuantitySnippetDomainCommand;
+use Brera\Product\ProjectProductStockQuantitySnippetDomainCommandHandler;
 use Brera\Queue\Queue;
 use Brera\Renderer\BlockStructure;
 
-class CommonFactory implements Factory, DomainEventFactory
+class CommonFactory implements Factory, DomainEventFactory, DomainCommandFactory
 {
     use FactoryTrait;
 
@@ -51,6 +58,11 @@ class CommonFactory implements Factory, DomainEventFactory
      * @var Queue
      */
     private $eventQueue;
+
+    /**
+     * @var Queue
+     */
+    private $commandQueue;
 
     /**
      * @var Logger
@@ -476,7 +488,6 @@ class CommonFactory implements Factory, DomainEventFactory
 
     /**
      * @return KeyValueStore
-     * @throws UndefinedFactoryMethodException
      */
     private function getKeyValueStore()
     {
@@ -501,7 +512,6 @@ class CommonFactory implements Factory, DomainEventFactory
 
     /**
      * @return Queue
-     * @throws UndefinedFactoryMethodException
      */
     public function getEventQueue()
     {
@@ -522,7 +532,6 @@ class CommonFactory implements Factory, DomainEventFactory
 
     /**
      * @return Logger
-     * @throws UndefinedFactoryMethodException
      */
     public function getLogger()
     {
@@ -536,7 +545,6 @@ class CommonFactory implements Factory, DomainEventFactory
     /**
      * @param string $targetObjectName
      * @return object
-     * @throws UndefinedFactoryMethodException
      */
     private function callExternalCreateMethod($targetObjectName)
     {
@@ -604,7 +612,6 @@ class CommonFactory implements Factory, DomainEventFactory
         return new ImageImportDomainEventHandler($event, $this->getMasterFactory()->getImageProcessorCollection());
     }
 
-
     /**
      * @return ImageProcessorCollection
      */
@@ -615,5 +622,125 @@ class CommonFactory implements Factory, DomainEventFactory
         }
 
         return $this->imageProcessorCollection;
+    }
+
+    /**
+     * @param ProjectProductStockQuantitySnippetDomainCommand $command
+     * @return ProjectProductStockQuantitySnippetDomainCommandHandler
+     */
+    public function createProjectProductStockQuantitySnippetDomainCommandHandler(
+        ProjectProductStockQuantitySnippetDomainCommand $command
+    ) {
+        return new ProjectProductStockQuantitySnippetDomainCommandHandler(
+            $command,
+            $this->getMasterFactory()->getProductStockQuantitySourceBuilder(),
+            $this->getMasterFactory()->createContextSource(),
+            $this->getMasterFactory()->getProductStockQuantityProjector()
+        );
+    }
+
+    /**
+     * @return ProductStockQuantitySourceBuilder
+     */
+    public function getProductStockQuantitySourceBuilder()
+    {
+        return new ProductStockQuantitySourceBuilder();
+    }
+
+    /**
+     * @return ProductStockQuantityProjector
+     */
+    public function getProductStockQuantityProjector()
+    {
+        return new ProductStockQuantityProjector(
+            $this->getMasterFactory()->createDataPoolWriter(),
+            $this->getMasterFactory()->createProductStockQuantitySnippetRendererCollection()
+        );
+    }
+
+    /**
+     * @return SnippetRendererCollection
+     */
+    public function createProductStockQuantitySnippetRendererCollection()
+    {
+        return new SnippetRendererCollection(
+            $this->getMasterFactory()->createProductStockQuantitySnippetRendererList(),
+            $this->getMasterFactory()->createSnippetList()
+        );
+    }
+
+    /**
+     * @return SnippetRenderer[]
+     */
+    public function createProductStockQuantitySnippetRendererList()
+    {
+        return [$this->getMasterFactory()->createProductStockQuantitySnippetRenderer()];
+    }
+
+    /**
+     * @return ProductStockQuantitySnippetRenderer
+     */
+    public function createProductStockQuantitySnippetRenderer()
+    {
+        return new ProductStockQuantitySnippetRenderer(
+            $this->getMasterFactory()->createProductStockQuantityRendererSnippetKeyGenerator(),
+            $this->getMasterFactory()->createContextBuilder(),
+            $this->getMasterFactory()->createSnippetList()
+        );
+    }
+
+    /**
+     * @return ProductSnippetKeyGenerator
+     */
+    public function createProductStockQuantityRendererSnippetKeyGenerator()
+    {
+        return new ProductSnippetKeyGenerator(
+            ProductStockQuantitySnippetRenderer::CODE,
+            ['website', 'language', 'version']
+        );
+    }
+
+    /**
+     * @return DomainCommandConsumer
+     */
+    public function createDomainCommandConsumer()
+    {
+        return new DomainCommandConsumer(
+            $this->getMasterFactory()->getCommandQueue(),
+            $this->getMasterFactory()->createDomainCommandHandlerLocator(),
+            $this->getLogger()
+        );
+    }
+
+    /**
+     * @return Queue
+     */
+    public function getCommandQueue()
+    {
+        if (null === $this->eventQueue) {
+            $this->eventQueue = $this->callExternalCreateMethod('CommandQueue');
+        }
+
+        return $this->eventQueue;
+    }
+
+    /**
+     * @return DomainCommandHandlerLocator
+     */
+    public function createDomainCommandHandlerLocator()
+    {
+        return new DomainCommandHandlerLocator($this);
+    }
+
+    /**
+     * @param ProductStockQuantityChangedDomainEvent $event
+     * @return ProductStockQuantityChangedDomainEventHandler
+     */
+    public function createProductStockQuantityChangedDomainEventHandler(ProductStockQuantityChangedDomainEvent $event)
+    {
+        return new ProductStockQuantityChangedDomainEventHandler(
+            $event,
+            $this->getMasterFactory()->getCommandQueue()
+        );
     }
 }

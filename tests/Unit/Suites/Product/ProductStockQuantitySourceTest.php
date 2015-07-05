@@ -16,9 +16,9 @@ class ProductStockQuantitySourceTest extends \PHPUnit_Framework_TestCase
     private $stubSku;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var string[]|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubContext;
+    private $stubContextData = ['foo' => 'bar', 'baz' => 'qux'];
 
     /**
      * @var Quantity|\PHPUnit_Framework_MockObject_MockObject
@@ -33,12 +33,11 @@ class ProductStockQuantitySourceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->stubSku = $this->getMock(Sku::class);
-        $this->stubContext = $this->getMock(Context::class);
         $this->stubQuantity = $this->getMock(Quantity::class);
 
         $this->productStockQuantitySource = new ProductStockQuantitySource(
             $this->stubSku,
-            $this->stubContext,
+            $this->stubContextData,
             $this->stubQuantity
         );
     }
@@ -56,8 +55,8 @@ class ProductStockQuantitySourceTest extends \PHPUnit_Framework_TestCase
 
     public function testProductStockQuantityContextDataIsReturned()
     {
-        $result = $this->productStockQuantitySource->getContext();
-        $this->assertEquals($this->stubContext, $result);
+        $result = $this->productStockQuantitySource->getContextData();
+        $this->assertEquals($this->stubContextData, $result);
     }
 
     public function testStockIsReturned()

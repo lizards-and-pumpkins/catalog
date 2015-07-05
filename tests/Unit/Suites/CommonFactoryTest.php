@@ -18,6 +18,13 @@ use Brera\Product\ProductListingSavedDomainEventHandler;
 use Brera\Product\ProductProjector;
 use Brera\Product\ProductSnippetKeyGenerator;
 use Brera\Product\ProductSourceBuilder;
+use Brera\Product\ProductStockQuantityChangedDomainEvent;
+use Brera\Product\ProductStockQuantityChangedDomainEventHandler;
+use Brera\Product\ProductStockQuantityProjector;
+use Brera\Product\ProductStockQuantitySnippetRenderer;
+use Brera\Product\ProductStockQuantitySourceBuilder;
+use Brera\Product\ProjectProductStockQuantitySnippetDomainCommand;
+use Brera\Product\ProjectProductStockQuantitySnippetDomainCommandHandler;
 use Brera\Queue\Queue;
 
 /**
@@ -30,6 +37,8 @@ use Brera\Queue\Queue;
  * @uses   \Brera\DataPool\DataPoolReader
  * @uses   \Brera\Context\ContextBuilder
  * @uses   \Brera\Context\ContextSource
+ * @uses   \Brera\DomainCommandConsumer
+ * @uses   \Brera\DomainCommandHandlerLocator
  * @uses   \Brera\DomainEventConsumer
  * @uses   \Brera\DomainEventHandlerLocator
  * @uses   \Brera\RootTemplateChangedDomainEvent
@@ -51,6 +60,10 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Product\CatalogImportDomainEventHandler
  * @uses   \Brera\Product\ProductSearchDocumentBuilder
  * @uses   \Brera\Product\ProductSourceDetailViewSnippetRenderer
+ * @uses   \Brera\Product\ProductStockQuantityProjector
+ * @uses   \Brera\Product\ProductStockQuantityChangedDomainEventHandler
+ * @uses   \Brera\Product\ProductStockQuantitySnippetRenderer
+ * @uses   \Brera\Product\ProjectProductStockQuantitySnippetDomainCommandHandler
  * @uses   \Brera\Product\ProductDetailViewBlockRenderer
  * @uses   \Brera\Product\ProductDetailViewInContextSnippetRenderer
  * @uses   \Brera\Product\ProductListingSnippetRenderer
@@ -274,14 +287,94 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         /* @var $event \PHPUnit_Framework_MockObject_MockObject|ImageImportDomainEvent */
         $event = $this->getMock(ImageImportDomainEvent::class, [], [], '', false);
+        $result = $this->commonFactory->createImageImportDomainEventHandler($event);
 
-        $handler = $this->commonFactory->createImageImportDomainEventHandler($event);
-        $this->assertInstanceOf(ImageImportDomainEventHandler::class, $handler);
+        $this->assertInstanceOf(ImageImportDomainEventHandler::class, $result);
     }
 
     public function testProductSnippetKeyGeneratorIsReturned()
     {
         $result = $this->commonFactory->createProductInListingSnippetKeyGenerator();
         $this->assertInstanceOf(ProductSnippetKeyGenerator::class, $result);
+    }
+
+    public function testProjectProductStockQuantitySnippetDomainCommandHandlerIsReturned()
+    {
+        /** @var ProjectProductStockQuantitySnippetDomainCommand $command */
+        $command = $this->getMock(ProjectProductStockQuantitySnippetDomainCommand::class, [], [], '', false);
+        $result = $this->commonFactory->createProjectProductStockQuantitySnippetDomainCommandHandler($command);
+
+        $this->assertInstanceOf(ProjectProductStockQuantitySnippetDomainCommandHandler::class, $result);
+    }
+
+    public function testProductStockQuantitySourceBuilderIsReturned()
+    {
+        $result = $this->commonFactory->getProductStockQuantitySourceBuilder();
+        $this->assertInstanceOf(ProductStockQuantitySourceBuilder::class, $result);
+    }
+
+    public function testProductStockQuantityProjectorIsReturned()
+    {
+        $result = $this->commonFactory->getProductStockQuantityProjector();
+        $this->assertInstanceOf(ProductStockQuantityProjector::class, $result);
+    }
+
+    public function testSnippetRendererCollectionIsReturned()
+    {
+        $result = $this->commonFactory->createProductStockQuantitySnippetRendererCollection();
+        $this->assertInstanceOf(SnippetRendererCollection::class, $result);
+    }
+
+    public function testArrayOfSnippetRenderersIsReturned()
+    {
+        $result = $this->commonFactory->createProductStockQuantitySnippetRendererList();
+        $this->assertContainsOnly(SnippetRenderer::class, $result);
+    }
+
+    public function testProductStockQuantitySnippetRendererIsReturned()
+    {
+        $result = $this->commonFactory->createProductStockQuantitySnippetRenderer();
+        $this->assertInstanceOf(ProductStockQuantitySnippetRenderer::class, $result);
+    }
+
+    public function testProductSnippetKeyGeneratorIsReturnedAsProductStockQuantityRendererSnippetKeyGenerator()
+    {
+        $result = $this->commonFactory->createProductStockQuantityRendererSnippetKeyGenerator();
+        $this->assertInstanceOf(ProductSnippetKeyGenerator::class, $result);
+    }
+
+    public function testDomainCommandConsumerIsReturned()
+    {
+        $result = $this->commonFactory->createDomainCommandConsumer();
+        $this->assertInstanceOf(DomainCommandConsumer::class, $result);
+    }
+
+    public function testDomainCommandQueueIsReturned()
+    {
+        $result = $this->commonFactory->getCommandQueue();
+        $this->assertInstanceOf(Queue::class, $result);
+    }
+
+    public function testSameDomainCommandQueueInstanceIsReturned()
+    {
+        $result1 = $this->commonFactory->getCommandQueue();
+        $result2 = $this->commonFactory->getCommandQueue();
+
+        $this->assertSame($result1, $result2);
+    }
+
+    public function testDomainCommandHandlerLocatorIsReturned()
+    {
+        $result = $this->commonFactory->createDomainCommandHandlerLocator();
+        $this->assertInstanceOf(DomainCommandHandlerLocator::class, $result);
+    }
+
+    public function testProductStockQuantityChangedDomainEventHandlerIsReturned()
+    {
+        /** @var ProductStockQuantityChangedDomainEvent $event */
+        $event = $this->getMock(ProductStockQuantityChangedDomainEvent::class, [], [], '', false);
+        $result = $this->commonFactory->createProductStockQuantityChangedDomainEventHandler($event);
+
+        $this->assertInstanceOf(ProductStockQuantityChangedDomainEventHandler::class, $result);
     }
 }
