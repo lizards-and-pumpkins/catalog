@@ -46,8 +46,8 @@ class CommandConsumer
     private function processCommand(Command $command)
     {
         try {
-            $domainEventHandler = $this->commandHandlerLocator->getHandlerFor($command);
-            $domainEventHandler->process();
+            $commandHandler = $this->commandHandlerLocator->getHandlerFor($command);
+            $commandHandler->process();
         } catch (\Exception $e) {
             $this->logger->log(new CommandHandlerFailedMessage($command, $e));
         }
