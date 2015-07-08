@@ -13,7 +13,7 @@ use Brera\Product\ProductInListingInContextSnippetRenderer;
 use Brera\Product\ProductListingSnippetRenderer;
 use Brera\Utils\XPathParser;
 
-class EdgeToEdgeTestAbstract extends AbstractIntegrationTest
+class EdgeToEdgeTest extends AbstractIntegrationTest
 {
     public function testProductDomainEventPutsProductToKeyValueStoreAndSearchIndex()
     {

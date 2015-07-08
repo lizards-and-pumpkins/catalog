@@ -54,6 +54,11 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(InMemoryQueue::class, $this->factory->createEventQueue());
     }
 
+    public function testInMemoryCommandQueueIsReturned()
+    {
+        $this->assertInstanceOf(InMemoryQueue::class, $this->factory->createCommandQueue());
+    }
+
     public function testInMemoryLoggerIsReturned()
     {
         $this->assertInstanceOf(InMemoryLogger::class, $this->factory->createLogger());

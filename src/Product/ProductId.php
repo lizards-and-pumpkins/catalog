@@ -12,7 +12,7 @@ class ProductId
     /**
      * @param string $id
      */
-    protected function __construct($id)
+    private function __construct($id)
     {
         $this->id = $id;
     }

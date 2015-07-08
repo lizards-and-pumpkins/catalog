@@ -17,7 +17,7 @@ class ProductIdTest extends \PHPUnit_Framework_TestCase
      */
     private $stubSku;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->stubSku = $this->getMock(Sku::class);
         $this->productId = ProductId::fromSku($this->stubSku);
