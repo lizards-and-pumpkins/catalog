@@ -160,7 +160,7 @@ class ProductListingMetaInfoSnippetContent implements PageMetaInfoSnippetContent
             throw new MalformedSearchCriteriaMetaException('Malformed criteria.');
         }
 
-        $criteria = SearchCriteria::create(SearchCriteria::AND_CONDITION);
+        $criteria = SearchCriteria::createAnd();
 
         foreach ($metaInfo['criteria'] as $criterionArray) {
             if (!is_array($criterionArray)) {

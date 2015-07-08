@@ -26,17 +26,19 @@ class SearchCriteria implements \JsonSerializable
     }
 
     /**
-     * @param string $condition
      * @return SearchCriteria
-     * @throws InvalidCriteriaConditionException
      */
-    public static function create($condition)
+    public static function createAnd()
     {
-        if (self::AND_CONDITION !== $condition && self::OR_CONDITION !== $condition) {
-            throw new InvalidCriteriaConditionException();
-        }
+        return new self(self::AND_CONDITION);
+    }
 
-        return new self($condition);
+    /**
+     * @return SearchCriteria
+     */
+    public static function createOr()
+    {
+        return new self(self::OR_CONDITION);
     }
 
     /**

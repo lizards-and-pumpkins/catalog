@@ -75,7 +75,9 @@ class ProductListingSourceBuilder
             throw new MissingConditionXmlAttributeException();
         }
 
-        return SearchCriteria::create($criteriaCondition[0]['value']);
+        $method = 'create' . $criteriaCondition[0]['value'];
+
+        return SearchCriteria::$method();
     }
 
     /**

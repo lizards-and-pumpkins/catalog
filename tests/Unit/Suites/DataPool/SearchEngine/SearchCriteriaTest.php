@@ -9,24 +9,19 @@ class SearchCriteriaTest extends \PHPUnit_Framework_TestCase
 {
     public function testJsonSerializableInterfaceIsImplemented()
     {
-        $result = SearchCriteria::create(SearchCriteria::AND_CONDITION);
-
-        $this->assertInstanceOf(\JsonSerializable::class, $result);
+        $this->assertInstanceOf(\JsonSerializable::class, SearchCriteria::createAnd());
     }
 
-    public function testExeptionIsThrownIfCriteriaConditionIsInvalid()
+    public function testCriteriaAndConditionIsReturned()
     {
-        $this->setExpectedException(InvalidCriteriaConditionException::class);
-        SearchCriteria::create('foo');
+        $criteria = SearchCriteria::createAnd();
+        $this->assertEquals(SearchCriteria::AND_CONDITION, $criteria->getCondition());
     }
 
-    public function testCriteriaConditionIsReturned()
+    public function testCriteriaOrConditionIsReturned()
     {
-        $condition = SearchCriteria::AND_CONDITION;
-
-        $criteria = SearchCriteria::create($condition);
-
-        $this->assertEquals($condition, $criteria->getCondition());
+        $criteria = SearchCriteria::createOr();
+        $this->assertEquals(SearchCriteria::OR_CONDITION, $criteria->getCondition());
     }
 
     public function testCriteriaArrayIsReturned()
@@ -34,7 +29,7 @@ class SearchCriteriaTest extends \PHPUnit_Framework_TestCase
         $mockCriterion1 = $this->getMock(SearchCriterion::class, [], [], '', false);
         $mockCriterion2 = $this->getMock(SearchCriterion::class, [], [], '', false);
 
-        $criteria = SearchCriteria::create(SearchCriteria::AND_CONDITION);
+        $criteria = SearchCriteria::createAnd();
         $criteria->add($mockCriterion1);
         $criteria->add($mockCriterion2);
 
@@ -45,11 +40,9 @@ class SearchCriteriaTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayRepresentationOfCriteriaIsReturned()
     {
-        $condition = SearchCriteria::AND_CONDITION;
-
-        $criteria = SearchCriteria::create($condition);
+        $criteria = SearchCriteria::createAnd();
         $result = $criteria->jsonSerialize();
-        $expectation = ['condition' => $condition, 'criteria' => []];
+        $expectation = ['condition' => SearchCriteria::AND_CONDITION, 'criteria' => []];
 
         $this->assertSame($expectation, $result);
     }

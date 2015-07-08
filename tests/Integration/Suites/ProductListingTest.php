@@ -142,7 +142,7 @@ class ProductListingTest extends AbstractIntegrationTest
     {
         $searchCriterion1 = SearchCriterion::create('category', 'men-accessories', 'eq');
         $searchCriterion2 = SearchCriterion::create('brand', 'Adidas', 'eq');
-        $searchCriteria = SearchCriteria::create(SearchCriteria::AND_CONDITION);
+        $searchCriteria = SearchCriteria::createAnd();
         $searchCriteria->add($searchCriterion1);
         $searchCriteria->add($searchCriterion2);
 
