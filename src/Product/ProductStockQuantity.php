@@ -17,7 +17,7 @@ class ProductStockQuantity implements Quantity
     public function __construct($quantity)
     {
         if (!is_int($quantity)) {
-            throw new InvalidStockSourceException(
+            throw new InvalidStockQuantitySourceException(
                 sprintf('Expecting integer stock source, got %s', gettype($quantity))
             );
         }
@@ -28,12 +28,12 @@ class ProductStockQuantity implements Quantity
     /**
      * @param string $quantityString
      * @return ProductStockQuantity
-     * @throws InvalidStockSourceException
+     * @throws InvalidStockQuantitySourceException
      */
     public static function fromString($quantityString)
     {
         if (!is_string($quantityString)) {
-            throw new InvalidStockSourceException(
+            throw new InvalidStockQuantitySourceException(
                 sprintf('Expecting string stock source, got %s', gettype($quantityString))
             );
         }

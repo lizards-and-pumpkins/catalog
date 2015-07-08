@@ -15,13 +15,13 @@ class ProductStockQuantityTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfNonStringArgumentIsPassedToFromStringConstructor()
     {
-        $this->setExpectedException(InvalidStockSourceException::class, 'Expecting string stock source, got integer');
+        $this->setExpectedException(InvalidStockQuantitySourceException::class, 'Expecting string stock source, got integer');
         ProductStockQuantity::fromString(1);
     }
 
     public function testExceptionIsThrownAsNonIntegerIsPassedToConstructor()
     {
-        $this->setExpectedException(InvalidStockSourceException::class, 'Expecting integer stock source, got string');
+        $this->setExpectedException(InvalidStockQuantitySourceException::class, 'Expecting integer stock source, got string');
         new ProductStockQuantity('1');
     }
 
