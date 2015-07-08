@@ -40,10 +40,12 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
         $this->domainEventConsumer = new DomainEventConsumer($this->mockQueue, $this->mockLocator, $this->mockLogger);
     }
 
-    public function testDomainEventHandlerIsTriggeredForSetNumberOfEventsEvent()
+    /**
+     * @dataProvider getNumberOfEventsToProcess
+     * @param int $numberOfEventsToProcess
+     */
+    public function testDomainEventHandlerIsTriggeredForSetNumberOfEventsEvent($numberOfEventsToProcess)
     {
-        $numberOfEventsToProcess = rand(1, 10);
-
         $this->addNextMethodToStubDomainEventQueue();
 
         $stubEventHandler = $this->getMock(DomainEventHandler::class);
@@ -52,6 +54,14 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($stubEventHandler);
 
         $this->domainEventConsumer->process($numberOfEventsToProcess);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function getNumberOfEventsToProcess()
+    {
+        return array_map(function ($i) { return [$i]; }, range(1, 3));
     }
 
     public function testLogEntryIsWrittenIfLocatorIsNotFound()

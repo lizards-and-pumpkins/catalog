@@ -40,10 +40,12 @@ class CommandConsumerTest extends \PHPUnit_Framework_TestCase
         $this->commandConsumer = new CommandConsumer($this->mockQueue, $this->mockLocator, $this->mockLogger);
     }
 
-    public function testCommandHandlerIsTriggeredForSetNumberOfCommands()
+    /**
+     * @dataProvider getNumberOfCommandsToProcess
+     * @param int $numberOfCommandsToProcess
+     */
+    public function testCommandHandlerIsTriggeredForSetNumberOfCommands($numberOfCommandsToProcess)
     {
-        $numberOfCommandsToProcess = rand(1, 10);
-
         $stubCommand = $this->getMock(Command::class);
         $this->mockQueue->expects($this->any())
             ->method('next')
@@ -58,6 +60,14 @@ class CommandConsumerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($mockCommandHandler);
 
         $this->commandConsumer->process($numberOfCommandsToProcess);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function getNumberOfCommandsToProcess()
+    {
+        return array_map(function ($i) { return [$i]; }, range(1, 3));
     }
 
     public function testLogEntryIsWrittenIfLocatorIsNotFound()
