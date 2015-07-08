@@ -36,7 +36,7 @@ class CommandHandlerFailedMessageTest extends \PHPUnit_Framework_TestCase
     public function testLogMessageIsReturned()
     {
         $expectation = sprintf(
-            "Failure during processing Command domain command with following message:\n\n%s",
+            "Failure during processing Command command with following message:\n\n%s",
             $this->exceptionMessage
         );
 

@@ -26,7 +26,7 @@ class CommandHandlerFailedMessage implements LogMessage
     public function __toString()
     {
         return sprintf(
-            "Failure during processing %s domain command with following message:\n\n%s",
+            "Failure during processing %s command with following message:\n\n%s",
             get_class($this->command),
             $this->exception->getMessage()
         );

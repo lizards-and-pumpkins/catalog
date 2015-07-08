@@ -20,7 +20,7 @@ class FailedToReadFromCommandQueueMessage implements LogMessage
     public function __toString()
     {
         return sprintf(
-            "Failed to read from domain command queue message with following exception:\n\n%s",
+            "Failed to read from command queue message with following exception:\n\n%s",
             $this->exception->getMessage()
         );
     }

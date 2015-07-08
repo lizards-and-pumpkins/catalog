@@ -26,7 +26,7 @@ class FailedToReadFromCommandQueueMessageTest extends \PHPUnit_Framework_TestCas
     public function testLogMessageIsReturned()
     {
         $result = (string) $this->message;
-        $expectation = "Failed to read from domain command queue message with following exception:\n\nfoo";
+        $expectation = "Failed to read from command queue message with following exception:\n\nfoo";
 
         $this->assertEquals($expectation, $result);
 

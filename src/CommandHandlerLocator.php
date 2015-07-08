@@ -26,7 +26,7 @@ class CommandHandlerLocator
 
         if (!method_exists($this->factory, $method)) {
             throw new UnableToFindCommandHandlerException(
-                sprintf('Unable to find a handler for %s domain command', $commandClass)
+                sprintf('Unable to find a handler for %s command', $commandClass)
             );
         }
 
