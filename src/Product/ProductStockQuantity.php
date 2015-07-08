@@ -14,15 +14,27 @@ class ProductStockQuantity implements Quantity
     /**
      * @param int $quantity
      */
-    public function __construct($quantity)
+    private function __construct($quantity)
     {
-        if (!is_int($quantity)) {
+        $this->quantity = $quantity;
+    }
+
+    /**
+     * @param int $quantityInt
+     * @return ProductStockQuantity
+     * @throws InvalidStockQuantitySourceException
+     */
+    public static function fromInt($quantityInt)
+    {
+        if (!is_int($quantityInt)) {
             throw new InvalidStockQuantitySourceException(
-                sprintf('Expecting integer stock source, got %s', gettype($quantity))
+                sprintf('Expecting integer stock source, got %s', gettype($quantityInt))
             );
         }
 
-        $this->quantity = $quantity;
+        $quantity = self::multiplyByNumberOfDecimalPoints($quantityInt, self::NUM_DECIMAL_POINTS);
+
+        return new static($quantity);
     }
 
     /**
@@ -52,14 +64,14 @@ class ProductStockQuantity implements Quantity
     }
 
     /**
-     * @param string $quantityString
+     * @param string|int $quantity
      * @param int $numberOfDecimalPoints
      * @return int
      */
-    private static function multiplyByNumberOfDecimalPoints($quantityString, $numberOfDecimalPoints)
+    private static function multiplyByNumberOfDecimalPoints($quantity, $numberOfDecimalPoints)
     {
         $base = pow(10, $numberOfDecimalPoints);
-        $quantityFloat = round($quantityString, $numberOfDecimalPoints);
+        $quantityFloat = round($quantity, $numberOfDecimalPoints);
 
         return intval($quantityFloat * $base);
     }

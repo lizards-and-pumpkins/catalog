@@ -9,20 +9,26 @@ class ProductStockQuantityTest extends \PHPUnit_Framework_TestCase
 {
     public function testQuantityInterfaceIsImplemented()
     {
-        $result = new ProductStockQuantity(0);
+        $result = ProductStockQuantity::fromInt(0);
         $this->assertInstanceOf(Quantity::class, $result);
     }
 
     public function testExceptionIsThrownIfNonStringArgumentIsPassedToFromStringConstructor()
     {
-        $this->setExpectedException(InvalidStockQuantitySourceException::class, 'Expecting string stock source, got integer');
+        $this->setExpectedException(
+            InvalidStockQuantitySourceException::class,
+            'Expecting string stock source, got integer'
+        );
         ProductStockQuantity::fromString(1);
     }
 
-    public function testExceptionIsThrownAsNonIntegerIsPassedToConstructor()
+    public function testExceptionIsThrownAsNonIntegerIsPassedToFromIntConstructor()
     {
-        $this->setExpectedException(InvalidStockQuantitySourceException::class, 'Expecting integer stock source, got string');
-        new ProductStockQuantity('1');
+        $this->setExpectedException(
+            InvalidStockQuantitySourceException::class,
+            'Expecting integer stock source, got string'
+        );
+        ProductStockQuantity::fromInt('1');
     }
 
     public function testStockIsCreatedFromStringMultipliedByNumberOfDecimalPoints()
