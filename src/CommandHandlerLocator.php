@@ -18,7 +18,7 @@ class CommandHandlerLocator
 
     /**
      * @param Command $command
-     * @return mixed
+     * @return CommandHandler
      * @throws UnableToFindCommandHandlerException
      */
     public function getHandlerFor(Command $command)
