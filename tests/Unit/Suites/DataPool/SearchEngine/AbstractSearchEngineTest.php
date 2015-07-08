@@ -567,14 +567,31 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     {
         $mockCriterion = $this->getMock(SearchCriterion::class, [], [], '', false);
         $mockCriterion->expects($this->any())
-            ->method('getFieldName')
-            ->willReturn($fieldName);
-        $mockCriterion->expects($this->any())
-            ->method('getFieldValue')
-            ->willReturn($fieldValue);
-        $mockCriterion->expects($this->any())
-            ->method('getOperation')
-            ->willReturn($operation);
+            ->method('matches')
+            ->willReturnCallback(function (
+                SearchDocumentField $searchDocumentField
+            ) use ($fieldName, $fieldValue, $operation) {
+                if ($searchDocumentField->getKey() !== $fieldName) {
+                    return false;
+                }
+
+                switch ($operation) {
+                    case 'eq':
+                        return $searchDocumentField->getValue() == $fieldValue;
+                    case 'neq':
+                        return $searchDocumentField->getValue() != $fieldValue;
+                    case 'gt':
+                        return $searchDocumentField->getValue() > $fieldValue;
+                    case 'gte';
+                        return $searchDocumentField->getValue() >= $fieldValue;
+                    case 'lt':
+                        return $searchDocumentField->getValue() < $fieldValue;
+                    case 'lte':
+                        return $searchDocumentField->getValue() <= $fieldValue;
+                }
+
+                return false;
+            });
 
         return $mockCriterion;
     }

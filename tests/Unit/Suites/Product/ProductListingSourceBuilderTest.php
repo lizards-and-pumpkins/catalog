@@ -3,6 +3,7 @@
 namespace Brera\Product;
 
 use Brera\DataPool\SearchEngine\SearchCriteria;
+use Brera\DataPool\SearchEngine\SearchCriterion;
 
 /**
  * @covers \Brera\Product\ProductListingSourceBuilder
@@ -33,15 +34,14 @@ EOX;
         $this->assertEquals('men-accessories', $urlKey);
         $this->assertEquals(['website' => 'ru', 'language' => 'en_US'], $context);
 
+        $expectedCriterion1 = SearchCriterion::create('category', 'accessories', 'eq');
+        $expectedCriterion2 = SearchCriterion::create('gender', 'male', 'eq');
+
         $this->assertInstanceOf(SearchCriteria::class, $searchCriteria);
         $this->assertEquals('and', $searchCriteria->getCondition());
         $this->assertCount(2, $criteria);
-        $this->assertEquals('category', $criteria[0]->getFieldName());
-        $this->assertEquals('accessories', $criteria[0]->getFieldValue());
-        $this->assertEquals('eq', $criteria[0]->getOperation());
-        $this->assertEquals('gender', $criteria[1]->getFieldName());
-        $this->assertEquals('male', $criteria[1]->getFieldValue());
-        $this->assertEquals('eq', $criteria[1]->getOperation());
+        $this->assertEquals($expectedCriterion1, $criteria[0]);
+        $this->assertEquals($expectedCriterion2, $criteria[1]);
     }
 
     public function testExceptionIsThrownIfUrlKeyAttributeIsMissing()

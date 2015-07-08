@@ -86,42 +86,12 @@ class SearchDocument
     {
         $isMatching = false;
 
-        /** @var SearchDocumentField $field */
         $fields = $this->fields->getFields();
 
         while (false === $isMatching && list(, $field) = each($fields)) {
-            if ($field->getKey() !== $criterion->getFieldName()) {
-                continue;
-            }
-
-            $isMatching = $this->searchDocumentFieldMatchesCriterion($criterion, $field);
+            $isMatching = $criterion->matches($field);
         }
 
         return $isMatching;
-    }
-
-    /**
-     * @param SearchCriterion $criterion
-     * @param SearchDocumentField $field
-     * @return bool
-     */
-    private function searchDocumentFieldMatchesCriterion(SearchCriterion $criterion, SearchDocumentField $field)
-    {
-        switch ($criterion->getOperation()) {
-            case 'eq':
-                return $field->getValue() == $criterion->getFieldValue();
-            case 'neq':
-                return $field->getValue() != $criterion->getFieldValue();
-            case 'gt':
-                return $field->getValue() > $criterion->getFieldValue();
-            case 'gte';
-                return $field->getValue() >= $criterion->getFieldValue();
-            case 'lt':
-                return $field->getValue() < $criterion->getFieldValue();
-            case 'lte':
-                return $field->getValue() <= $criterion->getFieldValue();
-        }
-
-        return false;
     }
 }

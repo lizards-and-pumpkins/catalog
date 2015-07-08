@@ -3,6 +3,7 @@
 namespace Brera\Product;
 
 use Brera\DataPool\SearchEngine\SearchCriteria;
+use Brera\DataPool\SearchEngine\SearchCriterion;
 
 /**
  * @covers \Brera\Product\ProductListingMetaInfoSnippetContent
@@ -225,8 +226,8 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
         $metaSnippetContent = ProductListingMetaInfoSnippetContent::fromJson($json);
         $criteria = $metaSnippetContent->getSelectionCriteria()->getCriteria();
 
-        $this->assertEquals($fieldName, $criteria[0]->getFieldName());
-        $this->assertEquals($fieldValue, $criteria[0]->getFieldValue());
-        $this->assertEquals($operation, $criteria[0]->getOperation());
+        $expectedCriterion = SearchCriterion::create($fieldName, $fieldValue, $operation);
+
+        $this->assertEquals($expectedCriterion, $criteria[0]);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Brera\DataPool\SearchEngine;
 
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
+
 class SearchCriterion implements \JsonSerializable
 {
     /**
@@ -55,29 +57,8 @@ class SearchCriterion implements \JsonSerializable
     }
 
     /**
-     * @return string
+     * @return string[]
      */
-    public function getFieldName()
-    {
-        return $this->fieldName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFieldValue()
-    {
-        return $this->fieldValue;
-    }
-
-    /**
-     * @return string
-     */
-    public function getOperation()
-    {
-        return $this->operation;
-    }
-
     public function jsonSerialize()
     {
         return [
@@ -85,5 +66,33 @@ class SearchCriterion implements \JsonSerializable
             'fieldValue'    => $this->fieldValue,
             'operation'     => $this->operation
         ];
+    }
+
+    /**
+     * @param SearchDocumentField $searchDocumentField
+     * @return bool
+     */
+    public function matches(SearchDocumentField $searchDocumentField)
+    {
+        if ($searchDocumentField->getKey() !== $this->fieldName) {
+            return false;
+        }
+
+        switch ($this->operation) {
+            case 'eq':
+                return $searchDocumentField->getValue() == $this->fieldValue;
+            case 'neq':
+                return $searchDocumentField->getValue() != $this->fieldValue;
+            case 'gt':
+                return $searchDocumentField->getValue() > $this->fieldValue;
+            case 'gte';
+                return $searchDocumentField->getValue() >= $this->fieldValue;
+            case 'lt':
+                return $searchDocumentField->getValue() < $this->fieldValue;
+            case 'lte':
+                return $searchDocumentField->getValue() <= $this->fieldValue;
+        }
+
+        return false;
     }
 }
