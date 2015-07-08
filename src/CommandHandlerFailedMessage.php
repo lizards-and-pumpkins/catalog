@@ -2,15 +2,21 @@
 
 namespace Brera;
 
-class FailedToReadFromDomainCommandQueueMessage implements LogMessage
+class CommandHandlerFailedMessage implements LogMessage
 {
+    /**
+     * @var Command
+     */
+    private $command;
+
     /**
      * @var \Exception
      */
     private $exception;
 
-    public function __construct(\Exception $exception)
+    public function __construct(Command $command, \Exception $exception)
     {
+        $this->command = $command;
         $this->exception = $exception;
     }
 
@@ -20,7 +26,8 @@ class FailedToReadFromDomainCommandQueueMessage implements LogMessage
     public function __toString()
     {
         return sprintf(
-            "Failed to read from domain command queue message with following exception:\n\n%s",
+            "Failure during processing %s domain command with following message:\n\n%s",
+            get_class($this->command),
             $this->exception->getMessage()
         );
     }

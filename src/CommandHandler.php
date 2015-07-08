@@ -2,7 +2,7 @@
 
 namespace Brera;
 
-interface DomainCommandHandler
+interface CommandHandler
 {
     /**
      * @return void

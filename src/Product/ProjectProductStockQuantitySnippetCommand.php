@@ -2,9 +2,9 @@
 
 namespace Brera\Product;
 
-use Brera\DomainCommand;
+use Brera\Command;
 
-class ProjectProductStockQuantitySnippetDomainCommand implements DomainCommand
+class ProjectProductStockQuantitySnippetCommand implements Command
 {
     /**
      * @var string

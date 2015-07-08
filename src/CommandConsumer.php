@@ -4,7 +4,7 @@ namespace Brera;
 
 use Brera\Queue\Queue;
 
-class DomainCommandConsumer
+class CommandConsumer
 {
     /**
      * @var Queue
@@ -12,7 +12,7 @@ class DomainCommandConsumer
     private $commandQueue;
 
     /**
-     * @var DomainCommandHandlerLocator
+     * @var CommandHandlerLocator
      */
     private $commandHandlerLocator;
 
@@ -23,7 +23,7 @@ class DomainCommandConsumer
 
     public function __construct(
         Queue $commandQueue,
-        DomainCommandHandlerLocator $commandHandlerLocator,
+        CommandHandlerLocator $commandHandlerLocator,
         Logger $logger
     ) {
         $this->commandQueue = $commandQueue;
@@ -35,21 +35,21 @@ class DomainCommandConsumer
     {
         for ($i=0; $i<$numberOfMessagesToProcess; $i++) {
             try {
-                $domainCommand = $this->commandQueue->next();
-                $this->processDomainCommand($domainCommand);
+                $command = $this->commandQueue->next();
+                $this->processCommand($command);
             } catch (\Exception $e) {
-                $this->logger->log(new FailedToReadFromDomainCommandQueueMessage($e));
+                $this->logger->log(new FailedToReadFromCommandQueueMessage($e));
             }
         }
     }
 
-    private function processDomainCommand(DomainCommand $domainCommand)
+    private function processCommand(Command $command)
     {
         try {
-            $domainEventHandler = $this->commandHandlerLocator->getHandlerFor($domainCommand);
+            $domainEventHandler = $this->commandHandlerLocator->getHandlerFor($command);
             $domainEventHandler->process();
         } catch (\Exception $e) {
-            $this->logger->log(new DomainCommandHandlerFailedMessage($domainCommand, $e));
+            $this->logger->log(new CommandHandlerFailedMessage($command, $e));
         }
     }
 }

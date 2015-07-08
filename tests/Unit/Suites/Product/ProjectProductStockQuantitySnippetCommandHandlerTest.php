@@ -3,15 +3,15 @@
 namespace Brera\Product;
 
 use Brera\Context\ContextSource;
-use Brera\DomainCommandHandler;
+use Brera\CommandHandler;
 
 /**
- * @covers \Brera\Product\ProjectProductStockQuantitySnippetDomainCommandHandler
+ * @covers \Brera\Product\ProjectProductStockQuantitySnippetCommandHandler
  */
-class ProjectProductStockQuantitySnippetDomainCommandHandlerTest extends \PHPUnit_Framework_TestCase
+class ProjectProductStockQuantitySnippetCommandHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ProjectProductStockQuantitySnippetDomainCommand|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProjectProductStockQuantitySnippetCommand|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockCommand;
 
@@ -26,19 +26,19 @@ class ProjectProductStockQuantitySnippetDomainCommandHandlerTest extends \PHPUni
     private $mockProductStockQuantitySourceBuilder;
 
     /**
-     * @var ProjectProductStockQuantitySnippetDomainCommandHandler
+     * @var ProjectProductStockQuantitySnippetCommandHandler
      */
     private $commandHandler;
 
     protected function setUp()
     {
-        $this->mockCommand = $this->getMock(ProjectProductStockQuantitySnippetDomainCommand::class, [], [], '', false);
+        $this->mockCommand = $this->getMock(ProjectProductStockQuantitySnippetCommand::class, [], [], '', false);
         $this->mockProjector = $this->getMock(ProductStockQuantityProjector::class, [], [], '', false);
         $this->mockProductStockQuantitySourceBuilder = $this->getMock(
             ProductStockQuantitySourceBuilder::class, [], [], '', false
         );
         $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
-        $this->commandHandler = new ProjectProductStockQuantitySnippetDomainCommandHandler(
+        $this->commandHandler = new ProjectProductStockQuantitySnippetCommandHandler(
             $this->mockCommand,
             $this->mockProductStockQuantitySourceBuilder,
             $stubContextSource,
@@ -46,9 +46,9 @@ class ProjectProductStockQuantitySnippetDomainCommandHandlerTest extends \PHPUni
         );
     }
 
-    public function testDomainCommandHandlerInterfaceIsImplemented()
+    public function testCommandHandlerInterfaceIsImplemented()
     {
-        $this->assertInstanceOf(DomainCommandHandler::class, $this->commandHandler);
+        $this->assertInstanceOf(CommandHandler::class, $this->commandHandler);
     }
     
     public function testProductQuantitySnippetProjectionIsTriggered()

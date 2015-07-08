@@ -3,14 +3,14 @@
 namespace Brera\Product;
 
 use Brera\Context\ContextSource;
-use Brera\DomainCommandHandler;
+use Brera\CommandHandler;
 
-class ProjectProductStockQuantitySnippetDomainCommandHandler implements DomainCommandHandler
+class ProjectProductStockQuantitySnippetCommandHandler implements CommandHandler
 {
     /**
-     * @var ProjectProductStockQuantitySnippetDomainCommand
+     * @var ProjectProductStockQuantitySnippetCommand
      */
-    private $domainCommand;
+    private $command;
 
     /**
      * @var ProductStockQuantitySourceBuilder
@@ -28,12 +28,12 @@ class ProjectProductStockQuantitySnippetDomainCommandHandler implements DomainCo
     private $projector;
 
     public function __construct(
-        ProjectProductStockQuantitySnippetDomainCommand $domainCommand,
+        ProjectProductStockQuantitySnippetCommand $command,
         ProductStockQuantitySourceBuilder $productStockQuantitySourceBuilder,
         ContextSource $contextSource,
         ProductStockQuantityProjector $projector
     ) {
-        $this->domainCommand = $domainCommand;
+        $this->command = $command;
         $this->productStockQuantitySourceBuilder = $productStockQuantitySourceBuilder;
         $this->contextSource = $contextSource;
         $this->projector = $projector;
@@ -42,7 +42,7 @@ class ProjectProductStockQuantitySnippetDomainCommandHandler implements DomainCo
     public function process()
     {
         $productStockQuantitySource = $this->productStockQuantitySourceBuilder->createFromXml(
-            $this->domainCommand->getPayload()
+            $this->command->getPayload()
         );
 
         $this->projector->project($productStockQuantitySource, $this->contextSource);

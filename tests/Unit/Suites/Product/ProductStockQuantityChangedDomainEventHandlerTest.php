@@ -7,7 +7,7 @@ use Brera\Queue\Queue;
 
 /**
  * @covers \Brera\Product\ProductStockQuantityChangedDomainEventHandler
- * @uses   \Brera\Product\ProjectProductStockQuantitySnippetDomainCommand
+ * @uses   \Brera\Product\ProjectProductStockQuantitySnippetCommand
  */
 class ProductStockQuantityChangedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -19,7 +19,7 @@ class ProductStockQuantityChangedDomainEventHandlerTest extends \PHPUnit_Framewo
     /**
      * @var Queue|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockDomainCommandQueue;
+    private $mockCommandQueue;
 
     /**
      * @var ProductStockQuantityChangedDomainEventHandler
@@ -29,11 +29,11 @@ class ProductStockQuantityChangedDomainEventHandlerTest extends \PHPUnit_Framewo
     protected function setUp()
     {
         $this->mockDomainEvent = $this->getMock(ProductStockQuantityChangedDomainEvent::class, [], [], '', false);
-        $this->mockDomainCommandQueue = $this->getMock(Queue::class);
+        $this->mockCommandQueue = $this->getMock(Queue::class);
 
         $this->domainEventHandler = new ProductStockQuantityChangedDomainEventHandler(
             $this->mockDomainEvent,
-            $this->mockDomainCommandQueue
+            $this->mockCommandQueue
         );
     }
 
@@ -44,7 +44,7 @@ class ProductStockQuantityChangedDomainEventHandlerTest extends \PHPUnit_Framewo
 
     public function testDomainEventCommandIsPutIntoCommandQueue()
     {
-        $this->mockDomainCommandQueue->expects($this->once())
+        $this->mockCommandQueue->expects($this->once())
             ->method('add');
 
         $this->domainEventHandler->process();

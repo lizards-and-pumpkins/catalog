@@ -3,12 +3,12 @@
 namespace Brera;
 
 /**
- * @covers \Brera\FailedToReadFromDomainCommandQueueMessage
+ * @covers \Brera\FailedToReadFromCommandQueueMessage
  */
-class FailedToReadFromDomainCommandQueueMessageTest extends \PHPUnit_Framework_TestCase
+class FailedToReadFromCommandQueueMessageTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var FailedToReadFromDomainCommandQueueMessage
+     * @var FailedToReadFromCommandQueueMessage
      */
     private $message;
 
@@ -20,7 +20,7 @@ class FailedToReadFromDomainCommandQueueMessageTest extends \PHPUnit_Framework_T
     protected function setUp()
     {
         $this->stubException = new \Exception('foo');
-        $this->message = new FailedToReadFromDomainCommandQueueMessage($this->stubException);
+        $this->message = new FailedToReadFromCommandQueueMessage($this->stubException);
     }
 
     public function testLogMessageIsReturned()

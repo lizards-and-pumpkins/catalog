@@ -12,7 +12,7 @@ use Brera\Product\ProductSnippetKeyGenerator;
  * @method Context\ContextBuilder createContextBuilderWithVersion
  * @method Context\ContextSource createContextSource
  * @method DomainEventConsumer createDomainEventConsumer
- * @method DomainCommandConsumer createDomainCommandConsumer
+ * @method CommandConsumer createCommandConsumer
  * @method SnippetKeyGeneratorLocator getSnippetKeyGeneratorLocator
  * @method InMemoryLogger getLogger
  * @method GenericSnippetKeyGenerator createProductDetailViewSnippetKeyGenerator

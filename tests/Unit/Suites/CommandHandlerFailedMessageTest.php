@@ -3,9 +3,9 @@
 namespace Brera;
 
 /**
- * @covers \Brera\DomainCommandHandlerFailedMessage
+ * @covers \Brera\CommandHandlerFailedMessage
  */
-class DomainCommandHandlerFailedMessageTest extends \PHPUnit_Framework_TestCase
+class CommandHandlerFailedMessageTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Exception
@@ -13,7 +13,7 @@ class DomainCommandHandlerFailedMessageTest extends \PHPUnit_Framework_TestCase
     private $stubException;
 
     /**
-     * @var DomainCommandHandlerFailedMessage
+     * @var CommandHandlerFailedMessage
      */
     private $message;
 
@@ -24,19 +24,19 @@ class DomainCommandHandlerFailedMessageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $stubDomainCommand = $this->getMockBuilder(DomainCommand::class)
-            ->setMockClassName('DomainCommand')
+        $stubCommand = $this->getMockBuilder(Command::class)
+            ->setMockClassName('Command')
             ->getMock();
 
         $this->stubException = new \Exception($this->exceptionMessage);
 
-        $this->message = new DomainCommandHandlerFailedMessage($stubDomainCommand, $this->stubException);
+        $this->message = new CommandHandlerFailedMessage($stubCommand, $this->stubException);
     }
 
     public function testLogMessageIsReturned()
     {
         $expectation = sprintf(
-            "Failure during processing DomainCommand domain command with following message:\n\n%s",
+            "Failure during processing Command domain command with following message:\n\n%s",
             $this->exceptionMessage
         );
 

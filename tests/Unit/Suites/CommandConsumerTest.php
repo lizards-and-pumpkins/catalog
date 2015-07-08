@@ -5,11 +5,11 @@ namespace Brera;
 use Brera\Queue\Queue;
 
 /**
- * @covers \Brera\DomainCommandConsumer
- * @uses   \Brera\DomainCommandHandlerFailedMessage
- * @uses   \Brera\FailedToReadFromDomainCommandQueueMessage
+ * @covers \Brera\CommandConsumer
+ * @uses   \Brera\CommandHandlerFailedMessage
+ * @uses   \Brera\FailedToReadFromCommandQueueMessage
  */
-class DomainCommandConsumerTest extends \PHPUnit_Framework_TestCase
+class CommandConsumerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Queue|\PHPUnit_Framework_MockObject_MockObject
@@ -17,7 +17,7 @@ class DomainCommandConsumerTest extends \PHPUnit_Framework_TestCase
     private $mockQueue;
 
     /**
-     * @var DomainCommandHandlerLocator|\PHPUnit_Framework_MockObject_MockObject
+     * @var CommandHandlerLocator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockLocator;
 
@@ -27,35 +27,35 @@ class DomainCommandConsumerTest extends \PHPUnit_Framework_TestCase
     private $mockLogger;
 
     /**
-     * @var DomainCommandConsumer|\PHPUnit_Framework_MockObject_MockObject
+     * @var CommandConsumer|\PHPUnit_Framework_MockObject_MockObject
      */
     private $commandConsumer;
 
     protected function setUp()
     {
         $this->mockQueue = $this->getMock(Queue::class);
-        $this->mockLocator = $this->getMock(DomainCommandHandlerLocator::class, [], [], '', false);
+        $this->mockLocator = $this->getMock(CommandHandlerLocator::class, [], [], '', false);
         $this->mockLogger = $this->getMock(Logger::class);
 
-        $this->commandConsumer = new DomainCommandConsumer($this->mockQueue, $this->mockLocator, $this->mockLogger);
+        $this->commandConsumer = new CommandConsumer($this->mockQueue, $this->mockLocator, $this->mockLogger);
     }
 
-    public function testDomainCommandHandlerIsTriggeredForSetNumberOfCommands()
+    public function testCommandHandlerIsTriggeredForSetNumberOfCommands()
     {
         $numberOfCommandsToProcess = rand(1, 10);
 
-        $stubDomainCommand = $this->getMock(DomainCommand::class);
+        $stubCommand = $this->getMock(Command::class);
         $this->mockQueue->expects($this->any())
             ->method('next')
-            ->willReturn($stubDomainCommand);
+            ->willReturn($stubCommand);
 
-        $mockDomainCommandHandler = $this->getMock(DomainCommandHandler::class);
-        $mockDomainCommandHandler->expects($this->exactly($numberOfCommandsToProcess))
+        $mockCommandHandler = $this->getMock(CommandHandler::class);
+        $mockCommandHandler->expects($this->exactly($numberOfCommandsToProcess))
             ->method('process');
 
         $this->mockLocator->expects($this->any())
             ->method('getHandlerFor')
-            ->willReturn($mockDomainCommandHandler);
+            ->willReturn($mockCommandHandler);
 
         $this->commandConsumer->process($numberOfCommandsToProcess);
     }
@@ -64,10 +64,10 @@ class DomainCommandConsumerTest extends \PHPUnit_Framework_TestCase
     {
         $numberOfCommandsToProcess = 1;
 
-        $stubDomainCommand = $this->getMock(DomainCommand::class);
+        $stubCommand = $this->getMock(Command::class);
         $this->mockQueue->expects($this->any())
             ->method('next')
-            ->willReturn($stubDomainCommand);
+            ->willReturn($stubCommand);
 
         $exception = $this->getMock(UnableToFindDomainEventHandlerException::class);
         $this->mockLocator->expects($this->exactly($numberOfCommandsToProcess))

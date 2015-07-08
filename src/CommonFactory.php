@@ -40,12 +40,12 @@ use Brera\Product\ProductStockQuantityChangedDomainEventHandler;
 use Brera\Product\ProductStockQuantityProjector;
 use Brera\Product\ProductStockQuantitySnippetRenderer;
 use Brera\Product\ProductStockQuantitySourceBuilder;
-use Brera\Product\ProjectProductStockQuantitySnippetDomainCommand;
-use Brera\Product\ProjectProductStockQuantitySnippetDomainCommandHandler;
+use Brera\Product\ProjectProductStockQuantitySnippetCommand;
+use Brera\Product\ProjectProductStockQuantitySnippetCommandHandler;
 use Brera\Queue\Queue;
 use Brera\Renderer\BlockStructure;
 
-class CommonFactory implements Factory, DomainEventFactory, DomainCommandFactory
+class CommonFactory implements Factory, DomainEventFactory, CommandFactory
 {
     use FactoryTrait;
 
@@ -625,13 +625,13 @@ class CommonFactory implements Factory, DomainEventFactory, DomainCommandFactory
     }
 
     /**
-     * @param ProjectProductStockQuantitySnippetDomainCommand $command
-     * @return ProjectProductStockQuantitySnippetDomainCommandHandler
+     * @param ProjectProductStockQuantitySnippetCommand $command
+     * @return ProjectProductStockQuantitySnippetCommandHandler
      */
-    public function createProjectProductStockQuantitySnippetDomainCommandHandler(
-        ProjectProductStockQuantitySnippetDomainCommand $command
+    public function createProjectProductStockQuantitySnippetCommandHandler(
+        ProjectProductStockQuantitySnippetCommand $command
     ) {
-        return new ProjectProductStockQuantitySnippetDomainCommandHandler(
+        return new ProjectProductStockQuantitySnippetCommandHandler(
             $command,
             $this->getMasterFactory()->getProductStockQuantitySourceBuilder(),
             $this->getMasterFactory()->createContextSource(),
@@ -701,13 +701,13 @@ class CommonFactory implements Factory, DomainEventFactory, DomainCommandFactory
     }
 
     /**
-     * @return DomainCommandConsumer
+     * @return CommandConsumer
      */
-    public function createDomainCommandConsumer()
+    public function createCommandConsumer()
     {
-        return new DomainCommandConsumer(
+        return new CommandConsumer(
             $this->getMasterFactory()->getCommandQueue(),
-            $this->getMasterFactory()->createDomainCommandHandlerLocator(),
+            $this->getMasterFactory()->createCommandHandlerLocator(),
             $this->getLogger()
         );
     }
@@ -725,11 +725,11 @@ class CommonFactory implements Factory, DomainEventFactory, DomainCommandFactory
     }
 
     /**
-     * @return DomainCommandHandlerLocator
+     * @return CommandHandlerLocator
      */
-    public function createDomainCommandHandlerLocator()
+    public function createCommandHandlerLocator()
     {
-        return new DomainCommandHandlerLocator($this);
+        return new CommandHandlerLocator($this);
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace Brera;
 
-interface DomainCommand
+interface Command
 {
 
 }

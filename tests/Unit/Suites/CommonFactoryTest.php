@@ -23,8 +23,8 @@ use Brera\Product\ProductStockQuantityChangedDomainEventHandler;
 use Brera\Product\ProductStockQuantityProjector;
 use Brera\Product\ProductStockQuantitySnippetRenderer;
 use Brera\Product\ProductStockQuantitySourceBuilder;
-use Brera\Product\ProjectProductStockQuantitySnippetDomainCommand;
-use Brera\Product\ProjectProductStockQuantitySnippetDomainCommandHandler;
+use Brera\Product\ProjectProductStockQuantitySnippetCommand;
+use Brera\Product\ProjectProductStockQuantitySnippetCommandHandler;
 use Brera\Queue\Queue;
 
 /**
@@ -37,8 +37,8 @@ use Brera\Queue\Queue;
  * @uses   \Brera\DataPool\DataPoolReader
  * @uses   \Brera\Context\ContextBuilder
  * @uses   \Brera\Context\ContextSource
- * @uses   \Brera\DomainCommandConsumer
- * @uses   \Brera\DomainCommandHandlerLocator
+ * @uses   \Brera\CommandConsumer
+ * @uses   \Brera\CommandHandlerLocator
  * @uses   \Brera\DomainEventConsumer
  * @uses   \Brera\DomainEventHandlerLocator
  * @uses   \Brera\RootTemplateChangedDomainEvent
@@ -63,7 +63,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Product\ProductStockQuantityProjector
  * @uses   \Brera\Product\ProductStockQuantityChangedDomainEventHandler
  * @uses   \Brera\Product\ProductStockQuantitySnippetRenderer
- * @uses   \Brera\Product\ProjectProductStockQuantitySnippetDomainCommandHandler
+ * @uses   \Brera\Product\ProjectProductStockQuantitySnippetCommandHandler
  * @uses   \Brera\Product\ProductDetailViewBlockRenderer
  * @uses   \Brera\Product\ProductDetailViewInContextSnippetRenderer
  * @uses   \Brera\Product\ProductListingSnippetRenderer
@@ -298,13 +298,13 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ProductSnippetKeyGenerator::class, $result);
     }
 
-    public function testProjectProductStockQuantitySnippetDomainCommandHandlerIsReturned()
+    public function testProjectProductStockQuantitySnippetCommandHandlerIsReturned()
     {
-        /** @var ProjectProductStockQuantitySnippetDomainCommand $command */
-        $command = $this->getMock(ProjectProductStockQuantitySnippetDomainCommand::class, [], [], '', false);
-        $result = $this->commonFactory->createProjectProductStockQuantitySnippetDomainCommandHandler($command);
+        /** @var ProjectProductStockQuantitySnippetCommand $command */
+        $command = $this->getMock(ProjectProductStockQuantitySnippetCommand::class, [], [], '', false);
+        $result = $this->commonFactory->createProjectProductStockQuantitySnippetCommandHandler($command);
 
-        $this->assertInstanceOf(ProjectProductStockQuantitySnippetDomainCommandHandler::class, $result);
+        $this->assertInstanceOf(ProjectProductStockQuantitySnippetCommandHandler::class, $result);
     }
 
     public function testProductStockQuantitySourceBuilderIsReturned()
@@ -343,19 +343,19 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ProductSnippetKeyGenerator::class, $result);
     }
 
-    public function testDomainCommandConsumerIsReturned()
+    public function testCommandConsumerIsReturned()
     {
-        $result = $this->commonFactory->createDomainCommandConsumer();
-        $this->assertInstanceOf(DomainCommandConsumer::class, $result);
+        $result = $this->commonFactory->createCommandConsumer();
+        $this->assertInstanceOf(CommandConsumer::class, $result);
     }
 
-    public function testDomainCommandQueueIsReturned()
+    public function testCommandQueueIsReturned()
     {
         $result = $this->commonFactory->getCommandQueue();
         $this->assertInstanceOf(Queue::class, $result);
     }
 
-    public function testSameDomainCommandQueueInstanceIsReturned()
+    public function testSameCommandQueueInstanceIsReturned()
     {
         $result1 = $this->commonFactory->getCommandQueue();
         $result2 = $this->commonFactory->getCommandQueue();
@@ -363,10 +363,10 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($result1, $result2);
     }
 
-    public function testDomainCommandHandlerLocatorIsReturned()
+    public function testCommandHandlerLocatorIsReturned()
     {
-        $result = $this->commonFactory->createDomainCommandHandlerLocator();
-        $this->assertInstanceOf(DomainCommandHandlerLocator::class, $result);
+        $result = $this->commonFactory->createCommandHandlerLocator();
+        $this->assertInstanceOf(CommandHandlerLocator::class, $result);
     }
 
     public function testProductStockQuantityChangedDomainEventHandlerIsReturned()

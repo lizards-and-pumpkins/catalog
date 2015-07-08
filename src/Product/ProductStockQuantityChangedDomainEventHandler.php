@@ -15,19 +15,19 @@ class ProductStockQuantityChangedDomainEventHandler implements DomainEventHandle
     /**
      * @var Queue
      */
-    private $domainCommandQueue;
+    private $commandQueue;
 
-    public function __construct(ProductStockQuantityChangedDomainEvent $event, Queue $domainCommandQueue)
+    public function __construct(ProductStockQuantityChangedDomainEvent $event, Queue $commandQueue)
     {
         $this->event = $event;
-        $this->domainCommandQueue = $domainCommandQueue;
+        $this->commandQueue = $commandQueue;
     }
 
     public function process()
     {
         $payload = $this->event->getPayload();
-        $command = new ProjectProductStockQuantitySnippetDomainCommand($payload);
+        $command = new ProjectProductStockQuantitySnippetCommand($payload);
 
-        $this->domainCommandQueue->add($command);
+        $this->commandQueue->add($command);
     }
 }

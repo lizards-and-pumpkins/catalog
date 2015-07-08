@@ -29,7 +29,7 @@ EOX;
         $queue->add(new ProductStockQuantityChangedDomainEvent($xml));
 
         $this->processDomainEvents(1);
-        $this->processDomainCommands(1);
+        $this->processCommands(1);
 
         $logger = $this->factory->getLogger();
         $this->failIfMessagesWhereLogged($logger);
@@ -58,9 +58,9 @@ EOX;
     /**
      * @param int $numberOfMessages
      */
-    private function processDomainCommands($numberOfMessages)
+    private function processCommands($numberOfMessages)
     {
-        $consumer = $this->factory->createDomainCommandConsumer();
+        $consumer = $this->factory->createCommandConsumer();
         $consumer->process($numberOfMessages);
     }
 }
