@@ -24,7 +24,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $productName = 'LED Arm-Signallampe';
         $productPrice = 1295;
 
-        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/product.xml');
+        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
 
         $queue = $factory->getEventQueue();
         $queue->add(new CatalogImportDomainEvent($xml));
@@ -130,7 +130,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
     {
         $factory = $this->prepareIntegrationTestMasterFactory();
 
-        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/product.xml');
+        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
 
         $queue = $factory->getEventQueue();
         $queue->add(new CatalogImportDomainEvent($xml));
@@ -139,7 +139,9 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $numberOfMessages = 3;
         $consumer->process($numberOfMessages);
         
-        $urlKeys = (new XPathParser($xml))->getXmlNodesArrayByXPath('/*/product/attributes/url_key[@language="en_US"]');
+        $urlKeys = (new XPathParser($xml))->getXmlNodesArrayByXPath(
+            '//catalog/products/product/attributes/url_key[@language="en_US"]'
+        );
         
         $httpUrl = HttpUrl::fromString('http://example.com/' . $urlKeys[0]['value']);
         $request = HttpRequest::fromParameters('GET', $httpUrl);

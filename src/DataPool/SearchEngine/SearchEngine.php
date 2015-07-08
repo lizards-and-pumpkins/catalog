@@ -28,9 +28,9 @@ interface SearchEngine
     public function query($queryString, Context $context);
 
     /**
-     * @param string[] $queryCriteria
+     * @param SearchCriteria $criteria
      * @param Context $context
-     * @return \string[]
+     * @return string[]
      */
-    public function queryGivenFields(array $queryCriteria, Context $context);
+    public function getContentOfSearchDocumentsMatchingCriteria(SearchCriteria $criteria, Context $context);
 }

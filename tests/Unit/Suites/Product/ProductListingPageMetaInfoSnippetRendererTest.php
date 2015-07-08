@@ -4,6 +4,7 @@ namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\Context\ContextBuilder;
+use Brera\DataPool\SearchEngine\SearchCriteria;
 use Brera\SnippetRenderer;
 use Brera\Snippet;
 use Brera\UrlPathKeyGenerator;
@@ -19,21 +20,6 @@ class ProductListingCriteriaSnippetRendererTest extends \PHPUnit_Framework_TestC
      * @var ProductListingCriteriaSnippetRenderer
      */
     private $renderer;
-
-    /**
-     * @return ProductListingSource|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getMockProductListingSource()
-    {
-        $mockProductListingSource = $this->getMock(ProductListingSource::class, [], [], '', false);
-        $mockProductListingSource->expects($this->once())
-            ->method('getContextData')
-            ->willReturn([]);
-        $mockProductListingSource->expects($this->once())
-            ->method('getCriteria')
-            ->willReturn([]);
-        return $mockProductListingSource;
-    }
 
     protected function setUp()
     {
@@ -76,5 +62,21 @@ class ProductListingCriteriaSnippetRendererTest extends \PHPUnit_Framework_TestC
         $expectedPattern = ProductListingSnippetRenderer::CODE . '_%s';
         $this->assertStringMatchesFormat($expectedPattern, $snippet->getKey());
 
+    }
+
+    /**
+     * @return ProductListingSource|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getMockProductListingSource()
+    {
+        $mockSearchCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
+        $mockProductListingSource = $this->getMock(ProductListingSource::class, [], [], '', false);
+        $mockProductListingSource->expects($this->once())
+            ->method('getContextData')
+            ->willReturn([]);
+        $mockProductListingSource->expects($this->once())
+            ->method('getCriteria')
+            ->willReturn($mockSearchCriteria);
+        return $mockProductListingSource;
     }
 }

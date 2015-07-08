@@ -5,6 +5,7 @@ namespace Brera\Product;
 use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\KeyNotFoundException;
+use Brera\DataPool\SearchEngine\SearchCriteria;
 use Brera\Http\HttpRequestHandler;
 use Brera\Http\UnableToHandleRequestException;
 use Brera\Page;
@@ -14,14 +15,15 @@ use Brera\SnippetKeyGeneratorLocator;
 
 /**
  * @covers \Brera\Product\ProductListingRequestHandler
- * @uses \Brera\Product\ProductListingMetaInfoSnippetContent
+ * @uses   \Brera\Product\ProductListingMetaInfoSnippetContent
+ * @uses   \Brera\DataPool\SearchEngine\SearchCriteria
  */
 class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var string[]
+     * @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $testSelectionCriteria = ['test-attribute' => 'test-value'];
+    private $mockSelectionCriteria;
 
     /**
      * @var Context|\PHPUnit_Framework_MockObject_MockObject
@@ -53,15 +55,26 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private $requestHandler;
 
+    /**
+     * @var string
+     */
     private $testMetaInfoKey;
 
+    /**
+     * @var string
+     */
     private $testMetaInfoSnippetJson;
 
     protected function setUp()
     {
+        $this->mockSelectionCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
+        $this->mockSelectionCriteria->expects($this->any())
+            ->method('jsonSerialize')
+            ->willReturn(['condition' => SearchCriteria::AND_CONDITION, 'criteria' => []]);
+
         $this->testMetaInfoKey = 'product_listing_' . $this->testUrlPathKey;
         $this->testMetaInfoSnippetJson = json_encode(ProductListingMetaInfoSnippetContent::create(
-            $this->testSelectionCriteria,
+            $this->mockSelectionCriteria,
             'root-snippet-code',
             ['child-snippet1']
         )->getInfo());

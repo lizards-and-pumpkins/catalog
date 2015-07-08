@@ -30,6 +30,7 @@ class CatalogImportDomainEventHandler implements DomainEventHandler
         $xml = $this->event->getXml();
 
         $this->emitProductImportDomainEvents($xml);
+        $this->emitProductListingSavedDomainEvents($xml);
         $this->emitImageImportDomainEvents($xml);
     }
 
@@ -38,7 +39,7 @@ class CatalogImportDomainEventHandler implements DomainEventHandler
      */
     private function emitProductImportDomainEvents($xml)
     {
-        $productNodesXml = (new XPathParser($xml))->getXmlNodesRawXmlArrayByXPath('product');
+        $productNodesXml = (new XPathParser($xml))->getXmlNodesRawXmlArrayByXPath('//catalog/products/product');
         foreach ($productNodesXml as $productXml) {
             $this->eventQueue->add(new ProductImportDomainEvent($productXml));
         }
@@ -47,9 +48,22 @@ class CatalogImportDomainEventHandler implements DomainEventHandler
     /**
      * @param string $xml
      */
+    private function emitProductListingSavedDomainEvents($xml)
+    {
+        $listingNodesXml = (new XPathParser($xml))->getXmlNodesRawXmlArrayByXPath('//catalog/listings/listing');
+        foreach ($listingNodesXml as $listingXml) {
+            $this->eventQueue->add(new ProductListingSavedDomainEvent($listingXml));
+        }
+    }
+
+    /**
+     * @param string $xml
+     */
     private function emitImageImportDomainEvents($xml)
     {
-        $imageNodes = (new XPathParser($xml))->getXmlNodesArrayByXPath('product/attributes/image/file');
+        $imageNodes = (new XPathParser($xml))->getXmlNodesArrayByXPath(
+            '//catalog/products/product/attributes/image/file'
+        );
         foreach ($imageNodes as $imageNode) {
             $this->eventQueue->add(new ImageImportDomainEvent($imageNode['value']));
         }

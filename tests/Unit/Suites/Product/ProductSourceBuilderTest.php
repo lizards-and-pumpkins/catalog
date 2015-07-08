@@ -27,7 +27,7 @@ class ProductSourceBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $this->builder = new ProductSourceBuilder();
 
-        $xml = file_get_contents(__DIR__ . '/../../../shared-fixture/product.xml');
+        $xml = file_get_contents(__DIR__ . '/../../../shared-fixture/catalog.xml');
         $this->domDocument = new \DOMDocument();
         $this->domDocument->loadXML($xml);
     }

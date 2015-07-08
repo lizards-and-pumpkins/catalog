@@ -3,6 +3,7 @@
 namespace Brera\DataPool;
 
 use Brera\DataPool\KeyValue\KeyValueStore;
+use Brera\DataPool\SearchEngine\SearchCriteria;
 use Brera\DataPool\SearchEngine\SearchEngine;
 use Brera\Context\Context;
 
@@ -159,12 +160,12 @@ class DataPoolReader
     }
 
     /**
-     * @param string[] $queryCriteria
+     * @param SearchCriteria $criteria
      * @param Context $context
      * @return string[]
      */
-    public function getProductIdsMatchingCriteria(array $queryCriteria, Context $context)
+    public function getProductIdsMatchingCriteria(SearchCriteria $criteria, Context $context)
     {
-        return $this->searchEngine->queryGivenFields($queryCriteria, $context);
+        return $this->searchEngine->getContentOfSearchDocumentsMatchingCriteria($criteria, $context);
     }
 }
