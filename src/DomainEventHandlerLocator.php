@@ -2,11 +2,6 @@
 
 namespace Brera;
 
-use Brera\Image\ImageImportDomainEvent;
-use Brera\Product\CatalogImportDomainEvent;
-use Brera\Product\ProductImportDomainEvent;
-use Brera\Product\ProductListingSavedDomainEvent;
-
 class DomainEventHandlerLocator
 {
     /**
@@ -26,30 +21,32 @@ class DomainEventHandlerLocator
      */
     public function getHandlerFor(DomainEvent $event)
     {
-        $eventClass = get_class($event);
+        $eventClass = $this->getUnqualifiedDomainEventClassName($event);
+        $method = 'create' . $eventClass . 'Handler';
 
-        switch ($eventClass) {
-            case ProductImportDomainEvent::class:
-                /* @var $event ProductImportDomainEvent */
-                return $this->factory->createProductImportDomainEventHandler($event);
-
-            case CatalogImportDomainEvent::class:
-                /* @var $event CatalogImportDomainEvent */
-                return $this->factory->createCatalogImportDomainEventHandler($event);
-
-            case RootTemplateChangedDomainEvent::class:
-                /* @var $event RootTemplateChangedDomainEvent */
-                return $this->factory->createRootTemplateChangedDomainEventHandler($event);
-            case ImageImportDomainEvent::class:
-                /* @var $event ImageImportDomainEvent */
-                return $this->factory->createImageImportDomainEventHandler($event);
-            case ProductListingSavedDomainEvent::class:
-                /* @var $event ProductListingSavedDomainEvent */
-                return $this->factory->createProductListingSavedDomainEventHandler($event);
+        if (!method_exists($this->factory, $method)) {
+            throw new UnableToFindDomainEventHandlerException(
+                sprintf('Unable to find a handler for %s domain event', $eventClass)
+            );
         }
 
-        throw new UnableToFindDomainEventHandlerException(
-            sprintf('Unable to find a handler for %s domain event', $eventClass)
-        );
+        return $this->factory->{$method}($event);
     }
+
+    /**
+     * @param DomainEvent $event
+     * @return string
+     */
+    private function getUnqualifiedDomainEventClassName(DomainEvent $event)
+    {
+        $qualifiedClassName = get_class($event);
+        $lastQualifierPosition = strrpos($qualifiedClassName, '\\');
+
+        if (false === $lastQualifierPosition) {
+            return $qualifiedClassName;
+        }
+
+        return substr($qualifiedClassName, $lastQualifierPosition + 1);
+    }
+
 }

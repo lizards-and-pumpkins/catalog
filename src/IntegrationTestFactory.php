@@ -35,6 +35,14 @@ class IntegrationTestFactory implements Factory
     }
 
     /**
+     * @return InMemoryQueue
+     */
+    public function createCommandQueue()
+    {
+        return new InMemoryQueue();
+    }
+
+    /**
      * @return InMemoryLogger
      */
     public function createLogger()

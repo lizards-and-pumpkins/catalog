@@ -6,14 +6,12 @@ use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use Brera\InvalidProjectionDataSourceTypeException;
 use Brera\SampleContextSource;
 use Brera\DataPool\DataPoolWriter;
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilder;
 use Brera\SnippetList;
-use Brera\SnippetRendererCollection;
 use Brera\ProjectionSourceData;
+use Brera\SnippetRendererCollection;
 
 /**
  * @covers \Brera\Product\ProductProjector
- * @uses   \Brera\Product\ProductSnippetRendererCollection
  */
 class ProductProjectorTest extends \PHPUnit_Framework_TestCase
 {
@@ -43,7 +41,7 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
     private $mockRendererCollection;
 
     /**
-     * @var SearchDocumentBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductSearchDocumentBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubSearchDocumentBuilder;
 
@@ -53,7 +51,7 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
         $this->stubDataPoolWriter = $this->getMock(DataPoolWriter::class, [], [], '', false);
         $this->stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
 
-        $this->mockRendererCollection = $this->getMock(ProductSnippetRendererCollection::class, [], [], '', false);
+        $this->mockRendererCollection = $this->getMock(SnippetRendererCollection::class, [], [], '', false);
         $this->mockRendererCollection->expects($this->any())
             ->method('render')
             ->willReturn($this->stubSnippetList);
@@ -92,10 +90,7 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
         $stubContext = $this->getMock(SampleContextSource::class, [], [], '', false);
         $invalidDataSourceType = $this->getMock(ProjectionSourceData::class);
 
-        $this->setExpectedException(
-            InvalidProjectionDataSourceTypeException::class,
-            'First argument must be instance of ProductSource.'
-        );
+        $this->setExpectedException(InvalidProjectionDataSourceTypeException::class);
 
         $this->projector->project($invalidDataSourceType, $stubContext);
     }

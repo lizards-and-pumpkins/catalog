@@ -7,11 +7,12 @@ use Brera\Projector;
 use Brera\ProjectionSourceData;
 use Brera\Context\ContextSource;
 use Brera\InvalidProjectionDataSourceTypeException;
+use Brera\SnippetRendererCollection;
 
 class ProductProjector implements Projector
 {
     /**
-     * @var ProductSnippetRendererCollection
+     * @var SnippetRendererCollection
      */
     private $rendererCollection;
 
@@ -26,7 +27,7 @@ class ProductProjector implements Projector
     private $dataPoolWriter;
 
     public function __construct(
-        ProductSnippetRendererCollection $rendererCollection,
+        SnippetRendererCollection $rendererCollection,
         ProductSearchDocumentBuilder $searchDocumentBuilder,
         DataPoolWriter $dataPoolWriter
     ) {
