@@ -2,12 +2,6 @@
 
 namespace Brera;
 
-use Brera\Image\ImageImportDomainEvent;
-use Brera\Product\CatalogImportDomainEvent;
-use Brera\Product\ProductImportDomainEvent;
-use Brera\Product\ProductListingSavedDomainEvent;
-use Brera\Product\ProductStockQuantityChangedDomainEvent;
-
 class DomainEventHandlerLocator
 {
     /**
@@ -27,36 +21,32 @@ class DomainEventHandlerLocator
      */
     public function getHandlerFor(DomainEvent $event)
     {
-        $eventClass = get_class($event);
+        $eventClass = $this->getUnqualifiedDomainEventClassName($event);
+        $method = 'create' . $eventClass . 'Handler';
 
-        switch ($eventClass) {
-            case ProductImportDomainEvent::class:
-                /* @var ProductImportDomainEvent $event */
-                return $this->factory->createProductImportDomainEventHandler($event);
-
-            case CatalogImportDomainEvent::class:
-                /* @var CatalogImportDomainEvent $event */
-                return $this->factory->createCatalogImportDomainEventHandler($event);
-
-            case RootTemplateChangedDomainEvent::class:
-                /* @var RootTemplateChangedDomainEvent $event */
-                return $this->factory->createRootTemplateChangedDomainEventHandler($event);
-
-            case ImageImportDomainEvent::class:
-                /* @var ImageImportDomainEvent $event */
-                return $this->factory->createImageImportDomainEventHandler($event);
-
-            case ProductListingSavedDomainEvent::class:
-                /* @var ProductListingSavedDomainEvent $event */
-                return $this->factory->createProductListingSavedDomainEventHandler($event);
-
-            case ProductStockQuantityChangedDomainEvent::class:
-                /** @var ProductStockQuantityChangedDomainEvent $event */
-                return $this->factory->createProductStockQuantityChangedDomainEventHandler($event);
+        if (!method_exists($this->factory, $method)) {
+            throw new UnableToFindDomainEventHandlerException(
+                sprintf('Unable to find a handler for %s domain event', $eventClass)
+            );
         }
 
-        throw new UnableToFindDomainEventHandlerException(
-            sprintf('Unable to find a handler for %s domain event', $eventClass)
-        );
+        return $this->factory->{$method}($event);
     }
+
+    /**
+     * @param DomainEvent $event
+     * @return string
+     */
+    private function getUnqualifiedDomainEventClassName(DomainEvent $event)
+    {
+        $qualifiedClassName = get_class($event);
+        $lastQualifierPosition = strrpos($qualifiedClassName, '\\');
+
+        if (false === $lastQualifierPosition) {
+            return $qualifiedClassName;
+        }
+
+        return substr($qualifiedClassName, $lastQualifierPosition + 1);
+    }
+
 }

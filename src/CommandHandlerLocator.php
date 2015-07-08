@@ -2,8 +2,6 @@
 
 namespace Brera;
 
-use Brera\Product\ProjectProductStockQuantitySnippetCommand;
-
 class CommandHandlerLocator
 {
     /**
@@ -23,15 +21,31 @@ class CommandHandlerLocator
      */
     public function getHandlerFor(Command $command)
     {
-        $commandClass = get_class($command);
+        $commandClass = $this->getUnqualifiedCommandClassName($command);
+        $method = 'create' . $commandClass . 'Handler';
 
-        switch ($commandClass) {
-            case ProjectProductStockQuantitySnippetCommand::class:
-                return $this->factory->createProjectProductStockQuantitySnippetCommandHandler($command);
+        if (!method_exists($this->factory, $method)) {
+            throw new UnableToFindCommandHandlerException(
+                sprintf('Unable to find a handler for %s domain command', $commandClass)
+            );
         }
 
-        throw new UnableToFindCommandHandlerException(
-            sprintf('Unable to find a handler for %s domain command', $commandClass)
-        );
+        return $this->factory->{$method}($command);
+    }
+
+    /**
+     * @param Command $command
+     * @return string
+     */
+    private function getUnqualifiedCommandClassName(Command $command)
+    {
+        $qualifiedClassName = get_class($command);
+        $lastQualifierPosition = strrpos($qualifiedClassName, '\\');
+
+        if (false === $lastQualifierPosition) {
+            return $qualifiedClassName;
+        }
+
+        return substr($qualifiedClassName, $lastQualifierPosition + 1);
     }
 }
