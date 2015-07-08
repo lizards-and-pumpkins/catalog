@@ -605,8 +605,11 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     {
         $mockCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
         $mockCriteria->expects($this->any())
-            ->method('getCondition')
-            ->willReturn($condition);
+            ->method('hasAndCondition')
+            ->willReturn(SearchCriteria::AND_CONDITION === $condition);
+        $mockCriteria->expects($this->any())
+            ->method('hasOrCondition')
+            ->willReturn(SearchCriteria::OR_CONDITION === $condition);
         $mockCriteria->expects($this->any())
             ->method('getCriteria')
             ->willReturn($mockCriteriaToReturn);

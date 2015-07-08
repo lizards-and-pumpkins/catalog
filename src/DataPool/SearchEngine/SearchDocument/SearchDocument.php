@@ -71,8 +71,8 @@ class SearchDocument
 
         while (false === $canExitTheLoop && list(, $criterion) = each($criterionArray)) {
             $isMatching = $this->hasMatchingField($criterion);
-            $canExitTheLoop = (SearchCriteria::OR_CONDITION === $criteria->getCondition() && $isMatching) ||
-                              (SearchCriteria::AND_CONDITION === $criteria->getCondition() && !$isMatching);
+            $canExitTheLoop = ($criteria->hasOrCondition() && $isMatching) ||
+                              ($criteria->hasAndCondition() && !$isMatching);
         }
 
         return $isMatching;

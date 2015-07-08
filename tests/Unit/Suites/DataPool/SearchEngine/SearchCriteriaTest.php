@@ -12,16 +12,20 @@ class SearchCriteriaTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(\JsonSerializable::class, SearchCriteria::createAnd());
     }
 
-    public function testCriteriaAndConditionIsReturned()
+    public function testCriteriaWithAndConditionIsCreated()
     {
         $criteria = SearchCriteria::createAnd();
-        $this->assertEquals(SearchCriteria::AND_CONDITION, $criteria->getCondition());
+
+        $this->assertTrue($criteria->hasAndCondition());
+        $this->assertFalse($criteria->hasOrCondition());
     }
 
-    public function testCriteriaOrConditionIsReturned()
+    public function testCriteriaWithOrConditionIsCreate()
     {
         $criteria = SearchCriteria::createOr();
-        $this->assertEquals(SearchCriteria::OR_CONDITION, $criteria->getCondition());
+
+        $this->assertTrue($criteria->hasOrCondition());
+        $this->assertFalse($criteria->hasAndCondition());
     }
 
     public function testCriteriaArrayIsReturned()

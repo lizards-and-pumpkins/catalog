@@ -41,14 +41,6 @@ class SearchCriteria implements \JsonSerializable
         return new self(self::OR_CONDITION);
     }
 
-    /**
-     * @return string
-     */
-    public function getCondition()
-    {
-        return $this->condition;
-    }
-
     public function add(SearchCriterion $criterion)
     {
         $this->criteria[] = $criterion;
@@ -60,6 +52,22 @@ class SearchCriteria implements \JsonSerializable
     public function getCriteria()
     {
         return $this->criteria;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasAndCondition()
+    {
+        return self::AND_CONDITION === $this->condition;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasOrCondition()
+    {
+        return self::OR_CONDITION === $this->condition;
     }
 
     /**

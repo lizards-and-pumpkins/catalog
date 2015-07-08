@@ -38,7 +38,7 @@ EOX;
         $expectedCriterion2 = SearchCriterion::create('gender', 'male', 'eq');
 
         $this->assertInstanceOf(SearchCriteria::class, $searchCriteria);
-        $this->assertEquals('and', $searchCriteria->getCondition());
+        $this->assertTrue($searchCriteria->hasAndCondition());
         $this->assertCount(2, $criteria);
         $this->assertEquals($expectedCriterion1, $criteria[0]);
         $this->assertEquals($expectedCriterion2, $criteria[1]);
