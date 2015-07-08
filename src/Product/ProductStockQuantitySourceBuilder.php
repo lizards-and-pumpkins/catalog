@@ -11,7 +11,7 @@ class ProductStockQuantitySourceBuilder
         $parser = new XPathParser($xml);
 
         $skuNodes = $parser->getXmlNodesArrayByXPath('/*/sku');
-        $skuSting = $this->getSkuStringFromDomNodeArray($skuNodes);
+        $skuString = $this->getSkuStringFromDomNodeArray($skuNodes);
 
         $contextNodes = $parser->getXmlNodesArrayByXPath('/*/@*');
         $contextData = $this->getContextDataFromXmlNodeArray($contextNodes);
@@ -19,7 +19,7 @@ class ProductStockQuantitySourceBuilder
         $quantityNodes = $parser->getXmlNodesArrayByXPath('/*/quantity');
         $quantityString = $this->getQuantityStringFromDomNodeArray($quantityNodes);
 
-        $sku = PoCSku::fromString($skuSting);
+        $sku = PoCSku::fromString($skuString);
         $quantity = ProductStockQuantity::fromString($quantityString);
 
         return new ProductStockQuantitySource($sku, $contextData, $quantity);
