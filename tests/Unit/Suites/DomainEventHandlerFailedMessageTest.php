@@ -43,7 +43,7 @@ class DomainEventHandlerFailedMessageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectation, (string) $this->message);
     }
 
-    public function testExceptionIsReturned()
+    public function testExceptionContextIsReturned()
     {
         $result = $this->message->getContext();
 
