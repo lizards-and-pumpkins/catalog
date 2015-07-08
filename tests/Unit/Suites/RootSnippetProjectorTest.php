@@ -9,24 +9,53 @@ use Brera\DataPool\DataPoolWriter;
  */
 class RootSnippetProjectorTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var SnippetRendererCollection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockSnippetRendererCollection;
+
+    /**
+     * @var DataPoolWriter|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockDataPoolWriter;
+
+    /**
+     * @var RootSnippetProjector
+     */
+    private $projector;
+
+    protected function setUp()
+    {
+        $this->mockSnippetRendererCollection = $this->getMock(SnippetRendererCollection::class, [], [], '', false);
+        $this->mockDataPoolWriter = $this->getMock(DataPoolWriter::class, [], [], '', false);
+
+        $this->projector = new RootSnippetProjector($this->mockSnippetRendererCollection, $this->mockDataPoolWriter);
+    }
+
     public function testSnippetListIsWrittenIntoDataPool()
     {
-        $stubDataObject = $this->getMock(ProjectionSourceData::class);
+        $stubProjectionSourceData = $this->getMock(RootSnippetSourceList::class, [], [], '', false);
         $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
         $stubSnippetList = $this->getMock(SnippetList::class);
 
-        $mockSnippetRendererCollection = $this->getMock(SnippetRendererCollection::class, [], [], '', false);
-        $mockSnippetRendererCollection->expects($this->once())
+        $this->mockSnippetRendererCollection->expects($this->any())
             ->method('render')
-            ->with($stubDataObject, $stubContextSource)
             ->willReturn($stubSnippetList);
 
-        $mockDataPoolWriter = $this->getMock(DataPoolWriter::class, [], [], '', false);
-        $mockDataPoolWriter->expects($this->once())
+        $this->mockDataPoolWriter->expects($this->once())
             ->method('writeSnippetList')
             ->with($stubSnippetList);
 
-        $projector = new RootSnippetProjector($mockSnippetRendererCollection, $mockDataPoolWriter);
-        $projector->project($stubDataObject, $stubContextSource);
+        $this->projector->project($stubProjectionSourceData, $stubContextSource);
+    }
+
+    public function testExceptionIsThrownIfProjectionDataIsNotInstanceOfRootSnippetSourceList()
+    {
+        $stubProjectionSourceData = $this->getMock(ProjectionSourceData::class);
+        $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
+
+        $this->setExpectedException(InvalidProjectionDataSourceTypeException::class);
+
+        $this->projector->project($stubProjectionSourceData, $stubContextSource);
     }
 }

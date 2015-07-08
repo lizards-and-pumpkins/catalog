@@ -11,7 +11,7 @@ class ProductInListingBlock extends ProductBlock
     {
         $brandName = $this->getProductAttributeValue('brand');
         $brand = strtolower(preg_replace('/\W/', '_', trim($brandName)));
-        $fileName = 'media/brands/brands-slider/' . $brand . '.png';
+        $fileName = 'images/brands/brands-slider/' . $brand . '.png';
 
         if (!file_exists('pub/' . $fileName)) {
             return false;

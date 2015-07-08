@@ -32,7 +32,7 @@ class FailedToReadFromDomainEventQueueMessageTest extends \PHPUnit_Framework_Tes
 
     }
 
-    public function testExceptionIsReturned()
+    public function testExceptionContextIsReturned()
     {
         $result = $this->message->getContext();
 

@@ -25,6 +25,12 @@ class RootSnippetProjector implements Projector
 
     public function project(ProjectionSourceData $dataObject, ContextSource $context)
     {
+        if (!($dataObject instanceof RootSnippetSourceList)) {
+            throw new InvalidProjectionDataSourceTypeException(
+                'First argument must be instance of RootSnippetSourceList.'
+            );
+        }
+
         $snippetList = $this->snippetRendererCollection->render($dataObject, $context);
         $this->dataPoolWriter->writeSnippetList($snippetList);
     }
