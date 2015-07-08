@@ -66,13 +66,13 @@ class SearchDocument
     public function isMatchingCriteria(SearchCriteria $criteria)
     {
         $isMatching = false;
-        $canExitTheLoop = false;
-        $criterionArray = $criteria->getCriteria();
 
-        while (false === $canExitTheLoop && list(, $criterion) = each($criterionArray)) {
+        foreach ($criteria->getCriteria() as $criterion) {
             $isMatching = $this->hasMatchingField($criterion);
-            $canExitTheLoop = ($criteria->hasOrCondition() && $isMatching) ||
-                              ($criteria->hasAndCondition() && !$isMatching);
+
+            if (($criteria->hasOrCondition() && $isMatching) || ($criteria->hasAndCondition() && !$isMatching)) {
+                return $isMatching;
+            }
         }
 
         return $isMatching;
