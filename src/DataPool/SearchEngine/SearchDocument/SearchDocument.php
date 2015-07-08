@@ -86,10 +86,10 @@ class SearchDocument
     {
         $isMatching = false;
 
-        $fields = $this->fields->getFields();
-
-        while (false === $isMatching && list(, $field) = each($fields)) {
-            $isMatching = $criterion->matches($field);
+        foreach ($this->fields->getFields() as $field) {
+            if ($isMatching = $criterion->matches($field)) {
+                return $isMatching;
+            }
         }
 
         return $isMatching;
