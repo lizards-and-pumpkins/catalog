@@ -55,7 +55,7 @@ class ProductProjector implements Projector
         $snippetList = $this->rendererCollection->render($productSource, $contextSource);
         $this->dataPoolWriter->writeSnippetList($snippetList);
 
-        $searchDocument = $this->searchDocumentBuilder->aggregate($productSource, $contextSource);
-        $this->dataPoolWriter->writeSearchDocumentCollection($searchDocument);
+        $searchDocumentCollection = $this->searchDocumentBuilder->aggregate($productSource, $contextSource);
+        $this->dataPoolWriter->writeSearchDocumentCollection($searchDocumentCollection);
     }
 }

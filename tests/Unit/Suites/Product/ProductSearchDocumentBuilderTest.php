@@ -28,15 +28,15 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private $searchDocumentBuilder;
 
+    /**
+     * @var string
+     */
+    private $searchableAttributeCode = 'foo';
+
     protected function setUp()
     {
-        $searchableAttributeCodes = ['name'];
-
-        $this->stubContextSource = $this->getMockBuilder(SampleContextSource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->searchDocumentBuilder = new ProductSearchDocumentBuilder($searchableAttributeCodes);
+        $this->stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
+        $this->searchDocumentBuilder = new ProductSearchDocumentBuilder([$this->searchableAttributeCode]);
     }
 
     public function testSearchIndexerInterfaceIsImplemented()
@@ -51,15 +51,10 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
             ->method('getAllAvailableContexts')
             ->willReturn([$stubContext]);
 
-        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
-
         $stubProduct = $this->getMock(Product::class, [], [], '', false);
         $stubProduct->expects($this->atLeastOnce())
-            ->method('getId')
-            ->willReturn($stubProductId);
-        $stubProduct->expects($this->atLeastOnce())
             ->method('getAttributeValue')
-            ->with('name')
+            ->with($this->searchableAttributeCode)
             ->willReturn('bar');
 
         $stubProductSource = $this->getMock(ProductSource::class, [], [], '', false);

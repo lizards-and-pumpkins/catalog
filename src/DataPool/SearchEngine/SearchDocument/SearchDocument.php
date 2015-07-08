@@ -3,6 +3,8 @@
 namespace Brera\DataPool\SearchEngine\SearchDocument;
 
 use Brera\Context\Context;
+use Brera\DataPool\SearchEngine\SearchCriteria;
+use Brera\DataPool\SearchEngine\SearchCriterion;
 
 class SearchDocument
 {
@@ -58,27 +60,38 @@ class SearchDocument
     }
 
     /**
-     * @param string[] $fieldNamesAndValuesToCheck
+     * @param SearchCriteria $criteria
      * @return bool
      */
-    public function hasFieldMatchingOneOf(array $fieldNamesAndValuesToCheck)
+    public function isMatchingCriteria(SearchCriteria $criteria)
     {
-        foreach ($fieldNamesAndValuesToCheck as $fieldName => $fieldValue) {
-            if ($this->hasMatchingField($fieldName, $fieldValue)) {
-                return true;
+        $isMatching = false;
+
+        foreach ($criteria->getCriteria() as $criterion) {
+            $isMatching = $this->hasMatchingField($criterion);
+
+            if (($criteria->hasOrCondition() && $isMatching) || ($criteria->hasAndCondition() && !$isMatching)) {
+                return $isMatching;
             }
         }
-        return false;
+
+        return $isMatching;
     }
 
     /**
-     * @param string $fieldName
-     * @param string $fieldValue
+     * @param SearchCriterion $criterion
      * @return bool
      */
-    public function hasMatchingField($fieldName, $fieldValue)
+    private function hasMatchingField(SearchCriterion $criterion)
     {
-        $searchField = SearchDocumentField::fromKeyAndValue($fieldName, $fieldValue);
-        return $this->fields->contains($searchField);
+        $isMatching = false;
+
+        foreach ($this->fields->getFields() as $field) {
+            if ($isMatching = $criterion->matches($field)) {
+                return $isMatching;
+            }
+        }
+
+        return $isMatching;
     }
 }

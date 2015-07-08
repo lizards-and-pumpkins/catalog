@@ -4,7 +4,6 @@ namespace Brera\Product;
 
 use Brera\ProjectionSourceData;
 
-/* TODO: Does it really have to extend ProjectionSourceData? */
 class Product implements ProjectionSourceData
 {
     /**

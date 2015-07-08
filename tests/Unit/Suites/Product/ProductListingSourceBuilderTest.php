@@ -2,54 +2,88 @@
 
 namespace Brera\Product;
 
+use Brera\DataPool\SearchEngine\SearchCriteria;
+use Brera\DataPool\SearchEngine\SearchCriterion;
+
 /**
  * @covers \Brera\Product\ProductListingSourceBuilder
  * @uses   \Brera\Utils\XPathParser
  * @uses   \Brera\Product\ProductListingSource
+ * @uses   \Brera\DataPool\SearchEngine\SearchCriteria
+ * @uses   \Brera\DataPool\SearchEngine\SearchCriterion
  */
 class ProductListingSourceBuilderTest extends \PHPUnit_Framework_TestCase
 {
-    public function testProductListingSourceIsCreatedFromXml()
+    public function testProductListingSourceWithAndConditionIsCreatedFromXml()
     {
         $xml = <<<EOX
-<listing url_key="men-accessories" website="ru" language="en_US">
-    <category>men-accessories</category>
+<listing url_key="men-accessories" condition="and" website="ru" language="en_US">
+    <category operation="eq">accessories</category>
+    <gender operation="eq">male</gender>
 </listing>
 EOX;
 
-        $builder = new ProductListingSourceBuilder();
-        $productListingSource = $builder->createProductListingSourceFromXml($xml);
+        $productListingSource = (new ProductListingSourceBuilder())->createProductListingSourceFromXml($xml);
 
         $urlKey = $productListingSource->getUrlKey();
-        $context = $this->getObjectProperty($productListingSource, 'contextData');
-        $attributes = $this->getObjectProperty($productListingSource, 'criteria');
-
-        $expectedUrlKey = 'men-accessories';
-        $expectedContextData = ['website' => 'ru', 'language' => 'en_US'];
-        $expectedCriteria = ['category' => 'men-accessories'];
+        $context = $productListingSource->getContextData();
+        $searchCriteria = $productListingSource->getCriteria();
+        $criteria = $searchCriteria->getCriteria();
 
         $this->assertInstanceOf(ProductListingSource::class, $productListingSource);
-        $this->assertEquals($expectedUrlKey, $urlKey);
-        $this->assertEquals($expectedContextData, $context);
-        $this->assertEquals($expectedCriteria, $attributes);
+        $this->assertEquals('men-accessories', $urlKey);
+        $this->assertEquals(['website' => 'ru', 'language' => 'en_US'], $context);
+
+        $expectedCriterion1 = SearchCriterion::create('category', 'accessories', 'eq');
+        $expectedCriterion2 = SearchCriterion::create('gender', 'male', 'eq');
+
+        $this->assertInstanceOf(SearchCriteria::class, $searchCriteria);
+        $this->assertTrue($searchCriteria->hasAndCondition());
+        $this->assertCount(2, $criteria);
+        $this->assertEquals($expectedCriterion1, $criteria[0]);
+        $this->assertEquals($expectedCriterion2, $criteria[1]);
     }
 
-    public function testExceptionIsThrownInCaseXmlHasNoEssentialData()
+    public function testProductListingSourceWithOrConditionIsCreatedFromXml()
     {
-        $this->setExpectedException(InvalidNumberOfUrlKeysPerImportedProductListingException::class);
-        (new ProductListingSourceBuilder())->createProductListingSourceFromXml('<?xml version="1.0"?><node />');
+        $xml = <<<EOX
+<listing url_key="men-accessories" condition="or" website="ru" language="en_US">
+    <category operation="eq">accessories</category>
+    <gender operation="eq">male</gender>
+</listing>
+EOX;
+
+        $productListingSource = (new ProductListingSourceBuilder())->createProductListingSourceFromXml($xml);
+        $searchCriteria = $productListingSource->getCriteria();
+
+        $this->assertTrue($searchCriteria->hasOrCondition());
     }
 
-    /**
-     * @param ProductListingSource $productSource
-     * @param string $propertyName
-     * @return mixed
-     */
-    private function getObjectProperty(ProductListingSource $productSource, $propertyName)
+    public function testExceptionIsThrownIfUrlKeyAttributeIsMissing()
     {
-        $property = new \ReflectionProperty($productSource, $propertyName);
-        $property->setAccessible(true);
+        $this->setExpectedException(MissingUrlKeyXmlAttributeException::class);
+        (new ProductListingSourceBuilder())->createProductListingSourceFromXml('<listing />');
+    }
 
-        return $property->getValue($productSource);
+    public function testExceptionIsThrownIfConditionAttributeOfListingNodeIsMissing()
+    {
+        $this->setExpectedException(MissingConditionXmlAttributeException::class);
+        (new ProductListingSourceBuilder())->createProductListingSourceFromXml('<listing url_key="foo"/>');
+    }
+
+    public function testExceptionIsThrownIfConditionAttributeOfListingNodeIsInvalid()
+    {
+        $this->setExpectedException(InvalidConditionXmlAttributeException::class);
+        (new ProductListingSourceBuilder())->createProductListingSourceFromXml(
+            '<listing url_key="foo" condition="bar"/>'
+        );
+    }
+
+    public function testExceptionIsThrownIfCriterionNodeDoesNotHaveOperationAttribute()
+    {
+        $this->setExpectedException(MissingCriterionOperationXmlAttributeException::class);
+        $xml = '<listing url_key="foo" condition="and"><bar /></listing>';
+
+        (new ProductListingSourceBuilder())->createProductListingSourceFromXml($xml);
     }
 }

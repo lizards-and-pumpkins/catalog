@@ -39,24 +39,4 @@ class SearchDocumentFieldCollection
     {
         return $this->fields;
     }
-
-    /**
-     * @param SearchDocumentField $fieldToCheck
-     * @return bool
-     */
-    public function contains(SearchDocumentField $fieldToCheck)
-    {
-        return in_array($fieldToCheck, $this->fields);
-    }
-
-    /**
-     * @return string[]
-     */
-    public function toArray()
-    {
-        return array_reduce($this->fields, function (array $acc, SearchDocumentField $field) {
-            $acc[$field->getKey()] = $field->getValue();
-            return $acc;
-        }, []);
-    }
 }
