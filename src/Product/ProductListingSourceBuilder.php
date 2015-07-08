@@ -72,12 +72,18 @@ class ProductListingSourceBuilder
     private function createSearchCriteria(array $criteriaCondition)
     {
         if (empty($criteriaCondition)) {
-            throw new MissingConditionXmlAttributeException();
+            throw new MissingConditionXmlAttributeException;
         }
 
-        $method = 'create' . $criteriaCondition[0]['value'];
+        if (SearchCriteria::AND_CONDITION === $criteriaCondition[0]['value']) {
+            return SearchCriteria::createAnd();
+        }
 
-        return SearchCriteria::$method();
+        if (SearchCriteria::OR_CONDITION === $criteriaCondition[0]['value']) {
+            return SearchCriteria::createOr();
+        }
+
+        throw new InvalidConditionXmlAttributeException;
     }
 
     /**

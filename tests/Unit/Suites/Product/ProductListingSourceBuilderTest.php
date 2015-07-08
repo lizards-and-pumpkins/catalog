@@ -14,7 +14,7 @@ use Brera\DataPool\SearchEngine\SearchCriterion;
  */
 class ProductListingSourceBuilderTest extends \PHPUnit_Framework_TestCase
 {
-    public function testProductListingSourceIsCreatedFromXml()
+    public function testProductListingSourceWithAndConditionIsCreatedFromXml()
     {
         $xml = <<<EOX
 <listing url_key="men-accessories" condition="and" website="ru" language="en_US">
@@ -44,6 +44,21 @@ EOX;
         $this->assertEquals($expectedCriterion2, $criteria[1]);
     }
 
+    public function testProductListingSourceWithOrConditionIsCreatedFromXml()
+    {
+        $xml = <<<EOX
+<listing url_key="men-accessories" condition="or" website="ru" language="en_US">
+    <category operation="eq">accessories</category>
+    <gender operation="eq">male</gender>
+</listing>
+EOX;
+
+        $productListingSource = (new ProductListingSourceBuilder())->createProductListingSourceFromXml($xml);
+        $searchCriteria = $productListingSource->getCriteria();
+
+        $this->assertTrue($searchCriteria->hasOrCondition());
+    }
+
     public function testExceptionIsThrownIfUrlKeyAttributeIsMissing()
     {
         $this->setExpectedException(MissingUrlKeyXmlAttributeException::class);
@@ -54,6 +69,14 @@ EOX;
     {
         $this->setExpectedException(MissingConditionXmlAttributeException::class);
         (new ProductListingSourceBuilder())->createProductListingSourceFromXml('<listing url_key="foo"/>');
+    }
+
+    public function testExceptionIsThrownIfConditionAttributeOfListingNodeIsInvalid()
+    {
+        $this->setExpectedException(InvalidConditionXmlAttributeException::class);
+        (new ProductListingSourceBuilder())->createProductListingSourceFromXml(
+            '<listing url_key="foo" condition="bar"/>'
+        );
     }
 
     public function testExceptionIsThrownIfCriterionNodeDoesNotHaveOperationAttribute()
