@@ -142,26 +142,10 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
 
     public function testExceptionIsThrownIfSearchCriteriaCriteriaIsMissing()
     {
-        $this->setExpectedException(MalformedSearchCriteriaMetaException::class, 'Malformed criteria.');
+        $this->setExpectedException(MalformedSearchCriteriaMetaException::class, 'Missing criteria.');
 
         $json = json_encode([
             ProductListingMetaInfoSnippetContent::KEY_CRITERIA => ['condition' => ''],
-            ProductListingMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
-            ProductListingMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
-        ]);
-
-        ProductListingMetaInfoSnippetContent::fromJson($json);
-    }
-
-    public function testExceptionIsThrownIfSearchCriteriaCriterionIsInvalid()
-    {
-        $this->setExpectedException(MalformedSearchCriteriaMetaException::class, 'Malformed criterion.');
-
-        $json = json_encode([
-            ProductListingMetaInfoSnippetContent::KEY_CRITERIA => [
-                'condition' => '',
-                'criteria'  => ['']
-            ],
             ProductListingMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
             ProductListingMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
         ]);

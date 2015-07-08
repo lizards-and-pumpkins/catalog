@@ -152,42 +152,54 @@ class ProductListingMetaInfoSnippetContent implements PageMetaInfoSnippetContent
      */
     private static function createSearchCriteriaFromMetaInfo(array $metaInfo)
     {
-        if (!isset($metaInfo['condition'])) {
-            throw new MalformedSearchCriteriaMetaException('Missing criteria condition.');
-        }
-
-        if (!isset($metaInfo['criteria']) || !is_array($metaInfo['criteria'])) {
-            throw new MalformedSearchCriteriaMetaException('Malformed criteria.');
-        }
+        self::validateSearchCriteriaMetaInfo($metaInfo);
 
         $criteria = SearchCriteria::createAnd();
 
-        foreach ($metaInfo['criteria'] as $criterionArray) {
-            if (!is_array($criterionArray)) {
-                throw new MalformedSearchCriteriaMetaException('Malformed criterion.');
-            }
-
-            if (!isset($criterionArray['fieldName'])) {
-                throw new MalformedSearchCriteriaMetaException('Missing criterion field name.');
-            }
-
-            if (!isset($criterionArray['fieldValue'])) {
-                throw new MalformedSearchCriteriaMetaException('Missing criterion field value.');
-            }
-
-            if (!isset($criterionArray['operation'])) {
-                throw new MalformedSearchCriteriaMetaException('Missing criterion operation.');
-            }
+        foreach ($metaInfo['criteria'] as $criterionMetaInfo) {
+            self::validateSearchCriterionMetaInfo($criterionMetaInfo);
 
             $criterion = SearchCriterion::create(
-                $criterionArray['fieldName'],
-                $criterionArray['fieldValue'],
-                $criterionArray['operation']
+                $criterionMetaInfo['fieldName'],
+                $criterionMetaInfo['fieldValue'],
+                $criterionMetaInfo['operation']
             );
 
             $criteria->add($criterion);
         }
 
         return $criteria;
+    }
+
+    /**
+     * @param mixed[] $metaInfo
+     */
+    private static function validateSearchCriteriaMetaInfo(array $metaInfo)
+    {
+        if (!isset($metaInfo['condition'])) {
+            throw new MalformedSearchCriteriaMetaException('Missing criteria condition.');
+        }
+
+        if (!isset($metaInfo['criteria'])) {
+            throw new MalformedSearchCriteriaMetaException('Missing criteria.');
+        }
+    }
+
+    /**
+     * @param string[] $criterionArray
+     */
+    private static function validateSearchCriterionMetaInfo(array $criterionArray)
+    {
+        if (!isset($criterionArray['fieldName'])) {
+            throw new MalformedSearchCriteriaMetaException('Missing criterion field name.');
+        }
+
+        if (!isset($criterionArray['fieldValue'])) {
+            throw new MalformedSearchCriteriaMetaException('Missing criterion field value.');
+        }
+
+        if (!isset($criterionArray['operation'])) {
+            throw new MalformedSearchCriteriaMetaException('Missing criterion operation.');
+        }
     }
 }
