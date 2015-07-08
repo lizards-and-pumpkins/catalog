@@ -32,7 +32,7 @@ class FailedToReadFromCommandQueueMessageTest extends \PHPUnit_Framework_TestCas
 
     }
 
-    public function testExceptionIsReturned()
+    public function testExceptionContextIsReturned()
     {
         $result = $this->message->getContext();
 
