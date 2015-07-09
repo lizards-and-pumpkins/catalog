@@ -4,6 +4,9 @@ namespace Brera;
 
 use Brera\Context\Context;
 use Brera\Context\VersionedContext;
+use Brera\Http\HttpHeaders;
+use Brera\Http\HttpRequest;
+use Brera\Http\HttpRequestBody;
 use Brera\Http\HttpUrl;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
@@ -25,6 +28,13 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
         $snippetKeyGeneratorLocator = new SnippetKeyGeneratorLocator();
         $urlPathKeyGenerator = new PoCUrlPathKeyGenerator();
 
+        $httpRequest = HttpRequest::fromParameters(
+            'GET',
+            $url,
+            HttpHeaders::fromArray([]),
+            HttpRequestBody::fromString('')
+        );
+
         $keyValueStore = new InMemoryKeyValueStore();
         $searchEngine = new InMemorySearchEngine();
 
@@ -45,7 +55,7 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
             $dataPoolReader,
             new PageBuilder($dataPoolReader, $snippetKeyGeneratorLocator, $logger)
         );
-        $page = $pageBuilder->process();
+        $page = $pageBuilder->process($httpRequest);
 
         $body = $page->getBody();
         $expected = '<html><head><title>Page Title</title></head><body><h1>Headline</h1></body></html>';

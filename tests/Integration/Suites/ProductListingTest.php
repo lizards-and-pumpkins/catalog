@@ -5,6 +5,9 @@ namespace Brera;
 use Brera\Context\Context;
 use Brera\DataPool\SearchEngine\SearchCriteria;
 use Brera\DataPool\SearchEngine\SearchCriterion;
+use Brera\Http\HttpHeaders;
+use Brera\Http\HttpRequest;
+use Brera\Http\HttpRequestBody;
 use Brera\Http\HttpUrl;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\ProductListingMetaInfoSnippetContent;
@@ -66,9 +69,16 @@ class ProductListingTest extends AbstractIntegrationTest
             ProductListingSnippetRenderer::CODE,
             $this->factory->createProductListingSnippetKeyGenerator()
         );
-        
+
+        $httpRequest = HttpRequest::fromParameters(
+            'GET',
+            HttpUrl::fromString('http://www.example.com'),
+            HttpHeaders::fromArray([]),
+            HttpRequestBody::fromString('')
+        );
+
         $productListingRequestHandler = $this->getProductListingRequestHandler();
-        $page = $productListingRequestHandler->process();
+        $page = $productListingRequestHandler->process($httpRequest);
         $body = $page->getBody();
 
         /* TODO: read from XML */
