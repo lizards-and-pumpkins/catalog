@@ -8,6 +8,13 @@ namespace Brera\Image;
  */
 class ImageMagickInscribeStrategyTest extends \PHPUnit_Framework_TestCase
 {
+    protected function setUp()
+    {
+        if (! extension_loaded('imagick')) {
+            $this->markTestSkipped('The PHP extension imagick is not installed');
+        }
+    }
+    
     public function testImplementImageProcessorStrategyInterfaceIsImplemented()
     {
         $strategy = new ImageMagickInscribeStrategy(1, 1, 'none');

@@ -8,6 +8,13 @@ namespace Brera\Image;
  */
 class ImageMagickResizeStrategyTest extends AbstractResizeStrategyTest
 {
+    protected function setUp()
+    {
+        if (! extension_loaded('imagick')) {
+            $this->markTestSkipped('The PHP extension imagick is not installed');
+        }
+    }
+    
     /**
      * @return string
      */
