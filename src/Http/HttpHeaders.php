@@ -20,11 +20,11 @@ class HttpHeaders
 
     /**
      * @param string[] $headers
-     * @return static
+     * @return HttpHeaders
      */
     public static function fromArray(array $headers)
     {
-        return new static($headers);
+        return new self($headers);
     }
 
     /**
