@@ -26,11 +26,12 @@ class DefaultHttpResponse implements HttpResponse
     }
 
     /**
-     * @param string $header
+     * @param string $name
+     * @param string $value
      */
-    public function addHeader($header)
+    public function addHeader($name, $value)
     {
-        $this->headers[] = $header;
+        $this->headers[$name] = $value;
     }
 
     /**
@@ -43,7 +44,14 @@ class DefaultHttpResponse implements HttpResponse
 
     public function send()
     {
-        array_map('header', $this->headers);
+        $this->sendHeaders();
         echo $this->getBody();
+    }
+
+    protected function sendHeaders()
+    {
+        foreach ($this->headers as $headerName => $headerValue) {
+            header(sprintf('%s: %s', $headerName, $headerValue));
+        }
     }
 }

@@ -16,9 +16,9 @@ abstract class ApiRequestHandler implements HttpRequestHandler
     {
         $response = new DefaultHttpResponse();
 
-        $response->addHeader('Access-Control-Allow-Origin: *');
-        $response->addHeader('Access-Control-Allow-Methods: *');
-        $response->addHeader('Content-Type: application/json');
+        $response->addHeader('Access-Control-Allow-Origin', '*');
+        $response->addHeader('Access-Control-Allow-Methods', '*');
+        $response->addHeader('Content-Type', 'application/json');
 
         $response->setBody($this->getResponseBody($request));
 
