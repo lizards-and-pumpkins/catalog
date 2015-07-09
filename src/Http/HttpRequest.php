@@ -19,7 +19,7 @@ abstract class HttpRequest
      */
     private $body;
 
-    final private function __construct(HttpUrl $url, HttpHeaders $headers, HttpRequestBody $body)
+    final public function __construct(HttpUrl $url, HttpHeaders $headers, HttpRequestBody $body)
     {
         $this->url = $url;
         $this->headers = $headers;
