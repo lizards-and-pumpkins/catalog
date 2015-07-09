@@ -11,7 +11,7 @@ namespace Brera\Http;
  */
 class HttpPutRequestTest extends AbstractHttpRequestTest
 {
-    public function testPostRequestIsReturned()
+    public function testPutRequestIsReturned()
     {
         $request = HttpRequest::fromParameters(
             'PUT',
@@ -22,18 +22,6 @@ class HttpPutRequestTest extends AbstractHttpRequestTest
 
         $this->assertInstanceOf(HttpPutRequest::class, $request);
         $this->assertInstanceOf(HttpRequest::class, $request);
-    }
-
-    public function testItReturnsAnEmptyStringForMultipartFormDataRequests()
-    {
-        $headers = HttpHeaders::fromArray(['content-type' => 'multipart/form-data']);
-        $request = HttpRequest::fromParameters(
-            'PUT',
-            $this->getStubHttpUrl(),
-            $headers,
-            HttpRequestBody::fromString('')
-        );
-        $this->assertSame('', $request->getRawBody());
     }
 
     public function testItReturnsTheRequestContentForNonMultipartFormDataRequests()
