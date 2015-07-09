@@ -29,8 +29,7 @@ class VersionedContextTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->stubDataVersion = $this->getMock(DataVersion::class, [], [], '', false);
-        $this->stubDataVersion->expects($this->any())
-            ->method('__toString')
+        $this->stubDataVersion->method('__toString')
             ->willReturn($this->testVersionValue);
         $this->versionedContext = new VersionedContext($this->stubDataVersion);
     }

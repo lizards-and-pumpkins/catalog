@@ -146,8 +146,7 @@ class BlockStructureTest extends \PHPUnit_Framework_TestCase
     private function getStubBlockWithName($blockName)
     {
         $stubBlock = $this->getStubBlock();
-        $stubBlock->expects($this->any())
-            ->method('getBlockName')
+        $stubBlock->method('getBlockName')
             ->willReturn($blockName);
         return $stubBlock;
     }

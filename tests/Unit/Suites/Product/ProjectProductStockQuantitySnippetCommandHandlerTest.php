@@ -59,8 +59,7 @@ class ProjectProductStockQuantitySnippetCommandHandlerTest extends \PHPUnit_Fram
     {
         $stubProductStockQuantitySource = $this->getMock(ProductStockQuantitySource::class, [], [], '', false);
 
-        $this->mockProductStockQuantitySourceBuilder->expects($this->any())
-            ->method('createFromXml')
+        $this->mockProductStockQuantitySourceBuilder->method('createFromXml')
             ->willReturn($stubProductStockQuantitySource);
 
         $this->mockProjector->expects($this->once())

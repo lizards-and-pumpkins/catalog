@@ -157,11 +157,9 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     private function getContextMockWithReturnValueMap(array $returnValueMap)
     {
         $stubContext = $this->getMock(Context::class);
-        $stubContext->expects($this->any())
-            ->method('getSupportedCodes')
+        $stubContext->method('getSupportedCodes')
             ->willReturn(array_column($returnValueMap, 0));
-        $stubContext->expects($this->any())
-            ->method('getValue')
+        $stubContext->method('getValue')
             ->willReturnMap($returnValueMap);
         return $stubContext;
     }

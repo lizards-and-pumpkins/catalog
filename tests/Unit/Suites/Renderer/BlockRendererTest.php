@@ -27,8 +27,7 @@ class BlockRendererTest extends BlockRendererTestAbstract
 
     public function testExceptionIsThrownIfNoRootBlockIsDefined()
     {
-        $this->getStubLayout()->expects($this->any())
-            ->method('getNodeChildren')
+        $this->getStubLayout()->method('getNodeChildren')
             ->willReturn([]);
         $this->setExpectedException(BlockRendererMustHaveOneRootBlockException::class);
 
@@ -37,8 +36,7 @@ class BlockRendererTest extends BlockRendererTestAbstract
 
     public function testExceptionIsThrownIfMoreThenOneRootBlockIsDefined()
     {
-        $this->getStubLayout()->expects($this->any())
-            ->method('getNodeChildren')
+        $this->getStubLayout()->method('getNodeChildren')
             ->willReturn([['test-dummy-1'], ['test-dummy-2']]);
         $this->setExpectedException(BlockRendererMustHaveOneRootBlockException::class);
 

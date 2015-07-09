@@ -73,8 +73,7 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
 
         $mockSearchDocumentField = $this->createMockSearchDocumentField('non-matching-field-name', $dummyFieldValue);
 
-        $this->mockDocumentFieldsCollection->expects($this->any())
-            ->method('getFields')
+        $this->mockDocumentFieldsCollection->method('getFields')
             ->willReturn([$mockSearchDocumentField]);
 
         $this->assertFalse($this->searchDocument->isMatchingCriteria($mockCriteria));
@@ -89,8 +88,7 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
 
         $mockSearchDocumentField = $this->createMockSearchDocumentField($dummyFieldName, 'non-matching-field-value');
 
-        $this->mockDocumentFieldsCollection->expects($this->any())
-            ->method('getFields')
+        $this->mockDocumentFieldsCollection->method('getFields')
             ->willReturn([$mockSearchDocumentField]);
 
         $this->assertFalse($this->searchDocument->isMatchingCriteria($mockCriteria));
@@ -216,8 +214,7 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
     private function createMockCriterion($fieldName, $fieldValue, $operation)
     {
         $mockCriterion = $this->getMock(SearchCriterion::class, [], [], '', false);
-        $mockCriterion->expects($this->any())
-            ->method('matches')
+        $mockCriterion->method('matches')
             ->willReturnCallback(function (
                 SearchDocumentField $searchDocumentField
             ) use (
@@ -258,11 +255,9 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
     private function createMockCriteria($condition, array $mockCriteriaToReturn)
     {
         $mockCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
-        $mockCriteria->expects($this->any())
-            ->method('getCondition')
+        $mockCriteria->method('getCondition')
             ->willReturn($condition);
-        $mockCriteria->expects($this->any())
-            ->method('getCriteria')
+        $mockCriteria->method('getCriteria')
             ->willReturn($mockCriteriaToReturn);
 
         return $mockCriteria;
@@ -276,11 +271,9 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
     private function createMockSearchDocumentField($fieldName, $fieldValue)
     {
         $mockSearchDocumentField = $this->getMock(SearchDocumentField::class, [], [], '', false);
-        $mockSearchDocumentField->expects($this->any())
-            ->method('getKey')
+        $mockSearchDocumentField->method('getKey')
             ->willReturn($fieldName);
-        $mockSearchDocumentField->expects($this->any())
-            ->method('getValue')
+        $mockSearchDocumentField->method('getValue')
             ->willReturn($fieldValue);
 
         return $mockSearchDocumentField;

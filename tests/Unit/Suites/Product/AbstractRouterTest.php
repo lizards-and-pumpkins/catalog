@@ -54,8 +54,7 @@ abstract class AbstractRouterTest extends \PHPUnit_Framework_TestCase
     private function getStubRequest()
     {
         $stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
-        $stubRequest->expects($this->any())
-            ->method('getUrl')
+        $stubRequest->method('getUrl')
             ->willReturn(HttpUrl::fromString('http://example.com/'));
 
         return $stubRequest;

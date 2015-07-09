@@ -74,8 +74,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->mockSelectionCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
-        $this->mockSelectionCriteria->expects($this->any())
-            ->method('jsonSerialize')
+        $this->mockSelectionCriteria->method('jsonSerialize')
             ->willReturn(['condition' => SearchCriteria::AND_CONDITION, 'criteria' => []]);
 
         $this->testMetaInfoKey = 'product_listing_' . $this->testUrlPathKey;

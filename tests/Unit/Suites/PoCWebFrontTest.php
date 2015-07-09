@@ -81,29 +81,22 @@ class PoCWebFrontTest extends \PHPUnit_Framework_TestCase
         $this->mockHttpResponse = $this->getMock(HttpResponse::class);
 
         array_map(function ($methodName) use ($stubMasterFactory) {
-            $stubMasterFactory->expects($this->any())
-                ->method($methodName)
+            $stubMasterFactory->method($methodName)
                 ->willReturn($this->getMock(HttpRouter::class));
         }, $routerFactoryMethods);
 
-        $stubMasterFactory->expects($this->any())
-            ->method('createContextBuilder')
+        $stubMasterFactory->method('createContextBuilder')
             ->willReturn($stubContextBuilder);
-        $stubContextBuilder->expects($this->any())
-            ->method('getContext')
+        $stubContextBuilder->method('getContext')
             ->willReturn($this->getMock(Context::class));
-        $stubContextBuilder->expects($this->any())
-            ->method('createFromRequest')
+        $stubContextBuilder->method('createFromRequest')
             ->willReturn($this->getMock(Context::class));
 
-        $stubMasterFactory->expects($this->any())
-            ->method('createHttpRouterChain')
+        $stubMasterFactory->method('createHttpRouterChain')
             ->willReturn($mockRouterChain);
-        $mockRouterChain->expects($this->any())
-            ->method('route')
+        $mockRouterChain->method('route')
             ->willReturn($mockHttpRequestHandler);
-        $mockHttpRequestHandler->expects($this->any())
-            ->method('process')
+        $mockHttpRequestHandler->method('process')
             ->willReturn($this->mockHttpResponse);
 
         $this->webFront = new PoCWebFront($stubHttpRequest, $stubMasterFactory);
@@ -125,8 +118,7 @@ class PoCWebFrontTest extends \PHPUnit_Framework_TestCase
     public function testPoCMasterFactoryIsReturned()
     {
         $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
-        $stubHttpRequest->expects($this->any())
-            ->method('getUrl')
+        $stubHttpRequest->method('getUrl')
             ->willReturn($this->getMock(HttpUrl::class, [], [], '', false));
         $webFront = new PoCWebFront($stubHttpRequest);
         $webFront->registerFactory(new IntegrationTestFactory());

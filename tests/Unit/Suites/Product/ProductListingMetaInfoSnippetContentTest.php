@@ -30,8 +30,7 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
     protected function setUp()
     {
         $this->selectionCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
-        $this->selectionCriteria->expects($this->any())
-            ->method('jsonSerialize')
+        $this->selectionCriteria->method('jsonSerialize')
             ->willReturn(['condition' => SearchCriteria::AND_CONDITION, 'criteria' => []]);
 
         $this->pageMetaInfo = ProductListingMetaInfoSnippetContent::create(

@@ -40,8 +40,7 @@ class ProductInListingInContextSnippetRendererTest extends \PHPUnit_Framework_Te
     private function getStubProduct()
     {
         $stubProduct = $this->getMock(Product::class, [], [], '', false);
-        $stubProduct->expects($this->any())
-            ->method('getId')
+        $stubProduct->method('getId')
             ->willReturn($this->testProductId);
         return $stubProduct;
     }
@@ -57,14 +56,11 @@ class ProductInListingInContextSnippetRendererTest extends \PHPUnit_Framework_Te
             '',
             false
         );
-        $this->stubProductInListingBlockRenderer->expects($this->any())
-            ->method('render')
+        $this->stubProductInListingBlockRenderer->method('render')
             ->willReturn('dummy content');
-        $this->stubProductInListingBlockRenderer->expects($this->any())
-            ->method('getRootSnippetCode')
+        $this->stubProductInListingBlockRenderer->method('getRootSnippetCode')
             ->willReturn('dummy root block code');
-        $this->stubProductInListingBlockRenderer->expects($this->any())
-            ->method('getNestedSnippetCodes')
+        $this->stubProductInListingBlockRenderer->method('getNestedSnippetCodes')
             ->willReturn([]);
 
         $this->mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
@@ -78,8 +74,7 @@ class ProductInListingInContextSnippetRendererTest extends \PHPUnit_Framework_Te
 
     public function testProductInListingViewSnippetsAreRendered()
     {
-        $this->mockSnippetKeyGenerator->expects($this->any())
-            ->method('getKeyForContext')
+        $this->mockSnippetKeyGenerator->method('getKeyForContext')
             ->willReturn('stub-content-key');
         
         $this->mockSnippetList->expects($this->once())->method('add');
@@ -104,8 +99,7 @@ class ProductInListingInContextSnippetRendererTest extends \PHPUnit_Framework_Te
         $stubContext = $this->getMock(Context::class);
         $stubProduct = $this->getStubProduct();
 
-        $this->mockSnippetKeyGenerator->expects($this->any())
-            ->method('getKeyForContext')
+        $this->mockSnippetKeyGenerator->method('getKeyForContext')
             ->willReturn('stub-content-key');
         $this->mockSnippetKeyGenerator->expects($this->once())->method('getKeyForContext')
             ->with($this->anything(), ['product_id' => $this->testProductId]);

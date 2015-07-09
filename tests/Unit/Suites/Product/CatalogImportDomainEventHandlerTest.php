@@ -29,8 +29,7 @@ class CatalogImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
         $xml = file_get_contents(__DIR__ . '/../../../shared-fixture/catalog.xml');
 
         $mockCatalogImportDomainEvent = $this->getMock(CatalogImportDomainEvent::class, [], [], '', false);
-        $mockCatalogImportDomainEvent->expects($this->any())
-            ->method('getXml')
+        $mockCatalogImportDomainEvent->method('getXml')
             ->willReturn($xml);
 
         $this->eventSpy = $this->any();

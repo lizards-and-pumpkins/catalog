@@ -47,16 +47,14 @@ class CommandConsumerTest extends \PHPUnit_Framework_TestCase
     public function testCommandHandlerIsTriggeredForSetNumberOfCommands($numberOfCommandsToProcess)
     {
         $stubCommand = $this->getMock(Command::class);
-        $this->mockQueue->expects($this->any())
-            ->method('next')
+        $this->mockQueue->method('next')
             ->willReturn($stubCommand);
 
         $mockCommandHandler = $this->getMock(CommandHandler::class);
         $mockCommandHandler->expects($this->exactly($numberOfCommandsToProcess))
             ->method('process');
 
-        $this->mockLocator->expects($this->any())
-            ->method('getHandlerFor')
+        $this->mockLocator->method('getHandlerFor')
             ->willReturn($mockCommandHandler);
 
         $this->commandConsumer->process($numberOfCommandsToProcess);
@@ -77,8 +75,7 @@ class CommandConsumerTest extends \PHPUnit_Framework_TestCase
         $numberOfCommandsToProcess = 1;
 
         $stubCommand = $this->getMock(Command::class);
-        $this->mockQueue->expects($this->any())
-            ->method('next')
+        $this->mockQueue->method('next')
             ->willReturn($stubCommand);
 
         $exception = $this->getMock(UnableToFindDomainEventHandlerException::class);

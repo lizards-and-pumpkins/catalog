@@ -47,12 +47,10 @@ class SnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testRenderedSnippetListIsReturned()
     {
-        $this->mockRenderer->expects($this->any())
-            ->method('render')
+        $this->mockRenderer->method('render')
             ->willReturn($this->getMock(SnippetList::class));
 
-        $this->mockRenderer2->expects($this->any())
-            ->method('render')
+        $this->mockRenderer2->method('render')
             ->willReturn($this->getMock(SnippetList::class));
 
         $stubProjectionSourceData = $this->getMock(ProjectionSourceData::class);
@@ -91,13 +89,11 @@ class SnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
         $stubSnippetListFromRenderer = $this->getMock(SnippetList::class);
         $stubSnippetListFromRenderer2 = $this->getMock(SnippetList::class);
 
-        $this->mockRenderer->expects($this->any())
-            ->method('render')
+        $this->mockRenderer->method('render')
             ->with($stubProjectionSourceData, $stubContextSource)
             ->willReturn($stubSnippetListFromRenderer);
 
-        $this->mockRenderer2->expects($this->any())
-            ->method('render')
+        $this->mockRenderer2->method('render')
             ->with($stubProjectionSourceData, $stubContextSource)
             ->willReturn($stubSnippetListFromRenderer2);
 

@@ -35,8 +35,7 @@ abstract class BlockRendererTestAbstract extends \PHPUnit_Framework_TestCase
     {
         $this->stubThemeLocator = $this->getMock(ThemeLocator::class);
         $this->stubLayout = $this->getMock(Layout::class, [], [], '', false);
-        $this->stubThemeLocator->expects($this->any())
-            ->method('getLayoutForHandle')
+        $this->stubThemeLocator->method('getLayoutForHandle')
             ->willReturn($this->stubLayout);
         $this->stubBlockStructure = new BlockStructure();
         $this->blockRenderer = $this->createRendererInstance($this->stubThemeLocator, $this->stubBlockStructure);
@@ -108,11 +107,9 @@ abstract class BlockRendererTestAbstract extends \PHPUnit_Framework_TestCase
         $childBlockName = ''
     ) {
         $stubChild = $this->createStubBlockLayout($className, $template, $childBlockName);
-        $stubBlock->expects($this->any())
-            ->method('getNodeChildren')
+        $stubBlock->method('getNodeChildren')
             ->willReturn([$stubChild]);
-        $stubBlock->expects($this->any())
-            ->method('hasChildren')
+        $stubBlock->method('hasChildren')
             ->willReturn(true);
         return $stubChild;
     }
@@ -126,8 +123,7 @@ abstract class BlockRendererTestAbstract extends \PHPUnit_Framework_TestCase
     final protected function createStubBlockLayout($className, $template, $nameInLayout = '')
     {
         $stubBlockLayout = $this->getMock(Layout::class, [], [], '', false);
-        $stubBlockLayout->expects($this->any())
-            ->method('getAttribute')
+        $stubBlockLayout->method('getAttribute')
             ->willReturnMap([
                 ['class', $className],
                 ['template', $template],

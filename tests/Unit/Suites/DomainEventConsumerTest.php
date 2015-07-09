@@ -101,8 +101,7 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
     private function addNextMethodToStubDomainEventQueue()
     {
         $stubDomainEvent = $this->getMock(DomainEvent::class);
-        $this->mockQueue->expects($this->any())
-            ->method('next')
+        $this->mockQueue->method('next')
             ->willReturn($stubDomainEvent);
     }
 }

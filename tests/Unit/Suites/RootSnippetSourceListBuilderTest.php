@@ -23,8 +23,7 @@ class RootSnippetSourceListBuilderTest extends \PHPUnit_Framework_TestCase
         $stubContext = $this->getMock(Context::class);
 
         $mockContextBuilder = $this->getMock(ContextBuilder::class, [], [], '', false);
-        $mockContextBuilder->expects($this->any())
-            ->method('getContext')
+        $mockContextBuilder->method('getContext')
             ->willReturn($stubContext);
 
         $this->rootSnippetSourceListBuilder = new RootSnippetSourceListBuilder($mockContextBuilder);

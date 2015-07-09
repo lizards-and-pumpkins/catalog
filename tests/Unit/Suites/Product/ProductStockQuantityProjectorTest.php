@@ -60,8 +60,7 @@ class ProductStockQuantityProjectorTest extends \PHPUnit_Framework_TestCase
         $stubSnippetList = $this->getMock(SnippetList::class);
         $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
 
-        $this->mockSnippetRendererCollection->expects($this->any())
-            ->method('render')
+        $this->mockSnippetRendererCollection->method('render')
             ->willReturn($stubSnippetList);
 
         $this->mockDataPoolWriter->expects($this->once())

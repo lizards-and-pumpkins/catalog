@@ -65,27 +65,21 @@ class ProductStockQuantitySnippetRendererTest extends \PHPUnit_Framework_TestCas
         $stubContext = $this->getMock(Context::class);
 
         $mockStock = $this->getMock(ProductStockQuantity::class, [], [], '', false);
-        $mockStock->expects($this->any())
-            ->method('getQuantity')
+        $mockStock->method('getQuantity')
             ->willReturn($stubQuantity);
 
         $mockProductStockQuantitySource = $this->getMock(ProductStockQuantitySource::class, [], [], '', false);
-        $mockProductStockQuantitySource->expects($this->any())
-            ->method('getSku')
+        $mockProductStockQuantitySource->method('getSku')
             ->willReturn($stubSku);
-        $mockProductStockQuantitySource->expects($this->any())
-            ->method('getContextData')
+        $mockProductStockQuantitySource->method('getContextData')
             ->willReturn([]);
-        $mockProductStockQuantitySource->expects($this->any())
-            ->method('getStock')
+        $mockProductStockQuantitySource->method('getStock')
             ->willReturn($mockStock);
 
-        $this->mockContextBuilder->expects($this->any())
-            ->method('getContext')
+        $this->mockContextBuilder->method('getContext')
             ->willReturn($stubContext);
 
-        $this->mockSnippetKeyGenerator->expects($this->any())
-            ->method('getKeyForContext')
+        $this->mockSnippetKeyGenerator->method('getKeyForContext')
             ->willReturn($stubSnippetKey);
 
         $dummyStock = ProductStockQuantity::fromString($stubQuantity);

@@ -46,9 +46,9 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
 
         $this->stubContext = $this->getMock(Context::class);
-        $this->stubContext->expects($this->any())->method('getSupportedCodes')->willReturn(['dummy-part']);
-        $this->stubContext->expects($this->any())->method('supportsCode')->with('dummy-part')->willReturn(true);
-        $this->stubContext->expects($this->any())->method('getValue')->with('dummy-part')->willReturn('dummy-value');
+        $this->stubContext->method('getSupportedCodes')->willReturn(['dummy-part']);
+        $this->stubContext->method('supportsCode')->with('dummy-part')->willReturn(true);
+        $this->stubContext->method('getValue')->with('dummy-part')->willReturn('dummy-value');
 
         $this->searchEngine = $this->createSearchEngineInstance();
     }
@@ -121,8 +121,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $searchDocument2Content
         );
 
-        $this->stubSearchDocumentCollection->expects($this->any())
-            ->method('getDocuments')
+        $this->stubSearchDocumentCollection->method('getDocuments')
             ->willReturn([$this->stubSearchDocument, $this->stubSearchDocument2]);
 
         $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
@@ -151,8 +150,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             null
         );
 
-        $this->stubSearchDocumentCollection->expects($this->any())
-            ->method('getDocuments')
+        $this->stubSearchDocumentCollection->method('getDocuments')
             ->willReturn([$this->stubSearchDocument, $this->stubSearchDocument2]);
 
         $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
@@ -166,16 +164,16 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     {
         $contextPartCode = 'dummy-part';
         $stubDocument1Context = $this->getMock(Context::class);
-        $stubDocument1Context->expects($this->any())->method('getValue')->willReturn('value-1');
-        $stubDocument1Context->expects($this->any())->method('supportsCode')->willReturn(true);
+        $stubDocument1Context->method('getValue')->willReturn('value-1');
+        $stubDocument1Context->method('supportsCode')->willReturn(true);
 
         $stubDocument2Context = $this->getMock(Context::class);
-        $stubDocument2Context->expects($this->any())->method('getValue')->willReturn('value-2');
-        $stubDocument2Context->expects($this->any())->method('supportsCode')->willReturn(true);
+        $stubDocument2Context->method('getValue')->willReturn('value-2');
+        $stubDocument2Context->method('supportsCode')->willReturn(true);
 
         $stubQueryContext = $this->getMock(Context::class);
-        $stubQueryContext->expects($this->any())->method('getSupportedCodes')->willReturn([$contextPartCode]);
-        $stubQueryContext->expects($this->any())->method('getValue')->willReturn('value-2');
+        $stubQueryContext->method('getSupportedCodes')->willReturn([$contextPartCode]);
+        $stubQueryContext->method('getValue')->willReturn('value-2');
 
         $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => 'bar']);
         $this->prepareStubSearchDocument(
@@ -192,8 +190,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             'content2'
         );
 
-        $this->stubSearchDocumentCollection->expects($this->any())
-            ->method('getDocuments')
+        $this->stubSearchDocumentCollection->method('getDocuments')
             ->willReturn([$this->stubSearchDocument, $this->stubSearchDocument2]);
 
         $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
@@ -206,24 +203,24 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     public function testPartialContextsAreMatched()
     {
         $stubDocument1Context = $this->getMock(Context::class);
-        $stubDocument1Context->expects($this->any())->method('getValue')
+        $stubDocument1Context->method('getValue')
             ->willReturnMap([
                 ['part1', 'value1'],
                 ['part2', 'value2'],
             ]);
-        $stubDocument1Context->expects($this->any())->method('supportsCode')->willReturn(true);
+        $stubDocument1Context->method('supportsCode')->willReturn(true);
 
         $stubDocument2Context = $this->getMock(Context::class);
-        $stubDocument2Context->expects($this->any())->method('getValue')
+        $stubDocument2Context->method('getValue')
             ->willReturnMap([
                 ['part1', 'value1'],
                 ['part2', 'value2'],
             ]);
-        $stubDocument2Context->expects($this->any())->method('supportsCode')->willReturn(true);
+        $stubDocument2Context->method('supportsCode')->willReturn(true);
 
         $stubQueryContext = $this->getMock(Context::class);
-        $stubQueryContext->expects($this->any())->method('getSupportedCodes')->willReturn(['part2']);
-        $stubQueryContext->expects($this->any())->method('getValue')->willReturn('value2');
+        $stubQueryContext->method('getSupportedCodes')->willReturn(['part2']);
+        $stubQueryContext->method('getValue')->willReturn('value2');
 
         $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => 'bar']);
         $this->prepareStubSearchDocument(
@@ -240,8 +237,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             'content2'
         );
 
-        $this->stubSearchDocumentCollection->expects($this->any())
-            ->method('getDocuments')
+        $this->stubSearchDocumentCollection->method('getDocuments')
             ->willReturn([$this->stubSearchDocument, $this->stubSearchDocument2]);
 
         $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
@@ -257,19 +253,19 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $stubQueryContext = $this->getMock(Context::class);
         $stubQueryContext->expects($this->once())->method('getSupportedCodes')
             ->willReturn([$contextPartCode . '1', $contextPartCode . '2']);
-        $stubQueryContext->expects($this->any())->method('getValue')
+        $stubQueryContext->method('getValue')
             ->willReturnMap([
                 [$contextPartCode . '1', 'value1'],
                 [$contextPartCode . '2', 'value2'],
             ]);
 
         $stubDocumentContext = $this->getMock(Context::class);
-        $stubDocumentContext->expects($this->any())->method('supportsCode')
+        $stubDocumentContext->method('supportsCode')
             ->willReturnMap([
                 [$contextPartCode . '1', false],
                 [$contextPartCode . '2', true],
             ]);
-        $stubDocumentContext->expects($this->any())->method('getValue')
+        $stubDocumentContext->method('getValue')
             ->with($contextPartCode . '2')->willReturn('value2');
 
         $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => 'bar']);
@@ -280,8 +276,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             'content'
         );
 
-        $this->stubSearchDocumentCollection->expects($this->any())
-            ->method('getDocuments')
+        $this->stubSearchDocumentCollection->method('getDocuments')
             ->willReturn([$this->stubSearchDocument]);
 
         $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
@@ -295,10 +290,10 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     {
         $contextPartCode = 'dummy-part';
         $stubQueryContext = $this->getMock(Context::class);
-        $stubQueryContext->expects($this->any())->method('getSupportedCodes')->willReturn([$contextPartCode]);
+        $stubQueryContext->method('getSupportedCodes')->willReturn([$contextPartCode]);
 
         $stubDocumentContext = $this->getMock(Context::class);
-        $stubDocumentContext->expects($this->any())->method('supportsCode')->with($contextPartCode)->willReturn(false);
+        $stubDocumentContext->method('supportsCode')->with($contextPartCode)->willReturn(false);
         $stubDocumentContext->expects($this->never())->method('getValue');
 
         $stubFieldsCollection = $this->createStubSearchDocumentFieldCollectionFromArray(['foo' => 'bar']);
@@ -309,8 +304,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             'content'
         );
 
-        $this->stubSearchDocumentCollection->expects($this->any())
-            ->method('getDocuments')
+        $this->stubSearchDocumentCollection->method('getDocuments')
             ->willReturn([$this->stubSearchDocument]);
 
         $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
@@ -340,8 +334,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $searchDocument2Content
         );
 
-        $this->stubSearchDocumentCollection->expects($this->any())
-            ->method('getDocuments')
+        $this->stubSearchDocumentCollection->method('getDocuments')
             ->willReturn([$this->stubSearchDocument, $this->stubSearchDocument2]);
 
         $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
@@ -371,8 +364,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $searchDocumentContent
         );
 
-        $this->stubSearchDocumentCollection->expects($this->any())
-            ->method('getDocuments')
+        $this->stubSearchDocumentCollection->method('getDocuments')
             ->willReturn([$this->stubSearchDocument, $this->stubSearchDocument2]);
 
         $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
@@ -525,16 +517,13 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         \PHPUnit_Framework_MockObject_MockObject $stubSearchDocumentFieldCollection = null,
         $content = null
     ) {
-        $stubSearchDocument->expects($this->any())
-            ->method('getContext')
+        $stubSearchDocument->method('getContext')
             ->willReturn($stubContext);
 
-        $stubSearchDocument->expects($this->any())
-            ->method('getFieldsCollection')
+        $stubSearchDocument->method('getFieldsCollection')
             ->willReturn($stubSearchDocumentFieldCollection);
 
-        $stubSearchDocument->expects($this->any())
-            ->method('getContent')
+        $stubSearchDocument->method('getContent')
             ->willReturn($content);
     }
 
@@ -556,8 +545,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     private function createMockCriterion($fieldName, $fieldValue, $operation)
     {
         $mockCriterion = $this->getMock(SearchCriterion::class, [], [], '', false);
-        $mockCriterion->expects($this->any())
-            ->method('matches')
+        $mockCriterion->method('matches')
             ->willReturnCallback(function (
                 SearchDocumentField $searchDocumentField
             ) use (
@@ -598,14 +586,11 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     private function createMockCriteria($condition, array $mockCriteriaToReturn)
     {
         $mockCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
-        $mockCriteria->expects($this->any())
-            ->method('hasAndCondition')
+        $mockCriteria->method('hasAndCondition')
             ->willReturn(SearchCriteria::AND_CONDITION === $condition);
-        $mockCriteria->expects($this->any())
-            ->method('hasOrCondition')
+        $mockCriteria->method('hasOrCondition')
             ->willReturn(SearchCriteria::OR_CONDITION === $condition);
-        $mockCriteria->expects($this->any())
-            ->method('getCriteria')
+        $mockCriteria->method('getCriteria')
             ->willReturn($mockCriteriaToReturn);
 
         return $mockCriteria;

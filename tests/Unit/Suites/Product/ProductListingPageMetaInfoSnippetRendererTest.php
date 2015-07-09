@@ -26,12 +26,10 @@ class ProductListingCriteriaSnippetRendererTest extends \PHPUnit_Framework_TestC
         $stubContext = $this->getMock(Context::class);
 
         $mockUrlPathKeyGenerator = $this->getMock(UrlPathKeyGenerator::class);
-        $mockUrlPathKeyGenerator->expects($this->any())
-            ->method('getUrlKeyForPathInContext')
+        $mockUrlPathKeyGenerator->method('getUrlKeyForPathInContext')
             ->willReturn('foo');
         $mockContextBuilder = $this->getMock(ContextBuilder::class, [], [], '', false);
-        $mockContextBuilder->expects($this->any())
-            ->method('getContext')
+        $mockContextBuilder->method('getContext')
             ->willReturn($stubContext);
 
         $this->renderer = new ProductListingCriteriaSnippetRenderer($mockUrlPathKeyGenerator, $mockContextBuilder);

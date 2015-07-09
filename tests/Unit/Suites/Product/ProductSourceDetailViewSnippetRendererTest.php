@@ -51,11 +51,9 @@ class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_Test
         $this->mockSnippetList = $this->getMock(SnippetList::class);
         $rendererClass = ProductDetailViewInContextSnippetRenderer::class;
         $this->mockProductDetailViewInContextRenderer = $this->getMock($rendererClass, [], [], '', false);
-        $this->mockProductDetailViewInContextRenderer->expects($this->any())
-            ->method('render')
+        $this->mockProductDetailViewInContextRenderer->method('render')
             ->willReturn($this->mockSnippetList);
-        $this->mockProductDetailViewInContextRenderer->expects($this->any())
-            ->method('getUsedContextParts')
+        $this->mockProductDetailViewInContextRenderer->method('getUsedContextParts')
             ->willReturn(['version']);
         
 
@@ -67,8 +65,7 @@ class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_Test
         $this->stubContext = $this->getMock(Context::class, [], [], '', false);
 
         $this->stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
-        $this->stubContextSource->expects($this->any())
-            ->method('getContextsForParts')
+        $this->stubContextSource->method('getContextsForParts')
             ->willReturn([$this->stubContext]);
     }
 
@@ -143,16 +140,13 @@ class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_Test
         $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
 
         $stubProduct = $this->getMock(Product::class, [], [], '', false);
-        $stubProduct->expects($this->any())
-            ->method('getId')
+        $stubProduct->method('getId')
             ->willReturn($stubProductId);
 
         $stubProductSource = $this->getMock(ProductSource::class, [], [], '', false);
-        $stubProductSource->expects($this->any())
-            ->method('getId')
+        $stubProductSource->method('getId')
             ->willReturn($stubProductId);
-        $stubProductSource->expects($this->any())
-            ->method('getProductForContext')
+        $stubProductSource->method('getProductForContext')
             ->willReturn($stubProduct);
 
         return $stubProductSource;
