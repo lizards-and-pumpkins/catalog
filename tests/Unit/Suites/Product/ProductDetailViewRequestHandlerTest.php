@@ -5,6 +5,7 @@ namespace Brera\Product;
 use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\KeyNotFoundException;
+use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
 use Brera\Http\UnableToHandleRequestException;
 use Brera\Page;
@@ -52,6 +53,11 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
     private $stubPageBuilder;
 
     /**
+     * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubRequest;
+
+    /**
      * @var string
      */
     private $testProductId = '123';
@@ -73,6 +79,8 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
             $this->mockDataPoolReader,
             $this->stubPageBuilder
         );
+
+        $this->stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
     }
 
     public function testRequestHandlerInterfaceIsImplemented()
@@ -98,7 +106,7 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownIfProcessWithoutMetaInfoContentIsCalled()
     {
         $this->setExpectedException(UnableToHandleRequestException::class);
-        $this->requestHandler->process();
+        $this->requestHandler->process($this->stubRequest);
     }
 
     public function testPageMetaInfoSnippetIsCreated()
@@ -107,7 +115,7 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
             [$this->testMetaInfoKey, $this->testMetaInfoSnippetJson]
         ]);
 
-        $this->requestHandler->process();
+        $this->requestHandler->process($this->stubRequest);
         
         $this->assertAttributeInstanceOf(
             ProductDetailPageMetaInfoSnippetContent::class,
@@ -127,6 +135,6 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
             ['product_id' => $this->testProductId]
         )->willReturn($this->getMock(Page::class, [], [], '', false));
         
-        $this->assertInstanceOf(Page::class, $this->requestHandler->process());
+        $this->assertInstanceOf(Page::class, $this->requestHandler->process($this->stubRequest));
     }
 }

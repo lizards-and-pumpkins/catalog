@@ -10,7 +10,8 @@ interface HttpRequestHandler
     public function canProcess();
 
     /**
+     * @param HttpRequest $request
      * @return HttpResponse
      */
-    public function process();
+    public function process(HttpRequest $request);
 }

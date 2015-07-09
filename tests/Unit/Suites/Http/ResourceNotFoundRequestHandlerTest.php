@@ -19,7 +19,9 @@ class ResourceNotFoundRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testInstanceOfHttpResourceNotFoundResponseIsReturned()
     {
-        $result = $this->requestHandler->process();
+        $stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+        $result = $this->requestHandler->process($stubRequest);
+
         $this->assertInstanceOf(HttpResourceNotFoundResponse::class, $result);
     }
 

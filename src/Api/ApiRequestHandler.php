@@ -3,11 +3,12 @@
 namespace Brera\Api;
 
 use Brera\DefaultHttpResponse;
+use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
 
 abstract class ApiRequestHandler implements HttpRequestHandler
 {
-    public final function process()
+    public final function process(HttpRequest $request)
     {
         $response = new DefaultHttpResponse();
 

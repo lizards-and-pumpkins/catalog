@@ -6,6 +6,7 @@ use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\KeyNotFoundException;
 use Brera\DataPool\SearchEngine\SearchCriteria;
+use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
 use Brera\Http\UnableToHandleRequestException;
 use Brera\Page;
@@ -65,6 +66,11 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private $testMetaInfoSnippetJson;
 
+    /**
+     * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubRequest;
+
     protected function setUp()
     {
         $this->mockSelectionCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
@@ -89,6 +95,8 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
             $this->mockPageBuilder,
             $this->mockSnippetKeyGeneratorLocator
         );
+
+        $this->stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
     }
 
     public function testHttpHandlerInterfaceIsImplemented()
@@ -114,13 +122,13 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownIfProcessWithoutMetaInfoContentIsCalled()
     {
         $this->setExpectedException(UnableToHandleRequestException::class);
-        $this->requestHandler->process();
+        $this->requestHandler->process($this->stubRequest);
     }
 
     public function testPageMetaInfoSnippetIsCreated()
     {
         $this->mockMetaInfoSnippet();
-        $this->requestHandler->process();
+        $this->requestHandler->process($this->stubRequest);
 
         $this->assertAttributeInstanceOf(
             ProductListingMetaInfoSnippetContent::class,
@@ -134,7 +142,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->mockMetaInfoSnippet();
         $this->mockPageBuilder->method('buildPage')->willReturn($this->getMock(Page::class, [], [], '', false));
 
-        $this->assertInstanceOf(Page::class, $this->requestHandler->process());
+        $this->assertInstanceOf(Page::class, $this->requestHandler->process($this->stubRequest));
     }
 
     public function testProductsInListingAreAddedToPageBuilder()
@@ -155,7 +163,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('addSnippetsToPage');
 
         $this->mockMetaInfoSnippet();
-        $this->requestHandler->process();
+        $this->requestHandler->process($this->stubRequest);
     }
 
     private function mockMetaInfoSnippet()

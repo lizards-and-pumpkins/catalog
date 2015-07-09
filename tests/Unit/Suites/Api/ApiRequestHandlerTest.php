@@ -4,6 +4,7 @@ namespace Brera\Api;
 
 use Brera\Api\Stubs\StubApiRequestHandler;
 use Brera\DefaultHttpResponse;
+use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
 
 /**
@@ -13,12 +14,18 @@ use Brera\Http\HttpRequestHandler;
 class ApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubRequest;
+
+    /**
      * @var ApiRequestHandler
      */
     private $apiRequestHandler;
 
     protected function setUp()
     {
+        $this->stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
         $this->apiRequestHandler = new StubApiRequestHandler;
     }
 
@@ -29,13 +36,13 @@ class ApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testInstanceOfDefaultHttpResponseIsReturned()
     {
-        $result = $this->apiRequestHandler->process();
+        $result = $this->apiRequestHandler->process($this->stubRequest);
         $this->assertInstanceOf(DefaultHttpResponse::class, $result);
     }
 
     public function testApiSpecificHeadersAreSet()
     {
-        $response = $this->apiRequestHandler->process();
+        $response = $this->apiRequestHandler->process($this->stubRequest);
         $result = $this->getPrivateFieldValue($response, 'headers');
         $expectedHeaders = [
             'Access-Control-Allow-Origin: *',
@@ -48,7 +55,7 @@ class ApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testDummyBodyContentIsReturned()
     {
-        $response = $this->apiRequestHandler->process();
+        $response = $this->apiRequestHandler->process($this->stubRequest);
         $result = $response->getBody();
         $expectedBodyContent = StubApiRequestHandler::DUMMY_BODY_CONTENT;
 

@@ -2,6 +2,8 @@
 
 namespace Brera\Product;
 
+use Brera\Http\HttpRequest;
+
 /**
  * @covers \Brera\Product\CatalogImportApiRequestHandler
  * @uses   \Brera\Api\ApiRequestHandler
@@ -26,7 +28,8 @@ class CatalogImportApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testResponseContainsExpectedJson()
     {
-        $response = $this->apiRequestHandler->process();
+        $stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+        $response = $this->apiRequestHandler->process($stubRequest);
         $result = json_decode($response->getBody());
         $expectedJson = 'dummy response';
 
