@@ -8,6 +8,13 @@ namespace Brera\Image;
  */
 class GdResizeStrategyTest extends AbstractResizeStrategyTest
 {
+    protected function setUp()
+    {
+        if (! extension_loaded('gd')) {
+            $this->markTestSkipped('The PHP extension gd is not installed');
+        }
+    }
+    
     /**
      * @return string
      */
