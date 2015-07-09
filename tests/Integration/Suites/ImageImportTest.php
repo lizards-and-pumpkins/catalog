@@ -7,6 +7,14 @@ use Brera\Utils\LocalFilesystem;
 
 class ImageImportTest extends \PHPUnit_Framework_TestCase
 {
+    protected function setUp()
+    {
+        if (! extension_loaded('imagick')) {
+            $this->markTestSkipped('The PHP extension imagick is not installed');
+        }
+        $this->flushProcessedImagesDir();
+    }
+
     public function testImagesAreImportedAndProcessed()
     {
         $factory = $this->prepareIntegrationTestMasterFactory();
@@ -33,11 +41,6 @@ class ImageImportTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals(IntegrationTestFactory::PROCESSED_IMAGE_HEIGHT, $fileInfo[1]);
             $this->assertEquals('image/jpeg', $fileInfo['mime']);
         }
-    }
-
-    protected function setUp()
-    {
-        $this->flushProcessedImagesDir();
     }
 
     protected function tearDown()
