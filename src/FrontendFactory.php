@@ -46,12 +46,18 @@ class FrontendFactory implements Factory
      */
     public function createCatalogImportApiRequestHandler()
     {
-        $catalogImportDirectory = __DIR__ . '/../tests/shared-fixture/';
-
         return CatalogImportApiRequestHandler::create(
             $this->getMasterFactory()->getEventQueue(),
-            $catalogImportDirectory
+            $this->getCatalogImportDirectoryConfig()
         );
+    }
+
+    /**
+     * @return string
+     */
+    private function getCatalogImportDirectoryConfig()
+    {
+        return __DIR__ . '/../tests/shared-fixture/';
     }
 
     /**
