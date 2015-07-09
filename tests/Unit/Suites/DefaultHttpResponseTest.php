@@ -47,6 +47,10 @@ class DefaultHttpResponseTest extends \PHPUnit_Framework_TestCase
         $this->defaultHttpResponse->addHeader($customHeader);
         $this->defaultHttpResponse->send();
 
+        if (!extension_loaded('xdebug')) {
+            $this->markTestSkipped('This test requires the PHP extension xdebug to be installed.');
+        }
+
         $headers = xdebug_get_headers();
 
         $this->assertContains($customHeader, $headers);
