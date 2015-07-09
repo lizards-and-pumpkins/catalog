@@ -2,6 +2,8 @@
 
 namespace Brera;
 
+use Brera\Http\HttpHeaders;
+use Brera\Http\HttpRequestBody;
 use Brera\Http\HttpResourceNotFoundResponse;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\PoCSku;
@@ -144,7 +146,9 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         );
         
         $httpUrl = HttpUrl::fromString('http://example.com/' . $urlKeys[0]['value']);
-        $request = HttpRequest::fromParameters('GET', $httpUrl);
+        $httpHeaders = HttpHeaders::fromArray([]);
+        $httpRequestBody = HttpRequestBody::fromString('');
+        $request = HttpRequest::fromParameters('GET', $httpUrl, $httpHeaders, $httpRequestBody);
 
         $website = new PoCWebFront($request, $factory);
         $response = $website->runWithoutSendingResponse();
@@ -155,7 +159,9 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
     public function testHttpResourceNotFoundResponseIsReturned()
     {
         $url = HttpUrl::fromString('http://example.com/non/existent/path');
-        $request = HttpRequest::fromParameters('GET', $url);
+        $headers = HttpHeaders::fromArray([]);
+        $requestBody = HttpRequestBody::fromString('');
+        $request = HttpRequest::fromParameters('GET', $url, $headers, $requestBody);
 
         $website = new PoCWebFront($request);
         $website->registerFactory(new IntegrationTestFactory());
