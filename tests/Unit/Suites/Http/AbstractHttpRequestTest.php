@@ -34,7 +34,12 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
             ->method('__toString')
             ->willReturn($url);
 
-        $httpRequest = new HttpPostRequest($stubHttpUrl, HttpHeaders::fromArray([]), HttpRequestBody::fromString(''));
+        $httpRequest = HttpRequest::fromParameters(
+            'GET',
+            $stubHttpUrl,
+            HttpHeaders::fromArray([]),
+            HttpRequestBody::fromString('')
+        );
         $result = $httpRequest->getUrl();
 
         $this->assertEquals($result, $url);
