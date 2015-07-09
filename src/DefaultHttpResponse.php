@@ -48,7 +48,7 @@ class DefaultHttpResponse implements HttpResponse
         echo $this->getBody();
     }
 
-    protected function sendHeaders()
+    private function sendHeaders()
     {
         foreach ($this->headers as $headerName => $headerValue) {
             header(sprintf('%s: %s', $headerName, $headerValue));

@@ -70,7 +70,7 @@ class CatalogImportApiRequestHandler extends ApiRequestHandler
      * @return string
      * @throws CatalogImportFileNotReadableException
      */
-    protected function getImportFileContents(HttpRequest $request)
+    private function getImportFileContents(HttpRequest $request)
     {
         $filePath = $this->importDirectoryPath . '/' . $this->getImportFileNameFromRequest($request);
 
