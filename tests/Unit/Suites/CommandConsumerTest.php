@@ -67,7 +67,9 @@ class CommandConsumerTest extends \PHPUnit_Framework_TestCase
      */
     public function getNumberOfCommandsToProcess()
     {
-        return array_map(function ($i) { return [$i]; }, range(1, 3));
+        return array_map(function ($i) {
+            return [$i];
+        }, range(1, 3));
     }
 
     public function testLogEntryIsWrittenIfLocatorIsNotFound()

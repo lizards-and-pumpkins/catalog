@@ -35,7 +35,11 @@ class ProjectProductStockQuantitySnippetCommandHandlerTest extends \PHPUnit_Fram
         $this->mockCommand = $this->getMock(ProjectProductStockQuantitySnippetCommand::class, [], [], '', false);
         $this->mockProjector = $this->getMock(ProductStockQuantityProjector::class, [], [], '', false);
         $this->mockProductStockQuantitySourceBuilder = $this->getMock(
-            ProductStockQuantitySourceBuilder::class, [], [], '', false
+            ProductStockQuantitySourceBuilder::class,
+            [],
+            [],
+            '',
+            false
         );
         $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
         $this->commandHandler = new ProjectProductStockQuantitySnippetCommandHandler(

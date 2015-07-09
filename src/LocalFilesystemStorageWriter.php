@@ -41,7 +41,7 @@ class LocalFilesystemStorageWriter implements FileStorageWriter
     }
 
     /**
-     * @param $filePath
+     * @param string $filePath
      * @throws FileNotWritableException
      */
     private function checkIfDestinationIsWritable($filePath)

@@ -220,7 +220,11 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
             ->method('matches')
             ->willReturnCallback(function (
                 SearchDocumentField $searchDocumentField
-            ) use ($fieldName, $fieldValue, $operation) {
+            ) use (
+                $fieldName,
+                $fieldValue,
+                $operation
+            ) {
                 if ($searchDocumentField->getKey() !== $fieldName) {
                     return false;
                 }
@@ -248,7 +252,7 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $condition
-     * @param \PHPUnit_Framework_MockObject_MockObject[]
+     * @param \PHPUnit_Framework_MockObject_MockObject[] $mockCriteriaToReturn
      * @return SearchCriteria|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createMockCriteria($condition, array $mockCriteriaToReturn)
@@ -265,8 +269,8 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $fieldName
-     * @param $fieldValue
+     * @param string $fieldName
+     * @param string $fieldValue
      * @return \PHPUnit_Framework_MockObject_MockObject|SearchDocumentField
      */
     private function createMockSearchDocumentField($fieldName, $fieldValue)

@@ -8,7 +8,11 @@ use Brera\Http\HttpRequestHandler;
 
 abstract class ApiRequestHandler implements HttpRequestHandler
 {
-    public final function process(HttpRequest $request)
+    /**
+     * @param HttpRequest $request
+     * @return DefaultHttpResponse
+     */
+    final public function process(HttpRequest $request)
     {
         $response = new DefaultHttpResponse();
 

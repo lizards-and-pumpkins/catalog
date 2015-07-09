@@ -11,7 +11,7 @@ class SearchDocumentCollection
 
     public function add(SearchDocument $document)
     {
-        array_push($this->documents, $document);
+        $this->documents[] = $document;
     }
 
     /**

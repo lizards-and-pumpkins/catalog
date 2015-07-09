@@ -6,6 +6,10 @@ use Brera\Utils\XPathParser;
 
 class ProductStockQuantitySourceBuilder
 {
+    /**
+     * @param string $xml
+     * @return ProductStockQuantitySource
+     */
     public function createFromXml($xml)
     {
         $parser = new XPathParser($xml);

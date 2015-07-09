@@ -37,6 +37,10 @@ class ProductStockQuantitySnippetRenderer implements SnippetRenderer
         $this->snippetList = $snippetList;
     }
 
+    /**
+     * @param ProductStockQuantitySource $productStockQuantitySource
+     * @return SnippetList
+     */
     public function render(ProductStockQuantitySource $productStockQuantitySource)
     {
         $key = $this->getSnippetKey($productStockQuantitySource);

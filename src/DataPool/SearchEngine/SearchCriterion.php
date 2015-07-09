@@ -23,8 +23,8 @@ class SearchCriterion implements \JsonSerializable
 
     /**
      * @param string $fieldName
-     * @param $fieldValue
-     * @param $operation
+     * @param string $fieldValue
+     * @param string $operation
      */
     private function __construct($fieldName, $fieldValue, $operation)
     {

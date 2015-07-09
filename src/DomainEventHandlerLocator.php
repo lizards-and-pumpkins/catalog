@@ -48,5 +48,4 @@ class DomainEventHandlerLocator
 
         return substr($qualifiedClassName, $lastQualifierPosition + 1);
     }
-
 }

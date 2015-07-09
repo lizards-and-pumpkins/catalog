@@ -23,6 +23,11 @@ class RootSnippetProjector implements Projector
         $this->dataPoolWriter = $dataPoolWriter;
     }
 
+    /**
+     * @param ProjectionSourceData $dataObject
+     * @param ContextSource $context
+     * @throws InvalidProjectionDataSourceTypeException
+     */
     public function project(ProjectionSourceData $dataObject, ContextSource $context)
     {
         if (!($dataObject instanceof RootSnippetSourceList)) {

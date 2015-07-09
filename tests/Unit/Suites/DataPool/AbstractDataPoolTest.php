@@ -42,15 +42,11 @@ abstract class AbstractDataPoolTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return ProductId|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getStubProductId()
     {
-        $productId = $this->getMockBuilder(ProductId::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        return $productId;
+        return $this->getMock(ProductId::class, [], [], '', false);
     }
 
     protected function addSetMethodToStubKeyValueStore()

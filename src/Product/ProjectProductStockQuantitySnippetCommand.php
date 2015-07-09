@@ -11,6 +11,9 @@ class ProjectProductStockQuantitySnippetCommand implements Command
      */
     private $payload;
 
+    /**
+     * @param string $payload
+     */
     public function __construct($payload)
     {
         $this->payload = $payload;

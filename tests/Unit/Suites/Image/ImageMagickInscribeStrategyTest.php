@@ -85,7 +85,8 @@ class ImageMagickInscribeStrategyTest extends \PHPUnit_Framework_TestCase
 
         $imageStream = file_get_contents(__DIR__ . '/../../../shared-fixture/test_image2.jpg');
 
-        $result = (new ImageMagickInscribeStrategy($requiredWidth, $requiredHeight, 'none'))->processBinaryImageData($imageStream);
+        $imageMagickInscribeStrategy = new ImageMagickInscribeStrategy($requiredWidth, $requiredHeight, 'none');
+        $result = $imageMagickInscribeStrategy->processBinaryImageData($imageStream);
         $resultImageInfo = getimagesizefromstring($result);
 
         $this->assertEquals($requiredWidth, $resultImageInfo[0]);

@@ -46,9 +46,13 @@ class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_T
     protected function setUp()
     {
         $this->mockSnippetList = $this->getMock(SnippetList::class);
-        $this->stubProductDetailViewBlockRenderer = $this->getMockBuilder(ProductDetailViewBlockRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->stubProductDetailViewBlockRenderer = $this->getMock(
+            ProductDetailViewBlockRenderer::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->stubProductDetailViewBlockRenderer->expects($this->any())
             ->method('render')
             ->willReturn('dummy content');
@@ -102,7 +106,7 @@ class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_T
         $testContextParts = ['version', 'website', 'language'];
         $this->mockSnippetKeyGenerator->expects($this->once())->method('getContextPartsUsedForKey')
             ->willReturn($testContextParts);
-        
+
         $this->assertSame($testContextParts, $this->renderer->getUsedContextParts());
     }
 }

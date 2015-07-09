@@ -31,6 +31,9 @@ class CommandConsumer
         $this->logger = $logger;
     }
 
+    /**
+     * @param int $numberOfMessagesToProcess
+     */
     public function process($numberOfMessagesToProcess)
     {
         for ($i=0; $i<$numberOfMessagesToProcess; $i++) {

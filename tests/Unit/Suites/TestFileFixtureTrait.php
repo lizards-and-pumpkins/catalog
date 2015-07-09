@@ -33,6 +33,9 @@ trait TestFileFixtureTrait
         $this->fixtureFiles[] = $realFile;
     }
 
+    /**
+     * @param string $directoryPath
+     */
     public function createFixtureDirectory($directoryPath)
     {
         $absolutePath = $this->getAbsolutePath($directoryPath);

@@ -47,9 +47,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $testAttributeValue = 'test-name';
         $testAttributeCode = 'name';
 
-        $stubProductAttribute = $this->getMockBuilder(ProductAttribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $stubProductAttribute = $this->getMock(ProductAttribute::class, [], [], '', false);
         $stubProductAttribute->expects($this->once())
             ->method('getValue')
             ->willReturn($testAttributeValue);

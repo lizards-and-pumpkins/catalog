@@ -46,7 +46,7 @@ class CatalogImportApiRequestHandler extends ApiRequestHandler
     /**
      * @return bool
      */
-    public final function canProcess()
+    final public function canProcess()
     {
         return true;
     }
@@ -55,7 +55,7 @@ class CatalogImportApiRequestHandler extends ApiRequestHandler
      * @param HttpRequest $request
      * @return string
      */
-    protected final function getResponseBody(HttpRequest $request)
+    final protected function getResponseBody(HttpRequest $request)
     {
         $importFileContents = $this->getImportFileContents($request);
 

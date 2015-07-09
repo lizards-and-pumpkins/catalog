@@ -500,25 +500,15 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $stubSearchDocumentFieldArray = [];
 
         foreach ($fieldsMap as $key => $value) {
-            $stubSearchDocumentField = $this->getMockBuilder(SearchDocumentField::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-            $stubSearchDocumentField->expects($this->any())
-                ->method('getKey')
-                ->willReturn($key);
-            $stubSearchDocumentField->expects($this->any())
-                ->method('getValue')
-                ->willReturn($value);
+            $stubSearchDocumentField = $this->getMock(SearchDocumentField::class, [], [], '', false);
+            $stubSearchDocumentField->method('getKey')->willReturn($key);
+            $stubSearchDocumentField->method('getValue')->willReturn($value);
 
-            array_push($stubSearchDocumentFieldArray, $stubSearchDocumentField);
+            $stubSearchDocumentFieldArray[] = $stubSearchDocumentField;
         }
 
-        $stubSearchDocumentFieldCollection = $this->getMockBuilder(SearchDocumentFieldCollection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $stubSearchDocumentFieldCollection->expects($this->any())
-            ->method('getFields')
-            ->willReturn($stubSearchDocumentFieldArray);
+        $stubSearchDocumentFieldCollection = $this->getMock(SearchDocumentFieldCollection::class, [], [], '', false);
+        $stubSearchDocumentFieldCollection->method('getFields')->willReturn($stubSearchDocumentFieldArray);
 
         return $stubSearchDocumentFieldCollection;
     }
@@ -570,7 +560,11 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             ->method('matches')
             ->willReturnCallback(function (
                 SearchDocumentField $searchDocumentField
-            ) use ($fieldName, $fieldValue, $operation) {
+            ) use (
+                $fieldName,
+                $fieldValue,
+                $operation
+            ) {
                 if ($searchDocumentField->getKey() !== $fieldName) {
                     return false;
                 }
@@ -598,7 +592,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $condition
-     * @param \PHPUnit_Framework_MockObject_MockObject[]
+     * @param \PHPUnit_Framework_MockObject_MockObject[] $mockCriteriaToReturn
      * @return SearchCriteria|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createMockCriteria($condition, array $mockCriteriaToReturn)
