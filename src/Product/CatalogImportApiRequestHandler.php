@@ -3,6 +3,7 @@
 namespace Brera\Product;
 
 use Brera\Api\ApiRequestHandler;
+use Brera\Http\HttpRequest;
 
 class CatalogImportApiRequestHandler extends ApiRequestHandler
 {
@@ -15,10 +16,12 @@ class CatalogImportApiRequestHandler extends ApiRequestHandler
     }
 
     /**
+     * @param HttpRequest $request
      * @return string
      */
-    protected final function getResponseBody()
+    protected final function getResponseBody(HttpRequest $request)
     {
+
         return json_encode('dummy response');
     }
 }

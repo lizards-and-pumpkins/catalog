@@ -16,13 +16,14 @@ abstract class ApiRequestHandler implements HttpRequestHandler
         $response->addHeader('Access-Control-Allow-Methods: *');
         $response->addHeader('Content-Type: application/json');
 
-        $response->setBody($this->getResponseBody());
+        $response->setBody($this->getResponseBody($request));
 
         return $response;
     }
 
     /**
+     * @param HttpRequest $request
      * @return string
      */
-    abstract protected function getResponseBody();
+    abstract protected function getResponseBody(HttpRequest $request);
 }
