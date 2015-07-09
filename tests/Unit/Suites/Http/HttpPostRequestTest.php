@@ -7,6 +7,7 @@ namespace Brera\Http;
  * @covers \Brera\Http\HttpRequest
  * @uses   \Brera\Http\HttpUrl
  * @uses   \Brera\Http\HttpHeaders
+ * @uses   \Brera\Http\HttpRequestBody
  */
 class HttpPostRequestTest extends AbstractHttpRequestTest
 {

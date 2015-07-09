@@ -3,6 +3,9 @@
 
 namespace Brera\Http;
 
+/**
+ * @covers \Brera\Http\HttpRequestBody
+ */
 class HttpRequestBodyTest extends \PHPUnit_Framework_TestCase
 {
     public function testItReturnsTheRequestBodyAsString()
