@@ -9,15 +9,28 @@ abstract class HttpRequest
      */
     private $url;
 
-    public function __construct(HttpUrl $url)
+    /**
+     * @var HttpHeaders
+     */
+    private $headers;
+    
+    /**
+     * @var HttpRequestBody
+     */
+    private $body;
+
+    public function __construct(HttpUrl $url, HttpHeaders $headers, HttpRequestBody $body)
     {
         $this->url = $url;
+        $this->headers = $headers;
+        $this->body = $body;
     }
 
     /**
+     * @param string $requestBody
      * @return HttpRequest
      */
-    public static function fromGlobalState()
+    public static function fromGlobalState($requestBody = '')
     {
         $requestMethod = $_SERVER['REQUEST_METHOD'];
 
@@ -27,24 +40,29 @@ abstract class HttpRequest
         }
 
         $url = HttpUrl::fromString($protocol . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+        $headers = HttpHeaders::fromArray(self::getGlobalRequestHeaders());
+        $body = HttpRequestBody::fromString($requestBody);
 
-        /* TODO: Decouple */
-        return self::fromParameters($requestMethod, $url);
+        return self::fromParameters($requestMethod, $url, $headers, $body);
     }
 
     /**
      * @param string $requestMethod
      * @param HttpUrl $url
+     * @param HttpHeaders $headers
+     * @param HttpRequestBody $body
      * @return HttpRequest
      * @throws UnsupportedRequestMethodException
      */
-    public static function fromParameters($requestMethod, HttpUrl $url)
+    public static function fromParameters($requestMethod, HttpUrl $url, HttpHeaders $headers, HttpRequestBody $body)
     {
         switch (strtoupper($requestMethod)) {
             case 'GET':
-                return new HttpGetRequest($url);
+                return new HttpGetRequest($url, $headers, $body);
             case 'POST':
-                return new HttpPostRequest($url);
+                return new HttpPostRequest($url, $headers, $body);
+            case 'PUT':
+                return new HttpPutRequest($url, $headers, $body);
             default:
                 throw new UnsupportedRequestMethodException(
                     sprintf('Unsupported request method: "%s"', $requestMethod)
@@ -53,10 +71,39 @@ abstract class HttpRequest
     }
 
     /**
+     * @return string[]
+     */
+    private static function getGlobalRequestHeaders()
+    {
+        return array_reduce(array_keys($_SERVER), function (array $result, $key) {
+            return substr($key, 0, 5) !== 'HTTP_' ?
+                $result :
+                array_merge($result, [strtolower(str_replace('_', '-', substr($key, 5))) => $_SERVER[$key]]);
+        }, []);
+    }
+
+    /**
      * @return HttpUrl
      */
     public function getUrl()
     {
         return $this->url;
+    }
+
+    /**
+     * @param string $headerName
+     * @return string
+     */
+    public function getHeader($headerName)
+    {
+        return $this->headers->get($headerName);
+    }
+
+    /**
+     * @return string
+     */
+    public function getRawBody()
+    {
+        return $this->body->toString();
     }
 }

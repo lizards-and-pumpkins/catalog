@@ -4,6 +4,27 @@ namespace Brera\Http;
 
 abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
 {
+    private $testRequestHost = 'example.com';
+
+    /**
+     * @return HttpUrl|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getStubHttpUrl()
+    {
+        return $this->getMock(HttpUrl::class, [], [], '', false);
+    }
+
+    /**
+     * @param bool $isSecure
+     */
+    private function setUpGlobalState($isSecure = false)
+    {
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_SERVER['HTTPS'] = $isSecure;
+        $_SERVER['HTTP_HOST'] = $this->testRequestHost;
+        $_SERVER['REQUEST_URI'] = '/';
+    }
+
     public function testUrlIsReturned()
     {
         $url = 'http://www.example.com/seo-url/';
@@ -13,7 +34,7 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
             ->method('__toString')
             ->willReturn($url);
 
-        $httpRequest = new HttpPostRequest($stubHttpUrl);
+        $httpRequest = new HttpPostRequest($stubHttpUrl, HttpHeaders::fromArray([]), HttpRequestBody::fromString(''));
         $result = $httpRequest->getUrl();
 
         $this->assertEquals($result, $url);
@@ -21,9 +42,9 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
 
     public function testUnsupportedRequestMethodExceptionIsThrown()
     {
-        $this->setExpectedException(UnsupportedRequestMethodException::class, 'Unsupported request method: "PUT"');
+        $this->setExpectedException(UnsupportedRequestMethodException::class, 'Unsupported request method: "XXX"');
         $stubHttpUrl = $this->getStubHttpUrl();
-        HttpRequest::fromParameters('PUT', $stubHttpUrl);
+        HttpRequest::fromParameters('XXX', $stubHttpUrl, HttpHeaders::fromArray([]), HttpRequestBody::fromString(''));
     }
 
     public function testHttpIsRequestReturnedFromGlobalState()
@@ -44,22 +65,25 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(HttpGetRequest::class, $result);
     }
 
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|HttpUrl
-     */
-    protected function getStubHttpUrl()
+    public function testItReturnsARequestHeader()
     {
-        return $this->getMock(HttpUrl::class, [], [], '', false);
+        $this->setUpGlobalState();
+        $result = HttpRequest::fromGlobalState();
+        $this->assertSame($this->testRequestHost, $result->getHeader('host'));
     }
 
-    /**
-     * @param bool $isSecure
-     */
-    private function setUpGlobalState($isSecure = false)
+    public function testItDefaultsToAnEmptyRequestBody()
     {
-        $_SERVER['REQUEST_METHOD'] = 'GET';
-        $_SERVER['HTTPS'] = $isSecure;
-        $_SERVER['HTTP_HOST'] = 'example.com';
-        $_SERVER['REQUEST_URI'] = '/';
+        $this->setUpGlobalState();
+        $result = HttpRequest::fromGlobalState();
+        $this->assertSame('', $result->getRawBody());
+    }
+
+    public function testItReturnsAnInjectedRequestBody()
+    {
+        $testRequestBody = 'the request body';
+        $this->setUpGlobalState();
+        $result = HttpRequest::fromGlobalState($testRequestBody);
+        $this->assertSame($testRequestBody, $result->getRawBody());
     }
 }
