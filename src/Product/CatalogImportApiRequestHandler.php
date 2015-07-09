@@ -86,7 +86,7 @@ class CatalogImportApiRequestHandler extends ApiRequestHandler
      * @return string
      * @throws CatalogImportFileNameNotFoundInRequestBodyException
      */
-    protected function getImportFileNameFromRequest(HttpRequest $request)
+    private function getImportFileNameFromRequest(HttpRequest $request)
     {
         $requestArguments = json_decode($request->getRawBody(), true);
 
