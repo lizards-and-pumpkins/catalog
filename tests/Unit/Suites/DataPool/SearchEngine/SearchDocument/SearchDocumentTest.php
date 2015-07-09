@@ -236,7 +236,7 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
                         return $searchDocumentField->getValue() != $fieldValue;
                     case 'gt':
                         return $searchDocumentField->getValue() > $fieldValue;
-                    case 'gte';
+                    case 'gte':
                         return $searchDocumentField->getValue() >= $fieldValue;
                     case 'lt':
                         return $searchDocumentField->getValue() < $fieldValue;

@@ -85,7 +85,7 @@ class SearchCriterion implements \JsonSerializable
                 return $searchDocumentField->getValue() != $this->fieldValue;
             case 'gt':
                 return $searchDocumentField->getValue() > $this->fieldValue;
-            case 'gte';
+            case 'gte':
                 return $searchDocumentField->getValue() >= $this->fieldValue;
             case 'lt':
                 return $searchDocumentField->getValue() < $this->fieldValue;
