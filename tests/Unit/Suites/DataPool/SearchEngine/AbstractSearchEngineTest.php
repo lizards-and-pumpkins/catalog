@@ -385,8 +385,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     public function testEmptyArrayIsReturnedIfNoMatchesAreFound()
     {
-        $mockCriterion = $this->createMockCriterion('test-field', 'test-search-term', 'eq');
-        $mockCriteria = $this->createMockCriteria(SearchCriteria::OR_CONDITION, [$mockCriterion]);
+        $criterion = SearchCriterion::create('test-field', 'test-search-term', 'eq');
+        $mockCriteria = $this->createMockCriteria(SearchCriteria::OR_CONDITION, [$criterion]);
 
         $result = $this->searchEngine->getContentOfSearchDocumentsMatchingCriteria($mockCriteria, $this->stubContext);
 
@@ -406,8 +406,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $searchEngine = $this->createSearchEngineInstance();
         $searchEngine->addSearchDocument($testSearchDocument);
 
-        $mockCriterion = $this->createMockCriterion($testFieldName, $testQueryTerm, 'eq');
-        $mockCriteria = $this->createMockCriteria(SearchCriteria::OR_CONDITION, [$mockCriterion]);
+        $criterion = SearchCriterion::create($testFieldName, $testQueryTerm, 'eq');
+        $mockCriteria = $this->createMockCriteria(SearchCriteria::OR_CONDITION, [$criterion]);
 
         $result = $searchEngine->getContentOfSearchDocumentsMatchingCriteria($mockCriteria, $this->stubContext);
         $this->assertEquals([$testProductId], $result);
@@ -432,9 +432,9 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $searchEngine->addSearchDocument($dummySearchDocument1);
         $searchEngine->addSearchDocument($dummySearchDocument2);
 
-        $mockCriterion1 = $this->createMockCriterion($dummyFieldName1, $dummyFieldValue1, 'eq');
-        $mockCriterion2 = $this->createMockCriterion($dummyFieldName2, $dummyFieldValue2, 'eq');
-        $mockCriteria = $this->createMockCriteria(SearchCriteria::OR_CONDITION, [$mockCriterion1, $mockCriterion2]);
+        $criterion1 = SearchCriterion::create($dummyFieldName1, $dummyFieldValue1, 'eq');
+        $criterion2 = SearchCriterion::create($dummyFieldName2, $dummyFieldValue2, 'eq');
+        $mockCriteria = $this->createMockCriteria(SearchCriteria::OR_CONDITION, [$criterion1, $criterion2]);
 
         $result = $searchEngine->getContentOfSearchDocumentsMatchingCriteria($mockCriteria, $this->stubContext);
 
@@ -467,9 +467,9 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $searchEngine->addSearchDocument($dummySearchDocument2);
         $searchEngine->addSearchDocument($dummySearchDocument3);
 
-        $mockCriterion1 = $this->createMockCriterion($dummyFieldName1, $dummyFieldValue1, 'eq');
-        $mockCriterion2 = $this->createMockCriterion($dummyFieldName2, $dummyFieldValue2, 'eq');
-        $mockCriteria = $this->createMockCriteria(SearchCriteria::AND_CONDITION, [$mockCriterion1, $mockCriterion2]);
+        $criterion1 = SearchCriterion::create($dummyFieldName1, $dummyFieldValue1, 'eq');
+        $criterion2 = SearchCriterion::create($dummyFieldName2, $dummyFieldValue2, 'eq');
+        $mockCriteria = $this->createMockCriteria(SearchCriteria::AND_CONDITION, [$criterion1, $criterion2]);
 
         $result = $searchEngine->getContentOfSearchDocumentsMatchingCriteria($mockCriteria, $this->stubContext);
 
@@ -534,48 +534,6 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     private function assertArraysHasEqualElements(array $array1, array $array2)
     {
         $this->assertEmpty(array_diff($array1, $array2));
-    }
-
-    /**
-     * @param string $fieldName
-     * @param string $fieldValue
-     * @param string $operation
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createMockCriterion($fieldName, $fieldValue, $operation)
-    {
-        $mockCriterion = $this->getMock(SearchCriterion::class, [], [], '', false);
-        $mockCriterion->method('matches')
-            ->willReturnCallback(function (
-                SearchDocumentField $searchDocumentField
-            ) use (
-                $fieldName,
-                $fieldValue,
-                $operation
-            ) {
-                if ($searchDocumentField->getKey() !== $fieldName) {
-                    return false;
-                }
-
-                switch ($operation) {
-                    case 'eq':
-                        return $searchDocumentField->getValue() == $fieldValue;
-                    case 'neq':
-                        return $searchDocumentField->getValue() != $fieldValue;
-                    case 'gt':
-                        return $searchDocumentField->getValue() > $fieldValue;
-                    case 'gte':
-                        return $searchDocumentField->getValue() >= $fieldValue;
-                    case 'lt':
-                        return $searchDocumentField->getValue() < $fieldValue;
-                    case 'lte':
-                        return $searchDocumentField->getValue() <= $fieldValue;
-                }
-
-                return false;
-            });
-
-        return $mockCriterion;
     }
 
     /**
