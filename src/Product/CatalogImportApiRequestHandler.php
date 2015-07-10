@@ -37,7 +37,7 @@ class CatalogImportApiRequestHandler extends ApiRequestHandler
     public static function create(Queue $domainEventQueue, $importDirectoryPath)
     {
         if (!is_readable($importDirectoryPath)) {
-            throw new CatalogImportDirectoryNotReadableException;
+            throw new CatalogImportDirectoryNotReadableException(sprintf('%s is not readable.', $importDirectoryPath));
         }
 
         return new self($domainEventQueue, $importDirectoryPath);
@@ -75,7 +75,7 @@ class CatalogImportApiRequestHandler extends ApiRequestHandler
         $filePath = $this->importDirectoryPath . '/' . $this->getImportFileNameFromRequest($request);
 
         if (!is_readable($filePath)) {
-            throw new CatalogImportFileNotReadableException;
+            throw new CatalogImportFileNotReadableException(sprintf('%s file is not readable.', $filePath));
         }
 
         return file_get_contents($filePath);
@@ -91,7 +91,9 @@ class CatalogImportApiRequestHandler extends ApiRequestHandler
         $requestArguments = json_decode($request->getRawBody(), true);
 
         if (!is_array($requestArguments) || !isset($requestArguments['fileName']) || !$requestArguments['fileName']) {
-            throw new CatalogImportFileNameNotFoundInRequestBodyException;
+            throw new CatalogImportFileNameNotFoundInRequestBodyException(
+                'Import file name is not fount in request body.'
+            );
         }
 
         return $requestArguments['fileName'];
