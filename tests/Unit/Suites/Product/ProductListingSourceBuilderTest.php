@@ -18,8 +18,8 @@ class ProductListingSourceBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $xml = <<<EOX
 <listing url_key="men-accessories" condition="and" website="ru" language="en_US">
-    <category operation="eq">accessories</category>
-    <gender operation="eq">male</gender>
+    <category operation="=">accessories</category>
+    <gender operation="=">male</gender>
 </listing>
 EOX;
 
@@ -34,8 +34,8 @@ EOX;
         $this->assertEquals('men-accessories', $urlKey);
         $this->assertEquals(['website' => 'ru', 'language' => 'en_US'], $context);
 
-        $expectedCriterion1 = SearchCriterion::create('category', 'accessories', 'eq');
-        $expectedCriterion2 = SearchCriterion::create('gender', 'male', 'eq');
+        $expectedCriterion1 = SearchCriterion::create('category', 'accessories', '=');
+        $expectedCriterion2 = SearchCriterion::create('gender', 'male', '=');
 
         $this->assertInstanceOf(SearchCriteria::class, $searchCriteria);
         $this->assertTrue($searchCriteria->hasAndCondition());
@@ -48,8 +48,8 @@ EOX;
     {
         $xml = <<<EOX
 <listing url_key="men-accessories" condition="or" website="ru" language="en_US">
-    <category operation="eq">accessories</category>
-    <gender operation="eq">male</gender>
+    <category operation="=">accessories</category>
+    <gender operation="=">male</gender>
 </listing>
 EOX;
 

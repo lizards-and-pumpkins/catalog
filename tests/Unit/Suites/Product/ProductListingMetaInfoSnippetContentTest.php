@@ -209,7 +209,7 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
     {
         $fieldName = 'foo';
         $fieldValue = 'bar';
-        $operation = 'eq';
+        $operation = '=';
 
         $json = json_encode([
             ProductListingMetaInfoSnippetContent::KEY_CRITERIA => [

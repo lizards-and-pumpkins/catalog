@@ -150,8 +150,8 @@ class ProductListingTest extends AbstractIntegrationTest
      */
     private function getStubMetaInfo()
     {
-        $searchCriterion1 = SearchCriterion::create('category', 'men-accessories', 'eq');
-        $searchCriterion2 = SearchCriterion::create('brand', 'Adidas', 'eq');
+        $searchCriterion1 = SearchCriterion::create('category', 'men-accessories', '=');
+        $searchCriterion2 = SearchCriterion::create('brand', 'Adidas', '=');
         $searchCriteria = SearchCriteria::createAnd();
         $searchCriteria->add($searchCriterion1);
         $searchCriteria->add($searchCriterion2);

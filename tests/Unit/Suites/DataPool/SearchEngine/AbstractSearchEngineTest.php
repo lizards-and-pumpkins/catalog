@@ -385,7 +385,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     public function testEmptyArrayIsReturnedIfNoMatchesAreFound()
     {
-        $criterion = SearchCriterion::create('test-field', 'test-search-term', 'eq');
+        $criterion = SearchCriterion::create('test-field', 'test-search-term', '=');
         $mockCriteria = $this->createMockCriteria(SearchCriteria::OR_CONDITION, [$criterion]);
 
         $result = $this->searchEngine->getContentOfSearchDocumentsMatchingCriteria($mockCriteria, $this->stubContext);
@@ -406,7 +406,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $searchEngine = $this->createSearchEngineInstance();
         $searchEngine->addSearchDocument($testSearchDocument);
 
-        $criterion = SearchCriterion::create($testFieldName, $testQueryTerm, 'eq');
+        $criterion = SearchCriterion::create($testFieldName, $testQueryTerm, '=');
         $mockCriteria = $this->createMockCriteria(SearchCriteria::OR_CONDITION, [$criterion]);
 
         $result = $searchEngine->getContentOfSearchDocumentsMatchingCriteria($mockCriteria, $this->stubContext);
@@ -432,8 +432,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $searchEngine->addSearchDocument($dummySearchDocument1);
         $searchEngine->addSearchDocument($dummySearchDocument2);
 
-        $criterion1 = SearchCriterion::create($dummyFieldName1, $dummyFieldValue1, 'eq');
-        $criterion2 = SearchCriterion::create($dummyFieldName2, $dummyFieldValue2, 'eq');
+        $criterion1 = SearchCriterion::create($dummyFieldName1, $dummyFieldValue1, '=');
+        $criterion2 = SearchCriterion::create($dummyFieldName2, $dummyFieldValue2, '=');
         $mockCriteria = $this->createMockCriteria(SearchCriteria::OR_CONDITION, [$criterion1, $criterion2]);
 
         $result = $searchEngine->getContentOfSearchDocumentsMatchingCriteria($mockCriteria, $this->stubContext);
@@ -467,8 +467,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $searchEngine->addSearchDocument($dummySearchDocument2);
         $searchEngine->addSearchDocument($dummySearchDocument3);
 
-        $criterion1 = SearchCriterion::create($dummyFieldName1, $dummyFieldValue1, 'eq');
-        $criterion2 = SearchCriterion::create($dummyFieldName2, $dummyFieldValue2, 'eq');
+        $criterion1 = SearchCriterion::create($dummyFieldName1, $dummyFieldValue1, '=');
+        $criterion2 = SearchCriterion::create($dummyFieldName2, $dummyFieldValue2, '=');
         $mockCriteria = $this->createMockCriteria(SearchCriteria::AND_CONDITION, [$criterion1, $criterion2]);
 
         $result = $searchEngine->getContentOfSearchDocumentsMatchingCriteria($mockCriteria, $this->stubContext);

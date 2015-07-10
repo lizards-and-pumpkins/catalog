@@ -49,7 +49,7 @@ class SearchCriterion implements \JsonSerializable
             throw new \InvalidArgumentException('Criterion field value should be a string');
         }
 
-        if (!in_array($operation, ['eq', 'neq', 'gt', 'gte', 'lt', 'lte'])) {
+        if (!in_array($operation, ['=', '!=', '>', '>=', '<', '<='])) {
             throw new \InvalidArgumentException('Invalid criterion operation');
         }
 
@@ -79,17 +79,17 @@ class SearchCriterion implements \JsonSerializable
         }
 
         switch ($this->operation) {
-            case 'eq':
+            case '=':
                 return $searchDocumentField->getValue() == $this->fieldValue;
-            case 'neq':
+            case '!=':
                 return $searchDocumentField->getValue() != $this->fieldValue;
-            case 'gt':
+            case '>':
                 return $searchDocumentField->getValue() > $this->fieldValue;
-            case 'gte':
+            case '>=':
                 return $searchDocumentField->getValue() >= $this->fieldValue;
-            case 'lt':
+            case '<':
                 return $searchDocumentField->getValue() < $this->fieldValue;
-            case 'lte':
+            case '<=':
                 return $searchDocumentField->getValue() <= $this->fieldValue;
         }
 

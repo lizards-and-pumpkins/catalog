@@ -7,6 +7,7 @@ use Brera\Utils\LocalFilesystem;
 /**
  * @covers \Brera\DataPool\SearchEngine\FileSearchEngine
  * @covers \Brera\DataPool\SearchEngine\IntegrationTestSearchEngineAbstract
+ * @uses   \Brera\DataPool\SearchEngine\SearchCriterion
  * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocument
  * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField
  * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection

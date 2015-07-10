@@ -11,7 +11,7 @@ class SearchCriterionTest extends \PHPUnit_Framework_TestCase
 {
     public function testJsonSerializableInterfaceIsImplemented()
     {
-        $result = SearchCriterion::create('foo', 'bar', 'eq');
+        $result = SearchCriterion::create('foo', 'bar', '=');
 
         $this->assertInstanceOf(\JsonSerializable::class, $result);
     }
@@ -19,13 +19,13 @@ class SearchCriterionTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownIfFieldNameIsNotValid()
     {
         $this->setExpectedException(\InvalidArgumentException::class, 'Criterion field name should be a string');
-        SearchCriterion::create(1, 'bar', 'eq');
+        SearchCriterion::create(1, 'bar', '=');
     }
 
     public function testExceptionIsThrownIfFieldValueIsNotValid()
     {
         $this->setExpectedException(\InvalidArgumentException::class, 'Criterion field value should be a string');
-        SearchCriterion::create('foo', 1, 'eq');
+        SearchCriterion::create('foo', 1, '=');
     }
 
     public function testExceptionIsThrownIfOperationIsNotValid()
@@ -38,7 +38,7 @@ class SearchCriterionTest extends \PHPUnit_Framework_TestCase
     {
         $fieldName = 'foo';
         $fieldValue = 'bar';
-        $operation = 'eq';
+        $operation = '=';
 
         $criterion = SearchCriterion::create($fieldName, $fieldValue, $operation);
         $result = $criterion->jsonSerialize();
@@ -51,7 +51,7 @@ class SearchCriterionTest extends \PHPUnit_Framework_TestCase
     {
         $fieldName = 'foo';
         $fieldValue = 'bar';
-        $operation = 'eq';
+        $operation = '=';
 
         $criterion = SearchCriterion::create($fieldName, $fieldValue, $operation);
         $mockSearchDocumentField = $this->createMockSearchDocumentField('baz', $fieldValue);
@@ -84,12 +84,12 @@ class SearchCriterionTest extends \PHPUnit_Framework_TestCase
     public function getNonMatchingValues()
     {
         return [
-            ['foo', 'eq', 'bar'],
-            ['foo', 'neq', 'foo'],
-            ['1', 'gt', '1'],
-            ['1', 'lt', '1'],
-            ['1', 'gte', '2'],
-            ['1', 'lte', '0']
+            ['foo', '=', 'bar'],
+            ['foo', '!=', 'foo'],
+            ['1', '>', '1'],
+            ['1', '<', '1'],
+            ['1', '>=', '2'],
+            ['1', '<=', '0']
         ];
     }
 
@@ -118,12 +118,12 @@ class SearchCriterionTest extends \PHPUnit_Framework_TestCase
     public function getMatchingValues()
     {
         return [
-            ['foo', 'eq', 'foo'],
-            ['foo', 'neq', 'bar'],
-            ['1', 'gt', '0'],
-            ['1', 'lt', '2'],
-            ['1', 'gte', '1'],
-            ['1', 'lte', '1']
+            ['foo', '=', 'foo'],
+            ['foo', '!=', 'bar'],
+            ['1', '>', '0'],
+            ['1', '<', '2'],
+            ['1', '>=', '1'],
+            ['1', '<=', '1']
         ];
     }
 
