@@ -92,7 +92,7 @@ class CatalogImportApiRequestHandler extends ApiRequestHandler
 
         if (!is_array($requestArguments) || !isset($requestArguments['fileName']) || !$requestArguments['fileName']) {
             throw new CatalogImportFileNameNotFoundInRequestBodyException(
-                'Import file name is not fount in request body.'
+                'Import file name is not found in request body.'
             );
         }
 
