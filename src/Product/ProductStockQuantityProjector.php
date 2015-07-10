@@ -26,7 +26,12 @@ class ProductStockQuantityProjector implements Projector
         $this->dataPoolWriter = $dataPoolWriter;
         $this->snippetRendererCollection = $snippetRendererCollection;
     }
-    
+
+    /**
+     * @param ProjectionSourceData $projectionSourceData
+     * @param ContextSource $contextSource
+     * @throws InvalidProjectionDataSourceTypeException
+     */
     public function project(ProjectionSourceData $projectionSourceData, ContextSource $contextSource)
     {
         if (!($projectionSourceData instanceof ProductStockQuantitySource)) {

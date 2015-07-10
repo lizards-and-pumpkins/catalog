@@ -14,6 +14,7 @@ use Brera\Product\ProductListingRouter;
  * @uses   \Brera\PoCMasterFactory
  * @uses   \Brera\IntegrationTestFactory
  * @uses   \Brera\CommonFactory
+ * @uses   \Brera\Product\CatalogImportApiRequestHandler
  * @uses   \Brera\Product\ProductDetailViewRouter
  * @uses   \Brera\Product\ProductDetailViewRequestHandlerBuilder
  * @uses   \Brera\Product\ProductListingRouter

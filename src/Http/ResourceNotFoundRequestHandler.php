@@ -6,9 +6,10 @@ namespace Brera\Http;
 class ResourceNotFoundRequestHandler implements HttpRequestHandler
 {
     /**
+     * @param HttpRequest $request
      * @return HttpResponse
      */
-    public function process()
+    public function process(HttpRequest $request)
     {
         return new HttpResourceNotFoundResponse();
     }

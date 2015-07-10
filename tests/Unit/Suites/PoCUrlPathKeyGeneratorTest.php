@@ -28,13 +28,11 @@ class PoCUrlPathKeyGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testUrlKeySnippetIsCreatedForGivenPath($path, $expected)
     {
         $stubUrl = $this->getMock(HttpUrl::class, [], [], '', false);
-        $stubUrl->expects($this->any())
-            ->method('getPathRelativeToWebFront')
+        $stubUrl->method('getPathRelativeToWebFront')
             ->willReturn($path);
         
         $mockContext = $this->getMock(Context::class);
-        $mockContext->expects($this->any())
-            ->method('getId')
+        $mockContext->method('getId')
             ->willReturn('v1');
         $result = $this->keyGenerator->getUrlKeyForUrlInContext($stubUrl, $mockContext);
         

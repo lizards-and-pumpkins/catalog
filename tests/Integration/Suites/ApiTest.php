@@ -6,20 +6,34 @@ use Brera\Http\HttpHeaders;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestBody;
 use Brera\Http\HttpUrl;
+use Brera\Product\CatalogImportDomainEvent;
 
-class ApiTest extends \PHPUnit_Framework_TestCase
+class ApiTest extends AbstractIntegrationTest
 {
-    public function testApiJsonResponseIsReturned()
+    public function testCatalogImportDomainEventWithCorrectPayloadIsPlacedIntoQueue()
     {
+        $factory = $this->prepareIntegrationTestMasterFactory();
+
         $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
         $httpHeaders = HttpHeaders::fromArray([]);
-        $httpRequestBody = HttpRequestBody::fromString('');
+        $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
+        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters('GET', $httpUrl, $httpHeaders, $httpRequestBody);
 
-        $website = new PoCWebFront($request);
-        $website->registerFactory(new IntegrationTestFactory());
+        $domainEventQueue = $factory->getEventQueue();
+        $this->assertEquals(0, $domainEventQueue->count());
+
+        $website = new PoCWebFront($request, $factory);
         $response = $website->runWithoutSendingResponse();
 
-        $this->assertEquals('"dummy response"', $response->getBody());
+        $this->assertEquals('"OK"', $response->getBody());
+        $this->assertEquals(1, $domainEventQueue->count());
+
+        /** @var CatalogImportDomainEvent $domainEvent */
+        $domainEvent = $domainEventQueue->next();
+        $expectedContents = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
+
+        $this->assertInstanceOf(CatalogImportDomainEvent::class, $domainEvent);
+        $this->assertEquals($expectedContents, $domainEvent->getXml());
     }
 }

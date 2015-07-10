@@ -18,7 +18,7 @@ class ProductAttributeList
 
     public function add(ProductAttribute $attribute)
     {
-        array_push($this->attributes, $attribute);
+        $this->attributes[] = $attribute;
         $this->addAttributeCode($attribute->getCode());
     }
 

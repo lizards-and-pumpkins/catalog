@@ -61,7 +61,7 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
      */
     public function getNumberOfEventsToProcess()
     {
-        return array_map(function ($i) { return [$i]; }, range(1, 3));
+        return [[1], [2], [3]];
     }
 
     public function testLogEntryIsWrittenIfLocatorIsNotFound()
@@ -99,8 +99,7 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
     private function addNextMethodToStubDomainEventQueue()
     {
         $stubDomainEvent = $this->getMock(DomainEvent::class);
-        $this->mockQueue->expects($this->any())
-            ->method('next')
+        $this->mockQueue->method('next')
             ->willReturn($stubDomainEvent);
     }
 }

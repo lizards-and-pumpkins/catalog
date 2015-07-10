@@ -4,7 +4,6 @@ namespace Brera\Api;
 
 use Brera\Context\Context;
 use Brera\Http\HttpRequest;
-use Brera\Http\HttpRequestHandler;
 use Brera\Http\HttpRouter;
 
 class ApiRouter implements HttpRouter
@@ -24,15 +23,14 @@ class ApiRouter implements HttpRouter
     /**
      * @param HttpRequest $request
      * @param Context $context
-     * @return HttpRequestHandler|null
+     * @return ApiRequestHandler|null
      */
     public function route(HttpRequest $request, Context $context)
     {
-        $urlPath = trim($request->getUrl()->getPath(), DIRECTORY_SEPARATOR);
-
+        $urlPath = trim($request->getUrl()->getPath(), '/');
         $urlToken = explode('/', $urlPath);
 
-        if ($this::API_URL_PREFIX !== array_shift($urlToken)) {
+        if (self::API_URL_PREFIX !== array_shift($urlToken)) {
             return null;
         }
 

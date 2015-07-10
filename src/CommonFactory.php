@@ -717,11 +717,11 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function getCommandQueue()
     {
-        if (null === $this->eventQueue) {
-            $this->eventQueue = $this->callExternalCreateMethod('CommandQueue');
+        if (null === $this->commandQueue) {
+            $this->commandQueue = $this->callExternalCreateMethod('CommandQueue');
         }
 
-        return $this->eventQueue;
+        return $this->commandQueue;
     }
 
     /**

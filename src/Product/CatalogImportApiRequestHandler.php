@@ -2,24 +2,100 @@
 
 namespace Brera\Product;
 
-use Brera\DefaultHttpResponse;
-use Brera\Http\HttpRequestHandler;
+use Brera\Api\ApiRequestHandler;
+use Brera\Http\HttpRequest;
+use Brera\Queue\Queue;
 
-class CatalogImportApiRequestHandler implements HttpRequestHandler
+class CatalogImportApiRequestHandler extends ApiRequestHandler
 {
     /**
-     * @return DefaultHttpResponse
+     * @var Queue
      */
-    public function process()
+    private $domainEventQueue;
+
+    /**
+     * @var string
+     */
+    private $importDirectoryPath;
+
+    /**
+     * @param Queue $domainEventQueue
+     * @param string $importDirectoryPath
+     */
+    private function __construct(Queue $domainEventQueue, $importDirectoryPath)
     {
-        // todo: change to json response
-        $response = new DefaultHttpResponse();
-        $response->setBody(json_encode('dummy response'));
-        return $response;
+        $this->domainEventQueue = $domainEventQueue;
+        $this->importDirectoryPath = $importDirectoryPath;
     }
 
-    public function canProcess()
+    /**
+     * @param Queue $domainEventQueue
+     * @param string $importDirectoryPath
+     * @return CatalogImportApiRequestHandler
+     * @throws CatalogImportDirectoryNotReadableException
+     */
+    public static function create(Queue $domainEventQueue, $importDirectoryPath)
     {
-        // TODO: Implement canProcess() method.
+        if (!is_readable($importDirectoryPath)) {
+            throw new CatalogImportDirectoryNotReadableException(sprintf('%s is not readable.', $importDirectoryPath));
+        }
+
+        return new self($domainEventQueue, $importDirectoryPath);
+    }
+
+    /**
+     * @return bool
+     */
+    final public function canProcess()
+    {
+        return true;
+    }
+
+    /**
+     * @param HttpRequest $request
+     * @return string
+     */
+    final protected function getResponseBody(HttpRequest $request)
+    {
+        $importFileContents = $this->getImportFileContents($request);
+
+        $catalogImportDomainEvent = new CatalogImportDomainEvent($importFileContents);
+        $this->domainEventQueue->add($catalogImportDomainEvent);
+
+        return json_encode('OK');
+    }
+
+    /**
+     * @param HttpRequest $request
+     * @return string
+     * @throws CatalogImportFileNotReadableException
+     */
+    private function getImportFileContents(HttpRequest $request)
+    {
+        $filePath = $this->importDirectoryPath . '/' . $this->getImportFileNameFromRequest($request);
+
+        if (!is_readable($filePath)) {
+            throw new CatalogImportFileNotReadableException(sprintf('%s file is not readable.', $filePath));
+        }
+
+        return file_get_contents($filePath);
+    }
+
+    /**
+     * @param HttpRequest $request
+     * @return string
+     * @throws CatalogImportFileNameNotFoundInRequestBodyException
+     */
+    private function getImportFileNameFromRequest(HttpRequest $request)
+    {
+        $requestArguments = json_decode($request->getRawBody(), true);
+
+        if (!is_array($requestArguments) || !isset($requestArguments['fileName']) || !$requestArguments['fileName']) {
+            throw new CatalogImportFileNameNotFoundInRequestBodyException(
+                'Import file name is not fount in request body.'
+            );
+        }
+
+        return $requestArguments['fileName'];
     }
 }

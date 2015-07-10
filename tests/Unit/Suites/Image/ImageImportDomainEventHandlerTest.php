@@ -42,8 +42,7 @@ class ImageImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $imageFilename = 'test_image.jpg';
 
-        $this->mockImageImportDomainEvent->expects($this->any())
-            ->method('getImage')
+        $this->mockImageImportDomainEvent->method('getImage')
             ->willReturn($imageFilename);
 
         $this->mockImageProcessorCollection->expects($this->once())

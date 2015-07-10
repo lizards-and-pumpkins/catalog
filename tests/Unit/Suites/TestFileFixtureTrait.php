@@ -34,6 +34,16 @@ trait TestFileFixtureTrait
     }
 
     /**
+     * @param string $directoryPath
+     */
+    public function createFixtureDirectory($directoryPath)
+    {
+        $absolutePath = $this->getAbsolutePath($directoryPath);
+        $directories = explode('/', ltrim($absolutePath, '/'));
+        $this->createMissingDirectoriesRecursively($directories);
+    }
+
+    /**
      * @return string
      */
     public function getUniqueTempDir()
@@ -49,15 +59,16 @@ trait TestFileFixtureTrait
     }
 
     /**
-     * @param string $file
+     * @param string $path
      * @return string
      */
-    private function getAbsolutePath($file)
+    private function getAbsolutePath($path)
     {
-        $realFile = substr($file, 0, 1) !== '/'
-            ? getcwd() . '/' . $file
-            : $file;
-        return $realFile;
+        if ('/' === substr($path, 0, 1)) {
+            return $path;
+        }
+
+        return getcwd() . '/' . $path;
     }
 
     /**

@@ -56,7 +56,7 @@ abstract class WebFront
 
         // TODO put response creation into factory, response depends on http version!
 
-        return $requestHandler->process();
+        return $requestHandler->process($this->request);
     }
 
     final public function registerFactory(Factory $factory)

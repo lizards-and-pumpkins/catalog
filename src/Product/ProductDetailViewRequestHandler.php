@@ -5,6 +5,7 @@ namespace Brera\Product;
 use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\KeyNotFoundException;
+use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
 use Brera\Http\HttpResponse;
 use Brera\Http\UnableToHandleRequestException;
@@ -65,10 +66,11 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
     }
 
     /**
+     * @param HttpRequest $request
      * @return HttpResponse
      * @throws UnableToHandleRequestException
      */
-    public function process()
+    public function process(HttpRequest $request)
     {
         if (!$this->canProcess()) {
             throw new UnableToHandleRequestException;

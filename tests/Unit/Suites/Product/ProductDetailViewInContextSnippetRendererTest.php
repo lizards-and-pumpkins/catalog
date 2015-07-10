@@ -46,25 +46,24 @@ class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_T
     protected function setUp()
     {
         $this->mockSnippetList = $this->getMock(SnippetList::class);
-        $this->stubProductDetailViewBlockRenderer = $this->getMockBuilder(ProductDetailViewBlockRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->stubProductDetailViewBlockRenderer->expects($this->any())
-            ->method('render')
+        $this->stubProductDetailViewBlockRenderer = $this->getMock(
+            ProductDetailViewBlockRenderer::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->stubProductDetailViewBlockRenderer->method('render')
             ->willReturn('dummy content');
-        $this->stubProductDetailViewBlockRenderer->expects($this->any())
-            ->method('getRootSnippetCode')
+        $this->stubProductDetailViewBlockRenderer->method('getRootSnippetCode')
             ->willReturn('dummy root block code');
-        $this->stubProductDetailViewBlockRenderer->expects($this->any())
-            ->method('getNestedSnippetCodes')
+        $this->stubProductDetailViewBlockRenderer->method('getNestedSnippetCodes')
             ->willReturn([]);
         $this->mockSnippetKeyGenerator = $this->getMock(ProductSnippetKeyGenerator::class, [], [], '', false);
-        $this->mockSnippetKeyGenerator->expects($this->any())
-            ->method('getKeyForContext')
+        $this->mockSnippetKeyGenerator->method('getKeyForContext')
             ->willReturn('stub-content-key');
         $this->stubUrlPathKeyGenerator = $this->getMock(UrlPathKeyGenerator::class);
-        $this->stubUrlPathKeyGenerator->expects($this->any())
-            ->method('getUrlKeyForPathInContext')
+        $this->stubUrlPathKeyGenerator->method('getUrlKeyForPathInContext')
             ->willReturn('stub-url-key');
         $this->renderer = new ProductDetailViewInContextSnippetRenderer(
             $this->mockSnippetList,
@@ -78,7 +77,7 @@ class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_T
     {
         $this->mockSnippetList->expects($this->exactly(2))->method('add');
         $stubProduct = $this->getMock(Product::class, [], [], '', false);
-        $stubProduct->expects($this->any())->method('getId')->willReturn(2);
+        $stubProduct->method('getId')->willReturn(2);
         $stubContext = $this->getMock(Context::class, [], [], '', false);
         $this->renderer->render($stubProduct, $stubContext);
     }
@@ -86,7 +85,7 @@ class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_T
     public function testContainedJson()
     {
         $stubProduct = $this->getMock(Product::class, [], [], '', false);
-        $stubProduct->expects($this->any())->method('getId')->willReturn(2);
+        $stubProduct->method('getId')->willReturn(2);
         $stubContext = $this->getMock(Context::class, [], [], '', false);
         $this->renderer->render($stubProduct, $stubContext);
 
@@ -102,7 +101,7 @@ class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_T
         $testContextParts = ['version', 'website', 'language'];
         $this->mockSnippetKeyGenerator->expects($this->once())->method('getContextPartsUsedForKey')
             ->willReturn($testContextParts);
-        
+
         $this->assertSame($testContextParts, $this->renderer->getUsedContextParts());
     }
 }

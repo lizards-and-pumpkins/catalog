@@ -63,8 +63,7 @@ abstract class ContextDecoratorTestAbstract extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->mockDecoratedContext = $this->getMock(Context::class);
-        $this->mockDecoratedContext->expects($this->any())
-            ->method('getSupportedCodes')
+        $this->mockDecoratedContext->method('getSupportedCodes')
             ->willReturn([$this->decoratedComponentCode]);
         $this->decorator = $this->createContextDecoratorUnderTest(
             $this->mockDecoratedContext,

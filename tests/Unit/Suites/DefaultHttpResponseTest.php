@@ -2,38 +2,74 @@
 
 namespace Brera;
 
+use Brera\Http\HttpResponse;
+use Brera\Http\InvalidResponseBodyException;
+
 /**
  * @covers \Brera\DefaultHttpResponse
+ * @uses   \Brera\Http\HttpHeaders
  */
 class DefaultHttpResponseTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var DefaultHttpResponse
-     */
-    private $defaultHttpResponse;
-
-    public function setUp()
+    public function testHttpResponseInterfaceIsImplemented()
     {
-        $this->defaultHttpResponse = new DefaultHttpResponse();
+        $dummyBody = 'foo';
+        $dummyHeaders = [];
+
+        $result = DefaultHttpResponse::create($dummyBody, $dummyHeaders);
+
+        $this->assertInstanceOf(HttpResponse::class, $result);
     }
 
-    public function testBodyIsSetAndRetrieved()
+    public function testExceptionIsThrownDuringAttemptToCreateResponseWithNonStringBody()
     {
-        $body = 'dummy';
+        $this->setExpectedException(InvalidResponseBodyException::class);
+        DefaultHttpResponse::create(1, []);
+    }
 
-        $this->defaultHttpResponse->setBody($body);
-        $result = $this->defaultHttpResponse->getBody();
+    public function testResponseBodyIsReturned()
+    {
+        $dummyBody = 'foo';
+        $dummyHeaders = [];
 
-        $this->assertEquals($body, $result);
+        $response = DefaultHttpResponse::create($dummyBody, $dummyHeaders);
+        $result = $response->getBody();
+
+        $this->assertEquals($dummyBody, $result);
     }
 
     public function testBodyIsEchoed()
     {
-        $body = 'dummy';
+        $dummyBody = 'foo';
+        $dummyHeaders = [];
 
-        $this->defaultHttpResponse->setBody($body);
-        $this->defaultHttpResponse->send();
+        $response = DefaultHttpResponse::create($dummyBody, $dummyHeaders);
+        $response->send();
 
-        $this->expectOutputString($body);
+        $this->expectOutputString($dummyBody);
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testGivenHeaderIsIncludedIntoResponse()
+    {
+        if (!extension_loaded('xdebug')) {
+            $this->markTestSkipped('This test requires the PHP extension xdebug to be installed.');
+        }
+
+        $customHeaderName = 'Foo';
+        $customHeaderValue = 'bar';
+
+        $dummyBody = '';
+        $dummyHeaders = [$customHeaderName => $customHeaderValue];
+
+        $response = DefaultHttpResponse::create($dummyBody, $dummyHeaders);
+        $response->send();
+
+        $expectedHeader = $customHeaderName . ': ' . $customHeaderValue;
+        $headers = xdebug_get_headers();
+
+        $this->assertContains($expectedHeader, $headers);
     }
 }

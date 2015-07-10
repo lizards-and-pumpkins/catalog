@@ -52,8 +52,7 @@ class ProductListingProjectorTest extends \PHPUnit_Framework_TestCase
         $stubContext = $this->getMock(SampleContextSource::class, [], [], '', false);
         $stubSnippet = $this->getMock(Snippet::class, [], [], '', false);
 
-        $this->mockProductListingPageMetaInfoSnippetRenderer->expects($this->any())
-            ->method('render')
+        $this->mockProductListingPageMetaInfoSnippetRenderer->method('render')
             ->willReturn($stubSnippet);
 
         $this->mockDataPoolWriter->expects($this->once())

@@ -52,8 +52,7 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
         $this->stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
 
         $this->mockRendererCollection = $this->getMock(SnippetRendererCollection::class, [], [], '', false);
-        $this->mockRendererCollection->expects($this->any())
-            ->method('render')
+        $this->mockRendererCollection->method('render')
             ->willReturn($this->stubSnippetList);
 
         $this->stubSearchDocumentBuilder = $this->getMock(ProductSearchDocumentBuilder::class, [], [], '', false);

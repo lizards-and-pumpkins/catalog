@@ -14,7 +14,7 @@ class TestFileFixtureTraitTest extends \PHPUnit_Framework_TestCase
      */
     public function testFileIsCreated()
     {
-        $file = $this->getTestFilename();
+        $file = $this->getTestFilePath();
         $this->assertFileNotExists($file);
         $this->createFixtureFile($file, '');
         $this->assertFileExists($file);
@@ -29,6 +29,29 @@ class TestFileFixtureTraitTest extends \PHPUnit_Framework_TestCase
     public function testCreatedFileIsRemoved($file)
     {
         $this->assertFileNotExists($file);
+    }
+
+    /**
+     * @return string
+     */
+    public function testFixtureDirectoryIsCreated()
+    {
+        $directoryPath = $this->getTestDirectoryPath();
+        $this->assertFileNotExists($directoryPath);
+        $this->createFixtureDirectory($directoryPath);
+        $this->assertFileExists($directoryPath);
+        $this->assertTrue(is_dir($directoryPath));
+
+        return $directoryPath;
+    }
+
+    /**
+     * @depends testFixtureDirectoryIsCreated
+     * @param string $directoryPath
+     */
+    public function testFixtureDirectoryIsRemoved($directoryPath)
+    {
+        $this->assertFileNotExists($directoryPath);
     }
 
     /**
@@ -58,7 +81,7 @@ class TestFileFixtureTraitTest extends \PHPUnit_Framework_TestCase
 
     public function testFileWithTheGivenContentIsCreated()
     {
-        $file = $this->getTestFilename();
+        $file = $this->getTestFilePath();
         $content = '123';
         $this->createFixtureFile($file, $content);
 
@@ -67,7 +90,7 @@ class TestFileFixtureTraitTest extends \PHPUnit_Framework_TestCase
 
     public function testFileWit0500ModeIsCreatedByDefault()
     {
-        $file = $this->getTestFilename();
+        $file = $this->getTestFilePath();
         $this->createFixtureFile($file, '');
 
         $this->assertFileMode($file, 0500);
@@ -75,7 +98,7 @@ class TestFileFixtureTraitTest extends \PHPUnit_Framework_TestCase
 
     public function testFileWithGivenModeIsCreated()
     {
-        $file = $this->getTestFilename();
+        $file = $this->getTestFilePath();
         $this->createFixtureFile($file, '', 0666);
         $this->assertFileMode($file, 0666);
     }
@@ -85,7 +108,7 @@ class TestFileFixtureTraitTest extends \PHPUnit_Framework_TestCase
      */
     public function testNonWritableFileIsCreated()
     {
-        $file = $this->getTestFilename();
+        $file = $this->getTestFilePath();
         $this->createFixtureFile($file, '', 0000);
         $this->assertFileMode($file, 0000);
 
@@ -103,7 +126,7 @@ class TestFileFixtureTraitTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfFileAlreadyExists()
     {
-        $file = $this->getTestFilename();
+        $file = $this->getTestFilePath();
         $this->setExpectedException(\RuntimeException::class, 'Fixture file already exists');
 
         $this->createFixtureFile($file, '');
@@ -126,7 +149,15 @@ class TestFileFixtureTraitTest extends \PHPUnit_Framework_TestCase
     /**
      * @return string
      */
-    private function getTestFilename()
+    private function getTestFilePath()
+    {
+        return sys_get_temp_dir() . '/' . uniqid() . '.test';
+    }
+
+    /**
+     * @return string
+     */
+    private function getTestDirectoryPath()
     {
         return sys_get_temp_dir() . '/' . uniqid() . '.test';
     }

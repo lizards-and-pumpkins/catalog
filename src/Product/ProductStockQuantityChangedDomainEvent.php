@@ -11,6 +11,9 @@ class ProductStockQuantityChangedDomainEvent implements DomainEvent
      */
     private $payload;
 
+    /**
+     * @param string $payload
+     */
     public function __construct($payload)
     {
         $this->payload = $payload;
