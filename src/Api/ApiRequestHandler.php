@@ -3,6 +3,7 @@
 namespace Brera\Api;
 
 use Brera\DefaultHttpResponse;
+use Brera\Http\HttpHeaders;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
 
@@ -14,15 +15,14 @@ abstract class ApiRequestHandler implements HttpRequestHandler
      */
     final public function process(HttpRequest $request)
     {
-        $response = new DefaultHttpResponse();
+        $body = $this->getResponseBody($request);
+        $headers = [
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Methods' => '*',
+            'Content-Type' => 'application/json',
+        ];
 
-        $response->addHeader('Access-Control-Allow-Origin', '*');
-        $response->addHeader('Access-Control-Allow-Methods', '*');
-        $response->addHeader('Content-Type', 'application/json');
-
-        $response->setBody($this->getResponseBody($request));
-
-        return $response;
+        return DefaultHttpResponse::create($body, $headers);
     }
 
     /**

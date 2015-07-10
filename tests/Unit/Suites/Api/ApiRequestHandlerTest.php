@@ -10,6 +10,7 @@ use Brera\Http\HttpRequestHandler;
 /**
  * @covers \Brera\Api\ApiRequestHandler
  * @uses   \Brera\DefaultHttpResponse
+ * @uses   \Brera\Http\HttpHeaders
  */
 class ApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -43,14 +44,14 @@ class ApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
     public function testApiSpecificHeadersAreSet()
     {
         $response = $this->apiRequestHandler->process($this->stubRequest);
-        $result = $this->getPrivateFieldValue($response, 'headers');
+        $headers = $this->getPrivateFieldValue($response, 'headers');
         $expectedHeaders = [
             'Access-Control-Allow-Origin' => '*',
             'Access-Control-Allow-Methods' => '*',
             'Content-Type' => 'application/json',
         ];
 
-        $this->assertArraySubset($expectedHeaders, $result);
+        $this->assertArraySubset($expectedHeaders, $headers->getAll());
     }
 
     public function testDummyBodyContentIsReturned()

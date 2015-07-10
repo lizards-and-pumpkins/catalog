@@ -10,7 +10,7 @@ class HttpHeadersTest extends \PHPUnit_Framework_TestCase
 {
     public function testItThrowsAnExceptionIfAnInvalidHeaderIsRequested()
     {
-        $this->setExpectedException(\Brera\Http\HeaderNotPresentException::class);
+        $this->setExpectedException(HeaderNotPresentException::class);
         HttpHeaders::fromArray([])->get('a-http-request-header');
     }
 
@@ -44,5 +44,43 @@ class HttpHeadersTest extends \PHPUnit_Framework_TestCase
         $headerValue = 'the-header-value';
         $headers = HttpHeaders::fromArray([$headerName => $headerValue]);
         $this->assertSame($headerValue, $headers->get(strtoupper($headerName)));
+    }
+
+    public function testEmptyArrayIsReturnedInCaseNoHeadersWereSet()
+    {
+        $headers = HttpHeaders::fromArray([]);
+        $this->assertEquals([], $headers->getAll());
+    }
+
+    public function testAllHeadersAreReturned()
+    {
+        $headersArray = ['header 1 name' => 'header 1 value', 'header 2 name' => 'header 2 value'];
+        $headers = HttpHeaders::fromArray($headersArray);
+
+        $this->assertEquals($headersArray, $headers->getAll());
+    }
+
+    /**
+     * @dataProvider getMalformedHeadersSources
+     * @param mixed[] $malformedHeadersSource
+     */
+    public function testExceptionIsThrownDuringAttemptToCreateHeadersFromArrayContainingNonStringKeysOrValues(
+        array $malformedHeadersSource
+    )
+    {
+        $this->setExpectedException(InvalidHttpHeadersException::class);
+        HttpHeaders::fromArray($malformedHeadersSource);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function getMalformedHeadersSources()
+    {
+        return [
+            [['foo' => 1]],
+            [['bar']],
+            [[1 => []]]
+        ];
     }
 }

@@ -24,6 +24,12 @@ class HttpHeaders
      */
     public static function fromArray(array $headers)
     {
+        foreach ($headers as $headerName => $headerValue) {
+            if (!is_string($headerName) || !is_string($headerValue)) {
+                throw new InvalidHttpHeadersException('Can only create HTTP headers from string');
+            }
+        }
+
         return new self($headers);
     }
 
@@ -39,6 +45,14 @@ class HttpHeaders
             throw new HeaderNotPresentException(sprintf('The header "%s" is not present.', $headerName));
         }
         return $this->headers[$normalizedHeaderName];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getAll()
+    {
+        return $this->headers;
     }
 
     /**

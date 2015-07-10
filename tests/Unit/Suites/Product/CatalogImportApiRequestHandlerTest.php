@@ -10,6 +10,7 @@ use Brera\TestFileFixtureTrait;
  * @covers \Brera\Product\CatalogImportApiRequestHandler
  * @uses   \Brera\Api\ApiRequestHandler
  * @uses   \Brera\DefaultHttpResponse
+ * @uses   \Brera\Http\HttpHeaders
  * @uses   \Brera\Product\CatalogImportDomainEvent
  */
 class CatalogImportApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
