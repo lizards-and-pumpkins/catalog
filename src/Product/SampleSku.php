@@ -2,7 +2,7 @@
 
 namespace Brera\Product;
 
-class PoCSku implements Sku
+class SampleSku implements Sku
 {
     /**
      * @var string
@@ -20,7 +20,7 @@ class PoCSku implements Sku
     /**
      * @param string $skuString
      * @throws InvalidSkuException
-     * @return PoCSku
+     * @return SampleSku
      */
     public static function fromString($skuString)
     {

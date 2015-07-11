@@ -6,7 +6,7 @@ use Brera\Http\HttpHeaders;
 use Brera\Http\HttpRequestBody;
 use Brera\Http\HttpResourceNotFoundResponse;
 use Brera\Product\CatalogImportDomainEvent;
-use Brera\Product\PoCSku;
+use Brera\Product\SampleSku;
 use Brera\Product\ProductDetailViewInContextSnippetRenderer;
 use Brera\Product\ProductId;
 use Brera\Http\HttpUrl;
@@ -21,7 +21,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
     {
         $factory = $this->prepareIntegrationTestMasterFactory();
 
-        $sku = PoCSku::fromString('118235-251');
+        $sku = SampleSku::fromString('118235-251');
         $productId = ProductId::fromSku($sku);
         $productName = 'LED Arm-Signallampe';
         $productPrice = 1295;

@@ -23,7 +23,7 @@ class ProductStockQuantitySourceBuilder
         $quantityNodes = $parser->getXmlNodesArrayByXPath('/*/quantity');
         $quantityString = $this->getQuantityStringFromDomNodeArray($quantityNodes);
 
-        $sku = PoCSku::fromString($skuString);
+        $sku = SampleSku::fromString($skuString);
         $quantity = ProductStockQuantity::fromString($quantityString);
 
         return new ProductStockQuantitySource($sku, $contextData, $quantity);

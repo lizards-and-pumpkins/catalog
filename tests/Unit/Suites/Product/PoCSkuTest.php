@@ -3,20 +3,20 @@
 namespace Brera\Product;
 
 /**
- * @covers \Brera\Product\PoCSku
+ * @covers \Brera\Product\SampleSku
  */
-class PoCSkuTest extends \PHPUnit_Framework_TestCase
+class SampleSkuTest extends \PHPUnit_Framework_TestCase
 {
     public function testSkuInterfaceIsImplemented()
     {
-        $sku = PoCSku::fromString('sku-string');
+        $sku = SampleSku::fromString('sku-string');
         $this->assertInstanceOf(Sku::class, $sku);
     }
 
     public function testSkuIsConvertedIntoString()
     {
         $skuString = 'sku-string';
-        $sku = PoCSku::fromString($skuString);
+        $sku = SampleSku::fromString($skuString);
 
         $this->assertSame($skuString, (string) $sku);
     }
@@ -28,7 +28,7 @@ class PoCSkuTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownIfSkuIsNotValid($invalidSku)
     {
         $this->setExpectedException(InvalidSkuException::class);
-        PoCSku::fromString($invalidSku);
+        SampleSku::fromString($invalidSku);
     }
 
     /**

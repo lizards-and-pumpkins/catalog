@@ -6,7 +6,7 @@ namespace Brera\Product;
  * @covers \Brera\Product\ProductSourceBuilder
  * @uses   \Brera\Product\ProductSource
  * @uses   \Brera\Product\ProductId
- * @uses   \Brera\Product\PoCSku
+ * @uses   \Brera\Product\SampleSku
  * @uses   \Brera\Utils\XPathParser
  * @uses   \Brera\Product\ProductAttribute
  * @uses   \Brera\Product\ProductAttributeList
