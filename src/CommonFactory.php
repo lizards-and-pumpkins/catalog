@@ -407,11 +407,11 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return PoCUrlPathKeyGenerator
+     * @return SampleUrlPathKeyGenerator
      */
     public function createUrlPathKeyGenerator()
     {
-        return new PoCUrlPathKeyGenerator();
+        return new SampleUrlPathKeyGenerator();
     }
 
     /**

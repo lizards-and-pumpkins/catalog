@@ -6,7 +6,7 @@ namespace Brera;
 use Brera\Context\Context;
 use Brera\Http\HttpUrl;
 
-class PoCUrlPathKeyGenerator implements UrlPathKeyGenerator
+class SampleUrlPathKeyGenerator implements UrlPathKeyGenerator
 {
     /**
      * @param HttpUrl $url

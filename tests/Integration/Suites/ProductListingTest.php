@@ -47,7 +47,7 @@ class ProductListingTest extends AbstractIntegrationTest
 
         $url = HttpUrl::fromString('http://example.com/' . $urlKey);
         $metaInfoSnippetKey =  ProductListingSnippetRenderer::CODE . '_'
-            . (new PoCUrlPathKeyGenerator())->getUrlKeyForUrlInContext($url, $context);
+            . (new SampleUrlPathKeyGenerator())->getUrlKeyForUrlInContext($url, $context);
 
         $dataPoolReader = $this->factory->createDataPoolReader();
         $metaInfoSnippet = $dataPoolReader->getSnippet($metaInfoSnippetKey);
@@ -142,7 +142,7 @@ class ProductListingTest extends AbstractIntegrationTest
     private function getPageMetaInfoSnippetKey(Context $context)
     {
         $url = HttpUrl::fromString($this->testUrl);
-        return (new PoCUrlPathKeyGenerator())->getUrlKeyForUrlInContext($url, $context);
+        return (new SampleUrlPathKeyGenerator())->getUrlKeyForUrlInContext($url, $context);
     }
 
     /**

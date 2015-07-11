@@ -6,18 +6,18 @@ use Brera\Context\Context;
 use Brera\Http\HttpUrl;
 
 /**
- * @covers \Brera\PoCUrlPathKeyGenerator
+ * @covers \Brera\SampleUrlPathKeyGenerator
  */
-class PoCUrlPathKeyGeneratorTest extends \PHPUnit_Framework_TestCase
+class SampleUrlPathKeyGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var PoCUrlPathKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var SampleUrlPathKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $keyGenerator;
 
     public function setUp()
     {
-        $this->keyGenerator = new PoCUrlPathKeyGenerator();
+        $this->keyGenerator = new SampleUrlPathKeyGenerator();
     }
 
     /**
