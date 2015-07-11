@@ -150,7 +150,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $httpRequestBody = HttpRequestBody::fromString('');
         $request = HttpRequest::fromParameters('GET', $httpUrl, $httpHeaders, $httpRequestBody);
 
-        $website = new PoCWebFront($request, $factory);
+        $website = new SampleWebFront($request, $factory);
         $response = $website->runWithoutSendingResponse();
 
         $this->assertContains('<body>', $response->getBody());
@@ -163,7 +163,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $requestBody = HttpRequestBody::fromString('');
         $request = HttpRequest::fromParameters('GET', $url, $headers, $requestBody);
 
-        $website = new PoCWebFront($request);
+        $website = new SampleWebFront($request);
         $website->registerFactory(new IntegrationTestFactory());
         $response = $website->runWithoutSendingResponse();
         $this->assertInstanceOf(HttpResourceNotFoundResponse::class, $response);

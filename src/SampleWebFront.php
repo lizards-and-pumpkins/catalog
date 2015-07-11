@@ -6,7 +6,7 @@ use Brera\Context\ContextBuilder;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRouterChain;
 
-class PoCWebFront extends WebFront
+class SampleWebFront extends WebFront
 {
     /**
      * @return MasterFactory
