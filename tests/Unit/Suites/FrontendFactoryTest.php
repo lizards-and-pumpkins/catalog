@@ -11,7 +11,7 @@ use Brera\Product\ProductListingRouter;
  * @covers \Brera\FrontendFactory
  * @covers \Brera\FactoryTrait
  * @uses   \Brera\MasterFactoryTrait
- * @uses   \Brera\PoCMasterFactory
+ * @uses   \Brera\SampleMasterFactory
  * @uses   \Brera\IntegrationTestFactory
  * @uses   \Brera\CommonFactory
  * @uses   \Brera\Product\CatalogImportApiRequestHandler
@@ -36,7 +36,7 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $masterFactory = new PoCMasterFactory();
+        $masterFactory = new SampleMasterFactory();
         $masterFactory->register(new IntegrationTestFactory());
         $masterFactory->register(new CommonFactory());
         $this->frontendFactory = new FrontendFactory();

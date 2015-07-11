@@ -5,11 +5,11 @@ namespace Brera;
 abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @return PoCMasterFactory
+     * @return SampleMasterFactory
      */
     final protected function prepareIntegrationTestMasterFactory()
     {
-        $factory = new PoCMasterFactory();
+        $factory = new SampleMasterFactory();
         $factory->register(new CommonFactory());
         $factory->register(new IntegrationTestFactory());
         $factory->register(new FrontendFactory());

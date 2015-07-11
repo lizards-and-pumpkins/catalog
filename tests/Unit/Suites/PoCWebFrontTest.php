@@ -115,7 +115,7 @@ class PoCWebFrontTest extends \PHPUnit_Framework_TestCase
         $this->webFront->run();
     }
 
-    public function testPoCMasterFactoryIsReturned()
+    public function testSampleMasterFactoryIsReturned()
     {
         $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
         $stubHttpRequest->method('getUrl')
@@ -123,6 +123,6 @@ class PoCWebFrontTest extends \PHPUnit_Framework_TestCase
         $webFront = new PoCWebFront($stubHttpRequest);
         $webFront->registerFactory(new IntegrationTestFactory());
         $webFront->runWithoutSendingResponse();
-        $this->assertInstanceOf(PoCMasterFactory::class, $webFront->getMasterFactory());
+        $this->assertInstanceOf(SampleMasterFactory::class, $webFront->getMasterFactory());
     }
 }

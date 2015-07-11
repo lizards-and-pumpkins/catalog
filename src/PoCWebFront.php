@@ -13,7 +13,7 @@ class PoCWebFront extends WebFront
      */
     protected function createMasterFactoryIfNotInjected()
     {
-        return new PoCMasterFactory();
+        return new SampleMasterFactory();
     }
 
     /**

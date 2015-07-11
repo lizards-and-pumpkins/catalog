@@ -21,7 +21,7 @@ class ProductListingTest extends AbstractIntegrationTest
     private $testUrl = 'http://example.com/adidas-men-accessories';
 
     /**
-     * @var PoCMasterFactory
+     * @var SampleMasterFactory
      */
     private $factory;
 

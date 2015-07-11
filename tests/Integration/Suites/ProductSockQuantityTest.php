@@ -7,7 +7,7 @@ use Brera\Product\ProductStockQuantityChangedDomainEvent;
 class ProductSockQuantityTest extends AbstractIntegrationTest
 {
     /**
-     * @var PoCMasterFactory
+     * @var SampleMasterFactory
      */
     private $factory;
 
