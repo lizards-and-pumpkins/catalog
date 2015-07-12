@@ -11,6 +11,7 @@ use Brera\SnippetRenderer;
 
 /**
  * @covers \Brera\Product\ProductBackOrderAvailabilitySnippetRenderer
+ * @uses   \Brera\Snippet
  */
 class ProductBackOrderAvailabilitySnippetRendererTest extends \PHPUnit_Framework_TestCase
 {

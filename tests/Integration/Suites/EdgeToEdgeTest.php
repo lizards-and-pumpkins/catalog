@@ -25,6 +25,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $productId = ProductId::fromSku($sku);
         $productName = 'LED Arm-Signallampe';
         $productPrice = 1295;
+        $productBackOrderAvailability = 'true';
 
         $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
 
@@ -79,9 +80,18 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
 
         $priceSnippetKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('price');
         $priceSnippetKey = $priceSnippetKeyGenerator->getKeyForContext($context, ['product_id' => $productId]);
-        $result = $dataPoolReader->getSnippet($priceSnippetKey);
+        $priceSnippetContents = $dataPoolReader->getSnippet($priceSnippetKey);
         
-        $this->assertEquals($productPrice, $result);
+        $this->assertEquals($productPrice, $priceSnippetContents);
+
+        $backOrderAvailabilitySnippetKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('backorders');
+        $backOrderAvailabilitySnippetKey = $backOrderAvailabilitySnippetKeyGenerator->getKeyForContext(
+            $context,
+            ['product_id' => $productId]
+        );
+        $backOrderAvailabilitySnippetContents = $dataPoolReader->getSnippet($backOrderAvailabilitySnippetKey);
+
+        $this->assertEquals($productBackOrderAvailability, $backOrderAvailabilitySnippetContents);
 
         $searchResults = $dataPoolReader->getSearchResults('led', $context);
 

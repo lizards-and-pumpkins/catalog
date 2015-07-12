@@ -16,6 +16,7 @@ use Brera\Image\ImageProcessorCollection;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\PriceSnippetRenderer;
+use Brera\Product\ProductBackOrderAvailabilitySnippetRenderer;
 use Brera\Product\ProductDetailViewBlockRenderer;
 use Brera\Product\ProductDetailViewInContextSnippetRenderer;
 use Brera\Product\ProductImportDomainEvent;
@@ -185,6 +186,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $this->getMasterFactory()->createProductSourceDetailViewSnippetRenderer(),
             $this->getMasterFactory()->createProductSourceInListingSnippetRenderer(),
             $this->getMasterFactory()->createPriceSnippetRenderer(),
+            $this->getMasterFactory()->createProductBackOrderAvailabilitySnippetRenderer()
         ];
     }
 
@@ -365,7 +367,19 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return new PriceSnippetRenderer(
             $this->getMasterFactory()->createSnippetList(),
             $this->getMasterFactory()->createPriceSnippetKeyGenerator(),
-            $this->getMasterFactory()->getRegularPriceSnippetKey()
+            $this->getMasterFactory()->getProductRegularPriceAttributeCode()
+        );
+    }
+
+    /**
+     * @return ProductBackOrderAvailabilitySnippetRenderer
+     */
+    public function createProductBackOrderAvailabilitySnippetRenderer()
+    {
+        return new ProductBackOrderAvailabilitySnippetRenderer(
+            $this->getMasterFactory()->createSnippetList(),
+            $this->getMasterFactory()->createProductBackOrderAvailabilitySnippetKeyGenerator(),
+            $this->getMasterFactory()->getProductBackOrderAvailabilityAttributeCode()
         );
     }
 
@@ -396,6 +410,14 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         // TODO move to catalog factory
         return new ProductSnippetKeyGenerator($this->getMasterFactory()->getRegularPriceSnippetKey());
+    }
+
+    /**
+     * @return SnippetKeyGenerator
+     */
+    public function createProductBackOrderAvailabilitySnippetKeyGenerator()
+    {
+        return new ProductSnippetKeyGenerator($this->getMasterFactory()->getProductBackOrderAvailabilitySnippetKey());
     }
 
     /**
@@ -601,6 +623,30 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function getRegularPriceSnippetKey()
     {
         return 'price';
+    }
+
+    /**
+     * @return string
+     */
+    public function getProductRegularPriceAttributeCode()
+    {
+        return 'price';
+    }
+
+    /**
+     * @return string
+     */
+    public function getProductBackOrderAvailabilitySnippetKey()
+    {
+        return 'backorders';
+    }
+
+    /**
+     * @return string
+     */
+    public function getProductBackOrderAvailabilityAttributeCode()
+    {
+        return 'backorders';
     }
 
     /**
