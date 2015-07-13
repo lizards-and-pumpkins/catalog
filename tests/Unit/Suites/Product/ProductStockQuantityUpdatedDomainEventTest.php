@@ -5,9 +5,9 @@ namespace Brera\Product;
 use Brera\DomainEvent;
 
 /**
- * @covers \Brera\Product\ProductStockQuantityChangedDomainEvent
+ * @covers \Brera\Product\ProductStockQuantityUpdatedDomainEvent
  */
-class ProductStockQuantityChangedDomainEventTest extends \PHPUnit_Framework_TestCase
+class ProductStockQuantityUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var string
@@ -15,13 +15,13 @@ class ProductStockQuantityChangedDomainEventTest extends \PHPUnit_Framework_Test
     private $dummyPayload = 'foo';
 
     /**
-     * @var ProductStockQuantityChangedDomainEvent
+     * @var ProductStockQuantityUpdatedDomainEvent
      */
     private $domainEvent;
 
     protected function setUp()
     {
-        $this->domainEvent = new ProductStockQuantityChangedDomainEvent($this->dummyPayload);
+        $this->domainEvent = new ProductStockQuantityUpdatedDomainEvent($this->dummyPayload);
     }
 
     public function testDomainEventInterfaceIsImplemented()

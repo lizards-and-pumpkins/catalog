@@ -2,9 +2,9 @@
 
 namespace Brera\Product;
 
-use Brera\DomainEvent;
+use Brera\Command;
 
-class ProductStockQuantityChangedDomainEvent implements DomainEvent
+class UpdateProductStockQuantityCommand implements Command
 {
     /**
      * @var string

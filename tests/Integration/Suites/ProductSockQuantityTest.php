@@ -2,7 +2,7 @@
 
 namespace Brera;
 
-use Brera\Product\ProductStockQuantityChangedDomainEvent;
+use Brera\Product\UpdateProductStockQuantityCommand;
 
 class ProductSockQuantityTest extends AbstractIntegrationTest
 {
@@ -25,11 +25,11 @@ class ProductSockQuantityTest extends AbstractIntegrationTest
     <quantity>200</quantity>
 </sockNode>
 EOX;
-        $queue = $this->factory->getEventQueue();
-        $queue->add(new ProductStockQuantityChangedDomainEvent($xml));
+        $queue = $this->factory->getCommandQueue();
+        $queue->add(new UpdateProductStockQuantityCommand($xml));
 
-        $this->processDomainEvents(1);
         $this->processCommands(1);
+        $this->processDomainEvents(1);
 
         $logger = $this->factory->getLogger();
         $this->failIfMessagesWhereLogged($logger);
