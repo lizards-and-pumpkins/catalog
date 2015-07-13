@@ -18,7 +18,7 @@ class ApiTest extends AbstractIntegrationTest
         $httpHeaders = HttpHeaders::fromArray([]);
         $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
-        $request = HttpRequest::fromParameters('GET', $httpUrl, $httpHeaders, $httpRequestBody);
+        $request = HttpRequest::fromParameters(HttpRequest::HTTP_GET_REQUEST, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $domainEventQueue = $factory->getEventQueue();
         $this->assertEquals(0, $domainEventQueue->count());

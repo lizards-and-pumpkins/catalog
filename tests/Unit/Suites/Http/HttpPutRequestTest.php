@@ -14,7 +14,7 @@ class HttpPutRequestTest extends AbstractHttpRequestTest
     public function testPutRequestIsReturned()
     {
         $request = HttpRequest::fromParameters(
-            'PUT',
+            HttpRequest::HTTP_PUT_REQUEST,
             $this->getStubHttpUrl(),
             HttpHeaders::fromArray([]),
             HttpRequestBody::fromString('')
@@ -28,7 +28,12 @@ class HttpPutRequestTest extends AbstractHttpRequestTest
     {
         $headers = HttpHeaders::fromArray([]);
         $requestBody = HttpRequestBody::fromString('some-request-content');
-        $request = HttpRequest::fromParameters('PUT', $this->getStubHttpUrl(), $headers, $requestBody);
+        $request = HttpRequest::fromParameters(
+            HttpRequest::HTTP_PUT_REQUEST,
+            $this->getStubHttpUrl(),
+            $headers,
+            $requestBody
+        );
         $this->assertSame('some-request-content', $request->getRawBody());
     }
 }

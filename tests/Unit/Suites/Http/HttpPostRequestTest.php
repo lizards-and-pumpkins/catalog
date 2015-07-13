@@ -16,7 +16,7 @@ class HttpPostRequestTest extends AbstractHttpRequestTest
         $stubHttpUrl = $this->getStubHttpUrl();
 
         $result = HttpRequest::fromParameters(
-            'POST',
+            HttpRequest::HTTP_POST_REQUEST,
             $stubHttpUrl,
             HttpHeaders::fromArray([]),
             HttpRequestBody::fromString('')

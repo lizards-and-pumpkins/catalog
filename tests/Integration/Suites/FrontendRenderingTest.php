@@ -29,7 +29,7 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
         $urlPathKeyGenerator = new PoCUrlPathKeyGenerator();
 
         $httpRequest = HttpRequest::fromParameters(
-            'GET',
+            HttpRequest::HTTP_GET_REQUEST,
             $url,
             HttpHeaders::fromArray([]),
             HttpRequestBody::fromString('')

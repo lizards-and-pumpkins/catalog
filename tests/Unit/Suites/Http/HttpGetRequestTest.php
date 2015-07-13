@@ -16,7 +16,7 @@ class HttpGetRequestTest extends AbstractHttpRequestTest
         $stubHttpUrl = $this->getStubHttpUrl();
 
         $result = HttpRequest::fromParameters(
-            'GET',
+            HttpRequest::HTTP_GET_REQUEST,
             $stubHttpUrl,
             HttpHeaders::fromArray([]),
             HttpRequestBody::fromString('')
