@@ -124,6 +124,10 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->getRegularPriceSnippetKey(),
             $this->getMasterFactory()->createPriceSnippetKeyGenerator()
         );
+        $snippetKeyGeneratorLocator->register(
+            $this->getMasterFactory()->getProductBackOrderAvailabilitySnippetKey(),
+            $this->getMasterFactory()->createProductBackOrderAvailabilitySnippetKeyGenerator()
+        );
 
         return $snippetKeyGeneratorLocator;
     }

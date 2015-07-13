@@ -6,7 +6,7 @@ use Brera\Http\HttpHeaders;
 use Brera\Http\HttpRequestBody;
 use Brera\Http\HttpResourceNotFoundResponse;
 use Brera\Product\CatalogImportDomainEvent;
-use Brera\Product\PoCSku;
+use Brera\Product\SampleSku;
 use Brera\Product\ProductDetailViewInContextSnippetRenderer;
 use Brera\Product\ProductId;
 use Brera\Http\HttpUrl;
@@ -21,10 +21,11 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
     {
         $factory = $this->prepareIntegrationTestMasterFactory();
 
-        $sku = PoCSku::fromString('118235-251');
+        $sku = SampleSku::fromString('118235-251');
         $productId = ProductId::fromSku($sku);
         $productName = 'LED Arm-Signallampe';
         $productPrice = 1295;
+        $productBackOrderAvailability = 'true';
 
         $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
 
@@ -79,9 +80,18 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
 
         $priceSnippetKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('price');
         $priceSnippetKey = $priceSnippetKeyGenerator->getKeyForContext($context, ['product_id' => $productId]);
-        $result = $dataPoolReader->getSnippet($priceSnippetKey);
+        $priceSnippetContents = $dataPoolReader->getSnippet($priceSnippetKey);
         
-        $this->assertEquals($productPrice, $result);
+        $this->assertEquals($productPrice, $priceSnippetContents);
+
+        $backOrderAvailabilitySnippetKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('backorders');
+        $backOrderAvailabilitySnippetKey = $backOrderAvailabilitySnippetKeyGenerator->getKeyForContext(
+            $context,
+            ['product_id' => $productId]
+        );
+        $backOrderAvailabilitySnippetContents = $dataPoolReader->getSnippet($backOrderAvailabilitySnippetKey);
+
+        $this->assertEquals($productBackOrderAvailability, $backOrderAvailabilitySnippetContents);
 
         $searchResults = $dataPoolReader->getSearchResults('led', $context);
 
@@ -150,7 +160,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $httpRequestBody = HttpRequestBody::fromString('');
         $request = HttpRequest::fromParameters(HttpRequest::HTTP_GET_REQUEST, $httpUrl, $httpHeaders, $httpRequestBody);
 
-        $website = new PoCWebFront($request, $factory);
+        $website = new SampleWebFront($request, $factory);
         $response = $website->runWithoutSendingResponse();
 
         $this->assertContains('<body>', $response->getBody());
@@ -163,7 +173,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $requestBody = HttpRequestBody::fromString('');
         $request = HttpRequest::fromParameters(HttpRequest::HTTP_GET_REQUEST, $url, $headers, $requestBody);
 
-        $website = new PoCWebFront($request);
+        $website = new SampleWebFront($request);
         $website->registerFactory(new IntegrationTestFactory());
         $response = $website->runWithoutSendingResponse();
         $this->assertInstanceOf(HttpResourceNotFoundResponse::class, $response);

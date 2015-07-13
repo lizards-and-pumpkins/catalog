@@ -26,7 +26,7 @@ class FrontendRenderingTest extends \PHPUnit_Framework_TestCase
         $url = HttpUrl::fromString('http://example.com/product1');
         $context = new VersionedContext(DataVersion::fromVersionString('1.0'));
         $snippetKeyGeneratorLocator = new SnippetKeyGeneratorLocator();
-        $urlPathKeyGenerator = new PoCUrlPathKeyGenerator();
+        $urlPathKeyGenerator = new SampleUrlPathKeyGenerator();
 
         $httpRequest = HttpRequest::fromParameters(
             HttpRequest::HTTP_GET_REQUEST,

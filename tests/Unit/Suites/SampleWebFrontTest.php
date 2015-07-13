@@ -12,7 +12,7 @@ use Brera\Http\HttpRouterChain;
 use Brera\Http\HttpUrl;
 
 /**
- * @covers \Brera\PoCWebFront
+ * @covers \Brera\SampleWebFront
  * @covers \Brera\WebFront
  * @uses   \Brera\FactoryTrait
  * @uses   \Brera\MasterFactoryTrait
@@ -21,7 +21,7 @@ use Brera\Http\HttpUrl;
  * @uses   \Brera\IntegrationTestFactory
  * @uses   \Brera\DataVersion
  * @uses   \Brera\PageBuilder
- * @uses   \Brera\PoCUrlPathKeyGenerator
+ * @uses   \Brera\SampleUrlPathKeyGenerator
  * @uses   \Brera\SnippetKeyGeneratorLocator
  * @uses   \Brera\GenericSnippetKeyGenerator
  * @uses   \Brera\Product\CatalogImportApiRequestHandler
@@ -44,10 +44,10 @@ use Brera\Http\HttpUrl;
  * @uses   \Brera\Api\ApiRequestHandlerChain
  * @uses   \Brera\DataPool\DataPoolReader
  */
-class PoCWebFrontTest extends \PHPUnit_Framework_TestCase
+class SampleWebFrontTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var PoCWebFront
+     * @var SampleWebFront
      */
     private $webFront;
 
@@ -99,7 +99,7 @@ class PoCWebFrontTest extends \PHPUnit_Framework_TestCase
         $mockHttpRequestHandler->method('process')
             ->willReturn($this->mockHttpResponse);
 
-        $this->webFront = new PoCWebFront($stubHttpRequest, $stubMasterFactory);
+        $this->webFront = new SampleWebFront($stubHttpRequest, $stubMasterFactory);
     }
 
     public function testMasterFactoryIsReturned()
@@ -115,14 +115,14 @@ class PoCWebFrontTest extends \PHPUnit_Framework_TestCase
         $this->webFront->run();
     }
 
-    public function testPoCMasterFactoryIsReturned()
+    public function testSampleMasterFactoryIsReturned()
     {
         $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
         $stubHttpRequest->method('getUrl')
             ->willReturn($this->getMock(HttpUrl::class, [], [], '', false));
-        $webFront = new PoCWebFront($stubHttpRequest);
+        $webFront = new SampleWebFront($stubHttpRequest);
         $webFront->registerFactory(new IntegrationTestFactory());
         $webFront->runWithoutSendingResponse();
-        $this->assertInstanceOf(PoCMasterFactory::class, $webFront->getMasterFactory());
+        $this->assertInstanceOf(SampleMasterFactory::class, $webFront->getMasterFactory());
     }
 }

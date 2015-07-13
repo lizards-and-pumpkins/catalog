@@ -9,7 +9,7 @@ use Brera\Image\ImageProcessorCollection;
 use Brera\Image\ImageProcessingStrategySequence;
 use Brera\LocalFilesystemStorageReader;
 use Brera\LocalFilesystemStorageWriter;
-use Brera\PoCMasterFactory;
+use Brera\SampleMasterFactory;
 use Brera\SampleFactory;
 use Brera\InMemoryLogger;
 use Brera\Queue\InMemory\InMemoryQueue;
@@ -38,7 +38,7 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $masterFactory = new PoCMasterFactory();
+        $masterFactory = new SampleMasterFactory();
         $this->factory = new SampleFactory();
         $masterFactory->register($this->factory);
     }

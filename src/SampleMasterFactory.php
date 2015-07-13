@@ -19,7 +19,7 @@ use Brera\Product\ProductSnippetKeyGenerator;
  * @method GenericSnippetKeyGenerator createProductListingSnippetKeyGenerator
  * @method ProductSnippetKeyGenerator createProductStockQuantityRendererSnippetKeyGenerator
  */
-class PoCMasterFactory implements MasterFactory
+class SampleMasterFactory implements MasterFactory
 {
     use MasterFactoryTrait;
 }

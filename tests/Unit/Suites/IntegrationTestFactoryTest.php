@@ -11,7 +11,7 @@ use Brera\InMemoryLogger;
 use Brera\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
 use Brera\LocalFilesystemStorageReader;
 use Brera\LocalFilesystemStorageWriter;
-use Brera\PoCMasterFactory;
+use Brera\SampleMasterFactory;
 use Brera\Queue\InMemory\InMemoryQueue;
 use Brera\Utils\LocalFilesystem;
 
@@ -39,7 +39,7 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $masterFactory = new PoCMasterFactory();
+        $masterFactory = new SampleMasterFactory();
         $this->factory = new IntegrationTestFactory();
         $masterFactory->register($this->factory);
     }

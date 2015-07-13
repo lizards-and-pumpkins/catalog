@@ -23,7 +23,7 @@ class ApiTest extends AbstractIntegrationTest
         $domainEventQueue = $factory->getEventQueue();
         $this->assertEquals(0, $domainEventQueue->count());
 
-        $website = new PoCWebFront($request, $factory);
+        $website = new SampleWebFront($request, $factory);
         $response = $website->runWithoutSendingResponse();
 
         $this->assertEquals('"OK"', $response->getBody());

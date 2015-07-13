@@ -4,7 +4,7 @@ namespace Brera\Product;
 
 /**
  * @covers \Brera\Product\ProductStockQuantitySourceBuilder
- * @uses   \Brera\Product\PoCSku
+ * @uses   \Brera\Product\SampleSku
  * @uses   \Brera\Product\ProductStockQuantity
  * @uses   \Brera\Product\ProductStockQuantitySource
  * @uses   \Brera\Utils\XPathParser

@@ -3,7 +3,7 @@
 namespace Brera\Context;
 
 use Brera\IntegrationTestFactory;
-use Brera\PoCMasterFactory;
+use Brera\SampleMasterFactory;
 use Brera\CommonFactory;
 use Brera\Product\ProductSourceBuilder;
 
@@ -19,7 +19,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     <name website="cy" language="en_US">cy-en_US</name>
 </attributes></product>
 EOX;
-        $factory = new PoCMasterFactory();
+        $factory = new SampleMasterFactory();
         $factory->register(new CommonFactory());
         $factory->register(new IntegrationTestFactory());
         /** @var ProductSourceBuilder $productSourceBuilder */

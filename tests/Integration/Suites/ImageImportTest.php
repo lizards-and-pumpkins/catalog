@@ -49,11 +49,11 @@ class ImageImportTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return PoCMasterFactory
+     * @return SampleMasterFactory
      */
     private function prepareIntegrationTestMasterFactory()
     {
-        $factory = new PoCMasterFactory();
+        $factory = new SampleMasterFactory();
         $factory->register(new CommonFactory());
         $factory->register(new IntegrationTestFactory());
 

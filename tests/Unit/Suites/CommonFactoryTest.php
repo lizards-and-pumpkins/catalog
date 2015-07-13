@@ -47,6 +47,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\UrlPathKeyGenerator
  * @uses   \Brera\Renderer\BlockRenderer
  * @uses   \Brera\Product\PriceSnippetRenderer
+ * @uses   \Brera\Product\ProductBackOrderAvailabilitySnippetRenderer
  * @uses   \Brera\Product\ProductSourceBuilder
  * @uses   \Brera\Product\ProductProjector
  * @uses   \Brera\Product\ProductSnippetKeyGenerator
@@ -89,7 +90,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $masterFactory = new PoCMasterFactory();
+        $masterFactory = new SampleMasterFactory();
         $masterFactory->register(new IntegrationTestFactory());
         $this->commonFactory = new CommonFactory();
         $masterFactory->register($this->commonFactory);
@@ -223,7 +224,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionWithHelpfulMessageIsThrownIfNoKeyValueStoreFactoryIsRegistered()
     {
-        $masterFactory = new PoCMasterFactory();
+        $masterFactory = new SampleMasterFactory();
         $commonFactory = new CommonFactory();
         $masterFactory->register($commonFactory);
 
@@ -237,7 +238,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionWithHelpfulMessageIsThrownIfNoEventQueueFactoryIsRegistered()
     {
-        $masterFactory = new PoCMasterFactory();
+        $masterFactory = new SampleMasterFactory();
         $commonFactory = new CommonFactory();
         $masterFactory->register($commonFactory);
 
@@ -251,7 +252,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionWithHelpfulMessageIsThrownIfNoLoggerFactoryIsRegistered()
     {
-        $masterFactory = new PoCMasterFactory();
+        $masterFactory = new SampleMasterFactory();
         $commonFactory = new CommonFactory();
         $masterFactory->register($commonFactory);
 

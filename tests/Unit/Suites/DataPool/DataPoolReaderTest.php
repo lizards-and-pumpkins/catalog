@@ -10,7 +10,7 @@ use Brera\DataPool\SearchEngine\SearchCriterion;
  * @covers \Brera\DataPool\DataPoolReader
  * @uses   \Brera\Product\ProductId
  * @uses   \Brera\Http\HttpUrl
- * @uses   \Brera\Product\PoCSku
+ * @uses   \Brera\Product\SampleSku
  */
 class DataPoolReaderTest extends AbstractDataPoolTest
 {
