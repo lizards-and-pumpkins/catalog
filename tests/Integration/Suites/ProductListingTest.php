@@ -71,7 +71,7 @@ class ProductListingTest extends AbstractIntegrationTest
         );
 
         $httpRequest = HttpRequest::fromParameters(
-            'GET',
+            HttpRequest::HTTP_GET_REQUEST,
             HttpUrl::fromString('http://www.example.com'),
             HttpHeaders::fromArray([]),
             HttpRequestBody::fromString('')

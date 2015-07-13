@@ -4,6 +4,10 @@ namespace Brera\Http;
 
 abstract class HttpRequest
 {
+    const HTTP_GET_REQUEST = 'GET';
+    const HTTP_POST_REQUEST = 'POST';
+    const HTTP_PUT_REQUEST = 'PUT';
+
     /**
      * @var HttpUrl
      */
@@ -57,11 +61,11 @@ abstract class HttpRequest
     public static function fromParameters($requestMethod, HttpUrl $url, HttpHeaders $headers, HttpRequestBody $body)
     {
         switch (strtoupper($requestMethod)) {
-            case 'GET':
+            case self::HTTP_GET_REQUEST:
                 return new HttpGetRequest($url, $headers, $body);
-            case 'POST':
+            case self::HTTP_POST_REQUEST:
                 return new HttpPostRequest($url, $headers, $body);
-            case 'PUT':
+            case self::HTTP_PUT_REQUEST:
                 return new HttpPutRequest($url, $headers, $body);
             default:
                 throw new UnsupportedRequestMethodException(

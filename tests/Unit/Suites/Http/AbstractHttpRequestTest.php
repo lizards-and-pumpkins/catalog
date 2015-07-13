@@ -19,7 +19,7 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
      */
     private function setUpGlobalState($isSecure = false)
     {
-        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_SERVER['REQUEST_METHOD'] = HttpRequest::HTTP_GET_REQUEST;
         $_SERVER['HTTPS'] = $isSecure;
         $_SERVER['HTTP_HOST'] = $this->testRequestHost;
         $_SERVER['REQUEST_URI'] = '/';
@@ -35,7 +35,7 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
             ->willReturn($url);
 
         $httpRequest = HttpRequest::fromParameters(
-            'GET',
+            HttpRequest::HTTP_GET_REQUEST,
             $stubHttpUrl,
             HttpHeaders::fromArray([]),
             HttpRequestBody::fromString('')
