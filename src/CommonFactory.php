@@ -350,10 +350,12 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createPriceSnippetRenderer()
     {
+        $productRegularPriceAttributeCode = 'price';
+
         return new PriceSnippetRenderer(
             $this->getMasterFactory()->createSnippetList(),
             $this->getMasterFactory()->createPriceSnippetKeyGenerator(),
-            $this->getMasterFactory()->getProductRegularPriceAttributeCode()
+            $productRegularPriceAttributeCode
         );
     }
 
@@ -362,10 +364,12 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductBackOrderAvailabilitySnippetRenderer()
     {
+        $productBackOrderAvailabilityAttributeCode = 'backorders';
+
         return new ProductBackOrderAvailabilitySnippetRenderer(
             $this->getMasterFactory()->createSnippetList(),
             $this->getMasterFactory()->createProductBackOrderAvailabilitySnippetKeyGenerator(),
-            $this->getMasterFactory()->getProductBackOrderAvailabilityAttributeCode()
+            $productBackOrderAvailabilityAttributeCode
         );
     }
 
@@ -441,7 +445,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createContextSource()
     {
-        // TODO: Move to sample factory
         return new SampleContextSource($this->getMasterFactory()->createContextBuilder());
     }
 
@@ -611,23 +614,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     /**
      * @return string
      */
-    public function getProductRegularPriceAttributeCode()
-    {
-        return 'price';
-    }
-
-    /**
-     * @return string
-     */
     public function getProductBackOrderAvailabilitySnippetKey()
-    {
-        return 'backorders';
-    }
-
-    /**
-     * @return string
-     */
-    public function getProductBackOrderAvailabilityAttributeCode()
     {
         return 'backorders';
     }
