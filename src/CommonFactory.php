@@ -41,6 +41,8 @@ use Brera\Product\ProductStockQuantityUpdatedDomainEventHandler;
 use Brera\Product\ProductStockQuantityProjector;
 use Brera\Product\ProductStockQuantitySnippetRenderer;
 use Brera\Product\ProductStockQuantitySourceBuilder;
+use Brera\Product\UpdateMultipleProductStockQuantityCommand;
+use Brera\Product\UpdateMultipleProductStockQuantityCommandHandler;
 use Brera\Product\UpdateProductStockQuantityCommand;
 use Brera\Product\UpdateProductStockQuantityCommandHandler;
 use Brera\Queue\Queue;
@@ -648,6 +650,19 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return new UpdateProductStockQuantityCommandHandler(
             $command,
             $this->getMasterFactory()->getEventQueue()
+        );
+    }
+
+    /**
+     * @param UpdateMultipleProductStockQuantityCommand $command
+     * @return UpdateProductStockQuantityCommandHandler
+     */
+    public function createUpdateMultipleProductStockQuantityCommandHandler(
+        UpdateMultipleProductStockQuantityCommand $command
+    ) {
+        return new UpdateMultipleProductStockQuantityCommandHandler(
+            $command,
+            $this->getMasterFactory()->getCommandQueue()
         );
     }
 

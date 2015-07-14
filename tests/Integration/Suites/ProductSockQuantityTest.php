@@ -36,8 +36,8 @@ class ProductSockQuantityTest extends AbstractIntegrationTest
         $this->assertEquals('"OK"', $response->getBody());
         $this->assertEquals(1, $domainCommandQueue->count());
 
-        $this->processCommands(1);
-        $this->processDomainEvents(1);
+        $this->processCommands(3);
+        $this->processDomainEvents(2);
 
         $logger = $this->factory->getLogger();
         $this->failIfMessagesWhereLogged($logger);
@@ -46,12 +46,16 @@ class ProductSockQuantityTest extends AbstractIntegrationTest
         $context = $contextSource->getAllAvailableContexts()[1];
 
         $snippetKeyGenerator = $this->factory->createProductStockQuantityRendererSnippetKeyGenerator();
-        $snippetKey = $snippetKeyGenerator->getKeyForContext($context, ['product_id' => 'foo']);
+        $snippet1Key = $snippetKeyGenerator->getKeyForContext($context, ['product_id' => 'foo']);
+        $snippet2Key = $snippetKeyGenerator->getKeyForContext($context, ['product_id' => 'bar']);
 
         $dataPoolReader = $this->factory->createDataPoolReader();
-        $result = $dataPoolReader->getSnippet($snippetKey);
 
-        $this->assertEquals(200, $result);
+        $snippet1Content = $dataPoolReader->getSnippet($snippet1Key);
+        $this->assertEquals(200, $snippet1Content);
+
+        $snippet2Content = $dataPoolReader->getSnippet($snippet2Key);
+        $this->assertEquals(0, $snippet2Content);
     }
 
     /**

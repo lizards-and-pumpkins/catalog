@@ -2,12 +2,15 @@
 
 namespace Brera;
 
+use Brera\Product\UpdateMultipleProductStockQuantityCommand;
+use Brera\Product\UpdateMultipleProductStockQuantityCommandHandler;
 use Brera\Product\UpdateProductStockQuantityCommandHandler;
 use Brera\Product\UpdateProductStockQuantityCommand;
 
 /**
  * @covers \Brera\CommandHandlerLocator
  * @uses   \Brera\Product\UpdateProductStockQuantityCommand
+ * @uses   \Brera\Product\UpdateMultipleProductStockQuantityCommand
  */
 class CommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -34,7 +37,7 @@ class CommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         $this->locator->getHandlerFor($stubCommand);
     }
 
-    public function testProjectProductQuantitySnippetCommandHandlerIsLocatedAndReturned()
+    public function testUpdateProductStockQuantityCommandHandlerIsLocatedAndReturned()
     {
         $stubHandler = $this->getMock(UpdateProductStockQuantityCommandHandler::class, [], [], '', false);
 
@@ -50,5 +53,23 @@ class CommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         $result = $this->locator->getHandlerFor($productImportCommand);
 
         $this->assertInstanceOf(UpdateProductStockQuantityCommandHandler::class, $result);
+    }
+
+    public function testUpdateMultipleProductStockQuantityCommandHandlerIsLocatedAndReturned()
+    {
+        $stubHandler = $this->getMock(UpdateMultipleProductStockQuantityCommandHandler::class, [], [], '', false);
+
+        $this->factory->expects($this->once())
+            ->method('createUpdateMultipleProductStockQuantityCommandHandler')
+            ->willReturn($stubHandler);
+
+        /**
+         * The real object has to be used here as getHandlerFor method will call get_class against it
+         */
+        $productImportCommand = new UpdateMultipleProductStockQuantityCommand('<xml/>');
+
+        $result = $this->locator->getHandlerFor($productImportCommand);
+
+        $this->assertInstanceOf(UpdateMultipleProductStockQuantityCommandHandler::class, $result);
     }
 }

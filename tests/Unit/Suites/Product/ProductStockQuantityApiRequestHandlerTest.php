@@ -12,7 +12,7 @@ use Brera\TestFileFixtureTrait;
  * @uses   \Brera\Api\ApiRequestHandler
  * @uses   \Brera\DefaultHttpResponse
  * @uses   \Brera\Http\HttpHeaders
- * @uses   \Brera\Product\UpdateProductStockQuantityCommand
+ * @uses   \Brera\Product\UpdateMultipleProductStockQuantityCommand
  */
 class ProductStockQuantityApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -81,17 +81,15 @@ class ProductStockQuantityApiRequestHandlerTest extends \PHPUnit_Framework_TestC
         $this->apiRequestHandler->process($this->mockRequest);
     }
 
-    public function testCatalogImportDomainEventIsEmitted()
+    public function testUpdateMultipleProductStockQuantityCommandIsEmitted()
     {
         $fileName = 'foo';
-
         $this->createFixtureFile($this->importDirectoryPath . '/' . $fileName, '');
-
         $this->mockRequest->method('getRawBody')->willReturn(json_encode(['fileName' => $fileName]));
 
         $this->mockCommandQueue->expects($this->once())
             ->method('add')
-            ->with($this->isInstanceOf(UpdateProductStockQuantityCommand::class));
+            ->with($this->isInstanceOf(UpdateMultipleProductStockQuantityCommand::class));
 
         $response = $this->apiRequestHandler->process($this->mockRequest);
 

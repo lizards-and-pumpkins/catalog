@@ -8,6 +8,8 @@ use Brera\Queue\Queue;
 /**
  * @covers \Brera\Product\UpdateMultipleProductStockQuantityCommandHandler
  * @uses   \Brera\Product\UpdateMultipleProductStockQuantityCommand
+ * @uses   \Brera\Product\UpdateProductStockQuantityCommand
+ * @uses   \Brera\Utils\XPathParser
  */
 class UpdateMultipleProductStockQuantityCommandHandlerTest extends \PHPUnit_Framework_TestCase
 {

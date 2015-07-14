@@ -23,6 +23,8 @@ use Brera\Product\ProductStockQuantityUpdatedDomainEventHandler;
 use Brera\Product\ProductStockQuantityProjector;
 use Brera\Product\ProductStockQuantitySnippetRenderer;
 use Brera\Product\ProductStockQuantitySourceBuilder;
+use Brera\Product\UpdateMultipleProductStockQuantityCommand;
+use Brera\Product\UpdateMultipleProductStockQuantityCommandHandler;
 use Brera\Product\UpdateProductStockQuantityCommand;
 use Brera\Product\UpdateProductStockQuantityCommandHandler;
 use Brera\Queue\Queue;
@@ -65,6 +67,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Product\ProductStockQuantityUpdatedDomainEventHandler
  * @uses   \Brera\Product\ProductStockQuantitySnippetRenderer
  * @uses   \Brera\Product\UpdateProductStockQuantityCommandHandler
+ * @uses   \Brera\Product\UpdateMultipleProductStockQuantityCommandHandler
  * @uses   \Brera\Product\ProductDetailViewBlockRenderer
  * @uses   \Brera\Product\ProductDetailViewInContextSnippetRenderer
  * @uses   \Brera\Product\ProductListingSnippetRenderer
@@ -306,6 +309,15 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $result = $this->commonFactory->createUpdateProductStockQuantityCommandHandler($command);
 
         $this->assertInstanceOf(UpdateProductStockQuantityCommandHandler::class, $result);
+    }
+
+    public function testUpdateMultipleProductStockQuantityCommandHandlerIsReturned()
+    {
+        /** @var UpdateMultipleProductStockQuantityCommand $command */
+        $command = $this->getMock(UpdateMultipleProductStockQuantityCommand::class, [], [], '', false);
+        $result = $this->commonFactory->createUpdateMultipleProductStockQuantityCommandHandler($command);
+
+        $this->assertInstanceOf(UpdatemultipleProductStockQuantityCommandHandler::class, $result);
     }
 
     public function testProductStockQuantitySourceBuilderIsReturned()

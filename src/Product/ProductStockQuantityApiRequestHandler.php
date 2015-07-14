@@ -59,7 +59,7 @@ class ProductStockQuantityApiRequestHandler extends ApiRequestHandler
     {
         $importFileContents = $this->getImportFileContents($request);
 
-        $updateProductStockQuantityCommand = new UpdateProductStockQuantityCommand($importFileContents);
+        $updateProductStockQuantityCommand = new UpdateMultipleProductStockQuantityCommand($importFileContents);
         $this->commandQueue->add($updateProductStockQuantityCommand);
 
         return json_encode('OK');
