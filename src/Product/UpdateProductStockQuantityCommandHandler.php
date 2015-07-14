@@ -25,8 +25,8 @@ class UpdateProductStockQuantityCommandHandler implements CommandHandler
     public function process()
     {
         $payload = $this->command->getPayload();
-        $command = new ProductStockQuantityUpdatedDomainEvent($payload);
+        $event = new ProductStockQuantityUpdatedDomainEvent($payload);
 
-        $this->domainEventQueue->add($command);
+        $this->domainEventQueue->add($event);
     }
 }
