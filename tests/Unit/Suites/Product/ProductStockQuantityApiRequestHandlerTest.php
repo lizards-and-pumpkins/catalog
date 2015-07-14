@@ -8,23 +8,28 @@ use Brera\Queue\Queue;
 use Brera\TestFileFixtureTrait;
 
 /**
- * @covers \Brera\Product\CatalogImportApiRequestHandler
+ * @covers \Brera\Product\ProductStockQuantityApiRequestHandler
  * @uses   \Brera\Api\ApiRequestHandler
  * @uses   \Brera\DefaultHttpResponse
  * @uses   \Brera\Http\HttpHeaders
- * @uses   \Brera\Product\CatalogImportDomainEvent
+ * @uses   \Brera\Product\UpdateProductStockQuantityCommand
  */
-class CatalogImportApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
+class ProductStockQuantityApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
     use TestFileFixtureTrait;
 
     /**
      * @var Queue|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockDomainEventQueue;
+    private $mockCommandQueue;
 
     /**
-     * @var CatalogImportApiRequestHandler
+     * @var string
+     */
+    private $importDirectoryPath;
+
+    /**
+     * @var ProductStockQuantityApiRequestHandler
      */
     private $apiRequestHandler;
 
@@ -33,19 +38,14 @@ class CatalogImportApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private $mockRequest;
 
-    /**
-     * @var string
-     */
-    private $importDirectoryPath;
-
     protected function setUp()
     {
         $this->importDirectoryPath = $this->getUniqueTempDir();
         $this->createFixtureDirectory($this->importDirectoryPath);
 
-        $this->mockDomainEventQueue = $this->getMock(Queue::class);
-        $this->apiRequestHandler = CatalogImportApiRequestHandler::create(
-            $this->mockDomainEventQueue,
+        $this->mockCommandQueue = $this->getMock(Queue::class);
+        $this->apiRequestHandler = ProductStockQuantityApiRequestHandler::create(
+            $this->mockCommandQueue,
             $this->importDirectoryPath
         );
 
@@ -65,7 +65,7 @@ class CatalogImportApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownIfImportDirectoryIsNotReadable()
     {
         $this->setExpectedException(CatalogImportDirectoryNotReadableException::class);
-        CatalogImportApiRequestHandler::create($this->mockDomainEventQueue, '/some-not-existing-directory');
+        ProductStockQuantityApiRequestHandler::create($this->mockCommandQueue, '/some-not-existing-directory');
     }
 
     public function testExceptionIsThrownIfCatalogImportFileNameIsNotFoundInRequestBody()
@@ -89,9 +89,9 @@ class CatalogImportApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->mockRequest->method('getRawBody')->willReturn(json_encode(['fileName' => $fileName]));
 
-        $this->mockDomainEventQueue->expects($this->once())
+        $this->mockCommandQueue->expects($this->once())
             ->method('add')
-            ->with($this->isInstanceOf(CatalogImportDomainEvent::class));
+            ->with($this->isInstanceOf(UpdateProductStockQuantityCommand::class));
 
         $response = $this->apiRequestHandler->process($this->mockRequest);
 

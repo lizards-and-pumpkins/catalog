@@ -2,7 +2,10 @@
 
 namespace Brera;
 
-use Brera\Product\UpdateProductStockQuantityCommand;
+use Brera\Http\HttpHeaders;
+use Brera\Http\HttpRequest;
+use Brera\Http\HttpRequestBody;
+use Brera\Http\HttpUrl;
 
 class ProductSockQuantityTest extends AbstractIntegrationTest
 {
@@ -18,15 +21,20 @@ class ProductSockQuantityTest extends AbstractIntegrationTest
 
     public function testProductStockQuantitySnippetIsWrittenIntoDataPool()
     {
-        $xml = <<<EOX
-<?xml version="1.0"?>
-<sockNode website="ru" language="en_US">
-    <sku>foo</sku>
-    <quantity>200</quantity>
-</sockNode>
-EOX;
-        $queue = $this->factory->getCommandQueue();
-        $queue->add(new UpdateProductStockQuantityCommand($xml));
+        $httpUrl = HttpUrl::fromString('http://example.com/api/product_stock_quantity');
+        $httpHeaders = HttpHeaders::fromArray([]);
+        $httpRequestBodyString = json_encode(['fileName' => 'stock.xml']);
+        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
+        $request = HttpRequest::fromParameters(HttpRequest::HTTP_PUT_REQUEST, $httpUrl, $httpHeaders, $httpRequestBody);
+
+        $domainCommandQueue = $this->factory->getCommandQueue();
+        $this->assertEquals(0, $domainCommandQueue->count());
+
+        $website = new SampleWebFront($request, $this->factory);
+        $response = $website->runWithoutSendingResponse();
+
+        $this->assertEquals('"OK"', $response->getBody());
+        $this->assertEquals(1, $domainCommandQueue->count());
 
         $this->processCommands(1);
         $this->processDomainEvents(1);

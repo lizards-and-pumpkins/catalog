@@ -8,6 +8,7 @@ use Brera\Product\ProductSnippetKeyGenerator;
  * @method DataPool\DataPoolWriter createDataPoolWriter
  * @method DataPool\DataPoolReader createDataPoolReader
  * @method Queue\Queue getCommandQueue
+ * @method Queue\Queue getEventQueue
  * @method Context\ContextBuilder createContextBuilder
  * @method Context\ContextBuilder createContextBuilderWithVersion
  * @method Context\ContextSource createContextSource

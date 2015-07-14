@@ -12,6 +12,7 @@ use Brera\Product\ProductInListingInContextSnippetRenderer;
 use Brera\Product\ProductListingRequestHandlerBuilder;
 use Brera\Product\ProductListingRouter;
 use Brera\Product\ProductListingSnippetRenderer;
+use Brera\Product\ProductStockQuantityApiRequestHandler;
 
 class FrontendFactory implements Factory
 {
@@ -39,6 +40,11 @@ class FrontendFactory implements Factory
             'catalog_import',
             $this->getMasterFactory()->createCatalogImportApiRequestHandler()
         );
+
+        $requestHandlerChain->register(
+            'product_stock_quantity',
+            $this->getMasterFactory()->createProductStockQuantityApiRequestHandler()
+        );
     }
 
     /**
@@ -53,11 +59,22 @@ class FrontendFactory implements Factory
     }
 
     /**
+     * @return ProductStockQuantityApiRequestHandler
+     */
+    public function createProductStockQuantityApiRequestHandler()
+    {
+        return ProductStockQuantityApiRequestHandler::create(
+            $this->getMasterFactory()->getCommandQueue(),
+            $this->getCatalogImportDirectoryConfig()
+        );
+    }
+
+    /**
      * @return string
      */
     private function getCatalogImportDirectoryConfig()
     {
-        return __DIR__ . '/../tests/shared-fixture/';
+        return __DIR__ . '/../tests/shared-fixture';
     }
 
     /**
