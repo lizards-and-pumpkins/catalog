@@ -20,7 +20,7 @@ use Brera\Product\ProductListingRouter;
  * @uses   \Brera\Product\ProductListingRouter
  * @uses   \Brera\Product\ProductListingRequestHandlerBuilder
  * @uses   \Brera\Product\ProductSnippetKeyGenerator
- * @uses   \Brera\Product\ProductStockQuantityApiRequestHandler
+ * @uses   \Brera\Product\MultipleProductStockQuantityApiRequestHandler
  * @uses   \Brera\DataPool\DataPoolReader
  * @uses   \Brera\Api\ApiRouter
  * @uses   \Brera\Api\ApiRequestHandlerChain

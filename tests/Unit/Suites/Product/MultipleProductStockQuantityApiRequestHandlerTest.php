@@ -8,13 +8,13 @@ use Brera\Queue\Queue;
 use Brera\TestFileFixtureTrait;
 
 /**
- * @covers \Brera\Product\ProductStockQuantityApiRequestHandler
+ * @covers \Brera\Product\MultipleProductStockQuantityApiRequestHandler
  * @uses   \Brera\Api\ApiRequestHandler
  * @uses   \Brera\DefaultHttpResponse
  * @uses   \Brera\Http\HttpHeaders
  * @uses   \Brera\Product\UpdateMultipleProductStockQuantityCommand
  */
-class ProductStockQuantityApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
+class MultipleProductStockQuantityApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
     use TestFileFixtureTrait;
 
@@ -29,7 +29,7 @@ class ProductStockQuantityApiRequestHandlerTest extends \PHPUnit_Framework_TestC
     private $importDirectoryPath;
 
     /**
-     * @var ProductStockQuantityApiRequestHandler
+     * @var MultipleProductStockQuantityApiRequestHandler
      */
     private $apiRequestHandler;
 
@@ -44,7 +44,7 @@ class ProductStockQuantityApiRequestHandlerTest extends \PHPUnit_Framework_TestC
         $this->createFixtureDirectory($this->importDirectoryPath);
 
         $this->mockCommandQueue = $this->getMock(Queue::class);
-        $this->apiRequestHandler = ProductStockQuantityApiRequestHandler::create(
+        $this->apiRequestHandler = MultipleProductStockQuantityApiRequestHandler::create(
             $this->mockCommandQueue,
             $this->importDirectoryPath
         );
@@ -65,7 +65,7 @@ class ProductStockQuantityApiRequestHandlerTest extends \PHPUnit_Framework_TestC
     public function testExceptionIsThrownIfImportDirectoryIsNotReadable()
     {
         $this->setExpectedException(CatalogImportDirectoryNotReadableException::class);
-        ProductStockQuantityApiRequestHandler::create($this->mockCommandQueue, '/some-not-existing-directory');
+        MultipleProductStockQuantityApiRequestHandler::create($this->mockCommandQueue, '/some-not-existing-directory');
     }
 
     public function testExceptionIsThrownIfCatalogImportFileNameIsNotFoundInRequestBody()

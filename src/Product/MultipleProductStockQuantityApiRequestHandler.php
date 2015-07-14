@@ -6,7 +6,7 @@ use Brera\Api\ApiRequestHandler;
 use Brera\Http\HttpRequest;
 use Brera\Queue\Queue;
 
-class ProductStockQuantityApiRequestHandler extends ApiRequestHandler
+class MultipleProductStockQuantityApiRequestHandler extends ApiRequestHandler
 {
     /**
      * @var Queue
