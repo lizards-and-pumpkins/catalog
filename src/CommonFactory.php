@@ -649,7 +649,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createUpdateProductStockQuantityCommandHandler(UpdateProductStockQuantityCommand $command) {
         return new UpdateProductStockQuantityCommandHandler(
             $command,
-            $this->getMasterFactory()->getEventQueue()
+            $this->getMasterFactory()->getEventQueue(),
+            $this->getMasterFactory()->getProductStockQuantitySourceBuilder()
         );
     }
 
@@ -767,7 +768,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new ProductStockQuantityUpdatedDomainEventHandler(
             $event,
-            $this->getMasterFactory()->getProductStockQuantitySourceBuilder(),
             $this->getMasterFactory()->createContextSource(),
             $this->getMasterFactory()->getProductStockQuantityProjector()
         );

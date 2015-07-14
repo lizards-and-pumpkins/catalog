@@ -7,23 +7,20 @@ use Brera\DomainEvent;
 class ProductStockQuantityUpdatedDomainEvent implements DomainEvent
 {
     /**
-     * @var string
+     * @var ProductStockQuantitySource
      */
-    private $payload;
+    private $productStockQuantitySource;
 
-    /**
-     * @param string $payload
-     */
-    public function __construct($payload)
+    public function __construct(ProductId $productId, ProductStockQuantitySource $productStockQuantitySource)
     {
-        $this->payload = $payload;
+        $this->productStockQuantitySource = $productStockQuantitySource;
     }
 
     /**
-     * @return string
+     * @return ProductStockQuantitySource
      */
-    public function getPayload()
+    public function getProductStockQuantitySource()
     {
-        return $this->payload;
+        return $this->productStockQuantitySource;
     }
 }

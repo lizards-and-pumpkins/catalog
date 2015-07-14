@@ -10,9 +10,9 @@ use Brera\DomainEvent;
 class ProductStockQuantityUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var string
+     * @var ProductStockQuantitySource|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $dummyPayload = 'foo';
+    private $stubProductStockQuantitySource;
 
     /**
      * @var ProductStockQuantityUpdatedDomainEvent
@@ -21,7 +21,13 @@ class ProductStockQuantityUpdatedDomainEventTest extends \PHPUnit_Framework_Test
 
     protected function setUp()
     {
-        $this->domainEvent = new ProductStockQuantityUpdatedDomainEvent($this->dummyPayload);
+        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
+        $this->stubProductStockQuantitySource = $this->getMock(ProductStockQuantitySource::class, [], [], '', false);
+
+        $this->domainEvent = new ProductStockQuantityUpdatedDomainEvent(
+            $stubProductId,
+            $this->stubProductStockQuantitySource
+        );
     }
 
     public function testDomainEventInterfaceIsImplemented()
@@ -29,9 +35,9 @@ class ProductStockQuantityUpdatedDomainEventTest extends \PHPUnit_Framework_Test
         $this->assertInstanceOf(DomainEvent::class, $this->domainEvent);
     }
 
-    public function testEventPayloadIsReturned()
+    public function testProductStockQuantitySourceIsReturned()
     {
-        $result = $this->domainEvent->getPayload();
-        $this->assertSame($this->dummyPayload, $result);
+        $result = $this->domainEvent->getProductStockQuantitySource();
+        $this->assertSame($this->stubProductStockQuantitySource, $result);
     }
 }

@@ -21,11 +21,6 @@ class ProductStockQuantityUpdatedDomainEventHandlerTest extends \PHPUnit_Framewo
     private $mockProjector;
 
     /**
-     * @var ProductStockQuantitySourceBuilder|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $mockProductStockQuantitySourceBuilder;
-
-    /**
      * @var ProductStockQuantityUpdatedDomainEventHandler
      */
     private $domainEventHandler;
@@ -46,7 +41,6 @@ class ProductStockQuantityUpdatedDomainEventHandlerTest extends \PHPUnit_Framewo
 
         $this->domainEventHandler = new ProductStockQuantityUpdatedDomainEventHandler(
             $this->mockDomainEvent,
-            $this->mockProductStockQuantitySourceBuilder,
             $stubContextSource,
             $this->mockProjector
         );
@@ -61,7 +55,7 @@ class ProductStockQuantityUpdatedDomainEventHandlerTest extends \PHPUnit_Framewo
     {
         $stubProductStockQuantitySource = $this->getMock(ProductStockQuantitySource::class, [], [], '', false);
 
-        $this->mockProductStockQuantitySourceBuilder->method('createFromXml')
+        $this->mockDomainEvent->method('getProductStockQuantitySource')
             ->willReturn($stubProductStockQuantitySource);
 
         $this->mockProjector->expects($this->once())

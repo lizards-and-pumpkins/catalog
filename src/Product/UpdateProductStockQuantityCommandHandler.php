@@ -17,16 +17,41 @@ class UpdateProductStockQuantityCommandHandler implements CommandHandler
      */
     private $domainEventQueue;
 
-    public function __construct(UpdateProductStockQuantityCommand $command, Queue $domainEventQueue) {
+    /**
+     * @var ProductStockQuantitySourceBuilder
+     */
+    private $productStockQuantitySourceBuilder;
+
+    public function __construct(
+        UpdateProductStockQuantityCommand $command,
+        Queue $domainEventQueue,
+        ProductStockQuantitySourceBuilder $productStockQuantitySourceBuilder
+    ) {
         $this->command = $command;
         $this->domainEventQueue = $domainEventQueue;
+        $this->productStockQuantitySourceBuilder = $productStockQuantitySourceBuilder;
     }
 
     public function process()
     {
-        $payload = $this->command->getPayload();
-        $event = new ProductStockQuantityUpdatedDomainEvent($payload);
+        $productStockQuantitySource = $this->extractProductStockQuantitySourceFromPayload();
+
+        $productSku = $productStockQuantitySource->getSku();
+        $productId = ProductId::fromSku($productSku);
+
+        $event = new ProductStockQuantityUpdatedDomainEvent($productId, $productStockQuantitySource);
 
         $this->domainEventQueue->add($event);
+    }
+
+    /**
+     * @return ProductStockQuantitySource
+     */
+    private function extractProductStockQuantitySourceFromPayload()
+    {
+        $xml = $this->command->getPayload();
+        $productStockQuantitySource = $this->productStockQuantitySourceBuilder->createFromXml($xml);
+
+        return $productStockQuantitySource;
     }
 }

@@ -6,10 +6,12 @@ use Brera\Image\ImageImportDomainEvent;
 use Brera\Image\ImageImportDomainEventHandler;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
+use Brera\Product\ProductId;
 use Brera\Product\ProductImportDomainEvent;
 use Brera\Product\ProductImportDomainEventHandler;
 use Brera\Product\ProductListingSavedDomainEvent;
 use Brera\Product\ProductListingSavedDomainEventHandler;
+use Brera\Product\ProductStockQuantitySource;
 use Brera\Product\ProductStockQuantityUpdatedDomainEvent;
 use Brera\Product\ProductStockQuantityUpdatedDomainEventHandler;
 
@@ -141,7 +143,13 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
             ->method('createProductStockQuantityUpdatedDomainEventHandler')
             ->willReturn($stubEventHandler);
 
-        $productStockQuantityChangedDomainEvent = new ProductStockQuantityUpdatedDomainEvent('<xml/>');
+        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
+        $stubProductStockQuantitySource = $this->getMock(ProductStockQuantitySource::class, [], [], '', false);
+
+        $productStockQuantityChangedDomainEvent = new ProductStockQuantityUpdatedDomainEvent(
+            $stubProductId,
+            $stubProductStockQuantitySource
+        );
 
         $result = $this->locator->getHandlerFor($productStockQuantityChangedDomainEvent);
 

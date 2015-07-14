@@ -13,11 +13,6 @@ class ProductStockQuantityUpdatedDomainEventHandler implements DomainEventHandle
     private $event;
 
     /**
-     * @var ProductStockQuantitySourceBuilder
-     */
-    private $productStockQuantitySourceBuilder;
-
-    /**
      * @var ContextSource
      */
     private $contextSource;
@@ -29,21 +24,17 @@ class ProductStockQuantityUpdatedDomainEventHandler implements DomainEventHandle
 
     public function __construct(
         ProductStockQuantityUpdatedDomainEvent $event,
-        ProductStockQuantitySourceBuilder $productStockQuantitySourceBuilder,
         ContextSource $contextSource,
         ProductStockQuantityProjector $projector
     ) {
         $this->event = $event;
-        $this->productStockQuantitySourceBuilder = $productStockQuantitySourceBuilder;
         $this->contextSource = $contextSource;
         $this->projector = $projector;
     }
 
     public function process()
     {
-        $productStockQuantitySource = $this->productStockQuantitySourceBuilder->createFromXml(
-            $this->event->getPayload()
-        );
+        $productStockQuantitySource = $this->event->getProductStockQuantitySource();
 
         $this->projector->project($productStockQuantitySource, $this->contextSource);
     }
