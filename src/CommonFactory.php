@@ -646,7 +646,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      * @param UpdateProductStockQuantityCommand $command
      * @return UpdateProductStockQuantityCommandHandler
      */
-    public function createUpdateProductStockQuantityCommandHandler(UpdateProductStockQuantityCommand $command) {
+    public function createUpdateProductStockQuantityCommandHandler(UpdateProductStockQuantityCommand $command)
+    {
         return new UpdateProductStockQuantityCommandHandler(
             $command,
             $this->getMasterFactory()->getEventQueue(),

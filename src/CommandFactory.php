@@ -24,5 +24,4 @@ interface CommandFactory
     public function createUpdateMultipleProductStockQuantityCommandHandler(
         UpdateMultipleProductStockQuantityCommand $command
     );
-
 }
