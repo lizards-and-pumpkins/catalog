@@ -28,16 +28,8 @@ class ProductStockQuantityUpdatedDomainEventHandlerTest extends \PHPUnit_Framewo
     protected function setUp()
     {
         $this->mockDomainEvent = $this->getMock(ProductStockQuantityUpdatedDomainEvent::class, [], [], '', false);
-
-        $this->mockProjector = $this->getMock(ProductStockQuantityProjector::class, [], [], '', false);
-        $this->mockProductStockQuantitySourceBuilder = $this->getMock(
-            ProductStockQuantitySourceBuilder::class,
-            [],
-            [],
-            '',
-            false
-        );
         $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
+        $this->mockProjector = $this->getMock(ProductStockQuantityProjector::class, [], [], '', false);
 
         $this->domainEventHandler = new ProductStockQuantityUpdatedDomainEventHandler(
             $this->mockDomainEvent,
@@ -54,12 +46,9 @@ class ProductStockQuantityUpdatedDomainEventHandlerTest extends \PHPUnit_Framewo
     public function testProductQuantitySnippetProjectionIsTriggered()
     {
         $stubProductStockQuantitySource = $this->getMock(ProductStockQuantitySource::class, [], [], '', false);
+        $this->mockDomainEvent->method('getProductStockQuantitySource')->willReturn($stubProductStockQuantitySource);
 
-        $this->mockDomainEvent->method('getProductStockQuantitySource')
-            ->willReturn($stubProductStockQuantitySource);
-
-        $this->mockProjector->expects($this->once())
-            ->method('project');
+        $this->mockProjector->expects($this->once())->method('project');
 
         $this->domainEventHandler->process();
     }
