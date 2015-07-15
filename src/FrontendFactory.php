@@ -13,6 +13,7 @@ use Brera\Product\ProductListingRequestHandlerBuilder;
 use Brera\Product\ProductListingRouter;
 use Brera\Product\ProductListingSnippetRenderer;
 use Brera\Product\MultipleProductStockQuantityApiRequestHandler;
+use Brera\Utils\Directory;
 
 class FrontendFactory implements Factory
 {
@@ -65,7 +66,7 @@ class FrontendFactory implements Factory
     {
         return MultipleProductStockQuantityApiRequestHandler::create(
             $this->getMasterFactory()->getCommandQueue(),
-            $this->getCatalogImportDirectoryConfig()
+            Directory::fromPath($this->getCatalogImportDirectoryConfig())
         );
     }
 

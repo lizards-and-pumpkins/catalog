@@ -5,6 +5,7 @@ namespace Brera\Product;
 use Brera\Api\ApiRequestHandler;
 use Brera\Http\HttpRequest;
 use Brera\Queue\Queue;
+use Brera\Utils\Directory;
 
 class MultipleProductStockQuantityApiRequestHandler extends ApiRequestHandler
 {
@@ -14,33 +15,31 @@ class MultipleProductStockQuantityApiRequestHandler extends ApiRequestHandler
     private $commandQueue;
 
     /**
-     * @var string
+     * @var Directory
      */
-    private $importDirectoryPath;
+    private $importDirectory;
 
-    /**
-     * @param Queue $commandQueue
-     * @param string $importDirectoryPath
-     */
-    private function __construct(Queue $commandQueue, $importDirectoryPath)
+    private function __construct(Queue $commandQueue, Directory $importDirectory)
     {
         $this->commandQueue = $commandQueue;
-        $this->importDirectoryPath = $importDirectoryPath;
+        $this->importDirectory = $importDirectory;
     }
 
     /**
      * @param Queue $commandQueue
-     * @param string $importDirectoryPath
+     * @param Directory $importDirectory
      * @return CatalogImportApiRequestHandler
      * @throws CatalogImportDirectoryNotReadableException
      */
-    public static function create(Queue $commandQueue, $importDirectoryPath)
+    public static function create(Queue $commandQueue, Directory $importDirectory)
     {
-        if (!is_readable($importDirectoryPath)) {
-            throw new CatalogImportDirectoryNotReadableException(sprintf('%s is not readable.', $importDirectoryPath));
+        if (!$importDirectory->isReadable()) {
+            throw new CatalogImportDirectoryNotReadableException(
+                sprintf('%s is not readable.', $importDirectory->getPath())
+            );
         }
 
-        return new self($commandQueue, $importDirectoryPath);
+        return new self($commandQueue, $importDirectory);
     }
 
     /**
@@ -72,7 +71,7 @@ class MultipleProductStockQuantityApiRequestHandler extends ApiRequestHandler
      */
     private function getImportFileContents(HttpRequest $request)
     {
-        $filePath = $this->importDirectoryPath . '/' . $this->getImportFileNameFromRequest($request);
+        $filePath = $this->importDirectory->getPath() . '/' . $this->getImportFileNameFromRequest($request);
 
         if (!is_readable($filePath)) {
             throw new CatalogImportFileNotReadableException(sprintf('%s file is not readable.', $filePath));

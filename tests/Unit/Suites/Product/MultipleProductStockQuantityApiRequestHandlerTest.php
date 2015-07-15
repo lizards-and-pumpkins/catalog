@@ -6,6 +6,7 @@ use Brera\Api\ApiRequestHandler;
 use Brera\Http\HttpRequest;
 use Brera\Queue\Queue;
 use Brera\TestFileFixtureTrait;
+use Brera\Utils\Directory;
 
 /**
  * @covers \Brera\Product\MultipleProductStockQuantityApiRequestHandler
@@ -22,6 +23,11 @@ class MultipleProductStockQuantityApiRequestHandlerTest extends \PHPUnit_Framewo
      * @var Queue|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockCommandQueue;
+
+    /**
+     * @var Directory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockDirectory;
 
     /**
      * @var string
@@ -44,9 +50,14 @@ class MultipleProductStockQuantityApiRequestHandlerTest extends \PHPUnit_Framewo
         $this->createFixtureDirectory($this->importDirectoryPath);
 
         $this->mockCommandQueue = $this->getMock(Queue::class);
+
+        $this->mockDirectory = $this->getMock(Directory::class, [], [], '', false);
+        $this->mockDirectory->method('isReadable')->willReturn(true);
+        $this->mockDirectory->method('getPath')->willReturn($this->importDirectoryPath);
+
         $this->apiRequestHandler = MultipleProductStockQuantityApiRequestHandler::create(
             $this->mockCommandQueue,
-            $this->importDirectoryPath
+            $this->mockDirectory
         );
 
         $this->mockRequest = $this->getMock(HttpRequest::class, [], [], '', false);
@@ -64,8 +75,12 @@ class MultipleProductStockQuantityApiRequestHandlerTest extends \PHPUnit_Framewo
 
     public function testExceptionIsThrownIfImportDirectoryIsNotReadable()
     {
+        $mockDirectory = $this->getMock(Directory::class, [], [], '', false);
+        $mockDirectory->method('isReadable')->willReturn(false);
+
         $this->setExpectedException(CatalogImportDirectoryNotReadableException::class);
-        MultipleProductStockQuantityApiRequestHandler::create($this->mockCommandQueue, '/some-not-existing-directory');
+
+        MultipleProductStockQuantityApiRequestHandler::create($this->mockCommandQueue, $mockDirectory);
     }
 
     public function testExceptionIsThrownIfCatalogImportFileNameIsNotFoundInRequestBody()
