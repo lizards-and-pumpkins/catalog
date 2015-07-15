@@ -2,7 +2,6 @@
 
 namespace Brera\Product;
 
-use Brera\Context\Context;
 use Brera\ProjectionSourceData;
 
 /**
