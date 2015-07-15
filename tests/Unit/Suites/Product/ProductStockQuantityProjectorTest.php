@@ -55,7 +55,7 @@ class ProductStockQuantityProjectorTest extends \PHPUnit_Framework_TestCase
         $this->projector->project($stubProjectionSourceData, $stubContextSource);
     }
 
-    public function testSnippetListIsWrittenDataPool()
+    public function testSnippetListIsWrittenIntoDataPool()
     {
         $stubSnippetList = $this->getMock(SnippetList::class);
         $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
