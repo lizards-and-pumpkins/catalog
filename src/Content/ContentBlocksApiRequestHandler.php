@@ -50,7 +50,7 @@ class ContentBlocksApiRequestHandler extends ApiRequestHandler
 
         $this->commandQueue->add(new UpdateContentBlockCommand($contentBlockId, $contentBlockSource));
 
-        return 'OK';
+        return json_encode('OK');
     }
 
     /**
