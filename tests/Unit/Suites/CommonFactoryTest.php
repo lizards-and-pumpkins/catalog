@@ -289,9 +289,9 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testImageImportEventDomainHandlerIsReturned()
     {
-        /* @var $event \PHPUnit_Framework_MockObject_MockObject|ImageImportDomainEvent */
-        $event = $this->getMock(ImageImportDomainEvent::class, [], [], '', false);
-        $result = $this->commonFactory->createImageImportDomainEventHandler($event);
+        /* @var ImageImportDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubEvent */
+        $stubEvent = $this->getMock(ImageImportDomainEvent::class, [], [], '', false);
+        $result = $this->commonFactory->createImageImportDomainEventHandler($stubEvent);
 
         $this->assertInstanceOf(ImageImportDomainEventHandler::class, $result);
     }
@@ -304,18 +304,18 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateProductStockQuantityCommandHandlerIsReturned()
     {
-        /** @var UpdateProductStockQuantityCommand $command */
-        $command = $this->getMock(UpdateProductStockQuantityCommand::class, [], [], '', false);
-        $result = $this->commonFactory->createUpdateProductStockQuantityCommandHandler($command);
+        /** @var UpdateProductStockQuantityCommand|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
+        $stubCommand = $this->getMock(UpdateProductStockQuantityCommand::class, [], [], '', false);
+        $result = $this->commonFactory->createUpdateProductStockQuantityCommandHandler($stubCommand);
 
         $this->assertInstanceOf(UpdateProductStockQuantityCommandHandler::class, $result);
     }
 
     public function testUpdateMultipleProductStockQuantityCommandHandlerIsReturned()
     {
-        /** @var UpdateMultipleProductStockQuantityCommand $command */
-        $command = $this->getMock(UpdateMultipleProductStockQuantityCommand::class, [], [], '', false);
-        $result = $this->commonFactory->createUpdateMultipleProductStockQuantityCommandHandler($command);
+        /** @var UpdateMultipleProductStockQuantityCommand|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
+        $stubCommand = $this->getMock(UpdateMultipleProductStockQuantityCommand::class, [], [], '', false);
+        $result = $this->commonFactory->createUpdateMultipleProductStockQuantityCommandHandler($stubCommand);
 
         $this->assertInstanceOf(UpdatemultipleProductStockQuantityCommandHandler::class, $result);
     }
@@ -384,9 +384,9 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testProductStockQuantityUpdatedDomainEventHandlerIsReturned()
     {
-        /** @var ProductStockQuantityUpdatedDomainEvent $event */
-        $event = $this->getMock(ProductStockQuantityUpdatedDomainEvent::class, [], [], '', false);
-        $result = $this->commonFactory->createProductStockQuantityUpdatedDomainEventHandler($event);
+        /** @var ProductStockQuantityUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubEvent */
+        $stubEvent = $this->getMock(ProductStockQuantityUpdatedDomainEvent::class, [], [], '', false);
+        $result = $this->commonFactory->createProductStockQuantityUpdatedDomainEventHandler($stubEvent);
 
         $this->assertInstanceOf(ProductStockQuantityUpdatedDomainEventHandler::class, $result);
     }
