@@ -158,7 +158,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $httpUrl = HttpUrl::fromString('http://example.com/' . $urlKeys[0]['value']);
         $httpHeaders = HttpHeaders::fromArray([]);
         $httpRequestBody = HttpRequestBody::fromString('');
-        $request = HttpRequest::fromParameters(HttpRequest::HTTP_GET_REQUEST, $httpUrl, $httpHeaders, $httpRequestBody);
+        $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $website = new SampleWebFront($request, $factory);
         $response = $website->runWithoutSendingResponse();
@@ -171,7 +171,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $url = HttpUrl::fromString('http://example.com/non/existent/path');
         $headers = HttpHeaders::fromArray([]);
         $requestBody = HttpRequestBody::fromString('');
-        $request = HttpRequest::fromParameters(HttpRequest::HTTP_GET_REQUEST, $url, $headers, $requestBody);
+        $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $url, $headers, $requestBody);
 
         $website = new SampleWebFront($request);
         $website->registerFactory(new IntegrationTestFactory());
