@@ -33,7 +33,7 @@ class Directory
 
         if (is_file($directoryPath)) {
             throw new FileAlreadyExistsWithinGivenPathException(
-                sprintf('File already exists withing the path %s.', $directoryPath)
+                sprintf('The specified directory is a file: %s.', $directoryPath)
             );
         }
 
