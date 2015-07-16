@@ -3,6 +3,7 @@
 namespace Brera;
 
 use Brera\Api\ApiRouter;
+use Brera\Content\ContentBlocksApiRequestHandler;
 use Brera\Product\CatalogImportApiRequestHandler;
 use Brera\Product\ProductDetailViewRouter;
 use Brera\Product\ProductListingRouter;
@@ -14,6 +15,7 @@ use Brera\Product\ProductListingRouter;
  * @uses   \Brera\SampleMasterFactory
  * @uses   \Brera\IntegrationTestFactory
  * @uses   \Brera\CommonFactory
+ * @uses   \Brera\Content\ContentBlocksApiRequestHandler
  * @uses   \Brera\Product\CatalogImportApiRequestHandler
  * @uses   \Brera\Product\ProductDetailViewRouter
  * @uses   \Brera\Product\ProductDetailViewRequestHandlerBuilder
@@ -47,6 +49,12 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->frontendFactory->createCatalogImportApiRequestHandler();
         $this->assertInstanceOf(CatalogImportApiRequestHandler::class, $result);
+    }
+
+    public function testContentBlocksApiRequestHandlerIsReturned()
+    {
+        $result = $this->frontendFactory->createContentBlocksApiRequestHandler();
+        $this->assertInstanceOf(ContentBlocksApiRequestHandler::class, $result);
     }
 
     public function testApiRouterIsReturned()

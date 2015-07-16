@@ -4,6 +4,7 @@ namespace Brera;
 
 use Brera\Api\ApiRequestHandlerChain;
 use Brera\Api\ApiRouter;
+use Brera\Content\ContentBlocksApiRequestHandler;
 use Brera\Product\CatalogImportApiRequestHandler;
 use Brera\Product\ProductDetailViewInContextSnippetRenderer;
 use Brera\Product\ProductDetailViewRequestHandlerBuilder;
@@ -39,6 +40,10 @@ class FrontendFactory implements Factory
             'catalog_import',
             $this->getMasterFactory()->createCatalogImportApiRequestHandler()
         );
+        $requestHandlerChain->register(
+            'content_blocks',
+            $this->getMasterFactory()->createContentBlocksApiRequestHandler()
+        );
     }
 
     /**
@@ -49,6 +54,16 @@ class FrontendFactory implements Factory
         return CatalogImportApiRequestHandler::create(
             $this->getMasterFactory()->getEventQueue(),
             $this->getCatalogImportDirectoryConfig()
+        );
+    }
+
+    /**
+     * @return ContentBlocksApiRequestHandler
+     */
+    public function createContentBlocksApiRequestHandler()
+    {
+        return new ContentBlocksApiRequestHandler(
+            $this->getMasterFactory()->getCommandQueue()
         );
     }
 
