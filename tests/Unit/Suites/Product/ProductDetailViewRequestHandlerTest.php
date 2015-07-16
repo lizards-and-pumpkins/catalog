@@ -92,7 +92,7 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $exception = new KeyNotFoundException();
         $this->mockDataPoolReader->method('getSnippet')->willThrowException($exception);
-        $this->assertFalse($this->requestHandler->canProcess());
+        $this->assertFalse($this->requestHandler->canProcess($this->stubRequest));
     }
 
     public function testTrueIsReturnedIfPageMetaInfoContentSnippetCanBeLoaded()
@@ -100,7 +100,7 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->mockDataPoolReader->method('getSnippet')->willReturnMap([
             [$this->testMetaInfoKey, $this->testMetaInfoSnippetJson]
         ]);
-        $this->assertTrue($this->requestHandler->canProcess());
+        $this->assertTrue($this->requestHandler->canProcess($this->stubRequest));
     }
 
     public function testExceptionIsThrownIfProcessWithoutMetaInfoContentIsCalled()

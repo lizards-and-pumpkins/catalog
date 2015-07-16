@@ -53,7 +53,7 @@ class CatalogImportApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testCanProcessMethodAlwaysReturnsTrue()
     {
-        $this->assertTrue($this->apiRequestHandler->canProcess());
+        $this->assertTrue($this->apiRequestHandler->canProcess($this->mockRequest));
     }
 
     public function testExceptionIsThrownIfImportDirectoryIsNotReadable()

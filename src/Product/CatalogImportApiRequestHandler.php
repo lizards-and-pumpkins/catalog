@@ -44,9 +44,10 @@ class CatalogImportApiRequestHandler extends ApiRequestHandler
     }
 
     /**
+     * @param HttpRequest $request
      * @return bool
      */
-    final public function canProcess()
+    final public function canProcess(HttpRequest $request)
     {
         return true;
     }

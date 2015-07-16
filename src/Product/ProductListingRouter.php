@@ -27,7 +27,7 @@ class ProductListingRouter implements HttpRouter
     public function route(HttpRequest $request, Context $context)
     {
         $urlKeyRequestHandler = $this->urlKeyRequestHandlerBuilder->create($request->getUrl(), $context);
-        if (! $urlKeyRequestHandler->canProcess()) {
+        if (! $urlKeyRequestHandler->canProcess($request)) {
             return null;
         }
         
