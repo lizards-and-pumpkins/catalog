@@ -7,9 +7,9 @@ use Brera\ProjectionSourceData;
 class ContentBlockSource implements ProjectionSourceData
 {
     /**
-     * @var string
+     * @var ContentBlockId
      */
-    private $identifier;
+    private $contentBlockId;
 
     /**
      * @var string
@@ -22,13 +22,13 @@ class ContentBlockSource implements ProjectionSourceData
     private $contextData;
 
     /**
-     * @param string $identifier
+     * @param ContentBlockId $contentBlockId
      * @param string $content
      * @param string[] $contextData
      */
-    public function __construct($identifier, $content, array $contextData)
+    public function __construct(ContentBlockId $contentBlockId, $content, array $contextData)
     {
-        $this->identifier = $identifier;
+        $this->contentBlockId = $contentBlockId;
         $this->content = $content;
         $this->contextData = $contextData;
     }
@@ -36,9 +36,9 @@ class ContentBlockSource implements ProjectionSourceData
     /**
      * @return string
      */
-    public function getIdentifier()
+    public function getContentBlockId()
     {
-        return $this->identifier;
+        return $this->contentBlockId;
     }
 
     /**

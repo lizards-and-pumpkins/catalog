@@ -10,9 +10,9 @@ use Brera\ProjectionSourceData;
 class ContentBlockSourceTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var string
+     * @var ContentBlockId|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubContentBlockIdentifier = 'foo';
+    private $stubContentBlockId;
 
     /**
      * @var string
@@ -31,8 +31,9 @@ class ContentBlockSourceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->stubContentBlockId = $this->getMock(ContentBlockId::class, [], [], '', false);
         $this->contentBlockSource = new ContentBlockSource(
-            $this->stubContentBlockIdentifier,
+            $this->stubContentBlockId,
             $this->stubContentBlockContent,
             $this->stubContextData
         );
@@ -43,10 +44,10 @@ class ContentBlockSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ProjectionSourceData::class, $this->contentBlockSource);
     }
 
-    public function testContentBlockIdentifierIsReturned()
+    public function testContentBlockIdIsReturned()
     {
-        $result = $this->contentBlockSource->getIdentifier();
-        $this->assertEquals($this->stubContentBlockIdentifier, $result);
+        $result = $this->contentBlockSource->getContentBlockId();
+        $this->assertEquals($this->stubContentBlockId, $result);
     }
 
     public function testContentBlockContentIsReturned()
