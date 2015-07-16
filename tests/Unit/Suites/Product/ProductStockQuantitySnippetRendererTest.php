@@ -11,7 +11,6 @@ use Brera\SnippetRenderer;
 
 /**
  * @covers \Brera\Product\ProductStockQuantitySnippetRenderer
- * @uses   \Brera\Product\ProductId
  * @uses   \Brera\Product\ProductStockQuantity
  * @uses   \Brera\SnippetList
  * @uses   \Brera\Snippet

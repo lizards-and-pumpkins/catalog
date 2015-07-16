@@ -10,18 +10,14 @@ use Brera\Command;
 class UpdateMultipleProductStockQuantityCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var string
-     */
-    private $dummyPayload = 'foo';
-
-    /**
      * @var UpdateMultipleProductStockQuantityCommand
      */
     private $command;
 
     protected function setUp()
     {
-        $this->command = new UpdateMultipleProductStockQuantityCommand($this->dummyPayload);
+        $stubProductStockQuantitySourceArray = [$this->getMock(ProductStockQuantitySource::class, [], [], '', false)];
+        $this->command = new UpdateMultipleProductStockQuantityCommand($stubProductStockQuantitySourceArray);
     }
 
     public function testCommandInterfaceIsImplemented()
@@ -29,9 +25,9 @@ class UpdateMultipleProductStockQuantityCommandTest extends \PHPUnit_Framework_T
         $this->assertInstanceOf(Command::class, $this->command);
     }
 
-    public function testCommandPayloadIsReturned()
+    public function testArrayOrProductStockQuantitySourcesIsReturned()
     {
-        $result = $this->command->getPayload();
-        $this->assertSame($this->dummyPayload, $result);
+        $result = $this->command->getProductStockQuantitySourceArray();
+        $this->assertContainsOnly(ProductStockQuantitySource::class, $result);
     }
 }

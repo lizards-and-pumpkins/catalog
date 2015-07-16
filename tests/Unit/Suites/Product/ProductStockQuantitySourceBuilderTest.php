@@ -5,6 +5,7 @@ namespace Brera\Product;
 /**
  * @covers \Brera\Product\ProductStockQuantitySourceBuilder
  * @uses   \Brera\Product\SampleSku
+ * @uses   \Brera\Product\ProductId
  * @uses   \Brera\Product\ProductStockQuantity
  * @uses   \Brera\Product\ProductStockQuantitySource
  * @uses   \Brera\Utils\XPathParser
@@ -70,12 +71,12 @@ class ProductStockQuantitySourceBuilderTest extends \PHPUnit_Framework_TestCase
 EOX;
         $productStockQuantitySource = (new ProductStockQuantitySourceBuilder)->createFromXml($xml);
 
-        $resultSku = $productStockQuantitySource->getSku();
+        $resultProductId = $productStockQuantitySource->getProductId();
         $resultQuantity = $productStockQuantitySource->getStock();
         $resultContextData = $productStockQuantitySource->getContextData();
 
         $this->assertInstanceOf(ProductStockQuantitySource::class, $productStockQuantitySource);
-        $this->assertEquals('baz', $resultSku);
+        $this->assertEquals('baz', $resultProductId);
         $this->assertSame(1, $resultQuantity->getQuantity());
         $this->assertSame(['website' => 'foo', 'language' => 'bar'], $resultContextData);
     }

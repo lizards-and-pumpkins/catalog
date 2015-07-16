@@ -2,15 +2,14 @@
 
 namespace Brera\Product;
 
-use Brera\Context\Context;
 use Brera\ProjectionSourceData;
 
 class ProductStockQuantitySource implements ProjectionSourceData
 {
     /**
-     * @var Sku
+     * @var ProductId
      */
-    private $sku;
+    private $productId;
 
     /**
      * @var string[]
@@ -23,23 +22,23 @@ class ProductStockQuantitySource implements ProjectionSourceData
     private $stock;
 
     /**
-     * @param Sku $sku
+     * @param ProductId $productId
      * @param string[] $contextData
      * @param Quantity $stock
      */
-    public function __construct(Sku $sku, array $contextData, Quantity $stock)
+    public function __construct(ProductId $productId, array $contextData, Quantity $stock)
     {
-        $this->sku = $sku;
+        $this->productId = $productId;
         $this->contextData = $contextData;
         $this->stock = $stock;
     }
 
     /**
-     * @return Sku
+     * @return ProductId
      */
-    public function getSku()
+    public function getProductId()
     {
-        return $this->sku;
+        return $this->productId;
     }
 
     /**

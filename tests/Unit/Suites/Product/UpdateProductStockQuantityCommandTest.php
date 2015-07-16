@@ -10,9 +10,14 @@ use Brera\Command;
 class UpdateProductStockQuantityCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var string
+     * @var ProductId|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $dummyPayload = 'foo';
+    private $stubProductId;
+
+    /**
+     * @var ProductStockQuantitySource|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubProductStockQuantitySource;
 
     /**
      * @var UpdateProductStockQuantityCommand
@@ -21,7 +26,13 @@ class UpdateProductStockQuantityCommandTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->command = new UpdateProductStockQuantityCommand($this->dummyPayload);
+        $this->stubProductId = $this->getMock(ProductId::class, [], [], '', false);
+        $this->stubProductStockQuantitySource = $this->getMock(ProductStockQuantitySource::class, [], [], '', false);
+
+        $this->command = new UpdateProductStockQuantityCommand(
+            $this->stubProductId,
+            $this->stubProductStockQuantitySource
+        );
     }
 
     public function testCommandInterfaceIsImplemented()
@@ -29,9 +40,15 @@ class UpdateProductStockQuantityCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Command::class, $this->command);
     }
 
-    public function testCommandPayloadIsReturned()
+    public function testProductIdIsReturned()
     {
-        $result = $this->command->getPayload();
-        $this->assertSame($this->dummyPayload, $result);
+        $result = $this->command->getProductId();
+        $this->assertSame($this->stubProductId, $result);
+    }
+
+    public function testProductStockQuantitySource()
+    {
+        $result = $this->command->getProductStockQuantitySource();
+        $this->assertSame($this->stubProductStockQuantitySource, $result);
     }
 }

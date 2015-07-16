@@ -26,18 +26,9 @@ class UpdateMultipleProductStockQuantityCommandHandler implements CommandHandler
 
     public function process()
     {
-        $xml = $this->command->getPayload();
-        $this->emitUpdateProductStockQuantityCommands($xml);
-    }
-
-    /**
-     * @param string $xml
-     */
-    private function emitUpdateProductStockQuantityCommands($xml)
-    {
-        $stockNodesXml = (new XPathParser($xml))->getXmlNodesRawXmlArrayByXPath('/*/stock');
-        foreach ($stockNodesXml as $stockXml) {
-            $this->commandQueue->add(new UpdateProductStockQuantityCommand($stockXml));
+        foreach ($this->command->getProductStockQuantitySourceArray() as $productStockQuantitySource) {
+            $productId = $productStockQuantitySource->getProductId();
+            $this->commandQueue->add(new UpdateProductStockQuantityCommand($productId, $productStockQuantitySource));
         }
     }
 }

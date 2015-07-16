@@ -5,7 +5,7 @@ namespace Brera\Utils;
 use Brera\TestFileFixtureTrait;
 
 /**
- * @covers \Brera\Directory
+ * @covers \Brera\Utils\Directory
  */
 class DirectoryTest extends \PHPUnit_Framework_TestCase
 {

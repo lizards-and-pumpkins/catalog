@@ -9,7 +9,6 @@ use Brera\Queue\Queue;
  * @covers \Brera\Product\UpdateMultipleProductStockQuantityCommandHandler
  * @uses   \Brera\Product\UpdateMultipleProductStockQuantityCommand
  * @uses   \Brera\Product\UpdateProductStockQuantityCommand
- * @uses   \Brera\Utils\XPathParser
  */
 class UpdateMultipleProductStockQuantityCommandHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,10 +29,16 @@ class UpdateMultipleProductStockQuantityCommandHandlerTest extends \PHPUnit_Fram
 
     protected function setUp()
     {
-        $xml = file_get_contents(__DIR__ . '/../../../shared-fixture/stock.xml');
+        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
+        $stubProductStockQuantitySource1 = $this->getMock(ProductStockQuantitySource::class, [], [], '', false);
+        $stubProductStockQuantitySource1->method('getProductId')->willReturn($stubProductId);
+        $stubProductStockQuantitySource2 = $this->getMock(ProductStockQuantitySource::class, [], [], '', false);
+        $stubProductStockQuantitySource2->method('getProductId')->willReturn($stubProductId);
+        $stubProductStockQuantitySourceArray = [$stubProductStockQuantitySource1, $stubProductStockQuantitySource2];
 
         $this->mockCommand = $this->getMock(UpdateMultipleProductStockQuantityCommand::class, [], [], '', false);
-        $this->mockCommand->method('getPayload')->willReturn($xml);
+        $this->mockCommand->method('getProductStockQuantitySourceArray')
+            ->willReturn($stubProductStockQuantitySourceArray);
 
         $this->mockCommandQueue = $this->getMock(Queue::class);
 

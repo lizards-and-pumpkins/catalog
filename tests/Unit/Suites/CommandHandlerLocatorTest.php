@@ -2,6 +2,8 @@
 
 namespace Brera;
 
+use Brera\Product\ProductId;
+use Brera\Product\ProductStockQuantitySource;
 use Brera\Product\UpdateMultipleProductStockQuantityCommand;
 use Brera\Product\UpdateMultipleProductStockQuantityCommandHandler;
 use Brera\Product\UpdateProductStockQuantityCommandHandler;
@@ -45,10 +47,13 @@ class CommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
             ->method('createUpdateProductStockQuantityCommandHandler')
             ->willReturn($stubHandler);
 
+        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
+        $stubProductStockQuantitySource = $this->getMock(ProductStockQuantitySource::class, [], [], '', false);
+
         /**
          * The real object has to be used here as getHandlerFor method will call get_class against it
          */
-        $productImportCommand = new UpdateProductStockQuantityCommand('<xml/>');
+        $productImportCommand = new UpdateProductStockQuantityCommand($stubProductId, $stubProductStockQuantitySource);
 
         $result = $this->locator->getHandlerFor($productImportCommand);
 
@@ -58,6 +63,7 @@ class CommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
     public function testUpdateMultipleProductStockQuantityCommandHandlerIsLocatedAndReturned()
     {
         $stubHandler = $this->getMock(UpdateMultipleProductStockQuantityCommandHandler::class, [], [], '', false);
+        $stubProductStockQuantitySource = $this->getMock(ProductStockQuantitySource::class, [], [], '', false);
 
         $this->factory->expects($this->once())
             ->method('createUpdateMultipleProductStockQuantityCommandHandler')
@@ -66,7 +72,7 @@ class CommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         /**
          * The real object has to be used here as getHandlerFor method will call get_class against it
          */
-        $productImportCommand = new UpdateMultipleProductStockQuantityCommand('<xml/>');
+        $productImportCommand = new UpdateMultipleProductStockQuantityCommand([$stubProductStockQuantitySource]);
 
         $result = $this->locator->getHandlerFor($productImportCommand);
 

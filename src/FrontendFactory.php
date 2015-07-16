@@ -66,7 +66,8 @@ class FrontendFactory implements Factory
     {
         return MultipleProductStockQuantityApiRequestHandler::create(
             $this->getMasterFactory()->getCommandQueue(),
-            Directory::fromPath($this->getCatalogImportDirectoryConfig())
+            Directory::fromPath($this->getCatalogImportDirectoryConfig()),
+            $this->getMasterFactory()->getProductStockQuantitySourceBuilder()
         );
     }
 

@@ -2,7 +2,6 @@
 
 namespace Brera\Product;
 
-use Brera\Context\Context;
 use Brera\ProjectionSourceData;
 
 /**
@@ -11,9 +10,9 @@ use Brera\ProjectionSourceData;
 class ProductStockQuantitySourceTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Sku|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductId|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubSku;
+    private $stubProductId;
 
     /**
      * @var string[]|\PHPUnit_Framework_MockObject_MockObject
@@ -32,11 +31,11 @@ class ProductStockQuantitySourceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubSku = $this->getMock(Sku::class);
+        $this->stubProductId = $this->getMock(ProductId::class, [], [], '', false);
         $this->stubQuantity = $this->getMock(Quantity::class);
 
         $this->productStockQuantitySource = new ProductStockQuantitySource(
-            $this->stubSku,
+            $this->stubProductId,
             $this->stubContextData,
             $this->stubQuantity
         );
@@ -47,10 +46,10 @@ class ProductStockQuantitySourceTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ProjectionSourceData::class, $this->productStockQuantitySource);
     }
 
-    public function testProductSkuIsReturned()
+    public function testProductIdIsReturned()
     {
-        $result = $this->productStockQuantitySource->getSku();
-        $this->assertEquals($this->stubSku, $result);
+        $result = $this->productStockQuantitySource->getProductId();
+        $this->assertEquals($this->stubProductId, $result);
     }
 
     public function testProductStockQuantityContextDataIsReturned()

@@ -27,6 +27,7 @@ use Brera\Product\ProductListingRouter;
  * @uses   \Brera\SnippetKeyGeneratorLocator
  * @uses   \Brera\GenericSnippetKeyGenerator
  * @uses   \Brera\PageBuilder
+ * @uses   \Brera\Utils\Directory
  */
 class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
 {

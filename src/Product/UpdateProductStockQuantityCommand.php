@@ -7,23 +7,34 @@ use Brera\Command;
 class UpdateProductStockQuantityCommand implements Command
 {
     /**
-     * @var string
+     * @var ProductId
      */
-    private $payload;
+    private $productId;
 
     /**
-     * @param string $payload
+     * @var ProductStockQuantitySource
      */
-    public function __construct($payload)
+    private $productStockQuantitySource;
+
+    public function __construct(ProductId $productId, ProductStockQuantitySource $productStockQuantitySource)
     {
-        $this->payload = $payload;
+        $this->productId = $productId;
+        $this->productStockQuantitySource = $productStockQuantitySource;
     }
 
     /**
-     * @return string
+     * @return ProductId
      */
-    public function getPayload()
+    public function getProductId()
     {
-        return $this->payload;
+        return $this->productId;
+    }
+
+    /**
+     * @return ProductStockQuantitySource
+     */
+    public function getProductStockQuantitySource()
+    {
+        return $this->productStockQuantitySource;
     }
 }

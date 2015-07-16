@@ -6,6 +6,7 @@ use Brera\Api\ApiRequestHandler;
 use Brera\Http\HttpRequest;
 use Brera\Queue\Queue;
 use Brera\Utils\Directory;
+use Brera\Utils\XPathParser;
 
 class MultipleProductStockQuantityApiRequestHandler extends ApiRequestHandler
 {
@@ -19,27 +20,40 @@ class MultipleProductStockQuantityApiRequestHandler extends ApiRequestHandler
      */
     private $importDirectory;
 
-    private function __construct(Queue $commandQueue, Directory $importDirectory)
-    {
+    /**
+     * @var ProductStockQuantitySourceBuilder
+     */
+    private $productStockQuantitySourceBuilder;
+
+    private function __construct(
+        Queue $commandQueue,
+        Directory $importDirectory,
+        ProductStockQuantitySourceBuilder $productStockQuantitySourceBuilder
+    ) {
         $this->commandQueue = $commandQueue;
         $this->importDirectory = $importDirectory;
+        $this->productStockQuantitySourceBuilder = $productStockQuantitySourceBuilder;
     }
 
     /**
      * @param Queue $commandQueue
      * @param Directory $importDirectory
+     * @param ProductStockQuantitySourceBuilder $productStockQuantitySourceBuilder
      * @return CatalogImportApiRequestHandler
      * @throws CatalogImportDirectoryNotReadableException
      */
-    public static function create(Queue $commandQueue, Directory $importDirectory)
-    {
+    public static function create(
+        Queue $commandQueue,
+        Directory $importDirectory,
+        ProductStockQuantitySourceBuilder $productStockQuantitySourceBuilder
+    ) {
         if (!$importDirectory->isReadable()) {
             throw new CatalogImportDirectoryNotReadableException(
                 sprintf('%s is not readable.', $importDirectory->getPath())
             );
         }
 
-        return new self($commandQueue, $importDirectory);
+        return new self($commandQueue, $importDirectory, $productStockQuantitySourceBuilder);
     }
 
     /**
@@ -58,7 +72,13 @@ class MultipleProductStockQuantityApiRequestHandler extends ApiRequestHandler
     {
         $importFileContents = $this->getImportFileContents($request);
 
-        $command = new UpdateMultipleProductStockQuantityCommand($importFileContents);
+        $productStockQuantitySourceArray = [];
+        $stockNodesXml = (new XPathParser($importFileContents))->getXmlNodesRawXmlArrayByXPath('/*/stock');
+        foreach ($stockNodesXml as $xml) {
+            $productStockQuantitySourceArray[] = $this->productStockQuantitySourceBuilder->createFromXml($xml);
+        }
+
+        $command = new UpdateMultipleProductStockQuantityCommand($productStockQuantitySourceArray);
         $this->commandQueue->add($command);
 
         return json_encode('OK');

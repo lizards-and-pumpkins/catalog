@@ -5,7 +5,6 @@ namespace Brera\Product;
 use Brera\Api\ApiRequestHandler;
 use Brera\Http\HttpRequest;
 use Brera\Queue\Queue;
-use Brera\TestFileFixtureTrait;
 use Brera\Utils\Directory;
 
 /**
@@ -14,11 +13,10 @@ use Brera\Utils\Directory;
  * @uses   \Brera\DefaultHttpResponse
  * @uses   \Brera\Http\HttpHeaders
  * @uses   \Brera\Product\UpdateMultipleProductStockQuantityCommand
+ * @uses   \Brera\Utils\XPathParser
  */
 class MultipleProductStockQuantityApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    use TestFileFixtureTrait;
-
     /**
      * @var Queue|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -35,6 +33,11 @@ class MultipleProductStockQuantityApiRequestHandlerTest extends \PHPUnit_Framewo
     private $importDirectoryPath;
 
     /**
+     * @var ProductStockQuantitySourceBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockProductStockQuantitySourceBuilder;
+
+    /**
      * @var MultipleProductStockQuantityApiRequestHandler
      */
     private $apiRequestHandler;
@@ -46,8 +49,7 @@ class MultipleProductStockQuantityApiRequestHandlerTest extends \PHPUnit_Framewo
 
     protected function setUp()
     {
-        $this->importDirectoryPath = $this->getUniqueTempDir();
-        $this->createFixtureDirectory($this->importDirectoryPath);
+        $this->importDirectoryPath = __DIR__ . '/../../../shared-fixture';
 
         $this->mockCommandQueue = $this->getMock(Queue::class);
 
@@ -55,9 +57,18 @@ class MultipleProductStockQuantityApiRequestHandlerTest extends \PHPUnit_Framewo
         $this->mockDirectory->method('isReadable')->willReturn(true);
         $this->mockDirectory->method('getPath')->willReturn($this->importDirectoryPath);
 
+        $this->mockProductStockQuantitySourceBuilder = $this->getMock(
+            ProductStockQuantitySourceBuilder::class,
+            [],
+            [],
+            '',
+            false
+        );
+
         $this->apiRequestHandler = MultipleProductStockQuantityApiRequestHandler::create(
             $this->mockCommandQueue,
-            $this->mockDirectory
+            $this->mockDirectory,
+            $this->mockProductStockQuantitySourceBuilder
         );
 
         $this->mockRequest = $this->getMock(HttpRequest::class, [], [], '', false);
@@ -80,7 +91,11 @@ class MultipleProductStockQuantityApiRequestHandlerTest extends \PHPUnit_Framewo
 
         $this->setExpectedException(CatalogImportDirectoryNotReadableException::class);
 
-        MultipleProductStockQuantityApiRequestHandler::create($this->mockCommandQueue, $mockDirectory);
+        MultipleProductStockQuantityApiRequestHandler::create(
+            $this->mockCommandQueue,
+            $mockDirectory,
+            $this->mockProductStockQuantitySourceBuilder
+        );
     }
 
     public function testExceptionIsThrownIfCatalogImportFileNameIsNotFoundInRequestBody()
@@ -98,8 +113,7 @@ class MultipleProductStockQuantityApiRequestHandlerTest extends \PHPUnit_Framewo
 
     public function testUpdateMultipleProductStockQuantityCommandIsEmitted()
     {
-        $fileName = 'foo';
-        $this->createFixtureFile($this->importDirectoryPath . '/' . $fileName, '');
+        $fileName = 'stock.xml';
         $this->mockRequest->method('getRawBody')->willReturn(json_encode(['fileName' => $fileName]));
 
         $this->mockCommandQueue->expects($this->once())

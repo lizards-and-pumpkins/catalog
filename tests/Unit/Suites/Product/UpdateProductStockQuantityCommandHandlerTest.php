@@ -7,8 +7,6 @@ use Brera\Queue\Queue;
 
 /**
  * @covers \Brera\Product\UpdateProductStockQuantityCommandHandler
- * @uses   \Brera\Product\UpdateProductStockQuantityCommand
- * @uses   \Brera\Product\ProductId
  * @uses   \Brera\Product\ProductStockQuantityUpdatedDomainEvent
  */
 class UpdateProductStockQuantityCommandHandlerTest extends \PHPUnit_Framework_TestCase
@@ -24,11 +22,6 @@ class UpdateProductStockQuantityCommandHandlerTest extends \PHPUnit_Framework_Te
     private $mockDomainEventQueue;
 
     /**
-     * @var ProductStockQuantitySourceBuilder|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $mockProductStockQuantitySourceBuilder;
-
-    /**
      * @var UpdateProductStockQuantityCommandHandler
      */
     private $commandHandler;
@@ -37,18 +30,10 @@ class UpdateProductStockQuantityCommandHandlerTest extends \PHPUnit_Framework_Te
     {
         $this->mockCommand = $this->getMock(UpdateProductStockQuantityCommand::class, [], [], '', false);
         $this->mockDomainEventQueue = $this->getMock(Queue::class);
-        $this->mockProductStockQuantitySourceBuilder = $this->getMock(
-            ProductStockQuantitySourceBuilder::class,
-            [],
-            [],
-            '',
-            false
-        );
 
         $this->commandHandler = new UpdateProductStockQuantityCommandHandler(
             $this->mockCommand,
-            $this->mockDomainEventQueue,
-            $this->mockProductStockQuantitySourceBuilder
+            $this->mockDomainEventQueue
         );
     }
 
@@ -59,13 +44,11 @@ class UpdateProductStockQuantityCommandHandlerTest extends \PHPUnit_Framework_Te
 
     public function testDomainEventCommandIsPutIntoCommandQueue()
     {
-        $stubSku = $this->getMock(Sku::class);
+        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
+        $stubProductStockQuantitySource = $this->getMock(ProductStockQuantitySource::class, [], [], '', false);
 
-        $mockProductStockQuantitySource = $this->getMock(ProductStockQuantitySource::class, [], [], '', false);
-        $mockProductStockQuantitySource->method('getSku')->willReturn($stubSku);
-
-        $this->mockProductStockQuantitySourceBuilder->method('createFromXml')
-            ->willReturn($mockProductStockQuantitySource);
+        $this->mockCommand->method('getProductId')->willReturn($stubProductId);
+        $this->mockCommand->method('getProductStockQuantitySource')->willReturn($stubProductStockQuantitySource);
 
         $this->mockDomainEventQueue->expects($this->once())
             ->method('add')
