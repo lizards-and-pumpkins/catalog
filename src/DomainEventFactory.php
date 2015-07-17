@@ -12,8 +12,8 @@ use Brera\Product\ProductImportDomainEvent;
 use Brera\Product\ProductImportDomainEventHandler;
 use Brera\Product\ProductListingSavedDomainEvent;
 use Brera\Product\ProductListingSavedDomainEventHandler;
-use Brera\Product\ProductStockQuantityChangedDomainEvent;
-use Brera\Product\ProductStockQuantityChangedDomainEventHandler;
+use Brera\Product\ProductStockQuantityUpdatedDomainEvent;
+use Brera\Product\ProductStockQuantityUpdatedDomainEventHandler;
 
 interface DomainEventFactory
 {
@@ -48,10 +48,10 @@ interface DomainEventFactory
     public function createProductListingSavedDomainEventHandler(ProductListingSavedDomainEvent $event);
 
     /**
-     * @param ProductStockQuantityChangedDomainEvent $event
-     * @return ProductStockQuantityChangedDomainEventHandler
+     * @param ProductStockQuantityUpdatedDomainEvent $event
+     * @return ProductStockQuantityUpdatedDomainEventHandler
      */
-    public function createProductStockQuantityChangedDomainEventHandler(ProductStockQuantityChangedDomainEvent $event);
+    public function createProductStockQuantityUpdatedDomainEventHandler(ProductStockQuantityUpdatedDomainEvent $event);
 
     /**
      * @param ContentBlockWasUpdatedDomainEvent $event

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Brera\Http;
 
 /**
@@ -66,8 +65,7 @@ class HttpHeadersTest extends \PHPUnit_Framework_TestCase
      */
     public function testExceptionIsThrownDuringAttemptToCreateHeadersFromArrayContainingNonStringKeysOrValues(
         array $malformedHeadersSource
-    )
-    {
+    ) {
         $this->setExpectedException(InvalidHttpHeadersException::class);
         HttpHeaders::fromArray($malformedHeadersSource);
     }

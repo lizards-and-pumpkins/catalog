@@ -33,6 +33,7 @@ use Brera\Http\HttpUrl;
  * @uses   \Brera\Product\ProductListingRequestHandler
  * @uses   \Brera\Product\ProductListingRequestHandlerBuilder
  * @uses   \Brera\Product\ProductSnippetKeyGenerator
+ * @uses   \Brera\Product\MultipleProductStockQuantityApiRequestHandler
  * @uses   \Brera\Http\ResourceNotFoundRouter
  * @uses   \Brera\Http\ResourceNotFoundRequestHandler
  * @uses   \Brera\Http\HttpRouterChain
@@ -44,6 +45,7 @@ use Brera\Http\HttpUrl;
  * @uses   \Brera\Api\ApiRouter
  * @uses   \Brera\Api\ApiRequestHandlerChain
  * @uses   \Brera\DataPool\DataPoolReader
+ * @uses   \Brera\Utils\Directory
  */
 class SampleWebFrontTest extends \PHPUnit_Framework_TestCase
 {

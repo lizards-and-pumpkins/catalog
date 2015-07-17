@@ -22,12 +22,14 @@ use Brera\Product\ProductListingRouter;
  * @uses   \Brera\Product\ProductListingRouter
  * @uses   \Brera\Product\ProductListingRequestHandlerBuilder
  * @uses   \Brera\Product\ProductSnippetKeyGenerator
+ * @uses   \Brera\Product\MultipleProductStockQuantityApiRequestHandler
  * @uses   \Brera\DataPool\DataPoolReader
  * @uses   \Brera\Api\ApiRouter
  * @uses   \Brera\Api\ApiRequestHandlerChain
  * @uses   \Brera\SnippetKeyGeneratorLocator
  * @uses   \Brera\GenericSnippetKeyGenerator
  * @uses   \Brera\PageBuilder
+ * @uses   \Brera\Utils\Directory
  */
 class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
 {

@@ -2,6 +2,7 @@
 
 namespace Brera\Product;
 
+use Brera\Api\ApiRequestHandler;
 use Brera\Http\HttpRequest;
 use Brera\Queue\Queue;
 use Brera\TestFileFixtureTrait;
@@ -49,6 +50,11 @@ class CatalogImportApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->mockRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+    }
+
+    public function testClassIsDerivedFromApiRequestHandler()
+    {
+        $this->assertInstanceOf(ApiRequestHandler::class, $this->apiRequestHandler);
     }
 
     public function testCanProcessMethodAlwaysReturnsTrue()

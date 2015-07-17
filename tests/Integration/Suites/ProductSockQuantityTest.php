@@ -2,7 +2,10 @@
 
 namespace Brera;
 
-use Brera\Product\ProductStockQuantityChangedDomainEvent;
+use Brera\Http\HttpHeaders;
+use Brera\Http\HttpRequest;
+use Brera\Http\HttpRequestBody;
+use Brera\Http\HttpUrl;
 
 class ProductSockQuantityTest extends AbstractIntegrationTest
 {
@@ -18,18 +21,23 @@ class ProductSockQuantityTest extends AbstractIntegrationTest
 
     public function testProductStockQuantitySnippetIsWrittenIntoDataPool()
     {
-        $xml = <<<EOX
-<?xml version="1.0"?>
-<sockNode website="ru" language="en_US">
-    <sku>foo</sku>
-    <quantity>200</quantity>
-</sockNode>
-EOX;
-        $queue = $this->factory->getEventQueue();
-        $queue->add(new ProductStockQuantityChangedDomainEvent($xml));
+        $httpUrl = HttpUrl::fromString('http://example.com/api/multiple_product_stock_quantity');
+        $httpHeaders = HttpHeaders::fromArray([]);
+        $httpRequestBodyString = json_encode(['fileName' => 'stock.xml']);
+        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
+        $request = HttpRequest::fromParameters(HttpRequest::HTTP_PUT_REQUEST, $httpUrl, $httpHeaders, $httpRequestBody);
 
-        $this->processDomainEvents(1);
-        $this->processCommands(1);
+        $domainCommandQueue = $this->factory->getCommandQueue();
+        $this->assertEquals(0, $domainCommandQueue->count());
+
+        $website = new SampleWebFront($request, $this->factory);
+        $response = $website->runWithoutSendingResponse();
+
+        $this->assertEquals('"OK"', $response->getBody());
+        $this->assertEquals(1, $domainCommandQueue->count());
+
+        $this->processCommands(3);
+        $this->processDomainEvents(2);
 
         $logger = $this->factory->getLogger();
         $this->failIfMessagesWhereLogged($logger);
@@ -38,12 +46,16 @@ EOX;
         $context = $contextSource->getAllAvailableContexts()[1];
 
         $snippetKeyGenerator = $this->factory->createProductStockQuantityRendererSnippetKeyGenerator();
-        $snippetKey = $snippetKeyGenerator->getKeyForContext($context, ['product_id' => 'foo']);
+        $snippet1Key = $snippetKeyGenerator->getKeyForContext($context, ['product_id' => 'foo']);
+        $snippet2Key = $snippetKeyGenerator->getKeyForContext($context, ['product_id' => 'bar']);
 
         $dataPoolReader = $this->factory->createDataPoolReader();
-        $result = $dataPoolReader->getSnippet($snippetKey);
 
-        $this->assertEquals(200, $result);
+        $snippet1Content = $dataPoolReader->getSnippet($snippet1Key);
+        $this->assertEquals(200, $snippet1Content);
+
+        $snippet2Content = $dataPoolReader->getSnippet($snippet2Key);
+        $this->assertEquals(0, $snippet2Content);
     }
 
     /**

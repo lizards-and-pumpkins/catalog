@@ -42,13 +42,15 @@ use Brera\Product\ProductSnippetKeyGenerator;
 use Brera\Product\ProductSourceBuilder;
 use Brera\Product\ProductSourceDetailViewSnippetRenderer;
 use Brera\Product\ProductSourceInListingSnippetRenderer;
-use Brera\Product\ProductStockQuantityChangedDomainEvent;
-use Brera\Product\ProductStockQuantityChangedDomainEventHandler;
+use Brera\Product\ProductStockQuantityUpdatedDomainEvent;
+use Brera\Product\ProductStockQuantityUpdatedDomainEventHandler;
 use Brera\Product\ProductStockQuantityProjector;
 use Brera\Product\ProductStockQuantitySnippetRenderer;
 use Brera\Product\ProductStockQuantitySourceBuilder;
-use Brera\Product\ProjectProductStockQuantitySnippetCommand;
-use Brera\Product\ProjectProductStockQuantitySnippetCommandHandler;
+use Brera\Product\UpdateMultipleProductStockQuantityCommand;
+use Brera\Product\UpdateMultipleProductStockQuantityCommandHandler;
+use Brera\Product\UpdateProductStockQuantityCommand;
+use Brera\Product\UpdateProductStockQuantityCommandHandler;
 use Brera\Queue\Queue;
 use Brera\Renderer\BlockStructure;
 
@@ -647,17 +649,28 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @param ProjectProductStockQuantitySnippetCommand $command
-     * @return ProjectProductStockQuantitySnippetCommandHandler
+     * @param UpdateProductStockQuantityCommand $command
+     * @return UpdateProductStockQuantityCommandHandler
      */
-    public function createProjectProductStockQuantitySnippetCommandHandler(
-        ProjectProductStockQuantitySnippetCommand $command
-    ) {
-        return new ProjectProductStockQuantitySnippetCommandHandler(
+    public function createUpdateProductStockQuantityCommandHandler(UpdateProductStockQuantityCommand $command)
+    {
+        return new UpdateProductStockQuantityCommandHandler(
             $command,
-            $this->getMasterFactory()->getProductStockQuantitySourceBuilder(),
-            $this->getMasterFactory()->createContextSource(),
-            $this->getMasterFactory()->getProductStockQuantityProjector()
+            $this->getMasterFactory()->getEventQueue(),
+            $this->getMasterFactory()->getProductStockQuantitySourceBuilder()
+        );
+    }
+
+    /**
+     * @param UpdateMultipleProductStockQuantityCommand $command
+     * @return UpdateProductStockQuantityCommandHandler
+     */
+    public function createUpdateMultipleProductStockQuantityCommandHandler(
+        UpdateMultipleProductStockQuantityCommand $command
+    ) {
+        return new UpdateMultipleProductStockQuantityCommandHandler(
+            $command,
+            $this->getMasterFactory()->getCommandQueue()
         );
     }
 
@@ -755,14 +768,15 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @param ProductStockQuantityChangedDomainEvent $event
-     * @return ProductStockQuantityChangedDomainEventHandler
+     * @param ProductStockQuantityUpdatedDomainEvent $event
+     * @return ProductStockQuantityUpdatedDomainEventHandler
      */
-    public function createProductStockQuantityChangedDomainEventHandler(ProductStockQuantityChangedDomainEvent $event)
+    public function createProductStockQuantityUpdatedDomainEventHandler(ProductStockQuantityUpdatedDomainEvent $event)
     {
-        return new ProductStockQuantityChangedDomainEventHandler(
+        return new ProductStockQuantityUpdatedDomainEventHandler(
             $event,
-            $this->getMasterFactory()->getCommandQueue()
+            $this->getMasterFactory()->createContextSource(),
+            $this->getMasterFactory()->getProductStockQuantityProjector()
         );
     }
 

@@ -24,9 +24,10 @@ class ProductStockQuantitySourceBuilder
         $quantityString = $this->getQuantityStringFromDomNodeArray($quantityNodes);
 
         $sku = SampleSku::fromString($skuString);
+        $productId = ProductId::fromSku($sku);
         $quantity = ProductStockQuantity::fromString($quantityString);
 
-        return new ProductStockQuantitySource($sku, $contextData, $quantity);
+        return new ProductStockQuantitySource($productId, $contextData, $quantity);
     }
 
     /**

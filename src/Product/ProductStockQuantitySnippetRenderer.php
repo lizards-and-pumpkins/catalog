@@ -57,7 +57,7 @@ class ProductStockQuantitySnippetRenderer implements SnippetRenderer
      */
     private function getSnippetKey(ProductStockQuantitySource $productStockQuantitySource)
     {
-        $productId = ProductId::fromSku($productStockQuantitySource->getSku());
+        $productId = $productStockQuantitySource->getProductId();
         $contextData = $productStockQuantitySource->getContextData();
         $context = $this->contextBuilder->getContext($contextData);
 
