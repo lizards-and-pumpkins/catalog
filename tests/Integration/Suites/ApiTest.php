@@ -14,7 +14,7 @@ class ApiTest extends AbstractIntegrationTest
     {
         $factory = $this->prepareIntegrationTestMasterFactory();
 
-        $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
+        $httpUrl = HttpUrl::fromString('http://example.com/api/v1/catalog_import');
         $httpHeaders = HttpHeaders::fromArray([]);
         $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);

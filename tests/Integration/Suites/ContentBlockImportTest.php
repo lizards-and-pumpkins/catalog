@@ -23,7 +23,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
     {
         $contentBlockContent = 'bar';
 
-        $httpUrl = HttpUrl::fromString('http://example.com/api/content_blocks/foo');
+        $httpUrl = HttpUrl::fromString('http://example.com/api/v1/content_blocks/foo');
         $httpHeaders = HttpHeaders::fromArray([]);
         $httpRequestBodyString = json_encode([
             'content' => $contentBlockContent,

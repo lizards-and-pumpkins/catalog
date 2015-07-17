@@ -34,8 +34,17 @@ class ApiRouter implements HttpRouter
             return null;
         }
 
+        $apiVersionUrlToken = array_shift($urlToken);
+        if (!preg_match('/^v(\d+)$/', $apiVersionUrlToken, $matchedVersion)) {
+            return null;
+        }
+
         $requestHandlerCode = array_shift($urlToken);
-        $apiRequestHandler = $this->requestHandlerChain->getApiRequestHandler($requestHandlerCode);
+        $apiRequestHandler = $this->requestHandlerChain->getApiRequestHandler(
+            $requestHandlerCode,
+            $request->getMethod(),
+            (int) $matchedVersion[1]
+        );
 
         if ($apiRequestHandler->canProcess($request)) {
             return $apiRequestHandler;

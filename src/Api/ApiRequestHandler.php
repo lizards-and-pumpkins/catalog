@@ -3,7 +3,6 @@
 namespace Brera\Api;
 
 use Brera\DefaultHttpResponse;
-use Brera\Http\HttpHeaders;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
 

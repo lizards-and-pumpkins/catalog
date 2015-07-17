@@ -5,40 +5,26 @@ namespace Brera\Product;
 use Brera\Api\ApiRequestHandler;
 use Brera\Http\HttpRequest;
 use Brera\Queue\Queue;
-use Brera\Utils\Directory;
+use Brera\TestFileFixtureTrait;
 
 /**
- * @covers \Brera\Product\MultipleProductStockQuantityApiRequestHandler
+ * @covers \Brera\Product\CatalogImportApiV1PutRequestHandler
  * @uses   \Brera\Api\ApiRequestHandler
  * @uses   \Brera\DefaultHttpResponse
  * @uses   \Brera\Http\HttpHeaders
- * @uses   \Brera\Product\UpdateMultipleProductStockQuantityCommand
- * @uses   \Brera\Utils\XPathParser
+ * @uses   \Brera\Product\CatalogImportDomainEvent
  */
-class MultipleProductStockQuantityApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
+class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
+    use TestFileFixtureTrait;
+
     /**
      * @var Queue|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockCommandQueue;
+    private $mockDomainEventQueue;
 
     /**
-     * @var Directory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $mockDirectory;
-
-    /**
-     * @var string
-     */
-    private $importDirectoryPath;
-
-    /**
-     * @var ProductStockQuantitySourceBuilder|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $mockProductStockQuantitySourceBuilder;
-
-    /**
-     * @var MultipleProductStockQuantityApiRequestHandler
+     * @var CatalogImportApiV1PutRequestHandler
      */
     private $requestHandler;
 
@@ -47,28 +33,20 @@ class MultipleProductStockQuantityApiRequestHandlerTest extends \PHPUnit_Framewo
      */
     private $mockRequest;
 
+    /**
+     * @var string
+     */
+    private $importDirectoryPath;
+
     protected function setUp()
     {
-        $this->importDirectoryPath = __DIR__ . '/../../../shared-fixture';
+        $this->importDirectoryPath = $this->getUniqueTempDir();
+        $this->createFixtureDirectory($this->importDirectoryPath);
 
-        $this->mockCommandQueue = $this->getMock(Queue::class);
-
-        $this->mockDirectory = $this->getMock(Directory::class, [], [], '', false);
-        $this->mockDirectory->method('isReadable')->willReturn(true);
-        $this->mockDirectory->method('getPath')->willReturn($this->importDirectoryPath);
-
-        $this->mockProductStockQuantitySourceBuilder = $this->getMock(
-            ProductStockQuantitySourceBuilder::class,
-            [],
-            [],
-            '',
-            false
-        );
-
-        $this->requestHandler = MultipleProductStockQuantityApiRequestHandler::create(
-            $this->mockCommandQueue,
-            $this->mockDirectory,
-            $this->mockProductStockQuantitySourceBuilder
+        $this->mockDomainEventQueue = $this->getMock(Queue::class);
+        $this->requestHandler = CatalogImportApiV1PutRequestHandler::create(
+            $this->mockDomainEventQueue,
+            $this->importDirectoryPath
         );
 
         $this->mockRequest = $this->getMock(HttpRequest::class, [], [], '', false);
@@ -93,16 +71,8 @@ class MultipleProductStockQuantityApiRequestHandlerTest extends \PHPUnit_Framewo
 
     public function testExceptionIsThrownIfImportDirectoryIsNotReadable()
     {
-        $mockDirectory = $this->getMock(Directory::class, [], [], '', false);
-        $mockDirectory->method('isReadable')->willReturn(false);
-
         $this->setExpectedException(CatalogImportDirectoryNotReadableException::class);
-
-        MultipleProductStockQuantityApiRequestHandler::create(
-            $this->mockCommandQueue,
-            $mockDirectory,
-            $this->mockProductStockQuantitySourceBuilder
-        );
+        CatalogImportApiV1PutRequestHandler::create($this->mockDomainEventQueue, '/some-not-existing-directory');
     }
 
     public function testExceptionIsThrownIfCatalogImportFileNameIsNotFoundInRequestBody()
@@ -118,14 +88,17 @@ class MultipleProductStockQuantityApiRequestHandlerTest extends \PHPUnit_Framewo
         $this->requestHandler->process($this->mockRequest);
     }
 
-    public function testUpdateMultipleProductStockQuantityCommandIsEmitted()
+    public function testCatalogImportDomainEventIsEmitted()
     {
-        $fileName = 'stock.xml';
+        $fileName = 'foo';
+
+        $this->createFixtureFile($this->importDirectoryPath . '/' . $fileName, '');
+
         $this->mockRequest->method('getRawBody')->willReturn(json_encode(['fileName' => $fileName]));
 
-        $this->mockCommandQueue->expects($this->once())
+        $this->mockDomainEventQueue->expects($this->once())
             ->method('add')
-            ->with($this->isInstanceOf(UpdateMultipleProductStockQuantityCommand::class));
+            ->with($this->isInstanceOf(CatalogImportDomainEvent::class));
 
         $response = $this->requestHandler->process($this->mockRequest);
 

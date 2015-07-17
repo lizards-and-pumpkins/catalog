@@ -8,7 +8,7 @@ use Brera\Queue\Queue;
 use Brera\Utils\Directory;
 use Brera\Utils\XPathParser;
 
-class MultipleProductStockQuantityApiRequestHandler extends ApiRequestHandler
+class MultipleProductStockQuantityApiV1PutRequestHandler extends ApiRequestHandler
 {
     /**
      * @var Queue
@@ -39,7 +39,7 @@ class MultipleProductStockQuantityApiRequestHandler extends ApiRequestHandler
      * @param Queue $commandQueue
      * @param Directory $importDirectory
      * @param ProductStockQuantitySourceBuilder $productStockQuantitySourceBuilder
-     * @return CatalogImportApiRequestHandler
+     * @return CatalogImportApiV1PutRequestHandler
      * @throws CatalogImportDirectoryNotReadableException
      */
     public static function create(

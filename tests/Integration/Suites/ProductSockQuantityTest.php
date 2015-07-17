@@ -21,7 +21,7 @@ class ProductSockQuantityTest extends AbstractIntegrationTest
 
     public function testProductStockQuantitySnippetIsWrittenIntoDataPool()
     {
-        $httpUrl = HttpUrl::fromString('http://example.com/api/multiple_product_stock_quantity');
+        $httpUrl = HttpUrl::fromString('http://example.com/api/v1/multiple_product_stock_quantity');
         $httpHeaders = HttpHeaders::fromArray([]);
         $httpRequestBodyString = json_encode(['fileName' => 'stock.xml']);
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);

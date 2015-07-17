@@ -3,8 +3,8 @@
 namespace Brera;
 
 use Brera\Api\ApiRouter;
-use Brera\Content\ContentBlocksApiRequestHandler;
-use Brera\Product\CatalogImportApiRequestHandler;
+use Brera\Content\ContentBlocksApiV1PutRequestHandler;
+use Brera\Product\CatalogImportApiV1PutRequestHandler;
 use Brera\Product\ProductDetailViewRouter;
 use Brera\Product\ProductListingRouter;
 
@@ -15,15 +15,15 @@ use Brera\Product\ProductListingRouter;
  * @uses   \Brera\SampleMasterFactory
  * @uses   \Brera\IntegrationTestFactory
  * @uses   \Brera\CommonFactory
- * @uses   \Brera\Content\ContentBlocksApiRequestHandler
+ * @uses   \Brera\Content\ContentBlocksApiV1PutRequestHandler
  * @uses   \Brera\Content\ContentBlockSnippetKeyGenerator
- * @uses   \Brera\Product\CatalogImportApiRequestHandler
+ * @uses   \Brera\Product\CatalogImportApiV1PutRequestHandler
  * @uses   \Brera\Product\ProductDetailViewRouter
  * @uses   \Brera\Product\ProductDetailViewRequestHandlerBuilder
  * @uses   \Brera\Product\ProductListingRouter
  * @uses   \Brera\Product\ProductListingRequestHandlerBuilder
  * @uses   \Brera\Product\ProductSnippetKeyGenerator
- * @uses   \Brera\Product\MultipleProductStockQuantityApiRequestHandler
+ * @uses   \Brera\Product\MultipleProductStockQuantityApiV1PutRequestHandler
  * @uses   \Brera\DataPool\DataPoolReader
  * @uses   \Brera\Api\ApiRouter
  * @uses   \Brera\Api\ApiRequestHandlerChain
@@ -51,13 +51,13 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCatalogImportApiRequestHandlerIsReturned()
     {
         $result = $this->frontendFactory->createCatalogImportApiRequestHandler();
-        $this->assertInstanceOf(CatalogImportApiRequestHandler::class, $result);
+        $this->assertInstanceOf(CatalogImportApiV1PutRequestHandler::class, $result);
     }
 
     public function testContentBlocksApiRequestHandlerIsReturned()
     {
         $result = $this->frontendFactory->createContentBlocksApiRequestHandler();
-        $this->assertInstanceOf(ContentBlocksApiRequestHandler::class, $result);
+        $this->assertInstanceOf(ContentBlocksApiV1PutRequestHandler::class, $result);
     }
 
     public function testApiRouterIsReturned()

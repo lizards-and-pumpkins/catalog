@@ -18,7 +18,7 @@ use Brera\Http\HttpUrl;
  * @uses   \Brera\MasterFactoryTrait
  * @uses   \Brera\FrontendFactory
  * @uses   \Brera\CommonFactory
- * @uses   \Brera\Content\ContentBlocksApiRequestHandler
+ * @uses   \Brera\Content\ContentBlocksApiV1PutRequestHandler
  * @uses   \Brera\Content\ContentBlockSnippetKeyGenerator
  * @uses   \Brera\IntegrationTestFactory
  * @uses   \Brera\DataVersion
@@ -26,7 +26,7 @@ use Brera\Http\HttpUrl;
  * @uses   \Brera\SampleUrlPathKeyGenerator
  * @uses   \Brera\SnippetKeyGeneratorLocator
  * @uses   \Brera\GenericSnippetKeyGenerator
- * @uses   \Brera\Product\CatalogImportApiRequestHandler
+ * @uses   \Brera\Product\CatalogImportApiV1PutRequestHandler
  * @uses   \Brera\Product\ProductDetailViewRouter
  * @uses   \Brera\Product\ProductDetailViewRequestHandler
  * @uses   \Brera\Product\ProductDetailViewRequestHandlerBuilder
@@ -34,7 +34,7 @@ use Brera\Http\HttpUrl;
  * @uses   \Brera\Product\ProductListingRequestHandler
  * @uses   \Brera\Product\ProductListingRequestHandlerBuilder
  * @uses   \Brera\Product\ProductSnippetKeyGenerator
- * @uses   \Brera\Product\MultipleProductStockQuantityApiRequestHandler
+ * @uses   \Brera\Product\MultipleProductStockQuantityApiV1PutRequestHandler
  * @uses   \Brera\Http\ResourceNotFoundRouter
  * @uses   \Brera\Http\ResourceNotFoundRequestHandler
  * @uses   \Brera\Http\HttpRouterChain

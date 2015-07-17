@@ -7,7 +7,7 @@ use Brera\Http\HttpRequest;
 use Brera\Queue\Queue;
 
 /**
- * @covers \Brera\Content\ContentBlocksApiRequestHandler
+ * @covers \Brera\Content\ContentBlocksApiV1PutRequestHandler
  * @uses   \Brera\Api\ApiRequestHandler
  * @uses   \Brera\Content\ContentBlockId
  * @uses   \Brera\Content\ContentBlockSource
@@ -15,7 +15,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\DefaultHttpResponse
  * @uses   \Brera\Http\HttpHeaders
  */
-class ContentBlocksApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
+class ContentBlocksApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Queue|\PHPUnit_Framework_MockObject_MockObject
@@ -23,7 +23,7 @@ class ContentBlocksApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
     private $mockCommandQueue;
 
     /**
-     * @var ContentBlocksApiRequestHandler
+     * @var ContentBlocksApiV1PutRequestHandler
      */
     private $requestHandler;
 
@@ -35,7 +35,7 @@ class ContentBlocksApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->mockCommandQueue = $this->getMock(Queue::class);
-        $this->requestHandler = new ContentBlocksApiRequestHandler($this->mockCommandQueue);
+        $this->requestHandler = new ContentBlocksApiV1PutRequestHandler($this->mockCommandQueue);
         $this->mockRequest = $this->getMock(HttpRequest::class, [], [], '', false);
     }
 
@@ -44,22 +44,14 @@ class ContentBlocksApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ApiRequestHandler::class, $this->requestHandler);
     }
 
-    public function testRequestCanNotBeProcessedIfMethodIsNotPut()
-    {
-        $this->mockRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->assertFalse($this->requestHandler->canProcess($this->mockRequest));
-    }
-
     public function testRequestCanNotBeProcessedIfUrlDoesNotContainContentBlockId()
     {
-        $this->mockRequest->method('getMethod')->willReturn(HttpRequest::METHOD_PUT);
         $this->mockRequest->method('getUrl')->willReturn('http://example.com/api/content_blocks');
         $this->assertFalse($this->requestHandler->canProcess($this->mockRequest));
     }
 
-    public function testRequestCanBeProcessedIfValid()
+    public function testRequestCanBeProcessedIfUrlContainsBlockId()
     {
-        $this->mockRequest->method('getMethod')->willReturn(HttpRequest::METHOD_PUT);
         $this->mockRequest->method('getUrl')->willReturn('http://example.com/api/content_blocks/foo');
         $this->assertTrue($this->requestHandler->canProcess($this->mockRequest));
     }

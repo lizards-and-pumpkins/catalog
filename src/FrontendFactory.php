@@ -4,8 +4,9 @@ namespace Brera;
 
 use Brera\Api\ApiRequestHandlerChain;
 use Brera\Api\ApiRouter;
-use Brera\Content\ContentBlocksApiRequestHandler;
-use Brera\Product\CatalogImportApiRequestHandler;
+use Brera\Content\ContentBlocksApiV1PutRequestHandler;
+use Brera\Http\HttpRequest;
+use Brera\Product\CatalogImportApiV1PutRequestHandler;
 use Brera\Product\ProductDetailViewInContextSnippetRenderer;
 use Brera\Product\ProductDetailViewRequestHandlerBuilder;
 use Brera\Product\ProductDetailViewRouter;
@@ -13,7 +14,7 @@ use Brera\Product\ProductInListingInContextSnippetRenderer;
 use Brera\Product\ProductListingRequestHandlerBuilder;
 use Brera\Product\ProductListingRouter;
 use Brera\Product\ProductListingSnippetRenderer;
-use Brera\Product\MultipleProductStockQuantityApiRequestHandler;
+use Brera\Product\MultipleProductStockQuantityApiV1PutRequestHandler;
 use Brera\Utils\Directory;
 
 class FrontendFactory implements Factory
@@ -40,47 +41,53 @@ class FrontendFactory implements Factory
     {
         $requestHandlerChain->register(
             'catalog_import',
+            HttpRequest::METHOD_PUT,
+            1,
             $this->getMasterFactory()->createCatalogImportApiRequestHandler()
         );
         
         $requestHandlerChain->register(
             'content_blocks',
+            HttpRequest::METHOD_PUT,
+            1,
             $this->getMasterFactory()->createContentBlocksApiRequestHandler()
         );
 
         $requestHandlerChain->register(
             'multiple_product_stock_quantity',
+            HttpRequest::METHOD_PUT,
+            1,
             $this->getMasterFactory()->createMultipleProductStockQuantityApiRequestHandler()
         );
     }
 
     /**
-     * @return CatalogImportApiRequestHandler
+     * @return CatalogImportApiV1PutRequestHandler
      */
     public function createCatalogImportApiRequestHandler()
     {
-        return CatalogImportApiRequestHandler::create(
+        return CatalogImportApiV1PutRequestHandler::create(
             $this->getMasterFactory()->getEventQueue(),
             $this->getCatalogImportDirectoryConfig()
         );
     }
 
     /**
-     * @return ContentBlocksApiRequestHandler
+     * @return ContentBlocksApiV1PutRequestHandler
      */
     public function createContentBlocksApiRequestHandler()
     {
-        return new ContentBlocksApiRequestHandler(
+        return new ContentBlocksApiV1PutRequestHandler(
             $this->getMasterFactory()->getCommandQueue()
         );
     }
 
     /**
-     * @return MultipleProductStockQuantityApiRequestHandler
+     * @return MultipleProductStockQuantityApiV1PutRequestHandler
      */
     public function createMultipleProductStockQuantityApiRequestHandler()
     {
-        return MultipleProductStockQuantityApiRequestHandler::create(
+        return MultipleProductStockQuantityApiV1PutRequestHandler::create(
             $this->getMasterFactory()->getCommandQueue(),
             Directory::fromPath($this->getCatalogImportDirectoryConfig()),
             $this->getMasterFactory()->getProductStockQuantitySourceBuilder()

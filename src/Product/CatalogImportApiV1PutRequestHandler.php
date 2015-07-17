@@ -6,7 +6,7 @@ use Brera\Api\ApiRequestHandler;
 use Brera\Http\HttpRequest;
 use Brera\Queue\Queue;
 
-class CatalogImportApiRequestHandler extends ApiRequestHandler
+class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
 {
     /**
      * @var Queue
@@ -31,7 +31,7 @@ class CatalogImportApiRequestHandler extends ApiRequestHandler
     /**
      * @param Queue $domainEventQueue
      * @param string $importDirectoryPath
-     * @return CatalogImportApiRequestHandler
+     * @return CatalogImportApiV1PutRequestHandler
      * @throws CatalogImportDirectoryNotReadableException
      */
     public static function create(Queue $domainEventQueue, $importDirectoryPath)

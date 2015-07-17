@@ -6,7 +6,7 @@ use Brera\Api\ApiRequestHandler;
 use Brera\Http\HttpRequest;
 use Brera\Queue\Queue;
 
-class ContentBlocksApiRequestHandler extends ApiRequestHandler
+class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
 {
     /**
      * @var Queue
@@ -24,15 +24,7 @@ class ContentBlocksApiRequestHandler extends ApiRequestHandler
      */
     public function canProcess(HttpRequest $request)
     {
-        if (HttpRequest::METHOD_PUT !== $request->getMethod()) {
-            return false;
-        }
-
-        if (null === $this->extractContentBlockIdFromUrl($request)) {
-            return false;
-        }
-
-        return true;
+        return null !== $this->extractContentBlockIdFromUrl($request);
     }
 
     /**

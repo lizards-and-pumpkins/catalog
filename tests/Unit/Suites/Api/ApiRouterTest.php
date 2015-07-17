@@ -58,6 +58,14 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($result);
     }
 
+    public function testNullIsReturnedIfVersionFormatIsInvalid()
+    {
+        $this->stubUrl->expects($this->once())->method('getPath')->willReturn('api/foo');
+        $result = $this->apiRouter->route($this->stubHttpRequest, $this->stubContext);
+
+        $this->assertNull($result);
+    }
+
     public function testNullIsReturnedIfApiRequestHandlerCanNotProcessRequest()
     {
         $stubApiRequestHandler = $this->getMock(HttpRequestHandler::class);
@@ -67,7 +75,7 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
             ->method('getApiRequestHandler')
             ->willReturn($stubApiRequestHandler);
 
-        $this->stubUrl->expects($this->once())->method('getPath')->willReturn('api/foo');
+        $this->stubUrl->expects($this->once())->method('getPath')->willReturn('api/v1/foo');
         $result = $this->apiRouter->route($this->stubHttpRequest, $this->stubContext);
 
         $this->assertNull($result);
@@ -82,7 +90,7 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
             ->method('getApiRequestHandler')
             ->willReturn($stubApiRequestHandler);
 
-        $this->stubUrl->expects($this->once())->method('getPath')->willReturn('api/foo');
+        $this->stubUrl->expects($this->once())->method('getPath')->willReturn('api/v1/foo');
         $result = $this->apiRouter->route($this->stubHttpRequest, $this->stubContext);
 
         $this->assertInstanceOf(HttpRequestHandler::class, $result);
