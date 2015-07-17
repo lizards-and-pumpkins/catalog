@@ -67,6 +67,7 @@ class ContentBlocksApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownIfContentBlockContentIsMissingInRequestBody()
     {
         $this->setExpectedException(ContentBlockContentIsMissingInRequestBodyException::class);
+        $this->mockRequest->method('getRawBody')->willReturn(json_encode([]));
         $this->requestHandler->process($this->mockRequest);
     }
 
