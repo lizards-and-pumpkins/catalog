@@ -4,7 +4,6 @@ namespace Brera\Product;
 
 use Brera\CommandHandler;
 use Brera\Queue\Queue;
-use Brera\Utils\XPathParser;
 
 class UpdateMultipleProductStockQuantityCommandHandler implements CommandHandler
 {
