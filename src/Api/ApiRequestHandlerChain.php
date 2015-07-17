@@ -17,7 +17,7 @@ class ApiRequestHandlerChain
 
     /**
      * @param string $code
-     * @return ApiRequestHandler|null
+     * @return ApiRequestHandler
      */
     public function getApiRequestHandler($code)
     {
