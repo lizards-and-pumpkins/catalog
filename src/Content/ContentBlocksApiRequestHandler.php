@@ -54,9 +54,9 @@ class ContentBlocksApiRequestHandler extends ApiRequestHandler
     }
 
     /**
-     * @param string $requestBody
+     * @param string[] $requestBody
      */
-    protected function validateRequestBody($requestBody)
+    protected function validateRequestBody(array $requestBody)
     {
         if (!isset($requestBody['content'])) {
             throw new ContentBlockContentIsMissingInRequestBodyException(
