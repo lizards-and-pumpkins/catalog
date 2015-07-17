@@ -33,8 +33,12 @@ class PageBuilder
      * @var Context
      */
     private $context;
-    
+
+    /**
+     * @var string[]
+     */
     private $keyGeneratorParams;
+
     /**
      * @var Logger
      */
@@ -87,6 +91,7 @@ class PageBuilder
             array_map([$this, 'tryToGetSnippetKey'], $snippetCodes)
         ));
     }
+
     /**
      * @param string $snippetCode
      * @return string
