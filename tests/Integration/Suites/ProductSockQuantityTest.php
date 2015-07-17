@@ -25,7 +25,7 @@ class ProductSockQuantityTest extends AbstractIntegrationTest
         $httpHeaders = HttpHeaders::fromArray([]);
         $httpRequestBodyString = json_encode(['fileName' => 'stock.xml']);
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
-        $request = HttpRequest::fromParameters(HttpRequest::HTTP_PUT_REQUEST, $httpUrl, $httpHeaders, $httpRequestBody);
+        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $domainCommandQueue = $this->factory->getCommandQueue();
         $this->assertEquals(0, $domainCommandQueue->count());

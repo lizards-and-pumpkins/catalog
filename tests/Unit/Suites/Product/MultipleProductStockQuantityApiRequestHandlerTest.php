@@ -40,7 +40,7 @@ class MultipleProductStockQuantityApiRequestHandlerTest extends \PHPUnit_Framewo
     /**
      * @var MultipleProductStockQuantityApiRequestHandler
      */
-    private $apiRequestHandler;
+    private $requestHandler;
 
     /**
      * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
@@ -65,7 +65,7 @@ class MultipleProductStockQuantityApiRequestHandlerTest extends \PHPUnit_Framewo
             false
         );
 
-        $this->apiRequestHandler = MultipleProductStockQuantityApiRequestHandler::create(
+        $this->requestHandler = MultipleProductStockQuantityApiRequestHandler::create(
             $this->mockCommandQueue,
             $this->mockDirectory,
             $this->mockProductStockQuantitySourceBuilder
@@ -76,12 +76,19 @@ class MultipleProductStockQuantityApiRequestHandlerTest extends \PHPUnit_Framewo
 
     public function testClassIsDerivedFromApiRequestHandler()
     {
-        $this->assertInstanceOf(ApiRequestHandler::class, $this->apiRequestHandler);
+        $this->assertInstanceOf(ApiRequestHandler::class, $this->requestHandler);
     }
 
-    public function testCanProcessMethodAlwaysReturnsTrue()
+    public function testRequestCanNotBeProcessedIfMethodIsNotPut()
     {
-        $this->assertTrue($this->apiRequestHandler->canProcess());
+        $this->mockRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
+        $this->assertFalse($this->requestHandler->canProcess($this->mockRequest));
+    }
+
+    public function testRequestCanBeProcessedIfMethodIsPut()
+    {
+        $this->mockRequest->method('getMethod')->willReturn(HttpRequest::METHOD_PUT);
+        $this->assertTrue($this->requestHandler->canProcess($this->mockRequest));
     }
 
     public function testExceptionIsThrownIfImportDirectoryIsNotReadable()
@@ -101,14 +108,14 @@ class MultipleProductStockQuantityApiRequestHandlerTest extends \PHPUnit_Framewo
     public function testExceptionIsThrownIfCatalogImportFileNameIsNotFoundInRequestBody()
     {
         $this->setExpectedException(CatalogImportFileNameNotFoundInRequestBodyException::class);
-        $this->apiRequestHandler->process($this->mockRequest);
+        $this->requestHandler->process($this->mockRequest);
     }
 
     public function testExceptionIsThrownIfCatalogImportFileIsNotReadable()
     {
         $this->setExpectedException(CatalogImportFileNotReadableException::class);
         $this->mockRequest->method('getRawBody')->willReturn(json_encode(['fileName' => 'foo']));
-        $this->apiRequestHandler->process($this->mockRequest);
+        $this->requestHandler->process($this->mockRequest);
     }
 
     public function testUpdateMultipleProductStockQuantityCommandIsEmitted()
@@ -120,7 +127,7 @@ class MultipleProductStockQuantityApiRequestHandlerTest extends \PHPUnit_Framewo
             ->method('add')
             ->with($this->isInstanceOf(UpdateMultipleProductStockQuantityCommand::class));
 
-        $response = $this->apiRequestHandler->process($this->mockRequest);
+        $response = $this->requestHandler->process($this->mockRequest);
 
         $result = json_decode($response->getBody());
         $expectedJson = 'OK';

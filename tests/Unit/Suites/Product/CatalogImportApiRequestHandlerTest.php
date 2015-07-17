@@ -26,7 +26,7 @@ class CatalogImportApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var CatalogImportApiRequestHandler
      */
-    private $apiRequestHandler;
+    private $requestHandler;
 
     /**
      * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
@@ -44,7 +44,7 @@ class CatalogImportApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->createFixtureDirectory($this->importDirectoryPath);
 
         $this->mockDomainEventQueue = $this->getMock(Queue::class);
-        $this->apiRequestHandler = CatalogImportApiRequestHandler::create(
+        $this->requestHandler = CatalogImportApiRequestHandler::create(
             $this->mockDomainEventQueue,
             $this->importDirectoryPath
         );
@@ -54,12 +54,19 @@ class CatalogImportApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testClassIsDerivedFromApiRequestHandler()
     {
-        $this->assertInstanceOf(ApiRequestHandler::class, $this->apiRequestHandler);
+        $this->assertInstanceOf(ApiRequestHandler::class, $this->requestHandler);
     }
 
-    public function testCanProcessMethodAlwaysReturnsTrue()
+    public function testRequestCanNotBeProcessedIfMethodIsNotPut()
     {
-        $this->assertTrue($this->apiRequestHandler->canProcess($this->mockRequest));
+        $this->mockRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
+        $this->assertFalse($this->requestHandler->canProcess($this->mockRequest));
+    }
+
+    public function testRequestCanBeProcessedIfMethodIsPut()
+    {
+        $this->mockRequest->method('getMethod')->willReturn(HttpRequest::METHOD_PUT);
+        $this->assertTrue($this->requestHandler->canProcess($this->mockRequest));
     }
 
     public function testExceptionIsThrownIfImportDirectoryIsNotReadable()
@@ -71,14 +78,14 @@ class CatalogImportApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownIfCatalogImportFileNameIsNotFoundInRequestBody()
     {
         $this->setExpectedException(CatalogImportFileNameNotFoundInRequestBodyException::class);
-        $this->apiRequestHandler->process($this->mockRequest);
+        $this->requestHandler->process($this->mockRequest);
     }
 
     public function testExceptionIsThrownIfCatalogImportFileIsNotReadable()
     {
         $this->setExpectedException(CatalogImportFileNotReadableException::class);
         $this->mockRequest->method('getRawBody')->willReturn(json_encode(['fileName' => 'foo']));
-        $this->apiRequestHandler->process($this->mockRequest);
+        $this->requestHandler->process($this->mockRequest);
     }
 
     public function testCatalogImportDomainEventIsEmitted()
@@ -93,7 +100,7 @@ class CatalogImportApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('add')
             ->with($this->isInstanceOf(CatalogImportDomainEvent::class));
 
-        $response = $this->apiRequestHandler->process($this->mockRequest);
+        $response = $this->requestHandler->process($this->mockRequest);
 
         $result = json_decode($response->getBody());
         $expectedJson = 'OK';

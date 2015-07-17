@@ -49,7 +49,7 @@ class CatalogImportApiRequestHandler extends ApiRequestHandler
      */
     final public function canProcess(HttpRequest $request)
     {
-        return true;
+        return HttpRequest::METHOD_PUT === $request->getMethod();
     }
 
     /**

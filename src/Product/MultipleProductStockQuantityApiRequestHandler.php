@@ -57,11 +57,12 @@ class MultipleProductStockQuantityApiRequestHandler extends ApiRequestHandler
     }
 
     /**
+     * @param HttpRequest $request
      * @return bool
      */
-    public function canProcess()
+    public function canProcess(HttpRequest $request)
     {
-        return true;
+        return HttpRequest::METHOD_PUT === $request->getMethod();
     }
 
     /**
