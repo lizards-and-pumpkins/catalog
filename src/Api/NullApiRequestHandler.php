@@ -8,6 +8,15 @@ class NullApiRequestHandler extends ApiRequestHandler
 {
     /**
      * @param HttpRequest $request
+     * @return bool
+     */
+    public function canProcess(HttpRequest $request)
+    {
+        return false;
+    }
+
+    /**
+     * @param HttpRequest $request
      * @return string
      */
     protected function getResponseBody(HttpRequest $request)
@@ -17,10 +26,9 @@ class NullApiRequestHandler extends ApiRequestHandler
 
     /**
      * @param HttpRequest $request
-     * @return bool
      */
-    public function canProcess(HttpRequest $request)
+    protected function processRequest(HttpRequest $request)
     {
-        return false;
+
     }
 }

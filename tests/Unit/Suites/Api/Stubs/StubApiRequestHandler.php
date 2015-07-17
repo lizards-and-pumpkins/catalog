@@ -11,6 +11,15 @@ class StubApiRequestHandler extends ApiRequestHandler
 
     /**
      * @param HttpRequest $request
+     * @return bool
+     */
+    public function canProcess(HttpRequest $request)
+    {
+        return true;
+    }
+
+    /**
+     * @param HttpRequest $request
      * @return string
      */
     protected function getResponseBody(HttpRequest $request)
@@ -20,10 +29,10 @@ class StubApiRequestHandler extends ApiRequestHandler
 
     /**
      * @param HttpRequest $request
-     * @return bool
+     * @return void
      */
-    public function canProcess(HttpRequest $request)
+    protected function processRequest(HttpRequest $request)
     {
-        return true;
+
     }
 }

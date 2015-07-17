@@ -58,12 +58,18 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
      */
     final protected function getResponseBody(HttpRequest $request)
     {
+        return json_encode('OK');
+    }
+
+    /**
+     * @param HttpRequest $request
+     */
+    protected function processRequest(HttpRequest $request)
+    {
         $importFileContents = $this->getImportFileContents($request);
 
         $catalogImportDomainEvent = new CatalogImportDomainEvent($importFileContents);
         $this->domainEventQueue->add($catalogImportDomainEvent);
-
-        return json_encode('OK');
     }
 
     /**

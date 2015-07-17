@@ -71,6 +71,14 @@ class MultipleProductStockQuantityApiV1PutRequestHandler extends ApiRequestHandl
      */
     protected function getResponseBody(HttpRequest $request)
     {
+        return json_encode('OK');
+    }
+
+    /**
+     * @param HttpRequest $request
+     */
+    protected function processRequest(HttpRequest $request)
+    {
         $importFileContents = $this->getImportFileContents($request);
 
         $productStockQuantitySourceArray = [];
@@ -81,8 +89,6 @@ class MultipleProductStockQuantityApiV1PutRequestHandler extends ApiRequestHandl
 
         $command = new UpdateMultipleProductStockQuantityCommand($productStockQuantitySourceArray);
         $this->commandQueue->add($command);
-
-        return json_encode('OK');
     }
 
     /**

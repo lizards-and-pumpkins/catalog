@@ -14,7 +14,14 @@ abstract class ApiRequestHandler implements HttpRequestHandler
      */
     final public function process(HttpRequest $request)
     {
-        $body = $this->getResponseBody($request);
+        try {
+            $this->processRequest($request);
+            $body = $this->getResponseBody($request);
+        } catch (\Exception $e) {
+            /* TODO: Implement error handling */
+            throw $e;
+        }
+
         $headers = [
             'Access-Control-Allow-Origin' => '*',
             'Access-Control-Allow-Methods' => '*',
@@ -29,4 +36,10 @@ abstract class ApiRequestHandler implements HttpRequestHandler
      * @return string
      */
     abstract protected function getResponseBody(HttpRequest $request);
+
+    /**
+     * @param HttpRequest $request
+     * @return void
+     */
+    abstract protected function processRequest(HttpRequest $request);
 }

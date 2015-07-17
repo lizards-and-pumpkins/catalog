@@ -33,6 +33,14 @@ class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
      */
     protected function getResponseBody(HttpRequest $request)
     {
+        return json_encode('OK');
+    }
+
+    /**
+     * @param HttpRequest $request
+     */
+    protected function processRequest(HttpRequest $request)
+    {
         $requestBody = json_decode($request->getRawBody(), true);
         $this->validateRequestBody($requestBody);
 
@@ -41,8 +49,6 @@ class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
         $contentBlockSource = new ContentBlockSource($contentBlockId, $requestBody['content'], $requestBody['context']);
 
         $this->commandQueue->add(new UpdateContentBlockCommand($contentBlockId, $contentBlockSource));
-
-        return json_encode('OK');
     }
 
     /**
