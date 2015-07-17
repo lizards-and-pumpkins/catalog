@@ -27,6 +27,11 @@ class ContentBlockProjector implements Projector
         $this->dataPoolWriter = $dataPoolWriter;
     }
 
+    /**
+     * @param ProjectionSourceData $projectionSourceData
+     * @param ContextSource $contextSource
+     * @throws InvalidProjectionDataSourceTypeException
+     */
     public function project(ProjectionSourceData $projectionSourceData, ContextSource $contextSource)
     {
         if (!($projectionSourceData instanceof ContentBlockSource)) {
