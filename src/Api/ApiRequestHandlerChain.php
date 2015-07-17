@@ -21,8 +21,8 @@ class ApiRequestHandlerChain
      */
     public function getApiRequestHandler($code)
     {
-        if (!array_key_exists($code, $this->requestHandlers)) {
-            return null;
+        if (!isset($this->requestHandlers[$code])) {
+            return new NullApiRequestHandler;
         }
 
         return $this->requestHandlers[$code];

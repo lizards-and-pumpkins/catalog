@@ -37,7 +37,7 @@ class ApiRouter implements HttpRouter
         $requestHandlerCode = array_shift($urlToken);
         $apiRequestHandler = $this->requestHandlerChain->getApiRequestHandler($requestHandlerCode);
 
-        if (null !== $apiRequestHandler && $apiRequestHandler->canProcess($request)) {
+        if ($apiRequestHandler->canProcess($request)) {
             return $apiRequestHandler;
         }
 

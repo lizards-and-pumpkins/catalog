@@ -23,48 +23,43 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
      */
     private $stubApiRequestHandlerChain;
 
+    /**
+     * @var HttpUrl|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubUrl;
+
+    /**
+     * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubHttpRequest;
+
+    /**
+     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubContext;
+
     protected function setUp()
     {
         $this->stubApiRequestHandlerChain = $this->getMock(ApiRequestHandlerChain::class);
         $this->apiRouter = new ApiRouter($this->stubApiRequestHandlerChain);
+
+        $this->stubUrl = $this->getMock(HttpUrl::class, [], [], '', false);
+        $this->stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+        $this->stubHttpRequest->expects($this->once())->method('getUrl')->willReturn($this->stubUrl);
+
+        $this->stubContext = $this->getMock(Context::class);
     }
 
     public function testNullIsReturnedIfUrlIsNotLedByApiPrefix()
     {
-        $stubUrl = $this->getMock(HttpUrl::class, [], [], '', false);
-        $stubUrl->expects($this->once())->method('getPath')->willReturn('foo/bar');
-
-        $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
-        $stubHttpRequest->expects($this->once())->method('getUrl')->willReturn($stubUrl);
-        
-        $stubContext = $this->getMock(Context::class);
-        $result = $this->apiRouter->route($stubHttpRequest, $stubContext);
-
-        $this->assertNull($result);
-    }
-
-    public function testNullIsReturnedIfNoApiRequestHandlerIsFound()
-    {
-        $stubUrl = $this->getMock(HttpUrl::class, [], [], '', false);
-        $stubUrl->expects($this->once())->method('getPath')->willReturn('api/foo');
-
-        $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
-        $stubHttpRequest->expects($this->once())->method('getUrl')->willReturn($stubUrl);
-
-        $stubContext = $this->getMock(Context::class);
-        $result = $this->apiRouter->route($stubHttpRequest, $stubContext);
+        $this->stubUrl->expects($this->once())->method('getPath')->willReturn('foo/bar');
+        $result = $this->apiRouter->route($this->stubHttpRequest, $this->stubContext);
 
         $this->assertNull($result);
     }
 
     public function testNullIsReturnedIfApiRequestHandlerCanNotProcessRequest()
     {
-        $stubUrl = $this->getMock(HttpUrl::class, [], [], '', false);
-        $stubUrl->expects($this->once())->method('getPath')->willReturn('api/foo');
-
-        $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
-        $stubHttpRequest->expects($this->once())->method('getUrl')->willReturn($stubUrl);
-
         $stubApiRequestHandler = $this->getMock(HttpRequestHandler::class);
         $stubApiRequestHandler->method('canProcess')->willReturn(false);
 
@@ -72,20 +67,14 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
             ->method('getApiRequestHandler')
             ->willReturn($stubApiRequestHandler);
 
-        $stubContext = $this->getMock(Context::class);
-        $result = $this->apiRouter->route($stubHttpRequest, $stubContext);
+        $this->stubUrl->expects($this->once())->method('getPath')->willReturn('api/foo');
+        $result = $this->apiRouter->route($this->stubHttpRequest, $this->stubContext);
 
         $this->assertNull($result);
     }
 
     public function testApiRequestHandlerIsReturned()
     {
-        $stubUrl = $this->getMock(HttpUrl::class, [], [], '', false);
-        $stubUrl->expects($this->once())->method('getPath')->willReturn('api/foo');
-
-        $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
-        $stubHttpRequest->expects($this->once())->method('getUrl')->willReturn($stubUrl);
-
         $stubApiRequestHandler = $this->getMock(HttpRequestHandler::class);
         $stubApiRequestHandler->method('canProcess')->willReturn(true);
 
@@ -93,8 +82,8 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
             ->method('getApiRequestHandler')
             ->willReturn($stubApiRequestHandler);
 
-        $stubContext = $this->getMock(Context::class);
-        $result = $this->apiRouter->route($stubHttpRequest, $stubContext);
+        $this->stubUrl->expects($this->once())->method('getPath')->willReturn('api/foo');
+        $result = $this->apiRouter->route($this->stubHttpRequest, $this->stubContext);
 
         $this->assertInstanceOf(HttpRequestHandler::class, $result);
     }

@@ -29,10 +29,9 @@ class ApiRequestHandlerChainTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($stubApiRequestHandler, $result);
     }
 
-    public function testNullIsReturnedIfNoApiRequestHandlerIsFound()
+    public function testNullApiRequestHandlerIsReturnedIfNoApiRequestHandlerIsFound()
     {
         $result = $this->requestHandlerChain->getApiRequestHandler('foo');
-
-        $this->assertNull($result);
+        $this->assertInstanceOf(NullApiRequestHandler::class, $result);
     }
 }
