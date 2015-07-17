@@ -10,6 +10,8 @@ use Brera\SnippetRenderer;
 
 class ContentBlockSnippetRenderer implements SnippetRenderer
 {
+    const CODE = 'content_block';
+
     /**
      * @var SnippetList
      */
@@ -43,7 +45,7 @@ class ContentBlockSnippetRenderer implements SnippetRenderer
     {
         $context = $this->contextBuilder->getContext($contentBlockSource->getContextData());
         $key = $this->snippetKeyGenerator->getKeyForContext($context, [
-            'content_block_identifier' => $contentBlockSource->getContentBlockId()
+            'content_block_identifier' => (string) $contentBlockSource->getContentBlockId()
         ]);
         $content = $contentBlockSource->getContent();
         $snippet = Snippet::create($key, $content);

@@ -2,11 +2,15 @@
 
 namespace Brera;
 
+use Brera\Content\ContentBlockId;
+use Brera\Content\ContentBlockSource;
+use Brera\Content\UpdateContentBlockCommand;
 use Brera\Product\ProjectProductStockQuantitySnippetCommandHandler;
 use Brera\Product\ProjectProductStockQuantitySnippetCommand;
 
 /**
  * @covers \Brera\CommandHandlerLocator
+ * @uses   \Brera\Content\UpdateContentBlockCommand
  * @uses   \Brera\Product\ProjectProductStockQuantitySnippetCommand
  */
 class CommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
@@ -50,5 +54,26 @@ class CommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         $result = $this->locator->getHandlerFor($productImportCommand);
 
         $this->assertInstanceOf(ProjectProductStockQuantitySnippetCommandHandler::class, $result);
+    }
+
+    public function testUpdateContentBlockCommandHandlerIsLocatedAndReturned()
+    {
+        $stubHandler = $this->getMock(UpdateContentBlockCommand::class, [], [], '', false);
+
+        $this->factory->expects($this->once())
+            ->method('createUpdateContentBlockCommandHandler')
+            ->willReturn($stubHandler);
+
+        $stubContentBlockId = $this->getMock(ContentBlockId::class, [], [], '', false);
+        $stubContentBlockSource = $this->getMock(ContentBlockSource::class, [], [], '', false);
+
+        /**
+         * The real object has to be used here as getHandlerFor method will call get_class against it
+         */
+        $command = new UpdateContentBlockCommand($stubContentBlockId, $stubContentBlockSource);
+
+        $result = $this->locator->getHandlerFor($command);
+
+        $this->assertInstanceOf(UpdateContentBlockCommand::class, $result);
     }
 }

@@ -2,6 +2,12 @@
 
 namespace Brera;
 
+use Brera\Content\ContentBlockProjector;
+use Brera\Content\ContentBlockSnippetRenderer;
+use Brera\Content\ContentBlockWasUpdatedDomainEvent;
+use Brera\Content\ContentBlockWasUpdatedDomainEventHandler;
+use Brera\Content\UpdateContentBlockCommand;
+use Brera\Content\UpdateContentBlockCommandHandler;
 use Brera\Context\ContextBuilder;
 use Brera\Context\ContextSource;
 use Brera\DataPool\DataPoolReader;
@@ -757,6 +763,84 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return new ProductStockQuantityChangedDomainEventHandler(
             $event,
             $this->getMasterFactory()->getCommandQueue()
+        );
+    }
+
+    /**
+     * @param UpdateContentBlockCommand $command
+     * @return UpdateContentBlockCommandHandler
+     */
+    public function createUpdateContentBlockCommandHandler(UpdateContentBlockCommand $command)
+    {
+        return new UpdateContentBlockCommandHandler(
+            $command,
+            $this->getMasterFactory()->getEventQueue()
+        );
+    }
+
+    /**
+     * @param ContentBlockWasUpdatedDomainEvent $event
+     * @return ContentBlockWasUpdatedDomainEventHandler
+     */
+    public function createContentBlockWasUpdatedDomainEventHandler(ContentBlockWasUpdatedDomainEvent $event)
+    {
+        return new ContentBlockWasUpdatedDomainEventHandler(
+            $event,
+            $this->getMasterFactory()->createContextSource(),
+            $this->getMasterFactory()->getContentBlockProjector()
+        );
+    }
+
+    /**
+     * @return ContentBlockProjector
+     */
+    public function getContentBlockProjector()
+    {
+        return new ContentBlockProjector(
+            $this->getMasterFactory()->createContentBlockSnippetRendererCollection(),
+            $this->getMasterFactory()->createDataPoolWriter()
+        );
+    }
+
+    /**
+     * @return SnippetRendererCollection
+     */
+    public function createContentBlockSnippetRendererCollection()
+    {
+        return new SnippetRendererCollection(
+            $this->getMasterFactory()->createContentBlockSnippetRendererList(),
+            $this->getMasterFactory()->createSnippetList()
+        );
+    }
+
+    /**
+     * @return SnippetRenderer[]
+     */
+    public function createContentBlockSnippetRendererList()
+    {
+        return [$this->getMasterFactory()->createContentBlockSnippetRenderer()];
+    }
+
+    /**
+     * @return ContentBlockSnippetRenderer
+     */
+    public function createContentBlockSnippetRenderer()
+    {
+        return new ContentBlockSnippetRenderer(
+            $this->getMasterFactory()->createSnippetList(),
+            $this->getMasterFactory()->createContentBlockSnippetKeyGenerator(),
+            $this->getMasterFactory()->createContextBuilder()
+        );
+    }
+
+    /**
+     * @return GenericSnippetKeyGenerator
+     */
+    public function createContentBlockSnippetKeyGenerator()
+    {
+        return new GenericSnippetKeyGenerator(
+            ContentBlockSnippetRenderer::CODE,
+            ['website', 'language', 'version']
         );
     }
 }

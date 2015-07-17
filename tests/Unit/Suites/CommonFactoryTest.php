@@ -2,6 +2,10 @@
 
 namespace Brera;
 
+use Brera\Content\ContentBlockWasUpdatedDomainEvent;
+use Brera\Content\ContentBlockWasUpdatedDomainEventHandler;
+use Brera\Content\UpdateContentBlockCommand;
+use Brera\Content\UpdateContentBlockCommandHandler;
 use Brera\Context\ContextBuilder;
 use Brera\Context\ContextSource;
 use Brera\DataPool\DataPoolReader;
@@ -35,6 +39,11 @@ use Brera\Queue\Queue;
  * @uses   \Brera\IntegrationTestFactory
  * @uses   \Brera\DataPool\DataPoolWriter
  * @uses   \Brera\DataPool\DataPoolReader
+ * @uses   \Brera\Content\ContentBlockSnippetRenderer
+ * @uses   \Brera\Content\ContentBlockWasUpdatedDomainEvent
+ * @uses   \Brera\Content\ContentBlockWasUpdatedDomainEventHandler
+ * @uses   \Brera\Content\ContentBlockProjector
+ * @uses   \Brera\Content\UpdateContentBlockCommandHandler
  * @uses   \Brera\Context\ContextBuilder
  * @uses   \Brera\Context\ContextSource
  * @uses   \Brera\CommandConsumer
@@ -377,5 +386,23 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $result = $this->commonFactory->createProductStockQuantityChangedDomainEventHandler($event);
 
         $this->assertInstanceOf(ProductStockQuantityChangedDomainEventHandler::class, $result);
+    }
+
+    public function testUpdateContentBlockCommandHandlerIsReturned()
+    {
+        /** @var UpdateContentBlockCommand $stubCommand */
+        $stubCommand = $this->getMock(UpdateContentBlockCommand::class, [], [], '', false);
+        $result = $this->commonFactory->createUpdateContentBlockCommandHandler($stubCommand);
+
+        $this->assertInstanceOf(UpdateContentBlockCommandHandler::class, $result);
+    }
+
+    public function testContentBlockWasUpdatedDomainEventHandlerIsReturned()
+    {
+        /** @var ContentBlockWasUpdatedDomainEvent $stubEvent */
+        $stubEvent = $this->getMock(ContentBlockWasUpdatedDomainEvent::class, [], [], '', false);
+        $result = $this->commonFactory->createContentBlockWasUpdatedDomainEventHandler($stubEvent);
+
+        $this->assertInstanceOf(ContentBlockWasUpdatedDomainEventHandler::class, $result);
     }
 }
