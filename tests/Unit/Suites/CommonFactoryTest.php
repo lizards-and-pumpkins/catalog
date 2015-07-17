@@ -403,7 +403,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateContentBlockCommandHandlerIsReturned()
     {
-        /** @var UpdateContentBlockCommand $stubCommand */
+        /** @var UpdateContentBlockCommand|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
         $stubCommand = $this->getMock(UpdateContentBlockCommand::class, [], [], '', false);
         $result = $this->commonFactory->createUpdateContentBlockCommandHandler($stubCommand);
 
@@ -412,7 +412,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testContentBlockWasUpdatedDomainEventHandlerIsReturned()
     {
-        /** @var ContentBlockWasUpdatedDomainEvent $stubEvent */
+        /** @var ContentBlockWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubEvent */
         $stubEvent = $this->getMock(ContentBlockWasUpdatedDomainEvent::class, [], [], '', false);
         $result = $this->commonFactory->createContentBlockWasUpdatedDomainEventHandler($stubEvent);
 
