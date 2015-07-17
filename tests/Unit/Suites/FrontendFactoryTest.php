@@ -50,13 +50,13 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCatalogImportApiRequestHandlerIsReturned()
     {
-        $result = $this->frontendFactory->createCatalogImportApiRequestHandler();
+        $result = $this->frontendFactory->createCatalogImportApiV1PutRequestHandler();
         $this->assertInstanceOf(CatalogImportApiV1PutRequestHandler::class, $result);
     }
 
     public function testContentBlocksApiRequestHandlerIsReturned()
     {
-        $result = $this->frontendFactory->createContentBlocksApiRequestHandler();
+        $result = $this->frontendFactory->createContentBlocksApiV1PutRequestHandler();
         $this->assertInstanceOf(ContentBlocksApiV1PutRequestHandler::class, $result);
     }
 

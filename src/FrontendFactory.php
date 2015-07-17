@@ -43,28 +43,28 @@ class FrontendFactory implements Factory
             'catalog_import',
             HttpRequest::METHOD_PUT,
             1,
-            $this->getMasterFactory()->createCatalogImportApiRequestHandler()
+            $this->getMasterFactory()->createCatalogImportApiV1PutRequestHandler()
         );
         
         $requestHandlerChain->register(
             'content_blocks',
             HttpRequest::METHOD_PUT,
             1,
-            $this->getMasterFactory()->createContentBlocksApiRequestHandler()
+            $this->getMasterFactory()->createContentBlocksApiV1PutRequestHandler()
         );
 
         $requestHandlerChain->register(
             'multiple_product_stock_quantity',
             HttpRequest::METHOD_PUT,
             1,
-            $this->getMasterFactory()->createMultipleProductStockQuantityApiRequestHandler()
+            $this->getMasterFactory()->createMultipleProductStockQuantityApiV1PutRequestHandler()
         );
     }
 
     /**
      * @return CatalogImportApiV1PutRequestHandler
      */
-    public function createCatalogImportApiRequestHandler()
+    public function createCatalogImportApiV1PutRequestHandler()
     {
         return CatalogImportApiV1PutRequestHandler::create(
             $this->getMasterFactory()->getEventQueue(),
@@ -75,7 +75,7 @@ class FrontendFactory implements Factory
     /**
      * @return ContentBlocksApiV1PutRequestHandler
      */
-    public function createContentBlocksApiRequestHandler()
+    public function createContentBlocksApiV1PutRequestHandler()
     {
         return new ContentBlocksApiV1PutRequestHandler(
             $this->getMasterFactory()->getCommandQueue()
@@ -85,7 +85,7 @@ class FrontendFactory implements Factory
     /**
      * @return MultipleProductStockQuantityApiV1PutRequestHandler
      */
-    public function createMultipleProductStockQuantityApiRequestHandler()
+    public function createMultipleProductStockQuantityApiV1PutRequestHandler()
     {
         return MultipleProductStockQuantityApiV1PutRequestHandler::create(
             $this->getMasterFactory()->getCommandQueue(),
