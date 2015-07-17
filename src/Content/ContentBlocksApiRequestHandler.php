@@ -83,9 +83,7 @@ class ContentBlocksApiRequestHandler extends ApiRequestHandler
      */
     private function extractContentBlockIdFromUrl(HttpRequest $request)
     {
-        $urlStartingFromEndpoint = stristr($request->getUrl(), '/content_blocks/');
-        $trimmedUrlStartingFromEndpoint = trim($urlStartingFromEndpoint, '/');
-        $urlTokens = explode('/', $trimmedUrlStartingFromEndpoint);
+        preg_match('#/content_blocks/([^/]+)#i', $request->getUrl(), $urlTokens);
 
         if (count($urlTokens) < 2) {
             return null;
