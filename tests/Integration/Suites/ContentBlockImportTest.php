@@ -51,7 +51,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $context = $contextSource->getAllAvailableContexts()[1];
 
         $snippetKeyGenerator = $this->factory->createContentBlockSnippetKeyGenerator();
-        $snippetKey = $snippetKeyGenerator->getKeyForContext($context, ['content_block' => 'foo']);
+        $snippetKey = $snippetKeyGenerator->getKeyForContext($context, ['content_block_id' => 'foo']);
 
         $dataPoolReader = $this->factory->createDataPoolReader();
 

@@ -3,6 +3,7 @@
 namespace Brera;
 
 use Brera\Content\ContentBlockProjector;
+use Brera\Content\ContentBlockSnippetKeyGenerator;
 use Brera\Content\ContentBlockSnippetRenderer;
 use Brera\Content\ContentBlockWasUpdatedDomainEvent;
 use Brera\Content\ContentBlockWasUpdatedDomainEventHandler;
@@ -417,6 +418,16 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
+     * @return SnippetKeyGenerator
+     */
+    public function createContentBlockSnippetKeyGenerator()
+    {
+        return new ContentBlockSnippetKeyGenerator(
+            $this->getMasterFactory()->getContentBlockSnippetKey()
+        );
+    }
+
+    /**
      * @return BlockStructure
      */
     public function createBlockStructure()
@@ -625,6 +636,14 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function getProductBackOrderAvailabilitySnippetKey()
     {
         return 'backorders';
+    }
+
+    /**
+     * @return string
+     */
+    public function getContentBlockSnippetKey()
+    {
+        return 'content_block';
     }
 
     /**
@@ -844,17 +863,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $this->getMasterFactory()->createSnippetList(),
             $this->getMasterFactory()->createContentBlockSnippetKeyGenerator(),
             $this->getMasterFactory()->createContextBuilder()
-        );
-    }
-
-    /**
-     * @return GenericSnippetKeyGenerator
-     */
-    public function createContentBlockSnippetKeyGenerator()
-    {
-        return new GenericSnippetKeyGenerator(
-            ContentBlockSnippetRenderer::CODE,
-            ['website', 'language', 'version']
         );
     }
 }

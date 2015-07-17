@@ -141,7 +141,6 @@ class FrontendFactory implements Factory
      */
     public function createSnippetKeyGeneratorLocator()
     {
-        // todo: replace string constants with class constant references
         $snippetKeyGeneratorLocator = new SnippetKeyGeneratorLocator();
         $snippetKeyGeneratorLocator->register(
             ProductDetailViewInContextSnippetRenderer::CODE,
@@ -162,6 +161,10 @@ class FrontendFactory implements Factory
         $snippetKeyGeneratorLocator->register(
             $this->getMasterFactory()->getProductBackOrderAvailabilitySnippetKey(),
             $this->getMasterFactory()->createProductBackOrderAvailabilitySnippetKeyGenerator()
+        );
+        $snippetKeyGeneratorLocator->register(
+            $this->getMasterFactory()->getContentBlockSnippetKey(),
+            $this->getMasterFactory()->createContentBlockSnippetKeyGenerator()
         );
 
         return $snippetKeyGeneratorLocator;

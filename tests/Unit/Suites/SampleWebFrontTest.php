@@ -19,6 +19,7 @@ use Brera\Http\HttpUrl;
  * @uses   \Brera\FrontendFactory
  * @uses   \Brera\CommonFactory
  * @uses   \Brera\Content\ContentBlocksApiRequestHandler
+ * @uses   \Brera\Content\ContentBlockSnippetKeyGenerator
  * @uses   \Brera\IntegrationTestFactory
  * @uses   \Brera\DataVersion
  * @uses   \Brera\PageBuilder
