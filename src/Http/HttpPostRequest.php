@@ -7,7 +7,7 @@ class HttpPostRequest extends HttpRequest
     /**
      * @return string
      */
-    public function getMethod()
+    final public function getMethod()
     {
         return self::METHOD_POST;
     }
