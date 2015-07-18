@@ -37,26 +37,33 @@ class FrontendFactory implements Factory
         return new ApiRouter($requestHandlerChain);
     }
 
-    protected function registerApiRequestHandlers(ApiRequestHandlerChain $requestHandlerChain)
+    private function registerApiRequestHandlers(ApiRequestHandlerChain $requestHandlerChain)
     {
+        $this->registerApiV1RequestHandlers($requestHandlerChain);
+    }
+
+    private function registerApiV1RequestHandlers(ApiRequestHandlerChain $requestHandlerChain)
+    {
+        $version = 1;
+
         $requestHandlerChain->register(
             'catalog_import',
             HttpRequest::METHOD_PUT,
-            1,
+            $version,
             $this->getMasterFactory()->createCatalogImportApiV1PutRequestHandler()
         );
-        
+
         $requestHandlerChain->register(
             'content_blocks',
             HttpRequest::METHOD_PUT,
-            1,
+            $version,
             $this->getMasterFactory()->createContentBlocksApiV1PutRequestHandler()
         );
 
         $requestHandlerChain->register(
             'multiple_product_stock_quantity',
             HttpRequest::METHOD_PUT,
-            1,
+            $version,
             $this->getMasterFactory()->createMultipleProductStockQuantityApiV1PutRequestHandler()
         );
     }
