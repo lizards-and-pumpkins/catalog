@@ -23,12 +23,4 @@ class NullApiRequestHandler extends ApiRequestHandler
     {
         throw new \RuntimeException('NullApiRequestHandler should never be processed.');
     }
-
-    /**
-     * @param HttpRequest $request
-     */
-    protected function processRequest(HttpRequest $request)
-    {
-
-    }
 }

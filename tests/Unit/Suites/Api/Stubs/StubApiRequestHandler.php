@@ -26,13 +26,4 @@ class StubApiRequestHandler extends ApiRequestHandler
     {
         return self::DUMMY_BODY_CONTENT;
     }
-
-    /**
-     * @param HttpRequest $request
-     * @return void
-     */
-    protected function processRequest(HttpRequest $request)
-    {
-
-    }
 }

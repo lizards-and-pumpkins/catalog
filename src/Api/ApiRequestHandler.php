@@ -41,5 +41,8 @@ abstract class ApiRequestHandler implements HttpRequestHandler
      * @param HttpRequest $request
      * @return void
      */
-    abstract protected function processRequest(HttpRequest $request);
+    protected function processRequest(HttpRequest $request)
+    {
+        // Intentionally empty hook method
+    }
 }
