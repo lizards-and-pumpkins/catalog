@@ -22,7 +22,7 @@ class GenericSnippetKeyGenerator implements SnippetKeyGenerator
      */
     public function __construct($snippetCode, array $contextParts)
     {
-        if (! is_string($snippetCode)) {
+        if (!is_string($snippetCode)) {
             throw new InvalidSnippetCodeException(
                 sprintf('The snippet code has to be a string, got "%s"', gettype($snippetCode))
             );
@@ -37,7 +37,7 @@ class GenericSnippetKeyGenerator implements SnippetKeyGenerator
      * @param mixed[] $data
      * @return string
      */
-    public function getKeyForContext(Context $context, array $data = [])
+    public function getKeyForContext(Context $context, array $data)
     {
         return sprintf('%s_%s', $this->snippetCode, $context->getIdForParts($this->contextParts));
     }

@@ -38,9 +38,9 @@ class ContentBlockSnippetKeyGenerator implements SnippetKeyGenerator
      * @param string[] $data
      * @return string
      */
-    public function getKeyForContext(Context $context, array $data = [])
+    public function getKeyForContext(Context $context, array $data)
     {
-        if (! array_key_exists('content_block_id', $data)) {
+        if (!array_key_exists('content_block_id', $data)) {
             throw new MissingContentBlockIdException(sprintf(
                 'Content block ID must be specified when getting a content block snippet key'
             ));

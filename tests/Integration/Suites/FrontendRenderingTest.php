@@ -100,12 +100,12 @@ class FrontendRenderingTest extends AbstractIntegrationTest
         $dataPoolWriter->writeSnippet($metaInfoSnippet);
 
         $headSnippetKeyGenerator = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode('head');
-        $key = $headSnippetKeyGenerator->getKeyForContext($context);
+        $key = $headSnippetKeyGenerator->getKeyForContext($context, []);
         $headSnippet = Snippet::create($key, '<title>Page Title</title>');
         $dataPoolWriter->writeSnippet($headSnippet);
 
         $bodySnippetKeyGenerator = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode('body');
-        $key = $bodySnippetKeyGenerator->getKeyForContext($context);
+        $key = $bodySnippetKeyGenerator->getKeyForContext($context, []);
         $bodySnippet = Snippet::create($key, '<h1>Headline</h1>');
         $dataPoolWriter->writeSnippet($bodySnippet);
     }

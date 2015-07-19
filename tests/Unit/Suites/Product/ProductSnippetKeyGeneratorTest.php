@@ -51,7 +51,7 @@ class ProductSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(MissingProductIdException::class);
         $stubContext = $this->getMock(Context::class);
-        $this->keyGenerator->getKeyForContext($stubContext);
+        $this->keyGenerator->getKeyForContext($stubContext, []);
     }
 
     public function testRequiredContextPartsAreReturned()
