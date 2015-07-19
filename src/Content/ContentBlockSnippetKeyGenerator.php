@@ -14,16 +14,23 @@ class ContentBlockSnippetKeyGenerator implements SnippetKeyGenerator
     private $snippetCode;
 
     /**
+     * @var array
+     */
+    private $contextParts;
+
+    /**
      * @param string $snippetCode
      */
-    public function __construct($snippetCode)
+    public function __construct($snippetCode, array $contextParts)
     {
         if (!is_string($snippetCode)) {
             throw new InvalidSnippetCodeException(sprintf(
                 'The snippet code for the ContentBlockSnippetKeyGenerator has to be a string'
             ));
         }
+
         $this->snippetCode = $snippetCode;
+        $this->contextParts = $contextParts;
     }
     
     /**
@@ -38,7 +45,13 @@ class ContentBlockSnippetKeyGenerator implements SnippetKeyGenerator
                 'Content block ID must be specified when getting a content block snippet key'
             ));
         }
-        return sprintf('%s_%s_%s', $this->snippetCode, $data['content_block_id'], $context->getId());
+
+        return sprintf(
+            '%s_%s_%s',
+            $this->snippetCode,
+            $data['content_block_id'],
+            $context->getIdForParts($this->contextParts)
+        );
     }
 
     /**
@@ -46,6 +59,6 @@ class ContentBlockSnippetKeyGenerator implements SnippetKeyGenerator
      */
     public function getContextPartsUsedForKey()
     {
-        return ['website', 'language'];
+        return $this->contextParts;
     }
 }

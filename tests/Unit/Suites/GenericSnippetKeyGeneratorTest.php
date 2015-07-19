@@ -12,7 +12,12 @@ class GenericSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    private $testSnippetCode = 'test_snippet_code';
+    private $dummySnippetCode = 'test_snippet_code';
+
+    /**
+     * @var string[]
+     */
+    private $dummyContextParts = ['dummy-context-part'];
     
     /**
      * @var GenericSnippetKeyGenerator
@@ -21,7 +26,7 @@ class GenericSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->keyGenerator = new GenericSnippetKeyGenerator($this->testSnippetCode, ['dummy-context-part']);
+        $this->keyGenerator = new GenericSnippetKeyGenerator($this->dummySnippetCode, $this->dummyContextParts);
     }
 
     public function testSnippetKeyGeneratorInterfaceIsImplemented()
@@ -36,7 +41,7 @@ class GenericSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownIfTheSnippetCodeIsNoString($invalidSnippetType)
     {
         $this->setExpectedException(InvalidSnippetCodeException::class);
-        new GenericSnippetKeyGenerator($invalidSnippetType, ['dummy-context-part']);
+        new GenericSnippetKeyGenerator($invalidSnippetType, $this->dummyContextParts);
     }
 
     /**
@@ -57,25 +62,22 @@ class GenericSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
         $stubContext = $this->getMock(Context::class);
         $result = $this->keyGenerator->getKeyForContext($stubContext);
 
-        $this->assertContains($this->testSnippetCode, $result);
+        $this->assertContains($this->dummySnippetCode, $result);
     }
 
     public function testContextIdentifierIsIncludedInReturnedKey()
     {
-        $testContextId = 'test-context-id';
+        $dummyContextId = 'foo';
         $stubContext = $this->getMock(Context::class);
-        $stubContext->expects($this->once())
-            ->method('getIdForParts')
-            ->willReturn($testContextId);
+        $stubContext->method('getIdForParts')->willReturn($dummyContextId);
         $result = $this->keyGenerator->getKeyForContext($stubContext);
 
-        $this->assertContains($testContextId, $result);
+        $this->assertContains($dummyContextId, $result);
     }
 
     public function testRequiredContextPartsAreReturned()
     {
         $result = $this->keyGenerator->getContextPartsUsedForKey();
-        $this->assertInternalType('array', $result);
-        $this->assertContainsOnly('string', $result);
+        $this->assertSame($this->dummyContextParts, $result);
     }
 }

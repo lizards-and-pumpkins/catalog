@@ -265,7 +265,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new GenericSnippetKeyGenerator(
             ProductListingSnippetRenderer::CODE,
-            ['website', 'language', 'version']
+            $this->getMasterFactory()->getRequiredContexts()
         );
     }
 
@@ -328,7 +328,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductDetailViewSnippetKeyGenerator()
     {
-        return new ProductSnippetKeyGenerator('product_detail_view');
+        return new ProductSnippetKeyGenerator('product_detail_view', $this->getMasterFactory()->getRequiredContexts());
     }
 
     /**
@@ -398,7 +398,10 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductInListingSnippetKeyGenerator()
     {
-        return new ProductSnippetKeyGenerator(ProductInListingInContextSnippetRenderer::CODE);
+        return new ProductSnippetKeyGenerator(
+            ProductInListingInContextSnippetRenderer::CODE,
+            $this->getMasterFactory()->getRequiredContexts()
+        );
     }
 
     /**
@@ -406,7 +409,10 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createPriceSnippetKeyGenerator()
     {
-        return new ProductSnippetKeyGenerator($this->getMasterFactory()->getRegularPriceSnippetKey());
+        return new ProductSnippetKeyGenerator(
+            $this->getMasterFactory()->getRegularPriceSnippetKey(),
+            $this->getMasterFactory()->getRequiredContexts()
+        );
     }
 
     /**
@@ -414,7 +420,10 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductBackOrderAvailabilitySnippetKeyGenerator()
     {
-        return new ProductSnippetKeyGenerator($this->getMasterFactory()->getProductBackOrderAvailabilitySnippetKey());
+        return new ProductSnippetKeyGenerator(
+            $this->getMasterFactory()->getProductBackOrderAvailabilitySnippetKey(),
+            $this->getMasterFactory()->getRequiredContexts()
+        );
     }
 
     /**
@@ -423,7 +432,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createContentBlockSnippetKeyGenerator()
     {
         return new ContentBlockSnippetKeyGenerator(
-            $this->getMasterFactory()->getContentBlockSnippetKey()
+            $this->getMasterFactory()->getContentBlockSnippetKey(),
+            $this->getMasterFactory()->getRequiredContexts()
         );
     }
 
@@ -750,7 +760,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new ProductSnippetKeyGenerator(
             ProductStockQuantitySnippetRenderer::CODE,
-            ['website', 'language', 'version']
+            $this->getMasterFactory()->getRequiredContexts()
         );
     }
 
@@ -864,5 +874,13 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $this->getMasterFactory()->createContentBlockSnippetKeyGenerator(),
             $this->getMasterFactory()->createContextBuilder()
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function getRequiredContexts()
+    {
+        return ['website', 'language', 'version'];
     }
 }

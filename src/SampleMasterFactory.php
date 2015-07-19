@@ -20,6 +20,7 @@ use Brera\Product\ProductSnippetKeyGenerator;
  * @method GenericSnippetKeyGenerator createProductListingSnippetKeyGenerator
  * @method ProductSnippetKeyGenerator createProductStockQuantityRendererSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createContentBlockSnippetKeyGenerator
+ * @method string[] getRequiredContexts
  */
 class SampleMasterFactory implements MasterFactory
 {

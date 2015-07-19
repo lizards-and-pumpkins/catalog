@@ -11,26 +11,29 @@ use Brera\SnippetKeyGenerator;
  */
 class ContentBlockSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var string
+     */
     private $contentBlockId = 'foo';
-    
-    private $testSnippetCode = 'content_block';
+
+    /**
+     * @var string
+     */
+    private $dummySnippetCode = 'content_block';
+
+    /**
+     * @var string[]
+     */
+    private $dummyContextParts = ['dummy-context-part'];
 
     /**
      * @var ContentBlockSnippetKeyGenerator
      */
     private $keyGenerator;
 
-    /**
-     * @return Context|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getMockContext()
-    {
-        return $this->getMock(Context::class);
-    }
-
     protected function setUp()
     {
-        $this->keyGenerator = new ContentBlockSnippetKeyGenerator($this->testSnippetCode);
+        $this->keyGenerator = new ContentBlockSnippetKeyGenerator($this->dummySnippetCode, $this->dummyContextParts);
     }
 
     public function testSnippetKeyGeneratorInterfaceIsImplemented()
@@ -41,48 +44,45 @@ class ContentBlockSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownIfTheSnippetCodeIsNotAString()
     {
         $this->setExpectedException(InvalidSnippetCodeException::class);
-        new ContentBlockSnippetKeyGenerator(123);
+        new ContentBlockSnippetKeyGenerator(123, $this->dummyContextParts);
     }
 
     public function testExceptionIsThrownIfNoContentBlockIdIsSpecified()
     {
         $this->setExpectedException(MissingContentBlockIdException::class);
-        $this->keyGenerator->getKeyForContext($this->getMockContext());
+        $stubContext = $this->getMock(Context::class);
+        $this->keyGenerator->getKeyForContext($stubContext);
     }
 
-    public function testWebsiteAndLanguageContextPartsAreUsed()
+    public function testRequiredContextPartsAreReturned()
     {
         $result = $this->keyGenerator->getContextPartsUsedForKey();
-        $this->assertInternalType('array', $result);
-        $this->assertContains('website', $result);
-        $this->assertContains('language', $result);
+        $this->assertSame($this->dummyContextParts, $result);
     }
 
     public function testSnippetCodeIsIncludedInTheKey()
     {
-        $result = $this->keyGenerator->getKeyForContext(
-            $this->getMockContext(),
-            ['content_block_id' => $this->contentBlockId]
-        );
-        $this->assertContains($this->testSnippetCode, $result);
+        $stubContext = $this->getMock(Context::class);
+        $result = $this->keyGenerator->getKeyForContext($stubContext, ['content_block_id' => $this->contentBlockId]);
+
+        $this->assertContains($this->dummySnippetCode, $result);
     }
 
     public function testContentBlockIdIsIncludedInTheKey()
     {
-        $result = $this->keyGenerator->getKeyForContext(
-            $this->getMockContext(),
-            ['content_block_id' => $this->contentBlockId]
-        );
+        $stubContext = $this->getMock(Context::class);
+        $result = $this->keyGenerator->getKeyForContext($stubContext, ['content_block_id' => $this->contentBlockId]);
+
         $this->assertContains((string) $this->contentBlockId, $result);
     }
 
-    public function testContextIsIncludedIdInTheKey()
+    public function testContextIdentifierIsIncludedInReturnedKey()
     {
-        $testContextId = 'test-context-id';
-        $mockContext = $this->getMockContext();
-        $mockContext->expects($this->once())->method('getId')->willReturn($testContextId);
-        $result = $this->keyGenerator->getKeyForContext($mockContext, ['content_block_id' => $this->contentBlockId]);
+        $dummyContextId = 'foo';
+        $stubContext = $this->getMock(Context::class);
+        $stubContext->method('getIdForParts')->willReturn($dummyContextId);
+        $result = $this->keyGenerator->getKeyForContext($stubContext, ['content_block_id' => $this->contentBlockId]);
 
-        $this->assertContains($testContextId, $result);
+        $this->assertContains($dummyContextId, $result);
     }
 }

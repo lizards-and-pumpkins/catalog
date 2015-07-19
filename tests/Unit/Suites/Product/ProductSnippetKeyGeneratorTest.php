@@ -11,26 +11,29 @@ use Brera\SnippetKeyGenerator;
  */
 class ProductSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var int
+     */
     private $productId = 10;
-    
-    private $testSnippetCode = 'product_detail_view';
+
+    /**
+     * @var string
+     */
+    private $dummySnippetCode = 'product_detail_view';
+
+    /**
+     * @var string[]
+     */
+    private $dummyContextParts = ['dummy-context-part'];
 
     /**
      * @var ProductSnippetKeyGenerator
      */
     private $keyGenerator;
 
-    /**
-     * @return Context|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getMockContext()
-    {
-        return $this->getMock(Context::class);
-    }
-
     protected function setUp()
     {
-        $this->keyGenerator = new ProductSnippetKeyGenerator($this->testSnippetCode);
+        $this->keyGenerator = new ProductSnippetKeyGenerator($this->dummySnippetCode, $this->dummyContextParts);
     }
 
     public function testSnippetKeyGeneratorInterfaceIsImplemented()
@@ -41,42 +44,45 @@ class ProductSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownIfTheSnippetCodeIsNotAString()
     {
         $this->setExpectedException(InvalidSnippetCodeException::class);
-        new ProductSnippetKeyGenerator(123);
+        new ProductSnippetKeyGenerator(123, $this->dummyContextParts);
     }
 
     public function testExceptionIsThrownIfNoProductIdIsSpecified()
     {
         $this->setExpectedException(MissingProductIdException::class);
-        $this->keyGenerator->getKeyForContext($this->getMockContext());
+        $stubContext = $this->getMock(Context::class);
+        $this->keyGenerator->getKeyForContext($stubContext);
     }
 
-    public function testWebsiteAndLanguageContextPartsAreUsed()
+    public function testRequiredContextPartsAreReturned()
     {
         $result = $this->keyGenerator->getContextPartsUsedForKey();
-        $this->assertInternalType('array', $result);
-        $this->assertContains('website', $result);
-        $this->assertContains('language', $result);
+        $this->assertSame($this->dummyContextParts, $result);
     }
 
     public function testSnippetCodeIsIncludedInTheKey()
     {
-        $result = $this->keyGenerator->getKeyForContext($this->getMockContext(), ['product_id' => $this->productId]);
-        $this->assertContains($this->testSnippetCode, $result);
+        $stubContext = $this->getMock(Context::class);
+        $result = $this->keyGenerator->getKeyForContext($stubContext, ['product_id' => $this->productId]);
+
+        $this->assertContains($this->dummySnippetCode, $result);
     }
 
     public function testProductIdIsIncludedInTheKey()
     {
-        $result = $this->keyGenerator->getKeyForContext($this->getMockContext(), ['product_id' => $this->productId]);
+        $stubContext = $this->getMock(Context::class);
+        $result = $this->keyGenerator->getKeyForContext($stubContext, ['product_id' => $this->productId]);
+
         $this->assertContains((string) $this->productId, $result);
     }
 
-    public function testContextIsIncludedIdInTheKey()
+    public function testContextIdentifierIsIncludedInReturnedKey()
     {
-        $testContextId = 'test-context-id';
-        $mockContext = $this->getMockContext();
-        $mockContext->expects($this->once())->method('getId')->willReturn($testContextId);
-        $result = $this->keyGenerator->getKeyForContext($mockContext, ['product_id' => $this->productId]);
+        $dummyContextId = 'foo';
+        $stubContext = $this->getMock(Context::class);
+        $stubContext->method('getIdForParts')->willReturn($dummyContextId);
+        $result = $this->keyGenerator->getKeyForContext($stubContext, ['product_id' => $this->productId]);
 
-        $this->assertContains($testContextId, $result);
+        $this->assertContains($dummyContextId, $result);
     }
 }
