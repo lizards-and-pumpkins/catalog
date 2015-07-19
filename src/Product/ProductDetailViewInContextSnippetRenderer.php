@@ -47,7 +47,7 @@ class ProductDetailViewInContextSnippetRenderer implements SnippetRenderer
     public function __construct(
         SnippetList $snippetList,
         ProductDetailViewBlockRenderer $blockRenderer,
-        ProductSnippetKeyGenerator $snippetKeyGenerator,
+        SnippetKeyGenerator $snippetKeyGenerator,
         UrlPathKeyGenerator $urlKeyGenerator
     ) {
         $this->snippetList = $snippetList;

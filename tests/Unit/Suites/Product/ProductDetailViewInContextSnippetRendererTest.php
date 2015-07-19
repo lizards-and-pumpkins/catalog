@@ -43,7 +43,7 @@ class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_T
         $stubProductDetailViewBlockRenderer->method('getRootSnippetCode')->willReturn('dummy root block code');
         $stubProductDetailViewBlockRenderer->method('getNestedSnippetCodes')->willReturn([]);
 
-        $this->mockSnippetKeyGenerator = $this->getMock(ProductSnippetKeyGenerator::class, [], [], '', false);
+        $this->mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class, [], [], '', false);
         $this->mockSnippetKeyGenerator->method('getKeyForContext')->willReturn('stub-content-key');
 
         $stubUrlPathKeyGenerator = $this->getMock(UrlPathKeyGenerator::class);
