@@ -6,8 +6,9 @@ use Brera\Context\Context;
 use Brera\SnippetKeyGenerator;
 use Brera\Snippet;
 use Brera\SnippetList;
+use Brera\SnippetRenderer;
 
-class ProductInListingInContextSnippetRenderer
+class ProductInListingInContextSnippetRenderer implements SnippetRenderer
 {
     const CODE = 'product_in_listing';
     

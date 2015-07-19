@@ -7,9 +7,10 @@ use Brera\Context\Context;
 use Brera\SnippetKeyGenerator;
 use Brera\Snippet;
 use Brera\SnippetList;
+use Brera\SnippetRenderer;
 use Brera\UrlPathKeyGenerator;
 
-class ProductDetailViewInContextSnippetRenderer
+class ProductDetailViewInContextSnippetRenderer implements SnippetRenderer
 {
     const CODE = 'product_detail_view';
 
