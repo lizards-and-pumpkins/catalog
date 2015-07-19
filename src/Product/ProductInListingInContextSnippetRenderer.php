@@ -69,12 +69,4 @@ class ProductInListingInContextSnippetRenderer
         $contentSnippet = Snippet::create($key, $content);
         $this->snippetList->add($contentSnippet);
     }
-
-    /**
-     * @return string[]
-     */
-    public function getUsedContextParts()
-    {
-        return $this->snippetKeyGenerator->getContextPartsUsedForKey();
-    }
 }

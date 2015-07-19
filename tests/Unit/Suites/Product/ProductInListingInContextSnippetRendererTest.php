@@ -85,15 +85,6 @@ class ProductInListingInContextSnippetRendererTest extends \PHPUnit_Framework_Te
         $this->renderer->render($stubProduct, $stubContext);
     }
 
-    public function testContextPartsFetchingIsDelegatedToKeyGenerator()
-    {
-        $testContextParts = ['version', 'website', 'language'];
-        $this->mockSnippetKeyGenerator->expects($this->once())->method('getContextPartsUsedForKey')
-            ->willReturn($testContextParts);
-
-        $this->assertSame($testContextParts, $this->renderer->getUsedContextParts());
-    }
-
     public function testProductIdIsPassedToKeyGenerator()
     {
         $stubContext = $this->getMock(Context::class);
