@@ -34,11 +34,6 @@ class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_T
      */
     private $mockSnippetKeyGenerator;
 
-    /**
-     * @var UrlPathKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubUrlPathKeyGenerator;
-
     protected function setUp()
     {
         $this->mockSnippetList = $this->getMock(SnippetList::class);
@@ -51,14 +46,14 @@ class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_T
         $this->mockSnippetKeyGenerator = $this->getMock(ProductSnippetKeyGenerator::class, [], [], '', false);
         $this->mockSnippetKeyGenerator->method('getKeyForContext')->willReturn('stub-content-key');
 
-        $this->stubUrlPathKeyGenerator = $this->getMock(UrlPathKeyGenerator::class);
-        $this->stubUrlPathKeyGenerator->method('getUrlKeyForPathInContext')->willReturn('stub-url-key');
+        $stubUrlPathKeyGenerator = $this->getMock(UrlPathKeyGenerator::class);
+        $stubUrlPathKeyGenerator->method('getUrlKeyForPathInContext')->willReturn('stub-url-key');
 
         $this->renderer = new ProductDetailViewInContextSnippetRenderer(
             $this->mockSnippetList,
             $stubProductDetailViewBlockRenderer,
             $this->mockSnippetKeyGenerator,
-            $this->stubUrlPathKeyGenerator
+            $stubUrlPathKeyGenerator
         );
     }
 
