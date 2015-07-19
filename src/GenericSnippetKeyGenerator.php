@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Brera;
 
 use Brera\Context\Context;
@@ -8,7 +7,7 @@ use Brera\Context\Context;
 class GenericSnippetKeyGenerator implements SnippetKeyGenerator
 {
     /**
-     * @var
+     * @var string
      */
     private $snippetCode;
     
@@ -24,11 +23,11 @@ class GenericSnippetKeyGenerator implements SnippetKeyGenerator
     public function __construct($snippetCode, array $contextParts)
     {
         if (! is_string($snippetCode)) {
-            throw new InvalidSnippetCodeException(sprintf(
-                'The snippet code has to be a string, got "%s"',
-                $this->getSnippetCodeRepresentationForErrorMessage($snippetCode)
-            ));
+            throw new InvalidSnippetCodeException(
+                sprintf('The snippet code has to be a string, got "%s"', gettype($snippetCode))
+            );
         }
+
         $this->snippetCode = $snippetCode;
         $this->contextParts = $contextParts;
     }
@@ -40,22 +39,7 @@ class GenericSnippetKeyGenerator implements SnippetKeyGenerator
      */
     public function getKeyForContext(Context $context, array $data = [])
     {
-        return sprintf(
-            '%s_%s',
-            $this->snippetCode,
-            $context->getIdForParts($this->getContextPartsUsedForKey())
-        );
-    }
-
-    /**
-     * @param string $snippetCode
-     * @return string
-     */
-    private function getSnippetCodeRepresentationForErrorMessage($snippetCode)
-    {
-        return is_scalar($snippetCode) ?
-            (string) $snippetCode :
-            gettype($snippetCode);
+        return sprintf('%s_%s', $this->snippetCode, $context->getIdForParts($this->contextParts));
     }
 
     /**
