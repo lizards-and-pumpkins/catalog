@@ -21,7 +21,6 @@ use Brera\Product\ProductListingRouter;
  * @uses   \Brera\Product\ProductDetailViewRequestHandlerBuilder
  * @uses   \Brera\Product\ProductListingRouter
  * @uses   \Brera\Product\ProductListingRequestHandlerBuilder
- * @uses   \Brera\Product\ProductSnippetKeyGenerator
  * @uses   \Brera\Product\MultipleProductStockQuantityApiV1PutRequestHandler
  * @uses   \Brera\DataPool\DataPoolReader
  * @uses   \Brera\Api\ApiRouter

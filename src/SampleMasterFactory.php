@@ -2,8 +2,6 @@
 
 namespace Brera;
 
-use Brera\Product\ProductSnippetKeyGenerator;
-
 /**
  * @method DataPool\DataPoolWriter createDataPoolWriter
  * @method DataPool\DataPoolReader createDataPoolReader
@@ -16,9 +14,9 @@ use Brera\Product\ProductSnippetKeyGenerator;
  * @method CommandConsumer createCommandConsumer
  * @method SnippetKeyGeneratorLocator getSnippetKeyGeneratorLocator
  * @method InMemoryLogger getLogger
- * @method ProductSnippetKeyGenerator createProductDetailViewSnippetKeyGenerator
+ * @method GenericSnippetKeyGenerator createProductDetailViewSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createProductListingSnippetKeyGenerator
- * @method ProductSnippetKeyGenerator createProductStockQuantityRendererSnippetKeyGenerator
+ * @method GenericSnippetKeyGenerator createProductStockQuantityRendererSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createContentBlockSnippetKeyGenerator
  * @method string[] getRequiredContexts
  */

@@ -20,7 +20,6 @@ use Brera\Product\ProductImportDomainEventHandler;
 use Brera\Product\ProductListingSavedDomainEvent;
 use Brera\Product\ProductListingSavedDomainEventHandler;
 use Brera\Product\ProductProjector;
-use Brera\Product\ProductSnippetKeyGenerator;
 use Brera\Product\ProductSourceBuilder;
 use Brera\Product\ProductStockQuantityUpdatedDomainEvent;
 use Brera\Product\ProductStockQuantityUpdatedDomainEventHandler;
@@ -61,7 +60,6 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Product\ProductBackOrderAvailabilitySnippetRenderer
  * @uses   \Brera\Product\ProductSourceBuilder
  * @uses   \Brera\Product\ProductProjector
- * @uses   \Brera\Product\ProductSnippetKeyGenerator
  * @uses   \Brera\Product\ProductImportDomainEvent
  * @uses   \Brera\Product\ProductImportDomainEventHandler
  * @uses   \Brera\Product\ProductListingCriteriaSnippetRenderer
@@ -305,10 +303,10 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ImageImportDomainEventHandler::class, $result);
     }
 
-    public function testProductSnippetKeyGeneratorIsReturned()
+    public function testSnippetKeyGeneratorIsReturned()
     {
         $result = $this->commonFactory->createProductInListingSnippetKeyGenerator();
-        $this->assertInstanceOf(ProductSnippetKeyGenerator::class, $result);
+        $this->assertInstanceOf(GenericSnippetKeyGenerator::class, $result);
     }
 
     public function testUpdateProductStockQuantityCommandHandlerIsReturned()
@@ -359,10 +357,10 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ProductStockQuantitySnippetRenderer::class, $result);
     }
 
-    public function testProductSnippetKeyGeneratorIsReturnedAsProductStockQuantityRendererSnippetKeyGenerator()
+    public function testSnippetKeyGeneratorIsReturnedAsProductStockQuantityRendererSnippetKeyGenerator()
     {
         $result = $this->commonFactory->createProductStockQuantityRendererSnippetKeyGenerator();
-        $this->assertInstanceOf(ProductSnippetKeyGenerator::class, $result);
+        $this->assertInstanceOf(GenericSnippetKeyGenerator::class, $result);
     }
 
     public function testCommandConsumerIsReturned()

@@ -38,7 +38,6 @@ use Brera\Product\ProductListingSnippetRenderer;
 use Brera\Product\ProductProjector;
 use Brera\Product\ProductListingSourceBuilder;
 use Brera\Product\ProductSearchDocumentBuilder;
-use Brera\Product\ProductSnippetKeyGenerator;
 use Brera\Product\ProductSourceBuilder;
 use Brera\Product\ProductSourceDetailViewSnippetRenderer;
 use Brera\Product\ProductSourceInListingSnippetRenderer;
@@ -327,7 +326,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductDetailViewSnippetKeyGenerator()
     {
-        return new ProductSnippetKeyGenerator('product_detail_view', $this->getMasterFactory()->getRequiredContexts());
+        return new GenericSnippetKeyGenerator('product_detail_view', $this->getMasterFactory()->getRequiredContexts());
     }
 
     /**
@@ -397,7 +396,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductInListingSnippetKeyGenerator()
     {
-        return new ProductSnippetKeyGenerator(
+        return new GenericSnippetKeyGenerator(
             ProductInListingInContextSnippetRenderer::CODE,
             $this->getMasterFactory()->getRequiredContexts()
         );
@@ -408,7 +407,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createPriceSnippetKeyGenerator()
     {
-        return new ProductSnippetKeyGenerator(
+        return new GenericSnippetKeyGenerator(
             $this->getMasterFactory()->getRegularPriceSnippetKey(),
             $this->getMasterFactory()->getRequiredContexts()
         );
@@ -419,7 +418,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductBackOrderAvailabilitySnippetKeyGenerator()
     {
-        return new ProductSnippetKeyGenerator(
+        return new GenericSnippetKeyGenerator(
             $this->getMasterFactory()->getProductBackOrderAvailabilitySnippetKey(),
             $this->getMasterFactory()->getRequiredContexts()
         );
@@ -753,11 +752,11 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return ProductSnippetKeyGenerator
+     * @return SnippetKeyGenerator
      */
     public function createProductStockQuantityRendererSnippetKeyGenerator()
     {
-        return new ProductSnippetKeyGenerator(
+        return new GenericSnippetKeyGenerator(
             ProductStockQuantitySnippetRenderer::CODE,
             $this->getMasterFactory()->getRequiredContexts()
         );

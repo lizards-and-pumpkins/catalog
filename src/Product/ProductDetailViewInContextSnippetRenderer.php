@@ -37,7 +37,7 @@ class ProductDetailViewInContextSnippetRenderer implements SnippetRenderer
     /**
      * @var SnippetKeyGenerator
      */
-    private $productSnippetKeyGenerator;
+    private $SnippetKeyGenerator;
     
     /**
      * @var UrlPathKeyGenerator
@@ -52,7 +52,7 @@ class ProductDetailViewInContextSnippetRenderer implements SnippetRenderer
     ) {
         $this->snippetList = $snippetList;
         $this->blockRenderer = $blockRenderer;
-        $this->productSnippetKeyGenerator = $snippetKeyGenerator;
+        $this->SnippetKeyGenerator = $snippetKeyGenerator;
         $this->urlKeyGenerator = $urlKeyGenerator;
     }
     
@@ -75,7 +75,7 @@ class ProductDetailViewInContextSnippetRenderer implements SnippetRenderer
     private function addProductDetailViewSnippetsToSnippetList()
     {
         $content = $this->blockRenderer->render($this->product, $this->context);
-        $key = $this->productSnippetKeyGenerator->getKeyForContext(
+        $key = $this->SnippetKeyGenerator->getKeyForContext(
             $this->context,
             ['product_id' => $this->product->getId()]
         );
@@ -115,7 +115,7 @@ class ProductDetailViewInContextSnippetRenderer implements SnippetRenderer
      */
     public function getUsedContextParts()
     {
-        return $this->productSnippetKeyGenerator->getContextPartsUsedForKey();
+        return $this->SnippetKeyGenerator->getContextPartsUsedForKey();
     }
 
     /**

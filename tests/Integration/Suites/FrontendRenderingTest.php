@@ -11,7 +11,6 @@ use Brera\Http\HttpUrl;
 use Brera\Product\ProductDetailPageMetaInfoSnippetContent;
 use Brera\Product\ProductDetailViewInContextSnippetRenderer;
 use Brera\Product\ProductDetailViewRequestHandler;
-use Brera\Product\ProductSnippetKeyGenerator;
 
 class FrontendRenderingTest extends AbstractIntegrationTest
 {
@@ -70,7 +69,7 @@ class FrontendRenderingTest extends AbstractIntegrationTest
         $dataPoolWriter = $this->factory->createDataPoolWriter();
 
         $rootSnippetCode = 'root-snippet';
-        $rootSnippetKeyGenerator = new ProductSnippetKeyGenerator(
+        $rootSnippetKeyGenerator = new GenericSnippetKeyGenerator(
             ProductDetailViewInContextSnippetRenderer::CODE,
             $this->factory->getRequiredContexts()
         );
