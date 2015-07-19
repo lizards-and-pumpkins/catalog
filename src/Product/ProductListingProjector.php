@@ -2,36 +2,36 @@
 
 namespace Brera\Product;
 
+use Brera\Context\ContextSource;
 use Brera\DataPool\DataPoolWriter;
 use Brera\InvalidProjectionDataSourceTypeException;
 use Brera\ProjectionSourceData;
 use Brera\Projector;
+use Brera\SnippetRendererCollection;
 
 class ProductListingProjector implements Projector
 {
     /**
-     * @var ProductListingCriteriaSnippetRenderer
+     * @var SnippetRendererCollection
      */
-    private $productListingPageMetaInfoSnippetRenderer;
+    private $snippetRendererCollection;
 
     /**
      * @var DataPoolWriter
      */
     private $dataPoolWriter;
 
-    public function __construct(
-        ProductListingCriteriaSnippetRenderer $productListingPageMetaInfoSnippetRenderer,
-        DataPoolWriter $dataPoolWriter
-    ) {
-        $this->productListingPageMetaInfoSnippetRenderer = $productListingPageMetaInfoSnippetRenderer;
+    public function __construct(SnippetRendererCollection $snippetRendererCollection, DataPoolWriter $dataPoolWriter)
+    {
+        $this->snippetRendererCollection = $snippetRendererCollection;
         $this->dataPoolWriter = $dataPoolWriter;
     }
 
     /**
      * @param ProjectionSourceData $dataObject
-     * @throws InvalidProjectionDataSourceTypeException
+     * @param ContextSource $contextSource
      */
-    public function project(ProjectionSourceData $dataObject)
+    public function project(ProjectionSourceData $dataObject, ContextSource $contextSource)
     {
         if (!($dataObject instanceof ProductListingSource)) {
             throw new InvalidProjectionDataSourceTypeException(
@@ -39,13 +39,12 @@ class ProductListingProjector implements Projector
             );
         }
 
-        $this->projectProductListing($dataObject);
+        $this->projectProductListing($dataObject, $contextSource);
     }
 
-    private function projectProductListing(ProductListingSource $productListingSource)
+    private function projectProductListing(ProductListingSource $productListingSource, ContextSource $contextSource)
     {
-        $snippet = $this->productListingPageMetaInfoSnippetRenderer->render($productListingSource);
-
-        $this->dataPoolWriter->writeSnippet($snippet);
+        $snippetList = $this->snippetRendererCollection->render($productListingSource, $contextSource);
+        $this->dataPoolWriter->writeSnippetList($snippetList);
     }
 }

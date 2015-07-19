@@ -134,7 +134,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return new ProductListingSavedDomainEventHandler(
             $event,
             $this->getMasterFactory()->createProductListingSourceBuilder(),
-            $this->getMasterFactory()->createProductListingProjector()
+            $this->getMasterFactory()->createProductListingProjector(),
+            $this->getMasterFactory()->createContextSource()
         );
     }
 
@@ -228,17 +229,39 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createProductListingProjector()
     {
         return new ProductListingProjector(
-            $this->getMasterFactory()->createProductListingPageMetaInfoSnippetRenderer(),
+            $this->getMasterFactory()->createProductListingSnippetRendererCollection(),
             $this->getMasterFactory()->createDataPoolWriter()
         );
     }
 
     /**
+     * @return SnippetRendererCollection
+     */
+    public function createProductListingSnippetRendererCollection()
+    {
+        return new SnippetRendererCollection(
+            $this->getProductListingSnippetRendererList(),
+            $this->getMasterFactory()->createSnippetList()
+        );
+    }
+
+    /**
+     * @return SnippetRenderer[]
+     */
+    public function getProductListingSnippetRendererList()
+    {
+        return [
+            $this->getMasterFactory()->createProductListingCriteriaSnippetRenderer()
+        ];
+    }
+
+    /**
      * @return ProductListingCriteriaSnippetRenderer
      */
-    public function createProductListingPageMetaInfoSnippetRenderer()
+    public function createProductListingCriteriaSnippetRenderer()
     {
         return new ProductListingCriteriaSnippetRenderer(
+            $this->getMasterFactory()->createSnippetList(),
             $this->getMasterFactory()->createUrlPathKeyGenerator(),
             $this->getMasterFactory()->createContextBuilder()
         );

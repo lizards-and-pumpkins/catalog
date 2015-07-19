@@ -3,6 +3,7 @@
 namespace Brera\Product;
 
 use Brera\Context\ContextBuilder;
+use Brera\SnippetList;
 use Brera\SnippetRenderer;
 use Brera\Snippet;
 use Brera\UrlPathKeyGenerator;
@@ -19,22 +20,34 @@ class ProductListingCriteriaSnippetRenderer implements SnippetRenderer
      */
     private $contextBuilder;
 
-    public function __construct(UrlPathKeyGenerator $urlPathKeyGenerator, ContextBuilder $contextBuilder)
-    {
+    /**
+     * @var SnippetList
+     */
+    private $snippetList;
+
+    public function __construct(
+        SnippetList $snippetList,
+        UrlPathKeyGenerator $urlPathKeyGenerator,
+        ContextBuilder $contextBuilder
+    ) {
+        $this->snippetList = $snippetList;
         $this->urlPathKeyGenerator = $urlPathKeyGenerator;
         $this->contextBuilder = $contextBuilder;
     }
 
     /**
      * @param ProductListingSource $productListingSource
-     * @return Snippet
+     * @return SnippetList
      */
     public function render(ProductListingSource $productListingSource)
     {
         $metaDataKey = $this->getProductListingMetaDataKey($productListingSource);
         $metaDataContent = $this->getProductListingPageMetaDataContent($productListingSource);
+        $snippet =  Snippet::create($metaDataKey, $metaDataContent);
 
-        return Snippet::create($metaDataKey, $metaDataContent);
+        $this->snippetList->add($snippet);
+
+        return $this->snippetList;
     }
 
     /**

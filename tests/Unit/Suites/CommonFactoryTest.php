@@ -114,7 +114,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testProductImportDomainEventHandlerIsReturned()
     {
-        /* TODO: Move to catalog factory test */
         $productImportDomainEvent = new ProductImportDomainEvent('<xml/>');
         $result = $this->commonFactory->createProductImportDomainEventHandler($productImportDomainEvent);
         $this->assertInstanceOf(ProductImportDomainEventHandler::class, $result);
@@ -122,7 +121,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCatalogImportDomainEventHandlerIsReturned()
     {
-        /* TODO: Move to catalog factory test */
         $catalogImportDomainEvent = new CatalogImportDomainEvent('<xml/>');
         $result = $this->commonFactory->createCatalogImportDomainEventHandler($catalogImportDomainEvent);
         $this->assertInstanceOf(CatalogImportDomainEventHandler::class, $result);
@@ -130,7 +128,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testRootTemplateChangedDomainEventHandlerIsReturned()
     {
-        /* TODO: Move to catalog factory test */
         $rootTemplateChangedDomainEvent = new RootTemplateChangedDomainEvent('<xml/>');
         $result = $this->commonFactory->createRootTemplateChangedDomainEventHandler($rootTemplateChangedDomainEvent);
         $this->assertInstanceOf(RootTemplateChangedDomainEventHandler::class, $result);
@@ -138,7 +135,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testProductListingSavedDomainEventHandlerIsReturned()
     {
-        /* TODO: Move to catalog factory test */
         $productListingSavedDomainEvent = new ProductListingSavedDomainEvent('<xml/>');
         $result = $this->commonFactory->createProductListingSavedDomainEventHandler($productListingSavedDomainEvent);
         $this->assertInstanceOf(ProductListingSavedDomainEventHandler::class, $result);
@@ -146,7 +142,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testProductProjectorIsReturned()
     {
-        /* TODO: Move to catalog factory test */
         $result = $this->commonFactory->createProductProjector();
         $this->assertInstanceOf(ProductProjector::class, $result);
     }
@@ -165,14 +160,12 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testProductDetailViewSnippetKeyGeneratorIsReturned()
     {
-        /* TODO: Move to catalog factory test */
         $result = $this->commonFactory->createProductDetailViewSnippetKeyGenerator();
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
 
     public function testProductBuilderIsReturned()
     {
-        /* TODO: Move to catalog factory test */
         $result = $this->commonFactory->createProductSourceBuilder();
         $this->assertInstanceOf(ProductSourceBuilder::class, $result);
     }

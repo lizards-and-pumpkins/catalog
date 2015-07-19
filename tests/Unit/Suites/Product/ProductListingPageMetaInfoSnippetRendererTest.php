@@ -5,6 +5,7 @@ namespace Brera\Product;
 use Brera\Context\Context;
 use Brera\Context\ContextBuilder;
 use Brera\DataPool\SearchEngine\SearchCriteria;
+use Brera\SnippetList;
 use Brera\SnippetRenderer;
 use Brera\Snippet;
 use Brera\UrlPathKeyGenerator;
@@ -17,6 +18,16 @@ use Brera\UrlPathKeyGenerator;
 class ProductListingCriteriaSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var string
+     */
+    private $dummyUrlKey = 'foo';
+
+    /**
+     * @var SnippetList|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockSnippetList;
+
+    /**
      * @var ProductListingCriteriaSnippetRenderer
      */
     private $renderer;
@@ -26,13 +37,18 @@ class ProductListingCriteriaSnippetRendererTest extends \PHPUnit_Framework_TestC
         $stubContext = $this->getMock(Context::class);
 
         $mockUrlPathKeyGenerator = $this->getMock(UrlPathKeyGenerator::class);
-        $mockUrlPathKeyGenerator->method('getUrlKeyForPathInContext')
-            ->willReturn('foo');
-        $mockContextBuilder = $this->getMock(ContextBuilder::class, [], [], '', false);
-        $mockContextBuilder->method('getContext')
-            ->willReturn($stubContext);
+        $mockUrlPathKeyGenerator->method('getUrlKeyForPathInContext')->willReturn($this->dummyUrlKey);
 
-        $this->renderer = new ProductListingCriteriaSnippetRenderer($mockUrlPathKeyGenerator, $mockContextBuilder);
+        $mockContextBuilder = $this->getMock(ContextBuilder::class, [], [], '', false);
+        $mockContextBuilder->method('getContext')->willReturn($stubContext);
+
+        $this->mockSnippetList = $this->getMock(SnippetList::class);
+
+        $this->renderer = new ProductListingCriteriaSnippetRenderer(
+            $this->mockSnippetList,
+            $mockUrlPathKeyGenerator,
+            $mockContextBuilder
+        );
     }
 
     public function testSnippetRendererInterfaceIsImplemented()
@@ -40,26 +56,14 @@ class ProductListingCriteriaSnippetRendererTest extends \PHPUnit_Framework_TestC
         $this->assertInstanceOf(SnippetRenderer::class, $this->renderer);
     }
 
-    public function testSnippetWithValidJsonAsContentIsReturned()
+    public function testSnippetWithValidJsonAsContentInAListIsReturned()
     {
         $mockProductListingSource = $this->getMockProductListingSource();
+        $expectedSnippet = $this->getExpectedSnippet();
 
-        $snippet = $this->renderer->render($mockProductListingSource);
+        $this->mockSnippetList->expects($this->once())->method('add')->with($expectedSnippet);
 
-        json_decode($snippet->getContent());
-
-        $this->assertInstanceOf(Snippet::class, $snippet);
-        $this->assertEquals(JSON_ERROR_NONE, json_last_error());
-    }
-
-    public function testReturnedResultSnippetKeyHasProductListingSnippetCodePrefix()
-    {
-        $mockProductListingSource = $this->getMockProductListingSource();
-
-        $snippet = $this->renderer->render($mockProductListingSource);
-        $expectedPattern = ProductListingSnippetRenderer::CODE . '_%s';
-        $this->assertStringMatchesFormat($expectedPattern, $snippet->getKey());
-
+        $this->renderer->render($mockProductListingSource);
     }
 
     /**
@@ -69,12 +73,24 @@ class ProductListingCriteriaSnippetRendererTest extends \PHPUnit_Framework_TestC
     {
         $mockSearchCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
         $mockProductListingSource = $this->getMock(ProductListingSource::class, [], [], '', false);
-        $mockProductListingSource->expects($this->once())
-            ->method('getContextData')
-            ->willReturn([]);
-        $mockProductListingSource->expects($this->once())
-            ->method('getCriteria')
-            ->willReturn($mockSearchCriteria);
+        $mockProductListingSource->method('getContextData')->willReturn([]);
+        $mockProductListingSource->method('getCriteria')->willReturn($mockSearchCriteria);
+
         return $mockProductListingSource;
+    }
+
+    /**
+     * @return Snippet
+     */
+    private function getExpectedSnippet()
+    {
+        return Snippet::create(
+            ProductListingSnippetRenderer::CODE . '_' . $this->dummyUrlKey,
+            json_encode([
+                'product_selection_criteria' => null,
+                'root_snippet_code'          => ProductListingSnippetRenderer::CODE,
+                'page_snippet_codes'         => [ProductListingSnippetRenderer::CODE]
+            ])
+        );
     }
 }
