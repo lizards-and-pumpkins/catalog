@@ -3,7 +3,6 @@
 namespace Brera;
 
 use Brera\Content\ContentBlockProjector;
-use Brera\Content\ContentBlockSnippetKeyGenerator;
 use Brera\Content\ContentBlockSnippetRenderer;
 use Brera\Content\ContentBlockWasUpdatedDomainEvent;
 use Brera\Content\ContentBlockWasUpdatedDomainEventHandler;
@@ -431,7 +430,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createContentBlockSnippetKeyGenerator()
     {
-        return new ContentBlockSnippetKeyGenerator(
+        return new GenericSnippetKeyGenerator(
             $this->getMasterFactory()->getContentBlockSnippetKey(),
             $this->getMasterFactory()->getRequiredContexts()
         );

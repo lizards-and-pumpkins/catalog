@@ -16,7 +16,6 @@ use Brera\Product\ProductListingRouter;
  * @uses   \Brera\IntegrationTestFactory
  * @uses   \Brera\CommonFactory
  * @uses   \Brera\Content\ContentBlocksApiV1PutRequestHandler
- * @uses   \Brera\Content\ContentBlockSnippetKeyGenerator
  * @uses   \Brera\Product\CatalogImportApiV1PutRequestHandler
  * @uses   \Brera\Product\ProductDetailViewRouter
  * @uses   \Brera\Product\ProductDetailViewRequestHandlerBuilder

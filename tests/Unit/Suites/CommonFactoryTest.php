@@ -46,7 +46,6 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Content\ContentBlockWasUpdatedDomainEventHandler
  * @uses   \Brera\Content\ContentBlockProjector
  * @uses   \Brera\Content\UpdateContentBlockCommandHandler
- * @uses   \Brera\Content\ContentBlockSnippetKeyGenerator
  * @uses   \Brera\Context\ContextBuilder
  * @uses   \Brera\Context\ContextSource
  * @uses   \Brera\CommandConsumer
