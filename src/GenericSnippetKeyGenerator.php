@@ -39,7 +39,15 @@ class GenericSnippetKeyGenerator implements SnippetKeyGenerator
      */
     public function getKeyForContext(Context $context, array $data)
     {
-        return sprintf('%s_%s', $this->snippetCode, $context->getIdForParts($this->contextParts));
+        $snippetKey = $this->snippetCode;
+
+        if (!empty($data)) {
+            $snippetKey .= '_' . implode('_', $data);
+        }
+
+        $snippetKey .= '_' . $context->getIdForParts($this->contextParts);
+
+        return $snippetKey;
     }
 
     /**

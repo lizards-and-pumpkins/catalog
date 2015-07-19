@@ -4,7 +4,6 @@ namespace Brera;
 
 use Brera\Context\Context;
 use Brera\Context\VersionedContext;
-use Brera\DataPool\DataPoolWriter;
 use Brera\Http\HttpHeaders;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestBody;
@@ -42,14 +41,7 @@ class FrontendRenderingTest extends AbstractIntegrationTest
             HttpRequestBody::fromString('')
         );
 
-        $dataPoolWriter = $this->factory->createDataPoolWriter();
-
-        $this->addPageMetaInfoFixtureToKeyValueStorage(
-            $dataPoolWriter,
-            $snippetKeyGeneratorLocator,
-            $urlPathKeyGenerator,
-            $context
-        );
+        $this->addPageMetaInfoFixtureToKeyValueStorage($snippetKeyGeneratorLocator, $urlPathKeyGenerator, $context);
 
         $dataPoolReader = $this->factory->createDataPoolReader();
         $logger = $this->factory->getLogger();
@@ -61,27 +53,36 @@ class FrontendRenderingTest extends AbstractIntegrationTest
             new PageBuilder($dataPoolReader, $snippetKeyGeneratorLocator, $logger)
         );
         $page = $pageBuilder->process($httpRequest);
-
         $body = $page->getBody();
+
+        $this->failIfMessagesWhereLogged($logger);
+
         $expected = '<html><head><title>Page Title</title></head><body><h1>Headline</h1></body></html>';
 
         $this->assertEquals($expected, $body);
     }
 
     private function addPageMetaInfoFixtureToKeyValueStorage(
-        DataPoolWriter $dataPoolWriter,
         SnippetKeyGeneratorLocator $snippetKeyGeneratorLocator,
         UrlPathKeyGenerator $urlPathKeyGenerator,
         Context $context
     ) {
+        $dataPoolWriter = $this->factory->createDataPoolWriter();
+
         $rootSnippetCode = 'root-snippet';
         $rootSnippetKeyGenerator = new ProductSnippetKeyGenerator(
             ProductDetailViewInContextSnippetRenderer::CODE,
             $this->factory->getRequiredContexts()
         );
         $snippetKeyGeneratorLocator->register($rootSnippetCode, $rootSnippetKeyGenerator);
-        $snippetKeyGeneratorLocator->register('head', new GenericSnippetKeyGenerator('head', []));
-        $snippetKeyGeneratorLocator->register('body', new GenericSnippetKeyGenerator('body', []));
+        $snippetKeyGeneratorLocator->register('head', new GenericSnippetKeyGenerator(
+            'head',
+            $this->factory->getRequiredContexts())
+        );
+        $snippetKeyGeneratorLocator->register('body', new GenericSnippetKeyGenerator(
+            'body',
+            $this->factory->getRequiredContexts()
+        ));
 
         $pageSnippet = Snippet::create(
             $rootSnippetKeyGenerator->getKeyForContext($context, ['product_id' => $this->testProductId]),
@@ -100,12 +101,12 @@ class FrontendRenderingTest extends AbstractIntegrationTest
         $dataPoolWriter->writeSnippet($metaInfoSnippet);
 
         $headSnippetKeyGenerator = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode('head');
-        $key = $headSnippetKeyGenerator->getKeyForContext($context, []);
+        $key = $headSnippetKeyGenerator->getKeyForContext($context, ['product_id' => $this->testProductId]);
         $headSnippet = Snippet::create($key, '<title>Page Title</title>');
         $dataPoolWriter->writeSnippet($headSnippet);
 
         $bodySnippetKeyGenerator = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode('body');
-        $key = $bodySnippetKeyGenerator->getKeyForContext($context, []);
+        $key = $bodySnippetKeyGenerator->getKeyForContext($context, ['product_id' => $this->testProductId]);
         $bodySnippet = Snippet::create($key, '<h1>Headline</h1>');
         $dataPoolWriter->writeSnippet($bodySnippet);
     }

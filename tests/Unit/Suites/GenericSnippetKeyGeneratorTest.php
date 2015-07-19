@@ -57,7 +57,7 @@ class GenericSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function testKeyIncludingHandleIsReturned()
+    public function testSnippetKeyContainsSnippetCode()
     {
         $stubContext = $this->getMock(Context::class);
         $result = $this->keyGenerator->getKeyForContext($stubContext, []);
@@ -65,7 +65,7 @@ class GenericSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertContains($this->dummySnippetCode, $result);
     }
 
-    public function testContextIdentifierIsIncludedInReturnedKey()
+    public function testSnippetKeyContainsContextPartValue()
     {
         $dummyContextId = 'foo';
         $stubContext = $this->getMock(Context::class);
@@ -73,6 +73,15 @@ class GenericSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
         $result = $this->keyGenerator->getKeyForContext($stubContext, []);
 
         $this->assertContains($dummyContextId, $result);
+    }
+
+    public function testSnippetKeyContainsDataValue()
+    {
+        $dummyDataValue = 'foo';
+        $stubContext = $this->getMock(Context::class);
+        $result = $this->keyGenerator->getKeyForContext($stubContext, [$dummyDataValue]);
+
+        $this->assertContains($dummyDataValue, $result);
     }
 
     public function testRequiredContextPartsAreReturned()
