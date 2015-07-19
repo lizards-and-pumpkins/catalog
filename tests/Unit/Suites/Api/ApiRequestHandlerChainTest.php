@@ -2,8 +2,6 @@
 
 namespace Brera\Api;
 
-use Brera\Http\HttpRequest;
-
 /**
  * @covers Brera\Api\ApiRequestHandlerChain
  */
@@ -24,16 +22,10 @@ class ApiRequestHandlerChainTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException(ApiVersionMustBeIntException::class);
 
         $requestHandlerCode = 'foo';
-        $requestHandlerMethod = HttpRequest::METHOD_GET;
         $requestHandlerVersion = 'bar';
 
         $stubApiRequestHandler = $this->getMock(ApiRequestHandler::class);
-        $this->requestHandlerChain->register(
-            $requestHandlerCode,
-            $requestHandlerMethod,
-            $requestHandlerVersion,
-            $stubApiRequestHandler
-        );
+        $this->requestHandlerChain->register($requestHandlerCode, $requestHandlerVersion, $stubApiRequestHandler);
     }
 
     public function testExceptionIsThrownDuringAttemptToLocateRequestHandlerWithNonIntVersion()
@@ -41,27 +33,17 @@ class ApiRequestHandlerChainTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException(ApiVersionMustBeIntException::class);
 
         $requestHandlerCode = 'foo';
-        $requestHandlerMethod = HttpRequest::METHOD_GET;
         $requestHandlerVersion = 'bar';
 
-        $this->requestHandlerChain->getApiRequestHandler(
-            $requestHandlerCode,
-            $requestHandlerMethod,
-            $requestHandlerVersion
-        );
+        $this->requestHandlerChain->getApiRequestHandler($requestHandlerCode, $requestHandlerVersion);
     }
 
     public function testNullApiRequestHandlerIsReturnedIfNoApiRequestHandlerIsFound()
     {
         $requestHandlerCode = 'foo';
-        $requestHandlerMethod = HttpRequest::METHOD_GET;
         $requestHandlerVersion = 1;
 
-        $result = $this->requestHandlerChain->getApiRequestHandler(
-            $requestHandlerCode,
-            $requestHandlerMethod,
-            $requestHandlerVersion
-        );
+        $result = $this->requestHandlerChain->getApiRequestHandler($requestHandlerCode, $requestHandlerVersion);
 
         $this->assertInstanceOf(NullApiRequestHandler::class, $result);
     }
@@ -69,22 +51,12 @@ class ApiRequestHandlerChainTest extends \PHPUnit_Framework_TestCase
     public function testRequestHandlerIsReturned()
     {
         $requestHandlerCode = 'foo';
-        $requestHandlerMethod = HttpRequest::METHOD_GET;
         $requestHandlerVersion = 1;
 
         $stubApiRequestHandler = $this->getMock(ApiRequestHandler::class);
-        $this->requestHandlerChain->register(
-            $requestHandlerCode,
-            $requestHandlerMethod,
-            $requestHandlerVersion,
-            $stubApiRequestHandler
-        );
+        $this->requestHandlerChain->register($requestHandlerCode, $requestHandlerVersion, $stubApiRequestHandler);
 
-        $result = $this->requestHandlerChain->getApiRequestHandler(
-            $requestHandlerCode,
-            $requestHandlerMethod,
-            $requestHandlerVersion
-        );
+        $result = $this->requestHandlerChain->getApiRequestHandler($requestHandlerCode, $requestHandlerVersion);
 
         $this->assertSame($stubApiRequestHandler, $result);
     }

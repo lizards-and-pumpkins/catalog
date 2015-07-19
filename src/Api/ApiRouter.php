@@ -40,9 +40,12 @@ class ApiRouter implements HttpRouter
         }
 
         $requestHandlerCode = array_shift($urlToken);
+        if (!$requestHandlerCode) {
+            return null;
+        }
+
         $apiRequestHandler = $this->requestHandlerChain->getApiRequestHandler(
-            $requestHandlerCode,
-            $request->getMethod(),
+            strtolower($request->getMethod() . '_' . $requestHandlerCode),
             (int) $matchedVersion[1]
         );
 

@@ -44,14 +44,22 @@ class ContentBlocksApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
         $this->assertInstanceOf(ApiRequestHandler::class, $this->requestHandler);
     }
 
+    public function testRequestCanNotBeProcessedIfMethodIsNotPut()
+    {
+        $this->mockRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
+        $this->assertFalse($this->requestHandler->canProcess($this->mockRequest));
+    }
+
     public function testRequestCanNotBeProcessedIfUrlDoesNotContainContentBlockId()
     {
+        $this->mockRequest->method('getMethod')->willReturn(HttpRequest::METHOD_PUT);
         $this->mockRequest->method('getUrl')->willReturn('http://example.com/api/content_blocks');
         $this->assertFalse($this->requestHandler->canProcess($this->mockRequest));
     }
 
-    public function testRequestCanBeProcessedIfUrlContainsBlockId()
+    public function testRequestCanBeProcessedIfValid()
     {
+        $this->mockRequest->method('getMethod')->willReturn(HttpRequest::METHOD_PUT);
         $this->mockRequest->method('getUrl')->willReturn('http://example.com/api/content_blocks/foo');
         $this->assertTrue($this->requestHandler->canProcess($this->mockRequest));
     }

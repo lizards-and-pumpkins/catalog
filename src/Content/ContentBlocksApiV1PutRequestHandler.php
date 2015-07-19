@@ -24,7 +24,15 @@ class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
      */
     public function canProcess(HttpRequest $request)
     {
-        return null !== $this->extractContentBlockIdFromUrl($request);
+        if (HttpRequest::METHOD_PUT !== $request->getMethod()) {
+            return false;
+        }
+
+        if (null === $this->extractContentBlockIdFromUrl($request)) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

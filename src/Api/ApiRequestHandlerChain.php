@@ -8,29 +8,27 @@ class ApiRequestHandlerChain
 
     /**
      * @param string $code
-     * @param string $method
      * @param int $version
      * @param ApiRequestHandler $requestHandler
      */
-    public function register($code, $method, $version, ApiRequestHandler $requestHandler)
+    public function register($code, $version, ApiRequestHandler $requestHandler)
     {
         $this->validateApiVersion($version);
 
-        $key = $this->getRequestHandlerChainKey($code, $method, $version);
+        $key = $this->getRequestHandlerChainKey($code, $version);
         $this->requestHandlers[$key] = $requestHandler;
     }
 
     /**
      * @param string $code
-     * @param string $method
      * @param int $version
      * @return ApiRequestHandler
      */
-    public function getApiRequestHandler($code, $method, $version)
+    public function getApiRequestHandler($code, $version)
     {
         $this->validateApiVersion($version);
 
-        $key = $this->getRequestHandlerChainKey($code, $method, $version);
+        $key = $this->getRequestHandlerChainKey($code, $version);
 
         if (!isset($this->requestHandlers[$key])) {
             return new NullApiRequestHandler;
@@ -39,9 +37,14 @@ class ApiRequestHandlerChain
         return $this->requestHandlers[$key];
     }
 
-    private function getRequestHandlerChainKey($code, $method, $version)
+    /**
+     * @param string $code
+     * @param string $version
+     * @return string
+     */
+    private function getRequestHandlerChainKey($code, $version)
     {
-        return sprintf('v%s_%s_%s', $code, $method, $version);
+        return sprintf('v%s_%s', $version, $code);
     }
 
     /**

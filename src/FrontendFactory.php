@@ -47,22 +47,19 @@ class FrontendFactory implements Factory
         $version = 1;
 
         $requestHandlerChain->register(
-            'catalog_import',
-            HttpRequest::METHOD_PUT,
+            'put_catalog_import',
             $version,
             $this->getMasterFactory()->createCatalogImportApiV1PutRequestHandler()
         );
 
         $requestHandlerChain->register(
-            'content_blocks',
-            HttpRequest::METHOD_PUT,
+            'put_content_blocks',
             $version,
             $this->getMasterFactory()->createContentBlocksApiV1PutRequestHandler()
         );
 
         $requestHandlerChain->register(
-            'multiple_product_stock_quantity',
-            HttpRequest::METHOD_PUT,
+            'put_multiple_product_stock_quantity',
             $version,
             $this->getMasterFactory()->createMultipleProductStockQuantityApiV1PutRequestHandler()
         );

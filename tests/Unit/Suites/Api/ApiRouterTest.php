@@ -66,6 +66,14 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($result);
     }
 
+    public function testNullIsReturnedIfEndpointCodeIsNotSpecified()
+    {
+        $this->stubUrl->expects($this->once())->method('getPath')->willReturn('api/v1');
+        $result = $this->apiRouter->route($this->stubHttpRequest, $this->stubContext);
+
+        $this->assertNull($result);
+    }
+
     public function testNullIsReturnedIfApiRequestHandlerCanNotProcessRequest()
     {
         $stubApiRequestHandler = $this->getMock(HttpRequestHandler::class);
