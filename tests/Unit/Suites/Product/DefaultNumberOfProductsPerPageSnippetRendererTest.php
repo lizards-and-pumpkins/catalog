@@ -4,6 +4,7 @@ namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\Context\ContextSource;
+use Brera\RootSnippetSourceList;
 use Brera\Snippet;
 use Brera\SnippetKeyGenerator;
 use Brera\SnippetList;
@@ -30,11 +31,6 @@ class DefaultNumberOfProductsPerPageSnippetRendererTest extends \PHPUnit_Framewo
      */
     private $renderer;
 
-    /**
-     * @var ContextSource|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubContextSource;
-
     protected function setUp()
     {
         $this->mockSnippetList = $this->getMock(SnippetList::class);
@@ -44,8 +40,6 @@ class DefaultNumberOfProductsPerPageSnippetRendererTest extends \PHPUnit_Framewo
             $this->mockSnippetList,
             $this->stubSnippetKeyGenerator
         );
-
-        $this->stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
     }
 
     public function testSnippetRendererInterfaceIsImplemented()
@@ -53,19 +47,19 @@ class DefaultNumberOfProductsPerPageSnippetRendererTest extends \PHPUnit_Framewo
         $this->assertInstanceOf(SnippetRenderer::class, $this->renderer);
     }
 
-    public function testExceptionIsThrownIfSpecifiedNumberOfProductsPerPageIsNotAnInteger()
-    {
-        $this->setExpectedException(InvalidNumberOfProductsPerPageException::class);
-        $this->renderer->render('foo', $this->stubContextSource);
-    }
-
     public function testSnippetListIsReturned()
     {
         $dummyNumberOfProductsPerPage = 9;
         $dummySnippetKey = 'bar';
 
+        /** @var RootSnippetSourceList|\PHPUnit_Framework_MockObject_MockObject $stubRootSnippetSourceList */
+        $stubRootSnippetSourceList = $this->getMock(RootSnippetSourceList::class, [], [], '', false);
+        $stubRootSnippetSourceList->method('getNumItemsPrePageForContext')->willReturn([$dummyNumberOfProductsPerPage]);
+
         $stubContext = $this->getMock(Context::class);
-        $this->stubContextSource->method('getContextsForParts')->willReturn([$stubContext]);
+        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
+        $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
+        $stubContextSource->method('getContextsForParts')->willReturn([$stubContext]);
 
         $this->stubSnippetKeyGenerator->method('getContextPartsUsedForKey')->willReturn(['foo']);
         $this->stubSnippetKeyGenerator->method('getKeyForContext')->willReturn($dummySnippetKey);
@@ -74,6 +68,6 @@ class DefaultNumberOfProductsPerPageSnippetRendererTest extends \PHPUnit_Framewo
 
         $this->mockSnippetList->expects($this->once())->method('add')->with($expectedSnippet);
 
-        $this->renderer->render($dummyNumberOfProductsPerPage, $this->stubContextSource);
+        $this->renderer->render($stubRootSnippetSourceList, $stubContextSource);
     }
 }

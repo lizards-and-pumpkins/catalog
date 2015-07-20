@@ -3,6 +3,7 @@
 namespace Brera\Product;
 
 use Brera\Context\ContextSource;
+use Brera\RootSnippetSourceList;
 use Brera\Snippet;
 use Brera\SnippetKeyGenerator;
 use Brera\SnippetList;
@@ -27,43 +28,30 @@ class DefaultNumberOfProductsPerPageSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param int $numberOfProductsPerPage
+     * @param RootSnippetSourceList $rootSnippetSourceList
      * @param ContextSource $contextSource
      * @return SnippetList
      */
-    public function render($numberOfProductsPerPage, ContextSource $contextSource)
+    public function render(RootSnippetSourceList $rootSnippetSourceList, ContextSource $contextSource)
     {
-        $this->validateNumberOfProductsPerPage($numberOfProductsPerPage);
-
         $contextParts = $this->snippetKeyGenerator->getContextPartsUsedForKey();
         $contexts = $contextSource->getContextsForParts($contextParts);
         foreach ($contexts as $context) {
-            $this->renderSnippetInContext($numberOfProductsPerPage, $context);
+            $this->renderSnippetInContext($rootSnippetSourceList, $context);
         }
 
         return $this->snippetList;
     }
 
     /**
-     * @param $numberOfProductsPerPage
-     */
-    private function validateNumberOfProductsPerPage($numberOfProductsPerPage)
-    {
-        if (!is_int($numberOfProductsPerPage)) {
-            throw new InvalidNumberOfProductsPerPageException(
-                sprintf('Number or products per page has to be integer, got "%s".', gettype($numberOfProductsPerPage))
-            );
-        }
-    }
-
-    /**
-     * @param int $numberOfProductsPerPage
+     * @param RootSnippetSourceList $rootSnippetSourceList
      * @param $context
      */
-    private function renderSnippetInContext($numberOfProductsPerPage, $context)
+    private function renderSnippetInContext(RootSnippetSourceList $rootSnippetSourceList, $context)
     {
         $snippetKey = $this->snippetKeyGenerator->getKeyForContext($context, []);
-        $snippet = Snippet::create($snippetKey, $numberOfProductsPerPage);
+        $snippetContent = array_shift($rootSnippetSourceList->getNumItemsPrePageForContext($context));
+        $snippet = Snippet::create($snippetKey, $snippetContent);
         $this->snippetList->add($snippet);
     }
 }
