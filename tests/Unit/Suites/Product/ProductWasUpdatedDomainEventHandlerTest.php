@@ -3,41 +3,48 @@
 namespace Brera\Product;
 
 use Brera\Context\ContextSource;
+use Brera\DomainEventHandler;
 
 /**
  * @covers \Brera\Product\ProductWasUpdatedDomainEventHandler
  */
 class ProductWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testProjectionIsTriggered()
+    /**
+     * @var ProductProjector|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockProductProjector;
+
+    /**
+     * @var ProductWasUpdatedDomainEventHandler
+     */
+    private $domainEventHandler;
+
+    protected function setUp()
     {
         $stubProductSource = $this->getMock(ProductSource::class, [], [], '', false);
 
         $stubDomainEvent = $this->getMock(ProductWasUpdatedDomainEvent::class, [], [], '', false);
-        $stubDomainEvent->expects($this->once())
-            ->method('getXml');
+        $stubDomainEvent->method('getProductSource')->willReturn($stubProductSource);
 
-        $stubProductBuilder = $this->getMock(ProductSourceBuilder::class);
-        $stubProductBuilder->expects($this->once())
-            ->method('createProductSourceFromXml')
-            ->willReturn($stubProductSource);
+        $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
+        $this->mockProductProjector = $this->getMock(ProductProjector::class, [], [], '', false);
 
-        $stubContextSource = $this->getMockBuilder(ContextSource::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getContextMatrix'])
-            ->getMock();
-
-        $stubProjector = $this->getMock(ProductProjector::class, [], [], '', false);
-        $stubProjector->expects($this->once())
-            ->method('project')
-            ->with($stubProductSource, $stubContextSource);
-
-        (new ProductWasUpdatedDomainEventHandler(
+        $this->domainEventHandler = new ProductWasUpdatedDomainEventHandler(
             $stubDomainEvent,
-            $stubProductBuilder,
             $stubContextSource,
-            $stubProjector
-        )
-        )->process();
+            $this->mockProductProjector
+        );
+    }
+
+    public function testDomainEventHandlerInterfaceIsImplemented()
+    {
+        $this->assertInstanceOf(DomainEventHandler::class, $this->domainEventHandler);
+    }
+
+    public function testProductProjectionIsTriggered()
+    {
+        $this->mockProductProjector->expects($this->once())->method('project');
+        $this->domainEventHandler->process();
     }
 }

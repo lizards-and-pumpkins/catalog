@@ -21,28 +21,41 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
     private $importDirectoryPath;
 
     /**
+     * @var ProductSourceBuilder
+     */
+    private $productSourceBuilder;
+
+    /**
      * @param Queue $domainEventQueue
      * @param string $importDirectoryPath
+     * @param ProductSourceBuilder $productSourceBuilder
      */
-    private function __construct(Queue $domainEventQueue, $importDirectoryPath)
-    {
+    private function __construct(
+        Queue $domainEventQueue,
+        $importDirectoryPath,
+        ProductSourceBuilder $productSourceBuilder
+    ) {
         $this->domainEventQueue = $domainEventQueue;
         $this->importDirectoryPath = $importDirectoryPath;
+        $this->productSourceBuilder = $productSourceBuilder;
     }
 
     /**
      * @param Queue $domainEventQueue
      * @param string $importDirectoryPath
+     * @param ProductSourceBuilder $productSourceBuilder
      * @return CatalogImportApiV1PutRequestHandler
-     * @throws CatalogImportDirectoryNotReadableException
      */
-    public static function create(Queue $domainEventQueue, $importDirectoryPath)
-    {
+    public static function create(
+        Queue $domainEventQueue,
+        $importDirectoryPath,
+        ProductSourceBuilder $productSourceBuilder
+    ) {
         if (!is_readable($importDirectoryPath)) {
             throw new CatalogImportDirectoryNotReadableException(sprintf('%s is not readable.', $importDirectoryPath));
         }
 
-        return new self($domainEventQueue, $importDirectoryPath);
+        return new self($domainEventQueue, $importDirectoryPath, $productSourceBuilder);
     }
 
     /**
@@ -69,7 +82,9 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
 
         $productNodesXml = (new XPathParser($xml))->getXmlNodesRawXmlArrayByXPath('//catalog/products/product');
         foreach ($productNodesXml as $productXml) {
-            $this->domainEventQueue->add(new ProductWasUpdatedDomainEvent($productXml));
+            $productSource = $this->productSourceBuilder->createProductSourceFromXml($productXml);
+            $productId = $productSource->getId();
+            $this->domainEventQueue->add(new ProductWasUpdatedDomainEvent($productId, $productSource));
         }
 
         $listingNodesXml = (new XPathParser($xml))->getXmlNodesRawXmlArrayByXPath('//catalog/listings/listing');

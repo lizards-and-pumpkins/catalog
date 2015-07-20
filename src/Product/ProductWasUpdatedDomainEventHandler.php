@@ -13,11 +13,6 @@ class ProductWasUpdatedDomainEventHandler implements DomainEventHandler
     private $event;
 
     /**
-     * @var ProductSourceBuilder
-     */
-    private $productSourceBuilder;
-
-    /**
      * @var ProductProjector
      */
     private $projector;
@@ -29,21 +24,17 @@ class ProductWasUpdatedDomainEventHandler implements DomainEventHandler
 
     public function __construct(
         ProductWasUpdatedDomainEvent $event,
-        ProductSourceBuilder $productSourceBuilder,
         ContextSource $contextSource,
         ProductProjector $projector
     ) {
         $this->event = $event;
-        $this->productSourceBuilder = $productSourceBuilder;
         $this->contextSource = $contextSource;
         $this->projector = $projector;
     }
 
     public function process()
     {
-        $xml = $this->event->getXml();
-        $productSource = $this->productSourceBuilder->createProductSourceFromXml($xml);
-
+        $productSource = $this->event->getProductSource();
         $this->projector->project($productSource, $this->contextSource);
     }
 }

@@ -7,23 +7,26 @@ use Brera\DomainEvent;
 class ProductWasUpdatedDomainEvent implements DomainEvent
 {
     /**
-     * @var string
+     * @var ProductId
      */
-    private $xml;
+    private $productId;
 
     /**
-     * @param string $xml
+     * @var ProductSource
      */
-    public function __construct($xml)
+    private $productSource;
+
+    public function __construct(ProductId $productId, ProductSource $productSource)
     {
-        $this->xml = $xml;
+        $this->productId = $productId;
+        $this->productSource = $productSource;
     }
 
     /**
-     * @return string
+     * @return ProductSource
      */
-    public function getXml()
+    public function getProductSource()
     {
-        return $this->xml;
+        return $this->productSource;
     }
 }

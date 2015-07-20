@@ -43,6 +43,11 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
     private $importDirectoryPath;
 
     /**
+     * @var ProductSourceBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubProductSourceBuilder;
+
+    /**
      * @var \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount
      */
     private $eventSpy;
@@ -57,9 +62,17 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
         $this->mockDomainEventQueue = $this->getMock(Queue::class);
         $this->mockDomainEventQueue->expects($this->eventSpy)->method('add');
 
+        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
+        $stubProductSource = $this->getMock(ProductSource::class, [], [], '', false);
+        $stubProductSource->method('getId')->willReturn($stubProductId);
+
+        $this->stubProductSourceBuilder = $this->getMock(ProductSourceBuilder::class, [], [], '', false);
+        $this->stubProductSourceBuilder->method('createProductSourceFromXml')->willReturn($stubProductSource);
+
         $this->requestHandler = CatalogImportApiV1PutRequestHandler::create(
             $this->mockDomainEventQueue,
-            $this->importDirectoryPath
+            $this->importDirectoryPath,
+            $this->stubProductSourceBuilder
         );
 
         $this->mockRequest = $this->getMock(HttpRequest::class, [], [], '', false);
@@ -85,7 +98,11 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
     public function testExceptionIsThrownIfImportDirectoryIsNotReadable()
     {
         $this->setExpectedException(CatalogImportDirectoryNotReadableException::class);
-        CatalogImportApiV1PutRequestHandler::create($this->mockDomainEventQueue, '/some-not-existing-directory');
+        CatalogImportApiV1PutRequestHandler::create(
+            $this->mockDomainEventQueue,
+            '/some-not-existing-directory',
+            $this->stubProductSourceBuilder
+        );
     }
 
     public function testExceptionIsThrownIfCatalogImportFileNameIsNotFoundInRequestBody()
