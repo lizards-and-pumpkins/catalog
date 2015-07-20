@@ -3,15 +3,15 @@
 namespace Brera\Product;
 
 /**
- * @covers \Brera\Product\ProductImportDomainEvent
+ * @covers \Brera\Product\ProductWasUpdatedDomainEvent
  */
-class ProductImportDomainEventTest extends \PHPUnit_Framework_TestCase
+class ProductWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 {
     public function testProductImportXmlIsReturned()
     {
         $xml = '<?xml version="1.0"?><rootNode></rootNode>';
 
-        $domainEvent = new ProductImportDomainEvent($xml);
+        $domainEvent = new ProductWasUpdatedDomainEvent($xml);
         $result = $domainEvent->getXml();
 
         $this->assertEquals($xml, $result);

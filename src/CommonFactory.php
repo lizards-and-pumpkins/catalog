@@ -26,8 +26,8 @@ use Brera\Product\PriceSnippetRenderer;
 use Brera\Product\ProductBackOrderAvailabilitySnippetRenderer;
 use Brera\Product\ProductDetailViewBlockRenderer;
 use Brera\Product\ProductDetailViewInContextSnippetRenderer;
-use Brera\Product\ProductImportDomainEvent;
-use Brera\Product\ProductImportDomainEventHandler;
+use Brera\Product\ProductWasUpdatedDomainEvent;
+use Brera\Product\ProductWasUpdatedDomainEventHandler;
 use Brera\Product\ProductInListingBlockRenderer;
 use Brera\Product\ProductInListingInContextSnippetRenderer;
 use Brera\Product\ProductListingBlockRenderer;
@@ -90,12 +90,12 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     private $imageProcessorCollection;
 
     /**
-     * @param ProductImportDomainEvent $event
-     * @return ProductImportDomainEventHandler
+     * @param ProductWasUpdatedDomainEvent $event
+     * @return ProductWasUpdatedDomainEventHandler
      */
-    public function createProductImportDomainEventHandler(ProductImportDomainEvent $event)
+    public function createProductWasUpdatedDomainEventHandler(ProductWasUpdatedDomainEvent $event)
     {
-        return new ProductImportDomainEventHandler(
+        return new ProductWasUpdatedDomainEventHandler(
             $event,
             $this->getMasterFactory()->createProductSourceBuilder(),
             $this->getMasterFactory()->createContextSource(),

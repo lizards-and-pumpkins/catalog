@@ -7,8 +7,8 @@ use Brera\Image\ImageImportDomainEventHandler;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\ProductId;
-use Brera\Product\ProductImportDomainEvent;
-use Brera\Product\ProductImportDomainEventHandler;
+use Brera\Product\ProductWasUpdatedDomainEvent;
+use Brera\Product\ProductWasUpdatedDomainEventHandler;
 use Brera\Product\ProductListingSavedDomainEvent;
 use Brera\Product\ProductListingSavedDomainEventHandler;
 use Brera\Product\ProductStockQuantitySource;
@@ -19,9 +19,9 @@ use Brera\Product\ProductStockQuantityUpdatedDomainEventHandler;
  * @covers \Brera\DomainEventHandlerLocator
  * @uses   \Brera\Image\ImageImportDomainEvent
  * @uses   \Brera\Product\CatalogImportDomainEvent
- * @uses   \Brera\Product\ProductImportDomainEvent
  * @uses   \Brera\Product\ProductListingSavedDomainEvent
  * @uses   \Brera\Product\ProductStockQuantityUpdatedDomainEvent
+ * @uses   \Brera\Product\ProductWasUpdatedDomainEvent
  * @uses   \Brera\RootTemplateChangedDomainEvent
  */
 class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
@@ -49,22 +49,22 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         $this->locator->getHandlerFor($stubDomainEvent);
     }
 
-    public function testProductImportDomainEventHandlerIsLocatedAndReturned()
+    public function testProductWasUpdatedDomainEventHandlerIsLocatedAndReturned()
     {
-        $stubEventHandler = $this->getMock(ProductImportDomainEventHandler::class, [], [], '', false);
+        $stubEventHandler = $this->getMock(ProductWasUpdatedDomainEventHandler::class, [], [], '', false);
 
         $this->factory->expects($this->once())
-            ->method('createProductImportDomainEventHandler')
+            ->method('createProductWasUpdatedDomainEventHandler')
             ->willReturn($stubEventHandler);
 
         /**
          * The real object has to be used here as getHandlerFor method will call get_class against it
          */
-        $productImportDomainEvent = new ProductImportDomainEvent('<xml/>');
+        $productWasUpdatedDomainEvent = new ProductWasUpdatedDomainEvent('<xml/>');
 
-        $result = $this->locator->getHandlerFor($productImportDomainEvent);
+        $result = $this->locator->getHandlerFor($productWasUpdatedDomainEvent);
 
-        $this->assertInstanceOf(ProductImportDomainEventHandler::class, $result);
+        $this->assertInstanceOf(ProductWasUpdatedDomainEventHandler::class, $result);
     }
 
     public function testCatalogImportDomainEventHandlerIsLocatedAndReturned()

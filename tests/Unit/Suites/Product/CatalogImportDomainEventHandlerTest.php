@@ -7,8 +7,8 @@ use Brera\Queue\Queue;
 
 /**
  * @covers \Brera\Product\CatalogImportDomainEventHandler
- * @uses   \Brera\Product\ProductImportDomainEvent
  * @uses   \Brera\Product\ProductListingSavedDomainEvent
+ * @uses   \Brera\Product\ProductWasUpdatedDomainEvent
  * @uses   \Brera\Image\ImageImportDomainEvent
  * @uses   \Brera\Utils\XPathParser
  */
@@ -44,11 +44,11 @@ class CatalogImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testProductImportDomainEventsAreEmitted()
+    public function testProductWasUpdatedDomainEventsAreEmitted()
     {
         $this->catalogImportDomainEventHandler->process();
 
-        $this->assertEventWasAddedToAQueue(ProductImportDomainEvent::class);
+        $this->assertEventWasAddedToAQueue(ProductWasUpdatedDomainEvent::class);
     }
 
     public function testProductListingSavedDomainEventsAreEmitted()

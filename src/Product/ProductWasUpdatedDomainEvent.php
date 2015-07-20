@@ -4,7 +4,7 @@ namespace Brera\Product;
 
 use Brera\DomainEvent;
 
-class ProductImportDomainEvent implements DomainEvent
+class ProductWasUpdatedDomainEvent implements DomainEvent
 {
     /**
      * @var string

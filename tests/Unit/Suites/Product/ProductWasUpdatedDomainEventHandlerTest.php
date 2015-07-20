@@ -5,15 +5,15 @@ namespace Brera\Product;
 use Brera\Context\ContextSource;
 
 /**
- * @covers \Brera\Product\ProductImportDomainEventHandler
+ * @covers \Brera\Product\ProductWasUpdatedDomainEventHandler
  */
-class ProductImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
+class ProductWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testProjectionIsTriggered()
     {
         $stubProductSource = $this->getMock(ProductSource::class, [], [], '', false);
 
-        $stubDomainEvent = $this->getMock(ProductImportDomainEvent::class, [], [], '', false);
+        $stubDomainEvent = $this->getMock(ProductWasUpdatedDomainEvent::class, [], [], '', false);
         $stubDomainEvent->expects($this->once())
             ->method('getXml');
 
@@ -32,7 +32,7 @@ class ProductImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('project')
             ->with($stubProductSource, $stubContextSource);
 
-        (new ProductImportDomainEventHandler(
+        (new ProductWasUpdatedDomainEventHandler(
             $stubDomainEvent,
             $stubProductBuilder,
             $stubContextSource,

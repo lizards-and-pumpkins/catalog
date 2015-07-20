@@ -15,8 +15,8 @@ use Brera\Image\ImageImportDomainEvent;
 use Brera\Image\ImageImportDomainEventHandler;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
-use Brera\Product\ProductImportDomainEvent;
-use Brera\Product\ProductImportDomainEventHandler;
+use Brera\Product\ProductWasUpdatedDomainEvent;
+use Brera\Product\ProductWasUpdatedDomainEventHandler;
 use Brera\Product\ProductListingSavedDomainEvent;
 use Brera\Product\ProductListingSavedDomainEventHandler;
 use Brera\Product\ProductProjector;
@@ -63,12 +63,12 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Product\ProductSourceBuilder
  * @uses   \Brera\Product\ProductProjector
  * @uses   \Brera\Product\ProductSnippetKeyGenerator
- * @uses   \Brera\Product\ProductImportDomainEvent
- * @uses   \Brera\Product\ProductImportDomainEventHandler
  * @uses   \Brera\Product\ProductListingCriteriaSnippetRenderer
  * @uses   \Brera\Product\ProductListingProjector
  * @uses   \Brera\Product\ProductListingSavedDomainEvent
  * @uses   \Brera\Product\ProductListingSavedDomainEventHandler
+ * @uses   \Brera\Product\ProductWasUpdatedDomainEvent
+ * @uses   \Brera\Product\ProductWasUpdatedDomainEventHandler
  * @uses   \Brera\Product\CatalogImportDomainEvent
  * @uses   \Brera\Product\CatalogImportDomainEventHandler
  * @uses   \Brera\Product\ProductSearchDocumentBuilder
@@ -115,12 +115,12 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         (new CommonFactory())->createDomainEventConsumer();
     }
 
-    public function testProductImportDomainEventHandlerIsReturned()
+    public function testProductWasUpdatedDomainEventHandlerIsReturned()
     {
         /* TODO: Move to catalog factory test */
-        $productImportDomainEvent = new ProductImportDomainEvent('<xml/>');
-        $result = $this->commonFactory->createProductImportDomainEventHandler($productImportDomainEvent);
-        $this->assertInstanceOf(ProductImportDomainEventHandler::class, $result);
+        $productWasUpdatedDomainEvent = new ProductWasUpdatedDomainEvent('<xml/>');
+        $result = $this->commonFactory->createProductWasUpdatedDomainEventHandler($productWasUpdatedDomainEvent);
+        $this->assertInstanceOf(ProductWasUpdatedDomainEventHandler::class, $result);
     }
 
     public function testCatalogImportDomainEventHandlerIsReturned()

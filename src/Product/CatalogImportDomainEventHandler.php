@@ -29,7 +29,7 @@ class CatalogImportDomainEventHandler implements DomainEventHandler
     {
         $xml = $this->event->getXml();
 
-        $this->emitProductImportDomainEvents($xml);
+        $this->emitProductWasUpdatedDomainEvents($xml);
         $this->emitProductListingSavedDomainEvents($xml);
         $this->emitImageImportDomainEvents($xml);
     }
@@ -37,11 +37,11 @@ class CatalogImportDomainEventHandler implements DomainEventHandler
     /**
      * @param string $xml
      */
-    private function emitProductImportDomainEvents($xml)
+    private function emitProductWasUpdatedDomainEvents($xml)
     {
         $productNodesXml = (new XPathParser($xml))->getXmlNodesRawXmlArrayByXPath('//catalog/products/product');
         foreach ($productNodesXml as $productXml) {
-            $this->eventQueue->add(new ProductImportDomainEvent($productXml));
+            $this->eventQueue->add(new ProductWasUpdatedDomainEvent($productXml));
         }
     }
 
