@@ -2,7 +2,7 @@
 
 namespace Brera;
 
-class RootTemplateChangedDomainEvent implements DomainEvent
+class PageTemplateWasUpdatedDomainEvent implements DomainEvent
 {
     /**
      * @var string

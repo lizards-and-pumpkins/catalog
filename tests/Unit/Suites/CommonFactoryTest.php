@@ -53,8 +53,8 @@ use Brera\Queue\Queue;
  * @uses   \Brera\CommandHandlerLocator
  * @uses   \Brera\DomainEventConsumer
  * @uses   \Brera\DomainEventHandlerLocator
- * @uses   \Brera\RootTemplateChangedDomainEvent
- * @uses   \Brera\RootTemplateChangedDomainEventHandler
+ * @uses   \Brera\PageTemplateWasUpdatedDomainEvent
+ * @uses   \Brera\PageTemplateWasUpdatedDomainEventHandler
  * @uses   \Brera\RootSnippetProjector
  * @uses   \Brera\UrlPathKeyGenerator
  * @uses   \Brera\Renderer\BlockRenderer
@@ -135,14 +135,14 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(CatalogImportDomainEventHandler::class, $result);
     }
 
-    public function testRootTemplateChangedDomainEventHandlerIsReturned()
+    public function testPageTemplateWasUpdatedDomainEventHandlerIsReturned()
     {
         /* TODO: Move to catalog factory test */
-        /** @var RootTemplateChangedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
-        $stubDomainEvent = $this->getMock(RootTemplateChangedDomainEvent::class, [], [], '', false);
-        $result = $this->commonFactory->createRootTemplateChangedDomainEventHandler($stubDomainEvent);
+        /** @var PageTemplateWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
+        $stubDomainEvent = $this->getMock(PageTemplateWasUpdatedDomainEvent::class, [], [], '', false);
+        $result = $this->commonFactory->createPageTemplateWasUpdatedDomainEventHandler($stubDomainEvent);
 
-        $this->assertInstanceOf(RootTemplateChangedDomainEventHandler::class, $result);
+        $this->assertInstanceOf(PageTemplateWasUpdatedDomainEventHandler::class, $result);
     }
 
     public function testProductListingWasUpdatedDomainEventHandlerIsReturned()

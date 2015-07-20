@@ -59,7 +59,7 @@ class ProductListingTest extends AbstractIntegrationTest
 
     public function testProductListingPageHtmlIsReturned()
     {
-        $this->addRootTemplateChangedDomainEventToSetupProductListingFixture();
+        $this->addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture();
         $this->addProductWasUpdatedDomainEventToSetUpProductFixture();
         $this->addProductListingCriteriaDomainDomainEventFixture();
 
@@ -89,11 +89,11 @@ class ProductListingTest extends AbstractIntegrationTest
         $this->assertNotContains($unExpectedProductName, $body);
     }
     
-    private function addRootTemplateChangedDomainEventToSetupProductListingFixture()
+    private function addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture()
     {
         $xml = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.xml');
         $queue = $this->factory->getEventQueue();
-        $queue->add(new RootTemplateChangedDomainEvent($xml));
+        $queue->add(new PageTemplateWasUpdatedDomainEvent($xml));
     }
 
     private function addProductWasUpdatedDomainEventToSetUpProductFixture()

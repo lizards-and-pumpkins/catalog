@@ -3,15 +3,15 @@
 namespace Brera;
 
 /**
- * @covers \Brera\RootTemplateChangedDomainEvent
+ * @covers \Brera\PageTemplateWasUpdatedDomainEvent
  */
-class RootTemplateChangedDomainEventTest extends \PHPUnit_Framework_TestCase
+class PageTemplateWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 {
     public function testPassedInXmlIsReturned()
     {
         $xml = 'foo';
 
-        $event = new RootTemplateChangedDomainEvent($xml);
+        $event = new PageTemplateWasUpdatedDomainEvent($xml);
         $result = $event->getXml();
 
         $this->assertEquals($xml, $result);

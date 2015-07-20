@@ -104,14 +104,14 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         );
     }
 
-    public function testRootTemplateChangedDomainEventPutsProductListingRootSnippetIntoKeyValueStore()
+    public function testPageTemplateWasUpdatedDomainEventPutsProductListingRootSnippetIntoKeyValueStore()
     {
         $factory = $this->prepareIntegrationTestMasterFactory();
 
         $xml = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.xml');
 
         $queue = $factory->getEventQueue();
-        $queue->add(new RootTemplateChangedDomainEvent($xml));
+        $queue->add(new PageTemplateWasUpdatedDomainEvent($xml));
 
         $consumer = $factory->createDomainEventConsumer();
         $numberOfMessages = 1;

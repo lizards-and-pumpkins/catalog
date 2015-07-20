@@ -3,31 +3,27 @@
 namespace Brera;
 
 /**
- * @covers \Brera\RootTemplateChangedDomainEventHandler
+ * @covers \Brera\PageTemplateWasUpdatedDomainEventHandler
  */
-class RootTemplateChangedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
+class PageTemplateWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testProjectionIsTriggered()
     {
         $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
         $stubRootSnippetSourceList = $this->getMock(RootSnippetSourceList::class, [], [], '', false);
 
-        $mockRootTemplateChangedDomainEvent = $this->getMock(RootTemplateChangedDomainEvent::class, [], [], '', false);
-        $mockRootTemplateChangedDomainEvent->expects($this->once())
-            ->method('getXml');
+        $mockDomainEvent = $this->getMock(PageTemplateWasUpdatedDomainEvent::class, [], [], '', false);
 
         $mockRootSnippetSourceBuilder = $this->getMock(RootSnippetSourceListBuilder::class, [], [], '', false);
-        $mockRootSnippetSourceBuilder->expects($this->once())
-            ->method('createFromXml')
-            ->willReturn($stubRootSnippetSourceList);
+        $mockRootSnippetSourceBuilder->method('createFromXml')->willReturn($stubRootSnippetSourceList);
 
         $mockProjector = $this->getMock(RootSnippetProjector::class, [], [], '', false);
         $mockProjector->expects($this->once())
             ->method('project')
             ->with($stubRootSnippetSourceList, $stubContextSource);
 
-        (new RootTemplateChangedDomainEventHandler(
-            $mockRootTemplateChangedDomainEvent,
+        (new PageTemplateWasUpdatedDomainEventHandler(
+            $mockDomainEvent,
             $mockRootSnippetSourceBuilder,
             $stubContextSource,
             $mockProjector

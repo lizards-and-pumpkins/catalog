@@ -114,12 +114,12 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @param RootTemplateChangedDomainEvent $event
-     * @return RootTemplateChangedDomainEventHandler
+     * @param PageTemplateWasUpdatedDomainEvent $event
+     * @return PageTemplateWasUpdatedDomainEventHandler
      */
-    public function createRootTemplateChangedDomainEventHandler(RootTemplateChangedDomainEvent $event)
+    public function createPageTemplateWasUpdatedDomainEventHandler(PageTemplateWasUpdatedDomainEvent $event)
     {
-        return new RootTemplateChangedDomainEventHandler(
+        return new PageTemplateWasUpdatedDomainEventHandler(
             $event,
             $this->getMasterFactory()->createRootSnippetSourceBuilder(),
             $this->getMasterFactory()->createContextSource(),

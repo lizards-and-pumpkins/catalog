@@ -30,10 +30,10 @@ interface DomainEventFactory
     public function createCatalogImportDomainEventHandler(CatalogImportDomainEvent $event);
 
     /**
-     * @param RootTemplateChangedDomainEvent $event
-     * @return RootTemplateChangedDomainEventHandler
+     * @param PageTemplateWasUpdatedDomainEvent $event
+     * @return PageTemplateWasUpdatedDomainEventHandler
      */
-    public function createRootTemplateChangedDomainEventHandler(RootTemplateChangedDomainEvent $event);
+    public function createPageTemplateWasUpdatedDomainEventHandler(PageTemplateWasUpdatedDomainEvent $event);
 
     /**
      * @param ImageWasUpdatedDomainEvent $event

@@ -20,7 +20,7 @@ use Brera\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
  * @uses   \Brera\Product\ProductListingWasUpdatedDomainEvent
  * @uses   \Brera\Product\ProductStockQuantityWasUpdatedDomainEvent
  * @uses   \Brera\Product\ProductWasUpdatedDomainEvent
- * @uses   \Brera\RootTemplateChangedDomainEvent
+ * @uses   \Brera\PageTemplateWasUpdatedDomainEvent
  */
 class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -80,20 +80,20 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(CatalogImportDomainEventHandler::class, $result);
     }
 
-    public function testRootTemplateChangedDomainEventHandlerIsLocatedAndReturned()
+    public function testPageTemplateWasUpdatedDomainEventHandlerIsLocatedAndReturned()
     {
-        $stubEventHandler = $this->getMock(RootTemplateChangedDomainEventHandler::class, [], [], '', false);
-        $this->factory->method('createRootTemplateChangedDomainEventHandler')->willReturn($stubEventHandler);
+        $stubEventHandler = $this->getMock(PageTemplateWasUpdatedDomainEventHandler::class, [], [], '', false);
+        $this->factory->method('createPageTemplateWasUpdatedDomainEventHandler')->willReturn($stubEventHandler);
 
-        /** @var RootTemplateChangedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
-        $stubDomainEvent = $this->getMockBuilder(RootTemplateChangedDomainEvent::class)
-            ->setMockClassName('RootTemplateChangedDomainEvent')
+        /** @var PageTemplateWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
+        $stubDomainEvent = $this->getMockBuilder(PageTemplateWasUpdatedDomainEvent::class)
+            ->setMockClassName('PageTemplateWasUpdatedDomainEvent')
             ->disableOriginalConstructor()
             ->getMock();
 
         $result = $this->locator->getHandlerFor($stubDomainEvent);
 
-        $this->assertInstanceOf(RootTemplateChangedDomainEventHandler::class, $result);
+        $this->assertInstanceOf(PageTemplateWasUpdatedDomainEventHandler::class, $result);
     }
 
     public function testImageWasUpdatedDomainEventHandlerIsLocatedAndReturned()
