@@ -13,8 +13,6 @@ use Brera\Http\HttpRouterChain;
 use Brera\Http\ResourceNotFoundRouter;
 use Brera\Image\ImageWasUpdatedDomainEvent;
 use Brera\Image\ImageWasUpdatedDomainEventHandler;
-use Brera\Product\CatalogImportDomainEvent;
-use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\ProductWasUpdatedDomainEvent;
 use Brera\Product\ProductWasUpdatedDomainEventHandler;
 use Brera\Product\ProductListingWasUpdatedDomainEvent;
@@ -69,8 +67,6 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Product\ProductListingWasUpdatedDomainEventHandler
  * @uses   \Brera\Product\ProductWasUpdatedDomainEvent
  * @uses   \Brera\Product\ProductWasUpdatedDomainEventHandler
- * @uses   \Brera\Product\CatalogImportDomainEvent
- * @uses   \Brera\Product\CatalogImportDomainEventHandler
  * @uses   \Brera\Product\ProductSearchDocumentBuilder
  * @uses   \Brera\Product\ProductSourceDetailViewSnippetRenderer
  * @uses   \Brera\Product\ProductStockQuantityProjector
@@ -123,16 +119,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $result = $this->commonFactory->createProductWasUpdatedDomainEventHandler($stubDomainEvent);
 
         $this->assertInstanceOf(ProductWasUpdatedDomainEventHandler::class, $result);
-    }
-
-    public function testCatalogImportDomainEventHandlerIsReturned()
-    {
-        /* TODO: Move to catalog factory test */
-        /** @var CatalogImportDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
-        $stubDomainEvent = $this->getMock(CatalogImportDomainEvent::class, [], [], '', false);
-        $result = $this->commonFactory->createCatalogImportDomainEventHandler($stubDomainEvent);
-
-        $this->assertInstanceOf(CatalogImportDomainEventHandler::class, $result);
     }
 
     public function testPageTemplateWasUpdatedDomainEventHandlerIsReturned()

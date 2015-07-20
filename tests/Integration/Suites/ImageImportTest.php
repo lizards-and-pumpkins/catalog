@@ -5,13 +5,14 @@ namespace Brera;
 use Brera\Image\ImageWasUpdatedDomainEvent;
 use Brera\Utils\LocalFilesystem;
 
-class ImageImportTest extends \PHPUnit_Framework_TestCase
+class ImageImportTest extends AbstractIntegrationTest
 {
     protected function setUp()
     {
-        if (! extension_loaded('imagick')) {
+        if (!extension_loaded('imagick')) {
             $this->markTestSkipped('The PHP extension imagick is not installed');
         }
+
         $this->flushProcessedImagesDir();
     }
 
@@ -19,7 +20,7 @@ class ImageImportTest extends \PHPUnit_Framework_TestCase
     {
         $factory = $this->prepareIntegrationTestMasterFactory();
 
-        $images = ['test_image.jpg', 'test_image2.jpg'];
+        $images = ['../test_image.jpg', '../test_image2.jpg'];
 
         $queue = $factory->getEventQueue();
         foreach ($images as $image) {
@@ -30,7 +31,8 @@ class ImageImportTest extends \PHPUnit_Framework_TestCase
         $numberOfMessages = count($images);
         $consumer->process($numberOfMessages);
 
-        $this->assertEmpty($factory->getLogger()->getMessages());
+        $logger = $factory->getLogger();
+        $this->failIfMessagesWhereLogged($logger);
 
         foreach ($images as $image) {
             $filePath = sys_get_temp_dir() . '/' . IntegrationTestFactory::PROCESSED_IMAGES_DIR . '/' . $image;
@@ -46,18 +48,6 @@ class ImageImportTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         $this->flushProcessedImagesDir();
-    }
-
-    /**
-     * @return SampleMasterFactory
-     */
-    private function prepareIntegrationTestMasterFactory()
-    {
-        $factory = new SampleMasterFactory();
-        $factory->register(new CommonFactory());
-        $factory->register(new IntegrationTestFactory());
-
-        return $factory;
     }
 
     private function flushProcessedImagesDir()

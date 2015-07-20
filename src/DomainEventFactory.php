@@ -6,8 +6,6 @@ use Brera\Content\ContentBlockWasUpdatedDomainEvent;
 use Brera\Content\ContentBlockWasUpdatedDomainEventHandler;
 use Brera\Image\ImageWasUpdatedDomainEvent;
 use Brera\Image\ImageWasUpdatedDomainEventHandler;
-use Brera\Product\CatalogImportDomainEvent;
-use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\ProductWasUpdatedDomainEvent;
 use Brera\Product\ProductWasUpdatedDomainEventHandler;
 use Brera\Product\ProductListingWasUpdatedDomainEvent;
@@ -22,12 +20,6 @@ interface DomainEventFactory
      * @return ProductWasUpdatedDomainEventHandler
      */
     public function createProductWasUpdatedDomainEventHandler(ProductWasUpdatedDomainEvent $event);
-
-    /**
-     * @param CatalogImportDomainEvent $event
-     * @return CatalogImportDomainEventHandler
-     */
-    public function createCatalogImportDomainEventHandler(CatalogImportDomainEvent $event);
 
     /**
      * @param PageTemplateWasUpdatedDomainEvent $event

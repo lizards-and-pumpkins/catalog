@@ -5,7 +5,6 @@ namespace Brera;
 use Brera\Http\HttpHeaders;
 use Brera\Http\HttpRequestBody;
 use Brera\Http\HttpResourceNotFoundResponse;
-use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\SampleSku;
 use Brera\Product\ProductDetailViewInContextSnippetRenderer;
 use Brera\Product\ProductId;
@@ -17,33 +16,34 @@ use Brera\Utils\XPathParser;
 
 class EdgeToEdgeTest extends AbstractIntegrationTest
 {
+    /**
+     * @var SampleMasterFactory
+     */
+    private $factory;
+
+    protected function setUp()
+    {
+        $this->factory = $this->prepareIntegrationTestMasterFactory();
+    }
+
     public function testProductDomainEventPutsProductToKeyValueStoreAndSearchIndex()
     {
-        $factory = $this->prepareIntegrationTestMasterFactory();
-
         $sku = SampleSku::fromString('118235-251');
         $productId = ProductId::fromSku($sku);
         $productName = 'LED Arm-Signallampe';
         $productPrice = 1295;
         $productBackOrderAvailability = 'true';
 
-        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
+        $this->importCatalog();
 
-        $queue = $factory->getEventQueue();
-        $queue->add(new CatalogImportDomainEvent($xml));
-
-        $consumer = $factory->createDomainEventConsumer();
-        $numberOfMessages = 3;
-        $consumer->process($numberOfMessages);
-        
-        $logger = $factory->getLogger();
+        $logger = $this->factory->getLogger();
         $this->failIfMessagesWhereLogged($logger);
 
-        $dataPoolReader = $factory->createDataPoolReader();
+        $dataPoolReader = $this->factory->createDataPoolReader();
 
-        $keyGeneratorLocator = $factory->getSnippetKeyGeneratorLocator();
+        $keyGeneratorLocator = $this->factory->getSnippetKeyGeneratorLocator();
 
-        $contextSource = $factory->createContextSource();
+        $contextSource = $this->factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[0];
 
         $productDetailViewKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
@@ -106,28 +106,26 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
 
     public function testPageTemplateWasUpdatedDomainEventPutsProductListingRootSnippetIntoKeyValueStore()
     {
-        $factory = $this->prepareIntegrationTestMasterFactory();
-
         $xml = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.xml');
 
-        $queue = $factory->getEventQueue();
+        $queue = $this->factory->getEventQueue();
         $queue->add(new PageTemplateWasUpdatedDomainEvent($xml));
 
-        $consumer = $factory->createDomainEventConsumer();
+        $consumer = $this->factory->createDomainEventConsumer();
         $numberOfMessages = 1;
         $consumer->process($numberOfMessages);
 
-        $logger = $factory->getLogger();
+        $logger = $this->factory->getLogger();
         $this->failIfMessagesWhereLogged($logger);
 
-        $dataPoolReader = $factory->createDataPoolReader();
+        $dataPoolReader = $this->factory->createDataPoolReader();
 
-        $keyGeneratorLocator = $factory->getSnippetKeyGeneratorLocator();
+        $keyGeneratorLocator = $this->factory->getSnippetKeyGeneratorLocator();
         $keyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
             ProductListingSnippetRenderer::CODE
         );
 
-        $contextSource = $factory->createContextSource();
+        $contextSource = $this->factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[0];
 
         $key = $keyGenerator->getKeyForContext($context);
@@ -140,17 +138,9 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
 
     public function testImportedProductIsAccessibleFromTheFrontend()
     {
-        $factory = $this->prepareIntegrationTestMasterFactory();
+        $this->importCatalog();
 
         $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
-
-        $queue = $factory->getEventQueue();
-        $queue->add(new CatalogImportDomainEvent($xml));
-
-        $consumer = $factory->createDomainEventConsumer();
-        $numberOfMessages = 3;
-        $consumer->process($numberOfMessages);
-        
         $urlKeys = (new XPathParser($xml))->getXmlNodesArrayByXPath(
             '//catalog/products/product/attributes/url_key[@language="en_US"]'
         );
@@ -160,7 +150,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $httpRequestBody = HttpRequestBody::fromString('');
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
 
-        $website = new SampleWebFront($request, $factory);
+        $website = new SampleWebFront($request, $this->factory);
         $response = $website->runWithoutSendingResponse();
 
         $this->assertContains('<body>', $response->getBody());
@@ -177,5 +167,24 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $website->registerFactory(new IntegrationTestFactory());
         $response = $website->runWithoutSendingResponse();
         $this->assertInstanceOf(HttpResourceNotFoundResponse::class, $response);
+    }
+
+    private function importCatalog()
+    {
+        $httpUrl = HttpUrl::fromString('http://example.com/api/v1/catalog_import');
+        $httpHeaders = HttpHeaders::fromArray([]);
+        $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
+        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
+        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
+
+        $website = new SampleWebFront($request, $this->factory);
+        $website->runWithoutSendingResponse();
+
+        $queue = $this->factory->getEventQueue();
+        $consumer = $this->factory->createDomainEventConsumer();
+
+        while ($queue->count() > 0) {
+            $consumer->process(1);
+        }
     }
 }

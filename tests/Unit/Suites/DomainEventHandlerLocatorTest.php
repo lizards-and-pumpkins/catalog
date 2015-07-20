@@ -4,8 +4,6 @@ namespace Brera;
 
 use Brera\Image\ImageWasUpdatedDomainEvent;
 use Brera\Image\ImageWasUpdatedDomainEventHandler;
-use Brera\Product\CatalogImportDomainEvent;
-use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\ProductWasUpdatedDomainEvent;
 use Brera\Product\ProductWasUpdatedDomainEventHandler;
 use Brera\Product\ProductListingWasUpdatedDomainEvent;
@@ -16,7 +14,6 @@ use Brera\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
 /**
  * @covers \Brera\DomainEventHandlerLocator
  * @uses   \Brera\Image\ImageWasUpdatedDomainEvent
- * @uses   \Brera\Product\CatalogImportDomainEvent
  * @uses   \Brera\Product\ProductListingWasUpdatedDomainEvent
  * @uses   \Brera\Product\ProductStockQuantityWasUpdatedDomainEvent
  * @uses   \Brera\Product\ProductWasUpdatedDomainEvent
@@ -62,22 +59,6 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         $result = $this->locator->getHandlerFor($stubDomainEvent);
 
         $this->assertInstanceOf(ProductWasUpdatedDomainEventHandler::class, $result);
-    }
-
-    public function testCatalogImportDomainEventHandlerIsLocatedAndReturned()
-    {
-        $stubEventHandler = $this->getMock(CatalogImportDomainEventHandler::class, [], [], '', false);
-        $this->factory->method('createCatalogImportDomainEventHandler')->willReturn($stubEventHandler);
-
-        /** @var CatalogImportDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
-        $stubDomainEvent = $this->getMockBuilder(CatalogImportDomainEvent::class)
-            ->setMockClassName('CatalogImportDomainEvent')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $result = $this->locator->getHandlerFor($stubDomainEvent);
-
-        $this->assertInstanceOf(CatalogImportDomainEventHandler::class, $result);
     }
 
     public function testPageTemplateWasUpdatedDomainEventHandlerIsLocatedAndReturned()

@@ -9,7 +9,6 @@ use Brera\Http\HttpHeaders;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestBody;
 use Brera\Http\HttpUrl;
-use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\ProductListingMetaInfoSnippetContent;
 use Brera\Product\ProductListingRequestHandler;
 use Brera\Product\ProductListingWasUpdatedDomainEvent;
@@ -33,7 +32,7 @@ class ProductListingTest extends AbstractIntegrationTest
     public function testProductListingMetaSnippetIsWrittenIntoDataPool()
     {
         $this->addProductListingCriteriaDomainDomainEventFixture();
-        $this->processDomainEvents(1);
+        $this->processDomainEvents();
         
         $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
         $urlKeyNode = (new XPathParser($xml))->getXmlNodesArrayByXPath('//catalog/listings/listing[1]/@url_key');
@@ -63,7 +62,7 @@ class ProductListingTest extends AbstractIntegrationTest
         $this->addProductWasUpdatedDomainEventToSetUpProductFixture();
         $this->addProductListingCriteriaDomainDomainEventFixture();
 
-        $this->processDomainEvents(5);
+        $this->processDomainEvents();
         
         $this->factory->getSnippetKeyGeneratorLocator()->register(
             ProductListingSnippetRenderer::CODE,
@@ -98,9 +97,14 @@ class ProductListingTest extends AbstractIntegrationTest
 
     private function addProductWasUpdatedDomainEventToSetUpProductFixture()
     {
-        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
-        $queue = $this->factory->getEventQueue();
-        $queue->add(new CatalogImportDomainEvent($xml));
+        $httpUrl = HttpUrl::fromString('http://example.com/api/v1/catalog_import');
+        $httpHeaders = HttpHeaders::fromArray([]);
+        $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
+        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
+        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
+
+        $website = new SampleWebFront($request, $this->factory);
+        $website->runWithoutSendingResponse();
     }
 
     private function addProductListingCriteriaDomainDomainEventFixture()
@@ -165,12 +169,13 @@ class ProductListingTest extends AbstractIntegrationTest
         return $metaSnippetContent->getInfo();
     }
 
-    /**
-     * @param int $numberOfMessages
-     */
-    private function processDomainEvents($numberOfMessages)
+    private function processDomainEvents()
     {
+        $queue = $this->factory->getEventQueue();
         $consumer = $this->factory->createDomainEventConsumer();
-        $consumer->process($numberOfMessages);
+
+        while ($queue->count() > 0) {
+            $consumer->process(1);
+        }
     }
 }

@@ -4,7 +4,9 @@ namespace Brera\Product;
 
 use Brera\Api\ApiRequestHandler;
 use Brera\Http\HttpRequest;
+use Brera\Image\ImageWasUpdatedDomainEvent;
 use Brera\Queue\Queue;
+use Brera\Utils\XPathParser;
 
 class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
 {
@@ -66,10 +68,24 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
      */
     protected function processRequest(HttpRequest $request)
     {
-        $importFileContents = $this->getImportFileContents($request);
+        $xml = $this->getImportFileContents($request);
 
-        $catalogImportDomainEvent = new CatalogImportDomainEvent($importFileContents);
-        $this->domainEventQueue->add($catalogImportDomainEvent);
+        $productNodesXml = (new XPathParser($xml))->getXmlNodesRawXmlArrayByXPath('//catalog/products/product');
+        foreach ($productNodesXml as $productXml) {
+            $this->domainEventQueue->add(new ProductWasUpdatedDomainEvent($productXml));
+        }
+
+        $listingNodesXml = (new XPathParser($xml))->getXmlNodesRawXmlArrayByXPath('//catalog/listings/listing');
+        foreach ($listingNodesXml as $listingXml) {
+            $this->domainEventQueue->add(new ProductListingWasUpdatedDomainEvent($listingXml));
+        }
+
+        $imageNodes = (new XPathParser($xml))->getXmlNodesArrayByXPath(
+            '//catalog/products/product/attributes/image/file'
+        );
+        foreach ($imageNodes as $imageNode) {
+            $this->domainEventQueue->add(new ImageWasUpdatedDomainEvent($imageNode['value']));
+        }
     }
 
     /**

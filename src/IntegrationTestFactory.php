@@ -94,7 +94,7 @@ class IntegrationTestFactory implements Factory
      */
     public function getImageFileStorageReader()
     {
-        return new LocalFilesystemStorageReader(__DIR__ . '/../tests/shared-fixture');
+        return new LocalFilesystemStorageReader(__DIR__ . '/../tests/shared-fixture/product-images');
     }
 
     /**

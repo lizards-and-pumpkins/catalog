@@ -20,8 +20,6 @@ use Brera\Http\ResourceNotFoundRouter;
 use Brera\Image\ImageWasUpdatedDomainEvent;
 use Brera\Image\ImageWasUpdatedDomainEventHandler;
 use Brera\Image\ImageProcessorCollection;
-use Brera\Product\CatalogImportDomainEvent;
-use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\PriceSnippetRenderer;
 use Brera\Product\ProductBackOrderAvailabilitySnippetRenderer;
 use Brera\Product\ProductDetailViewBlockRenderer;
@@ -102,15 +100,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $this->getMasterFactory()->createProductProjector(),
             $this->getMasterFactory()->createProductSearchDocumentBuilder()
         );
-    }
-
-    /**
-     * @param CatalogImportDomainEvent $event
-     * @return CatalogImportDomainEventHandler
-     */
-    public function createCatalogImportDomainEventHandler(CatalogImportDomainEvent $event)
-    {
-        return new CatalogImportDomainEventHandler($event, $this->getMasterFactory()->getEventQueue());
     }
 
     /**

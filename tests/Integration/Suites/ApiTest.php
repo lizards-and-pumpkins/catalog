@@ -6,11 +6,10 @@ use Brera\Http\HttpHeaders;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestBody;
 use Brera\Http\HttpUrl;
-use Brera\Product\CatalogImportDomainEvent;
 
 class ApiTest extends AbstractIntegrationTest
 {
-    public function testCatalogImportDomainEventWithCorrectPayloadIsPlacedIntoQueue()
+    public function testDomainEventsArePlacedIntoQueue()
     {
         $factory = $this->prepareIntegrationTestMasterFactory();
 
@@ -27,13 +26,6 @@ class ApiTest extends AbstractIntegrationTest
         $response = $website->runWithoutSendingResponse();
 
         $this->assertEquals('"OK"', $response->getBody());
-        $this->assertEquals(1, $domainEventQueue->count());
-
-        /** @var CatalogImportDomainEvent $domainEvent */
-        $domainEvent = $domainEventQueue->next();
-        $expectedContents = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
-
-        $this->assertInstanceOf(CatalogImportDomainEvent::class, $domainEvent);
-        $this->assertEquals($expectedContents, $domainEvent->getXml());
+        $this->assertGreaterThan(0, $domainEventQueue->count());
     }
 }

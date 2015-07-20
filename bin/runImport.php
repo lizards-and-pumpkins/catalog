@@ -1,24 +1,32 @@
 <?php
 
+namespace Brera;
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use Brera\CommonFactory;
-use Brera\Product\CatalogImportDomainEvent;
-use Brera\SampleMasterFactory;
-use Brera\PageTemplateWasUpdatedDomainEvent;
-use Brera\SampleFactory;
+use Brera\Http\HttpHeaders;
+use Brera\Http\HttpRequest;
+use Brera\Http\HttpRequestBody;
+use Brera\Http\HttpUrl;
 
 $factory = new SampleMasterFactory();
 $factory->register(new CommonFactory());
 $factory->register(new SampleFactory());
+$factory->register(new FrontendFactory());
 
 $queue = $factory->getEventQueue();
 
 $xml = file_get_contents(__DIR__ . '/../tests/shared-fixture/product-listing-root-snippet.xml');
 $queue->add(new PageTemplateWasUpdatedDomainEvent($xml));
 
-$xml = file_get_contents(__DIR__ . '/../tests/shared-fixture/catalog.xml');
-$queue->add(new CatalogImportDomainEvent($xml));
+$httpUrl = HttpUrl::fromString('http://example.com/api/v1/catalog_import');
+$httpHeaders = HttpHeaders::fromArray([]);
+$httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
+$httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
+$request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
+
+$website = new SampleWebFront($request, $factory);
+$website->runWithoutSendingResponse();
 
 $consumer = $factory->createDomainEventConsumer();
 while ($queue->count() > 0) {

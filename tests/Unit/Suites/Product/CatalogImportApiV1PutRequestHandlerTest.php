@@ -4,6 +4,7 @@ namespace Brera\Product;
 
 use Brera\Api\ApiRequestHandler;
 use Brera\Http\HttpRequest;
+use Brera\Image\ImageWasUpdatedDomainEvent;
 use Brera\Queue\Queue;
 use Brera\TestFileFixtureTrait;
 
@@ -12,7 +13,10 @@ use Brera\TestFileFixtureTrait;
  * @uses   \Brera\Api\ApiRequestHandler
  * @uses   \Brera\DefaultHttpResponse
  * @uses   \Brera\Http\HttpHeaders
- * @uses   \Brera\Product\CatalogImportDomainEvent
+ * @uses   \Brera\Image\ImageWasUpdatedDomainEvent
+ * @uses   \Brera\Product\ProductWasUpdatedDomainEvent
+ * @uses   \Brera\Product\ProductListingWasUpdatedDomainEvent
+ * @uses   \Brera\Utils\XPathParser
  */
 class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -38,12 +42,21 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
      */
     private $importDirectoryPath;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount
+     */
+    private $eventSpy;
+
     protected function setUp()
     {
         $this->importDirectoryPath = $this->getUniqueTempDir();
         $this->createFixtureDirectory($this->importDirectoryPath);
 
+        $this->eventSpy = $this->any();
+
         $this->mockDomainEventQueue = $this->getMock(Queue::class);
+        $this->mockDomainEventQueue->expects($this->eventSpy)->method('add');
+
         $this->requestHandler = CatalogImportApiV1PutRequestHandler::create(
             $this->mockDomainEventQueue,
             $this->importDirectoryPath
@@ -88,17 +101,13 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
         $this->requestHandler->process($this->mockRequest);
     }
 
-    public function testCatalogImportDomainEventIsEmitted()
+    public function testProductWasUpdatedDomainEventsAreEmitted()
     {
         $fileName = 'foo';
-
-        $this->createFixtureFile($this->importDirectoryPath . '/' . $fileName, '');
+        $fileContents = file_get_contents(__DIR__ . '/../../../shared-fixture/catalog.xml');
+        $this->createFixtureFile($this->importDirectoryPath . '/' . $fileName, $fileContents);
 
         $this->mockRequest->method('getRawBody')->willReturn(json_encode(['fileName' => $fileName]));
-
-        $this->mockDomainEventQueue->expects($this->once())
-            ->method('add')
-            ->with($this->isInstanceOf(CatalogImportDomainEvent::class));
 
         $response = $this->requestHandler->process($this->mockRequest);
 
@@ -106,5 +115,61 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
         $expectedJson = 'OK';
 
         $this->assertEquals($expectedJson, $result);
+        $this->assertEventWasAddedToAQueue(ProductWasUpdatedDomainEvent::class);
+    }
+
+    public function testProductListingWasUpdatedDomainEventsAreEmitted()
+    {
+        $fileName = 'foo';
+        $fileContents = file_get_contents(__DIR__ . '/../../../shared-fixture/catalog.xml');
+        $this->createFixtureFile($this->importDirectoryPath . '/' . $fileName, $fileContents);
+
+        $this->mockRequest->method('getRawBody')->willReturn(json_encode(['fileName' => $fileName]));
+
+        $response = $this->requestHandler->process($this->mockRequest);
+
+        $result = json_decode($response->getBody());
+        $expectedJson = 'OK';
+
+        $this->assertEquals($expectedJson, $result);
+        $this->assertEventWasAddedToAQueue(ProductListingWasUpdatedDomainEvent::class);
+    }
+
+    public function testImageWasUpdatedDomainEventsAreEmitted()
+    {
+        $fileName = 'foo';
+        $fileContents = file_get_contents(__DIR__ . '/../../../shared-fixture/catalog.xml');
+        $this->createFixtureFile($this->importDirectoryPath . '/' . $fileName, $fileContents);
+
+        $this->mockRequest->method('getRawBody')->willReturn(json_encode(['fileName' => $fileName]));
+
+        $response = $this->requestHandler->process($this->mockRequest);
+
+        $result = json_decode($response->getBody());
+        $expectedJson = 'OK';
+
+        $this->assertEquals($expectedJson, $result);
+        $this->assertEventWasAddedToAQueue(ImageWasUpdatedDomainEvent::class);
+    }
+
+    /**
+     * @param string $eventClass
+     */
+    private function assertEventWasAddedToAQueue($eventClass)
+    {
+        $numberOfRequiredInvocations = 0;
+
+        /** @var \PHPUnit_Framework_MockObject_Invocation_Object $invocation */
+        foreach ($this->eventSpy->getInvocations() as $invocation) {
+            if ($eventClass === get_class($invocation->parameters[0])) {
+                $numberOfRequiredInvocations++;
+            }
+        }
+
+        $this->assertGreaterThan(
+            0,
+            $numberOfRequiredInvocations,
+            sprintf('Failed to assert that %s was added to event queue.', $eventClass)
+        );
     }
 }
