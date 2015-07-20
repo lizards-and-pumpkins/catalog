@@ -115,7 +115,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         /* TODO: Move to catalog factory test */
         /** @var ProductWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
-        $stubDomainEvent = $this->getMock(ProductWasUpdatedDomainEvent::class, [], [], '', false);;
+        $stubDomainEvent = $this->getMock(ProductWasUpdatedDomainEvent::class, [], [], '', false);
         $result = $this->commonFactory->createProductWasUpdatedDomainEventHandler($stubDomainEvent);
 
         $this->assertInstanceOf(ProductWasUpdatedDomainEventHandler::class, $result);

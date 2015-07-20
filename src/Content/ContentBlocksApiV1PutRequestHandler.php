@@ -44,9 +44,6 @@ class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
         return json_encode('OK');
     }
 
-    /**
-     * @param HttpRequest $request
-     */
     protected function processRequest(HttpRequest $request)
     {
         $requestBody = json_decode($request->getRawBody(), true);
