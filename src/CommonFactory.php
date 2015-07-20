@@ -21,6 +21,7 @@ use Brera\Image\ImageImportDomainEventHandler;
 use Brera\Image\ImageProcessorCollection;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
+use Brera\Product\DefaultNumberOfProductsPerPageSnippetRenderer;
 use Brera\Product\PriceSnippetRenderer;
 use Brera\Product\ProductBackOrderAvailabilitySnippetRenderer;
 use Brera\Product\ProductDetailViewBlockRenderer;
@@ -220,7 +221,61 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return [
             $this->getMasterFactory()->createProductListingSnippetRenderer(),
+            $this->getMasterFactory()->createDefaultNumberOfProductsPerPageSnippetRenderer()
         ];
+    }
+
+    /**
+     * @return ProductListingSnippetRenderer
+     */
+    public function createProductListingSnippetRenderer()
+    {
+        return new ProductListingSnippetRenderer(
+            $this->getMasterFactory()->createSnippetList(),
+            $this->getMasterFactory()->createProductListingSnippetKeyGenerator(),
+            $this->getMasterFactory()->createProductListingBlockRenderer()
+        );
+    }
+
+    /**
+     * @return GenericSnippetKeyGenerator
+     */
+    public function createProductListingSnippetKeyGenerator()
+    {
+        return new GenericSnippetKeyGenerator(
+            ProductListingSnippetRenderer::CODE,
+            $this->getMasterFactory()->getRequiredContexts()
+        );
+    }
+
+    /**
+     * @return ProductListingBlockRenderer
+     */
+    public function createProductListingBlockRenderer()
+    {
+        return new ProductListingBlockRenderer(
+            $this->getMasterFactory()->createThemeLocator(),
+            $this->getMasterFactory()->createBlockStructure()
+        );
+    }
+
+    /**
+     * @return DefaultNumberOfProductsPerPageSnippetRenderer
+     */
+    public function createDefaultNumberOfProductsPerPageSnippetRenderer()
+    {
+        return new DefaultNumberOfProductsPerPageSnippetRenderer(
+            $this->getMasterFactory()->createSnippetList(),
+            $this->getMasterFactory()->createDefaultNumberOfProductsPerPageSnippetKeyGenerator()
+        );
+    }
+
+    public function createDefaultNumberOfProductsPerPageSnippetKeyGenerator()
+    {
+        return new GenericSnippetKeyGenerator(
+            'default_number_of_products_per_page',
+            $this->getMasterFactory()->getRequiredContexts()
+        );
     }
 
     /**
@@ -264,40 +319,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $this->getMasterFactory()->createSnippetList(),
             $this->getMasterFactory()->createUrlPathKeyGenerator(),
             $this->getMasterFactory()->createContextBuilder()
-        );
-    }
-
-    /**
-     * @return ProductListingSnippetRenderer
-     */
-    public function createProductListingSnippetRenderer()
-    {
-        return new ProductListingSnippetRenderer(
-            $this->getMasterFactory()->createSnippetList(),
-            $this->getMasterFactory()->createProductListingSnippetKeyGenerator(),
-            $this->getMasterFactory()->createProductListingBlockRenderer()
-        );
-    }
-
-    /**
-     * @return GenericSnippetKeyGenerator
-     */
-    public function createProductListingSnippetKeyGenerator()
-    {
-        return new GenericSnippetKeyGenerator(
-            ProductListingSnippetRenderer::CODE,
-            $this->getMasterFactory()->getRequiredContexts()
-        );
-    }
-
-    /**
-     * @return ProductListingBlockRenderer
-     */
-    public function createProductListingBlockRenderer()
-    {
-        return new ProductListingBlockRenderer(
-            $this->getMasterFactory()->createThemeLocator(),
-            $this->getMasterFactory()->createBlockStructure()
         );
     }
 
