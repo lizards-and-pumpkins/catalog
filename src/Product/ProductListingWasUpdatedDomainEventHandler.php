@@ -4,7 +4,7 @@ namespace Brera\Product;
 
 use Brera\DomainEventHandler;
 
-class ProductListingSavedDomainEventHandler implements DomainEventHandler
+class ProductListingWasUpdatedDomainEventHandler implements DomainEventHandler
 {
     /**
      * @var ProductListingProjector
@@ -17,12 +17,12 @@ class ProductListingSavedDomainEventHandler implements DomainEventHandler
     private $productListingSourceBuilder;
 
     /**
-     * @var ProductListingSavedDomainEvent
+     * @var ProductListingWasUpdatedDomainEvent
      */
     private $domainEvent;
 
     public function __construct(
-        ProductListingSavedDomainEvent $domainEvent,
+        ProductListingWasUpdatedDomainEvent $domainEvent,
         ProductListingSourceBuilder $productListingSourceBuilder,
         ProductListingProjector $projector
     ) {

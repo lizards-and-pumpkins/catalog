@@ -3,15 +3,15 @@
 namespace Brera\Product;
 
 /**
- * @covers \Brera\Product\ProductListingSavedDomainEvent
+ * @covers \Brera\Product\ProductListingWasUpdatedDomainEvent
  */
-class ProductListingSavedDomainEventTest extends \PHPUnit_Framework_TestCase
+class ProductListingWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 {
     public function testProductListingXmlIsReturned()
     {
         $xml = '<?xml version="1.0"?><rootNode></rootNode>';
 
-        $domainEvent = new ProductListingSavedDomainEvent($xml);
+        $domainEvent = new ProductListingWasUpdatedDomainEvent($xml);
         $result = $domainEvent->getXml();
 
         $this->assertEquals($xml, $result);

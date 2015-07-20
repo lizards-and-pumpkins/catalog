@@ -10,8 +10,8 @@ use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\ProductWasUpdatedDomainEvent;
 use Brera\Product\ProductWasUpdatedDomainEventHandler;
-use Brera\Product\ProductListingSavedDomainEvent;
-use Brera\Product\ProductListingSavedDomainEventHandler;
+use Brera\Product\ProductListingWasUpdatedDomainEvent;
+use Brera\Product\ProductListingWasUpdatedDomainEventHandler;
 use Brera\Product\ProductStockQuantityUpdatedDomainEvent;
 use Brera\Product\ProductStockQuantityUpdatedDomainEventHandler;
 
@@ -42,10 +42,10 @@ interface DomainEventFactory
     public function createImageImportDomainEventHandler(ImageImportDomainEvent $event);
 
     /**
-     * @param ProductListingSavedDomainEvent $event
-     * @return ProductListingSavedDomainEventHandler
+     * @param ProductListingWasUpdatedDomainEvent $event
+     * @return ProductListingWasUpdatedDomainEventHandler
      */
-    public function createProductListingSavedDomainEventHandler(ProductListingSavedDomainEvent $event);
+    public function createProductListingWasUpdatedDomainEventHandler(ProductListingWasUpdatedDomainEvent $event);
 
     /**
      * @param ProductStockQuantityUpdatedDomainEvent $event

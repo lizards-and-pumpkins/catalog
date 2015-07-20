@@ -17,8 +17,8 @@ use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\ProductWasUpdatedDomainEvent;
 use Brera\Product\ProductWasUpdatedDomainEventHandler;
-use Brera\Product\ProductListingSavedDomainEvent;
-use Brera\Product\ProductListingSavedDomainEventHandler;
+use Brera\Product\ProductListingWasUpdatedDomainEvent;
+use Brera\Product\ProductListingWasUpdatedDomainEventHandler;
 use Brera\Product\ProductProjector;
 use Brera\Product\ProductSnippetKeyGenerator;
 use Brera\Product\ProductSourceBuilder;
@@ -65,8 +65,8 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Product\ProductSnippetKeyGenerator
  * @uses   \Brera\Product\ProductListingCriteriaSnippetRenderer
  * @uses   \Brera\Product\ProductListingProjector
- * @uses   \Brera\Product\ProductListingSavedDomainEvent
- * @uses   \Brera\Product\ProductListingSavedDomainEventHandler
+ * @uses   \Brera\Product\ProductListingWasUpdatedDomainEvent
+ * @uses   \Brera\Product\ProductListingWasUpdatedDomainEventHandler
  * @uses   \Brera\Product\ProductWasUpdatedDomainEvent
  * @uses   \Brera\Product\ProductWasUpdatedDomainEventHandler
  * @uses   \Brera\Product\CatalogImportDomainEvent
@@ -118,33 +118,41 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     public function testProductWasUpdatedDomainEventHandlerIsReturned()
     {
         /* TODO: Move to catalog factory test */
-        $productWasUpdatedDomainEvent = new ProductWasUpdatedDomainEvent('<xml/>');
-        $result = $this->commonFactory->createProductWasUpdatedDomainEventHandler($productWasUpdatedDomainEvent);
+        /** @var ProductWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
+        $stubDomainEvent = $this->getMock(ProductWasUpdatedDomainEvent::class, [], [], '', false);;
+        $result = $this->commonFactory->createProductWasUpdatedDomainEventHandler($stubDomainEvent);
+
         $this->assertInstanceOf(ProductWasUpdatedDomainEventHandler::class, $result);
     }
 
     public function testCatalogImportDomainEventHandlerIsReturned()
     {
         /* TODO: Move to catalog factory test */
-        $catalogImportDomainEvent = new CatalogImportDomainEvent('<xml/>');
-        $result = $this->commonFactory->createCatalogImportDomainEventHandler($catalogImportDomainEvent);
+        /** @var CatalogImportDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
+        $stubDomainEvent = $this->getMock(CatalogImportDomainEvent::class, [], [], '', false);
+        $result = $this->commonFactory->createCatalogImportDomainEventHandler($stubDomainEvent);
+
         $this->assertInstanceOf(CatalogImportDomainEventHandler::class, $result);
     }
 
     public function testRootTemplateChangedDomainEventHandlerIsReturned()
     {
         /* TODO: Move to catalog factory test */
-        $rootTemplateChangedDomainEvent = new RootTemplateChangedDomainEvent('<xml/>');
-        $result = $this->commonFactory->createRootTemplateChangedDomainEventHandler($rootTemplateChangedDomainEvent);
+        /** @var RootTemplateChangedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
+        $stubDomainEvent = $this->getMock(RootTemplateChangedDomainEvent::class, [], [], '', false);
+        $result = $this->commonFactory->createRootTemplateChangedDomainEventHandler($stubDomainEvent);
+
         $this->assertInstanceOf(RootTemplateChangedDomainEventHandler::class, $result);
     }
 
-    public function testProductListingSavedDomainEventHandlerIsReturned()
+    public function testProductListingWasUpdatedDomainEventHandlerIsReturned()
     {
         /* TODO: Move to catalog factory test */
-        $productListingSavedDomainEvent = new ProductListingSavedDomainEvent('<xml/>');
-        $result = $this->commonFactory->createProductListingSavedDomainEventHandler($productListingSavedDomainEvent);
-        $this->assertInstanceOf(ProductListingSavedDomainEventHandler::class, $result);
+        /** @var ProductListingWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
+        $stubDomainEvent = $this->getMock(ProductListingWasUpdatedDomainEvent::class, [], [], '', false);
+        $result = $this->commonFactory->createProductListingWasUpdatedDomainEventHandler($stubDomainEvent);
+
+        $this->assertInstanceOf(ProductListingWasUpdatedDomainEventHandler::class, $result);
     }
 
     public function testProductProjectorIsReturned()
@@ -299,9 +307,9 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testImageImportEventDomainHandlerIsReturned()
     {
-        /* @var ImageImportDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubEvent */
-        $stubEvent = $this->getMock(ImageImportDomainEvent::class, [], [], '', false);
-        $result = $this->commonFactory->createImageImportDomainEventHandler($stubEvent);
+        /* @var ImageImportDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
+        $stubDomainEvent = $this->getMock(ImageImportDomainEvent::class, [], [], '', false);
+        $result = $this->commonFactory->createImageImportDomainEventHandler($stubDomainEvent);
 
         $this->assertInstanceOf(ImageImportDomainEventHandler::class, $result);
     }
@@ -394,9 +402,9 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testProductStockQuantityUpdatedDomainEventHandlerIsReturned()
     {
-        /** @var ProductStockQuantityUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubEvent */
-        $stubEvent = $this->getMock(ProductStockQuantityUpdatedDomainEvent::class, [], [], '', false);
-        $result = $this->commonFactory->createProductStockQuantityUpdatedDomainEventHandler($stubEvent);
+        /** @var ProductStockQuantityUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
+        $stubDomainEvent = $this->getMock(ProductStockQuantityUpdatedDomainEvent::class, [], [], '', false);
+        $result = $this->commonFactory->createProductStockQuantityUpdatedDomainEventHandler($stubDomainEvent);
 
         $this->assertInstanceOf(ProductStockQuantityUpdatedDomainEventHandler::class, $result);
     }
@@ -412,9 +420,9 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testContentBlockWasUpdatedDomainEventHandlerIsReturned()
     {
-        /** @var ContentBlockWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubEvent */
-        $stubEvent = $this->getMock(ContentBlockWasUpdatedDomainEvent::class, [], [], '', false);
-        $result = $this->commonFactory->createContentBlockWasUpdatedDomainEventHandler($stubEvent);
+        /** @var ContentBlockWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
+        $stubDomainEvent = $this->getMock(ContentBlockWasUpdatedDomainEvent::class, [], [], '', false);
+        $result = $this->commonFactory->createContentBlockWasUpdatedDomainEventHandler($stubDomainEvent);
 
         $this->assertInstanceOf(ContentBlockWasUpdatedDomainEventHandler::class, $result);
     }

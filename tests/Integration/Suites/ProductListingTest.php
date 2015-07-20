@@ -12,7 +12,7 @@ use Brera\Http\HttpUrl;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\ProductListingMetaInfoSnippetContent;
 use Brera\Product\ProductListingRequestHandler;
-use Brera\Product\ProductListingSavedDomainEvent;
+use Brera\Product\ProductListingWasUpdatedDomainEvent;
 use Brera\Product\ProductListingSnippetRenderer;
 use Brera\Utils\XPathParser;
 
@@ -109,7 +109,7 @@ class ProductListingTest extends AbstractIntegrationTest
         $listingNodesRawXml = (new XPathParser($xml))->getXmlNodesRawXmlArrayByXPath('//catalog/listings/listing[1]');
 
         $queue = $this->factory->getEventQueue();
-        $queue->add(new ProductListingSavedDomainEvent($listingNodesRawXml[0]));
+        $queue->add(new ProductListingWasUpdatedDomainEvent($listingNodesRawXml[0]));
     }
 
     /**

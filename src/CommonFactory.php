@@ -33,8 +33,8 @@ use Brera\Product\ProductInListingInContextSnippetRenderer;
 use Brera\Product\ProductListingBlockRenderer;
 use Brera\Product\ProductListingCriteriaSnippetRenderer;
 use Brera\Product\ProductListingProjector;
-use Brera\Product\ProductListingSavedDomainEvent;
-use Brera\Product\ProductListingSavedDomainEventHandler;
+use Brera\Product\ProductListingWasUpdatedDomainEvent;
+use Brera\Product\ProductListingWasUpdatedDomainEventHandler;
 use Brera\Product\ProductListingSnippetRenderer;
 use Brera\Product\ProductProjector;
 use Brera\Product\ProductListingSourceBuilder;
@@ -128,12 +128,12 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @param ProductListingSavedDomainEvent $event
-     * @return ProductListingSavedDomainEventHandler
+     * @param ProductListingWasUpdatedDomainEvent $event
+     * @return ProductListingWasUpdatedDomainEventHandler
      */
-    public function createProductListingSavedDomainEventHandler(ProductListingSavedDomainEvent $event)
+    public function createProductListingWasUpdatedDomainEventHandler(ProductListingWasUpdatedDomainEvent $event)
     {
-        return new ProductListingSavedDomainEventHandler(
+        return new ProductListingWasUpdatedDomainEventHandler(
             $event,
             $this->getMasterFactory()->createProductListingSourceBuilder(),
             $this->getMasterFactory()->createProductListingProjector()
