@@ -13,6 +13,7 @@ use Brera\Http\HttpRouterChain;
 use Brera\Http\ResourceNotFoundRouter;
 use Brera\Image\ImageWasUpdatedDomainEvent;
 use Brera\Image\ImageWasUpdatedDomainEventHandler;
+use Brera\Product\ProductListingSourceBuilder;
 use Brera\Product\ProductWasUpdatedDomainEvent;
 use Brera\Product\ProductWasUpdatedDomainEventHandler;
 use Brera\Product\ProductListingWasUpdatedDomainEvent;
@@ -63,6 +64,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Product\ProductSnippetKeyGenerator
  * @uses   \Brera\Product\ProductListingCriteriaSnippetRenderer
  * @uses   \Brera\Product\ProductListingProjector
+ * @uses   \Brera\Product\ProductListingSourceBuilder
  * @uses   \Brera\Product\ProductListingWasUpdatedDomainEvent
  * @uses   \Brera\Product\ProductListingWasUpdatedDomainEventHandler
  * @uses   \Brera\Product\ProductWasUpdatedDomainEvent
@@ -162,16 +164,20 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testProductDetailViewSnippetKeyGeneratorIsReturned()
     {
-        /* TODO: Move to catalog factory test */
         $result = $this->commonFactory->createProductDetailViewSnippetKeyGenerator();
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
 
-    public function testProductBuilderIsReturned()
+    public function testProductSourceBuilderIsReturned()
     {
-        /* TODO: Move to catalog factory test */
         $result = $this->commonFactory->createProductSourceBuilder();
         $this->assertInstanceOf(ProductSourceBuilder::class, $result);
+    }
+
+    public function testProductListingSourceBuilderIsReturned()
+    {
+        $result = $this->commonFactory->createProductListingSourceBuilder();
+        $this->assertInstanceOf(ProductListingSourceBuilder::class, $result);
     }
 
     public function testThemeLocatorIsReturned()

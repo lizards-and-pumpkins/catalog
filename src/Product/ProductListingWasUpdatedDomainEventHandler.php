@@ -7,35 +7,23 @@ use Brera\DomainEventHandler;
 class ProductListingWasUpdatedDomainEventHandler implements DomainEventHandler
 {
     /**
-     * @var ProductListingProjector
-     */
-    private $projector;
-
-    /**
-     * @var ProductListingSourceBuilder
-     */
-    private $productListingSourceBuilder;
-
-    /**
      * @var ProductListingWasUpdatedDomainEvent
      */
     private $domainEvent;
 
-    public function __construct(
-        ProductListingWasUpdatedDomainEvent $domainEvent,
-        ProductListingSourceBuilder $productListingSourceBuilder,
-        ProductListingProjector $projector
-    ) {
+    /**
+     * @var ProductListingProjector
+     */
+    private $projector;
+
+    public function __construct(ProductListingWasUpdatedDomainEvent $domainEvent, ProductListingProjector $projector) {
         $this->domainEvent = $domainEvent;
-        $this->productListingSourceBuilder = $productListingSourceBuilder;
         $this->projector = $projector;
     }
 
     public function process()
     {
-        $xml = $this->domainEvent->getXml();
-        $productListingSource = $this->productListingSourceBuilder->createProductListingSourceFromXml($xml);
-
+        $productListingSource = $this->domainEvent->getProductListingSource();
         $this->projector->project($productListingSource);
     }
 }

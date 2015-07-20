@@ -2,18 +2,38 @@
 
 namespace Brera\Product;
 
+use Brera\DomainEvent;
+
 /**
  * @covers \Brera\Product\ProductListingWasUpdatedDomainEvent
  */
 class ProductListingWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 {
-    public function testProductListingXmlIsReturned()
+    /**
+     * @var ProductListingSource|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubProductListingSource;
+
+    /**
+     * @var ProductListingWasUpdatedDomainEvent
+     */
+    private $domainEvent;
+
+    protected function setUp()
     {
-        $xml = '<?xml version="1.0"?><rootNode></rootNode>';
+        $dummyUrlKey = 'foo';
+        $this->stubProductListingSource = $this->getMock(ProductListingSource::class, [], [], '', false);
+        $this->domainEvent = new ProductListingWasUpdatedDomainEvent($dummyUrlKey, $this->stubProductListingSource);
+    }
 
-        $domainEvent = new ProductListingWasUpdatedDomainEvent($xml);
-        $result = $domainEvent->getXml();
+    public function testDomainEventInterFaceIsImplemented()
+    {
+        $this->assertInstanceOf(DomainEvent::class, $this->domainEvent);
+    }
 
-        $this->assertEquals($xml, $result);
+    public function testProductListingSourceIsReturned()
+    {
+        $result = $this->domainEvent->getProductListingSource();
+        $this->assertEquals($this->stubProductListingSource, $result);
     }
 }

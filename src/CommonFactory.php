@@ -122,7 +122,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new ProductListingWasUpdatedDomainEventHandler(
             $event,
-            $this->getMasterFactory()->createProductListingSourceBuilder(),
             $this->getMasterFactory()->createProductListingProjector()
         );
     }

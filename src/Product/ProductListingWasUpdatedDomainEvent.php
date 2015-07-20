@@ -9,21 +9,27 @@ class ProductListingWasUpdatedDomainEvent implements DomainEvent
     /**
      * @var string
      */
-    private $xml;
+    private $urlKey;
 
     /**
-     * @param string $xml
+     * @var ProductListingSource
      */
-    public function __construct($xml)
+    private $productListingSource;
+
+    /**
+     * @param string $urlKey
+     */
+    public function __construct($urlKey, ProductListingSource $productListingSource)
     {
-        $this->xml = $xml;
+        $this->urlKey = $urlKey;
+        $this->productListingSource = $productListingSource;
     }
 
     /**
-     * @return string
+     * @return ProductListingSource
      */
-    public function getXml()
+    public function getProductListingSource()
     {
-        return $this->xml;
+        return $this->productListingSource;
     }
 }

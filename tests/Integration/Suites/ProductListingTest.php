@@ -11,7 +11,6 @@ use Brera\Http\HttpRequestBody;
 use Brera\Http\HttpUrl;
 use Brera\Product\ProductListingMetaInfoSnippetContent;
 use Brera\Product\ProductListingRequestHandler;
-use Brera\Product\ProductListingWasUpdatedDomainEvent;
 use Brera\Product\ProductListingSnippetRenderer;
 use Brera\Utils\XPathParser;
 
@@ -31,9 +30,9 @@ class ProductListingTest extends AbstractIntegrationTest
     
     public function testProductListingMetaSnippetIsWrittenIntoDataPool()
     {
-        $this->addProductListingCriteriaDomainDomainEventFixture();
+        $this->importCatalog();
         $this->processDomainEvents();
-        
+
         $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
         $urlKeyNode = (new XPathParser($xml))->getXmlNodesArrayByXPath('//catalog/listings/listing[1]/@url_key');
         $urlKey = $urlKeyNode[0]['value'];
@@ -59,8 +58,7 @@ class ProductListingTest extends AbstractIntegrationTest
     public function testProductListingPageHtmlIsReturned()
     {
         $this->addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture();
-        $this->addProductWasUpdatedDomainEventToSetUpProductFixture();
-        $this->addProductListingCriteriaDomainDomainEventFixture();
+        $this->importCatalog();
 
         $this->processDomainEvents();
         
@@ -95,7 +93,7 @@ class ProductListingTest extends AbstractIntegrationTest
         $queue->add(new PageTemplateWasUpdatedDomainEvent($xml));
     }
 
-    private function addProductWasUpdatedDomainEventToSetUpProductFixture()
+    private function importCatalog()
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/v1/catalog_import');
         $httpHeaders = HttpHeaders::fromArray([]);
@@ -105,15 +103,6 @@ class ProductListingTest extends AbstractIntegrationTest
 
         $website = new SampleWebFront($request, $this->factory);
         $website->runWithoutSendingResponse();
-    }
-
-    private function addProductListingCriteriaDomainDomainEventFixture()
-    {
-        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
-        $listingNodesRawXml = (new XPathParser($xml))->getXmlNodesRawXmlArrayByXPath('//catalog/listings/listing[1]');
-
-        $queue = $this->factory->getEventQueue();
-        $queue->add(new ProductListingWasUpdatedDomainEvent($listingNodesRawXml[0]));
     }
 
     /**

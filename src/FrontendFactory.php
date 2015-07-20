@@ -73,7 +73,8 @@ class FrontendFactory implements Factory
         return CatalogImportApiV1PutRequestHandler::create(
             $this->getMasterFactory()->getEventQueue(),
             $this->getCatalogImportDirectoryConfig(),
-            $this->getMasterFactory()->createProductSourceBuilder()
+            $this->getMasterFactory()->createProductSourceBuilder(),
+            $this->getMasterFactory()->createProductListingSourceBuilder()
         );
     }
 

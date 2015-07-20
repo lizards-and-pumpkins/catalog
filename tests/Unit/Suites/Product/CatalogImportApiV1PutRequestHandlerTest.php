@@ -48,6 +48,11 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
     private $stubProductSourceBuilder;
 
     /**
+     * @var ProductListingSourceBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubProductListingSourceBuilder;
+
+    /**
      * @var \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount
      */
     private $eventSpy;
@@ -69,10 +74,19 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
         $this->stubProductSourceBuilder = $this->getMock(ProductSourceBuilder::class, [], [], '', false);
         $this->stubProductSourceBuilder->method('createProductSourceFromXml')->willReturn($stubProductSource);
 
+        $dummyUrlKey = 'foo';
+        $stubProductListingSource = $this->getMock(ProductListingSource::class, [], [], '', false);
+        $stubProductListingSource->method('getUrlKey')->willReturn($dummyUrlKey);
+
+        $this->stubProductListingSourceBuilder = $this->getMock(ProductListingSourceBuilder::class, [], [], '', false);
+        $this->stubProductListingSourceBuilder->method('createProductListingSourceFromXml')
+            ->willReturn($stubProductListingSource);
+
         $this->requestHandler = CatalogImportApiV1PutRequestHandler::create(
             $this->mockDomainEventQueue,
             $this->importDirectoryPath,
-            $this->stubProductSourceBuilder
+            $this->stubProductSourceBuilder,
+            $this->stubProductListingSourceBuilder
         );
 
         $this->mockRequest = $this->getMock(HttpRequest::class, [], [], '', false);
@@ -101,7 +115,8 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
         CatalogImportApiV1PutRequestHandler::create(
             $this->mockDomainEventQueue,
             '/some-not-existing-directory',
-            $this->stubProductSourceBuilder
+            $this->stubProductSourceBuilder,
+            $this->stubProductListingSourceBuilder
         );
     }
 
