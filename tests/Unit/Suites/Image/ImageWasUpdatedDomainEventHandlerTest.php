@@ -3,19 +3,19 @@
 namespace Brera\Image;
 
 /**
- * @covers \Brera\Image\ImageImportDomainEventHandler
+ * @covers \Brera\Image\ImageWasUpdatedDomainEventHandler
  */
-class ImageImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
+class ImageWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ImageImportDomainEventHandler
+     * @var ImageWasUpdatedDomainEventHandler
      */
     private $handler;
 
     /**
-     * @var ImageImportDomainEvent|\PHPUnit_Framework_MockObject_MockObject
+     * @var ImageWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockImageImportDomainEvent;
+    private $mockImageWasUpdatedDomainEvent;
 
     /**
      * @var ImageProcessorCollection|\PHPUnit_Framework_MockObject_MockObject
@@ -24,25 +24,25 @@ class ImageImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockImageImportDomainEvent = $this->getMock(ImageImportDomainEvent::class, [], [], '', false);
+        $this->mockImageWasUpdatedDomainEvent = $this->getMock(ImageWasUpdatedDomainEvent::class, [], [], '', false);
         $this->mockImageProcessorCollection = $this->getMock(ImageProcessorCollection::class, [], [], '', false);
 
-        $this->handler = new ImageImportDomainEventHandler(
-            $this->mockImageImportDomainEvent,
+        $this->handler = new ImageWasUpdatedDomainEventHandler(
+            $this->mockImageWasUpdatedDomainEvent,
             $this->mockImageProcessorCollection
         );
     }
 
     public function testImageDomainEventHandlerIsReturned()
     {
-        $this->assertInstanceOf(ImageImportDomainEventHandler::class, $this->handler);
+        $this->assertInstanceOf(ImageWasUpdatedDomainEventHandler::class, $this->handler);
     }
 
     public function testAllImagesArePassedThroughImageProcessor()
     {
         $imageFilename = 'test_image.jpg';
 
-        $this->mockImageImportDomainEvent->method('getImage')
+        $this->mockImageWasUpdatedDomainEvent->method('getImage')
             ->willReturn($imageFilename);
 
         $this->mockImageProcessorCollection->expects($this->once())

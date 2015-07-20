@@ -4,7 +4,7 @@ namespace Brera\Image;
 
 use Brera\DomainEvent;
 
-class ImageImportDomainEvent implements DomainEvent
+class ImageWasUpdatedDomainEvent implements DomainEvent
 {
     /**
      * @var string

@@ -2,14 +2,14 @@
 
 namespace Brera\Product;
 
-use Brera\Image\ImageImportDomainEvent;
+use Brera\Image\ImageWasUpdatedDomainEvent;
 use Brera\Queue\Queue;
 
 /**
  * @covers \Brera\Product\CatalogImportDomainEventHandler
  * @uses   \Brera\Product\ProductListingWasUpdatedDomainEvent
  * @uses   \Brera\Product\ProductWasUpdatedDomainEvent
- * @uses   \Brera\Image\ImageImportDomainEvent
+ * @uses   \Brera\Image\ImageWasUpdatedDomainEvent
  * @uses   \Brera\Utils\XPathParser
  */
 class CatalogImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
@@ -58,11 +58,11 @@ class CatalogImportDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertEventWasAddedToAQueue(ProductListingWasUpdatedDomainEvent::class);
     }
 
-    public function testImageImportDomainEventsAreEmitted()
+    public function testImageWasUpdatedDomainEventsAreEmitted()
     {
         $this->catalogImportDomainEventHandler->process();
 
-        $this->assertEventWasAddedToAQueue(ImageImportDomainEvent::class);
+        $this->assertEventWasAddedToAQueue(ImageWasUpdatedDomainEvent::class);
     }
 
     /**

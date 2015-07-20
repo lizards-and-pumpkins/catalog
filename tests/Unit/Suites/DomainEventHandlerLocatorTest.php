@@ -2,8 +2,8 @@
 
 namespace Brera;
 
-use Brera\Image\ImageImportDomainEvent;
-use Brera\Image\ImageImportDomainEventHandler;
+use Brera\Image\ImageWasUpdatedDomainEvent;
+use Brera\Image\ImageWasUpdatedDomainEventHandler;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
 use Brera\Product\ProductWasUpdatedDomainEvent;
@@ -15,7 +15,7 @@ use Brera\Product\ProductStockQuantityUpdatedDomainEventHandler;
 
 /**
  * @covers \Brera\DomainEventHandlerLocator
- * @uses   \Brera\Image\ImageImportDomainEvent
+ * @uses   \Brera\Image\ImageWasUpdatedDomainEvent
  * @uses   \Brera\Product\CatalogImportDomainEvent
  * @uses   \Brera\Product\ProductListingWasUpdatedDomainEvent
  * @uses   \Brera\Product\ProductStockQuantityUpdatedDomainEvent
@@ -96,20 +96,20 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(RootTemplateChangedDomainEventHandler::class, $result);
     }
 
-    public function testImageImportDomainEventHandlerIsLocatedAndReturned()
+    public function testImageWasUpdatedDomainEventHandlerIsLocatedAndReturned()
     {
-        $stubEventHandler = $this->getMock(ImageImportDomainEventHandler::class, [], [], '', false);
-        $this->factory->method('createImageImportDomainEventHandler')->willReturn($stubEventHandler);
+        $stubEventHandler = $this->getMock(ImageWasUpdatedDomainEventHandler::class, [], [], '', false);
+        $this->factory->method('createImageWasUpdatedDomainEventHandler')->willReturn($stubEventHandler);
 
-        /** @var ImageImportDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
-        $stubDomainEvent = $this->getMockBuilder(ImageImportDomainEvent::class)
-            ->setMockClassName('ImageImportDomainEvent')
+        /** @var ImageWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
+        $stubDomainEvent = $this->getMockBuilder(ImageWasUpdatedDomainEvent::class)
+            ->setMockClassName('ImageWasUpdatedDomainEvent')
             ->disableOriginalConstructor()
             ->getMock();
 
         $result = $this->locator->getHandlerFor($stubDomainEvent);
 
-        $this->assertInstanceOf(ImageImportDomainEventHandler::class, $result);
+        $this->assertInstanceOf(ImageWasUpdatedDomainEventHandler::class, $result);
     }
 
     public function testProductListingWasUpdatedDomainEventHandlerIsLocatedAndReturned()

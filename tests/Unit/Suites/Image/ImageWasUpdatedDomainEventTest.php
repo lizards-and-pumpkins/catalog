@@ -3,14 +3,14 @@
 namespace Brera\Image;
 
 /**
- * @covers \Brera\Image\ImageImportDomainEvent
+ * @covers \Brera\Image\ImageWasUpdatedDomainEvent
  */
-class ImageImportDomainEventTest extends \PHPUnit_Framework_TestCase
+class ImageWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 {
     public function testPassedImageFilenameIsReturned()
     {
         $imageFilename = 'test_image.jpg';
-        $event = new ImageImportDomainEvent($imageFilename);
+        $event = new ImageWasUpdatedDomainEvent($imageFilename);
 
         $this->assertEquals($imageFilename, $event->getImage());
     }

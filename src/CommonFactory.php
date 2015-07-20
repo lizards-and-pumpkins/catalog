@@ -17,8 +17,8 @@ use Brera\DataPool\KeyValue\KeyValueStore;
 use Brera\DataPool\SearchEngine\SearchEngine;
 use Brera\Http\HttpRouterChain;
 use Brera\Http\ResourceNotFoundRouter;
-use Brera\Image\ImageImportDomainEvent;
-use Brera\Image\ImageImportDomainEventHandler;
+use Brera\Image\ImageWasUpdatedDomainEvent;
+use Brera\Image\ImageWasUpdatedDomainEventHandler;
 use Brera\Image\ImageProcessorCollection;
 use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\CatalogImportDomainEventHandler;
@@ -647,12 +647,12 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @param ImageImportDomainEvent $event
-     * @return ImageImportDomainEventHandler
+     * @param ImageWasUpdatedDomainEvent $event
+     * @return ImageWasUpdatedDomainEventHandler
      */
-    public function createImageImportDomainEventHandler(ImageImportDomainEvent $event)
+    public function createImageWasUpdatedDomainEventHandler(ImageWasUpdatedDomainEvent $event)
     {
-        return new ImageImportDomainEventHandler($event, $this->getMasterFactory()->getImageProcessorCollection());
+        return new ImageWasUpdatedDomainEventHandler($event, $this->getMasterFactory()->getImageProcessorCollection());
     }
 
     /**
