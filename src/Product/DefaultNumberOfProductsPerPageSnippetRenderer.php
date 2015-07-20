@@ -11,6 +11,8 @@ use Brera\SnippetRenderer;
 
 class DefaultNumberOfProductsPerPageSnippetRenderer implements SnippetRenderer
 {
+    const CODE = 'default_number_of_products_per_page';
+
     /**
      * @var SnippetList
      */

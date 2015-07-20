@@ -59,8 +59,6 @@ class ProductListingTest extends AbstractIntegrationTest
 
     public function testProductListingPageHtmlIsReturned()
     {
-        $this->markTestSkipped('There should be a snippet which keeps available numbers of products per page.');
-
         $this->addRootTemplateChangedDomainEventToSetupProductListingFixture();
         $this->addProductImportDomainEventToSetUpProductFixture();
         $this->addProductListingCriteriaDomainDomainEventFixture();

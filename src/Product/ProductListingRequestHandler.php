@@ -88,7 +88,11 @@ class ProductListingRequestHandler implements HttpRequestHandler
 
         $this->addProductsInListingToPageBuilder();
 
-        return $this->pageBuilder->buildPage($this->pageMetaInfo, $this->context, []);
+        return $this->pageBuilder->buildPage(
+            $this->pageMetaInfo,
+            $this->context,
+            ['products_per_page' => $this->getDefaultNumberOrProductsPerPage()]
+        );
     }
 
     private function loadPageMetaInfoSnippet()
@@ -166,5 +170,19 @@ class ProductListingRequestHandler implements HttpRequestHandler
             $acc[$snippetCode] = $key;
             return $acc;
         }, []);
+    }
+
+    /**
+     * @return string
+     */
+    private function getDefaultNumberOrProductsPerPage()
+    {
+        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
+            DefaultNumberOfProductsPerPageSnippetRenderer::CODE
+        );
+        $snippetKey = $keyGenerator->getKeyForContext($this->context, []);
+        $defaultNumberOrProductsPerPage = $this->dataPoolReader->getSnippet($snippetKey);
+
+        return $defaultNumberOrProductsPerPage;
     }
 }

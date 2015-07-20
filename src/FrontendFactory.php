@@ -7,6 +7,7 @@ use Brera\Api\ApiRouter;
 use Brera\Content\ContentBlocksApiV1PutRequestHandler;
 use Brera\Http\HttpRequest;
 use Brera\Product\CatalogImportApiV1PutRequestHandler;
+use Brera\Product\DefaultNumberOfProductsPerPageSnippetRenderer;
 use Brera\Product\ProductDetailViewInContextSnippetRenderer;
 use Brera\Product\ProductDetailViewRequestHandlerBuilder;
 use Brera\Product\ProductDetailViewRouter;
@@ -176,6 +177,10 @@ class FrontendFactory implements Factory
         $snippetKeyGeneratorLocator->register(
             $this->getMasterFactory()->getContentBlockSnippetKey(),
             $this->getMasterFactory()->createContentBlockSnippetKeyGenerator()
+        );
+        $snippetKeyGeneratorLocator->register(
+            DefaultNumberOfProductsPerPageSnippetRenderer::CODE,
+            $this->getMasterFactory()->createDefaultNumberOfProductsPerPageSnippetKeyGenerator()
         );
 
         return $snippetKeyGeneratorLocator;

@@ -273,7 +273,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createDefaultNumberOfProductsPerPageSnippetKeyGenerator()
     {
         return new GenericSnippetKeyGenerator(
-            'default_number_of_products_per_page',
+            DefaultNumberOfProductsPerPageSnippetRenderer::CODE,
             $this->getMasterFactory()->getRequiredContexts()
         );
     }

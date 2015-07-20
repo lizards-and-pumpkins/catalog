@@ -56,6 +56,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\RootSnippetProjector
  * @uses   \Brera\UrlPathKeyGenerator
  * @uses   \Brera\Renderer\BlockRenderer
+ * @uses   \Brera\Product\DefaultNumberOfProductsPerPageSnippetRenderer
  * @uses   \Brera\Product\PriceSnippetRenderer
  * @uses   \Brera\Product\ProductBackOrderAvailabilitySnippetRenderer
  * @uses   \Brera\Product\ProductSourceBuilder
