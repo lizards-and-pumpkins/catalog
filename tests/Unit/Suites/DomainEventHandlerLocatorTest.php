@@ -10,15 +10,15 @@ use Brera\Product\ProductWasUpdatedDomainEvent;
 use Brera\Product\ProductWasUpdatedDomainEventHandler;
 use Brera\Product\ProductListingWasUpdatedDomainEvent;
 use Brera\Product\ProductListingWasUpdatedDomainEventHandler;
-use Brera\Product\ProductStockQuantityUpdatedDomainEvent;
-use Brera\Product\ProductStockQuantityUpdatedDomainEventHandler;
+use Brera\Product\ProductStockQuantityWasUpdatedDomainEvent;
+use Brera\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
 
 /**
  * @covers \Brera\DomainEventHandlerLocator
  * @uses   \Brera\Image\ImageWasUpdatedDomainEvent
  * @uses   \Brera\Product\CatalogImportDomainEvent
  * @uses   \Brera\Product\ProductListingWasUpdatedDomainEvent
- * @uses   \Brera\Product\ProductStockQuantityUpdatedDomainEvent
+ * @uses   \Brera\Product\ProductStockQuantityWasUpdatedDomainEvent
  * @uses   \Brera\Product\ProductWasUpdatedDomainEvent
  * @uses   \Brera\RootTemplateChangedDomainEvent
  */
@@ -130,17 +130,17 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testProductStockQuantityChangedDomainEventHandlerIsLocatedAndReturned()
     {
-        $stubEventHandler = $this->getMock(ProductStockQuantityUpdatedDomainEventHandler::class, [], [], '', false);
-        $this->factory->method('createProductStockQuantityUpdatedDomainEventHandler')->willReturn($stubEventHandler);
+        $stubEventHandler = $this->getMock(ProductStockQuantityWasUpdatedDomainEventHandler::class, [], [], '', false);
+        $this->factory->method('createProductStockQuantityWasUpdatedDomainEventHandler')->willReturn($stubEventHandler);
 
-        /** @var ProductStockQuantityUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
-        $stubDomainEvent = $this->getMockBuilder(ProductStockQuantityUpdatedDomainEvent::class)
-            ->setMockClassName('ProductStockQuantityUpdatedDomainEvent')
+        /** @var ProductStockQuantityWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
+        $stubDomainEvent = $this->getMockBuilder(ProductStockQuantityWasUpdatedDomainEvent::class)
+            ->setMockClassName('ProductStockQuantityWasUpdatedDomainEvent')
             ->disableOriginalConstructor()
             ->getMock();
 
         $result = $this->locator->getHandlerFor($stubDomainEvent);
 
-        $this->assertInstanceOf(ProductStockQuantityUpdatedDomainEventHandler::class, $result);
+        $this->assertInstanceOf(ProductStockQuantityWasUpdatedDomainEventHandler::class, $result);
     }
 }

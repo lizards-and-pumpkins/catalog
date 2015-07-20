@@ -28,7 +28,7 @@ class UpdateProductStockQuantityCommandHandler implements CommandHandler
         $productId = $this->command->getProductId();
         $productStockQuantitySource = $this->command->getProductStockQuantitySource();
 
-        $event = new ProductStockQuantityUpdatedDomainEvent($productId, $productStockQuantitySource);
+        $event = new ProductStockQuantityWasUpdatedDomainEvent($productId, $productStockQuantitySource);
 
         $this->domainEventQueue->add($event);
     }

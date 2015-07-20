@@ -4,7 +4,7 @@ namespace Brera\Product;
 
 use Brera\DomainEvent;
 
-class ProductStockQuantityUpdatedDomainEvent implements DomainEvent
+class ProductStockQuantityWasUpdatedDomainEvent implements DomainEvent
 {
     /**
      * @var ProductStockQuantitySource

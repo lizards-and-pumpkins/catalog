@@ -43,8 +43,8 @@ use Brera\Product\ProductSnippetKeyGenerator;
 use Brera\Product\ProductSourceBuilder;
 use Brera\Product\ProductSourceDetailViewSnippetRenderer;
 use Brera\Product\ProductSourceInListingSnippetRenderer;
-use Brera\Product\ProductStockQuantityUpdatedDomainEvent;
-use Brera\Product\ProductStockQuantityUpdatedDomainEventHandler;
+use Brera\Product\ProductStockQuantityWasUpdatedDomainEvent;
+use Brera\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
 use Brera\Product\ProductStockQuantityProjector;
 use Brera\Product\ProductStockQuantitySnippetRenderer;
 use Brera\Product\ProductStockQuantitySourceBuilder;
@@ -787,12 +787,13 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @param ProductStockQuantityUpdatedDomainEvent $event
-     * @return ProductStockQuantityUpdatedDomainEventHandler
+     * @param ProductStockQuantityWasUpdatedDomainEvent $event
+     * @return ProductStockQuantityWasUpdatedDomainEventHandler
      */
-    public function createProductStockQuantityUpdatedDomainEventHandler(ProductStockQuantityUpdatedDomainEvent $event)
-    {
-        return new ProductStockQuantityUpdatedDomainEventHandler(
+    public function createProductStockQuantityWasUpdatedDomainEventHandler(
+        ProductStockQuantityWasUpdatedDomainEvent $event
+    ) {
+        return new ProductStockQuantityWasUpdatedDomainEventHandler(
             $event,
             $this->getMasterFactory()->createContextSource(),
             $this->getMasterFactory()->getProductStockQuantityProjector()

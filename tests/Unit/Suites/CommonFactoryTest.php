@@ -22,8 +22,8 @@ use Brera\Product\ProductListingWasUpdatedDomainEventHandler;
 use Brera\Product\ProductProjector;
 use Brera\Product\ProductSnippetKeyGenerator;
 use Brera\Product\ProductSourceBuilder;
-use Brera\Product\ProductStockQuantityUpdatedDomainEvent;
-use Brera\Product\ProductStockQuantityUpdatedDomainEventHandler;
+use Brera\Product\ProductStockQuantityWasUpdatedDomainEvent;
+use Brera\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
 use Brera\Product\ProductStockQuantityProjector;
 use Brera\Product\ProductStockQuantitySnippetRenderer;
 use Brera\Product\ProductStockQuantitySourceBuilder;
@@ -74,7 +74,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Product\ProductSearchDocumentBuilder
  * @uses   \Brera\Product\ProductSourceDetailViewSnippetRenderer
  * @uses   \Brera\Product\ProductStockQuantityProjector
- * @uses   \Brera\Product\ProductStockQuantityUpdatedDomainEventHandler
+ * @uses   \Brera\Product\ProductStockQuantityWasUpdatedDomainEventHandler
  * @uses   \Brera\Product\ProductStockQuantitySnippetRenderer
  * @uses   \Brera\Product\UpdateProductStockQuantityCommandHandler
  * @uses   \Brera\Product\UpdateMultipleProductStockQuantityCommandHandler
@@ -400,13 +400,13 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(CommandHandlerLocator::class, $result);
     }
 
-    public function testProductStockQuantityUpdatedDomainEventHandlerIsReturned()
+    public function testProductStockQuantityWasUpdatedDomainEventHandlerIsReturned()
     {
-        /** @var ProductStockQuantityUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
-        $stubDomainEvent = $this->getMock(ProductStockQuantityUpdatedDomainEvent::class, [], [], '', false);
-        $result = $this->commonFactory->createProductStockQuantityUpdatedDomainEventHandler($stubDomainEvent);
+        /** @var ProductStockQuantityWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
+        $stubDomainEvent = $this->getMock(ProductStockQuantityWasUpdatedDomainEvent::class, [], [], '', false);
+        $result = $this->commonFactory->createProductStockQuantityWasUpdatedDomainEventHandler($stubDomainEvent);
 
-        $this->assertInstanceOf(ProductStockQuantityUpdatedDomainEventHandler::class, $result);
+        $this->assertInstanceOf(ProductStockQuantityWasUpdatedDomainEventHandler::class, $result);
     }
 
     public function testUpdateContentBlockCommandHandlerIsReturned()
