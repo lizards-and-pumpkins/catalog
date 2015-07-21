@@ -19,7 +19,7 @@ class RootSnippetSourceListBuilder
 
     /**
      * @param string $xml
-     * @return RootSnippetSource
+     * @return RootSnippetSourceList
      */
     public function createFromXml($xml)
     {

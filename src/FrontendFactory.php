@@ -63,6 +63,12 @@ class FrontendFactory implements Factory
             $version,
             $this->getMasterFactory()->createMultipleProductStockQuantityApiV1PutRequestHandler()
         );
+
+        $requestHandlerChain->register(
+            'put_page_templates',
+            $version,
+            $this->getMasterFactory()->createPageTemplatesApiV1PutRequestHandler()
+        );
     }
 
     /**
@@ -97,6 +103,17 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->getCommandQueue(),
             Directory::fromPath($this->getCatalogImportDirectoryConfig()),
             $this->getMasterFactory()->getProductStockQuantitySourceBuilder()
+        );
+    }
+
+    /**
+     * @return PageTemplatesApiV1PutRequestHandler
+     */
+    public function createPageTemplatesApiV1PutRequestHandler()
+    {
+        return new PageTemplatesApiV1PutRequestHandler(
+            $this->getMasterFactory()->createRootSnippetSourceListBuilder(),
+            $this->getMasterFactory()->getEventQueue()
         );
     }
 

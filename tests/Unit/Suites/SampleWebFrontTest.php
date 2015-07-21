@@ -26,6 +26,7 @@ use Brera\Http\HttpUrl;
  * @uses   \Brera\SampleUrlPathKeyGenerator
  * @uses   \Brera\SnippetKeyGeneratorLocator
  * @uses   \Brera\GenericSnippetKeyGenerator
+ * @uses   \Brera\PageTemplatesApiV1PutRequestHandler
  * @uses   \Brera\Product\CatalogImportApiV1PutRequestHandler
  * @uses   \Brera\Product\ProductDetailViewRouter
  * @uses   \Brera\Product\ProductDetailViewRequestHandler
@@ -35,6 +36,7 @@ use Brera\Http\HttpUrl;
  * @uses   \Brera\Product\ProductListingRequestHandlerBuilder
  * @uses   \Brera\Product\ProductSnippetKeyGenerator
  * @uses   \Brera\Product\MultipleProductStockQuantityApiV1PutRequestHandler
+ * @uses   \Brera\RootSnippetSourceListBuilder
  * @uses   \Brera\Http\ResourceNotFoundRouter
  * @uses   \Brera\Http\ResourceNotFoundRequestHandler
  * @uses   \Brera\Http\HttpRouterChain

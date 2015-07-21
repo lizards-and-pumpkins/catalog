@@ -115,7 +115,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testProductWasUpdatedDomainEventHandlerIsReturned()
     {
-        /* TODO: Move to catalog factory test */
         /** @var ProductWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
         $stubDomainEvent = $this->getMock(ProductWasUpdatedDomainEvent::class, [], [], '', false);
         $result = $this->commonFactory->createProductWasUpdatedDomainEventHandler($stubDomainEvent);
@@ -125,7 +124,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testPageTemplateWasUpdatedDomainEventHandlerIsReturned()
     {
-        /* TODO: Move to catalog factory test */
         /** @var PageTemplateWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
         $stubDomainEvent = $this->getMock(PageTemplateWasUpdatedDomainEvent::class, [], [], '', false);
         $result = $this->commonFactory->createPageTemplateWasUpdatedDomainEventHandler($stubDomainEvent);
@@ -135,7 +133,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testProductListingWasUpdatedDomainEventHandlerIsReturned()
     {
-        /* TODO: Move to catalog factory test */
         /** @var ProductListingWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
         $stubDomainEvent = $this->getMock(ProductListingWasUpdatedDomainEvent::class, [], [], '', false);
         $result = $this->commonFactory->createProductListingWasUpdatedDomainEventHandler($stubDomainEvent);
@@ -145,7 +142,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testProductProjectorIsReturned()
     {
-        /* TODO: Move to catalog factory test */
         $result = $this->commonFactory->createProductProjector();
         $this->assertInstanceOf(ProductProjector::class, $result);
     }
@@ -178,6 +174,12 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createProductListingSourceBuilder();
         $this->assertInstanceOf(ProductListingSourceBuilder::class, $result);
+    }
+
+    public function testRootSnippetSourceListBuilderIsReturned()
+    {
+        $result = $this->commonFactory->createRootSnippetSourceListBuilder();
+        $this->assertInstanceOf(RootSnippetSourceListBuilder::class, $result);
     }
 
     public function testThemeLocatorIsReturned()

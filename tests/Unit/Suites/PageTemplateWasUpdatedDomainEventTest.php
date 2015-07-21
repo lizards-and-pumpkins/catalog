@@ -7,13 +7,35 @@ namespace Brera;
  */
 class PageTemplateWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 {
-    public function testPassedInXmlIsReturned()
+    /**
+     * @var RootSnippetSourceList|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubRootSnippetSourceList;
+
+    /**
+     * @var PageTemplateWasUpdatedDomainEvent
+     */
+    private $domainEvent;
+
+    protected function setUp()
     {
-        $xml = 'foo';
+        $dummyRootSnippetId = 'foo';
+        $this->stubRootSnippetSourceList = $this->getMock(RootSnippetSourceList::class, [], [], '', false);
 
-        $event = new PageTemplateWasUpdatedDomainEvent($xml);
-        $result = $event->getXml();
+        $this->domainEvent = new PageTemplateWasUpdatedDomainEvent(
+            $dummyRootSnippetId,
+            $this->stubRootSnippetSourceList
+        );
+    }
 
-        $this->assertEquals($xml, $result);
+    public function testDomainEventInterfaceIsImplemented()
+    {
+        $this->assertInstanceOf(DomainEvent::class, $this->domainEvent);
+    }
+
+    public function testRootSnippetSourceListIsReturned()
+    {
+        $result = $this->domainEvent->getRootSnippetSourceList();
+        $this->assertSame($this->stubRootSnippetSourceList, $result);
     }
 }

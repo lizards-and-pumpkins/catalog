@@ -9,12 +9,7 @@ class PageTemplateWasUpdatedDomainEventHandler implements DomainEventHandler
     /**
      * @var PageTemplateWasUpdatedDomainEvent
      */
-    private $event;
-
-    /**
-     * @var RootSnippetSourceListBuilder
-     */
-    private $rootSnippetSourceBuilder;
+    private $domainEvent;
 
     /**
      * @var ContextSource
@@ -27,21 +22,18 @@ class PageTemplateWasUpdatedDomainEventHandler implements DomainEventHandler
     private $projector;
 
     public function __construct(
-        PageTemplateWasUpdatedDomainEvent $event,
-        RootSnippetSourceListBuilder $rootSnippetSourceBuilder,
+        PageTemplateWasUpdatedDomainEvent $domainEvent,
         ContextSource $contextSource,
         RootSnippetProjector $projector
     ) {
         $this->projector = $projector;
-        $this->rootSnippetSourceBuilder = $rootSnippetSourceBuilder;
         $this->contextSource = $contextSource;
-        $this->event = $event;
+        $this->domainEvent = $domainEvent;
     }
 
     public function process()
     {
-        $rootSnippetSource = $this->rootSnippetSourceBuilder->createFromXml($this->event->getXml());
-
-        $this->projector->project($rootSnippetSource, $this->contextSource);
+        $rootSnippetSourceList = $this->domainEvent->getRootSnippetSourceList();
+        $this->projector->project($rootSnippetSourceList, $this->contextSource);
     }
 }

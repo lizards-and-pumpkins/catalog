@@ -88,9 +88,14 @@ class ProductListingTest extends AbstractIntegrationTest
     
     private function addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture()
     {
-        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.xml');
-        $queue = $this->factory->getEventQueue();
-        $queue->add(new PageTemplateWasUpdatedDomainEvent($xml));
+        $httpUrl = HttpUrl::fromString('http://example.com/api/v1/page_templates/product_listing');
+        $httpHeaders = HttpHeaders::fromArray([]);
+        $httpRequestBodyString = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.xml');
+        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
+        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
+
+        $website = new SampleWebFront($request, $this->factory);
+        $website->runWithoutSendingResponse();
     }
 
     private function importCatalog()

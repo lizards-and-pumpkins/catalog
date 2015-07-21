@@ -17,6 +17,7 @@ use Brera\Product\ProductListingRouter;
  * @uses   \Brera\CommonFactory
  * @uses   \Brera\Content\ContentBlocksApiV1PutRequestHandler
  * @uses   \Brera\Content\ContentBlockSnippetKeyGenerator
+ * @uses   \Brera\Context\ContextBuilder
  * @uses   \Brera\Product\CatalogImportApiV1PutRequestHandler
  * @uses   \Brera\Product\ProductDetailViewRouter
  * @uses   \Brera\Product\ProductDetailViewRequestHandlerBuilder
@@ -25,11 +26,14 @@ use Brera\Product\ProductListingRouter;
  * @uses   \Brera\Product\ProductSnippetKeyGenerator
  * @uses   \Brera\Product\MultipleProductStockQuantityApiV1PutRequestHandler
  * @uses   \Brera\DataPool\DataPoolReader
+ * @uses   \Brera\DataVersion
  * @uses   \Brera\Api\ApiRouter
  * @uses   \Brera\Api\ApiRequestHandlerChain
  * @uses   \Brera\SnippetKeyGeneratorLocator
  * @uses   \Brera\GenericSnippetKeyGenerator
  * @uses   \Brera\PageBuilder
+ * @uses   \Brera\PageTemplatesApiV1PutRequestHandler
+ * @uses   \Brera\RootSnippetSourceListBuilder
  * @uses   \Brera\Utils\Directory
  */
 class FrontendFactoryTest extends \PHPUnit_Framework_TestCase

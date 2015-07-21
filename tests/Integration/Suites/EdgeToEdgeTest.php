@@ -106,14 +106,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
 
     public function testPageTemplateWasUpdatedDomainEventPutsProductListingRootSnippetIntoKeyValueStore()
     {
-        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.xml');
-
-        $queue = $this->factory->getEventQueue();
-        $queue->add(new PageTemplateWasUpdatedDomainEvent($xml));
-
-        $consumer = $this->factory->createDomainEventConsumer();
-        $numberOfMessages = 1;
-        $consumer->process($numberOfMessages);
+        $this->addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture();
 
         $logger = $this->factory->getLogger();
         $this->failIfMessagesWhereLogged($logger);
@@ -180,6 +173,25 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $website = new SampleWebFront($request, $this->factory);
         $website->runWithoutSendingResponse();
 
+        $this->processDomainEventsInQueue();
+    }
+
+    private function addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture()
+    {
+        $httpUrl = HttpUrl::fromString('http://example.com/api/v1/page_templates/product_listing');
+        $httpHeaders = HttpHeaders::fromArray([]);
+        $httpRequestBodyString = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.xml');
+        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
+        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
+
+        $website = new SampleWebFront($request, $this->factory);
+        $website->runWithoutSendingResponse();
+
+        $this->processDomainEventsInQueue();
+    }
+
+    private function processDomainEventsInQueue()
+    {
         $queue = $this->factory->getEventQueue();
         $consumer = $this->factory->createDomainEventConsumer();
 

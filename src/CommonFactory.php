@@ -108,7 +108,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new PageTemplateWasUpdatedDomainEventHandler(
             $event,
-            $this->getMasterFactory()->createRootSnippetSourceBuilder(),
             $this->getMasterFactory()->createContextSource(),
             $this->getMasterFactory()->createRootSnippetProjector()
         );
@@ -129,7 +128,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     /**
      * @return RootSnippetSourceListBuilder
      */
-    public function createRootSnippetSourceBuilder()
+    public function createRootSnippetSourceListBuilder()
     {
         return new RootSnippetSourceListBuilder($this->getMasterFactory()->createContextBuilder());
     }

@@ -7,21 +7,28 @@ class PageTemplateWasUpdatedDomainEvent implements DomainEvent
     /**
      * @var string
      */
-    private $xml;
+    private $rootSnippetId;
 
     /**
-     * @param string $xml
+     * @var RootSnippetSourceList
      */
-    public function __construct($xml)
+    private $rootSnippetSourceList;
+
+    /**
+     * @param string $rootSnippetId
+     * @param RootSnippetSourceList $rootSnippetSourceList
+     */
+    public function __construct($rootSnippetId, RootSnippetSourceList $rootSnippetSourceList)
     {
-        $this->xml = $xml;
+        $this->rootSnippetId = $rootSnippetId;
+        $this->rootSnippetSourceList = $rootSnippetSourceList;
     }
 
     /**
-     * @return string
+     * @return RootSnippetSourceList
      */
-    public function getXml()
+    public function getRootSnippetSourceList()
     {
-        return $this->xml;
+        return $this->rootSnippetSourceList;
     }
 }
