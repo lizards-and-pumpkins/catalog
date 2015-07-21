@@ -4,11 +4,13 @@ namespace Brera;
 
 use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
+use Brera\Http\HttpResponse;
 use Brera\Product\ProductDetailPageMetaInfoSnippetContent;
 
 /**
  * @covers \Brera\PageBuilder
- * @uses   \Brera\Page
+ * @uses   \Brera\DefaultHttpResponse
+ * @uses   \Brera\Http\HttpHeaders
  * @uses   \Brera\MissingSnippetCodeMessage
  */
 class PageBuilderTest extends \PHPUnit_Framework_TestCase
@@ -77,14 +79,14 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testPageIsReturned()
+    public function testHttpResponseIsReturned()
     {
         $rootSnippetContent = 'Stub Content';
         $childSnippetMap = [];
 
         $this->setDataPoolFixture($this->testRootSnippetCode, $rootSnippetContent, $childSnippetMap);
         $result = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
-        $this->assertInstanceOf(Page::class, $result);
+        $this->assertInstanceOf(HttpResponse::class, $result);
     }
 
     public function testPlaceholderIsReplacedWithoutNestedPlaceholders()
@@ -224,6 +226,7 @@ EOH;
 
     public function testChildSnippetsAreGracefullyHandledWithNoKeyGenerator()
     {
+        /** @var SnippetKeyGeneratorLocator|\PHPUnit_Framework_MockObject_MockObject $stubSnippetKeyGeneratorLocator */
         $stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
         $this->fakeSnippetKeyGeneratorLocatorForRootOnly($stubSnippetKeyGeneratorLocator);
 
