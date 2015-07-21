@@ -58,7 +58,7 @@ class PageBuilder
      * @param PageMetaInfoSnippetContent $metaInfo
      * @param Context $context
      * @param mixed[] $keyGeneratorParams
-     * @return Page
+     * @return DefaultHttpResponse
      */
     public function buildPage(PageMetaInfoSnippetContent $metaInfo, Context $context, array $keyGeneratorParams)
     {
@@ -69,7 +69,7 @@ class PageBuilder
         $this->logMissingSnippets();
         $content = $this->buildPageContent();
 
-        return new Page($content);
+        return DefaultHttpResponse::create($content, []);
     }
 
     /**
