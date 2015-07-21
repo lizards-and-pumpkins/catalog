@@ -68,8 +68,7 @@ class ProductSourceInListingSnippetRenderer implements SnippetRenderer
      */
     private function getContextList()
     {
-        $parts = $this->productInContextRenderer->getUsedContextParts();
-        return $this->contextSource->getAllAvailableContexts($parts);
+        return $this->contextSource->getAllAvailableContexts();
     }
 
     /**

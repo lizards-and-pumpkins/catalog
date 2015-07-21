@@ -2,6 +2,13 @@
 
 namespace Brera;
 
+use Brera\Content\ContentBlockProjector;
+use Brera\Content\ContentBlockSnippetKeyGenerator;
+use Brera\Content\ContentBlockSnippetRenderer;
+use Brera\Content\ContentBlockWasUpdatedDomainEvent;
+use Brera\Content\ContentBlockWasUpdatedDomainEventHandler;
+use Brera\Content\UpdateContentBlockCommand;
+use Brera\Content\UpdateContentBlockCommandHandler;
 use Brera\Context\ContextBuilder;
 use Brera\Context\ContextSource;
 use Brera\DataPool\DataPoolReader;
@@ -411,6 +418,16 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
+     * @return SnippetKeyGenerator
+     */
+    public function createContentBlockSnippetKeyGenerator()
+    {
+        return new ContentBlockSnippetKeyGenerator(
+            $this->getMasterFactory()->getContentBlockSnippetKey()
+        );
+    }
+
+    /**
      * @return BlockStructure
      */
     public function createBlockStructure()
@@ -622,6 +639,14 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
+     * @return string
+     */
+    public function getContentBlockSnippetKey()
+    {
+        return 'content_block';
+    }
+
+    /**
      * @param ImageImportDomainEvent $event
      * @return ImageImportDomainEventHandler
      */
@@ -771,6 +796,73 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $event,
             $this->getMasterFactory()->createContextSource(),
             $this->getMasterFactory()->getProductStockQuantityProjector()
+        );
+    }
+
+    /**
+     * @param UpdateContentBlockCommand $command
+     * @return UpdateContentBlockCommandHandler
+     */
+    public function createUpdateContentBlockCommandHandler(UpdateContentBlockCommand $command)
+    {
+        return new UpdateContentBlockCommandHandler(
+            $command,
+            $this->getMasterFactory()->getEventQueue()
+        );
+    }
+
+    /**
+     * @param ContentBlockWasUpdatedDomainEvent $event
+     * @return ContentBlockWasUpdatedDomainEventHandler
+     */
+    public function createContentBlockWasUpdatedDomainEventHandler(ContentBlockWasUpdatedDomainEvent $event)
+    {
+        return new ContentBlockWasUpdatedDomainEventHandler(
+            $event,
+            $this->getMasterFactory()->createContextSource(),
+            $this->getMasterFactory()->getContentBlockProjector()
+        );
+    }
+
+    /**
+     * @return ContentBlockProjector
+     */
+    public function getContentBlockProjector()
+    {
+        return new ContentBlockProjector(
+            $this->getMasterFactory()->createContentBlockSnippetRendererCollection(),
+            $this->getMasterFactory()->createDataPoolWriter()
+        );
+    }
+
+    /**
+     * @return SnippetRendererCollection
+     */
+    public function createContentBlockSnippetRendererCollection()
+    {
+        return new SnippetRendererCollection(
+            $this->getMasterFactory()->createContentBlockSnippetRendererList(),
+            $this->getMasterFactory()->createSnippetList()
+        );
+    }
+
+    /**
+     * @return SnippetRenderer[]
+     */
+    public function createContentBlockSnippetRendererList()
+    {
+        return [$this->getMasterFactory()->createContentBlockSnippetRenderer()];
+    }
+
+    /**
+     * @return ContentBlockSnippetRenderer
+     */
+    public function createContentBlockSnippetRenderer()
+    {
+        return new ContentBlockSnippetRenderer(
+            $this->getMasterFactory()->createSnippetList(),
+            $this->getMasterFactory()->createContentBlockSnippetKeyGenerator(),
+            $this->getMasterFactory()->createContextBuilder()
         );
     }
 }

@@ -4,7 +4,9 @@ namespace Brera;
 
 use Brera\Api\ApiRequestHandlerChain;
 use Brera\Api\ApiRouter;
-use Brera\Product\CatalogImportApiRequestHandler;
+use Brera\Content\ContentBlocksApiV1PutRequestHandler;
+use Brera\Http\HttpRequest;
+use Brera\Product\CatalogImportApiV1PutRequestHandler;
 use Brera\Product\ProductDetailViewInContextSnippetRenderer;
 use Brera\Product\ProductDetailViewRequestHandlerBuilder;
 use Brera\Product\ProductDetailViewRouter;
@@ -12,7 +14,7 @@ use Brera\Product\ProductInListingInContextSnippetRenderer;
 use Brera\Product\ProductListingRequestHandlerBuilder;
 use Brera\Product\ProductListingRouter;
 use Brera\Product\ProductListingSnippetRenderer;
-use Brera\Product\MultipleProductStockQuantityApiRequestHandler;
+use Brera\Product\MultipleProductStockQuantityApiV1PutRequestHandler;
 use Brera\Utils\Directory;
 
 class FrontendFactory implements Factory
@@ -35,36 +37,61 @@ class FrontendFactory implements Factory
         return new ApiRouter($requestHandlerChain);
     }
 
-    protected function registerApiRequestHandlers(ApiRequestHandlerChain $requestHandlerChain)
+    private function registerApiRequestHandlers(ApiRequestHandlerChain $requestHandlerChain)
     {
+        $this->registerApiV1RequestHandlers($requestHandlerChain);
+    }
+
+    private function registerApiV1RequestHandlers(ApiRequestHandlerChain $requestHandlerChain)
+    {
+        $version = 1;
+
         $requestHandlerChain->register(
-            'catalog_import',
-            $this->getMasterFactory()->createCatalogImportApiRequestHandler()
+            'put_catalog_import',
+            $version,
+            $this->getMasterFactory()->createCatalogImportApiV1PutRequestHandler()
         );
 
         $requestHandlerChain->register(
-            'multiple_product_stock_quantity',
-            $this->getMasterFactory()->createMultipleProductStockQuantityApiRequestHandler()
+            'put_content_blocks',
+            $version,
+            $this->getMasterFactory()->createContentBlocksApiV1PutRequestHandler()
+        );
+
+        $requestHandlerChain->register(
+            'put_multiple_product_stock_quantity',
+            $version,
+            $this->getMasterFactory()->createMultipleProductStockQuantityApiV1PutRequestHandler()
         );
     }
 
     /**
-     * @return CatalogImportApiRequestHandler
+     * @return CatalogImportApiV1PutRequestHandler
      */
-    public function createCatalogImportApiRequestHandler()
+    public function createCatalogImportApiV1PutRequestHandler()
     {
-        return CatalogImportApiRequestHandler::create(
+        return CatalogImportApiV1PutRequestHandler::create(
             $this->getMasterFactory()->getEventQueue(),
             $this->getCatalogImportDirectoryConfig()
         );
     }
 
     /**
-     * @return MultipleProductStockQuantityApiRequestHandler
+     * @return ContentBlocksApiV1PutRequestHandler
      */
-    public function createMultipleProductStockQuantityApiRequestHandler()
+    public function createContentBlocksApiV1PutRequestHandler()
     {
-        return MultipleProductStockQuantityApiRequestHandler::create(
+        return new ContentBlocksApiV1PutRequestHandler(
+            $this->getMasterFactory()->getCommandQueue()
+        );
+    }
+
+    /**
+     * @return MultipleProductStockQuantityApiV1PutRequestHandler
+     */
+    public function createMultipleProductStockQuantityApiV1PutRequestHandler()
+    {
+        return MultipleProductStockQuantityApiV1PutRequestHandler::create(
             $this->getMasterFactory()->getCommandQueue(),
             Directory::fromPath($this->getCatalogImportDirectoryConfig()),
             $this->getMasterFactory()->getProductStockQuantitySourceBuilder()
@@ -125,7 +152,6 @@ class FrontendFactory implements Factory
      */
     public function createSnippetKeyGeneratorLocator()
     {
-        // todo: replace string constants with class constant references
         $snippetKeyGeneratorLocator = new SnippetKeyGeneratorLocator();
         $snippetKeyGeneratorLocator->register(
             ProductDetailViewInContextSnippetRenderer::CODE,
@@ -146,6 +172,10 @@ class FrontendFactory implements Factory
         $snippetKeyGeneratorLocator->register(
             $this->getMasterFactory()->getProductBackOrderAvailabilitySnippetKey(),
             $this->getMasterFactory()->createProductBackOrderAvailabilitySnippetKeyGenerator()
+        );
+        $snippetKeyGeneratorLocator->register(
+            $this->getMasterFactory()->getContentBlockSnippetKey(),
+            $this->getMasterFactory()->createContentBlockSnippetKeyGenerator()
         );
 
         return $snippetKeyGeneratorLocator;

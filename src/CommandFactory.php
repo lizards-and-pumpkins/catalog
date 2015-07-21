@@ -2,6 +2,8 @@
 
 namespace Brera;
 
+use Brera\Content\UpdateContentBlockCommand;
+use Brera\Content\UpdateContentBlockCommandHandler;
 use Brera\Product\UpdateMultipleProductStockQuantityCommand;
 use Brera\Product\UpdateMultipleProductStockQuantityCommandHandler;
 use Brera\Product\UpdateProductStockQuantityCommand;
@@ -24,4 +26,10 @@ interface CommandFactory
     public function createUpdateMultipleProductStockQuantityCommandHandler(
         UpdateMultipleProductStockQuantityCommand $command
     );
+
+    /**
+     * @param UpdateContentBlockCommand $command
+     * @return UpdateContentBlockCommandHandler
+     */
+    public function createUpdateContentBlockCommandHandler(UpdateContentBlockCommand $command);
 }

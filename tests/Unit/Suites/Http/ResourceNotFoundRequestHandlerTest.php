@@ -27,6 +27,7 @@ class ResourceNotFoundRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testTrueIsReturnedForEveryRequest()
     {
-        $this->assertTrue($this->requestHandler->canProcess());
+        $mockRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+        $this->assertTrue($this->requestHandler->canProcess($mockRequest));
     }
 }

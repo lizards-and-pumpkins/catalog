@@ -14,11 +14,11 @@ class ApiTest extends AbstractIntegrationTest
     {
         $factory = $this->prepareIntegrationTestMasterFactory();
 
-        $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
+        $httpUrl = HttpUrl::fromString('http://example.com/api/v1/catalog_import');
         $httpHeaders = HttpHeaders::fromArray([]);
         $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
-        $request = HttpRequest::fromParameters(HttpRequest::HTTP_PUT_REQUEST, $httpUrl, $httpHeaders, $httpRequestBody);
+        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $domainEventQueue = $factory->getEventQueue();
         $this->assertEquals(0, $domainEventQueue->count());

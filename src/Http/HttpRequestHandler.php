@@ -5,9 +5,10 @@ namespace Brera\Http;
 interface HttpRequestHandler
 {
     /**
+     * @param HttpRequest $request
      * @return bool
      */
-    public function canProcess();
+    public function canProcess(HttpRequest $request);
 
     /**
      * @param HttpRequest $request

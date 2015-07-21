@@ -57,9 +57,10 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
     }
 
     /**
+     * @param HttpRequest $request
      * @return bool
      */
-    public function canProcess()
+    public function canProcess(HttpRequest $request)
     {
         $this->loadPageMetaInfoSnippet();
         return (bool)$this->pageMetaInfo;
@@ -72,7 +73,7 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
      */
     public function process(HttpRequest $request)
     {
-        if (!$this->canProcess()) {
+        if (!$this->canProcess($request)) {
             throw new UnableToHandleRequestException;
         }
         return $this->pageBuilder->buildPage(

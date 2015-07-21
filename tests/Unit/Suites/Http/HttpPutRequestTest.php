@@ -11,29 +11,30 @@ namespace Brera\Http;
  */
 class HttpPutRequestTest extends AbstractHttpRequestTest
 {
-    public function testPutRequestIsReturned()
+    /**
+     * @var HttpPutRequest
+     */
+    private $request;
+
+    protected function setUp()
     {
-        $request = HttpRequest::fromParameters(
-            HttpRequest::HTTP_PUT_REQUEST,
-            $this->getStubHttpUrl(),
+        $stubHttpUrl = $this->getStubHttpUrl();
+        $this->request = HttpRequest::fromParameters(
+            HttpRequest::METHOD_PUT,
+            $stubHttpUrl,
             HttpHeaders::fromArray([]),
             HttpRequestBody::fromString('')
         );
-
-        $this->assertInstanceOf(HttpPutRequest::class, $request);
-        $this->assertInstanceOf(HttpRequest::class, $request);
     }
 
-    public function testItReturnsTheRequestContentForNonMultipartFormDataRequests()
+    public function testPutRequestIsReturned()
     {
-        $headers = HttpHeaders::fromArray([]);
-        $requestBody = HttpRequestBody::fromString('some-request-content');
-        $request = HttpRequest::fromParameters(
-            HttpRequest::HTTP_PUT_REQUEST,
-            $this->getStubHttpUrl(),
-            $headers,
-            $requestBody
-        );
-        $this->assertSame('some-request-content', $request->getRawBody());
+        $this->assertInstanceOf(HttpPutRequest::class, $this->request);
+    }
+
+    public function testPutMethodNameIsReturned()
+    {
+        $result = $this->request->getMethod();
+        $this->assertSame(HttpRequest::METHOD_PUT, $result);
     }
 }

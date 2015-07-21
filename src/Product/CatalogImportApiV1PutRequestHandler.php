@@ -6,7 +6,7 @@ use Brera\Api\ApiRequestHandler;
 use Brera\Http\HttpRequest;
 use Brera\Queue\Queue;
 
-class CatalogImportApiRequestHandler extends ApiRequestHandler
+class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
 {
     /**
      * @var Queue
@@ -31,7 +31,7 @@ class CatalogImportApiRequestHandler extends ApiRequestHandler
     /**
      * @param Queue $domainEventQueue
      * @param string $importDirectoryPath
-     * @return CatalogImportApiRequestHandler
+     * @return CatalogImportApiV1PutRequestHandler
      * @throws CatalogImportDirectoryNotReadableException
      */
     public static function create(Queue $domainEventQueue, $importDirectoryPath)
@@ -44,11 +44,12 @@ class CatalogImportApiRequestHandler extends ApiRequestHandler
     }
 
     /**
+     * @param HttpRequest $request
      * @return bool
      */
-    final public function canProcess()
+    final public function canProcess(HttpRequest $request)
     {
-        return true;
+        return HttpRequest::METHOD_PUT === $request->getMethod();
     }
 
     /**
@@ -57,12 +58,18 @@ class CatalogImportApiRequestHandler extends ApiRequestHandler
      */
     final protected function getResponseBody(HttpRequest $request)
     {
+        return json_encode('OK');
+    }
+
+    /**
+     * @param HttpRequest $request
+     */
+    protected function processRequest(HttpRequest $request)
+    {
         $importFileContents = $this->getImportFileContents($request);
 
         $catalogImportDomainEvent = new CatalogImportDomainEvent($importFileContents);
         $this->domainEventQueue->add($catalogImportDomainEvent);
-
-        return json_encode('OK');
     }
 
     /**

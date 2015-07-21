@@ -11,17 +11,30 @@ namespace Brera\Http;
  */
 class HttpPostRequestTest extends AbstractHttpRequestTest
 {
-    public function testPostRequestIsReturned()
+    /**
+     * @var HttpPostRequest
+     */
+    private $request;
+
+    protected function setUp()
     {
         $stubHttpUrl = $this->getStubHttpUrl();
-
-        $result = HttpRequest::fromParameters(
-            HttpRequest::HTTP_POST_REQUEST,
+        $this->request = HttpRequest::fromParameters(
+            HttpRequest::METHOD_POST,
             $stubHttpUrl,
             HttpHeaders::fromArray([]),
             HttpRequestBody::fromString('')
         );
+    }
 
-        $this->assertInstanceOf(HttpPostRequest::class, $result);
+    public function testPostRequestIsReturned()
+    {
+        $this->assertInstanceOf(HttpPostRequest::class, $this->request);
+    }
+
+    public function testPostMethodNameIsReturned()
+    {
+        $result = $this->request->getMethod();
+        $this->assertSame(HttpRequest::METHOD_POST, $result);
     }
 }

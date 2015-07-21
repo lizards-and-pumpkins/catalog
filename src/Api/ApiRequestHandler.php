@@ -3,7 +3,6 @@
 namespace Brera\Api;
 
 use Brera\DefaultHttpResponse;
-use Brera\Http\HttpHeaders;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
 
@@ -15,7 +14,14 @@ abstract class ApiRequestHandler implements HttpRequestHandler
      */
     final public function process(HttpRequest $request)
     {
-        $body = $this->getResponseBody($request);
+        try {
+            $this->processRequest($request);
+            $body = $this->getResponseBody($request);
+        } catch (\Exception $e) {
+            /* TODO: Implement error handling */
+            throw $e;
+        }
+
         $headers = [
             'Access-Control-Allow-Origin' => '*',
             'Access-Control-Allow-Methods' => '*',
@@ -30,4 +36,13 @@ abstract class ApiRequestHandler implements HttpRequestHandler
      * @return string
      */
     abstract protected function getResponseBody(HttpRequest $request);
+
+    /**
+     * @param HttpRequest $request
+     * @return void
+     */
+    protected function processRequest(HttpRequest $request)
+    {
+        // Intentionally empty hook method
+    }
 }

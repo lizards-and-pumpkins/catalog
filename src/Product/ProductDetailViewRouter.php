@@ -27,7 +27,8 @@ class ProductDetailViewRouter implements HttpRouter
     public function route(HttpRequest $request, Context $context)
     {
         $handler = $this->productDetailViewRequestHandlerBuilder->create($request->getUrl(), $context);
-        if (! $handler->canProcess()) {
+
+        if (!$handler->canProcess($request)) {
             return null;
         }
         

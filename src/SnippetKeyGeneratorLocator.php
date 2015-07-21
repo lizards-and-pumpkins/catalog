@@ -12,7 +12,7 @@ class SnippetKeyGeneratorLocator
 
     /**
      * @param string $snippetCode
-     * @return GenericSnippetKeyGenerator
+     * @return SnippetKeyGenerator
      */
     public function getKeyGeneratorForSnippetCode($snippetCode)
     {

@@ -8,7 +8,7 @@ use Brera\Queue\Queue;
 use Brera\Utils\Directory;
 use Brera\Utils\XPathParser;
 
-class MultipleProductStockQuantityApiRequestHandler extends ApiRequestHandler
+class MultipleProductStockQuantityApiV1PutRequestHandler extends ApiRequestHandler
 {
     /**
      * @var Queue
@@ -39,7 +39,7 @@ class MultipleProductStockQuantityApiRequestHandler extends ApiRequestHandler
      * @param Queue $commandQueue
      * @param Directory $importDirectory
      * @param ProductStockQuantitySourceBuilder $productStockQuantitySourceBuilder
-     * @return CatalogImportApiRequestHandler
+     * @return CatalogImportApiV1PutRequestHandler
      * @throws CatalogImportDirectoryNotReadableException
      */
     public static function create(
@@ -57,11 +57,12 @@ class MultipleProductStockQuantityApiRequestHandler extends ApiRequestHandler
     }
 
     /**
+     * @param HttpRequest $request
      * @return bool
      */
-    public function canProcess()
+    public function canProcess(HttpRequest $request)
     {
-        return true;
+        return HttpRequest::METHOD_PUT === $request->getMethod();
     }
 
     /**
@@ -69,6 +70,14 @@ class MultipleProductStockQuantityApiRequestHandler extends ApiRequestHandler
      * @return string
      */
     protected function getResponseBody(HttpRequest $request)
+    {
+        return json_encode('OK');
+    }
+
+    /**
+     * @param HttpRequest $request
+     */
+    protected function processRequest(HttpRequest $request)
     {
         $importFileContents = $this->getImportFileContents($request);
 
@@ -80,8 +89,6 @@ class MultipleProductStockQuantityApiRequestHandler extends ApiRequestHandler
 
         $command = new UpdateMultipleProductStockQuantityCommand($productStockQuantitySourceArray);
         $this->commandQueue->add($command);
-
-        return json_encode('OK');
     }
 
     /**

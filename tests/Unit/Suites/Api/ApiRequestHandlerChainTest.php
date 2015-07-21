@@ -17,22 +17,47 @@ class ApiRequestHandlerChainTest extends \PHPUnit_Framework_TestCase
         $this->requestHandlerChain = new ApiRequestHandlerChain();
     }
 
+    public function testExceptionIsThrownDuringAttemptToRegisterRequestHandlerWithNonIntVersion()
+    {
+        $this->setExpectedException(ApiVersionMustBeIntException::class);
+
+        $requestHandlerCode = 'foo';
+        $requestHandlerVersion = 'bar';
+
+        $stubApiRequestHandler = $this->getMock(ApiRequestHandler::class);
+        $this->requestHandlerChain->register($requestHandlerCode, $requestHandlerVersion, $stubApiRequestHandler);
+    }
+
+    public function testExceptionIsThrownDuringAttemptToLocateRequestHandlerWithNonIntVersion()
+    {
+        $this->setExpectedException(ApiVersionMustBeIntException::class);
+
+        $requestHandlerCode = 'foo';
+        $requestHandlerVersion = 'bar';
+
+        $this->requestHandlerChain->getApiRequestHandler($requestHandlerCode, $requestHandlerVersion);
+    }
+
+    public function testNullApiRequestHandlerIsReturnedIfNoApiRequestHandlerIsFound()
+    {
+        $requestHandlerCode = 'foo';
+        $requestHandlerVersion = 1;
+
+        $result = $this->requestHandlerChain->getApiRequestHandler($requestHandlerCode, $requestHandlerVersion);
+
+        $this->assertInstanceOf(NullApiRequestHandler::class, $result);
+    }
+
     public function testRequestHandlerIsReturned()
     {
         $requestHandlerCode = 'foo';
+        $requestHandlerVersion = 1;
 
         $stubApiRequestHandler = $this->getMock(ApiRequestHandler::class);
+        $this->requestHandlerChain->register($requestHandlerCode, $requestHandlerVersion, $stubApiRequestHandler);
 
-        $this->requestHandlerChain->register($requestHandlerCode, $stubApiRequestHandler);
-        $result = $this->requestHandlerChain->getApiRequestHandler($requestHandlerCode);
+        $result = $this->requestHandlerChain->getApiRequestHandler($requestHandlerCode, $requestHandlerVersion);
 
         $this->assertSame($stubApiRequestHandler, $result);
-    }
-
-    public function testNullIsReturnedIfNoApiRequestHandlerIsFound()
-    {
-        $result = $this->requestHandlerChain->getApiRequestHandler('foo');
-
-        $this->assertNull($result);
     }
 }

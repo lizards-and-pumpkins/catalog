@@ -2,6 +2,8 @@
 
 namespace Brera;
 
+use Brera\Content\ContentBlockWasUpdatedDomainEvent;
+use Brera\Content\ContentBlockWasUpdatedDomainEventHandler;
 use Brera\Image\ImageImportDomainEvent;
 use Brera\Image\ImageImportDomainEventHandler;
 use Brera\Product\CatalogImportDomainEvent;
@@ -50,4 +52,10 @@ interface DomainEventFactory
      * @return ProductStockQuantityUpdatedDomainEventHandler
      */
     public function createProductStockQuantityUpdatedDomainEventHandler(ProductStockQuantityUpdatedDomainEvent $event);
+
+    /**
+     * @param ContentBlockWasUpdatedDomainEvent $event
+     * @return ContentBlockWasUpdatedDomainEventHandler
+     */
+    public function createContentBlockWasUpdatedDomainEventHandler(ContentBlockWasUpdatedDomainEvent $event);
 }
