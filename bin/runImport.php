@@ -14,10 +14,14 @@ $factory->register(new CommonFactory());
 $factory->register(new SampleFactory());
 $factory->register(new FrontendFactory());
 
-$queue = $factory->getEventQueue();
+$httpUrl = HttpUrl::fromString('http://example.com/api/v1/page_templates/product_listing');
+$httpHeaders = HttpHeaders::fromArray([]);
+$httpRequestBodyString = file_get_contents(__DIR__ . '/../tests/shared-fixture/product-listing-root-snippet.xml');
+$httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
+$request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
-$xml = file_get_contents(__DIR__ . '/../tests/shared-fixture/product-listing-root-snippet.xml');
-$queue->add(new PageTemplateWasUpdatedDomainEvent($xml));
+$website = new SampleWebFront($request, $factory);
+$website->runWithoutSendingResponse();
 
 $httpUrl = HttpUrl::fromString('http://example.com/api/v1/catalog_import');
 $httpHeaders = HttpHeaders::fromArray([]);
@@ -28,9 +32,16 @@ $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpH
 $website = new SampleWebFront($request, $factory);
 $website->runWithoutSendingResponse();
 
-$consumer = $factory->createDomainEventConsumer();
-while ($queue->count() > 0) {
-    $consumer->process(1);
+$commandQueue = $factory->getCommandQueue();
+$commandConsumer = $factory->createCommandConsumer();
+while ($commandQueue->count() > 0) {
+    $commandConsumer->process(1);
+}
+
+$domainEventQueue = $factory->getEventQueue();
+$domainEventConsumer = $factory->createDomainEventConsumer();
+while ($domainEventQueue->count() > 0) {
+    $domainEventConsumer->process(1);
 }
 
 $messages = $factory->getLogger()->getMessages();

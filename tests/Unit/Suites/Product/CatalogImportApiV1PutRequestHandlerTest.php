@@ -4,7 +4,7 @@ namespace Brera\Product;
 
 use Brera\Api\ApiRequestHandler;
 use Brera\Http\HttpRequest;
-use Brera\Image\ImageWasUpdatedDomainEvent;
+use Brera\Image\UpdateImageCommand;
 use Brera\Queue\Queue;
 use Brera\TestFileFixtureTrait;
 
@@ -14,8 +14,11 @@ use Brera\TestFileFixtureTrait;
  * @uses   \Brera\DefaultHttpResponse
  * @uses   \Brera\Http\HttpHeaders
  * @uses   \Brera\Image\ImageWasUpdatedDomainEvent
+ * @uses   \Brera\Image\UpdateImageCommand
  * @uses   \Brera\Product\ProductWasUpdatedDomainEvent
  * @uses   \Brera\Product\ProductListingWasUpdatedDomainEvent
+ * @uses   \Brera\Product\UpdateProductCommand
+ * @uses   \Brera\Product\UpdateProductListingCommand
  * @uses   \Brera\Utils\XPathParser
  */
 class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
@@ -25,7 +28,7 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
     /**
      * @var Queue|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockDomainEventQueue;
+    private $mockCommandQueue;
 
     /**
      * @var CatalogImportApiV1PutRequestHandler
@@ -64,8 +67,8 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
 
         $this->eventSpy = $this->any();
 
-        $this->mockDomainEventQueue = $this->getMock(Queue::class);
-        $this->mockDomainEventQueue->expects($this->eventSpy)->method('add');
+        $this->mockCommandQueue = $this->getMock(Queue::class);
+        $this->mockCommandQueue->expects($this->eventSpy)->method('add');
 
         $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
         $stubProductSource = $this->getMock(ProductSource::class, [], [], '', false);
@@ -83,7 +86,7 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
             ->willReturn($stubProductListingSource);
 
         $this->requestHandler = CatalogImportApiV1PutRequestHandler::create(
-            $this->mockDomainEventQueue,
+            $this->mockCommandQueue,
             $this->importDirectoryPath,
             $this->stubProductSourceBuilder,
             $this->stubProductListingSourceBuilder
@@ -113,7 +116,7 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
     {
         $this->setExpectedException(CatalogImportDirectoryNotReadableException::class);
         CatalogImportApiV1PutRequestHandler::create(
-            $this->mockDomainEventQueue,
+            $this->mockCommandQueue,
             '/some-not-existing-directory',
             $this->stubProductSourceBuilder,
             $this->stubProductListingSourceBuilder
@@ -133,7 +136,7 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
         $this->requestHandler->process($this->mockRequest);
     }
 
-    public function testProductWasUpdatedDomainEventsAreEmitted()
+    public function testUpdateProductCommandsAreEmitted()
     {
         $fileName = 'foo';
         $fileContents = file_get_contents(__DIR__ . '/../../../shared-fixture/catalog.xml');
@@ -147,10 +150,10 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
         $expectedJson = 'OK';
 
         $this->assertEquals($expectedJson, $result);
-        $this->assertEventWasAddedToAQueue(ProductWasUpdatedDomainEvent::class);
+        $this->assertCommandWasAddedToAQueue(UpdateProductCommand::class);
     }
 
-    public function testProductListingWasUpdatedDomainEventsAreEmitted()
+    public function testUpdateProductListingCommandsAreEmitted()
     {
         $fileName = 'foo';
         $fileContents = file_get_contents(__DIR__ . '/../../../shared-fixture/catalog.xml');
@@ -164,10 +167,10 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
         $expectedJson = 'OK';
 
         $this->assertEquals($expectedJson, $result);
-        $this->assertEventWasAddedToAQueue(ProductListingWasUpdatedDomainEvent::class);
+        $this->assertCommandWasAddedToAQueue(UpdateProductListingCommand::class);
     }
 
-    public function testImageWasUpdatedDomainEventsAreEmitted()
+    public function testUpdateImageCommandsAreEmitted()
     {
         $fileName = 'foo';
         $fileContents = file_get_contents(__DIR__ . '/../../../shared-fixture/catalog.xml');
@@ -181,13 +184,13 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
         $expectedJson = 'OK';
 
         $this->assertEquals($expectedJson, $result);
-        $this->assertEventWasAddedToAQueue(ImageWasUpdatedDomainEvent::class);
+        $this->assertCommandWasAddedToAQueue(UpdateImageCommand::class);
     }
 
     /**
      * @param string $eventClass
      */
-    private function assertEventWasAddedToAQueue($eventClass)
+    private function assertCommandWasAddedToAQueue($eventClass)
     {
         $numberOfRequiredInvocations = 0;
 

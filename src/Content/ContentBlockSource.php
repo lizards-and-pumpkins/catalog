@@ -34,7 +34,7 @@ class ContentBlockSource implements ProjectionSourceData
     }
 
     /**
-     * @return string
+     * @return ContentBlockId
      */
     public function getContentBlockId()
     {

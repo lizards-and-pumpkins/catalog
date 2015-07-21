@@ -4,7 +4,7 @@ namespace Brera\Product;
 
 use Brera\Api\ApiRequestHandler;
 use Brera\Http\HttpRequest;
-use Brera\Image\ImageWasUpdatedDomainEvent;
+use Brera\Image\UpdateImageCommand;
 use Brera\Queue\Queue;
 use Brera\Utils\XPathParser;
 
@@ -13,7 +13,7 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
     /**
      * @var Queue
      */
-    private $domainEventQueue;
+    private $commandQueue;
 
     /**
      * @var string
@@ -31,32 +31,32 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
     private $productListingSourceBuilder;
 
     /**
-     * @param Queue $domainEventQueue
+     * @param Queue $commandQueue
      * @param string $importDirectoryPath
      * @param ProductSourceBuilder $productSourceBuilder
      * @param ProductListingSourceBuilder $productListingSourceBuilder
      */
     private function __construct(
-        Queue $domainEventQueue,
+        Queue $commandQueue,
         $importDirectoryPath,
         ProductSourceBuilder $productSourceBuilder,
         ProductListingSourceBuilder $productListingSourceBuilder
     ) {
-        $this->domainEventQueue = $domainEventQueue;
+        $this->commandQueue = $commandQueue;
         $this->importDirectoryPath = $importDirectoryPath;
         $this->productSourceBuilder = $productSourceBuilder;
         $this->productListingSourceBuilder = $productListingSourceBuilder;
     }
 
     /**
-     * @param Queue $domainEventQueue
+     * @param Queue $commandQueue
      * @param string $importDirectoryPath
      * @param ProductSourceBuilder $productSourceBuilder
      * @param ProductSourceBuilder $productSourceBuilder
      * @return CatalogImportApiV1PutRequestHandler
      */
     public static function create(
-        Queue $domainEventQueue,
+        Queue $commandQueue,
         $importDirectoryPath,
         ProductSourceBuilder $productSourceBuilder,
         ProductListingSourceBuilder $productListingSourceBuilder
@@ -65,7 +65,7 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
             throw new CatalogImportDirectoryNotReadableException(sprintf('%s is not readable.', $importDirectoryPath));
         }
 
-        return new self($domainEventQueue, $importDirectoryPath, $productSourceBuilder, $productListingSourceBuilder);
+        return new self($commandQueue, $importDirectoryPath, $productSourceBuilder, $productListingSourceBuilder);
     }
 
     /**
@@ -93,22 +93,20 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
         $productNodesXml = (new XPathParser($xml))->getXmlNodesRawXmlArrayByXPath('//catalog/products/product');
         foreach ($productNodesXml as $productXml) {
             $productSource = $this->productSourceBuilder->createProductSourceFromXml($productXml);
-            $productId = $productSource->getId();
-            $this->domainEventQueue->add(new ProductWasUpdatedDomainEvent($productId, $productSource));
+            $this->commandQueue->add(new UpdateProductCommand($productSource));
         }
 
         $listingNodesXml = (new XPathParser($xml))->getXmlNodesRawXmlArrayByXPath('//catalog/listings/listing');
         foreach ($listingNodesXml as $listingXml) {
             $productListingSource = $this->productListingSourceBuilder->createProductListingSourceFromXml($listingXml);
-            $urlKey = $productListingSource->getUrlKey();
-            $this->domainEventQueue->add(new ProductListingWasUpdatedDomainEvent($urlKey, $productListingSource));
+            $this->commandQueue->add(new UpdateProductListingCommand($productListingSource));
         }
 
         $imageNodes = (new XPathParser($xml))->getXmlNodesArrayByXPath(
             '//catalog/products/product/attributes/image/file'
         );
         foreach ($imageNodes as $imageNode) {
-            $this->domainEventQueue->add(new ImageWasUpdatedDomainEvent($imageNode['value']));
+            $this->commandQueue->add(new UpdateImageCommand($imageNode['value']));
         }
     }
 

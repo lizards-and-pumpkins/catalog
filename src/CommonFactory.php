@@ -20,6 +20,8 @@ use Brera\Http\ResourceNotFoundRouter;
 use Brera\Image\ImageWasUpdatedDomainEvent;
 use Brera\Image\ImageWasUpdatedDomainEventHandler;
 use Brera\Image\ImageProcessorCollection;
+use Brera\Image\UpdateImageCommand;
+use Brera\Image\UpdateImageCommandHandler;
 use Brera\Product\PriceSnippetRenderer;
 use Brera\Product\ProductBackOrderAvailabilitySnippetRenderer;
 use Brera\Product\ProductDetailViewBlockRenderer;
@@ -48,6 +50,10 @@ use Brera\Product\ProductStockQuantitySnippetRenderer;
 use Brera\Product\ProductStockQuantitySourceBuilder;
 use Brera\Product\UpdateMultipleProductStockQuantityCommand;
 use Brera\Product\UpdateMultipleProductStockQuantityCommandHandler;
+use Brera\Product\UpdateProductCommand;
+use Brera\Product\UpdateProductCommandHandler;
+use Brera\Product\UpdateProductListingCommand;
+use Brera\Product\UpdateProductListingCommandHandler;
 use Brera\Product\UpdateProductStockQuantityCommand;
 use Brera\Product\UpdateProductStockQuantityCommandHandler;
 use Brera\Queue\Queue;
@@ -849,6 +855,42 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $this->getMasterFactory()->createSnippetList(),
             $this->getMasterFactory()->createContentBlockSnippetKeyGenerator(),
             $this->getMasterFactory()->createContextBuilder()
+        );
+    }
+
+    /**
+     * @param UpdateProductCommand $command
+     * @return UpdateProductCommandHandler
+     */
+    public function createUpdateProductCommandHandler(UpdateProductCommand $command)
+    {
+        return new UpdateProductCommandHandler(
+            $command,
+            $this->getMasterFactory()->getEventQueue()
+        );
+    }
+
+    /**
+     * @param UpdateProductListingCommand $command
+     * @return UpdateProductListingCommandHandler
+     */
+    public function createUpdateProductListingCommandHandler(UpdateProductListingCommand $command)
+    {
+        return new UpdateProductListingCommandHandler(
+            $command,
+            $this->getMasterFactory()->getEventQueue()
+        );
+    }
+
+    /**
+     * @param UpdateImageCommand $command
+     * @return UpdateImageCommandHandler
+     */
+    public function createUpdateImageCommandHandler(UpdateImageCommand $command)
+    {
+        return new UpdateImageCommandHandler(
+            $command,
+            $this->getMasterFactory()->getEventQueue()
         );
     }
 }

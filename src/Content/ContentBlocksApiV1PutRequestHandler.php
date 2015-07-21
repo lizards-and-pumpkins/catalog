@@ -53,7 +53,7 @@ class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
         $contentBlockId = ContentBlockId::fromString($contentBlockIdString);
         $contentBlockSource = new ContentBlockSource($contentBlockId, $requestBody['content'], $requestBody['context']);
 
-        $this->commandQueue->add(new UpdateContentBlockCommand($contentBlockId, $contentBlockSource));
+        $this->commandQueue->add(new UpdateContentBlockCommand($contentBlockSource));
     }
 
     /**

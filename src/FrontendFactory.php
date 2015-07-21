@@ -5,7 +5,6 @@ namespace Brera;
 use Brera\Api\ApiRequestHandlerChain;
 use Brera\Api\ApiRouter;
 use Brera\Content\ContentBlocksApiV1PutRequestHandler;
-use Brera\Http\HttpRequest;
 use Brera\Product\CatalogImportApiV1PutRequestHandler;
 use Brera\Product\ProductDetailViewInContextSnippetRenderer;
 use Brera\Product\ProductDetailViewRequestHandlerBuilder;
@@ -77,7 +76,7 @@ class FrontendFactory implements Factory
     public function createCatalogImportApiV1PutRequestHandler()
     {
         return CatalogImportApiV1PutRequestHandler::create(
-            $this->getMasterFactory()->getEventQueue(),
+            $this->getMasterFactory()->getCommandQueue(),
             $this->getCatalogImportDirectoryConfig(),
             $this->getMasterFactory()->createProductSourceBuilder(),
             $this->getMasterFactory()->createProductListingSourceBuilder()

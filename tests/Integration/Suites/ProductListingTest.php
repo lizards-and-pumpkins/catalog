@@ -31,6 +31,8 @@ class ProductListingTest extends AbstractIntegrationTest
     public function testProductListingMetaSnippetIsWrittenIntoDataPool()
     {
         $this->importCatalog();
+
+        $this->processCommandsInQueue();
         $this->processDomainEvents();
 
         $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
@@ -60,6 +62,7 @@ class ProductListingTest extends AbstractIntegrationTest
         $this->addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture();
         $this->importCatalog();
 
+        $this->processCommandsInQueue();
         $this->processDomainEvents();
         
         $this->factory->getSnippetKeyGeneratorLocator()->register(
@@ -161,6 +164,16 @@ class ProductListingTest extends AbstractIntegrationTest
         );
 
         return $metaSnippetContent->getInfo();
+    }
+
+    private function processCommandsInQueue()
+    {
+        $queue = $this->factory->getCommandQueue();
+        $consumer = $this->factory->createCommandConsumer();
+
+        while ($queue->count() > 0) {
+            $consumer->process(1);
+        }
     }
 
     private function processDomainEvents()

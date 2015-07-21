@@ -29,11 +29,8 @@ class UpdateMultipleProductStockQuantityCommandHandlerTest extends \PHPUnit_Fram
 
     protected function setUp()
     {
-        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
         $stubProductStockQuantitySource1 = $this->getMock(ProductStockQuantitySource::class, [], [], '', false);
-        $stubProductStockQuantitySource1->method('getProductId')->willReturn($stubProductId);
         $stubProductStockQuantitySource2 = $this->getMock(ProductStockQuantitySource::class, [], [], '', false);
-        $stubProductStockQuantitySource2->method('getProductId')->willReturn($stubProductId);
         $stubProductStockQuantitySourceArray = [$stubProductStockQuantitySource1, $stubProductStockQuantitySource2];
 
         $this->mockCommand = $this->getMock(UpdateMultipleProductStockQuantityCommand::class, [], [], '', false);

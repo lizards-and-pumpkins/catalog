@@ -13,6 +13,8 @@ use Brera\Http\HttpRouterChain;
 use Brera\Http\ResourceNotFoundRouter;
 use Brera\Image\ImageWasUpdatedDomainEvent;
 use Brera\Image\ImageWasUpdatedDomainEventHandler;
+use Brera\Image\UpdateImageCommand;
+use Brera\Image\UpdateImageCommandHandler;
 use Brera\Product\ProductListingSourceBuilder;
 use Brera\Product\ProductWasUpdatedDomainEvent;
 use Brera\Product\ProductWasUpdatedDomainEventHandler;
@@ -28,6 +30,10 @@ use Brera\Product\ProductStockQuantitySnippetRenderer;
 use Brera\Product\ProductStockQuantitySourceBuilder;
 use Brera\Product\UpdateMultipleProductStockQuantityCommand;
 use Brera\Product\UpdateMultipleProductStockQuantityCommandHandler;
+use Brera\Product\UpdateProductCommand;
+use Brera\Product\UpdateProductCommandHandler;
+use Brera\Product\UpdateProductListingCommand;
+use Brera\Product\UpdateProductListingCommandHandler;
 use Brera\Product\UpdateProductStockQuantityCommand;
 use Brera\Product\UpdateProductStockQuantityCommandHandler;
 use Brera\Queue\Queue;
@@ -37,6 +43,7 @@ use Brera\Queue\Queue;
  * @covers \Brera\FactoryTrait
  * @uses   \Brera\DataVersion
  * @uses   \Brera\MasterFactoryTrait
+ * @uses   \Brera\Image\UpdateImageCommandHandler
  * @uses   \Brera\IntegrationTestFactory
  * @uses   \Brera\DataPool\DataPoolWriter
  * @uses   \Brera\DataPool\DataPoolReader
@@ -74,6 +81,8 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Product\ProductStockQuantityProjector
  * @uses   \Brera\Product\ProductStockQuantityWasUpdatedDomainEventHandler
  * @uses   \Brera\Product\ProductStockQuantitySnippetRenderer
+ * @uses   \Brera\Product\UpdateProductCommandHandler
+ * @uses   \Brera\Product\UpdateProductListingCommandHandler
  * @uses   \Brera\Product\UpdateProductStockQuantityCommandHandler
  * @uses   \Brera\Product\UpdateMultipleProductStockQuantityCommandHandler
  * @uses   \Brera\Product\ProductDetailViewBlockRenderer
@@ -419,5 +428,32 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $result = $this->commonFactory->createContentBlockWasUpdatedDomainEventHandler($stubDomainEvent);
 
         $this->assertInstanceOf(ContentBlockWasUpdatedDomainEventHandler::class, $result);
+    }
+
+    public function testUpdateProductCommandHandlerIsReturned()
+    {
+        /** @var UpdateProductCommand|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
+        $stubCommand = $this->getMock(UpdateProductCommand::class, [], [], '', false);
+        $result = $this->commonFactory->createUpdateProductCommandHandler($stubCommand);
+
+        $this->assertInstanceOf(UpdateProductCommandHandler::class, $result);
+    }
+
+    public function testUpdateProductListingCommandHandlerIsReturned()
+    {
+        /** @var UpdateProductListingCommand|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
+        $stubCommand = $this->getMock(UpdateProductListingCommand::class, [], [], '', false);
+        $result = $this->commonFactory->createUpdateProductListingCommandHandler($stubCommand);
+
+        $this->assertInstanceOf(UpdateProductListingCommandHandler::class, $result);
+    }
+
+    public function testUpdateImageCommandHandlerIsReturned()
+    {
+        /** @var UpdateImageCommand|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
+        $stubCommand = $this->getMock(UpdateImageCommand::class, [], [], '', false);
+        $result = $this->commonFactory->createUpdateImageCommandHandler($stubCommand);
+
+        $this->assertInstanceOf(UpdateImageCommandHandler::class, $result);
     }
 }

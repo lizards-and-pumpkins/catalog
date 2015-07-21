@@ -19,13 +19,13 @@ class ApiTest extends AbstractIntegrationTest
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
-        $domainEventQueue = $factory->getEventQueue();
-        $this->assertEquals(0, $domainEventQueue->count());
+        $commandQueue = $factory->getCommandQueue();
+        $this->assertEquals(0, $commandQueue->count());
 
         $website = new SampleWebFront($request, $factory);
         $response = $website->runWithoutSendingResponse();
 
         $this->assertEquals('"OK"', $response->getBody());
-        $this->assertGreaterThan(0, $domainEventQueue->count());
+        $this->assertGreaterThan(0, $commandQueue->count());
     }
 }

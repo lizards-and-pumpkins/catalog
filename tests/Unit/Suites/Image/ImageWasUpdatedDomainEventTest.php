@@ -32,7 +32,7 @@ class ImageWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 
     public function testPassedImageFilenameIsReturned()
     {
-        $result = $this->domainEvent->getImage();
-        $this->assertEquals($this->dummyImageFileName, $this->domainEvent->getImage());
+        $result = $this->domainEvent->getImageFileName();
+        $this->assertEquals($this->dummyImageFileName, $result);
     }
 }

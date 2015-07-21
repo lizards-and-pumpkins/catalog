@@ -24,6 +24,6 @@ class ImageWasUpdatedDomainEventHandler implements DomainEventHandler
 
     public function process()
     {
-        $this->imageProcessorCollection->process($this->event->getImage());
+        $this->imageProcessorCollection->process($this->event->getImageFileName());
     }
 }

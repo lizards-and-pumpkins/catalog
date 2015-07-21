@@ -2,9 +2,9 @@
 
 namespace Brera\Image;
 
-use Brera\DomainEvent;
+use Brera\Command;
 
-class ImageWasUpdatedDomainEvent implements DomainEvent
+class UpdateImageCommand implements Command
 {
     /**
      * @var string
