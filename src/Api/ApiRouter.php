@@ -27,7 +27,7 @@ class ApiRouter implements HttpRouter
      */
     public function route(HttpRequest $request, Context $context)
     {
-        $urlPath = trim($request->getUrl()->getPath(), '/');
+        $urlPath = trim($request->getUrl()->getPathRelativeToWebFront(), '/');
         $urlToken = explode('/', $urlPath);
 
         if (self::API_URL_PREFIX !== array_shift($urlToken)) {
