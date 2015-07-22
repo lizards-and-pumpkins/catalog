@@ -40,7 +40,7 @@ class RootSnippetSourceList implements ProjectionSourceData
      * @param Context $context
      * @return int[]
      */
-    public function getNumItemsPrePageForContext(Context $context)
+    public function getNumItemsPerPageForContext(Context $context)
     {
         $numItemsPerPage = [];
 
