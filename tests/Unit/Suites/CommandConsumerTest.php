@@ -73,16 +73,13 @@ class CommandConsumerTest extends \PHPUnit_Framework_TestCase
         $numberOfCommandsToProcess = 1;
 
         $stubCommand = $this->getMock(Command::class);
-        $this->mockQueue->method('next')
-            ->willReturn($stubCommand);
+        $this->mockQueue->method('next')->willReturn($stubCommand);
 
-        $exception = $this->getMock(UnableToFindDomainEventHandlerException::class);
         $this->mockLocator->expects($this->exactly($numberOfCommandsToProcess))
             ->method('getHandlerFor')
-            ->willThrowException($exception);
+            ->willThrowException(new UnableToFindDomainEventHandlerException);
 
-        $this->mockLogger->expects($this->exactly($numberOfCommandsToProcess))
-            ->method('log');
+        $this->mockLogger->expects($this->exactly($numberOfCommandsToProcess))->method('log');
 
         $this->commandConsumer->process($numberOfCommandsToProcess);
     }
@@ -91,10 +88,9 @@ class CommandConsumerTest extends \PHPUnit_Framework_TestCase
     {
         $numberOfCommandsToProcess = 1;
 
-        $stubUnderflowException = $this->getMock(\UnderflowException::class);
         $this->mockQueue->expects($this->exactly($numberOfCommandsToProcess))
             ->method('next')
-            ->willThrowException($stubUnderflowException);
+            ->willThrowException(new \UnderflowException);
 
         $this->mockLogger->expects($this->exactly($numberOfCommandsToProcess))
             ->method('log');
