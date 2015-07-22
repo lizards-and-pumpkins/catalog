@@ -29,6 +29,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        /** @var  $stubBlockRenderer BlockRenderer|\PHPUnit_Framework_MockObject_MockObject */
         $stubBlockRenderer = $this->getMock(BlockRenderer::class, [], [], '', false);
         $this->stubProduct = $this->getMock(Product::class, [], [], '', false);
 
@@ -54,13 +55,10 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
 
     public function testEmptyStringIsReturnedIfAttributeIsNotFound()
     {
-        $stubException = $this->getMock(ProductAttributeNotFoundException::class);
-
         $attributeCode = 'foo';
-        $this->stubProduct->expects($this->once())
-            ->method('getAttributeValue')
+        $this->stubProduct->method('getAttributeValue')
             ->with($attributeCode)
-            ->willThrowException($stubException);
+            ->willThrowException(new ProductAttributeNotFoundException);
 
         $result = $this->productBlock->getProductAttributeValue($attributeCode);
         $this->assertSame('', $result);
