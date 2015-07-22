@@ -37,7 +37,7 @@ class ProductProjector implements Projector
     }
 
     /**
-     * @param ProjectionSourceData $productSource
+     * @param ProductSource $productSource
      * @param ContextSource $contextSource
      */
     public function project(ProjectionSourceData $productSource, ContextSource $contextSource)
