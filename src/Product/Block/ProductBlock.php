@@ -3,11 +3,12 @@
 namespace Brera\Product\Block;
 
 use Brera\Image;
+use Brera\Product\Product;
 use Brera\Product\ProductAttributeNotFoundException;
-use Brera\Product\ProductSource;
+use Brera\Product\ProductId;
 use Brera\Renderer\Block;
 
-abstract class ProductBlock extends Block
+class ProductBlock extends Block
 {
     /**
      * @param string $attributeCode
@@ -16,14 +17,7 @@ abstract class ProductBlock extends Block
      */
     public function getProductAttributeValue($attributeCode)
     {
-        try {
-            $product = $this->getProduct();
-            $value = $product->getAttributeValue($attributeCode);
-        } catch (ProductAttributeNotFoundException $e) {
-            /* TODO: Log */
-            $value = '';
-        }
-        return $value;
+        return $this->getProduct()->getAttributeValue($attributeCode);
     }
 
     /**
@@ -54,9 +48,33 @@ abstract class ProductBlock extends Block
     }
 
     /**
-     * @return ProductSource
+     * @return ProductId
      */
-    final protected function getProduct()
+    public function getProductId()
+    {
+        return $this->getProduct()->getId();
+    }
+
+    /**
+     * @return string
+     */
+    public function getBrandLogoSrc()
+    {
+        $brandName = $this->getProductAttributeValue('brand');
+        $brand = strtolower(preg_replace('/\W/', '_', trim($brandName)));
+        $fileName = 'images/brands/brands-slider/' . $brand . '.png';
+
+        if (!file_exists('pub/' . $fileName)) {
+            return '';
+        }
+
+        return $fileName;
+    }
+
+    /**
+     * @return Product
+     */
+    private function getProduct()
     {
         return $this->getDataObject();
     }

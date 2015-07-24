@@ -6,9 +6,10 @@ use Brera\Image;
 use Brera\Product\Product;
 use Brera\Product\ProductAttribute;
 use Brera\Product\ProductAttributeList;
-use Brera\Product\ProductAttributeNotFoundException;
+use Brera\Product\ProductId;
 use Brera\Renderer\Block;
 use Brera\Renderer\BlockRenderer;
+use Brera\TestFileFixtureTrait;
 
 /**
  * @covers \Brera\Product\Block\ProductBlock
@@ -17,6 +18,8 @@ use Brera\Renderer\BlockRenderer;
  */
 class ProductBlockTest extends \PHPUnit_Framework_TestCase
 {
+    use TestFileFixtureTrait;
+
     /**
      * @var Product|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -33,7 +36,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
         $stubBlockRenderer = $this->getMock(BlockRenderer::class, [], [], '', false);
         $this->stubProduct = $this->getMock(Product::class, [], [], '', false);
 
-        $this->productBlock = new ProductBlockTestStub($stubBlockRenderer, 'foo.phtml', 'foo', $this->stubProduct);
+        $this->productBlock = new ProductBlock($stubBlockRenderer, 'foo.phtml', 'foo', $this->stubProduct);
     }
 
     public function testBlockClassIsExtended()
@@ -45,36 +48,54 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
     {
         $attributeCode = 'name';
         $attributeValue = 'foo';
-        $this->stubProduct->expects($this->once())
-            ->method('getAttributeValue')
-            ->with($attributeCode)
-            ->willReturn($attributeValue);
 
-        $this->assertEquals($attributeValue, $this->productBlock->getProductAttributeValue($attributeCode));
+        $this->stubProduct->method('getAttributeValue')->with($attributeCode)->willReturn($attributeValue);
+        $result = $this->productBlock->getProductAttributeValue($attributeCode);
+
+        $this->assertEquals($attributeValue, $result);
     }
 
-    public function testEmptyStringIsReturnedIfAttributeIsNotFound()
+    public function testProductIdIsReturned()
     {
-        $attributeCode = 'foo';
-        $this->stubProduct->method('getAttributeValue')
-            ->with($attributeCode)
-            ->willThrowException(new ProductAttributeNotFoundException);
+        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);;
 
-        $result = $this->productBlock->getProductAttributeValue($attributeCode);
-        $this->assertSame('', $result);
+        $this->stubProduct->method('getId')->willReturn($stubProductId);
+        $result = $this->productBlock->getProductId();
+
+        $this->assertEquals($stubProductId, $result);
     }
 
     public function testProductUrlIsReturned()
     {
         $urlKey = 'foo';
-        $this->stubProduct->expects($this->once())
-            ->method('getAttributeValue')
-            ->with('url_key')
-            ->willReturn($urlKey);
 
+        $this->stubProduct->method('getAttributeValue')->with('url_key')->willReturn($urlKey);
         $result = $this->productBlock->getProductUrl();
 
         $this->assertEquals($urlKey, $result);
+    }
+
+    public function testEmptyStringIsReturnedIfProductBrandLogoImageFileDoesNotExist()
+    {
+        $testProductBrandName = 'foo';
+        $this->stubProduct->method('getAttributeValue')->with('brand')->willReturn($testProductBrandName);
+
+        $result = $this->productBlock->getBrandLogoSrc();
+
+        $this->assertEquals('', $result);
+    }
+
+    public function testProductBrandLogoSrcIsReturned()
+    {
+        $testProductBrandName = 'foo';
+        $this->stubProduct->method('getAttributeValue')->with('brand')->willReturn($testProductBrandName);
+
+        $expectedProductBrandLogoSrc = 'images/brands/brands-slider/' . $testProductBrandName . '.png';
+        $this->createFixtureFile('pub/' . $expectedProductBrandLogoSrc, '');
+
+        $result = $this->productBlock->getBrandLogoSrc();
+
+        $this->assertEquals($expectedProductBrandLogoSrc, $result);
     }
 
     public function testInstanceOfImageIsReturned()
