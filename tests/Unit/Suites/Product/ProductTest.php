@@ -2,8 +2,6 @@
 
 namespace Brera\Product;
 
-use Brera\ProjectionSourceData;
-
 /**
  * @covers \Brera\Product\Product
  */
@@ -29,11 +27,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->stubProductId = $this->getMock(ProductId::class, [], [], '', false);
         $this->stubProductAttributeList = $this->getMock(ProductAttributeList::class);
         $this->product = new Product($this->stubProductId, $this->stubProductAttributeList);
-    }
-
-    public function testProjectionSourceDataInterfaceIsImplemented()
-    {
-        $this->assertInstanceOf(ProjectionSourceData::class, $this->product);
     }
 
     public function testProductIdIsReturned()

@@ -57,7 +57,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
 
     public function testProductIdIsReturned()
     {
-        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);;
+        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
 
         $this->stubProduct->method('getId')->willReturn($stubProductId);
         $result = $this->productBlock->getProductId();

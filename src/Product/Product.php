@@ -2,9 +2,7 @@
 
 namespace Brera\Product;
 
-use Brera\ProjectionSourceData;
-
-class Product implements ProjectionSourceData // TODO: This is wrong. ProjectionSourceData should not be implemented
+class Product
 {
     /**
      * @var ProductId

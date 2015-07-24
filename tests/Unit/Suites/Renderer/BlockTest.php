@@ -24,10 +24,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        $this->mockBlockRenderer = $this->getMockBuilder(BlockRenderer::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getLayoutHandle', 'getChildBlockOutput'])
-            ->getMock();
+        $this->mockBlockRenderer = $this->getMock(BlockRenderer::class, [], [], '', false);
         $this->stubDataObject = $this->getMock(ProjectionSourceData::class);
     }
 

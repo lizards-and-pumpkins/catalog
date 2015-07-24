@@ -4,6 +4,7 @@
 namespace Brera\Product;
 
 use Brera\Renderer\BlockRenderer;
+use Brera\Renderer\InvalidDataObjectException;
 
 class ProductDetailViewBlockRenderer extends BlockRenderer
 {
@@ -20,6 +21,14 @@ class ProductDetailViewBlockRenderer extends BlockRenderer
      */
     public function getProduct()
     {
-        return $this->getDataObject();
+        $dataObject = $this->getDataObject();
+
+        if (!($dataObject instanceof Product)) {
+            throw new InvalidDataObjectException(
+                sprintf('Data object must be instance of Product, got %s.', gettype($dataObject))
+            );
+        }
+
+        return $dataObject;
     }
 }
