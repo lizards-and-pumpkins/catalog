@@ -31,7 +31,7 @@ class HttpHeaders
                 throw new InvalidHttpHeadersException('Can only create HTTP headers from string');
             }
 
-            $normalizedHeaderName = self::normalizeHeaderName($headerName);
+            $normalizedHeaderName = strtolower($headerName);
             $normalizedHeaders[$normalizedHeaderName] = $headerValue;
         }
 
@@ -45,8 +45,8 @@ class HttpHeaders
      */
     public function get($headerName)
     {
-        $normalizedHeaderName = $this->normalizeHeaderName($headerName);
-        if (! $this->has($normalizedHeaderName)) {
+        $normalizedHeaderName = strtolower($headerName);
+        if (!$this->has($normalizedHeaderName)) {
             throw new HeaderNotPresentException(sprintf('The header "%s" is not present.', $headerName));
         }
         return $this->headers[$normalizedHeaderName];
@@ -66,15 +66,6 @@ class HttpHeaders
      */
     public function has($headerName)
     {
-        return array_key_exists($this->normalizeHeaderName($headerName), $this->headers);
-    }
-
-    /**
-     * @param string $headerName
-     * @return string
-     */
-    private function normalizeHeaderName($headerName)
-    {
-        return strtolower($headerName);
+        return array_key_exists(strtolower($headerName), $this->headers);
     }
 }
