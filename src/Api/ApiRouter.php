@@ -34,8 +34,8 @@ class ApiRouter implements HttpRouter
             return null;
         }
 
-        $apiVersionUrlToken = array_shift($urlToken);
-        if (!preg_match('/^v(\d+)$/', $apiVersionUrlToken, $matchedVersion)) {
+        $acceptHeader = $request->getHeader('Accept');
+        if (!preg_match('/^application\/vnd\.brera\.\w+\.v(\d+)\+(json|xml)$/', $acceptHeader, $matchedVersion)) {
             return null;
         }
 
