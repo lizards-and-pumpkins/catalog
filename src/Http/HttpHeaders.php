@@ -24,13 +24,18 @@ class HttpHeaders
      */
     public static function fromArray(array $headers)
     {
+        $normalizedHeaders = [];
+
         foreach ($headers as $headerName => $headerValue) {
             if (!is_string($headerName) || !is_string($headerValue)) {
                 throw new InvalidHttpHeadersException('Can only create HTTP headers from string');
             }
+
+            $normalizedHeaderName = self::normalizeHeaderName($headerName);
+            $normalizedHeaders[$normalizedHeaderName] = $headerValue;
         }
 
-        return new self($headers);
+        return new self($normalizedHeaders);
     }
 
     /**

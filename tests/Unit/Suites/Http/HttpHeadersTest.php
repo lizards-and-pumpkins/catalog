@@ -26,8 +26,7 @@ class HttpHeadersTest extends \PHPUnit_Framework_TestCase
 
     public function testItChecksForHeaderPresenceInACaseInsensitiveManner()
     {
-        $headerName = 'a-http-header';
-        $this->assertTrue(HttpHeaders::fromArray([$headerName => 'the-header-value'])->has(strtoupper($headerName)));
+        $this->assertTrue(HttpHeaders::fromArray(['A-http-header' => 'the-header-value'])->has('a-HTTP-header'));
     }
 
     public function testItReturnsTheHeaderIfPresent()
