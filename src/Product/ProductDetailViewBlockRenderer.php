@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Brera\Product;
 
 use Brera\Renderer\BlockRenderer;
@@ -24,9 +23,10 @@ class ProductDetailViewBlockRenderer extends BlockRenderer
         $dataObject = $this->getDataObject();
 
         if (!($dataObject instanceof Product)) {
-            throw new InvalidDataObjectException(
-                sprintf('Data object must be instance of Product, got %s.', gettype($dataObject))
-            );
+            throw new InvalidDataObjectException(sprintf(
+                'Data object must be instance of Product, got %s.',
+                ('object' !== gettype($dataObject) ? gettype($dataObject) : get_class($dataObject))
+            ));
         }
 
         return $dataObject;
