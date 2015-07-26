@@ -30,9 +30,9 @@ class Block
      * @param BlockRenderer $blockRenderer
      * @param string $template
      * @param string $name
-     * @param ProjectionSourceData $dataObject
+     * @param mixed $dataObject
      */
-    final public function __construct(BlockRenderer $blockRenderer, $template, $name, ProjectionSourceData $dataObject)
+    final public function __construct(BlockRenderer $blockRenderer, $template, $name, $dataObject)
     {
         // TODO Decouple from template rendering logic
         $this->blockRenderer = $blockRenderer;
