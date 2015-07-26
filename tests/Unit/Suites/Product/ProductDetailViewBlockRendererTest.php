@@ -29,7 +29,7 @@ class ProductDetailViewBlockRendererTest extends BlockRendererTestAbstract
         return new ProductDetailViewBlockRenderer($stubThemeLocator, $stubBlockStructure);
     }
 
-    public function testExceptionIsThrownIdDataObjectIsNotAProduct()
+    public function testExceptionIsThrownIfDataObjectIsNotAProduct()
     {
         $this->setExpectedException(InvalidDataObjectException::class);
         $stubContext = $this->getStubContext();

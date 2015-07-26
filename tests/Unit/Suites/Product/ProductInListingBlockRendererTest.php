@@ -23,7 +23,7 @@ class ProductInListingBlockRendererTest extends BlockRendererTestAbstract
         $this->assertEquals('product_in_listing', $result);
     }
 
-    public function testExceptionIsThrownIdDataObjectIsNotAProduct()
+    public function testExceptionIsThrownIfDataObjectIsNotAProduct()
     {
         $this->setExpectedException(InvalidDataObjectException::class);
         $stubContext = $this->getStubContext();
