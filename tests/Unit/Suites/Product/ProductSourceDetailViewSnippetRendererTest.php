@@ -13,7 +13,7 @@ use Brera\SnippetRenderer;
 /**
  * @covers \Brera\Product\ProductSourceDetailViewSnippetRenderer
  * @uses   \Brera\Snippet
- * @uses   \Brera\Product\Block\ProductDetailsPageBlock
+ * @uses   \Brera\Product\Block\ProductBlock
  * @uses   \Brera\Renderer\LayoutReader
  * @uses   \Brera\Renderer\Block
  * @uses   \Brera\Utils\XPathParser
