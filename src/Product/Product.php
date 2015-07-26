@@ -2,9 +2,7 @@
 
 namespace Brera\Product;
 
-use Brera\ProjectionSourceData;
-
-class Product implements ProjectionSourceData
+class Product
 {
     /**
      * @var ProductId
@@ -36,6 +34,13 @@ class Product implements ProjectionSourceData
      */
     public function getAttributeValue($attributeCode)
     {
-        return $this->attributeList->getAttribute($attributeCode)->getValue();
+        try {
+            $value = $this->attributeList->getAttribute($attributeCode)->getValue();
+        } catch (ProductAttributeNotFoundException $e) {
+            /* TODO: Log */
+            $value = '';
+        }
+
+        return $value;
     }
 }

@@ -2,8 +2,6 @@
 
 namespace Brera\Product;
 
-use Brera\ProjectionSourceData;
-
 /**
  * @covers \Brera\Product\Product
  */
@@ -31,11 +29,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->product = new Product($this->stubProductId, $this->stubProductAttributeList);
     }
 
-    public function testProjectionSourceDataInterfaceIsImplemented()
-    {
-        $this->assertInstanceOf(ProjectionSourceData::class, $this->product);
-    }
-
     public function testProductIdIsReturned()
     {
         $result = $this->product->getId();
@@ -44,19 +37,27 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testAttributeValueIsReturned()
     {
-        $testAttributeValue = 'test-name';
-        $testAttributeCode = 'name';
+        $testAttributeCode = 'foo';
+        $testAttributeValue = 'bar';
 
         $stubProductAttribute = $this->getMock(ProductAttribute::class, [], [], '', false);
-        $stubProductAttribute->expects($this->once())
-            ->method('getValue')
-            ->willReturn($testAttributeValue);
+        $stubProductAttribute->method('getValue')->willReturn($testAttributeValue);
 
-        $this->stubProductAttributeList->expects($this->once())
-            ->method('getAttribute')
+        $this->stubProductAttributeList->method('getAttribute')
             ->with($testAttributeCode)
             ->willReturn($stubProductAttribute);
 
         $this->assertSame($testAttributeValue, $this->product->getAttributeValue($testAttributeCode));
+    }
+
+    public function testEmptyStringIsReturnedIfAttributeIsNotFound()
+    {
+        $stubProductAttribute = $this->getMock(ProductAttribute::class, [], [], '', false);
+        $stubProductAttribute->method('getValue')->willThrowException(new ProductAttributeNotFoundException);
+
+        $this->stubProductAttributeList->method('getAttribute')->willReturn($stubProductAttribute);
+
+        $result = $this->product->getAttributeValue('whatever');
+        $this->assertSame('', $result);
     }
 }
