@@ -38,10 +38,8 @@ abstract class BlockRenderer
      */
     private $outermostBlock;
 
-    public function __construct(
-        ThemeLocator $themeLocator,
-        BlockStructure $blockStructure
-    ) {
+    public function __construct(ThemeLocator $themeLocator, BlockStructure $blockStructure)
+    {
         $this->themeLocator = $themeLocator;
         $this->blockStructure = $blockStructure;
     }
@@ -52,11 +50,11 @@ abstract class BlockRenderer
     abstract public function getLayoutHandle();
 
     /**
-     * @param ProjectionSourceData $dataObject
+     * @param mixed $dataObject
      * @param Context $context
      * @return string
      */
-    public function render(ProjectionSourceData $dataObject, Context $context)
+    public function render($dataObject, Context $context)
     {
         $this->dataObject = $dataObject;
         $this->context = $context;

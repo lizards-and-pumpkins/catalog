@@ -5,6 +5,7 @@ namespace Brera\Product;
 use Brera\Renderer\BlockRenderer;
 use Brera\Renderer\BlockRendererTestAbstract;
 use Brera\Renderer\BlockStructure;
+use Brera\Renderer\InvalidDataObjectException;
 use Brera\Renderer\Stubs\StubBlock;
 use Brera\ThemeLocator;
 
@@ -20,6 +21,17 @@ class ProductInListingBlockRendererTest extends BlockRendererTestAbstract
     {
         $result = $this->getBlockRenderer()->getLayoutHandle();
         $this->assertEquals('product_in_listing', $result);
+    }
+
+    public function testExceptionIsThrownIfDataObjectIsNotAProduct()
+    {
+        $this->setExpectedException(InvalidDataObjectException::class);
+        $stubContext = $this->getStubContext();
+        $template = $this->getUniqueTempDir() . '/template.phtml';
+        $this->createFixtureFile($template, '');
+        $this->addStubRootBlock(StubBlock::class, $template);
+        $this->getBlockRenderer()->render([], $stubContext);
+        $this->getBlockRenderer()->getProduct();
     }
 
     public function testProductPassedToRenderIsReturned()
