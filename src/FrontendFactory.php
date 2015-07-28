@@ -129,7 +129,7 @@ class FrontendFactory implements Factory
     private function createProductDetailViewRequestHandlerBuilder()
     {
         return new ProductDetailViewRequestHandlerBuilder(
-            $this->getMasterFactory()->createUrlPathKeyGenerator(),
+            $this->getMasterFactory()->createProductDetailPageMetaSnippetKeyGenerator(),
             $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->createPageBuilder()
         );

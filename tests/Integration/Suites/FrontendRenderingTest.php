@@ -29,9 +29,14 @@ class FrontendRenderingTest extends AbstractIntegrationTest
     public function testPageIsRenderedFromAnUrlWithoutVariablesInSnippets()
     {
         $url = HttpUrl::fromString('http://example.com/product1');
+        $urlKey = ltrim($url->getPathRelativeToWebFront(), '/');
         $context = new VersionedContext(DataVersion::fromVersionString('1'));
         $snippetKeyGeneratorLocator = $this->factory->getSnippetKeyGeneratorLocator();
-        $urlPathKeyGenerator = new SampleUrlPathKeyGenerator();
+        $productDetailPageMetaSnippetKeyGenerator = $this->factory->createProductDetailPageMetaSnippetKeyGenerator();
+        $productDetailPageMetaSnippetKey = $productDetailPageMetaSnippetKeyGenerator->getKeyForContext(
+            $context,
+            ['url_key' => $urlKey]
+        );
 
         $httpRequest = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
@@ -40,13 +45,17 @@ class FrontendRenderingTest extends AbstractIntegrationTest
             HttpRequestBody::fromString('')
         );
 
-        $this->addPageMetaInfoFixtureToKeyValueStorage($snippetKeyGeneratorLocator, $urlPathKeyGenerator, $context);
+        $this->addPageMetaInfoFixtureToKeyValueStorage(
+            $snippetKeyGeneratorLocator,
+            $productDetailPageMetaSnippetKey,
+            $context
+        );
 
         $dataPoolReader = $this->factory->createDataPoolReader();
         $logger = $this->factory->getLogger();
 
         $pageBuilder = new ProductDetailViewRequestHandler(
-            $urlPathKeyGenerator->getUrlKeyForUrlInContext($url, $context),
+            $productDetailPageMetaSnippetKey,
             $context,
             $dataPoolReader,
             new PageBuilder($dataPoolReader, $snippetKeyGeneratorLocator, $logger)
@@ -61,9 +70,14 @@ class FrontendRenderingTest extends AbstractIntegrationTest
         $this->assertEquals($expected, $body);
     }
 
+    /**
+     * @param SnippetKeyGeneratorLocator $snippetKeyGeneratorLocator
+     * @param string $productDetailPageMetaSnippetKey
+     * @param Context $context
+     */
     private function addPageMetaInfoFixtureToKeyValueStorage(
         SnippetKeyGeneratorLocator $snippetKeyGeneratorLocator,
-        UrlPathKeyGenerator $urlPathKeyGenerator,
+        $productDetailPageMetaSnippetKey,
         Context $context
     ) {
         $dataPoolWriter = $this->factory->createDataPoolWriter();
@@ -94,9 +108,7 @@ class FrontendRenderingTest extends AbstractIntegrationTest
             $rootSnippetCode,
             [$rootSnippetCode, 'head', 'body']
         );
-        $urlPathKey = ProductDetailViewInContextSnippetRenderer::CODE . '_'
-            . $urlPathKeyGenerator->getUrlKeyForPathInContext('/product1', $context);
-        $metaInfoSnippet = Snippet::create($urlPathKey, json_encode($pageMetaInfo->getInfo()));
+        $metaInfoSnippet = Snippet::create($productDetailPageMetaSnippetKey, json_encode($pageMetaInfo->getInfo()));
         $dataPoolWriter->writeSnippet($metaInfoSnippet);
 
         $headSnippetKeyGenerator = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode('head');

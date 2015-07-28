@@ -19,6 +19,7 @@ namespace Brera;
  * @method GenericSnippetKeyGenerator createProductStockQuantityRendererSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createContentBlockSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createProductListingMetaDataSnippetKeyGenerator
+ * @method GenericSnippetKeyGenerator createProductDetailPageMetaSnippetKeyGenerator
  * @method string[] getRequiredContexts
  */
 class SampleMasterFactory implements MasterFactory

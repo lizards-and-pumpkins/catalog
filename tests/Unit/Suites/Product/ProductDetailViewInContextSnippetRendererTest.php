@@ -32,7 +32,12 @@ class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_T
     /**
      * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockSnippetKeyGenerator;
+    private $mockProductDetailViewSnippetKeyGenerator;
+
+    /**
+     * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockProductDetailPageMetaSnippetKeyGenerator;
 
     protected function setUp()
     {
@@ -43,17 +48,17 @@ class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_T
         $stubProductDetailViewBlockRenderer->method('getRootSnippetCode')->willReturn('dummy root block code');
         $stubProductDetailViewBlockRenderer->method('getNestedSnippetCodes')->willReturn([]);
 
-        $this->mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class, [], [], '', false);
-        $this->mockSnippetKeyGenerator->method('getKeyForContext')->willReturn('stub-content-key');
+        $this->mockProductDetailViewSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $this->mockProductDetailViewSnippetKeyGenerator->method('getKeyForContext')->willReturn('stub-content-key');
 
-        $stubUrlPathKeyGenerator = $this->getMock(UrlPathKeyGenerator::class);
-        $stubUrlPathKeyGenerator->method('getUrlKeyForPathInContext')->willReturn('stub-url-key');
+        $this->mockProductDetailPageMetaSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $this->mockProductDetailPageMetaSnippetKeyGenerator->method('getKeyForContext')->willReturn('stub-url-key');
 
         $this->renderer = new ProductDetailViewInContextSnippetRenderer(
             $this->mockSnippetList,
             $stubProductDetailViewBlockRenderer,
-            $this->mockSnippetKeyGenerator,
-            $stubUrlPathKeyGenerator
+            $this->mockProductDetailViewSnippetKeyGenerator,
+            $this->mockProductDetailPageMetaSnippetKeyGenerator
         );
     }
 
@@ -88,7 +93,7 @@ class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_T
     public function testContextPartsFetchingIsDelegatedToKeyGenerator()
     {
         $dummyContextParts = ['foo', 'bar', 'baz'];
-        $this->mockSnippetKeyGenerator->method('getContextPartsUsedForKey')->willReturn($dummyContextParts);
+        $this->mockProductDetailViewSnippetKeyGenerator->method('getContextPartsUsedForKey')->willReturn($dummyContextParts);
 
         $this->assertSame($dummyContextParts, $this->renderer->getUsedContextParts());
     }

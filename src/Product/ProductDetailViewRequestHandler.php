@@ -51,7 +51,7 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
         PageBuilder $pageBuilder
     ) {
         $this->dataPoolReader = $dataPoolReader;
-        $this->metaInfoSnippetKey = ProductDetailViewInContextSnippetRenderer::CODE . '_' . $metaInfoSnippetKey;
+        $this->metaInfoSnippetKey = $metaInfoSnippetKey;
         $this->context = $context;
         $this->pageBuilder = $pageBuilder;
     }

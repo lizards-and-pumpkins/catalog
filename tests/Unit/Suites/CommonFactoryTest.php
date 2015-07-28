@@ -147,12 +147,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ProductProjector::class, $result);
     }
 
-    public function testUrlPathKeyGeneratorIsReturned()
-    {
-        $result = $this->commonFactory->createUrlPathKeyGenerator();
-        $this->assertInstanceOf(UrlPathKeyGenerator::class, $result);
-    }
-    
     public function testSnippetListIsReturned()
     {
         $result = $this->commonFactory->createSnippetList();
