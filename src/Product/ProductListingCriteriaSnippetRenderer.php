@@ -3,17 +3,17 @@
 namespace Brera\Product;
 
 use Brera\Context\ContextBuilder;
+use Brera\SnippetKeyGenerator;
 use Brera\SnippetList;
 use Brera\SnippetRenderer;
 use Brera\Snippet;
-use Brera\UrlPathKeyGenerator;
 
 class ProductListingCriteriaSnippetRenderer implements SnippetRenderer
 {
     /**
-     * @var UrlPathKeyGenerator
+     * @var SnippetKeyGenerator
      */
-    private $urlPathKeyGenerator;
+    private $snippetKeyGenerator;
 
     /**
      * @var ContextBuilder
@@ -27,11 +27,11 @@ class ProductListingCriteriaSnippetRenderer implements SnippetRenderer
 
     public function __construct(
         SnippetList $snippetList,
-        UrlPathKeyGenerator $urlPathKeyGenerator,
+        SnippetKeyGenerator $snippetKeyGenerator,
         ContextBuilder $contextBuilder
     ) {
         $this->snippetList = $snippetList;
-        $this->urlPathKeyGenerator = $urlPathKeyGenerator;
+        $this->snippetKeyGenerator = $snippetKeyGenerator;
         $this->contextBuilder = $contextBuilder;
     }
 
@@ -41,9 +41,9 @@ class ProductListingCriteriaSnippetRenderer implements SnippetRenderer
      */
     public function render(ProductListingSource $productListingSource)
     {
-        $metaDataKey = $this->getProductListingMetaDataKey($productListingSource);
-        $metaDataContent = $this->getProductListingPageMetaDataContent($productListingSource);
-        $snippet =  Snippet::create($metaDataKey, $metaDataContent);
+        $metaDataSnippetKey = $this->getProductListingMetaDataSnippetKey($productListingSource);
+        $metaDataSnippetContent = $this->getProductListingPageMetaDataSnippetContent($productListingSource);
+        $snippet = Snippet::create($metaDataSnippetKey, $metaDataSnippetContent);
 
         $this->snippetList->add($snippet);
 
@@ -54,20 +54,22 @@ class ProductListingCriteriaSnippetRenderer implements SnippetRenderer
      * @param ProductListingSource $productListingSource
      * @return string
      */
-    private function getProductListingMetaDataKey(ProductListingSource $productListingSource)
+    private function getProductListingMetaDataSnippetKey(ProductListingSource $productListingSource)
     {
         $contextData = $productListingSource->getContextData();
         $context = $this->contextBuilder->getContext($contextData);
 
-        $key = $this->urlPathKeyGenerator->getUrlKeyForPathInContext($productListingSource->getUrlKey(), $context);
-        return ProductListingSnippetRenderer::CODE . '_' . $key;
+        $productListingUrlKey = $productListingSource->getUrlKey();
+        $snippetKey = $this->snippetKeyGenerator->getKeyForContext($context, ['url_key' => $productListingUrlKey]);
+
+        return $snippetKey;
     }
 
     /**
      * @param ProductListingSource $productListingSource
      * @return string
      */
-    private function getProductListingPageMetaDataContent(ProductListingSource $productListingSource)
+    private function getProductListingPageMetaDataSnippetContent(ProductListingSource $productListingSource)
     {
         $metaSnippetContent = ProductListingMetaInfoSnippetContent::create(
             $productListingSource->getCriteria(),

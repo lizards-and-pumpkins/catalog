@@ -25,16 +25,16 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
     /**
      * @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $selectionCriteria;
+    private $stubSelectionCriteria;
 
     protected function setUp()
     {
-        $this->selectionCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
-        $this->selectionCriteria->method('jsonSerialize')
+        $this->stubSelectionCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
+        $this->stubSelectionCriteria->method('jsonSerialize')
             ->willReturn(['condition' => SearchCriteria::AND_CONDITION, 'criteria' => []]);
 
         $this->pageMetaInfo = ProductListingMetaInfoSnippetContent::create(
-            $this->selectionCriteria,
+            $this->stubSelectionCriteria,
             $this->rootSnippetCode,
             [$this->rootSnippetCode]
         );
@@ -63,13 +63,13 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
     public function testExceptionIsThrownIfTheRootSnippetCodeIsNoString()
     {
         $this->setExpectedException(\InvalidArgumentException::class);
-        ProductListingMetaInfoSnippetContent::create($this->selectionCriteria, 1.0, []);
+        ProductListingMetaInfoSnippetContent::create($this->stubSelectionCriteria, 1.0, []);
     }
 
     public function testRootSnippetCodeIsAddedToTheSnippetCodeListIfNotPresent()
     {
         $rootSnippetCode = 'root-snippet-code';
-        $pageMetaInfo = ProductListingMetaInfoSnippetContent::create($this->selectionCriteria, $rootSnippetCode, []);
+        $pageMetaInfo = ProductListingMetaInfoSnippetContent::create($this->stubSelectionCriteria, $rootSnippetCode, []);
         $this->assertContains(
             $rootSnippetCode,
             $pageMetaInfo->getInfo()[ProductListingMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES]
@@ -114,7 +114,7 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
 
     public function testSelectionCriteriaIsReturned()
     {
-        $this->assertEquals($this->selectionCriteria, $this->pageMetaInfo->getSelectionCriteria());
+        $this->assertEquals($this->stubSelectionCriteria, $this->pageMetaInfo->getSelectionCriteria());
     }
 
     public function testRootSnippetCodeIsReturned()

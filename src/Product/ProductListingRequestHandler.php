@@ -59,7 +59,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         SnippetKeyGeneratorLocator $keyGeneratorLocator
     ) {
         $this->dataPoolReader = $dataPoolReader;
-        $this->metaInfoSnippetKey = ProductListingSnippetRenderer::CODE . '_' . $metaInfoSnippetKey;
+        $this->metaInfoSnippetKey = $metaInfoSnippetKey;
         $this->context = $context;
         $this->pageBuilder = $pageBuilder;
         $this->keyGeneratorLocator = $keyGeneratorLocator;

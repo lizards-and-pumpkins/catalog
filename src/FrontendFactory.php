@@ -141,7 +141,6 @@ class FrontendFactory implements Factory
     private function createProductListingRequestHandlerBuilder()
     {
         return new ProductListingRequestHandlerBuilder(
-            $this->getMasterFactory()->createUrlPathKeyGenerator(),
             $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->createPageBuilder(),
             $this->getMasterFactory()->getSnippetKeyGeneratorLocator()

@@ -2,7 +2,6 @@
 
 namespace Brera;
 
-use Brera\Context\Context;
 use Brera\DataPool\SearchEngine\SearchCriteria;
 use Brera\DataPool\SearchEngine\SearchCriterion;
 use Brera\Http\HttpHeaders;
@@ -45,12 +44,11 @@ class ProductListingTest extends AbstractIntegrationTest
         $contextSource = $this->factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[1];
 
-        $url = HttpUrl::fromString('http://example.com/' . $urlKey);
-        $metaInfoSnippetKey =  ProductListingSnippetRenderer::CODE . '_'
-            . (new SampleUrlPathKeyGenerator())->getUrlKeyForUrlInContext($url, $context);
+        $productListingMetaInfoSnippetKeyGenerator = $this->factory->createProductListingMetaDataSnippetKeyGenerator();
+        $snippetKey = $productListingMetaInfoSnippetKeyGenerator->getKeyForContext($context, ['url_key' => $urlKey]);
 
         $dataPoolReader = $this->factory->createDataPoolReader();
-        $metaInfoSnippet = $dataPoolReader->getSnippet($metaInfoSnippetKey);
+        $metaInfoSnippet = $dataPoolReader->getSnippet($snippetKey);
 
         $expectedMetaInfoContent = json_encode($this->getStubMetaInfo());
 
@@ -126,23 +124,19 @@ class ProductListingTest extends AbstractIntegrationTest
             $this->factory->getLogger()
         );
 
+        $url = HttpUrl::fromString($this->testUrl);
+        $urlKey = ltrim($url->getPathRelativeToWebFront(), '/');
+
+        $productListingMetaInfoSnippetKeyGenerator = $this->factory->createProductListingMetaDataSnippetKeyGenerator();
+        $snippetKey = $productListingMetaInfoSnippetKeyGenerator->getKeyForContext($context, ['url_key' => $urlKey]);
+
         return new ProductListingRequestHandler(
-            $this->getPageMetaInfoSnippetKey($context),
+            $snippetKey,
             $context,
             $dataPoolReader,
             $pageBuilder,
             $this->factory->getSnippetKeyGeneratorLocator()
         );
-    }
-
-    /**
-     * @param Context $context
-     * @return string
-     */
-    private function getPageMetaInfoSnippetKey(Context $context)
-    {
-        $url = HttpUrl::fromString($this->testUrl);
-        return (new SampleUrlPathKeyGenerator())->getUrlKeyForUrlInContext($url, $context);
     }
 
     /**

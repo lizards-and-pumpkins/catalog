@@ -6,10 +6,10 @@ use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\KeyNotFoundException;
 use Brera\DataPool\SearchEngine\SearchCriteria;
+use Brera\DefaultHttpResponse;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
 use Brera\Http\UnableToHandleRequestException;
-use Brera\Page;
 use Brera\PageBuilder;
 use Brera\SnippetKeyGenerator;
 use Brera\SnippetKeyGeneratorLocator;
@@ -58,9 +58,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $mockSelectionCriteria->method('jsonSerialize')
             ->willReturn(['condition' => SearchCriteria::AND_CONDITION, 'criteria' => []]);
 
-        $testUrlPathKey = 'stub-meta-info-key';
-
-        $this->testMetaInfoKey = 'product_listing_' . $testUrlPathKey;
+        $this->testMetaInfoKey = 'stub-meta-info-key';
         $this->testMetaInfoSnippetJson = json_encode(ProductListingMetaInfoSnippetContent::create(
             $mockSelectionCriteria,
             'root-snippet-code',
@@ -80,7 +78,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $mockSnippetKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')->willReturn($mockSnippetKeyGenerator);
 
         $this->requestHandler = new ProductListingRequestHandler(
-            $testUrlPathKey,
+            $this->testMetaInfoKey,
             $stubContext,
             $this->mockDataPoolReader,
             $this->mockPageBuilder,
@@ -131,9 +129,10 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
     public function testPageIsReturned()
     {
         $this->mockMetaInfoSnippet();
-        $this->mockPageBuilder->method('buildPage')->willReturn($this->getMock(Page::class, [], [], '', false));
+        $this->mockPageBuilder->method('buildPage')
+            ->willReturn($this->getMock(DefaultHttpResponse::class, [], [], '', false));
 
-        $this->assertInstanceOf(Page::class, $this->requestHandler->process($this->stubRequest));
+        $this->assertInstanceOf(DefaultHttpResponse::class, $this->requestHandler->process($this->stubRequest));
     }
 
     public function testProductsInListingAreAddedToPageBuilder()

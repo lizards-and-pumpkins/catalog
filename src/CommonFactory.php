@@ -317,7 +317,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new ProductListingCriteriaSnippetRenderer(
             $this->getMasterFactory()->createSnippetList(),
-            $this->getMasterFactory()->createUrlPathKeyGenerator(),
+            $this->getMasterFactory()->createProductListingMetaDataSnippetKeyGenerator(),
             $this->getMasterFactory()->createContextBuilder()
         );
     }
@@ -328,6 +328,17 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createSnippetList()
     {
         return new SnippetList();
+    }
+
+    /**
+     * @return GenericSnippetKeyGenerator
+     */
+    public function createProductListingMetaDataSnippetKeyGenerator()
+    {
+        return new GenericSnippetKeyGenerator(
+            ProductListingSnippetRenderer::CODE,
+            $this->getMasterFactory()->getRequiredContexts()
+        );
     }
 
     /**
