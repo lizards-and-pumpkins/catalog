@@ -22,7 +22,6 @@ use Brera\Http\HttpUrl;
  * @uses   \Brera\IntegrationTestFactory
  * @uses   \Brera\DataVersion
  * @uses   \Brera\PageBuilder
- * @uses   \Brera\SampleUrlPathKeyGenerator
  * @uses   \Brera\SnippetKeyGeneratorLocator
  * @uses   \Brera\GenericSnippetKeyGenerator
  * @uses   \Brera\Product\CatalogImportApiV1PutRequestHandler

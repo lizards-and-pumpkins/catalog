@@ -54,7 +54,6 @@ use Brera\Queue\Queue;
  * @uses   \Brera\RootTemplateChangedDomainEvent
  * @uses   \Brera\RootTemplateChangedDomainEventHandler
  * @uses   \Brera\RootSnippetProjector
- * @uses   \Brera\UrlPathKeyGenerator
  * @uses   \Brera\Renderer\BlockRenderer
  * @uses   \Brera\Product\DefaultNumberOfProductsPerPageSnippetRenderer
  * @uses   \Brera\Product\PriceSnippetRenderer

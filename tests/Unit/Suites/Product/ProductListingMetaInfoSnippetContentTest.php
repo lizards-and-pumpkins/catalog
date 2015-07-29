@@ -69,7 +69,11 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
     public function testRootSnippetCodeIsAddedToTheSnippetCodeListIfNotPresent()
     {
         $rootSnippetCode = 'root-snippet-code';
-        $pageMetaInfo = ProductListingMetaInfoSnippetContent::create($this->stubSelectionCriteria, $rootSnippetCode, []);
+        $pageMetaInfo = ProductListingMetaInfoSnippetContent::create(
+            $this->stubSelectionCriteria,
+            $rootSnippetCode,
+            []
+        );
         $this->assertContains(
             $rootSnippetCode,
             $pageMetaInfo->getInfo()[ProductListingMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES]

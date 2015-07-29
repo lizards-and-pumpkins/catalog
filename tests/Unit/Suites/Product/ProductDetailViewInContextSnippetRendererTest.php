@@ -8,7 +8,6 @@ use Brera\Snippet;
 use Brera\SnippetList;
 use Brera\SnippetRenderer;
 use Brera\TestFileFixtureTrait;
-use Brera\UrlPathKeyGenerator;
 
 /**
  * @covers \Brera\Product\ProductDetailViewInContextSnippetRenderer
@@ -93,7 +92,8 @@ class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_T
     public function testContextPartsFetchingIsDelegatedToKeyGenerator()
     {
         $dummyContextParts = ['foo', 'bar', 'baz'];
-        $this->mockProductDetailViewSnippetKeyGenerator->method('getContextPartsUsedForKey')->willReturn($dummyContextParts);
+        $this->mockProductDetailViewSnippetKeyGenerator->method('getContextPartsUsedForKey')
+            ->willReturn($dummyContextParts);
 
         $this->assertSame($dummyContextParts, $this->renderer->getUsedContextParts());
     }

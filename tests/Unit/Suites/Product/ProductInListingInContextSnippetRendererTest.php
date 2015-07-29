@@ -45,7 +45,7 @@ class ProductInListingInContextSnippetRendererTest extends \PHPUnit_Framework_Te
     {
         $this->mockSnippetList = $this->getMock(SnippetList::class);
 
-        $stubProductInListingBlockRenderer = $this->getMock(ProductInListingBlockRenderer::class, [], [], '', false );
+        $stubProductInListingBlockRenderer = $this->getMock(ProductInListingBlockRenderer::class, [], [], '', false);
         $stubProductInListingBlockRenderer->method('render')->willReturn('dummy content');
         $stubProductInListingBlockRenderer->method('getRootSnippetCode')->willReturn('dummy root block code');
         $stubProductInListingBlockRenderer->method('getNestedSnippetCodes')->willReturn([]);
