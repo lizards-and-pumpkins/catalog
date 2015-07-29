@@ -238,13 +238,14 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return GenericSnippetKeyGenerator
+     * @return SnippetKeyGenerator
      */
     public function createProductListingSnippetKeyGenerator()
     {
         return new GenericSnippetKeyGenerator(
             ProductListingSnippetRenderer::CODE,
-            $this->getMasterFactory()->getRequiredContexts()
+            $this->getMasterFactory()->getRequiredContexts(),
+            []
         );
     }
 
@@ -274,7 +275,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new GenericSnippetKeyGenerator(
             DefaultNumberOfProductsPerPageSnippetRenderer::CODE,
-            $this->getMasterFactory()->getRequiredContexts()
+            $this->getMasterFactory()->getRequiredContexts(),
+            []
         );
     }
 
@@ -336,8 +338,9 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createProductListingMetaDataSnippetKeyGenerator()
     {
         return new GenericSnippetKeyGenerator(
-            ProductListingSnippetRenderer::CODE,
-            $this->getMasterFactory()->getRequiredContexts()
+            ProductListingCriteriaSnippetRenderer::CODE,
+            $this->getMasterFactory()->getRequiredContexts(),
+            ['url_key']
         );
     }
 
@@ -381,7 +384,11 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductDetailViewSnippetKeyGenerator()
     {
-        return new GenericSnippetKeyGenerator('product_detail_view', $this->getMasterFactory()->getRequiredContexts());
+        return new GenericSnippetKeyGenerator(
+            'product_detail_view',
+            $this->getMasterFactory()->getRequiredContexts(),
+            ['product_id']
+        );
     }
 
     /**
@@ -391,7 +398,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new GenericSnippetKeyGenerator(
             ProductDetailViewInContextSnippetRenderer::CODE,
-            $this->getMasterFactory()->getRequiredContexts()
+            $this->getMasterFactory()->getRequiredContexts(),
+            ['url_key']
         );
     }
 
@@ -464,7 +472,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new GenericSnippetKeyGenerator(
             ProductInListingInContextSnippetRenderer::CODE,
-            $this->getMasterFactory()->getRequiredContexts()
+            $this->getMasterFactory()->getRequiredContexts(),
+            ['product_id']
         );
     }
 
@@ -475,7 +484,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new GenericSnippetKeyGenerator(
             $this->getMasterFactory()->getRegularPriceSnippetKey(),
-            $this->getMasterFactory()->getRequiredContexts()
+            $this->getMasterFactory()->getRequiredContexts(),
+            ['product_id']
         );
     }
 
@@ -486,7 +496,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new GenericSnippetKeyGenerator(
             $this->getMasterFactory()->getProductBackOrderAvailabilitySnippetKey(),
-            $this->getMasterFactory()->getRequiredContexts()
+            $this->getMasterFactory()->getRequiredContexts(),
+            ['product_id']
         );
     }
 
@@ -497,7 +508,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new GenericSnippetKeyGenerator(
             $this->getMasterFactory()->getContentBlockSnippetKey(),
-            $this->getMasterFactory()->getRequiredContexts()
+            $this->getMasterFactory()->getRequiredContexts(),
+            ['content_block_id']
         );
     }
 
@@ -816,7 +828,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new GenericSnippetKeyGenerator(
             ProductStockQuantitySnippetRenderer::CODE,
-            $this->getMasterFactory()->getRequiredContexts()
+            $this->getMasterFactory()->getRequiredContexts(),
+            ['product_id']
         );
     }
 

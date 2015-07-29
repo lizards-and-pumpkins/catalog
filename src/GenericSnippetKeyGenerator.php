@@ -17,10 +17,16 @@ class GenericSnippetKeyGenerator implements SnippetKeyGenerator
     private $contextParts;
 
     /**
+     * @var string[]
+     */
+    private $usedDataParts;
+
+    /**
      * @param string $snippetCode
      * @param string[] $contextParts
+     * @param string[] $usedDataParts
      */
-    public function __construct($snippetCode, array $contextParts)
+    public function __construct($snippetCode, array $contextParts, array $usedDataParts)
     {
         if (!is_string($snippetCode)) {
             throw new InvalidSnippetCodeException(
@@ -30,6 +36,7 @@ class GenericSnippetKeyGenerator implements SnippetKeyGenerator
 
         $this->snippetCode = $snippetCode;
         $this->contextParts = $contextParts;
+        $this->usedDataParts = $usedDataParts;
     }
 
     /**
@@ -39,13 +46,8 @@ class GenericSnippetKeyGenerator implements SnippetKeyGenerator
      */
     public function getKeyForContext(Context $context, array $data)
     {
-        $snippetKey = $this->snippetCode;
-
-        if (!empty($data)) {
-            $snippetKey .= '_' . implode('_', $data);
-        }
-
-        $snippetKey .= '_' . $context->getIdForParts($this->contextParts);
+        $snippetKeyData = $this->getSnippetKeyDataAsString($data);
+        $snippetKey = $this->snippetCode . $snippetKeyData . '_' . $context->getIdForParts($this->contextParts);
 
         return $snippetKey;
     }
@@ -56,5 +58,26 @@ class GenericSnippetKeyGenerator implements SnippetKeyGenerator
     public function getContextPartsUsedForKey()
     {
         return $this->contextParts;
+    }
+
+    /**
+     * @param string[] $data
+     * @return string
+     */
+    private function getSnippetKeyDataAsString(array $data)
+    {
+        $dataString = '';
+
+        foreach ($this->usedDataParts as $dataKey) {
+            if (!isset($data[$dataKey])) {
+                throw new MissingSnippetKeyGenerationDataException(
+                    sprintf('"%s" is missing in snippet generation data.', $dataKey)
+                );
+            }
+
+            $dataString .= '_' . $data[$dataKey];
+        }
+
+        return $dataString;
     }
 }

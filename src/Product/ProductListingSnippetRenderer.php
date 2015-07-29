@@ -63,7 +63,7 @@ class ProductListingSnippetRenderer implements SnippetRenderer
         $numItemsPerPageForContext = $rootSnippetSourceList->getNumItemsPerPageForContext($context);
 
         foreach ($numItemsPerPageForContext as $numItemsPerPage) {
-            $key = $this->snippetKeyGenerator->getKeyForContext($context, ['items_per_page' => $numItemsPerPage]);
+            $key = $this->snippetKeyGenerator->getKeyForContext($context, ['products_per_page' => $numItemsPerPage]);
             $contentSnippet = Snippet::create($key, $content);
             $this->snippetList->add($contentSnippet);
         }

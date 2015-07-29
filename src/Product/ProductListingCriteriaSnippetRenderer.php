@@ -10,6 +10,8 @@ use Brera\Snippet;
 
 class ProductListingCriteriaSnippetRenderer implements SnippetRenderer
 {
+    const CODE = 'product_listing_meta';
+
     /**
      * @var SnippetKeyGenerator
      */
