@@ -36,6 +36,11 @@ class ProductListingMetaInfoSnippetRendererTest extends \PHPUnit_Framework_TestC
     {
         $stubContext = $this->getMock(Context::class);
 
+        $stubProductListingBlockRenderer = $this->getMock(ProductListingBlockRenderer::class, [], [], '', false);
+        $stubProductListingBlockRenderer->method('render')->willReturn('dummy content');
+        $stubProductListingBlockRenderer->method('getRootSnippetCode')->willReturn('dummy root block code');
+        $stubProductListingBlockRenderer->method('getNestedSnippetCodes')->willReturn([]);
+
         /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $mockSnippetKeyGenerator */
         $mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $mockSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->dummySnippetKey);
@@ -48,6 +53,7 @@ class ProductListingMetaInfoSnippetRendererTest extends \PHPUnit_Framework_TestC
 
         $this->renderer = new ProductListingMetaInfoSnippetRenderer(
             $this->mockSnippetList,
+            $stubProductListingBlockRenderer,
             $mockSnippetKeyGenerator,
             $mockContextBuilder
         );

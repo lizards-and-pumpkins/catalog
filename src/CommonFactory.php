@@ -319,6 +319,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new ProductListingMetaInfoSnippetRenderer(
             $this->getMasterFactory()->createSnippetList(),
+            $this->getMasterFactory()->createProductListingBlockRenderer(),
             $this->getMasterFactory()->createProductListingMetaDataSnippetKeyGenerator(),
             $this->getMasterFactory()->createContextBuilder()
         );
