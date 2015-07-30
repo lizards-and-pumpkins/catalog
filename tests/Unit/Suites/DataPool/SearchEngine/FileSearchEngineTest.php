@@ -28,16 +28,13 @@ class FileSearchEngineTest extends AbstractSearchEngineTest
 
     public function testExceptionIsThrownIfSearchEngineStorageDirIsNotWritable()
     {
-        $this->setExpectedException(
-            SearchEngineNotAvailableException::class,
-            'Directory "" is not writable by the filesystem search engine.'
-        );
-        FileSearchEngine::withPath('non-existing-path');
+        $this->setExpectedException(SearchEngineNotAvailableException::class);
+        FileSearchEngine::create('non-existing-path');
     }
 
     public function testSearchEngineInterfaceIsImplemented()
     {
-        $searchEngine = FileSearchEngine::withDefaultPath();
+        $searchEngine = $this->createSearchEngineInstance();
         $this->assertInstanceOf(SearchEngine::class, $searchEngine);
     }
 
@@ -48,7 +45,7 @@ class FileSearchEngineTest extends AbstractSearchEngineTest
     {
         $this->prepareTemporaryStorage();
 
-        return FileSearchEngine::withPath($this->temporaryStorage);
+        return FileSearchEngine::create($this->temporaryStorage);
     }
 
     private function prepareTemporaryStorage()

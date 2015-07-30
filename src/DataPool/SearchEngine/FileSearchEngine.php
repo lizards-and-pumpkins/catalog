@@ -14,7 +14,16 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
     /**
      * @param string $storagePath
      */
-    final private function __construct($storagePath)
+    private function __construct($storagePath)
+    {
+        $this->storagePath = $storagePath;
+    }
+
+    /**
+     * @param string $storagePath
+     * @return FileSearchEngine
+     */
+    public static function create($storagePath)
     {
         if (!is_writable($storagePath)) {
             throw new SearchEngineNotAvailableException(sprintf(
@@ -23,26 +32,7 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
             ));
         }
 
-        $this->storagePath = $storagePath;
-    }
-
-    /**
-     * @param string $storagePath
-     * @return FileSearchEngine
-     */
-    public static function withPath($storagePath)
-    {
         return new self($storagePath);
-    }
-
-    /**
-     * @return FileSearchEngine
-     */
-    public static function withDefaultPath()
-    {
-        $defaultPath = sys_get_temp_dir();
-
-        return new self($defaultPath);
     }
 
     public function addSearchDocument(SearchDocument $searchDocument)
