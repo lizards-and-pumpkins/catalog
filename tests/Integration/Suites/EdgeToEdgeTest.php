@@ -133,7 +133,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $key = $keyGenerator->getKeyForContext($context, ['products_per_page' => 9]);
         $html = $dataPoolReader->getSnippet($key);
 
-        $expectation = file_get_contents(__DIR__ . '/../../../theme/template/list.phtml');
+        $expectation = '<ul class="products-grid">';
 
         $this->assertContains($expectation, $html);
     }

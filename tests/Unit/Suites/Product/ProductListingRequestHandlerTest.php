@@ -9,6 +9,7 @@ use Brera\DataPool\SearchEngine\SearchCriteria;
 use Brera\DefaultHttpResponse;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
+use Brera\Http\HttpUrl;
 use Brera\Http\UnableToHandleRequestException;
 use Brera\PageBuilder;
 use Brera\SnippetKeyGenerator;
@@ -85,7 +86,10 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
             $mockSnippetKeyGeneratorLocator
         );
 
+        $stubUrl = $this->getMock(HttpUrl::class, [], [], '', false);
+
         $this->stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+        $this->stubRequest->method('getUrl')->willReturn($stubUrl);
     }
 
     public function testHttpHandlerInterfaceIsImplemented()

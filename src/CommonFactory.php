@@ -953,4 +953,16 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return ['website', 'language', 'version'];
     }
+
+    /**
+     * @return SnippetKeyGenerator
+     */
+    public function createContentBlockInProductListingSnippetKeyGenerator()
+    {
+        return new GenericSnippetKeyGenerator(
+            'content_block_in_product_listing',
+            $this->getMasterFactory()->getRequiredContexts(),
+            ['url_key']
+        );
+    }
 }

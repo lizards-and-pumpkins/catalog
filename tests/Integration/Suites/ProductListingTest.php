@@ -32,7 +32,7 @@ class ProductListingTest extends AbstractIntegrationTest
     public function testProductListingMetaSnippetIsWrittenIntoDataPool()
     {
         $this->addProductListingCriteriaDomainDomainEventFixture();
-        $this->processDomainEvents(1);
+        $this->processDomainEvents();
         
         $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
         $urlKeyNode = (new XPathParser($xml))->getXmlNodesArrayByXPath('//catalog/listings/listing[1]/@url_key');
@@ -61,12 +61,9 @@ class ProductListingTest extends AbstractIntegrationTest
         $this->addProductImportDomainEventToSetUpProductFixture();
         $this->addProductListingCriteriaDomainDomainEventFixture();
 
-        $this->processDomainEvents(5);
-        
-        $this->factory->getSnippetKeyGeneratorLocator()->register(
-            ProductListingSnippetRenderer::CODE,
-            $this->factory->createProductListingSnippetKeyGenerator()
-        );
+        $this->processDomainEvents();
+
+        $this->registerProductListingSnippetKeyGenerator();
 
         $httpRequest = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
@@ -86,7 +83,33 @@ class ProductListingTest extends AbstractIntegrationTest
         $this->assertContains($expectedProductName, $body);
         $this->assertNotContains($unExpectedProductName, $body);
     }
-    
+
+    public function testContentBlockIsPresentAtProductListingPage()
+    {
+        $contentBlockContent = '<div>Content Block</div>';
+
+        $this->addContentBlockToDataPool($contentBlockContent);
+        $this->addRootTemplateChangedDomainEventToSetupProductListingFixture();
+        $this->addProductImportDomainEventToSetUpProductFixture();
+        $this->addProductListingCriteriaDomainDomainEventFixture();
+        $this->registerContentBlockInProductListingSnippetKeyGenerator();
+
+        $this->processDomainEvents();
+
+        $httpRequest = HttpRequest::fromParameters(
+            HttpRequest::METHOD_GET,
+            HttpUrl::fromString('http://www.example.com/foo'),
+            HttpHeaders::fromArray([]),
+            HttpRequestBody::fromString('')
+        );
+
+        $productListingRequestHandler = $this->getProductListingRequestHandler();
+        $page = $productListingRequestHandler->process($httpRequest);
+        $body = $page->getBody();
+
+        $this->assertContains($contentBlockContent, $body);
+    }
+
     private function addRootTemplateChangedDomainEventToSetupProductListingFixture()
     {
         $xml = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.xml');
@@ -140,6 +163,27 @@ class ProductListingTest extends AbstractIntegrationTest
     }
 
     /**
+     * @param string $contentBlockContent
+     */
+    private function addContentBlockToDataPool($contentBlockContent)
+    {
+        $httpUrl = HttpUrl::fromString('http://example.com/api/v1/content_blocks/in_product_listing_foo');
+        $httpHeaders = HttpHeaders::fromArray([]);
+        $httpRequestBodyString = json_encode([
+            'content' => $contentBlockContent,
+            'context' => ['website' => 'ru', 'language' => 'en_US']
+        ]);
+        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
+        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
+
+        $website = new SampleWebFront($request, $this->factory);
+        $website->runWithoutSendingResponse();
+
+        $this->processCommandsInQueue();
+        $this->processDomainEvents();
+    }
+
+    /**
      * @return mixed[]
      */
     private function getStubMetaInfo()
@@ -149,22 +193,54 @@ class ProductListingTest extends AbstractIntegrationTest
         $searchCriteria = SearchCriteria::createAnd();
         $searchCriteria->add($searchCriterion1);
         $searchCriteria->add($searchCriterion2);
+        $codesOfOtherSnippets = [
+            'global_notices',
+            'breadcrumbsContainer',
+            'global_messages',
+            'content_block_in_product_listing',
+            'before_body_end'
+        ];
 
         $metaSnippetContent = ProductListingMetaInfoSnippetContent::create(
             $searchCriteria,
             ProductListingSnippetRenderer::CODE,
-            []
+            $codesOfOtherSnippets
         );
 
         return $metaSnippetContent->getInfo();
     }
 
-    /**
-     * @param int $numberOfMessages
-     */
-    private function processDomainEvents($numberOfMessages)
+    private function processCommandsInQueue()
     {
+        $queue = $this->factory->getCommandQueue();
+        $consumer = $this->factory->createCommandConsumer();
+        while ($queue->count() > 0) {
+            $consumer->process(1);
+        }
+    }
+
+    private function processDomainEvents()
+    {
+        $queue = $this->factory->getEventQueue();
         $consumer = $this->factory->createDomainEventConsumer();
-        $consumer->process($numberOfMessages);
+        while ($queue->count() > 0) {
+            $consumer->process(1);
+        }
+    }
+
+    private function registerProductListingSnippetKeyGenerator()
+    {
+        $this->factory->getSnippetKeyGeneratorLocator()->register(
+            ProductListingSnippetRenderer::CODE,
+            $this->factory->createProductListingSnippetKeyGenerator()
+        );
+    }
+
+    private function registerContentBlockInProductListingSnippetKeyGenerator()
+    {
+        $this->factory->getSnippetKeyGeneratorLocator()->register(
+            'content_block_in_product_listing',
+            $this->factory->createContentBlockInProductListingSnippetKeyGenerator()
+        );
     }
 }
