@@ -31,7 +31,7 @@ use Brera\Product\ProductImportDomainEventHandler;
 use Brera\Product\ProductInListingBlockRenderer;
 use Brera\Product\ProductInListingInContextSnippetRenderer;
 use Brera\Product\ProductListingBlockRenderer;
-use Brera\Product\ProductListingCriteriaSnippetRenderer;
+use Brera\Product\ProductListingMetaInfoSnippetRenderer;
 use Brera\Product\ProductListingProjector;
 use Brera\Product\ProductListingSavedDomainEvent;
 use Brera\Product\ProductListingSavedDomainEventHandler;
@@ -308,16 +308,16 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function getProductListingSnippetRendererList()
     {
         return [
-            $this->getMasterFactory()->createProductListingCriteriaSnippetRenderer()
+            $this->getMasterFactory()->createProductListingMetaInfoSnippetRenderer()
         ];
     }
 
     /**
-     * @return ProductListingCriteriaSnippetRenderer
+     * @return ProductListingMetaInfoSnippetRenderer
      */
-    public function createProductListingCriteriaSnippetRenderer()
+    public function createProductListingMetaInfoSnippetRenderer()
     {
-        return new ProductListingCriteriaSnippetRenderer(
+        return new ProductListingMetaInfoSnippetRenderer(
             $this->getMasterFactory()->createSnippetList(),
             $this->getMasterFactory()->createProductListingMetaDataSnippetKeyGenerator(),
             $this->getMasterFactory()->createContextBuilder()
@@ -338,7 +338,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createProductListingMetaDataSnippetKeyGenerator()
     {
         return new GenericSnippetKeyGenerator(
-            ProductListingCriteriaSnippetRenderer::CODE,
+            ProductListingMetaInfoSnippetRenderer::CODE,
             $this->getMasterFactory()->getRequiredContexts(),
             ['url_key']
         );

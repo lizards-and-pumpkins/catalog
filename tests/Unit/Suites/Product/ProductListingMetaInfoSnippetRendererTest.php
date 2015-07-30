@@ -11,11 +11,11 @@ use Brera\SnippetRenderer;
 use Brera\Snippet;
 
 /**
- * @covers \Brera\Product\ProductListingCriteriaSnippetRenderer
+ * @covers \Brera\Product\ProductListingMetaInfoSnippetRenderer
  * @uses   \Brera\Product\ProductListingMetaInfoSnippetContent
  * @uses   \Brera\Snippet
  */
-class ProductListingCriteriaSnippetRendererTest extends \PHPUnit_Framework_TestCase
+class ProductListingMetaInfoSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var string
@@ -28,7 +28,7 @@ class ProductListingCriteriaSnippetRendererTest extends \PHPUnit_Framework_TestC
     private $mockSnippetList;
 
     /**
-     * @var ProductListingCriteriaSnippetRenderer
+     * @var ProductListingMetaInfoSnippetRenderer
      */
     private $renderer;
 
@@ -46,7 +46,7 @@ class ProductListingCriteriaSnippetRendererTest extends \PHPUnit_Framework_TestC
 
         $this->mockSnippetList = $this->getMock(SnippetList::class);
 
-        $this->renderer = new ProductListingCriteriaSnippetRenderer(
+        $this->renderer = new ProductListingMetaInfoSnippetRenderer(
             $this->mockSnippetList,
             $mockSnippetKeyGenerator,
             $mockContextBuilder

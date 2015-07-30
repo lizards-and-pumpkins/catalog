@@ -8,7 +8,7 @@ use Brera\SnippetList;
 use Brera\SnippetRenderer;
 use Brera\Snippet;
 
-class ProductListingCriteriaSnippetRenderer implements SnippetRenderer
+class ProductListingMetaInfoSnippetRenderer implements SnippetRenderer
 {
     const CODE = 'product_listing_meta';
 

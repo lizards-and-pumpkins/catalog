@@ -62,7 +62,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Product\ProductProjector
  * @uses   \Brera\Product\ProductImportDomainEvent
  * @uses   \Brera\Product\ProductImportDomainEventHandler
- * @uses   \Brera\Product\ProductListingCriteriaSnippetRenderer
+ * @uses   \Brera\Product\ProductListingMetaInfoSnippetRenderer
  * @uses   \Brera\Product\ProductListingProjector
  * @uses   \Brera\Product\ProductListingSavedDomainEvent
  * @uses   \Brera\Product\ProductListingSavedDomainEventHandler

@@ -43,7 +43,7 @@ class ProductListingRequestHandlerBuilder
     public function create(HttpUrl $url, Context $context)
     {
         $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
-            ProductListingCriteriaSnippetRenderer::CODE
+            ProductListingMetaInfoSnippetRenderer::CODE
         );
         $urlKey = ltrim($url->getPathRelativeToWebFront(), '/');
         $metaInfoSnippetKey = $keyGenerator->getKeyForContext($context, ['url_key' => $urlKey]);
