@@ -45,9 +45,14 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     public function testEntryIsAddedIntoIndexAndThenFound()
     {
-        $searchDocumentContent = 'qux';
         $searchDocumentFieldValue = 'bar';
-        $searchDocument = $this->createSearchDocument(['foo' => $searchDocumentFieldValue], $searchDocumentContent);
+        $searchDocumentContent = 'qux';
+        $searchDocumentFieldName = 'foo';
+        
+        $searchDocument = $this->createSearchDocument(
+            [$searchDocumentFieldName => $searchDocumentFieldValue],
+            $searchDocumentContent
+        );
 
         $this->searchEngine->addSearchDocument($searchDocument);
         $result = $this->searchEngine->query($searchDocumentFieldValue, $this->stubContext);
@@ -57,7 +62,9 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     public function testEmptyArrayIsReturnedIfQueryStringIsNotFoundInIndex()
     {
-        $searchDocument = $this->createSearchDocument(['foo' => 'bar'], null);
+        $searchDocumentFields = ['foo' => 'bar'];
+        $searchDocumentContent = null;
+        $searchDocument = $this->createSearchDocument($searchDocumentFields, $searchDocumentContent);
         $this->searchEngine->addSearchDocument($searchDocument);
         $result = $this->searchEngine->query('baz', $this->stubContext);
 
@@ -84,23 +91,26 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     public function testOnlyEntriesContainingRequestedStringAreReturned()
     {
         $searchDocumentContent = 'content';
+        $keyword = 'bar';
 
-        $searchDocumentA = $this->createSearchDocument(['foo' => 'bar'], $searchDocumentContent);
+        $searchDocumentA = $this->createSearchDocument(['foo' => $keyword], $searchDocumentContent);
         $searchDocumentB = $this->createSearchDocument(['baz' => 'qux'], null);
 
         $this->stubSearchDocumentCollection->method('getDocuments')->willReturn([$searchDocumentA, $searchDocumentB]);
         $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
-        $result = $this->searchEngine->query('bar', $this->stubContext);
+        $result = $this->searchEngine->query($keyword, $this->stubContext);
 
         $this->assertEquals([$searchDocumentContent], $result);
     }
 
     public function testOnlyMatchesWithMatchingContextsAreReturned()
     {
+        $keyword = 'bar';
+
         $searchDocumentAContent = 'contentA';
         $stubSearchDocumentAContext = $this->createStubContext(['website' => 'value-1']);
         $searchDocumentA = $this->createSearchDocumentWithContext(
-            ['foo' => 'bar'],
+            ['foo' => $keyword],
             $searchDocumentAContent,
             $stubSearchDocumentAContext
         );
@@ -108,7 +118,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $searchDocumentBContent = 'contentB';
         $stubSearchDocumentBContext = $this->createStubContext(['website' => 'value-2']);
         $searchDocumentB = $this->createSearchDocumentWithContext(
-            ['foo' => 'bar'],
+            ['foo' => $keyword],
             $searchDocumentBContent,
             $stubSearchDocumentBContext
         );
@@ -117,7 +127,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
 
         $stubQueryContext = $this->createStubContext(['website' => 'value-2']);
-        $result = $this->searchEngine->query('bar', $stubQueryContext);
+        $result = $this->searchEngine->query($keyword, $stubQueryContext);
 
         $this->assertEquals([$searchDocumentBContent], $result);
     }
