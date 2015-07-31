@@ -57,7 +57,7 @@ class SampleFactory implements Factory
         $searchEngineStoragePath = sys_get_temp_dir() . '/brera/search-engine';
         $this->createDirectoryIfNotExists($searchEngineStoragePath);
 
-        return FileSearchEngine::withPath($searchEngineStoragePath);
+        return FileSearchEngine::create($searchEngineStoragePath);
     }
 
     /**
