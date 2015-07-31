@@ -29,8 +29,9 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine
     final public function query($queryString, Context $queryContext)
     {
         $results = [];
+        $searchDocuments = $this->getSearchDocuments();
 
-        foreach ($this->getSearchDocuments() as $searchDocument) {
+        foreach ($searchDocuments as $searchDocument) {
             if (!$this->hasMatchingContext($queryContext, $searchDocument)) {
                 continue;
             }
