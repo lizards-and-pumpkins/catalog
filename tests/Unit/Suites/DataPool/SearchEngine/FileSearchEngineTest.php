@@ -7,6 +7,12 @@ use Brera\Utils\LocalFilesystem;
 /**
  * @covers \Brera\DataPool\SearchEngine\FileSearchEngine
  * @covers \Brera\DataPool\SearchEngine\IntegrationTestSearchEngineAbstract
+ * @uses   \Brera\Context\ContextBuilder
+ * @uses   \Brera\Context\ContextDecorator
+ * @uses   \Brera\Context\LanguageContextDecorator
+ * @uses   \Brera\Context\VersionedContext
+ * @uses   \Brera\Context\WebsiteContextDecorator
+ * @uses   \Brera\DataVersion
  * @uses   \Brera\DataPool\SearchEngine\SearchCriterion
  * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocument
  * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField
