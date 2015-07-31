@@ -81,8 +81,8 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
     {
         return [
             'content' => $searchDocument->getContent(),
-            'fields'  => $this->getSearchDocumentFieldsAsAnArray($searchDocument->getFieldsCollection()),
-            'context' => $this->getContextAsAnArray($searchDocument->getContext())
+            'fields'  => $this->getSearchDocumentFieldsAsArray($searchDocument->getFieldsCollection()),
+            'context' => $this->getContextAsArray($searchDocument->getContext())
         ];
     }
 
@@ -90,7 +90,7 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
      * @param SearchDocumentFieldCollection $searchDocumentFieldCollection
      * @return string[]
      */
-    private function getSearchDocumentFieldsAsAnArray(SearchDocumentFieldCollection $searchDocumentFieldCollection)
+    private function getSearchDocumentFieldsAsArray(SearchDocumentFieldCollection $searchDocumentFieldCollection)
     {
         return array_reduce(
             $searchDocumentFieldCollection->getFields(),
@@ -105,7 +105,7 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
      * @param Context $context
      * @return string[]
      */
-    private function getContextAsAnArray(Context $context)
+    private function getContextAsArray(Context $context)
     {
         $contextArray = [];
 
