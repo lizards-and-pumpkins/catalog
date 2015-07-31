@@ -7,6 +7,12 @@ use Brera\Utils\LocalFilesystem;
 /**
  * @covers \Brera\DataPool\SearchEngine\FileSearchEngine
  * @covers \Brera\DataPool\SearchEngine\IntegrationTestSearchEngineAbstract
+ * @uses   \Brera\Context\ContextBuilder
+ * @uses   \Brera\Context\ContextDecorator
+ * @uses   \Brera\Context\LanguageContextDecorator
+ * @uses   \Brera\Context\VersionedContext
+ * @uses   \Brera\Context\WebsiteContextDecorator
+ * @uses   \Brera\DataVersion
  * @uses   \Brera\DataPool\SearchEngine\SearchCriterion
  * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocument
  * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField
@@ -28,16 +34,13 @@ class FileSearchEngineTest extends AbstractSearchEngineTest
 
     public function testExceptionIsThrownIfSearchEngineStorageDirIsNotWritable()
     {
-        $this->setExpectedException(
-            SearchEngineNotAvailableException::class,
-            'Directory "" is not writable by the filesystem search engine.'
-        );
-        FileSearchEngine::withPath('non-existing-path');
+        $this->setExpectedException(SearchEngineNotAvailableException::class);
+        FileSearchEngine::create('non-existing-path');
     }
 
     public function testSearchEngineInterfaceIsImplemented()
     {
-        $searchEngine = FileSearchEngine::withDefaultPath();
+        $searchEngine = $this->createSearchEngineInstance();
         $this->assertInstanceOf(SearchEngine::class, $searchEngine);
     }
 
@@ -48,7 +51,7 @@ class FileSearchEngineTest extends AbstractSearchEngineTest
     {
         $this->prepareTemporaryStorage();
 
-        return FileSearchEngine::withPath($this->temporaryStorage);
+        return FileSearchEngine::create($this->temporaryStorage);
     }
 
     private function prepareTemporaryStorage()
