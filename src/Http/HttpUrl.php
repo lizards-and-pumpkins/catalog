@@ -69,7 +69,7 @@ class HttpUrl
         $path = $this->url->getPath();
         $path->remove($this->getDirectoryPathRelativeToDocumentRoot());
 
-        return $path->getUriComponent();
+        return ltrim($path->getUriComponent(), '/');
     }
 
     /**

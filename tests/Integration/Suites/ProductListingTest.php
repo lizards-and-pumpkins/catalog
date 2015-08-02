@@ -125,7 +125,7 @@ class ProductListingTest extends AbstractIntegrationTest
         );
 
         $url = HttpUrl::fromString($this->testUrl);
-        $urlKey = ltrim($url->getPathRelativeToWebFront(), '/');
+        $urlKey = $url->getPathRelativeToWebFront();
 
         $productListingMetaInfoSnippetKeyGenerator = $this->factory->createProductListingMetaDataSnippetKeyGenerator();
         $snippetKey = $productListingMetaInfoSnippetKeyGenerator->getKeyForContext($context, ['url_key' => $urlKey]);

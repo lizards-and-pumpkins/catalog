@@ -71,6 +71,6 @@ class HttpUrlTest extends \PHPUnit_Framework_TestCase
 
         $_SERVER['SCRIPT_NAME'] = $originalScriptName;
 
-        $this->assertEquals('/some-page', $result);
+        $this->assertEquals('some-page', $result);
     }
 }

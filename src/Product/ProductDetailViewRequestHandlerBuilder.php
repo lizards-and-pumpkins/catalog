@@ -42,7 +42,7 @@ class ProductDetailViewRequestHandlerBuilder
      */
     public function create(HttpUrl $url, Context $context)
     {
-        $urlKey = ltrim($url->getPathRelativeToWebFront(), '/');
+        $urlKey = $url->getPathRelativeToWebFront();
         $metaInfoSnippetKey = $this->snippetKeyGenerator->getKeyForContext($context, ['url_key' => $urlKey]);
 
         return new ProductDetailViewRequestHandler(
