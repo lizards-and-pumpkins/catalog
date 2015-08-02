@@ -5,7 +5,7 @@ namespace Brera\Product;
 use Brera\PageMetaInfoSnippetContent;
 
 /**
- * @covers ProductSearchResultsMetaSnippetContent
+ * @covers \Brera\Product\ProductSearchResultsMetaSnippetContent
  */
 class ProductSearchResultsMetaSnippetContentTest extends \PHPUnit_Framework_TestCase
 {
