@@ -4,6 +4,7 @@ namespace Brera\Product;
 
 use Brera\DataPool\SearchEngine\SearchCriteria;
 use Brera\DataPool\SearchEngine\SearchCriterion;
+use Brera\UrlKey;
 use Brera\Utils\XPathParser;
 
 class ProductListingSourceBuilder
@@ -17,7 +18,8 @@ class ProductListingSourceBuilder
         $parser = new XPathParser($xml);
 
         $urlKeyNode = $parser->getXmlNodesArrayByXPath('/listing/@url_key');
-        $urlKey = $this->getUrlKeyStringFromDomNodeArray($urlKeyNode);
+        $urlKeyString = $this->getUrlKeyStringFromDomNodeArray($urlKeyNode);
+        $urlKey = UrlKey::fromString($urlKeyString);
 
         $xmlNodeAttributes = $parser->getXmlNodesArrayByXPath('/listing/@*');
         $contextData = $this->getFormattedContextData($xmlNodeAttributes);

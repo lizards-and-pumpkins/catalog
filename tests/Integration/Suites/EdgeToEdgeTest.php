@@ -121,7 +121,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $contextSource = $this->factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[0];
 
-        $key = $keyGenerator->getKeyForContext($context);
+        $key = $keyGenerator->getKeyForContext($context, ['products_per_page' => 9]);
         $html = $dataPoolReader->getSnippet($key);
 
         $expectation = file_get_contents(__DIR__ . '/../../../theme/template/list.phtml');

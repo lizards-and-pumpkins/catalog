@@ -21,7 +21,6 @@ use Brera\Product\ProductWasUpdatedDomainEventHandler;
 use Brera\Product\ProductListingWasUpdatedDomainEvent;
 use Brera\Product\ProductListingWasUpdatedDomainEventHandler;
 use Brera\Product\ProductProjector;
-use Brera\Product\ProductSnippetKeyGenerator;
 use Brera\Product\ProductSourceBuilder;
 use Brera\Product\ProductStockQuantityWasUpdatedDomainEvent;
 use Brera\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
@@ -52,7 +51,6 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Content\ContentBlockWasUpdatedDomainEventHandler
  * @uses   \Brera\Content\ContentBlockProjector
  * @uses   \Brera\Content\UpdateContentBlockCommandHandler
- * @uses   \Brera\Content\ContentBlockSnippetKeyGenerator
  * @uses   \Brera\Context\ContextBuilder
  * @uses   \Brera\Context\ContextSource
  * @uses   \Brera\CommandConsumer
@@ -62,14 +60,13 @@ use Brera\Queue\Queue;
  * @uses   \Brera\PageTemplateWasUpdatedDomainEvent
  * @uses   \Brera\PageTemplateWasUpdatedDomainEventHandler
  * @uses   \Brera\RootSnippetProjector
- * @uses   \Brera\UrlPathKeyGenerator
  * @uses   \Brera\Renderer\BlockRenderer
+ * @uses   \Brera\Product\DefaultNumberOfProductsPerPageSnippetRenderer
  * @uses   \Brera\Product\PriceSnippetRenderer
  * @uses   \Brera\Product\ProductBackOrderAvailabilitySnippetRenderer
  * @uses   \Brera\Product\ProductSourceBuilder
  * @uses   \Brera\Product\ProductProjector
- * @uses   \Brera\Product\ProductSnippetKeyGenerator
- * @uses   \Brera\Product\ProductListingCriteriaSnippetRenderer
+ * @uses   \Brera\Product\ProductListingMetaInfoSnippetRenderer
  * @uses   \Brera\Product\ProductListingProjector
  * @uses   \Brera\Product\ProductListingSourceBuilder
  * @uses   \Brera\Product\ProductListingWasUpdatedDomainEvent
@@ -155,12 +152,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ProductProjector::class, $result);
     }
 
-    public function testUrlPathKeyGeneratorIsReturned()
-    {
-        $result = $this->commonFactory->createUrlPathKeyGenerator();
-        $this->assertInstanceOf(UrlPathKeyGenerator::class, $result);
-    }
-    
     public function testSnippetListIsReturned()
     {
         $result = $this->commonFactory->createSnippetList();
@@ -317,10 +308,10 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ImageWasUpdatedDomainEventHandler::class, $result);
     }
 
-    public function testProductSnippetKeyGeneratorIsReturned()
+    public function testSnippetKeyGeneratorIsReturned()
     {
         $result = $this->commonFactory->createProductInListingSnippetKeyGenerator();
-        $this->assertInstanceOf(ProductSnippetKeyGenerator::class, $result);
+        $this->assertInstanceOf(GenericSnippetKeyGenerator::class, $result);
     }
 
     public function testUpdateProductStockQuantityCommandHandlerIsReturned()
@@ -371,10 +362,10 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ProductStockQuantitySnippetRenderer::class, $result);
     }
 
-    public function testProductSnippetKeyGeneratorIsReturnedAsProductStockQuantityRendererSnippetKeyGenerator()
+    public function testSnippetKeyGeneratorIsReturnedAsProductStockQuantityRendererSnippetKeyGenerator()
     {
         $result = $this->commonFactory->createProductStockQuantityRendererSnippetKeyGenerator();
-        $this->assertInstanceOf(ProductSnippetKeyGenerator::class, $result);
+        $this->assertInstanceOf(GenericSnippetKeyGenerator::class, $result);
     }
 
     public function testCommandConsumerIsReturned()

@@ -12,11 +12,11 @@ class ProductListingRouter implements HttpRouter
     /**
      * @var ProductListingRequestHandlerBuilder
      */
-    private $urlKeyRequestHandlerBuilder;
+    private $productListingRequestHandlerBuilder;
 
-    public function __construct(ProductListingRequestHandlerBuilder $urlKeyRequestHandlerBuilder)
+    public function __construct(ProductListingRequestHandlerBuilder $productListingRequestHandlerBuilder)
     {
-        $this->urlKeyRequestHandlerBuilder = $urlKeyRequestHandlerBuilder;
+        $this->productListingRequestHandlerBuilder = $productListingRequestHandlerBuilder;
     }
 
     /**
@@ -26,8 +26,8 @@ class ProductListingRouter implements HttpRouter
      */
     public function route(HttpRequest $request, Context $context)
     {
-        $urlKeyRequestHandler = $this->urlKeyRequestHandlerBuilder->create($request->getUrl(), $context);
-        if (! $urlKeyRequestHandler->canProcess($request)) {
+        $urlKeyRequestHandler = $this->productListingRequestHandlerBuilder->create($request->getUrl(), $context);
+        if (!$urlKeyRequestHandler->canProcess($request)) {
             return null;
         }
         
