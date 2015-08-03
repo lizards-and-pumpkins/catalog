@@ -21,7 +21,7 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
         $mockRootSnippetSourceList = $this->getMock(RootSnippetSourceList::class, [], [], '', false);
         $mockRootSnippetSourceList->expects($this->atLeastOnce())
-            ->method('getNumItemsPerPageForContext')
+            ->method('getListOfAvailableNumberOfItemsPerPageForContext')
             ->with($stubContext)
             ->willReturn([$numItemsPerPage]);
 
