@@ -24,13 +24,18 @@ class HttpHeaders
      */
     public static function fromArray(array $headers)
     {
+        $normalizedHeaders = [];
+
         foreach ($headers as $headerName => $headerValue) {
             if (!is_string($headerName) || !is_string($headerValue)) {
                 throw new InvalidHttpHeadersException('Can only create HTTP headers from string');
             }
+
+            $normalizedHeaderName = strtolower($headerName);
+            $normalizedHeaders[$normalizedHeaderName] = $headerValue;
         }
 
-        return new self($headers);
+        return new self($normalizedHeaders);
     }
 
     /**
@@ -40,8 +45,8 @@ class HttpHeaders
      */
     public function get($headerName)
     {
-        $normalizedHeaderName = $this->normalizeHeaderName($headerName);
-        if (! $this->has($normalizedHeaderName)) {
+        $normalizedHeaderName = strtolower($headerName);
+        if (!$this->has($normalizedHeaderName)) {
             throw new HeaderNotPresentException(sprintf('The header "%s" is not present.', $headerName));
         }
         return $this->headers[$normalizedHeaderName];
@@ -61,15 +66,6 @@ class HttpHeaders
      */
     public function has($headerName)
     {
-        return array_key_exists($this->normalizeHeaderName($headerName), $this->headers);
-    }
-
-    /**
-     * @param string $headerName
-     * @return string
-     */
-    private function normalizeHeaderName($headerName)
-    {
-        return strtolower($headerName);
+        return array_key_exists(strtolower($headerName), $this->headers);
     }
 }

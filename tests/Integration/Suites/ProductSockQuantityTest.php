@@ -21,8 +21,10 @@ class ProductSockQuantityTest extends AbstractIntegrationTest
 
     public function testProductStockQuantitySnippetIsWrittenIntoDataPool()
     {
-        $httpUrl = HttpUrl::fromString('http://example.com/api/v1/multiple_product_stock_quantity');
-        $httpHeaders = HttpHeaders::fromArray([]);
+        $httpUrl = HttpUrl::fromString('http://example.com/api/multiple_product_stock_quantity');
+        $httpHeaders = HttpHeaders::fromArray(
+            ['Accept' => 'application/vnd.brera.multiple_product_stock_quantity.v1+json']
+        );
         $httpRequestBodyString = json_encode(['fileName' => 'stock.xml']);
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
@@ -36,8 +38,8 @@ class ProductSockQuantityTest extends AbstractIntegrationTest
         $this->assertEquals('"OK"', $response->getBody());
         $this->assertEquals(1, $domainCommandQueue->count());
 
-        $this->processCommands(3);
-        $this->processDomainEvents(2);
+        $this->factory->createCommandConsumer()->process();
+        $this->factory->createDomainEventConsumer()->process();
 
         $logger = $this->factory->getLogger();
         $this->failIfMessagesWhereLogged($logger);
@@ -56,23 +58,5 @@ class ProductSockQuantityTest extends AbstractIntegrationTest
 
         $snippet2Content = $dataPoolReader->getSnippet($snippet2Key);
         $this->assertEquals(0, $snippet2Content);
-    }
-
-    /**
-     * @param int $numberOfMessages
-     */
-    private function processDomainEvents($numberOfMessages)
-    {
-        $consumer = $this->factory->createDomainEventConsumer();
-        $consumer->process($numberOfMessages);
-    }
-
-    /**
-     * @param int $numberOfMessages
-     */
-    private function processCommands($numberOfMessages)
-    {
-        $consumer = $this->factory->createCommandConsumer();
-        $consumer->process($numberOfMessages);
     }
 }

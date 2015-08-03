@@ -4,11 +4,12 @@ namespace Brera\Product;
 
 use Brera\DataPool\SearchEngine\SearchCriteria;
 use Brera\ProjectionSourceData;
+use Brera\UrlKey;
 
 class ProductListingSource implements ProjectionSourceData
 {
     /**
-     * @var string
+     * @var UrlKey
      */
     private $urlKey;
 
@@ -23,11 +24,11 @@ class ProductListingSource implements ProjectionSourceData
     private $criteria;
 
     /**
-     * @param string $urlKey
+     * @param UrlKey $urlKey
      * @param string[] $contextData
      * @param SearchCriteria $criteria
      */
-    public function __construct($urlKey, array $contextData, SearchCriteria $criteria)
+    public function __construct(UrlKey $urlKey, array $contextData, SearchCriteria $criteria)
     {
         $this->urlKey = $urlKey;
         $this->contextData = $contextData;
@@ -35,7 +36,7 @@ class ProductListingSource implements ProjectionSourceData
     }
 
     /**
-     * @return string
+     * @return UrlKey
      */
     public function getUrlKey()
     {

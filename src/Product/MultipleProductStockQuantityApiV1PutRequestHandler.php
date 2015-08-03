@@ -74,9 +74,6 @@ class MultipleProductStockQuantityApiV1PutRequestHandler extends ApiRequestHandl
         return json_encode('OK');
     }
 
-    /**
-     * @param HttpRequest $request
-     */
     protected function processRequest(HttpRequest $request)
     {
         $importFileContents = $this->getImportFileContents($request);

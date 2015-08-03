@@ -7,6 +7,8 @@ use Brera\InvalidProjectionDataSourceTypeException;
 use Brera\ProjectionSourceData;
 use Brera\SampleContextSource;
 use Brera\Snippet;
+use Brera\SnippetList;
+use Brera\SnippetRendererCollection;
 
 /**
  * @covers \Brera\Product\ProductListingProjector
@@ -14,14 +16,19 @@ use Brera\Snippet;
 class ProductListingProjectorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ProductListingCriteriaSnippetRenderer|\PHPUnit_Framework_MockObject_MockObject
+     * @var SnippetList|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockProductListingPageMetaInfoSnippetRenderer;
+    private $stubSnippetList;
 
     /**
      * @var DataPoolWriter|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockDataPoolWriter;
+
+    /**
+     * @var SnippetRendererCollection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockRendererCollection;
 
     /**
      * @var ProductListingProjector
@@ -30,45 +37,37 @@ class ProductListingProjectorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockProductListingPageMetaInfoSnippetRenderer = $this->getMock(
-            ProductListingCriteriaSnippetRenderer::class,
-            [],
-            [],
-            '',
-            false
-        );
-
+        $this->stubSnippetList = $this->getMock(SnippetList::class);
         $this->mockDataPoolWriter = $this->getMock(DataPoolWriter::class, [], [], '', false);
 
+        $this->mockRendererCollection = $this->getMock(SnippetRendererCollection::class, [], [], '', false);
+        $this->mockRendererCollection->method('render')->willReturn($this->stubSnippetList);
+
         $this->projector = new ProductListingProjector(
-            $this->mockProductListingPageMetaInfoSnippetRenderer,
+            $this->mockRendererCollection,
             $this->mockDataPoolWriter
         );
     }
 
-    public function testProductListingMetaSnippetIsSetOnDataPoolWriter()
-    {
-        $stubProductListingSource = $this->getMock(ProductListingSource::class, [], [], '', false);
-        $stubContext = $this->getMock(SampleContextSource::class, [], [], '', false);
-        $stubSnippet = $this->getMock(Snippet::class, [], [], '', false);
-
-        $this->mockProductListingPageMetaInfoSnippetRenderer->method('render')
-            ->willReturn($stubSnippet);
-
-        $this->mockDataPoolWriter->expects($this->once())
-            ->method('writeSnippet')
-            ->with($stubSnippet);
-
-        $this->projector->project($stubProductListingSource, $stubContext);
-    }
-
     public function testExceptionIsThrownIfTheDataSourceTypeIsNotProduct()
     {
-        $stubContext = $this->getMock(SampleContextSource::class, [], [], '', false);
+        $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
         $invalidDataSourceType = $this->getMock(ProjectionSourceData::class);
 
         $this->setExpectedException(InvalidProjectionDataSourceTypeException::class);
 
-        $this->projector->project($invalidDataSourceType, $stubContext);
+        $this->projector->project($invalidDataSourceType, $stubContextSource);
+    }
+
+    public function testSnippetListIsWrittenIntoDataPoolWriter()
+    {
+        $stubProductListingSource = $this->getMock(ProductListingSource::class, [], [], '', false);
+        $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
+
+        $this->mockDataPoolWriter->expects($this->once())
+            ->method('writeSnippetList')
+            ->with($this->stubSnippetList);
+
+        $this->projector->project($stubProductListingSource, $stubContextSource);
     }
 }

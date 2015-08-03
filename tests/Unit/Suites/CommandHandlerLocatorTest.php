@@ -2,10 +2,9 @@
 
 namespace Brera;
 
-use Brera\Content\ContentBlockId;
 use Brera\Content\ContentBlockSource;
 use Brera\Content\UpdateContentBlockCommand;
-use Brera\Product\ProductId;
+use Brera\Content\UpdateContentBlockCommandHandler;
 use Brera\Product\ProductStockQuantitySource;
 use Brera\Product\UpdateMultipleProductStockQuantityCommand;
 use Brera\Product\UpdateMultipleProductStockQuantityCommandHandler;
@@ -38,6 +37,7 @@ class CommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfNoHandlerIsLocated()
     {
+        /** @var Command|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
         $stubCommand = $this->getMock(Command::class);
         $this->setExpectedException(UnableToFindCommandHandlerException::class);
         $this->locator->getHandlerFor($stubCommand);
@@ -51,13 +51,13 @@ class CommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
             ->method('createUpdateProductStockQuantityCommandHandler')
             ->willReturn($stubHandler);
 
-        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
+        /** @var ProductStockQuantitySource|\PHPUnit_Framework_MockObject_MockObject $stubProductStockQuantitySource */
         $stubProductStockQuantitySource = $this->getMock(ProductStockQuantitySource::class, [], [], '', false);
 
         /**
          * The real object has to be used here as getHandlerFor method will call get_class against it
          */
-        $productImportCommand = new UpdateProductStockQuantityCommand($stubProductId, $stubProductStockQuantitySource);
+        $productImportCommand = new UpdateProductStockQuantityCommand($stubProductStockQuantitySource);
 
         $result = $this->locator->getHandlerFor($productImportCommand);
 
@@ -85,22 +85,22 @@ class CommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
     
     public function testUpdateContentBlockCommandHandlerIsLocatedAndReturned()
     {
-        $stubHandler = $this->getMock(UpdateContentBlockCommand::class, [], [], '', false);
+        $stubHandler = $this->getMock(UpdateContentBlockCommandHandler::class, [], [], '', false);
 
         $this->factory->expects($this->once())
             ->method('createUpdateContentBlockCommandHandler')
             ->willReturn($stubHandler);
 
-        $stubContentBlockId = $this->getMock(ContentBlockId::class, [], [], '', false);
+        /** @var ContentBlockSource|\PHPUnit_Framework_MockObject_MockObject $stubContentBlockSource */
         $stubContentBlockSource = $this->getMock(ContentBlockSource::class, [], [], '', false);
 
         /**
          * The real object has to be used here as getHandlerFor method will call get_class against it
          */
-        $command = new UpdateContentBlockCommand($stubContentBlockId, $stubContentBlockSource);
+        $command = new UpdateContentBlockCommand($stubContentBlockSource);
 
         $result = $this->locator->getHandlerFor($command);
 
-        $this->assertInstanceOf(UpdateContentBlockCommand::class, $result);
+        $this->assertInstanceOf(UpdateContentBlockCommandHandler::class, $result);
     }
 }

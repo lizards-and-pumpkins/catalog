@@ -5,12 +5,13 @@ namespace Brera;
 use Brera\Api\ApiRequestHandlerChain;
 use Brera\Api\ApiRouter;
 use Brera\Content\ContentBlocksApiV1PutRequestHandler;
-use Brera\Http\HttpRequest;
 use Brera\Product\CatalogImportApiV1PutRequestHandler;
+use Brera\Product\DefaultNumberOfProductsPerPageSnippetRenderer;
 use Brera\Product\ProductDetailViewInContextSnippetRenderer;
 use Brera\Product\ProductDetailViewRequestHandlerBuilder;
 use Brera\Product\ProductDetailViewRouter;
 use Brera\Product\ProductInListingInContextSnippetRenderer;
+use Brera\Product\ProductListingMetaInfoSnippetRenderer;
 use Brera\Product\ProductListingRequestHandlerBuilder;
 use Brera\Product\ProductListingRouter;
 use Brera\Product\ProductListingSnippetRenderer;
@@ -63,6 +64,12 @@ class FrontendFactory implements Factory
             $version,
             $this->getMasterFactory()->createMultipleProductStockQuantityApiV1PutRequestHandler()
         );
+
+        $requestHandlerChain->register(
+            'put_page_templates',
+            $version,
+            $this->getMasterFactory()->createPageTemplatesApiV1PutRequestHandler()
+        );
     }
 
     /**
@@ -71,8 +78,10 @@ class FrontendFactory implements Factory
     public function createCatalogImportApiV1PutRequestHandler()
     {
         return CatalogImportApiV1PutRequestHandler::create(
-            $this->getMasterFactory()->getEventQueue(),
-            $this->getCatalogImportDirectoryConfig()
+            $this->getMasterFactory()->getCommandQueue(),
+            $this->getCatalogImportDirectoryConfig(),
+            $this->getMasterFactory()->createProductSourceBuilder(),
+            $this->getMasterFactory()->createProductListingSourceBuilder()
         );
     }
 
@@ -95,6 +104,17 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->getCommandQueue(),
             Directory::fromPath($this->getCatalogImportDirectoryConfig()),
             $this->getMasterFactory()->getProductStockQuantitySourceBuilder()
+        );
+    }
+
+    /**
+     * @return PageTemplatesApiV1PutRequestHandler
+     */
+    public function createPageTemplatesApiV1PutRequestHandler()
+    {
+        return new PageTemplatesApiV1PutRequestHandler(
+            $this->getMasterFactory()->createRootSnippetSourceListBuilder(),
+            $this->getMasterFactory()->getEventQueue()
         );
     }
 
@@ -128,7 +148,7 @@ class FrontendFactory implements Factory
     private function createProductDetailViewRequestHandlerBuilder()
     {
         return new ProductDetailViewRequestHandlerBuilder(
-            $this->getMasterFactory()->createUrlPathKeyGenerator(),
+            $this->getMasterFactory()->createProductDetailPageMetaSnippetKeyGenerator(),
             $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->createPageBuilder()
         );
@@ -140,7 +160,6 @@ class FrontendFactory implements Factory
     private function createProductListingRequestHandlerBuilder()
     {
         return new ProductListingRequestHandlerBuilder(
-            $this->getMasterFactory()->createUrlPathKeyGenerator(),
             $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->createPageBuilder(),
             $this->getMasterFactory()->getSnippetKeyGeneratorLocator()
@@ -176,6 +195,14 @@ class FrontendFactory implements Factory
         $snippetKeyGeneratorLocator->register(
             $this->getMasterFactory()->getContentBlockSnippetKey(),
             $this->getMasterFactory()->createContentBlockSnippetKeyGenerator()
+        );
+        $snippetKeyGeneratorLocator->register(
+            DefaultNumberOfProductsPerPageSnippetRenderer::CODE,
+            $this->getMasterFactory()->createDefaultNumberOfProductsPerPageSnippetKeyGenerator()
+        );
+        $snippetKeyGeneratorLocator->register(
+            ProductListingMetaInfoSnippetRenderer::CODE,
+            $this->getMasterFactory()->createProductListingMetaDataSnippetKeyGenerator()
         );
 
         return $snippetKeyGeneratorLocator;

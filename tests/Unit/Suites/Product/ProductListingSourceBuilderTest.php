@@ -7,10 +7,11 @@ use Brera\DataPool\SearchEngine\SearchCriterion;
 
 /**
  * @covers \Brera\Product\ProductListingSourceBuilder
- * @uses   \Brera\Utils\XPathParser
- * @uses   \Brera\Product\ProductListingSource
  * @uses   \Brera\DataPool\SearchEngine\SearchCriteria
  * @uses   \Brera\DataPool\SearchEngine\SearchCriterion
+ * @uses   \Brera\Product\ProductListingSource
+ * @uses   \Brera\Utils\XPathParser
+ * @uses   \Brera\UrlKey
  */
 class ProductListingSourceBuilderTest extends \PHPUnit_Framework_TestCase
 {

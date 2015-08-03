@@ -4,54 +4,48 @@ namespace Brera;
 
 use Brera\Content\ContentBlockWasUpdatedDomainEvent;
 use Brera\Content\ContentBlockWasUpdatedDomainEventHandler;
-use Brera\Image\ImageImportDomainEvent;
-use Brera\Image\ImageImportDomainEventHandler;
-use Brera\Product\CatalogImportDomainEvent;
-use Brera\Product\CatalogImportDomainEventHandler;
-use Brera\Product\ProductImportDomainEvent;
-use Brera\Product\ProductImportDomainEventHandler;
-use Brera\Product\ProductListingSavedDomainEvent;
-use Brera\Product\ProductListingSavedDomainEventHandler;
-use Brera\Product\ProductStockQuantityUpdatedDomainEvent;
-use Brera\Product\ProductStockQuantityUpdatedDomainEventHandler;
+use Brera\Image\ImageWasUpdatedDomainEvent;
+use Brera\Image\ImageWasUpdatedDomainEventHandler;
+use Brera\Product\ProductWasUpdatedDomainEvent;
+use Brera\Product\ProductWasUpdatedDomainEventHandler;
+use Brera\Product\ProductListingWasUpdatedDomainEvent;
+use Brera\Product\ProductListingWasUpdatedDomainEventHandler;
+use Brera\Product\ProductStockQuantityWasUpdatedDomainEvent;
+use Brera\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
 
 interface DomainEventFactory
 {
     /**
-     * @param ProductImportDomainEvent $event
-     * @return ProductImportDomainEventHandler
+     * @param ProductWasUpdatedDomainEvent $event
+     * @return ProductWasUpdatedDomainEventHandler
      */
-    public function createProductImportDomainEventHandler(ProductImportDomainEvent $event);
+    public function createProductWasUpdatedDomainEventHandler(ProductWasUpdatedDomainEvent $event);
 
     /**
-     * @param CatalogImportDomainEvent $event
-     * @return CatalogImportDomainEventHandler
+     * @param PageTemplateWasUpdatedDomainEvent $event
+     * @return PageTemplateWasUpdatedDomainEventHandler
      */
-    public function createCatalogImportDomainEventHandler(CatalogImportDomainEvent $event);
+    public function createPageTemplateWasUpdatedDomainEventHandler(PageTemplateWasUpdatedDomainEvent $event);
 
     /**
-     * @param RootTemplateChangedDomainEvent $event
-     * @return RootTemplateChangedDomainEventHandler
+     * @param ImageWasUpdatedDomainEvent $event
+     * @return ImageWasUpdatedDomainEventHandler
      */
-    public function createRootTemplateChangedDomainEventHandler(RootTemplateChangedDomainEvent $event);
+    public function createImageWasUpdatedDomainEventHandler(ImageWasUpdatedDomainEvent $event);
 
     /**
-     * @param ImageImportDomainEvent $event
-     * @return ImageImportDomainEventHandler
+     * @param ProductListingWasUpdatedDomainEvent $event
+     * @return ProductListingWasUpdatedDomainEventHandler
      */
-    public function createImageImportDomainEventHandler(ImageImportDomainEvent $event);
+    public function createProductListingWasUpdatedDomainEventHandler(ProductListingWasUpdatedDomainEvent $event);
 
     /**
-     * @param ProductListingSavedDomainEvent $event
-     * @return ProductListingSavedDomainEventHandler
+     * @param ProductStockQuantityWasUpdatedDomainEvent $event
+     * @return ProductStockQuantityWasUpdatedDomainEventHandler
      */
-    public function createProductListingSavedDomainEventHandler(ProductListingSavedDomainEvent $event);
-
-    /**
-     * @param ProductStockQuantityUpdatedDomainEvent $event
-     * @return ProductStockQuantityUpdatedDomainEventHandler
-     */
-    public function createProductStockQuantityUpdatedDomainEventHandler(ProductStockQuantityUpdatedDomainEvent $event);
+    public function createProductStockQuantityWasUpdatedDomainEventHandler(
+        ProductStockQuantityWasUpdatedDomainEvent $event
+    );
 
     /**
      * @param ContentBlockWasUpdatedDomainEvent $event

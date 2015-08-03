@@ -19,12 +19,12 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $this->factory = $this->prepareIntegrationTestMasterFactory();
     }
 
-    public function testContentBlockSnippetIswrittenIntoDataPool()
+    public function testContentBlockSnippetIsWrittenIntoDataPool()
     {
         $contentBlockContent = 'bar';
 
-        $httpUrl = HttpUrl::fromString('http://example.com/api/v1/content_blocks/foo');
-        $httpHeaders = HttpHeaders::fromArray([]);
+        $httpUrl = HttpUrl::fromString('http://example.com/api/content_blocks/foo');
+        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.content_blocks.v1+json']);
         $httpRequestBodyString = json_encode([
             'content' => $contentBlockContent,
             'context' => ['website' => 'ru', 'language' => 'en_US']
@@ -41,8 +41,8 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $this->assertEquals('"OK"', $response->getBody());
         $this->assertEquals(1, $domainCommandQueue->count());
 
-        $this->processCommands(1);
-        $this->processDomainEvents(1);
+        $this->factory->createCommandConsumer()->process();
+        $this->factory->createDomainEventConsumer()->process();
 
         $logger = $this->factory->getLogger();
         $this->failIfMessagesWhereLogged($logger);
@@ -57,22 +57,5 @@ class ContentBlockImportTest extends AbstractIntegrationTest
 
         $snippetContent = $dataPoolReader->getSnippet($snippetKey);
         $this->assertEquals($contentBlockContent, $snippetContent);
-    }
-
-    /**
-     * @param int $numberOfMessages
-     */
-    private function processDomainEvents($numberOfMessages)
-    {
-        $consumer = $this->factory->createDomainEventConsumer();
-        $consumer->process($numberOfMessages);
-    }
-    /**
-     * @param int $numberOfMessages
-     */
-    private function processCommands($numberOfMessages)
-    {
-        $consumer = $this->factory->createCommandConsumer();
-        $consumer->process($numberOfMessages);
     }
 }

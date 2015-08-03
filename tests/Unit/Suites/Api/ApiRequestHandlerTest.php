@@ -46,9 +46,9 @@ class ApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $response = $this->apiRequestHandler->process($this->stubRequest);
         $headers = $this->getPrivateFieldValue($response, 'headers');
         $expectedHeaders = [
-            'Access-Control-Allow-Origin' => '*',
-            'Access-Control-Allow-Methods' => '*',
-            'Content-Type' => 'application/json',
+            'access-control-allow-origin' => '*',
+            'access-control-allow-methods' => '*',
+            'content-type' => 'application/json',
         ];
 
         $this->assertArraySubset($expectedHeaders, $headers->getAll());

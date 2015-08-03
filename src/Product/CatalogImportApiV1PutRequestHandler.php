@@ -4,14 +4,16 @@ namespace Brera\Product;
 
 use Brera\Api\ApiRequestHandler;
 use Brera\Http\HttpRequest;
+use Brera\Image\UpdateImageCommand;
 use Brera\Queue\Queue;
+use Brera\Utils\XPathParser;
 
 class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
 {
     /**
      * @var Queue
      */
-    private $domainEventQueue;
+    private $commandQueue;
 
     /**
      * @var string
@@ -19,28 +21,51 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
     private $importDirectoryPath;
 
     /**
-     * @param Queue $domainEventQueue
-     * @param string $importDirectoryPath
+     * @var ProductSourceBuilder
      */
-    private function __construct(Queue $domainEventQueue, $importDirectoryPath)
-    {
-        $this->domainEventQueue = $domainEventQueue;
+    private $productSourceBuilder;
+
+    /**
+     * @var ProductListingSourceBuilder
+     */
+    private $productListingSourceBuilder;
+
+    /**
+     * @param Queue $commandQueue
+     * @param string $importDirectoryPath
+     * @param ProductSourceBuilder $productSourceBuilder
+     * @param ProductListingSourceBuilder $productListingSourceBuilder
+     */
+    private function __construct(
+        Queue $commandQueue,
+        $importDirectoryPath,
+        ProductSourceBuilder $productSourceBuilder,
+        ProductListingSourceBuilder $productListingSourceBuilder
+    ) {
+        $this->commandQueue = $commandQueue;
         $this->importDirectoryPath = $importDirectoryPath;
+        $this->productSourceBuilder = $productSourceBuilder;
+        $this->productListingSourceBuilder = $productListingSourceBuilder;
     }
 
     /**
-     * @param Queue $domainEventQueue
+     * @param Queue $commandQueue
      * @param string $importDirectoryPath
+     * @param ProductSourceBuilder $productSourceBuilder
+     * @param ProductSourceBuilder $productSourceBuilder
      * @return CatalogImportApiV1PutRequestHandler
-     * @throws CatalogImportDirectoryNotReadableException
      */
-    public static function create(Queue $domainEventQueue, $importDirectoryPath)
-    {
+    public static function create(
+        Queue $commandQueue,
+        $importDirectoryPath,
+        ProductSourceBuilder $productSourceBuilder,
+        ProductListingSourceBuilder $productListingSourceBuilder
+    ) {
         if (!is_readable($importDirectoryPath)) {
             throw new CatalogImportDirectoryNotReadableException(sprintf('%s is not readable.', $importDirectoryPath));
         }
 
-        return new self($domainEventQueue, $importDirectoryPath);
+        return new self($commandQueue, $importDirectoryPath, $productSourceBuilder, $productListingSourceBuilder);
     }
 
     /**
@@ -61,15 +86,28 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
         return json_encode('OK');
     }
 
-    /**
-     * @param HttpRequest $request
-     */
     protected function processRequest(HttpRequest $request)
     {
-        $importFileContents = $this->getImportFileContents($request);
+        $xml = $this->getImportFileContents($request);
 
-        $catalogImportDomainEvent = new CatalogImportDomainEvent($importFileContents);
-        $this->domainEventQueue->add($catalogImportDomainEvent);
+        $productNodesXml = (new XPathParser($xml))->getXmlNodesRawXmlArrayByXPath('//catalog/products/product');
+        foreach ($productNodesXml as $productXml) {
+            $productSource = $this->productSourceBuilder->createProductSourceFromXml($productXml);
+            $this->commandQueue->add(new UpdateProductCommand($productSource));
+        }
+
+        $listingNodesXml = (new XPathParser($xml))->getXmlNodesRawXmlArrayByXPath('//catalog/listings/listing');
+        foreach ($listingNodesXml as $listingXml) {
+            $productListingSource = $this->productListingSourceBuilder->createProductListingSourceFromXml($listingXml);
+            $this->commandQueue->add(new UpdateProductListingCommand($productListingSource));
+        }
+
+        $imageNodes = (new XPathParser($xml))->getXmlNodesArrayByXPath(
+            '//catalog/products/product/attributes/image/file'
+        );
+        foreach ($imageNodes as $imageNode) {
+            $this->commandQueue->add(new UpdateImageCommand($imageNode['value']));
+        }
     }
 
     /**

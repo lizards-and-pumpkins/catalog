@@ -59,7 +59,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         SnippetKeyGeneratorLocator $keyGeneratorLocator
     ) {
         $this->dataPoolReader = $dataPoolReader;
-        $this->metaInfoSnippetKey = ProductListingSnippetRenderer::CODE . '_' . $metaInfoSnippetKey;
+        $this->metaInfoSnippetKey = $metaInfoSnippetKey;
         $this->context = $context;
         $this->pageBuilder = $pageBuilder;
         $this->keyGeneratorLocator = $keyGeneratorLocator;
@@ -88,7 +88,14 @@ class ProductListingRequestHandler implements HttpRequestHandler
 
         $this->addProductsInListingToPageBuilder();
 
-        return $this->pageBuilder->buildPage($this->pageMetaInfo, $this->context, []);
+        return $this->pageBuilder->buildPage(
+            $this->pageMetaInfo,
+            $this->context,
+            [
+                'products_per_page' => $this->getDefaultNumberOrProductsPerPage(),
+                'url_key' => ltrim($request->getUrl()->getPathRelativeToWebFront(), '/')
+            ]
+        );
     }
 
     private function loadPageMetaInfoSnippet()
@@ -166,5 +173,19 @@ class ProductListingRequestHandler implements HttpRequestHandler
             $acc[$snippetCode] = $key;
             return $acc;
         }, []);
+    }
+
+    /**
+     * @return string
+     */
+    private function getDefaultNumberOrProductsPerPage()
+    {
+        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
+            DefaultNumberOfProductsPerPageSnippetRenderer::CODE
+        );
+        $snippetKey = $keyGenerator->getKeyForContext($this->context, []);
+        $defaultNumberOrProductsPerPage = $this->dataPoolReader->getSnippet($snippetKey);
+
+        return $defaultNumberOrProductsPerPage;
     }
 }

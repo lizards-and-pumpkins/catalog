@@ -1,15 +1,14 @@
 <?php
 
-
 namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\SnippetKeyGenerator;
 use Brera\Snippet;
 use Brera\SnippetList;
-use Brera\UrlPathKeyGenerator;
+use Brera\SnippetRenderer;
 
-class ProductDetailViewInContextSnippetRenderer
+class ProductDetailViewInContextSnippetRenderer implements SnippetRenderer
 {
     const CODE = 'product_detail_view';
 
@@ -36,23 +35,23 @@ class ProductDetailViewInContextSnippetRenderer
     /**
      * @var SnippetKeyGenerator
      */
-    private $productSnippetKeyGenerator;
+    private $productDetailViewSnippetKeyGenerator;
     
     /**
-     * @var UrlPathKeyGenerator
+     * @var SnippetKeyGenerator
      */
-    private $urlKeyGenerator;
+    private $productDetailPageMetaSnippetKeyGenerator;
 
     public function __construct(
         SnippetList $snippetList,
         ProductDetailViewBlockRenderer $blockRenderer,
-        ProductSnippetKeyGenerator $snippetKeyGenerator,
-        UrlPathKeyGenerator $urlKeyGenerator
+        SnippetKeyGenerator $productDetailViewSnippetKeyGenerator,
+        SnippetKeyGenerator $productDetailPageMetaSnippetKeyGenerator
     ) {
         $this->snippetList = $snippetList;
         $this->blockRenderer = $blockRenderer;
-        $this->productSnippetKeyGenerator = $snippetKeyGenerator;
-        $this->urlKeyGenerator = $urlKeyGenerator;
+        $this->productDetailViewSnippetKeyGenerator = $productDetailViewSnippetKeyGenerator;
+        $this->productDetailPageMetaSnippetKeyGenerator = $productDetailPageMetaSnippetKeyGenerator;
     }
     
     /**
@@ -74,7 +73,7 @@ class ProductDetailViewInContextSnippetRenderer
     private function addProductDetailViewSnippetsToSnippetList()
     {
         $content = $this->blockRenderer->render($this->product, $this->context);
-        $key = $this->productSnippetKeyGenerator->getKeyForContext(
+        $key = $this->productDetailViewSnippetKeyGenerator->getKeyForContext(
             $this->context,
             ['product_id' => $this->product->getId()]
         );
@@ -90,7 +89,10 @@ class ProductDetailViewInContextSnippetRenderer
      */
     private function getProductDetailPageMetaSnippet()
     {
-        $snippetKey = $this->getPageMetaSnippetKey();
+        $snippetKey = $this->productDetailPageMetaSnippetKeyGenerator->getKeyForContext(
+            $this->context,
+            ['url_key' => $this->product->getAttributeValue('url_key')]
+        );
         $metaData = $this->getPageMetaSnippetContent();
         return Snippet::create($snippetKey, json_encode($metaData));
     }
@@ -114,18 +116,6 @@ class ProductDetailViewInContextSnippetRenderer
      */
     public function getUsedContextParts()
     {
-        return $this->productSnippetKeyGenerator->getContextPartsUsedForKey();
-    }
-
-    /**
-     * @return string
-     */
-    private function getPageMetaSnippetKey()
-    {
-        $snippetKey = $this->urlKeyGenerator->getUrlKeyForPathInContext(
-            $this->product->getAttributeValue('url_key'),
-            $this->context
-        );
-        return self::CODE . '_' . $snippetKey;
+        return $this->productDetailViewSnippetKeyGenerator->getContextPartsUsedForKey();
     }
 }

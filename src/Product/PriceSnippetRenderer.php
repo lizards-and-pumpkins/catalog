@@ -31,11 +31,8 @@ class PriceSnippetRenderer implements SnippetRenderer
      * @param SnippetKeyGenerator $snippetKeyGenerator
      * @param string $priceAttributeCode
      */
-    public function __construct(
-        SnippetList $snippetList,
-        SnippetKeyGenerator $snippetKeyGenerator,
-        $priceAttributeCode
-    ) {
+    public function __construct(SnippetList $snippetList, SnippetKeyGenerator $snippetKeyGenerator, $priceAttributeCode)
+    {
         $this->snippetList = $snippetList;
         $this->snippetKeyGenerator = $snippetKeyGenerator;
         $this->priceAttributeCode = $priceAttributeCode;
