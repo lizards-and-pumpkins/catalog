@@ -2,6 +2,7 @@
 
 namespace Brera\Product;
 
+use Brera\Context\Context;
 use Brera\Context\ContextSource;
 use Brera\Renderer\BlockRenderer;
 use Brera\RootSnippetSourceList;
@@ -45,23 +46,35 @@ class ProductSearchResultsMetaSnippetRenderer implements SnippetRenderer
     public function render(RootSnippetSourceList $rootSnippetSourceList, ContextSource $contextSource)
     {
         $availableContexts = $contextSource->getAllAvailableContexts();
-        $rootSnippetCode = $this->blockRenderer->getRootSnippetCode();
-        $pageSnippetCodes = $this->blockRenderer->getNestedSnippetCodes();
 
         foreach ($availableContexts as $context) {
-            $numItemsPerPageForContext = $rootSnippetSourceList->getNumItemsPrePageForContext($context);
-
-            foreach ($numItemsPerPageForContext as $numItemsPerPage) {
-                $metaSnippetKey = $this->snippetKeyGenerator->getKeyForContext(
-                    $context,
-                    ['items_per_page' => $numItemsPerPage]
-                );
-                $metaSnippetContent = $this->getMetaSnippetContentJson($rootSnippetCode, $pageSnippetCodes);
-                $this->snippetList->add(Snippet::create($metaSnippetKey, $metaSnippetContent));
-            }
+            $this->renderMetaInfoSnippetForContext($rootSnippetSourceList, $context);
         }
 
         return $this->snippetList;
+    }
+
+    /**
+     * @param RootSnippetSourceList $rootSnippetSourceList
+     * @param Context $context
+     */
+    private function renderMetaInfoSnippetForContext(RootSnippetSourceList $rootSnippetSourceList, Context $context)
+    {
+        $this->blockRenderer->render($rootSnippetSourceList, $context);
+
+        $rootSnippetCode = $this->blockRenderer->getRootSnippetCode();
+        $pageSnippetCodes = $this->blockRenderer->getNestedSnippetCodes();
+
+        $numItemsPerPageForContext = $rootSnippetSourceList->getNumItemsPrePageForContext($context);
+
+        foreach ($numItemsPerPageForContext as $numItemsPerPage) {
+            $metaSnippetKey = $this->snippetKeyGenerator->getKeyForContext(
+                $context,
+                ['items_per_page' => $numItemsPerPage]
+            );
+            $metaSnippetContent = $this->getMetaSnippetContentJson($rootSnippetCode, $pageSnippetCodes);
+            $this->snippetList->add(Snippet::create($metaSnippetKey, $metaSnippetContent));
+        }
     }
 
     /**

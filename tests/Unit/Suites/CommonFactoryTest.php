@@ -69,6 +69,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Product\ProductListingProjector
  * @uses   \Brera\Product\ProductListingSavedDomainEvent
  * @uses   \Brera\Product\ProductListingSavedDomainEventHandler
+ * @uses   \Brera\Product\ProductSearchResultsMetaSnippetRenderer
  * @uses   \Brera\Product\CatalogImportDomainEvent
  * @uses   \Brera\Product\CatalogImportDomainEventHandler
  * @uses   \Brera\Product\ProductSearchDocumentBuilder

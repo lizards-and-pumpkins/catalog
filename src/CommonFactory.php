@@ -39,6 +39,7 @@ use Brera\Product\ProductListingSnippetRenderer;
 use Brera\Product\ProductProjector;
 use Brera\Product\ProductListingSourceBuilder;
 use Brera\Product\ProductSearchDocumentBuilder;
+use Brera\Product\ProductSearchResultsMetaSnippetRenderer;
 use Brera\Product\ProductSnippetKeyGenerator;
 use Brera\Product\ProductSourceBuilder;
 use Brera\Product\ProductSourceDetailViewSnippetRenderer;
@@ -221,6 +222,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return [
             $this->getMasterFactory()->createProductListingSnippetRenderer(),
+            $this->getMasterFactory()->createProductSearchResultsMetaSnippetRenderer(),
         ];
     }
 
@@ -864,5 +866,36 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $this->getMasterFactory()->createContentBlockSnippetKeyGenerator(),
             $this->getMasterFactory()->createContextBuilder()
         );
+    }
+
+    /**
+     * @return ProductSearchResultsMetaSnippetRenderer
+     */
+    public function createProductSearchResultsMetaSnippetRenderer()
+    {
+        return new ProductSearchResultsMetaSnippetRenderer(
+            $this->getMasterFactory()->createSnippetList(),
+            $this->getMasterFactory()->createProductSearchResultMetaSnippetKeyGenerator(),
+            $this->getMasterFactory()->createProductListingBlockRenderer()
+        );
+    }
+
+    /**
+     * @return SnippetKeyGenerator
+     */
+    public function createProductSearchResultMetaSnippetKeyGenerator()
+    {
+        return new GenericSnippetKeyGenerator(
+            $this->getMasterFactory()->getProductSearchResultMetaSnippetCode(),
+            ['website', 'language', 'version'] // TODO: Change to factory method once issue-258 is merged into master
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public function getProductSearchResultMetaSnippetCode()
+    {
+        return 'product_search_result';
     }
 }
