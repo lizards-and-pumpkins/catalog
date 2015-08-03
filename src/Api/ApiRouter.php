@@ -35,7 +35,7 @@ class ApiRouter implements HttpRouter
         }
 
         $acceptHeader = $request->getHeader('Accept');
-        if (!preg_match('/^application\/vnd\.brera\.\w+\.v(\d+)\+(json|xml)$/', $acceptHeader, $matchedVersion)) {
+        if (!preg_match('/^application\/vnd\.brera\.\w+\.v(\d+)\+(?:json|xml)$/', $acceptHeader, $matchedVersion)) {
             return null;
         }
 
