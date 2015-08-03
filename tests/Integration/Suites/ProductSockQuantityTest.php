@@ -38,8 +38,8 @@ class ProductSockQuantityTest extends AbstractIntegrationTest
         $this->assertEquals('"OK"', $response->getBody());
         $this->assertEquals(1, $domainCommandQueue->count());
 
-        $this->processCommands(3);
-        $this->processDomainEvents(2);
+        $this->factory->createCommandConsumer()->process();
+        $this->factory->createDomainEventConsumer()->process();
 
         $logger = $this->factory->getLogger();
         $this->failIfMessagesWhereLogged($logger);
@@ -58,23 +58,5 @@ class ProductSockQuantityTest extends AbstractIntegrationTest
 
         $snippet2Content = $dataPoolReader->getSnippet($snippet2Key);
         $this->assertEquals(0, $snippet2Content);
-    }
-
-    /**
-     * @param int $numberOfMessages
-     */
-    private function processDomainEvents($numberOfMessages)
-    {
-        $consumer = $this->factory->createDomainEventConsumer();
-        $consumer->process($numberOfMessages);
-    }
-
-    /**
-     * @param int $numberOfMessages
-     */
-    private function processCommands($numberOfMessages)
-    {
-        $consumer = $this->factory->createCommandConsumer();
-        $consumer->process($numberOfMessages);
     }
 }

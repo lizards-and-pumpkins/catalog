@@ -26,8 +26,7 @@ class UpdateMultipleProductStockQuantityCommandHandler implements CommandHandler
     public function process()
     {
         foreach ($this->command->getProductStockQuantitySourceArray() as $productStockQuantitySource) {
-            $productId = $productStockQuantitySource->getProductId();
-            $this->commandQueue->add(new UpdateProductStockQuantityCommand($productId, $productStockQuantitySource));
+            $this->commandQueue->add(new UpdateProductStockQuantityCommand($productStockQuantitySource));
         }
     }
 }

@@ -5,9 +5,9 @@ namespace Brera\Product;
 use Brera\DomainEvent;
 
 /**
- * @covers \Brera\Product\ProductStockQuantityUpdatedDomainEvent
+ * @covers \Brera\Product\ProductStockQuantityWasUpdatedDomainEvent
  */
-class ProductStockQuantityUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
+class ProductStockQuantityWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ProductStockQuantitySource|\PHPUnit_Framework_MockObject_MockObject
@@ -15,7 +15,7 @@ class ProductStockQuantityUpdatedDomainEventTest extends \PHPUnit_Framework_Test
     private $stubProductStockQuantitySource;
 
     /**
-     * @var ProductStockQuantityUpdatedDomainEvent
+     * @var ProductStockQuantityWasUpdatedDomainEvent
      */
     private $domainEvent;
 
@@ -24,7 +24,7 @@ class ProductStockQuantityUpdatedDomainEventTest extends \PHPUnit_Framework_Test
         $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
         $this->stubProductStockQuantitySource = $this->getMock(ProductStockQuantitySource::class, [], [], '', false);
 
-        $this->domainEvent = new ProductStockQuantityUpdatedDomainEvent(
+        $this->domainEvent = new ProductStockQuantityWasUpdatedDomainEvent(
             $stubProductId,
             $this->stubProductStockQuantitySource
         );

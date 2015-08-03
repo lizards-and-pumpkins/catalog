@@ -41,9 +41,10 @@ class UpdateContentBlockCommandHandlerTest extends \PHPUnit_Framework_TestCase
     public function testContentBlockWasUpdatedDomainEventIsEmitted()
     {
         $stubContentBlockId = $this->getMock(ContentBlockId::class, [], [], '', false);
-        $this->mockCommand->method('getContentBlockId')->willReturn($stubContentBlockId);
 
         $stubContentBlockSource = $this->getMock(ContentBlockSource::class, [], [], '', false);
+        $stubContentBlockSource->method('getContentBlockId')->willReturn($stubContentBlockId);
+
         $this->mockCommand->method('getContentBlockSource')->willReturn($stubContentBlockSource);
 
         $this->mockDomainEventQueue->expects($this->once())

@@ -41,8 +41,8 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $this->assertEquals('"OK"', $response->getBody());
         $this->assertEquals(1, $domainCommandQueue->count());
 
-        $this->processCommands(1);
-        $this->processDomainEvents(1);
+        $this->factory->createCommandConsumer()->process();
+        $this->factory->createDomainEventConsumer()->process();
 
         $logger = $this->factory->getLogger();
         $this->failIfMessagesWhereLogged($logger);
@@ -57,22 +57,5 @@ class ContentBlockImportTest extends AbstractIntegrationTest
 
         $snippetContent = $dataPoolReader->getSnippet($snippetKey);
         $this->assertEquals($contentBlockContent, $snippetContent);
-    }
-
-    /**
-     * @param int $numberOfMessages
-     */
-    private function processDomainEvents($numberOfMessages)
-    {
-        $consumer = $this->factory->createDomainEventConsumer();
-        $consumer->process($numberOfMessages);
-    }
-    /**
-     * @param int $numberOfMessages
-     */
-    private function processCommands($numberOfMessages)
-    {
-        $consumer = $this->factory->createCommandConsumer();
-        $consumer->process($numberOfMessages);
     }
 }

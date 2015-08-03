@@ -7,7 +7,7 @@ use Brera\Queue\Queue;
 
 /**
  * @covers \Brera\Product\UpdateProductStockQuantityCommandHandler
- * @uses   \Brera\Product\ProductStockQuantityUpdatedDomainEvent
+ * @uses   \Brera\Product\ProductStockQuantityWasUpdatedDomainEvent
  */
 class UpdateProductStockQuantityCommandHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -46,13 +46,14 @@ class UpdateProductStockQuantityCommandHandlerTest extends \PHPUnit_Framework_Te
     {
         $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
         $stubProductStockQuantitySource = $this->getMock(ProductStockQuantitySource::class, [], [], '', false);
+        $stubProductStockQuantitySource->method('getProductId')->willReturn($stubProductId);
 
-        $this->mockCommand->method('getProductId')->willReturn($stubProductId);
         $this->mockCommand->method('getProductStockQuantitySource')->willReturn($stubProductStockQuantitySource);
 
         $this->mockDomainEventQueue->expects($this->once())
             ->method('add')
-            ->with($this->isInstanceOf(ProductStockQuantityUpdatedDomainEvent::class));
+            ->with($this->isInstanceOf(ProductStockQuantityWasUpdatedDomainEvent::class));
+
         $this->commandHandler->process();
     }
 }

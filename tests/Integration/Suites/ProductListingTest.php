@@ -8,10 +8,8 @@ use Brera\Http\HttpHeaders;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestBody;
 use Brera\Http\HttpUrl;
-use Brera\Product\CatalogImportDomainEvent;
 use Brera\Product\ProductListingMetaInfoSnippetContent;
 use Brera\Product\ProductListingRequestHandler;
-use Brera\Product\ProductListingSavedDomainEvent;
 use Brera\Product\ProductListingSnippetRenderer;
 use Brera\Utils\XPathParser;
 
@@ -31,9 +29,11 @@ class ProductListingTest extends AbstractIntegrationTest
     
     public function testProductListingMetaSnippetIsWrittenIntoDataPool()
     {
-        $this->addProductListingCriteriaDomainDomainEventFixture();
-        $this->processDomainEvents();
-        
+        $this->importCatalog();
+
+        $this->factory->createCommandConsumer()->process();
+        $this->factory->createDomainEventConsumer()->process();
+
         $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
         $urlKeyNode = (new XPathParser($xml))->getXmlNodesArrayByXPath('//catalog/listings/listing[1]/@url_key');
         $urlKey = $urlKeyNode[0]['value'];
@@ -57,11 +57,16 @@ class ProductListingTest extends AbstractIntegrationTest
 
     public function testProductListingPageHtmlIsReturned()
     {
-        $this->addRootTemplateChangedDomainEventToSetupProductListingFixture();
-        $this->addProductImportDomainEventToSetUpProductFixture();
-        $this->addProductListingCriteriaDomainDomainEventFixture();
+        $this->addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture();
+        $this->importCatalog();
 
-        $this->processDomainEvents();
+        $this->factory->createCommandConsumer()->process();
+        $this->factory->createDomainEventConsumer()->process();
+        
+        $this->factory->getSnippetKeyGeneratorLocator()->register(
+            ProductListingSnippetRenderer::CODE,
+            $this->factory->createProductListingSnippetKeyGenerator()
+        );
 
         $this->registerProductListingSnippetKeyGenerator();
 
@@ -86,15 +91,15 @@ class ProductListingTest extends AbstractIntegrationTest
 
     public function testContentBlockIsPresentAtProductListingPage()
     {
+        $this->addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture();
+        $this->importCatalog();
+
         $contentBlockContent = '<div>Content Block</div>';
 
         $this->addContentBlockToDataPool($contentBlockContent);
-        $this->addRootTemplateChangedDomainEventToSetupProductListingFixture();
-        $this->addProductImportDomainEventToSetUpProductFixture();
-        $this->addProductListingCriteriaDomainDomainEventFixture();
         $this->registerContentBlockInProductListingSnippetKeyGenerator();
 
-        $this->processDomainEvents();
+        $this->factory->createDomainEventConsumer()->process();
 
         $httpRequest = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
@@ -110,27 +115,28 @@ class ProductListingTest extends AbstractIntegrationTest
         $this->assertContains($contentBlockContent, $body);
     }
 
-    private function addRootTemplateChangedDomainEventToSetupProductListingFixture()
+    private function addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture()
     {
-        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.xml');
-        $queue = $this->factory->getEventQueue();
-        $queue->add(new RootTemplateChangedDomainEvent($xml));
+        $httpUrl = HttpUrl::fromString('http://example.com/api/v1/page_templates/product_listing');
+        $httpHeaders = HttpHeaders::fromArray([]);
+        $httpRequestBodyString = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.xml');
+        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
+        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
+
+        $website = new SampleWebFront($request, $this->factory);
+        $website->runWithoutSendingResponse();
     }
 
-    private function addProductImportDomainEventToSetUpProductFixture()
+    private function importCatalog()
     {
-        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
-        $queue = $this->factory->getEventQueue();
-        $queue->add(new CatalogImportDomainEvent($xml));
-    }
+        $httpUrl = HttpUrl::fromString('http://example.com/api/v1/catalog_import');
+        $httpHeaders = HttpHeaders::fromArray([]);
+        $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
+        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
+        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
-    private function addProductListingCriteriaDomainDomainEventFixture()
-    {
-        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
-        $listingNodesRawXml = (new XPathParser($xml))->getXmlNodesRawXmlArrayByXPath('//catalog/listings/listing[1]');
-
-        $queue = $this->factory->getEventQueue();
-        $queue->add(new ProductListingSavedDomainEvent($listingNodesRawXml[0]));
+        $website = new SampleWebFront($request, $this->factory);
+        $website->runWithoutSendingResponse();
     }
 
     /**
@@ -179,8 +185,8 @@ class ProductListingTest extends AbstractIntegrationTest
         $website = new SampleWebFront($request, $this->factory);
         $website->runWithoutSendingResponse();
 
-        $this->processCommandsInQueue();
-        $this->processDomainEvents();
+        $this->factory->createCommandConsumer()->process();
+        $this->factory->createDomainEventConsumer()->process();
     }
 
     /**
@@ -209,24 +215,6 @@ class ProductListingTest extends AbstractIntegrationTest
         );
 
         return $metaSnippetContent->getInfo();
-    }
-
-    private function processCommandsInQueue()
-    {
-        $queue = $this->factory->getCommandQueue();
-        $consumer = $this->factory->createCommandConsumer();
-        while ($queue->count() > 0) {
-            $consumer->process(1);
-        }
-    }
-
-    private function processDomainEvents()
-    {
-        $queue = $this->factory->getEventQueue();
-        $consumer = $this->factory->createDomainEventConsumer();
-        while ($queue->count() > 0) {
-            $consumer->process(1);
-        }
     }
 
     private function registerProductListingSnippetKeyGenerator()

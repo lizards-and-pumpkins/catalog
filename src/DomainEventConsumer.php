@@ -6,6 +6,8 @@ use Brera\Queue\Queue;
 
 class DomainEventConsumer
 {
+    private $maxNumberOfMessagesToProcess = 200;
+
     /**
      * @var Queue
      */
@@ -28,13 +30,11 @@ class DomainEventConsumer
         $this->logger = $logger;
     }
 
-    /**
-     * @param int $numberOfMessages
-     * @return null
-     */
-    public function process($numberOfMessages)
+    public function process()
     {
-        for ($i = 0; $i < $numberOfMessages; $i ++) {
+        $numberOfMessagesBeforeReturn = $this->maxNumberOfMessagesToProcess;
+
+        while ($this->queue->count() > 0 && $numberOfMessagesBeforeReturn-- > 0) {
             try {
                 $domainEvent = $this->queue->next();
                 $this->processDomainEvent($domainEvent);
