@@ -91,7 +91,10 @@ class ProductListingRequestHandler implements HttpRequestHandler
         return $this->pageBuilder->buildPage(
             $this->pageMetaInfo,
             $this->context,
-            ['products_per_page' => $this->getDefaultNumberOrProductsPerPage()]
+            [
+                'products_per_page' => $this->getDefaultNumberOrProductsPerPage(),
+                'url_key' => ltrim($request->getUrl()->getPathRelativeToWebFront(), '/')
+            ]
         );
     }
 

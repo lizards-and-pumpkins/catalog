@@ -19,7 +19,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $this->factory = $this->prepareIntegrationTestMasterFactory();
     }
 
-    public function testContentBlockSnippetIswrittenIntoDataPool()
+    public function testContentBlockSnippetIsWrittenIntoDataPool()
     {
         $contentBlockContent = 'bar';
 
