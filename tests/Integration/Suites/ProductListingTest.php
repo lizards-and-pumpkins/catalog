@@ -68,6 +68,8 @@ class ProductListingTest extends AbstractIntegrationTest
             $this->factory->createProductListingSnippetKeyGenerator()
         );
 
+        $this->registerProductListingSnippetKeyGenerator();
+
         $httpRequest = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
             HttpUrl::fromString('http://www.example.com'),
@@ -86,7 +88,33 @@ class ProductListingTest extends AbstractIntegrationTest
         $this->assertContains($expectedProductName, $body);
         $this->assertNotContains($unExpectedProductName, $body);
     }
-    
+
+    public function testContentBlockIsPresentAtProductListingPage()
+    {
+        $contentBlockContent = '<div>Content Block</div>';
+
+        $this->addContentBlockToDataPool($contentBlockContent);
+        $this->addRootTemplateChangedDomainEventToSetupProductListingFixture();
+        $this->addProductImportDomainEventToSetUpProductFixture();
+        $this->addProductListingCriteriaDomainDomainEventFixture();
+        $this->registerContentBlockInProductListingSnippetKeyGenerator();
+
+        $this->processDomainEvents();
+
+        $httpRequest = HttpRequest::fromParameters(
+            HttpRequest::METHOD_GET,
+            HttpUrl::fromString('http://www.example.com/foo'),
+            HttpHeaders::fromArray([]),
+            HttpRequestBody::fromString('')
+        );
+
+        $productListingRequestHandler = $this->getProductListingRequestHandler();
+        $page = $productListingRequestHandler->process($httpRequest);
+        $body = $page->getBody();
+
+        $this->assertContains($contentBlockContent, $body);
+    }
+
     private function addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture()
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/v1/page_templates/product_listing');
@@ -141,6 +169,27 @@ class ProductListingTest extends AbstractIntegrationTest
     }
 
     /**
+     * @param string $contentBlockContent
+     */
+    private function addContentBlockToDataPool($contentBlockContent)
+    {
+        $httpUrl = HttpUrl::fromString('http://example.com/api/v1/content_blocks/in_product_listing_foo');
+        $httpHeaders = HttpHeaders::fromArray([]);
+        $httpRequestBodyString = json_encode([
+            'content' => $contentBlockContent,
+            'context' => ['website' => 'ru', 'language' => 'en_US']
+        ]);
+        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
+        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
+
+        $website = new SampleWebFront($request, $this->factory);
+        $website->runWithoutSendingResponse();
+
+        $this->processCommandsInQueue();
+        $this->processDomainEvents();
+    }
+
+    /**
      * @return mixed[]
      */
     private function getStubMetaInfo()
@@ -151,7 +200,13 @@ class ProductListingTest extends AbstractIntegrationTest
         $searchCriteria->add($searchCriterion1);
         $searchCriteria->add($searchCriterion2);
 
-        $pageSnippetCodes = [];
+        $pageSnippetCodes = [
+            'global_notices',
+            'breadcrumbsContainer',
+            'global_messages',
+            'content_block_in_product_listing',
+            'before_body_end'
+        ];
 
         $metaSnippetContent = ProductListingMetaInfoSnippetContent::create(
             $searchCriteria,
@@ -160,5 +215,21 @@ class ProductListingTest extends AbstractIntegrationTest
         );
 
         return $metaSnippetContent->getInfo();
+    }
+
+    private function registerProductListingSnippetKeyGenerator()
+    {
+        $this->factory->getSnippetKeyGeneratorLocator()->register(
+            ProductListingSnippetRenderer::CODE,
+            $this->factory->createProductListingSnippetKeyGenerator()
+        );
+    }
+
+    private function registerContentBlockInProductListingSnippetKeyGenerator()
+    {
+        $this->factory->getSnippetKeyGeneratorLocator()->register(
+            'content_block_in_product_listing',
+            $this->factory->createContentBlockInProductListingSnippetKeyGenerator()
+        );
     }
 }
