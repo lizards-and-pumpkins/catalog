@@ -91,15 +91,15 @@ class ProductListingTest extends AbstractIntegrationTest
 
     public function testContentBlockIsPresentAtProductListingPage()
     {
+        $this->addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture();
+        $this->importCatalog();
+
         $contentBlockContent = '<div>Content Block</div>';
 
         $this->addContentBlockToDataPool($contentBlockContent);
-        $this->addRootTemplateChangedDomainEventToSetupProductListingFixture();
-        $this->addProductImportDomainEventToSetUpProductFixture();
-        $this->addProductListingCriteriaDomainDomainEventFixture();
         $this->registerContentBlockInProductListingSnippetKeyGenerator();
 
-        $this->processDomainEvents();
+        $this->factory->createDomainEventConsumer()->process();
 
         $httpRequest = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
@@ -185,8 +185,8 @@ class ProductListingTest extends AbstractIntegrationTest
         $website = new SampleWebFront($request, $this->factory);
         $website->runWithoutSendingResponse();
 
-        $this->processCommandsInQueue();
-        $this->processDomainEvents();
+        $this->factory->createCommandConsumer()->process();
+        $this->factory->createDomainEventConsumer()->process();
     }
 
     /**
