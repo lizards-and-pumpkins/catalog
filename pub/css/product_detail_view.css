@@ -62,12 +62,10 @@ div.product-shop div.price-box p.regular-price { font-size: 24px; font-weight: n
 /* Social buttons */
 .socialSharing { padding-top: 15px; clear: both }
 .socialSharing .item { float:left }
-.socialSharing div.item:first-child { margin-left: 0 }
-.socialSharing div.item.twitterLike { margin-right: -35px }
-.socialSharing.en_US div.item.twitterLike, .socialSharing.fr_FR div.item.twitterLike { margin-right: -25px }
-.socialSharing div.item.fb-like { margin-left: -25px }
-.socialSharing div#___plusone_0 { float:left !important }
 .socialSharing div.gplus-container { float:left; width: 200px }
+.socialSharing .item.twitterLike { margin-right: 5px }
+.socialSharing .item.fb-like { margin-left: -27px }
+.socialSharing #___plusone_0 { float:left !important }
 .socialSharing .print { float: right; font-size: 11px }
 
 #recently-viewed-products { position: relative; display: none }

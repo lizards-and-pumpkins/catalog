@@ -6,8 +6,9 @@ use Brera\Context\Context;
 use Brera\SnippetKeyGenerator;
 use Brera\Snippet;
 use Brera\SnippetList;
+use Brera\SnippetRenderer;
 
-class ProductInListingInContextSnippetRenderer
+class ProductInListingInContextSnippetRenderer implements SnippetRenderer
 {
     const CODE = 'product_in_listing';
     
@@ -68,13 +69,5 @@ class ProductInListingInContextSnippetRenderer
         $key = $this->snippetKeyGenerator->getKeyForContext($this->context, ['product_id' => $this->product->getId()]);
         $contentSnippet = Snippet::create($key, $content);
         $this->snippetList->add($contentSnippet);
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getUsedContextParts()
-    {
-        return $this->snippetKeyGenerator->getContextPartsUsedForKey();
     }
 }

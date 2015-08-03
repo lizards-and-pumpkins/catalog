@@ -5,10 +5,10 @@ namespace Brera\Product;
 use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\KeyNotFoundException;
+use Brera\DefaultHttpResponse;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
 use Brera\Http\UnableToHandleRequestException;
-use Brera\Page;
 use Brera\PageBuilder;
 
 /**
@@ -30,12 +30,7 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    private $testUrlPathKey = 'stub-meta-info-key';
-
-    /**
-     * @var string
-     */
-    private $testMetaInfoKey;
+    private $dummyMetaInfoKey = 'stub-meta-info-key';
 
     /**
      * @var Context|\PHPUnit_Framework_MockObject_MockObject
@@ -45,7 +40,7 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    private $testMetaInfoSnippetJson;
+    private $dummyMetaInfoSnippetJson;
 
     /**
      * @var PageBuilder|\PHPUnit_Framework_MockObject_MockObject
@@ -64,8 +59,7 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->testMetaInfoKey = 'product_detail_view_' . $this->testUrlPathKey;
-        $this->testMetaInfoSnippetJson = json_encode(ProductDetailPageMetaInfoSnippetContent::create(
+        $this->dummyMetaInfoSnippetJson = json_encode(ProductDetailPageMetaInfoSnippetContent::create(
             $this->testProductId,
             'root-snippet-code',
             ['child-snippet1']
@@ -74,7 +68,7 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->stubContext = $this->getMock(Context::class);
         $this->stubPageBuilder = $this->getMock(PageBuilder::class, [], [], '', false);
         $this->requestHandler = new ProductDetailViewRequestHandler(
-            $this->testUrlPathKey,
+            $this->dummyMetaInfoKey,
             $this->stubContext,
             $this->mockDataPoolReader,
             $this->stubPageBuilder
@@ -98,7 +92,7 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
     public function testTrueIsReturnedIfPageMetaInfoContentSnippetCanBeLoaded()
     {
         $this->mockDataPoolReader->method('getSnippet')->willReturnMap([
-            [$this->testMetaInfoKey, $this->testMetaInfoSnippetJson]
+            [$this->dummyMetaInfoKey, $this->dummyMetaInfoSnippetJson]
         ]);
         $this->assertTrue($this->requestHandler->canProcess($this->stubRequest));
     }
@@ -112,7 +106,7 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
     public function testPageMetaInfoSnippetIsCreated()
     {
         $this->mockDataPoolReader->method('getSnippet')->willReturnMap([
-            [$this->testMetaInfoKey, $this->testMetaInfoSnippetJson]
+            [$this->dummyMetaInfoKey, $this->dummyMetaInfoSnippetJson]
         ]);
 
         $this->requestHandler->process($this->stubRequest);
@@ -127,14 +121,14 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
     public function testPageIsReturned()
     {
         $this->mockDataPoolReader->method('getSnippet')->willReturnMap([
-            [$this->testMetaInfoKey, $this->testMetaInfoSnippetJson]
+            [$this->dummyMetaInfoKey, $this->dummyMetaInfoSnippetJson]
         ]);
         $this->stubPageBuilder->method('buildPage')->with(
             $this->anything(),
             $this->anything(),
             ['product_id' => $this->testProductId]
-        )->willReturn($this->getMock(Page::class, [], [], '', false));
+        )->willReturn($this->getMock(DefaultHttpResponse::class, [], [], '', false));
         
-        $this->assertInstanceOf(Page::class, $this->requestHandler->process($this->stubRequest));
+        $this->assertInstanceOf(DefaultHttpResponse::class, $this->requestHandler->process($this->stubRequest));
     }
 }

@@ -11,7 +11,7 @@ interface SnippetKeyGenerator
      * @param mixed[] $data
      * @return string
      */
-    public function getKeyForContext(Context $context, array $data = []);
+    public function getKeyForContext(Context $context, array $data);
 
     /**
      * @return string[]

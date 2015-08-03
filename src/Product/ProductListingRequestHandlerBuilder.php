@@ -7,15 +7,9 @@ use Brera\Http\HttpUrl;
 use Brera\DataPool\DataPoolReader;
 use Brera\PageBuilder;
 use Brera\SnippetKeyGeneratorLocator;
-use Brera\UrlPathKeyGenerator;
 
 class ProductListingRequestHandlerBuilder
 {
-    /**
-     * @var UrlPathKeyGenerator
-     */
-    private $urlPathKeyGenerator;
-
     /**
      * @var DataPoolReader
      */
@@ -32,12 +26,10 @@ class ProductListingRequestHandlerBuilder
     private $keyGeneratorLocator;
 
     public function __construct(
-        UrlPathKeyGenerator $urlPathKeyGenerator,
         DataPoolReader $dataPoolReader,
         PageBuilder $pageBuilder,
         SnippetKeyGeneratorLocator $keyGeneratorLocator
     ) {
-        $this->urlPathKeyGenerator = $urlPathKeyGenerator;
         $this->dataPoolReader = $dataPoolReader;
         $this->pageBuilder = $pageBuilder;
         $this->keyGeneratorLocator = $keyGeneratorLocator;
@@ -50,8 +42,14 @@ class ProductListingRequestHandlerBuilder
      */
     public function create(HttpUrl $url, Context $context)
     {
+        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
+            ProductListingMetaInfoSnippetRenderer::CODE
+        );
+        $urlKey = $url->getPathRelativeToWebFront();
+        $metaInfoSnippetKey = $keyGenerator->getKeyForContext($context, ['url_key' => $urlKey]);
+
         return new ProductListingRequestHandler(
-            $this->urlPathKeyGenerator->getUrlKeyForUrlInContext($url, $context),
+            $metaInfoSnippetKey,
             $context,
             $this->dataPoolReader,
             $this->pageBuilder,
