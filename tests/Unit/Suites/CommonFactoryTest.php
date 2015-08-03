@@ -402,4 +402,10 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(ContentBlockWasUpdatedDomainEventHandler::class, $result);
     }
+
+    public function testContentBlockInProductListingSnippetKeyGeneratorIsReturned()
+    {
+        $result = $this->commonFactory->createContentBlockInProductListingSnippetKeyGenerator();
+        $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
+    }
 }
