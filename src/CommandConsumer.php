@@ -42,12 +42,6 @@ class CommandConsumer
                 $this->logger->log(new FailedToReadFromCommandQueueMessage($e));
             }
         }
-
-        if ($numberOfMessagesBeforeReturn < 1) {
-            $this->logger->log(
-                new QueueProcessingLimitIsReachedMessage(__CLASS__, $this->maxNumberOfMessagesToProcess)
-            );
-        }
     }
 
     private function processCommand(Command $command)

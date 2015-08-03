@@ -3,13 +3,11 @@
 namespace Brera;
 
 use Brera\Queue\Queue;
-use Brera\Queue\QueueProcessingLimitIsReachedMessage;
 
 /**
  * @covers \Brera\DomainEventConsumer
  * @uses   \Brera\DomainEventHandlerFailedMessage
  * @uses   \Brera\FailedToReadFromDomainEventQueueMessage
- * @uses   \Brera\Queue\QueueProcessingLimitIsReachedMessage
  */
 class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
 {
@@ -90,16 +88,14 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
         $this->domainEventConsumer->process();
     }
 
-    public function testMessageIsLoggedIfProcessingLimitIsReached()
+    public function testConsumerStopsIfProcessingLimitIsReached()
     {
         $stubDomainEvent = $this->getMock(DomainEvent::class);
         $this->stubQueue->method('next')->willReturn($stubDomainEvent);
         $this->stubQueue->method('count')->willReturn(1);
 
-        $this->mockLogger->expects($this->once())->method('log')
-            ->with($this->isInstanceOf(QueueProcessingLimitIsReachedMessage::class));
-
         $stubEventHandler = $this->getMock(DomainEventHandler::class);
+        $stubEventHandler->expects($this->exactly(200))->method('process');
         $this->mockLocator->method('getHandlerFor')->willReturn($stubEventHandler);
 
         $this->domainEventConsumer->process();

@@ -3,7 +3,6 @@
 namespace Brera;
 
 use Brera\Queue\Queue;
-use Brera\Queue\QueueProcessingLimitIsReachedMessage;
 
 class DomainEventConsumer
 {
@@ -42,12 +41,6 @@ class DomainEventConsumer
             } catch (\Exception $e) {
                 $this->logger->log(new FailedToReadFromDomainEventQueueMessage($e));
             }
-        }
-
-        if ($numberOfMessagesBeforeReturn < 1) {
-            $this->logger->log(
-                new QueueProcessingLimitIsReachedMessage(__CLASS__, $this->maxNumberOfMessagesToProcess)
-            );
         }
     }
 

@@ -3,13 +3,11 @@
 namespace Brera;
 
 use Brera\Queue\Queue;
-use Brera\Queue\QueueProcessingLimitIsReachedMessage;
 
 /**
  * @covers \Brera\CommandConsumer
  * @uses   \Brera\CommandHandlerFailedMessage
  * @uses   \Brera\FailedToReadFromCommandQueueMessage
- * @uses   \Brera\Queue\QueueProcessingLimitIsReachedMessage
  */
 class CommandConsumerTest extends \PHPUnit_Framework_TestCase
 {
@@ -89,16 +87,14 @@ class CommandConsumerTest extends \PHPUnit_Framework_TestCase
         $this->commandConsumer->process();
     }
 
-    public function testMessageIsLoggedIfProcessingLimitIsReached()
+    public function testConsumerStopsIfProcessingLimitIsReached()
     {
         $stubCommand = $this->getMock(Command::class);
         $this->stubQueue->method('next')->willReturn($stubCommand);
         $this->stubQueue->method('count')->willReturn(1);
 
-        $this->mockLogger->expects($this->once())->method('log')
-            ->with($this->isInstanceOf(QueueProcessingLimitIsReachedMessage::class));
-
         $stubCommandHandler = $this->getMock(CommandHandler::class);
+        $stubCommandHandler->expects($this->exactly(200))->method('process');
         $this->mockLocator->method('getHandlerFor')->willReturn($stubCommandHandler);
 
         $this->commandConsumer->process();
