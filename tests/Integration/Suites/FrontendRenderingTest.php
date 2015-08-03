@@ -29,7 +29,7 @@ class FrontendRenderingTest extends AbstractIntegrationTest
     public function testPageIsRenderedFromAnUrlWithoutVariablesInSnippets()
     {
         $url = HttpUrl::fromString('http://example.com/product1');
-        $urlKey = ltrim($url->getPathRelativeToWebFront(), '/');
+        $urlKey = $url->getPathRelativeToWebFront();
         $context = new VersionedContext(DataVersion::fromVersionString('1'));
         $snippetKeyGeneratorLocator = $this->factory->getSnippetKeyGeneratorLocator();
         $productDetailPageMetaSnippetKeyGenerator = $this->factory->createProductDetailPageMetaSnippetKeyGenerator();

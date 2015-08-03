@@ -45,7 +45,7 @@ class ProductListingRequestHandlerBuilder
         $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
             ProductListingMetaInfoSnippetRenderer::CODE
         );
-        $urlKey = ltrim($url->getPathRelativeToWebFront(), '/');
+        $urlKey = $url->getPathRelativeToWebFront();
         $metaInfoSnippetKey = $keyGenerator->getKeyForContext($context, ['url_key' => $urlKey]);
 
         return new ProductListingRequestHandler(

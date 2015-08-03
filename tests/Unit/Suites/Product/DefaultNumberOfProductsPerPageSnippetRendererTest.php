@@ -54,7 +54,8 @@ class DefaultNumberOfProductsPerPageSnippetRendererTest extends \PHPUnit_Framewo
 
         /** @var RootSnippetSourceList|\PHPUnit_Framework_MockObject_MockObject $stubRootSnippetSourceList */
         $stubRootSnippetSourceList = $this->getMock(RootSnippetSourceList::class, [], [], '', false);
-        $stubRootSnippetSourceList->method('getNumItemsPerPageForContext')->willReturn([$dummyNumberOfProductsPerPage]);
+        $stubRootSnippetSourceList->method('getListOfAvailableNumberOfItemsPerPageForContext')
+            ->willReturn([$dummyNumberOfProductsPerPage]);
 
         $stubContext = $this->getMock(Context::class);
         /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */

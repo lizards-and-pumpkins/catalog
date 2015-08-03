@@ -45,6 +45,6 @@ class UrlKey
      */
     private static function normalizeUrlKey($urlKey)
     {
-        return preg_replace('#[^a-z0-9:_-]#i', '_', $urlKey);
+        return preg_replace('/[^a-z0-9$\-_.+!*\'(),]/i', '_', $urlKey);
     }
 }

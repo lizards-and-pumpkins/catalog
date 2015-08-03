@@ -148,7 +148,7 @@ class ProductListingTest extends AbstractIntegrationTest
         );
 
         $url = HttpUrl::fromString($this->testUrl);
-        $urlKey = ltrim($url->getPathRelativeToWebFront(), '/');
+        $urlKey = $url->getPathRelativeToWebFront();
 
         $productListingMetaInfoSnippetKeyGenerator = $this->factory->createProductListingMetaDataSnippetKeyGenerator();
         $snippetKey = $productListingMetaInfoSnippetKeyGenerator->getKeyForContext($context, ['url_key' => $urlKey]);
@@ -193,7 +193,8 @@ class ProductListingTest extends AbstractIntegrationTest
         $searchCriteria = SearchCriteria::createAnd();
         $searchCriteria->add($searchCriterion1);
         $searchCriteria->add($searchCriterion2);
-        $codesOfOtherSnippets = [
+
+        $pageSnippetCodes = [
             'global_notices',
             'breadcrumbsContainer',
             'global_messages',
@@ -204,7 +205,7 @@ class ProductListingTest extends AbstractIntegrationTest
         $metaSnippetContent = ProductListingMetaInfoSnippetContent::create(
             $searchCriteria,
             ProductListingSnippetRenderer::CODE,
-            $codesOfOtherSnippets
+            $pageSnippetCodes
         );
 
         return $metaSnippetContent->getInfo();

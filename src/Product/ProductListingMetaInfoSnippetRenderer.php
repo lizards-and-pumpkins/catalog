@@ -84,10 +84,12 @@ class ProductListingMetaInfoSnippetRenderer implements SnippetRenderer
      */
     private function getProductListingPageMetaDataSnippetContent(ProductListingSource $productListingSource)
     {
+        $pageSnippetCodes = $this->blockRenderer->getNestedSnippetCodes();
+
         $metaSnippetContent = ProductListingMetaInfoSnippetContent::create(
             $productListingSource->getCriteria(),
             ProductListingSnippetRenderer::CODE,
-            $this->blockRenderer->getNestedSnippetCodes()
+            $pageSnippetCodes
         );
 
         return json_encode($metaSnippetContent->getInfo());

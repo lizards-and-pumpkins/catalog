@@ -242,10 +242,12 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductListingSnippetKeyGenerator()
     {
+        $usedDataParts = [];
+
         return new GenericSnippetKeyGenerator(
             ProductListingSnippetRenderer::CODE,
             $this->getMasterFactory()->getRequiredContexts(),
-            []
+            $usedDataParts
         );
     }
 
@@ -273,10 +275,12 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
 
     public function createDefaultNumberOfProductsPerPageSnippetKeyGenerator()
     {
+        $usedDataParts = [];
+
         return new GenericSnippetKeyGenerator(
             DefaultNumberOfProductsPerPageSnippetRenderer::CODE,
             $this->getMasterFactory()->getRequiredContexts(),
-            []
+            $usedDataParts
         );
     }
 
@@ -334,14 +338,16 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return GenericSnippetKeyGenerator
+     * @return SnippetKeyGenerator
      */
     public function createProductListingMetaDataSnippetKeyGenerator()
     {
+        $usedDataParts = ['url_key'];
+
         return new GenericSnippetKeyGenerator(
             ProductListingMetaInfoSnippetRenderer::CODE,
             $this->getMasterFactory()->getRequiredContexts(),
-            ['url_key']
+            $usedDataParts
         );
     }
 
@@ -385,10 +391,12 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductDetailViewSnippetKeyGenerator()
     {
+        $usedDataParts = ['product_id'];
+
         return new GenericSnippetKeyGenerator(
             'product_detail_view',
             $this->getMasterFactory()->getRequiredContexts(),
-            ['product_id']
+            $usedDataParts
         );
     }
 
@@ -397,10 +405,12 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductDetailPageMetaSnippetKeyGenerator()
     {
+        $usedDataParts = ['url_key'];
+
         return new GenericSnippetKeyGenerator(
             ProductDetailViewInContextSnippetRenderer::CODE,
             $this->getMasterFactory()->getRequiredContexts(),
-            ['url_key']
+            $usedDataParts
         );
     }
 
@@ -471,10 +481,12 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductInListingSnippetKeyGenerator()
     {
+        $usedDataParts = ['product_id'];
+
         return new GenericSnippetKeyGenerator(
             ProductInListingInContextSnippetRenderer::CODE,
             $this->getMasterFactory()->getRequiredContexts(),
-            ['product_id']
+            $usedDataParts
         );
     }
 
@@ -483,10 +495,12 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createPriceSnippetKeyGenerator()
     {
+        $usedDataParts = ['product_id'];
+
         return new GenericSnippetKeyGenerator(
             $this->getMasterFactory()->getRegularPriceSnippetKey(),
             $this->getMasterFactory()->getRequiredContexts(),
-            ['product_id']
+            $usedDataParts
         );
     }
 
@@ -495,10 +509,12 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductBackOrderAvailabilitySnippetKeyGenerator()
     {
+        $usedDataParts = ['product_id'];
+
         return new GenericSnippetKeyGenerator(
             $this->getMasterFactory()->getProductBackOrderAvailabilitySnippetKey(),
             $this->getMasterFactory()->getRequiredContexts(),
-            ['product_id']
+            $usedDataParts
         );
     }
 
@@ -507,10 +523,12 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createContentBlockSnippetKeyGenerator()
     {
+        $usedDataParts = ['content_block_id'];
+
         return new GenericSnippetKeyGenerator(
             $this->getMasterFactory()->getContentBlockSnippetKey(),
             $this->getMasterFactory()->getRequiredContexts(),
-            ['content_block_id']
+            $usedDataParts
         );
     }
 
@@ -827,10 +845,12 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductStockQuantityRendererSnippetKeyGenerator()
     {
+        $usedDataParts = ['product_id'];
+
         return new GenericSnippetKeyGenerator(
             ProductStockQuantitySnippetRenderer::CODE,
             $this->getMasterFactory()->getRequiredContexts(),
-            ['product_id']
+            $usedDataParts
         );
     }
 
