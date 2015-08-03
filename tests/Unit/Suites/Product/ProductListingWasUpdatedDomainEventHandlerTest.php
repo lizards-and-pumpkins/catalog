@@ -2,6 +2,7 @@
 
 namespace Brera\Product;
 
+use Brera\Context\ContextSource;
 use Brera\DomainEventHandler;
 
 /**
@@ -22,13 +23,19 @@ class ProductListingWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_
     protected function setUp()
     {
         $stubProductListingSource = $this->getMock(ProductListingSource::class, [], [], '', false);
+
+        /** @var ProductListingWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $mockDomainEvent */
         $mockDomainEvent = $this->getMock(ProductListingWasUpdatedDomainEvent::class, [], [], '', false);
         $mockDomainEvent->method('getProductListingSource')->willReturn($stubProductListingSource);
 
         $this->mockProjector = $this->getMock(ProductListingProjector::class, [], [], '', false);
 
+        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
+        $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
+
         $this->domainEventHandler = new ProductListingWasUpdatedDomainEventHandler(
             $mockDomainEvent,
+            $stubContextSource,
             $this->mockProjector
         );
     }
