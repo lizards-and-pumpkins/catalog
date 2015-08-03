@@ -6,8 +6,8 @@ use Brera\Context\Context;
 use Brera\Http\HttpUrl;
 use Brera\DataPool\DataPoolReader;
 use Brera\PageBuilder;
+use Brera\SnippetKeyGenerator;
 use Brera\SnippetKeyGeneratorLocator;
-use Brera\UrlPathKeyGenerator;
 
 /**
  * @covers \Brera\Product\ProductListingRequestHandlerBuilder
@@ -22,13 +22,19 @@ class ProductListingRequestHandlerBuilderTest extends \PHPUnit_Framework_TestCas
 
     public function setUp()
     {
-        $stubUrlPathKeyGenerator = $this->getMock(UrlPathKeyGenerator::class, [], [], '', false);
+        /** @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject $stubDataPoolReader */
         $stubDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
+
+        /** @var PageBuilder|\PHPUnit_Framework_MockObject_MockObject $stubPageBuilder */
         $stubPageBuilder = $this->getMock(PageBuilder::class, [], [], '', false);
+
+        $stubSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+
+        /** @var SnippetKeyGeneratorLocator|\PHPUnit_Framework_MockObject_MockObject $stubSnippetKeyGeneratorLocator */
         $stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
+        $stubSnippetKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')->willReturn($stubSnippetKeyGenerator);
 
         $this->builder = new ProductListingRequestHandlerBuilder(
-            $stubUrlPathKeyGenerator,
             $stubDataPoolReader,
             $stubPageBuilder,
             $stubSnippetKeyGeneratorLocator
@@ -37,7 +43,10 @@ class ProductListingRequestHandlerBuilderTest extends \PHPUnit_Framework_TestCas
 
     public function testUrlKeyRequestHandlerIsCreated()
     {
+        /** @var HttpUrl|\PHPUnit_Framework_MockObject_MockObject $stubUrl */
         $stubUrl = $this->getMock(HttpUrl::class, [], [], '', false);
+
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->getMock(Context::class);
 
         $result = $this->builder->create($stubUrl, $stubContext);

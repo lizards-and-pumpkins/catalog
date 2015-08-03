@@ -26,7 +26,9 @@ class UrlKey
             );
         }
 
-        return new self($urlKey);
+        $normalizedUrlKey = self::normalizeUrlKey($urlKey);
+
+        return new self($normalizedUrlKey);
     }
 
     /**
@@ -35,5 +37,14 @@ class UrlKey
     public function __toString()
     {
         return (string) $this->urlKey;
+    }
+
+    /**
+     * @param string $urlKey
+     * @return string
+     */
+    private static function normalizeUrlKey($urlKey)
+    {
+        return preg_replace('/[^a-z0-9$\-_.+!*\'(),]/i', '_', $urlKey);
     }
 }

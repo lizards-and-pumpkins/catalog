@@ -37,9 +37,8 @@ class ProductProjector implements Projector
     }
 
     /**
-     * @param ProductSource|ProjectionSourceData $productSource
+     * @param ProjectionSourceData $productSource
      * @param ContextSource $contextSource
-     * @throws InvalidProjectionDataSourceTypeException
      */
     public function project(ProjectionSourceData $productSource, ContextSource $contextSource)
     {

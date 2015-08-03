@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <listings>
     <products_per_page>
-        <number website="ru" language="de_DE">60</number>
-        <number website="ru" language="de_DE">120</number>
-        <number website="ru" language="en_US">60</number>
-        <number website="ru" language="en_US">120</number>
+        <number website="ru" language="de_DE">9</number>
+        <number website="ru" language="de_DE">18</number>
+        <number website="ru" language="en_US">9</number>
+        <number website="ru" language="en_US">18</number>
     </products_per_page>
 </listings>

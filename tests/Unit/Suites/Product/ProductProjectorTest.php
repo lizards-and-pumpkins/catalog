@@ -33,7 +33,7 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
     /**
      * @var DataPoolWriter|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubDataPoolWriter;
+    private $mockDataPoolWriter;
 
     /**
      * @var SnippetRendererCollection|\PHPUnit_Framework_MockObject_MockObject
@@ -48,19 +48,18 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->stubSnippetList = $this->getMock(SnippetList::class);
-        $this->stubDataPoolWriter = $this->getMock(DataPoolWriter::class, [], [], '', false);
+        $this->mockDataPoolWriter = $this->getMock(DataPoolWriter::class, [], [], '', false);
         $this->stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
 
         $this->mockRendererCollection = $this->getMock(SnippetRendererCollection::class, [], [], '', false);
-        $this->mockRendererCollection->method('render')
-            ->willReturn($this->stubSnippetList);
+        $this->mockRendererCollection->method('render')->willReturn($this->stubSnippetList);
 
         $this->stubSearchDocumentBuilder = $this->getMock(ProductSearchDocumentBuilder::class, [], [], '', false);
 
         $this->projector = new ProductProjector(
             $this->mockRendererCollection,
             $this->stubSearchDocumentBuilder,
-            $this->stubDataPoolWriter
+            $this->mockDataPoolWriter
         );
     }
 
@@ -70,27 +69,27 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
             ->method('aggregate')
             ->willReturn($this->stubSearchDocumentCollection);
 
-        $this->stubDataPoolWriter->expects($this->once())
+        $this->mockDataPoolWriter->expects($this->once())
             ->method('writeSnippetList')
             ->with($this->stubSnippetList);
 
-        $this->stubDataPoolWriter->expects($this->once())
+        $this->mockDataPoolWriter->expects($this->once())
             ->method('writeSearchDocumentCollection')
             ->with($this->stubSearchDocumentCollection);
 
         $stubProduct = $this->getMock(ProductSource::class, [], [], '', false);
-        $stubContext = $this->getMock(SampleContextSource::class, [], [], '', false);
+        $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
 
-        $this->projector->project($stubProduct, $stubContext);
+        $this->projector->project($stubProduct, $stubContextSource);
     }
 
     public function testExceptionIsThrownIfTheDataSourceTypeIsNotProduct()
     {
-        $stubContext = $this->getMock(SampleContextSource::class, [], [], '', false);
+        $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
         $invalidDataSourceType = $this->getMock(ProjectionSourceData::class);
 
         $this->setExpectedException(InvalidProjectionDataSourceTypeException::class);
 
-        $this->projector->project($invalidDataSourceType, $stubContext);
+        $this->projector->project($invalidDataSourceType, $stubContextSource);
     }
 }

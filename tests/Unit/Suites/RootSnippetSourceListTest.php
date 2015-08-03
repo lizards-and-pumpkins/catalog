@@ -23,7 +23,7 @@ class RootSnippetSourceListTest extends \PHPUnit_Framework_TestCase
         ];
         $rootSnippetSourceList = RootSnippetSourceList::fromArray($sourceDataPairs);
 
-        $result = $rootSnippetSourceList->getNumItemsPrePageForContext($stubContext);
+        $result = $rootSnippetSourceList->getListOfAvailableNumberOfItemsPerPageForContext($stubContext);
 
         $this->assertSame([10, 30], $result);
     }

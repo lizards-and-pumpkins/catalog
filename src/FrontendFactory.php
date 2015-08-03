@@ -7,10 +7,12 @@ use Brera\Api\ApiRouter;
 use Brera\Content\ContentBlocksApiV1PutRequestHandler;
 use Brera\Http\HttpRequest;
 use Brera\Product\CatalogImportApiV1PutRequestHandler;
+use Brera\Product\DefaultNumberOfProductsPerPageSnippetRenderer;
 use Brera\Product\ProductDetailViewInContextSnippetRenderer;
 use Brera\Product\ProductDetailViewRequestHandlerBuilder;
 use Brera\Product\ProductDetailViewRouter;
 use Brera\Product\ProductInListingInContextSnippetRenderer;
+use Brera\Product\ProductListingMetaInfoSnippetRenderer;
 use Brera\Product\ProductListingRequestHandlerBuilder;
 use Brera\Product\ProductListingRouter;
 use Brera\Product\ProductListingSnippetRenderer;
@@ -128,7 +130,7 @@ class FrontendFactory implements Factory
     private function createProductDetailViewRequestHandlerBuilder()
     {
         return new ProductDetailViewRequestHandlerBuilder(
-            $this->getMasterFactory()->createUrlPathKeyGenerator(),
+            $this->getMasterFactory()->createProductDetailPageMetaSnippetKeyGenerator(),
             $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->createPageBuilder()
         );
@@ -140,7 +142,6 @@ class FrontendFactory implements Factory
     private function createProductListingRequestHandlerBuilder()
     {
         return new ProductListingRequestHandlerBuilder(
-            $this->getMasterFactory()->createUrlPathKeyGenerator(),
             $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->createPageBuilder(),
             $this->getMasterFactory()->getSnippetKeyGeneratorLocator()
@@ -176,6 +177,14 @@ class FrontendFactory implements Factory
         $snippetKeyGeneratorLocator->register(
             $this->getMasterFactory()->getContentBlockSnippetKey(),
             $this->getMasterFactory()->createContentBlockSnippetKeyGenerator()
+        );
+        $snippetKeyGeneratorLocator->register(
+            DefaultNumberOfProductsPerPageSnippetRenderer::CODE,
+            $this->getMasterFactory()->createDefaultNumberOfProductsPerPageSnippetKeyGenerator()
+        );
+        $snippetKeyGeneratorLocator->register(
+            ProductListingMetaInfoSnippetRenderer::CODE,
+            $this->getMasterFactory()->createProductListingMetaDataSnippetKeyGenerator()
         );
 
         return $snippetKeyGeneratorLocator;
