@@ -33,9 +33,9 @@ class DomainEventConsumer
 
     public function process()
     {
-        $numberOfMessagesBeforeFail = $this->maxNumberOfMessagesToProcess;
+        $numberOfMessagesBeforeReturn = $this->maxNumberOfMessagesToProcess;
 
-        while ($this->queue->count() > 0 && $numberOfMessagesBeforeFail-- > 0) {
+        while ($this->queue->count() > 0 && $numberOfMessagesBeforeReturn-- > 0) {
             try {
                 $domainEvent = $this->queue->next();
                 $this->processDomainEvent($domainEvent);
@@ -44,7 +44,7 @@ class DomainEventConsumer
             }
         }
 
-        if ($numberOfMessagesBeforeFail < 1) {
+        if ($numberOfMessagesBeforeReturn < 1) {
             $this->logger->log(
                 new QueueProcessingLimitIsReachedMessage(__CLASS__, $this->maxNumberOfMessagesToProcess)
             );

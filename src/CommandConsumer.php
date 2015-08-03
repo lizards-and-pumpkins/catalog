@@ -32,9 +32,9 @@ class CommandConsumer
 
     public function process()
     {
-        $numberOfMessagesBeforeFail = $this->maxNumberOfMessagesToProcess;
+        $numberOfMessagesBeforeReturn = $this->maxNumberOfMessagesToProcess;
 
-        while ($this->commandQueue->count() > 0 && $numberOfMessagesBeforeFail-- > 0) {
+        while ($this->commandQueue->count() > 0 && $numberOfMessagesBeforeReturn-- > 0) {
             try {
                 $domainEvent = $this->commandQueue->next();
                 $this->processCommand($domainEvent);
@@ -43,7 +43,7 @@ class CommandConsumer
             }
         }
 
-        if ($numberOfMessagesBeforeFail < 1) {
+        if ($numberOfMessagesBeforeReturn < 1) {
             $this->logger->log(
                 new QueueProcessingLimitIsReachedMessage(__CLASS__, $this->maxNumberOfMessagesToProcess)
             );
