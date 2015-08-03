@@ -27,9 +27,7 @@ class ImageImportTest extends AbstractIntegrationTest
             $queue->add(new ImageWasUpdatedDomainEvent($image));
         }
 
-        $consumer = $factory->createDomainEventConsumer();
-        $numberOfMessages = count($images);
-        $consumer->process($numberOfMessages);
+        $factory->createDomainEventConsumer()->process();
 
         $logger = $factory->getLogger();
         $this->failIfMessagesWhereLogged($logger);

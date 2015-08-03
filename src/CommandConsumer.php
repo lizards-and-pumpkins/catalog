@@ -3,9 +3,12 @@
 namespace Brera;
 
 use Brera\Queue\Queue;
+use Brera\Queue\QueueProcessingLimitIsReachedMessage;
 
 class CommandConsumer
 {
+    private $maxNumberOfMessagesToProcess = 200;
+
     /**
      * @var Queue
      */
@@ -21,28 +24,29 @@ class CommandConsumer
      */
     private $logger;
 
-    public function __construct(
-        Queue $commandQueue,
-        CommandHandlerLocator $commandHandlerLocator,
-        Logger $logger
-    ) {
+    public function __construct(Queue $commandQueue, CommandHandlerLocator $commandHandlerLocator, Logger $logger) {
         $this->commandQueue = $commandQueue;
         $this->commandHandlerLocator = $commandHandlerLocator;
         $this->logger = $logger;
     }
 
-    /**
-     * @param int $numberOfMessagesToProcess
-     */
-    public function process($numberOfMessagesToProcess)
+    public function process()
     {
-        for ($i=0; $i<$numberOfMessagesToProcess; $i++) {
+        $numberOfMessagesBeforeFail = $this->maxNumberOfMessagesToProcess;
+
+        while ($this->commandQueue->count() > 0 && $numberOfMessagesBeforeFail-- > 0) {
             try {
-                $command = $this->commandQueue->next();
-                $this->processCommand($command);
+                $domainEvent = $this->commandQueue->next();
+                $this->processCommand($domainEvent);
             } catch (\Exception $e) {
                 $this->logger->log(new FailedToReadFromCommandQueueMessage($e));
             }
+        }
+
+        if ($numberOfMessagesBeforeFail < 1) {
+            $this->logger->log(
+                new QueueProcessingLimitIsReachedMessage(__CLASS__, $this->maxNumberOfMessagesToProcess)
+            );
         }
     }
 

@@ -173,8 +173,8 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $website = new SampleWebFront($request, $this->factory);
         $website->runWithoutSendingResponse();
 
-        $this->processCommandsInQueue();
-        $this->processDomainEventsInQueue();
+        $this->factory->createCommandConsumer()->process();
+        $this->factory->createDomainEventConsumer()->process();
     }
 
     private function addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture()
@@ -188,27 +188,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $website = new SampleWebFront($request, $this->factory);
         $website->runWithoutSendingResponse();
 
-        $this->processCommandsInQueue();
-        $this->processDomainEventsInQueue();
-    }
-
-    private function processCommandsInQueue()
-    {
-        $queue = $this->factory->getCommandQueue();
-        $consumer = $this->factory->createCommandConsumer();
-
-        while ($queue->count() > 0) {
-            $consumer->process(1);
-        }
-    }
-
-    private function processDomainEventsInQueue()
-    {
-        $queue = $this->factory->getEventQueue();
-        $consumer = $this->factory->createDomainEventConsumer();
-
-        while ($queue->count() > 0) {
-            $consumer->process(1);
-        }
+        $this->factory->createCommandConsumer()->process();
+        $this->factory->createDomainEventConsumer()->process();
     }
 }

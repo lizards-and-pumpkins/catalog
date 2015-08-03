@@ -3,18 +3,20 @@
 namespace Brera;
 
 use Brera\Queue\Queue;
+use Brera\Queue\QueueProcessingLimitIsReachedMessage;
 
 /**
  * @covers \Brera\CommandConsumer
  * @uses   \Brera\CommandHandlerFailedMessage
  * @uses   \Brera\FailedToReadFromCommandQueueMessage
+ * @uses   \Brera\Queue\QueueProcessingLimitIsReachedMessage
  */
 class CommandConsumerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Queue|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockQueue;
+    private $stubQueue;
 
     /**
      * @var CommandHandlerLocator|\PHPUnit_Framework_MockObject_MockObject
@@ -33,68 +35,72 @@ class CommandConsumerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockQueue = $this->getMock(Queue::class);
+        $this->stubQueue = $this->getMock(Queue::class);
         $this->mockLocator = $this->getMock(CommandHandlerLocator::class, [], [], '', false);
         $this->mockLogger = $this->getMock(Logger::class);
 
-        $this->commandConsumer = new CommandConsumer($this->mockQueue, $this->mockLocator, $this->mockLogger);
+        $this->commandConsumer = new CommandConsumer($this->stubQueue, $this->mockLocator, $this->mockLogger);
     }
 
     /**
-     * @dataProvider getNumberOfCommandsToProcess
-     * @param int $numberOfCommandsToProcess
+     * @dataProvider getNumberOfCommandsInQueue
+     * @param int $numberOfCommandsInQueue
      */
-    public function testCommandHandlerIsTriggeredForSetNumberOfCommands($numberOfCommandsToProcess)
+    public function testAllCommandsInQueueAreProcessed($numberOfCommandsInQueue)
     {
         $stubCommand = $this->getMock(Command::class);
-        $this->mockQueue->method('next')
-            ->willReturn($stubCommand);
+        $this->stubQueue->method('next')->willReturn($stubCommand);
+        $this->stubQueue->method('count')
+            ->will(call_user_func_array([$this, 'onConsecutiveCalls'], range($numberOfCommandsInQueue, 0)));
 
         $mockCommandHandler = $this->getMock(CommandHandler::class);
-        $mockCommandHandler->expects($this->exactly($numberOfCommandsToProcess))
-            ->method('process');
-
-        $this->mockLocator->method('getHandlerFor')
+        $this->mockLocator->expects($this->exactly($numberOfCommandsInQueue))->method('getHandlerFor')
             ->willReturn($mockCommandHandler);
 
-        $this->commandConsumer->process($numberOfCommandsToProcess);
+        $this->commandConsumer->process();
     }
 
     /**
      * @return array[]
      */
-    public function getNumberOfCommandsToProcess()
+    public function getNumberOfCommandsInQueue()
     {
         return [[1], [2], [3]];
     }
 
     public function testLogEntryIsWrittenIfLocatorIsNotFound()
     {
-        $numberOfCommandsToProcess = 1;
-
         $stubCommand = $this->getMock(Command::class);
-        $this->mockQueue->method('next')->willReturn($stubCommand);
+        $this->stubQueue->method('next')->willReturn($stubCommand);
+        $this->stubQueue->method('count')->willReturnOnConsecutiveCalls(1, 0);
 
-        $this->mockLocator->expects($this->exactly($numberOfCommandsToProcess))
-            ->method('getHandlerFor')
-            ->willThrowException(new UnableToFindDomainEventHandlerException);
+        $this->mockLocator->method('getHandlerFor')->willThrowException(new UnableToFindCommandHandlerException);
+        $this->mockLogger->expects($this->once())->method('log');
 
-        $this->mockLogger->expects($this->exactly($numberOfCommandsToProcess))->method('log');
-
-        $this->commandConsumer->process($numberOfCommandsToProcess);
+        $this->commandConsumer->process();
     }
 
     public function testLogEntryIsWrittenOnQueueReadFailure()
     {
-        $numberOfCommandsToProcess = 1;
+        $this->stubQueue->expects($this->once())->method('next')->willThrowException(new \UnderflowException);
+        $this->stubQueue->method('count')->willReturnOnConsecutiveCalls(1, 0);
+        $this->mockLogger->expects($this->once())->method('log');
 
-        $this->mockQueue->expects($this->exactly($numberOfCommandsToProcess))
-            ->method('next')
-            ->willThrowException(new \UnderflowException);
+        $this->commandConsumer->process();
+    }
 
-        $this->mockLogger->expects($this->exactly($numberOfCommandsToProcess))
-            ->method('log');
+    public function testMessageIsLoggedIfProcessingLimitIsReached()
+    {
+        $stubCommand = $this->getMock(Command::class);
+        $this->stubQueue->method('next')->willReturn($stubCommand);
+        $this->stubQueue->method('count')->willReturn(1);
 
-        $this->commandConsumer->process($numberOfCommandsToProcess);
+        $this->mockLogger->expects($this->once())->method('log')
+            ->with($this->isInstanceOf(QueueProcessingLimitIsReachedMessage::class));
+
+        $stubCommandHandler = $this->getMock(CommandHandler::class);
+        $this->mockLocator->method('getHandlerFor')->willReturn($stubCommandHandler);
+
+        $this->commandConsumer->process();
     }
 }

@@ -3,9 +3,12 @@
 namespace Brera;
 
 use Brera\Queue\Queue;
+use Brera\Queue\QueueProcessingLimitIsReachedMessage;
 
 class DomainEventConsumer
 {
+    private $maxNumberOfMessagesToProcess = 200;
+
     /**
      * @var Queue
      */
@@ -28,19 +31,23 @@ class DomainEventConsumer
         $this->logger = $logger;
     }
 
-    /**
-     * @param int $numberOfMessages
-     * @return null
-     */
-    public function process($numberOfMessages)
+    public function process()
     {
-        for ($i = 0; $i < $numberOfMessages; $i ++) {
+        $numberOfMessagesBeforeFail = $this->maxNumberOfMessagesToProcess;
+
+        while ($this->queue->count() > 0 && $numberOfMessagesBeforeFail-- > 0) {
             try {
                 $domainEvent = $this->queue->next();
                 $this->processDomainEvent($domainEvent);
             } catch (\Exception $e) {
                 $this->logger->log(new FailedToReadFromDomainEventQueueMessage($e));
             }
+        }
+
+        if ($numberOfMessagesBeforeFail < 1) {
+            $this->logger->log(
+                new QueueProcessingLimitIsReachedMessage(__CLASS__, $this->maxNumberOfMessagesToProcess)
+            );
         }
     }
 

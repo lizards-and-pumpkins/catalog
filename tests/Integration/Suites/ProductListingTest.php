@@ -31,8 +31,8 @@ class ProductListingTest extends AbstractIntegrationTest
     {
         $this->importCatalog();
 
-        $this->processCommandsInQueue();
-        $this->processDomainEvents();
+        $this->factory->createCommandConsumer()->process();
+        $this->factory->createDomainEventConsumer()->process();
 
         $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
         $urlKeyNode = (new XPathParser($xml))->getXmlNodesArrayByXPath('//catalog/listings/listing[1]/@url_key');
@@ -60,8 +60,8 @@ class ProductListingTest extends AbstractIntegrationTest
         $this->addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture();
         $this->importCatalog();
 
-        $this->processCommandsInQueue();
-        $this->processDomainEvents();
+        $this->factory->createCommandConsumer()->process();
+        $this->factory->createDomainEventConsumer()->process();
         
         $this->factory->getSnippetKeyGeneratorLocator()->register(
             ProductListingSnippetRenderer::CODE,
@@ -160,25 +160,5 @@ class ProductListingTest extends AbstractIntegrationTest
         );
 
         return $metaSnippetContent->getInfo();
-    }
-
-    private function processCommandsInQueue()
-    {
-        $queue = $this->factory->getCommandQueue();
-        $consumer = $this->factory->createCommandConsumer();
-
-        while ($queue->count() > 0) {
-            $consumer->process(1);
-        }
-    }
-
-    private function processDomainEvents()
-    {
-        $queue = $this->factory->getEventQueue();
-        $consumer = $this->factory->createDomainEventConsumer();
-
-        while ($queue->count() > 0) {
-            $consumer->process(1);
-        }
     }
 }
