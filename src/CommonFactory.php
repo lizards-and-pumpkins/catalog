@@ -213,7 +213,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return [
             $this->getMasterFactory()->createProductListingSnippetRenderer(),
-            $this->getMasterFactory()->createDefaultNumberOfProductsPerPageSnippetRenderer()
+            $this->getMasterFactory()->createDefaultNumberOfProductsPerPageSnippetRenderer(),
             $this->getMasterFactory()->createProductSearchResultsMetaSnippetRenderer(),
         ];
     }
@@ -1033,9 +1033,12 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductSearchResultMetaSnippetKeyGenerator()
     {
+        $usedDataParts = [];
+
         return new GenericSnippetKeyGenerator(
             $this->getMasterFactory()->getProductSearchResultMetaSnippetCode(),
-            ['website', 'language', 'version'] // TODO: Change to factory method once issue-258 is merged into master
+            $this->getMasterFactory()->getRequiredContexts(),
+            $usedDataParts
         );
     }
 

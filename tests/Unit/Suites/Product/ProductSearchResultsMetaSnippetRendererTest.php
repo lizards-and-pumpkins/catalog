@@ -73,7 +73,7 @@ class ProductSearchResultsMetaSnippetRendererTest extends \PHPUnit_Framework_Tes
         $this->stubContextSource->method('getAllAvailableContexts')->willReturn([$stubContext]);
 
         $this->stubRootSnippetSourceList = $this->getMock(RootSnippetSourceList::class, [], [], '', false);
-        $this->stubRootSnippetSourceList->method('getNumItemsPrePageForContext')->willReturn([9]);
+        $this->stubRootSnippetSourceList->method('getListOfAvailableNumberOfItemsPerPageForContext')->willReturn([9]);
     }
 
     public function testSnippetRendererInterfaceIsImplemented()

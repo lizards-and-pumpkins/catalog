@@ -2,6 +2,11 @@
 
 namespace Brera;
 
+use Brera\Http\HttpHeaders;
+use Brera\Http\HttpRequest;
+use Brera\Http\HttpRequestBody;
+use Brera\Http\HttpUrl;
+
 class ProductSearchTest extends AbstractIntegrationTest
 {
     /**
@@ -16,12 +21,7 @@ class ProductSearchTest extends AbstractIntegrationTest
     
     public function testProductSearchResultsMetaSnippetIsWrittenIntoDataPool()
     {
-        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.xml');
-
-        $queue = $this->factory->getEventQueue();
-        $queue->add(new RootTemplateChangedDomainEvent($xml));
-
-        $this->processDomainEvents();
+        $this->addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture();
 
         $contextSource = $this->factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[1];
@@ -39,6 +39,7 @@ class ProductSearchTest extends AbstractIntegrationTest
                 'global_notices',
                 'breadcrumbsContainer',
                 'global_messages',
+                'content_block_in_product_listing',
                 'before_body_end'
             ]
         ];
@@ -46,16 +47,18 @@ class ProductSearchTest extends AbstractIntegrationTest
         $this->assertSame(json_encode($expectedMetaInfoContent), $metaInfoSnippet);
     }
 
-    private function processDomainEvents()
+    private function addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture()
     {
-        $queue = $this->factory->getEventQueue();
-        $consumer = $this->factory->createDomainEventConsumer();
+        $httpUrl = HttpUrl::fromString('http://example.com/api/page_templates/product_listing');
+        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.page_templates.v1+json']);
+        $httpRequestBodyString = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.xml');
+        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
+        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
-        while ($queue->count() > 0) {
-            $consumer->process(1);
-        }
+        $website = new SampleWebFront($request, $this->factory);
+        $website->runWithoutSendingResponse();
 
-        $logger = $this->factory->getLogger();
-        $this->failIfMessagesWhereLogged($logger);
+        $this->factory->createCommandConsumer()->process();
+        $this->factory->createDomainEventConsumer()->process();
     }
 }
