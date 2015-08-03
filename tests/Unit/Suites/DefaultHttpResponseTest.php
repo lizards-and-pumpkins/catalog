@@ -58,7 +58,7 @@ class DefaultHttpResponseTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('This test requires the PHP extension xdebug to be installed.');
         }
 
-        $customHeaderName = 'Foo';
+        $customHeaderName = 'foo';
         $customHeaderValue = 'bar';
 
         $dummyBody = '';

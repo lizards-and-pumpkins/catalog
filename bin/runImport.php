@@ -14,8 +14,8 @@ $factory->register(new CommonFactory());
 $factory->register(new SampleFactory());
 $factory->register(new FrontendFactory());
 
-$httpUrl = HttpUrl::fromString('http://example.com/api/v1/page_templates/product_listing');
-$httpHeaders = HttpHeaders::fromArray([]);
+$httpUrl = HttpUrl::fromString('http://example.com/api/page_templates/product_listing');
+$httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.page_templates.v1+json']);
 $httpRequestBodyString = file_get_contents(__DIR__ . '/../tests/shared-fixture/product-listing-root-snippet.xml');
 $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
 $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
@@ -23,8 +23,8 @@ $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpH
 $website = new SampleWebFront($request, $factory);
 $website->runWithoutSendingResponse();
 
-$httpUrl = HttpUrl::fromString('http://example.com/api/v1/catalog_import');
-$httpHeaders = HttpHeaders::fromArray([]);
+$httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
+$httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.catalog_import.v1+json']);
 $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
 $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
 $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);

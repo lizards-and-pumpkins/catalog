@@ -27,15 +27,15 @@ class ApiRouter implements HttpRouter
      */
     public function route(HttpRequest $request, Context $context)
     {
-        $urlPath = trim($request->getUrl()->getPath(), '/');
+        $urlPath = trim($request->getUrl()->getPathRelativeToWebFront(), '/');
         $urlToken = explode('/', $urlPath);
 
         if (self::API_URL_PREFIX !== array_shift($urlToken)) {
             return null;
         }
 
-        $apiVersionUrlToken = array_shift($urlToken);
-        if (!preg_match('/^v(\d+)$/', $apiVersionUrlToken, $matchedVersion)) {
+        $acceptHeader = $request->getHeader('Accept');
+        if (!preg_match('/^application\/vnd\.brera\.\w+\.v(\d+)\+(?:json|xml)$/', $acceptHeader, $matchedVersion)) {
             return null;
         }
 
