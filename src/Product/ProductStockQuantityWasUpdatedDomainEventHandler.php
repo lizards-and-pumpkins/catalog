@@ -5,10 +5,10 @@ namespace Brera\Product;
 use Brera\Context\ContextSource;
 use Brera\DomainEventHandler;
 
-class ProductStockQuantityUpdatedDomainEventHandler implements DomainEventHandler
+class ProductStockQuantityWasUpdatedDomainEventHandler implements DomainEventHandler
 {
     /**
-     * @var ProductStockQuantityUpdatedDomainEvent
+     * @var ProductStockQuantityWasUpdatedDomainEvent
      */
     private $event;
 
@@ -23,7 +23,7 @@ class ProductStockQuantityUpdatedDomainEventHandler implements DomainEventHandle
     private $projector;
 
     public function __construct(
-        ProductStockQuantityUpdatedDomainEvent $event,
+        ProductStockQuantityWasUpdatedDomainEvent $event,
         ContextSource $contextSource,
         ProductStockQuantityProjector $projector
     ) {

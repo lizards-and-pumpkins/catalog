@@ -6,12 +6,12 @@ use Brera\Context\ContextSource;
 use Brera\DomainEventHandler;
 
 /**
- * @covers \Brera\Product\ProductStockQuantityUpdatedDomainEventHandler
+ * @covers \Brera\Product\ProductStockQuantityWasUpdatedDomainEventHandler
  */
-class ProductStockQuantityUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
+class ProductStockQuantityWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ProductStockQuantityUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductStockQuantityWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockDomainEvent;
 
@@ -21,17 +21,17 @@ class ProductStockQuantityUpdatedDomainEventHandlerTest extends \PHPUnit_Framewo
     private $mockProjector;
 
     /**
-     * @var ProductStockQuantityUpdatedDomainEventHandler
+     * @var ProductStockQuantityWasUpdatedDomainEventHandler
      */
     private $domainEventHandler;
 
     protected function setUp()
     {
-        $this->mockDomainEvent = $this->getMock(ProductStockQuantityUpdatedDomainEvent::class, [], [], '', false);
+        $this->mockDomainEvent = $this->getMock(ProductStockQuantityWasUpdatedDomainEvent::class, [], [], '', false);
         $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
         $this->mockProjector = $this->getMock(ProductStockQuantityProjector::class, [], [], '', false);
 
-        $this->domainEventHandler = new ProductStockQuantityUpdatedDomainEventHandler(
+        $this->domainEventHandler = new ProductStockQuantityWasUpdatedDomainEventHandler(
             $this->mockDomainEvent,
             $stubContextSource,
             $this->mockProjector

@@ -16,25 +16,25 @@ use Brera\DataPool\KeyValue\KeyValueStore;
 use Brera\DataPool\SearchEngine\SearchEngine;
 use Brera\Http\HttpRouterChain;
 use Brera\Http\ResourceNotFoundRouter;
-use Brera\Image\ImageImportDomainEvent;
-use Brera\Image\ImageImportDomainEventHandler;
+use Brera\Image\ImageWasUpdatedDomainEvent;
+use Brera\Image\ImageWasUpdatedDomainEventHandler;
 use Brera\Image\ImageProcessorCollection;
-use Brera\Product\CatalogImportDomainEvent;
-use Brera\Product\CatalogImportDomainEventHandler;
+use Brera\Image\UpdateImageCommand;
+use Brera\Image\UpdateImageCommandHandler;
 use Brera\Product\DefaultNumberOfProductsPerPageSnippetRenderer;
 use Brera\Product\PriceSnippetRenderer;
 use Brera\Product\ProductBackOrderAvailabilitySnippetRenderer;
 use Brera\Product\ProductDetailViewBlockRenderer;
 use Brera\Product\ProductDetailViewInContextSnippetRenderer;
-use Brera\Product\ProductImportDomainEvent;
-use Brera\Product\ProductImportDomainEventHandler;
+use Brera\Product\ProductWasUpdatedDomainEvent;
+use Brera\Product\ProductWasUpdatedDomainEventHandler;
 use Brera\Product\ProductInListingBlockRenderer;
 use Brera\Product\ProductInListingInContextSnippetRenderer;
 use Brera\Product\ProductListingBlockRenderer;
 use Brera\Product\ProductListingMetaInfoSnippetRenderer;
 use Brera\Product\ProductListingProjector;
-use Brera\Product\ProductListingSavedDomainEvent;
-use Brera\Product\ProductListingSavedDomainEventHandler;
+use Brera\Product\ProductListingWasUpdatedDomainEvent;
+use Brera\Product\ProductListingWasUpdatedDomainEventHandler;
 use Brera\Product\ProductListingSnippetRenderer;
 use Brera\Product\ProductProjector;
 use Brera\Product\ProductListingSourceBuilder;
@@ -42,13 +42,17 @@ use Brera\Product\ProductSearchDocumentBuilder;
 use Brera\Product\ProductSourceBuilder;
 use Brera\Product\ProductSourceDetailViewSnippetRenderer;
 use Brera\Product\ProductSourceInListingSnippetRenderer;
-use Brera\Product\ProductStockQuantityUpdatedDomainEvent;
-use Brera\Product\ProductStockQuantityUpdatedDomainEventHandler;
+use Brera\Product\ProductStockQuantityWasUpdatedDomainEvent;
+use Brera\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
 use Brera\Product\ProductStockQuantityProjector;
 use Brera\Product\ProductStockQuantitySnippetRenderer;
 use Brera\Product\ProductStockQuantitySourceBuilder;
 use Brera\Product\UpdateMultipleProductStockQuantityCommand;
 use Brera\Product\UpdateMultipleProductStockQuantityCommandHandler;
+use Brera\Product\UpdateProductCommand;
+use Brera\Product\UpdateProductCommandHandler;
+use Brera\Product\UpdateProductListingCommand;
+use Brera\Product\UpdateProductListingCommandHandler;
 use Brera\Product\UpdateProductStockQuantityCommand;
 use Brera\Product\UpdateProductStockQuantityCommandHandler;
 use Brera\Queue\Queue;
@@ -89,61 +93,48 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     private $imageProcessorCollection;
 
     /**
-     * @param ProductImportDomainEvent $event
-     * @return ProductImportDomainEventHandler
+     * @param ProductWasUpdatedDomainEvent $event
+     * @return ProductWasUpdatedDomainEventHandler
      */
-    public function createProductImportDomainEventHandler(ProductImportDomainEvent $event)
+    public function createProductWasUpdatedDomainEventHandler(ProductWasUpdatedDomainEvent $event)
     {
-        return new ProductImportDomainEventHandler(
+        return new ProductWasUpdatedDomainEventHandler(
             $event,
-            $this->getMasterFactory()->createProductSourceBuilder(),
             $this->getMasterFactory()->createContextSource(),
-            $this->getMasterFactory()->createProductProjector(),
-            $this->getMasterFactory()->createProductSearchDocumentBuilder()
+            $this->getMasterFactory()->createProductProjector()
         );
     }
 
     /**
-     * @param CatalogImportDomainEvent $event
-     * @return CatalogImportDomainEventHandler
+     * @param PageTemplateWasUpdatedDomainEvent $event
+     * @return PageTemplateWasUpdatedDomainEventHandler
      */
-    public function createCatalogImportDomainEventHandler(CatalogImportDomainEvent $event)
+    public function createPageTemplateWasUpdatedDomainEventHandler(PageTemplateWasUpdatedDomainEvent $event)
     {
-        return new CatalogImportDomainEventHandler($event, $this->getMasterFactory()->getEventQueue());
-    }
-
-    /**
-     * @param RootTemplateChangedDomainEvent $event
-     * @return RootTemplateChangedDomainEventHandler
-     */
-    public function createRootTemplateChangedDomainEventHandler(RootTemplateChangedDomainEvent $event)
-    {
-        return new RootTemplateChangedDomainEventHandler(
+        return new PageTemplateWasUpdatedDomainEventHandler(
             $event,
-            $this->getMasterFactory()->createRootSnippetSourceBuilder(),
             $this->getMasterFactory()->createContextSource(),
             $this->getMasterFactory()->createRootSnippetProjector()
         );
     }
 
     /**
-     * @param ProductListingSavedDomainEvent $event
-     * @return ProductListingSavedDomainEventHandler
+     * @param ProductListingWasUpdatedDomainEvent $event
+     * @return ProductListingWasUpdatedDomainEventHandler
      */
-    public function createProductListingSavedDomainEventHandler(ProductListingSavedDomainEvent $event)
+    public function createProductListingWasUpdatedDomainEventHandler(ProductListingWasUpdatedDomainEvent $event)
     {
-        return new ProductListingSavedDomainEventHandler(
+        return new ProductListingWasUpdatedDomainEventHandler(
             $event,
-            $this->getMasterFactory()->createProductListingSourceBuilder(),
-            $this->getMasterFactory()->createProductListingProjector(),
-            $this->getMasterFactory()->createContextSource()
+            $this->getMasterFactory()->createContextSource(),
+            $this->getMasterFactory()->createProductListingProjector()
         );
     }
 
     /**
      * @return RootSnippetSourceListBuilder
      */
-    public function createRootSnippetSourceBuilder()
+    public function createRootSnippetSourceListBuilder()
     {
         return new RootSnippetSourceListBuilder($this->getMasterFactory()->createContextBuilder());
     }
@@ -744,12 +735,12 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @param ImageImportDomainEvent $event
-     * @return ImageImportDomainEventHandler
+     * @param ImageWasUpdatedDomainEvent $event
+     * @return ImageWasUpdatedDomainEventHandler
      */
-    public function createImageImportDomainEventHandler(ImageImportDomainEvent $event)
+    public function createImageWasUpdatedDomainEventHandler(ImageWasUpdatedDomainEvent $event)
     {
-        return new ImageImportDomainEventHandler($event, $this->getMasterFactory()->getImageProcessorCollection());
+        return new ImageWasUpdatedDomainEventHandler($event, $this->getMasterFactory()->getImageProcessorCollection());
     }
 
     /**
@@ -887,12 +878,13 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @param ProductStockQuantityUpdatedDomainEvent $event
-     * @return ProductStockQuantityUpdatedDomainEventHandler
+     * @param ProductStockQuantityWasUpdatedDomainEvent $event
+     * @return ProductStockQuantityWasUpdatedDomainEventHandler
      */
-    public function createProductStockQuantityUpdatedDomainEventHandler(ProductStockQuantityUpdatedDomainEvent $event)
-    {
-        return new ProductStockQuantityUpdatedDomainEventHandler(
+    public function createProductStockQuantityWasUpdatedDomainEventHandler(
+        ProductStockQuantityWasUpdatedDomainEvent $event
+    ) {
+        return new ProductStockQuantityWasUpdatedDomainEventHandler(
             $event,
             $this->getMasterFactory()->createContextSource(),
             $this->getMasterFactory()->getProductStockQuantityProjector()
@@ -963,6 +955,42 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $this->getMasterFactory()->createSnippetList(),
             $this->getMasterFactory()->createContentBlockSnippetKeyGenerator(),
             $this->getMasterFactory()->createContextBuilder()
+        );
+    }
+
+    /**
+     * @param UpdateProductCommand $command
+     * @return UpdateProductCommandHandler
+     */
+    public function createUpdateProductCommandHandler(UpdateProductCommand $command)
+    {
+        return new UpdateProductCommandHandler(
+            $command,
+            $this->getMasterFactory()->getEventQueue()
+        );
+    }
+
+    /**
+     * @param UpdateProductListingCommand $command
+     * @return UpdateProductListingCommandHandler
+     */
+    public function createUpdateProductListingCommandHandler(UpdateProductListingCommand $command)
+    {
+        return new UpdateProductListingCommandHandler(
+            $command,
+            $this->getMasterFactory()->getEventQueue()
+        );
+    }
+
+    /**
+     * @param UpdateImageCommand $command
+     * @return UpdateImageCommandHandler
+     */
+    public function createUpdateImageCommandHandler(UpdateImageCommand $command)
+    {
+        return new UpdateImageCommandHandler(
+            $command,
+            $this->getMasterFactory()->getEventQueue()
         );
     }
 
