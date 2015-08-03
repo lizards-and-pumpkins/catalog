@@ -150,10 +150,12 @@ class ProductListingTest extends AbstractIntegrationTest
         $searchCriteria->add($searchCriterion1);
         $searchCriteria->add($searchCriterion2);
 
+        $pageSnippetCodes = [];
+
         $metaSnippetContent = ProductListingMetaInfoSnippetContent::create(
             $searchCriteria,
             ProductListingSnippetRenderer::CODE,
-            []
+            $pageSnippetCodes
         );
 
         return $metaSnippetContent->getInfo();

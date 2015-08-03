@@ -33,10 +33,12 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
         $this->stubSelectionCriteria->method('jsonSerialize')
             ->willReturn(['condition' => SearchCriteria::AND_CONDITION, 'criteria' => []]);
 
+        $pageSnippetCodes = [$this->rootSnippetCode];
+
         $this->pageMetaInfo = ProductListingMetaInfoSnippetContent::create(
             $this->stubSelectionCriteria,
             $this->rootSnippetCode,
-            [$this->rootSnippetCode]
+            $pageSnippetCodes
         );
     }
 

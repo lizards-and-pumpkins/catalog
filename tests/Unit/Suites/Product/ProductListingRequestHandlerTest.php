@@ -59,11 +59,14 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn(['condition' => SearchCriteria::AND_CONDITION, 'criteria' => []]);
 
         $this->testMetaInfoKey = 'stub-meta-info-key';
+        $pageSnippetCodes = ['child-snippet1'];
+
         $this->testMetaInfoSnippetJson = json_encode(ProductListingMetaInfoSnippetContent::create(
             $mockSelectionCriteria,
             'root-snippet-code',
-            ['child-snippet1']
+            $pageSnippetCodes
         )->getInfo());
+
         $this->mockDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
         $this->mockPageBuilder = $this->getMock(PageBuilder::class, [], [], '', false);
 
