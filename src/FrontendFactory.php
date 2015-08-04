@@ -17,6 +17,7 @@ use Brera\Product\ProductListingRouter;
 use Brera\Product\ProductListingSnippetRenderer;
 use Brera\Product\MultipleProductStockQuantityApiV1PutRequestHandler;
 use Brera\Utils\Directory;
+use Brera\Context\Context;
 
 class FrontendFactory implements Factory
 {
@@ -26,6 +27,11 @@ class FrontendFactory implements Factory
      * @var SnippetKeyGeneratorLocator
      */
     private $snippetKeyGeneratorLocator;
+
+    /**
+     * @var Context
+     */
+    private $context;
 
     /**
      * @return ApiRouter
@@ -229,5 +235,23 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->getSnippetKeyGeneratorLocator(),
             $this->getMasterFactory()->getLogger()
         );
+    }
+
+    public function setContext(Context $context)
+    {
+        $this->context = $context;
+    }
+
+    /**
+     * @return Context
+     */
+    public function getContext()
+    {
+        if (is_null($this->context)) {
+            throw new ContextNotSetOnFactoryException(
+                'The context was not set on the factory. Is the bootstrap complete?'
+            );
+        }
+        return $this->context;
     }
 }

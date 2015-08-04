@@ -72,14 +72,14 @@ abstract class WebFront
     abstract protected function createMasterFactory();
 
     /**
-     * @param HttpRequest $request
-     */
-    abstract protected function createContext(HttpRequest $request);
-
-    /**
      * @param MasterFactory $factory
      */
     abstract protected function registerFactories(MasterFactory $factory);
+
+    /**
+     * @param HttpRequest $request
+     */
+    abstract protected function createContext(HttpRequest $request);
 
     /**
      * @param HttpRouterChain $router

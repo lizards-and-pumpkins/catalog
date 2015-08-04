@@ -4,6 +4,7 @@ namespace Brera;
 
 use Brera\Api\ApiRouter;
 use Brera\Content\ContentBlocksApiV1PutRequestHandler;
+use Brera\Context\Context;
 use Brera\Product\CatalogImportApiV1PutRequestHandler;
 use Brera\Product\ProductDetailViewRouter;
 use Brera\Product\ProductListingRouter;
@@ -86,5 +87,22 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
         $result2 = $this->frontendFactory->getSnippetKeyGeneratorLocator();
         $this->assertInstanceOf(SnippetKeyGeneratorLocator::class, $result1);
         $this->assertSame($result1, $result2);
+    }
+
+    public function testItReturnsASetContext()
+    {
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
+        $stubContext = $this->getMock(Context::class);
+        $this->frontendFactory->setContext($stubContext);
+        $this->assertSame($stubContext, $this->frontendFactory->getContext());
+    }
+
+    public function testItThrowsAnExceptionIfTheContextIsRetrievedBeforeItIsSet()
+    {
+        $this->setExpectedException(
+            ContextNotSetOnFactoryException::class,
+            'The context was not set on the factory. Is the bootstrap complete?'
+        );
+        $this->frontendFactory->getContext();
     }
 }

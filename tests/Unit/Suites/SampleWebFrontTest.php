@@ -59,6 +59,11 @@ class SampleWebFrontTest extends \PHPUnit_Framework_TestCase
      */
     private $mockHttpResponse;
 
+    /**
+     * @var FrontendFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockFrontendFactory;
+
     protected function setUp()
     {
         $routerFactoryMethods = [
@@ -97,8 +102,10 @@ class SampleWebFrontTest extends \PHPUnit_Framework_TestCase
         $stubMasterFactory->method('createHttpRouterChain')->willReturn($mockRouterChain);
         $mockRouterChain->method('route')->willReturn($mockHttpRequestHandler);
         $mockHttpRequestHandler->method('process')->willReturn($this->mockHttpResponse);
+        
+        $this->mockFrontendFactory = $this->getMock(FrontendFactory::class);
 
-        $this->webFront = new TestSampleWebFront($stubHttpRequest, $stubMasterFactory);
+        $this->webFront = new TestSampleWebFront($stubHttpRequest, $stubMasterFactory, $this->mockFrontendFactory);
     }
 
     public function testMasterFactoryIsReturned()
@@ -127,5 +134,12 @@ class SampleWebFrontTest extends \PHPUnit_Framework_TestCase
         $webFront->runWithoutSendingResponse();
 
         $this->assertInstanceOf(SampleMasterFactory::class, $webFront->getMasterFactory());
+    }
+
+    public function testItSetsTheContextOnTheFrontendFactory()
+    {
+        $this->mockFrontendFactory->expects($this->once())->method('setContext')
+            ->with($this->isInstanceOf(Context::class));
+        $this->webFront->runWithoutSendingResponse();
     }
 }

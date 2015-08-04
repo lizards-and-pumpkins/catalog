@@ -11,11 +11,20 @@ class TestSampleWebFront extends SampleWebFront
      * @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $testMasterFactory;
+
+    /**
+     * @var FrontendFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $testFrontendFactory;
     
-    public function __construct(HttpRequest $request, MasterFactory $testMasterFactory)
-    {
+    public function __construct(
+        HttpRequest $request,
+        MasterFactory $testMasterFactory,
+        FrontendFactory $frontendFactory
+    ) {
         parent::__construct($request);
         $this->testMasterFactory = $testMasterFactory;
+        $this->testFrontendFactory = $frontendFactory;
     }
 
     /**
@@ -26,9 +35,14 @@ class TestSampleWebFront extends SampleWebFront
         return $this->testMasterFactory;
     }
 
-    protected function registerFactories(MasterFactory $masterFactory)
+    protected function registerSharedFactories(MasterFactory $masterFactory)
     {
-        // The injected test master factory should already contains all required factories
+        // Shared factories already should be registered on the injected factory
+    }
+
+    protected function registerFrontendFactory(MasterFactory $masterFactory)
+    {
+        $this->setFrontendFactoryForTestability($this->testFrontendFactory);
     }
 
 
