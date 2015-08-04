@@ -116,7 +116,8 @@ class IntegrationTestFactory implements Factory
      */
     public function getImageProcessingStrategySequence()
     {
-        $imageResizeStrategy = new ImageMagickResizeStrategy(
+        $imageResizeStrategyClass = $this->locateImageResizeStrategyClass();
+        $imageResizeStrategy = new $imageResizeStrategyClass(
             self::PROCESSED_IMAGE_WIDTH,
             self::PROCESSED_IMAGE_HEIGHT
         );
@@ -125,5 +126,16 @@ class IntegrationTestFactory implements Factory
         $strategySequence->add($imageResizeStrategy);
 
         return $strategySequence;
+    }
+
+    /**
+     * @return string
+     */
+    private function locateImageResizeStrategyClass()
+    {
+        if (extension_loaded('imagick')) {
+            return ImageMagickResizeStrategy::class;
+        }
+        return Image\GdResizeStrategy::class;
     }
 }

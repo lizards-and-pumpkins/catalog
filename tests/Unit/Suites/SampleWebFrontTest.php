@@ -73,6 +73,7 @@ class SampleWebFrontTest extends \PHPUnit_Framework_TestCase
             $routerFactoryMethods
         );
 
+        /** @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject $stubMasterFactory */
         $stubMasterFactory = $this->getMockBuilder(MasterFactory::class)
             ->setMethods($stubFactoryMethods)
             ->getMock();
@@ -97,7 +98,7 @@ class SampleWebFrontTest extends \PHPUnit_Framework_TestCase
         $mockRouterChain->method('route')->willReturn($mockHttpRequestHandler);
         $mockHttpRequestHandler->method('process')->willReturn($this->mockHttpResponse);
 
-        $this->webFront = new SampleWebFront($stubHttpRequest, $stubMasterFactory);
+        $this->webFront = new TestSampleWebFront($stubHttpRequest, $stubMasterFactory);
     }
 
     public function testMasterFactoryIsReturned()

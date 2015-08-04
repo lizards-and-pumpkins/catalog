@@ -123,7 +123,7 @@ class ProductListingTest extends AbstractIntegrationTest
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
-        $website = new SampleWebFront($request, $this->factory);
+        $website = new InjectableSampleWebFront($request, $this->factory);
         $website->runWithoutSendingResponse();
     }
 
@@ -135,7 +135,7 @@ class ProductListingTest extends AbstractIntegrationTest
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
-        $website = new SampleWebFront($request, $this->factory);
+        $website = new InjectableSampleWebFront($request, $this->factory);
         $website->runWithoutSendingResponse();
     }
 
@@ -182,7 +182,7 @@ class ProductListingTest extends AbstractIntegrationTest
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
-        $website = new SampleWebFront($request, $this->factory);
+        $website = new InjectableSampleWebFront($request, $this->factory);
         $website->runWithoutSendingResponse();
 
         $this->factory->createCommandConsumer()->process();

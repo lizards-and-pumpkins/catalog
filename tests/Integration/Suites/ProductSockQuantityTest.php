@@ -7,7 +7,7 @@ use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestBody;
 use Brera\Http\HttpUrl;
 
-class ProductSockQuantityTest extends AbstractIntegrationTest
+class ProductStockQuantityTest extends AbstractIntegrationTest
 {
     /**
      * @var SampleMasterFactory
@@ -32,7 +32,7 @@ class ProductSockQuantityTest extends AbstractIntegrationTest
         $domainCommandQueue = $this->factory->getCommandQueue();
         $this->assertEquals(0, $domainCommandQueue->count());
 
-        $website = new SampleWebFront($request, $this->factory);
+        $website = new InjectableSampleWebFront($request, $this->factory);
         $response = $website->runWithoutSendingResponse();
 
         $this->assertEquals('"OK"', $response->getBody());

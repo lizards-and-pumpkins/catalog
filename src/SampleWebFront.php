@@ -11,9 +11,15 @@ class SampleWebFront extends WebFront
     /**
      * @return MasterFactory
      */
-    protected function createMasterFactoryIfNotInjected()
+    protected function createMasterFactory()
     {
         return new SampleMasterFactory();
+    }
+
+    protected function registerFactories(MasterFactory $masterFactory)
+    {
+        $masterFactory->register(new CommonFactory());
+        $masterFactory->register(new FrontendFactory());
     }
 
     /**
@@ -25,12 +31,6 @@ class SampleWebFront extends WebFront
         /** @var ContextBuilder $contextBuilder */
         $contextBuilder = $this->getMasterFactory()->createContextBuilder();
         return $contextBuilder->createFromRequest($request);
-    }
-
-    protected function registerFactoriesIfMasterFactoryWasNotInjected(MasterFactory $factory)
-    {
-        $factory->register(new CommonFactory());
-        $factory->register(new FrontendFactory());
     }
 
     protected function registerRouters(HttpRouterChain $router)

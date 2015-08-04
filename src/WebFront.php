@@ -24,10 +24,14 @@ abstract class WebFront
      */
     private $context;
 
-    public function __construct(HttpRequest $request, MasterFactory $factory = null)
+    /**
+     * @var HttpRouterChain
+     */
+    private $routerChain;
+
+    public function __construct(HttpRequest $request)
     {
         $this->request = $request;
-        $this->masterFactory = $factory;
     }
 
     /**
@@ -45,14 +49,11 @@ abstract class WebFront
      */
     public function runWithoutSendingResponse()
     {
-        $this->buildFactoryIfItWasNotInjected();
+        $this->buildFactory();
         $this->buildContext();
-        
-        /** @var HttpRouterChain $routerChain */
-        $routerChain = $this->getMasterFactory()->createHttpRouterChain();
-        $this->registerRouters($routerChain);
+        $this->buildRouterChain();
 
-        $requestHandler = $routerChain->route($this->request, $this->context);
+        $requestHandler = $this->routerChain->route($this->request, $this->context);
 
         // TODO put response creation into factory, response depends on http version!
 
@@ -61,14 +62,14 @@ abstract class WebFront
 
     final public function registerFactory(Factory $factory)
     {
-        $this->buildFactoryIfItWasNotInjected();
+        $this->buildFactory();
         $this->masterFactory->register($factory);
     }
 
     /**
      * @return MasterFactory
      */
-    abstract protected function createMasterFactoryIfNotInjected();
+    abstract protected function createMasterFactory();
 
     /**
      * @param HttpRequest $request
@@ -78,22 +79,34 @@ abstract class WebFront
     /**
      * @param MasterFactory $factory
      */
-    abstract protected function registerFactoriesIfMasterFactoryWasNotInjected(MasterFactory $factory);
+    abstract protected function registerFactories(MasterFactory $factory);
 
     /**
      * @param HttpRouterChain $router
      */
     abstract protected function registerRouters(HttpRouterChain $router);
 
-    private function buildFactoryIfItWasNotInjected()
+    private function buildFactory()
     {
         if (null !== $this->masterFactory) {
             return;
         }
-
-        $this->masterFactory = $this->createMasterFactoryIfNotInjected();
+        
+        $this->masterFactory = $this->createMasterFactory();
         $this->validateMasterFactory();
-        $this->registerFactoriesIfMasterFactoryWasNotInjected($this->masterFactory);
+        $this->registerFactories($this->masterFactory);
+    }
+
+    private function buildContext()
+    {
+        $this->context = $this->createContext($this->request);
+        $this->validateContext();
+    }
+
+    private function buildRouterChain()
+    {
+        $this->routerChain = $this->masterFactory->createHttpRouterChain();
+        $this->registerRouters($this->routerChain);
     }
 
     /**
@@ -101,6 +114,7 @@ abstract class WebFront
      */
     public function getMasterFactory()
     {
+        $this->buildFactory();
         return $this->masterFactory;
     }
 
@@ -115,12 +129,6 @@ abstract class WebFront
                 $this->getExceptionMessageClassNameRepresentation($this->masterFactory)
             ));
         }
-    }
-
-    private function buildContext()
-    {
-        $this->context = $this->createContext($this->request);
-        $this->validateContext();
     }
 
     /**
