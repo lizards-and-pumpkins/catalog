@@ -2,7 +2,6 @@
 
 namespace Brera;
 
-use Brera\Context\Context;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpResponse;
 use Brera\Http\HttpRouterChain;

@@ -235,6 +235,7 @@ class FrontendFactory implements Factory
     }
 
     /**
+     * @param HttpRequest $request
      * @return Context
      */
     public function getContext(HttpRequest $request)
