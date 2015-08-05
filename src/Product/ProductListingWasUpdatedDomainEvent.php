@@ -18,6 +18,7 @@ class ProductListingWasUpdatedDomainEvent implements DomainEvent
 
     /**
      * @param string $urlKey
+     * @param ProductListingSource $productListingSource
      */
     public function __construct($urlKey, ProductListingSource $productListingSource)
     {
