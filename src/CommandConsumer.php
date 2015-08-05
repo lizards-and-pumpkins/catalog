@@ -3,7 +3,6 @@
 namespace Brera;
 
 use Brera\Queue\Queue;
-use Brera\Queue\QueueProcessingLimitIsReachedMessage;
 
 class CommandConsumer
 {
