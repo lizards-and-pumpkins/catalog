@@ -100,8 +100,6 @@ class ProductListingTest extends AbstractIntegrationTest
         $this->addContentBlockToDataPool($contentBlockContent);
         $this->registerContentBlockInProductListingSnippetKeyGenerator();
 
-        $dataPoolReader = $this->factory->createDataPoolReader();
-
         $this->factory->createDomainEventConsumer()->process();
 
         $request = HttpRequest::fromParameters(
