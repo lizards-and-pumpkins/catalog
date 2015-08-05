@@ -21,15 +21,19 @@ class FrontendRenderingTest extends AbstractIntegrationTest
      */
     private $factory;
 
-    protected function setUp()
-    {
-        $this->factory = $this->prepareIntegrationTestMasterFactory();
-    }
-
     public function testPageIsRenderedFromAnUrlWithoutVariablesInSnippets()
     {
         $url = HttpUrl::fromString('http://example.com/product1');
         $urlKey = $url->getPathRelativeToWebFront();
+        $httpRequest = HttpRequest::fromParameters(
+            HttpRequest::METHOD_GET,
+            $url,
+            HttpHeaders::fromArray([]),
+            HttpRequestBody::fromString('')
+        );
+        
+        $this->factory = $this->prepareIntegrationTestMasterFactory();
+        
         $context = new VersionedContext(DataVersion::fromVersionString('1'));
         $snippetKeyGeneratorLocator = $this->factory->getSnippetKeyGeneratorLocator();
         $productDetailPageMetaSnippetKeyGenerator = $this->factory->createProductDetailPageMetaSnippetKeyGenerator();
@@ -38,12 +42,6 @@ class FrontendRenderingTest extends AbstractIntegrationTest
             ['url_key' => $urlKey]
         );
 
-        $httpRequest = HttpRequest::fromParameters(
-            HttpRequest::METHOD_GET,
-            $url,
-            HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
-        );
 
         $this->addPageMetaInfoFixtureToKeyValueStorage(
             $snippetKeyGeneratorLocator,

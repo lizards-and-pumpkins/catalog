@@ -20,6 +20,7 @@ use Brera\Utils\LocalFilesystem;
  * @uses   \Brera\DataPool\KeyValue\InMemory\InMemoryKeyValueStore
  * @uses   \Brera\FactoryTrait
  * @uses   \Brera\Image\ImageMagickResizeStrategy
+ * @uses   \Brera\Image\GdResizeStrategy
  * @uses   \Brera\Image\ImageProcessor
  * @uses   \Brera\Image\ImageProcessorCollection
  * @uses   \Brera\Image\ImageProcessingStrategySequence

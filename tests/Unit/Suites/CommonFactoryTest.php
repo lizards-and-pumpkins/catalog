@@ -92,6 +92,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Product\ProductInListingInContextSnippetRenderer
  * @uses   \Brera\Image\ImageWasUpdatedDomainEventHandler
  * @uses   \Brera\Image\ImageMagickResizeStrategy
+ * @uses   \Brera\Image\GdResizeStrategy
  * @uses   \Brera\Image\ImageProcessor
  * @uses   \Brera\Image\ImageProcessorCollection
  * @uses   \Brera\Image\ImageProcessingStrategySequence

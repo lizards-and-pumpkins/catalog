@@ -2,17 +2,36 @@
 
 namespace Brera;
 
+use Brera\Http\HttpHeaders;
+use Brera\Http\HttpRequest;
+use Brera\Http\HttpRequestBody;
+use Brera\Http\HttpsUrl;
 use Brera\Image\ImageWasUpdatedDomainEvent;
 use Brera\Utils\LocalFilesystem;
 
 class ImageImportTest extends AbstractIntegrationTest
 {
+    private function flushProcessedImagesDir()
+    {
+        $localFilesystem = new LocalFilesystem();
+        $processedImagesDir = sys_get_temp_dir() . '/' . IntegrationTestFactory::PROCESSED_IMAGES_DIR;
+        if (is_dir($processedImagesDir)) {
+            $localFilesystem->removeDirectoryAndItsContent($processedImagesDir);
+        }
+        mkdir($processedImagesDir);
+    }
+
     protected function setUp()
     {
         if (!extension_loaded('imagick')) {
             $this->markTestSkipped('The PHP extension imagick is not installed');
         }
 
+        $this->flushProcessedImagesDir();
+    }
+
+    protected function tearDown()
+    {
         $this->flushProcessedImagesDir();
     }
 
@@ -41,20 +60,5 @@ class ImageImportTest extends AbstractIntegrationTest
             $this->assertEquals(IntegrationTestFactory::PROCESSED_IMAGE_HEIGHT, $fileInfo[1]);
             $this->assertEquals('image/jpeg', $fileInfo['mime']);
         }
-    }
-
-    protected function tearDown()
-    {
-        $this->flushProcessedImagesDir();
-    }
-
-    private function flushProcessedImagesDir()
-    {
-        $localFilesystem = new LocalFilesystem();
-        $processedImagesDir = sys_get_temp_dir() . '/' . IntegrationTestFactory::PROCESSED_IMAGES_DIR;
-        if (is_dir($processedImagesDir)) {
-            $localFilesystem->removeDirectoryAndItsContent($processedImagesDir);
-        }
-        mkdir($processedImagesDir);
     }
 }

@@ -5,6 +5,8 @@ namespace Brera;
 use Brera\Api\ApiRequestHandlerChain;
 use Brera\Api\ApiRouter;
 use Brera\Content\ContentBlocksApiV1PutRequestHandler;
+use Brera\Context\ContextBuilder;
+use Brera\Http\HttpRequest;
 use Brera\Product\CatalogImportApiV1PutRequestHandler;
 use Brera\Product\DefaultNumberOfProductsPerPageSnippetRenderer;
 use Brera\Product\ProductDetailViewInContextSnippetRenderer;
@@ -17,6 +19,7 @@ use Brera\Product\ProductListingRouter;
 use Brera\Product\ProductListingSnippetRenderer;
 use Brera\Product\MultipleProductStockQuantityApiV1PutRequestHandler;
 use Brera\Utils\Directory;
+use Brera\Context\Context;
 
 class FrontendFactory implements Factory
 {
@@ -229,5 +232,16 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->getSnippetKeyGeneratorLocator(),
             $this->getMasterFactory()->getLogger()
         );
+    }
+
+    /**
+     * @param HttpRequest $request
+     * @return Context
+     */
+    public function getContext(HttpRequest $request)
+    {
+        /** @var ContextBuilder $contextBuilder */
+        $contextBuilder = $this->getMasterFactory()->createContextBuilder();
+        return $contextBuilder->createFromRequest($request);
     }
 }

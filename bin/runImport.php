@@ -3,7 +3,7 @@
 namespace Brera;
 
 require_once __DIR__ . '/../vendor/autoload.php';
-
+require_once __DIR__ . '/../tests/Integration/Suites/InjectableSampleWebFront.php';
 use Brera\Http\HttpHeaders;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestBody;
@@ -20,7 +20,7 @@ $httpRequestBodyString = file_get_contents(__DIR__ . '/../tests/shared-fixture/p
 $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
 $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
-$website = new SampleWebFront($request, $factory);
+$website = new InjectableSampleWebFront($request, $factory);
 $website->runWithoutSendingResponse();
 
 $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
@@ -29,7 +29,7 @@ $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
 $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
 $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
-$website = new SampleWebFront($request, $factory);
+$website = new InjectableSampleWebFront($request, $factory);
 $website->runWithoutSendingResponse();
 
 $commandQueue = $factory->getCommandQueue();

@@ -2,8 +2,6 @@
 
 namespace Brera;
 
-use Brera\Context\ContextBuilder;
-use Brera\Http\HttpRequest;
 use Brera\Http\HttpRouterChain;
 
 class SampleWebFront extends WebFront
@@ -11,26 +9,15 @@ class SampleWebFront extends WebFront
     /**
      * @return MasterFactory
      */
-    protected function createMasterFactoryIfNotInjected()
+    protected function createMasterFactory()
     {
         return new SampleMasterFactory();
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return Context\Context
-     */
-    protected function createContext(HttpRequest $request)
+    protected function registerFactories(MasterFactory $masterFactory)
     {
-        /** @var ContextBuilder $contextBuilder */
-        $contextBuilder = $this->getMasterFactory()->createContextBuilder();
-        return $contextBuilder->createFromRequest($request);
-    }
-
-    protected function registerFactoriesIfMasterFactoryWasNotInjected(MasterFactory $factory)
-    {
-        $factory->register(new CommonFactory());
-        $factory->register(new FrontendFactory());
+        $masterFactory->register(new CommonFactory());
+        $masterFactory->register(new FrontendFactory());
     }
 
     protected function registerRouters(HttpRouterChain $router)
