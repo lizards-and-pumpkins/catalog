@@ -23,6 +23,9 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
 
     public function testProductDomainEventPutsProductToKeyValueStoreAndSearchIndex()
     {
+        // TODO: Test is broken, the import and the following request should initialize their own WebFront instances,
+        // TODO: thus sharing the data pool and queue needs to be handled properly.
+
         $sku = SampleSku::fromString('118235-251');
         $productId = ProductId::fromSku($sku);
         $productName = 'LED Arm-Signallampe';
@@ -126,6 +129,9 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
 
     public function testImportedProductIsAccessibleFromTheFrontend()
     {
+        // TODO: Test is broken, the import and the following request should initialize their own WebFront instances,
+        // TODO: thus sharing the data pool and queue needs to be handled properly.
+
         $this->importCatalog();
 
         $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');

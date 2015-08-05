@@ -66,6 +66,9 @@ class ProductListingTest extends AbstractIntegrationTest
 
     public function testProductListingPageHtmlIsReturned()
     {
+        // TODO: Test is broken, the import and the following request should initialize their own WebFront instances,
+        // TODO: thus sharing the data pool and queue needs to be handled properly.
+
         $this->importCatalog();
         $this->addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture();
 
@@ -92,6 +95,9 @@ class ProductListingTest extends AbstractIntegrationTest
 
     public function testContentBlockIsPresentAtProductListingPage()
     {
+        // TODO: Test is broken, the import and the following request should initialize their own WebFront instances,
+        // TODO: thus sharing the data pool and queue needs to be handled properly.
+
         $this->importCatalog();
         $this->addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture();
 
