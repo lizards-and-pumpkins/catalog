@@ -30,8 +30,6 @@ class ProductListingTest extends AbstractIntegrationTest
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
-        $this->factory = $this->prepareIntegrationTestMasterFactory($request);
-
         $website = new InjectableSampleWebFront($request, $this->factory);
         $website->runWithoutSendingResponse();
     }
@@ -43,11 +41,7 @@ class ProductListingTest extends AbstractIntegrationTest
         $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
-
-        if (! $this->factory) {
-            $this->factory = $this->prepareIntegrationTestMasterFactory($request);
-        }
-
+        
         $website = new InjectableSampleWebFront($request, $this->factory);
         $website->runWithoutSendingResponse();
     }
@@ -144,6 +138,11 @@ class ProductListingTest extends AbstractIntegrationTest
             'content_block_in_product_listing',
             $this->factory->createContentBlockInProductListingSnippetKeyGenerator()
         );
+    }
+
+    protected function setUp()
+    {
+        $this->factory = $this->prepareIntegrationTestMasterFactory();
     }
 
     public function testProductListingMetaSnippetIsWrittenIntoDataPool()

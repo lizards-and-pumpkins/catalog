@@ -37,13 +37,7 @@ class ImageImportTest extends AbstractIntegrationTest
 
     public function testImagesAreImportedAndProcessed()
     {
-        $request = HttpRequest::fromParameters(
-            HttpRequest::METHOD_GET,
-            HttpsUrl::fromString('http://example.com/'),
-            HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
-        );
-        $factory = $this->prepareIntegrationTestMasterFactory($request);
+        $factory = $this->prepareIntegrationTestMasterFactory();
 
         $images = ['../test_image.jpg', '../test_image2.jpg'];
 

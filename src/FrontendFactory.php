@@ -31,21 +31,6 @@ class FrontendFactory implements Factory
     private $snippetKeyGeneratorLocator;
 
     /**
-     * @var Context
-     */
-    private $context;
-    
-    /**
-     * @var HttpRequest
-     */
-    private $request;
-
-    public function __construct(HttpRequest $request)
-    {
-        $this->request = $request;
-    }
-
-    /**
      * @return ApiRouter
      */
     public function createApiRouter()
@@ -252,10 +237,10 @@ class FrontendFactory implements Factory
     /**
      * @return Context
      */
-    public function getContext()
+    public function getContext(HttpRequest $request)
     {
         /** @var ContextBuilder $contextBuilder */
         $contextBuilder = $this->getMasterFactory()->createContextBuilder();
-        return $contextBuilder->createFromRequest($this->request);
+        return $contextBuilder->createFromRequest($request);
     }
 }

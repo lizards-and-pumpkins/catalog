@@ -31,7 +31,8 @@ class FrontendRenderingTest extends AbstractIntegrationTest
             HttpHeaders::fromArray([]),
             HttpRequestBody::fromString('')
         );
-        $this->factory = $this->prepareIntegrationTestMasterFactory($httpRequest);
+        
+        $this->factory = $this->prepareIntegrationTestMasterFactory();
         
         $context = new VersionedContext(DataVersion::fromVersionString('1'));
         $snippetKeyGeneratorLocator = $this->factory->getSnippetKeyGeneratorLocator();

@@ -9,11 +9,6 @@ use Brera\Http\HttpUrl;
 
 class ProductStockQuantityTest extends AbstractIntegrationTest
 {
-    /**
-     * @var SampleMasterFactory
-     */
-    private $factory;
-
     public function testProductStockQuantitySnippetIsWrittenIntoDataPool()
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/multiple_product_stock_quantity');
@@ -24,7 +19,7 @@ class ProductStockQuantityTest extends AbstractIntegrationTest
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
-        $factory = $this->prepareIntegrationTestMasterFactory($request);
+        $factory = $this->prepareIntegrationTestMasterFactory();
         
         $domainCommandQueue = $factory->getCommandQueue();
         $this->assertEquals(0, $domainCommandQueue->count());

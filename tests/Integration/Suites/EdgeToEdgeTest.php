@@ -21,6 +21,11 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
      */
     private $factory;
 
+    protected function setUp()
+    {
+        $this->factory = $this->prepareIntegrationTestMasterFactory();
+    }
+
     private function importCatalog()
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
@@ -28,8 +33,6 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
-
-        $this->factory = $this->prepareIntegrationTestMasterFactory($request);
 
         $website = new InjectableSampleWebFront($request, $this->factory);
         $website->runWithoutSendingResponse();
@@ -45,8 +48,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $httpRequestBodyString = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.xml');
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
-
-        $this->factory = $this->prepareIntegrationTestMasterFactory($request);
+        
         $website = new InjectableSampleWebFront($request, $this->factory);
         $website->runWithoutSendingResponse();
 
@@ -191,8 +193,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $headers = HttpHeaders::fromArray([]);
         $requestBody = HttpRequestBody::fromString('');
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $url, $headers, $requestBody);
-
-        $this->factory = $this->prepareIntegrationTestMasterFactory($request);
+        
         $website = new SampleWebFront($request);
         $website->registerFactory(new IntegrationTestFactory());
         $response = $website->runWithoutSendingResponse();

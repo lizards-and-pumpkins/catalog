@@ -58,13 +58,7 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
         $masterFactory->register(new IntegrationTestFactory());
         $masterFactory->register(new CommonFactory());
         
-        $request = HttpRequest::fromParameters(
-            HttpRequest::METHOD_GET,
-            HttpsUrl::fromString('http://example.com/'),
-            HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
-        );
-        $this->frontendFactory = new FrontendFactory($request);
+        $this->frontendFactory = new FrontendFactory();
         $masterFactory->register($this->frontendFactory);
     }
 
@@ -108,6 +102,12 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsAContext()
     {
-        $this->assertInstanceOf(Context::class, $this->frontendFactory->getContext());
+        $request = HttpRequest::fromParameters(
+            HttpRequest::METHOD_GET,
+            HttpsUrl::fromString('http://example.com/'),
+            HttpHeaders::fromArray([]),
+            HttpRequestBody::fromString('')
+        );
+        $this->assertInstanceOf(Context::class, $this->frontendFactory->getContext($request));
     }
 }
