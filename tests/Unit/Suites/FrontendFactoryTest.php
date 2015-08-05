@@ -5,6 +5,10 @@ namespace Brera;
 use Brera\Api\ApiRouter;
 use Brera\Content\ContentBlocksApiV1PutRequestHandler;
 use Brera\Context\Context;
+use Brera\Http\HttpHeaders;
+use Brera\Http\HttpRequest;
+use Brera\Http\HttpRequestBody;
+use Brera\Http\HttpsUrl;
 use Brera\Product\CatalogImportApiV1PutRequestHandler;
 use Brera\Product\ProductDetailViewRouter;
 use Brera\Product\ProductListingRouter;
@@ -34,6 +38,12 @@ use Brera\Product\ProductListingRouter;
  * @uses   \Brera\PageTemplatesApiV1PutRequestHandler
  * @uses   \Brera\RootSnippetSourceListBuilder
  * @uses   \Brera\Utils\Directory
+ * @uses   \Brera\Http\HttpRequest
+ * @uses   \Brera\Http\HttpUrl
+ * @uses   \Brera\Http\HttpHeaders
+ * @uses   \Brera\Http\HttpRequestBody
+ * @uses   \Brera\Context\VersionedContext
+ * @uses   \Brera\Context\ContextDecorator
  */
 class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -47,7 +57,14 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
         $masterFactory = new SampleMasterFactory();
         $masterFactory->register(new IntegrationTestFactory());
         $masterFactory->register(new CommonFactory());
-        $this->frontendFactory = new FrontendFactory();
+        
+        $request = HttpRequest::fromParameters(
+            HttpRequest::METHOD_GET,
+            HttpsUrl::fromString('http://example.com/'),
+            HttpHeaders::fromArray([]),
+            HttpRequestBody::fromString('')
+        );
+        $this->frontendFactory = new FrontendFactory($request);
         $masterFactory->register($this->frontendFactory);
     }
 
@@ -89,20 +106,8 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($result1, $result2);
     }
 
-    public function testItReturnsASetContext()
+    public function testItReturnsAContext()
     {
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $this->getMock(Context::class);
-        $this->frontendFactory->setContext($stubContext);
-        $this->assertSame($stubContext, $this->frontendFactory->getContext());
-    }
-
-    public function testItThrowsAnExceptionIfTheContextIsRetrievedBeforeItIsSet()
-    {
-        $this->setExpectedException(
-            ContextNotSetOnFactoryException::class,
-            'The context was not set on the factory. Is the bootstrap complete?'
-        );
-        $this->frontendFactory->getContext();
+        $this->assertInstanceOf(Context::class, $this->frontendFactory->getContext());
     }
 }

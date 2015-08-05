@@ -2,11 +2,25 @@
 
 namespace Brera;
 
+use Brera\Http\HttpHeaders;
+use Brera\Http\HttpRequest;
+use Brera\Http\HttpRequestBody;
+use Brera\Http\HttpsUrl;
 use Brera\Image\ImageWasUpdatedDomainEvent;
 use Brera\Utils\LocalFilesystem;
 
 class ImageImportTest extends AbstractIntegrationTest
 {
+    private function flushProcessedImagesDir()
+    {
+        $localFilesystem = new LocalFilesystem();
+        $processedImagesDir = sys_get_temp_dir() . '/' . IntegrationTestFactory::PROCESSED_IMAGES_DIR;
+        if (is_dir($processedImagesDir)) {
+            $localFilesystem->removeDirectoryAndItsContent($processedImagesDir);
+        }
+        mkdir($processedImagesDir);
+    }
+
     protected function setUp()
     {
         if (!extension_loaded('imagick')) {
@@ -16,9 +30,20 @@ class ImageImportTest extends AbstractIntegrationTest
         $this->flushProcessedImagesDir();
     }
 
+    protected function tearDown()
+    {
+        $this->flushProcessedImagesDir();
+    }
+
     public function testImagesAreImportedAndProcessed()
     {
-        $factory = $this->prepareIntegrationTestMasterFactory();
+        $request = HttpRequest::fromParameters(
+            HttpRequest::METHOD_GET,
+            HttpsUrl::fromString('http://example.com/'),
+            HttpHeaders::fromArray([]),
+            HttpRequestBody::fromString('')
+        );
+        $factory = $this->prepareIntegrationTestMasterFactory($request);
 
         $images = ['../test_image.jpg', '../test_image2.jpg'];
 
@@ -41,20 +66,5 @@ class ImageImportTest extends AbstractIntegrationTest
             $this->assertEquals(IntegrationTestFactory::PROCESSED_IMAGE_HEIGHT, $fileInfo[1]);
             $this->assertEquals('image/jpeg', $fileInfo['mime']);
         }
-    }
-
-    protected function tearDown()
-    {
-        $this->flushProcessedImagesDir();
-    }
-
-    private function flushProcessedImagesDir()
-    {
-        $localFilesystem = new LocalFilesystem();
-        $processedImagesDir = sys_get_temp_dir() . '/' . IntegrationTestFactory::PROCESSED_IMAGES_DIR;
-        if (is_dir($processedImagesDir)) {
-            $localFilesystem->removeDirectoryAndItsContent($processedImagesDir);
-        }
-        mkdir($processedImagesDir);
     }
 }

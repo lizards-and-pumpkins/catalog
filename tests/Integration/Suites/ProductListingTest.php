@@ -22,99 +22,6 @@ class ProductListingTest extends AbstractIntegrationTest
      */
     private $factory;
 
-    protected function setUp()
-    {
-        $this->factory = $this->prepareIntegrationTestMasterFactory();
-    }
-    
-    public function testProductListingMetaSnippetIsWrittenIntoDataPool()
-    {
-        $this->importCatalog();
-
-        $this->factory->createCommandConsumer()->process();
-        $this->factory->createDomainEventConsumer()->process();
-
-        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
-        $urlKeyNode = (new XPathParser($xml))->getXmlNodesArrayByXPath('//catalog/listings/listing[1]/@url_key');
-        $urlKey = $urlKeyNode[0]['value'];
-
-        $logger = $this->factory->getLogger();
-        $this->failIfMessagesWhereLogged($logger);
-
-        $contextSource = $this->factory->createContextSource();
-        $context = $contextSource->getAllAvailableContexts()[1];
-
-        $productListingMetaInfoSnippetKeyGenerator = $this->factory->createProductListingMetaDataSnippetKeyGenerator();
-        $snippetKey = $productListingMetaInfoSnippetKeyGenerator->getKeyForContext($context, ['url_key' => $urlKey]);
-
-        $dataPoolReader = $this->factory->createDataPoolReader();
-        $metaInfoSnippet = $dataPoolReader->getSnippet($snippetKey);
-
-        $expectedMetaInfoContent = json_encode($this->getStubMetaInfo());
-
-        $this->assertSame($expectedMetaInfoContent, $metaInfoSnippet);
-    }
-
-    public function testProductListingPageHtmlIsReturned()
-    {
-        $this->addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture();
-        $this->importCatalog();
-
-        $this->factory->createCommandConsumer()->process();
-        $this->factory->createDomainEventConsumer()->process();
-        
-        $this->factory->getSnippetKeyGeneratorLocator()->register(
-            ProductListingSnippetRenderer::CODE,
-            $this->factory->createProductListingSnippetKeyGenerator()
-        );
-
-        $this->registerProductListingSnippetKeyGenerator();
-
-        $httpRequest = HttpRequest::fromParameters(
-            HttpRequest::METHOD_GET,
-            HttpUrl::fromString('http://www.example.com'),
-            HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
-        );
-
-        $productListingRequestHandler = $this->getProductListingRequestHandler();
-        $page = $productListingRequestHandler->process($httpRequest);
-        $body = $page->getBody();
-
-        /* TODO: read from XML */
-        $expectedProductName = 'Adilette';
-        $unExpectedProductName = 'LED Armflasher';
-
-        $this->assertContains($expectedProductName, $body);
-        $this->assertNotContains($unExpectedProductName, $body);
-    }
-
-    public function testContentBlockIsPresentAtProductListingPage()
-    {
-        $this->addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture();
-        $this->importCatalog();
-
-        $contentBlockContent = '<div>Content Block</div>';
-
-        $this->addContentBlockToDataPool($contentBlockContent);
-        $this->registerContentBlockInProductListingSnippetKeyGenerator();
-
-        $this->factory->createDomainEventConsumer()->process();
-
-        $httpRequest = HttpRequest::fromParameters(
-            HttpRequest::METHOD_GET,
-            HttpUrl::fromString('http://www.example.com/foo'),
-            HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
-        );
-
-        $productListingRequestHandler = $this->getProductListingRequestHandler();
-        $page = $productListingRequestHandler->process($httpRequest);
-        $body = $page->getBody();
-
-        $this->assertContains($contentBlockContent, $body);
-    }
-
     private function addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture()
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/page_templates/product_listing');
@@ -122,6 +29,8 @@ class ProductListingTest extends AbstractIntegrationTest
         $httpRequestBodyString = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.xml');
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
+
+        $this->factory = $this->prepareIntegrationTestMasterFactory($request);
 
         $website = new InjectableSampleWebFront($request, $this->factory);
         $website->runWithoutSendingResponse();
@@ -134,6 +43,10 @@ class ProductListingTest extends AbstractIntegrationTest
         $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
+
+        if (! $this->factory) {
+            $this->factory = $this->prepareIntegrationTestMasterFactory($request);
+        }
 
         $website = new InjectableSampleWebFront($request, $this->factory);
         $website->runWithoutSendingResponse();
@@ -231,5 +144,101 @@ class ProductListingTest extends AbstractIntegrationTest
             'content_block_in_product_listing',
             $this->factory->createContentBlockInProductListingSnippetKeyGenerator()
         );
+    }
+
+    public function testProductListingMetaSnippetIsWrittenIntoDataPool()
+    {
+        $this->importCatalog();
+
+        $this->factory->createCommandConsumer()->process();
+        $this->factory->createDomainEventConsumer()->process();
+
+        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
+        $urlKeyNode = (new XPathParser($xml))->getXmlNodesArrayByXPath('//catalog/listings/listing[1]/@url_key');
+        $urlKey = $urlKeyNode[0]['value'];
+
+        $logger = $this->factory->getLogger();
+        $this->failIfMessagesWhereLogged($logger);
+
+        $contextSource = $this->factory->createContextSource();
+        $context = $contextSource->getAllAvailableContexts()[1];
+
+        $productListingMetaInfoSnippetKeyGenerator = $this->factory->createProductListingMetaDataSnippetKeyGenerator();
+        $snippetKey = $productListingMetaInfoSnippetKeyGenerator->getKeyForContext($context, ['url_key' => $urlKey]);
+
+        $dataPoolReader = $this->factory->createDataPoolReader();
+        $metaInfoSnippet = $dataPoolReader->getSnippet($snippetKey);
+
+        $expectedMetaInfoContent = json_encode($this->getStubMetaInfo());
+
+        $this->assertSame($expectedMetaInfoContent, $metaInfoSnippet);
+    }
+
+    public function testProductListingPageHtmlIsReturned()
+    {
+        // TODO: Test is broken, the import and the following request should initialize
+        // TODO: their own WebFront instances, thus sharing the data pool and queue needs
+        // TODO: to be handled properly.
+
+        $this->addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture();
+        $this->importCatalog();
+
+        $this->factory->createCommandConsumer()->process();
+        $this->factory->createDomainEventConsumer()->process();
+        
+        $this->factory->getSnippetKeyGeneratorLocator()->register(
+            ProductListingSnippetRenderer::CODE,
+            $this->factory->createProductListingSnippetKeyGenerator()
+        );
+
+        $this->registerProductListingSnippetKeyGenerator();
+
+        $httpRequest = HttpRequest::fromParameters(
+            HttpRequest::METHOD_GET,
+            HttpUrl::fromString('http://www.example.com'),
+            HttpHeaders::fromArray([]),
+            HttpRequestBody::fromString('')
+        );
+
+        $productListingRequestHandler = $this->getProductListingRequestHandler();
+        $page = $productListingRequestHandler->process($httpRequest);
+        $body = $page->getBody();
+
+        /* TODO: read from XML */
+        $expectedProductName = 'Adilette';
+        $unExpectedProductName = 'LED Armflasher';
+
+        $this->assertContains($expectedProductName, $body);
+        $this->assertNotContains($unExpectedProductName, $body);
+    }
+
+    public function testContentBlockIsPresentAtProductListingPage()
+    {
+        // TODO: Test is broken, the import and the following request should initialize
+        // TODO: their own WebFront instances, thus sharing the data pool and queue needs
+        // TODO: to be handled properly.
+
+        $this->addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture();
+        $this->importCatalog();
+
+        $contentBlockContent = '<div>Content Block</div>';
+
+        $this->addContentBlockToDataPool($contentBlockContent);
+        $this->registerContentBlockInProductListingSnippetKeyGenerator();
+
+        $this->factory->createDomainEventConsumer()->process();
+
+        $httpRequest = HttpRequest::fromParameters(
+            HttpRequest::METHOD_GET,
+            HttpUrl::fromString('http://www.example.com/foo'),
+            HttpHeaders::fromArray([]),
+            HttpRequestBody::fromString('')
+        );
+
+        $productListingRequestHandler = $this->getProductListingRequestHandler();
+        $page = $productListingRequestHandler->process($httpRequest);
+        $body = $page->getBody();
+
+        $this->assertContains($contentBlockContent, $body);
     }
 }

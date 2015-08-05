@@ -21,9 +21,37 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
      */
     private $factory;
 
-    protected function setUp()
+    private function importCatalog()
     {
-        $this->factory = $this->prepareIntegrationTestMasterFactory();
+        $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
+        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.catalog_import.v1+json']);
+        $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
+        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
+        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
+
+        $this->factory = $this->prepareIntegrationTestMasterFactory($request);
+
+        $website = new InjectableSampleWebFront($request, $this->factory);
+        $website->runWithoutSendingResponse();
+
+        $this->factory->createCommandConsumer()->process();
+        $this->factory->createDomainEventConsumer()->process();
+    }
+
+    private function addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture()
+    {
+        $httpUrl = HttpUrl::fromString('http://example.com/api/page_templates/product_listing');
+        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.page_templates.v1+json']);
+        $httpRequestBodyString = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.xml');
+        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
+        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
+
+        $this->factory = $this->prepareIntegrationTestMasterFactory($request);
+        $website = new InjectableSampleWebFront($request, $this->factory);
+        $website->runWithoutSendingResponse();
+
+        $this->factory->createCommandConsumer()->process();
+        $this->factory->createDomainEventConsumer()->process();
     }
 
     public function testProductDomainEventPutsProductToKeyValueStoreAndSearchIndex()
@@ -34,6 +62,10 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $productPrice = 1295;
         $productBackOrderAvailability = 'true';
 
+        // TODO: Test is broken, the import and the following request should initialize
+        // TODO: their own WebFront instances, thus sharing the data pool and queue needs
+        // TODO: to be handled properly.
+        
         $this->importCatalog();
 
         $logger = $this->factory->getLogger();
@@ -131,6 +163,10 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
 
     public function testImportedProductIsAccessibleFromTheFrontend()
     {
+        // TODO: Test is broken, the import and the following request should initialize
+        // TODO: their own WebFront instances, thus sharing the data pool and queue needs
+        // TODO: to be handled properly.
+
         $this->importCatalog();
 
         $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
@@ -142,7 +178,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $httpHeaders = HttpHeaders::fromArray([]);
         $httpRequestBody = HttpRequestBody::fromString('');
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
-
+        
         $website = new InjectableSampleWebFront($request, $this->factory);
         $response = $website->runWithoutSendingResponse();
 
@@ -156,39 +192,10 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $requestBody = HttpRequestBody::fromString('');
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $url, $headers, $requestBody);
 
+        $this->factory = $this->prepareIntegrationTestMasterFactory($request);
         $website = new SampleWebFront($request);
         $website->registerFactory(new IntegrationTestFactory());
         $response = $website->runWithoutSendingResponse();
         $this->assertInstanceOf(HttpResourceNotFoundResponse::class, $response);
-    }
-
-    private function importCatalog()
-    {
-        $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
-        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.catalog_import.v1+json']);
-        $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
-        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
-        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
-
-        $website = new InjectableSampleWebFront($request, $this->factory);
-        $website->runWithoutSendingResponse();
-
-        $this->factory->createCommandConsumer()->process();
-        $this->factory->createDomainEventConsumer()->process();
-    }
-
-    private function addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture()
-    {
-        $httpUrl = HttpUrl::fromString('http://example.com/api/page_templates/product_listing');
-        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.page_templates.v1+json']);
-        $httpRequestBodyString = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.xml');
-        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
-        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
-
-        $website = new InjectableSampleWebFront($request, $this->factory);
-        $website->runWithoutSendingResponse();
-
-        $this->factory->createCommandConsumer()->process();
-        $this->factory->createDomainEventConsumer()->process();
     }
 }

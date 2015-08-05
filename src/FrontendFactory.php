@@ -5,6 +5,8 @@ namespace Brera;
 use Brera\Api\ApiRequestHandlerChain;
 use Brera\Api\ApiRouter;
 use Brera\Content\ContentBlocksApiV1PutRequestHandler;
+use Brera\Context\ContextBuilder;
+use Brera\Http\HttpRequest;
 use Brera\Product\CatalogImportApiV1PutRequestHandler;
 use Brera\Product\DefaultNumberOfProductsPerPageSnippetRenderer;
 use Brera\Product\ProductDetailViewInContextSnippetRenderer;
@@ -32,6 +34,16 @@ class FrontendFactory implements Factory
      * @var Context
      */
     private $context;
+    
+    /**
+     * @var HttpRequest
+     */
+    private $request;
+
+    public function __construct(HttpRequest $request)
+    {
+        $this->request = $request;
+    }
 
     /**
      * @return ApiRouter
@@ -237,21 +249,13 @@ class FrontendFactory implements Factory
         );
     }
 
-    public function setContext(Context $context)
-    {
-        $this->context = $context;
-    }
-
     /**
      * @return Context
      */
     public function getContext()
     {
-        if (is_null($this->context)) {
-            throw new ContextNotSetOnFactoryException(
-                'The context was not set on the factory. Is the bootstrap complete?'
-            );
-        }
-        return $this->context;
+        /** @var ContextBuilder $contextBuilder */
+        $contextBuilder = $this->getMasterFactory()->createContextBuilder();
+        return $contextBuilder->createFromRequest($this->request);
     }
 }

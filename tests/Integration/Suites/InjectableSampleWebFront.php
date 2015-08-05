@@ -26,8 +26,8 @@ class InjectableSampleWebFront extends SampleWebFront
         return $this->testMasterFactory;
     }
 
-    protected function registerSharedFactories(MasterFactory $masterFactory)
+    protected function registerFactories(MasterFactory $masterFactory)
     {
-        // The shared factories should already be registered with the injected master factory
+        // The injected testing master factory already should have all factories set
     }
 }

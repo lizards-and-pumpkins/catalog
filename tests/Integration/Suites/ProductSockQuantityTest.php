@@ -14,11 +14,6 @@ class ProductStockQuantityTest extends AbstractIntegrationTest
      */
     private $factory;
 
-    protected function setUp()
-    {
-        $this->factory = $this->prepareIntegrationTestMasterFactory();
-    }
-
     public function testProductStockQuantitySnippetIsWrittenIntoDataPool()
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/multiple_product_stock_quantity');
@@ -29,29 +24,31 @@ class ProductStockQuantityTest extends AbstractIntegrationTest
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
-        $domainCommandQueue = $this->factory->getCommandQueue();
+        $factory = $this->prepareIntegrationTestMasterFactory($request);
+        
+        $domainCommandQueue = $factory->getCommandQueue();
         $this->assertEquals(0, $domainCommandQueue->count());
 
-        $website = new InjectableSampleWebFront($request, $this->factory);
+        $website = new InjectableSampleWebFront($request, $factory);
         $response = $website->runWithoutSendingResponse();
 
         $this->assertEquals('"OK"', $response->getBody());
         $this->assertEquals(1, $domainCommandQueue->count());
 
-        $this->factory->createCommandConsumer()->process();
-        $this->factory->createDomainEventConsumer()->process();
+        $factory->createCommandConsumer()->process();
+        $factory->createDomainEventConsumer()->process();
 
-        $logger = $this->factory->getLogger();
+        $logger = $factory->getLogger();
         $this->failIfMessagesWhereLogged($logger);
 
-        $contextSource = $this->factory->createContextSource();
+        $contextSource = $factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[1];
 
-        $snippetKeyGenerator = $this->factory->createProductStockQuantityRendererSnippetKeyGenerator();
+        $snippetKeyGenerator = $factory->createProductStockQuantityRendererSnippetKeyGenerator();
         $snippet1Key = $snippetKeyGenerator->getKeyForContext($context, ['product_id' => 'foo']);
         $snippet2Key = $snippetKeyGenerator->getKeyForContext($context, ['product_id' => 'bar']);
 
-        $dataPoolReader = $this->factory->createDataPoolReader();
+        $dataPoolReader = $factory->createDataPoolReader();
 
         $snippet1Content = $dataPoolReader->getSnippet($snippet1Key);
         $this->assertEquals(200, $snippet1Content);

@@ -20,11 +20,6 @@ abstract class WebFront
     private $request;
 
     /**
-     * @var Context
-     */
-    private $context;
-
-    /**
      * @var HttpRouterChain
      */
     private $routerChain;
@@ -50,10 +45,10 @@ abstract class WebFront
     public function runWithoutSendingResponse()
     {
         $this->buildFactory();
-        $this->buildContext();
         $this->buildRouterChain();
 
-        $requestHandler = $this->routerChain->route($this->request, $this->context);
+        $context = $this->getMasterFactory()->getContext();
+        $requestHandler = $this->routerChain->route($this->request, $context);
 
         // TODO put response creation into factory, response depends on http version!
 
@@ -77,14 +72,17 @@ abstract class WebFront
     abstract protected function registerFactories(MasterFactory $factory);
 
     /**
-     * @param HttpRequest $request
-     */
-    abstract protected function createContext(HttpRequest $request);
-
-    /**
      * @param HttpRouterChain $router
      */
     abstract protected function registerRouters(HttpRouterChain $router);
+
+    /**
+     * @return HttpRequest
+     */
+    final protected function getRequest()
+    {
+        return $this->request;
+    }
 
     private function buildFactory()
     {
@@ -95,12 +93,6 @@ abstract class WebFront
         $this->masterFactory = $this->createMasterFactory();
         $this->validateMasterFactory();
         $this->registerFactories($this->masterFactory);
-    }
-
-    private function buildContext()
-    {
-        $this->context = $this->createContext($this->request);
-        $this->validateContext();
     }
 
     private function buildRouterChain()
@@ -127,19 +119,6 @@ abstract class WebFront
             throw new \InvalidArgumentException(sprintf(
                 'Factory is not of type MasterFactory but "%s"',
                 $this->getExceptionMessageClassNameRepresentation($this->masterFactory)
-            ));
-        }
-    }
-
-    /**
-     * @throws \InvalidArgumentException
-     */
-    private function validateContext()
-    {
-        if (!($this->context instanceof Context)) {
-            throw new \InvalidArgumentException(sprintf(
-                'Context is not of type Context but "%s"',
-                $this->getExceptionMessageClassNameRepresentation($this->context)
             ));
         }
     }

@@ -14,11 +14,6 @@ class ContentBlockImportTest extends AbstractIntegrationTest
      */
     private $factory;
 
-    protected function setUp()
-    {
-        $this->factory = $this->prepareIntegrationTestMasterFactory();
-    }
-
     public function testContentBlockSnippetIsWrittenIntoDataPool()
     {
         $contentBlockContent = 'bar';
@@ -31,6 +26,8 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         ]);
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
+        
+        $this->factory = $this->prepareIntegrationTestMasterFactory($request);
 
         $domainCommandQueue = $this->factory->getCommandQueue();
         $this->assertEquals(0, $domainCommandQueue->count());
