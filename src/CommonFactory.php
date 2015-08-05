@@ -264,6 +264,9 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         );
     }
 
+    /**
+     * @return SnippetKeyGenerator
+     */
     public function createDefaultNumberOfProductsPerPageSnippetKeyGenerator()
     {
         $usedDataParts = [];

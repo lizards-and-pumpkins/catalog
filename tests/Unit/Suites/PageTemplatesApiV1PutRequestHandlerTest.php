@@ -34,7 +34,9 @@ class PageTemplatesApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
     {
         $stubRootSnippetSourceList = $this->getMock(RootSnippetSourceList::class, [], [], '', false);
 
-        /** @var RootSnippetSourceListBuilder|\PHPUnit_Framework_MockObject_MockObject $stubRootSnippetSourceListBuilder */
+        /**
+         * @var RootSnippetSourceListBuilder|\PHPUnit_Framework_MockObject_MockObject $stubRootSnippetSourceListBuilder
+         */
         $stubRootSnippetSourceListBuilder = $this->getMock(RootSnippetSourceListBuilder::class, [], [], '', false);
         $stubRootSnippetSourceListBuilder->method('createFromXml')->willReturn($stubRootSnippetSourceList);
 

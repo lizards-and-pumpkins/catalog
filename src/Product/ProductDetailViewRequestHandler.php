@@ -39,12 +39,6 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
      */
     private $snippetKeyGenerator;
 
-    /**
-     * @param Context $context
-     * @param DataPoolReader $dataPoolReader
-     * @param PageBuilder $pageBuilder
-     * @param SnippetKeyGenerator $snippetKeyGenerator
-     */
     public function __construct(
         Context $context,
         DataPoolReader $dataPoolReader,

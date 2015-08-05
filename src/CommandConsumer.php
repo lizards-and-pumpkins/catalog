@@ -23,7 +23,8 @@ class CommandConsumer
      */
     private $logger;
 
-    public function __construct(Queue $commandQueue, CommandHandlerLocator $commandHandlerLocator, Logger $logger) {
+    public function __construct(Queue $commandQueue, CommandHandlerLocator $commandHandlerLocator, Logger $logger)
+    {
         $this->commandQueue = $commandQueue;
         $this->commandHandlerLocator = $commandHandlerLocator;
         $this->logger = $logger;

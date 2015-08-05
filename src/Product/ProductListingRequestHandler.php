@@ -39,12 +39,6 @@ class ProductListingRequestHandler implements HttpRequestHandler
      */
     private $keyGeneratorLocator;
 
-    /**
-     * @param Context $context
-     * @param DataPoolReader $dataPoolReader
-     * @param PageBuilder $pageBuilder
-     * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
-     */
     public function __construct(
         Context $context,
         DataPoolReader $dataPoolReader,
