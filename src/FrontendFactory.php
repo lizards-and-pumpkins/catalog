@@ -26,11 +26,6 @@ class FrontendFactory implements Factory
     use FactoryTrait;
 
     /**
-     * @var Context
-     */
-    private $context;
-
-    /**
      * @var HttpRequest
      */
     private $request;
