@@ -10,13 +10,13 @@ use Brera\Http\HttpRouter;
 class ProductListingRouter implements HttpRouter
 {
     /**
-     * @var ProductListingRequestHandlerBuilder
+     * @var ProductListingRequestHandler
      */
-    private $productListingRequestHandlerBuilder;
+    private $productListingRequestHandler;
 
-    public function __construct(ProductListingRequestHandlerBuilder $productListingRequestHandlerBuilder)
+    public function __construct(ProductListingRequestHandler $productListingRequestHandler)
     {
-        $this->productListingRequestHandlerBuilder = $productListingRequestHandlerBuilder;
+        $this->productListingRequestHandler = $productListingRequestHandler;
     }
 
     /**
@@ -26,11 +26,10 @@ class ProductListingRouter implements HttpRouter
      */
     public function route(HttpRequest $request, Context $context)
     {
-        $urlKeyRequestHandler = $this->productListingRequestHandlerBuilder->create($request->getUrl(), $context);
-        if (!$urlKeyRequestHandler->canProcess($request)) {
+        if (!$this->productListingRequestHandler->canProcess($request)) {
             return null;
         }
         
-        return $urlKeyRequestHandler;
+        return $this->productListingRequestHandler;
     }
 }

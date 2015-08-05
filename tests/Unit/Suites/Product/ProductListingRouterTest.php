@@ -21,12 +21,7 @@ class ProductListingRouterTest extends AbstractRouterTest
     public function setUp()
     {
         $this->mockRequestHandler = $this->getMock(ProductListingRequestHandler::class, [], [], '', false);
-
-        $mockRequestHandlerBuilder = $this->getMock(ProductListingRequestHandlerBuilder::class, [], [], '', false);
-        $mockRequestHandlerBuilder->method('create')
-            ->willReturn($this->mockRequestHandler);
-
-        $this->router = new ProductListingRouter($mockRequestHandlerBuilder);
+        $this->router = new ProductListingRouter($this->mockRequestHandler);
     }
 
     /**

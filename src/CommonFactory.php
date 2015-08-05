@@ -770,7 +770,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
 
     /**
      * @param UpdateMultipleProductStockQuantityCommand $command
-     * @return UpdateProductStockQuantityCommandHandler
+     * @return UpdateMultipleProductStockQuantityCommandHandler
      */
     public function createUpdateMultipleProductStockQuantityCommandHandler(
         UpdateMultipleProductStockQuantityCommand $command

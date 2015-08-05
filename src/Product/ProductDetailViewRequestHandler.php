@@ -10,6 +10,7 @@ use Brera\Http\HttpRequestHandler;
 use Brera\Http\HttpResponse;
 use Brera\Http\UnableToHandleRequestException;
 use Brera\PageBuilder;
+use Brera\SnippetKeyGenerator;
 
 class ProductDetailViewRequestHandler implements HttpRequestHandler
 {
@@ -24,11 +25,6 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
     private $dataPoolReader;
 
     /**
-     * @var string
-     */
-    private $metaInfoSnippetKey;
-
-    /**
      * @var Context
      */
     private $context;
@@ -39,21 +35,26 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
     private $pageBuilder;
 
     /**
-     * @param string $metaInfoSnippetKey
+     * @var SnippetKeyGenerator
+     */
+    private $snippetKeyGenerator;
+
+    /**
      * @param Context $context
      * @param DataPoolReader $dataPoolReader
      * @param PageBuilder $pageBuilder
+     * @param SnippetKeyGenerator $snippetKeyGenerator
      */
     public function __construct(
-        $metaInfoSnippetKey,
         Context $context,
         DataPoolReader $dataPoolReader,
-        PageBuilder $pageBuilder
+        PageBuilder $pageBuilder,
+        SnippetKeyGenerator $snippetKeyGenerator
     ) {
-        $this->dataPoolReader = $dataPoolReader;
-        $this->metaInfoSnippetKey = $metaInfoSnippetKey;
         $this->context = $context;
+        $this->dataPoolReader = $dataPoolReader;
         $this->pageBuilder = $pageBuilder;
+        $this->snippetKeyGenerator = $snippetKeyGenerator;
     }
 
     /**
@@ -62,7 +63,7 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
      */
     public function canProcess(HttpRequest $request)
     {
-        $this->loadPageMetaInfoSnippet();
+        $this->loadPageMetaInfoSnippet($request);
         return (bool)$this->pageMetaInfo;
     }
 
@@ -76,18 +77,20 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
         if (!$this->canProcess($request)) {
             throw new UnableToHandleRequestException;
         }
-        return $this->pageBuilder->buildPage(
-            $this->pageMetaInfo,
-            $this->context,
-            $this->getPageParamArray()
-        );
+
+        $keyGeneratorParams = [
+            ProductDetailPageMetaInfoSnippetContent::KEY_PRODUCT_ID => $this->pageMetaInfo->getProductId()
+        ];
+
+        return $this->pageBuilder->buildPage($this->pageMetaInfo, $this->context, $keyGeneratorParams);
     }
 
-    private function loadPageMetaInfoSnippet()
+    private function loadPageMetaInfoSnippet(HttpRequest $request)
     {
         if (is_null($this->pageMetaInfo)) {
             $this->pageMetaInfo = false;
-            $json = $this->getPageMetaInfoJsonIfExists();
+            $metaInfoSnippetKey = $this->getMetaInfoSnippetKey($request);
+            $json = $this->getPageMetaInfoJsonIfExists($metaInfoSnippetKey);
             if ($json) {
                 $this->pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::fromJson($json);
             }
@@ -95,12 +98,13 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
     }
 
     /**
+     * @param string $metaInfoSnippetKey
      * @return string
      */
-    private function getPageMetaInfoJsonIfExists()
+    private function getPageMetaInfoJsonIfExists($metaInfoSnippetKey)
     {
         try {
-            $snippet = $this->dataPoolReader->getSnippet($this->metaInfoSnippetKey);
+            $snippet = $this->dataPoolReader->getSnippet($metaInfoSnippetKey);
         } catch (KeyNotFoundException $e) {
             $snippet = '';
         }
@@ -108,12 +112,14 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
     }
 
     /**
-     * @return string[]
+     * @param HttpRequest $request
+     * @return string
      */
-    private function getPageParamArray()
+    private function getMetaInfoSnippetKey(HttpRequest $request)
     {
-        return [
-            ProductDetailPageMetaInfoSnippetContent::KEY_PRODUCT_ID => $this->pageMetaInfo->getProductId()
-        ];
+        $urlKey = $request->getUrl()->getPathRelativeToWebFront();
+        $metaInfoSnippetKey = $this->snippetKeyGenerator->getKeyForContext($this->context, ['url_key' => $urlKey]);
+
+        return $metaInfoSnippetKey;
     }
 }

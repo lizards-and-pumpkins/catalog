@@ -8,8 +8,10 @@ use Brera\DataPool\KeyValue\KeyNotFoundException;
 use Brera\DefaultHttpResponse;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
+use Brera\Http\HttpUrl;
 use Brera\Http\UnableToHandleRequestException;
 use Brera\PageBuilder;
+use Brera\SnippetKeyGenerator;
 
 /**
  * @covers Brera\Product\ProductDetailViewRequestHandler
@@ -64,17 +66,26 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
             'root-snippet-code',
             ['child-snippet1']
         )->getInfo());
+
         $this->mockDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
         $this->stubContext = $this->getMock(Context::class);
         $this->stubPageBuilder = $this->getMock(PageBuilder::class, [], [], '', false);
+
+        /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $stubSnippetKeyGenerator */
+        $stubSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $stubSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->dummyMetaInfoKey);
+
         $this->requestHandler = new ProductDetailViewRequestHandler(
-            $this->dummyMetaInfoKey,
             $this->stubContext,
             $this->mockDataPoolReader,
-            $this->stubPageBuilder
+            $this->stubPageBuilder,
+            $stubSnippetKeyGenerator
         );
 
+        $stubUrl = $this->getMock(HttpUrl::class, [], [], '', false);
+
         $this->stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+        $this->stubRequest->method('getUrl')->willReturn($stubUrl);
     }
 
     public function testRequestHandlerInterfaceIsImplemented()

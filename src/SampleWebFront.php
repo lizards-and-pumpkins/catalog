@@ -17,7 +17,7 @@ class SampleWebFront extends WebFront
     protected function registerFactories(MasterFactory $masterFactory)
     {
         $masterFactory->register(new CommonFactory());
-        $masterFactory->register(new FrontendFactory());
+        $masterFactory->register(new FrontendFactory($this->getRequest()));
     }
 
     protected function registerRouters(HttpRouterChain $router)
