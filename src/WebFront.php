@@ -46,10 +46,7 @@ abstract class WebFront
         $this->buildFactory();
         $this->buildRouterChain();
 
-        $context = $this->getMasterFactory()->getContext($this->request);
-        $requestHandler = $this->routerChain->route($this->request, $context);
-
-        // TODO put response creation into factory, response depends on http version!
+        $requestHandler = $this->routerChain->route($this->request);
 
         return $requestHandler->process($this->request);
     }

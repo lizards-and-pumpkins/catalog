@@ -28,10 +28,8 @@ use Brera\Http\HttpUrl;
  * @uses   \Brera\Product\CatalogImportApiV1PutRequestHandler
  * @uses   \Brera\Product\ProductDetailViewRouter
  * @uses   \Brera\Product\ProductDetailViewRequestHandler
- * @uses   \Brera\Product\ProductDetailViewRequestHandlerBuilder
  * @uses   \Brera\Product\ProductListingRouter
  * @uses   \Brera\Product\ProductListingRequestHandler
- * @uses   \Brera\Product\ProductListingRequestHandlerBuilder
  * @uses   \Brera\Product\MultipleProductStockQuantityApiV1PutRequestHandler
  * @uses   \Brera\RootSnippetSourceListBuilder
  * @uses   \Brera\Http\ResourceNotFoundRouter

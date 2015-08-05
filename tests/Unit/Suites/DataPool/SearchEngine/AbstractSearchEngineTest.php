@@ -368,7 +368,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $stubContext = $this->getMock(Context::class);
         $stubContext->method('getValue')->willReturnMap($contextValueMap);
-        $stubContext->method('supportsCode')->willReturnCallback(function($contextPartCode) use ($contextDataSet) {
+        $stubContext->method('supportsCode')->willReturnCallback(function ($contextPartCode) use ($contextDataSet) {
             return isset($contextDataSet[$contextPartCode]);
         });
         $stubContext->method('getSupportedCodes')->willReturn(array_keys($contextDataSet));

@@ -24,9 +24,9 @@ use Brera\Product\ProductListingRouter;
  * @uses   \Brera\Context\ContextBuilder
  * @uses   \Brera\Product\CatalogImportApiV1PutRequestHandler
  * @uses   \Brera\Product\ProductDetailViewRouter
- * @uses   \Brera\Product\ProductDetailViewRequestHandlerBuilder
+ * @uses   \Brera\Product\ProductDetailViewRequestHandler
  * @uses   \Brera\Product\ProductListingRouter
- * @uses   \Brera\Product\ProductListingRequestHandlerBuilder
+ * @uses   \Brera\Product\ProductListingRequestHandler
  * @uses   \Brera\Product\MultipleProductStockQuantityApiV1PutRequestHandler
  * @uses   \Brera\DataPool\DataPoolReader
  * @uses   \Brera\DataVersion
@@ -57,8 +57,15 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
         $masterFactory = new SampleMasterFactory();
         $masterFactory->register(new IntegrationTestFactory());
         $masterFactory->register(new CommonFactory());
-        
-        $this->frontendFactory = new FrontendFactory();
+
+        $request = HttpRequest::fromParameters(
+            HttpRequest::METHOD_GET,
+            HttpsUrl::fromString('http://example.com/'),
+            HttpHeaders::fromArray([]),
+            HttpRequestBody::fromString('')
+        );
+
+        $this->frontendFactory = new FrontendFactory($request);
         $masterFactory->register($this->frontendFactory);
     }
 
@@ -102,12 +109,6 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsAContext()
     {
-        $request = HttpRequest::fromParameters(
-            HttpRequest::METHOD_GET,
-            HttpsUrl::fromString('http://example.com/'),
-            HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
-        );
-        $this->assertInstanceOf(Context::class, $this->frontendFactory->getContext($request));
+        $this->assertInstanceOf(Context::class, $this->frontendFactory->getContext());
     }
 }

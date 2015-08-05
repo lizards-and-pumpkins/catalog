@@ -52,7 +52,7 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
      * @param Queue $commandQueue
      * @param string $importDirectoryPath
      * @param ProductSourceBuilder $productSourceBuilder
-     * @param ProductSourceBuilder $productSourceBuilder
+     * @param ProductListingSourceBuilder $productListingSourceBuilder
      * @return CatalogImportApiV1PutRequestHandler
      */
     public static function create(

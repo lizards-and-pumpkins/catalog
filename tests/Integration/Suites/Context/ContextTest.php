@@ -22,7 +22,6 @@ EOX;
         $factory = new SampleMasterFactory();
         $factory->register(new CommonFactory());
         $factory->register(new IntegrationTestFactory());
-        /** @var ProductSourceBuilder $productSourceBuilder */
         $productSourceBuilder = $factory->createProductSourceBuilder();
         $contextSource = $factory->createContextSource();
         $productSource = $productSourceBuilder->createProductSourceFromXml($xml);

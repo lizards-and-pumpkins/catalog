@@ -25,14 +25,14 @@ class FrontendRenderingTest extends AbstractIntegrationTest
     {
         $url = HttpUrl::fromString('http://example.com/product1');
         $urlKey = $url->getPathRelativeToWebFront();
-        $httpRequest = HttpRequest::fromParameters(
+        $request = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
             $url,
             HttpHeaders::fromArray([]),
             HttpRequestBody::fromString('')
         );
         
-        $this->factory = $this->prepareIntegrationTestMasterFactory();
+        $this->factory = $this->prepareIntegrationTestMasterFactory($request);
         
         $context = new VersionedContext(DataVersion::fromVersionString('1'));
         $snippetKeyGeneratorLocator = $this->factory->getSnippetKeyGeneratorLocator();
@@ -53,12 +53,12 @@ class FrontendRenderingTest extends AbstractIntegrationTest
         $logger = $this->factory->getLogger();
 
         $pageBuilder = new ProductDetailViewRequestHandler(
-            $productDetailPageMetaSnippetKey,
             $context,
             $dataPoolReader,
-            new PageBuilder($dataPoolReader, $snippetKeyGeneratorLocator, $logger)
+            new PageBuilder($dataPoolReader, $snippetKeyGeneratorLocator, $logger),
+            $productDetailPageMetaSnippetKeyGenerator
         );
-        $page = $pageBuilder->process($httpRequest);
+        $page = $pageBuilder->process($request);
         $body = $page->getBody();
 
         $this->failIfMessagesWhereLogged($logger);

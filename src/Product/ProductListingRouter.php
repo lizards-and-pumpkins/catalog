@@ -2,7 +2,6 @@
 
 namespace Brera\Product;
 
-use Brera\Context\Context;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
 use Brera\Http\HttpRouter;
@@ -10,27 +9,25 @@ use Brera\Http\HttpRouter;
 class ProductListingRouter implements HttpRouter
 {
     /**
-     * @var ProductListingRequestHandlerBuilder
+     * @var ProductListingRequestHandler
      */
-    private $productListingRequestHandlerBuilder;
+    private $productListingRequestHandler;
 
-    public function __construct(ProductListingRequestHandlerBuilder $productListingRequestHandlerBuilder)
+    public function __construct(ProductListingRequestHandler $productListingRequestHandler)
     {
-        $this->productListingRequestHandlerBuilder = $productListingRequestHandlerBuilder;
+        $this->productListingRequestHandler = $productListingRequestHandler;
     }
 
     /**
      * @param HttpRequest $request
-     * @param Context $context
      * @return HttpRequestHandler|null
      */
-    public function route(HttpRequest $request, Context $context)
+    public function route(HttpRequest $request)
     {
-        $urlKeyRequestHandler = $this->productListingRequestHandlerBuilder->create($request->getUrl(), $context);
-        if (!$urlKeyRequestHandler->canProcess($request)) {
+        if (!$this->productListingRequestHandler->canProcess($request)) {
             return null;
         }
         
-        return $urlKeyRequestHandler;
+        return $this->productListingRequestHandler;
     }
 }

@@ -10,11 +10,11 @@ use Brera\Http\HttpRequest;
 use Brera\Product\CatalogImportApiV1PutRequestHandler;
 use Brera\Product\DefaultNumberOfProductsPerPageSnippetRenderer;
 use Brera\Product\ProductDetailViewInContextSnippetRenderer;
-use Brera\Product\ProductDetailViewRequestHandlerBuilder;
+use Brera\Product\ProductDetailViewRequestHandler;
 use Brera\Product\ProductDetailViewRouter;
 use Brera\Product\ProductInListingInContextSnippetRenderer;
 use Brera\Product\ProductListingMetaInfoSnippetRenderer;
-use Brera\Product\ProductListingRequestHandlerBuilder;
+use Brera\Product\ProductListingRequestHandler;
 use Brera\Product\ProductListingRouter;
 use Brera\Product\ProductListingSnippetRenderer;
 use Brera\Product\MultipleProductStockQuantityApiV1PutRequestHandler;
@@ -24,6 +24,16 @@ use Brera\Context\Context;
 class FrontendFactory implements Factory
 {
     use FactoryTrait;
+
+    /**
+     * @var HttpRequest
+     */
+    private $request;
+
+    public function __construct(HttpRequest $request)
+    {
+        $this->request = $request;
+    }
 
     /**
      * @var SnippetKeyGeneratorLocator
@@ -134,7 +144,7 @@ class FrontendFactory implements Factory
      */
     public function createProductDetailViewRouter()
     {
-        return new ProductDetailViewRouter($this->createProductDetailViewRequestHandlerBuilder());
+        return new ProductDetailViewRouter($this->createProductDetailViewRequestHandler());
     }
 
     /**
@@ -142,27 +152,29 @@ class FrontendFactory implements Factory
      */
     public function createProductListingRouter()
     {
-        return new ProductListingRouter($this->createProductListingRequestHandlerBuilder());
+        return new ProductListingRouter($this->createProductListingRequestHandler());
     }
 
     /**
-     * @return ProductDetailViewRequestHandlerBuilder
+     * @return ProductDetailViewRequestHandler
      */
-    private function createProductDetailViewRequestHandlerBuilder()
+    private function createProductDetailViewRequestHandler()
     {
-        return new ProductDetailViewRequestHandlerBuilder(
-            $this->getMasterFactory()->createProductDetailPageMetaSnippetKeyGenerator(),
+        return new ProductDetailViewRequestHandler(
+            $this->getContext(),
             $this->getMasterFactory()->createDataPoolReader(),
-            $this->getMasterFactory()->createPageBuilder()
+            $this->getMasterFactory()->createPageBuilder(),
+            $this->getMasterFactory()->createProductDetailPageMetaSnippetKeyGenerator()
         );
     }
 
     /**
-     * @return ProductListingRequestHandlerBuilder
+     * @return ProductListingRequestHandler
      */
-    private function createProductListingRequestHandlerBuilder()
+    private function createProductListingRequestHandler()
     {
-        return new ProductListingRequestHandlerBuilder(
+        return new ProductListingRequestHandler(
+            $this->getContext(),
             $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->createPageBuilder(),
             $this->getMasterFactory()->getSnippetKeyGeneratorLocator()
@@ -235,13 +247,12 @@ class FrontendFactory implements Factory
     }
 
     /**
-     * @param HttpRequest $request
      * @return Context
      */
-    public function getContext(HttpRequest $request)
+    public function getContext()
     {
         /** @var ContextBuilder $contextBuilder */
         $contextBuilder = $this->getMasterFactory()->createContextBuilder();
-        return $contextBuilder->createFromRequest($request);
+        return $contextBuilder->createFromRequest($this->request);
     }
 }

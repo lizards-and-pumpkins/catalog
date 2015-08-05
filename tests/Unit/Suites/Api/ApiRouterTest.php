@@ -2,7 +2,6 @@
 
 namespace Brera\Api;
 
-use Brera\Context\Context;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
 use Brera\Http\HttpUrl;
@@ -33,11 +32,6 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
      */
     private $stubHttpRequest;
 
-    /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubContext;
-
     protected function setUp()
     {
         $this->stubApiRequestHandlerChain = $this->getMock(ApiRequestHandlerChain::class);
@@ -46,14 +40,12 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
         $this->stubUrl = $this->getMock(HttpUrl::class, [], [], '', false);
         $this->stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
         $this->stubHttpRequest->method('getUrl')->willReturn($this->stubUrl);
-
-        $this->stubContext = $this->getMock(Context::class);
     }
 
     public function testNullIsReturnedIfUrlIsNotLedByApiPrefix()
     {
         $this->stubUrl->method('getPathRelativeToWebFront')->willReturn('foo/bar');
-        $result = $this->apiRouter->route($this->stubHttpRequest, $this->stubContext);
+        $result = $this->apiRouter->route($this->stubHttpRequest);
 
         $this->assertNull($result);
     }
@@ -62,7 +54,7 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubHttpRequest->method('getHeader')->with('Accept')->willReturn('application/json');
         $this->stubUrl->method('getPathRelativeToWebFront')->willReturn('api/foo');
-        $result = $this->apiRouter->route($this->stubHttpRequest, $this->stubContext);
+        $result = $this->apiRouter->route($this->stubHttpRequest);
 
         $this->assertNull($result);
     }
@@ -71,7 +63,7 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubHttpRequest->method('getHeader')->with('Accept')->willReturn('application/vnd.brera.foo.v1+json');
         $this->stubUrl->method('getPathRelativeToWebFront')->willReturn('api');
-        $result = $this->apiRouter->route($this->stubHttpRequest, $this->stubContext);
+        $result = $this->apiRouter->route($this->stubHttpRequest);
 
         $this->assertNull($result);
     }
@@ -87,7 +79,7 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
 
         $this->stubUrl->expects($this->once())->method('getPathRelativeToWebFront')->willReturn('api/foo');
         $this->stubHttpRequest->method('getHeader')->with('Accept')->willReturn('application/vnd.brera.foo.v1+json');
-        $result = $this->apiRouter->route($this->stubHttpRequest, $this->stubContext);
+        $result = $this->apiRouter->route($this->stubHttpRequest);
 
         $this->assertNull($result);
     }
@@ -103,7 +95,7 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
 
         $this->stubHttpRequest->method('getHeader')->with('Accept')->willReturn('application/vnd.brera.foo.v1+json');
         $this->stubUrl->method('getPathRelativeToWebFront')->willReturn('api/foo');
-        $result = $this->apiRouter->route($this->stubHttpRequest, $this->stubContext);
+        $result = $this->apiRouter->route($this->stubHttpRequest);
 
         $this->assertInstanceOf(HttpRequestHandler::class, $result);
     }

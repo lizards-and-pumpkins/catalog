@@ -2,6 +2,7 @@
 
 namespace Brera\Product;
 
+use Brera\Context\Context;
 use Brera\Context\ContextSource;
 use Brera\RootSnippetSourceList;
 use Brera\Snippet;
@@ -45,11 +46,7 @@ class DefaultNumberOfProductsPerPageSnippetRenderer implements SnippetRenderer
         return $this->snippetList;
     }
 
-    /**
-     * @param RootSnippetSourceList $rootSnippetSourceList
-     * @param $context
-     */
-    private function renderSnippetInContext(RootSnippetSourceList $rootSnippetSourceList, $context)
+    private function renderSnippetInContext(RootSnippetSourceList $rootSnippetSourceList, Context $context)
     {
         $snippetKey = $this->snippetKeyGenerator->getKeyForContext($context, []);
         $availableNumbersOfItemsPerPage = $rootSnippetSourceList->getListOfAvailableNumberOfItemsPerPageForContext(
