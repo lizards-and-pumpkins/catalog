@@ -4,7 +4,6 @@ namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\Context\ContextSource;
-use Brera\ProjectionSourceData;
 use Brera\Renderer\BlockRenderer;
 use Brera\RootSnippetSourceList;
 use Brera\SnippetKeyGenerator;
@@ -42,11 +41,11 @@ class ProductListingSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param ProjectionSourceData $rootSnippetSourceList
+     * @param RootSnippetSourceList $rootSnippetSourceList
      * @param ContextSource $contextSource
      * @return SnippetList
      */
-    public function render(ProjectionSourceData $rootSnippetSourceList, ContextSource $contextSource)
+    public function render(RootSnippetSourceList $rootSnippetSourceList, ContextSource $contextSource)
     {
         foreach ($contextSource->getAllAvailableContexts() as $context) {
             $this->renderProductListingSnippetsForContext($rootSnippetSourceList, $context);
