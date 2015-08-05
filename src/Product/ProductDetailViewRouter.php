@@ -2,7 +2,6 @@
 
 namespace Brera\Product;
 
-use Brera\Context\Context;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
 use Brera\Http\HttpRouter;
@@ -21,10 +20,9 @@ class ProductDetailViewRouter implements HttpRouter
 
     /**
      * @param HttpRequest $request
-     * @param Context $context
      * @return HttpRequestHandler|null
      */
-    public function route(HttpRequest $request, Context $context)
+    public function route(HttpRequest $request)
     {
         if (!$this->productDetailViewRequestHandler->canProcess($request)) {
             return null;

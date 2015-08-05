@@ -46,8 +46,7 @@ abstract class WebFront
         $this->buildFactory();
         $this->buildRouterChain();
 
-        $context = $this->getMasterFactory()->getContext();
-        $requestHandler = $this->routerChain->route($this->request, $context);
+        $requestHandler = $this->routerChain->route($this->request);
 
         return $requestHandler->process($this->request);
     }
