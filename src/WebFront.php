@@ -2,7 +2,6 @@
 
 namespace Brera;
 
-use Brera\Context\Context;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpResponse;
 use Brera\Http\HttpRouterChain;
@@ -20,14 +19,13 @@ abstract class WebFront
     private $request;
 
     /**
-     * @var Context
+     * @var HttpRouterChain
      */
-    private $context;
+    private $routerChain;
 
-    public function __construct(HttpRequest $request, MasterFactory $factory = null)
+    public function __construct(HttpRequest $request)
     {
         $this->request = $request;
-        $this->masterFactory = $factory;
     }
 
     /**
@@ -45,55 +43,58 @@ abstract class WebFront
      */
     public function runWithoutSendingResponse()
     {
-        $this->buildFactoryIfItWasNotInjected();
-        $this->buildContext();
-        
-        /** @var HttpRouterChain $routerChain */
-        $routerChain = $this->getMasterFactory()->createHttpRouterChain();
-        $this->registerRouters($routerChain);
+        $this->buildFactory();
+        $this->buildRouterChain();
 
-        $requestHandler = $routerChain->route($this->request, $this->context);
-
-        // TODO put response creation into factory, response depends on http version!
+        $requestHandler = $this->routerChain->route($this->request);
 
         return $requestHandler->process($this->request);
     }
 
     final public function registerFactory(Factory $factory)
     {
-        $this->buildFactoryIfItWasNotInjected();
+        $this->buildFactory();
         $this->masterFactory->register($factory);
     }
 
     /**
      * @return MasterFactory
      */
-    abstract protected function createMasterFactoryIfNotInjected();
-
-    /**
-     * @param HttpRequest $request
-     */
-    abstract protected function createContext(HttpRequest $request);
+    abstract protected function createMasterFactory();
 
     /**
      * @param MasterFactory $factory
      */
-    abstract protected function registerFactoriesIfMasterFactoryWasNotInjected(MasterFactory $factory);
+    abstract protected function registerFactories(MasterFactory $factory);
 
     /**
      * @param HttpRouterChain $router
      */
     abstract protected function registerRouters(HttpRouterChain $router);
 
-    private function buildFactoryIfItWasNotInjected()
+    /**
+     * @return HttpRequest
+     */
+    final protected function getRequest()
+    {
+        return $this->request;
+    }
+
+    private function buildFactory()
     {
         if (null !== $this->masterFactory) {
             return;
         }
-
-        $this->masterFactory = $this->createMasterFactoryIfNotInjected();
+        
+        $this->masterFactory = $this->createMasterFactory();
         $this->validateMasterFactory();
-        $this->registerFactoriesIfMasterFactoryWasNotInjected($this->masterFactory);
+        $this->registerFactories($this->masterFactory);
+    }
+
+    private function buildRouterChain()
+    {
+        $this->routerChain = $this->masterFactory->createHttpRouterChain();
+        $this->registerRouters($this->routerChain);
     }
 
     /**
@@ -101,6 +102,7 @@ abstract class WebFront
      */
     public function getMasterFactory()
     {
+        $this->buildFactory();
         return $this->masterFactory;
     }
 
@@ -113,25 +115,6 @@ abstract class WebFront
             throw new \InvalidArgumentException(sprintf(
                 'Factory is not of type MasterFactory but "%s"',
                 $this->getExceptionMessageClassNameRepresentation($this->masterFactory)
-            ));
-        }
-    }
-
-    private function buildContext()
-    {
-        $this->context = $this->createContext($this->request);
-        $this->validateContext();
-    }
-
-    /**
-     * @throws \InvalidArgumentException
-     */
-    private function validateContext()
-    {
-        if (!($this->context instanceof Context)) {
-            throw new \InvalidArgumentException(sprintf(
-                'Context is not of type Context but "%s"',
-                $this->getExceptionMessageClassNameRepresentation($this->context)
             ));
         }
     }

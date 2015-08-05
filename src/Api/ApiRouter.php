@@ -2,7 +2,6 @@
 
 namespace Brera\Api;
 
-use Brera\Context\Context;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRouter;
 
@@ -22,10 +21,9 @@ class ApiRouter implements HttpRouter
 
     /**
      * @param HttpRequest $request
-     * @param Context $context
      * @return ApiRequestHandler|null
      */
-    public function route(HttpRequest $request, Context $context)
+    public function route(HttpRequest $request)
     {
         $urlPath = trim($request->getUrl()->getPathRelativeToWebFront(), '/');
         $urlToken = explode('/', $urlPath);

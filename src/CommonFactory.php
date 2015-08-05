@@ -266,6 +266,9 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         );
     }
 
+    /**
+     * @return SnippetKeyGenerator
+     */
     public function createDefaultNumberOfProductsPerPageSnippetKeyGenerator()
     {
         $usedDataParts = [];
@@ -772,7 +775,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
 
     /**
      * @param UpdateMultipleProductStockQuantityCommand $command
-     * @return UpdateProductStockQuantityCommandHandler
+     * @return UpdateMultipleProductStockQuantityCommandHandler
      */
     public function createUpdateMultipleProductStockQuantityCommandHandler(
         UpdateMultipleProductStockQuantityCommand $command
@@ -997,7 +1000,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getRequiredContexts()
     {

@@ -3,7 +3,6 @@
 namespace Brera;
 
 use Brera\Queue\Queue;
-use Brera\Queue\QueueProcessingLimitIsReachedMessage;
 
 class CommandConsumer
 {
@@ -24,7 +23,8 @@ class CommandConsumer
      */
     private $logger;
 
-    public function __construct(Queue $commandQueue, CommandHandlerLocator $commandHandlerLocator, Logger $logger) {
+    public function __construct(Queue $commandQueue, CommandHandlerLocator $commandHandlerLocator, Logger $logger)
+    {
         $this->commandQueue = $commandQueue;
         $this->commandHandlerLocator = $commandHandlerLocator;
         $this->logger = $logger;

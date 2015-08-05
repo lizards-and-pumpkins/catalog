@@ -48,7 +48,7 @@ class ApiRequestHandlerChain
     }
 
     /**
-     * @param $version
+     * @param int $version
      */
     private function validateApiVersion($version)
     {

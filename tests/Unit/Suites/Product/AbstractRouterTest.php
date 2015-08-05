@@ -2,7 +2,6 @@
 
 namespace Brera\Product;
 
-use Brera\Context\Context;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
 use Brera\Http\HttpRouter;
@@ -27,25 +26,19 @@ abstract class AbstractRouterTest extends \PHPUnit_Framework_TestCase
 
     public function testNullIsReturnedIfRequestHandlerIsUnableToProcessRequest()
     {
-        $this->getMockRequestHandler()->expects($this->once())
-            ->method('canProcess')
-            ->willReturn(false);
+        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubRequest */
         $stubRequest = $this->getStubRequest();
-        $stubContext = $this->getMock(Context::class);
-        $this->assertNull($this->getRouterUnderTest()->route($stubRequest, $stubContext));
+        $this->getMockRequestHandler()->expects($this->once())->method('canProcess')->willReturn(false);
+
+        $this->assertNull($this->getRouterUnderTest()->route($stubRequest));
     }
 
     public function testRequestHandlerIsReturnedIfRequestHandlerCanProcessRequest()
     {
-        $this->getMockRequestHandler()->expects($this->once())
-            ->method('canProcess')
-            ->willReturn(true);
+        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubRequest */
         $stubRequest = $this->getStubRequest();
-        $stubContext = $this->getMock(Context::class);
-        $this->assertSame($this->getMockRequestHandler(), $this->getRouterUnderTest()->route(
-            $stubRequest,
-            $stubContext
-        ));
+        $this->getMockRequestHandler()->expects($this->once())->method('canProcess')->willReturn(true);
+        $this->assertSame($this->getMockRequestHandler(), $this->getRouterUnderTest()->route($stubRequest));
     }
 
     /**
@@ -54,8 +47,7 @@ abstract class AbstractRouterTest extends \PHPUnit_Framework_TestCase
     private function getStubRequest()
     {
         $stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
-        $stubRequest->method('getUrl')
-            ->willReturn(HttpUrl::fromString('http://example.com/'));
+        $stubRequest->method('getUrl')->willReturn(HttpUrl::fromString('http://example.com/'));
 
         return $stubRequest;
     }

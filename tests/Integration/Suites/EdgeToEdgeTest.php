@@ -21,13 +21,11 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
      */
     private $factory;
 
-    protected function setUp()
-    {
-        $this->factory = $this->prepareIntegrationTestMasterFactory();
-    }
-
     public function testProductDomainEventPutsProductToKeyValueStoreAndSearchIndex()
     {
+        // TODO: Test is broken, the import and the following request should initialize their own WebFront instances,
+        // TODO: thus sharing the data pool and queue needs to be handled properly.
+
         $sku = SampleSku::fromString('118235-251');
         $productId = ProductId::fromSku($sku);
         $productName = 'LED Arm-Signallampe';
@@ -81,7 +79,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $priceSnippetKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('price');
         $priceSnippetKey = $priceSnippetKeyGenerator->getKeyForContext($context, ['product_id' => $productId]);
         $priceSnippetContents = $dataPoolReader->getSnippet($priceSnippetKey);
-        
+
         $this->assertEquals($productPrice, $priceSnippetContents);
 
         $backOrderAvailabilitySnippetKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('backorders');
@@ -131,19 +129,22 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
 
     public function testImportedProductIsAccessibleFromTheFrontend()
     {
+        // TODO: Test is broken, the import and the following request should initialize their own WebFront instances,
+        // TODO: thus sharing the data pool and queue needs to be handled properly.
+
         $this->importCatalog();
 
         $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
         $urlKeys = (new XPathParser($xml))->getXmlNodesArrayByXPath(
             '//catalog/products/product/attributes/url_key[@language="en_US"]'
         );
-        
+
         $httpUrl = HttpUrl::fromString('http://example.com/' . $urlKeys[0]['value']);
         $httpHeaders = HttpHeaders::fromArray([]);
         $httpRequestBody = HttpRequestBody::fromString('');
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
 
-        $website = new SampleWebFront($request, $this->factory);
+        $website = new InjectableSampleWebFront($request, $this->factory);
         $response = $website->runWithoutSendingResponse();
 
         $this->assertContains('<body>', $response->getBody());
@@ -170,7 +171,9 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
-        $website = new SampleWebFront($request, $this->factory);
+        $this->factory = $this->prepareIntegrationTestMasterFactory($request);
+
+        $website = new InjectableSampleWebFront($request, $this->factory);
         $website->runWithoutSendingResponse();
 
         $this->factory->createCommandConsumer()->process();
@@ -185,7 +188,9 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
-        $website = new SampleWebFront($request, $this->factory);
+        $this->factory = $this->prepareIntegrationTestMasterFactory($request);
+
+        $website = new InjectableSampleWebFront($request, $this->factory);
         $website->runWithoutSendingResponse();
 
         $this->factory->createCommandConsumer()->process();

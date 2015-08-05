@@ -7,8 +7,7 @@ namespace Brera;
  * @method DataPool\DataPoolReader createDataPoolReader
  * @method Queue\Queue getCommandQueue
  * @method Queue\Queue getEventQueue
- * @method Context\ContextBuilder createContextBuilder
- * @method Context\ContextBuilder createContextBuilderWithVersion
+ * @method Context\Context getContext
  * @method Context\ContextSource createContextSource
  * @method DomainEventConsumer createDomainEventConsumer
  * @method CommandConsumer createCommandConsumer
@@ -23,6 +22,7 @@ namespace Brera;
  * @method GenericSnippetKeyGenerator createProductDetailPageMetaSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createContentBlockInProductListingSnippetKeyGenerator
  * @method string[] getRequiredContexts
+ * @method Product\ProductSourceBuilder createProductSourceBuilder
  */
 class SampleMasterFactory implements MasterFactory
 {

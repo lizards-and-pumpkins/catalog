@@ -94,7 +94,7 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
     {
         return array_reduce(
             $searchDocumentFieldCollection->getFields(),
-            function($searchDocumentFieldsArray, SearchDocumentField $field) {
+            function ($searchDocumentFieldsArray, SearchDocumentField $field) {
                 $searchDocumentFieldsArray[$field->getKey()] = $field->getValue();
                 return $searchDocumentFieldsArray;
             }

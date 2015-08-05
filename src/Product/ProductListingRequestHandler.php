@@ -25,11 +25,6 @@ class ProductListingRequestHandler implements HttpRequestHandler
     private $dataPoolReader;
 
     /**
-     * @var string
-     */
-    private $metaInfoSnippetKey;
-
-    /**
      * @var Context
      */
     private $context;
@@ -44,22 +39,13 @@ class ProductListingRequestHandler implements HttpRequestHandler
      */
     private $keyGeneratorLocator;
 
-    /**
-     * @param string $metaInfoSnippetKey
-     * @param Context $context
-     * @param DataPoolReader $dataPoolReader
-     * @param PageBuilder $pageBuilder
-     * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
-     */
     public function __construct(
-        $metaInfoSnippetKey,
         Context $context,
         DataPoolReader $dataPoolReader,
         PageBuilder $pageBuilder,
         SnippetKeyGeneratorLocator $keyGeneratorLocator
     ) {
         $this->dataPoolReader = $dataPoolReader;
-        $this->metaInfoSnippetKey = $metaInfoSnippetKey;
         $this->context = $context;
         $this->pageBuilder = $pageBuilder;
         $this->keyGeneratorLocator = $keyGeneratorLocator;
@@ -71,7 +57,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
      */
     public function canProcess(HttpRequest $request)
     {
-        $this->loadPageMetaInfoSnippet();
+        $this->loadPageMetaInfoSnippet($request);
         return (bool)$this->pageMetaInfo;
     }
 
@@ -88,21 +74,20 @@ class ProductListingRequestHandler implements HttpRequestHandler
 
         $this->addProductsInListingToPageBuilder();
 
-        return $this->pageBuilder->buildPage(
-            $this->pageMetaInfo,
-            $this->context,
-            [
-                'products_per_page' => $this->getDefaultNumberOrProductsPerPage(),
-                'url_key' => ltrim($request->getUrl()->getPathRelativeToWebFront(), '/')
-            ]
-        );
+        $keyGeneratorParams = [
+            'products_per_page' => $this->getDefaultNumberOrProductsPerPage(),
+            'url_key'           => ltrim($request->getUrl()->getPathRelativeToWebFront(), '/')
+        ];
+
+        return $this->pageBuilder->buildPage($this->pageMetaInfo, $this->context, $keyGeneratorParams);
     }
 
-    private function loadPageMetaInfoSnippet()
+    private function loadPageMetaInfoSnippet(HttpRequest $request)
     {
         if (is_null($this->pageMetaInfo)) {
             $this->pageMetaInfo = false;
-            $json = $this->getPageMetaInfoJsonIfExists();
+            $metaInfoSnippetKey = $this->getMetaInfoSnippetKey($request);
+            $json = $this->getPageMetaInfoJsonIfExists($metaInfoSnippetKey);
             if ($json) {
                 $this->pageMetaInfo = ProductListingMetaInfoSnippetContent::fromJson($json);
             }
@@ -110,12 +95,13 @@ class ProductListingRequestHandler implements HttpRequestHandler
     }
 
     /**
+     * @param string $metaInfoSnippetKey
      * @return string
      */
-    private function getPageMetaInfoJsonIfExists()
+    private function getPageMetaInfoJsonIfExists($metaInfoSnippetKey)
     {
         try {
-            $snippet = $this->dataPoolReader->getSnippet($this->metaInfoSnippetKey);
+            $snippet = $this->dataPoolReader->getSnippet($metaInfoSnippetKey);
         } catch (KeyNotFoundException $e) {
             $snippet = '';
         }
@@ -187,5 +173,20 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $defaultNumberOrProductsPerPage = $this->dataPoolReader->getSnippet($snippetKey);
 
         return $defaultNumberOrProductsPerPage;
+    }
+
+    /**
+     * @param HttpRequest $request
+     * @return string
+     */
+    private function getMetaInfoSnippetKey(HttpRequest $request)
+    {
+        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
+            ProductListingMetaInfoSnippetRenderer::CODE
+        );
+        $urlKey = $request->getUrl()->getPathRelativeToWebFront();
+        $metaInfoSnippetKey = $keyGenerator->getKeyForContext($this->context, ['url_key' => $urlKey]);
+
+        return $metaInfoSnippetKey;
     }
 }

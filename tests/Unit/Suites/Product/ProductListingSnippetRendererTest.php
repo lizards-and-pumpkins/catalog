@@ -19,28 +19,32 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $numItemsPerPage = 10;
         $stubContext = $this->getMock(Context::class);
 
+        /** @var RootSnippetSourceList|\PHPUnit_Framework_MockObject_MockObject $mockRootSnippetSourceList */
         $mockRootSnippetSourceList = $this->getMock(RootSnippetSourceList::class, [], [], '', false);
         $mockRootSnippetSourceList->expects($this->atLeastOnce())
             ->method('getListOfAvailableNumberOfItemsPerPageForContext')
             ->with($stubContext)
             ->willReturn([$numItemsPerPage]);
 
+        /** @var SnippetList|\PHPUnit_Framework_MockObject_MockObject $mockSnippetList */
         $mockSnippetList = $this->getMock(SnippetList::class);
-        $mockSnippetList->expects($this->atLeastOnce())
-            ->method('add');
+        $mockSnippetList->expects($this->atLeastOnce())->method('add');
 
+        /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $mockSnippetKeyGenerator */
         $mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $mockSnippetKeyGenerator->expects($this->atLeastOnce())
             ->method('getKeyForContext')
             ->with($stubContext)
             ->willReturn('foo');
 
+        /** @var ProductListingBlockRenderer|\PHPUnit_Framework_MockObject_MockObject $mockBlockRenderer */
         $mockBlockRenderer = $this->getMock(ProductListingBlockRenderer::class, [], [], '', false);
         $mockBlockRenderer->expects($this->atLeastOnce())
             ->method('render')
             ->with($mockRootSnippetSourceList, $stubContext)
             ->willReturn('bar');
 
+        /** @var SampleContextSource|\PHPUnit_Framework_MockObject_MockObject $mockContextSource */
         $mockContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
         $mockContextSource->expects($this->atLeastOnce())
             ->method('getAllAvailableContexts')

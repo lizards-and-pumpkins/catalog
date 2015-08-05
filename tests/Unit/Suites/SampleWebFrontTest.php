@@ -28,10 +28,8 @@ use Brera\Http\HttpUrl;
  * @uses   \Brera\Product\CatalogImportApiV1PutRequestHandler
  * @uses   \Brera\Product\ProductDetailViewRouter
  * @uses   \Brera\Product\ProductDetailViewRequestHandler
- * @uses   \Brera\Product\ProductDetailViewRequestHandlerBuilder
  * @uses   \Brera\Product\ProductListingRouter
  * @uses   \Brera\Product\ProductListingRequestHandler
- * @uses   \Brera\Product\ProductListingRequestHandlerBuilder
  * @uses   \Brera\Product\MultipleProductStockQuantityApiV1PutRequestHandler
  * @uses   \Brera\RootSnippetSourceListBuilder
  * @uses   \Brera\Http\ResourceNotFoundRouter
@@ -69,14 +67,14 @@ class SampleWebFrontTest extends \PHPUnit_Framework_TestCase
         ];
 
         $stubFactoryMethods = array_merge(
-            ['createContextBuilder', 'createHttpRouterChain', 'register'],
+            ['getContext', 'createHttpRouterChain', 'register'],
             $routerFactoryMethods
         );
 
+        /** @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject $stubMasterFactory */
         $stubMasterFactory = $this->getMockBuilder(MasterFactory::class)
             ->setMethods($stubFactoryMethods)
             ->getMock();
-        $stubContextBuilder = $this->getMock(ContextBuilder::class, [], [], '', false);
 
         /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubHttpRequest */
         $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
@@ -89,15 +87,13 @@ class SampleWebFrontTest extends \PHPUnit_Framework_TestCase
                 ->willReturn($this->getMock(HttpRouter::class));
         }, $routerFactoryMethods);
 
-        $stubMasterFactory->method('createContextBuilder')->willReturn($stubContextBuilder);
-        $stubContextBuilder->method('getContext')->willReturn($this->getMock(Context::class));
-        $stubContextBuilder->method('createFromRequest')->willReturn($this->getMock(Context::class));
+        $stubMasterFactory->method('getContext')->willReturn($this->getMock(Context::class));
 
         $stubMasterFactory->method('createHttpRouterChain')->willReturn($mockRouterChain);
         $mockRouterChain->method('route')->willReturn($mockHttpRequestHandler);
         $mockHttpRequestHandler->method('process')->willReturn($this->mockHttpResponse);
 
-        $this->webFront = new SampleWebFront($stubHttpRequest, $stubMasterFactory);
+        $this->webFront = new TestSampleWebFront($stubHttpRequest, $stubMasterFactory);
     }
 
     public function testMasterFactoryIsReturned()
