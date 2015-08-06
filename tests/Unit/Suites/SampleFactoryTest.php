@@ -41,11 +41,18 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
         $this->factory = new SampleFactory();
         $masterFactory->register($this->factory);
     }
-    
+
     protected function tearDown()
     {
         $keyValueStoragePath = sys_get_temp_dir() . '/brera/key-value-store';
         if (file_exists($keyValueStoragePath)) {
+            $iterator = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator($keyValueStoragePath, \FilesystemIterator::SKIP_DOTS),
+                \RecursiveIteratorIterator::CHILD_FIRST
+            );
+            foreach ($iterator as $path) {
+                $path->isDir() && !$path->isLink() ? rmdir($path->getPathname()) : unlink($path->getPathname());
+            }
             rmdir($keyValueStoragePath);
         }
     }
