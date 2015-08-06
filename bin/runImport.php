@@ -2,49 +2,83 @@
 
 namespace Brera;
 
-require_once __DIR__ . '/../vendor/autoload.php';
-require_once __DIR__ . '/../tests/Integration/Suites/InjectableSampleWebFront.php';
 use Brera\Http\HttpHeaders;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestBody;
+use Brera\Http\HttpRouterChain;
 use Brera\Http\HttpUrl;
 
-$httpUrl = HttpUrl::fromString('http://example.com/api/page_templates/product_listing');
-$httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.page_templates.v1+json']);
-$httpRequestBodyString = file_get_contents(__DIR__ . '/../tests/shared-fixture/product-listing-root-snippet.xml');
-$httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
-$request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
+require_once __DIR__ . '/../vendor/autoload.php';
 
-$factory = new SampleMasterFactory();
-$factory->register(new CommonFactory());
-$factory->register(new SampleFactory());
-$factory->register(new FrontendFactory($request));
+class ApiApp extends WebFront
+{
+    /**
+     * @return MasterFactory
+     */
+    protected function createMasterFactory()
+    {
+        return new SampleMasterFactory();
+    }
 
-$website = new InjectableSampleWebFront($request, $factory);
-$website->runWithoutSendingResponse();
+    protected function registerFactories(MasterFactory $factory)
+    {
+        $factory->register(new CommonFactory());
+        $factory->register(new SampleFactory());
+        $factory->register(new FrontendFactory($this->getRequest()));
+    }
 
-$httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
-$httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.catalog_import.v1+json']);
-$httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
-$httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
-$request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
+    protected function registerRouters(HttpRouterChain $router)
+    {
+        $router->register($this->getMasterFactory()->createApiRouter());
+        $router->register($this->getMasterFactory()->createResourceNotFoundRouter());
+    }
 
-$website = new InjectableSampleWebFront($request, $factory);
-$website->runWithoutSendingResponse();
+    public function processQueues()
+    {
+        $commandConsumer = $this->getMasterFactory()->createCommandConsumer();
+        $commandConsumer->process();
+        $domainEventConsumer = $this->getMasterFactory()->createDomainEventConsumer();
+        $domainEventConsumer->process();
+    }
 
-$commandConsumer = $factory->createCommandConsumer();
-$commandConsumer->process();
+    /**
+     * @return LogMessage[]
+     */
+    public function getLoggedMessages()
+    {
+        return $this->getMasterFactory()->getLogger()->getMessages();
+    }
+}
 
-$domainEventConsumer = $factory->createDomainEventConsumer();
-$domainEventConsumer->process();
 
-$messages = $factory->getLogger()->getMessages();
-if (count($messages)) {
+$httpRequestBodyContent = file_get_contents(__DIR__ . '/../tests/shared-fixture/product-listing-root-snippet.xml');
+$productListingImportRequest = HttpRequest::fromParameters(
+    HttpRequest::METHOD_PUT,
+    HttpUrl::fromString('http://example.com/api/page_templates/product_listing'),
+    HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.page_templates.v1+json']),
+    HttpRequestBody::fromString($httpRequestBodyContent)
+);
+$productListingImport = new ApiApp($productListingImportRequest);
+$productListingImport->runWithoutSendingResponse();
+
+
+$catalogImportRequest = HttpRequest::fromParameters(
+    HttpRequest::METHOD_PUT,
+    HttpUrl::fromString('http://example.com/api/catalog_import'),
+    HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.catalog_import.v1+json']),
+    HttpRequestBody::fromString(json_encode(['fileName' => 'catalog.xml']))
+);
+$catalogImport = new ApiApp($catalogImportRequest);
+$catalogImport->runWithoutSendingResponse();
+
+
+$catalogImport->processQueues();
+
+
+$messages = array_merge($productListingImport->getLoggedMessages(), $catalogImport->getLoggedMessages());
+if (count($messages) > 0) {
     echo "Log message(s):\n";
     foreach ($messages as $message) {
-        echo "\t" . $message;
-        if (substr($message, -1) !== PHP_EOL) {
-            echo PHP_EOL;
-        }
+        printf("\t%s\n", rtrim($message));
     }
 }
