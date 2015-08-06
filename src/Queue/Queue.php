@@ -2,7 +2,7 @@
 
 namespace Brera\Queue;
 
-interface Queue
+interface Queue extends \Countable
 {
     /**
      * @return int
