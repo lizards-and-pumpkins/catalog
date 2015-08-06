@@ -36,11 +36,19 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
      */
     private $factory;
 
-    public function setUp()
+    protected function setUp()
     {
         $masterFactory = new SampleMasterFactory();
         $this->factory = new SampleFactory();
         $masterFactory->register($this->factory);
+    }
+    
+    protected function tearDown()
+    {
+        $keyValueStoragePath = sys_get_temp_dir() . '/brera/key-value-store';
+        if (file_exists($keyValueStoragePath)) {
+            rmdir($keyValueStoragePath);
+        }
     }
 
     public function testFileKeyValueStoreIsReturned()
