@@ -15,7 +15,7 @@ class ImageMagickInscribeStrategyTest extends \PHPUnit_Framework_TestCase
         }
     }
     
-    public function testImplementImageProcessorStrategyInterfaceIsImplemented()
+    public function testImageProcessorStrategyInterfaceIsImplemented()
     {
         $strategy = new ImageMagickInscribeStrategy(1, 1, 'none');
         $this->assertInstanceOf(ImageProcessingStrategy::class, $strategy);

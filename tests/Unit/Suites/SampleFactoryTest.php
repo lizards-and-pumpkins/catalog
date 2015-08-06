@@ -9,10 +9,10 @@ use Brera\Image\ImageProcessorCollection;
 use Brera\Image\ImageProcessingStrategySequence;
 use Brera\LocalFilesystemStorageReader;
 use Brera\LocalFilesystemStorageWriter;
+use Brera\Queue\File\FileQueue;
 use Brera\SampleMasterFactory;
 use Brera\SampleFactory;
 use Brera\InMemoryLogger;
-use Brera\Queue\InMemory\InMemoryQueue;
 
 /**
  * @covers \Brera\SampleFactory
@@ -20,7 +20,6 @@ use Brera\Queue\InMemory\InMemoryQueue;
  * @uses   \Brera\InMemoryLogger
  * @uses   \Brera\DataPool\KeyValue\File\FileKeyValueStore
  * @uses   \Brera\DataPool\SearchEngine\FileSearchEngine
- * @uses   \Brera\Queue\InMemory\InMemoryQueue
  * @uses   \Brera\Image\ImageMagickInscribeStrategy
  * @uses   \Brera\Image\ImageProcessor
  * @uses   \Brera\Image\ImageProcessorCollection
@@ -36,11 +35,26 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
      */
     private $factory;
 
-    public function setUp()
+    protected function setUp()
     {
         $masterFactory = new SampleMasterFactory();
         $this->factory = new SampleFactory();
         $masterFactory->register($this->factory);
+    }
+
+    protected function tearDown()
+    {
+        $keyValueStoragePath = sys_get_temp_dir() . '/brera/key-value-store';
+        if (file_exists($keyValueStoragePath)) {
+            $iterator = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator($keyValueStoragePath, \FilesystemIterator::SKIP_DOTS),
+                \RecursiveIteratorIterator::CHILD_FIRST
+            );
+            foreach ($iterator as $path) {
+                $path->isDir() && !$path->isLink() ? rmdir($path->getPathname()) : unlink($path->getPathname());
+            }
+            rmdir($keyValueStoragePath);
+        }
     }
 
     public function testFileKeyValueStoreIsReturned()
@@ -55,12 +69,12 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testInMemoryEventQueueIsReturned()
     {
-        $this->assertInstanceOf(InMemoryQueue::class, $this->factory->createEventQueue());
+        $this->assertInstanceOf(FileQueue::class, $this->factory->createEventQueue());
     }
 
     public function testInMemoryCommandQueueIsReturned()
     {
-        $this->assertInstanceOf(InMemoryQueue::class, $this->factory->createCommandQueue());
+        $this->assertInstanceOf(FileQueue::class, $this->factory->createCommandQueue());
     }
 
     public function testInMemoryLoggerIsReturned()
