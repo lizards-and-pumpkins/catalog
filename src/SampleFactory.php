@@ -8,6 +8,7 @@ use Brera\Image\ImageMagickInscribeStrategy;
 use Brera\Image\ImageProcessor;
 use Brera\Image\ImageProcessorCollection;
 use Brera\Image\ImageProcessingStrategySequence;
+use Brera\Queue\File\FileQueue;
 use Brera\Queue\InMemory\InMemoryQueue;
 
 class SampleFactory implements Factory
@@ -30,7 +31,9 @@ class SampleFactory implements Factory
      */
     public function createEventQueue()
     {
-        return new InMemoryQueue();
+        $storagePath = sys_get_temp_dir() . '/brera/event-queue/content';
+        $lockFile = sys_get_temp_dir() . '/brera/event-queue/lock';
+        return new FileQueue($storagePath, $lockFile);
     }
 
     /**
@@ -38,7 +41,9 @@ class SampleFactory implements Factory
      */
     public function createCommandQueue()
     {
-        return new InMemoryQueue();
+        $storagePath = sys_get_temp_dir() . '/brera/command-queue/content';
+        $lockFile = sys_get_temp_dir() . '/brera/command-queue/lock';
+        return new FileQueue($storagePath, $lockFile);
     }
 
     /**
