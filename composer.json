@@ -20,6 +20,7 @@
     "require": {
         "php": "~5.6.0|~7.0",
         "ext-imagick": "*",
+        "ext-mbstring": "*",
         "brera/lib-key-value-store": "dev-master",
         "brera/lib-queue": "dev-master",
         "league/url": "3.1.1"

@@ -17,6 +17,11 @@ abstract class HttpRequest
      * @var HttpHeaders
      */
     private $headers;
+
+    /**
+     * @var string[]
+     */
+    private $lazyLoadedQueryParameters;
     
     /**
      * @var HttpRequestBody
@@ -72,6 +77,27 @@ abstract class HttpRequest
                     sprintf('Unsupported request method: "%s"', $requestMethod)
                 );
         }
+    }
+
+    /**
+     * @param string $parameterName
+     * @return string
+     */
+    public function getQueryParameter($parameterName)
+    {
+        if (HttpRequest::METHOD_GET !== $this->getMethod()) {
+            return null;
+        }
+
+        if (null === $this->lazyLoadedQueryParameters) {
+            mb_parse_str($_SERVER['QUERY_STRING'], $this->lazyLoadedQueryParameters);
+        }
+
+        if (!isset($this->lazyLoadedQueryParameters[$parameterName])) {
+            return null;
+        }
+
+        return $this->lazyLoadedQueryParameters[$parameterName];
     }
 
     /**
