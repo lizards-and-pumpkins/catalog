@@ -73,4 +73,17 @@ class HttpUrlTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('some-page', $result);
     }
+
+    public function testNullIsReturnedIfParameterIsAbsentInRequestQuery()
+    {
+        $this->assertNull($this->url->getQueryParameter('foo'));
+    }
+
+    public function testQueryParameterIsReturned()
+    {
+        $url = HttpUrl::fromString('http://example.com/?foo=bar&baz=qux');
+        $result = $url->getQueryParameter('foo');
+
+        $this->assertEquals('bar', $result);
+    }
 }

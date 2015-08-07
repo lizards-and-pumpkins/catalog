@@ -25,7 +25,7 @@ class ProductBlock extends Block
      */
     public function getProductUrl()
     {
-        return $this->getProductAttributeValue('url_key');
+        return '/brera/' . $this->getProductAttributeValue('url_key');
     }
 
     /**

@@ -80,27 +80,6 @@ abstract class HttpRequest
     }
 
     /**
-     * @param string $parameterName
-     * @return string
-     */
-    public function getQueryParameter($parameterName)
-    {
-        if (HttpRequest::METHOD_GET !== $this->getMethod()) {
-            return null;
-        }
-
-        if (null === $this->lazyLoadedQueryParameters) {
-            mb_parse_str($_SERVER['QUERY_STRING'], $this->lazyLoadedQueryParameters);
-        }
-
-        if (!isset($this->lazyLoadedQueryParameters[$parameterName])) {
-            return null;
-        }
-
-        return $this->lazyLoadedQueryParameters[$parameterName];
-    }
-
-    /**
      * @return string[]
      */
     private static function getGlobalRequestHeaders()

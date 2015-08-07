@@ -3,7 +3,6 @@
 namespace Brera;
 
 use Brera\Context\Context;
-use Brera\Context\ContextBuilder;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
 use Brera\Http\HttpResponse;
@@ -31,6 +30,8 @@ use Brera\Http\HttpUrl;
  * @uses   \Brera\Product\ProductListingRouter
  * @uses   \Brera\Product\ProductListingRequestHandler
  * @uses   \Brera\Product\MultipleProductStockQuantityApiV1PutRequestHandler
+ * @uses   \Brera\Product\ProductSearchRequestHandler
+ * @uses   \Brera\Product\ProductSearchResultsRouter
  * @uses   \Brera\RootSnippetSourceListBuilder
  * @uses   \Brera\Http\ResourceNotFoundRouter
  * @uses   \Brera\Http\ResourceNotFoundRequestHandler
@@ -63,7 +64,8 @@ class SampleWebFrontTest extends \PHPUnit_Framework_TestCase
             'createApiRouter',
             'createProductDetailViewRouter',
             'createProductListingRouter',
-            'createResourceNotFoundRouter'
+            'createResourceNotFoundRouter',
+            'createProductSearchResultsRouter'
         ];
 
         $stubFactoryMethods = array_merge(

@@ -12,6 +12,7 @@ use Brera\Http\HttpsUrl;
 use Brera\Product\CatalogImportApiV1PutRequestHandler;
 use Brera\Product\ProductDetailViewRouter;
 use Brera\Product\ProductListingRouter;
+use Brera\Product\ProductSearchResultsRouter;
 
 /**
  * @covers \Brera\FrontendFactory
@@ -27,6 +28,8 @@ use Brera\Product\ProductListingRouter;
  * @uses   \Brera\Product\ProductDetailViewRequestHandler
  * @uses   \Brera\Product\ProductListingRouter
  * @uses   \Brera\Product\ProductListingRequestHandler
+ * @uses   \Brera\Product\ProductSearchRequestHandler
+ * @uses   \Brera\Product\ProductSearchResultsRouter
  * @uses   \Brera\Product\MultipleProductStockQuantityApiV1PutRequestHandler
  * @uses   \Brera\DataPool\DataPoolReader
  * @uses   \Brera\DataVersion
@@ -110,5 +113,11 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsAContext()
     {
         $this->assertInstanceOf(Context::class, $this->frontendFactory->getContext());
+    }
+
+    public function testProductSearchResultsRouterIsReturned()
+    {
+        $result = $this->frontendFactory->createProductSearchResultsRouter();
+        $this->assertInstanceOf(ProductSearchResultsRouter::class, $result);
     }
 }

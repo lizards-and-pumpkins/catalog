@@ -34,7 +34,7 @@ class Image
     {
         /* TODO: Re-implement w/o putting project specific data (size label, media dir) into general purpose class */
 
-        return self::MEDIA_DIR . '/' . $size . '/' . $this->src;
+        return '/brera/' . self::MEDIA_DIR . '/' . $size . '/' . $this->src;
     }
 
     /**

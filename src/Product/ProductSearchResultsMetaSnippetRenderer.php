@@ -13,6 +13,8 @@ use Brera\SnippetRenderer;
 
 class ProductSearchResultsMetaSnippetRenderer implements SnippetRenderer
 {
+    const CODE = 'product_search_result';
+
     /**
      * @var SnippetList
      */
@@ -70,7 +72,7 @@ class ProductSearchResultsMetaSnippetRenderer implements SnippetRenderer
         foreach ($numItemsPerPageForContext as $numItemsPerPage) {
             $metaSnippetKey = $this->snippetKeyGenerator->getKeyForContext(
                 $context,
-                ['items_per_page' => $numItemsPerPage]
+                ['products_per_page' => $numItemsPerPage]
             );
             $metaSnippetContent = $this->getMetaSnippetContentJson($rootSnippetCode, $pageSnippetCodes);
             $this->snippetList->add(Snippet::create($metaSnippetKey, $metaSnippetContent));

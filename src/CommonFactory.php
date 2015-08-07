@@ -1039,17 +1039,23 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         $usedDataParts = [];
 
         return new GenericSnippetKeyGenerator(
-            $this->getMasterFactory()->getProductSearchResultMetaSnippetCode(),
+            ProductSearchResultsMetaSnippetRenderer::CODE,
             $this->getMasterFactory()->getRequiredContexts(),
             $usedDataParts
         );
     }
 
     /**
-     * @return string
+     * @return SnippetKeyGenerator
      */
-    public function getProductSearchResultMetaSnippetCode()
+    public function createProductSearchResultsMetaSnippetKeyGenerator()
     {
-        return 'product_search_result';
+        $usedDataParts = [];
+
+        return new GenericSnippetKeyGenerator(
+            ProductSearchResultsMetaSnippetRenderer::CODE,
+            $this->getMasterFactory()->getRequiredContexts(),
+            $usedDataParts
+        );
     }
 }
