@@ -10,6 +10,11 @@ interface Queue extends \Countable
     public function count();
 
     /**
+     * @return bool
+     */
+    public function isReadyForNext();
+
+    /**
      * @param mixed $data
      * @return null
      * @throws NotSerializableException
