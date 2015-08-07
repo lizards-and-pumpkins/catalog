@@ -2,7 +2,7 @@
 
 namespace Brera\Queue;
 
-interface Queue
+interface Queue extends \Countable
 {
     /**
      * @return int
@@ -10,8 +10,14 @@ interface Queue
     public function count();
 
     /**
+     * @return bool
+     */
+    public function isReadyForNext();
+
+    /**
      * @param mixed $data
      * @return null
+     * @throws NotSerializableException
      */
     public function add($data);
 

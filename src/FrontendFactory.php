@@ -247,11 +247,17 @@ class FrontendFactory implements Factory
      */
     public function createPageBuilder()
     {
-        return new PageBuilder(
+        $pageBuilder = new PageBuilder(
             $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->getSnippetKeyGeneratorLocator(),
             $this->getMasterFactory()->getLogger()
         );
+        $this->registerSnippetTransformations($pageBuilder);
+        return $pageBuilder;
+    }
+
+    private function registerSnippetTransformations(PageBuilder $pageBuilder)
+    {
     }
 
     /**

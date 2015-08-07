@@ -34,7 +34,7 @@ class DomainEventConsumer
     {
         $numberOfMessagesBeforeReturn = $this->maxNumberOfMessagesToProcess;
 
-        while ($this->queue->count() > 0 && $numberOfMessagesBeforeReturn-- > 0) {
+        while ($this->queue->isReadyForNext() && $numberOfMessagesBeforeReturn-- > 0) {
             try {
                 $domainEvent = $this->queue->next();
                 $this->processDomainEvent($domainEvent);

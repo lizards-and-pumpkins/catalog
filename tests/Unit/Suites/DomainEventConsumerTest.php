@@ -40,38 +40,26 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
         $this->domainEventConsumer = new DomainEventConsumer($this->stubQueue, $this->mockLocator, $this->mockLogger);
     }
 
-    /**
-     * @dataProvider getNumberOfEventsInQueue
-     * @param int $numberOfEventsInQueue
-     */
-    public function testAllEventsInQueueAreProcessed($numberOfEventsInQueue)
+    public function testItCallsNextIfQueueIsReady()
     {
         $stubDomainEvent = $this->getMock(DomainEvent::class);
         $this->stubQueue->method('next')->willReturn($stubDomainEvent);
-        $this->stubQueue->method('count')
-            ->will(call_user_func_array([$this, 'onConsecutiveCalls'], range($numberOfEventsInQueue, 0)));
+        $this->stubQueue->method('isReadyForNext')
+            ->willReturnOnConsecutiveCalls(true, true, true, false);
 
         $stubEventHandler = $this->getMock(DomainEventHandler::class);
-        $this->mockLocator->expects($this->exactly($numberOfEventsInQueue))
+        $this->mockLocator->expects($this->exactly(3))
             ->method('getHandlerFor')
             ->willReturn($stubEventHandler);
 
         $this->domainEventConsumer->process();
     }
 
-    /**
-     * @return array[]
-     */
-    public function getNumberOfEventsInQueue()
-    {
-        return [[1], [2], [3]];
-    }
-
     public function testLogEntryIsWrittenIfLocatorIsNotFound()
     {
         $stubDomainEvent = $this->getMock(DomainEvent::class);
         $this->stubQueue->method('next')->willReturn($stubDomainEvent);
-        $this->stubQueue->method('count')->willReturnOnConsecutiveCalls(1, 0);
+        $this->stubQueue->method('isReadyForNext')->willReturnOnConsecutiveCalls(true, false);
 
         $this->mockLocator->method('getHandlerFor')->willThrowException(new UnableToFindDomainEventHandlerException);
         $this->mockLogger->expects($this->once())->method('log');
@@ -82,7 +70,7 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
     public function testLogEntryIsWrittenOnQueueReadFailure()
     {
         $this->stubQueue->method('next')->willThrowException(new \UnderflowException);
-        $this->stubQueue->method('count')->willReturnOnConsecutiveCalls(1, 0);
+        $this->stubQueue->method('isReadyForNext')->willReturnOnConsecutiveCalls(true, false);
         $this->mockLogger->expects($this->once())->method('log');
 
         $this->domainEventConsumer->process();
@@ -92,7 +80,7 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
     {
         $stubDomainEvent = $this->getMock(DomainEvent::class);
         $this->stubQueue->method('next')->willReturn($stubDomainEvent);
-        $this->stubQueue->method('count')->willReturn(1);
+        $this->stubQueue->method('isReadyForNext')->willReturn(true);
 
         $stubEventHandler = $this->getMock(DomainEventHandler::class);
         $stubEventHandler->expects($this->exactly(200))->method('process');
