@@ -15,7 +15,7 @@ class ProductAttribute implements Attribute
     /**
      * @var array
      */
-    private $context;
+    private $contextData;
 
     /**
      * @var string|ProductAttributeList
@@ -30,7 +30,7 @@ class ProductAttribute implements Attribute
     private function __construct($code, $value, array $contextData = [])
     {
         $this->code = $code;
-        $this->context = $contextData;
+        $this->contextData = $contextData;
         $this->value = $value;
     }
 
@@ -41,6 +41,27 @@ class ProductAttribute implements Attribute
     public static function fromArray(array $node)
     {
         return new self($node['nodeName'], self::getValueRecursive($node['value']), $node['attributes']);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getContextParts()
+    {
+        return array_keys($this->contextData);
+    }
+
+    /**
+     * @param ProductAttribute $attribute
+     * @return bool
+     */
+    public function hasSameContextPartsAs(ProductAttribute $attribute)
+    {
+        $ownContextParts = $this->getContextParts();
+        $foreignContextParts = $attribute->getContextParts();
+
+        return !array_diff($ownContextParts, $foreignContextParts) &&
+               !array_diff($foreignContextParts, $ownContextParts);
     }
 
     /**
@@ -112,7 +133,7 @@ class ProductAttribute implements Attribute
      */
     private function getScoreIfContextIsSetAndMatches($contextCode, Context $context)
     {
-        return array_key_exists($contextCode, $this->context) ?
+        return array_key_exists($contextCode, $this->contextData) ?
             $this->getScoreIfContextMatches($contextCode, $context) :
             0;
     }
@@ -124,7 +145,7 @@ class ProductAttribute implements Attribute
      */
     private function getScoreIfContextMatches($contextCode, Context $context)
     {
-        return $context->getValue($contextCode) === $this->context[$contextCode] ?
+        return $context->getValue($contextCode) === $this->contextData[$contextCode] ?
             1 :
             0;
     }
