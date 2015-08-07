@@ -60,6 +60,131 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private $stubSnippetKeyGeneratorLocator;
 
+    /**
+     * @param string $snippetCode
+     * @param string $snippetKey
+     */
+    private function assertSnippetCodeIsMappedToSnippetKey($snippetCode, $snippetKey)
+    {
+        $field = 'snippetCodeToKeyMap';
+        $this->assertArrayKeyIsMappedToValueOnRequestHandler($snippetCode, $snippetKey, $field);
+    }
+
+    /**
+     * @param string $snippetKey
+     * @param string $content
+     */
+    private function assertSnippetKeyIsMappedToContent($snippetKey, $content)
+    {
+        $field = 'snippetKeyToContentMap';
+        $this->assertArrayKeyIsMappedToValueOnRequestHandler($snippetKey, $content, $field);
+    }
+
+    /**
+     * @param string $key
+     * @param mixed $value
+     * @param string $field
+     */
+    private function assertArrayKeyIsMappedToValueOnRequestHandler($key, $value, $field)
+    {
+        $map = $this->getPrivateFieldValue($field);
+        $this->assertArrayHasKey($key, $map);
+        $this->assertSame($value, $map[$key]);
+    }
+
+    /**
+     * @param string $field
+     * @return mixed
+     */
+    private function getPrivateFieldValue($field)
+    {
+        $property = new \ReflectionProperty($this->pageBuilder, $field);
+        $property->setAccessible(true);
+        return $property->getValue($this->pageBuilder);
+    }
+
+    /**
+     * @param string $rootSnippetCode
+     * @param string $rootSnippetContent
+     * @param string[] $childSnippetMap
+     */
+    private function setDataPoolFixture($rootSnippetCode, $rootSnippetContent, array $childSnippetMap)
+    {
+        $allSnippetCodes = array_merge([$rootSnippetCode], array_keys($childSnippetMap));
+        $allSnippetContent = array_merge([$rootSnippetContent], array_values($childSnippetMap));
+        $this->setPageMetaInfoFixture($rootSnippetCode, $allSnippetCodes);
+        $this->setPageContentSnippetFixture($allSnippetCodes, $allSnippetContent);
+    }
+
+    /**
+     * @param string $rootSnippetCode
+     * @param string[] $allSnippetCodes
+     */
+    private function setPageMetaInfoFixture($rootSnippetCode, array $allSnippetCodes)
+    {
+        $pageMetaInfo = [
+            ProductDetailPageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE => $rootSnippetCode,
+            ProductDetailPageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => $allSnippetCodes
+        ];
+
+        $this->mockDataPoolReader->method('getSnippet')
+            ->with($this->urlPathKeyFixture)
+            ->willReturn(json_encode($pageMetaInfo));
+
+        $this->stubPageMetaInfo->method('getPageSnippetCodes')
+            ->willReturn($allSnippetCodes);
+        $this->stubPageMetaInfo->method('getRootSnippetCode')
+            ->willReturn($rootSnippetCode);
+
+    }
+
+    /**
+     * @param string[] $allSnippetCodes
+     * @param string[] $allSnippetContent
+     */
+    private function setPageContentSnippetFixture(array $allSnippetCodes, array $allSnippetContent)
+    {
+        $allSnippetKeys = $allSnippetCodes;
+        $pageSnippetKeyMap = array_combine($allSnippetKeys, $allSnippetContent);
+        $this->mockDataPoolReader->method('getSnippets')
+            ->willReturn($pageSnippetKeyMap);
+    }
+
+    /**
+     * @param \PHPUnit_Framework_MockObject_MockObject $fakeKeyGeneratorLocator
+     */
+    private function fakeSnippetKeyGeneratorLocator(\PHPUnit_Framework_MockObject_MockObject $fakeKeyGeneratorLocator)
+    {
+        $fixedKeyGeneratorMockFactory = function ($snippetCode) {
+            $keyGenerator = $this->getMock(SnippetKeyGenerator::class, [], [], '', false);
+            $keyGenerator->method('getKeyForContext')->willReturn($snippetCode);
+            return $keyGenerator;
+        };
+        $fakeKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')
+            ->willReturnCallback($fixedKeyGeneratorMockFactory);
+    }
+
+    /**
+     * @param \PHPUnit_Framework_MockObject_MockObject $fakeSnippetKeyGeneratorLocator
+     */
+    private function fakeSnippetKeyGeneratorLocatorForRootOnly(
+        \PHPUnit_Framework_MockObject_MockObject $fakeSnippetKeyGeneratorLocator
+    ) {
+        $fakeSnippetKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')->willReturnCallback(
+            function ($snippetCode) {
+                if ($snippetCode === $this->testRootSnippetCode) {
+                    $keyGenerator = $this->getMock(SnippetKeyGenerator::class, [], [], '', false);
+                    $keyGenerator->method('getKeyForContext')->willReturn($snippetCode);
+                    return $keyGenerator;
+                }
+                throw new \Exception(sprintf(
+                    'No key generator set for snippet "%s"',
+                    $snippetCode
+                ));
+            }
+        );
+    }
+
     protected function setUp()
     {
         $this->stubContext = $this->getMock(Context::class);
@@ -245,131 +370,6 @@ EOH;
             true,
             'Dummy assertion. What I want is that the page is built with unregistered key generators ' .
             'without throwing an exception'
-        );
-    }
-
-    /**
-     * @param string $snippetCode
-     * @param string $snippetKey
-     */
-    private function assertSnippetCodeIsMappedToSnippetKey($snippetCode, $snippetKey)
-    {
-        $field = 'snippetCodeToKeyMap';
-        $this->assertArrayKeyIsMappedToValueOnRequestHandler($snippetCode, $snippetKey, $field);
-    }
-
-    /**
-     * @param string $snippetKey
-     * @param string $content
-     */
-    private function assertSnippetKeyIsMappedToContent($snippetKey, $content)
-    {
-        $field = 'snippetKeyToContentMap';
-        $this->assertArrayKeyIsMappedToValueOnRequestHandler($snippetKey, $content, $field);
-    }
-
-    /**
-     * @param string $key
-     * @param mixed $value
-     * @param string $field
-     */
-    private function assertArrayKeyIsMappedToValueOnRequestHandler($key, $value, $field)
-    {
-        $map = $this->getPrivateFieldValue($field);
-        $this->assertArrayHasKey($key, $map);
-        $this->assertSame($value, $map[$key]);
-    }
-
-    /**
-     * @param string $field
-     * @return mixed
-     */
-    private function getPrivateFieldValue($field)
-    {
-        $property = new \ReflectionProperty($this->pageBuilder, $field);
-        $property->setAccessible(true);
-        return $property->getValue($this->pageBuilder);
-    }
-
-    /**
-     * @param string $rootSnippetCode
-     * @param string $rootSnippetContent
-     * @param string[] $childSnippetMap
-     */
-    private function setDataPoolFixture($rootSnippetCode, $rootSnippetContent, array $childSnippetMap)
-    {
-        $allSnippetCodes = array_merge([$rootSnippetCode], array_keys($childSnippetMap));
-        $allSnippetContent = array_merge([$rootSnippetContent], array_values($childSnippetMap));
-        $this->setPageMetaInfoFixture($rootSnippetCode, $allSnippetCodes);
-        $this->setPageContentSnippetFixture($allSnippetCodes, $allSnippetContent);
-    }
-
-    /**
-     * @param string $rootSnippetCode
-     * @param string[] $allSnippetCodes
-     */
-    private function setPageMetaInfoFixture($rootSnippetCode, array $allSnippetCodes)
-    {
-        $pageMetaInfo = [
-            ProductDetailPageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE => $rootSnippetCode,
-            ProductDetailPageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => $allSnippetCodes
-        ];
-
-        $this->mockDataPoolReader->method('getSnippet')
-            ->with($this->urlPathKeyFixture)
-            ->willReturn(json_encode($pageMetaInfo));
-
-        $this->stubPageMetaInfo->method('getPageSnippetCodes')
-            ->willReturn($allSnippetCodes);
-        $this->stubPageMetaInfo->method('getRootSnippetCode')
-            ->willReturn($rootSnippetCode);
-
-    }
-
-    /**
-     * @param string[] $allSnippetCodes
-     * @param string[] $allSnippetContent
-     */
-    private function setPageContentSnippetFixture(array $allSnippetCodes, array $allSnippetContent)
-    {
-        $allSnippetKeys = $allSnippetCodes;
-        $pageSnippetKeyMap = array_combine($allSnippetKeys, $allSnippetContent);
-        $this->mockDataPoolReader->method('getSnippets')
-            ->willReturn($pageSnippetKeyMap);
-    }
-
-    /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $fakeKeyGeneratorLocator
-     */
-    private function fakeSnippetKeyGeneratorLocator(\PHPUnit_Framework_MockObject_MockObject $fakeKeyGeneratorLocator)
-    {
-        $fixedKeyGeneratorMockFactory = function ($snippetCode) {
-            $keyGenerator = $this->getMock(SnippetKeyGenerator::class, [], [], '', false);
-            $keyGenerator->method('getKeyForContext')->willReturn($snippetCode);
-            return $keyGenerator;
-        };
-        $fakeKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')
-            ->willReturnCallback($fixedKeyGeneratorMockFactory);
-    }
-
-    /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $fakeSnippetKeyGeneratorLocator
-     */
-    private function fakeSnippetKeyGeneratorLocatorForRootOnly(
-        \PHPUnit_Framework_MockObject_MockObject $fakeSnippetKeyGeneratorLocator
-    ) {
-        $fakeSnippetKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')->willReturnCallback(
-            function ($snippetCode) {
-                if ($snippetCode === $this->testRootSnippetCode) {
-                    $keyGenerator = $this->getMock(SnippetKeyGenerator::class, [], [], '', false);
-                    $keyGenerator->method('getKeyForContext')->willReturn($snippetCode);
-                    return $keyGenerator;
-                }
-                throw new \Exception(sprintf(
-                    'No key generator set for snippet "%s"',
-                    $snippetCode
-                ));
-            }
         );
     }
 }
