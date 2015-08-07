@@ -34,7 +34,7 @@ class CommandConsumer
     {
         $numberOfMessagesBeforeReturn = $this->maxNumberOfMessagesToProcess;
 
-        while ($this->commandQueue->count() > 0 && $numberOfMessagesBeforeReturn-- > 0) {
+        while ($this->commandQueue->isReadyForNext() && $numberOfMessagesBeforeReturn-- > 0) {
             try {
                 $domainEvent = $this->commandQueue->next();
                 $this->processCommand($domainEvent);
