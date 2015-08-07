@@ -162,8 +162,8 @@ class PageBuilder
     {
         list($rootSnippet, $childSnippets) = $this->separateRootAndChildSnippets();
         $childSnippetsCodes = $this->getLoadedChildSnippetCodes();
-        $childSnippetCodesToContentMap = $this->mergePlaceholderAndSnippets($childSnippetsCodes, $childSnippets);
-        return $this->injectSnippetsIntoContent($rootSnippet, $childSnippetCodesToContentMap);
+        $childSnippetPlaceholdersToContentMap = $this->mergePlaceholderAndSnippets($childSnippetsCodes, $childSnippets);
+        return $this->injectSnippetsIntoContent($rootSnippet, $childSnippetPlaceholdersToContentMap);
     }
 
     /**
@@ -250,10 +250,10 @@ class PageBuilder
      * @param string[] $snippets
      * @return string
      */
-    private function injectSnippetsIntoContent($content, array $snippets)
+    private function injectSnippetsIntoContent($content, array $snippetPlaceholdersToContentMap)
     {
         return $this->removePlaceholders(
-            $this->replaceAsLongAsSomethingIsReplaced($content, $snippets)
+            $this->replaceAsLongAsSomethingIsReplaced($content, $snippetPlaceholdersToContentMap)
         );
     }
 
