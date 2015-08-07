@@ -8,7 +8,7 @@ use Brera\DataPool\DataPoolReader;
 class PageBuilder
 {
     private $rootSnippetCode;
-    
+
     /**
      * @var DataPoolReader
      */
@@ -23,7 +23,7 @@ class PageBuilder
      * @var string[]
      */
     private $snippetKeyToContentMap = [];
-    
+
     /**
      * @var SnippetKeyGeneratorLocator
      */
@@ -43,6 +43,11 @@ class PageBuilder
      * @var Logger
      */
     private $logger;
+
+    /**
+     * @var array[]
+     */
+    private $snippetTransformations = [];
 
     public function __construct(
         DataPoolReader $dataPoolReader,
@@ -67,6 +72,8 @@ class PageBuilder
         $this->initFromMetaInfo($metaInfo);
         $this->loadSnippets();
         $this->logMissingSnippets();
+        $this->applySnippetTransformations();
+
         $content = $this->buildPageContent();
 
         return DefaultHttpResponse::create($content, []);
@@ -90,6 +97,18 @@ class PageBuilder
             $snippetCodes,
             array_map([$this, 'tryToGetSnippetKey'], $snippetCodes)
         ));
+    }
+
+    /**
+     * @param string $snippetCode
+     * @param callable $transformation
+     */
+    public function registerSnippetTransformation($snippetCode, callable $transformation)
+    {
+        if (!array_key_exists($snippetCode, $this->snippetTransformations)) {
+            $this->snippetTransformations[$snippetCode] = [];
+        }
+        $this->snippetTransformations[$snippetCode][] = $transformation;
     }
 
     /**
@@ -154,7 +173,7 @@ class PageBuilder
         }
         return $missingSnippetCodes;
     }
-    
+
     /**
      * @return string
      */
@@ -202,7 +221,7 @@ class PageBuilder
             $this->context->getId()
         );
     }
-    
+
     /**
      * @return string[]
      */
@@ -241,13 +260,14 @@ class PageBuilder
     private function buildPlaceholderFromCode($code)
     {
         // TODO delegate placeholder creation (and also use the delegate during import)
-        /** @see Brera\Renderer\BlockRenderer::getBlockPlaceholder() **/
+        /** @see Brera\Renderer\BlockRenderer::getBlockPlaceholder() * */
 
         return sprintf('{{snippet %s}}', $code);
     }
+
     /**
      * @param string $content
-     * @param string[] $snippets
+     * @param string[] $snippetPlaceholdersToContentMap
      * @return string
      */
     private function injectSnippetsIntoContent($content, array $snippetPlaceholdersToContentMap)
@@ -291,5 +311,63 @@ class PageBuilder
             $snippetCodes[] = $this->rootSnippetCode;
         }
         return $snippetCodes;
+    }
+
+    private function applySnippetTransformations()
+    {
+        array_map(function ($snippetCode) {
+            $this->applyTransformationToSnippetByCode($snippetCode);
+        }, $this->getCodesOfSnippetsWithTransformations());
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getCodesOfSnippetsWithTransformations()
+    {
+        return array_filter(array_keys($this->snippetTransformations), [$this, 'hasSnippetWithCode']);
+    }
+
+    /**
+     * @param string $snippetCode
+     * @return bool
+     */
+    private function hasSnippetWithCode($snippetCode)
+    {
+        return
+            array_key_exists($snippetCode, $this->snippetCodeToKeyMap) &&
+            array_key_exists($this->snippetCodeToKeyMap[$snippetCode], $this->snippetKeyToContentMap);
+    }
+
+    /**
+     * @param string $snippetCode
+     */
+    private function applyTransformationToSnippetByCode($snippetCode)
+    {
+        $snippetKey = $this->snippetCodeToKeyMap[$snippetCode];
+        $this->snippetKeyToContentMap[$snippetKey] = array_reduce(
+            $this->getTransformationsForSnippetByCode($snippetCode),
+            [$this, 'applyTransformationToSnippetContent'],
+            $this->getSnippetByKey($snippetKey)
+        );
+    }
+
+    /**
+     * @param string $content
+     * @param callable $transformation
+     * @return string
+     */
+    private function applyTransformationToSnippetContent($content, callable $transformation)
+    {
+        return $transformation($content);
+    }
+
+    /**
+     * @param string $snippetCode
+     * @return callable[]
+     */
+    private function getTransformationsForSnippetByCode($snippetCode)
+    {
+        return $this->snippetTransformations[$snippetCode];
     }
 }

@@ -372,4 +372,63 @@ EOH;
             'without throwing an exception'
         );
     }
+
+    public function testTestSnippetTransformationIsNotCalledIfThereIsNoMatchingSnippet()
+    {
+        /** @var callable|\PHPUnit_Framework_MockObject_MockObject $mockTransformation */
+        $mockTransformation = $this->getMock(TestSnippetTransformation::class, ['__invoke']);
+        $mockTransformation->expects($this->never())->method('__invoke');
+        $this->pageBuilder->registerSnippetTransformation('non-existing-snippet-code', $mockTransformation);
+
+        $rootSnippetContent = '<html><head>{{snippet head}}</head><body>{{snippet body}}</body></html>';
+        $childSnippetMap = [
+            'head' => '<title>My Website!</title>',
+            'body' => '<h1>My Website!</h1>',
+        ];
+        $this->setDataPoolFixture($this->testRootSnippetCode, $rootSnippetContent, $childSnippetMap);
+        
+        $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
+    }
+
+    public function testTestSnippetTransformationIsCalledIfThereIsAMatchingSnippet()
+    {
+        /** @var callable|\PHPUnit_Framework_MockObject_MockObject $mockTransformation */
+        $mockTransformation = $this->getMock(TestSnippetTransformation::class, ['__invoke']);
+        $mockTransformation->expects($this->once())->method('__invoke')->with('<h1>My Website!</h1>');
+        $this->pageBuilder->registerSnippetTransformation('body', $mockTransformation);
+
+        $rootSnippetContent = '<html><head>{{snippet head}}</head><body>{{snippet body}}</body></html>';
+        $childSnippetMap = [
+            'head' => '<title>My Website!</title>',
+            'body' => '<h1>My Website!</h1>',
+        ];
+        $this->setDataPoolFixture($this->testRootSnippetCode, $rootSnippetContent, $childSnippetMap);
+
+        $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
+    }
+
+    public function testMultipleTestSnippetTransformationsForOneSnippetCanBeRegistered()
+    {
+        /** @var callable|\PHPUnit_Framework_MockObject_MockObject $mockTransformationOne */
+        $mockTransformationOne = $this->getMock(TestSnippetTransformation::class, ['__invoke']);
+        $mockTransformationOne->expects($this->once())->method('__invoke')->with('<h1>My Website!</h1>')
+            ->willReturn('result one');
+        $this->pageBuilder->registerSnippetTransformation('body', $mockTransformationOne);
+
+        /** @var callable|\PHPUnit_Framework_MockObject_MockObject $mockTransformationTwo */
+        $mockTransformationTwo = $this->getMock(TestSnippetTransformation::class, ['__invoke']);
+        $mockTransformationTwo->expects($this->once())->method('__invoke')->with('result one')
+            ->willReturn('result two');
+        $this->pageBuilder->registerSnippetTransformation('body', $mockTransformationTwo);
+
+        $rootSnippetContent = '<body>{{snippet body}}</body>';
+        $childSnippetMap = [
+            'head' => '<title>My Website!</title>',
+            'body' => '<h1>My Website!</h1>',
+        ];
+        $this->setDataPoolFixture($this->testRootSnippetCode, $rootSnippetContent, $childSnippetMap);
+
+        $page = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
+        $this->assertEquals('<body>result two</body>', $page->getBody());
+    }
 }
