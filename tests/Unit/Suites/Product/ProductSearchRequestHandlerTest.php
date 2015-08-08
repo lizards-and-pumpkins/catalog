@@ -174,7 +174,6 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->mockDataPoolReader->method('getSnippet')->willReturn(json_encode($metaSnippetContent));
         $this->mockDataPoolReader->method('getSnippets')->willReturn([]);
 
-
         $this->mockPageBuilder->expects($this->once())->method('addSnippetsToPage');
 
         $this->requestHandler->process($this->stubHttpRequest);
