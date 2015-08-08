@@ -19,11 +19,6 @@ abstract class HttpRequest
     private $headers;
 
     /**
-     * @var string[]
-     */
-    private $lazyLoadedQueryParameters;
-    
-    /**
      * @var HttpRequestBody
      */
     private $body;
