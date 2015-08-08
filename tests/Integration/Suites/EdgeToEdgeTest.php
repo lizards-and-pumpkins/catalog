@@ -104,7 +104,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
 
     public function testPageTemplateWasUpdatedDomainEventPutsProductListingRootSnippetIntoKeyValueStore()
     {
-        $this->addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture();
+        $this->createProductListingFixture();
 
         $logger = $this->factory->getLogger();
         $this->failIfMessagesWhereLogged($logger);
@@ -180,7 +180,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $this->factory->createDomainEventConsumer()->process();
     }
 
-    private function addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture()
+    private function createProductListingFixture()
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/page_templates/product_listing');
         $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.page_templates.v1+json']);
