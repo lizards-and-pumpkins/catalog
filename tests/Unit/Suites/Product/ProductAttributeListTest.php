@@ -17,7 +17,7 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->attributeList = new ProductAttributeList();
+        $this->attributeList = new ProductAttributeList;
     }
 
     public function testAttributeIsAddedAndRetrievedFromProductAttributeList()
@@ -70,8 +70,9 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
             'value'         => 'foo'
         ]];
 
-        $attributeList = ProductAttributeList::fromArray($attributeArray);
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->getMock(Context::class);
+        $attributeList = ProductAttributeList::fromArray($attributeArray);
         $this->assertInstanceOf(
             ProductAttributeList::class,
             $attributeList->getAttributesForContext($stubContext)
@@ -105,6 +106,8 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
         $contextReturnValueMap,
         $expected
     ) {
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
+        $stubContext = $this->getStubContextWithReturnValueMap($contextReturnValueMap);
         $attributeCode = 'name';
         $attributesArray = [
             [
@@ -124,7 +127,6 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
             ],
         ];
         $attributeList = ProductAttributeList::fromArray($attributesArray);
-        $stubContext = $this->getStubContextWithReturnValueMap($contextReturnValueMap);
         $resultList = $attributeList->getAttributesForContext($stubContext);
 
         $this->assertEquals($expected, $resultList->getAttribute($attributeCode)->getValue());
@@ -165,6 +167,30 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
                 'CCC' // expected value
             ],
         ];
+    }
+
+    public function testExceptionIsThrownWhileCombiningAttributesWithSameCodeButDifferentContextPartsIntoList()
+    {
+        $attributeA = ProductAttribute::fromArray([
+            'nodeName'   => 'attributeCode',
+            'attributes' => [
+                'foo' => 'bar',
+                'baz' => 'qux',
+            ],
+            'value'      => 'valueA'
+        ]);
+        $attributeB = ProductAttribute::fromArray([
+            'nodeName'   => 'attributeCode',
+            'attributes' => [
+                'foo' => 'bar',
+            ],
+            'value'      => 'valueB'
+        ]);
+
+        $this->setExpectedException(AttributeContextPartsMismatchException::class);
+
+        $this->attributeList->add($attributeA);
+        $this->attributeList->add($attributeB);
     }
 
     /**

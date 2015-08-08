@@ -18,6 +18,14 @@ class ProductAttributeList
 
     public function add(ProductAttribute $attribute)
     {
+        foreach ($this->attributes as $attributeInList) {
+            if ($attribute->hasSameCodeAs($attributeInList) && !$attribute->hasSameContextPartsAs($attributeInList)) {
+                throw new AttributeContextPartsMismatchException(
+                    'Attributes with different context parts can not be combined into a list'
+                );
+            }
+        }
+
         $this->attributes[] = $attribute;
         $this->addAttributeCode($attribute->getCode());
     }
@@ -35,6 +43,7 @@ class ProductAttributeList
 
         foreach ($this->attributes as $attribute) {
             if ($attribute->isCodeEqualsTo($code)) {
+                /* TODO: Handle case when more than one attribute with specified code is in the list */
                 return $attribute;
             }
         }
