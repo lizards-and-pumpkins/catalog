@@ -34,6 +34,13 @@ class RootSnippetSourceListBuilderTest extends \PHPUnit_Framework_TestCase
         $this->rootSnippetSourceListBuilder->fromJson('{}');
     }
 
+    public function testExceptionIsThrownIfProductsPerPageInstructionIsNonArray()
+    {
+        $json = json_encode(5);
+        $this->setExpectedException(MalformedProductListingRootSnippetJsonException::class);
+        $this->rootSnippetSourceListBuilder->fromJson($json);
+    }
+
     public function testExceptionIsThrownIfProductsPerPageInstructionIsMissingContextInformation()
     {
         $json = json_encode([

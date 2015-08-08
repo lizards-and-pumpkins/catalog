@@ -30,6 +30,12 @@ class RootSnippetSourceListBuilder
             );
         }
 
+        if (!is_array($sourceArray['products_per_page'])) {
+            throw new MalformedProductListingRootSnippetJsonException(
+                '"products_per_page" in root snippet source list JSON must be an array.'
+            );
+        }
+
         $sourceDataPairs = array_map(function ($productsPerPageData) {
             $this->validateProductsPerPageData($productsPerPageData);
             $context = $this->contextBuilder->getContext($productsPerPageData['context']);
