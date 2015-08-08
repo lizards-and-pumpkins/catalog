@@ -101,23 +101,14 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testRequestCanNotBeProcessedIfQueryStringParameterIsNotPresent()
     {
-        $urlString = ProductSearchRequestHandler::SEARCH_RESULTS_SLUG;
-        $this->stubHttpUrl->method('getPathRelativeToWebFront')->willReturn($urlString);
-        $this->stubHttpUrl->method('getQueryParameter')
-            ->with(ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME)
-            ->willReturn(null);
-        $this->stubHttpRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-
+        $this->prepareStubHttpRequest(null);
         $this->assertFalse($this->requestHandler->canProcess($this->stubHttpRequest));
     }
 
     public function testRequestCanNotBeProcessedIfQueryStringIsShorterThenMinimalAllowedLength()
     {
-        $urlString = ProductSearchRequestHandler::SEARCH_RESULTS_SLUG;
-        $this->stubHttpUrl->method('getPathRelativeToWebFront')->willReturn($urlString);
-        $this->stubHttpUrl->method('getQueryParameter')
-            ->with(ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME)
-            ->willReturn('f');
+        $queryString = 'f';
+        $this->prepareStubHttpRequest($queryString);
         $this->stubHttpRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
 
         $this->assertFalse($this->requestHandler->canProcess($this->stubHttpRequest));
