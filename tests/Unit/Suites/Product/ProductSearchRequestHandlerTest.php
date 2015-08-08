@@ -44,6 +44,19 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private $stubHttpRequest;
 
+    /**
+     * @param string $queryString
+     */
+    private function prepareStubHttpRequest($queryString)
+    {
+        $urlString = ProductSearchRequestHandler::SEARCH_RESULTS_SLUG;
+        $this->stubHttpUrl->method('getPathRelativeToWebFront')->willReturn($urlString);
+        $this->stubHttpUrl->method('getQueryParameter')
+            ->with(ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME)
+            ->willReturn($queryString);
+        $this->stubHttpRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
+    }
+
     protected function setUp()
     {
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
@@ -165,18 +178,5 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->mockPageBuilder->expects($this->once())->method('addSnippetsToPage');
 
         $this->requestHandler->process($this->stubHttpRequest);
-    }
-
-    /**
-     * @param string $queryString
-     */
-    private function prepareStubHttpRequest($queryString)
-    {
-        $urlString = ProductSearchRequestHandler::SEARCH_RESULTS_SLUG;
-        $this->stubHttpUrl->method('getPathRelativeToWebFront')->willReturn($urlString);
-        $this->stubHttpUrl->method('getQueryParameter')
-            ->with(ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME)
-            ->willReturn($queryString);
-        $this->stubHttpRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
     }
 }
