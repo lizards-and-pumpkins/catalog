@@ -33,7 +33,7 @@
                 <url_key language="en_US">led-armflasher</url_key>
                 <name language="de_DE">LED Arm-Signallampe</name>
                 <name language="en_US">LED Armflasher</name>
-                <price customer_group="retail" website="ru">12.95</price>
+                <price website="ru">12.95</price>
                 <price website="ru">11.45</price>
                 <special_price website="ru">11.95</special_price>
                 <weight>11.2</weight>
@@ -343,7 +343,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 <url_key>adipure-360</url_key>
                 <category>men-running-shoes</category>
                 <category>specials</category>
-                <category website="ru" language="en_US">men-accessories</category>
+                <category>men-accessories</category>
                 <stock_qty>5</stock_qty>
                 <backorders>true</backorders>
                 <name>adiPure 360</name>
