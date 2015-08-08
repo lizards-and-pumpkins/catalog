@@ -70,7 +70,7 @@ class ProductListingTest extends AbstractIntegrationTest
         // TODO: thus sharing the data pool and queue needs to be handled properly.
 
         $this->importCatalog();
-        $this->addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture();
+        $this->createProductListingFixture();
 
         $this->registerProductListingSnippetKeyGenerator();
 
@@ -99,7 +99,7 @@ class ProductListingTest extends AbstractIntegrationTest
         // TODO: thus sharing the data pool and queue needs to be handled properly.
 
         $this->importCatalog();
-        $this->addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture();
+        $this->createProductListingFixture();
 
         $contentBlockContent = '<div>Content Block</div>';
 
@@ -137,7 +137,7 @@ class ProductListingTest extends AbstractIntegrationTest
         $this->factory->createDomainEventConsumer()->process();
     }
 
-    private function addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture()
+    private function createProductListingFixture()
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/page_templates/product_listing');
         $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.page_templates.v1+json']);
