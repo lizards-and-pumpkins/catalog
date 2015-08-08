@@ -46,25 +46,25 @@ class RootSnippetSourceListBuilder
     {
         if (!isset($data['context'])) {
             throw new MalformedProductListingRootSnippetJsonException(
-                'Products pre page JSON is lacking context data.'
+                'Products per page JSON is lacking context data.'
             );
         }
 
         if (!is_array($data['context'])) {
             throw new MalformedProductListingRootSnippetJsonException(
-                'Products pre page context data JSON must be an array.'
+                'Products per page context data JSON must be an array.'
             );
         }
 
         if (!isset($data['number'])) {
             throw new MalformedProductListingRootSnippetJsonException(
-                'Products pre page JSON is lacking products per page number.'
+                'Products per page JSON is lacking products per page number.'
             );
         }
 
         if (!is_int($data['number'])) {
             throw new MalformedProductListingRootSnippetJsonException(
-                'Products pre page number must be an integer.'
+                'Products per page number must be an integer.'
             );
         }
     }
