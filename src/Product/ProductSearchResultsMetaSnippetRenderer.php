@@ -56,10 +56,6 @@ class ProductSearchResultsMetaSnippetRenderer implements SnippetRenderer
         return $this->snippetList;
     }
 
-    /**
-     * @param RootSnippetSourceList $rootSnippetSourceList
-     * @param Context $context
-     */
     private function renderMetaInfoSnippetForContext(RootSnippetSourceList $rootSnippetSourceList, Context $context)
     {
         $this->blockRenderer->render($rootSnippetSourceList, $context);
