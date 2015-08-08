@@ -39,7 +39,7 @@ class RootSnippetSourceListBuilder
         $sourceDataPairs = array_map(function ($productsPerPageData) {
             $this->validateProductsPerPageData($productsPerPageData);
             $context = $this->contextBuilder->getContext($productsPerPageData['context']);
-            return ['context' => $context, 'numItemsPerPage' => (int) $productsPerPageData['number']];
+            return ['context' => $context, 'numItemsPerPage' => $productsPerPageData['number']];
         }, $sourceArray['products_per_page']);
 
         return RootSnippetSourceList::fromArray($sourceDataPairs);
