@@ -1,0 +1,32 @@
+{
+  "products_per_page": [
+    {
+      "context": {
+        "website":"ru",
+        "language":"de_DE"
+      },
+      "number": 9
+    },
+    {
+      "context": {
+        "website":"ru",
+        "language":"de_DE"
+      },
+      "number": 18
+    },
+    {
+      "context": {
+        "website":"ru",
+        "language":"en_US"
+      },
+      "number": 9
+    },
+    {
+      "context": {
+        "website":"ru",
+        "language":"en_US"
+      },
+      "number": 18
+    }
+  ]
+}
