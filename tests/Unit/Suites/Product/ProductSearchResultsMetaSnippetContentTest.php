@@ -48,10 +48,7 @@ class ProductSearchResultsMetaSnippetContentTest extends \PHPUnit_Framework_Test
         $result = $this->metaSnippetContent->getInfo();
 
         foreach ($expectedKeys as $key) {
-            $this->assertTrue(
-                isset($result[$key]),
-                sprintf('The expected key "%s" is not set on the page meta info array', $key)
-            );
+            $this->assertArrayHasKey($key, $result, sprintf('Page meta info array is lacking "%s" key', $key));
         }
     }
 
