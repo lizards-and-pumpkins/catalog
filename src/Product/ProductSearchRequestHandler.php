@@ -112,6 +112,9 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         return true;
     }
 
+    /**
+     * @param string $queryString
+     */
     private function addSearchResultsToPageBuilder($queryString)
     {
         $productIds = $this->dataPoolReader->getSearchResults($queryString, $this->context);
