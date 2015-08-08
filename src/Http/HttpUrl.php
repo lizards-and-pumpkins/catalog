@@ -111,5 +111,4 @@ class HttpUrl
 
         return $requestQuery[$parameterName];
     }
-
 }
