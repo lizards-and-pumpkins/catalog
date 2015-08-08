@@ -202,6 +202,22 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($attributeA->hasSameContextPartsAs($attributeB));
     }
 
+    public function testFalseIsReturnedIfAttributeCodesAreDifferent()
+    {
+        $attributeA = ProductAttribute::fromArray(['nodeName' => 'codeA', 'attributes' => [], 'value' => 'valueA']);
+        $attributeB = ProductAttribute::fromArray(['nodeName' => 'codeB', 'attributes' => [], 'value' => 'valueB']);
+
+        $this->assertFalse($attributeA->hasSameCodeAs($attributeB));
+    }
+
+    public function testTrueIsReturnedIfAttributeCodesAreIdentical()
+    {
+        $attributeA = ProductAttribute::fromArray(['nodeName' => 'codeA', 'attributes' => [], 'value' => 'valueA']);
+        $attributeB = ProductAttribute::fromArray(['nodeName' => 'codeA', 'attributes' => [], 'value' => 'valueB']);
+
+        $this->assertTrue($attributeA->hasSameCodeAs($attributeB));
+    }
+
     /**
      * @param string[] $attributeContext
      * @return ProductAttribute

@@ -65,6 +65,15 @@ class ProductAttribute implements Attribute
     }
 
     /**
+     * @param ProductAttribute $attribute
+     * @return bool
+     */
+    public function hasSameCodeAs(ProductAttribute $attribute)
+    {
+        return $this->code === $attribute->getCode();
+    }
+
+    /**
      * @param array|string $nodeValue
      * @return string|ProductAttributeList
      */
