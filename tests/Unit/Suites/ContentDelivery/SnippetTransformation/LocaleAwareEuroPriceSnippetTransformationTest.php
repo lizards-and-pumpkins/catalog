@@ -6,6 +6,9 @@ namespace Brera\ContentDelivery\SnippetTransformation;
 use Brera\Context\Context;
 use Brera\Context\LanguageContextDecorator;
 
+/**
+ * @covers \Brera\ContentDelivery\SnippetTransformation\LocaleAwareEuroPriceSnippetTransformation
+ */
 class LocaleAwareEuroPriceSnippetTransformationTest extends \PHPUnit_Framework_TestCase
 {
     /**
