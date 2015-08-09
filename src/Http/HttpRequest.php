@@ -17,7 +17,7 @@ abstract class HttpRequest
      * @var HttpHeaders
      */
     private $headers;
-    
+
     /**
      * @var HttpRequestBody
      */

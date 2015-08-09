@@ -39,6 +39,7 @@ use Brera\Product\ProductListingSnippetRenderer;
 use Brera\Product\ProductProjector;
 use Brera\Product\ProductListingSourceBuilder;
 use Brera\Product\ProductSearchDocumentBuilder;
+use Brera\Product\ProductSearchResultsMetaSnippetRenderer;
 use Brera\Product\ProductSourceBuilder;
 use Brera\Product\ProductSourceDetailViewSnippetRenderer;
 use Brera\Product\ProductSourceInListingSnippetRenderer;
@@ -212,7 +213,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return [
             $this->getMasterFactory()->createProductListingSnippetRenderer(),
-            $this->getMasterFactory()->createDefaultNumberOfProductsPerPageSnippetRenderer()
+            $this->getMasterFactory()->createDefaultNumberOfProductsPerPageSnippetRenderer(),
+            $this->getMasterFactory()->createProductSearchResultsMetaSnippetRenderer(),
         ];
     }
 
@@ -1014,6 +1016,46 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             'content_block_in_product_listing',
             $this->getMasterFactory()->getRequiredContexts(),
             ['url_key']
+        );
+    }
+
+    /**
+     * @return ProductSearchResultsMetaSnippetRenderer
+     */
+    public function createProductSearchResultsMetaSnippetRenderer()
+    {
+        return new ProductSearchResultsMetaSnippetRenderer(
+            $this->getMasterFactory()->createSnippetList(),
+            $this->getMasterFactory()->createProductSearchResultMetaSnippetKeyGenerator(),
+            $this->getMasterFactory()->createProductListingBlockRenderer()
+        );
+    }
+
+    /**
+     * @return SnippetKeyGenerator
+     */
+    public function createProductSearchResultMetaSnippetKeyGenerator()
+    {
+        $usedDataParts = [];
+
+        return new GenericSnippetKeyGenerator(
+            ProductSearchResultsMetaSnippetRenderer::CODE,
+            $this->getMasterFactory()->getRequiredContexts(),
+            $usedDataParts
+        );
+    }
+
+    /**
+     * @return SnippetKeyGenerator
+     */
+    public function createProductSearchResultsMetaSnippetKeyGenerator()
+    {
+        $usedDataParts = [];
+
+        return new GenericSnippetKeyGenerator(
+            ProductSearchResultsMetaSnippetRenderer::CODE,
+            $this->getMasterFactory()->getRequiredContexts(),
+            $usedDataParts
         );
     }
 }

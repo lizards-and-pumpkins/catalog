@@ -18,6 +18,10 @@ use Brera\Product\ProductListingRequestHandler;
 use Brera\Product\ProductListingRouter;
 use Brera\Product\ProductListingSnippetRenderer;
 use Brera\Product\MultipleProductStockQuantityApiV1PutRequestHandler;
+use Brera\Product\ProductSearchRequestHandler;
+use Brera\Product\ProductSearchResultsMetaSnippetContent;
+use Brera\Product\ProductSearchResultsMetaSnippetRenderer;
+use Brera\Product\ProductSearchResultsRouter;
 use Brera\Utils\Directory;
 use Brera\Context\Context;
 
@@ -219,6 +223,10 @@ class FrontendFactory implements Factory
             ProductListingMetaInfoSnippetRenderer::CODE,
             $this->getMasterFactory()->createProductListingMetaDataSnippetKeyGenerator()
         );
+        $snippetKeyGeneratorLocator->register(
+            ProductSearchResultsMetaSnippetRenderer::CODE,
+            $this->getMasterFactory()->createProductSearchResultsMetaSnippetKeyGenerator()
+        );
 
         return $snippetKeyGeneratorLocator;
     }
@@ -260,5 +268,28 @@ class FrontendFactory implements Factory
         /** @var ContextBuilder $contextBuilder */
         $contextBuilder = $this->getMasterFactory()->createContextBuilder();
         return $contextBuilder->createFromRequest($this->request);
+    }
+
+    /**
+     * @return ProductSearchResultsRouter
+     */
+    public function createProductSearchResultsRouter()
+    {
+        return new ProductSearchResultsRouter(
+            $this->createProductSearchRequestHandler()
+        );
+    }
+
+    /**
+     * @return ProductSearchRequestHandler
+     */
+    private function createProductSearchRequestHandler()
+    {
+        return new ProductSearchRequestHandler(
+            $this->getContext(),
+            $this->getMasterFactory()->createDataPoolReader(),
+            $this->getMasterFactory()->createPageBuilder(),
+            $this->getMasterFactory()->getSnippetKeyGeneratorLocator()
+        );
     }
 }

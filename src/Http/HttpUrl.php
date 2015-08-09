@@ -96,4 +96,19 @@ class HttpUrl
     {
         return preg_replace('#/[^/]*$#', '', $_SERVER['SCRIPT_NAME']);
     }
+
+    /**
+     * @param string $parameterName
+     * @return string
+     */
+    public function getQueryParameter($parameterName)
+    {
+        $requestQuery = $this->url->getQuery();
+
+        if (!isset($requestQuery[$parameterName])) {
+            return null;
+        }
+
+        return $requestQuery[$parameterName];
+    }
 }

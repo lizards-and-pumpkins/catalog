@@ -7,14 +7,6 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
     private $testRequestHost = 'example.com';
 
     /**
-     * @return HttpUrl|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getStubHttpUrl()
-    {
-        return $this->getMock(HttpUrl::class, [], [], '', false);
-    }
-
-    /**
      * @param bool $isSecure
      */
     private function setUpGlobalState($isSecure = false)
@@ -23,16 +15,16 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
         $_SERVER['HTTPS'] = $isSecure;
         $_SERVER['HTTP_HOST'] = $this->testRequestHost;
         $_SERVER['REQUEST_URI'] = '/';
+        $_SERVER['QUERY_STRING'] = '';
     }
 
     public function testUrlIsReturned()
     {
         $url = 'http://www.example.com/seo-url/';
 
-        $stubHttpUrl = $this->getStubHttpUrl();
-        $stubHttpUrl->expects($this->once())
-            ->method('__toString')
-            ->willReturn($url);
+        /** @var HttpUrl|\PHPUnit_Framework_MockObject_MockObject $stubHttpUrl */
+        $stubHttpUrl = $this->getMock(HttpUrl::class, [], [], '', false);
+        $stubHttpUrl->method('__toString')->willReturn($url);
 
         $httpRequest = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
@@ -47,15 +39,17 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
 
     public function testUnsupportedRequestMethodExceptionIsThrown()
     {
+        /** @var HttpUrl|\PHPUnit_Framework_MockObject_MockObject $stubHttpUrl */
+        $stubHttpUrl = $this->getMock(HttpUrl::class, [], [], '', false);
+
         $this->setExpectedException(UnsupportedRequestMethodException::class, 'Unsupported request method: "XXX"');
-        $stubHttpUrl = $this->getStubHttpUrl();
+
         HttpRequest::fromParameters('XXX', $stubHttpUrl, HttpHeaders::fromArray([]), HttpRequestBody::fromString(''));
     }
 
     public function testHttpIsRequestReturnedFromGlobalState()
     {
         $this->setUpGlobalState();
-
         $result = HttpRequest::fromGlobalState();
 
         $this->assertInstanceOf(HttpGetRequest::class, $result);
@@ -64,7 +58,6 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
     public function testHttpRequestIsReturnedFromGlobalStateOfSecureUrl()
     {
         $this->setUpGlobalState(true);
-
         $result = HttpRequest::fromGlobalState();
 
         $this->assertInstanceOf(HttpGetRequest::class, $result);

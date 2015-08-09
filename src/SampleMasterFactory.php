@@ -17,6 +17,7 @@ namespace Brera;
  * @method GenericSnippetKeyGenerator createProductListingSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createProductStockQuantityRendererSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createContentBlockSnippetKeyGenerator
+ * @method GenericSnippetKeyGenerator createProductSearchResultMetaSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createProductListingMetaDataSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createProductDetailPageMetaSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createContentBlockInProductListingSnippetKeyGenerator

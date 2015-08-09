@@ -43,9 +43,8 @@ class PageTemplatesApiV1PutRequestHandler extends ApiRequestHandler
 
     protected function processRequest(HttpRequest $request)
     {
-        $xml = $request->getRawBody();
         $rootSnippetId = $this->extractRootSnippetIdFromUrl($request);
-        $rootSnippetSourceList = $this->rootSnippetSourceListBuilder->createFromXml($xml);
+        $rootSnippetSourceList = $this->rootSnippetSourceListBuilder->fromJson($request->getRawBody());
         $this->domainEventQueue->add(new PageTemplateWasUpdatedDomainEvent($rootSnippetId, $rootSnippetSourceList));
     }
 

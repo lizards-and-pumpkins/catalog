@@ -54,11 +54,11 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
             ProductListingMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE,
             ProductListingMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES
         ];
+
+        $result = $this->pageMetaInfo->getInfo();
+
         foreach ($keys as $key) {
-            $this->assertTrue(
-                array_key_exists($key, $this->pageMetaInfo->getInfo()),
-                sprintf('The expected key "%s" is not set on the page meta info array', $key)
-            );
+            $this->assertArrayHasKey($key, $result, sprintf('Page meta info array is lacking "%s" key', $key));
         }
     }
 

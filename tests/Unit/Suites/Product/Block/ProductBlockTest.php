@@ -72,7 +72,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
         $this->stubProduct->method('getAttributeValue')->with('url_key')->willReturn($urlKey);
         $result = $this->productBlock->getProductUrl();
 
-        $this->assertEquals($urlKey, $result);
+        $this->assertEquals('/brera/' . $urlKey, $result);
     }
 
     public function testEmptyStringIsReturnedIfProductBrandLogoImageFileDoesNotExist()

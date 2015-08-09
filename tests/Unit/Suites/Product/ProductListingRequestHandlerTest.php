@@ -94,7 +94,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->stubRequest->method('getUrl')->willReturn($stubUrl);
     }
 
-    public function testHttpHandlerInterfaceIsImplemented()
+    public function testHttpRequestHandlerInterfaceIsImplemented()
     {
         $this->assertInstanceOf(HttpRequestHandler::class, $this->requestHandler);
     }
