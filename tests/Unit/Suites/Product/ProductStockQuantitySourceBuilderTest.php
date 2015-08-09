@@ -64,7 +64,7 @@ class ProductStockQuantitySourceBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $xml = <<<EOX
 <?xml version="1.0"?>
-<rootNode website="foo" language="bar">
+<rootNode website="foo" locale="bar">
     <sku>baz</sku>
     <quantity>1</quantity>
 </rootNode>
@@ -78,6 +78,6 @@ EOX;
         $this->assertInstanceOf(ProductStockQuantitySource::class, $productStockQuantitySource);
         $this->assertEquals('baz', $resultProductId);
         $this->assertSame(1, $resultQuantity->getQuantity());
-        $this->assertSame(['website' => 'foo', 'language' => 'bar'], $resultContextData);
+        $this->assertSame(['website' => 'foo', 'locale' => 'bar'], $resultContextData);
     }
 }

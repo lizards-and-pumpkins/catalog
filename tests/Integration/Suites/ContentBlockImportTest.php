@@ -18,7 +18,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.content_blocks.v1+json']);
         $httpRequestBodyString = json_encode([
             'content' => $contentBlockContent,
-            'context' => ['website' => 'ru', 'language' => 'en_US']
+            'context' => ['website' => 'ru', 'locale' => 'en_US']
         ]);
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);

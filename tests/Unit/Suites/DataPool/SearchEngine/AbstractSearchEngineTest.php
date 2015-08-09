@@ -135,7 +135,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     public function testPartialContextsAreMatched()
     {
         $searchDocumentAContent = 'contentA';
-        $stubDocumentAContext = $this->createStubContext(['website' => 'value1', 'language' => 'value2']);
+        $stubDocumentAContext = $this->createStubContext(['website' => 'value1', 'locale' => 'value2']);
         $searchDocumentA = $this->createSearchDocumentWithContext(
             ['foo' => 'bar'],
             $searchDocumentAContent,
@@ -143,7 +143,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         );
 
         $searchDocumentBContent = 'contentB';
-        $stubDocumentBContext = $this->createStubContext(['website' => 'value1', 'language' => 'value2']);
+        $stubDocumentBContext = $this->createStubContext(['website' => 'value1', 'locale' => 'value2']);
         $searchDocumentB = $this->createSearchDocumentWithContext(
             ['foo' => 'bar'],
             $searchDocumentBContent,
@@ -153,7 +153,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->stubSearchDocumentCollection->method('getDocuments')->willReturn([$searchDocumentA, $searchDocumentB]);
         $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
 
-        $stubQueryContext = $this->createStubContext(['language' => 'value2']);
+        $stubQueryContext = $this->createStubContext(['locale' => 'value2']);
         $result = $this->searchEngine->query('bar', $stubQueryContext);
 
         $this->assertArraysHasEqualElements([$searchDocumentAContent, $searchDocumentBContent], $result);
@@ -161,7 +161,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     public function testContextPartsThatAreNotInSearchDocumentContextAreIgnored()
     {
-        $stubDocumentContext = $this->createStubContext(['language' => 'value2']);
+        $stubDocumentContext = $this->createStubContext(['locale' => 'value2']);
         $searchDocumentContent = 'content';
         $searchDocument = $this->createSearchDocumentWithContext(
             ['foo' => 'bar'],
@@ -172,7 +172,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->stubSearchDocumentCollection->method('getDocuments')->willReturn([$searchDocument]);
         $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
 
-        $stubQueryContext = $this->createStubContext(['website' => 'value1', 'language' => 'value2']);
+        $stubQueryContext = $this->createStubContext(['website' => 'value1', 'locale' => 'value2']);
         $result = $this->searchEngine->query('bar', $stubQueryContext);
 
         $this->assertEquals([$searchDocumentContent], $result);

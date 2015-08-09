@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <update>
-    <stock website="ru" language="en_US">
+    <stock website="ru" locale="en_US">
         <sku>foo</sku>
         <quantity>200</quantity>
     </stock>
-    <stock website="ru" language="en_US">
+    <stock website="ru" locale="en_US">
         <sku>bar</sku>
         <quantity>0</quantity>
     </stock>

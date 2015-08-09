@@ -1004,7 +1004,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function getRequiredContexts()
     {
-        return ['website', 'language', 'version'];
+        return ['website', 'locale', 'version'];
     }
 
     /**

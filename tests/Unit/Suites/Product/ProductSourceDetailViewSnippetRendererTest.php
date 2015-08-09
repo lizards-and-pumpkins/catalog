@@ -104,7 +104,7 @@ class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_Test
 
     public function testUsedContextPartsAreRequestedFromSnippetRendererAndPassedToContextBuilder()
     {
-        $contextParts = ['version', 'website', 'language'];
+        $contextParts = ['version', 'website', 'locale'];
 
         $mockProductDetailViewInContextRenderer =
             $this->getMock(ProductDetailViewInContextSnippetRenderer::class, [], [], '', false);
