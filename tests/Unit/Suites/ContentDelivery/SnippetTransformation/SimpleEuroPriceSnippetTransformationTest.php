@@ -5,6 +5,9 @@ namespace Brera\ContentDelivery\SnippetTransformation;
 
 use Brera\Context\Context;
 
+/**
+ * @covers Brera\ContentDelivery\SnippetTransformation\SimpleEuroPriceSnippetTransformation
+ */
 class SimpleEuroPriceSnippetTransformationTest extends \PHPUnit_Framework_TestCase
 {
     /**
