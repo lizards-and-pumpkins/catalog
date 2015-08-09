@@ -2,7 +2,7 @@
 
 namespace Brera;
 
-use Brera\ContentDelivery\SnippetTransformation;
+use Brera\ContentDelivery\SnippetTransformation\SnippetTransformation;
 use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
 use Brera\Http\HttpResponse;
