@@ -5,6 +5,7 @@ namespace Brera;
 use Brera\Api\ApiRequestHandlerChain;
 use Brera\Api\ApiRouter;
 use Brera\Content\ContentBlocksApiV1PutRequestHandler;
+use Brera\ContentDelivery\SnippetTransformation\SimpleEuroPriceSnippetTransformation;
 use Brera\Context\ContextBuilder;
 use Brera\Http\HttpRequest;
 use Brera\Product\CatalogImportApiV1PutRequestHandler;
@@ -258,6 +259,10 @@ class FrontendFactory implements Factory
 
     private function registerSnippetTransformations(PageBuilder $pageBuilder)
     {
+        $pageBuilder->registerSnippetTransformation(
+            'price',
+            $this->getMasterFactory()->createPriceSnippetTransformation()
+        );
     }
 
     /**
@@ -291,5 +296,13 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->createPageBuilder(),
             $this->getMasterFactory()->getSnippetKeyGeneratorLocator()
         );
+    }
+
+    /**
+     * @return SimpleEuroPriceSnippetTransformation
+     */
+    public function createPriceSnippetTransformation()
+    {
+        return new SimpleEuroPriceSnippetTransformation();
     }
 }
