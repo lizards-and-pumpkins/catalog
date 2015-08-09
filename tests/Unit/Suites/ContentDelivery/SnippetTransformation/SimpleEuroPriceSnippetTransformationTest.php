@@ -19,7 +19,7 @@ class SimpleEuroPriceSnippetTransformationTest extends \PHPUnit_Framework_TestCa
 
     /**
      * @param string $expected
-     * @param int $input
+     * @param int|string $input
      */
     private function assertIsTransformedTo($expected, $input)
     {
@@ -39,27 +39,49 @@ class SimpleEuroPriceSnippetTransformationTest extends \PHPUnit_Framework_TestCa
         $this->assertTrue(is_callable($this->transformation), "Snippet transformations not callable");
     }
 
-    public function testItIgnoresStringInput()
+    public function testItIgnoresInputContainingNotOnlyNumbers()
     {
-        $this->assertIsTransformedTo('123', '123');
+        $this->assertIsTransformedTo('12,3', '12,3');
+        $this->assertIsTransformedTo('12.3', '12.3');
+        $this->assertIsTransformedTo('12.30 €', '12.30 €');
+    }
+
+    public function testItReturnsNullInputAsAnEmptyString()
+    {
+        $this->assertIsTransformedTo('', null);
+    }
+
+    public function testItReturnsArrayInputAsAnEmptyString()
+    {
+        $this->assertIsTransformedTo('', []);
+    }
+
+    public function testItReturnsAnEmptyStringAsAnEmptyString()
+    {
+        $this->assertIsTransformedTo('', '');
     }
 
     /**
-     * @dataProvider integerInputDataProvider
+     * @dataProvider numbersOnlyInputDataProvider
+     * @param string $expected
+     * @param int|string $input
      */
-    public function testItReturnsIntegersInEuro($expected, $input)
+    public function testItReturnsInputNumbersAsEuro($expected, $input)
     {
         $this->assertIsTransformedTo($expected, $input);
     }
 
-    public function integerInputDataProvider()
+    public function numbersOnlyInputDataProvider()
     {
         return [
             ['1,00 €', 100],
+            ['1,00 €', '100'],
             ['0,01 €', 1],
             ['0,00 €', 0],
             ['-0,01 €', -1],
+            ['-0,11 €', '-11'],
             ['12.345.678,99 €', 1234567899],
+            ['12.345.678,99 €', '1234567899'],
         ];
     }
 }
