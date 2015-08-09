@@ -18,7 +18,7 @@ class SimpleEuroPriceSnippetTransformation implements SnippetTransformation
             return '';
         }
         if (is_string($input) && !preg_match('/^-?\d+$/', $input)) {
-            return (string)$input;
+            return $input;
         }
         return sprintf('%s €', number_format($input / 100, 2, ',', '.'));
     }
