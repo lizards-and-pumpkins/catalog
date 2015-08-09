@@ -20,7 +20,7 @@ class LocaleAwareEuroPriceSnippetTransformation implements SnippetTransformation
         if (! is_int($input) && ! is_string($input)) {
             return '';
         }
-        if (is_string($input) && !preg_match('/^-?\d*$/', $input)) {
+        if (is_string($input) && !preg_match('/^-?\d+$/', $input)) {
             return $input;
         }
         $locale = $this->getLocaleString($context);
