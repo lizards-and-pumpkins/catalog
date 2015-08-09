@@ -50,6 +50,11 @@ class LocaleAwareEuroPriceSnippetTransformationTest extends \PHPUnit_Framework_T
         $this->assertIsTransformedTo('123.4', '123.4', 'de_DE');
     }
 
+    public function testItReturnsAnEmptyStringInputAsAnEmptyString()
+    {
+        $this->assertIsTransformedTo('', '', 'de_DE');
+    }
+
     public function testItThrowsAnExceptionIfTheContextReturnsNoValidLocale()
     {
         $this->setExpectedException(NoValidLocaleInContext::class, "No valid locale in context");
