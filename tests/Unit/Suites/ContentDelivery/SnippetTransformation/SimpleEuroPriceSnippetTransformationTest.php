@@ -19,7 +19,7 @@ class SimpleEuroPriceSnippetTransformationTest extends \PHPUnit_Framework_TestCa
 
     /**
      * @param string $expected
-     * @param int|string $input
+     * @param int|string|null $input
      */
     private function assertIsTransformedTo($expected, $input)
     {
