@@ -13,10 +13,10 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     {
         $xml = <<<EOX
 <product sku="test"><attributes>
-    <name website="ru" language="de_DE">ru-de_DE</name>
-    <name website="ru" language="en_US">ru-en_US</name>
-    <name website="cy" language="de_DE">cy-de_DE</name>
-    <name website="cy" language="en_US">cy-en_US</name>
+    <name website="ru" locale="de_DE">ru-de_DE</name>
+    <name website="ru" locale="en_US">ru-en_US</name>
+    <name website="cy" locale="de_DE">cy-de_DE</name>
+    <name website="cy" locale="en_US">cy-en_US</name>
 </attributes></product>
 EOX;
         $factory = new SampleMasterFactory();
@@ -25,14 +25,14 @@ EOX;
         $productSourceBuilder = $factory->createProductSourceBuilder();
         $contextSource = $factory->createContextSource();
         $productSource = $productSourceBuilder->createProductSourceFromXml($xml);
-        $codes = ['website', 'language', 'version'];
+        $codes = ['website', 'locale', 'version'];
         $extractedValues = [];
         $contextCounter = 0;
 
         foreach ($contextSource->getAllAvailableContexts() as $context) {
             $contextCounter++;
             $this->assertEmpty(array_diff($codes, $context->getSupportedCodes()));
-            $expected = $context->getValue('website') . '-' . $context->getValue('language');
+            $expected = $context->getValue('website') . '-' . $context->getValue('locale');
             $product = $productSource->getProductForContext($context);
             $attributeValue = $product->getAttributeValue('name');
             $this->assertEquals($expected, $attributeValue);

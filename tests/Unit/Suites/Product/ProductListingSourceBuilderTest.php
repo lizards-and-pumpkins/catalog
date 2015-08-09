@@ -18,7 +18,7 @@ class ProductListingSourceBuilderTest extends \PHPUnit_Framework_TestCase
     public function testProductListingSourceWithAndConditionIsCreatedFromXml()
     {
         $xml = <<<EOX
-<listing url_key="men-accessories" condition="and" website="ru" language="en_US">
+<listing url_key="men-accessories" condition="and" website="ru" locale="en_US">
     <category operation="=">accessories</category>
     <gender operation="=">male</gender>
 </listing>
@@ -33,7 +33,7 @@ EOX;
 
         $this->assertInstanceOf(ProductListingSource::class, $productListingSource);
         $this->assertEquals('men-accessories', $urlKey);
-        $this->assertEquals(['website' => 'ru', 'language' => 'en_US'], $context);
+        $this->assertEquals(['website' => 'ru', 'locale' => 'en_US'], $context);
 
         $expectedCriterion1 = SearchCriterion::create('category', 'accessories', '=');
         $expectedCriterion2 = SearchCriterion::create('gender', 'male', '=');
@@ -48,7 +48,7 @@ EOX;
     public function testProductListingSourceWithOrConditionIsCreatedFromXml()
     {
         $xml = <<<EOX
-<listing url_key="men-accessories" condition="or" website="ru" language="en_US">
+<listing url_key="men-accessories" condition="or" website="ru" locale="en_US">
     <category operation="=">accessories</category>
     <gender operation="=">male</gender>
 </listing>

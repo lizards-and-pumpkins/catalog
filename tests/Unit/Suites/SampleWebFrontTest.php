@@ -38,7 +38,7 @@ use Brera\Http\HttpUrl;
  * @uses   \Brera\Http\HttpRouterChain
  * @uses   \Brera\Context\ContextDecorator
  * @uses   \Brera\Context\WebsiteContextDecorator
- * @uses   \Brera\Context\LanguageContextDecorator
+ * @uses   \Brera\Context\LocaleContextDecorator
  * @uses   \Brera\Context\VersionedContext
  * @uses   \Brera\Context\ContextBuilder
  * @uses   \Brera\Api\ApiRouter

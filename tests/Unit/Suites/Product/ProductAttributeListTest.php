@@ -112,17 +112,17 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
         $attributesArray = [
             [
                 'nodeName'      => $attributeCode,
-                'attributes'    => ['website' => $websiteCodeA, 'language' => $langA],
+                'attributes'    => ['website' => $websiteCodeA, 'locale' => $langA],
                 'value'         => $valueA
             ],
             [
                 'nodeName'      => $attributeCode,
-                'attributes'    => ['website' => $websiteCodeB, 'language' => $langB],
+                'attributes'    => ['website' => $websiteCodeB, 'locale' => $langB],
                 'value'         => $valueB
             ],
             [
                 'nodeName'      => $attributeCode,
-                'attributes'    => ['website' => $websiteCodeC, 'language' => $langC],
+                'attributes'    => ['website' => $websiteCodeC, 'locale' => $langC],
                 'value'         => $valueC
             ],
         ];
@@ -140,30 +140,30 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
         return [
             'only-web-in-context' => [
                 'webA', 'webB', 'webC', // website codes
-                'lang', 'lang', 'lang', // language codes
+                'lang', 'lang', 'lang', // locale codes
                 'AAA', 'BBB', 'CCC', // attribute values
                 [['website', 'webB']], // return value map
                 'BBB' // expected value
             ],
             'one-match' => [
                 'webA', 'webA', 'webB', // website codes
-                'langA', 'langB', 'langA', // language codes
+                'langA', 'langB', 'langA', // locale codes
                 'AAA', 'BBB', 'CCC', // attribute values
-                [['website', 'webB'], ['language', 'langA']], // return value map
+                [['website', 'webB'], ['locale', 'langA']], // return value map
                 'CCC' // expected value
             ],
             'two-match-pick-first' => [
                 'webA', 'webB', 'webC', // website codes
-                'langB', 'langA', 'langC', // language codes
+                'langB', 'langA', 'langC', // locale codes
                 'AAA', 'BBB', 'CCC', // attribute values
-                [['website', 'webA'], ['language', 'langA']], // return value map
+                [['website', 'webA'], ['locale', 'langA']], // return value map
                 'AAA' // expected value
             ],
             '3-match-pick-highest' => [
                 'webA', 'webB', 'webA', // website codes
-                'langB', 'langA', 'langA', // language codes
+                'langB', 'langA', 'langA', // locale codes
                 'AAA', 'BBB', 'CCC', // attribute values
-                [['website', 'webA'], ['language', 'langA']], // return value map
+                [['website', 'webA'], ['locale', 'langA']], // return value map
                 'CCC' // expected value
             ],
         ];

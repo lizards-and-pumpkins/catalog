@@ -20,13 +20,13 @@ class ContextSourceTest extends \PHPUnit_Framework_TestCase
     private $stubContextBuilder;
 
     private $testContextMatrix = [
-        ['website' => 'website-one', 'language' => 'english', 'customer_group' => 'general'],
-        ['website' => 'website-one', 'language' => 'english', 'customer_group' => 'reseller'],
-        ['website' => 'website-one', 'language' => 'german', 'customer_group' => 'general'],
-        ['website' => 'website-one', 'language' => 'german', 'customer_group' => 'reseller'],
-        ['website' => 'website-two', 'language' => 'english', 'customer_group' => 'general'],
-        ['website' => 'website-two', 'language' => 'french', 'customer_group' => 'general'],
-        ['website' => 'website-two', 'language' => 'german', 'customer_group' => 'general'],
+        ['website' => 'website-one', 'locale' => 'en_US', 'customer_group' => 'general'],
+        ['website' => 'website-one', 'locale' => 'en_US', 'customer_group' => 'reseller'],
+        ['website' => 'website-one', 'locale' => 'de_DE', 'customer_group' => 'general'],
+        ['website' => 'website-one', 'locale' => 'de_DE', 'customer_group' => 'reseller'],
+        ['website' => 'website-two', 'locale' => 'en_US', 'customer_group' => 'general'],
+        ['website' => 'website-two', 'locale' => 'fr_FR', 'customer_group' => 'general'],
+        ['website' => 'website-two', 'locale' => 'de_DE', 'customer_group' => 'general'],
     ];
 
     protected function setUp()
@@ -71,11 +71,11 @@ class ContextSourceTest extends \PHPUnit_Framework_TestCase
                 ]
             ],
             [
-                ['language'],
-                [['language' => 'english'], ['language' => 'german'], ['language' => 'french']]
+                ['locale'],
+                [['locale' => 'en_US'], ['locale' => 'de_DE'], ['locale' => 'fr_FR']]
             ],
             [
-                ['website', 'customer_group', 'language'],
+                ['website', 'customer_group', 'locale'],
                 $this->testContextMatrix
             ]
         ];

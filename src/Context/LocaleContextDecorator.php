@@ -3,9 +3,9 @@
 
 namespace Brera\Context;
 
-class LanguageContextDecorator extends ContextDecorator
+class LocaleContextDecorator extends ContextDecorator
 {
-    const CODE = 'language';
+    const CODE = 'locale';
     
     /**
      * @return string
