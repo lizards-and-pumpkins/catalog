@@ -11,7 +11,6 @@ use Brera\Product\ProductId;
 use Brera\Http\HttpUrl;
 use Brera\Http\HttpRequest;
 use Brera\Product\ProductInListingInContextSnippetRenderer;
-use Brera\Product\ProductListingSnippetRenderer;
 use Brera\Utils\XPathParser;
 
 class EdgeToEdgeTest extends AbstractIntegrationTest
@@ -21,7 +20,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
      */
     private $factory;
 
-    public function testProductDomainEventPutsProductToKeyValueStoreAndSearchIndex()
+    public function testCatalogImportDomainEventPutsProductToKeyValueStoreAndSearchIndex()
     {
         // TODO: Test is broken, the import and the following request should initialize their own WebFront instances,
         // TODO: thus sharing the data pool and queue needs to be handled properly.
@@ -102,31 +101,6 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         );
     }
 
-    public function testPageTemplateWasUpdatedDomainEventPutsProductListingRootSnippetIntoKeyValueStore()
-    {
-        $this->createProductListingFixture();
-
-        $logger = $this->factory->getLogger();
-        $this->failIfMessagesWhereLogged($logger);
-
-        $dataPoolReader = $this->factory->createDataPoolReader();
-
-        $keyGeneratorLocator = $this->factory->getSnippetKeyGeneratorLocator();
-        $keyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
-            ProductListingSnippetRenderer::CODE
-        );
-
-        $contextSource = $this->factory->createContextSource();
-        $context = $contextSource->getAllAvailableContexts()[0];
-
-        $key = $keyGenerator->getKeyForContext($context, ['products_per_page' => 9]);
-        $html = $dataPoolReader->getSnippet($key);
-
-        $expectation = '<ul class="products-grid">';
-
-        $this->assertContains($expectation, $html);
-    }
-
     public function testImportedProductIsAccessibleFromTheFrontend()
     {
         // TODO: Test is broken, the import and the following request should initialize their own WebFront instances,
@@ -168,23 +142,6 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
         $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.catalog_import.v1+json']);
         $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
-        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
-        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
-
-        $this->factory = $this->prepareIntegrationTestMasterFactory($request);
-
-        $website = new InjectableSampleWebFront($request, $this->factory);
-        $website->runWithoutSendingResponse();
-
-        $this->factory->createCommandConsumer()->process();
-        $this->factory->createDomainEventConsumer()->process();
-    }
-
-    private function createProductListingFixture()
-    {
-        $httpUrl = HttpUrl::fromString('http://example.com/api/page_templates/product_listing');
-        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.page_templates.v1+json']);
-        $httpRequestBodyString = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.json');
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
