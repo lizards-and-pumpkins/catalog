@@ -359,7 +359,7 @@ class PageBuilder
      */
     private function applyTransformationToSnippetContent($content, callable $transformation)
     {
-        return $transformation($content);
+        return $transformation($content, $this->context);
     }
 
     /**
