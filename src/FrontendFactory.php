@@ -98,7 +98,8 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->getCommandQueue(),
             $this->getCatalogImportDirectoryConfig(),
             $this->getMasterFactory()->createProductSourceBuilder(),
-            $this->getMasterFactory()->createProductListingSourceBuilder()
+            $this->getMasterFactory()->createProductListingSourceBuilder(),
+            $this->getMasterFactory()->getLogger()
         );
     }
 

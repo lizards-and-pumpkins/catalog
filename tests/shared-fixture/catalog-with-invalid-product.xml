@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<catalog xmlns="http://brera.io" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://brera.io ../../schema/catalog.xsd">
+    <products>
+        <product type="simple" sku="288193NEU" visible="true" tax_class_id="5">
+            <attributes>
+                <image>
+                    <file>288193_14.jpg</file>
+                    <label/>
+                </image>
+                <url_key>adilette</url_key>
+                <name>Adilette</name>
+                <category>men-accessories</category>
+                <price>14.92</price>
+                <brand>Adidas</brand>
+                <gender>Herren</gender>
+                <stock_qty>5</stock_qty>
+                <backorders>false</backorders>
+            </attributes>
+        </product>
+        <product type="simple" sku="T4H2N-4701" visible="true" tax_class_id="5">
+            <attributes>
+                <image>
+                    <file>t4h2n-4701_14.jpg</file>
+                    <label/>
+                </image>
+                <url_key>gel-kayano-21</url_key>
+                <name>Gel-Kayano 21</name>
+                <category>men-accessories</category>
+                <price website="ru_DE">106.95</price>
+                <price>107.95</price>
+                <brand>Asics</brand>
+                <style>Stabil</style>
+                <gender>Herren</gender>
+                <stock_qty>5</stock_qty>
+                <backorders>true</backorders>
+            </attributes>
+        </product>
+    </products>
+</catalog>
