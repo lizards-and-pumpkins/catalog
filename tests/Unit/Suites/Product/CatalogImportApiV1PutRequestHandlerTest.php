@@ -16,6 +16,9 @@ use Brera\TestFileFixtureTrait;
  * @uses   \Brera\Http\HttpHeaders
  * @uses   \Brera\Image\ImageWasUpdatedDomainEvent
  * @uses   \Brera\Image\UpdateImageCommand
+ * @uses   \Brera\Product\ProductImportFailedMessage
+ * @uses   \Brera\Product\ProductId
+ * @uses   \Brera\Product\SampleSku
  * @uses   \Brera\Product\ProductWasUpdatedDomainEvent
  * @uses   \Brera\Product\ProductListingWasUpdatedDomainEvent
  * @uses   \Brera\Product\UpdateProductCommand
