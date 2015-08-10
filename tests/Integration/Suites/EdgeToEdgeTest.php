@@ -177,7 +177,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $importExceptionMessage = 'Attributes with different context parts can not be combined into a list';
         $expectedLoggedErrorMessage = sprintf(
             "Failed to import product ID: %s due to following reason:\n%s",
-            (string) $invalidProductId,
+            $invalidProductId,
             $importExceptionMessage
         );
         $this->assertContains($expectedLoggedErrorMessage, $messages, 'Product import failure was not logged.');

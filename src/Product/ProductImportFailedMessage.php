@@ -29,7 +29,7 @@ class ProductImportFailedMessage implements LogMessage
     {
         return sprintf(
             "Failed to import product ID: %s due to following reason:\n%s",
-            (string) $this->productId,
+            $this->productId,
             $this->exception->getMessage()
         );
     }
