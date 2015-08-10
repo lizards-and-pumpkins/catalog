@@ -31,7 +31,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $productPrice = 1295;
         $productBackOrderAvailability = 'true';
 
-        $this->importCatalog();
+        $this->importCatalog('catalog.xml');
 
         $logger = $this->factory->getLogger();
         $this->failIfMessagesWhereLogged($logger);
@@ -106,7 +106,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         // TODO: Test is broken, the import and the following request should initialize their own WebFront instances,
         // TODO: thus sharing the data pool and queue needs to be handled properly.
 
-        $this->importCatalog();
+        $this->importCatalog('catalog.xml');
 
         $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
         $urlKeys = (new XPathParser($xml))->getXmlNodesArrayByXPath(
@@ -137,11 +137,66 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $this->assertInstanceOf(HttpResourceNotFoundResponse::class, $response);
     }
 
-    private function importCatalog()
+    public function testProductsWithValidDataAreImportedAndInvalidDataAreNotImportedButLogged()
+    {
+        // TODO: Test is broken, the import and the following request should initialize their own WebFront instances,
+        // TODO: thus sharing the data pool and queue needs to be handled properly.
+
+        $this->importCatalog('catalog-with-invalid-product.xml');
+
+        $dataPoolReader = $this->factory->createDataPoolReader();
+
+        $contextSource = $this->factory->createContextSource();
+        $context = $contextSource->getAllAvailableContexts()[0];
+
+        $keyGeneratorLocator = $this->factory->getSnippetKeyGeneratorLocator();
+        $productDetailViewKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
+            ProductDetailViewInContextSnippetRenderer::CODE
+        );
+
+        $validProductSku = SampleSku::fromString('288193NEU');
+        $validProductId = ProductId::fromSku($validProductSku);
+        $validProductDetailViewSnippetKey = $productDetailViewKeyGenerator->getKeyForContext(
+            $context,
+            ['product_id' => $validProductId]
+        );
+
+        $invalidProductSku = SampleSku::fromString('T4H2N-4701');
+        $invalidProductId = ProductId::fromSku($invalidProductSku);
+        $invalidProductDetailViewSnippetKey = $productDetailViewKeyGenerator->getKeyForContext(
+            $context,
+            ['product_id' => $invalidProductId]
+        );
+
+        $this->assertTrue($dataPoolReader->hasSnippet($validProductDetailViewSnippetKey));
+        $this->assertFalse($dataPoolReader->hasSnippet($invalidProductDetailViewSnippetKey));
+
+        $logger = $this->factory->getLogger();
+        $messages = $logger->getMessages();
+
+        $importExceptionMessage = 'Attributes with different context parts can not be combined into a list';
+        $expectedLoggedErrorMessage = sprintf(
+            "Failed to import product ID: %s due to following reason:\n%s",
+            (string) $invalidProductId,
+            $importExceptionMessage
+        );
+        $this->assertContains($expectedLoggedErrorMessage, $messages, 'Product import failure was not logged.');
+
+        if (!empty($messages)) {
+            $messageString = implode(PHP_EOL, $messages);
+            if ($messageString !== $expectedLoggedErrorMessage) {
+                $this->fail($messageString);
+            }
+        }
+    }
+        /**
+     * @param string $importFileName
+     */
+    private function importCatalog($importFileName)
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
         $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.catalog_import.v1+json']);
-        $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
+        $httpRequestBodyString = json_encode(['fileName' => $importFileName]);
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
