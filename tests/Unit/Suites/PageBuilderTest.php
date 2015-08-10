@@ -2,6 +2,7 @@
 
 namespace Brera;
 
+use Brera\ContentDelivery\SnippetTransformation\SnippetTransformation;
 use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
 use Brera\Http\HttpResponse;
@@ -376,7 +377,7 @@ EOH;
     public function testTestSnippetTransformationIsNotCalledIfThereIsNoMatchingSnippet()
     {
         /** @var callable|\PHPUnit_Framework_MockObject_MockObject $mockTransformation */
-        $mockTransformation = $this->getMock(TestSnippetTransformation::class, ['__invoke']);
+        $mockTransformation = $this->getMock(SnippetTransformation::class);
         $mockTransformation->expects($this->never())->method('__invoke');
         $this->pageBuilder->registerSnippetTransformation('non-existing-snippet-code', $mockTransformation);
 
@@ -393,7 +394,7 @@ EOH;
     public function testTestSnippetTransformationIsCalledIfThereIsAMatchingSnippet()
     {
         /** @var callable|\PHPUnit_Framework_MockObject_MockObject $mockTransformation */
-        $mockTransformation = $this->getMock(TestSnippetTransformation::class, ['__invoke']);
+        $mockTransformation = $this->getMock(SnippetTransformation::class);
         $mockTransformation->expects($this->once())->method('__invoke')->with('<h1>My Website!</h1>');
         $this->pageBuilder->registerSnippetTransformation('body', $mockTransformation);
 
@@ -410,13 +411,13 @@ EOH;
     public function testMultipleTestSnippetTransformationsForOneSnippetCanBeRegistered()
     {
         /** @var callable|\PHPUnit_Framework_MockObject_MockObject $mockTransformationOne */
-        $mockTransformationOne = $this->getMock(TestSnippetTransformation::class, ['__invoke']);
+        $mockTransformationOne = $this->getMock(SnippetTransformation::class);
         $mockTransformationOne->expects($this->once())->method('__invoke')->with('<h1>My Website!</h1>')
             ->willReturn('result one');
         $this->pageBuilder->registerSnippetTransformation('body', $mockTransformationOne);
 
         /** @var callable|\PHPUnit_Framework_MockObject_MockObject $mockTransformationTwo */
-        $mockTransformationTwo = $this->getMock(TestSnippetTransformation::class, ['__invoke']);
+        $mockTransformationTwo = $this->getMock(SnippetTransformation::class);
         $mockTransformationTwo->expects($this->once())->method('__invoke')->with('result one')
             ->willReturn('result two');
         $this->pageBuilder->registerSnippetTransformation('body', $mockTransformationTwo);

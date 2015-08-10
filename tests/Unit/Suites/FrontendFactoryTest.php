@@ -4,6 +4,7 @@ namespace Brera;
 
 use Brera\Api\ApiRouter;
 use Brera\Content\ContentBlocksApiV1PutRequestHandler;
+use Brera\ContentDelivery\SnippetTransformation\SimpleEuroPriceSnippetTransformation;
 use Brera\Context\Context;
 use Brera\Http\HttpHeaders;
 use Brera\Http\HttpRequest;
@@ -119,5 +120,11 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->frontendFactory->createProductSearchResultsRouter();
         $this->assertInstanceOf(ProductSearchResultsRouter::class, $result);
+    }
+
+    public function testItReturnsASimpleEuroPriceSnippetTransformation()
+    {
+        $result = $this->frontendFactory->createPriceSnippetTransformation();
+        $this->assertInstanceOf(SimpleEuroPriceSnippetTransformation::class, $result);
     }
 }
