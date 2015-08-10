@@ -24,9 +24,8 @@ class CommandHandlerFailedMessageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $stubCommand = $this->getMockBuilder(Command::class)
-            ->setMockClassName('Command')
-            ->getMock();
+        /** @var Command|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
+        $stubCommand = $this->getMockBuilder(Command::class)->setMockClassName('Command')->getMock();
 
         $this->stubException = new \Exception($this->exceptionMessage);
 
