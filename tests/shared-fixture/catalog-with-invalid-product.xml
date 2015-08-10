@@ -27,6 +27,7 @@
                 <url_key>gel-kayano-21</url_key>
                 <name>Gel-Kayano 21</name>
                 <category>men-accessories</category>
+                <!-- The following lines will result in exception as context parts are different for same attribute. -->
                 <price website="ru_DE">106.95</price>
                 <price>107.95</price>
                 <brand>Asics</brand>
