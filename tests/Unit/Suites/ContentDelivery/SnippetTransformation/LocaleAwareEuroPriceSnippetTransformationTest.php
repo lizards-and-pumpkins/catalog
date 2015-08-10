@@ -4,7 +4,7 @@
 namespace Brera\ContentDelivery\SnippetTransformation;
 
 use Brera\Context\Context;
-use Brera\Context\LanguageContextDecorator;
+use Brera\Context\LocaleContextDecorator;
 
 /**
  * @covers \Brera\ContentDelivery\SnippetTransformation\LocaleAwareEuroPriceSnippetTransformation
@@ -27,7 +27,7 @@ class LocaleAwareEuroPriceSnippetTransformationTest extends \PHPUnit_Framework_T
      */
     private function assertIsTransformedTo($expected, $input, $locale)
     {
-        $this->mockContext->method('getValue')->with(LanguageContextDecorator::CODE)->willReturn($locale);
+        $this->mockContext->method('getValue')->with(LocaleContextDecorator::CODE)->willReturn($locale);
         $transformation = $this->transformation;
         $this->assertSame($expected, $transformation($input, $this->mockContext));
     }

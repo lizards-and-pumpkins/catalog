@@ -4,7 +4,7 @@
 namespace Brera\ContentDelivery\SnippetTransformation;
 
 use Brera\Context\Context;
-use Brera\Context\LanguageContextDecorator;
+use Brera\Context\LocaleContextDecorator;
 use SebastianBergmann\Money\EUR;
 use SebastianBergmann\Money\IntlFormatter;
 
@@ -33,7 +33,7 @@ class LocaleAwareEuroPriceSnippetTransformation implements SnippetTransformation
      */
     private function getLocaleString(Context $context)
     {
-        $locale = $context->getValue(LanguageContextDecorator::CODE);
+        $locale = $context->getValue(LocaleContextDecorator::CODE);
         if (is_null($locale)) {
             throw new NoValidLocaleInContext('No valid locale in context');
         }
