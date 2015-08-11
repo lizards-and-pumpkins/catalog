@@ -8,7 +8,7 @@
 $mainImage = $this->getMainProductImage();
 
 $maxQty = 5; // Temporary hardcoded
-$brand = $this->getProductAttributeValue('brand');
+$brand = $this->getFirstValueOfProductAttribute('brand');
 $brandLogo = strtolower(preg_replace('/\W/', '_', trim($brand))) . '.png';
 
 /* TODO: Implement calculation of save */
@@ -44,7 +44,7 @@ $save = 0;
                     <div class="product-title">
                         <img src="images/logos/<?= $brandLogo ?>" width="95" />
                         <div class="product-title-info">
-                            <h1 itemprop="name"><?= $this->getProductAttributeValue('name') ?></h1>
+                            <h1 itemprop="name"><?= $this->getFirstValueOfProductAttribute('name') ?></h1>
                             <p class="similarProducts">
                                 <?= $this->__('More by') ?> <a href="" itemprop="brand"><?= $brand ?></a>
                             </p>
@@ -65,11 +65,11 @@ $save = 0;
 
                 <div class="product-main-info">
                     <div class="main-information">
-                        <?php if ($gender = $this->getProductAttributeValue('gender')) : ?>
+                        <?php if ($gender = $this->getAllValuesOfProductAttributeGlued('gender', ', ')) : ?>
                             <p><strong><?= $this->__('Gender') ?>:</strong> <?= $gender ?></p>
                         <?php endif ?>
 
-                        <?php if (($style = $this->getProductAttributeValue('style'))) : ?>
+                        <?php if (($style = $this->getAllValuesOfProductAttributeGlued('style', ', '))) : ?>
                             <p><strong><?= $this->__('Style') ?>:</strong> <?= $style ?></p>
                         <?php endif ?>
 
@@ -133,7 +133,7 @@ $save = 0;
             <li><a href="#additional-information"><?= $this->__('Additional Information') ?></a></li>
         </ul>
         <div id="description" class="tab-content" itemprop="description">
-            <?= $this->getProductAttributeValue('description') ?>
+            <?= $this->getFirstValueOfProductAttribute('description') ?>
         </div>
         <div id="additional-information" class="tab-content">
             [ TODO ]
@@ -149,8 +149,8 @@ $save = 0;
 
         var html = '<li style="background-image:url(\'/media/brands/brands-small/<?= $brandLogo ?>\')" class="item">';
         html += '<div class="grid-cell-container">';
-        html += '<a href="<?php /* TODO: Product URL */ ?>" class="product-image"><img src="<?php /* TODO: 188x115 thumbnail URL */ ?>" width="188" height="115" alt="<?= $this->getProductAttributeValue('name') ?>" /></a>';
-        html += '<h2 class="product-name"><a href="<?php /* TODO: Product URL */ ?>"><?= $this->getProductAttributeValue('name') ?></a></h2>';
+        html += '<a href="<?php /* TODO: Product URL */ ?>" class="product-image"><img src="<?php /* TODO: 188x115 thumbnail URL */ ?>" width="188" height="115" alt="<?= $this->getFirstValueOfProductAttribute('name') ?>" /></a>';
+        html += '<h2 class="product-name"><a href="<?php /* TODO: Product URL */ ?>"><?= $this->getFirstValueOfProductAttribute('name') ?></a></h2>';
         html += '<a href="<?php /* TODO: Product URL */ ?>"><?= $this->getChildOutput('price') ?></a>';
         <?php if ($gender) : ?>
         html += '<p class="product-category"><a href="<?php /* TODO: Product URL */ ?>"><?= is_array($gender) ? implode(',', $gender) : $gender ?></a></p>';

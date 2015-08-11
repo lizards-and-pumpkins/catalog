@@ -11,6 +11,6 @@ $productImage = $this->getMainProductImage();
 ?>
 <div class="grid-cell-container"<?php if ($brandLogo) : ?> style="background-image: url('<?= $brandLogo ?>')"<?php endif ?>>
     <a href="<?= $this->getProductUrl() ?>"><img src="<?= $productImage->getPath('medium') ?>" alt="<?= $productImage->getLabel() ?>" width="188" height="115" /></a>
-    <h2><a href="<?= $this->getProductUrl() ?>"><?= $this->getProductAttributeValue('name') ?></a></h2>
-    <p><?= $this->getProductAttributeValue('gender') ?></p>
+    <h2><a href="<?= $this->getProductUrl() ?>"><?= $this->getFirstValueOfProductAttribute('name') ?></a></h2>
+    <p><?= $this->getAllValuesOfProductAttributeGlued('gender', ', ') ?></p>
 </div>

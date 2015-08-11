@@ -15,9 +15,16 @@ class ProductBlock extends Block
      * @return string
      * @throws ProductAttributeNotFoundException
      */
-    public function getProductAttributeValue($attributeCode)
+    public function getFirstValueOfProductAttribute($attributeCode)
     {
-        return $this->getProduct()->getFirstAttributeValue($attributeCode);
+        return $this->getProduct()->getFirstValueOfAttribute($attributeCode);
+    }
+
+    public function getAllValuesOfProductAttributeGlued($attributeCode, $glue)
+    {
+        $attributeValues = $this->getProduct()->getAllValuesOfAttribute($attributeCode);
+
+        return implode($glue, $attributeValues);
     }
 
     /**
@@ -25,7 +32,7 @@ class ProductBlock extends Block
      */
     public function getProductUrl()
     {
-        return '/brera/' . $this->getProductAttributeValue('url_key');
+        return '/brera/' . $this->getFirstValueOfProductAttribute('url_key');
     }
 
     /**
@@ -39,7 +46,7 @@ class ProductBlock extends Block
          * todo: getAttributeValue should always return a string.
          * todo: For images, it would be better to have a dedicated method, for example getImage or getAsset
          */
-        $image = $product->getFirstAttributeValue('image');
+        $image = $product->getFirstValueOfAttribute('image');
         $imageFile = $image->getAttributesWithCode('file')[0];
         $imageLabel = $image->getAttributesWithCode('label')[0];
 
@@ -59,7 +66,7 @@ class ProductBlock extends Block
      */
     public function getBrandLogoSrc()
     {
-        $brandName = $this->getProductAttributeValue('brand');
+        $brandName = $this->getFirstValueOfProductAttribute('brand');
         $brand = strtolower(preg_replace('/\W/', '_', trim($brandName)));
         $fileName = 'images/brands/brands-slider/' . $brand . '.png';
 

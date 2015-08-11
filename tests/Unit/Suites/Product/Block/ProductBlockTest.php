@@ -44,15 +44,30 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Block::class, $this->productBlock);
     }
 
-    public function testProductAttributeValueIsReturned()
+    public function testFirstValueOfProductAttributeIsReturned()
     {
         $attributeCode = 'name';
         $attributeValue = 'foo';
 
-        $this->stubProduct->method('getFirstAttributeValue')->with($attributeCode)->willReturn($attributeValue);
-        $result = $this->productBlock->getProductAttributeValue($attributeCode);
+        $this->stubProduct->method('getFirstValueOfAttribute')->with($attributeCode)->willReturn($attributeValue);
+        $result = $this->productBlock->getFirstValueOfProductAttribute($attributeCode);
 
         $this->assertEquals($attributeValue, $result);
+    }
+
+    public function testAllValuesOfProductAttributeGluedAreReturned()
+    {
+        $attributeCode = 'foo';
+        $attributeValueA = 'bar';
+        $attributeValueB = 'baz';
+        $glue = ' in love with ';
+
+        $this->stubProduct->method('getAllValuesOfAttribute')->willReturn([$attributeValueA, $attributeValueB]);
+
+        $result = $this->productBlock->getAllValuesOfProductAttributeGlued($attributeCode, $glue);
+        $expected = $attributeValueA . $glue . $attributeValueB;
+
+        $this->assertSame($expected, $result);
     }
 
     public function testProductIdIsReturned()
@@ -69,7 +84,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
     {
         $urlKey = 'foo';
 
-        $this->stubProduct->method('getFirstAttributeValue')->with('url_key')->willReturn($urlKey);
+        $this->stubProduct->method('getFirstValueOfAttribute')->with('url_key')->willReturn($urlKey);
         $result = $this->productBlock->getProductUrl();
 
         $this->assertEquals('/brera/' . $urlKey, $result);
@@ -78,7 +93,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
     public function testEmptyStringIsReturnedIfProductBrandLogoImageFileDoesNotExist()
     {
         $testProductBrandName = 'foo';
-        $this->stubProduct->method('getFirstAttributeValue')->with('brand')->willReturn($testProductBrandName);
+        $this->stubProduct->method('getFirstValueOfAttribute')->with('brand')->willReturn($testProductBrandName);
 
         $result = $this->productBlock->getBrandLogoSrc();
 
@@ -88,7 +103,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
     public function testProductBrandLogoSrcIsReturned()
     {
         $testProductBrandName = 'foo';
-        $this->stubProduct->method('getFirstAttributeValue')->with('brand')->willReturn($testProductBrandName);
+        $this->stubProduct->method('getFirstValueOfAttribute')->with('brand')->willReturn($testProductBrandName);
 
         $expectedProductBrandLogoSrc = 'images/brands/brands-slider/' . $testProductBrandName . '.png';
         $this->createFixtureFile('pub/' . $expectedProductBrandLogoSrc, '');
@@ -108,7 +123,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$stubAttribute]);
 
         $this->stubProduct->expects($this->once())
-            ->method('getFirstAttributeValue')
+            ->method('getFirstValueOfAttribute')
             ->with('image')
             ->willReturn($mockProductAttributeList);
 

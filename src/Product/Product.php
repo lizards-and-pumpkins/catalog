@@ -32,15 +32,31 @@ class Product
      * @param string $attributeCode
      * @return string|ProductAttributeList
      */
-    public function getFirstAttributeValue($attributeCode)
+    public function getFirstValueOfAttribute($attributeCode)
     {
+        $attributeValues = $this->getAllValuesOfAttribute($attributeCode);
+
+        return $attributeValues[0];
+    }
+
+    /**
+     * @param string $attributeCode
+     * @return string[]|ProductAttributeList[]
+     */
+    public function getAllValuesOfAttribute($attributeCode)
+    {
+        $values = [];
+
         try {
-            $value = $this->attributeList->getAttributesWithCode($attributeCode)[0]->getValue();
+            $productAttributes = $this->attributeList->getAttributesWithCode($attributeCode);
+            foreach ($productAttributes as $productAttribute) {
+                $values[] = $productAttribute->getValue();
+            }
         } catch (ProductAttributeNotFoundException $e) {
             /* TODO: Log */
-            $value = '';
+            return [''];
         }
 
-        return $value;
+        return $values;
     }
 }

@@ -57,7 +57,7 @@ class PriceSnippetRenderer implements SnippetRenderer
     {
         $productInContext = $productSource->getProductForContext($context);
         $key = $this->snippetKeyGenerator->getKeyForContext($context, ['product_id' => $productInContext->getId()]);
-        $priceString = $productInContext->getFirstAttributeValue($this->priceAttributeCode);
+        $priceString = $productInContext->getFirstValueOfAttribute($this->priceAttributeCode);
         $price = Price::fromString($priceString);
         $snippet = Snippet::create($key, $price->getAmount());
         $this->snippetList->add($snippet);
