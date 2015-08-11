@@ -53,7 +53,7 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
 
         $stubProduct = $this->getMock(Product::class, [], [], '', false);
         $stubProduct->expects($this->atLeastOnce())
-            ->method('getAttributeValue')
+            ->method('getFirstAttributeValue')
             ->with($this->searchableAttributeCode)
             ->willReturn('bar');
 

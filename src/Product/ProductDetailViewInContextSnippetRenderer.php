@@ -91,7 +91,7 @@ class ProductDetailViewInContextSnippetRenderer implements SnippetRenderer
     {
         $snippetKey = $this->productDetailPageMetaSnippetKeyGenerator->getKeyForContext(
             $this->context,
-            ['url_key' => $this->product->getAttributeValue('url_key')]
+            ['url_key' => $this->product->getFirstAttributeValue('url_key')]
         );
         $metaData = $this->getPageMetaSnippetContent();
         return Snippet::create($snippetKey, json_encode($metaData));

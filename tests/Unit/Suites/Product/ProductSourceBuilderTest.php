@@ -45,7 +45,7 @@ class ProductSourceBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(ProductSource::class, $productSource);
         $this->assertEquals($expectedSku, $productSource->getId());
-        $this->assertProductAttributeValueEquals($expectedAttribute, $productSource, 'special_price');
+        $this->assertFirstProductAttributeInAListValueEquals($expectedAttribute, $productSource, 'special_price');
     }
 
     public function testProductSourceIsCreatedFromXmlIgnoringAssociatedProducts()
@@ -60,7 +60,7 @@ class ProductSourceBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(ProductSource::class, $productSource);
         $this->assertEquals($expectedSku, $productSource->getId());
-        $this->assertProductAttributeValueEquals($expectedAttribute, $productSource, 'price');
+        $this->assertFirstProductAttributeInAListValueEquals($expectedAttribute, $productSource, 'price');
     }
 
     public function testProductSourceIsCreatedFromXmlIgnoringAssociatedProductsAttributes()
@@ -74,7 +74,7 @@ class ProductSourceBuilderTest extends \PHPUnit_Framework_TestCase
         );
 
         $productSource = $this->builder->createProductSourceFromXml($secondNodeXml);
-        $this->assertProductAttributeValueEquals('nothing', $productSource, 'size');
+        $this->assertFirstProductAttributeInAListValueEquals('nothing', $productSource, 'size');
     }
 
     public function testExceptionIsThrownIfXmlHasNoEssentialData()
@@ -88,12 +88,12 @@ class ProductSourceBuilderTest extends \PHPUnit_Framework_TestCase
      * @param ProductSource $productSource
      * @param string $attributeCode
      */
-    private function assertProductAttributeValueEquals($expected, ProductSource $productSource, $attributeCode)
+    private function assertFirstProductAttributeInAListValueEquals($expected, ProductSource $productSource, $attributeCode)
     {
         $property = new \ReflectionProperty($productSource, 'attributes');
         $property->setAccessible(true);
         /** @var ProductAttributeList $attributeList */
         $attributeList = $property->getValue($productSource);
-        $this->assertEquals($expected, $attributeList->getAttribute($attributeCode)->getValue());
+        $this->assertEquals($expected, $attributeList->getAttributesWithCode($attributeCode)[0]->getValue());
     }
 }

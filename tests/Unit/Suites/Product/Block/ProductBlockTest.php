@@ -49,7 +49,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
         $attributeCode = 'name';
         $attributeValue = 'foo';
 
-        $this->stubProduct->method('getAttributeValue')->with($attributeCode)->willReturn($attributeValue);
+        $this->stubProduct->method('getFirstAttributeValue')->with($attributeCode)->willReturn($attributeValue);
         $result = $this->productBlock->getProductAttributeValue($attributeCode);
 
         $this->assertEquals($attributeValue, $result);
@@ -69,7 +69,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
     {
         $urlKey = 'foo';
 
-        $this->stubProduct->method('getAttributeValue')->with('url_key')->willReturn($urlKey);
+        $this->stubProduct->method('getFirstAttributeValue')->with('url_key')->willReturn($urlKey);
         $result = $this->productBlock->getProductUrl();
 
         $this->assertEquals('/brera/' . $urlKey, $result);
@@ -78,7 +78,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
     public function testEmptyStringIsReturnedIfProductBrandLogoImageFileDoesNotExist()
     {
         $testProductBrandName = 'foo';
-        $this->stubProduct->method('getAttributeValue')->with('brand')->willReturn($testProductBrandName);
+        $this->stubProduct->method('getFirstAttributeValue')->with('brand')->willReturn($testProductBrandName);
 
         $result = $this->productBlock->getBrandLogoSrc();
 
@@ -88,7 +88,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
     public function testProductBrandLogoSrcIsReturned()
     {
         $testProductBrandName = 'foo';
-        $this->stubProduct->method('getAttributeValue')->with('brand')->willReturn($testProductBrandName);
+        $this->stubProduct->method('getFirstAttributeValue')->with('brand')->willReturn($testProductBrandName);
 
         $expectedProductBrandLogoSrc = 'images/brands/brands-slider/' . $testProductBrandName . '.png';
         $this->createFixtureFile('pub/' . $expectedProductBrandLogoSrc, '');
@@ -104,11 +104,11 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
 
         $mockProductAttributeList = $this->getMock(ProductAttributeList::class);
         $mockProductAttributeList->expects($this->exactly(2))
-            ->method('getAttribute')
-            ->willReturn($stubAttribute);
+            ->method('getAttributesWithCode')
+            ->willReturn([$stubAttribute]);
 
         $this->stubProduct->expects($this->once())
-            ->method('getAttributeValue')
+            ->method('getFirstAttributeValue')
             ->with('image')
             ->willReturn($mockProductAttributeList);
 

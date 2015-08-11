@@ -70,7 +70,7 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
         $attributesMap = [];
 
         foreach ($this->searchableAttributeCodes as $attributeCode) {
-            $attributesMap[$attributeCode] = $product->getAttributeValue($attributeCode);
+            $attributesMap[$attributeCode] = $product->getFirstAttributeValue($attributeCode);
         }
 
         return SearchDocumentFieldCollection::fromArray($attributesMap);

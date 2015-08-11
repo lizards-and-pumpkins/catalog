@@ -74,7 +74,7 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $dummyPriceAttributeValue = '1';
 
         $mockProduct = $this->getMock(Product::class, [], [], '', false);
-        $mockProduct->method('getAttributeValue')
+        $mockProduct->method('getFirstAttributeValue')
             ->with($this->dummyPriceAttributeCode)
             ->willReturn($dummyPriceAttributeValue);
 

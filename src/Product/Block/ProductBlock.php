@@ -17,7 +17,7 @@ class ProductBlock extends Block
      */
     public function getProductAttributeValue($attributeCode)
     {
-        return $this->getProduct()->getAttributeValue($attributeCode);
+        return $this->getProduct()->getFirstAttributeValue($attributeCode);
     }
 
     /**
@@ -36,13 +36,12 @@ class ProductBlock extends Block
         $product = $this->getProduct();
 
         /**
-         * @todo: getAttributeValue should always return a string.
-         * @todo: For images, it would be better to have a dedicated method,
-         * @todo: for example getImage or getAsset
+         * todo: getAttributeValue should always return a string.
+         * todo: For images, it would be better to have a dedicated method, for example getImage or getAsset
          */
-        $image = $product->getAttributeValue('image');
-        $imageFile = $image->getAttribute('file');
-        $imageLabel = $image->getAttribute('label');
+        $image = $product->getFirstAttributeValue('image');
+        $imageFile = $image->getAttributesWithCode('file')[0];
+        $imageLabel = $image->getAttributesWithCode('label')[0];
 
         return new Image($imageFile->getValue(), $imageLabel->getValue());
     }

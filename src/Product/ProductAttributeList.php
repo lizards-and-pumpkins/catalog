@@ -32,23 +32,27 @@ class ProductAttributeList
 
     /**
      * @param string $code
-     * @throws ProductAttributeNotFoundException
-     * @return ProductAttribute
+     * @return ProductAttribute[]
      */
-    public function getAttribute($code)
+    public function getAttributesWithCode($code)
     {
         if (empty($code)) {
             throw new ProductAttributeNotFoundException('Can not get an attribute with blank code.');
         }
 
+        $attributesWithCode = [];
+
         foreach ($this->attributes as $attribute) {
             if ($attribute->isCodeEqualsTo($code)) {
-                /* TODO: Handle case when more than one attribute with specified code is in the list */
-                return $attribute;
+                $attributesWithCode[] = $attribute;
             }
         }
 
-        throw new ProductAttributeNotFoundException(sprintf('Can not find an attribute with code "%s".', $code));
+        if (empty($attributesWithCode)) {
+            throw new ProductAttributeNotFoundException(sprintf('Can not find an attribute with code "%s".', $code));
+        }
+
+        return $attributesWithCode;
     }
 
     /**

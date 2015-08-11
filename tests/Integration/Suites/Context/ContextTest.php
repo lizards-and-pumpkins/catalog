@@ -34,7 +34,7 @@ EOX;
             $this->assertEmpty(array_diff($codes, $context->getSupportedCodes()));
             $expected = $context->getValue('website') . '-' . $context->getValue('locale');
             $product = $productSource->getProductForContext($context);
-            $attributeValue = $product->getAttributeValue('name');
+            $attributeValue = $product->getFirstAttributeValue('name');
             $this->assertEquals($expected, $attributeValue);
             $extractedValues[] = $attributeValue;
         }

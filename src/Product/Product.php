@@ -32,10 +32,10 @@ class Product
      * @param string $attributeCode
      * @return string|ProductAttributeList
      */
-    public function getAttributeValue($attributeCode)
+    public function getFirstAttributeValue($attributeCode)
     {
         try {
-            $value = $this->attributeList->getAttribute($attributeCode)->getValue();
+            $value = $this->attributeList->getAttributesWithCode($attributeCode)[0]->getValue();
         } catch (ProductAttributeNotFoundException $e) {
             /* TODO: Log */
             $value = '';
