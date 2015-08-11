@@ -24,14 +24,12 @@ use Brera\Http\HttpUrl;
  * @uses   \Brera\SnippetKeyGeneratorLocator
  * @uses   \Brera\GenericSnippetKeyGenerator
  * @uses   \Brera\PageTemplatesApiV1PutRequestHandler
+ * @uses   \Brera\Http\GenericHttpRouter
  * @uses   \Brera\Product\CatalogImportApiV1PutRequestHandler
- * @uses   \Brera\Product\ProductDetailViewRouter
  * @uses   \Brera\Product\ProductDetailViewRequestHandler
- * @uses   \Brera\Product\ProductListingRouter
  * @uses   \Brera\Product\ProductListingRequestHandler
  * @uses   \Brera\Product\MultipleProductStockQuantityApiV1PutRequestHandler
  * @uses   \Brera\Product\ProductSearchRequestHandler
- * @uses   \Brera\Product\ProductSearchResultsRouter
  * @uses   \Brera\RootSnippetSourceListBuilder
  * @uses   \Brera\Http\ResourceNotFoundRouter
  * @uses   \Brera\Http\ResourceNotFoundRequestHandler

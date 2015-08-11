@@ -7,22 +7,20 @@ use Brera\Api\ApiRouter;
 use Brera\Content\ContentBlocksApiV1PutRequestHandler;
 use Brera\ContentDelivery\SnippetTransformation\SimpleEuroPriceSnippetTransformation;
 use Brera\Context\ContextBuilder;
+use Brera\Http\GenericHttpRouter;
 use Brera\Http\HttpRequest;
+use Brera\Http\HttpRouter;
 use Brera\Product\CatalogImportApiV1PutRequestHandler;
 use Brera\Product\DefaultNumberOfProductsPerPageSnippetRenderer;
 use Brera\Product\ProductDetailViewInContextSnippetRenderer;
 use Brera\Product\ProductDetailViewRequestHandler;
-use Brera\Product\ProductDetailViewRouter;
 use Brera\Product\ProductInListingInContextSnippetRenderer;
 use Brera\Product\ProductListingMetaInfoSnippetRenderer;
 use Brera\Product\ProductListingRequestHandler;
-use Brera\Product\ProductListingRouter;
 use Brera\Product\ProductListingSnippetRenderer;
 use Brera\Product\MultipleProductStockQuantityApiV1PutRequestHandler;
 use Brera\Product\ProductSearchRequestHandler;
-use Brera\Product\ProductSearchResultsMetaSnippetContent;
 use Brera\Product\ProductSearchResultsMetaSnippetRenderer;
-use Brera\Product\ProductSearchResultsRouter;
 use Brera\Utils\Directory;
 use Brera\Context\Context;
 
@@ -145,19 +143,19 @@ class FrontendFactory implements Factory
     }
 
     /**
-     * @return ProductDetailViewRouter
+     * @return HttpRouter
      */
     public function createProductDetailViewRouter()
     {
-        return new ProductDetailViewRouter($this->createProductDetailViewRequestHandler());
+        return new GenericHttpRouter($this->createProductDetailViewRequestHandler());
     }
 
     /**
-     * @return ProductListingRouter
+     * @return HttpRouter
      */
     public function createProductListingRouter()
     {
-        return new ProductListingRouter($this->createProductListingRequestHandler());
+        return new GenericHttpRouter($this->createProductListingRequestHandler());
     }
 
     /**
@@ -276,13 +274,11 @@ class FrontendFactory implements Factory
     }
 
     /**
-     * @return ProductSearchResultsRouter
+     * @return HttpRouter
      */
     public function createProductSearchResultsRouter()
     {
-        return new ProductSearchResultsRouter(
-            $this->createProductSearchRequestHandler()
-        );
+        return new GenericHttpRouter($this->createProductSearchRequestHandler());
     }
 
     /**

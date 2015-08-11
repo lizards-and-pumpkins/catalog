@@ -6,14 +6,12 @@ use Brera\Api\ApiRouter;
 use Brera\Content\ContentBlocksApiV1PutRequestHandler;
 use Brera\ContentDelivery\SnippetTransformation\SimpleEuroPriceSnippetTransformation;
 use Brera\Context\Context;
+use Brera\Http\GenericHttpRouter;
 use Brera\Http\HttpHeaders;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestBody;
 use Brera\Http\HttpsUrl;
 use Brera\Product\CatalogImportApiV1PutRequestHandler;
-use Brera\Product\ProductDetailViewRouter;
-use Brera\Product\ProductListingRouter;
-use Brera\Product\ProductSearchResultsRouter;
 
 /**
  * @covers \Brera\FrontendFactory
@@ -25,12 +23,10 @@ use Brera\Product\ProductSearchResultsRouter;
  * @uses   \Brera\Content\ContentBlocksApiV1PutRequestHandler
  * @uses   \Brera\Context\ContextBuilder
  * @uses   \Brera\Product\CatalogImportApiV1PutRequestHandler
- * @uses   \Brera\Product\ProductDetailViewRouter
+ * @uses   \Brera\Http\GenericHttpRouter
  * @uses   \Brera\Product\ProductDetailViewRequestHandler
- * @uses   \Brera\Product\ProductListingRouter
  * @uses   \Brera\Product\ProductListingRequestHandler
  * @uses   \Brera\Product\ProductSearchRequestHandler
- * @uses   \Brera\Product\ProductSearchResultsRouter
  * @uses   \Brera\Product\MultipleProductStockQuantityApiV1PutRequestHandler
  * @uses   \Brera\DataPool\DataPoolReader
  * @uses   \Brera\DataVersion
@@ -94,13 +90,13 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
     public function testProductDetailViewRouterIsReturned()
     {
         $result = $this->frontendFactory->createProductDetailViewRouter();
-        $this->assertInstanceOf(ProductDetailViewRouter::class, $result);
+        $this->assertInstanceOf(GenericHttpRouter::class, $result);
     }
 
     public function testProductListingRouterIsReturned()
     {
         $result = $this->frontendFactory->createProductListingRouter();
-        $this->assertInstanceOf(ProductListingRouter::class, $result);
+        $this->assertInstanceOf(GenericHttpRouter::class, $result);
     }
 
     public function testSameKeyGeneratorLocatorIsReturnedViaGetter()
@@ -119,7 +115,7 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
     public function testProductSearchResultsRouterIsReturned()
     {
         $result = $this->frontendFactory->createProductSearchResultsRouter();
-        $this->assertInstanceOf(ProductSearchResultsRouter::class, $result);
+        $this->assertInstanceOf(GenericHttpRouter::class, $result);
     }
 
     public function testItReturnsASimpleEuroPriceSnippetTransformation()
