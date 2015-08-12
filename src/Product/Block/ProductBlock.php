@@ -20,6 +20,11 @@ class ProductBlock extends Block
         return $this->getProduct()->getFirstValueOfAttribute($attributeCode);
     }
 
+    /**
+     * @param string $attributeCode
+     * @param string $glue
+     * @return string
+     */
     public function getAllValuesOfProductAttributeGlued($attributeCode, $glue)
     {
         $attributeValues = $this->getProduct()->getAllValuesOfAttribute($attributeCode);

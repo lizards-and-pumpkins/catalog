@@ -88,8 +88,11 @@ class ProductSourceBuilderTest extends \PHPUnit_Framework_TestCase
      * @param ProductSource $productSource
      * @param string $attributeCode
      */
-    private function assertFirstProductAttributeInAListValueEquals($expected, ProductSource $productSource, $attributeCode)
-    {
+    private function assertFirstProductAttributeInAListValueEquals(
+        $expected,
+        ProductSource $productSource,
+        $attributeCode
+    ) {
         $property = new \ReflectionProperty($productSource, 'attributes');
         $property->setAccessible(true);
         /** @var ProductAttributeList $attributeList */

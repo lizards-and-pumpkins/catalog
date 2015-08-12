@@ -46,7 +46,7 @@ class RootSnippetSourceListBuilder
     }
 
     /**
-     * @param array $data
+     * @param mixed[] $data
      */
     private function validateProductsPerPageData(array $data)
     {
