@@ -13,8 +13,6 @@ use Brera\SnippetRenderer;
  */
 class ProductInListingInContextSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
-    private $testProductId = 2;
-    
     /**
      * @var ProductInListingInContextSnippetRenderer
      */
@@ -30,31 +28,19 @@ class ProductInListingInContextSnippetRendererTest extends \PHPUnit_Framework_Te
      */
     private $mockSnippetKeyGenerator;
 
-    /**
-     * @return Product|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getStubProduct()
-    {
-        $stubProduct = $this->getMock(Product::class, [], [], '', false);
-        $stubProduct->method('getId')
-            ->willReturn($this->testProductId);
-        return $stubProduct;
-    }
-
     protected function setUp()
     {
         $this->mockSnippetList = $this->getMock(SnippetList::class);
 
-        $stubProductInListingBlockRenderer = $this->getMock(ProductInListingBlockRenderer::class, [], [], '', false);
-        $stubProductInListingBlockRenderer->method('render')->willReturn('dummy content');
-        $stubProductInListingBlockRenderer->method('getRootSnippetCode')->willReturn('dummy root block code');
-        $stubProductInListingBlockRenderer->method('getNestedSnippetCodes')->willReturn([]);
+        /** @var ProductInListingBlockRenderer|\PHPUnit_Framework_MockObject_MockObject $stubBlockRenderer */
+        $stubBlockRenderer = $this->getMock(ProductInListingBlockRenderer::class, [], [], '', false);
+        $stubBlockRenderer->method('render')->willReturn('dummy content');
 
         $this->mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
 
         $this->renderer = new ProductInListingInContextSnippetRenderer(
             $this->mockSnippetList,
-            $stubProductInListingBlockRenderer,
+            $stubBlockRenderer,
             $this->mockSnippetKeyGenerator
         );
     }
@@ -67,10 +53,13 @@ class ProductInListingInContextSnippetRendererTest extends \PHPUnit_Framework_Te
     public function testProductInListingViewSnippetsAreRendered()
     {
         $this->mockSnippetKeyGenerator->method('getKeyForContext')->willReturn('stub-content-key');
-        
+
         $this->mockSnippetList->expects($this->once())->method('add');
 
-        $stubProduct = $this->getStubProduct();
+        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
+        $stubProduct = $this->getMock(Product::class, [], [], '', false);
+
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->getMock(Context::class, [], [], '', false);
 
         $this->renderer->render($stubProduct, $stubContext);
@@ -78,12 +67,18 @@ class ProductInListingInContextSnippetRendererTest extends \PHPUnit_Framework_Te
 
     public function testProductIdIsPassedToKeyGenerator()
     {
+        $dummyProductId = 'foo';
+
+        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
+        $stubProduct = $this->getMock(Product::class, [], [], '', false);
+        $stubProduct->method('getId')->willReturn($dummyProductId);
+
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->getMock(Context::class);
-        $stubProduct = $this->getStubProduct();
 
         $this->mockSnippetKeyGenerator->method('getKeyForContext')->willReturn('stub-content-key');
         $this->mockSnippetKeyGenerator->expects($this->once())->method('getKeyForContext')
-            ->with($this->anything(), ['product_id' => $this->testProductId]);
+            ->with($this->anything(), ['product_id' => $dummyProductId]);
         $this->renderer->render($stubProduct, $stubContext);
     }
 }
