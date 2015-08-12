@@ -14,13 +14,13 @@ use Brera\Product\CatalogImportApiV1PutRequestHandler;
 use Brera\Product\DefaultNumberOfProductsPerPageSnippetRenderer;
 use Brera\Product\ProductDetailViewInContextSnippetRenderer;
 use Brera\Product\ProductDetailViewRequestHandler;
-use Brera\Product\ProductInListingInContextSnippetRenderer;
 use Brera\Product\ProductListingMetaInfoSnippetRenderer;
 use Brera\Product\ProductListingRequestHandler;
 use Brera\Product\ProductListingSnippetRenderer;
 use Brera\Product\MultipleProductStockQuantityApiV1PutRequestHandler;
 use Brera\Product\ProductSearchRequestHandler;
 use Brera\Product\ProductSearchResultsMetaSnippetRenderer;
+use Brera\Product\ProductInListingSnippetRenderer;
 use Brera\Utils\Directory;
 use Brera\Context\Context;
 
@@ -196,7 +196,7 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator()
         );
         $snippetKeyGeneratorLocator->register(
-            ProductInListingInContextSnippetRenderer::CODE,
+            ProductInListingSnippetRenderer::CODE,
             $this->getMasterFactory()->createProductInListingSnippetKeyGenerator()
         );
         $snippetKeyGeneratorLocator->register(

@@ -47,6 +47,11 @@ class ProductInSearchAutocompletionInContextSnippetRenderer implements SnippetRe
         $this->snippetKeyGenerator = $snippetKeyGenerator;
     }
 
+    /**
+     * @param Product $product
+     * @param Context $context
+     * @return SnippetList
+     */
     public function render(Product $product, Context $context)
     {
         $this->product = $product;

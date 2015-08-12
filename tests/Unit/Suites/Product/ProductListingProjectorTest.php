@@ -6,7 +6,6 @@ use Brera\DataPool\DataPoolWriter;
 use Brera\InvalidProjectionDataSourceTypeException;
 use Brera\ProjectionSourceData;
 use Brera\SampleContextSource;
-use Brera\Snippet;
 use Brera\SnippetList;
 use Brera\SnippetRendererCollection;
 

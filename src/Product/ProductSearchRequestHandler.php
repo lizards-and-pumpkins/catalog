@@ -124,7 +124,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         }
 
         $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
-            ProductInListingInContextSnippetRenderer::CODE
+            ProductInListingSnippetRenderer::CODE
         );
         $productInListingSnippetKeys = array_map(function ($productId) use ($keyGenerator) {
             return $keyGenerator->getKeyForContext($this->context, ['product_id' => $productId]);

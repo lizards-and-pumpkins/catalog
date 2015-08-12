@@ -89,8 +89,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\GenericSnippetKeyGenerator
  * @uses   \Brera\SnippetRendererCollection
  * @uses   \Brera\RootSnippetSourceListBuilder
- * @uses   \Brera\Product\ProductSourceInListingSnippetRenderer
- * @uses   \Brera\Product\ProductInListingInContextSnippetRenderer
+ * @uses   \Brera\Product\ProductInListingSnippetRenderer
  * @uses   \Brera\Image\ImageWasUpdatedDomainEventHandler
  * @uses   \Brera\Image\ImageMagickResizeStrategy
  * @uses   \Brera\Image\GdResizeStrategy

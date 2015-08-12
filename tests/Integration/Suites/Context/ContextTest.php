@@ -5,7 +5,6 @@ namespace Brera\Context;
 use Brera\IntegrationTestFactory;
 use Brera\SampleMasterFactory;
 use Brera\CommonFactory;
-use Brera\Product\ProductSourceBuilder;
 
 class ContextTest extends \PHPUnit_Framework_TestCase
 {
