@@ -41,6 +41,11 @@ abstract class BlockRendererTestAbstract extends \PHPUnit_Framework_TestCase
         $this->blockRenderer = $this->createRendererInstance($this->stubThemeLocator, $this->stubBlockStructure);
     }
 
+    public function testBlockRendererClassIsExtended()
+    {
+        $this->assertInstanceOf(BlockRenderer::class, $this->blockRenderer);
+    }
+
     /**
      * @param ThemeLocator|\PHPUnit_Framework_MockObject_MockObject $stubThemeLocator
      * @param BlockStructure $stubBlockStructure

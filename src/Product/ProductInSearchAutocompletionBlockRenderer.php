@@ -2,7 +2,9 @@
 
 namespace Brera\Product;
 
-class ProductInSearchAutocompletionBlockRenderer
+use Brera\Renderer\BlockRenderer;
+
+class ProductInSearchAutocompletionBlockRenderer extends BlockRenderer
 {
     public function getLayoutHandle()
     {
