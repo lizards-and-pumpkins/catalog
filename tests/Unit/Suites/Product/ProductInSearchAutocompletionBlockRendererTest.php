@@ -8,28 +8,25 @@ use Brera\Renderer\BlockStructure;
 use Brera\ThemeLocator;
 
 /**
- * @covers \Brera\Product\ProductInListingBlockRenderer
- * @uses   \Brera\Renderer\BlockRenderer
- * @uses   \Brera\Renderer\BlockStructure
- * @uses   \Brera\Renderer\Block
+ * @covers \Brera\Product\ProductInSearchAutocompletionBlockRenderer
  */
-class ProductInListingBlockRendererTest extends BlockRendererTestAbstract
+class ProductInSearchAutocompletionBlockRendererTest extends BlockRendererTestAbstract
 {
     /**
      * @param ThemeLocator|\PHPUnit_Framework_MockObject_MockObject $stubThemeLocator
      * @param BlockStructure $stubBlockStructure
      * @return BlockRenderer
      */
-    final protected function createRendererInstance(
+    protected function createRendererInstance(
         \PHPUnit_Framework_MockObject_MockObject $stubThemeLocator,
         BlockStructure $stubBlockStructure
     ) {
-        return new ProductInListingBlockRenderer($stubThemeLocator, $stubBlockStructure);
+        return new ProductInSearchAutocompletionBlockRenderer($stubThemeLocator, $stubBlockStructure);
     }
 
     public function testLayoutHandleIsReturned()
     {
         $result = $this->getBlockRenderer()->getLayoutHandle();
-        $this->assertEquals('product_in_listing', $result);
+        $this->assertEquals('product_in_autocompletion', $result);
     }
 }
