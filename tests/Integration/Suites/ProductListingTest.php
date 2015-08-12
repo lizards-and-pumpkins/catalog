@@ -122,6 +122,31 @@ class ProductListingTest extends AbstractIntegrationTest
         $this->assertContains($contentBlockContent, $body);
     }
 
+    public function testPageTemplateWasUpdatedDomainEventPutsProductListingRootSnippetIntoKeyValueStore()
+    {
+        $this->createProductListingFixture();
+
+        $logger = $this->factory->getLogger();
+        $this->failIfMessagesWhereLogged($logger);
+
+        $dataPoolReader = $this->factory->createDataPoolReader();
+
+        $keyGeneratorLocator = $this->factory->getSnippetKeyGeneratorLocator();
+        $keyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
+            ProductListingSnippetRenderer::CODE
+        );
+
+        $contextSource = $this->factory->createContextSource();
+        $context = $contextSource->getAllAvailableContexts()[0];
+
+        $key = $keyGenerator->getKeyForContext($context, ['products_per_page' => 9]);
+        $html = $dataPoolReader->getSnippet($key);
+
+        $expectation = '<ul class="products-grid">';
+
+        $this->assertContains($expectation, $html);
+    }
+
     private function importCatalog()
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');

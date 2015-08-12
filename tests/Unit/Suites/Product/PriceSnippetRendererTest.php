@@ -55,8 +55,10 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
     public function testEmptySnippetListIsReturned()
     {
+        /** @var ProductSource|\PHPUnit_Framework_MockObject_MockObject $mockProductSource */
         $mockProductSource = $this->getMock(ProductSource::class, [], [], '', false);
 
+        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $mockContextSource */
         $mockContextSource = $this->getMock(ContextSource::class, [], [], '', false);
         $mockContextSource->method('getAllAvailableContexts')
             ->willReturn([]);
@@ -74,14 +76,16 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $dummyPriceAttributeValue = '1';
 
         $mockProduct = $this->getMock(Product::class, [], [], '', false);
-        $mockProduct->method('getAttributeValue')
+        $mockProduct->method('getFirstValueOfAttribute')
             ->with($this->dummyPriceAttributeCode)
             ->willReturn($dummyPriceAttributeValue);
 
+        /** @var ProductSource|\PHPUnit_Framework_MockObject_MockObject $mockProductSource */
         $mockProductSource = $this->getMock(ProductSource::class, [], [], '', false);
         $mockProductSource->method('getProductForContext')
             ->willReturn($mockProduct);
 
+        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $mockContextSource */
         $mockContextSource = $this->getMock(ContextSource::class, [], [], '', false);
         $mockContextSource->method('getAllAvailableContexts')
             ->willReturn([$stubContext]);

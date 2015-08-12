@@ -31,7 +31,8 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
         $attribute = ProductAttribute::fromArray($attributeArray);
 
         $this->attributeList->add($attribute);
-        $result = $this->attributeList->getAttribute('foo');
+        $attributesWithCode = $this->attributeList->getAttributesWithCode('foo');
+        $result = $attributesWithCode[0];
 
         $this->assertEquals('bar', $result->getValue());
     }
@@ -39,13 +40,13 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownIfBlankCodeIsProvided()
     {
         $this->setExpectedException(ProductAttributeNotFoundException::class);
-        $this->attributeList->getAttribute('');
+        $this->attributeList->getAttributesWithCode('');
     }
 
     public function testExceptionIsThrownIfNoAttributeWithGivenCodeIsSet()
     {
         $this->setExpectedException(ProductAttributeNotFoundException::class);
-        $this->attributeList->getAttribute('foo');
+        $this->attributeList->getAttributesWithCode('foo');
     }
 
     public function testAttributeListIsCreatedFromAttributesArray()
@@ -57,26 +58,24 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
         ]];
 
         $attributeList = ProductAttributeList::fromArray($attributeArray);
-        $attribute = $attributeList->getAttribute('foo');
+        $attributesWithCode = $attributeList->getAttributesWithCode('foo');
+        $result = $attributesWithCode[0];
 
-        $this->assertEquals('bar', $attribute->getValue());
+        $this->assertEquals('bar', $result->getValue());
     }
 
-    public function testAttributeListIsReturned()
+    public function testAttributeListContainsMultipleAttributeValues()
     {
-        $attributeArray = [[
-            'nodeName'      => 'name',
-            'attributes'    => ['website' => 'test'],
-            'value'         => 'foo'
-        ]];
+        $attributeArray = [
+            ['nodeName' => 'foo', 'attributes' => [], 'value' => 'bar'],
+            ['nodeName' => 'foo', 'attributes' => [], 'value' => 'baz'],
+        ];
 
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $this->getMock(Context::class);
         $attributeList = ProductAttributeList::fromArray($attributeArray);
-        $this->assertInstanceOf(
-            ProductAttributeList::class,
-            $attributeList->getAttributesForContext($stubContext)
-        );
+        $result = $attributeList->getAttributesWithCode('foo');
+
+        $this->assertCount(count($attributeArray), $result);
+        $this->assertContainsOnly(ProductAttribute::class, $result);
     }
 
     /**
@@ -127,9 +126,11 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
             ],
         ];
         $attributeList = ProductAttributeList::fromArray($attributesArray);
-        $resultList = $attributeList->getAttributesForContext($stubContext);
+        $attributeListForContext = $attributeList->getAttributesForContext($stubContext);
+        $attributesWithCode = $attributeListForContext->getAttributesWithCode($attributeCode);
+        $result = $attributesWithCode[0];
 
-        $this->assertEquals($expected, $resultList->getAttribute($attributeCode)->getValue());
+        $this->assertEquals($expected, $result->getValue());
     }
 
     /**

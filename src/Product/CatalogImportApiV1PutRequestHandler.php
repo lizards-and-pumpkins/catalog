@@ -5,6 +5,7 @@ namespace Brera\Product;
 use Brera\Api\ApiRequestHandler;
 use Brera\Http\HttpRequest;
 use Brera\Image\UpdateImageCommand;
+use Brera\Logger;
 use Brera\Queue\Queue;
 use Brera\Utils\XPathParser;
 
@@ -31,21 +32,29 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
     private $productListingSourceBuilder;
 
     /**
+     * @var Logger
+     */
+    private $logger;
+
+    /**
      * @param Queue $commandQueue
      * @param string $importDirectoryPath
      * @param ProductSourceBuilder $productSourceBuilder
      * @param ProductListingSourceBuilder $productListingSourceBuilder
+     * @param Logger $logger
      */
     private function __construct(
         Queue $commandQueue,
         $importDirectoryPath,
         ProductSourceBuilder $productSourceBuilder,
-        ProductListingSourceBuilder $productListingSourceBuilder
+        ProductListingSourceBuilder $productListingSourceBuilder,
+        Logger $logger
     ) {
         $this->commandQueue = $commandQueue;
         $this->importDirectoryPath = $importDirectoryPath;
         $this->productSourceBuilder = $productSourceBuilder;
         $this->productListingSourceBuilder = $productListingSourceBuilder;
+        $this->logger = $logger;
     }
 
     /**
@@ -53,19 +62,27 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
      * @param string $importDirectoryPath
      * @param ProductSourceBuilder $productSourceBuilder
      * @param ProductListingSourceBuilder $productListingSourceBuilder
+     * @param Logger $logger
      * @return CatalogImportApiV1PutRequestHandler
      */
     public static function create(
         Queue $commandQueue,
         $importDirectoryPath,
         ProductSourceBuilder $productSourceBuilder,
-        ProductListingSourceBuilder $productListingSourceBuilder
+        ProductListingSourceBuilder $productListingSourceBuilder,
+        Logger $logger
     ) {
         if (!is_readable($importDirectoryPath)) {
             throw new CatalogImportDirectoryNotReadableException(sprintf('%s is not readable.', $importDirectoryPath));
         }
 
-        return new self($commandQueue, $importDirectoryPath, $productSourceBuilder, $productListingSourceBuilder);
+        return new self(
+            $commandQueue,
+            $importDirectoryPath,
+            $productSourceBuilder,
+            $productListingSourceBuilder,
+            $logger
+        );
     }
 
     /**
@@ -92,8 +109,16 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
 
         $productNodesXml = (new XPathParser($xml))->getXmlNodesRawXmlArrayByXPath('//catalog/products/product');
         foreach ($productNodesXml as $productXml) {
-            $productSource = $this->productSourceBuilder->createProductSourceFromXml($productXml);
-            $this->commandQueue->add(new UpdateProductCommand($productSource));
+            try {
+                $productSource = $this->productSourceBuilder->createProductSourceFromXml($productXml);
+                $this->commandQueue->add(new UpdateProductCommand($productSource));
+            } catch (\Exception $exception) {
+                $skuString = (new XPathParser($productXml))->getXmlNodesArrayByXPath('//@sku')[0]['value'];
+                $sku = SampleSku::fromString($skuString);
+                $productId = ProductId::fromSku($sku);
+                $loggerMessage = new ProductImportFailedMessage($productId, $exception);
+                $this->logger->log($loggerMessage);
+            }
         }
 
         $listingNodesXml = (new XPathParser($xml))->getXmlNodesRawXmlArrayByXPath('//catalog/listings/listing');

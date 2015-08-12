@@ -5,6 +5,7 @@ namespace Brera\Product;
 use Brera\Api\ApiRequestHandler;
 use Brera\Http\HttpRequest;
 use Brera\Image\UpdateImageCommand;
+use Brera\Logger;
 use Brera\Queue\Queue;
 use Brera\TestFileFixtureTrait;
 
@@ -15,6 +16,9 @@ use Brera\TestFileFixtureTrait;
  * @uses   \Brera\Http\HttpHeaders
  * @uses   \Brera\Image\ImageWasUpdatedDomainEvent
  * @uses   \Brera\Image\UpdateImageCommand
+ * @uses   \Brera\Product\ProductImportFailedMessage
+ * @uses   \Brera\Product\ProductId
+ * @uses   \Brera\Product\SampleSku
  * @uses   \Brera\Product\ProductWasUpdatedDomainEvent
  * @uses   \Brera\Product\ProductListingWasUpdatedDomainEvent
  * @uses   \Brera\Product\UpdateProductCommand
@@ -29,6 +33,11 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
      * @var Queue|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockCommandQueue;
+
+    /**
+     * @var Logger|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $logger;
 
     /**
      * @var CatalogImportApiV1PutRequestHandler
@@ -85,11 +94,14 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
         $this->stubProductListingSourceBuilder->method('createProductListingSourceFromXml')
             ->willReturn($stubProductListingSource);
 
+        $this->logger = $this->getMock(Logger::class);
+
         $this->requestHandler = CatalogImportApiV1PutRequestHandler::create(
             $this->mockCommandQueue,
             $this->importDirectoryPath,
             $this->stubProductSourceBuilder,
-            $this->stubProductListingSourceBuilder
+            $this->stubProductListingSourceBuilder,
+            $this->logger
         );
 
         $this->mockRequest = $this->getMock(HttpRequest::class, [], [], '', false);
@@ -119,7 +131,8 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
             $this->mockCommandQueue,
             '/some-not-existing-directory',
             $this->stubProductSourceBuilder,
-            $this->stubProductListingSourceBuilder
+            $this->stubProductListingSourceBuilder,
+            $this->logger
         );
     }
 
@@ -133,6 +146,24 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
     {
         $this->setExpectedException(CatalogImportFileNotReadableException::class);
         $this->mockRequest->method('getRawBody')->willReturn(json_encode(['fileName' => 'foo']));
+        $this->requestHandler->process($this->mockRequest);
+    }
+
+    public function testExceptionIsThrownIfProductSourceDataWasNotCreated()
+    {
+        $fileName = 'foo';
+        $fileContents = file_get_contents(__DIR__ . '/../../../shared-fixture/catalog-with-invalid-product.xml');
+        $this->createFixtureFile($this->importDirectoryPath . '/' . $fileName, $fileContents);
+
+        $this->mockRequest->method('getRawBody')->willReturn(json_encode(['fileName' => $fileName]));
+
+        $exceptionMessage = 'bar';
+        $this->stubProductSourceBuilder->method('createProductSourceFromXml')
+            ->willThrowException(new AttributeContextPartsMismatchException($exceptionMessage));
+
+        $this->logger->expects($this->atLeastOnce())->method('log')
+            ->with($this->isInstanceOf(ProductImportFailedMessage::class));
+
         $this->requestHandler->process($this->mockRequest);
     }
 

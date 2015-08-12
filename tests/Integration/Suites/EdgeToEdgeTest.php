@@ -11,7 +11,6 @@ use Brera\Product\ProductId;
 use Brera\Http\HttpUrl;
 use Brera\Http\HttpRequest;
 use Brera\Product\ProductInListingInContextSnippetRenderer;
-use Brera\Product\ProductListingSnippetRenderer;
 use Brera\Utils\XPathParser;
 
 class EdgeToEdgeTest extends AbstractIntegrationTest
@@ -21,7 +20,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
      */
     private $factory;
 
-    public function testProductDomainEventPutsProductToKeyValueStoreAndSearchIndex()
+    public function testCatalogImportDomainEventPutsProductToKeyValueStoreAndSearchIndex()
     {
         // TODO: Test is broken, the import and the following request should initialize their own WebFront instances,
         // TODO: thus sharing the data pool and queue needs to be handled properly.
@@ -32,7 +31,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $productPrice = 1295;
         $productBackOrderAvailability = 'true';
 
-        $this->importCatalog();
+        $this->importCatalog('catalog.xml');
 
         $logger = $this->factory->getLogger();
         $this->failIfMessagesWhereLogged($logger);
@@ -102,37 +101,12 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         );
     }
 
-    public function testPageTemplateWasUpdatedDomainEventPutsProductListingRootSnippetIntoKeyValueStore()
-    {
-        $this->createProductListingFixture();
-
-        $logger = $this->factory->getLogger();
-        $this->failIfMessagesWhereLogged($logger);
-
-        $dataPoolReader = $this->factory->createDataPoolReader();
-
-        $keyGeneratorLocator = $this->factory->getSnippetKeyGeneratorLocator();
-        $keyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
-            ProductListingSnippetRenderer::CODE
-        );
-
-        $contextSource = $this->factory->createContextSource();
-        $context = $contextSource->getAllAvailableContexts()[0];
-
-        $key = $keyGenerator->getKeyForContext($context, ['products_per_page' => 9]);
-        $html = $dataPoolReader->getSnippet($key);
-
-        $expectation = '<ul class="products-grid">';
-
-        $this->assertContains($expectation, $html);
-    }
-
     public function testImportedProductIsAccessibleFromTheFrontend()
     {
         // TODO: Test is broken, the import and the following request should initialize their own WebFront instances,
         // TODO: thus sharing the data pool and queue needs to be handled properly.
 
-        $this->importCatalog();
+        $this->importCatalog('catalog.xml');
 
         $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
         $urlKeys = (new XPathParser($xml))->getXmlNodesArrayByXPath(
@@ -163,28 +137,66 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $this->assertInstanceOf(HttpResourceNotFoundResponse::class, $response);
     }
 
-    private function importCatalog()
+    public function testProductsWithValidDataAreImportedAndInvalidDataAreNotImportedButLogged()
+    {
+        // TODO: Test is broken, the import and the following request should initialize their own WebFront instances,
+        // TODO: thus sharing the data pool and queue needs to be handled properly.
+
+        $this->importCatalog('catalog-with-invalid-product.xml');
+
+        $dataPoolReader = $this->factory->createDataPoolReader();
+
+        $contextSource = $this->factory->createContextSource();
+        $context = $contextSource->getAllAvailableContexts()[0];
+
+        $keyGeneratorLocator = $this->factory->getSnippetKeyGeneratorLocator();
+        $productDetailViewKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
+            ProductDetailViewInContextSnippetRenderer::CODE
+        );
+
+        $validProductSku = SampleSku::fromString('288193NEU');
+        $validProductId = ProductId::fromSku($validProductSku);
+        $validProductDetailViewSnippetKey = $productDetailViewKeyGenerator->getKeyForContext(
+            $context,
+            ['product_id' => $validProductId]
+        );
+
+        $invalidProductSku = SampleSku::fromString('T4H2N-4701');
+        $invalidProductId = ProductId::fromSku($invalidProductSku);
+        $invalidProductDetailViewSnippetKey = $productDetailViewKeyGenerator->getKeyForContext(
+            $context,
+            ['product_id' => $invalidProductId]
+        );
+
+        $this->assertTrue($dataPoolReader->hasSnippet($validProductDetailViewSnippetKey));
+        $this->assertFalse($dataPoolReader->hasSnippet($invalidProductDetailViewSnippetKey));
+
+        $logger = $this->factory->getLogger();
+        $messages = $logger->getMessages();
+
+        $importExceptionMessage = 'Attributes with different context parts can not be combined into a list';
+        $expectedLoggedErrorMessage = sprintf(
+            "Failed to import product ID: %s due to following reason:\n%s",
+            $invalidProductId,
+            $importExceptionMessage
+        );
+        $this->assertContains($expectedLoggedErrorMessage, $messages, 'Product import failure was not logged.');
+
+        if (!empty($messages)) {
+            $messageString = implode(PHP_EOL, $messages);
+            if ($messageString !== $expectedLoggedErrorMessage) {
+                $this->fail($messageString);
+            }
+        }
+    }
+        /**
+     * @param string $importFileName
+     */
+    private function importCatalog($importFileName)
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
         $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.catalog_import.v1+json']);
-        $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
-        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
-        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
-
-        $this->factory = $this->prepareIntegrationTestMasterFactory($request);
-
-        $website = new InjectableSampleWebFront($request, $this->factory);
-        $website->runWithoutSendingResponse();
-
-        $this->factory->createCommandConsumer()->process();
-        $this->factory->createDomainEventConsumer()->process();
-    }
-
-    private function createProductListingFixture()
-    {
-        $httpUrl = HttpUrl::fromString('http://example.com/api/page_templates/product_listing');
-        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.page_templates.v1+json']);
-        $httpRequestBodyString = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.json');
+        $httpRequestBodyString = json_encode(['fileName' => $importFileName]);
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 

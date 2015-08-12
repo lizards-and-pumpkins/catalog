@@ -76,8 +76,8 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
         $attributeValue = $attribute->getValue();
 
         $this->assertInstanceOf(ProductAttributeList::class, $attributeValue);
-        $this->assertEquals(1, $attributeValue->getAttribute('bar')->getValue());
-        $this->assertEquals(2, $attributeValue->getAttribute('baz')->getValue());
+        $this->assertEquals(1, $attributeValue->getAttributesWithCode('bar')[0]->getValue());
+        $this->assertEquals(2, $attributeValue->getAttributesWithCode('baz')[0]->getValue());
     }
 
     public function testIntegerIsReturnedForMatchScore()

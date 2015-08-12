@@ -54,8 +54,10 @@ class ProductBackOrderAvailabilitySnippetRendererTest extends \PHPUnit_Framework
 
     public function testEmptySnippetListIsReturned()
     {
+        /** @var ProductSource|\PHPUnit_Framework_MockObject_MockObject $mockProductSource */
         $mockProductSource = $this->getMock(ProductSource::class, [], [], '', false);
 
+        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $mockContextSource */
         $mockContextSource = $this->getMock(ContextSource::class, [], [], '', false);
         $mockContextSource->method('getAllAvailableContexts')
             ->willReturn([]);
@@ -73,14 +75,16 @@ class ProductBackOrderAvailabilitySnippetRendererTest extends \PHPUnit_Framework
         $dummyBackOrderAvailabilityAttributeValue = '1';
 
         $mockProduct = $this->getMock(Product::class, [], [], '', false);
-        $mockProduct->method('getAttributeValue')
+        $mockProduct->method('getFirstValueOfAttribute')
             ->with($this->dummyBackOrderAvialabilityAttributeCode)
             ->willReturn($dummyBackOrderAvailabilityAttributeValue);
 
+        /** @var ProductSource|\PHPUnit_Framework_MockObject_MockObject $mockProductSource */
         $mockProductSource = $this->getMock(ProductSource::class, [], [], '', false);
         $mockProductSource->method('getProductForContext')
             ->willReturn($mockProduct);
 
+        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $mockContextSource */
         $mockContextSource = $this->getMock(ContextSource::class, [], [], '', false);
         $mockContextSource->method('getAllAvailableContexts')
             ->willReturn([$stubContext]);

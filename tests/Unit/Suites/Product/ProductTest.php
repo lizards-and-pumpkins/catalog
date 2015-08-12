@@ -37,17 +37,51 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testAttributeValueIsReturned()
     {
-        $testAttributeCode = 'foo';
-        $testAttributeValue = 'bar';
+        $dummyAttributeCode = 'foo';
+        $dummyAttributeValue = 'bar';
 
         $stubProductAttribute = $this->getMock(ProductAttribute::class, [], [], '', false);
-        $stubProductAttribute->method('getValue')->willReturn($testAttributeValue);
+        $stubProductAttribute->method('getValue')->willReturn($dummyAttributeValue);
 
-        $this->stubProductAttributeList->method('getAttribute')
-            ->with($testAttributeCode)
-            ->willReturn($stubProductAttribute);
+        $this->stubProductAttributeList->method('getAttributesWithCode')
+            ->with($dummyAttributeCode)
+            ->willReturn([$stubProductAttribute]);
 
-        $this->assertSame($testAttributeValue, $this->product->getAttributeValue($testAttributeCode));
+        $this->assertSame($dummyAttributeValue, $this->product->getFirstValueOfAttribute($dummyAttributeCode));
+    }
+
+    public function testAllValuesOfProductAttributeAreReturned()
+    {
+        $dummyAttributeCode = 'foo';
+
+        $dummyAttributeAValue = 'bar';
+        $stubProductAttributeA = $this->getMock(ProductAttribute::class, [], [], '', false);
+        $stubProductAttributeA->method('getValue')->willReturn($dummyAttributeAValue);
+
+        $dummyAttributeBValue = 'baz';
+        $stubProductAttributeB = $this->getMock(ProductAttribute::class, [], [], '', false);
+        $stubProductAttributeB->method('getValue')->willReturn($dummyAttributeBValue);
+
+        $this->stubProductAttributeList->method('getAttributesWithCode')
+            ->with($dummyAttributeCode)
+            ->willReturn([$stubProductAttributeA, $stubProductAttributeB]);
+
+        $expectedValues = [$dummyAttributeAValue, $dummyAttributeBValue];
+        $result = $this->product->getAllValuesOfAttribute($dummyAttributeCode);
+
+        $this->assertSame($expectedValues, $result);
+    }
+
+    public function testArrayContainingOneEmptyStringIsReturnedIfAttributeIsNotFound()
+    {
+        $stubProductAttribute = $this->getMock(ProductAttribute::class, [], [], '', false);
+        $stubProductAttribute->method('getValue')->willThrowException(new ProductAttributeNotFoundException);
+
+        $this->stubProductAttributeList->method('getAttributesWithCode')->willReturn([$stubProductAttribute]);
+
+        $result = $this->product->getAllValuesOfAttribute('whatever');
+
+        $this->assertSame([''], $result);
     }
 
     public function testEmptyStringIsReturnedIfAttributeIsNotFound()
@@ -55,9 +89,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $stubProductAttribute = $this->getMock(ProductAttribute::class, [], [], '', false);
         $stubProductAttribute->method('getValue')->willThrowException(new ProductAttributeNotFoundException);
 
-        $this->stubProductAttributeList->method('getAttribute')->willReturn($stubProductAttribute);
+        $this->stubProductAttributeList->method('getAttributesWithCode')->willReturn([$stubProductAttribute]);
 
-        $result = $this->product->getAttributeValue('whatever');
+        $result = $this->product->getFirstValueOfAttribute('whatever');
+
         $this->assertSame('', $result);
     }
 }
