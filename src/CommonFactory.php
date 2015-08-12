@@ -26,6 +26,8 @@ use Brera\Product\PriceSnippetRenderer;
 use Brera\Product\ProductBackOrderAvailabilitySnippetRenderer;
 use Brera\Product\ProductDetailViewBlockRenderer;
 use Brera\Product\ProductDetailViewInContextSnippetRenderer;
+use Brera\Product\ProductInSearchAutocompletionBlockRenderer;
+use Brera\Product\ProductInSearchAutocompletionSnippetRenderer;
 use Brera\Product\ProductWasUpdatedDomainEvent;
 use Brera\Product\ProductWasUpdatedDomainEventHandler;
 use Brera\Product\ProductInListingBlockRenderer;
@@ -178,6 +180,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return [
             $this->getMasterFactory()->createProductSourceDetailViewSnippetRenderer(),
             $this->getMasterFactory()->createProductInListingSnippetRenderer(),
+            $this->getMasterFactory()->createProductInSearchAutocompletionSnippetRenderer(),
             $this->getMasterFactory()->createPriceSnippetRenderer(),
             $this->getMasterFactory()->createProductBackOrderAvailabilitySnippetRenderer()
         ];
@@ -422,6 +425,18 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
+     * @return ProductInSearchAutocompletionSnippetRenderer
+     */
+    public function createProductInSearchAutocompletionSnippetRenderer()
+    {
+        return new ProductInSearchAutocompletionSnippetRenderer(
+            $this->getMasterFactory()->createSnippetList(),
+            $this->getMasterFactory()->createProductInSearchAutocompletionBlockRenderer(),
+            $this->getMasterFactory()->createProductInSearchAutocompletionSnippetKeyGenerator()
+        );
+    }
+
+    /**
      * @return PriceSnippetRenderer
      */
     public function createPriceSnippetRenderer()
@@ -469,6 +484,31 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
 
         return new GenericSnippetKeyGenerator(
             ProductInListingSnippetRenderer::CODE,
+            $this->getMasterFactory()->getRequiredContexts(),
+            $usedDataParts
+        );
+    }
+
+    /**
+     * @return ProductInSearchAutocompletionBlockRenderer
+     */
+    public function createProductInSearchAutocompletionBlockRenderer()
+    {
+        return new ProductInSearchAutocompletionBlockRenderer(
+            $this->getMasterFactory()->createThemeLocator(),
+            $this->getMasterFactory()->createBlockStructure()
+        );
+    }
+
+    /**
+     * @return SnippetKeyGenerator
+     */
+    public function createProductInSearchAutocompletionSnippetKeyGenerator()
+    {
+        $usedDataParts = ['product_id'];
+
+        return new GenericSnippetKeyGenerator(
+            ProductInSearchAutocompletionSnippetRenderer::CODE,
             $this->getMasterFactory()->getRequiredContexts(),
             $usedDataParts
         );
