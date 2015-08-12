@@ -9,6 +9,7 @@ use Brera\ThemeLocator;
 
 /**
  * @covers \Brera\Product\ProductInSearchAutocompletionBlockRenderer
+ * @uses   \Brera\Renderer\BlockRenderer
  */
 class ProductInSearchAutocompletionBlockRendererTest extends BlockRendererTestAbstract
 {
