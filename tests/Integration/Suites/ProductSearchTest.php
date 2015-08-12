@@ -6,8 +6,10 @@ use Brera\Http\HttpHeaders;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestBody;
 use Brera\Http\HttpUrl;
+use Brera\Product\ProductId;
 use Brera\Product\ProductSearchRequestHandler;
 use Brera\Product\ProductSearchResultsMetaSnippetRenderer;
+use Brera\Product\SampleSku;
 
 class ProductSearchTest extends AbstractIntegrationTest
 {
@@ -88,6 +90,29 @@ class ProductSearchTest extends AbstractIntegrationTest
 
         $this->assertContains($expectedProductName, $body);
         $this->assertNotContains($unExpectedProductName, $body);
+    }
+
+    public function testProductInSearchAutocompletionSnippetsAreAddedToDataPool()
+    {
+        // TODO: Test is broken, the import and the following request should initialize their own WebFront instances,
+        // TODO: thus sharing the data pool and queue needs to be handled properly.
+
+        $this->importCatalog();
+
+        $sku = SampleSku::fromString('118235-251');
+        $productId = ProductId::fromSku($sku);
+        $productName = 'LED Arm-Signallampe';
+
+        $contextSource = $this->factory->createContextSource();
+        $context = $contextSource->getAllAvailableContexts()[0];
+
+        $dataPoolReader = $this->factory->createDataPoolReader();
+        $snippetKeyGenerator = $this->factory->createProductInSearchAutocompletionSnippetKeyGenerator();
+
+        $snippetKey = $snippetKeyGenerator->getKeyForContext($context, ['product_id' => $productId]);
+        $snippet = $dataPoolReader->getSnippet($snippetKey);
+
+        $this->assertContains($productName, $snippet);
     }
 
     private function addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture()
