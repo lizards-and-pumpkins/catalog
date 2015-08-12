@@ -11,10 +11,10 @@ use Brera\SnippetList;
 use Brera\SnippetRenderer;
 
 /**
- * @covers \Brera\Product\ProductInListingSnippetRenderer
+ * @covers \Brera\Product\ProductInSearchAutocompletionSnippetRenderer
  * @uses   \Brera\Snippet
  */
-class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
+class ProductInSearchAutocompletionSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var SnippetList|\PHPUnit_Framework_MockObject_MockObject
@@ -27,7 +27,7 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
     private $mockSnippetKeyGenerator;
 
     /**
-     * @var ProductInListingSnippetRenderer
+     * @var ProductInSearchAutocompletionSnippetRenderer
      */
     private $snippetRenderer;
 
@@ -40,14 +40,16 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockSnippetList = $this->getMock(SnippetList::class);
 
-        /** @var ProductInListingBlockRenderer|\PHPUnit_Framework_MockObject_MockObject $stubBlockRenderer */
-        $stubBlockRenderer = $this->getMock(ProductInListingBlockRenderer::class, [], [], '', false);
-        $stubBlockRenderer->method('render')->willReturn('dummy content');
-
         $this->mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $this->mockSnippetKeyGenerator->method('getKeyForContext')->willReturn('stub-content-key');
 
-        $this->snippetRenderer = new ProductInListingSnippetRenderer(
+        /**
+         * @var ProductInSearchAutocompletionBlockRenderer|\PHPUnit_Framework_MockObject_MockObject $stubBlockRenderer
+         */
+        $stubBlockRenderer = $this->getMock(ProductInSearchAutocompletionBlockRenderer::class, [], [], '', false);
+        $stubBlockRenderer->method('render')->willReturn('dummy content');
+
+        $this->snippetRenderer = new ProductInSearchAutocompletionSnippetRenderer(
             $this->mockSnippetList,
             $stubBlockRenderer,
             $this->mockSnippetKeyGenerator
@@ -74,7 +76,7 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->snippetRenderer->render($invalidSourceObject, $this->stubContextSource);
     }
 
-    public function testProductInListingViewSnippetsAreRendered()
+    public function testProductInAutocompletionInContextSnippetsAreAddedToSnippetList()
     {
         $dummyProductId = 'foo';
         $stubProductSource = $this->getStubProductSource($dummyProductId);
