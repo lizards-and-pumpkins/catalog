@@ -33,18 +33,20 @@ class ProductListingProjector implements Projector
      */
     public function project(ProjectionSourceData $dataObject, ContextSource $contextSource)
     {
-        if (!($dataObject instanceof ProductListingSource)) {
+        if (!($dataObject instanceof ProductListingMetaInfoSource)) {
             throw new InvalidProjectionDataSourceTypeException(
-                'First argument must be instance of ProductListingSource.'
+                'First argument must be instance of ProductListingMetaInfoSource.'
             );
         }
 
         $this->projectProductListing($dataObject, $contextSource);
     }
 
-    private function projectProductListing(ProductListingSource $productListingSource, ContextSource $contextSource)
-    {
-        $snippetList = $this->snippetRendererCollection->render($productListingSource, $contextSource);
+    private function projectProductListing(
+        ProductListingMetaInfoSource $productListingMetaInfoSource,
+        ContextSource $contextSource
+    ) {
+        $snippetList = $this->snippetRendererCollection->render($productListingMetaInfoSource, $contextSource);
         $this->dataPoolWriter->writeSnippetList($snippetList);
     }
 }

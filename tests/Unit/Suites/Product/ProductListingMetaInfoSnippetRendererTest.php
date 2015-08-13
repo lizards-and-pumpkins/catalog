@@ -36,6 +36,9 @@ class ProductListingMetaInfoSnippetRendererTest extends \PHPUnit_Framework_TestC
     {
         $stubContext = $this->getMock(Context::class);
 
+        /**
+         * @var ProductListingBlockRenderer|\PHPUnit_Framework_MockObject_MockObject $stubProductListingBlockRenderer
+         */
         $stubProductListingBlockRenderer = $this->getMock(ProductListingBlockRenderer::class, [], [], '', false);
         $stubProductListingBlockRenderer->method('render')->willReturn('dummy content');
         $stubProductListingBlockRenderer->method('getRootSnippetCode')->willReturn('dummy root block code');
@@ -66,25 +69,25 @@ class ProductListingMetaInfoSnippetRendererTest extends \PHPUnit_Framework_TestC
 
     public function testSnippetWithValidJsonAsContentInAListIsReturned()
     {
-        $mockProductListingSource = $this->getMockProductListingSource();
+        $mockProductListingMetaInfoSource = $this->getMockProductListingMetaInfoSource();
         $expectedSnippet = $this->getExpectedSnippet();
 
         $this->mockSnippetList->expects($this->once())->method('add')->with($expectedSnippet);
 
-        $this->renderer->render($mockProductListingSource);
+        $this->renderer->render($mockProductListingMetaInfoSource);
     }
 
     /**
-     * @return ProductListingSource|\PHPUnit_Framework_MockObject_MockObject
+     * @return ProductListingMetaInfoSource|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function getMockProductListingSource()
+    private function getMockProductListingMetaInfoSource()
     {
         $mockSearchCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
-        $mockProductListingSource = $this->getMock(ProductListingSource::class, [], [], '', false);
-        $mockProductListingSource->method('getContextData')->willReturn([]);
-        $mockProductListingSource->method('getCriteria')->willReturn($mockSearchCriteria);
+        $mockProductListingMetaInfoSource = $this->getMock(ProductListingMetaInfoSource::class, [], [], '', false);
+        $mockProductListingMetaInfoSource->method('getContextData')->willReturn([]);
+        $mockProductListingMetaInfoSource->method('getCriteria')->willReturn($mockSearchCriteria);
 
-        return $mockProductListingSource;
+        return $mockProductListingMetaInfoSource;
     }
 
     /**

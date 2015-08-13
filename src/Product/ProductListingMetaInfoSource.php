@@ -6,7 +6,7 @@ use Brera\DataPool\SearchEngine\SearchCriteria;
 use Brera\ProjectionSourceData;
 use Brera\UrlKey;
 
-class ProductListingSource implements ProjectionSourceData
+class ProductListingMetaInfoSource implements ProjectionSourceData
 {
     /**
      * @var UrlKey

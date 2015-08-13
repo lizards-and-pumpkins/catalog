@@ -7,20 +7,20 @@ use Brera\Command;
 class UpdateProductListingCommand implements Command
 {
     /**
-     * @var ProductListingSource
+     * @var ProductListingMetaInfoSource
      */
-    private $productListingSource;
+    private $productListingMetaInfoSource;
 
-    public function __construct(ProductListingSource $productListingSource)
+    public function __construct(ProductListingMetaInfoSource $productListingMetaInfoSource)
     {
-        $this->productListingSource = $productListingSource;
+        $this->productListingMetaInfoSource = $productListingMetaInfoSource;
     }
 
     /**
-     * @return ProductListingSource
+     * @return ProductListingMetaInfoSource
      */
-    public function getProductListingSource()
+    public function getProductListingMetaInfoSource()
     {
-        return $this->productListingSource;
+        return $this->productListingMetaInfoSource;
     }
 }

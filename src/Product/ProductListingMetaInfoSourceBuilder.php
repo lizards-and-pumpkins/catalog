@@ -7,13 +7,13 @@ use Brera\DataPool\SearchEngine\SearchCriterion;
 use Brera\UrlKey;
 use Brera\Utils\XPathParser;
 
-class ProductListingSourceBuilder
+class ProductListingMetaInfoSourceBuilder
 {
     /**
      * @param string $xml
-     * @return ProductListingSource
+     * @return ProductListingMetaInfoSource
      */
-    public function createProductListingSourceFromXml($xml)
+    public function createProductListingMetaInfoSourceFromXml($xml)
     {
         $parser = new XPathParser($xml);
 
@@ -34,7 +34,7 @@ class ProductListingSourceBuilder
             $criteria->add($criterion);
         }
 
-        return new ProductListingSource($urlKey, $contextData, $criteria);
+        return new ProductListingMetaInfoSource($urlKey, $contextData, $criteria);
     }
 
     /**

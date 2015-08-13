@@ -38,7 +38,7 @@ use Brera\Product\ProductListingWasUpdatedDomainEvent;
 use Brera\Product\ProductListingWasUpdatedDomainEventHandler;
 use Brera\Product\ProductListingSnippetRenderer;
 use Brera\Product\ProductProjector;
-use Brera\Product\ProductListingSourceBuilder;
+use Brera\Product\ProductListingMetaInfoSourceBuilder;
 use Brera\Product\ProductSearchDocumentBuilder;
 use Brera\Product\ProductSearchResultsMetaSnippetRenderer;
 use Brera\Product\ProductSourceBuilder;
@@ -142,11 +142,11 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return ProductListingSourceBuilder
+     * @return ProductListingMetaInfoSourceBuilder
      */
-    public function createProductListingSourceBuilder()
+    public function createProductListingMetaInfoSourceBuilder()
     {
-        return new ProductListingSourceBuilder();
+        return new ProductListingMetaInfoSourceBuilder();
     }
 
     /**

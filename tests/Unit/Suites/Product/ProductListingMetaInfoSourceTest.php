@@ -7,9 +7,9 @@ use Brera\ProjectionSourceData;
 use Brera\UrlKey;
 
 /**
- * @covers \Brera\Product\ProductListingSource
+ * @covers \Brera\Product\ProductListingMetaInfoSource
  */
-class ProductListingSourceTest extends \PHPUnit_Framework_TestCase
+class ProductListingMetaInfoSourceTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var UrlKey|\PHPUnit_Framework_MockObject_MockObject
@@ -27,15 +27,15 @@ class ProductListingSourceTest extends \PHPUnit_Framework_TestCase
     private $stubCriteria;
 
     /**
-     * @var ProductListingSource
+     * @var ProductListingMetaInfoSource
      */
-    private $productListingSource;
+    private $productListingMetaInfoSource;
 
     protected function setUp()
     {
         $this->stubUrlKey = $this->getMock(UrlKey::class, [], [], '', false);
         $this->stubCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
-        $this->productListingSource = new ProductListingSource(
+        $this->productListingMetaInfoSource = new ProductListingMetaInfoSource(
             $this->stubUrlKey,
             $this->dummyContextData,
             $this->stubCriteria
@@ -44,24 +44,24 @@ class ProductListingSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testProjectionSourceDataInterfaceIsImplemented()
     {
-        $this->assertInstanceOf(ProjectionSourceData::class, $this->productListingSource);
+        $this->assertInstanceOf(ProjectionSourceData::class, $this->productListingMetaInfoSource);
     }
 
     public function testProductListingUrlKeyIsReturned()
     {
-        $result = $this->productListingSource->getUrlKey();
+        $result = $this->productListingMetaInfoSource->getUrlKey();
         $this->assertSame($this->stubUrlKey, $result);
     }
 
     public function testProductListingContextDataIsReturned()
     {
-        $result = $this->productListingSource->getContextData();
+        $result = $this->productListingMetaInfoSource->getContextData();
         $this->assertSame($this->dummyContextData, $result);
     }
 
     public function testProductListingCriteriaAreReturned()
     {
-        $result = $this->productListingSource->getCriteria();
+        $result = $this->productListingMetaInfoSource->getCriteria();
         $this->assertSame($this->stubCriteria, $result);
     }
 }

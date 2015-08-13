@@ -11,7 +11,6 @@ use Brera\SnippetKeyGenerator;
 use Brera\SnippetList;
 use Brera\SnippetRenderer;
 
-
 class ProductSearchAutosuggestionSnippetRenderer implements SnippetRenderer
 {
     const CODE = 'product_search_autosuggestion';
@@ -41,6 +40,11 @@ class ProductSearchAutosuggestionSnippetRenderer implements SnippetRenderer
         $this->blockRenderer = $blockRenderer;
     }
 
+    /**
+     * @param RootSnippetSourceList $rootSnippetSourceList
+     * @param ContextSource $contextSource
+     * @return SnippetList
+     */
     public function render(RootSnippetSourceList $rootSnippetSourceList, ContextSource $contextSource)
     {
         foreach ($contextSource->getAllAvailableContexts() as $context) {

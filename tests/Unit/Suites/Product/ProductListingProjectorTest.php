@@ -2,10 +2,10 @@
 
 namespace Brera\Product;
 
+use Brera\Context\ContextSource;
 use Brera\DataPool\DataPoolWriter;
 use Brera\InvalidProjectionDataSourceTypeException;
 use Brera\ProjectionSourceData;
-use Brera\SampleContextSource;
 use Brera\SnippetList;
 use Brera\SnippetRendererCollection;
 
@@ -50,7 +50,10 @@ class ProductListingProjectorTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfTheDataSourceTypeIsNotProduct()
     {
-        $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
+        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
+        $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
+
+        /** @var ProjectionSourceData|\PHPUnit_Framework_MockObject_MockObject $invalidDataSourceType */
         $invalidDataSourceType = $this->getMock(ProjectionSourceData::class);
 
         $this->setExpectedException(InvalidProjectionDataSourceTypeException::class);
@@ -60,13 +63,18 @@ class ProductListingProjectorTest extends \PHPUnit_Framework_TestCase
 
     public function testSnippetListIsWrittenIntoDataPoolWriter()
     {
-        $stubProductListingSource = $this->getMock(ProductListingSource::class, [], [], '', false);
-        $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
+        /**
+         * @var ProductListingMetaInfoSource|\PHPUnit_Framework_MockObject_MockObject $stubProductListingMetaInfoSource
+         */
+        $stubProductListingMetaInfoSource = $this->getMock(ProductListingMetaInfoSource::class, [], [], '', false);
+
+        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
+        $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
 
         $this->mockDataPoolWriter->expects($this->once())
             ->method('writeSnippetList')
             ->with($this->stubSnippetList);
 
-        $this->projector->project($stubProductListingSource, $stubContextSource);
+        $this->projector->project($stubProductListingMetaInfoSource, $stubContextSource);
     }
 }

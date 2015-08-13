@@ -15,7 +15,7 @@ use Brera\Image\ImageWasUpdatedDomainEvent;
 use Brera\Image\ImageWasUpdatedDomainEventHandler;
 use Brera\Image\UpdateImageCommand;
 use Brera\Image\UpdateImageCommandHandler;
-use Brera\Product\ProductListingSourceBuilder;
+use Brera\Product\ProductListingMetaInfoSourceBuilder;
 use Brera\Product\ProductWasUpdatedDomainEvent;
 use Brera\Product\ProductWasUpdatedDomainEventHandler;
 use Brera\Product\ProductListingWasUpdatedDomainEvent;
@@ -69,7 +69,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Product\ProductInSearchAutosuggestionSnippetRenderer
  * @uses   \Brera\Product\ProductListingMetaInfoSnippetRenderer
  * @uses   \Brera\Product\ProductListingProjector
- * @uses   \Brera\Product\ProductListingSourceBuilder
+ * @uses   \Brera\Product\ProductListingMetaInfoSourceBuilder
  * @uses   \Brera\Product\ProductListingWasUpdatedDomainEvent
  * @uses   \Brera\Product\ProductListingWasUpdatedDomainEventHandler
  * @uses   \Brera\Product\ProductWasUpdatedDomainEvent
@@ -172,10 +172,10 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ProductSourceBuilder::class, $result);
     }
 
-    public function testProductListingSourceBuilderIsReturned()
+    public function testProductListingMetaInfoSourceBuilderIsReturned()
     {
-        $result = $this->commonFactory->createProductListingSourceBuilder();
-        $this->assertInstanceOf(ProductListingSourceBuilder::class, $result);
+        $result = $this->commonFactory->createProductListingMetaInfoSourceBuilder();
+        $this->assertInstanceOf(ProductListingMetaInfoSourceBuilder::class, $result);
     }
 
     public function testRootSnippetSourceListBuilderIsReturned()
