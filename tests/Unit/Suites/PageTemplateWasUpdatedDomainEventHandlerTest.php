@@ -2,16 +2,13 @@
 
 namespace Brera;
 
+use Brera\Context\ContextSource;
+
 /**
  * @covers \Brera\PageTemplateWasUpdatedDomainEventHandler
  */
 class PageTemplateWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var PageTemplateWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubDomainEvent;
-
     /**
      * @var RootSnippetProjector|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -24,15 +21,18 @@ class PageTemplateWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_Te
 
     protected function setUp()
     {
-        $stubRootSnippetSourceList = $this->getMock(RootSnippetSourceList::class, [], [], '', false);
-        $this->stubDomainEvent = $this->getMock(PageTemplateWasUpdatedDomainEvent::class, [], [], '', false);
-        $this->stubDomainEvent->method('getRootSnippetSourceList')->willReturn($stubRootSnippetSourceList);
+        $stubProjectionSourceData = $this->getMock(ProjectionSourceData::class);
 
-        $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
+        /** @var PageTemplateWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
+        $stubDomainEvent = $this->getMock(PageTemplateWasUpdatedDomainEvent::class, [], [], '', false);
+        $stubDomainEvent->method('getProjectionSourceData')->willReturn($stubProjectionSourceData);
+
+        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
+        $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
         $this->mockProjector = $this->getMock(RootSnippetProjector::class, [], [], '', false);
 
         $this->domainEventHandler = new PageTemplateWasUpdatedDomainEventHandler(
-            $this->stubDomainEvent,
+            $stubDomainEvent,
             $stubContextSource,
             $this->mockProjector
         );

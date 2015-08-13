@@ -27,7 +27,7 @@ class PageTemplateWasUpdatedDomainEvent implements DomainEvent
     /**
      * @return RootSnippetSourceList
      */
-    public function getRootSnippetSourceList()
+    public function getProjectionSourceData()
     {
         return $this->rootSnippetSourceList;
     }

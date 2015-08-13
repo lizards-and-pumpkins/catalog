@@ -33,7 +33,7 @@ class PageTemplateWasUpdatedDomainEventHandler implements DomainEventHandler
 
     public function process()
     {
-        $rootSnippetSourceList = $this->domainEvent->getRootSnippetSourceList();
-        $this->projector->project($rootSnippetSourceList, $this->contextSource);
+        $projectionSourceData = $this->domainEvent->getProjectionSourceData();
+        $this->projector->project($projectionSourceData, $this->contextSource);
     }
 }

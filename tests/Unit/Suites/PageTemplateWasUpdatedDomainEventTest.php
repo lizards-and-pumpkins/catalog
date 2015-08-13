@@ -35,7 +35,7 @@ class PageTemplateWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 
     public function testRootSnippetSourceListIsReturned()
     {
-        $result = $this->domainEvent->getRootSnippetSourceList();
+        $result = $this->domainEvent->getProjectionSourceData();
         $this->assertSame($this->stubRootSnippetSourceList, $result);
     }
 }
