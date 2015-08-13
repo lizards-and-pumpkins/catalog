@@ -62,11 +62,11 @@ class ProductInSearchAutosuggestionSnippetRenderer implements SnippetRenderer
     ) {
         foreach ($contextSource->getAllAvailableContexts() as $context) {
             $productInContext = $productSource->getProductForContext($context);
-            $this->addProductInSearchAutocompletingInContextSnippetsToList($productInContext, $context);
+            $this->addProductInSearchAutosuggestionInContextSnippetsToList($productInContext, $context);
         }
     }
 
-    private function addProductInSearchAutocompletingInContextSnippetsToList(Product $product, Context $context)
+    private function addProductInSearchAutosuggestionInContextSnippetsToList(Product $product, Context $context)
     {
         $content = $this->blockRenderer->render($product, $context);
         $key = $this->snippetKeyGenerator->getKeyForContext($context, ['product_id' => $product->getId()]);
