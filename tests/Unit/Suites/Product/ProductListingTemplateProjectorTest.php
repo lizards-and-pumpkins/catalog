@@ -1,13 +1,19 @@
 <?php
 
-namespace Brera;
+namespace Brera\Product;
 
 use Brera\DataPool\DataPoolWriter;
+use Brera\InvalidProjectionDataSourceTypeException;
+use Brera\ProjectionSourceData;
+use Brera\RootSnippetSourceList;
+use Brera\SampleContextSource;
+use Brera\SnippetList;
+use Brera\SnippetRendererCollection;
 
 /**
- * @covers \Brera\TemplateProjector
+ * @covers \Brera\Product\ProductListingTemplateProjector
  */
-class TemplateProjectorTest extends \PHPUnit_Framework_TestCase
+class ProductListingTemplateProjectorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var SnippetRendererCollection|\PHPUnit_Framework_MockObject_MockObject
@@ -20,7 +26,7 @@ class TemplateProjectorTest extends \PHPUnit_Framework_TestCase
     private $mockDataPoolWriter;
 
     /**
-     * @var TemplateProjector
+     * @var ProductListingTemplateProjector
      */
     private $projector;
 
@@ -29,7 +35,10 @@ class TemplateProjectorTest extends \PHPUnit_Framework_TestCase
         $this->mockSnippetRendererCollection = $this->getMock(SnippetRendererCollection::class, [], [], '', false);
         $this->mockDataPoolWriter = $this->getMock(DataPoolWriter::class, [], [], '', false);
 
-        $this->projector = new TemplateProjector($this->mockSnippetRendererCollection, $this->mockDataPoolWriter);
+        $this->projector = new ProductListingTemplateProjector(
+            $this->mockSnippetRendererCollection,
+            $this->mockDataPoolWriter
+        );
     }
 
     public function testSnippetListIsWrittenIntoDataPool()

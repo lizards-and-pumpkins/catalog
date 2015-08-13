@@ -1,11 +1,16 @@
 <?php
 
-namespace Brera;
+namespace Brera\Product;
 
 use Brera\Context\ContextSource;
 use Brera\DataPool\DataPoolWriter;
+use Brera\InvalidProjectionDataSourceTypeException;
+use Brera\ProjectionSourceData;
+use Brera\Projector;
+use Brera\RootSnippetSourceList;
+use Brera\SnippetRendererCollection;
 
-class TemplateProjector implements Projector
+class ProductListingTemplateProjector implements Projector
 {
     /**
      * @var SnippetRendererCollection

@@ -8,9 +8,14 @@ namespace Brera;
 class TemplateWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var RootSnippetSourceList|\PHPUnit_Framework_MockObject_MockObject
+     * @var string
      */
-    private $stubRootSnippetSourceList;
+    private $dummyTemplateId = 'foo';
+
+    /**
+     * @var ProjectionSourceData|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubProjectionSourceData;
 
     /**
      * @var TemplateWasUpdatedDomainEvent
@@ -19,13 +24,8 @@ class TemplateWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $dummyRootSnippetId = 'foo';
-        $this->stubRootSnippetSourceList = $this->getMock(RootSnippetSourceList::class, [], [], '', false);
-
-        $this->domainEvent = new TemplateWasUpdatedDomainEvent(
-            $dummyRootSnippetId,
-            $this->stubRootSnippetSourceList
-        );
+        $this->stubProjectionSourceData = $this->getMock(ProjectionSourceData::class);
+        $this->domainEvent = new TemplateWasUpdatedDomainEvent($this->dummyTemplateId, $this->stubProjectionSourceData);
     }
 
     public function testDomainEventInterfaceIsImplemented()
@@ -33,9 +33,15 @@ class TemplateWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(DomainEvent::class, $this->domainEvent);
     }
 
-    public function testRootSnippetSourceListIsReturned()
+    public function testProjectionSourceDataIsReturned()
     {
         $result = $this->domainEvent->getProjectionSourceData();
-        $this->assertSame($this->stubRootSnippetSourceList, $result);
+        $this->assertSame($this->stubProjectionSourceData, $result);
+    }
+
+    public function testTemplateIdIsReturned()
+    {
+        $result = $this->domainEvent->getTemplateId();
+        $this->assertSame($this->dummyTemplateId, $result);
     }
 }

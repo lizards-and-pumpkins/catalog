@@ -7,28 +7,36 @@ class TemplateWasUpdatedDomainEvent implements DomainEvent
     /**
      * @var string
      */
-    private $rootSnippetId;
+    private $templateId;
 
     /**
-     * @var RootSnippetSourceList
+     * @var ProjectionSourceData
      */
-    private $rootSnippetSourceList;
+    private $projectionSourceData;
 
     /**
-     * @param string $rootSnippetId
-     * @param RootSnippetSourceList $rootSnippetSourceList
+     * @param string $templateId
+     * @param ProjectionSourceData $projectionSourceData
      */
-    public function __construct($rootSnippetId, RootSnippetSourceList $rootSnippetSourceList)
+    public function __construct($templateId, ProjectionSourceData $projectionSourceData)
     {
-        $this->rootSnippetId = $rootSnippetId;
-        $this->rootSnippetSourceList = $rootSnippetSourceList;
+        $this->templateId = $templateId;
+        $this->projectionSourceData = $projectionSourceData;
     }
 
     /**
-     * @return RootSnippetSourceList
+     * @return ProjectionSourceData
      */
     public function getProjectionSourceData()
     {
-        return $this->rootSnippetSourceList;
+        return $this->projectionSourceData;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTemplateId()
+    {
+        return $this->templateId;
     }
 }

@@ -17,16 +17,16 @@ class TemplateWasUpdatedDomainEventHandler implements DomainEventHandler
     private $contextSource;
 
     /**
-     * @var TemplateProjector
+     * @var TemplateProjectorLocator
      */
-    private $projector;
+    private $projectorLocator;
 
     public function __construct(
         TemplateWasUpdatedDomainEvent $domainEvent,
         ContextSource $contextSource,
-        TemplateProjector $projector
+        TemplateProjectorLocator $projectorLocator
     ) {
-        $this->projector = $projector;
+        $this->projectorLocator = $projectorLocator;
         $this->contextSource = $contextSource;
         $this->domainEvent = $domainEvent;
     }
@@ -34,6 +34,7 @@ class TemplateWasUpdatedDomainEventHandler implements DomainEventHandler
     public function process()
     {
         $projectionSourceData = $this->domainEvent->getProjectionSourceData();
-        $this->projector->project($projectionSourceData, $this->contextSource);
+        $projector = $this->projectorLocator->getTemplateProjectorForCode($this->domainEvent->getTemplateId());
+        $projector->project($projectionSourceData, $this->contextSource);
     }
 }

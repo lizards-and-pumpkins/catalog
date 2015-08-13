@@ -28,6 +28,7 @@ use Brera\Product\ProductDetailViewBlockRenderer;
 use Brera\Product\ProductDetailViewInContextSnippetRenderer;
 use Brera\Product\ProductInSearchAutosuggestionBlockRenderer;
 use Brera\Product\ProductInSearchAutosuggestionSnippetRenderer;
+use Brera\Product\ProductListingTemplateProjector;
 use Brera\Product\ProductWasUpdatedDomainEvent;
 use Brera\Product\ProductWasUpdatedDomainEventHandler;
 use Brera\Product\ProductInListingBlockRenderer;
@@ -116,8 +117,22 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return new TemplateWasUpdatedDomainEventHandler(
             $event,
             $this->getMasterFactory()->createContextSource(),
-            $this->getMasterFactory()->createTemplateProjector()
+            $this->getMasterFactory()->createTemplateProjectorLocator()
         );
+    }
+
+    /**
+     * @return TemplateProjectorLocator
+     */
+    public function createTemplateProjectorLocator()
+    {
+        $templateProjectorLocator = new TemplateProjectorLocator();
+        $templateProjectorLocator->register(
+            ProductListingSnippetRenderer::CODE,
+            $this->getMasterFactory()->createProductListingTemplateProjector()
+        );
+
+        return $templateProjectorLocator;
     }
 
     /**
@@ -187,12 +202,12 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return TemplateProjector
+     * @return ProductListingTemplateProjector
      */
-    public function createTemplateProjector()
+    public function createProductListingTemplateProjector()
     {
-        return new TemplateProjector(
-            $this->createRootSnippetRendererCollection(),
+        return new ProductListingTemplateProjector(
+            $this->createProductListingTemplateRendererCollection(),
             $this->getMasterFactory()->createDataPoolWriter()
         );
     }
@@ -200,7 +215,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     /**
      * @return SnippetRendererCollection
      */
-    public function createRootSnippetRendererCollection()
+    public function createProductListingTemplateRendererCollection()
     {
         return new SnippetRendererCollection(
             $this->getRootSnippetRendererList(),

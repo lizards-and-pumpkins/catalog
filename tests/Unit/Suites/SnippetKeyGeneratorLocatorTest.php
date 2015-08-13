@@ -32,9 +32,11 @@ class SnippetKeyGeneratorLocatorTest extends \PHPUnit_Framework_TestCase
         $this->locator->getKeyGeneratorForSnippetCode('test');
     }
 
-    public function testKeyGeneratorForSnippetCodesAreRegistered()
+    public function testKeyGeneratorForSnippetCodesIsReturned()
     {
         $testSnippetCode = 'test_snippet_code';
+
+        /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $stubKeyGenerator */
         $stubKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $this->locator->register($testSnippetCode, $stubKeyGenerator);
 
@@ -43,6 +45,7 @@ class SnippetKeyGeneratorLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownWhenRegisteringNonStringSnippetCode()
     {
+        /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $stubKeyGenerator */
         $stubKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $this->setExpectedException(InvalidSnippetCodeException::class, 'Expected snippet code to be a string');
 
@@ -51,7 +54,10 @@ class SnippetKeyGeneratorLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testSameInstanceForSameSnippetCodeIsReturned()
     {
-        $this->locator->register('test', $this->getMock(SnippetKeyGenerator::class));
+        /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $stubKeyGenerator */
+        $stubKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+
+        $this->locator->register('test', $stubKeyGenerator);
         $result1 = $this->locator->getKeyGeneratorForSnippetCode('test');
         $result2 = $this->locator->getKeyGeneratorForSnippetCode('test');
 
@@ -60,10 +66,17 @@ class SnippetKeyGeneratorLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testDifferentInstancesAreReturnedForDifferentSnippetCodes()
     {
-        $this->locator->register('test1', $this->getMock(SnippetKeyGenerator::class));
-        $this->locator->register('test2', $this->getMock(SnippetKeyGenerator::class));
+        /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $stubKeyGeneratorA */
+        $stubKeyGeneratorA = $this->getMock(SnippetKeyGenerator::class);
+        $this->locator->register('test1', $stubKeyGeneratorA);
+
+        /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $stubKeyGeneratorB */
+        $stubKeyGeneratorB = $this->getMock(SnippetKeyGenerator::class);
+        $this->locator->register('test2', $stubKeyGeneratorB);
+
         $result1 = $this->locator->getKeyGeneratorForSnippetCode('test1');
         $result2 = $this->locator->getKeyGeneratorForSnippetCode('test2');
+
         $this->assertNotSame($result1, $result2);
     }
 }

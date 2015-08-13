@@ -59,7 +59,6 @@ use Brera\Queue\Queue;
  * @uses   \Brera\DomainEventHandlerLocator
  * @uses   \Brera\TemplateWasUpdatedDomainEvent
  * @uses   \Brera\TemplateWasUpdatedDomainEventHandler
- * @uses   \Brera\TemplateProjector
  * @uses   \Brera\Renderer\BlockRenderer
  * @uses   \Brera\Product\DefaultNumberOfProductsPerPageSnippetRenderer
  * @uses   \Brera\Product\PriceSnippetRenderer
@@ -68,6 +67,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Product\ProductProjector
  * @uses   \Brera\Product\ProductInSearchAutosuggestionSnippetRenderer
  * @uses   \Brera\Product\ProductListingMetaInfoSnippetRenderer
+ * @uses   \Brera\Product\ProductListingTemplateProjector
  * @uses   \Brera\Product\ProductListingProjector
  * @uses   \Brera\Product\ProductListingMetaInfoSourceBuilder
  * @uses   \Brera\Product\ProductListingWasUpdatedDomainEvent
@@ -99,6 +99,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Image\ImageProcessingStrategySequence
  * @uses   \Brera\LocalFilesystemStorageReader
  * @uses   \Brera\LocalFilesystemStorageWriter
+ * @uses   \Brera\TemplateProjectorLocator
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
