@@ -60,9 +60,7 @@ class ProductInListingSnippetRenderer implements SnippetRenderer
 
     private function addProductInListingSnippetsToList(ProductSource $productSource, ContextSource $contextSource)
     {
-        $availableContexts = $contextSource->getAllAvailableContexts();
-
-        foreach ($availableContexts as $context) {
+        foreach ($contextSource->getAllAvailableContexts() as $context) {
             $productInContext = $productSource->getProductForContext($context);
             $this->addProductInListingInContextSnippetsToList($productInContext, $context);
         }

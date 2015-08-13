@@ -62,9 +62,7 @@ class ProductInSearchAutocompletionSnippetRenderer implements SnippetRenderer
         ProductSource $productSource,
         ContextSource $contextSource
     ) {
-        $availableContexts = $contextSource->getAllAvailableContexts();
-
-        foreach ($availableContexts as $context) {
+        foreach ($contextSource->getAllAvailableContexts() as $context) {
             $productInContext = $productSource->getProductForContext($context);
             $this->addProductInSearchAutocompletingInContextSnippetsToList($productInContext, $context);
         }

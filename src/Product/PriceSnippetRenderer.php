@@ -45,8 +45,7 @@ class PriceSnippetRenderer implements SnippetRenderer
      */
     public function render(ProductSource $productSource, ContextSource $contextSource)
     {
-        $availableContexts = $contextSource->getAllAvailableContexts();
-        foreach ($availableContexts as $context) {
+        foreach ($contextSource->getAllAvailableContexts() as $context) {
             $this->renderProductPriceInContext($productSource, $context);
         }
 

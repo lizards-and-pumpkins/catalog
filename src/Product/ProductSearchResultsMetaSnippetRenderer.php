@@ -47,9 +47,7 @@ class ProductSearchResultsMetaSnippetRenderer implements SnippetRenderer
      */
     public function render(RootSnippetSourceList $rootSnippetSourceList, ContextSource $contextSource)
     {
-        $availableContexts = $contextSource->getAllAvailableContexts();
-
-        foreach ($availableContexts as $context) {
+        foreach ($contextSource->getAllAvailableContexts() as $context) {
             $this->renderMetaInfoSnippetForContext($rootSnippetSourceList, $context);
         }
 
