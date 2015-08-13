@@ -87,6 +87,5 @@ class ProductSourceDetailViewSnippetRenderer implements SnippetRenderer
     {
         $this->productSource = $productSource;
         $this->contextSource = $contextSource;
-        $this->snippetList->clear();
     }
 }

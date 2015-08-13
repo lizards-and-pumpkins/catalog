@@ -51,8 +51,6 @@ class ProductInSearchAutosuggestionSnippetRenderer implements SnippetRenderer
             throw new InvalidProjectionDataSourceTypeException('First argument must be instance of ProductSource.');
         }
 
-        $this->snippetList->clear();
-
         $this->addProductInSearchAutosuggestionSnippetsToList($productSource, $contextSource);
 
         return $this->snippetList;

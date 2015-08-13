@@ -51,8 +51,6 @@ class ProductInListingSnippetRenderer implements SnippetRenderer
             throw new InvalidProjectionDataSourceTypeException('First argument must be instance of ProductSource.');
         }
 
-        $this->snippetList->clear();
-
         $this->addProductInListingSnippetsToList($productSource, $contextSource);
 
         return $this->snippetList;

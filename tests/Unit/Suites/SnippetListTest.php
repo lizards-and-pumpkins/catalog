@@ -59,15 +59,4 @@ class SnippetListTest extends \PHPUnit_Framework_TestCase
         $this->assertContains($snippet, $this->resultList->getIterator());
         $this->assertContains($snippet2, $this->resultList->getIterator());
     }
-
-    public function testListIsCleared()
-    {
-        $snippet = Snippet::create('test', 'test');
-
-        $this->resultList->add($snippet);
-        $this->assertEquals(1, $this->resultList->count());
-
-        $this->resultList->clear();
-        $this->assertEquals(0, $this->resultList->count());
-    }
 }
