@@ -122,7 +122,7 @@ class ProductListingTest extends AbstractIntegrationTest
         $this->assertContains($contentBlockContent, $body);
     }
 
-    public function testPageTemplateWasUpdatedDomainEventPutsProductListingRootSnippetIntoKeyValueStore()
+    public function testProductListingRootSnippetIsAddedToDataPool()
     {
         $this->createProductListingFixture();
 
@@ -132,9 +132,7 @@ class ProductListingTest extends AbstractIntegrationTest
         $dataPoolReader = $this->factory->createDataPoolReader();
 
         $keyGeneratorLocator = $this->factory->getSnippetKeyGeneratorLocator();
-        $keyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
-            ProductListingSnippetRenderer::CODE
-        );
+        $keyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(ProductListingSnippetRenderer::CODE);
 
         $contextSource = $this->factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[0];
