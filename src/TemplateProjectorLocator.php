@@ -8,11 +8,11 @@ class TemplateProjectorLocator
      * @var Projector[]
      */
     private $projectors = [];
+
     /**
      * @param string $code
      * @return Projector
      */
-
     public function getTemplateProjectorForCode($code)
     {
         $this->validateProjectorCode($code);
