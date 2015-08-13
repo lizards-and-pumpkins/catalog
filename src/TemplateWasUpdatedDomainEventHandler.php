@@ -4,10 +4,10 @@ namespace Brera;
 
 use Brera\Context\ContextSource;
 
-class PageTemplateWasUpdatedDomainEventHandler implements DomainEventHandler
+class TemplateWasUpdatedDomainEventHandler implements DomainEventHandler
 {
     /**
-     * @var PageTemplateWasUpdatedDomainEvent
+     * @var TemplateWasUpdatedDomainEvent
      */
     private $domainEvent;
 
@@ -22,7 +22,7 @@ class PageTemplateWasUpdatedDomainEventHandler implements DomainEventHandler
     private $projector;
 
     public function __construct(
-        PageTemplateWasUpdatedDomainEvent $domainEvent,
+        TemplateWasUpdatedDomainEvent $domainEvent,
         ContextSource $contextSource,
         RootSnippetProjector $projector
     ) {

@@ -162,8 +162,8 @@ class ProductListingTest extends AbstractIntegrationTest
 
     private function createProductListingFixture()
     {
-        $httpUrl = HttpUrl::fromString('http://example.com/api/page_templates/product_listing');
-        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.page_templates.v1+json']);
+        $httpUrl = HttpUrl::fromString('http://example.com/api/templates/product_listing');
+        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.templates.v1+json']);
         $httpRequestBodyString = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.json');
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);

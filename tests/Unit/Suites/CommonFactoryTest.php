@@ -57,8 +57,8 @@ use Brera\Queue\Queue;
  * @uses   \Brera\CommandHandlerLocator
  * @uses   \Brera\DomainEventConsumer
  * @uses   \Brera\DomainEventHandlerLocator
- * @uses   \Brera\PageTemplateWasUpdatedDomainEvent
- * @uses   \Brera\PageTemplateWasUpdatedDomainEventHandler
+ * @uses   \Brera\TemplateWasUpdatedDomainEvent
+ * @uses   \Brera\TemplateWasUpdatedDomainEventHandler
  * @uses   \Brera\RootSnippetProjector
  * @uses   \Brera\Renderer\BlockRenderer
  * @uses   \Brera\Product\DefaultNumberOfProductsPerPageSnippetRenderer
@@ -130,13 +130,13 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ProductWasUpdatedDomainEventHandler::class, $result);
     }
 
-    public function testPageTemplateWasUpdatedDomainEventHandlerIsReturned()
+    public function testTemplateWasUpdatedDomainEventHandlerIsReturned()
     {
-        /** @var PageTemplateWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
-        $stubDomainEvent = $this->getMock(PageTemplateWasUpdatedDomainEvent::class, [], [], '', false);
-        $result = $this->commonFactory->createPageTemplateWasUpdatedDomainEventHandler($stubDomainEvent);
+        /** @var TemplateWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
+        $stubDomainEvent = $this->getMock(TemplateWasUpdatedDomainEvent::class, [], [], '', false);
+        $result = $this->commonFactory->createTemplateWasUpdatedDomainEventHandler($stubDomainEvent);
 
-        $this->assertInstanceOf(PageTemplateWasUpdatedDomainEventHandler::class, $result);
+        $this->assertInstanceOf(TemplateWasUpdatedDomainEventHandler::class, $result);
     }
 
     public function testProductListingWasUpdatedDomainEventHandlerIsReturned()

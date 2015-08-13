@@ -3,9 +3,9 @@
 namespace Brera;
 
 /**
- * @covers \Brera\PageTemplateWasUpdatedDomainEvent
+ * @covers \Brera\TemplateWasUpdatedDomainEvent
  */
-class PageTemplateWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
+class TemplateWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var RootSnippetSourceList|\PHPUnit_Framework_MockObject_MockObject
@@ -13,7 +13,7 @@ class PageTemplateWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
     private $stubRootSnippetSourceList;
 
     /**
-     * @var PageTemplateWasUpdatedDomainEvent
+     * @var TemplateWasUpdatedDomainEvent
      */
     private $domainEvent;
 
@@ -22,7 +22,7 @@ class PageTemplateWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
         $dummyRootSnippetId = 'foo';
         $this->stubRootSnippetSourceList = $this->getMock(RootSnippetSourceList::class, [], [], '', false);
 
-        $this->domainEvent = new PageTemplateWasUpdatedDomainEvent(
+        $this->domainEvent = new TemplateWasUpdatedDomainEvent(
             $dummyRootSnippetId,
             $this->stubRootSnippetSourceList
         );

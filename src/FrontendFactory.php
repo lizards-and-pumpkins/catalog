@@ -82,9 +82,9 @@ class FrontendFactory implements Factory
         );
 
         $requestHandlerChain->register(
-            'put_page_templates',
+            'put_templates',
             $version,
-            $this->getMasterFactory()->createPageTemplatesApiV1PutRequestHandler()
+            $this->getMasterFactory()->createTemplatesApiV1PutRequestHandler()
         );
     }
 
@@ -125,11 +125,11 @@ class FrontendFactory implements Factory
     }
 
     /**
-     * @return PageTemplatesApiV1PutRequestHandler
+     * @return TemplatesApiV1PutRequestHandler
      */
-    public function createPageTemplatesApiV1PutRequestHandler()
+    public function createTemplatesApiV1PutRequestHandler()
     {
-        return new PageTemplatesApiV1PutRequestHandler(
+        return new TemplatesApiV1PutRequestHandler(
             $this->getMasterFactory()->createRootSnippetSourceListBuilder(),
             $this->getMasterFactory()->getEventQueue()
         );

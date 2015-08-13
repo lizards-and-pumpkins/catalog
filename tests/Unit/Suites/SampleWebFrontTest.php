@@ -23,7 +23,7 @@ use Brera\Http\HttpUrl;
  * @uses   \Brera\PageBuilder
  * @uses   \Brera\SnippetKeyGeneratorLocator
  * @uses   \Brera\GenericSnippetKeyGenerator
- * @uses   \Brera\PageTemplatesApiV1PutRequestHandler
+ * @uses   \Brera\TemplatesApiV1PutRequestHandler
  * @uses   \Brera\Http\GenericHttpRouter
  * @uses   \Brera\Product\CatalogImportApiV1PutRequestHandler
  * @uses   \Brera\Product\ProductDetailViewRequestHandler

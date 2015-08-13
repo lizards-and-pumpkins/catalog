@@ -7,13 +7,13 @@ use Brera\Http\HttpRequest;
 use Brera\Queue\Queue;
 
 /**
- * @covers \Brera\PageTemplatesApiV1PutRequestHandler
+ * @covers \Brera\TemplatesApiV1PutRequestHandler
  * @uses   \Brera\Api\ApiRequestHandler
  * @uses   \Brera\DefaultHttpResponse
  * @uses   \Brera\Http\HttpHeaders
- * @uses   \Brera\PageTemplateWasUpdatedDomainEvent
+ * @uses   \Brera\TemplateWasUpdatedDomainEvent
  */
-class PageTemplatesApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
+class TemplatesApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Queue|\PHPUnit_Framework_MockObject_MockObject
@@ -21,7 +21,7 @@ class PageTemplatesApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
     private $mockDomainEventQueue;
 
     /**
-     * @var PageTemplatesApiV1PutRequestHandler
+     * @var TemplatesApiV1PutRequestHandler
      */
     private $requestHandler;
 
@@ -42,7 +42,7 @@ class PageTemplatesApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
 
         $this->mockDomainEventQueue = $this->getMock(Queue::class);
 
-        $this->requestHandler = new PageTemplatesApiV1PutRequestHandler(
+        $this->requestHandler = new TemplatesApiV1PutRequestHandler(
             $stubRootSnippetSourceListBuilder,
             $this->mockDomainEventQueue
         );
@@ -64,24 +64,24 @@ class PageTemplatesApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
     public function testRequestCanNotBeProcessedIfUrlDoesNotContainRootSnippetId()
     {
         $this->mockRequest->method('getMethod')->willReturn(HttpRequest::METHOD_PUT);
-        $this->mockRequest->method('getUrl')->willReturn('http://example.com/api/page_templates');
+        $this->mockRequest->method('getUrl')->willReturn('http://example.com/api/templates');
         $this->assertFalse($this->requestHandler->canProcess($this->mockRequest));
     }
 
     public function testRequestCanBeProcessedIfValid()
     {
         $this->mockRequest->method('getMethod')->willReturn(HttpRequest::METHOD_PUT);
-        $this->mockRequest->method('getUrl')->willReturn('http://example.com/api/page_templates/foo');
+        $this->mockRequest->method('getUrl')->willReturn('http://example.com/api/templates/foo');
         $this->assertTrue($this->requestHandler->canProcess($this->mockRequest));
     }
 
     public function testUpdateContentBlockCommandIsEmitted()
     {
-        $this->mockRequest->method('getUrl')->willReturn('http://example.com/api/page_templates/foo');
+        $this->mockRequest->method('getUrl')->willReturn('http://example.com/api/templates/foo');
 
         $this->mockDomainEventQueue->expects($this->once())
             ->method('add')
-            ->with($this->isInstanceOf(PageTemplateWasUpdatedDomainEvent::class));
+            ->with($this->isInstanceOf(TemplateWasUpdatedDomainEvent::class));
 
         $this->requestHandler->process($this->mockRequest);
     }

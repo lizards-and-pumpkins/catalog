@@ -6,7 +6,7 @@ use Brera\Api\ApiRequestHandler;
 use Brera\Http\HttpRequest;
 use Brera\Queue\Queue;
 
-class PageTemplatesApiV1PutRequestHandler extends ApiRequestHandler
+class TemplatesApiV1PutRequestHandler extends ApiRequestHandler
 {
     /**
      * @var RootSnippetSourceListBuilder
@@ -45,7 +45,7 @@ class PageTemplatesApiV1PutRequestHandler extends ApiRequestHandler
     {
         $rootSnippetId = $this->extractRootSnippetIdFromUrl($request);
         $rootSnippetSourceList = $this->rootSnippetSourceListBuilder->fromJson($request->getRawBody());
-        $this->domainEventQueue->add(new PageTemplateWasUpdatedDomainEvent($rootSnippetId, $rootSnippetSourceList));
+        $this->domainEventQueue->add(new TemplateWasUpdatedDomainEvent($rootSnippetId, $rootSnippetSourceList));
     }
 
     /**
@@ -63,7 +63,7 @@ class PageTemplatesApiV1PutRequestHandler extends ApiRequestHandler
      */
     private function extractRootSnippetIdFromUrl(HttpRequest $request)
     {
-        preg_match('#/page_templates/([^/]+)#i', $request->getUrl(), $urlTokens);
+        preg_match('#/templates/([^/]+)#i', $request->getUrl(), $urlTokens);
 
         if (count($urlTokens) < 2) {
             return null;
