@@ -10,7 +10,7 @@ use Brera\Context\ContextSource;
 class TemplateWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var RootSnippetProjector|\PHPUnit_Framework_MockObject_MockObject
+     * @var TemplateProjector|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockProjector;
 
@@ -29,7 +29,7 @@ class TemplateWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCa
 
         /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
         $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
-        $this->mockProjector = $this->getMock(RootSnippetProjector::class, [], [], '', false);
+        $this->mockProjector = $this->getMock(TemplateProjector::class, [], [], '', false);
 
         $this->domainEventHandler = new TemplateWasUpdatedDomainEventHandler(
             $stubDomainEvent,

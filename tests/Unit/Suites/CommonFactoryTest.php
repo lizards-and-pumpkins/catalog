@@ -59,7 +59,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\DomainEventHandlerLocator
  * @uses   \Brera\TemplateWasUpdatedDomainEvent
  * @uses   \Brera\TemplateWasUpdatedDomainEventHandler
- * @uses   \Brera\RootSnippetProjector
+ * @uses   \Brera\TemplateProjector
  * @uses   \Brera\Renderer\BlockRenderer
  * @uses   \Brera\Product\DefaultNumberOfProductsPerPageSnippetRenderer
  * @uses   \Brera\Product\PriceSnippetRenderer

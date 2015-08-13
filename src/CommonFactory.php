@@ -116,7 +116,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return new TemplateWasUpdatedDomainEventHandler(
             $event,
             $this->getMasterFactory()->createContextSource(),
-            $this->getMasterFactory()->createRootSnippetProjector()
+            $this->getMasterFactory()->createTemplateProjector()
         );
     }
 
@@ -187,11 +187,11 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return RootSnippetProjector
+     * @return TemplateProjector
      */
-    public function createRootSnippetProjector()
+    public function createTemplateProjector()
     {
-        return new RootSnippetProjector(
+        return new TemplateProjector(
             $this->createRootSnippetRendererCollection(),
             $this->getMasterFactory()->createDataPoolWriter()
         );

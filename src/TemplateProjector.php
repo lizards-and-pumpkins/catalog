@@ -5,7 +5,7 @@ namespace Brera;
 use Brera\Context\ContextSource;
 use Brera\DataPool\DataPoolWriter;
 
-class RootSnippetProjector implements Projector
+class TemplateProjector implements Projector
 {
     /**
      * @var SnippetRendererCollection

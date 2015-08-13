@@ -5,9 +5,9 @@ namespace Brera;
 use Brera\DataPool\DataPoolWriter;
 
 /**
- * @covers \Brera\RootSnippetProjector
+ * @covers \Brera\TemplateProjector
  */
-class RootSnippetProjectorTest extends \PHPUnit_Framework_TestCase
+class TemplateProjectorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var SnippetRendererCollection|\PHPUnit_Framework_MockObject_MockObject
@@ -20,7 +20,7 @@ class RootSnippetProjectorTest extends \PHPUnit_Framework_TestCase
     private $mockDataPoolWriter;
 
     /**
-     * @var RootSnippetProjector
+     * @var TemplateProjector
      */
     private $projector;
 
@@ -29,7 +29,7 @@ class RootSnippetProjectorTest extends \PHPUnit_Framework_TestCase
         $this->mockSnippetRendererCollection = $this->getMock(SnippetRendererCollection::class, [], [], '', false);
         $this->mockDataPoolWriter = $this->getMock(DataPoolWriter::class, [], [], '', false);
 
-        $this->projector = new RootSnippetProjector($this->mockSnippetRendererCollection, $this->mockDataPoolWriter);
+        $this->projector = new TemplateProjector($this->mockSnippetRendererCollection, $this->mockDataPoolWriter);
     }
 
     public function testSnippetListIsWrittenIntoDataPool()

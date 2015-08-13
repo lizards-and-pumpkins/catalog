@@ -17,14 +17,14 @@ class TemplateWasUpdatedDomainEventHandler implements DomainEventHandler
     private $contextSource;
 
     /**
-     * @var RootSnippetProjector
+     * @var TemplateProjector
      */
     private $projector;
 
     public function __construct(
         TemplateWasUpdatedDomainEvent $domainEvent,
         ContextSource $contextSource,
-        RootSnippetProjector $projector
+        TemplateProjector $projector
     ) {
         $this->projector = $projector;
         $this->contextSource = $contextSource;
