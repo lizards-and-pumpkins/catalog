@@ -11,7 +11,7 @@ use Brera\DomainEventHandler;
 class ProductListingWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ProductListingProjector|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductListingMetaInfoSnippetProjector|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockProjector;
 
@@ -28,7 +28,7 @@ class ProductListingWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_
         $mockDomainEvent = $this->getMock(ProductListingWasUpdatedDomainEvent::class, [], [], '', false);
         $mockDomainEvent->method('getProductListingMetaInfoSource')->willReturn($stubProductListingMetaInfoSource);
 
-        $this->mockProjector = $this->getMock(ProductListingProjector::class, [], [], '', false);
+        $this->mockProjector = $this->getMock(ProductListingMetaInfoSnippetProjector::class, [], [], '', false);
 
         /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
         $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);

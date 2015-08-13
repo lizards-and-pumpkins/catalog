@@ -10,9 +10,9 @@ use Brera\SnippetList;
 use Brera\SnippetRendererCollection;
 
 /**
- * @covers \Brera\Product\ProductListingProjector
+ * @covers \Brera\Product\ProductListingMetaInfoSnippetProjector
  */
-class ProductListingProjectorTest extends \PHPUnit_Framework_TestCase
+class ProductListingMetaInfoSnippetProjectorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var SnippetList|\PHPUnit_Framework_MockObject_MockObject
@@ -30,7 +30,7 @@ class ProductListingProjectorTest extends \PHPUnit_Framework_TestCase
     private $mockRendererCollection;
 
     /**
-     * @var ProductListingProjector
+     * @var ProductListingMetaInfoSnippetProjector
      */
     private $projector;
 
@@ -42,7 +42,7 @@ class ProductListingProjectorTest extends \PHPUnit_Framework_TestCase
         $this->mockRendererCollection = $this->getMock(SnippetRendererCollection::class, [], [], '', false);
         $this->mockRendererCollection->method('render')->willReturn($this->stubSnippetList);
 
-        $this->projector = new ProductListingProjector(
+        $this->projector = new ProductListingMetaInfoSnippetProjector(
             $this->mockRendererCollection,
             $this->mockDataPoolWriter
         );

@@ -9,7 +9,7 @@ use Brera\ProjectionSourceData;
 use Brera\Projector;
 use Brera\SnippetRendererCollection;
 
-class ProductListingProjector implements Projector
+class ProductListingMetaInfoSnippetProjector implements Projector
 {
     /**
      * @var SnippetRendererCollection

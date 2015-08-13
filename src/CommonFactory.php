@@ -34,7 +34,7 @@ use Brera\Product\ProductWasUpdatedDomainEventHandler;
 use Brera\Product\ProductInListingBlockRenderer;
 use Brera\Product\ProductListingBlockRenderer;
 use Brera\Product\ProductListingMetaInfoSnippetRenderer;
-use Brera\Product\ProductListingProjector;
+use Brera\Product\ProductListingMetaInfoSnippetProjector;
 use Brera\Product\ProductListingWasUpdatedDomainEvent;
 use Brera\Product\ProductListingWasUpdatedDomainEventHandler;
 use Brera\Product\ProductListingSnippetRenderer;
@@ -144,7 +144,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return new ProductListingWasUpdatedDomainEventHandler(
             $event,
             $this->getMasterFactory()->createContextSource(),
-            $this->getMasterFactory()->createProductListingProjector()
+            $this->getMasterFactory()->createProductListingMetaInfoSnippetProjector()
         );
     }
 
@@ -298,11 +298,11 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return ProductListingProjector
+     * @return ProductListingMetaInfoSnippetProjector
      */
-    public function createProductListingProjector()
+    public function createProductListingMetaInfoSnippetProjector()
     {
-        return new ProductListingProjector(
+        return new ProductListingMetaInfoSnippetProjector(
             $this->getMasterFactory()->createProductListingSnippetRendererCollection(),
             $this->getMasterFactory()->createDataPoolWriter()
         );

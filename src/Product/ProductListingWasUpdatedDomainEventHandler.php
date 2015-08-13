@@ -18,14 +18,14 @@ class ProductListingWasUpdatedDomainEventHandler implements DomainEventHandler
     private $contextSource;
 
     /**
-     * @var ProductListingProjector
+     * @var ProductListingMetaInfoSnippetProjector
      */
     private $projector;
 
     public function __construct(
         ProductListingWasUpdatedDomainEvent $domainEvent,
         ContextSource $contextSource,
-        ProductListingProjector $projector
+        ProductListingMetaInfoSnippetProjector $projector
     ) {
         $this->domainEvent = $domainEvent;
         $this->contextSource = $contextSource;

@@ -68,7 +68,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Product\ProductInSearchAutosuggestionSnippetRenderer
  * @uses   \Brera\Product\ProductListingMetaInfoSnippetRenderer
  * @uses   \Brera\Product\ProductListingTemplateProjector
- * @uses   \Brera\Product\ProductListingProjector
+ * @uses   \Brera\Product\ProductListingMetaInfoSnippetProjector
  * @uses   \Brera\Product\ProductListingMetaInfoSourceBuilder
  * @uses   \Brera\Product\ProductListingWasUpdatedDomainEvent
  * @uses   \Brera\Product\ProductListingWasUpdatedDomainEventHandler
