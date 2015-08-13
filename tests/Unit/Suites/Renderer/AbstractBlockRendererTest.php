@@ -7,7 +7,7 @@ use Brera\ProjectionSourceData;
 use Brera\TestFileFixtureTrait;
 use Brera\ThemeLocator;
 
-abstract class BlockRendererTestAbstract extends \PHPUnit_Framework_TestCase
+abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
 {
     use TestFileFixtureTrait;
 

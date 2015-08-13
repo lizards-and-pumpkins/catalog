@@ -3,7 +3,7 @@
 namespace Brera\Product;
 
 use Brera\Renderer\BlockRenderer;
-use Brera\Renderer\BlockRendererTestAbstract;
+use Brera\Renderer\AbstractBlockRendererTest;
 use Brera\Renderer\BlockStructure;
 use Brera\ThemeLocator;
 
@@ -11,7 +11,7 @@ use Brera\ThemeLocator;
  * @covers \Brera\Product\ProductInSearchAutocompletionBlockRenderer
  * @uses   \Brera\Renderer\BlockRenderer
  */
-class ProductInSearchAutocompletionBlockRendererTest extends BlockRendererTestAbstract
+class ProductInSearchAutocompletionBlockRendererTest extends AbstractBlockRendererTest
 {
     /**
      * @param ThemeLocator|\PHPUnit_Framework_MockObject_MockObject $stubThemeLocator

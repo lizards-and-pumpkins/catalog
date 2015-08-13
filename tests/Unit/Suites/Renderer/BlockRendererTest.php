@@ -11,7 +11,7 @@ use Brera\ThemeLocator;
  * @uses   \Brera\Renderer\Block
  * @uses   \Brera\Renderer\BlockStructure
  */
-class BlockRendererTest extends BlockRendererTestAbstract
+class BlockRendererTest extends AbstractBlockRendererTest
 {
     /**
      * @param ThemeLocator|\PHPUnit_Framework_MockObject_MockObject $stubThemeLocator
