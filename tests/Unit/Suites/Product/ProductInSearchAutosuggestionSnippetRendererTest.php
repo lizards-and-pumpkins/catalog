@@ -11,10 +11,10 @@ use Brera\SnippetList;
 use Brera\SnippetRenderer;
 
 /**
- * @covers \Brera\Product\ProductInSearchAutocompletionSnippetRenderer
+ * @covers \Brera\Product\ProductInSearchAutosuggestionSnippetRenderer
  * @uses   \Brera\Snippet
  */
-class ProductInSearchAutocompletionSnippetRendererTest extends \PHPUnit_Framework_TestCase
+class ProductInSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var SnippetList|\PHPUnit_Framework_MockObject_MockObject
@@ -27,7 +27,7 @@ class ProductInSearchAutocompletionSnippetRendererTest extends \PHPUnit_Framewor
     private $mockSnippetKeyGenerator;
 
     /**
-     * @var ProductInSearchAutocompletionSnippetRenderer
+     * @var ProductInSearchAutosuggestionSnippetRenderer
      */
     private $snippetRenderer;
 
@@ -44,12 +44,12 @@ class ProductInSearchAutocompletionSnippetRendererTest extends \PHPUnit_Framewor
         $this->mockSnippetKeyGenerator->method('getKeyForContext')->willReturn('stub-content-key');
 
         /**
-         * @var ProductInSearchAutocompletionBlockRenderer|\PHPUnit_Framework_MockObject_MockObject $stubBlockRenderer
+         * @var ProductInSearchAutosuggestionBlockRenderer|\PHPUnit_Framework_MockObject_MockObject $stubBlockRenderer
          */
-        $stubBlockRenderer = $this->getMock(ProductInSearchAutocompletionBlockRenderer::class, [], [], '', false);
+        $stubBlockRenderer = $this->getMock(ProductInSearchAutosuggestionBlockRenderer::class, [], [], '', false);
         $stubBlockRenderer->method('render')->willReturn('dummy content');
 
-        $this->snippetRenderer = new ProductInSearchAutocompletionSnippetRenderer(
+        $this->snippetRenderer = new ProductInSearchAutosuggestionSnippetRenderer(
             $this->mockSnippetList,
             $stubBlockRenderer,
             $this->mockSnippetKeyGenerator
@@ -76,7 +76,7 @@ class ProductInSearchAutocompletionSnippetRendererTest extends \PHPUnit_Framewor
         $this->snippetRenderer->render($invalidSourceObject, $this->stubContextSource);
     }
 
-    public function testProductInAutocompletionInContextSnippetsAreAddedToSnippetList()
+    public function testProductInAutosuggestionInContextSnippetsAreAddedToSnippetList()
     {
         $dummyProductId = 'foo';
         $stubProductSource = $this->getStubProductSource($dummyProductId);

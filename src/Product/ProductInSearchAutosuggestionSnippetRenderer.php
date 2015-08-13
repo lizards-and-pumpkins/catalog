@@ -11,9 +11,9 @@ use Brera\SnippetKeyGenerator;
 use Brera\SnippetList;
 use Brera\SnippetRenderer;
 
-class ProductInSearchAutocompletionSnippetRenderer implements SnippetRenderer
+class ProductInSearchAutosuggestionSnippetRenderer implements SnippetRenderer
 {
-    const CODE = 'product_in_search_autocompletion';
+    const CODE = 'product_in_search_autosuggestion';
 
     /**
      * @var SnippetList
@@ -21,7 +21,7 @@ class ProductInSearchAutocompletionSnippetRenderer implements SnippetRenderer
     private $snippetList;
 
     /**
-     * @var ProductInSearchAutocompletionBlockRenderer
+     * @var ProductInSearchAutosuggestionBlockRenderer
      */
     private $blockRenderer;
 
@@ -32,7 +32,7 @@ class ProductInSearchAutocompletionSnippetRenderer implements SnippetRenderer
 
     public function __construct(
         SnippetList $snippetList,
-        ProductInSearchAutocompletionBlockRenderer $blockRenderer,
+        ProductInSearchAutosuggestionBlockRenderer $blockRenderer,
         SnippetKeyGenerator $snippetKeyGenerator
     ) {
         $this->snippetList = $snippetList;
@@ -53,12 +53,12 @@ class ProductInSearchAutocompletionSnippetRenderer implements SnippetRenderer
 
         $this->snippetList->clear();
 
-        $this->addProductInSearchAutocompletionSnippetsToList($productSource, $contextSource);
+        $this->addProductInSearchAutosuggestionSnippetsToList($productSource, $contextSource);
 
         return $this->snippetList;
     }
 
-    private function addProductInSearchAutocompletionSnippetsToList(
+    private function addProductInSearchAutosuggestionSnippetsToList(
         ProductSource $productSource,
         ContextSource $contextSource
     ) {

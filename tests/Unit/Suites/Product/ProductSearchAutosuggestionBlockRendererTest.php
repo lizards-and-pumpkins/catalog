@@ -2,16 +2,16 @@
 
 namespace Brera\Product;
 
-use Brera\Renderer\BlockRenderer;
 use Brera\Renderer\AbstractBlockRendererTest;
+use Brera\Renderer\BlockRenderer;
 use Brera\Renderer\BlockStructure;
 use Brera\ThemeLocator;
 
 /**
- * @covers \Brera\Product\ProductInSearchAutocompletionBlockRenderer
- * @uses   \Brera\Renderer\BlockRenderer
+ * @covers \Brera\Product\ProductSearchAutosuggestionBlockRenderer
+ * @uses \Brera\Renderer\BlockRenderer
  */
-class ProductInSearchAutocompletionBlockRendererTest extends AbstractBlockRendererTest
+class ProductSearchAutosuggestionBlockRendererTest extends AbstractBlockRendererTest
 {
     /**
      * @param ThemeLocator|\PHPUnit_Framework_MockObject_MockObject $stubThemeLocator
@@ -22,12 +22,12 @@ class ProductInSearchAutocompletionBlockRendererTest extends AbstractBlockRender
         \PHPUnit_Framework_MockObject_MockObject $stubThemeLocator,
         BlockStructure $stubBlockStructure
     ) {
-        return new ProductInSearchAutocompletionBlockRenderer($stubThemeLocator, $stubBlockStructure);
+        return new ProductSearchAutosuggestionBlockRenderer($stubThemeLocator, $stubBlockStructure);
     }
 
     public function testLayoutHandleIsReturned()
     {
         $result = $this->getBlockRenderer()->getLayoutHandle();
-        $this->assertEquals('product_in_autocompletion', $result);
+        $this->assertEquals('product_search_autosuggestion', $result);
     }
 }

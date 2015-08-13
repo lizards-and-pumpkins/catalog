@@ -26,8 +26,8 @@ use Brera\Product\PriceSnippetRenderer;
 use Brera\Product\ProductBackOrderAvailabilitySnippetRenderer;
 use Brera\Product\ProductDetailViewBlockRenderer;
 use Brera\Product\ProductDetailViewInContextSnippetRenderer;
-use Brera\Product\ProductInSearchAutocompletionBlockRenderer;
-use Brera\Product\ProductInSearchAutocompletionSnippetRenderer;
+use Brera\Product\ProductInSearchAutosuggestionBlockRenderer;
+use Brera\Product\ProductInSearchAutosuggestionSnippetRenderer;
 use Brera\Product\ProductWasUpdatedDomainEvent;
 use Brera\Product\ProductWasUpdatedDomainEventHandler;
 use Brera\Product\ProductInListingBlockRenderer;
@@ -180,7 +180,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return [
             $this->getMasterFactory()->createProductSourceDetailViewSnippetRenderer(),
             $this->getMasterFactory()->createProductInListingSnippetRenderer(),
-            $this->getMasterFactory()->createProductInSearchAutocompletionSnippetRenderer(),
+            $this->getMasterFactory()->createProductInSearchAutosuggestionSnippetRenderer(),
             $this->getMasterFactory()->createPriceSnippetRenderer(),
             $this->getMasterFactory()->createProductBackOrderAvailabilitySnippetRenderer()
         ];
@@ -425,14 +425,14 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return ProductInSearchAutocompletionSnippetRenderer
+     * @return ProductInSearchAutosuggestionSnippetRenderer
      */
-    public function createProductInSearchAutocompletionSnippetRenderer()
+    public function createProductInSearchAutosuggestionSnippetRenderer()
     {
-        return new ProductInSearchAutocompletionSnippetRenderer(
+        return new ProductInSearchAutosuggestionSnippetRenderer(
             $this->getMasterFactory()->createSnippetList(),
-            $this->getMasterFactory()->createProductInSearchAutocompletionBlockRenderer(),
-            $this->getMasterFactory()->createProductInSearchAutocompletionSnippetKeyGenerator()
+            $this->getMasterFactory()->createProductInSearchAutosuggestionBlockRenderer(),
+            $this->getMasterFactory()->createProductInSearchAutosuggestionSnippetKeyGenerator()
         );
     }
 
@@ -490,11 +490,11 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return ProductInSearchAutocompletionBlockRenderer
+     * @return ProductInSearchAutosuggestionBlockRenderer
      */
-    public function createProductInSearchAutocompletionBlockRenderer()
+    public function createProductInSearchAutosuggestionBlockRenderer()
     {
-        return new ProductInSearchAutocompletionBlockRenderer(
+        return new ProductInSearchAutosuggestionBlockRenderer(
             $this->getMasterFactory()->createThemeLocator(),
             $this->getMasterFactory()->createBlockStructure()
         );
@@ -503,12 +503,12 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     /**
      * @return SnippetKeyGenerator
      */
-    public function createProductInSearchAutocompletionSnippetKeyGenerator()
+    public function createProductInSearchAutosuggestionSnippetKeyGenerator()
     {
         $usedDataParts = ['product_id'];
 
         return new GenericSnippetKeyGenerator(
-            ProductInSearchAutocompletionSnippetRenderer::CODE,
+            ProductInSearchAutosuggestionSnippetRenderer::CODE,
             $this->getMasterFactory()->getRequiredContexts(),
             $usedDataParts
         );

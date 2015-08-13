@@ -12,10 +12,10 @@ use Brera\SnippetList;
 use Brera\SnippetRenderer;
 
 /**
- * @covers \Brera\Product\ProductSearchAutocompletionSnipperRenderer
+ * @covers \Brera\Product\ProductSearchAutosuggestionSnippetRenderer
  * @uses   \Brera\Snippet
  */
-class ProductSearchAutocompletionSnipperRendererTest extends \PHPUnit_Framework_TestCase
+class ProductSearchAutosuggestionSnipperRenderetTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var SnippetList|\PHPUnit_Framework_MockObject_MockObject
@@ -23,7 +23,7 @@ class ProductSearchAutocompletionSnipperRendererTest extends \PHPUnit_Framework_
     private $mockSnippetList;
 
     /**
-     * @var ProductSearchAutocompletionSnipperRenderer
+     * @var ProductSearchAutosuggestionSnippetRenderer
      */
     private $snippetRenderer;
 
@@ -43,7 +43,7 @@ class ProductSearchAutocompletionSnipperRendererTest extends \PHPUnit_Framework_
         /** @var BlockRenderer|\PHPUnit_Framework_MockObject_MockObject $stubBlockRenderer */
         $stubBlockRenderer = $this->getMock(BlockRenderer::class, [], [], '', false);
 
-        $this->snippetRenderer = new ProductSearchAutocompletionSnipperRenderer(
+        $this->snippetRenderer = new ProductSearchAutosuggestionSnippetRenderer(
             $this->mockSnippetList,
             $stubSnippetKeyGenerator,
             $stubBlockRenderer

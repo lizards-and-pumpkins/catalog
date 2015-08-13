@@ -66,7 +66,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Product\ProductBackOrderAvailabilitySnippetRenderer
  * @uses   \Brera\Product\ProductSourceBuilder
  * @uses   \Brera\Product\ProductProjector
- * @uses   \Brera\Product\ProductInSearchAutocompletionSnippetRenderer
+ * @uses   \Brera\Product\ProductInSearchAutosuggestionSnippetRenderer
  * @uses   \Brera\Product\ProductListingMetaInfoSnippetRenderer
  * @uses   \Brera\Product\ProductListingProjector
  * @uses   \Brera\Product\ProductListingSourceBuilder

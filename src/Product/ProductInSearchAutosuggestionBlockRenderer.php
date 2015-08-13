@@ -4,13 +4,13 @@ namespace Brera\Product;
 
 use Brera\Renderer\BlockRenderer;
 
-class ProductSearchAutocompletionBlockRenderer extends BlockRenderer
+class ProductInSearchAutosuggestionBlockRenderer extends BlockRenderer
 {
     /**
      * @return string
      */
     public function getLayoutHandle()
     {
-        return 'product_search_autocompletion';
+        return 'product_in_autosuggestion';
     }
 }

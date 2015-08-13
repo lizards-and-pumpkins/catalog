@@ -12,8 +12,10 @@ use Brera\SnippetList;
 use Brera\SnippetRenderer;
 
 
-class ProductSearchAutocompletionSnipperRenderer implements SnippetRenderer
+class ProductSearchAutosuggestionSnippetRenderer implements SnippetRenderer
 {
+    const CODE = 'product_search_autosuggestion';
+
     /**
      * @var SnippetList
      */
@@ -42,7 +44,7 @@ class ProductSearchAutocompletionSnipperRenderer implements SnippetRenderer
     public function render(RootSnippetSourceList $rootSnippetSourceList, ContextSource $contextSource)
     {
         foreach ($contextSource->getAllAvailableContexts() as $context) {
-            $snippet = $this->createSearchAutocompletionSnippetsForContext($rootSnippetSourceList, $context);
+            $snippet = $this->createSearchAutosuggestionSnippetsForContext($rootSnippetSourceList, $context);
             $this->snippetList->add($snippet);
         }
 
@@ -54,7 +56,7 @@ class ProductSearchAutocompletionSnipperRenderer implements SnippetRenderer
      * @param Context $context
      * @return Snippet
      */
-    private function createSearchAutocompletionSnippetsForContext(
+    private function createSearchAutosuggestionSnippetsForContext(
         RootSnippetSourceList $rootSnippetSourceList,
         Context $context
     ) {
