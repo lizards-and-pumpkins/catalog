@@ -9,18 +9,12 @@ use Brera\Queue\Queue;
 class TemplatesApiV1PutRequestHandler extends ApiRequestHandler
 {
     /**
-     * @var RootSnippetSourceListBuilder
-     */
-    private $rootSnippetSourceListBuilder;
-
-    /**
      * @var Queue
      */
     private $domainEventQueue;
 
-    public function __construct(RootSnippetSourceListBuilder $rootSnippetSourceListBuilder, Queue $domainEventQueue)
+    public function __construct(Queue $domainEventQueue)
     {
-        $this->rootSnippetSourceListBuilder = $rootSnippetSourceListBuilder;
         $this->domainEventQueue = $domainEventQueue;
     }
 
@@ -34,7 +28,7 @@ class TemplatesApiV1PutRequestHandler extends ApiRequestHandler
             return false;
         }
 
-        if (null === $this->extractRootSnippetIdFromUrl($request)) {
+        if (null === $this->extractRootSnippetIdFromRequest($request)) {
             return false;
         }
 
@@ -43,9 +37,8 @@ class TemplatesApiV1PutRequestHandler extends ApiRequestHandler
 
     protected function processRequest(HttpRequest $request)
     {
-        $rootSnippetId = $this->extractRootSnippetIdFromUrl($request);
-        $rootSnippetSourceList = $this->rootSnippetSourceListBuilder->fromJson($request->getRawBody());
-        $this->domainEventQueue->add(new TemplateWasUpdatedDomainEvent($rootSnippetId, $rootSnippetSourceList));
+        $rootSnippetId = $this->extractRootSnippetIdFromRequest($request);
+        $this->domainEventQueue->add(new TemplateWasUpdatedDomainEvent($rootSnippetId, $request->getRawBody()));
     }
 
     /**
@@ -61,7 +54,7 @@ class TemplatesApiV1PutRequestHandler extends ApiRequestHandler
      * @param HttpRequest $request
      * @return string|null
      */
-    private function extractRootSnippetIdFromUrl(HttpRequest $request)
+    private function extractRootSnippetIdFromRequest(HttpRequest $request)
     {
         preg_match('#/templates/([^/]+)#i', $request->getUrl(), $urlTokens);
 

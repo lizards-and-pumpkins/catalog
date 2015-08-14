@@ -130,7 +130,6 @@ class FrontendFactory implements Factory
     public function createTemplatesApiV1PutRequestHandler()
     {
         return new TemplatesApiV1PutRequestHandler(
-            $this->getMasterFactory()->createRootSnippetSourceListBuilder(),
             $this->getMasterFactory()->getEventQueue()
         );
     }

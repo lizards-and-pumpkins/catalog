@@ -4,9 +4,8 @@ namespace Brera\Product;
 
 use Brera\Context\ContextSource;
 use Brera\DataPool\DataPoolWriter;
-use Brera\InvalidProjectionSourceDataTypeException;
 use Brera\Projector;
-use Brera\RootSnippetSourceList;
+use Brera\RootSnippetSourceListBuilder;
 use Brera\SnippetRendererCollection;
 
 class ProductListingTemplateProjector implements Projector
@@ -21,26 +20,29 @@ class ProductListingTemplateProjector implements Projector
      */
     private $dataPoolWriter;
 
-    public function __construct(SnippetRendererCollection $snippetRendererCollection, DataPoolWriter $dataPoolWriter)
-    {
+    /**
+     * @var RootSnippetSourceListBuilder
+     */
+    private $rootSnippetSourceListBuilder;
+
+    public function __construct(
+        SnippetRendererCollection $snippetRendererCollection,
+        DataPoolWriter $dataPoolWriter,
+        RootSnippetSourceListBuilder $rootSnippetSourceListBuilder
+    ) {
         $this->snippetRendererCollection = $snippetRendererCollection;
         $this->dataPoolWriter = $dataPoolWriter;
+        $this->rootSnippetSourceListBuilder = $rootSnippetSourceListBuilder;
     }
 
     /**
      * @param mixed $projectionSourceData
      * @param ContextSource $context
-     * @throws InvalidProjectionSourceDataTypeException
      */
     public function project($projectionSourceData, ContextSource $context)
     {
-        if (!($projectionSourceData instanceof RootSnippetSourceList)) {
-            throw new InvalidProjectionSourceDataTypeException(
-                'First argument must be instance of RootSnippetSourceList.'
-            );
-        }
-
-        $snippetList = $this->snippetRendererCollection->render($projectionSourceData, $context);
+        $rootSnippetSourceList = $this->rootSnippetSourceListBuilder->fromJson($projectionSourceData);
+        $snippetList = $this->snippetRendererCollection->render($rootSnippetSourceList, $context);
         $this->dataPoolWriter->writeSnippetList($snippetList);
     }
 }

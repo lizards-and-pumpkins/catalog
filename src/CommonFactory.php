@@ -208,7 +208,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new ProductListingTemplateProjector(
             $this->createProductListingTemplateRendererCollection(),
-            $this->getMasterFactory()->createDataPoolWriter()
+            $this->getMasterFactory()->createDataPoolWriter(),
+            $this->getMasterFactory()->createRootSnippetSourceListBuilder()
         );
     }
 

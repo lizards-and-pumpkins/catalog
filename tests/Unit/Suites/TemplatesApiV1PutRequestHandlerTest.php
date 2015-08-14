@@ -32,20 +32,8 @@ class TemplatesApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $stubRootSnippetSourceList = $this->getMock(RootSnippetSourceList::class, [], [], '', false);
-
-        /**
-         * @var RootSnippetSourceListBuilder|\PHPUnit_Framework_MockObject_MockObject $stubRootSnippetSourceListBuilder
-         */
-        $stubRootSnippetSourceListBuilder = $this->getMock(RootSnippetSourceListBuilder::class, [], [], '', false);
-        $stubRootSnippetSourceListBuilder->method('fromJson')->willReturn($stubRootSnippetSourceList);
-
         $this->mockDomainEventQueue = $this->getMock(Queue::class);
-
-        $this->requestHandler = new TemplatesApiV1PutRequestHandler(
-            $stubRootSnippetSourceListBuilder,
-            $this->mockDomainEventQueue
-        );
+        $this->requestHandler = new TemplatesApiV1PutRequestHandler($this->mockDomainEventQueue);
 
         $this->mockRequest = $this->getMock(HttpRequest::class, [], [], '', false);
     }
@@ -65,6 +53,7 @@ class TemplatesApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockRequest->method('getMethod')->willReturn(HttpRequest::METHOD_PUT);
         $this->mockRequest->method('getUrl')->willReturn('http://example.com/api/templates');
+
         $this->assertFalse($this->requestHandler->canProcess($this->mockRequest));
     }
 
@@ -72,10 +61,11 @@ class TemplatesApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockRequest->method('getMethod')->willReturn(HttpRequest::METHOD_PUT);
         $this->mockRequest->method('getUrl')->willReturn('http://example.com/api/templates/foo');
+
         $this->assertTrue($this->requestHandler->canProcess($this->mockRequest));
     }
 
-    public function testUpdateContentBlockCommandIsEmitted()
+    public function testTemplateWasUpdatedDomainEventIsEmitted()
     {
         $this->mockRequest->method('getUrl')->willReturn('http://example.com/api/templates/foo');
 

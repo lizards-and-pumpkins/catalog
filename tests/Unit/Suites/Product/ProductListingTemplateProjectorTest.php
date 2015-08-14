@@ -4,9 +4,8 @@ namespace Brera\Product;
 
 use Brera\Context\ContextSource;
 use Brera\DataPool\DataPoolWriter;
-use Brera\InvalidProjectionSourceDataTypeException;
 use Brera\RootSnippetSourceList;
-use Brera\SampleContextSource;
+use Brera\RootSnippetSourceListBuilder;
 use Brera\SnippetList;
 use Brera\SnippetRendererCollection;
 
@@ -15,11 +14,6 @@ use Brera\SnippetRendererCollection;
  */
 class ProductListingTemplateProjectorTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var SnippetRendererCollection|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $mockSnippetRendererCollection;
-
     /**
      * @var DataPoolWriter|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -32,12 +26,26 @@ class ProductListingTemplateProjectorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockSnippetRendererCollection = $this->getMock(SnippetRendererCollection::class, [], [], '', false);
+        $stubRootSnippetSourceList = $this->getMock(RootSnippetSourceList::class, [], [], '', false);
+
+        /**
+         * @var RootSnippetSourceListBuilder|\PHPUnit_Framework_MockObject_MockObject $stubRootSnippetSourceListBuilder
+         */
+        $stubRootSnippetSourceListBuilder = $this->getMock(RootSnippetSourceListBuilder::class, [], [], '', false);
+        $stubRootSnippetSourceListBuilder->method('fromJson')->willReturn($stubRootSnippetSourceList);
+
+        $stubSnippetList = $this->getMock(SnippetList::class);
+
+        /** @var SnippetRendererCollection|\PHPUnit_Framework_MockObject_MockObject $stubSnippetRendererCollection */
+        $stubSnippetRendererCollection = $this->getMock(SnippetRendererCollection::class, [], [], '', false);
+        $stubSnippetRendererCollection->method('render')->willReturn($stubSnippetList);
+
         $this->mockDataPoolWriter = $this->getMock(DataPoolWriter::class, [], [], '', false);
 
         $this->projector = new ProductListingTemplateProjector(
-            $this->mockSnippetRendererCollection,
-            $this->mockDataPoolWriter
+            $stubSnippetRendererCollection,
+            $this->mockDataPoolWriter,
+            $stubRootSnippetSourceListBuilder
         );
     }
 
@@ -45,21 +53,10 @@ class ProductListingTemplateProjectorTest extends \PHPUnit_Framework_TestCase
     {
         /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
         $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
-        $stubProjectionSourceData = $this->getMock(RootSnippetSourceList::class, [], [], '', false);
-        $stubSnippetList = $this->getMock(SnippetList::class);
+        $projectionSourceDataJson = '{}';
 
-        $this->mockSnippetRendererCollection->method('render')->willReturn($stubSnippetList);
-        $this->mockDataPoolWriter->expects($this->once())->method('writeSnippetList')->with($stubSnippetList);
+        $this->mockDataPoolWriter->expects($this->once())->method('writeSnippetList');
 
-        $this->projector->project($stubProjectionSourceData, $stubContextSource);
-    }
-
-    public function testExceptionIsThrownIfProjectionDataIsNotInstanceOfRootSnippetSourceList()
-    {
-        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
-        $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
-        $this->setExpectedException(InvalidProjectionSourceDataTypeException::class);
-
-        $this->projector->project('invalid-projection-source-data', $stubContextSource);
+        $this->projector->project($projectionSourceDataJson, $stubContextSource);
     }
 }
