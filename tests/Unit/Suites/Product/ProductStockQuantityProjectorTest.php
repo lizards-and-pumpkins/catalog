@@ -2,11 +2,10 @@
 
 namespace Brera\Product;
 
+use Brera\Context\ContextSource;
 use Brera\DataPool\DataPoolWriter;
-use Brera\InvalidProjectionDataSourceTypeException;
-use Brera\ProjectionSourceData;
+use Brera\InvalidProjectionSourceDataTypeException;
 use Brera\Projector;
-use Brera\SampleContextSource;
 use Brera\SnippetList;
 use Brera\SnippetRendererCollection;
 
@@ -47,27 +46,23 @@ class ProductStockQuantityProjectorTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfProjectionDataIsNotInstanceOfProductStockQuantitySource()
     {
-        $stubProjectionSourceData = $this->getMock(ProjectionSourceData::class);
-        $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
+        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
+        $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
+        $this->setExpectedException(InvalidProjectionSourceDataTypeException::class);
 
-        $this->setExpectedException(InvalidProjectionDataSourceTypeException::class);
-
-        $this->projector->project($stubProjectionSourceData, $stubContextSource);
+        $this->projector->project('invalid-projection-source-data', $stubContextSource);
     }
 
     public function testSnippetListIsWrittenIntoDataPool()
     {
+        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
+        $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
         $stubSnippetList = $this->getMock(SnippetList::class);
-        $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
-
-        $this->mockSnippetRendererCollection->method('render')
-            ->willReturn($stubSnippetList);
-
-        $this->mockDataPoolWriter->expects($this->once())
-            ->method('writeSnippetList')
-            ->with($stubSnippetList);
-
         $stubProductStockQuantitySource = $this->getMock(ProductStockQuantitySource::class, [], [], '', false);
+
+        $this->mockSnippetRendererCollection->method('render')->willReturn($stubSnippetList);
+        $this->mockDataPoolWriter->expects($this->once())->method('writeSnippetList')->with($stubSnippetList);
+
         $this->projector->project($stubProductStockQuantitySource, $stubContextSource);
     }
 }

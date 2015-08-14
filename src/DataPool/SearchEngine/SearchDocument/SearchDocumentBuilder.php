@@ -3,13 +3,12 @@
 namespace Brera\DataPool\SearchEngine\SearchDocument;
 
 use Brera\Context\ContextSource;
-use Brera\ProjectionSourceData;
 
 interface SearchDocumentBuilder
 {
     /**
-     * @param ProjectionSourceData $projectionSourceData
+     * @param mixed $projectionSourceDataData
      * @param ContextSource $contextSource
      */
-    public function aggregate(ProjectionSourceData $projectionSourceData, ContextSource $contextSource);
+    public function aggregate($projectionSourceDataData, ContextSource $contextSource);
 }

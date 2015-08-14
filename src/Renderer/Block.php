@@ -2,8 +2,6 @@
 
 namespace Brera\Renderer;
 
-use Brera\ProjectionSourceData;
-
 class Block
 {
     /**
@@ -12,7 +10,7 @@ class Block
     private $template;
 
     /**
-     * @var ProjectionSourceData
+     * @var mixed
      */
     private $dataObject;
 
@@ -50,7 +48,7 @@ class Block
     }
 
     /**
-     * @return ProjectionSourceData
+     * @return mixed
      */
     final protected function getDataObject()
     {

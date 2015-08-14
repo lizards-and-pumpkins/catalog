@@ -3,10 +3,9 @@
 namespace Brera\Product;
 
 use Brera\DataPool\SearchEngine\SearchCriteria;
-use Brera\ProjectionSourceData;
 use Brera\UrlKey;
 
-class ProductListingMetaInfoSource implements ProjectionSourceData
+class ProductListingMetaInfoSource
 {
     /**
      * @var UrlKey

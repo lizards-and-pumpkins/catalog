@@ -4,8 +4,7 @@ namespace Brera\Product;
 
 use Brera\Context\ContextSource;
 use Brera\DataPool\DataPoolWriter;
-use Brera\InvalidProjectionDataSourceTypeException;
-use Brera\ProjectionSourceData;
+use Brera\InvalidProjectionSourceDataTypeException;
 use Brera\SnippetList;
 use Brera\SnippetRendererCollection;
 
@@ -48,17 +47,12 @@ class ProductListingMetaInfoSnippetProjectorTest extends \PHPUnit_Framework_Test
         );
     }
 
-    public function testExceptionIsThrownIfTheDataSourceTypeIsNotProduct()
+    public function testExceptionIsThrownIfProjectionSourceDataIsNotProduct()
     {
         /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
         $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
-
-        /** @var ProjectionSourceData|\PHPUnit_Framework_MockObject_MockObject $invalidDataSourceType */
-        $invalidDataSourceType = $this->getMock(ProjectionSourceData::class);
-
-        $this->setExpectedException(InvalidProjectionDataSourceTypeException::class);
-
-        $this->projector->project($invalidDataSourceType, $stubContextSource);
+        $this->setExpectedException(InvalidProjectionSourceDataTypeException::class);
+        $this->projector->project('invalid-projection-source-data', $stubContextSource);
     }
 
     public function testSnippetListIsWrittenIntoDataPoolWriter()
@@ -71,9 +65,7 @@ class ProductListingMetaInfoSnippetProjectorTest extends \PHPUnit_Framework_Test
         /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
         $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
 
-        $this->mockDataPoolWriter->expects($this->once())
-            ->method('writeSnippetList')
-            ->with($this->stubSnippetList);
+        $this->mockDataPoolWriter->expects($this->once())->method('writeSnippetList')->with($this->stubSnippetList);
 
         $this->projector->project($stubProductListingMetaInfoSource, $stubContextSource);
     }

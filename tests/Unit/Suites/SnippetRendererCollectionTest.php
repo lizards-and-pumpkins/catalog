@@ -2,6 +2,8 @@
 
 namespace Brera;
 
+use Brera\Context\ContextSource;
+
 /**
  * @covers \Brera\SnippetRendererCollection
  */
@@ -47,16 +49,12 @@ class SnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testRenderedSnippetListIsReturned()
     {
-        $this->mockRenderer->method('render')
-            ->willReturn($this->getMock(SnippetList::class));
+        $this->mockRenderer->method('render')->willReturn($this->getMock(SnippetList::class));
+        $this->mockRenderer2->method('render')->willReturn($this->getMock(SnippetList::class));
 
-        $this->mockRenderer2->method('render')
-            ->willReturn($this->getMock(SnippetList::class));
+        $stubContextSource = $this->getStubContextSource();
 
-        $stubProjectionSourceData = $this->getMock(ProjectionSourceData::class);
-        $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
-
-        $snippetList = $this->rendererCollection->render($stubProjectionSourceData, $stubContextSource);
+        $snippetList = $this->rendererCollection->render('stub-projection-source-data', $stubContextSource);
 
         $this->assertInstanceOf(SnippetList::class, $snippetList);
         $this->assertSame($this->stubSnippetList, $snippetList);
@@ -64,8 +62,8 @@ class SnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testRenderingIsDelegatedToSnippetRenderers()
     {
-        $stubProjectionSourceData = $this->getMock(ProjectionSourceData::class);
-        $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
+        $stubProjectionSourceData = 'stub-projection-source-data';
+        $stubContextSource = $this->getStubContextSource();
         $stubSnippetListFromRenderer = $this->getMock(SnippetList::class);
 
         $this->mockRenderer->expects($this->once())
@@ -83,8 +81,8 @@ class SnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testResultsOfRenderersAreMerged()
     {
-        $stubProjectionSourceData = $this->getMock(ProjectionSourceData::class);
-        $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
+        $stubProjectionSourceData = 'stub-projection-source-data';
+        $stubContextSource = $this->getStubContextSource();
 
         $stubSnippetListFromRenderer = $this->getMock(SnippetList::class);
         $stubSnippetListFromRenderer2 = $this->getMock(SnippetList::class);
@@ -105,5 +103,13 @@ class SnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->rendererCollection->render($stubProjectionSourceData, $stubContextSource);
+    }
+
+    /**
+     * @return ContextSource|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getStubContextSource()
+    {
+        return $this->getMock(ContextSource::class, [], [], '', false);
     }
 }

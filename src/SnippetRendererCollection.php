@@ -27,14 +27,14 @@ class SnippetRendererCollection
     }
     
     /**
-     * @param ProjectionSourceData $productSource
+     * @param mixed $projectionSourceData
      * @param ContextSource $contextSource
      * @return SnippetList
      */
-    public function render(ProjectionSourceData $productSource, ContextSource $contextSource)
+    public function render($projectionSourceData, ContextSource $contextSource)
     {
         foreach ($this->renderers as $renderer) {
-            $this->snippetList->merge($renderer->render($productSource, $contextSource));
+            $this->snippetList->merge($renderer->render($projectionSourceData, $contextSource));
         }
 
         return $this->snippetList;

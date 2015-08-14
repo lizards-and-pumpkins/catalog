@@ -3,9 +3,8 @@
 namespace Brera\Product;
 
 use Brera\Context\Context;
-use Brera\ProjectionSourceData;
 
-class ProductSource implements ProjectionSourceData
+class ProductSource
 {
     /**
      * @var ProductId

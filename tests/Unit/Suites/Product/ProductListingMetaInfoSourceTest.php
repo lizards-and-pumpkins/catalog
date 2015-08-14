@@ -3,7 +3,6 @@
 namespace Brera\Product;
 
 use Brera\DataPool\SearchEngine\SearchCriteria;
-use Brera\ProjectionSourceData;
 use Brera\UrlKey;
 
 /**
@@ -40,11 +39,6 @@ class ProductListingMetaInfoSourceTest extends \PHPUnit_Framework_TestCase
             $this->dummyContextData,
             $this->stubCriteria
         );
-    }
-
-    public function testProjectionSourceDataInterfaceIsImplemented()
-    {
-        $this->assertInstanceOf(ProjectionSourceData::class, $this->productListingMetaInfoSource);
     }
 
     public function testProductListingUrlKeyIsReturned()

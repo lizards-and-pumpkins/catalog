@@ -13,9 +13,9 @@ class TemplateWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
     private $dummyTemplateId = 'foo';
 
     /**
-     * @var ProjectionSourceData|\PHPUnit_Framework_MockObject_MockObject
+     * @var mixed
      */
-    private $stubProjectionSourceData;
+    private $stubProjectionSourceData = 'stub-projection-source-data';
 
     /**
      * @var TemplateWasUpdatedDomainEvent
@@ -24,7 +24,6 @@ class TemplateWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubProjectionSourceData = $this->getMock(ProjectionSourceData::class);
         $this->domainEvent = new TemplateWasUpdatedDomainEvent($this->dummyTemplateId, $this->stubProjectionSourceData);
     }
 

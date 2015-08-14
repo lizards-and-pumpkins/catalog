@@ -3,7 +3,6 @@
 namespace Brera\Renderer;
 
 use Brera\Context\Context;
-use Brera\ProjectionSourceData;
 use Brera\TestFileFixtureTrait;
 use Brera\ThemeLocator;
 
@@ -70,14 +69,6 @@ abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
     final protected function getBlockRenderer()
     {
         return $this->blockRenderer;
-    }
-
-    /**
-     * @return ProjectionSourceData|\PHPUnit_Framework_MockObject_MockObject
-     */
-    final protected function getStubDataObject()
-    {
-        return $this->getMock(ProjectionSourceData::class);
     }
 
     /**

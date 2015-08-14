@@ -4,8 +4,7 @@ namespace Brera\Product;
 
 use Brera\Context\ContextSource;
 use Brera\DataPool\DataPoolWriter;
-use Brera\InvalidProjectionDataSourceTypeException;
-use Brera\ProjectionSourceData;
+use Brera\InvalidProjectionSourceDataTypeException;
 use Brera\Projector;
 use Brera\SnippetRendererCollection;
 
@@ -28,18 +27,18 @@ class ProductListingMetaInfoSnippetProjector implements Projector
     }
 
     /**
-     * @param ProjectionSourceData $dataObject
+     * @param mixed $projectionSourceData
      * @param ContextSource $contextSource
      */
-    public function project(ProjectionSourceData $dataObject, ContextSource $contextSource)
+    public function project($projectionSourceData, ContextSource $contextSource)
     {
-        if (!($dataObject instanceof ProductListingMetaInfoSource)) {
-            throw new InvalidProjectionDataSourceTypeException(
+        if (!($projectionSourceData instanceof ProductListingMetaInfoSource)) {
+            throw new InvalidProjectionSourceDataTypeException(
                 'First argument must be instance of ProductListingMetaInfoSource.'
             );
         }
 
-        $this->projectProductListing($dataObject, $contextSource);
+        $this->projectProductListing($projectionSourceData, $contextSource);
     }
 
     private function projectProductListing(

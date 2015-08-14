@@ -10,22 +10,22 @@ class TemplateWasUpdatedDomainEvent implements DomainEvent
     private $templateId;
 
     /**
-     * @var ProjectionSourceData
+     * @var mixed
      */
     private $projectionSourceData;
 
     /**
      * @param string $templateId
-     * @param ProjectionSourceData $projectionSourceData
+     * @param mixed $projectionSourceData
      */
-    public function __construct($templateId, ProjectionSourceData $projectionSourceData)
+    public function __construct($templateId, $projectionSourceData)
     {
         $this->templateId = $templateId;
         $this->projectionSourceData = $projectionSourceData;
     }
 
     /**
-     * @return ProjectionSourceData
+     * @return mixed
      */
     public function getProjectionSourceData()
     {

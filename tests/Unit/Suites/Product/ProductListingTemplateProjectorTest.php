@@ -2,9 +2,9 @@
 
 namespace Brera\Product;
 
+use Brera\Context\ContextSource;
 use Brera\DataPool\DataPoolWriter;
-use Brera\InvalidProjectionDataSourceTypeException;
-use Brera\ProjectionSourceData;
+use Brera\InvalidProjectionSourceDataTypeException;
 use Brera\RootSnippetSourceList;
 use Brera\SampleContextSource;
 use Brera\SnippetList;
@@ -43,27 +43,23 @@ class ProductListingTemplateProjectorTest extends \PHPUnit_Framework_TestCase
 
     public function testSnippetListIsWrittenIntoDataPool()
     {
+        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
+        $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
         $stubProjectionSourceData = $this->getMock(RootSnippetSourceList::class, [], [], '', false);
-        $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
         $stubSnippetList = $this->getMock(SnippetList::class);
 
-        $this->mockSnippetRendererCollection->method('render')
-            ->willReturn($stubSnippetList);
-
-        $this->mockDataPoolWriter->expects($this->once())
-            ->method('writeSnippetList')
-            ->with($stubSnippetList);
+        $this->mockSnippetRendererCollection->method('render')->willReturn($stubSnippetList);
+        $this->mockDataPoolWriter->expects($this->once())->method('writeSnippetList')->with($stubSnippetList);
 
         $this->projector->project($stubProjectionSourceData, $stubContextSource);
     }
 
     public function testExceptionIsThrownIfProjectionDataIsNotInstanceOfRootSnippetSourceList()
     {
-        $stubProjectionSourceData = $this->getMock(ProjectionSourceData::class);
-        $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
+        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
+        $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
+        $this->setExpectedException(InvalidProjectionSourceDataTypeException::class);
 
-        $this->setExpectedException(InvalidProjectionDataSourceTypeException::class);
-
-        $this->projector->project($stubProjectionSourceData, $stubContextSource);
+        $this->projector->project('invalid-projection-source-data', $stubContextSource);
     }
 }

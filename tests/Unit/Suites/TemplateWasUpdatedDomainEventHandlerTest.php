@@ -21,11 +21,9 @@ class TemplateWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCa
 
     protected function setUp()
     {
-        $stubProjectionSourceData = $this->getMock(ProjectionSourceData::class);
-
         /** @var TemplateWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
         $stubDomainEvent = $this->getMock(TemplateWasUpdatedDomainEvent::class, [], [], '', false);
-        $stubDomainEvent->method('getProjectionSourceData')->willReturn($stubProjectionSourceData);
+        $stubDomainEvent->method('getProjectionSourceData')->willReturn('stub-projection-source-data');
 
         /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
         $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);

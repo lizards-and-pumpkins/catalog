@@ -4,8 +4,7 @@ namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\Context\ContextSource;
-use Brera\InvalidProjectionDataSourceTypeException;
-use Brera\ProjectionSourceData;
+use Brera\InvalidProjectionSourceDataTypeException;
 use Brera\SnippetKeyGenerator;
 use Brera\SnippetList;
 use Brera\SnippetRenderer;
@@ -66,12 +65,8 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfProjectionSourceDataIsNotAProductSource()
     {
-        /** @var ProjectionSourceData|\PHPUnit_Framework_MockObject_MockObject $invalidSourceObject */
-        $invalidSourceObject = $this->getMock(ProjectionSourceData::class);
-
-        $this->setExpectedException(InvalidProjectionDataSourceTypeException::class);
-
-        $this->snippetRenderer->render($invalidSourceObject, $this->stubContextSource);
+        $this->setExpectedException(InvalidProjectionSourceDataTypeException::class);
+        $this->snippetRenderer->render('invalid-projection-source-data', $this->stubContextSource);
     }
 
     public function testProductInListingViewSnippetsAreRendered()

@@ -2,7 +2,6 @@
 
 namespace Brera\Renderer;
 
-use Brera\ProjectionSourceData;
 use Brera\TestFileFixtureTrait;
 
 /**
@@ -13,9 +12,9 @@ class BlockTest extends \PHPUnit_Framework_TestCase
     use TestFileFixtureTrait;
 
     /**
-     * @var ProjectionSourceData|\PHPUnit_Framework_MockObject_MockObject
+     * @var mixed
      */
-    private $stubDataObject;
+    private $stubDataObject = 'stub-projection-source-data';
 
     /**
      * @var BlockRenderer|\PHPUnit_Framework_MockObject_MockObject
@@ -25,7 +24,6 @@ class BlockTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->mockBlockRenderer = $this->getMock(BlockRenderer::class, [], [], '', false);
-        $this->stubDataObject = $this->getMock(ProjectionSourceData::class);
     }
 
     public function testBlocksNameIsReturned()

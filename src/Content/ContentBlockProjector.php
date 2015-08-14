@@ -4,8 +4,7 @@ namespace Brera\Content;
 
 use Brera\Context\ContextSource;
 use Brera\DataPool\DataPoolWriter;
-use Brera\InvalidProjectionDataSourceTypeException;
-use Brera\ProjectionSourceData;
+use Brera\InvalidProjectionSourceDataTypeException;
 use Brera\Projector;
 use Brera\SnippetRendererCollection;
 
@@ -28,14 +27,14 @@ class ContentBlockProjector implements Projector
     }
 
     /**
-     * @param ProjectionSourceData $projectionSourceData
+     * @param mixed $projectionSourceData
      * @param ContextSource $contextSource
-     * @throws InvalidProjectionDataSourceTypeException
+     * @throws InvalidProjectionSourceDataTypeException
      */
-    public function project(ProjectionSourceData $projectionSourceData, ContextSource $contextSource)
+    public function project($projectionSourceData, ContextSource $contextSource)
     {
         if (!($projectionSourceData instanceof ContentBlockSource)) {
-            throw new InvalidProjectionDataSourceTypeException(
+            throw new InvalidProjectionSourceDataTypeException(
                 'First argument must be instance of ContentBlockSource.'
             );
         }

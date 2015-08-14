@@ -2,12 +2,12 @@
 
 namespace Brera\Product;
 
+use Brera\Context\ContextSource;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
-use Brera\InvalidProjectionDataSourceTypeException;
+use Brera\InvalidProjectionSourceDataTypeException;
 use Brera\SampleContextSource;
 use Brera\DataPool\DataPoolWriter;
 use Brera\SnippetList;
-use Brera\ProjectionSourceData;
 use Brera\SnippetRendererCollection;
 
 /**
@@ -77,19 +77,19 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
             ->method('writeSearchDocumentCollection')
             ->with($this->stubSearchDocumentCollection);
 
+        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
+        $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
         $stubProduct = $this->getMock(ProductSource::class, [], [], '', false);
-        $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
 
         $this->projector->project($stubProduct, $stubContextSource);
     }
 
-    public function testExceptionIsThrownIfTheDataSourceTypeIsNotProduct()
+    public function testExceptionIsThrownIfProjectionSourceDataIsNotProduct()
     {
-        $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
-        $invalidDataSourceType = $this->getMock(ProjectionSourceData::class);
+        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
+        $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
+        $this->setExpectedException(InvalidProjectionSourceDataTypeException::class);
 
-        $this->setExpectedException(InvalidProjectionDataSourceTypeException::class);
-
-        $this->projector->project($invalidDataSourceType, $stubContextSource);
+        $this->projector->project('invalid-projection-source-data', $stubContextSource);
     }
 }
