@@ -18,6 +18,7 @@ use Brera\Product\ProductListingMetaInfoSnippetRenderer;
 use Brera\Product\ProductListingRequestHandler;
 use Brera\Product\ProductListingSnippetRenderer;
 use Brera\Product\MultipleProductStockQuantityApiV1PutRequestHandler;
+use Brera\Product\ProductSearchAutosuggestionSnippetRenderer;
 use Brera\Product\ProductSearchRequestHandler;
 use Brera\Product\ProductSearchResultsMetaSnippetRenderer;
 use Brera\Product\ProductInListingSnippetRenderer;
@@ -225,6 +226,10 @@ class FrontendFactory implements Factory
         $snippetKeyGeneratorLocator->register(
             ProductSearchResultsMetaSnippetRenderer::CODE,
             $this->getMasterFactory()->createProductSearchResultsMetaSnippetKeyGenerator()
+        );
+        $snippetKeyGeneratorLocator->register(
+            ProductSearchAutosuggestionSnippetRenderer::CODE,
+            $this->getMasterFactory()->createProductSearchAutosuggestionSnippetKeyGenerator()
         );
 
         return $snippetKeyGeneratorLocator;

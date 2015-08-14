@@ -30,6 +30,9 @@ use Brera\Product\ProductInSearchAutosuggestionBlockRenderer;
 use Brera\Product\ProductInSearchAutosuggestionSnippetRenderer;
 use Brera\Product\ProductListingSourceListBuilder;
 use Brera\Product\ProductListingTemplateProjector;
+use Brera\Product\ProductSearchAutosuggestionBlockRenderer;
+use Brera\Product\ProductSearchAutosuggestionSnippetRenderer;
+use Brera\Product\ProductSearchAutosuggestionTemplateProjector;
 use Brera\Product\ProductWasUpdatedDomainEvent;
 use Brera\Product\ProductWasUpdatedDomainEventHandler;
 use Brera\Product\ProductInListingBlockRenderer;
@@ -132,6 +135,10 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             ProductListingSnippetRenderer::CODE,
             $this->getMasterFactory()->createProductListingTemplateProjector()
         );
+        $templateProjectorLocator->register(
+            ProductSearchAutosuggestionSnippetRenderer::CODE,
+            $this->getMasterFactory()->createProductSearchAutosuggestionTemplateProjector()
+        );
 
         return $templateProjectorLocator;
     }
@@ -203,6 +210,76 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
+     * @return ProductSearchAutosuggestionTemplateProjector
+     */
+    public function createProductSearchAutosuggestionTemplateProjector()
+    {
+        return new ProductSearchAutosuggestionTemplateProjector(
+            $this->getMasterFactory()->createDataPoolWriter(),
+            $this->createProductSearchAutosuggestionTemplateRendererCollection()
+        );
+    }
+
+    /**
+     * @return SnippetRendererCollection
+     */
+    private function createProductSearchAutosuggestionTemplateRendererCollection()
+    {
+        return new SnippetRendererCollection(
+            $this->getProductSearchAutosuggestionRendererList(),
+            $this->getMasterFactory()->createSnippetList()
+        );
+    }
+
+    /**
+     * @return SnippetRenderer[]
+     */
+    private function getProductSearchAutosuggestionRendererList()
+    {
+        return [
+            $this->getMasterFactory()->createProductSearchAutosuggestionSnippetRenderer(),
+//            $this->getMasterFactory()->createProductSearchAutosuggestionMetaSnippetRenderer(),
+        ];
+    }
+
+    /**
+     * @return ProductSearchAutosuggestionSnippetRenderer
+     */
+    public function createProductSearchAutosuggestionSnippetRenderer()
+    {
+        return new ProductSearchAutosuggestionSnippetRenderer(
+            $this->getMasterFactory()->createSnippetList(),
+            $this->getMasterFactory()->createProductSearchAutosuggestionSnippetKeyGenerator(),
+            $this->getMasterFactory()->createProductSearchAutosuggestionBlockRenderer()
+        );
+    }
+
+    /**
+     * @return SnippetKeyGenerator
+     */
+    public function createProductSearchAutosuggestionSnippetKeyGenerator()
+    {
+        $usedDataParts = [];
+
+        return new GenericSnippetKeyGenerator(
+            ProductSearchAutosuggestionSnippetRenderer::CODE,
+            $this->getMasterFactory()->getRequiredContexts(),
+            $usedDataParts
+        );
+    }
+
+    /**
+     * @return ProductSearchAutosuggestionBlockRenderer
+     */
+    public function createProductSearchAutosuggestionBlockRenderer()
+    {
+        return new ProductSearchAutosuggestionBlockRenderer(
+            $this->getMasterFactory()->createThemeLocator(),
+            $this->getMasterFactory()->createBlockStructure()
+        );
+    }
+
+    /**
      * @return ProductListingTemplateProjector
      */
     public function createProductListingTemplateProjector()
@@ -217,7 +294,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     /**
      * @return SnippetRendererCollection
      */
-    public function createProductListingTemplateRendererCollection()
+    private function createProductListingTemplateRendererCollection()
     {
         return new SnippetRendererCollection(
             $this->getProductListingRendererList(),

@@ -6,10 +6,8 @@ use Brera\Http\HttpHeaders;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestBody;
 use Brera\Http\HttpUrl;
-use Brera\Product\ProductId;
 use Brera\Product\ProductSearchRequestHandler;
 use Brera\Product\ProductSearchResultsMetaSnippetRenderer;
-use Brera\Product\SampleSku;
 
 class ProductSearchTest extends AbstractIntegrationTest
 {
@@ -37,7 +35,7 @@ class ProductSearchTest extends AbstractIntegrationTest
     
     public function testProductSearchResultsMetaSnippetIsWrittenIntoDataPool()
     {
-        $this->addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture();
+        $this->addTemplateWasUpdatedDomainEventToSetupProductListingFixture();
 
         $contextSource = $this->factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[1];
@@ -69,7 +67,7 @@ class ProductSearchTest extends AbstractIntegrationTest
         // TODO: thus sharing the data pool and queue needs to be handled properly.
 
         $this->importCatalog();
-        $this->addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture();
+        $this->addTemplateWasUpdatedDomainEventToSetupProductListingFixture();
 
         $this->registerProductSearchResultsMetaSnippetKeyGenerator();
 
@@ -92,33 +90,10 @@ class ProductSearchTest extends AbstractIntegrationTest
         $this->assertNotContains($unExpectedProductName, $body);
     }
 
-    public function testProductInSearchAutocompletionSnippetsAreAddedToDataPool()
+    private function addTemplateWasUpdatedDomainEventToSetupProductListingFixture()
     {
-        // TODO: Test is broken, the import and the following request should initialize their own WebFront instances,
-        // TODO: thus sharing the data pool and queue needs to be handled properly.
-
-        $this->importCatalog();
-
-        $sku = SampleSku::fromString('118235-251');
-        $productId = ProductId::fromSku($sku);
-        $productName = 'LED Arm-Signallampe';
-
-        $contextSource = $this->factory->createContextSource();
-        $context = $contextSource->getAllAvailableContexts()[0];
-
-        $dataPoolReader = $this->factory->createDataPoolReader();
-        $snippetKeyGenerator = $this->factory->createProductInSearchAutocompletionSnippetKeyGenerator();
-
-        $snippetKey = $snippetKeyGenerator->getKeyForContext($context, ['product_id' => $productId]);
-        $snippet = $dataPoolReader->getSnippet($snippetKey);
-
-        $this->assertContains($productName, $snippet);
-    }
-
-    private function addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture()
-    {
-        $httpUrl = HttpUrl::fromString('http://example.com/api/page_templates/product_listing');
-        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.page_templates.v1+json']);
+        $httpUrl = HttpUrl::fromString('http://example.com/api/templates/product_listing');
+        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.templates.v1+json']);
         $httpRequestBodyString = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.json');
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
