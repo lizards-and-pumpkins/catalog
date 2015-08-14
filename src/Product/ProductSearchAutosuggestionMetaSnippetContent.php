@@ -4,7 +4,7 @@ namespace Brera\Product;
 
 use Brera\PageMetaInfoSnippetContent;
 
-class ProductSearchAutosuggestionMetaContent implements PageMetaInfoSnippetContent
+class ProductSearchAutosuggestionMetaSnippetContent implements PageMetaInfoSnippetContent
 {
     /**
      * @var string
@@ -44,7 +44,7 @@ class ProductSearchAutosuggestionMetaContent implements PageMetaInfoSnippetConte
 
     /**
      * @param string $json
-     * @return ProductSearchAutosuggestionMetaContent
+     * @return ProductSearchAutosuggestionMetaSnippetContent
      */
     public static function fromJson($json)
     {
