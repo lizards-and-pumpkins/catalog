@@ -36,12 +36,12 @@ class ProductListingTemplateProjector implements Projector
 
     /**
      * @param mixed $projectionSourceData
-     * @param ContextSource $context
+     * @param ContextSource $contextSource
      */
-    public function project($projectionSourceData, ContextSource $context)
+    public function project($projectionSourceData, ContextSource $contextSource)
     {
         $productListingSourceList = $this->productListingSourceListBuilder->fromJson($projectionSourceData);
-        $snippetList = $this->snippetRendererCollection->render($productListingSourceList, $context);
+        $snippetList = $this->snippetRendererCollection->render($productListingSourceList, $contextSource);
         $this->dataPoolWriter->writeSnippetList($snippetList);
     }
 }
