@@ -4,7 +4,7 @@ namespace Brera\Product;
 
 use Brera\PageMetaInfoSnippetContent;
 
-class ProductSearchResultsMetaSnippetContent implements PageMetaInfoSnippetContent
+class ProductSearchResultMetaSnippetContent implements PageMetaInfoSnippetContent
 {
     /**
      * @var string
@@ -29,7 +29,7 @@ class ProductSearchResultsMetaSnippetContent implements PageMetaInfoSnippetConte
     /**
      * @param string $rootSnippetCode
      * @param string[] $pageSnippetCodes
-     * @return ProductSearchResultsMetaSnippetContent
+     * @return ProductSearchResultMetaSnippetContent
      */
     public static function create($rootSnippetCode, array $pageSnippetCodes)
     {
@@ -49,7 +49,7 @@ class ProductSearchResultsMetaSnippetContent implements PageMetaInfoSnippetConte
 
     /**
      * @param string $json
-     * @return ProductSearchResultsMetaSnippetContent
+     * @return ProductSearchResultMetaSnippetContent
      */
     public static function fromJson($json)
     {

@@ -12,7 +12,7 @@ use Brera\SnippetRenderer;
 
 class ProductSearchAutosuggestionMetaSnippetRenderer implements SnippetRenderer
 {
-    const CODE = 'product_search_autosuggestion';
+    const CODE = 'product_search_autosuggestion_meta';
 
     /**
      * @var SnippetList
@@ -39,19 +39,27 @@ class ProductSearchAutosuggestionMetaSnippetRenderer implements SnippetRenderer
         $this->blockRenderer = $blockRenderer;
     }
 
-    public function render(ContextSource $contextSource)
+    /**
+     * @param mixed $dataObject
+     * @param ContextSource $contextSource
+     * @return SnippetList
+     */
+    public function render($dataObject, ContextSource $contextSource)
     {
         foreach ($contextSource->getAllAvailableContexts() as $context) {
-            $this->renderMetaInfoSnippetForContext($context);
+            $this->renderMetaInfoSnippetForContext($dataObject, $context);
         }
 
         return $this->snippetList;
     }
 
-    private function renderMetaInfoSnippetForContext(Context $context)
+    /**
+     * @param mixed $dataObject
+     * @param Context $context
+     */
+    private function renderMetaInfoSnippetForContext($dataObject, Context $context)
     {
-        $dummyDataObject = []; // TODO: Do it clean!
-        $this->blockRenderer->render($dummyDataObject, $context);
+        $this->blockRenderer->render($dataObject, $context);
 
         $rootSnippetCode = $this->blockRenderer->getRootSnippetCode();
         $pageSnippetCodes = $this->blockRenderer->getNestedSnippetCodes();

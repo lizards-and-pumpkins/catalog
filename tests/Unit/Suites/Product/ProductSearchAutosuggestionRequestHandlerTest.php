@@ -14,10 +14,10 @@ use Brera\SnippetKeyGenerator;
 use Brera\SnippetKeyGeneratorLocator;
 
 /**
- * @covers \Brera\Product\ProductSearchRequestHandler
- * @uses   \Brera\Product\ProductSearchResultMetaSnippetContent
+ * @covers \Brera\Product\ProductSearchAutosuggestionRequestHandler
+ * @uses   \Brera\Product\ProductSearchAutosuggestionMetaSnippetContent
  */
-class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
+class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var HttpUrl|\PHPUnit_Framework_MockObject_MockObject
@@ -35,7 +35,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
     private $mockDataPoolReader;
 
     /**
-     * @var ProductSearchRequestHandler
+     * @var ProductSearchAutosuggestionRequestHandler
      */
     private $requestHandler;
 
@@ -49,10 +49,10 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private function prepareStubHttpRequest($queryString)
     {
-        $urlString = ProductSearchRequestHandler::SEARCH_RESULTS_SLUG;
+        $urlString = ProductSearchAutosuggestionRequestHandler::SEARCH_RESULTS_SLUG;
         $this->stubHttpUrl->method('getPathRelativeToWebFront')->willReturn($urlString);
         $this->stubHttpUrl->method('getQueryParameter')
-            ->with(ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME)
+            ->with(ProductSearchAutosuggestionRequestHandler::QUERY_STRING_PARAMETER_NAME)
             ->willReturn($queryString);
         $this->stubHttpRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
     }
@@ -71,7 +71,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $mockSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
         $mockSnippetKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')->willReturn($mockSnippetKeyGenerator);
 
-        $this->requestHandler = new ProductSearchRequestHandler(
+        $this->requestHandler = new ProductSearchAutosuggestionRequestHandler(
             $stubContext,
             $this->mockDataPoolReader,
             $this->mockPageBuilder,
@@ -88,13 +88,13 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(HttpRequestHandler::class, $this->requestHandler);
     }
 
-    public function testRequestCanNotBeProcessedIfRequestUrlIsNotEqualToSearchPageUrl()
+    public function testRequestCanNotBeProcessedIfRequestUrlIsNotEqualToSearchAutosuggestionUrl()
     {
         $urlString = 'foo';
         $this->stubHttpUrl->method('getPathRelativeToWebFront')->willReturn($urlString);
         $this->stubHttpRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
         $this->stubHttpRequest->method('getQueryParameter')
-            ->with(ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME)
+            ->with(ProductSearchAutosuggestionRequestHandler::QUERY_STRING_PARAMETER_NAME)
             ->willReturn('bar');
 
         $this->assertFalse($this->requestHandler->canProcess($this->stubHttpRequest));
@@ -102,11 +102,11 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testRequestCanNotBeProcessedIfRequestMethodIsNotGet()
     {
-        $urlString = ProductSearchRequestHandler::SEARCH_RESULTS_SLUG;
+        $urlString = ProductSearchAutosuggestionRequestHandler::SEARCH_RESULTS_SLUG;
         $this->stubHttpUrl->method('getPathRelativeToWebFront')->willReturn($urlString);
         $this->stubHttpRequest->method('getMethod')->willReturn(HttpRequest::METHOD_POST);
         $this->stubHttpRequest->method('getQueryParameter')
-            ->with(ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME)
+            ->with(ProductSearchAutosuggestionRequestHandler::QUERY_STRING_PARAMETER_NAME)
             ->willReturn('foo');
 
         $this->assertFalse($this->requestHandler->canProcess($this->stubHttpRequest));
@@ -135,7 +135,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @depends testRequestCanNotBeProcessedIfRequestUrlIsNotEqualToSearchPageUrl
+     * @depends testRequestCanNotBeProcessedIfRequestUrlIsNotEqualToSearchAutosuggestionUrl
      */
     public function testExceptionIsThrownDuringAttemptToProcessInvalidRequest()
     {

@@ -7,7 +7,7 @@ use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestBody;
 use Brera\Http\HttpUrl;
 use Brera\Product\ProductSearchRequestHandler;
-use Brera\Product\ProductSearchResultsMetaSnippetRenderer;
+use Brera\Product\ProductSearchResultMetaSnippetRenderer;
 
 class ProductSearchTest extends AbstractIntegrationTest
 {
@@ -33,7 +33,7 @@ class ProductSearchTest extends AbstractIntegrationTest
         $this->factory = $this->prepareIntegrationTestMasterFactory($this->request);
     }
     
-    public function testProductSearchResultsMetaSnippetIsWrittenIntoDataPool()
+    public function testProductSearchResultMetaSnippetIsWrittenIntoDataPool()
     {
         $this->addTemplateWasUpdatedDomainEventToSetupProductListingFixture();
 
@@ -69,7 +69,7 @@ class ProductSearchTest extends AbstractIntegrationTest
         $this->importCatalog();
         $this->addTemplateWasUpdatedDomainEventToSetupProductListingFixture();
 
-        $this->registerProductSearchResultsMetaSnippetKeyGenerator();
+        $this->registerProductSearchResultMetaSnippetKeyGenerator();
 
         $request = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
@@ -78,8 +78,8 @@ class ProductSearchTest extends AbstractIntegrationTest
             HttpRequestBody::fromString('')
         );
 
-        $productSearchResultsRequestHandler = $this->getProductSearchRequestHandler();
-        $page = $productSearchResultsRequestHandler->process($request);
+        $productSearchResultRequestHandler = $this->getProductSearchRequestHandler();
+        $page = $productSearchResultRequestHandler->process($request);
         $body = $page->getBody();
 
         /* TODO: read from XML */
@@ -140,10 +140,10 @@ class ProductSearchTest extends AbstractIntegrationTest
         );
     }
 
-    private function registerProductSearchResultsMetaSnippetKeyGenerator()
+    private function registerProductSearchResultMetaSnippetKeyGenerator()
     {
         $this->factory->getSnippetKeyGeneratorLocator()->register(
-            ProductSearchResultsMetaSnippetRenderer::CODE,
+            ProductSearchResultMetaSnippetRenderer::CODE,
             $this->factory->createProductSearchResultMetaSnippetKeyGenerator()
         );
     }

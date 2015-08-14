@@ -11,9 +11,9 @@ use Brera\Http\UnableToHandleRequestException;
 use Brera\PageBuilder;
 use Brera\SnippetKeyGeneratorLocator;
 
-class ProductSearchRequestHandler implements HttpRequestHandler
+class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
 {
-    const SEARCH_RESULTS_SLUG = 'catalogsearch/result';
+    const SEARCH_RESULTS_SLUG = 'catalogsearch/suggest';
     const QUERY_STRING_PARAMETER_NAME = 'q';
     const SEARCH_QUERY_MINIMUM_LENGTH = 3;
 
@@ -73,16 +73,13 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         $this->addSearchResultsToPageBuilder($searchQueryString);
 
         $metaInfoSnippetKeyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
-            ProductSearchResultMetaSnippetRenderer::CODE
+            ProductSearchAutosuggestionMetaSnippetRenderer::CODE
         );
         $metaInfoSnippetKey = $metaInfoSnippetKeyGenerator->getKeyForContext($this->context, []);
         $metaInfoSnippetJson = $this->dataPoolReader->getSnippet($metaInfoSnippetKey);
-        $metaInfoSnippetContent = ProductSearchResultMetaSnippetContent::fromJson($metaInfoSnippetJson);
+        $metaInfoSnippetContent = ProductSearchAutosuggestionMetaSnippetContent::fromJson($metaInfoSnippetJson);
 
-        $keyGeneratorParams = [
-            'items_per_page' => $this->getDefaultNumberOrProductsPerPage(),
-            'query_string'   => $searchQueryString,
-        ];
+        $keyGeneratorParams = ['query_string' => $searchQueryString];
 
         return $this->pageBuilder->buildPage($metaInfoSnippetContent, $this->context, $keyGeneratorParams);
     }
@@ -124,42 +121,30 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         }
 
         $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
-            ProductInListingSnippetRenderer::CODE
+            ProductInSearchAutosuggestionSnippetRenderer::CODE
         );
-        $productInListingSnippetKeys = array_map(function ($productId) use ($keyGenerator) {
+        $productInAutosuggestionSnippetKeys = array_map(function ($productId) use ($keyGenerator) {
             return $keyGenerator->getKeyForContext($this->context, ['product_id' => $productId]);
         }, $productIds);
 
-        $snippetKeyToContentMap = $this->dataPoolReader->getSnippets($productInListingSnippetKeys);
-        $snippetCodeToKeyMap = $this->getProductInListingSnippetCodeToKeyMap($productInListingSnippetKeys);
+        $snippetKeyToContentMap = $this->dataPoolReader->getSnippets($productInAutosuggestionSnippetKeys);
+        $snippetCodeToKeyMap = $this->getProductInAutosuggestionSnippetCodeToKeyMap(
+            $productInAutosuggestionSnippetKeys
+        );
 
         $this->pageBuilder->addSnippetsToPage($snippetCodeToKeyMap, $snippetKeyToContentMap);
     }
 
     /**
-     * @param string[] $productInListingSnippetKeys
+     * @param string[] $productInAutosuggestionSnippetKeys
      * @return string[]
      */
-    private function getProductInListingSnippetCodeToKeyMap($productInListingSnippetKeys)
+    private function getProductInAutosuggestionSnippetCodeToKeyMap($productInAutosuggestionSnippetKeys)
     {
-        return array_reduce($productInListingSnippetKeys, function (array $acc, $key) {
+        return array_reduce($productInAutosuggestionSnippetKeys, function (array $acc, $key) {
             $snippetCode = sprintf('product_%d', count($acc) + 1);
             $acc[$snippetCode] = $key;
             return $acc;
         }, []);
-    }
-
-    /**
-     * @return string
-     */
-    private function getDefaultNumberOrProductsPerPage()
-    {
-        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
-            DefaultNumberOfProductsPerPageSnippetRenderer::CODE
-        );
-        $snippetKey = $keyGenerator->getKeyForContext($this->context, []);
-        $defaultNumberOrProductsPerPage = $this->dataPoolReader->getSnippet($snippetKey);
-
-        return $defaultNumberOrProductsPerPage;
     }
 }

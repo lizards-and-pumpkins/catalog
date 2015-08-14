@@ -72,7 +72,7 @@ class ProductSearchAutosuggestionMetaSnippetRendererTest extends \PHPUnit_Framew
 
     public function testSnippetListIsReturned()
     {
-        $result = $this->renderer->render($this->stubContextSource);
+        $result = $this->renderer->render('dummy-data-object', $this->stubContextSource);
         $this->assertInstanceOf(SnippetList::class, $result);
     }
 
@@ -85,6 +85,6 @@ class ProductSearchAutosuggestionMetaSnippetRendererTest extends \PHPUnit_Framew
         $expectedSnippet = Snippet::create($this->dummySnippetKey, json_encode($expectedSnippetContent));
         $this->mockSnippetList->expects($this->once())->method('add')->with($expectedSnippet);
 
-        $this->renderer->render($this->stubContextSource);
+        $this->renderer->render('dummy-data-object', $this->stubContextSource);
     }
 }

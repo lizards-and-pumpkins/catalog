@@ -63,7 +63,8 @@ class SampleWebFrontTest extends \PHPUnit_Framework_TestCase
             'createProductDetailViewRouter',
             'createProductListingRouter',
             'createResourceNotFoundRouter',
-            'createProductSearchResultsRouter'
+            'createProductSearchResultRouter',
+            'createProductSearchAutosuggestionRouter',
         ];
 
         $stubFactoryMethods = array_merge(

@@ -14,13 +14,16 @@ use Brera\Product\CatalogImportApiV1PutRequestHandler;
 use Brera\Product\DefaultNumberOfProductsPerPageSnippetRenderer;
 use Brera\Product\ProductDetailViewInContextSnippetRenderer;
 use Brera\Product\ProductDetailViewRequestHandler;
+use Brera\Product\ProductInSearchAutosuggestionSnippetRenderer;
 use Brera\Product\ProductListingMetaInfoSnippetRenderer;
 use Brera\Product\ProductListingRequestHandler;
 use Brera\Product\ProductListingSnippetRenderer;
 use Brera\Product\MultipleProductStockQuantityApiV1PutRequestHandler;
+use Brera\Product\ProductSearchAutosuggestionMetaSnippetRenderer;
+use Brera\Product\ProductSearchAutosuggestionRequestHandler;
 use Brera\Product\ProductSearchAutosuggestionSnippetRenderer;
 use Brera\Product\ProductSearchRequestHandler;
-use Brera\Product\ProductSearchResultsMetaSnippetRenderer;
+use Brera\Product\ProductSearchResultMetaSnippetRenderer;
 use Brera\Product\ProductInListingSnippetRenderer;
 use Brera\Utils\Directory;
 use Brera\Context\Context;
@@ -224,8 +227,16 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->createProductListingMetaDataSnippetKeyGenerator()
         );
         $snippetKeyGeneratorLocator->register(
-            ProductSearchResultsMetaSnippetRenderer::CODE,
-            $this->getMasterFactory()->createProductSearchResultsMetaSnippetKeyGenerator()
+            ProductSearchResultMetaSnippetRenderer::CODE,
+            $this->getMasterFactory()->createProductSearchResultMetaSnippetKeyGenerator()
+        );
+        $snippetKeyGeneratorLocator->register(
+            ProductInSearchAutosuggestionSnippetRenderer::CODE,
+            $this->getMasterFactory()->createProductInSearchAutosuggestionSnippetKeyGenerator()
+        );
+        $snippetKeyGeneratorLocator->register(
+            ProductSearchAutosuggestionMetaSnippetRenderer::CODE,
+            $this->getMasterFactory()->createProductSearchAutosuggestionMetaSnippetKeyGenerator()
         );
         $snippetKeyGeneratorLocator->register(
             ProductSearchAutosuggestionSnippetRenderer::CODE,
@@ -281,7 +292,7 @@ class FrontendFactory implements Factory
     /**
      * @return HttpRouter
      */
-    public function createProductSearchResultsRouter()
+    public function createProductSearchResultRouter()
     {
         return new GenericHttpRouter($this->createProductSearchRequestHandler());
     }
@@ -292,6 +303,27 @@ class FrontendFactory implements Factory
     private function createProductSearchRequestHandler()
     {
         return new ProductSearchRequestHandler(
+            $this->getContext(),
+            $this->getMasterFactory()->createDataPoolReader(),
+            $this->getMasterFactory()->createPageBuilder(),
+            $this->getMasterFactory()->getSnippetKeyGeneratorLocator()
+        );
+    }
+
+    /**
+     * @return HttpRouter
+     */
+    public function createProductSearchAutosuggestionRouter()
+    {
+        return new GenericHttpRouter($this->createProductSearchAutosuggestionRequestHandler());
+    }
+
+    /**
+     * @return ProductSearchAutosuggestionRequestHandler
+     */
+    private function createProductSearchAutosuggestionRequestHandler()
+    {
+        return new ProductSearchAutosuggestionRequestHandler(
             $this->getContext(),
             $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->createPageBuilder(),

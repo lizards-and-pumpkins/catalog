@@ -11,11 +11,11 @@ use Brera\SnippetList;
 use Brera\SnippetRenderer;
 
 /**
- * @covers \Brera\Product\ProductSearchResultsMetaSnippetRenderer
- * @uses   \Brera\Product\ProductSearchResultsMetaSnippetContent
+ * @covers \Brera\Product\ProductSearchResultMetaSnippetRenderer
+ * @uses   \Brera\Product\ProductSearchResultMetaSnippetContent
  * @uses   \Brera\Snippet
  */
-class ProductSearchResultsMetaSnippetRendererTest extends \PHPUnit_Framework_TestCase
+class ProductSearchResultMetaSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var string
@@ -33,7 +33,7 @@ class ProductSearchResultsMetaSnippetRendererTest extends \PHPUnit_Framework_Tes
     private $mockSnippetList;
 
     /**
-     * @var ProductSearchResultsMetaSnippetRenderer
+     * @var ProductSearchResultMetaSnippetRenderer
      */
     private $renderer;
 
@@ -60,7 +60,7 @@ class ProductSearchResultsMetaSnippetRendererTest extends \PHPUnit_Framework_Tes
         $stubBlockRenderer->method('getRootSnippetCode')->willReturn($this->dummyRootSnippetCode);
         $stubBlockRenderer->method('getNestedSnippetCodes')->willReturn([]);
 
-        $this->renderer = new ProductSearchResultsMetaSnippetRenderer(
+        $this->renderer = new ProductSearchResultMetaSnippetRenderer(
             $this->mockSnippetList,
             $stubSnippetKeyGenerator,
             $stubBlockRenderer
@@ -90,8 +90,8 @@ class ProductSearchResultsMetaSnippetRendererTest extends \PHPUnit_Framework_Tes
     public function testSnippetWithValidJsonAsContentAddedToList()
     {
         $expectedSnippetContent = [
-            ProductSearchResultsMetaSnippetContent::KEY_ROOT_SNIPPET_CODE  => $this->dummyRootSnippetCode,
-            ProductSearchResultsMetaSnippetContent::KEY_PAGE_SNIPPET_CODES => [$this->dummyRootSnippetCode]
+            ProductSearchResultMetaSnippetContent::KEY_ROOT_SNIPPET_CODE  => $this->dummyRootSnippetCode,
+            ProductSearchResultMetaSnippetContent::KEY_PAGE_SNIPPET_CODES => [$this->dummyRootSnippetCode]
         ];
         $expectedSnippet = Snippet::create($this->dummySnippetKey, json_encode($expectedSnippetContent));
         $this->mockSnippetList->expects($this->once())->method('add')->with($expectedSnippet);

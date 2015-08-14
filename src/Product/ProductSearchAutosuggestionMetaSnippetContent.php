@@ -26,6 +26,11 @@ class ProductSearchAutosuggestionMetaSnippetContent implements PageMetaInfoSnipp
         $this->pageSnippetCodes = $pageSnippetCodes;
     }
 
+    /**
+     * @param string $rootSnippetCode
+     * @param string[] $pageSnippetCodes
+     * @return ProductSearchAutosuggestionMetaSnippetContent
+     */
     public static function create($rootSnippetCode, array $pageSnippetCodes)
     {
         if (!is_string($rootSnippetCode)) {

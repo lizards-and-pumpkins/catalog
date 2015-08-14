@@ -62,6 +62,16 @@ $productListingImport = new ApiApp($productListingImportRequest);
 $productListingImport->runWithoutSendingResponse();
 
 
+$productSearchAutosuggestionImportRequest = HttpRequest::fromParameters(
+    HttpRequest::METHOD_PUT,
+    HttpUrl::fromString('http://example.com/api/templates/product_search_autosuggestion'),
+    HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.templates.v1+json']),
+    HttpRequestBody::fromString('')
+);
+$productSearchAutosuggestionImport = new ApiApp($productSearchAutosuggestionImportRequest);
+$productSearchAutosuggestionImport->runWithoutSendingResponse();
+
+
 $catalogImportRequest = HttpRequest::fromParameters(
     HttpRequest::METHOD_PUT,
     HttpUrl::fromString('http://example.com/api/catalog_import'),

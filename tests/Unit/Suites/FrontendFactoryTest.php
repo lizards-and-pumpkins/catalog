@@ -112,9 +112,9 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Context::class, $this->frontendFactory->getContext());
     }
 
-    public function testProductSearchResultsRouterIsReturned()
+    public function testProductSearchResultRouterIsReturned()
     {
-        $result = $this->frontendFactory->createProductSearchResultsRouter();
+        $result = $this->frontendFactory->createProductSearchResultRouter();
         $this->assertInstanceOf(GenericHttpRouter::class, $result);
     }
 

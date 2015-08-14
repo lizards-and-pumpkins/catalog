@@ -10,7 +10,7 @@ use Brera\SnippetKeyGenerator;
 use Brera\SnippetList;
 use Brera\SnippetRenderer;
 
-class ProductSearchResultsMetaSnippetRenderer implements SnippetRenderer
+class ProductSearchResultMetaSnippetRenderer implements SnippetRenderer
 {
     const CODE = 'product_search_result';
 
@@ -79,11 +79,11 @@ class ProductSearchResultsMetaSnippetRenderer implements SnippetRenderer
     /**
      * @param string $rootSnippetCode
      * @param string[] $pageSnippetCodes
-     * @return ProductSearchResultsMetaSnippetContent|string
+     * @return ProductSearchResultMetaSnippetContent|string
      */
     private function getMetaSnippetContentJson($rootSnippetCode, array $pageSnippetCodes)
     {
-        $metaSnippetContent = ProductSearchResultsMetaSnippetContent::create($rootSnippetCode, $pageSnippetCodes);
+        $metaSnippetContent = ProductSearchResultMetaSnippetContent::create($rootSnippetCode, $pageSnippetCodes);
         return json_encode($metaSnippetContent->getInfo());
     }
 }

@@ -77,7 +77,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Product\ProductWasUpdatedDomainEventHandler
  * @uses   \Brera\Product\ProductSearchAutosuggestionSnippetRenderer
  * @uses   \Brera\Product\ProductSearchAutosuggestionTemplateProjector
- * @uses   \Brera\Product\ProductSearchResultsMetaSnippetRenderer
+ * @uses   \Brera\Product\ProductSearchResultMetaSnippetRenderer
  * @uses   \Brera\Product\ProductSearchDocumentBuilder
  * @uses   \Brera\Product\ProductSourceDetailViewSnippetRenderer
  * @uses   \Brera\Product\ProductStockQuantityProjector
@@ -460,9 +460,9 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
 
-    public function testProductSearchResultsMetaSnippetKeyGeneratorIsReturned()
+    public function testProductSearchResultMetaSnippetKeyGeneratorIsReturned()
     {
-        $result = $this->commonFactory->createProductSearchResultsMetaSnippetKeyGenerator();
+        $result = $this->commonFactory->createProductSearchResultMetaSnippetKeyGenerator();
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
 }

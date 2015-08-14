@@ -22,6 +22,7 @@ namespace Brera;
  * @method GenericSnippetKeyGenerator createProductDetailPageMetaSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createContentBlockInProductListingSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createProductInSearchAutosuggestionSnippetKeyGenerator
+ * @method GenericSnippetKeyGenerator createProductSearchAutosuggestionMetaSnippetKeyGenerator
  * @method string[] getRequiredContexts
  * @method Product\ProductSourceBuilder createProductSourceBuilder
  */

@@ -7,6 +7,9 @@ use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestBody;
 use Brera\Http\HttpUrl;
 use Brera\Product\ProductId;
+use Brera\Product\ProductInSearchAutosuggestionSnippetRenderer;
+use Brera\Product\ProductSearchAutosuggestionMetaSnippetRenderer;
+use Brera\Product\ProductSearchAutosuggestionRequestHandler;
 use Brera\Product\ProductSearchAutosuggestionSnippetRenderer;
 use Brera\Product\SampleSku;
 
@@ -82,6 +85,37 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
         $this->assertContains($expectation, $html);
     }
 
+    public function testSearchAutosuggestionHtmlIsReturned()
+    {
+        // TODO: Test is broken, the import and the following request should initialize their own WebFront instances,
+        // TODO: thus sharing the data pool and queue needs to be handled properly.
+
+        $this->importCatalog();
+        $this->createSearchAutosuggestionSnippet();
+
+        $this->registerProductSearchAutosuggestionMetaSnippetKeyGenerator();
+        $this->registerProductInSearchAutosuggestionSnippetKeyGenerator();
+
+        $request = HttpRequest::fromParameters(
+            HttpRequest::METHOD_GET,
+            HttpUrl::fromString('http://example.com/catalogsearch/suggest/?q=adi'),
+            HttpHeaders::fromArray([]),
+            HttpRequestBody::fromString('')
+        );
+
+        $productSearchAutosuggestionRequestHandler = $this->getProductSearchAutosuggestionRequestHandler();
+        $page = $productSearchAutosuggestionRequestHandler->process($request);
+        $body = $page->getBody();
+
+        $this->assertStringStartsWith('<ul>', $body);
+
+        $expectedProductName = 'Adilette';
+        $unExpectedProductName = 'LED Armflasher';
+
+        $this->assertContains($expectedProductName, $body);
+        $this->assertNotContains($unExpectedProductName, $body);
+    }
+
     private function importCatalog()
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
@@ -110,5 +144,41 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
 
         $this->factory->createCommandConsumer()->process();
         $this->factory->createDomainEventConsumer()->process();
+    }
+
+    /**
+     * @return ProductSearchAutosuggestionRequestHandler
+     */
+    private function getProductSearchAutosuggestionRequestHandler()
+    {
+        $dataPoolReader = $this->factory->createDataPoolReader();
+        $pageBuilder = new PageBuilder(
+            $dataPoolReader,
+            $this->factory->getSnippetKeyGeneratorLocator(),
+            $this->factory->getLogger()
+        );
+
+        return new ProductSearchAutosuggestionRequestHandler(
+            $this->factory->getContext(),
+            $dataPoolReader,
+            $pageBuilder,
+            $this->factory->getSnippetKeyGeneratorLocator()
+        );
+    }
+
+    private function registerProductSearchAutosuggestionMetaSnippetKeyGenerator()
+    {
+        $this->factory->getSnippetKeyGeneratorLocator()->register(
+            ProductSearchAutosuggestionMetaSnippetRenderer::CODE,
+            $this->factory->createProductSearchAutosuggestionMetaSnippetKeyGenerator()
+        );
+    }
+
+    private function registerProductInSearchAutosuggestionSnippetKeyGenerator()
+    {
+        $this->factory->getSnippetKeyGeneratorLocator()->register(
+            ProductInSearchAutosuggestionSnippetRenderer::CODE,
+            $this->factory->createProductInSearchAutosuggestionSnippetKeyGenerator()
+        );
     }
 }

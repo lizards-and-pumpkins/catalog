@@ -5,12 +5,12 @@ namespace Brera\Product;
 use Brera\PageMetaInfoSnippetContent;
 
 /**
- * @covers \Brera\Product\ProductSearchResultsMetaSnippetContent
+ * @covers \Brera\Product\ProductSearchResultMetaSnippetContent
  */
-class ProductSearchResultsMetaSnippetContentTest extends \PHPUnit_Framework_TestCase
+class ProductSearchResultMetaSnippetContentTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ProductSearchResultsMetaSnippetContent
+     * @var ProductSearchResultMetaSnippetContent
      */
     private $metaSnippetContent;
 
@@ -21,7 +21,7 @@ class ProductSearchResultsMetaSnippetContentTest extends \PHPUnit_Framework_Test
 
     protected function setUp()
     {
-        $this->metaSnippetContent = ProductSearchResultsMetaSnippetContent::create(
+        $this->metaSnippetContent = ProductSearchResultMetaSnippetContent::create(
             $this->dummyRootSnippetCode,
             [$this->dummyRootSnippetCode]
         );
@@ -35,14 +35,14 @@ class ProductSearchResultsMetaSnippetContentTest extends \PHPUnit_Framework_Test
     public function testExceptionIsThrownIfTheRootSnippetCodeIsNoString()
     {
         $this->setExpectedException(\InvalidArgumentException::class);
-        ProductSearchResultsMetaSnippetContent::create(1, []);
+        ProductSearchResultMetaSnippetContent::create(1, []);
     }
 
     public function testMetaSnippetContentInfoContainsRequiredKeys()
     {
         $expectedKeys = [
-            ProductSearchResultsMetaSnippetContent::KEY_ROOT_SNIPPET_CODE,
-            ProductSearchResultsMetaSnippetContent::KEY_PAGE_SNIPPET_CODES
+            ProductSearchResultMetaSnippetContent::KEY_ROOT_SNIPPET_CODE,
+            ProductSearchResultMetaSnippetContent::KEY_PAGE_SNIPPET_CODES
         ];
 
         $result = $this->metaSnippetContent->getInfo();
@@ -64,9 +64,9 @@ class ProductSearchResultsMetaSnippetContentTest extends \PHPUnit_Framework_Test
 
     public function testRootSnippetCodeIsAddedToTheSnippetCodeListIfAbsent()
     {
-        $metaSnippetContent = ProductSearchResultsMetaSnippetContent::create($this->dummyRootSnippetCode, []);
+        $metaSnippetContent = ProductSearchResultMetaSnippetContent::create($this->dummyRootSnippetCode, []);
         $metaMetaInfo = $metaSnippetContent->getInfo();
-        $pageSnippetCodes = $metaMetaInfo[ProductSearchResultsMetaSnippetContent::KEY_PAGE_SNIPPET_CODES];
+        $pageSnippetCodes = $metaMetaInfo[ProductSearchResultMetaSnippetContent::KEY_PAGE_SNIPPET_CODES];
 
         $this->assertContains($this->dummyRootSnippetCode, $pageSnippetCodes);
     }
@@ -74,8 +74,8 @@ class ProductSearchResultsMetaSnippetContentTest extends \PHPUnit_Framework_Test
     public function testCanBeCreatedFromJson()
     {
         $jsonEncodedPageMetaInfo = json_encode($this->metaSnippetContent->getInfo());
-        $metaSnippetContent = ProductSearchResultsMetaSnippetContent::fromJson($jsonEncodedPageMetaInfo);
-        $this->assertInstanceOf(ProductSearchResultsMetaSnippetContent::class, $metaSnippetContent);
+        $metaSnippetContent = ProductSearchResultMetaSnippetContent::fromJson($jsonEncodedPageMetaInfo);
+        $this->assertInstanceOf(ProductSearchResultMetaSnippetContent::class, $metaSnippetContent);
     }
 
     /**
@@ -89,7 +89,7 @@ class ProductSearchResultsMetaSnippetContentTest extends \PHPUnit_Framework_Test
 
         $this->setExpectedException(\RuntimeException::class, sprintf('Missing "%s" in input JSON', $missingKey));
 
-        ProductSearchResultsMetaSnippetContent::fromJson(json_encode($pageMetaInfo));
+        ProductSearchResultMetaSnippetContent::fromJson(json_encode($pageMetaInfo));
     }
 
     /**
@@ -98,14 +98,14 @@ class ProductSearchResultsMetaSnippetContentTest extends \PHPUnit_Framework_Test
     public function pageInfoArrayKeyProvider()
     {
         return [
-            [ProductSearchResultsMetaSnippetContent::KEY_ROOT_SNIPPET_CODE],
-            [ProductSearchResultsMetaSnippetContent::KEY_PAGE_SNIPPET_CODES],
+            [ProductSearchResultMetaSnippetContent::KEY_ROOT_SNIPPET_CODE],
+            [ProductSearchResultMetaSnippetContent::KEY_PAGE_SNIPPET_CODES],
         ];
     }
 
     public function testExceptionIsThrownInCaseOfJsonErrors()
     {
         $this->setExpectedException(\OutOfBoundsException::class);
-        ProductSearchResultsMetaSnippetContent::fromJson('malformed-json');
+        ProductSearchResultMetaSnippetContent::fromJson('malformed-json');
     }
 }

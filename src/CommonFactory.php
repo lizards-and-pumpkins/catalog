@@ -31,6 +31,7 @@ use Brera\Product\ProductInSearchAutosuggestionSnippetRenderer;
 use Brera\Product\ProductListingSourceListBuilder;
 use Brera\Product\ProductListingTemplateProjector;
 use Brera\Product\ProductSearchAutosuggestionBlockRenderer;
+use Brera\Product\ProductSearchAutosuggestionMetaSnippetRenderer;
 use Brera\Product\ProductSearchAutosuggestionSnippetRenderer;
 use Brera\Product\ProductSearchAutosuggestionTemplateProjector;
 use Brera\Product\ProductWasUpdatedDomainEvent;
@@ -45,7 +46,7 @@ use Brera\Product\ProductListingSnippetRenderer;
 use Brera\Product\ProductProjector;
 use Brera\Product\ProductListingMetaInfoSourceBuilder;
 use Brera\Product\ProductSearchDocumentBuilder;
-use Brera\Product\ProductSearchResultsMetaSnippetRenderer;
+use Brera\Product\ProductSearchResultMetaSnippetRenderer;
 use Brera\Product\ProductSourceBuilder;
 use Brera\Product\ProductSourceDetailViewSnippetRenderer;
 use Brera\Product\ProductInListingSnippetRenderer;
@@ -238,7 +239,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return [
             $this->getMasterFactory()->createProductSearchAutosuggestionSnippetRenderer(),
-//            $this->getMasterFactory()->createProductSearchAutosuggestionMetaSnippetRenderer(),
+            $this->getMasterFactory()->createProductSearchAutosuggestionMetaSnippetRenderer(),
         ];
     }
 
@@ -255,6 +256,18 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
+     * @return ProductSearchAutosuggestionMetaSnippetRenderer
+     */
+    public function createProductSearchAutosuggestionMetaSnippetRenderer()
+    {
+        return new ProductSearchAutosuggestionMetaSnippetRenderer(
+            $this->getMasterFactory()->createSnippetList(),
+            $this->getMasterFactory()->createProductSearchAutosuggestionMetaSnippetKeyGenerator(),
+            $this->getMasterFactory()->createProductSearchAutosuggestionBlockRenderer()
+        );
+    }
+
+    /**
      * @return SnippetKeyGenerator
      */
     public function createProductSearchAutosuggestionSnippetKeyGenerator()
@@ -263,6 +276,20 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
 
         return new GenericSnippetKeyGenerator(
             ProductSearchAutosuggestionSnippetRenderer::CODE,
+            $this->getMasterFactory()->getRequiredContexts(),
+            $usedDataParts
+        );
+    }
+
+    /**
+     * @return SnippetKeyGenerator
+     */
+    public function createProductSearchAutosuggestionMetaSnippetKeyGenerator()
+    {
+        $usedDataParts = [];
+
+        return new GenericSnippetKeyGenerator(
+            ProductSearchAutosuggestionMetaSnippetRenderer::CODE,
             $this->getMasterFactory()->getRequiredContexts(),
             $usedDataParts
         );
@@ -310,7 +337,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return [
             $this->getMasterFactory()->createProductListingSnippetRenderer(),
             $this->getMasterFactory()->createDefaultNumberOfProductsPerPageSnippetRenderer(),
-            $this->getMasterFactory()->createProductSearchResultsMetaSnippetRenderer(),
+            $this->getMasterFactory()->createProductSearchResultMetaSnippetRenderer(),
         ];
     }
 
@@ -1142,11 +1169,11 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return ProductSearchResultsMetaSnippetRenderer
+     * @return ProductSearchResultMetaSnippetRenderer
      */
-    public function createProductSearchResultsMetaSnippetRenderer()
+    public function createProductSearchResultMetaSnippetRenderer()
     {
-        return new ProductSearchResultsMetaSnippetRenderer(
+        return new ProductSearchResultMetaSnippetRenderer(
             $this->getMasterFactory()->createSnippetList(),
             $this->getMasterFactory()->createProductSearchResultMetaSnippetKeyGenerator(),
             $this->getMasterFactory()->createProductListingBlockRenderer()
@@ -1161,21 +1188,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         $usedDataParts = [];
 
         return new GenericSnippetKeyGenerator(
-            ProductSearchResultsMetaSnippetRenderer::CODE,
-            $this->getMasterFactory()->getRequiredContexts(),
-            $usedDataParts
-        );
-    }
-
-    /**
-     * @return SnippetKeyGenerator
-     */
-    public function createProductSearchResultsMetaSnippetKeyGenerator()
-    {
-        $usedDataParts = [];
-
-        return new GenericSnippetKeyGenerator(
-            ProductSearchResultsMetaSnippetRenderer::CODE,
+            ProductSearchResultMetaSnippetRenderer::CODE,
             $this->getMasterFactory()->getRequiredContexts(),
             $usedDataParts
         );
