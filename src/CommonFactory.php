@@ -28,6 +28,7 @@ use Brera\Product\ProductDetailViewBlockRenderer;
 use Brera\Product\ProductDetailViewInContextSnippetRenderer;
 use Brera\Product\ProductInSearchAutosuggestionBlockRenderer;
 use Brera\Product\ProductInSearchAutosuggestionSnippetRenderer;
+use Brera\Product\ProductListingSourceListBuilder;
 use Brera\Product\ProductListingTemplateProjector;
 use Brera\Product\ProductWasUpdatedDomainEvent;
 use Brera\Product\ProductWasUpdatedDomainEventHandler;
@@ -149,11 +150,11 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return RootSnippetSourceListBuilder
+     * @return ProductListingSourceListBuilder
      */
-    public function createRootSnippetSourceListBuilder()
+    public function createProductListingSourceListBuilder()
     {
-        return new RootSnippetSourceListBuilder($this->getMasterFactory()->createContextBuilder());
+        return new ProductListingSourceListBuilder($this->getMasterFactory()->createContextBuilder());
     }
 
     /**
@@ -209,7 +210,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return new ProductListingTemplateProjector(
             $this->createProductListingTemplateRendererCollection(),
             $this->getMasterFactory()->createDataPoolWriter(),
-            $this->getMasterFactory()->createRootSnippetSourceListBuilder()
+            $this->getMasterFactory()->createProductListingSourceListBuilder()
         );
     }
 
@@ -219,7 +220,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createProductListingTemplateRendererCollection()
     {
         return new SnippetRendererCollection(
-            $this->getRootSnippetRendererList(),
+            $this->getProductListingRendererList(),
             $this->getMasterFactory()->createSnippetList()
         );
     }
@@ -227,7 +228,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     /**
      * @return SnippetRenderer[]
      */
-    private function getRootSnippetRendererList()
+    private function getProductListingRendererList()
     {
         return [
             $this->getMasterFactory()->createProductListingSnippetRenderer(),

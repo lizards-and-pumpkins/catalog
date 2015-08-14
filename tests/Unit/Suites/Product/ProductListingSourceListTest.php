@@ -1,29 +1,30 @@
 <?php
 
-namespace Brera;
+namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\Context\VersionedContext;
 
 /**
- * @covers \Brera\RootSnippetSourceList
- * @uses   \Brera\RootSnippetSource
+ * @covers \Brera\Product\ProductListingSourceList
+ * @uses   \Brera\Product\ProductListingSource
  */
-class RootSnippetSourceListTest extends \PHPUnit_Framework_TestCase
+class ProductListingSourceListTest extends \PHPUnit_Framework_TestCase
 {
     public function testNumbersOfItemsPerPageForGivenContextIsReturned()
     {
-        $stubContext = $this->getMock(Context::class);
-        $stubContext2 = $this->getMock(VersionedContext::class, [], [], '', false);
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContextA */
+        $stubContextA = $this->getMock(Context::class);
+        $stubContextB = $this->getMock(VersionedContext::class, [], [], '', false);
 
         $sourceDataPairs = [
-            ['context' => $stubContext, 'numItemsPerPage' => 10],
-            ['context' => $stubContext2, 'numItemsPerPage' => 20],
-            ['context' => $stubContext, 'numItemsPerPage' => 30],
+            ['context' => $stubContextA, 'numItemsPerPage' => 10],
+            ['context' => $stubContextB, 'numItemsPerPage' => 20],
+            ['context' => $stubContextA, 'numItemsPerPage' => 30],
         ];
-        $rootSnippetSourceList = RootSnippetSourceList::fromArray($sourceDataPairs);
+        $productListingSourceList = ProductListingSourceList::fromArray($sourceDataPairs);
 
-        $result = $rootSnippetSourceList->getListOfAvailableNumberOfItemsPerPageForContext($stubContext);
+        $result = $productListingSourceList->getListOfAvailableNumberOfItemsPerPageForContext($stubContextA);
 
         $this->assertSame([10, 30], $result);
     }
@@ -37,11 +38,11 @@ class RootSnippetSourceListTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->setExpectedException(
-            InvalidRootSnippetSourceDataException::class,
+            InvalidProductListingSourceDataException::class,
             'No valid context found in one or more root snippet source data pairs.'
         );
 
-        RootSnippetSourceList::fromArray($sourceDataPairs);
+        ProductListingSourceList::fromArray($sourceDataPairs);
     }
 
     public function testExceptionIsThrownIfDataDoesNotHaveValidNumberOfItemsPerPage()
@@ -52,10 +53,10 @@ class RootSnippetSourceListTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->setExpectedException(
-            InvalidRootSnippetSourceDataException::class,
+            InvalidProductListingSourceDataException::class,
             'No valid number of items per page found in one or more root snippet source data pairs.'
         );
 
-        RootSnippetSourceList::fromArray($sourceDataPairs);
+        ProductListingSourceList::fromArray($sourceDataPairs);
     }
 }

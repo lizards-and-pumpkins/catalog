@@ -36,7 +36,7 @@ use Brera\Product\CatalogImportApiV1PutRequestHandler;
  * @uses   \Brera\GenericSnippetKeyGenerator
  * @uses   \Brera\PageBuilder
  * @uses   \Brera\TemplatesApiV1PutRequestHandler
- * @uses   \Brera\RootSnippetSourceListBuilder
+ * @uses   \Brera\Product\ProductListingSourceListBuilder
  * @uses   \Brera\Utils\Directory
  * @uses   \Brera\Http\HttpRequest
  * @uses   \Brera\Http\HttpUrl

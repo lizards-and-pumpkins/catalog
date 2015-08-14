@@ -5,7 +5,6 @@ namespace Brera\Product;
 use Brera\Context\Context;
 use Brera\Context\ContextSource;
 use Brera\Renderer\BlockRenderer;
-use Brera\RootSnippetSourceList;
 use Brera\Snippet;
 use Brera\SnippetKeyGenerator;
 use Brera\SnippetList;
@@ -41,27 +40,31 @@ class ProductSearchResultsMetaSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param RootSnippetSourceList $rootSnippetSourceList
+     * @param mixed $dataObject
      * @param ContextSource $contextSource
      * @return SnippetList
      */
-    public function render(RootSnippetSourceList $rootSnippetSourceList, ContextSource $contextSource)
+    public function render($dataObject, ContextSource $contextSource)
     {
         foreach ($contextSource->getAllAvailableContexts() as $context) {
-            $this->renderMetaInfoSnippetForContext($rootSnippetSourceList, $context);
+            $this->renderMetaInfoSnippetForContext($dataObject, $context);
         }
 
         return $this->snippetList;
     }
 
-    private function renderMetaInfoSnippetForContext(RootSnippetSourceList $rootSnippetSourceList, Context $context)
-    {
-        $this->blockRenderer->render($rootSnippetSourceList, $context);
+    private function renderMetaInfoSnippetForContext(
+        ProductListingSourceList $productListingSourceList,
+        Context $context
+    ) {
+        $this->blockRenderer->render($productListingSourceList, $context);
 
         $rootSnippetCode = $this->blockRenderer->getRootSnippetCode();
         $pageSnippetCodes = $this->blockRenderer->getNestedSnippetCodes();
 
-        $numItemsPerPageForContext = $rootSnippetSourceList->getListOfAvailableNumberOfItemsPerPageForContext($context);
+        $numItemsPerPageForContext = $productListingSourceList->getListOfAvailableNumberOfItemsPerPageForContext(
+            $context
+        );
 
         foreach ($numItemsPerPageForContext as $numItemsPerPage) {
             $metaSnippetKey = $this->snippetKeyGenerator->getKeyForContext(

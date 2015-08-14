@@ -1,21 +1,21 @@
 <?php
 
-namespace Brera;
+namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\Context\ContextBuilder;
 
 /**
- * @covers \Brera\RootSnippetSourceListBuilder
- * @uses   \Brera\RootSnippetSourceList
- * @uses   \Brera\RootSnippetSource
+ * @covers \Brera\Product\ProductListingSourceListBuilder
+ * @uses   \Brera\Product\ProductListingSourceList
+ * @uses   \Brera\Product\ProductListingSource
  */
-class RootSnippetSourceListBuilderTest extends \PHPUnit_Framework_TestCase
+class ProductListingSourceListBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var RootSnippetSourceListBuilder
+     * @var ProductListingSourceListBuilder
      */
-    private $rootSnippetSourceListBuilder;
+    private $productListingSourceListBuilder;
 
     protected function setUp()
     {
@@ -25,20 +25,20 @@ class RootSnippetSourceListBuilderTest extends \PHPUnit_Framework_TestCase
         $mockContextBuilder = $this->getMock(ContextBuilder::class, [], [], '', false);
         $mockContextBuilder->method('getContext')->willReturn($stubContext);
 
-        $this->rootSnippetSourceListBuilder = new RootSnippetSourceListBuilder($mockContextBuilder);
+        $this->productListingSourceListBuilder = new ProductListingSourceListBuilder($mockContextBuilder);
     }
 
     public function testExceptionIsThrownIfProductPerPageElementIsAbsentInJson()
     {
-        $this->setExpectedException(MalformedProductListingRootSnippetJsonException::class);
-        $this->rootSnippetSourceListBuilder->fromJson('{}');
+        $this->setExpectedException(MalformedProductListingSourceJsonException::class);
+        $this->productListingSourceListBuilder->fromJson('{}');
     }
 
     public function testExceptionIsThrownIfProductsPerPageInstructionIsNonArray()
     {
-        $json = json_encode(5);
-        $this->setExpectedException(MalformedProductListingRootSnippetJsonException::class);
-        $this->rootSnippetSourceListBuilder->fromJson($json);
+        $json = json_encode(['products_per_page' => 1]);
+        $this->setExpectedException(MalformedProductListingSourceJsonException::class);
+        $this->productListingSourceListBuilder->fromJson($json);
     }
 
     public function testExceptionIsThrownIfProductsPerPageInstructionIsMissingContextInformation()
@@ -50,8 +50,8 @@ class RootSnippetSourceListBuilderTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ]);
-        $this->setExpectedException(MalformedProductListingRootSnippetJsonException::class);
-        $this->rootSnippetSourceListBuilder->fromJson($json);
+        $this->setExpectedException(MalformedProductListingSourceJsonException::class);
+        $this->productListingSourceListBuilder->fromJson($json);
     }
 
     public function testExceptionIsThrownIfProductsPerPageInstructionContextInformationIsNonArray()
@@ -64,8 +64,8 @@ class RootSnippetSourceListBuilderTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ]);
-        $this->setExpectedException(MalformedProductListingRootSnippetJsonException::class);
-        $this->rootSnippetSourceListBuilder->fromJson($json);
+        $this->setExpectedException(MalformedProductListingSourceJsonException::class);
+        $this->productListingSourceListBuilder->fromJson($json);
     }
 
     public function testExceptionIsThrownIfProductsPerPageNumberIsMissing()
@@ -77,8 +77,8 @@ class RootSnippetSourceListBuilderTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ]);
-        $this->setExpectedException(MalformedProductListingRootSnippetJsonException::class);
-        $this->rootSnippetSourceListBuilder->fromJson($json);
+        $this->setExpectedException(MalformedProductListingSourceJsonException::class);
+        $this->productListingSourceListBuilder->fromJson($json);
     }
 
     public function testExceptionIsThrownIfProductsPerPageNumberIsNonInteger()
@@ -91,15 +91,15 @@ class RootSnippetSourceListBuilderTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ]);
-        $this->setExpectedException(MalformedProductListingRootSnippetJsonException::class);
-        $this->rootSnippetSourceListBuilder->fromJson($json);
+        $this->setExpectedException(MalformedProductListingSourceJsonException::class);
+        $this->productListingSourceListBuilder->fromJson($json);
     }
 
-    public function testRootSnippetSourceListCanBeCreatedFromJson()
+    public function testProductListingSourceListCanBeCreatedFromJson()
     {
-        $json = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.json');
-        $rootSnippetSourceList = $this->rootSnippetSourceListBuilder->fromJson($json);
+        $json = file_get_contents(__DIR__ . '/../../../shared-fixture/product-listing-root-snippet.json');
+        $productListingSourceList = $this->productListingSourceListBuilder->fromJson($json);
 
-        $this->assertInstanceOf(RootSnippetSourceList::class, $rootSnippetSourceList);
+        $this->assertInstanceOf(ProductListingSourceList::class, $productListingSourceList);
     }
 }

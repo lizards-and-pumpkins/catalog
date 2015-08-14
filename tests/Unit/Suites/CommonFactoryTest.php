@@ -16,6 +16,7 @@ use Brera\Image\ImageWasUpdatedDomainEventHandler;
 use Brera\Image\UpdateImageCommand;
 use Brera\Image\UpdateImageCommandHandler;
 use Brera\Product\ProductListingMetaInfoSourceBuilder;
+use Brera\Product\ProductListingSourceListBuilder;
 use Brera\Product\ProductWasUpdatedDomainEvent;
 use Brera\Product\ProductWasUpdatedDomainEventHandler;
 use Brera\Product\ProductListingWasUpdatedDomainEvent;
@@ -89,7 +90,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Product\ProductListingSnippetRenderer
  * @uses   \Brera\GenericSnippetKeyGenerator
  * @uses   \Brera\SnippetRendererCollection
- * @uses   \Brera\RootSnippetSourceListBuilder
+ * @uses   \Brera\Product\ProductListingSourceListBuilder
  * @uses   \Brera\Product\ProductInListingSnippetRenderer
  * @uses   \Brera\Image\ImageWasUpdatedDomainEventHandler
  * @uses   \Brera\Image\ImageMagickResizeStrategy
@@ -179,10 +180,10 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ProductListingMetaInfoSourceBuilder::class, $result);
     }
 
-    public function testRootSnippetSourceListBuilderIsReturned()
+    public function testProductListingSourceListBuilderIsReturned()
     {
-        $result = $this->commonFactory->createRootSnippetSourceListBuilder();
-        $this->assertInstanceOf(RootSnippetSourceListBuilder::class, $result);
+        $result = $this->commonFactory->createProductListingSourceListBuilder();
+        $this->assertInstanceOf(ProductListingSourceListBuilder::class, $result);
     }
 
     public function testThemeLocatorIsReturned()

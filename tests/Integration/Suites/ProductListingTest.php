@@ -122,7 +122,7 @@ class ProductListingTest extends AbstractIntegrationTest
         $this->assertContains($contentBlockContent, $body);
     }
 
-    public function testProductListingRootSnippetIsAddedToDataPool()
+    public function testProductListingSnippetIsAddedToDataPool()
     {
         $this->createProductListingFixture();
 

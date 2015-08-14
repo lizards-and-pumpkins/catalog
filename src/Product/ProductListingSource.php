@@ -1,10 +1,10 @@
 <?php
 
-namespace Brera;
+namespace Brera\Product;
 
 use Brera\Context\Context;
 
-class RootSnippetSource
+class ProductListingSource
 {
     /**
      * @var Context

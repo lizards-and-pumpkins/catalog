@@ -3,7 +3,6 @@
 namespace Brera\Product;
 
 use Brera\Context\Context;
-use Brera\RootSnippetSourceList;
 use Brera\SampleContextSource;
 use Brera\SnippetKeyGenerator;
 use Brera\SnippetList;
@@ -19,9 +18,9 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $numItemsPerPage = 10;
         $stubContext = $this->getMock(Context::class);
 
-        /** @var RootSnippetSourceList|\PHPUnit_Framework_MockObject_MockObject $mockRootSnippetSourceList */
-        $mockRootSnippetSourceList = $this->getMock(RootSnippetSourceList::class, [], [], '', false);
-        $mockRootSnippetSourceList->expects($this->atLeastOnce())
+        /** @var ProductListingSourceList|\PHPUnit_Framework_MockObject_MockObject $stubProductListingSourceList */
+        $stubProductListingSourceList = $this->getMock(ProductListingSourceList::class, [], [], '', false);
+        $stubProductListingSourceList->expects($this->atLeastOnce())
             ->method('getListOfAvailableNumberOfItemsPerPageForContext')
             ->with($stubContext)
             ->willReturn([$numItemsPerPage]);
@@ -41,7 +40,7 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $mockBlockRenderer = $this->getMock(ProductListingBlockRenderer::class, [], [], '', false);
         $mockBlockRenderer->expects($this->atLeastOnce())
             ->method('render')
-            ->with($mockRootSnippetSourceList, $stubContext)
+            ->with($stubProductListingSourceList, $stubContext)
             ->willReturn('bar');
 
         /** @var SampleContextSource|\PHPUnit_Framework_MockObject_MockObject $mockContextSource */
@@ -56,7 +55,7 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
             $mockBlockRenderer
         );
 
-        $result = $snippetRenderer->render($mockRootSnippetSourceList, $mockContextSource);
+        $result = $snippetRenderer->render($stubProductListingSourceList, $mockContextSource);
 
         $this->assertSame($mockSnippetList, $result);
     }

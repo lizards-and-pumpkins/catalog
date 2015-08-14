@@ -5,7 +5,6 @@ namespace Brera\Product;
 use Brera\Context\Context;
 use Brera\Context\ContextSource;
 use Brera\Renderer\BlockRenderer;
-use Brera\RootSnippetSourceList;
 use Brera\Snippet;
 use Brera\SnippetKeyGenerator;
 use Brera\SnippetList;
@@ -41,14 +40,14 @@ class ProductSearchAutosuggestionSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param RootSnippetSourceList $rootSnippetSourceList
+     * @param mixed $dataObject
      * @param ContextSource $contextSource
      * @return SnippetList
      */
-    public function render(RootSnippetSourceList $rootSnippetSourceList, ContextSource $contextSource)
+    public function render($dataObject, ContextSource $contextSource)
     {
         foreach ($contextSource->getAllAvailableContexts() as $context) {
-            $snippet = $this->createSearchAutosuggestionSnippetsForContext($rootSnippetSourceList, $context);
+            $snippet = $this->createSearchAutosuggestionSnippetsForContext($dataObject, $context);
             $this->snippetList->add($snippet);
         }
 
@@ -56,16 +55,14 @@ class ProductSearchAutosuggestionSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param RootSnippetSourceList $rootSnippetSourceList
+     * @param mixed $dataObject
      * @param Context $context
      * @return Snippet
      */
-    private function createSearchAutosuggestionSnippetsForContext(
-        RootSnippetSourceList $rootSnippetSourceList,
-        Context $context
-    ) {
+    private function createSearchAutosuggestionSnippetsForContext($dataObject, Context $context)
+    {
         $key = $this->snippetKeyGenerator->getKeyForContext($context, []);
-        $content = $this->blockRenderer->render($rootSnippetSourceList, $context);
+        $content = $this->blockRenderer->render($dataObject, $context);
 
         return Snippet::create($key, $content);
     }

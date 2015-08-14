@@ -5,7 +5,6 @@ namespace Brera\Product;
 use Brera\Context\ContextSource;
 use Brera\DataPool\DataPoolWriter;
 use Brera\Projector;
-use Brera\RootSnippetSourceListBuilder;
 use Brera\SnippetRendererCollection;
 
 class ProductListingTemplateProjector implements Projector
@@ -21,18 +20,18 @@ class ProductListingTemplateProjector implements Projector
     private $dataPoolWriter;
 
     /**
-     * @var RootSnippetSourceListBuilder
+     * @var ProductListingSourceListBuilder
      */
-    private $rootSnippetSourceListBuilder;
+    private $productListingSourceListBuilder;
 
     public function __construct(
         SnippetRendererCollection $snippetRendererCollection,
         DataPoolWriter $dataPoolWriter,
-        RootSnippetSourceListBuilder $rootSnippetSourceListBuilder
+        ProductListingSourceListBuilder $productListingSourceListBuilder
     ) {
         $this->snippetRendererCollection = $snippetRendererCollection;
         $this->dataPoolWriter = $dataPoolWriter;
-        $this->rootSnippetSourceListBuilder = $rootSnippetSourceListBuilder;
+        $this->productListingSourceListBuilder = $productListingSourceListBuilder;
     }
 
     /**
@@ -41,8 +40,8 @@ class ProductListingTemplateProjector implements Projector
      */
     public function project($projectionSourceData, ContextSource $context)
     {
-        $rootSnippetSourceList = $this->rootSnippetSourceListBuilder->fromJson($projectionSourceData);
-        $snippetList = $this->snippetRendererCollection->render($rootSnippetSourceList, $context);
+        $productListingSourceList = $this->productListingSourceListBuilder->fromJson($projectionSourceData);
+        $snippetList = $this->snippetRendererCollection->render($productListingSourceList, $context);
         $this->dataPoolWriter->writeSnippetList($snippetList);
     }
 }

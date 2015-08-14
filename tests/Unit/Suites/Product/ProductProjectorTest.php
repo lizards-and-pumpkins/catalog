@@ -5,7 +5,6 @@ namespace Brera\Product;
 use Brera\Context\ContextSource;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use Brera\InvalidProjectionSourceDataTypeException;
-use Brera\SampleContextSource;
 use Brera\DataPool\DataPoolWriter;
 use Brera\SnippetList;
 use Brera\SnippetRendererCollection;

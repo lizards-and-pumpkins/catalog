@@ -28,7 +28,7 @@ class TemplatesApiV1PutRequestHandler extends ApiRequestHandler
             return false;
         }
 
-        if (null === $this->extractRootSnippetIdFromRequest($request)) {
+        if (null === $this->extractTemplateIdFromRequest($request)) {
             return false;
         }
 
@@ -37,8 +37,8 @@ class TemplatesApiV1PutRequestHandler extends ApiRequestHandler
 
     protected function processRequest(HttpRequest $request)
     {
-        $rootSnippetId = $this->extractRootSnippetIdFromRequest($request);
-        $this->domainEventQueue->add(new TemplateWasUpdatedDomainEvent($rootSnippetId, $request->getRawBody()));
+        $templateId = $this->extractTemplateIdFromRequest($request);
+        $this->domainEventQueue->add(new TemplateWasUpdatedDomainEvent($templateId, $request->getRawBody()));
     }
 
     /**
@@ -54,7 +54,7 @@ class TemplatesApiV1PutRequestHandler extends ApiRequestHandler
      * @param HttpRequest $request
      * @return string|null
      */
-    private function extractRootSnippetIdFromRequest(HttpRequest $request)
+    private function extractTemplateIdFromRequest(HttpRequest $request)
     {
         preg_match('#/templates/([^/]+)#i', $request->getUrl(), $urlTokens);
 

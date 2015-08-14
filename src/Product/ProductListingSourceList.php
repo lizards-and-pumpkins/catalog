@@ -1,13 +1,13 @@
 <?php
 
-namespace Brera;
+namespace Brera\Product;
 
 use Brera\Context\Context;
 
-class RootSnippetSourceList
+class ProductListingSourceList
 {
     /**
-     * @var RootSnippetSource[]
+     * @var ProductListingSource[]
      */
     private $sources;
 
@@ -21,7 +21,7 @@ class RootSnippetSourceList
 
     /**
      * @param array[] $sourceDataPairs
-     * @return RootSnippetSourceList
+     * @return ProductListingSourceList
      */
     public static function fromArray(array $sourceDataPairs)
     {
@@ -30,7 +30,7 @@ class RootSnippetSourceList
         foreach ($sourceDataPairs as $sourceDataPair) {
             self::validateSourceData($sourceDataPair);
 
-            $sources[] = new RootSnippetSource($sourceDataPair['context'], $sourceDataPair['numItemsPerPage']);
+            $sources[] = new ProductListingSource($sourceDataPair['context'], $sourceDataPair['numItemsPerPage']);
         }
 
         return new self($sources);
@@ -55,18 +55,18 @@ class RootSnippetSourceList
 
     /**
      * @param mixed[] $sourceDataPair
-     * @throws InvalidRootSnippetSourceDataException
+     * @throws InvalidProductListingSourceDataException
      */
     private static function validateSourceData(array $sourceDataPair)
     {
         if (!array_key_exists('context', $sourceDataPair) || !is_a($sourceDataPair['context'], Context::class)) {
-            throw new InvalidRootSnippetSourceDataException(
+            throw new InvalidProductListingSourceDataException(
                 'No valid context found in one or more root snippet source data pairs.'
             );
         }
 
         if (!array_key_exists('numItemsPerPage', $sourceDataPair) || !is_int($sourceDataPair['numItemsPerPage'])) {
-            throw new InvalidRootSnippetSourceDataException(
+            throw new InvalidProductListingSourceDataException(
                 'No valid number of items per page found in one or more root snippet source data pairs.'
             );
         }

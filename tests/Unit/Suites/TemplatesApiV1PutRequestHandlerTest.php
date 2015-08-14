@@ -49,7 +49,7 @@ class TemplatesApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->requestHandler->canProcess($this->mockRequest));
     }
 
-    public function testRequestCanNotBeProcessedIfUrlDoesNotContainRootSnippetId()
+    public function testRequestCanNotBeProcessedIfUrlDoesNotContainTemplateId()
     {
         $this->mockRequest->method('getMethod')->willReturn(HttpRequest::METHOD_PUT);
         $this->mockRequest->method('getUrl')->willReturn('http://example.com/api/templates');

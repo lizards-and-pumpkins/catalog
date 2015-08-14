@@ -4,8 +4,6 @@ namespace Brera\Product;
 
 use Brera\Context\ContextSource;
 use Brera\DataPool\DataPoolWriter;
-use Brera\RootSnippetSourceList;
-use Brera\RootSnippetSourceListBuilder;
 use Brera\SnippetList;
 use Brera\SnippetRendererCollection;
 
@@ -26,13 +24,16 @@ class ProductListingTemplateProjectorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $stubRootSnippetSourceList = $this->getMock(RootSnippetSourceList::class, [], [], '', false);
+        $stubRootSnippetSourceList = $this->getMock(ProductListingSourceList::class, [], [], '', false);
 
-        /**
-         * @var RootSnippetSourceListBuilder|\PHPUnit_Framework_MockObject_MockObject $stubRootSnippetSourceListBuilder
-         */
-        $stubRootSnippetSourceListBuilder = $this->getMock(RootSnippetSourceListBuilder::class, [], [], '', false);
-        $stubRootSnippetSourceListBuilder->method('fromJson')->willReturn($stubRootSnippetSourceList);
+        $stubProductListingSourceListBuilder = $this->getMock(
+            ProductListingSourceListBuilder::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $stubProductListingSourceListBuilder->method('fromJson')->willReturn($stubRootSnippetSourceList);
 
         $stubSnippetList = $this->getMock(SnippetList::class);
 
@@ -45,7 +46,7 @@ class ProductListingTemplateProjectorTest extends \PHPUnit_Framework_TestCase
         $this->projector = new ProductListingTemplateProjector(
             $stubSnippetRendererCollection,
             $this->mockDataPoolWriter,
-            $stubRootSnippetSourceListBuilder
+            $stubProductListingSourceListBuilder
         );
     }
 

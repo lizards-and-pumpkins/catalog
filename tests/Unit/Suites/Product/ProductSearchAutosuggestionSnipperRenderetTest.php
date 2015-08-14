@@ -5,7 +5,6 @@ namespace Brera\Product;
 use Brera\Context\Context;
 use Brera\Context\ContextSource;
 use Brera\Renderer\BlockRenderer;
-use Brera\RootSnippetSourceList;
 use Brera\Snippet;
 use Brera\SnippetKeyGenerator;
 use Brera\SnippetList;
@@ -62,21 +61,21 @@ class ProductSearchAutosuggestionSnipperRenderetTest extends \PHPUnit_Framework_
 
     public function testSnippetListIsReturned()
     {
-        /** @var RootSnippetSourceList|\PHPUnit_Framework_MockObject_MockObject $stubRootSnippetSourceList */
-        $stubRootSnippetSourceList = $this->getMock(RootSnippetSourceList::class, [], [], '', false);
+        /** @var ProductListingSourceList|\PHPUnit_Framework_MockObject_MockObject $stubProductListingSourceList */
+        $stubProductListingSourceList = $this->getMock(ProductListingSourceList::class, [], [], '', false);
 
-        $result = $this->snippetRenderer->render($stubRootSnippetSourceList, $this->stubContextSource);
+        $result = $this->snippetRenderer->render($stubProductListingSourceList, $this->stubContextSource);
 
         $this->assertInstanceOf(SnippetList::class, $result);
     }
 
     public function testSnippetIsAddedToSnippetList()
     {
-        /** @var RootSnippetSourceList|\PHPUnit_Framework_MockObject_MockObject $stubRootSnippetSourceList */
-        $stubRootSnippetSourceList = $this->getMock(RootSnippetSourceList::class, [], [], '', false);
+        /** @var ProductListingSourceList|\PHPUnit_Framework_MockObject_MockObject $stubProductListingSourceList */
+        $stubProductListingSourceList = $this->getMock(ProductListingSourceList::class, [], [], '', false);
 
         $this->mockSnippetList->expects($this->once())->method('add')->with($this->isInstanceOf(Snippet::class));
 
-        $this->snippetRenderer->render($stubRootSnippetSourceList, $this->stubContextSource);
+        $this->snippetRenderer->render($stubProductListingSourceList, $this->stubContextSource);
     }
 }

@@ -5,7 +5,6 @@ namespace Brera\Product;
 use Brera\Context\Context;
 use Brera\Context\ContextSource;
 use Brera\Renderer\BlockRenderer;
-use Brera\RootSnippetSourceList;
 use Brera\Snippet;
 use Brera\SnippetKeyGenerator;
 use Brera\SnippetList;
@@ -39,9 +38,9 @@ class ProductSearchResultsMetaSnippetRendererTest extends \PHPUnit_Framework_Tes
     private $renderer;
 
     /**
-     * @var RootSnippetSourceList|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductListingSourceList|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubRootSnippetSourceList;
+    private $stubProductListingSourceList;
 
     /**
      * @var ContextSource|\PHPUnit_Framework_MockObject_MockObject
@@ -72,8 +71,9 @@ class ProductSearchResultsMetaSnippetRendererTest extends \PHPUnit_Framework_Tes
         $this->stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
         $this->stubContextSource->method('getAllAvailableContexts')->willReturn([$stubContext]);
 
-        $this->stubRootSnippetSourceList = $this->getMock(RootSnippetSourceList::class, [], [], '', false);
-        $this->stubRootSnippetSourceList->method('getListOfAvailableNumberOfItemsPerPageForContext')->willReturn([9]);
+        $this->stubProductListingSourceList = $this->getMock(ProductListingSourceList::class, [], [], '', false);
+        $this->stubProductListingSourceList->method('getListOfAvailableNumberOfItemsPerPageForContext')
+            ->willReturn([9]);
     }
 
     public function testSnippetRendererInterfaceIsImplemented()
@@ -83,7 +83,7 @@ class ProductSearchResultsMetaSnippetRendererTest extends \PHPUnit_Framework_Tes
 
     public function testSnippetListIsReturned()
     {
-        $result = $this->renderer->render($this->stubRootSnippetSourceList, $this->stubContextSource);
+        $result = $this->renderer->render($this->stubProductListingSourceList, $this->stubContextSource);
         $this->assertInstanceOf(SnippetList::class, $result);
     }
 
@@ -96,6 +96,6 @@ class ProductSearchResultsMetaSnippetRendererTest extends \PHPUnit_Framework_Tes
         $expectedSnippet = Snippet::create($this->dummySnippetKey, json_encode($expectedSnippetContent));
         $this->mockSnippetList->expects($this->once())->method('add')->with($expectedSnippet);
 
-        $this->renderer->render($this->stubRootSnippetSourceList, $this->stubContextSource);
+        $this->renderer->render($this->stubProductListingSourceList, $this->stubContextSource);
     }
 }
