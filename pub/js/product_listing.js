@@ -1,5 +1,3 @@
-require([
-    'common'
-], function() {
+require(['common'], function() {
     
 });

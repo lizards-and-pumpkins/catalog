@@ -69,8 +69,9 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
         }
 
         $searchQueryString = $request->getUrl()->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
+        $productIds = $this->dataPoolReader->getSearchResults($searchQueryString, $this->context);
 
-        $this->addSearchResultsToPageBuilder($searchQueryString);
+        $this->addSearchResultsToPageBuilder($productIds);
 
         $metaInfoSnippetKeyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
             ProductSearchAutosuggestionMetaSnippetRenderer::CODE
@@ -79,7 +80,10 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
         $metaInfoSnippetJson = $this->dataPoolReader->getSnippet($metaInfoSnippetKey);
         $metaInfoSnippetContent = ProductSearchAutosuggestionMetaSnippetContent::fromJson($metaInfoSnippetJson);
 
-        $keyGeneratorParams = ['query_string' => $searchQueryString];
+        $keyGeneratorParams = [
+            'total_number_of_results' => count($productIds),
+            'query_string'            => $searchQueryString
+        ];
 
         return $this->pageBuilder->buildPage($metaInfoSnippetContent, $this->context, $keyGeneratorParams);
     }
@@ -110,12 +114,10 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
     }
 
     /**
-     * @param string $queryString
+     * @param string[] $productIds
      */
-    private function addSearchResultsToPageBuilder($queryString)
+    private function addSearchResultsToPageBuilder(array $productIds)
     {
-        $productIds = $this->dataPoolReader->getSearchResults($queryString, $this->context);
-
         if (empty($productIds)) {
             return;
         }

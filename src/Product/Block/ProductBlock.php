@@ -79,7 +79,7 @@ class ProductBlock extends Block
             return '';
         }
 
-        return $fileName;
+        return '/brera/' . $fileName;
     }
 
     /**

@@ -10,7 +10,7 @@ $productImage = $this->getMainProductImage();
 ?>
 <li>
     <a href="<?= $this->getProductUrl() ?>">
-        <img src="<?= $productImage->getPath('thumbnail') ?>" alt="<?= $productImage->getLabel() ?>" width="60" height="37"/>
+        <img src="<?= $productImage->getPath('search-autosuggestion') ?>" alt="<?= $productImage->getLabel() ?>" width="60" height="37"/>
         <?= $this->getFirstValueOfProductAttribute('name') ?>
     </a>
 </li>
