@@ -32,7 +32,7 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
     /**
      * @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockDataPoolReader;
+    private $stubDataPoolReader;
 
     /**
      * @var ProductSearchAutosuggestionRequestHandler
@@ -62,7 +62,7 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->getMock(Context::class);
 
-        $this->mockDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
+        $this->stubDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
         $this->mockPageBuilder = $this->getMock(PageBuilder::class, [], [], '', false);
 
         $mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
@@ -73,7 +73,7 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
 
         $this->requestHandler = new ProductSearchAutosuggestionRequestHandler(
             $stubContext,
-            $this->mockDataPoolReader,
+            $this->stubDataPoolReader,
             $this->mockPageBuilder,
             $mockSnippetKeyGeneratorLocator
         );
@@ -155,7 +155,8 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
             'root_snippet_code'  => 'foo',
             'page_snippet_codes' => ['foo']
         ];
-        $this->mockDataPoolReader->method('getSnippet')->willReturn(json_encode($metaSnippetContent));
+        $this->stubDataPoolReader->method('getSnippet')->willReturn(json_encode($metaSnippetContent));
+        $this->stubDataPoolReader->method('getSearchResults')->willReturn([]);
 
         $this->assertInstanceOf(DefaultHttpResponse::class, $this->requestHandler->process($this->stubHttpRequest));
     }
@@ -165,14 +166,14 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
         $queryString = 'foo';
         $this->prepareStubHttpRequest($queryString);
 
-        $this->mockDataPoolReader->method('getSearchResults')->willReturn(['product_in_listing_id']);
+        $this->stubDataPoolReader->method('getSearchResults')->willReturn(['product_in_listing_id']);
 
         $metaSnippetContent = [
             'root_snippet_code'  => 'foo',
             'page_snippet_codes' => ['foo']
         ];
-        $this->mockDataPoolReader->method('getSnippet')->willReturn(json_encode($metaSnippetContent));
-        $this->mockDataPoolReader->method('getSnippets')->willReturn([]);
+        $this->stubDataPoolReader->method('getSnippet')->willReturn(json_encode($metaSnippetContent));
+        $this->stubDataPoolReader->method('getSnippets')->willReturn([]);
 
         $this->mockPageBuilder->expects($this->once())->method('addSnippetsToPage');
 

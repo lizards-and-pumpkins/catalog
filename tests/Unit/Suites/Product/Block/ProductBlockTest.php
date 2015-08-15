@@ -105,9 +105,10 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
         $testProductBrandName = 'foo';
         $this->stubProduct->method('getFirstValueOfAttribute')->with('brand')->willReturn($testProductBrandName);
 
-        $expectedProductBrandLogoSrc = 'images/brands/brands-slider/' . $testProductBrandName . '.png';
-        $this->createFixtureFile('pub/' . $expectedProductBrandLogoSrc, '');
+        $brandLogoSrc = 'images/brands/brands-slider/' . $testProductBrandName . '.png';
+        $this->createFixtureFile('pub/' . $brandLogoSrc, '');
 
+        $expectedProductBrandLogoSrc = '/brera/' . $brandLogoSrc;
         $result = $this->productBlock->getBrandLogoSrc();
 
         $this->assertEquals($expectedProductBrandLogoSrc, $result);
