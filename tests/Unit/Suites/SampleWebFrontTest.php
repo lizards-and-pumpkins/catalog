@@ -29,6 +29,7 @@ use Brera\Http\HttpUrl;
  * @uses   \Brera\Product\ProductDetailViewRequestHandler
  * @uses   \Brera\Product\ProductListingRequestHandler
  * @uses   \Brera\Product\MultipleProductStockQuantityApiV1PutRequestHandler
+ * @uses   \Brera\Product\ProductSearchAutosuggestionRequestHandler
  * @uses   \Brera\Product\ProductSearchRequestHandler
  * @uses   \Brera\Product\ProductListingSourceListBuilder
  * @uses   \Brera\Http\ResourceNotFoundRouter

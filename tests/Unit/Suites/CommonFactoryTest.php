@@ -75,6 +75,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Product\ProductListingWasUpdatedDomainEventHandler
  * @uses   \Brera\Product\ProductWasUpdatedDomainEvent
  * @uses   \Brera\Product\ProductWasUpdatedDomainEventHandler
+ * @uses   \Brera\Product\ProductSearchAutosuggestionMetaSnippetRenderer
  * @uses   \Brera\Product\ProductSearchAutosuggestionSnippetRenderer
  * @uses   \Brera\Product\ProductSearchAutosuggestionTemplateProjector
  * @uses   \Brera\Product\ProductSearchResultMetaSnippetRenderer

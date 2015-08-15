@@ -12,6 +12,8 @@ use Brera\SnippetRenderer;
 
 /**
  * @covers \Brera\Product\ProductSearchAutosuggestionMetaSnippetRenderer
+ * @uses   \Brera\Product\ProductSearchAutosuggestionMetaSnippetContent
+ * @uses   \Brera\Snippet
  */
 class ProductSearchAutosuggestionMetaSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {

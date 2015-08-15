@@ -26,6 +26,7 @@ use Brera\Product\CatalogImportApiV1PutRequestHandler;
  * @uses   \Brera\Http\GenericHttpRouter
  * @uses   \Brera\Product\ProductDetailViewRequestHandler
  * @uses   \Brera\Product\ProductListingRequestHandler
+ * @uses   \Brera\Product\ProductSearchAutosuggestionRequestHandler
  * @uses   \Brera\Product\ProductSearchRequestHandler
  * @uses   \Brera\Product\MultipleProductStockQuantityApiV1PutRequestHandler
  * @uses   \Brera\DataPool\DataPoolReader
@@ -122,5 +123,11 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->frontendFactory->createPriceSnippetTransformation();
         $this->assertInstanceOf(SimpleEuroPriceSnippetTransformation::class, $result);
+    }
+
+    public function testProductSearchAutosuggestionRouterIsReturned()
+    {
+        $result = $this->frontendFactory->createProductSearchAutosuggestionRouter();
+        $this->assertInstanceOf(GenericHttpRouter::class, $result);
     }
 }
