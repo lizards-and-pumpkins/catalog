@@ -83,8 +83,14 @@ class ProductSearchRequestHandler implements HttpRequestHandler
             'items_per_page' => $this->getDefaultNumberOrProductsPerPage(),
             'query_string'   => $searchQueryString,
         ];
+        $dynamicSnippets = [];
 
-        return $this->pageBuilder->buildPage($metaInfoSnippetContent, $this->context, $keyGeneratorParams);
+        return $this->pageBuilder->buildPage(
+            $metaInfoSnippetContent,
+            $this->context,
+            $keyGeneratorParams,
+            $dynamicSnippets
+        );
     }
 
     /**

@@ -45,6 +45,11 @@ class PageBuilder
     private $logger;
 
     /**
+     * @var string[]
+     */
+    private $dynamicSnippets;
+
+    /**
      * @var array[]
      */
     private $snippetTransformations = [];
@@ -63,12 +68,19 @@ class PageBuilder
      * @param PageMetaInfoSnippetContent $metaInfo
      * @param Context $context
      * @param mixed[] $keyGeneratorParams
+     * @param string[] $dynamicSnippets
      * @return DefaultHttpResponse
      */
-    public function buildPage(PageMetaInfoSnippetContent $metaInfo, Context $context, array $keyGeneratorParams)
-    {
+    public function buildPage(
+        PageMetaInfoSnippetContent $metaInfo,
+        Context $context,
+        array $keyGeneratorParams,
+        array $dynamicSnippets
+    ) {
         $this->context = $context;
         $this->keyGeneratorParams = $keyGeneratorParams;
+        $this->dynamicSnippets = $dynamicSnippets;
+
         $this->initFromMetaInfo($metaInfo);
         $this->loadSnippets();
         $this->logMissingSnippets();
@@ -167,7 +179,7 @@ class PageBuilder
     {
         $missingSnippetCodes = [];
         foreach ($this->snippetCodeToKeyMap as $code => $key) {
-            if (!array_key_exists($key, $this->snippetKeyToContentMap)) {
+            if (!isset($this->snippetKeyToContentMap[$key]) && !isset($this->dynamicSnippets[$key])) {
                 $missingSnippetCodes[] = $code;
             }
         }
@@ -181,6 +193,10 @@ class PageBuilder
     {
         list($rootSnippet, $childSnippets) = $this->separateRootAndChildSnippets();
         $childSnippetsCodes = $this->getLoadedChildSnippetCodes();
+
+        $childSnippetsCodes = array_merge($childSnippetsCodes, array_keys($this->dynamicSnippets));
+        $childSnippets = array_merge($childSnippets, $this->dynamicSnippets);
+
         $childSnippetPlaceholdersToContentMap = $this->mergePlaceholderAndSnippets($childSnippetsCodes, $childSnippets);
         return $this->injectSnippetsIntoContent($rootSnippet, $childSnippetPlaceholdersToContentMap);
     }

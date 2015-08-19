@@ -128,14 +128,11 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
             ProductDetailPageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => $allSnippetCodes
         ];
 
-        $this->mockDataPoolReader->method('getSnippet')
-            ->with($this->urlPathKeyFixture)
+        $this->mockDataPoolReader->method('getSnippet')->with($this->urlPathKeyFixture)
             ->willReturn(json_encode($pageMetaInfo));
 
-        $this->stubPageMetaInfo->method('getPageSnippetCodes')
-            ->willReturn($allSnippetCodes);
-        $this->stubPageMetaInfo->method('getRootSnippetCode')
-            ->willReturn($rootSnippetCode);
+        $this->stubPageMetaInfo->method('getPageSnippetCodes')->willReturn($allSnippetCodes);
+        $this->stubPageMetaInfo->method('getRootSnippetCode')->willReturn($rootSnippetCode);
 
     }
 
@@ -147,8 +144,7 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $allSnippetKeys = $allSnippetCodes;
         $pageSnippetKeyMap = array_combine($allSnippetKeys, $allSnippetContent);
-        $this->mockDataPoolReader->method('getSnippets')
-            ->willReturn($pageSnippetKeyMap);
+        $this->mockDataPoolReader->method('getSnippets')->willReturn($pageSnippetKeyMap);
     }
 
     /**
@@ -178,10 +174,7 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
                     $keyGenerator->method('getKeyForContext')->willReturn($snippetCode);
                     return $keyGenerator;
                 }
-                throw new \Exception(sprintf(
-                    'No key generator set for snippet "%s"',
-                    $snippetCode
-                ));
+                throw new \Exception(sprintf('No key generator set for snippet "%s"', $snippetCode));
             }
         );
     }
@@ -189,13 +182,15 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->stubContext = $this->getMock(Context::class);
-        $this->stubContext->method('getIdForParts')
-            ->willReturn($this->contextIdFixture);
+        $this->stubContext->method('getIdForParts')->willReturn($this->contextIdFixture);
+
         $this->stubPageMetaInfo = $this->getMock(PageMetaInfoSnippetContent::class);
 
         $this->mockDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
+
         $this->stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
         $this->fakeSnippetKeyGeneratorLocator($this->stubSnippetKeyGeneratorLocator);
+
         $this->stubLogger = $this->getMock(Logger::class);
 
         $this->pageBuilder = new PageBuilder(
@@ -211,7 +206,7 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
         $childSnippetMap = [];
 
         $this->setDataPoolFixture($this->testRootSnippetCode, $rootSnippetContent, $childSnippetMap);
-        $result = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
+        $result = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, [], []);
         $this->assertInstanceOf(HttpResponse::class, $result);
     }
 
@@ -226,7 +221,7 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
 
         $expectedContent = '<html><head>' . $headContent . '</head><body>' . $bodyContent . '</body></html>';
 
-        $page = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
+        $page = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, [], []);
         $this->assertEquals($expectedContent, $page->getBody());
     }
 
@@ -247,7 +242,7 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
 <html><head><title>My Website!</title></head><body><h1>My Website!</h1>child1child2child3</body></html>
 EOH;
 
-        $page = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
+        $page = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, [], []);
         $this->assertEquals($expectedContent, $page->getBody());
     }
 
@@ -268,7 +263,7 @@ EOH;
 <html><head><title>My Website!</title></head><body><h1>My Website!</h1>child1child2child3</body></html>
 EOH;
 
-        $page = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
+        $page = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, [], []);
         $this->assertEquals($expectedContent, $page->getBody());
     }
 
@@ -286,7 +281,7 @@ EOH;
 
         $expectedContent = '<html><body><h1>My Website!</h1>child1child2child3</body></html>';
 
-        $page = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
+        $page = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, [], []);
         $this->assertEquals($expectedContent, $page->getBody());
     }
 
@@ -299,7 +294,7 @@ EOH;
         $this->setPageContentSnippetFixture($allSnippetCodes, $allSnippetContent);
         $this->setExpectedException(InvalidPageMetaSnippetException::class);
 
-        $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
+        $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, [], []);
     }
 
     public function testLogIsWrittenIfChildSnippetContentIsNotFound()
@@ -311,7 +306,7 @@ EOH;
         $this->setPageContentSnippetFixture($allSnippetCodes, $allSnippetContent);
         $this->stubLogger->expects($this->once())
             ->method('log');
-        $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
+        $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, [], []);
     }
 
     /**
@@ -327,11 +322,11 @@ EOH;
         $this->setDataPoolFixture($this->testRootSnippetCode, $rootSnippetContent, $childSnippetCodeToContentMap);
 
         if ($testLoadBeforeAdd) {
-            $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
+            $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, [], []);
             $this->pageBuilder->addSnippetsToPage($snippetCodeToKeyMap, $snippetKeyToContentMap);
         } else {
             $this->pageBuilder->addSnippetsToPage($snippetCodeToKeyMap, $snippetKeyToContentMap);
-            $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
+            $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, [], []);
         }
 
         $this->assertSnippetKeyIsMappedToContent('child1', 'Child Content 1');
@@ -366,7 +361,7 @@ EOH;
         $this->setPageMetaInfoFixture($this->testRootSnippetCode, $childSnippetCodes);
         $this->mockDataPoolReader->method('getSnippets')
             ->willReturn([$this->testRootSnippetCode => 'Dummy Root Content']);
-        $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
+        $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, [], []);
         $this->assertTrue(
             true,
             'Dummy assertion. What I want is that the page is built with unregistered key generators ' .
@@ -388,7 +383,7 @@ EOH;
         ];
         $this->setDataPoolFixture($this->testRootSnippetCode, $rootSnippetContent, $childSnippetMap);
         
-        $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
+        $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, [], []);
     }
 
     public function testTestSnippetTransformationIsCalledIfThereIsAMatchingSnippet()
@@ -405,7 +400,7 @@ EOH;
         ];
         $this->setDataPoolFixture($this->testRootSnippetCode, $rootSnippetContent, $childSnippetMap);
 
-        $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
+        $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, [], []);
     }
 
     public function testMultipleTestSnippetTransformationsForOneSnippetCanBeRegistered()
@@ -429,7 +424,21 @@ EOH;
         ];
         $this->setDataPoolFixture($this->testRootSnippetCode, $rootSnippetContent, $childSnippetMap);
 
-        $page = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
+        $page = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, [], []);
         $this->assertEquals('<body>result two</body>', $page->getBody());
+    }
+
+    public function testDynamicSnippetsAreHolePunchedIntoPage()
+    {
+        $dynamicSnippetKey = 'foo';
+        $dynamicSnippetContent = 'bar';
+        $dynamicSnippets = [$dynamicSnippetKey => $dynamicSnippetContent];
+
+        $rootSnippetContent = sprintf('<div>{{snippet %s}}</div>', $dynamicSnippetKey);
+        $this->setPageMetaInfoFixture($this->testRootSnippetCode, [$dynamicSnippetKey]);
+        $this->setPageContentSnippetFixture([$this->testRootSnippetCode], [$rootSnippetContent]);
+
+        $page = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, [], $dynamicSnippets);
+        $this->assertContains($dynamicSnippetContent, $page->getBody());
     }
 }

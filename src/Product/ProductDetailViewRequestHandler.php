@@ -75,8 +75,14 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
         $keyGeneratorParams = [
             ProductDetailPageMetaInfoSnippetContent::KEY_PRODUCT_ID => $this->pageMetaInfo->getProductId()
         ];
+        $dynamicSnippets = [];
 
-        return $this->pageBuilder->buildPage($this->pageMetaInfo, $this->context, $keyGeneratorParams);
+        return $this->pageBuilder->buildPage(
+            $this->pageMetaInfo,
+            $this->context,
+            $keyGeneratorParams,
+            $dynamicSnippets
+        );
     }
 
     private function loadPageMetaInfoSnippet(HttpRequest $request)

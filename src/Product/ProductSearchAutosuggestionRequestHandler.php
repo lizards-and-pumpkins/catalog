@@ -80,12 +80,18 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
         $metaInfoSnippetJson = $this->dataPoolReader->getSnippet($metaInfoSnippetKey);
         $metaInfoSnippetContent = ProductSearchAutosuggestionMetaSnippetContent::fromJson($metaInfoSnippetJson);
 
-        $keyGeneratorParams = [
+        $keyGeneratorParams = [];
+        $dynamicSnippets = [
             'total_number_of_results' => count($productIds),
             'query_string'            => $searchQueryString
         ];
 
-        return $this->pageBuilder->buildPage($metaInfoSnippetContent, $this->context, $keyGeneratorParams);
+        return $this->pageBuilder->buildPage(
+            $metaInfoSnippetContent,
+            $this->context,
+            $keyGeneratorParams,
+            $dynamicSnippets
+        );
     }
 
     /**
