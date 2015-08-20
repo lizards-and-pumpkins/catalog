@@ -51,10 +51,9 @@ abstract class ContextSource
      */
     private function getContextMatrixForParts(array $requestedParts)
     {
-        $aggregatedResult = array();
-        $flippedRequestedParts = array_flip($requestedParts);
+        $aggregatedResult = [];
         foreach ($this->getContextMatrix() as $contextSourceRecord) {
-            $matchingParts = $this->extractMatchingParts($contextSourceRecord, $flippedRequestedParts);
+            $matchingParts = $this->extractMatchingParts($contextSourceRecord, $requestedParts);
             $aggregatedResult = $this->addExtractedContextToAggregateIfNotAlreadyPresent(
                 $matchingParts,
                 $aggregatedResult
@@ -65,12 +64,12 @@ abstract class ContextSource
 
     /**
      * @param string[] $contextSourceRecord
-     * @param string[] $flippedRequestedParts
+     * @param string[] $requestedParts
      * @return string[]
      */
-    private function extractMatchingParts($contextSourceRecord, $flippedRequestedParts)
+    private function extractMatchingParts($contextSourceRecord, $requestedParts)
     {
-        return array_intersect_key($contextSourceRecord, $flippedRequestedParts);
+        return array_intersect_key($contextSourceRecord, array_flip($requestedParts));
     }
 
     /**
