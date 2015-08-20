@@ -175,7 +175,7 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
         $this->stubDataPoolReader->method('getSnippet')->willReturn(json_encode($metaSnippetContent));
         $this->stubDataPoolReader->method('getSnippets')->willReturn([]);
 
-        $this->mockPageBuilder->expects($this->once())->method('addSnippetsToPage');
+        $this->mockPageBuilder->expects($this->atLeastOnce())->method('addSnippetsToPage');
 
         $this->requestHandler->process($this->stubHttpRequest);
     }

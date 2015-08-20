@@ -78,14 +78,8 @@ class ProductListingRequestHandler implements HttpRequestHandler
             'products_per_page' => $this->getDefaultNumberOrProductsPerPage(),
             'url_key'           => ltrim($request->getUrl()->getPathRelativeToWebFront(), '/')
         ];
-        $dynamicSnippets = [];
 
-        return $this->pageBuilder->buildPage(
-            $this->pageMetaInfo,
-            $this->context,
-            $keyGeneratorParams,
-            $dynamicSnippets
-        );
+        return $this->pageBuilder->buildPage($this->pageMetaInfo, $this->context, $keyGeneratorParams);
     }
 
     private function loadPageMetaInfoSnippet(HttpRequest $request)

@@ -80,18 +80,12 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
         $metaInfoSnippetJson = $this->dataPoolReader->getSnippet($metaInfoSnippetKey);
         $metaInfoSnippetContent = ProductSearchAutosuggestionMetaSnippetContent::fromJson($metaInfoSnippetJson);
 
-        $keyGeneratorParams = [];
-        $dynamicSnippets = [
-            'total_number_of_results' => count($productIds),
-            'query_string'            => $searchQueryString
-        ];
+        $this->addTotalNumberOfResultsSnippetToPageBuilder(count($productIds));
+        $this->addSearchQueryStringSnippetToPageBuilder($searchQueryString);
 
-        return $this->pageBuilder->buildPage(
-            $metaInfoSnippetContent,
-            $this->context,
-            $keyGeneratorParams,
-            $dynamicSnippets
-        );
+        $keyGeneratorParams = [];
+
+        return $this->pageBuilder->buildPage($metaInfoSnippetContent, $this->context, $keyGeneratorParams);
     }
 
     /**
@@ -154,5 +148,39 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
             $acc[$snippetCode] = $key;
             return $acc;
         }, []);
+    }
+
+    /**
+     * @param string $searchQueryString
+     */
+    private function addSearchQueryStringSnippetToPageBuilder($searchQueryString)
+    {
+        $snippetCode = 'query_string';
+        $snippetContent = $searchQueryString;
+
+        $this->addDynamicSnippetToPageBuilder($snippetCode, $snippetContent);
+    }
+
+    /**
+     * @param string $totalNumberOfResults
+     */
+    private function addTotalNumberOfResultsSnippetToPageBuilder($totalNumberOfResults)
+    {
+        $snippetCode = 'total_number_of_results';
+        $snippetContent = $totalNumberOfResults;
+
+        $this->addDynamicSnippetToPageBuilder($snippetCode, $snippetContent);
+    }
+
+    /**
+     * @param string $snippetCode
+     * @param string $snippetContent
+     */
+    private function addDynamicSnippetToPageBuilder($snippetCode, $snippetContent)
+    {
+        $snippetCodeToKeyMap = [$snippetCode => $snippetCode];
+        $snippetKeyToContentMap = [$snippetCode => $snippetContent];
+
+        $this->pageBuilder->addSnippetsToPage($snippetCodeToKeyMap, $snippetKeyToContentMap);
     }
 }

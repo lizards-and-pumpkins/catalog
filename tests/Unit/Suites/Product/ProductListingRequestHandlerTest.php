@@ -146,7 +146,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->mockDataPoolReader->method('getProductIdsMatchingCriteria')->willReturn(['product_in_listing_id']);
         $this->mockDataPoolReader->method('getSnippets')->willReturn([]);
 
-        $this->mockPageBuilder->expects($this->once())->method('addSnippetsToPage');
+        $this->mockPageBuilder->expects($this->atLeastOnce())->method('addSnippetsToPage');
 
         $this->mockMetaInfoSnippet();
         $this->requestHandler->process($this->stubRequest);
