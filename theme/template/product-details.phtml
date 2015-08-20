@@ -98,8 +98,11 @@ $save = 0;
                     </div>
 
                     <div class="price-information" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
-                        <?= $this->getChildOutput('price') ?>
+                        <div class="price-box">
+                            <span class="regular-price"><?= $this->getChildOutput('price') ?></span>
+                        </div>
                     </div>
+                    <span class="regular-price"><?= $this->getChildOutput('special_price') ?></span>
                 </div>
 
                 <div class="product-controls">
