@@ -70,4 +70,14 @@ class VersionedContext implements Context
     {
         return $code == self::CODE;
     }
+
+    /**
+     * @param Context $otherContext
+     * @return bool
+     */
+    public function isSubsetOf(Context $otherContext)
+    {
+        return $otherContext->supportsCode(self::CODE) &&
+               $this->getValue(self::CODE) === $otherContext->getValue(self::CODE);
+    }
 }

@@ -29,8 +29,8 @@ class VersionedContextTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->stubDataVersion = $this->getMock(DataVersion::class, [], [], '', false);
-        $this->stubDataVersion->method('__toString')
-            ->willReturn($this->testVersionValue);
+        $this->stubDataVersion->method('__toString')->willReturn($this->testVersionValue);
+
         $this->versionedContext = new VersionedContext($this->stubDataVersion);
     }
 
@@ -82,5 +82,31 @@ class VersionedContextTest extends \PHPUnit_Framework_TestCase
     public function testCodesOtherThenVersionAreNotSupported()
     {
         $this->assertFalse($this->versionedContext->supportsCode('foo'));
+    }
+
+    public function testFalseIsReturnedIfContextIsNotSubsetOfOtherContext()
+    {
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $otherContext */
+        $otherContext = $this->getMock(Context::class);
+        $otherContext->method('getSupportedCodes')->willReturn(['foo']);
+        $otherContext->method('getValue')->with('foo')->willReturn('bar');
+
+        $this->assertFalse($this->versionedContext->isSubsetOf($otherContext));
+    }
+
+    public function testContextIsSubsetOfItself()
+    {
+        $this->assertTrue($this->versionedContext->isSubsetOf($this->versionedContext));
+    }
+
+    public function testTrueIsReturnedIfContextIsSubsetOfWiderContext()
+    {
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $otherContext */
+        $otherContext = $this->getMock(Context::class);
+        $otherContext->method('getSupportedCodes')->willReturn([VersionedContext::CODE, 'some-other-code']);
+        $otherContext->method('supportsCode')->with(VersionedContext::CODE)->willReturn(true);
+        $otherContext->method('getValue')->with(VersionedContext::CODE)->willReturn($this->testVersionValue);
+
+        $this->assertTrue($this->versionedContext->isSubsetOf($otherContext));
     }
 }

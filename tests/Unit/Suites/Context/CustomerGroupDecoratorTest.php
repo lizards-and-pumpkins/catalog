@@ -10,7 +10,7 @@ namespace Brera\Context;
  * @uses   \Brera\Context\VersionedContext
  * @uses   \Brera\DataVersion
  */
-class CustomerGroupContextDecoratorTest extends ContextDecoratorTestAbstract
+class CustomerGroupContextDecoratorTest extends AbstractContextDecoratorTest
 {
     /**
      * @return string

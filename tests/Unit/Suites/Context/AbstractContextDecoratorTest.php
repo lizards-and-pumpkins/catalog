@@ -2,7 +2,7 @@
 
 namespace Brera\Context;
 
-abstract class ContextDecoratorTestAbstract extends \PHPUnit_Framework_TestCase
+abstract class AbstractContextDecoratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Context|\PHPUnit_Framework_MockObject_MockObject
@@ -63,8 +63,7 @@ abstract class ContextDecoratorTestAbstract extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->mockDecoratedContext = $this->getMock(Context::class);
-        $this->mockDecoratedContext->method('getSupportedCodes')
-            ->willReturn([$this->decoratedComponentCode]);
+        $this->mockDecoratedContext->method('getSupportedCodes')->willReturn([$this->decoratedComponentCode]);
         $this->decorator = $this->createContextDecoratorUnderTest(
             $this->mockDecoratedContext,
             $this->getStubContextData()
@@ -179,9 +178,44 @@ abstract class ContextDecoratorTestAbstract extends \PHPUnit_Framework_TestCase
     public function testHandlingIsDelegatedToComponentIfCodeIsNotSupported()
     {
         $code = 'dummy-part';
-        $this->mockDecoratedContext->expects($this->once())
-            ->method('supportsCode')
-            ->with($code);
+        $this->mockDecoratedContext->expects($this->once())->method('supportsCode')->with($code);
         $this->getDecoratorUnderTest()->supportsCode($code);
+    }
+
+    public function testFalseIsReturnedIfContextIsNotSubsetOfOtherContext()
+    {
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $otherContext */
+        $otherContext = $this->getMock(Context::class);
+        $otherContext->method('getSupportedCodes')->willReturn(['foo']);
+        $otherContext->method('getValue')->with('foo')->willReturn('bar');
+
+        $this->assertFalse($this->decorator->isSubsetOf($otherContext));
+    }
+
+    public function testContextIsSubsetOfItself()
+    {
+        $this->mockDecoratedContext->method('supportsCode')->with($this->decoratedComponentCode)->willReturn(true);
+        $this->assertTrue($this->decorator->isSubsetOf($this->decorator));
+    }
+
+    public function testTrueIsReturnedIfContextIsSubsetOfWiderContext()
+    {
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $otherContext */
+        $otherContext = $this->getMock(Context::class);
+        $otherContext->method('getSupportedCodes')->willReturn([
+            $this->decoratedComponentCode,
+            $this->getDecoratorUnderTestCode(),
+            'code-of-component-not-present-in-decorator-under-test'
+        ]);
+        $otherContext->method('supportsCode')->willReturnMap([
+            [$this->decoratedComponentCode, true],
+            [$this->getDecoratorUnderTestCode(), true],
+        ]);
+        $otherContext->method('getValue')->willReturnMap([
+            [$this->decoratedComponentCode, null],
+            [$this->getDecoratorUnderTestCode(), $this->getStubContextData()[$this->getDecoratorUnderTestCode()]],
+        ]);
+
+        $this->assertTrue($this->decorator->isSubsetOf($otherContext));
     }
 }
