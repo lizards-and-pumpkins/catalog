@@ -5,7 +5,6 @@ namespace Brera;
 use Brera\Http\HttpHeaders;
 use Brera\Http\HttpRequestBody;
 use Brera\Http\HttpResourceNotFoundResponse;
-use Brera\Product\SampleSku;
 use Brera\Product\ProductDetailViewInContextSnippetRenderer;
 use Brera\Product\ProductId;
 use Brera\Http\HttpUrl;
@@ -25,8 +24,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         // TODO: Test is broken, the import and the following request should initialize their own WebFront instances,
         // TODO: thus sharing the data pool and queue needs to be handled properly.
 
-        $sku = SampleSku::fromString('118235-251');
-        $productId = ProductId::fromSku($sku);
+        $productId = ProductId::fromString('118235-251');
         $productName = 'LED Arm-Signallampe';
         $productPrice = 1295;
         $productBackOrderAvailability = 'true';
@@ -53,9 +51,9 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $productDetailViewHtml = $dataPoolReader->getSnippet($productDetailViewKey);
 
         $this->assertContains(
-            (string) $sku,
+            (string) $productId,
             $productDetailViewHtml,
-            sprintf('The result page HTML does not contain the expected sku "%s"', $sku)
+            sprintf('The result page HTML does not contain the expected sku "%s"', $productId)
         );
         $this->assertContains(
             $productName,
@@ -154,15 +152,13 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
             ProductDetailViewInContextSnippetRenderer::CODE
         );
 
-        $validProductSku = SampleSku::fromString('288193NEU');
-        $validProductId = ProductId::fromSku($validProductSku);
+        $validProductId = ProductId::fromString('288193NEU');
         $validProductDetailViewSnippetKey = $productDetailViewKeyGenerator->getKeyForContext(
             $context,
             ['product_id' => $validProductId]
         );
 
-        $invalidProductSku = SampleSku::fromString('T4H2N-4701');
-        $invalidProductId = ProductId::fromSku($invalidProductSku);
+        $invalidProductId = ProductId::fromString('T4H2N-4701');
         $invalidProductDetailViewSnippetKey = $productDetailViewKeyGenerator->getKeyForContext(
             $context,
             ['product_id' => $invalidProductId]

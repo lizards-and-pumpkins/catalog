@@ -114,8 +114,7 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
                 $this->commandQueue->add(new UpdateProductCommand($productSource));
             } catch (\Exception $exception) {
                 $skuString = (new XPathParser($productXml))->getXmlNodesArrayByXPath('//@sku')[0]['value'];
-                $sku = SampleSku::fromString($skuString);
-                $productId = ProductId::fromSku($sku);
+                $productId = ProductId::fromString($skuString);
                 $loggerMessage = new ProductImportFailedMessage($productId, $exception);
                 $this->logger->log($loggerMessage);
             }

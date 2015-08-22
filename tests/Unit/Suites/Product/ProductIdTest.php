@@ -7,30 +7,23 @@ namespace Brera\Product;
  */
 class ProductIdTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var ProductId
-     */
-    private $productId;
-
-    /**
-     * @var Sku|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubSku;
-
-    protected function setUp()
+    public function testExceptionIsThrownDuringAttemptToCreateProductIdFromNonString()
     {
-        $this->stubSku = $this->getMock(Sku::class);
-        $this->productId = ProductId::fromSku($this->stubSku);
+        $this->setExpectedException(InvalidProductIdException::class);
+        ProductId::fromString(1);
     }
 
-    public function testCanBeCreatedFromSku()
+    public function testProductIdCanBeCreatedFromString()
     {
-        $this->assertInstanceOf(ProductId::class, $this->productId);
+        $productId = ProductId::fromString('foo');
+        $this->assertInstanceOf(ProductId::class, $productId);
     }
 
-    public function testCanBeConvertedToString()
+    public function testProductIdCanBeConvertedToString()
     {
-        $result = (string) $this->productId;
-        $this->assertInternalType('string', $result);
+        $productIdString = 'foo';
+        $productId = ProductId::fromString($productIdString);
+
+        $this->assertSame($productIdString, (string) $productId);
     }
 }
