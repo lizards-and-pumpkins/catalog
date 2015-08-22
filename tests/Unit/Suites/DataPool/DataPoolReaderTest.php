@@ -4,7 +4,6 @@ namespace Brera\DataPool;
 
 use Brera\Context\Context;
 use Brera\DataPool\SearchEngine\SearchCriteria;
-use Brera\DataPool\SearchEngine\SearchCriterion;
 
 /**
  * @covers \Brera\DataPool\DataPoolReader
@@ -37,15 +36,13 @@ class DataPoolReaderTest extends AbstractDataPoolTest
 
     /**
      * @dataProvider snippetListProvider
+     * @param string $keyValueStorageReturn
+     * @param string[] $expectedList
      */
     public function testSnippetListIsReturned($keyValueStorageReturn, $expectedList)
     {
         $this->addGetMethodToStubKeyValueStore($keyValueStorageReturn);
-
-        $this->assertEquals(
-            $expectedList,
-            $this->dataPoolReader->getChildSnippetKeys('some_key')
-        );
+        $this->assertEquals($expectedList, $this->dataPoolReader->getChildSnippetKeys('some_key'));
     }
 
     /**
@@ -63,6 +60,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
 
     /**
      * @dataProvider brokenJsonProvider
+     * @param mixed $brokenJson
      */
     public function testExceptionIsThrownIfJsonIsBroken($brokenJson)
     {
@@ -87,6 +85,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
 
     /**
      * @dataProvider invalidKeyProvider
+     * @param mixed $key
      */
     public function testOnlyStringKeyIsAcceptedForSnippetList($key)
     {
@@ -96,6 +95,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
 
     /**
      * @dataProvider invalidKeyProvider
+     * @param mixed $key
      */
     public function testOnlyStringKeysAreAcceptedForGetSnippet($key)
     {
@@ -119,6 +119,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
 
     /**
      * @dataProvider brokenKeysForSnippetsProvider
+     * @param mixed $key
      */
     public function testOnlyStringKeysAreAcceptedForGetSnippets($key)
     {
@@ -159,58 +160,47 @@ class DataPoolReaderTest extends AbstractDataPoolTest
 
     public function testFalseIsReturnedIfASnippetKeyIsNotInTheStore()
     {
-        $this->getStubKeyValueStore()->expects($this->once())
-            ->method('has')
-            ->with('test')
-            ->willReturn(false);
+        $this->getStubKeyValueStore()->method('has')->with('test')->willReturn(false);
         $this->assertFalse($this->dataPoolReader->hasSnippet('test'));
     }
 
     public function testTrueIsReturnedIfASnippetKeyIsInTheStore()
     {
-        $this->getStubKeyValueStore()->expects($this->once())
-            ->method('has')
-            ->with('test')
-            ->willReturn(true);
+        $this->getStubKeyValueStore()->method('has')->with('test')->willReturn(true);
         $this->assertTrue($this->dataPoolReader->hasSnippet('test'));
     }
 
     public function testNegativeOneIsReturnedIfTheCurrentVersionIsNotSet()
     {
-        $this->getStubKeyValueStore()->expects($this->once())
-            ->method('has')
-            ->with('current_version')
-            ->willReturn(false);
+        $this->getStubKeyValueStore()->method('has')->with('current_version')->willReturn(false);
         $this->assertSame('-1', $this->dataPoolReader->getCurrentDataVersion());
     }
 
     public function testCurrentVersionIsReturned()
     {
         $currentDataVersion = '123';
-        $this->getStubKeyValueStore()->expects($this->once())
-            ->method('has')
-            ->with('current_version')
-            ->willReturn(true);
-        $this->getStubKeyValueStore()->expects($this->once())
-            ->method('get')
-            ->with('current_version')
-            ->willReturn($currentDataVersion);
+        $this->getStubKeyValueStore()->method('has')->with('current_version')->willReturn(true);
+        $this->getStubKeyValueStore()->method('get')->with('current_version')->willReturn($currentDataVersion);
+
         $this->assertSame($currentDataVersion, $this->dataPoolReader->getCurrentDataVersion());
     }
 
     public function testSearchResultsAreReturnedFromSearchEngine()
     {
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->getMock(Context::class);
 
-        $this->getStubSearchEngine()->expects($this->once())
-            ->method('query');
+        $this->getStubSearchEngine()->expects($this->once())->method('query');
 
         $this->dataPoolReader->getSearchResults('foo', $stubContext);
     }
 
     public function testCriteriaQueriesAreDelegatedToSearchEngine()
     {
+        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $mockCriteria */
         $mockCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
+
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->getMock(Context::class);
 
         $this->getStubSearchEngine()->expects($this->once())
