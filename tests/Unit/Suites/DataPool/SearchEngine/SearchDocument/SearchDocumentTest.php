@@ -61,7 +61,6 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
     public function testFalseIsReturnedIfInputArrayIsEmpty()
     {
         $mockCriteria = $this->createMockCriteria(SearchCriteria::OR_CONDITION, []);
-
         $this->assertFalse($this->searchDocument->isMatchingCriteria($mockCriteria));
     }
 
@@ -73,9 +72,7 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
         $mockCriteria = $this->createMockCriteria(SearchCriteria::OR_CONDITION, [$criterion]);
 
         $mockSearchDocumentField = $this->createMockSearchDocumentField('non-matching-field-name', $dummyFieldValue);
-
-        $this->mockDocumentFieldsCollection->method('getFields')
-            ->willReturn([$mockSearchDocumentField]);
+        $this->mockDocumentFieldsCollection->method('getFields')->willReturn([$mockSearchDocumentField]);
 
         $this->assertFalse($this->searchDocument->isMatchingCriteria($mockCriteria));
     }
@@ -88,9 +85,7 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
         $mockCriteria = $this->createMockCriteria(SearchCriteria::OR_CONDITION, [$criterion]);
 
         $mockSearchDocumentField = $this->createMockSearchDocumentField($dummyFieldName, 'non-matching-field-value');
-
-        $this->mockDocumentFieldsCollection->method('getFields')
-            ->willReturn([$mockSearchDocumentField]);
+        $this->mockDocumentFieldsCollection->method('getFields')->willReturn([$mockSearchDocumentField]);
 
         $this->assertFalse($this->searchDocument->isMatchingCriteria($mockCriteria));
     }
@@ -104,10 +99,7 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
         $mockCriteria = $this->createMockCriteria(SearchCriteria::OR_CONDITION, [$criterion]);
 
         $mockSearchDocumentField = $this->createMockSearchDocumentField($dummyFieldName, $dummyFieldValue);
-
-        $this->mockDocumentFieldsCollection->expects($this->once())
-            ->method('getFields')
-            ->willReturn([$mockSearchDocumentField]);
+        $this->mockDocumentFieldsCollection->method('getFields')->willReturn([$mockSearchDocumentField]);
 
         $this->assertTrue($this->searchDocument->isMatchingCriteria($mockCriteria));
     }
@@ -120,10 +112,7 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
         $mockCriteria = $this->createMockCriteria(SearchCriteria::OR_CONDITION, [$criterion]);
 
         $mockSearchDocumentField = $this->createMockSearchDocumentField($dummyFieldName, 'non-matching-field-value');
-
-        $this->mockDocumentFieldsCollection->expects($this->once())
-            ->method('getFields')
-            ->willReturn([$mockSearchDocumentField]);
+        $this->mockDocumentFieldsCollection->method('getFields')->willReturn([$mockSearchDocumentField]);
 
         $this->assertTrue($this->searchDocument->isMatchingCriteria($mockCriteria));
     }
@@ -136,10 +125,7 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
         $mockCriteria = $this->createMockCriteria(SearchCriteria::OR_CONDITION, [$criterion]);
 
         $mockSearchDocumentField = $this->createMockSearchDocumentField($dummyFieldName, '2');
-
-        $this->mockDocumentFieldsCollection->expects($this->once())
-            ->method('getFields')
-            ->willReturn([$mockSearchDocumentField]);
+        $this->mockDocumentFieldsCollection->method('getFields')->willReturn([$mockSearchDocumentField]);
 
         $this->assertTrue($this->searchDocument->isMatchingCriteria($mockCriteria));
     }
@@ -152,10 +138,7 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
         $mockCriteria = $this->createMockCriteria(SearchCriteria::OR_CONDITION, [$criterion]);
 
         $mockSearchDocumentField = $this->createMockSearchDocumentField($dummyFieldName, '1');
-
-        $this->mockDocumentFieldsCollection->expects($this->once())
-            ->method('getFields')
-            ->willReturn([$mockSearchDocumentField]);
+        $this->mockDocumentFieldsCollection->method('getFields')->willReturn([$mockSearchDocumentField]);
 
         $this->assertTrue($this->searchDocument->isMatchingCriteria($mockCriteria));
     }
@@ -168,10 +151,7 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
         $mockCriteria = $this->createMockCriteria(SearchCriteria::OR_CONDITION, [$criterion]);
 
         $mockSearchDocumentField = $this->createMockSearchDocumentField($dummyFieldName, '1');
-
-        $this->mockDocumentFieldsCollection->expects($this->once())
-            ->method('getFields')
-            ->willReturn([$mockSearchDocumentField]);
+        $this->mockDocumentFieldsCollection->method('getFields')->willReturn([$mockSearchDocumentField]);
 
         $this->assertTrue($this->searchDocument->isMatchingCriteria($mockCriteria));
     }
@@ -184,10 +164,7 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
         $mockCriteria = $this->createMockCriteria(SearchCriteria::OR_CONDITION, [$criterion]);
 
         $mockSearchDocumentField = $this->createMockSearchDocumentField($dummyFieldName, '1');
-
-        $this->mockDocumentFieldsCollection->expects($this->once())
-            ->method('getFields')
-            ->willReturn([$mockSearchDocumentField]);
+        $this->mockDocumentFieldsCollection->method('getFields')->willReturn([$mockSearchDocumentField]);
 
         $this->assertTrue($this->searchDocument->isMatchingCriteria($mockCriteria));
     }
@@ -200,10 +177,8 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
     private function createMockCriteria($condition, array $mockCriteriaToReturn)
     {
         $mockCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
-        $mockCriteria->method('getCondition')
-            ->willReturn($condition);
-        $mockCriteria->method('getCriteria')
-            ->willReturn($mockCriteriaToReturn);
+        $mockCriteria->method('getCondition')->willReturn($condition);
+        $mockCriteria->method('getCriteria')->willReturn($mockCriteriaToReturn);
 
         return $mockCriteria;
     }
@@ -216,10 +191,8 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
     private function createMockSearchDocumentField($fieldName, $fieldValue)
     {
         $mockSearchDocumentField = $this->getMock(SearchDocumentField::class, [], [], '', false);
-        $mockSearchDocumentField->method('getKey')
-            ->willReturn($fieldName);
-        $mockSearchDocumentField->method('getValue')
-            ->willReturn($fieldValue);
+        $mockSearchDocumentField->method('getKey')->willReturn($fieldName);
+        $mockSearchDocumentField->method('getValue')->willReturn($fieldValue);
 
         return $mockSearchDocumentField;
     }
