@@ -5,6 +5,8 @@ namespace Brera\Product;
 use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\KeyNotFoundException;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
 use Brera\Http\HttpResponse;
@@ -110,13 +112,15 @@ class ProductListingRequestHandler implements HttpRequestHandler
 
     private function addProductsInListingToPageBuilder()
     {
-        $productIds = $this->getProductListingProductIds();
+        $searchDocumentCollection = $this->getCollectionOfSearchDocumentsMatchingCriteria();
 
-        if (empty($productIds)) {
+        if (empty($searchDocumentCollection)) {
             return;
         }
 
-        $productInListingSnippetKeys = $this->getProductInListingSnippetKeysFromProductIds($productIds);
+        $productInListingSnippetKeys = $this->getProductInListingSnippetKeysSearchDocumentCollection(
+            $searchDocumentCollection
+        );
         
         $snippetKeyToContentMap = $this->dataPoolReader->getSnippets($productInListingSnippetKeys);
         $snippetCodeToKeyMap = $this->getProductInListingSnippetCodeToKeyMap($productInListingSnippetKeys);
@@ -125,27 +129,25 @@ class ProductListingRequestHandler implements HttpRequestHandler
     }
 
     /**
-     * @return string[]
+     * @return SearchDocumentCollection
      */
-    private function getProductListingProductIds()
+    private function getCollectionOfSearchDocumentsMatchingCriteria()
     {
         $selectionCriteria = $this->pageMetaInfo->getSelectionCriteria();
-        $productIds = $this->dataPoolReader->getProductIdsMatchingCriteria($selectionCriteria, $this->context);
-
-        return $productIds;
+        return $this->dataPoolReader->getSearchDocumentsMatchingCriteria($selectionCriteria, $this->context);
     }
 
     /**
-     * @param string[] $productIds
+     * @param SearchDocumentCollection $collection
      * @return string[]
      */
-    private function getProductInListingSnippetKeysFromProductIds(array $productIds)
+    private function getProductInListingSnippetKeysSearchDocumentCollection(SearchDocumentCollection $collection)
     {
         $snippetCode = ProductInListingInContextSnippetRenderer::CODE;
         $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
-        return array_map(function ($productId) use ($keyGenerator) {
-            return $keyGenerator->getKeyForContext($this->context, ['product_id' => $productId]);
-        }, $productIds);
+        return array_map(function (SearchDocument $searchDocument) use ($keyGenerator) {
+            return $keyGenerator->getKeyForContext($this->context, ['product_id' => $searchDocument->getProductId()]);
+        }, $collection->getDocuments());
     }
 
     /**

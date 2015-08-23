@@ -7,6 +7,7 @@ use Brera\Context\VersionedContext;
 use Brera\DataPool\SearchEngine\SearchCriteria;
 use Brera\DataPool\SearchEngine\SearchCriterion;
 use Brera\DataVersion;
+use Brera\Product\ProductId;
 
 /**
  * @covers \Brera\DataPool\SearchEngine\SearchDocument\SearchDocument
@@ -30,9 +31,9 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
     private $testContext;
 
     /**
-     * @var string
+     * @var ProductId|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $content = 'foo';
+    private $stubProductId;
 
     /**
      * @var SearchDocument
@@ -43,11 +44,12 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockDocumentFieldsCollection = $this->getMock(SearchDocumentFieldCollection::class, [], [], '', false);
         $this->testContext = new VersionedContext(DataVersion::fromVersionString('123'));
+        $this->stubProductId = $this->getMock(ProductId::class, [], [], '', false);
 
         $this->searchDocument = new SearchDocument(
             $this->mockDocumentFieldsCollection,
             $this->testContext,
-            $this->content
+            $this->stubProductId
         );
     }
 
@@ -55,7 +57,7 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertSame($this->mockDocumentFieldsCollection, $this->searchDocument->getFieldsCollection());
         $this->assertSame($this->testContext, $this->searchDocument->getContext());
-        $this->assertSame($this->content, $this->searchDocument->getContent());
+        $this->assertSame($this->stubProductId, $this->searchDocument->getProductId());
     }
 
     public function testFalseIsReturnedIfInputArrayIsEmpty()

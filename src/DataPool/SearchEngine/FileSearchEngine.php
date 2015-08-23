@@ -8,6 +8,7 @@ use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
 use Brera\DataVersion;
+use Brera\Product\ProductId;
 
 class FileSearchEngine extends IntegrationTestSearchEngineAbstract
 {
@@ -80,9 +81,9 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
     private function getArrayRepresentationOfSearchDocument(SearchDocument $searchDocument)
     {
         return [
-            'content' => $searchDocument->getContent(),
-            'fields'  => $this->getSearchDocumentFieldsAsArray($searchDocument->getFieldsCollection()),
-            'context' => $this->getContextAsArray($searchDocument->getContext())
+            'product_id' => (string) $searchDocument->getProductId(),
+            'fields'     => $this->getSearchDocumentFieldsAsArray($searchDocument->getFieldsCollection()),
+            'context'    => $this->getContextAsArray($searchDocument->getContext())
         ];
     }
 
@@ -125,12 +126,10 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
         $searchDocumentArrayRepresentation = json_decode($json, true);
 
         $context = $this->createContextFromDataSet($searchDocumentArrayRepresentation['context']);
+        $searchDocumentFields = SearchDocumentFieldCollection::fromArray($searchDocumentArrayRepresentation['fields']);
+        $productId = ProductId::fromString($searchDocumentArrayRepresentation['product_id']);
 
-        return new SearchDocument(
-            SearchDocumentFieldCollection::fromArray($searchDocumentArrayRepresentation['fields']),
-            $context,
-            $searchDocumentArrayRepresentation['content']
-        );
+        return new SearchDocument($searchDocumentFields, $context, $productId);
     }
 
     /**

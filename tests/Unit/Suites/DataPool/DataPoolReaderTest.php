@@ -204,9 +204,9 @@ class DataPoolReaderTest extends AbstractDataPoolTest
         $stubContext = $this->getMock(Context::class);
 
         $this->getStubSearchEngine()->expects($this->once())
-            ->method('getContentOfSearchDocumentsMatchingCriteria')
+            ->method('getSearchDocumentsMatchingCriteria')
             ->with($mockCriteria, $stubContext);
 
-        $this->dataPoolReader->getProductIdsMatchingCriteria($mockCriteria, $stubContext);
+        $this->dataPoolReader->getSearchDocumentsMatchingCriteria($mockCriteria, $stubContext);
     }
 }

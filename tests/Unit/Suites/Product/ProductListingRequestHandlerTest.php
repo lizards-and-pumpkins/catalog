@@ -6,6 +6,8 @@ use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\KeyNotFoundException;
 use Brera\DataPool\SearchEngine\SearchCriteria;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use Brera\DefaultHttpResponse;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
@@ -143,8 +145,13 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testProductsInListingAreAddedToPageBuilder()
     {
-        $this->mockDataPoolReader->method('getProductIdsMatchingCriteria')->willReturn(['product_in_listing_id']);
+        $stubSearchDocument = $this->getMock(SearchDocument::class, [], [], '', false);
+        $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
+        $stubSearchDocumentCollection->method('getDocuments')->willReturn([$stubSearchDocument]);
+
         $this->mockDataPoolReader->method('getSnippets')->willReturn([]);
+        $this->mockDataPoolReader->method('getSearchDocumentsMatchingCriteria')
+            ->willReturn($stubSearchDocumentCollection);
 
         $this->mockPageBuilder->expects($this->once())->method('addSnippetsToPage');
 

@@ -5,6 +5,7 @@ namespace Brera\DataPool\SearchEngine\SearchDocument;
 use Brera\Context\Context;
 use Brera\DataPool\SearchEngine\SearchCriteria;
 use Brera\DataPool\SearchEngine\SearchCriterion;
+use Brera\Product\ProductId;
 
 class SearchDocument
 {
@@ -19,20 +20,15 @@ class SearchDocument
     private $context;
 
     /**
-     * @var string
+     * @var ProductId
      */
-    private $content;
+    private $productId;
 
-    /**
-     * @param SearchDocumentFieldCollection $fields
-     * @param Context $context
-     * @param string $content
-     */
-    public function __construct(SearchDocumentFieldCollection $fields, Context $context, $content)
+    public function __construct(SearchDocumentFieldCollection $fields, Context $context, ProductId $productId)
     {
         $this->fields = $fields;
         $this->context = $context;
-        $this->content = (string) $content;
+        $this->productId = $productId;
     }
 
     /**
@@ -52,11 +48,11 @@ class SearchDocument
     }
 
     /**
-     * @return string
+     * @return ProductId
      */
-    public function getContent()
+    public function getProductId()
     {
-        return $this->content;
+        return $this->productId;
     }
 
     /**

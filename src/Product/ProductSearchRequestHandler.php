@@ -4,6 +4,7 @@ namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
 use Brera\Http\HttpResponse;
@@ -117,18 +118,18 @@ class ProductSearchRequestHandler implements HttpRequestHandler
      */
     private function addSearchResultsToPageBuilder($queryString)
     {
-        $productIds = $this->dataPoolReader->getSearchResults($queryString, $this->context);
+        $searchDocumentCollection = $this->dataPoolReader->getSearchResults($queryString, $this->context);
 
-        if (empty($productIds)) {
+        if (empty($searchDocumentCollection)) {
             return;
         }
 
         $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
             ProductInListingInContextSnippetRenderer::CODE
         );
-        $productInListingSnippetKeys = array_map(function ($productId) use ($keyGenerator) {
-            return $keyGenerator->getKeyForContext($this->context, ['product_id' => $productId]);
-        }, $productIds);
+        $productInListingSnippetKeys = array_map(function (SearchDocument $searchDocument) use ($keyGenerator) {
+            return $keyGenerator->getKeyForContext($this->context, ['product_id' => $searchDocument->getProductId()]);
+        }, $searchDocumentCollection->getDocuments());
 
         $snippetKeyToContentMap = $this->dataPoolReader->getSnippets($productInListingSnippetKeys);
         $snippetCodeToKeyMap = $this->getProductInListingSnippetCodeToKeyMap($productInListingSnippetKeys);

@@ -90,12 +90,10 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
 
         $searchResults = $dataPoolReader->getSearchResults('led', $context);
 
-        $this->assertContains(
-            (string) $productId,
-            $searchResults,
-            sprintf('The search result does not contain the expected product ID "%s"', $productId),
-            false,
-            false
+        $this->assertEquals(
+            $productId,
+            $searchResults->getDocuments()[0]->getProductId(),
+            sprintf('The search result does not contain the expected product ID "%s"', $productId)
         );
     }
 

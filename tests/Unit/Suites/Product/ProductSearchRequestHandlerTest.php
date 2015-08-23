@@ -4,6 +4,8 @@ namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use Brera\DefaultHttpResponse;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
@@ -165,7 +167,11 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $queryString = 'foo';
         $this->prepareStubHttpRequest($queryString);
 
-        $this->mockDataPoolReader->method('getSearchResults')->willReturn(['product_in_listing_id']);
+        $stubSearchDocument = $this->getMock(SearchDocument::class, [], [], '', false);
+        $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
+        $stubSearchDocumentCollection->method('getDocuments')->willReturn([$stubSearchDocument]);
+
+        $this->mockDataPoolReader->method('getSearchResults')->willReturn($stubSearchDocumentCollection);
 
         $metaSnippetContent = [
             'root_snippet_code'  => 'foo',

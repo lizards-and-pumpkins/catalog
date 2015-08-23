@@ -15,8 +15,10 @@ use Brera\Utils\LocalFilesystem;
  * @uses   \Brera\DataVersion
  * @uses   \Brera\DataPool\SearchEngine\SearchCriterion
  * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocument
+ * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection
  * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField
  * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection
+ * @uses   \Brera\Product\ProductId
  * @uses   \Brera\Utils\LocalFileSystem
  */
 class FileSearchEngineTest extends AbstractSearchEngineTest

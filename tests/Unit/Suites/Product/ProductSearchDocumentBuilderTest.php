@@ -47,22 +47,17 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
     public function testSearchDocumentCollectionIsReturned()
     {
         $stubContext = $this->getMock(Context::class, [], [], '', false);
-        $this->stubContextSource->expects($this->atLeastOnce())
-            ->method('getAllAvailableContexts')
-            ->willReturn([$stubContext]);
+        $this->stubContextSource->method('getAllAvailableContexts')->willReturn([$stubContext]);
 
         $stubProduct = $this->getMock(Product::class, [], [], '', false);
-        $stubProduct->expects($this->atLeastOnce())
-            ->method('getFirstValueOfAttribute')
-            ->with($this->searchableAttributeCode)
-            ->willReturn('bar');
+        $stubProduct->method('getFirstValueOfAttribute')->with($this->searchableAttributeCode)->willReturn('bar');
+
+        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
+        $stubProduct->method('getId')->willReturn($stubProductId);
 
         /** @var ProductSource|\PHPUnit_Framework_MockObject_MockObject $stubProductSource */
         $stubProductSource = $this->getMock(ProductSource::class, [], [], '', false);
-        $stubProductSource->expects($this->atLeastOnce())
-            ->method('getProductForContext')
-            ->with($stubContext)
-            ->willReturn($stubProduct);
+        $stubProductSource->method('getProductForContext')->with($stubContext)->willReturn($stubProduct);
 
         $result = $this->searchDocumentBuilder->aggregate($stubProductSource, $this->stubContextSource);
 
@@ -71,6 +66,7 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfTheDataSourceObjectTypeIsNotProduct()
     {
+        /** @var ProjectionSourceData|\PHPUnit_Framework_MockObject_MockObject $invalidDataSource */
         $invalidDataSource = $this->getMock(ProjectionSourceData::class);
 
         $this->setExpectedException(
