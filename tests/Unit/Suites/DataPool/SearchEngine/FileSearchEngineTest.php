@@ -2,6 +2,7 @@
 
 namespace Brera\DataPool\SearchEngine;
 
+use Brera\Product\ProductId;
 use Brera\Utils\LocalFilesystem;
 
 /**
@@ -38,12 +39,6 @@ class FileSearchEngineTest extends AbstractSearchEngineTest
     {
         $this->setExpectedException(SearchEngineNotAvailableException::class);
         FileSearchEngine::create('non-existing-path');
-    }
-
-    public function testSearchEngineInterfaceIsImplemented()
-    {
-        $searchEngine = $this->createSearchEngineInstance();
-        $this->assertInstanceOf(SearchEngine::class, $searchEngine);
     }
 
     /**

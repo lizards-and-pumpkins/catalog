@@ -165,7 +165,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     public function testEntriesContainingRequestedStringAreReturned()
     {
         $productAId = ProductId::fromString('id01');
-        $productBId = ProductId::fromString('id01');
+        $productBId = ProductId::fromString('id02');
 
         $searchDocumentA = $this->createSearchDocument(['foo' => 'barbarism'], $productAId);
         $searchDocumentB = $this->createSearchDocument(['baz' => 'cabaret'], $productBId);
@@ -239,6 +239,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     {
         $productAId = ProductId::fromString('A');
         $productBId = ProductId::fromString('B');
+        $productCId = ProductId::fromString('C');
         $dummyFieldName1 = 'foo';
         $dummyFieldValue1 = 'bar';
         $dummyFieldName2 = 'baz';
@@ -254,7 +255,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $dummyFieldName2 => $dummyFieldValue2
         ], $productBId);
 
-        $searchDocumentC = $this->createSearchDocument([$dummyFieldName1 => $dummyFieldValue1], $productBId);
+        $searchDocumentC = $this->createSearchDocument([$dummyFieldName1 => $dummyFieldValue1], $productCId);
 
         $this->stubSearchDocumentCollection->method('getDocuments')
             ->willReturn([$searchDocumentA, $searchDocumentB, $searchDocumentC]);
