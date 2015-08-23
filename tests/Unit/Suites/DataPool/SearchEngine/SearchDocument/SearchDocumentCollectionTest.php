@@ -17,6 +17,11 @@ class SearchDocumentCollectionTest extends \PHPUnit_Framework_TestCase
         $this->searchDocumentCollection = new SearchDocumentCollection();
     }
 
+    public function testCountableInterfaceIsImplemented()
+    {
+        $this->assertInstanceOf(\Countable::class, $this->searchDocumentCollection);
+    }
+
     public function testIsInitiallyEmpty()
     {
         $this->assertCount(0, $this->searchDocumentCollection->getDocuments());
@@ -24,12 +29,13 @@ class SearchDocumentCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testSearchDocumentIsAddedToCollection()
     {
+        /** @var SearchDocument|\PHPUnit_Framework_MockObject_MockObject $stubSearchDocument */
         $stubSearchDocument = $this->getMock(SearchDocument::class, [], [], '', false);
         $this->searchDocumentCollection->add($stubSearchDocument);
         $result = $this->searchDocumentCollection->getDocuments();
 
+        $this->assertCount(1, $this->searchDocumentCollection);
         $this->assertContainsOnly(SearchDocument::class, $result);
-        $this->assertCount(1, $result);
         $this->assertSame($stubSearchDocument, $result[0]);
     }
 }
