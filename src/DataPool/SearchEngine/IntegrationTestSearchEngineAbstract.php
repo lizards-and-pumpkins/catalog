@@ -64,6 +64,15 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine
     }
 
     /**
+     * @param SearchDocument $searchDocument
+     * @return string
+     */
+    final protected function getSearchDocumentIdentifier(SearchDocument $searchDocument)
+    {
+        return $searchDocument->getProductId() . ':' . $searchDocument->getContext()->getId();
+    }
+
+    /**
      * @param Context $queryContext
      * @param SearchDocument $searchDocument
      * @return bool

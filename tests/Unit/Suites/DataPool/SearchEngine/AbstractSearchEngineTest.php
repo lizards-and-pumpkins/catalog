@@ -270,6 +270,23 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productAId, $productBId]);
     }
 
+    public function testSearchDocumentsWithSameProductIdOverwritesEachOther()
+    {
+        $productId = ProductId::fromString('id');
+        $dummyFieldName = 'foo';
+        $dummyFieldValue = 'bar';
+
+        $searchDocumentA = $this->createSearchDocument([$dummyFieldName => $dummyFieldValue], $productId);
+        $searchDocumentB = $this->createSearchDocument([$dummyFieldName => $dummyFieldValue], $productId);
+
+        $this->stubSearchDocumentCollection->method('getDocuments')->willReturn([$searchDocumentA, $searchDocumentB]);
+        $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
+
+        $result = $this->searchEngine->query('bar', $this->testContext);
+
+        $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productId]);
+    }
+
     /**
      * @return SearchEngine
      */

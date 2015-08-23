@@ -43,8 +43,7 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
 
     public function addSearchDocument(SearchDocument $searchDocument)
     {
-        $fileName = $searchDocument->getProductId() . ':' . $searchDocument->getContext()->getId();
-        $searchDocumentFilePath = $this->storagePath . '/' . $fileName;
+        $searchDocumentFilePath = $this->storagePath . '/' . $this->getSearchDocumentIdentifier($searchDocument);
 
         $searchDocumentArrayRepresentation = $this->getArrayRepresentationOfSearchDocument($searchDocument);
         $searchDocumentJson = json_encode($searchDocumentArrayRepresentation, JSON_PRETTY_PRINT);
