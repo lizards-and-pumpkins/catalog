@@ -2,6 +2,8 @@
 
 namespace Brera\Product;
 
+use Brera\Renderer\AbstractBlockRendererTest;
+use Brera\Renderer\BlockRenderer;
 use Brera\Renderer\BlockStructure;
 use Brera\ThemeLocator;
 
@@ -9,17 +11,17 @@ use Brera\ThemeLocator;
  * @covers \Brera\Product\ProductListingBlockRenderer
  * @uses \Brera\Renderer\BlockRenderer
  */
-class ProductListingBlockRendererTest extends \PHPUnit_Framework_TestCase
+class ProductListingBlockRendererTest extends AbstractBlockRendererTest
 {
-    public function testLayoutHandleIsReturned()
-    {
-        $stubThemeLocator = $this->getMock(ThemeLocator::class);
-        $stubBlockStructure = $this->getMock(BlockStructure::class);
-
-        $blockRenderer = new ProductListingBlockRenderer($stubThemeLocator, $stubBlockStructure);
-
-        $result = $blockRenderer->getLayoutHandle();
-
-        $this->assertEquals('product_listing', $result);
+    /**
+     * @param ThemeLocator|\PHPUnit_Framework_MockObject_MockObject $stubThemeLocator
+     * @param BlockStructure $stubBlockStructure
+     * @return BlockRenderer
+     */
+    protected function createRendererInstance(
+        \PHPUnit_Framework_MockObject_MockObject $stubThemeLocator,
+        BlockStructure $stubBlockStructure
+    ) {
+        return new ProductListingBlockRenderer($stubThemeLocator, $stubBlockStructure);
     }
 }
