@@ -42,6 +42,7 @@ use Brera\Http\HttpUrl;
  * @uses   \Brera\Api\ApiRouter
  * @uses   \Brera\Api\ApiRequestHandlerChain
  * @uses   \Brera\DataPool\DataPoolReader
+ * @uses   \Brera\Renderer\BlockRenderer
  * @uses   \Brera\Utils\Directory
  */
 class SampleWebFrontTest extends \PHPUnit_Framework_TestCase

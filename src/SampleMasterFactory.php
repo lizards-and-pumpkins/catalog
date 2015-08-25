@@ -23,6 +23,7 @@ namespace Brera;
  * @method GenericSnippetKeyGenerator createContentBlockInProductListingSnippetKeyGenerator
  * @method string[] getRequiredContexts
  * @method Product\ProductSourceBuilder createProductSourceBuilder
+ * @method Product\FilterNavigationBlockRenderer createFilterNavigationBlockRenderer
  */
 class SampleMasterFactory implements MasterFactory
 {

@@ -15,6 +15,7 @@ use Brera\Image\ImageWasUpdatedDomainEvent;
 use Brera\Image\ImageWasUpdatedDomainEventHandler;
 use Brera\Image\UpdateImageCommand;
 use Brera\Image\UpdateImageCommandHandler;
+use Brera\Product\FilterNavigationBlockRenderer;
 use Brera\Product\ProductListingSourceBuilder;
 use Brera\Product\ProductWasUpdatedDomainEvent;
 use Brera\Product\ProductWasUpdatedDomainEventHandler;
@@ -460,5 +461,11 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createProductSearchResultsMetaSnippetKeyGenerator();
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
+    }
+
+    public function testFilterNavigationBlockRendererIsReturned()
+    {
+        $result = $this->commonFactory->createFilterNavigationBlockRenderer();
+        $this->assertInstanceOf(FilterNavigationBlockRenderer::class, $result);
     }
 }

@@ -210,12 +210,15 @@ class ProductListingTest extends AbstractIntegrationTest
             $this->factory->getSnippetKeyGeneratorLocator(),
             $this->factory->getLogger()
         );
+        $filterNavigationAttributeCodes = [];
 
         return new ProductListingRequestHandler(
             $this->factory->getContext(),
             $dataPoolReader,
             $pageBuilder,
-            $this->factory->getSnippetKeyGeneratorLocator()
+            $this->factory->getSnippetKeyGeneratorLocator(),
+            $this->factory->createFilterNavigationBlockRenderer(),
+            $filterNavigationAttributeCodes
         );
     }
 

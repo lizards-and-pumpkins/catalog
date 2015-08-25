@@ -12,6 +12,7 @@ use Brera\Http\HttpRequestHandler;
 use Brera\Http\HttpResponse;
 use Brera\Http\UnableToHandleRequestException;
 use Brera\PageBuilder;
+use Brera\Renderer\BlockRenderer;
 use Brera\SnippetKeyGeneratorLocator;
 
 class ProductListingRequestHandler implements HttpRequestHandler
@@ -41,16 +42,38 @@ class ProductListingRequestHandler implements HttpRequestHandler
      */
     private $keyGeneratorLocator;
 
+    /**
+     * @var BlockRenderer
+     */
+    private $filterNavigationBlockRenderer;
+
+    /**
+     * @var string[]
+     */
+    private $filterNavigationAttributeCodes;
+
+    /**
+     * @param Context $context
+     * @param DataPoolReader $dataPoolReader
+     * @param PageBuilder $pageBuilder
+     * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
+     * @param BlockRenderer $filterNavigationBlockRenderer
+     * @param string[] $filterNavigationAttributeCodes
+     */
     public function __construct(
         Context $context,
         DataPoolReader $dataPoolReader,
         PageBuilder $pageBuilder,
-        SnippetKeyGeneratorLocator $keyGeneratorLocator
+        SnippetKeyGeneratorLocator $keyGeneratorLocator,
+        BlockRenderer $filterNavigationBlockRenderer,
+        array $filterNavigationAttributeCodes
     ) {
         $this->dataPoolReader = $dataPoolReader;
         $this->context = $context;
         $this->pageBuilder = $pageBuilder;
         $this->keyGeneratorLocator = $keyGeneratorLocator;
+        $this->filterNavigationBlockRenderer = $filterNavigationBlockRenderer;
+        $this->filterNavigationAttributeCodes = $filterNavigationAttributeCodes;
     }
 
     /**
@@ -74,7 +97,10 @@ class ProductListingRequestHandler implements HttpRequestHandler
             throw new UnableToHandleRequestException;
         }
 
-        $this->addProductsInListingToPageBuilder();
+        $searchDocumentCollection = $this->getCollectionOfSearchDocumentsMatchingCriteria();
+
+        $this->addProductsInListingToPageBuilder($searchDocumentCollection);
+        $this->addFilterNavigationSnippetToPageBuilder($searchDocumentCollection);
 
         $keyGeneratorParams = [
             'products_per_page' => $this->getDefaultNumberOrProductsPerPage(),
@@ -110,11 +136,9 @@ class ProductListingRequestHandler implements HttpRequestHandler
         return $snippet;
     }
 
-    private function addProductsInListingToPageBuilder()
+    private function addProductsInListingToPageBuilder(SearchDocumentCollection $searchDocumentCollection)
     {
-        $searchDocumentCollection = $this->getCollectionOfSearchDocumentsMatchingCriteria();
-
-        if (empty($searchDocumentCollection)) {
+        if (0 === count($searchDocumentCollection)) {
             return;
         }
 
@@ -190,5 +214,25 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $metaInfoSnippetKey = $keyGenerator->getKeyForContext($this->context, ['url_key' => $urlKey]);
 
         return $metaInfoSnippetKey;
+    }
+
+    private function addFilterNavigationSnippetToPageBuilder(SearchDocumentCollection $searchDocumentCollection)
+    {
+        if (0 === count($searchDocumentCollection)) {
+            return;
+        }
+
+        $dataObject = [
+            'search_document_collection'        => $searchDocumentCollection,
+            'filter_navigation_attribute_codes' => $this->filterNavigationAttributeCodes
+        ];
+
+        $snippetCode = 'filter_navigation';
+        $snippetContents = $this->filterNavigationBlockRenderer->render($dataObject, $this->context);
+
+        $snippetCodeToKeyMap = [$snippetCode => $snippetCode];
+        $snippetKeyToContentMap = [$snippetCode => $snippetContents];
+
+        $this->pageBuilder->addSnippetsToPage($snippetCodeToKeyMap, $snippetKeyToContentMap);
     }
 }

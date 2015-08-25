@@ -14,6 +14,7 @@ use Brera\Http\HttpRequestHandler;
 use Brera\Http\HttpUrl;
 use Brera\Http\UnableToHandleRequestException;
 use Brera\PageBuilder;
+use Brera\Renderer\BlockRenderer;
 use Brera\SnippetKeyGenerator;
 use Brera\SnippetKeyGeneratorLocator;
 
@@ -83,11 +84,17 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $mockSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
         $mockSnippetKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')->willReturn($mockSnippetKeyGenerator);
 
+        /** @var BlockRenderer|\PHPUnit_Framework_MockObject_MockObject $stubFilterNavigationBlockRenderer */
+        $stubFilterNavigationBlockRenderer = $this->getMock(BlockRenderer::class, [], [], '', false);
+        $stubFilterNavigationAttributeCodes = [];
+
         $this->requestHandler = new ProductListingRequestHandler(
             $stubContext,
             $this->mockDataPoolReader,
             $this->mockPageBuilder,
-            $mockSnippetKeyGeneratorLocator
+            $mockSnippetKeyGeneratorLocator,
+            $stubFilterNavigationBlockRenderer,
+            $stubFilterNavigationAttributeCodes
         );
 
         $stubUrl = $this->getMock(HttpUrl::class, [], [], '', false);
@@ -124,6 +131,12 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testPageMetaInfoSnippetIsCreated()
     {
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection();
+
+        $this->mockDataPoolReader->method('getSnippets')->willReturn([]);
+        $this->mockDataPoolReader->method('getSearchDocumentsMatchingCriteria')
+            ->willReturn($stubSearchDocumentCollection);
+
         $this->mockMetaInfoSnippet();
         $this->requestHandler->process($this->stubRequest);
 
@@ -136,6 +149,12 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testPageIsReturned()
     {
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection();
+
+        $this->mockDataPoolReader->method('getSnippets')->willReturn([]);
+        $this->mockDataPoolReader->method('getSearchDocumentsMatchingCriteria')
+            ->willReturn($stubSearchDocumentCollection);
+
         $this->mockMetaInfoSnippet();
         $this->mockPageBuilder->method('buildPage')
             ->willReturn($this->getMock(DefaultHttpResponse::class, [], [], '', false));
@@ -143,17 +162,30 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(DefaultHttpResponse::class, $this->requestHandler->process($this->stubRequest));
     }
 
-    public function testProductsInListingAreAddedToPageBuilder()
+    public function testNoSnippetsAreAddedToPageBuilderIfListingIsEmpty()
     {
-        $stubSearchDocument = $this->getMock(SearchDocument::class, [], [], '', false);
         $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
-        $stubSearchDocumentCollection->method('getDocuments')->willReturn([$stubSearchDocument]);
+        $stubSearchDocumentCollection->method('count')->willReturn(0);
 
         $this->mockDataPoolReader->method('getSnippets')->willReturn([]);
         $this->mockDataPoolReader->method('getSearchDocumentsMatchingCriteria')
             ->willReturn($stubSearchDocumentCollection);
 
-        $this->mockPageBuilder->expects($this->once())->method('addSnippetsToPage');
+        $this->mockPageBuilder->expects($this->never())->method('addSnippetsToPage');
+
+        $this->mockMetaInfoSnippet();
+        $this->requestHandler->process($this->stubRequest);
+    }
+
+    public function testProductsInListingAreAddedToPageBuilder()
+    {
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection();
+
+        $this->mockDataPoolReader->method('getSnippets')->willReturn([]);
+        $this->mockDataPoolReader->method('getSearchDocumentsMatchingCriteria')
+            ->willReturn($stubSearchDocumentCollection);
+
+        $this->mockPageBuilder->expects($this->atLeastOnce())->method('addSnippetsToPage');
 
         $this->mockMetaInfoSnippet();
         $this->requestHandler->process($this->stubRequest);
@@ -164,5 +196,18 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->mockDataPoolReader->method('getSnippet')->willReturnMap([
             [$this->testMetaInfoKey, $this->testMetaInfoSnippetJson]
         ]);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubSearchDocumentCollection()
+    {
+        $stubSearchDocument = $this->getMock(SearchDocument::class, [], [], '', false);
+        $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
+        $stubSearchDocumentCollection->method('getDocuments')->willReturn([$stubSearchDocument]);
+        $stubSearchDocumentCollection->method('count')->willReturn(1);
+
+        return $stubSearchDocumentCollection;
     }
 }

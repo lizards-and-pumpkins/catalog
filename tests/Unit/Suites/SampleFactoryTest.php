@@ -84,7 +84,26 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayOfSearchableAttributeCodesIsReturned()
     {
-        $this->assertInternalType('array', $this->factory->getSearchableAttributeCodes());
+        $result = $this->factory->getSearchableAttributeCodes();
+
+        $this->assertInternalType('array', $result);
+        $this->assertContainsOnly('string', $result);
+    }
+
+    public function testArrayOfProductListingFilterNavigationAttributeCodesIsReturned()
+    {
+        $result = $this->factory->getProductListingFilterNavigationAttributeCodes();
+
+        $this->assertInternalType('array', $result);
+        $this->assertContainsOnly('string', $result);
+    }
+
+    public function testArrayOfProductSearchResultsFilterNavigationAttributeCodesIsReturned()
+    {
+        $result = $this->factory->getProductSearchResultsFilterNavigationAttributeCodes();
+
+        $this->assertInternalType('array', $result);
+        $this->assertContainsOnly('string', $result);
     }
 
     public function testImageProcessorCollectionIsReturned()

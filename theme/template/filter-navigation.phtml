@@ -1,0 +1,16 @@
+<?php
+/**
+ * @var \Brera\Product\Block\FilterNavigationBlock $this
+ */
+?>
+<?php foreach ($this->getFilters() as $filterCode => $filterValues) : ?>
+<div id="productListFilter">
+    <div class="block-title roundedBorder expanded" id="filter-title-brand"><?= $filterCode ?></div>
+    <ol class="filter-content scroll-pane">
+        <?php foreach ($filterValues as $valueCode => $valueCount) : ?>
+            <li><a href="?<?= $filterCode ?>=<?= $valueCode ?>"><?= $valueCode ?> (<?= $valueCount ?>)</a></li>
+        <?php endforeach ?>
+    </ol>
+</div>
+<?php endforeach ?>
+

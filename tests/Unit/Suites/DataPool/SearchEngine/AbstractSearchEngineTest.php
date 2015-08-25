@@ -313,13 +313,17 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         return new SearchDocument(SearchDocumentFieldCollection::fromArray($fields), $context, $productId);
     }
 
+    /**
+     * @param SearchDocumentCollection $collection
+     * @param ProductId[] $productIds
+     */
     private function assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds(
         SearchDocumentCollection $collection,
         array $productIds
     ) {
         $this->assertCount(count($productIds), $collection, 'Failed asserting collection size matches expectation.');
         foreach ($productIds as $productId) {
-            if (!($this->searchDocumentsCollectionContainsDocumentForProductId($collection,$productId))) {
+            if (!$this->searchDocumentsCollectionContainsDocumentForProductId($collection, $productId)) {
                 $this->fail(
                     sprintf('Failed asserting document for product ID "%s" is present in collection', $productId)
                 );
