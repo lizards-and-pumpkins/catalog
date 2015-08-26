@@ -41,7 +41,7 @@ class SearchCriteria implements \JsonSerializable
         return new self(self::OR_CONDITION);
     }
 
-    public function add(SearchCriterion $criterion)
+    public function addCriterion(SearchCriterion $criterion)
     {
         $this->criteria[] = $criterion;
     }

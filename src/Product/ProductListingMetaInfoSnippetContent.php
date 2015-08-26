@@ -165,7 +165,7 @@ class ProductListingMetaInfoSnippetContent implements PageMetaInfoSnippetContent
                 $criterionMetaInfo['operation']
             );
 
-            $criteria->add($criterion);
+            $criteria->addCriterion($criterion);
         }
 
         return $criteria;

@@ -34,8 +34,8 @@ class SearchCriteriaTest extends \PHPUnit_Framework_TestCase
         $mockCriterion2 = $this->getMock(SearchCriterion::class, [], [], '', false);
 
         $criteria = SearchCriteria::createAnd();
-        $criteria->add($mockCriterion1);
-        $criteria->add($mockCriterion2);
+        $criteria->addCriterion($mockCriterion1);
+        $criteria->addCriterion($mockCriterion2);
 
         $result = $criteria->getCriteria();
 

@@ -31,7 +31,7 @@ class ProductListingSourceBuilder
 
         foreach ($criteriaNodes as $criterionNode) {
             $criterion = $this->createCriterion($criterionNode);
-            $criteria->add($criterion);
+            $criteria->addCriterion($criterion);
         }
 
         return new ProductListingSource($urlKey, $contextData, $criteria);
