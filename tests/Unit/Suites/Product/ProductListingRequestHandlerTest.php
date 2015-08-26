@@ -46,43 +46,20 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
     private $testMetaInfoKey;
 
     /**
-     * @var string
-     */
-    private $testMetaInfoSnippetJson;
-
-    /**
      * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubRequest;
 
     protected function setUp()
     {
-        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $mockSelectionCriteria */
-        $mockSelectionCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
-        $mockSelectionCriteria->method('jsonSerialize')
-            ->willReturn(['condition' => SearchCriteria::AND_CONDITION, 'criteria' => []]);
-
         $this->testMetaInfoKey = 'stub-meta-info-key';
-        $pageSnippetCodes = ['child-snippet1'];
-
-        $this->testMetaInfoSnippetJson = json_encode(ProductListingMetaInfoSnippetContent::create(
-            $mockSelectionCriteria,
-            'root-snippet-code',
-            $pageSnippetCodes
-        )->getInfo());
 
         $this->mockDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
         $this->mockPageBuilder = $this->getMock(PageBuilder::class, [], [], '', false);
 
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->getMock(Context::class);
-
-        $mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
-        $mockSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->testMetaInfoKey);
-
-        /** @var SnippetKeyGeneratorLocator|\PHPUnit_Framework_MockObject_MockObject $mockSnippetKeyGeneratorLocator */
-        $mockSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
-        $mockSnippetKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')->willReturn($mockSnippetKeyGenerator);
+        $stubSnippetKeyGeneratorLocator = $this->createStubSnippetKeyGeneratorLocator();
 
         /** @var BlockRenderer|\PHPUnit_Framework_MockObject_MockObject $stubFilterNavigationBlockRenderer */
         $stubFilterNavigationBlockRenderer = $this->getMock(BlockRenderer::class, [], [], '', false);
@@ -92,13 +69,12 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
             $stubContext,
             $this->mockDataPoolReader,
             $this->mockPageBuilder,
-            $mockSnippetKeyGeneratorLocator,
+            $stubSnippetKeyGeneratorLocator,
             $stubFilterNavigationBlockRenderer,
             $stubFilterNavigationAttributeCodes
         );
 
         $stubUrl = $this->getMock(HttpUrl::class, [], [], '', false);
-
         $this->stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
         $this->stubRequest->method('getUrl')->willReturn($stubUrl);
     }
@@ -117,9 +93,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testTrueIsReturnedIfThePageMetaInfoContentSnippetCanBeLoaded()
     {
-        $this->mockDataPoolReader->method('getSnippet')->willReturnMap([
-            [$this->testMetaInfoKey, $this->testMetaInfoSnippetJson]
-        ]);
+        $this->mockMetaInfoSnippet();
         $this->assertTrue($this->requestHandler->canProcess($this->stubRequest));
     }
 
@@ -193,8 +167,21 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     private function mockMetaInfoSnippet()
     {
+        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $mockSelectionCriteria */
+        $mockSelectionCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
+        $mockSelectionCriteria->method('jsonSerialize')
+            ->willReturn(['condition' => SearchCriteria::AND_CONDITION, 'criteria' => []]);
+
+        $pageSnippetCodes = ['child-snippet1'];
+
+        $testMetaInfoSnippetJson = json_encode(ProductListingMetaInfoSnippetContent::create(
+            $mockSelectionCriteria,
+            'root-snippet-code',
+            $pageSnippetCodes
+        )->getInfo());
+
         $this->mockDataPoolReader->method('getSnippet')->willReturnMap([
-            [$this->testMetaInfoKey, $this->testMetaInfoSnippetJson]
+            [$this->testMetaInfoKey, $testMetaInfoSnippetJson]
         ]);
     }
 
@@ -209,5 +196,19 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $stubSearchDocumentCollection->method('count')->willReturn(1);
 
         return $stubSearchDocumentCollection;
+    }
+
+    /**
+     * @return SnippetKeyGeneratorLocator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function createStubSnippetKeyGeneratorLocator()
+    {
+        $mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $mockSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->testMetaInfoKey);
+
+        $stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
+        $stubSnippetKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')->willReturn($mockSnippetKeyGenerator);
+
+        return $stubSnippetKeyGeneratorLocator;
     }
 }
