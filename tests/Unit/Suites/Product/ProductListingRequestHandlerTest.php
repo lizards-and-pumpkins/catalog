@@ -201,7 +201,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @return SnippetKeyGeneratorLocator|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function createStubSnippetKeyGeneratorLocator()
+    private function createStubSnippetKeyGeneratorLocator()
     {
         $mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $mockSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->testMetaInfoKey);
