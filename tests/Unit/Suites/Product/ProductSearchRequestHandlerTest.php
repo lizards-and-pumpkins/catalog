@@ -95,9 +95,6 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $urlString = 'foo';
         $this->stubHttpUrl->method('getPathRelativeToWebFront')->willReturn($urlString);
         $this->stubHttpRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->stubHttpRequest->method('getQueryParameter')
-            ->with(ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME)
-            ->willReturn('bar');
 
         $this->assertFalse($this->requestHandler->canProcess($this->stubHttpRequest));
     }
@@ -107,9 +104,6 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $urlString = ProductSearchRequestHandler::SEARCH_RESULTS_SLUG;
         $this->stubHttpUrl->method('getPathRelativeToWebFront')->willReturn($urlString);
         $this->stubHttpRequest->method('getMethod')->willReturn(HttpRequest::METHOD_POST);
-        $this->stubHttpRequest->method('getQueryParameter')
-            ->with(ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME)
-            ->willReturn('foo');
 
         $this->assertFalse($this->requestHandler->canProcess($this->stubHttpRequest));
     }
