@@ -73,12 +73,7 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
 
         $this->addSearchResultsToPageBuilder($productIds);
 
-        $metaInfoSnippetKeyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
-            ProductSearchAutosuggestionMetaSnippetRenderer::CODE
-        );
-        $metaInfoSnippetKey = $metaInfoSnippetKeyGenerator->getKeyForContext($this->context, []);
-        $metaInfoSnippetJson = $this->dataPoolReader->getSnippet($metaInfoSnippetKey);
-        $metaInfoSnippetContent = ProductSearchAutosuggestionMetaSnippetContent::fromJson($metaInfoSnippetJson);
+        $metaInfoSnippetContent = $this->getMetaInfoSnippetContent();
 
         $this->addTotalNumberOfResultsSnippetToPageBuilder(count($productIds));
         $this->addSearchQueryStringSnippetToPageBuilder($searchQueryString);
@@ -182,5 +177,19 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
         $snippetKeyToContentMap = [$snippetCode => $snippetContent];
 
         $this->pageBuilder->addSnippetsToPage($snippetCodeToKeyMap, $snippetKeyToContentMap);
+    }
+
+    /**
+     * @return ProductSearchAutosuggestionMetaSnippetContent
+     */
+    private function getMetaInfoSnippetContent()
+    {
+        $metaInfoSnippetKeyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
+            ProductSearchAutosuggestionMetaSnippetRenderer::CODE
+        );
+        $metaInfoSnippetKey = $metaInfoSnippetKeyGenerator->getKeyForContext($this->context, []);
+        $metaInfoSnippetJson = $this->dataPoolReader->getSnippet($metaInfoSnippetKey);
+
+        return ProductSearchAutosuggestionMetaSnippetContent::fromJson($metaInfoSnippetJson);
     }
 }
