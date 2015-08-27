@@ -4,9 +4,9 @@ namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
-use Brera\DefaultHttpResponse;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
+use Brera\Http\HttpResponse;
 use Brera\Http\HttpUrl;
 use Brera\Http\UnableToHandleRequestException;
 use Brera\PageBuilder;
@@ -148,8 +148,7 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
         $queryString = 'foo';
         $this->prepareStubHttpRequest($queryString);
 
-        $this->mockPageBuilder->method('buildPage')
-            ->willReturn($this->getMock(DefaultHttpResponse::class, [], [], '', false));
+        $this->mockPageBuilder->method('buildPage')->willReturn($this->getMock(HttpResponse::class, [], [], '', false));
 
         $metaSnippetContent = [
             'root_snippet_code'  => 'foo',
@@ -158,7 +157,7 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
         $this->stubDataPoolReader->method('getSnippet')->willReturn(json_encode($metaSnippetContent));
         $this->stubDataPoolReader->method('getSearchResults')->willReturn([]);
 
-        $this->assertInstanceOf(DefaultHttpResponse::class, $this->requestHandler->process($this->stubHttpRequest));
+        $this->assertInstanceOf(HttpResponse::class, $this->requestHandler->process($this->stubHttpRequest));
     }
 
     public function testSearchResultsAreAddedToPageBuilder()
