@@ -65,11 +65,11 @@ $save = 0;
 
                 <div class="product-main-info">
                     <div class="main-information">
-                        <?php if ($gender = $this->getAllValuesOfProductAttributeGlued('gender', ', ')) : ?>
+                        <?php if ($gender = $this->getImplodedValuesOfProductAttribute('gender', ', ')) : ?>
                             <p><strong><?= $this->__('Gender') ?>:</strong> <?= $gender ?></p>
                         <?php endif ?>
 
-                        <?php if (($style = $this->getAllValuesOfProductAttributeGlued('style', ', '))) : ?>
+                        <?php if (($style = $this->getImplodedValuesOfProductAttribute('style', ', '))) : ?>
                             <p><strong><?= $this->__('Style') ?>:</strong> <?= $style ?></p>
                         <?php endif ?>
 

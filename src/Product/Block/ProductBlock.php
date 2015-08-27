@@ -25,7 +25,7 @@ class ProductBlock extends Block
      * @param string $glue
      * @return string
      */
-    public function getAllValuesOfProductAttributeGlued($attributeCode, $glue)
+    public function getImplodedValuesOfProductAttribute($attributeCode, $glue)
     {
         $attributeValues = $this->getProduct()->getAllValuesOfAttribute($attributeCode);
 

@@ -55,7 +55,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($attributeValue, $result);
     }
 
-    public function testAllValuesOfProductAttributeGluedAreReturned()
+    public function testImplodedValuesOfProductAttributeAreReturned()
     {
         $attributeCode = 'foo';
         $attributeValueA = 'bar';
@@ -64,7 +64,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
 
         $this->stubProduct->method('getAllValuesOfAttribute')->willReturn([$attributeValueA, $attributeValueB]);
 
-        $result = $this->productBlock->getAllValuesOfProductAttributeGlued($attributeCode, $glue);
+        $result = $this->productBlock->getImplodedValuesOfProductAttribute($attributeCode, $glue);
         $expected = $attributeValueA . $glue . $attributeValueB;
 
         $this->assertSame($expected, $result);
