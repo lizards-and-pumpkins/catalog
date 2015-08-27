@@ -108,6 +108,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
         $brandLogoSrc = 'images/brands/brands-slider/' . $testProductBrandName . '.png';
         $this->createFixtureFile('pub/' . $brandLogoSrc, '');
 
+        /* TODO: Fix it once retrieving base URL is implemented */
         $expectedProductBrandLogoSrc = '/brera/' . $brandLogoSrc;
         $result = $this->productBlock->getBrandLogoSrc();
 
