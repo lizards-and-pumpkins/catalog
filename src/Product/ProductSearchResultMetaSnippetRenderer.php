@@ -62,7 +62,7 @@ class ProductSearchResultMetaSnippetRenderer implements SnippetRenderer
         $rootSnippetCode = $this->blockRenderer->getRootSnippetCode();
         $pageSnippetCodes = $this->blockRenderer->getNestedSnippetCodes();
 
-        $numItemsPerPageForContext = $productListingSourceList->getListOfAvailableNumberOfItemsPerPageForContext(
+        $numItemsPerPageForContext = $productListingSourceList->getListOfAvailableNumberOfProductsPerPageForContext(
             $context
         );
 

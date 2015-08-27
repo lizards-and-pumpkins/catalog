@@ -48,10 +48,10 @@ class DefaultNumberOfProductsPerPageSnippetRenderer implements SnippetRenderer
     private function renderSnippetInContext(ProductListingSourceList $productListingSourceList, Context $context)
     {
         $snippetKey = $this->snippetKeyGenerator->getKeyForContext($context, []);
-        $availableNumbersOfItemsPerPage = $productListingSourceList->getListOfAvailableNumberOfItemsPerPageForContext(
+        $availableProductsPerPage = $productListingSourceList->getListOfAvailableNumberOfProductsPerPageForContext(
             $context
         );
-        $snippetContent = array_shift($availableNumbersOfItemsPerPage);
+        $snippetContent = array_shift($availableProductsPerPage);
         $snippet = Snippet::create($snippetKey, $snippetContent);
         $this->snippetList->add($snippet);
     }

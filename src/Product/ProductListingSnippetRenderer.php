@@ -60,7 +60,7 @@ class ProductListingSnippetRenderer implements SnippetRenderer
         Context $context
     ) {
         $content = $this->blockRenderer->render($productListingSourceList, $context);
-        $productsPerPageForContext = $productListingSourceList->getListOfAvailableNumberOfItemsPerPageForContext(
+        $productsPerPageForContext = $productListingSourceList->getListOfAvailableNumberOfProductsPerPageForContext(
             $context
         );
 

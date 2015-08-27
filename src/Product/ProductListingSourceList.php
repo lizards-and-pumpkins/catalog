@@ -40,7 +40,7 @@ class ProductListingSourceList
      * @param Context $context
      * @return int[]
      */
-    public function getListOfAvailableNumberOfItemsPerPageForContext(Context $context)
+    public function getListOfAvailableNumberOfProductsPerPageForContext(Context $context)
     {
         $numItemsPerPage = [];
 

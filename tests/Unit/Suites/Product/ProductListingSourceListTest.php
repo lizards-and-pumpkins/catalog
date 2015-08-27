@@ -24,7 +24,7 @@ class ProductListingSourceListTest extends \PHPUnit_Framework_TestCase
         ];
         $productListingSourceList = ProductListingSourceList::fromArray($sourceDataPairs);
 
-        $result = $productListingSourceList->getListOfAvailableNumberOfItemsPerPageForContext($stubContextA);
+        $result = $productListingSourceList->getListOfAvailableNumberOfProductsPerPageForContext($stubContextA);
 
         $this->assertSame([10, 30], $result);
     }
