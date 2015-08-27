@@ -65,7 +65,7 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
     public function process(HttpRequest $request)
     {
         if (!$this->isValidSearchRequest($request)) {
-            throw new UnableToHandleRequestException;
+            throw new UnableToHandleRequestException('Unable to handle ProductSearchAutosuggestion request.');
         }
 
         $searchQueryString = $request->getUrl()->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
