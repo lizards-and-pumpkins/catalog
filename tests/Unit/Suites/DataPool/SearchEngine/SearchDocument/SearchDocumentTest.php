@@ -60,7 +60,7 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->stubProductId, $this->searchDocument->getProductId());
     }
 
-    public function testFalseIsReturnedIfInputArrayIsEmpty()
+    public function testFalseIsReturnedDuringAttemptToMatchSearchDocumentToEmptyCriteria()
     {
         $mockCriteria = $this->createMockCriteria(SearchCriteria::OR_CONDITION, []);
         $this->assertFalse($this->searchDocument->isMatchingCriteria($mockCriteria));
@@ -68,7 +68,7 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
 
     public function testFalseIsReturnedIfSearchDocumentDoesNotContainAFieldWithMatchingName()
     {
-        $dummyFieldValue = 'field-name';
+        $dummyFieldValue = 'field-value';
 
         $criterion = SearchCriterion::create('field-name', $dummyFieldValue, '=');
         $mockCriteria = $this->createMockCriteria(SearchCriteria::OR_CONDITION, [$criterion]);
@@ -171,6 +171,26 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->searchDocument->isMatchingCriteria($mockCriteria));
     }
 
+    public function testSearchDocumentCanBeComparedToMultiLevelCriteria()
+    {
+        $criterionA = SearchCriterion::create('a', '1', '=');
+        $criterionB = SearchCriterion::create('b', '2', '=');
+
+        $mockNestedCriteria = $this->createMockCriteria(SearchCriteria::OR_CONDITION, [$criterionA, $criterionB]);
+
+        $criterionC = SearchCriterion::create('c', '3', '>');
+
+        $mockCriteria = $this->createMockCriteria(SearchCriteria::AND_CONDITION, [$criterionC, $mockNestedCriteria]);
+
+        $mockSearchDocumentFieldA = $this->createMockSearchDocumentField('a', '1');
+        $mockSearchDocumentFieldC = $this->createMockSearchDocumentField('c', '4');
+        $this->mockDocumentFieldsCollection->method('getFields')->willReturn(
+            [$mockSearchDocumentFieldA, $mockSearchDocumentFieldC]
+        );
+
+        $this->assertTrue($this->searchDocument->isMatchingCriteria($mockCriteria));
+    }
+
     /**
      * @param string $condition
      * @param \PHPUnit_Framework_MockObject_MockObject[] $mockCriteriaToReturn
@@ -179,7 +199,8 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
     private function createMockCriteria($condition, array $mockCriteriaToReturn)
     {
         $mockCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
-        $mockCriteria->method('getCondition')->willReturn($condition);
+        $mockCriteria->method('hasAndCondition')->willReturn(SearchCriteria::AND_CONDITION === $condition);
+        $mockCriteria->method('hasOrCondition')->willReturn(SearchCriteria::OR_CONDITION === $condition);
         $mockCriteria->method('getCriteria')->willReturn($mockCriteriaToReturn);
 
         return $mockCriteria;

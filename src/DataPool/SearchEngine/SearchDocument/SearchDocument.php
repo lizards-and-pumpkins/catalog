@@ -64,7 +64,13 @@ class SearchDocument
         $isMatching = false;
 
         foreach ($criteria->getCriteria() as $criterion) {
-            $isMatching = $this->hasMatchingField($criterion);
+            if ($criterion instanceof SearchCriteria) {
+                $isMatching = $this->isMatchingCriteria($criterion);
+            }
+
+            if ($criterion instanceof SearchCriterion) {
+                $isMatching = $this->hasMatchingField($criterion);
+            }
 
             if (($criteria->hasOrCondition() && $isMatching) || ($criteria->hasAndCondition() && !$isMatching)) {
                 return $isMatching;
@@ -80,14 +86,12 @@ class SearchDocument
      */
     private function hasMatchingField(SearchCriterion $criterion)
     {
-        $isMatching = false;
-
         foreach ($this->fields->getFields() as $field) {
-            if ($isMatching = $criterion->matches($field)) {
-                return $isMatching;
+            if ($criterion->matches($field)) {
+                return true;
             }
         }
 
-        return $isMatching;
+        return false;
     }
 }

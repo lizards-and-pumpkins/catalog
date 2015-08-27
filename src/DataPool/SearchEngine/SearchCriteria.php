@@ -13,7 +13,7 @@ class SearchCriteria implements \JsonSerializable
     private $condition;
 
     /**
-     * @var SearchCriterion[]
+     * @var SearchCriterion|SearchCriteria[]
      */
     private $criteria = [];
 
@@ -46,8 +46,13 @@ class SearchCriteria implements \JsonSerializable
         $this->criteria[] = $criterion;
     }
 
+    public function addCriteria(SearchCriteria $criteria)
+    {
+        $this->criteria[] = $criteria;
+    }
+
     /**
-     * @return SearchCriterion[]
+     * @return SearchCriterion|SearchCriteria[]
      */
     public function getCriteria()
     {
