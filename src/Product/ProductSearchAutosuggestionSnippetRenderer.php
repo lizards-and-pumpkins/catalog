@@ -46,6 +46,8 @@ class ProductSearchAutosuggestionSnippetRenderer implements SnippetRenderer
      */
     public function render($dataObject, ContextSource $contextSource)
     {
+        $this->snippetList->clear();
+
         foreach ($contextSource->getAllAvailableContexts() as $context) {
             $snippet = $this->createSearchAutosuggestionSnippetsForContext($dataObject, $context);
             $this->snippetList->add($snippet);

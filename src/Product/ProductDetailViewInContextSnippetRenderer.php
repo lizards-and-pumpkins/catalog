@@ -63,6 +63,7 @@ class ProductDetailViewInContextSnippetRenderer implements SnippetRenderer
     {
         $this->product = $product;
         $this->context = $context;
+        $this->snippetList->clear();
 
         $this->addProductDetailViewSnippetsToSnippetList();
 

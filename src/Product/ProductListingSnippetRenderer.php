@@ -46,6 +46,8 @@ class ProductListingSnippetRenderer implements SnippetRenderer
      */
     public function render(ProductListingSourceList $productListingSourceList, ContextSource $contextSource)
     {
+        $this->snippetList->clear();
+
         foreach ($contextSource->getAllAvailableContexts() as $context) {
             $this->renderProductListingSnippetsForContext($productListingSourceList, $context);
         }

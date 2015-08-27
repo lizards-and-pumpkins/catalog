@@ -51,6 +51,7 @@ class ProductSourceDetailViewSnippetRenderer implements SnippetRenderer
 
         $this->productSource = $projectionSourceData;
         $this->contextSource = $contextSource;
+        $this->snippetList->clear();
         
         $this->createProductDetailViewSnippets();
 
