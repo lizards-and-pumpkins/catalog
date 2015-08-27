@@ -2,6 +2,8 @@
 
 namespace Brera\DataPool\SearchEngine\SearchDocument;
 
+use Brera\DataPool\SearchEngine\SearchCriteria;
+
 /**
  * @covers \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection
  */
@@ -37,5 +39,28 @@ class SearchDocumentCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $this->searchDocumentCollection);
         $this->assertContainsOnly(SearchDocument::class, $result);
         $this->assertSame($stubSearchDocument, $result[0]);
+    }
+
+    public function testSearchDocumentCollectionIsFilteredAccordingToSearchDocumentCriteria()
+    {
+        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubSearchCriteria */
+        $stubSearchCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
+
+        /** @var SearchDocument|\PHPUnit_Framework_MockObject_MockObject $stubSearchDocumentA */
+        $stubSearchDocumentA = $this->getMock(SearchDocument::class, [], [], '', false);
+        $stubSearchDocumentA->method('isMatchingCriteria')->with($stubSearchCriteria)->willReturn(true);
+
+        /** @var SearchDocument|\PHPUnit_Framework_MockObject_MockObject $stubSearchDocumentB */
+        $stubSearchDocumentB = $this->getMock(SearchDocument::class, [], [], '', false);
+        $stubSearchDocumentB->method('isMatchingCriteria')->with($stubSearchCriteria)->willReturn(false);
+
+        $this->searchDocumentCollection->add($stubSearchDocumentA);
+        $this->searchDocumentCollection->add($stubSearchDocumentB);
+        $filteredCollection = $this->searchDocumentCollection->getCollectionFilteredByCriteria($stubSearchCriteria);
+
+        $result = $filteredCollection->getDocuments();
+
+        $this->assertCount(1, $filteredCollection);
+        $this->assertSame($stubSearchDocumentA, $result[0]);
     }
 }
