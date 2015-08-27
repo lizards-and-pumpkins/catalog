@@ -57,7 +57,7 @@ class ProductListingMetaInfoSnippetRenderer implements SnippetRenderer
         $this->blockRenderer->render($productListingMetaInfoSource, $context);
 
         $metaDataSnippetKey = $this->getProductListingMetaDataSnippetKey($productListingMetaInfoSource, $context);
-        $metaDataSnippetContent = $this->getProductListingPageMetaDataSnippetContent($productListingMetaInfoSource);
+        $metaDataSnippetContent = $this->getProductListingPageMetaInfoSnippetContent($productListingMetaInfoSource);
         $snippet = Snippet::create($metaDataSnippetKey, $metaDataSnippetContent);
 
         $this->snippetList->add($snippet);
@@ -84,7 +84,7 @@ class ProductListingMetaInfoSnippetRenderer implements SnippetRenderer
      * @param ProductListingMetaInfoSource $productListingMetaInfoSource
      * @return string
      */
-    private function getProductListingPageMetaDataSnippetContent(
+    private function getProductListingPageMetaInfoSnippetContent(
         ProductListingMetaInfoSource $productListingMetaInfoSource
     ) {
         $pageSnippetCodes = $this->blockRenderer->getNestedSnippetCodes();
