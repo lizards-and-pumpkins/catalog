@@ -32,6 +32,31 @@ class ProductListingMetaInfoSnippetRendererTest extends \PHPUnit_Framework_TestC
      */
     private $renderer;
 
+    /**
+     * @return ProductListingMetaInfoSource|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getMockProductListingMetaInfoSource()
+    {
+        $mockSearchCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
+        $mockProductListingMetaInfoSource = $this->getMock(ProductListingMetaInfoSource::class, [], [], '', false);
+        $mockProductListingMetaInfoSource->method('getContextData')->willReturn([]);
+        $mockProductListingMetaInfoSource->method('getCriteria')->willReturn($mockSearchCriteria);
+
+        return $mockProductListingMetaInfoSource;
+    }
+
+    /**
+     * @return Snippet
+     */
+    private function getExpectedSnippet()
+    {
+        return Snippet::create($this->dummySnippetKey, json_encode([
+            'product_selection_criteria' => null,
+            'root_snippet_code'          => ProductListingSnippetRenderer::CODE,
+            'page_snippet_codes'         => [ProductListingSnippetRenderer::CODE]
+        ]));
+    }
+
     protected function setUp()
     {
         $stubContext = $this->getMock(Context::class);
@@ -75,30 +100,5 @@ class ProductListingMetaInfoSnippetRendererTest extends \PHPUnit_Framework_TestC
         $this->mockSnippetList->expects($this->once())->method('add')->with($expectedSnippet);
 
         $this->renderer->render($mockProductListingMetaInfoSource);
-    }
-
-    /**
-     * @return ProductListingMetaInfoSource|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getMockProductListingMetaInfoSource()
-    {
-        $mockSearchCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
-        $mockProductListingMetaInfoSource = $this->getMock(ProductListingMetaInfoSource::class, [], [], '', false);
-        $mockProductListingMetaInfoSource->method('getContextData')->willReturn([]);
-        $mockProductListingMetaInfoSource->method('getCriteria')->willReturn($mockSearchCriteria);
-
-        return $mockProductListingMetaInfoSource;
-    }
-
-    /**
-     * @return Snippet
-     */
-    private function getExpectedSnippet()
-    {
-        return Snippet::create($this->dummySnippetKey, json_encode([
-            'product_selection_criteria' => null,
-            'root_snippet_code'          => ProductListingSnippetRenderer::CODE,
-            'page_snippet_codes'         => [ProductListingSnippetRenderer::CODE]
-        ]));
     }
 }

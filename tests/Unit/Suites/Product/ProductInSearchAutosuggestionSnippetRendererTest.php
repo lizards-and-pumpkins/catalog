@@ -35,6 +35,25 @@ class ProductInSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framewor
      */
     private $stubContextSource;
 
+    /**
+     * @param string $dummyProductIdString
+     * @return ProductSource|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getStubProductSource($dummyProductIdString)
+    {
+        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
+        $stubProductId->method('__toString')->willReturn($dummyProductIdString);
+
+        $stubProduct = $this->getMock(Product::class, [], [], '', false);
+        $stubProduct->method('getId')->willReturn($stubProductId);
+
+        $stubProductSource = $this->getMock(ProductSource::class, [], [], '', false);
+        $stubProductSource->method('getId')->willReturn($stubProductId);
+        $stubProductSource->method('getProductForContext')->willReturn($stubProduct);
+
+        return $stubProductSource;
+    }
+
     protected function setUp()
     {
         $this->mockSnippetList = $this->getMock(SnippetList::class);
@@ -90,24 +109,5 @@ class ProductInSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framewor
             ->with($this->anything(), ['product_id' => $dummyProductId]);
 
         $this->snippetRenderer->render($stubProductSource, $this->stubContextSource);
-    }
-
-    /**
-     * @param string $dummyProductIdString
-     * @return ProductSource|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getStubProductSource($dummyProductIdString)
-    {
-        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
-        $stubProductId->method('__toString')->willReturn($dummyProductIdString);
-
-        $stubProduct = $this->getMock(Product::class, [], [], '', false);
-        $stubProduct->method('getId')->willReturn($stubProductId);
-
-        $stubProductSource = $this->getMock(ProductSource::class, [], [], '', false);
-        $stubProductSource->method('getId')->willReturn($stubProductId);
-        $stubProductSource->method('getProductForContext')->willReturn($stubProduct);
-
-        return $stubProductSource;
     }
 }
