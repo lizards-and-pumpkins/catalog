@@ -22,6 +22,7 @@ use Brera\SnippetKeyGeneratorLocator;
  * @covers \Brera\Product\ProductListingRequestHandler
  * @uses   \Brera\Product\ProductListingMetaInfoSnippetContent
  * @uses   \Brera\DataPool\SearchEngine\SearchCriteria
+ * @uses   \Brera\DataPool\SearchEngine\SearchCriterion
  */
 class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -46,9 +47,19 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
     private $testMetaInfoKey;
 
     /**
+     * @var HttpUrl|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubUrl;
+
+    /**
      * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubRequest;
+
+    /**
+     * @var string
+     */
+    private $testFilterNavigationAttributeCode = 'foo';
 
     protected function setUp()
     {
@@ -63,7 +74,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         /** @var BlockRenderer|\PHPUnit_Framework_MockObject_MockObject $stubFilterNavigationBlockRenderer */
         $stubFilterNavigationBlockRenderer = $this->getMock(BlockRenderer::class, [], [], '', false);
-        $stubFilterNavigationAttributeCodes = [];
+        $stubFilterNavigationAttributeCodes = [$this->testFilterNavigationAttributeCode];
 
         $this->requestHandler = new ProductListingRequestHandler(
             $stubContext,
@@ -74,9 +85,9 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
             $stubFilterNavigationAttributeCodes
         );
 
-        $stubUrl = $this->getMock(HttpUrl::class, [], [], '', false);
+        $this->stubUrl = $this->getMock(HttpUrl::class, [], [], '', false);
         $this->stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
-        $this->stubRequest->method('getUrl')->willReturn($stubUrl);
+        $this->stubRequest->method('getUrl')->willReturn($this->stubUrl);
     }
 
     public function testHttpRequestHandlerInterfaceIsImplemented()
@@ -160,6 +171,50 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($stubSearchDocumentCollection);
 
         $this->mockPageBuilder->expects($this->atLeastOnce())->method('addSnippetsToPage');
+
+        $this->mockMetaInfoSnippet();
+        $this->requestHandler->process($this->stubRequest);
+    }
+
+    public function testSelectedFiltersAreNotAppliedToEmptyCollection()
+    {
+        $mockSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
+        $mockSearchDocumentCollection->method('count')->willReturn(0);
+        $mockSearchDocumentCollection->expects($this->never())->method('getCollectionFilteredByCriteria');
+
+        $this->mockDataPoolReader->method('getSnippets')->willReturn([]);
+        $this->mockDataPoolReader->method('getSearchDocumentsMatchingCriteria')
+            ->willReturn($mockSearchDocumentCollection);
+
+        $this->mockMetaInfoSnippet();
+        $this->requestHandler->process($this->stubRequest);
+    }
+
+    public function testNoFiltersAreAppliedToCollectionIfNoFiltersAreSelected()
+    {
+        $mockInitialSearchDocumentCollection = $this->createStubSearchDocumentCollection();
+        $mockInitialSearchDocumentCollection->expects($this->never())->method('getCollectionFilteredByCriteria');
+
+        $this->mockDataPoolReader->method('getSnippets')->willReturn([]);
+        $this->mockDataPoolReader->method('getSearchDocumentsMatchingCriteria')
+            ->willReturn($mockInitialSearchDocumentCollection);
+
+        $this->mockMetaInfoSnippet();
+        $this->requestHandler->process($this->stubRequest);
+    }
+
+    public function testSelectedFiltersAreAppliedToCollection()
+    {
+        $this->stubUrl->method('getQueryParameter')->with($this->testFilterNavigationAttributeCode)->willReturn('bar');
+
+        $mockFilteredSearchDocumentCollection = $this->createStubSearchDocumentCollection();
+        $mockInitialSearchDocumentCollection = $this->createStubSearchDocumentCollection();
+        $mockInitialSearchDocumentCollection->expects($this->once())->method('getCollectionFilteredByCriteria')
+            ->willReturn($mockFilteredSearchDocumentCollection);
+
+        $this->mockDataPoolReader->method('getSnippets')->willReturn([]);
+        $this->mockDataPoolReader->method('getSearchDocumentsMatchingCriteria')
+            ->willReturn($mockInitialSearchDocumentCollection);
 
         $this->mockMetaInfoSnippet();
         $this->requestHandler->process($this->stubRequest);

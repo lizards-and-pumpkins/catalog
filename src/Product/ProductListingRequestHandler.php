@@ -5,6 +5,8 @@ namespace Brera\Product;
 use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\KeyNotFoundException;
+use Brera\DataPool\SearchEngine\SearchCriteria;
+use Brera\DataPool\SearchEngine\SearchCriterion;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use Brera\Http\HttpRequest;
@@ -98,9 +100,10 @@ class ProductListingRequestHandler implements HttpRequestHandler
         }
 
         $searchDocumentCollection = $this->getCollectionOfSearchDocumentsMatchingCriteria();
-
-        $this->addProductsInListingToPageBuilder($searchDocumentCollection);
         $this->addFilterNavigationSnippetToPageBuilder($searchDocumentCollection);
+
+        $filteredCollection = $this->applyFiltersToSearchDocumentCollection($searchDocumentCollection, $request);
+        $this->addProductsInListingToPageBuilder($filteredCollection);
 
         $keyGeneratorParams = [
             'products_per_page' => $this->getDefaultNumberOrProductsPerPage(),
@@ -234,5 +237,44 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $snippetKeyToContentMap = [$snippetCode => $snippetContents];
 
         $this->pageBuilder->addSnippetsToPage($snippetCodeToKeyMap, $snippetKeyToContentMap);
+    }
+
+    /**
+     * @param SearchDocumentCollection $searchDocumentCollection
+     * @param HttpRequest $request
+     * @return SearchDocumentCollection
+     */
+    private function applyFiltersToSearchDocumentCollection(
+        SearchDocumentCollection $searchDocumentCollection,
+        HttpRequest $request
+    ) {
+        if (0 === count($searchDocumentCollection)) {
+            return $searchDocumentCollection;
+        }
+
+        // TODO: Refactor this mess. Maybe move it into HttpRequest or HttpUrl
+        $url = $request->getUrl();
+        $filtersCriteria = SearchCriteria::createAnd();
+        foreach ($this->filterNavigationAttributeCodes as $attributeCode) {
+            $rawAttributeValue = $url->getQueryParameter($attributeCode);
+
+            if (!trim($rawAttributeValue)) {
+                continue;
+            }
+
+            $attributeValues = explode(',', $rawAttributeValue);
+
+            $filterCriteria = SearchCriteria::createOr();
+            foreach ($attributeValues as $attributeValue) {
+                $filterCriteria->addCriterion(SearchCriterion::create($attributeCode, $attributeValue, '='));
+            }
+            $filtersCriteria->addCriteria($filterCriteria);
+        }
+
+        if (empty($filtersCriteria->getCriteria())) {
+            return $searchDocumentCollection;
+        }
+
+        return $searchDocumentCollection->getCollectionFilteredByCriteria($filtersCriteria);
     }
 }
