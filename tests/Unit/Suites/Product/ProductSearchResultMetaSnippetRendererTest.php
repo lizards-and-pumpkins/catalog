@@ -72,7 +72,7 @@ class ProductSearchResultMetaSnippetRendererTest extends \PHPUnit_Framework_Test
         $this->stubContextSource->method('getAllAvailableContexts')->willReturn([$stubContext]);
 
         $this->stubProductListingSourceList = $this->getMock(ProductListingSourceList::class, [], [], '', false);
-        $this->stubProductListingSourceList->method('getListOfAvailableNumberOfItemsPerPageForContext')
+        $this->stubProductListingSourceList->method('getListOfAvailableNumberOfProductsPerPageForContext')
             ->willReturn([9]);
     }
 
