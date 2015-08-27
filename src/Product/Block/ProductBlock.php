@@ -37,6 +37,7 @@ class ProductBlock extends Block
      */
     public function getProductUrl()
     {
+        /* TODO: Implement retrieval of base URL for context */
         return '/brera/' . $this->getFirstValueOfProductAttribute('url_key');
     }
 
