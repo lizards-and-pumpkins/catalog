@@ -28,11 +28,6 @@ class ProductSearchAutosuggestionMetaSnippetRendererTest extends \PHPUnit_Framew
     private $dummyRootSnippetCode = 'bar';
 
     /**
-     * @var SnippetList|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $mockSnippetList;
-
-    /**
      * @var ProductSearchAutosuggestionMetaSnippetRenderer
      */
     private $renderer;
@@ -53,10 +48,10 @@ class ProductSearchAutosuggestionMetaSnippetRendererTest extends \PHPUnit_Framew
         $stubBlockRenderer->method('getRootSnippetCode')->willReturn($this->dummyRootSnippetCode);
         $stubBlockRenderer->method('getNestedSnippetCodes')->willReturn([]);
 
-        $this->mockSnippetList = $this->getMock(SnippetList::class);
+        $testSnippetList = new SnippetList;
 
         $this->renderer = new ProductSearchAutosuggestionMetaSnippetRenderer(
-            $this->mockSnippetList,
+            $testSnippetList,
             $stubSnippetKeyGenerator,
             $stubBlockRenderer
         );
@@ -85,8 +80,12 @@ class ProductSearchAutosuggestionMetaSnippetRendererTest extends \PHPUnit_Framew
             ProductSearchAutosuggestionMetaSnippetContent::KEY_PAGE_SNIPPET_CODES => [$this->dummyRootSnippetCode]
         ];
         $expectedSnippet = Snippet::create($this->dummySnippetKey, json_encode($expectedSnippetContent));
-        $this->mockSnippetList->expects($this->once())->method('add')->with($expectedSnippet);
 
-        $this->renderer->render('dummy-data-object', $this->stubContextSource);
+        $result = $this->renderer->render('dummy-data-object', $this->stubContextSource);
+
+        $this->assertInstanceOf(SnippetList::class, $result);
+        $this->assertCount(1, $result);
+        $this->assertContainsOnly(Snippet::class, $result);
+        $this->assertEquals($expectedSnippet, $result->getIterator()->current());
     }
 }

@@ -28,11 +28,6 @@ class ProductSearchResultMetaSnippetRendererTest extends \PHPUnit_Framework_Test
     private $dummyRootSnippetCode = 'bar';
 
     /**
-     * @var SnippetList|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $mockSnippetList;
-
-    /**
      * @var ProductSearchResultMetaSnippetRenderer
      */
     private $renderer;
@@ -49,7 +44,7 @@ class ProductSearchResultMetaSnippetRendererTest extends \PHPUnit_Framework_Test
 
     protected function setUp()
     {
-        $this->mockSnippetList = $this->getMock(SnippetList::class);
+        $testSnippetList = new SnippetList;
 
         /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $stubSnippetKeyGenerator */
         $stubSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
@@ -61,7 +56,7 @@ class ProductSearchResultMetaSnippetRendererTest extends \PHPUnit_Framework_Test
         $stubBlockRenderer->method('getNestedSnippetCodes')->willReturn([]);
 
         $this->renderer = new ProductSearchResultMetaSnippetRenderer(
-            $this->mockSnippetList,
+            $testSnippetList,
             $stubSnippetKeyGenerator,
             $stubBlockRenderer
         );
@@ -94,8 +89,12 @@ class ProductSearchResultMetaSnippetRendererTest extends \PHPUnit_Framework_Test
             ProductSearchResultMetaSnippetContent::KEY_PAGE_SNIPPET_CODES => [$this->dummyRootSnippetCode]
         ];
         $expectedSnippet = Snippet::create($this->dummySnippetKey, json_encode($expectedSnippetContent));
-        $this->mockSnippetList->expects($this->once())->method('add')->with($expectedSnippet);
 
-        $this->renderer->render($this->stubProductListingSourceList, $this->stubContextSource);
+        $result = $this->renderer->render($this->stubProductListingSourceList, $this->stubContextSource);
+
+        $this->assertInstanceOf(SnippetList::class, $result);
+        $this->assertCount(1, $result);
+        $this->assertContainsOnly(Snippet::class, $result);
+        $this->assertEquals($expectedSnippet, $result->getIterator()->current());
     }
 }

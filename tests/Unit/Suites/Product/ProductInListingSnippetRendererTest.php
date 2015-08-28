@@ -5,6 +5,7 @@ namespace Brera\Product;
 use Brera\Context\Context;
 use Brera\Context\ContextSource;
 use Brera\InvalidProjectionSourceDataTypeException;
+use Brera\Snippet;
 use Brera\SnippetKeyGenerator;
 use Brera\SnippetList;
 use Brera\SnippetRenderer;
@@ -15,11 +16,6 @@ use Brera\SnippetRenderer;
  */
 class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var SnippetList|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $mockSnippetList;
-
     /**
      * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -56,7 +52,7 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockSnippetList = $this->getMock(SnippetList::class);
+        $testSnippetList = new SnippetList;
 
         /** @var ProductInListingBlockRenderer|\PHPUnit_Framework_MockObject_MockObject $stubBlockRenderer */
         $stubBlockRenderer = $this->getMock(ProductInListingBlockRenderer::class, [], [], '', false);
@@ -66,7 +62,7 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->mockSnippetKeyGenerator->method('getKeyForContext')->willReturn('stub-content-key');
 
         $this->snippetRenderer = new ProductInListingSnippetRenderer(
-            $this->mockSnippetList,
+            $testSnippetList,
             $stubBlockRenderer,
             $this->mockSnippetKeyGenerator
         );
@@ -88,14 +84,16 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->snippetRenderer->render('invalid-projection-source-data', $this->stubContextSource);
     }
 
-    public function testProductInListingViewSnippetsAreRendered()
+    public function testProductInListingViewSnippetIsRendered()
     {
         $dummyProductId = 'foo';
         $stubProductSource = $this->getStubProductSource($dummyProductId);
 
-        $this->mockSnippetList->expects($this->once())->method('add');
+        $result = $this->snippetRenderer->render($stubProductSource, $this->stubContextSource);
 
-        $this->snippetRenderer->render($stubProductSource, $this->stubContextSource);
+        $this->assertInstanceOf(SnippetList::class, $result);
+        $this->assertCount(1, $result);
+        $this->assertContainsOnly(Snippet::class, $result);
     }
 
     public function testProductIdIsPassedToKeyGenerator()

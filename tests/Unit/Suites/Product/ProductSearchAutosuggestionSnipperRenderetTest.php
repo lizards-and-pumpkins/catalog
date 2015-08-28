@@ -17,11 +17,6 @@ use Brera\SnippetRenderer;
 class ProductSearchAutosuggestionSnipperRenderetTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var SnippetList|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $mockSnippetList;
-
-    /**
      * @var ProductSearchAutosuggestionSnippetRenderer
      */
     private $snippetRenderer;
@@ -33,7 +28,7 @@ class ProductSearchAutosuggestionSnipperRenderetTest extends \PHPUnit_Framework_
 
     protected function setUp()
     {
-        $this->mockSnippetList = $this->getMock(SnippetList::class);
+        $testSnippetList = new SnippetList;
 
         /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $stubSnippetKeyGenerator */
         $stubSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
@@ -43,7 +38,7 @@ class ProductSearchAutosuggestionSnipperRenderetTest extends \PHPUnit_Framework_
         $stubBlockRenderer = $this->getMock(BlockRenderer::class, [], [], '', false);
 
         $this->snippetRenderer = new ProductSearchAutosuggestionSnippetRenderer(
-            $this->mockSnippetList,
+            $testSnippetList,
             $stubSnippetKeyGenerator,
             $stubBlockRenderer
         );
@@ -74,8 +69,10 @@ class ProductSearchAutosuggestionSnipperRenderetTest extends \PHPUnit_Framework_
         /** @var ProductListingSourceList|\PHPUnit_Framework_MockObject_MockObject $stubProductListingSourceList */
         $stubProductListingSourceList = $this->getMock(ProductListingSourceList::class, [], [], '', false);
 
-        $this->mockSnippetList->expects($this->once())->method('add')->with($this->isInstanceOf(Snippet::class));
+        $result = $this->snippetRenderer->render($stubProductListingSourceList, $this->stubContextSource);
 
-        $this->snippetRenderer->render($stubProductListingSourceList, $this->stubContextSource);
+        $this->assertInstanceOf(SnippetList::class, $result);
+        $this->assertCount(1, $result);
+        $this->assertContainsOnly(Snippet::class, $result);
     }
 }
