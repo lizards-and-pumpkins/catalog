@@ -172,6 +172,8 @@ class ContextBuilder
     {
         $dataSetCodes = array_diff(array_keys($contextDataSet), [VersionedContext::CODE]);
         $registeredDecoratorCodes = array_diff(array_keys($this->registeredContextDecorators), $dataSetCodes);
-        return array_merge($dataSetCodes, $registeredDecoratorCodes);
+        $codes = array_merge($dataSetCodes, $registeredDecoratorCodes);
+        sort($codes);
+        return $codes;
     }
 }
