@@ -23,7 +23,7 @@ class ProductListingSourceListBuilderTest extends \PHPUnit_Framework_TestCase
 
         /** @var ContextBuilder|\PHPUnit_Framework_MockObject_MockObject $mockContextBuilder */
         $mockContextBuilder = $this->getMock(ContextBuilder::class, [], [], '', false);
-        $mockContextBuilder->method('getContext')->willReturn($stubContext);
+        $mockContextBuilder->method('createContext')->willReturn($stubContext);
 
         $this->productListingSourceListBuilder = new ProductListingSourceListBuilder($mockContextBuilder);
     }

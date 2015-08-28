@@ -52,7 +52,7 @@ class ProductListingMetaInfoSnippetRenderer implements SnippetRenderer
     public function render(ProductListingMetaInfoSource $productListingMetaInfoSource)
     {
         $contextData = $productListingMetaInfoSource->getContextData();
-        $context = $this->contextBuilder->getContext($contextData);
+        $context = $this->contextBuilder->createContext($contextData);
 
         $this->blockRenderer->render($productListingMetaInfoSource, $context);
 
