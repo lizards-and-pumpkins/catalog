@@ -14,4 +14,12 @@ class WebsiteContextDecorator extends ContextDecorator
     {
         return self::CODE;
     }
+
+    /**
+     * @return string
+     */
+    protected function getValueFromContext()
+    {
+        return parent::getValueFromContext();
+    }
 }

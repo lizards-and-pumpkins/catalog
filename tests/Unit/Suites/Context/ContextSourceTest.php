@@ -37,16 +37,14 @@ class ContextSourceTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayIsReturned()
     {
-        $this->stubContextBuilder->expects($this->once())
-            ->method('getContexts')
-            ->willReturn([]);
+        $this->stubContextBuilder->method('createContextsFromDataSets')->willReturn([]);
 
         $this->assertInternalType('array', $this->contextSource->getAllAvailableContexts());
     }
 
     public function testAllAvailableContextsAreLazyLoaded()
     {
-        $this->stubContextBuilder->expects($this->once())->method('getContexts')->willReturn([]);
+        $this->stubContextBuilder->expects($this->once())->method('createContextsFromDataSets')->willReturn([]);
 
         $this->contextSource->getAllAvailableContexts();
         $this->contextSource->getAllAvailableContexts();
@@ -58,7 +56,7 @@ class ContextSourceTest extends \PHPUnit_Framework_TestCase
     public function testOnlyDesiredPartsArePassedToContextBuilder($partsToExtract, $expectedContextMatrix)
     {
         $this->stubContextBuilder->expects($this->once())
-            ->method('getContexts')
+            ->method('createContextsFromDataSets')
             ->with($expectedContextMatrix);
 
         $this->contextSource->getContextsForParts($partsToExtract);
