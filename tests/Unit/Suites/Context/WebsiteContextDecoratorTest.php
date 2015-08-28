@@ -47,6 +47,10 @@ class WebsiteContextDecoratorTest extends ContextDecoratorTestAbstract
         return new WebsiteContextDecorator($stubContext, $stubContextData);
     }
 
+    /**
+     * @param string $urlString
+     * @return HttpRequest
+     */
     private function createTestRequest($urlString)
     {
         return HttpRequest::fromParameters(
@@ -79,6 +83,9 @@ class WebsiteContextDecoratorTest extends ContextDecoratorTestAbstract
         $this->assertSame($expected, $websiteValue);
     }
 
+    /**
+     * @return array[]
+     */
     public function websiteSourceDataProvider()
     {
         return [
