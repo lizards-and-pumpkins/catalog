@@ -9,6 +9,7 @@ use Brera\Http\HttpRequest;
 /**
  * @covers \Brera\Context\ContextBuilder
  * @uses   \Brera\Context\VersionedContext
+ * @uses   \Brera\Context\WebsiteContextDecorator
  * @uses   \Brera\Context\ContextDecorator
  * @uses   \Brera\DataVersion
  */
