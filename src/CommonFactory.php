@@ -10,6 +10,7 @@ use Brera\Content\UpdateContentBlockCommand;
 use Brera\Content\UpdateContentBlockCommandHandler;
 use Brera\Context\ContextBuilder;
 use Brera\Context\ContextSource;
+use Brera\Context\LocaleContextDecorator;
 use Brera\Context\WebsiteContextDecorator;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\DataPoolWriter;
@@ -728,6 +729,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         $contextBuilder = new ContextBuilder($version);
         $contextBuilder->registerContextDecorator('website', WebsiteContextDecorator::class);
+        $contextBuilder->registerContextDecorator('locale', LocaleContextDecorator::class);
         return $contextBuilder;
     }
 
