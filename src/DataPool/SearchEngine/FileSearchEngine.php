@@ -144,6 +144,6 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
 
         unset($dataSet['version']);
 
-        return $contextBuilder->getContext($dataSet);
+        return $contextBuilder->createContext($dataSet);
     }
 }

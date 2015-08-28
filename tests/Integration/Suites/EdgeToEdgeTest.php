@@ -22,9 +22,6 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
 
     public function testCatalogImportDomainEventPutsProductToKeyValueStoreAndSearchIndex()
     {
-        // TODO: Test is broken, the import and the following request should initialize their own WebFront instances,
-        // TODO: thus sharing the data pool and queue needs to be handled properly.
-
         $sku = SampleSku::fromString('118235-251');
         $productId = ProductId::fromSku($sku);
         $productName = 'LED Arm-Signallampe';
@@ -117,6 +114,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $httpHeaders = HttpHeaders::fromArray([]);
         $httpRequestBody = HttpRequestBody::fromString('');
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
+        
 
         $website = new InjectableSampleWebFront($request, $this->factory);
         $response = $website->runWithoutSendingResponse();

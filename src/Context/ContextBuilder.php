@@ -27,7 +27,7 @@ class ContextBuilder
      */
     public function createFromRequest(HttpRequest $request)
     {
-        return $this->getContext(['request' => $request, 'locale' => 'en_US']);
+        return $this->createContext(['request' => $request, 'locale' => 'en_US']);
     }
 
     /**
@@ -37,7 +37,7 @@ class ContextBuilder
     public function createContextsFromDataSets(array $contextDataSets)
     {
         array_map([$this, 'validateAllPartsHaveDecorators'], $contextDataSets);
-        return array_map([$this, 'getContext'], $contextDataSets);
+        return array_map([$this, 'createContext'], $contextDataSets);
     }
 
     /**
@@ -54,7 +54,7 @@ class ContextBuilder
      * @param mixed[] $contextDataSet
      * @return Context
      */
-    public function getContext(array $contextDataSet)
+    public function createContext(array $contextDataSet)
     {
         $versionedContext = new VersionedContext($this->dataVersion);
         $codes = $this->getContextDecoratorCodesToCreate($contextDataSet);

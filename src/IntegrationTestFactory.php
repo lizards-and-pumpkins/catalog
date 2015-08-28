@@ -72,7 +72,7 @@ class IntegrationTestFactory implements Factory
     public function createImageProcessorCollection()
     {
         $processorCollection = new ImageProcessorCollection();
-        $processorCollection->add($this->getMasterFactory()->getImageProcessor());
+        $processorCollection->add($this->getMasterFactory()->createImageProcessor());
 
         return $processorCollection;
     }
@@ -80,11 +80,11 @@ class IntegrationTestFactory implements Factory
     /**
      * @return ImageProcessor
      */
-    public function getImageProcessor()
+    public function createImageProcessor()
     {
-        $strategySequence = $this->getMasterFactory()->getImageProcessingStrategySequence();
-        $fileStorageReader = $this->getMasterFactory()->getImageFileStorageReader();
-        $fileStorageWriter = $this->getMasterFactory()->getImageFileStorageWriter();
+        $strategySequence = $this->getMasterFactory()->createImageProcessingStrategySequence();
+        $fileStorageReader = $this->getMasterFactory()->createImageFileStorageReader();
+        $fileStorageWriter = $this->getMasterFactory()->createImageFileStorageWriter();
 
         return new ImageProcessor($strategySequence, $fileStorageReader, $fileStorageWriter);
     }
@@ -92,7 +92,7 @@ class IntegrationTestFactory implements Factory
     /**
      * @return FileStorageReader
      */
-    public function getImageFileStorageReader()
+    public function createImageFileStorageReader()
     {
         return new LocalFilesystemStorageReader(__DIR__ . '/../tests/shared-fixture/product-images');
     }
@@ -100,7 +100,7 @@ class IntegrationTestFactory implements Factory
     /**
      * @return FileStorageWriter
      */
-    public function getImageFileStorageWriter()
+    public function createImageFileStorageWriter()
     {
         $resultImageDir = sys_get_temp_dir() . '/' . self::PROCESSED_IMAGES_DIR;
 
@@ -114,7 +114,7 @@ class IntegrationTestFactory implements Factory
     /**
      * @return ImageProcessingStrategySequence
      */
-    public function getImageProcessingStrategySequence()
+    public function createImageProcessingStrategySequence()
     {
         $imageResizeStrategyClass = $this->locateImageResizeStrategyClass();
         $imageResizeStrategy = new $imageResizeStrategyClass(
