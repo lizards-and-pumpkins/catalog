@@ -12,7 +12,8 @@ class WebsiteContextDecorator extends ContextDecorator
     private $defaultWebsite = 'ru';
     
     private $validWebsites = [
-        'ru'
+        'ru',
+        'cy'
     ];
 
     /**
@@ -89,9 +90,11 @@ class WebsiteContextDecorator extends ContextDecorator
     private function getWebsiteFromRequestPath()
     {
         $path = $this->getRequest()->getUrl()->getPathRelativeToWebFront();
-        $parts = explode('/', $path);
-        return count($parts) > 0 ?
-            $parts[0] :
-            '';
+        if ('' === $path) {
+            return '';
+        }
+        $pathParts = explode('/', $path, 2);
+        list($website) = explode('_', $pathParts[0], 2);
+        return $website;
     }
 }

@@ -83,10 +83,13 @@ class WebsiteContextDecoratorTest extends ContextDecoratorTestAbstract
     {
         return [
             'website' => [['website' => 'test'], 'test'],
-            'request' => [['request' => $this->createTestRequest('http://example.com/ru')], 'ru'],
+            'request ru' => [['request' => $this->createTestRequest('http://example.com/ru')], 'ru'],
+            'request cy' => [['request' => $this->createTestRequest('http://example.com/cy')], 'cy'],
+            'request ru_de' => [['request' => $this->createTestRequest('http://example.com/ru_de')], 'ru'],
+            'request cy_de' => [['request' => $this->createTestRequest('http://example.com/cy_de')], 'cy'],
             'default' => [['request' => $this->createTestRequest('http://example.com/')], 'ru'],
             'website has priority' => [
-                ['request' => $this->createTestRequest('http://example.com/ru'), 'website' => 'bbb'],
+                ['request' => $this->createTestRequest('http://example.com/ru_de'), 'website' => 'bbb'],
                 'bbb'
             ],
         ];
