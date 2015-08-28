@@ -14,6 +14,10 @@ use Brera\Http\HttpUrl;
  * @uses   \Brera\Context\ContextBuilder
  * @uses   \Brera\Context\VersionedContext
  * @uses   \Brera\DataVersion
+ * @uses   \Brera\Http\HttpRequest
+ * @uses   \Brera\Http\HttpUrl
+ * @uses   \Brera\Http\HttpHeaders
+ * @uses   \Brera\Http\HttpRequestBody
  */
 class WebsiteContextDecoratorTest extends ContextDecoratorTestAbstract
 {
