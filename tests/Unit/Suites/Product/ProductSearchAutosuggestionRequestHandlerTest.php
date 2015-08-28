@@ -4,6 +4,8 @@ namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
 use Brera\Http\HttpResponse;
@@ -55,6 +57,19 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
             ->with(ProductSearchAutosuggestionRequestHandler::QUERY_STRING_PARAMETER_NAME)
             ->willReturn($queryString);
         $this->stubHttpRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubSearchDocumentCollection()
+    {
+        $stubSearchDocument = $this->getMock(SearchDocument::class, [], [], '', false);
+        $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
+        $stubSearchDocumentCollection->method('getDocuments')->willReturn([$stubSearchDocument]);
+        $stubSearchDocumentCollection->method('count')->willReturn(1);
+
+        return $stubSearchDocumentCollection;
     }
 
     protected function setUp()
@@ -155,7 +170,10 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
             'page_snippet_codes' => ['foo']
         ];
         $this->stubDataPoolReader->method('getSnippet')->willReturn(json_encode($metaSnippetContent));
-        $this->stubDataPoolReader->method('getSearchResults')->willReturn([]);
+        $this->stubDataPoolReader->method('getSnippets')->willReturn([]);
+
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection();
+        $this->stubDataPoolReader->method('getSearchResults')->willReturn($stubSearchDocumentCollection);
 
         $this->assertInstanceOf(HttpResponse::class, $this->requestHandler->process($this->stubHttpRequest));
     }
@@ -165,7 +183,8 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
         $queryString = 'foo';
         $this->prepareStubHttpRequest($queryString);
 
-        $this->stubDataPoolReader->method('getSearchResults')->willReturn(['product_in_listing_id']);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection();
+        $this->stubDataPoolReader->method('getSearchResults')->willReturn($stubSearchDocumentCollection);
 
         $metaSnippetContent = [
             'root_snippet_code'  => 'foo',

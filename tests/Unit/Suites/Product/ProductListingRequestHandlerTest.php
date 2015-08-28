@@ -8,9 +8,9 @@ use Brera\DataPool\KeyValue\KeyNotFoundException;
 use Brera\DataPool\SearchEngine\SearchCriteria;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
-use Brera\DefaultHttpResponse;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
+use Brera\Http\HttpResponse;
 use Brera\Http\HttpUrl;
 use Brera\Http\UnableToHandleRequestException;
 use Brera\PageBuilder;
@@ -141,10 +141,9 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($stubSearchDocumentCollection);
 
         $this->mockMetaInfoSnippet();
-        $this->mockPageBuilder->method('buildPage')
-            ->willReturn($this->getMock(DefaultHttpResponse::class, [], [], '', false));
+        $this->mockPageBuilder->method('buildPage')->willReturn($this->getMock(HttpResponse::class, [], [], '', false));
 
-        $this->assertInstanceOf(DefaultHttpResponse::class, $this->requestHandler->process($this->stubRequest));
+        $this->assertInstanceOf(HttpResponse::class, $this->requestHandler->process($this->stubRequest));
     }
 
     public function testNoSnippetsAreAddedToPageBuilderIfListingIsEmpty()

@@ -4,6 +4,8 @@ namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
 use Brera\Http\HttpResponse;
@@ -69,13 +71,13 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
         }
 
         $searchQueryString = $request->getUrl()->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
-        $productIds = $this->dataPoolReader->getSearchResults($searchQueryString, $this->context);
+        $searchDocumentsCollection = $this->dataPoolReader->getSearchResults($searchQueryString, $this->context);
 
-        $this->addSearchResultsToPageBuilder($productIds);
+        $this->addSearchResultsToPageBuilder($searchDocumentsCollection);
 
         $metaInfoSnippetContent = $this->getMetaInfoSnippetContent();
 
-        $this->addTotalNumberOfResultsSnippetToPageBuilder(count($productIds));
+        $this->addTotalNumberOfResultsSnippetToPageBuilder(count($searchDocumentsCollection));
         $this->addSearchQueryStringSnippetToPageBuilder($searchQueryString);
 
         $keyGeneratorParams = [];
@@ -108,21 +110,19 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
         return true;
     }
 
-    /**
-     * @param string[] $productIds
-     */
-    private function addSearchResultsToPageBuilder(array $productIds)
+    private function addSearchResultsToPageBuilder(SearchDocumentCollection $searchDocumentCollection)
     {
-        if (empty($productIds)) {
+        if (0 === count($searchDocumentCollection)) {
             return;
         }
 
         $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
             ProductInSearchAutosuggestionSnippetRenderer::CODE
         );
-        $productInAutosuggestionSnippetKeys = array_map(function ($productId) use ($keyGenerator) {
-            return $keyGenerator->getKeyForContext($this->context, ['product_id' => $productId]);
-        }, $productIds);
+        $searchDocuments = $searchDocumentCollection->getDocuments();
+        $productInAutosuggestionSnippetKeys = array_map(function (SearchDocument $searchDocument) use ($keyGenerator) {
+            return $keyGenerator->getKeyForContext($this->context, ['product_id' => $searchDocument->getProductId()]);
+        }, $searchDocuments);
 
         $snippetKeyToContentMap = $this->dataPoolReader->getSnippets($productInAutosuggestionSnippetKeys);
         $snippetCodeToKeyMap = $this->getProductInAutosuggestionSnippetCodeToKeyMap(

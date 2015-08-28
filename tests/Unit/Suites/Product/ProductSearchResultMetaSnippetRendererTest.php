@@ -14,6 +14,7 @@ use Brera\SnippetRenderer;
  * @covers \Brera\Product\ProductSearchResultMetaSnippetRenderer
  * @uses   \Brera\Product\ProductSearchResultMetaSnippetContent
  * @uses   \Brera\Snippet
+ * @uses   \Brera\SnippetList
  */
 class ProductSearchResultMetaSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
