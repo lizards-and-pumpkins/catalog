@@ -20,7 +20,12 @@ class ProductBlock extends Block
         return $this->getProduct()->getFirstValueOfAttribute($attributeCode);
     }
 
-    public function getAllValuesOfProductAttributeGlued($attributeCode, $glue)
+    /**
+     * @param string $attributeCode
+     * @param string $glue
+     * @return string
+     */
+    public function getImplodedValuesOfProductAttribute($attributeCode, $glue)
     {
         $attributeValues = $this->getProduct()->getAllValuesOfAttribute($attributeCode);
 
@@ -32,6 +37,7 @@ class ProductBlock extends Block
      */
     public function getProductUrl()
     {
+        /* TODO: Implement retrieval of base URL for context */
         return '/brera/' . $this->getFirstValueOfProductAttribute('url_key');
     }
 
@@ -74,7 +80,7 @@ class ProductBlock extends Block
             return '';
         }
 
-        return $fileName;
+        return '/brera/' . $fileName;
     }
 
     /**

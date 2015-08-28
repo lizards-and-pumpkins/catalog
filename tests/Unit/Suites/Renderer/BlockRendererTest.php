@@ -27,20 +27,18 @@ class BlockRendererTest extends AbstractBlockRendererTest
 
     public function testExceptionIsThrownIfNoRootBlockIsDefined()
     {
-        $this->getStubLayout()->method('getNodeChildren')
-            ->willReturn([]);
+        $this->getStubLayout()->method('getNodeChildren')->willReturn([]);
         $this->setExpectedException(BlockRendererMustHaveOneRootBlockException::class);
 
-        $this->getBlockRenderer()->render($this->getStubDataObject(), $this->getStubContext());
+        $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
     }
 
     public function testExceptionIsThrownIfMoreThenOneRootBlockIsDefined()
     {
-        $this->getStubLayout()->method('getNodeChildren')
-            ->willReturn([['test-dummy-1'], ['test-dummy-2']]);
+        $this->getStubLayout()->method('getNodeChildren')->willReturn([['test-dummy-1'], ['test-dummy-2']]);
         $this->setExpectedException(BlockRendererMustHaveOneRootBlockException::class);
 
-        $this->getBlockRenderer()->render($this->getStubDataObject(), $this->getStubContext());
+        $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
     }
 
     public function testExceptionIsThrownIfNoBlockClassIsSpecified()
@@ -48,7 +46,7 @@ class BlockRendererTest extends AbstractBlockRendererTest
         $this->addStubRootBlock(null, 'dummy-template');
         $this->setExpectedException(CanNotInstantiateBlockException::class, 'Block class is not specified.');
 
-        $this->getBlockRenderer()->render($this->getStubDataObject(), $this->getStubContext());
+        $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
     }
 
     public function testExceptionIsThrownIfTheClassDoesNotExist()
@@ -56,7 +54,7 @@ class BlockRendererTest extends AbstractBlockRendererTest
         $this->addStubRootBlock('None\\Existing\\BlockClass', 'dummy-template');
         $this->setExpectedException(CanNotInstantiateBlockException::class, 'Block class does not exist');
 
-        $this->getBlockRenderer()->render($this->getStubDataObject(), $this->getStubContext());
+        $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
     }
 
     public function testExceptionIsThrownIfTheSpecifiedClassIsNotABlock()
@@ -67,7 +65,7 @@ class BlockRendererTest extends AbstractBlockRendererTest
             sprintf('Block class "%s" must extend "%s"', $nonBlockClass, Block::class)
         );
         $this->addStubRootBlock($nonBlockClass, 'dummy-template');
-        $this->getBlockRenderer()->render($this->getStubDataObject(), $this->getStubContext());
+        $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
     }
 
     public function testBlockSpecifiedInLayoutIsRendered()
@@ -76,7 +74,7 @@ class BlockRendererTest extends AbstractBlockRendererTest
         $templateContent = 'test template content';
         $this->createFixtureFile($template, $templateContent);
         $this->addStubRootBlock(StubBlock::class, $template);
-        $result = $this->getBlockRenderer()->render($this->getStubDataObject(), $this->getStubContext());
+        $result = $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
 
         $this->assertEquals($templateContent, $result);
     }
@@ -97,7 +95,7 @@ class BlockRendererTest extends AbstractBlockRendererTest
         $rootBlock = $this->addStubRootBlock(StubBlock::class, $rootTemplate);
         $this->addChildLayoutToStubBlock($rootBlock, StubBlock::class, $childTemplate, $childBlockName);
 
-        $result = $this->getBlockRenderer()->render($this->getStubDataObject(), $this->getStubContext());
+        $result = $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
 
         $this->assertEquals($combinedTemplateContent, $result);
     }
@@ -114,7 +112,7 @@ class BlockRendererTest extends AbstractBlockRendererTest
 
         $this->addStubRootBlock(StubBlock::class, $rootTemplate);
 
-        $result = $this->getBlockRenderer()->render($this->getStubDataObject(), $this->getStubContext());
+        $result = $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
         $this->assertEquals($templateContentWithChildPlaceholder, $result);
     }
 
@@ -140,7 +138,7 @@ class BlockRendererTest extends AbstractBlockRendererTest
 
         $this->addStubRootBlock(StubBlock::class, $rootTemplate);
 
-        $this->getBlockRenderer()->render($this->getStubDataObject(), $this->getStubContext());
+        $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
         $this->assertEquals([$childBlockName1, $childBlockName2], $this->getBlockRenderer()->getNestedSnippetCodes());
     }
 
@@ -157,10 +155,10 @@ class BlockRendererTest extends AbstractBlockRendererTest
 
         $this->addStubRootBlock(StubBlock::class, $rootTemplate);
 
-        $this->getBlockRenderer()->render($this->getStubDataObject(), $this->getStubContext());
+        $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
         $this->assertEquals([$childBlockName1, $childBlockName2], $this->getBlockRenderer()->getNestedSnippetCodes());
         
-        $this->getBlockRenderer()->render($this->getStubDataObject(), $this->getStubContext());
+        $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
         $this->assertEquals([$childBlockName1, $childBlockName2], $this->getBlockRenderer()->getNestedSnippetCodes());
     }
 
@@ -171,11 +169,11 @@ class BlockRendererTest extends AbstractBlockRendererTest
 
     public function testDataObjectPassedToRenderIsReturned()
     {
-        $stubDataObject = $this->getStubDataObject();
+        $testProjectionSourceData = 'test-projection-source-data';
         $template = $this->getUniqueTempDir() . '/template.phtml';
         $this->createFixtureFile($template, '');
         $this->addStubRootBlock(StubBlock::class, $template);
-        $this->getBlockRenderer()->render($stubDataObject, $this->getStubContext());
-        $this->assertSame($stubDataObject, $this->getBlockRenderer()->getDataObject());
+        $this->getBlockRenderer()->render($testProjectionSourceData, $this->getStubContext());
+        $this->assertSame($testProjectionSourceData, $this->getBlockRenderer()->getDataObject());
     }
 }

@@ -38,23 +38,12 @@
             </a>
         </div>
         <div id="searchPanel">
-            <form id="search_mini_form" autocomplete="off" action="/brera/catalogsearch/result/"
-                  method="get">
+            <form autocomplete="off" action="/brera/catalogsearch/result/">
                 <div class="input-box">
                     <input id="search" type="text" name="q" value="" class="input-text" maxlength="128"
-                           placeholder="Suchbegriff eingeben"/>
-                    <button type="submit" title="Suchanfrage starten" disabled="disabled" class="disabled"><span
-                            class="search-button-image"></span></button>
-                    <div class="clearer"></div>
-                    <div id="search_autocomplete" class="search-autocomplete"></div>
-                    <script>
-
-                        /** TODO: Fix and move to external JS file */
-
-//                        var searchForm = new Varien.searchForm('search_mini_form', 'search', '');
-//                        searchForm.initAutocomplete('/ru_de/catalogsearch/ajax/suggest/', 'search_autocomplete');
-                        //]]>
-                    </script>
+                           placeholder="<?= $this->__('Suchbegriff eingeben') ?>"/>
+                    <button type="submit" disabled="disabled" class="disabled"><span class="search-button-image"></span></button>
+                    <div id="search-autosuggestion"></div>
                 </div>
             </form>
         </div>

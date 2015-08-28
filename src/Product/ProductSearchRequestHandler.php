@@ -74,11 +74,11 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         $this->addSearchResultsToPageBuilder($searchQueryString);
 
         $metaInfoSnippetKeyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
-            ProductSearchResultsMetaSnippetRenderer::CODE
+            ProductSearchResultMetaSnippetRenderer::CODE
         );
         $metaInfoSnippetKey = $metaInfoSnippetKeyGenerator->getKeyForContext($this->context, []);
         $metaInfoSnippetJson = $this->dataPoolReader->getSnippet($metaInfoSnippetKey);
-        $metaInfoSnippetContent = ProductSearchResultsMetaSnippetContent::fromJson($metaInfoSnippetJson);
+        $metaInfoSnippetContent = ProductSearchResultMetaSnippetContent::fromJson($metaInfoSnippetJson);
 
         $keyGeneratorParams = [
             'items_per_page' => $this->getDefaultNumberOrProductsPerPage(),
@@ -125,7 +125,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         }
 
         $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
-            ProductInListingInContextSnippetRenderer::CODE
+            ProductInListingSnippetRenderer::CODE
         );
         $productInListingSnippetKeys = array_map(function (SearchDocument $searchDocument) use ($keyGenerator) {
             return $keyGenerator->getKeyForContext($this->context, ['product_id' => $searchDocument->getProductId()]);

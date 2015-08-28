@@ -54,12 +54,22 @@ class ApiApp extends WebFront
 $httpRequestBodyContent = file_get_contents(__DIR__ . '/../tests/shared-fixture/product-listing-root-snippet.json');
 $productListingImportRequest = HttpRequest::fromParameters(
     HttpRequest::METHOD_PUT,
-    HttpUrl::fromString('http://example.com/api/page_templates/product_listing'),
-    HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.page_templates.v1+json']),
+    HttpUrl::fromString('http://example.com/api/templates/product_listing'),
+    HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.templates.v1+json']),
     HttpRequestBody::fromString($httpRequestBodyContent)
 );
 $productListingImport = new ApiApp($productListingImportRequest);
 $productListingImport->runWithoutSendingResponse();
+
+
+$productSearchAutosuggestionImportRequest = HttpRequest::fromParameters(
+    HttpRequest::METHOD_PUT,
+    HttpUrl::fromString('http://example.com/api/templates/product_search_autosuggestion'),
+    HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.templates.v1+json']),
+    HttpRequestBody::fromString('')
+);
+$productSearchAutosuggestionImport = new ApiApp($productSearchAutosuggestionImportRequest);
+$productSearchAutosuggestionImport->runWithoutSendingResponse();
 
 
 $catalogImportRequest = HttpRequest::fromParameters(

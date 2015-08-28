@@ -99,6 +99,7 @@ class SampleFactory implements Factory
         $processorCollection->add($this->getMasterFactory()->getProductDetailsPageImageProcessor());
         $processorCollection->add($this->getMasterFactory()->getProductListingImageProcessor());
         $processorCollection->add($this->getMasterFactory()->getGalleyThumbnailImageProcessor());
+        $processorCollection->add($this->getMasterFactory()->getSearchAutosuggestionImageProcessor());
 
         return $processorCollection;
     }
@@ -267,6 +268,50 @@ class SampleFactory implements Factory
     public function getGalleyThumbnailImageProcessingStrategySequence()
     {
         $imageResizeStrategy = new ImageMagickInscribeStrategy(48, 48, 'white');
+
+        $strategySequence = new ImageProcessingStrategySequence();
+        $strategySequence->add($imageResizeStrategy);
+
+        return $strategySequence;
+    }
+
+    /**
+     * @return ImageProcessor
+     */
+    public function getSearchAutosuggestionImageProcessor()
+    {
+        $strategySequence = $this->getMasterFactory()->getSearchAutosuggestionImageProcessingStrategySequence();
+        $fileStorageReader = $this->getMasterFactory()->getSearchAutosuggestionImageFileStorageReader();
+        $fileStorageWriter = $this->getMasterFactory()->getSearchAutosuggestionImageFileStorageWriter();
+
+        return new ImageProcessor($strategySequence, $fileStorageReader, $fileStorageWriter);
+    }
+
+    /**
+     * @return FileStorageReader
+     */
+    public function getSearchAutosuggestionImageFileStorageReader()
+    {
+        return new LocalFilesystemStorageReader(__DIR__ . '/../tests/shared-fixture/product-images');
+    }
+
+    /**
+     * @return FileStorageWriter
+     */
+    public function getSearchAutosuggestionImageFileStorageWriter()
+    {
+        $resultImageDir = __DIR__ . '/../pub/media/product/search-autosuggestion';
+        $this->createDirectoryIfNotExists($resultImageDir);
+
+        return new LocalFilesystemStorageWriter($resultImageDir);
+    }
+
+    /**
+     * @return ImageProcessingStrategySequence
+     */
+    public function getSearchAutosuggestionImageProcessingStrategySequence()
+    {
+        $imageResizeStrategy = new ImageMagickInscribeStrategy(60, 37, 'white');
 
         $strategySequence = new ImageProcessingStrategySequence();
         $strategySequence->add($imageResizeStrategy);

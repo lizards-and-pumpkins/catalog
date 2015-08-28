@@ -5,11 +5,11 @@ namespace Brera;
 use Brera\Http\HttpHeaders;
 use Brera\Http\HttpRequestBody;
 use Brera\Http\HttpResourceNotFoundResponse;
+use Brera\Product\ProductInListingSnippetRenderer;
 use Brera\Product\ProductDetailViewInContextSnippetRenderer;
 use Brera\Product\ProductId;
 use Brera\Http\HttpUrl;
 use Brera\Http\HttpRequest;
-use Brera\Product\ProductInListingInContextSnippetRenderer;
 use Brera\Utils\XPathParser;
 
 class EdgeToEdgeTest extends AbstractIntegrationTest
@@ -62,7 +62,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         );
 
         $listingPageKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
-            ProductInListingInContextSnippetRenderer::CODE
+            ProductInListingSnippetRenderer::CODE
         );
         $listingPageKey = $listingPageKeyGenerator->getKeyForContext($context, ['product_id' => $productId]);
         $productListingHtml = $dataPoolReader->getSnippet($listingPageKey);

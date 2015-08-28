@@ -5,9 +5,8 @@ namespace Brera\Product;
 use Brera\Context\Context;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilder;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
-use Brera\InvalidProjectionDataSourceTypeException;
+use Brera\InvalidProjectionSourceDataTypeException;
 use Brera\SampleContextSource;
-use Brera\ProjectionSourceData;
 
 /**
  * @covers \Brera\Product\ProductSearchDocumentBuilder
@@ -64,16 +63,9 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(SearchDocumentCollection::class, $result);
     }
 
-    public function testExceptionIsThrownIfTheDataSourceObjectTypeIsNotProduct()
+    public function testExceptionIsThrownIfProjectionSourceDataIsNotProduct()
     {
-        /** @var ProjectionSourceData|\PHPUnit_Framework_MockObject_MockObject $invalidDataSource */
-        $invalidDataSource = $this->getMock(ProjectionSourceData::class);
-
-        $this->setExpectedException(
-            InvalidProjectionDataSourceTypeException::class,
-            'First argument must be instance of ProductSource.'
-        );
-
-        $this->searchDocumentBuilder->aggregate($invalidDataSource, $this->stubContextSource);
+        $this->setExpectedException(InvalidProjectionSourceDataTypeException::class);
+        $this->searchDocumentBuilder->aggregate('invalid-projection-source-data', $this->stubContextSource);
     }
 }

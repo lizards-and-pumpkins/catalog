@@ -24,6 +24,7 @@ class LocaleAwareEuroPriceSnippetTransformationTest extends \PHPUnit_Framework_T
     /**
      * @param string $expected
      * @param int|string|null $input
+     * @param string $locale
      */
     private function assertIsTransformedTo($expected, $input, $locale)
     {
@@ -75,6 +76,9 @@ class LocaleAwareEuroPriceSnippetTransformationTest extends \PHPUnit_Framework_T
         $this->assertIsTransformedTo($expected, $input, $locale);
     }
 
+    /**
+     * @return array[]
+     */
     public function validNumberDataProvider()
     {
         return [

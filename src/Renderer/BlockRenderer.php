@@ -3,7 +3,6 @@
 namespace Brera\Renderer;
 
 use Brera\Context\Context;
-use Brera\ProjectionSourceData;
 use Brera\ThemeLocator;
 
 abstract class BlockRenderer
@@ -14,7 +13,7 @@ abstract class BlockRenderer
     private $themeLocator;
 
     /**
-     * @var ProjectionSourceData
+     * @var mixed
      */
     private $dataObject;
 
@@ -67,7 +66,7 @@ abstract class BlockRenderer
     }
 
     /**
-     * @return ProjectionSourceData
+     * @return mixed
      */
     final public function getDataObject()
     {

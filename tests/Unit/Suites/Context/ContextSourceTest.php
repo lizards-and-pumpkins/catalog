@@ -44,6 +44,14 @@ class ContextSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $this->contextSource->getAllAvailableContexts());
     }
 
+    public function testAllAvailableContextsAreLazyLoaded()
+    {
+        $this->stubContextBuilder->expects($this->once())->method('getContexts')->willReturn([]);
+
+        $this->contextSource->getAllAvailableContexts();
+        $this->contextSource->getAllAvailableContexts();
+    }
+
     /**
      * @dataProvider extractPartsProvider
      */

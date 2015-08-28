@@ -59,9 +59,9 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
     private $stubProductSourceBuilder;
 
     /**
-     * @var ProductListingSourceBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductListingMetaInfoSourceBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubProductListingSourceBuilder;
+    private $stubProductListingMetaInfoSourceBuilder;
 
     /**
      * @var \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount
@@ -86,12 +86,18 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
         $this->stubProductSourceBuilder->method('createProductSourceFromXml')->willReturn($stubProductSource);
 
         $dummyUrlKey = 'foo';
-        $stubProductListingSource = $this->getMock(ProductListingSource::class, [], [], '', false);
-        $stubProductListingSource->method('getUrlKey')->willReturn($dummyUrlKey);
+        $stubProductListingMetaInfoSource = $this->getMock(ProductListingMetaInfoSource::class, [], [], '', false);
+        $stubProductListingMetaInfoSource->method('getUrlKey')->willReturn($dummyUrlKey);
 
-        $this->stubProductListingSourceBuilder = $this->getMock(ProductListingSourceBuilder::class, [], [], '', false);
-        $this->stubProductListingSourceBuilder->method('createProductListingSourceFromXml')
-            ->willReturn($stubProductListingSource);
+        $this->stubProductListingMetaInfoSourceBuilder = $this->getMock(
+            ProductListingMetaInfoSourceBuilder::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->stubProductListingMetaInfoSourceBuilder->method('createProductListingMetaInfoSourceFromXml')
+            ->willReturn($stubProductListingMetaInfoSource);
 
         $this->logger = $this->getMock(Logger::class);
 
@@ -99,7 +105,7 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
             $this->mockCommandQueue,
             $this->importDirectoryPath,
             $this->stubProductSourceBuilder,
-            $this->stubProductListingSourceBuilder,
+            $this->stubProductListingMetaInfoSourceBuilder,
             $this->logger
         );
 
@@ -130,7 +136,7 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
             $this->mockCommandQueue,
             '/some-not-existing-directory',
             $this->stubProductSourceBuilder,
-            $this->stubProductListingSourceBuilder,
+            $this->stubProductListingMetaInfoSourceBuilder,
             $this->logger
         );
     }

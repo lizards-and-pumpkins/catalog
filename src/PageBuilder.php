@@ -69,6 +69,7 @@ class PageBuilder
     {
         $this->context = $context;
         $this->keyGeneratorParams = $keyGeneratorParams;
+
         $this->initFromMetaInfo($metaInfo);
         $this->loadSnippets();
         $this->logMissingSnippets();
@@ -167,7 +168,7 @@ class PageBuilder
     {
         $missingSnippetCodes = [];
         foreach ($this->snippetCodeToKeyMap as $code => $key) {
-            if (!array_key_exists($key, $this->snippetKeyToContentMap)) {
+            if (!isset($this->snippetKeyToContentMap[$key])) {
                 $missingSnippetCodes[] = $code;
             }
         }

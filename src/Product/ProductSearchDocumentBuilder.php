@@ -4,12 +4,11 @@ namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\Context\ContextSource;
-use Brera\InvalidProjectionDataSourceTypeException;
+use Brera\InvalidProjectionSourceDataTypeException;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilder;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
-use Brera\ProjectionSourceData;
 
 class ProductSearchDocumentBuilder implements SearchDocumentBuilder
 {
@@ -27,21 +26,21 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
     }
 
     /**
-     * @param ProjectionSourceData $productSource
+     * @param mixed $projectionSourceData
      * @param ContextSource $contextSource
      * @return SearchDocumentCollection
-     * @throws InvalidProjectionDataSourceTypeException
+     * @throws InvalidProjectionSourceDataTypeException
      */
-    public function aggregate(ProjectionSourceData $productSource, ContextSource $contextSource)
+    public function aggregate($projectionSourceData, ContextSource $contextSource)
     {
-        if (!($productSource instanceof ProductSource)) {
-            throw new InvalidProjectionDataSourceTypeException('First argument must be instance of ProductSource.');
+        if (!($projectionSourceData instanceof ProductSource)) {
+            throw new InvalidProjectionSourceDataTypeException('First argument must be instance of ProductSource.');
         }
 
         $collection = new SearchDocumentCollection();
 
         foreach ($contextSource->getAllAvailableContexts() as $context) {
-            $document = $this->createSearchDocument($productSource, $context);
+            $document = $this->createSearchDocument($projectionSourceData, $context);
             $collection->add($document);
         }
 

@@ -4,7 +4,6 @@ namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\Context\ContextSource;
-use Brera\RootSnippetSourceList;
 use Brera\Snippet;
 use Brera\SnippetKeyGenerator;
 use Brera\SnippetList;
@@ -52,9 +51,9 @@ class DefaultNumberOfProductsPerPageSnippetRendererTest extends \PHPUnit_Framewo
         $dummyNumberOfProductsPerPage = 9;
         $dummySnippetKey = 'bar';
 
-        /** @var RootSnippetSourceList|\PHPUnit_Framework_MockObject_MockObject $stubRootSnippetSourceList */
-        $stubRootSnippetSourceList = $this->getMock(RootSnippetSourceList::class, [], [], '', false);
-        $stubRootSnippetSourceList->method('getListOfAvailableNumberOfItemsPerPageForContext')
+        /** @var ProductListingSourceList|\PHPUnit_Framework_MockObject_MockObject $stubProductListingSourceList */
+        $stubProductListingSourceList = $this->getMock(ProductListingSourceList::class, [], [], '', false);
+        $stubProductListingSourceList->method('getListOfAvailableNumberOfProductsPerPageForContext')
             ->willReturn([$dummyNumberOfProductsPerPage]);
 
         $stubContext = $this->getMock(Context::class);
@@ -69,6 +68,6 @@ class DefaultNumberOfProductsPerPageSnippetRendererTest extends \PHPUnit_Framewo
 
         $this->mockSnippetList->expects($this->once())->method('add')->with($expectedSnippet);
 
-        $this->renderer->render($stubRootSnippetSourceList, $stubContextSource);
+        $this->renderer->render($stubProductListingSourceList, $stubContextSource);
     }
 }

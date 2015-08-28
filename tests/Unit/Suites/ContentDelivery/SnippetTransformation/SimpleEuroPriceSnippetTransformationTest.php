@@ -74,6 +74,9 @@ class SimpleEuroPriceSnippetTransformationTest extends \PHPUnit_Framework_TestCa
         $this->assertIsTransformedTo($expected, $input);
     }
 
+    /**
+     * @return array[]
+     */
     public function numbersOnlyInputDataProvider()
     {
         return [

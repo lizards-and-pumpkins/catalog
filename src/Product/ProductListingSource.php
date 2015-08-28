@@ -2,60 +2,43 @@
 
 namespace Brera\Product;
 
-use Brera\DataPool\SearchEngine\SearchCriteria;
-use Brera\ProjectionSourceData;
-use Brera\UrlKey;
+use Brera\Context\Context;
 
-class ProductListingSource implements ProjectionSourceData
+class ProductListingSource
 {
     /**
-     * @var UrlKey
+     * @var Context
      */
-    private $urlKey;
+    private $context;
 
     /**
-     * @var string[]
+     * @var int
      */
-    private $contextData;
+    private $numItemsPerPage;
 
     /**
-     * @var SearchCriteria
+     * @param Context $context
+     * @param int $numItemsPerPage
      */
-    private $criteria;
-
-    /**
-     * @param UrlKey $urlKey
-     * @param string[] $contextData
-     * @param SearchCriteria $criteria
-     */
-    public function __construct(UrlKey $urlKey, array $contextData, SearchCriteria $criteria)
+    public function __construct(Context $context, $numItemsPerPage)
     {
-        $this->urlKey = $urlKey;
-        $this->contextData = $contextData;
-        $this->criteria = $criteria;
+        $this->context = $context;
+        $this->numItemsPerPage = (int) $numItemsPerPage;
     }
 
     /**
-     * @return UrlKey
+     * @return Context
      */
-    public function getUrlKey()
+    public function getContext()
     {
-        return $this->urlKey;
+        return $this->context;
     }
 
     /**
-     * @return string[]
+     * @return int
      */
-    public function getContextData()
+    public function getNumItemsPerPage()
     {
-        return $this->contextData;
-    }
-
-    /**
-     * @return SearchCriteria
-     */
-    public function getCriteria()
-    {
-        return $this->criteria;
+        return $this->numItemsPerPage;
     }
 }

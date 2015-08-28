@@ -27,9 +27,9 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
     private $productSourceBuilder;
 
     /**
-     * @var ProductListingSourceBuilder
+     * @var ProductListingMetaInfoSourceBuilder
      */
-    private $productListingSourceBuilder;
+    private $productListingMetaInfoSourceBuilder;
 
     /**
      * @var Logger
@@ -40,20 +40,20 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
      * @param Queue $commandQueue
      * @param string $importDirectoryPath
      * @param ProductSourceBuilder $productSourceBuilder
-     * @param ProductListingSourceBuilder $productListingSourceBuilder
+     * @param ProductListingMetaInfoSourceBuilder $productListingMetaInfoSourceBuilder
      * @param Logger $logger
      */
     private function __construct(
         Queue $commandQueue,
         $importDirectoryPath,
         ProductSourceBuilder $productSourceBuilder,
-        ProductListingSourceBuilder $productListingSourceBuilder,
+        ProductListingMetaInfoSourceBuilder $productListingMetaInfoSourceBuilder,
         Logger $logger
     ) {
         $this->commandQueue = $commandQueue;
         $this->importDirectoryPath = $importDirectoryPath;
         $this->productSourceBuilder = $productSourceBuilder;
-        $this->productListingSourceBuilder = $productListingSourceBuilder;
+        $this->productListingMetaInfoSourceBuilder = $productListingMetaInfoSourceBuilder;
         $this->logger = $logger;
     }
 
@@ -61,7 +61,7 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
      * @param Queue $commandQueue
      * @param string $importDirectoryPath
      * @param ProductSourceBuilder $productSourceBuilder
-     * @param ProductListingSourceBuilder $productListingSourceBuilder
+     * @param ProductListingMetaInfoSourceBuilder $productListingMetaInfoSourceBuilder
      * @param Logger $logger
      * @return CatalogImportApiV1PutRequestHandler
      */
@@ -69,7 +69,7 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
         Queue $commandQueue,
         $importDirectoryPath,
         ProductSourceBuilder $productSourceBuilder,
-        ProductListingSourceBuilder $productListingSourceBuilder,
+        ProductListingMetaInfoSourceBuilder $productListingMetaInfoSourceBuilder,
         Logger $logger
     ) {
         if (!is_readable($importDirectoryPath)) {
@@ -80,7 +80,7 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
             $commandQueue,
             $importDirectoryPath,
             $productSourceBuilder,
-            $productListingSourceBuilder,
+            $productListingMetaInfoSourceBuilder,
             $logger
         );
     }
@@ -122,8 +122,9 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
 
         $listingNodesXml = (new XPathParser($xml))->getXmlNodesRawXmlArrayByXPath('//catalog/listings/listing');
         foreach ($listingNodesXml as $listingXml) {
-            $productListingSource = $this->productListingSourceBuilder->createProductListingSourceFromXml($listingXml);
-            $this->commandQueue->add(new UpdateProductListingCommand($productListingSource));
+            $productListingMetaInfoSource = $this->productListingMetaInfoSourceBuilder
+                ->createProductListingMetaInfoSourceFromXml($listingXml);
+            $this->commandQueue->add(new UpdateProductListingCommand($productListingMetaInfoSource));
         }
 
         $imageNodes = (new XPathParser($xml))->getXmlNodesArrayByXPath(

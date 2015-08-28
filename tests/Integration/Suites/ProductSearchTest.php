@@ -7,7 +7,7 @@ use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestBody;
 use Brera\Http\HttpUrl;
 use Brera\Product\ProductSearchRequestHandler;
-use Brera\Product\ProductSearchResultsMetaSnippetRenderer;
+use Brera\Product\ProductSearchResultMetaSnippetRenderer;
 
 class ProductSearchTest extends AbstractIntegrationTest
 {
@@ -33,9 +33,9 @@ class ProductSearchTest extends AbstractIntegrationTest
         $this->factory = $this->prepareIntegrationTestMasterFactory($this->request);
     }
     
-    public function testProductSearchResultsMetaSnippetIsWrittenIntoDataPool()
+    public function testProductSearchResultMetaSnippetIsWrittenIntoDataPool()
     {
-        $this->addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture();
+        $this->addTemplateWasUpdatedDomainEventToSetupProductListingFixture();
 
         $contextSource = $this->factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[1];
@@ -67,9 +67,9 @@ class ProductSearchTest extends AbstractIntegrationTest
         // TODO: thus sharing the data pool and queue needs to be handled properly.
 
         $this->importCatalog();
-        $this->addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture();
+        $this->addTemplateWasUpdatedDomainEventToSetupProductListingFixture();
 
-        $this->registerProductSearchResultsMetaSnippetKeyGenerator();
+        $this->registerProductSearchResultMetaSnippetKeyGenerator();
 
         $request = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
@@ -78,8 +78,8 @@ class ProductSearchTest extends AbstractIntegrationTest
             HttpRequestBody::fromString('')
         );
 
-        $productSearchResultsRequestHandler = $this->getProductSearchRequestHandler();
-        $page = $productSearchResultsRequestHandler->process($request);
+        $productSearchResultRequestHandler = $this->getProductSearchRequestHandler();
+        $page = $productSearchResultRequestHandler->process($request);
         $body = $page->getBody();
 
         /* TODO: read from XML */
@@ -90,10 +90,10 @@ class ProductSearchTest extends AbstractIntegrationTest
         $this->assertNotContains($unExpectedProductName, $body);
     }
 
-    private function addPageTemplateWasUpdatedDomainEventToSetupProductListingFixture()
+    private function addTemplateWasUpdatedDomainEventToSetupProductListingFixture()
     {
-        $httpUrl = HttpUrl::fromString('http://example.com/api/page_templates/product_listing');
-        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.page_templates.v1+json']);
+        $httpUrl = HttpUrl::fromString('http://example.com/api/templates/product_listing');
+        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.templates.v1+json']);
         $httpRequestBodyString = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.json');
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
@@ -140,10 +140,10 @@ class ProductSearchTest extends AbstractIntegrationTest
         );
     }
 
-    private function registerProductSearchResultsMetaSnippetKeyGenerator()
+    private function registerProductSearchResultMetaSnippetKeyGenerator()
     {
         $this->factory->getSnippetKeyGeneratorLocator()->register(
-            ProductSearchResultsMetaSnippetRenderer::CODE,
+            ProductSearchResultMetaSnippetRenderer::CODE,
             $this->factory->createProductSearchResultMetaSnippetKeyGenerator()
         );
     }

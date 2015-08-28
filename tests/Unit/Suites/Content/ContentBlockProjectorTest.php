@@ -2,11 +2,10 @@
 
 namespace Brera\Content;
 
+use Brera\Context\ContextSource;
 use Brera\DataPool\DataPoolWriter;
-use Brera\InvalidProjectionDataSourceTypeException;
-use Brera\ProjectionSourceData;
+use Brera\InvalidProjectionSourceDataTypeException;
 use Brera\Projector;
-use Brera\SampleContextSource;
 use Brera\SnippetList;
 use Brera\SnippetRendererCollection;
 
@@ -45,10 +44,11 @@ class ContentBlockProjectorTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfProjectionSourceDataIsNotAnInstanceOfContentBlockSource()
     {
-        $this->setExpectedException(InvalidProjectionDataSourceTypeException::class);
+        $this->setExpectedException(InvalidProjectionSourceDataTypeException::class);
 
-        $stubProjectionSourceData = $this->getMock(ProjectionSourceData::class);
-        $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
+        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
+        $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
+        $stubProjectionSourceData = 'stub-projection-source-data';
 
         $this->projector->project($stubProjectionSourceData, $stubContextSource);
     }
@@ -57,15 +57,12 @@ class ContentBlockProjectorTest extends \PHPUnit_Framework_TestCase
     {
         $stubSnippetList = $this->getMock(SnippetList::class);
 
-        $this->mockSnippetRendererCollection->method('render')
-            ->willReturn($stubSnippetList);
+        $this->mockSnippetRendererCollection->method('render')->willReturn($stubSnippetList);
+        $this->mockDataPoolWriter->expects($this->once())->method('writeSnippetList')->with($stubSnippetList);
 
-        $this->mockDataPoolWriter->expects($this->once())
-            ->method('writeSnippetList')
-            ->with($stubSnippetList);
-
+        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
+        $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
         $stubContentBlockSource = $this->getMock(ContentBlockSource::class, [], [], '', false);
-        $stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
 
         $this->projector->project($stubContentBlockSource, $stubContextSource);
     }

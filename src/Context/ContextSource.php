@@ -9,6 +9,11 @@ abstract class ContextSource
      */
     private $contextBuilder;
 
+    /**
+     * @var Context[]
+     */
+    private $lazyLoadedAllAvailableContexts;
+
     public function __construct(ContextBuilder $contextBuilder)
     {
         $this->contextBuilder = $contextBuilder;
@@ -19,7 +24,11 @@ abstract class ContextSource
      */
     public function getAllAvailableContexts()
     {
-        return $this->contextBuilder->getContexts($this->getContextMatrix());
+        if (null === $this->lazyLoadedAllAvailableContexts) {
+            $this->lazyLoadedAllAvailableContexts = $this->contextBuilder->getContexts($this->getContextMatrix());
+        }
+
+        return $this->lazyLoadedAllAvailableContexts;
     }
 
     /**
@@ -42,7 +51,7 @@ abstract class ContextSource
      */
     private function getContextMatrixForParts(array $requestedParts)
     {
-        $aggregatedResult = array();
+        $aggregatedResult = [];
         $flippedRequestedParts = array_flip($requestedParts);
         foreach ($this->getContextMatrix() as $contextSourceRecord) {
             $matchingParts = $this->extractMatchingParts($contextSourceRecord, $flippedRequestedParts);

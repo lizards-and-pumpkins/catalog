@@ -7,8 +7,8 @@ use Brera\Context\ContextSource;
 interface Projector
 {
     /**
-     * @param ProjectionSourceData $dataObject
+     * @param mixed $projectionSourceData
      * @param ContextSource $contextSource
      */
-    public function project(ProjectionSourceData $dataObject, ContextSource $contextSource);
+    public function project($projectionSourceData, ContextSource $contextSource);
 }

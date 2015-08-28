@@ -4,10 +4,9 @@ namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\Context\ContextSource;
-use Brera\InvalidProjectionDataSourceTypeException;
+use Brera\InvalidProjectionSourceDataTypeException;
 use Brera\SnippetRenderer;
 use Brera\SnippetList;
-use Brera\ProjectionSourceData;
 
 class ProductSourceDetailViewSnippetRenderer implements SnippetRenderer
 {
@@ -40,14 +39,19 @@ class ProductSourceDetailViewSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param ProjectionSourceData|ProductSource $productSource
+     * @param mixed $projectionSourceData
      * @param ContextSource $contextSource
      * @return SnippetList
      */
-    public function render(ProjectionSourceData $productSource, ContextSource $contextSource)
+    public function render($projectionSourceData, ContextSource $contextSource)
     {
-        $this->validateProjectionSourceData($productSource);
-        $this->initProperties($productSource, $contextSource);
+        if (!($projectionSourceData instanceof ProductSource)) {
+            throw new InvalidProjectionSourceDataTypeException('First argument must be instance of Product.');
+        }
+
+        $this->productSource = $projectionSourceData;
+        $this->contextSource = $contextSource;
+        $this->snippetList->clear();
         
         $this->createProductDetailViewSnippets();
 
@@ -70,23 +74,5 @@ class ProductSourceDetailViewSnippetRenderer implements SnippetRenderer
     {
         $parts = $this->productInContextRenderer->getUsedContextParts();
         return $this->contextSource->getContextsForParts($parts);
-    }
-
-    /**
-     * @param ProjectionSourceData $productSource
-     * @throws InvalidProjectionDataSourceTypeException
-     */
-    private function validateProjectionSourceData(ProjectionSourceData $productSource)
-    {
-        if (!($productSource instanceof ProductSource)) {
-            throw new InvalidProjectionDataSourceTypeException('First argument must be instance of Product.');
-        }
-    }
-
-    private function initProperties(ProjectionSourceData $productSource, ContextSource $contextSource)
-    {
-        $this->productSource = $productSource;
-        $this->contextSource = $contextSource;
-        $this->snippetList->clear();
     }
 }

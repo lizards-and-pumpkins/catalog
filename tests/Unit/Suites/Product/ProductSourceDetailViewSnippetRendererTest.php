@@ -3,11 +3,10 @@
 namespace Brera\Product;
 
 use Brera\Context\ContextSource;
-use Brera\InvalidProjectionDataSourceTypeException;
+use Brera\InvalidProjectionSourceDataTypeException;
 use Brera\SampleContextSource;
 use Brera\Context\Context;
 use Brera\SnippetList;
-use Brera\ProjectionSourceData;
 use Brera\SnippetRenderer;
 
 /**
@@ -76,11 +75,8 @@ class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_Test
 
     public function testOnlyProductsAreAcceptedForRendering()
     {
-        $invalidSourceObject = $this->getMock(ProjectionSourceData::class, [], [], '', false);
-
-        $this->setExpectedException(InvalidProjectionDataSourceTypeException::class);
-
-        $this->productSourceSnippetRenderer->render($invalidSourceObject, $this->stubContextSource);
+        $this->setExpectedException(InvalidProjectionSourceDataTypeException::class);
+        $this->productSourceSnippetRenderer->render('invalid-projection-source-data', $this->stubContextSource);
     }
 
     public function testSnippetListIsReturned()
@@ -114,7 +110,8 @@ class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_Test
         $mockProductDetailViewInContextRenderer->expects($this->atLeastOnce())
             ->method('render')
             ->willReturn($this->mockSnippetList);
-        
+
+        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $mockContextSource */
         $mockContextSource = $this->getMockBuilder(ContextSource::class)
             ->disableOriginalConstructor()
             ->setMethods(['getContextsForParts'])
@@ -140,14 +137,11 @@ class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_Test
         $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
 
         $stubProduct = $this->getMock(Product::class, [], [], '', false);
-        $stubProduct->method('getId')
-            ->willReturn($stubProductId);
+        $stubProduct->method('getId')->willReturn($stubProductId);
 
         $stubProductSource = $this->getMock(ProductSource::class, [], [], '', false);
-        $stubProductSource->method('getId')
-            ->willReturn($stubProductId);
-        $stubProductSource->method('getProductForContext')
-            ->willReturn($stubProduct);
+        $stubProductSource->method('getId')->willReturn($stubProductId);
+        $stubProductSource->method('getProductForContext')->willReturn($stubProduct);
 
         return $stubProductSource;
     }

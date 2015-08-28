@@ -17,7 +17,7 @@ use Brera\SnippetKeyGeneratorLocator;
 
 /**
  * @covers \Brera\Product\ProductSearchRequestHandler
- * @uses   \Brera\Product\ProductSearchResultsMetaSnippetContent
+ * @uses   \Brera\Product\ProductSearchResultMetaSnippetContent
  */
 class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {

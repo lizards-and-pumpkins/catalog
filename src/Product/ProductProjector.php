@@ -4,9 +4,8 @@ namespace Brera\Product;
 
 use Brera\DataPool\DataPoolWriter;
 use Brera\Projector;
-use Brera\ProjectionSourceData;
 use Brera\Context\ContextSource;
-use Brera\InvalidProjectionDataSourceTypeException;
+use Brera\InvalidProjectionSourceDataTypeException;
 use Brera\SnippetRendererCollection;
 
 class ProductProjector implements Projector
@@ -37,16 +36,16 @@ class ProductProjector implements Projector
     }
 
     /**
-     * @param ProjectionSourceData $productSource
+     * @param mixed $projectionSourceData
      * @param ContextSource $contextSource
      */
-    public function project(ProjectionSourceData $productSource, ContextSource $contextSource)
+    public function project($projectionSourceData, ContextSource $contextSource)
     {
-        if (!($productSource instanceof ProductSource)) {
-            throw new InvalidProjectionDataSourceTypeException('First argument must be instance of ProductSource.');
+        if (!($projectionSourceData instanceof ProductSource)) {
+            throw new InvalidProjectionSourceDataTypeException('First argument must be instance of ProductSource.');
         }
 
-        $this->projectProduct($productSource, $contextSource);
+        $this->projectProduct($projectionSourceData, $contextSource);
     }
 
     private function projectProduct(ProductSource $productSource, ContextSource $contextSource)

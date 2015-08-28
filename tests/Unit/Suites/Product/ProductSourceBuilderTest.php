@@ -22,6 +22,23 @@ class ProductSourceBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private $domDocument;
 
+    /**
+     * @param mixed $expected
+     * @param ProductSource $productSource
+     * @param string $attributeCode
+     */
+    private function assertFirstProductAttributeInAListValueEquals(
+        $expected,
+        ProductSource $productSource,
+        $attributeCode
+    ) {
+        $property = new \ReflectionProperty($productSource, 'attributes');
+        $property->setAccessible(true);
+        /** @var ProductAttributeList $attributeList */
+        $attributeList = $property->getValue($productSource);
+        $this->assertEquals($expected, $attributeList->getAttributesWithCode($attributeCode)[0]->getValue());
+    }
+
     protected function setUp()
     {
         $this->builder = new ProductSourceBuilder();
@@ -80,19 +97,5 @@ class ProductSourceBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(InvalidNumberOfSkusPerImportedProductException::class);
         (new ProductSourceBuilder())->createProductSourceFromXml('<?xml version="1.0"?><node/>');
-    }
-
-    /**
-     * @param mixed $expected
-     * @param ProductSource $productSource
-     * @param string $attributeCode
-     */
-    private function assertFirstProductAttributeInAListValueEquals($expected, ProductSource $productSource, $attributeCode)
-    {
-        $property = new \ReflectionProperty($productSource, 'attributes');
-        $property->setAccessible(true);
-        /** @var ProductAttributeList $attributeList */
-        $attributeList = $property->getValue($productSource);
-        $this->assertEquals($expected, $attributeList->getAttributesWithCode($attributeCode)[0]->getValue());
     }
 }

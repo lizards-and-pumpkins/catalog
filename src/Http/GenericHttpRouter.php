@@ -2,10 +2,6 @@
 
 namespace Brera\Http;
 
-use Brera\Http\HttpRequest;
-use Brera\Http\HttpRequestHandler;
-use Brera\Http\HttpRouter;
-
 class GenericHttpRouter implements HttpRouter
 {
     /**

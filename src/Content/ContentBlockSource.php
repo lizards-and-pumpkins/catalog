@@ -2,9 +2,7 @@
 
 namespace Brera\Content;
 
-use Brera\ProjectionSourceData;
-
-class ContentBlockSource implements ProjectionSourceData
+class ContentBlockSource
 {
     /**
      * @var ContentBlockId

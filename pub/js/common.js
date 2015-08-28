@@ -1,4 +1,4 @@
-define(['cookie', 'lib/jquery.uniform.min'], function(cookie) {
+define(['cookie', 'product_search_autosuggestion', 'lib/jquery.uniform.min'], function(cookie) {
 
     jQuery(document).ready(function() {
 

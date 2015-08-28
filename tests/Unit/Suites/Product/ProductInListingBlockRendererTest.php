@@ -20,10 +20,16 @@ class ProductInListingBlockRendererTest extends AbstractBlockRendererTest
      * @param BlockStructure $stubBlockStructure
      * @return BlockRenderer
      */
-    protected function createRendererInstance(
+    final protected function createRendererInstance(
         \PHPUnit_Framework_MockObject_MockObject $stubThemeLocator,
         BlockStructure $stubBlockStructure
     ) {
         return new ProductInListingBlockRenderer($stubThemeLocator, $stubBlockStructure);
+    }
+
+    public function testLayoutHandleIsReturned()
+    {
+        $result = $this->getBlockRenderer()->getLayoutHandle();
+        $this->assertEquals('product_in_listing', $result);
     }
 }
