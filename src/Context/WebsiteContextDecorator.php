@@ -29,7 +29,7 @@ class WebsiteContextDecorator extends ContextDecorator
      */
     protected function getValueFromContext()
     {
-        if ($this->isWebsiteCodeinSourceData()) {
+        if ($this->isWebsiteCodeInSourceData()) {
             return $this->getWebsiteValueFromSourceData();
         }
         if ($this->isRequestInSourceData()) {
@@ -52,7 +52,7 @@ class WebsiteContextDecorator extends ContextDecorator
     /**
      * @return bool
      */
-    private function isWebsiteCodeinSourceData()
+    private function isWebsiteCodeInSourceData()
     {
         return isset($this->getSourceData()[self::CODE]);
     }
