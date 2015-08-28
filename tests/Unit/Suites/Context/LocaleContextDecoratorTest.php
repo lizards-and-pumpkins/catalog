@@ -86,12 +86,16 @@ class LocaleContextDecoratorTest extends ContextDecoratorTestAbstract
     public function localeSourceDataProvider()
     {
         return [
-            'locale' => [['locale' => 'de_DE'], 'de_DE'],
+            'locale' => [['locale' => 'xxx'], 'xxx'],
             'request de' => [['request' => $this->createTestRequest('http://example.com/xx_de')], 'de_DE'],
             'request en' => [['request' => $this->createTestRequest('http://example.com/xx_en')], 'en_US'],
             'default' => [['request' => $this->createTestRequest('http://example.com/')], 'de_DE'],
             'missing lang' => [['request' => $this->createTestRequest('http://example.com/xx')], 'de_DE'],
             'invalid lang' => [['request' => $this->createTestRequest('http://example.com/xx_xx')], 'de_DE'],
+            'locale and request' => [
+                ['request' => $this->createTestRequest('http://example.com/xx_en'), 'locale' => 'xxx'],
+                'xxx'
+            ],
         ];
     }
 }
