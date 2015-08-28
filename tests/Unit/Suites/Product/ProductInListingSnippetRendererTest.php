@@ -13,6 +13,7 @@ use Brera\SnippetRenderer;
 /**
  * @covers \Brera\Product\ProductInListingSnippetRenderer
  * @uses   \Brera\Snippet
+ * @uses   \Brera\SnippetList
  */
 class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {

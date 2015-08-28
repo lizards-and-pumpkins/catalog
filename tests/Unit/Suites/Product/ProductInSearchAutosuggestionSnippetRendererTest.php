@@ -13,6 +13,7 @@ use Brera\SnippetRenderer;
 /**
  * @covers \Brera\Product\ProductInSearchAutosuggestionSnippetRenderer
  * @uses   \Brera\Snippet
+ * @uses   \Brera\SnippetList
  */
 class ProductInSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
