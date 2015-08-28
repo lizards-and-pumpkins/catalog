@@ -210,7 +210,7 @@ class ProductListingTest extends AbstractIntegrationTest
         );
 
         return new ProductListingRequestHandler(
-            $this->factory->getContext(),
+            $this->factory->createContext(),
             $dataPoolReader,
             $pageBuilder,
             $this->factory->getSnippetKeyGeneratorLocator()

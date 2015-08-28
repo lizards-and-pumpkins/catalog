@@ -159,7 +159,7 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
         );
 
         return new ProductSearchAutosuggestionRequestHandler(
-            $this->factory->getContext(),
+            $this->factory->createContext(),
             $dataPoolReader,
             $pageBuilder,
             $this->factory->getSnippetKeyGeneratorLocator()

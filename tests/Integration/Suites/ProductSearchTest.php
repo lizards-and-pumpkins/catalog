@@ -133,7 +133,7 @@ class ProductSearchTest extends AbstractIntegrationTest
         );
 
         return new ProductSearchRequestHandler(
-            $this->factory->getContext(),
+            $this->factory->createContext(),
             $dataPoolReader,
             $pageBuilder,
             $this->factory->getSnippetKeyGeneratorLocator()

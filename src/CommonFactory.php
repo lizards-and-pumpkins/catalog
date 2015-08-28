@@ -192,7 +192,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createProductSnippetRendererCollection()
     {
         return new SnippetRendererCollection(
-            $this->getProductSnippetRendererList(),
+            $this->createProductSnippetRendererList(),
             $this->getMasterFactory()->createSnippetList()
         );
     }
@@ -200,7 +200,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     /**
      * @return SnippetRenderer[]
      */
-    private function getProductSnippetRendererList()
+    private function createProductSnippetRendererList()
     {
         return [
             $this->getMasterFactory()->createProductSourceDetailViewSnippetRenderer(),
@@ -228,7 +228,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     private function createProductSearchAutosuggestionTemplateRendererCollection()
     {
         return new SnippetRendererCollection(
-            $this->getProductSearchAutosuggestionRendererList(),
+            $this->createProductSearchAutosuggestionRendererList(),
             $this->getMasterFactory()->createSnippetList()
         );
     }
@@ -236,7 +236,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     /**
      * @return SnippetRenderer[]
      */
-    private function getProductSearchAutosuggestionRendererList()
+    private function createProductSearchAutosuggestionRendererList()
     {
         return [
             $this->getMasterFactory()->createProductSearchAutosuggestionSnippetRenderer(),
@@ -325,7 +325,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     private function createProductListingTemplateRendererCollection()
     {
         return new SnippetRendererCollection(
-            $this->getProductListingRendererList(),
+            $this->createProductListingRendererList(),
             $this->getMasterFactory()->createSnippetList()
         );
     }
@@ -333,7 +333,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     /**
      * @return SnippetRenderer[]
      */
-    private function getProductListingRendererList()
+    private function createProductListingRendererList()
     {
         return [
             $this->getMasterFactory()->createProductListingSnippetRenderer(),
@@ -421,7 +421,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createProductListingSnippetRendererCollection()
     {
         return new SnippetRendererCollection(
-            $this->getProductListingSnippetRendererList(),
+            $this->createProductListingSnippetRendererList(),
             $this->getMasterFactory()->createSnippetList()
         );
     }
@@ -429,7 +429,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     /**
      * @return SnippetRenderer[]
      */
-    public function getProductListingSnippetRendererList()
+    public function createProductListingSnippetRendererList()
     {
         return [
             $this->getMasterFactory()->createProductListingMetaInfoSnippetRenderer()
@@ -897,7 +897,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createImageWasUpdatedDomainEventHandler(ImageWasUpdatedDomainEvent $event)
     {
-        return new ImageWasUpdatedDomainEventHandler($event, $this->getMasterFactory()->getImageProcessorCollection());
+        return new ImageWasUpdatedDomainEventHandler($event, $this->getMasterFactory()->createImageProcessorCollection());
     }
 
     /**
@@ -921,7 +921,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return new UpdateProductStockQuantityCommandHandler(
             $command,
             $this->getMasterFactory()->getEventQueue(),
-            $this->getMasterFactory()->getProductStockQuantitySourceBuilder()
+            $this->getMasterFactory()->createProductStockQuantitySourceBuilder()
         );
     }
 
@@ -941,7 +941,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     /**
      * @return ProductStockQuantitySourceBuilder
      */
-    public function getProductStockQuantitySourceBuilder()
+    public function createProductStockQuantitySourceBuilder()
     {
         return new ProductStockQuantitySourceBuilder();
     }
@@ -949,7 +949,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     /**
      * @return ProductStockQuantityProjector
      */
-    public function getProductStockQuantityProjector()
+    public function createProductStockQuantityProjector()
     {
         return new ProductStockQuantityProjector(
             $this->getMasterFactory()->createDataPoolWriter(),
@@ -1044,7 +1044,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return new ProductStockQuantityWasUpdatedDomainEventHandler(
             $event,
             $this->getMasterFactory()->createContextSource(),
-            $this->getMasterFactory()->getProductStockQuantityProjector()
+            $this->getMasterFactory()->createProductStockQuantityProjector()
         );
     }
 
@@ -1069,14 +1069,14 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return new ContentBlockWasUpdatedDomainEventHandler(
             $event,
             $this->getMasterFactory()->createContextSource(),
-            $this->getMasterFactory()->getContentBlockProjector()
+            $this->getMasterFactory()->createContentBlockProjector()
         );
     }
 
     /**
      * @return ContentBlockProjector
      */
-    public function getContentBlockProjector()
+    public function createContentBlockProjector()
     {
         return new ContentBlockProjector(
             $this->getMasterFactory()->createContentBlockSnippetRendererCollection(),
