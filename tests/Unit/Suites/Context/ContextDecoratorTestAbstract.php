@@ -60,7 +60,7 @@ abstract class ContextDecoratorTestAbstract extends \PHPUnit_Framework_TestCase
         return $this->decorator;
     }
 
-    public function setUp()
+    protected function setUp()
     {
         $this->mockDecoratedContext = $this->getMock(Context::class);
         $this->mockDecoratedContext->method('getSupportedCodes')
@@ -75,17 +75,6 @@ abstract class ContextDecoratorTestAbstract extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(Context::class, $this->getDecoratorUnderTest());
     }
-
-    final public function testExceptionIsThrownIfValueIsNotFoundInSourceData()
-    {
-        $this->setExpectedExceptionRegExp(
-            ContextCodeNotFoundException::class,
-            '/No value found in the context source data for the code "[^\"]+"/'
-        );
-        $decorator = $this->createContextDecoratorUnderTest($this->getMockDecoratedContext(), []);
-        $decorator->getValue($this->getDecoratorUnderTestCode());
-    }
-
 
     final public function testHandlingIsDelegatedToComponentIfCodeDoesNotMatch()
     {

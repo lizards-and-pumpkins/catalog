@@ -27,7 +27,7 @@ class ContextBuilder
      */
     public function createFromRequest(HttpRequest $request)
     {
-        return $this->getContext(['request' => $request, 'website' => 'ru', 'locale' => 'en_US']);
+        return $this->getContext(['request' => $request, 'locale' => 'en_US']);
     }
 
     /**
