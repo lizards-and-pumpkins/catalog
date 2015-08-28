@@ -28,7 +28,6 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->builder->getContext(['nonExistingContextPartCode' => 'contextPartValue']);
         $this->assertInstanceOf(Context::class, $result);
-        
     }
 
     public function testExceptionIsThrownForContextListCreationWithDataSetsContainingCodesWithoutMatchingDecorator()

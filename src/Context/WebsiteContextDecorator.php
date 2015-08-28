@@ -34,7 +34,10 @@ class WebsiteContextDecorator extends ContextDecorator
         if ($this->isRequestInSourceData()) {
             return $this->getWebsiteFromRequest();
         }
-        $this->throwUnableToDetermineWebsiteException();
+        throw new UnableToDetermineWebsiteContextException(sprintf(
+            'Unable to determine website from context source data ("%s" and "request" not present)',
+            self::CODE
+        ));
     }
 
     /**
@@ -90,16 +93,5 @@ class WebsiteContextDecorator extends ContextDecorator
         return count($parts) > 0 ?
             $parts[0] :
             '';
-    }
-
-    /**
-     * @return void
-     */
-    private function throwUnableToDetermineWebsiteException()
-    {
-        throw new UnableToDetermineWebsiteContextException(sprintf(
-            'Unable to determine website from context source data ("%s" and "request" not present)',
-            self::CODE
-        ));
     }
 }

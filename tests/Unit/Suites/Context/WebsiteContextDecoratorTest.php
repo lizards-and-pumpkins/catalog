@@ -57,7 +57,7 @@ class WebsiteContextDecoratorTest extends ContextDecoratorTestAbstract
         );
     }
 
-    public function testItThrowsExceptionIfNeitherWebsiteAndNoreRequestArePresent()
+    public function testItThrowsExceptionIfNeitherWebsiteNorRequestArePresent()
     {
         $this->setExpectedException(
             UnableToDetermineWebsiteContextException::class,
