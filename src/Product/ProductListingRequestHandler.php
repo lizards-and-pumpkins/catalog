@@ -96,7 +96,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
     public function process(HttpRequest $request)
     {
         if (!$this->canProcess($request)) {
-            throw new UnableToHandleRequestException;
+            throw new UnableToHandleRequestException(sprintf('Unable to process request with handler %s', __CLASS__));
         }
 
         $searchDocumentCollection = $this->getCollectionOfSearchDocumentsMatchingCriteria();

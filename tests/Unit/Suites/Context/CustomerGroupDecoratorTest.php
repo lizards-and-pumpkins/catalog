@@ -37,4 +37,14 @@ class CustomerGroupContextDecoratorTest extends AbstractContextDecoratorTest
     {
         return new CustomerGroupContextDecorator($stubContext, $stubContextData);
     }
+
+    public function testExceptionIsThrownIfValueIsNotFoundInSourceData()
+    {
+        $this->setExpectedExceptionRegExp(
+            ContextCodeNotFoundException::class,
+            '/No value found in the context source data for the code "[^\"]+"/'
+        );
+        $decorator = $this->createContextDecoratorUnderTest($this->getMockDecoratedContext(), []);
+        $decorator->getValue($this->getDecoratorUnderTestCode());
+    }
 }

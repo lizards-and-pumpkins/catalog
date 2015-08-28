@@ -2,12 +2,14 @@
 
 namespace Brera\Context;
 
+use Brera\Context\Stubs\TestContextDecorator;
 use Brera\DataVersion;
 use Brera\Http\HttpRequest;
 
 /**
  * @covers \Brera\Context\ContextBuilder
  * @uses   \Brera\Context\VersionedContext
+ * @uses   \Brera\Context\WebsiteContextDecorator
  * @uses   \Brera\Context\ContextDecorator
  * @uses   \Brera\DataVersion
  */
@@ -23,10 +25,16 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
         $this->builder = new ContextBuilder(DataVersion::fromVersionString('1'));
     }
 
-    public function testExceptionIsThrownForNonExistingCode()
+    public function testNoExceptionIsThrownForIndividualContextCreationWithCodesWithoutMatchingDecorator()
+    {
+        $result = $this->builder->getContext(['nonExistingContextPartCode' => 'contextPartValue']);
+        $this->assertInstanceOf(Context::class, $result);
+    }
+
+    public function testExceptionIsThrownForContextListCreationWithDataSetsContainingCodesWithoutMatchingDecorator()
     {
         $this->setExpectedException(ContextDecoratorNotFoundException::class);
-        $this->builder->getContext(['nonExistingContextPartCode' => 'contextPartValue']);
+        $this->builder->createContextsFromDataSets([['nonExistingContextPartCode' => 'contextPartValue']]);
     }
 
     public function testExceptionIsThrownForNonContextDecoratorClass()
@@ -40,7 +48,7 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
         $contexts = [
             ['stub_valid_test' => 'dummy'],
         ];
-        $result = $this->builder->getContexts($contexts);
+        $result = $this->builder->createContextsFromDataSets($contexts);
         $this->assertCount(1, $result);
         $this->assertContainsOnlyInstancesOf(Context::class, $result);
     }
@@ -72,7 +80,7 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function testExceptionIsThrownIfNonExistentClassIsAdded()
+    public function testExceptionIsThrownIfNonExistentDecoratorClassIsRegistered()
     {
         $this->setExpectedException(ContextDecoratorNotFoundException::class);
         $this->builder->registerContextDecorator('test', 'Non\\Existent\\DecoratorClass');
@@ -90,15 +98,37 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
         $contexts = [
             ['test' => 'dummy'],
         ];
-        $result = $this->builder->getContexts($contexts);
+        $result = $this->builder->createContextsFromDataSets($contexts);
         $this->assertCount(1, $result);
         $this->assertContainsOnlyInstancesOf(Context::class, $result);
     }
 
     public function testContextIsCreatedFromARequest()
     {
+        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubRequest */
         $stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
         $result = $this->builder->createFromRequest($stubRequest);
         $this->assertInstanceOf(Context::class, $result);
+    }
+    
+    public function testContextDecoratorsReceiveRequestAsPartOfSourceData()
+    {
+        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubRequest */
+        $stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+        $this->builder->registerContextDecorator('request_test', TestContextDecorator::class);
+        /** @var TestContextDecorator $context */
+        $context = $this->builder->createFromRequest($stubRequest);
+        $rawSourceData = $context->getRawSourceDataForTest();
+        $this->assertArrayHasKey('request', $rawSourceData);
+        $this->assertSame($stubRequest, $rawSourceData['request']);
+    }
+
+    public function testContextsAreInstantiatedInTheSameOrderIndependentOfHowTheyAreSpecified()
+    {
+        $contextSourceA = ['stub_valid_test' => 'dummy', 'website' => 'test'];
+        $contextSourceB = ['website' => 'test', 'stub_valid_test' => 'dummy'];
+        $contextA = $this->builder->getContext($contextSourceA);
+        $contextB = $this->builder->getContext($contextSourceB);
+        $this->assertSame($contextA->getId(), $contextB->getId(), "Context decorator order is not the same");
     }
 }

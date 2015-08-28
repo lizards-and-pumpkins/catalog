@@ -27,30 +27,54 @@ class ContextBuilder
      */
     public function createFromRequest(HttpRequest $request)
     {
-        // TODO Implement this
-        return $this->getContext(['website' => 'ru', 'locale' => 'en_US']);
+        return $this->getContext(['request' => $request, 'locale' => 'en_US']);
     }
 
     /**
      * @param array[] $contextDataSets
      * @return Context[]
      */
-    public function getContexts(array $contextDataSets)
+    public function createContextsFromDataSets(array $contextDataSets)
     {
+        array_map([$this, 'validateAllPartsHaveDecorators'], $contextDataSets);
         return array_map([$this, 'getContext'], $contextDataSets);
     }
 
     /**
-     * @param string[] $contextDataSet
+     * @param mixed[] $contextDataSet
+     */
+    private function validateAllPartsHaveDecorators(array $contextDataSet)
+    {
+        array_map(function ($code) {
+            $this->validateDecoratorClassExists($code, $this->getDecoratorClass($code));
+        }, array_keys($contextDataSet));
+    }
+
+    /**
+     * @param mixed[] $contextDataSet
      * @return Context
      */
     public function getContext(array $contextDataSet)
     {
         $versionedContext = new VersionedContext($this->dataVersion);
-        $codes = array_diff(array_keys($contextDataSet), [VersionedContext::CODE]);
+        $codes = $this->getContextDecoratorCodesToCreate($contextDataSet);
         return array_reduce($codes, function ($context, $code) use ($contextDataSet) {
             return $this->createContextDecorator($context, $code, $contextDataSet);
         }, $versionedContext);
+    }
+
+    /**
+     * @param Context $context
+     * @param string $code
+     * @param string[] $contextSourceDataSet
+     * @return ContextDecorator
+     */
+    private function createContextDecorator(Context $context, $code, array $contextSourceDataSet)
+    {
+        $decoratorClass = $this->getDecoratorClass($code);
+        return class_exists($decoratorClass) ?
+            new $decoratorClass($context, $contextSourceDataSet) :
+            $context;
     }
 
     /**
@@ -64,15 +88,44 @@ class ContextBuilder
     }
 
     /**
-     * @param Context $context
      * @param string $code
-     * @param string[] $contextSourceDataSet
-     * @return ContextDecorator
+     * @param string $decoratorClass
+     * @throws ContextDecoratorNotFoundException
+     * @throws InvalidContextDecoratorClassException
      */
-    private function createContextDecorator(Context $context, $code, array $contextSourceDataSet)
+    private function validateDecoratorClass($code, $decoratorClass)
     {
-        $decoratorClass = $this->getDecoratorClass($code);
-        return new $decoratorClass($context, $contextSourceDataSet);
+        $this->validateDecoratorClassExists($code, $decoratorClass);
+        $this->validateClassIsContextDecorator($code, $decoratorClass);
+    }
+
+    /**
+     * @param string $code
+     * @param string $decoratorClass
+     */
+    private function validateDecoratorClassExists($code, $decoratorClass)
+    {
+        if (!class_exists($decoratorClass)) {
+            throw new ContextDecoratorNotFoundException(
+                sprintf('Context decorator class "%s" not found for code "%s"', $decoratorClass, $code)
+            );
+        }
+    }
+
+    /**
+     * @param string $code
+     * @param string $decoratorClass
+     */
+    private function validateClassIsContextDecorator($code, $decoratorClass)
+    {
+        if (!in_array(ContextDecorator::class, class_parents($decoratorClass))) {
+            throw new InvalidContextDecoratorClassException(sprintf(
+                'Context Decorator class "%s" for code "%s" does not extend %s',
+                $decoratorClass,
+                $code,
+                ContextDecorator::class
+            ));
+        }
     }
 
     /**
@@ -94,30 +147,10 @@ class ContextBuilder
     {
         $decoratorClass = ucfirst($this->removeUnderscores($code)) . 'ContextDecorator';
         $qualifiedDecoratorClass = '\\Brera\\Context\\' . $decoratorClass;
-        $this->validateDecoratorClass($code, $qualifiedDecoratorClass);
-        $this->registerContextDecorator($code, $qualifiedDecoratorClass);
+        if (class_exists($qualifiedDecoratorClass)) {
+            $this->registerContextDecorator($code, $qualifiedDecoratorClass);
+        }
         return $qualifiedDecoratorClass;
-    }
-
-    /**
-     * @param string $code
-     * @param string $qualifiedClassName
-     * @throws ContextDecoratorNotFoundException
-     * @throws InvalidContextDecoratorClassException
-     */
-    private function validateDecoratorClass($code, $qualifiedClassName)
-    {
-        if (!class_exists($qualifiedClassName)) {
-            throw new ContextDecoratorNotFoundException(
-                sprintf('Context decorator class "%s" not found for code "%s"', $qualifiedClassName, $code)
-            );
-        }
-        if (!in_array(ContextDecorator::class, class_parents($qualifiedClassName))) {
-            throw new InvalidContextDecoratorClassException(sprintf(
-                'Context Decorator class "%s" does not extend \\Brera\\Context\\ContextDecorator',
-                $qualifiedClassName
-            ));
-        }
     }
 
     /**
@@ -129,5 +162,18 @@ class ContextBuilder
         return str_replace('_', '', preg_replace_callback('/_([a-z])/', function ($m) {
             return strtoupper($m[1]);
         }, $code));
+    }
+
+    /**
+     * @param string[] $contextDataSet
+     * @return string[]
+     */
+    private function getContextDecoratorCodesToCreate(array $contextDataSet)
+    {
+        $dataSetCodes = array_diff(array_keys($contextDataSet), [VersionedContext::CODE]);
+        $registeredDecoratorCodes = array_diff(array_keys($this->registeredContextDecorators), $dataSetCodes);
+        $codes = array_merge($dataSetCodes, $registeredDecoratorCodes);
+        sort($codes);
+        return $codes;
     }
 }
