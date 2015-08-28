@@ -121,4 +121,13 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('request', $rawSourceData);
         $this->assertSame($stubRequest, $rawSourceData['request']);
     }
+
+    public function testContextsAreInstantiatedInTheSameOrderIndependentOfHowTheyAreSpecified()
+    {
+        $contextSourceA = ['stub_valid_test' => 'dummy', 'website' => 'test'];
+        $contextSourceB = ['website' => 'test', 'stub_valid_test' => 'dummy'];
+        $contextA = $this->builder->getContext($contextSourceA);
+        $contextB = $this->builder->getContext($contextSourceB);
+        $this->assertSame($contextA->getId(), $contextB->getId(), "Context decorator order is not the same");
+    }
 }
