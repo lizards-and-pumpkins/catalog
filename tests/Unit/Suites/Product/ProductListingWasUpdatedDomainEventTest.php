@@ -10,9 +10,9 @@ use Brera\DomainEvent;
 class ProductListingWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ProductListingSource|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductListingMetaInfoSource|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubProductListingSource;
+    private $stubProductListingMetaInfoSource;
 
     /**
      * @var ProductListingWasUpdatedDomainEvent
@@ -22,8 +22,17 @@ class ProductListingWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCas
     protected function setUp()
     {
         $dummyUrlKey = 'foo';
-        $this->stubProductListingSource = $this->getMock(ProductListingSource::class, [], [], '', false);
-        $this->domainEvent = new ProductListingWasUpdatedDomainEvent($dummyUrlKey, $this->stubProductListingSource);
+        $this->stubProductListingMetaInfoSource = $this->getMock(
+            ProductListingMetaInfoSource::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->domainEvent = new ProductListingWasUpdatedDomainEvent(
+            $dummyUrlKey,
+            $this->stubProductListingMetaInfoSource
+        );
     }
 
     public function testDomainEventInterFaceIsImplemented()
@@ -31,9 +40,9 @@ class ProductListingWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCas
         $this->assertInstanceOf(DomainEvent::class, $this->domainEvent);
     }
 
-    public function testProductListingSourceIsReturned()
+    public function testProductListingMetaInfoSourceIsReturned()
     {
-        $result = $this->domainEvent->getProductListingSource();
-        $this->assertEquals($this->stubProductListingSource, $result);
+        $result = $this->domainEvent->getProductListingMetaInfoSource();
+        $this->assertEquals($this->stubProductListingMetaInfoSource, $result);
     }
 }

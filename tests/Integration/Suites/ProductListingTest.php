@@ -122,7 +122,7 @@ class ProductListingTest extends AbstractIntegrationTest
         $this->assertContains($contentBlockContent, $body);
     }
 
-    public function testPageTemplateWasUpdatedDomainEventPutsProductListingRootSnippetIntoKeyValueStore()
+    public function testProductListingSnippetIsAddedToDataPool()
     {
         $this->createProductListingFixture();
 
@@ -132,9 +132,7 @@ class ProductListingTest extends AbstractIntegrationTest
         $dataPoolReader = $this->factory->createDataPoolReader();
 
         $keyGeneratorLocator = $this->factory->getSnippetKeyGeneratorLocator();
-        $keyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
-            ProductListingSnippetRenderer::CODE
-        );
+        $keyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(ProductListingSnippetRenderer::CODE);
 
         $contextSource = $this->factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[0];
@@ -164,8 +162,8 @@ class ProductListingTest extends AbstractIntegrationTest
 
     private function createProductListingFixture()
     {
-        $httpUrl = HttpUrl::fromString('http://example.com/api/page_templates/product_listing');
-        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.page_templates.v1+json']);
+        $httpUrl = HttpUrl::fromString('http://example.com/api/templates/product_listing');
+        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.templates.v1+json']);
         $httpRequestBodyString = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.json');
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);

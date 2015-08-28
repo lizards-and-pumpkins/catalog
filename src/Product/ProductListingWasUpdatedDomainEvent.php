@@ -12,25 +12,25 @@ class ProductListingWasUpdatedDomainEvent implements DomainEvent
     private $urlKey;
 
     /**
-     * @var ProductListingSource
+     * @var ProductListingMetaInfoSource
      */
-    private $productListingSource;
+    private $productListingMetaInfoSource;
 
     /**
      * @param string $urlKey
-     * @param ProductListingSource $productListingSource
+     * @param ProductListingMetaInfoSource $productListingMetaInfoSource
      */
-    public function __construct($urlKey, ProductListingSource $productListingSource)
+    public function __construct($urlKey, ProductListingMetaInfoSource $productListingMetaInfoSource)
     {
         $this->urlKey = $urlKey;
-        $this->productListingSource = $productListingSource;
+        $this->productListingMetaInfoSource = $productListingMetaInfoSource;
     }
 
     /**
-     * @return ProductListingSource
+     * @return ProductListingMetaInfoSource
      */
-    public function getProductListingSource()
+    public function getProductListingMetaInfoSource()
     {
-        return $this->productListingSource;
+        return $this->productListingMetaInfoSource;
     }
 }

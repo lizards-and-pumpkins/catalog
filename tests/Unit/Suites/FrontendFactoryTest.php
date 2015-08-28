@@ -26,6 +26,7 @@ use Brera\Product\CatalogImportApiV1PutRequestHandler;
  * @uses   \Brera\Http\GenericHttpRouter
  * @uses   \Brera\Product\ProductDetailViewRequestHandler
  * @uses   \Brera\Product\ProductListingRequestHandler
+ * @uses   \Brera\Product\ProductSearchAutosuggestionRequestHandler
  * @uses   \Brera\Product\ProductSearchRequestHandler
  * @uses   \Brera\Product\MultipleProductStockQuantityApiV1PutRequestHandler
  * @uses   \Brera\DataPool\DataPoolReader
@@ -35,8 +36,8 @@ use Brera\Product\CatalogImportApiV1PutRequestHandler;
  * @uses   \Brera\SnippetKeyGeneratorLocator
  * @uses   \Brera\GenericSnippetKeyGenerator
  * @uses   \Brera\PageBuilder
- * @uses   \Brera\PageTemplatesApiV1PutRequestHandler
- * @uses   \Brera\RootSnippetSourceListBuilder
+ * @uses   \Brera\TemplatesApiV1PutRequestHandler
+ * @uses   \Brera\Product\ProductListingSourceListBuilder
  * @uses   \Brera\Utils\Directory
  * @uses   \Brera\Http\HttpRequest
  * @uses   \Brera\Http\HttpUrl
@@ -112,9 +113,9 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Context::class, $this->frontendFactory->getContext());
     }
 
-    public function testProductSearchResultsRouterIsReturned()
+    public function testProductSearchResultRouterIsReturned()
     {
-        $result = $this->frontendFactory->createProductSearchResultsRouter();
+        $result = $this->frontendFactory->createProductSearchResultRouter();
         $this->assertInstanceOf(GenericHttpRouter::class, $result);
     }
 
@@ -122,5 +123,11 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->frontendFactory->createPriceSnippetTransformation();
         $this->assertInstanceOf(SimpleEuroPriceSnippetTransformation::class, $result);
+    }
+
+    public function testProductSearchAutosuggestionRouterIsReturned()
+    {
+        $result = $this->frontendFactory->createProductSearchAutosuggestionRouter();
+        $this->assertInstanceOf(GenericHttpRouter::class, $result);
     }
 }

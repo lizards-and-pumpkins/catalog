@@ -10,9 +10,9 @@ use Brera\Command;
 class UpdateProductListingCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ProductListingSource|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductListingMetaInfoSource|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubProductListingSource;
+    private $stubProductListingMetaInfoSource;
 
     /**
      * @var UpdateProductListingCommand
@@ -21,8 +21,14 @@ class UpdateProductListingCommandTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubProductListingSource = $this->getMock(ProductListingSource::class, [], [], '', false);
-        $this->command = new UpdateProductListingCommand($this->stubProductListingSource);
+        $this->stubProductListingMetaInfoSource = $this->getMock(
+            ProductListingMetaInfoSource::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->command = new UpdateProductListingCommand($this->stubProductListingMetaInfoSource);
     }
 
     public function testCommandInterFaceIsImplemented()
@@ -30,9 +36,9 @@ class UpdateProductListingCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Command::class, $this->command);
     }
 
-    public function testProductListingSourceIsReturned()
+    public function testProductListingMetaInfoSourceIsReturned()
     {
-        $result = $this->command->getProductListingSource();
-        $this->assertSame($this->stubProductListingSource, $result);
+        $result = $this->command->getProductListingMetaInfoSource();
+        $this->assertSame($this->stubProductListingMetaInfoSource, $result);
     }
 }

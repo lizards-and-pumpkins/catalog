@@ -5,7 +5,6 @@ namespace Brera\Product;
 use Brera\Context\Context;
 use Brera\Context\ContextSource;
 use Brera\Renderer\BlockRenderer;
-use Brera\RootSnippetSourceList;
 use Brera\SnippetKeyGenerator;
 use Brera\SnippetRenderer;
 use Brera\Snippet;
@@ -41,28 +40,32 @@ class ProductListingSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param RootSnippetSourceList $rootSnippetSourceList
+     * @param ProductListingSourceList $productListingSourceList
      * @param ContextSource $contextSource
      * @return SnippetList
      */
-    public function render(RootSnippetSourceList $rootSnippetSourceList, ContextSource $contextSource)
+    public function render(ProductListingSourceList $productListingSourceList, ContextSource $contextSource)
     {
+        $this->snippetList->clear();
+
         foreach ($contextSource->getAllAvailableContexts() as $context) {
-            $this->renderProductListingSnippetsForContext($rootSnippetSourceList, $context);
+            $this->renderProductListingSnippetsForContext($productListingSourceList, $context);
         }
 
         return $this->snippetList;
     }
 
     private function renderProductListingSnippetsForContext(
-        RootSnippetSourceList $rootSnippetSourceList,
+        ProductListingSourceList $productListingSourceList,
         Context $context
     ) {
-        $content = $this->blockRenderer->render($rootSnippetSourceList, $context);
-        $numItemsPerPageForContext = $rootSnippetSourceList->getListOfAvailableNumberOfItemsPerPageForContext($context);
+        $content = $this->blockRenderer->render($productListingSourceList, $context);
+        $productsPerPageForContext = $productListingSourceList->getListOfAvailableNumberOfProductsPerPageForContext(
+            $context
+        );
 
-        foreach ($numItemsPerPageForContext as $numItemsPerPage) {
-            $key = $this->snippetKeyGenerator->getKeyForContext($context, ['products_per_page' => $numItemsPerPage]);
+        foreach ($productsPerPageForContext as $productsPerPage) {
+            $key = $this->snippetKeyGenerator->getKeyForContext($context, ['products_per_page' => $productsPerPage]);
             $contentSnippet = Snippet::create($key, $content);
             $this->snippetList->add($contentSnippet);
         }

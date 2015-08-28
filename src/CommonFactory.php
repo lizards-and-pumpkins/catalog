@@ -26,23 +26,30 @@ use Brera\Product\PriceSnippetRenderer;
 use Brera\Product\ProductBackOrderAvailabilitySnippetRenderer;
 use Brera\Product\ProductDetailViewBlockRenderer;
 use Brera\Product\ProductDetailViewInContextSnippetRenderer;
+use Brera\Product\ProductInSearchAutosuggestionBlockRenderer;
+use Brera\Product\ProductInSearchAutosuggestionSnippetRenderer;
+use Brera\Product\ProductListingSourceListBuilder;
+use Brera\Product\ProductListingTemplateProjector;
+use Brera\Product\ProductSearchAutosuggestionBlockRenderer;
+use Brera\Product\ProductSearchAutosuggestionMetaSnippetRenderer;
+use Brera\Product\ProductSearchAutosuggestionSnippetRenderer;
+use Brera\Product\ProductSearchAutosuggestionTemplateProjector;
 use Brera\Product\ProductWasUpdatedDomainEvent;
 use Brera\Product\ProductWasUpdatedDomainEventHandler;
 use Brera\Product\ProductInListingBlockRenderer;
-use Brera\Product\ProductInListingInContextSnippetRenderer;
 use Brera\Product\ProductListingBlockRenderer;
 use Brera\Product\ProductListingMetaInfoSnippetRenderer;
-use Brera\Product\ProductListingProjector;
+use Brera\Product\ProductListingMetaInfoSnippetProjector;
 use Brera\Product\ProductListingWasUpdatedDomainEvent;
 use Brera\Product\ProductListingWasUpdatedDomainEventHandler;
 use Brera\Product\ProductListingSnippetRenderer;
 use Brera\Product\ProductProjector;
-use Brera\Product\ProductListingSourceBuilder;
+use Brera\Product\ProductListingMetaInfoSourceBuilder;
 use Brera\Product\ProductSearchDocumentBuilder;
-use Brera\Product\ProductSearchResultsMetaSnippetRenderer;
+use Brera\Product\ProductSearchResultMetaSnippetRenderer;
 use Brera\Product\ProductSourceBuilder;
 use Brera\Product\ProductSourceDetailViewSnippetRenderer;
-use Brera\Product\ProductSourceInListingSnippetRenderer;
+use Brera\Product\ProductInListingSnippetRenderer;
 use Brera\Product\ProductStockQuantityWasUpdatedDomainEvent;
 use Brera\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
 use Brera\Product\ProductStockQuantityProjector;
@@ -107,16 +114,34 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @param PageTemplateWasUpdatedDomainEvent $event
-     * @return PageTemplateWasUpdatedDomainEventHandler
+     * @param TemplateWasUpdatedDomainEvent $event
+     * @return TemplateWasUpdatedDomainEventHandler
      */
-    public function createPageTemplateWasUpdatedDomainEventHandler(PageTemplateWasUpdatedDomainEvent $event)
+    public function createTemplateWasUpdatedDomainEventHandler(TemplateWasUpdatedDomainEvent $event)
     {
-        return new PageTemplateWasUpdatedDomainEventHandler(
+        return new TemplateWasUpdatedDomainEventHandler(
             $event,
             $this->getMasterFactory()->createContextSource(),
-            $this->getMasterFactory()->createRootSnippetProjector()
+            $this->getMasterFactory()->createTemplateProjectorLocator()
         );
+    }
+
+    /**
+     * @return TemplateProjectorLocator
+     */
+    public function createTemplateProjectorLocator()
+    {
+        $templateProjectorLocator = new TemplateProjectorLocator();
+        $templateProjectorLocator->register(
+            ProductListingSnippetRenderer::CODE,
+            $this->getMasterFactory()->createProductListingTemplateProjector()
+        );
+        $templateProjectorLocator->register(
+            ProductSearchAutosuggestionSnippetRenderer::CODE,
+            $this->getMasterFactory()->createProductSearchAutosuggestionTemplateProjector()
+        );
+
+        return $templateProjectorLocator;
     }
 
     /**
@@ -128,24 +153,24 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return new ProductListingWasUpdatedDomainEventHandler(
             $event,
             $this->getMasterFactory()->createContextSource(),
-            $this->getMasterFactory()->createProductListingProjector()
+            $this->getMasterFactory()->createProductListingMetaInfoSnippetProjector()
         );
     }
 
     /**
-     * @return RootSnippetSourceListBuilder
+     * @return ProductListingSourceListBuilder
      */
-    public function createRootSnippetSourceListBuilder()
+    public function createProductListingSourceListBuilder()
     {
-        return new RootSnippetSourceListBuilder($this->getMasterFactory()->createContextBuilder());
+        return new ProductListingSourceListBuilder($this->getMasterFactory()->createContextBuilder());
     }
 
     /**
-     * @return ProductListingSourceBuilder
+     * @return ProductListingMetaInfoSourceBuilder
      */
-    public function createProductListingSourceBuilder()
+    public function createProductListingMetaInfoSourceBuilder()
     {
-        return new ProductListingSourceBuilder();
+        return new ProductListingMetaInfoSourceBuilder();
     }
 
     /**
@@ -178,30 +203,31 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return [
             $this->getMasterFactory()->createProductSourceDetailViewSnippetRenderer(),
-            $this->getMasterFactory()->createProductSourceInListingSnippetRenderer(),
+            $this->getMasterFactory()->createProductInListingSnippetRenderer(),
+            $this->getMasterFactory()->createProductInSearchAutosuggestionSnippetRenderer(),
             $this->getMasterFactory()->createPriceSnippetRenderer(),
             $this->getMasterFactory()->createProductBackOrderAvailabilitySnippetRenderer()
         ];
     }
 
     /**
-     * @return RootSnippetProjector
+     * @return ProductSearchAutosuggestionTemplateProjector
      */
-    public function createRootSnippetProjector()
+    public function createProductSearchAutosuggestionTemplateProjector()
     {
-        return new RootSnippetProjector(
-            $this->createRootSnippetRendererCollection(),
-            $this->getMasterFactory()->createDataPoolWriter()
+        return new ProductSearchAutosuggestionTemplateProjector(
+            $this->getMasterFactory()->createDataPoolWriter(),
+            $this->createProductSearchAutosuggestionTemplateRendererCollection()
         );
     }
 
     /**
      * @return SnippetRendererCollection
      */
-    public function createRootSnippetRendererCollection()
+    private function createProductSearchAutosuggestionTemplateRendererCollection()
     {
         return new SnippetRendererCollection(
-            $this->getRootSnippetRendererList(),
+            $this->getProductSearchAutosuggestionRendererList(),
             $this->getMasterFactory()->createSnippetList()
         );
     }
@@ -209,12 +235,109 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     /**
      * @return SnippetRenderer[]
      */
-    private function getRootSnippetRendererList()
+    private function getProductSearchAutosuggestionRendererList()
+    {
+        return [
+            $this->getMasterFactory()->createProductSearchAutosuggestionSnippetRenderer(),
+            $this->getMasterFactory()->createProductSearchAutosuggestionMetaSnippetRenderer(),
+        ];
+    }
+
+    /**
+     * @return ProductSearchAutosuggestionSnippetRenderer
+     */
+    public function createProductSearchAutosuggestionSnippetRenderer()
+    {
+        return new ProductSearchAutosuggestionSnippetRenderer(
+            $this->getMasterFactory()->createSnippetList(),
+            $this->getMasterFactory()->createProductSearchAutosuggestionSnippetKeyGenerator(),
+            $this->getMasterFactory()->createProductSearchAutosuggestionBlockRenderer()
+        );
+    }
+
+    /**
+     * @return ProductSearchAutosuggestionMetaSnippetRenderer
+     */
+    public function createProductSearchAutosuggestionMetaSnippetRenderer()
+    {
+        return new ProductSearchAutosuggestionMetaSnippetRenderer(
+            $this->getMasterFactory()->createSnippetList(),
+            $this->getMasterFactory()->createProductSearchAutosuggestionMetaSnippetKeyGenerator(),
+            $this->getMasterFactory()->createProductSearchAutosuggestionBlockRenderer()
+        );
+    }
+
+    /**
+     * @return SnippetKeyGenerator
+     */
+    public function createProductSearchAutosuggestionSnippetKeyGenerator()
+    {
+        $usedDataParts = [];
+
+        return new GenericSnippetKeyGenerator(
+            ProductSearchAutosuggestionSnippetRenderer::CODE,
+            $this->getMasterFactory()->getRequiredContexts(),
+            $usedDataParts
+        );
+    }
+
+    /**
+     * @return SnippetKeyGenerator
+     */
+    public function createProductSearchAutosuggestionMetaSnippetKeyGenerator()
+    {
+        $usedDataParts = [];
+
+        return new GenericSnippetKeyGenerator(
+            ProductSearchAutosuggestionMetaSnippetRenderer::CODE,
+            $this->getMasterFactory()->getRequiredContexts(),
+            $usedDataParts
+        );
+    }
+
+    /**
+     * @return ProductSearchAutosuggestionBlockRenderer
+     */
+    public function createProductSearchAutosuggestionBlockRenderer()
+    {
+        return new ProductSearchAutosuggestionBlockRenderer(
+            $this->getMasterFactory()->createThemeLocator(),
+            $this->getMasterFactory()->createBlockStructure()
+        );
+    }
+
+    /**
+     * @return ProductListingTemplateProjector
+     */
+    public function createProductListingTemplateProjector()
+    {
+        return new ProductListingTemplateProjector(
+            $this->createProductListingTemplateRendererCollection(),
+            $this->getMasterFactory()->createDataPoolWriter(),
+            $this->getMasterFactory()->createProductListingSourceListBuilder()
+        );
+    }
+
+    /**
+     * @return SnippetRendererCollection
+     */
+    private function createProductListingTemplateRendererCollection()
+    {
+        return new SnippetRendererCollection(
+            $this->getProductListingRendererList(),
+            $this->getMasterFactory()->createSnippetList()
+        );
+    }
+
+    /**
+     * @return SnippetRenderer[]
+     */
+    private function getProductListingRendererList()
     {
         return [
             $this->getMasterFactory()->createProductListingSnippetRenderer(),
             $this->getMasterFactory()->createDefaultNumberOfProductsPerPageSnippetRenderer(),
-            $this->getMasterFactory()->createProductSearchResultsMetaSnippetRenderer(),
+            $this->getMasterFactory()->createProductSearchResultMetaSnippetRenderer(),
         ];
     }
 
@@ -281,11 +404,11 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return ProductListingProjector
+     * @return ProductListingMetaInfoSnippetProjector
      */
-    public function createProductListingProjector()
+    public function createProductListingMetaInfoSnippetProjector()
     {
-        return new ProductListingProjector(
+        return new ProductListingMetaInfoSnippetProjector(
             $this->getMasterFactory()->createProductListingSnippetRendererCollection(),
             $this->getMasterFactory()->createDataPoolWriter()
         );
@@ -411,25 +534,26 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return ProductSourceInListingSnippetRenderer
+     * @return ProductInListingSnippetRenderer
      */
-    public function createProductSourceInListingSnippetRenderer()
+    public function createProductInListingSnippetRenderer()
     {
-        return new ProductSourceInListingSnippetRenderer(
+        return new ProductInListingSnippetRenderer(
             $this->getMasterFactory()->createSnippetList(),
-            $this->getMasterFactory()->createProductInListingInContextSnippetRenderer()
+            $this->getMasterFactory()->createProductInListingBlockRenderer(),
+            $this->getMasterFactory()->createProductInListingSnippetKeyGenerator()
         );
     }
 
     /**
-     * @return ProductInListingInContextSnippetRenderer
+     * @return ProductInSearchAutosuggestionSnippetRenderer
      */
-    public function createProductInListingInContextSnippetRenderer()
+    public function createProductInSearchAutosuggestionSnippetRenderer()
     {
-        return new ProductInListingInContextSnippetRenderer(
+        return new ProductInSearchAutosuggestionSnippetRenderer(
             $this->getMasterFactory()->createSnippetList(),
-            $this->getMasterFactory()->createProductInListingBlockRenderer(),
-            $this->getMasterFactory()->createProductInListingSnippetKeyGenerator()
+            $this->getMasterFactory()->createProductInSearchAutosuggestionBlockRenderer(),
+            $this->getMasterFactory()->createProductInSearchAutosuggestionSnippetKeyGenerator()
         );
     }
 
@@ -480,7 +604,32 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         $usedDataParts = ['product_id'];
 
         return new GenericSnippetKeyGenerator(
-            ProductInListingInContextSnippetRenderer::CODE,
+            ProductInListingSnippetRenderer::CODE,
+            $this->getMasterFactory()->getRequiredContexts(),
+            $usedDataParts
+        );
+    }
+
+    /**
+     * @return ProductInSearchAutosuggestionBlockRenderer
+     */
+    public function createProductInSearchAutosuggestionBlockRenderer()
+    {
+        return new ProductInSearchAutosuggestionBlockRenderer(
+            $this->getMasterFactory()->createThemeLocator(),
+            $this->getMasterFactory()->createBlockStructure()
+        );
+    }
+
+    /**
+     * @return SnippetKeyGenerator
+     */
+    public function createProductInSearchAutosuggestionSnippetKeyGenerator()
+    {
+        $usedDataParts = ['product_id'];
+
+        return new GenericSnippetKeyGenerator(
+            ProductInSearchAutosuggestionSnippetRenderer::CODE,
             $this->getMasterFactory()->getRequiredContexts(),
             $usedDataParts
         );
@@ -1020,11 +1169,11 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return ProductSearchResultsMetaSnippetRenderer
+     * @return ProductSearchResultMetaSnippetRenderer
      */
-    public function createProductSearchResultsMetaSnippetRenderer()
+    public function createProductSearchResultMetaSnippetRenderer()
     {
-        return new ProductSearchResultsMetaSnippetRenderer(
+        return new ProductSearchResultMetaSnippetRenderer(
             $this->getMasterFactory()->createSnippetList(),
             $this->getMasterFactory()->createProductSearchResultMetaSnippetKeyGenerator(),
             $this->getMasterFactory()->createProductListingBlockRenderer()
@@ -1039,21 +1188,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         $usedDataParts = [];
 
         return new GenericSnippetKeyGenerator(
-            ProductSearchResultsMetaSnippetRenderer::CODE,
-            $this->getMasterFactory()->getRequiredContexts(),
-            $usedDataParts
-        );
-    }
-
-    /**
-     * @return SnippetKeyGenerator
-     */
-    public function createProductSearchResultsMetaSnippetKeyGenerator()
-    {
-        $usedDataParts = [];
-
-        return new GenericSnippetKeyGenerator(
-            ProductSearchResultsMetaSnippetRenderer::CODE,
+            ProductSearchResultMetaSnippetRenderer::CODE,
             $this->getMasterFactory()->getRequiredContexts(),
             $usedDataParts
         );

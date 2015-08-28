@@ -2,8 +2,6 @@
 
 namespace Brera\Product;
 
-use Brera\ProjectionSourceData;
-
 /**
  * @covers \Brera\Product\ProductStockQuantitySource
  */
@@ -39,11 +37,6 @@ class ProductStockQuantitySourceTest extends \PHPUnit_Framework_TestCase
             $this->stubContextData,
             $this->stubQuantity
         );
-    }
-
-    public function testProjectionSourceDataInterfaceIsImplemented()
-    {
-        $this->assertInstanceOf(ProjectionSourceData::class, $this->productStockQuantitySource);
     }
 
     public function testProductIdIsReturned()

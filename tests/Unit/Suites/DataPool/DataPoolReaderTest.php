@@ -4,7 +4,6 @@ namespace Brera\DataPool;
 
 use Brera\Context\Context;
 use Brera\DataPool\SearchEngine\SearchCriteria;
-use Brera\DataPool\SearchEngine\SearchCriterion;
 
 /**
  * @covers \Brera\DataPool\DataPoolReader

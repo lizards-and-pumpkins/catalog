@@ -22,10 +22,10 @@ interface DomainEventFactory
     public function createProductWasUpdatedDomainEventHandler(ProductWasUpdatedDomainEvent $event);
 
     /**
-     * @param PageTemplateWasUpdatedDomainEvent $event
-     * @return PageTemplateWasUpdatedDomainEventHandler
+     * @param TemplateWasUpdatedDomainEvent $event
+     * @return TemplateWasUpdatedDomainEventHandler
      */
-    public function createPageTemplateWasUpdatedDomainEventHandler(PageTemplateWasUpdatedDomainEvent $event);
+    public function createTemplateWasUpdatedDomainEventHandler(TemplateWasUpdatedDomainEvent $event);
 
     /**
      * @param ImageWasUpdatedDomainEvent $event

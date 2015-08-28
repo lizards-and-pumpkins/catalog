@@ -18,9 +18,8 @@ body.catalog-product-view div.wrapper {background-color: #fff;}
 .product-shop .top { border-bottom: 1px solid #fff; margin-bottom: 10px; padding-bottom: 15px }
 .product-shop p { margin: 0 0 5px 0; }
 #switcher-container p { margin: 0; }
-.product-shop .price-box .retail-price { font-size: 17px; text-decoration: line-through; }
 #product-attribute-specs-table .retail-price { text-decoration: line-through; }
-.product-shop .price-box .regular-price { font-weight: bold; font-size: 21px; }
+.product-shop .price-box .regular-price { font-size: 24px; }
 .product-shop .artikel-nummer { font-size: 11px; margin: -3px 0 0 0; }
 .product-shop .delivery { color: #3d9b35; }
 .product-shop .note { line-height: 16px; }

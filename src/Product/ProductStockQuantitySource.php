@@ -2,9 +2,7 @@
 
 namespace Brera\Product;
 
-use Brera\ProjectionSourceData;
-
-class ProductStockQuantitySource implements ProjectionSourceData
+class ProductStockQuantitySource
 {
     /**
      * @var ProductId

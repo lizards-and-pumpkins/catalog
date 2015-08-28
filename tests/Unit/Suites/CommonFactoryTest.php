@@ -15,7 +15,8 @@ use Brera\Image\ImageWasUpdatedDomainEvent;
 use Brera\Image\ImageWasUpdatedDomainEventHandler;
 use Brera\Image\UpdateImageCommand;
 use Brera\Image\UpdateImageCommandHandler;
-use Brera\Product\ProductListingSourceBuilder;
+use Brera\Product\ProductListingMetaInfoSourceBuilder;
+use Brera\Product\ProductListingSourceListBuilder;
 use Brera\Product\ProductWasUpdatedDomainEvent;
 use Brera\Product\ProductWasUpdatedDomainEventHandler;
 use Brera\Product\ProductListingWasUpdatedDomainEvent;
@@ -57,23 +58,27 @@ use Brera\Queue\Queue;
  * @uses   \Brera\CommandHandlerLocator
  * @uses   \Brera\DomainEventConsumer
  * @uses   \Brera\DomainEventHandlerLocator
- * @uses   \Brera\PageTemplateWasUpdatedDomainEvent
- * @uses   \Brera\PageTemplateWasUpdatedDomainEventHandler
- * @uses   \Brera\RootSnippetProjector
+ * @uses   \Brera\TemplateWasUpdatedDomainEvent
+ * @uses   \Brera\TemplateWasUpdatedDomainEventHandler
  * @uses   \Brera\Renderer\BlockRenderer
  * @uses   \Brera\Product\DefaultNumberOfProductsPerPageSnippetRenderer
  * @uses   \Brera\Product\PriceSnippetRenderer
  * @uses   \Brera\Product\ProductBackOrderAvailabilitySnippetRenderer
  * @uses   \Brera\Product\ProductSourceBuilder
  * @uses   \Brera\Product\ProductProjector
+ * @uses   \Brera\Product\ProductInSearchAutosuggestionSnippetRenderer
  * @uses   \Brera\Product\ProductListingMetaInfoSnippetRenderer
- * @uses   \Brera\Product\ProductListingProjector
- * @uses   \Brera\Product\ProductListingSourceBuilder
+ * @uses   \Brera\Product\ProductListingTemplateProjector
+ * @uses   \Brera\Product\ProductListingMetaInfoSnippetProjector
+ * @uses   \Brera\Product\ProductListingMetaInfoSourceBuilder
  * @uses   \Brera\Product\ProductListingWasUpdatedDomainEvent
  * @uses   \Brera\Product\ProductListingWasUpdatedDomainEventHandler
  * @uses   \Brera\Product\ProductWasUpdatedDomainEvent
  * @uses   \Brera\Product\ProductWasUpdatedDomainEventHandler
- * @uses   \Brera\Product\ProductSearchResultsMetaSnippetRenderer
+ * @uses   \Brera\Product\ProductSearchAutosuggestionMetaSnippetRenderer
+ * @uses   \Brera\Product\ProductSearchAutosuggestionSnippetRenderer
+ * @uses   \Brera\Product\ProductSearchAutosuggestionTemplateProjector
+ * @uses   \Brera\Product\ProductSearchResultMetaSnippetRenderer
  * @uses   \Brera\Product\ProductSearchDocumentBuilder
  * @uses   \Brera\Product\ProductSourceDetailViewSnippetRenderer
  * @uses   \Brera\Product\ProductStockQuantityProjector
@@ -88,9 +93,8 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Product\ProductListingSnippetRenderer
  * @uses   \Brera\GenericSnippetKeyGenerator
  * @uses   \Brera\SnippetRendererCollection
- * @uses   \Brera\RootSnippetSourceListBuilder
- * @uses   \Brera\Product\ProductSourceInListingSnippetRenderer
- * @uses   \Brera\Product\ProductInListingInContextSnippetRenderer
+ * @uses   \Brera\Product\ProductListingSourceListBuilder
+ * @uses   \Brera\Product\ProductInListingSnippetRenderer
  * @uses   \Brera\Image\ImageWasUpdatedDomainEventHandler
  * @uses   \Brera\Image\ImageMagickResizeStrategy
  * @uses   \Brera\Image\GdResizeStrategy
@@ -99,6 +103,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\Image\ImageProcessingStrategySequence
  * @uses   \Brera\LocalFilesystemStorageReader
  * @uses   \Brera\LocalFilesystemStorageWriter
+ * @uses   \Brera\TemplateProjectorLocator
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -130,13 +135,13 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ProductWasUpdatedDomainEventHandler::class, $result);
     }
 
-    public function testPageTemplateWasUpdatedDomainEventHandlerIsReturned()
+    public function testTemplateWasUpdatedDomainEventHandlerIsReturned()
     {
-        /** @var PageTemplateWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
-        $stubDomainEvent = $this->getMock(PageTemplateWasUpdatedDomainEvent::class, [], [], '', false);
-        $result = $this->commonFactory->createPageTemplateWasUpdatedDomainEventHandler($stubDomainEvent);
+        /** @var TemplateWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
+        $stubDomainEvent = $this->getMock(TemplateWasUpdatedDomainEvent::class, [], [], '', false);
+        $result = $this->commonFactory->createTemplateWasUpdatedDomainEventHandler($stubDomainEvent);
 
-        $this->assertInstanceOf(PageTemplateWasUpdatedDomainEventHandler::class, $result);
+        $this->assertInstanceOf(TemplateWasUpdatedDomainEventHandler::class, $result);
     }
 
     public function testProductListingWasUpdatedDomainEventHandlerIsReturned()
@@ -172,16 +177,16 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ProductSourceBuilder::class, $result);
     }
 
-    public function testProductListingSourceBuilderIsReturned()
+    public function testProductListingMetaInfoSourceBuilderIsReturned()
     {
-        $result = $this->commonFactory->createProductListingSourceBuilder();
-        $this->assertInstanceOf(ProductListingSourceBuilder::class, $result);
+        $result = $this->commonFactory->createProductListingMetaInfoSourceBuilder();
+        $this->assertInstanceOf(ProductListingMetaInfoSourceBuilder::class, $result);
     }
 
-    public function testRootSnippetSourceListBuilderIsReturned()
+    public function testProductListingSourceListBuilderIsReturned()
     {
-        $result = $this->commonFactory->createRootSnippetSourceListBuilder();
-        $this->assertInstanceOf(RootSnippetSourceListBuilder::class, $result);
+        $result = $this->commonFactory->createProductListingSourceListBuilder();
+        $this->assertInstanceOf(ProductListingSourceListBuilder::class, $result);
     }
 
     public function testThemeLocatorIsReturned()
@@ -456,9 +461,9 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
 
-    public function testProductSearchResultsMetaSnippetKeyGeneratorIsReturned()
+    public function testProductSearchResultMetaSnippetKeyGeneratorIsReturned()
     {
-        $result = $this->commonFactory->createProductSearchResultsMetaSnippetKeyGenerator();
+        $result = $this->commonFactory->createProductSearchResultMetaSnippetKeyGenerator();
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
 }

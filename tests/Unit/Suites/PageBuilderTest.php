@@ -128,14 +128,11 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
             ProductDetailPageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => $allSnippetCodes
         ];
 
-        $this->mockDataPoolReader->method('getSnippet')
-            ->with($this->urlPathKeyFixture)
+        $this->mockDataPoolReader->method('getSnippet')->with($this->urlPathKeyFixture)
             ->willReturn(json_encode($pageMetaInfo));
 
-        $this->stubPageMetaInfo->method('getPageSnippetCodes')
-            ->willReturn($allSnippetCodes);
-        $this->stubPageMetaInfo->method('getRootSnippetCode')
-            ->willReturn($rootSnippetCode);
+        $this->stubPageMetaInfo->method('getPageSnippetCodes')->willReturn($allSnippetCodes);
+        $this->stubPageMetaInfo->method('getRootSnippetCode')->willReturn($rootSnippetCode);
 
     }
 
@@ -147,8 +144,7 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $allSnippetKeys = $allSnippetCodes;
         $pageSnippetKeyMap = array_combine($allSnippetKeys, $allSnippetContent);
-        $this->mockDataPoolReader->method('getSnippets')
-            ->willReturn($pageSnippetKeyMap);
+        $this->mockDataPoolReader->method('getSnippets')->willReturn($pageSnippetKeyMap);
     }
 
     /**
@@ -178,10 +174,7 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
                     $keyGenerator->method('getKeyForContext')->willReturn($snippetCode);
                     return $keyGenerator;
                 }
-                throw new \Exception(sprintf(
-                    'No key generator set for snippet "%s"',
-                    $snippetCode
-                ));
+                throw new \Exception(sprintf('No key generator set for snippet "%s"', $snippetCode));
             }
         );
     }
@@ -189,13 +182,15 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->stubContext = $this->getMock(Context::class);
-        $this->stubContext->method('getIdForParts')
-            ->willReturn($this->contextIdFixture);
+        $this->stubContext->method('getIdForParts')->willReturn($this->contextIdFixture);
+
         $this->stubPageMetaInfo = $this->getMock(PageMetaInfoSnippetContent::class);
 
         $this->mockDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
+
         $this->stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
         $this->fakeSnippetKeyGeneratorLocator($this->stubSnippetKeyGeneratorLocator);
+
         $this->stubLogger = $this->getMock(Logger::class);
 
         $this->pageBuilder = new PageBuilder(

@@ -23,23 +23,23 @@ h1 { font-size: 26px; font-weight: normal; color: #323232; text-transform: upper
 .col2-left-layout .col-left { width: 217px }
 
 /* Main search form */
-#search_mini_form { width: 367px }
-#search_mini_form .input-box { position: relative; padding-right: 48px }
-#search_mini_form input { float:left; width:285px; font-family: GeogrotesqueRegular, Helvetica, Arial, sans-serif; font-size: 17px; cursor: pointer }
-#search_mini_form input:focus { cursor: text }
-#search_mini_form button { padding: 0; border-radius: 0 2px 2px 0; position: absolute; right: -1px; top: -1px; cursor: pointer }
-#search_mini_form button:disabled { cursor: default }
+#searchPanel form { width: 367px }
+#searchPanel .input-box { position: relative; padding-right: 48px }
+#searchPanel input { width: 285px; font-family: GeogrotesqueRegular, sans-serif; font-size: 17px; cursor: pointer }
+#searchPanel input:focus { cursor: text }
+#searchPanel button { padding: 0; border-radius: 0 2px 2px 0; position: absolute; right: -1px; top: -1px; cursor: pointer; background-color: #e46d06 }
+#searchPanel button:disabled { cursor: default; background-color: #999999 }
 /* IE8 will cough up once it will see :disabled and will ignore the complete selector so it has to be duplicated */
-#search_mini_form button.disabled { cursor: default }
-#search_mini_form button .search-button-image { background: url('../images/icons/icons-36-white.png') -1216px -4px; height: 32px; width: 50px; display: block }
+#searchPanel button.disabled { cursor: default; background-color: #999999 }
+#searchPanel button .search-button-image { background: url('../images/icons/icons-36-white.png') -1216px -4px; height: 32px; width: 50px; display: block }
 
-.search-autocomplete { top: 42px; z-index: 200 }
-.search-autocomplete ul { border: 1px solid #ccc; border-top: none; width: 299px; overflow: hidden; position: absolute; left: -17px; background: #ffffff }
-.search-autocomplete ul li { border-top:1px solid #cccccc }
-.search-autocomplete ul li a { color:#474747; display:block; font-family: GeogrotesqueRegular, Helvetica, Arial, sans-serif; font-size: 15px; height: 39px; line-height: 39px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
-.search-autocomplete ul li.no-thumbnail a { padding-left: 16px }
-.search-autocomplete ul li a:hover { background-color: #e9e9e9 }
-.search-autocomplete ul li img { margin: 1px 16px 1px 1px }
+#search-autosuggestion { position: absolute; left: -1px; z-index: 200 }
+#search-autosuggestion ul { border: 1px solid #ccc; border-top: none; width: 299px; background: #ffffff }
+#search-autosuggestion ul li { border-top: 1px solid #cccccc }
+#search-autosuggestion ul li a { color:#474747; display:block; font-family: GeogrotesqueRegular, Helvetica, Arial, sans-serif; font-size: 15px; height: 39px; line-height: 39px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+#search-autosuggestion ul li.no-thumbnail a { padding-left: 16px }
+#search-autosuggestion ul li a:hover { background-color: #e9e9e9 }
+#search-autosuggestion ul li img { margin: 1px 16px 1px 1px }
 
 /* Header section */
 .logo { float: left; margin: 19px 40px 28px 0 }

@@ -23,13 +23,15 @@ class UpdateProductListingCommandHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        /** @var ProductListingSource|\PHPUnit_Framework_MockObject_MockObject $stubProductListingSource */
-        $stubProductListingSource = $this->getMock(ProductListingSource::class, [], [], '', false);
-        $stubProductListingSource->method('getUrlKey')->willReturn('foo');
+        /**
+         * @var ProductListingMetaInfoSource|\PHPUnit_Framework_MockObject_MockObject $stubProductListingMetaInfoSource
+         */
+        $stubProductListingMetaInfoSource = $this->getMock(ProductListingMetaInfoSource::class, [], [], '', false);
+        $stubProductListingMetaInfoSource->method('getUrlKey')->willReturn('foo');
 
         /** @var UpdateProductListingCommand|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
         $stubCommand = $this->getMock(UpdateProductListingCommand::class, [], [], '', false);
-        $stubCommand->method('getProductListingSource')->willReturn($stubProductListingSource);
+        $stubCommand->method('getProductListingMetaInfoSource')->willReturn($stubProductListingMetaInfoSource);
 
         $this->mockDomainEventQueue = $this->getMock(Queue::class);
 

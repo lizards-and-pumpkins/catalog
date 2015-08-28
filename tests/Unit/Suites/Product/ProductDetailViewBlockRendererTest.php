@@ -3,7 +3,7 @@
 namespace Brera\Product;
 
 use Brera\Renderer\BlockRenderer;
-use Brera\Renderer\BlockRendererTestAbstract;
+use Brera\Renderer\AbstractBlockRendererTest;
 use Brera\Renderer\BlockStructure;
 use Brera\Renderer\InvalidDataObjectException;
 use Brera\Renderer\Stubs\StubBlock;
@@ -15,7 +15,7 @@ use Brera\ThemeLocator;
  * @uses   \Brera\Renderer\BlockStructure
  * @uses   \Brera\Renderer\Block
  */
-class ProductDetailViewBlockRendererTest extends BlockRendererTestAbstract
+class ProductDetailViewBlockRendererTest extends AbstractBlockRendererTest
 {
     /**
      * @param ThemeLocator|\PHPUnit_Framework_MockObject_MockObject $stubThemeLocator

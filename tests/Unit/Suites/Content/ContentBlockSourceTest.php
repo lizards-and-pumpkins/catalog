@@ -2,8 +2,6 @@
 
 namespace Brera\Content;
 
-use Brera\ProjectionSourceData;
-
 /**
  * @covers \Brera\Content\ContentBlockSource
  */
@@ -37,11 +35,6 @@ class ContentBlockSourceTest extends \PHPUnit_Framework_TestCase
             $this->stubContentBlockContent,
             $this->stubContextData
         );
-    }
-
-    public function testProjectionSourceDataInterfaceIsImplemented()
-    {
-        $this->assertInstanceOf(ProjectionSourceData::class, $this->contentBlockSource);
     }
 
     public function testContentBlockIdIsReturned()

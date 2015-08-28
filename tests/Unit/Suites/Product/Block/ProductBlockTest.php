@@ -55,7 +55,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($attributeValue, $result);
     }
 
-    public function testAllValuesOfProductAttributeGluedAreReturned()
+    public function testImplodedValuesOfProductAttributeAreReturned()
     {
         $attributeCode = 'foo';
         $attributeValueA = 'bar';
@@ -64,7 +64,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
 
         $this->stubProduct->method('getAllValuesOfAttribute')->willReturn([$attributeValueA, $attributeValueB]);
 
-        $result = $this->productBlock->getAllValuesOfProductAttributeGlued($attributeCode, $glue);
+        $result = $this->productBlock->getImplodedValuesOfProductAttribute($attributeCode, $glue);
         $expected = $attributeValueA . $glue . $attributeValueB;
 
         $this->assertSame($expected, $result);
@@ -105,9 +105,11 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
         $testProductBrandName = 'foo';
         $this->stubProduct->method('getFirstValueOfAttribute')->with('brand')->willReturn($testProductBrandName);
 
-        $expectedProductBrandLogoSrc = 'images/brands/brands-slider/' . $testProductBrandName . '.png';
-        $this->createFixtureFile('pub/' . $expectedProductBrandLogoSrc, '');
+        $brandLogoSrc = 'images/brands/brands-slider/' . $testProductBrandName . '.png';
+        $this->createFixtureFile('pub/' . $brandLogoSrc, '');
 
+        /* TODO: Fix it once retrieving base URL is implemented */
+        $expectedProductBrandLogoSrc = '/brera/' . $brandLogoSrc;
         $result = $this->productBlock->getBrandLogoSrc();
 
         $this->assertEquals($expectedProductBrandLogoSrc, $result);

@@ -2,7 +2,6 @@
 
 namespace Brera\Renderer;
 
-use Brera\ProjectionSourceData;
 use Brera\TestFileFixtureTrait;
 
 /**
@@ -13,9 +12,9 @@ class BlockTest extends \PHPUnit_Framework_TestCase
     use TestFileFixtureTrait;
 
     /**
-     * @var ProjectionSourceData|\PHPUnit_Framework_MockObject_MockObject
+     * @var mixed
      */
-    private $stubDataObject;
+    private $testProjectionSourceData = 'test-projection-source-data';
 
     /**
      * @var BlockRenderer|\PHPUnit_Framework_MockObject_MockObject
@@ -25,7 +24,6 @@ class BlockTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->mockBlockRenderer = $this->getMock(BlockRenderer::class, [], [], '', false);
-        $this->stubDataObject = $this->getMock(ProjectionSourceData::class);
     }
 
     public function testBlocksNameIsReturned()
@@ -42,7 +40,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $method = new \ReflectionMethod($block, 'getDataObject');
         $method->setAccessible(true);
 
-        $this->assertSame($this->stubDataObject, $method->invoke($block));
+        $this->assertSame($this->testProjectionSourceData, $method->invoke($block));
     }
 
     public function testExceptionIsThrownIfTemplateFileDoesNotExist()
@@ -116,6 +114,6 @@ class BlockTest extends \PHPUnit_Framework_TestCase
      */
     private function createBlockInstance($template, $blockName)
     {
-        return new Block($this->mockBlockRenderer, $template, $blockName, $this->stubDataObject);
+        return new Block($this->mockBlockRenderer, $template, $blockName, $this->testProjectionSourceData);
     }
 }

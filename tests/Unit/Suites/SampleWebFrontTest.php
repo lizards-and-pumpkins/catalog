@@ -23,14 +23,15 @@ use Brera\Http\HttpUrl;
  * @uses   \Brera\PageBuilder
  * @uses   \Brera\SnippetKeyGeneratorLocator
  * @uses   \Brera\GenericSnippetKeyGenerator
- * @uses   \Brera\PageTemplatesApiV1PutRequestHandler
+ * @uses   \Brera\TemplatesApiV1PutRequestHandler
  * @uses   \Brera\Http\GenericHttpRouter
  * @uses   \Brera\Product\CatalogImportApiV1PutRequestHandler
  * @uses   \Brera\Product\ProductDetailViewRequestHandler
  * @uses   \Brera\Product\ProductListingRequestHandler
  * @uses   \Brera\Product\MultipleProductStockQuantityApiV1PutRequestHandler
+ * @uses   \Brera\Product\ProductSearchAutosuggestionRequestHandler
  * @uses   \Brera\Product\ProductSearchRequestHandler
- * @uses   \Brera\RootSnippetSourceListBuilder
+ * @uses   \Brera\Product\ProductListingSourceListBuilder
  * @uses   \Brera\Http\ResourceNotFoundRouter
  * @uses   \Brera\Http\ResourceNotFoundRequestHandler
  * @uses   \Brera\Http\HttpRouterChain
@@ -63,7 +64,8 @@ class SampleWebFrontTest extends \PHPUnit_Framework_TestCase
             'createProductDetailViewRouter',
             'createProductListingRouter',
             'createResourceNotFoundRouter',
-            'createProductSearchResultsRouter'
+            'createProductSearchResultRouter',
+            'createProductSearchAutosuggestionRouter',
         ];
 
         $stubFactoryMethods = array_merge(
