@@ -25,7 +25,9 @@ abstract class ContextSource
     public function getAllAvailableContexts()
     {
         if (null === $this->lazyLoadedAllAvailableContexts) {
-            $this->lazyLoadedAllAvailableContexts = $this->contextBuilder->getContexts($this->getContextMatrix());
+            $this->lazyLoadedAllAvailableContexts = $this->contextBuilder->createContextsFromDataSets(
+                $this->getContextMatrix()
+            );
         }
 
         return $this->lazyLoadedAllAvailableContexts;
@@ -37,7 +39,9 @@ abstract class ContextSource
      */
     public function getContextsForParts(array $requestedContextParts)
     {
-        return $this->contextBuilder->getContexts($this->getContextMatrixForParts($requestedContextParts));
+        return $this->contextBuilder->createContextsFromDataSets(
+            $this->getContextMatrixForParts($requestedContextParts)
+        );
     }
 
     /**

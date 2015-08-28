@@ -10,6 +10,7 @@ use Brera\Content\UpdateContentBlockCommand;
 use Brera\Content\UpdateContentBlockCommandHandler;
 use Brera\Context\ContextBuilder;
 use Brera\Context\ContextSource;
+use Brera\Context\WebsiteContextDecorator;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\DataPoolWriter;
 use Brera\DataPool\KeyValue\KeyValueStore;
@@ -725,7 +726,9 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createContextBuilderWithVersion(DataVersion $version)
     {
-        return new ContextBuilder($version);
+        $contextBuilder = new ContextBuilder($version);
+        $contextBuilder->registerContextDecorator('website', WebsiteContextDecorator::class);
+        return $contextBuilder;
     }
 
     /**
