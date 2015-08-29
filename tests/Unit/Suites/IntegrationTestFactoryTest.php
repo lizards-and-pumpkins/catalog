@@ -13,7 +13,6 @@ use Brera\InMemoryLogger;
 use Brera\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
 use Brera\LocalFilesystemStorageReader;
 use Brera\LocalFilesystemStorageWriter;
-use Brera\Logger;
 use Brera\Queue\Queue;
 use Brera\SampleMasterFactory;
 use Brera\Queue\InMemory\InMemoryQueue;
