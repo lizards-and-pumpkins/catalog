@@ -151,6 +151,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $response = $website->runWithoutSendingResponse();
         $this->assertInstanceOf(HttpResourceNotFoundResponse::class, $response);
     }
+    
     public function testProductsWithValidDataAreImportedAndInvalidDataAreNotImportedButLogged()
     {
         $this->importCatalog('catalog-with-invalid-product.xml');

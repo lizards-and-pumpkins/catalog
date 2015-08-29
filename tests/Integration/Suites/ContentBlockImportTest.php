@@ -9,7 +9,6 @@ use Brera\Http\HttpUrl;
 
 class ContentBlockImportTest extends AbstractIntegrationTest
 {
-
     public function testContentBlockSnippetIsWrittenIntoDataPool()
     {
         $contentBlockContent = 'bar';
