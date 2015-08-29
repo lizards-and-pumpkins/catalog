@@ -51,7 +51,7 @@ class ProductListingTest extends AbstractIntegrationTest
         $this->failIfMessagesWhereLogged($logger);
 
         $contextSource = $this->factory->createContextSource();
-        $context = $contextSource->getAllAvailableContexts()[1];
+        $context = $contextSource->getAllAvailableContexts()[0];
 
         $productListingMetaInfoSnippetKeyGenerator = $this->factory->createProductListingMetaDataSnippetKeyGenerator();
         $snippetKey = $productListingMetaInfoSnippetKeyGenerator->getKeyForContext($context, ['url_key' => $urlKey]);
@@ -185,7 +185,7 @@ class ProductListingTest extends AbstractIntegrationTest
         $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.content_blocks.v1+json']);
         $httpRequestBodyString = json_encode([
             'content' => $contentBlockContent,
-            'context' => ['website' => 'ru', 'locale' => 'en_US']
+            'context' => ['website' => 'ru', 'locale' => 'de_DE']
         ]);
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);

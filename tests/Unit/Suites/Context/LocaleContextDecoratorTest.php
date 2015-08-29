@@ -3,12 +3,19 @@
 
 namespace Brera\Context;
 
+use Brera\Http\HttpHeaders;
+use Brera\Http\HttpRequest;
+use Brera\Http\HttpRequestBody;
+use Brera\Http\HttpUrl;
+
 /**
  * @covers \Brera\Context\LocaleContextDecorator
  * @covers \Brera\Context\ContextDecorator
  * @uses   \Brera\Context\ContextBuilder
  * @uses   \Brera\Context\VersionedContext
  * @uses   \Brera\DataVersion
+ * @uses   \Brera\Http\HttpUrl
+ * @uses   \Brera\Http\HttpRequest
  */
 class LocaleContextDecoratorTest extends ContextDecoratorTestAbstract
 {
@@ -38,13 +45,57 @@ class LocaleContextDecoratorTest extends ContextDecoratorTestAbstract
         return new LocaleContextDecorator($stubContext, $stubContextData);
     }
 
-    public function testExceptionIsThrownIfValueIsNotFoundInSourceData()
+    /**
+     * @param string $urlString
+     * @return HttpRequest
+     */
+    private function createTestRequest($urlString)
     {
-        $this->setExpectedExceptionRegExp(
-            ContextCodeNotFoundException::class,
-            '/No value found in the context source data for the code "[^\"]+"/'
+        return HttpRequest::fromParameters(
+            HttpRequest::METHOD_GET,
+            HttpUrl::fromString($urlString),
+            HttpHeaders::fromArray([]),
+            HttpRequestBody::fromString('')
+        );
+    }
+
+    public function testExceptionIsThrownIfNeitherLocaleNorRequestArePresent()
+    {
+        $this->setExpectedException(
+            UnableToDetermineLocaleException::class,
+            'Unable to determine locale from context source data ("locale" and "request" not present)'
         );
         $decorator = $this->createContextDecoratorUnderTest($this->getMockDecoratedContext(), []);
         $decorator->getValue($this->getDecoratorUnderTestCode());
+    }
+
+    /**
+     * @param mixed[] $sourceData
+     * @param string $expected
+     * @dataProvider localeSourceDataProvider
+     */
+    public function testItReturnsTheExpectedLocale(array $sourceData, $expected)
+    {
+        $localeContext = $this->createContextDecoratorUnderTest($this->getMockDecoratedContext(), $sourceData);
+        $this->assertSame($expected, $localeContext->getValue(LocaleContextDecorator::CODE));
+    }
+
+    /**
+     * @return array[]
+     */
+    public function localeSourceDataProvider()
+    {
+        return [
+            'locale' => [['locale' => 'xxx'], 'xxx'],
+            'request de' => [['request' => $this->createTestRequest('http://example.com/xx_de')], 'de_DE'],
+            'request en' => [['request' => $this->createTestRequest('http://example.com/xx_en')], 'en_US'],
+            'default' => [['request' => $this->createTestRequest('http://example.com/')], 'de_DE'],
+            'missing lang' => [['request' => $this->createTestRequest('http://example.com/xx')], 'de_DE'],
+            'invalid lang' => [['request' => $this->createTestRequest('http://example.com/xx_xx')], 'de_DE'],
+            'locale and request' => [
+                ['request' => $this->createTestRequest('http://example.com/xx_en'), 'locale' => 'xxx'],
+                'xxx'
+            ],
+        ];
     }
 }
