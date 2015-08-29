@@ -758,13 +758,16 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createDataPoolWriter()
     {
-        return new DataPoolWriter($this->getKeyValueStore(), $this->getSearchEngine());
+        return new DataPoolWriter(
+            $this->getMasterFactory()->getKeyValueStore(),
+            $this->getMasterFactory()->getSearchEngine()
+        );
     }
 
     /**
      * @return KeyValueStore
      */
-    private function getKeyValueStore()
+    public function getKeyValueStore()
     {
         if (null === $this->keyValueStore) {
             $this->keyValueStore = $this->callExternalCreateMethod('KeyValueStore');
@@ -802,7 +805,10 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createDataPoolReader()
     {
-        return new DataPoolReader($this->getKeyValueStore(), $this->getSearchEngine());
+        return new DataPoolReader(
+            $this->getMasterFactory()->getKeyValueStore(),
+            $this->getMasterFactory()->getSearchEngine()
+        );
     }
 
     /**
@@ -867,7 +873,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     /**
      * @return SearchEngine
      */
-    private function getSearchEngine()
+    public function getSearchEngine()
     {
         if (null === $this->searchEngine) {
             $this->searchEngine = $this->callExternalCreateMethod('SearchEngine');
