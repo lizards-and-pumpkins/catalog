@@ -92,7 +92,6 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
     /**
      * @param string $json
      * @return mixed[]
-     * @throws \OutOfBoundsException
      */
     private static function decodeJson($json)
     {

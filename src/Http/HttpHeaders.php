@@ -41,7 +41,6 @@ class HttpHeaders
     /**
      * @param string $headerName
      * @return string
-     * @throws HeaderNotPresentException
      */
     public function get($headerName)
     {

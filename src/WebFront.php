@@ -106,9 +106,6 @@ abstract class WebFront
         return $this->masterFactory;
     }
 
-    /**
-     * @throws \InvalidArgumentException
-     */
     private function validateMasterFactory()
     {
         if (!($this->masterFactory instanceof MasterFactory)) {

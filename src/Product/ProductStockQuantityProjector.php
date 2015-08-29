@@ -29,7 +29,6 @@ class ProductStockQuantityProjector implements Projector
     /**
      * @param mixed $projectionSourceData
      * @param ContextSource $contextSource
-     * @throws InvalidProjectionSourceDataTypeException
      */
     public function project($projectionSourceData, ContextSource $contextSource)
     {

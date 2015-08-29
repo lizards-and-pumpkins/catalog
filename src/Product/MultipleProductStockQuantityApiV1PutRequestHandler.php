@@ -40,7 +40,6 @@ class MultipleProductStockQuantityApiV1PutRequestHandler extends ApiRequestHandl
      * @param Directory $importDirectory
      * @param ProductStockQuantitySourceBuilder $productStockQuantitySourceBuilder
      * @return CatalogImportApiV1PutRequestHandler
-     * @throws CatalogImportDirectoryNotReadableException
      */
     public static function create(
         Queue $commandQueue,
@@ -91,7 +90,6 @@ class MultipleProductStockQuantityApiV1PutRequestHandler extends ApiRequestHandl
     /**
      * @param HttpRequest $request
      * @return string
-     * @throws CatalogImportFileNotReadableException
      */
     private function getImportFileContents(HttpRequest $request)
     {
@@ -107,7 +105,6 @@ class MultipleProductStockQuantityApiV1PutRequestHandler extends ApiRequestHandl
     /**
      * @param HttpRequest $request
      * @return string
-     * @throws CatalogImportFileNameNotFoundInRequestBodyException
      */
     private function getImportFileNameFromRequest(HttpRequest $request)
     {

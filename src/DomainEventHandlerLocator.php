@@ -17,7 +17,6 @@ class DomainEventHandlerLocator
     /**
      * @param DomainEvent $event
      * @return DomainEventHandler
-     * @throws UnableToFindDomainEventHandlerException
      */
     public function getHandlerFor(DomainEvent $event)
     {

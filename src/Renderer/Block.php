@@ -65,7 +65,6 @@ class Block
 
     /**
      * @return string
-     * @throws TemplateFileNotReadableException
      */
     final public function render()
     {

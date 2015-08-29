@@ -17,7 +17,6 @@ interface Queue extends \Countable
     /**
      * @param mixed $data
      * @return null
-     * @throws NotSerializableException
      */
     public function add($data);
 

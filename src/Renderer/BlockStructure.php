@@ -79,7 +79,6 @@ class BlockStructure
      * @param string $parentName
      * @param string $childName
      * @return string
-     * @throws BlockIsNotAChildOfParentBlockException
      */
     public function getChildBlock($parentName, $childName)
     {

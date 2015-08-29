@@ -55,7 +55,6 @@ class ProductListingSourceList
 
     /**
      * @param mixed[] $sourceDataPair
-     * @throws InvalidProductListingSourceDataException
      */
     private static function validateSourceData(array $sourceDataPair)
     {
