@@ -59,9 +59,9 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
     {
         $factory = new IntegrationTestFactory();
         if ($this->isFirstInstantiationOfFactory()) {
-            $this->storePersistentObjects($factory);
+            $this->storeInMemoryObjects($factory);
         } else {
-            $this->restorePersistentObjectsOnFactory($factory);
+            $this->persistInMemoryObjectsOnFactory($factory);
         }
         return $factory;
     }
@@ -74,7 +74,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
         return null === $this->keyValueStore;
     }
     
-    private function storePersistentObjects(IntegrationTestFactory $factory)
+    private function storeInMemoryObjects(IntegrationTestFactory $factory)
     {
         $this->keyValueStore = $factory->getKeyValueStore();
         $this->eventQueue = $factory->getEventQueue();
@@ -82,7 +82,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine = $factory->getSearchEngine();
     }
 
-    private function restorePersistentObjectsOnFactory(IntegrationTestFactory $factory)
+    private function persistInMemoryObjectsOnFactory(IntegrationTestFactory $factory)
     {
         $factory->setKeyValueStore($this->keyValueStore);
         $factory->setEventQueue($this->eventQueue);
