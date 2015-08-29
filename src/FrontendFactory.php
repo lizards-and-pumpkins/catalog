@@ -124,7 +124,7 @@ class FrontendFactory implements Factory
         return MultipleProductStockQuantityApiV1PutRequestHandler::create(
             $this->getMasterFactory()->getCommandQueue(),
             Directory::fromPath($this->getCatalogImportDirectoryConfig()),
-            $this->getMasterFactory()->getProductStockQuantitySourceBuilder()
+            $this->getMasterFactory()->createProductStockQuantitySourceBuilder()
         );
     }
 
@@ -168,7 +168,7 @@ class FrontendFactory implements Factory
     private function createProductDetailViewRequestHandler()
     {
         return new ProductDetailViewRequestHandler(
-            $this->getContext(),
+            $this->createContext(),
             $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->createPageBuilder(),
             $this->getMasterFactory()->createProductDetailPageMetaSnippetKeyGenerator()
@@ -181,7 +181,7 @@ class FrontendFactory implements Factory
     private function createProductListingRequestHandler()
     {
         return new ProductListingRequestHandler(
-            $this->getContext(),
+            $this->createContext(),
             $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->createPageBuilder(),
             $this->getMasterFactory()->getSnippetKeyGeneratorLocator(),
@@ -284,7 +284,7 @@ class FrontendFactory implements Factory
     /**
      * @return Context
      */
-    public function getContext()
+    public function createContext()
     {
         /** @var ContextBuilder $contextBuilder */
         $contextBuilder = $this->getMasterFactory()->createContextBuilder();
@@ -305,7 +305,7 @@ class FrontendFactory implements Factory
     private function createProductSearchRequestHandler()
     {
         return new ProductSearchRequestHandler(
-            $this->getContext(),
+            $this->createContext(),
             $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->createPageBuilder(),
             $this->getMasterFactory()->getSnippetKeyGeneratorLocator()
@@ -326,7 +326,7 @@ class FrontendFactory implements Factory
     private function createProductSearchAutosuggestionRequestHandler()
     {
         return new ProductSearchAutosuggestionRequestHandler(
-            $this->getContext(),
+            $this->createContext(),
             $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->createPageBuilder(),
             $this->getMasterFactory()->getSnippetKeyGeneratorLocator()

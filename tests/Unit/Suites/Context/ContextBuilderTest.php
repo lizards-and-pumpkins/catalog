@@ -27,7 +27,7 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testNoExceptionIsThrownForIndividualContextCreationWithCodesWithoutMatchingDecorator()
     {
-        $result = $this->builder->getContext(['nonExistingContextPartCode' => 'contextPartValue']);
+        $result = $this->builder->createContext(['nonExistingContextPartCode' => 'contextPartValue']);
         $this->assertInstanceOf(Context::class, $result);
     }
 
@@ -40,7 +40,7 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownForNonContextDecoratorClass()
     {
         $this->setExpectedException(InvalidContextDecoratorClassException::class);
-        $this->builder->getContext(['stub_invalid_test' => 'dummy']);
+        $this->builder->createContext(['stub_invalid_test' => 'dummy']);
     }
 
     public function testContextsForGivePartsIsReturned()
@@ -127,8 +127,8 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $contextSourceA = ['stub_valid_test' => 'dummy', 'website' => 'test'];
         $contextSourceB = ['website' => 'test', 'stub_valid_test' => 'dummy'];
-        $contextA = $this->builder->getContext($contextSourceA);
-        $contextB = $this->builder->getContext($contextSourceB);
+        $contextA = $this->builder->createContext($contextSourceA);
+        $contextB = $this->builder->createContext($contextSourceB);
         $this->assertSame($contextA->getId(), $contextB->getId(), "Context decorator order is not the same");
     }
 }

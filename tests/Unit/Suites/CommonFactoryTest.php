@@ -342,13 +342,13 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testProductStockQuantitySourceBuilderIsReturned()
     {
-        $result = $this->commonFactory->getProductStockQuantitySourceBuilder();
+        $result = $this->commonFactory->createProductStockQuantitySourceBuilder();
         $this->assertInstanceOf(ProductStockQuantitySourceBuilder::class, $result);
     }
 
     public function testProductStockQuantityProjectorIsReturned()
     {
-        $result = $this->commonFactory->getProductStockQuantityProjector();
+        $result = $this->commonFactory->createProductStockQuantityProjector();
         $this->assertInstanceOf(ProductStockQuantityProjector::class, $result);
     }
 

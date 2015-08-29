@@ -211,7 +211,7 @@ class ProductListingTest extends AbstractIntegrationTest
         $filterNavigationAttributeCodes = [];
 
         return new ProductListingRequestHandler(
-            $this->factory->getContext(),
+            $this->factory->createContext(),
             $dataPoolReader,
             $pageBuilder,
             $this->factory->getSnippetKeyGeneratorLocator(),

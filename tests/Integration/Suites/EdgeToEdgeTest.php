@@ -21,9 +21,6 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
 
     public function testCatalogImportDomainEventPutsProductToKeyValueStoreAndSearchIndex()
     {
-        // TODO: Test is broken, the import and the following request should initialize their own WebFront instances,
-        // TODO: thus sharing the data pool and queue needs to be handled properly.
-
         $productId = ProductId::fromString('118235-251');
         $productName = 'LED Arm-Signallampe';
         $productPrice = 1295;

@@ -75,7 +75,7 @@ class ProductListingMetaInfoSnippetRendererTest extends \PHPUnit_Framework_TestC
 
         /** @var ContextBuilder|\PHPUnit_Framework_MockObject_MockObject $mockContextBuilder */
         $mockContextBuilder = $this->getMock(ContextBuilder::class, [], [], '', false);
-        $mockContextBuilder->method('getContext')->willReturn($stubContext);
+        $mockContextBuilder->method('createContext')->willReturn($stubContext);
 
         $this->mockSnippetList = $this->getMock(SnippetList::class);
 

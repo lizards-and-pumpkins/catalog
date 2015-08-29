@@ -72,12 +72,12 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testLocalFilesystemStorageWriterIsReturned()
     {
-        $this->assertInstanceOf(LocalFilesystemStorageWriter::class, $this->factory->getImageFileStorageWriter());
+        $this->assertInstanceOf(LocalFilesystemStorageWriter::class, $this->factory->createImageFileStorageWriter());
     }
 
     public function testLocalFilesystemStorageReaderIsReturned()
     {
-        $this->assertInstanceOf(LocalFilesystemStorageReader::class, $this->factory->getImageFileStorageReader());
+        $this->assertInstanceOf(LocalFilesystemStorageReader::class, $this->factory->createImageFileStorageReader());
     }
 
     public function testResizedImagesDirectoryIsCreated()
@@ -86,7 +86,7 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
 
         (new LocalFilesystem())->removeDirectoryAndItsContent($resultImageDir);
 
-        $this->factory->getImageFileStorageWriter();
+        $this->factory->createImageFileStorageWriter();
 
         $this->assertTrue(is_dir($resultImageDir));
     }
@@ -95,7 +95,7 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(
             ImageProcessingStrategySequence::class,
-            $this->factory->getImageProcessingStrategySequence()
+            $this->factory->createImageProcessingStrategySequence()
         );
     }
 
@@ -130,6 +130,6 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testImageProcessorIsReturned()
     {
-        $this->assertInstanceOf(ImageProcessor::class, $this->factory->getImageProcessor());
+        $this->assertInstanceOf(ImageProcessor::class, $this->factory->createImageProcessor());
     }
 }

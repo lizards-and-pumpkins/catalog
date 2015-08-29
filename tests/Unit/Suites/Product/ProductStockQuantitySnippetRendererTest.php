@@ -75,7 +75,7 @@ class ProductStockQuantitySnippetRendererTest extends \PHPUnit_Framework_TestCas
         $mockProductStockQuantitySource->method('getStock')
             ->willReturn($mockStock);
 
-        $this->mockContextBuilder->method('getContext')
+        $this->mockContextBuilder->method('createContext')
             ->willReturn($stubContext);
 
         $this->mockSnippetKeyGenerator->method('getKeyForContext')
