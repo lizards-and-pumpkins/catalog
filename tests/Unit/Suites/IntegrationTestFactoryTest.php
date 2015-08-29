@@ -157,19 +157,6 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($stubCommandQueue, $this->factory->getCommandQueue());
     }
 
-    public function testItReturnsTheSameLoggerOnMultipleCalls()
-    {
-        $this->assertInstanceOf(Logger::class, $this->factory->getLogger());
-        $this->assertSame($this->factory->getLogger(), $this->factory->getLogger());
-    }
-
-    public function testItReturnsTheSetLogger()
-    {
-        $stubLogger = $this->getMock(Logger::class);
-        $this->factory->setLogger($stubLogger);
-        $this->assertSame($stubLogger, $this->factory->getLogger());
-    }
-
     public function testItReturnsTheSameSearchEngineOnMultipleCalls()
     {
         $this->assertInstanceOf(SearchEngine::class, $this->factory->getSearchEngine());
