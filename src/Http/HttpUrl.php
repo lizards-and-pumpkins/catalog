@@ -28,7 +28,6 @@ class HttpUrl
     /**
      * @param string $urlString
      * @return HttpUrl
-     * @throws UnknownProtocolException
      */
     public static function fromString($urlString)
     {
@@ -75,7 +74,6 @@ class HttpUrl
     /**
      * @param \League\Url\AbstractUrl $url
      * @return HttpUrl
-     * @throws UnknownProtocolException
      */
     private static function createHttpUrlBasedOnSchema(AbstractUrl $url)
     {

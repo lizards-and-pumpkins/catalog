@@ -904,7 +904,10 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createImageWasUpdatedDomainEventHandler(ImageWasUpdatedDomainEvent $event)
     {
-        return new ImageWasUpdatedDomainEventHandler($event, $this->getMasterFactory()->createImageProcessorCollection());
+        return new ImageWasUpdatedDomainEventHandler(
+            $event,
+            $this->getMasterFactory()->createImageProcessorCollection()
+        );
     }
 
     /**

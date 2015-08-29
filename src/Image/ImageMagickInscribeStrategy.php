@@ -63,9 +63,6 @@ class ImageMagickInscribeStrategy implements ImageProcessingStrategy
         return $canvas;
     }
 
-    /**
-     * @throws InvalidColorException
-     */
     private function validateBackgroundColor()
     {
         try {

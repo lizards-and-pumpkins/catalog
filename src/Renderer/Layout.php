@@ -75,7 +75,6 @@ class Layout
 
     /**
      * @param mixed[] $layout
-     * @throws RootElementOfLayoutMustBeAnArrayException
      * @return array[]
      */
     private static function getRootElement(array $layout)

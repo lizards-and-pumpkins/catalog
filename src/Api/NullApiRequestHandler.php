@@ -15,10 +15,6 @@ class NullApiRequestHandler extends ApiRequestHandler
         return false;
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return string
-     */
     protected function getResponseBody(HttpRequest $request)
     {
         throw new \RuntimeException('NullApiRequestHandler should never be processed.');

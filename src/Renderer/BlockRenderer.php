@@ -75,7 +75,6 @@ abstract class BlockRenderer
 
     /**
      * @return Layout
-     * @throws BlockRendererMustHaveOneRootBlockException
      */
     private function getOuterMostBlockLayout()
     {
@@ -115,7 +114,6 @@ abstract class BlockRenderer
     /**
      * @param Layout $layout
      * @param string $parentName
-     * @return void
      */
     private function addDeclaredChildBlocks(Layout $layout, $parentName)
     {
@@ -130,8 +128,6 @@ abstract class BlockRenderer
 
     /**
      * @param string $blockClass
-     * @return void
-     * @throws CanNotInstantiateBlockException
      */
     private function validateBlockClass($blockClass)
     {

@@ -138,7 +138,6 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
     /**
      * @param HttpRequest $request
      * @return string
-     * @throws CatalogImportFileNotReadableException
      */
     private function getImportFileContents(HttpRequest $request)
     {
@@ -154,7 +153,6 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
     /**
      * @param HttpRequest $request
      * @return string
-     * @throws CatalogImportFileNameNotFoundInRequestBodyException
      */
     private function getImportFileNameFromRequest(HttpRequest $request)
     {

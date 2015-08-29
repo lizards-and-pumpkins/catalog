@@ -22,7 +22,6 @@ class ProductStockQuantity implements Quantity
     /**
      * @param int $quantityInt
      * @return ProductStockQuantity
-     * @throws InvalidStockQuantitySourceException
      */
     public static function fromInt($quantityInt)
     {
@@ -40,7 +39,6 @@ class ProductStockQuantity implements Quantity
     /**
      * @param string $quantityString
      * @return ProductStockQuantity
-     * @throws InvalidStockQuantitySourceException
      */
     public static function fromString($quantityString)
     {

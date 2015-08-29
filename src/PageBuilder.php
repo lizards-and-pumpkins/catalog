@@ -200,7 +200,6 @@ class PageBuilder
     /**
      * @param string $snippetKey
      * @return string
-     * @throws InvalidPageMetaSnippetException
      */
     private function getSnippetByKey($snippetKey)
     {

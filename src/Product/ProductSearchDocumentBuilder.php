@@ -29,7 +29,6 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
      * @param mixed $projectionSourceData
      * @param ContextSource $contextSource
      * @return SearchDocumentCollection
-     * @throws InvalidProjectionSourceDataTypeException
      */
     public function aggregate($projectionSourceData, ContextSource $contextSource)
     {

@@ -28,7 +28,6 @@ class SearchDocumentField
      * @param string $key
      * @param string $value
      * @return SearchDocumentField
-     * @throws InvalidSearchDocumentFieldKeyException
      */
     public static function fromKeyAndValue($key, $value)
     {
