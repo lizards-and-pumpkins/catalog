@@ -100,9 +100,6 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
 
     public function testImportedProductIsAccessibleFromTheFrontend()
     {
-        // TODO: Test is broken, the import and the following request should initialize their own WebFront instances,
-        // TODO: thus sharing the data pool and queue needs to be handled properly.
-
         $this->importCatalog('catalog.xml');
 
         $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
@@ -114,8 +111,8 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $httpHeaders = HttpHeaders::fromArray([]);
         $httpRequestBody = HttpRequestBody::fromString('');
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
+        $this->prepareIntegrationTestMasterFactoryForRequest($request);
         
-
         $website = new InjectableSampleWebFront($request, $this->factory);
         $response = $website->runWithoutSendingResponse();
 
@@ -137,9 +134,6 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
 
     public function testProductsWithValidDataAreImportedAndInvalidDataAreNotImportedButLogged()
     {
-        // TODO: Test is broken, the import and the following request should initialize their own WebFront instances,
-        // TODO: thus sharing the data pool and queue needs to be handled properly.
-
         $this->importCatalog('catalog-with-invalid-product.xml');
 
         $dataPoolReader = $this->factory->createDataPoolReader();
@@ -198,7 +192,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
-        $this->factory = $this->prepareIntegrationTestMasterFactory($request);
+        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
 
         $website = new InjectableSampleWebFront($request, $this->factory);
         $website->runWithoutSendingResponse();

@@ -37,11 +37,6 @@ class IntegrationTestFactory implements Factory
     private $commandQueue;
 
     /**
-     * @var Logger
-     */
-    private $logger;
-
-    /**
      * @var SearchEngine
      */
     private $searchEngine;
@@ -213,22 +208,6 @@ class IntegrationTestFactory implements Factory
     public function setCommandQueue(Queue $commandQueue)
     {
         $this->commandQueue = $commandQueue;
-    }
-
-    /**
-     * @return Logger
-     */
-    public function getLogger()
-    {
-        if (null === $this->logger) {
-            $this->logger = $this->createLogger();
-        }
-        return $this->logger;
-    }
-
-    public function setLogger(Logger $logger)
-    {
-        $this->logger = $logger;
     }
 
     /**
