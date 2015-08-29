@@ -454,11 +454,11 @@ LED Armflasher with elastic Band and Flasher]]></description>
         </product>
     </products>
     <listings>
-        <listing url_key="adidas-men-accessories" condition="and" website="ru" locale="en_US">
+        <listing url_key="adidas-men-accessories" condition="and" website="ru" locale="de_DE">
             <category operation="=">men-accessories</category>
             <brand operation="=">Adidas</brand>
         </listing>
-        <listing url_key="men-accessories" condition="and" website="ru" locale="en_US">
+        <listing url_key="men-accessories" condition="and" website="ru" locale="de_DE">
             <category operation="=">men-accessories</category>
         </listing>
     </listings>
