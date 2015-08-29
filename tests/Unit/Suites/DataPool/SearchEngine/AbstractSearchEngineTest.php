@@ -4,6 +4,7 @@ namespace Brera\DataPool\SearchEngine;
 
 use Brera\Context\Context;
 use Brera\Context\ContextBuilder;
+use Brera\Context\WebsiteContextDecorator;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
@@ -31,7 +32,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     {
         $this->searchEngine = $this->createSearchEngineInstance();
         $this->stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
-        $this->testContext = $this->createContextFromDataParts(['website' => 'ru']);
+        $this->testContext = $this->createContextFromDataParts([WebsiteContextDecorator::CODE => 'ru']);
     }
 
     public function testSearchEngineInterfaceIsImplemented()
@@ -373,6 +374,6 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $dataVersion = DataVersion::fromVersionString('-1');
         $contextBuilder = new ContextBuilder($dataVersion);
 
-        return $contextBuilder->getContext($contextDataSet);
+        return $contextBuilder->createContextsFromDataSets([$contextDataSet])[0];
     }
 }
