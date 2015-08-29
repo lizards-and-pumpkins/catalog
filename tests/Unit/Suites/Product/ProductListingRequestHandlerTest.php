@@ -61,6 +61,53 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private $testFilterNavigationAttributeCode = 'foo';
 
+    private function mockMetaInfoSnippet()
+    {
+        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $mockSelectionCriteria */
+        $mockSelectionCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
+        $mockSelectionCriteria->method('jsonSerialize')
+            ->willReturn(['condition' => SearchCriteria::AND_CONDITION, 'criteria' => []]);
+
+        $pageSnippetCodes = ['child-snippet1'];
+
+        $testMetaInfoSnippetJson = json_encode(ProductListingMetaInfoSnippetContent::create(
+            $mockSelectionCriteria,
+            'root-snippet-code',
+            $pageSnippetCodes
+        )->getInfo());
+
+        $this->mockDataPoolReader->method('getSnippet')->willReturnMap([
+            [$this->testMetaInfoKey, $testMetaInfoSnippetJson]
+        ]);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubSearchDocumentCollection()
+    {
+        $stubSearchDocument = $this->getMock(SearchDocument::class, [], [], '', false);
+        $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
+        $stubSearchDocumentCollection->method('getDocuments')->willReturn([$stubSearchDocument]);
+        $stubSearchDocumentCollection->method('count')->willReturn(1);
+
+        return $stubSearchDocumentCollection;
+    }
+
+    /**
+     * @return SnippetKeyGeneratorLocator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubSnippetKeyGeneratorLocator()
+    {
+        $mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $mockSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->testMetaInfoKey);
+
+        $stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
+        $stubSnippetKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')->willReturn($mockSnippetKeyGenerator);
+
+        return $stubSnippetKeyGeneratorLocator;
+    }
+
     protected function setUp()
     {
         $this->testMetaInfoKey = 'stub-meta-info-key';
@@ -217,52 +264,5 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->mockMetaInfoSnippet();
         $this->requestHandler->process($this->stubRequest);
-    }
-
-    private function mockMetaInfoSnippet()
-    {
-        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $mockSelectionCriteria */
-        $mockSelectionCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
-        $mockSelectionCriteria->method('jsonSerialize')
-            ->willReturn(['condition' => SearchCriteria::AND_CONDITION, 'criteria' => []]);
-
-        $pageSnippetCodes = ['child-snippet1'];
-
-        $testMetaInfoSnippetJson = json_encode(ProductListingMetaInfoSnippetContent::create(
-            $mockSelectionCriteria,
-            'root-snippet-code',
-            $pageSnippetCodes
-        )->getInfo());
-
-        $this->mockDataPoolReader->method('getSnippet')->willReturnMap([
-            [$this->testMetaInfoKey, $testMetaInfoSnippetJson]
-        ]);
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubSearchDocumentCollection()
-    {
-        $stubSearchDocument = $this->getMock(SearchDocument::class, [], [], '', false);
-        $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
-        $stubSearchDocumentCollection->method('getDocuments')->willReturn([$stubSearchDocument]);
-        $stubSearchDocumentCollection->method('count')->willReturn(1);
-
-        return $stubSearchDocumentCollection;
-    }
-
-    /**
-     * @return SnippetKeyGeneratorLocator|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubSnippetKeyGeneratorLocator()
-    {
-        $mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
-        $mockSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->testMetaInfoKey);
-
-        $stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
-        $stubSnippetKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')->willReturn($mockSnippetKeyGenerator);
-
-        return $stubSnippetKeyGeneratorLocator;
     }
 }
