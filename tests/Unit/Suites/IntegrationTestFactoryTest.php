@@ -2,7 +2,9 @@
 
 namespace Brera\Tests\Integration;
 
+use Brera\DataPool\KeyValue\KeyValueStore;
 use Brera\DataPool\SearchEngine\InMemorySearchEngine;
+use Brera\DataPool\SearchEngine\SearchEngine;
 use Brera\Image\ImageProcessor;
 use Brera\Image\ImageProcessorCollection;
 use Brera\Image\ImageProcessingStrategySequence;
@@ -11,6 +13,7 @@ use Brera\InMemoryLogger;
 use Brera\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
 use Brera\LocalFilesystemStorageReader;
 use Brera\LocalFilesystemStorageWriter;
+use Brera\Queue\Queue;
 use Brera\SampleMasterFactory;
 use Brera\Queue\InMemory\InMemoryQueue;
 use Brera\Utils\LocalFilesystem;
@@ -112,5 +115,57 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
     public function testImageProcessorIsReturned()
     {
         $this->assertInstanceOf(ImageProcessor::class, $this->factory->createImageProcessor());
+    }
+
+    public function testItReturnsTheSameKeyValueStoreInstanceOnMultipleCalls()
+    {
+        $this->assertInstanceOf(KeyValueStore::class, $this->factory->getKeyValueStore());
+        $this->assertSame($this->factory->getKeyValueStore(), $this->factory->getKeyValueStore());
+    }
+
+    public function testItReturnsTheSetKeyValueStore()
+    {
+        $stubKeyValueStore = $this->getMock(KeyValueStore::class);
+        $this->factory->setKeyValueStore($stubKeyValueStore);
+        $this->assertSame($stubKeyValueStore, $this->factory->getKeyValueStore());
+    }
+
+    public function testItReturnsTheSameEventQueueInstanceOnMultipleCalls()
+    {
+        $this->assertInstanceOf(Queue::class, $this->factory->getEventQueue());
+        $this->assertSame($this->factory->getEventQueue(), $this->factory->getEventQueue());
+    }
+
+    public function testItReturnsTheSetEventQueue()
+    {
+        $stubEventQueue = $this->getMock(Queue::class);
+        $this->factory->setEventQueue($stubEventQueue);
+        $this->assertSame($stubEventQueue, $this->factory->getEventQueue());
+    }
+
+    public function testItReturnsTheSameCommandQueueInstanceOnMultipleCalls()
+    {
+        $this->assertInstanceOf(Queue::class, $this->factory->getCommandQueue());
+        $this->assertSame($this->factory->getCommandQueue(), $this->factory->getCommandQueue());
+    }
+
+    public function testItReturnsTheSetCommandQueue()
+    {
+        $stubCommandQueue = $this->getMock(Queue::class);
+        $this->factory->setCommandQueue($stubCommandQueue);
+        $this->assertSame($stubCommandQueue, $this->factory->getCommandQueue());
+    }
+
+    public function testItReturnsTheSameSearchEngineOnMultipleCalls()
+    {
+        $this->assertInstanceOf(SearchEngine::class, $this->factory->getSearchEngine());
+        $this->assertSame($this->factory->getSearchEngine(), $this->factory->getSearchEngine());
+    }
+
+    public function testItReturnsTheSetSearchEngine()
+    {
+        $stubSearchEngine = $this->getMock(SearchEngine::class);
+        $this->factory->setSearchEngine($stubSearchEngine);
+        $this->assertSame($stubSearchEngine, $this->factory->getSearchEngine());
     }
 }

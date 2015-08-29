@@ -3,12 +3,15 @@
 namespace Brera;
 
 use Brera\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
+use Brera\DataPool\KeyValue\KeyValueStore;
 use Brera\DataPool\SearchEngine\InMemorySearchEngine;
+use Brera\DataPool\SearchEngine\SearchEngine;
 use Brera\Image\ImageMagickResizeStrategy;
 use Brera\Image\ImageProcessor;
 use Brera\Image\ImageProcessorCollection;
 use Brera\Image\ImageProcessingStrategySequence;
 use Brera\Queue\InMemory\InMemoryQueue;
+use Brera\Queue\Queue;
 
 class IntegrationTestFactory implements Factory
 {
@@ -18,6 +21,26 @@ class IntegrationTestFactory implements Factory
     const PROCESSED_IMAGE_WIDTH = 40;
     const PROCESSED_IMAGE_HEIGHT = 20;
 
+    /**
+     * @var KeyValueStore
+     */
+    private $keyValueStore;
+
+    /**
+     * @var Queue
+     */
+    private $eventQueue;
+
+    /**
+     * @var Queue
+     */
+    private $commandQueue;
+
+    /**
+     * @var SearchEngine
+     */
+    private $searchEngine;
+    
     /**
      * @return InMemoryKeyValueStore
      */
@@ -137,5 +160,69 @@ class IntegrationTestFactory implements Factory
             return ImageMagickResizeStrategy::class;
         }
         return Image\GdResizeStrategy::class;
+    }
+
+    /**
+     * @return KeyValueStore
+     */
+    public function getKeyValueStore()
+    {
+        if (null === $this->keyValueStore) {
+            $this->keyValueStore = $this->createKeyValueStore();
+        }
+        return $this->keyValueStore;
+    }
+
+    public function setKeyValueStore(KeyValueStore $keyValueStore)
+    {
+        $this->keyValueStore = $keyValueStore;
+    }
+
+    /**
+     * @return Queue
+     */
+    public function getEventQueue()
+    {
+        if (null === $this->eventQueue) {
+            $this->eventQueue = $this->createEventQueue();
+        }
+        return $this->eventQueue;
+    }
+
+    public function setEventQueue(Queue $eventQueue)
+    {
+        $this->eventQueue = $eventQueue;
+    }
+
+    /**
+     * @return Queue
+     */
+    public function getCommandQueue()
+    {
+        if (null === $this->commandQueue) {
+            $this->commandQueue = $this->createCommandQueue();
+        }
+        return $this->commandQueue;
+    }
+
+    public function setCommandQueue(Queue $commandQueue)
+    {
+        $this->commandQueue = $commandQueue;
+    }
+
+    /**
+     * @return SearchEngine
+     */
+    public function getSearchEngine()
+    {
+        if (null === $this->searchEngine) {
+            $this->searchEngine = $this->createSearchEngine();
+        }
+        return $this->searchEngine;
+    }
+
+    public function setSearchEngine(SearchEngine $searchEngine)
+    {
+        $this->searchEngine = $searchEngine;
     }
 }

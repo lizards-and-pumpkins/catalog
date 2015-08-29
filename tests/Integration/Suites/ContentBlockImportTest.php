@@ -9,7 +9,6 @@ use Brera\Http\HttpUrl;
 
 class ContentBlockImportTest extends AbstractIntegrationTest
 {
-
     public function testContentBlockSnippetIsWrittenIntoDataPool()
     {
         $contentBlockContent = 'bar';
@@ -23,7 +22,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
         
-        $factory = $this->prepareIntegrationTestMasterFactory($request);
+        $factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
 
         $domainCommandQueue = $factory->getCommandQueue();
         $this->assertEquals(0, $domainCommandQueue->count());

@@ -20,6 +20,26 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
      */
     private $factory;
 
+    /**
+     * @param string $importFileName
+     */
+    private function importCatalog($importFileName)
+    {
+        $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
+        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.catalog_import.v1+json']);
+        $httpRequestBodyString = json_encode(['fileName' => $importFileName]);
+        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
+        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
+
+        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+
+        $website = new InjectableSampleWebFront($request, $this->factory);
+        $website->runWithoutSendingResponse();
+
+        $this->factory->createCommandConsumer()->process();
+        $this->factory->createDomainEventConsumer()->process();
+    }
+
     public function testCatalogImportDomainEventPutsProductToKeyValueStoreAndSearchIndex()
     {
         $sku = SampleSku::fromString('118235-251');
@@ -100,9 +120,6 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
 
     public function testImportedProductIsAccessibleFromTheFrontend()
     {
-        // TODO: Test is broken, the import and the following request should initialize their own WebFront instances,
-        // TODO: thus sharing the data pool and queue needs to be handled properly.
-
         $this->importCatalog('catalog.xml');
 
         $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
@@ -114,8 +131,8 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $httpHeaders = HttpHeaders::fromArray([]);
         $httpRequestBody = HttpRequestBody::fromString('');
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
+        $this->prepareIntegrationTestMasterFactoryForRequest($request);
         
-
         $website = new InjectableSampleWebFront($request, $this->factory);
         $response = $website->runWithoutSendingResponse();
 
@@ -134,12 +151,9 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $response = $website->runWithoutSendingResponse();
         $this->assertInstanceOf(HttpResourceNotFoundResponse::class, $response);
     }
-
+    
     public function testProductsWithValidDataAreImportedAndInvalidDataAreNotImportedButLogged()
     {
-        // TODO: Test is broken, the import and the following request should initialize their own WebFront instances,
-        // TODO: thus sharing the data pool and queue needs to be handled properly.
-
         $this->importCatalog('catalog-with-invalid-product.xml');
 
         $dataPoolReader = $this->factory->createDataPoolReader();
@@ -186,24 +200,5 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
                 $this->fail($messageString);
             }
         }
-    }
-        /**
-     * @param string $importFileName
-     */
-    private function importCatalog($importFileName)
-    {
-        $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
-        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.catalog_import.v1+json']);
-        $httpRequestBodyString = json_encode(['fileName' => $importFileName]);
-        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
-        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
-
-        $this->factory = $this->prepareIntegrationTestMasterFactory($request);
-
-        $website = new InjectableSampleWebFront($request, $this->factory);
-        $website->runWithoutSendingResponse();
-
-        $this->factory->createCommandConsumer()->process();
-        $this->factory->createDomainEventConsumer()->process();
     }
 }

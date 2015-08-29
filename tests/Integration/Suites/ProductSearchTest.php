@@ -12,83 +12,9 @@ use Brera\Product\ProductSearchResultMetaSnippetRenderer;
 class ProductSearchTest extends AbstractIntegrationTest
 {
     /**
-     * @var HttpRequest
-     */
-    private $request;
-
-    /**
      * @var SampleMasterFactory
      */
     private $factory;
-
-    protected function setUp()
-    {
-        $this->request = HttpRequest::fromParameters(
-            HttpRequest::METHOD_GET,
-            HttpUrl::fromString('http://example.com/'),
-            HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
-        );
-
-        $this->factory = $this->prepareIntegrationTestMasterFactory($this->request);
-    }
-    
-    public function testProductSearchResultMetaSnippetIsWrittenIntoDataPool()
-    {
-        $this->addTemplateWasUpdatedDomainEventToSetupProductListingFixture();
-
-        $contextSource = $this->factory->createContextSource();
-        $context = $contextSource->getAllAvailableContexts()[1];
-
-        $metaInfoSnippetKeyGenerator = $this->factory->createProductSearchResultMetaSnippetKeyGenerator();
-        $metaInfoSnippetKey = $metaInfoSnippetKeyGenerator->getKeyForContext($context, []);
-
-        $dataPoolReader = $this->factory->createDataPoolReader();
-        $metaInfoSnippet = $dataPoolReader->getSnippet($metaInfoSnippetKey);
-
-        $expectedMetaInfoContent = [
-            'root_snippet_code'  => 'product_listing',
-            'page_snippet_codes' => [
-                'product_listing',
-                'global_notices',
-                'breadcrumbsContainer',
-                'global_messages',
-                'content_block_in_product_listing',
-                'before_body_end'
-            ]
-        ];
-
-        $this->assertSame(json_encode($expectedMetaInfoContent), $metaInfoSnippet);
-    }
-
-    public function testProductListingPageHtmlIsReturned()
-    {
-        // TODO: Test is broken, the import and the following request should initialize their own WebFront instances,
-        // TODO: thus sharing the data pool and queue needs to be handled properly.
-
-        $this->importCatalog();
-        $this->addTemplateWasUpdatedDomainEventToSetupProductListingFixture();
-
-        $this->registerProductSearchResultMetaSnippetKeyGenerator();
-
-        $request = HttpRequest::fromParameters(
-            HttpRequest::METHOD_GET,
-            HttpUrl::fromString('http://example.com/catalogsearch/result/?q=adi'),
-            HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
-        );
-
-        $productSearchResultRequestHandler = $this->getProductSearchRequestHandler();
-        $page = $productSearchResultRequestHandler->process($request);
-        $body = $page->getBody();
-
-        /* TODO: read from XML */
-        $expectedProductName = 'Adilette';
-        $unExpectedProductName = 'LED Armflasher';
-
-        $this->assertContains($expectedProductName, $body);
-        $this->assertNotContains($unExpectedProductName, $body);
-    }
 
     private function addTemplateWasUpdatedDomainEventToSetupProductListingFixture()
     {
@@ -97,6 +23,8 @@ class ProductSearchTest extends AbstractIntegrationTest
         $httpRequestBodyString = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.json');
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
+
+        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
 
         $website = new InjectableSampleWebFront($request, $this->factory);
         $website->runWithoutSendingResponse();
@@ -112,6 +40,8 @@ class ProductSearchTest extends AbstractIntegrationTest
         $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
+
+        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
 
         $website = new InjectableSampleWebFront($request, $this->factory);
         $website->runWithoutSendingResponse();
@@ -146,5 +76,60 @@ class ProductSearchTest extends AbstractIntegrationTest
             ProductSearchResultMetaSnippetRenderer::CODE,
             $this->factory->createProductSearchResultMetaSnippetKeyGenerator()
         );
+    }
+
+    public function testProductSearchResultMetaSnippetIsWrittenIntoDataPool()
+    {
+        $this->addTemplateWasUpdatedDomainEventToSetupProductListingFixture();
+
+        $contextSource = $this->factory->createContextSource();
+        $context = $contextSource->getAllAvailableContexts()[1];
+
+        $metaInfoSnippetKeyGenerator = $this->factory->createProductSearchResultMetaSnippetKeyGenerator();
+        $metaInfoSnippetKey = $metaInfoSnippetKeyGenerator->getKeyForContext($context, []);
+
+        $dataPoolReader = $this->factory->createDataPoolReader();
+        $metaInfoSnippet = $dataPoolReader->getSnippet($metaInfoSnippetKey);
+
+        $expectedMetaInfoContent = [
+            'root_snippet_code'  => 'product_listing',
+            'page_snippet_codes' => [
+                'product_listing',
+                'global_notices',
+                'breadcrumbsContainer',
+                'global_messages',
+                'content_block_in_product_listing',
+                'before_body_end'
+            ]
+        ];
+
+        $this->assertSame(json_encode($expectedMetaInfoContent), $metaInfoSnippet);
+    }
+
+    public function testProductListingPageHtmlIsReturned()
+    {
+        $this->importCatalog();
+        $this->addTemplateWasUpdatedDomainEventToSetupProductListingFixture();
+
+        $request = HttpRequest::fromParameters(
+            HttpRequest::METHOD_GET,
+            HttpUrl::fromString('http://example.com/catalogsearch/result/?q=adi'),
+            HttpHeaders::fromArray([]),
+            HttpRequestBody::fromString('')
+        );
+        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+        
+        $this->registerProductSearchResultMetaSnippetKeyGenerator();
+        
+        $productSearchResultRequestHandler = $this->getProductSearchRequestHandler();
+        $page = $productSearchResultRequestHandler->process($request);
+        $body = $page->getBody();
+
+        /* TODO: read from XML */
+        $expectedProductName = 'Adilette';
+        $unExpectedProductName = 'LED Armflasher';
+
+        $this->assertContains($expectedProductName, $body);
+        $this->assertNotContains($unExpectedProductName, $body);
     }
 }

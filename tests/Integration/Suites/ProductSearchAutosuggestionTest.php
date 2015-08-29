@@ -16,32 +16,82 @@ use Brera\Product\SampleSku;
 class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
 {
     /**
-     * @var HttpRequest
-     */
-    private $request;
-
-    /**
      * @var SampleMasterFactory
      */
     private $factory;
 
-    protected function setUp()
+    private function importCatalog()
     {
-        $this->request = HttpRequest::fromParameters(
-            HttpRequest::METHOD_GET,
-            HttpUrl::fromString('http://example.com/'),
-            HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
+        $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
+        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.catalog_import.v1+json']);
+        $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
+        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
+        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
+
+        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+
+        $website = new InjectableSampleWebFront($request, $this->factory);
+        $website->runWithoutSendingResponse();
+
+        $this->factory->createCommandConsumer()->process();
+        $this->factory->createDomainEventConsumer()->process();
+    }
+
+    private function createSearchAutosuggestionSnippet()
+    {
+        $httpUrl = HttpUrl::fromString('http://example.com/api/templates/product_search_autosuggestion');
+        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.templates.v1+json']);
+        $httpRequestBodyString = '[]';
+        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
+        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
+
+        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+
+        $website = new InjectableSampleWebFront($request, $this->factory);
+        $website->runWithoutSendingResponse();
+
+        $this->factory->createCommandConsumer()->process();
+        $this->factory->createDomainEventConsumer()->process();
+    }
+
+    /**
+     * @return ProductSearchAutosuggestionRequestHandler
+     */
+    private function getProductSearchAutosuggestionRequestHandler()
+    {
+        $dataPoolReader = $this->factory->createDataPoolReader();
+        $pageBuilder = new PageBuilder(
+            $dataPoolReader,
+            $this->factory->getSnippetKeyGeneratorLocator(),
+            $this->factory->getLogger()
         );
 
-        $this->factory = $this->prepareIntegrationTestMasterFactory($this->request);
+        return new ProductSearchAutosuggestionRequestHandler(
+            $this->factory->createContext(),
+            $dataPoolReader,
+            $pageBuilder,
+            $this->factory->getSnippetKeyGeneratorLocator()
+        );
+    }
+
+    private function registerProductSearchAutosuggestionMetaSnippetKeyGenerator()
+    {
+        $this->factory->getSnippetKeyGeneratorLocator()->register(
+            ProductSearchAutosuggestionMetaSnippetRenderer::CODE,
+            $this->factory->createProductSearchAutosuggestionMetaSnippetKeyGenerator()
+        );
+    }
+
+    private function registerProductInSearchAutosuggestionSnippetKeyGenerator()
+    {
+        $this->factory->getSnippetKeyGeneratorLocator()->register(
+            ProductInSearchAutosuggestionSnippetRenderer::CODE,
+            $this->factory->createProductInSearchAutosuggestionSnippetKeyGenerator()
+        );
     }
 
     public function testProductInSearchAutosuggestionSnippetsAreAddedToDataPool()
     {
-        // TODO: Test is broken, the import and the following request should initialize their own WebFront instances,
-        // TODO: thus sharing the data pool and queue needs to be handled properly.
-
         $this->importCatalog();
 
         $sku = SampleSku::fromString('118235-251');
@@ -87,14 +137,8 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
 
     public function testSearchAutosuggestionHtmlIsReturned()
     {
-        // TODO: Test is broken, the import and the following request should initialize their own WebFront instances,
-        // TODO: thus sharing the data pool and queue needs to be handled properly.
-
         $this->importCatalog();
         $this->createSearchAutosuggestionSnippet();
-
-        $this->registerProductSearchAutosuggestionMetaSnippetKeyGenerator();
-        $this->registerProductInSearchAutosuggestionSnippetKeyGenerator();
 
         $request = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
@@ -102,6 +146,11 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
             HttpHeaders::fromArray([]),
             HttpRequestBody::fromString('')
         );
+
+        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+
+        $this->registerProductSearchAutosuggestionMetaSnippetKeyGenerator();
+        $this->registerProductInSearchAutosuggestionSnippetKeyGenerator();
 
         $productSearchAutosuggestionRequestHandler = $this->getProductSearchAutosuggestionRequestHandler();
         $page = $productSearchAutosuggestionRequestHandler->process($request);
@@ -114,71 +163,5 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
 
         $this->assertContains($expectedProductName, $body);
         $this->assertNotContains($unExpectedProductName, $body);
-    }
-
-    private function importCatalog()
-    {
-        $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
-        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.catalog_import.v1+json']);
-        $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
-        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
-        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
-
-        $website = new InjectableSampleWebFront($request, $this->factory);
-        $website->runWithoutSendingResponse();
-
-        $this->factory->createCommandConsumer()->process();
-        $this->factory->createDomainEventConsumer()->process();
-    }
-
-    private function createSearchAutosuggestionSnippet()
-    {
-        $httpUrl = HttpUrl::fromString('http://example.com/api/templates/product_search_autosuggestion');
-        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.templates.v1+json']);
-        $httpRequestBodyString = '[]';
-        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
-        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
-
-        $website = new InjectableSampleWebFront($request, $this->factory);
-        $website->runWithoutSendingResponse();
-
-        $this->factory->createCommandConsumer()->process();
-        $this->factory->createDomainEventConsumer()->process();
-    }
-
-    /**
-     * @return ProductSearchAutosuggestionRequestHandler
-     */
-    private function getProductSearchAutosuggestionRequestHandler()
-    {
-        $dataPoolReader = $this->factory->createDataPoolReader();
-        $pageBuilder = new PageBuilder(
-            $dataPoolReader,
-            $this->factory->getSnippetKeyGeneratorLocator(),
-            $this->factory->getLogger()
-        );
-
-        return new ProductSearchAutosuggestionRequestHandler(
-            $this->factory->createContext(),
-            $dataPoolReader,
-            $pageBuilder,
-            $this->factory->getSnippetKeyGeneratorLocator()
-        );
-    }
-
-    private function registerProductSearchAutosuggestionMetaSnippetKeyGenerator()
-    {
-        $this->factory->getSnippetKeyGeneratorLocator()->register(
-            ProductSearchAutosuggestionMetaSnippetRenderer::CODE,
-            $this->factory->createProductSearchAutosuggestionMetaSnippetKeyGenerator()
-        );
-    }
-
-    private function registerProductInSearchAutosuggestionSnippetKeyGenerator()
-    {
-        $this->factory->getSnippetKeyGeneratorLocator()->register(
-            ProductInSearchAutosuggestionSnippetRenderer::CODE,
-            $this->factory->createProductInSearchAutosuggestionSnippetKeyGenerator()
-        );
     }
 }
