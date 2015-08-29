@@ -16,7 +16,6 @@ trait FactoryTrait
 
     /**
      * @return MasterFactory
-     * @throws NoMasterFactorySetException
      */
     protected function getMasterFactory()
     {

@@ -56,7 +56,6 @@ abstract class HttpRequest
      * @param HttpHeaders $headers
      * @param HttpRequestBody $body
      * @return HttpRequest
-     * @throws UnsupportedRequestMethodException
      */
     public static function fromParameters($requestMethod, HttpUrl $url, HttpHeaders $headers, HttpRequestBody $body)
     {

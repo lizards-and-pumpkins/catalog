@@ -162,9 +162,6 @@ class XPathParser
         }
     }
 
-    /**
-     * @throws \OutOfBoundsException
-     */
     private function validateNoErrors()
     {
         $errors = libxml_get_errors();

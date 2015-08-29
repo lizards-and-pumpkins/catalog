@@ -90,8 +90,6 @@ class ContextBuilder
     /**
      * @param string $code
      * @param string $decoratorClass
-     * @throws ContextDecoratorNotFoundException
-     * @throws InvalidContextDecoratorClassException
      */
     private function validateDecoratorClass($code, $decoratorClass)
     {

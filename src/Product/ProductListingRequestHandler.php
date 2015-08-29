@@ -64,7 +64,6 @@ class ProductListingRequestHandler implements HttpRequestHandler
     /**
      * @param HttpRequest $request
      * @return HttpResponse
-     * @throws UnableToHandleRequestException
      */
     public function process(HttpRequest $request)
     {

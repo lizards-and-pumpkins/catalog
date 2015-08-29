@@ -42,7 +42,6 @@ class LocalFilesystemStorageReader implements FileStorageReader
 
     /**
      * @param string $filePath
-     * @throws FileNotReadableException
      */
     private function checkIfFileIsReadable($filePath)
     {

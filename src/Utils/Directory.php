@@ -20,8 +20,6 @@ class Directory
     /**
      * @param string $directoryPath
      * @return Directory
-     * @throws InvalidDirectoryPathException
-     * @throws FileAlreadyExistsWithinGivenPathException
      */
     public static function fromPath($directoryPath)
     {

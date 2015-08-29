@@ -19,7 +19,6 @@ class SampleSku implements Sku
 
     /**
      * @param string $skuString
-     * @throws InvalidSkuException
      * @return SampleSku
      */
     public static function fromString($skuString)

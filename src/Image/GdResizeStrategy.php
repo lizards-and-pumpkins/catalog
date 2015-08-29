@@ -39,7 +39,6 @@ class GdResizeStrategy implements ImageProcessingStrategy
     /**
      * @param string $binaryImageData
      * @return mixed[]
-     * @throws InvalidBinaryImageDataException
      */
     private function getImageInfo($binaryImageData)
     {
@@ -63,7 +62,6 @@ class GdResizeStrategy implements ImageProcessingStrategy
 
     /**
      * @param mixed[] $imageInfo
-     * @throws InvalidBinaryImageDataException
      */
     private function validateImageType(array $imageInfo)
     {

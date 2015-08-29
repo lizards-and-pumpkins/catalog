@@ -12,7 +12,6 @@ class HttpRouterChain implements HttpRouter
     /**
      * @param HttpRequest $request
      * @return HttpRequestHandler
-     * @throws UnableToRouteRequestException
      */
     public function route(HttpRequest $request)
     {

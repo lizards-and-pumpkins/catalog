@@ -14,9 +14,6 @@ trait ResizeStrategyTrait
      */
     private $height;
 
-    /**
-     * @throws InvalidImageDimensionException
-     */
     private function validateImageDimensions()
     {
         if (!is_int($this->width)) {

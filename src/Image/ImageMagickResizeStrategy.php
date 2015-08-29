@@ -19,7 +19,6 @@ class ImageMagickResizeStrategy implements ImageProcessingStrategy
     /**
      * @param string $binaryImageData
      * @return string
-     * @throws InvalidBinaryImageDataException
      */
     public function processBinaryImageData($binaryImageData)
     {

@@ -13,7 +13,6 @@ class ProductBlock extends Block
     /**
      * @param string $attributeCode
      * @return string
-     * @throws ProductAttributeNotFoundException
      */
     public function getFirstValueOfProductAttribute($attributeCode)
     {

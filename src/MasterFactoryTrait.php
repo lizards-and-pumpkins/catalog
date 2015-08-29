@@ -32,7 +32,6 @@ trait MasterFactoryTrait
      * @param string $method
      * @param mixed[] $parameters
      * @return mixed
-     * @throws UndefinedFactoryMethodException
      */
     final public function __call($method, array $parameters)
     {

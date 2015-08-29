@@ -12,8 +12,6 @@ class DataVersion
     /**
      * @param string $version
      * @return DataVersion
-     * @throws EmptyVersionException
-     * @throws InvalidVersionException
      */
     public static function fromVersionString($version)
     {

@@ -85,7 +85,6 @@ class ProductListingMetaInfoSnippetContent implements PageMetaInfoSnippetContent
     /**
      * @param string $json
      * @return mixed[]
-     * @throws \OutOfBoundsException
      */
     private static function decodeJson($json)
     {
@@ -148,7 +147,6 @@ class ProductListingMetaInfoSnippetContent implements PageMetaInfoSnippetContent
     /**
      * @param mixed[] $metaInfo
      * @return SearchCriteria
-     * @throws MalformedSearchCriteriaMetaException
      */
     private static function createSearchCriteriaFromMetaInfo(array $metaInfo)
     {

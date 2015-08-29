@@ -23,8 +23,6 @@ class SnippetKeyGeneratorLocator
 
     /**
      * @param string $snippetCode
-     * @throws InvalidSnippetCodeException
-     * @throws SnippetKeyGeneratorNotRegisteredException
      */
     private function validateSnippetCode($snippetCode)
     {
