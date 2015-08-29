@@ -15,7 +15,69 @@ class ProductSearchTest extends AbstractIntegrationTest
      * @var SampleMasterFactory
      */
     private $factory;
-    
+
+    private function addTemplateWasUpdatedDomainEventToSetupProductListingFixture()
+    {
+        $httpUrl = HttpUrl::fromString('http://example.com/api/templates/product_listing');
+        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.templates.v1+json']);
+        $httpRequestBodyString = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.json');
+        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
+        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
+
+        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+
+        $website = new InjectableSampleWebFront($request, $this->factory);
+        $website->runWithoutSendingResponse();
+
+        $this->factory->createCommandConsumer()->process();
+        $this->factory->createDomainEventConsumer()->process();
+    }
+
+    private function importCatalog()
+    {
+        $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
+        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.catalog_import.v1+json']);
+        $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
+        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
+        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
+
+        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+
+        $website = new InjectableSampleWebFront($request, $this->factory);
+        $website->runWithoutSendingResponse();
+
+        $this->factory->createCommandConsumer()->process();
+        $this->factory->createDomainEventConsumer()->process();
+    }
+
+    /**
+     * @return ProductSearchRequestHandler
+     */
+    private function getProductSearchRequestHandler()
+    {
+        $dataPoolReader = $this->factory->createDataPoolReader();
+        $pageBuilder = new PageBuilder(
+            $dataPoolReader,
+            $this->factory->getSnippetKeyGeneratorLocator(),
+            $this->factory->getLogger()
+        );
+
+        return new ProductSearchRequestHandler(
+            $this->factory->createContext(),
+            $dataPoolReader,
+            $pageBuilder,
+            $this->factory->getSnippetKeyGeneratorLocator()
+        );
+    }
+
+    private function registerProductSearchResultMetaSnippetKeyGenerator()
+    {
+        $this->factory->getSnippetKeyGeneratorLocator()->register(
+            ProductSearchResultMetaSnippetRenderer::CODE,
+            $this->factory->createProductSearchResultMetaSnippetKeyGenerator()
+        );
+    }
+
     public function testProductSearchResultMetaSnippetIsWrittenIntoDataPool()
     {
         $this->addTemplateWasUpdatedDomainEventToSetupProductListingFixture();
@@ -69,67 +131,5 @@ class ProductSearchTest extends AbstractIntegrationTest
 
         $this->assertContains($expectedProductName, $body);
         $this->assertNotContains($unExpectedProductName, $body);
-    }
-
-    private function addTemplateWasUpdatedDomainEventToSetupProductListingFixture()
-    {
-        $httpUrl = HttpUrl::fromString('http://example.com/api/templates/product_listing');
-        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.templates.v1+json']);
-        $httpRequestBodyString = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.json');
-        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
-        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
-
-        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-        
-        $website = new InjectableSampleWebFront($request, $this->factory);
-        $website->runWithoutSendingResponse();
-
-        $this->factory->createCommandConsumer()->process();
-        $this->factory->createDomainEventConsumer()->process();
-    }
-
-    private function importCatalog()
-    {
-        $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
-        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.catalog_import.v1+json']);
-        $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
-        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
-        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
-
-        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-        
-        $website = new InjectableSampleWebFront($request, $this->factory);
-        $website->runWithoutSendingResponse();
-
-        $this->factory->createCommandConsumer()->process();
-        $this->factory->createDomainEventConsumer()->process();
-    }
-
-    /**
-     * @return ProductSearchRequestHandler
-     */
-    private function getProductSearchRequestHandler()
-    {
-        $dataPoolReader = $this->factory->createDataPoolReader();
-        $pageBuilder = new PageBuilder(
-            $dataPoolReader,
-            $this->factory->getSnippetKeyGeneratorLocator(),
-            $this->factory->getLogger()
-        );
-
-        return new ProductSearchRequestHandler(
-            $this->factory->createContext(),
-            $dataPoolReader,
-            $pageBuilder,
-            $this->factory->getSnippetKeyGeneratorLocator()
-        );
-    }
-
-    private function registerProductSearchResultMetaSnippetKeyGenerator()
-    {
-        $this->factory->getSnippetKeyGeneratorLocator()->register(
-            ProductSearchResultMetaSnippetRenderer::CODE,
-            $this->factory->createProductSearchResultMetaSnippetKeyGenerator()
-        );
     }
 }

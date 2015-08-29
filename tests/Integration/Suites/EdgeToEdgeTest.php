@@ -20,6 +20,26 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
      */
     private $factory;
 
+    /**
+     * @param string $importFileName
+     */
+    private function importCatalog($importFileName)
+    {
+        $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
+        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.catalog_import.v1+json']);
+        $httpRequestBodyString = json_encode(['fileName' => $importFileName]);
+        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
+        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
+
+        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+
+        $website = new InjectableSampleWebFront($request, $this->factory);
+        $website->runWithoutSendingResponse();
+
+        $this->factory->createCommandConsumer()->process();
+        $this->factory->createDomainEventConsumer()->process();
+    }
+
     public function testCatalogImportDomainEventPutsProductToKeyValueStoreAndSearchIndex()
     {
         $sku = SampleSku::fromString('118235-251');
@@ -131,7 +151,6 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $response = $website->runWithoutSendingResponse();
         $this->assertInstanceOf(HttpResourceNotFoundResponse::class, $response);
     }
-
     public function testProductsWithValidDataAreImportedAndInvalidDataAreNotImportedButLogged()
     {
         $this->importCatalog('catalog-with-invalid-product.xml');
@@ -180,24 +199,5 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
                 $this->fail($messageString);
             }
         }
-    }
-        /**
-     * @param string $importFileName
-     */
-    private function importCatalog($importFileName)
-    {
-        $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
-        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.catalog_import.v1+json']);
-        $httpRequestBodyString = json_encode(['fileName' => $importFileName]);
-        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
-        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
-
-        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-
-        $website = new InjectableSampleWebFront($request, $this->factory);
-        $website->runWithoutSendingResponse();
-
-        $this->factory->createCommandConsumer()->process();
-        $this->factory->createDomainEventConsumer()->process();
     }
 }

@@ -21,53 +21,6 @@ class FrontendRenderingTest extends AbstractIntegrationTest
      */
     private $factory;
 
-    public function testPageIsRenderedFromAnUrlWithoutVariablesInSnippets()
-    {
-        $url = HttpUrl::fromString('http://example.com/product1');
-        $urlKey = $url->getPathRelativeToWebFront();
-        $request = HttpRequest::fromParameters(
-            HttpRequest::METHOD_GET,
-            $url,
-            HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
-        );
-        
-        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-        
-        $context = new VersionedContext(DataVersion::fromVersionString('1'));
-        $snippetKeyGeneratorLocator = $this->factory->getSnippetKeyGeneratorLocator();
-        $productDetailPageMetaSnippetKeyGenerator = $this->factory->createProductDetailPageMetaSnippetKeyGenerator();
-        $productDetailPageMetaSnippetKey = $productDetailPageMetaSnippetKeyGenerator->getKeyForContext(
-            $context,
-            ['url_key' => $urlKey]
-        );
-
-
-        $this->addPageMetaInfoFixtureToKeyValueStorage(
-            $snippetKeyGeneratorLocator,
-            $productDetailPageMetaSnippetKey,
-            $context
-        );
-
-        $dataPoolReader = $this->factory->createDataPoolReader();
-        $logger = $this->factory->getLogger();
-
-        $pageBuilder = new ProductDetailViewRequestHandler(
-            $context,
-            $dataPoolReader,
-            new PageBuilder($dataPoolReader, $snippetKeyGeneratorLocator, $logger),
-            $productDetailPageMetaSnippetKeyGenerator
-        );
-        $page = $pageBuilder->process($request);
-        $body = $page->getBody();
-
-        $this->failIfMessagesWhereLogged($logger);
-
-        $expected = '<html><head><title>Page Title</title></head><body><h1>Headline</h1></body></html>';
-
-        $this->assertEquals($expected, $body);
-    }
-
     /**
      * @param SnippetKeyGeneratorLocator $snippetKeyGeneratorLocator
      * @param string $productDetailPageMetaSnippetKey
@@ -119,5 +72,52 @@ class FrontendRenderingTest extends AbstractIntegrationTest
         $key = $bodySnippetKeyGenerator->getKeyForContext($context, ['product_id' => $this->testProductId]);
         $bodySnippet = Snippet::create($key, '<h1>Headline</h1>');
         $dataPoolWriter->writeSnippet($bodySnippet);
+    }
+
+    public function testPageIsRenderedFromAnUrlWithoutVariablesInSnippets()
+    {
+        $url = HttpUrl::fromString('http://example.com/product1');
+        $urlKey = $url->getPathRelativeToWebFront();
+        $request = HttpRequest::fromParameters(
+            HttpRequest::METHOD_GET,
+            $url,
+            HttpHeaders::fromArray([]),
+            HttpRequestBody::fromString('')
+        );
+        
+        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+        
+        $context = new VersionedContext(DataVersion::fromVersionString('1'));
+        $snippetKeyGeneratorLocator = $this->factory->getSnippetKeyGeneratorLocator();
+        $productDetailPageMetaSnippetKeyGenerator = $this->factory->createProductDetailPageMetaSnippetKeyGenerator();
+        $productDetailPageMetaSnippetKey = $productDetailPageMetaSnippetKeyGenerator->getKeyForContext(
+            $context,
+            ['url_key' => $urlKey]
+        );
+
+
+        $this->addPageMetaInfoFixtureToKeyValueStorage(
+            $snippetKeyGeneratorLocator,
+            $productDetailPageMetaSnippetKey,
+            $context
+        );
+
+        $dataPoolReader = $this->factory->createDataPoolReader();
+        $logger = $this->factory->getLogger();
+
+        $pageBuilder = new ProductDetailViewRequestHandler(
+            $context,
+            $dataPoolReader,
+            new PageBuilder($dataPoolReader, $snippetKeyGeneratorLocator, $logger),
+            $productDetailPageMetaSnippetKeyGenerator
+        );
+        $page = $pageBuilder->process($request);
+        $body = $page->getBody();
+
+        $this->failIfMessagesWhereLogged($logger);
+
+        $expected = '<html><head><title>Page Title</title></head><body><h1>Headline</h1></body></html>';
+
+        $this->assertEquals($expected, $body);
     }
 }
