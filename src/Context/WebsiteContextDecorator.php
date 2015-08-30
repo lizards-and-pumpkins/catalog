@@ -89,7 +89,7 @@ class WebsiteContextDecorator extends ContextDecorator
      */
     private function getWebsiteFromRequestPath()
     {
-        $path = $this->getRequest()->getUrl()->getPathRelativeToWebFront();
+        $path = $this->getRequest()->getUrlPathRelativeToWebFront();
         if ('' === $path) {
             return '';
         }
