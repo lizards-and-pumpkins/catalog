@@ -24,7 +24,7 @@ class LocaleContextDecoratorTest extends ContextDecoratorTestAbstract
      */
     protected function getDecoratorUnderTestCode()
     {
-        return 'locale';
+        return LocaleContextDecorator::CODE;
     }
 
     /**
