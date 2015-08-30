@@ -58,7 +58,7 @@ class LocaleContextDecorator extends ContextDecorator
     private function getLocaleFromRequestPath()
     {
         $firstPathPart = $this->getFirstRequestPathPart();
-        return substr($firstPathPart, strpos($firstPathPart, '_') + 1);
+        return (string) substr($firstPathPart, strpos($firstPathPart, '_') + 1);
     }
 
     /**

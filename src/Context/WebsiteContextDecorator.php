@@ -102,9 +102,8 @@ class WebsiteContextDecorator extends ContextDecorator
     private function getFirstRequestPathPart()
     {
         $path = $this->getRequest()->getUrlPathRelativeToWebFront();
-        if ('' === $path) {
-            return '';
-        }
-        return explode('/', $path, 2)[0];
+        return '' !== $path ?
+            explode('/', $path, 2)[0] :
+            '';
     }
 }
