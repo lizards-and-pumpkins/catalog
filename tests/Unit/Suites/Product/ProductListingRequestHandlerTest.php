@@ -251,7 +251,8 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testSelectedFiltersAreAppliedToCollection()
     {
-        $this->stubUrl->method('getQueryParameter')->with($this->testFilterNavigationAttributeCode)->willReturn('bar');
+        $this->stubRequest->method('getQueryParameter')->with($this->testFilterNavigationAttributeCode)
+            ->willReturn('bar');
 
         $mockFilteredSearchDocumentCollection = $this->createStubSearchDocumentCollection();
         $mockInitialSearchDocumentCollection = $this->createStubSearchDocumentCollection();

@@ -53,10 +53,10 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
     {
         $urlString = ProductSearchAutosuggestionRequestHandler::SEARCH_RESULTS_SLUG;
         $this->stubHttpUrl->method('getPathRelativeToWebFront')->willReturn($urlString);
-        $this->stubHttpUrl->method('getQueryParameter')
+        $this->stubHttpRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
+        $this->stubHttpRequest->method('getQueryParameter')
             ->with(ProductSearchAutosuggestionRequestHandler::QUERY_STRING_PARAMETER_NAME)
             ->willReturn($queryString);
-        $this->stubHttpRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
     }
 
     /**

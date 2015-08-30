@@ -104,7 +104,7 @@ class HttpUrl
         $requestQuery = $this->url->getQuery();
 
         if (!isset($requestQuery[$parameterName])) {
-            return null;
+            return '';
         }
 
         return $requestQuery[$parameterName];

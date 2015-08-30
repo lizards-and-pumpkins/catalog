@@ -251,11 +251,10 @@ class ProductListingRequestHandler implements HttpRequestHandler
             return $searchDocumentCollection;
         }
 
-        // TODO: Refactor this mess. Maybe move it into HttpRequest or HttpUrl
-        $url = $request->getUrl();
+        // TODO: Refactor this mess. Maybe move it into HttpRequest
         $filtersCriteria = SearchCriteria::createAnd();
         foreach ($this->filterNavigationAttributeCodes as $attributeCode) {
-            $rawAttributeValue = $url->getQueryParameter($attributeCode);
+            $rawAttributeValue = $request->getQueryParameter($attributeCode);
 
             if (!trim($rawAttributeValue)) {
                 continue;

@@ -70,7 +70,7 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
             throw new UnableToHandleRequestException('Unable to handle ProductSearchAutosuggestion request.');
         }
 
-        $searchQueryString = $request->getUrl()->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
+        $searchQueryString = $request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
         $searchDocumentsCollection = $this->dataPoolReader->getSearchResults($searchQueryString, $this->context);
 
         $this->addSearchResultsToPageBuilder($searchDocumentsCollection);
@@ -101,7 +101,7 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
             return false;
         }
 
-        $searchQueryString = $request->getUrl()->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
+        $searchQueryString = $request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
 
         if (null === $searchQueryString || self::SEARCH_QUERY_MINIMUM_LENGTH > strlen($searchQueryString)) {
             return false;

@@ -84,4 +84,29 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
         $result = HttpRequest::fromGlobalState($testRequestBody);
         $this->assertSame($testRequestBody, $result->getRawBody());
     }
+    
+    public function testEmptyStringIsReturnedIfParameterIsAbsentInRequestQuery()
+    {
+        $result = HttpRequest::fromGlobalState();
+        $this->assertSame('', $result->getQueryParameter('foo'));
+    }
+
+    public function testQueryParameterIsReturned()
+    {
+        $queryParameterName = 'foo';
+        $queryParameterValue = 'bar';
+
+        /** @var HttpUrl|\PHPUnit_Framework_MockObject_MockObject $stubHttpUrl */
+        $stubHttpUrl = $this->getMock(HttpUrl::class, [], [], '', false);
+        $stubHttpUrl->method('getQueryParameter')->with($queryParameterName)->willReturn($queryParameterValue);
+
+        $result = HttpRequest::fromParameters(
+            HttpRequest::METHOD_GET,
+            $stubHttpUrl,
+            HttpHeaders::fromArray([]),
+            HttpRequestBody::fromString('')
+        );
+
+        $this->assertEquals($queryParameterValue, $result->getQueryParameter($queryParameterName));
+    }
 }

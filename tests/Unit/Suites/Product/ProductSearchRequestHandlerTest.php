@@ -53,10 +53,10 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $urlString = ProductSearchRequestHandler::SEARCH_RESULTS_SLUG;
         $this->stubHttpUrl->method('getPathRelativeToWebFront')->willReturn($urlString);
-        $this->stubHttpUrl->method('getQueryParameter')
+        $this->stubHttpRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
+        $this->stubHttpRequest->method('getQueryParameter')
             ->with(ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME)
             ->willReturn($queryString);
-        $this->stubHttpRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
     }
 
     protected function setUp()

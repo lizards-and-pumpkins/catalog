@@ -69,7 +69,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
             throw new UnableToHandleRequestException;
         }
 
-        $searchQueryString = $request->getUrl()->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
+        $searchQueryString = $request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
 
         $this->addSearchResultsToPageBuilder($searchQueryString);
 
@@ -104,7 +104,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
             return false;
         }
 
-        $searchQueryString = $request->getUrl()->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
+        $searchQueryString = $request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
 
         if (null === $searchQueryString || self::SEARCH_QUERY_MINIMUM_LENGTH > strlen($searchQueryString)) {
             return false;

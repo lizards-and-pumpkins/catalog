@@ -114,4 +114,13 @@ abstract class HttpRequest
      * @return string
      */
     abstract public function getMethod();
+
+    /**
+     * @param string $parameterName
+     * @return string
+     */
+    public function getQueryParameter($parameterName)
+    {
+        return $this->getUrl()->getQueryParameter($parameterName);
+    }
 }
