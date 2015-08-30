@@ -44,7 +44,7 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
 
     public function testNullIsReturnedIfUrlIsNotLedByApiPrefix()
     {
-        $this->stubUrl->method('getPathRelativeToWebFront')->willReturn('foo/bar');
+        $this->stubHttpRequest->method('getUrlPathRelativeToWebFront')->willReturn('foo/bar');
         $result = $this->apiRouter->route($this->stubHttpRequest);
 
         $this->assertNull($result);
@@ -53,7 +53,7 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
     public function testNullIsReturnedIfVersionFormatIsInvalid()
     {
         $this->stubHttpRequest->method('getHeader')->with('Accept')->willReturn('application/json');
-        $this->stubUrl->method('getPathRelativeToWebFront')->willReturn('api/foo');
+        $this->stubHttpRequest->method('getUrlPathRelativeToWebFront')->willReturn('api/foo');
         $result = $this->apiRouter->route($this->stubHttpRequest);
 
         $this->assertNull($result);
@@ -62,7 +62,7 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
     public function testNullIsReturnedIfEndpointCodeIsNotSpecified()
     {
         $this->stubHttpRequest->method('getHeader')->with('Accept')->willReturn('application/vnd.brera.foo.v1+json');
-        $this->stubUrl->method('getPathRelativeToWebFront')->willReturn('api');
+        $this->stubHttpRequest->method('getUrlPathRelativeToWebFront')->willReturn('api');
         $result = $this->apiRouter->route($this->stubHttpRequest);
 
         $this->assertNull($result);
@@ -77,7 +77,7 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
             ->method('getApiRequestHandler')
             ->willReturn($stubApiRequestHandler);
 
-        $this->stubUrl->expects($this->once())->method('getPathRelativeToWebFront')->willReturn('api/foo');
+        $this->stubHttpRequest->method('getUrlPathRelativeToWebFront')->willReturn('api/foo');
         $this->stubHttpRequest->method('getHeader')->with('Accept')->willReturn('application/vnd.brera.foo.v1+json');
         $result = $this->apiRouter->route($this->stubHttpRequest);
 
@@ -94,7 +94,7 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
             ->willReturn($stubApiRequestHandler);
 
         $this->stubHttpRequest->method('getHeader')->with('Accept')->willReturn('application/vnd.brera.foo.v1+json');
-        $this->stubUrl->method('getPathRelativeToWebFront')->willReturn('api/foo');
+        $this->stubHttpRequest->method('getUrlPathRelativeToWebFront')->willReturn('api/foo');
         $result = $this->apiRouter->route($this->stubHttpRequest);
 
         $this->assertInstanceOf(HttpRequestHandler::class, $result);

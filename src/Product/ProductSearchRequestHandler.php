@@ -65,7 +65,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
     public function process(HttpRequest $request)
     {
         if (!$this->isValidSearchRequest($request)) {
-            throw new UnableToHandleRequestException;
+            throw new UnableToHandleRequestException(sprintf('Unable to process request with handler %s', __CLASS__));
         }
 
         $searchQueryString = $request->getUrl()->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
@@ -93,7 +93,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
      */
     private function isValidSearchRequest(HttpRequest $request)
     {
-        $urlPathWithoutTrailingSlash = rtrim($request->getUrl()->getPathRelativeToWebFront(), '/');
+        $urlPathWithoutTrailingSlash = rtrim($request->getUrlPathRelativeToWebFront(), '/');
 
         if (self::SEARCH_RESULTS_SLUG !== $urlPathWithoutTrailingSlash) {
             return false;

@@ -112,12 +112,9 @@ class SampleWebFrontTest extends \PHPUnit_Framework_TestCase
 
     public function testSampleMasterFactoryIsReturned()
     {
-        $mockUrl = $this->getMock(HttpUrl::class, [], [], '', false);
-        $mockUrl->method('getPathRelativeToWebFront')->willReturn('foo');
-
         /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubHttpRequest */
         $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
-        $stubHttpRequest->method('getUrl')->willReturn($mockUrl);
+        $stubHttpRequest->method('getUrlPathRelativeToWebFront')->willReturn('foo');
 
         $webFront = new SampleWebFront($stubHttpRequest);
         $webFront->registerFactory(new IntegrationTestFactory());
