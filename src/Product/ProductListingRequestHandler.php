@@ -75,7 +75,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
 
         $keyGeneratorParams = [
             'products_per_page' => $this->getDefaultNumberOrProductsPerPage(),
-            'url_key'           => ltrim($request->getUrl()->getPathRelativeToWebFront(), '/')
+            'url_key'           => ltrim($request->getUrlPathRelativeToWebFront(), '/')
         ];
 
         return $this->pageBuilder->buildPage($this->pageMetaInfo, $this->context, $keyGeneratorParams);
@@ -183,7 +183,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
             ProductListingMetaInfoSnippetRenderer::CODE
         );
-        $urlKey = $request->getUrl()->getPathRelativeToWebFront();
+        $urlKey = $request->getUrlPathRelativeToWebFront();
         $metaInfoSnippetKey = $keyGenerator->getKeyForContext($this->context, ['url_key' => $urlKey]);
 
         return $metaInfoSnippetKey;
