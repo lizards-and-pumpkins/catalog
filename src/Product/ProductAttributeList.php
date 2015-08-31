@@ -34,17 +34,17 @@ class ProductAttributeList
 
     public function add(ProductAttribute $attribute)
     {
-        $this->validateProductMayBeAddedToList($attribute);
+        $this->validateAttributeMayBeAddedToList($attribute);
 
         $this->attributes[] = $attribute;
         $this->addAttributeCode($attribute->getCode());
     }
     
-    private function validateProductMayBeAddedToList(ProductAttribute $attribute)
+    private function validateAttributeMayBeAddedToList(ProductAttribute $attribute)
     {
         foreach ($this->getAttributesByCodeWithoutValidation($attribute->getCode()) as $attributeInList) {
             if (!$attribute->hasSameContextPartsAs($attributeInList)) {
-                throw new AttributeContextPartsMismatchException(
+                throw new ProductAttributeContextPartsMismatchException(
                     'Attributes with different context parts can not be combined into one list'
                 );
             }

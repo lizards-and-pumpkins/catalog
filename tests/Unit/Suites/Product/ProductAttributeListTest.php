@@ -228,7 +228,7 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
             'value' => 'valueB'
         ]);
 
-        $this->setExpectedException(AttributeContextPartsMismatchException::class);
+        $this->setExpectedException(ProductAttributeContextPartsMismatchException::class);
 
         $this->attributeList->add($attributeA);
         $this->attributeList->add($attributeB);
