@@ -262,4 +262,17 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
             [2, ['attr_1', 'attr_2']],
         ];
     }
+
+    public function testHasAttributeReturnsFalseForAttributesNotInTheList()
+    {
+        $this->assertFalse($this->attributeList->hasAttribute('foo'));
+    }
+
+    public function testHasAttributeReturnsTrueForAttributesInTheList()
+    {
+        $attributeArray = [[ 'code' => 'foo', 'contextData' => [], 'value' => 'bar']];
+        $attributeList = ProductAttributeList::fromArray($attributeArray);
+        $this->assertTrue($attributeList->hasAttribute('foo'));
+
+    }
 }
