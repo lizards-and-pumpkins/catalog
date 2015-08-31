@@ -10,34 +10,60 @@ use Brera\Context\Context;
  */
 class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 {
-    public function testTrueIsReturnedIfAttributeWithGivenCodeExists()
+    /**
+     * @param string[] $attributeContext
+     * @return ProductAttribute
+     */
+    private function createProductAttributeWithArray(array $attributeContext)
+    {
+        return ProductAttribute::fromArray([
+            'code' => 'name',
+            'contextData' => $attributeContext,
+            'value' => 'dummy-test-value'
+        ]);
+    }
+
+    /**
+     * @param string[] $returnValueMap
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getContextMockWithReturnValueMap(array $returnValueMap)
+    {
+        $stubContext = $this->getMock(Context::class);
+        $stubContext->method('getSupportedCodes')->willReturn(array_column($returnValueMap, 0));
+        $stubContext->method('getValue')->willReturnMap($returnValueMap);
+
+        return $stubContext;
+    }
+
+    public function testTrueIsReturnedIfAttributeHasGivenCode()
     {
         $attribute = ProductAttribute::fromArray([
-            'code'   => 'foo',
+            'code' => 'foo',
             'contextData' => [],
-            'value'      => 'bar'
+            'value' => 'value'
         ]);
 
         $this->assertTrue($attribute->isCodeEqualsTo('foo'));
     }
 
-    public function testFalseIsReturnedIfAttributeWithGivenCodeDoesNotExist()
+    public function testFalseIsReturnedIfAttributeHasDifferentCode()
     {
         $attribute = ProductAttribute::fromArray([
-            'code'   => 'foo',
+            'code' => 'foo',
             'contextData' => [],
-            'value'      => 'bar'
+            'value' => 'value'
         ]);
 
-        $this->assertFalse($attribute->isCodeEqualsTo('baz'));
+        $this->assertFalse($attribute->isCodeEqualsTo('bar'));
     }
 
     public function testAttributeCodeIsReturned()
     {
         $attribute = ProductAttribute::fromArray([
-            'code'   => 'foo',
+            'code' => 'foo',
             'contextData' => [],
-            'value'      => 'bar'
+            'value' => 'bar'
         ]);
 
         $this->assertEquals('foo', $attribute->getCode());
@@ -46,9 +72,9 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     public function testAttributeValueIsReturned()
     {
         $attribute = ProductAttribute::fromArray([
-            'code'   => 'foo',
+            'code' => 'foo',
             'contextData' => [],
-            'value'      => 'bar'
+            'value' => 'bar'
         ]);
 
         $this->assertEquals('bar', $attribute->getValue());
@@ -57,18 +83,18 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     public function testAttributeWithSubAttributeIsReturned()
     {
         $attribute = ProductAttribute::fromArray([
-            'code'   => 'foo',
+            'code' => 'foo',
             'contextData' => [],
-            'value'      => [
+            'value' => [
                 [
-                    'code'   => 'bar',
+                    'code' => 'bar',
                     'contextData' => [],
-                    'value'      => 1
+                    'value' => 1
                 ],
                 [
-                    'code'   => 'baz',
+                    'code' => 'baz',
                     'contextData' => [],
-                    'value'      => 2
+                    'value' => 2
                 ]
             ]
         ]);
@@ -107,7 +133,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
         $testWebsiteCode = 'foo';
         $testLocaleCode = 'bar';
         $attribute = $this->createProductAttributeWithArray([
-            'website'  => $testWebsiteCode,
+            'website' => $testWebsiteCode,
             'locale' => $testLocaleCode
         ]);
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
@@ -151,30 +177,54 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
         $contextData = ['foo' => 'bar', 'baz' => 'qux'];
 
         $attribute = ProductAttribute::fromArray([
-            'code'   => 'attributeANodeName',
+            'code' => 'attributeACode',
             'contextData' => $contextData,
-            'value'      => 'attributeAValue'
+            'value' => 'attributeAValue'
         ]);
 
         $this->assertSame(array_keys($contextData), $attribute->getContextParts());
     }
 
+    public function testExceptionIsThrownIfRequestedContextPartIsNotPresent()
+    {
+        $this->setExpectedException(
+            ProductAttributeDoesNotContainContextPartException::class,
+            'The context part "foo" is not present on the attribute "attributeCode"'
+        );
+        $attribute = ProductAttribute::fromArray([
+            'code' => 'attributeCode',
+            'contextData' => [],
+            'value' => 'attributeValue'
+        ]);
+        $attribute->getContextPartValue('foo');
+    }
+
+    public function testItReturnsTheContextPartIfItIsPresent()
+    {
+        $attribute = ProductAttribute::fromArray([
+            'code' => 'attributeCode',
+            'contextData' => ['foo' => 'bar'],
+            'value' => 'attributeValue'
+        ]);
+        $this->assertSame('bar', $attribute->getContextPartValue('foo'));
+    }
+    
     public function testFalseIsReturnedIfContentPartsOfAttributesAreDifferent()
     {
         $attributeA = ProductAttribute::fromArray([
-            'code'   => 'attributeANodeName',
+            'code' => 'attributeACode',
             'contextData' => [
                 'foo' => 'bar',
                 'baz' => 'qux',
             ],
-            'value'      => 'attributeAValue'
+            'value' => 'attributeAValue'
         ]);
         $attributeB = ProductAttribute::fromArray([
-            'code'   => 'attributeBNodeName',
+            'code' => 'attributeBCode',
             'contextData' => [
                 'foo' => 'bar',
             ],
-            'value'      => 'attributeBValue'
+            'value' => 'attributeBValue'
         ]);
 
         $this->assertFalse($attributeA->hasSameContextPartsAs($attributeB));
@@ -183,20 +233,20 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     public function testTrueIsReturnedIfContentPartsOfAttributesAreIdentical()
     {
         $attributeA = ProductAttribute::fromArray([
-            'code'   => 'attributeANodeName',
+            'code' => 'attributeACode',
             'contextData' => [
                 'foo' => 'bar',
                 'baz' => 'qux',
             ],
-            'value'      => 'attributeAValue'
+            'value' => 'attributeAValue'
         ]);
         $attributeB = ProductAttribute::fromArray([
-            'code'   => 'attributeBNodeName',
+            'code' => 'attributeBCode',
             'contextData' => [
                 'foo' => 'qux',
                 'baz' => 'bar'
             ],
-            'value'      => 'attributeBValue'
+            'value' => 'attributeBValue'
         ]);
 
         $this->assertTrue($attributeA->hasSameContextPartsAs($attributeB));
@@ -216,31 +266,5 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
         $attributeB = ProductAttribute::fromArray(['code' => 'codeA', 'contextData' => [], 'value' => 'valueB']);
 
         $this->assertTrue($attributeA->hasSameCodeAs($attributeB));
-    }
-
-    /**
-     * @param string[] $attributeContext
-     * @return ProductAttribute
-     */
-    private function createProductAttributeWithArray(array $attributeContext)
-    {
-        return ProductAttribute::fromArray([
-            'code'   => 'name',
-            'contextData' => $attributeContext,
-            'value'      => 'dummy-test-value'
-        ]);
-    }
-
-    /**
-     * @param string[] $returnValueMap
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getContextMockWithReturnValueMap(array $returnValueMap)
-    {
-        $stubContext = $this->getMock(Context::class);
-        $stubContext->method('getSupportedCodes')->willReturn(array_column($returnValueMap, 0));
-        $stubContext->method('getValue')->willReturnMap($returnValueMap);
-
-        return $stubContext;
     }
 }

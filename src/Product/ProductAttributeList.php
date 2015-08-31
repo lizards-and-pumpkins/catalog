@@ -16,18 +16,49 @@ class ProductAttributeList
      */
     private $attributeCodes = [];
 
+    /**
+     * @param mixed[] $attributesArray
+     * @return ProductAttributeList
+     */
+    public static function fromArray(array $attributesArray)
+    {
+        $attributeList = new self();
+
+        foreach ($attributesArray as $attributeArray) {
+            $attribute = ProductAttribute::fromArray($attributeArray);
+            $attributeList->add($attribute);
+        }
+
+        return $attributeList;
+    }
+
     public function add(ProductAttribute $attribute)
     {
-        foreach ($this->attributes as $attributeInList) {
-            if ($attribute->hasSameCodeAs($attributeInList) && !$attribute->hasSameContextPartsAs($attributeInList)) {
-                throw new AttributeContextPartsMismatchException(
-                    'Attributes with different context parts can not be combined into a list'
-                );
-            }
-        }
+        $this->validateProductMayBeAddedToList($attribute);
 
         $this->attributes[] = $attribute;
         $this->addAttributeCode($attribute->getCode());
+    }
+    
+    private function validateProductMayBeAddedToList(ProductAttribute $attribute)
+    {
+        foreach ($this->getAttributesByCodeWithoutValidation($attribute->getCode()) as $attributeInList) {
+            if (!$attribute->hasSameContextPartsAs($attributeInList)) {
+                throw new AttributeContextPartsMismatchException(
+                    'Attributes with different context parts can not be combined into one list'
+                );
+            }
+        }
+    }
+
+    /**
+     * @param string $attributeCode
+     */
+    private function addAttributeCode($attributeCode)
+    {
+        if (!$this->hasAttribute($attributeCode)) {
+            $this->attributeCodes[$attributeCode] = $attributeCode;
+        }
     }
 
     /**
@@ -39,53 +70,29 @@ class ProductAttributeList
         if (empty($code)) {
             throw new ProductAttributeNotFoundException('Can not get an attribute with blank code.');
         }
-
-        $attributesWithCode = [];
-
-        foreach ($this->attributes as $attribute) {
-            if ($attribute->isCodeEqualsTo($code)) {
-                $attributesWithCode[] = $attribute;
-            }
-        }
-
-        if (empty($attributesWithCode)) {
+        if (!$this->hasAttribute($code)) {
             throw new ProductAttributeNotFoundException(sprintf('Can not find an attribute with code "%s".', $code));
         }
 
-        return $attributesWithCode;
+        return $this->getAttributesByCodeWithoutValidation($code);
     }
 
     /**
-     * @param mixed[] $nodes
-     * @return ProductAttributeList
+     * @param string $code
+     * @return ProductAttribute[]
      */
-    public static function fromArray(array $nodes)
+    private function getAttributesByCodeWithoutValidation($code)
     {
-        $attributeList = new self();
-
-        foreach ($nodes as $node) {
-            $attribute = ProductAttribute::fromArray($node);
-            $attributeList->add($attribute);
-        }
-
-        return $attributeList;
-    }
-
-    /**
-     * @param string $attributeCode
-     */
-    private function addAttributeCode($attributeCode)
-    {
-        if (!in_array($attributeCode, $this->attributeCodes)) {
-            $this->attributeCodes[] = $attributeCode;
-        }
+        return array_values(array_filter($this->attributes, function (ProductAttribute $attribute) use ($code) {
+            return $attribute->isCodeEqualsTo($code);
+        }));
     }
 
     /**
      * @param Context $context
      * @return ProductAttributeList
      */
-    public function getAttributesForContext(Context $context)
+    public function getAttributeListForContext(Context $context)
     {
         $extractedAttributes = $this->extractAttributesForContext($context);
         return $this->createAttributeListFromAttributeArray($extractedAttributes);
@@ -97,30 +104,10 @@ class ProductAttributeList
      */
     private function extractAttributesForContext(Context $context)
     {
-        $attributesForContext = [];
-        foreach ($this->attributeCodes as $code) {
-            $attributesForCode = $this->getAttributesForCode($code);
-            $attributesForContext[] = $this->getBestMatchingAttributeForContext(
-                $attributesForCode,
-                $context
-            );
-        }
-        return $attributesForContext;
-    }
-
-    /**
-     * @param string $code
-     * @return ProductAttribute[]
-     */
-    private function getAttributesForCode($code)
-    {
-        $attributesForCode = [];
-        foreach ($this->attributes as $attribute) {
-            if ($attribute->getCode() === $code) {
-                $attributesForCode[] = $attribute;
-            }
-        }
-        return $attributesForCode;
+        return array_map(function ($code) use ($context) {
+            $attributesForCode = $this->getAttributesWithCode($code);
+            return $this->getBestMatchingAttributeForContext($attributesForCode, $context);
+        }, $this->attributeCodes);
     }
 
     /**
@@ -167,5 +154,22 @@ class ProductAttributeList
             $attributeList->add($attribute);
         });
         return $attributeList;
+    }
+
+    /**
+     * @param string $attributeCode
+     * @return bool
+     */
+    private function hasAttribute($attributeCode)
+    {
+        return isset($this->attributeCodes[$attributeCode]);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getAttributeCodes()
+    {
+        return array_values($this->attributeCodes);
     }
 }

@@ -15,6 +15,20 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
      */
     private $attributeList;
 
+    /**
+     * @param mixed[] $returnValueMap
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getStubContextWithReturnValueMap(array $returnValueMap)
+    {
+        $stubContext = $this->getMock(Context::class);
+        $stubContext->method('getSupportedCodes')
+            ->willReturn(array_column($returnValueMap, 0));
+        $stubContext->method('getValue')
+            ->willReturnMap($returnValueMap);
+        return $stubContext;
+    }
+
     protected function setUp()
     {
         $this->attributeList = new ProductAttributeList;
@@ -128,7 +142,7 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
             ],
         ];
         $attributeList = ProductAttributeList::fromArray($attributesArray);
-        $attributeListForContext = $attributeList->getAttributesForContext($stubContext);
+        $attributeListForContext = $attributeList->getAttributeListForContext($stubContext);
         $attributesWithCode = $attributeListForContext->getAttributesWithCode($attributeCode);
         $result = $attributesWithCode[0];
 
@@ -221,16 +235,31 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param mixed[] $returnValueMap
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @param int $numAttributesToAdd
+     * @param string[] $expected
+     * @dataProvider numberOfAttributesToAddProvider
      */
-    private function getStubContextWithReturnValueMap(array $returnValueMap)
+    public function testItReturnsTheCodesOfAttributesInTheList($numAttributesToAdd, $expected)
     {
-        $stubContext = $this->getMock(Context::class);
-        $stubContext->method('getSupportedCodes')
-            ->willReturn(array_column($returnValueMap, 0));
-        $stubContext->method('getValue')
-            ->willReturnMap($returnValueMap);
-        return $stubContext;
+        for ($i = 0; $i < $numAttributesToAdd; $i++) {
+            $this->attributeList->add(ProductAttribute::fromArray([
+                'code' => 'attr_' . ($i +1),
+                'contextData' => [],
+                'value' => 'value'
+            ]));
+        }
+        $this->assertSame($expected, $this->attributeList->getAttributeCodes());
+    }
+
+    /**
+     * @return array[]
+     */
+    public function numberOfAttributesToAddProvider()
+    {
+        return [
+            [0, []],
+            [1, ['attr_1']],
+            [2, ['attr_1', 'attr_2']],
+        ];
     }
 }
