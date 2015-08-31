@@ -15,6 +15,20 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
      */
     private $attributeList;
 
+    /**
+     * @param mixed[] $returnValueMap
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getStubContextWithReturnValueMap(array $returnValueMap)
+    {
+        $stubContext = $this->getMock(Context::class);
+        $stubContext->method('getSupportedCodes')
+            ->willReturn(array_column($returnValueMap, 0));
+        $stubContext->method('getValue')
+            ->willReturnMap($returnValueMap);
+        return $stubContext;
+    }
+
     protected function setUp()
     {
         $this->attributeList = new ProductAttributeList;
@@ -23,9 +37,9 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     public function testAttributeIsAddedAndRetrievedFromProductAttributeList()
     {
         $attributeArray = [
-            'nodeName'      => 'foo',
-            'attributes'    => [],
-            'value'         => 'bar'
+            'code' => 'foo',
+            'contextData' => [],
+            'value' => 'bar'
         ];
 
         $attribute = ProductAttribute::fromArray($attributeArray);
@@ -51,11 +65,13 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
 
     public function testAttributeListIsCreatedFromAttributesArray()
     {
-        $attributeArray = [[
-            'nodeName'      => 'foo',
-            'attributes'    => [],
-            'value'         => 'bar'
-        ]];
+        $attributeArray = [
+            [
+                'code' => 'foo',
+                'contextData' => [],
+                'value' => 'bar'
+            ]
+        ];
 
         $attributeList = ProductAttributeList::fromArray($attributeArray);
         $attributesWithCode = $attributeList->getAttributesWithCode('foo');
@@ -67,8 +83,8 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     public function testAttributeListContainsMultipleAttributeValues()
     {
         $attributeArray = [
-            ['nodeName' => 'foo', 'attributes' => [], 'value' => 'bar'],
-            ['nodeName' => 'foo', 'attributes' => [], 'value' => 'baz'],
+            ['code' => 'foo', 'contextData' => [], 'value' => 'bar'],
+            ['code' => 'foo', 'contextData' => [], 'value' => 'baz'],
         ];
 
         $attributeList = ProductAttributeList::fromArray($attributeArray);
@@ -110,23 +126,23 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
         $attributeCode = 'name';
         $attributesArray = [
             [
-                'nodeName'      => $attributeCode,
-                'attributes'    => ['website' => $websiteCodeA, 'locale' => $langA],
-                'value'         => $valueA
+                'code' => $attributeCode,
+                'contextData' => ['website' => $websiteCodeA, 'locale' => $langA],
+                'value' => $valueA
             ],
             [
-                'nodeName'      => $attributeCode,
-                'attributes'    => ['website' => $websiteCodeB, 'locale' => $langB],
-                'value'         => $valueB
+                'code' => $attributeCode,
+                'contextData' => ['website' => $websiteCodeB, 'locale' => $langB],
+                'value' => $valueB
             ],
             [
-                'nodeName'      => $attributeCode,
-                'attributes'    => ['website' => $websiteCodeC, 'locale' => $langC],
-                'value'         => $valueC
+                'code' => $attributeCode,
+                'contextData' => ['website' => $websiteCodeC, 'locale' => $langC],
+                'value' => $valueC
             ],
         ];
         $attributeList = ProductAttributeList::fromArray($attributesArray);
-        $attributeListForContext = $attributeList->getAttributesForContext($stubContext);
+        $attributeListForContext = $attributeList->getAttributeListForContext($stubContext);
         $attributesWithCode = $attributeListForContext->getAttributesWithCode($attributeCode);
         $result = $attributesWithCode[0];
 
@@ -140,30 +156,54 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'only-web-in-context' => [
-                'webA', 'webB', 'webC', // website codes
-                'lang', 'lang', 'lang', // locale codes
-                'AAA', 'BBB', 'CCC', // attribute values
+                'webA',
+                'webB',
+                'webC', // website codes
+                'lang',
+                'lang',
+                'lang', // locale codes
+                'AAA',
+                'BBB',
+                'CCC', // attribute values
                 [['website', 'webB']], // return value map
                 'BBB' // expected value
             ],
             'one-match' => [
-                'webA', 'webA', 'webB', // website codes
-                'langA', 'langB', 'langA', // locale codes
-                'AAA', 'BBB', 'CCC', // attribute values
+                'webA',
+                'webA',
+                'webB', // website codes
+                'langA',
+                'langB',
+                'langA', // locale codes
+                'AAA',
+                'BBB',
+                'CCC', // attribute values
                 [['website', 'webB'], ['locale', 'langA']], // return value map
                 'CCC' // expected value
             ],
             'two-match-pick-first' => [
-                'webA', 'webB', 'webC', // website codes
-                'langB', 'langA', 'langC', // locale codes
-                'AAA', 'BBB', 'CCC', // attribute values
+                'webA',
+                'webB',
+                'webC', // website codes
+                'langB',
+                'langA',
+                'langC', // locale codes
+                'AAA',
+                'BBB',
+                'CCC', // attribute values
                 [['website', 'webA'], ['locale', 'langA']], // return value map
                 'AAA' // expected value
             ],
             '3-match-pick-highest' => [
-                'webA', 'webB', 'webA', // website codes
-                'langB', 'langA', 'langA', // locale codes
-                'AAA', 'BBB', 'CCC', // attribute values
+                'webA',
+                'webB',
+                'webA', // website codes
+                'langB',
+                'langA',
+                'langA', // locale codes
+                'AAA',
+                'BBB',
+                'CCC', // attribute values
                 [['website', 'webA'], ['locale', 'langA']], // return value map
                 'CCC' // expected value
             ],
@@ -173,38 +213,53 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownWhileCombiningAttributesWithSameCodeButDifferentContextPartsIntoList()
     {
         $attributeA = ProductAttribute::fromArray([
-            'nodeName'   => 'attributeCode',
-            'attributes' => [
+            'code' => 'attributeCode',
+            'contextData' => [
                 'foo' => 'bar',
                 'baz' => 'qux',
             ],
-            'value'      => 'valueA'
+            'value' => 'valueA'
         ]);
         $attributeB = ProductAttribute::fromArray([
-            'nodeName'   => 'attributeCode',
-            'attributes' => [
+            'code' => 'attributeCode',
+            'contextData' => [
                 'foo' => 'bar',
             ],
-            'value'      => 'valueB'
+            'value' => 'valueB'
         ]);
 
-        $this->setExpectedException(AttributeContextPartsMismatchException::class);
+        $this->setExpectedException(ProductAttributeContextPartsMismatchException::class);
 
         $this->attributeList->add($attributeA);
         $this->attributeList->add($attributeB);
     }
 
     /**
-     * @param mixed[] $returnValueMap
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @param int $numAttributesToAdd
+     * @param string[] $expected
+     * @dataProvider numberOfAttributesToAddProvider
      */
-    private function getStubContextWithReturnValueMap(array $returnValueMap)
+    public function testItReturnsTheCodesOfAttributesInTheList($numAttributesToAdd, $expected)
     {
-        $stubContext = $this->getMock(Context::class);
-        $stubContext->method('getSupportedCodes')
-            ->willReturn(array_column($returnValueMap, 0));
-        $stubContext->method('getValue')
-            ->willReturnMap($returnValueMap);
-        return $stubContext;
+        for ($i = 0; $i < $numAttributesToAdd; $i++) {
+            $this->attributeList->add(ProductAttribute::fromArray([
+                'code' => 'attr_' . ($i +1),
+                'contextData' => [],
+                'value' => 'value'
+            ]));
+        }
+        $this->assertSame($expected, $this->attributeList->getAttributeCodes());
+    }
+
+    /**
+     * @return array[]
+     */
+    public function numberOfAttributesToAddProvider()
+    {
+        return [
+            [0, []],
+            [1, ['attr_1']],
+            [2, ['attr_1', 'attr_2']],
+        ];
     }
 }

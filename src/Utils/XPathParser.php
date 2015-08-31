@@ -76,9 +76,9 @@ class XPathParser
             }
 
             $nodeArray[] = [
-            'nodeName'      => $node->nodeName,
-            'attributes'    => $this->getNodeAttributesAsArray($node),
-            'value'         => $value
+                'nodeName' => $node->nodeName,
+                'attributes' => $this->getNodeAttributesAsArray($node),
+                'value' => $value
             ];
         }
 
