@@ -40,7 +40,7 @@ class ProductAttribute implements Attribute
      */
     public static function fromArray(array $node)
     {
-        return new self($node['nodeName'], self::getValueRecursive($node['value']), $node['attributes']);
+        return new self($node['code'], self::getValueRecursive($node['value']), $node['contextData']);
     }
 
     /**
@@ -86,7 +86,7 @@ class ProductAttribute implements Attribute
         $list = new ProductAttributeList();
 
         foreach ($nodeValue as $node) {
-            $list->add(new self($node['nodeName'], self::getValueRecursive($node['value']), $node['attributes']));
+            $list->add(new self($node['code'], self::getValueRecursive($node['value']), $node['contextData']));
         }
 
         return $list;

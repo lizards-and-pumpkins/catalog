@@ -13,8 +13,8 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     public function testTrueIsReturnedIfAttributeWithGivenCodeExists()
     {
         $attribute = ProductAttribute::fromArray([
-            'nodeName'   => 'foo',
-            'attributes' => [],
+            'code'   => 'foo',
+            'contextData' => [],
             'value'      => 'bar'
         ]);
 
@@ -24,8 +24,8 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     public function testFalseIsReturnedIfAttributeWithGivenCodeDoesNotExist()
     {
         $attribute = ProductAttribute::fromArray([
-            'nodeName'   => 'foo',
-            'attributes' => [],
+            'code'   => 'foo',
+            'contextData' => [],
             'value'      => 'bar'
         ]);
 
@@ -35,8 +35,8 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     public function testAttributeCodeIsReturned()
     {
         $attribute = ProductAttribute::fromArray([
-            'nodeName'   => 'foo',
-            'attributes' => [],
+            'code'   => 'foo',
+            'contextData' => [],
             'value'      => 'bar'
         ]);
 
@@ -46,8 +46,8 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     public function testAttributeValueIsReturned()
     {
         $attribute = ProductAttribute::fromArray([
-            'nodeName'   => 'foo',
-            'attributes' => [],
+            'code'   => 'foo',
+            'contextData' => [],
             'value'      => 'bar'
         ]);
 
@@ -57,17 +57,17 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     public function testAttributeWithSubAttributeIsReturned()
     {
         $attribute = ProductAttribute::fromArray([
-            'nodeName'   => 'foo',
-            'attributes' => [],
+            'code'   => 'foo',
+            'contextData' => [],
             'value'      => [
                 [
-                    'nodeName'   => 'bar',
-                    'attributes' => [],
+                    'code'   => 'bar',
+                    'contextData' => [],
                     'value'      => 1
                 ],
                 [
-                    'nodeName'   => 'baz',
-                    'attributes' => [],
+                    'code'   => 'baz',
+                    'contextData' => [],
                     'value'      => 2
                 ]
             ]
@@ -151,8 +151,8 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
         $contextData = ['foo' => 'bar', 'baz' => 'qux'];
 
         $attribute = ProductAttribute::fromArray([
-            'nodeName'   => 'attributeANodeName',
-            'attributes' => $contextData,
+            'code'   => 'attributeANodeName',
+            'contextData' => $contextData,
             'value'      => 'attributeAValue'
         ]);
 
@@ -162,16 +162,16 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     public function testFalseIsReturnedIfContentPartsOfAttributesAreDifferent()
     {
         $attributeA = ProductAttribute::fromArray([
-            'nodeName'   => 'attributeANodeName',
-            'attributes' => [
+            'code'   => 'attributeANodeName',
+            'contextData' => [
                 'foo' => 'bar',
                 'baz' => 'qux',
             ],
             'value'      => 'attributeAValue'
         ]);
         $attributeB = ProductAttribute::fromArray([
-            'nodeName'   => 'attributeBNodeName',
-            'attributes' => [
+            'code'   => 'attributeBNodeName',
+            'contextData' => [
                 'foo' => 'bar',
             ],
             'value'      => 'attributeBValue'
@@ -183,16 +183,16 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     public function testTrueIsReturnedIfContentPartsOfAttributesAreIdentical()
     {
         $attributeA = ProductAttribute::fromArray([
-            'nodeName'   => 'attributeANodeName',
-            'attributes' => [
+            'code'   => 'attributeANodeName',
+            'contextData' => [
                 'foo' => 'bar',
                 'baz' => 'qux',
             ],
             'value'      => 'attributeAValue'
         ]);
         $attributeB = ProductAttribute::fromArray([
-            'nodeName'   => 'attributeBNodeName',
-            'attributes' => [
+            'code'   => 'attributeBNodeName',
+            'contextData' => [
                 'foo' => 'qux',
                 'baz' => 'bar'
             ],
@@ -204,16 +204,16 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 
     public function testFalseIsReturnedIfAttributeCodesAreDifferent()
     {
-        $attributeA = ProductAttribute::fromArray(['nodeName' => 'codeA', 'attributes' => [], 'value' => 'valueA']);
-        $attributeB = ProductAttribute::fromArray(['nodeName' => 'codeB', 'attributes' => [], 'value' => 'valueB']);
+        $attributeA = ProductAttribute::fromArray(['code' => 'codeA', 'contextData' => [], 'value' => 'valueA']);
+        $attributeB = ProductAttribute::fromArray(['code' => 'codeB', 'contextData' => [], 'value' => 'valueB']);
 
         $this->assertFalse($attributeA->hasSameCodeAs($attributeB));
     }
 
     public function testTrueIsReturnedIfAttributeCodesAreIdentical()
     {
-        $attributeA = ProductAttribute::fromArray(['nodeName' => 'codeA', 'attributes' => [], 'value' => 'valueA']);
-        $attributeB = ProductAttribute::fromArray(['nodeName' => 'codeA', 'attributes' => [], 'value' => 'valueB']);
+        $attributeA = ProductAttribute::fromArray(['code' => 'codeA', 'contextData' => [], 'value' => 'valueA']);
+        $attributeB = ProductAttribute::fromArray(['code' => 'codeA', 'contextData' => [], 'value' => 'valueB']);
 
         $this->assertTrue($attributeA->hasSameCodeAs($attributeB));
     }
@@ -225,8 +225,8 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     private function createProductAttributeWithArray(array $attributeContext)
     {
         return ProductAttribute::fromArray([
-            'nodeName'   => 'name',
-            'attributes' => $attributeContext,
+            'code'   => 'name',
+            'contextData' => $attributeContext,
             'value'      => 'dummy-test-value'
         ]);
     }

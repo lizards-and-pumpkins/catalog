@@ -23,9 +23,9 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     public function testAttributeIsAddedAndRetrievedFromProductAttributeList()
     {
         $attributeArray = [
-            'nodeName'      => 'foo',
-            'attributes'    => [],
-            'value'         => 'bar'
+            'code' => 'foo',
+            'contextData' => [],
+            'value' => 'bar'
         ];
 
         $attribute = ProductAttribute::fromArray($attributeArray);
@@ -51,11 +51,13 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
 
     public function testAttributeListIsCreatedFromAttributesArray()
     {
-        $attributeArray = [[
-            'nodeName'      => 'foo',
-            'attributes'    => [],
-            'value'         => 'bar'
-        ]];
+        $attributeArray = [
+            [
+                'code' => 'foo',
+                'contextData' => [],
+                'value' => 'bar'
+            ]
+        ];
 
         $attributeList = ProductAttributeList::fromArray($attributeArray);
         $attributesWithCode = $attributeList->getAttributesWithCode('foo');
@@ -67,8 +69,8 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     public function testAttributeListContainsMultipleAttributeValues()
     {
         $attributeArray = [
-            ['nodeName' => 'foo', 'attributes' => [], 'value' => 'bar'],
-            ['nodeName' => 'foo', 'attributes' => [], 'value' => 'baz'],
+            ['code' => 'foo', 'contextData' => [], 'value' => 'bar'],
+            ['code' => 'foo', 'contextData' => [], 'value' => 'baz'],
         ];
 
         $attributeList = ProductAttributeList::fromArray($attributeArray);
@@ -110,19 +112,19 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
         $attributeCode = 'name';
         $attributesArray = [
             [
-                'nodeName'      => $attributeCode,
-                'attributes'    => ['website' => $websiteCodeA, 'locale' => $langA],
-                'value'         => $valueA
+                'code' => $attributeCode,
+                'contextData' => ['website' => $websiteCodeA, 'locale' => $langA],
+                'value' => $valueA
             ],
             [
-                'nodeName'      => $attributeCode,
-                'attributes'    => ['website' => $websiteCodeB, 'locale' => $langB],
-                'value'         => $valueB
+                'code' => $attributeCode,
+                'contextData' => ['website' => $websiteCodeB, 'locale' => $langB],
+                'value' => $valueB
             ],
             [
-                'nodeName'      => $attributeCode,
-                'attributes'    => ['website' => $websiteCodeC, 'locale' => $langC],
-                'value'         => $valueC
+                'code' => $attributeCode,
+                'contextData' => ['website' => $websiteCodeC, 'locale' => $langC],
+                'value' => $valueC
             ],
         ];
         $attributeList = ProductAttributeList::fromArray($attributesArray);
@@ -140,30 +142,54 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'only-web-in-context' => [
-                'webA', 'webB', 'webC', // website codes
-                'lang', 'lang', 'lang', // locale codes
-                'AAA', 'BBB', 'CCC', // attribute values
+                'webA',
+                'webB',
+                'webC', // website codes
+                'lang',
+                'lang',
+                'lang', // locale codes
+                'AAA',
+                'BBB',
+                'CCC', // attribute values
                 [['website', 'webB']], // return value map
                 'BBB' // expected value
             ],
             'one-match' => [
-                'webA', 'webA', 'webB', // website codes
-                'langA', 'langB', 'langA', // locale codes
-                'AAA', 'BBB', 'CCC', // attribute values
+                'webA',
+                'webA',
+                'webB', // website codes
+                'langA',
+                'langB',
+                'langA', // locale codes
+                'AAA',
+                'BBB',
+                'CCC', // attribute values
                 [['website', 'webB'], ['locale', 'langA']], // return value map
                 'CCC' // expected value
             ],
             'two-match-pick-first' => [
-                'webA', 'webB', 'webC', // website codes
-                'langB', 'langA', 'langC', // locale codes
-                'AAA', 'BBB', 'CCC', // attribute values
+                'webA',
+                'webB',
+                'webC', // website codes
+                'langB',
+                'langA',
+                'langC', // locale codes
+                'AAA',
+                'BBB',
+                'CCC', // attribute values
                 [['website', 'webA'], ['locale', 'langA']], // return value map
                 'AAA' // expected value
             ],
             '3-match-pick-highest' => [
-                'webA', 'webB', 'webA', // website codes
-                'langB', 'langA', 'langA', // locale codes
-                'AAA', 'BBB', 'CCC', // attribute values
+                'webA',
+                'webB',
+                'webA', // website codes
+                'langB',
+                'langA',
+                'langA', // locale codes
+                'AAA',
+                'BBB',
+                'CCC', // attribute values
                 [['website', 'webA'], ['locale', 'langA']], // return value map
                 'CCC' // expected value
             ],
@@ -173,19 +199,19 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownWhileCombiningAttributesWithSameCodeButDifferentContextPartsIntoList()
     {
         $attributeA = ProductAttribute::fromArray([
-            'nodeName'   => 'attributeCode',
-            'attributes' => [
+            'code' => 'attributeCode',
+            'contextData' => [
                 'foo' => 'bar',
                 'baz' => 'qux',
             ],
-            'value'      => 'valueA'
+            'value' => 'valueA'
         ]);
         $attributeB = ProductAttribute::fromArray([
-            'nodeName'   => 'attributeCode',
-            'attributes' => [
+            'code' => 'attributeCode',
+            'contextData' => [
                 'foo' => 'bar',
             ],
-            'value'      => 'valueB'
+            'value' => 'valueB'
         ]);
 
         $this->setExpectedException(AttributeContextPartsMismatchException::class);
