@@ -8,7 +8,7 @@ class Product
      * @var ProductId
      */
     private $productId;
-    
+
     /**
      * @var ProductAttributeList
      */
@@ -45,18 +45,14 @@ class Product
      */
     public function getAllValuesOfAttribute($attributeCode)
     {
-        $values = [];
-
         try {
-            $productAttributes = $this->attributeList->getAttributesWithCode($attributeCode);
-            foreach ($productAttributes as $productAttribute) {
-                $values[] = $productAttribute->getValue();
-            }
+            return array_map(function (ProductAttribute $productAttribute) {
+                return $productAttribute->getValue();
+            }, $this->attributeList->getAttributesWithCode($attributeCode));
+
         } catch (ProductAttributeNotFoundException $e) {
             /* TODO: Log */
             return [''];
         }
-
-        return $values;
     }
 }
