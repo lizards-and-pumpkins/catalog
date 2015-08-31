@@ -160,7 +160,7 @@ class ProductAttributeList
      * @param string $attributeCode
      * @return bool
      */
-    private function hasAttribute($attributeCode)
+    public function hasAttribute($attributeCode)
     {
         return isset($this->attributeCodes[$attributeCode]);
     }
