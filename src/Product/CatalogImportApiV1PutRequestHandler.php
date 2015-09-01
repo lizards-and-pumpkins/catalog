@@ -107,33 +107,9 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
     {
         $xml = $this->getImportFileContents($request);
 
-        $productNodesXml = (new XPathParser($xml))->getXmlNodesRawXmlArrayByXPath('//catalog/products/product');
-        foreach ($productNodesXml as $productXml) {
-            try {
-                $productSource = $this->productSourceBuilder->createProductSourceFromXml($productXml);
-                $this->commandQueue->add(new UpdateProductCommand($productSource));
-            } catch (\Exception $exception) {
-                $skuString = (new XPathParser($productXml))->getXmlNodesArrayByXPath('//@sku')[0]['value'];
-                $sku = SampleSku::fromString($skuString);
-                $productId = ProductId::fromSku($sku);
-                $loggerMessage = new ProductImportFailedMessage($productId, $exception);
-                $this->logger->log($loggerMessage);
-            }
-        }
-
-        $listingNodesXml = (new XPathParser($xml))->getXmlNodesRawXmlArrayByXPath('//catalog/listings/listing');
-        foreach ($listingNodesXml as $listingXml) {
-            $productListingMetaInfoSource = $this->productListingMetaInfoSourceBuilder
-                ->createProductListingMetaInfoSourceFromXml($listingXml);
-            $this->commandQueue->add(new UpdateProductListingCommand($productListingMetaInfoSource));
-        }
-
-        $imageNodes = (new XPathParser($xml))->getXmlNodesArrayByXPath(
-            '//catalog/products/product/attributes/image/file'
-        );
-        foreach ($imageNodes as $imageNode) {
-            $this->commandQueue->add(new UpdateImageCommand($imageNode['value']));
-        }
+        $this->processProductsXml($xml);
+        $this->processListings($xml);
+        $this->processImages($xml);
     }
 
     /**
@@ -166,5 +142,51 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
         }
 
         return $requestArguments['fileName'];
+    }
+
+    /**
+     * @param string $xml
+     */
+    private function processProductsXml($xml)
+    {
+        $productNodesXml = (new XPathParser($xml))->getXmlNodesRawXmlArrayByXPath('//catalog/products/product');
+        foreach ($productNodesXml as $productXml) {
+            try {
+                $productSource = $this->productSourceBuilder->createProductSourceFromXml($productXml);
+                $this->commandQueue->add(new UpdateProductCommand($productSource));
+            } catch (\Exception $exception) {
+                $skuString = (new XPathParser($productXml))->getXmlNodesArrayByXPath('//@sku')[0]['value'];
+                $sku = SampleSku::fromString($skuString);
+                $productId = ProductId::fromSku($sku);
+                $loggerMessage = new ProductImportFailedMessage($productId, $exception);
+                $this->logger->log($loggerMessage);
+            }
+        }
+    }
+
+    /**
+     * @param string $xml
+     */
+    private function processListings($xml)
+    {
+        $listingNodesXml = (new XPathParser($xml))->getXmlNodesRawXmlArrayByXPath('//catalog/listings/listing');
+        foreach ($listingNodesXml as $listingXml) {
+            $productListingMetaInfoSource = $this->productListingMetaInfoSourceBuilder
+                ->createProductListingMetaInfoSourceFromXml($listingXml);
+            $this->commandQueue->add(new UpdateProductListingCommand($productListingMetaInfoSource));
+        }
+    }
+
+    /**
+     * @param string $xml
+     */
+    private function processImages($xml)
+    {
+        $imageNodes = (new XPathParser($xml))->getXmlNodesArrayByXPath(
+            '//catalog/products/product/attributes/image/file'
+        );
+        foreach ($imageNodes as $imageNode) {
+            $this->commandQueue->add(new UpdateImageCommand($imageNode['value']));
+        }
     }
 }
