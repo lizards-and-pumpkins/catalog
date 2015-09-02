@@ -37,7 +37,7 @@ class ContextBuilder
     public function createContextsFromDataSets(array $contextDataSets)
     {
         array_map([$this, 'validateAllPartsHaveDecorators'], $contextDataSets);
-        return array_map([$this, 'createContext'], $contextDataSets);
+        return array_map([$this, 'createContextContainingGivenContextParts'], $contextDataSets);
     }
 
     /**
@@ -56,9 +56,29 @@ class ContextBuilder
      */
     public function createContext(array $contextDataSet)
     {
+        $decoratorCodes = $this->getContextCodesFromDataSetAndRegisteredCodes($contextDataSet);
+        return $this->createContextForGivenCodes($contextDataSet, $decoratorCodes);
+    }
+
+    /**
+     * @param mixed[] $contextDataSet
+     * @return Context
+     */
+    private function createContextContainingGivenContextParts(array $contextDataSet)
+    {
+        $decoratorCodes = $this->getContextCodesFromDataSet($contextDataSet);
+        return $this->createContextForGivenCodes($contextDataSet, $decoratorCodes);
+    }
+
+    /**
+     * @param mixed[] $contextDataSet
+     * @param string[] $decoratorCodes
+     * @return Context
+     */
+    private function createContextForGivenCodes(array $contextDataSet, $decoratorCodes)
+    {
         $versionedContext = new VersionedContext($this->dataVersion);
-        $codes = $this->getContextDecoratorCodesToCreate($contextDataSet);
-        return array_reduce($codes, function ($context, $code) use ($contextDataSet) {
+        return array_reduce($decoratorCodes, function ($context, $code) use ($contextDataSet) {
             return $this->createContextDecorator($context, $code, $contextDataSet);
         }, $versionedContext);
     }
@@ -166,11 +186,31 @@ class ContextBuilder
      * @param string[] $contextDataSet
      * @return string[]
      */
-    private function getContextDecoratorCodesToCreate(array $contextDataSet)
+    private function getContextCodesFromDataSetAndRegisteredCodes(array $contextDataSet)
     {
-        $dataSetCodes = array_diff(array_keys($contextDataSet), [VersionedContext::CODE]);
-        $registeredDecoratorCodes = array_diff(array_keys($this->registeredContextDecorators), $dataSetCodes);
+        $dataSetCodes = $this->getContextCodesFromDataSet($contextDataSet);
+        $registeredDecoratorCodes = array_diff($this->getRegisteredContextCodes(), $dataSetCodes);
         $codes = array_merge($dataSetCodes, $registeredDecoratorCodes);
+        return $codes;
+    }
+
+    /**
+     * @param mixed[] $contextDataSet
+     * @return string[]
+     */
+    private function getContextCodesFromDataSet(array $contextDataSet)
+    {
+        $codes = array_diff(array_keys($contextDataSet), [VersionedContext::CODE]);
+        sort($codes);
+        return $codes;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getRegisteredContextCodes()
+    {
+        $codes = array_keys($this->registeredContextDecorators);
         sort($codes);
         return $codes;
     }
