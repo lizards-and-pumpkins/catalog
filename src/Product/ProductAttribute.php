@@ -13,7 +13,7 @@ class ProductAttribute implements Attribute
     private $code;
 
     /**
-     * @var array
+     * @var string[]
      */
     private $contextData;
 
@@ -25,7 +25,7 @@ class ProductAttribute implements Attribute
     /**
      * @param string $code
      * @param string|ProductAttributeList $value
-     * @param mixed[] $contextData
+     * @param string[] $contextData
      */
     private function __construct($code, $value, array $contextData = [])
     {
@@ -35,14 +35,25 @@ class ProductAttribute implements Attribute
     }
 
     /**
-     * @param mixed[] $node
+     * @param mixed[] $attribute
      * @return ProductAttribute
      */
-    public static function fromArray(array $node)
+    public static function fromArray(array $attribute)
     {
-        return new self($node['nodeName'], self::getValueRecursive($node['value']), $node['attributes']);
+        return new self($attribute['code'], self::getValueRecursive($attribute['value']), $attribute['contextData']);
     }
 
+    /**
+     * @param string|mixed[] $attributeValue
+     * @return string|ProductAttributeList
+     */
+    private static function getValueRecursive($attributeValue)
+    {
+        return is_array($attributeValue) ?
+            ProductAttributeList::fromArray($attributeValue) :
+            $attributeValue;
+    }
+    
     /**
      * @return string[]
      */
@@ -71,25 +82,6 @@ class ProductAttribute implements Attribute
     public function hasSameCodeAs(ProductAttribute $attribute)
     {
         return $this->code === $attribute->getCode();
-    }
-
-    /**
-     * @param array|string $nodeValue
-     * @return string|ProductAttributeList
-     */
-    private static function getValueRecursive($nodeValue)
-    {
-        if (!is_array($nodeValue)) {
-            return $nodeValue;
-        }
-
-        $list = new ProductAttributeList();
-
-        foreach ($nodeValue as $node) {
-            $list->add(new self($node['nodeName'], self::getValueRecursive($node['value']), $node['attributes']));
-        }
-
-        return $list;
     }
 
     /**
@@ -126,10 +118,7 @@ class ProductAttribute implements Attribute
         return array_reduce(
             $context->getSupportedCodes(),
             function ($score, $contextCode) use ($context) {
-                return $score + $this->getScoreIfContextIsSetAndMatches(
-                    $contextCode,
-                    $context
-                );
+                return $score + $this->getScoreIfContextPartIsSetAndMatches($contextCode, $context);
             },
             0
         );
@@ -140,10 +129,10 @@ class ProductAttribute implements Attribute
      * @param Context $context
      * @return int
      */
-    private function getScoreIfContextIsSetAndMatches($contextCode, Context $context)
+    private function getScoreIfContextPartIsSetAndMatches($contextCode, Context $context)
     {
         return array_key_exists($contextCode, $this->contextData) ?
-            $this->getScoreIfContextMatches($contextCode, $context) :
+            $this->getScoreIfContextPartMatches($contextCode, $context) :
             0;
     }
 
@@ -152,10 +141,32 @@ class ProductAttribute implements Attribute
      * @param Context $context
      * @return int
      */
-    private function getScoreIfContextMatches($contextCode, Context $context)
+    private function getScoreIfContextPartMatches($contextCode, Context $context)
     {
         return $context->getValue($contextCode) === $this->contextData[$contextCode] ?
             1 :
             0;
+    }
+
+    /**
+     * @param string $contextPartCode
+     * @return string
+     */
+    public function getContextPartValue($contextPartCode)
+    {
+        $this->validateContextPartIsPresent($contextPartCode);
+        return $this->contextData[$contextPartCode];
+    }
+
+    /**
+     * @param string $contextCode
+     */
+    private function validateContextPartIsPresent($contextCode)
+    {
+        if (!isset($this->contextData[$contextCode])) {
+            throw new ProductAttributeDoesNotContainContextPartException(
+                sprintf('The context part "%s" is not present on the attribute "%s"', $contextCode, $this->getCode())
+            );
+        }
     }
 }

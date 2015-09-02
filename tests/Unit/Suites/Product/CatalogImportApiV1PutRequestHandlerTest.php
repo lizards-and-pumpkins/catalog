@@ -164,7 +164,7 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
 
         $exceptionMessage = 'bar';
         $this->stubProductSourceBuilder->method('createProductSourceFromXml')
-            ->willThrowException(new AttributeContextPartsMismatchException($exceptionMessage));
+            ->willThrowException(new ProductAttributeContextPartsMismatchException($exceptionMessage));
 
         $this->logger->expects($this->atLeastOnce())->method('log')
             ->with($this->isInstanceOf(ProductImportFailedMessage::class));

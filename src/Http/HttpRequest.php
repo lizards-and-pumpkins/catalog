@@ -94,6 +94,14 @@ abstract class HttpRequest
     }
 
     /**
+     * @return string
+     */
+    public function getUrlPathRelativeToWebFront()
+    {
+        return $this->getUrl()->getPathRelativeToWebFront();
+    }
+
+    /**
      * @param string $headerName
      * @return string
      */

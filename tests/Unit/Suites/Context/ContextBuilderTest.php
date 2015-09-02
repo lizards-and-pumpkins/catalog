@@ -37,6 +37,17 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
         $this->builder->createContextsFromDataSets([['nonExistingContextPartCode' => 'contextPartValue']]);
     }
 
+    public function testNoExceptionIsThrownForDataSetMissingRegisteredDecoratorParts()
+    {
+        $this->builder->registerContextDecorator('locale', LocaleContextDecorator::class);
+        $contexts = [
+            ['stub_valid_test' => 'dummy'],
+        ];
+        foreach ($this->builder->createContextsFromDataSets($contexts) as $context) {
+            $this->assertNotContains('locale', $context->getSupportedCodes());
+        }
+    }
+
     public function testExceptionIsThrownForNonContextDecoratorClass()
     {
         $this->setExpectedException(InvalidContextDecoratorClassException::class);

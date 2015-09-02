@@ -8,7 +8,7 @@ class Product
      * @var ProductId
      */
     private $productId;
-    
+
     /**
      * @var ProductAttributeList
      */
@@ -35,28 +35,23 @@ class Product
     public function getFirstValueOfAttribute($attributeCode)
     {
         $attributeValues = $this->getAllValuesOfAttribute($attributeCode);
-
-        return $attributeValues[0];
+        
+        return isset($attributeValues[0]) ?
+            $attributeValues[0] :
+            '';
     }
 
     /**
      * @param string $attributeCode
-     * @return string[]|ProductAttributeList[]
+     * @return string[]|ProductAttributeList[]|mixed[]
      */
     public function getAllValuesOfAttribute($attributeCode)
     {
-        $values = [];
-
-        try {
-            $productAttributes = $this->attributeList->getAttributesWithCode($attributeCode);
-            foreach ($productAttributes as $productAttribute) {
-                $values[] = $productAttribute->getValue();
-            }
-        } catch (ProductAttributeNotFoundException $e) {
-            /* TODO: Log */
-            return [''];
+        if (! $this->attributeList->hasAttribute($attributeCode)) {
+            return [];
         }
-
-        return $values;
+        return array_map(function (ProductAttribute $productAttribute) {
+            return $productAttribute->getValue();
+        }, $this->attributeList->getAttributesWithCode($attributeCode));
     }
 }

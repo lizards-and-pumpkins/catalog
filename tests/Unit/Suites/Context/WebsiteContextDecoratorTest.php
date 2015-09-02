@@ -91,12 +91,13 @@ class WebsiteContextDecoratorTest extends AbstractContextDecoratorTest
         return [
             'website' => [['website' => 'test'], 'test'],
             'request ru' => [['request' => $this->createTestRequest('http://example.com/ru')], 'ru'],
-            'request cy' => [['request' => $this->createTestRequest('http://example.com/cy')], 'cy'],
-            'request ru_de' => [['request' => $this->createTestRequest('http://example.com/ru_de')], 'ru'],
-            'request cy_de' => [['request' => $this->createTestRequest('http://example.com/cy_de')], 'cy'],
+            'request cy' => [['request' => $this->createTestRequest('http://example.com/cy')], 'ru'],
+            'request _cy' => [['request' => $this->createTestRequest('http://example.com/_cy')], 'ru'],
+            'request ru_de' => [['request' => $this->createTestRequest('http://example.com/ru_xx')], 'ru'],
+            'request cy_de' => [['request' => $this->createTestRequest('http://example.com/cy_xx')], 'cy'],
             'default' => [['request' => $this->createTestRequest('http://example.com/')], 'ru'],
             'website has priority' => [
-                ['request' => $this->createTestRequest('http://example.com/ru_de'), 'website' => 'bbb'],
+                ['request' => $this->createTestRequest('http://example.com/ru_xx'), 'website' => 'bbb'],
                 'bbb'
             ],
         ];

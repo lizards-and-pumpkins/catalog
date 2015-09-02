@@ -8,9 +8,9 @@ use Brera\Http\HttpRequest;
 class WebsiteContextDecorator extends ContextDecorator
 {
     const CODE = 'website';
-    
+
     private $defaultWebsite = 'ru';
-    
+
     private $validWebsites = [
         'ru',
         'cy'
@@ -79,7 +79,7 @@ class WebsiteContextDecorator extends ContextDecorator
     private function getWebsiteFromRequest()
     {
         $websiteFromPath = $this->getWebsiteFromRequestPath();
-        return in_array($websiteFromPath, $this->validWebsites)?
+        return in_array($websiteFromPath, $this->validWebsites) ?
             $websiteFromPath :
             $this->defaultWebsite;
     }
@@ -89,12 +89,21 @@ class WebsiteContextDecorator extends ContextDecorator
      */
     private function getWebsiteFromRequestPath()
     {
-        $path = $this->getRequest()->getUrl()->getPathRelativeToWebFront();
-        if ('' === $path) {
-            return '';
-        }
-        $pathParts = explode('/', $path, 2);
-        list($website) = explode('_', $pathParts[0], 2);
-        return $website;
+        $firstPathPart = $this->getFirstRequestPathPart();
+        $pos = strpos($firstPathPart, '_');
+        return $pos > 1 ?
+            substr($firstPathPart, 0, $pos) :
+            '';
+    }
+
+    /**
+     * @return string
+     */
+    private function getFirstRequestPathPart()
+    {
+        $path = $this->getRequest()->getUrlPathRelativeToWebFront();
+        return '' !== $path ?
+            explode('/', $path, 2)[0] :
+            '';
     }
 }

@@ -19,9 +19,26 @@ class ProductSourceBuilder
         $productId = ProductId::fromString($skuString);
 
         $attributeNodes = $parser->getXmlNodesArrayByXPath('/product/attributes/*');
-        $attributeList = ProductAttributeList::fromArray($attributeNodes);
+        $attributesArray = array_map([$this, 'nodeArrayAsAttributeArray'], $attributeNodes);
+        $attributeList = ProductAttributeList::fromArray($attributesArray);
 
         return new ProductSource($productId, $attributeList);
+    }
+    
+    /**
+     * @param mixed[] $node
+     * @return mixed[]
+     */
+    private function nodeArrayAsAttributeArray(array $node)
+    {
+        $value = !is_array($node['value']) ?
+            $node['value'] :
+            array_map([$this, 'nodeArrayAsAttributeArray'], $node['value']);
+        return [
+            'code' => $node['nodeName'],
+            'contextData' => $node['attributes'],
+            'value' => $value,
+        ];
     }
 
     /**

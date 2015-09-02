@@ -31,12 +31,20 @@ class ProductSource
     }
 
     /**
+     * @return ProductAttributeList
+     */
+    public function getAttributeList()
+    {
+        return $this->attributes;
+    }
+
+    /**
      * @param Context $context
      * @return Product
      */
     public function getProductForContext(Context $context)
     {
-        $attributes = $this->attributes->getAttributesForContext($context);
+        $attributes = $this->attributes->getAttributeListForContext($context);
         return new Product($this->getId(), $attributes);
     }
 }

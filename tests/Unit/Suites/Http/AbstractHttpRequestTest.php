@@ -34,7 +34,24 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
         );
         $result = $httpRequest->getUrl();
 
-        $this->assertEquals($result, $url);
+        $this->assertEquals($url, $result);
+    }
+
+    public function testUrlPathRelativeToWebFrontIsReturned()
+    {
+        $path = 'foo';
+
+        /** @var HttpUrl|\PHPUnit_Framework_MockObject_MockObject $stubHttpUrl */
+        $stubHttpUrl = $this->getMock(HttpUrl::class, [], [], '', false);
+        $stubHttpUrl->method('getPathRelativeToWebFront')->willReturn($path);
+
+        $httpRequest = HttpRequest::fromParameters(
+            HttpRequest::METHOD_GET,
+            $stubHttpUrl,
+            HttpHeaders::fromArray([]),
+            HttpRequestBody::fromString('')
+        );
+        $this->assertSame($path, $httpRequest->getUrlPathRelativeToWebFront());
     }
 
     public function testUnsupportedRequestMethodExceptionIsThrown()
