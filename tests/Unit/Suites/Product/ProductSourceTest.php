@@ -41,6 +41,11 @@ class ProductSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->stubProductId, $result);
     }
 
+    public function testItReturnsTheAttributeList()
+    {
+        $this->assertSame($this->mockProductAttributeList, $this->productSource->getAttributeList());
+    }
+
     public function testProductForContextIsReturned()
     {
         $stubContext = $this->getMock(Context::class);

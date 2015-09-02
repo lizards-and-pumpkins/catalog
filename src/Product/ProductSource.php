@@ -31,6 +31,14 @@ class ProductSource
     }
 
     /**
+     * @return ProductAttributeList
+     */
+    public function getAttributeList()
+    {
+        return $this->attributes;
+    }
+
+    /**
      * @param Context $context
      * @return Product
      */
