@@ -11,7 +11,7 @@ use Brera\Log\LogMessage;
 use Brera\Log\Persister\CompositeLogMessagePersister;
 use Brera\Log\Persister\FileLogMessagePersister;
 use Brera\Log\Persister\LogMessagePersister;
-use Brera\Log\Persister\StdOutMessagePersister;
+use Brera\Log\Persister\StdOutLogMessagePersister;
 use Brera\Queue\File\FileQueue;
 use Brera\Queue\LoggingQueueDecorator;
 use Brera\Queue\Queue;
@@ -95,7 +95,7 @@ class LoggingQueueFactory implements Factory
     public function createLogMessagePersister()
     {
         return CompositeLogMessagePersister::fromParameterList(
-            new StdOutMessagePersister(),
+            new StdOutLogMessagePersister(),
             new FileLogMessagePersister($this->getMasterFactory()->getLogFilePathConfig())
         );
     }
