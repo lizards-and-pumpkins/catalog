@@ -9,7 +9,7 @@ use Brera\Image\ImageProcessor;
 use Brera\Image\ImageProcessorCollection;
 use Brera\Image\ImageProcessingStrategySequence;
 use Brera\IntegrationTestFactory;
-use Brera\InMemoryLogger;
+use Brera\Log\InMemoryLogger;
 use Brera\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
 use Brera\LocalFilesystemStorageReader;
 use Brera\LocalFilesystemStorageWriter;

@@ -2,6 +2,9 @@
 
 namespace Brera;
 
+use Brera\Log\InMemoryLogger;
+use Brera\Log\LogMessage;
+
 /**
  * @covers \Brera\InMemoryLogger
  */

@@ -2,6 +2,8 @@
 
 namespace Brera;
 
+use Brera\Log\InMemoryLogger;
+
 /**
  * @method DataPool\DataPoolWriter createDataPoolWriter
  * @method DataPool\DataPoolReader createDataPoolReader

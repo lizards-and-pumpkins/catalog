@@ -23,6 +23,7 @@ use Brera\Image\ImageWasUpdatedDomainEventHandler;
 use Brera\Image\ImageProcessorCollection;
 use Brera\Image\UpdateImageCommand;
 use Brera\Image\UpdateImageCommandHandler;
+use Brera\Log\Logger;
 use Brera\Product\DefaultNumberOfProductsPerPageSnippetRenderer;
 use Brera\Product\PriceSnippetRenderer;
 use Brera\Product\ProductBackOrderAvailabilitySnippetRenderer;

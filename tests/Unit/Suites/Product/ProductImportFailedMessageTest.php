@@ -2,7 +2,7 @@
 
 namespace Brera\Product;
 
-use Brera\LogMessage;
+use Brera\Log\LogMessage;
 
 /**
  * @covers \Brera\Product\ProductImportFailedMessage

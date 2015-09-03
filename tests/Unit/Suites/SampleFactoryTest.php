@@ -12,7 +12,7 @@ use Brera\LocalFilesystemStorageWriter;
 use Brera\Queue\File\FileQueue;
 use Brera\SampleMasterFactory;
 use Brera\SampleFactory;
-use Brera\InMemoryLogger;
+use Brera\Log\InMemoryLogger;
 
 /**
  * @covers \Brera\SampleFactory

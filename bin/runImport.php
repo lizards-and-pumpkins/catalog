@@ -7,6 +7,7 @@ use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestBody;
 use Brera\Http\HttpRouterChain;
 use Brera\Http\HttpUrl;
+use Brera\Log\LogMessage;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -76,13 +77,13 @@ $catalogImportRequest = HttpRequest::fromParameters(
     HttpRequest::METHOD_PUT,
     HttpUrl::fromString('http://example.com/api/catalog_import'),
     HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.catalog_import.v1+json']),
-    HttpRequestBody::fromString(json_encode(['fileName' => 'catalog.xml']))
+    HttpRequestBody::fromString(json_encode(['fileName' => 'catalog-seed.xml']))
 );
 $catalogImport = new ApiApp($catalogImportRequest);
 $catalogImport->runWithoutSendingResponse();
 
 
-$catalogImport->processQueues();
+//$catalogImport->processQueues();
 
 
 $messages = array_merge($productListingImport->getLoggedMessages(), $catalogImport->getLoggedMessages());

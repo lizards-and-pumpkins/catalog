@@ -8,6 +8,7 @@ use Brera\Image\ImageMagickInscribeStrategy;
 use Brera\Image\ImageProcessor;
 use Brera\Image\ImageProcessorCollection;
 use Brera\Image\ImageProcessingStrategySequence;
+use Brera\Log\InMemoryLogger;
 use Brera\Queue\File\FileQueue;
 use Brera\Queue\InMemory\InMemoryQueue;
 
