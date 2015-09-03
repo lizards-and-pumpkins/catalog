@@ -9,6 +9,10 @@ use Brera\Image\ImageProcessor;
 use Brera\Image\ImageProcessorCollection;
 use Brera\Image\ImageProcessingStrategySequence;
 use Brera\Log\InMemoryLogger;
+use Brera\Log\Persister\FileLogMessagePersister;
+use Brera\Log\Persister\LogMessagePersister;
+use Brera\Log\Persister\NullLogMessagePersister;
+use Brera\Log\PersistingLoggerDecorator;
 use Brera\Queue\File\FileQueue;
 use Brera\Queue\InMemory\InMemoryQueue;
 
@@ -52,7 +56,26 @@ class SampleFactory implements Factory
      */
     public function createLogger()
     {
-        return new InMemoryLogger();
+        return new PersistingLoggerDecorator(
+            new InMemoryLogger(),
+            $this->getMasterFactory()->createLogMessagePersister()
+        );
+    }
+
+    /**
+     * @return LogMessagePersister
+     */
+    public function createLogMessagePersister()
+    {
+        return new FileLogMessagePersister($this->getLogFilePathConfig());
+    }
+
+    /**
+     * @return string
+     */
+    public function getLogFilePathConfig()
+    {
+        return __DIR__ . '/../log/system.log';
     }
 
     /**

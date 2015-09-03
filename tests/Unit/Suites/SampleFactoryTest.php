@@ -9,15 +9,18 @@ use Brera\Image\ImageProcessorCollection;
 use Brera\Image\ImageProcessingStrategySequence;
 use Brera\LocalFilesystemStorageReader;
 use Brera\LocalFilesystemStorageWriter;
+use Brera\Log\Persister\FileLogMessagePersister;
+use Brera\Log\PersistingLoggerDecorator;
 use Brera\Queue\File\FileQueue;
 use Brera\SampleMasterFactory;
 use Brera\SampleFactory;
-use Brera\Log\InMemoryLogger;
 
 /**
  * @covers \Brera\SampleFactory
  * @uses   \Brera\FactoryTrait
- * @uses   \Brera\InMemoryLogger
+ * @uses   \Brera\Log\InMemoryLogger
+ * @uses   \Brera\Log\PersistingLoggerDecorator
+ * @uses   \Brera\Log\Persister\FileLogMessagePersister
  * @uses   \Brera\DataPool\KeyValue\File\FileKeyValueStore
  * @uses   \Brera\DataPool\SearchEngine\FileSearchEngine
  * @uses   \Brera\Image\ImageMagickInscribeStrategy
@@ -77,9 +80,14 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(FileQueue::class, $this->factory->createCommandQueue());
     }
 
-    public function testInMemoryLoggerIsReturned()
+    public function testPersistingLoggerIsReturned()
     {
-        $this->assertInstanceOf(InMemoryLogger::class, $this->factory->createLogger());
+        $this->assertInstanceOf(PersistingLoggerDecorator::class, $this->factory->createLogger());
+    }
+
+    public function testLogMessagePersisterIsReturned()
+    {
+        $this->assertInstanceOf(FileLogMessagePersister::class, $this->factory->createLogMessagePersister());
     }
 
     public function testArrayOfSearchableAttributeCodesIsReturned()

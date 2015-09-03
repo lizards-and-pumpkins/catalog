@@ -27,7 +27,7 @@ use Brera\Utils\LocalFilesystem;
  * @uses   \Brera\Image\ImageProcessor
  * @uses   \Brera\Image\ImageProcessorCollection
  * @uses   \Brera\Image\ImageProcessingStrategySequence
- * @uses   \Brera\InMemoryLogger
+ * @uses   \Brera\Log\InMemoryLogger
  * @uses   \Brera\LocalFilesystemStorageReader
  * @uses   \Brera\LocalFilesystemStorageWriter
  * @uses   \Brera\MasterFactoryTrait
