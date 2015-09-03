@@ -20,7 +20,7 @@ class NullLogMessagePersisterTest extends \PHPUnit_Framework_TestCase
         $this->persister = new NullLogMessagePersister();
     }
     
-    public function testItImplementsALogPersister()
+    public function testItIsALogMessagePersister()
     {
         $this->assertInstanceOf(LogMessagePersister::class, $this->persister);
     }
