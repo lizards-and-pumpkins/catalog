@@ -191,6 +191,7 @@ class ContextBuilder
         $dataSetCodes = $this->getContextCodesFromDataSet($contextDataSet);
         $registeredDecoratorCodes = array_diff($this->getRegisteredContextCodes(), $dataSetCodes);
         $codes = array_merge($dataSetCodes, $registeredDecoratorCodes);
+        sort($codes);
         return $codes;
     }
 
@@ -210,8 +211,6 @@ class ContextBuilder
      */
     private function getRegisteredContextCodes()
     {
-        $codes = array_keys($this->registeredContextDecorators);
-        sort($codes);
-        return $codes;
+        return array_keys($this->registeredContextDecorators);
     }
 }

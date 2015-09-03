@@ -10,6 +10,7 @@ use Brera\Http\HttpRequest;
  * @covers \Brera\Context\ContextBuilder
  * @uses   \Brera\Context\VersionedContext
  * @uses   \Brera\Context\WebsiteContextDecorator
+ * @uses   \Brera\Context\LocaleContextDecorator
  * @uses   \Brera\Context\ContextDecorator
  * @uses   \Brera\DataVersion
  */
@@ -127,19 +128,54 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
         /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubRequest */
         $stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
         $this->builder->registerContextDecorator('request_test', TestContextDecorator::class);
+        
         /** @var TestContextDecorator $context */
         $context = $this->builder->createFromRequest($stubRequest);
+        
         $rawSourceData = $context->getRawSourceDataForTest();
         $this->assertArrayHasKey('request', $rawSourceData);
         $this->assertSame($stubRequest, $rawSourceData['request']);
     }
 
-    public function testContextsAreInstantiatedInTheSameOrderIndependentOfHowTheyAreSpecified()
+    public function testContextDecoratorOrderIsIndependentOfTheContextSourceArrayOrder()
     {
         $contextSourceA = ['stub_valid_test' => 'dummy', 'website' => 'test'];
         $contextSourceB = ['website' => 'test', 'stub_valid_test' => 'dummy'];
+        
         $contextA = $this->builder->createContext($contextSourceA);
         $contextB = $this->builder->createContext($contextSourceB);
-        $this->assertSame($contextA->getId(), $contextB->getId(), "Context decorator order is not the same");
+        
+        $this->assertSame($contextA->getId(), $contextB->getId(), 'Context decorator order depends on input');
+    }
+
+    public function testContextDecoratorOrderIsIndependentOfTheContextSourceArrayOrderInForDataSets()
+    {
+        $contextDataSetA = [['stub_valid_test' => 'dummy', 'website' => 'test']];
+        $contextDataSetB = [['website' => 'test', 'stub_valid_test' => 'dummy']];
+        
+        $setA = $this->builder->createContextsFromDataSets($contextDataSetA);
+        $setB = $this->builder->createContextsFromDataSets($contextDataSetB);
+
+        $message = 'Context decorators in context sets are not always built in the same order';
+        $this->assertSame($setA[0]->getId(), $setB[0]->getId(), $message);
+    }
+
+    public function testContextDecoratorOrderIsIndependentOfDecoratorRegistrationOrder()
+    {
+        $builderA = $this->builder;
+        $builderB = new ContextBuilder(DataVersion::fromVersionString('1'));
+        
+        $builderA->registerContextDecorator('locale', LocaleContextDecorator::class);
+        $builderA->registerContextDecorator('website', WebsiteContextDecorator::class);
+
+        $builderB->registerContextDecorator('website', WebsiteContextDecorator::class);
+        $builderB->registerContextDecorator('locale', LocaleContextDecorator::class);
+
+        $contextSource = ['request' => $this->getMock(HttpRequest::class, [], [], '', false)];
+        $contextA = $builderA->createContext($contextSource);
+        $contextB = $builderB->createContext($contextSource);
+
+        $message = 'Context decorator order depends on registration order';
+        $this->assertSame($contextA->getId(), $contextB->getId(), $message);
     }
 }
