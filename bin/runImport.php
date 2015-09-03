@@ -8,6 +8,9 @@ use Brera\Http\HttpRequestBody;
 use Brera\Http\HttpRouterChain;
 use Brera\Http\HttpUrl;
 use Brera\Log\LogMessage;
+use Brera\Queue\File\FileQueue;
+use Brera\Queue\LoggingQueueDecorator;
+use Brera\Queue\Queue;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -25,6 +28,7 @@ class ApiApp extends WebFront
     {
         $factory->register(new CommonFactory());
         $factory->register(new SampleFactory());
+        $factory->register(new LoggingQueueFactory());
         $factory->register(new FrontendFactory($this->getRequest()));
     }
 
@@ -48,6 +52,37 @@ class ApiApp extends WebFront
     public function getLoggedMessages()
     {
         return $this->getMasterFactory()->getLogger()->getMessages();
+    }
+}
+
+class LoggingQueueFactory implements Factory
+{
+    use FactoryTrait;
+
+    /**
+     * @return Queue
+     */
+    public function createEventQueue()
+    {
+        $storagePath = sys_get_temp_dir() . '/brera/event-queue/content';
+        $lockFile = sys_get_temp_dir() . '/brera/event-queue/lock';
+        return new LoggingQueueDecorator(
+            new FileQueue($storagePath, $lockFile),
+            $this->getMasterFactory()->getLogger()
+        );
+    }
+
+    /**
+     * @return Queue
+     */
+    public function createCommandQueue()
+    {
+        $storagePath = sys_get_temp_dir() . '/brera/command-queue/content';
+        $lockFile = sys_get_temp_dir() . '/brera/command-queue/lock';
+        return new LoggingQueueDecorator(
+            new FileQueue($storagePath, $lockFile),
+            $this->getMasterFactory()->getLogger()
+        );
     }
 }
 
