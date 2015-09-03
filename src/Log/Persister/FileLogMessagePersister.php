@@ -74,7 +74,18 @@ class FileLogMessagePersister implements LogMessagePersister
      */
     private function formatMessage(LogMessage $message)
     {
-        $contextStr = preg_replace('/  +/', ' ', str_replace(["\n", "\r"], ' ', print_r($message->getContext(), true)));
+        // Todo: add the $message class name
+        $contextStr = $this->formatContextString($message);
         return sprintf("%s\t%s\t%s\n", date('c'), $message, $contextStr);
+    }
+
+    /**
+     * @param LogMessage $message
+     * @return string
+     */
+    private function formatContextString(LogMessage $message)
+    {
+        // Todo: truncate large context data
+        return preg_replace('/  +/', ' ', str_replace(["\n", "\r"], ' ', print_r($message->getContext(), true)));
     }
 }
