@@ -37,6 +37,6 @@ class StdOutMessageWriterTest extends \PHPUnit_Framework_TestCase
         $actual = ob_get_contents();
         ob_end_clean();
         
-        $this->assertSame(get_class($stubMessage) . "\t" . $testMessageString . "\n", $actual);
+        $this->assertSame(get_class($stubMessage) . ":\t" . $testMessageString . "\n", $actual);
     }
 }

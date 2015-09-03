@@ -9,6 +9,6 @@ class StdOutMessageWriter implements LogMessageWriter
 {
     public function persist(LogMessage $logMessage)
     {
-        echo get_class($logMessage) . "\t" . $logMessage . "\n";
+        echo get_class($logMessage) . ":\t" . $logMessage . "\n";
     }
 }

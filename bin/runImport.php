@@ -8,6 +8,10 @@ use Brera\Http\HttpRequestBody;
 use Brera\Http\HttpRouterChain;
 use Brera\Http\HttpUrl;
 use Brera\Log\LogMessage;
+use Brera\Log\Persister\CompositeLogMessagePersister;
+use Brera\Log\Persister\FileLogMessagePersister;
+use Brera\Log\Persister\LogMessagePersister;
+use Brera\Log\Persister\StdOutMessagePersister;
 use Brera\Queue\File\FileQueue;
 use Brera\Queue\LoggingQueueDecorator;
 use Brera\Queue\Queue;
@@ -82,6 +86,17 @@ class LoggingQueueFactory implements Factory
         return new LoggingQueueDecorator(
             new FileQueue($storagePath, $lockFile),
             $this->getMasterFactory()->getLogger()
+        );
+    }
+
+    /**
+     * @return LogMessagePersister
+     */
+    public function createLogMessagePersister()
+    {
+        return CompositeLogMessagePersister::fromParameterList(
+            new StdOutMessagePersister(),
+            new FileLogMessagePersister($this->getMasterFactory()->getLogFilePathConfig())
         );
     }
 }

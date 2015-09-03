@@ -66,7 +66,7 @@ class SampleFactory implements Factory
      */
     public function createLogMessagePersister()
     {
-        return new FileLogMessageWriter($this->getLogFilePathConfig());
+        return new FileLogMessagePersister($this->getMasterFactory()->getLogFilePathConfig());
     }
 
     /**
