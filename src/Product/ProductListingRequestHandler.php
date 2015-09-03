@@ -50,24 +50,21 @@ class ProductListingRequestHandler implements HttpRequestHandler
     private $filterNavigationBlockRenderer;
 
     /**
-     * @var string[]
+     * @var FilterNavigationFilterCollection
+     */
+    private $filterNavigationFilterCollection;
+    /**
+     * @var array
      */
     private $filterNavigationAttributeCodes;
 
-    /**
-     * @param Context $context
-     * @param DataPoolReader $dataPoolReader
-     * @param PageBuilder $pageBuilder
-     * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
-     * @param BlockRenderer $filterNavigationBlockRenderer
-     * @param string[] $filterNavigationAttributeCodes
-     */
     public function __construct(
         Context $context,
         DataPoolReader $dataPoolReader,
         PageBuilder $pageBuilder,
         SnippetKeyGeneratorLocator $keyGeneratorLocator,
         BlockRenderer $filterNavigationBlockRenderer,
+        FilterNavigationFilterCollection $filterNavigationFilterCollection,
         array $filterNavigationAttributeCodes
     ) {
         $this->dataPoolReader = $dataPoolReader;
@@ -75,6 +72,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $this->pageBuilder = $pageBuilder;
         $this->keyGeneratorLocator = $keyGeneratorLocator;
         $this->filterNavigationBlockRenderer = $filterNavigationBlockRenderer;
+        $this->filterNavigationFilterCollection = $filterNavigationFilterCollection;
         $this->filterNavigationAttributeCodes = $filterNavigationAttributeCodes;
     }
 
@@ -98,11 +96,28 @@ class ProductListingRequestHandler implements HttpRequestHandler
             throw new UnableToHandleRequestException(sprintf('Unable to process request with handler %s', __CLASS__));
         }
 
-        $searchDocumentCollection = $this->getCollectionOfSearchDocumentsMatchingCriteria();
-        $this->addFilterNavigationSnippetToPageBuilder($searchDocumentCollection);
+        $originalSelectionCriteria = $this->pageMetaInfo->getSelectionCriteria();
 
-        $filteredCollection = $this->applyFiltersToSearchDocumentCollection($searchDocumentCollection, $request);
-        $this->addProductsInListingToPageBuilder($filteredCollection);
+        $selectedFilters = $this->getSelectedFilterValuesFromRequest($request);
+        $selectionCriteriaWithSelectedFiltersApplied = $this->applyFiltersToSelectionCriteria(
+            $originalSelectionCriteria,
+            $selectedFilters
+        );
+
+        $searchDocumentCollection = $this->getCollectionOfSearchDocumentsMatchingCriteria(
+            $selectionCriteriaWithSelectedFiltersApplied
+        );
+
+        if (0 < count($searchDocumentCollection)) {
+            $this->filterNavigationFilterCollection->initialize(
+                $searchDocumentCollection,
+                $originalSelectionCriteria,
+                $selectedFilters,
+                $this->context
+            );
+            $this->addFilterNavigationSnippetToPageBuilder();
+            $this->addProductsInListingToPageBuilder($searchDocumentCollection);
+        }
 
         $keyGeneratorParams = [
             'products_per_page' => $this->getDefaultNumberOrProductsPerPage(),
@@ -140,10 +155,6 @@ class ProductListingRequestHandler implements HttpRequestHandler
 
     private function addProductsInListingToPageBuilder(SearchDocumentCollection $searchDocumentCollection)
     {
-        if (0 === count($searchDocumentCollection)) {
-            return;
-        }
-
         $productInListingSnippetKeys = $this->getProductInListingSnippetKeysSearchDocumentCollection(
             $searchDocumentCollection
         );
@@ -155,11 +166,11 @@ class ProductListingRequestHandler implements HttpRequestHandler
     }
 
     /**
+     * @param SearchCriteria $selectionCriteria
      * @return SearchDocumentCollection
      */
-    private function getCollectionOfSearchDocumentsMatchingCriteria()
+    private function getCollectionOfSearchDocumentsMatchingCriteria(SearchCriteria $selectionCriteria)
     {
-        $selectionCriteria = $this->pageMetaInfo->getSelectionCriteria();
         return $this->dataPoolReader->getSearchDocumentsMatchingCriteria($selectionCriteria, $this->context);
     }
 
@@ -218,16 +229,9 @@ class ProductListingRequestHandler implements HttpRequestHandler
         return $metaInfoSnippetKey;
     }
 
-    private function addFilterNavigationSnippetToPageBuilder(SearchDocumentCollection $searchDocumentCollection)
+    private function addFilterNavigationSnippetToPageBuilder()
     {
-        if (0 === count($searchDocumentCollection)) {
-            return;
-        }
-
-        $dataObject = [
-            'search_document_collection'        => $searchDocumentCollection,
-            'filter_navigation_attribute_codes' => $this->filterNavigationAttributeCodes
-        ];
+        $dataObject = $this->filterNavigationFilterCollection;
 
         $snippetCode = 'filter_navigation';
         $snippetContents = $this->filterNavigationBlockRenderer->render($dataObject, $this->context);
@@ -239,40 +243,52 @@ class ProductListingRequestHandler implements HttpRequestHandler
     }
 
     /**
-     * @param SearchDocumentCollection $searchDocumentCollection
-     * @param HttpRequest $request
-     * @return SearchDocumentCollection
+     * @param SearchCriteria $originalSelectionCriteria
+     * @param array[] $selectedFilters
+     * @return SearchCriteria
      */
-    private function applyFiltersToSearchDocumentCollection(
-        SearchDocumentCollection $searchDocumentCollection,
-        HttpRequest $request
-    ) {
-        if (0 === count($searchDocumentCollection)) {
-            return $searchDocumentCollection;
+    private function applyFiltersToSelectionCriteria(SearchCriteria $originalSelectionCriteria, array $selectedFilters)
+    {
+        if (empty($selectedFilters)) {
+            return $originalSelectionCriteria;
         }
 
-        // TODO: Refactor this mess. Maybe move it into HttpRequest
         $filtersCriteria = SearchCriteria::createAnd();
-        foreach ($this->filterNavigationAttributeCodes as $attributeCode) {
-            $rawAttributeValue = $request->getQueryParameter($attributeCode);
 
-            if (!trim($rawAttributeValue)) {
+        foreach ($selectedFilters as $filterCode => $filterValues) {
+            if (empty($filterValues)) {
                 continue;
             }
 
-            $attributeValues = explode(',', $rawAttributeValue);
-
             $filterCriteria = SearchCriteria::createOr();
-            foreach ($attributeValues as $attributeValue) {
-                $filterCriteria->addCriterion(SearchCriterion::create($attributeCode, $attributeValue, '='));
+            foreach ($filterValues as $filterValue) {
+                $filterCriteria->addCriterion(SearchCriterion::create($filterCode, $filterValue, '='));
             }
             $filtersCriteria->addCriteria($filterCriteria);
         }
 
         if (empty($filtersCriteria->getCriteria())) {
-            return $searchDocumentCollection;
+            return $originalSelectionCriteria;
         }
 
-        return $searchDocumentCollection->getCollectionFilteredByCriteria($filtersCriteria);
+        $filtersCriteria->addCriteria($originalSelectionCriteria);
+
+        return $filtersCriteria;
+    }
+
+    /**
+     * @param HttpRequest $request
+     * @return array[]
+     */
+    private function getSelectedFilterValuesFromRequest(HttpRequest $request)
+    {
+        $selectedFilters = [];
+
+        foreach ($this->filterNavigationAttributeCodes as $filterCode) {
+            $rawAttributeValue = $request->getQueryParameter($filterCode);
+            $selectedFilters[$filterCode] = array_filter(explode(',', $rawAttributeValue));
+        }
+
+        return $selectedFilters;
     }
 }

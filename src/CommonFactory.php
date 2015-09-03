@@ -25,6 +25,7 @@ use Brera\Image\UpdateImageCommand;
 use Brera\Image\UpdateImageCommandHandler;
 use Brera\Product\DefaultNumberOfProductsPerPageSnippetRenderer;
 use Brera\Product\FilterNavigationBlockRenderer;
+use Brera\Product\FilterNavigationFilterCollection;
 use Brera\Product\PriceSnippetRenderer;
 use Brera\Product\ProductBackOrderAvailabilitySnippetRenderer;
 use Brera\Product\ProductDetailViewBlockRenderer;
@@ -1223,6 +1224,16 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return new FilterNavigationBlockRenderer(
             $this->getMasterFactory()->createThemeLocator(),
             $this->getMasterFactory()->createBlockStructure()
+        );
+    }
+
+    /**
+     * @return FilterNavigationFilterCollection
+     */
+    public function createFilterNavigationFilterCollection()
+    {
+        return new FilterNavigationFilterCollection(
+            $this->getMasterFactory()->createDataPoolReader()
         );
     }
 }

@@ -2,27 +2,68 @@
 
 namespace Brera\Product;
 
-use Brera\Http\HttpRequest;
+use Brera\Context\Context;
+use Brera\DataPool\DataPoolReader;
+use Brera\DataPool\SearchEngine\SearchCriteria;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
 
 /**
  * @covers \Brera\Product\FilterNavigationFilterCollection
+ * @uses   \Brera\DataPool\SearchEngine\SearchCriteria
+ * @uses   \Brera\DataPool\SearchEngine\SearchCriterion
  * @uses   \Brera\Product\FilterNavigationFilter
+ * @uses   \Brera\Product\FilterNavigationFilterValue
+ * @uses   \Brera\Product\FilterNavigationFilterValueCollection
  */
 class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var string[]
+     * @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $attributeCodesAllowedInFilterNavigation = ['foo', 'bar'];
+    private $stubDataPoolReader;
 
     /**
      * @var FilterNavigationFilterCollection
      */
     private $filterCollection;
 
+    /**
+     * @param string $key
+     * @param string $value
+     * @return SearchDocumentField|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubSearchDocumentField($key, $value)
+    {
+        $stubSearchDocumentField = $this->getMock(SearchDocumentField::class, [], [], '', false);
+        $stubSearchDocumentField->method('getKey')->willReturn($key);
+        $stubSearchDocumentField->method('getValue')->willReturn($value);
+
+        return $stubSearchDocumentField;
+    }
+
+    /**
+     * @param SearchDocumentField[] $fields
+     * @return SearchDocument|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubSearchDocumentWithGivenFields(array $fields)
+    {
+        $stubSearchDocumentFieldsCollection = $this->getMock(SearchDocumentFieldCollection::class, [], [], '', false);
+        $stubSearchDocumentFieldsCollection->method('getFields')->willReturn($fields);
+
+        $stubSearchDocument = $this->getMock(SearchDocument::class, [], [], '', false);
+        $stubSearchDocument->method('getFieldsCollection')->willReturn($stubSearchDocumentFieldsCollection);
+
+        return $stubSearchDocument;
+    }
+
     protected function setUp()
     {
-        $this->filterCollection = new FilterNavigationFilterCollection($this->attributeCodesAllowedInFilterNavigation);
+        $this->stubDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
+
+        $this->filterCollection = new FilterNavigationFilterCollection($this->stubDataPoolReader);
     }
 
     public function testCountableInterfaceIsImplemented()
@@ -35,24 +76,177 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(0, $this->filterCollection);
     }
 
-    public function testCollectionIsFilledFromRequest()
+    public function testCollectionOnlyIncludesFiltersConfiguredForFilterNavigation()
     {
-        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubHttpRequest */
-        $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
-        $stubHttpRequest->method('getQueryParameter')->willReturnMap([['foo', 'baz'], ['bar', 'qux']]);
+        $selectedFilters = ['foo' => []];
 
-        $this->filterCollection->fillFromRequest($stubHttpRequest);
+        $stubField1 = $this->createStubSearchDocumentField('foo', 'baz');
+        $stubField2 = $this->createStubSearchDocumentField('bar', 'qux');
 
-        $this->assertCount(2, $this->filterCollection);
+        $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([$stubField1, $stubField2]);
 
-        $filterA = $this->filterCollection->getFilters()['foo'];
-        $this->assertInstanceOf(FilterNavigationFilter::class, $filterA);
-        $this->assertEquals('foo', $filterA->getCode());
-        $this->assertEquals(['baz'], $filterA->getSelectedFilters());
+        /** @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject $stubSearchDocumentCollection */
+        $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
+        $stubSearchDocumentCollection->method('getDocuments')->willReturn([$stubSearchDocument]);
 
-        $filterB = $this->filterCollection->getFilters()['bar'];
-        $this->assertInstanceOf(FilterNavigationFilter::class, $filterB);
-        $this->assertEquals('bar', $filterB->getCode());
-        $this->assertEquals(['qux'], $filterB->getSelectedFilters());
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
+        $stubContext = $this->getMock(Context::class);
+
+        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubSearchCriteria */
+        $stubSearchCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
+
+        $this->filterCollection->initialize(
+            $stubSearchDocumentCollection,
+            $stubSearchCriteria,
+            $selectedFilters,
+            $stubContext
+        );
+        $result = $this->filterCollection->getFilters();
+
+        $this->assertCount(1, $result);
+
+        $this->assertSame('foo', $result[0]->getCode());
+        $this->assertCount(1, $result[0]->getValuesCollection());
+        $this->assertSame('baz', $result[0]->getValuesCollection()->getFilterValues()[0]->getValue());
+        $this->assertSame(1, $result[0]->getValuesCollection()->getFilterValues()[0]->getCount());
+        $this->assertFalse($result[0]->getValuesCollection()->getFilterValues()[0]->isSelected());
+    }
+
+    public function testCollectionReflectsValuesFromSearchDocumentFieldsIfNoFiltersAreSelected()
+    {
+        $selectedFilters = ['foo' => [], 'bar' => []];
+
+        $stubField = $this->createStubSearchDocumentField('foo', 'qux');
+
+        $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([$stubField]);
+
+        /** @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject $stubSearchDocumentCollection */
+        $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
+        $stubSearchDocumentCollection->method('getDocuments')->willReturn([$stubSearchDocument]);
+
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
+        $stubContext = $this->getMock(Context::class);
+
+        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubSearchCriteria */
+        $stubSearchCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
+
+        $this->filterCollection->initialize(
+            $stubSearchDocumentCollection,
+            $stubSearchCriteria,
+            $selectedFilters,
+            $stubContext
+        );
+        $result = $this->filterCollection->getFilters();
+
+        $this->assertCount(1, $result);
+
+        $this->assertSame('foo', $result[0]->getCode());
+        $this->assertCount(1, $result[0]->getValuesCollection());
+        $this->assertSame('qux', $result[0]->getValuesCollection()->getFilterValues()[0]->getValue());
+        $this->assertSame(1, $result[0]->getValuesCollection()->getFilterValues()[0]->getCount());
+        $this->assertFalse($result[0]->getValuesCollection()->getFilterValues()[0]->isSelected());
+    }
+
+    public function testOnlyFiltersWhichHaveMatchingValuesInProductsCollectionAreReturned()
+    {
+        $selectedFilters = ['foo' => ['baz'], 'bar' => []];
+
+        $stubField = $this->createStubSearchDocumentField('foo', 'baz');
+
+        $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([$stubField]);
+
+        /** @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject $stubFilteredDocumentCollection */
+        $stubFilteredDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
+        $stubFilteredDocumentCollection->method('getDocuments')->willReturn([$stubSearchDocument]);
+
+        /** @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject $stubUnfilteredDocumentCollection */
+        $stubUnfilteredDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
+        $stubUnfilteredDocumentCollection->method('getDocuments')->willReturn([$stubSearchDocument]);
+
+        $this->stubDataPoolReader->method('getSearchDocumentsMatchingCriteria')
+            ->willReturn($stubUnfilteredDocumentCollection);
+
+
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
+        $stubContext = $this->getMock(Context::class);
+
+        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubSearchCriteria */
+        $stubSearchCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
+
+        $this->filterCollection->initialize(
+            $stubFilteredDocumentCollection,
+            $stubSearchCriteria,
+            $selectedFilters,
+            $stubContext
+        );
+        $result = $this->filterCollection->getFilters();
+
+        $this->assertCount(1, $result);
+
+        $this->assertSame('foo', $result[0]->getCode());
+        $this->assertCount(1, $result[0]->getValuesCollection());
+        $this->assertSame('baz', $result[0]->getValuesCollection()->getFilterValues()[0]->getValue());
+        $this->assertSame(1, $result[0]->getValuesCollection()->getFilterValues()[0]->getCount());
+        $this->assertTrue($result[0]->getValuesCollection()->getFilterValues()[0]->isSelected());
+    }
+
+    public function testSelectedFiltersHaveSiblingValuesForBroadeningProductsCollection()
+    {
+        $selectedFilters = ['foo' => ['baz'], 'bar' => ['0 Eur - 100 Eur']];
+
+        $stubField1 = $this->createStubSearchDocumentField('foo', 'baz');
+        $stubField2 = $this->createStubSearchDocumentField('foo', 'qux');
+        $stubField3 = $this->createStubSearchDocumentField('bar', '0 Eur - 100 Eur');
+        $stubField4 = $this->createStubSearchDocumentField('bar', '100 Eur - 200 Eur');
+
+        $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields(
+            [$stubField1, $stubField2, $stubField3, $stubField4]
+        );
+
+        /** @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject $stubFilteredDocumentCollection */
+        $stubFilteredDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
+        $stubFilteredDocumentCollection->method('getDocuments')->willReturn([$stubSearchDocument]);
+
+        /** @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject $stubUnfilteredDocumentCollection */
+        $stubUnfilteredDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
+        $stubUnfilteredDocumentCollection->method('getDocuments')->willReturn([$stubSearchDocument]);
+
+        $this->stubDataPoolReader->method('getSearchDocumentsMatchingCriteria')
+            ->willReturn($stubUnfilteredDocumentCollection);
+
+
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
+        $stubContext = $this->getMock(Context::class);
+
+        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubSearchCriteria */
+        $stubSearchCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
+
+        $this->filterCollection->initialize(
+            $stubFilteredDocumentCollection,
+            $stubSearchCriteria,
+            $selectedFilters,
+            $stubContext
+        );
+        $result = $this->filterCollection->getFilters();
+
+        $this->assertCount(2, $result);
+
+        $this->assertSame('foo', $result[0]->getCode());
+        $this->assertCount(2, $result[0]->getValuesCollection());
+        $this->assertSame('baz', $result[0]->getValuesCollection()->getFilterValues()[0]->getValue());
+        $this->assertSame(1, $result[0]->getValuesCollection()->getFilterValues()[0]->getCount());
+        $this->assertTrue($result[0]->getValuesCollection()->getFilterValues()[0]->isSelected());
+        $this->assertSame('qux', $result[0]->getValuesCollection()->getFilterValues()[1]->getValue());
+        $this->assertSame(1, $result[0]->getValuesCollection()->getFilterValues()[1]->getCount());
+        $this->assertFalse($result[0]->getValuesCollection()->getFilterValues()[1]->isSelected());
+
+        $this->assertSame('bar', $result[1]->getCode());
+        $this->assertCount(2, $result[1]->getValuesCollection());
+        $this->assertSame('0 Eur - 100 Eur', $result[1]->getValuesCollection()->getFilterValues()[0]->getValue());
+        $this->assertSame(1, $result[1]->getValuesCollection()->getFilterValues()[0]->getCount());
+        $this->assertTrue($result[1]->getValuesCollection()->getFilterValues()[0]->isSelected());
+        $this->assertSame('100 Eur - 200 Eur', $result[1]->getValuesCollection()->getFilterValues()[1]->getValue());
+        $this->assertSame(1, $result[1]->getValuesCollection()->getFilterValues()[1]->getCount());
+        $this->assertFalse($result[1]->getValuesCollection()->getFilterValues()[1]->isSelected());
     }
 }

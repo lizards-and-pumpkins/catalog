@@ -10,26 +10,26 @@ class FilterNavigationFilter
     private $filterNavigationCode;
 
     /**
-     * @var string[]
+     * @var FilterNavigationFilterValueCollection
      */
-    private $selectedFilters;
+    private $filterValueCollection;
 
     /**
      * @param string $filterNavigationCode
-     * @param string[] $selectedFilters
+     * @param FilterNavigationFilterValueCollection $filterValueCollection
      */
-    private function __construct($filterNavigationCode, array $selectedFilters)
+    private function __construct($filterNavigationCode, FilterNavigationFilterValueCollection $filterValueCollection)
     {
         $this->filterNavigationCode = $filterNavigationCode;
-        $this->selectedFilters = $selectedFilters;
+        $this->filterValueCollection = $filterValueCollection;
     }
 
     /**
      * @param string $filterNavigationCode
-     * @param string[] $selectedFilters
+     * @param FilterNavigationFilterValueCollection $filterValueCollection
      * @return FilterNavigationFilter
      */
-    public static function create($filterNavigationCode, array $selectedFilters)
+    public static function create($filterNavigationCode, FilterNavigationFilterValueCollection $filterValueCollection)
     {
         if (!is_string($filterNavigationCode)) {
             throw new InvalidFilterNavigationFilterCode(
@@ -37,7 +37,7 @@ class FilterNavigationFilter
             );
         }
 
-        return new self($filterNavigationCode, $selectedFilters);
+        return new self($filterNavigationCode, $filterValueCollection);
     }
 
     /**
@@ -49,10 +49,10 @@ class FilterNavigationFilter
     }
 
     /**
-     * @return string[]
+     * @return FilterNavigationFilterValueCollection
      */
-    public function getSelectedFilters()
+    public function getValuesCollection()
     {
-        return $this->selectedFilters;
+        return $this->filterValueCollection;
     }
 }

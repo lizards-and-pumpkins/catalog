@@ -99,6 +99,7 @@ class ProductListingTest extends AbstractIntegrationTest
             $pageBuilder,
             $this->factory->getSnippetKeyGeneratorLocator(),
             $this->factory->createFilterNavigationBlockRenderer(),
+            $this->factory->createFilterNavigationFilterCollection(),
             $filterNavigationAttributeCodes
         );
     }
