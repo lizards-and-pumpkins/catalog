@@ -2,6 +2,7 @@
 
 namespace Brera\Product;
 
+use Brera\DataPool\SearchEngine\CompositeSearchCriterion;
 use Brera\DataPool\SearchEngine\SearchCriteria;
 use Brera\DataPool\SearchEngine\SearchCriterion;
 use Brera\PageMetaInfoSnippetContent;
@@ -152,7 +153,7 @@ class ProductListingMetaInfoSnippetContent implements PageMetaInfoSnippetContent
     {
         self::validateSearchCriteriaMetaInfo($metaInfo);
 
-        $criteria = SearchCriteria::createAnd();
+        $criteria = CompositeSearchCriterion::createAnd();
 
         foreach ($metaInfo['criteria'] as $criterionMetaInfo) {
             self::validateSearchCriterionMetaInfo($criterionMetaInfo);
@@ -163,7 +164,7 @@ class ProductListingMetaInfoSnippetContent implements PageMetaInfoSnippetContent
                 $criterionMetaInfo['operation']
             );
 
-            $criteria->addCriterion($criterion);
+            $criteria->addCriteria($criterion);
         }
 
         return $criteria;

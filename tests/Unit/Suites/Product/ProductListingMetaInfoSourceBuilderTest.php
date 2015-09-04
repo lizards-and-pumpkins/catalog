@@ -2,12 +2,12 @@
 
 namespace Brera\Product;
 
-use Brera\DataPool\SearchEngine\SearchCriteria;
+use Brera\DataPool\SearchEngine\CompositeSearchCriterion;
 use Brera\DataPool\SearchEngine\SearchCriterion;
 
 /**
  * @covers \Brera\Product\ProductListingMetaInfoSourceBuilder
- * @uses   \Brera\DataPool\SearchEngine\SearchCriteria
+ * @uses   \Brera\DataPool\SearchEngine\CompositeSearchCriterion
  * @uses   \Brera\DataPool\SearchEngine\SearchCriterion
  * @uses   \Brera\Product\ProductListingMetaInfoSource
  * @uses   \Brera\Utils\XPathParser
@@ -29,21 +29,17 @@ EOX;
 
         $urlKey = $productListingMetaInfoSource->getUrlKey();
         $context = $productListingMetaInfoSource->getContextData();
-        $searchCriteria = $productListingMetaInfoSource->getCriteria();
-        $criteria = $searchCriteria->getCriteria();
+        $result = $productListingMetaInfoSource->getCriteria();
 
         $this->assertInstanceOf(ProductListingMetaInfoSource::class, $productListingMetaInfoSource);
         $this->assertEquals('men-accessories', $urlKey);
         $this->assertEquals(['website' => 'ru', 'locale' => 'en_US'], $context);
 
-        $expectedCriterion1 = SearchCriterion::create('category', 'accessories', '=');
-        $expectedCriterion2 = SearchCriterion::create('gender', 'male', '=');
+        $expectedCriteria = CompositeSearchCriterion::createAnd();
+        $expectedCriteria->addCriteria(SearchCriterion::create('category', 'accessories', '='));
+        $expectedCriteria->addCriteria(SearchCriterion::create('gender', 'male', '='));
 
-        $this->assertInstanceOf(SearchCriteria::class, $searchCriteria);
-        $this->assertTrue($searchCriteria->hasAndCondition());
-        $this->assertCount(2, $criteria);
-        $this->assertEquals($expectedCriterion1, $criteria[0]);
-        $this->assertEquals($expectedCriterion2, $criteria[1]);
+        $this->assertEquals($expectedCriteria, $result);
     }
 
     public function testProductListingMetaInfoSourceWithOrConditionIsCreatedFromXml()
@@ -57,9 +53,13 @@ EOX;
 
         $productListingMetaInfoSource = (new ProductListingMetaInfoSourceBuilder())
             ->createProductListingMetaInfoSourceFromXml($xml);
-        $searchCriteria = $productListingMetaInfoSource->getCriteria();
+        $result = $productListingMetaInfoSource->getCriteria();
 
-        $this->assertTrue($searchCriteria->hasOrCondition());
+        $expectedCriteria = CompositeSearchCriterion::createOr();
+        $expectedCriteria->addCriteria(SearchCriterion::create('category', 'accessories', '='));
+        $expectedCriteria->addCriteria(SearchCriterion::create('gender', 'male', '='));
+
+        $this->assertEquals($expectedCriteria, $result);
     }
 
     public function testExceptionIsThrownIfUrlKeyAttributeIsMissing()

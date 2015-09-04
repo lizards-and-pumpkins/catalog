@@ -12,7 +12,7 @@ use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
 
 /**
  * @covers \Brera\Product\FilterNavigationFilterCollection
- * @uses   \Brera\DataPool\SearchEngine\SearchCriteria
+ * @uses   \Brera\DataPool\SearchEngine\CompositeSearchCriterion
  * @uses   \Brera\DataPool\SearchEngine\SearchCriterion
  * @uses   \Brera\Product\FilterNavigationFilter
  * @uses   \Brera\Product\FilterNavigationFilterValue

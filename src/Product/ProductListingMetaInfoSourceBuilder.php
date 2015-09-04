@@ -2,7 +2,7 @@
 
 namespace Brera\Product;
 
-use Brera\DataPool\SearchEngine\SearchCriteria;
+use Brera\DataPool\SearchEngine\CompositeSearchCriterion;
 use Brera\DataPool\SearchEngine\SearchCriterion;
 use Brera\UrlKey;
 use Brera\Utils\XPathParser;
@@ -31,7 +31,7 @@ class ProductListingMetaInfoSourceBuilder
 
         foreach ($criteriaNodes as $criterionNode) {
             $criterion = $this->createCriterion($criterionNode);
-            $criteria->addCriterion($criterion);
+            $criteria->addCriteria($criterion);
         }
 
         return new ProductListingMetaInfoSource($urlKey, $contextData, $criteria);
@@ -69,7 +69,7 @@ class ProductListingMetaInfoSourceBuilder
 
     /**
      * @param array[] $criteriaCondition
-     * @return SearchCriteria
+     * @return CompositeSearchCriterion
      */
     private function createSearchCriteria(array $criteriaCondition)
     {
@@ -77,12 +77,12 @@ class ProductListingMetaInfoSourceBuilder
             throw new MissingConditionXmlAttributeException;
         }
 
-        if (SearchCriteria::AND_CONDITION === $criteriaCondition[0]['value']) {
-            return SearchCriteria::createAnd();
+        if (CompositeSearchCriterion::AND_CONDITION === $criteriaCondition[0]['value']) {
+            return CompositeSearchCriterion::createAnd();
         }
 
-        if (SearchCriteria::OR_CONDITION === $criteriaCondition[0]['value']) {
-            return SearchCriteria::createOr();
+        if (CompositeSearchCriterion::OR_CONDITION === $criteriaCondition[0]['value']) {
+            return CompositeSearchCriterion::createOr();
         }
 
         throw new InvalidConditionXmlAttributeException;

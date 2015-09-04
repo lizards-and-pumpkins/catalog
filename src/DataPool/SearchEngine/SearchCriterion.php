@@ -2,9 +2,9 @@
 
 namespace Brera\DataPool\SearchEngine;
 
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
 
-class SearchCriterion implements \JsonSerializable
+class SearchCriterion implements SearchCriteria, \JsonSerializable
 {
     /**
      * @var string
@@ -69,28 +69,40 @@ class SearchCriterion implements \JsonSerializable
     }
 
     /**
-     * @param SearchDocumentField $searchDocumentField
+     * @param SearchDocument $searchDocument
      * @return bool
      */
-    public function matches(SearchDocumentField $searchDocumentField)
+    public function matches(SearchDocument $searchDocument)
     {
-        if ($searchDocumentField->getKey() !== $this->fieldName) {
-            return false;
-        }
+        foreach ($searchDocument->getFieldsCollection()->getFields() as $searchDocumentField) {
+            if ($searchDocumentField->getKey() !== $this->fieldName) {
+                continue;
+            }
 
-        switch ($this->operation) {
-            case '=':
-                return $searchDocumentField->getValue() == $this->fieldValue;
-            case '!=':
-                return $searchDocumentField->getValue() != $this->fieldValue;
-            case '>':
-                return $searchDocumentField->getValue() > $this->fieldValue;
-            case '>=':
-                return $searchDocumentField->getValue() >= $this->fieldValue;
-            case '<':
-                return $searchDocumentField->getValue() < $this->fieldValue;
-            case '<=':
-                return $searchDocumentField->getValue() <= $this->fieldValue;
+            $matches = false;
+            switch ($this->operation) {
+                case '=':
+                    $matches = $searchDocumentField->getValue() == $this->fieldValue;
+                    break;
+                case '!=':
+                    $matches = $searchDocumentField->getValue() != $this->fieldValue;
+                    break;
+                case '>':
+                    $matches = $searchDocumentField->getValue() > $this->fieldValue;
+                    break;
+                case '>=':
+                    $matches = $searchDocumentField->getValue() >= $this->fieldValue;
+                    break;
+                case '<':
+                    $matches = $searchDocumentField->getValue() < $this->fieldValue;
+                    break;
+                case '<=':
+                    $matches = $searchDocumentField->getValue() <= $this->fieldValue;
+            }
+
+            if (true === $matches) {
+                return true;
+            }
         }
 
         return false;

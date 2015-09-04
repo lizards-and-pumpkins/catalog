@@ -5,6 +5,7 @@ namespace Brera\Product;
 use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\KeyNotFoundException;
+use Brera\DataPool\SearchEngine\CompositeSearchCriterion;
 use Brera\DataPool\SearchEngine\SearchCriteria;
 use Brera\DataPool\SearchEngine\SearchCriterion;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
@@ -58,6 +59,15 @@ class ProductListingRequestHandler implements HttpRequestHandler
      */
     private $filterNavigationAttributeCodes;
 
+    /**
+     * @param Context $context
+     * @param DataPoolReader $dataPoolReader
+     * @param PageBuilder $pageBuilder
+     * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
+     * @param BlockRenderer $filterNavigationBlockRenderer
+     * @param FilterNavigationFilterCollection $filterNavigationFilterCollection
+     * @param string[] $filterNavigationAttributeCodes
+     */
     public function __construct(
         Context $context,
         DataPoolReader $dataPoolReader,
@@ -253,21 +263,23 @@ class ProductListingRequestHandler implements HttpRequestHandler
             return $originalSelectionCriteria;
         }
 
-        $filtersCriteria = SearchCriteria::createAnd();
+        $filtersCriteria = CompositeSearchCriterion::createAnd();
+        $somethingIsAdded = false;
 
         foreach ($selectedFilters as $filterCode => $filterValues) {
             if (empty($filterValues)) {
                 continue;
             }
 
-            $filterCriteria = SearchCriteria::createOr();
+            $filterCriteria = CompositeSearchCriterion::createOr();
             foreach ($filterValues as $filterValue) {
-                $filterCriteria->addCriterion(SearchCriterion::create($filterCode, $filterValue, '='));
+                $filterCriteria->addCriteria(SearchCriterion::create($filterCode, $filterValue, '='));
             }
             $filtersCriteria->addCriteria($filterCriteria);
+            $somethingIsAdded = true;
         }
 
-        if (empty($filtersCriteria->getCriteria())) {
+        if (false === $somethingIsAdded) {
             return $originalSelectionCriteria;
         }
 

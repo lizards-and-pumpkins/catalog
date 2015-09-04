@@ -2,12 +2,12 @@
 
 namespace Brera\Product;
 
-use Brera\DataPool\SearchEngine\SearchCriteria;
+use Brera\DataPool\SearchEngine\CompositeSearchCriterion;
 use Brera\DataPool\SearchEngine\SearchCriterion;
 
 /**
  * @covers \Brera\Product\ProductListingMetaInfoSnippetContent
- * @uses   \Brera\DataPool\SearchEngine\SearchCriteria
+ * @uses   \Brera\DataPool\SearchEngine\CompositeSearchCriterion
  * @uses   \Brera\DataPool\SearchEngine\SearchCriterion
  */
 class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCase
@@ -23,15 +23,15 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
     private $rootSnippetCode = 'root-snippet-code';
 
     /**
-     * @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject
+     * @var CompositeSearchCriterion|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubSelectionCriteria;
 
     protected function setUp()
     {
-        $this->stubSelectionCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
+        $this->stubSelectionCriteria = $this->getMock(CompositeSearchCriterion::class, [], [], '', false);
         $this->stubSelectionCriteria->method('jsonSerialize')
-            ->willReturn(['condition' => SearchCriteria::AND_CONDITION, 'criteria' => []]);
+            ->willReturn(['condition' => CompositeSearchCriterion::AND_CONDITION, 'criteria' => []]);
 
         $pageSnippetCodes = [$this->rootSnippetCode];
 
@@ -229,10 +229,11 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
         ]);
 
         $metaSnippetContent = ProductListingMetaInfoSnippetContent::fromJson($json);
-        $criteria = $metaSnippetContent->getSelectionCriteria()->getCriteria();
+        $result = $metaSnippetContent->getSelectionCriteria();
 
-        $expectedCriterion = SearchCriterion::create($fieldName, $fieldValue, $operation);
+        $expectedCriteria = CompositeSearchCriterion::createAnd();
+        $expectedCriteria->addCriteria(SearchCriterion::create($fieldName, $fieldValue, $operation));
 
-        $this->assertEquals($expectedCriterion, $criteria[0]);
+        $this->assertEquals($expectedCriteria, $result);
     }
 }

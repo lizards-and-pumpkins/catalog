@@ -4,7 +4,7 @@ namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\Context\ContextBuilder;
-use Brera\DataPool\SearchEngine\SearchCriteria;
+use Brera\DataPool\SearchEngine\CompositeSearchCriterion;
 use Brera\SnippetKeyGenerator;
 use Brera\SnippetList;
 use Brera\SnippetRenderer;
@@ -37,7 +37,7 @@ class ProductListingMetaInfoSnippetRendererTest extends \PHPUnit_Framework_TestC
      */
     private function getMockProductListingMetaInfoSource()
     {
-        $mockSearchCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
+        $mockSearchCriteria = $this->getMock(CompositeSearchCriterion::class, [], [], '', false);
         $mockProductListingMetaInfoSource = $this->getMock(ProductListingMetaInfoSource::class, [], [], '', false);
         $mockProductListingMetaInfoSource->method('getContextData')->willReturn([]);
         $mockProductListingMetaInfoSource->method('getCriteria')->willReturn($mockSearchCriteria);

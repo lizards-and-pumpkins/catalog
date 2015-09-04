@@ -70,6 +70,9 @@ class FilterNavigationBlock extends Block
         return http_build_query(array_filter($selectedFilters));
     }
 
+    /**
+     * @return array[]
+     */
     private function getSelectedFilters()
     {
         if (null === $this->lazyLoadedSelectedFilters) {

@@ -2,18 +2,52 @@
 
 namespace Brera\DataPool\SearchEngine;
 
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
 
 /**
  * @covers \Brera\DataPool\SearchEngine\SearchCriterion
  */
 class SearchCriterionTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @param string $fieldKey
+     * @param string $fieldValue
+     * @return SearchDocumentField|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubSearchDocumentField($fieldKey, $fieldValue)
+    {
+        $stubSearchDocumentField = $this->getMock(SearchDocumentField::class, [], [], '', false);
+        $stubSearchDocumentField->method('getKey')->willReturn($fieldKey);
+        $stubSearchDocumentField->method('getValue')->willReturn($fieldValue);
+
+        return $stubSearchDocumentField;
+    }
+
+    /**
+     * @param SearchDocumentField[] $stubSearchDocumentFields
+     * @return SearchDocument|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubSearchDocumentWithGivenFields(array $stubSearchDocumentFields)
+    {
+        $stubSearchDocumentFieldCollection = $this->getMock(SearchDocumentFieldCollection::class, [], [], '', false);
+        $stubSearchDocumentFieldCollection->method('getFields')->willReturn($stubSearchDocumentFields);
+
+        $stubSearchDocument = $this->getMock(SearchDocument::class, [], [], '', false);
+        $stubSearchDocument->method('getFieldsCollection')->willReturn($stubSearchDocumentFieldCollection);
+
+        return $stubSearchDocument;
+    }
+
+    public function testSearchCriteriaInterfaceIsImplemented()
+    {
+        $this->assertInstanceOf(SearchCriteria::class, SearchCriterion::create('foo', 'bar', '='));
+    }
+
     public function testJsonSerializableInterfaceIsImplemented()
     {
-        $result = SearchCriterion::create('foo', 'bar', '=');
-
-        $this->assertInstanceOf(\JsonSerializable::class, $result);
+        $this->assertInstanceOf(\JsonSerializable::class, SearchCriterion::create('foo', 'bar', '='));
     }
 
     public function testExceptionIsThrownIfFieldNameIsNotValid()
@@ -47,16 +81,18 @@ class SearchCriterionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expectation, $result);
     }
 
-    public function testFalseIsReturnIfGivenSearchDocumentFieldNameIsNotMatchingCriterionFieldName()
+    public function testFalseIsReturnIfGivenSearchDocumentContainsNoFieldWithNametMatchingCriterionFieldName()
     {
         $fieldName = 'foo';
         $fieldValue = 'bar';
         $operation = '=';
 
         $criterion = SearchCriterion::create($fieldName, $fieldValue, $operation);
-        $mockSearchDocumentField = $this->createMockSearchDocumentField('baz', $fieldValue);
 
-        $this->assertFalse($criterion->matches($mockSearchDocumentField));
+        $stubSearchDocumentField = $this->createStubSearchDocumentField('baz', $fieldValue);
+        $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([$stubSearchDocumentField]);
+
+        $this->assertFalse($criterion->matches($stubSearchDocument));
     }
 
     /**
@@ -73,9 +109,11 @@ class SearchCriterionTest extends \PHPUnit_Framework_TestCase
         $fieldName = 'foo';
 
         $criterion = SearchCriterion::create($fieldName, $criterionFieldValue, $operation);
-        $mockSearchDocumentField = $this->createMockSearchDocumentField($fieldName, $searchDocumentFieldValue);
 
-        $this->assertFalse($criterion->matches($mockSearchDocumentField));
+        $stubSearchDocumentField = $this->createStubSearchDocumentField($fieldName, $searchDocumentFieldValue);
+        $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([$stubSearchDocumentField]);
+
+        $this->assertFalse($criterion->matches($stubSearchDocument));
     }
 
     /**
@@ -107,9 +145,11 @@ class SearchCriterionTest extends \PHPUnit_Framework_TestCase
         $fieldName = 'foo';
 
         $criterion = SearchCriterion::create($fieldName, $criterionFieldValue, $operation);
-        $mockSearchDocumentField = $this->createMockSearchDocumentField($fieldName, $searchDocumentFieldValue);
 
-        $this->assertTrue($criterion->matches($mockSearchDocumentField));
+        $stubSearchDocumentField = $this->createStubSearchDocumentField($fieldName, $searchDocumentFieldValue);
+        $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([$stubSearchDocumentField]);
+
+        $this->assertTrue($criterion->matches($stubSearchDocument));
     }
 
     /**
@@ -125,21 +165,5 @@ class SearchCriterionTest extends \PHPUnit_Framework_TestCase
             ['1', '>=', '1'],
             ['1', '<=', '1']
         ];
-    }
-
-    /**
-     * @param string $fieldKey
-     * @param string $fieldValue
-     * @return SearchDocumentField|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createMockSearchDocumentField($fieldKey, $fieldValue)
-    {
-        $mockSearchDocumentField = $this->getMock(SearchDocumentField::class, [], [], '', false);
-        $mockSearchDocumentField->method('getKey')
-            ->willReturn($fieldKey);
-        $mockSearchDocumentField->method('getValue')
-            ->willReturn($fieldValue);
-
-        return $mockSearchDocumentField;
     }
 }

@@ -5,7 +5,7 @@ namespace Brera\Product;
 use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\KeyNotFoundException;
-use Brera\DataPool\SearchEngine\SearchCriteria;
+use Brera\DataPool\SearchEngine\CompositeSearchCriterion;
 use Brera\DataPool\SearchEngine\SearchCriterion;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
@@ -21,7 +21,7 @@ use Brera\SnippetKeyGeneratorLocator;
 /**
  * @covers \Brera\Product\ProductListingRequestHandler
  * @uses   \Brera\Product\ProductListingMetaInfoSnippetContent
- * @uses   \Brera\DataPool\SearchEngine\SearchCriteria
+ * @uses   \Brera\DataPool\SearchEngine\CompositeSearchCriterion
  * @uses   \Brera\DataPool\SearchEngine\SearchCriterion
  */
 class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
@@ -58,10 +58,10 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     private function mockMetaInfoSnippet()
     {
-        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $mockSelectionCriteria */
-        $mockSelectionCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
+        /** @var CompositeSearchCriterion|\PHPUnit_Framework_MockObject_MockObject $mockSelectionCriteria */
+        $mockSelectionCriteria = $this->getMock(CompositeSearchCriterion::class, [], [], '', false);
         $mockSelectionCriteria->method('jsonSerialize')
-            ->willReturn(['condition' => SearchCriteria::AND_CONDITION, 'criteria' => []]);
+            ->willReturn(['condition' => CompositeSearchCriterion::AND_CONDITION, 'criteria' => []]);
 
         $pageSnippetCodes = ['child-snippet1'];
 
@@ -238,7 +238,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->mockMetaInfoSnippet();
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection();
 
-        $originalCriteria = SearchCriteria::createAnd();
+        $originalCriteria = CompositeSearchCriterion::createAnd();
 
         $this->mockDataPoolReader->method('getSnippets')->willReturn([]);
         $this->mockDataPoolReader->expects($this->once())->method('getSearchDocumentsMatchingCriteria')
@@ -274,10 +274,10 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection();
         $this->stubRequest->method('getQueryParameter')->with('foo')->willReturn('bar');
 
-        $filterCriteria = SearchCriteria::createOr();
-        $filterCriteria->addCriterion(SearchCriterion::create('foo', 'bar', '='));
-        $originalCriteria = SearchCriteria::createAnd();
-        $expectedCriteria = SearchCriteria::createAnd();
+        $filterCriteria = CompositeSearchCriterion::createOr();
+        $filterCriteria->addCriteria(SearchCriterion::create('foo', 'bar', '='));
+        $originalCriteria = CompositeSearchCriterion::createAnd();
+        $expectedCriteria = CompositeSearchCriterion::createAnd();
         $expectedCriteria->addCriteria($filterCriteria);
         $expectedCriteria->addCriteria($originalCriteria);
 

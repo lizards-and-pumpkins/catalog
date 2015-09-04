@@ -55,7 +55,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine
         $searchDocuments = $this->getSearchDocuments();
 
         foreach ($searchDocuments as $searchDocument) {
-            if ($searchDocument->isMatchingCriteria($criteria) && $context->isSubsetOf($searchDocument->getContext())) {
+            if ($criteria->matches($searchDocument) && $context->isSubsetOf($searchDocument->getContext())) {
                 $collection->add($searchDocument);
             }
         }

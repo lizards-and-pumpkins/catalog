@@ -4,6 +4,7 @@ namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
+use Brera\DataPool\SearchEngine\CompositeSearchCriterion;
 use Brera\DataPool\SearchEngine\SearchCriteria;
 use Brera\DataPool\SearchEngine\SearchCriterion;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
@@ -140,7 +141,7 @@ class FilterNavigationFilterCollection implements \Countable
 
     /**
      * @param SearchCriteria $originalCriteria
-     * @param array $selectedFilters
+     * @param array[] $selectedFilters
      * @param string $filterCodeToExclude
      * @return SearchCriteria
      */
@@ -149,21 +150,23 @@ class FilterNavigationFilterCollection implements \Countable
         array $selectedFilters,
         $filterCodeToExclude
     ) {
-        $filtersCriteria = SearchCriteria::createAnd();
+        $filtersCriteria = CompositeSearchCriterion::createAnd();
+        $somethingIsAddedToCriteria = false;
 
         foreach ($selectedFilters as $filterCode => $filterValues) {
             if ($filterCode === $filterCodeToExclude || empty($filterValues)) {
                 continue;
             }
 
-            $filterCriteria = SearchCriteria::createOr();
+            $filterCriteria = CompositeSearchCriterion::createOr();
             foreach ($filterValues as $filterValue) {
-                $filterCriteria->addCriterion(SearchCriterion::create($filterCode, $filterValue, '='));
+                $filterCriteria->addCriteria(SearchCriterion::create($filterCode, $filterValue, '='));
             }
             $filtersCriteria->addCriteria($filterCriteria);
+            $somethingIsAddedToCriteria = true;
         }
 
-        if (empty($filtersCriteria->getCriteria())) {
+        if (false === $somethingIsAddedToCriteria) {
             return $originalCriteria;
         }
 

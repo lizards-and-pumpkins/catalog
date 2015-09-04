@@ -7,6 +7,7 @@ use Brera\Context\ContextBuilder;
 use Brera\Context\WebsiteContextDecorator;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
 use Brera\DataVersion;
 use Brera\Product\ProductId;
@@ -178,112 +179,58 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productAId, $productBId]);
     }
 
-    public function testEmptyCollectionIsReturnedForEmptySearchCriteria()
+    public function testEmptyCollectionIsReturnedIfNoSearchDocumentsMatchesGivenCriteria()
     {
-        $mockCriteria = $this->createMockCriteria(SearchCriteria::OR_CONDITION, []);
-        $result = $this->searchEngine->getSearchDocumentsMatchingCriteria($mockCriteria, $this->testContext);
+        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubCriteria */
+        $stubCriteria = $this->getMock(SearchCriteria::class);
+        $stubCriteria->method('matches')->willReturn(false);
+
+        $result = $this->searchEngine->getSearchDocumentsMatchingCriteria($stubCriteria, $this->testContext);
 
         $this->assertEmpty($result);
     }
 
-    public function testEmptyCollectionIsReturnedIfNoMatchesAreFound()
-    {
-        $criterion = SearchCriterion::create('test-field', 'test-search-term', '=');
-        $mockCriteria = $this->createMockCriteria(SearchCriteria::OR_CONDITION, [$criterion]);
-
-        $result = $this->searchEngine->getSearchDocumentsMatchingCriteria($mockCriteria, $this->testContext);
-
-        $this->assertEmpty($result);
-    }
-
-    public function testCollectionWithOneDocumentMatchingCriteriaIsReturned()
-    {
-        $productId = ProductId::fromString('id');
-        $dummyFieldName = 'test-field-name';
-        $dummyQueryTerm = 'test-query-term';
-
-        $searchDocument = $this->createSearchDocument([$dummyFieldName => $dummyQueryTerm], $productId);
-        $this->searchEngine->addSearchDocument($searchDocument);
-
-        $criterion = SearchCriterion::create($dummyFieldName, $dummyQueryTerm, '=');
-        $mockCriteria = $this->createMockCriteria(SearchCriteria::OR_CONDITION, [$criterion]);
-        $result = $this->searchEngine->getSearchDocumentsMatchingCriteria($mockCriteria, $this->testContext);
-
-        $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productId]);
-    }
-
-    public function testCollectionWithTwoDocumentsMatchingAnyCriteriaIsReturned()
+    public function testCollectionContainsOnlySearchDocumentsMatchingGivenCriteria()
     {
         $productAId = ProductId::fromString('A');
         $productBId = ProductId::fromString('B');
-        $dummyFieldName1 = 'foo';
-        $dummyFieldValue1 = 'bar';
-        $dummyFieldName2 = 'baz';
-        $dummyFieldValue2 = 'qux';
 
-        $searchDocumentA = $this->createSearchDocument([$dummyFieldName1 => $dummyFieldValue1], $productAId);
-        $searchDocumentB = $this->createSearchDocument([$dummyFieldName2 => $dummyFieldValue2], $productBId);
+        $searchDocumentA = $this->createSearchDocument(['foo' => 'bar'], $productAId);
+        $searchDocumentB = $this->createSearchDocument(['baz' => 'qux'], $productBId);
 
         $this->stubSearchDocumentCollection->method('getDocuments')->willReturn([$searchDocumentA, $searchDocumentB]);
         $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
 
-        $criterion1 = SearchCriterion::create($dummyFieldName1, $dummyFieldValue1, '=');
-        $criterion2 = SearchCriterion::create($dummyFieldName2, $dummyFieldValue2, '=');
-        $mockCriteria = $this->createMockCriteria(SearchCriteria::OR_CONDITION, [$criterion1, $criterion2]);
+        $matchingSearchDocumentField = SearchDocumentField::fromKeyAndValue('foo', 'bar');
 
-        $result = $this->searchEngine->getSearchDocumentsMatchingCriteria($mockCriteria, $this->testContext);
+        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubCriteria */
+        $stubCriteria = $this->getMock(SearchCriteria::class);
+        $stubCriteria->method('matches')->willReturnCallback(
+            function (SearchDocument $searchDocument) use ($matchingSearchDocumentField) {
+                return in_array($matchingSearchDocumentField, $searchDocument->getFieldsCollection()->getFields());
+            }
+        );
 
-        $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productAId, $productBId]);
+        $result = $this->searchEngine->getSearchDocumentsMatchingCriteria($stubCriteria, $this->testContext);
+
+        $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productAId]);
     }
 
-    public function testCollectionWithTwoDocumentsMatchingAllCriteriaAreReturned()
+    public function testIfMultipleMatchingDocumentsHasSameProductIdOnlyOneInstanceIsReturned()
     {
-        $productAId = ProductId::fromString('A');
-        $productBId = ProductId::fromString('B');
-        $productCId = ProductId::fromString('C');
-        $dummyFieldName1 = 'foo';
-        $dummyFieldValue1 = 'bar';
-        $dummyFieldName2 = 'baz';
-        $dummyFieldValue2 = 'qux';
+        $productId = ProductId::fromString('A');
 
-        $searchDocumentA = $this->createSearchDocument([
-            $dummyFieldName1 => $dummyFieldValue1,
-            $dummyFieldName2 => $dummyFieldValue2
-        ], $productAId);
-
-        $searchDocumentB = $this->createSearchDocument([
-            $dummyFieldName1 => $dummyFieldValue1,
-            $dummyFieldName2 => $dummyFieldValue2
-        ], $productBId);
-
-        $searchDocumentC = $this->createSearchDocument([$dummyFieldName1 => $dummyFieldValue1], $productCId);
-
-        $this->stubSearchDocumentCollection->method('getDocuments')
-            ->willReturn([$searchDocumentA, $searchDocumentB, $searchDocumentC]);
-        $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
-
-        $criterion1 = SearchCriterion::create($dummyFieldName1, $dummyFieldValue1, '=');
-        $criterion2 = SearchCriterion::create($dummyFieldName2, $dummyFieldValue2, '=');
-        $mockCriteria = $this->createMockCriteria(SearchCriteria::AND_CONDITION, [$criterion1, $criterion2]);
-
-        $result = $this->searchEngine->getSearchDocumentsMatchingCriteria($mockCriteria, $this->testContext);
-
-        $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productAId, $productBId]);
-    }
-
-    public function testSearchDocumentsWithSameProductIdOverwritesEachOther()
-    {
-        $productId = ProductId::fromString('id');
-        $dummyFieldName = 'foo';
-        $dummyFieldValue = 'bar';
-
-        $searchDocumentA = $this->createSearchDocument([$dummyFieldName => $dummyFieldValue], $productId);
-        $searchDocumentB = $this->createSearchDocument([$dummyFieldName => $dummyFieldValue], $productId);
+        $searchDocumentA = $this->createSearchDocument(['foo' => 'bar'], $productId);
+        $searchDocumentB = $this->createSearchDocument(['baz' => 'qux'], $productId);
 
         $this->stubSearchDocumentCollection->method('getDocuments')->willReturn([$searchDocumentA, $searchDocumentB]);
         $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
 
-        $result = $this->searchEngine->query('bar', $this->testContext);
+        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubCriteria */
+        $stubCriteria = $this->getMock(SearchCriteria::class);
+        $stubCriteria->method('matches')->willReturn(true);
+
+        $result = $this->searchEngine->getSearchDocumentsMatchingCriteria($stubCriteria, $this->testContext);
 
         $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productId]);
     }
@@ -348,21 +295,6 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             }
         }
         return false;
-    }
-
-    /**
-     * @param string $condition
-     * @param \PHPUnit_Framework_MockObject_MockObject[] $mockCriteriaToReturn
-     * @return SearchCriteria|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createMockCriteria($condition, array $mockCriteriaToReturn)
-    {
-        $mockCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
-        $mockCriteria->method('hasAndCondition')->willReturn(SearchCriteria::AND_CONDITION === $condition);
-        $mockCriteria->method('hasOrCondition')->willReturn(SearchCriteria::OR_CONDITION === $condition);
-        $mockCriteria->method('getCriteria')->willReturn($mockCriteriaToReturn);
-
-        return $mockCriteria;
     }
 
     /**

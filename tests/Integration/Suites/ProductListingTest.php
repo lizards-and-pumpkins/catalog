@@ -2,7 +2,7 @@
 
 namespace Brera;
 
-use Brera\DataPool\SearchEngine\SearchCriteria;
+use Brera\DataPool\SearchEngine\CompositeSearchCriterion;
 use Brera\DataPool\SearchEngine\SearchCriterion;
 use Brera\Http\HttpHeaders;
 use Brera\Http\HttpRequest;
@@ -111,9 +111,9 @@ class ProductListingTest extends AbstractIntegrationTest
     {
         $searchCriterion1 = SearchCriterion::create('category', 'sale', '=');
         $searchCriterion2 = SearchCriterion::create('brand', 'Adidas', '=');
-        $searchCriteria = SearchCriteria::createAnd();
-        $searchCriteria->addCriterion($searchCriterion1);
-        $searchCriteria->addCriterion($searchCriterion2);
+        $searchCriteria = CompositeSearchCriterion::createAnd();
+        $searchCriteria->addCriteria($searchCriterion1);
+        $searchCriteria->addCriteria($searchCriterion2);
 
         $pageSnippetCodes = [
             'global_notices',
