@@ -20,7 +20,7 @@ class FileLogMessageWriter implements LogMessageWriter
         $this->logFilePath = $logFilePath;
     }
 
-    public function persist(LogMessage $logMessage)
+    public function write(LogMessage $logMessage)
     {
         $this->createLogDirIfNotExists();
         $this->validateLogFileIsWritable();

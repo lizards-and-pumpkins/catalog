@@ -11,5 +11,5 @@ interface LogMessageWriter
      * @param LogMessage $logMessage
      * @return void
      */
-    public function persist(LogMessage $logMessage);
+    public function write(LogMessage $logMessage);
 }

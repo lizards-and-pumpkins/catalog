@@ -8,10 +8,10 @@ use Brera\Http\HttpRequestBody;
 use Brera\Http\HttpRouterChain;
 use Brera\Http\HttpUrl;
 use Brera\Log\LogMessage;
-use Brera\Log\Persister\CompositeLogMessagePersister;
-use Brera\Log\Persister\FileLogMessagePersister;
-use Brera\Log\Persister\LogMessagePersister;
-use Brera\Log\Persister\StdOutLogMessagePersister;
+use Brera\Log\Writer\CompositeLogMessageWriter;
+use Brera\Log\Writer\FileLogMessageWriter;
+use Brera\Log\Writer\LogMessageWriter;
+use Brera\Log\Writer\StdOutLogMessageWriter;
 use Brera\Queue\File\FileQueue;
 use Brera\Queue\LoggingQueueDecorator;
 use Brera\Queue\Queue;
@@ -90,13 +90,13 @@ class LoggingQueueFactory implements Factory
     }
 
     /**
-     * @return LogMessagePersister
+     * @return LogMessageWriter
      */
-    public function createLogMessagePersister()
+    public function createLogMessageWriter()
     {
-        return CompositeLogMessagePersister::fromParameterList(
-            new StdOutLogMessagePersister(),
-            new FileLogMessagePersister($this->getMasterFactory()->getLogFilePathConfig())
+        return CompositeLogMessageWriter::fromParameterList(
+            new StdOutLogMessageWriter(),
+            new FileLogMessageWriter($this->getMasterFactory()->getLogFilePathConfig())
         );
     }
 }

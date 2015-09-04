@@ -7,7 +7,7 @@ use Brera\Log\LogMessage;
 
 class NullLogMessageWriter implements LogMessageWriter
 {
-    public function persist(LogMessage $logMessage)
+    public function write(LogMessage $logMessage)
     {
         // Do nothing
     }

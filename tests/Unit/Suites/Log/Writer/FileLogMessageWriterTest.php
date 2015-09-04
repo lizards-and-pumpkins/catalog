@@ -16,7 +16,7 @@ class FileLogMessageWriterTest extends \PHPUnit_Framework_TestCase
     /**
      * @var FileLogMessageWriter
      */
-    private $persister;
+    private $writer;
 
     /**
      * @var string
@@ -61,7 +61,7 @@ class FileLogMessageWriterTest extends \PHPUnit_Framework_TestCase
         $logDir = $this->getUniqueTempDir();
         $this->createFixtureDirectory($logDir);
         $this->testLogFilePath = $logDir . '/dir/file.log';
-        $this->persister = new FileLogMessageWriter($this->testLogFilePath);
+        $this->writer = new FileLogMessageWriter($this->testLogFilePath);
         $this->stubLogMessage = $this->getMock(LogMessage::class);
         $this->stubLogMessage->method('__toString')->willReturn('test log message');
     }
@@ -74,22 +74,22 @@ class FileLogMessageWriterTest extends \PHPUnit_Framework_TestCase
         parent::tearDown();
     }
 
-    public function testItIsALogMessagePersister()
+    public function testItIsALogMessageWriter()
     {
-        $this->assertInstanceOf(LogMessageWriter::class, $this->persister);
+        $this->assertInstanceOf(LogMessageWriter::class, $this->writer);
     }
 
     public function testItCreatesTheLogFileDirectory()
     {
-        $this->persister->persist($this->stubLogMessage);
+        $this->writer->write($this->stubLogMessage);
         $this->assertFileExists(dirname($this->testLogFilePath));
     }
 
     public function testItThrowsAnExceptionIfTheLogDirectoryCanNotBeCreated()
     {
         $this->setExpectedException(UnableToCreateLogDirectoryException::class);
-        $persister = new FileLogMessageWriter('');
-        $persister->persist($this->stubLogMessage);
+        $writer = new FileLogMessageWriter('');
+        $writer->write($this->stubLogMessage);
     }
 
     public function testItThrowsAnExceptionIfTheLogDirectoryIsNotWritable()
@@ -101,7 +101,7 @@ class FileLogMessageWriterTest extends \PHPUnit_Framework_TestCase
         $logDirectoryPath = dirname($this->testLogFilePath);
         $this->createFixtureDirectory($logDirectoryPath);
         chmod($logDirectoryPath, 0000);
-        $this->persister->persist($this->stubLogMessage);
+        $this->writer->write($this->stubLogMessage);
     }
 
     public function testItThrowsAnExceptionIfTheLogFileIsNotWritable()
@@ -111,14 +111,14 @@ class FileLogMessageWriterTest extends \PHPUnit_Framework_TestCase
             sprintf('The log file is not writable: "%s"', $this->testLogFilePath)
         );
         $this->createFixtureFile($this->testLogFilePath, '', 0400);
-        $this->persister->persist($this->stubLogMessage);
+        $this->writer->write($this->stubLogMessage);
     }
 
     public function testItWritesMessagesToTheLogFile()
     {
         $this->stubLogMessage->method('getContext')->willReturn(['a' => new \stdClass, 'b' => [PHP_EOL]]);
         
-        $this->persister->persist($this->stubLogMessage);
+        $this->writer->write($this->stubLogMessage);
         $content = file_get_contents($this->testLogFilePath);
         
         $message = 'The log file did not contain the log message content';
@@ -138,7 +138,7 @@ class FileLogMessageWriterTest extends \PHPUnit_Framework_TestCase
     {
         $existingContent = "already existing content\n";
         $this->createFixtureFile($this->testLogFilePath, $existingContent, 0600);
-        $this->persister->persist($this->stubLogMessage);
+        $this->writer->write($this->stubLogMessage);
         $this->assertContains($existingContent, file_get_contents($this->testLogFilePath));
     }
 }

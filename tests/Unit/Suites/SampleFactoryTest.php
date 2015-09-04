@@ -10,7 +10,7 @@ use Brera\Image\ImageProcessingStrategySequence;
 use Brera\LocalFilesystemStorageReader;
 use Brera\LocalFilesystemStorageWriter;
 use Brera\Log\Writer\FileLogMessageWriter;
-use Brera\Log\PersistingLoggerDecorator;
+use Brera\Log\WritingLoggerDecorator;
 use Brera\Queue\File\FileQueue;
 use Brera\SampleMasterFactory;
 use Brera\SampleFactory;
@@ -19,7 +19,7 @@ use Brera\SampleFactory;
  * @covers \Brera\SampleFactory
  * @uses   \Brera\FactoryTrait
  * @uses   \Brera\Log\InMemoryLogger
- * @uses   \Brera\Log\PersistingLoggerDecorator
+ * @uses   \Brera\Log\WritingLoggerDecorator
  * @uses   \Brera\Log\Writer\FileLogMessageWriter
  * @uses   \Brera\DataPool\KeyValue\File\FileKeyValueStore
  * @uses   \Brera\DataPool\SearchEngine\FileSearchEngine
@@ -80,14 +80,14 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(FileQueue::class, $this->factory->createCommandQueue());
     }
 
-    public function testPersistingLoggerIsReturned()
+    public function testWritingLoggerIsReturned()
     {
-        $this->assertInstanceOf(PersistingLoggerDecorator::class, $this->factory->createLogger());
+        $this->assertInstanceOf(WritingLoggerDecorator::class, $this->factory->createLogger());
     }
 
-    public function testLogMessagePersisterIsReturned()
+    public function testLogMessageWriterIsReturned()
     {
-        $this->assertInstanceOf(FileLogMessageWriter::class, $this->factory->createLogMessagePersister());
+        $this->assertInstanceOf(FileLogMessageWriter::class, $this->factory->createLogMessageWriter());
     }
 
     public function testArrayOfSearchableAttributeCodesIsReturned()

@@ -13,16 +13,16 @@ class NullLogMessageWriterTest extends \PHPUnit_Framework_TestCase
     /**
      * @var NullLogMessageWriter
      */
-    private $persister;
+    private $writer;
 
     protected function setUp()
     {
-        $this->persister = new NullLogMessageWriter();
+        $this->writer = new NullLogMessageWriter();
     }
     
-    public function testItIsALogMessagePersister()
+    public function testItIsALogMessageWriter()
     {
-        $this->assertInstanceOf(LogMessageWriter::class, $this->persister);
+        $this->assertInstanceOf(LogMessageWriter::class, $this->writer);
     }
 
     public function testItTakesALogMessage()
@@ -30,6 +30,6 @@ class NullLogMessageWriterTest extends \PHPUnit_Framework_TestCase
         /** @var LogMessage|\PHPUnit_Framework_MockObject_MockObject $mockLogMessage */
         $mockLogMessage = $this->getMock(LogMessage::class);
         $mockLogMessage->expects($this->never())->method('__toString');
-        $this->persister->persist($mockLogMessage);
+        $this->writer->write($mockLogMessage);
     }
 }

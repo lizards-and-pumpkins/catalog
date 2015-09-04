@@ -5,9 +5,9 @@ namespace Brera\Log\Writer;
 
 use Brera\Log\LogMessage;
 
-class StdOutMessageWriter implements LogMessageWriter
+class StdOutLogMessageWriter implements LogMessageWriter
 {
-    public function persist(LogMessage $logMessage)
+    public function write(LogMessage $logMessage)
     {
         echo get_class($logMessage) . ":\t" . $logMessage . "\n";
     }

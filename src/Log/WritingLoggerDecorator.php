@@ -5,7 +5,7 @@ namespace Brera\Log;
 
 use Brera\Log\Writer\LogMessageWriter;
 
-class PersistingLoggerDecorator implements Logger
+class WritingLoggerDecorator implements Logger
 {
     /**
      * @var Logger
@@ -15,17 +15,17 @@ class PersistingLoggerDecorator implements Logger
     /**
      * @var LogMessageWriter
      */
-    private $logPersister;
+    private $logWriter;
 
-    public function __construct(Logger $component, LogMessageWriter $logPersister)
+    public function __construct(Logger $component, LogMessageWriter $logWriter)
     {
         $this->component = $component;
-        $this->logPersister = $logPersister;
+        $this->logWriter = $logWriter;
     }
     
     public function log(LogMessage $message)
     {
-        $this->logPersister->persist($message);
+        $this->logWriter->write($message);
         $this->component->log($message);
     }
 

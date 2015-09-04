@@ -10,14 +10,14 @@ class CompositeLogMessageWriter implements LogMessageWriter
     /**
      * @var LogMessageWriter[]
      */
-    private $persisters;
+    private $writers;
 
     /**
-     * @param LogMessageWriter[] $logMessagePersisterComponents
+     * @param LogMessageWriter[] $logMessageWriters
      */
-    private function __construct(array $logMessagePersisterComponents)
+    private function __construct(array $logMessageWriters)
     {
-        $this->persisters = $logMessagePersisterComponents;
+        $this->writers = $logMessageWriters;
     }
 
     /**
@@ -26,39 +26,39 @@ class CompositeLogMessageWriter implements LogMessageWriter
      */
     public static function fromParameterList()
     {
-        $logMessagePersisters = func_get_args();
-        array_map('self::validateIsLogMessagePersister', $logMessagePersisters);
-        return new self($logMessagePersisters);
+        $logMessageWriters = func_get_args();
+        array_map('self::validateIsLogMessageWriter', $logMessageWriters);
+        return new self($logMessageWriters);
     }
 
     /**
-     * @param mixed $persisterCandidate
+     * @param mixed $writerCandidate
      */
-    private static function validateIsLogMessagePersister($persisterCandidate)
+    private static function validateIsLogMessageWriter($writerCandidate)
     {
-        if (!is_object($persisterCandidate) || !$persisterCandidate instanceof LogMessageWriter) {
-            $type = self::getTypeStringRepresentation($persisterCandidate);
-            throw new NoLogMessagePersisterArgumentException(
+        if (!is_object($writerCandidate) || !$writerCandidate instanceof LogMessageWriter) {
+            $type = self::getTypeStringRepresentation($writerCandidate);
+            throw new NoLogMessageWriterArgumentException(
                 sprintf('The argument has to implement LogMessageWriter, got "%s"', $type)
             );
         }
     }
 
     /**
-     * @param mixed $persisterCandidate
+     * @param mixed $writerCandidate
      * @return string
      */
-    private static function getTypeStringRepresentation($persisterCandidate)
+    private static function getTypeStringRepresentation($writerCandidate)
     {
-        return is_object($persisterCandidate) ?
-            get_class($persisterCandidate) :
-            gettype($persisterCandidate);
+        return is_object($writerCandidate) ?
+            get_class($writerCandidate) :
+            gettype($writerCandidate);
     }
 
-    public function persist(LogMessage $logMessage)
+    public function write(LogMessage $logMessage)
     {
-        array_map(function (LogMessageWriter $persister) use ($logMessage) {
-            $persister->persist($logMessage);
-        }, $this->persisters);
+        array_map(function (LogMessageWriter $writer) use ($logMessage) {
+            $writer->write($logMessage);
+        }, $this->writers);
     }
 }

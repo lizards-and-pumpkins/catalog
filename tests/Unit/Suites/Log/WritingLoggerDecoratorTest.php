@@ -6,14 +6,14 @@ namespace Brera\Log;
 use Brera\Log\Writer\LogMessageWriter;
 
 /**
- * @covers Brera\Log\PersistingLoggerDecorator
+ * @covers Brera\Log\WritingLoggerDecorator
  */
-class PersistingLoggerDecoratorTest extends \PHPUnit_Framework_TestCase
+class WritingLoggerDecoratorTest extends \PHPUnit_Framework_TestCase
 {
     private $stubLogMessage;
     
     /**
-     * @var PersistingLoggerDecorator
+     * @var WritingLoggerDecorator
      */
     private $decorator;
 
@@ -25,14 +25,14 @@ class PersistingLoggerDecoratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @var LogMessageWriter|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockPersister;
+    private $mockWriter;
 
     protected function setUp()
     {
         $this->wrappedLogger = $this->getMock(Logger::class);
         $this->stubLogMessage = $this->getMock(LogMessage::class);
-        $this->mockPersister = $this->getMock(LogMessageWriter::class);
-        $this->decorator = new PersistingLoggerDecorator($this->wrappedLogger, $this->mockPersister);
+        $this->mockWriter = $this->getMock(LogMessageWriter::class);
+        $this->decorator = new WritingLoggerDecorator($this->wrappedLogger, $this->mockWriter);
     }
 
     public function testItIsALogger()
@@ -55,9 +55,9 @@ class PersistingLoggerDecoratorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $this->decorator->getMessages());
     }
 
-    public function testItPassesLogMessagesToThePersister()
+    public function testItPassesLogMessagesToTheWriter()
     {
-        $this->mockPersister->expects($this->once())->method('persist')->with($this->stubLogMessage);
+        $this->mockWriter->expects($this->once())->method('write')->with($this->stubLogMessage);
         $this->decorator->log($this->stubLogMessage);
     }
 }
