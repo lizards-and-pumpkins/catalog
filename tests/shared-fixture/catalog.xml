@@ -23,9 +23,9 @@
                 </image-->
                 <category website="ru" locale="de_DE">men</category>
                 <category website="ru" locale="de_DE">women</category>
-                <category website="ru" locale="de_DE">men-accessories</category>
+                <category website="ru" locale="de_DE">sale</category>
                 <category website="ru" locale="de_DE">women-accessories</category>
-                <category website="ru" locale="en_US">men-accessories</category>
+                <category website="ru" locale="en_US">sale</category>
                 <category website="ru" locale="en_US">women-accessories</category>
                 <stock_qty>5</stock_qty>
                 <backorders>true</backorders>
@@ -59,7 +59,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 </image>
                 <url_key>adilette</url_key>
                 <name>Adilette</name>
-                <category>men-accessories</category>
+                <category>sale</category>
                 <price>14.92</price>
                 <brand>Adidas</brand>
                 <gender>Herren</gender>
@@ -76,7 +76,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 </image>
                 <url_key>gel-kayano-21</url_key>
                 <name>Gel-Kayano 21</name>
-                <category>men-accessories</category>
+                <category>sale</category>
                 <price>106.95</price>
                 <brand>Asics</brand>
                 <style>Stabil</style>
@@ -94,7 +94,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 </image>
                 <url_key>xa-pro-3d-gtx</url_key>
                 <name>XA Pro 3D GTX</name>
-                <category>men-accessories</category>
+                <category>sale</category>
                 <price>89.95</price>
                 <brand>Salomon</brand>
                 <style>Trail</style>
@@ -112,7 +112,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 </image>
                 <url_key>gt-2000-3</url_key>
                 <name>GT-2000 3</name>
-                <category>men-accessories</category>
+                <category>sale</category>
                 <price>89.90</price>
                 <brand>Asics</brand>
                 <style>Stabil</style>
@@ -130,7 +130,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 </image>
                 <url_key>gel-nimbus-17</url_key>
                 <name>Gel-Nimbus 17</name>
-                <category>men-accessories</category>
+                <category>sale</category>
                 <price>134.95</price>
                 <brand>Asics</brand>
                 <style>Neutral</style>
@@ -148,7 +148,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 </image>
                 <url_key>gel-noosa-tri-9</url_key>
                 <name>Gel-Noosa Tri 9</name>
-                <category>men-accessories</category>
+                <category>sale</category>
                 <price>83.97</price>
                 <brand>Asics</brand>
                 <style>Lightweight/Stabil</style>
@@ -166,7 +166,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 </image>
                 <url_key>gel-noosa-tri-10</url_key>
                 <name>Gel-Noosa Tri 10</name>
-                <category>men-accessories</category>
+                <category>sale</category>
                 <price>84.90</price>
                 <brand>Asics</brand>
                 <style>Lightweight/Stabil</style>
@@ -184,7 +184,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 </image>
                 <url_key>gel-noosa-tri-10-2</url_key>
                 <name>Gel-Noosa Tri 10</name>
-                <category>men-accessories</category>
+                <category>sale</category>
                 <price>84.90</price>
                 <brand>Asics</brand>
                 <style>Lightweight/Stabil</style>
@@ -202,7 +202,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 </image>
                 <url_key>gel-nimbus-16</url_key>
                 <name>Gel-Nimbus 16</name>
-                <category>men-accessories</category>
+                <category>sale</category>
                 <price>106.95</price>
                 <brand>Asics</brand>
                 <style>Neutral</style>
@@ -220,7 +220,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 </image>
                 <url_key>triumph-iso</url_key>
                 <name>Triumph Iso</name>
-                <category>men-accessories</category>
+                <category>sale</category>
                 <price>132.81</price>
                 <brand>Saucony</brand>
                 <style>Neutral</style>
@@ -238,7 +238,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 </image>
                 <url_key>gel-noosa-10-4</url_key>
                 <name>Gel-Noosa 10</name>
-                <category>men-accessories</category>
+                <category>sale</category>
                 <price>84.90</price>
                 <brand>Asics</brand>
                 <style>Lightweight/Stabil</style>
@@ -256,7 +256,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 </image>
                 <url_key>gel-noosa-10-5</url_key>
                 <name>Gel-Noosa 10</name>
-                <category>men-accessories</category>
+                <category>sale</category>
                 <price>84.90</price>
                 <brand>Asics</brand>
                 <style>Lightweight/Stabil</style>
@@ -274,7 +274,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 </image>
                 <url_key>gel-noosa-10-3</url_key>
                 <name>Gel-Noosa 10</name>
-                <category>men-accessories</category>
+                <category>sale</category>
                 <price>89.95</price>
                 <brand>Asics</brand>
                 <style>Lightweight/Stabil</style>
@@ -292,7 +292,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 </image>
                 <url_key>gel-noosa-10-gs-9</url_key>
                 <name>Gel-Noosa Tri 10 GS</name>
-                <category>men-accessories</category>
+                <category>sale</category>
                 <price>47.57</price>
                 <brand>Asics</brand>
                 <style>Lightweight/Stabil</style>
@@ -310,7 +310,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 </image>
                 <url_key>gel-noosa-10-gs-8</url_key>
                 <name>Gel-Noosa Tri 10 GS</name>
-                <category>men-accessories</category>
+                <category>sale</category>
                 <price>47.57</price>
                 <brand>Asics</brand>
                 <style>Lightweight/Stabil</style>
@@ -344,7 +344,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 <url_key>adipure-360</url_key>
                 <category>men-running-shoes</category>
                 <category>specials</category>
-                <category>men-accessories</category>
+                <category>sale</category>
                 <stock_qty>5</stock_qty>
                 <backorders>true</backorders>
                 <name>adiPure 360</name>
@@ -454,12 +454,12 @@ LED Armflasher with elastic Band and Flasher]]></description>
         </product>
     </products>
     <listings>
-        <listing url_key="adidas-men-accessories" condition="and" website="ru" locale="de_DE">
-            <category operation="=">men-accessories</category>
+        <listing url_key="adidas-sale" condition="and" website="ru" locale="de_DE">
+            <category operation="=">sale</category>
             <brand operation="=">Adidas</brand>
         </listing>
-        <listing url_key="men-accessories" condition="and" website="ru" locale="de_DE">
-            <category operation="=">men-accessories</category>
+        <listing url_key="sale" condition="and" website="ru" locale="de_DE">
+            <category operation="=">sale</category>
         </listing>
     </listings>
 </catalog>
