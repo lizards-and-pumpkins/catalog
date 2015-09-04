@@ -56,20 +56,110 @@ class FilterNavigationBlock extends Block
      */
     public function getQueryStringForFilterSelection($filterCode, $filterValue)
     {
-        $selectedFilters = $this->getSelectedFilters();
-        foreach ($selectedFilters as $selectedFilterCode => $selectedValues) {
-            if ($filterCode === $selectedFilterCode) {
-                if (in_array($filterValue, $selectedValues)) {
-                    $selectedValues = array_diff($selectedValues, [$filterValue]);
-                } else {
-                    $selectedValues[] = $filterValue;
-                }
-            }
-            $selectedFilters[$selectedFilterCode] = implode(self::VALUES_SEPARATOR, $selectedValues);
+        $queryArgumentsForSelection = $this->getQueryArgumentsForSelection($filterCode, $filterValue);
+        return $this->buildHttpQueryFromArray($queryArgumentsForSelection);
+    }
+
+    /**
+     * @param string $filterCode
+     * @param string $filterValue
+     * @return string[]
+     */
+    private function getQueryArgumentsForSelection($filterCode, $filterValue)
+    {
+        $filterCodes = array_keys($this->getSelectedFilters());
+        return array_reduce($filterCodes, function (array $selection, $codeToCheck) use ($filterCode, $filterValue) {
+            $selectedValues = $this->getUpdatedQueryValuesForFilter($codeToCheck, $filterCode, $filterValue);
+            $selection[$codeToCheck] = implode(self::VALUES_SEPARATOR, $selectedValues);
+            return $selection;
+        }, []);
+    }
+
+    /**
+     * @param string $codeToGet
+     * @param string $codeToUpdate
+     * @param string $filterValue
+     * @return string[]
+     */
+    private function getUpdatedQueryValuesForFilter($codeToGet, $codeToUpdate, $filterValue)
+    {
+        if ($codeToGet === $codeToUpdate) {
+            return $this->toggleValueSelectionForFilter($codeToUpdate, $filterValue);
         }
 
+        return $this->getSelectedValuesForFilter($codeToGet);
+    }
+
+    /**
+     * @param string $filterCode
+     * @param string $filterValue
+     * @return string[]
+     */
+    private function toggleValueSelectionForFilter($filterCode, $filterValue)
+    {
+        if ($this->isFilterValueCurrentlySelected($filterCode, $filterValue)) {
+            return $this->removeValueFromFilterSelection($filterCode, $filterValue);
+        }
+
+        return $this->addValueToFilterSelection($filterCode, $filterValue);
+    }
+
+    /**
+     * @param string $filterCode
+     * @param string $filterValue
+     * @return bool
+     */
+    private function isFilterValueCurrentlySelected($filterCode, $filterValue)
+    {
+        return in_array($filterValue, $this->getValuesForFilter($filterCode));
+    }
+
+    /**
+     * @param string $filterCode
+     * @param string $filterValue
+     * @return string[]
+     */
+    private function removeValueFromFilterSelection($filterCode, $filterValue)
+    {
+        return array_diff($this->getValuesForFilter($filterCode), [$filterValue]);
+    }
+
+    /**
+     * @param string $filterCode
+     * @param string $filterValue
+     * @return string[]
+     */
+    private function addValueToFilterSelection($filterCode, $filterValue)
+    {
+        return array_merge($this->getValuesForFilter($filterCode), [$filterValue]);
+    }
+
+    /**
+     * @param string $filterCode
+     * @return string[]
+     */
+    private function getSelectedValuesForFilter($filterCode)
+    {
+        return $this->getSelectedFilters()[$filterCode];
+    }
+
+    /**
+     * @param string $filterCode
+     * @return string[]
+     */
+    private function getValuesForFilter($filterCode)
+    {
+        return $this->getSelectedFilters()[$filterCode];
+    }
+
+    /**
+     * @param string[] $queryArguments
+     * @return string
+     */
+    private function buildHttpQueryFromArray(array $queryArguments)
+    {
         /* TODO: Once base URL is accessible in blocks maybe replace http_build_query w/ HttpUrl method */
-        return http_build_query(array_filter($selectedFilters));
+        return http_build_query(array_filter($queryArguments));
     }
 
     /**
