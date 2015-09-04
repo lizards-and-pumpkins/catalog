@@ -3,7 +3,7 @@
 
 namespace Brera\Log;
 
-use Brera\Log\Persister\LogMessagePersister;
+use Brera\Log\Writer\LogMessagePersister;
 
 /**
  * @covers Brera\Log\PersistingLoggerDecorator

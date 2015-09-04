@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Brera\Log\Persister;
+namespace Brera\Log\Writer;
 
 class UnableToWriteToLogFileException extends \RuntimeException
 {

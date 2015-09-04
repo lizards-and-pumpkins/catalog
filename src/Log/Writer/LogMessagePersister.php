@@ -1,8 +1,7 @@
 <?php
 
 
-// todo: rename to Writer
-namespace Brera\Log\Persister;
+namespace Brera\Log\Writer;
 
 use Brera\Log\LogMessage;
 

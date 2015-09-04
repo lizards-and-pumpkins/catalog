@@ -1,12 +1,12 @@
 <?php
 
 
-namespace Brera\Log\Persister;
+namespace Brera\Log\Writer;
 
 use Brera\Log\LogMessage;
 
 /**
- * @covers Brera\Log\Persister\NullLogMessagePersister
+ * @covers Brera\Log\Writer\NullLogMessagePersister
  */
 class NullLogMessagePersisterTest extends \PHPUnit_Framework_TestCase
 {

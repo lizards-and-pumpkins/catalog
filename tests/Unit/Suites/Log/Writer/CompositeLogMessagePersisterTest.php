@@ -1,12 +1,12 @@
 <?php
 
 
-namespace Brera\Log\Persister;
+namespace Brera\Log\Writer;
 
 use Brera\Log\LogMessage;
 
 /**
- * @covers Brera\Log\Persister\CompositeLogMessagePersister
+ * @covers Brera\Log\Writer\CompositeLogMessagePersister
  */
 class CompositeLogMessagePersisterTest extends \PHPUnit_Framework_TestCase
 {

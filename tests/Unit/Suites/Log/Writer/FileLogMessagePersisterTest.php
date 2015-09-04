@@ -1,13 +1,13 @@
 <?php
 
 
-namespace Brera\Log\Persister;
+namespace Brera\Log\Writer;
 
 use Brera\Log\LogMessage;
 use Brera\TestFileFixtureTrait;
 
 /**
- * @covers \Brera\Log\Persister\FileLogMessagePersister
+ * @covers \Brera\Log\Writer\FileLogMessagePersister
  */
 class FileLogMessagePersisterTest extends \PHPUnit_Framework_TestCase
 {

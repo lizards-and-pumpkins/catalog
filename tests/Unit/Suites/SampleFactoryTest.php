@@ -9,7 +9,7 @@ use Brera\Image\ImageProcessorCollection;
 use Brera\Image\ImageProcessingStrategySequence;
 use Brera\LocalFilesystemStorageReader;
 use Brera\LocalFilesystemStorageWriter;
-use Brera\Log\Persister\FileLogMessagePersister;
+use Brera\Log\Writer\FileLogMessagePersister;
 use Brera\Log\PersistingLoggerDecorator;
 use Brera\Queue\File\FileQueue;
 use Brera\SampleMasterFactory;
@@ -20,7 +20,7 @@ use Brera\SampleFactory;
  * @uses   \Brera\FactoryTrait
  * @uses   \Brera\Log\InMemoryLogger
  * @uses   \Brera\Log\PersistingLoggerDecorator
- * @uses   \Brera\Log\Persister\FileLogMessagePersister
+ * @uses   \Brera\Log\Writer\FileLogMessagePersister
  * @uses   \Brera\DataPool\KeyValue\File\FileKeyValueStore
  * @uses   \Brera\DataPool\SearchEngine\FileSearchEngine
  * @uses   \Brera\Image\ImageMagickInscribeStrategy
