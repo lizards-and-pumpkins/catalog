@@ -89,6 +89,18 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
         $this->filterCollection->getFilters();
     }
 
+    public function testExceptionIsThrownDuringAttemptToRetrieveSelectedFiltersWithoutInitializingCollection()
+    {
+        $this->setExpectedException(FilterCollectionInNotInitializedException::class);
+        $this->filterCollection->getSelectedFilters();
+    }
+
+    public function testExceptionIsThrownDuringAttemptToRetrieveFiltersCountWithoutInitializingCollection()
+    {
+        $this->setExpectedException(FilterCollectionInNotInitializedException::class);
+        count($this->filterCollection);
+    }
+
     public function testCollectionOnlyIncludesFiltersConfiguredForFilterNavigation()
     {
         $selectedFilters = ['foo' => []];
