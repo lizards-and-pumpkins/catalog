@@ -66,7 +66,7 @@ class FilterNavigationBlock extends Block
             $selectedFilters[$selectedFilterCode] = implode(self::VALUES_SEPARATOR, $selectedValues);
         }
 
-        /* TODO: Replace http_build_query w/ HttpUrl method */
+        /* TODO: Once base URL is accessible in blocks maybe replace http_build_query w/ HttpUrl method */
         return http_build_query(array_filter($selectedFilters));
     }
 
