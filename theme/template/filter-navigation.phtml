@@ -9,7 +9,7 @@
     <ol class="filter-content scroll-pane">
         <?php foreach ($filter->getValuesCollection()->getFilterValues() as $filterValue) : ?>
             <li<?php if ($filterValue->isSelected()) : ?> class="active"<?php endif ?>>
-                <a href="<?php /* TODO: Insert base URL */ ?>?<?= $filter->getCode() ?>=<?= $filterValue->getValue() ?>"><?= $filterValue->getValue() ?> (<?= $filterValue->getCount() ?>)</a>
+                <a href="<?php /* TODO: Insert base URL */ ?>?<?= $this->getQueryString($filter->getCode(), $filterValue->getValue()) ?>"><?= $filterValue->getValue() ?> (<?= $filterValue->getCount() ?>)</a>
             </li>
         <?php endforeach ?>
     </ol>
