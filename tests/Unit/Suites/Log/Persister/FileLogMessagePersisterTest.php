@@ -130,6 +130,8 @@ class FileLogMessagePersisterTest extends \PHPUnit_Framework_TestCase
 
         $expected = 'Array ( [a] => stdClass Object ( ) [b] => Array ( [0] => ) )';
         $this->assertContains($expected, $content);
+        
+        $this->assertContains(get_class($this->stubLogMessage), $content);
     }
 
     public function testItAppendsToExistingContent()

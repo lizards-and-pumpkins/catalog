@@ -24,7 +24,8 @@ class FileLogMessagePersister implements LogMessagePersister
     {
         $this->createLogDirIfNotExists();
         $this->validateLogFileIsWritable();
-        $this->logMessageToFile($logMessage);
+
+        $this->writeToFile($this->formatMessage($logMessage));
     }
 
     private function createLogDirIfNotExists()
@@ -61,10 +62,15 @@ class FileLogMessagePersister implements LogMessagePersister
         }
     }
 
-    private function logMessageToFile(LogMessage $message)
+    /**
+     * @param string $messageString
+     */
+    private function writeToFile($messageString)
     {
         $f = fopen($this->logFilePath, 'a');
-        fwrite($f, $this->formatMessage($message));
+        flock($f, LOCK_EX);
+        fwrite($f, $messageString);
+        flock($f, LOCK_UN);
         fclose($f);
     }
 
@@ -74,9 +80,8 @@ class FileLogMessagePersister implements LogMessagePersister
      */
     private function formatMessage(LogMessage $message)
     {
-        // Todo: add the $message class name
         $contextStr = $this->formatContextString($message);
-        return sprintf("%s\t%s\t%s\n", date('c'), $message, $contextStr);
+        return sprintf("%s\t%s\t%s\t%s\n", date('c'), $message, get_class($message), $contextStr);
     }
 
     /**
