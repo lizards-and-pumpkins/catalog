@@ -7,7 +7,6 @@ use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestBody;
 use Brera\Http\HttpRouterChain;
 use Brera\Http\HttpUrl;
-use Brera\Log\LogMessage;
 use Brera\Log\Writer\CompositeLogMessageWriter;
 use Brera\Log\Writer\FileLogMessageWriter;
 use Brera\Log\Writer\LogMessageWriter;
@@ -48,14 +47,6 @@ class ApiApp extends WebFront
         $commandConsumer->process();
         $domainEventConsumer = $this->getMasterFactory()->createDomainEventConsumer();
         $domainEventConsumer->process();
-    }
-
-    /**
-     * @return LogMessage[]
-     */
-    public function getLoggedMessages()
-    {
-        return $this->getMasterFactory()->getLogger()->getMessages();
     }
 }
 
@@ -134,12 +125,3 @@ $catalogImport->runWithoutSendingResponse();
 
 
 $catalogImport->processQueues();
-
-
-$messages = array_merge($productListingImport->getLoggedMessages(), $catalogImport->getLoggedMessages());
-if (count($messages) > 0) {
-    echo "Log message(s):\n";
-    foreach ($messages as $message) {
-        printf("\t%s\n", rtrim($message));
-    }
-}

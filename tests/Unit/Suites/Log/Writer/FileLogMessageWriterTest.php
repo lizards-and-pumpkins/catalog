@@ -31,8 +31,6 @@ class FileLogMessageWriterTest extends \PHPUnit_Framework_TestCase
     private function removeTestLogFileIfExists()
     {
         if (file_exists($this->testLogFilePath)) {
-            if (!is_writable($this->testLogFilePath)) {
-            }
             unlink($this->testLogFilePath);
         }
     }
