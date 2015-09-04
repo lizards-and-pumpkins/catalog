@@ -31,6 +31,16 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
     private $filterCollection;
 
     /**
+     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubContext;
+
+    /**
+     * @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubSearchCriteria;
+
+    /**
      * @param string $key
      * @param string $value
      * @return SearchDocumentField|\PHPUnit_Framework_MockObject_MockObject
@@ -62,8 +72,10 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->stubDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
-
         $this->filterCollection = new FilterNavigationFilterCollection($this->stubDataPoolReader);
+
+        $this->stubContext = $this->getMock(Context::class);
+        $this->stubSearchCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
     }
 
     public function testCountableInterfaceIsImplemented()
@@ -89,17 +101,11 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
         $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
         $stubSearchDocumentCollection->method('getDocuments')->willReturn([$stubSearchDocument]);
 
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $this->getMock(Context::class);
-
-        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubSearchCriteria */
-        $stubSearchCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
-
         $this->filterCollection->initialize(
             $stubSearchDocumentCollection,
-            $stubSearchCriteria,
+            $this->stubSearchCriteria,
             $selectedFilters,
-            $stubContext
+            $this->stubContext
         );
         $result = $this->filterCollection->getFilters();
 
@@ -124,17 +130,11 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
         $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
         $stubSearchDocumentCollection->method('getDocuments')->willReturn([$stubSearchDocument]);
 
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $this->getMock(Context::class);
-
-        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubSearchCriteria */
-        $stubSearchCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
-
         $this->filterCollection->initialize(
             $stubSearchDocumentCollection,
-            $stubSearchCriteria,
+            $this->stubSearchCriteria,
             $selectedFilters,
-            $stubContext
+            $this->stubContext
         );
         $result = $this->filterCollection->getFilters();
 
@@ -152,7 +152,6 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
         $selectedFilters = ['foo' => ['baz'], 'bar' => []];
 
         $stubField = $this->createStubSearchDocumentField('foo', 'baz');
-
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([$stubField]);
 
         /** @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject $stubFilteredDocumentCollection */
@@ -166,18 +165,11 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
         $this->stubDataPoolReader->method('getSearchDocumentsMatchingCriteria')
             ->willReturn($stubUnfilteredDocumentCollection);
 
-
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $this->getMock(Context::class);
-
-        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubSearchCriteria */
-        $stubSearchCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
-
         $this->filterCollection->initialize(
             $stubFilteredDocumentCollection,
-            $stubSearchCriteria,
+            $this->stubSearchCriteria,
             $selectedFilters,
-            $stubContext
+            $this->stubContext
         );
         $result = $this->filterCollection->getFilters();
 
@@ -214,18 +206,11 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
         $this->stubDataPoolReader->method('getSearchDocumentsMatchingCriteria')
             ->willReturn($stubUnfilteredDocumentCollection);
 
-
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $this->getMock(Context::class);
-
-        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubSearchCriteria */
-        $stubSearchCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
-
         $this->filterCollection->initialize(
             $stubFilteredDocumentCollection,
-            $stubSearchCriteria,
+            $this->stubSearchCriteria,
             $selectedFilters,
-            $stubContext
+            $this->stubContext
         );
         $result = $this->filterCollection->getFilters();
 
@@ -248,5 +233,31 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('100 Eur - 200 Eur', $result[1]->getValuesCollection()->getFilterValues()[1]->getValue());
         $this->assertSame(1, $result[1]->getValuesCollection()->getFilterValues()[1]->getCount());
         $this->assertFalse($result[1]->getValuesCollection()->getFilterValues()[1]->isSelected());
+    }
+
+    public function testSelectedFiltersAndValuesAreReturned()
+    {
+        $selectedFilters = ['foo' => ['baz'], 'bar' => []];
+
+        $stubField = $this->createStubSearchDocumentField('foo', 'baz');
+        $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([$stubField]);
+
+        /** @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject $stubFilteredDocumentCollection */
+        $stubFilteredDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
+        $stubFilteredDocumentCollection->method('getDocuments')->willReturn([$stubSearchDocument]);
+
+        $this->stubDataPoolReader->method('getSearchDocumentsMatchingCriteria')
+            ->willReturn($stubFilteredDocumentCollection);
+
+        $this->filterCollection->initialize(
+            $stubFilteredDocumentCollection,
+            $this->stubSearchCriteria,
+            $selectedFilters,
+            $this->stubContext
+        );
+
+        $result = $this->filterCollection->getSelectedFilters();
+
+        $this->assertSame($selectedFilters, $result);
     }
 }

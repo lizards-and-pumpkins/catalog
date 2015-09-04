@@ -16,6 +16,11 @@ class FilterNavigationFilterCollection implements \Countable
     private $filters = [];
 
     /**
+     * @var array[]
+     */
+    private $selectedFilters;
+
+    /**
      * @var DataPoolReader
      */
     private $dataPoolReader;
@@ -42,6 +47,14 @@ class FilterNavigationFilterCollection implements \Countable
     }
 
     /**
+     * @return array[]
+     */
+    public function getSelectedFilters()
+    {
+        return $this->selectedFilters;
+    }
+
+    /**
      * @param SearchDocumentCollection $originalSearchDocumentCollection
      * @param SearchCriteria $originalCriteria
      * @param array[] $selectedFilters
@@ -53,11 +66,13 @@ class FilterNavigationFilterCollection implements \Countable
         array $selectedFilters,
         Context $context
     ) {
-        $allowedFilterCodes = array_keys($selectedFilters);
+        $this->selectedFilters = $selectedFilters;
+
+        $allowedFilterCodes = array_keys($this->selectedFilters);
         $defaultFilters = $this->getFiltersAppliedToCollection($originalSearchDocumentCollection, $allowedFilterCodes);
 
         $filters = [];
-        foreach ($selectedFilters as $selectedFilterCode => $selectedFilterValues) {
+        foreach ($this->selectedFilters as $selectedFilterCode => $selectedFilterValues) {
             if (empty($selectedFilterValues)) {
                 if (isset($defaultFilters[$selectedFilterCode])) {
                     $filters[$selectedFilterCode] = $defaultFilters[$selectedFilterCode];
@@ -67,7 +82,7 @@ class FilterNavigationFilterCollection implements \Countable
 
             $customCriteria = $this->addFiltersExceptGivenOneToSearchCriteria(
                 $originalCriteria,
-                $selectedFilters,
+                $this->selectedFilters,
                 $selectedFilterCode
             );
             $searchDocumentCollection = $this->dataPoolReader->getSearchDocumentsMatchingCriteria(
@@ -81,7 +96,7 @@ class FilterNavigationFilterCollection implements \Countable
         foreach ($filters as $filterCode => $filterValues) {
             $filterNavigationFilterValueCollection = new FilterNavigationFilterValueCollection;
             foreach ($filterValues as $filterValueString => $filterValueCount) {
-                if (in_array($filterValueString, $selectedFilters[$filterCode])) {
+                if (in_array($filterValueString, $this->selectedFilters[$filterCode])) {
                     $filterValue = FilterNavigationFilterValue::createSelected($filterValueString, $filterValueCount);
                 } else {
                     $filterValue = FilterNavigationFilterValue::create($filterValueString, $filterValueCount);
