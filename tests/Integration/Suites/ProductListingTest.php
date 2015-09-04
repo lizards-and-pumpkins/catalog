@@ -15,7 +15,7 @@ use Brera\Utils\XPathParser;
 
 class ProductListingTest extends AbstractIntegrationTest
 {
-    private $testUrl = 'http://example.com/adidas-men-accessories';
+    private $testUrl = 'http://example.com/sale';
 
     /**
      * @var SampleMasterFactory
@@ -109,7 +109,7 @@ class ProductListingTest extends AbstractIntegrationTest
      */
     private function getStubMetaInfo()
     {
-        $searchCriterion1 = SearchCriterion::create('category', 'men-accessories', '=');
+        $searchCriterion1 = SearchCriterion::create('category', 'sale', '=');
         $searchCriterion2 = SearchCriterion::create('brand', 'Adidas', '=');
         $searchCriteria = SearchCriteria::createAnd();
         $searchCriteria->addCriterion($searchCriterion1);
