@@ -6,23 +6,23 @@ namespace Brera\Log\Writer;
 use Brera\Log\LogMessage;
 
 /**
- * @covers Brera\Log\Writer\NullLogMessagePersister
+ * @covers Brera\Log\Writer\NullLogMessageWriter
  */
-class NullLogMessagePersisterTest extends \PHPUnit_Framework_TestCase
+class NullLogMessageWriterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var NullLogMessagePersister
+     * @var NullLogMessageWriter
      */
     private $persister;
 
     protected function setUp()
     {
-        $this->persister = new NullLogMessagePersister();
+        $this->persister = new NullLogMessageWriter();
     }
     
     public function testItIsALogMessagePersister()
     {
-        $this->assertInstanceOf(LogMessagePersister::class, $this->persister);
+        $this->assertInstanceOf(LogMessageWriter::class, $this->persister);
     }
 
     public function testItTakesALogMessage()

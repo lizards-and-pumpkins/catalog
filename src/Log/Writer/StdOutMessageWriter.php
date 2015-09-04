@@ -5,7 +5,7 @@ namespace Brera\Log\Writer;
 
 use Brera\Log\LogMessage;
 
-class StdOutMessagePersister implements LogMessagePersister
+class StdOutMessageWriter implements LogMessageWriter
 {
     public function persist(LogMessage $logMessage)
     {

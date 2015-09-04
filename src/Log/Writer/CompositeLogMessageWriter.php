@@ -5,15 +5,15 @@ namespace Brera\Log\Writer;
 
 use Brera\Log\LogMessage;
 
-class CompositeLogMessagePersister implements LogMessagePersister
+class CompositeLogMessageWriter implements LogMessageWriter
 {
     /**
-     * @var LogMessagePersister[]
+     * @var LogMessageWriter[]
      */
     private $persisters;
 
     /**
-     * @param LogMessagePersister[] $logMessagePersisterComponents
+     * @param LogMessageWriter[] $logMessagePersisterComponents
      */
     private function __construct(array $logMessagePersisterComponents)
     {
@@ -21,8 +21,8 @@ class CompositeLogMessagePersister implements LogMessagePersister
     }
 
     /**
-     * @param LogMessagePersister $_ [optional]
-     * @return CompositeLogMessagePersister
+     * @param LogMessageWriter $_ [optional]
+     * @return CompositeLogMessageWriter
      */
     public static function fromParameterList()
     {
@@ -36,10 +36,10 @@ class CompositeLogMessagePersister implements LogMessagePersister
      */
     private static function validateIsLogMessagePersister($persisterCandidate)
     {
-        if (!is_object($persisterCandidate) || !$persisterCandidate instanceof LogMessagePersister) {
+        if (!is_object($persisterCandidate) || !$persisterCandidate instanceof LogMessageWriter) {
             $type = self::getTypeStringRepresentation($persisterCandidate);
             throw new NoLogMessagePersisterArgumentException(
-                sprintf('The argument has to implement LogMessagePersister, got "%s"', $type)
+                sprintf('The argument has to implement LogMessageWriter, got "%s"', $type)
             );
         }
     }
@@ -57,7 +57,7 @@ class CompositeLogMessagePersister implements LogMessagePersister
 
     public function persist(LogMessage $logMessage)
     {
-        array_map(function (LogMessagePersister $persister) use ($logMessage) {
+        array_map(function (LogMessageWriter $persister) use ($logMessage) {
             $persister->persist($logMessage);
         }, $this->persisters);
     }

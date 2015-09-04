@@ -5,7 +5,7 @@ namespace Brera\Log\Writer;
 
 use Brera\Log\LogMessage;
 
-class FileLogMessagePersister implements LogMessagePersister
+class FileLogMessageWriter implements LogMessageWriter
 {
     /**
      * @var string

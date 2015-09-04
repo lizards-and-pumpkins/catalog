@@ -7,14 +7,14 @@ use Brera\Log\LogMessage;
 use Brera\TestFileFixtureTrait;
 
 /**
- * @covers \Brera\Log\Writer\FileLogMessagePersister
+ * @covers \Brera\Log\Writer\FileLogMessageWriter
  */
-class FileLogMessagePersisterTest extends \PHPUnit_Framework_TestCase
+class FileLogMessageWriterTest extends \PHPUnit_Framework_TestCase
 {
     use TestFileFixtureTrait;
 
     /**
-     * @var FileLogMessagePersister
+     * @var FileLogMessageWriter
      */
     private $persister;
 
@@ -61,7 +61,7 @@ class FileLogMessagePersisterTest extends \PHPUnit_Framework_TestCase
         $logDir = $this->getUniqueTempDir();
         $this->createFixtureDirectory($logDir);
         $this->testLogFilePath = $logDir . '/dir/file.log';
-        $this->persister = new FileLogMessagePersister($this->testLogFilePath);
+        $this->persister = new FileLogMessageWriter($this->testLogFilePath);
         $this->stubLogMessage = $this->getMock(LogMessage::class);
         $this->stubLogMessage->method('__toString')->willReturn('test log message');
     }
@@ -76,7 +76,7 @@ class FileLogMessagePersisterTest extends \PHPUnit_Framework_TestCase
 
     public function testItIsALogMessagePersister()
     {
-        $this->assertInstanceOf(LogMessagePersister::class, $this->persister);
+        $this->assertInstanceOf(LogMessageWriter::class, $this->persister);
     }
 
     public function testItCreatesTheLogFileDirectory()
@@ -88,7 +88,7 @@ class FileLogMessagePersisterTest extends \PHPUnit_Framework_TestCase
     public function testItThrowsAnExceptionIfTheLogDirectoryCanNotBeCreated()
     {
         $this->setExpectedException(UnableToCreateLogDirectoryException::class);
-        $persister = new FileLogMessagePersister('');
+        $persister = new FileLogMessageWriter('');
         $persister->persist($this->stubLogMessage);
     }
 

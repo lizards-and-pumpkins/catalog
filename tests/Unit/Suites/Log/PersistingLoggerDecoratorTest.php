@@ -3,7 +3,7 @@
 
 namespace Brera\Log;
 
-use Brera\Log\Writer\LogMessagePersister;
+use Brera\Log\Writer\LogMessageWriter;
 
 /**
  * @covers Brera\Log\PersistingLoggerDecorator
@@ -23,7 +23,7 @@ class PersistingLoggerDecoratorTest extends \PHPUnit_Framework_TestCase
     private $wrappedLogger;
 
     /**
-     * @var LogMessagePersister|\PHPUnit_Framework_MockObject_MockObject
+     * @var LogMessageWriter|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockPersister;
 
@@ -31,7 +31,7 @@ class PersistingLoggerDecoratorTest extends \PHPUnit_Framework_TestCase
     {
         $this->wrappedLogger = $this->getMock(Logger::class);
         $this->stubLogMessage = $this->getMock(LogMessage::class);
-        $this->mockPersister = $this->getMock(LogMessagePersister::class);
+        $this->mockPersister = $this->getMock(LogMessageWriter::class);
         $this->decorator = new PersistingLoggerDecorator($this->wrappedLogger, $this->mockPersister);
     }
 

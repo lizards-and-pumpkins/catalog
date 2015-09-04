@@ -5,8 +5,7 @@ namespace Brera\Log\Writer;
 
 use Brera\Log\LogMessage;
 
-// todo: rename to LogMessageWriter
-interface LogMessagePersister
+interface LogMessageWriter
 {
     /**
      * @param LogMessage $logMessage

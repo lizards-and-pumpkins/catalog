@@ -5,7 +5,7 @@ namespace Brera\Log\Writer;
 
 use Brera\Log\LogMessage;
 
-class NullLogMessagePersister implements LogMessagePersister
+class NullLogMessageWriter implements LogMessageWriter
 {
     public function persist(LogMessage $logMessage)
     {

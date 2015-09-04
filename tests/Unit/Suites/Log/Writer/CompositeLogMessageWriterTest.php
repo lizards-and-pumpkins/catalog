@@ -6,33 +6,33 @@ namespace Brera\Log\Writer;
 use Brera\Log\LogMessage;
 
 /**
- * @covers Brera\Log\Writer\CompositeLogMessagePersister
+ * @covers Brera\Log\Writer\CompositeLogMessageWriter
  */
-class CompositeLogMessagePersisterTest extends \PHPUnit_Framework_TestCase
+class CompositeLogMessageWriterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var CompositeLogMessagePersister
+     * @var CompositeLogMessageWriter
      */
     private $persister;
 
     protected function setUp()
     {
-        $this->persister = CompositeLogMessagePersister::fromParameterList();
+        $this->persister = CompositeLogMessageWriter::fromParameterList();
     }
 
     public function testItIsALogMessagePersister()
     {
-        $this->assertInstanceOf(LogMessagePersister::class, $this->persister);
-        $this->assertInstanceOf(LogMessagePersister::class, CompositeLogMessagePersister::fromParameterList());
+        $this->assertInstanceOf(LogMessageWriter::class, $this->persister);
+        $this->assertInstanceOf(LogMessageWriter::class, CompositeLogMessageWriter::fromParameterList());
     }
 
     public function testItThrowsAnExceptionIfAnArgumentIsNoLogMessagePersister()
     {
         $this->setExpectedException(
             NoLogMessagePersisterArgumentException::class,
-            'The argument has to implement LogMessagePersister, got'
+            'The argument has to implement LogMessageWriter, got'
         );
-        CompositeLogMessagePersister::fromParameterList($this->getMock(LogMessagePersister::class), $this);
+        CompositeLogMessageWriter::fromParameterList($this->getMock(LogMessageWriter::class), $this);
     }
 
     public function testItDelegatesToLogMessagPersisterComponents()
@@ -40,13 +40,13 @@ class CompositeLogMessagePersisterTest extends \PHPUnit_Framework_TestCase
         /** @var LogMessage|\PHPUnit_Framework_MockObject_MockObject $stubLogMessage */
         $stubLogMessage = $this->getMock(LogMessage::class);
         
-        $mockPersisterA = $this->getMock(LogMessagePersister::class);
+        $mockPersisterA = $this->getMock(LogMessageWriter::class);
         $mockPersisterA->expects($this->once())->method('persist')->with($stubLogMessage);
         
-        $mockPersisterB = $this->getMock(LogMessagePersister::class);
+        $mockPersisterB = $this->getMock(LogMessageWriter::class);
         $mockPersisterB->expects($this->once())->method('persist')->with($stubLogMessage);
 
-        $composite = CompositeLogMessagePersister::fromParameterList($mockPersisterA, $mockPersisterB);
+        $composite = CompositeLogMessageWriter::fromParameterList($mockPersisterA, $mockPersisterB);
         $composite->persist($stubLogMessage);
     }
 }

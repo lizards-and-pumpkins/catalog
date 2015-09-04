@@ -6,23 +6,23 @@ namespace Brera\Log\Writer;
 use Brera\Log\LogMessage;
 
 /**
- * @covers Brera\Log\Writer\StdOutMessagePersister
+ * @covers Brera\Log\Writer\StdOutMessageWriter
  */
-class StdOutMessagePersisterTest extends \PHPUnit_Framework_TestCase
+class StdOutMessageWriterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var StdOutMessagePersister
+     * @var StdOutMessageWriter
      */
     private $persister;
 
     protected function setUp()
     {
-        $this->persister = new StdOutMessagePersister();
+        $this->persister = new StdOutMessageWriter();
     }
 
     public function testItIsALogMessagePersister()
     {
-        $this->assertInstanceOf(LogMessagePersister::class, $this->persister);
+        $this->assertInstanceOf(LogMessageWriter::class, $this->persister);
     }
 
     public function testItOutputsTheLogMessage()
