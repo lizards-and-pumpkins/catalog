@@ -104,7 +104,7 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayOfSearchableAttributeCodesIsReturned()
     {
-        $result = $this->factory->getSearchableAttributeCodes();
+        $result = $this->factory->getSearchableAttributeCodesConfig();
 
         $this->assertInternalType('array', $result);
         $this->assertContainsOnly('string', $result);
@@ -112,7 +112,7 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayOfProductListingFilterNavigationAttributeCodesIsReturned()
     {
-        $result = $this->factory->getProductListingFilterNavigationAttributeCodes();
+        $result = $this->factory->getProductListingFilterNavigationAttributeCodesConfig();
 
         $this->assertInternalType('array', $result);
         $this->assertContainsOnly('string', $result);
@@ -120,7 +120,7 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayOfProductSearchResultsFilterNavigationAttributeCodesIsReturned()
     {
-        $result = $this->factory->getProductSearchResultsFilterNavigationAttributeCodes();
+        $result = $this->factory->getProductSearchResultsFilterNavigationAttributeCodesConfig();
 
         $this->assertInternalType('array', $result);
         $this->assertContainsOnly('string', $result);

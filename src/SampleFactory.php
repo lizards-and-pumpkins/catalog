@@ -18,7 +18,7 @@ class SampleFactory implements Factory
     /**
      * @return string[]
      */
-    public function getSearchableAttributeCodes()
+    public function getSearchableAttributeCodesConfig()
     {
         return ['name', 'category', 'brand'];
     }
@@ -26,7 +26,7 @@ class SampleFactory implements Factory
     /**
      * @return string[]
      */
-    public function getProductListingFilterNavigationAttributeCodes()
+    public function getProductListingFilterNavigationAttributeCodesConfig()
     {
         return ['brand', 'gender'];
     }
@@ -34,7 +34,7 @@ class SampleFactory implements Factory
     /**
      * @return string[]
      */
-    public function getProductSearchResultsFilterNavigationAttributeCodes()
+    public function getProductSearchResultsFilterNavigationAttributeCodesConfig()
     {
         return ['brand', 'category', 'gender'];
     }
