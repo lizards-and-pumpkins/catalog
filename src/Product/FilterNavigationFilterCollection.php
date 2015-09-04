@@ -14,7 +14,7 @@ class FilterNavigationFilterCollection implements \Countable
     /**
      * @var FilterNavigationFilter[]
      */
-    private $filters = [];
+    private $filters;
 
     /**
      * @var array[]
@@ -36,6 +36,7 @@ class FilterNavigationFilterCollection implements \Countable
      */
     public function count()
     {
+        $this->validateFiltersCollectionIsInitialized();
         return count($this->filters);
     }
 
@@ -44,6 +45,7 @@ class FilterNavigationFilterCollection implements \Countable
      */
     public function getFilters()
     {
+        $this->validateFiltersCollectionIsInitialized();
         return $this->filters;
     }
 
@@ -173,5 +175,12 @@ class FilterNavigationFilterCollection implements \Countable
         $filtersCriteria->addCriteria($originalCriteria);
 
         return $filtersCriteria;
+    }
+
+    private function validateFiltersCollectionIsInitialized()
+    {
+        if (null === $this->filters) {
+            throw new FilterCollectionInNotInitializedException('Filters collection is not initialized.');
+        }
     }
 }

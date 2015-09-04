@@ -83,9 +83,10 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(\Countable::class, $this->filterCollection);
     }
 
-    public function testCollectionIsInitiallyEmpty()
+    public function testExceptionIsThrownDuringAttemptToRetrieveFiltersWithoutInitializingCollection()
     {
-        $this->assertCount(0, $this->filterCollection);
+        $this->setExpectedException(FilterCollectionInNotInitializedException::class);
+        $this->filterCollection->getFilters();
     }
 
     public function testCollectionOnlyIncludesFiltersConfiguredForFilterNavigation()
