@@ -44,7 +44,9 @@ class FilterNavigationBlock extends Block
      */
     private function getVariableType($variable)
     {
-        return 'object' !== gettype($variable) ? gettype($variable) : get_class($variable);
+        return 'object' !== gettype($variable) ?
+            gettype($variable) :
+            get_class($variable);
     }
 
     /**
