@@ -66,7 +66,7 @@ class FilterNavigationBlockTest extends \PHPUnit_Framework_TestCase
 
         $this->stubFilterCollection->method('getSelectedFilters')->willReturn([$filterCode => []]);
 
-        $result = $this->block->getQueryString($filterCode, $filterValue);
+        $result = $this->block->getQueryStringForFilterSelection($filterCode, $filterValue);
         $expectedQueryString = sprintf('%s=%s', $filterCode, $filterValue);
 
         $this->assertEquals($expectedQueryString, $result);
@@ -83,7 +83,7 @@ class FilterNavigationBlockTest extends \PHPUnit_Framework_TestCase
         $this->stubFilterCollection->method('getSelectedFilters')
             ->willReturn([$existingFilterCode => [$existingFilterSelectedValue], $newFilterCode => []]);
 
-        $result = $this->block->getQueryString($newFilterCode, $newFilterValue);
+        $result = $this->block->getQueryStringForFilterSelection($newFilterCode, $newFilterValue);
         $resultTokensArray = explode('&', $result);
 
         $expectedOldToken = sprintf('%s=%s', $existingFilterCode, $existingFilterSelectedValue);
@@ -103,7 +103,7 @@ class FilterNavigationBlockTest extends \PHPUnit_Framework_TestCase
         $this->stubFilterCollection->method('getSelectedFilters')
             ->willReturn([$filterCode => [$filterPreviouslySelectedValue]]);
 
-        $result = $this->block->getQueryString($filterCode, $filterValue);
+        $result = $this->block->getQueryStringForFilterSelection($filterCode, $filterValue);
         $expectedQueryString = sprintf(
             '%s=%s%s%s',
             $filterCode,
@@ -129,7 +129,7 @@ class FilterNavigationBlockTest extends \PHPUnit_Framework_TestCase
             $filterCode      => [$filterValue, $filterOtherSelectedValue]
         ]);
 
-        $result = $this->block->getQueryString($filterCode, $filterValue);
+        $result = $this->block->getQueryStringForFilterSelection($filterCode, $filterValue);
         $resultTokensArray = explode('&', $result);
 
         $expectedFilterToken = sprintf('%s=%s', $filterCode, $filterOtherSelectedValue);
@@ -153,7 +153,7 @@ class FilterNavigationBlockTest extends \PHPUnit_Framework_TestCase
             $filterCode      => [$filterValue]
         ]);
 
-        $result = $this->block->getQueryString($filterCode, $filterValue);
+        $result = $this->block->getQueryStringForFilterSelection($filterCode, $filterValue);
         $expectedQueryString = sprintf('%s=%s', $otherFilterCode, $otherFilterSelectedValue);
 
         $this->assertSame($expectedQueryString, $result);

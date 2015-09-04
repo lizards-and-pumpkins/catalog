@@ -54,7 +54,7 @@ class FilterNavigationBlock extends Block
      * @param string $filterValue
      * @return string
      */
-    public function getQueryString($filterCode, $filterValue)
+    public function getQueryStringForFilterSelection($filterCode, $filterValue)
     {
         $selectedFilters = $this->getSelectedFilters();
         foreach ($selectedFilters as $selectedFilterCode => $selectedValues) {
