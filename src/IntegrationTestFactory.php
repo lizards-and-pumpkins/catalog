@@ -44,7 +44,7 @@ class IntegrationTestFactory implements Factory
     /**
      * @return string[]
      */
-    public function getSearchableAttributeCodesConfig()
+    public function getSearchableAttributeCodes()
     {
         return ['name', 'category', 'brand'];
     }
@@ -52,7 +52,7 @@ class IntegrationTestFactory implements Factory
     /**
      * @return string[]
      */
-    public function getProductListingFilterNavigationAttributeCodesConfig()
+    public function getProductListingFilterNavigationAttributeCodes()
     {
         return ['brand', 'gender'];
     }
@@ -60,7 +60,7 @@ class IntegrationTestFactory implements Factory
     /**
      * @return string[]
      */
-    public function getProductSearchResultsFilterNavigationAttributeCodesConfig()
+    public function getProductSearchResultsFilterNavigationAttributeCodes()
     {
         return ['brand', 'category', 'gender'];
     }
