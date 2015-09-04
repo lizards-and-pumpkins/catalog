@@ -54,6 +54,7 @@ class FilterNavigationFilterCollection implements \Countable
      */
     public function getSelectedFilters()
     {
+        $this->validateFiltersCollectionIsInitialized();
         return $this->selectedFilters;
     }
 
