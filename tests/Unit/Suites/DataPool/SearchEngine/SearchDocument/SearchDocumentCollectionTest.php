@@ -22,20 +22,34 @@ class SearchDocumentCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(\Countable::class, $this->searchDocumentCollection);
     }
 
-    public function testIsInitiallyEmpty()
+    public function testIteratorAggregateInterfaceIsImplemented()
     {
-        $this->assertCount(0, $this->searchDocumentCollection->getDocuments());
+        $this->assertInstanceOf(\IteratorAggregate::class, $this->searchDocumentCollection);
     }
 
-    public function testSearchDocumentIsAddedToCollection()
+    public function testCollectionIsInitiallyEmpty()
+    {
+        $this->assertCount(0, $this->searchDocumentCollection);
+    }
+
+    public function testCollectionIsAccessibleViaGetter()
     {
         /** @var SearchDocument|\PHPUnit_Framework_MockObject_MockObject $stubSearchDocument */
         $stubSearchDocument = $this->getMock(SearchDocument::class, [], [], '', false);
         $this->searchDocumentCollection->add($stubSearchDocument);
         $result = $this->searchDocumentCollection->getDocuments();
 
-        $this->assertCount(1, $this->searchDocumentCollection);
+        $this->assertCount(1, $result);
         $this->assertContainsOnly(SearchDocument::class, $result);
         $this->assertSame($stubSearchDocument, $result[0]);
+    }
+
+    public function testCollectionIsAccessibleViaArrayIterator()
+    {
+        /** @var SearchDocument|\PHPUnit_Framework_MockObject_MockObject $stubSearchDocument */
+        $stubSearchDocument = $this->getMock(SearchDocument::class, [], [], '', false);
+        $this->searchDocumentCollection->add($stubSearchDocument);
+
+        $this->assertContains($stubSearchDocument, $this->searchDocumentCollection->getIterator());
     }
 }

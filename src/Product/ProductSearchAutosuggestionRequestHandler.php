@@ -119,10 +119,9 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
         $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
             ProductInSearchAutosuggestionSnippetRenderer::CODE
         );
-        $searchDocuments = $searchDocumentCollection->getDocuments();
         $productInAutosuggestionSnippetKeys = array_map(function (SearchDocument $searchDocument) use ($keyGenerator) {
             return $keyGenerator->getKeyForContext($this->context, ['product_id' => $searchDocument->getProductId()]);
-        }, $searchDocuments);
+        }, $searchDocumentCollection->getDocuments());
 
         $snippetKeyToContentMap = $this->dataPoolReader->getSnippets($productInAutosuggestionSnippetKeys);
         $snippetCodeToKeyMap = $this->getProductInAutosuggestionSnippetCodeToKeyMap(

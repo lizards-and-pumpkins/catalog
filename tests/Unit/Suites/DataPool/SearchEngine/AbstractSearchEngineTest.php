@@ -82,7 +82,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         SearchDocumentCollection $collection,
         ProductId $productId
     ) {
-        $documents = $collection->getDocuments();
+        $documents = $collection->getIterator();
         foreach ($documents as $document) {
             if ($document->getProductId() == $productId) {
                 return true;
@@ -159,7 +159,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $searchDocumentA = $this->createSearchDocument(['foo' => $keyword], $productAId);
         $searchDocumentB = $this->createSearchDocument(['baz' => $keyword], $productBId);
 
-        $this->stubSearchDocumentCollection->method('getDocuments')->willReturn([$searchDocumentA, $searchDocumentB]);
+        $this->stubSearchDocumentCollection->method('getIterator')
+            ->willReturn(new \ArrayIterator([$searchDocumentA, $searchDocumentB]));
         $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
         $result = $this->searchEngine->query($keyword, $this->testContext);
 
@@ -176,7 +177,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $searchDocumentA = $this->createSearchDocument(['foo' => $keyword], $productAId);
         $searchDocumentB = $this->createSearchDocument(['baz' => 'qux'], $productBId);
 
-        $this->stubSearchDocumentCollection->method('getDocuments')->willReturn([$searchDocumentA, $searchDocumentB]);
+        $this->stubSearchDocumentCollection->method('getIterator')
+            ->willReturn(new \ArrayIterator([$searchDocumentA, $searchDocumentB]));
         $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
         $result = $this->searchEngine->query($keyword, $this->testContext);
 
@@ -195,7 +197,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $searchDocumentA = $this->createSearchDocumentWithContext(['foo' => $keyword], $productAId, $documentAContext);
         $searchDocumentB = $this->createSearchDocumentWithContext(['foo' => $keyword], $productBId, $documentBContext);
 
-        $this->stubSearchDocumentCollection->method('getDocuments')->willReturn([$searchDocumentA, $searchDocumentB]);
+        $this->stubSearchDocumentCollection->method('getIterator')
+            ->willReturn(new \ArrayIterator([$searchDocumentA, $searchDocumentB]));
         $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
 
         $queryContext = $this->createContextFromDataParts(['website' => 'value-2']);
@@ -214,7 +217,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $searchDocumentA = $this->createSearchDocumentWithContext(['foo' => 'bar'], $productAId, $documentAContext);
         $searchDocumentB = $this->createSearchDocumentWithContext(['foo' => 'bar'], $productBId, $documentBContext);
 
-        $this->stubSearchDocumentCollection->method('getDocuments')->willReturn([$searchDocumentA, $searchDocumentB]);
+        $this->stubSearchDocumentCollection->method('getIterator')
+            ->willReturn(new \ArrayIterator([$searchDocumentA, $searchDocumentB]));
         $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
 
         $queryContext = $this->createContextFromDataParts(['locale' => 'value2']);
@@ -229,7 +233,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $documentContext = $this->createContextFromDataParts(['locale' => 'value2']);
         $searchDocument = $this->createSearchDocumentWithContext(['foo' => 'bar'], $productId, $documentContext);
 
-        $this->stubSearchDocumentCollection->method('getDocuments')->willReturn([$searchDocument]);
+        $this->stubSearchDocumentCollection->method('getIterator')
+            ->willReturn(new \ArrayIterator([$searchDocument]));
         $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
 
         $queryContext = $this->createContextFromDataParts(['website' => 'value1', 'locale' => 'value2']);
@@ -246,7 +251,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $searchDocumentA = $this->createSearchDocument(['foo' => 'barbarism'], $productAId);
         $searchDocumentB = $this->createSearchDocument(['baz' => 'cabaret'], $productBId);
 
-        $this->stubSearchDocumentCollection->method('getDocuments')->willReturn([$searchDocumentA, $searchDocumentB]);
+        $this->stubSearchDocumentCollection->method('getIterator')
+            ->willReturn(new \ArrayIterator([$searchDocumentA, $searchDocumentB]));
         $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
         $result = $this->searchEngine->query('bar', $this->testContext);
 
@@ -272,7 +278,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $searchDocumentA = $this->createSearchDocument(['foo' => 'bar'], $productAId);
         $searchDocumentB = $this->createSearchDocument(['baz' => 'qux'], $productBId);
 
-        $this->stubSearchDocumentCollection->method('getDocuments')->willReturn([$searchDocumentA, $searchDocumentB]);
+        $this->stubSearchDocumentCollection->method('getIterator')
+            ->willReturn(new \ArrayIterator([$searchDocumentA, $searchDocumentB]));
         $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
 
         $matchingSearchDocumentField = SearchDocumentField::fromKeyAndValue('foo', 'bar');
@@ -297,7 +304,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $searchDocumentA = $this->createSearchDocument(['foo' => 'bar'], $productId);
         $searchDocumentB = $this->createSearchDocument(['baz' => 'qux'], $productId);
 
-        $this->stubSearchDocumentCollection->method('getDocuments')->willReturn([$searchDocumentA, $searchDocumentB]);
+        $this->stubSearchDocumentCollection->method('getIterator')
+            ->willReturn(new \ArrayIterator([$searchDocumentA, $searchDocumentB]));
         $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
 
         /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubCriteria */

@@ -7,6 +7,7 @@ use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\SearchEngine\CompositeSearchCriterion;
 use Brera\DataPool\SearchEngine\SearchCriteria;
 use Brera\DataPool\SearchEngine\SearchCriterion;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 
 class FilterNavigationFilterCollection implements \Countable
@@ -123,7 +124,8 @@ class FilterNavigationFilterCollection implements \Countable
     ) {
         $filters = [];
 
-        foreach ($searchDocumentCollection->getDocuments() as $searchDocument) {
+        /** @var SearchDocument $searchDocument */
+        foreach ($searchDocumentCollection as $searchDocument) {
             foreach ($searchDocument->getFieldsCollection()->getFields() as $searchDocumentField) {
                 $filterCode = $searchDocumentField->getKey();
                 if (!in_array($filterCode, $filtersCodesToFetch)) {

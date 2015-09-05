@@ -9,7 +9,6 @@ use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use Brera\DefaultHttpResponse;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
-use Brera\Http\HttpUrl;
 use Brera\Http\UnableToHandleRequestException;
 use Brera\PageBuilder;
 use Brera\SnippetKeyGenerator;
@@ -21,11 +20,6 @@ use Brera\SnippetKeyGeneratorLocator;
  */
 class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var HttpUrl|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubHttpUrl;
-
     /**
      * @var PageBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -80,9 +74,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
             $mockSnippetKeyGeneratorLocator
         );
 
-        $this->stubHttpUrl = $this->getMock(HttpUrl::class, [], [], '', false);
         $this->stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
-        $this->stubHttpRequest->method('getUrl')->willReturn($this->stubHttpUrl);
     }
 
     public function testHttpRequestHandlerInterfaceIsImplemented()
@@ -93,7 +85,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
     public function testRequestCanNotBeProcessedIfRequestUrlIsNotEqualToSearchPageUrl()
     {
         $urlString = 'foo';
-        $this->stubHttpUrl->method('getPathRelativeToWebFront')->willReturn($urlString);
+        $this->stubHttpRequest->method('getUrlPathRelativeToWebFront')->willReturn($urlString);
         $this->stubHttpRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
 
         $this->assertFalse($this->requestHandler->canProcess($this->stubHttpRequest));
@@ -102,7 +94,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
     public function testRequestCanNotBeProcessedIfRequestMethodIsNotGet()
     {
         $urlString = ProductSearchRequestHandler::SEARCH_RESULTS_SLUG;
-        $this->stubHttpUrl->method('getPathRelativeToWebFront')->willReturn($urlString);
+        $this->stubHttpRequest->method('getUrlPathRelativeToWebFront')->willReturn($urlString);
         $this->stubHttpRequest->method('getMethod')->willReturn(HttpRequest::METHOD_POST);
 
         $this->assertFalse($this->requestHandler->canProcess($this->stubHttpRequest));

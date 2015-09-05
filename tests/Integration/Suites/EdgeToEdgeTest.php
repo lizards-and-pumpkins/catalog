@@ -109,7 +109,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
 
         $this->assertEquals(
             $productId,
-            $searchResults->getDocuments()[0]->getProductId(),
+            $searchResults->getIterator()->current()->getProductId(),
             sprintf('The search result does not contain the expected product ID "%s"', $productId)
         );
     }

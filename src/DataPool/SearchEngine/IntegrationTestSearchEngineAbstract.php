@@ -16,7 +16,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine
 
     final public function addSearchDocumentCollection(SearchDocumentCollection $searchDocumentCollection)
     {
-        foreach ($searchDocumentCollection->getDocuments() as $searchDocument) {
+        foreach ($searchDocumentCollection as $searchDocument) {
             $this->addSearchDocument($searchDocument);
         }
     }
