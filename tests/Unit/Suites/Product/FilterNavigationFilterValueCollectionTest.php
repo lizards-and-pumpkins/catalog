@@ -30,20 +30,17 @@ class FilterNavigationFilterValueCollectionTest extends \PHPUnit_Framework_TestC
         $this->assertInstanceOf(\Countable::class, $this->filterValueCollection);
     }
 
+    public function testIteratorAggregateInterfaceIsImplemented()
+    {
+        $this->assertInstanceOf(\IteratorAggregate::class, $this->filterValueCollection);
+    }
+
     public function testCollectionIsInitiallyEmpty()
     {
         $this->assertCount(0, $this->filterValueCollection);
     }
 
-    public function testFilterValueCanBeAddedToCollection()
-    {
-        $stubFilterValue = $this->createStubFilterValue();
-        $this->filterValueCollection->add($stubFilterValue);
-
-        $this->assertCount(1, $this->filterValueCollection);
-    }
-
-    public function testFilterValuesArrayIsReturned()
+    public function testCollectionIsAccessibleViaGetter()
     {
         $stubFilterValueA = $this->createStubFilterValue();
         $stubFilterValueB = $this->createStubFilterValue();
@@ -56,5 +53,18 @@ class FilterNavigationFilterValueCollectionTest extends \PHPUnit_Framework_TestC
         $this->assertCount(2, $result);
         $this->assertContains($stubFilterValueA, $result);
         $this->assertContains($stubFilterValueB, $result);
+    }
+
+    public function testCollectionIsAccessibleViaIterator()
+    {
+        $stubFilterValueA = $this->createStubFilterValue();
+        $stubFilterValueB = $this->createStubFilterValue();
+
+        $this->filterValueCollection->add($stubFilterValueA);
+        $this->filterValueCollection->add($stubFilterValueB);
+
+        $this->assertCount(2, $this->filterValueCollection);
+        $this->assertContains($stubFilterValueA, $this->filterValueCollection);
+        $this->assertContains($stubFilterValueB, $this->filterValueCollection);
     }
 }

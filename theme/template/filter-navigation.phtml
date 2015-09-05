@@ -2,13 +2,14 @@
 /**
  * @var \Brera\Product\Block\FilterNavigationBlock $this
  * @var \Brera\Product\FilterNavigationFilter $filter
+ * @var \Brera\Product\FilterNavigationFilterValue $filterValue
  */
 ?>
 <?php foreach ($this->getFilterCollection() as $filter) : ?>
 <div id="productListFilter">
     <div class="block-title roundedBorder expanded" id="filter-title-brand"><?= $filter->getCode() ?></div>
     <ol class="filter-content scroll-pane">
-        <?php foreach ($filter->getValuesCollection()->getFilterValues() as $filterValue) : ?>
+        <?php foreach ($filter->getValuesCollection() as $filterValue) : ?>
             <li<?php if ($filterValue->isSelected()) : ?> class="active"<?php endif ?>>
                 <a href="<?php /* TODO: Insert base URL */ ?>?<?= $this->getQueryStringForFilterSelection($filter->getCode(), $filterValue->getValue()) ?>"><?= $filterValue->getValue() ?> (<?= $filterValue->getCount() ?>)</a>
             </li>

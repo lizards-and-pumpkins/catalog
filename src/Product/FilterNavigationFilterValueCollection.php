@@ -2,7 +2,7 @@
 
 namespace Brera\Product;
 
-class FilterNavigationFilterValueCollection implements \Countable
+class FilterNavigationFilterValueCollection implements \Countable, \IteratorAggregate
 {
     /**
      * @var FilterNavigationFilterValue[]
@@ -15,6 +15,14 @@ class FilterNavigationFilterValueCollection implements \Countable
     public function count()
     {
         return count($this->filterValues);
+    }
+
+    /**
+     * @return \ArrayIterator
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->filterValues);
     }
 
     public function add(FilterNavigationFilterValue $filterValue)
