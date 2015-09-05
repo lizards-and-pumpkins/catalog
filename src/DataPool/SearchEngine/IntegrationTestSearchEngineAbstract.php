@@ -6,6 +6,7 @@ namespace Brera\DataPool\SearchEngine;
 use Brera\Context\Context;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 
 abstract class IntegrationTestSearchEngineAbstract implements SearchEngine
 {
@@ -110,9 +111,8 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine
      */
     private function isAnyFieldValueOfSearchDocumentMatchesQueryString(SearchDocument $searchDocument, $queryString)
     {
-        $searchDocumentFieldsCollection = $searchDocument->getFieldsCollection();
-
-        foreach ($searchDocumentFieldsCollection->getFields() as $field) {
+        /** @var SearchDocumentField $field */
+        foreach ($searchDocument->getFieldsCollection() as $field) {
             if (false !== stripos($field->getValue(), $queryString)) {
                 return true;
             }

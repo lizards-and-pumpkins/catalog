@@ -9,6 +9,7 @@ use Brera\DataPool\SearchEngine\SearchCriteria;
 use Brera\DataPool\SearchEngine\SearchCriterion;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 
 class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
 {
@@ -135,7 +136,8 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
 
         /** @var SearchDocument $searchDocument */
         foreach ($searchDocumentCollection as $searchDocument) {
-            foreach ($searchDocument->getFieldsCollection()->getFields() as $searchDocumentField) {
+            /** @var SearchDocumentField $searchDocumentField */
+            foreach ($searchDocument->getFieldsCollection() as $searchDocumentField) {
                 $filterCode = $searchDocumentField->getKey();
                 if (!in_array($filterCode, $filtersCodesToFetch)) {
                     continue;

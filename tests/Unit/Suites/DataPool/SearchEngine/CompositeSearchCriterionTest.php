@@ -25,7 +25,8 @@ class CompositeSearchCriterionTest extends \PHPUnit_Framework_TestCase
         }
 
         $stubSearchDocumentFieldsCollection = $this->getMock(SearchDocumentFieldCollection::class, [], [], '', false);
-        $stubSearchDocumentFieldsCollection->method('getFields')->willReturn($searchDocumentFieldsArray);
+        $stubSearchDocumentFieldsCollection->method('getIterator')
+            ->willReturn(new \ArrayIterator($searchDocumentFieldsArray));
 
         $stubSearchDocument = $this->getMock(SearchDocument::class, [], [], '', false);
         $stubSearchDocument->method('getFieldsCollection')->willReturn($stubSearchDocumentFieldsCollection);

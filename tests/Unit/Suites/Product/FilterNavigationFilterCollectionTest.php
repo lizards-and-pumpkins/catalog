@@ -61,7 +61,7 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
     private function createStubSearchDocumentWithGivenFields(array $fields)
     {
         $stubSearchDocumentFieldsCollection = $this->getMock(SearchDocumentFieldCollection::class, [], [], '', false);
-        $stubSearchDocumentFieldsCollection->method('getFields')->willReturn($fields);
+        $stubSearchDocumentFieldsCollection->method('getIterator')->willReturn(new \ArrayIterator($fields));
 
         $stubSearchDocument = $this->getMock(SearchDocument::class, [], [], '', false);
         $stubSearchDocument->method('getFieldsCollection')->willReturn($stubSearchDocumentFieldsCollection);

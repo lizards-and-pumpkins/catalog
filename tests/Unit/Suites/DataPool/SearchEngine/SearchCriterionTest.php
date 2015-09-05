@@ -32,7 +32,8 @@ class SearchCriterionTest extends \PHPUnit_Framework_TestCase
     private function createStubSearchDocumentWithGivenFields(array $stubSearchDocumentFields)
     {
         $stubSearchDocumentFieldCollection = $this->getMock(SearchDocumentFieldCollection::class, [], [], '', false);
-        $stubSearchDocumentFieldCollection->method('getFields')->willReturn($stubSearchDocumentFields);
+        $stubSearchDocumentFieldCollection->method('getIterator')
+            ->willReturn(new \ArrayIterator($stubSearchDocumentFields));
 
         $stubSearchDocument = $this->getMock(SearchDocument::class, [], [], '', false);
         $stubSearchDocument->method('getFieldsCollection')->willReturn($stubSearchDocumentFieldCollection);

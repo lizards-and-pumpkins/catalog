@@ -3,6 +3,7 @@
 namespace Brera\DataPool\SearchEngine;
 
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 
 class SearchCriterion implements SearchCriteria, \JsonSerializable
 {
@@ -74,7 +75,8 @@ class SearchCriterion implements SearchCriteria, \JsonSerializable
      */
     public function matches(SearchDocument $searchDocument)
     {
-        foreach ($searchDocument->getFieldsCollection()->getFields() as $searchDocumentField) {
+        /** @var SearchDocumentField $searchDocumentField */
+        foreach ($searchDocument->getFieldsCollection() as $searchDocumentField) {
             if ($searchDocumentField->getKey() !== $this->fieldName) {
                 continue;
             }
