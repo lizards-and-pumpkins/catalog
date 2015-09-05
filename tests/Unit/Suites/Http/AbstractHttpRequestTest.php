@@ -104,7 +104,13 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
     
     public function testEmptyStringIsReturnedIfParameterIsAbsentInRequestQuery()
     {
-        $result = HttpRequest::fromGlobalState();
+        $result = HttpRequest::fromParameters(
+            HttpRequest::METHOD_GET,
+            HttpUrl::fromString('http://example.com'),
+            HttpHeaders::fromArray([]),
+            HttpRequestBody::fromString('')
+        );
+
         $this->assertSame('', $result->getQueryParameter('foo'));
     }
 
