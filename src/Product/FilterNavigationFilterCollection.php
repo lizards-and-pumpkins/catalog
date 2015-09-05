@@ -10,7 +10,7 @@ use Brera\DataPool\SearchEngine\SearchCriterion;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 
-class FilterNavigationFilterCollection implements \Countable
+class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
 {
     /**
      * @var FilterNavigationFilter[]
@@ -39,6 +39,15 @@ class FilterNavigationFilterCollection implements \Countable
     {
         $this->validateFiltersCollectionIsInitialized();
         return count($this->filters);
+    }
+
+    /**
+     * @return \ArrayIterator
+     */
+    public function getIterator()
+    {
+        $this->validateFiltersCollectionIsInitialized();
+        return new \ArrayIterator($this->filters);
     }
 
     /**

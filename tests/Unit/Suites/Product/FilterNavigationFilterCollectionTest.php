@@ -83,7 +83,18 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(\Countable::class, $this->filterCollection);
     }
 
-    public function testExceptionIsThrownDuringAttemptToRetrieveFiltersWithoutInitializingCollection()
+    public function testIteratorAggregateInterfaceIsImplemented()
+    {
+        $this->assertInstanceOf(\IteratorAggregate::class, $this->filterCollection);
+    }
+
+    public function testExceptionIsThrownDuringAttemptToAccessCollectionViaIteratorWithoutInitializingCollection()
+    {
+        $this->setExpectedException(FilterCollectionInNotInitializedException::class);
+        $this->filterCollection->getIterator()->current();
+    }
+
+    public function testExceptionIsThrownDuringAttemptToAccessCollectionViaGetterWithoutInitializingCollection()
     {
         $this->setExpectedException(FilterCollectionInNotInitializedException::class);
         $this->filterCollection->getFilters();
@@ -101,7 +112,7 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
         count($this->filterCollection);
     }
 
-    public function testEmptyFiltersArrayIsReturnedIfNoFiltersAreApplicableToCollection()
+    public function testEmptyCollectionIsReturnedIfNoFiltersAreApplicableToSearchDocumentCollection()
     {
         $selectedFilters = ['foo' => []];
 
@@ -116,10 +127,29 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
             $this->stubContext
         );
 
-        $result = $this->filterCollection->getFilters();
+        $this->assertEmpty($this->filterCollection);
+    }
 
-        $this->assertInternalType('array', $result);
-        $this->assertEmpty($result);
+    public function testCollectionIsAccessibleViaIterator()
+    {
+        $selectedFilters = ['foo' => []];
+
+        $stubField = $this->createStubSearchDocumentField('foo', 'baz');
+        $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([$stubField]);
+
+        /** @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject $stubSearchDocumentCollection */
+        $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
+        $stubSearchDocumentCollection->method('getIterator')->willReturn(new \ArrayIterator([$stubSearchDocument]));
+
+        $this->filterCollection->initialize(
+            $stubSearchDocumentCollection,
+            $this->stubSearchCriteria,
+            $selectedFilters,
+            $this->stubContext
+        );
+
+        $this->assertCount(1, $this->filterCollection);
+        $this->assertSame('foo', $this->filterCollection->getIterator()->current()->getCode());
     }
 
     public function testCollectionOnlyIncludesFiltersConfiguredForFilterNavigation()
@@ -141,9 +171,10 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
             $selectedFilters,
             $this->stubContext
         );
-        $result = $this->filterCollection->getFilters();
 
-        $this->assertCount(1, $result);
+        $this->assertCount(1, $this->filterCollection);
+
+        $result = $this->filterCollection->getFilters();
 
         $this->assertSame('foo', $result[0]->getCode());
         $this->assertCount(1, $result[0]->getValuesCollection());
@@ -170,9 +201,10 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
             $selectedFilters,
             $this->stubContext
         );
-        $result = $this->filterCollection->getFilters();
 
-        $this->assertCount(1, $result);
+        $this->assertCount(1, $this->filterCollection);
+
+        $result = $this->filterCollection->getFilters();
 
         $this->assertSame('foo', $result[0]->getCode());
         $this->assertCount(1, $result[0]->getValuesCollection());
@@ -205,9 +237,10 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
             $selectedFilters,
             $this->stubContext
         );
-        $result = $this->filterCollection->getFilters();
 
-        $this->assertCount(1, $result);
+        $this->assertCount(1, $this->filterCollection);
+
+        $result = $this->filterCollection->getFilters();
 
         $this->assertSame('foo', $result[0]->getCode());
         $this->assertCount(1, $result[0]->getValuesCollection());
@@ -246,9 +279,10 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
             $selectedFilters,
             $this->stubContext
         );
-        $result = $this->filterCollection->getFilters();
 
-        $this->assertCount(2, $result);
+        $this->assertCount(2, $this->filterCollection);
+
+        $result = $this->filterCollection->getFilters();
 
         $this->assertSame('foo', $result[0]->getCode());
         $this->assertCount(2, $result[0]->getValuesCollection());
