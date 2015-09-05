@@ -101,6 +101,27 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
         count($this->filterCollection);
     }
 
+    public function testEmptyFiltersArrayIsReturnedIfNoFiltersAreApplicableToCollection()
+    {
+        $selectedFilters = ['foo' => []];
+
+        /** @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject $stubSearchDocumentCollection */
+        $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
+        $stubSearchDocumentCollection->method('getDocuments')->willReturn([]);
+
+        $this->filterCollection->initialize(
+            $stubSearchDocumentCollection,
+            $this->stubSearchCriteria,
+            $selectedFilters,
+            $this->stubContext
+        );
+
+        $result = $this->filterCollection->getFilters();
+
+        $this->assertInternalType('array', $result);
+        $this->assertEmpty($result);
+    }
+
     public function testCollectionOnlyIncludesFiltersConfiguredForFilterNavigation()
     {
         $selectedFilters = ['foo' => []];

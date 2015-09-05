@@ -70,6 +70,7 @@ class FilterNavigationFilterCollection implements \Countable
         array $selectedFilters,
         Context $context
     ) {
+        $this->filters = [];
         $this->selectedFilters = $selectedFilters;
 
         $allowedFilterCodes = array_keys($this->selectedFilters);
