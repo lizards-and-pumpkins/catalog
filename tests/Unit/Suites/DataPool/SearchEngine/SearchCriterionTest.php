@@ -81,7 +81,7 @@ class SearchCriterionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expectation, $result);
     }
 
-    public function testFalseIsReturnIfGivenSearchDocumentContainsNoFieldWithNametMatchingCriterionFieldName()
+    public function testFalseIsReturnedIfGivenSearchDocumentContainsNoFieldWithNametMatchingCriterionFieldName()
     {
         $fieldName = 'foo';
         $fieldValue = 'bar';
