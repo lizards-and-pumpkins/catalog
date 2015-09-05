@@ -269,7 +269,11 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         SearchDocumentCollection $collection,
         array $productIds
     ) {
-        $this->assertCount(count($productIds), $collection, 'Failed asserting collection size matches expectation.');
+        $this->assertCount(
+            count($productIds),
+            $collection,
+            'Failed asserting that the search document collection size matches the number of expected product ids.'
+        );
         foreach ($productIds as $productId) {
             if (!$this->isDocumentForProductIdInDocumentCollection($collection, $productId)) {
                 $this->fail(sprintf(
