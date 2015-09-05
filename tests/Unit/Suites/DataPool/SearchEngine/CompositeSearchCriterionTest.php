@@ -21,10 +21,7 @@ class CompositeSearchCriterionTest extends \PHPUnit_Framework_TestCase
         $searchDocumentFieldsArray = [];
 
         foreach ($searchDocumentFieldsData as $fieldKey => $fieldValue) {
-            $stubSearchDocumentField = $this->getMock(SearchDocumentField::class, [], [], '', false);
-            $stubSearchDocumentField->method('getKey')->willReturn($fieldKey);
-            $stubSearchDocumentField->method('getValue')->willReturn($fieldValue);
-            $searchDocumentFieldsArray[] = $stubSearchDocumentField;
+            $searchDocumentFieldsArray[] = $this->createStubSearchDocumentField($fieldKey, $fieldValue);
         }
 
         $stubSearchDocumentFieldsCollection = $this->getMock(SearchDocumentFieldCollection::class, [], [], '', false);
@@ -34,6 +31,20 @@ class CompositeSearchCriterionTest extends \PHPUnit_Framework_TestCase
         $stubSearchDocument->method('getFieldsCollection')->willReturn($stubSearchDocumentFieldsCollection);
 
         return $stubSearchDocument;
+    }
+
+    /**
+     * @param string $fieldKey
+     * @param string $fieldValue
+     * @return SearchDocumentField|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubSearchDocumentField($fieldKey, $fieldValue)
+    {
+        $stubSearchDocumentField = $this->getMock(SearchDocumentField::class, [], [], '', false);
+        $stubSearchDocumentField->method('getKey')->willReturn($fieldKey);
+        $stubSearchDocumentField->method('getValue')->willReturn($fieldValue);
+
+        return $stubSearchDocumentField;
     }
 
     public function testSearchCriteriaInterfaceIsImplemented()
