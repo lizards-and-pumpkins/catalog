@@ -49,7 +49,8 @@ class FilterNavigationBlockTest extends \PHPUnit_Framework_TestCase
             sprintf('Data object must be instance of %s, got "stdClass".', FilterNavigationFilterCollection::class)
         );
         $invalidDataObject = new \stdClass;
-        $block = new FilterNavigationBlock($this->stubBlockRenderer, 'foo.phtml', 'foo', $invalidDataObject);
+        $blockName = 'foo';
+        $block = new FilterNavigationBlock($this->stubBlockRenderer, 'foo.phtml', $blockName, $invalidDataObject);
         $block->getFilterCollection();
     }
 
