@@ -29,6 +29,80 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
      */
     private $searchEngine;
 
+    /**
+     * @param string[] $fields
+     * @param ProductId $productId
+     * @return SearchDocument
+     */
+    private function createSearchDocument(array $fields, ProductId $productId)
+    {
+        return $this->createSearchDocumentWithContext($fields, $productId, $this->testContext);
+    }
+
+    /**
+     * @param string[] $fields
+     * @param ProductId $productId
+     * @param Context $context
+     * @return SearchDocument
+     */
+    private function createSearchDocumentWithContext(array $fields, ProductId $productId, Context $context)
+    {
+        return new SearchDocument(SearchDocumentFieldCollection::fromArray($fields), $context, $productId);
+    }
+
+    /**
+     * @param SearchDocumentCollection $collection
+     * @param ProductId[] $productIds
+     */
+    private function assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds(
+        SearchDocumentCollection $collection,
+        array $productIds
+    ) {
+        $this->assertCount(
+            count($productIds),
+            $collection,
+            'Failed asserting that the search document collection size matches the number of expected product ids.'
+        );
+        foreach ($productIds as $productId) {
+            if (!$this->isDocumentForProductIdInDocumentCollection($collection, $productId)) {
+                $this->fail(sprintf(
+                    'Failed asserting document for product ID "%s" is present in search document collection.',
+                    $productId
+                ));
+            }
+        }
+    }
+
+    /**
+     * @param SearchDocumentCollection $collection
+     * @param ProductId $productId
+     * @return bool
+     */
+    private function isDocumentForProductIdInDocumentCollection(
+        SearchDocumentCollection $collection,
+        ProductId $productId
+    ) {
+        $documents = $collection->getDocuments();
+        foreach ($documents as $document) {
+            if ($document->getProductId() == $productId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param string[] $contextDataSet
+     * @return Context
+     */
+    private function createContextFromDataParts(array $contextDataSet)
+    {
+        $dataVersion = DataVersion::fromVersionString('-1');
+        $contextBuilder = new ContextBuilder($dataVersion);
+
+        return $contextBuilder->createContextsFromDataSets([$contextDataSet])[0];
+    }
+
     protected function setUp()
     {
         $this->searchEngine = $this->createSearchEngineInstance();
@@ -239,78 +313,4 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
      * @return SearchEngine
      */
     abstract protected function createSearchEngineInstance();
-
-    /**
-     * @param string[] $fields
-     * @param ProductId $productId
-     * @return SearchDocument
-     */
-    private function createSearchDocument(array $fields, ProductId $productId)
-    {
-        return $this->createSearchDocumentWithContext($fields, $productId, $this->testContext);
-    }
-
-    /**
-     * @param string[] $fields
-     * @param ProductId $productId
-     * @param Context $context
-     * @return SearchDocument
-     */
-    private function createSearchDocumentWithContext(array $fields, ProductId $productId, Context $context)
-    {
-        return new SearchDocument(SearchDocumentFieldCollection::fromArray($fields), $context, $productId);
-    }
-
-    /**
-     * @param SearchDocumentCollection $collection
-     * @param ProductId[] $productIds
-     */
-    private function assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds(
-        SearchDocumentCollection $collection,
-        array $productIds
-    ) {
-        $this->assertCount(
-            count($productIds),
-            $collection,
-            'Failed asserting that the search document collection size matches the number of expected product ids.'
-        );
-        foreach ($productIds as $productId) {
-            if (!$this->isDocumentForProductIdInDocumentCollection($collection, $productId)) {
-                $this->fail(sprintf(
-                    'Failed asserting document for product ID "%s" is present in search document collection.',
-                    $productId
-                ));
-            }
-        }
-    }
-
-    /**
-     * @param SearchDocumentCollection $collection
-     * @param ProductId $productId
-     * @return bool
-     */
-    private function isDocumentForProductIdInDocumentCollection(
-        SearchDocumentCollection $collection,
-        ProductId $productId
-    ) {
-        $documents = $collection->getDocuments();
-        foreach ($documents as $document) {
-            if ($document->getProductId() == $productId) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * @param string[] $contextDataSet
-     * @return Context
-     */
-    private function createContextFromDataParts(array $contextDataSet)
-    {
-        $dataVersion = DataVersion::fromVersionString('-1');
-        $contextBuilder = new ContextBuilder($dataVersion);
-
-        return $contextBuilder->createContextsFromDataSets([$contextDataSet])[0];
-    }
 }
