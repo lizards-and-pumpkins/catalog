@@ -198,7 +198,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     public function testCriteriaQueriesAreDelegatedToSearchEngine()
     {
         /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $mockCriteria */
-        $mockCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
+        $mockCriteria = $this->getMock(SearchCriteria::class);
 
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->getMock(Context::class);

@@ -33,7 +33,7 @@ class ProductListingMetaInfoSourceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->stubUrlKey = $this->getMock(UrlKey::class, [], [], '', false);
-        $this->stubCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
+        $this->stubCriteria = $this->getMock(SearchCriteria::class);
         $this->productListingMetaInfoSource = new ProductListingMetaInfoSource(
             $this->stubUrlKey,
             $this->dummyContextData,

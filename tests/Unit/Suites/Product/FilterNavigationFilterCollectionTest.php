@@ -75,7 +75,7 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
         $this->filterCollection = new FilterNavigationFilterCollection($this->stubDataPoolReader);
 
         $this->stubContext = $this->getMock(Context::class);
-        $this->stubSearchCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
+        $this->stubSearchCriteria = $this->getMock(SearchCriteria::class);
     }
 
     public function testCountableInterfaceIsImplemented()
