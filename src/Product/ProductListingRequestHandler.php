@@ -54,6 +54,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
      * @var FilterNavigationFilterCollection
      */
     private $filterNavigationFilterCollection;
+
     /**
      * @var array
      */
@@ -106,28 +107,12 @@ class ProductListingRequestHandler implements HttpRequestHandler
             throw new UnableToHandleRequestException(sprintf('Unable to process request with handler %s', __CLASS__));
         }
 
-        $originalSelectionCriteria = $this->pageMetaInfo->getSelectionCriteria();
-
         $selectedFilters = $this->getSelectedFilterValuesFromRequest($request);
-        $selectionCriteriaWithSelectedFiltersApplied = $this->applyFiltersToSelectionCriteria(
-            $originalSelectionCriteria,
-            $selectedFilters
-        );
+        $originalCriteria = $this->pageMetaInfo->getSelectionCriteria();
 
-        $searchDocumentCollection = $this->getCollectionOfSearchDocumentsMatchingCriteria(
-            $selectionCriteriaWithSelectedFiltersApplied
-        );
+        $documentCollection = $this->getSearchDocumentsMatchingCriteria($originalCriteria, $selectedFilters);
 
-        if (0 < count($searchDocumentCollection)) {
-            $this->filterNavigationFilterCollection->initialize(
-                $searchDocumentCollection,
-                $originalSelectionCriteria,
-                $selectedFilters,
-                $this->context
-            );
-            $this->addFilterNavigationSnippetToPageBuilder();
-            $this->addProductsInListingToPageBuilder($searchDocumentCollection);
-        }
+        $this->addProductListingContentToPage($documentCollection, $originalCriteria, $selectedFilters);
 
         $keyGeneratorParams = [
             'products_per_page' => $this->getDefaultNumberOrProductsPerPage(),
@@ -139,13 +124,15 @@ class ProductListingRequestHandler implements HttpRequestHandler
 
     private function loadPageMetaInfoSnippet(HttpRequest $request)
     {
-        if (is_null($this->pageMetaInfo)) {
-            $this->pageMetaInfo = false;
-            $metaInfoSnippetKey = $this->getMetaInfoSnippetKey($request);
-            $json = $this->getPageMetaInfoJsonIfExists($metaInfoSnippetKey);
-            if ($json) {
-                $this->pageMetaInfo = ProductListingMetaInfoSnippetContent::fromJson($json);
-            }
+        if (null !== $this->pageMetaInfo) {
+            return;
+        }
+
+        $this->pageMetaInfo = false;
+        $metaInfoSnippetKey = $this->getMetaInfoSnippetKey($request);
+        $json = $this->getPageMetaInfoJsonIfExists($metaInfoSnippetKey);
+        if ($json) {
+            $this->pageMetaInfo = ProductListingMetaInfoSnippetContent::fromJson($json);
         }
     }
 
@@ -165,10 +152,10 @@ class ProductListingRequestHandler implements HttpRequestHandler
 
     private function addProductsInListingToPageBuilder(SearchDocumentCollection $searchDocumentCollection)
     {
-        $productInListingSnippetKeys = $this->getProductInListingSnippetKeysSearchDocumentCollection(
+        $productInListingSnippetKeys = $this->getProductInListingSnippetKeysForSearchDocumentCollection(
             $searchDocumentCollection
         );
-        
+
         $snippetKeyToContentMap = $this->dataPoolReader->getSnippets($productInListingSnippetKeys);
         $snippetCodeToKeyMap = $this->getProductInListingSnippetCodeToKeyMap($productInListingSnippetKeys);
 
@@ -176,19 +163,30 @@ class ProductListingRequestHandler implements HttpRequestHandler
     }
 
     /**
-     * @param SearchCriteria $selectionCriteria
+     * @param SearchCriteria $originalCriteria
+     * @param array[] $selectedFilters
      * @return SearchDocumentCollection
      */
-    private function getCollectionOfSearchDocumentsMatchingCriteria(SearchCriteria $selectionCriteria)
+    private function getSearchDocumentsMatchingCriteria(SearchCriteria $originalCriteria, array $selectedFilters)
     {
-        return $this->dataPoolReader->getSearchDocumentsMatchingCriteria($selectionCriteria, $this->context);
+        $criteriaWithSelectedFiltersApplied = $this->applyFiltersToSelectionCriteria(
+            $originalCriteria,
+            $selectedFilters
+        );
+
+        $searchDocumentCollection = $this->dataPoolReader->getSearchDocumentsMatchingCriteria(
+            $criteriaWithSelectedFiltersApplied,
+            $this->context
+        );
+
+        return $searchDocumentCollection;
     }
 
     /**
      * @param SearchDocumentCollection $collection
      * @return string[]
      */
-    private function getProductInListingSnippetKeysSearchDocumentCollection(SearchDocumentCollection $collection)
+    private function getProductInListingSnippetKeysForSearchDocumentCollection(SearchDocumentCollection $collection)
     {
         $snippetCode = ProductInListingSnippetRenderer::CODE;
         $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
@@ -253,20 +251,20 @@ class ProductListingRequestHandler implements HttpRequestHandler
     }
 
     /**
-     * @param SearchCriteria $originalSelectionCriteria
-     * @param array[] $selectedFilters
+     * @param SearchCriteria $originalCriteria
+     * @param array[] $filters
      * @return SearchCriteria
      */
-    private function applyFiltersToSelectionCriteria(SearchCriteria $originalSelectionCriteria, array $selectedFilters)
+    private function applyFiltersToSelectionCriteria(SearchCriteria $originalCriteria, array $filters)
     {
-        if (empty($selectedFilters)) {
-            return $originalSelectionCriteria;
+        if (empty($filters)) {
+            return $originalCriteria;
         }
 
-        $filtersCriteria = CompositeSearchCriterion::createAnd();
+        $criteriaWithFiltersApplied = CompositeSearchCriterion::createAnd();
         $somethingIsAdded = false;
 
-        foreach ($selectedFilters as $filterCode => $filterValues) {
+        foreach ($filters as $filterCode => $filterValues) {
             if (empty($filterValues)) {
                 continue;
             }
@@ -275,17 +273,17 @@ class ProductListingRequestHandler implements HttpRequestHandler
             foreach ($filterValues as $filterValue) {
                 $filterCriteria->addCriteria(SearchCriterion::create($filterCode, $filterValue, '='));
             }
-            $filtersCriteria->addCriteria($filterCriteria);
+            $criteriaWithFiltersApplied->addCriteria($filterCriteria);
             $somethingIsAdded = true;
         }
 
         if (false === $somethingIsAdded) {
-            return $originalSelectionCriteria;
+            return $originalCriteria;
         }
 
-        $filtersCriteria->addCriteria($originalSelectionCriteria);
+        $criteriaWithFiltersApplied->addCriteria($originalCriteria);
 
-        return $filtersCriteria;
+        return $criteriaWithFiltersApplied;
     }
 
     /**
@@ -302,5 +300,42 @@ class ProductListingRequestHandler implements HttpRequestHandler
         }
 
         return $selectedFilters;
+    }
+
+    /**
+     * @param SearchDocumentCollection $searchDocumentCollection
+     * @param SearchCriteria $originalCriteria
+     * @param array[] $selectedFilters
+     */
+    private function addProductListingContentToPage(
+        SearchDocumentCollection $searchDocumentCollection,
+        SearchCriteria $originalCriteria,
+        array $selectedFilters
+    ) {
+        if (1 > count($searchDocumentCollection)) {
+            return;
+        }
+
+        $this->addFilterNavigationToPageBuilder($searchDocumentCollection, $originalCriteria, $selectedFilters);
+        $this->addProductsInListingToPageBuilder($searchDocumentCollection);
+    }
+
+    /**
+     * @param SearchDocumentCollection $searchDocumentCollection
+     * @param SearchCriteria $originalCriteria
+     * @param array[] $selectedFilters
+     */
+    private function addFilterNavigationToPageBuilder(
+        SearchDocumentCollection $searchDocumentCollection,
+        SearchCriteria $originalCriteria,
+        array $selectedFilters
+    ) {
+        $this->filterNavigationFilterCollection->initialize(
+            $searchDocumentCollection,
+            $originalCriteria,
+            $selectedFilters,
+            $this->context
+        );
+        $this->addFilterNavigationSnippetToPageBuilder();
     }
 }

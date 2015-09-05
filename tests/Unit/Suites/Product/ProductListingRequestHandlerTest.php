@@ -58,22 +58,21 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     private function mockMetaInfoSnippet()
     {
-        /** @var CompositeSearchCriterion|\PHPUnit_Framework_MockObject_MockObject $mockSelectionCriteria */
-        $mockSelectionCriteria = $this->getMock(CompositeSearchCriterion::class, [], [], '', false);
-        $mockSelectionCriteria->method('jsonSerialize')
+        /** @var CompositeSearchCriterion|\PHPUnit_Framework_MockObject_MockObject $stubSelectionCriteria */
+        $stubSelectionCriteria = $this->getMock(CompositeSearchCriterion::class, [], [], '', false);
+        $stubSelectionCriteria->method('jsonSerialize')
             ->willReturn(['condition' => CompositeSearchCriterion::AND_CONDITION, 'criteria' => []]);
 
         $pageSnippetCodes = ['child-snippet1'];
 
         $testMetaInfoSnippetJson = json_encode(ProductListingMetaInfoSnippetContent::create(
-            $mockSelectionCriteria,
+            $stubSelectionCriteria,
             'root-snippet-code',
             $pageSnippetCodes
         )->getInfo());
 
-        $this->mockDataPoolReader->method('getSnippet')->willReturnMap([
-            [$this->testMetaInfoKey, $testMetaInfoSnippetJson]
-        ]);
+        $this->mockDataPoolReader->method('getSnippet')->with($this->testMetaInfoKey)
+            ->willReturn($testMetaInfoSnippetJson);
     }
 
     /**
@@ -150,6 +149,16 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockMetaInfoSnippet();
         $this->assertTrue($this->requestHandler->canProcess($this->stubRequest));
+    }
+
+    public function testPageMetaInfoIsOnlyLoadedOnce()
+    {
+        $this->mockMetaInfoSnippet();
+
+        $this->mockDataPoolReader->expects($this->once())->method('getSnippet')->with($this->testMetaInfoKey);
+
+        $this->requestHandler->canProcess($this->stubRequest);
+        $this->requestHandler->canProcess($this->stubRequest);
     }
 
     public function testExceptionIsThrownIfProcessWithoutMetaInfoContentIsCalled()
