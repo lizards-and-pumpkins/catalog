@@ -271,7 +271,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     ) {
         $this->assertCount(count($productIds), $collection, 'Failed asserting collection size matches expectation.');
         foreach ($productIds as $productId) {
-            if (!$this->searchDocumentsCollectionContainsDocumentForProductId($collection, $productId)) {
+            if (!$this->isDocumentForProductIdInDocumentCollection($collection, $productId)) {
                 $this->fail(
                     sprintf('Failed asserting document for product ID "%s" is present in collection', $productId)
                 );
@@ -284,7 +284,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
      * @param ProductId $productId
      * @return bool
      */
-    private function searchDocumentsCollectionContainsDocumentForProductId(
+    private function isDocumentForProductIdInDocumentCollection(
         SearchDocumentCollection $collection,
         ProductId $productId
     ) {
