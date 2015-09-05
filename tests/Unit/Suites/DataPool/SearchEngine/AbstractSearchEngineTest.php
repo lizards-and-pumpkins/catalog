@@ -82,7 +82,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         SearchDocumentCollection $collection,
         ProductId $productId
     ) {
-        $documents = $collection->getIterator();
+        $documents = $collection->getDocuments();
         foreach ($documents as $document) {
             if ($document->getProductId() == $productId) {
                 return true;
