@@ -44,7 +44,7 @@ class ProductListingMetaInfoSourceBuilder
     private function getUrlKeyStringFromDomNodeArray(array $urlKeyAttributeNode)
     {
         if (empty($urlKeyAttributeNode)) {
-            throw new MissingUrlKeyXmlAttributeException();
+            throw new MissingUrlKeyXmlAttributeException('"url_key" attribute is missing in product listing XML.');
         }
 
         return $urlKeyAttributeNode[0]['value'];
@@ -74,7 +74,7 @@ class ProductListingMetaInfoSourceBuilder
     private function createSearchCriteria(array $criteriaCondition)
     {
         if (empty($criteriaCondition)) {
-            throw new MissingConditionXmlAttributeException;
+            throw new MissingConditionXmlAttributeException('Missing "condition" attribute in product listing XML.');
         }
 
         if (CompositeSearchCriterion::AND_CONDITION === $criteriaCondition[0]['value']) {
@@ -85,7 +85,7 @@ class ProductListingMetaInfoSourceBuilder
             return CompositeSearchCriterion::createOr();
         }
 
-        throw new InvalidConditionXmlAttributeException;
+        throw new InvalidConditionXmlAttributeException('Invalid "condition" attribute value in product listing XML.');
     }
 
     /**
@@ -95,7 +95,9 @@ class ProductListingMetaInfoSourceBuilder
     private function createCriterion(array $criterionNode)
     {
         if (!isset($criterionNode['attributes']['operation'])) {
-            throw new MissingCriterionOperationXmlAttributeException();
+            throw new MissingCriterionOperationXmlAttributeException(
+                'Missing "operation" attribute in product listing condition XML node.'
+            );
         }
 
         return SearchCriterion::create(
