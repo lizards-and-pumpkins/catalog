@@ -10,15 +10,15 @@ class FilterNavigationFilter
     private $filterNavigationCode;
 
     /**
-     * @var FilterNavigationFilterValueCollection
+     * @var FilterNavigationFilterOptionCollection
      */
     private $filterValueCollection;
 
     /**
      * @param string $filterNavigationCode
-     * @param FilterNavigationFilterValueCollection $filterValueCollection
+     * @param FilterNavigationFilterOptionCollection $filterValueCollection
      */
-    private function __construct($filterNavigationCode, FilterNavigationFilterValueCollection $filterValueCollection)
+    private function __construct($filterNavigationCode, FilterNavigationFilterOptionCollection $filterValueCollection)
     {
         $this->filterNavigationCode = $filterNavigationCode;
         $this->filterValueCollection = $filterValueCollection;
@@ -26,10 +26,10 @@ class FilterNavigationFilter
 
     /**
      * @param string $filterNavigationCode
-     * @param FilterNavigationFilterValueCollection $filterValueCollection
+     * @param FilterNavigationFilterOptionCollection $filterValueCollection
      * @return FilterNavigationFilter
      */
-    public static function create($filterNavigationCode, FilterNavigationFilterValueCollection $filterValueCollection)
+    public static function create($filterNavigationCode, FilterNavigationFilterOptionCollection $filterValueCollection)
     {
         if (!is_string($filterNavigationCode)) {
             throw new InvalidFilterNavigationFilterCode(
@@ -49,7 +49,7 @@ class FilterNavigationFilter
     }
 
     /**
-     * @return FilterNavigationFilterValueCollection
+     * @return FilterNavigationFilterOptionCollection
      */
     public function getValuesCollection()
     {

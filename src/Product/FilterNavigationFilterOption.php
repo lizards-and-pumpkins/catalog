@@ -2,7 +2,7 @@
 
 namespace Brera\Product;
 
-class FilterNavigationFilterValue
+class FilterNavigationFilterOption
 {
     /**
      * @var string
@@ -34,12 +34,12 @@ class FilterNavigationFilterValue
     /**
      * @param string $value
      * @param int $count
-     * @return FilterNavigationFilterValue
+     * @return FilterNavigationFilterOption
      */
     public static function create($value, $count)
     {
-        self::validateFilterValue($value);
-        self::validateFilterCount($count);
+        self::validateFilterOptionValue($value);
+        self::validateFilterOptionCount($count);
 
         return new self($value, $count, false);
     }
@@ -47,12 +47,12 @@ class FilterNavigationFilterValue
     /**
      * @param string $value
      * @param int $count
-     * @return FilterNavigationFilterValue
+     * @return FilterNavigationFilterOption
      */
     public static function createSelected($value, $count)
     {
-        self::validateFilterValue($value);
-        self::validateFilterCount($count);
+        self::validateFilterOptionValue($value);
+        self::validateFilterOptionCount($count);
 
         return new self($value, $count, true);
     }
@@ -84,11 +84,11 @@ class FilterNavigationFilterValue
     /**
      * @param string $value
      */
-    private static function validateFilterValue($value)
+    private static function validateFilterOptionValue($value)
     {
         if (!is_string($value)) {
-            throw new InvalidFilterNavigationFilterValueValueException(
-                sprintf('Filter value must be a string, "%s" given.', gettype($value))
+            throw new InvalidFilterNavigationFilterOptionValueException(
+                sprintf('Filter option value must be a string, "%s" given.', gettype($value))
             );
         }
     }
@@ -96,11 +96,11 @@ class FilterNavigationFilterValue
     /**
      * @param int $count
      */
-    private static function validateFilterCount($count)
+    private static function validateFilterOptionCount($count)
     {
         if (!is_int($count)) {
-            throw new InvalidFilterNavigationFilterValueCountException(
-                sprintf('Filter count must be an integer, "%s" given.', gettype($count))
+            throw new InvalidFilterNavigationFilterOptionCountException(
+                sprintf('Filter option count must be an integer, "%s" given.', gettype($count))
             );
         }
     }

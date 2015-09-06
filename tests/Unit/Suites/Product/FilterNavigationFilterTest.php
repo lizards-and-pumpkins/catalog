@@ -8,14 +8,14 @@ namespace Brera\Product;
 class FilterNavigationFilterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var FilterNavigationFilterValueCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilterNavigationFilterOptionCollection|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubFilterValueCollection;
 
     protected function setUp()
     {
         $this->stubFilterValueCollection = $this->getMock(
-            FilterNavigationFilterValueCollection::class,
+            FilterNavigationFilterOptionCollection::class,
             [],
             [],
             '',

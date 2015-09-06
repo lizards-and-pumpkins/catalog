@@ -109,17 +109,17 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
             $filters[$selectedFilterCode] = $filter[$selectedFilterCode];
         }
 
-        foreach ($filters as $filterCode => $filterValues) {
-            $filterNavigationFilterValueCollection = new FilterNavigationFilterValueCollection;
-            foreach ($filterValues as $filterValueString => $filterValueCount) {
-                if (in_array($filterValueString, $this->selectedFilters[$filterCode])) {
-                    $filterValue = FilterNavigationFilterValue::createSelected($filterValueString, $filterValueCount);
+        foreach ($filters as $filterCode => $filterOptions) {
+            $filterNavigationFilterOptionCollection = new FilterNavigationFilterOptionCollection;
+            foreach ($filterOptions as $optionValue => $optionCount) {
+                if (in_array($optionValue, $this->selectedFilters[$filterCode])) {
+                    $filterOption = FilterNavigationFilterOption::createSelected($optionValue, $optionCount);
                 } else {
-                    $filterValue = FilterNavigationFilterValue::create($filterValueString, $filterValueCount);
+                    $filterOption = FilterNavigationFilterOption::create($optionValue, $optionCount);
                 }
-                $filterNavigationFilterValueCollection->add($filterValue);
+                $filterNavigationFilterOptionCollection->add($filterOption);
             }
-            $this->filters[] = FilterNavigationFilter::create($filterCode, $filterNavigationFilterValueCollection);
+            $this->filters[] = FilterNavigationFilter::create($filterCode, $filterNavigationFilterOptionCollection);
         }
     }
 
