@@ -97,14 +97,14 @@ class HttpUrl
 
     /**
      * @param string $parameterName
-     * @return string
+     * @return string|null
      */
     public function getQueryParameter($parameterName)
     {
         $requestQuery = $this->url->getQuery();
 
         if (!isset($requestQuery[$parameterName])) {
-            return '';
+            return null;
         }
 
         return $requestQuery[$parameterName];

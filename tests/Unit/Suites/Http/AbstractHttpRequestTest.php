@@ -102,7 +102,7 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($testRequestBody, $result->getRawBody());
     }
     
-    public function testEmptyStringIsReturnedIfParameterIsAbsentInRequestQuery()
+    public function testNullIsReturnedIfParameterIsAbsentInRequestQuery()
     {
         $result = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
@@ -111,7 +111,7 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
             HttpRequestBody::fromString('')
         );
 
-        $this->assertSame('', $result->getQueryParameter('foo'));
+        $this->assertNull($result->getQueryParameter('foo'));
     }
 
     public function testQueryParameterIsReturned()

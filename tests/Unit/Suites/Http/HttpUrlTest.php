@@ -76,7 +76,7 @@ class HttpUrlTest extends \PHPUnit_Framework_TestCase
 
     public function testEmptyStringIsReturnedIfParameterIsAbsentInRequestQuery()
     {
-        $this->assertSame('', $this->url->getQueryParameter('foo'));
+        $this->assertNull($this->url->getQueryParameter('foo'));
     }
 
     public function testQueryParameterIsReturned()
