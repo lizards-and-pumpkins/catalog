@@ -111,7 +111,7 @@ class FilterNavigationBlock extends Block
      */
     private function isFilterValueCurrentlySelected($filterCode, $filterValue)
     {
-        return in_array($filterValue, $this->getValuesForFilter($filterCode));
+        return in_array($filterValue, $this->getSelectedValuesForFilter($filterCode));
     }
 
     /**
@@ -121,7 +121,7 @@ class FilterNavigationBlock extends Block
      */
     private function removeValueFromFilterSelection($filterCode, $filterValue)
     {
-        return array_diff($this->getValuesForFilter($filterCode), [$filterValue]);
+        return array_diff($this->getSelectedValuesForFilter($filterCode), [$filterValue]);
     }
 
     /**
@@ -131,7 +131,7 @@ class FilterNavigationBlock extends Block
      */
     private function addValueToFilterSelection($filterCode, $filterValue)
     {
-        return array_merge($this->getValuesForFilter($filterCode), [$filterValue]);
+        return array_merge($this->getSelectedValuesForFilter($filterCode), [$filterValue]);
     }
 
     /**
@@ -139,15 +139,6 @@ class FilterNavigationBlock extends Block
      * @return string[]
      */
     private function getSelectedValuesForFilter($filterCode)
-    {
-        return $this->getSelectedFilters()[$filterCode];
-    }
-
-    /**
-     * @param string $filterCode
-     * @return string[]
-     */
-    private function getValuesForFilter($filterCode)
     {
         return $this->getSelectedFilters()[$filterCode];
     }
