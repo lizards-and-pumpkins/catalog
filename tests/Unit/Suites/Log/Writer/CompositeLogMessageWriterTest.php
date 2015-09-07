@@ -17,22 +17,13 @@ class CompositeLogMessageWriterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->writer = CompositeLogMessageWriter::fromParameterList();
+        $this->writer = new CompositeLogMessageWriter();
     }
 
     public function testItIsALogMessageWriter()
     {
         $this->assertInstanceOf(LogMessageWriter::class, $this->writer);
-        $this->assertInstanceOf(LogMessageWriter::class, CompositeLogMessageWriter::fromParameterList());
-    }
-
-    public function testItThrowsAnExceptionIfAnArgumentIsNoLogMessageWriter()
-    {
-        $this->setExpectedException(
-            NoLogMessageWriterArgumentException::class,
-            'The argument has to implement LogMessageWriter, got'
-        );
-        CompositeLogMessageWriter::fromParameterList($this->getMock(LogMessageWriter::class), $this);
+        $this->assertInstanceOf(LogMessageWriter::class, new CompositeLogMessageWriter());
     }
 
     public function testItDelegatesToLogMessagWriterComponents()
@@ -46,7 +37,7 @@ class CompositeLogMessageWriterTest extends \PHPUnit_Framework_TestCase
         $mockWriterB = $this->getMock(LogMessageWriter::class);
         $mockWriterB->expects($this->once())->method('write')->with($stubLogMessage);
 
-        $composite = CompositeLogMessageWriter::fromParameterList($mockWriterA, $mockWriterB);
+        $composite = new CompositeLogMessageWriter($mockWriterA, $mockWriterB);
         $composite->write($stubLogMessage);
     }
 }
