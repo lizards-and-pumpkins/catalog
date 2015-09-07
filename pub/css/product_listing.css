@@ -5,3 +5,11 @@
 @import "responsive.css";
 @import "styles.css";
 @import "uniform.default.css";
+
+/* Pagination */
+.pages { text-align: right; padding: 43px 0 0 0; font-size: 12px }
+.pages li { display: inline-block; border: 1px solid #b3b3b3; margin-left: 2px; background-color: #f0f0f0 }
+.pages a, .pages .current { padding: 4px 9px; display: inline-block; color: #000000 }
+.pages .current { color: #ffffff; background-color: #37a3d4; border-color: #1280ac }
+.pages .next, .pages .prev { padding: 4px 7px; color: #3c3c3c }
+.pages .prev { background-position: -6px -5px }
