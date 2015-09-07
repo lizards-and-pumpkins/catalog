@@ -73,7 +73,9 @@ class CompositeSearchCriterion implements SearchCriteria, \JsonSerializable
     private static function validateIsSearchCriteria($searchCriteria)
     {
         if (!($searchCriteria instanceof SearchCriteria)) {
-            throw new InvalidSearchCriteriaException();
+            throw new InvalidSearchCriteriaException(
+                'Unable to create CompositeSearchCriterion from non SearchCriteria.'
+            );
         }
     }
 
