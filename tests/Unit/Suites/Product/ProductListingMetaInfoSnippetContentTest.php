@@ -2,13 +2,13 @@
 
 namespace Brera\Product;
 
-use Brera\DataPool\SearchEngine\CompositeSearchCriterion;
-use Brera\DataPool\SearchEngine\SearchCriterion;
+use Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
+use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
 
 /**
  * @covers \Brera\Product\ProductListingMetaInfoSnippetContent
- * @uses   \Brera\DataPool\SearchEngine\CompositeSearchCriterion
- * @uses   \Brera\DataPool\SearchEngine\SearchCriterion
+ * @uses   \Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
+ * @uses   \Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion
  */
 class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCase
 {

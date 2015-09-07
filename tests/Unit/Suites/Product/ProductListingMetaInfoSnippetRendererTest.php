@@ -4,7 +4,7 @@ namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\Context\ContextBuilder;
-use Brera\DataPool\SearchEngine\CompositeSearchCriterion;
+use Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use Brera\SnippetKeyGenerator;
 use Brera\SnippetList;
 use Brera\SnippetRenderer;

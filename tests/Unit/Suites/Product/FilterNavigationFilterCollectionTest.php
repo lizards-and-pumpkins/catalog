@@ -4,7 +4,7 @@ namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
-use Brera\DataPool\SearchEngine\SearchCriteria;
+use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
@@ -12,8 +12,8 @@ use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
 
 /**
  * @covers \Brera\Product\FilterNavigationFilterCollection
- * @uses   \Brera\DataPool\SearchEngine\CompositeSearchCriterion
- * @uses   \Brera\DataPool\SearchEngine\SearchCriterion
+ * @uses   \Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
+ * @uses   \Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion
  * @uses   \Brera\Product\FilterNavigationFilter
  * @uses   \Brera\Product\FilterNavigationFilterOption
  * @uses   \Brera\Product\FilterNavigationFilterOptionCollection

@@ -2,8 +2,8 @@
 
 namespace Brera;
 
-use Brera\DataPool\SearchEngine\CompositeSearchCriterion;
-use Brera\DataPool\SearchEngine\SearchCriterion;
+use Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
+use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
 use Brera\Http\HttpHeaders;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestBody;

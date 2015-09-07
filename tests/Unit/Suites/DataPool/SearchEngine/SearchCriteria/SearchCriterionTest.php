@@ -1,13 +1,13 @@
 <?php
 
-namespace Brera\DataPool\SearchEngine;
+namespace Brera\DataPool\SearchEngine\SearchCriteria;
 
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
 
 /**
- * @covers \Brera\DataPool\SearchEngine\SearchCriterion
+ * @covers \Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion
  */
 class SearchCriterionTest extends \PHPUnit_Framework_TestCase
 {

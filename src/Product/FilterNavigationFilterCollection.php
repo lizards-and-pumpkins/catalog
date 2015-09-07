@@ -4,9 +4,9 @@ namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
-use Brera\DataPool\SearchEngine\CompositeSearchCriterion;
-use Brera\DataPool\SearchEngine\SearchCriteria;
-use Brera\DataPool\SearchEngine\SearchCriterion;
+use Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
+use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
+use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField;

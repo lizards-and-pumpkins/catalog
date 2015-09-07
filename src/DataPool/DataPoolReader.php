@@ -3,7 +3,7 @@
 namespace Brera\DataPool;
 
 use Brera\DataPool\KeyValue\KeyValueStore;
-use Brera\DataPool\SearchEngine\SearchCriteria;
+use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use Brera\DataPool\SearchEngine\SearchEngine;
 use Brera\Context\Context;

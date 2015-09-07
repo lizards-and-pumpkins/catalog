@@ -5,8 +5,8 @@ namespace Brera\Product;
 use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\KeyNotFoundException;
-use Brera\DataPool\SearchEngine\CompositeSearchCriterion;
-use Brera\DataPool\SearchEngine\SearchCriterion;
+use Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
+use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use Brera\Http\HttpRequest;
@@ -21,8 +21,8 @@ use Brera\SnippetKeyGeneratorLocator;
 /**
  * @covers \Brera\Product\ProductListingRequestHandler
  * @uses   \Brera\Product\ProductListingMetaInfoSnippetContent
- * @uses   \Brera\DataPool\SearchEngine\CompositeSearchCriterion
- * @uses   \Brera\DataPool\SearchEngine\SearchCriterion
+ * @uses   \Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
+ * @uses   \Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion
  */
 class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {

@@ -3,7 +3,7 @@
 namespace Brera\DataPool;
 
 use Brera\Context\Context;
-use Brera\DataPool\SearchEngine\SearchCriteria;
+use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 
 /**
  * @covers \Brera\DataPool\DataPoolReader

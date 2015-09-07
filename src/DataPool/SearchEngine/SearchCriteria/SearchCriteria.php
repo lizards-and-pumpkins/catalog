@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\DataPool\SearchEngine;
+namespace Brera\DataPool\SearchEngine\SearchCriteria;
 
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
 

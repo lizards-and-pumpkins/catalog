@@ -2,7 +2,6 @@
 
 namespace Brera\DataPool\SearchEngine;
 
-use Brera\Product\ProductId;
 use Brera\Utils\LocalFilesystem;
 
 /**
@@ -14,7 +13,7 @@ use Brera\Utils\LocalFilesystem;
  * @uses   \Brera\Context\VersionedContext
  * @uses   \Brera\Context\WebsiteContextDecorator
  * @uses   \Brera\DataVersion
- * @uses   \Brera\DataPool\SearchEngine\SearchCriterion
+ * @uses   \Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion
  * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocument
  * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection
  * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField
