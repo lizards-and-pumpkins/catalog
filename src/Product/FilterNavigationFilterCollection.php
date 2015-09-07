@@ -171,29 +171,27 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
         array $selectedFilters,
         $filterCodeToExclude
     ) {
-        $filtersCriteria = CompositeSearchCriterion::createAnd();
-        $somethingIsAddedToCriteria = false;
+        $filtersCriteriaArray = [];
 
-        foreach ($selectedFilters as $filterCode => $filterValues) {
-            if ($filterCode === $filterCodeToExclude || empty($filterValues)) {
+        foreach ($selectedFilters as $filterCode => $filterOptionValues) {
+            if ($filterCode === $filterCodeToExclude || empty($filterOptionValues)) {
                 continue;
             }
 
-            $filterCriteria = CompositeSearchCriterion::createOr();
-            foreach ($filterValues as $filterValue) {
-                $filterCriteria->addCriteria(SearchCriterion::create($filterCode, $filterValue, '='));
-            }
-            $filtersCriteria->addCriteria($filterCriteria);
-            $somethingIsAddedToCriteria = true;
+            $optionValuesCriteriaArray = array_map(function ($filterOptionValue) use ($filterCode) {
+                return SearchCriterion::create($filterCode, $filterOptionValue, '=');
+            }, $filterOptionValues);
+
+            $filterCriteria = CompositeSearchCriterion::createOr($optionValuesCriteriaArray);
+            $filtersCriteriaArray[] = $filterCriteria;
         }
 
-        if (false === $somethingIsAddedToCriteria) {
+        if (empty($filtersCriteriaArray)) {
             return $originalCriteria;
         }
 
-        $filtersCriteria->addCriteria($originalCriteria);
-
-        return $filtersCriteria;
+        $filtersCriteriaArray[] = $originalCriteria;
+        return CompositeSearchCriterion::createAnd($filtersCriteriaArray);
     }
 
     private function validateFiltersCollectionIsInitialized()

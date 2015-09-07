@@ -111,9 +111,7 @@ class ProductListingTest extends AbstractIntegrationTest
     {
         $searchCriterion1 = SearchCriterion::create('category', 'sale', '=');
         $searchCriterion2 = SearchCriterion::create('brand', 'Adidas', '=');
-        $searchCriteria = CompositeSearchCriterion::createAnd();
-        $searchCriteria->addCriteria($searchCriterion1);
-        $searchCriteria->addCriteria($searchCriterion2);
+        $searchCriteria = CompositeSearchCriterion::createAnd([$searchCriterion1, $searchCriterion2]);
 
         $pageSnippetCodes = [
             'global_notices',

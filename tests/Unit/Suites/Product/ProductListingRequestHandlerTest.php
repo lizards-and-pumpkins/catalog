@@ -242,40 +242,6 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->requestHandler->process($this->stubRequest);
     }
 
-    public function testNoFiltersAreAppliedToSelectionCriteriaIfNoAttributesAreSetToBeDisplayedInFilterNavigation()
-    {
-        $this->mockMetaInfoSnippet();
-        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection();
-
-        $originalCriteria = CompositeSearchCriterion::createAnd();
-
-        $this->mockDataPoolReader->method('getSnippets')->willReturn([]);
-        $this->mockDataPoolReader->expects($this->once())->method('getSearchDocumentsMatchingCriteria')
-            ->with($originalCriteria)
-            ->willReturn($stubSearchDocumentCollection);
-
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $this->getMock(Context::class);
-        $stubSnippetKeyGeneratorLocator = $this->createStubSnippetKeyGeneratorLocator();
-
-        /** @var BlockRenderer|\PHPUnit_Framework_MockObject_MockObject $stubFilterNavigationBlockRenderer */
-        $stubFilterNavigationBlockRenderer = $this->getMock(BlockRenderer::class, [], [], '', false);
-
-        $stubFilterNavigationAttributeCodes = [];
-
-        $this->requestHandler = new ProductListingRequestHandler(
-            $stubContext,
-            $this->mockDataPoolReader,
-            $this->mockPageBuilder,
-            $stubSnippetKeyGeneratorLocator,
-            $stubFilterNavigationBlockRenderer,
-            $this->stubFilterCollection,
-            $stubFilterNavigationAttributeCodes
-        );
-
-        $this->requestHandler->process($this->stubRequest);
-    }
-
     public function testFiltersAreAppliedToSelectionCriteriaIfSelected()
     {
         $this->mockMetaInfoSnippet();
@@ -283,12 +249,10 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection();
         $this->stubRequest->method('getQueryParameter')->with('foo')->willReturn('bar');
 
-        $filterCriteria = CompositeSearchCriterion::createOr();
-        $filterCriteria->addCriteria(SearchCriterion::create('foo', 'bar', '='));
-        $originalCriteria = CompositeSearchCriterion::createAnd();
-        $expectedCriteria = CompositeSearchCriterion::createAnd();
-        $expectedCriteria->addCriteria($filterCriteria);
-        $expectedCriteria->addCriteria($originalCriteria);
+        $filterCriterion = SearchCriterion::create('foo', 'bar', '=');
+        $filterCriteria = CompositeSearchCriterion::createOr([$filterCriterion]);
+        $originalCriteria = CompositeSearchCriterion::createAnd([]);
+        $expectedCriteria = CompositeSearchCriterion::createAnd([$filterCriteria, $originalCriteria]);
 
         $this->mockDataPoolReader->method('getSnippets')->willReturn([]);
         $this->mockDataPoolReader->expects($this->once())->method('getSearchDocumentsMatchingCriteria')

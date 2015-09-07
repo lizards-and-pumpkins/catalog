@@ -21,31 +21,32 @@ class CompositeSearchCriterion implements SearchCriteria, \JsonSerializable
 
     /**
      * @param string $condition
+     * @param SearchCriteria[] $criteria
      */
-    private function __construct($condition)
+    private function __construct($condition, array $criteria)
     {
         $this->condition = $condition;
+        $this->criteria = $criteria;
     }
 
     /**
+     * @param SearchCriteria[] $criteria
      * @return CompositeSearchCriterion
      */
-    public static function createAnd()
+    public static function createAnd(array $criteria)
     {
-        return new self(self::AND_CONDITION);
+        array_map('self::validateIsSearchCriteria', $criteria);
+        return new self(self::AND_CONDITION, $criteria);
     }
 
     /**
+     * @param SearchCriteria[] $criteria
      * @return CompositeSearchCriterion
      */
-    public static function createOr()
+    public static function createOr(array $criteria)
     {
-        return new self(self::OR_CONDITION);
-    }
-
-    public function addCriteria(SearchCriteria $criteria)
-    {
-        $this->criteria[] = $criteria;
+        array_map('self::validateIsSearchCriteria', $criteria);
+        return new self(self::OR_CONDITION, $criteria);
     }
 
     /**
@@ -54,6 +55,8 @@ class CompositeSearchCriterion implements SearchCriteria, \JsonSerializable
      */
     public function matches(SearchDocument $searchDocument)
     {
+        $isMatching = false;
+
         foreach ($this->criteria as $criteria) {
             $isMatching = $criteria->matches($searchDocument);
             if (($this->hasOrCondition() && $isMatching) || ($this->hasAndCondition() && !$isMatching)) {
@@ -62,6 +65,16 @@ class CompositeSearchCriterion implements SearchCriteria, \JsonSerializable
         }
 
         return $isMatching;
+    }
+
+    /**
+     * @param mixed $searchCriteria
+     */
+    private static function validateIsSearchCriteria($searchCriteria)
+    {
+        if (!($searchCriteria instanceof SearchCriteria)) {
+            throw new InvalidSearchCriteriaException();
+        }
     }
 
     /**

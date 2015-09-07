@@ -257,33 +257,27 @@ class ProductListingRequestHandler implements HttpRequestHandler
      */
     private function applyFiltersToSelectionCriteria(SearchCriteria $originalCriteria, array $filters)
     {
-        if (empty($filters)) {
-            return $originalCriteria;
-        }
+        $filtersCriteriaArray = [];
 
-        $criteriaWithFiltersApplied = CompositeSearchCriterion::createAnd();
-        $somethingIsAdded = false;
-
-        foreach ($filters as $filterCode => $filterValues) {
-            if (empty($filterValues)) {
+        foreach ($filters as $filterCode => $filterOptionValues) {
+            if (empty($filterOptionValues)) {
                 continue;
             }
 
-            $filterCriteria = CompositeSearchCriterion::createOr();
-            foreach ($filterValues as $filterValue) {
-                $filterCriteria->addCriteria(SearchCriterion::create($filterCode, $filterValue, '='));
-            }
-            $criteriaWithFiltersApplied->addCriteria($filterCriteria);
-            $somethingIsAdded = true;
+            $optionValuesCriteriaArray = array_map(function ($filterOptionValue) use ($filterCode) {
+                return SearchCriterion::create($filterCode, $filterOptionValue, '=');
+            }, $filterOptionValues);
+
+            $filterCriteria = CompositeSearchCriterion::createOr($optionValuesCriteriaArray);
+            $filtersCriteriaArray[] = $filterCriteria;
         }
 
-        if (false === $somethingIsAdded) {
+        if (empty($filtersCriteriaArray)) {
             return $originalCriteria;
         }
 
-        $criteriaWithFiltersApplied->addCriteria($originalCriteria);
-
-        return $criteriaWithFiltersApplied;
+        $filtersCriteriaArray[] = $originalCriteria;
+        return CompositeSearchCriterion::createAnd($filtersCriteriaArray);
     }
 
     /**

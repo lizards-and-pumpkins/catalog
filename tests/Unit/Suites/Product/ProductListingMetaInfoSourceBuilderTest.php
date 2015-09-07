@@ -35,9 +35,9 @@ EOX;
         $this->assertEquals('men-accessories', $urlKey);
         $this->assertEquals(['website' => 'ru', 'locale' => 'en_US'], $context);
 
-        $expectedCriteria = CompositeSearchCriterion::createAnd();
-        $expectedCriteria->addCriteria(SearchCriterion::create('category', 'accessories', '='));
-        $expectedCriteria->addCriteria(SearchCriterion::create('gender', 'male', '='));
+        $expectedCriterion1 = SearchCriterion::create('category', 'accessories', '=');
+        $expectedCriterion2 = SearchCriterion::create('gender', 'male', '=');
+        $expectedCriteria = CompositeSearchCriterion::createAnd([$expectedCriterion1, $expectedCriterion2]);
 
         $this->assertEquals($expectedCriteria, $result);
     }
@@ -55,9 +55,9 @@ EOX;
             ->createProductListingMetaInfoSourceFromXml($xml);
         $result = $productListingMetaInfoSource->getCriteria();
 
-        $expectedCriteria = CompositeSearchCriterion::createOr();
-        $expectedCriteria->addCriteria(SearchCriterion::create('category', 'accessories', '='));
-        $expectedCriteria->addCriteria(SearchCriterion::create('gender', 'male', '='));
+        $expectedCriterion1 = SearchCriterion::create('category', 'accessories', '=');
+        $expectedCriterion2 = SearchCriterion::create('gender', 'male', '=');
+        $expectedCriteria = CompositeSearchCriterion::createOr([$expectedCriterion1, $expectedCriterion2]);
 
         $this->assertEquals($expectedCriteria, $result);
     }

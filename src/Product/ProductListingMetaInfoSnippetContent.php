@@ -153,21 +153,17 @@ class ProductListingMetaInfoSnippetContent implements PageMetaInfoSnippetContent
     {
         self::validateSearchCriteriaMetaInfo($metaInfo);
 
-        $criteria = CompositeSearchCriterion::createAnd();
-
-        foreach ($metaInfo['criteria'] as $criterionMetaInfo) {
+        $criterionArray = array_map(function (array $criterionMetaInfo) {
             self::validateSearchCriterionMetaInfo($criterionMetaInfo);
 
-            $criterion = SearchCriterion::create(
+            return SearchCriterion::create(
                 $criterionMetaInfo['fieldName'],
                 $criterionMetaInfo['fieldValue'],
                 $criterionMetaInfo['operation']
             );
+        }, $metaInfo['criteria']);
 
-            $criteria->addCriteria($criterion);
-        }
-
-        return $criteria;
+        return CompositeSearchCriterion::createAnd($criterionArray);
     }
 
     /**

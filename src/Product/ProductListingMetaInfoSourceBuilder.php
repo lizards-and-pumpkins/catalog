@@ -24,15 +24,11 @@ class ProductListingMetaInfoSourceBuilder
         $xmlNodeAttributes = $parser->getXmlNodesArrayByXPath('/listing/@*');
         $contextData = $this->getFormattedContextData($xmlNodeAttributes);
 
-        $criteriaConditionNodes = $parser->getXmlNodesArrayByXPath('/listing/@condition');
-        $criteria = $this->createSearchCriteria($criteriaConditionNodes);
-
         $criteriaNodes = $parser->getXmlNodesArrayByXPath('/listing/*');
+        $criteriaConditionNodes = $parser->getXmlNodesArrayByXPath('/listing/@condition');
 
-        foreach ($criteriaNodes as $criterionNode) {
-            $criterion = $this->createCriterion($criterionNode);
-            $criteria->addCriteria($criterion);
-        }
+        $criterionArray = array_map([$this, 'createCriterion'], $criteriaNodes);
+        $criteria = $this->createSearchCriteria($criteriaConditionNodes, $criterionArray);
 
         return new ProductListingMetaInfoSource($urlKey, $contextData, $criteria);
     }
@@ -69,20 +65,21 @@ class ProductListingMetaInfoSourceBuilder
 
     /**
      * @param array[] $criteriaCondition
+     * @param SearchCriterion[] $criterionArray
      * @return CompositeSearchCriterion
      */
-    private function createSearchCriteria(array $criteriaCondition)
+    private function createSearchCriteria(array $criteriaCondition, array $criterionArray)
     {
         if (empty($criteriaCondition)) {
             throw new MissingConditionXmlAttributeException('Missing "condition" attribute in product listing XML.');
         }
 
         if (CompositeSearchCriterion::AND_CONDITION === $criteriaCondition[0]['value']) {
-            return CompositeSearchCriterion::createAnd();
+            return CompositeSearchCriterion::createAnd($criterionArray);
         }
 
         if (CompositeSearchCriterion::OR_CONDITION === $criteriaCondition[0]['value']) {
-            return CompositeSearchCriterion::createOr();
+            return CompositeSearchCriterion::createOr($criterionArray);
         }
 
         throw new InvalidConditionXmlAttributeException('Invalid "condition" attribute value in product listing XML.');

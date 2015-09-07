@@ -50,17 +50,17 @@ class CompositeSearchCriterionTest extends \PHPUnit_Framework_TestCase
 
     public function testSearchCriteriaInterfaceIsImplemented()
     {
-        $this->assertInstanceOf(SearchCriteria::class, CompositeSearchCriterion::createAnd());
+        $this->assertInstanceOf(SearchCriteria::class, CompositeSearchCriterion::createAnd([]));
     }
 
     public function testJsonSerializableInterfaceIsImplemented()
     {
-        $this->assertInstanceOf(\JsonSerializable::class, CompositeSearchCriterion::createAnd());
+        $this->assertInstanceOf(\JsonSerializable::class, CompositeSearchCriterion::createAnd([]));
     }
 
     public function testCriteriaWithAndConditionIsCreated()
     {
-        $criteria = CompositeSearchCriterion::createAnd();
+        $criteria = CompositeSearchCriterion::createAnd([]);
         $result = $criteria->jsonSerialize();
         $expectation = ['condition' => CompositeSearchCriterion::AND_CONDITION, 'criteria' => []];
 
@@ -69,18 +69,30 @@ class CompositeSearchCriterionTest extends \PHPUnit_Framework_TestCase
 
     public function testCriteriaWithOrConditionIsCreated()
     {
-        $criteria = CompositeSearchCriterion::createOr();
+        $criteria = CompositeSearchCriterion::createOr([]);
         $result = $criteria->jsonSerialize();
         $expectation = ['condition' => CompositeSearchCriterion::OR_CONDITION, 'criteria' => []];
 
         $this->assertSame($expectation, $result);
     }
-    
+
+    public function testExceptionIsThrownDuringAttemptToCreateAndCriterionWithInvalidCriteria()
+    {
+        $this->setExpectedException(InvalidSearchCriteriaException::class);
+        CompositeSearchCriterion::createAnd(['invalid-criteria']);
+    }
+
+    public function testExceptionIsThrownDuringAttemptToCreateOrCriterionWithInvalidCriteria()
+    {
+        $this->setExpectedException(InvalidSearchCriteriaException::class);
+        CompositeSearchCriterion::createOr(['invalid-criteria']);
+    }
+
     public function testFalseIsReturnedIfNoneOfSearchDocumentFieldsIsNotMatchingCriteria()
     {
-        $criteria = CompositeSearchCriterion::createOr();
-        $criteria->addCriteria(SearchCriterion::create('foo', 'bar', '='));
+        $testCriterion = SearchCriterion::create('foo', 'bar', '=');
 
+        $criteria = CompositeSearchCriterion::createOr([$testCriterion]);
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([]);
 
         $this->assertFalse($criteria->matches($stubSearchDocument));
@@ -88,9 +100,9 @@ class CompositeSearchCriterionTest extends \PHPUnit_Framework_TestCase
 
     public function testFalseIsReturnedIfSearchDocumentFieldsAreNotMatchingAllCriteriaConditions()
     {
-        $criteria = CompositeSearchCriterion::createAnd();
-        $criteria->addCriteria(SearchCriterion::create('foo', 'bar', '='));
-        $criteria->addCriteria(SearchCriterion::create('baz', 'qux', '='));
+        $testCriterionA = SearchCriterion::create('foo', 'bar', '=');
+        $testCriterionB = SearchCriterion::create('baz', 'qux', '=');
+        $criteria = CompositeSearchCriterion::createAnd([$testCriterionA, $testCriterionB]);
 
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields(['foo' => 'bar']);
 
@@ -99,9 +111,9 @@ class CompositeSearchCriterionTest extends \PHPUnit_Framework_TestCase
 
     public function testTrueIsReturnedIfAllOfSearchDocumentFieldsAreMatchingCriteria()
     {
-        $criteria = CompositeSearchCriterion::createAnd();
-        $criteria->addCriteria(SearchCriterion::create('foo', 'bar', '='));
-        $criteria->addCriteria(SearchCriterion::create('baz', 'qux', '='));
+        $testCriterionA = SearchCriterion::create('foo', 'bar', '=');
+        $testCriterionB = SearchCriterion::create('baz', 'qux', '=');
+        $criteria = CompositeSearchCriterion::createAnd([$testCriterionA, $testCriterionB]);
 
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields(['foo' => 'bar', 'baz' => 'qux']);
 
@@ -110,9 +122,9 @@ class CompositeSearchCriterionTest extends \PHPUnit_Framework_TestCase
 
     public function testTrueIsReturnedIfAtLeastOneCriteriaConditionMatchesAnyOfSearchDocumentFields()
     {
-        $criteria = CompositeSearchCriterion::createOr();
-        $criteria->addCriteria(SearchCriterion::create('foo', 'bar', '='));
-        $criteria->addCriteria(SearchCriterion::create('baz', 'qux', '='));
+        $testCriterionA = SearchCriterion::create('foo', 'bar', '=');
+        $testCriterionB = SearchCriterion::create('baz', 'qux', '=');
+        $criteria = CompositeSearchCriterion::createOr([$testCriterionA, $testCriterionB]);
 
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields(['foo' => 'bar']);
 

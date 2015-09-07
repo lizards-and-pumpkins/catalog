@@ -231,8 +231,8 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
         $metaSnippetContent = ProductListingMetaInfoSnippetContent::fromJson($json);
         $result = $metaSnippetContent->getSelectionCriteria();
 
-        $expectedCriteria = CompositeSearchCriterion::createAnd();
-        $expectedCriteria->addCriteria(SearchCriterion::create($fieldName, $fieldValue, $operation));
+        $expectedCriterion = SearchCriterion::create($fieldName, $fieldValue, $operation);
+        $expectedCriteria = CompositeSearchCriterion::createAnd([$expectedCriterion]);
 
         $this->assertEquals($expectedCriteria, $result);
     }
