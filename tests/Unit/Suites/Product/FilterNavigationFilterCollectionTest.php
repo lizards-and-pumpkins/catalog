@@ -174,13 +174,13 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertCount(1, $this->filterCollection);
 
-        $result = $this->filterCollection->getFilters();
+        $filters = $this->filterCollection->getFilters();
 
-        $this->assertSame('foo', $result[0]->getCode());
-        $this->assertCount(1, $result[0]->getFilterOptionCollection());
-        $this->assertSame('baz', $result[0]->getFilterOptionCollection()->getFilterOptions()[0]->getValue());
-        $this->assertSame(1, $result[0]->getFilterOptionCollection()->getFilterOptions()[0]->getCount());
-        $this->assertFalse($result[0]->getFilterOptionCollection()->getFilterOptions()[0]->isSelected());
+        $this->assertSame('foo', $filters[0]->getCode());
+        $this->assertCount(1, $filters[0]->getFilterOptionCollection());
+        $this->assertSame('baz', $filters[0]->getFilterOptionCollection()->getFilterOptions()[0]->getValue());
+        $this->assertSame(1, $filters[0]->getFilterOptionCollection()->getFilterOptions()[0]->getCount());
+        $this->assertFalse($filters[0]->getFilterOptionCollection()->getFilterOptions()[0]->isSelected());
     }
 
     public function testCollectionReflectsValuesFromSearchDocumentFieldsIfNoFiltersAreSelected()
@@ -204,13 +204,13 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertCount(1, $this->filterCollection);
 
-        $result = $this->filterCollection->getFilters();
+        $filters = $this->filterCollection->getFilters();
 
-        $this->assertSame('foo', $result[0]->getCode());
-        $this->assertCount(1, $result[0]->getFilterOptionCollection());
-        $this->assertSame('qux', $result[0]->getFilterOptionCollection()->getFilterOptions()[0]->getValue());
-        $this->assertSame(1, $result[0]->getFilterOptionCollection()->getFilterOptions()[0]->getCount());
-        $this->assertFalse($result[0]->getFilterOptionCollection()->getFilterOptions()[0]->isSelected());
+        $this->assertSame('foo', $filters[0]->getCode());
+        $this->assertCount(1, $filters[0]->getFilterOptionCollection());
+        $this->assertSame('qux', $filters[0]->getFilterOptionCollection()->getFilterOptions()[0]->getValue());
+        $this->assertSame(1, $filters[0]->getFilterOptionCollection()->getFilterOptions()[0]->getCount());
+        $this->assertFalse($filters[0]->getFilterOptionCollection()->getFilterOptions()[0]->isSelected());
     }
 
     public function testOnlyFiltersWhichHaveMatchingValuesInProductsCollectionAreReturned()
@@ -240,13 +240,13 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertCount(1, $this->filterCollection);
 
-        $result = $this->filterCollection->getFilters();
+        $filters = $this->filterCollection->getFilters();
 
-        $this->assertSame('foo', $result[0]->getCode());
-        $this->assertCount(1, $result[0]->getFilterOptionCollection());
-        $this->assertSame('baz', $result[0]->getFilterOptionCollection()->getFilterOptions()[0]->getValue());
-        $this->assertSame(1, $result[0]->getFilterOptionCollection()->getFilterOptions()[0]->getCount());
-        $this->assertTrue($result[0]->getFilterOptionCollection()->getFilterOptions()[0]->isSelected());
+        $this->assertSame('foo', $filters[0]->getCode());
+        $this->assertCount(1, $filters[0]->getFilterOptionCollection());
+        $this->assertSame('baz', $filters[0]->getFilterOptionCollection()->getFilterOptions()[0]->getValue());
+        $this->assertSame(1, $filters[0]->getFilterOptionCollection()->getFilterOptions()[0]->getCount());
+        $this->assertTrue($filters[0]->getFilterOptionCollection()->getFilterOptions()[0]->isSelected());
     }
 
     public function testSelectedFiltersHaveSiblingValuesForBroadeningProductsCollection()
@@ -282,25 +282,31 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertCount(2, $this->filterCollection);
 
-        $result = $this->filterCollection->getFilters();
+        $filters = $this->filterCollection->getFilters();
 
-        $this->assertSame('foo', $result[0]->getCode());
-        $this->assertCount(2, $result[0]->getFilterOptionCollection());
-        $this->assertSame('baz', $result[0]->getFilterOptionCollection()->getFilterOptions()[0]->getValue());
-        $this->assertSame(1, $result[0]->getFilterOptionCollection()->getFilterOptions()[0]->getCount());
-        $this->assertTrue($result[0]->getFilterOptionCollection()->getFilterOptions()[0]->isSelected());
-        $this->assertSame('qux', $result[0]->getFilterOptionCollection()->getFilterOptions()[1]->getValue());
-        $this->assertSame(1, $result[0]->getFilterOptionCollection()->getFilterOptions()[1]->getCount());
-        $this->assertFalse($result[0]->getFilterOptionCollection()->getFilterOptions()[1]->isSelected());
+        $this->assertSame('foo', $filters[0]->getCode());
+        $this->assertCount(2, $filters[0]->getFilterOptionCollection());
+        $this->assertSame('baz', $filters[0]->getFilterOptionCollection()->getFilterOptions()[0]->getValue());
+        $this->assertSame(1, $filters[0]->getFilterOptionCollection()->getFilterOptions()[0]->getCount());
+        $this->assertTrue($filters[0]->getFilterOptionCollection()->getFilterOptions()[0]->isSelected());
+        $this->assertSame('qux', $filters[0]->getFilterOptionCollection()->getFilterOptions()[1]->getValue());
+        $this->assertSame(1, $filters[0]->getFilterOptionCollection()->getFilterOptions()[1]->getCount());
+        $this->assertFalse($filters[0]->getFilterOptionCollection()->getFilterOptions()[1]->isSelected());
 
-        $this->assertSame('bar', $result[1]->getCode());
-        $this->assertCount(2, $result[1]->getFilterOptionCollection());
-        $this->assertSame('0 Eur - 100 Eur', $result[1]->getFilterOptionCollection()->getFilterOptions()[0]->getValue());
-        $this->assertSame(1, $result[1]->getFilterOptionCollection()->getFilterOptions()[0]->getCount());
-        $this->assertTrue($result[1]->getFilterOptionCollection()->getFilterOptions()[0]->isSelected());
-        $this->assertSame('100 Eur - 200 Eur', $result[1]->getFilterOptionCollection()->getFilterOptions()[1]->getValue());
-        $this->assertSame(1, $result[1]->getFilterOptionCollection()->getFilterOptions()[1]->getCount());
-        $this->assertFalse($result[1]->getFilterOptionCollection()->getFilterOptions()[1]->isSelected());
+        $this->assertSame('bar', $filters[1]->getCode());
+        $this->assertCount(2, $filters[1]->getFilterOptionCollection());
+        $this->assertSame(
+            '0 Eur - 100 Eur',
+            $filters[1]->getFilterOptionCollection()->getFilterOptions()[0]->getValue()
+        );
+        $this->assertSame(1, $filters[1]->getFilterOptionCollection()->getFilterOptions()[0]->getCount());
+        $this->assertTrue($filters[1]->getFilterOptionCollection()->getFilterOptions()[0]->isSelected());
+        $this->assertSame(
+            '100 Eur - 200 Eur',
+            $filters[1]->getFilterOptionCollection()->getFilterOptions()[1]->getValue()
+        );
+        $this->assertSame(1, $filters[1]->getFilterOptionCollection()->getFilterOptions()[1]->getCount());
+        $this->assertFalse($filters[1]->getFilterOptionCollection()->getFilterOptions()[1]->isSelected());
     }
 
     public function testSelectedFiltersAndValuesAreReturned()
