@@ -81,7 +81,6 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
         array $selectedFilters,
         Context $context
     ) {
-        $this->filters = [];
         $this->selectedFilters = $selectedFilters;
 
         $allowedFilterCodes = array_keys($this->selectedFilters);
@@ -96,35 +95,14 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
                 continue;
             }
 
-            $customCriteria = $this->addFiltersExceptGivenOneToSearchCriteria(
+            $filters[$selectedFilterCode] = $this->getFilterOptionsWithApplicableSiblings(
                 $originalCriteria,
-                $this->selectedFilters,
+                $context,
                 $selectedFilterCode
             );
-            $searchDocumentCollection = $this->dataPoolReader->getSearchDocumentsMatchingCriteria(
-                $customCriteria,
-                $context
-            );
-            $filter = $this->getFiltersAppliedToCollection($searchDocumentCollection, [$selectedFilterCode]);
-            $filters[$selectedFilterCode] = $filter[$selectedFilterCode];
         }
 
-        foreach ($filters as $filterCode => $filterOptions) {
-            $filterNavigationFilterOptionCollection = new FilterNavigationFilterOptionCollection;
-            foreach ($filterOptions as $optionValue => $optionCount) {
-                if (in_array($optionValue, $this->selectedFilters[$filterCode])) {
-                    $filterOption = FilterNavigationFilterOption::createSelected(
-                        $filterCode,
-                        $optionValue,
-                        $optionCount
-                    );
-                } else {
-                    $filterOption = FilterNavigationFilterOption::create($filterCode, $optionValue, $optionCount);
-                }
-                $filterNavigationFilterOptionCollection->add($filterOption);
-            }
-            $this->filters[] = FilterNavigationFilter::create($filterCode, $filterNavigationFilterOptionCollection);
-        }
+        $this->initializeFiltersFromArray($filters);
     }
 
     /**
@@ -158,6 +136,31 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
         }
 
         return $filters;
+    }
+
+    /**
+     * @param SearchCriteria $originalCriteria
+     * @param Context $context
+     * @param string $filterCode
+     * @return array[]
+     */
+    private function getFilterOptionsWithApplicableSiblings(
+        SearchCriteria $originalCriteria,
+        Context $context,
+        $filterCode
+    ) {
+        $customCriteria = $this->addFiltersExceptGivenOneToSearchCriteria(
+            $originalCriteria,
+            $this->selectedFilters,
+            $filterCode
+        );
+        $searchDocumentCollection = $this->dataPoolReader->getSearchDocumentsMatchingCriteria(
+            $customCriteria,
+            $context
+        );
+        $filter = $this->getFiltersAppliedToCollection($searchDocumentCollection, [$filterCode]);
+
+        return $filter[$filterCode];
     }
 
     /**
@@ -198,6 +201,31 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
     {
         if (null === $this->filters) {
             throw new FilterCollectionInNotInitializedException('Filters collection is not initialized.');
+        }
+    }
+
+    /**
+     * @param array[] $filters
+     */
+    private function initializeFiltersFromArray(array $filters)
+    {
+        $this->filters = [];
+
+        foreach ($filters as $filterCode => $filterOptions) {
+            $filterNavigationFilterOptionCollection = new FilterNavigationFilterOptionCollection;
+            foreach ($filterOptions as $optionValue => $optionCount) {
+                if (in_array($optionValue, $this->selectedFilters[$filterCode])) {
+                    $filterOption = FilterNavigationFilterOption::createSelected(
+                        $filterCode,
+                        $optionValue,
+                        $optionCount
+                    );
+                } else {
+                    $filterOption = FilterNavigationFilterOption::create($filterCode, $optionValue, $optionCount);
+                }
+                $filterNavigationFilterOptionCollection->add($filterOption);
+            }
+            $this->filters[] = FilterNavigationFilter::create($filterCode, $filterNavigationFilterOptionCollection);
         }
     }
 }
