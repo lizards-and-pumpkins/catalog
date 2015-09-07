@@ -116,13 +116,7 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
             return;
         }
 
-        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
-            ProductInSearchAutosuggestionSnippetRenderer::CODE
-        );
-        $productInAutosuggestionSnippetKeys = array_map(function (SearchDocument $searchDocument) use ($keyGenerator) {
-            return $keyGenerator->getKeyForContext($this->context, ['product_id' => $searchDocument->getProductId()]);
-        }, $searchDocumentCollection->getDocuments());
-
+        $productInAutosuggestionSnippetKeys = $this->getProductInAutosuggestionSnippetKeys($searchDocumentCollection);
         $snippetKeyToContentMap = $this->dataPoolReader->getSnippets($productInAutosuggestionSnippetKeys);
         $snippetCodeToKeyMap = $this->getProductInAutosuggestionSnippetCodeToKeyMap(
             $productInAutosuggestionSnippetKeys
@@ -190,5 +184,20 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
         $metaInfoSnippetJson = $this->dataPoolReader->getSnippet($metaInfoSnippetKey);
 
         return ProductSearchAutosuggestionMetaSnippetContent::fromJson($metaInfoSnippetJson);
+    }
+
+    /**
+     * @param SearchDocumentCollection $searchDocumentCollection
+     * @return string[]
+     */
+    private function getProductInAutosuggestionSnippetKeys(SearchDocumentCollection $searchDocumentCollection)
+    {
+        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
+            ProductInSearchAutosuggestionSnippetRenderer::CODE
+        );
+
+        return array_map(function (SearchDocument $searchDocument) use ($keyGenerator) {
+            return $keyGenerator->getKeyForContext($this->context, ['product_id' => $searchDocument->getProductId()]);
+        }, $searchDocumentCollection->getDocuments());
     }
 }
