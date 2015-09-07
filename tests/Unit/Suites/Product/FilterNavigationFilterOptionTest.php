@@ -9,28 +9,32 @@ class FilterNavigationFilterOptionTest extends \PHPUnit_Framework_TestCase
 {
     public function testExceptionIsThrownIfOptionValueIsNotString()
     {
+        $optionCode = 'foo';
         $invalidOptionValue = 1;
         $optionCount = 1;
 
         $this->setExpectedException(InvalidFilterNavigationFilterOptionValueException::class);
-        FilterNavigationFilterOption::create($invalidOptionValue, $optionCount);
+        FilterNavigationFilterOption::create($optionCode, $invalidOptionValue, $optionCount);
     }
 
     public function testExceptionIsThrownIfOptionCountIsNotInteger()
     {
-        $optionValue = 'foo';
+        $optionCode = 'foo';
+        $optionValue = 'bar';
         $invalidOptionCount = '1';
 
         $this->setExpectedException(InvalidFilterNavigationFilterOptionCountException::class);
-        FilterNavigationFilterOption::create($optionValue, $invalidOptionCount);
+        FilterNavigationFilterOption::create($optionCode, $optionValue, $invalidOptionCount);
     }
 
     public function testOptionIsCreated()
     {
-        $optionValue = 'foo';
+        $optionCode = 'foo';
+        $optionValue = 'bar';
         $optionCount = 1;
-        $filterOption = FilterNavigationFilterOption::create($optionValue, $optionCount);
+        $filterOption = FilterNavigationFilterOption::create($optionCode, $optionValue, $optionCount);
 
+        $this->assertSame($optionCode, $filterOption->getCode());
         $this->assertSame($optionValue, $filterOption->getValue());
         $this->assertSame($optionCount, $filterOption->getCount());
         $this->assertFalse($filterOption->isSelected());
@@ -38,10 +42,12 @@ class FilterNavigationFilterOptionTest extends \PHPUnit_Framework_TestCase
 
     public function testSelectedOptionIsCreated()
     {
-        $optionValue = 'foo';
+        $optionCode = 'foo';
+        $optionValue = 'bar';
         $optionCount = 1;
-        $filterOption = FilterNavigationFilterOption::createSelected($optionValue, $optionCount);
+        $filterOption = FilterNavigationFilterOption::createSelected($optionCode, $optionValue, $optionCount);
 
+        $this->assertSame($optionCode, $filterOption->getCode());
         $this->assertSame($optionValue, $filterOption->getValue());
         $this->assertSame($optionCount, $filterOption->getCount());
         $this->assertTrue($filterOption->isSelected());

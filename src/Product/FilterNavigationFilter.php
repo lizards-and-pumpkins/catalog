@@ -7,37 +7,37 @@ class FilterNavigationFilter
     /**
      * @var string
      */
-    private $filterNavigationCode;
+    private $filterCode;
 
     /**
      * @var FilterNavigationFilterOptionCollection
      */
-    private $filterValueCollection;
+    private $filterOptionCollection;
 
     /**
-     * @param string $filterNavigationCode
-     * @param FilterNavigationFilterOptionCollection $filterValueCollection
+     * @param string $filterCode
+     * @param FilterNavigationFilterOptionCollection $filterOptionCollection
      */
-    private function __construct($filterNavigationCode, FilterNavigationFilterOptionCollection $filterValueCollection)
+    private function __construct($filterCode, FilterNavigationFilterOptionCollection $filterOptionCollection)
     {
-        $this->filterNavigationCode = $filterNavigationCode;
-        $this->filterValueCollection = $filterValueCollection;
+        $this->filterCode = $filterCode;
+        $this->filterOptionCollection = $filterOptionCollection;
     }
 
     /**
-     * @param string $filterNavigationCode
-     * @param FilterNavigationFilterOptionCollection $filterValueCollection
+     * @param string $filterCode
+     * @param FilterNavigationFilterOptionCollection $filterOptionCollection
      * @return FilterNavigationFilter
      */
-    public static function create($filterNavigationCode, FilterNavigationFilterOptionCollection $filterValueCollection)
+    public static function create($filterCode, FilterNavigationFilterOptionCollection $filterOptionCollection)
     {
-        if (!is_string($filterNavigationCode)) {
+        if (!is_string($filterCode)) {
             throw new InvalidFilterNavigationFilterCode(
-                sprintf('Filter navigation filter code must be a string, got "%s".', gettype($filterNavigationCode))
+                sprintf('Filter code must be a string, got "%s".', gettype($filterCode))
             );
         }
 
-        return new self($filterNavigationCode, $filterValueCollection);
+        return new self($filterCode, $filterOptionCollection);
     }
 
     /**
@@ -45,14 +45,14 @@ class FilterNavigationFilter
      */
     public function getCode()
     {
-        return $this->filterNavigationCode;
+        return $this->filterCode;
     }
 
     /**
      * @return FilterNavigationFilterOptionCollection
      */
-    public function getValuesCollection()
+    public function getFilterOptionCollection()
     {
-        return $this->filterValueCollection;
+        return $this->filterOptionCollection;
     }
 }

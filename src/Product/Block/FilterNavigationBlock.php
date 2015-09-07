@@ -3,6 +3,7 @@
 namespace Brera\Product\Block;
 
 use Brera\Product\FilterNavigationFilterCollection;
+use Brera\Product\FilterNavigationFilterOption;
 use Brera\Renderer\Block;
 use Brera\Renderer\InvalidDataObjectException;
 
@@ -50,26 +51,24 @@ class FilterNavigationBlock extends Block
     }
 
     /**
-     * @param string $filterCode
-     * @param string $filterValue
+     * @param FilterNavigationFilterOption $filterOption
      * @return string
      */
-    public function getQueryStringForFilterSelection($filterCode, $filterValue)
+    public function getQueryStringForFilterSelection(FilterNavigationFilterOption $filterOption)
     {
-        $queryArgumentsForSelection = $this->getQueryArgumentsForSelection($filterCode, $filterValue);
+        $queryArgumentsForSelection = $this->getQueryArgumentsForSelection($filterOption);
         return $this->buildHttpQueryFromArray($queryArgumentsForSelection);
     }
 
     /**
-     * @param string $filterCode
-     * @param string $filterValue
-     * @return string[]
+     * @param FilterNavigationFilterOption $filterOption
+     * @return \string[]
      */
-    private function getQueryArgumentsForSelection($filterCode, $filterValue)
+    private function getQueryArgumentsForSelection(FilterNavigationFilterOption $filterOption)
     {
         $filterCodes = array_keys($this->getSelectedFilters());
-        return array_reduce($filterCodes, function (array $selection, $codeToCheck) use ($filterCode, $filterValue) {
-            $selectedValues = $this->getUpdatedQueryValuesForFilter($codeToCheck, $filterCode, $filterValue);
+        return array_reduce($filterCodes, function (array $selection, $codeToCheck) use ($filterOption) {
+            $selectedValues = $this->getUpdatedQueryParameterForFilterOption($codeToCheck, $filterOption);
             $selection[$codeToCheck] = implode(self::VALUES_SEPARATOR, $selectedValues);
             return $selection;
         }, []);
@@ -77,68 +76,63 @@ class FilterNavigationBlock extends Block
 
     /**
      * @param string $codeToGet
-     * @param string $codeToUpdate
-     * @param string $filterValue
+     * @param FilterNavigationFilterOption $filterOption
      * @return string[]
      */
-    private function getUpdatedQueryValuesForFilter($codeToGet, $codeToUpdate, $filterValue)
+    private function getUpdatedQueryParameterForFilterOption($codeToGet, FilterNavigationFilterOption $filterOption)
     {
-        if ($codeToGet === $codeToUpdate) {
-            return $this->toggleValueSelectionForFilter($codeToUpdate, $filterValue);
+        if ($codeToGet === $filterOption->getCode()) {
+            return $this->toggleFilterOptionSelection($filterOption);
         }
 
-        return $this->getSelectedValuesForFilter($codeToGet);
+        return $this->getSelectedFilterOptions($codeToGet);
     }
 
     /**
-     * @param string $filterCode
-     * @param string $filterValue
+     * @param FilterNavigationFilterOption $filterOption
      * @return string[]
      */
-    private function toggleValueSelectionForFilter($filterCode, $filterValue)
+    private function toggleFilterOptionSelection(FilterNavigationFilterOption $filterOption)
     {
-        if ($this->isFilterValueCurrentlySelected($filterCode, $filterValue)) {
-            return $this->removeValueFromFilterSelection($filterCode, $filterValue);
+        if ($this->isFilterOptionCurrentlySelected($filterOption)) {
+            return $this->removeFilterOptionFromSelection($filterOption);
         }
 
-        return $this->addValueToFilterSelection($filterCode, $filterValue);
+        return $this->addFilterOptionToSelection($filterOption);
     }
 
     /**
-     * @param string $filterCode
-     * @param string $filterValue
+     * @param FilterNavigationFilterOption $filterOption
      * @return bool
      */
-    private function isFilterValueCurrentlySelected($filterCode, $filterValue)
+    private function isFilterOptionCurrentlySelected(FilterNavigationFilterOption $filterOption)
     {
-        return in_array($filterValue, $this->getSelectedValuesForFilter($filterCode));
+        return in_array($filterOption->getValue(), $this->getSelectedFilterOptions($filterOption->getCode()));
+    }
+
+    /**
+     * @param FilterNavigationFilterOption $filterOption
+     * @return string[]
+     */
+    private function removeFilterOptionFromSelection(FilterNavigationFilterOption $filterOption)
+    {
+        return array_diff($this->getSelectedFilterOptions($filterOption->getCode()), [$filterOption->getValue()]);
+    }
+
+    /**
+     * @param FilterNavigationFilterOption $filterOption
+     * @return string[]
+     */
+    private function addFilterOptionToSelection(FilterNavigationFilterOption $filterOption)
+    {
+        return array_merge($this->getSelectedFilterOptions($filterOption->getCode()), [$filterOption->getValue()]);
     }
 
     /**
      * @param string $filterCode
-     * @param string $filterValue
      * @return string[]
      */
-    private function removeValueFromFilterSelection($filterCode, $filterValue)
-    {
-        return array_diff($this->getSelectedValuesForFilter($filterCode), [$filterValue]);
-    }
-
-    /**
-     * @param string $filterCode
-     * @param string $filterValue
-     * @return string[]
-     */
-    private function addValueToFilterSelection($filterCode, $filterValue)
-    {
-        return array_merge($this->getSelectedValuesForFilter($filterCode), [$filterValue]);
-    }
-
-    /**
-     * @param string $filterCode
-     * @return string[]
-     */
-    private function getSelectedValuesForFilter($filterCode)
+    private function getSelectedFilterOptions($filterCode)
     {
         return $this->getSelectedFilters()[$filterCode];
     }

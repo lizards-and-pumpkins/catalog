@@ -7,6 +7,11 @@ class FilterNavigationFilterOption
     /**
      * @var string
      */
+    private $code;
+
+    /**
+     * @var string
+     */
     private $value;
 
     /**
@@ -20,41 +25,53 @@ class FilterNavigationFilterOption
     private $isSelected;
 
     /**
+     * @param string $code
      * @param string $value
      * @param int $count
      * @param bool $isSelected
      */
-    private function __construct($value, $count, $isSelected)
+    private function __construct($code, $value, $count, $isSelected)
     {
+        $this->code = $code;
         $this->value = $value;
         $this->count = $count;
         $this->isSelected = $isSelected;
     }
 
     /**
+     * @param string $code
      * @param string $value
      * @param int $count
      * @return FilterNavigationFilterOption
      */
-    public static function create($value, $count)
+    public static function create($code, $value, $count)
     {
         self::validateFilterOptionValue($value);
         self::validateFilterOptionCount($count);
 
-        return new self($value, $count, false);
+        return new self($code, $value, $count, false);
     }
 
     /**
+     * @param string $code
      * @param string $value
      * @param int $count
      * @return FilterNavigationFilterOption
      */
-    public static function createSelected($value, $count)
+    public static function createSelected($code, $value, $count)
     {
         self::validateFilterOptionValue($value);
         self::validateFilterOptionCount($count);
 
-        return new self($value, $count, true);
+        return new self($code, $value, $count, true);
+    }
+
+    /**
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
     }
 
     /**
