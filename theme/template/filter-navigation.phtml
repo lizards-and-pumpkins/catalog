@@ -9,7 +9,7 @@
 <div id="productListFilter">
     <div class="block-title roundedBorder expanded" id="filter-title-brand"><?= $filter->getCode() ?></div>
     <ol class="filter-content scroll-pane">
-        <?php foreach ($filter->getFilterOptionCollection() as $filterOption) : ?>
+        <?php foreach ($filter->getOptionCollection() as $filterOption) : ?>
             <li<?php if ($filterOption->isSelected()) : ?> class="active"<?php endif ?>>
                 <a href="<?php /* TODO: Insert base URL */ ?>?<?= $this->getQueryStringForFilterSelection($filterOption) ?>"><?= $filterOption->getValue() ?> (<?= $filterOption->getCount() ?>)</a>
             </li>

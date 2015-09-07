@@ -51,7 +51,7 @@ class FilterNavigationFilter
     /**
      * @return FilterNavigationFilterOptionCollection
      */
-    public function getFilterOptionCollection()
+    public function getOptionCollection()
     {
         return $this->filterOptionCollection;
     }

@@ -48,7 +48,7 @@ class FilterNavigationFilterOptionCollectionTest extends \PHPUnit_Framework_Test
         $this->filterOptionCollection->add($stubFilterOptionA);
         $this->filterOptionCollection->add($stubFilterOptionB);
 
-        $result = $this->filterOptionCollection->getFilterOptions();
+        $result = $this->filterOptionCollection->getOptions();
 
         $this->assertCount(2, $result);
         $this->assertContains($stubFilterOptionA, $result);

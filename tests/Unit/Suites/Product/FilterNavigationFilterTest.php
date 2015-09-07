@@ -36,6 +36,6 @@ class FilterNavigationFilterTest extends \PHPUnit_Framework_TestCase
         $filter = FilterNavigationFilter::create($filterNavigationCode, $this->stubFilterValueCollection);
 
         $this->assertSame($filterNavigationCode, $filter->getCode());
-        $this->assertSame($this->stubFilterValueCollection, $filter->getFilterOptionCollection());
+        $this->assertSame($this->stubFilterValueCollection, $filter->getOptionCollection());
     }
 }

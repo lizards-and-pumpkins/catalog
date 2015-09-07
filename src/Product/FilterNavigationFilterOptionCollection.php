@@ -33,7 +33,7 @@ class FilterNavigationFilterOptionCollection implements \Countable, \IteratorAgg
     /**
      * @return FilterNavigationFilterOption[]
      */
-    public function getFilterOptions()
+    public function getOptions()
     {
         return $this->filterOptions;
     }
