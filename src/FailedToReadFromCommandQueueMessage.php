@@ -2,6 +2,8 @@
 
 namespace Brera;
 
+use Brera\Log\LogMessage;
+
 class FailedToReadFromCommandQueueMessage implements LogMessage
 {
     /**

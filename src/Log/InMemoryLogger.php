@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera;
+namespace Brera\Log;
 
 class InMemoryLogger implements Logger
 {

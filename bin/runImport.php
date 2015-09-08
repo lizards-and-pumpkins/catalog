@@ -7,6 +7,13 @@ use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestBody;
 use Brera\Http\HttpRouterChain;
 use Brera\Http\HttpUrl;
+use Brera\Log\Writer\CompositeLogMessageWriter;
+use Brera\Log\Writer\FileLogMessageWriter;
+use Brera\Log\Writer\LogMessageWriter;
+use Brera\Log\Writer\StdOutLogMessageWriter;
+use Brera\Queue\File\FileQueue;
+use Brera\Queue\LoggingQueueDecorator;
+use Brera\Queue\Queue;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -24,6 +31,7 @@ class ApiApp extends WebFront
     {
         $factory->register(new CommonFactory());
         $factory->register(new SampleFactory());
+        $factory->register(new LoggingQueueFactory());
         $factory->register(new FrontendFactory($this->getRequest()));
     }
 
@@ -40,13 +48,47 @@ class ApiApp extends WebFront
         $domainEventConsumer = $this->getMasterFactory()->createDomainEventConsumer();
         $domainEventConsumer->process();
     }
+}
+
+class LoggingQueueFactory implements Factory
+{
+    use FactoryTrait;
 
     /**
-     * @return LogMessage[]
+     * @return Queue
      */
-    public function getLoggedMessages()
+    public function createEventQueue()
     {
-        return $this->getMasterFactory()->getLogger()->getMessages();
+        $storagePath = sys_get_temp_dir() . '/brera/event-queue/content';
+        $lockFile = sys_get_temp_dir() . '/brera/event-queue/lock';
+        return new LoggingQueueDecorator(
+            new FileQueue($storagePath, $lockFile),
+            $this->getMasterFactory()->getLogger()
+        );
+    }
+
+    /**
+     * @return Queue
+     */
+    public function createCommandQueue()
+    {
+        $storagePath = sys_get_temp_dir() . '/brera/command-queue/content';
+        $lockFile = sys_get_temp_dir() . '/brera/command-queue/lock';
+        return new LoggingQueueDecorator(
+            new FileQueue($storagePath, $lockFile),
+            $this->getMasterFactory()->getLogger()
+        );
+    }
+
+    /**
+     * @return LogMessageWriter
+     */
+    public function createLogMessageWriter()
+    {
+        return new CompositeLogMessageWriter(
+            new StdOutLogMessageWriter(),
+            new FileLogMessageWriter($this->getMasterFactory()->getLogFilePathConfig())
+        );
     }
 }
 
@@ -83,12 +125,3 @@ $catalogImport->runWithoutSendingResponse();
 
 
 $catalogImport->processQueues();
-
-
-$messages = array_merge($productListingImport->getLoggedMessages(), $catalogImport->getLoggedMessages());
-if (count($messages) > 0) {
-    echo "Log message(s):\n";
-    foreach ($messages as $message) {
-        printf("\t%s\n", rtrim($message));
-    }
-}

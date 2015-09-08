@@ -5,7 +5,7 @@ namespace Brera\Product;
 use Brera\Api\ApiRequestHandler;
 use Brera\Http\HttpRequest;
 use Brera\Image\UpdateImageCommand;
-use Brera\Logger;
+use Brera\Log\Logger;
 use Brera\Queue\Queue;
 use Brera\TestFileFixtureTrait;
 

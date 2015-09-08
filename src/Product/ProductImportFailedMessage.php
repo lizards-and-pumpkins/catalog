@@ -2,7 +2,7 @@
 
 namespace Brera\Product;
 
-use Brera\LogMessage;
+use Brera\Log\LogMessage;
 
 class ProductImportFailedMessage implements LogMessage
 {
