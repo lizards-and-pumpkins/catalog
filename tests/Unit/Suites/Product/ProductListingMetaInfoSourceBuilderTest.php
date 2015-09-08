@@ -37,7 +37,7 @@ EOX;
 
         $expectedCriterion1 = SearchCriterion::create('category', 'accessories', '=');
         $expectedCriterion2 = SearchCriterion::create('gender', 'male', '=');
-        $expectedCriteria = CompositeSearchCriterion::createAnd([$expectedCriterion1, $expectedCriterion2]);
+        $expectedCriteria = CompositeSearchCriterion::createAnd($expectedCriterion1, $expectedCriterion2);
 
         $this->assertEquals($expectedCriteria, $result);
     }
@@ -57,7 +57,7 @@ EOX;
 
         $expectedCriterion1 = SearchCriterion::create('category', 'accessories', '=');
         $expectedCriterion2 = SearchCriterion::create('gender', 'male', '=');
-        $expectedCriteria = CompositeSearchCriterion::createOr([$expectedCriterion1, $expectedCriterion2]);
+        $expectedCriteria = CompositeSearchCriterion::createOr($expectedCriterion1, $expectedCriterion2);
 
         $this->assertEquals($expectedCriteria, $result);
     }

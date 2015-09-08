@@ -21,32 +21,30 @@ class CompositeSearchCriterion implements SearchCriteria, \JsonSerializable
 
     /**
      * @param string $condition
-     * @param SearchCriteria[] $criteria
+     * @param SearchCriteria|SearchCriteria[] $criteria
      */
-    private function __construct($condition, array $criteria)
+    private function __construct($condition, SearchCriteria ...$criteria)
     {
         $this->condition = $condition;
         $this->criteria = $criteria;
     }
 
     /**
-     * @param SearchCriteria[] $criteria
+     * @param SearchCriteria|SearchCriteria[] $criteria
      * @return CompositeSearchCriterion
      */
-    public static function createAnd(array $criteria)
+    public static function createAnd(SearchCriteria ...$criteria)
     {
-        array_map('self::validateIsSearchCriteria', $criteria);
-        return new self(self::AND_CONDITION, $criteria);
+        return new self(self::AND_CONDITION, ...$criteria);
     }
 
     /**
-     * @param SearchCriteria[] $criteria
+     * @param SearchCriteria|SearchCriteria[] $criteria
      * @return CompositeSearchCriterion
      */
-    public static function createOr(array $criteria)
+    public static function createOr(SearchCriteria ...$criteria)
     {
-        array_map('self::validateIsSearchCriteria', $criteria);
-        return new self(self::OR_CONDITION, $criteria);
+        return new self(self::OR_CONDITION, ...$criteria);
     }
 
     /**
@@ -65,18 +63,6 @@ class CompositeSearchCriterion implements SearchCriteria, \JsonSerializable
         }
 
         return $isMatching;
-    }
-
-    /**
-     * @param mixed $searchCriteria
-     */
-    private static function validateIsSearchCriteria($searchCriteria)
-    {
-        if (!is_object($searchCriteria) || !($searchCriteria instanceof SearchCriteria)) {
-            throw new InvalidSearchCriteriaException(
-                'Unable to create CompositeSearchCriterion from non SearchCriteria.'
-            );
-        }
     }
 
     /**

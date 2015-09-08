@@ -268,7 +268,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
                 return SearchCriterion::create($filterCode, $filterOptionValue, '=');
             }, $filterOptionValues);
 
-            $filterCriteria = CompositeSearchCriterion::createOr($optionValuesCriteriaArray);
+            $filterCriteria = CompositeSearchCriterion::createOr(...$optionValuesCriteriaArray);
             $filtersCriteriaArray[] = $filterCriteria;
         }
 
@@ -277,7 +277,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         }
 
         $filtersCriteriaArray[] = $originalCriteria;
-        return CompositeSearchCriterion::createAnd($filtersCriteriaArray);
+        return CompositeSearchCriterion::createAnd(...$filtersCriteriaArray);
     }
 
     /**

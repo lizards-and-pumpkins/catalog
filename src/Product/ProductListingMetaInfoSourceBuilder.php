@@ -28,7 +28,7 @@ class ProductListingMetaInfoSourceBuilder
         $criteriaConditionNodes = $parser->getXmlNodesArrayByXPath('/listing/@condition');
 
         $criterionArray = array_map([$this, 'createCriterion'], $criteriaNodes);
-        $criteria = $this->createSearchCriteria($criteriaConditionNodes, $criterionArray);
+        $criteria = $this->createSearchCriteria($criteriaConditionNodes, ...$criterionArray);
 
         return new ProductListingMetaInfoSource($urlKey, $contextData, $criteria);
     }
@@ -65,21 +65,21 @@ class ProductListingMetaInfoSourceBuilder
 
     /**
      * @param array[] $criteriaCondition
-     * @param SearchCriterion[] $criterionArray
+     * @param SearchCriterion|SearchCriterion[] $criterionArray
      * @return CompositeSearchCriterion
      */
-    private function createSearchCriteria(array $criteriaCondition, array $criterionArray)
+    private function createSearchCriteria(array $criteriaCondition, SearchCriterion ...$criterionArray)
     {
         if (empty($criteriaCondition)) {
             throw new MissingConditionXmlAttributeException('Missing "condition" attribute in product listing XML.');
         }
 
         if (CompositeSearchCriterion::AND_CONDITION === $criteriaCondition[0]['value']) {
-            return CompositeSearchCriterion::createAnd($criterionArray);
+            return CompositeSearchCriterion::createAnd(...$criterionArray);
         }
 
         if (CompositeSearchCriterion::OR_CONDITION === $criteriaCondition[0]['value']) {
-            return CompositeSearchCriterion::createOr($criterionArray);
+            return CompositeSearchCriterion::createOr(...$criterionArray);
         }
 
         throw new InvalidConditionXmlAttributeException(sprintf(

@@ -250,9 +250,9 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->stubRequest->method('getQueryParameter')->with('foo')->willReturn('bar');
 
         $filterCriterion = SearchCriterion::create('foo', 'bar', '=');
-        $filterCriteria = CompositeSearchCriterion::createOr([$filterCriterion]);
-        $originalCriteria = CompositeSearchCriterion::createAnd([]);
-        $expectedCriteria = CompositeSearchCriterion::createAnd([$filterCriteria, $originalCriteria]);
+        $filterCriteria = CompositeSearchCriterion::createOr($filterCriterion);
+        $originalCriteria = CompositeSearchCriterion::createAnd();
+        $expectedCriteria = CompositeSearchCriterion::createAnd($filterCriteria, $originalCriteria);
 
         $this->mockDataPoolReader->method('getSnippets')->willReturn([]);
         $this->mockDataPoolReader->expects($this->once())->method('getSearchDocumentsMatchingCriteria')

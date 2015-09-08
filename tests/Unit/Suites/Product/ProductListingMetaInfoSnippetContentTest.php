@@ -232,7 +232,7 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
         $result = $metaSnippetContent->getSelectionCriteria();
 
         $expectedCriterion = SearchCriterion::create($fieldName, $fieldValue, $operation);
-        $expectedCriteria = CompositeSearchCriterion::createAnd([$expectedCriterion]);
+        $expectedCriteria = CompositeSearchCriterion::createAnd($expectedCriterion);
 
         $this->assertEquals($expectedCriteria, $result);
     }

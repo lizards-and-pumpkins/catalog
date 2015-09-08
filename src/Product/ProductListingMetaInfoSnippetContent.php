@@ -163,7 +163,7 @@ class ProductListingMetaInfoSnippetContent implements PageMetaInfoSnippetContent
             );
         }, $metaInfo['criteria']);
 
-        return CompositeSearchCriterion::createAnd($criterionArray);
+        return CompositeSearchCriterion::createAnd(...$criterionArray);
     }
 
     /**

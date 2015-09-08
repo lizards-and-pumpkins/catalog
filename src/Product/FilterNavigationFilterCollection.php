@@ -185,7 +185,7 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
                 return SearchCriterion::create($filterCode, $filterOptionValue, '=');
             }, $filterOptionValues);
 
-            $filterCriteria = CompositeSearchCriterion::createOr($optionValuesCriteriaArray);
+            $filterCriteria = CompositeSearchCriterion::createOr(...$optionValuesCriteriaArray);
             $filtersCriteriaArray[] = $filterCriteria;
         }
 
@@ -194,7 +194,7 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
         }
 
         $filtersCriteriaArray[] = $originalCriteria;
-        return CompositeSearchCriterion::createAnd($filtersCriteriaArray);
+        return CompositeSearchCriterion::createAnd(...$filtersCriteriaArray);
     }
 
     private function validateFiltersCollectionIsInitialized()
