@@ -6,7 +6,7 @@ use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
+use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
@@ -182,7 +182,7 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
             }
 
             $optionValuesCriteriaArray = array_map(function ($filterOptionValue) use ($filterCode) {
-                return SearchCriterion::create($filterCode, $filterOptionValue, '=');
+                return SearchCriterionEqual::create($filterCode, $filterOptionValue);
             }, $filterOptionValues);
 
             $filterCriteria = CompositeSearchCriterion::createOr(...$optionValuesCriteriaArray);

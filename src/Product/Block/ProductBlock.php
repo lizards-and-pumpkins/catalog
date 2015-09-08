@@ -4,7 +4,6 @@ namespace Brera\Product\Block;
 
 use Brera\Image;
 use Brera\Product\Product;
-use Brera\Product\ProductAttributeNotFoundException;
 use Brera\Product\ProductId;
 use Brera\Renderer\Block;
 

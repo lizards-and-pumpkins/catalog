@@ -3,7 +3,7 @@
 namespace Brera;
 
 use Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
-use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
+use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
 use Brera\Http\HttpHeaders;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestBody;
@@ -109,8 +109,8 @@ class ProductListingTest extends AbstractIntegrationTest
      */
     private function getStubMetaInfo()
     {
-        $searchCriterion1 = SearchCriterion::create('category', 'sale', '=');
-        $searchCriterion2 = SearchCriterion::create('brand', 'Adidas', '=');
+        $searchCriterion1 = SearchCriterionEqual::create('category', 'sale');
+        $searchCriterion2 = SearchCriterionEqual::create('brand', 'Adidas');
         $searchCriteria = CompositeSearchCriterion::createAnd($searchCriterion1, $searchCriterion2);
 
         $pageSnippetCodes = [

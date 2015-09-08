@@ -6,7 +6,7 @@ use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\KeyNotFoundException;
 use Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
-use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
+use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use Brera\Http\HttpRequest;
@@ -249,7 +249,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection();
         $this->stubRequest->method('getQueryParameter')->with('foo')->willReturn('bar');
 
-        $filterCriterion = SearchCriterion::create('foo', 'bar', '=');
+        $filterCriterion = SearchCriterionEqual::create('foo', 'bar');
         $filterCriteria = CompositeSearchCriterion::createOr($filterCriterion);
         $originalCriteria = CompositeSearchCriterion::createAnd();
         $expectedCriteria = CompositeSearchCriterion::createAnd($filterCriteria, $originalCriteria);

@@ -211,11 +211,34 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
         ProductListingMetaInfoSnippetContent::fromJson($json);
     }
 
+    public function testExceptionIsThrownIfCriterionOperationIsInvalid()
+    {
+        $invalidOperationName = 'baz';
+
+        $this->setExpectedException(
+            MalformedSearchCriteriaMetaException::class,
+            sprintf('Unknown criterion operation "%s"', $invalidOperationName)
+        );
+
+        $json = json_encode([
+            ProductListingMetaInfoSnippetContent::KEY_CRITERIA => [
+                'condition' => '',
+                'criteria'  => [
+                    ['fieldName' => 'foo', 'fieldValue' => 'bar', 'operation' => $invalidOperationName]
+                ]
+            ],
+            ProductListingMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
+            ProductListingMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
+        ]);
+
+        ProductListingMetaInfoSnippetContent::fromJson($json);
+    }
+
     public function testProductListingMetaInfoIsCreatedWithPassedSearchCriteria()
     {
         $fieldName = 'foo';
         $fieldValue = 'bar';
-        $operation = '=';
+        $operation = 'Equal';
 
         $json = json_encode([
             ProductListingMetaInfoSnippetContent::KEY_CRITERIA => [
@@ -231,7 +254,8 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
         $metaSnippetContent = ProductListingMetaInfoSnippetContent::fromJson($json);
         $result = $metaSnippetContent->getSelectionCriteria();
 
-        $expectedCriterion = SearchCriterion::create($fieldName, $fieldValue, $operation);
+        $className = SearchCriterion::class . $operation;
+        $expectedCriterion = call_user_func([$className, 'create'], $fieldName, $fieldValue);
         $expectedCriteria = CompositeSearchCriterion::createAnd($expectedCriterion);
 
         $this->assertEquals($expectedCriteria, $result);

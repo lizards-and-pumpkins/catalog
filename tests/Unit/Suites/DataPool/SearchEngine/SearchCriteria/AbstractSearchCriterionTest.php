@@ -9,7 +9,7 @@ use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
 /**
  * @covers \Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion
  */
-class SearchCriterionTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractSearchCriterionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @param string $fieldKey
@@ -41,54 +41,73 @@ class SearchCriterionTest extends \PHPUnit_Framework_TestCase
         return $stubSearchDocument;
     }
 
+    /**
+     * @param string $fieldName
+     * @param string $fieldValue
+     * @return SearchCriterion
+     */
+    private function createInstanceOfClassUnderTest($fieldName, $fieldValue)
+    {
+        $className = SearchCriterion::class . $this->getOperationName();
+
+        if (!class_exists($className)) {
+            $this->fail(
+                sprintf('Criterion class %s does not exist. Maybe naming convention is not followed?', $className)
+            );
+        }
+
+        return call_user_func([$className, 'create'], $fieldName, $fieldValue);
+    }
+
+    /**
+     * @return string
+     */
+    abstract protected function getOperationName();
+
     public function testSearchCriteriaInterfaceIsImplemented()
     {
-        $this->assertInstanceOf(SearchCriteria::class, SearchCriterion::create('foo', 'bar', '='));
+        $this->assertInstanceOf(SearchCriteria::class, $this->createInstanceOfClassUnderTest('foo', 'bar'));
     }
 
     public function testJsonSerializableInterfaceIsImplemented()
     {
-        $this->assertInstanceOf(\JsonSerializable::class, SearchCriterion::create('foo', 'bar', '='));
+        $this->assertInstanceOf(\JsonSerializable::class, $this->createInstanceOfClassUnderTest('foo', 'bar'));
     }
 
     public function testExceptionIsThrownIfFieldNameIsNotValid()
     {
         $this->setExpectedException(\InvalidArgumentException::class, 'Criterion field name should be a string');
-        SearchCriterion::create(1, 'bar', '=');
+        $this->createInstanceOfClassUnderTest(1, 'bar');
     }
 
     public function testExceptionIsThrownIfFieldValueIsNotValid()
     {
         $this->setExpectedException(\InvalidArgumentException::class, 'Criterion field value should be a string');
-        SearchCriterion::create('foo', 1, '=');
-    }
-
-    public function testExceptionIsThrownIfOperationIsNotValid()
-    {
-        $this->setExpectedException(\InvalidArgumentException::class, 'Invalid criterion operation');
-        SearchCriterion::create('foo', 'bar', 'baz');
+        $this->createInstanceOfClassUnderTest('foo', 1);
     }
 
     public function testArrayRepresentationOfCriterionIsReturned()
     {
         $fieldName = 'foo';
         $fieldValue = 'bar';
-        $operation = '=';
+        $criterion = $this->createInstanceOfClassUnderTest($fieldName, $fieldValue);
 
-        $criterion = SearchCriterion::create($fieldName, $fieldValue, $operation);
         $result = $criterion->jsonSerialize();
-        $expectation = ['fieldName' => $fieldName, 'fieldValue' => $fieldValue, 'operation' => $operation];
+        $expectation = [
+            'fieldName'  => $fieldName,
+            'fieldValue' => $fieldValue,
+            'operation'  => $this->getOperationName()
+        ];
 
         $this->assertSame($expectation, $result);
     }
 
-    public function testFalseIsReturnedIfGivenSearchDocumentContainsNoFieldWithNametMatchingCriterionFieldName()
+    public function testFalseIsReturnedIfGivenSearchDocumentContainsNoFieldWithNameMatchingCriterionFieldName()
     {
         $fieldName = 'foo';
         $fieldValue = 'bar';
-        $operation = '=';
 
-        $criterion = SearchCriterion::create($fieldName, $fieldValue, $operation);
+        $criterion = $this->createInstanceOfClassUnderTest($fieldName, $fieldValue);
 
         $stubSearchDocumentField = $this->createStubSearchDocumentField('baz', $fieldValue);
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([$stubSearchDocumentField]);
@@ -99,17 +118,15 @@ class SearchCriterionTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getNonMatchingValues
      * @param string $searchDocumentFieldValue
-     * @param string $operation
      * @param string $criterionFieldValue
      */
     public function testFalseIsReturnIfGivenSearchDocumentFieldValueIsNotMatchingCriterionValueOnOperation(
         $searchDocumentFieldValue,
-        $operation,
         $criterionFieldValue
     ) {
         $fieldName = 'foo';
 
-        $criterion = SearchCriterion::create($fieldName, $criterionFieldValue, $operation);
+        $criterion = $this->createInstanceOfClassUnderTest($fieldName, $criterionFieldValue);
 
         $stubSearchDocumentField = $this->createStubSearchDocumentField($fieldName, $searchDocumentFieldValue);
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([$stubSearchDocumentField]);
@@ -120,32 +137,20 @@ class SearchCriterionTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function getNonMatchingValues()
-    {
-        return [
-            ['foo', '=', 'bar'],
-            ['foo', '!=', 'foo'],
-            ['1', '>', '1'],
-            ['1', '<', '1'],
-            ['1', '>=', '2'],
-            ['1', '<=', '0']
-        ];
-    }
+    abstract public function getNonMatchingValues();
 
     /**
      * @dataProvider getMatchingValues
      * @param string $searchDocumentFieldValue
-     * @param string $operation
      * @param string $criterionFieldValue
      */
     public function testTrueIsReturnIfGivenSearchDocumentFieldValueMatchesCriterionValueOnOperation(
         $searchDocumentFieldValue,
-        $operation,
         $criterionFieldValue
     ) {
         $fieldName = 'foo';
 
-        $criterion = SearchCriterion::create($fieldName, $criterionFieldValue, $operation);
+        $criterion = $this->createInstanceOfClassUnderTest($fieldName, $criterionFieldValue);
 
         $stubSearchDocumentField = $this->createStubSearchDocumentField($fieldName, $searchDocumentFieldValue);
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([$stubSearchDocumentField]);
@@ -156,15 +161,5 @@ class SearchCriterionTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function getMatchingValues()
-    {
-        return [
-            ['foo', '=', 'foo'],
-            ['foo', '!=', 'bar'],
-            ['1', '>', '0'],
-            ['1', '<', '2'],
-            ['1', '>=', '1'],
-            ['1', '<=', '1']
-        ];
-    }
+    abstract public function getMatchingValues();
 }

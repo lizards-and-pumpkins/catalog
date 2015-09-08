@@ -9,6 +9,7 @@ use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
 /**
  * @covers \Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
  * @uses   \Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion
+ * @uses   \Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual
  */
 class CompositeSearchCriterionTest extends \PHPUnit_Framework_TestCase
 {
@@ -78,7 +79,7 @@ class CompositeSearchCriterionTest extends \PHPUnit_Framework_TestCase
 
     public function testFalseIsReturnedIfNoneOfSearchDocumentFieldsIsNotMatchingCriteria()
     {
-        $testCriterion = SearchCriterion::create('foo', 'bar', '=');
+        $testCriterion = SearchCriterionEqual::create('foo', 'bar');
 
         $criteria = CompositeSearchCriterion::createOr($testCriterion);
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([]);
@@ -88,8 +89,8 @@ class CompositeSearchCriterionTest extends \PHPUnit_Framework_TestCase
 
     public function testFalseIsReturnedIfSearchDocumentFieldsAreNotMatchingAllCriteriaConditions()
     {
-        $testCriterionA = SearchCriterion::create('foo', 'bar', '=');
-        $testCriterionB = SearchCriterion::create('baz', 'qux', '=');
+        $testCriterionA = SearchCriterionEqual::create('foo', 'bar');
+        $testCriterionB = SearchCriterionEqual::create('baz', 'qux');
         $criteria = CompositeSearchCriterion::createAnd($testCriterionA, $testCriterionB);
 
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields(['foo' => 'bar']);
@@ -99,8 +100,8 @@ class CompositeSearchCriterionTest extends \PHPUnit_Framework_TestCase
 
     public function testTrueIsReturnedIfAllOfSearchDocumentFieldsAreMatchingCriteria()
     {
-        $testCriterionA = SearchCriterion::create('foo', 'bar', '=');
-        $testCriterionB = SearchCriterion::create('baz', 'qux', '=');
+        $testCriterionA = SearchCriterionEqual::create('foo', 'bar');
+        $testCriterionB = SearchCriterionEqual::create('baz', 'qux');
         $criteria = CompositeSearchCriterion::createAnd($testCriterionA, $testCriterionB);
 
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields(['foo' => 'bar', 'baz' => 'qux']);
@@ -110,8 +111,8 @@ class CompositeSearchCriterionTest extends \PHPUnit_Framework_TestCase
 
     public function testTrueIsReturnedIfAtLeastOneCriteriaConditionMatchesAnyOfSearchDocumentFields()
     {
-        $testCriterionA = SearchCriterion::create('foo', 'bar', '=');
-        $testCriterionB = SearchCriterion::create('baz', 'qux', '=');
+        $testCriterionA = SearchCriterionEqual::create('foo', 'bar');
+        $testCriterionB = SearchCriterionEqual::create('baz', 'qux');
         $criteria = CompositeSearchCriterion::createOr($testCriterionA, $testCriterionB);
 
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields(['foo' => 'bar']);

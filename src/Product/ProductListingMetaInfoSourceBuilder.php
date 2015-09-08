@@ -93,16 +93,37 @@ class ProductListingMetaInfoSourceBuilder
      */
     private function createCriterion(array $criterionNode)
     {
+        $this->validateSearchCriterionMetaInfo($criterionNode);
+
+        $className = $this->getCriterionClassNameForOperation($criterionNode['attributes']['operation']);
+
+        return call_user_func([$className, 'create'], $criterionNode['nodeName'], $criterionNode['value']);
+    }
+
+    /**
+     * @param array[] $criterionNode
+     */
+    private function validateSearchCriterionMetaInfo(array $criterionNode)
+    {
         if (!isset($criterionNode['attributes']['operation'])) {
             throw new MissingCriterionOperationXmlAttributeException(
                 'Missing "operation" attribute in product listing condition XML node.'
             );
         }
 
-        return SearchCriterion::create(
-            $criterionNode['nodeName'],
-            $criterionNode['value'],
-            $criterionNode['attributes']['operation']
-        );
+        if (!class_exists($this->getCriterionClassNameForOperation($criterionNode['attributes']['operation']))) {
+            throw new InvalidCriterionOperationXmlAttributeException(
+                sprintf('Unknown criterion operation "%s"', $criterionNode['attributes']['operation'])
+            );
+        }
+    }
+
+    /**
+     * @param string $operationName
+     * @return string
+     */
+    private function getCriterionClassNameForOperation($operationName)
+    {
+        return SearchCriterion::class . $operationName;
     }
 }

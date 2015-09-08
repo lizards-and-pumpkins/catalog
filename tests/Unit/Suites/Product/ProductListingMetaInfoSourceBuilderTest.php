@@ -3,7 +3,7 @@
 namespace Brera\Product;
 
 use Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
-use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
+use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
 
 /**
  * @covers \Brera\Product\ProductListingMetaInfoSourceBuilder
@@ -19,8 +19,8 @@ class ProductListingMetaInfoSourceBuilderTest extends \PHPUnit_Framework_TestCas
     {
         $xml = <<<EOX
 <listing url_key="men-accessories" condition="and" website="ru" locale="en_US">
-    <category operation="=">accessories</category>
-    <gender operation="=">male</gender>
+    <category operation="Equal">accessories</category>
+    <gender operation="Equal">male</gender>
 </listing>
 EOX;
 
@@ -35,8 +35,8 @@ EOX;
         $this->assertEquals('men-accessories', $urlKey);
         $this->assertEquals(['website' => 'ru', 'locale' => 'en_US'], $context);
 
-        $expectedCriterion1 = SearchCriterion::create('category', 'accessories', '=');
-        $expectedCriterion2 = SearchCriterion::create('gender', 'male', '=');
+        $expectedCriterion1 = SearchCriterionEqual::create('category', 'accessories');
+        $expectedCriterion2 = SearchCriterionEqual::create('gender', 'male');
         $expectedCriteria = CompositeSearchCriterion::createAnd($expectedCriterion1, $expectedCriterion2);
 
         $this->assertEquals($expectedCriteria, $result);
@@ -46,8 +46,8 @@ EOX;
     {
         $xml = <<<EOX
 <listing url_key="men-accessories" condition="or" website="ru" locale="en_US">
-    <category operation="=">accessories</category>
-    <gender operation="=">male</gender>
+    <category operation="Equal">accessories</category>
+    <gender operation="Equal">male</gender>
 </listing>
 EOX;
 
@@ -55,8 +55,8 @@ EOX;
             ->createProductListingMetaInfoSourceFromXml($xml);
         $result = $productListingMetaInfoSource->getCriteria();
 
-        $expectedCriterion1 = SearchCriterion::create('category', 'accessories', '=');
-        $expectedCriterion2 = SearchCriterion::create('gender', 'male', '=');
+        $expectedCriterion1 = SearchCriterionEqual::create('category', 'accessories');
+        $expectedCriterion2 = SearchCriterionEqual::create('gender', 'male');
         $expectedCriteria = CompositeSearchCriterion::createOr($expectedCriterion1, $expectedCriterion2);
 
         $this->assertEquals($expectedCriteria, $result);
@@ -65,29 +65,35 @@ EOX;
     public function testExceptionIsThrownIfUrlKeyAttributeIsMissing()
     {
         $this->setExpectedException(MissingUrlKeyXmlAttributeException::class);
-        (new ProductListingMetaInfoSourceBuilder())->createProductListingMetaInfoSourceFromXml('<listing />');
+        $xml = '<listing />';
+        (new ProductListingMetaInfoSourceBuilder())->createProductListingMetaInfoSourceFromXml($xml);
     }
 
     public function testExceptionIsThrownIfConditionAttributeOfListingNodeIsMissing()
     {
         $this->setExpectedException(MissingConditionXmlAttributeException::class);
-        (new ProductListingMetaInfoSourceBuilder())
-            ->createProductListingMetaInfoSourceFromXml('<listing url_key="foo"/>');
+        $xml = '<listing url_key="foo"/>';
+        (new ProductListingMetaInfoSourceBuilder())->createProductListingMetaInfoSourceFromXml($xml);
     }
 
     public function testExceptionIsThrownIfConditionAttributeOfListingNodeIsInvalid()
     {
         $this->setExpectedException(InvalidConditionXmlAttributeException::class);
-        (new ProductListingMetaInfoSourceBuilder())->createProductListingMetaInfoSourceFromXml(
-            '<listing url_key="foo" condition="bar"/>'
-        );
+        $xml = '<listing url_key="foo" condition="bar"/>';
+        (new ProductListingMetaInfoSourceBuilder())->createProductListingMetaInfoSourceFromXml($xml);
     }
 
     public function testExceptionIsThrownIfCriterionNodeDoesNotHaveOperationAttribute()
     {
         $this->setExpectedException(MissingCriterionOperationXmlAttributeException::class);
         $xml = '<listing url_key="foo" condition="and"><bar /></listing>';
+        (new ProductListingMetaInfoSourceBuilder())->createProductListingMetaInfoSourceFromXml($xml);
+    }
 
+    public function testExceptionIsThrownIfCriterionOperationAttributeIsInvalid()
+    {
+        $this->setExpectedException(InvalidCriterionOperationXmlAttributeException::class);
+        $xml = '<listing url_key="foo" condition="and"><bar operation="baz" /></listing>';
         (new ProductListingMetaInfoSourceBuilder())->createProductListingMetaInfoSourceFromXml($xml);
     }
 }

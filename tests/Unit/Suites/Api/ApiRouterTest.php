@@ -4,7 +4,6 @@ namespace Brera\Api;
 
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
-use Brera\Http\HttpUrl;
 
 /**
  * @covers \Brera\Api\ApiRouter

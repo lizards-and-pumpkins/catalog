@@ -156,10 +156,10 @@ class ProductListingMetaInfoSnippetContent implements PageMetaInfoSnippetContent
         $criterionArray = array_map(function (array $criterionMetaInfo) {
             self::validateSearchCriterionMetaInfo($criterionMetaInfo);
 
-            return SearchCriterion::create(
+            return call_user_func(
+                [self::getCriterionClassNameForOperation($criterionMetaInfo['operation']), 'create'],
                 $criterionMetaInfo['fieldName'],
-                $criterionMetaInfo['fieldValue'],
-                $criterionMetaInfo['operation']
+                $criterionMetaInfo['fieldValue']
             );
         }, $metaInfo['criteria']);
 
@@ -196,5 +196,20 @@ class ProductListingMetaInfoSnippetContent implements PageMetaInfoSnippetContent
         if (!isset($criterionArray['operation'])) {
             throw new MalformedSearchCriteriaMetaException('Missing criterion operation.');
         }
+
+        if (!class_exists(self::getCriterionClassNameForOperation($criterionArray['operation']))) {
+            throw new MalformedSearchCriteriaMetaException(
+                sprintf('Unknown criterion operation "%s"', $criterionArray['operation'])
+            );
+        }
+    }
+
+    /**
+     * @param string $operationName
+     * @return string
+     */
+    private static function getCriterionClassNameForOperation($operationName)
+    {
+        return SearchCriterion::class . $operationName;
     }
 }

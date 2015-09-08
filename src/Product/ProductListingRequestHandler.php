@@ -7,7 +7,7 @@ use Brera\DataPool\DataPoolReader;
 use Brera\DataPool\KeyValue\KeyNotFoundException;
 use Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
+use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use Brera\Http\HttpRequest;
@@ -265,7 +265,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
             }
 
             $optionValuesCriteriaArray = array_map(function ($filterOptionValue) use ($filterCode) {
-                return SearchCriterion::create($filterCode, $filterOptionValue, '=');
+                return SearchCriterionEqual::create($filterCode, $filterOptionValue);
             }, $filterOptionValues);
 
             $filterCriteria = CompositeSearchCriterion::createOr(...$optionValuesCriteriaArray);

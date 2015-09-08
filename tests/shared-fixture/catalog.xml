@@ -455,11 +455,11 @@ LED Armflasher with elastic Band and Flasher]]></description>
     </products>
     <listings>
         <listing url_key="adidas-sale" condition="and" website="ru" locale="de_DE">
-            <category operation="=">sale</category>
-            <brand operation="=">Adidas</brand>
+            <category operation="Equal">sale</category>
+            <brand operation="Equal">Adidas</brand>
         </listing>
         <listing url_key="sale" condition="and" website="ru" locale="de_DE">
-            <category operation="=">sale</category>
+            <category operation="Equal">sale</category>
         </listing>
     </listings>
 </catalog>

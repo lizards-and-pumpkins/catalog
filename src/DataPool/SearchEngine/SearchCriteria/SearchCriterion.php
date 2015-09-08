@@ -5,7 +5,7 @@ namespace Brera\DataPool\SearchEngine\SearchCriteria;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 
-class SearchCriterion implements SearchCriteria, \JsonSerializable
+abstract class SearchCriterion implements SearchCriteria, \JsonSerializable
 {
     /**
      * @var string
@@ -18,29 +18,21 @@ class SearchCriterion implements SearchCriteria, \JsonSerializable
     private $fieldValue;
 
     /**
-     * @var string
-     */
-    private $operation;
-
-    /**
      * @param string $fieldName
      * @param string $fieldValue
-     * @param string $operation
      */
-    private function __construct($fieldName, $fieldValue, $operation)
+    private function __construct($fieldName, $fieldValue)
     {
         $this->fieldName = $fieldName;
         $this->fieldValue = $fieldValue;
-        $this->operation = $operation;
     }
 
     /**
      * @param string $fieldName
      * @param string $fieldValue
-     * @param string $operation
      * @return SearchCriterion
      */
-    public static function create($fieldName, $fieldValue, $operation)
+    public static function create($fieldName, $fieldValue)
     {
         if (!is_string($fieldName)) {
             throw new \InvalidArgumentException('Criterion field name should be a string');
@@ -50,11 +42,9 @@ class SearchCriterion implements SearchCriteria, \JsonSerializable
             throw new \InvalidArgumentException('Criterion field value should be a string');
         }
 
-        if (!in_array($operation, ['=', '!=', '>', '>=', '<', '<='])) {
-            throw new \InvalidArgumentException('Invalid criterion operation');
-        }
+        $className = get_called_class();
 
-        return new self($fieldName, $fieldValue, $operation);
+        return new $className($fieldName, $fieldValue);
     }
 
     /**
@@ -65,7 +55,7 @@ class SearchCriterion implements SearchCriteria, \JsonSerializable
         return [
             'fieldName'     => $this->fieldName,
             'fieldValue'    => $this->fieldValue,
-            'operation'     => $this->operation
+            'operation'     => $this->extractOperationNameFromClassName()
         ];
     }
 
@@ -81,32 +71,26 @@ class SearchCriterion implements SearchCriteria, \JsonSerializable
                 continue;
             }
 
-            $matches = false;
-            switch ($this->operation) {
-                case '=':
-                    $matches = $searchDocumentField->getValue() == $this->fieldValue;
-                    break;
-                case '!=':
-                    $matches = $searchDocumentField->getValue() != $this->fieldValue;
-                    break;
-                case '>':
-                    $matches = $searchDocumentField->getValue() > $this->fieldValue;
-                    break;
-                case '>=':
-                    $matches = $searchDocumentField->getValue() >= $this->fieldValue;
-                    break;
-                case '<':
-                    $matches = $searchDocumentField->getValue() < $this->fieldValue;
-                    break;
-                case '<=':
-                    $matches = $searchDocumentField->getValue() <= $this->fieldValue;
-            }
-
-            if (true === $matches) {
+            if ($this->hasValueMatchingOperator($searchDocumentField->getValue(), $this->fieldValue)) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * @param string $searchDocumentFieldValue
+     * @param string $criterionValue
+     * @return bool
+     */
+    abstract protected function hasValueMatchingOperator($searchDocumentFieldValue, $criterionValue);
+
+    /**
+     * @return string
+     */
+    private function extractOperationNameFromClassName()
+    {
+        return preg_replace('/.*\\SearchCriterion/', '', get_called_class());
     }
 }
