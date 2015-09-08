@@ -13,10 +13,12 @@ use Brera\Utils\LocalFilesystem;
  * @uses   \Brera\Context\VersionedContext
  * @uses   \Brera\Context\WebsiteContextDecorator
  * @uses   \Brera\DataVersion
- * @uses   \Brera\DataPool\SearchEngine\SearchCriterion
+ * @uses   \Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion
  * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocument
+ * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection
  * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField
  * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection
+ * @uses   \Brera\Product\ProductId
  * @uses   \Brera\Utils\LocalFileSystem
  */
 class FileSearchEngineTest extends AbstractSearchEngineTest
@@ -36,12 +38,6 @@ class FileSearchEngineTest extends AbstractSearchEngineTest
     {
         $this->setExpectedException(SearchEngineNotAvailableException::class);
         FileSearchEngine::create('non-existing-path');
-    }
-
-    public function testSearchEngineInterfaceIsImplemented()
-    {
-        $searchEngine = $this->createSearchEngineInstance();
-        $this->assertInstanceOf(SearchEngine::class, $searchEngine);
     }
 
     /**

@@ -1,0 +1,19 @@
+<?php
+/**
+ * @var \Brera\Product\Block\FilterNavigationBlock $this
+ * @var \Brera\Product\FilterNavigationFilter $filter
+ * @var \Brera\Product\FilterNavigationFilterOption $filterOption
+ */
+?>
+<?php foreach ($this->getFilterCollection() as $filter) : ?>
+<div id="productListFilter">
+    <div class="block-title roundedBorder expanded" id="filter-title-brand"><?= $filter->getCode() ?></div>
+    <ol class="filter-content scroll-pane">
+        <?php foreach ($filter->getOptionCollection() as $filterOption) : ?>
+            <li<?php if ($filterOption->isSelected()) : ?> class="active"<?php endif ?>>
+                <a href="<?php /* TODO: Insert base URL */ ?>?<?= $this->getQueryStringForFilterSelection($filterOption) ?>"><?= $filterOption->getValue() ?> (<?= $filterOption->getCount() ?>)</a>
+            </li>
+        <?php endforeach ?>
+    </ol>
+</div>
+<?php endforeach ?>

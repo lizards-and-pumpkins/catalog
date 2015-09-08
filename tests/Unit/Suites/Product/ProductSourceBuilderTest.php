@@ -6,7 +6,6 @@ namespace Brera\Product;
  * @covers \Brera\Product\ProductSourceBuilder
  * @uses   \Brera\Product\ProductSource
  * @uses   \Brera\Product\ProductId
- * @uses   \Brera\Product\SampleSku
  * @uses   \Brera\Utils\XPathParser
  * @uses   \Brera\Product\ProductAttribute
  * @uses   \Brera\Product\ProductAttributeList
@@ -53,7 +52,7 @@ class ProductSourceBuilderTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \DOMElement $firstNode */
         $firstNode = $this->domDocument->getElementsByTagName('product')->item(0);
-        $expectedSku = $firstNode->attributes->getNamedItem('sku')->nodeValue;
+        $expectedProductId = $firstNode->attributes->getNamedItem('sku')->nodeValue;
         $expectedAttribute = $firstNode->getElementsByTagName('special_price')->item(0)->nodeValue;
 
         $firstNodeXml = $this->domDocument->saveXML($firstNode);
@@ -61,7 +60,7 @@ class ProductSourceBuilderTest extends \PHPUnit_Framework_TestCase
         $productSource = $this->builder->createProductSourceFromXml($firstNodeXml);
 
         $this->assertInstanceOf(ProductSource::class, $productSource);
-        $this->assertEquals($expectedSku, $productSource->getId());
+        $this->assertEquals($expectedProductId, $productSource->getId());
         $this->assertFirstProductAttributeInAListValueEquals($expectedAttribute, $productSource, 'special_price');
     }
 

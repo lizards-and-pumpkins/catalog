@@ -23,6 +23,7 @@ use Brera\Product\CatalogImportApiV1PutRequestHandler;
  * @uses   \Brera\Content\ContentBlocksApiV1PutRequestHandler
  * @uses   \Brera\Context\ContextBuilder
  * @uses   \Brera\Product\CatalogImportApiV1PutRequestHandler
+ * @uses   \Brera\Product\FilterNavigationFilterCollection
  * @uses   \Brera\Http\GenericHttpRouter
  * @uses   \Brera\Product\ProductDetailViewRequestHandler
  * @uses   \Brera\Product\ProductListingRequestHandler
@@ -36,6 +37,7 @@ use Brera\Product\CatalogImportApiV1PutRequestHandler;
  * @uses   \Brera\SnippetKeyGeneratorLocator
  * @uses   \Brera\GenericSnippetKeyGenerator
  * @uses   \Brera\PageBuilder
+ * @uses   \Brera\Renderer\BlockRenderer
  * @uses   \Brera\TemplatesApiV1PutRequestHandler
  * @uses   \Brera\Product\ProductListingSourceListBuilder
  * @uses   \Brera\Utils\Directory

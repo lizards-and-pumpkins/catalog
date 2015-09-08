@@ -21,6 +21,30 @@ class SampleFactory implements Factory
     use FactoryTrait;
 
     /**
+     * @return string[]
+     */
+    public function getSearchableAttributeCodes()
+    {
+        return ['name', 'category', 'brand'];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getProductListingFilterNavigationAttributeCodes()
+    {
+        return ['brand', 'gender'];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getProductSearchResultsFilterNavigationAttributeCodes()
+    {
+        return ['brand', 'category', 'gender'];
+    }
+
+    /**
      * @return FileKeyValueStore
      */
     public function createKeyValueStore()
@@ -87,14 +111,6 @@ class SampleFactory implements Factory
         $this->createDirectoryIfNotExists($searchEngineStoragePath);
 
         return FileSearchEngine::create($searchEngineStoragePath);
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getSearchableAttributeCodes()
-    {
-        return ['name', 'category', 'brand'];
     }
 
     /**

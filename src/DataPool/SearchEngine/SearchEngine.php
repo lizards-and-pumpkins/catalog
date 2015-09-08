@@ -3,6 +3,7 @@
 namespace Brera\DataPool\SearchEngine;
 
 use Brera\Context\Context;
+use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 
@@ -23,14 +24,14 @@ interface SearchEngine
     /**
      * @param string $queryString
      * @param Context $context
-     * @return string[]
+     * @return SearchDocumentCollection
      */
     public function query($queryString, Context $context);
 
     /**
      * @param SearchCriteria $criteria
      * @param Context $context
-     * @return string[]
+     * @return SearchDocumentCollection
      */
-    public function getContentOfSearchDocumentsMatchingCriteria(SearchCriteria $criteria, Context $context);
+    public function getSearchDocumentsMatchingCriteria(SearchCriteria $criteria, Context $context);
 }

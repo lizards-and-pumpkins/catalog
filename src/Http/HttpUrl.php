@@ -97,7 +97,7 @@ class HttpUrl
 
     /**
      * @param string $parameterName
-     * @return string
+     * @return string|null
      */
     public function getQueryParameter($parameterName)
     {

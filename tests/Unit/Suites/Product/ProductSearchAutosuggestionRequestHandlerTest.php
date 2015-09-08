@@ -4,10 +4,11 @@ namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
 use Brera\Http\HttpResponse;
-use Brera\Http\HttpUrl;
 use Brera\Http\UnableToHandleRequestException;
 use Brera\PageBuilder;
 use Brera\SnippetKeyGenerator;
@@ -19,11 +20,6 @@ use Brera\SnippetKeyGeneratorLocator;
  */
 class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var HttpUrl|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubHttpUrl;
-
     /**
      * @var PageBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -51,10 +47,23 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
     {
         $urlString = ProductSearchAutosuggestionRequestHandler::SEARCH_RESULTS_SLUG;
         $this->stubHttpRequest->method('getUrlPathRelativeToWebFront')->willReturn($urlString);
-        $this->stubHttpUrl->method('getQueryParameter')
+        $this->stubHttpRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
+        $this->stubHttpRequest->method('getQueryParameter')
             ->with(ProductSearchAutosuggestionRequestHandler::QUERY_STRING_PARAMETER_NAME)
             ->willReturn($queryString);
-        $this->stubHttpRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubSearchDocumentCollection()
+    {
+        $stubSearchDocument = $this->getMock(SearchDocument::class, [], [], '', false);
+        $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
+        $stubSearchDocumentCollection->method('getDocuments')->willReturn([$stubSearchDocument]);
+        $stubSearchDocumentCollection->method('count')->willReturn(1);
+
+        return $stubSearchDocumentCollection;
     }
 
     protected function setUp()
@@ -65,22 +74,20 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
         $this->stubDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
         $this->mockPageBuilder = $this->getMock(PageBuilder::class, [], [], '', false);
 
-        $mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $stubSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
 
-        /** @var SnippetKeyGeneratorLocator|\PHPUnit_Framework_MockObject_MockObject $mockSnippetKeyGeneratorLocator */
-        $mockSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
-        $mockSnippetKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')->willReturn($mockSnippetKeyGenerator);
+        /** @var SnippetKeyGeneratorLocator|\PHPUnit_Framework_MockObject_MockObject $stubSnippetKeyGeneratorLocator */
+        $stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
+        $stubSnippetKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')->willReturn($stubSnippetKeyGenerator);
 
         $this->requestHandler = new ProductSearchAutosuggestionRequestHandler(
             $stubContext,
             $this->stubDataPoolReader,
             $this->mockPageBuilder,
-            $mockSnippetKeyGeneratorLocator
+            $stubSnippetKeyGeneratorLocator
         );
 
-        $this->stubHttpUrl = $this->getMock(HttpUrl::class, [], [], '', false);
         $this->stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
-        $this->stubHttpRequest->method('getUrl')->willReturn($this->stubHttpUrl);
     }
 
     public function testHttpRequestHandlerInterfaceIsImplemented()
@@ -91,7 +98,7 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
     public function testRequestCanNotBeProcessedIfRequestUrlIsNotEqualToSearchAutosuggestionUrl()
     {
         $urlString = 'foo';
-        $this->stubHttpUrl->method('getPathRelativeToWebFront')->willReturn($urlString);
+        $this->stubHttpRequest->method('getUrlPathRelativeToWebFront')->willReturn($urlString);
         $this->stubHttpRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
         $this->stubHttpRequest->method('getQueryParameter')
             ->with(ProductSearchAutosuggestionRequestHandler::QUERY_STRING_PARAMETER_NAME)
@@ -103,7 +110,7 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
     public function testRequestCanNotBeProcessedIfRequestMethodIsNotGet()
     {
         $urlString = ProductSearchAutosuggestionRequestHandler::SEARCH_RESULTS_SLUG;
-        $this->stubHttpUrl->method('getPathRelativeToWebFront')->willReturn($urlString);
+        $this->stubHttpRequest->method('getUrlPathRelativeToWebFront')->willReturn($urlString);
         $this->stubHttpRequest->method('getMethod')->willReturn(HttpRequest::METHOD_POST);
         $this->stubHttpRequest->method('getQueryParameter')
             ->with(ProductSearchAutosuggestionRequestHandler::QUERY_STRING_PARAMETER_NAME)
@@ -155,9 +162,32 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
             'page_snippet_codes' => ['foo']
         ];
         $this->stubDataPoolReader->method('getSnippet')->willReturn(json_encode($metaSnippetContent));
-        $this->stubDataPoolReader->method('getSearchResults')->willReturn([]);
+        $this->stubDataPoolReader->method('getSnippets')->willReturn([]);
+
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection();
+        $this->stubDataPoolReader->method('getSearchResults')->willReturn($stubSearchDocumentCollection);
 
         $this->assertInstanceOf(HttpResponse::class, $this->requestHandler->process($this->stubHttpRequest));
+    }
+
+    public function testNoSnippetsAreAddedToPageBuilderIfNoSearchResultsAreReturned()
+    {
+        $queryString = 'foo';
+        $this->prepareStubHttpRequest($queryString);
+
+        $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
+        $stubSearchDocumentCollection->method('count')->willReturn(0);
+
+        $this->stubDataPoolReader->method('getSearchResults')->willReturn($stubSearchDocumentCollection);
+
+        $metaSnippetContent = [
+            'root_snippet_code'  => 'foo',
+            'page_snippet_codes' => ['foo']
+        ];
+        $this->stubDataPoolReader->method('getSnippet')->willReturn(json_encode($metaSnippetContent));
+        $this->stubDataPoolReader->expects($this->never())->method('getSnippets');
+
+        $this->requestHandler->process($this->stubHttpRequest);
     }
 
     public function testSearchResultsAreAddedToPageBuilder()
@@ -165,7 +195,8 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
         $queryString = 'foo';
         $this->prepareStubHttpRequest($queryString);
 
-        $this->stubDataPoolReader->method('getSearchResults')->willReturn(['product_in_listing_id']);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection();
+        $this->stubDataPoolReader->method('getSearchResults')->willReturn($stubSearchDocumentCollection);
 
         $metaSnippetContent = [
             'root_snippet_code'  => 'foo',

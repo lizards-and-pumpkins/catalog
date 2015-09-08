@@ -11,7 +11,6 @@ use Brera\Product\ProductInSearchAutosuggestionSnippetRenderer;
 use Brera\Product\ProductSearchAutosuggestionMetaSnippetRenderer;
 use Brera\Product\ProductSearchAutosuggestionRequestHandler;
 use Brera\Product\ProductSearchAutosuggestionSnippetRenderer;
-use Brera\Product\SampleSku;
 
 class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
 {
@@ -94,8 +93,7 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
     {
         $this->importCatalog();
 
-        $sku = SampleSku::fromString('118235-251');
-        $productId = ProductId::fromSku($sku);
+        $productId = ProductId::fromString('118235-251');
         $productName = 'LED Arm-Signallampe';
 
         $contextSource = $this->factory->createContextSource();

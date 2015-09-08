@@ -4,6 +4,8 @@ namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
 use Brera\Http\HttpResponse;
@@ -68,14 +70,14 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
             throw new UnableToHandleRequestException(sprintf('Unable to process request with handler %s', __CLASS__));
         }
 
-        $searchQueryString = $request->getUrl()->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
-        $productIds = $this->dataPoolReader->getSearchResults($searchQueryString, $this->context);
+        $searchQueryString = $request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
+        $searchDocumentsCollection = $this->dataPoolReader->getSearchResults($searchQueryString, $this->context);
 
-        $this->addSearchResultsToPageBuilder($productIds);
+        $this->addSearchResultsToPageBuilder($searchDocumentsCollection);
 
         $metaInfoSnippetContent = $this->getMetaInfoSnippetContent();
 
-        $this->addTotalNumberOfResultsSnippetToPageBuilder(count($productIds));
+        $this->addTotalNumberOfResultsSnippetToPageBuilder(count($searchDocumentsCollection));
         $this->addSearchQueryStringSnippetToPageBuilder($searchQueryString);
 
         $keyGeneratorParams = [];
@@ -99,7 +101,7 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
             return false;
         }
 
-        $searchQueryString = $request->getUrl()->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
+        $searchQueryString = $request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
 
         if (null === $searchQueryString || self::SEARCH_QUERY_MINIMUM_LENGTH > strlen($searchQueryString)) {
             return false;
@@ -108,22 +110,13 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
         return true;
     }
 
-    /**
-     * @param string[] $productIds
-     */
-    private function addSearchResultsToPageBuilder(array $productIds)
+    private function addSearchResultsToPageBuilder(SearchDocumentCollection $searchDocumentCollection)
     {
-        if (empty($productIds)) {
+        if (0 === count($searchDocumentCollection)) {
             return;
         }
 
-        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
-            ProductInSearchAutosuggestionSnippetRenderer::CODE
-        );
-        $productInAutosuggestionSnippetKeys = array_map(function ($productId) use ($keyGenerator) {
-            return $keyGenerator->getKeyForContext($this->context, ['product_id' => $productId]);
-        }, $productIds);
-
+        $productInAutosuggestionSnippetKeys = $this->getProductInAutosuggestionSnippetKeys($searchDocumentCollection);
         $snippetKeyToContentMap = $this->dataPoolReader->getSnippets($productInAutosuggestionSnippetKeys);
         $snippetCodeToKeyMap = $this->getProductInAutosuggestionSnippetCodeToKeyMap(
             $productInAutosuggestionSnippetKeys
@@ -191,5 +184,20 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
         $metaInfoSnippetJson = $this->dataPoolReader->getSnippet($metaInfoSnippetKey);
 
         return ProductSearchAutosuggestionMetaSnippetContent::fromJson($metaInfoSnippetJson);
+    }
+
+    /**
+     * @param SearchDocumentCollection $searchDocumentCollection
+     * @return string[]
+     */
+    private function getProductInAutosuggestionSnippetKeys(SearchDocumentCollection $searchDocumentCollection)
+    {
+        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
+            ProductInSearchAutosuggestionSnippetRenderer::CODE
+        );
+
+        return array_map(function (SearchDocument $searchDocument) use ($keyGenerator) {
+            return $keyGenerator->getKeyForContext($this->context, ['product_id' => $searchDocument->getProductId()]);
+        }, $searchDocumentCollection->getDocuments());
     }
 }

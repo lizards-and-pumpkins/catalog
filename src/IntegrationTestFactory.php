@@ -43,6 +43,30 @@ class IntegrationTestFactory implements Factory
     private $searchEngine;
     
     /**
+     * @return string[]
+     */
+    public function getSearchableAttributeCodes()
+    {
+        return ['name', 'category', 'brand'];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getProductListingFilterNavigationAttributeCodes()
+    {
+        return ['brand', 'gender'];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getProductSearchResultsFilterNavigationAttributeCodes()
+    {
+        return ['brand', 'category', 'gender'];
+    }
+
+    /**
      * @return InMemoryKeyValueStore
      */
     public function createKeyValueStore()
@@ -80,14 +104,6 @@ class IntegrationTestFactory implements Factory
     public function createSearchEngine()
     {
         return new InMemorySearchEngine();
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getSearchableAttributeCodes()
-    {
-        return ['name', 'category', 'brand'];
     }
 
     /**

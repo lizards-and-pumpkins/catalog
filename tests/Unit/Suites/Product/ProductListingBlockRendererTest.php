@@ -24,10 +24,4 @@ class ProductListingBlockRendererTest extends AbstractBlockRendererTest
     ) {
         return new ProductListingBlockRenderer($stubThemeLocator, $stubBlockStructure);
     }
-
-    public function testLayoutHandleIsReturned()
-    {
-        $result = $this->getBlockRenderer()->getLayoutHandle();
-        $this->assertEquals('product_listing', $result);
-    }
 }

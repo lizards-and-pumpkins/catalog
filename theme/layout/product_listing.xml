@@ -5,7 +5,7 @@
         <block name="head" class="Brera\Renderer\Block" template="theme/template/head.phtml" />
         <block name="header" class="Brera\Renderer\Block" template="theme/template/header.phtml" />
         <block name="left" class="Brera\Renderer\Block" template="theme/template/left.phtml" />
-        <block name="content" class="Brera\Product\Block\ProductListingPageBlock" template="theme/template/list.phtml" />
+        <block name="content" class="Brera\Renderer\Block" template="theme/template/list.phtml" />
         <block name="footer" class="Brera\Renderer\Block" template="theme/template/footer.phtml" />
     </block>
 </snippet>
