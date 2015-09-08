@@ -82,7 +82,9 @@ class ProductListingMetaInfoSourceBuilder
             return CompositeSearchCriterion::createOr($criterionArray);
         }
 
-        throw new InvalidConditionXmlAttributeException('Invalid "condition" attribute value in product listing XML.');
+        throw new InvalidConditionXmlAttributeException(sprintf(
+            '"condition" attribute value "%s" in product listing XML is invalid.', $criteriaCondition[0]['value']
+        ));
     }
 
     /**
