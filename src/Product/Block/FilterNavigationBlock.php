@@ -29,13 +29,11 @@ class FilterNavigationBlock extends Block
     {
         $dataObject = $this->getDataObject();
         if (!($dataObject instanceof FilterNavigationFilterCollection)) {
-            throw new InvalidDataObjectException(
-                sprintf(
-                    'Data object must be instance of %s, got "%s".',
-                    FilterNavigationFilterCollection::class,
-                    $this->getVariableType($dataObject)
-                )
-            );
+            throw new InvalidDataObjectException(sprintf(
+                'Data object must be instance of %s, got "%s".',
+                FilterNavigationFilterCollection::class,
+                $this->getVariableType($dataObject)
+            ));
         }
     }
 
