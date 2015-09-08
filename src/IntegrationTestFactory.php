@@ -10,6 +10,7 @@ use Brera\Image\ImageMagickResizeStrategy;
 use Brera\Image\ImageProcessor;
 use Brera\Image\ImageProcessorCollection;
 use Brera\Image\ImageProcessingStrategySequence;
+use Brera\Log\InMemoryLogger;
 use Brera\Queue\InMemory\InMemoryQueue;
 use Brera\Queue\Queue;
 
@@ -41,6 +42,30 @@ class IntegrationTestFactory implements Factory
      */
     private $searchEngine;
     
+    /**
+     * @return string[]
+     */
+    public function getSearchableAttributeCodes()
+    {
+        return ['name', 'category', 'brand'];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getProductListingFilterNavigationAttributeCodes()
+    {
+        return ['brand', 'gender'];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getProductSearchResultsFilterNavigationAttributeCodes()
+    {
+        return ['brand', 'category', 'gender'];
+    }
+
     /**
      * @return InMemoryKeyValueStore
      */
@@ -79,14 +104,6 @@ class IntegrationTestFactory implements Factory
     public function createSearchEngine()
     {
         return new InMemorySearchEngine();
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getSearchableAttributeCodes()
-    {
-        return ['name', 'category', 'brand'];
     }
 
     /**

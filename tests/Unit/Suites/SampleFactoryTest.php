@@ -9,15 +9,18 @@ use Brera\Image\ImageProcessorCollection;
 use Brera\Image\ImageProcessingStrategySequence;
 use Brera\LocalFilesystemStorageReader;
 use Brera\LocalFilesystemStorageWriter;
+use Brera\Log\Writer\FileLogMessageWriter;
+use Brera\Log\WritingLoggerDecorator;
 use Brera\Queue\File\FileQueue;
 use Brera\SampleMasterFactory;
 use Brera\SampleFactory;
-use Brera\InMemoryLogger;
 
 /**
  * @covers \Brera\SampleFactory
  * @uses   \Brera\FactoryTrait
- * @uses   \Brera\InMemoryLogger
+ * @uses   \Brera\Log\InMemoryLogger
+ * @uses   \Brera\Log\WritingLoggerDecorator
+ * @uses   \Brera\Log\Writer\FileLogMessageWriter
  * @uses   \Brera\DataPool\KeyValue\File\FileKeyValueStore
  * @uses   \Brera\DataPool\SearchEngine\FileSearchEngine
  * @uses   \Brera\Image\ImageMagickInscribeStrategy
@@ -77,14 +80,38 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(FileQueue::class, $this->factory->createCommandQueue());
     }
 
-    public function testInMemoryLoggerIsReturned()
+    public function testWritingLoggerIsReturned()
     {
-        $this->assertInstanceOf(InMemoryLogger::class, $this->factory->createLogger());
+        $this->assertInstanceOf(WritingLoggerDecorator::class, $this->factory->createLogger());
+    }
+
+    public function testLogMessageWriterIsReturned()
+    {
+        $this->assertInstanceOf(FileLogMessageWriter::class, $this->factory->createLogMessageWriter());
     }
 
     public function testArrayOfSearchableAttributeCodesIsReturned()
     {
-        $this->assertInternalType('array', $this->factory->getSearchableAttributeCodes());
+        $result = $this->factory->getSearchableAttributeCodes();
+
+        $this->assertInternalType('array', $result);
+        $this->assertContainsOnly('string', $result);
+    }
+
+    public function testArrayOfProductListingFilterNavigationAttributeCodesIsReturned()
+    {
+        $result = $this->factory->getProductListingFilterNavigationAttributeCodes();
+
+        $this->assertInternalType('array', $result);
+        $this->assertContainsOnly('string', $result);
+    }
+
+    public function testArrayOfProductSearchResultsFilterNavigationAttributeCodesIsReturned()
+    {
+        $result = $this->factory->getProductSearchResultsFilterNavigationAttributeCodes();
+
+        $this->assertInternalType('array', $result);
+        $this->assertContainsOnly('string', $result);
     }
 
     public function testImageProcessorCollectionIsReturned()

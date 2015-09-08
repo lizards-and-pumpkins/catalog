@@ -3,8 +3,7 @@
 namespace Brera\DataPool\SearchEngine\SearchDocument;
 
 use Brera\Context\Context;
-use Brera\DataPool\SearchEngine\SearchCriteria;
-use Brera\DataPool\SearchEngine\SearchCriterion;
+use Brera\Product\ProductId;
 
 class SearchDocument
 {
@@ -19,20 +18,15 @@ class SearchDocument
     private $context;
 
     /**
-     * @var string
+     * @var ProductId
      */
-    private $content;
+    private $productId;
 
-    /**
-     * @param SearchDocumentFieldCollection $fields
-     * @param Context $context
-     * @param string $content
-     */
-    public function __construct(SearchDocumentFieldCollection $fields, Context $context, $content)
+    public function __construct(SearchDocumentFieldCollection $fields, Context $context, ProductId $productId)
     {
         $this->fields = $fields;
         $this->context = $context;
-        $this->content = (string) $content;
+        $this->productId = $productId;
     }
 
     /**
@@ -52,46 +46,10 @@ class SearchDocument
     }
 
     /**
-     * @return string
+     * @return ProductId
      */
-    public function getContent()
+    public function getProductId()
     {
-        return $this->content;
-    }
-
-    /**
-     * @param SearchCriteria $criteria
-     * @return bool
-     */
-    public function isMatchingCriteria(SearchCriteria $criteria)
-    {
-        $isMatching = false;
-
-        foreach ($criteria->getCriteria() as $criterion) {
-            $isMatching = $this->hasMatchingField($criterion);
-
-            if (($criteria->hasOrCondition() && $isMatching) || ($criteria->hasAndCondition() && !$isMatching)) {
-                return $isMatching;
-            }
-        }
-
-        return $isMatching;
-    }
-
-    /**
-     * @param SearchCriterion $criterion
-     * @return bool
-     */
-    private function hasMatchingField(SearchCriterion $criterion)
-    {
-        $isMatching = false;
-
-        foreach ($this->fields->getFields() as $field) {
-            if ($isMatching = $criterion->matches($field)) {
-                return $isMatching;
-            }
-        }
-
-        return $isMatching;
+        return $this->productId;
     }
 }

@@ -16,7 +16,7 @@ interface Queue extends \Countable
 
     /**
      * @param mixed $data
-     * @return null
+     * @return void
      */
     public function add($data);
 

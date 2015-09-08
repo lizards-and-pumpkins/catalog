@@ -2,7 +2,7 @@
 
 namespace Brera\Product;
 
-use Brera\DataPool\SearchEngine\SearchCriteria;
+use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use Brera\UrlKey;
 
 class ProductListingMetaInfoSource

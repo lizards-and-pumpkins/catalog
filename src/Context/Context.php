@@ -31,4 +31,10 @@ interface Context
      * @return bool
      */
     public function supportsCode($code);
+
+    /**
+     * @param Context $otherContext
+     * @return bool
+     */
+    public function isSubsetOf(Context $otherContext);
 }

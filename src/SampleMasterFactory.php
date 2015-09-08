@@ -2,6 +2,8 @@
 
 namespace Brera;
 
+use Brera\Log\InMemoryLogger;
+
 /**
  * @method DataPool\DataPoolWriter createDataPoolWriter
  * @method DataPool\DataPoolReader createDataPoolReader
@@ -25,6 +27,9 @@ namespace Brera;
  * @method GenericSnippetKeyGenerator createProductSearchAutosuggestionMetaSnippetKeyGenerator
  * @method string[] getRequiredContexts
  * @method Product\ProductSourceBuilder createProductSourceBuilder
+ * @method Product\FilterNavigationBlockRenderer createFilterNavigationBlockRenderer
+ * @method Context\Context createContext
+ * @method Product\FilterNavigationFilterCollection createFilterNavigationFilterCollection
  */
 class SampleMasterFactory implements MasterFactory
 {

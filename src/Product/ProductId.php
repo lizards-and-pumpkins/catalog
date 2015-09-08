@@ -22,15 +22,19 @@ class ProductId
      */
     public function __toString()
     {
-        return (string) $this->id;
+        return (string)$this->id;
     }
 
     /**
-     * @param Sku $sku
+     * @param string $productId
      * @return ProductId
      */
-    public static function fromSku(Sku $sku)
+    public static function fromString($productId)
     {
-        return new ProductId((string) $sku);
+        if (!is_string($productId)) {
+            throw new InvalidProductIdException(sprintf('Can not create product ID from %s.', gettype($productId)));
+        }
+
+        return new ProductId((string) $productId);
     }
 }

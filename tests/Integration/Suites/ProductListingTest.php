@@ -2,8 +2,8 @@
 
 namespace Brera;
 
-use Brera\DataPool\SearchEngine\SearchCriteria;
-use Brera\DataPool\SearchEngine\SearchCriterion;
+use Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
+use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
 use Brera\Http\HttpHeaders;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestBody;
@@ -15,7 +15,7 @@ use Brera\Utils\XPathParser;
 
 class ProductListingTest extends AbstractIntegrationTest
 {
-    private $testUrl = 'http://example.com/adidas-men-accessories';
+    private $testUrl = 'http://example.com/sale';
 
     /**
      * @var SampleMasterFactory
@@ -91,12 +91,16 @@ class ProductListingTest extends AbstractIntegrationTest
             $this->factory->getSnippetKeyGeneratorLocator(),
             $this->factory->getLogger()
         );
+        $filterNavigationAttributeCodes = [];
 
         return new ProductListingRequestHandler(
             $this->factory->createContext(),
             $dataPoolReader,
             $pageBuilder,
-            $this->factory->getSnippetKeyGeneratorLocator()
+            $this->factory->getSnippetKeyGeneratorLocator(),
+            $this->factory->createFilterNavigationBlockRenderer(),
+            $this->factory->createFilterNavigationFilterCollection(),
+            $filterNavigationAttributeCodes
         );
     }
 
@@ -105,11 +109,9 @@ class ProductListingTest extends AbstractIntegrationTest
      */
     private function getStubMetaInfo()
     {
-        $searchCriterion1 = SearchCriterion::create('category', 'men-accessories', '=');
-        $searchCriterion2 = SearchCriterion::create('brand', 'Adidas', '=');
-        $searchCriteria = SearchCriteria::createAnd();
-        $searchCriteria->add($searchCriterion1);
-        $searchCriteria->add($searchCriterion2);
+        $searchCriterion1 = SearchCriterionEqual::create('category', 'sale');
+        $searchCriterion2 = SearchCriterionEqual::create('brand', 'Adidas');
+        $searchCriteria = CompositeSearchCriterion::createAnd($searchCriterion1, $searchCriterion2);
 
         $pageSnippetCodes = [
             'global_notices',

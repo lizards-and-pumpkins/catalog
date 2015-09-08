@@ -8,12 +8,41 @@ use Brera\Image\ImageMagickInscribeStrategy;
 use Brera\Image\ImageProcessor;
 use Brera\Image\ImageProcessorCollection;
 use Brera\Image\ImageProcessingStrategySequence;
+use Brera\Log\InMemoryLogger;
+use Brera\Log\Logger;
+use Brera\Log\Writer\FileLogMessageWriter;
+use Brera\Log\Writer\LogMessageWriter;
+use Brera\Log\WritingLoggerDecorator;
 use Brera\Queue\File\FileQueue;
-use Brera\Queue\InMemory\InMemoryQueue;
+use Brera\Queue\Queue;
 
 class SampleFactory implements Factory
 {
     use FactoryTrait;
+
+    /**
+     * @return string[]
+     */
+    public function getSearchableAttributeCodes()
+    {
+        return ['name', 'category', 'brand'];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getProductListingFilterNavigationAttributeCodes()
+    {
+        return ['brand', 'gender'];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getProductSearchResultsFilterNavigationAttributeCodes()
+    {
+        return ['brand', 'category', 'gender'];
+    }
 
     /**
      * @return FileKeyValueStore
@@ -27,7 +56,7 @@ class SampleFactory implements Factory
     }
 
     /**
-     * @return InMemoryQueue
+     * @return Queue
      */
     public function createEventQueue()
     {
@@ -37,7 +66,7 @@ class SampleFactory implements Factory
     }
 
     /**
-     * @return InMemoryQueue
+     * @return Queue
      */
     public function createCommandQueue()
     {
@@ -47,11 +76,30 @@ class SampleFactory implements Factory
     }
 
     /**
-     * @return InMemoryLogger
+     * @return Logger
      */
     public function createLogger()
     {
-        return new InMemoryLogger();
+        return new WritingLoggerDecorator(
+            new InMemoryLogger(),
+            $this->getMasterFactory()->createLogMessageWriter()
+        );
+    }
+
+    /**
+     * @return LogMessageWriter
+     */
+    public function createLogMessageWriter()
+    {
+        return new FileLogMessageWriter($this->getMasterFactory()->getLogFilePathConfig());
+    }
+
+    /**
+     * @return string
+     */
+    public function getLogFilePathConfig()
+    {
+        return __DIR__ . '/../log/system.log';
     }
 
     /**
@@ -63,14 +111,6 @@ class SampleFactory implements Factory
         $this->createDirectoryIfNotExists($searchEngineStoragePath);
 
         return FileSearchEngine::create($searchEngineStoragePath);
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getSearchableAttributeCodes()
-    {
-        return ['name', 'category', 'brand'];
     }
 
     /**

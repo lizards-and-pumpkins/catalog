@@ -2,8 +2,8 @@
 
 namespace Brera\Product;
 
-use Brera\DataPool\SearchEngine\SearchCriteria;
-use Brera\DataPool\SearchEngine\SearchCriterion;
+use Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
+use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
 use Brera\UrlKey;
 use Brera\Utils\XPathParser;
 
@@ -24,15 +24,11 @@ class ProductListingMetaInfoSourceBuilder
         $xmlNodeAttributes = $parser->getXmlNodesArrayByXPath('/listing/@*');
         $contextData = $this->getFormattedContextData($xmlNodeAttributes);
 
-        $criteriaConditionNodes = $parser->getXmlNodesArrayByXPath('/listing/@condition');
-        $criteria = $this->createSearchCriteria($criteriaConditionNodes);
-
         $criteriaNodes = $parser->getXmlNodesArrayByXPath('/listing/*');
+        $criteriaConditionNodes = $parser->getXmlNodesArrayByXPath('/listing/@condition');
 
-        foreach ($criteriaNodes as $criterionNode) {
-            $criterion = $this->createCriterion($criterionNode);
-            $criteria->add($criterion);
-        }
+        $criterionArray = array_map([$this, 'createCriterion'], $criteriaNodes);
+        $criteria = $this->createSearchCriteria($criteriaConditionNodes, ...$criterionArray);
 
         return new ProductListingMetaInfoSource($urlKey, $contextData, $criteria);
     }
@@ -44,7 +40,7 @@ class ProductListingMetaInfoSourceBuilder
     private function getUrlKeyStringFromDomNodeArray(array $urlKeyAttributeNode)
     {
         if (empty($urlKeyAttributeNode)) {
-            throw new MissingUrlKeyXmlAttributeException();
+            throw new MissingUrlKeyXmlAttributeException('"url_key" attribute is missing in product listing XML.');
         }
 
         return $urlKeyAttributeNode[0]['value'];
@@ -69,23 +65,26 @@ class ProductListingMetaInfoSourceBuilder
 
     /**
      * @param array[] $criteriaCondition
-     * @return SearchCriteria
+     * @param SearchCriterion|SearchCriterion[] $criterionArray
+     * @return CompositeSearchCriterion
      */
-    private function createSearchCriteria(array $criteriaCondition)
+    private function createSearchCriteria(array $criteriaCondition, SearchCriterion ...$criterionArray)
     {
         if (empty($criteriaCondition)) {
-            throw new MissingConditionXmlAttributeException;
+            throw new MissingConditionXmlAttributeException('Missing "condition" attribute in product listing XML.');
         }
 
-        if (SearchCriteria::AND_CONDITION === $criteriaCondition[0]['value']) {
-            return SearchCriteria::createAnd();
+        if (CompositeSearchCriterion::AND_CONDITION === $criteriaCondition[0]['value']) {
+            return CompositeSearchCriterion::createAnd(...$criterionArray);
         }
 
-        if (SearchCriteria::OR_CONDITION === $criteriaCondition[0]['value']) {
-            return SearchCriteria::createOr();
+        if (CompositeSearchCriterion::OR_CONDITION === $criteriaCondition[0]['value']) {
+            return CompositeSearchCriterion::createOr(...$criterionArray);
         }
 
-        throw new InvalidConditionXmlAttributeException;
+        throw new InvalidConditionXmlAttributeException(sprintf(
+            '"condition" attribute value "%s" in product listing XML is invalid.', $criteriaCondition[0]['value']
+        ));
     }
 
     /**
@@ -94,14 +93,37 @@ class ProductListingMetaInfoSourceBuilder
      */
     private function createCriterion(array $criterionNode)
     {
+        $this->validateSearchCriterionMetaInfo($criterionNode);
+
+        $className = $this->getCriterionClassNameForOperation($criterionNode['attributes']['operation']);
+
+        return call_user_func([$className, 'create'], $criterionNode['nodeName'], $criterionNode['value']);
+    }
+
+    /**
+     * @param array[] $criterionNode
+     */
+    private function validateSearchCriterionMetaInfo(array $criterionNode)
+    {
         if (!isset($criterionNode['attributes']['operation'])) {
-            throw new MissingCriterionOperationXmlAttributeException();
+            throw new MissingCriterionOperationXmlAttributeException(
+                'Missing "operation" attribute in product listing condition XML node.'
+            );
         }
 
-        return SearchCriterion::create(
-            $criterionNode['nodeName'],
-            $criterionNode['value'],
-            $criterionNode['attributes']['operation']
-        );
+        if (!class_exists($this->getCriterionClassNameForOperation($criterionNode['attributes']['operation']))) {
+            throw new InvalidCriterionOperationXmlAttributeException(
+                sprintf('Unknown criterion operation "%s"', $criterionNode['attributes']['operation'])
+            );
+        }
+    }
+
+    /**
+     * @param string $operationName
+     * @return string
+     */
+    private function getCriterionClassNameForOperation($operationName)
+    {
+        return SearchCriterion::class . $operationName;
     }
 }

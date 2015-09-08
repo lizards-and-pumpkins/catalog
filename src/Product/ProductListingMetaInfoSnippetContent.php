@@ -2,8 +2,9 @@
 
 namespace Brera\Product;
 
-use Brera\DataPool\SearchEngine\SearchCriteria;
-use Brera\DataPool\SearchEngine\SearchCriterion;
+use Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
+use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
+use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
 use Brera\PageMetaInfoSnippetContent;
 
 class ProductListingMetaInfoSnippetContent implements PageMetaInfoSnippetContent
@@ -152,21 +153,17 @@ class ProductListingMetaInfoSnippetContent implements PageMetaInfoSnippetContent
     {
         self::validateSearchCriteriaMetaInfo($metaInfo);
 
-        $criteria = SearchCriteria::createAnd();
-
-        foreach ($metaInfo['criteria'] as $criterionMetaInfo) {
+        $criterionArray = array_map(function (array $criterionMetaInfo) {
             self::validateSearchCriterionMetaInfo($criterionMetaInfo);
 
-            $criterion = SearchCriterion::create(
+            return call_user_func(
+                [self::getCriterionClassNameForOperation($criterionMetaInfo['operation']), 'create'],
                 $criterionMetaInfo['fieldName'],
-                $criterionMetaInfo['fieldValue'],
-                $criterionMetaInfo['operation']
+                $criterionMetaInfo['fieldValue']
             );
+        }, $metaInfo['criteria']);
 
-            $criteria->add($criterion);
-        }
-
-        return $criteria;
+        return CompositeSearchCriterion::createAnd(...$criterionArray);
     }
 
     /**
@@ -199,5 +196,20 @@ class ProductListingMetaInfoSnippetContent implements PageMetaInfoSnippetContent
         if (!isset($criterionArray['operation'])) {
             throw new MalformedSearchCriteriaMetaException('Missing criterion operation.');
         }
+
+        if (!class_exists(self::getCriterionClassNameForOperation($criterionArray['operation']))) {
+            throw new MalformedSearchCriteriaMetaException(
+                sprintf('Unknown criterion operation "%s"', $criterionArray['operation'])
+            );
+        }
+    }
+
+    /**
+     * @param string $operationName
+     * @return string
+     */
+    private static function getCriterionClassNameForOperation($operationName)
+    {
+        return SearchCriterion::class . $operationName;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Brera;
 
+use Brera\Log\Logger;
 use Brera\Queue\Queue;
 
 class CommandConsumer

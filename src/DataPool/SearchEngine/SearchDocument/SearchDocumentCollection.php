@@ -2,7 +2,7 @@
 
 namespace Brera\DataPool\SearchEngine\SearchDocument;
 
-class SearchDocumentCollection
+class SearchDocumentCollection implements \Countable, \IteratorAggregate
 {
     /**
      * @var SearchDocument[]
@@ -20,5 +20,21 @@ class SearchDocumentCollection
     public function getDocuments()
     {
         return $this->documents;
+    }
+
+    /**
+     * @return int
+     */
+    public function count()
+    {
+        return count($this->documents);
+    }
+
+    /**
+     * @return \ArrayIterator
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->documents);
     }
 }

@@ -4,10 +4,11 @@ namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use Brera\DefaultHttpResponse;
 use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestHandler;
-use Brera\Http\HttpUrl;
 use Brera\Http\UnableToHandleRequestException;
 use Brera\PageBuilder;
 use Brera\SnippetKeyGenerator;
@@ -19,11 +20,6 @@ use Brera\SnippetKeyGeneratorLocator;
  */
 class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var HttpUrl|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubHttpUrl;
-
     /**
      * @var PageBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -51,10 +47,10 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $urlString = ProductSearchRequestHandler::SEARCH_RESULTS_SLUG;
         $this->stubHttpRequest->method('getUrlPathRelativeToWebFront')->willReturn($urlString);
-        $this->stubHttpUrl->method('getQueryParameter')
+        $this->stubHttpRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
+        $this->stubHttpRequest->method('getQueryParameter')
             ->with(ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME)
             ->willReturn($queryString);
-        $this->stubHttpRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
     }
 
     protected function setUp()
@@ -78,9 +74,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
             $mockSnippetKeyGeneratorLocator
         );
 
-        $this->stubHttpUrl = $this->getMock(HttpUrl::class, [], [], '', false);
         $this->stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
-        $this->stubHttpRequest->method('getUrl')->willReturn($this->stubHttpUrl);
     }
 
     public function testHttpRequestHandlerInterfaceIsImplemented()
@@ -91,11 +85,8 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
     public function testRequestCanNotBeProcessedIfRequestUrlIsNotEqualToSearchPageUrl()
     {
         $urlString = 'foo';
-        $this->stubHttpUrl->method('getPathRelativeToWebFront')->willReturn($urlString);
+        $this->stubHttpRequest->method('getUrlPathRelativeToWebFront')->willReturn($urlString);
         $this->stubHttpRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->stubHttpRequest->method('getQueryParameter')
-            ->with(ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME)
-            ->willReturn('bar');
 
         $this->assertFalse($this->requestHandler->canProcess($this->stubHttpRequest));
     }
@@ -103,11 +94,8 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
     public function testRequestCanNotBeProcessedIfRequestMethodIsNotGet()
     {
         $urlString = ProductSearchRequestHandler::SEARCH_RESULTS_SLUG;
-        $this->stubHttpUrl->method('getPathRelativeToWebFront')->willReturn($urlString);
+        $this->stubHttpRequest->method('getUrlPathRelativeToWebFront')->willReturn($urlString);
         $this->stubHttpRequest->method('getMethod')->willReturn(HttpRequest::METHOD_POST);
-        $this->stubHttpRequest->method('getQueryParameter')
-            ->with(ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME)
-            ->willReturn('foo');
 
         $this->assertFalse($this->requestHandler->canProcess($this->stubHttpRequest));
     }
@@ -165,7 +153,11 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $queryString = 'foo';
         $this->prepareStubHttpRequest($queryString);
 
-        $this->mockDataPoolReader->method('getSearchResults')->willReturn(['product_in_listing_id']);
+        $stubSearchDocument = $this->getMock(SearchDocument::class, [], [], '', false);
+        $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
+        $stubSearchDocumentCollection->method('getDocuments')->willReturn([$stubSearchDocument]);
+
+        $this->mockDataPoolReader->method('getSearchResults')->willReturn($stubSearchDocumentCollection);
 
         $metaSnippetContent = [
             'root_snippet_code'  => 'foo',

@@ -23,7 +23,10 @@ use Brera\Image\ImageWasUpdatedDomainEventHandler;
 use Brera\Image\ImageProcessorCollection;
 use Brera\Image\UpdateImageCommand;
 use Brera\Image\UpdateImageCommandHandler;
+use Brera\Log\Logger;
 use Brera\Product\DefaultNumberOfProductsPerPageSnippetRenderer;
+use Brera\Product\FilterNavigationBlockRenderer;
+use Brera\Product\FilterNavigationFilterCollection;
 use Brera\Product\PriceSnippetRenderer;
 use Brera\Product\ProductBackOrderAvailabilitySnippetRenderer;
 use Brera\Product\ProductDetailViewBlockRenderer;
@@ -860,7 +863,13 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductSearchDocumentBuilder()
     {
-        return new ProductSearchDocumentBuilder($this->getMasterFactory()->getSearchableAttributeCodes());
+        $indexAttributeCodes = array_merge(
+            $this->getMasterFactory()->getSearchableAttributeCodes(),
+            $this->getMasterFactory()->getProductListingFilterNavigationAttributeCodes(),
+            $this->getMasterFactory()->getProductSearchResultsFilterNavigationAttributeCodes()
+        );
+
+        return new ProductSearchDocumentBuilder($indexAttributeCodes);
     }
 
     /**
@@ -1205,6 +1214,27 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             ProductSearchResultMetaSnippetRenderer::CODE,
             $this->getMasterFactory()->getRequiredContexts(),
             $usedDataParts
+        );
+    }
+
+    /**
+     * @return FilterNavigationBlockRenderer
+     */
+    public function createFilterNavigationBlockRenderer()
+    {
+        return new FilterNavigationBlockRenderer(
+            $this->getMasterFactory()->createThemeLocator(),
+            $this->getMasterFactory()->createBlockStructure()
+        );
+    }
+
+    /**
+     * @return FilterNavigationFilterCollection
+     */
+    public function createFilterNavigationFilterCollection()
+    {
+        return new FilterNavigationFilterCollection(
+            $this->getMasterFactory()->createDataPoolReader()
         );
     }
 }

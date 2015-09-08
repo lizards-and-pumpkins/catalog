@@ -34,10 +34,22 @@ abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubThemeLocator = $this->getMock(ThemeLocator::class);
         $this->stubLayout = $this->getMock(Layout::class, [], [], '', false);
-        $this->stubThemeLocator->method('getLayoutForHandle')
-            ->willReturn($this->stubLayout);
+        $this->stubThemeLocator->method('getLayoutForHandle')->willReturn($this->stubLayout);
         $this->stubBlockStructure = new BlockStructure();
         $this->blockRenderer = $this->createRendererInstance($this->stubThemeLocator, $this->stubBlockStructure);
+    }
+
+    public function testBlockRendererAbstractClassIsExtended()
+    {
+        $this->assertInstanceOf(BlockRenderer::class, $this->blockRenderer);
+    }
+
+    public function testBlockLayoutHandleIsNonEmptyString()
+    {
+        $result = $this->blockRenderer->getLayoutHandle();
+
+        $this->assertInternalType('string', $result);
+        $this->assertNotEmpty(trim($result));
     }
 
     public function testBlockRendererClassIsExtended()

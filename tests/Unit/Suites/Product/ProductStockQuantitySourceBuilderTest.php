@@ -4,7 +4,6 @@ namespace Brera\Product;
 
 /**
  * @covers \Brera\Product\ProductStockQuantitySourceBuilder
- * @uses   \Brera\Product\SampleSku
  * @uses   \Brera\Product\ProductId
  * @uses   \Brera\Product\ProductStockQuantity
  * @uses   \Brera\Product\ProductStockQuantitySource

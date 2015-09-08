@@ -6,6 +6,7 @@ use Brera\ContentDelivery\SnippetTransformation\SnippetTransformation;
 use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
 use Brera\Http\HttpResponse;
+use Brera\Log\Logger;
 use Brera\Product\ProductDetailPageMetaInfoSnippetContent;
 
 /**

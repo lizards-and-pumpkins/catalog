@@ -5,7 +5,7 @@ namespace Brera\Product;
 use Brera\Api\ApiRequestHandler;
 use Brera\Http\HttpRequest;
 use Brera\Image\UpdateImageCommand;
-use Brera\Logger;
+use Brera\Log\Logger;
 use Brera\Queue\Queue;
 use Brera\Utils\XPathParser;
 
@@ -156,8 +156,7 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
                 $this->commandQueue->add(new UpdateProductCommand($productSource));
             } catch (\Exception $exception) {
                 $skuString = (new XPathParser($productXml))->getXmlNodesArrayByXPath('//@sku')[0]['value'];
-                $sku = SampleSku::fromString($skuString);
-                $productId = ProductId::fromSku($sku);
+                $productId = ProductId::fromString($skuString);
                 $loggerMessage = new ProductImportFailedMessage($productId, $exception);
                 $this->logger->log($loggerMessage);
             }

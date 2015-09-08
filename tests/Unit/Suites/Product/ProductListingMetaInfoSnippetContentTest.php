@@ -2,13 +2,13 @@
 
 namespace Brera\Product;
 
-use Brera\DataPool\SearchEngine\SearchCriteria;
-use Brera\DataPool\SearchEngine\SearchCriterion;
+use Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
+use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
 
 /**
  * @covers \Brera\Product\ProductListingMetaInfoSnippetContent
- * @uses   \Brera\DataPool\SearchEngine\SearchCriteria
- * @uses   \Brera\DataPool\SearchEngine\SearchCriterion
+ * @uses   \Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
+ * @uses   \Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion
  */
 class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,15 +23,15 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
     private $rootSnippetCode = 'root-snippet-code';
 
     /**
-     * @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject
+     * @var CompositeSearchCriterion|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubSelectionCriteria;
 
     protected function setUp()
     {
-        $this->stubSelectionCriteria = $this->getMock(SearchCriteria::class, [], [], '', false);
+        $this->stubSelectionCriteria = $this->getMock(CompositeSearchCriterion::class, [], [], '', false);
         $this->stubSelectionCriteria->method('jsonSerialize')
-            ->willReturn(['condition' => SearchCriteria::AND_CONDITION, 'criteria' => []]);
+            ->willReturn(['condition' => CompositeSearchCriterion::AND_CONDITION, 'criteria' => []]);
 
         $pageSnippetCodes = [$this->rootSnippetCode];
 
@@ -211,11 +211,34 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
         ProductListingMetaInfoSnippetContent::fromJson($json);
     }
 
+    public function testExceptionIsThrownIfCriterionOperationIsInvalid()
+    {
+        $invalidOperationName = 'baz';
+
+        $this->setExpectedException(
+            MalformedSearchCriteriaMetaException::class,
+            sprintf('Unknown criterion operation "%s"', $invalidOperationName)
+        );
+
+        $json = json_encode([
+            ProductListingMetaInfoSnippetContent::KEY_CRITERIA => [
+                'condition' => '',
+                'criteria'  => [
+                    ['fieldName' => 'foo', 'fieldValue' => 'bar', 'operation' => $invalidOperationName]
+                ]
+            ],
+            ProductListingMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
+            ProductListingMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
+        ]);
+
+        ProductListingMetaInfoSnippetContent::fromJson($json);
+    }
+
     public function testProductListingMetaInfoIsCreatedWithPassedSearchCriteria()
     {
         $fieldName = 'foo';
         $fieldValue = 'bar';
-        $operation = '=';
+        $operation = 'Equal';
 
         $json = json_encode([
             ProductListingMetaInfoSnippetContent::KEY_CRITERIA => [
@@ -229,10 +252,12 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
         ]);
 
         $metaSnippetContent = ProductListingMetaInfoSnippetContent::fromJson($json);
-        $criteria = $metaSnippetContent->getSelectionCriteria()->getCriteria();
+        $result = $metaSnippetContent->getSelectionCriteria();
 
-        $expectedCriterion = SearchCriterion::create($fieldName, $fieldValue, $operation);
+        $className = SearchCriterion::class . $operation;
+        $expectedCriterion = call_user_func([$className, 'create'], $fieldName, $fieldValue);
+        $expectedCriteria = CompositeSearchCriterion::createAnd($expectedCriterion);
 
-        $this->assertEquals($expectedCriterion, $criteria[0]);
+        $this->assertEquals($expectedCriteria, $result);
     }
 }

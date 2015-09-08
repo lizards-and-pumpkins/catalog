@@ -2,6 +2,8 @@
 
 namespace Brera;
 
+use Brera\Log\LogMessage;
+
 class FailedToReadFromDomainEventQueueMessage implements LogMessage
 {
     /**

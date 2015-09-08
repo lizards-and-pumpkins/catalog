@@ -19,7 +19,7 @@ use Brera\Http\HttpUrl;
  * @uses   \Brera\Http\HttpHeaders
  * @uses   \Brera\Http\HttpRequestBody
  */
-class WebsiteContextDecoratorTest extends ContextDecoratorTestAbstract
+class WebsiteContextDecoratorTest extends AbstractContextDecoratorTest
 {
     /**
      * @return string

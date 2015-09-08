@@ -16,8 +16,7 @@ class ProductSourceBuilder
 
         $skuNode = $parser->getXmlNodesArrayByXPath('/product/@sku');
         $skuString = $this->getSkuStringFromDomNodeArray($skuNode);
-        $sku = SampleSku::fromString($skuString);
-        $productId = ProductId::fromSku($sku);
+        $productId = ProductId::fromString($skuString);
 
         $attributeNodes = $parser->getXmlNodesArrayByXPath('/product/attributes/*');
         $attributesArray = array_map([$this, 'nodeArrayAsAttributeArray'], $attributeNodes);

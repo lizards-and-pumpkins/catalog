@@ -15,14 +15,14 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
     /**
      * @var string[]
      */
-    private $searchableAttributeCodes;
+    private $indexAttributeCodes;
 
     /**
-     * @param string[] $searchableAttributeCodes
+     * @param string[] $indexAttributeCodes
      */
-    public function __construct(array $searchableAttributeCodes)
+    public function __construct(array $indexAttributeCodes)
     {
-        $this->searchableAttributeCodes = $searchableAttributeCodes;
+        $this->indexAttributeCodes = $indexAttributeCodes;
     }
 
     /**
@@ -67,7 +67,7 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
     {
         $attributesMap = [];
 
-        foreach ($this->searchableAttributeCodes as $attributeCode) {
+        foreach ($this->indexAttributeCodes as $attributeCode) {
             /* TODO: handle case when attribute has more then one value for attribute (e.g. gender, category) */
             $attributesMap[$attributeCode] = $product->getFirstValueOfAttribute($attributeCode);
         }

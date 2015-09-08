@@ -37,6 +37,21 @@ abstract class ContextDecorator implements Context
     }
 
     /**
+     * @param Context $otherContext
+     * @return bool
+     */
+    public function isSubsetOf(Context $otherContext)
+    {
+        foreach ($this->getSupportedCodes() as $code) {
+            if (!$otherContext->supportsCode($code) || $this->getValue($code) !== $otherContext->getValue($code)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * @return string
      */
     protected function getValueFromContext()

@@ -11,12 +11,16 @@ use Brera\Context\ContextSource;
 use Brera\DataPool\DataPoolReader;
 use Brera\Http\HttpRouterChain;
 use Brera\Http\ResourceNotFoundRouter;
+use Brera\Image\ImageProcessorCollection;
 use Brera\Image\ImageWasUpdatedDomainEvent;
 use Brera\Image\ImageWasUpdatedDomainEventHandler;
 use Brera\Image\UpdateImageCommand;
 use Brera\Image\UpdateImageCommandHandler;
+use Brera\Log\Logger;
+use Brera\Product\FilterNavigationFilterCollection;
 use Brera\Product\ProductListingMetaInfoSourceBuilder;
 use Brera\Product\ProductListingSourceListBuilder;
+use Brera\Product\FilterNavigationBlockRenderer;
 use Brera\Product\ProductWasUpdatedDomainEvent;
 use Brera\Product\ProductWasUpdatedDomainEventHandler;
 use Brera\Product\ProductListingWasUpdatedDomainEvent;
@@ -62,6 +66,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\TemplateWasUpdatedDomainEventHandler
  * @uses   \Brera\Renderer\BlockRenderer
  * @uses   \Brera\Product\DefaultNumberOfProductsPerPageSnippetRenderer
+ * @uses   \Brera\Product\FilterNavigationFilterCollection
  * @uses   \Brera\Product\PriceSnippetRenderer
  * @uses   \Brera\Product\ProductBackOrderAvailabilitySnippetRenderer
  * @uses   \Brera\Product\ProductSourceBuilder
@@ -465,5 +470,31 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createProductSearchResultMetaSnippetKeyGenerator();
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
+    }
+
+    public function testFilterNavigationBlockRendererIsReturned()
+    {
+        $result = $this->commonFactory->createFilterNavigationBlockRenderer();
+        $this->assertInstanceOf(FilterNavigationBlockRenderer::class, $result);
+    }
+
+    public function testImageProcessorCollectionIsReturned()
+    {
+        $result = $this->commonFactory->getImageProcessorCollection();
+        $this->assertInstanceOf(ImageProcessorCollection::class, $result);
+    }
+
+    public function testSameInstanceOfImageProcessorCollectionIsReturnedOnConsecutiveCalls()
+    {
+        $resultA = $this->commonFactory->getImageProcessorCollection();
+        $resultB = $this->commonFactory->getImageProcessorCollection();
+
+        $this->assertSame($resultA, $resultB);
+    }
+
+    public function testFilterNavigationFilterCollectionIsReturned()
+    {
+        $result = $this->commonFactory->createFilterNavigationFilterCollection();
+        $this->assertInstanceOf(FilterNavigationFilterCollection::class, $result);
     }
 }

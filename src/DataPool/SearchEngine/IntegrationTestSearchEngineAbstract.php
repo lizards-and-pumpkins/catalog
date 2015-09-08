@@ -1,11 +1,12 @@
 <?php
 
-
 namespace Brera\DataPool\SearchEngine;
 
 use Brera\Context\Context;
+use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
+use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 
 abstract class IntegrationTestSearchEngineAbstract implements SearchEngine
 {
@@ -16,7 +17,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine
 
     final public function addSearchDocumentCollection(SearchDocumentCollection $searchDocumentCollection)
     {
-        foreach ($searchDocumentCollection->getDocuments() as $searchDocument) {
+        foreach ($searchDocumentCollection as $searchDocument) {
             $this->addSearchDocument($searchDocument);
         }
     }
@@ -24,11 +25,11 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine
     /**
      * @param string $queryString
      * @param Context $queryContext
-     * @return string[]
+     * @return SearchDocumentCollection
      */
     final public function query($queryString, Context $queryContext)
     {
-        $results = [];
+        $collection = new SearchDocumentCollection;
         $searchDocuments = $this->getSearchDocuments();
 
         foreach ($searchDocuments as $searchDocument) {
@@ -36,32 +37,40 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine
                 continue;
             }
 
-            $results = $this->findDocumentsMatchingAnyFields($queryString, $searchDocument, $results);
+            if ($this->isAnyFieldValueOfSearchDocumentMatchesQueryString($searchDocument, $queryString)) {
+                $collection->add($searchDocument);
+            }
         }
 
-        return $results;
+        return $collection;
     }
 
     /**
      * @param SearchCriteria $criteria
      * @param Context $context
-     * @return string[]
+     * @return SearchDocumentCollection
      */
-    final public function getContentOfSearchDocumentsMatchingCriteria(SearchCriteria $criteria, Context $context)
+    final public function getSearchDocumentsMatchingCriteria(SearchCriteria $criteria, Context $context)
     {
-        $result = [];
-        
-        foreach ($this->getSearchDocuments() as $searchDocument) {
-            // todo: check for matching context
-            if ($searchDocument->isMatchingCriteria($criteria)) {
-                $content = $searchDocument->getContent();
-                if (! in_array($content, $result)) {
-                    $result[] = $content;
-                }
+        $collection = new SearchDocumentCollection;
+        $searchDocuments = $this->getSearchDocuments();
+
+        foreach ($searchDocuments as $searchDocument) {
+            if ($criteria->matches($searchDocument) && $context->isSubsetOf($searchDocument->getContext())) {
+                $collection->add($searchDocument);
             }
         }
         
-        return $result;
+        return $collection;
+    }
+
+    /**
+     * @param SearchDocument $searchDocument
+     * @return string
+     */
+    final protected function getSearchDocumentIdentifier(SearchDocument $searchDocument)
+    {
+        return $searchDocument->getProductId() . ':' . $searchDocument->getContext()->getId();
     }
 
     /**
@@ -96,20 +105,18 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine
     }
 
     /**
-     * @param string $queryString
      * @param SearchDocument $searchDocument
-     * @param string[] $results
-     * @return string[]
+     * @param string $queryString
+     * @return bool
      */
-    private function findDocumentsMatchingAnyFields($queryString, SearchDocument $searchDocument, array $results)
+    private function isAnyFieldValueOfSearchDocumentMatchesQueryString(SearchDocument $searchDocument, $queryString)
     {
-        $searchDocumentFieldsCollection = $searchDocument->getFieldsCollection();
-        $content = $searchDocument->getContent();
-        foreach ($searchDocumentFieldsCollection->getFields() as $field) {
-            if (! in_array($content, $results) && false !== stripos($field->getValue(), $queryString)) {
-                $results[] = $searchDocument->getContent();
+        /** @var SearchDocumentField $field */
+        foreach ($searchDocument->getFieldsCollection() as $field) {
+            if (false !== stripos($field->getValue(), $queryString)) {
+                return true;
             }
         }
-        return $results;
+        return false;
     }
 }

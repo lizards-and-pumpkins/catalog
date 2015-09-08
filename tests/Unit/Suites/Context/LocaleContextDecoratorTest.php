@@ -17,7 +17,7 @@ use Brera\Http\HttpUrl;
  * @uses   \Brera\Http\HttpUrl
  * @uses   \Brera\Http\HttpRequest
  */
-class LocaleContextDecoratorTest extends ContextDecoratorTestAbstract
+class LocaleContextDecoratorTest extends AbstractContextDecoratorTest
 {
     /**
      * @return string

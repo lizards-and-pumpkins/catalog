@@ -6,13 +6,6 @@
 
 .col-main .std p img { max-width: 100% }
 
-/* Homepage slider wrap */
-.slider-wrap { float: right; width:66%; position: relative; left: 68%; overflow: hidden }
-
-/* Homepage columns */
-.home-container-2 { float: left; width: 100%; position: relative }
-.home-container-1 { float: left; width: 100%; position: relative; right: 68% }
-
 /* Phone bar */
 .phone-bar { display: none }
 #phoneMenuPlaceholder { display: none }
@@ -35,39 +28,12 @@
     .footer-block ul, .footer-block .footer-block-title { margin-right: 20px }
     .footer-block-wide { float: none; clear: both; width: auto }
     .footer-block-wide img { margin: 21px 5px 0 }
-
-    /* Login/Register */
-    .customer-account-login .main .account-login, .customer-account-login .main .account-create { margin: 0; width: 49% !important; }
-    .customer-account-login .main .account-create { float: right }
-    .customer-account-login .main ul.messages { width: 100% }
-    /* TODO: Register success page */
-
-    /* Forgot password page */
-    .customer-account-forgotpassword .main-container .main form, div.formContainer { width: 100% }
-
-    /* CMS pages */
-    .cms-page-view .col-left { display: none }
-    .cms-page-view .col2-left-layout .col-main { float: none; width: auto }
-    .cms-page-view #breadcrumbs { position: static }
-
-    /* Contact us */
-    .contacts-index-index .formContainer { width: auto }
-
-    /* Newsletter page */
-    #newsletter-validate-detail .row, #newsletter-validate-detail .buttons-set { float: none }
-    #newsletter-validate-detail .row { margin: 0 0 10px 0; width: auto }
-
-    /*CMS Home Page*/
-    .banner-wrap img { width: 100% }
 }
 
 /* Phone */
 @media (max-width: 767px) {
     .col-main { clear: both }
-    .cms-index-index .main-container .main { padding-left: 0; padding-right: 0 }
-    #topSellerTabLinks { margin-left: 10px }
     .social { width: auto; clear: both; margin: 0 0 30px 0 }
-    .cms-index-index .social { margin-left: 10px }
     .social.first { margin-top: 30px }
     .social .inner-container { padding: 0; border: none; height: auto }
     .social .text { width: 200px }
@@ -96,7 +62,6 @@
     #phoneMenuPlaceholder > ul > li { float: left; width:20%; height: 10px }
     #phoneMenuPlaceholder > ul > li.active { background: url("../images/phone-menu-arrow.png") no-repeat center }
     .lang-ru_en, .lang-st_en, .lang-cy_en, .lang-ru_fr, .lang-st_fr, .lang-cy_fr, .lang-ru_de, .lang-st_de, .lang-cy_de, .lang-ru_es { padding-left: 25px }
-    .home-container-1 { background-color: transparent }
     #searchPanel { display: none }
 
     /* Footer blocks */
@@ -104,13 +69,6 @@
     .footer-block ul { height: auto; max-height: 138px; margin-left: 10px }
     .footer-block .footer-block-title { font-family: 'GeogrotesqueMedium', serif; background: #e5e5e5 url("../images/icon-footer-arrow.png") no-repeat right; padding: 5px 10px; font-size: 14px; margin: 0; border: none }
 
-    /* Login page */
-    .customer-account-login .main .account-login, .customer-account-login .main .account-create { float: none; width: 100% !important; }
-
     .header-panel { position: absolute; right: 0; top: 7px }
     .header-panel > a, .header-panel > span, .header-panel span.sep { display: none }
-
-    /*CMS Home Page*/
-    .banner-wrap { left: 0 }
-    .banner-wrap, .slider-wrap { float: none; width: 100%; margin-top: 25px; height: auto }
 }

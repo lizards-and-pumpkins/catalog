@@ -8,13 +8,25 @@ namespace Brera\DataPool\SearchEngine\SearchDocument;
  */
 class SearchDocumentFieldCollectionTest extends \PHPUnit_Framework_TestCase
 {
-    public function testCollectionIsCreatedFromArray()
+    public function testCountableInterfaceIsImplemented()
+    {
+        $collection = SearchDocumentFieldCollection::fromArray([]);
+        $this->assertInstanceOf(\Countable::class, $collection);
+    }
+
+    public function testIteratorAggregateInterfaceIsImplemented()
+    {
+        $collection = SearchDocumentFieldCollection::fromArray([]);
+        $this->assertInstanceOf(\IteratorAggregate::class, $collection);
+    }
+
+    public function testCollectionIsAccessibleViaGetter()
     {
         $fieldsArray = ['foo' => 'bar', 'baz' => 'qux'];
         $collection = SearchDocumentFieldCollection::fromArray($fieldsArray);
         $result = $collection->getFields();
 
-        $this->assertCount(2, $result);
+        $this->assertCount(2, $collection);
         $this->assertContainsOnly(SearchDocumentField::class, $result);
         $this->assertEquals('foo', $result[0]->getKey());
         $this->assertEquals('bar', $result[0]->getValue());
@@ -22,11 +34,14 @@ class SearchDocumentFieldCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('qux', $result[1]->getValue());
     }
 
-    public function testEmptyCollectionIsCreatedFromEmptyArray()
+    public function testCollectionIsAccessibleViaIterator()
     {
-        $collection = SearchDocumentFieldCollection::fromArray([]);
+        $fieldsArray = ['foo' => 'bar'];
+        $collection = SearchDocumentFieldCollection::fromArray($fieldsArray);
 
-        $this->assertInstanceOf(SearchDocumentFieldCollection::class, $collection);
-        $this->assertCount(0, $collection->getFields());
+        $this->assertCount(1, $collection);
+        $this->assertContainsOnly(SearchDocumentField::class, $collection);
+        $this->assertEquals('foo', $collection->getIterator()->current()->getKey());
+        $this->assertEquals('bar', $collection->getIterator()->current()->getValue());
     }
 }

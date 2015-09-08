@@ -5,7 +5,7 @@ namespace Brera\Product;
 use Brera\Api\ApiRequestHandler;
 use Brera\Http\HttpRequest;
 use Brera\Image\UpdateImageCommand;
-use Brera\Logger;
+use Brera\Log\Logger;
 use Brera\Queue\Queue;
 use Brera\TestFileFixtureTrait;
 
@@ -18,7 +18,6 @@ use Brera\TestFileFixtureTrait;
  * @uses   \Brera\Image\UpdateImageCommand
  * @uses   \Brera\Product\ProductImportFailedMessage
  * @uses   \Brera\Product\ProductId
- * @uses   \Brera\Product\SampleSku
  * @uses   \Brera\Product\ProductWasUpdatedDomainEvent
  * @uses   \Brera\Product\ProductListingWasUpdatedDomainEvent
  * @uses   \Brera\Product\UpdateProductCommand
