@@ -46,10 +46,11 @@ class FilterNavigationBlockTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->stubBlockRenderer = $this->getMock(BlockRenderer::class, [], [], '', false);
+        $blockName = 'foo';
         $this->stubFilterCollection = $this->getMock(FilterNavigationFilterCollection::class, [], [], '', false);
         $stubDataObject = $this->stubFilterCollection;
 
-        $this->block = new FilterNavigationBlock($this->stubBlockRenderer, 'foo.phtml', 'foo', $stubDataObject);
+        $this->block = new FilterNavigationBlock($this->stubBlockRenderer, 'foo.phtml', $blockName, $stubDataObject);
     }
 
     public function testBlockClassIsExtended()
