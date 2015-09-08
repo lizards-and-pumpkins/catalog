@@ -4,6 +4,7 @@ namespace Brera;
 
 use Brera\Context\Context;
 use Brera\DataPool\DataPoolReader;
+use Brera\Log\Logger;
 
 class PageBuilder
 {

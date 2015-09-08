@@ -10,6 +10,7 @@ use Brera\Image\ImageMagickResizeStrategy;
 use Brera\Image\ImageProcessor;
 use Brera\Image\ImageProcessorCollection;
 use Brera\Image\ImageProcessingStrategySequence;
+use Brera\Log\InMemoryLogger;
 use Brera\Queue\InMemory\InMemoryQueue;
 use Brera\Queue\Queue;
 

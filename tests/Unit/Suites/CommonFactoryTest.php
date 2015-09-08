@@ -16,6 +16,7 @@ use Brera\Image\ImageWasUpdatedDomainEvent;
 use Brera\Image\ImageWasUpdatedDomainEventHandler;
 use Brera\Image\UpdateImageCommand;
 use Brera\Image\UpdateImageCommandHandler;
+use Brera\Log\Logger;
 use Brera\Product\FilterNavigationFilterCollection;
 use Brera\Product\ProductListingMetaInfoSourceBuilder;
 use Brera\Product\ProductListingSourceListBuilder;

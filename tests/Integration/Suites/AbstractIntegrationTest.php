@@ -5,6 +5,7 @@ namespace Brera;
 use Brera\DataPool\KeyValue\KeyValueStore;
 use Brera\DataPool\SearchEngine\SearchEngine;
 use Brera\Http\HttpRequest;
+use Brera\Log\Logger;
 use Brera\Queue\Queue;
 
 abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase

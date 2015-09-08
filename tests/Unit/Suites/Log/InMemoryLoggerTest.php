@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera;
+namespace Brera\Log;
 
 /**
- * @covers \Brera\InMemoryLogger
+ * @covers \Brera\Log\InMemoryLogger
  */
 class InMemoryLoggerTest extends \PHPUnit_Framework_TestCase
 {

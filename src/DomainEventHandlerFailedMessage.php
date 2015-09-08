@@ -2,6 +2,8 @@
 
 namespace Brera;
 
+use Brera\Log\LogMessage;
+
 class DomainEventHandlerFailedMessage implements LogMessage
 {
     /**

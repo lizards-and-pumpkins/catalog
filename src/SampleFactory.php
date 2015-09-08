@@ -8,8 +8,13 @@ use Brera\Image\ImageMagickInscribeStrategy;
 use Brera\Image\ImageProcessor;
 use Brera\Image\ImageProcessorCollection;
 use Brera\Image\ImageProcessingStrategySequence;
+use Brera\Log\InMemoryLogger;
+use Brera\Log\Logger;
+use Brera\Log\Writer\FileLogMessageWriter;
+use Brera\Log\Writer\LogMessageWriter;
+use Brera\Log\WritingLoggerDecorator;
 use Brera\Queue\File\FileQueue;
-use Brera\Queue\InMemory\InMemoryQueue;
+use Brera\Queue\Queue;
 
 class SampleFactory implements Factory
 {
@@ -51,7 +56,7 @@ class SampleFactory implements Factory
     }
 
     /**
-     * @return InMemoryQueue
+     * @return Queue
      */
     public function createEventQueue()
     {
@@ -61,7 +66,7 @@ class SampleFactory implements Factory
     }
 
     /**
-     * @return InMemoryQueue
+     * @return Queue
      */
     public function createCommandQueue()
     {
@@ -71,11 +76,30 @@ class SampleFactory implements Factory
     }
 
     /**
-     * @return InMemoryLogger
+     * @return Logger
      */
     public function createLogger()
     {
-        return new InMemoryLogger();
+        return new WritingLoggerDecorator(
+            new InMemoryLogger(),
+            $this->getMasterFactory()->createLogMessageWriter()
+        );
+    }
+
+    /**
+     * @return LogMessageWriter
+     */
+    public function createLogMessageWriter()
+    {
+        return new FileLogMessageWriter($this->getMasterFactory()->getLogFilePathConfig());
+    }
+
+    /**
+     * @return string
+     */
+    public function getLogFilePathConfig()
+    {
+        return __DIR__ . '/../log/system.log';
     }
 
     /**
