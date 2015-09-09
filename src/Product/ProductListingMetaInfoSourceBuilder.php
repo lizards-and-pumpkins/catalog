@@ -59,7 +59,7 @@ class ProductListingMetaInfoSourceBuilder
     {
         return function ($data) use ($message) {
             if (!is_string($data)) {
-                throw new InvalidContextDataValueException(sprintf($message, $this->getTypeOfData($data)));
+                throw new DataNotStringException(sprintf($message, $this->getTypeOfData($data)));
             }
         };
     }

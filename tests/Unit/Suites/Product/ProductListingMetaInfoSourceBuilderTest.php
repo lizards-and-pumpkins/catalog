@@ -113,7 +113,7 @@ EOX;
     public function testItThrowsAnExceptionIfTheContextArrayContainsNonStrings()
     {
         $expectedMessage = 'The context array has to contain only string values, found ';
-        $this->setExpectedException(InvalidContextDataValueException::class, $expectedMessage);
+        $this->setExpectedException(DataNotStringException::class, $expectedMessage);
         (new ProductListingMetaInfoSourceBuilder())->createProductListingMetaInfoSource(
             UrlKey::fromString('http://example.com'),
             ['key' => 123],
@@ -124,10 +124,10 @@ EOX;
     public function testItThrowsAnExceptionIfTheContextArrayKeysAreNotStrings()
     {
         $expectedMessage = 'The context array has to contain only string keys, found ';
-        $this->setExpectedException(InvalidContextDataValueException::class, $expectedMessage);
+        $this->setExpectedException(DataNotStringException::class, $expectedMessage);
         (new ProductListingMetaInfoSourceBuilder())->createProductListingMetaInfoSource(
             UrlKey::fromString('http://example.com'),
-            [ 0 => 'value'],
+            [0 => 'value'],
             $this->getMock(SearchCriteria::class)
         );
     }
