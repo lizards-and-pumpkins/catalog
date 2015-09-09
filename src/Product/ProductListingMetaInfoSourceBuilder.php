@@ -83,7 +83,8 @@ class ProductListingMetaInfoSourceBuilder
         }
 
         throw new InvalidConditionXmlAttributeException(sprintf(
-            '"condition" attribute value "%s" in product listing XML is invalid.', $criteriaCondition[0]['value']
+            '"condition" attribute value "%s" in product listing XML is invalid.',
+            $criteriaCondition[0]['value']
         ));
     }
 
@@ -109,6 +110,13 @@ class ProductListingMetaInfoSourceBuilder
             throw new MissingCriterionOperationXmlAttributeException(
                 'Missing "operation" attribute in product listing condition XML node.'
             );
+        }
+        
+        if (! preg_match('/^[a-z]+$/i', $criterionNode['attributes']['operation'])) {
+            throw new InvalidCriterionOperationXmlAttributeException(sprintf(
+                'Invalid operation in product listing XML "%s", only the letters a-z are allowed.',
+                $criterionNode['attributes']['operation']
+            ));
         }
 
         if (!class_exists($this->getCriterionClassNameForOperation($criterionNode['attributes']['operation']))) {

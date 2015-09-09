@@ -90,10 +90,20 @@ EOX;
         (new ProductListingMetaInfoSourceBuilder())->createProductListingMetaInfoSourceFromXml($xml);
     }
 
-    public function testExceptionIsThrownIfCriterionOperationAttributeIsInvalid()
+    public function testExceptionIsThrownIfCriterionOperationAttributeIsNotAValidClass()
     {
         $this->setExpectedException(InvalidCriterionOperationXmlAttributeException::class);
         $xml = '<listing url_key="foo" condition="and"><bar operation="baz" /></listing>';
+        (new ProductListingMetaInfoSourceBuilder())->createProductListingMetaInfoSourceFromXml($xml);
+    }
+
+    public function testExceptionIsThrownIfCriterionOperationAttributeContainsNonCharacterData()
+    {
+        $this->setExpectedException(
+            InvalidCriterionOperationXmlAttributeException::class,
+            sprintf('Invalid operation in product listing XML "%s", only the letters a-z are allowed.', "a\\b")
+        );
+        $xml = '<listing url_key="foo" condition="and"><bar operation="a\\b" /></listing>';
         (new ProductListingMetaInfoSourceBuilder())->createProductListingMetaInfoSourceFromXml($xml);
     }
 }
