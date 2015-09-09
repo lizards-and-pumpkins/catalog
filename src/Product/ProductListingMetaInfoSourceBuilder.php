@@ -3,6 +3,7 @@
 namespace Brera\Product;
 
 use Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
+use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
 use Brera\UrlKey;
 use Brera\Utils\XPathParser;
@@ -30,7 +31,37 @@ class ProductListingMetaInfoSourceBuilder
         $criterionArray = array_map([$this, 'createCriterion'], $criteriaNodes);
         $criteria = $this->createSearchCriteria($criteriaConditionNodes, ...$criterionArray);
 
+        return $this->createProductListingMetaInfoSource($urlKey, $contextData, $criteria);
+    }
+
+    /**
+     * @param UrlKey $urlKey
+     * @param string[] $contextData
+     * @param SearchCriteria $criteria
+     * @return ProductListingMetaInfoSource
+     */
+    public function createProductListingMetaInfoSource(UrlKey $urlKey, array $contextData, SearchCriteria $criteria)
+    {
+        $thingsToCheck = [['values', $contextData], ['keys', array_keys($contextData)]];
+        array_map(function (array $thingToCheck) {
+            $message = sprintf('The context array has to contain only string %s, found "%%s"', $thingToCheck[0]);
+            array_map($this->getStringValidatorWithMessage($message), $thingToCheck[1]);
+        }, $thingsToCheck);
+
         return new ProductListingMetaInfoSource($urlKey, $contextData, $criteria);
+    }
+
+    /**
+     * @param string $message
+     * @return callable
+     */
+    private function getStringValidatorWithMessage($message)
+    {
+        return function ($data) use ($message) {
+            if (!is_string($data)) {
+                throw new DataNotStringException(sprintf($message, $this->getTypeOfData($data)));
+            }
+        };
     }
 
     /**
@@ -83,7 +114,8 @@ class ProductListingMetaInfoSourceBuilder
         }
 
         throw new InvalidConditionXmlAttributeException(sprintf(
-            '"condition" attribute value "%s" in product listing XML is invalid.', $criteriaCondition[0]['value']
+            '"condition" attribute value "%s" in product listing XML is invalid.',
+            $criteriaCondition[0]['value']
         ));
     }
 
@@ -110,10 +142,24 @@ class ProductListingMetaInfoSourceBuilder
                 'Missing "operation" attribute in product listing condition XML node.'
             );
         }
+        $this->validateSearchCriteriaOperationString($criterionNode['attributes']['operation']);
+    }
 
-        if (!class_exists($this->getCriterionClassNameForOperation($criterionNode['attributes']['operation']))) {
+    /**
+     * @param string $operation
+     */
+    private function validateSearchCriteriaOperationString($operation)
+    {
+        if (!preg_match('/^[a-z]+$/i', $operation)) {
+            throw new InvalidCriterionOperationXmlAttributeException(sprintf(
+                'Invalid operation in product listing XML "%s", only the letters a-z are allowed.',
+                $operation
+            ));
+        }
+
+        if (!class_exists($this->getCriterionClassNameForOperation($operation))) {
             throw new InvalidCriterionOperationXmlAttributeException(
-                sprintf('Unknown criterion operation "%s"', $criterionNode['attributes']['operation'])
+                sprintf('Unknown criterion operation "%s"', $operation)
             );
         }
     }
@@ -125,5 +171,16 @@ class ProductListingMetaInfoSourceBuilder
     private function getCriterionClassNameForOperation($operationName)
     {
         return SearchCriterion::class . $operationName;
+    }
+
+    /**
+     * @param mixed $data
+     * @return string
+     */
+    private function getTypeOfData($data)
+    {
+        return is_object($data) ?
+            get_class($data) :
+            gettype($data);
     }
 }
