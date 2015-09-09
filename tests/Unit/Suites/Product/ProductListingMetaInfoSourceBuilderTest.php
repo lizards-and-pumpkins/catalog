@@ -3,7 +3,10 @@
 namespace Brera\Product;
 
 use Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
+use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
+use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
 use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
+use Brera\UrlKey;
 
 /**
  * @covers \Brera\Product\ProductListingMetaInfoSourceBuilder
@@ -105,5 +108,27 @@ EOX;
         );
         $xml = '<listing url_key="foo" condition="and"><bar operation="a\\b" /></listing>';
         (new ProductListingMetaInfoSourceBuilder())->createProductListingMetaInfoSourceFromXml($xml);
+    }
+
+    public function testItThrowsAnExceptionIfTheContextArrayContainsNonStrings()
+    {
+        $expectedMessage = 'The context array has to contain only string values, found ';
+        $this->setExpectedException(InvalidContextDataValueException::class, $expectedMessage);
+        (new ProductListingMetaInfoSourceBuilder())->createProductListingMetaInfoSource(
+            UrlKey::fromString('http://example.com'),
+            ['key' => 123],
+            $this->getMock(SearchCriteria::class)
+        );
+    }
+
+    public function testItThrowsAnExceptionIfTheContextArrayKeysAreNotStrings()
+    {
+        $expectedMessage = 'The context array has to contain only string keys, found ';
+        $this->setExpectedException(InvalidContextDataValueException::class, $expectedMessage);
+        (new ProductListingMetaInfoSourceBuilder())->createProductListingMetaInfoSource(
+            UrlKey::fromString('http://example.com'),
+            [ 0 => 'value'],
+            $this->getMock(SearchCriteria::class)
+        );
     }
 }
