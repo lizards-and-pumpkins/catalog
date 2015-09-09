@@ -35,9 +35,9 @@ class ProductSourceBuilder
             $node['value'] :
             array_map([$this, 'nodeArrayAsAttributeArray'], $node['value']);
         return [
-            'code' => $node['nodeName'],
-            'contextData' => $node['attributes'],
-            'value' => $value,
+            ProductAttribute::CODE => $node['nodeName'],
+            ProductAttribute::CONTEXT_DATA => $node['attributes'],
+            ProductAttribute::VALUE => $value,
         ];
     }
 

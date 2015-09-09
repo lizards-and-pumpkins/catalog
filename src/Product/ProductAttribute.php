@@ -7,6 +7,10 @@ use Brera\Context\Context;
 
 class ProductAttribute implements Attribute
 {
+    const CODE = 'code';
+    const VALUE = 'value';
+    const CONTEXT_DATA = 'contextData';
+    
     /**
      * @var string
      */
@@ -40,7 +44,11 @@ class ProductAttribute implements Attribute
      */
     public static function fromArray(array $attribute)
     {
-        return new self($attribute['code'], self::getValueRecursive($attribute['value']), $attribute['contextData']);
+        return new self(
+            $attribute[self::CODE],
+            self::getValueRecursive($attribute[self::VALUE]),
+            $attribute[self::CONTEXT_DATA]
+        );
     }
 
     /**
