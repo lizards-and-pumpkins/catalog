@@ -129,6 +129,15 @@ abstract class HttpRequest
      */
     public function getQueryParameter($parameterName)
     {
-        return $this->getUrl()->getQueryParameter($parameterName);
+        return $this->url->getQueryParameter($parameterName);
+    }
+
+    /**
+     * @param string $queryParameterToBeExcluded
+     * @return string[]
+     */
+    public function getQueryParametersExceptGiven($queryParameterToBeExcluded)
+    {
+        return $this->url->getQueryParametersExceptGiven($queryParameterToBeExcluded);
     }
 }
