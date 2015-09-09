@@ -17,9 +17,9 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     private function createProductAttributeWithArray(array $attributeContext)
     {
         return ProductAttribute::fromArray([
-            'code' => 'name',
-            'contextData' => $attributeContext,
-            'value' => 'dummy-test-value'
+            ProductAttribute::CODE => 'name',
+            ProductAttribute::CONTEXT_DATA => $attributeContext,
+            ProductAttribute::VALUE => 'dummy-test-value'
         ]);
     }
 
@@ -39,9 +39,9 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     public function testTrueIsReturnedIfAttributeHasGivenCode()
     {
         $attribute = ProductAttribute::fromArray([
-            'code' => 'foo',
-            'contextData' => [],
-            'value' => 'value'
+            ProductAttribute::CODE => 'foo',
+            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::VALUE => ProductAttribute::VALUE
         ]);
 
         $this->assertTrue($attribute->isCodeEqualsTo('foo'));
@@ -50,9 +50,9 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     public function testFalseIsReturnedIfAttributeHasDifferentCode()
     {
         $attribute = ProductAttribute::fromArray([
-            'code' => 'foo',
-            'contextData' => [],
-            'value' => 'value'
+            ProductAttribute::CODE => 'foo',
+            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::VALUE => ProductAttribute::VALUE
         ]);
 
         $this->assertFalse($attribute->isCodeEqualsTo('bar'));
@@ -61,9 +61,9 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     public function testAttributeCodeIsReturned()
     {
         $attribute = ProductAttribute::fromArray([
-            'code' => 'foo',
-            'contextData' => [],
-            'value' => 'bar'
+            ProductAttribute::CODE => 'foo',
+            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::VALUE => 'bar'
         ]);
 
         $this->assertEquals('foo', $attribute->getCode());
@@ -72,9 +72,9 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     public function testAttributeValueIsReturned()
     {
         $attribute = ProductAttribute::fromArray([
-            'code' => 'foo',
-            'contextData' => [],
-            'value' => 'bar'
+            ProductAttribute::CODE => 'foo',
+            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::VALUE => 'bar'
         ]);
 
         $this->assertEquals('bar', $attribute->getValue());
@@ -83,18 +83,18 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     public function testAttributeWithSubAttributeIsReturned()
     {
         $attribute = ProductAttribute::fromArray([
-            'code' => 'foo',
-            'contextData' => [],
-            'value' => [
+            ProductAttribute::CODE => 'foo',
+            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::VALUE => [
                 [
-                    'code' => 'bar',
-                    'contextData' => [],
-                    'value' => 1
+                    ProductAttribute::CODE => 'bar',
+                    ProductAttribute::CONTEXT_DATA => [],
+                    ProductAttribute::VALUE => 1
                 ],
                 [
-                    'code' => 'baz',
-                    'contextData' => [],
-                    'value' => 2
+                    ProductAttribute::CODE => 'baz',
+                    ProductAttribute::CONTEXT_DATA => [],
+                    ProductAttribute::VALUE => 2
                 ]
             ]
         ]);
@@ -177,9 +177,9 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
         $contextData = ['foo' => 'bar', 'baz' => 'qux'];
 
         $attribute = ProductAttribute::fromArray([
-            'code' => 'attributeACode',
-            'contextData' => $contextData,
-            'value' => 'attributeAValue'
+            ProductAttribute::CODE => 'attributeACode',
+            ProductAttribute::CONTEXT_DATA => $contextData,
+            ProductAttribute::VALUE => 'attributeAValue'
         ]);
 
         $this->assertSame(array_keys($contextData), $attribute->getContextParts());
@@ -192,9 +192,9 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
             'The context part "foo" is not present on the attribute "attributeCode"'
         );
         $attribute = ProductAttribute::fromArray([
-            'code' => 'attributeCode',
-            'contextData' => [],
-            'value' => 'attributeValue'
+            ProductAttribute::CODE => 'attributeCode',
+            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::VALUE => 'attributeValue'
         ]);
         $attribute->getContextPartValue('foo');
     }
@@ -202,29 +202,29 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsTheContextPartIfItIsPresent()
     {
         $attribute = ProductAttribute::fromArray([
-            'code' => 'attributeCode',
-            'contextData' => ['foo' => 'bar'],
-            'value' => 'attributeValue'
+            ProductAttribute::CODE => 'attributeCode',
+            ProductAttribute::CONTEXT_DATA => ['foo' => 'bar'],
+            ProductAttribute::VALUE => 'attributeValue'
         ]);
         $this->assertSame('bar', $attribute->getContextPartValue('foo'));
     }
-    
+
     public function testFalseIsReturnedIfContentPartsOfAttributesAreDifferent()
     {
         $attributeA = ProductAttribute::fromArray([
-            'code' => 'attributeACode',
-            'contextData' => [
+            ProductAttribute::CODE => 'attributeACode',
+            ProductAttribute::CONTEXT_DATA => [
                 'foo' => 'bar',
                 'baz' => 'qux',
             ],
-            'value' => 'attributeAValue'
+            ProductAttribute::VALUE => 'attributeAValue'
         ]);
         $attributeB = ProductAttribute::fromArray([
-            'code' => 'attributeBCode',
-            'contextData' => [
+            ProductAttribute::CODE => 'attributeBCode',
+            ProductAttribute::CONTEXT_DATA => [
                 'foo' => 'bar',
             ],
-            'value' => 'attributeBValue'
+            ProductAttribute::VALUE => 'attributeBValue'
         ]);
 
         $this->assertFalse($attributeA->hasSameContextPartsAs($attributeB));
@@ -233,20 +233,20 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     public function testTrueIsReturnedIfContentPartsOfAttributesAreIdentical()
     {
         $attributeA = ProductAttribute::fromArray([
-            'code' => 'attributeACode',
-            'contextData' => [
+            ProductAttribute::CODE => 'attributeACode',
+            ProductAttribute::CONTEXT_DATA => [
                 'foo' => 'bar',
                 'baz' => 'qux',
             ],
-            'value' => 'attributeAValue'
+            ProductAttribute::VALUE => 'attributeAValue'
         ]);
         $attributeB = ProductAttribute::fromArray([
-            'code' => 'attributeBCode',
-            'contextData' => [
+            ProductAttribute::CODE => 'attributeBCode',
+            ProductAttribute::CONTEXT_DATA => [
                 'foo' => 'qux',
                 'baz' => 'bar'
             ],
-            'value' => 'attributeBValue'
+            ProductAttribute::VALUE => 'attributeBValue'
         ]);
 
         $this->assertTrue($attributeA->hasSameContextPartsAs($attributeB));
@@ -254,16 +254,32 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 
     public function testFalseIsReturnedIfAttributeCodesAreDifferent()
     {
-        $attributeA = ProductAttribute::fromArray(['code' => 'codeA', 'contextData' => [], 'value' => 'valueA']);
-        $attributeB = ProductAttribute::fromArray(['code' => 'codeB', 'contextData' => [], 'value' => 'valueB']);
+        $attributeA = ProductAttribute::fromArray([
+            ProductAttribute::CODE => 'codeA',
+            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::VALUE => 'valueA'
+        ]);
+        $attributeB = ProductAttribute::fromArray([
+            ProductAttribute::CODE => 'codeB',
+            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::VALUE => 'valueB'
+        ]);
 
         $this->assertFalse($attributeA->hasSameCodeAs($attributeB));
     }
 
     public function testTrueIsReturnedIfAttributeCodesAreIdentical()
     {
-        $attributeA = ProductAttribute::fromArray(['code' => 'codeA', 'contextData' => [], 'value' => 'valueA']);
-        $attributeB = ProductAttribute::fromArray(['code' => 'codeA', 'contextData' => [], 'value' => 'valueB']);
+        $attributeA = ProductAttribute::fromArray([
+            ProductAttribute::CODE => 'codeA',
+            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::VALUE => 'valueA'
+        ]);
+        $attributeB = ProductAttribute::fromArray([
+            ProductAttribute::CODE => 'codeA',
+            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::VALUE => 'valueB'
+        ]);
 
         $this->assertTrue($attributeA->hasSameCodeAs($attributeB));
     }
