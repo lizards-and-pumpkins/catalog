@@ -73,7 +73,7 @@ class PaginationTest extends \PHPUnit_Framework_TestCase
     {
         $testCurrentPageNumber = 2;
 
-        $this->stubRequest->method('getQueryParameter')->with(PaginationBlock::PAGINATION_QUERY_PARAMETER_NAME)
+        $this->stubRequest->method('getQueryParameter')->with(Pagination::PAGINATION_QUERY_PARAMETER_NAME)
             ->willReturn($testCurrentPageNumber);
 
         $this->assertEquals($testCurrentPageNumber, $this->pagination->getCurrentPageNumber());
@@ -82,5 +82,18 @@ class PaginationTest extends \PHPUnit_Framework_TestCase
     public function testCurrentPageEqualsToOneByDefault()
     {
         $this->assertEquals(1, $this->pagination->getCurrentPageNumber());
+    }
+
+    public function testQueryStringForGivenPageNumberIsReturned()
+    {
+        $pageNumber = 2;
+
+        $this->stubRequest->method('getQueryParametersExceptGiven')->with(Pagination::PAGINATION_QUERY_PARAMETER_NAME)
+            ->willReturn([]);
+
+        $expectedQueryString = sprintf('%s=%d', Pagination::PAGINATION_QUERY_PARAMETER_NAME, $pageNumber);
+        $result = $this->pagination->getQueryStringForPage($pageNumber);
+
+        $this->assertEquals($expectedQueryString, $result);
     }
 }

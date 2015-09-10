@@ -6,6 +6,8 @@ use Brera\Http\HttpRequest;
 
 class Pagination
 {
+    const PAGINATION_QUERY_PARAMETER_NAME = 'p';
+
     /**
      * @var HttpRequest
      */
@@ -93,7 +95,7 @@ class Pagination
     {
         if (null === $this->lazyLoadedCurrentPageNumber) {
             $this->lazyLoadedCurrentPageNumber = $this->request->getQueryParameter(
-                PaginationBlock::PAGINATION_QUERY_PARAMETER_NAME
+                self::PAGINATION_QUERY_PARAMETER_NAME
             );
 
             if (null === $this->lazyLoadedCurrentPageNumber) {
@@ -102,5 +104,18 @@ class Pagination
         }
 
         return $this->lazyLoadedCurrentPageNumber;
+    }
+
+    /**
+     * @param int $pageNumber
+     * @return string
+     */
+    public function getQueryStringForPage($pageNumber)
+    {
+        $queryParameters = $this->request->getQueryParametersExceptGiven(self::PAGINATION_QUERY_PARAMETER_NAME);
+        $queryParameters[self::PAGINATION_QUERY_PARAMETER_NAME] = $pageNumber;
+
+        return http_build_query($queryParameters);
+
     }
 }
