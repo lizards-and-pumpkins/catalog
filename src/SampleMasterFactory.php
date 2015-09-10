@@ -30,6 +30,7 @@ use Brera\Log\InMemoryLogger;
  * @method Product\FilterNavigationBlockRenderer createFilterNavigationBlockRenderer
  * @method Context\Context createContext
  * @method Product\FilterNavigationFilterCollection createFilterNavigationFilterCollection
+ * @method PaginationBlockRenderer createPaginationBlockRenderer
  */
 class SampleMasterFactory implements MasterFactory
 {
