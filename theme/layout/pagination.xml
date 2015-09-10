@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<snippet xmlns="http://brera.io" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://brera.io ../../schema/snippet.xsd">
+    <block name="product" class="Brera\PaginationBlock" template="theme/template/pagination.phtml"/>
+</snippet>

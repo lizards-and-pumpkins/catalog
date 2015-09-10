@@ -1237,4 +1237,15 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $this->getMasterFactory()->createDataPoolReader()
         );
     }
+
+    /**
+     * @return PaginationBlockRenderer
+     */
+    public function createPaginationBlockRenderer()
+    {
+        return new PaginationBlockRenderer(
+            $this->getMasterFactory()->createThemeLocator(),
+            $this->getMasterFactory()->createBlockStructure()
+        );
+    }
 }

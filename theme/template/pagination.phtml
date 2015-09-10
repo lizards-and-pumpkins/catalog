@@ -1,0 +1,35 @@
+<?php
+/**
+ * @var \Brera\PaginationBlock $this
+ */
+?>
+<?php
+
+$maxPaginationLinksToShow = 7;
+$totalPagesCount = $this->getTotalPageCount();
+$currentPageNumber = $this->getCurrentPageNumber();
+
+?>
+<div class="pages">
+    <ol>
+        <?php if ($totalPagesCount && 1 < $currentPageNumber) : ?>
+            <li><a class="prev" href="<?php /* TODO: Insert base URL */ ?>?<?= $this->getQueryStringForPage(1) ?>">&#9664;</a></li>
+        <?php endif ?>
+        <?php for ($pageNumber = 1; $pageNumber <= $totalPagesCount; $pageNumber ++) : ?>
+            <?php if ($totalPagesCount > $maxPaginationLinksToShow && $currentPageNumber < $totalPagesCount - 1) : ?>
+                <?php if ($currentPageNumber === $maxPaginationLinksToShow - 1) : ?>
+                    <li>...</li>
+                <?php endif ?>
+                <?php continue; ?>
+            <?php endif ?>
+            <?php if ($currentPageNumber === $pageNumber) : ?>
+                <li class="current"><?= $pageNumber ?></li>
+            <?php else : ?>
+                <li><a href="<?php /* TODO: Insert base URL */ ?>?<?= $this->getQueryStringForPage($pageNumber) ?>"><?= $pageNumber ?></a></li>
+            <?php endif ?>
+        <?php endfor ?>
+        <?php if ($totalPagesCount && $totalPagesCount > $currentPageNumber) : ?>
+            <li><a class="next" href="<?php /* TODO: Insert base URL */ ?>?<?= $this->getQueryStringForPage($totalPagesCount) ?>">&#9654;</a></li>
+        <?php endif ?>
+    </ol>
+</div>

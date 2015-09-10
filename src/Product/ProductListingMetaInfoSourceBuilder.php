@@ -83,7 +83,8 @@ class ProductListingMetaInfoSourceBuilder
         }
 
         throw new InvalidConditionXmlAttributeException(sprintf(
-            '"condition" attribute value "%s" in product listing XML is invalid.', $criteriaCondition[0]['value']
+            '"condition" attribute value "%s" in product listing XML is invalid.',
+            $criteriaCondition[0]['value']
         ));
     }
 
