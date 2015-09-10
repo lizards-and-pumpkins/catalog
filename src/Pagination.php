@@ -65,14 +65,6 @@ class Pagination
     }
 
     /**
-     * @return HttpRequest
-     */
-    public function getRequest()
-    {
-        return $this->request;
-    }
-
-    /**
      * @return int
      */
     public function getCollectionSize()

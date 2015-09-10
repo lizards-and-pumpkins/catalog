@@ -54,11 +54,6 @@ class PaginationTest extends \PHPUnit_Framework_TestCase
         Pagination::create($this->stubRequest, $this->testCollectionSize, $invalidNumberOfItemsPerPage);
     }
 
-    public function testHttpRequestIsReturned()
-    {
-        $this->assertSame($this->stubRequest, $this->pagination->getRequest());
-    }
-
     public function testCollectionSizeIsReturned()
     {
         $this->assertSame($this->testCollectionSize, $this->pagination->getCollectionSize());
