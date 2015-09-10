@@ -22,6 +22,11 @@ class Pagination
     private $numberOfItemsPerPage;
 
     /**
+     * @var int
+     */
+    private $lazyLoadedCurrentPageNumber;
+
+    /**
      * @param HttpRequest $request
      * @param int $collectionSize
      * @param int $numberOfItemsPerPage
@@ -79,5 +84,23 @@ class Pagination
     public function getNumberOfItemsPerPage()
     {
         return $this->numberOfItemsPerPage;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCurrentPageNumber()
+    {
+        if (null === $this->lazyLoadedCurrentPageNumber) {
+            $this->lazyLoadedCurrentPageNumber = $this->request->getQueryParameter(
+                PaginationBlock::PAGINATION_QUERY_PARAMETER_NAME
+            );
+
+            if (null === $this->lazyLoadedCurrentPageNumber) {
+                $this->lazyLoadedCurrentPageNumber = 1;
+            }
+        }
+
+        return $this->lazyLoadedCurrentPageNumber;
     }
 }

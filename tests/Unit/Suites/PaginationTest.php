@@ -27,13 +27,13 @@ class PaginationTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Pagination
      */
-    private $paginationData;
+    private $pagination;
 
     protected function setUp()
     {
         $this->stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
 
-        $this->paginationData = Pagination::create(
+        $this->pagination = Pagination::create(
             $this->stubRequest,
             $this->testCollectionSize,
             $this->testNumberOfItemsPerPage
@@ -56,16 +56,31 @@ class PaginationTest extends \PHPUnit_Framework_TestCase
 
     public function testHttpRequestIsReturned()
     {
-        $this->assertSame($this->stubRequest, $this->paginationData->getRequest());
+        $this->assertSame($this->stubRequest, $this->pagination->getRequest());
     }
 
     public function testCollectionSizeIsReturned()
     {
-        $this->assertSame($this->testCollectionSize, $this->paginationData->getCollectionSize());
+        $this->assertSame($this->testCollectionSize, $this->pagination->getCollectionSize());
     }
 
     public function testNumberOfItemsPerPageIsReturned()
     {
-        $this->assertSame($this->testNumberOfItemsPerPage, $this->paginationData->getNumberOfItemsPerPage());
+        $this->assertSame($this->testNumberOfItemsPerPage, $this->pagination->getNumberOfItemsPerPage());
+    }
+
+    public function testCurrentPageNumberIsReturned()
+    {
+        $testCurrentPageNumber = 2;
+
+        $this->stubRequest->method('getQueryParameter')->with(PaginationBlock::PAGINATION_QUERY_PARAMETER_NAME)
+            ->willReturn($testCurrentPageNumber);
+
+        $this->assertEquals($testCurrentPageNumber, $this->pagination->getCurrentPageNumber());
+    }
+
+    public function testCurrentPageEqualsToOneByDefault()
+    {
+        $this->assertEquals(1, $this->pagination->getCurrentPageNumber());
     }
 }
