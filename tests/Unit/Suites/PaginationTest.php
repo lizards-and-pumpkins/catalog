@@ -5,9 +5,9 @@ namespace Brera;
 use Brera\Http\HttpRequest;
 
 /**
- * @covers \Brera\PaginationData
+ * @covers \Brera\Pagination
  */
-class PaginationDataTest extends \PHPUnit_Framework_TestCase
+class PaginationTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
@@ -25,7 +25,7 @@ class PaginationDataTest extends \PHPUnit_Framework_TestCase
     private $testNumberOfItemsPerPage = 9;
 
     /**
-     * @var PaginationData
+     * @var Pagination
      */
     private $paginationData;
 
@@ -33,7 +33,7 @@ class PaginationDataTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
 
-        $this->paginationData = PaginationData::create(
+        $this->paginationData = Pagination::create(
             $this->stubRequest,
             $this->testCollectionSize,
             $this->testNumberOfItemsPerPage
@@ -44,14 +44,14 @@ class PaginationDataTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(InvalidCollectionSizeTypeException::class);
         $invalidCollectionSize = [];
-        PaginationData::create($this->stubRequest, $invalidCollectionSize, $this->testNumberOfItemsPerPage);
+        Pagination::create($this->stubRequest, $invalidCollectionSize, $this->testNumberOfItemsPerPage);
     }
 
     public function testExceptionIsThrowIfNumberOfItemsPerPageIsNotInteger()
     {
         $this->setExpectedException(InvalidNumberOfItemsPerPageTypeException::class);
         $invalidNumberOfItemsPerPage = [];
-        PaginationData::create($this->stubRequest, $this->testCollectionSize, $invalidNumberOfItemsPerPage);
+        Pagination::create($this->stubRequest, $this->testCollectionSize, $invalidNumberOfItemsPerPage);
     }
 
     public function testHttpRequestIsReturned()

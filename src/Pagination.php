@@ -4,7 +4,7 @@ namespace Brera;
 
 use Brera\Http\HttpRequest;
 
-class PaginationData
+class Pagination
 {
     /**
      * @var HttpRequest
@@ -37,7 +37,7 @@ class PaginationData
      * @param HttpRequest $request
      * @param mixed $collectionSize
      * @param mixed $numberOfItemsPerPage
-     * @return PaginationData
+     * @return Pagination
      */
     public static function create(HttpRequest $request, $collectionSize, $numberOfItemsPerPage)
     {
