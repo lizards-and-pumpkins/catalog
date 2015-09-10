@@ -3,7 +3,10 @@
 namespace Brera\Product;
 
 use Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
+use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
+use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
 use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
+use Brera\UrlKey;
 
 /**
  * @covers \Brera\Product\ProductListingMetaInfoSourceBuilder
@@ -90,10 +93,42 @@ EOX;
         (new ProductListingMetaInfoSourceBuilder())->createProductListingMetaInfoSourceFromXml($xml);
     }
 
-    public function testExceptionIsThrownIfCriterionOperationAttributeIsInvalid()
+    public function testExceptionIsThrownIfCriterionOperationAttributeIsNotAValidClass()
     {
         $this->setExpectedException(InvalidCriterionOperationXmlAttributeException::class);
         $xml = '<listing url_key="foo" condition="and"><bar operation="baz" /></listing>';
         (new ProductListingMetaInfoSourceBuilder())->createProductListingMetaInfoSourceFromXml($xml);
+    }
+
+    public function testExceptionIsThrownIfCriterionOperationAttributeContainsNonCharacterData()
+    {
+        $this->setExpectedException(
+            InvalidCriterionOperationXmlAttributeException::class,
+            sprintf('Invalid operation in product listing XML "%s", only the letters a-z are allowed.', "a\\b")
+        );
+        $xml = '<listing url_key="foo" condition="and"><bar operation="a\\b" /></listing>';
+        (new ProductListingMetaInfoSourceBuilder())->createProductListingMetaInfoSourceFromXml($xml);
+    }
+
+    public function testItThrowsAnExceptionIfTheContextArrayContainsNonStrings()
+    {
+        $expectedMessage = 'The context array has to contain only string values, found ';
+        $this->setExpectedException(DataNotStringException::class, $expectedMessage);
+        (new ProductListingMetaInfoSourceBuilder())->createProductListingMetaInfoSource(
+            UrlKey::fromString('http://example.com'),
+            ['key' => 123],
+            $this->getMock(SearchCriteria::class)
+        );
+    }
+
+    public function testItThrowsAnExceptionIfTheContextArrayKeysAreNotStrings()
+    {
+        $expectedMessage = 'The context array has to contain only string keys, found ';
+        $this->setExpectedException(DataNotStringException::class, $expectedMessage);
+        (new ProductListingMetaInfoSourceBuilder())->createProductListingMetaInfoSource(
+            UrlKey::fromString('http://example.com'),
+            [0 => 'value'],
+            $this->getMock(SearchCriteria::class)
+        );
     }
 }
