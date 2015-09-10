@@ -71,12 +71,12 @@ class PaginationTest extends \PHPUnit_Framework_TestCase
         $this->stubRequest->method('getQueryParameter')->with(Pagination::PAGINATION_QUERY_PARAMETER_NAME)
             ->willReturn($testCurrentPageNumber);
 
-        $this->assertEquals($testCurrentPageNumber, $this->pagination->getCurrentPageNumber());
+        $this->assertSame($testCurrentPageNumber, $this->pagination->getCurrentPageNumber());
     }
 
     public function testCurrentPageEqualsToOneByDefault()
     {
-        $this->assertEquals(1, $this->pagination->getCurrentPageNumber());
+        $this->assertSame(1, $this->pagination->getCurrentPageNumber());
     }
 
     public function testQueryStringForGivenPageNumberIsReturned()

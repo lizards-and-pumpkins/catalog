@@ -86,11 +86,11 @@ class Pagination
     public function getCurrentPageNumber()
     {
         if (null === $this->lazyLoadedCurrentPageNumber) {
-            $this->lazyLoadedCurrentPageNumber = $this->request->getQueryParameter(
+            $this->lazyLoadedCurrentPageNumber = (int) $this->request->getQueryParameter(
                 self::PAGINATION_QUERY_PARAMETER_NAME
             );
 
-            if (null === $this->lazyLoadedCurrentPageNumber) {
+            if (0 === $this->lazyLoadedCurrentPageNumber) {
                 $this->lazyLoadedCurrentPageNumber = 1;
             }
         }
