@@ -136,12 +136,12 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
     public function testQueryParametersExceptGivenRetrievalIsDelegatedToHttpUrl()
     {
         $queryParameterToBeExcluded = 'baz';
-        $queryParameters = ['foo' => 'bar'];
+        $queryParametersWithParameterExcluded = ['foo' => 'bar'];
 
         /** @var HttpUrl|\PHPUnit_Framework_MockObject_MockObject $stubHttpUrl */
         $stubHttpUrl = $this->getMock(HttpUrl::class, [], [], '', false);
         $stubHttpUrl->method('getQueryParametersExceptGiven')->with($queryParameterToBeExcluded)
-            ->willReturn($queryParameters);
+            ->willReturn($queryParametersWithParameterExcluded);
 
         $request = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
@@ -151,6 +151,6 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
         );
         $result = $request->getQueryParametersExceptGiven($queryParameterToBeExcluded);
 
-        $this->assertArrayNotHasKey($queryParameterToBeExcluded, $result);
+        $this->assertSame($queryParametersWithParameterExcluded, $result);
     }
 }

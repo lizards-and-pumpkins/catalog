@@ -313,7 +313,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         HttpRequest $request,
         array $selectedFilters
     ) {
-        if (1 > count($searchDocumentCollection)) {
+        if (0 === count($searchDocumentCollection)) {
             return;
         }
 
