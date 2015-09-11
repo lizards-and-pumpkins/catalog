@@ -31,27 +31,11 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     private $searchEngine;
 
     /**
-     * @return SearchEngine
-     */
-    final protected function getSearchEngine()
-    {
-        return $this->searchEngine;
-    }
-
-    /**
-     * @return Context
-     */
-    final protected function getTestContext()
-    {
-        return $this->testContext;
-    }
-
-    /**
      * @param string[] $fields
      * @param ProductId $productId
      * @return SearchDocument
      */
-    final protected function createSearchDocument(array $fields, ProductId $productId)
+    private function createSearchDocument(array $fields, ProductId $productId)
     {
         return $this->createSearchDocumentWithContext($fields, $productId, $this->testContext);
     }
@@ -338,4 +322,20 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
      * @return SearchEngine
      */
     abstract protected function createSearchEngineInstance();
+
+    public function testItClearsTheStorage()
+    {
+        $searchDocumentFieldName = 'foo';
+        $searchDocumentFieldValue = 'bar';
+        $productId = ProductId::fromString('id');
+
+        $searchDocument = $this->createSearchDocument(
+            [$searchDocumentFieldName => $searchDocumentFieldValue],
+            $productId
+        );
+
+        $this->searchEngine->addSearchDocument($searchDocument);
+        $this->searchEngine->clear();
+        $this->assertEmpty($this->searchEngine->query($searchDocumentFieldValue, $this->testContext));
+    }
 }

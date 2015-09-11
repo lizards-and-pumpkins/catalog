@@ -9,10 +9,9 @@ use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
 use Brera\DataVersion;
 use Brera\Product\ProductId;
-use Brera\Utils\Clearable;
 use Brera\Utils\LocalFilesystem;
 
-class FileSearchEngine extends IntegrationTestSearchEngineAbstract implements Clearable
+class FileSearchEngine extends IntegrationTestSearchEngineAbstract
 {
     /**
      * @var string

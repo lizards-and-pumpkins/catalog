@@ -3,9 +3,8 @@
 namespace Brera\DataPool\SearchEngine;
 
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
-use Brera\Utils\Clearable;
 
-class InMemorySearchEngine extends IntegrationTestSearchEngineAbstract implements Clearable
+class InMemorySearchEngine extends IntegrationTestSearchEngineAbstract
 {
     /**
      * @var SearchDocument[]
