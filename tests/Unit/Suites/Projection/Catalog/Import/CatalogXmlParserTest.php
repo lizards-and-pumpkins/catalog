@@ -7,6 +7,9 @@ use Brera\Product\ProductSource;
 use Brera\TestFileFixtureTrait;
 use SebastianBergmann\Money\XXX;
 
+/**
+ * @covers Brera\Projection\Catalog\Import\CatalogXmlParser
+ */
 class CatalogXmlParserTest extends \PHPUnit_Framework_TestCase
 {
     use TestFileFixtureTrait;
@@ -203,7 +206,7 @@ EOT;
         $expectedType
     ) {
         $this->setExpectedException(
-            Exception\CatalogImportSourceFilePathIsNotAStringException::class,
+            Exception\CatalogImportSourceXMLNotAStringException::class,
             sprintf('Expected the catalog XML to be a string, got "%s"', $expectedType)
         );
         CatalogXmlParser::fromXml($noXmlStringInput);

@@ -104,7 +104,7 @@ class CatalogXmlParser
     private static function validateSourceXmlIsString($xmlString)
     {
         if (!is_string($xmlString)) {
-            throw new Exception\CatalogImportSourceFilePathIsNotAStringException(sprintf(
+            throw new Exception\CatalogImportSourceXMLNotAStringException(sprintf(
                 'Expected the catalog XML to be a string, got "%s"',
                 self::getVariableType($xmlString)
             ));
