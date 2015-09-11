@@ -5,10 +5,12 @@ namespace Brera\Projection\Catalog\Import;
 
 use Brera\Product\ProductSource;
 use Brera\TestFileFixtureTrait;
+use Brera\Utils\XPathParser;
 use SebastianBergmann\Money\XXX;
 
 /**
- * @covers Brera\Projection\Catalog\Import\CatalogXmlParser
+ * @covers \Brera\Projection\Catalog\Import\CatalogXmlParser
+ * @uses   \Brera\Utils\XPathParser
  */
 class CatalogXmlParserTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,22 +32,44 @@ EOT;
     /**
      * @return string
      */
-    private function getSimpleProductXml()
+    private function getFirstImageXml()
     {
         return <<<EOT
-        <product type="simple" sku="test-sku" visible="true" tax_class_id="123">
-            <attributes>
                 <image>
                     <main>true</main>
                     <file>first-image.jpg</file>
                     <label>The main image label</label>
                 </image>
+EOT;
+
+    }
+
+    /**
+     * @return string
+     */
+    private function getSecondImageXml()
+    {
+        return <<<EOT
                 <image>
                     <show_in_gallery>false</show_in_gallery>
                     <file>second-image.png</file>
                     <label locale="xx_XX">Second image label XX</label>
                     <label locale="yy_YY">Second image label YY</label>
                 </image>
+EOT;
+
+    }
+
+    /**
+     * @return string
+     */
+    private function getSimpleProductXml()
+    {
+        return sprintf('
+        <product type="simple" sku="test-sku" visible="true" tax_class_id="123">
+            <attributes>
+                %s
+                %s
                 <category website="test1" locale="xx_XX">category-1</category>
                 <category website="test2" locale="xx_XX">category-1</category>
                 <category website="test2" locale="yy_YY">category-1</category>
@@ -62,7 +86,7 @@ EOT;
                 <style>Pumpkin</style>
             </attributes>
         </product>
-EOT;
+', $this->getFirstImageXml(), $this->getSecondImageXml());
     }
 
     /**
@@ -161,20 +185,36 @@ EOT;
     }
 
     /**
-     * @param mixed $expectedXml
+     * @param string $expectedXml
      * @param int $expectedCallCount
      * @return \Closure|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createMockCallback($expectedXml, $expectedCallCount)
+    private function createMockCallbackExpectingXml($expectedXml, $expectedCallCount)
     {
+        $mockCallback = $this->getMock(Callback::class, ['__invoke']);
         $expected = new \DOMDocument();
         $expected->loadXML($expectedXml);
-        $mockCallback = $this->getMock(Callback::class, ['__invoke']);
         $mockCallback->expects($this->exactly($expectedCallCount))->method('__invoke')->willReturnCallback(
             function ($xml) use ($expected) {
                 $actual = new \DOMDocument();
                 $actual->loadXML($xml);
                 $this->assertEqualXMLStructure($expected->firstChild, $actual->firstChild);
+            }
+        );
+        return $mockCallback;
+    }
+
+    /**
+     * @param \PHPUnit_Framework_Constraint $condition
+     * @param int $expectedCallCount
+     * @return \Closure|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createMockCallbackExpectingMatch(\PHPUnit_Framework_Constraint $condition, $expectedCallCount)
+    {
+        $mockCallback = $this->getMock(Callback::class, ['__invoke']);
+        $mockCallback->expects($this->exactly($expectedCallCount))->method('__invoke')->willReturnCallback(
+            function ($arg) use ($condition) {
+                $condition->evaluate($arg);
             }
         );
         return $mockCallback;
@@ -264,9 +304,9 @@ EOT;
     {
         $instance = CatalogXmlParser::fromXml($this->getCatalogXmlWithOneSimpleProduct());
         $expectedXml = $this->getSimpleProductXml();
-        $expectedCallCount = 1;
-        $instance->registerProductSourceCallback($this->createMockCallback($expectedXml, $expectedCallCount));
-        $instance->registerProductSourceCallback($this->createMockCallback($expectedXml, $expectedCallCount));
+        $callCount = 1;
+        $instance->registerProductSourceCallback($this->createMockCallbackExpectingXml($expectedXml, $callCount));
+        $instance->registerProductSourceCallback($this->createMockCallbackExpectingXml($expectedXml, $callCount));
         $instance->parse();
     }
 
@@ -274,8 +314,8 @@ EOT;
     {
         $instance = CatalogXmlParser::fromXml($this->getCatalogXmlWithTwoSimpleProducts());
         $expectedXml = $this->getSimpleProductXml();
-        $expectedCallCount = 2;
-        $instance->registerProductSourceCallback($this->createMockCallback($expectedXml, $expectedCallCount));
+        $callCount = 2;
+        $instance->registerProductSourceCallback($this->createMockCallbackExpectingXml($expectedXml, $callCount));
         $instance->parse();
     }
 
@@ -284,7 +324,17 @@ EOT;
         $instance = CatalogXmlParser::fromXml($this->getCatalogXmlWithTwoListings());
         $expectedXml = $this->getListingXml();
         $expectedCallCount = 2;
-        $instance->registerListingCallback($this->createMockCallback($expectedXml, $expectedCallCount));
+        $instance->registerListingCallback($this->createMockCallbackExpectingXml($expectedXml, $expectedCallCount));
+        $instance->parse();
+    }
+
+    public function testItCallsAllRegisteredImageCallbacks()
+    {
+        $instance = CatalogXmlParser::fromXml($this->getCatalogXmlWithOneSimpleProduct());
+        $expectedCallCount = 2;
+        $expected = $this->isType('array');
+        $instance->registerProductImageCallback($this->createMockCallbackExpectingMatch($expected, $expectedCallCount));
+        $instance->registerProductImageCallback($this->createMockCallbackExpectingMatch($expected, $expectedCallCount));
         $instance->parse();
     }
 }

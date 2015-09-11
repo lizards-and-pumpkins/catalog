@@ -7,6 +7,7 @@ use Brera\Product\ProductAttributeList;
 use Brera\Product\ProductId;
 use Brera\Product\ProductSource;
 use Brera\Product\SampleSku;
+use Brera\Utils\XPathParser;
 
 class CatalogXmlParser
 {
@@ -24,6 +25,11 @@ class CatalogXmlParser
      * @var callable[]
      */
     private $listingCallbacks = [];
+
+    /**
+     * @var callable[]
+     */
+    private $productImageCallbacks = [];
 
     private function __construct(\XmlReader $xmlReader)
     {
@@ -125,12 +131,27 @@ class CatalogXmlParser
     public function parse()
     {
         while ($this->xmlReader->read()) {
+            if ($this->isElementOnDepth('file', 5)) {
+            }
             if ($this->isProductNode()) {
-                $this->processElementCallbacks($this->productSourceCallbacks);
+                $productXml = $this->xmlReader->readOuterXml();
+                $this->processCallbacksWithArg($this->productSourceCallbacks, $productXml);
+                $this->processImageCallbacksForProductXml($productXml);
             } elseif ($this->isListingNode()) {
-                $this->processElementCallbacks($this->listingCallbacks);
+                $this->processCallbacksWithCurrentNode($this->listingCallbacks);
             }
         }
+    }
+
+    /**
+     * @param string $productXml
+     */
+    private function processImageCallbacksForProductXml($productXml)
+    {
+        $imageNodes = (new XPathParser($productXml))->getXmlNodesArrayByXPath('/product/attributes/image');
+        array_map(function (array $imageNode) {
+            $this->processCallbacksWithArg($this->productImageCallbacks, $imageNode);
+        }, $imageNodes);
     }
 
     public function registerProductSourceCallback(callable $callback)
@@ -141,6 +162,11 @@ class CatalogXmlParser
     public function registerListingCallback(callable $callback)
     {
         $this->listingCallbacks[] = $callback;
+    }
+
+    public function registerProductImageCallback(callable $callback)
+    {
+        $this->productImageCallbacks[] = $callback;
     }
 
     /**
@@ -175,12 +201,21 @@ class CatalogXmlParser
     /**
      * @param callable[] $callbacks
      */
-    private function processElementCallbacks($callbacks)
+    private function processCallbacksWithCurrentNode(array $callbacks)
     {
         $xmlString = $this->xmlReader->readOuterXml();
-        array_map(function (callable $callback) use ($xmlString) {
-            call_user_func($callback, $xmlString);
-        }, $callbacks);
+        $this->processCallbacksWithArg($callbacks, $xmlString);
         $this->xmlReader->next();
+    }
+
+    /**
+     * @param callable[] $callbacks
+     * @param string $argument
+     */
+    private function processCallbacksWithArg(array $callbacks, $argument)
+    {
+        array_map(function (callable $callback) use ($argument) {
+            call_user_func($callback, $argument);
+        }, $callbacks);
     }
 }
