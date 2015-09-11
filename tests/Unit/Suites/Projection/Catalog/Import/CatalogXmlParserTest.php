@@ -5,6 +5,7 @@ namespace Brera\Projection\Catalog\Import;
 
 use Brera\Product\ProductSource;
 use Brera\TestFileFixtureTrait;
+use SebastianBergmann\Money\XXX;
 
 class CatalogXmlParserTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,19 +14,13 @@ class CatalogXmlParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @return string
      */
-    private function getListingsXml()
+    private function getListingXml()
     {
         return <<<EOT
-    <listings>
         <listing url_key="lizards" condition="and" website="test1" locale="xx_XX">
             <category operation="=">category-1</category>
             <brand operation="=">Lizards</brand>
         </listing>
-        <listing url_key="lizards" condition="and" website="test2" locale="xx_XX">
-            <category operation="=">category-2</category>
-        </listing>
-    </listings>
-
 EOT;
     }
 
@@ -68,32 +63,117 @@ EOT;
     }
 
     /**
+     * @param string $content
      * @return string
      */
-    private function getSimpleProductInputFilePath()
+    private function getProductSectionWithContent($content)
     {
-        $dirPath = $this->getUniqueTempDir();
-        $filePath = $dirPath . '/simple-product.xml';
-        $contents = sprintf(
-            '<catalog  xmlns="http://brera.io" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        return sprintf('
     <products>
     %s
     </products>
-</catalog>', $this->getSimpleProductXml()
+', $content);
+    }
+
+    /**
+     * @param string $content
+     * @return string
+     */
+    private function getListingSectionWithContent($content)
+    {
+        return sprintf('
+    <listings>
+    %s
+    </listings>
+', $content);
+    }
+
+    /**
+     * @param string $content
+     * @return string
+     */
+    private function getCatalogXmlWithContent($content)
+    {
+        return sprintf('<catalog  xmlns="http://brera.io" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    %s
+</catalog>', $content);
+    }
+
+    /**
+     * @return string
+     */
+    private function getCatalogXmlWithOneSimpleProduct()
+    {
+        return $this->getCatalogXmlWithContent(
+            $this->getProductSectionWithContent(
+                $this->getSimpleProductXml()
+            )
         );
-        $this->createFixtureDirectory($dirPath);
-        $this->createFixtureFile($filePath, $contents);
+    }
+
+    /**
+     * @return string
+     */
+    public function getCatalogXmlWithTwoSimpleProducts()
+    {
+        return $this->getCatalogXmlWithContent(
+            $this->getProductSectionWithContent(
+                $this->getSimpleProductXml() .
+                $this->getSimpleProductXml()
+            )
+        );
+    }
+
+    /**
+     * @return string
+     */
+    private function getCatalogXmlWithTwoListings()
+    {
+        return $this->getCatalogXmlWithContent(
+            $this->getListingSectionWithContent(
+                $this->getListingXml() .
+                $this->getListingXml()
+            )
+        );
+    }
+
+    /**
+     * @param string $filePath ∂
+     * @param string $content
+     */
+    private function createFixtureFileAndPathWithContent($filePath, $content)
+    {
+        $this->createFixtureDirectory(dirname($filePath));
+        $this->createFixtureFile($filePath, $content);
+    }
+
+    /**
+     * @return string
+     */
+    private function createCatalogXmlFileWithOneSimpleProduct()
+    {
+        $filePath = $this->getUniqueTempDir() . '/simple-product.xml';
+        $this->createFixtureFileAndPathWithContent($filePath, $this->getCatalogXmlWithOneSimpleProduct());
         return $filePath;
     }
 
     /**
-     * @param string $className
-     * @return callable|\PHPUnit_Framework_MockObject_MockObject
+     * @param mixed $expectedXml
+     * @param int $expectedCallCount
+     * @return \Closure|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createMockCallbackExpectingClass($className)
+    private function createMockCallback($expectedXml, $expectedCallCount)
     {
+        $expected = new \DOMDocument();
+        $expected->loadXML($expectedXml);
         $mockCallback = $this->getMock(Callback::class, ['__invoke']);
-        $mockCallback->expects($this->once())->method('__invoke')->with($this->isInstanceOf($className));
+        $mockCallback->expects($this->exactly($expectedCallCount))->method('__invoke')->willReturnCallback(
+            function ($xml) use ($expected) {
+                $actual = new \DOMDocument();
+                $actual->loadXML($xml);
+                $this->assertEqualXMLStructure($expected->firstChild, $actual->firstChild);
+            }
+        );
         return $mockCallback;
     }
 
@@ -102,13 +182,31 @@ EOT;
      * @param string $expectedType
      * @dataProvider invalidSourceFilePathDataProvider
      */
-    public function testItThrowsAnExceptionIfTheNamedConstructorInputIsNotAString($invalidSourceFilePath, $expectedType)
-    {
+    public function testItThrowsAnExceptionIfTheFromFileConstructorInputIsNotAString(
+        $invalidSourceFilePath,
+        $expectedType
+    ) {
         $this->setExpectedException(
             Exception\CatalogImportSourceFilePathIsNotAStringException::class,
             sprintf('Expected the catalog XML import file path to be a string, got "%s"', $expectedType)
         );
-        CatalogXmlParser::forFile($invalidSourceFilePath);
+        CatalogXmlParser::fromFilePath($invalidSourceFilePath);
+    }
+
+    /**
+     * @param int|object|null $noXmlStringInput
+     * @param string $expectedType
+     * @dataProvider invalidSourceFilePathDataProvider
+     */
+    public function testItThrowsAnExceptionIfTheFromXmlConstructorInputIsNotAString(
+        $noXmlStringInput,
+        $expectedType
+    ) {
+        $this->setExpectedException(
+            Exception\CatalogImportSourceFilePathIsNotAStringException::class,
+            sprintf('Expected the catalog XML to be a string, got "%s"', $expectedType)
+        );
+        CatalogXmlParser::fromXml($noXmlStringInput);
     }
 
     /**
@@ -130,7 +228,7 @@ EOT;
             Exception\CatalogImportSourceXmlFileDoesNotExistException::class,
             sprintf('The catalog XML import file "%s" does not exist', $sourceFilePath)
         );
-        CatalogXmlParser::forFile($sourceFilePath);
+        CatalogXmlParser::fromFilePath($sourceFilePath);
     }
 
     public function testItThrowsAnExceptionIfTheInputFileIsNotReadable()
@@ -139,20 +237,51 @@ EOT;
         $sourceFilePath = $dirPath . '/not-readable.xml';
         $this->createFixtureDirectory($dirPath);
         $this->createFixtureFile($sourceFilePath, '', 0000);
-        
+
         $this->setExpectedException(
             Exception\CatalogImportSourceXmlFileIsNotReadableException::class,
             sprintf('The catalog XML import file "%s" is not readable', $sourceFilePath)
         );
-        CatalogXmlParser::forFile($sourceFilePath);
+        CatalogXmlParser::fromFilePath($sourceFilePath);
     }
 
-    public function testItCallsRegisteredProductSourceCallbacks()
+    public function testItReturnsACatalogXmlParserInstanceFromAFile()
     {
-        $sourceFilePath = $this->getSimpleProductInputFilePath();
-        $parser = CatalogXmlParser::forFile($sourceFilePath);
-        $mockCallback = $this->createMockCallbackExpectingClass(ProductSource::class);
-        $parser->registerCallbackForProductSource($mockCallback);
-        $parser->parse();
+        $instance = CatalogXmlParser::fromFilePath($this->createCatalogXmlFileWithOneSimpleProduct());
+        $this->assertInstanceOf(CatalogXmlParser::class, $instance);
+    }
+
+    public function testItReturnsACatalogXmlParserInstanceFromAXmlString()
+    {
+        $instance = CatalogXmlParser::fromXml($this->getCatalogXmlWithOneSimpleProduct());
+        $this->assertInstanceOf(CatalogXmlParser::class, $instance);
+    }
+
+    public function testItCallsAllRegisteredProductSourceCallbacksForOneProduct()
+    {
+        $instance = CatalogXmlParser::fromXml($this->getCatalogXmlWithOneSimpleProduct());
+        $expectedXml = $this->getSimpleProductXml();
+        $expectedCallCount = 1;
+        $instance->registerProductSourceCallback($this->createMockCallback($expectedXml, $expectedCallCount));
+        $instance->registerProductSourceCallback($this->createMockCallback($expectedXml, $expectedCallCount));
+        $instance->parse();
+    }
+
+    public function testItCallsRegisteredProductSourceCallbackForTwoProducts()
+    {
+        $instance = CatalogXmlParser::fromXml($this->getCatalogXmlWithTwoSimpleProducts());
+        $expectedXml = $this->getSimpleProductXml();
+        $expectedCallCount = 2;
+        $instance->registerProductSourceCallback($this->createMockCallback($expectedXml, $expectedCallCount));
+        $instance->parse();
+    }
+
+    public function testItCallsAllRegisteredListingCallbacks()
+    {
+        $instance = CatalogXmlParser::fromXml($this->getCatalogXmlWithTwoListings());
+        $expectedXml = $this->getListingXml();
+        $expectedCallCount = 2;
+        $instance->registerListingCallback($this->createMockCallback($expectedXml, $expectedCallCount));
+        $instance->parse();
     }
 }
