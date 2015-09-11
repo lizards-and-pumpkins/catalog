@@ -1,8 +1,6 @@
 <?php
 
-namespace Unit\Suites\DataPool\SearchEngine\SearchCriteria;
-
-use Brera\DataPool\SearchEngine\SearchCriteria\AbstractSearchCriterionTest;
+namespace Brera\DataPool\SearchEngine\SearchCriteria;
 
 /**
  * @covers \Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterOrEqualThan

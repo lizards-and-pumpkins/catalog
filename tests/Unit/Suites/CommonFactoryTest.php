@@ -497,4 +497,10 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $result = $this->commonFactory->createFilterNavigationFilterCollection();
         $this->assertInstanceOf(FilterNavigationFilterCollection::class, $result);
     }
+
+    public function testPaginationBlockRendererIsReturned()
+    {
+        $result = $this->commonFactory->createPaginationBlockRenderer();
+        $this->assertInstanceOf(PaginationBlockRenderer::class, $result);
+    }
 }

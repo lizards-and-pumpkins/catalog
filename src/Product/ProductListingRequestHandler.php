@@ -15,6 +15,7 @@ use Brera\Http\HttpRequestHandler;
 use Brera\Http\HttpResponse;
 use Brera\Http\UnableToHandleRequestException;
 use Brera\PageBuilder;
+use Brera\Pagination;
 use Brera\Renderer\BlockRenderer;
 use Brera\SnippetKeyGeneratorLocator;
 
@@ -61,6 +62,11 @@ class ProductListingRequestHandler implements HttpRequestHandler
     private $filterNavigationAttributeCodes;
 
     /**
+     * @var BlockRenderer
+     */
+    private $paginationBlockRenderer;
+
+    /**
      * @param Context $context
      * @param DataPoolReader $dataPoolReader
      * @param PageBuilder $pageBuilder
@@ -68,6 +74,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
      * @param BlockRenderer $filterNavigationBlockRenderer
      * @param FilterNavigationFilterCollection $filterNavigationFilterCollection
      * @param string[] $filterNavigationAttributeCodes
+     * @param BlockRenderer $paginationBlockRenderer
      */
     public function __construct(
         Context $context,
@@ -76,7 +83,8 @@ class ProductListingRequestHandler implements HttpRequestHandler
         SnippetKeyGeneratorLocator $keyGeneratorLocator,
         BlockRenderer $filterNavigationBlockRenderer,
         FilterNavigationFilterCollection $filterNavigationFilterCollection,
-        array $filterNavigationAttributeCodes
+        array $filterNavigationAttributeCodes,
+        BlockRenderer $paginationBlockRenderer
     ) {
         $this->dataPoolReader = $dataPoolReader;
         $this->context = $context;
@@ -85,6 +93,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $this->filterNavigationBlockRenderer = $filterNavigationBlockRenderer;
         $this->filterNavigationFilterCollection = $filterNavigationFilterCollection;
         $this->filterNavigationAttributeCodes = $filterNavigationAttributeCodes;
+        $this->paginationBlockRenderer = $paginationBlockRenderer;
     }
 
     /**
@@ -112,7 +121,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
 
         $documentCollection = $this->getSearchDocumentsMatchingCriteria($originalCriteria, $selectedFilters);
 
-        $this->addProductListingContentToPage($documentCollection, $originalCriteria, $selectedFilters);
+        $this->addProductListingContentToPage($documentCollection, $originalCriteria, $request, $selectedFilters);
 
         $keyGeneratorParams = [
             'products_per_page' => $this->getDefaultNumberOrProductsPerPage(),
@@ -150,10 +159,18 @@ class ProductListingRequestHandler implements HttpRequestHandler
         return $snippet;
     }
 
-    private function addProductsInListingToPageBuilder(SearchDocumentCollection $searchDocumentCollection)
-    {
-        $productInListingSnippetKeys = $this->getProductInListingSnippetKeysForSearchDocumentCollection(
-            $searchDocumentCollection
+    private function addProductsInListingToPageBuilder(
+        SearchDocumentCollection $searchDocumentCollection,
+        Pagination $pagination
+    ) {
+        $currentPageNumber = $pagination->getCurrentPageNumber();
+        $productsPerPage = $pagination->getNumberOfItemsPerPage();
+
+        $documents = $searchDocumentCollection->getDocuments();
+        $currentPageDocuments = array_slice($documents, ($currentPageNumber - 1) * $productsPerPage, $productsPerPage);
+
+        $productInListingSnippetKeys = $this->getProductInListingSnippetKeysForSearchDocuments(
+            ...$currentPageDocuments
         );
 
         $snippetKeyToContentMap = $this->dataPoolReader->getSnippets($productInListingSnippetKeys);
@@ -183,16 +200,17 @@ class ProductListingRequestHandler implements HttpRequestHandler
     }
 
     /**
-     * @param SearchDocumentCollection $collection
+     * @param SearchDocument ...$searchDocuments
      * @return string[]
      */
-    private function getProductInListingSnippetKeysForSearchDocumentCollection(SearchDocumentCollection $collection)
+    private function getProductInListingSnippetKeysForSearchDocuments(SearchDocument ...$searchDocuments)
     {
-        $snippetCode = ProductInListingSnippetRenderer::CODE;
-        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
+        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
+            ProductInListingSnippetRenderer::CODE
+        );
         return array_map(function (SearchDocument $searchDocument) use ($keyGenerator) {
             return $keyGenerator->getKeyForContext($this->context, ['product_id' => $searchDocument->getProductId()]);
-        }, $collection->getDocuments());
+        }, $searchDocuments);
     }
 
     /**
@@ -235,19 +253,6 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $metaInfoSnippetKey = $keyGenerator->getKeyForContext($this->context, ['url_key' => $urlKey]);
 
         return $metaInfoSnippetKey;
-    }
-
-    private function addFilterNavigationSnippetToPageBuilder()
-    {
-        $dataObject = $this->filterNavigationFilterCollection;
-
-        $snippetCode = 'filter_navigation';
-        $snippetContents = $this->filterNavigationBlockRenderer->render($dataObject, $this->context);
-
-        $snippetCodeToKeyMap = [$snippetCode => $snippetCode];
-        $snippetKeyToContentMap = [$snippetCode => $snippetContents];
-
-        $this->pageBuilder->addSnippetsToPage($snippetCodeToKeyMap, $snippetKeyToContentMap);
     }
 
     /**
@@ -299,19 +304,25 @@ class ProductListingRequestHandler implements HttpRequestHandler
     /**
      * @param SearchDocumentCollection $searchDocumentCollection
      * @param SearchCriteria $originalCriteria
+     * @param HttpRequest $request
      * @param array[] $selectedFilters
      */
     private function addProductListingContentToPage(
         SearchDocumentCollection $searchDocumentCollection,
         SearchCriteria $originalCriteria,
+        HttpRequest $request,
         array $selectedFilters
     ) {
         if (1 > count($searchDocumentCollection)) {
             return;
         }
 
+        $numberOfProductsPerPage = (int) $this->getDefaultNumberOrProductsPerPage();
+        $pagination = Pagination::create($request, count($searchDocumentCollection), $numberOfProductsPerPage);
+
         $this->addFilterNavigationToPageBuilder($searchDocumentCollection, $originalCriteria, $selectedFilters);
-        $this->addProductsInListingToPageBuilder($searchDocumentCollection);
+        $this->addProductsInListingToPageBuilder($searchDocumentCollection, $pagination);
+        $this->addPaginationToPageBuilder($pagination);
     }
 
     /**
@@ -331,5 +342,31 @@ class ProductListingRequestHandler implements HttpRequestHandler
             $this->context
         );
         $this->addFilterNavigationSnippetToPageBuilder();
+    }
+
+    private function addFilterNavigationSnippetToPageBuilder()
+    {
+        $dataObject = $this->filterNavigationFilterCollection;
+
+        $snippetCode = 'filter_navigation';
+        $snippetContents = $this->filterNavigationBlockRenderer->render($dataObject, $this->context);
+
+        $snippetCodeToKeyMap = [$snippetCode => $snippetCode];
+        $snippetKeyToContentMap = [$snippetCode => $snippetContents];
+
+        $this->pageBuilder->addSnippetsToPage($snippetCodeToKeyMap, $snippetKeyToContentMap);
+    }
+
+    private function addPaginationToPageBuilder(Pagination $pagination)
+    {
+        $dataObject = $pagination;
+
+        $snippetCode = 'pagination';
+        $snippetContents = $this->paginationBlockRenderer->render($dataObject, $this->context);
+
+        $snippetCodeToKeyMap = [$snippetCode => $snippetCode];
+        $snippetKeyToContentMap = [$snippetCode => $snippetContents];
+
+        $this->pageBuilder->addSnippetsToPage($snippetCodeToKeyMap, $snippetKeyToContentMap);
     }
 }
