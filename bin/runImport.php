@@ -15,6 +15,7 @@ use Brera\Log\Writer\StdOutLogMessageWriter;
 use Brera\Queue\File\FileQueue;
 use Brera\Queue\LoggingQueueDecorator;
 use Brera\Queue\Queue;
+use Brera\Utils\Clearable;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -41,13 +42,21 @@ class ApiApp extends WebFront
         $router->register($this->getMasterFactory()->createApiRouter());
         $router->register($this->getMasterFactory()->createResourceNotFoundRouter());
     }
-
+    
     public function processQueues()
     {
         $commandConsumer = $this->getMasterFactory()->createCommandConsumer();
         $commandConsumer->process();
         $domainEventConsumer = $this->getMasterFactory()->createDomainEventConsumer();
         $domainEventConsumer->process();
+    }
+
+    public function clearStorage()
+    {
+        $this->getMasterFactory();
+        $this->getMasterFactory()->createDataPoolWriter()->clear();
+        $this->getMasterFactory()->createCommandQueue()->clear();
+        $this->getMasterFactory()->createEventQueue()->clear();
     }
 }
 
@@ -56,7 +65,7 @@ class LoggingQueueFactory implements Factory
     use FactoryTrait;
 
     /**
-     * @return Queue
+     * @return Queue|Clearable
      */
     public function createEventQueue()
     {
@@ -69,7 +78,7 @@ class LoggingQueueFactory implements Factory
     }
 
     /**
-     * @return Queue
+     * @return Queue|Clearable
      */
     public function createCommandQueue()
     {
@@ -92,6 +101,8 @@ class LoggingQueueFactory implements Factory
         );
     }
 }
+
+
 
 
 $httpRequestBodyContent = file_get_contents(__DIR__ . '/../tests/shared-fixture/product-listing-root-snippet.json');
@@ -119,10 +130,11 @@ $catalogImportRequest = HttpRequest::fromParameters(
     HttpRequest::METHOD_PUT,
     HttpUrl::fromString('http://example.com/api/catalog_import'),
     HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.catalog_import.v1+json']),
-    HttpRequestBody::fromString(json_encode(['fileName' => 'catalog.xml']))
+    HttpRequestBody::fromString(json_encode(['fileName' => 'catalog-seed.xml']))
 );
+
 $catalogImport = new ApiApp($catalogImportRequest);
+$catalogImport->clearStorage();
 $catalogImport->runWithoutSendingResponse();
 
-
-$catalogImport->processQueues();
+//$catalogImport->processQueues();

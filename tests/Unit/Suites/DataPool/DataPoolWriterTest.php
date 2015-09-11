@@ -2,9 +2,13 @@
 
 namespace Brera\DataPool;
 
+use Brera\DataPool\KeyValue\InMemory\InMemoryKeyValueStoreTest;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
+use Brera\DataPool\Stub\ClearableStubKeyValueStore;
+use Brera\DataPool\Stub\ClearableStubSearchEngine;
 use Brera\Snippet;
 use Brera\SnippetList;
+use Brera\Utils\Clearable;
 
 /**
  * @covers \Brera\DataPool\DataPoolWriter
@@ -87,5 +91,20 @@ class DataPoolWriterTest extends AbstractDataPoolTest
             ->willReturn($mockSnippetContent);
 
         return $mockSnippet;
+    }
+
+    public function testItIsClearable()
+    {
+        $this->assertInstanceOf(Clearable::class, $this->dataPoolWriter);
+    }
+
+    public function testItDelegatesClearToStorage()
+    {
+        $mockSearchEngine = $this->getMock(ClearableStubSearchEngine::class);
+        $mockKeyValueStore = $this->getMock(ClearableStubKeyValueStore::class);
+        $mockKeyValueStore->expects($this->once())->method('clear');
+        $mockSearchEngine->expects($this->once())->method('clear');
+        $writer = new DataPoolWriter($mockKeyValueStore, $mockSearchEngine);
+        $writer->clear();
     }
 }

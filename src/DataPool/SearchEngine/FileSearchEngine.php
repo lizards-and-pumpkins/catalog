@@ -9,8 +9,10 @@ use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
 use Brera\DataVersion;
 use Brera\Product\ProductId;
+use Brera\Utils\Clearable;
+use Brera\Utils\LocalFilesystem;
 
-class FileSearchEngine extends IntegrationTestSearchEngineAbstract
+class FileSearchEngine extends IntegrationTestSearchEngineAbstract implements Clearable
 {
     /**
      * @var string
@@ -72,6 +74,11 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
         }
 
         return $searchDocuments;
+    }
+
+    public function flush()
+    {
+        
     }
 
     /**
@@ -144,5 +151,10 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
         unset($dataSet['version']);
 
         return $contextBuilder->createContext($dataSet);
+    }
+
+    public function clear()
+    {
+        (new LocalFilesystem())->removeDirectoryContents($this->storagePath);
     }
 }

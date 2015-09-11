@@ -2,6 +2,9 @@
 
 namespace Brera\DataPool\SearchEngine;
 
+use Brera\Product\ProductId;
+use Brera\Utils\Clearable;
+
 /**
  * @covers \Brera\DataPool\SearchEngine\InMemorySearchEngine
  * @covers \Brera\DataPool\SearchEngine\IntegrationTestSearchEngineAbstract
@@ -26,5 +29,28 @@ class InMemorySearchEngineTest extends AbstractSearchEngineTest
     protected function createSearchEngineInstance()
     {
         return new InMemorySearchEngine();
+    }
+
+    public function testItIsClearable()
+    {
+        $this->assertInstanceOf(Clearable::class, $this->getSearchEngine());
+    }
+
+    public function testItClearsTheStorage()
+    {
+        $searchDocumentFieldName = 'foo';
+        $searchDocumentFieldValue = 'bar';
+        $productId = ProductId::fromString('id');
+
+        $searchDocument = $this->createSearchDocument(
+            [$searchDocumentFieldName => $searchDocumentFieldValue],
+            $productId
+        );
+
+        $this->getSearchEngine()->addSearchDocument($searchDocument);
+        $this->getSearchEngine()->clear();
+        $result = $this->getSearchEngine()->query($searchDocumentFieldValue, $this->getTestContext());
+
+        $this->assertEmpty($result);
     }
 }

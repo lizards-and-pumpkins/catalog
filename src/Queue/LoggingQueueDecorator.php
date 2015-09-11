@@ -4,8 +4,9 @@
 namespace Brera\Queue;
 
 use Brera\Log\Logger;
+use Brera\Utils\Clearable;
 
-class LoggingQueueDecorator implements Queue
+class LoggingQueueDecorator implements Queue, Clearable
 {
     /**
      * @var Queue
@@ -53,5 +54,12 @@ class LoggingQueueDecorator implements Queue
     public function next()
     {
         return $this->component->next();
+    }
+
+    public function clear()
+    {
+        if ($this->component instanceof Clearable) {
+            $this->component->clear();
+        }
     }
 }

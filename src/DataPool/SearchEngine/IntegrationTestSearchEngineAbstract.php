@@ -7,6 +7,7 @@ use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
+use Brera\Utils\Clearable;
 
 abstract class IntegrationTestSearchEngineAbstract implements SearchEngine
 {

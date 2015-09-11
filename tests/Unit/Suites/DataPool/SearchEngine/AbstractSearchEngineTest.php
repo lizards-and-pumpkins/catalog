@@ -31,11 +31,24 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     private $searchEngine;
 
     /**
+     * @return SearchEngine
+     */
+    protected function getSearchEngine()
+    {
+        return $this->searchEngine;
+    }
+    
+    protected function getTestContext()
+    {
+        return $this->testContext;
+    }
+
+    /**
      * @param string[] $fields
      * @param ProductId $productId
      * @return SearchDocument
      */
-    private function createSearchDocument(array $fields, ProductId $productId)
+    protected function createSearchDocument(array $fields, ProductId $productId)
     {
         return $this->createSearchDocumentWithContext($fields, $productId, $this->testContext);
     }

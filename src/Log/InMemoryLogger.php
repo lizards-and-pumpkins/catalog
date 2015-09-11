@@ -4,6 +4,8 @@ namespace Brera\Log;
 
 class InMemoryLogger implements Logger
 {
+    private $maxMessagesToKeep = 500;
+    
     /**
      * @var LogMessage[]
      */
@@ -11,6 +13,9 @@ class InMemoryLogger implements Logger
 
     public function log(LogMessage $message)
     {
+        if (count($this->messages) === $this->maxMessagesToKeep) {
+            array_shift($this->messages);
+        }
         $this->messages[] = $message;
     }
 

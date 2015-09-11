@@ -7,7 +7,7 @@ interface KeyValueStore
     /**
      * @param string $key
      * @param mixed $value
-     * @return null
+     * @return void
      */
     public function set($key, $value);
 
