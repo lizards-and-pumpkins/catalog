@@ -76,11 +76,6 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract implements Cl
         return $searchDocuments;
     }
 
-    public function flush()
-    {
-        
-    }
-
     /**
      * @param SearchDocument $searchDocument
      * @return mixed[]
