@@ -33,12 +33,15 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     /**
      * @return SearchEngine
      */
-    protected function getSearchEngine()
+    final protected function getSearchEngine()
     {
         return $this->searchEngine;
     }
-    
-    protected function getTestContext()
+
+    /**
+     * @return Context
+     */
+    final protected function getTestContext()
     {
         return $this->testContext;
     }
@@ -48,7 +51,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
      * @param ProductId $productId
      * @return SearchDocument
      */
-    protected function createSearchDocument(array $fields, ProductId $productId)
+    final protected function createSearchDocument(array $fields, ProductId $productId)
     {
         return $this->createSearchDocumentWithContext($fields, $productId, $this->testContext);
     }
