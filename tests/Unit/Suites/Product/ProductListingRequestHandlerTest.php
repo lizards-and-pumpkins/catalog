@@ -198,16 +198,9 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         \PHPUnit_Framework_MockObject_Matcher_InvokedRecorder $spy,
         $snippetCode
     ) {
-        $numberOfTimesSnippetWasAddedToPageBuilder = array_reduce(
-            $spy->getInvocations(),
-            function ($carry, \PHPUnit_Framework_MockObject_Invocation_Object $invocation) use ($snippetCode) {
-                if ([$snippetCode => $snippetCode] === $invocation->parameters[0]) {
-                    $carry++;
-                }
-                return $carry;
-            },
-            0
-        );
+        $numberOfTimesSnippetWasAddedToPageBuilder = array_sum(array_map(function($invocation) use ($snippetCode) {
+            return intval([$snippetCode => $snippetCode] === $invocation->parameters[0]);
+        }, $spy->getInvocations()));
 
         $this->assertEquals(
             1,
