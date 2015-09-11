@@ -130,11 +130,10 @@ $catalogImportRequest = HttpRequest::fromParameters(
     HttpRequest::METHOD_PUT,
     HttpUrl::fromString('http://example.com/api/catalog_import'),
     HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.catalog_import.v1+json']),
-    HttpRequestBody::fromString(json_encode(['fileName' => 'catalog-seed.xml']))
+    HttpRequestBody::fromString(json_encode(['fileName' => 'catalog.xml']))
 );
 
 $catalogImport = new ApiApp($catalogImportRequest);
-$catalogImport->clearStorage();
 $catalogImport->runWithoutSendingResponse();
 
-//$catalogImport->processQueues();
+$catalogImport->processQueues();
