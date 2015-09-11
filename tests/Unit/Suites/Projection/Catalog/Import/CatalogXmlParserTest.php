@@ -61,14 +61,14 @@ EOT;
     }
 
     /**
+     * @param string|null $imageXml
      * @return string
      */
-    private function getSimpleProductXml()
+    private function getSimpleProductXml($imageXml = null)
     {
         return sprintf('
         <product type="simple" sku="test-sku" visible="true" tax_class_id="123">
             <attributes>
-                %s
                 %s
                 <category website="test1" locale="xx_XX">category-1</category>
                 <category website="test2" locale="xx_XX">category-1</category>
@@ -86,7 +86,7 @@ EOT;
                 <style>Pumpkin</style>
             </attributes>
         </product>
-', $this->getFirstImageXml(), $this->getSecondImageXml());
+', isset($imageXml) ? $imageXml : ($this->getFirstImageXml() . $this->getSecondImageXml()));
     }
 
     /**
@@ -160,6 +160,20 @@ EOT;
             $this->getListingSectionWithContent(
                 $this->getListingXml() .
                 $this->getListingXml()
+            )
+        );
+    }
+
+    /**
+     * @return string
+     */
+    private function getCatalogXmlWithOneProductImage()
+    {
+        return $this->getCatalogXmlWithContent(
+            $this->getProductSectionWithContent(
+                $this->getSimpleProductXml(
+                    $this->getFirstImageXml()
+                )
             )
         );
     }
@@ -330,11 +344,10 @@ EOT;
 
     public function testItCallsAllRegisteredImageCallbacks()
     {
-        $instance = CatalogXmlParser::fromXml($this->getCatalogXmlWithOneSimpleProduct());
-        $expectedCallCount = 2;
-        $expected = $this->isType('array');
-        $instance->registerProductImageCallback($this->createMockCallbackExpectingMatch($expected, $expectedCallCount));
-        $instance->registerProductImageCallback($this->createMockCallbackExpectingMatch($expected, $expectedCallCount));
+        $instance = CatalogXmlParser::fromXml($this->getCatalogXmlWithOneProductImage());
+        $callCount = 1;
+        $expectedXml = $this->getFirstImageXml();
+        $instance->registerProductImageCallback($this->createMockCallbackExpectingXml($expectedXml, $callCount));
         $instance->parse();
     }
 }

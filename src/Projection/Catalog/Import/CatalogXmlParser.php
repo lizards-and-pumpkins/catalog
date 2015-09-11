@@ -128,11 +128,24 @@ class CatalogXmlParser
             gettype($variable);
     }
 
+    public function registerProductSourceCallback(callable $callback)
+    {
+        $this->productSourceCallbacks[] = $callback;
+    }
+
+    public function registerListingCallback(callable $callback)
+    {
+        $this->listingCallbacks[] = $callback;
+    }
+
+    public function registerProductImageCallback(callable $callback)
+    {
+        $this->productImageCallbacks[] = $callback;
+    }
+
     public function parse()
     {
         while ($this->xmlReader->read()) {
-            if ($this->isElementOnDepth('file', 5)) {
-            }
             if ($this->isProductNode()) {
                 $productXml = $this->xmlReader->readOuterXml();
                 $this->processCallbacksWithArg($this->productSourceCallbacks, $productXml);
@@ -148,25 +161,10 @@ class CatalogXmlParser
      */
     private function processImageCallbacksForProductXml($productXml)
     {
-        $imageNodes = (new XPathParser($productXml))->getXmlNodesArrayByXPath('/product/attributes/image');
-        array_map(function (array $imageNode) {
-            $this->processCallbacksWithArg($this->productImageCallbacks, $imageNode);
+        $imageNodes = (new XPathParser($productXml))->getXmlNodesRawXmlArrayByXPath('/product/attributes/image');
+        array_map(function ($imageXml) {
+            $this->processCallbacksWithArg($this->productImageCallbacks, $imageXml);
         }, $imageNodes);
-    }
-
-    public function registerProductSourceCallback(callable $callback)
-    {
-        $this->productSourceCallbacks[] = $callback;
-    }
-
-    public function registerListingCallback(callable $callback)
-    {
-        $this->listingCallbacks[] = $callback;
-    }
-
-    public function registerProductImageCallback(callable $callback)
-    {
-        $this->productImageCallbacks[] = $callback;
     }
 
     /**
@@ -205,7 +203,6 @@ class CatalogXmlParser
     {
         $xmlString = $this->xmlReader->readOuterXml();
         $this->processCallbacksWithArg($callbacks, $xmlString);
-        $this->xmlReader->next();
     }
 
     /**
