@@ -322,4 +322,20 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
      * @return SearchEngine
      */
     abstract protected function createSearchEngineInstance();
+
+    public function testItClearsTheStorage()
+    {
+        $searchDocumentFieldName = 'foo';
+        $searchDocumentFieldValue = 'bar';
+        $productId = ProductId::fromString('id');
+
+        $searchDocument = $this->createSearchDocument(
+            [$searchDocumentFieldName => $searchDocumentFieldValue],
+            $productId
+        );
+
+        $this->searchEngine->addSearchDocument($searchDocument);
+        $this->searchEngine->clear();
+        $this->assertEmpty($this->searchEngine->query($searchDocumentFieldValue, $this->testContext));
+    }
 }

@@ -6,6 +6,7 @@ use Brera\Api\ApiRequestHandler;
 use Brera\Http\HttpRequest;
 use Brera\Image\UpdateImageCommand;
 use Brera\Log\Logger;
+use Brera\Projection\Catalog\Import\CatalogXmlParser;
 use Brera\Queue\Queue;
 use Brera\Utils\XPathParser;
 
@@ -105,26 +106,12 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
 
     protected function processRequest(HttpRequest $request)
     {
-        $xml = $this->getImportFileContents($request);
-
-        $this->processProductsXml($xml);
-        $this->processListings($xml);
-        $this->processImages($xml);
-    }
-
-    /**
-     * @param HttpRequest $request
-     * @return string
-     */
-    private function getImportFileContents(HttpRequest $request)
-    {
-        $filePath = $this->importDirectoryPath . '/' . $this->getImportFileNameFromRequest($request);
-
-        if (!is_readable($filePath)) {
-            throw new CatalogImportFileNotReadableException(sprintf('%s file is not readable.', $filePath));
-        }
-
-        return file_get_contents($filePath);
+        $filePath = $this->getValidImportFilePathFromRequest($request);
+        $parser = CatalogXmlParser::fromFilePath($filePath);
+        $parser->registerProductSourceCallback([$this, 'processProductXml']);
+        $parser->registerListingCallback([$this, 'processListingXml']);
+        $parser->registerProductImageCallback([$this, 'processProductImageXml']);
+        $parser->parse();
     }
 
     /**
@@ -145,47 +132,58 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
     }
 
     /**
-     * @param string $xml
+     * @param string $productXml
      */
-    private function processProductsXml($xml)
+    public function processProductXml($productXml)
     {
-        $productNodesXml = (new XPathParser($xml))->getXmlNodesRawXmlArrayByXPath('//catalog/products/product');
-        foreach ($productNodesXml as $productXml) {
-            try {
-                $productSource = $this->productSourceBuilder->createProductSourceFromXml($productXml);
-                $this->commandQueue->add(new UpdateProductCommand($productSource));
-            } catch (\Exception $exception) {
-                $skuString = (new XPathParser($productXml))->getXmlNodesArrayByXPath('//@sku')[0]['value'];
-                $productId = ProductId::fromString($skuString);
-                $loggerMessage = new ProductImportFailedMessage($productId, $exception);
-                $this->logger->log($loggerMessage);
-            }
+        try {
+            $productSource = $this->productSourceBuilder->createProductSourceFromXml($productXml);
+            $this->commandQueue->add(new UpdateProductCommand($productSource));
+        } catch (\Exception $exception) {
+            $skuString = (new XPathParser($productXml))->getXmlNodesArrayByXPath('//@sku')[0]['value'];
+            $productId = ProductId::fromString($skuString);
+            $loggerMessage = new ProductImportFailedMessage($productId, $exception);
+            $this->logger->log($loggerMessage);
         }
     }
 
     /**
-     * @param string $xml
+     * @param string $listingXml
      */
-    private function processListings($xml)
+    public function processListingXml($listingXml)
     {
-        $listingNodesXml = (new XPathParser($xml))->getXmlNodesRawXmlArrayByXPath('//catalog/listings/listing');
-        foreach ($listingNodesXml as $listingXml) {
-            $productListingMetaInfoSource = $this->productListingMetaInfoSourceBuilder
-                ->createProductListingMetaInfoSourceFromXml($listingXml);
-            $this->commandQueue->add(new UpdateProductListingCommand($productListingMetaInfoSource));
+        $productListingMetaInfoSource = $this->productListingMetaInfoSourceBuilder
+            ->createProductListingMetaInfoSourceFromXml($listingXml);
+        $this->commandQueue->add(new UpdateProductListingCommand($productListingMetaInfoSource));
+    }
+
+    /**
+     * @param string $productImageXml
+     */
+    public function processProductImageXml($productImageXml)
+    {
+        $fileNode = (new XPathParser($productImageXml))->getXmlNodesArrayByXPath('/image/file')[0];
+        $this->commandQueue->add(new UpdateImageCommand($fileNode['value']));
+    }
+
+    /**
+     * @param string $filePath
+     */
+    private function validateImportFileIsReadable($filePath)
+    {
+        if (!is_readable($filePath)) {
+            throw new CatalogImportFileNotReadableException(sprintf('%s file is not readable.', $filePath));
         }
     }
 
     /**
-     * @param string $xml
+     * @param HttpRequest $request
+     * @return string
      */
-    private function processImages($xml)
+    private function getValidImportFilePathFromRequest(HttpRequest $request)
     {
-        $imageNodes = (new XPathParser($xml))->getXmlNodesArrayByXPath(
-            '//catalog/products/product/attributes/image/file'
-        );
-        foreach ($imageNodes as $imageNode) {
-            $this->commandQueue->add(new UpdateImageCommand($imageNode['value']));
-        }
+        $filePath = $this->importDirectoryPath . '/' . $this->getImportFileNameFromRequest($request);
+        $this->validateImportFileIsReadable($filePath);
+        return $filePath;
     }
 }

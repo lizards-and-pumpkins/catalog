@@ -9,6 +9,7 @@ use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
 use Brera\DataVersion;
 use Brera\Product\ProductId;
+use Brera\Utils\LocalFilesystem;
 
 class FileSearchEngine extends IntegrationTestSearchEngineAbstract
 {
@@ -144,5 +145,10 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
         unset($dataSet['version']);
 
         return $contextBuilder->createContext($dataSet);
+    }
+
+    public function clear()
+    {
+        (new LocalFilesystem())->removeDirectoryContents($this->storagePath);
     }
 }

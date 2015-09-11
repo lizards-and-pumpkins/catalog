@@ -10,11 +10,11 @@ class LocalFilesystem
     public function removeDirectoryAndItsContent($directoryPath)
     {
         if (!is_dir($directoryPath)) {
-            throw new DirectoryDoesNotExistException();
+            throw new DirectoryDoesNotExistException(sprintf('The directory "%s" does not exist', $directoryPath));
         }
 
         if (!is_writable($directoryPath)) {
-            throw new DirectoryNotWritableException();
+            throw new DirectoryNotWritableException(sprintf('The directory "%s" is not writable', $directoryPath));
         }
 
         $directoryIterator = new \RecursiveDirectoryIterator($directoryPath, \FilesystemIterator::SKIP_DOTS);
@@ -24,5 +24,18 @@ class LocalFilesystem
         }
 
         rmdir($directoryPath);
+    }
+
+    /**
+     * @param string $directoryPath
+     */
+    public function removeDirectoryContents($directoryPath)
+    {
+        $directoryIterator = new \RecursiveDirectoryIterator($directoryPath, \FilesystemIterator::SKIP_DOTS);
+        foreach ($directoryIterator as $path) {
+            is_dir($path->getPathname()) ?
+                $this->removeDirectoryAndItsContent($path->getPathname()) :
+                unlink($path->getPathname());
+        }
     }
 }

@@ -23,6 +23,7 @@ use Brera\TestFileFixtureTrait;
  * @uses   \Brera\Product\UpdateProductCommand
  * @uses   \Brera\Product\UpdateProductListingCommand
  * @uses   \Brera\Utils\XPathParser
+ * @uses   \Brera\Projection\Catalog\Import\CatalogXmlParser
  */
 class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {

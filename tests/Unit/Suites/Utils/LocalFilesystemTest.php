@@ -64,6 +64,23 @@ class LocalFilesystemTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(is_dir($directoryPath));
     }
 
+    public function testDirectoryContentsAreRemoved()
+    {
+        $directoryPath = $this->testDirectoryPath . '/directory-to-be-remain';
+
+        mkdir($directoryPath);
+        touch($directoryPath . '/file-to-be-removed');
+        mkdir($directoryPath . '/dir-to-be-removed');
+        symlink($directoryPath . '/file-to-be-removed', $directoryPath . '/link-to-be-removed');
+
+        $this->filesystem->removeDirectoryContents($directoryPath);
+
+        $this->assertTrue(is_dir($directoryPath));
+        $this->assertFalse(file_exists($directoryPath . '/file-to-be-removed'));
+        $this->assertFalse(is_dir($directoryPath . '/dir-to-be-removed'));
+        $this->assertFalse(file_exists($directoryPath . '/link-to-be-removed'));
+    }
+
     public function testExceptionIsThrownIfDirectoryDoesNotExist()
     {
         $this->setExpectedException(DirectoryDoesNotExistException::class);

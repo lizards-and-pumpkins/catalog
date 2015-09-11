@@ -23,4 +23,9 @@ class InMemorySearchEngine extends IntegrationTestSearchEngineAbstract
     {
         return $this->index;
     }
+
+    public function clear()
+    {
+        $this->index = [];
+    }
 }

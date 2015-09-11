@@ -7,8 +7,9 @@ use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use Brera\DataPool\SearchEngine\SearchEngine;
 use Brera\Snippet;
 use Brera\SnippetList;
+use Brera\Utils\Clearable;
 
-class DataPoolWriter
+class DataPoolWriter implements Clearable
 {
     /**
      * @var KeyValueStore
@@ -41,5 +42,21 @@ class DataPoolWriter
     public function writeSearchDocumentCollection(SearchDocumentCollection $searchDocumentCollection)
     {
         $this->searchEngine->addSearchDocumentCollection($searchDocumentCollection);
+    }
+
+    public function clear()
+    {
+        $this->clearInstance($this->searchEngine);
+        $this->clearInstance($this->keyValueStore);
+    }
+
+    /**
+     * @param object $instance
+     */
+    private function clearInstance($instance)
+    {
+        if ($instance instanceof Clearable) {
+            $instance->clear();
+        }
     }
 }

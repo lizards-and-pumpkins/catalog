@@ -4,6 +4,8 @@
 namespace Brera\Queue;
 
 use Brera\Log\Logger;
+use Brera\Queue\Stub\ClearableStubQueue;
+use Brera\Utils\Clearable;
 
 /**
  * @covers \Brera\Queue\LoggingQueueDecorator
@@ -71,5 +73,17 @@ class LoggingQueueDecoratorTest extends \PHPUnit_Framework_TestCase
         $testData = new \stdClass();
         $this->mockLogger->expects($this->once())->method('log')->with($this->isInstanceOf(QueueAddLogMessage::class));
         $this->decorator->add($testData);
+    }
+
+    public function testItIsClearable()
+    {
+        $this->assertInstanceOf(Clearable::class, $this->decorator);
+    }
+
+    public function testItDelegatesClearCallsToTheDecoratedQueue()
+    {
+        $mockQueue = $this->getMock(ClearableStubQueue::class);
+        $mockQueue->expects($this->once())->method('clear');
+        (new LoggingQueueDecorator($mockQueue, $this->mockLogger))->clear();
     }
 }
