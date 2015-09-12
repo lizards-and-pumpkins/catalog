@@ -1282,7 +1282,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $this->translator = new CsvTranslator;
 
             /* TODO: Move to proper location and make locale dependant */
-            $this->translator->addFile('../theme/locale/de_DE.csv');
+            $this->translator->addFile(__DIR__ . '/../theme/locale/de_DE.csv');
         }
 
         return $this->translator;
