@@ -5,11 +5,11 @@ namespace Brera;
 class DomainEventHandlerLocator
 {
     /**
-     * @var DomainEventFactory
+     * @var MasterFactory
      */
     private $factory;
 
-    public function __construct(DomainEventFactory $factory)
+    public function __construct(MasterFactory $factory)
     {
         $this->factory = $factory;
     }
@@ -23,7 +23,7 @@ class DomainEventHandlerLocator
         $eventClass = $this->getUnqualifiedDomainEventClassName($event);
         $method = 'create' . $eventClass . 'Handler';
 
-        if (!method_exists($this->factory, $method)) {
+        if (!method_exists(DomainEventFactory::class, $method)) {
             throw new UnableToFindDomainEventHandlerException(
                 sprintf('Unable to find a handler for %s domain event', $eventClass)
             );

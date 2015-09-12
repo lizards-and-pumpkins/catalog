@@ -68,6 +68,7 @@ use Brera\Product\UpdateProductListingCommand;
 use Brera\Product\UpdateProductListingCommandHandler;
 use Brera\Product\UpdateProductStockQuantityCommand;
 use Brera\Product\UpdateProductStockQuantityCommandHandler;
+use Brera\Projection\ProcessTimeLoggingDomainEventHandlerDecorator;
 use Brera\Queue\Queue;
 use Brera\Renderer\BlockStructure;
 
@@ -752,7 +753,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createDomainEventHandlerLocator()
     {
-        return new DomainEventHandlerLocator($this);
+        return new DomainEventHandlerLocator($this->getMasterFactory());
     }
 
     /**
@@ -1246,6 +1247,18 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return new PaginationBlockRenderer(
             $this->getMasterFactory()->createThemeLocator(),
             $this->getMasterFactory()->createBlockStructure()
+        );
+    }
+
+    /**
+     * @param DomainEventHandler $eventHandlerToDecorate
+     * @return ProcessTimeLoggingDomainEventHandlerDecorator
+     */
+    public function createProcessTimeLoggingDomainEventDecorator(DomainEventHandler $eventHandlerToDecorate)
+    {
+        return new ProcessTimeLoggingDomainEventHandlerDecorator(
+            $eventHandlerToDecorate,
+            $this->getMasterFactory()->getLogger()
         );
     }
 }

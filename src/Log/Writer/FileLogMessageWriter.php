@@ -80,17 +80,76 @@ class FileLogMessageWriter implements LogMessageWriter
      */
     private function formatMessage(LogMessage $message)
     {
-        $contextStr = $this->formatContextString($message);
+        $contextStr = $this->formatContextString($message->getContext());
         return sprintf("%s\t%s\t%s\t%s\n", date('c'), $message, get_class($message), $contextStr);
     }
 
     /**
-     * @param LogMessage $message
+     * @param mixed[] $contextData
      * @return string
      */
-    private function formatContextString(LogMessage $message)
+    private function formatContextString(array $contextData)
     {
-        // Todo: truncate large context data
-        return preg_replace('/  +/', ' ', str_replace(["\n", "\r"], ' ', print_r($message->getContext(), true)));
+        $contextInfo = array_map(function ($name) use ($contextData) {
+            return sprintf('%s => %s', $name, $this->formatContextInfoElement($contextData[$name]));
+        }, array_keys($contextData));
+        return preg_replace('/  +/', ' ', str_replace(["\n", "\r"], ' ', print_r($contextInfo, true)));
+    }
+
+    /**
+     * @param mixed $data
+     * @return string
+     */
+    private function formatContextInfoElement($data)
+    {
+        switch (gettype($data)) {
+            case 'object':
+                $value = $this->getObjectInfoString($data);
+                break;
+            case 'array':
+                $value = $this->getArrayInfoString($data);
+                break;
+            case 'string':
+            case 'integer':
+            case 'float':
+                $value = $this->getScalarInfoString($data);
+                break;
+            default:
+                $value = gettype($data);
+                break;
+        }
+        return $value;
+    }
+
+    /**
+     * @param object $object
+     * @return string
+     */
+    private function getObjectInfoString($object)
+    {
+        if ($object instanceof \Exception) {
+            $info = get_class($object) . ' ' . $object->getFile() . ':' . $object->getLine();
+        } else {
+            $info = get_class($object);
+        }
+        return $info;
+    }
+
+    /**
+     * @param mixed[] $array
+     * @return string
+     */
+    private function getArrayInfoString(array $array)
+    {
+        return 'Array(' . count($array) . ')';
+    }
+
+    /**
+     * @param string|int|float $data
+     * @return string
+     */
+    private function getScalarInfoString($data)
+    {
+        return sprintf('(%s) %s', gettype($data), $data);
     }
 }
