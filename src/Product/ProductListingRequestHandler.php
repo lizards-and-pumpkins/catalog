@@ -351,10 +351,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $snippetCode = 'filter_navigation';
         $snippetContents = $this->filterNavigationBlockRenderer->render($dataObject, $this->context);
 
-        $snippetCodeToKeyMap = [$snippetCode => $snippetCode];
-        $snippetKeyToContentMap = [$snippetCode => $snippetContents];
-
-        $this->pageBuilder->addSnippetsToPage($snippetCodeToKeyMap, $snippetKeyToContentMap);
+        $this->addDynamicSnippetToPageBuilder($snippetCode, $snippetContents);
     }
 
     private function addPaginationToPageBuilder(Pagination $pagination)
@@ -364,6 +361,15 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $snippetCode = 'pagination';
         $snippetContents = $this->paginationBlockRenderer->render($dataObject, $this->context);
 
+        $this->addDynamicSnippetToPageBuilder($snippetCode, $snippetContents);
+    }
+
+    /**
+     * @param string $snippetCode
+     * @param string $snippetContents
+     */
+    private function addDynamicSnippetToPageBuilder($snippetCode, $snippetContents)
+    {
         $snippetCodeToKeyMap = [$snippetCode => $snippetCode];
         $snippetKeyToContentMap = [$snippetCode => $snippetContents];
 
