@@ -21,13 +21,13 @@ trait TestFileFixtureTrait
     private $uniqueId;
 
     /**
-     * @param string $file
+     * @param string $filePath
      * @param string $content
      * @param int $mode
      */
-    public function createFixtureFile($file, $content, $mode = 0500)
+    public function createFixtureFile($filePath, $content, $mode = 0500)
     {
-        $realFile = $this->getAbsolutePath($file);
+        $realFile = $this->getAbsolutePath($filePath);
         $this->createMissingDirectories($realFile);
         $this->createFile($content, $realFile, $mode);
         $this->fixtureFiles[] = $realFile;
