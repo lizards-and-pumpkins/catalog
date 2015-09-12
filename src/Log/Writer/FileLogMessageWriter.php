@@ -91,6 +91,24 @@ class FileLogMessageWriter implements LogMessageWriter
     private function formatContextString(LogMessage $message)
     {
         // Todo: truncate large context data
-        return preg_replace('/  +/', ' ', str_replace(["\n", "\r"], ' ', print_r($message->getContext(), true)));
+        $contextData = $message->getContext();
+        $data = array_map(function ($name) use ($contextData) {
+            switch (gettype($contextData[$name])) {
+                case 'string':
+                    $value = $contextData[$name];
+                    break;
+                case 'object':
+                    $value = get_class($contextData[$name]);
+                    break;
+                case 'array':
+                    $value = 'Array(' . count($contextData[$name]) . ')';
+                    break;
+                default:
+                    $value = gettype($contextData[$name]);
+                    break;
+            }
+            return sprintf('%s => %s', $name, $value);
+        }, array_keys($contextData));
+        return preg_replace('/  +/', ' ', str_replace(["\n", "\r"], ' ', print_r($data, true)));
     }
 }

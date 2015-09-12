@@ -79,6 +79,7 @@ class FileLogMessageWriterTest extends \PHPUnit_Framework_TestCase
 
     public function testItCreatesTheLogFileDirectory()
     {
+        $this->stubLogMessage->method('getContext')->willReturn([]);
         $this->writer->write($this->stubLogMessage);
         $this->assertFileExists(dirname($this->testLogFilePath));
     }
@@ -114,26 +115,31 @@ class FileLogMessageWriterTest extends \PHPUnit_Framework_TestCase
 
     public function testItWritesMessagesToTheLogFile()
     {
-        $this->stubLogMessage->method('getContext')->willReturn(['a' => new \stdClass, 'b' => [PHP_EOL]]);
-        
+        $this->stubLogMessage->method('getContext')->willReturn([
+            'a' => new \stdClass,
+            'b' => [1, 2, 3],
+            'c' => "string\n"
+        ]);
+
         $this->writer->write($this->stubLogMessage);
         $content = file_get_contents($this->testLogFilePath);
-        
+
         $message = 'The log file did not contain the log message content';
         $this->assertContains((string)$this->stubLogMessage, $content, $message);
-        
+
         // ISO 8601 Example: 2015-09-03T18:45:52+02:00
         $iso8601pattern = '/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d\+\d\d:\d\d/';
         $this->assertRegExp($iso8601pattern, $content);
 
-        $expected = 'Array ( [a] => stdClass Object ( ) [b] => Array ( [0] => ) )';
+        $expected = 'Array ( [0] => a => stdClass [1] => b => Array(3) [2] => c => string )';
         $this->assertContains($expected, $content);
-        
+
         $this->assertContains(get_class($this->stubLogMessage), $content);
     }
 
     public function testItAppendsToExistingContent()
     {
+        $this->stubLogMessage->method('getContext')->willReturn([]);
         $existingContent = "already existing content\n";
         $this->createFixtureFile($this->testLogFilePath, $existingContent, 0600);
         $this->writer->write($this->stubLogMessage);
