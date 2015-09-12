@@ -6,7 +6,7 @@ namespace Brera\Projection;
 use Brera\DomainEventHandler;
 use Brera\Log\Logger;
 
-class ProcessTimeLoggingDomainEventDecorator implements DomainEventHandler
+class ProcessTimeLoggingDomainEventHandlerDecorator implements DomainEventHandler
 {
     /**
      * @var DomainEventHandler

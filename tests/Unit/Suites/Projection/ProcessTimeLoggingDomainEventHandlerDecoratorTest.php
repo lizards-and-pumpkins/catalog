@@ -11,7 +11,7 @@ use Brera\Log\LogMessage;
  * @covers \Brera\Projection\ProcessTimeLoggingDomainEventDecorator
  * @uses   \Brera\Projection\DomainEventProcessedLogMessage
  */
-class ProcessTimeLoggingDomainEventDecoratorTest extends \PHPUnit_Framework_TestCase
+class ProcessTimeLoggingDomainEventHandlerDecoratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var DomainEventHandler|\PHPUnit_Framework_MockObject_MockObject
@@ -24,7 +24,7 @@ class ProcessTimeLoggingDomainEventDecoratorTest extends \PHPUnit_Framework_Test
     private $mockLogger;
 
     /**
-     * @var ProcessTimeLoggingDomainEventDecorator;
+     * @var ProcessTimeLoggingDomainEventHandlerDecorator;
      */
     private $decorator;
 
@@ -32,7 +32,7 @@ class ProcessTimeLoggingDomainEventDecoratorTest extends \PHPUnit_Framework_Test
     {
         $this->mockDecoratedEventHandler = $this->getMock(DomainEventhandler::class);
         $this->mockLogger = $this->getMock(Logger::class);
-        $this->decorator = new ProcessTimeLoggingDomainEventDecorator(
+        $this->decorator = new ProcessTimeLoggingDomainEventHandlerDecorator(
             $this->mockDecoratedEventHandler,
             $this->mockLogger
         );

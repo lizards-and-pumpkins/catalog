@@ -40,7 +40,7 @@ use Brera\Product\UpdateProductListingCommand;
 use Brera\Product\UpdateProductListingCommandHandler;
 use Brera\Product\UpdateProductStockQuantityCommand;
 use Brera\Product\UpdateProductStockQuantityCommandHandler;
-use Brera\Projection\ProcessTimeLoggingDomainEventDecorator;
+use Brera\Projection\ProcessTimeLoggingDomainEventHandlerDecorator;
 use Brera\Queue\Queue;
 
 /**
@@ -506,11 +506,11 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(PaginationBlockRenderer::class, $result);
     }
 
-    public function testItReturnsAProcessTimeLoggingDomainEventDecorator()
+    public function testItReturnsAProcessTimeLoggingDomainEventHandlerDecorator()
     {
         $stubDomainEvent = $this->getMock(ProductWasUpdatedDomainEvent::class, [], [], '', false);
         $eventHandlerToDecorate = $this->commonFactory->createProductWasUpdatedDomainEventHandler($stubDomainEvent);
         $result = $this->commonFactory->createProcessTimeLoggingDomainEventDecorator($eventHandlerToDecorate);
-        $this->assertInstanceOf(ProcessTimeLoggingDomainEventDecorator::class, $result);
+        $this->assertInstanceOf(ProcessTimeLoggingDomainEventHandlerDecorator::class, $result);
     }
 }

@@ -68,7 +68,7 @@ use Brera\Product\UpdateProductListingCommand;
 use Brera\Product\UpdateProductListingCommandHandler;
 use Brera\Product\UpdateProductStockQuantityCommand;
 use Brera\Product\UpdateProductStockQuantityCommandHandler;
-use Brera\Projection\ProcessTimeLoggingDomainEventDecorator;
+use Brera\Projection\ProcessTimeLoggingDomainEventHandlerDecorator;
 use Brera\Queue\Queue;
 use Brera\Renderer\BlockStructure;
 
@@ -1252,11 +1252,11 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
 
     /**
      * @param DomainEventHandler $eventHandlerToDecorate
-     * @return ProcessTimeLoggingDomainEventDecorator
+     * @return ProcessTimeLoggingDomainEventHandlerDecorator
      */
     public function createProcessTimeLoggingDomainEventDecorator(DomainEventHandler $eventHandlerToDecorate)
     {
-        return new ProcessTimeLoggingDomainEventDecorator(
+        return new ProcessTimeLoggingDomainEventHandlerDecorator(
             $eventHandlerToDecorate,
             $this->getMasterFactory()->getLogger()
         );
