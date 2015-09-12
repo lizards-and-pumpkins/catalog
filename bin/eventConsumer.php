@@ -3,49 +3,101 @@
 
 namespace Brera;
 
-use Brera\Log\Writer\FileLogMessageWriter;
-use Brera\Log\Writer\LogMessageWriter;
-use Brera\Queue\File\FileQueue;
-use Brera\Queue\LoggingQueueDecorator;
-use Brera\Queue\Queue;
+use Brera\Content\ContentBlockWasUpdatedDomainEvent;
+use Brera\Content\ContentBlockWasUpdatedDomainEventHandler;
+use Brera\Image\ImageWasUpdatedDomainEvent;
+use Brera\Image\ImageWasUpdatedDomainEventHandler;
+use Brera\Product\ProductListingWasUpdatedDomainEvent;
+use Brera\Product\ProductListingWasUpdatedDomainEventHandler;
+use Brera\Product\ProductStockQuantityWasUpdatedDomainEvent;
+use Brera\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
+use Brera\Product\ProductWasUpdatedDomainEvent;
+use Brera\Product\ProductWasUpdatedDomainEventHandler;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$factory = new SampleMasterFactory();
-$factory->register(new CommonFactory());
-$factory->register(new SampleFactory());
-
-
-class LoggingQueueFactory implements Factory
+class LoggingEventHandlerFactory implements Factory, DomainEventFactory
 {
     use FactoryTrait;
 
     /**
-     * @return Queue
+     * @param ProductWasUpdatedDomainEvent $event
+     * @return ProductWasUpdatedDomainEventHandler
      */
-    public function createEventQueue()
+    public function createProductWasUpdatedDomainEventHandler(ProductWasUpdatedDomainEvent $event)
     {
-        $storagePath = sys_get_temp_dir() . '/brera/event-queue/content';
-        $lockFile = sys_get_temp_dir() . '/brera/event-queue/lock';
-        return new LoggingQueueDecorator(
-            new FileQueue($storagePath, $lockFile),
-            $this->getMasterFactory()->getLogger()
+        $commonFactory = new CommonFactory();
+        return $commonFactory->createProcessTimeLoggingDomainEventDecorator(
+            $commonFactory->createProductWasUpdatedDomainEventHandler($event)
         );
     }
 
     /**
-     * @return Queue
+     * @param TemplateWasUpdatedDomainEvent $event
+     * @return TemplateWasUpdatedDomainEventHandler
      */
-    public function createCommandQueue()
+    public function createTemplateWasUpdatedDomainEventHandler(TemplateWasUpdatedDomainEvent $event)
     {
-        $storagePath = sys_get_temp_dir() . '/brera/command-queue/content';
-        $lockFile = sys_get_temp_dir() . '/brera/command-queue/lock';
-        return new LoggingQueueDecorator(
-            new FileQueue($storagePath, $lockFile),
-            $this->getMasterFactory()->getLogger()
+        $commonFactory = new CommonFactory();
+        return $commonFactory->createProcessTimeLoggingDomainEventDecorator(
+            $commonFactory->createTemplateWasUpdatedDomainEventHandler($event)
+        );
+    }
+
+    /**
+     * @param ImageWasUpdatedDomainEvent $event
+     * @return ImageWasUpdatedDomainEventHandler
+     */
+    public function createImageWasUpdatedDomainEventHandler(ImageWasUpdatedDomainEvent $event)
+    {
+        $commonFactory = new CommonFactory();
+        return $commonFactory->createProcessTimeLoggingDomainEventDecorator(
+            $commonFactory->createImageWasUpdatedDomainEventHandler($event)
+        );
+    }
+
+    /**
+     * @param ProductListingWasUpdatedDomainEvent $event
+     * @return ProductListingWasUpdatedDomainEventHandler
+     */
+    public function createProductListingWasUpdatedDomainEventHandler(ProductListingWasUpdatedDomainEvent $event)
+    {
+        $commonFactory = new CommonFactory();
+        return $commonFactory->createProcessTimeLoggingDomainEventDecorator(
+            $commonFactory->createProductListingWasUpdatedDomainEventHandler($event)
+        );
+    }
+
+    /**
+     * @param ProductStockQuantityWasUpdatedDomainEvent $event
+     * @return ProductStockQuantityWasUpdatedDomainEventHandler
+     */
+    public function createProductStockQuantityWasUpdatedDomainEventHandler(
+        ProductStockQuantityWasUpdatedDomainEvent $event
+    ) {
+        $commonFactory = new CommonFactory();
+        return $commonFactory->createProcessTimeLoggingDomainEventDecorator(
+            $commonFactory->createProductStockQuantityWasUpdatedDomainEventHandler($event)
+        );
+    }
+
+    /**
+     * @param ContentBlockWasUpdatedDomainEvent $event
+     * @return ContentBlockWasUpdatedDomainEventHandler
+     */
+    public function createContentBlockWasUpdatedDomainEventHandler(ContentBlockWasUpdatedDomainEvent $event)
+    {
+        $commonFactory = new CommonFactory();
+        return $commonFactory->createProcessTimeLoggingDomainEventDecorator(
+            $commonFactory->createContentBlockWasUpdatedDomainEventHandler($event)
         );
     }
 }
+
+$factory = new SampleMasterFactory();
+$factory->register(new CommonFactory());
+$factory->register(new SampleFactory());
+$factory->register(new LoggingEventHandlerFactory());
 
 $eventConsumer = $factory->createDomainEventConsumer();
 $eventConsumer->process();
