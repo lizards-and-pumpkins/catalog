@@ -93,18 +93,23 @@ class FileLogMessageWriter implements LogMessageWriter
         // Todo: truncate large context data
         $contextData = $message->getContext();
         $data = array_map(function ($name) use ($contextData) {
-            switch (gettype($contextData[$name])) {
+            $data = $contextData[$name];
+            switch (gettype($data)) {
                 case 'string':
-                    $value = $contextData[$name];
+                    $value = $data;
                     break;
                 case 'object':
-                    $value = get_class($contextData[$name]);
+                    if ($data instanceof \Exception) {
+                        $value = get_class($data) . ' ' . $data->getFile() . ':' . $data->getLine();
+                    } else {
+                        $value = get_class($data);
+                    }
                     break;
                 case 'array':
-                    $value = 'Array(' . count($contextData[$name]) . ')';
+                    $value = 'Array(' . count($data) . ')';
                     break;
                 default:
-                    $value = gettype($contextData[$name]);
+                    $value = gettype($data);
                     break;
             }
             return sprintf('%s => %s', $name, $value);
