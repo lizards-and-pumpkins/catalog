@@ -198,7 +198,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         \PHPUnit_Framework_MockObject_Matcher_InvokedRecorder $spy,
         $snippetCode
     ) {
-        $numberOfTimesSnippetWasAddedToPageBuilder = array_sum(array_map(function($invocation) use ($snippetCode) {
+        $numberOfTimesSnippetWasAddedToPageBuilder = array_sum(array_map(function ($invocation) use ($snippetCode) {
             return intval([$snippetCode => $snippetCode] === $invocation->parameters[0]);
         }, $spy->getInvocations()));
 
@@ -386,6 +386,20 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->requestHandler->process($this->stubRequest);
 
         $snippetCode = 'pagination';
+
+        $this->assertDynamicSnippetWasAddedToPageBuilder($addSnippetsToPageSpy, $snippetCode);
+    }
+
+    public function testCollectionSizeSnippetIsAddedToPageBuilder()
+    {
+        $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
+
+        $addSnippetsToPageSpy = $this->any();
+        $this->mockPageBuilder->expects($addSnippetsToPageSpy)->method('addSnippetsToPage');
+
+        $this->requestHandler->process($this->stubRequest);
+
+        $snippetCode = 'collection_size';
 
         $this->assertDynamicSnippetWasAddedToPageBuilder($addSnippetsToPageSpy, $snippetCode);
     }

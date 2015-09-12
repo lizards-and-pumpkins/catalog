@@ -323,6 +323,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $this->addFilterNavigationToPageBuilder($searchDocumentCollection, $originalCriteria, $selectedFilters);
         $this->addProductsInListingToPageBuilder($searchDocumentCollection, $pagination);
         $this->addPaginationToPageBuilder($pagination);
+        $this->addCollectionSizeToPageBuilder($searchDocumentCollection);
     }
 
     /**
@@ -351,10 +352,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $snippetCode = 'filter_navigation';
         $snippetContents = $this->filterNavigationBlockRenderer->render($dataObject, $this->context);
 
-        $snippetCodeToKeyMap = [$snippetCode => $snippetCode];
-        $snippetKeyToContentMap = [$snippetCode => $snippetContents];
-
-        $this->pageBuilder->addSnippetsToPage($snippetCodeToKeyMap, $snippetKeyToContentMap);
+        $this->addDynamicSnippetToPageBuilder($snippetCode, $snippetContents);
     }
 
     private function addPaginationToPageBuilder(Pagination $pagination)
@@ -364,6 +362,23 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $snippetCode = 'pagination';
         $snippetContents = $this->paginationBlockRenderer->render($dataObject, $this->context);
 
+        $this->addDynamicSnippetToPageBuilder($snippetCode, $snippetContents);
+    }
+
+    private function addCollectionSizeToPageBuilder(SearchDocumentCollection $searchDocumentCollection)
+    {
+        $snippetCode = 'collection_size';
+        $snippetContent = count($searchDocumentCollection);
+
+        $this->addDynamicSnippetToPageBuilder($snippetCode, $snippetContent);
+    }
+
+    /**
+     * @param string $snippetCode
+     * @param string $snippetContents
+     */
+    private function addDynamicSnippetToPageBuilder($snippetCode, $snippetContents)
+    {
         $snippetCodeToKeyMap = [$snippetCode => $snippetCode];
         $snippetKeyToContentMap = [$snippetCode => $snippetContents];
 
