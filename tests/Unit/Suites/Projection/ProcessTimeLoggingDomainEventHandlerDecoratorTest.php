@@ -8,7 +8,7 @@ use Brera\Log\Logger;
 use Brera\Log\LogMessage;
 
 /**
- * @covers \Brera\Projection\ProcessTimeLoggingDomainEventDecorator
+ * @covers \Brera\Projection\ProcessTimeLoggingDomainEventHandlerDecorator
  * @uses   \Brera\Projection\DomainEventProcessedLogMessage
  */
 class ProcessTimeLoggingDomainEventHandlerDecoratorTest extends \PHPUnit_Framework_TestCase

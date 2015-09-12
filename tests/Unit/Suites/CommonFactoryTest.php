@@ -110,7 +110,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\LocalFilesystemStorageReader
  * @uses   \Brera\LocalFilesystemStorageWriter
  * @uses   \Brera\TemplateProjectorLocator
- * @uses   \Brera\Projection\ProcessTimeLoggingDomainEventDecorator
+ * @uses   \Brera\Projection\ProcessTimeLoggingDomainEventHandlerDecorator
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
