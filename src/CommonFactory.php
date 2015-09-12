@@ -753,7 +753,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createDomainEventHandlerLocator()
     {
-        return new DomainEventHandlerLocator($this);
+        return new DomainEventHandlerLocator($this->getMasterFactory());
     }
 
     /**

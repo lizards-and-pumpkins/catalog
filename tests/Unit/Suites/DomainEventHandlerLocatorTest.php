@@ -27,13 +27,15 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
     private $locator;
 
     /**
-     * @var CommonFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $factory;
 
     protected function setUp()
     {
-        $this->factory = $this->getMock(CommonFactory::class);
+        $this->factory = $this->getMockBuilder(MasterFactory::class)
+            ->setMethods(array_merge(get_class_methods(DomainEventFactory::class), ['register']))
+            ->getMock();
         $this->locator = new DomainEventHandlerLocator($this->factory);
     }
 
