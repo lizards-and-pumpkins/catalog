@@ -5,7 +5,8 @@
 ?>
 <?= $this->getChildOutput('content_block_in_product_listing') ?>
 <div class="toolbar roundedBorder">
-    <p class="amount">{{snippet collection_size}} <?= $this->__('Artikel') ?></p>
+    <?php /* TODO: Handle singular forn */ ?>
+    <p class="amount">{{snippet collection_size}} <?= $this->__('Items') ?></p>
 </div>
 <ul class="products-grid">
     <li>{{snippet product_1}}</li>
