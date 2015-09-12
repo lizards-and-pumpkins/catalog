@@ -71,9 +71,7 @@ class Block
         $templatePath = realpath($this->template);
 
         if (!is_readable($templatePath) || is_dir($templatePath)) {
-            throw new TemplateFileNotReadableException(
-                sprintf('The template path is not readable: "%s"', $this->template)
-            );
+            throw new TemplateFileNotReadableException(sprintf('Template "%s" is not readable.', $this->template));
         }
 
         ob_start();
