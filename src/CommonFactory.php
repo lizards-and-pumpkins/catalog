@@ -70,6 +70,8 @@ use Brera\Product\UpdateProductStockQuantityCommand;
 use Brera\Product\UpdateProductStockQuantityCommandHandler;
 use Brera\Queue\Queue;
 use Brera\Renderer\BlockStructure;
+use Brera\Translation\CsvTranslator;
+use Brera\Translation\Translator;
 
 class CommonFactory implements Factory, DomainEventFactory, CommandFactory
 {
@@ -104,6 +106,11 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      * @var ImageProcessorCollection
      */
     private $imageProcessorCollection;
+
+    /**
+     * @var Translator
+     */
+    private $translator;
 
     /**
      * @param ProductWasUpdatedDomainEvent $event
@@ -307,7 +314,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new ProductSearchAutosuggestionBlockRenderer(
             $this->getMasterFactory()->createThemeLocator(),
-            $this->getMasterFactory()->createBlockStructure()
+            $this->getMasterFactory()->createBlockStructure(),
+            $this->getMasterFactory()->getTranslator()
         );
     }
 
@@ -379,7 +387,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new ProductListingBlockRenderer(
             $this->getMasterFactory()->createThemeLocator(),
-            $this->getMasterFactory()->createBlockStructure()
+            $this->getMasterFactory()->createBlockStructure(),
+            $this->getMasterFactory()->getTranslator()
         );
     }
 
@@ -506,7 +515,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new ProductDetailViewBlockRenderer(
             $this->getMasterFactory()->createThemeLocator(),
-            $this->getMasterFactory()->createBlockStructure()
+            $this->getMasterFactory()->createBlockStructure(),
+            $this->getMasterFactory()->getTranslator()
         );
     }
 
@@ -597,7 +607,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new ProductInListingBlockRenderer(
             $this->getMasterFactory()->createThemeLocator(),
-            $this->getMasterFactory()->createBlockStructure()
+            $this->getMasterFactory()->createBlockStructure(),
+            $this->getMasterFactory()->getTranslator()
         );
     }
 
@@ -622,7 +633,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new ProductInSearchAutosuggestionBlockRenderer(
             $this->getMasterFactory()->createThemeLocator(),
-            $this->getMasterFactory()->createBlockStructure()
+            $this->getMasterFactory()->createBlockStructure(),
+            $this->getMasterFactory()->getTranslator()
         );
     }
 
@@ -1224,7 +1236,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new FilterNavigationBlockRenderer(
             $this->getMasterFactory()->createThemeLocator(),
-            $this->getMasterFactory()->createBlockStructure()
+            $this->getMasterFactory()->createBlockStructure(),
+            $this->getMasterFactory()->getTranslator()
         );
     }
 
@@ -1245,7 +1258,20 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new PaginationBlockRenderer(
             $this->getMasterFactory()->createThemeLocator(),
-            $this->getMasterFactory()->createBlockStructure()
+            $this->getMasterFactory()->createBlockStructure(),
+            $this->getMasterFactory()->getTranslator()
         );
+    }
+
+    public function getTranslator()
+    {
+        if (null === $this->translator) {
+            $this->translator = new CsvTranslator;
+
+            /* TODO: Move to proper location and make locale dependant */
+            $this->translator->addFile('../theme/locale/de_DE.csv');
+        }
+
+        return $this->translator;
     }
 }

@@ -5,6 +5,7 @@ namespace Brera;
 use Brera\Renderer\AbstractBlockRendererTest;
 use Brera\Renderer\BlockRenderer;
 use Brera\Renderer\BlockStructure;
+use Brera\Translation\Translator;
 
 /**
  * @covers \Brera\PaginationBlockRenderer
@@ -13,14 +14,16 @@ use Brera\Renderer\BlockStructure;
 class PaginationBlockRendererTest extends AbstractBlockRendererTest
 {
     /**
-     * @param ThemeLocator|\PHPUnit_Framework_MockObject_MockObject $stubThemeLocator
+     * @param ThemeLocator $stubThemeLocator
      * @param BlockStructure $stubBlockStructure
+     * @param Translator $stubTranslator
      * @return BlockRenderer
      */
     protected function createRendererInstance(
-        \PHPUnit_Framework_MockObject_MockObject $stubThemeLocator,
-        BlockStructure $stubBlockStructure
+        ThemeLocator $stubThemeLocator,
+        BlockStructure $stubBlockStructure,
+        Translator $stubTranslator
     ) {
-        return new PaginationBlockRenderer($stubThemeLocator, $stubBlockStructure);
+        return new PaginationBlockRenderer($stubThemeLocator, $stubBlockStructure, $stubTranslator);
     }
 }

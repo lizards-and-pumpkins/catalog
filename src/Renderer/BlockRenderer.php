@@ -4,6 +4,7 @@ namespace Brera\Renderer;
 
 use Brera\Context\Context;
 use Brera\ThemeLocator;
+use Brera\Translation\Translator;
 
 abstract class BlockRenderer
 {
@@ -33,14 +34,20 @@ abstract class BlockRenderer
     private $blockStructure;
 
     /**
+     * @var Translator
+     */
+    private $translator;
+
+    /**
      * @var Block
      */
     private $outermostBlock;
 
-    public function __construct(ThemeLocator $themeLocator, BlockStructure $blockStructure)
+    public function __construct(ThemeLocator $themeLocator, BlockStructure $blockStructure, Translator $translator)
     {
         $this->themeLocator = $themeLocator;
         $this->blockStructure = $blockStructure;
+        $this->translator = $translator;
     }
 
     /**
@@ -187,6 +194,15 @@ abstract class BlockRenderer
             );
         }
         return $this->missingBlockNames;
+    }
+
+    /**
+     * @param string $string
+     * @return string
+     */
+    public function translate($string)
+    {
+        return $this->translator->translate($string);
     }
 
     /**

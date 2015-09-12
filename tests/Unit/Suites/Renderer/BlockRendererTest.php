@@ -5,6 +5,7 @@ namespace Brera\Renderer;
 use Brera\Renderer\Stubs\StubBlock;
 use Brera\Renderer\Stubs\StubBlockRenderer;
 use Brera\ThemeLocator;
+use Brera\Translation\Translator;
 
 /**
  * @covers \Brera\Renderer\BlockRenderer
@@ -14,15 +15,17 @@ use Brera\ThemeLocator;
 class BlockRendererTest extends AbstractBlockRendererTest
 {
     /**
-     * @param ThemeLocator|\PHPUnit_Framework_MockObject_MockObject $stubThemeLocator
+     * @param ThemeLocator $stubThemeLocator
      * @param BlockStructure $stubBlockStructure
+     * @param Translator $stubTranslator
      * @return StubBlockRenderer
      */
     protected function createRendererInstance(
-        \PHPUnit_Framework_MockObject_MockObject $stubThemeLocator,
-        BlockStructure $stubBlockStructure
+        ThemeLocator $stubThemeLocator,
+        BlockStructure $stubBlockStructure,
+        Translator $stubTranslator
     ) {
-        return new StubBlockRenderer($stubThemeLocator, $stubBlockStructure);
+        return new StubBlockRenderer($stubThemeLocator, $stubBlockStructure, $stubTranslator);
     }
 
     public function testExceptionIsThrownIfNoRootBlockIsDefined()

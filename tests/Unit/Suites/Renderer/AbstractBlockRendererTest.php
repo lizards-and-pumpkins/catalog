@@ -5,6 +5,7 @@ namespace Brera\Renderer;
 use Brera\Context\Context;
 use Brera\TestFileFixtureTrait;
 use Brera\ThemeLocator;
+use Brera\Translation\Translator;
 
 abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,13 +31,25 @@ abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
      */
     private $stubBlockStructure;
 
+    /**
+     * @var Translator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubTranslator;
+
     protected function setUp()
     {
-        $this->stubThemeLocator = $this->getMock(ThemeLocator::class);
         $this->stubLayout = $this->getMock(Layout::class, [], [], '', false);
+        $this->stubThemeLocator = $this->getMock(ThemeLocator::class);
         $this->stubThemeLocator->method('getLayoutForHandle')->willReturn($this->stubLayout);
+
         $this->stubBlockStructure = new BlockStructure();
-        $this->blockRenderer = $this->createRendererInstance($this->stubThemeLocator, $this->stubBlockStructure);
+        $this->stubTranslator = $this->getMock(Translator::class);
+
+        $this->blockRenderer = $this->createRendererInstance(
+            $this->stubThemeLocator,
+            $this->stubBlockStructure,
+            $this->stubTranslator
+        );
     }
 
     public function testBlockRendererAbstractClassIsExtended()
@@ -57,14 +70,26 @@ abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(BlockRenderer::class, $this->blockRenderer);
     }
 
+    public function testStringTranslationIsDelegatedToTranslator()
+    {
+        $originalString = 'foo';
+        $translatedString = 'bar';
+
+        $this->stubTranslator->method('translate')->with($originalString)->willReturn($translatedString);
+
+        $this->assertSame($translatedString, $this->blockRenderer->translate($originalString));
+    }
+
     /**
-     * @param ThemeLocator|\PHPUnit_Framework_MockObject_MockObject $stubThemeLocator
+     * @param ThemeLocator $stubThemeLocator
      * @param BlockStructure $stubBlockStructure
+     * @param Translator $stubTranslator
      * @return BlockRenderer
      */
     abstract protected function createRendererInstance(
-        \PHPUnit_Framework_MockObject_MockObject $stubThemeLocator,
-        BlockStructure $stubBlockStructure
+        ThemeLocator $stubThemeLocator,
+        BlockStructure $stubBlockStructure,
+        Translator $stubTranslator
     );
 
     /**

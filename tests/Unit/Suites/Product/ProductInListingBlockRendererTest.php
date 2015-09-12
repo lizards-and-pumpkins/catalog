@@ -6,6 +6,7 @@ use Brera\Renderer\BlockRenderer;
 use Brera\Renderer\AbstractBlockRendererTest;
 use Brera\Renderer\BlockStructure;
 use Brera\ThemeLocator;
+use Brera\Translation\Translator;
 
 /**
  * @covers \Brera\Product\ProductInListingBlockRenderer
@@ -16,20 +17,16 @@ use Brera\ThemeLocator;
 class ProductInListingBlockRendererTest extends AbstractBlockRendererTest
 {
     /**
-     * @param ThemeLocator|\PHPUnit_Framework_MockObject_MockObject $stubThemeLocator
+     * @param ThemeLocator $stubThemeLocator
      * @param BlockStructure $stubBlockStructure
+     * @param Translator $stubTranslator
      * @return BlockRenderer
      */
     final protected function createRendererInstance(
-        \PHPUnit_Framework_MockObject_MockObject $stubThemeLocator,
-        BlockStructure $stubBlockStructure
+        ThemeLocator $stubThemeLocator,
+        BlockStructure $stubBlockStructure,
+        Translator $stubTranslator
     ) {
-        return new ProductInListingBlockRenderer($stubThemeLocator, $stubBlockStructure);
-    }
-
-    public function testLayoutHandleIsReturned()
-    {
-        $result = $this->getBlockRenderer()->getLayoutHandle();
-        $this->assertEquals('product_in_listing', $result);
+        return new ProductInListingBlockRenderer($stubThemeLocator, $stubBlockStructure, $stubTranslator);
     }
 }
