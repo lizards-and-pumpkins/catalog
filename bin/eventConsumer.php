@@ -21,12 +21,26 @@ class LoggingEventHandlerFactory implements Factory, DomainEventFactory
     use FactoryTrait;
 
     /**
+     * @var CommonFactory
+     */
+    private $commonFactory;
+
+    private function getCommonFactory()
+    {
+        if (null === $this->commonFactory) {
+            $this->commonFactory = new CommonFactory();
+            $this->commonFactory->setMasterFactory($this->getMasterFactory());
+        }
+        return $this->commonFactory;
+    }
+    
+    /**
      * @param ProductWasUpdatedDomainEvent $event
      * @return ProductWasUpdatedDomainEventHandler
      */
     public function createProductWasUpdatedDomainEventHandler(ProductWasUpdatedDomainEvent $event)
     {
-        $commonFactory = new CommonFactory();
+        $commonFactory = $this->getCommonFactory();
         return $commonFactory->createProcessTimeLoggingDomainEventDecorator(
             $commonFactory->createProductWasUpdatedDomainEventHandler($event)
         );
@@ -38,7 +52,7 @@ class LoggingEventHandlerFactory implements Factory, DomainEventFactory
      */
     public function createTemplateWasUpdatedDomainEventHandler(TemplateWasUpdatedDomainEvent $event)
     {
-        $commonFactory = new CommonFactory();
+        $commonFactory = $this->getCommonFactory();
         return $commonFactory->createProcessTimeLoggingDomainEventDecorator(
             $commonFactory->createTemplateWasUpdatedDomainEventHandler($event)
         );
@@ -50,7 +64,7 @@ class LoggingEventHandlerFactory implements Factory, DomainEventFactory
      */
     public function createImageWasUpdatedDomainEventHandler(ImageWasUpdatedDomainEvent $event)
     {
-        $commonFactory = new CommonFactory();
+        $commonFactory = $this->getCommonFactory();
         return $commonFactory->createProcessTimeLoggingDomainEventDecorator(
             $commonFactory->createImageWasUpdatedDomainEventHandler($event)
         );
@@ -62,7 +76,7 @@ class LoggingEventHandlerFactory implements Factory, DomainEventFactory
      */
     public function createProductListingWasUpdatedDomainEventHandler(ProductListingWasUpdatedDomainEvent $event)
     {
-        $commonFactory = new CommonFactory();
+        $commonFactory = $this->getCommonFactory();
         return $commonFactory->createProcessTimeLoggingDomainEventDecorator(
             $commonFactory->createProductListingWasUpdatedDomainEventHandler($event)
         );
@@ -75,7 +89,7 @@ class LoggingEventHandlerFactory implements Factory, DomainEventFactory
     public function createProductStockQuantityWasUpdatedDomainEventHandler(
         ProductStockQuantityWasUpdatedDomainEvent $event
     ) {
-        $commonFactory = new CommonFactory();
+        $commonFactory = $this->getCommonFactory();
         return $commonFactory->createProcessTimeLoggingDomainEventDecorator(
             $commonFactory->createProductStockQuantityWasUpdatedDomainEventHandler($event)
         );
@@ -87,7 +101,7 @@ class LoggingEventHandlerFactory implements Factory, DomainEventFactory
      */
     public function createContentBlockWasUpdatedDomainEventHandler(ContentBlockWasUpdatedDomainEvent $event)
     {
-        $commonFactory = new CommonFactory();
+        $commonFactory = $this->getCommonFactory();
         return $commonFactory->createProcessTimeLoggingDomainEventDecorator(
             $commonFactory->createContentBlockWasUpdatedDomainEventHandler($event)
         );
