@@ -25,36 +25,95 @@ class CalculateAverageDomainEventProcessingTime
     private function prepareCommandLineArguments(CLImate $climate)
     {
         $climate->arguments->add([
+            'sortBy' => [
+                'prefix' => 's',
+                'longPrefix' => 'sortBy',
+                'description' => 'Sort by field (handler|count|total|avg)',
+                'defaultValue' => 'avg',
+            ],
+            'direction' => [
+                'prefix' => 'd',
+                'longPrefix' => 'direction',
+                'description' => 'Sort direction (asc|desc)',
+                'defaultValue' => 'asc',
+            ],
             'logfile' => [
                 'description' => 'Log file',
             ]
         ]);
 
-        $climate->arguments->parse();
+        $this->validateArguments($climate);
     }
 
     private function execute(CLImate $climate)
     {
         $filePath = $climate->arguments->get('logfile');
-        $this->validateLogfilePath($filePath);
-        $tableData = $this->collectTableDataFromFile($filePath);
+        $tableData = $this->sortTableData(
+            $this->collectTableDataFromFile($filePath),
+            $climate->arguments->get('sortBy'),
+            $climate->arguments->get('direction')
+        );
         $climate->table($tableData);
     }
 
     /**
-     * @param string $filePath
+     * @param array[] $tableData
+     * @param string $field
+     * @param string $direction
+     * @return array[]
      */
-    private function validateLogfilePath($filePath)
+    private function sortTableData($tableData, $field, $direction)
     {
-        if (empty($filePath)) {
-            throw new \RuntimeException('No log file specified');
+        $directionalOperator = $direction === 'asc' ? 1 : -1;
+        usort($tableData, function (array $rowA, array $rowB) use ($field, $directionalOperator) {
+            $valueA = $this->getComparisonValueFromRow($rowA, $field);
+            $valueB = $this->getComparisonValueFromRow($rowB, $field);
+            $result = $this->threeWayCompare($valueA, $valueB);
+            return $result * $directionalOperator;
+        });
+        return $tableData;
+    }
+
+    /**
+     * @param mixed $valueA
+     * @param mixed $valueB
+     * @return int
+     */
+    private function threeWayCompare($valueA, $valueB)
+    {
+        if ($valueA > $valueB) {
+            $result = 1;
+        } elseif ($valueA < $valueB) {
+            $result = -1;
+        } else {
+            $result = 0;
         }
-        if (!file_exists($filePath)) {
-            throw new \RuntimeException(sprintf('Log file not found: "%s"', $filePath));
-        }
-        if (!is_readable($filePath)) {
-            throw new \RuntimeException(sprintf('Log file not readable: "%s"', $filePath));
-        }
+        return $result;
+    }
+
+    /**
+     * @param mixed[] $row
+     * @param string $field
+     * @return mixed
+     */
+    private function getComparisonValueFromRow(array $row, $field)
+    {
+        $key = $this->getArrayKeyFromSortByField($field);
+        return $row[$key];
+    }
+
+    /**
+     * @param string $field
+     * @return string
+     */
+    private function getArrayKeyFromSortByField($field)
+    {
+        return array_search($field, [
+            'Handler' => 'handler',
+            'Count' => 'count',
+            'Total Sec' => 'total',
+            'Average Sec' => 'avg'
+        ]);
     }
 
     /**
@@ -64,7 +123,8 @@ class CalculateAverageDomainEventProcessingTime
     private function collectTableDataFromFile($filePath)
     {
         $eventHandlerStats = $this->readEventHandlerStatsFromFile($filePath);
-        return $this->buildTableDataFromStats($eventHandlerStats);
+        $tableData = $this->buildTableDataFromStats($eventHandlerStats);
+        return $tableData;
     }
 
     /**
@@ -124,6 +184,50 @@ class CalculateAverageDomainEventProcessingTime
             'Total Sec' => sprintf('%11.4F', $sum),
             'Average Sec' => sprintf('%.4F', $sum / $count)
         ];
+    }
+
+    private function validateArguments(CLImate $climate)
+    {
+        $climate->arguments->parse();
+        $this->validateLogfilePath($climate->arguments->get('logfile'));
+        $this->validateSortField($climate->arguments->get('sortBy'));
+        $this->validateSortDirection($climate->arguments->get('direction'));
+    }
+
+    /**
+     * @param string $filePath
+     */
+    private function validateLogfilePath($filePath)
+    {
+        if (empty($filePath)) {
+            throw new \RuntimeException('No log file specified');
+        }
+        if (!file_exists($filePath)) {
+            throw new \RuntimeException(sprintf('Log file not found: "%s"', $filePath));
+        }
+        if (!is_readable($filePath)) {
+            throw new \RuntimeException(sprintf('Log file not readable: "%s"', $filePath));
+        }
+    }
+
+    /**
+     * @param string $order
+     */
+    private function validateSortField($order)
+    {
+        if (!in_array($order, ['handler', 'count', 'total', 'avg'])) {
+            throw new \RuntimeException(sprintf('Invalid order: "%s"', $order));
+        }
+    }
+
+    /**
+     * @param string $direction
+     */
+    private function validateSortDirection($direction)
+    {
+        if (!in_array($direction, ['asc', 'desc'])) {
+            throw new \RuntimeException(sprintf('Invalid sort direction: "%s"', $direction));
+        }
     }
 }
 
