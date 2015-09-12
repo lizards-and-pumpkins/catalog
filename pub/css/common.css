@@ -21,6 +21,7 @@ h1 { font-size: 26px; font-weight: normal; color: #323232; text-transform: upper
 .col2-left-layout .main { display: table }
 .col2-left-layout .main > div { display: table-cell; vertical-align: top }
 .col2-left-layout .col-left { width: 217px }
+.col2-left-layout .col-main { padding-left: 10px }
 
 /* Main search form */
 #searchPanel form { width: 367px }

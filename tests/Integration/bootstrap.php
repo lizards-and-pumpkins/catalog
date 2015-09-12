@@ -4,6 +4,9 @@ chdir(__DIR__ . '/../..');
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
+// Closure autoloader from
+// https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader-examples.md#closure-example
+
 spl_autoload_register(function ($class) {
     $prefix = 'Brera\\';
     $len = strlen($prefix);

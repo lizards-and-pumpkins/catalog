@@ -89,7 +89,7 @@ class Layout
     }
 
     /**
-     * @param string|array $layout
+     * @param string|array[] $layout
      * @return string|Layout[]
      */
     private static function getValue($layout)
@@ -109,7 +109,7 @@ class Layout
     }
 
     /**
-     * @param string|array $layout
+     * @param string|array[] $layout
      * @return bool
      */
     private static function hasChildNodes($layout)

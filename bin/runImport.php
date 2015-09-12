@@ -95,10 +95,7 @@ class LoggingQueueFactory implements Factory
      */
     public function createLogMessageWriter()
     {
-        return new CompositeLogMessageWriter(
-            new StdOutLogMessageWriter(),
-            new FileLogMessageWriter($this->getMasterFactory()->getLogFilePathConfig())
-        );
+        return new StdOutLogMessageWriter();
     }
 }
 
