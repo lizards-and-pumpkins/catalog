@@ -131,7 +131,7 @@ class FileLogMessageWriterTest extends \PHPUnit_Framework_TestCase
         $iso8601pattern = '/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d\+\d\d:\d\d/';
         $this->assertRegExp($iso8601pattern, $content);
 
-        $expected = 'Array ( [0] => a => stdClass [1] => b => Array(3) [2] => c => string )';
+        $expected = 'Array ( [0] => a => stdClass [1] => b => Array(3) [2] => c => (string) string )';
         $this->assertContains($expected, $content);
 
         $this->assertContains(get_class($this->stubLogMessage), $content);
