@@ -13,6 +13,10 @@
 .expanded { background-image: url(../images/minus.png) }
 .collapsed { background-image: url(../images/plus.png) }
 
+/* Toolbar */
+.toolbar { margin-bottom: 15px; background: #e3e3e3; border-top: 1px solid #dfdfdf; color: #474747; padding: 0 30px }
+.toolbar .amount { float:left; width: 220px; font-size: 16px; margin: 25px 0 }
+
 /* Pagination */
 .pages { text-align: right; padding: 43px 0 0 0; font-size: 12px }
 .pages li { display: inline-block; border: 1px solid #b3b3b3; margin-left: 2px; background-color: #f0f0f0 }
@@ -20,3 +24,6 @@
 .pages .current { color: #ffffff; background-color: #37a3d4; border-color: #1280ac }
 .pages .next, .pages .prev { padding: 4px 7px; color: #3c3c3c }
 .pages .prev { background-position: -6px -5px }
+
+/* Clearer */
+.toolbar:after { content: ""; display: block; height: 0; clear: both; visibility: hidden }
