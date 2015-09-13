@@ -42,14 +42,6 @@ class ApiApp extends WebFront
         $domainEventConsumer = $this->getMasterFactory()->createDomainEventConsumer();
         $domainEventConsumer->process();
     }
-
-    public function clearStorage()
-    {
-        $this->getMasterFactory();
-        $this->getMasterFactory()->createDataPoolWriter()->clear();
-        $this->getMasterFactory()->createCommandQueue()->clear();
-        $this->getMasterFactory()->createEventQueue()->clear();
-    }
 }
 
 
