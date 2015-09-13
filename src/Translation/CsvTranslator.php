@@ -36,7 +36,7 @@ class CsvTranslator implements Translator
 
             if (2 !== count($data)) {
                 throw new MalformedTranslationFileException(
-                    sprintf('Bad translation formatting in "%s": $s', $translationFilePath, $row)
+                    sprintf('Bad translation formatting in "%s": %s', $translationFilePath, $row)
                 );
             }
 
