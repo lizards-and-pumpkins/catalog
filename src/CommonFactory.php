@@ -71,8 +71,9 @@ use Brera\Product\UpdateProductStockQuantityCommandHandler;
 use Brera\Projection\ProcessTimeLoggingDomainEventHandlerDecorator;
 use Brera\Queue\Queue;
 use Brera\Renderer\BlockStructure;
-use Brera\Translation\CsvTranslator;
-use Brera\Translation\Translator;
+use Brera\Renderer\ThemeLocator;
+use Brera\Renderer\Translation\CsvTranslator;
+use Brera\Renderer\Translation\Translator;
 
 class CommonFactory implements Factory, DomainEventFactory, CommandFactory
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera;
+namespace Brera\Renderer;
 
-use Brera\Renderer\Layout;
+use Brera\TestFileFixtureTrait;
 
 /**
- * @covers \Brera\ThemeLocator
+ * @covers \Brera\Renderer\ThemeLocator
  * @uses   \Brera\Renderer\Layout
  * @uses   \Brera\Renderer\LayoutReader
  * @uses   \Brera\Utils\XPathParser

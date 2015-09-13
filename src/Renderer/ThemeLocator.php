@@ -1,8 +1,6 @@
 <?php
 
-namespace Brera;
-
-use Brera\Renderer\LayoutReader;
+namespace Brera\Renderer;
 
 class ThemeLocator
 {

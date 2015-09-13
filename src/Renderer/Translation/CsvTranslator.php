@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\Translation;
+namespace Brera\Renderer\Translation;
 
-use Brera\Translation\Exception\MalformedTranslationFileException;
-use Brera\Translation\Exception\TranslationFileNotReadableException;
+use Brera\Renderer\Translation\Exception\MalformedTranslationFileException;
+use Brera\Renderer\Translation\Exception\TranslationFileNotReadableException;
 
 class CsvTranslator implements Translator
 {

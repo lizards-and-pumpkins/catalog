@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\Translation;
+namespace Brera\Renderer\Translation;
 
 interface Translator
 {

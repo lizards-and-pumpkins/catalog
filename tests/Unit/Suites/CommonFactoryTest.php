@@ -42,6 +42,7 @@ use Brera\Product\UpdateProductStockQuantityCommand;
 use Brera\Product\UpdateProductStockQuantityCommandHandler;
 use Brera\Projection\ProcessTimeLoggingDomainEventHandlerDecorator;
 use Brera\Queue\Queue;
+use Brera\Renderer\ThemeLocator;
 
 /**
  * @covers \Brera\CommonFactory
@@ -111,6 +112,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\LocalFilesystemStorageWriter
  * @uses   \Brera\TemplateProjectorLocator
  * @uses   \Brera\Projection\ProcessTimeLoggingDomainEventHandlerDecorator
+ * @uses   \Brera\Renderer\Translation\CsvTranslator
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -508,6 +510,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsAProcessTimeLoggingDomainEventHandlerDecorator()
     {
+        /** @var ProductWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
         $stubDomainEvent = $this->getMock(ProductWasUpdatedDomainEvent::class, [], [], '', false);
         $eventHandlerToDecorate = $this->commonFactory->createProductWasUpdatedDomainEventHandler($stubDomainEvent);
         $result = $this->commonFactory->createProcessTimeLoggingDomainEventDecorator($eventHandlerToDecorate);

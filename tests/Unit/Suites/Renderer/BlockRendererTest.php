@@ -4,8 +4,7 @@ namespace Brera\Renderer;
 
 use Brera\Renderer\Stubs\StubBlock;
 use Brera\Renderer\Stubs\StubBlockRenderer;
-use Brera\ThemeLocator;
-use Brera\Translation\Translator;
+use Brera\Renderer\Translation\Translator;
 
 /**
  * @covers \Brera\Renderer\BlockRenderer

@@ -1,13 +1,13 @@
 <?php
 
-namespace Brera\Translation;
+namespace Brera\Renderer\Translation;
 
+use Brera\Renderer\Translation\Exception\MalformedTranslationFileException;
+use Brera\Renderer\Translation\Exception\TranslationFileNotReadableException;
 use Brera\TestFileFixtureTrait;
-use Brera\Translation\Exception\MalformedTranslationFileException;
-use Brera\Translation\Exception\TranslationFileNotReadableException;
 
 /**
- * @covers \Brera\Translation\CsvTranslator
+ * @covers \Brera\Renderer\Translation\CsvTranslator
  */
 class CsvTranslatorTest extends \PHPUnit_Framework_TestCase
 {

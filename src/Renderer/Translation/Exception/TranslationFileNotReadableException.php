@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\Translation\Exception;
+namespace Brera\Renderer\Translation\Exception;
 
 class TranslationFileNotReadableException extends \OutOfBoundsException
 {

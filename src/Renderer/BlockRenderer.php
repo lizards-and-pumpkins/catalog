@@ -3,8 +3,7 @@
 namespace Brera\Renderer;
 
 use Brera\Context\Context;
-use Brera\ThemeLocator;
-use Brera\Translation\Translator;
+use Brera\Renderer\Translation\Translator;
 
 abstract class BlockRenderer
 {

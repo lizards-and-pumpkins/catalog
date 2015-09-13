@@ -3,9 +3,8 @@
 namespace Brera\Renderer;
 
 use Brera\Context\Context;
+use Brera\Renderer\Translation\Translator;
 use Brera\TestFileFixtureTrait;
-use Brera\ThemeLocator;
-use Brera\Translation\Translator;
 
 abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
 {

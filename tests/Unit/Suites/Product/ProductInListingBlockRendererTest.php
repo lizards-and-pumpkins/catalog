@@ -5,8 +5,8 @@ namespace Brera\Product;
 use Brera\Renderer\BlockRenderer;
 use Brera\Renderer\AbstractBlockRendererTest;
 use Brera\Renderer\BlockStructure;
-use Brera\ThemeLocator;
-use Brera\Translation\Translator;
+use Brera\Renderer\ThemeLocator;
+use Brera\Renderer\Translation\Translator;
 
 /**
  * @covers \Brera\Product\ProductInListingBlockRenderer
