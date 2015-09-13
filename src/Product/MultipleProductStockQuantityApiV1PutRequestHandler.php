@@ -4,7 +4,6 @@ namespace Brera\Product;
 
 use Brera\Api\ApiRequestHandler;
 use Brera\Http\HttpRequest;
-use Brera\Product\Exception\CatalogImportDirectoryNotReadableException;
 use Brera\Product\Exception\CatalogImportFileNameNotFoundInRequestBodyException;
 use Brera\Queue\Queue;
 use Brera\Utils\Directory;
@@ -49,7 +48,7 @@ class MultipleProductStockQuantityApiV1PutRequestHandler extends ApiRequestHandl
         ProductStockQuantitySourceBuilder $productStockQuantitySourceBuilder
     ) {
         if (!$importDirectory->isReadable()) {
-            throw new CatalogImportDirectoryNotReadableException(
+            throw new CatalogImportApiDirectoryNotReadableException(
                 sprintf('%s is not readable.', $importDirectory->getPath())
             );
         }

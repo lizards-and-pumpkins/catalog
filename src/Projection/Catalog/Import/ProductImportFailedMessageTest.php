@@ -1,11 +1,12 @@
 <?php
 
-namespace Brera\Product;
+namespace Brera\Projection\Catalog\Import;
 
 use Brera\Log\LogMessage;
+use Brera\Product\ProductId;
 
 /**
- * @covers \Brera\Product\ProductImportFailedMessage
+ * @covers \Brera\Projection\Catalog\Import\ProductImportFailedMessage
  */
 class ProductImportFailedMessageTest extends \PHPUnit_Framework_TestCase
 {
