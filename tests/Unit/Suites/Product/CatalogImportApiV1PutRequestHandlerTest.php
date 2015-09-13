@@ -7,19 +7,17 @@ use Brera\Http\HttpRequest;
 use Brera\Log\Logger;
 use Brera\Product\Exception\CatalogImportFileNameNotFoundInRequestBodyException;
 use Brera\Projection\Catalog\Import\CatalogImport;
-use Brera\TestFileFixtureTrait;
+use org\bovigo\vfs\vfsStream;
 
 /**
  * @covers \Brera\Product\CatalogImportApiV1PutRequestHandler
- * @uses \Brera\Api\ApiRequestHandler
- * @uses \Brera\Http\HttpHeaders
- * @uses \Brera\Http\HttpResponse
- * @uses \Brera\DefaultHttpResponse
+ * @uses   \Brera\Api\ApiRequestHandler
+ * @uses   \Brera\Http\HttpHeaders
+ * @uses   \Brera\Http\HttpResponse
+ * @uses   \Brera\DefaultHttpResponse
  */
 class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    use TestFileFixtureTrait;
-
     /**
      * @var CatalogImportApiV1PutRequestHandler
      */
@@ -47,8 +45,9 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
 
     protected function setUp()
     {
-        $this->testImportDirectoryPath = $this->getUniqueTempDir();
-        $this->createFixtureDirectory($this->testImportDirectoryPath);
+        vfsStream::setup('root');
+        $this->testImportDirectoryPath = vfsStream::url('root/catalog-import-directory');
+        mkdir($this->testImportDirectoryPath, 0700, true);
 
         $this->mockCatalogImport = $this->getMock(CatalogImport::class, [], [], '', false);
 
