@@ -4,6 +4,7 @@ namespace Brera\Renderer;
 
 use Brera\Context\Context;
 use Brera\Renderer\Translation\Translator;
+use Brera\Renderer\Translation\TranslatorRegistry;
 use Brera\TestFileFixtureTrait;
 
 abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
@@ -42,12 +43,17 @@ abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
         $this->stubThemeLocator->method('getLayoutForHandle')->willReturn($this->stubLayout);
 
         $this->stubBlockStructure = new BlockStructure();
-        $this->stubTranslator = $this->getMock(Translator::class);
+
+        $this->stubTranslator = $this->getMock(Translator::class, [], [], '', false);
+
+        /** @var TranslatorRegistry|\PHPUnit_Framework_MockObject_MockObject $stubTranslatorRegistry */
+        $stubTranslatorRegistry = $this->getMock(TranslatorRegistry::class, [], [], '', false);
+        $stubTranslatorRegistry->method('getTranslatorForLocale')->willReturn($this->stubTranslator);
 
         $this->blockRenderer = $this->createRendererInstance(
             $this->stubThemeLocator,
             $this->stubBlockStructure,
-            $this->stubTranslator
+            $stubTranslatorRegistry
         );
     }
 
@@ -69,26 +75,16 @@ abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(BlockRenderer::class, $this->blockRenderer);
     }
 
-    public function testStringTranslationIsDelegatedToTranslator()
-    {
-        $originalString = 'foo';
-        $translatedString = 'bar';
-
-        $this->stubTranslator->method('translate')->with($originalString)->willReturn($translatedString);
-
-        $this->assertSame($translatedString, $this->blockRenderer->translate($originalString));
-    }
-
     /**
      * @param ThemeLocator $stubThemeLocator
      * @param BlockStructure $stubBlockStructure
-     * @param Translator $stubTranslator
+     * @param TranslatorRegistry $stubTranslatorRegistry
      * @return BlockRenderer
      */
     abstract protected function createRendererInstance(
         ThemeLocator $stubThemeLocator,
         BlockStructure $stubBlockStructure,
-        Translator $stubTranslator
+        TranslatorRegistry $stubTranslatorRegistry
     );
 
     /**
@@ -116,6 +112,14 @@ abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return Translator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    final protected function getStubTranslator()
+    {
+        return $this->stubTranslator;
+    }
+
+    /**
      * @param string $className
      * @param string $template
      * @return Layout|\PHPUnit_Framework_MockObject_MockObject
@@ -139,10 +143,9 @@ abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
         $childBlockName = ''
     ) {
         $stubChild = $this->createStubBlockLayout($className, $template, $childBlockName);
-        $stubBlock->method('getNodeChildren')
-            ->willReturn([$stubChild]);
-        $stubBlock->method('hasChildren')
-            ->willReturn(true);
+        $stubBlock->method('getNodeChildren')->willReturn([$stubChild]);
+        $stubBlock->method('hasChildren')->willReturn(true);
+
         return $stubChild;
     }
 
@@ -155,12 +158,11 @@ abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
     final protected function createStubBlockLayout($className, $template, $nameInLayout = '')
     {
         $stubBlockLayout = $this->getMock(Layout::class, [], [], '', false);
-        $stubBlockLayout->method('getAttribute')
-            ->willReturnMap([
-                ['class', $className],
-                ['template', $template],
-                ['name', $nameInLayout],
-            ]);
+        $stubBlockLayout->method('getAttribute')->willReturnMap([
+            ['class', $className],
+            ['template', $template],
+            ['name', $nameInLayout],
+        ]);
         return $stubBlockLayout;
     }
 }

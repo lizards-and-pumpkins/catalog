@@ -3,7 +3,8 @@
 namespace Brera\Renderer;
 
 use Brera\Context\Context;
-use Brera\Renderer\Translation\Translator;
+use Brera\Context\LocaleContextDecorator;
+use Brera\Renderer\Translation\TranslatorRegistry;
 
 abstract class BlockRenderer
 {
@@ -33,20 +34,23 @@ abstract class BlockRenderer
     private $blockStructure;
 
     /**
-     * @var Translator
+     * @var TranslatorRegistry
      */
-    private $translator;
+    private $translatorRegistry;
 
     /**
      * @var Block
      */
     private $outermostBlock;
 
-    public function __construct(ThemeLocator $themeLocator, BlockStructure $blockStructure, Translator $translator)
-    {
+    public function __construct(
+        ThemeLocator $themeLocator,
+        BlockStructure $blockStructure,
+        TranslatorRegistry $translatorRegistry
+    ) {
         $this->themeLocator = $themeLocator;
         $this->blockStructure = $blockStructure;
-        $this->translator = $translator;
+        $this->translatorRegistry = $translatorRegistry;
     }
 
     /**
@@ -201,7 +205,8 @@ abstract class BlockRenderer
      */
     public function translate($string)
     {
-        return $this->translator->translate($string);
+        $locale = $this->context->getValue(LocaleContextDecorator::CODE);
+        return $this->translatorRegistry->getTranslatorForLocale($locale)->translate($string);
     }
 
     /**

@@ -70,7 +70,7 @@ use Brera\TemplateWasUpdatedDomainEventHandler;
  * @uses   \Brera\Image\ImageProcessorCollection
  * @uses   \Brera\Image\ImageProcessor
  * @uses   \Brera\Image\ImageMagickResizeStrategy
- * @uses   \Brera\Renderer\Translation\CsvTranslator
+ * @uses   \Brera\Renderer\Translation\TranslatorRegistry
  */
 class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 {

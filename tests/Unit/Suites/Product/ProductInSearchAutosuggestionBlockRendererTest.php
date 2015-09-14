@@ -6,7 +6,7 @@ use Brera\Renderer\BlockRenderer;
 use Brera\Renderer\AbstractBlockRendererTest;
 use Brera\Renderer\BlockStructure;
 use Brera\Renderer\ThemeLocator;
-use Brera\Renderer\Translation\Translator;
+use Brera\Renderer\Translation\TranslatorRegistry;
 
 /**
  * @covers \Brera\Product\ProductInSearchAutosuggestionBlockRenderer
@@ -17,14 +17,18 @@ class ProductInSearchAutosuggestionBlockRendererTest extends AbstractBlockRender
     /**
      * @param ThemeLocator $stubThemeLocator
      * @param BlockStructure $stubBlockStructure
-     * @param Translator $stubTranslator
+     * @param TranslatorRegistry $stubTranslatorRegistry
      * @return BlockRenderer
      */
     protected function createRendererInstance(
         ThemeLocator $stubThemeLocator,
         BlockStructure $stubBlockStructure,
-        Translator $stubTranslator
+        TranslatorRegistry $stubTranslatorRegistry
     ) {
-        return new ProductInSearchAutosuggestionBlockRenderer($stubThemeLocator, $stubBlockStructure, $stubTranslator);
+        return new ProductInSearchAutosuggestionBlockRenderer(
+            $stubThemeLocator,
+            $stubBlockStructure,
+            $stubTranslatorRegistry
+        );
     }
 }

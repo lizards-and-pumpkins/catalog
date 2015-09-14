@@ -74,6 +74,7 @@ use Brera\Renderer\BlockStructure;
 use Brera\Renderer\ThemeLocator;
 use Brera\Renderer\Translation\CsvTranslator;
 use Brera\Renderer\Translation\Translator;
+use Brera\Renderer\Translation\TranslatorRegistry;
 
 class CommonFactory implements Factory, DomainEventFactory, CommandFactory
 {
@@ -110,9 +111,9 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     private $imageProcessorCollection;
 
     /**
-     * @var Translator
+     * @var TranslatorRegistry
      */
-    private $translator;
+    private $translatorRegistry;
 
     /**
      * @param ProductWasUpdatedDomainEvent $event
@@ -317,7 +318,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return new ProductSearchAutosuggestionBlockRenderer(
             $this->getMasterFactory()->createThemeLocator(),
             $this->getMasterFactory()->createBlockStructure(),
-            $this->getMasterFactory()->getTranslator()
+            $this->getMasterFactory()->getTranslatorRegistry()
         );
     }
 
@@ -390,7 +391,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return new ProductListingBlockRenderer(
             $this->getMasterFactory()->createThemeLocator(),
             $this->getMasterFactory()->createBlockStructure(),
-            $this->getMasterFactory()->getTranslator()
+            $this->getMasterFactory()->getTranslatorRegistry()
         );
     }
 
@@ -518,7 +519,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return new ProductDetailViewBlockRenderer(
             $this->getMasterFactory()->createThemeLocator(),
             $this->getMasterFactory()->createBlockStructure(),
-            $this->getMasterFactory()->getTranslator()
+            $this->getMasterFactory()->getTranslatorRegistry()
         );
     }
 
@@ -610,7 +611,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return new ProductInListingBlockRenderer(
             $this->getMasterFactory()->createThemeLocator(),
             $this->getMasterFactory()->createBlockStructure(),
-            $this->getMasterFactory()->getTranslator()
+            $this->getMasterFactory()->getTranslatorRegistry()
         );
     }
 
@@ -636,7 +637,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return new ProductInSearchAutosuggestionBlockRenderer(
             $this->getMasterFactory()->createThemeLocator(),
             $this->getMasterFactory()->createBlockStructure(),
-            $this->getMasterFactory()->getTranslator()
+            $this->getMasterFactory()->getTranslatorRegistry()
         );
     }
 
@@ -1239,7 +1240,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return new FilterNavigationBlockRenderer(
             $this->getMasterFactory()->createThemeLocator(),
             $this->getMasterFactory()->createBlockStructure(),
-            $this->getMasterFactory()->getTranslator()
+            $this->getMasterFactory()->getTranslatorRegistry()
         );
     }
 
@@ -1261,7 +1262,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return new PaginationBlockRenderer(
             $this->getMasterFactory()->createThemeLocator(),
             $this->getMasterFactory()->createBlockStructure(),
-            $this->getMasterFactory()->getTranslator()
+            $this->getMasterFactory()->getTranslatorRegistry()
         );
     }
 
@@ -1277,15 +1278,26 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         );
     }
 
-    public function getTranslator()
+    /**
+     * @return TranslatorRegistry
+     */
+    public function getTranslatorRegistry()
     {
-        if (null === $this->translator) {
-            $this->translator = new CsvTranslator;
-
-            /* TODO: Move to proper location and make locale dependant */
-            $this->translator->addFile(__DIR__ . '/../theme/locale/de_DE.csv');
+        if (null === $this->translatorRegistry) {
+            $this->translatorRegistry = new TranslatorRegistry(
+                $this->getMasterFactory()->getTranslatorClassName(),
+                $this->getMasterFactory()->createThemeLocator()
+            );
         }
 
-        return $this->translator;
+        return $this->translatorRegistry;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTranslatorClassName()
+    {
+        return CsvTranslator::class;
     }
 }

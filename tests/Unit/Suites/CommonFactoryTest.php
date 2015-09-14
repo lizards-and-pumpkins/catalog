@@ -112,7 +112,7 @@ use Brera\Renderer\ThemeLocator;
  * @uses   \Brera\LocalFilesystemStorageWriter
  * @uses   \Brera\TemplateProjectorLocator
  * @uses   \Brera\Projection\ProcessTimeLoggingDomainEventHandlerDecorator
- * @uses   \Brera\Renderer\Translation\CsvTranslator
+ * @uses   \Brera\Renderer\Translation\TranslatorRegistry
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {

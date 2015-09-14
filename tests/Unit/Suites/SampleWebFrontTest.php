@@ -44,7 +44,7 @@ use Brera\Http\HttpRouterChain;
  * @uses   \Brera\Api\ApiRequestHandlerChain
  * @uses   \Brera\DataPool\DataPoolReader
  * @uses   \Brera\Renderer\BlockRenderer
- * @uses   \Brera\Renderer\Translation\CsvTranslator
+ * @uses   \Brera\Renderer\Translation\TranslatorRegistry
  * @uses   \Brera\Utils\Directory
  */
 class SampleWebFrontTest extends \PHPUnit_Framework_TestCase

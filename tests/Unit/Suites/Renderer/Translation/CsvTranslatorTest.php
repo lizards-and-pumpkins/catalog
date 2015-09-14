@@ -2,6 +2,7 @@
 
 namespace Brera\Renderer\Translation;
 
+use Brera\Renderer\ThemeLocator;
 use Brera\Renderer\Translation\Exception\MalformedTranslationFileException;
 use Brera\Renderer\Translation\Exception\TranslationFileNotReadableException;
 use Brera\TestFileFixtureTrait;
@@ -14,57 +15,78 @@ class CsvTranslatorTest extends \PHPUnit_Framework_TestCase
     use TestFileFixtureTrait;
 
     /**
-     * @var CsvTranslator
+     * @var string
      */
-    private $translator;
+    private $testLocaleCode = 'foo_BAR';
+
+    /**
+     * @var ThemeLocator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubThemeLocator;
 
     protected function setUp()
     {
-        $this->translator = new CsvTranslator;
+        $this->stubThemeLocator = $this->getMock(ThemeLocator::class, [], [], '', false);
     }
 
     public function testTranslatorInterfaceIsImplemented()
     {
-        $this->assertInstanceOf(Translator::class, $this->translator);
+        $result = CsvTranslator::forLocale($this->testLocaleCode, $this->stubThemeLocator);
+        $this->assertInstanceOf(Translator::class, $result);
     }
 
     public function testExceptionIsThrownIfTranslationFileIsNotReadable()
     {
         $this->setExpectedException(TranslationFileNotReadableException::class);
-        $this->translator->addFile('some-non-existing-file.csv');
+
+        $testLocaleDirectoryPath = sys_get_temp_dir() . '/' . $this->testLocaleCode;
+        $testTranslationFilePath = $testLocaleDirectoryPath . '/test_translation_file.csv';
+        $testTranslationFileContents = '"foo","bar"';
+
+        $this->createFixtureFile($testTranslationFilePath, $testTranslationFileContents, 0000);
+        $this->stubThemeLocator->method('getLocaleDirectoryPath')->willReturn($testLocaleDirectoryPath);
+
+        CsvTranslator::forLocale($this->testLocaleCode, $this->stubThemeLocator);
     }
 
     public function testExceptionIsThrownIfTranslationFileHasWrongFormatting()
     {
         $this->setExpectedException(MalformedTranslationFileException::class);
 
-        $testTranslationFilePath = sys_get_temp_dir() . '/test_translation_file.csv';
+        $testLocaleDirectoryPath = sys_get_temp_dir() . '/' . $this->testLocaleCode;
+        $testTranslationFilePath = $testLocaleDirectoryPath . '/test_translation_file.csv';
         $testTranslationFileContents = '"foo,bar"';
+
         $this->createFixtureFile($testTranslationFilePath, $testTranslationFileContents);
+        $this->stubThemeLocator->method('getLocaleDirectoryPath')->willReturn($testLocaleDirectoryPath);
 
-        $this->translator->addFile($testTranslationFilePath);
-
+        CsvTranslator::forLocale($this->testLocaleCode, $this->stubThemeLocator);
     }
 
     public function testOriginalStringIsReturnedIfTranslationIsMissing()
     {
         $testTranslationSource = 'foo';
-        $result = $this->translator->translate($testTranslationSource);
+        $translator = CsvTranslator::forLocale($this->testLocaleCode, $this->stubThemeLocator);
+        $result = $translator->translate($testTranslationSource);
 
         $this->assertSame($testTranslationSource, $result);
     }
 
     public function testGivenStringIsTranslated()
     {
+        $testLocaleDirectoryPath = sys_get_temp_dir() . '/' . $this->testLocaleCode;
+        $testTranslationFilePath = $testLocaleDirectoryPath . '/test_translation_file.csv';
+
         $testTranslationSource = 'foo';
         $testTranslationResult = 'bar';
 
-        $testTranslationFilePath = sys_get_temp_dir() . '/test_translation_file.csv';
         $testTranslationFileContents = sprintf('"%s","%s"', $testTranslationSource, $testTranslationResult);
-        $this->createFixtureFile($testTranslationFilePath, $testTranslationFileContents);
 
-        $this->translator->addFile($testTranslationFilePath);
-        $result = $this->translator->translate($testTranslationSource);
+        $this->createFixtureFile($testTranslationFilePath, $testTranslationFileContents);
+        $this->stubThemeLocator->method('getLocaleDirectoryPath')->willReturn($testLocaleDirectoryPath);
+
+        $translator = CsvTranslator::forLocale($this->testLocaleCode, $this->stubThemeLocator);
+        $result = $translator->translate($testTranslationSource);
 
         $this->assertSame($testTranslationResult, $result);
     }

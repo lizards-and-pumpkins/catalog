@@ -4,7 +4,7 @@ namespace Brera\Renderer;
 
 use Brera\Renderer\Stubs\StubBlock;
 use Brera\Renderer\Stubs\StubBlockRenderer;
-use Brera\Renderer\Translation\Translator;
+use Brera\Renderer\Translation\TranslatorRegistry;
 
 /**
  * @covers \Brera\Renderer\BlockRenderer
@@ -16,15 +16,15 @@ class BlockRendererTest extends AbstractBlockRendererTest
     /**
      * @param ThemeLocator $stubThemeLocator
      * @param BlockStructure $stubBlockStructure
-     * @param Translator $stubTranslator
+     * @param TranslatorRegistry $stubTranslatorRegistry
      * @return StubBlockRenderer
      */
     protected function createRendererInstance(
         ThemeLocator $stubThemeLocator,
         BlockStructure $stubBlockStructure,
-        Translator $stubTranslator
+        TranslatorRegistry $stubTranslatorRegistry
     ) {
-        return new StubBlockRenderer($stubThemeLocator, $stubBlockStructure, $stubTranslator);
+        return new StubBlockRenderer($stubThemeLocator, $stubBlockStructure, $stubTranslatorRegistry);
     }
 
     public function testExceptionIsThrownIfNoRootBlockIsDefined()
@@ -177,5 +177,21 @@ class BlockRendererTest extends AbstractBlockRendererTest
         $this->addStubRootBlock(StubBlock::class, $template);
         $this->getBlockRenderer()->render($testProjectionSourceData, $this->getStubContext());
         $this->assertSame($testProjectionSourceData, $this->getBlockRenderer()->getDataObject());
+    }
+
+    public function testStringTranslationIsDelegatedToTranslator()
+    {
+        $originalString = 'foo';
+        $translatedString = 'bar';
+
+        $template = sys_get_temp_dir() . '/' . uniqid() . '/test-template.php';
+        $templateContent = 'test template content';
+        $this->createFixtureFile($template, $templateContent);
+        $this->addStubRootBlock(StubBlock::class, $template);
+        $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
+
+        $this->getStubTranslator()->method('translate')->with($originalString)->willReturn($translatedString);
+
+        $this->assertSame($translatedString, $this->getBlockRenderer()->translate($originalString));
     }
 }
