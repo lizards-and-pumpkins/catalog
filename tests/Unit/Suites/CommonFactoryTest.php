@@ -40,6 +40,7 @@ use Brera\Product\UpdateProductListingCommand;
 use Brera\Product\UpdateProductListingCommandHandler;
 use Brera\Product\UpdateProductStockQuantityCommand;
 use Brera\Product\UpdateProductStockQuantityCommandHandler;
+use Brera\Projection\Catalog\Import\CatalogImport;
 use Brera\Projection\ProcessTimeLoggingDomainEventHandlerDecorator;
 use Brera\Queue\Queue;
 
@@ -111,6 +112,7 @@ use Brera\Queue\Queue;
  * @uses   \Brera\LocalFilesystemStorageWriter
  * @uses   \Brera\TemplateProjectorLocator
  * @uses   \Brera\Projection\ProcessTimeLoggingDomainEventHandlerDecorator
+ * @uses   \Brera\Projection\Catalog\Import\CatalogImport
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -512,5 +514,11 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $eventHandlerToDecorate = $this->commonFactory->createProductWasUpdatedDomainEventHandler($stubDomainEvent);
         $result = $this->commonFactory->createProcessTimeLoggingDomainEventDecorator($eventHandlerToDecorate);
         $this->assertInstanceOf(ProcessTimeLoggingDomainEventHandlerDecorator::class, $result);
+    }
+
+    public function testCatalogImportIsReturned()
+    {
+        $result = $this->commonFactory->createCatalogImport();
+        $this->assertInstanceOf(CatalogImport::class, $result);
     }
 }

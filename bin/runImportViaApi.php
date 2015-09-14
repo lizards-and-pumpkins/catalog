@@ -8,14 +8,6 @@ use Brera\Http\HttpRequest;
 use Brera\Http\HttpRequestBody;
 use Brera\Http\HttpRouterChain;
 use Brera\Http\HttpUrl;
-use Brera\Log\Writer\CompositeLogMessageWriter;
-use Brera\Log\Writer\FileLogMessageWriter;
-use Brera\Log\Writer\LogMessageWriter;
-use Brera\Log\Writer\StdOutLogMessageWriter;
-use Brera\Queue\File\FileQueue;
-use Brera\Queue\LoggingQueueDecorator;
-use Brera\Queue\Queue;
-use Brera\Utils\Clearable;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -50,56 +42,7 @@ class ApiApp extends WebFront
         $domainEventConsumer = $this->getMasterFactory()->createDomainEventConsumer();
         $domainEventConsumer->process();
     }
-
-    public function clearStorage()
-    {
-        $this->getMasterFactory();
-        $this->getMasterFactory()->createDataPoolWriter()->clear();
-        $this->getMasterFactory()->createCommandQueue()->clear();
-        $this->getMasterFactory()->createEventQueue()->clear();
-    }
 }
-
-class LoggingQueueFactory implements Factory
-{
-    use FactoryTrait;
-
-    /**
-     * @return Queue|Clearable
-     */
-    public function createEventQueue()
-    {
-        $storagePath = sys_get_temp_dir() . '/brera/event-queue/content';
-        $lockFile = sys_get_temp_dir() . '/brera/event-queue/lock';
-        return new LoggingQueueDecorator(
-            new FileQueue($storagePath, $lockFile),
-            $this->getMasterFactory()->getLogger()
-        );
-    }
-
-    /**
-     * @return Queue|Clearable
-     */
-    public function createCommandQueue()
-    {
-        $storagePath = sys_get_temp_dir() . '/brera/command-queue/content';
-        $lockFile = sys_get_temp_dir() . '/brera/command-queue/lock';
-        return new LoggingQueueDecorator(
-            new FileQueue($storagePath, $lockFile),
-            $this->getMasterFactory()->getLogger()
-        );
-    }
-
-    /**
-     * @return LogMessageWriter
-     */
-    public function createLogMessageWriter()
-    {
-        return new StdOutLogMessageWriter();
-    }
-}
-
-
 
 
 $httpRequestBodyContent = file_get_contents(__DIR__ . '/../tests/shared-fixture/product-listing-root-snippet.json');

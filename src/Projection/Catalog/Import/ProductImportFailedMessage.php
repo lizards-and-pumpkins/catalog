@@ -1,8 +1,9 @@
 <?php
 
-namespace Brera\Product;
+namespace Brera\Projection\Catalog\Import;
 
 use Brera\Log\LogMessage;
+use Brera\Product\ProductId;
 
 class ProductImportFailedMessage implements LogMessage
 {
