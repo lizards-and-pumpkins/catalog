@@ -1,12 +1,12 @@
 <?php
 
 
-namespace Brera\Log\Writer;
+namespace LizardsAndPumpkins\Log\Writer;
 
-use Brera\Log\LogMessage;
+use LizardsAndPumpkins\Log\LogMessage;
 
 /**
- * @covers Brera\Log\Writer\NullLogMessageWriter
+ * @covers LizardsAndPumpkins\Log\Writer\NullLogMessageWriter
  */
 class NullLogMessageWriterTest extends \PHPUnit_Framework_TestCase
 {

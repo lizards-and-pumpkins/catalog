@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\Renderer;
+namespace LizardsAndPumpkins\Renderer;
 
 /**
- * @covers \Brera\Renderer\Layout
+ * @covers \LizardsAndPumpkins\Renderer\Layout
  */
 class LayoutTest extends \PHPUnit_Framework_TestCase
 {

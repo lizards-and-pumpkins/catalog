@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -14,4 +14,4 @@ $factory->createCommandQueue()->clear();
 $factory->createEventQueue()->clear();
 
 printf("Cleared data pool and queues\n");
-printf("Storage dir: %s\n", sys_get_temp_dir() . '/brera');
+printf("Storage dir: %s\n", sys_get_temp_dir() . '/lizards-and-pumpkins');

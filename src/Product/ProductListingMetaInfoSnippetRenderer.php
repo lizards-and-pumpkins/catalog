@@ -1,13 +1,13 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Context\Context;
-use Brera\Context\ContextBuilder;
-use Brera\SnippetKeyGenerator;
-use Brera\SnippetList;
-use Brera\SnippetRenderer;
-use Brera\Snippet;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\SnippetKeyGenerator;
+use LizardsAndPumpkins\SnippetList;
+use LizardsAndPumpkins\SnippetRenderer;
+use LizardsAndPumpkins\Snippet;
 
 class ProductListingMetaInfoSnippetRenderer implements SnippetRenderer
 {

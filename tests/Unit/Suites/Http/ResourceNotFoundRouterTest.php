@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\Http;
+namespace LizardsAndPumpkins\Http;
 
 /**
- * @covers \Brera\Http\ResourceNotFoundRouter
+ * @covers \LizardsAndPumpkins\Http\ResourceNotFoundRouter
  */
 class ResourceNotFoundRouterTest extends \PHPUnit_Framework_TestCase
 {

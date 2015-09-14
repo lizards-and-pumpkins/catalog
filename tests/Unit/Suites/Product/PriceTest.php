@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Product\Exception\InvalidPriceSourceException;
+use LizardsAndPumpkins\Product\Exception\InvalidPriceSourceException;
 
 /**
- * @covers \Brera\Product\Price
+ * @covers \LizardsAndPumpkins\Product\Price
  */
 class PriceTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Brera\Api;
+namespace LizardsAndPumpkins\Api;
 
-use Brera\DefaultHttpResponse;
-use Brera\Http\HttpRequest;
-use Brera\Http\HttpRequestHandler;
+use LizardsAndPumpkins\DefaultHttpResponse;
+use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Http\HttpRequestHandler;
 
 abstract class ApiRequestHandler implements HttpRequestHandler
 {

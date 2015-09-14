@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Brera\DataPool\SearchEngine\SearchDocument;
+namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument;
 
 class InvalidSearchDocumentContentException extends \UnexpectedValueException
 {

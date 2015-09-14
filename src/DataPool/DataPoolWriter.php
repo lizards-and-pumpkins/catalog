@@ -1,13 +1,13 @@
 <?php
 
-namespace Brera\DataPool;
+namespace LizardsAndPumpkins\DataPool;
 
-use Brera\DataPool\KeyValue\KeyValueStore;
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
-use Brera\DataPool\SearchEngine\SearchEngine;
-use Brera\Snippet;
-use Brera\SnippetList;
-use Brera\Utils\Clearable;
+use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
+use LizardsAndPumpkins\Snippet;
+use LizardsAndPumpkins\SnippetList;
+use LizardsAndPumpkins\Utils\Clearable;
 
 class DataPoolWriter implements Clearable
 {

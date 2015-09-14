@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\Content;
+namespace LizardsAndPumpkins\Content;
 
 /**
- * @covers \Brera\Content\ContentBlockSource
+ * @covers \LizardsAndPumpkins\Content\ContentBlockSource
  */
 class ContentBlockSourceTest extends \PHPUnit_Framework_TestCase
 {

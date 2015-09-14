@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\PageMetaInfoSnippetContent;
+use LizardsAndPumpkins\PageMetaInfoSnippetContent;
 
 /**
- * @covers \Brera\Product\ProductSearchResultMetaSnippetContent
+ * @covers \LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetContent
  */
 class ProductSearchResultMetaSnippetContentTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Http\HttpHeaders;
-use Brera\Http\HttpResponse;
-use Brera\Http\InvalidResponseBodyException;
+use LizardsAndPumpkins\Http\HttpHeaders;
+use LizardsAndPumpkins\Http\HttpResponse;
+use LizardsAndPumpkins\Http\InvalidResponseBodyException;
 
 class DefaultHttpResponse implements HttpResponse
 {

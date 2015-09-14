@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Context\Context;
+use LizardsAndPumpkins\Context\Context;
 
 class GenericSnippetKeyGenerator implements SnippetKeyGenerator
 {

@@ -1,19 +1,19 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Context\Context;
-use Brera\Context\ContextSource;
-use Brera\InvalidProjectionSourceDataTypeException;
-use Brera\Snippet;
-use Brera\SnippetKeyGenerator;
-use Brera\SnippetList;
-use Brera\SnippetRenderer;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\ContextSource;
+use LizardsAndPumpkins\InvalidProjectionSourceDataTypeException;
+use LizardsAndPumpkins\Snippet;
+use LizardsAndPumpkins\SnippetKeyGenerator;
+use LizardsAndPumpkins\SnippetList;
+use LizardsAndPumpkins\SnippetRenderer;
 
 /**
- * @covers \Brera\Product\ProductInSearchAutosuggestionSnippetRenderer
- * @uses   \Brera\Snippet
- * @uses   \Brera\SnippetList
+ * @covers \LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Snippet
+ * @uses   \LizardsAndPumpkins\SnippetList
  */
 class ProductInSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {

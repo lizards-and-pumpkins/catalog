@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Brera\Product\Exception;
+namespace LizardsAndPumpkins\Product\Exception;
 
 class MissingProductIdException extends \RuntimeException
 {

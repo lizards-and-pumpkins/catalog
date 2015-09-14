@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Utils\FileNotReadableException;
+use LizardsAndPumpkins\Utils\FileNotReadableException;
 
 class LocalFilesystemStorageReader implements FileStorageReader
 {

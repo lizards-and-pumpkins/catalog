@@ -1,12 +1,12 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use Brera\UrlKey;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
+use LizardsAndPumpkins\UrlKey;
 
 /**
- * @covers \Brera\Product\ProductListingMetaInfoSource
+ * @covers \LizardsAndPumpkins\Product\ProductListingMetaInfoSource
  */
 class ProductListingMetaInfoSourceTest extends \PHPUnit_Framework_TestCase
 {

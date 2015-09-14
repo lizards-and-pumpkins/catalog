@@ -1,20 +1,20 @@
 <?php
 
-namespace Brera\Product\Block;
+namespace LizardsAndPumpkins\Product\Block;
 
-use Brera\Image;
-use Brera\Product\Product;
-use Brera\Product\ProductAttribute;
-use Brera\Product\ProductAttributeList;
-use Brera\Product\ProductId;
-use Brera\Renderer\Block;
-use Brera\Renderer\BlockRenderer;
-use Brera\TestFileFixtureTrait;
+use LizardsAndPumpkins\Image;
+use LizardsAndPumpkins\Product\Product;
+use LizardsAndPumpkins\Product\ProductAttribute;
+use LizardsAndPumpkins\Product\ProductAttributeList;
+use LizardsAndPumpkins\Product\ProductId;
+use LizardsAndPumpkins\Renderer\Block;
+use LizardsAndPumpkins\Renderer\BlockRenderer;
+use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
- * @covers \Brera\Product\Block\ProductBlock
- * @uses   \Brera\Renderer\Block
- * @uses   \Brera\Image
+ * @covers \LizardsAndPumpkins\Product\Block\ProductBlock
+ * @uses   \LizardsAndPumpkins\Renderer\Block
+ * @uses   \LizardsAndPumpkins\Image
  */
 class ProductBlockTest extends \PHPUnit_Framework_TestCase
 {
@@ -87,7 +87,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
         $this->stubProduct->method('getFirstValueOfAttribute')->with('url_key')->willReturn($urlKey);
         $result = $this->productBlock->getProductUrl();
 
-        $this->assertEquals('/brera/' . $urlKey, $result);
+        $this->assertEquals('/lizards-and-pumpkins/' . $urlKey, $result);
     }
 
     public function testEmptyStringIsReturnedIfProductBrandLogoImageFileDoesNotExist()
@@ -109,7 +109,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
         $this->createFixtureFile('pub/' . $brandLogoSrc, '');
 
         /* TODO: Fix it once retrieving base URL is implemented */
-        $expectedProductBrandLogoSrc = '/brera/' . $brandLogoSrc;
+        $expectedProductBrandLogoSrc = '/lizards-and-pumpkins/' . $brandLogoSrc;
         $result = $this->productBlock->getBrandLogoSrc();
 
         $this->assertEquals($expectedProductBrandLogoSrc, $result);

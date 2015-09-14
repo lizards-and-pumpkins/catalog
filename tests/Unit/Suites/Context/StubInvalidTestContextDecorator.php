@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\Context;
+namespace LizardsAndPumpkins\Context;
 
 class StubInvalidTestContextDecorator
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Product\Exception\InvalidProductIdException;
+use LizardsAndPumpkins\Product\Exception\InvalidProductIdException;
 
 /**
- * @covers \Brera\Product\ProductId
+ * @covers \LizardsAndPumpkins\Product\ProductId
  */
 class ProductIdTest extends \PHPUnit_Framework_TestCase
 {

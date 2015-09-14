@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
 /**
- * @covers \Brera\Product\ProductDetailPageMetaInfoSnippetContent
+ * @covers \LizardsAndPumpkins\Product\ProductDetailPageMetaInfoSnippetContent
  */
 class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCase
 {

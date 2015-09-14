@@ -1,23 +1,23 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Image\ImageWasUpdatedDomainEvent;
-use Brera\Image\ImageWasUpdatedDomainEventHandler;
-use Brera\Product\ProductWasUpdatedDomainEvent;
-use Brera\Product\ProductWasUpdatedDomainEventHandler;
-use Brera\Product\ProductListingWasUpdatedDomainEvent;
-use Brera\Product\ProductListingWasUpdatedDomainEventHandler;
-use Brera\Product\ProductStockQuantityWasUpdatedDomainEvent;
-use Brera\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Image\ImageWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Image\ImageWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
 
 /**
- * @covers \Brera\DomainEventHandlerLocator
- * @uses   \Brera\Image\ImageWasUpdatedDomainEvent
- * @uses   \Brera\Product\ProductListingWasUpdatedDomainEvent
- * @uses   \Brera\Product\ProductStockQuantityWasUpdatedDomainEvent
- * @uses   \Brera\Product\ProductWasUpdatedDomainEvent
- * @uses   \Brera\TemplateWasUpdatedDomainEvent
+ * @covers \LizardsAndPumpkins\DomainEventHandlerLocator
+ * @uses   \LizardsAndPumpkins\Image\ImageWasUpdatedDomainEvent
+ * @uses   \LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEvent
+ * @uses   \LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEvent
+ * @uses   \LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent
+ * @uses   \LizardsAndPumpkins\TemplateWasUpdatedDomainEvent
  */
 class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 {

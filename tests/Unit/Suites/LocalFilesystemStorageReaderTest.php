@@ -1,13 +1,13 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Utils\FileNotReadableException;
-use Brera\Utils\LocalFilesystem;
+use LizardsAndPumpkins\Utils\FileNotReadableException;
+use LizardsAndPumpkins\Utils\LocalFilesystem;
 
 /**
- * @covers \Brera\LocalFilesystemStorageReader
- * @uses \Brera\Utils\LocalFilesystem
+ * @covers \LizardsAndPumpkins\LocalFilesystemStorageReader
+ * @uses \LizardsAndPumpkins\Utils\LocalFilesystem
  */
 class LocalFilesystemStorageReaderTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,7 +23,7 @@ class LocalFilesystemStorageReaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->testBaseDirPath = sys_get_temp_dir() . '/brera-local-filesystem-storage';
+        $this->testBaseDirPath = sys_get_temp_dir() . '/lizards-and-pumpkins-local-filesystem-storage';
         mkdir($this->testBaseDirPath);
 
         $this->reader = new LocalFilesystemStorageReader($this->testBaseDirPath);

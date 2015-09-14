@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
 /**
- * @covers \Brera\CommandHandlerFailedMessage
+ * @covers \LizardsAndPumpkins\CommandHandlerFailedMessage
  */
 class CommandHandlerFailedMessageTest extends \PHPUnit_Framework_TestCase
 {

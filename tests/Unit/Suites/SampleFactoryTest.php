@@ -1,35 +1,35 @@
 <?php
 
-namespace Brera\Tests\Integration;
+namespace LizardsAndPumpkins\Tests\Integration;
 
-use Brera\DataPool\KeyValue\File\FileKeyValueStore;
-use Brera\DataPool\SearchEngine\FileSearchEngine;
-use Brera\Image\ImageProcessor;
-use Brera\Image\ImageProcessorCollection;
-use Brera\Image\ImageProcessingStrategySequence;
-use Brera\LocalFilesystemStorageReader;
-use Brera\LocalFilesystemStorageWriter;
-use Brera\Log\Writer\FileLogMessageWriter;
-use Brera\Log\WritingLoggerDecorator;
-use Brera\Queue\File\FileQueue;
-use Brera\SampleMasterFactory;
-use Brera\SampleFactory;
+use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
+use LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine;
+use LizardsAndPumpkins\Image\ImageProcessor;
+use LizardsAndPumpkins\Image\ImageProcessorCollection;
+use LizardsAndPumpkins\Image\ImageProcessingStrategySequence;
+use LizardsAndPumpkins\LocalFilesystemStorageReader;
+use LizardsAndPumpkins\LocalFilesystemStorageWriter;
+use LizardsAndPumpkins\Log\Writer\FileLogMessageWriter;
+use LizardsAndPumpkins\Log\WritingLoggerDecorator;
+use LizardsAndPumpkins\Queue\File\FileQueue;
+use LizardsAndPumpkins\SampleMasterFactory;
+use LizardsAndPumpkins\SampleFactory;
 
 /**
- * @covers \Brera\SampleFactory
- * @uses   \Brera\FactoryTrait
- * @uses   \Brera\Log\InMemoryLogger
- * @uses   \Brera\Log\WritingLoggerDecorator
- * @uses   \Brera\Log\Writer\FileLogMessageWriter
- * @uses   \Brera\DataPool\KeyValue\File\FileKeyValueStore
- * @uses   \Brera\DataPool\SearchEngine\FileSearchEngine
- * @uses   \Brera\Image\ImageMagickInscribeStrategy
- * @uses   \Brera\Image\ImageProcessor
- * @uses   \Brera\Image\ImageProcessorCollection
- * @uses   \Brera\Image\ImageProcessingStrategySequence
- * @uses   \Brera\LocalFilesystemStorageReader
- * @uses   \Brera\LocalFilesystemStorageWriter
- * @uses   \Brera\MasterFactoryTrait
+ * @covers \LizardsAndPumpkins\SampleFactory
+ * @uses   \LizardsAndPumpkins\FactoryTrait
+ * @uses   \LizardsAndPumpkins\Log\InMemoryLogger
+ * @uses   \LizardsAndPumpkins\Log\WritingLoggerDecorator
+ * @uses   \LizardsAndPumpkins\Log\Writer\FileLogMessageWriter
+ * @uses   \LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine
+ * @uses   \LizardsAndPumpkins\Image\ImageMagickInscribeStrategy
+ * @uses   \LizardsAndPumpkins\Image\ImageProcessor
+ * @uses   \LizardsAndPumpkins\Image\ImageProcessorCollection
+ * @uses   \LizardsAndPumpkins\Image\ImageProcessingStrategySequence
+ * @uses   \LizardsAndPumpkins\LocalFilesystemStorageReader
+ * @uses   \LizardsAndPumpkins\LocalFilesystemStorageWriter
+ * @uses   \LizardsAndPumpkins\MasterFactoryTrait
  */
 class SampleFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -47,7 +47,7 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
-        $keyValueStoragePath = sys_get_temp_dir() . '/brera/key-value-store';
+        $keyValueStoragePath = sys_get_temp_dir() . '/lizards-and-pumpkins/key-value-store';
         if (file_exists($keyValueStoragePath)) {
             $iterator = new \RecursiveIteratorIterator(
                 new \RecursiveDirectoryIterator($keyValueStoragePath, \FilesystemIterator::SKIP_DOTS),

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <phpdox xmlns="http://xml.phpdox.net/config" silent="false">
-    <project name="brera" source="../src/" workdir="./phpdox">
+    <project name="lizards-and-pumpkins" source="../src/" workdir="./phpdox">
         <collector publiconly="true" backend="parser" />
 
         <generator output="./api">

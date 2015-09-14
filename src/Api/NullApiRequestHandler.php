@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera\Api;
+namespace LizardsAndPumpkins\Api;
 
-use Brera\Http\HttpRequest;
+use LizardsAndPumpkins\Http\HttpRequest;
 
 class NullApiRequestHandler extends ApiRequestHandler
 {

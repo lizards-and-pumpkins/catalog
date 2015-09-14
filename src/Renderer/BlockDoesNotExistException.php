@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\Renderer;
+namespace LizardsAndPumpkins\Renderer;
 
 class BlockDoesNotExistException extends \RuntimeException
 {

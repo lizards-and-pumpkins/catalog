@@ -1,10 +1,10 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Http\HttpRequest;
-use Brera\Http\HttpResponse;
-use Brera\Http\HttpRouterChain;
+use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Http\HttpResponse;
+use LizardsAndPumpkins\Http\HttpRouterChain;
 
 abstract class WebFront
 {

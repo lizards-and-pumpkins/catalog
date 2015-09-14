@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Context\ContextSource;
+use LizardsAndPumpkins\Context\ContextSource;
 
 /**
- * @covers \Brera\SnippetRendererCollection
+ * @covers \LizardsAndPumpkins\SnippetRendererCollection
  */
 class SnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
 {

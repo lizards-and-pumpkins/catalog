@@ -1,10 +1,10 @@
 <?php
 
-namespace Brera\Content;
+namespace LizardsAndPumpkins\Content;
 
-use Brera\Api\ApiRequestHandler;
-use Brera\Http\HttpRequest;
-use Brera\Queue\Queue;
+use LizardsAndPumpkins\Api\ApiRequestHandler;
+use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Queue\Queue;
 
 class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
 {

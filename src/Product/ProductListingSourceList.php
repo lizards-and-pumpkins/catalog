@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Context\Context;
-use Brera\Product\Exception\InvalidProductListingSourceDataException;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Product\Exception\InvalidProductListingSourceDataException;
 
 class ProductListingSourceList
 {

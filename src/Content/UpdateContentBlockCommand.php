@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera\Content;
+namespace LizardsAndPumpkins\Content;
 
-use Brera\Command;
+use LizardsAndPumpkins\Command;
 
 class UpdateContentBlockCommand implements Command
 {

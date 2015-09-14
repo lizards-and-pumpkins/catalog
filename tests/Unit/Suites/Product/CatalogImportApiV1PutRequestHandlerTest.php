@@ -1,21 +1,21 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Api\ApiRequestHandler;
-use Brera\Http\HttpRequest;
-use Brera\Log\Logger;
-use Brera\Product\Exception\CatalogImportApiDirectoryNotReadableException;
-use Brera\Product\Exception\CatalogImportFileNameNotFoundInRequestBodyException;
-use Brera\Projection\Catalog\Import\CatalogImport;
+use LizardsAndPumpkins\Api\ApiRequestHandler;
+use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Log\Logger;
+use LizardsAndPumpkins\Product\Exception\CatalogImportApiDirectoryNotReadableException;
+use LizardsAndPumpkins\Product\Exception\CatalogImportFileNameNotFoundInRequestBodyException;
+use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
 use org\bovigo\vfs\vfsStream;
 
 /**
- * @covers \Brera\Product\CatalogImportApiV1PutRequestHandler
- * @uses   \Brera\Api\ApiRequestHandler
- * @uses   \Brera\Http\HttpHeaders
- * @uses   \Brera\Http\HttpResponse
- * @uses   \Brera\DefaultHttpResponse
+ * @covers \LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler
+ * @uses   \LizardsAndPumpkins\Api\ApiRequestHandler
+ * @uses   \LizardsAndPumpkins\Http\HttpHeaders
+ * @uses   \LizardsAndPumpkins\Http\HttpResponse
+ * @uses   \LizardsAndPumpkins\DefaultHttpResponse
  */
 class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {

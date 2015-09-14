@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Brera\Http;
+namespace LizardsAndPumpkins\Http;
 
 /**
- * @covers \Brera\Http\HttpRequestBody
+ * @covers \LizardsAndPumpkins\Http\HttpRequestBody
  */
 class HttpRequestBodyTest extends \PHPUnit_Framework_TestCase
 {

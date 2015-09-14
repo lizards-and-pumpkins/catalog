@@ -1,10 +1,10 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
 /**
- * @covers \Brera\SnippetList
- * @uses   \Brera\Snippet
+ * @covers \LizardsAndPumpkins\SnippetList
+ * @uses   \LizardsAndPumpkins\Snippet
  */
 class SnippetListTest extends \PHPUnit_Framework_TestCase
 {

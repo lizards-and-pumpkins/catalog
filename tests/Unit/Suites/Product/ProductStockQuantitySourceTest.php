@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
 /**
- * @covers \Brera\Product\ProductStockQuantitySource
+ * @covers \LizardsAndPumpkins\Product\ProductStockQuantitySource
  */
 class ProductStockQuantitySourceTest extends \PHPUnit_Framework_TestCase
 {

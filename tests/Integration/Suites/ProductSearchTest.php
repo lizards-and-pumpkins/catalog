@@ -1,13 +1,13 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Http\HttpHeaders;
-use Brera\Http\HttpRequest;
-use Brera\Http\HttpRequestBody;
-use Brera\Http\HttpUrl;
-use Brera\Product\ProductSearchRequestHandler;
-use Brera\Product\ProductSearchResultMetaSnippetRenderer;
+use LizardsAndPumpkins\Http\HttpHeaders;
+use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Http\HttpRequestBody;
+use LizardsAndPumpkins\Http\HttpUrl;
+use LizardsAndPumpkins\Product\ProductSearchRequestHandler;
+use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer;
 
 class ProductSearchTest extends AbstractIntegrationTest
 {
@@ -19,7 +19,9 @@ class ProductSearchTest extends AbstractIntegrationTest
     private function addTemplateWasUpdatedDomainEventToSetupProductListingFixture()
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/templates/product_listing');
-        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.templates.v1+json']);
+        $httpHeaders = HttpHeaders::fromArray([
+            'Accept' => 'application/vnd.lizards-and-pumpkins.templates.v1+json'
+        ]);
         $httpRequestBodyString = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.json');
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
@@ -36,7 +38,9 @@ class ProductSearchTest extends AbstractIntegrationTest
     private function importCatalog()
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
-        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.catalog_import.v1+json']);
+        $httpHeaders = HttpHeaders::fromArray([
+            'Accept' => 'application/vnd.lizards-and-pumpkins.catalog_import.v1+json'
+        ]);
         $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);

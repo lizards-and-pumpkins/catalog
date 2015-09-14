@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Context\ContextSource;
-use Brera\DataPool\DataPoolWriter;
-use Brera\Projector;
-use Brera\SnippetRendererCollection;
+use LizardsAndPumpkins\Context\ContextSource;
+use LizardsAndPumpkins\DataPool\DataPoolWriter;
+use LizardsAndPumpkins\Projector;
+use LizardsAndPumpkins\SnippetRendererCollection;
 
 class ProductSearchAutosuggestionTemplateProjector implements Projector
 {

@@ -1,15 +1,15 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Context\Context;
-use Brera\SampleContextSource;
-use Brera\SnippetKeyGenerator;
-use Brera\SnippetList;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\SampleContextSource;
+use LizardsAndPumpkins\SnippetKeyGenerator;
+use LizardsAndPumpkins\SnippetList;
 
 /**
- * @covers \Brera\Product\ProductListingSnippetRenderer
- * @uses   \Brera\Snippet
+ * @covers \LizardsAndPumpkins\Product\ProductListingSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Snippet
  */
 class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {

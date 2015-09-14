@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Context\ContextSource;
-use Brera\DomainEventHandler;
+use LizardsAndPumpkins\Context\ContextSource;
+use LizardsAndPumpkins\DomainEventHandler;
 
 class ProductStockQuantityWasUpdatedDomainEventHandler implements DomainEventHandler
 {

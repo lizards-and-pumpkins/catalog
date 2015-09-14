@@ -1,30 +1,30 @@
 <?php
 
 
-namespace Brera\Projection\Catalog\Import;
+namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
-use Brera\Image\UpdateImageCommand;
-use Brera\Log\Logger;
-use Brera\Product\Exception\ProductAttributeContextPartsMismatchException;
-use Brera\Product\ProductId;
-use Brera\Product\ProductSource;
-use Brera\Product\UpdateProductCommand;
-use Brera\Product\UpdateProductListingCommand;
-use Brera\Product\ProductListingMetaInfoSource;
-use Brera\Product\ProductListingMetaInfoSourceBuilder;
-use Brera\Product\ProductSourceBuilder;
-use Brera\Queue\Queue;
+use LizardsAndPumpkins\Image\UpdateImageCommand;
+use LizardsAndPumpkins\Log\Logger;
+use LizardsAndPumpkins\Product\Exception\ProductAttributeContextPartsMismatchException;
+use LizardsAndPumpkins\Product\ProductId;
+use LizardsAndPumpkins\Product\ProductSource;
+use LizardsAndPumpkins\Product\UpdateProductCommand;
+use LizardsAndPumpkins\Product\UpdateProductListingCommand;
+use LizardsAndPumpkins\Product\ProductListingMetaInfoSource;
+use LizardsAndPumpkins\Product\ProductListingMetaInfoSourceBuilder;
+use LizardsAndPumpkins\Product\ProductSourceBuilder;
+use LizardsAndPumpkins\Queue\Queue;
 use org\bovigo\vfs\vfsStream;
 
 /**
- * @covers \Brera\Projection\Catalog\Import\CatalogImport
- * @uses \Brera\Product\ProductId
- * @uses \Brera\Product\UpdateProductListingCommand
- * @uses \Brera\Product\UpdateProductCommand
- * @uses \Brera\Projection\Catalog\Import\ProductImportFailedMessage
- * @uses \Brera\Utils\XPathParser
- * @uses \Brera\Projection\Catalog\Import\CatalogXmlParser
- * @uses \Brera\Image\UpdateImageCommand
+ * @covers \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
+ * @uses \LizardsAndPumpkins\Product\ProductId
+ * @uses \LizardsAndPumpkins\Product\UpdateProductListingCommand
+ * @uses \LizardsAndPumpkins\Product\UpdateProductCommand
+ * @uses \LizardsAndPumpkins\Projection\Catalog\Import\ProductImportFailedMessage
+ * @uses \LizardsAndPumpkins\Utils\XPathParser
+ * @uses \LizardsAndPumpkins\Projection\Catalog\Import\CatalogXmlParser
+ * @uses \LizardsAndPumpkins\Image\UpdateImageCommand
  */
 class CatalogImportTest extends \PHPUnit_Framework_TestCase
 {

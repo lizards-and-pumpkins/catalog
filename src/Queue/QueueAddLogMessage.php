@@ -1,9 +1,9 @@
 <?php
 
 
-namespace Brera\Queue;
+namespace LizardsAndPumpkins\Queue;
 
-use Brera\Log\LogMessage;
+use LizardsAndPumpkins\Log\LogMessage;
 
 class QueueAddLogMessage implements LogMessage
 {

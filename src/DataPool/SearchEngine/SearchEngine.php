@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera\DataPool\SearchEngine;
+namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
-use Brera\Context\Context;
-use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 
 interface SearchEngine
 {

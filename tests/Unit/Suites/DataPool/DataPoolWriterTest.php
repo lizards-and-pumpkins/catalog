@@ -1,19 +1,19 @@
 <?php
 
-namespace Brera\DataPool;
+namespace LizardsAndPumpkins\DataPool;
 
-use Brera\DataPool\KeyValue\InMemory\InMemoryKeyValueStoreTest;
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
-use Brera\DataPool\Stub\ClearableStubKeyValueStore;
-use Brera\DataPool\Stub\ClearableStubSearchEngine;
-use Brera\Snippet;
-use Brera\SnippetList;
-use Brera\Utils\Clearable;
+use LizardsAndPumpkins\DataPool\KeyValue\InMemory\InMemoryKeyValueStoreTest;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
+use LizardsAndPumpkins\DataPool\Stub\ClearableStubKeyValueStore;
+use LizardsAndPumpkins\DataPool\Stub\ClearableStubSearchEngine;
+use LizardsAndPumpkins\Snippet;
+use LizardsAndPumpkins\SnippetList;
+use LizardsAndPumpkins\Utils\Clearable;
 
 /**
- * @covers \Brera\DataPool\DataPoolWriter
- * @uses   Brera\Product\ProductId
- * @uses   Brera\Http\HttpUrl
+ * @covers \LizardsAndPumpkins\DataPool\DataPoolWriter
+ * @uses   \LizardsAndPumpkins\Product\ProductId
+ * @uses   \LizardsAndPumpkins\Http\HttpUrl
  */
 class DataPoolWriterTest extends AbstractDataPoolTest
 {

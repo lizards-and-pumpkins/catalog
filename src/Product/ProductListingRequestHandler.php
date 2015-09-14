@@ -1,23 +1,23 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Context\Context;
-use Brera\DataPool\DataPoolReader;
-use Brera\DataPool\KeyValue\KeyNotFoundException;
-use Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
-use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
-use Brera\Http\HttpRequest;
-use Brera\Http\HttpRequestHandler;
-use Brera\Http\HttpResponse;
-use Brera\Http\UnableToHandleRequestException;
-use Brera\PageBuilder;
-use Brera\Pagination;
-use Brera\Renderer\BlockRenderer;
-use Brera\SnippetKeyGeneratorLocator;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\DataPool\DataPoolReader;
+use LizardsAndPumpkins\DataPool\KeyValue\KeyNotFoundException;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
+use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Http\HttpRequestHandler;
+use LizardsAndPumpkins\Http\HttpResponse;
+use LizardsAndPumpkins\Http\UnableToHandleRequestException;
+use LizardsAndPumpkins\PageBuilder;
+use LizardsAndPumpkins\Pagination;
+use LizardsAndPumpkins\Renderer\BlockRenderer;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
 
 class ProductListingRequestHandler implements HttpRequestHandler
 {

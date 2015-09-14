@@ -1,18 +1,18 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
-use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
-use Brera\Product\Exception\DataNotStringException;
-use Brera\Product\Exception\InvalidConditionXmlAttributeException;
-use Brera\Product\Exception\InvalidCriterionOperationXmlAttributeException;
-use Brera\Product\Exception\MissingConditionXmlAttributeException;
-use Brera\Product\Exception\MissingCriterionOperationXmlAttributeException;
-use Brera\Product\Exception\MissingUrlKeyXmlAttributeException;
-use Brera\UrlKey;
-use Brera\Utils\XPathParser;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
+use LizardsAndPumpkins\Product\Exception\DataNotStringException;
+use LizardsAndPumpkins\Product\Exception\InvalidConditionXmlAttributeException;
+use LizardsAndPumpkins\Product\Exception\InvalidCriterionOperationXmlAttributeException;
+use LizardsAndPumpkins\Product\Exception\MissingConditionXmlAttributeException;
+use LizardsAndPumpkins\Product\Exception\MissingCriterionOperationXmlAttributeException;
+use LizardsAndPumpkins\Product\Exception\MissingUrlKeyXmlAttributeException;
+use LizardsAndPumpkins\UrlKey;
+use LizardsAndPumpkins\Utils\XPathParser;
 
 class ProductListingMetaInfoSourceBuilder
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Context\Context;
-use Brera\DataPool\DataPoolReader;
-use Brera\Log\Logger;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\DataPool\DataPoolReader;
+use LizardsAndPumpkins\Log\Logger;
 
 class PageBuilder
 {
@@ -261,7 +261,7 @@ class PageBuilder
     private function buildPlaceholderFromCode($code)
     {
         // TODO delegate placeholder creation (and also use the delegate during import)
-        /** @see Brera\Renderer\BlockRenderer::getBlockPlaceholder() * */
+        /** @see LizardsAndPumpkins\Renderer\BlockRenderer::getBlockPlaceholder() * */
 
         return sprintf('{{snippet %s}}', $code);
     }

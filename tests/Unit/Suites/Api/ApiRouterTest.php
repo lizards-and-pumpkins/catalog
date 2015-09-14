@@ -1,13 +1,13 @@
 <?php
 
-namespace Brera\Api;
+namespace LizardsAndPumpkins\Api;
 
-use Brera\Http\HttpRequest;
-use Brera\Http\HttpRequestHandler;
+use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Http\HttpRequestHandler;
 
 /**
- * @covers \Brera\Api\ApiRouter
- * @uses   \Brera\Http\HttpRequestHandler
+ * @covers \LizardsAndPumpkins\Api\ApiRouter
+ * @uses   \LizardsAndPumpkins\Http\HttpRequestHandler
  */
 class ApiRouterTest extends \PHPUnit_Framework_TestCase
 {
@@ -53,7 +53,8 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
 
     public function testNullIsReturnedIfEndpointCodeIsNotSpecified()
     {
-        $this->stubHttpRequest->method('getHeader')->with('Accept')->willReturn('application/vnd.brera.foo.v1+json');
+        $this->stubHttpRequest->method('getHeader')->with('Accept')
+            ->willReturn('application/vnd.lizards-and-pumpkins.foo.v1+json');
         $this->stubHttpRequest->method('getUrlPathRelativeToWebFront')->willReturn('api');
         $result = $this->apiRouter->route($this->stubHttpRequest);
 
@@ -70,7 +71,8 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
             ->willReturn($stubApiRequestHandler);
 
         $this->stubHttpRequest->method('getUrlPathRelativeToWebFront')->willReturn('api/foo');
-        $this->stubHttpRequest->method('getHeader')->with('Accept')->willReturn('application/vnd.brera.foo.v1+json');
+        $this->stubHttpRequest->method('getHeader')->with('Accept')
+            ->willReturn('application/vnd.lizards-and-pumpkins.foo.v1+json');
         $result = $this->apiRouter->route($this->stubHttpRequest);
 
         $this->assertNull($result);
@@ -85,7 +87,8 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
             ->method('getApiRequestHandler')
             ->willReturn($stubApiRequestHandler);
 
-        $this->stubHttpRequest->method('getHeader')->with('Accept')->willReturn('application/vnd.brera.foo.v1+json');
+        $this->stubHttpRequest->method('getHeader')->with('Accept')
+            ->willReturn('application/vnd.lizards-and-pumpkins.foo.v1+json');
         $this->stubHttpRequest->method('getUrlPathRelativeToWebFront')->willReturn('api/foo');
         $result = $this->apiRouter->route($this->stubHttpRequest);
 

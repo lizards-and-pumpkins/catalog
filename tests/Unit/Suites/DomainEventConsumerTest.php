@@ -1,14 +1,14 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Log\Logger;
-use Brera\Queue\Queue;
+use LizardsAndPumpkins\Log\Logger;
+use LizardsAndPumpkins\Queue\Queue;
 
 /**
- * @covers \Brera\DomainEventConsumer
- * @uses   \Brera\DomainEventHandlerFailedMessage
- * @uses   \Brera\FailedToReadFromDomainEventQueueMessage
+ * @covers \LizardsAndPumpkins\DomainEventConsumer
+ * @uses   \LizardsAndPumpkins\DomainEventHandlerFailedMessage
+ * @uses   \LizardsAndPumpkins\FailedToReadFromDomainEventQueueMessage
  */
 class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
 {

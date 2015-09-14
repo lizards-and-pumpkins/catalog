@@ -1,15 +1,15 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Context\Context;
-use Brera\Context\ContextBuilder;
-use Brera\Product\Exception\MalformedProductListingSourceJsonException;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\Product\Exception\MalformedProductListingSourceJsonException;
 
 /**
- * @covers \Brera\Product\ProductListingSourceListBuilder
- * @uses   \Brera\Product\ProductListingSourceList
- * @uses   \Brera\Product\ProductListingSource
+ * @covers \LizardsAndPumpkins\Product\ProductListingSourceListBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductListingSourceList
+ * @uses   \LizardsAndPumpkins\Product\ProductListingSource
  */
 class ProductListingSourceListBuilderTest extends \PHPUnit_Framework_TestCase
 {

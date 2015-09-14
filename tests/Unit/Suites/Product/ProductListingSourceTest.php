@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Context\Context;
+use LizardsAndPumpkins\Context\Context;
 
 /**
- * @covers \Brera\Product\ProductListingSource
+ * @covers \LizardsAndPumpkins\Product\ProductListingSource
  */
 class ProductListingSourceTest extends \PHPUnit_Framework_TestCase
 {

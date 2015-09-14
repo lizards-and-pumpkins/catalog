@@ -1,14 +1,14 @@
 <?php
 
-namespace Brera\DataPool;
+namespace LizardsAndPumpkins\DataPool;
 
-use Brera\Context\Context;
-use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 
 /**
- * @covers \Brera\DataPool\DataPoolReader
- * @uses   \Brera\Product\ProductId
- * @uses   \Brera\Http\HttpUrl
+ * @covers \LizardsAndPumpkins\DataPool\DataPoolReader
+ * @uses   \LizardsAndPumpkins\Product\ProductId
+ * @uses   \LizardsAndPumpkins\Http\HttpUrl
  */
 class DataPoolReaderTest extends AbstractDataPoolTest
 {

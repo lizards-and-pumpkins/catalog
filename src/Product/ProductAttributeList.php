@@ -1,10 +1,10 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Context\Context;
-use Brera\Product\Exception\ProductAttributeContextPartsMismatchException;
-use Brera\Product\Exception\ProductAttributeNotFoundException;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Product\Exception\ProductAttributeContextPartsMismatchException;
+use LizardsAndPumpkins\Product\Exception\ProductAttributeNotFoundException;
 
 class ProductAttributeList
 {

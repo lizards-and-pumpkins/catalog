@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\Image;
+namespace LizardsAndPumpkins\Image;
 
-use Brera\FileStorageReader;
-use Brera\FileStorageWriter;
+use LizardsAndPumpkins\FileStorageReader;
+use LizardsAndPumpkins\FileStorageWriter;
 
 class ImageProcessor
 {

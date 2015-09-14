@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Brera\Queue\Stub;
+namespace LizardsAndPumpkins\Queue\Stub;
 
-use Brera\Queue\Queue;
-use Brera\Utils\Clearable;
+use LizardsAndPumpkins\Queue\Queue;
+use LizardsAndPumpkins\Utils\Clearable;
 
 class ClearableStubQueue implements Queue, Clearable
 {

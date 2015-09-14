@@ -1,34 +1,34 @@
 {
-    "name": "brera/brera",
+    "name": "lizards-and-pumpkins/catalog",
     "version": "dev-master",
-    "description": "Brera Proof Of Concept",
+    "description": "Lizards & Pumpkins catalog module",
     "license": "BSD-3-Clause",
     "authors": [
         {
             "name": "Vinai Kopp",
-            "email": "vinai@brera.io"
+            "email": "vinai@lizardsandpumpkins.com"
         },
         {
             "name": "Tim Bezhashvyly",
-            "email": "tim@brera.io"
+            "email": "tim@lizardsandpumpkins.com"
         },
         {
             "name": "Fabian Blechschmidt",
-            "email": "fabian@brera.io"
+            "email": "fabian@lizardsandpumpkins.com"
         }
     ],
     "require": {
         "php": "~5.6.0|~7.0",
         "ext-imagick": "*",
-        "brera/lib-key-value-store": "dev-master",
-        "brera/lib-queue": "dev-master",
+        "lizards-and-pumpkins/lib-key-value-store": "dev-master",
+        "lizards-and-pumpkins/lib-queue": "dev-master",
         "league/url": "3.1.1",
         "sebastian/money": "~1.5"
     },
     "require-dev": {
         "phpunit/phpunit": ">=4.7",
         "phpunit/phpunit-mock-objects": ">=2.3.5",
-        "brera/coding-standards": "dev-master",
+        "lizards-and-pumpkins/coding-standards": "dev-master",
         "league/climate": "~3.2.0",
         "squizlabs/php_codesniffer": "2.*",
         "phploc/phploc": "2.*",
@@ -39,7 +39,7 @@
         "mikey179/vfsStream": "1.5.0"
     },
     "autoload": {
-        "psr-4": {"Brera\\": "src/"}
+        "psr-4": {"LizardsAndPumpkins\\": "src/"}
     },
     "repositories": [
         {
@@ -52,7 +52,7 @@
             "vendor/bin/phpunit -c tests/Unit/phpunit.xml.dist",
             "vendor/bin/phpunit -c tests/Integration/phpunit.xml.dist"
         ],
-        "sniff": "vendor/bin/phpcs --runtime-set ignore_warnings_on_exit true --runtime-set ignore_errors_on_exit true -p --colors --standard=vendor/brera/coding-standards/src/Brera/ src/ tests/"
+        "sniff": "vendor/bin/phpcs --runtime-set ignore_warnings_on_exit true --runtime-set ignore_errors_on_exit true -p --colors --standard=vendor/lizards-and-pumpkins/coding-standards/src/LizardsAndPumpkins/ src/ tests/"
     },
     "minimum-stability": "dev",
     "prefer-stable": true

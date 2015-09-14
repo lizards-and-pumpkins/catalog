@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\Image;
+namespace LizardsAndPumpkins\Image;
 
 /**
- * @covers \Brera\Image\ImageProcessorCollection
+ * @covers \LizardsAndPumpkins\Image\ImageProcessorCollection
  */
 class ImageProcessorCollectionTest extends \PHPUnit_Framework_TestCase
 {

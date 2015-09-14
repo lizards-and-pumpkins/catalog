@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
 class InvalidSnippetKeyIdentifierException extends \RuntimeException
 {

@@ -1,17 +1,17 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
-use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
-use Brera\Http\HttpHeaders;
-use Brera\Http\HttpRequest;
-use Brera\Http\HttpRequestBody;
-use Brera\Http\HttpUrl;
-use Brera\Product\ProductListingMetaInfoSnippetContent;
-use Brera\Product\ProductListingRequestHandler;
-use Brera\Product\ProductListingSnippetRenderer;
-use Brera\Utils\XPathParser;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
+use LizardsAndPumpkins\Http\HttpHeaders;
+use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Http\HttpRequestBody;
+use LizardsAndPumpkins\Http\HttpUrl;
+use LizardsAndPumpkins\Product\ProductListingMetaInfoSnippetContent;
+use LizardsAndPumpkins\Product\ProductListingRequestHandler;
+use LizardsAndPumpkins\Product\ProductListingSnippetRenderer;
+use LizardsAndPumpkins\Utils\XPathParser;
 
 class ProductListingTest extends AbstractIntegrationTest
 {
@@ -25,7 +25,9 @@ class ProductListingTest extends AbstractIntegrationTest
     private function importCatalog()
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
-        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.catalog_import.v1+json']);
+        $httpHeaders = HttpHeaders::fromArray([
+            'Accept' => 'application/vnd.lizards-and-pumpkins.catalog_import.v1+json'
+        ]);
         $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
@@ -42,7 +44,9 @@ class ProductListingTest extends AbstractIntegrationTest
     private function createProductListingFixture()
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/templates/product_listing');
-        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.templates.v1+json']);
+        $httpHeaders = HttpHeaders::fromArray([
+            'Accept' => 'application/vnd.lizards-and-pumpkins.templates.v1+json'
+        ]);
         $httpRequestBodyString = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.json');
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
@@ -63,7 +67,9 @@ class ProductListingTest extends AbstractIntegrationTest
     {
         $testUrlKey = preg_replace('/.*\//', '', $this->testUrl);
         $httpUrl = HttpUrl::fromString('http://example.com/api/content_blocks/in_product_listing_' . $testUrlKey);
-        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.content_blocks.v1+json']);
+        $httpHeaders = HttpHeaders::fromArray([
+            'Accept' => 'application/vnd.lizards-and-pumpkins.content_blocks.v1+json'
+        ]);
         $httpRequestBodyString = json_encode([
             'content' => $contentBlockContent,
             'context' => ['website' => 'ru', 'locale' => 'de_DE']

@@ -1,12 +1,12 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Context\ContextSource;
-use Brera\DomainEventHandler;
+use LizardsAndPumpkins\Context\ContextSource;
+use LizardsAndPumpkins\DomainEventHandler;
 
 /**
- * @covers \Brera\Product\ProductWasUpdatedDomainEventHandler
+ * @covers \LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler
  */
 class ProductWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {

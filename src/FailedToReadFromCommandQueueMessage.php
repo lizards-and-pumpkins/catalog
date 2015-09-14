@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Log\LogMessage;
+use LizardsAndPumpkins\Log\LogMessage;
 
 class FailedToReadFromCommandQueueMessage implements LogMessage
 {

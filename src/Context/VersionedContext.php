@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera\Context;
+namespace LizardsAndPumpkins\Context;
 
-use Brera\DataVersion;
+use LizardsAndPumpkins\DataVersion;
 
 class VersionedContext implements Context
 {

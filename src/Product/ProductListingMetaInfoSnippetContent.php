@@ -1,12 +1,12 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
-use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
-use Brera\PageMetaInfoSnippetContent;
-use Brera\Product\Exception\MalformedSearchCriteriaMetaException;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
+use LizardsAndPumpkins\PageMetaInfoSnippetContent;
+use LizardsAndPumpkins\Product\Exception\MalformedSearchCriteriaMetaException;
 
 class ProductListingMetaInfoSnippetContent implements PageMetaInfoSnippetContent
 {

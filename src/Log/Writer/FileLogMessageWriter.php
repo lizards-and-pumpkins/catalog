@@ -1,9 +1,9 @@
 <?php
 
 
-namespace Brera\Log\Writer;
+namespace LizardsAndPumpkins\Log\Writer;
 
-use Brera\Log\LogMessage;
+use LizardsAndPumpkins\Log\LogMessage;
 
 class FileLogMessageWriter implements LogMessageWriter
 {

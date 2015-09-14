@@ -1,17 +1,17 @@
 <?php
 
-namespace Brera\Content;
+namespace LizardsAndPumpkins\Content;
 
-use Brera\Context\Context;
-use Brera\Context\ContextBuilder;
-use Brera\Snippet;
-use Brera\SnippetKeyGenerator;
-use Brera\SnippetList;
-use Brera\SnippetRenderer;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\Snippet;
+use LizardsAndPumpkins\SnippetKeyGenerator;
+use LizardsAndPumpkins\SnippetList;
+use LizardsAndPumpkins\SnippetRenderer;
 
 /**
- * @covers \Brera\Content\ContentBlockSnippetRenderer
- * @uses   \Brera\Snippet
+ * @covers \LizardsAndPumpkins\Content\ContentBlockSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Snippet
  */
 class ContentBlockSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\Api\Stubs;
+namespace LizardsAndPumpkins\Api\Stubs;
 
-use Brera\Api\ApiRequestHandler;
-use Brera\Http\HttpRequest;
+use LizardsAndPumpkins\Api\ApiRequestHandler;
+use LizardsAndPumpkins\Http\HttpRequest;
 
 class StubApiRequestHandler extends ApiRequestHandler
 {

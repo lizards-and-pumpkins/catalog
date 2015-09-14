@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\Api;
+namespace LizardsAndPumpkins\Api;
 
 class ApiRequestHandlerChain
 {

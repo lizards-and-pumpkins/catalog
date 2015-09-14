@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Renderer\BlockRenderer;
+use LizardsAndPumpkins\Renderer\BlockRenderer;
 
 class ProductListingBlockRenderer extends BlockRenderer
 {

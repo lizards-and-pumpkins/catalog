@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\DataPool\SearchEngine\SearchDocument;
+namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument;
 
 class SearchDocumentField
 {

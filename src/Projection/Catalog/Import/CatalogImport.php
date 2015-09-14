@@ -1,17 +1,17 @@
 <?php
 
 
-namespace Brera\Projection\Catalog\Import;
+namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
-use Brera\Image\UpdateImageCommand;
-use Brera\Log\Logger;
-use Brera\Product\ProductId;
-use Brera\Product\ProductListingMetaInfoSourceBuilder;
-use Brera\Product\ProductSourceBuilder;
-use Brera\Product\UpdateProductCommand;
-use Brera\Product\UpdateProductListingCommand;
-use Brera\Queue\Queue;
-use Brera\Utils\XPathParser;
+use LizardsAndPumpkins\Image\UpdateImageCommand;
+use LizardsAndPumpkins\Log\Logger;
+use LizardsAndPumpkins\Product\ProductId;
+use LizardsAndPumpkins\Product\ProductListingMetaInfoSourceBuilder;
+use LizardsAndPumpkins\Product\ProductSourceBuilder;
+use LizardsAndPumpkins\Product\UpdateProductCommand;
+use LizardsAndPumpkins\Product\UpdateProductListingCommand;
+use LizardsAndPumpkins\Queue\Queue;
+use LizardsAndPumpkins\Utils\XPathParser;
 
 class CatalogImport
 {

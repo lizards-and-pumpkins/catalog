@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera\Content;
+namespace LizardsAndPumpkins\Content;
 
-use Brera\DomainEvent;
+use LizardsAndPumpkins\DomainEvent;
 
 class ContentBlockWasUpdatedDomainEvent implements DomainEvent
 {

@@ -1,14 +1,14 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Context\Context;
-use Brera\Context\ContextSource;
-use Brera\InvalidProjectionSourceDataTypeException;
-use Brera\Snippet;
-use Brera\SnippetKeyGenerator;
-use Brera\SnippetRenderer;
-use Brera\SnippetList;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\ContextSource;
+use LizardsAndPumpkins\InvalidProjectionSourceDataTypeException;
+use LizardsAndPumpkins\Snippet;
+use LizardsAndPumpkins\SnippetKeyGenerator;
+use LizardsAndPumpkins\SnippetRenderer;
+use LizardsAndPumpkins\SnippetList;
 
 class ProductInListingSnippetRenderer implements SnippetRenderer
 {

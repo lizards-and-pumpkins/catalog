@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Context\Context;
+use LizardsAndPumpkins\Context\Context;
 
 class ProductSource
 {

@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
-<snippet xmlns="http://brera.io" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://brera.io ../../schema/snippet.xsd">
-    <block name="product_details_snippet" class="Brera\Renderer\Block" template="theme/template/1column.phtml">
-        <block name="head" class="Brera\Renderer\Block" template="theme/template/head.phtml" />
-        <block name="header" class="Brera\Renderer\Block" template="theme/template/header.phtml" />
-        <!--block name="global_messages" class="Brera\....\Block\Messages" template="..." /-->
-        <!--block name="breadcrumbs" class="Brera\....\Block\Breadcrumbs" template="..." /-->
-        <block name="content" class="Brera\Product\Block\ProductBlock" template="theme/template/product-details.phtml">
-            <!--block name="share_buttons" class="Brera\....\Block\SocialMediaShareButtons" template="..." /-->
-            <!--block name="availability_options_price" class="Brera\....\Block\PriceOptions" template="..." /-->
+<snippet xmlns="http://lizardsandpumpkins.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://lizardsandpumpkins.com ../../schema/snippet.xsd">
+    <block name="product_details_snippet" class="LizardsAndPumpkins\Renderer\Block" template="theme/template/1column.phtml">
+        <block name="head" class="LizardsAndPumpkins\Renderer\Block" template="theme/template/head.phtml" />
+        <block name="header" class="LizardsAndPumpkins\Renderer\Block" template="theme/template/header.phtml" />
+        <!--block name="global_messages" class="LizardsAndPumpkins\....\Block\Messages" template="..." /-->
+        <!--block name="breadcrumbs" class="LizardsAndPumpkins\....\Block\Breadcrumbs" template="..." /-->
+        <block name="content" class="LizardsAndPumpkins\Product\Block\ProductBlock" template="theme/template/product-details.phtml">
+            <!--block name="share_buttons" class="LizardsAndPumpkins\....\Block\SocialMediaShareButtons" template="..." /-->
+            <!--block name="availability_options_price" class="LizardsAndPumpkins\....\Block\PriceOptions" template="..." /-->
         </block>
-        <block name="footer" class="Brera\Renderer\Block" template="theme/template/footer.phtml" />
+        <block name="footer" class="LizardsAndPumpkins\Renderer\Block" template="theme/template/footer.phtml" />
     </block>
 </snippet>

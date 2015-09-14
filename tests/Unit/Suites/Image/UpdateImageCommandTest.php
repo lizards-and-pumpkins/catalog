@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera\Image;
+namespace LizardsAndPumpkins\Image;
 
-use Brera\Command;
+use LizardsAndPumpkins\Command;
 
 /**
- * @covers \Brera\Image\UpdateImageCommand
+ * @covers \LizardsAndPumpkins\Image\UpdateImageCommand
  */
 class UpdateImageCommandTest extends \PHPUnit_Framework_TestCase
 {

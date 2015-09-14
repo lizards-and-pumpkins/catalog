@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera\Renderer;
+namespace LizardsAndPumpkins\Renderer;
 
-use Brera\TestFileFixtureTrait;
+use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
- * @covers \Brera\Renderer\Block
+ * @covers \LizardsAndPumpkins\Renderer\Block
  */
 class BlockTest extends \PHPUnit_Framework_TestCase
 {

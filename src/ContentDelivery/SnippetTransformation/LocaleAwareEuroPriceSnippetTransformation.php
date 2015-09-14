@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Brera\ContentDelivery\SnippetTransformation;
+namespace LizardsAndPumpkins\ContentDelivery\SnippetTransformation;
 
-use Brera\Context\Context;
-use Brera\Context\LocaleContextDecorator;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\LocaleContextDecorator;
 use SebastianBergmann\Money\EUR;
 use SebastianBergmann\Money\IntlFormatter;
 

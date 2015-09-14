@@ -1,13 +1,13 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\CommandHandler;
-use Brera\Queue\Queue;
+use LizardsAndPumpkins\CommandHandler;
+use LizardsAndPumpkins\Queue\Queue;
 
 /**
- * @covers \Brera\Product\UpdateProductListingCommandHandler
- * @uses   \Brera\Product\ProductListingWasUpdatedDomainEvent
+ * @covers \LizardsAndPumpkins\Product\UpdateProductListingCommandHandler
+ * @uses   \LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEvent
  */
 class UpdateProductListingCommandHandlerTest extends \PHPUnit_Framework_TestCase
 {

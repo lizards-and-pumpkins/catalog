@@ -1,17 +1,17 @@
 <?php
 
-namespace Brera\DataPool\SearchEngine;
+namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
-use Brera\Context\Context;
-use Brera\Context\ContextBuilder;
-use Brera\Context\WebsiteContextDecorator;
-use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
-use Brera\DataVersion;
-use Brera\Product\ProductId;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\Context\WebsiteContextDecorator;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
+use LizardsAndPumpkins\DataVersion;
+use LizardsAndPumpkins\Product\ProductId;
 
 abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 {

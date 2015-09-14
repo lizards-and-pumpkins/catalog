@@ -1,14 +1,14 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Log\Logger;
-use Brera\Queue\Queue;
+use LizardsAndPumpkins\Log\Logger;
+use LizardsAndPumpkins\Queue\Queue;
 
 /**
- * @covers \Brera\CommandConsumer
- * @uses   \Brera\CommandHandlerFailedMessage
- * @uses   \Brera\FailedToReadFromCommandQueueMessage
+ * @covers \LizardsAndPumpkins\CommandConsumer
+ * @uses   \LizardsAndPumpkins\CommandHandlerFailedMessage
+ * @uses   \LizardsAndPumpkins\FailedToReadFromCommandQueueMessage
  */
 class CommandConsumerTest extends \PHPUnit_Framework_TestCase
 {

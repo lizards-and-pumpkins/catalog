@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Product\Exception\InvalidStockQuantitySourceException;
+use LizardsAndPumpkins\Product\Exception\InvalidStockQuantitySourceException;
 
 class ProductStockQuantity implements Quantity
 {

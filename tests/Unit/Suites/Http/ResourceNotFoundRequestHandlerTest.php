@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\Http;
+namespace LizardsAndPumpkins\Http;
 
 /**
- * @covers \Brera\Http\ResourceNotFoundRequestHandler
+ * @covers \LizardsAndPumpkins\Http\ResourceNotFoundRequestHandler
  */
 class ResourceNotFoundRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {

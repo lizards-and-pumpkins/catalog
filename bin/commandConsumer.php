@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
 require __DIR__ . '/../vendor/autoload.php';
 

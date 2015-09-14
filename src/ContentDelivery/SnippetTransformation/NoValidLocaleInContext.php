@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Brera\ContentDelivery\SnippetTransformation;
+namespace LizardsAndPumpkins\ContentDelivery\SnippetTransformation;
 
 class NoValidLocaleInContext extends \RuntimeException
 {

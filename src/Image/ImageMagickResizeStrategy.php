@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\Image;
+namespace LizardsAndPumpkins\Image;
 
 class ImageMagickResizeStrategy implements ImageProcessingStrategy
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
 /**
- * @covers \Brera\FailedToReadFromCommandQueueMessage
+ * @covers \LizardsAndPumpkins\FailedToReadFromCommandQueueMessage
  */
 class FailedToReadFromCommandQueueMessageTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\Http;
+namespace LizardsAndPumpkins\Http;
 
 class HttpsUrl extends HttpUrl
 {

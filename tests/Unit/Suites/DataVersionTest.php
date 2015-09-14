@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
 /**
- * @covers Brera\DataVersion
+ * @covers LizardsAndPumpkins\DataVersion
  */
 class DataVersionTest extends \PHPUnit_Framework_TestCase
 {

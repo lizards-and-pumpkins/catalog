@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
 use League\CLImate\CLImate;
 

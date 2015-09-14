@@ -1,38 +1,38 @@
 <?php
 
-namespace Brera\Tests\Integration;
+namespace LizardsAndPumpkins\Tests\Integration;
 
-use Brera\DataPool\KeyValue\KeyValueStore;
-use Brera\DataPool\SearchEngine\InMemorySearchEngine;
-use Brera\DataPool\SearchEngine\SearchEngine;
-use Brera\Image\ImageProcessor;
-use Brera\Image\ImageProcessorCollection;
-use Brera\Image\ImageProcessingStrategySequence;
-use Brera\IntegrationTestFactory;
-use Brera\Log\InMemoryLogger;
-use Brera\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
-use Brera\LocalFilesystemStorageReader;
-use Brera\LocalFilesystemStorageWriter;
-use Brera\Queue\Queue;
-use Brera\SampleMasterFactory;
-use Brera\Queue\InMemory\InMemoryQueue;
-use Brera\Utils\LocalFilesystem;
+use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
+use LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
+use LizardsAndPumpkins\Image\ImageProcessor;
+use LizardsAndPumpkins\Image\ImageProcessorCollection;
+use LizardsAndPumpkins\Image\ImageProcessingStrategySequence;
+use LizardsAndPumpkins\IntegrationTestFactory;
+use LizardsAndPumpkins\Log\InMemoryLogger;
+use LizardsAndPumpkins\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
+use LizardsAndPumpkins\LocalFilesystemStorageReader;
+use LizardsAndPumpkins\LocalFilesystemStorageWriter;
+use LizardsAndPumpkins\Queue\Queue;
+use LizardsAndPumpkins\SampleMasterFactory;
+use LizardsAndPumpkins\Queue\InMemory\InMemoryQueue;
+use LizardsAndPumpkins\Utils\LocalFilesystem;
 
 /**
- * @covers \Brera\IntegrationTestFactory
- * @uses   \Brera\DataPool\KeyValue\InMemory\InMemoryKeyValueStore
- * @uses   \Brera\FactoryTrait
- * @uses   \Brera\Image\ImageMagickResizeStrategy
- * @uses   \Brera\Image\GdResizeStrategy
- * @uses   \Brera\Image\ImageProcessor
- * @uses   \Brera\Image\ImageProcessorCollection
- * @uses   \Brera\Image\ImageProcessingStrategySequence
- * @uses   \Brera\Log\InMemoryLogger
- * @uses   \Brera\LocalFilesystemStorageReader
- * @uses   \Brera\LocalFilesystemStorageWriter
- * @uses   \Brera\MasterFactoryTrait
- * @uses   \Brera\Queue\InMemory\InMemoryQueue
- * @uses   \Brera\Utils\LocalFilesystem
+ * @covers \LizardsAndPumpkins\IntegrationTestFactory
+ * @uses   \LizardsAndPumpkins\DataPool\KeyValue\InMemory\InMemoryKeyValueStore
+ * @uses   \LizardsAndPumpkins\FactoryTrait
+ * @uses   \LizardsAndPumpkins\Image\ImageMagickResizeStrategy
+ * @uses   \LizardsAndPumpkins\Image\GdResizeStrategy
+ * @uses   \LizardsAndPumpkins\Image\ImageProcessor
+ * @uses   \LizardsAndPumpkins\Image\ImageProcessorCollection
+ * @uses   \LizardsAndPumpkins\Image\ImageProcessingStrategySequence
+ * @uses   \LizardsAndPumpkins\Log\InMemoryLogger
+ * @uses   \LizardsAndPumpkins\LocalFilesystemStorageReader
+ * @uses   \LizardsAndPumpkins\LocalFilesystemStorageWriter
+ * @uses   \LizardsAndPumpkins\MasterFactoryTrait
+ * @uses   \LizardsAndPumpkins\Queue\InMemory\InMemoryQueue
+ * @uses   \LizardsAndPumpkins\Utils\LocalFilesystem
  */
 class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
 {

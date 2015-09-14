@@ -1,13 +1,13 @@
 <?php
 
-namespace Brera\Content;
+namespace LizardsAndPumpkins\Content;
 
-use Brera\CommandHandler;
-use Brera\Queue\Queue;
+use LizardsAndPumpkins\CommandHandler;
+use LizardsAndPumpkins\Queue\Queue;
 
 /**
- * @covers \Brera\Content\UpdateContentBlockCommandHandler
- * @uses   \Brera\Content\ContentBlockWasUpdatedDomainEvent
+ * @covers \LizardsAndPumpkins\Content\UpdateContentBlockCommandHandler
+ * @uses   \LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEvent
  */
 class UpdateContentBlockCommandHandlerTest extends \PHPUnit_Framework_TestCase
 {

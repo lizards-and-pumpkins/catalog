@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Brera\DataPool;
+namespace LizardsAndPumpkins\DataPool;
 
 class InvalidKeyValueStoreKeyException extends \InvalidArgumentException
 {

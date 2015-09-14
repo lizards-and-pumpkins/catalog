@@ -1,26 +1,26 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
-use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
-use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
-use Brera\Product\Exception\DataNotStringException;
-use Brera\Product\Exception\InvalidConditionXmlAttributeException;
-use Brera\Product\Exception\InvalidCriterionOperationXmlAttributeException;
-use Brera\Product\Exception\MissingConditionXmlAttributeException;
-use Brera\Product\Exception\MissingCriterionOperationXmlAttributeException;
-use Brera\Product\Exception\MissingUrlKeyXmlAttributeException;
-use Brera\UrlKey;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
+use LizardsAndPumpkins\Product\Exception\DataNotStringException;
+use LizardsAndPumpkins\Product\Exception\InvalidConditionXmlAttributeException;
+use LizardsAndPumpkins\Product\Exception\InvalidCriterionOperationXmlAttributeException;
+use LizardsAndPumpkins\Product\Exception\MissingConditionXmlAttributeException;
+use LizardsAndPumpkins\Product\Exception\MissingCriterionOperationXmlAttributeException;
+use LizardsAndPumpkins\Product\Exception\MissingUrlKeyXmlAttributeException;
+use LizardsAndPumpkins\UrlKey;
 
 /**
- * @covers \Brera\Product\ProductListingMetaInfoSourceBuilder
- * @uses   \Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
- * @uses   \Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion
- * @uses   \Brera\Product\ProductListingMetaInfoSource
- * @uses   \Brera\Utils\XPathParser
- * @uses   \Brera\UrlKey
+ * @covers \LizardsAndPumpkins\Product\ProductListingMetaInfoSourceBuilder
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
+ * @uses   \LizardsAndPumpkins\Product\ProductListingMetaInfoSource
+ * @uses   \LizardsAndPumpkins\Utils\XPathParser
+ * @uses   \LizardsAndPumpkins\UrlKey
  */
 class ProductListingMetaInfoSourceBuilderTest extends \PHPUnit_Framework_TestCase
 {

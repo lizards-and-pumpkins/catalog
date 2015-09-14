@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Context\Context;
+use LizardsAndPumpkins\Context\Context;
 
 /**
- * @covers \Brera\MissingSnippetCodeMessage
+ * @covers \LizardsAndPumpkins\MissingSnippetCodeMessage
  */
 class MissingSnippetCodeMessageTest extends \PHPUnit_Framework_TestCase
 {

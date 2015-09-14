@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\Utils;
+namespace LizardsAndPumpkins\Utils;
 
 /**
- * @covers \Brera\Utils\XPathParser
+ * @covers \LizardsAndPumpkins\Utils\XPathParser
  */
 class XPathParserTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,21 +1,21 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Context\Context;
-use Brera\DataPool\DataPoolReader;
-use Brera\DataPool\KeyValue\KeyNotFoundException;
-use Brera\DefaultHttpResponse;
-use Brera\Http\HttpRequest;
-use Brera\Http\HttpRequestHandler;
-use Brera\Http\HttpUrl;
-use Brera\Http\UnableToHandleRequestException;
-use Brera\PageBuilder;
-use Brera\SnippetKeyGenerator;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\DataPool\DataPoolReader;
+use LizardsAndPumpkins\DataPool\KeyValue\KeyNotFoundException;
+use LizardsAndPumpkins\DefaultHttpResponse;
+use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Http\HttpRequestHandler;
+use LizardsAndPumpkins\Http\HttpUrl;
+use LizardsAndPumpkins\Http\UnableToHandleRequestException;
+use LizardsAndPumpkins\PageBuilder;
+use LizardsAndPumpkins\SnippetKeyGenerator;
 
 /**
- * @covers Brera\Product\ProductDetailViewRequestHandler
- * @uses   Brera\Product\ProductDetailPageMetaInfoSnippetContent
+ * @covers \LizardsAndPumpkins\Product\ProductDetailViewRequestHandler
+ * @uses   \LizardsAndPumpkins\Product\ProductDetailPageMetaInfoSnippetContent
  */
 class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {

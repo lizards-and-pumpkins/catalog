@@ -1,10 +1,10 @@
 <?php
 
-namespace Brera\Image;
+namespace LizardsAndPumpkins\Image;
 
 /**
- * @covers \Brera\Image\ImageMagickInscribeStrategy
- * @uses   \Brera\Image\ResizeStrategyTrait
+ * @covers \LizardsAndPumpkins\Image\ImageMagickInscribeStrategy
+ * @uses   \LizardsAndPumpkins\Image\ResizeStrategyTrait
  */
 class ImageMagickInscribeStrategyTest extends \PHPUnit_Framework_TestCase
 {

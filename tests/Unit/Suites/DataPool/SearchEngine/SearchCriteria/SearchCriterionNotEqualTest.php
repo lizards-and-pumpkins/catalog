@@ -1,10 +1,10 @@
 <?php
 
-namespace Brera\DataPool\SearchEngine\SearchCriteria;
+namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
 /**
- * @covers \Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterionNotEqual
- * @covers \Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion
+ * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionNotEqual
+ * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
  */
 class SearchCriterionNotEqualTest extends AbstractSearchCriterionTest
 {

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Brera\Renderer;
+namespace LizardsAndPumpkins\Renderer;
 
 class MethodNotYetAvailableException extends \LogicException
 {

@@ -1,17 +1,17 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Context\Context;
-use Brera\DataPool\DataPoolReader;
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
-use Brera\Http\HttpRequest;
-use Brera\Http\HttpRequestHandler;
-use Brera\Http\HttpResponse;
-use Brera\Http\UnableToHandleRequestException;
-use Brera\PageBuilder;
-use Brera\SnippetKeyGeneratorLocator;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\DataPool\DataPoolReader;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
+use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Http\HttpRequestHandler;
+use LizardsAndPumpkins\Http\HttpResponse;
+use LizardsAndPumpkins\Http\UnableToHandleRequestException;
+use LizardsAndPumpkins\PageBuilder;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
 
 class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
 {

@@ -1,13 +1,13 @@
 <?php
 
-namespace Brera\Renderer;
+namespace LizardsAndPumpkins\Renderer;
 
-use Brera\TestFileFixtureTrait;
+use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
- * @covers Brera\Renderer\LayoutReader
- * @uses Brera\Utils\XPathParser
- * @uses Brera\Renderer\Layout
+ * @covers LizardsAndPumpkins\Renderer\LayoutReader
+ * @uses LizardsAndPumpkins\Utils\XPathParser
+ * @uses LizardsAndPumpkins\Renderer\Layout
  */
 class LayoutReaderTest extends \PHPUnit_Framework_TestCase
 {
@@ -50,7 +50,7 @@ class LayoutReaderTest extends \PHPUnit_Framework_TestCase
         $layoutXML = <<<EOX
 <?xml version="1.0"?>
 <snippet>
-    <block name="test_block" class="Brera\Renderer\Block" template="some/template.phtml"/>
+    <block name="test_block" class="LizardsAndPumpkins\Renderer\Block" template="some/template.phtml"/>
 </snippet>
 EOX;
         $this->createFixtureFile($layoutFile, $layoutXML);

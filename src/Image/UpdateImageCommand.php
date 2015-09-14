@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera\Image;
+namespace LizardsAndPumpkins\Image;
 
-use Brera\Command;
+use LizardsAndPumpkins\Command;
 
 class UpdateImageCommand implements Command
 {

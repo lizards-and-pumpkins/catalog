@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Brera\Projection;
+namespace LizardsAndPumpkins\Projection;
 
-use Brera\DomainEventHandler;
-use Brera\Log\LogMessage;
+use LizardsAndPumpkins\DomainEventHandler;
+use LizardsAndPumpkins\Log\LogMessage;
 
 class DomainEventProcessedLogMessage implements LogMessage
 {

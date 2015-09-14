@@ -1,19 +1,19 @@
 <?php
 
-namespace Brera\Content;
+namespace LizardsAndPumpkins\Content;
 
-use Brera\Api\ApiRequestHandler;
-use Brera\Http\HttpRequest;
-use Brera\Queue\Queue;
+use LizardsAndPumpkins\Api\ApiRequestHandler;
+use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Queue\Queue;
 
 /**
- * @covers \Brera\Content\ContentBlocksApiV1PutRequestHandler
- * @uses   \Brera\Api\ApiRequestHandler
- * @uses   \Brera\Content\ContentBlockId
- * @uses   \Brera\Content\ContentBlockSource
- * @uses   \Brera\Content\UpdateContentBlockCommand
- * @uses   \Brera\DefaultHttpResponse
- * @uses   \Brera\Http\HttpHeaders
+ * @covers \LizardsAndPumpkins\Content\ContentBlocksApiV1PutRequestHandler
+ * @uses   \LizardsAndPumpkins\Api\ApiRequestHandler
+ * @uses   \LizardsAndPumpkins\Content\ContentBlockId
+ * @uses   \LizardsAndPumpkins\Content\ContentBlockSource
+ * @uses   \LizardsAndPumpkins\Content\UpdateContentBlockCommand
+ * @uses   \LizardsAndPumpkins\DefaultHttpResponse
+ * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  */
 class ContentBlocksApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {

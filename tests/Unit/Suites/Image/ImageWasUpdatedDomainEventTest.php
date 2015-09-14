@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera\Image;
+namespace LizardsAndPumpkins\Image;
 
-use Brera\DomainEvent;
+use LizardsAndPumpkins\DomainEvent;
 
 /**
- * @covers \Brera\Image\ImageWasUpdatedDomainEvent
+ * @covers \LizardsAndPumpkins\Image\ImageWasUpdatedDomainEvent
  */
 class ImageWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 {

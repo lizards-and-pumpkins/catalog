@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\Image;
+namespace LizardsAndPumpkins\Image;
 
-use Brera\CommandHandler;
-use Brera\Queue\Queue;
+use LizardsAndPumpkins\CommandHandler;
+use LizardsAndPumpkins\Queue\Queue;
 
 class UpdateImageCommandHandler implements CommandHandler
 {

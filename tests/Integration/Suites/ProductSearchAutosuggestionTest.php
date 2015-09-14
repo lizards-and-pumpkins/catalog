@@ -1,16 +1,16 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Http\HttpHeaders;
-use Brera\Http\HttpRequest;
-use Brera\Http\HttpRequestBody;
-use Brera\Http\HttpUrl;
-use Brera\Product\ProductId;
-use Brera\Product\ProductInSearchAutosuggestionSnippetRenderer;
-use Brera\Product\ProductSearchAutosuggestionMetaSnippetRenderer;
-use Brera\Product\ProductSearchAutosuggestionRequestHandler;
-use Brera\Product\ProductSearchAutosuggestionSnippetRenderer;
+use LizardsAndPumpkins\Http\HttpHeaders;
+use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Http\HttpRequestBody;
+use LizardsAndPumpkins\Http\HttpUrl;
+use LizardsAndPumpkins\Product\ProductId;
+use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductSearchAutosuggestionRequestHandler;
+use LizardsAndPumpkins\Product\ProductSearchAutosuggestionSnippetRenderer;
 
 class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
 {
@@ -22,7 +22,9 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
     private function importCatalog()
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
-        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.catalog_import.v1+json']);
+        $httpHeaders = HttpHeaders::fromArray([
+            'Accept' => 'application/vnd.lizards-and-pumpkins.catalog_import.v1+json'
+        ]);
         $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
@@ -39,7 +41,9 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
     private function createSearchAutosuggestionSnippet()
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/templates/product_search_autosuggestion');
-        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.templates.v1+json']);
+        $httpHeaders = HttpHeaders::fromArray([
+            'Accept' => 'application/vnd.lizards-and-pumpkins.templates.v1+json'
+        ]);
         $httpRequestBodyString = '[]';
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);

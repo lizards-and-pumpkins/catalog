@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera\Context;
+namespace LizardsAndPumpkins\Context;
 
-use Brera\Context\Stubs\StubContextSource;
+use LizardsAndPumpkins\Context\Stubs\StubContextSource;
 
 /**
- * @covers \Brera\Context\ContextSource
+ * @covers \LizardsAndPumpkins\Context\ContextSource
  */
 class ContextSourceTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Brera\Utils;
+namespace LizardsAndPumpkins\Utils;
 
 interface Clearable
 {

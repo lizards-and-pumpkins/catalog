@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Utils\FileNotWritableException;
+use LizardsAndPumpkins\Utils\FileNotWritableException;
 
 class LocalFilesystemStorageWriter implements FileStorageWriter
 {

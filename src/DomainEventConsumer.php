@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Log\Logger;
-use Brera\Queue\Queue;
+use LizardsAndPumpkins\Log\Logger;
+use LizardsAndPumpkins\Queue\Queue;
 
 class DomainEventConsumer
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Brera\Context;
+namespace LizardsAndPumpkins\Context;
 
-use Brera\IntegrationTestFactory;
-use Brera\SampleMasterFactory;
-use Brera\CommonFactory;
+use LizardsAndPumpkins\IntegrationTestFactory;
+use LizardsAndPumpkins\SampleMasterFactory;
+use LizardsAndPumpkins\CommonFactory;
 
 class ContextTest extends \PHPUnit_Framework_TestCase
 {
