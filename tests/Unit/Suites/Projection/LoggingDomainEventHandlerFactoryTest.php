@@ -1,75 +1,75 @@
 <?php
 
 
-namespace Brera\Projection;
+namespace LizardsAndPumpkins\Projection;
 
-use Brera\CommonFactory;
-use Brera\Content\ContentBlockWasUpdatedDomainEvent;
-use Brera\Content\ContentBlockWasUpdatedDomainEventHandler;
-use Brera\DomainEventHandler;
-use Brera\Image\ImageWasUpdatedDomainEvent;
-use Brera\Image\ImageWasUpdatedDomainEventHandler;
-use Brera\IntegrationTestFactory;
-use Brera\Product\ProductListingWasUpdatedDomainEvent;
-use Brera\Product\ProductListingWasUpdatedDomainEventHandler;
-use Brera\Product\ProductStockQuantityWasUpdatedDomainEvent;
-use Brera\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
-use Brera\Product\ProductWasUpdatedDomainEvent;
-use Brera\Product\ProductWasUpdatedDomainEventHandler;
-use Brera\SampleMasterFactory;
-use Brera\TemplateWasUpdatedDomainEvent;
-use Brera\TemplateWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\CommonFactory;
+use LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\DomainEventHandler;
+use LizardsAndPumpkins\Image\ImageWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Image\ImageWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\IntegrationTestFactory;
+use LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\SampleMasterFactory;
+use LizardsAndPumpkins\TemplateWasUpdatedDomainEvent;
+use LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler;
 
 /**
- * @covers \Brera\Projection\LoggingDomainEventHandlerFactory
- * @uses   \Brera\Product\ProductBackOrderAvailabilitySnippetRenderer
- * @uses   \Brera\Product\ProductProjector
- * @uses   \Brera\Product\ProductInListingSnippetRenderer
- * @uses   \Brera\Product\ProductSearchDocumentBuilder
- * @uses   \Brera\Product\ProductDetailViewInContextSnippetRenderer
- * @uses   \Brera\Product\PriceSnippetRenderer
- * @uses   \Brera\Product\ProductSourceDetailViewSnippetRenderer
- * @uses   \Brera\Product\ProductInSearchAutosuggestionSnippetRenderer
- * @uses   \Brera\Product\ProductSearchAutosuggestionMetaSnippetRenderer
- * @uses   \Brera\Product\ProductSearchAutosuggestionSnippetRenderer
- * @uses   \Brera\Product\ProductSearchAutosuggestionTemplateProjector
- * @uses   \Brera\Product\ProductSearchResultMetaSnippetRenderer
- * @uses   \Brera\Product\ProductListingSnippetRenderer
- * @uses   \Brera\Product\ProductListingMetaInfoSnippetRenderer
- * @uses   \Brera\Product\ProductListingSourceListBuilder
- * @uses   \Brera\Product\ProductListingTemplateProjector
- * @uses   \Brera\Product\ProductListingMetaInfoSnippetProjector
- * @uses   \Brera\Product\ProductStockQuantitySnippetRenderer
- * @uses   \Brera\Product\ProductStockQuantityWasUpdatedDomainEventHandler
- * @uses   \Brera\Product\ProductStockQuantityProjector
- * @uses   \Brera\Product\DefaultNumberOfProductsPerPageSnippetRenderer
- * @uses   \Brera\Product\ProductListingWasUpdatedDomainEventHandler
- * @uses   \Brera\GenericSnippetKeyGenerator
- * @uses   \Brera\Context\ContextBuilder
- * @uses   \Brera\Context\ContextSource
- * @uses   \Brera\Content\ContentBlockSnippetRenderer
- * @uses   \Brera\Content\ContentBlockWasUpdatedDomainEventHandler
- * @uses   \Brera\Content\ContentBlockProjector
- * @uses   \Brera\DataPool\DataPoolWriter
- * @uses   \Brera\DataPool\DataPoolReader
- * @uses   \Brera\IntegrationTestFactory
- * @uses   \Brera\Renderer\BlockRenderer
- * @uses   \Brera\Product\ProductWasUpdatedDomainEventHandler
- * @uses   \Brera\DataVersion
- * @uses   \Brera\CommonFactory
- * @uses   \Brera\TemplateWasUpdatedDomainEventHandler
- * @uses   \Brera\LocalFilesystemStorageReader
- * @uses   \Brera\LocalFilesystemStorageWriter
- * @uses   \Brera\FactoryTrait
- * @uses   \Brera\MasterFactoryTrait
- * @uses   \Brera\SnippetRendererCollection
- * @uses   \Brera\Projection\ProcessTimeLoggingDomainEventHandlerDecorator
- * @uses   \Brera\TemplateProjectorLocator
- * @uses   \Brera\Image\ImageProcessingStrategySequence
- * @uses   \Brera\Image\ImageWasUpdatedDomainEventHandler
- * @uses   \Brera\Image\ImageProcessorCollection
- * @uses   \Brera\Image\ImageProcessor
- * @uses   \Brera\Image\ImageMagickResizeStrategy
+ * @covers \LizardsAndPumpkins\Projection\LoggingDomainEventHandlerFactory
+ * @uses   \LizardsAndPumpkins\Product\ProductBackOrderAvailabilitySnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductProjector
+ * @uses   \LizardsAndPumpkins\Product\ProductInListingSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductSearchDocumentBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductDetailViewInContextSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\PriceSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductSourceDetailViewSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionTemplateProjector
+ * @uses   \LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductListingSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductListingMetaInfoSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductListingSourceListBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductListingTemplateProjector
+ * @uses   \LizardsAndPumpkins\Product\ProductListingMetaInfoSnippetProjector
+ * @uses   \LizardsAndPumpkins\Product\ProductStockQuantitySnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler
+ * @uses   \LizardsAndPumpkins\Product\ProductStockQuantityProjector
+ * @uses   \LizardsAndPumpkins\Product\DefaultNumberOfProductsPerPageSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEventHandler
+ * @uses   \LizardsAndPumpkins\GenericSnippetKeyGenerator
+ * @uses   \LizardsAndPumpkins\Context\ContextBuilder
+ * @uses   \LizardsAndPumpkins\Context\ContextSource
+ * @uses   \LizardsAndPumpkins\Content\ContentBlockSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEventHandler
+ * @uses   \LizardsAndPumpkins\Content\ContentBlockProjector
+ * @uses   \LizardsAndPumpkins\DataPool\DataPoolWriter
+ * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
+ * @uses   \LizardsAndPumpkins\IntegrationTestFactory
+ * @uses   \LizardsAndPumpkins\Renderer\BlockRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler
+ * @uses   \LizardsAndPumpkins\DataVersion
+ * @uses   \LizardsAndPumpkins\CommonFactory
+ * @uses   \LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler
+ * @uses   \LizardsAndPumpkins\LocalFilesystemStorageReader
+ * @uses   \LizardsAndPumpkins\LocalFilesystemStorageWriter
+ * @uses   \LizardsAndPumpkins\FactoryTrait
+ * @uses   \LizardsAndPumpkins\MasterFactoryTrait
+ * @uses   \LizardsAndPumpkins\SnippetRendererCollection
+ * @uses   \LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator
+ * @uses   \LizardsAndPumpkins\TemplateProjectorLocator
+ * @uses   \LizardsAndPumpkins\Image\ImageProcessingStrategySequence
+ * @uses   \LizardsAndPumpkins\Image\ImageWasUpdatedDomainEventHandler
+ * @uses   \LizardsAndPumpkins\Image\ImageProcessorCollection
+ * @uses   \LizardsAndPumpkins\Image\ImageProcessor
+ * @uses   \LizardsAndPumpkins\Image\ImageMagickResizeStrategy
  */
 class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 {

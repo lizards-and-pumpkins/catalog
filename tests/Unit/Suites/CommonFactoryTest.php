@@ -1,118 +1,118 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Content\ContentBlockWasUpdatedDomainEvent;
-use Brera\Content\ContentBlockWasUpdatedDomainEventHandler;
-use Brera\Content\UpdateContentBlockCommand;
-use Brera\Content\UpdateContentBlockCommandHandler;
-use Brera\Context\ContextBuilder;
-use Brera\Context\ContextSource;
-use Brera\DataPool\DataPoolReader;
-use Brera\Http\HttpRouterChain;
-use Brera\Http\ResourceNotFoundRouter;
-use Brera\Image\ImageProcessorCollection;
-use Brera\Image\ImageWasUpdatedDomainEvent;
-use Brera\Image\ImageWasUpdatedDomainEventHandler;
-use Brera\Image\UpdateImageCommand;
-use Brera\Image\UpdateImageCommandHandler;
-use Brera\Log\Logger;
-use Brera\Product\FilterNavigationFilterCollection;
-use Brera\Product\ProductListingMetaInfoSourceBuilder;
-use Brera\Product\ProductListingSourceListBuilder;
-use Brera\Product\FilterNavigationBlockRenderer;
-use Brera\Product\ProductWasUpdatedDomainEvent;
-use Brera\Product\ProductWasUpdatedDomainEventHandler;
-use Brera\Product\ProductListingWasUpdatedDomainEvent;
-use Brera\Product\ProductListingWasUpdatedDomainEventHandler;
-use Brera\Product\ProductProjector;
-use Brera\Product\ProductSourceBuilder;
-use Brera\Product\ProductStockQuantityWasUpdatedDomainEvent;
-use Brera\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
-use Brera\Product\ProductStockQuantityProjector;
-use Brera\Product\ProductStockQuantitySnippetRenderer;
-use Brera\Product\ProductStockQuantitySourceBuilder;
-use Brera\Product\UpdateMultipleProductStockQuantityCommand;
-use Brera\Product\UpdateMultipleProductStockQuantityCommandHandler;
-use Brera\Product\UpdateProductCommand;
-use Brera\Product\UpdateProductCommandHandler;
-use Brera\Product\UpdateProductListingCommand;
-use Brera\Product\UpdateProductListingCommandHandler;
-use Brera\Product\UpdateProductStockQuantityCommand;
-use Brera\Product\UpdateProductStockQuantityCommandHandler;
-use Brera\Projection\Catalog\Import\CatalogImport;
-use Brera\Projection\ProcessTimeLoggingDomainEventHandlerDecorator;
-use Brera\Queue\Queue;
+use LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Content\UpdateContentBlockCommand;
+use LizardsAndPumpkins\Content\UpdateContentBlockCommandHandler;
+use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\Context\ContextSource;
+use LizardsAndPumpkins\DataPool\DataPoolReader;
+use LizardsAndPumpkins\Http\HttpRouterChain;
+use LizardsAndPumpkins\Http\ResourceNotFoundRouter;
+use LizardsAndPumpkins\Image\ImageProcessorCollection;
+use LizardsAndPumpkins\Image\ImageWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Image\ImageWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Image\UpdateImageCommand;
+use LizardsAndPumpkins\Image\UpdateImageCommandHandler;
+use LizardsAndPumpkins\Log\Logger;
+use LizardsAndPumpkins\Product\FilterNavigationFilterCollection;
+use LizardsAndPumpkins\Product\ProductListingMetaInfoSourceBuilder;
+use LizardsAndPumpkins\Product\ProductListingSourceListBuilder;
+use LizardsAndPumpkins\Product\FilterNavigationBlockRenderer;
+use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Product\ProductProjector;
+use LizardsAndPumpkins\Product\ProductSourceBuilder;
+use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Product\ProductStockQuantityProjector;
+use LizardsAndPumpkins\Product\ProductStockQuantitySnippetRenderer;
+use LizardsAndPumpkins\Product\ProductStockQuantitySourceBuilder;
+use LizardsAndPumpkins\Product\UpdateMultipleProductStockQuantityCommand;
+use LizardsAndPumpkins\Product\UpdateMultipleProductStockQuantityCommandHandler;
+use LizardsAndPumpkins\Product\UpdateProductCommand;
+use LizardsAndPumpkins\Product\UpdateProductCommandHandler;
+use LizardsAndPumpkins\Product\UpdateProductListingCommand;
+use LizardsAndPumpkins\Product\UpdateProductListingCommandHandler;
+use LizardsAndPumpkins\Product\UpdateProductStockQuantityCommand;
+use LizardsAndPumpkins\Product\UpdateProductStockQuantityCommandHandler;
+use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
+use LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator;
+use LizardsAndPumpkins\Queue\Queue;
 
 /**
- * @covers \Brera\CommonFactory
- * @covers \Brera\FactoryTrait
- * @uses   \Brera\DataVersion
- * @uses   \Brera\MasterFactoryTrait
- * @uses   \Brera\Image\UpdateImageCommandHandler
- * @uses   \Brera\IntegrationTestFactory
- * @uses   \Brera\DataPool\DataPoolWriter
- * @uses   \Brera\DataPool\DataPoolReader
- * @uses   \Brera\Content\ContentBlockSnippetRenderer
- * @uses   \Brera\Content\ContentBlockWasUpdatedDomainEvent
- * @uses   \Brera\Content\ContentBlockWasUpdatedDomainEventHandler
- * @uses   \Brera\Content\ContentBlockProjector
- * @uses   \Brera\Content\UpdateContentBlockCommandHandler
- * @uses   \Brera\Context\ContextBuilder
- * @uses   \Brera\Context\ContextSource
- * @uses   \Brera\CommandConsumer
- * @uses   \Brera\CommandHandlerLocator
- * @uses   \Brera\DomainEventConsumer
- * @uses   \Brera\DomainEventHandlerLocator
- * @uses   \Brera\TemplateWasUpdatedDomainEvent
- * @uses   \Brera\TemplateWasUpdatedDomainEventHandler
- * @uses   \Brera\Renderer\BlockRenderer
- * @uses   \Brera\Product\DefaultNumberOfProductsPerPageSnippetRenderer
- * @uses   \Brera\Product\FilterNavigationFilterCollection
- * @uses   \Brera\Product\PriceSnippetRenderer
- * @uses   \Brera\Product\ProductBackOrderAvailabilitySnippetRenderer
- * @uses   \Brera\Product\ProductSourceBuilder
- * @uses   \Brera\Product\ProductProjector
- * @uses   \Brera\Product\ProductInSearchAutosuggestionSnippetRenderer
- * @uses   \Brera\Product\ProductListingMetaInfoSnippetRenderer
- * @uses   \Brera\Product\ProductListingTemplateProjector
- * @uses   \Brera\Product\ProductListingMetaInfoSnippetProjector
- * @uses   \Brera\Product\ProductListingMetaInfoSourceBuilder
- * @uses   \Brera\Product\ProductListingWasUpdatedDomainEvent
- * @uses   \Brera\Product\ProductListingWasUpdatedDomainEventHandler
- * @uses   \Brera\Product\ProductWasUpdatedDomainEvent
- * @uses   \Brera\Product\ProductWasUpdatedDomainEventHandler
- * @uses   \Brera\Product\ProductSearchAutosuggestionMetaSnippetRenderer
- * @uses   \Brera\Product\ProductSearchAutosuggestionSnippetRenderer
- * @uses   \Brera\Product\ProductSearchAutosuggestionTemplateProjector
- * @uses   \Brera\Product\ProductSearchResultMetaSnippetRenderer
- * @uses   \Brera\Product\ProductSearchDocumentBuilder
- * @uses   \Brera\Product\ProductSourceDetailViewSnippetRenderer
- * @uses   \Brera\Product\ProductStockQuantityProjector
- * @uses   \Brera\Product\ProductStockQuantityWasUpdatedDomainEventHandler
- * @uses   \Brera\Product\ProductStockQuantitySnippetRenderer
- * @uses   \Brera\Product\UpdateProductCommandHandler
- * @uses   \Brera\Product\UpdateProductListingCommandHandler
- * @uses   \Brera\Product\UpdateProductStockQuantityCommandHandler
- * @uses   \Brera\Product\UpdateMultipleProductStockQuantityCommandHandler
- * @uses   \Brera\Product\ProductDetailViewBlockRenderer
- * @uses   \Brera\Product\ProductDetailViewInContextSnippetRenderer
- * @uses   \Brera\Product\ProductListingSnippetRenderer
- * @uses   \Brera\GenericSnippetKeyGenerator
- * @uses   \Brera\SnippetRendererCollection
- * @uses   \Brera\Product\ProductListingSourceListBuilder
- * @uses   \Brera\Product\ProductInListingSnippetRenderer
- * @uses   \Brera\Image\ImageWasUpdatedDomainEventHandler
- * @uses   \Brera\Image\ImageMagickResizeStrategy
- * @uses   \Brera\Image\GdResizeStrategy
- * @uses   \Brera\Image\ImageProcessor
- * @uses   \Brera\Image\ImageProcessorCollection
- * @uses   \Brera\Image\ImageProcessingStrategySequence
- * @uses   \Brera\LocalFilesystemStorageReader
- * @uses   \Brera\LocalFilesystemStorageWriter
- * @uses   \Brera\TemplateProjectorLocator
- * @uses   \Brera\Projection\ProcessTimeLoggingDomainEventHandlerDecorator
- * @uses   \Brera\Projection\Catalog\Import\CatalogImport
+ * @covers \LizardsAndPumpkins\CommonFactory
+ * @covers \LizardsAndPumpkins\FactoryTrait
+ * @uses   \LizardsAndPumpkins\DataVersion
+ * @uses   \LizardsAndPumpkins\MasterFactoryTrait
+ * @uses   \LizardsAndPumpkins\Image\UpdateImageCommandHandler
+ * @uses   \LizardsAndPumpkins\IntegrationTestFactory
+ * @uses   \LizardsAndPumpkins\DataPool\DataPoolWriter
+ * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
+ * @uses   \LizardsAndPumpkins\Content\ContentBlockSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEvent
+ * @uses   \LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEventHandler
+ * @uses   \LizardsAndPumpkins\Content\ContentBlockProjector
+ * @uses   \LizardsAndPumpkins\Content\UpdateContentBlockCommandHandler
+ * @uses   \LizardsAndPumpkins\Context\ContextBuilder
+ * @uses   \LizardsAndPumpkins\Context\ContextSource
+ * @uses   \LizardsAndPumpkins\CommandConsumer
+ * @uses   \LizardsAndPumpkins\CommandHandlerLocator
+ * @uses   \LizardsAndPumpkins\DomainEventConsumer
+ * @uses   \LizardsAndPumpkins\DomainEventHandlerLocator
+ * @uses   \LizardsAndPumpkins\TemplateWasUpdatedDomainEvent
+ * @uses   \LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler
+ * @uses   \LizardsAndPumpkins\Renderer\BlockRenderer
+ * @uses   \LizardsAndPumpkins\Product\DefaultNumberOfProductsPerPageSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\FilterNavigationFilterCollection
+ * @uses   \LizardsAndPumpkins\Product\PriceSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductBackOrderAvailabilitySnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductSourceBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductProjector
+ * @uses   \LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductListingMetaInfoSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductListingTemplateProjector
+ * @uses   \LizardsAndPumpkins\Product\ProductListingMetaInfoSnippetProjector
+ * @uses   \LizardsAndPumpkins\Product\ProductListingMetaInfoSourceBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEvent
+ * @uses   \LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEventHandler
+ * @uses   \LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent
+ * @uses   \LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler
+ * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionTemplateProjector
+ * @uses   \LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductSearchDocumentBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductSourceDetailViewSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductStockQuantityProjector
+ * @uses   \LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler
+ * @uses   \LizardsAndPumpkins\Product\ProductStockQuantitySnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\UpdateProductCommandHandler
+ * @uses   \LizardsAndPumpkins\Product\UpdateProductListingCommandHandler
+ * @uses   \LizardsAndPumpkins\Product\UpdateProductStockQuantityCommandHandler
+ * @uses   \LizardsAndPumpkins\Product\UpdateMultipleProductStockQuantityCommandHandler
+ * @uses   \LizardsAndPumpkins\Product\ProductDetailViewBlockRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductDetailViewInContextSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductListingSnippetRenderer
+ * @uses   \LizardsAndPumpkins\GenericSnippetKeyGenerator
+ * @uses   \LizardsAndPumpkins\SnippetRendererCollection
+ * @uses   \LizardsAndPumpkins\Product\ProductListingSourceListBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductInListingSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Image\ImageWasUpdatedDomainEventHandler
+ * @uses   \LizardsAndPumpkins\Image\ImageMagickResizeStrategy
+ * @uses   \LizardsAndPumpkins\Image\GdResizeStrategy
+ * @uses   \LizardsAndPumpkins\Image\ImageProcessor
+ * @uses   \LizardsAndPumpkins\Image\ImageProcessorCollection
+ * @uses   \LizardsAndPumpkins\Image\ImageProcessingStrategySequence
+ * @uses   \LizardsAndPumpkins\LocalFilesystemStorageReader
+ * @uses   \LizardsAndPumpkins\LocalFilesystemStorageWriter
+ * @uses   \LizardsAndPumpkins\TemplateProjectorLocator
+ * @uses   \LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
