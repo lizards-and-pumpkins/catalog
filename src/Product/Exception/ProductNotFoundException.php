@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\Product;
+namespace Brera\Product\Exception;
 
 class ProductNotFoundException extends \OutOfBoundsException
 {

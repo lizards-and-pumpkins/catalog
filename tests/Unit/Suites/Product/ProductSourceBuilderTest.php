@@ -2,6 +2,9 @@
 
 namespace Brera\Product;
 
+use Brera\Product\Exception\InvalidNumberOfSkusPerImportedProductException;
+use Brera\Product\Exception\ProductAttributeNotFoundException;
+
 /**
  * @covers \Brera\Product\ProductSourceBuilder
  * @uses   \Brera\Product\ProductSource

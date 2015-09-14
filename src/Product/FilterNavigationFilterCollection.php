@@ -10,6 +10,7 @@ use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
+use Brera\Product\Exception\FilterCollectionInNotInitializedException;
 
 class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
 {

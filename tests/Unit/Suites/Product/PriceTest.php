@@ -2,6 +2,8 @@
 
 namespace Brera\Product;
 
+use Brera\Product\Exception\InvalidPriceSourceException;
+
 /**
  * @covers \Brera\Product\Price
  */

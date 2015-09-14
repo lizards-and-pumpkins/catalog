@@ -6,6 +6,8 @@ use Brera\Api\ApiRequestHandler;
 use Brera\Http\HttpRequest;
 use Brera\Image\UpdateImageCommand;
 use Brera\Log\Logger;
+use Brera\Product\Exception\CatalogImportDirectoryNotReadableException;
+use Brera\Product\Exception\CatalogImportFileNameNotFoundInRequestBodyException;
 use Brera\Projection\Catalog\Import\CatalogXmlParser;
 use Brera\Queue\Queue;
 use Brera\Utils\XPathParser;
