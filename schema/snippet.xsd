@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-        targetNamespace="http://brera.io"
-        xmlns="http://brera.io"
+        targetNamespace="http://lizardsandpumpkins.com"
+        xmlns="http://lizardsandpumpkins.com"
         elementFormDefault="qualified">
     <xs:element name="snippet">
         <xs:complexType>

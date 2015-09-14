@@ -1,12 +1,12 @@
 <?php
 
 
-namespace Brera\Log;
+namespace LizardsAndPumpkins\Log;
 
-use Brera\Log\Writer\LogMessageWriter;
+use LizardsAndPumpkins\Log\Writer\LogMessageWriter;
 
 /**
- * @covers Brera\Log\WritingLoggerDecorator
+ * @covers LizardsAndPumpkins\Log\WritingLoggerDecorator
  */
 class WritingLoggerDecoratorTest extends \PHPUnit_Framework_TestCase
 {

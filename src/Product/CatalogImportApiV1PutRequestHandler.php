@@ -1,13 +1,13 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Api\ApiRequestHandler;
-use Brera\Http\HttpRequest;
-use Brera\Log\Logger;
-use Brera\Product\Exception\CatalogImportApiDirectoryNotReadableException;
-use Brera\Product\Exception\CatalogImportFileNameNotFoundInRequestBodyException;
-use Brera\Projection\Catalog\Import\CatalogImport;
+use LizardsAndPumpkins\Api\ApiRequestHandler;
+use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Log\Logger;
+use LizardsAndPumpkins\Product\Exception\CatalogImportApiDirectoryNotReadableException;
+use LizardsAndPumpkins\Product\Exception\CatalogImportFileNameNotFoundInRequestBodyException;
+use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
 
 class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
 {

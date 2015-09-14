@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\Image;
+namespace LizardsAndPumpkins\Image;
 
 /**
- * @covers \Brera\Image\ImageProcessingStrategySequence
+ * @covers \LizardsAndPumpkins\Image\ImageProcessingStrategySequence
  */
 class ImageProcessingStrategySequenceTest extends \PHPUnit_Framework_TestCase
 {

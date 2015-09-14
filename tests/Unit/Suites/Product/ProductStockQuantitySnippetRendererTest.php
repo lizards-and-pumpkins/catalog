@@ -1,19 +1,19 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Context\Context;
-use Brera\Context\ContextBuilder;
-use Brera\Snippet;
-use Brera\SnippetKeyGenerator;
-use Brera\SnippetList;
-use Brera\SnippetRenderer;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\Snippet;
+use LizardsAndPumpkins\SnippetKeyGenerator;
+use LizardsAndPumpkins\SnippetList;
+use LizardsAndPumpkins\SnippetRenderer;
 
 /**
- * @covers \Brera\Product\ProductStockQuantitySnippetRenderer
- * @uses   \Brera\Product\ProductStockQuantity
- * @uses   \Brera\SnippetList
- * @uses   \Brera\Snippet
+ * @covers \LizardsAndPumpkins\Product\ProductStockQuantitySnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductStockQuantity
+ * @uses   \LizardsAndPumpkins\SnippetList
+ * @uses   \LizardsAndPumpkins\Snippet
  */
 class ProductStockQuantitySnippetRendererTest extends \PHPUnit_Framework_TestCase
 {

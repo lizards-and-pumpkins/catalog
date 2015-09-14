@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera\Renderer\Stubs;
+namespace LizardsAndPumpkins\Renderer\Stubs;
 
-use Brera\Renderer\Block;
+use LizardsAndPumpkins\Renderer\Block;
 
 class StubBlock extends Block
 {

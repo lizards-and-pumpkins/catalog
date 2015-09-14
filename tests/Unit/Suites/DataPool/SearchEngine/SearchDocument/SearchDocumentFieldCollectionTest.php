@@ -1,10 +1,10 @@
 <?php
 
-namespace Brera\DataPool\SearchEngine\SearchDocument;
+namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument;
 
 /**
- * @covers \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection
- * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField
+ * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField
  */
 class SearchDocumentFieldCollectionTest extends \PHPUnit_Framework_TestCase
 {

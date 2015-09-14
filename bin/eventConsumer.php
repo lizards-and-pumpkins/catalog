@@ -1,9 +1,9 @@
 #!/usr/bin/env php
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Projection\LoggingDomainEventHandlerFactory;
+use LizardsAndPumpkins\Projection\LoggingDomainEventHandlerFactory;
 
 require __DIR__ . '/../vendor/autoload.php';
 

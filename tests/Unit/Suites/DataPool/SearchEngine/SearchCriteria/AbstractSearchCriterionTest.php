@@ -1,13 +1,13 @@
 <?php
 
-namespace Brera\DataPool\SearchEngine\SearchCriteria;
+namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
 
 /**
- * @covers \Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion
+ * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
  */
 abstract class AbstractSearchCriterionTest extends \PHPUnit_Framework_TestCase
 {

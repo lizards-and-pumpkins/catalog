@@ -1,15 +1,15 @@
 <?php
 
 
-namespace Brera\Projection;
+namespace LizardsAndPumpkins\Projection;
 
-use Brera\DomainEventHandler;
-use Brera\Log\Logger;
-use Brera\Log\LogMessage;
+use LizardsAndPumpkins\DomainEventHandler;
+use LizardsAndPumpkins\Log\Logger;
+use LizardsAndPumpkins\Log\LogMessage;
 
 /**
- * @covers \Brera\Projection\ProcessTimeLoggingDomainEventHandlerDecorator
- * @uses   \Brera\Projection\DomainEventProcessedLogMessage
+ * @covers \LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator
+ * @uses   \LizardsAndPumpkins\Projection\DomainEventProcessedLogMessage
  */
 class ProcessTimeLoggingDomainEventHandlerDecoratorTest extends \PHPUnit_Framework_TestCase
 {

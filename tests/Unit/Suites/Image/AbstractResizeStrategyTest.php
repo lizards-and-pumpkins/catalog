@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\Image;
+namespace LizardsAndPumpkins\Image;
 
 abstract class AbstractResizeStrategyTest extends \PHPUnit_Framework_TestCase
 {

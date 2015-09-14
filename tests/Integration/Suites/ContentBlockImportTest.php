@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Http\HttpHeaders;
-use Brera\Http\HttpRequest;
-use Brera\Http\HttpRequestBody;
-use Brera\Http\HttpUrl;
+use LizardsAndPumpkins\Http\HttpHeaders;
+use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Http\HttpRequestBody;
+use LizardsAndPumpkins\Http\HttpUrl;
 
 class ContentBlockImportTest extends AbstractIntegrationTest
 {
@@ -14,7 +14,9 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $contentBlockContent = 'bar';
 
         $httpUrl = HttpUrl::fromString('http://example.com/api/content_blocks/foo');
-        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.content_blocks.v1+json']);
+        $httpHeaders = HttpHeaders::fromArray([
+            'Accept' => 'application/vnd.lizards-and-pumpkins.content_blocks.v1+json'
+        ]);
         $httpRequestBodyString = json_encode([
             'content' => $contentBlockContent,
             'context' => ['website' => 'ru', 'locale' => 'en_US']

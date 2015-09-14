@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera\Product\Block;
+namespace LizardsAndPumpkins\Product\Block;
 
-use Brera\Image;
-use Brera\Product\Product;
-use Brera\Product\ProductId;
-use Brera\Renderer\Block;
+use LizardsAndPumpkins\Image;
+use LizardsAndPumpkins\Product\Product;
+use LizardsAndPumpkins\Product\ProductId;
+use LizardsAndPumpkins\Renderer\Block;
 
 class ProductBlock extends Block
 {
@@ -36,7 +36,7 @@ class ProductBlock extends Block
     public function getProductUrl()
     {
         /* TODO: Implement retrieval of base URL for context */
-        return '/brera/' . $this->getFirstValueOfProductAttribute('url_key');
+        return '/lizards-and-pumpkins/' . $this->getFirstValueOfProductAttribute('url_key');
     }
 
     /**
@@ -78,7 +78,7 @@ class ProductBlock extends Block
             return '';
         }
 
-        return '/brera/' . $fileName;
+        return '/lizards-and-pumpkins/' . $fileName;
     }
 
     /**

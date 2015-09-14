@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Renderer\BlockRenderer;
+use LizardsAndPumpkins\Renderer\BlockRenderer;
 
 class PaginationBlockRenderer extends BlockRenderer
 {

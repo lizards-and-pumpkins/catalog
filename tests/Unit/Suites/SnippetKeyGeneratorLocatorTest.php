@@ -1,10 +1,10 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
 /**
- * @covers \Brera\SnippetKeyGeneratorLocator
- * @uses   \Brera\GenericSnippetKeyGenerator
+ * @covers \LizardsAndPumpkins\SnippetKeyGeneratorLocator
+ * @uses   \LizardsAndPumpkins\GenericSnippetKeyGenerator
  */
 class SnippetKeyGeneratorLocatorTest extends \PHPUnit_Framework_TestCase
 {

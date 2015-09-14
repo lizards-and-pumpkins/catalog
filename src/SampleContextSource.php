@@ -1,10 +1,10 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Context\ContextSource;
-use Brera\Context\LocaleContextDecorator;
-use Brera\Context\WebsiteContextDecorator;
+use LizardsAndPumpkins\Context\ContextSource;
+use LizardsAndPumpkins\Context\LocaleContextDecorator;
+use LizardsAndPumpkins\Context\WebsiteContextDecorator;
 
 class SampleContextSource extends ContextSource
 {

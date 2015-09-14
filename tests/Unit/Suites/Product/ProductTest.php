@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Product\Exception\ProductAttributeNotFoundException;
+use LizardsAndPumpkins\Product\Exception\ProductAttributeNotFoundException;
 
 /**
- * @covers \Brera\Product\Product
+ * @covers \LizardsAndPumpkins\Product\Product
  */
 class ProductTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,9 +1,9 @@
 <?php
 
 
-namespace Brera\ContentDelivery\SnippetTransformation;
+namespace LizardsAndPumpkins\ContentDelivery\SnippetTransformation;
 
-use Brera\Context\Context;
+use LizardsAndPumpkins\Context\Context;
 
 class SimpleEuroPriceSnippetTransformation implements SnippetTransformation
 {

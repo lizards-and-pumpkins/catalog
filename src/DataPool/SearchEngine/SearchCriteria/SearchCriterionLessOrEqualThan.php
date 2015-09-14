@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\DataPool\SearchEngine\SearchCriteria;
+namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
 class SearchCriterionLessOrEqualThan extends SearchCriterion
 {

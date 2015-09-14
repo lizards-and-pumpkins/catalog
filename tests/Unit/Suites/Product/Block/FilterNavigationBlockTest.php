@@ -1,16 +1,16 @@
 <?php
 
-namespace Brera\Product\Block;
+namespace LizardsAndPumpkins\Product\Block;
 
-use Brera\Product\FilterNavigationFilterCollection;
-use Brera\Product\FilterNavigationFilterOption;
-use Brera\Renderer\Block;
-use Brera\Renderer\BlockRenderer;
-use Brera\Renderer\InvalidDataObjectException;
+use LizardsAndPumpkins\Product\FilterNavigationFilterCollection;
+use LizardsAndPumpkins\Product\FilterNavigationFilterOption;
+use LizardsAndPumpkins\Renderer\Block;
+use LizardsAndPumpkins\Renderer\BlockRenderer;
+use LizardsAndPumpkins\Renderer\InvalidDataObjectException;
 
 /**
- * @covers \Brera\Product\Block\FilterNavigationBlock
- * @uses   \Brera\Renderer\Block
+ * @covers \LizardsAndPumpkins\Product\Block\FilterNavigationBlock
+ * @uses   \LizardsAndPumpkins\Renderer\Block
  */
 class FilterNavigationBlockTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\Queue;
+namespace LizardsAndPumpkins\Queue;
 
 class NotSerializableException extends \LogicException
 {

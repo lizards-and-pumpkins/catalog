@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera\Renderer;
+namespace LizardsAndPumpkins\Renderer;
 
-use Brera\Utils\XPathParser;
+use LizardsAndPumpkins\Utils\XPathParser;
 
 class LayoutReader
 {

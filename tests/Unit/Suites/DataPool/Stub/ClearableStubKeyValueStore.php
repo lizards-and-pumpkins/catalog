@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Brera\DataPool\Stub;
+namespace LizardsAndPumpkins\DataPool\Stub;
 
-use Brera\DataPool\KeyValue\KeyValueStore;
-use Brera\Utils\Clearable;
+use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
+use LizardsAndPumpkins\Utils\Clearable;
 
 class ClearableStubKeyValueStore implements KeyValueStore, Clearable
 {

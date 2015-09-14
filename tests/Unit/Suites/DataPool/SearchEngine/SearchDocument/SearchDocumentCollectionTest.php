@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\DataPool\SearchEngine\SearchDocument;
+namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument;
 
 /**
- * @covers \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection
+ * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection
  */
 class SearchDocumentCollectionTest extends \PHPUnit_Framework_TestCase
 {

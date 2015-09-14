@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera\Utils;
+namespace LizardsAndPumpkins\Utils;
 
-use Brera\TestFileFixtureTrait;
+use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
- * @covers \Brera\Utils\Directory
+ * @covers \LizardsAndPumpkins\Utils\Directory
  */
 class DirectoryTest extends \PHPUnit_Framework_TestCase
 {

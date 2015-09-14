@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\DomainEvent;
+use LizardsAndPumpkins\DomainEvent;
 
 class ProductWasUpdatedDomainEvent implements DomainEvent
 {

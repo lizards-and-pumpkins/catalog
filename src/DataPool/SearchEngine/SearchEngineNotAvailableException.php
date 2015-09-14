@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\DataPool\SearchEngine;
+namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 class SearchEngineNotAvailableException extends \RuntimeException
 {

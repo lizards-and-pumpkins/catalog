@@ -1,15 +1,15 @@
 <?php
 
-namespace Brera\DataPool\SearchEngine;
+namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
-use Brera\Context\Context;
-use Brera\Context\ContextBuilder;
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
-use Brera\DataVersion;
-use Brera\Product\ProductId;
-use Brera\Utils\LocalFilesystem;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
+use LizardsAndPumpkins\DataVersion;
+use LizardsAndPumpkins\Product\ProductId;
+use LizardsAndPumpkins\Utils\LocalFilesystem;
 
 class FileSearchEngine extends IntegrationTestSearchEngineAbstract
 {

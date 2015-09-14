@@ -1,12 +1,12 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\DataPool\DataPoolWriter;
-use Brera\Projector;
-use Brera\Context\ContextSource;
-use Brera\InvalidProjectionSourceDataTypeException;
-use Brera\SnippetRendererCollection;
+use LizardsAndPumpkins\DataPool\DataPoolWriter;
+use LizardsAndPumpkins\Projector;
+use LizardsAndPumpkins\Context\ContextSource;
+use LizardsAndPumpkins\InvalidProjectionSourceDataTypeException;
+use LizardsAndPumpkins\SnippetRendererCollection;
 
 class ProductProjector implements Projector
 {

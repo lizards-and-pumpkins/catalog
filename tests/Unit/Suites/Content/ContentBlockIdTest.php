@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\Content;
+namespace LizardsAndPumpkins\Content;
 
 /**
- * @covers \Brera\Content\ContentBlockId
+ * @covers \LizardsAndPumpkins\Content\ContentBlockId
  */
 class ContentBlockIdTest extends \PHPUnit_Framework_TestCase
 {

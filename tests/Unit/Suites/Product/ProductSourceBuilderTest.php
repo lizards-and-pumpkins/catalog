@@ -1,17 +1,17 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Product\Exception\InvalidNumberOfSkusPerImportedProductException;
-use Brera\Product\Exception\ProductAttributeNotFoundException;
+use LizardsAndPumpkins\Product\Exception\InvalidNumberOfSkusPerImportedProductException;
+use LizardsAndPumpkins\Product\Exception\ProductAttributeNotFoundException;
 
 /**
- * @covers \Brera\Product\ProductSourceBuilder
- * @uses   \Brera\Product\ProductSource
- * @uses   \Brera\Product\ProductId
- * @uses   \Brera\Utils\XPathParser
- * @uses   \Brera\Product\ProductAttribute
- * @uses   \Brera\Product\ProductAttributeList
+ * @covers \LizardsAndPumpkins\Product\ProductSourceBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductSource
+ * @uses   \LizardsAndPumpkins\Product\ProductId
+ * @uses   \LizardsAndPumpkins\Utils\XPathParser
+ * @uses   \LizardsAndPumpkins\Product\ProductAttribute
+ * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  */
 class ProductSourceBuilderTest extends \PHPUnit_Framework_TestCase
 {

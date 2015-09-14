@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\Api;
+namespace LizardsAndPumpkins\Api;
 
 /**
- * @covers Brera\Api\ApiRequestHandlerChain
+ * @covers LizardsAndPumpkins\Api\ApiRequestHandlerChain
  */
 class ApiRequestHandlerChainTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,6 +24,7 @@ class ApiRequestHandlerChainTest extends \PHPUnit_Framework_TestCase
         $requestHandlerCode = 'foo';
         $requestHandlerVersion = 'bar';
 
+        /** @var ApiRequestHandler|\PHPUnit_Framework_MockObject_MockObject $stubApiRequestHandler */
         $stubApiRequestHandler = $this->getMock(ApiRequestHandler::class);
         $this->requestHandlerChain->register($requestHandlerCode, $requestHandlerVersion, $stubApiRequestHandler);
     }
@@ -53,6 +54,7 @@ class ApiRequestHandlerChainTest extends \PHPUnit_Framework_TestCase
         $requestHandlerCode = 'foo';
         $requestHandlerVersion = 1;
 
+        /** @var ApiRequestHandler|\PHPUnit_Framework_MockObject_MockObject $stubApiRequestHandler */
         $stubApiRequestHandler = $this->getMock(ApiRequestHandler::class);
         $this->requestHandlerChain->register($requestHandlerCode, $requestHandlerVersion, $stubApiRequestHandler);
 

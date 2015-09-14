@@ -1,9 +1,9 @@
 <?php
 
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Http\HttpRequest;
+use LizardsAndPumpkins\Http\HttpRequest;
 
 class InjectableSampleWebFront extends SampleWebFront
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Product\Exception\InvalidFilterNavigationFilterOptionCountException;
-use Brera\Product\Exception\InvalidFilterNavigationFilterOptionValueException;
+use LizardsAndPumpkins\Product\Exception\InvalidFilterNavigationFilterOptionCountException;
+use LizardsAndPumpkins\Product\Exception\InvalidFilterNavigationFilterOptionValueException;
 
 class FilterNavigationFilterOption
 {

@@ -1,25 +1,25 @@
 <?php
 
-namespace Brera\DataPool\SearchEngine;
+namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
-use Brera\Utils\LocalFilesystem;
+use LizardsAndPumpkins\Utils\LocalFilesystem;
 
 /**
- * @covers \Brera\DataPool\SearchEngine\FileSearchEngine
- * @covers \Brera\DataPool\SearchEngine\IntegrationTestSearchEngineAbstract
- * @uses   \Brera\Context\ContextBuilder
- * @uses   \Brera\Context\ContextDecorator
- * @uses   \Brera\Context\LocaleContextDecorator
- * @uses   \Brera\Context\VersionedContext
- * @uses   \Brera\Context\WebsiteContextDecorator
- * @uses   \Brera\DataVersion
- * @uses   \Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion
- * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocument
- * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection
- * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField
- * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection
- * @uses   \Brera\Product\ProductId
- * @uses   \Brera\Utils\LocalFileSystem
+ * @covers \LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine
+ * @covers \LizardsAndPumpkins\DataPool\SearchEngine\IntegrationTestSearchEngineAbstract
+ * @uses   \LizardsAndPumpkins\Context\ContextBuilder
+ * @uses   \LizardsAndPumpkins\Context\ContextDecorator
+ * @uses   \LizardsAndPumpkins\Context\LocaleContextDecorator
+ * @uses   \LizardsAndPumpkins\Context\VersionedContext
+ * @uses   \LizardsAndPumpkins\Context\WebsiteContextDecorator
+ * @uses   \LizardsAndPumpkins\DataVersion
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection
+ * @uses   \LizardsAndPumpkins\Product\ProductId
+ * @uses   \LizardsAndPumpkins\Utils\LocalFileSystem
  */
 class FileSearchEngineTest extends AbstractSearchEngineTest
 {
@@ -52,7 +52,7 @@ class FileSearchEngineTest extends AbstractSearchEngineTest
 
     private function prepareTemporaryStorage()
     {
-        $this->temporaryStorage = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'brera-search-engine-storage';
+        $this->temporaryStorage = sys_get_temp_dir() . '/lizards-and-pumpkins-search-engine-storage';
 
         if (file_exists($this->temporaryStorage)) {
             $localFilesystem = new LocalFilesystem();

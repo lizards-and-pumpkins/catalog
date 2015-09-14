@@ -1,13 +1,13 @@
 <?php
 
 
-namespace Brera\Log\Writer;
+namespace LizardsAndPumpkins\Log\Writer;
 
-use Brera\Log\LogMessage;
-use Brera\TestFileFixtureTrait;
+use LizardsAndPumpkins\Log\LogMessage;
+use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
- * @covers \Brera\Log\Writer\FileLogMessageWriter
+ * @covers \LizardsAndPumpkins\Log\Writer\FileLogMessageWriter
  */
 class FileLogMessageWriterTest extends \PHPUnit_Framework_TestCase
 {

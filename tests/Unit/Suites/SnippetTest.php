@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
 /**
- * @covers \Brera\Snippet
+ * @covers \LizardsAndPumpkins\Snippet
  */
 class SnippetTest extends \PHPUnit_Framework_TestCase
 {

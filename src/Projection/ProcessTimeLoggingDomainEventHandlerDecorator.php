@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Brera\Projection;
+namespace LizardsAndPumpkins\Projection;
 
-use Brera\DomainEventHandler;
-use Brera\Log\Logger;
+use LizardsAndPumpkins\DomainEventHandler;
+use LizardsAndPumpkins\Log\Logger;
 
 class ProcessTimeLoggingDomainEventHandlerDecorator implements DomainEventHandler
 {

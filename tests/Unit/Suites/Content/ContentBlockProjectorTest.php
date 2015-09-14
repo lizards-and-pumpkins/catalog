@@ -1,16 +1,16 @@
 <?php
 
-namespace Brera\Content;
+namespace LizardsAndPumpkins\Content;
 
-use Brera\Context\ContextSource;
-use Brera\DataPool\DataPoolWriter;
-use Brera\InvalidProjectionSourceDataTypeException;
-use Brera\Projector;
-use Brera\SnippetList;
-use Brera\SnippetRendererCollection;
+use LizardsAndPumpkins\Context\ContextSource;
+use LizardsAndPumpkins\DataPool\DataPoolWriter;
+use LizardsAndPumpkins\InvalidProjectionSourceDataTypeException;
+use LizardsAndPumpkins\Projector;
+use LizardsAndPumpkins\SnippetList;
+use LizardsAndPumpkins\SnippetRendererCollection;
 
 /**
- * @covers \Brera\Content\ContentBlockProjector
+ * @covers \LizardsAndPumpkins\Content\ContentBlockProjector
  */
 class ContentBlockProjectorTest extends \PHPUnit_Framework_TestCase
 {

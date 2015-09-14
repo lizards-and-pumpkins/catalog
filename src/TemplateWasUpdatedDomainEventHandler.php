@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Context\ContextSource;
+use LizardsAndPumpkins\Context\ContextSource;
 
 class TemplateWasUpdatedDomainEventHandler implements DomainEventHandler
 {

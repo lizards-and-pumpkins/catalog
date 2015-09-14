@@ -1,33 +1,33 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Api\ApiRequestHandlerChain;
-use Brera\Api\ApiRouter;
-use Brera\Content\ContentBlocksApiV1PutRequestHandler;
-use Brera\ContentDelivery\SnippetTransformation\SimpleEuroPriceSnippetTransformation;
-use Brera\Context\ContextBuilder;
-use Brera\Http\GenericHttpRouter;
-use Brera\Http\HttpRequest;
-use Brera\Http\HttpRouter;
-use Brera\Product\CatalogImportApiV1PutRequestHandler;
-use Brera\Product\DefaultNumberOfProductsPerPageSnippetRenderer;
-use Brera\Product\ProductDetailViewInContextSnippetRenderer;
-use Brera\Product\ProductDetailViewRequestHandler;
-use Brera\Product\ProductInSearchAutosuggestionSnippetRenderer;
-use Brera\Product\ProductListingMetaInfoSnippetRenderer;
-use Brera\Product\ProductListingRequestHandler;
-use Brera\Product\ProductListingSnippetRenderer;
-use Brera\Product\MultipleProductStockQuantityApiV1PutRequestHandler;
-use Brera\Product\ProductSearchAutosuggestionMetaSnippetRenderer;
-use Brera\Product\ProductSearchAutosuggestionRequestHandler;
-use Brera\Product\ProductSearchAutosuggestionSnippetRenderer;
-use Brera\Product\ProductSearchRequestHandler;
-use Brera\Product\ProductSearchResultMetaSnippetRenderer;
-use Brera\Product\ProductInListingSnippetRenderer;
-use Brera\Projection\Catalog\Import\CatalogImport;
-use Brera\Utils\Directory;
-use Brera\Context\Context;
+use LizardsAndPumpkins\Api\ApiRequestHandlerChain;
+use LizardsAndPumpkins\Api\ApiRouter;
+use LizardsAndPumpkins\Content\ContentBlocksApiV1PutRequestHandler;
+use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\SimpleEuroPriceSnippetTransformation;
+use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\Http\GenericHttpRouter;
+use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Http\HttpRouter;
+use LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler;
+use LizardsAndPumpkins\Product\DefaultNumberOfProductsPerPageSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductDetailViewInContextSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductDetailViewRequestHandler;
+use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductListingMetaInfoSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductListingRequestHandler;
+use LizardsAndPumpkins\Product\ProductListingSnippetRenderer;
+use LizardsAndPumpkins\Product\MultipleProductStockQuantityApiV1PutRequestHandler;
+use LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductSearchAutosuggestionRequestHandler;
+use LizardsAndPumpkins\Product\ProductSearchAutosuggestionSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductSearchRequestHandler;
+use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
+use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
+use LizardsAndPumpkins\Utils\Directory;
+use LizardsAndPumpkins\Context\Context;
 
 class FrontendFactory implements Factory
 {

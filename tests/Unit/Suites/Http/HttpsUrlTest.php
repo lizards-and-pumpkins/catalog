@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera\Http;
+namespace LizardsAndPumpkins\Http;
 
 /**
- * @covers \Brera\Http\HttpsUrl
- * @covers \Brera\Http\HttpUrl
- * @uses \Brera\Http\HttpUrl
+ * @covers \LizardsAndPumpkins\Http\HttpsUrl
+ * @covers \LizardsAndPumpkins\Http\HttpUrl
+ * @uses   \LizardsAndPumpkins\Http\HttpUrl
  */
 class HttpsUrlTest extends \PHPUnit_Framework_TestCase
 {

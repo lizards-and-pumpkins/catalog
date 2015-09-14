@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Product\Exception\InvalidStockQuantitySourceException;
+use LizardsAndPumpkins\Product\Exception\InvalidStockQuantitySourceException;
 
 /**
- * @covers \Brera\Product\ProductStockQuantity
+ * @covers \LizardsAndPumpkins\Product\ProductStockQuantity
  */
 class ProductStockQuantityTest extends \PHPUnit_Framework_TestCase
 {

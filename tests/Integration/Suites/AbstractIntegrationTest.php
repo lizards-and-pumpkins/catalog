@@ -1,12 +1,12 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\DataPool\KeyValue\KeyValueStore;
-use Brera\DataPool\SearchEngine\SearchEngine;
-use Brera\Http\HttpRequest;
-use Brera\Log\Logger;
-use Brera\Queue\Queue;
+use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
+use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Log\Logger;
+use LizardsAndPumpkins\Queue\Queue;
 
 abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
 {

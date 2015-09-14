@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
 class FilterNavigationFilterOptionCollection implements \Countable, \IteratorAggregate
 {

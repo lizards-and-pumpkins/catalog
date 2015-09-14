@@ -1,17 +1,17 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Api\ApiRequestHandler;
-use Brera\Http\HttpRequest;
-use Brera\Queue\Queue;
+use LizardsAndPumpkins\Api\ApiRequestHandler;
+use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Queue\Queue;
 
 /**
- * @covers \Brera\TemplatesApiV1PutRequestHandler
- * @uses   \Brera\Api\ApiRequestHandler
- * @uses   \Brera\DefaultHttpResponse
- * @uses   \Brera\Http\HttpHeaders
- * @uses   \Brera\TemplateWasUpdatedDomainEvent
+ * @covers \LizardsAndPumpkins\TemplatesApiV1PutRequestHandler
+ * @uses   \LizardsAndPumpkins\Api\ApiRequestHandler
+ * @uses   \LizardsAndPumpkins\DefaultHttpResponse
+ * @uses   \LizardsAndPumpkins\Http\HttpHeaders
+ * @uses   \LizardsAndPumpkins\TemplateWasUpdatedDomainEvent
  */
 class TemplatesApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {

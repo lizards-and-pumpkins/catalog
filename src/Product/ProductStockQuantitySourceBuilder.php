@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Product\Exception\InvalidProductStockQuantitySourceDataException;
-use Brera\Utils\XPathParser;
+use LizardsAndPumpkins\Product\Exception\InvalidProductStockQuantitySourceDataException;
+use LizardsAndPumpkins\Utils\XPathParser;
 
 class ProductStockQuantitySourceBuilder
 {

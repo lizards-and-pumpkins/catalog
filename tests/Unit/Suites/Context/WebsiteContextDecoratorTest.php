@@ -1,23 +1,23 @@
 <?php
 
 
-namespace Brera\Context;
+namespace LizardsAndPumpkins\Context;
 
-use Brera\Http\HttpHeaders;
-use Brera\Http\HttpRequest;
-use Brera\Http\HttpRequestBody;
-use Brera\Http\HttpUrl;
+use LizardsAndPumpkins\Http\HttpHeaders;
+use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Http\HttpRequestBody;
+use LizardsAndPumpkins\Http\HttpUrl;
 
 /**
- * @covers \Brera\Context\WebsiteContextDecorator
- * @covers \Brera\Context\ContextDecorator
- * @uses   \Brera\Context\ContextBuilder
- * @uses   \Brera\Context\VersionedContext
- * @uses   \Brera\DataVersion
- * @uses   \Brera\Http\HttpRequest
- * @uses   \Brera\Http\HttpUrl
- * @uses   \Brera\Http\HttpHeaders
- * @uses   \Brera\Http\HttpRequestBody
+ * @covers \LizardsAndPumpkins\Context\WebsiteContextDecorator
+ * @covers \LizardsAndPumpkins\Context\ContextDecorator
+ * @uses   \LizardsAndPumpkins\Context\ContextBuilder
+ * @uses   \LizardsAndPumpkins\Context\VersionedContext
+ * @uses   \LizardsAndPumpkins\DataVersion
+ * @uses   \LizardsAndPumpkins\Http\HttpRequest
+ * @uses   \LizardsAndPumpkins\Http\HttpUrl
+ * @uses   \LizardsAndPumpkins\Http\HttpHeaders
+ * @uses   \LizardsAndPumpkins\Http\HttpRequestBody
  */
 class WebsiteContextDecoratorTest extends AbstractContextDecoratorTest
 {

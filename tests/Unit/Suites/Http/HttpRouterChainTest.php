@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\Http;
+namespace LizardsAndPumpkins\Http;
 
 /**
- * @covers Brera\Http\HttpRouterChain
+ * @covers LizardsAndPumpkins\Http\HttpRouterChain
  */
 class HttpRouterChainTest extends \PHPUnit_Framework_TestCase
 {

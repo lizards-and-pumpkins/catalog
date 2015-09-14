@@ -1,16 +1,16 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Context\Context;
-use Brera\DataPool\DataPoolReader;
-use Brera\DataPool\KeyValue\KeyNotFoundException;
-use Brera\Http\HttpRequest;
-use Brera\Http\HttpRequestHandler;
-use Brera\Http\HttpResponse;
-use Brera\Http\UnableToHandleRequestException;
-use Brera\PageBuilder;
-use Brera\SnippetKeyGenerator;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\DataPool\DataPoolReader;
+use LizardsAndPumpkins\DataPool\KeyValue\KeyNotFoundException;
+use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Http\HttpRequestHandler;
+use LizardsAndPumpkins\Http\HttpResponse;
+use LizardsAndPumpkins\Http\UnableToHandleRequestException;
+use LizardsAndPumpkins\PageBuilder;
+use LizardsAndPumpkins\SnippetKeyGenerator;
 
 class ProductDetailViewRequestHandler implements HttpRequestHandler
 {

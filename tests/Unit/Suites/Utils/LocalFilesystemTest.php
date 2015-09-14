@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\Utils;
+namespace LizardsAndPumpkins\Utils;
 
 /**
- * @covers \Brera\Utils\LocalFilesystem
+ * @covers \LizardsAndPumpkins\Utils\LocalFilesystem
  */
 class LocalFilesystemTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,7 +26,7 @@ class LocalFilesystemTest extends \PHPUnit_Framework_TestCase
     {
         $this->filesystem = new LocalFilesystem();
 
-        $this->testDirectoryPath = sys_get_temp_dir() . '/brera-local-filesystem-test';
+        $this->testDirectoryPath = sys_get_temp_dir() . '/lizards-and-pumpkins-local-filesystem-test';
         if (!is_dir($this->testDirectoryPath)) {
             mkdir($this->testDirectoryPath);
         }

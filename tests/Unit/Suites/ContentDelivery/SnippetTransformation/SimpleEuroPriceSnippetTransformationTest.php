@@ -1,12 +1,12 @@
 <?php
 
 
-namespace Brera\ContentDelivery\SnippetTransformation;
+namespace LizardsAndPumpkins\ContentDelivery\SnippetTransformation;
 
-use Brera\Context\Context;
+use LizardsAndPumpkins\Context\Context;
 
 /**
- * @covers Brera\ContentDelivery\SnippetTransformation\SimpleEuroPriceSnippetTransformation
+ * @covers LizardsAndPumpkins\ContentDelivery\SnippetTransformation\SimpleEuroPriceSnippetTransformation
  */
 class SimpleEuroPriceSnippetTransformationTest extends \PHPUnit_Framework_TestCase
 {

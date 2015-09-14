@@ -1,13 +1,13 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Http\HttpResponse;
-use Brera\Http\InvalidResponseBodyException;
+use LizardsAndPumpkins\Http\HttpResponse;
+use LizardsAndPumpkins\Http\InvalidResponseBodyException;
 
 /**
- * @covers \Brera\DefaultHttpResponse
- * @uses   \Brera\Http\HttpHeaders
+ * @covers \LizardsAndPumpkins\DefaultHttpResponse
+ * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  */
 class DefaultHttpResponseTest extends \PHPUnit_Framework_TestCase
 {

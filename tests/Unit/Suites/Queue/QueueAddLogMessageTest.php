@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Brera\Queue;
+namespace LizardsAndPumpkins\Queue;
 
 /**
- * @covers Brera\Queue\QueueAddLogMessage
+ * @covers LizardsAndPumpkins\Queue\QueueAddLogMessage
  */
 class QueueAddLogMessageTest extends \PHPUnit_Framework_TestCase
 {

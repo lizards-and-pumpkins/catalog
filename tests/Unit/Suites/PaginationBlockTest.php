@@ -1,14 +1,14 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Renderer\Block;
-use Brera\Renderer\BlockRenderer;
-use Brera\Renderer\InvalidDataObjectException;
+use LizardsAndPumpkins\Renderer\Block;
+use LizardsAndPumpkins\Renderer\BlockRenderer;
+use LizardsAndPumpkins\Renderer\InvalidDataObjectException;
 
 /**
- * @covers \Brera\PaginationBlock
- * @uses   \Brera\Renderer\Block
+ * @covers \LizardsAndPumpkins\PaginationBlock
+ * @uses   \LizardsAndPumpkins\Renderer\Block
  */
 class PaginationBlockTest extends \PHPUnit_Framework_TestCase
 {

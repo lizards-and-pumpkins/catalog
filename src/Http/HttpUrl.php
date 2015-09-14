@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\Http;
+namespace LizardsAndPumpkins\Http;
 
 use League\Url\UrlImmutable;
 use League\Url\AbstractUrl;

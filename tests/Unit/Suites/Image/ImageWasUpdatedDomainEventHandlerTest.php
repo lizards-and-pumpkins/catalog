@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\Image;
+namespace LizardsAndPumpkins\Image;
 
 /**
- * @covers \Brera\Image\ImageWasUpdatedDomainEventHandler
+ * @covers \LizardsAndPumpkins\Image\ImageWasUpdatedDomainEventHandler
  */
 class ImageWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {

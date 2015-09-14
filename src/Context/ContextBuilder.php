@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\Context;
+namespace LizardsAndPumpkins\Context;
 
-use Brera\DataVersion;
-use Brera\Http\HttpRequest;
+use LizardsAndPumpkins\DataVersion;
+use LizardsAndPumpkins\Http\HttpRequest;
 
 class ContextBuilder
 {
@@ -164,7 +164,7 @@ class ContextBuilder
     private function getDefaultContextDecoratorClass($code)
     {
         $decoratorClass = ucfirst($this->removeUnderscores($code)) . 'ContextDecorator';
-        $qualifiedDecoratorClass = '\\Brera\\Context\\' . $decoratorClass;
+        $qualifiedDecoratorClass = '\\LizardsAndPumpkins\\Context\\' . $decoratorClass;
         if (class_exists($qualifiedDecoratorClass)) {
             $this->registerContextDecorator($code, $qualifiedDecoratorClass);
         }

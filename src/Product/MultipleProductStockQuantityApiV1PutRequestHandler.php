@@ -1,14 +1,14 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Api\ApiRequestHandler;
-use Brera\Http\HttpRequest;
-use Brera\Product\Exception\CatalogImportApiDirectoryNotReadableException;
-use Brera\Product\Exception\CatalogImportFileNameNotFoundInRequestBodyException;
-use Brera\Queue\Queue;
-use Brera\Utils\Directory;
-use Brera\Utils\XPathParser;
+use LizardsAndPumpkins\Api\ApiRequestHandler;
+use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Product\Exception\CatalogImportApiDirectoryNotReadableException;
+use LizardsAndPumpkins\Product\Exception\CatalogImportFileNameNotFoundInRequestBodyException;
+use LizardsAndPumpkins\Queue\Queue;
+use LizardsAndPumpkins\Utils\Directory;
+use LizardsAndPumpkins\Utils\XPathParser;
 
 class MultipleProductStockQuantityApiV1PutRequestHandler extends ApiRequestHandler
 {

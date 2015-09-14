@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
 /**
- * @covers \Brera\FailedToReadFromDomainEventQueueMessage
+ * @covers \LizardsAndPumpkins\FailedToReadFromDomainEventQueueMessage
  */
 class FailedToReadFromDomainEventQueueMessageTest extends \PHPUnit_Framework_TestCase
 {

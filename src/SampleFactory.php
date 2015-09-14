@@ -1,20 +1,20 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\DataPool\KeyValue\File\FileKeyValueStore;
-use Brera\DataPool\SearchEngine\FileSearchEngine;
-use Brera\Image\ImageMagickInscribeStrategy;
-use Brera\Image\ImageProcessor;
-use Brera\Image\ImageProcessorCollection;
-use Brera\Image\ImageProcessingStrategySequence;
-use Brera\Log\InMemoryLogger;
-use Brera\Log\Logger;
-use Brera\Log\Writer\FileLogMessageWriter;
-use Brera\Log\Writer\LogMessageWriter;
-use Brera\Log\WritingLoggerDecorator;
-use Brera\Queue\File\FileQueue;
-use Brera\Queue\Queue;
+use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
+use LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine;
+use LizardsAndPumpkins\Image\ImageMagickInscribeStrategy;
+use LizardsAndPumpkins\Image\ImageProcessor;
+use LizardsAndPumpkins\Image\ImageProcessorCollection;
+use LizardsAndPumpkins\Image\ImageProcessingStrategySequence;
+use LizardsAndPumpkins\Log\InMemoryLogger;
+use LizardsAndPumpkins\Log\Logger;
+use LizardsAndPumpkins\Log\Writer\FileLogMessageWriter;
+use LizardsAndPumpkins\Log\Writer\LogMessageWriter;
+use LizardsAndPumpkins\Log\WritingLoggerDecorator;
+use LizardsAndPumpkins\Queue\File\FileQueue;
+use LizardsAndPumpkins\Queue\Queue;
 
 class SampleFactory implements Factory
 {
@@ -49,7 +49,7 @@ class SampleFactory implements Factory
      */
     public function createKeyValueStore()
     {
-        $storagePath = sys_get_temp_dir() . '/brera/key-value-store';
+        $storagePath = sys_get_temp_dir() . '/lizards-and-pumpkins/key-value-store';
         $this->createDirectoryIfNotExists($storagePath);
 
         return new FileKeyValueStore($storagePath);
@@ -60,8 +60,8 @@ class SampleFactory implements Factory
      */
     public function createEventQueue()
     {
-        $storagePath = sys_get_temp_dir() . '/brera/event-queue/content';
-        $lockFile = sys_get_temp_dir() . '/brera/event-queue/lock';
+        $storagePath = sys_get_temp_dir() . '/lizards-and-pumpkins/event-queue/content';
+        $lockFile = sys_get_temp_dir() . '/lizards-and-pumpkins/event-queue/lock';
         return new FileQueue($storagePath, $lockFile);
     }
 
@@ -70,8 +70,8 @@ class SampleFactory implements Factory
      */
     public function createCommandQueue()
     {
-        $storagePath = sys_get_temp_dir() . '/brera/command-queue/content';
-        $lockFile = sys_get_temp_dir() . '/brera/command-queue/lock';
+        $storagePath = sys_get_temp_dir() . '/lizards-and-pumpkins/command-queue/content';
+        $lockFile = sys_get_temp_dir() . '/lizards-and-pumpkins/command-queue/lock';
         return new FileQueue($storagePath, $lockFile);
     }
 
@@ -107,7 +107,7 @@ class SampleFactory implements Factory
      */
     public function createSearchEngine()
     {
-        $searchEngineStoragePath = sys_get_temp_dir() . '/brera/search-engine';
+        $searchEngineStoragePath = sys_get_temp_dir() . '/lizards-and-pumpkins/search-engine';
         $this->createDirectoryIfNotExists($searchEngineStoragePath);
 
         return FileSearchEngine::create($searchEngineStoragePath);

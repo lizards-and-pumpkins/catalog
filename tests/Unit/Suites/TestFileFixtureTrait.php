@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
 trait TestFileFixtureTrait
 {
@@ -48,7 +48,7 @@ trait TestFileFixtureTrait
      */
     public function getUniqueTempDir()
     {
-        return sys_get_temp_dir() . '/brera/test/' . $this->getUniqueId();
+        return sys_get_temp_dir() . '/lizards-and-pumpkins/test/' . $this->getUniqueId();
     }
 
     protected function tearDown()

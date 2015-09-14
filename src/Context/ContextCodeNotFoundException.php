@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Brera\Context;
+namespace LizardsAndPumpkins\Context;
 
 class ContextCodeNotFoundException extends \OutOfBoundsException
 {

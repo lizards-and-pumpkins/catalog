@@ -1,19 +1,19 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Context\Context;
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilder;
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
-use Brera\InvalidProjectionSourceDataTypeException;
-use Brera\SampleContextSource;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilder;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
+use LizardsAndPumpkins\InvalidProjectionSourceDataTypeException;
+use LizardsAndPumpkins\SampleContextSource;
 
 /**
- * @covers \Brera\Product\ProductSearchDocumentBuilder
- * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocument
- * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection
- * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField
- * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection
+ * @covers \LizardsAndPumpkins\Product\ProductSearchDocumentBuilder
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection
  */
 class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
 {

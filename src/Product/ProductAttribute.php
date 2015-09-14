@@ -1,10 +1,10 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Attribute;
-use Brera\Context\Context;
-use Brera\Product\Exception\ProductAttributeDoesNotContainContextPartException;
+use LizardsAndPumpkins\Attribute;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Product\Exception\ProductAttributeDoesNotContainContextPartException;
 
 class ProductAttribute implements Attribute
 {

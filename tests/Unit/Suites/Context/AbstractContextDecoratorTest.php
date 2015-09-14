@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\Context;
+namespace LizardsAndPumpkins\Context;
 
 abstract class AbstractContextDecoratorTest extends \PHPUnit_Framework_TestCase
 {

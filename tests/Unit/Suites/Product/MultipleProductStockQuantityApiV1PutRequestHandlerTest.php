@@ -1,21 +1,21 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Api\ApiRequestHandler;
-use Brera\Http\HttpRequest;
-use Brera\Product\Exception\CatalogImportApiDirectoryNotReadableException;
-use Brera\Product\Exception\CatalogImportFileNameNotFoundInRequestBodyException;
-use Brera\Queue\Queue;
-use Brera\Utils\Directory;
+use LizardsAndPumpkins\Api\ApiRequestHandler;
+use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Product\Exception\CatalogImportApiDirectoryNotReadableException;
+use LizardsAndPumpkins\Product\Exception\CatalogImportFileNameNotFoundInRequestBodyException;
+use LizardsAndPumpkins\Queue\Queue;
+use LizardsAndPumpkins\Utils\Directory;
 
 /**
- * @covers \Brera\Product\MultipleProductStockQuantityApiV1PutRequestHandler
- * @uses   \Brera\Api\ApiRequestHandler
- * @uses   \Brera\DefaultHttpResponse
- * @uses   \Brera\Http\HttpHeaders
- * @uses   \Brera\Product\UpdateMultipleProductStockQuantityCommand
- * @uses   \Brera\Utils\XPathParser
+ * @covers \LizardsAndPumpkins\Product\MultipleProductStockQuantityApiV1PutRequestHandler
+ * @uses   \LizardsAndPumpkins\Api\ApiRequestHandler
+ * @uses   \LizardsAndPumpkins\DefaultHttpResponse
+ * @uses   \LizardsAndPumpkins\Http\HttpHeaders
+ * @uses   \LizardsAndPumpkins\Product\UpdateMultipleProductStockQuantityCommand
+ * @uses   \LizardsAndPumpkins\Utils\XPathParser
  */
 class MultipleProductStockQuantityApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {

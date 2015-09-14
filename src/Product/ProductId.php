@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Product\Exception\InvalidProductIdException;
+use LizardsAndPumpkins\Product\Exception\InvalidProductIdException;
 
 class ProductId
 {

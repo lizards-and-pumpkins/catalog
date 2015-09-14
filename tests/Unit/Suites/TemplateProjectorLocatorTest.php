@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
 /**
- * @covers \Brera\TemplateProjectorLocator
+ * @covers \LizardsAndPumpkins\TemplateProjectorLocator
  */
 class TemplateProjectorLocatorTest extends \PHPUnit_Framework_TestCase
 {

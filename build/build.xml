@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="brera" default="build">
+<project name="lizards-and-pumpkins" default="build">
     <property name="toolsdir" value="${basedir}/../vendor/bin/"/>
     <property name="projectdir" value="${basedir}/.."/>
 
@@ -147,7 +147,7 @@
             depends="composer"
             description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.">
         <exec executable="${toolsdir}phpcs">
-            <arg value="--standard=${projectdir}/vendor/brera/coding-standards/src/Brera/" />
+            <arg value="--standard=${projectdir}/vendor/lizards-and-pumpkins/coding-standards/src/LizardsAndPumpkins/" />
             <arg value="--extensions=php" />
             <arg value="--ignore=autoload.php" />
             <arg path="${projectdir}/src" />
@@ -161,7 +161,7 @@
         <exec executable="${toolsdir}phpcs" output="/dev/null">
             <arg value="--report=checkstyle" />
             <arg value="--report-file=${projectdir}/build/logs/checkstyle.xml" />
-            <arg value="--standard=${projectdir}/vendor/brera/coding-standards/src/Brera/" />
+            <arg value="--standard=${projectdir}/vendor/lizards-and-pumpkins/coding-standards/src/LizardsAndPumpkins/" />
             <arg value="--extensions=php" />
             <arg value="--ignore=autoload.php" />
             <arg path="${projectdir}/src" />

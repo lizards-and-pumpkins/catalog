@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\Http;
+namespace LizardsAndPumpkins\Http;
 
 class GenericHttpRouter implements HttpRouter
 {
