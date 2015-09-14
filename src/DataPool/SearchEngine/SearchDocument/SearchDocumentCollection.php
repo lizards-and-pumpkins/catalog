@@ -9,9 +9,9 @@ class SearchDocumentCollection implements \Countable, \IteratorAggregate
      */
     private $documents = [];
 
-    public function add(SearchDocument $document)
+    public function __construct(SearchDocument ...$searchDocuments)
     {
-        $this->documents[] = $document;
+        $this->documents = $searchDocuments;
     }
 
     /**
