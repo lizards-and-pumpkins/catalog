@@ -49,11 +49,6 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     private $logger;
 
     /**
-     * @var \org\bovigo\vfs\vfsStreamDirectory
-     */
-    private $vfsRoot;
-
-    /**
      * @var CatalogImport
      */
     private $catalogImport;
@@ -106,13 +101,13 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        vfsStream::setup('root');
         $this->mockCommandQueue = $this->getMock(Queue::class);
         $this->addToCommandQueueSpy = $this->any();
         $this->mockCommandQueue->expects($this->addToCommandQueueSpy)->method('add');
         $this->stubProductSourceBuilder = $this->createMockProductSourceBuilder();
         $this->stubProductListingMetaInfoSourceBuilder = $this->createMockProductListingSourceBuilder();
         $this->logger = $this->getMock(Logger::class);
-        $this->vfsRoot = vfsStream::setup('root');
 
         $this->catalogImport = new CatalogImport(
             $this->mockCommandQueue,

@@ -5,6 +5,7 @@ namespace Brera\Product;
 use Brera\Api\ApiRequestHandler;
 use Brera\Http\HttpRequest;
 use Brera\Log\Logger;
+use Brera\Product\Exception\CatalogImportApiDirectoryNotReadableException;
 use Brera\Product\Exception\CatalogImportFileNameNotFoundInRequestBodyException;
 use Brera\Projection\Catalog\Import\CatalogImport;
 

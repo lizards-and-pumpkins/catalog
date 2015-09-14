@@ -5,6 +5,7 @@ namespace Brera\Product;
 use Brera\Api\ApiRequestHandler;
 use Brera\Http\HttpRequest;
 use Brera\Log\Logger;
+use Brera\Product\Exception\CatalogImportApiDirectoryNotReadableException;
 use Brera\Product\Exception\CatalogImportFileNameNotFoundInRequestBodyException;
 use Brera\Projection\Catalog\Import\CatalogImport;
 use org\bovigo\vfs\vfsStream;
@@ -98,7 +99,6 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
     public function testItDelegatesTheCatalogImport()
     {
         $importFileName = 'import-file.xml';
-
         $this->mockRequest->method('getRawBody')->willReturn(json_encode(['fileName' => $importFileName]));
 
         $this->mockCatalogImport->expects($this->once())->method('importFile')
