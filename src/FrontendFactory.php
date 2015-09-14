@@ -25,6 +25,7 @@ use Brera\Product\ProductSearchAutosuggestionSnippetRenderer;
 use Brera\Product\ProductSearchRequestHandler;
 use Brera\Product\ProductSearchResultMetaSnippetRenderer;
 use Brera\Product\ProductInListingSnippetRenderer;
+use Brera\Projection\Catalog\Import\CatalogImport;
 use Brera\Utils\Directory;
 use Brera\Context\Context;
 
@@ -98,10 +99,8 @@ class FrontendFactory implements Factory
     public function createCatalogImportApiV1PutRequestHandler()
     {
         return CatalogImportApiV1PutRequestHandler::create(
-            $this->getMasterFactory()->getCommandQueue(),
+            $this->getMasterFactory()->createCatalogImport(),
             $this->getCatalogImportDirectoryConfig(),
-            $this->getMasterFactory()->createProductSourceBuilder(),
-            $this->getMasterFactory()->createProductListingMetaInfoSourceBuilder(),
             $this->getMasterFactory()->getLogger()
         );
     }

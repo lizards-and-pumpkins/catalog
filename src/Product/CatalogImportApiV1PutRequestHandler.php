@@ -4,18 +4,17 @@ namespace Brera\Product;
 
 use Brera\Api\ApiRequestHandler;
 use Brera\Http\HttpRequest;
-use Brera\Image\UpdateImageCommand;
 use Brera\Log\Logger;
-use Brera\Projection\Catalog\Import\CatalogXmlParser;
-use Brera\Queue\Queue;
-use Brera\Utils\XPathParser;
+use Brera\Product\Exception\CatalogImportApiDirectoryNotReadableException;
+use Brera\Product\Exception\CatalogImportFileNameNotFoundInRequestBodyException;
+use Brera\Projection\Catalog\Import\CatalogImport;
 
 class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
 {
     /**
-     * @var Queue
+     * @var CatalogImport
      */
-    private $commandQueue;
+    private $catalogImport;
 
     /**
      * @var string
@@ -23,67 +22,37 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
     private $importDirectoryPath;
 
     /**
-     * @var ProductSourceBuilder
-     */
-    private $productSourceBuilder;
-
-    /**
-     * @var ProductListingMetaInfoSourceBuilder
-     */
-    private $productListingMetaInfoSourceBuilder;
-
-    /**
      * @var Logger
      */
     private $logger;
 
     /**
-     * @param Queue $commandQueue
+     * @param CatalogImport $catalogImport
      * @param string $importDirectoryPath
-     * @param ProductSourceBuilder $productSourceBuilder
-     * @param ProductListingMetaInfoSourceBuilder $productListingMetaInfoSourceBuilder
      * @param Logger $logger
      */
-    private function __construct(
-        Queue $commandQueue,
-        $importDirectoryPath,
-        ProductSourceBuilder $productSourceBuilder,
-        ProductListingMetaInfoSourceBuilder $productListingMetaInfoSourceBuilder,
-        Logger $logger
-    ) {
-        $this->commandQueue = $commandQueue;
+    private function __construct(CatalogImport $catalogImport, $importDirectoryPath, Logger $logger)
+    {
+        $this->catalogImport = $catalogImport;
         $this->importDirectoryPath = $importDirectoryPath;
-        $this->productSourceBuilder = $productSourceBuilder;
-        $this->productListingMetaInfoSourceBuilder = $productListingMetaInfoSourceBuilder;
         $this->logger = $logger;
     }
 
     /**
-     * @param Queue $commandQueue
+     * @param CatalogImport $catalogImport
      * @param string $importDirectoryPath
-     * @param ProductSourceBuilder $productSourceBuilder
-     * @param ProductListingMetaInfoSourceBuilder $productListingMetaInfoSourceBuilder
      * @param Logger $logger
      * @return CatalogImportApiV1PutRequestHandler
      */
-    public static function create(
-        Queue $commandQueue,
-        $importDirectoryPath,
-        ProductSourceBuilder $productSourceBuilder,
-        ProductListingMetaInfoSourceBuilder $productListingMetaInfoSourceBuilder,
-        Logger $logger
-    ) {
+    public static function create(CatalogImport $catalogImport, $importDirectoryPath, Logger $logger)
+    {
         if (!is_readable($importDirectoryPath)) {
-            throw new CatalogImportDirectoryNotReadableException(sprintf('%s is not readable.', $importDirectoryPath));
+            throw new CatalogImportApiDirectoryNotReadableException(
+                sprintf('%s is not readable.', $importDirectoryPath)
+            );
         }
 
-        return new self(
-            $commandQueue,
-            $importDirectoryPath,
-            $productSourceBuilder,
-            $productListingMetaInfoSourceBuilder,
-            $logger
-        );
+        return new self($catalogImport, $importDirectoryPath, $logger);
     }
 
     /**
@@ -107,11 +76,16 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
     protected function processRequest(HttpRequest $request)
     {
         $filePath = $this->getValidImportFilePathFromRequest($request);
-        $parser = CatalogXmlParser::fromFilePath($filePath);
-        $parser->registerProductSourceCallback([$this, 'processProductXml']);
-        $parser->registerListingCallback([$this, 'processListingXml']);
-        $parser->registerProductImageCallback([$this, 'processProductImageXml']);
-        $parser->parse();
+        $this->catalogImport->importFile($filePath);
+    }
+
+    /**
+     * @param HttpRequest $request
+     * @return string
+     */
+    private function getValidImportFilePathFromRequest(HttpRequest $request)
+    {
+        return $this->importDirectoryPath . '/' . $this->getImportFileNameFromRequest($request);
     }
 
     /**
@@ -129,61 +103,5 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
         }
 
         return $requestArguments['fileName'];
-    }
-
-    /**
-     * @param string $productXml
-     */
-    public function processProductXml($productXml)
-    {
-        try {
-            $productSource = $this->productSourceBuilder->createProductSourceFromXml($productXml);
-            $this->commandQueue->add(new UpdateProductCommand($productSource));
-        } catch (\Exception $exception) {
-            $skuString = (new XPathParser($productXml))->getXmlNodesArrayByXPath('//@sku')[0]['value'];
-            $productId = ProductId::fromString($skuString);
-            $loggerMessage = new ProductImportFailedMessage($productId, $exception);
-            $this->logger->log($loggerMessage);
-        }
-    }
-
-    /**
-     * @param string $listingXml
-     */
-    public function processListingXml($listingXml)
-    {
-        $productListingMetaInfoSource = $this->productListingMetaInfoSourceBuilder
-            ->createProductListingMetaInfoSourceFromXml($listingXml);
-        $this->commandQueue->add(new UpdateProductListingCommand($productListingMetaInfoSource));
-    }
-
-    /**
-     * @param string $productImageXml
-     */
-    public function processProductImageXml($productImageXml)
-    {
-        $fileNode = (new XPathParser($productImageXml))->getXmlNodesArrayByXPath('/image/file')[0];
-        $this->commandQueue->add(new UpdateImageCommand($fileNode['value']));
-    }
-
-    /**
-     * @param string $filePath
-     */
-    private function validateImportFileIsReadable($filePath)
-    {
-        if (!is_readable($filePath)) {
-            throw new CatalogImportFileNotReadableException(sprintf('%s file is not readable.', $filePath));
-        }
-    }
-
-    /**
-     * @param HttpRequest $request
-     * @return string
-     */
-    private function getValidImportFilePathFromRequest(HttpRequest $request)
-    {
-        $filePath = $this->importDirectoryPath . '/' . $this->getImportFileNameFromRequest($request);
-        $this->validateImportFileIsReadable($filePath);
-        return $filePath;
     }
 }

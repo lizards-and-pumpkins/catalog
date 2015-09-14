@@ -2,6 +2,7 @@
 
 namespace Brera\Product;
 
+use Brera\Product\Exception\InvalidProductStockQuantitySourceDataException;
 use Brera\Utils\XPathParser;
 
 class ProductStockQuantitySourceBuilder

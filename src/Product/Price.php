@@ -2,6 +2,8 @@
 
 namespace Brera\Product;
 
+use Brera\Product\Exception\InvalidPriceSourceException;
+
 class Price implements Money
 {
     const NUM_DECIMAL_POINTS = 2;

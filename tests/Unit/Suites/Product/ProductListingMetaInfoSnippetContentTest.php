@@ -4,6 +4,7 @@ namespace Brera\Product;
 
 use Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
+use Brera\Product\Exception\MalformedSearchCriteriaMetaException;
 
 /**
  * @covers \Brera\Product\ProductListingMetaInfoSnippetContent

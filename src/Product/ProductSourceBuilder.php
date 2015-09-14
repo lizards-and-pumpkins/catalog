@@ -2,6 +2,7 @@
 
 namespace Brera\Product;
 
+use Brera\Product\Exception\InvalidNumberOfSkusPerImportedProductException;
 use Brera\Utils\XPathParser;
 
 class ProductSourceBuilder

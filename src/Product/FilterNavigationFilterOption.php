@@ -2,6 +2,9 @@
 
 namespace Brera\Product;
 
+use Brera\Product\Exception\InvalidFilterNavigationFilterOptionCountException;
+use Brera\Product\Exception\InvalidFilterNavigationFilterOptionValueException;
+
 class FilterNavigationFilterOption
 {
     /**

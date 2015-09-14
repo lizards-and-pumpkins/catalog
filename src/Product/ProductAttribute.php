@@ -4,6 +4,7 @@ namespace Brera\Product;
 
 use Brera\Attribute;
 use Brera\Context\Context;
+use Brera\Product\Exception\ProductAttributeDoesNotContainContextPartException;
 
 class ProductAttribute implements Attribute
 {

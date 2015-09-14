@@ -68,6 +68,7 @@ use Brera\Product\UpdateProductListingCommand;
 use Brera\Product\UpdateProductListingCommandHandler;
 use Brera\Product\UpdateProductStockQuantityCommand;
 use Brera\Product\UpdateProductStockQuantityCommandHandler;
+use Brera\Projection\Catalog\Import\CatalogImport;
 use Brera\Projection\ProcessTimeLoggingDomainEventHandlerDecorator;
 use Brera\Queue\Queue;
 use Brera\Renderer\BlockStructure;
@@ -1274,6 +1275,19 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new ProcessTimeLoggingDomainEventHandlerDecorator(
             $eventHandlerToDecorate,
+            $this->getMasterFactory()->getLogger()
+        );
+    }
+
+    /**
+     * @return CatalogImport
+     */
+    public function createCatalogImport()
+    {
+        return new CatalogImport(
+            $this->getMasterFactory()->getCommandQueue(),
+            $this->getMasterFactory()->createProductSourceBuilder(),
+            $this->getMasterFactory()->createProductListingMetaInfoSourceBuilder(),
             $this->getMasterFactory()->getLogger()
         );
     }

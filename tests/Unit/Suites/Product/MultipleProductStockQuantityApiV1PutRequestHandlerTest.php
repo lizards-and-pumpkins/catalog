@@ -4,6 +4,8 @@ namespace Brera\Product;
 
 use Brera\Api\ApiRequestHandler;
 use Brera\Http\HttpRequest;
+use Brera\Product\Exception\CatalogImportApiDirectoryNotReadableException;
+use Brera\Product\Exception\CatalogImportFileNameNotFoundInRequestBodyException;
 use Brera\Queue\Queue;
 use Brera\Utils\Directory;
 
@@ -96,7 +98,7 @@ class MultipleProductStockQuantityApiV1PutRequestHandlerTest extends \PHPUnit_Fr
         $mockDirectory = $this->getMock(Directory::class, [], [], '', false);
         $mockDirectory->method('isReadable')->willReturn(false);
 
-        $this->setExpectedException(CatalogImportDirectoryNotReadableException::class);
+        $this->setExpectedException(CatalogImportApiDirectoryNotReadableException::class);
 
         MultipleProductStockQuantityApiV1PutRequestHandler::create(
             $this->mockCommandQueue,

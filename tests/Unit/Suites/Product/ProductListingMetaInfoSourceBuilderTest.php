@@ -6,6 +6,12 @@ use Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
 use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
+use Brera\Product\Exception\DataNotStringException;
+use Brera\Product\Exception\InvalidConditionXmlAttributeException;
+use Brera\Product\Exception\InvalidCriterionOperationXmlAttributeException;
+use Brera\Product\Exception\MissingConditionXmlAttributeException;
+use Brera\Product\Exception\MissingCriterionOperationXmlAttributeException;
+use Brera\Product\Exception\MissingUrlKeyXmlAttributeException;
 use Brera\UrlKey;
 
 /**

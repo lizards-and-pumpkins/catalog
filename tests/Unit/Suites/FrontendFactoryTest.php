@@ -47,6 +47,7 @@ use Brera\Product\CatalogImportApiV1PutRequestHandler;
  * @uses   \Brera\Http\HttpRequestBody
  * @uses   \Brera\Context\VersionedContext
  * @uses   \Brera\Context\ContextDecorator
+ * @uses   \Brera\Projection\Catalog\Import\CatalogImport
  * @uses   \Brera\Renderer\Translation\TranslatorRegistry
  */
 class FrontendFactoryTest extends \PHPUnit_Framework_TestCase

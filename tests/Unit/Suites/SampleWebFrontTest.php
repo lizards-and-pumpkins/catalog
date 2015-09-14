@@ -23,6 +23,7 @@ use Brera\Http\HttpRouterChain;
  * @uses   \Brera\SnippetKeyGeneratorLocator
  * @uses   \Brera\GenericSnippetKeyGenerator
  * @uses   \Brera\TemplatesApiV1PutRequestHandler
+ * @uses   \Brera\Projection\Catalog\Import\CatalogImport
  * @uses   \Brera\Http\GenericHttpRouter
  * @uses   \Brera\Product\CatalogImportApiV1PutRequestHandler
  * @uses   \Brera\Product\FilterNavigationFilterCollection

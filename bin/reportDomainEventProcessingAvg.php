@@ -39,9 +39,10 @@ class CalculateAverageDomainEventProcessingTime
             ],
             'logfile' => [
                 'description' => 'Log file',
+                'required' => true
             ]
         ]);
-
+        
         $this->validateArguments($climate);
     }
 
@@ -199,9 +200,6 @@ class CalculateAverageDomainEventProcessingTime
      */
     private function validateLogfilePath($filePath)
     {
-        if (empty($filePath)) {
-            throw new \RuntimeException('No log file specified');
-        }
         if (!file_exists($filePath)) {
             throw new \RuntimeException(sprintf('Log file not found: "%s"', $filePath));
         }

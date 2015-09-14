@@ -3,6 +3,8 @@
 namespace Brera\Product;
 
 use Brera\Context\Context;
+use Brera\Product\Exception\ProductAttributeContextPartsMismatchException;
+use Brera\Product\Exception\ProductAttributeNotFoundException;
 
 class ProductAttributeList
 {
