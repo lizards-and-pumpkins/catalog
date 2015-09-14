@@ -2,6 +2,8 @@
 
 namespace Brera\Product;
 
+use Brera\Product\Exception\InvalidStockQuantitySourceException;
+
 class ProductStockQuantity implements Quantity
 {
     const NUM_DECIMAL_POINTS = 0;

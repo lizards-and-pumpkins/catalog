@@ -3,6 +3,7 @@
 namespace Brera\Product;
 
 use Brera\Context\Context;
+use Brera\Product\Exception\InvalidProductListingSourceDataException;
 
 class ProductListingSourceList
 {

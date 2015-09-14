@@ -4,6 +4,7 @@ namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\Context\ContextBuilder;
+use Brera\Product\Exception\MalformedProductListingSourceJsonException;
 
 /**
  * @covers \Brera\Product\ProductListingSourceListBuilder

@@ -6,6 +6,9 @@ use Brera\Api\ApiRequestHandler;
 use Brera\Http\HttpRequest;
 use Brera\Image\UpdateImageCommand;
 use Brera\Log\Logger;
+use Brera\Product\Exception\CatalogImportDirectoryNotReadableException;
+use Brera\Product\Exception\CatalogImportFileNameNotFoundInRequestBodyException;
+use Brera\Product\Exception\ProductAttributeContextPartsMismatchException;
 use Brera\Queue\Queue;
 use Brera\TestFileFixtureTrait;
 

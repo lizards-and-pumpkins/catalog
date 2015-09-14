@@ -2,6 +2,8 @@
 
 namespace Brera\Product;
 
+use Brera\Product\Exception\InvalidProductStockQuantitySourceDataException;
+
 /**
  * @covers \Brera\Product\ProductStockQuantitySourceBuilder
  * @uses   \Brera\Product\ProductId

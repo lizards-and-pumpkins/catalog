@@ -9,6 +9,7 @@ use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
+use Brera\Product\Exception\FilterCollectionInNotInitializedException;
 
 /**
  * @covers \Brera\Product\FilterNavigationFilterCollection

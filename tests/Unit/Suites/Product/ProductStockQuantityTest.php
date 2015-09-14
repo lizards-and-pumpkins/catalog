@@ -2,6 +2,8 @@
 
 namespace Brera\Product;
 
+use Brera\Product\Exception\InvalidStockQuantitySourceException;
+
 /**
  * @covers \Brera\Product\ProductStockQuantity
  */

@@ -6,6 +6,7 @@ use Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
 use Brera\PageMetaInfoSnippetContent;
+use Brera\Product\Exception\MalformedSearchCriteriaMetaException;
 
 class ProductListingMetaInfoSnippetContent implements PageMetaInfoSnippetContent
 {

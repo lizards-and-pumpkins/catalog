@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Brera\Product;
+namespace Brera\Product\Exception;
 
 class ProductAttributeDoesNotContainContextPartException extends \OutOfRangeException
 {

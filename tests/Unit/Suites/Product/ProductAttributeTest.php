@@ -3,6 +3,7 @@
 namespace Brera\Product;
 
 use Brera\Context\Context;
+use Brera\Product\Exception\ProductAttributeDoesNotContainContextPartException;
 
 /**
  * @covers \Brera\Product\ProductAttribute

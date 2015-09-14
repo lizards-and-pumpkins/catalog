@@ -4,6 +4,7 @@ namespace Brera\Product;
 
 use Brera\Context\Context;
 use Brera\Context\VersionedContext;
+use Brera\Product\Exception\InvalidProductListingSourceDataException;
 
 /**
  * @covers \Brera\Product\ProductListingSourceList
