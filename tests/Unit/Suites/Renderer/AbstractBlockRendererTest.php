@@ -1,10 +1,10 @@
 <?php
 
-namespace Brera\Renderer;
+namespace LizardsAndPumpkins\Renderer;
 
-use Brera\Context\Context;
-use Brera\TestFileFixtureTrait;
-use Brera\ThemeLocator;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\TestFileFixtureTrait;
+use LizardsAndPumpkins\ThemeLocator;
 
 abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\Renderer;
+namespace LizardsAndPumpkins\Renderer;
 
-use Brera\Context\Context;
-use Brera\ThemeLocator;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\ThemeLocator;
 
 abstract class BlockRenderer
 {
@@ -192,7 +192,7 @@ abstract class BlockRenderer
     /**
      * @param string $blockName
      * @return string
-     * @see \Brera\UrlKeyRequestHandler::buildPlaceholdersFromCodes()
+     * @see \LizardsAndPumpkins\UrlKeyRequestHandler::buildPlaceholdersFromCodes()
      */
     private function getBlockPlaceholder($blockName)
     {

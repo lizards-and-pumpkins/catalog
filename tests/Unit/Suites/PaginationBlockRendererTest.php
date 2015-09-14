@@ -1,14 +1,14 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Renderer\AbstractBlockRendererTest;
-use Brera\Renderer\BlockRenderer;
-use Brera\Renderer\BlockStructure;
+use LizardsAndPumpkins\Renderer\AbstractBlockRendererTest;
+use LizardsAndPumpkins\Renderer\BlockRenderer;
+use LizardsAndPumpkins\Renderer\BlockStructure;
 
 /**
- * @covers \Brera\PaginationBlockRenderer
- * @uses   \Brera\Renderer\BlockRenderer
+ * @covers \LizardsAndPumpkins\PaginationBlockRenderer
+ * @uses   \LizardsAndPumpkins\Renderer\BlockRenderer
  */
 class PaginationBlockRendererTest extends AbstractBlockRendererTest
 {

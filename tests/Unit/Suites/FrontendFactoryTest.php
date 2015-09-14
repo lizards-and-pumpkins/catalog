@@ -1,53 +1,53 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Api\ApiRouter;
-use Brera\Content\ContentBlocksApiV1PutRequestHandler;
-use Brera\ContentDelivery\SnippetTransformation\SimpleEuroPriceSnippetTransformation;
-use Brera\Context\Context;
-use Brera\Http\GenericHttpRouter;
-use Brera\Http\HttpHeaders;
-use Brera\Http\HttpRequest;
-use Brera\Http\HttpRequestBody;
-use Brera\Http\HttpsUrl;
-use Brera\Product\CatalogImportApiV1PutRequestHandler;
+use LizardsAndPumpkins\Api\ApiRouter;
+use LizardsAndPumpkins\Content\ContentBlocksApiV1PutRequestHandler;
+use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\SimpleEuroPriceSnippetTransformation;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Http\GenericHttpRouter;
+use LizardsAndPumpkins\Http\HttpHeaders;
+use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Http\HttpRequestBody;
+use LizardsAndPumpkins\Http\HttpsUrl;
+use LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler;
 
 /**
- * @covers \Brera\FrontendFactory
- * @covers \Brera\FactoryTrait
- * @uses   \Brera\MasterFactoryTrait
- * @uses   \Brera\SampleMasterFactory
- * @uses   \Brera\IntegrationTestFactory
- * @uses   \Brera\CommonFactory
- * @uses   \Brera\Content\ContentBlocksApiV1PutRequestHandler
- * @uses   \Brera\Context\ContextBuilder
- * @uses   \Brera\Product\CatalogImportApiV1PutRequestHandler
- * @uses   \Brera\Product\FilterNavigationFilterCollection
- * @uses   \Brera\Http\GenericHttpRouter
- * @uses   \Brera\Product\ProductDetailViewRequestHandler
- * @uses   \Brera\Product\ProductListingRequestHandler
- * @uses   \Brera\Product\ProductSearchAutosuggestionRequestHandler
- * @uses   \Brera\Product\ProductSearchRequestHandler
- * @uses   \Brera\Product\MultipleProductStockQuantityApiV1PutRequestHandler
- * @uses   \Brera\DataPool\DataPoolReader
- * @uses   \Brera\DataVersion
- * @uses   \Brera\Api\ApiRouter
- * @uses   \Brera\Api\ApiRequestHandlerChain
- * @uses   \Brera\SnippetKeyGeneratorLocator
- * @uses   \Brera\GenericSnippetKeyGenerator
- * @uses   \Brera\PageBuilder
- * @uses   \Brera\Renderer\BlockRenderer
- * @uses   \Brera\TemplatesApiV1PutRequestHandler
- * @uses   \Brera\Product\ProductListingSourceListBuilder
- * @uses   \Brera\Utils\Directory
- * @uses   \Brera\Http\HttpRequest
- * @uses   \Brera\Http\HttpUrl
- * @uses   \Brera\Http\HttpHeaders
- * @uses   \Brera\Http\HttpRequestBody
- * @uses   \Brera\Context\VersionedContext
- * @uses   \Brera\Context\ContextDecorator
- * @uses   \Brera\Projection\Catalog\Import\CatalogImport
+ * @covers \LizardsAndPumpkins\FrontendFactory
+ * @covers \LizardsAndPumpkins\FactoryTrait
+ * @uses   \LizardsAndPumpkins\MasterFactoryTrait
+ * @uses   \LizardsAndPumpkins\SampleMasterFactory
+ * @uses   \LizardsAndPumpkins\IntegrationTestFactory
+ * @uses   \LizardsAndPumpkins\CommonFactory
+ * @uses   \LizardsAndPumpkins\Content\ContentBlocksApiV1PutRequestHandler
+ * @uses   \LizardsAndPumpkins\Context\ContextBuilder
+ * @uses   \LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler
+ * @uses   \LizardsAndPumpkins\Product\FilterNavigationFilterCollection
+ * @uses   \LizardsAndPumpkins\Http\GenericHttpRouter
+ * @uses   \LizardsAndPumpkins\Product\ProductDetailViewRequestHandler
+ * @uses   \LizardsAndPumpkins\Product\ProductListingRequestHandler
+ * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionRequestHandler
+ * @uses   \LizardsAndPumpkins\Product\ProductSearchRequestHandler
+ * @uses   \LizardsAndPumpkins\Product\MultipleProductStockQuantityApiV1PutRequestHandler
+ * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
+ * @uses   \LizardsAndPumpkins\DataVersion
+ * @uses   \LizardsAndPumpkins\Api\ApiRouter
+ * @uses   \LizardsAndPumpkins\Api\ApiRequestHandlerChain
+ * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator
+ * @uses   \LizardsAndPumpkins\GenericSnippetKeyGenerator
+ * @uses   \LizardsAndPumpkins\PageBuilder
+ * @uses   \LizardsAndPumpkins\Renderer\BlockRenderer
+ * @uses   \LizardsAndPumpkins\TemplatesApiV1PutRequestHandler
+ * @uses   \LizardsAndPumpkins\Product\ProductListingSourceListBuilder
+ * @uses   \LizardsAndPumpkins\Utils\Directory
+ * @uses   \LizardsAndPumpkins\Http\HttpRequest
+ * @uses   \LizardsAndPumpkins\Http\HttpUrl
+ * @uses   \LizardsAndPumpkins\Http\HttpHeaders
+ * @uses   \LizardsAndPumpkins\Http\HttpRequestBody
+ * @uses   \LizardsAndPumpkins\Context\VersionedContext
+ * @uses   \LizardsAndPumpkins\Context\ContextDecorator
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
  */
 class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
 {

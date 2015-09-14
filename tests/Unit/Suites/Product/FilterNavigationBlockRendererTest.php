@@ -1,15 +1,15 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Renderer\BlockRenderer;
-use Brera\Renderer\AbstractBlockRendererTest;
-use Brera\Renderer\BlockStructure;
-use Brera\ThemeLocator;
+use LizardsAndPumpkins\Renderer\BlockRenderer;
+use LizardsAndPumpkins\Renderer\AbstractBlockRendererTest;
+use LizardsAndPumpkins\Renderer\BlockStructure;
+use LizardsAndPumpkins\ThemeLocator;
 
 /**
- * @covers \Brera\Product\FilterNavigationBlockRenderer
- * @uses   \Brera\Renderer\BlockRenderer
+ * @covers \LizardsAndPumpkins\Product\FilterNavigationBlockRenderer
+ * @uses   \LizardsAndPumpkins\Renderer\BlockRenderer
  */
 class FilterNavigationBlockRendererTest extends AbstractBlockRendererTest
 {

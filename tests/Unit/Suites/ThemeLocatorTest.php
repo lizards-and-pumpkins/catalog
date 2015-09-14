@@ -1,14 +1,14 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Renderer\Layout;
+use LizardsAndPumpkins\Renderer\Layout;
 
 /**
- * @covers \Brera\ThemeLocator
- * @uses   \Brera\Renderer\Layout
- * @uses   \Brera\Renderer\LayoutReader
- * @uses   \Brera\Utils\XPathParser
+ * @covers \LizardsAndPumpkins\ThemeLocator
+ * @uses   \LizardsAndPumpkins\Renderer\Layout
+ * @uses   \LizardsAndPumpkins\Renderer\LayoutReader
+ * @uses   \LizardsAndPumpkins\Utils\XPathParser
  */
 class ThemeLocatorTest extends \PHPUnit_Framework_TestCase
 {
