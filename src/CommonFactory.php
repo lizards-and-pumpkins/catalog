@@ -74,7 +74,6 @@ use Brera\Queue\Queue;
 use Brera\Renderer\BlockStructure;
 use Brera\Renderer\ThemeLocator;
 use Brera\Renderer\Translation\CsvTranslator;
-use Brera\Renderer\Translation\Translator;
 use Brera\Renderer\Translation\TranslatorRegistry;
 
 class CommonFactory implements Factory, DomainEventFactory, CommandFactory
