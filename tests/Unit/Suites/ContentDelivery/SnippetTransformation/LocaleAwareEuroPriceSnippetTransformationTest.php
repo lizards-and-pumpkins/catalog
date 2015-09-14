@@ -1,13 +1,13 @@
 <?php
 
 
-namespace Brera\ContentDelivery\SnippetTransformation;
+namespace LizardsAndPumpkins\ContentDelivery\SnippetTransformation;
 
-use Brera\Context\Context;
-use Brera\Context\LocaleContextDecorator;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\LocaleContextDecorator;
 
 /**
- * @covers \Brera\ContentDelivery\SnippetTransformation\LocaleAwareEuroPriceSnippetTransformation
+ * @covers \LizardsAndPumpkins\ContentDelivery\SnippetTransformation\LocaleAwareEuroPriceSnippetTransformation
  */
 class LocaleAwareEuroPriceSnippetTransformationTest extends \PHPUnit_Framework_TestCase
 {

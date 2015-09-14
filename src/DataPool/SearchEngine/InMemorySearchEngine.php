@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera\DataPool\SearchEngine;
+namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 
 class InMemorySearchEngine extends IntegrationTestSearchEngineAbstract
 {

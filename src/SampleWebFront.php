@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Http\HttpRouterChain;
+use LizardsAndPumpkins\Http\HttpRouterChain;
 
 class SampleWebFront extends WebFront
 {

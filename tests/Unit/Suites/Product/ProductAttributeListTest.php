@@ -1,14 +1,14 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Context\Context;
-use Brera\Product\Exception\ProductAttributeContextPartsMismatchException;
-use Brera\Product\Exception\ProductAttributeNotFoundException;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Product\Exception\ProductAttributeContextPartsMismatchException;
+use LizardsAndPumpkins\Product\Exception\ProductAttributeNotFoundException;
 
 /**
- * @covers \Brera\Product\ProductAttributeList
- * @uses   \Brera\Product\ProductAttribute
+ * @covers \LizardsAndPumpkins\Product\ProductAttributeList
+ * @uses   \LizardsAndPumpkins\Product\ProductAttribute
  */
 class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
 {

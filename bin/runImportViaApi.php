@@ -1,13 +1,13 @@
 #!/usr/bin/env php
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Http\HttpHeaders;
-use Brera\Http\HttpRequest;
-use Brera\Http\HttpRequestBody;
-use Brera\Http\HttpRouterChain;
-use Brera\Http\HttpUrl;
+use LizardsAndPumpkins\Http\HttpHeaders;
+use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Http\HttpRequestBody;
+use LizardsAndPumpkins\Http\HttpRouterChain;
+use LizardsAndPumpkins\Http\HttpUrl;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -49,7 +49,7 @@ $httpRequestBodyContent = file_get_contents(__DIR__ . '/../tests/shared-fixture/
 $productListingImportRequest = HttpRequest::fromParameters(
     HttpRequest::METHOD_PUT,
     HttpUrl::fromString('http://example.com/api/templates/product_listing'),
-    HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.templates.v1+json']),
+    HttpHeaders::fromArray(['Accept' => 'application/vnd.lizards-and-pumpkins.templates.v1+json']),
     HttpRequestBody::fromString($httpRequestBodyContent)
 );
 $productListingImport = new ApiApp($productListingImportRequest);
@@ -59,7 +59,7 @@ $productListingImport->runWithoutSendingResponse();
 $productSearchAutosuggestionImportRequest = HttpRequest::fromParameters(
     HttpRequest::METHOD_PUT,
     HttpUrl::fromString('http://example.com/api/templates/product_search_autosuggestion'),
-    HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.templates.v1+json']),
+    HttpHeaders::fromArray(['Accept' => 'application/vnd.lizards-and-pumpkins.templates.v1+json']),
     HttpRequestBody::fromString('')
 );
 $productSearchAutosuggestionImport = new ApiApp($productSearchAutosuggestionImportRequest);
@@ -69,7 +69,7 @@ $productSearchAutosuggestionImport->runWithoutSendingResponse();
 $catalogImportRequest = HttpRequest::fromParameters(
     HttpRequest::METHOD_PUT,
     HttpUrl::fromString('http://example.com/api/catalog_import'),
-    HttpHeaders::fromArray(['Accept' => 'application/vnd.brera.catalog_import.v1+json']),
+    HttpHeaders::fromArray(['Accept' => 'application/vnd.lizards-and-pumpkins.catalog_import.v1+json']),
     HttpRequestBody::fromString(json_encode(['fileName' => 'catalog.xml']))
 );
 

@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\DataPool\SearchEngine\SearchDocument;
+namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument;
 
-use Brera\Context\Context;
-use Brera\Product\ProductId;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Product\ProductId;
 
 class SearchDocument
 {

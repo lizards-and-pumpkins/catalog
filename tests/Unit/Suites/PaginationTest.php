@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Http\HttpRequest;
+use LizardsAndPumpkins\Http\HttpRequest;
 
 /**
- * @covers \Brera\Pagination
+ * @covers \LizardsAndPumpkins\Pagination
  */
 class PaginationTest extends \PHPUnit_Framework_TestCase
 {

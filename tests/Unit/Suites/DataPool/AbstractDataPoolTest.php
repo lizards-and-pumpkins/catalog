@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera\DataPool;
+namespace LizardsAndPumpkins\DataPool;
 
-use Brera\DataPool\KeyValue\KeyValueStore;
-use Brera\DataPool\SearchEngine\SearchEngine;
-use Brera\Http\HttpUrl;
-use Brera\Product\ProductId;
+use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
+use LizardsAndPumpkins\Http\HttpUrl;
+use LizardsAndPumpkins\Product\ProductId;
 
 abstract class AbstractDataPoolTest extends \PHPUnit_Framework_TestCase
 {

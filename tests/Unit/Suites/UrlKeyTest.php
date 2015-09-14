@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
 /**
- * @covers \Brera\UrlKey
+ * @covers \LizardsAndPumpkins\UrlKey
  */
 class UrlKeyTest extends \PHPUnit_Framework_TestCase
 {

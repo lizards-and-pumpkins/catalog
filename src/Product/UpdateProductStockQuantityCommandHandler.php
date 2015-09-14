@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\CommandHandler;
-use Brera\Queue\Queue;
+use LizardsAndPumpkins\CommandHandler;
+use LizardsAndPumpkins\Queue\Queue;
 
 class UpdateProductStockQuantityCommandHandler implements CommandHandler
 {

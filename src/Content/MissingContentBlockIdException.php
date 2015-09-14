@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\Content;
+namespace LizardsAndPumpkins\Content;
 
 class MissingContentBlockIdException extends \OutOfBoundsException
 {

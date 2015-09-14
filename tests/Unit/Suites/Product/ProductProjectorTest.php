@@ -1,16 +1,16 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Context\ContextSource;
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
-use Brera\InvalidProjectionSourceDataTypeException;
-use Brera\DataPool\DataPoolWriter;
-use Brera\SnippetList;
-use Brera\SnippetRendererCollection;
+use LizardsAndPumpkins\Context\ContextSource;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
+use LizardsAndPumpkins\InvalidProjectionSourceDataTypeException;
+use LizardsAndPumpkins\DataPool\DataPoolWriter;
+use LizardsAndPumpkins\SnippetList;
+use LizardsAndPumpkins\SnippetRendererCollection;
 
 /**
- * @covers \Brera\Product\ProductProjector
+ * @covers \LizardsAndPumpkins\Product\ProductProjector
  */
 class ProductProjectorTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera\DataPool\SearchEngine\SearchCriteria;
+namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 
 interface SearchCriteria
 {

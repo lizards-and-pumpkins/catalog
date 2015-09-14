@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\Http;
+namespace LizardsAndPumpkins\Http;
 
 abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
 {

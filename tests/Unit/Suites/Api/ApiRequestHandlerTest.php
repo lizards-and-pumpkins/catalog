@@ -1,16 +1,16 @@
 <?php
 
-namespace Brera\Api;
+namespace LizardsAndPumpkins\Api;
 
-use Brera\Api\Stubs\StubApiRequestHandler;
-use Brera\DefaultHttpResponse;
-use Brera\Http\HttpRequest;
-use Brera\Http\HttpRequestHandler;
+use LizardsAndPumpkins\Api\Stubs\StubApiRequestHandler;
+use LizardsAndPumpkins\DefaultHttpResponse;
+use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Http\HttpRequestHandler;
 
 /**
- * @covers \Brera\Api\ApiRequestHandler
- * @uses   \Brera\DefaultHttpResponse
- * @uses   \Brera\Http\HttpHeaders
+ * @covers \LizardsAndPumpkins\Api\ApiRequestHandler
+ * @uses   \LizardsAndPumpkins\DefaultHttpResponse
+ * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  */
 class ApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {

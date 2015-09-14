@@ -1,24 +1,24 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
-use Brera\DataPool\KeyValue\KeyValueStore;
-use Brera\DataPool\SearchEngine\InMemorySearchEngine;
-use Brera\DataPool\SearchEngine\SearchEngine;
-use Brera\Image\ImageMagickResizeStrategy;
-use Brera\Image\ImageProcessor;
-use Brera\Image\ImageProcessorCollection;
-use Brera\Image\ImageProcessingStrategySequence;
-use Brera\Log\InMemoryLogger;
-use Brera\Queue\InMemory\InMemoryQueue;
-use Brera\Queue\Queue;
+use LizardsAndPumpkins\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
+use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
+use LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
+use LizardsAndPumpkins\Image\ImageMagickResizeStrategy;
+use LizardsAndPumpkins\Image\ImageProcessor;
+use LizardsAndPumpkins\Image\ImageProcessorCollection;
+use LizardsAndPumpkins\Image\ImageProcessingStrategySequence;
+use LizardsAndPumpkins\Log\InMemoryLogger;
+use LizardsAndPumpkins\Queue\InMemory\InMemoryQueue;
+use LizardsAndPumpkins\Queue\Queue;
 
 class IntegrationTestFactory implements Factory
 {
     use FactoryTrait;
 
-    const PROCESSED_IMAGES_DIR = 'brera/processed-images';
+    const PROCESSED_IMAGES_DIR = 'lizards-and-pumpkins/processed-images';
     const PROCESSED_IMAGE_WIDTH = 40;
     const PROCESSED_IMAGE_HEIGHT = 20;
 

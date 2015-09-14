@@ -1,19 +1,19 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Content\UpdateContentBlockCommand;
-use Brera\Content\UpdateContentBlockCommandHandler;
-use Brera\Image\UpdateImageCommand;
-use Brera\Image\UpdateImageCommandHandler;
-use Brera\Product\UpdateMultipleProductStockQuantityCommand;
-use Brera\Product\UpdateMultipleProductStockQuantityCommandHandler;
-use Brera\Product\UpdateProductCommand;
-use Brera\Product\UpdateProductCommandHandler;
-use Brera\Product\UpdateProductListingCommand;
-use Brera\Product\UpdateProductListingCommandHandler;
-use Brera\Product\UpdateProductStockQuantityCommand;
-use Brera\Product\UpdateProductStockQuantityCommandHandler;
+use LizardsAndPumpkins\Content\UpdateContentBlockCommand;
+use LizardsAndPumpkins\Content\UpdateContentBlockCommandHandler;
+use LizardsAndPumpkins\Image\UpdateImageCommand;
+use LizardsAndPumpkins\Image\UpdateImageCommandHandler;
+use LizardsAndPumpkins\Product\UpdateMultipleProductStockQuantityCommand;
+use LizardsAndPumpkins\Product\UpdateMultipleProductStockQuantityCommandHandler;
+use LizardsAndPumpkins\Product\UpdateProductCommand;
+use LizardsAndPumpkins\Product\UpdateProductCommandHandler;
+use LizardsAndPumpkins\Product\UpdateProductListingCommand;
+use LizardsAndPumpkins\Product\UpdateProductListingCommandHandler;
+use LizardsAndPumpkins\Product\UpdateProductStockQuantityCommand;
+use LizardsAndPumpkins\Product\UpdateProductStockQuantityCommandHandler;
 
 interface CommandFactory
 {

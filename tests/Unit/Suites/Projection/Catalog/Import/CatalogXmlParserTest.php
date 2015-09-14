@@ -1,16 +1,16 @@
 <?php
 
 
-namespace Brera\Projection\Catalog\Import;
+namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
-use Brera\Product\ProductSource;
-use Brera\TestFileFixtureTrait;
-use Brera\Utils\XPathParser;
+use LizardsAndPumpkins\Product\ProductSource;
+use LizardsAndPumpkins\TestFileFixtureTrait;
+use LizardsAndPumpkins\Utils\XPathParser;
 use SebastianBergmann\Money\XXX;
 
 /**
- * @covers \Brera\Projection\Catalog\Import\CatalogXmlParser
- * @uses   \Brera\Utils\XPathParser
+ * @covers \LizardsAndPumpkins\Projection\Catalog\Import\CatalogXmlParser
+ * @uses   \LizardsAndPumpkins\Utils\XPathParser
  */
 class CatalogXmlParserTest extends \PHPUnit_Framework_TestCase
 {
@@ -121,9 +121,11 @@ EOT;
      */
     private function getCatalogXmlWithContent($content)
     {
-        return sprintf('<catalog  xmlns="http://brera.io" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        return sprintf(
+            '<catalog  xmlns="http://lizardsandpumpkins.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     %s
-</catalog>', $content);
+</catalog>',
+            $content);
     }
 
     /**

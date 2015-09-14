@@ -1,15 +1,15 @@
 <?php
 
-namespace Brera\Renderer;
+namespace LizardsAndPumpkins\Renderer;
 
-use Brera\Renderer\Stubs\StubBlock;
-use Brera\Renderer\Stubs\StubBlockRenderer;
-use Brera\Renderer\Translation\TranslatorRegistry;
+use LizardsAndPumpkins\Renderer\Stubs\StubBlock;
+use LizardsAndPumpkins\Renderer\Stubs\StubBlockRenderer;
+use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
 
 /**
- * @covers \Brera\Renderer\BlockRenderer
- * @uses   \Brera\Renderer\Block
- * @uses   \Brera\Renderer\BlockStructure
+ * @covers \LizardsAndPumpkins\Renderer\BlockRenderer
+ * @uses   \LizardsAndPumpkins\Renderer\Block
+ * @uses   \LizardsAndPumpkins\Renderer\BlockStructure
  */
 class BlockRendererTest extends AbstractBlockRendererTest
 {

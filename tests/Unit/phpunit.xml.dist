@@ -25,7 +25,7 @@
         beStrictAboutOutputDuringTests="true"
         beStrictAboutTestSize="false"
         verbose="false">
-    <testsuite name="Brera Unit Tests">
+    <testsuite name="Lizards and Pumpkins Unit Tests">
         <directory>Suites</directory>
     </testsuite>
     <filter>

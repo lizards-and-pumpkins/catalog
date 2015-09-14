@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Log\InMemoryLogger;
+use LizardsAndPumpkins\Log\InMemoryLogger;
 
 /**
  * @method DataPool\DataPoolWriter createDataPoolWriter

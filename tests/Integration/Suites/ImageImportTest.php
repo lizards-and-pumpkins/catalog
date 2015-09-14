@@ -1,13 +1,13 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Http\HttpHeaders;
-use Brera\Http\HttpRequest;
-use Brera\Http\HttpRequestBody;
-use Brera\Http\HttpsUrl;
-use Brera\Image\ImageWasUpdatedDomainEvent;
-use Brera\Utils\LocalFilesystem;
+use LizardsAndPumpkins\Http\HttpHeaders;
+use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Http\HttpRequestBody;
+use LizardsAndPumpkins\Http\HttpsUrl;
+use LizardsAndPumpkins\Image\ImageWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Utils\LocalFilesystem;
 
 class ImageImportTest extends AbstractIntegrationTest
 {

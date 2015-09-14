@@ -1,18 +1,18 @@
 <?php
 
-namespace Brera\DataPool\SearchEngine\SearchDocument;
+namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument;
 
-use Brera\Context\VersionedContext;
-use Brera\DataVersion;
-use Brera\Product\ProductId;
+use LizardsAndPumpkins\Context\VersionedContext;
+use LizardsAndPumpkins\DataVersion;
+use LizardsAndPumpkins\Product\ProductId;
 
 /**
- * @covers \Brera\DataPool\SearchEngine\SearchDocument\SearchDocument
- * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField
- * @uses   \Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection
- * @uses   \Brera\DataVersion
- * @uses   \Brera\Context\VersionedContext
- * @uses   \Brera\Context\ContextBuilder
+ * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection
+ * @uses   \LizardsAndPumpkins\DataVersion
+ * @uses   \LizardsAndPumpkins\Context\VersionedContext
+ * @uses   \LizardsAndPumpkins\Context\ContextBuilder
  */
 class SearchDocumentTest extends \PHPUnit_Framework_TestCase
 {

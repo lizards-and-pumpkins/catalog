@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\Renderer;
+namespace LizardsAndPumpkins\Renderer;
 
 /**
- * @covers \Brera\Renderer\BlockStructure
+ * @covers \LizardsAndPumpkins\Renderer\BlockStructure
  */
 class BlockStructureTest extends \PHPUnit_Framework_TestCase
 {

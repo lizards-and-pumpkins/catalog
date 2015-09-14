@@ -1,15 +1,15 @@
 <?php
 
-namespace Brera\DataPool\SearchEngine\SearchCriteria;
+namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
 
 /**
- * @covers \Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
- * @uses   \Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion
- * @uses   \Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual
+ * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual
  */
 class CompositeSearchCriterionTest extends \PHPUnit_Framework_TestCase
 {

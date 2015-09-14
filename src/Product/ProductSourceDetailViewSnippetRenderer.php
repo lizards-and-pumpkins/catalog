@@ -1,12 +1,12 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Context\Context;
-use Brera\Context\ContextSource;
-use Brera\InvalidProjectionSourceDataTypeException;
-use Brera\SnippetRenderer;
-use Brera\SnippetList;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\ContextSource;
+use LizardsAndPumpkins\InvalidProjectionSourceDataTypeException;
+use LizardsAndPumpkins\SnippetRenderer;
+use LizardsAndPumpkins\SnippetList;
 
 class ProductSourceDetailViewSnippetRenderer implements SnippetRenderer
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera\Image;
+namespace LizardsAndPumpkins\Image;
 
-use Brera\DomainEventHandler;
+use LizardsAndPumpkins\DomainEventHandler;
 
 class ImageWasUpdatedDomainEventHandler implements DomainEventHandler
 {

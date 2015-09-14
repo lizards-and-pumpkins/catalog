@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera\DataPool\SearchEngine\SearchDocument;
+namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument;
 
-use Brera\Context\ContextSource;
+use LizardsAndPumpkins\Context\ContextSource;
 
 interface SearchDocumentBuilder
 {

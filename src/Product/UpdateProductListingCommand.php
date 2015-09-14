@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Command;
+use LizardsAndPumpkins\Command;
 
 class UpdateProductListingCommand implements Command
 {

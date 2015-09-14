@@ -1,6 +1,8 @@
 <?php
 
-namespace Brera\Renderer;
+namespace LizardsAndPumpkins\Renderer;
+
+use LizardsAndPumpkins\Renderer\LayoutReader;
 
 class ThemeLocator
 {

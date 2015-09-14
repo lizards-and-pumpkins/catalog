@@ -1,24 +1,24 @@
 <?php
 
 
-namespace Brera\Projection;
+namespace LizardsAndPumpkins\Projection;
 
-use Brera\CommonFactory;
-use Brera\Content\ContentBlockWasUpdatedDomainEvent;
-use Brera\Content\ContentBlockWasUpdatedDomainEventHandler;
-use Brera\DomainEventFactory;
-use Brera\Factory;
-use Brera\FactoryTrait;
-use Brera\Image\ImageWasUpdatedDomainEvent;
-use Brera\Image\ImageWasUpdatedDomainEventHandler;
-use Brera\Product\ProductListingWasUpdatedDomainEvent;
-use Brera\Product\ProductListingWasUpdatedDomainEventHandler;
-use Brera\Product\ProductStockQuantityWasUpdatedDomainEvent;
-use Brera\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
-use Brera\Product\ProductWasUpdatedDomainEvent;
-use Brera\Product\ProductWasUpdatedDomainEventHandler;
-use Brera\TemplateWasUpdatedDomainEvent;
-use Brera\TemplateWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\CommonFactory;
+use LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\DomainEventFactory;
+use LizardsAndPumpkins\Factory;
+use LizardsAndPumpkins\FactoryTrait;
+use LizardsAndPumpkins\Image\ImageWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Image\ImageWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\TemplateWasUpdatedDomainEvent;
+use LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler;
 
 class LoggingDomainEventHandlerFactory implements Factory, DomainEventFactory
 {

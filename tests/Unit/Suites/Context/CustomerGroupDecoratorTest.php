@@ -1,14 +1,14 @@
 <?php
 
 
-namespace Brera\Context;
+namespace LizardsAndPumpkins\Context;
 
 /**
- * @covers \Brera\Context\CustomerGroupContextDecorator
- * @covers \Brera\Context\ContextDecorator
- * @uses   \Brera\Context\ContextBuilder
- * @uses   \Brera\Context\VersionedContext
- * @uses   \Brera\DataVersion
+ * @covers \LizardsAndPumpkins\Context\CustomerGroupContextDecorator
+ * @covers \LizardsAndPumpkins\Context\ContextDecorator
+ * @uses   \LizardsAndPumpkins\Context\ContextBuilder
+ * @uses   \LizardsAndPumpkins\Context\VersionedContext
+ * @uses   \LizardsAndPumpkins\DataVersion
  */
 class CustomerGroupContextDecoratorTest extends AbstractContextDecoratorTest
 {

@@ -1,9 +1,9 @@
 <?php
 
 
-namespace Brera\Context\Stubs;
+namespace LizardsAndPumpkins\Context\Stubs;
 
-use Brera\Context\ContextDecorator;
+use LizardsAndPumpkins\Context\ContextDecorator;
 
 class TestContextDecorator extends ContextDecorator
 {

@@ -1,13 +1,13 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Context\Context;
-use Brera\Product\Exception\ProductAttributeDoesNotContainContextPartException;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Product\Exception\ProductAttributeDoesNotContainContextPartException;
 
 /**
- * @covers \Brera\Product\ProductAttribute
- * @uses   \Brera\Product\ProductAttributeList
+ * @covers \LizardsAndPumpkins\Product\ProductAttribute
+ * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  */
 class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 {

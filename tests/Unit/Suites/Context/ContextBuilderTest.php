@@ -1,18 +1,18 @@
 <?php
 
-namespace Brera\Context;
+namespace LizardsAndPumpkins\Context;
 
-use Brera\Context\Stubs\TestContextDecorator;
-use Brera\DataVersion;
-use Brera\Http\HttpRequest;
+use LizardsAndPumpkins\Context\Stubs\TestContextDecorator;
+use LizardsAndPumpkins\DataVersion;
+use LizardsAndPumpkins\Http\HttpRequest;
 
 /**
- * @covers \Brera\Context\ContextBuilder
- * @uses   \Brera\Context\VersionedContext
- * @uses   \Brera\Context\WebsiteContextDecorator
- * @uses   \Brera\Context\LocaleContextDecorator
- * @uses   \Brera\Context\ContextDecorator
- * @uses   \Brera\DataVersion
+ * @covers \LizardsAndPumpkins\Context\ContextBuilder
+ * @uses   \LizardsAndPumpkins\Context\VersionedContext
+ * @uses   \LizardsAndPumpkins\Context\WebsiteContextDecorator
+ * @uses   \LizardsAndPumpkins\Context\LocaleContextDecorator
+ * @uses   \LizardsAndPumpkins\Context\ContextDecorator
+ * @uses   \LizardsAndPumpkins\DataVersion
  */
 class ContextBuilderTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Brera\Log\Writer;
+namespace LizardsAndPumpkins\Log\Writer;
 
 class UnableToCreateLogDirectoryException extends \RuntimeException
 {

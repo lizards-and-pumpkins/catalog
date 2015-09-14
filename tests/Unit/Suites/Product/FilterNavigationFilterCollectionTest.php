@@ -1,23 +1,23 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Context\Context;
-use Brera\DataPool\DataPoolReader;
-use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
-use Brera\Product\Exception\FilterCollectionInNotInitializedException;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\DataPool\DataPoolReader;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
+use LizardsAndPumpkins\Product\Exception\FilterCollectionInNotInitializedException;
 
 /**
- * @covers \Brera\Product\FilterNavigationFilterCollection
- * @uses   \Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
- * @uses   \Brera\DataPool\SearchEngine\SearchCriteria\SearchCriterion
- * @uses   \Brera\Product\FilterNavigationFilter
- * @uses   \Brera\Product\FilterNavigationFilterOption
- * @uses   \Brera\Product\FilterNavigationFilterOptionCollection
+ * @covers \LizardsAndPumpkins\Product\FilterNavigationFilterCollection
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
+ * @uses   \LizardsAndPumpkins\Product\FilterNavigationFilter
+ * @uses   \LizardsAndPumpkins\Product\FilterNavigationFilterOption
+ * @uses   \LizardsAndPumpkins\Product\FilterNavigationFilterOptionCollection
  */
 class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
 {

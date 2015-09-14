@@ -1,13 +1,13 @@
 <?php
 
 
-namespace Brera\Projection\Catalog\Import;
+namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
-use Brera\Product\ProductAttributeList;
-use Brera\Product\ProductId;
-use Brera\Product\ProductSource;
-use Brera\Product\SampleSku;
-use Brera\Utils\XPathParser;
+use LizardsAndPumpkins\Product\ProductAttributeList;
+use LizardsAndPumpkins\Product\ProductId;
+use LizardsAndPumpkins\Product\ProductSource;
+use LizardsAndPumpkins\Product\SampleSku;
+use LizardsAndPumpkins\Utils\XPathParser;
 
 class CatalogXmlParser
 {

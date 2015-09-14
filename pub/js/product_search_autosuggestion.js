@@ -13,7 +13,7 @@ define(['jquery'], function ($) {
 
             /* TODO: Inject base URL */
 
-            $.ajax({url: '/brera/catalogsearch/suggest?q=' + value}).done(function (data) {
+            $.ajax({url: '/lizards-and-pumpkins/catalogsearch/suggest?q=' + value}).done(function (data) {
                 autosuggestionBox.html(data);
             });
         }).bind('blur', function() {

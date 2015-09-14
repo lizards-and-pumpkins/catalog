@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Brera\Http;
+namespace LizardsAndPumpkins\Http;
 
 class InvalidHttpRequestBodyException extends \OutOfBoundsException
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Context\ContextBuilder;
-use Brera\Product\Exception\MalformedProductListingSourceJsonException;
+use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\Product\Exception\MalformedProductListingSourceJsonException;
 
 class ProductListingSourceListBuilder
 {

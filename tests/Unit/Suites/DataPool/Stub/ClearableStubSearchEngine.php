@@ -1,14 +1,14 @@
 <?php
 
 
-namespace Brera\DataPool\Stub;
+namespace LizardsAndPumpkins\DataPool\Stub;
 
-use Brera\Context\Context;
-use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocument;
-use Brera\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
-use Brera\DataPool\SearchEngine\SearchEngine;
-use Brera\Utils\Clearable;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
+use LizardsAndPumpkins\Utils\Clearable;
 
 class ClearableStubSearchEngine implements SearchEngine, Clearable
 {

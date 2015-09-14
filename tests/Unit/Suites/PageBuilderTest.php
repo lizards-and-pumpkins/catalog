@@ -1,19 +1,19 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\ContentDelivery\SnippetTransformation\SnippetTransformation;
-use Brera\Context\Context;
-use Brera\DataPool\DataPoolReader;
-use Brera\Http\HttpResponse;
-use Brera\Log\Logger;
-use Brera\Product\ProductDetailPageMetaInfoSnippetContent;
+use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\SnippetTransformation;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\DataPool\DataPoolReader;
+use LizardsAndPumpkins\Http\HttpResponse;
+use LizardsAndPumpkins\Log\Logger;
+use LizardsAndPumpkins\Product\ProductDetailPageMetaInfoSnippetContent;
 
 /**
- * @covers \Brera\PageBuilder
- * @uses   \Brera\DefaultHttpResponse
- * @uses   \Brera\Http\HttpHeaders
- * @uses   \Brera\MissingSnippetCodeMessage
+ * @covers \LizardsAndPumpkins\PageBuilder
+ * @uses   \LizardsAndPumpkins\DefaultHttpResponse
+ * @uses   \LizardsAndPumpkins\Http\HttpHeaders
+ * @uses   \LizardsAndPumpkins\MissingSnippetCodeMessage
  */
 class PageBuilderTest extends \PHPUnit_Framework_TestCase
 {

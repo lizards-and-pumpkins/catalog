@@ -1,15 +1,15 @@
 <?php
 
 
-namespace Brera\Queue;
+namespace LizardsAndPumpkins\Queue;
 
-use Brera\Log\Logger;
-use Brera\Queue\Stub\ClearableStubQueue;
-use Brera\Utils\Clearable;
+use LizardsAndPumpkins\Log\Logger;
+use LizardsAndPumpkins\Queue\Stub\ClearableStubQueue;
+use LizardsAndPumpkins\Utils\Clearable;
 
 /**
- * @covers \Brera\Queue\LoggingQueueDecorator
- * @uses   \Brera\Queue\QueueAddLogMessage
+ * @covers \LizardsAndPumpkins\Queue\LoggingQueueDecorator
+ * @uses   \LizardsAndPumpkins\Queue\QueueAddLogMessage
  */
 class LoggingQueueDecoratorTest extends \PHPUnit_Framework_TestCase
 {

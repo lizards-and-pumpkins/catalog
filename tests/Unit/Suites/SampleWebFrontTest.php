@@ -1,52 +1,52 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Context\Context;
-use Brera\Http\HttpRequest;
-use Brera\Http\HttpRequestHandler;
-use Brera\Http\HttpResponse;
-use Brera\Http\HttpRouter;
-use Brera\Http\HttpRouterChain;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Http\HttpRequestHandler;
+use LizardsAndPumpkins\Http\HttpResponse;
+use LizardsAndPumpkins\Http\HttpRouter;
+use LizardsAndPumpkins\Http\HttpRouterChain;
 
 /**
- * @covers \Brera\SampleWebFront
- * @covers \Brera\WebFront
- * @uses   \Brera\FactoryTrait
- * @uses   \Brera\MasterFactoryTrait
- * @uses   \Brera\FrontendFactory
- * @uses   \Brera\CommonFactory
- * @uses   \Brera\Content\ContentBlocksApiV1PutRequestHandler
- * @uses   \Brera\IntegrationTestFactory
- * @uses   \Brera\DataVersion
- * @uses   \Brera\PageBuilder
- * @uses   \Brera\SnippetKeyGeneratorLocator
- * @uses   \Brera\GenericSnippetKeyGenerator
- * @uses   \Brera\TemplatesApiV1PutRequestHandler
- * @uses   \Brera\Projection\Catalog\Import\CatalogImport
- * @uses   \Brera\Http\GenericHttpRouter
- * @uses   \Brera\Product\CatalogImportApiV1PutRequestHandler
- * @uses   \Brera\Product\FilterNavigationFilterCollection
- * @uses   \Brera\Product\ProductDetailViewRequestHandler
- * @uses   \Brera\Product\ProductListingRequestHandler
- * @uses   \Brera\Product\MultipleProductStockQuantityApiV1PutRequestHandler
- * @uses   \Brera\Product\ProductSearchAutosuggestionRequestHandler
- * @uses   \Brera\Product\ProductSearchRequestHandler
- * @uses   \Brera\Product\ProductListingSourceListBuilder
- * @uses   \Brera\Http\ResourceNotFoundRouter
- * @uses   \Brera\Http\ResourceNotFoundRequestHandler
- * @uses   \Brera\Http\HttpRouterChain
- * @uses   \Brera\Context\ContextDecorator
- * @uses   \Brera\Context\WebsiteContextDecorator
- * @uses   \Brera\Context\LocaleContextDecorator
- * @uses   \Brera\Context\VersionedContext
- * @uses   \Brera\Context\ContextBuilder
- * @uses   \Brera\Api\ApiRouter
- * @uses   \Brera\Api\ApiRequestHandlerChain
- * @uses   \Brera\DataPool\DataPoolReader
- * @uses   \Brera\Renderer\BlockRenderer
- * @uses   \Brera\Renderer\Translation\TranslatorRegistry
- * @uses   \Brera\Utils\Directory
+ * @covers \LizardsAndPumpkins\SampleWebFront
+ * @covers \LizardsAndPumpkins\WebFront
+ * @uses   \LizardsAndPumpkins\FactoryTrait
+ * @uses   \LizardsAndPumpkins\MasterFactoryTrait
+ * @uses   \LizardsAndPumpkins\FrontendFactory
+ * @uses   \LizardsAndPumpkins\CommonFactory
+ * @uses   \LizardsAndPumpkins\Content\ContentBlocksApiV1PutRequestHandler
+ * @uses   \LizardsAndPumpkins\IntegrationTestFactory
+ * @uses   \LizardsAndPumpkins\DataVersion
+ * @uses   \LizardsAndPumpkins\PageBuilder
+ * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator
+ * @uses   \LizardsAndPumpkins\GenericSnippetKeyGenerator
+ * @uses   \LizardsAndPumpkins\TemplatesApiV1PutRequestHandler
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
+ * @uses   \LizardsAndPumpkins\Http\GenericHttpRouter
+ * @uses   \LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler
+ * @uses   \LizardsAndPumpkins\Product\FilterNavigationFilterCollection
+ * @uses   \LizardsAndPumpkins\Product\ProductDetailViewRequestHandler
+ * @uses   \LizardsAndPumpkins\Product\ProductListingRequestHandler
+ * @uses   \LizardsAndPumpkins\Product\MultipleProductStockQuantityApiV1PutRequestHandler
+ * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionRequestHandler
+ * @uses   \LizardsAndPumpkins\Product\ProductSearchRequestHandler
+ * @uses   \LizardsAndPumpkins\Product\ProductListingSourceListBuilder
+ * @uses   \LizardsAndPumpkins\Http\ResourceNotFoundRouter
+ * @uses   \LizardsAndPumpkins\Http\ResourceNotFoundRequestHandler
+ * @uses   \LizardsAndPumpkins\Http\HttpRouterChain
+ * @uses   \LizardsAndPumpkins\Context\ContextDecorator
+ * @uses   \LizardsAndPumpkins\Context\WebsiteContextDecorator
+ * @uses   \LizardsAndPumpkins\Context\LocaleContextDecorator
+ * @uses   \LizardsAndPumpkins\Context\VersionedContext
+ * @uses   \LizardsAndPumpkins\Context\ContextBuilder
+ * @uses   \LizardsAndPumpkins\Api\ApiRouter
+ * @uses   \LizardsAndPumpkins\Api\ApiRequestHandlerChain
+ * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
+ * @uses   \LizardsAndPumpkins\Renderer\BlockRenderer
+ * @uses   \LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry
+ * @uses   \LizardsAndPumpkins\Utils\Directory
  */
 class SampleWebFrontTest extends \PHPUnit_Framework_TestCase
 {

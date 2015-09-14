@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera\Content;
+namespace LizardsAndPumpkins\Content;
 
-use Brera\DomainEvent;
+use LizardsAndPumpkins\DomainEvent;
 
 /**
- * @covers \Brera\Content\ContentBlockWasUpdatedDomainEvent
+ * @covers \LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEvent
  */
 class ContentBlockWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,15 +1,15 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Context\ContextSource;
-use Brera\DataPool\DataPoolWriter;
-use Brera\Projector;
-use Brera\SnippetList;
-use Brera\SnippetRendererCollection;
+use LizardsAndPumpkins\Context\ContextSource;
+use LizardsAndPumpkins\DataPool\DataPoolWriter;
+use LizardsAndPumpkins\Projector;
+use LizardsAndPumpkins\SnippetList;
+use LizardsAndPumpkins\SnippetRendererCollection;
 
 /**
- * @covers \Brera\Product\ProductListingTemplateProjector
+ * @covers \LizardsAndPumpkins\Product\ProductListingTemplateProjector
  */
 class ProductListingTemplateProjectorTest extends \PHPUnit_Framework_TestCase
 {

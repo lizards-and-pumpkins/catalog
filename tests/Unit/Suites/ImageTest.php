@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
 /**
- * @covers \Brera\Image
+ * @covers \LizardsAndPumpkins\Image
  */
 class ImageTest extends \PHPUnit_Framework_TestCase
 {
@@ -11,7 +11,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     {
         $image = new Image('foo.png');
 
-        $this->assertEquals('/brera/' . Image::MEDIA_DIR . '/bar/foo.png', $image->getPath('bar'));
+        $this->assertEquals('/lizards-and-pumpkins/' . Image::MEDIA_DIR . '/bar/foo.png', $image->getPath('bar'));
     }
 
     public function testImageLabelIsReturned()

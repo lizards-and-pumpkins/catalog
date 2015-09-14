@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Command;
+use LizardsAndPumpkins\Command;
 
 /**
- * @covers \Brera\Product\UpdateProductListingCommand
+ * @covers \LizardsAndPumpkins\Product\UpdateProductListingCommand
  */
 class UpdateProductListingCommandTest extends \PHPUnit_Framework_TestCase
 {

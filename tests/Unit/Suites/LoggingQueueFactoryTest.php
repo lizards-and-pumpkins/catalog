@@ -1,19 +1,19 @@
 <?php
 
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Log\Writer\StdOutLogMessageWriter;
-use Brera\Queue\LoggingQueueDecorator;
-use Brera\Queue\Queue;
+use LizardsAndPumpkins\Log\Writer\StdOutLogMessageWriter;
+use LizardsAndPumpkins\Queue\LoggingQueueDecorator;
+use LizardsAndPumpkins\Queue\Queue;
 
 /**
- * @covers \Brera\LoggingQueueFactory
- * @uses   \Brera\FactoryTrait
- * @uses   \Brera\MasterFactoryTrait
- * @uses   \Brera\Queue\LoggingQueueDecorator
- * @uses   \Brera\CommonFactory
- * @uses   \Brera\IntegrationTestFactory
+ * @covers \LizardsAndPumpkins\LoggingQueueFactory
+ * @uses   \LizardsAndPumpkins\FactoryTrait
+ * @uses   \LizardsAndPumpkins\MasterFactoryTrait
+ * @uses   \LizardsAndPumpkins\Queue\LoggingQueueDecorator
+ * @uses   \LizardsAndPumpkins\CommonFactory
+ * @uses   \LizardsAndPumpkins\IntegrationTestFactory
  */
 class LoggingQueueFactoryTest extends \PHPUnit_Framework_TestCase
 {

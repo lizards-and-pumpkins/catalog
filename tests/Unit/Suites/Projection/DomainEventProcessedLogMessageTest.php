@@ -1,12 +1,12 @@
 <?php
 
 
-namespace Brera\Projection;
+namespace LizardsAndPumpkins\Projection;
 
-use Brera\DomainEventHandler;
+use LizardsAndPumpkins\DomainEventHandler;
 
 /**
- * @covers \Brera\Projection\DomainEventProcessedLogMessage
+ * @covers \LizardsAndPumpkins\Projection\DomainEventProcessedLogMessage
  */
 class DomainEventProcessedLogMessageTest extends \PHPUnit_Framework_TestCase
 {

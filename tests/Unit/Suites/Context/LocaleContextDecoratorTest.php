@@ -1,21 +1,21 @@
 <?php
 
 
-namespace Brera\Context;
+namespace LizardsAndPumpkins\Context;
 
-use Brera\Http\HttpHeaders;
-use Brera\Http\HttpRequest;
-use Brera\Http\HttpRequestBody;
-use Brera\Http\HttpUrl;
+use LizardsAndPumpkins\Http\HttpHeaders;
+use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Http\HttpRequestBody;
+use LizardsAndPumpkins\Http\HttpUrl;
 
 /**
- * @covers \Brera\Context\LocaleContextDecorator
- * @covers \Brera\Context\ContextDecorator
- * @uses   \Brera\Context\ContextBuilder
- * @uses   \Brera\Context\VersionedContext
- * @uses   \Brera\DataVersion
- * @uses   \Brera\Http\HttpUrl
- * @uses   \Brera\Http\HttpRequest
+ * @covers \LizardsAndPumpkins\Context\LocaleContextDecorator
+ * @covers \LizardsAndPumpkins\Context\ContextDecorator
+ * @uses   \LizardsAndPumpkins\Context\ContextBuilder
+ * @uses   \LizardsAndPumpkins\Context\VersionedContext
+ * @uses   \LizardsAndPumpkins\DataVersion
+ * @uses   \LizardsAndPumpkins\Http\HttpUrl
+ * @uses   \LizardsAndPumpkins\Http\HttpRequest
  */
 class LocaleContextDecoratorTest extends AbstractContextDecoratorTest
 {

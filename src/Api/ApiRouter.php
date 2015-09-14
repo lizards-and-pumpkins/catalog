@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\Api;
+namespace LizardsAndPumpkins\Api;
 
-use Brera\Http\HttpRequest;
-use Brera\Http\HttpRouter;
+use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Http\HttpRouter;
 
 class ApiRouter implements HttpRouter
 {
@@ -33,7 +33,11 @@ class ApiRouter implements HttpRouter
         }
 
         $acceptHeader = $request->getHeader('Accept');
-        if (!preg_match('/^application\/vnd\.brera\.\w+\.v(\d+)\+(?:json|xml)$/', $acceptHeader, $matchedVersion)) {
+        if (!preg_match(
+            '/^application\/vnd\.lizards-and-pumpkins\.\w+\.v(\d+)\+(?:json|xml)$/',
+            $acceptHeader,
+            $matchedVersion)
+        ) {
             return null;
         }
 

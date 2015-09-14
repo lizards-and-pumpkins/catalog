@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Brera\Context\Stubs;
+namespace LizardsAndPumpkins\Context\Stubs;
 
-use Brera\Context\ContextBuilder;
-use Brera\Context\ContextSource;
+use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\Context\ContextSource;
 
 class StubContextSource extends ContextSource
 {

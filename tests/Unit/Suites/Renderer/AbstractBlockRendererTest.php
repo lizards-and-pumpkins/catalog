@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera\Renderer;
+namespace LizardsAndPumpkins\Renderer;
 
-use Brera\Context\Context;
-use Brera\Renderer\Translation\Translator;
-use Brera\Renderer\Translation\TranslatorRegistry;
-use Brera\TestFileFixtureTrait;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Renderer\Translation\Translator;
+use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
+use LizardsAndPumpkins\TestFileFixtureTrait;
 
 abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
 {

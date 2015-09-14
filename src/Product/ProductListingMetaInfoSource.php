@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use Brera\UrlKey;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
+use LizardsAndPumpkins\UrlKey;
 
 class ProductListingMetaInfoSource
 {

@@ -1,13 +1,13 @@
 <?php
 
-namespace Brera\Context;
+namespace LizardsAndPumpkins\Context;
 
-use Brera\DataVersion;
+use LizardsAndPumpkins\DataVersion;
 
 /**
- * @covers \Brera\Context\VersionedContext
- * @uses   \Brera\Context\ContextBuilder
- * @uses   \Brera\DataVersion
+ * @covers \LizardsAndPumpkins\Context\VersionedContext
+ * @uses   \LizardsAndPumpkins\Context\ContextBuilder
+ * @uses   \LizardsAndPumpkins\DataVersion
  */
 class VersionedContextTest extends \PHPUnit_Framework_TestCase
 {

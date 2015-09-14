@@ -1,9 +1,9 @@
 #!/usr/bin/env php
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Queue\Queue;
+use LizardsAndPumpkins\Queue\Queue;
 use League\CLImate\CLImate;
 
 require_once __DIR__ . '/../vendor/autoload.php';

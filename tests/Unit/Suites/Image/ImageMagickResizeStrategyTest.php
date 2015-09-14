@@ -1,10 +1,10 @@
 <?php
 
-namespace Brera\Image;
+namespace LizardsAndPumpkins\Image;
 
 /**
- * @covers \Brera\Image\ImageMagickResizeStrategy
- * @covers \Brera\Image\ResizeStrategyTrait
+ * @covers \LizardsAndPumpkins\Image\ImageMagickResizeStrategy
+ * @covers \LizardsAndPumpkins\Image\ResizeStrategyTrait
  */
 class ImageMagickResizeStrategyTest extends AbstractResizeStrategyTest
 {

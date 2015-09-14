@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
 class SnippetKeyGeneratorNotRegisteredException extends \OutOfBoundsException
 {

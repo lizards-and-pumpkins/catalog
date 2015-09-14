@@ -1,10 +1,10 @@
 <?php
 
-namespace Brera\Image;
+namespace LizardsAndPumpkins\Image;
 
 /**
- * @covers \Brera\Image\GdResizeStrategy
- * @covers \Brera\Image\ResizeStrategyTrait
+ * @covers \LizardsAndPumpkins\Image\GdResizeStrategy
+ * @covers \LizardsAndPumpkins\Image\ResizeStrategyTrait
  */
 class GdResizeStrategyTest extends AbstractResizeStrategyTest
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace Brera\Api;
+namespace LizardsAndPumpkins\Api;
 
-use Brera\Http\HttpRequest;
+use LizardsAndPumpkins\Http\HttpRequest;
 
 /**
- * @covers \Brera\Api\NullApiRequestHandler
- * @uses   \Brera\Api\ApiRequestHandler
+ * @covers \LizardsAndPumpkins\Api\NullApiRequestHandler
+ * @uses   \LizardsAndPumpkins\Api\ApiRequestHandler
  */
 class NullApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {

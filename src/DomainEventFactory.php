@@ -1,17 +1,17 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Content\ContentBlockWasUpdatedDomainEvent;
-use Brera\Content\ContentBlockWasUpdatedDomainEventHandler;
-use Brera\Image\ImageWasUpdatedDomainEvent;
-use Brera\Image\ImageWasUpdatedDomainEventHandler;
-use Brera\Product\ProductWasUpdatedDomainEvent;
-use Brera\Product\ProductWasUpdatedDomainEventHandler;
-use Brera\Product\ProductListingWasUpdatedDomainEvent;
-use Brera\Product\ProductListingWasUpdatedDomainEventHandler;
-use Brera\Product\ProductStockQuantityWasUpdatedDomainEvent;
-use Brera\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Image\ImageWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Image\ImageWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
 
 interface DomainEventFactory
 {

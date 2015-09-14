@@ -1,13 +1,13 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Utils\FileNotWritableException;
-use Brera\Utils\LocalFilesystem;
+use LizardsAndPumpkins\Utils\FileNotWritableException;
+use LizardsAndPumpkins\Utils\LocalFilesystem;
 
 /**
- * @covers \Brera\LocalFilesystemStorageWriter
- * @uses   \Brera\Utils\LocalFilesystem
+ * @covers \LizardsAndPumpkins\LocalFilesystemStorageWriter
+ * @uses   \LizardsAndPumpkins\Utils\LocalFilesystem
  */
 class LocalFilesystemStorageWriterTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,7 +23,7 @@ class LocalFilesystemStorageWriterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->testBaseDirPath = sys_get_temp_dir() . '/brera-result-image';
+        $this->testBaseDirPath = sys_get_temp_dir() . '/lizards-and-pumpkins-result-image';
         mkdir($this->testBaseDirPath);
 
         $this->writer = new LocalFilesystemStorageWriter($this->testBaseDirPath);

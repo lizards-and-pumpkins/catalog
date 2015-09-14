@@ -1,10 +1,10 @@
 <?php
 
-namespace Brera\Renderer;
+namespace LizardsAndPumpkins\Renderer;
 
-use Brera\Context\Context;
-use Brera\Context\LocaleContextDecorator;
-use Brera\Renderer\Translation\TranslatorRegistry;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\LocaleContextDecorator;
+use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
 
 abstract class BlockRenderer
 {
@@ -212,7 +212,7 @@ abstract class BlockRenderer
     /**
      * @param string $blockName
      * @return string
-     * @see \Brera\UrlKeyRequestHandler::buildPlaceholdersFromCodes()
+     * @see \LizardsAndPumpkins\UrlKeyRequestHandler::buildPlaceholdersFromCodes()
      */
     private function getBlockPlaceholder($blockName)
     {

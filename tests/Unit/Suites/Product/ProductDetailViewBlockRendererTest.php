@@ -1,18 +1,18 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Renderer\BlockRenderer;
-use Brera\Renderer\AbstractBlockRendererTest;
-use Brera\Renderer\BlockStructure;
-use Brera\Renderer\ThemeLocator;
-use Brera\Renderer\Translation\TranslatorRegistry;
+use LizardsAndPumpkins\Renderer\AbstractBlockRendererTest;
+use LizardsAndPumpkins\Renderer\BlockRenderer;
+use LizardsAndPumpkins\Renderer\BlockStructure;
+use LizardsAndPumpkins\Renderer\ThemeLocator;
+use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
 
 /**
- * @covers \Brera\Product\ProductDetailViewBlockRenderer
- * @uses   \Brera\Renderer\BlockRenderer
- * @uses   \Brera\Renderer\BlockStructure
- * @uses   \Brera\Renderer\Block
+ * @covers \LizardsAndPumpkins\Product\ProductDetailViewBlockRenderer
+ * @uses   \LizardsAndPumpkins\Renderer\BlockRenderer
+ * @uses   \LizardsAndPumpkins\Renderer\BlockStructure
+ * @uses   \LizardsAndPumpkins\Renderer\Block
  */
 class ProductDetailViewBlockRendererTest extends AbstractBlockRendererTest
 {

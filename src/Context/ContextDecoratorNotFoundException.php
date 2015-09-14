@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Brera\Context;
+namespace LizardsAndPumpkins\Context;
 
 class ContextDecoratorNotFoundException extends \OutOfBoundsException
 {

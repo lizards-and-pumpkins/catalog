@@ -1,15 +1,15 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Product\Exception\InvalidProductStockQuantitySourceDataException;
+use LizardsAndPumpkins\Product\Exception\InvalidProductStockQuantitySourceDataException;
 
 /**
- * @covers \Brera\Product\ProductStockQuantitySourceBuilder
- * @uses   \Brera\Product\ProductId
- * @uses   \Brera\Product\ProductStockQuantity
- * @uses   \Brera\Product\ProductStockQuantitySource
- * @uses   \Brera\Utils\XPathParser
+ * @covers \LizardsAndPumpkins\Product\ProductStockQuantitySourceBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductId
+ * @uses   \LizardsAndPumpkins\Product\ProductStockQuantity
+ * @uses   \LizardsAndPumpkins\Product\ProductStockQuantitySource
+ * @uses   \LizardsAndPumpkins\Utils\XPathParser
  */
 class ProductStockQuantitySourceBuilderTest extends \PHPUnit_Framework_TestCase
 {

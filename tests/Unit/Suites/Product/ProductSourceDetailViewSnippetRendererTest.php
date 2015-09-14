@@ -1,22 +1,22 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Context\ContextSource;
-use Brera\InvalidProjectionSourceDataTypeException;
-use Brera\SampleContextSource;
-use Brera\Context\Context;
-use Brera\SnippetList;
-use Brera\SnippetRenderer;
+use LizardsAndPumpkins\Context\ContextSource;
+use LizardsAndPumpkins\InvalidProjectionSourceDataTypeException;
+use LizardsAndPumpkins\SampleContextSource;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\SnippetList;
+use LizardsAndPumpkins\SnippetRenderer;
 
 /**
- * @covers \Brera\Product\ProductSourceDetailViewSnippetRenderer
- * @uses   \Brera\Snippet
- * @uses   \Brera\Product\Block\ProductBlock
- * @uses   \Brera\Renderer\LayoutReader
- * @uses   \Brera\Renderer\Block
- * @uses   \Brera\Utils\XPathParser
- * @uses   \Brera\Renderer\Layout
+ * @covers \LizardsAndPumpkins\Product\ProductSourceDetailViewSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Snippet
+ * @uses   \LizardsAndPumpkins\Product\Block\ProductBlock
+ * @uses   \LizardsAndPumpkins\Renderer\LayoutReader
+ * @uses   \LizardsAndPumpkins\Renderer\Block
+ * @uses   \LizardsAndPumpkins\Utils\XPathParser
+ * @uses   \LizardsAndPumpkins\Renderer\Layout
  */
 class ProductSourceDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {

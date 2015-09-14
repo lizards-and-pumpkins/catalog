@@ -1,14 +1,14 @@
 <?php
 
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Log\Writer\LogMessageWriter;
-use Brera\Log\Writer\StdOutLogMessageWriter;
-use Brera\Queue\File\FileQueue;
-use Brera\Queue\LoggingQueueDecorator;
-use Brera\Queue\Queue;
-use Brera\Utils\Clearable;
+use LizardsAndPumpkins\Log\Writer\LogMessageWriter;
+use LizardsAndPumpkins\Log\Writer\StdOutLogMessageWriter;
+use LizardsAndPumpkins\Queue\File\FileQueue;
+use LizardsAndPumpkins\Queue\LoggingQueueDecorator;
+use LizardsAndPumpkins\Queue\Queue;
+use LizardsAndPumpkins\Utils\Clearable;
 
 class LoggingQueueFactory implements Factory
 {
@@ -19,8 +19,8 @@ class LoggingQueueFactory implements Factory
      */
     public function createEventQueue()
     {
-        $storagePath = sys_get_temp_dir() . '/brera/event-queue/content';
-        $lockFile = sys_get_temp_dir() . '/brera/event-queue/lock';
+        $storagePath = sys_get_temp_dir() . '/lizards-and-pumpkins/event-queue/content';
+        $lockFile = sys_get_temp_dir() . '/lizards-and-pumpkins/event-queue/lock';
         return new LoggingQueueDecorator(
             new FileQueue($storagePath, $lockFile),
             $this->getMasterFactory()->getLogger()
@@ -32,8 +32,8 @@ class LoggingQueueFactory implements Factory
      */
     public function createCommandQueue()
     {
-        $storagePath = sys_get_temp_dir() . '/brera/command-queue/content';
-        $lockFile = sys_get_temp_dir() . '/brera/command-queue/lock';
+        $storagePath = sys_get_temp_dir() . '/lizards-and-pumpkins/command-queue/content';
+        $lockFile = sys_get_temp_dir() . '/lizards-and-pumpkins/command-queue/lock';
         return new LoggingQueueDecorator(
             new FileQueue($storagePath, $lockFile),
             $this->getMasterFactory()->getLogger()

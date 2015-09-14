@@ -1,14 +1,14 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\CommandHandler;
-use Brera\Queue\Queue;
+use LizardsAndPumpkins\CommandHandler;
+use LizardsAndPumpkins\Queue\Queue;
 
 /**
- * @covers \Brera\Product\UpdateMultipleProductStockQuantityCommandHandler
- * @uses   \Brera\Product\UpdateMultipleProductStockQuantityCommand
- * @uses   \Brera\Product\UpdateProductStockQuantityCommand
+ * @covers \LizardsAndPumpkins\Product\UpdateMultipleProductStockQuantityCommandHandler
+ * @uses   \LizardsAndPumpkins\Product\UpdateMultipleProductStockQuantityCommand
+ * @uses   \LizardsAndPumpkins\Product\UpdateProductStockQuantityCommand
  */
 class UpdateMultipleProductStockQuantityCommandHandlerTest extends \PHPUnit_Framework_TestCase
 {

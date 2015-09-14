@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Context\ContextSource;
+use LizardsAndPumpkins\Context\ContextSource;
 
 /**
- * @covers \Brera\TemplateWasUpdatedDomainEventHandler
+ * @covers \LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler
  */
 class TemplateWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,14 +1,14 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Context\Context;
-use Brera\Context\VersionedContext;
-use Brera\Product\Exception\InvalidProductListingSourceDataException;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\VersionedContext;
+use LizardsAndPumpkins\Product\Exception\InvalidProductListingSourceDataException;
 
 /**
- * @covers \Brera\Product\ProductListingSourceList
- * @uses   \Brera\Product\ProductListingSource
+ * @covers \LizardsAndPumpkins\Product\ProductListingSourceList
+ * @uses   \LizardsAndPumpkins\Product\ProductListingSource
  */
 class ProductListingSourceListTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Renderer\Block;
-use Brera\Renderer\InvalidDataObjectException;
+use LizardsAndPumpkins\Renderer\Block;
+use LizardsAndPumpkins\Renderer\InvalidDataObjectException;
 
 class PaginationBlock extends Block
 {

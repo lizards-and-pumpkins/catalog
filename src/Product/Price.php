@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Product\Exception\InvalidPriceSourceException;
+use LizardsAndPumpkins\Product\Exception\InvalidPriceSourceException;
 
 class Price implements Money
 {

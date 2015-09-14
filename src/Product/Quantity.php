@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
 interface Quantity
 {

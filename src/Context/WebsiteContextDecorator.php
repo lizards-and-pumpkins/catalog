@@ -1,9 +1,9 @@
 <?php
 
 
-namespace Brera\Context;
+namespace LizardsAndPumpkins\Context;
 
-use Brera\Http\HttpRequest;
+use LizardsAndPumpkins\Http\HttpRequest;
 
 class WebsiteContextDecorator extends ContextDecorator
 {

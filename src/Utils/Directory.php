@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\Utils;
+namespace LizardsAndPumpkins\Utils;
 
 class Directory
 {

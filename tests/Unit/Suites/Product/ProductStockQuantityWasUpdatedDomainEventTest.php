@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\DomainEvent;
+use LizardsAndPumpkins\DomainEvent;
 
 /**
- * @covers \Brera\Product\ProductStockQuantityWasUpdatedDomainEvent
+ * @covers \LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEvent
  */
 class ProductStockQuantityWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,19 +1,19 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Context\Context;
-use Brera\Context\ContextBuilder;
-use Brera\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
-use Brera\SnippetKeyGenerator;
-use Brera\SnippetList;
-use Brera\SnippetRenderer;
-use Brera\Snippet;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
+use LizardsAndPumpkins\SnippetKeyGenerator;
+use LizardsAndPumpkins\SnippetList;
+use LizardsAndPumpkins\SnippetRenderer;
+use LizardsAndPumpkins\Snippet;
 
 /**
- * @covers \Brera\Product\ProductListingMetaInfoSnippetRenderer
- * @uses   \Brera\Product\ProductListingMetaInfoSnippetContent
- * @uses   \Brera\Snippet
+ * @covers \LizardsAndPumpkins\Product\ProductListingMetaInfoSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductListingMetaInfoSnippetContent
+ * @uses   \LizardsAndPumpkins\Snippet
  */
 class ProductListingMetaInfoSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Context\ContextBuilder;
-use Brera\Snippet;
-use Brera\SnippetKeyGenerator;
-use Brera\SnippetList;
-use Brera\SnippetRenderer;
+use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\Snippet;
+use LizardsAndPumpkins\SnippetKeyGenerator;
+use LizardsAndPumpkins\SnippetList;
+use LizardsAndPumpkins\SnippetRenderer;
 
 class ProductStockQuantitySnippetRenderer implements SnippetRenderer
 {

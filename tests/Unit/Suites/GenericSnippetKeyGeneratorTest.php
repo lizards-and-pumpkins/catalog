@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Context\Context;
+use LizardsAndPumpkins\Context\Context;
 
 /**
- * @covers \Brera\GenericSnippetKeyGenerator
+ * @covers \LizardsAndPumpkins\GenericSnippetKeyGenerator
  */
 class GenericSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
 {

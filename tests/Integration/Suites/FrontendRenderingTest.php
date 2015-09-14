@@ -1,16 +1,16 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Context\Context;
-use Brera\Context\VersionedContext;
-use Brera\Http\HttpHeaders;
-use Brera\Http\HttpRequest;
-use Brera\Http\HttpRequestBody;
-use Brera\Http\HttpUrl;
-use Brera\Product\ProductDetailPageMetaInfoSnippetContent;
-use Brera\Product\ProductDetailViewInContextSnippetRenderer;
-use Brera\Product\ProductDetailViewRequestHandler;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\VersionedContext;
+use LizardsAndPumpkins\Http\HttpHeaders;
+use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Http\HttpRequestBody;
+use LizardsAndPumpkins\Http\HttpUrl;
+use LizardsAndPumpkins\Product\ProductDetailPageMetaInfoSnippetContent;
+use LizardsAndPumpkins\Product\ProductDetailViewInContextSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductDetailViewRequestHandler;
 
 class FrontendRenderingTest extends AbstractIntegrationTest
 {

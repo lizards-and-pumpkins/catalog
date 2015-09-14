@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\DataPool\KeyValue;
+namespace LizardsAndPumpkins\DataPool\KeyValue;
 
 interface KeyValueStore
 {

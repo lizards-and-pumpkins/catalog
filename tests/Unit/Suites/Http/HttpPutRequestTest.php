@@ -1,15 +1,15 @@
 <?php
 
-namespace Brera\Http;
+namespace LizardsAndPumpkins\Http;
 
 /**
- * @covers \Brera\Http\HttpPutRequest
- * @covers \Brera\Http\HttpRequest
- * @uses   \Brera\Http\HttpUrl
- * @uses   \Brera\Http\HttpGetRequest
- * @uses   \Brera\Http\HttpHeaders
- * @uses   \Brera\Http\HttpPostRequest
- * @uses   \Brera\Http\HttpRequestBody
+ * @covers \LizardsAndPumpkins\Http\HttpPutRequest
+ * @covers \LizardsAndPumpkins\Http\HttpRequest
+ * @uses   \LizardsAndPumpkins\Http\HttpUrl
+ * @uses   \LizardsAndPumpkins\Http\HttpGetRequest
+ * @uses   \LizardsAndPumpkins\Http\HttpHeaders
+ * @uses   \LizardsAndPumpkins\Http\HttpPostRequest
+ * @uses   \LizardsAndPumpkins\Http\HttpRequestBody
  */
 class HttpPutRequestTest extends AbstractHttpRequestTest
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\PageMetaInfoSnippetContent;
+use LizardsAndPumpkins\PageMetaInfoSnippetContent;
 
 class ProductSearchAutosuggestionMetaSnippetContent implements PageMetaInfoSnippetContent
 {

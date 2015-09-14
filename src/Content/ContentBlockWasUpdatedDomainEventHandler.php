@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\Content;
+namespace LizardsAndPumpkins\Content;
 
-use Brera\Context\ContextSource;
-use Brera\DomainEventHandler;
+use LizardsAndPumpkins\Context\ContextSource;
+use LizardsAndPumpkins\DomainEventHandler;
 
 class ContentBlockWasUpdatedDomainEventHandler implements DomainEventHandler
 {

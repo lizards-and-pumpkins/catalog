@@ -1,13 +1,13 @@
 <?php
 
-namespace Brera\Image;
+namespace LizardsAndPumpkins\Image;
 
-use Brera\CommandHandler;
-use Brera\Queue\Queue;
+use LizardsAndPumpkins\CommandHandler;
+use LizardsAndPumpkins\Queue\Queue;
 
 /**
- * @covers \Brera\Image\UpdateImageCommandHandler
- * @uses   \Brera\Image\ImageWasUpdatedDomainEvent
+ * @covers \LizardsAndPumpkins\Image\UpdateImageCommandHandler
+ * @uses   \LizardsAndPumpkins\Image\ImageWasUpdatedDomainEvent
  */
 class UpdateImageCommandHandlerTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
 /**
- * @covers \Brera\TestFileFixtureTrait
+ * @covers \LizardsAndPumpkins\TestFileFixtureTrait
  */
 class TestFileFixtureTraitTest extends \PHPUnit_Framework_TestCase
 {

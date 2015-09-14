@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\Http;
+namespace LizardsAndPumpkins\Http;
 
 /**
- * @covers Brera\Http\HttpHeaders
+ * @covers LizardsAndPumpkins\Http\HttpHeaders
  */
 class HttpHeadersTest extends \PHPUnit_Framework_TestCase
 {

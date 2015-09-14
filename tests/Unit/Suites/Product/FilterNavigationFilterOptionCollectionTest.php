@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
 /**
- * @covers \Brera\Product\FilterNavigationFilterOptionCollection
+ * @covers \LizardsAndPumpkins\Product\FilterNavigationFilterOptionCollection
  */
 class FilterNavigationFilterOptionCollectionTest extends \PHPUnit_Framework_TestCase
 {

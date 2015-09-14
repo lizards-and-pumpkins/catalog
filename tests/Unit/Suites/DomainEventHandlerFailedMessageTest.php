@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
 /**
- * @covers \Brera\DomainEventHandlerFailedMessage
+ * @covers \LizardsAndPumpkins\DomainEventHandlerFailedMessage
  */
 class DomainEventHandlerFailedMessageTest extends \PHPUnit_Framework_TestCase
 {

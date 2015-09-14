@@ -1,18 +1,18 @@
 <?php
 
-namespace Brera\Product;
+namespace LizardsAndPumpkins\Product;
 
-use Brera\Context\Context;
-use Brera\SnippetKeyGenerator;
-use Brera\Snippet;
-use Brera\SnippetList;
-use Brera\SnippetRenderer;
-use Brera\TestFileFixtureTrait;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\SnippetKeyGenerator;
+use LizardsAndPumpkins\Snippet;
+use LizardsAndPumpkins\SnippetList;
+use LizardsAndPumpkins\SnippetRenderer;
+use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
- * @covers \Brera\Product\ProductDetailViewInContextSnippetRenderer
- * @uses   \Brera\Snippet
- * @uses   \Brera\Product\ProductDetailPageMetaInfoSnippetContent
+ * @covers \LizardsAndPumpkins\Product\ProductDetailViewInContextSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Snippet
+ * @uses   \LizardsAndPumpkins\Product\ProductDetailPageMetaInfoSnippetContent
  */
 class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {

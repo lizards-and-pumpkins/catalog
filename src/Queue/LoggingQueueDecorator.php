@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Brera\Queue;
+namespace LizardsAndPumpkins\Queue;
 
-use Brera\Log\Logger;
-use Brera\Utils\Clearable;
+use LizardsAndPumpkins\Log\Logger;
+use LizardsAndPumpkins\Utils\Clearable;
 
 class LoggingQueueDecorator implements Queue, Clearable
 {

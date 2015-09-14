@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<catalog xmlns="http://brera.io" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://brera.io ../../schema/catalog.xsd">
+<catalog xmlns="http://lizardsandpumpkins.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://lizardsandpumpkins.com ../../schema/catalog.xsd">
     <products>
         <product type="simple" sku="118235-251" visible="true" tax_class_id="5">
             <attributes>

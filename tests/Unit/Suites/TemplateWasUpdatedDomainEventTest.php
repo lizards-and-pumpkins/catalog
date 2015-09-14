@@ -1,9 +1,9 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
 /**
- * @covers \Brera\TemplateWasUpdatedDomainEvent
+ * @covers \LizardsAndPumpkins\TemplateWasUpdatedDomainEvent
  */
 class TemplateWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 {

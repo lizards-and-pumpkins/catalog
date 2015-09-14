@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera\Content;
+namespace LizardsAndPumpkins\Content;
 
-use Brera\Command;
+use LizardsAndPumpkins\Command;
 
 /**
- * @covers \Brera\Content\UpdateContentBlockCommand
+ * @covers \LizardsAndPumpkins\Content\UpdateContentBlockCommand
  */
 class UpdateContentBlockCommandTest extends \PHPUnit_Framework_TestCase
 {

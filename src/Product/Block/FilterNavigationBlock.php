@@ -1,11 +1,11 @@
 <?php
 
-namespace Brera\Product\Block;
+namespace LizardsAndPumpkins\Product\Block;
 
-use Brera\Product\FilterNavigationFilterCollection;
-use Brera\Product\FilterNavigationFilterOption;
-use Brera\Renderer\Block;
-use Brera\Renderer\InvalidDataObjectException;
+use LizardsAndPumpkins\Product\FilterNavigationFilterCollection;
+use LizardsAndPumpkins\Product\FilterNavigationFilterOption;
+use LizardsAndPumpkins\Renderer\Block;
+use LizardsAndPumpkins\Renderer\InvalidDataObjectException;
 
 class FilterNavigationBlock extends Block
 {

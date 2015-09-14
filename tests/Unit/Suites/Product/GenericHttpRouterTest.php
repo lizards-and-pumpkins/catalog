@@ -1,10 +1,10 @@
 <?php
 
-namespace Brera\Http;
+namespace LizardsAndPumpkins\Http;
 
 /**
- * @covers \Brera\Http\GenericHttpRouter
- * @uses   \Brera\Http\HttpUrl
+ * @covers \LizardsAndPumpkins\Http\GenericHttpRouter
+ * @uses   \LizardsAndPumpkins\Http\HttpUrl
  */
 class GenericHttpRouterTest extends \PHPUnit_Framework_TestCase
 {

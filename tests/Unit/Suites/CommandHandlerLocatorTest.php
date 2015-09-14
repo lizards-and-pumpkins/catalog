@@ -1,21 +1,21 @@
 <?php
 
-namespace Brera;
+namespace LizardsAndPumpkins;
 
-use Brera\Content\ContentBlockSource;
-use Brera\Content\UpdateContentBlockCommand;
-use Brera\Content\UpdateContentBlockCommandHandler;
-use Brera\Product\ProductStockQuantitySource;
-use Brera\Product\UpdateMultipleProductStockQuantityCommand;
-use Brera\Product\UpdateMultipleProductStockQuantityCommandHandler;
-use Brera\Product\UpdateProductStockQuantityCommandHandler;
-use Brera\Product\UpdateProductStockQuantityCommand;
+use LizardsAndPumpkins\Content\ContentBlockSource;
+use LizardsAndPumpkins\Content\UpdateContentBlockCommand;
+use LizardsAndPumpkins\Content\UpdateContentBlockCommandHandler;
+use LizardsAndPumpkins\Product\ProductStockQuantitySource;
+use LizardsAndPumpkins\Product\UpdateMultipleProductStockQuantityCommand;
+use LizardsAndPumpkins\Product\UpdateMultipleProductStockQuantityCommandHandler;
+use LizardsAndPumpkins\Product\UpdateProductStockQuantityCommandHandler;
+use LizardsAndPumpkins\Product\UpdateProductStockQuantityCommand;
 
 /**
- * @covers \Brera\CommandHandlerLocator
- * @uses   \Brera\Content\UpdateContentBlockCommand
- * @uses   \Brera\Product\UpdateProductStockQuantityCommand
- * @uses   \Brera\Product\UpdateMultipleProductStockQuantityCommand
+ * @covers \LizardsAndPumpkins\CommandHandlerLocator
+ * @uses   \LizardsAndPumpkins\Content\UpdateContentBlockCommand
+ * @uses   \LizardsAndPumpkins\Product\UpdateProductStockQuantityCommand
+ * @uses   \LizardsAndPumpkins\Product\UpdateMultipleProductStockQuantityCommand
  */
 class CommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 {
