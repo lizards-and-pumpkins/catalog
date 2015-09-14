@@ -1,14 +1,14 @@
 <?php
 
-namespace Brera\Renderer\Translation;
+namespace LizardsAndPumpkins\Renderer\Translation;
 
-use Brera\Renderer\ThemeLocator;
-use Brera\Renderer\Translation\Exception\MalformedTranslationFileException;
-use Brera\Renderer\Translation\Exception\TranslationFileNotReadableException;
-use Brera\TestFileFixtureTrait;
+use LizardsAndPumpkins\Renderer\ThemeLocator;
+use LizardsAndPumpkins\Renderer\Translation\Exception\MalformedTranslationFileException;
+use LizardsAndPumpkins\Renderer\Translation\Exception\TranslationFileNotReadableException;
+use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
- * @covers \Brera\Renderer\Translation\CsvTranslator
+ * @covers \LizardsAndPumpkins\Renderer\Translation\CsvTranslator
  */
 class CsvTranslatorTest extends \PHPUnit_Framework_TestCase
 {

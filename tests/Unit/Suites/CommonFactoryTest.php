@@ -114,7 +114,7 @@ use LizardsAndPumpkins\Renderer\ThemeLocator;
  * @uses   \LizardsAndPumpkins\TemplateProjectorLocator
  * @uses   \LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
- * @uses   \Brera\Renderer\Translation\TranslatorRegistry
+ * @uses   \LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {

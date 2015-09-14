@@ -48,7 +48,7 @@ use LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler;
  * @uses   \LizardsAndPumpkins\Context\VersionedContext
  * @uses   \LizardsAndPumpkins\Context\ContextDecorator
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
- * @uses   \Brera\Renderer\Translation\TranslatorRegistry
+ * @uses   \LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry
  */
 class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
 {

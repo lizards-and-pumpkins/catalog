@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\Renderer\Translation;
+namespace LizardsAndPumpkins\Renderer\Translation;
 
 interface Translator
 {

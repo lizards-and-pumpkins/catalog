@@ -1,8 +1,8 @@
 <?php
 
-namespace Brera\Renderer\Translation;
+namespace LizardsAndPumpkins\Renderer\Translation;
 
-use Brera\Renderer\ThemeLocator;
+use LizardsAndPumpkins\Renderer\ThemeLocator;
 
 class TranslatorRegistry
 {

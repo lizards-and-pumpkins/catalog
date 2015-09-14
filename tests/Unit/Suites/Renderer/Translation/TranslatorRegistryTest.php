@@ -1,12 +1,12 @@
 <?php
 
-namespace Brera\Renderer\Translation;
+namespace LizardsAndPumpkins\Renderer\Translation;
 
-use Brera\Renderer\ThemeLocator;
+use LizardsAndPumpkins\Renderer\ThemeLocator;
 
 /**
- * @covers \Brera\Renderer\Translation\TranslatorRegistry
- * @uses   \Brera\Renderer\Translation\CsvTranslator
+ * @covers \LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry
+ * @uses   \LizardsAndPumpkins\Renderer\Translation\CsvTranslator
  */
 class TranslatorRegistryTest extends \PHPUnit_Framework_TestCase
 {

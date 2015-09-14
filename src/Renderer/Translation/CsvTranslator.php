@@ -1,10 +1,10 @@
 <?php
 
-namespace Brera\Renderer\Translation;
+namespace LizardsAndPumpkins\Renderer\Translation;
 
-use Brera\Renderer\ThemeLocator;
-use Brera\Renderer\Translation\Exception\MalformedTranslationFileException;
-use Brera\Renderer\Translation\Exception\TranslationFileNotReadableException;
+use LizardsAndPumpkins\Renderer\ThemeLocator;
+use LizardsAndPumpkins\Renderer\Translation\Exception\MalformedTranslationFileException;
+use LizardsAndPumpkins\Renderer\Translation\Exception\TranslationFileNotReadableException;
 
 class CsvTranslator implements Translator
 {

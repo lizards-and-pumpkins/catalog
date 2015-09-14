@@ -1,6 +1,6 @@
 <?php
 
-namespace Brera\Renderer\Translation\Exception;
+namespace LizardsAndPumpkins\Renderer\Translation\Exception;
 
 class MalformedTranslationFileException extends \RuntimeException
 {
