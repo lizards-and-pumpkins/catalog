@@ -6,6 +6,7 @@ use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\InvalidProjectionSourceDataTypeException;
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
+use LizardsAndPumpkins\Projection\UrlKeyForContextCollection;
 use LizardsAndPumpkins\Projection\UrlKeyForContextCollector;
 use LizardsAndPumpkins\SnippetList;
 use LizardsAndPumpkins\SnippetRendererCollection;
@@ -53,13 +54,7 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->stubSnippetList = $this->getMock(SnippetList::class);
-        $this->mockDataPoolWriter = $this->getMock(
-            DataPoolWriter::class,
-            array_merge(get_class_methods(DataPoolWriter::class), ['writeUrlCollection']),
-            [],
-            '',
-            false
-        );
+        $this->mockDataPoolWriter = $this->getMock(DataPoolWriter::class, [], [], '', false);
         $this->stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
 
         $this->mockRendererCollection = $this->getMock(SnippetRendererCollection::class, [], [], '', false);
@@ -68,6 +63,9 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
         $this->stubSearchDocumentBuilder = $this->getMock(ProductSearchDocumentBuilder::class, [], [], '', false);
 
         $this->stubUrlKeyCollector = $this->getMock(UrlKeyForContextCollector::class, [], [], '', false);
+        $this->stubUrlKeyCollector->method('collectProductUrlKeys')->willReturn(
+            $this->getMock(UrlKeyForContextCollection::class, [], [], '', false)
+        );
 
         $this->projector = new ProductProjector(
             $this->mockRendererCollection,
@@ -111,13 +109,12 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubSearchDocumentBuilder->method('aggregate')->willReturn($this->stubSearchDocumentCollection);
 
-        $stubUrlKeyCollection = $this->getMock(UrlKeyCollection::class);
-        $this->stubUrlKeyCollector->method('collectProductUrlKeys')->willReturn($stubUrlKeyCollection);
-        $this->mockDataPoolWriter->expects($this->once())->method('writeUrlCollection')->with($stubUrlKeyCollection);
-
         /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
         $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
         $stubProductSource = $this->getMock(ProductSource::class, [], [], '', false);
+
+        $urlKeyCollection = $this->stubUrlKeyCollector->collectProductUrlKeys($stubProductSource, $stubContextSource);
+        $this->mockDataPoolWriter->expects($this->once())->method('writeUrlKeyCollection')->with($urlKeyCollection);
 
         $this->projector->project($stubProductSource, $stubContextSource);
     }

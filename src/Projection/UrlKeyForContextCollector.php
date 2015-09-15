@@ -18,8 +18,8 @@ class UrlKeyForContextCollector
      */
     public function collectProductUrlKeys(ProductSource $productSource, ContextSource $contextSource)
     {
-        $urlKeysForContext = $this->getUrlKeyForContexts($productSource, $contextSource->getAllAvailableContexts());
-        return new UrlKeyForContextCollection(...$urlKeysForContext);
+        $urlKeysForContexts = $this->getUrlKeysForContexts($productSource, $contextSource->getAllAvailableContexts());
+        return new UrlKeyForContextCollection(...$urlKeysForContexts);
     }
 
     /**
@@ -27,7 +27,7 @@ class UrlKeyForContextCollector
      * @param Context[] $contexts
      * @return UrlKeyForContext[]
      */
-    private function getUrlKeyForContexts(ProductSource $productSource, array $contexts)
+    private function getUrlKeysForContexts(ProductSource $productSource, array $contexts)
     {
         return array_map(function (Context $context) use ($productSource) {
             $product = $productSource->getProductForContext($context);

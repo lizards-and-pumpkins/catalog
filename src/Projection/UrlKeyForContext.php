@@ -47,4 +47,13 @@ class UrlKeyForContext
     {
         return (string) $this->urlKey;
     }
+
+    /**
+     * @param string $code
+     * @return string
+     */
+    public function getContextValue($code)
+    {
+        return $this->context->getValue($code);
+    }
 }

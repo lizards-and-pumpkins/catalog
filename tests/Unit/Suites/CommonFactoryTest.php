@@ -9,6 +9,8 @@ use LizardsAndPumpkins\Content\UpdateContentBlockCommandHandler;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
+use LizardsAndPumpkins\DataPool\UrlKeyStore\InMemoryUrlKeyStore;
+use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 use LizardsAndPumpkins\Http\HttpRouterChain;
 use LizardsAndPumpkins\Http\ResourceNotFoundRouter;
 use LizardsAndPumpkins\Image\ImageProcessorCollection;
@@ -528,5 +530,18 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createUrlKeyForContextCollector();
         $this->assertInstanceOf(UrlKeyForContextCollector::class, $result);
+    }
+
+    public function testUrlKeyStoreIsReturned()
+    {
+        $result = $this->commonFactory->createUrlKeyStore();
+        $this->assertInstanceOf(UrlKeyStore::class, $result);
+    }
+
+    public function testItReturnsTheSameUrlKeyStoreInstance()
+    {
+        $result1 = $this->commonFactory->getUrlKeyStore();
+        $result2 = $this->commonFactory->getUrlKeyStore();
+        $this->assertSame($result1, $result2);
     }
 }

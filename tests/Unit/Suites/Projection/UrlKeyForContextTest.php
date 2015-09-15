@@ -13,7 +13,7 @@ use LizardsAndPumpkins\UrlKey;
 class UrlKeyForContextTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var UrlKey
+     * @var UrlKeyForContext
      */
     private $testUrlKey;
 
@@ -47,5 +47,11 @@ class UrlKeyForContextTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsTheUrlKeyString()
     {
         $this->assertSame((string)$this->testUrlKey, (string)$this->urlKeyForContext);
+    }
+
+    public function testItDelegatesToTheContextWhenGettingContextValues()
+    {
+        $this->stubContext->expects($this->once())->method('getValue')->with('test')->willReturn('result');
+        $this->assertSame('result', $this->urlKeyForContext->getContextValue('test'));
     }
 }

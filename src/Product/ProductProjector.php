@@ -63,7 +63,7 @@ class ProductProjector implements Projector
         $searchDocumentCollection = $this->searchDocumentBuilder->aggregate($productSource, $contextSource);
         $this->dataPoolWriter->writeSearchDocumentCollection($searchDocumentCollection);
         
-        $urlKeyCollection = $this->urlKeyCollector->collectProductUrlKeys($productSource, $contextSource);
-        $this->dataPoolWriter->writeUrlCollection($urlKeyCollection);
+        $urlKeysForContextsCollection = $this->urlKeyCollector->collectProductUrlKeys($productSource, $contextSource);
+        $this->dataPoolWriter->writeUrlKeyCollection($urlKeysForContextsCollection);
     }
 }

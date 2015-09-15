@@ -16,6 +16,8 @@ use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
+use LizardsAndPumpkins\DataPool\UrlKeyStore\InMemoryUrlKeyStore;
+use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 use LizardsAndPumpkins\Http\HttpRouterChain;
 use LizardsAndPumpkins\Http\ResourceNotFoundRouter;
 use LizardsAndPumpkins\Image\ImageWasUpdatedDomainEvent;
@@ -108,6 +110,11 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      * @var ImageProcessorCollection
      */
     private $imageProcessorCollection;
+
+    /**
+     * @var UrlKeyStore
+     */
+    private $urlKeyStore;
 
     /**
      * @param ProductWasUpdatedDomainEvent $event
@@ -775,7 +782,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new DataPoolWriter(
             $this->getMasterFactory()->getKeyValueStore(),
-            $this->getMasterFactory()->getSearchEngine()
+            $this->getMasterFactory()->getSearchEngine(),
+            $this->getMasterFactory()->createUrlKeyStore()
         );
     }
 
@@ -1285,5 +1293,21 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $this->getMasterFactory()->createProductListingMetaInfoSourceBuilder(),
             $this->getMasterFactory()->getLogger()
         );
+    }
+
+    /**
+     * @return InMemoryUrlKeyStore
+     */
+    public function createUrlKeyStore()
+    {
+        return new InMemoryUrlKeyStore();
+    }
+
+    public function getUrlKeyStore()
+    {
+        if (null === $this->urlKeyStore) {
+            $this->urlKeyStore = $this->getMasterFactory()->createUrlKeyStore();
+        }
+        return $this->urlKeyStore;
     }
 }

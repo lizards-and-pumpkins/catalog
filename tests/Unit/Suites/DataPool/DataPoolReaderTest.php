@@ -21,7 +21,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     {
         parent::setUp();
 
-        $this->dataPoolReader = new DataPoolReader($this->getStubKeyValueStore(), $this->getStubSearchEngine());
+        $this->dataPoolReader = new DataPoolReader($this->getMockKeyValueStore(), $this->getMockSearchEngine());
     }
 
     public function testSnippetIsReturnedIfExists()
@@ -160,27 +160,27 @@ class DataPoolReaderTest extends AbstractDataPoolTest
 
     public function testFalseIsReturnedIfASnippetKeyIsNotInTheStore()
     {
-        $this->getStubKeyValueStore()->method('has')->with('test')->willReturn(false);
+        $this->getMockKeyValueStore()->method('has')->with('test')->willReturn(false);
         $this->assertFalse($this->dataPoolReader->hasSnippet('test'));
     }
 
     public function testTrueIsReturnedIfASnippetKeyIsInTheStore()
     {
-        $this->getStubKeyValueStore()->method('has')->with('test')->willReturn(true);
+        $this->getMockKeyValueStore()->method('has')->with('test')->willReturn(true);
         $this->assertTrue($this->dataPoolReader->hasSnippet('test'));
     }
 
     public function testNegativeOneIsReturnedIfTheCurrentVersionIsNotSet()
     {
-        $this->getStubKeyValueStore()->method('has')->with('current_version')->willReturn(false);
+        $this->getMockKeyValueStore()->method('has')->with('current_version')->willReturn(false);
         $this->assertSame('-1', $this->dataPoolReader->getCurrentDataVersion());
     }
 
     public function testCurrentVersionIsReturned()
     {
         $currentDataVersion = '123';
-        $this->getStubKeyValueStore()->method('has')->with('current_version')->willReturn(true);
-        $this->getStubKeyValueStore()->method('get')->with('current_version')->willReturn($currentDataVersion);
+        $this->getMockKeyValueStore()->method('has')->with('current_version')->willReturn(true);
+        $this->getMockKeyValueStore()->method('get')->with('current_version')->willReturn($currentDataVersion);
 
         $this->assertSame($currentDataVersion, $this->dataPoolReader->getCurrentDataVersion());
     }
@@ -190,7 +190,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->getMock(Context::class);
 
-        $this->getStubSearchEngine()->expects($this->once())->method('query');
+        $this->getMockSearchEngine()->expects($this->once())->method('query');
 
         $this->dataPoolReader->getSearchResults('foo', $stubContext);
     }
@@ -203,7 +203,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->getMock(Context::class);
 
-        $this->getStubSearchEngine()->expects($this->once())
+        $this->getMockSearchEngine()->expects($this->once())
             ->method('getSearchDocumentsMatchingCriteria')
             ->with($mockCriteria, $stubContext);
 

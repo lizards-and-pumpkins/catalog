@@ -2,10 +2,13 @@
 
 namespace LizardsAndPumpkins\DataPool;
 
-use LizardsAndPumpkins\DataPool\KeyValue\InMemory\InMemoryKeyValueStoreTest;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\DataPool\Stub\ClearableStubKeyValueStore;
 use LizardsAndPumpkins\DataPool\Stub\ClearableStubSearchEngine;
+use LizardsAndPumpkins\DataPool\Stub\ClearableStubUrlKeyStore;
+use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
+use LizardsAndPumpkins\Projection\UrlKeyForContext;
+use LizardsAndPumpkins\Projection\UrlKeyForContextCollection;
 use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetList;
 use LizardsAndPumpkins\Utils\Clearable;
@@ -28,7 +31,11 @@ class DataPoolWriterTest extends AbstractDataPoolTest
         /* TODO: Refactor */
         parent::setUp();
 
-        $this->dataPoolWriter = new DataPoolWriter($this->getStubKeyValueStore(), $this->getStubSearchEngine());
+        $this->dataPoolWriter = new DataPoolWriter(
+            $this->getMockKeyValueStore(),
+            $this->getMockSearchEngine(),
+            $this->getMockUrlKeyStore()
+        );
     }
 
     public function testSnippetListIsWrittenToDataPool()
@@ -43,7 +50,7 @@ class DataPoolWriterTest extends AbstractDataPoolTest
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([$mockSnippet]));
 
-        $this->getStubKeyValueStore()->expects($this->once())
+        $this->getMockKeyValueStore()->expects($this->once())
             ->method('set')
             ->with($testKey, $testContent);
 
@@ -54,7 +61,7 @@ class DataPoolWriterTest extends AbstractDataPoolTest
     {
         $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class);
 
-        $this->getStubSearchEngine()->expects($this->once())
+        $this->getMockSearchEngine()->expects($this->once())
             ->method('addSearchDocumentCollection')
             ->with($stubSearchDocumentCollection);
 
@@ -68,7 +75,7 @@ class DataPoolWriterTest extends AbstractDataPoolTest
 
         $mockSnippet = $this->getMockSnippet($testKey, $testContent);
 
-        $this->getStubKeyValueStore()->expects($this->once())
+        $this->getMockKeyValueStore()->expects($this->once())
             ->method('set')
             ->with($testKey, $testContent);
 
@@ -103,9 +110,27 @@ class DataPoolWriterTest extends AbstractDataPoolTest
     {
         $mockSearchEngine = $this->getMock(ClearableStubSearchEngine::class);
         $mockKeyValueStore = $this->getMock(ClearableStubKeyValueStore::class);
+        $mockUrlKeyStorage = $this->getMock(ClearableStubUrlKeyStore::class);
         $mockKeyValueStore->expects($this->once())->method('clear');
         $mockSearchEngine->expects($this->once())->method('clear');
-        $writer = new DataPoolWriter($mockKeyValueStore, $mockSearchEngine);
+        $mockUrlKeyStorage->expects($this->once())->method('clear');
+        $writer = new DataPoolWriter($mockKeyValueStore, $mockSearchEngine, $mockUrlKeyStorage);
         $writer->clear();
+    }
+
+    public function testItDelegatesStoreUrlKeys()
+    {
+        $mockSearchEngine = $this->getMock(ClearableStubSearchEngine::class);
+        $mockKeyValueStore = $this->getMock(ClearableStubKeyValueStore::class);
+        $mockUrlKeyStorage = $this->getMock(ClearableStubUrlKeyStore::class);
+        $mockUrlKeyStorage->expects($this->once())->method('addUrlKeyForVersion');
+
+        $stubUrlKeysForContextsCollection = $this->getMock(UrlKeyForContextCollection::class, [], [], '', false);
+        $stubUrlKeysForContextsCollection->method('getUrlKeys')->willReturn(
+            [$this->getMock(UrlKeyForContext::class, [], [], '', false)]
+        );
+
+        $writer = new DataPoolWriter($mockKeyValueStore, $mockSearchEngine, $mockUrlKeyStorage);
+        $writer->writeUrlKeyCollection($stubUrlKeysForContextsCollection);
     }
 }
