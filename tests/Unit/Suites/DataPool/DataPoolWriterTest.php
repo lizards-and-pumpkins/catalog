@@ -6,7 +6,6 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollec
 use LizardsAndPumpkins\DataPool\Stub\ClearableStubKeyValueStore;
 use LizardsAndPumpkins\DataPool\Stub\ClearableStubSearchEngine;
 use LizardsAndPumpkins\DataPool\Stub\ClearableStubUrlKeyStore;
-use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 use LizardsAndPumpkins\Projection\UrlKeyForContext;
 use LizardsAndPumpkins\Projection\UrlKeyForContextCollection;
 use LizardsAndPumpkins\Snippet;

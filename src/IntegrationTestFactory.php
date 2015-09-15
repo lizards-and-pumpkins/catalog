@@ -6,6 +6,8 @@ use LizardsAndPumpkins\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
+use LizardsAndPumpkins\DataPool\UrlKeyStore\InMemoryUrlKeyStore;
+use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 use LizardsAndPumpkins\Image\ImageMagickResizeStrategy;
 use LizardsAndPumpkins\Image\ImageProcessor;
 use LizardsAndPumpkins\Image\ImageProcessorCollection;
@@ -104,6 +106,14 @@ class IntegrationTestFactory implements Factory
     public function createSearchEngine()
     {
         return new InMemorySearchEngine();
+    }
+
+    /**
+     * @return UrlKeyStore
+     */
+    public function createUrlKeyStore()
+    {
+        return new InMemoryUrlKeyStore();
     }
 
     /**

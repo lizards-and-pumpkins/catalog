@@ -532,12 +532,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(UrlKeyForContextCollector::class, $result);
     }
 
-    public function testUrlKeyStoreIsReturned()
-    {
-        $result = $this->commonFactory->createUrlKeyStore();
-        $this->assertInstanceOf(UrlKeyStore::class, $result);
-    }
-
     public function testItReturnsTheSameUrlKeyStoreInstance()
     {
         $result1 = $this->commonFactory->getUrlKeyStore();

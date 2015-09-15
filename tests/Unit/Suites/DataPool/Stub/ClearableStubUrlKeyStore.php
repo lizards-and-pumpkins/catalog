@@ -21,4 +21,13 @@ class ClearableStubUrlKeyStore implements UrlKeyStore, Clearable
     {
         // Intentionally left empty
     }
+
+    /**
+     * @param string $dataVersionString
+     * @return string[]
+     */
+    public function getForDataVersion($dataVersionString)
+    {
+        // Intentionally left empty
+    }
 }

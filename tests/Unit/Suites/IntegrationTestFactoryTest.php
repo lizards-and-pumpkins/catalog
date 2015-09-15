@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\Tests\Integration;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
+use LizardsAndPumpkins\DataPool\UrlKeyStore\InMemoryUrlKeyStore;
 use LizardsAndPumpkins\Image\ImageProcessor;
 use LizardsAndPumpkins\Image\ImageProcessorCollection;
 use LizardsAndPumpkins\Image\ImageProcessingStrategySequence;
@@ -71,6 +72,11 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
     public function testInMemorySearchEngineIsReturned()
     {
         $this->assertInstanceOf(InMemorySearchEngine::class, $this->factory->createSearchEngine());
+    }
+
+    public function testItReturnsAnInMemoryUrlKeyStore()
+    {
+        $this->assertInstanceOf(InMemoryUrlKeyStore::class, $this->factory->createUrlKeyStore());
     }
 
     public function testLocalFilesystemStorageWriterIsReturned()

@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\DataPool\UrlKeyStore;
 
 use LizardsAndPumpkins\Utils\Clearable;
 
-class InMemoryUrlKeyStore implements UrlKeyStore, Clearable
+class InMemoryUrlKeyStore extends IntegrationTestUrlKeyStoreAbstract implements UrlKeyStore, Clearable
 {
     /**
      * @var string[]
@@ -18,23 +18,26 @@ class InMemoryUrlKeyStore implements UrlKeyStore, Clearable
     }
 
     /**
-     * @param string $urlKey
-     * @param string $version
+     * @param string $urlKeyString
+     * @param string $dataVersionString
      * @return void
      */
-    public function addUrlKeyForVersion($urlKey, $version)
+    public function addUrlKeyForVersion($urlKeyString, $dataVersionString)
     {
-        $this->urlKeys[$version][] = $urlKey;
+        $this->validateUrlKeyString($urlKeyString);
+        $this->validateDataVersionString($dataVersionString);
+        $this->urlKeys[$dataVersionString][] = $urlKeyString;
     }
 
     /**
-     * @param string $version
+     * @param string $dataVersionString
      * @return string[]
      */
-    public function getForVersion($version)
+    public function getForDataVersion($dataVersionString)
     {
-        return isset($this->urlKeys[$version]) ?
-            $this->urlKeys[$version] :
+        $this->validateDataVersionString($dataVersionString);
+        return isset($this->urlKeys[$dataVersionString]) ?
+            $this->urlKeys[$dataVersionString] :
             [];
     }
 }

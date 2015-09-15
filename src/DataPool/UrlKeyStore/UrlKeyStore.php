@@ -6,9 +6,15 @@ namespace LizardsAndPumpkins\DataPool\UrlKeyStore;
 interface UrlKeyStore
 {
     /**
-     * @param string $urlKey
-     * @param string $version
+     * @param string $urlKeyString
+     * @param string $dataVersionString
      * @return void
      */
-    public function addUrlKeyForVersion($urlKey, $version);
+    public function addUrlKeyForVersion($urlKeyString, $dataVersionString);
+
+    /**
+     * @param string $dataVersionString
+     * @return string[]
+     */
+    public function getForDataVersion($dataVersionString);
 }

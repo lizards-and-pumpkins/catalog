@@ -1296,13 +1296,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return InMemoryUrlKeyStore
+     * @return UrlKeyStore
      */
-    public function createUrlKeyStore()
-    {
-        return new InMemoryUrlKeyStore();
-    }
-
     public function getUrlKeyStore()
     {
         if (null === $this->urlKeyStore) {
