@@ -79,14 +79,14 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
      */
     final public function getSearchDocumentsMatchingCriteria(SearchCriteria $criteria, Context $context)
     {
-        $matchingDocuments = array_values(array_filter(
+        $matchingDocuments = array_filter(
             $this->getSearchDocuments(),
             function (SearchDocument $searchDocument) use ($criteria, $context) {
                 return $criteria->matches($searchDocument) && $context->isSubsetOf($searchDocument->getContext());
             }
-        ));
+        );
 
-        return new SearchDocumentCollection(...$matchingDocuments);
+        return new SearchDocumentCollection(...array_values($matchingDocuments));
     }
 
     /**
