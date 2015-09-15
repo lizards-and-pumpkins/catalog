@@ -36,8 +36,8 @@ class ApiRouter implements HttpRouter
         if (!preg_match(
             '/^application\/vnd\.lizards-and-pumpkins\.\w+\.v(\d+)\+(?:json|xml)$/',
             $acceptHeader,
-            $matchedVersion)
-        ) {
+            $matchedVersion
+        )) {
             return null;
         }
 
@@ -48,7 +48,7 @@ class ApiRouter implements HttpRouter
 
         $apiRequestHandler = $this->requestHandlerChain->getApiRequestHandler(
             strtolower($request->getMethod() . '_' . $requestHandlerCode),
-            (int) $matchedVersion[1]
+            (int)$matchedVersion[1]
         );
 
         if ($apiRequestHandler->canProcess($request)) {

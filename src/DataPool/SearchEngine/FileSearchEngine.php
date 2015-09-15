@@ -131,7 +131,9 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
         $searchDocumentArrayRepresentation = json_decode($json, true);
 
         $context = $this->createContextFromDataSet($searchDocumentArrayRepresentation[self::CONTEXT]);
-        $searchDocumentFields = SearchDocumentFieldCollection::fromArray($searchDocumentArrayRepresentation[self::FIELDS]);
+        $searchDocumentFields = SearchDocumentFieldCollection::fromArray(
+            $searchDocumentArrayRepresentation[self::FIELDS]
+        );
         $productId = ProductId::fromString($searchDocumentArrayRepresentation[self::PRODUCT_ID]);
 
         return new SearchDocument($searchDocumentFields, $context, $productId);

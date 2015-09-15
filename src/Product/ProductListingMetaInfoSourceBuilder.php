@@ -102,7 +102,7 @@ class ProductListingMetaInfoSourceBuilder
 
     /**
      * @param array[] $criteriaCondition
-     * @param SearchCriterion|SearchCriterion[] $criterionArray
+     * @param SearchCriterion|SearchCriterion ...$criterionArray
      * @return CompositeSearchCriterion
      */
     private function createSearchCriteria(array $criteriaCondition, SearchCriterion ...$criterionArray)

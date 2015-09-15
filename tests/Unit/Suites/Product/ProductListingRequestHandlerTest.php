@@ -192,7 +192,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedRecorder $spy
-     * @param $snippetCode
+     * @param string $snippetCode
      */
     private function assertDynamicSnippetWasAddedToPageBuilder(
         \PHPUnit_Framework_MockObject_Matcher_InvokedRecorder $spy,
