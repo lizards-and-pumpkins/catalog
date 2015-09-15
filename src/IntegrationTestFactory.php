@@ -43,7 +43,12 @@ class IntegrationTestFactory implements Factory
      * @var SearchEngine
      */
     private $searchEngine;
-    
+
+    /**
+     * @var UrlKeyStore
+     */
+    private $urlKeyStore;
+
     /**
      * @return string[]
      */
@@ -251,5 +256,21 @@ class IntegrationTestFactory implements Factory
     public function setSearchEngine(SearchEngine $searchEngine)
     {
         $this->searchEngine = $searchEngine;
+    }
+
+    /**
+     * @return UrlKeyStore
+     */
+    public function getUrlKeyStore()
+    {
+        if (null === $this->urlKeyStore) {
+            $this->urlKeyStore = $this->createUrlKeyStore();
+        }
+        return $this->urlKeyStore;
+    }
+
+    public function setUrlKeyStore(UrlKeyStore $urlKeyStore)
+    {
+        $this->urlKeyStore = $urlKeyStore;
     }
 }

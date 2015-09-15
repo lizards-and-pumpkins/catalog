@@ -783,7 +783,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return new DataPoolWriter(
             $this->getMasterFactory()->getKeyValueStore(),
             $this->getMasterFactory()->getSearchEngine(),
-            $this->getMasterFactory()->createUrlKeyStore()
+            $this->getMasterFactory()->getUrlKeyStore()
         );
     }
 
@@ -830,7 +830,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new DataPoolReader(
             $this->getMasterFactory()->getKeyValueStore(),
-            $this->getMasterFactory()->getSearchEngine()
+            $this->getMasterFactory()->getSearchEngine(),
+            $this->getMasterFactory()->getUrlKeyStore()
         );
     }
 

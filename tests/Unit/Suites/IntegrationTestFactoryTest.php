@@ -6,6 +6,7 @@ use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\InMemoryUrlKeyStore;
+use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 use LizardsAndPumpkins\Image\ImageProcessor;
 use LizardsAndPumpkins\Image\ImageProcessorCollection;
 use LizardsAndPumpkins\Image\ImageProcessingStrategySequence;
@@ -192,5 +193,18 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
         $stubSearchEngine = $this->getMock(SearchEngine::class);
         $this->factory->setSearchEngine($stubSearchEngine);
         $this->assertSame($stubSearchEngine, $this->factory->getSearchEngine());
+    }
+
+    public function testItReturnsTheSameUrlKeyStoreOnMultipleCalls()
+    {
+        $this->assertInstanceOf(UrlKeyStore::class, $this->factory->getUrlKeyStore());
+        $this->assertSame($this->factory->getUrlKeyStore(), $this->factory->getUrlKeyStore());
+    }
+
+    public function testItReturnsTheSetUrlKeyStore()
+    {
+        $stubUrlKeyStore = $this->getMock(UrlKeyStore::class);
+        $this->factory->setUrlKeyStore($stubUrlKeyStore);
+        $this->assertSame($stubUrlKeyStore, $this->factory->getUrlKeyStore());
     }
 }

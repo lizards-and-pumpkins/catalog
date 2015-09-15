@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
+use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Queue\Queue;
@@ -29,6 +30,11 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
      * @var SearchEngine
      */
     private $searchEngine;
+
+    /**
+     * @var UrlKeyStore
+     */
+    private $urlKeyStore;
     
     /**
      * @param HttpRequest $request
@@ -81,6 +87,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
         $this->eventQueue = $factory->getEventQueue();
         $this->commandQueue = $factory->getCommandQueue();
         $this->searchEngine = $factory->getSearchEngine();
+        $this->urlKeyStore = $factory->getUrlKeyStore();
     }
 
     private function persistInMemoryObjectsOnFactory(IntegrationTestFactory $factory)
@@ -89,5 +96,6 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
         $factory->setEventQueue($this->eventQueue);
         $factory->setCommandQueue($this->commandQueue);
         $factory->setSearchEngine($this->searchEngine);
+        $factory->setUrlKeyStore($this->urlKeyStore);
     }
 }

@@ -21,7 +21,11 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     {
         parent::setUp();
 
-        $this->dataPoolReader = new DataPoolReader($this->getMockKeyValueStore(), $this->getMockSearchEngine());
+        $this->dataPoolReader = new DataPoolReader(
+            $this->getMockKeyValueStore(),
+            $this->getMockSearchEngine(),
+            $this->getMockUrlKeyStore()
+        );
     }
 
     public function testSnippetIsReturnedIfExists()
@@ -208,5 +212,12 @@ class DataPoolReaderTest extends AbstractDataPoolTest
             ->with($mockCriteria, $stubContext);
 
         $this->dataPoolReader->getSearchDocumentsMatchingCriteria($mockCriteria, $stubContext);
+    }
+
+    public function testItDelegatesUrlKeyReadsToUrlKeyStorage()
+    {
+        $expected = ['test.html'];
+        $this->getMockUrlKeyStore()->expects($this->once())->method('getForDataVersion')->willReturn($expected);
+        $this->assertSame($expected, $this->dataPoolReader->getUrlKeysForVersion('1.0'));
     }
 }

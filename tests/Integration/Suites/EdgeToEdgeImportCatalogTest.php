@@ -13,7 +13,7 @@ use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Utils\XPathParser;
 
-class EdgeToEdgeTest extends AbstractIntegrationTest
+class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
 {
     /**
      * @var SampleMasterFactory
