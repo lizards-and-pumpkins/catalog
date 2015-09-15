@@ -92,7 +92,7 @@ class ProductListingMetaInfoSourceBuilder
         $contextData = [];
 
         foreach ($xmlNodeAttributes as $xmlAttribute) {
-            if ('url_key' !== $xmlAttribute['nodeName'] && 'condition' !== $xmlAttribute['nodeName']) {
+            if (Product::URL_KEY !== $xmlAttribute['nodeName'] && 'condition' !== $xmlAttribute['nodeName']) {
                 $contextData[$xmlAttribute['nodeName']] = $xmlAttribute['value'];
             }
         }

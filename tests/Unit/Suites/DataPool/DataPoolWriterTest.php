@@ -14,6 +14,7 @@ use LizardsAndPumpkins\Utils\Clearable;
  * @covers \LizardsAndPumpkins\DataPool\DataPoolWriter
  * @uses   \LizardsAndPumpkins\Product\ProductId
  * @uses   \LizardsAndPumpkins\Http\HttpUrl
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection
  */
 class DataPoolWriterTest extends AbstractDataPoolTest
 {

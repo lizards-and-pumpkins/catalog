@@ -105,7 +105,7 @@ class ProductInSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framewor
         $stubProductSource = $this->getStubProductSource($dummyProductId);
 
         $this->mockSnippetKeyGenerator->expects($this->once())->method('getKeyForContext')
-            ->with($this->anything(), ['product_id' => $dummyProductId]);
+            ->with($this->anything(), [Product::ID => $dummyProductId]);
 
         $this->snippetRenderer->render($stubProductSource, $this->stubContextSource);
     }

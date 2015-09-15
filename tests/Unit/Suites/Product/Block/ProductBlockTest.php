@@ -84,7 +84,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
     {
         $urlKey = 'foo';
 
-        $this->stubProduct->method('getFirstValueOfAttribute')->with('url_key')->willReturn($urlKey);
+        $this->stubProduct->method('getFirstValueOfAttribute')->with(Product::URL_KEY)->willReturn($urlKey);
         $result = $this->productBlock->getProductUrl();
 
         $this->assertEquals('/lizards-and-pumpkins/' . $urlKey, $result);
