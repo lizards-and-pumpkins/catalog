@@ -2,8 +2,6 @@
 
 namespace LizardsAndPumpkins\Renderer;
 
-use LizardsAndPumpkins\Renderer\LayoutReader;
-
 class ThemeLocator
 {
     /**
@@ -23,14 +21,5 @@ class ThemeLocator
         $layoutFile = $this->getThemeDirectory() . '/layout/' . $layoutHandle. '.xml';
         $reader = new LayoutReader();
         return $reader->loadLayoutFromXmlFile($layoutFile);
-    }
-
-    /**
-     * @param string $localeCode
-     * @return string
-     */
-    public function getLocaleDirectoryPath($localeCode)
-    {
-        return $this->getThemeDirectory() . '/locale/' . $localeCode;
     }
 }

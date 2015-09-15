@@ -28,7 +28,7 @@ class GettextTranslator implements Translator
     {
         self::validateLocale($localeCode);
 
-        $localeDirectoryPath = $themeLocator->getLocaleDirectoryPath($localeCode);
+        $localeDirectoryPath = $themeLocator->getThemeDirectory() . '/locale/' . $localeCode;
         bindtextdomain($localeCode, dirname($localeDirectoryPath));
 
         return new self($localeCode);

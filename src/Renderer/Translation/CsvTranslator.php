@@ -22,13 +22,13 @@ class CsvTranslator implements Translator
     }
 
     /**
-     * @param string $locale
+     * @param string $localeCode
      * @param ThemeLocator $themeLocator
      * @return CsvTranslator
      */
-    public static function forLocale($locale, ThemeLocator $themeLocator)
+    public static function forLocale($localeCode, ThemeLocator $themeLocator)
     {
-        $localeDirectoryPath = $themeLocator->getLocaleDirectoryPath($locale);
+        $localeDirectoryPath = $themeLocator->getThemeDirectory() . '/locale/' . $localeCode;
         $translations = [];
 
         if (is_dir($localeDirectoryPath) && is_readable($localeDirectoryPath)) {

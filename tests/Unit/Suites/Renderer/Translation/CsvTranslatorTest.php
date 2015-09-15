@@ -39,12 +39,13 @@ class CsvTranslatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(TranslationFileNotReadableException::class);
 
-        $testLocaleDirectoryPath = sys_get_temp_dir() . '/' . $this->testLocaleCode;
+        $testThemeDirectoryPath = sys_get_temp_dir();
+        $testLocaleDirectoryPath = $testThemeDirectoryPath . '/locale/' . $this->testLocaleCode;
         $testTranslationFilePath = $testLocaleDirectoryPath . '/test_translation_file.csv';
         $testTranslationFileContents = '"foo","bar"';
 
         $this->createFixtureFile($testTranslationFilePath, $testTranslationFileContents, 0000);
-        $this->stubThemeLocator->method('getLocaleDirectoryPath')->willReturn($testLocaleDirectoryPath);
+        $this->stubThemeLocator->method('getThemeDirectory')->willReturn($testThemeDirectoryPath);
 
         CsvTranslator::forLocale($this->testLocaleCode, $this->stubThemeLocator);
     }
@@ -53,12 +54,13 @@ class CsvTranslatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(MalformedTranslationFileException::class);
 
-        $testLocaleDirectoryPath = sys_get_temp_dir() . '/' . $this->testLocaleCode;
+        $testThemeDirectoryPath = sys_get_temp_dir();
+        $testLocaleDirectoryPath = $testThemeDirectoryPath . '/locale/' . $this->testLocaleCode;
         $testTranslationFilePath = $testLocaleDirectoryPath . '/test_translation_file.csv';
         $testTranslationFileContents = '"foo,bar"';
 
         $this->createFixtureFile($testTranslationFilePath, $testTranslationFileContents);
-        $this->stubThemeLocator->method('getLocaleDirectoryPath')->willReturn($testLocaleDirectoryPath);
+        $this->stubThemeLocator->method('getThemeDirectory')->willReturn($testThemeDirectoryPath);
 
         CsvTranslator::forLocale($this->testLocaleCode, $this->stubThemeLocator);
     }
@@ -74,7 +76,8 @@ class CsvTranslatorTest extends \PHPUnit_Framework_TestCase
 
     public function testGivenStringIsTranslated()
     {
-        $testLocaleDirectoryPath = sys_get_temp_dir() . '/' . $this->testLocaleCode;
+        $testThemeDirectoryPath = sys_get_temp_dir();
+        $testLocaleDirectoryPath = $testThemeDirectoryPath . '/locale/' . $this->testLocaleCode;
         $testTranslationFilePath = $testLocaleDirectoryPath . '/test_translation_file.csv';
 
         $testTranslationSource = 'foo';
@@ -83,7 +86,7 @@ class CsvTranslatorTest extends \PHPUnit_Framework_TestCase
         $testTranslationFileContents = sprintf('"%s","%s"', $testTranslationSource, $testTranslationResult);
 
         $this->createFixtureFile($testTranslationFilePath, $testTranslationFileContents);
-        $this->stubThemeLocator->method('getLocaleDirectoryPath')->willReturn($testLocaleDirectoryPath);
+        $this->stubThemeLocator->method('getThemeDirectory')->willReturn($testThemeDirectoryPath);
 
         $translator = CsvTranslator::forLocale($this->testLocaleCode, $this->stubThemeLocator);
         $result = $translator->translate($testTranslationSource);

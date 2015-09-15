@@ -38,13 +38,4 @@ class ThemeLocatorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(Layout::class, $result);
     }
-
-    public function testLocaleDirectoryPathIsReturned()
-    {
-        $localeCode = 'foo_BAR';
-        $result = $this->locator->getLocaleDirectoryPath($localeCode);
-        $expectedPath = $this->locator->getThemeDirectory() . '/locale/' . $localeCode;
-
-        $this->assertSame($expectedPath, $result);
-    }
 }

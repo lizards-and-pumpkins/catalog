@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Renderer\Translation;
 
-use LizardsAndPumpkins\Renderer\Translation\LocaleNotSupportedException;
 use LizardsAndPumpkins\Renderer\ThemeLocator;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
@@ -51,8 +50,8 @@ class GettextTranslatorTest extends \PHPUnit_Framework_TestCase
 
     public function testGivenStringIsTranslated()
     {
-        $testLocaleDirectoryPath = sys_get_temp_dir();
-        $testTranslationFilePath = $testLocaleDirectoryPath . '/' . $this->testLocaleCode . '/LC_MESSAGES/' .
+        $testThemeDirectoryPath = sys_get_temp_dir();
+        $testTranslationFilePath = $testThemeDirectoryPath . '/locale/' . $this->testLocaleCode . '/LC_MESSAGES/' .
                                      $this->testLocaleCode . '.mo';
         $this->createFixtureFile($testTranslationFilePath, '', 0777);
 
@@ -66,8 +65,7 @@ class GettextTranslatorTest extends \PHPUnit_Framework_TestCase
             $testTranslationFilePath
         ));
 
-        $this->stubThemeLocator->method('getLocaleDirectoryPath')
-            ->willReturn($testLocaleDirectoryPath . '/' . $this->testLocaleCode);
+        $this->stubThemeLocator->method('getThemeDirectory')->willReturn($testThemeDirectoryPath);
 
         $translator = GettextTranslator::forLocale($this->testLocaleCode, $this->stubThemeLocator);
         $result = $translator->translate($testTranslationSource);
