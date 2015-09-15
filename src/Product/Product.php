@@ -4,6 +4,9 @@ namespace LizardsAndPumpkins\Product;
 
 class Product
 {
+    const URL_KEY = 'url_key';
+    const ID = 'product_id';
+    
     /**
      * @var ProductId
      */

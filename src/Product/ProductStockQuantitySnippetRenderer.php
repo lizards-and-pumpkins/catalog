@@ -61,7 +61,7 @@ class ProductStockQuantitySnippetRenderer implements SnippetRenderer
         $contextData = $productStockQuantitySource->getContextData();
         $context = $this->contextBuilder->createContext($contextData);
 
-        $key = $this->snippetKeyGenerator->getKeyForContext($context, ['product_id' => $productId]);
+        $key = $this->snippetKeyGenerator->getKeyForContext($context, [Product::ID => $productId]);
 
         return $key;
     }

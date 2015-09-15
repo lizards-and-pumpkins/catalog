@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetList;
 use LizardsAndPumpkins\SnippetRenderer;
@@ -75,7 +76,10 @@ class ProductListingMetaInfoSnippetRenderer implements SnippetRenderer
         Context $context
     ) {
         $productListingUrlKey = $productListingMetaInfoSource->getUrlKey();
-        $snippetKey = $this->snippetKeyGenerator->getKeyForContext($context, ['url_key' => $productListingUrlKey]);
+        $snippetKey = $this->snippetKeyGenerator->getKeyForContext(
+            $context,
+            [PageMetaInfoSnippetContent::URL_KEY => $productListingUrlKey]
+        );
 
         return $snippetKey;
     }

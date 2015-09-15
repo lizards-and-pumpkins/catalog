@@ -66,7 +66,7 @@ class ProductInListingSnippetRenderer implements SnippetRenderer
     private function addProductInListingInContextSnippetsToList(Product $product, Context $context)
     {
         $content = $this->blockRenderer->render($product, $context);
-        $key = $this->snippetKeyGenerator->getKeyForContext($context, ['product_id' => $product->getId()]);
+        $key = $this->snippetKeyGenerator->getKeyForContext($context, [Product::ID => $product->getId()]);
         $contentSnippet = Snippet::create($key, $content);
         $this->snippetList->add($contentSnippet);
     }

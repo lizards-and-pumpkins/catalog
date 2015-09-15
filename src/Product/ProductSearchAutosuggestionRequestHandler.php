@@ -197,7 +197,7 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
         );
 
         return array_map(function (SearchDocument $searchDocument) use ($keyGenerator) {
-            return $keyGenerator->getKeyForContext($this->context, ['product_id' => $searchDocument->getProductId()]);
+            return $keyGenerator->getKeyForContext($this->context, [Product::ID => $searchDocument->getProductId()]);
         }, $searchDocumentCollection->getDocuments());
     }
 }

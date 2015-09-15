@@ -30,20 +30,46 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
      */
     final public function query($queryString, Context $queryContext)
     {
-        $collection = new SearchDocumentCollection;
-        $searchDocuments = $this->getSearchDocuments();
+        $allSearchDocuments = $this->getSearchDocuments();
+        $matchingDocs = $this->getSearchDocumentsForQueryAndContext($allSearchDocuments, $queryString, $queryContext);
 
-        foreach ($searchDocuments as $searchDocument) {
-            if (!$this->hasMatchingContext($queryContext, $searchDocument)) {
-                continue;
-            }
+        return new SearchDocumentCollection(...array_values($matchingDocs));
+    }
 
-            if ($this->isAnyFieldValueOfSearchDocumentMatchesQueryString($searchDocument, $queryString)) {
-                $collection->add($searchDocument);
-            }
-        }
+    /**
+     * @param SearchDocument[] $searchDocuments
+     * @param string $queryString
+     * @param Context $queryContext
+     * @return SearchDocument[]
+     */
+    private function getSearchDocumentsForQueryAndContext(array $searchDocuments, $queryString, Context $queryContext)
+    {
+        $docsMatchingContext = $this->getSearchDocumentsMatchingContext($searchDocuments, $queryContext);
+        return $this->getSearchDocumentsMatchingQueryString($docsMatchingContext, $queryString);
+    }
 
-        return $collection;
+    /**
+     * @param SearchDocument[] $searchDocuments
+     * @param Context $context
+     * @return SearchDocument[]
+     */
+    private function getSearchDocumentsMatchingContext(array $searchDocuments, Context $context)
+    {
+        return array_filter($searchDocuments, function (SearchDocument $searchDocument) use ($context) {
+            return $this->hasMatchingContext($context, $searchDocument);
+        });
+    }
+
+    /**
+     * @param SearchDocument[] $searchDocuments
+     * @param string $queryString
+     * @return SearchDocument[]
+     */
+    private function getSearchDocumentsMatchingQueryString(array $searchDocuments, $queryString)
+    {
+        return array_filter($searchDocuments, function (SearchDocument $searchDocument) use ($queryString) {
+            return $this->isAnyFieldValueOfSearchDocumentMatchesQueryString($searchDocument, $queryString);
+        });
     }
 
     /**
@@ -53,16 +79,14 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
      */
     final public function getSearchDocumentsMatchingCriteria(SearchCriteria $criteria, Context $context)
     {
-        $collection = new SearchDocumentCollection;
-        $searchDocuments = $this->getSearchDocuments();
-
-        foreach ($searchDocuments as $searchDocument) {
-            if ($criteria->matches($searchDocument) && $context->isSubsetOf($searchDocument->getContext())) {
-                $collection->add($searchDocument);
+        $matchingDocuments = array_filter(
+            $this->getSearchDocuments(),
+            function (SearchDocument $searchDocument) use ($criteria, $context) {
+                return $criteria->matches($searchDocument) && $context->isSubsetOf($searchDocument->getContext());
             }
-        }
-        
-        return $collection;
+        );
+
+        return new SearchDocumentCollection(...array_values($matchingDocuments));
     }
 
     /**

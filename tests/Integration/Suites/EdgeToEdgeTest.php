@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpResourceNotFoundResponse;
+use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewInContextSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductId;
@@ -65,7 +66,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         );
         $productDetailViewKey = $productDetailViewKeyGenerator->getKeyForContext(
             $context,
-            ['product_id' => $productId]
+            [Product::ID => $productId]
         );
         $productDetailViewHtml = $dataPoolReader->getSnippet($productDetailViewKey);
 
@@ -83,7 +84,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $listingPageKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
             ProductInListingSnippetRenderer::CODE
         );
-        $listingPageKey = $listingPageKeyGenerator->getKeyForContext($context, ['product_id' => $productId]);
+        $listingPageKey = $listingPageKeyGenerator->getKeyForContext($context, [Product::ID => $productId]);
         $productListingHtml = $dataPoolReader->getSnippet($listingPageKey);
 
         $this->assertContains(
@@ -93,7 +94,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         );
 
         $priceSnippetKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('price');
-        $priceSnippetKey = $priceSnippetKeyGenerator->getKeyForContext($context, ['product_id' => $productId]);
+        $priceSnippetKey = $priceSnippetKeyGenerator->getKeyForContext($context, [Product::ID => $productId]);
         $priceSnippetContents = $dataPoolReader->getSnippet($priceSnippetKey);
 
         $this->assertEquals($productPrice, $priceSnippetContents);
@@ -101,7 +102,7 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $backOrderAvailabilitySnippetKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('backorders');
         $backOrderAvailabilitySnippetKey = $backOrderAvailabilitySnippetKeyGenerator->getKeyForContext(
             $context,
-            ['product_id' => $productId]
+            [Product::ID => $productId]
         );
         $backOrderAvailabilitySnippetContents = $dataPoolReader->getSnippet($backOrderAvailabilitySnippetKey);
 
@@ -167,13 +168,13 @@ class EdgeToEdgeTest extends AbstractIntegrationTest
         $validProductId = ProductId::fromString('288193NEU');
         $validProductDetailViewSnippetKey = $productDetailViewKeyGenerator->getKeyForContext(
             $context,
-            ['product_id' => $validProductId]
+            [Product::ID => $validProductId]
         );
 
         $invalidProductId = ProductId::fromString('T4H2N-4701');
         $invalidProductDetailViewSnippetKey = $productDetailViewKeyGenerator->getKeyForContext(
             $context,
-            ['product_id' => $invalidProductId]
+            [Product::ID => $invalidProductId]
         );
 
         $this->assertTrue($dataPoolReader->hasSnippet($validProductDetailViewSnippetKey));

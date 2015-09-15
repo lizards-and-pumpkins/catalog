@@ -13,6 +13,10 @@ use LizardsAndPumpkins\Utils\LocalFilesystem;
 
 class FileSearchEngine extends IntegrationTestSearchEngineAbstract
 {
+    const PRODUCT_ID = 'product_id';
+    const CONTEXT = 'context';
+    const FIELDS = 'fields';
+    
     /**
      * @var string
      */
@@ -82,9 +86,9 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
     private function getArrayRepresentationOfSearchDocument(SearchDocument $searchDocument)
     {
         return [
-            'product_id' => (string) $searchDocument->getProductId(),
-            'fields'     => $this->getSearchDocumentFieldsAsArray($searchDocument->getFieldsCollection()),
-            'context'    => $this->getContextAsArray($searchDocument->getContext())
+            self::PRODUCT_ID => (string) $searchDocument->getProductId(),
+            self::FIELDS => $this->getSearchDocumentFieldsAsArray($searchDocument->getFieldsCollection()),
+            self::CONTEXT => $this->getContextAsArray($searchDocument->getContext())
         ];
     }
 
@@ -126,9 +130,9 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
     {
         $searchDocumentArrayRepresentation = json_decode($json, true);
 
-        $context = $this->createContextFromDataSet($searchDocumentArrayRepresentation['context']);
-        $searchDocumentFields = SearchDocumentFieldCollection::fromArray($searchDocumentArrayRepresentation['fields']);
-        $productId = ProductId::fromString($searchDocumentArrayRepresentation['product_id']);
+        $context = $this->createContextFromDataSet($searchDocumentArrayRepresentation[self::CONTEXT]);
+        $searchDocumentFields = SearchDocumentFieldCollection::fromArray($searchDocumentArrayRepresentation[self::FIELDS]);
+        $productId = ProductId::fromString($searchDocumentArrayRepresentation[self::PRODUCT_ID]);
 
         return new SearchDocument($searchDocumentFields, $context, $productId);
     }

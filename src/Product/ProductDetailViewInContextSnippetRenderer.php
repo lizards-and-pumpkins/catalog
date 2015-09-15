@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetList;
@@ -75,7 +76,7 @@ class ProductDetailViewInContextSnippetRenderer implements SnippetRenderer
         $content = $this->blockRenderer->render($this->product, $this->context);
         $key = $this->productDetailViewSnippetKeyGenerator->getKeyForContext(
             $this->context,
-            ['product_id' => $this->product->getId()]
+            [Product::ID => $this->product->getId()]
         );
         $contentSnippet = Snippet::create($key, $content);
         $this->snippetList->add($contentSnippet);
@@ -91,7 +92,7 @@ class ProductDetailViewInContextSnippetRenderer implements SnippetRenderer
     {
         $snippetKey = $this->productDetailPageMetaSnippetKeyGenerator->getKeyForContext(
             $this->context,
-            ['url_key' => $this->product->getFirstValueOfAttribute('url_key')]
+            [PageMetaInfoSnippetContent::URL_KEY => $this->product->getFirstValueOfAttribute(Product::URL_KEY)]
         );
         $metaData = $this->getPageMetaSnippetContent();
         return Snippet::create($snippetKey, json_encode($metaData));
