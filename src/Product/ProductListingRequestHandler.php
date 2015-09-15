@@ -251,7 +251,10 @@ class ProductListingRequestHandler implements HttpRequestHandler
             ProductListingMetaInfoSnippetRenderer::CODE
         );
         $urlKey = $request->getUrlPathRelativeToWebFront();
-        $metaInfoSnippetKey = $keyGenerator->getKeyForContext($this->context, ['url_key' => $urlKey]);
+        $metaInfoSnippetKey = $keyGenerator->getKeyForContext(
+            $this->context,
+            [PageMetaInfoSnippetContent::URL_KEY => $urlKey]
+        );
 
         return $metaInfoSnippetKey;
     }

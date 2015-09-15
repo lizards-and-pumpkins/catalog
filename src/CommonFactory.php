@@ -549,7 +549,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductDetailPageMetaSnippetKeyGenerator()
     {
-        $usedDataParts = ['url_key'];
+        $usedDataParts = [PageMetaInfoSnippetContent::URL_KEY];
 
         return new GenericSnippetKeyGenerator(
             ProductDetailViewInContextSnippetRenderer::CODE,
