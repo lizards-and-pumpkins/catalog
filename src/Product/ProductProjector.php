@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
+use LizardsAndPumpkins\Projection\UrlKeyForContextCollector;
 use LizardsAndPumpkins\Projector;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\InvalidProjectionSourceDataTypeException;
@@ -24,14 +25,20 @@ class ProductProjector implements Projector
      * @var DataPoolWriter
      */
     private $dataPoolWriter;
+    /**
+     * @var UrlKeyForContextCollector
+     */
+    private $urlKeyCollector;
 
     public function __construct(
         SnippetRendererCollection $rendererCollection,
         ProductSearchDocumentBuilder $searchDocumentBuilder,
+        UrlKeyForContextCollector $urlKeyCollector,
         DataPoolWriter $dataPoolWriter
     ) {
         $this->rendererCollection = $rendererCollection;
         $this->searchDocumentBuilder = $searchDocumentBuilder;
+        $this->urlKeyCollector = $urlKeyCollector;
         $this->dataPoolWriter = $dataPoolWriter;
     }
 
@@ -55,5 +62,8 @@ class ProductProjector implements Projector
 
         $searchDocumentCollection = $this->searchDocumentBuilder->aggregate($productSource, $contextSource);
         $this->dataPoolWriter->writeSearchDocumentCollection($searchDocumentCollection);
+        
+        $urlKeyCollection = $this->urlKeyCollector->collectProductUrlKeys($productSource, $contextSource);
+        $this->dataPoolWriter->writeUrlCollection($urlKeyCollection);
     }
 }

@@ -42,6 +42,7 @@ use LizardsAndPumpkins\Product\UpdateProductStockQuantityCommand;
 use LizardsAndPumpkins\Product\UpdateProductStockQuantityCommandHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
 use LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator;
+use LizardsAndPumpkins\Projection\UrlKeyForContextCollector;
 use LizardsAndPumpkins\Queue\Queue;
 
 /**
@@ -113,6 +114,7 @@ use LizardsAndPumpkins\Queue\Queue;
  * @uses   \LizardsAndPumpkins\TemplateProjectorLocator
  * @uses   \LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
+ * @uses   \LizardsAndPumpkins\Projection\UrlKeyForContextCollector
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -520,5 +522,11 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createCatalogImport();
         $this->assertInstanceOf(CatalogImport::class, $result);
+    }
+
+    public function testUrlKeyCollectorIsReturned()
+    {
+        $result = $this->commonFactory->createUrlKeyForContextCollector();
+        $this->assertInstanceOf(UrlKeyForContextCollector::class, $result);
     }
 }

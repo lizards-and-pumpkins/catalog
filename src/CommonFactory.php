@@ -34,7 +34,6 @@ use LizardsAndPumpkins\Product\ProductDetailViewBlockRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewInContextSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionBlockRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductListingMetaInfoSnippetContent;
 use LizardsAndPumpkins\Product\ProductListingSourceListBuilder;
 use LizardsAndPumpkins\Product\ProductListingTemplateProjector;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionBlockRenderer;
@@ -72,6 +71,7 @@ use LizardsAndPumpkins\Product\UpdateProductStockQuantityCommand;
 use LizardsAndPumpkins\Product\UpdateProductStockQuantityCommandHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
 use LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator;
+use LizardsAndPumpkins\Projection\UrlKeyForContextCollector;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\Renderer\BlockStructure;
 
@@ -188,10 +188,19 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createProductProjector()
     {
         return new ProductProjector(
-            $this->createProductSnippetRendererCollection(),
-            $this->createProductSearchDocumentBuilder(),
+            $this->getMasterFactory()->createProductSnippetRendererCollection(),
+            $this->getMasterFactory()->createProductSearchDocumentBuilder(),
+            $this->createUrlKeyForContextCollector(),
             $this->getMasterFactory()->createDataPoolWriter()
         );
+    }
+
+    /**
+     * @return UrlKeyForContextCollector
+     */
+    public function createUrlKeyForContextCollector()
+    {
+        return new UrlKeyForContextCollector();
     }
 
     /**
