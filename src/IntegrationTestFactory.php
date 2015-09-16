@@ -157,7 +157,7 @@ class IntegrationTestFactory implements Factory
      */
     public function createImageFileStorageWriter()
     {
-        $resultImageDir = sys_get_temp_dir() . '/' . self::PROCESSED_IMAGES_DIR;
+        $resultImageDir = $this->getMasterFactory()->getFileStorageBasePathConfig() . '/' . self::PROCESSED_IMAGES_DIR;
 
         if (!is_dir($resultImageDir)) {
             mkdir($resultImageDir, 0777, true);
@@ -272,5 +272,13 @@ class IntegrationTestFactory implements Factory
     public function setUrlKeyStore(UrlKeyStore $urlKeyStore)
     {
         $this->urlKeyStore = $urlKeyStore;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFileStorageBasePathConfig()
+    {
+        return sys_get_temp_dir();
     }
 }
