@@ -40,9 +40,7 @@ class GettextTranslator implements Translator
      */
     public function translate($string)
     {
-        putenv('LC_ALL=' . $this->localeCode);
         setlocale(LC_ALL, $this->localeCode);
-
         return dgettext($this->localeCode, $string);
     }
 
