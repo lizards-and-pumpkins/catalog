@@ -52,7 +52,14 @@ class FileUrlKeyStoreTest extends AbstractIntegrationTestUrlKeyStoreTest
         $urlKeyStoreOne = $this->createUrlKeyStoreInstance();
         $urlKeyStoreTwo = $this->createUrlKeyStoreInstance();
 
-        $urlKeyStoreOne->addUrlKeyForVersion('aaa', '1');
-        $this->assertSame(['aaa'], $urlKeyStoreTwo->getForDataVersion('1'));
+        $urlKeyStoreOne->addUrlKeyForVersion('1.0', 'example.html', 'dummy-context-string');
+        $this->assertSame([['example.html', 'dummy-context-string']], $urlKeyStoreTwo->getForDataVersion('1.0'));
+    }
+
+    public function testItCanStoreContextDataWithASpace()
+    {
+        $urlKeyStore = $this->createUrlKeyStoreInstance();
+        $urlKeyStore->addUrlKeyForVersion('1.0', 'example.html', 'context data with spaces');
+        $this->assertSame([['example.html', 'context data with spaces']], $urlKeyStore->getForDataVersion('1.0'));
     }
 }

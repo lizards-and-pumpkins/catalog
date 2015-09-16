@@ -40,6 +40,20 @@ class IntegrationTestUrlKeyStoreAbstract
     }
 
     /**
+     * @param mixed $contextDataString
+     */
+    final protected function validateContextDataString($contextDataString)
+    {
+        if (!is_string($contextDataString)) {
+            $message = sprintf(
+                'The context data has to be string for use with the UrlKeyStore, got "%s"',
+                $this->getVariableType($contextDataString)
+            );
+            throw new Exception\ContextDataIsNotAStringException($message);
+        }
+    }
+
+    /**
      * @param mixed $variable
      * @return string
      */

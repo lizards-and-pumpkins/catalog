@@ -183,6 +183,6 @@ class DataPoolReader
      */
     public function getUrlKeysForVersion($dataVersionString)
     {
-        return array_unique($this->urlKeyStore->getForDataVersion($dataVersionString));
+        return $this->urlKeyStore->getForDataVersion($dataVersionString);
     }
 }
