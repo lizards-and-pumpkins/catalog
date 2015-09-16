@@ -66,7 +66,7 @@ class UrlKeyForContextCollectorTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsAUrlKeyCollectionForListings()
     {
-        /** @var ProductListingMetaInfoSource|\PHPUnit_Framework_MockObject_MockObject $listingSourceMock */
+        /** @var ProductListingMetaInfo|\PHPUnit_Framework_MockObject_MockObject $listingSourceMock */
         $stubListingInfo = $this->getMock(ProductListingMetaInfo::class, [], [], '', false);
         $stubListingInfo->expects($this->once())->method('getUrlKey')
             ->willReturn(UrlKey::fromString('listing.html'));

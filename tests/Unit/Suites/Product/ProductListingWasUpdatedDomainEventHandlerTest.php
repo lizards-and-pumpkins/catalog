@@ -22,11 +22,11 @@ class ProductListingWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_
 
     protected function setUp()
     {
-        $stubProductListingMetaInfoSource = $this->getMock(ProductListingMetaInfo::class, [], [], '', false);
+        $stubProductListingMetaInfo = $this->getMock(ProductListingMetaInfo::class, [], [], '', false);
 
         /** @var ProductListingWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $mockDomainEvent */
         $mockDomainEvent = $this->getMock(ProductListingWasUpdatedDomainEvent::class, [], [], '', false);
-        $mockDomainEvent->method('getProductListingMetaInfoSource')->willReturn($stubProductListingMetaInfoSource);
+        $mockDomainEvent->method('getProductListingMetaInfo')->willReturn($stubProductListingMetaInfo);
 
         $this->mockProjector = $this->getMock(ProductListingMetaInfoSnippetProjector::class, [], [], '', false);
 

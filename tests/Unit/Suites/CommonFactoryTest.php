@@ -80,7 +80,7 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\Product\ProductListingMetaInfoSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductListingTemplateProjector
  * @uses   \LizardsAndPumpkins\Product\ProductListingMetaInfoSnippetProjector
- * @uses   \LizardsAndPumpkins\Product\ProductListingMetaInfoSourceBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductListingMetaInfoBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEvent
  * @uses   \LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent
@@ -193,9 +193,9 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ProductSourceBuilder::class, $result);
     }
 
-    public function testProductListingMetaInfoSourceBuilderIsReturned()
+    public function testProductListingMetaInfoBuilderIsReturned()
     {
-        $result = $this->commonFactory->createProductListingMetaInfoSourceBuilder();
+        $result = $this->commonFactory->createProductListingMetaInfoBuilder();
         $this->assertInstanceOf(ProductListingMetaInfoBuilder::class, $result);
     }
 

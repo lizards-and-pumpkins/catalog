@@ -65,7 +65,7 @@ class VersionedContextTest extends \PHPUnit_Framework_TestCase
     public function testVersionIdentifierIsReturned()
     {
         $expected = 'v:' . $this->testVersionValue;
-        $this->assertEquals($expected, $this->versionedContext->getId());
+        $this->assertEquals($expected, $this->versionedContext->toString());
     }
 
     public function testVersionIsIncludedInIdentifierWhenRequested()

@@ -44,7 +44,7 @@ class ProductListingMetaInfoSnippetProjectorTest extends \PHPUnit_Framework_Test
     /**
      * @return ProductListingMetaInfo|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createMockProductListingMetaInfoSource()
+    private function createMockProductListingMetaInfo()
     {
         return $this->getMock(ProductListingMetaInfo::class, [], [], '', false);
     }
@@ -65,10 +65,7 @@ class ProductListingMetaInfoSnippetProjectorTest extends \PHPUnit_Framework_Test
         $this->mockRendererCollection = $this->getMock(SnippetRendererCollection::class, [], [], '', false);
         $this->mockRendererCollection->method('render')->willReturn($this->stubSnippetList);
         
-        $this->mockUrlKeyCollector = $this->getMock(
-            UrlKeyForContextCollector::class,
-            array_merge(get_class_methods(UrlKeyForContextCollector::class), ['collectListingUrlKeys'])
-        );
+        $this->mockUrlKeyCollector = $this->getMock(UrlKeyForContextCollector::class);
 
         $this->projector = new ProductListingMetaInfoSnippetProjector(
             $this->mockRendererCollection,
@@ -86,29 +83,29 @@ class ProductListingMetaInfoSnippetProjectorTest extends \PHPUnit_Framework_Test
 
     public function testSnippetListIsWrittenToTheDataPool()
     {
-        $stubProductListingMetaInfoSource = $this->createMockProductListingMetaInfoSource();
+        $stubProductListingMetaInfo = $this->createMockProductListingMetaInfo();
         $stubContextSource = $this->createMockContextSource();
         $stubUrlKeyForContextCollection = $this->getMock(UrlKeyForContextCollection::class, [], [], '', false);
         $this->mockUrlKeyCollector->method('collectListingUrlKeys')->willReturn($stubUrlKeyForContextCollection);
 
         $this->mockDataPoolWriter->expects($this->once())->method('writeSnippetList')->with($this->stubSnippetList);
 
-        $this->projector->project($stubProductListingMetaInfoSource, $stubContextSource);
+        $this->projector->project($stubProductListingMetaInfo, $stubContextSource);
     }
 
     public function testUrlKeysForListingsAreCollectedAndWrittenToTheDataPool()
     {
-        $stubProductListingMetaInfoSource = $this->createMockProductListingMetaInfoSource();
+        $stubProductListingMetaInfo = $this->createMockProductListingMetaInfo();
         $stubContextSource = $this->createMockContextSource();
         $stubUrlKeyForContextCollection = $this->getMock(UrlKeyForContextCollection::class, [], [], '', false);
         
         $this->mockUrlKeyCollector->expects($this->once())->method('collectListingUrlKeys')
-            ->with($stubProductListingMetaInfoSource, $stubContextSource)
+            ->with($stubProductListingMetaInfo, $stubContextSource)
             ->willReturn($stubUrlKeyForContextCollection);
         
         $this->mockDataPoolWriter->expects($this->once())->method('writeUrlKeyCollection')
             ->with($stubUrlKeyForContextCollection);
 
-        $this->projector->project($stubProductListingMetaInfoSource, $stubContextSource);
+        $this->projector->project($stubProductListingMetaInfo, $stubContextSource);
     }
 }

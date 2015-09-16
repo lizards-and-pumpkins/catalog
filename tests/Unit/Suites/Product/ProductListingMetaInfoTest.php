@@ -6,7 +6,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\UrlKey;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductListingMetaInfoSource
+ * @covers \LizardsAndPumpkins\Product\ProductListingMetaInfo
  */
 class ProductListingMetaInfoTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,13 +28,13 @@ class ProductListingMetaInfoTest extends \PHPUnit_Framework_TestCase
     /**
      * @var ProductListingMetaInfo
      */
-    private $productListingMetaInfoSource;
+    private $productListingMetaInfo;
 
     protected function setUp()
     {
         $this->stubUrlKey = $this->getMock(UrlKey::class, [], [], '', false);
         $this->stubCriteria = $this->getMock(SearchCriteria::class);
-        $this->productListingMetaInfoSource = new ProductListingMetaInfo(
+        $this->productListingMetaInfo = new ProductListingMetaInfo(
             $this->stubUrlKey,
             $this->dummyContextData,
             $this->stubCriteria
@@ -43,19 +43,19 @@ class ProductListingMetaInfoTest extends \PHPUnit_Framework_TestCase
 
     public function testProductListingUrlKeyIsReturned()
     {
-        $result = $this->productListingMetaInfoSource->getUrlKey();
+        $result = $this->productListingMetaInfo->getUrlKey();
         $this->assertSame($this->stubUrlKey, $result);
     }
 
     public function testProductListingContextDataIsReturned()
     {
-        $result = $this->productListingMetaInfoSource->getContextData();
+        $result = $this->productListingMetaInfo->getContextData();
         $this->assertSame($this->dummyContextData, $result);
     }
 
     public function testProductListingCriteriaAreReturned()
     {
-        $result = $this->productListingMetaInfoSource->getCriteria();
+        $result = $this->productListingMetaInfo->getCriteria();
         $this->assertSame($this->stubCriteria, $result);
     }
 }

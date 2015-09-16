@@ -191,7 +191,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     /**
      * @return ProductListingMetaInfoBuilder
      */
-    public function createProductListingMetaInfoSourceBuilder()
+    public function createProductListingMetaInfoBuilder()
     {
         return new ProductListingMetaInfoBuilder();
     }
@@ -1306,7 +1306,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return new CatalogImport(
             $this->getMasterFactory()->getCommandQueue(),
             $this->getMasterFactory()->createProductSourceBuilder(),
-            $this->getMasterFactory()->createProductListingMetaInfoSourceBuilder(),
+            $this->getMasterFactory()->createProductListingMetaInfoBuilder(),
             $this->getMasterFactory()->getLogger()
         );
     }

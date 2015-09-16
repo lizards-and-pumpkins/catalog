@@ -12,7 +12,7 @@ class UpdateProductListingCommandTest extends \PHPUnit_Framework_TestCase
     /**
      * @var ProductListingMetaInfo|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubProductListingMetaInfoSource;
+    private $stubProductListingMetaInfo;
 
     /**
      * @var UpdateProductListingCommand
@@ -21,14 +21,14 @@ class UpdateProductListingCommandTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubProductListingMetaInfoSource = $this->getMock(
+        $this->stubProductListingMetaInfo = $this->getMock(
             ProductListingMetaInfo::class,
             [],
             [],
             '',
             false
         );
-        $this->command = new UpdateProductListingCommand($this->stubProductListingMetaInfoSource);
+        $this->command = new UpdateProductListingCommand($this->stubProductListingMetaInfo);
     }
 
     public function testCommandInterFaceIsImplemented()
@@ -36,9 +36,9 @@ class UpdateProductListingCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Command::class, $this->command);
     }
 
-    public function testProductListingMetaInfoSourceIsReturned()
+    public function testProductListingMetaInfoIsReturned()
     {
-        $result = $this->command->getProductListingMetaInfoSource();
-        $this->assertSame($this->stubProductListingMetaInfoSource, $result);
+        $result = $this->command->getProductListingMetaInfo();
+        $this->assertSame($this->stubProductListingMetaInfo, $result);
     }
 }

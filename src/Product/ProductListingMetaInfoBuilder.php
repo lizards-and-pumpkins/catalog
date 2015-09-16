@@ -20,7 +20,7 @@ class ProductListingMetaInfoBuilder
      * @param string $xml
      * @return ProductListingMetaInfo
      */
-    public function createProductListingMetaInfoSourceFromXml($xml)
+    public function createProductListingMetaInfoFromXml($xml)
     {
         $parser = new XPathParser($xml);
 
@@ -37,7 +37,7 @@ class ProductListingMetaInfoBuilder
         $criterionArray = array_map([$this, 'createCriterion'], $criteriaNodes);
         $criteria = $this->createSearchCriteria($criteriaConditionNodes, ...$criterionArray);
 
-        return $this->createProductListingMetaInfoSource($urlKey, $contextData, $criteria);
+        return $this->createProductListingMetaInfo($urlKey, $contextData, $criteria);
     }
 
     /**
@@ -46,7 +46,7 @@ class ProductListingMetaInfoBuilder
      * @param SearchCriteria $criteria
      * @return ProductListingMetaInfo
      */
-    public function createProductListingMetaInfoSource(UrlKey $urlKey, array $contextData, SearchCriteria $criteria)
+    public function createProductListingMetaInfo(UrlKey $urlKey, array $contextData, SearchCriteria $criteria)
     {
         $thingsToCheck = [['values', $contextData], ['keys', array_keys($contextData)]];
         array_map(function (array $thingToCheck) {

@@ -35,14 +35,14 @@ class ProductListingMetaInfoSnippetRendererTest extends \PHPUnit_Framework_TestC
     /**
      * @return ProductListingMetaInfo|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function getMockProductListingMetaInfoSource()
+    private function getMockProductListingMetaInfo()
     {
         $mockSearchCriteria = $this->getMock(CompositeSearchCriterion::class, [], [], '', false);
-        $mockProductListingMetaInfoSource = $this->getMock(ProductListingMetaInfo::class, [], [], '', false);
-        $mockProductListingMetaInfoSource->method('getContextData')->willReturn([]);
-        $mockProductListingMetaInfoSource->method('getCriteria')->willReturn($mockSearchCriteria);
+        $mockProductListingMetaInfo = $this->getMock(ProductListingMetaInfo::class, [], [], '', false);
+        $mockProductListingMetaInfo->method('getContextData')->willReturn([]);
+        $mockProductListingMetaInfo->method('getCriteria')->willReturn($mockSearchCriteria);
 
-        return $mockProductListingMetaInfoSource;
+        return $mockProductListingMetaInfo;
     }
 
     /**
@@ -94,11 +94,11 @@ class ProductListingMetaInfoSnippetRendererTest extends \PHPUnit_Framework_TestC
 
     public function testSnippetWithValidJsonAsContentInAListIsReturned()
     {
-        $mockProductListingMetaInfoSource = $this->getMockProductListingMetaInfoSource();
+        $mockProductListingMetaInfo = $this->getMockProductListingMetaInfo();
         $expectedSnippet = $this->getExpectedSnippet();
 
         $this->mockSnippetList->expects($this->once())->method('add')->with($expectedSnippet);
 
-        $this->renderer->render($mockProductListingMetaInfoSource);
+        $this->renderer->render($mockProductListingMetaInfo);
     }
 }

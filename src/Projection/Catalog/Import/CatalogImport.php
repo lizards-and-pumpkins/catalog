@@ -28,7 +28,7 @@ class CatalogImport
     /**
      * @var ProductListingMetaInfoBuilder
      */
-    private $productListingMetaInfoSourceBuilder;
+    private $productListingMetaInfoBuilder;
 
     /**
      * @var Logger
@@ -38,13 +38,13 @@ class CatalogImport
     public function __construct(
         Queue $commandQueue,
         ProductSourceBuilder $productSourceBuilder,
-        ProductListingMetaInfoBuilder $productListingMetaInfoSourceBuilder,
+        ProductListingMetaInfoBuilder $productListingMetaInfoBuilder,
         Logger $logger
     ) {
 
         $this->commandQueue = $commandQueue;
         $this->productSourceBuilder = $productSourceBuilder;
-        $this->productListingMetaInfoSourceBuilder = $productListingMetaInfoSourceBuilder;
+        $this->productListingMetaInfoBuilder = $productListingMetaInfoBuilder;
         $this->logger = $logger;
     }
 
@@ -110,9 +110,9 @@ class CatalogImport
      */
     private function processListingXml($listingXml)
     {
-        $productListingMetaInfoSource = $this->productListingMetaInfoSourceBuilder
-            ->createProductListingMetaInfoSourceFromXml($listingXml);
-        $this->commandQueue->add(new UpdateProductListingCommand($productListingMetaInfoSource));
+        $productListingMetaInfo = $this->productListingMetaInfoBuilder
+            ->createProductListingMetaInfoFromXml($listingXml);
+        $this->commandQueue->add(new UpdateProductListingCommand($productListingMetaInfo));
     }
 
     /**

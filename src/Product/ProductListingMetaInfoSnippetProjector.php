@@ -44,7 +44,7 @@ class ProductListingMetaInfoSnippetProjector implements Projector
     {
         if (!($projectionSourceData instanceof ProductListingMetaInfo)) {
             throw new InvalidProjectionSourceDataTypeException(
-                'First argument must be instance of ProductListingMetaInfoSource.'
+                'First argument must be instance of ProductListingMetaInfo.'
             );
         }
 
@@ -52,14 +52,14 @@ class ProductListingMetaInfoSnippetProjector implements Projector
     }
 
     private function projectProductListing(
-        ProductListingMetaInfo $productListingMetaInfoSource,
+        ProductListingMetaInfo $productListingMetaInfo,
         ContextSource $contextSource
     ) {
-        $snippetList = $this->snippetRendererCollection->render($productListingMetaInfoSource, $contextSource);
+        $snippetList = $this->snippetRendererCollection->render($productListingMetaInfo, $contextSource);
         $this->dataPoolWriter->writeSnippetList($snippetList);
         
         $urlKeysInContextsCollection = $this->urlKeyForContextCollector->collectListingUrlKeys(
-            $productListingMetaInfoSource,
+            $productListingMetaInfo,
             $contextSource
         );
         $this->dataPoolWriter->writeUrlKeyCollection($urlKeysInContextsCollection);

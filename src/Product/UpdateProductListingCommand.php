@@ -9,18 +9,18 @@ class UpdateProductListingCommand implements Command
     /**
      * @var ProductListingMetaInfo
      */
-    private $productListingMetaInfoSource;
+    private $productListingMetaInfo;
 
-    public function __construct(ProductListingMetaInfo $productListingMetaInfoSource)
+    public function __construct(ProductListingMetaInfo $productListingMetaInfo)
     {
-        $this->productListingMetaInfoSource = $productListingMetaInfoSource;
+        $this->productListingMetaInfo = $productListingMetaInfo;
     }
 
     /**
      * @return ProductListingMetaInfo
      */
-    public function getProductListingMetaInfoSource()
+    public function getProductListingMetaInfo()
     {
-        return $this->productListingMetaInfoSource;
+        return $this->productListingMetaInfo;
     }
 }
