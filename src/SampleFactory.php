@@ -50,7 +50,8 @@ class SampleFactory implements Factory
      */
     public function createKeyValueStore()
     {
-        $storagePath = $this->getMasterFactory()->getFileStorageBasePathConfig() . '/lizards-and-pumpkins/key-value-store';
+        $baseStorageDir = $this->getMasterFactory()->getFileStorageBasePathConfig();
+        $storagePath = $baseStorageDir . '/lizards-and-pumpkins/key-value-store';
         $this->createDirectoryIfNotExists($storagePath);
 
         return new FileKeyValueStore($storagePath);

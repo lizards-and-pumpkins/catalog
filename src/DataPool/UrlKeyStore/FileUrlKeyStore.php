@@ -46,7 +46,7 @@ class FileUrlKeyStore extends IntegrationTestUrlKeyStoreAbstract implements UrlK
     }
 
     /**
-     * @param string $urlKey
+     * @param string $filePath
      * @param string $record
      */
     private function appendRecordToFile($filePath, $record)
@@ -107,8 +107,8 @@ class FileUrlKeyStore extends IntegrationTestUrlKeyStoreAbstract implements UrlK
     }
 
     /**
-     * @param $urlKey
-     * @param $contextData
+     * @param string $urlKey
+     * @param string $contextData
      * @return string
      */
     private function formatRecordToWrite($urlKey, $contextData)
