@@ -98,7 +98,8 @@ class MultipleProductStockQuantityApiV1PutRequestHandler extends ApiRequestHandl
         $filePath = $this->importDirectory->getPath() . '/' . $this->getImportFileNameFromRequest($request);
 
         if (!is_readable($filePath)) {
-            throw new CatalogImportFileNotReadableException(sprintf('%s file is not readable.', $filePath));
+            $message = sprintf('The catalog import file "%s" is not readable.', $filePath);
+            throw new CatalogImportFileNotReadableException($message);
         }
 
         return file_get_contents($filePath);

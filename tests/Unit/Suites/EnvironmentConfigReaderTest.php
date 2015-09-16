@@ -3,6 +3,9 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\Exception\EnvironmentConfigKeyIsEmptyException;
+use LizardsAndPumpkins\Exception\EnvironmentConfigKeyIsNotAStringException;
+
 /**
  * @covers \LizardsAndPumpkins\EnvironmentConfigReader
  */
@@ -17,7 +20,7 @@ class EnvironmentConfigReaderTest extends \PHPUnit_Framework_TestCase
     public function testTheHasMethodThrowsAnExceptionIfTheGivenKeyIsNotAString()
     {
         $this->setExpectedException(
-            Exception\EnvironmentConfigKeyIsNotAStringException::class,
+            EnvironmentConfigKeyIsNotAStringException::class,
             'The given environment configuration key is not a string: "'
         );
         EnvironmentConfigReader::fromArray([])->has(123);
@@ -26,7 +29,7 @@ class EnvironmentConfigReaderTest extends \PHPUnit_Framework_TestCase
     public function testTheHasMethodThrowsAnExceptionIfTheGivenKeyIsEmpty()
     {
         $this->setExpectedException(
-            Exception\EnvironmentConfigKeyIsEmptyException::class,
+            EnvironmentConfigKeyIsEmptyException::class,
             'The given environment configuration key is empty.'
         );
         EnvironmentConfigReader::fromArray([])->has('');
@@ -46,7 +49,7 @@ class EnvironmentConfigReaderTest extends \PHPUnit_Framework_TestCase
     public function testTheGetMethodThrowsAnExceptionIfTheGivenKeyIsNotAString()
     {
         $this->setExpectedException(
-            Exception\EnvironmentConfigKeyIsNotAStringException::class,
+            EnvironmentConfigKeyIsNotAStringException::class,
             'The given environment configuration key is not a string: "'
         );
         EnvironmentConfigReader::fromArray([])->get(123);
@@ -55,7 +58,7 @@ class EnvironmentConfigReaderTest extends \PHPUnit_Framework_TestCase
     public function testTheGetMethodThrowsAnExceptionIfTheGivenKeyIsEmpty()
     {
         $this->setExpectedException(
-            Exception\EnvironmentConfigKeyIsEmptyException::class,
+            EnvironmentConfigKeyIsEmptyException::class,
             'The given environment configuration key is empty.'
         );
         EnvironmentConfigReader::fromArray([])->get('');

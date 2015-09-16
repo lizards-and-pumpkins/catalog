@@ -7,6 +7,10 @@ use LizardsAndPumpkins\Product\ProductAttributeList;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Product\ProductSource;
 use LizardsAndPumpkins\Product\SampleSku;
+use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportSourceFilePathIsNotAStringException;
+use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportSourceXmlFileDoesNotExistException;
+use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportSourceXmlFileIsNotReadableException;
+use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportSourceXMLNotAStringException;
 use LizardsAndPumpkins\Utils\XPathParser;
 
 class CatalogXmlParser
@@ -73,7 +77,7 @@ class CatalogXmlParser
     private static function validateSourceFilePathIsString($sourceFilePath)
     {
         if (!is_string($sourceFilePath)) {
-            throw new Exception\CatalogImportSourceFilePathIsNotAStringException(sprintf(
+            throw new CatalogImportSourceFilePathIsNotAStringException(sprintf(
                 'Expected the catalog XML import file path to be a string, got "%s"',
                 self::getVariableType($sourceFilePath)
             ));
@@ -86,7 +90,7 @@ class CatalogXmlParser
     private static function validateSourceFileExists($sourceFilePath)
     {
         if (!file_exists($sourceFilePath)) {
-            throw new Exception\CatalogImportSourceXmlFileDoesNotExistException(
+            throw new CatalogImportSourceXmlFileDoesNotExistException(
                 sprintf('The catalog XML import file "%s" does not exist', $sourceFilePath)
             );
         }
@@ -98,7 +102,7 @@ class CatalogXmlParser
     private static function validateSourceFileIsReadable($sourceFilePath)
     {
         if (!is_readable($sourceFilePath)) {
-            throw new Exception\CatalogImportSourceXmlFileIsNotReadableException(
+            throw new CatalogImportSourceXmlFileIsNotReadableException(
                 sprintf('The catalog XML import file "%s" is not readable', $sourceFilePath)
             );
         }
@@ -110,7 +114,7 @@ class CatalogXmlParser
     private static function validateSourceXmlIsString($xmlString)
     {
         if (!is_string($xmlString)) {
-            throw new Exception\CatalogImportSourceXMLNotAStringException(sprintf(
+            throw new CatalogImportSourceXMLNotAStringException(sprintf(
                 'Expected the catalog XML to be a string, got "%s"',
                 self::getVariableType($xmlString)
             ));

@@ -3,6 +3,9 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\Exception\EnvironmentConfigKeyIsEmptyException;
+use LizardsAndPumpkins\Exception\EnvironmentConfigKeyIsNotAStringException;
+
 class EnvironmentConfigReader implements ConfigReader
 {
     const ENV_VAR_PREFIX = 'LP_';
@@ -89,7 +92,7 @@ class EnvironmentConfigReader implements ConfigReader
         if (!is_string($configKey)) {
             $variableType = $this->getVariableType($configKey);
             $message = sprintf('The given environment configuration key is not a string: "%s"', $variableType);
-            throw new Exception\EnvironmentConfigKeyIsNotAStringException($message);
+            throw new EnvironmentConfigKeyIsNotAStringException($message);
         }
     }
 
@@ -100,7 +103,7 @@ class EnvironmentConfigReader implements ConfigReader
     {
         if ('' === $configKey) {
             $message = 'The given environment configuration key is empty.';
-            throw new Exception\EnvironmentConfigKeyIsEmptyException($message);
+            throw new EnvironmentConfigKeyIsEmptyException($message);
         }
     }
 

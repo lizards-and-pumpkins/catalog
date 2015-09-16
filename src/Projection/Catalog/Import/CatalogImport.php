@@ -10,6 +10,8 @@ use LizardsAndPumpkins\Product\ProductListingMetaInfoSourceBuilder;
 use LizardsAndPumpkins\Product\ProductSourceBuilder;
 use LizardsAndPumpkins\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Product\UpdateProductListingCommand;
+use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportFileDoesNotExistException;
+use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportFileNotReadableException;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\Utils\XPathParser;
 
@@ -67,12 +69,12 @@ class CatalogImport
     private function validateImportFilePath($importFilePath)
     {
         if (!file_exists($importFilePath)) {
-            throw new Exception\CatalogImportFileDoesNotExistException(
+            throw new CatalogImportFileDoesNotExistException(
                 sprintf('Catalog import file not found: "%s"', $importFilePath)
             );
         }
         if (!is_readable($importFilePath)) {
-            throw new Exception\CatalogImportFileNotReadableException(
+            throw new CatalogImportFileNotReadableException(
                 sprintf('Catalog import file is not readable: "%s"', $importFilePath)
             );
         }
