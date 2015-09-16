@@ -101,7 +101,7 @@ class EnvironmentConfigReader implements ConfigReader
      */
     private function validateConfigKeyNotEmpty($configKey)
     {
-        if ('' === $configKey) {
+        if ('' === trim($configKey)) {
             $message = 'The given environment configuration key is empty.';
             throw new EnvironmentConfigKeyIsEmptyException($message);
         }
