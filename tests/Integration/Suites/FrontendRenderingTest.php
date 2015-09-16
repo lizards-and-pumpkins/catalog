@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
+use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductDetailPageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Product\ProductDetailViewInContextSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewRequestHandler;
@@ -37,7 +38,7 @@ class FrontendRenderingTest extends AbstractIntegrationTest
         $rootSnippetKeyGenerator = new GenericSnippetKeyGenerator(
             ProductDetailViewInContextSnippetRenderer::CODE,
             $this->factory->getRequiredContexts(),
-            ['product_id']
+            [Product::ID]
         );
         $snippetKeyGeneratorLocator->register($rootSnippetCode, $rootSnippetKeyGenerator);
         $snippetKeyGeneratorLocator->register(
@@ -50,7 +51,7 @@ class FrontendRenderingTest extends AbstractIntegrationTest
         );
 
         $pageSnippet = Snippet::create(
-            $rootSnippetKeyGenerator->getKeyForContext($context, ['product_id' => $this->testProductId]),
+            $rootSnippetKeyGenerator->getKeyForContext($context, [Product::ID => $this->testProductId]),
             '<html><head>{{snippet head}}</head><body>{{snippet body}}</body></html>'
         );
         $dataPoolWriter->writeSnippet($pageSnippet);
@@ -64,12 +65,12 @@ class FrontendRenderingTest extends AbstractIntegrationTest
         $dataPoolWriter->writeSnippet($metaInfoSnippet);
 
         $headSnippetKeyGenerator = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode('head');
-        $key = $headSnippetKeyGenerator->getKeyForContext($context, ['product_id' => $this->testProductId]);
+        $key = $headSnippetKeyGenerator->getKeyForContext($context, [Product::ID => $this->testProductId]);
         $headSnippet = Snippet::create($key, '<title>Page Title</title>');
         $dataPoolWriter->writeSnippet($headSnippet);
 
         $bodySnippetKeyGenerator = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode('body');
-        $key = $bodySnippetKeyGenerator->getKeyForContext($context, ['product_id' => $this->testProductId]);
+        $key = $bodySnippetKeyGenerator->getKeyForContext($context, [Product::ID => $this->testProductId]);
         $bodySnippet = Snippet::create($key, '<h1>Headline</h1>');
         $dataPoolWriter->writeSnippet($bodySnippet);
     }
@@ -92,7 +93,7 @@ class FrontendRenderingTest extends AbstractIntegrationTest
         $productDetailPageMetaSnippetKeyGenerator = $this->factory->createProductDetailPageMetaSnippetKeyGenerator();
         $productDetailPageMetaSnippetKey = $productDetailPageMetaSnippetKeyGenerator->getKeyForContext(
             $context,
-            ['url_key' => $urlKey]
+            [PageMetaInfoSnippetContent::URL_KEY => $urlKey]
         );
 
 

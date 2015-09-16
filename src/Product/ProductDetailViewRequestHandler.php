@@ -10,6 +10,7 @@ use LizardsAndPumpkins\Http\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\UnableToHandleRequestException;
 use LizardsAndPumpkins\PageBuilder;
+use LizardsAndPumpkins\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 
 class ProductDetailViewRequestHandler implements HttpRequestHandler
@@ -72,7 +73,7 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
         }
 
         $keyGeneratorParams = [
-            ProductDetailPageMetaInfoSnippetContent::KEY_PRODUCT_ID => $this->pageMetaInfo->getProductId()
+            Product::ID => $this->pageMetaInfo->getProductId()
         ];
 
         return $this->pageBuilder->buildPage($this->pageMetaInfo, $this->context, $keyGeneratorParams);
@@ -111,7 +112,10 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
     private function getMetaInfoSnippetKey(HttpRequest $request)
     {
         $urlKey = $request->getUrlPathRelativeToWebFront();
-        $metaInfoSnippetKey = $this->snippetKeyGenerator->getKeyForContext($this->context, ['url_key' => $urlKey]);
+        $metaInfoSnippetKey = $this->snippetKeyGenerator->getKeyForContext(
+            $this->context,
+            [PageMetaInfoSnippetContent::URL_KEY => $urlKey]
+        );
 
         return $metaInfoSnippetKey;
     }

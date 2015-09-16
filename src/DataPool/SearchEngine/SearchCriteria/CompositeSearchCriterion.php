@@ -21,7 +21,7 @@ class CompositeSearchCriterion implements SearchCriteria, \JsonSerializable
 
     /**
      * @param string $condition
-     * @param SearchCriteria $criteria,...
+     * @param SearchCriteria ...$criteria
      */
     private function __construct($condition, SearchCriteria ...$criteria)
     {
@@ -30,7 +30,7 @@ class CompositeSearchCriterion implements SearchCriteria, \JsonSerializable
     }
 
     /**
-     * @param SearchCriteria $criteria,...
+     * @param SearchCriteria ...$criteria
      * @return CompositeSearchCriterion
      */
     public static function createAnd(SearchCriteria ...$criteria)
@@ -39,7 +39,7 @@ class CompositeSearchCriterion implements SearchCriteria, \JsonSerializable
     }
 
     /**
-     * @param SearchCriteria $criteria,...
+     * @param SearchCriteria ...$criteria
      * @return CompositeSearchCriterion
      */
     public static function createOr(SearchCriteria ...$criteria)

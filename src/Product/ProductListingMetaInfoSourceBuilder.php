@@ -92,7 +92,7 @@ class ProductListingMetaInfoSourceBuilder
         $contextData = [];
 
         foreach ($xmlNodeAttributes as $xmlAttribute) {
-            if ('url_key' !== $xmlAttribute['nodeName'] && 'condition' !== $xmlAttribute['nodeName']) {
+            if (Product::URL_KEY !== $xmlAttribute['nodeName'] && 'condition' !== $xmlAttribute['nodeName']) {
                 $contextData[$xmlAttribute['nodeName']] = $xmlAttribute['value'];
             }
         }
@@ -102,7 +102,7 @@ class ProductListingMetaInfoSourceBuilder
 
     /**
      * @param array[] $criteriaCondition
-     * @param SearchCriterion|SearchCriterion[] $criterionArray
+     * @param SearchCriterion|SearchCriterion ...$criterionArray
      * @return CompositeSearchCriterion
      */
     private function createSearchCriteria(array $criteriaCondition, SearchCriterion ...$criterionArray)

@@ -168,7 +168,10 @@ class ProductListingTest extends AbstractIntegrationTest
         $context = $contextSource->getAllAvailableContexts()[0];
 
         $productListingMetaInfoSnippetKeyGenerator = $this->factory->createProductListingMetaDataSnippetKeyGenerator();
-        $snippetKey = $productListingMetaInfoSnippetKeyGenerator->getKeyForContext($context, ['url_key' => $urlKey]);
+        $snippetKey = $productListingMetaInfoSnippetKeyGenerator->getKeyForContext(
+            $context,
+            [PageMetaInfoSnippetContent::URL_KEY => $urlKey]
+        );
 
         $dataPoolReader = $this->factory->createDataPoolReader();
         $metaInfoSnippet = $dataPoolReader->getSnippet($snippetKey);

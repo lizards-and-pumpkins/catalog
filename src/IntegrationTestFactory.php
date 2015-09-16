@@ -6,6 +6,8 @@ use LizardsAndPumpkins\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
+use LizardsAndPumpkins\DataPool\UrlKeyStore\InMemoryUrlKeyStore;
+use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 use LizardsAndPumpkins\Image\ImageMagickResizeStrategy;
 use LizardsAndPumpkins\Image\ImageProcessor;
 use LizardsAndPumpkins\Image\ImageProcessorCollection;
@@ -41,7 +43,12 @@ class IntegrationTestFactory implements Factory
      * @var SearchEngine
      */
     private $searchEngine;
-    
+
+    /**
+     * @var UrlKeyStore
+     */
+    private $urlKeyStore;
+
     /**
      * @return string[]
      */
@@ -104,6 +111,14 @@ class IntegrationTestFactory implements Factory
     public function createSearchEngine()
     {
         return new InMemorySearchEngine();
+    }
+
+    /**
+     * @return UrlKeyStore
+     */
+    public function createUrlKeyStore()
+    {
+        return new InMemoryUrlKeyStore();
     }
 
     /**
@@ -241,5 +256,21 @@ class IntegrationTestFactory implements Factory
     public function setSearchEngine(SearchEngine $searchEngine)
     {
         $this->searchEngine = $searchEngine;
+    }
+
+    /**
+     * @return UrlKeyStore
+     */
+    public function getUrlKeyStore()
+    {
+        if (null === $this->urlKeyStore) {
+            $this->urlKeyStore = $this->createUrlKeyStore();
+        }
+        return $this->urlKeyStore;
+    }
+
+    public function setUrlKeyStore(UrlKeyStore $urlKeyStore)
+    {
+        $this->urlKeyStore = $urlKeyStore;
     }
 }

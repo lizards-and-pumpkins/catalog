@@ -36,14 +36,21 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
             throw new InvalidProjectionSourceDataTypeException('First argument must be instance of ProductSource.');
         }
 
-        $collection = new SearchDocumentCollection();
+        $searchDocuments = $this->createSearchDocuments($projectionSourceData, $contextSource);
 
-        foreach ($contextSource->getAllAvailableContexts() as $context) {
-            $document = $this->createSearchDocument($projectionSourceData, $context);
-            $collection->add($document);
-        }
+        return new SearchDocumentCollection(...$searchDocuments);
+    }
 
-        return $collection;
+    /**
+     * @param ProductSource $productSource
+     * @param ContextSource $contextSource
+     * @return SearchDocument[]
+     */
+    private function createSearchDocuments(ProductSource $productSource, ContextSource $contextSource)
+    {
+        return array_map(function (Context $context) use ($productSource) {
+            return $this->createSearchDocument($productSource, $context);
+        }, $contextSource->getAllAvailableContexts());
     }
 
     /**
