@@ -1336,7 +1336,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return string
+     * @return callable
      */
     public function getTranslatorFactory()
     {
