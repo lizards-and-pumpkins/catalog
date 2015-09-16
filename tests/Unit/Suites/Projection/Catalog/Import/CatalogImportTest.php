@@ -10,8 +10,8 @@ use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Product\ProductSource;
 use LizardsAndPumpkins\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Product\UpdateProductListingCommand;
-use LizardsAndPumpkins\Product\ProductListingMetaInfoSource;
-use LizardsAndPumpkins\Product\ProductListingMetaInfoSourceBuilder;
+use LizardsAndPumpkins\Product\ProductListingMetaInfo;
+use LizardsAndPumpkins\Product\ProductListingMetaInfoBuilder;
 use LizardsAndPumpkins\Product\ProductSourceBuilder;
 use LizardsAndPumpkins\Queue\Queue;
 use org\bovigo\vfs\vfsStream;
@@ -39,7 +39,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     private $stubProductSourceBuilder;
 
     /**
-     * @var ProductListingMetaInfoSourceBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductListingMetaInfoBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubProductListingMetaInfoSourceBuilder;
 
@@ -86,14 +86,14 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return ProductListingMetaInfoSourceBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @return ProductListingMetaInfoBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createMockProductListingSourceBuilder()
     {
-        $productListingMetaInfoSource = $this->getMock(ProductListingMetaInfoSource::class, [], [], '', false);
+        $productListingMetaInfoSource = $this->getMock(ProductListingMetaInfo::class, [], [], '', false);
         $productListingMetaInfoSource->method('getUrlKey')->willReturn('dummy-url-key');
 
-        $productListingSourceBuilder = $this->getMock(ProductListingMetaInfoSourceBuilder::class, [], [], '', false);
+        $productListingSourceBuilder = $this->getMock(ProductListingMetaInfoBuilder::class, [], [], '', false);
         $productListingSourceBuilder->method('createProductListingMetaInfoSourceFromXml')
             ->willReturn($productListingMetaInfoSource);
         return $productListingSourceBuilder;

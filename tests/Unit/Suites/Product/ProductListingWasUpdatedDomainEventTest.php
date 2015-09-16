@@ -10,7 +10,7 @@ use LizardsAndPumpkins\DomainEvent;
 class ProductListingWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ProductListingMetaInfoSource|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductListingMetaInfo|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubProductListingMetaInfoSource;
 
@@ -23,7 +23,7 @@ class ProductListingWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCas
     {
         $dummyUrlKey = 'foo';
         $this->stubProductListingMetaInfoSource = $this->getMock(
-            ProductListingMetaInfoSource::class,
+            ProductListingMetaInfo::class,
             [],
             [],
             '',

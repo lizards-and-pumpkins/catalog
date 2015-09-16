@@ -10,7 +10,7 @@ use LizardsAndPumpkins\Command;
 class UpdateProductListingCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ProductListingMetaInfoSource|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductListingMetaInfo|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubProductListingMetaInfoSource;
 
@@ -22,7 +22,7 @@ class UpdateProductListingCommandTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->stubProductListingMetaInfoSource = $this->getMock(
-            ProductListingMetaInfoSource::class,
+            ProductListingMetaInfo::class,
             [],
             [],
             '',

@@ -47,10 +47,10 @@ class ProductListingMetaInfoSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param ProductListingMetaInfoSource $productListingMetaInfoSource
+     * @param ProductListingMetaInfo $productListingMetaInfoSource
      * @return SnippetList
      */
-    public function render(ProductListingMetaInfoSource $productListingMetaInfoSource)
+    public function render(ProductListingMetaInfo $productListingMetaInfoSource)
     {
         $contextData = $productListingMetaInfoSource->getContextData();
         $context = $this->contextBuilder->createContext($contextData);
@@ -67,12 +67,12 @@ class ProductListingMetaInfoSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param ProductListingMetaInfoSource $productListingMetaInfoSource
+     * @param ProductListingMetaInfo $productListingMetaInfoSource
      * @param Context $context
      * @return string
      */
     private function getProductListingMetaDataSnippetKey(
-        ProductListingMetaInfoSource $productListingMetaInfoSource,
+        ProductListingMetaInfo $productListingMetaInfoSource,
         Context $context
     ) {
         $productListingUrlKey = $productListingMetaInfoSource->getUrlKey();
@@ -85,11 +85,11 @@ class ProductListingMetaInfoSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param ProductListingMetaInfoSource $productListingMetaInfoSource
+     * @param ProductListingMetaInfo $productListingMetaInfoSource
      * @return string
      */
     private function getProductListingPageMetaInfoSnippetContent(
-        ProductListingMetaInfoSource $productListingMetaInfoSource
+        ProductListingMetaInfo $productListingMetaInfoSource
     ) {
         $pageSnippetCodes = $this->blockRenderer->getNestedSnippetCodes();
 

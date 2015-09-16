@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins\Projection\Catalog\Import;
 use LizardsAndPumpkins\Image\UpdateImageCommand;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\ProductId;
-use LizardsAndPumpkins\Product\ProductListingMetaInfoSourceBuilder;
+use LizardsAndPumpkins\Product\ProductListingMetaInfoBuilder;
 use LizardsAndPumpkins\Product\ProductSourceBuilder;
 use LizardsAndPumpkins\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Product\UpdateProductListingCommand;
@@ -26,7 +26,7 @@ class CatalogImport
     private $productSourceBuilder;
 
     /**
-     * @var ProductListingMetaInfoSourceBuilder
+     * @var ProductListingMetaInfoBuilder
      */
     private $productListingMetaInfoSourceBuilder;
 
@@ -38,7 +38,7 @@ class CatalogImport
     public function __construct(
         Queue $commandQueue,
         ProductSourceBuilder $productSourceBuilder,
-        ProductListingMetaInfoSourceBuilder $productListingMetaInfoSourceBuilder,
+        ProductListingMetaInfoBuilder $productListingMetaInfoSourceBuilder,
         Logger $logger
     ) {
 

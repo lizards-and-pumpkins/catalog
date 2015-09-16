@@ -24,9 +24,9 @@ class UpdateProductListingCommandHandlerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /**
-         * @var ProductListingMetaInfoSource|\PHPUnit_Framework_MockObject_MockObject $stubProductListingMetaInfoSource
+         * @var ProductListingMetaInfo|\PHPUnit_Framework_MockObject_MockObject $stubProductListingMetaInfoSource
          */
-        $stubProductListingMetaInfoSource = $this->getMock(ProductListingMetaInfoSource::class, [], [], '', false);
+        $stubProductListingMetaInfoSource = $this->getMock(ProductListingMetaInfo::class, [], [], '', false);
         $stubProductListingMetaInfoSource->method('getUrlKey')->willReturn('foo');
 
         /** @var UpdateProductListingCommand|\PHPUnit_Framework_MockObject_MockObject $stubCommand */

@@ -8,7 +8,7 @@ use LizardsAndPumpkins\UrlKey;
 /**
  * @covers \LizardsAndPumpkins\Product\ProductListingMetaInfoSource
  */
-class ProductListingMetaInfoSourceTest extends \PHPUnit_Framework_TestCase
+class ProductListingMetaInfoTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var UrlKey|\PHPUnit_Framework_MockObject_MockObject
@@ -26,7 +26,7 @@ class ProductListingMetaInfoSourceTest extends \PHPUnit_Framework_TestCase
     private $stubCriteria;
 
     /**
-     * @var ProductListingMetaInfoSource
+     * @var ProductListingMetaInfo
      */
     private $productListingMetaInfoSource;
 
@@ -34,7 +34,7 @@ class ProductListingMetaInfoSourceTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubUrlKey = $this->getMock(UrlKey::class, [], [], '', false);
         $this->stubCriteria = $this->getMock(SearchCriteria::class);
-        $this->productListingMetaInfoSource = new ProductListingMetaInfoSource(
+        $this->productListingMetaInfoSource = new ProductListingMetaInfo(
             $this->stubUrlKey,
             $this->dummyContextData,
             $this->stubCriteria

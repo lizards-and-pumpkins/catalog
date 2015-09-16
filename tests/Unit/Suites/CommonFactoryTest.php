@@ -18,7 +18,7 @@ use LizardsAndPumpkins\Image\UpdateImageCommand;
 use LizardsAndPumpkins\Image\UpdateImageCommandHandler;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\FilterNavigationFilterCollection;
-use LizardsAndPumpkins\Product\ProductListingMetaInfoSourceBuilder;
+use LizardsAndPumpkins\Product\ProductListingMetaInfoBuilder;
 use LizardsAndPumpkins\Product\ProductListingSourceListBuilder;
 use LizardsAndPumpkins\Product\FilterNavigationBlockRenderer;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
@@ -196,7 +196,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     public function testProductListingMetaInfoSourceBuilderIsReturned()
     {
         $result = $this->commonFactory->createProductListingMetaInfoSourceBuilder();
-        $this->assertInstanceOf(ProductListingMetaInfoSourceBuilder::class, $result);
+        $this->assertInstanceOf(ProductListingMetaInfoBuilder::class, $result);
     }
 
     public function testProductListingSourceListBuilderIsReturned()

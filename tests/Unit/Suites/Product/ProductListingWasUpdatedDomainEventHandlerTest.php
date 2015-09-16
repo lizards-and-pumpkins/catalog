@@ -22,7 +22,7 @@ class ProductListingWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_
 
     protected function setUp()
     {
-        $stubProductListingMetaInfoSource = $this->getMock(ProductListingMetaInfoSource::class, [], [], '', false);
+        $stubProductListingMetaInfoSource = $this->getMock(ProductListingMetaInfo::class, [], [], '', false);
 
         /** @var ProductListingWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $mockDomainEvent */
         $mockDomainEvent = $this->getMock(ProductListingWasUpdatedDomainEvent::class, [], [], '', false);

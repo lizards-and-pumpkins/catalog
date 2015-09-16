@@ -22,7 +22,7 @@ use LizardsAndPumpkins\UrlKey;
  * @uses   \LizardsAndPumpkins\Utils\XPathParser
  * @uses   \LizardsAndPumpkins\UrlKey
  */
-class ProductListingMetaInfoSourceBuilderTest extends \PHPUnit_Framework_TestCase
+class ProductListingMetaInfoBuilderTest extends \PHPUnit_Framework_TestCase
 {
     public function testProductListingMetaInfoSourceWithAndConditionIsCreatedFromXml()
     {
@@ -33,14 +33,14 @@ class ProductListingMetaInfoSourceBuilderTest extends \PHPUnit_Framework_TestCas
 </listing>
 EOX;
 
-        $productListingMetaInfoSource = (new ProductListingMetaInfoSourceBuilder())
+        $productListingMetaInfoSource = (new ProductListingMetaInfoBuilder())
             ->createProductListingMetaInfoSourceFromXml($xml);
 
         $urlKey = $productListingMetaInfoSource->getUrlKey();
         $context = $productListingMetaInfoSource->getContextData();
         $result = $productListingMetaInfoSource->getCriteria();
 
-        $this->assertInstanceOf(ProductListingMetaInfoSource::class, $productListingMetaInfoSource);
+        $this->assertInstanceOf(ProductListingMetaInfo::class, $productListingMetaInfoSource);
         $this->assertEquals('men-accessories', $urlKey);
         $this->assertEquals(['website' => 'ru', 'locale' => 'en_US'], $context);
 
@@ -60,7 +60,7 @@ EOX;
 </listing>
 EOX;
 
-        $productListingMetaInfoSource = (new ProductListingMetaInfoSourceBuilder())
+        $productListingMetaInfoSource = (new ProductListingMetaInfoBuilder())
             ->createProductListingMetaInfoSourceFromXml($xml);
         $result = $productListingMetaInfoSource->getCriteria();
 
@@ -75,35 +75,35 @@ EOX;
     {
         $this->setExpectedException(MissingUrlKeyXmlAttributeException::class);
         $xml = '<listing />';
-        (new ProductListingMetaInfoSourceBuilder())->createProductListingMetaInfoSourceFromXml($xml);
+        (new ProductListingMetaInfoBuilder())->createProductListingMetaInfoSourceFromXml($xml);
     }
 
     public function testExceptionIsThrownIfConditionAttributeOfListingNodeIsMissing()
     {
         $this->setExpectedException(MissingConditionXmlAttributeException::class);
         $xml = '<listing url_key="foo"/>';
-        (new ProductListingMetaInfoSourceBuilder())->createProductListingMetaInfoSourceFromXml($xml);
+        (new ProductListingMetaInfoBuilder())->createProductListingMetaInfoSourceFromXml($xml);
     }
 
     public function testExceptionIsThrownIfConditionAttributeOfListingNodeIsInvalid()
     {
         $this->setExpectedException(InvalidConditionXmlAttributeException::class);
         $xml = '<listing url_key="foo" condition="bar"/>';
-        (new ProductListingMetaInfoSourceBuilder())->createProductListingMetaInfoSourceFromXml($xml);
+        (new ProductListingMetaInfoBuilder())->createProductListingMetaInfoSourceFromXml($xml);
     }
 
     public function testExceptionIsThrownIfCriterionNodeDoesNotHaveOperationAttribute()
     {
         $this->setExpectedException(MissingCriterionOperationXmlAttributeException::class);
         $xml = '<listing url_key="foo" condition="and"><bar /></listing>';
-        (new ProductListingMetaInfoSourceBuilder())->createProductListingMetaInfoSourceFromXml($xml);
+        (new ProductListingMetaInfoBuilder())->createProductListingMetaInfoSourceFromXml($xml);
     }
 
     public function testExceptionIsThrownIfCriterionOperationAttributeIsNotAValidClass()
     {
         $this->setExpectedException(InvalidCriterionOperationXmlAttributeException::class);
         $xml = '<listing url_key="foo" condition="and"><bar operation="baz" /></listing>';
-        (new ProductListingMetaInfoSourceBuilder())->createProductListingMetaInfoSourceFromXml($xml);
+        (new ProductListingMetaInfoBuilder())->createProductListingMetaInfoSourceFromXml($xml);
     }
 
     public function testExceptionIsThrownIfCriterionOperationAttributeContainsNonCharacterData()
@@ -113,14 +113,14 @@ EOX;
             sprintf('Invalid operation in product listing XML "%s", only the letters a-z are allowed.', "a\\b")
         );
         $xml = '<listing url_key="foo" condition="and"><bar operation="a\\b" /></listing>';
-        (new ProductListingMetaInfoSourceBuilder())->createProductListingMetaInfoSourceFromXml($xml);
+        (new ProductListingMetaInfoBuilder())->createProductListingMetaInfoSourceFromXml($xml);
     }
 
     public function testItThrowsAnExceptionIfTheContextArrayContainsNonStrings()
     {
         $expectedMessage = 'The context array has to contain only string values, found ';
         $this->setExpectedException(DataNotStringException::class, $expectedMessage);
-        (new ProductListingMetaInfoSourceBuilder())->createProductListingMetaInfoSource(
+        (new ProductListingMetaInfoBuilder())->createProductListingMetaInfoSource(
             UrlKey::fromString('http://example.com'),
             ['key' => 123],
             $this->getMock(SearchCriteria::class)
@@ -131,7 +131,7 @@ EOX;
     {
         $expectedMessage = 'The context array has to contain only string keys, found ';
         $this->setExpectedException(DataNotStringException::class, $expectedMessage);
-        (new ProductListingMetaInfoSourceBuilder())->createProductListingMetaInfoSource(
+        (new ProductListingMetaInfoBuilder())->createProductListingMetaInfoSource(
             UrlKey::fromString('http://example.com'),
             [0 => 'value'],
             $this->getMock(SearchCriteria::class)

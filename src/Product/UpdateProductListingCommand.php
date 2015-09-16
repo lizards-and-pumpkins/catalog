@@ -7,17 +7,17 @@ use LizardsAndPumpkins\Command;
 class UpdateProductListingCommand implements Command
 {
     /**
-     * @var ProductListingMetaInfoSource
+     * @var ProductListingMetaInfo
      */
     private $productListingMetaInfoSource;
 
-    public function __construct(ProductListingMetaInfoSource $productListingMetaInfoSource)
+    public function __construct(ProductListingMetaInfo $productListingMetaInfoSource)
     {
         $this->productListingMetaInfoSource = $productListingMetaInfoSource;
     }
 
     /**
-     * @return ProductListingMetaInfoSource
+     * @return ProductListingMetaInfo
      */
     public function getProductListingMetaInfoSource()
     {

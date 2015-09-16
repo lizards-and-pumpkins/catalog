@@ -33,12 +33,12 @@ class ProductListingMetaInfoSnippetRendererTest extends \PHPUnit_Framework_TestC
     private $renderer;
 
     /**
-     * @return ProductListingMetaInfoSource|\PHPUnit_Framework_MockObject_MockObject
+     * @return ProductListingMetaInfo|\PHPUnit_Framework_MockObject_MockObject
      */
     private function getMockProductListingMetaInfoSource()
     {
         $mockSearchCriteria = $this->getMock(CompositeSearchCriterion::class, [], [], '', false);
-        $mockProductListingMetaInfoSource = $this->getMock(ProductListingMetaInfoSource::class, [], [], '', false);
+        $mockProductListingMetaInfoSource = $this->getMock(ProductListingMetaInfo::class, [], [], '', false);
         $mockProductListingMetaInfoSource->method('getContextData')->willReturn([]);
         $mockProductListingMetaInfoSource->method('getCriteria')->willReturn($mockSearchCriteria);
 

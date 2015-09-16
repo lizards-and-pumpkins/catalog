@@ -14,11 +14,11 @@ use LizardsAndPumpkins\Product\Exception\MissingUrlKeyXmlAttributeException;
 use LizardsAndPumpkins\UrlKey;
 use LizardsAndPumpkins\Utils\XPathParser;
 
-class ProductListingMetaInfoSourceBuilder
+class ProductListingMetaInfoBuilder
 {
     /**
      * @param string $xml
-     * @return ProductListingMetaInfoSource
+     * @return ProductListingMetaInfo
      */
     public function createProductListingMetaInfoSourceFromXml($xml)
     {
@@ -44,7 +44,7 @@ class ProductListingMetaInfoSourceBuilder
      * @param UrlKey $urlKey
      * @param string[] $contextData
      * @param SearchCriteria $criteria
-     * @return ProductListingMetaInfoSource
+     * @return ProductListingMetaInfo
      */
     public function createProductListingMetaInfoSource(UrlKey $urlKey, array $contextData, SearchCriteria $criteria)
     {
@@ -54,7 +54,7 @@ class ProductListingMetaInfoSourceBuilder
             array_map($this->getStringValidatorWithMessage($message), $thingToCheck[1]);
         }, $thingsToCheck);
 
-        return new ProductListingMetaInfoSource($urlKey, $contextData, $criteria);
+        return new ProductListingMetaInfo($urlKey, $contextData, $criteria);
     }
 
     /**
