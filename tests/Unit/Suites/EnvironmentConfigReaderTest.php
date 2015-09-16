@@ -71,7 +71,8 @@ class EnvironmentConfigReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testTheGetMethodReturnsTheValueFromTheEnvironmentMethodIfPresent()
     {
-        $environmentConfig = ['LP_THE-KEY' => 'the-value'];
-        $this->assertSame('the-value', EnvironmentConfigReader::fromArray($environmentConfig)->get('the-key'));
+        $testConfigValue = 'the-value';
+        $environmentConfig = ['LP_THE-KEY' => $testConfigValue];
+        $this->assertSame($testConfigValue, EnvironmentConfigReader::fromArray($environmentConfig)->get('the-key'));
     }
 }
