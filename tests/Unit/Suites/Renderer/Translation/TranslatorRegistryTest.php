@@ -14,11 +14,11 @@ class TranslatorRegistryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $stubTranslator = $this->getMock(Translator::class);
-
         /** @var callable|\PHPUnit_Framework_MockObject_MockObject $stubTranslatorFactory */
         $stubTranslatorFactory = $this->getMock(Callback::class, ['__invoke']);
-        $stubTranslatorFactory->method('__invoke')->willReturn($stubTranslator);
+        $stubTranslatorFactory->method('__invoke')->willReturnCallback(function () {
+            return $this->getMock(Translator::class);
+        });
 
         $this->registry = new TranslatorRegistry($stubTranslatorFactory);
     }
@@ -34,5 +34,13 @@ class TranslatorRegistryTest extends \PHPUnit_Framework_TestCase
         $instanceB = $this->registry->getTranslatorForLocale('foo_BAR');
 
         $this->assertSame($instanceA, $instanceB);
+    }
+
+    public function testDifferentInstancesOfTranslatorAreReturnedForDifferentLocales()
+    {
+        $instanceA = $this->registry->getTranslatorForLocale('foo_BAR');
+        $instanceB = $this->registry->getTranslatorForLocale('baz_QUX');
+
+        $this->assertNotSame($instanceA, $instanceB);
     }
 }
