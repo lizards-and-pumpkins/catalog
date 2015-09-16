@@ -28,29 +28,19 @@ class CsvTranslator implements Translator
      */
     public static function forLocale($localeCode, ThemeLocator $themeLocator)
     {
-        $localeDirectoryPath = $themeLocator->getThemeDirectory() . '/locale/' . $localeCode;
-        $translations = [];
+        $translationFiles = self::getTranslationFilesFromLocaleDirectory($localeCode, $themeLocator);
+        $translations = array_reduce($translationFiles, function (array $carry, $filePath) {
+            self::validateTranslationFileIsReadable($filePath);
+            $fileRows = file($filePath);
 
-        if (is_dir($localeDirectoryPath) && is_readable($localeDirectoryPath)) {
-            $translationFiles = glob($localeDirectoryPath . '/*.csv');
-            foreach ($translationFiles as $filePath) {
-                self::validateTranslationFileIsReadable($filePath);
-
-                $fileRows = file($filePath);
-
-                foreach ($fileRows as $row) {
-                    $data = str_getcsv($row);
-
-                    if (2 !== count($data)) {
-                        throw new MalformedTranslationFileException(
-                            sprintf('Bad translation formatting in "%s": %s', $filePath, $row)
-                        );
-                    }
-
-                    $translations[$data[0]] = $data[1];
-                }
+            foreach ($fileRows as $row) {
+                $data = str_getcsv($row);
+                self::validateTranslation($data, $filePath, $row);
+                $carry[$data[0]] = $data[1];
             }
-        }
+
+            return $carry;
+        }, []);
 
         return new self($translations);
     }
@@ -69,6 +59,19 @@ class CsvTranslator implements Translator
     }
 
     /**
+     * @param string $localeCode
+     * @param ThemeLocator $themeLocator
+     * @return string[]
+     */
+    private static function getTranslationFilesFromLocaleDirectory($localeCode, ThemeLocator $themeLocator)
+    {
+        $localeDirectoryPath = $themeLocator->getThemeDirectory() . '/locale/' . $localeCode;
+        self::validateLocaleDirectory($localeDirectoryPath);
+
+        return glob($localeDirectoryPath . '/*.csv');
+    }
+
+    /**
      * @param string $translationFilePath
      */
     private static function validateTranslationFileIsReadable($translationFilePath)
@@ -76,6 +79,32 @@ class CsvTranslator implements Translator
         if (!is_readable($translationFilePath)) {
             throw new TranslationFileNotReadableException(
                 sprintf('Translation file "%s" is not readable', $translationFilePath)
+            );
+        }
+    }
+
+    /**
+     * @param $localeDirectoryPath
+     */
+    private static function validateLocaleDirectory($localeDirectoryPath)
+    {
+        if (!is_dir($localeDirectoryPath) || !is_readable($localeDirectoryPath)) {
+            throw new LocaleDirectoryNotReadableException(
+                sprintf('Locale directory "%s" is not readable', $localeDirectoryPath)
+            );
+        }
+    }
+
+    /**
+     * @param string[] $translationData
+     * @param string $filePath
+     * @param string $row
+     */
+    private static function validateTranslation(array $translationData, $filePath, $row)
+    {
+        if (2 !== count($translationData)) {
+            throw new MalformedTranslationFileException(
+                sprintf('Bad translation formatting in "%s": %s', $filePath, $row)
             );
         }
     }

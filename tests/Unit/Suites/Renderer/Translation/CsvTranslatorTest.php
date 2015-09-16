@@ -31,8 +31,22 @@ class CsvTranslatorTest extends \PHPUnit_Framework_TestCase
 
     public function testTranslatorInterfaceIsImplemented()
     {
+        $testThemeDirectoryPath = sys_get_temp_dir();
+        $this->stubThemeLocator->method('getThemeDirectory')->willReturn($testThemeDirectoryPath);
+
+        $testLocaleDirectoryPath = $testThemeDirectoryPath . '/locale/' . $this->testLocaleCode;
+        $this->createFixtureDirectory($testLocaleDirectoryPath);
+
         $result = CsvTranslator::forLocale($this->testLocaleCode, $this->stubThemeLocator);
         $this->assertInstanceOf(Translator::class, $result);
+    }
+
+    public function testExceptionIsThrownIfLocaleDirectoryIsNotReadable()
+    {
+        $this->setExpectedException(LocaleDirectoryNotReadableException::class);
+        $this->stubThemeLocator->method('getThemeDirectory')->willReturn(sys_get_temp_dir());
+
+        CsvTranslator::forLocale($this->testLocaleCode, $this->stubThemeLocator);
     }
 
     public function testExceptionIsThrownIfTranslationFileIsNotReadable()
@@ -67,6 +81,12 @@ class CsvTranslatorTest extends \PHPUnit_Framework_TestCase
 
     public function testOriginalStringIsReturnedIfTranslationIsMissing()
     {
+        $testThemeDirectoryPath = sys_get_temp_dir();
+        $this->stubThemeLocator->method('getThemeDirectory')->willReturn($testThemeDirectoryPath);
+
+        $testLocaleDirectoryPath = $testThemeDirectoryPath . '/locale/' . $this->testLocaleCode;
+        $this->createFixtureDirectory($testLocaleDirectoryPath);
+
         $testTranslationSource = 'foo';
         $translator = CsvTranslator::forLocale($this->testLocaleCode, $this->stubThemeLocator);
         $result = $translator->translate($testTranslationSource);
