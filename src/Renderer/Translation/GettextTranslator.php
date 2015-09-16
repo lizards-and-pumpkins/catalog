@@ -40,8 +40,12 @@ class GettextTranslator implements Translator
      */
     public function translate($string)
     {
-        setlocale(LC_ALL, $this->localeCode);
-        return dgettext($this->localeCode, $string);
+        $originalLocaleCode = self::getCurrentLocaleCode();
+        self::setLocale($this->localeCode);
+        $translation = dgettext($this->localeCode, $string);
+        self::setLocale($originalLocaleCode);
+
+        return $translation;
     }
 
     /**
@@ -49,8 +53,29 @@ class GettextTranslator implements Translator
      */
     private static function validateLocale($localeCode)
     {
-        if (false === setlocale(LC_ALL, $localeCode)) {
+        $originalLocaleCode = self::getCurrentLocaleCode();
+        $newLocaleCode = self::setLocale($localeCode);
+        self::setLocale($originalLocaleCode);
+
+        if (false === $newLocaleCode) {
             throw new LocaleNotSupportedException(sprintf('Locale "%s" is not installed in the system.', $localeCode));
         }
+    }
+
+    /**
+     * @return string
+     */
+    private static function getCurrentLocaleCode()
+    {
+        return setlocale(LC_ALL, 0);
+    }
+
+    /**
+     * @param string $localeCode
+     * @return string
+     */
+    private static function setLocale($localeCode)
+    {
+        return setlocale(LC_ALL, $localeCode);
     }
 }
