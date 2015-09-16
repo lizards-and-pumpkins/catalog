@@ -85,8 +85,11 @@ class GettextTranslatorTest extends \PHPUnit_Framework_TestCase
     public function testGivenStringIsTranslated()
     {
         $testThemeDirectoryPath = sys_get_temp_dir();
-        $testTranslationFilePath = $testThemeDirectoryPath . '/locale/' . $this->testLocaleCode . '/LC_MESSAGES/' .
-                                     $this->testLocaleCode . '.mo';
+        $testTranslationFilePath = sprintf(
+            '%1$s/locale/%2$s/LC_MESSAGES/%2$s.mo',
+            $testThemeDirectoryPath,
+            $this->testLocaleCode
+        );
         $this->createFixtureFile($testTranslationFilePath, '', 0777);
 
         $testTranslationSource = 'foo';
