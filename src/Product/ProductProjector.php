@@ -25,6 +25,7 @@ class ProductProjector implements Projector
      * @var DataPoolWriter
      */
     private $dataPoolWriter;
+    
     /**
      * @var UrlKeyForContextCollector
      */
