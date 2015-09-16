@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\Utils\FileNotWritableException;
+use LizardsAndPumpkins\Utils\Exception\FileNotWritableException;
 use LizardsAndPumpkins\Utils\LocalFilesystem;
 
 /**

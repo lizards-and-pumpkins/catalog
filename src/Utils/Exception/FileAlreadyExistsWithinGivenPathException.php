@@ -1,6 +1,6 @@
 <?php
 
-namespace LizardsAndPumpkins\Utils;
+namespace LizardsAndPumpkins\Utils\Exception;
 
 class FileAlreadyExistsWithinGivenPathException extends \LogicException
 {

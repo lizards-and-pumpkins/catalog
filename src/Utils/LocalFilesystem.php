@@ -2,6 +2,9 @@
 
 namespace LizardsAndPumpkins\Utils;
 
+use LizardsAndPumpkins\Utils\Exception\DirectoryDoesNotExistException;
+use LizardsAndPumpkins\Utils\Exception\DirectoryNotWritableException;
+
 class LocalFilesystem
 {
     /**
@@ -31,6 +34,13 @@ class LocalFilesystem
      */
     public function removeDirectoryContents($directoryPath)
     {
+        if (!file_exists($directoryPath)) {
+            return;
+        }
+        if (!is_dir($directoryPath)) {
+            $message = sprintf('The given path is not a directory: "%s"', $directoryPath);
+            throw new Exception\NotADirectoryException($message);
+        }
         $directoryIterator = new \RecursiveDirectoryIterator($directoryPath, \FilesystemIterator::SKIP_DOTS);
         foreach ($directoryIterator as $path) {
             is_dir($path->getPathname()) ?

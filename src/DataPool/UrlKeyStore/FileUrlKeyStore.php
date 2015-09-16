@@ -38,6 +38,7 @@ class FileUrlKeyStore extends IntegrationTestUrlKeyStoreAbstract implements UrlK
         $this->validateUrlKeyString($urlKeyString);
         $this->validateDataVersionString($dataVersionString);
         $this->validateContextDataString($contextDataString);
+        $this->ensureDirectoryExists($this->storageDirectoryPath);
         $this->appendRecordToFile(
             $this->getUrlKeyStorageFilePathForVersion($dataVersionString),
             $this->formatRecordToWrite($urlKeyString, $contextDataString)
@@ -113,5 +114,15 @@ class FileUrlKeyStore extends IntegrationTestUrlKeyStoreAbstract implements UrlK
     private function formatRecordToWrite($urlKey, $contextData)
     {
         return $urlKey . self::FIELD_SEPARATOR . base64_encode($contextData) . PHP_EOL;
+    }
+
+    /**
+     * @param string $directoryPath
+     */
+    private function ensureDirectoryExists($directoryPath)
+    {
+        if (! file_exists($directoryPath)) {
+            mkdir($directoryPath, 0700, true);
+        }
     }
 }

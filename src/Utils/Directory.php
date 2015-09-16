@@ -2,6 +2,9 @@
 
 namespace LizardsAndPumpkins\Utils;
 
+use LizardsAndPumpkins\Utils\Exception\FileAlreadyExistsWithinGivenPathException;
+use LizardsAndPumpkins\Utils\Exception\InvalidDirectoryPathException;
+
 class Directory
 {
     /**
