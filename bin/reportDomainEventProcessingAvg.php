@@ -190,7 +190,7 @@ class CalculateAverageDomainEventProcessingTime
     private function validateArguments(CLImate $climate)
     {
         $climate->arguments->parse();
-        $this->validateLogfilePath($climate->arguments->get('logfile'));
+        $this->validateLogFilePath($climate->arguments->get('logfile'));
         $this->validateSortField($climate->arguments->get('sortBy'));
         $this->validateSortDirection($climate->arguments->get('direction'));
     }
@@ -198,7 +198,7 @@ class CalculateAverageDomainEventProcessingTime
     /**
      * @param string $filePath
      */
-    private function validateLogfilePath($filePath)
+    private function validateLogFilePath($filePath)
     {
         if (!file_exists($filePath)) {
             throw new \RuntimeException(sprintf('Log file not found: "%s"', $filePath));

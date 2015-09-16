@@ -207,4 +207,12 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
         $this->factory->setUrlKeyStore($stubUrlKeyStore);
         $this->assertSame($stubUrlKeyStore, $this->factory->getUrlKeyStore());
     }
+
+    public function testItReturnsAnExistingDirectoryAsTheFileStorageBasePathConfig()
+    {
+        $fileStorageBasePath = $this->factory->getFileStorageBasePathConfig();
+        $this->assertInternalType('string', $fileStorageBasePath);
+        $this->assertFileExists($fileStorageBasePath);
+        $this->assertTrue(is_dir($fileStorageBasePath));
+    }
 }

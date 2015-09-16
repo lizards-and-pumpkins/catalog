@@ -241,4 +241,12 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(FileUrlKeyStore::class, $this->factory->createUrlKeyStore());
     }
+
+    public function testItReturnsAnExistingDirectoryAsTheFileStorageBasePathConfig()
+    {
+        $fileStorageBasePath = $this->factory->getFileStorageBasePathConfig();
+        $this->assertInternalType('string', $fileStorageBasePath);
+        $this->assertFileExists($fileStorageBasePath);
+        $this->assertTrue(is_dir($fileStorageBasePath));
+    }
 }

@@ -44,7 +44,7 @@ class VersionedContext implements Context
     /**
      * @return string
      */
-    public function getId()
+    public function toString()
     {
         return 'v:' . $this->version;
     }
@@ -56,7 +56,7 @@ class VersionedContext implements Context
     public function getIdForParts(array $requestedParts)
     {
         return in_array(self::CODE, $requestedParts) ?
-            $this->getId() :
+            $this->toString() :
             '';
     }
 

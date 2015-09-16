@@ -25,9 +25,9 @@ class UpdateProductListingCommandHandler implements CommandHandler
 
     public function process()
     {
-        $productListingMetaInfoSource = $this->command->getProductListingMetaInfoSource();
-        $urlKey = $productListingMetaInfoSource->getUrlKey();
+        $productListingMetaInfo = $this->command->getProductListingMetaInfo();
+        $urlKey = $productListingMetaInfo->getUrlKey();
 
-        $this->domainEventQueue->add(new ProductListingWasUpdatedDomainEvent($urlKey, $productListingMetaInfoSource));
+        $this->domainEventQueue->add(new ProductListingWasUpdatedDomainEvent($urlKey, $productListingMetaInfo));
     }
 }

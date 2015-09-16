@@ -51,7 +51,7 @@ use LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductListingSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductProjector;
-use LizardsAndPumpkins\Product\ProductListingMetaInfoSourceBuilder;
+use LizardsAndPumpkins\Product\ProductListingMetaInfoBuilder;
 use LizardsAndPumpkins\Product\ProductSearchDocumentBuilder;
 use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSourceBuilder;
@@ -189,11 +189,11 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return ProductListingMetaInfoSourceBuilder
+     * @return ProductListingMetaInfoBuilder
      */
-    public function createProductListingMetaInfoSourceBuilder()
+    public function createProductListingMetaInfoBuilder()
     {
-        return new ProductListingMetaInfoSourceBuilder();
+        return new ProductListingMetaInfoBuilder();
     }
 
     /**
@@ -444,6 +444,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new ProductListingMetaInfoSnippetProjector(
             $this->getMasterFactory()->createProductListingSnippetRendererCollection(),
+            $this->getMasterFactory()->createUrlKeyForContextCollector(),
             $this->getMasterFactory()->createDataPoolWriter()
         );
     }
@@ -1305,7 +1306,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return new CatalogImport(
             $this->getMasterFactory()->getCommandQueue(),
             $this->getMasterFactory()->createProductSourceBuilder(),
-            $this->getMasterFactory()->createProductListingMetaInfoSourceBuilder(),
+            $this->getMasterFactory()->createProductListingMetaInfoBuilder(),
             $this->getMasterFactory()->getLogger()
         );
     }

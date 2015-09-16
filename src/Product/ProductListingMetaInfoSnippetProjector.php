@@ -7,6 +7,7 @@ use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\InvalidProjectionSourceDataTypeException;
 use LizardsAndPumpkins\Projector;
 use LizardsAndPumpkins\SnippetRendererCollection;
+use LizardsAndPumpkins\Projection\UrlKeyForContextCollector;
 
 class ProductListingMetaInfoSnippetProjector implements Projector
 {
@@ -19,11 +20,20 @@ class ProductListingMetaInfoSnippetProjector implements Projector
      * @var DataPoolWriter
      */
     private $dataPoolWriter;
+    
+    /**
+     * @var UrlKeyForContextCollector
+     */
+    private $urlKeyForContextCollector;
 
-    public function __construct(SnippetRendererCollection $snippetRendererCollection, DataPoolWriter $dataPoolWriter)
-    {
+    public function __construct(
+        SnippetRendererCollection $snippetRendererCollection,
+        UrlKeyForContextCollector $urlKeyForContextCollector,
+        DataPoolWriter $dataPoolWriter
+    ) {
         $this->snippetRendererCollection = $snippetRendererCollection;
         $this->dataPoolWriter = $dataPoolWriter;
+        $this->urlKeyForContextCollector = $urlKeyForContextCollector;
     }
 
     /**
@@ -32,9 +42,9 @@ class ProductListingMetaInfoSnippetProjector implements Projector
      */
     public function project($projectionSourceData, ContextSource $contextSource)
     {
-        if (!($projectionSourceData instanceof ProductListingMetaInfoSource)) {
+        if (!($projectionSourceData instanceof ProductListingMetaInfo)) {
             throw new InvalidProjectionSourceDataTypeException(
-                'First argument must be instance of ProductListingMetaInfoSource.'
+                'First argument must be instance of ProductListingMetaInfo.'
             );
         }
 
@@ -42,10 +52,16 @@ class ProductListingMetaInfoSnippetProjector implements Projector
     }
 
     private function projectProductListing(
-        ProductListingMetaInfoSource $productListingMetaInfoSource,
+        ProductListingMetaInfo $productListingMetaInfo,
         ContextSource $contextSource
     ) {
-        $snippetList = $this->snippetRendererCollection->render($productListingMetaInfoSource, $contextSource);
+        $snippetList = $this->snippetRendererCollection->render($productListingMetaInfo, $contextSource);
         $this->dataPoolWriter->writeSnippetList($snippetList);
+        
+        $urlKeysInContextsCollection = $this->urlKeyForContextCollector->collectListingUrlKeys(
+            $productListingMetaInfo,
+            $contextSource
+        );
+        $this->dataPoolWriter->writeUrlKeyCollection($urlKeysInContextsCollection);
     }
 }

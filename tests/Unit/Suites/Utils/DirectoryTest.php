@@ -3,6 +3,8 @@
 namespace LizardsAndPumpkins\Utils;
 
 use LizardsAndPumpkins\TestFileFixtureTrait;
+use LizardsAndPumpkins\Utils\Exception\FileAlreadyExistsWithinGivenPathException;
+use LizardsAndPumpkins\Utils\Exception\InvalidDirectoryPathException;
 
 /**
  * @covers \LizardsAndPumpkins\Utils\Directory

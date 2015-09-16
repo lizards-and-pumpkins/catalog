@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins\Projection\Catalog\Import;
 use LizardsAndPumpkins\Image\UpdateImageCommand;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\ProductId;
-use LizardsAndPumpkins\Product\ProductListingMetaInfoSourceBuilder;
+use LizardsAndPumpkins\Product\ProductListingMetaInfoBuilder;
 use LizardsAndPumpkins\Product\ProductSourceBuilder;
 use LizardsAndPumpkins\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Product\UpdateProductListingCommand;
@@ -26,9 +26,9 @@ class CatalogImport
     private $productSourceBuilder;
 
     /**
-     * @var ProductListingMetaInfoSourceBuilder
+     * @var ProductListingMetaInfoBuilder
      */
-    private $productListingMetaInfoSourceBuilder;
+    private $productListingMetaInfoBuilder;
 
     /**
      * @var Logger
@@ -38,13 +38,13 @@ class CatalogImport
     public function __construct(
         Queue $commandQueue,
         ProductSourceBuilder $productSourceBuilder,
-        ProductListingMetaInfoSourceBuilder $productListingMetaInfoSourceBuilder,
+        ProductListingMetaInfoBuilder $productListingMetaInfoBuilder,
         Logger $logger
     ) {
 
         $this->commandQueue = $commandQueue;
         $this->productSourceBuilder = $productSourceBuilder;
-        $this->productListingMetaInfoSourceBuilder = $productListingMetaInfoSourceBuilder;
+        $this->productListingMetaInfoBuilder = $productListingMetaInfoBuilder;
         $this->logger = $logger;
     }
 
@@ -110,9 +110,9 @@ class CatalogImport
      */
     private function processListingXml($listingXml)
     {
-        $productListingMetaInfoSource = $this->productListingMetaInfoSourceBuilder
-            ->createProductListingMetaInfoSourceFromXml($listingXml);
-        $this->commandQueue->add(new UpdateProductListingCommand($productListingMetaInfoSource));
+        $productListingMetaInfo = $this->productListingMetaInfoBuilder
+            ->createProductListingMetaInfoFromXml($listingXml);
+        $this->commandQueue->add(new UpdateProductListingCommand($productListingMetaInfo));
     }
 
     /**

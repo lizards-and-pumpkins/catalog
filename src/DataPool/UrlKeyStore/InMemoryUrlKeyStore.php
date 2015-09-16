@@ -18,15 +18,16 @@ class InMemoryUrlKeyStore extends IntegrationTestUrlKeyStoreAbstract implements 
     }
 
     /**
-     * @param string $urlKeyString
      * @param string $dataVersionString
-     * @return void
+     * @param string $urlKeyString
+     * @param string $contextDataString
      */
-    public function addUrlKeyForVersion($urlKeyString, $dataVersionString)
+    public function addUrlKeyForVersion($dataVersionString, $urlKeyString, $contextDataString)
     {
         $this->validateUrlKeyString($urlKeyString);
         $this->validateDataVersionString($dataVersionString);
-        $this->urlKeys[$dataVersionString][] = $urlKeyString;
+        $this->validateContextDataString($contextDataString);
+        $this->urlKeys[$dataVersionString][] = [$urlKeyString, $contextDataString];
     }
 
     /**

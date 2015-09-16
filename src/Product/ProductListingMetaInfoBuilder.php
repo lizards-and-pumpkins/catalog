@@ -14,13 +14,13 @@ use LizardsAndPumpkins\Product\Exception\MissingUrlKeyXmlAttributeException;
 use LizardsAndPumpkins\UrlKey;
 use LizardsAndPumpkins\Utils\XPathParser;
 
-class ProductListingMetaInfoSourceBuilder
+class ProductListingMetaInfoBuilder
 {
     /**
      * @param string $xml
-     * @return ProductListingMetaInfoSource
+     * @return ProductListingMetaInfo
      */
-    public function createProductListingMetaInfoSourceFromXml($xml)
+    public function createProductListingMetaInfoFromXml($xml)
     {
         $parser = new XPathParser($xml);
 
@@ -37,16 +37,16 @@ class ProductListingMetaInfoSourceBuilder
         $criterionArray = array_map([$this, 'createCriterion'], $criteriaNodes);
         $criteria = $this->createSearchCriteria($criteriaConditionNodes, ...$criterionArray);
 
-        return $this->createProductListingMetaInfoSource($urlKey, $contextData, $criteria);
+        return $this->createProductListingMetaInfo($urlKey, $contextData, $criteria);
     }
 
     /**
      * @param UrlKey $urlKey
      * @param string[] $contextData
      * @param SearchCriteria $criteria
-     * @return ProductListingMetaInfoSource
+     * @return ProductListingMetaInfo
      */
-    public function createProductListingMetaInfoSource(UrlKey $urlKey, array $contextData, SearchCriteria $criteria)
+    public function createProductListingMetaInfo(UrlKey $urlKey, array $contextData, SearchCriteria $criteria)
     {
         $thingsToCheck = [['values', $contextData], ['keys', array_keys($contextData)]];
         array_map(function (array $thingToCheck) {
@@ -54,7 +54,7 @@ class ProductListingMetaInfoSourceBuilder
             array_map($this->getStringValidatorWithMessage($message), $thingToCheck[1]);
         }, $thingsToCheck);
 
-        return new ProductListingMetaInfoSource($urlKey, $contextData, $criteria);
+        return new ProductListingMetaInfo($urlKey, $contextData, $criteria);
     }
 
     /**

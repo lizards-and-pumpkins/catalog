@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\Utils\FileNotReadableException;
+use LizardsAndPumpkins\Utils\Exception\FileNotReadableException;
 
 class LocalFilesystemStorageReader implements FileStorageReader
 {

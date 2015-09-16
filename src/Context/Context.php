@@ -7,7 +7,7 @@ interface Context
     /**
      * @return string
      */
-    public function getId();
+    public function toString();
 
     /**
      * @param string[] $requestedParts

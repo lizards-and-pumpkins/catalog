@@ -95,7 +95,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
      */
     final protected function getSearchDocumentIdentifier(SearchDocument $searchDocument)
     {
-        return $searchDocument->getProductId() . ':' . $searchDocument->getContext()->getId();
+        return $searchDocument->getProductId() . ':' . $searchDocument->getContext()->toString();
     }
 
     /**

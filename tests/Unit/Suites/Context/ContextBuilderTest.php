@@ -145,7 +145,7 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
         $contextA = $this->builder->createContext($contextSourceA);
         $contextB = $this->builder->createContext($contextSourceB);
         
-        $this->assertSame($contextA->getId(), $contextB->getId(), 'Context decorator order depends on input');
+        $this->assertSame($contextA->toString(), $contextB->toString(), 'Context decorator order depends on input');
     }
 
     public function testContextDecoratorOrderIsIndependentOfTheContextSourceArrayOrderInForDataSets()
@@ -157,7 +157,7 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
         $setB = $this->builder->createContextsFromDataSets($contextDataSetB);
 
         $message = 'Context decorators in context sets are not always built in the same order';
-        $this->assertSame($setA[0]->getId(), $setB[0]->getId(), $message);
+        $this->assertSame($setA[0]->toString(), $setB[0]->toString(), $message);
     }
 
     public function testContextDecoratorOrderIsIndependentOfDecoratorRegistrationOrder()
@@ -176,6 +176,6 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
         $contextB = $builderB->createContext($contextSource);
 
         $message = 'Context decorator order depends on registration order';
-        $this->assertSame($contextA->getId(), $contextB->getId(), $message);
+        $this->assertSame($contextA->toString(), $contextB->toString(), $message);
     }
 }

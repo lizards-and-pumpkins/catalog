@@ -10,8 +10,8 @@ use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Product\ProductSource;
 use LizardsAndPumpkins\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Product\UpdateProductListingCommand;
-use LizardsAndPumpkins\Product\ProductListingMetaInfoSource;
-use LizardsAndPumpkins\Product\ProductListingMetaInfoSourceBuilder;
+use LizardsAndPumpkins\Product\ProductListingMetaInfo;
+use LizardsAndPumpkins\Product\ProductListingMetaInfoBuilder;
 use LizardsAndPumpkins\Product\ProductSourceBuilder;
 use LizardsAndPumpkins\Queue\Queue;
 use org\bovigo\vfs\vfsStream;
@@ -39,9 +39,9 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     private $stubProductSourceBuilder;
 
     /**
-     * @var ProductListingMetaInfoSourceBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductListingMetaInfoBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubProductListingMetaInfoSourceBuilder;
+    private $stubProductListingMetaInfoBuilder;
 
     /**
      * @var Logger|\PHPUnit_Framework_MockObject_MockObject
@@ -77,6 +77,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
      */
     private function createMockProductSourceBuilder()
     {
+        /** @var ProductSource|\PHPUnit_Framework_MockObject_MockObject $stubProductSource */
         $productSource = $this->getMock(ProductSource::class, [], [], '', false);
         $productSource->method('getId')->willReturn(ProductId::fromString('dummy'));
         
@@ -86,16 +87,16 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return ProductListingMetaInfoSourceBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @return ProductListingMetaInfoBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createMockProductListingSourceBuilder()
     {
-        $productListingMetaInfoSource = $this->getMock(ProductListingMetaInfoSource::class, [], [], '', false);
-        $productListingMetaInfoSource->method('getUrlKey')->willReturn('dummy-url-key');
+        $productListingMetaInfo = $this->getMock(ProductListingMetaInfo::class, [], [], '', false);
+        $productListingMetaInfo->method('getUrlKey')->willReturn('dummy-url-key');
 
-        $productListingSourceBuilder = $this->getMock(ProductListingMetaInfoSourceBuilder::class, [], [], '', false);
-        $productListingSourceBuilder->method('createProductListingMetaInfoSourceFromXml')
-            ->willReturn($productListingMetaInfoSource);
+        $productListingSourceBuilder = $this->getMock(ProductListingMetaInfoBuilder::class, [], [], '', false);
+        $productListingSourceBuilder->method('createProductListingMetaInfoFromXml')
+            ->willReturn($productListingMetaInfo);
         return $productListingSourceBuilder;
     }
 
@@ -106,13 +107,13 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         $this->addToCommandQueueSpy = $this->any();
         $this->mockCommandQueue->expects($this->addToCommandQueueSpy)->method('add');
         $this->stubProductSourceBuilder = $this->createMockProductSourceBuilder();
-        $this->stubProductListingMetaInfoSourceBuilder = $this->createMockProductListingSourceBuilder();
+        $this->stubProductListingMetaInfoBuilder = $this->createMockProductListingSourceBuilder();
         $this->logger = $this->getMock(Logger::class);
 
         $this->catalogImport = new CatalogImport(
             $this->mockCommandQueue,
             $this->stubProductSourceBuilder,
-            $this->stubProductListingMetaInfoSourceBuilder,
+            $this->stubProductListingMetaInfoBuilder,
             $this->logger
         );
     }

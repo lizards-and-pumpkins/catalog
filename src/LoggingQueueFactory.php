@@ -19,8 +19,9 @@ class LoggingQueueFactory implements Factory
      */
     public function createEventQueue()
     {
-        $storagePath = sys_get_temp_dir() . '/lizards-and-pumpkins/event-queue/content';
-        $lockFile = sys_get_temp_dir() . '/lizards-and-pumpkins/event-queue/lock';
+        $storageBasePath = $this->getMasterFactory()->getFileStorageBasePathConfig();
+        $storagePath = $storageBasePath . '/lizards-and-pumpkins/event-queue/content';
+        $lockFile = $storageBasePath . '/lizards-and-pumpkins/event-queue/lock';
         return new LoggingQueueDecorator(
             new FileQueue($storagePath, $lockFile),
             $this->getMasterFactory()->getLogger()
@@ -32,8 +33,9 @@ class LoggingQueueFactory implements Factory
      */
     public function createCommandQueue()
     {
-        $storagePath = sys_get_temp_dir() . '/lizards-and-pumpkins/command-queue/content';
-        $lockFile = sys_get_temp_dir() . '/lizards-and-pumpkins/command-queue/lock';
+        $storageBasePath = $this->getMasterFactory()->getFileStorageBasePathConfig();
+        $storagePath = $storageBasePath . '/lizards-and-pumpkins/command-queue/content';
+        $lockFile = $storageBasePath . '/lizards-and-pumpkins/command-queue/lock';
         return new LoggingQueueDecorator(
             new FileQueue($storagePath, $lockFile),
             $this->getMasterFactory()->getLogger()

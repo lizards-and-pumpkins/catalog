@@ -1,6 +1,6 @@
 <?php
 
-namespace LizardsAndPumpkins\Utils;
+namespace LizardsAndPumpkins\Utils\Exception;
 
 class FileNotReadableException extends \RuntimeException
 {

@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\Product;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\UrlKey;
 
-class ProductListingMetaInfoSource
+class ProductListingMetaInfo
 {
     /**
      * @var UrlKey

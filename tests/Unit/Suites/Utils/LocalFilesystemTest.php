@@ -2,6 +2,9 @@
 
 namespace LizardsAndPumpkins\Utils;
 
+use LizardsAndPumpkins\Utils\Exception\DirectoryDoesNotExistException;
+use LizardsAndPumpkins\Utils\Exception\DirectoryNotWritableException;
+
 /**
  * @covers \LizardsAndPumpkins\Utils\LocalFilesystem
  */
@@ -91,5 +94,23 @@ class LocalFilesystemTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(DirectoryNotWritableException::class);
         $this->filesystem->removeDirectoryAndItsContent($this->nonWritableDirectoryPath);
+    }
+
+    public function testItSilentlyReturnsIfTheDirectoryDoesNotExist()
+    {
+        $this->filesystem->removeDirectoryContents('some-non-existant-directory');
+        $this->assertTrue(true, 'Assert the code did not try to open a non-exitant directory throwing an exception');
+    }
+
+    public function testItThrowsAnExceptionIfTheDirectoryIsAFile()
+    {
+        $this->setExpectedException(
+            Exception\NotADirectoryException::class,
+            'The given path is not a directory: "'
+        );
+        
+        $filePath = $directoryPath = $this->testDirectoryPath . '/existing-file';
+        touch($filePath);
+        $this->filesystem->removeDirectoryContents($filePath);
     }
 }

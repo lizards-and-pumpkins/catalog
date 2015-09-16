@@ -219,7 +219,7 @@ class PageBuilder
         return sprintf(
             'Snippet not available (key "%s", context "%s")',
             $snippetKey,
-            $this->context->getId()
+            $this->context->toString()
         );
     }
 

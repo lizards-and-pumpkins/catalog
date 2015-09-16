@@ -10,9 +10,9 @@ use LizardsAndPumpkins\DomainEvent;
 class ProductListingWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ProductListingMetaInfoSource|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductListingMetaInfo|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubProductListingMetaInfoSource;
+    private $stubProductListingMetaInfo;
 
     /**
      * @var ProductListingWasUpdatedDomainEvent
@@ -22,8 +22,8 @@ class ProductListingWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCas
     protected function setUp()
     {
         $dummyUrlKey = 'foo';
-        $this->stubProductListingMetaInfoSource = $this->getMock(
-            ProductListingMetaInfoSource::class,
+        $this->stubProductListingMetaInfo = $this->getMock(
+            ProductListingMetaInfo::class,
             [],
             [],
             '',
@@ -31,7 +31,7 @@ class ProductListingWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCas
         );
         $this->domainEvent = new ProductListingWasUpdatedDomainEvent(
             $dummyUrlKey,
-            $this->stubProductListingMetaInfoSource
+            $this->stubProductListingMetaInfo
         );
     }
 
@@ -40,9 +40,9 @@ class ProductListingWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCas
         $this->assertInstanceOf(DomainEvent::class, $this->domainEvent);
     }
 
-    public function testProductListingMetaInfoSourceIsReturned()
+    public function testProductListingMetaInfoIsReturned()
     {
-        $result = $this->domainEvent->getProductListingMetaInfoSource();
-        $this->assertEquals($this->stubProductListingMetaInfoSource, $result);
+        $result = $this->domainEvent->getProductListingMetaInfo();
+        $this->assertEquals($this->stubProductListingMetaInfo, $result);
     }
 }

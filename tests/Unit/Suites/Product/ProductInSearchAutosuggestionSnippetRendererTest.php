@@ -41,9 +41,11 @@ class ProductInSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framewor
         $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
         $stubProductId->method('__toString')->willReturn($dummyProductIdString);
 
+        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
         $stubProduct = $this->getMock(Product::class, [], [], '', false);
         $stubProduct->method('getId')->willReturn($stubProductId);
 
+        /** @var ProductSource|\PHPUnit_Framework_MockObject_MockObject $stubProductSource */
         $stubProductSource = $this->getMock(ProductSource::class, [], [], '', false);
         $stubProductSource->method('getId')->willReturn($stubProductId);
         $stubProductSource->method('getProductForContext')->willReturn($stubProduct);
