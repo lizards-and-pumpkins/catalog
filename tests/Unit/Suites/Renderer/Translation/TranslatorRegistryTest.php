@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Renderer\Translation;
 
 /**
  * @covers \LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry
- * @uses   \LizardsAndPumpkins\Renderer\Translation\CsvTranslator
  */
 class TranslatorRegistryTest extends \PHPUnit_Framework_TestCase
 {
