@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Tests\Integration;
 
+use LizardsAndPumpkins\CommonFactory;
 use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\FileUrlKeyStore;
@@ -32,6 +33,8 @@ use LizardsAndPumpkins\SampleFactory;
  * @uses   \LizardsAndPumpkins\LocalFilesystemStorageReader
  * @uses   \LizardsAndPumpkins\LocalFilesystemStorageWriter
  * @uses   \LizardsAndPumpkins\MasterFactoryTrait
+ * @uses   \LizardsAndPumpkins\EnvironmentConfigReader
+ * @uses   \LizardsAndPumpkins\CommonFactory
  */
 class SampleFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -45,6 +48,7 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
         $masterFactory = new SampleMasterFactory();
         $this->factory = new SampleFactory();
         $masterFactory->register($this->factory);
+        $masterFactory->register(new CommonFactory());
     }
 
     protected function tearDown()
