@@ -27,7 +27,10 @@ class RunImport
         $this->factory = $factory;
         $this->climate = $CLImate;
     }
-    
+
+    /**
+     * @return RunImport
+     */
     public static function bootstrap()
     {
         $factory = new SampleMasterFactory();
@@ -64,6 +67,11 @@ class RunImport
                 'description' => 'Process queues after the import)',
                 'noValue' => true,
             ],
+            'environmentConfig' => [
+                'prefix' => 'e',
+                'longPrefix' => 'environmentConfig',
+                'description' => 'Environment config settings, comma separated [foo=bar,baz=qux]',
+            ],
             'importFile' => [
                 'description' => 'Import XML file',
                 'required' => true
@@ -76,6 +84,10 @@ class RunImport
     private function validateArguments()
     {
         $this->climate->arguments->parse();
+        $env = $this->getArg('environmentConfig');
+        if ($env) {
+            $this->applyEnvironmentConfigSettings($env);
+        }
     }
 
     private function execute()
@@ -168,6 +180,19 @@ class RunImport
     private function output($message)
     {
         return $this->climate->output($message);
+    }
+
+    /**
+     * @param string $environmentConfigSettingsString
+     */
+    private function applyEnvironmentConfigSettings($environmentConfigSettingsString)
+    {
+        array_map(function ($setting) {
+            @list($key, $value) = explode('=', $setting, 2);
+            if (trim($key)) {
+                $_SERVER[EnvironmentConfigReader::ENV_VAR_PREFIX . strtoupper($key)] = trim($value);
+            }
+        }, explode(',', $environmentConfigSettingsString));
     }
 }
 
