@@ -190,7 +190,7 @@ class RunImport
         array_map(function ($setting) {
             @list($key, $value) = explode('=', $setting, 2);
             if (trim($key)) {
-                $_SERVER[EnvironmentConfigReader::ENV_VAR_PREFIX . strtoupper($key)] = trim($value);
+                $_SERVER[EnvironmentConfigReader::ENV_VAR_PREFIX . strtoupper(trim($key))] = trim($value);
             }
         }, explode(',', $environmentConfigSettingsString));
     }
