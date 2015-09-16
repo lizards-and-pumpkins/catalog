@@ -1322,6 +1322,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
+<<<<<<< HEAD
      * @return TranslatorRegistry
      */
     public function getTranslatorRegistry()
@@ -1343,5 +1344,13 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return function ($locale) {
             return CsvTranslator::forLocale($locale, $this->getMasterFactory()->createThemeLocator());
         };
+    }
+
+    /**
+     * @return EnvironmentConfigReader
+     */
+    public function createConfigReader()
+    {
+        return EnvironmentConfigReader::fromGlobalState();
     }
 }

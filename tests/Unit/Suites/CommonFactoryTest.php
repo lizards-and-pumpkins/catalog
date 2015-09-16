@@ -117,9 +117,13 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
  * @uses   \LizardsAndPumpkins\Projection\UrlKeyForContextCollector
+<<<<<<< HEAD
  * @uses   \LizardsAndPumpkins\Renderer\ThemeLocator
  * @uses   \LizardsAndPumpkins\Renderer\Translation\CsvTranslator
  * @uses   \LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry
+=======
+ * @uses   \LizardsAndPumpkins\EnvironmentConfigReader
+>>>>>>> Issue #237: Add factory method for EnvironmentConfigReader
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -547,5 +551,11 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $translatorFactory = $this->commonFactory->getTranslatorFactory();
         $this->assertInstanceOf(Translator::class, $translatorFactory('en_US'));
+    }
+
+    public function testItReturnsAConfigReader()
+    {
+        $result = $this->commonFactory->createConfigReader();
+        $this->assertInstanceOf(ConfigReader::class, $result);
     }
 }
