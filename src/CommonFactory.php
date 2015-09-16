@@ -1322,7 +1322,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-<<<<<<< HEAD
      * @return TranslatorRegistry
      */
     public function getTranslatorRegistry()

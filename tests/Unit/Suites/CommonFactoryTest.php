@@ -117,13 +117,10 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
  * @uses   \LizardsAndPumpkins\Projection\UrlKeyForContextCollector
-<<<<<<< HEAD
  * @uses   \LizardsAndPumpkins\Renderer\ThemeLocator
  * @uses   \LizardsAndPumpkins\Renderer\Translation\CsvTranslator
  * @uses   \LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry
-=======
  * @uses   \LizardsAndPumpkins\EnvironmentConfigReader
->>>>>>> Issue #237: Add factory method for EnvironmentConfigReader
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
