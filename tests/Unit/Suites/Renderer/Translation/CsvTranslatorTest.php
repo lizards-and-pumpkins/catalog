@@ -89,7 +89,9 @@ class CsvTranslatorTest extends \PHPUnit_Framework_TestCase
     public function testOriginalStringIsReturnedIfTranslationIsMissing()
     {
         $testThemeDirectoryPath = sys_get_temp_dir();
-        $this->stubThemeLocator->method('getThemeDirectory')->willReturn($testThemeDirectoryPath);
+        $testLocaleDirectoryPath = $testThemeDirectoryPath . '/locale/' . $this->testLocaleCode;
+
+        $this->createFixtureDirectory($testLocaleDirectoryPath);
 
         $testLocaleDirectoryPath = $testThemeDirectoryPath . '/locale/' . $this->testLocaleCode;
         $this->createFixtureDirectory($testLocaleDirectoryPath);
