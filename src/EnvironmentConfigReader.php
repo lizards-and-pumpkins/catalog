@@ -3,8 +3,10 @@
 
 namespace LizardsAndPumpkins;
 
-class EnvironmentConfigReader
+class EnvironmentConfigReader implements ConfigReader
 {
+    const ENV_VAR_PREFIX = 'LP_';
+    
     /**
      * @var string[]
      */
@@ -17,7 +19,7 @@ class EnvironmentConfigReader
     {
         $this->environmentConfig = $environmentConfig;
     }
-    
+
     /**
      * @return EnvironmentConfigReader
      */
@@ -42,13 +44,20 @@ class EnvironmentConfigReader
     public function has($configKey)
     {
         $this->validateConfigKey($configKey);
-        return isset($this->environmentConfig[$configKey]);
+        $normalizedKey = $this->normalizeConfigKey($configKey);
+        return isset($this->environmentConfig[$normalizedKey]);
     }
 
+    /**
+     * @param string $configKey
+     * @return null|string
+     */
     public function get($configKey)
     {
-        return $this->has($configKey) ?
-            $this->environmentConfig[$configKey] :
+        $this->validateConfigKey($configKey);
+        $normalizedKey = $this->normalizeConfigKey($configKey);
+        return isset($this->environmentConfig[$normalizedKey]) ?
+            $this->environmentConfig[$normalizedKey] :
             null;
     }
 
@@ -64,21 +73,43 @@ class EnvironmentConfigReader
     }
 
     /**
-     * @param $configKey
+     * @param string $configKey
      */
     private function validateConfigKey($configKey)
     {
+        $this->validateConfigKeyIsString($configKey);
+        $this->validateConfigKeyNotEmpty($configKey);
+    }
+
+    /**
+     * @param string $configKey
+     */
+    private function validateConfigKeyIsString($configKey)
+    {
         if (!is_string($configKey)) {
-            $message = sprintf(
-                'The given environment configuration key is not a string: "%s"',
-                $this->getVariableType($configKey)
-            );
+            $variableType = $this->getVariableType($configKey);
+            $message = sprintf('The given environment configuration key is not a string: "%s"', $variableType);
             throw new Exception\EnvironmentConfigKeyIsNotAStringException($message);
         }
-        
+    }
+
+    /**
+     * @param string $configKey
+     */
+    private function validateConfigKeyNotEmpty($configKey)
+    {
         if ('' === $configKey) {
             $message = 'The given environment configuration key is empty.';
             throw new Exception\EnvironmentConfigKeyIsEmptyException($message);
         }
+    }
+
+    /**
+     * @param string $configKey
+     * @return string
+     */
+    private function normalizeConfigKey($configKey)
+    {
+        return self::ENV_VAR_PREFIX . strtoupper($configKey);
     }
 }

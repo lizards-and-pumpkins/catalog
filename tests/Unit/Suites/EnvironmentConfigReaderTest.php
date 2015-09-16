@@ -3,6 +3,9 @@
 
 namespace LizardsAndPumpkins;
 
+/**
+ * @covers \LizardsAndPumpkins\EnvironmentConfigReader
+ */
 class EnvironmentConfigReaderTest extends \PHPUnit_Framework_TestCase
 {
     public function testItReturnsAnEnvironmentConfigReaderInstance()
@@ -36,7 +39,7 @@ class EnvironmentConfigReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testTheHasMethodReturnsTrueIfAGivenKeyIsSet()
     {
-        $environmentConfig = ['test' => ''];
+        $environmentConfig = ['LP_TEST' => ''];
         $this->assertTrue(EnvironmentConfigReader::fromArray($environmentConfig)->has('test'));
     }
 
@@ -65,7 +68,7 @@ class EnvironmentConfigReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testTheGetMethodReturnsTheValueFromTheEnvironmentMethodIfPresent()
     {
-        $environmentConfig = ['the-key' => 'the-value'];
+        $environmentConfig = ['LP_THE-KEY' => 'the-value'];
         $this->assertSame('the-value', EnvironmentConfigReader::fromArray($environmentConfig)->get('the-key'));
     }
 }
