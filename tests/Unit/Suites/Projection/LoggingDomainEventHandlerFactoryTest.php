@@ -70,6 +70,7 @@ use LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler;
  * @uses   \LizardsAndPumpkins\Image\ImageProcessorCollection
  * @uses   \LizardsAndPumpkins\Image\ImageProcessor
  * @uses   \LizardsAndPumpkins\Image\ImageMagickResizeStrategy
+ * @uses   \LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry
  */
 class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 {

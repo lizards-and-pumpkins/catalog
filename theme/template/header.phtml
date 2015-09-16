@@ -1,3 +1,8 @@
+<?php
+/**
+ * @var \Brera\Renderer\Block $this
+ */
+?>
 <header class="header-container">
     <div class="header">
         <div class="header-panel">
@@ -18,18 +23,19 @@
                 </span>
         	</span>
             <span class="sep"></span>
-            <a href="/ru_de/checkout/onepage/">Kasse</a>
+            <a href="/ru_de/checkout/onepage/"><?= $this->__('Checkout') ?></a>
             <span class="sep"></span>
             <a href="/ru_de/checkout/cart/">
                 <strong>
-                    <span id="meta-menu-cart-num-items">0</span> Artikel <span id="meta-menu-cart-total">0,00 €</span>
+                    <?php /* TODO: Handle pural form */ ?>
+                    <span id="meta-menu-cart-num-items">0</span> <?= $this->__('Items') ?> <span id="meta-menu-cart-total">0,00 €</span>
                 </strong>
             </a>
             <span class="sep"></span>
-            <a href="/ru_de/customer/account/">Ihr Konto</a>
+            <a href="/ru_de/customer/account/"><?= $this->__('My Account') ?></a>
             <span class="sep"></span>
-            <a href="/ru_de/customer/account/" id="meta-menu-login-link">Anmelden</a>
-            <a href="/ru_de/customer/account/logout/" id="meta-menu-logout-link">Abmelden</a>
+            <a href="/ru_de/customer/account/" id="meta-menu-login-link"><?= $this->__('Login') ?></a>
+            <a href="/ru_de/customer/account/logout/" id="meta-menu-logout-link"><?= $this->__('Logout') ?></a>
         </div>
         <div class="logo">
             <strong>21run.com</strong>
@@ -41,7 +47,7 @@
             <form autocomplete="off" action="/lizards-and-pumpkins/catalogsearch/result/">
                 <div class="input-box">
                     <input id="search" type="text" name="q" value="" class="input-text" maxlength="128"
-                           placeholder="<?= $this->__('Suchbegriff eingeben') ?>"/>
+                           placeholder="<?= $this->__('Enter search keyword') ?>"/>
                     <button type="submit" disabled="disabled" class="disabled"><span class="search-button-image"></span></button>
                     <div id="search-autosuggestion"></div>
                 </div>

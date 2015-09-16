@@ -12,6 +12,16 @@ class BlockTest extends \PHPUnit_Framework_TestCase
     use TestFileFixtureTrait;
 
     /**
+     * @var string
+     */
+    private $testBlockName = 'test-block-name';
+
+    /**
+     * @var string
+     */
+    private $testTemplateFilePath;
+
+    /**
      * @var mixed
      */
     private $testProjectionSourceData = 'test-projection-source-data';
@@ -20,100 +30,82 @@ class BlockTest extends \PHPUnit_Framework_TestCase
      * @var BlockRenderer|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockBlockRenderer;
-    
+
+    /**
+     * @var Block
+     */
+    private $block;
+
     public function setUp()
     {
+        $this->testTemplateFilePath = $this->getUniqueTempDir() . '/test-template.phtml';
         $this->mockBlockRenderer = $this->getMock(BlockRenderer::class, [], [], '', false);
+
+        $this->block = new Block(
+            $this->mockBlockRenderer,
+            $this->testTemplateFilePath,
+            $this->testBlockName,
+            $this->testProjectionSourceData
+        );
     }
 
     public function testBlocksNameIsReturned()
     {
-        $blockName = 'test-block-name';
-        $instance = $this->createBlockInstance('test-template.phtml', $blockName);
-
-        $this->assertEquals($blockName, $instance->getBlockName());
+        $this->assertEquals($this->testBlockName, $this->block->getBlockName());
     }
 
     public function testDataObjectIsReturned()
     {
-        $block = $this->createBlockInstance('test-template.phtml', 'test-block-name');
-        $method = new \ReflectionMethod($block, 'getDataObject');
+        $method = new \ReflectionMethod($this->block, 'getDataObject');
         $method->setAccessible(true);
 
-        $this->assertSame($this->testProjectionSourceData, $method->invoke($block));
+        $this->assertSame($this->testProjectionSourceData, $method->invoke($this->block));
     }
 
     public function testExceptionIsThrownIfTemplateFileDoesNotExist()
     {
-        $block = $this->createBlockInstance('test-template.phtml', 'test-block-name');
         $this->setExpectedException(TemplateFileNotReadableException::class);
-
-        $block->render();
+        $this->block->render();
     }
 
     public function testExceptionIsThrownIfTemplateFileIsNotReadable()
     {
-        $templateFilePath = $this->getUniqueTempDir() . '/test-template.phtml';
-
-        $this->createFixtureFile($templateFilePath, '', 0000);
-
-        $block = $this->createBlockInstance($templateFilePath, 'test-block-name');
-
         $this->setExpectedException(TemplateFileNotReadableException::class);
-
-        $block->render();
-    }
-
-    public function testSameStringAsTranslationIsReturned()
-    {
-        $block = $this->createBlockInstance('test-template.phtml', 'test-block-name');
-        $result = $block->__('foo');
-
-        $this->assertEquals('foo', $result);
+        $this->createFixtureFile($this->testTemplateFilePath, '', 0000);
+        $this->block->render();
     }
 
     public function testTemplateIsReturned()
     {
-        $template = $this->getUniqueTempDir() . '/test-template.phtml';
         $templateContent = 'The template content';
-        $this->createFixtureFile($template, $templateContent);
-        $block = $this->createBlockInstance($template, $templateContent);
+        $this->createFixtureFile($this->testTemplateFilePath, $templateContent);
 
-        $this->assertEquals($templateContent, $block->render());
+        $this->assertEquals($templateContent, $this->block->render());
     }
 
     public function testGettingChildBlockOutputIsDelegatedToBlockRenderer()
     {
-        $blockName = 'test-block-name';
         $childName = 'child-name';
-        $this->mockBlockRenderer->expects($this->once())
-            ->method('getChildBlockOutput')
-            ->with($blockName, $childName);
-        $block = $this->createBlockInstance('template.phtml', $blockName);
-        $block->getChildOutput($childName);
+        $this->mockBlockRenderer->expects($this->once())->method('getChildBlockOutput')
+            ->with($this->testBlockName, $childName);
+
+        $this->block->getChildOutput($childName);
     }
 
-    public function testLayoutHandleIsReturned()
+    public function testGettingLayoutHandleIsDelegatedToBlockRenderer()
     {
         $expectedLayoutHandle = 'foo';
+        $this->mockBlockRenderer->method('getLayoutHandle')->willReturn($expectedLayoutHandle);
 
-        $this->mockBlockRenderer->expects($this->once())
-            ->method('getLayoutHandle')
-            ->willReturn($expectedLayoutHandle);
-
-        $layoutHandle = $this->createBlockInstance('test-template.phtml', 'test-block-name');
-        $result = $layoutHandle->getLayoutHandle();
-
-        $this->assertSame($expectedLayoutHandle, $result);
+        $this->assertSame($expectedLayoutHandle, $this->block->getLayoutHandle());
     }
 
-    /**
-     * @param string $template
-     * @param string $blockName
-     * @return Block
-     */
-    private function createBlockInstance($template, $blockName)
+    public function testTranslationIsDelegatedToBlockRenderer()
     {
-        return new Block($this->mockBlockRenderer, $template, $blockName, $this->testProjectionSourceData);
+        $testSourceString = 'foo';
+        $testTranslatedString = 'bar';
+        $this->mockBlockRenderer->method('translate')->with($testSourceString)->willReturn($testTranslatedString);
+
+        $this->assertEquals($testTranslatedString, $this->block->__($testSourceString));
     }
 }

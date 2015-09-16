@@ -5,7 +5,8 @@ namespace LizardsAndPumpkins\Product;
 use LizardsAndPumpkins\Renderer\AbstractBlockRendererTest;
 use LizardsAndPumpkins\Renderer\BlockRenderer;
 use LizardsAndPumpkins\Renderer\BlockStructure;
-use LizardsAndPumpkins\ThemeLocator;
+use LizardsAndPumpkins\Renderer\ThemeLocator;
+use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
 
 /**
  * @covers \LizardsAndPumpkins\Product\ProductSearchAutosuggestionBlockRenderer
@@ -14,20 +15,20 @@ use LizardsAndPumpkins\ThemeLocator;
 class ProductSearchAutosuggestionBlockRendererTest extends AbstractBlockRendererTest
 {
     /**
-     * @param ThemeLocator|\PHPUnit_Framework_MockObject_MockObject $stubThemeLocator
+     * @param ThemeLocator $stubThemeLocator
      * @param BlockStructure $stubBlockStructure
+     * @param TranslatorRegistry $stubTranslatorRegistry
      * @return BlockRenderer
      */
     protected function createRendererInstance(
-        \PHPUnit_Framework_MockObject_MockObject $stubThemeLocator,
-        BlockStructure $stubBlockStructure
+        ThemeLocator $stubThemeLocator,
+        BlockStructure $stubBlockStructure,
+        TranslatorRegistry $stubTranslatorRegistry
     ) {
-        return new ProductSearchAutosuggestionBlockRenderer($stubThemeLocator, $stubBlockStructure);
-    }
-
-    public function testLayoutHandleIsReturned()
-    {
-        $result = $this->getBlockRenderer()->getLayoutHandle();
-        $this->assertEquals('product_search_autosuggestion', $result);
+        return new ProductSearchAutosuggestionBlockRenderer(
+            $stubThemeLocator,
+            $stubBlockStructure,
+            $stubTranslatorRegistry
+        );
     }
 }

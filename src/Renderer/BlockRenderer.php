@@ -3,7 +3,8 @@
 namespace LizardsAndPumpkins\Renderer;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\ThemeLocator;
+use LizardsAndPumpkins\Context\LocaleContextDecorator;
+use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
 
 abstract class BlockRenderer
 {
@@ -33,14 +34,23 @@ abstract class BlockRenderer
     private $blockStructure;
 
     /**
+     * @var TranslatorRegistry
+     */
+    private $translatorRegistry;
+
+    /**
      * @var Block
      */
     private $outermostBlock;
 
-    public function __construct(ThemeLocator $themeLocator, BlockStructure $blockStructure)
-    {
+    public function __construct(
+        ThemeLocator $themeLocator,
+        BlockStructure $blockStructure,
+        TranslatorRegistry $translatorRegistry
+    ) {
         $this->themeLocator = $themeLocator;
         $this->blockStructure = $blockStructure;
+        $this->translatorRegistry = $translatorRegistry;
     }
 
     /**
@@ -187,6 +197,16 @@ abstract class BlockRenderer
             );
         }
         return $this->missingBlockNames;
+    }
+
+    /**
+     * @param string $string
+     * @return string
+     */
+    public function translate($string)
+    {
+        $locale = $this->context->getValue(LocaleContextDecorator::CODE);
+        return $this->translatorRegistry->getTranslatorForLocale($locale)->translate($string);
     }
 
     /**

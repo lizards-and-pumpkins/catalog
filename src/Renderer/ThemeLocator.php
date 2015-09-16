@@ -1,8 +1,6 @@
 <?php
 
-namespace LizardsAndPumpkins;
-
-use LizardsAndPumpkins\Renderer\LayoutReader;
+namespace LizardsAndPumpkins\Renderer;
 
 class ThemeLocator
 {
@@ -16,7 +14,7 @@ class ThemeLocator
 
     /**
      * @param string $layoutHandle
-     * @return string
+     * @return Layout
      */
     public function getLayoutForHandle($layoutHandle)
     {

@@ -75,6 +75,9 @@ use LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator;
 use LizardsAndPumpkins\Projection\UrlKeyForContextCollector;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\Renderer\BlockStructure;
+use LizardsAndPumpkins\Renderer\ThemeLocator;
+use LizardsAndPumpkins\Renderer\Translation\CsvTranslator;
+use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
 
 class CommonFactory implements Factory, DomainEventFactory, CommandFactory
 {
@@ -114,6 +117,11 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      * @var UrlKeyStore
      */
     private $urlKeyStore;
+
+    /**
+     * @var TranslatorRegistry
+     */
+    private $translatorRegistry;
 
     /**
      * @param ProductWasUpdatedDomainEvent $event
@@ -326,7 +334,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new ProductSearchAutosuggestionBlockRenderer(
             $this->getMasterFactory()->createThemeLocator(),
-            $this->getMasterFactory()->createBlockStructure()
+            $this->getMasterFactory()->createBlockStructure(),
+            $this->getMasterFactory()->getTranslatorRegistry()
         );
     }
 
@@ -398,7 +407,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new ProductListingBlockRenderer(
             $this->getMasterFactory()->createThemeLocator(),
-            $this->getMasterFactory()->createBlockStructure()
+            $this->getMasterFactory()->createBlockStructure(),
+            $this->getMasterFactory()->getTranslatorRegistry()
         );
     }
 
@@ -525,7 +535,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new ProductDetailViewBlockRenderer(
             $this->getMasterFactory()->createThemeLocator(),
-            $this->getMasterFactory()->createBlockStructure()
+            $this->getMasterFactory()->createBlockStructure(),
+            $this->getMasterFactory()->getTranslatorRegistry()
         );
     }
 
@@ -616,7 +627,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new ProductInListingBlockRenderer(
             $this->getMasterFactory()->createThemeLocator(),
-            $this->getMasterFactory()->createBlockStructure()
+            $this->getMasterFactory()->createBlockStructure(),
+            $this->getMasterFactory()->getTranslatorRegistry()
         );
     }
 
@@ -641,7 +653,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new ProductInSearchAutosuggestionBlockRenderer(
             $this->getMasterFactory()->createThemeLocator(),
-            $this->getMasterFactory()->createBlockStructure()
+            $this->getMasterFactory()->createBlockStructure(),
+            $this->getMasterFactory()->getTranslatorRegistry()
         );
     }
 
@@ -1245,7 +1258,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new FilterNavigationBlockRenderer(
             $this->getMasterFactory()->createThemeLocator(),
-            $this->getMasterFactory()->createBlockStructure()
+            $this->getMasterFactory()->createBlockStructure(),
+            $this->getMasterFactory()->getTranslatorRegistry()
         );
     }
 
@@ -1266,7 +1280,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new PaginationBlockRenderer(
             $this->getMasterFactory()->createThemeLocator(),
-            $this->getMasterFactory()->createBlockStructure()
+            $this->getMasterFactory()->createBlockStructure(),
+            $this->getMasterFactory()->getTranslatorRegistry()
         );
     }
 
@@ -1304,5 +1319,29 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $this->urlKeyStore = $this->getMasterFactory()->createUrlKeyStore();
         }
         return $this->urlKeyStore;
+    }
+
+    /**
+     * @return TranslatorRegistry
+     */
+    public function getTranslatorRegistry()
+    {
+        if (null === $this->translatorRegistry) {
+            $this->translatorRegistry = new TranslatorRegistry(
+                $this->getMasterFactory()->getTranslatorFactory()
+            );
+        }
+
+        return $this->translatorRegistry;
+    }
+
+    /**
+     * @return callable
+     */
+    public function getTranslatorFactory()
+    {
+        return function ($locale) {
+            return CsvTranslator::forLocale($locale, $this->getMasterFactory()->createThemeLocator());
+        };
     }
 }

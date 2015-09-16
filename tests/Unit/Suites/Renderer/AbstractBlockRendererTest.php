@@ -3,8 +3,9 @@
 namespace LizardsAndPumpkins\Renderer;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Renderer\Translation\Translator;
+use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
 use LizardsAndPumpkins\TestFileFixtureTrait;
-use LizardsAndPumpkins\ThemeLocator;
 
 abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,13 +31,30 @@ abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
      */
     private $stubBlockStructure;
 
+    /**
+     * @var Translator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubTranslator;
+
     protected function setUp()
     {
-        $this->stubThemeLocator = $this->getMock(ThemeLocator::class);
         $this->stubLayout = $this->getMock(Layout::class, [], [], '', false);
+        $this->stubThemeLocator = $this->getMock(ThemeLocator::class);
         $this->stubThemeLocator->method('getLayoutForHandle')->willReturn($this->stubLayout);
+
         $this->stubBlockStructure = new BlockStructure();
-        $this->blockRenderer = $this->createRendererInstance($this->stubThemeLocator, $this->stubBlockStructure);
+
+        $this->stubTranslator = $this->getMock(Translator::class, [], [], '', false);
+
+        /** @var TranslatorRegistry|\PHPUnit_Framework_MockObject_MockObject $stubTranslatorRegistry */
+        $stubTranslatorRegistry = $this->getMock(TranslatorRegistry::class, [], [], '', false);
+        $stubTranslatorRegistry->method('getTranslatorForLocale')->willReturn($this->stubTranslator);
+
+        $this->blockRenderer = $this->createRendererInstance(
+            $this->stubThemeLocator,
+            $this->stubBlockStructure,
+            $stubTranslatorRegistry
+        );
     }
 
     public function testBlockRendererAbstractClassIsExtended()
@@ -58,13 +76,15 @@ abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param ThemeLocator|\PHPUnit_Framework_MockObject_MockObject $stubThemeLocator
+     * @param ThemeLocator $stubThemeLocator
      * @param BlockStructure $stubBlockStructure
+     * @param TranslatorRegistry $stubTranslatorRegistry
      * @return BlockRenderer
      */
     abstract protected function createRendererInstance(
-        \PHPUnit_Framework_MockObject_MockObject $stubThemeLocator,
-        BlockStructure $stubBlockStructure
+        ThemeLocator $stubThemeLocator,
+        BlockStructure $stubBlockStructure,
+        TranslatorRegistry $stubTranslatorRegistry
     );
 
     /**
@@ -92,6 +112,14 @@ abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return Translator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    final protected function getStubTranslator()
+    {
+        return $this->stubTranslator;
+    }
+
+    /**
      * @param string $className
      * @param string $template
      * @return Layout|\PHPUnit_Framework_MockObject_MockObject
@@ -115,10 +143,9 @@ abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
         $childBlockName = ''
     ) {
         $stubChild = $this->createStubBlockLayout($className, $template, $childBlockName);
-        $stubBlock->method('getNodeChildren')
-            ->willReturn([$stubChild]);
-        $stubBlock->method('hasChildren')
-            ->willReturn(true);
+        $stubBlock->method('getNodeChildren')->willReturn([$stubChild]);
+        $stubBlock->method('hasChildren')->willReturn(true);
+
         return $stubChild;
     }
 
@@ -131,12 +158,11 @@ abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
     final protected function createStubBlockLayout($className, $template, $nameInLayout = '')
     {
         $stubBlockLayout = $this->getMock(Layout::class, [], [], '', false);
-        $stubBlockLayout->method('getAttribute')
-            ->willReturnMap([
-                ['class', $className],
-                ['template', $template],
-                ['name', $nameInLayout],
-            ]);
+        $stubBlockLayout->method('getAttribute')->willReturnMap([
+            ['class', $className],
+            ['template', $template],
+            ['name', $nameInLayout],
+        ]);
         return $stubBlockLayout;
     }
 }

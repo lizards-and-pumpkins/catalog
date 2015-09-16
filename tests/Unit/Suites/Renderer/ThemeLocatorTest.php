@@ -1,11 +1,11 @@
 <?php
 
-namespace LizardsAndPumpkins;
+namespace LizardsAndPumpkins\Renderer;
 
-use LizardsAndPumpkins\Renderer\Layout;
+use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
- * @covers \LizardsAndPumpkins\ThemeLocator
+ * @covers \LizardsAndPumpkins\Renderer\ThemeLocator
  * @uses   \LizardsAndPumpkins\Renderer\Layout
  * @uses   \LizardsAndPumpkins\Renderer\LayoutReader
  * @uses   \LizardsAndPumpkins\Utils\XPathParser
