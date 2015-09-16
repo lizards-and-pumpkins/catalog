@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins\Tests\Integration;
 
 use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine;
+use LizardsAndPumpkins\DataPool\UrlKeyStore\FileUrlKeyStore;
 use LizardsAndPumpkins\Image\ImageProcessor;
 use LizardsAndPumpkins\Image\ImageProcessorCollection;
 use LizardsAndPumpkins\Image\ImageProcessingStrategySequence;
@@ -23,6 +24,7 @@ use LizardsAndPumpkins\SampleFactory;
  * @uses   \LizardsAndPumpkins\Log\Writer\FileLogMessageWriter
  * @uses   \LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine
+ * @uses   \LizardsAndPumpkins\DataPool\UrlKeyStore\FileUrlKeyStore
  * @uses   \LizardsAndPumpkins\Image\ImageMagickInscribeStrategy
  * @uses   \LizardsAndPumpkins\Image\ImageProcessor
  * @uses   \LizardsAndPumpkins\Image\ImageProcessorCollection
@@ -233,5 +235,10 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
             ImageProcessingStrategySequence::class,
             $this->factory->createGalleyThumbnailImageProcessingStrategySequence()
         );
+    }
+
+    public function testFileUrlKeyStoreIsReturned()
+    {
+        $this->assertInstanceOf(FileUrlKeyStore::class, $this->factory->createUrlKeyStore());
     }
 }

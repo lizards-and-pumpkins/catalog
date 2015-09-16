@@ -7,6 +7,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 
 class DataPoolReader
 {
@@ -29,11 +30,17 @@ class DataPoolReader
      * @var SearchEngine
      */
     private $searchEngine;
+    
+    /**
+     * @var UrlKeyStore
+     */
+    private $urlKeyStore;
 
-    public function __construct(KeyValueStore $keyValueStore, SearchEngine $searchEngine)
+    public function __construct(KeyValueStore $keyValueStore, SearchEngine $searchEngine, UrlKeyStore $urlKeyStore)
     {
         $this->keyValueStore = $keyValueStore;
         $this->searchEngine = $searchEngine;
+        $this->urlKeyStore = $urlKeyStore;
     }
 
     /**
@@ -168,5 +175,14 @@ class DataPoolReader
     public function getSearchDocumentsMatchingCriteria(SearchCriteria $criteria, Context $context)
     {
         return $this->searchEngine->getSearchDocumentsMatchingCriteria($criteria, $context);
+    }
+
+    /**
+     * @param string $dataVersionString
+     * @return string[]
+     */
+    public function getUrlKeysForVersion($dataVersionString)
+    {
+        return array_unique($this->urlKeyStore->getForDataVersion($dataVersionString));
     }
 }

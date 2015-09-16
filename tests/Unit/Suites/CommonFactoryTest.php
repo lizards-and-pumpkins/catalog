@@ -9,6 +9,8 @@ use LizardsAndPumpkins\Content\UpdateContentBlockCommandHandler;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
+use LizardsAndPumpkins\DataPool\UrlKeyStore\InMemoryUrlKeyStore;
+use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 use LizardsAndPumpkins\Http\HttpRouterChain;
 use LizardsAndPumpkins\Http\ResourceNotFoundRouter;
 use LizardsAndPumpkins\Image\ImageProcessorCollection;
@@ -42,6 +44,7 @@ use LizardsAndPumpkins\Product\UpdateProductStockQuantityCommand;
 use LizardsAndPumpkins\Product\UpdateProductStockQuantityCommandHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
 use LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator;
+use LizardsAndPumpkins\Projection\UrlKeyForContextCollector;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\Renderer\ThemeLocator;
 
@@ -114,6 +117,7 @@ use LizardsAndPumpkins\Renderer\ThemeLocator;
  * @uses   \LizardsAndPumpkins\TemplateProjectorLocator
  * @uses   \LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
+ * @uses   \LizardsAndPumpkins\Projection\UrlKeyForContextCollector
  * @uses   \LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
@@ -523,5 +527,18 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createCatalogImport();
         $this->assertInstanceOf(CatalogImport::class, $result);
+    }
+
+    public function testUrlKeyCollectorIsReturned()
+    {
+        $result = $this->commonFactory->createUrlKeyForContextCollector();
+        $this->assertInstanceOf(UrlKeyForContextCollector::class, $result);
+    }
+
+    public function testItReturnsTheSameUrlKeyStoreInstance()
+    {
+        $result1 = $this->commonFactory->getUrlKeyStore();
+        $result2 = $this->commonFactory->getUrlKeyStore();
+        $this->assertSame($result1, $result2);
     }
 }

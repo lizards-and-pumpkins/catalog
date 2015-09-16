@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine;
+use LizardsAndPumpkins\DataPool\UrlKeyStore\FileUrlKeyStore;
 use LizardsAndPumpkins\Image\ImageMagickInscribeStrategy;
 use LizardsAndPumpkins\Image\ImageProcessor;
 use LizardsAndPumpkins\Image\ImageProcessorCollection;
@@ -112,6 +113,18 @@ class SampleFactory implements Factory
 
         return FileSearchEngine::create($searchEngineStoragePath);
     }
+
+    /**
+     * @return FileUrlKeyStore
+     */
+    public function createUrlKeyStore()
+    {
+        $searchEngineStoragePath = sys_get_temp_dir() . '/lizards-and-pumpkins/url-key-store';
+        
+        return new FileUrlKeyStore($searchEngineStoragePath);
+    }
+    
+    
 
     /**
      * @return ImageProcessorCollection

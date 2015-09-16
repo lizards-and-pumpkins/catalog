@@ -15,6 +15,7 @@ use LizardsAndPumpkins\Http\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\UnableToHandleRequestException;
 use LizardsAndPumpkins\PageBuilder;
+use LizardsAndPumpkins\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Pagination;
 use LizardsAndPumpkins\Renderer\BlockRenderer;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
@@ -125,7 +126,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
 
         $keyGeneratorParams = [
             'products_per_page' => $this->getDefaultNumberOrProductsPerPage(),
-            'url_key'           => ltrim($request->getUrlPathRelativeToWebFront(), '/')
+            PageMetaInfoSnippetContent::URL_KEY => ltrim($request->getUrlPathRelativeToWebFront(), '/')
         ];
 
         return $this->pageBuilder->buildPage($this->pageMetaInfo, $this->context, $keyGeneratorParams);
@@ -209,7 +210,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
             ProductInListingSnippetRenderer::CODE
         );
         return array_map(function (SearchDocument $searchDocument) use ($keyGenerator) {
-            return $keyGenerator->getKeyForContext($this->context, ['product_id' => $searchDocument->getProductId()]);
+            return $keyGenerator->getKeyForContext($this->context, [Product::ID => $searchDocument->getProductId()]);
         }, $searchDocuments);
     }
 
@@ -250,7 +251,10 @@ class ProductListingRequestHandler implements HttpRequestHandler
             ProductListingMetaInfoSnippetRenderer::CODE
         );
         $urlKey = $request->getUrlPathRelativeToWebFront();
-        $metaInfoSnippetKey = $keyGenerator->getKeyForContext($this->context, ['url_key' => $urlKey]);
+        $metaInfoSnippetKey = $keyGenerator->getKeyForContext(
+            $this->context,
+            [PageMetaInfoSnippetContent::URL_KEY => $urlKey]
+        );
 
         return $metaInfoSnippetKey;
     }
@@ -317,7 +321,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
             return;
         }
 
-        $numberOfProductsPerPage = (int) $this->getDefaultNumberOrProductsPerPage();
+        $numberOfProductsPerPage = (int)$this->getDefaultNumberOrProductsPerPage();
         $pagination = Pagination::create($request, count($searchDocumentCollection), $numberOfProductsPerPage);
 
         $this->addFilterNavigationToPageBuilder($searchDocumentCollection, $originalCriteria, $selectedFilters);

@@ -16,6 +16,7 @@ use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
+use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 use LizardsAndPumpkins\Http\HttpRouterChain;
 use LizardsAndPumpkins\Http\ResourceNotFoundRouter;
 use LizardsAndPumpkins\Image\ImageWasUpdatedDomainEvent;
@@ -28,6 +29,7 @@ use LizardsAndPumpkins\Product\DefaultNumberOfProductsPerPageSnippetRenderer;
 use LizardsAndPumpkins\Product\FilterNavigationBlockRenderer;
 use LizardsAndPumpkins\Product\FilterNavigationFilterCollection;
 use LizardsAndPumpkins\Product\PriceSnippetRenderer;
+use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductBackOrderAvailabilitySnippetRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewBlockRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewInContextSnippetRenderer;
@@ -70,6 +72,7 @@ use LizardsAndPumpkins\Product\UpdateProductStockQuantityCommand;
 use LizardsAndPumpkins\Product\UpdateProductStockQuantityCommandHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
 use LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator;
+use LizardsAndPumpkins\Projection\UrlKeyForContextCollector;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\Renderer\BlockStructure;
 use LizardsAndPumpkins\Renderer\ThemeLocator;
@@ -109,6 +112,11 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      * @var ImageProcessorCollection
      */
     private $imageProcessorCollection;
+
+    /**
+     * @var UrlKeyStore
+     */
+    private $urlKeyStore;
 
     /**
      * @var TranslatorRegistry
@@ -194,10 +202,19 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createProductProjector()
     {
         return new ProductProjector(
-            $this->createProductSnippetRendererCollection(),
-            $this->createProductSearchDocumentBuilder(),
+            $this->getMasterFactory()->createProductSnippetRendererCollection(),
+            $this->getMasterFactory()->createProductSearchDocumentBuilder(),
+            $this->createUrlKeyForContextCollector(),
             $this->getMasterFactory()->createDataPoolWriter()
         );
+    }
+
+    /**
+     * @return UrlKeyForContextCollector
+     */
+    public function createUrlKeyForContextCollector()
+    {
+        return new UrlKeyForContextCollector();
     }
 
     /**
@@ -478,7 +495,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductListingMetaDataSnippetKeyGenerator()
     {
-        $usedDataParts = ['url_key'];
+        $usedDataParts = [PageMetaInfoSnippetContent::URL_KEY];
 
         return new GenericSnippetKeyGenerator(
             ProductListingMetaInfoSnippetRenderer::CODE,
@@ -528,7 +545,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductDetailViewSnippetKeyGenerator()
     {
-        $usedDataParts = ['product_id'];
+        $usedDataParts = [Product::ID];
 
         return new GenericSnippetKeyGenerator(
             'product_detail_view',
@@ -542,7 +559,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductDetailPageMetaSnippetKeyGenerator()
     {
-        $usedDataParts = ['url_key'];
+        $usedDataParts = [PageMetaInfoSnippetContent::URL_KEY];
 
         return new GenericSnippetKeyGenerator(
             ProductDetailViewInContextSnippetRenderer::CODE,
@@ -620,7 +637,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductInListingSnippetKeyGenerator()
     {
-        $usedDataParts = ['product_id'];
+        $usedDataParts = [Product::ID];
 
         return new GenericSnippetKeyGenerator(
             ProductInListingSnippetRenderer::CODE,
@@ -646,7 +663,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductInSearchAutosuggestionSnippetKeyGenerator()
     {
-        $usedDataParts = ['product_id'];
+        $usedDataParts = [Product::ID];
 
         return new GenericSnippetKeyGenerator(
             ProductInSearchAutosuggestionSnippetRenderer::CODE,
@@ -660,7 +677,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createPriceSnippetKeyGenerator()
     {
-        $usedDataParts = ['product_id'];
+        $usedDataParts = [Product::ID];
 
         return new GenericSnippetKeyGenerator(
             $this->getMasterFactory()->getRegularPriceSnippetKey(),
@@ -674,7 +691,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductBackOrderAvailabilitySnippetKeyGenerator()
     {
-        $usedDataParts = ['product_id'];
+        $usedDataParts = [Product::ID];
 
         return new GenericSnippetKeyGenerator(
             $this->getMasterFactory()->getProductBackOrderAvailabilitySnippetKey(),
@@ -777,7 +794,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new DataPoolWriter(
             $this->getMasterFactory()->getKeyValueStore(),
-            $this->getMasterFactory()->getSearchEngine()
+            $this->getMasterFactory()->getSearchEngine(),
+            $this->getMasterFactory()->getUrlKeyStore()
         );
     }
 
@@ -824,7 +842,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new DataPoolReader(
             $this->getMasterFactory()->getKeyValueStore(),
-            $this->getMasterFactory()->getSearchEngine()
+            $this->getMasterFactory()->getSearchEngine(),
+            $this->getMasterFactory()->getUrlKeyStore()
         );
     }
 
@@ -1028,7 +1047,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductStockQuantityRendererSnippetKeyGenerator()
     {
-        $usedDataParts = ['product_id'];
+        $usedDataParts = [Product::ID];
 
         return new GenericSnippetKeyGenerator(
             ProductStockQuantitySnippetRenderer::CODE,
@@ -1202,7 +1221,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return new GenericSnippetKeyGenerator(
             'content_block_in_product_listing',
             $this->getMasterFactory()->getRequiredContexts(),
-            ['url_key']
+            [PageMetaInfoSnippetContent::URL_KEY]
         );
     }
 
@@ -1289,6 +1308,17 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $this->getMasterFactory()->createProductListingMetaInfoSourceBuilder(),
             $this->getMasterFactory()->getLogger()
         );
+    }
+
+    /**
+     * @return UrlKeyStore
+     */
+    public function getUrlKeyStore()
+    {
+        if (null === $this->urlKeyStore) {
+            $this->urlKeyStore = $this->getMasterFactory()->createUrlKeyStore();
+        }
+        return $this->urlKeyStore;
     }
 
     /**

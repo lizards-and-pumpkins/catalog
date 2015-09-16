@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins\DataPool;
 
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
+use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Product\ProductId;
 
@@ -12,33 +13,47 @@ abstract class AbstractDataPoolTest extends \PHPUnit_Framework_TestCase
     /**
      * @var KeyValueStore|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubKeyValueStore;
+    private $mockKeyValueStore;
 
     /**
      * @var SearchEngine|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubSearchEngine;
+    private $mockSearchEngine;
+
+    /**
+     * @var UrlKeyStore|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockUrlKeyStore;
 
     protected function setUp()
     {
-        $this->stubKeyValueStore = $this->getMock(KeyValueStore::class);
-        $this->stubSearchEngine = $this->getMock(SearchEngine::class);
+        $this->mockKeyValueStore = $this->getMock(KeyValueStore::class);
+        $this->mockSearchEngine = $this->getMock(SearchEngine::class);
+        $this->mockUrlKeyStore = $this->getMock(UrlKeyStore::class);
+    }
+
+    /**
+     * @return UrlKeyStore|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getMockUrlKeyStore()
+    {
+        return $this->mockUrlKeyStore;
     }
 
     /**
      * @return SearchEngine|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getStubSearchEngine()
+    protected function getMockSearchEngine()
     {
-        return $this->stubSearchEngine;
+        return $this->mockSearchEngine;
     }
 
     /**
      * @return KeyValueStore|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getStubKeyValueStore()
+    protected function getMockKeyValueStore()
     {
-        return $this->stubKeyValueStore;
+        return $this->mockKeyValueStore;
     }
 
     /**
@@ -51,7 +66,7 @@ abstract class AbstractDataPoolTest extends \PHPUnit_Framework_TestCase
 
     protected function addSetMethodToStubKeyValueStore()
     {
-        $this->stubKeyValueStore->expects($this->once())
+        $this->mockKeyValueStore->expects($this->once())
             ->method('set');
     }
 
@@ -60,7 +75,7 @@ abstract class AbstractDataPoolTest extends \PHPUnit_Framework_TestCase
      */
     protected function addGetMethodToStubKeyValueStore($returnValue)
     {
-        $this->stubKeyValueStore->expects($this->once())
+        $this->mockKeyValueStore->expects($this->once())
             ->method('get')
             ->willReturn($returnValue);
     }
@@ -70,7 +85,7 @@ abstract class AbstractDataPoolTest extends \PHPUnit_Framework_TestCase
      */
     protected function addMultiGetMethodToStubKeyValueStore($returnValue)
     {
-        $this->stubKeyValueStore->expects($this->once())
+        $this->mockKeyValueStore->expects($this->once())
             ->method('multiGet')
             ->willReturn($returnValue);
     }
@@ -80,7 +95,7 @@ abstract class AbstractDataPoolTest extends \PHPUnit_Framework_TestCase
      */
     protected function addHasMethodToStubKeyValueStore($returnResult)
     {
-        $this->stubKeyValueStore->expects($this->once())
+        $this->mockKeyValueStore->expects($this->once())
             ->method('has')
             ->willReturn($returnResult);
     }

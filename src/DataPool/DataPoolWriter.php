@@ -2,9 +2,13 @@
 
 namespace LizardsAndPumpkins\DataPool;
 
+use LizardsAndPumpkins\Context\VersionedContext;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
+use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
+use LizardsAndPumpkins\Projection\UrlKeyForContext;
+use LizardsAndPumpkins\Projection\UrlKeyForContextCollection;
 use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetList;
 use LizardsAndPumpkins\Utils\Clearable;
@@ -20,11 +24,17 @@ class DataPoolWriter implements Clearable
      * @var SearchEngine
      */
     private $searchEngine;
+    
+    /**
+     * @var UrlKeyStore
+     */
+    private $urlKeyStorage;
 
-    public function __construct(KeyValueStore $keyValueStore, SearchEngine $searchEngine)
+    public function __construct(KeyValueStore $keyValueStore, SearchEngine $searchEngine, UrlKeyStore $urlKeyStorage)
     {
         $this->keyValueStore = $keyValueStore;
         $this->searchEngine = $searchEngine;
+        $this->urlKeyStorage = $urlKeyStorage;
     }
 
     public function writeSnippetList(SnippetList $snippetList)
@@ -48,6 +58,7 @@ class DataPoolWriter implements Clearable
     {
         $this->clearInstance($this->searchEngine);
         $this->clearInstance($this->keyValueStore);
+        $this->clearInstance($this->urlKeyStorage);
     }
 
     /**
@@ -58,5 +69,14 @@ class DataPoolWriter implements Clearable
         if ($instance instanceof Clearable) {
             $instance->clear();
         }
+    }
+
+    public function writeUrlKeyCollection(UrlKeyForContextCollection $urlKeysForContextsCollection)
+    {
+        array_map(function (UrlKeyForContext $urlKeyForContext) {
+            $urlKey = (string) $urlKeyForContext->getUrlKey();
+            $version = (string) $urlKeyForContext->getContextValue(VersionedContext::CODE);
+            $this->urlKeyStorage->addUrlKeyForVersion($urlKey, $version);
+        }, $urlKeysForContextsCollection->getUrlKeys());
     }
 }

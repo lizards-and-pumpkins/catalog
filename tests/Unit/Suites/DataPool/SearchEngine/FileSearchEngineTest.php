@@ -28,18 +28,6 @@ class FileSearchEngineTest extends AbstractSearchEngineTest
      */
     private $temporaryStorage;
 
-    protected function tearDown()
-    {
-        $localFilesystem = new LocalFilesystem();
-        $localFilesystem->removeDirectoryAndItsContent($this->temporaryStorage);
-    }
-
-    public function testExceptionIsThrownIfSearchEngineStorageDirIsNotWritable()
-    {
-        $this->setExpectedException(SearchEngineNotAvailableException::class);
-        FileSearchEngine::create('non-existing-path');
-    }
-
     /**
      * @return SearchEngine
      */
@@ -60,5 +48,16 @@ class FileSearchEngineTest extends AbstractSearchEngineTest
         }
 
         mkdir($this->temporaryStorage);
+    }
+
+    protected function tearDown()
+    {
+        (new LocalFilesystem())->removeDirectoryAndItsContent($this->temporaryStorage);
+    }
+
+    public function testExceptionIsThrownIfSearchEngineStorageDirIsNotWritable()
+    {
+        $this->setExpectedException(SearchEngineNotAvailableException::class);
+        FileSearchEngine::create('non-existing-path');
     }
 }
