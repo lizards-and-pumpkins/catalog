@@ -90,4 +90,11 @@ class EnvironmentConfigReaderTest extends \PHPUnit_Framework_TestCase
         $environmentConfig = ['LP_THE-KEY' => $testConfigValue];
         $this->assertSame($testConfigValue, EnvironmentConfigReader::fromArray($environmentConfig)->get('the-key'));
     }
+
+    public function testItRemovesSpacesFromTheConfigKey()
+    {
+        $testConfigValue = 'another-value';
+        $environmentConfig = ['LP_SPACES' => $testConfigValue];
+        $this->assertSame($testConfigValue, EnvironmentConfigReader::fromArray($environmentConfig)->get('  spa ces '));
+    }
 }

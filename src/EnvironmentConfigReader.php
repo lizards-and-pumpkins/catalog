@@ -113,6 +113,6 @@ class EnvironmentConfigReader implements ConfigReader
      */
     private function normalizeConfigKey($configKey)
     {
-        return self::ENV_VAR_PREFIX . strtoupper($configKey);
+        return self::ENV_VAR_PREFIX . strtoupper(str_replace(' ', '', $configKey));
     }
 }
