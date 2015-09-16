@@ -46,9 +46,9 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $masterFactory = new SampleMasterFactory();
+        $masterFactory->register(new CommonFactory());
         $this->factory = new SampleFactory();
         $masterFactory->register($this->factory);
-        $masterFactory->register(new CommonFactory());
     }
 
     protected function tearDown()
