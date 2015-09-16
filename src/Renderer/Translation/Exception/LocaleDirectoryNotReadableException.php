@@ -1,6 +1,6 @@
 <?php
 
-namespace LizardsAndPumpkins\Renderer\Translation;
+namespace LizardsAndPumpkins\Renderer\Translation\Exception;
 
 class LocaleDirectoryNotReadableException extends \RuntimeException
 {

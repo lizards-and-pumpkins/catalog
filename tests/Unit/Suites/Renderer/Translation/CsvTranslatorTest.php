@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Renderer\Translation;
 
 use LizardsAndPumpkins\Renderer\ThemeLocator;
+use LizardsAndPumpkins\Renderer\Translation\Exception\LocaleDirectoryNotReadableException;
 use LizardsAndPumpkins\Renderer\Translation\Exception\MalformedTranslationFileException;
 use LizardsAndPumpkins\Renderer\Translation\Exception\TranslationFileNotReadableException;
 use LizardsAndPumpkins\TestFileFixtureTrait;
