@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\DataPool;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\DataPool\Exception\InvalidKeyValueStoreKeyException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 
 /**

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace LizardsAndPumpkins\DataPool;
+namespace LizardsAndPumpkins\DataPool\Exception;
 
 class InvalidKeyValueStoreKeyException extends \InvalidArgumentException
 {
