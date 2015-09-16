@@ -31,7 +31,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     final public function query($queryString, Context $queryContext)
     {
         $allSearchDocuments = $this->getSearchDocuments();
-        $matchingDocs = $this->getSearchDocumentsForQueryAndContext($allSearchDocuments, $queryString, $queryContext);
+        $matchingDocs = $this->getSearchDocumentsForQueryInContext($allSearchDocuments, $queryString, $queryContext);
 
         return new SearchDocumentCollection(...array_values($matchingDocs));
     }
@@ -42,7 +42,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
      * @param Context $queryContext
      * @return SearchDocument[]
      */
-    private function getSearchDocumentsForQueryAndContext(array $searchDocuments, $queryString, Context $queryContext)
+    private function getSearchDocumentsForQueryInContext(array $searchDocuments, $queryString, Context $queryContext)
     {
         $docsMatchingContext = $this->getSearchDocumentsMatchingContext($searchDocuments, $queryContext);
         return $this->getSearchDocumentsMatchingQueryString($docsMatchingContext, $queryString);
