@@ -2,8 +2,6 @@
 
 namespace LizardsAndPumpkins\Renderer\Translation;
 
-use LizardsAndPumpkins\Renderer\ThemeLocator;
-
 /**
  * @covers \LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry
  * @uses   \LizardsAndPumpkins\Renderer\Translation\CsvTranslator
@@ -17,9 +15,13 @@ class TranslatorRegistryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        /** @var ThemeLocator|\PHPUnit_Framework_MockObject_MockObject $stubThemeLocator */
-        $stubThemeLocator = $this->getMock(ThemeLocator::class, [], [], '', false);
-        $this->registry = new TranslatorRegistry(CsvTranslator::class, $stubThemeLocator);
+        $stubTranslator = $this->getMock(Translator::class);
+
+        /** @var callable|\PHPUnit_Framework_MockObject_MockObject $stubTranslatorFactory */
+        $stubTranslatorFactory = $this->getMock(Callback::class, ['__invoke']);
+        $stubTranslatorFactory->method('__invoke')->willReturn($stubTranslator);
+
+        $this->registry = new TranslatorRegistry($stubTranslatorFactory);
     }
 
     public function testTranslatorIsReturnedEvenIfLocaleIsNotAvailable()

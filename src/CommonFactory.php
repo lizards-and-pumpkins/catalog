@@ -1298,8 +1298,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         if (null === $this->translatorRegistry) {
             $this->translatorRegistry = new TranslatorRegistry(
-                $this->getMasterFactory()->getTranslatorClassName(),
-                $this->getMasterFactory()->createThemeLocator()
+                $this->getMasterFactory()->getTranslatorFactory()
             );
         }
 
@@ -1309,8 +1308,10 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     /**
      * @return string
      */
-    public function getTranslatorClassName()
+    public function getTranslatorFactory()
     {
-        return CsvTranslator::class;
+        return function ($locale) {
+            return CsvTranslator::forLocale($locale, $this->getMasterFactory()->createThemeLocator());
+        };
     }
 }

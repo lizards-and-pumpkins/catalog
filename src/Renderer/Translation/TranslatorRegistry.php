@@ -2,33 +2,21 @@
 
 namespace LizardsAndPumpkins\Renderer\Translation;
 
-use LizardsAndPumpkins\Renderer\ThemeLocator;
-
 class TranslatorRegistry
 {
     /**
-     * @var string
+     * @var callable
      */
-    private $translatorClassName;
-
-    /**
-     * @var ThemeLocator
-     */
-    private $themeLocator;
+    private $translatorFactory;
 
     /**
      * @var Translator[]
      */
     private $translators = [];
 
-    /**
-     * @param string $translatorClassName
-     * @param ThemeLocator $themeLocator
-     */
-    public function __construct($translatorClassName, ThemeLocator $themeLocator)
+    public function __construct(callable $translatorFactory)
     {
-        $this->translatorClassName = $translatorClassName;
-        $this->themeLocator = $themeLocator;
+        $this->translatorFactory = $translatorFactory;
     }
 
     /**
@@ -38,11 +26,7 @@ class TranslatorRegistry
     public function getTranslatorForLocale($locale)
     {
         if (!isset($this->translators[$locale])) {
-            $this->translators[$locale] = call_user_func(
-                [$this->translatorClassName, 'forLocale'],
-                $locale,
-                $this->themeLocator
-            );
+            $this->translators[$locale] = call_user_func($this->translatorFactory, $locale);
         }
 
         return $this->translators[$locale];
