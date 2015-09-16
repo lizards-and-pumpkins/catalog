@@ -9,8 +9,6 @@ use LizardsAndPumpkins\Content\UpdateContentBlockCommandHandler;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
-use LizardsAndPumpkins\DataPool\UrlKeyStore\InMemoryUrlKeyStore;
-use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 use LizardsAndPumpkins\Http\HttpRouterChain;
 use LizardsAndPumpkins\Http\ResourceNotFoundRouter;
 use LizardsAndPumpkins\Image\ImageProcessorCollection;
@@ -47,6 +45,7 @@ use LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator;
 use LizardsAndPumpkins\Projection\UrlKeyForContextCollector;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\Renderer\ThemeLocator;
+use LizardsAndPumpkins\Renderer\Translation\Translator;
 
 /**
  * @covers \LizardsAndPumpkins\CommonFactory
@@ -118,6 +117,8 @@ use LizardsAndPumpkins\Renderer\ThemeLocator;
  * @uses   \LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
  * @uses   \LizardsAndPumpkins\Projection\UrlKeyForContextCollector
+ * @uses   \LizardsAndPumpkins\Renderer\ThemeLocator
+ * @uses   \LizardsAndPumpkins\Renderer\Translation\CsvTranslator
  * @uses   \LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
@@ -540,5 +541,11 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $result1 = $this->commonFactory->getUrlKeyStore();
         $result2 = $this->commonFactory->getUrlKeyStore();
         $this->assertSame($result1, $result2);
+    }
+    
+    public function testTranslatorIsReturned()
+    {
+        $translatorFactory = $this->commonFactory->getTranslatorFactory();
+        $this->assertInstanceOf(Translator::class, $translatorFactory('en_US'));
     }
 }
