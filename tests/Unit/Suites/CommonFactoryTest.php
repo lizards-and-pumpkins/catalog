@@ -120,6 +120,7 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\Renderer\ThemeLocator
  * @uses   \LizardsAndPumpkins\Renderer\Translation\CsvTranslator
  * @uses   \LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry
+ * @uses   \LizardsAndPumpkins\EnvironmentConfigReader
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -547,5 +548,11 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $translatorFactory = $this->commonFactory->getTranslatorFactory();
         $this->assertInstanceOf(Translator::class, $translatorFactory('en_US'));
+    }
+
+    public function testItReturnsAConfigReader()
+    {
+        $result = $this->commonFactory->createConfigReader();
+        $this->assertInstanceOf(ConfigReader::class, $result);
     }
 }

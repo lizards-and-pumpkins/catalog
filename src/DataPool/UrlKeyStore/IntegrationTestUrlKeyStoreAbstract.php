@@ -3,6 +3,11 @@
 
 namespace LizardsAndPumpkins\DataPool\UrlKeyStore;
 
+use LizardsAndPumpkins\DataPool\UrlKeyStore\Exception\DataVersionIsNotAStringException;
+use LizardsAndPumpkins\DataPool\UrlKeyStore\Exception\DataVersionToWriteIsEmptyStringException;
+use LizardsAndPumpkins\DataPool\UrlKeyStore\Exception\UrlKeyIsNotAStringException;
+use LizardsAndPumpkins\DataPool\UrlKeyStore\Exception\UrlKeyToWriteIsEmptyStringException;
+
 class IntegrationTestUrlKeyStoreAbstract
 {
     /**
@@ -13,11 +18,11 @@ class IntegrationTestUrlKeyStoreAbstract
         if (!is_string($urlKey)) {
             $variableType = $this->getVariableType($urlKey);
             $message = sprintf('URL keys have to be strings for storage in the UrlKeyStore, got "%s"', $variableType);
-            throw new Exception\UrlKeyIsNotAStringException($message);
+            throw new UrlKeyIsNotAStringException($message);
         }
         if ('' === $urlKey) {
             $message = 'Invalid URL key: url key strings have to be one or more characters long';
-            throw new Exception\UrlKeyToWriteIsEmptyStringException($message);
+            throw new UrlKeyToWriteIsEmptyStringException($message);
         }
     }
 
@@ -31,11 +36,11 @@ class IntegrationTestUrlKeyStoreAbstract
                 'The data version has to be string for use with the UrlKeyStore, got "%s"',
                 $this->getVariableType($dataVersionString)
             );
-            throw new Exception\DataVersionIsNotAStringException($message);
+            throw new DataVersionIsNotAStringException($message);
         }
         if ('' === $dataVersionString) {
             $message = 'Invalid data version: version strings have to be one or more characters long';
-            throw new Exception\DataVersionToWriteIsEmptyStringException($message);
+            throw new DataVersionToWriteIsEmptyStringException($message);
         }
     }
 

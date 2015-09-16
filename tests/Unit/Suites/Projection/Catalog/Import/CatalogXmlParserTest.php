@@ -4,6 +4,10 @@
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
 use LizardsAndPumpkins\Product\ProductSource;
+use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportSourceFilePathIsNotAStringException;
+use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportSourceXmlFileDoesNotExistException;
+use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportSourceXmlFileIsNotReadableException;
+use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportSourceXMLNotAStringException;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 use LizardsAndPumpkins\Utils\XPathParser;
 use SebastianBergmann\Money\XXX;
@@ -247,7 +251,7 @@ EOT;
         $expectedType
     ) {
         $this->setExpectedException(
-            Exception\CatalogImportSourceFilePathIsNotAStringException::class,
+            CatalogImportSourceFilePathIsNotAStringException::class,
             sprintf('Expected the catalog XML import file path to be a string, got "%s"', $expectedType)
         );
         CatalogXmlParser::fromFilePath($invalidSourceFilePath);
@@ -263,7 +267,7 @@ EOT;
         $expectedType
     ) {
         $this->setExpectedException(
-            Exception\CatalogImportSourceXMLNotAStringException::class,
+            CatalogImportSourceXMLNotAStringException::class,
             sprintf('Expected the catalog XML to be a string, got "%s"', $expectedType)
         );
         CatalogXmlParser::fromXml($noXmlStringInput);
@@ -285,7 +289,7 @@ EOT;
     {
         $sourceFilePath = 'non-existent-file.xml';
         $this->setExpectedException(
-            Exception\CatalogImportSourceXmlFileDoesNotExistException::class,
+            CatalogImportSourceXmlFileDoesNotExistException::class,
             sprintf('The catalog XML import file "%s" does not exist', $sourceFilePath)
         );
         CatalogXmlParser::fromFilePath($sourceFilePath);
@@ -299,7 +303,7 @@ EOT;
         $this->createFixtureFile($sourceFilePath, '', 0000);
 
         $this->setExpectedException(
-            Exception\CatalogImportSourceXmlFileIsNotReadableException::class,
+            CatalogImportSourceXmlFileIsNotReadableException::class,
             sprintf('The catalog XML import file "%s" is not readable', $sourceFilePath)
         );
         CatalogXmlParser::fromFilePath($sourceFilePath);

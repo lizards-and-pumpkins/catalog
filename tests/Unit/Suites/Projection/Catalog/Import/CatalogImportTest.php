@@ -13,6 +13,8 @@ use LizardsAndPumpkins\Product\UpdateProductListingCommand;
 use LizardsAndPumpkins\Product\ProductListingMetaInfo;
 use LizardsAndPumpkins\Product\ProductListingMetaInfoBuilder;
 use LizardsAndPumpkins\Product\ProductSourceBuilder;
+use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportFileDoesNotExistException;
+use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportFileNotReadableException;
 use LizardsAndPumpkins\Queue\Queue;
 use org\bovigo\vfs\vfsStream;
 
@@ -121,7 +123,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownIfImportFileDoesNotExist()
     {
         $this->setExpectedException(
-            Exception\CatalogImportFileDoesNotExistException::class,
+            CatalogImportFileDoesNotExistException::class,
             'Catalog import file not found'
         );
         $this->catalogImport->importFile(vfsStream::url('root/some-not-existing-file.xml'));
@@ -130,7 +132,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownIfImportFileIsNotReadable()
     {
         $this->setExpectedException(
-            Exception\CatalogImportFileNotReadableException::class,
+            CatalogImportFileNotReadableException::class,
             'Catalog import file is not readable'
         );
 
