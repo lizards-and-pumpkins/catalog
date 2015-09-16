@@ -125,8 +125,6 @@ class SampleFactory implements Factory
         $storageBasePath = $this->getMasterFactory()->getFileStorageBasePathConfig();
         return new FileUrlKeyStore($storageBasePath . '/lizards-and-pumpkins/url-key-store');
     }
-    
-    
 
     /**
      * @return ImageProcessorCollection
