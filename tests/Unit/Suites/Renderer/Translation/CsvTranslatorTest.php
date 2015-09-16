@@ -44,7 +44,14 @@ class CsvTranslatorTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownIfLocaleDirectoryIsNotReadable()
     {
         $this->setExpectedException(LocaleDirectoryNotReadableException::class);
-        $this->stubThemeLocator->method('getThemeDirectory')->willReturn(sys_get_temp_dir());
+
+        $testThemeDirectoryPath = sys_get_temp_dir();
+        $testLocaleDirectoryPath = $testThemeDirectoryPath . '/locale/' . $this->testLocaleCode;
+
+        $this->createFixtureDirectory($testLocaleDirectoryPath);
+        chmod($testLocaleDirectoryPath, 0000);
+
+        $this->stubThemeLocator->method('getThemeDirectory')->willReturn($testThemeDirectoryPath);
 
         CsvTranslator::forLocale($this->testLocaleCode, $this->stubThemeLocator);
     }

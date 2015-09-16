@@ -66,6 +66,11 @@ class CsvTranslator implements Translator
     private static function getTranslationFilesFromLocaleDirectory($localeCode, ThemeLocator $themeLocator)
     {
         $localeDirectoryPath = $themeLocator->getThemeDirectory() . '/locale/' . $localeCode;
+
+        if (!is_dir($localeDirectoryPath)) {
+            return [];
+        }
+
         self::validateLocaleDirectory($localeDirectoryPath);
 
         return glob($localeDirectoryPath . '/*.csv');
@@ -88,7 +93,7 @@ class CsvTranslator implements Translator
      */
     private static function validateLocaleDirectory($localeDirectoryPath)
     {
-        if (!is_dir($localeDirectoryPath) || !is_readable($localeDirectoryPath)) {
+        if (!is_readable($localeDirectoryPath)) {
             throw new LocaleDirectoryNotReadableException(
                 sprintf('Locale directory "%s" is not readable', $localeDirectoryPath)
             );
