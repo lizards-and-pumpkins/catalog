@@ -5,10 +5,12 @@ namespace LizardsAndPumpkins;
 
 use League\CLImate\CLImate;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
+use LizardsAndPumpkins\Utils\BaseCliCommand;
+use TheSeer\phpDox\CLI;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-class ListUrlKeys
+class ListUrlKeys extends BaseCliCommand
 {
     const IDX_URL_KEY = 0;
     const IDX_CONTEXT = 1;
@@ -18,15 +20,10 @@ class ListUrlKeys
      */
     private $factory;
 
-    /**
-     * @var CLImate
-     */
-    private $climate;
-
     private function __construct(MasterFactory $factory, CLImate $CLImate)
     {
         $this->factory = $factory;
-        $this->climate = $CLImate;
+        $this->setCLImate($CLImate);
     }
 
     /**
@@ -41,21 +38,13 @@ class ListUrlKeys
         return new self($factory, new CLImate());
     }
 
-    public function run()
+    /**
+     * @param CLImate $CLImate
+     * @return array[]
+     */
+    protected function getCommandLineArgumentsArray(CLImate $CLImate)
     {
-        try {
-            $this->prepareCommandLineArguments();
-            $this->execute();
-        } catch (\Exception $e) {
-            $this->climate->error($e->getMessage());
-            $this->climate->error(sprintf('%s:%d', $e->getFile(), $e->getLine()));
-            $this->climate->usage();
-        }
-    }
-
-    private function prepareCommandLineArguments()
-    {
-        $this->climate->arguments->add([
+        return array_merge([
             'withContext' => [
                 'prefix' => 'c',
                 'longPrefix' => 'withContext',
@@ -67,17 +56,10 @@ class ListUrlKeys
                 'defaultValue' => 'current',
                 'required' => false
             ]
-        ]);
-
-        $this->validateArguments();
+        ], parent::getCommandLineArgumentsArray($CLImate));
     }
 
-    private function validateArguments()
-    {
-        $this->climate->arguments->parse();
-    }
-
-    private function execute()
+    protected function execute(CLImate $climate)
     {
         $version = $this->getVersionToDisplay();
         $rawUrlKeyRecords = $this->getDataPoolReader()->getUrlKeysForVersion($version);
@@ -109,7 +91,7 @@ class ListUrlKeys
     }
 
     /**
-     * @param array $rawUrlKeyRecords
+     * @param string[] $rawUrlKeyRecords
      * @return string[]
      */
     private function formatUrlKeysWithContext(array $rawUrlKeyRecords)
@@ -121,28 +103,11 @@ class ListUrlKeys
     }
 
     /**
-     * @param string $arg
-     * @return bool|float|int|null|string
-     */
-    private function getArg($arg)
-    {
-        return $this->climate->arguments->get($arg);
-    }
-
-    /**
-     * @param string $message
-     */
-    private function output($message)
-    {
-        $this->climate->output($message);
-    }
-
-    /**
      * @param string $message
      */
     private function outputMessage($message)
     {
-        $this->climate->bold($message);
+        $this->getCLImate()->bold($message);
     }
 
     /**
