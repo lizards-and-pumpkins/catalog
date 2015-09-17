@@ -52,11 +52,12 @@ class ContextSourceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider extractPartsProvider
+     * @param string[] $partsToExtract
+     * @param array[] $expectedContextMatrix
      */
-    public function testOnlyDesiredPartsArePassedToContextBuilder($partsToExtract, $expectedContextMatrix)
+    public function testOnlyDesiredPartsArePassedToContextBuilder(array $partsToExtract, array $expectedContextMatrix)
     {
-        $this->stubContextBuilder->expects($this->once())
-            ->method('createContextsFromDataSets')
+        $this->stubContextBuilder->expects($this->once())->method('createContextsFromDataSets')
             ->with($expectedContextMatrix);
 
         $this->contextSource->getContextsForParts($partsToExtract);

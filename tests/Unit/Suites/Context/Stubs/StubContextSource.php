@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Context\Stubs;
 
 use LizardsAndPumpkins\Context\ContextBuilder;
@@ -9,24 +8,22 @@ use LizardsAndPumpkins\Context\ContextSource;
 class StubContextSource extends ContextSource
 {
     /**
-     * @var string[]
+     * @var array[]
      */
     private $testContextMatrix;
 
     /**
      * @param ContextBuilder $contextBuilder
-     * @param mixed[] $testContextMatrix
+     * @param array[] $testContextMatrix
      */
     public function __construct(ContextBuilder $contextBuilder, array $testContextMatrix)
     {
-
-        // TODO is $testContextMatrix mixed[] ?
         parent::__construct($contextBuilder);
         $this->testContextMatrix = $testContextMatrix;
     }
 
     /**
-     * @return string[]
+     * @return array[]
      */
     protected function getContextMatrix()
     {
