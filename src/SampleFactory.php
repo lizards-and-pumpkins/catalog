@@ -362,7 +362,12 @@ class SampleFactory implements Factory
      */
     public function getFileStorageBasePathConfig()
     {
-        return sys_get_temp_dir();
+        /** @var ConfigReader $configReader */
+        $configReader = $this->getMasterFactory()->createConfigReader();
+        $basePath = $configReader->get('file_storage_base_path');
+        return null === $basePath ?
+            sys_get_temp_dir() :
+            $basePath;
     }
     
     /**

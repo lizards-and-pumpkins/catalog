@@ -16,7 +16,7 @@ class RunImport
      * @var MasterFactory
      */
     private $factory;
-    
+
     /**
      * @var CLImate
      */
@@ -27,7 +27,10 @@ class RunImport
         $this->factory = $factory;
         $this->climate = $CLImate;
     }
-    
+
+    /**
+     * @return RunImport
+     */
     public static function bootstrap()
     {
         $factory = new SampleMasterFactory();
@@ -36,7 +39,7 @@ class RunImport
 
         return new self($factory, new CLImate());
     }
-    
+
     public function run()
     {
         try {
@@ -64,18 +67,27 @@ class RunImport
                 'description' => 'Process queues after the import)',
                 'noValue' => true,
             ],
+            'environmentConfig' => [
+                'prefix' => 'e',
+                'longPrefix' => 'environmentConfig',
+                'description' => 'Environment config settings, comma separated [foo=bar,baz=qux]',
+            ],
             'importFile' => [
                 'description' => 'Import XML file',
                 'required' => true
             ]
         ]);
-        
+
         $this->validateArguments();
     }
 
     private function validateArguments()
     {
         $this->climate->arguments->parse();
+        $env = $this->getArg('environmentConfig');
+        if ($env) {
+            $this->applyEnvironmentConfigSettings($env);
+        }
     }
 
     private function execute()
@@ -95,7 +107,7 @@ class RunImport
     private function clearStorage()
     {
         $this->output('Clearing queue and data pool before import...');
-        
+
         /** @var DataPoolWriter $dataPoolWriter */
         $dataPoolWriter = $this->factory->createDataPoolWriter();
         $dataPoolWriter->clear();
@@ -104,7 +116,7 @@ class RunImport
     private function importFile()
     {
         $this->output('Importing...');
-        
+
         /** @var CatalogImport $import */
         $import = $this->factory->createCatalogImport();
         $import->importFile($this->getArg('importFile'));
@@ -168,6 +180,61 @@ class RunImport
     private function output($message)
     {
         return $this->climate->output($message);
+    }
+
+    /**
+     * @param string $environmentConfigSettingsString
+     */
+    private function applyEnvironmentConfigSettings($environmentConfigSettingsString)
+    {
+        array_map(function ($setting) {
+            list($key, $value) = $this->parseSetting($setting);
+            $_SERVER[EnvironmentConfigReader::ENV_VAR_PREFIX . strtoupper($key)] = trim($value);
+        }, explode(',', $environmentConfigSettingsString));
+    }
+
+    /**
+     * @param string $setting
+     * @return string[]
+     */
+    private function parseSetting($setting)
+    {
+        $this->validateSettingFormat($setting);
+        return [$this->parseSettingKey($setting), $this->parseSettingValue($setting)];
+    }
+
+    /**
+     * @param string $setting
+     * @return string
+     */
+    private function parseSettingKey($setting)
+    {
+        $key = trim(substr($setting, 0, strpos($setting, '=')));
+        if ('' === $key) {
+            $message = sprintf('Environment settings have to be key=value pairs, key not found in "%s"', $setting);
+            throw new \InvalidArgumentException($message);
+        }
+        return $key;
+    }
+
+    /**
+     * @param string $setting
+     * @return string
+     */
+    private function parseSettingValue($setting)
+    {
+        return substr($setting, strpos($setting, '=') + 1);
+    }
+
+    /**
+     * @param string $setting
+     */
+    private function validateSettingFormat($setting)
+    {
+        if (false === strpos($setting, '=')) {
+            $message = sprintf('Environment settings have to be key=value pairs, "=" not found in "%s"', $setting);
+            throw new \InvalidArgumentException($message);
+        }
     }
 }
 
