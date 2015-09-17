@@ -10,9 +10,9 @@ use LizardsAndPumpkins\EnvironmentConfigReader;
 use LizardsAndPumpkins\Utils\Stub\StubCliCommand;
 
 /**
- * @covers \LizardsAndPumpkins\Utils\CliCommandBase
+ * @covers \LizardsAndPumpkins\Utils\BaseCliCommand
  */
-class CliCommandBaseTest extends \PHPUnit_Framework_TestCase
+class BaseCliCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var CLImate|\PHPUnit_Framework_MockObject_MockObject
@@ -32,7 +32,7 @@ class CliCommandBaseTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $environmentConfigString
      */
-    private function setEnvironmentConfigString($environmentConfigString)
+    private function setEnvironmentConfigArgumentString($environmentConfigString)
     {
         /** @var ArgumentManager|\PHPUnit_Framework_MockObject_MockObject $arguments */
         $arguments = $this->climate->arguments;
@@ -88,7 +88,7 @@ class CliCommandBaseTest extends \PHPUnit_Framework_TestCase
 
     public function testItSetsTheEnvironmentConfig()
     {
-        $this->setEnvironmentConfigString('foo=bar,baz=qux');
+        $this->setEnvironmentConfigArgumentString('foo=bar,baz=qux');
         $this->cliCommand->run();
         $this->assertArrayHasKey(EnvironmentConfigReader::ENV_VAR_PREFIX . 'FOO', $_SERVER);
         $this->assertArrayHasKey(EnvironmentConfigReader::ENV_VAR_PREFIX . 'BAZ', $_SERVER);
@@ -98,7 +98,7 @@ class CliCommandBaseTest extends \PHPUnit_Framework_TestCase
 
     public function testItTrimsTheEnvironmentConfigKeys()
     {
-        $this->setEnvironmentConfigString('foo-with-space =bar');
+        $this->setEnvironmentConfigArgumentString('foo-with-space =bar');
         $this->cliCommand->run();
         $key = EnvironmentConfigReader::ENV_VAR_PREFIX . 'FOO-WITH-SPACE';
         $this->assertArrayHasKey($key, $_SERVER);
@@ -106,7 +106,7 @@ class CliCommandBaseTest extends \PHPUnit_Framework_TestCase
 
     public function testItTrimsTheEnvironmentConfigValues()
     {
-        $this->setEnvironmentConfigString('foo= bar with space ');
+        $this->setEnvironmentConfigArgumentString('foo= bar with space ');
         $this->cliCommand->run();
         $key = EnvironmentConfigReader::ENV_VAR_PREFIX . 'FOO';
         $this->assertSame($_SERVER[$key], 'bar with space');
@@ -114,7 +114,7 @@ class CliCommandBaseTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfEnvironmentSettingIsNoKeyValuePair()
     {
-        $this->setEnvironmentConfigString('some-setting');
+        $this->setEnvironmentConfigArgumentString('some-setting');
         $this->cliCommand->run();
         $expectedString = 'Environment settings have to be key=value pairs, "=" not found in "some-setting"';
         $this->assertStringWasOutput($expectedString);
@@ -122,7 +122,7 @@ class CliCommandBaseTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfTheEnvironmentKeyIsEmpty()
     {
-        $this->setEnvironmentConfigString('=bar');
+        $this->setEnvironmentConfigArgumentString('=bar');
         $this->cliCommand->run();
         $this->assertStringWasOutput('Environment settings have to be key=value pairs, key not found in "=bar"');
     }
@@ -136,7 +136,7 @@ class CliCommandBaseTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsADefaultCLImateInstance()
     {
-        $property = new \ReflectionProperty(CliCommandBase::class, 'climate');
+        $property = new \ReflectionProperty(BaseCliCommand::class, 'climate');
         $property->setAccessible(true);
         $property->setValue($this->cliCommand, null);
         $property->setAccessible(false);

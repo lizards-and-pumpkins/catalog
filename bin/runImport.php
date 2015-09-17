@@ -7,11 +7,11 @@ use League\CLImate\CLImate;
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
 use LizardsAndPumpkins\Queue\Queue;
-use LizardsAndPumpkins\Utils\CliCommandBase;
+use LizardsAndPumpkins\Utils\BaseCliCommand;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-class RunImport extends CliCommandBase
+class RunImport extends BaseCliCommand
 {
     /**
      * @var MasterFactory

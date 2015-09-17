@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins\Utils;
 use League\CLImate\CLImate;
 use LizardsAndPumpkins\EnvironmentConfigReader;
 
-abstract class CliCommandBase
+abstract class BaseCliCommand
 {
     /**
      * @var CLImate
