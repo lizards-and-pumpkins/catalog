@@ -44,12 +44,12 @@ class CliCommandBaseTest extends \PHPUnit_Framework_TestCase
      */
     private function assertStringWasOutput($expectedString)
     {
-        $callCount = array_sum(array_map(function ($invocation) use ($expectedString) {
+        $callCountWithMatchingStringParam = array_sum(array_map(function ($invocation) use ($expectedString) {
             return intval($expectedString === $invocation->parameters[0]);
         }, $this->writeOutputSpy->getInvocations()));
 
         $message = sprintf('The expected string was not output: "%s"', $expectedString);
-        $this->assertTrue($callCount > 0, $message);
+        $this->assertTrue($callCountWithMatchingStringParam > 0, $message);
     }
 
     public function setUp()
@@ -74,7 +74,7 @@ class CliCommandBaseTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($climate, $this->cliCommand->publicTestGetCLImate());
     }
 
-    public function testItCallsTheHOokMethodsInTheRightOrder()
+    public function testItCallsTheHookMethodsInTheRightOrder()
     {
         $this->cliCommand->run();
         $expectedCalls = [
