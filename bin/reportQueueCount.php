@@ -5,10 +5,11 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Queue\Queue;
 use League\CLImate\CLImate;
+use LizardsAndPumpkins\Utils\BaseCliCommand;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-class ReportQueueCount
+class ReportQueueCount extends BaseCliCommand
 {
     /**
      * @var SampleMasterFactory
@@ -24,6 +25,7 @@ class ReportQueueCount
     {
         $this->factory = $factory;
         $this->climate = $climate;
+        $this->setCLImate($climate);
     }
 
     /**
@@ -37,19 +39,8 @@ class ReportQueueCount
 
         return new self($factory, new CLImate());
     }
-    
-    public function run()
-    {
-        try {
-            $this->execute();
-        } catch (\Exception $e) {
-            $this->climate->error($e->getMessage());
-            $this->climate->error(sprintf('%s:%d', $e->getFile(), $e->getLine()));
-            $this->climate->usage();
-        }
-    }
 
-    private function execute()
+    protected function execute(CLImate $cliimate)
     {
         $tableData = $this->formatTableData($this->factory->getCommandQueue(), $this->factory->getEventQueue());
         $this->climate->table($tableData);
