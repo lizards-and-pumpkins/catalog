@@ -4,27 +4,24 @@
 namespace LizardsAndPumpkins;
 
 use League\CLImate\CLImate;
+use LizardsAndPumpkins\Utils\BaseCliCommand;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-class CalculateAverageDomainEventProcessingTime
+class CalculateAverageDomainEventProcessingTime extends BaseCliCommand
 {
-    public function run()
+    public function __construct()
     {
-        $climate = new CLImate();
-        try {
-            $this->prepareCommandLineArguments($climate);
-            $this->execute($climate);
-        } catch (\Exception $e) {
-            $climate->error($e->getMessage());
-            $climate->error(sprintf('%s:%d', $e->getFile(), $e->getLine()));
-            $climate->usage();
-        }
+        $this->setCLImate(new CLImate());
     }
 
-    private function prepareCommandLineArguments(CLImate $climate)
+    /**
+     * @param CLImate $climate
+     * @return array[]
+     */
+    protected function getCommandLineArgumentsArray(CLImate $climate)
     {
-        $climate->arguments->add([
+        return array_merge([
             'sortBy' => [
                 'prefix' => 's',
                 'longPrefix' => 'sortBy',
@@ -41,18 +38,16 @@ class CalculateAverageDomainEventProcessingTime
                 'description' => 'Log file',
                 'required' => true
             ]
-        ]);
-        
-        $this->validateArguments($climate);
+        ], parent::getCommandLineArgumentsArray($climate));
     }
 
-    private function execute(CLImate $climate)
+    protected function execute(CLImate $climate)
     {
-        $filePath = $climate->arguments->get('logfile');
+        $filePath = $this->getArg('logfile');
         $tableData = $this->sortTableData(
             $this->collectTableDataFromFile($filePath),
-            $climate->arguments->get('sortBy'),
-            $climate->arguments->get('direction')
+            $this->getArg('sortBy'),
+            $this->getArg('direction')
         );
         $climate->table($tableData);
     }
@@ -124,8 +119,7 @@ class CalculateAverageDomainEventProcessingTime
     private function collectTableDataFromFile($filePath)
     {
         $eventHandlerStats = $this->readEventHandlerStatsFromFile($filePath);
-        $tableData = $this->buildTableDataFromStats($eventHandlerStats);
-        return $tableData;
+        return $this->buildTableDataFromStats($eventHandlerStats);
     }
 
     /**
@@ -187,9 +181,8 @@ class CalculateAverageDomainEventProcessingTime
         ];
     }
 
-    private function validateArguments(CLImate $climate)
+    protected function beforeExecute(CLImate $climate)
     {
-        $climate->arguments->parse();
         $this->validateLogFilePath($climate->arguments->get('logfile'));
         $this->validateSortField($climate->arguments->get('sortBy'));
         $this->validateSortDirection($climate->arguments->get('direction'));
