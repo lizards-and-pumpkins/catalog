@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Log\Writer;
 
 use LizardsAndPumpkins\Log\LogMessage;
@@ -128,11 +127,10 @@ class FileLogMessageWriter implements LogMessageWriter
     private function getObjectInfoString($object)
     {
         if ($object instanceof \Exception) {
-            $info = get_class($object) . ' ' . $object->getFile() . ':' . $object->getLine();
-        } else {
-            $info = get_class($object);
+            return get_class($object) . ' ' . $object->getFile() . ':' . $object->getLine();
         }
-        return $info;
+
+        return get_class($object);
     }
 
     /**
