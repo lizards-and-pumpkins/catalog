@@ -25,7 +25,6 @@ use LizardsAndPumpkins\Product\ProductSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchRequestHandler;
 use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
-use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
 use LizardsAndPumpkins\Utils\Directory;
 use LizardsAndPumpkins\Context\Context;
 

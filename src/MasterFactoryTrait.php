@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins;
 trait MasterFactoryTrait
 {
     /**
-     * @var array
+     * @var Factory[]
      */
     private $methods = [];
 
