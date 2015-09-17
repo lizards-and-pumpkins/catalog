@@ -45,11 +45,21 @@ class BaseCliCommandTest extends \PHPUnit_Framework_TestCase
     private function assertStringWasOutput($expectedString)
     {
         $callCountWithMatchingStringParam = array_sum(array_map(function ($invocation) use ($expectedString) {
-            return intval($expectedString === $invocation->parameters[0]);
+            return intval($this->checkStringMatchesIgnoreCtrlChars($invocation->parameters[0], $expectedString));
         }, $this->writeOutputSpy->getInvocations()));
 
         $message = sprintf('The expected string was not output: "%s"', $expectedString);
         $this->assertTrue($callCountWithMatchingStringParam > 0, $message);
+    }
+
+    /**
+     * @param string $haystack
+     * @param string $needle
+     * @return bool
+     */
+    private function checkStringMatchesIgnoreCtrlChars($haystack, $needle)
+    {
+        return false !== strpos($haystack, $needle);
     }
 
     public function setUp()
