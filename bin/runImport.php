@@ -7,10 +7,11 @@ use League\CLImate\CLImate;
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
 use LizardsAndPumpkins\Queue\Queue;
+use LizardsAndPumpkins\Utils\BaseCliCommand;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-class RunImport
+class RunImport extends BaseCliCommand
 {
     /**
      * @var MasterFactory
@@ -26,6 +27,7 @@ class RunImport
     {
         $this->factory = $factory;
         $this->climate = $CLImate;
+        $this->setCLImate($CLImate);
     }
 
     /**
@@ -40,57 +42,34 @@ class RunImport
         return new self($factory, new CLImate());
     }
 
-    public function run()
+    /**
+     * @param CLImate $climate
+     * @return array[]
+     */
+    protected function getCommandLineArgumentsArray(CLImate $climate)
     {
-        try {
-            $this->prepareCommandLineArguments();
-            $this->execute();
-        } catch (\Exception $e) {
-            $this->climate->error($e->getMessage());
-            $this->climate->error(sprintf('%s:%d', $e->getFile(), $e->getLine()));
-            $this->climate->usage();
-        }
-    }
-
-    private function prepareCommandLineArguments()
-    {
-        $this->climate->arguments->add([
+        return array_merge([
             'clearStorage' => [
                 'prefix' => 'c',
                 'longPrefix' => 'clearStorage',
-                'description' => 'Clear queues and data pool before the import)',
+                'description' => 'Clear queues and data pool before the import',
                 'noValue' => true,
             ],
             'processQueues' => [
                 'prefix' => 'p',
                 'longPrefix' => 'processQueues',
-                'description' => 'Process queues after the import)',
+                'description' => 'Process queues after the import',
                 'noValue' => true,
-            ],
-            'environmentConfig' => [
-                'prefix' => 'e',
-                'longPrefix' => 'environmentConfig',
-                'description' => 'Environment config settings, comma separated [foo=bar,baz=qux]',
             ],
             'importFile' => [
                 'description' => 'Import XML file',
                 'required' => true
             ]
-        ]);
-
-        $this->validateArguments();
+        ], parent::getCommandLineArgumentsArray($climate));
     }
 
-    private function validateArguments()
-    {
-        $this->climate->arguments->parse();
-        $env = $this->getArg('environmentConfig');
-        if ($env) {
-            $this->applyEnvironmentConfigSettings($env);
-        }
-    }
 
-    private function execute()
+    protected function execute(CLImate $CLImate)
     {
         $this->clearStorageIfRequested();
         $this->importFile();
@@ -161,79 +140,6 @@ class RunImport
     {
         while ($queue->count()) {
             $consumer->process();
-        }
-    }
-
-    /**
-     * @param string $arg
-     * @return bool|float|int|null|string
-     */
-    private function getArg($arg)
-    {
-        return $this->climate->arguments->get($arg);
-    }
-
-    /**
-     * @param string $message
-     * @return mixed
-     */
-    private function output($message)
-    {
-        return $this->climate->output($message);
-    }
-
-    /**
-     * @param string $environmentConfigSettingsString
-     */
-    private function applyEnvironmentConfigSettings($environmentConfigSettingsString)
-    {
-        array_map(function ($setting) {
-            list($key, $value) = $this->parseSetting($setting);
-            $_SERVER[EnvironmentConfigReader::ENV_VAR_PREFIX . strtoupper($key)] = trim($value);
-        }, explode(',', $environmentConfigSettingsString));
-    }
-
-    /**
-     * @param string $setting
-     * @return string[]
-     */
-    private function parseSetting($setting)
-    {
-        $this->validateSettingFormat($setting);
-        return [$this->parseSettingKey($setting), $this->parseSettingValue($setting)];
-    }
-
-    /**
-     * @param string $setting
-     * @return string
-     */
-    private function parseSettingKey($setting)
-    {
-        $key = trim(substr($setting, 0, strpos($setting, '=')));
-        if ('' === $key) {
-            $message = sprintf('Environment settings have to be key=value pairs, key not found in "%s"', $setting);
-            throw new \InvalidArgumentException($message);
-        }
-        return $key;
-    }
-
-    /**
-     * @param string $setting
-     * @return string
-     */
-    private function parseSettingValue($setting)
-    {
-        return substr($setting, strpos($setting, '=') + 1);
-    }
-
-    /**
-     * @param string $setting
-     */
-    private function validateSettingFormat($setting)
-    {
-        if (false === strpos($setting, '=')) {
-            $message = sprintf('Environment settings have to be key=value pairs, "=" not found in "%s"', $setting);
-            throw new \InvalidArgumentException($message);
         }
     }
 }
