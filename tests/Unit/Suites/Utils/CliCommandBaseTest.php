@@ -104,6 +104,14 @@ class CliCommandBaseTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey($key, $_SERVER);
     }
 
+    public function testItTrimsTheEnvironmentConfigValues()
+    {
+        $this->setEnvironmentConfigString('foo= bar with space ');
+        $this->cliCommand->run();
+        $key = EnvironmentConfigReader::ENV_VAR_PREFIX . 'FOO';
+        $this->assertSame($_SERVER[$key], 'bar with space');
+    }
+
     public function testItThrowsAnExceptionIfEnvironmentSettingIsNoKeyValuePair()
     {
         $this->setEnvironmentConfigString('some-setting');
