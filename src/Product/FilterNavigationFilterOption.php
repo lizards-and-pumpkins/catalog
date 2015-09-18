@@ -106,9 +106,9 @@ class FilterNavigationFilterOption
      */
     private static function validateFilterOptionValue($value)
     {
-        if (!is_string($value)) {
+        if (!is_string($value) && !is_int($value)) {
             throw new InvalidFilterNavigationFilterOptionValueException(
-                sprintf('Filter option value must be a string, "%s" given.', gettype($value))
+                sprintf('Filter option value must be either string or integer, "%s" given.', gettype($value))
             );
         }
     }

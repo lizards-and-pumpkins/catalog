@@ -10,10 +10,10 @@ use LizardsAndPumpkins\Product\Exception\InvalidFilterNavigationFilterOptionValu
  */
 class FilterNavigationFilterOptionTest extends \PHPUnit_Framework_TestCase
 {
-    public function testExceptionIsThrownIfOptionValueIsNotString()
+    public function testExceptionIsThrownIfOptionValueIsNeitherStringNorInteger()
     {
         $optionCode = 'foo';
-        $invalidOptionValue = 1;
+        $invalidOptionValue = 1.5;
         $optionCount = 1;
 
         $this->setExpectedException(InvalidFilterNavigationFilterOptionValueException::class);
@@ -33,7 +33,7 @@ class FilterNavigationFilterOptionTest extends \PHPUnit_Framework_TestCase
     public function testOptionIsCreated()
     {
         $optionCode = 'foo';
-        $optionValue = 'bar';
+        $optionValue = 1;
         $optionCount = 1;
         $filterOption = FilterNavigationFilterOption::create($optionCode, $optionValue, $optionCount);
 
