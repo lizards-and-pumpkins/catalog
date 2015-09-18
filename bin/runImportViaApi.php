@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 
+
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Http\HttpHeaders;

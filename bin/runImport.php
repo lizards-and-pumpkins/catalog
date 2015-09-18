@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 
+
 namespace LizardsAndPumpkins;
 
 use League\CLImate\CLImate;
@@ -48,7 +49,7 @@ class RunImport extends BaseCliCommand
      */
     protected function getCommandLineArgumentsArray(CLImate $climate)
     {
-        return array_merge([
+        return array_merge(parent::getCommandLineArgumentsArray($climate), [
             'clearStorage' => [
                 'prefix' => 'c',
                 'longPrefix' => 'clearStorage',
@@ -65,7 +66,7 @@ class RunImport extends BaseCliCommand
                 'description' => 'Import XML file',
                 'required' => true
             ]
-        ], parent::getCommandLineArgumentsArray($climate));
+        ]);
     }
 
 
