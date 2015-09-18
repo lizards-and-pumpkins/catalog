@@ -34,9 +34,18 @@ class BaseCliCommandTest extends \PHPUnit_Framework_TestCase
      */
     private function setEnvironmentConfigArgumentString($environmentConfigString)
     {
+        $this->setArgumentValue('environmentConfig', $environmentConfigString);
+    }
+
+    /**
+     * @param string $argumentName
+     * @param string $value
+     */
+    private function setArgumentValue($argumentName, $value)
+    {
         /** @var ArgumentManager|\PHPUnit_Framework_MockObject_MockObject $arguments */
         $arguments = $this->climate->arguments;
-        $arguments->method('get')->with('environmentConfig')->willReturn($environmentConfigString);
+        $arguments->method('get')->willReturnMap([[$argumentName, $value]]);
     }
 
     /**
@@ -151,5 +160,13 @@ class BaseCliCommandTest extends \PHPUnit_Framework_TestCase
         $property->setValue($this->cliCommand, null);
         $property->setAccessible(false);
         $this->assertInstanceOf(CLImate::class, $this->cliCommand->publicTestGetCLImate());
+    }
+
+    public function testItShowsTheUsageHelp()
+    {
+        $this->setArgumentValue('help', true);
+        $this->cliCommand->run();
+        $this->assertStringWasOutput('Usage:');
+        $this->assertFalse(in_array('execute', $this->cliCommand->methodCalls));
     }
 }
