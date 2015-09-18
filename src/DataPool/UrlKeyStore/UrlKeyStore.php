@@ -9,9 +9,9 @@ interface UrlKeyStore
      * @param string $dataVersionString
      * @param string $urlKeyString
      * @param string $contextDataString
-     * @return void
+     * @param string $urlKeyTypeString
      */
-    public function addUrlKeyForVersion($dataVersionString, $urlKeyString, $contextDataString);
+    public function addUrlKeyForVersion($dataVersionString, $urlKeyString, $contextDataString, $urlKeyTypeString);
 
     /**
      * @param string $dataVersionString

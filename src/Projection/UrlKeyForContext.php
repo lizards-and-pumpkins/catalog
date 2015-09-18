@@ -17,11 +17,22 @@ class UrlKeyForContext
      * @var Context
      */
     private $context;
+    
+    /**
+     * @var string
+     */
+    private $urlKeyTypeString;
 
-    public function __construct(UrlKey $urlKey, Context $context)
+    /**
+     * @param UrlKey $urlKey
+     * @param Context $context
+     * @param string $urlKeyTypeString
+     */
+    public function __construct(UrlKey $urlKey, Context $context, $urlKeyTypeString)
     {
         $this->urlKey = $urlKey;
         $this->context = $context;
+        $this->urlKeyTypeString = $urlKeyTypeString;
     }
 
     /**
@@ -63,5 +74,13 @@ class UrlKeyForContext
     public function getContextAsString()
     {
         return $this->context->toString();
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->urlKeyTypeString;
     }
 }
