@@ -91,15 +91,15 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     /**
      * @return ProductListingMetaInfoBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createMockProductListingSourceBuilder()
+    private function createMockProductsPerPageForContextBuilder()
     {
         $productListingMetaInfo = $this->getMock(ProductListingMetaInfo::class, [], [], '', false);
         $productListingMetaInfo->method('getUrlKey')->willReturn('dummy-url-key');
 
-        $productListingSourceBuilder = $this->getMock(ProductListingMetaInfoBuilder::class, [], [], '', false);
-        $productListingSourceBuilder->method('createProductListingMetaInfoFromXml')
+        $productsPerPageForContextBuilder = $this->getMock(ProductListingMetaInfoBuilder::class, [], [], '', false);
+        $productsPerPageForContextBuilder->method('createProductListingMetaInfoFromXml')
             ->willReturn($productListingMetaInfo);
-        return $productListingSourceBuilder;
+        return $productsPerPageForContextBuilder;
     }
 
     protected function setUp()
@@ -109,7 +109,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         $this->addToCommandQueueSpy = $this->any();
         $this->mockCommandQueue->expects($this->addToCommandQueueSpy)->method('add');
         $this->stubProductSourceBuilder = $this->createMockProductSourceBuilder();
-        $this->stubProductListingMetaInfoBuilder = $this->createMockProductListingSourceBuilder();
+        $this->stubProductListingMetaInfoBuilder = $this->createMockProductsPerPageForContextBuilder();
         $this->logger = $this->getMock(Logger::class);
 
         $this->catalogImport = new CatalogImport(

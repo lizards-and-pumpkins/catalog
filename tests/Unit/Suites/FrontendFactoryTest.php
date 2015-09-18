@@ -39,7 +39,7 @@ use LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler;
  * @uses   \LizardsAndPumpkins\PageBuilder
  * @uses   \LizardsAndPumpkins\Renderer\BlockRenderer
  * @uses   \LizardsAndPumpkins\TemplatesApiV1PutRequestHandler
- * @uses   \LizardsAndPumpkins\Product\ProductListingSourceListBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder
  * @uses   \LizardsAndPumpkins\Utils\Directory
  * @uses   \LizardsAndPumpkins\Http\HttpRequest
  * @uses   \LizardsAndPumpkins\Http\HttpUrl

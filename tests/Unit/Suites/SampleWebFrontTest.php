@@ -32,7 +32,7 @@ use LizardsAndPumpkins\Http\HttpRouterChain;
  * @uses   \LizardsAndPumpkins\Product\MultipleProductStockQuantityApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionRequestHandler
  * @uses   \LizardsAndPumpkins\Product\ProductSearchRequestHandler
- * @uses   \LizardsAndPumpkins\Product\ProductListingSourceListBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder
  * @uses   \LizardsAndPumpkins\Http\ResourceNotFoundRouter
  * @uses   \LizardsAndPumpkins\Http\ResourceNotFoundRequestHandler
  * @uses   \LizardsAndPumpkins\Http\HttpRouterChain

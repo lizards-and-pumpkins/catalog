@@ -51,9 +51,8 @@ class DefaultNumberOfProductsPerPageSnippetRendererTest extends \PHPUnit_Framewo
         $dummyNumberOfProductsPerPage = 9;
         $dummySnippetKey = 'bar';
 
-        /** @var ProductListingSourceList|\PHPUnit_Framework_MockObject_MockObject $stubProductListingSourceList */
-        $stubProductListingSourceList = $this->getMock(ProductListingSourceList::class, [], [], '', false);
-        $stubProductListingSourceList->method('getListOfAvailableNumberOfProductsPerPageForContext')
+        $stubProductsPerPageForContextList = $this->getMock(ProductsPerPageForContextList::class, [], [], '', false);
+        $stubProductsPerPageForContextList->method('getListOfAvailableNumberOfProductsPerPageForContext')
             ->willReturn([$dummyNumberOfProductsPerPage]);
 
         $stubContext = $this->getMock(Context::class);
@@ -68,6 +67,6 @@ class DefaultNumberOfProductsPerPageSnippetRendererTest extends \PHPUnit_Framewo
 
         $this->mockSnippetList->expects($this->once())->method('add')->with($expectedSnippet);
 
-        $this->renderer->render($stubProductListingSourceList, $stubContextSource);
+        $this->renderer->render($stubProductsPerPageForContextList, $stubContextSource);
     }
 }

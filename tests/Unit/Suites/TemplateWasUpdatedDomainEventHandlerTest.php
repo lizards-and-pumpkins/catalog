@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\ContextSource;
+use LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder;
 
 /**
  * @covers \LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler
@@ -33,7 +34,7 @@ class TemplateWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCa
         /** @var TemplateProjectorLocator|\PHPUnit_Framework_MockObject_MockObject $stubTemplateProjectorLocator */
         $stubTemplateProjectorLocator = $this->getMock(TemplateProjectorLocator::class, [], [], '', false);
         $stubTemplateProjectorLocator->method('getTemplateProjectorForCode')->willReturn($this->mockProjector);
-
+        
         $this->domainEventHandler = new TemplateWasUpdatedDomainEventHandler(
             $stubDomainEvent,
             $stubContextSource,
