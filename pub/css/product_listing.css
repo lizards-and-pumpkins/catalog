@@ -1,17 +1,18 @@
 @import "ekomi.css";
 @import "common.css";
-@import "ls-form.css";
 @import "product_grid.css";
-@import "responsive.css";
-@import "styles.css";
 
 /* Layered navigation */
-#productListFilter li a { padding: 10px 0 10px 34px; border-top: 1px solid #e4e4e4; color: inherit; display: block; background: url("../images/icon-checkbox.png") 10px 7px no-repeat; font-size: 11px }
-#productListFilter li.active a { background-image: url("../images/icon-checkbox-active.png") }
+.filter-content { list-style: none; padding: 0; margin: 0 }
+.filter-content li a { padding: 10px 0 10px 34px; border-top: 1px solid #e4e4e4; color: inherit; display: block; background: url("../images/icon-checkbox.png") 10px 7px no-repeat; font-size: 11px }
+.filter-content li.active a { background-image: url("../images/icon-checkbox-active.png") }
 .block-title { padding: 8px 10px; background-color: #e4e4e4; font-size: 17px; font-family: GeogrotesqueRegular, Helvetica, Arial, sans-serif }
 .expanded, .collapsed { background-position: top right; background-repeat: no-repeat }
 .expanded { background-image: url(../images/minus.png) }
 .collapsed { background-image: url(../images/plus.png) }
+.filter-color { text-align: center; margin: 4px 0 }
+.filter-color li { display: inline-block; margin: 4px }
+.filter-color li a { background: none; width: 26px; height: 26px; border-radius: 2px; border: #ececec solid 1px; padding: 0; font-size: 18px; text-align: center; line-height: 25px; color: #37a3d4 }
 
 /* Toolbar */
 .toolbar { margin-bottom: 15px; background: #e3e3e3; border-top: 1px solid #dfdfdf; color: #474747; padding: 0 30px }

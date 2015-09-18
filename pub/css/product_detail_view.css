@@ -1,10 +1,7 @@
 @import "ekomi.css";
 @import "common.css";
-@import "ls-form.css";
 @import "product_grid.css";
-@import "responsive.css";
-@import "styles.css";
-@import "uniform.default.css";
+@import "lib/uniform.default.css";
 @import "lib/jquery.jqzoom.css";
 
 .product-essential:after, #phoneTitlePlaceholder:after { content: ""; display: block; height: 0; clear: both; visibility: hidden }
@@ -25,10 +22,12 @@ body.catalog-product-view div.wrapper {background-color: #fff;}
 .product-shop .note { line-height: 16px; }
 .product-img-box { float: left }
 .more-views { overflow: hidden; width: 366px; position:relative; top:3px; height:50px; padding: 0; float: left; margin-top: 0 }
+.more-views ul { list-style: none; padding: 0; margin: 0 }
 .more-views li { float: left; list-style: none; padding: 0 1px 0 0; }
 .more-views a { display: block; margin-right: 1px; background-color: #fff; cursor: pointer }
 
 /* Tabs */
+.product-collateral .tabs { list-style: none; padding: 0; margin: 0 }
 .product-collateral .tabs li { display: inline }
 .product-collateral .tabs a { display: inline-block; padding: 10px 24px; border-top: 1px solid #bcbcbc; background: #f9f9f9; border-top-left-radius: 3px; border-top-right-radius: 3px; color: #666666; border-bottom: #ffffff solid 1px }
 .product-collateral .tabs a.active { border-color: #37A3E2; background-color: #f0f0f0; border-bottom: #f0f0f0 solid 1px }
@@ -37,14 +36,14 @@ body.catalog-product-view div.wrapper {background-color: #fff;}
 .product-shop .product-title img { float: left }
 .product-shop .similarProducts { font-size: 11px; margin-top: 5px }
 
- .slideshow { position: absolute; top:20px; left: 227px; z-index:10; }
- .slideshow object { width:125px; height:20px; }
- div.panorama,
- div.youTubeHolder { position: absolute; left:5px; top:5px; height: 340px; overflow: hidden; }
- .product-shop h1 { font-size: inherit }
- .product-shop div.top div.informations { position: absolute; top:60px; right:20px; }
- div.product-shop div.top div.informations div.price-box p.retail-price span.price { font-size: 18px; }
- div.product-shop div.top div.informations div.price-box p.regular-price span.price { font-weight: normal; font-size: 24px; }
+.slideshow { position: absolute; top:20px; left: 227px; z-index:10; }
+.slideshow object { width:125px; height:20px; }
+div.panorama,
+div.youTubeHolder { position: absolute; left:5px; top:5px; height: 340px; overflow: hidden; }
+.product-shop h1 { font-size: inherit }
+.product-shop div.top div.informations { position: absolute; top:60px; right:20px; }
+div.product-shop div.top div.informations div.price-box p.retail-price span.price { font-size: 18px; }
+div.product-shop div.top div.informations div.price-box p.regular-price span.price { font-weight: normal; font-size: 24px; }
 .product-shop .articleInformations { float: right; padding-top: 21px; font-size: 11px }
 .product-shop .articleInformations p { width:150px; float:right; text-align: right }
 

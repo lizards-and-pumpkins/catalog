@@ -1,8 +1,7 @@
-.products-grid { overflow: hidden }
+.products-grid { list-style: none; margin: 0; padding: 0; font-size: 0 }
 .products-grid a { color: #000000 }
-.products-grid li { list-style: none; float: left;  width: 33%; position: relative; margin-bottom: -1px }
-.products-grid li { background-position: 99% 1px; background-repeat: no-repeat } /* Legacy grid markup */
-.products-grid li .grid-cell-container { padding: 25px 15px 20px; height: 196px; border-bottom: 1px solid #eaeaea; border-right: 1px solid #eaeaea; background-position: 99% 1px; background-repeat: no-repeat }
+.products-grid li { display: inline-block; width: 33%; position: relative; margin-bottom: -1px; font-size: 13px }
+.products-grid li .grid-cell-container { padding: 25px 15px 20px; border-bottom: 1px solid #eaeaea; border-right: 1px solid #eaeaea; background-position: 99% 1px; background-repeat: no-repeat }
 .products-grid li.last .grid-cell-container { border-right: none }
 .products-grid .product-image { display: block; margin: 0 0 10px 0 }
 .products-grid .price-box { float: right; text-align: right }
@@ -10,10 +9,7 @@
 .products-grid .retail-price { text-decoration: line-through; position: relative; margin-bottom: 5px }
 .products-grid .regular-price, .products-grid .special-price { font-size: 15px; font-weight: bold; position: absolute; bottom: 23px; right: 14px }
 .products-grid .regular-price { position: static }
-.products-grid li span.new-product { background: #3CABD9; color: #ffffff; font-family: GeogrotesqueRegular, Helvetica, Arial, sans-serif; font-size: 1.2em; overflow: hidden; padding: 3px 7px; text-transform: uppercase; position: absolute; left: 0; top: 0; vertical-align: baseline }
+.products-grid li .new-product { background: #3CABD9; color: #ffffff; font-family: GeogrotesqueRegular, Helvetica, Arial, sans-serif; font-size: 1.2em; overflow: hidden; padding: 3px 7px; text-transform: uppercase; position: absolute; left: 0; top: 0; vertical-align: baseline }
 
 .swipe-container .products-grid li { float: none; width: auto }
 .swipe-container .products-grid li .grid-cell-container { border-bottom: none; width: 213px }
-
-/* Clearer */
-.products-grid:after { content: ""; display: block; height: 0; clear: both; visibility: hidden }
