@@ -38,6 +38,10 @@ class GettextTranslatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        if (!function_exists('gettext')) {
+            $this->markTestSkipped('Gettext is not installed.');
+        }
+
         $this->stubThemeLocator = $this->getMock(ThemeLocator::class, [], [], '', false);
 
         $this->originalLocaleCode = $this->getCurrentLocaleCode();
