@@ -54,15 +54,15 @@ class ProductSearchResultMetaSnippetRenderer implements SnippetRenderer
     }
 
     private function renderMetaInfoSnippetForContext(
-        ProductListingSourceList $productListingSourceList,
+        ProductsPerPageForContextList $productsPerPageForContextList,
         Context $context
     ) {
-        $this->blockRenderer->render($productListingSourceList, $context);
+        $this->blockRenderer->render($productsPerPageForContextList, $context);
 
         $rootSnippetCode = $this->blockRenderer->getRootSnippetCode();
         $pageSnippetCodes = $this->blockRenderer->getNestedSnippetCodes();
 
-        $numItemsPerPageForContext = $productListingSourceList->getListOfAvailableNumberOfProductsPerPageForContext(
+        $numItemsPerPageForContext = $productsPerPageForContextList->getListOfAvailableNumberOfProductsPerPageForContext(
             $context
         );
 

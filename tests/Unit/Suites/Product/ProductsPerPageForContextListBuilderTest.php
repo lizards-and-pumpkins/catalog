@@ -7,16 +7,16 @@ use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Product\Exception\MalformedProductListingSourceJsonException;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductListingSourceListBuilder
- * @uses   \LizardsAndPumpkins\Product\ProductListingSourceList
- * @uses   \LizardsAndPumpkins\Product\ProductListingSource
+ * @covers \LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductsPerPageForContextList
+ * @uses   \LizardsAndPumpkins\Product\ProductsPerPageForContext
  */
-class ProductListingSourceListBuilderTest extends \PHPUnit_Framework_TestCase
+class ProductsPerPageForContextListBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ProductListingSourceListBuilder
+     * @var ProductsPerPageForContextListBuilder
      */
-    private $productListingSourceListBuilder;
+    private $productsPerPageForContextListBuilder;
 
     protected function setUp()
     {
@@ -26,20 +26,20 @@ class ProductListingSourceListBuilderTest extends \PHPUnit_Framework_TestCase
         $mockContextBuilder = $this->getMock(ContextBuilder::class, [], [], '', false);
         $mockContextBuilder->method('createContext')->willReturn($stubContext);
 
-        $this->productListingSourceListBuilder = new ProductListingSourceListBuilder($mockContextBuilder);
+        $this->productsPerPageForContextListBuilder = new ProductsPerPageForContextListBuilder($mockContextBuilder);
     }
 
     public function testExceptionIsThrownIfProductPerPageElementIsAbsentInJson()
     {
         $this->setExpectedException(MalformedProductListingSourceJsonException::class);
-        $this->productListingSourceListBuilder->fromJson('{}');
+        $this->productsPerPageForContextListBuilder->fromJson('{}');
     }
 
     public function testExceptionIsThrownIfProductsPerPageInstructionIsNonArray()
     {
         $json = json_encode(['products_per_page' => 1]);
         $this->setExpectedException(MalformedProductListingSourceJsonException::class);
-        $this->productListingSourceListBuilder->fromJson($json);
+        $this->productsPerPageForContextListBuilder->fromJson($json);
     }
 
     public function testExceptionIsThrownIfProductsPerPageInstructionIsMissingContextInformation()
@@ -52,7 +52,7 @@ class ProductListingSourceListBuilderTest extends \PHPUnit_Framework_TestCase
             ]
         ]);
         $this->setExpectedException(MalformedProductListingSourceJsonException::class);
-        $this->productListingSourceListBuilder->fromJson($json);
+        $this->productsPerPageForContextListBuilder->fromJson($json);
     }
 
     public function testExceptionIsThrownIfProductsPerPageInstructionContextInformationIsNonArray()
@@ -66,7 +66,7 @@ class ProductListingSourceListBuilderTest extends \PHPUnit_Framework_TestCase
             ]
         ]);
         $this->setExpectedException(MalformedProductListingSourceJsonException::class);
-        $this->productListingSourceListBuilder->fromJson($json);
+        $this->productsPerPageForContextListBuilder->fromJson($json);
     }
 
     public function testExceptionIsThrownIfProductsPerPageNumberIsMissing()
@@ -79,7 +79,7 @@ class ProductListingSourceListBuilderTest extends \PHPUnit_Framework_TestCase
             ]
         ]);
         $this->setExpectedException(MalformedProductListingSourceJsonException::class);
-        $this->productListingSourceListBuilder->fromJson($json);
+        $this->productsPerPageForContextListBuilder->fromJson($json);
     }
 
     public function testExceptionIsThrownIfProductsPerPageNumberIsNonInteger()
@@ -93,14 +93,14 @@ class ProductListingSourceListBuilderTest extends \PHPUnit_Framework_TestCase
             ]
         ]);
         $this->setExpectedException(MalformedProductListingSourceJsonException::class);
-        $this->productListingSourceListBuilder->fromJson($json);
+        $this->productsPerPageForContextListBuilder->fromJson($json);
     }
 
-    public function testProductListingSourceListCanBeCreatedFromJson()
+    public function testProductsPerPageForContextListCanBeCreatedFromJson()
     {
         $json = file_get_contents(__DIR__ . '/../../../shared-fixture/product-listing-root-snippet.json');
-        $productListingSourceList = $this->productListingSourceListBuilder->fromJson($json);
+        $productListingSourceList = $this->productsPerPageForContextListBuilder->fromJson($json);
 
-        $this->assertInstanceOf(ProductListingSourceList::class, $productListingSourceList);
+        $this->assertInstanceOf(ProductsPerPageForContextList::class, $productListingSourceList);
     }
 }

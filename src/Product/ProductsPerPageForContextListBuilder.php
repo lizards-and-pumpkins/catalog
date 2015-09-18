@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\Product;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Product\Exception\MalformedProductListingSourceJsonException;
 
-class ProductListingSourceListBuilder
+class ProductsPerPageForContextListBuilder
 {
     /**
      * @var ContextBuilder
@@ -19,7 +19,7 @@ class ProductListingSourceListBuilder
 
     /**
      * @param string $json
-     * @return ProductListingSourceList
+     * @return ProductsPerPageForContextList
      */
     public function fromJson($json)
     {
@@ -37,13 +37,13 @@ class ProductListingSourceListBuilder
             );
         }
 
-        $sourceDataPairs = array_map(function ($productsPerPageData) {
+        $numberOfProductsAndContextTuples = array_map(function ($productsPerPageData) {
             $this->validateProductsPerPageData($productsPerPageData);
             $context = $this->contextBuilder->createContext($productsPerPageData['context']);
             return ['context' => $context, 'numItemsPerPage' => $productsPerPageData['number']];
         }, $sourceArray['products_per_page']);
 
-        return ProductListingSourceList::fromArray($sourceDataPairs);
+        return ProductsPerPageForContextList::fromArray($numberOfProductsAndContextTuples);
     }
 
     /**

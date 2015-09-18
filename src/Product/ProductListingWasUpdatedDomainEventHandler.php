@@ -35,6 +35,9 @@ class ProductListingWasUpdatedDomainEventHandler implements DomainEventHandler
     public function process()
     {
         $productListingMetaInfo = $this->domainEvent->getProductListingMetaInfo();
+        
+        
+        
         $this->projector->project($productListingMetaInfo, $this->contextSource);
     }
 }

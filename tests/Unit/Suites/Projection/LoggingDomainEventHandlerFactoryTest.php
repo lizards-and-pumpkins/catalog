@@ -36,7 +36,7 @@ use LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler;
  * @uses   \LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductListingSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductListingMetaInfoSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductListingSourceListBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductListingTemplateProjector
  * @uses   \LizardsAndPumpkins\Product\ProductListingMetaInfoSnippetProjector
  * @uses   \LizardsAndPumpkins\Product\ProductStockQuantitySnippetRenderer

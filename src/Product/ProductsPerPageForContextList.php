@@ -5,10 +5,10 @@ namespace LizardsAndPumpkins\Product;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Product\Exception\InvalidProductListingSourceDataException;
 
-class ProductListingSourceList
+class ProductsPerPageForContextList
 {
     /**
-     * @var ProductListingSource[]
+     * @var ProductsPerPageForContext[]
      */
     private $sources;
 
@@ -22,7 +22,7 @@ class ProductListingSourceList
 
     /**
      * @param array[] $sourceDataPairs
-     * @return ProductListingSourceList
+     * @return ProductsPerPageForContextList
      */
     public static function fromArray(array $sourceDataPairs)
     {
@@ -31,7 +31,10 @@ class ProductListingSourceList
         foreach ($sourceDataPairs as $sourceDataPair) {
             self::validateSourceData($sourceDataPair);
 
-            $sources[] = new ProductListingSource($sourceDataPair['context'], $sourceDataPair['numItemsPerPage']);
+            $sources[] = new ProductsPerPageForContext(
+                $sourceDataPair['context'],
+                $sourceDataPair['numItemsPerPage']
+            );
         }
 
         return new self($sources);

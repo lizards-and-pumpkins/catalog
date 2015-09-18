@@ -40,32 +40,32 @@ class ProductListingSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param ProductListingSourceList $productListingSourceList
+     * @param ProductsPerPageForContextList $productsPerPageForContextList
      * @param ContextSource $contextSource
      * @return SnippetList
      */
-    public function render(ProductListingSourceList $productListingSourceList, ContextSource $contextSource)
+    public function render(ProductsPerPageForContextList $productsPerPageForContextList, ContextSource $contextSource)
     {
         $this->snippetList->clear();
 
         foreach ($contextSource->getAllAvailableContexts() as $context) {
-            $this->renderProductListingSnippetsForContext($productListingSourceList, $context);
+            $this->renderProductListingSnippetsForContext($productsPerPageForContextList, $context);
         }
 
         return $this->snippetList;
     }
 
     private function renderProductListingSnippetsForContext(
-        ProductListingSourceList $productListingSourceList,
+        ProductsPerPageForContextList $productsPerPageForContextList,
         Context $context
     ) {
-        $content = $this->blockRenderer->render($productListingSourceList, $context);
-        $productsPerPageForContext = $productListingSourceList->getListOfAvailableNumberOfProductsPerPageForContext(
+        $content = $this->blockRenderer->render($productsPerPageForContextList, $context);
+        $productsPerPageCounts = $productsPerPageForContextList->getListOfAvailableNumberOfProductsPerPageForContext(
             $context
         );
 
-        foreach ($productsPerPageForContext as $productsPerPage) {
-            $key = $this->snippetKeyGenerator->getKeyForContext($context, ['products_per_page' => $productsPerPage]);
+        foreach ($productsPerPageCounts as $number) {
+            $key = $this->snippetKeyGenerator->getKeyForContext($context, ['products_per_page' => $number]);
             $contentSnippet = Snippet::create($key, $content);
             $this->snippetList->add($contentSnippet);
         }

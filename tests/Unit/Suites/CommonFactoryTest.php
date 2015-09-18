@@ -19,7 +19,7 @@ use LizardsAndPumpkins\Image\UpdateImageCommandHandler;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\FilterNavigationFilterCollection;
 use LizardsAndPumpkins\Product\ProductListingMetaInfoBuilder;
-use LizardsAndPumpkins\Product\ProductListingSourceListBuilder;
+use LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder;
 use LizardsAndPumpkins\Product\FilterNavigationBlockRenderer;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
@@ -103,7 +103,7 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\Product\ProductListingSnippetRenderer
  * @uses   \LizardsAndPumpkins\GenericSnippetKeyGenerator
  * @uses   \LizardsAndPumpkins\SnippetRendererCollection
- * @uses   \LizardsAndPumpkins\Product\ProductListingSourceListBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductInListingSnippetRenderer
  * @uses   \LizardsAndPumpkins\Image\ImageWasUpdatedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Image\ImageMagickResizeStrategy
@@ -200,10 +200,10 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ProductListingMetaInfoBuilder::class, $result);
     }
 
-    public function testProductListingSourceListBuilderIsReturned()
+    public function testProductsPerPageForContextListBuilderIsReturned()
     {
-        $result = $this->commonFactory->createProductListingSourceListBuilder();
-        $this->assertInstanceOf(ProductListingSourceListBuilder::class, $result);
+        $result = $this->commonFactory->createProductsPerPageForContextListBuilder();
+        $this->assertInstanceOf(ProductsPerPageForContextListBuilder::class, $result);
     }
 
     public function testThemeLocatorIsReturned()

@@ -34,9 +34,9 @@ class ProductSearchResultMetaSnippetRendererTest extends \PHPUnit_Framework_Test
     private $renderer;
 
     /**
-     * @var ProductListingSourceList|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductsPerPageForContextList|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubProductListingSourceList;
+    private $stubProductsPerPageForContextList;
 
     /**
      * @var ContextSource|\PHPUnit_Framework_MockObject_MockObject
@@ -67,8 +67,8 @@ class ProductSearchResultMetaSnippetRendererTest extends \PHPUnit_Framework_Test
         $this->stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
         $this->stubContextSource->method('getAllAvailableContexts')->willReturn([$stubContext]);
 
-        $this->stubProductListingSourceList = $this->getMock(ProductListingSourceList::class, [], [], '', false);
-        $this->stubProductListingSourceList->method('getListOfAvailableNumberOfProductsPerPageForContext')
+        $this->stubProductsPerPageForContextList = $this->getMock(ProductsPerPageForContextList::class, [], [], '', false);
+        $this->stubProductsPerPageForContextList->method('getListOfAvailableNumberOfProductsPerPageForContext')
             ->willReturn([9]);
     }
 
@@ -79,7 +79,7 @@ class ProductSearchResultMetaSnippetRendererTest extends \PHPUnit_Framework_Test
 
     public function testSnippetListIsReturned()
     {
-        $result = $this->renderer->render($this->stubProductListingSourceList, $this->stubContextSource);
+        $result = $this->renderer->render($this->stubProductsPerPageForContextList, $this->stubContextSource);
         $this->assertInstanceOf(SnippetList::class, $result);
     }
 
@@ -91,7 +91,7 @@ class ProductSearchResultMetaSnippetRendererTest extends \PHPUnit_Framework_Test
         ];
         $expectedSnippet = Snippet::create($this->dummySnippetKey, json_encode($expectedSnippetContent));
 
-        $result = $this->renderer->render($this->stubProductListingSourceList, $this->stubContextSource);
+        $result = $this->renderer->render($this->stubProductsPerPageForContextList, $this->stubContextSource);
 
         $this->assertInstanceOf(SnippetList::class, $result);
         $this->assertCount(1, $result);

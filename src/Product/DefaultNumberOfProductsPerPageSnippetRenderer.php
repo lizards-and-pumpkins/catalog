@@ -30,28 +30,26 @@ class DefaultNumberOfProductsPerPageSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param ProductListingSourceList $productListingSourceList
+     * @param ProductsPerPageForContextList $productsPerPageForContextList
      * @param ContextSource $contextSource
      * @return SnippetList
      */
-    public function render(ProductListingSourceList $productListingSourceList, ContextSource $contextSource)
+    public function render(ProductsPerPageForContextList $productsPerPageForContextList, ContextSource $contextSource)
     {
         $contextParts = $this->snippetKeyGenerator->getContextPartsUsedForKey();
         $contexts = $contextSource->getContextsForParts($contextParts);
         foreach ($contexts as $context) {
-            $this->renderSnippetInContext($productListingSourceList, $context);
+            $this->renderSnippetInContext($productsPerPageForContextList, $context);
         }
 
         return $this->snippetList;
     }
 
-    private function renderSnippetInContext(ProductListingSourceList $productListingSourceList, Context $context)
+    private function renderSnippetInContext(ProductsPerPageForContextList $productsPerPageList, Context $context)
     {
         $snippetKey = $this->snippetKeyGenerator->getKeyForContext($context, []);
-        $availableProductsPerPage = $productListingSourceList->getListOfAvailableNumberOfProductsPerPageForContext(
-            $context
-        );
-        $snippetContent = array_shift($availableProductsPerPage);
+        $productsPerPage = $productsPerPageList->getListOfAvailableNumberOfProductsPerPageForContext($context);
+        $snippetContent = array_shift($productsPerPage);
         $snippet = Snippet::create($snippetKey, $snippetContent);
         $this->snippetList->add($snippet);
     }

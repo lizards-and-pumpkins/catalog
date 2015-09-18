@@ -7,10 +7,10 @@ use LizardsAndPumpkins\Context\VersionedContext;
 use LizardsAndPumpkins\Product\Exception\InvalidProductListingSourceDataException;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductListingSourceList
- * @uses   \LizardsAndPumpkins\Product\ProductListingSource
+ * @covers \LizardsAndPumpkins\Product\ProductsPerPageForContextList
+ * @uses   \LizardsAndPumpkins\Product\ProductsPerPageForContext
  */
-class ProductListingSourceListTest extends \PHPUnit_Framework_TestCase
+class ProductsPerPageForContextListTest extends \PHPUnit_Framework_TestCase
 {
     public function testNumbersOfItemsPerPageForGivenContextIsReturned()
     {
@@ -23,9 +23,9 @@ class ProductListingSourceListTest extends \PHPUnit_Framework_TestCase
             ['context' => $stubContextB, 'numItemsPerPage' => 20],
             ['context' => $stubContextA, 'numItemsPerPage' => 30],
         ];
-        $productListingSourceList = ProductListingSourceList::fromArray($sourceDataPairs);
+        $productsPerPageForContextList = ProductsPerPageForContextList::fromArray($sourceDataPairs);
 
-        $result = $productListingSourceList->getListOfAvailableNumberOfProductsPerPageForContext($stubContextA);
+        $result = $productsPerPageForContextList->getListOfAvailableNumberOfProductsPerPageForContext($stubContextA);
 
         $this->assertSame([10, 30], $result);
     }
@@ -43,7 +43,7 @@ class ProductListingSourceListTest extends \PHPUnit_Framework_TestCase
             'No valid context found in one or more root snippet source data pairs.'
         );
 
-        ProductListingSourceList::fromArray($sourceDataPairs);
+        ProductsPerPageForContextList::fromArray($sourceDataPairs);
     }
 
     public function testExceptionIsThrownIfDataDoesNotHaveValidNumberOfItemsPerPage()
@@ -58,6 +58,6 @@ class ProductListingSourceListTest extends \PHPUnit_Framework_TestCase
             'No valid number of items per page found in one or more root snippet source data pairs.'
         );
 
-        ProductListingSourceList::fromArray($sourceDataPairs);
+        ProductsPerPageForContextList::fromArray($sourceDataPairs);
     }
 }
