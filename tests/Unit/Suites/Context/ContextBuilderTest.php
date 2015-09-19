@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins\Context;
 
 use LizardsAndPumpkins\Context\Exception\ContextDecoratorNotFoundException;
 use LizardsAndPumpkins\Context\Exception\InvalidContextDecoratorClassException;
+use LizardsAndPumpkins\Context\Exception\DataVersionMissingInContextDataSetException;
 use LizardsAndPumpkins\Context\Stubs\TestContextDecorator;
 use LizardsAndPumpkins\DataVersion;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -18,6 +19,8 @@ use LizardsAndPumpkins\Http\HttpRequest;
  */
 class ContextBuilderTest extends \PHPUnit_Framework_TestCase
 {
+    private $testVersion = '1';
+
     /**
      * @var ContextBuilder
      */
@@ -25,7 +28,7 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->builder = new ContextBuilder(DataVersion::fromVersionString('1'));
+        $this->builder = new ContextBuilder(DataVersion::fromVersionString($this->testVersion));
     }
 
     public function testNoExceptionIsThrownForIndividualContextCreationWithCodesWithoutMatchingDecorator()
@@ -179,5 +182,45 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
 
         $message = 'Context decorator order depends on registration order';
         $this->assertSame($contextA->toString(), $contextB->toString(), $message);
+    }
+
+    public function testItUsesTheVersionSuppliedInTheDataSetIfPresent()
+    {
+        $testVersion = '100';
+        $contextVersion111 = $this->builder->createContext([VersionedContext::CODE => '111']);
+        $contextVersion222 = $this->builder->createContext([VersionedContext::CODE => '222']);
+        $this->assertSame('111', $contextVersion111->getValue(VersionedContext::CODE));
+        $this->assertSame('222', $contextVersion222->getValue(VersionedContext::CODE));
+    }
+
+    public function testItUsesTheVersionInjectedInTheBuilderIfNotPresentInDataSet()
+    {
+        $context = $this->builder->createContext([]);
+        $this->assertSame($this->testVersion, $context->getValue(VersionedContext::CODE));
+    }
+
+    public function testStaticFactoryMethodThrowsExceptionIfVersionIsMissingFromDataSet()
+    {
+        $this->setExpectedException(
+            DataVersionMissingInContextDataSetException::class,
+            'The data version has to be part of the data set when using the static context factory method.'
+        );
+        ContextBuilder::rehydrateContext([]);
+    }
+
+    public function testItReturnsAContextWithTheMatchingValues()
+    {
+        $dataSet = [
+            WebsiteContextDecorator::CODE => 'test',
+            LocaleContextDecorator::CODE => 'xx_XX',
+            VersionedContext::CODE => '42'
+        ];
+        
+        $context = ContextBuilder::rehydrateContext($dataSet);
+        
+        $this->assertInstanceOf(Context::class, $context);
+        $this->assertSame('test', $context->getValue(WebsiteContextDecorator::CODE));
+        $this->assertSame('xx_XX', $context->getValue(LocaleContextDecorator::CODE));
+        $this->assertSame('42', (string) $context->getValue(VersionedContext::CODE));
     }
 }
