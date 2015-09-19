@@ -1,7 +1,7 @@
 <?php
 
 
-namespace LizardsAndPumpkins\Context;
+namespace LizardsAndPumpkins\Context\Exception;
 
 class ContextCodeNotFoundException extends \OutOfBoundsException
 {

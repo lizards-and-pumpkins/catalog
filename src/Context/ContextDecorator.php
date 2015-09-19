@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\Context;
 
+use LizardsAndPumpkins\Context\Exception\ContextCodeNotFoundException;
+
 abstract class ContextDecorator implements Context
 {
     /**
@@ -143,5 +145,15 @@ abstract class ContextDecorator implements Context
         return in_array($this->getCode(), $requestedParts) ?
             $this->buildIdString() :
             '';
+    }
+
+    /**
+     * @return string[]
+     */
+    public function jsonSerialize()
+    {
+        return array_merge(
+            $this->component->jsonSerialize(), [$this->getCode() => $this->getValueFromContext()]
+        );
     }
 }

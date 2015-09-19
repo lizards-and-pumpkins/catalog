@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\Context;
 
+use LizardsAndPumpkins\Context\Exception\ContextDecoratorNotFoundException;
+use LizardsAndPumpkins\Context\Exception\InvalidContextDecoratorClassException;
 use LizardsAndPumpkins\Context\Stubs\TestContextDecorator;
 use LizardsAndPumpkins\DataVersion;
 use LizardsAndPumpkins\Http\HttpRequest;

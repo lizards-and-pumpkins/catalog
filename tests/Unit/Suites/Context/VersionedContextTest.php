@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Context;
 
+use LizardsAndPumpkins\Context\Exception\ContextCodeNotFoundException;
 use LizardsAndPumpkins\DataVersion;
 
 /**
@@ -108,5 +109,11 @@ class VersionedContextTest extends \PHPUnit_Framework_TestCase
         $otherContext->method('getValue')->with(VersionedContext::CODE)->willReturn($this->testVersionValue);
 
         $this->assertTrue($this->versionedContext->isSubsetOf($otherContext));
+    }
+
+    public function testItCanBeSerialized()
+    {
+        $expected = [VersionedContext::CODE => $this->testVersionValue];
+        $this->assertSame($expected, $this->versionedContext->jsonSerialize());
     }
 }
