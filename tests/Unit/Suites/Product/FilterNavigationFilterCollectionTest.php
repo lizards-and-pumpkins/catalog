@@ -10,6 +10,8 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollec
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
 use LizardsAndPumpkins\Product\Exception\FilterCollectionInNotInitializedException;
+use LizardsAndPumpkins\Renderer\Translation\Translator;
+use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
 
 /**
  * @covers \LizardsAndPumpkins\Product\FilterNavigationFilterCollection
@@ -73,7 +75,17 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->stubDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
-        $this->filterCollection = new FilterNavigationFilterCollection($this->stubDataPoolReader);
+
+        $stubTranslator = $this->getMock(Translator::class);
+
+        /** @var TranslatorRegistry|\PHPUnit_Framework_MockObject_MockObject $stubTranslatorRegistry */
+        $stubTranslatorRegistry = $this->getMock(TranslatorRegistry::class, [], [], '', false);
+        $stubTranslatorRegistry->method('getTranslatorForLocale')->willReturn($stubTranslator);
+
+        $this->filterCollection = new FilterNavigationFilterCollection(
+            $this->stubDataPoolReader,
+            $stubTranslatorRegistry
+        );
 
         $this->stubContext = $this->getMock(Context::class);
         $this->stubSearchCriteria = $this->getMock(SearchCriteria::class);

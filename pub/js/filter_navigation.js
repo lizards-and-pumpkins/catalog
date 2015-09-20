@@ -18,7 +18,7 @@ define(['url', 'jquery'], function(url, $) {
                 }, $());
 
                 filterNavigation.append(
-                    $('<div/>').addClass('block-title roundedBorder expanded').text(filter.code)
+                    $('<div/>').addClass('block-title roundedBorder expanded').text(filter.label)
                 ).append(
                     $('<ol/>').addClass('filter-content scroll-pane filter-' + filter.code).append(optionElements)
                 );

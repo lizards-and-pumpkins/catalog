@@ -1257,7 +1257,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createFilterNavigationFilterCollection()
     {
         return new FilterNavigationFilterCollection(
-            $this->getMasterFactory()->createDataPoolReader()
+            $this->getMasterFactory()->createDataPoolReader(),
+            $this->getMasterFactory()->getTranslatorRegistry()
         );
     }
 

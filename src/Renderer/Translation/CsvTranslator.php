@@ -66,6 +66,8 @@ class CsvTranslator implements Translator
      */
     private static function getTranslationFilesFromLocaleDirectory($localeCode, ThemeLocator $themeLocator)
     {
+        chdir(__DIR__ . '/../../..');
+
         $localeDirectoryPath = $themeLocator->getThemeDirectory() . '/locale/' . $localeCode;
 
         if (!is_dir($localeDirectoryPath)) {
