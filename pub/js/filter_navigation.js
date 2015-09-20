@@ -1,18 +1,18 @@
 define(['url', 'jquery'], function(url, $) {
 
     var FilterNavigation = {
-        generateLayeredNavigation: function () {
-            if (typeof layeredNavigationJson !== 'object') {
+        generateLayeredNavigation: function (filterNavigationJson, filterNavigationPlaceholderSelector) {
+            if (typeof filterNavigationJson !== 'object') {
                 return;
             }
 
-            var filterNavigation = $('#filter-navigation');
+            var filterNavigation = $(filterNavigationPlaceholderSelector);
 
             if (!filterNavigation.length) {
                 return;
             }
 
-            layeredNavigationJson.map(function (filter) {
+            filterNavigationJson.map(function (filter) {
                 var optionElements = filter.options.reduce(function (carry, filterOption) {
                     return carry.add(FilterNavigation.createFilterOption(filter.code, filterOption));
                 }, $());
