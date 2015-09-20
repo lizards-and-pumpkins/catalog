@@ -238,13 +238,9 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
             $filterNavigationFilterOptionCollection = new FilterNavigationFilterOptionCollection;
             foreach ($filterOptions as $optionValue => $optionCount) {
                 if (in_array($optionValue, $this->selectedFilters[$filterCode])) {
-                    $filterOption = FilterNavigationFilterOption::createSelected(
-                        $filterCode,
-                        $optionValue,
-                        $optionCount
-                    );
+                    $filterOption = FilterNavigationFilterOption::createSelected($optionValue, $optionCount);
                 } else {
-                    $filterOption = FilterNavigationFilterOption::create($filterCode, $optionValue, $optionCount);
+                    $filterOption = FilterNavigationFilterOption::create($optionValue, $optionCount);
                 }
                 $filterNavigationFilterOptionCollection->add($filterOption);
             }

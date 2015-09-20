@@ -7,12 +7,6 @@ use LizardsAndPumpkins\Product\Exception\InvalidFilterNavigationFilterOptionValu
 
 class FilterNavigationFilterOption implements \JsonSerializable
 {
-    /* TODO: Remove code as it is not used anymore */
-    /**
-     * @var string
-     */
-    private $code;
-
     /**
      * @var string
      */
@@ -29,53 +23,41 @@ class FilterNavigationFilterOption implements \JsonSerializable
     private $isSelected;
 
     /**
-     * @param string $code
      * @param string $value
      * @param int $count
      * @param bool $isSelected
      */
-    private function __construct($code, $value, $count, $isSelected)
+    private function __construct($value, $count, $isSelected)
     {
-        $this->code = $code;
         $this->value = $value;
         $this->count = $count;
         $this->isSelected = $isSelected;
     }
 
     /**
-     * @param string $code
      * @param string $value
      * @param int $count
      * @return FilterNavigationFilterOption
      */
-    public static function create($code, $value, $count)
+    public static function create($value, $count)
     {
         self::validateFilterOptionValue($value);
         self::validateFilterOptionCount($count);
 
-        return new self($code, $value, $count, false);
+        return new self($value, $count, false);
     }
 
     /**
-     * @param string $code
      * @param string $value
      * @param int $count
      * @return FilterNavigationFilterOption
      */
-    public static function createSelected($code, $value, $count)
+    public static function createSelected($value, $count)
     {
         self::validateFilterOptionValue($value);
         self::validateFilterOptionCount($count);
 
-        return new self($code, $value, $count, true);
-    }
-
-    /**
-     * @return string
-     */
-    public function getCode()
-    {
-        return $this->code;
+        return new self($value, $count, true);
     }
 
     /**
@@ -132,7 +114,6 @@ class FilterNavigationFilterOption implements \JsonSerializable
     public function jsonSerialize()
     {
         return [
-            'code' => $this->code,
             'value' => $this->value,
             'count' => $this->count,
             'is_selected' => $this->isSelected
