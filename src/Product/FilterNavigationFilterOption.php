@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\Product;
 use LizardsAndPumpkins\Product\Exception\InvalidFilterNavigationFilterOptionCountException;
 use LizardsAndPumpkins\Product\Exception\InvalidFilterNavigationFilterOptionValueException;
 
-class FilterNavigationFilterOption
+class FilterNavigationFilterOption implements \JsonSerializable
 {
     /**
      * @var string
@@ -123,5 +123,18 @@ class FilterNavigationFilterOption
                 sprintf('Filter option count must be an integer, "%s" given.', gettype($count))
             );
         }
+    }
+
+    /**
+     * @return mixed[]
+     */
+    function jsonSerialize()
+    {
+        return [
+            'code' => $this->code,
+            'value' => $this->value,
+            'count' => $this->count,
+            'is_selected' => $this->isSelected
+        ];
     }
 }

@@ -8,6 +8,16 @@ namespace LizardsAndPumpkins\Product;
 class FilterNavigationFilterTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var string
+     */
+    private $testFilterNavigationCode = 'foo';
+
+    /**
+     * @var FilterNavigationFilter
+     */
+    private $filter;
+
+    /**
      * @var FilterNavigationFilterOptionCollection|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubFilterValueCollection;
@@ -21,6 +31,17 @@ class FilterNavigationFilterTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->stubFilterValueCollection->method('jsonSerialize')->willReturn([]);
+
+        $this->filter = FilterNavigationFilter::create(
+            $this->testFilterNavigationCode,
+            $this->stubFilterValueCollection
+        );
+    }
+
+    public function testJsonSerializableInterfaceIsImplemented()
+    {
+        $this->assertInstanceOf(\JsonSerializable::class, $this->filter);
     }
 
     public function testExceptionIsThrownDuringAttemptToCreateFilterWithNonStringAttributeCode()
@@ -32,10 +53,17 @@ class FilterNavigationFilterTest extends \PHPUnit_Framework_TestCase
 
     public function testFilterNavigationFilterIsReturned()
     {
-        $filterNavigationCode = 'foo';
-        $filter = FilterNavigationFilter::create($filterNavigationCode, $this->stubFilterValueCollection);
+        $this->assertSame($this->testFilterNavigationCode, $this->filter->getCode());
+        $this->assertSame($this->stubFilterValueCollection, $this->filter->getOptionCollection());
+    }
 
-        $this->assertSame($filterNavigationCode, $filter->getCode());
-        $this->assertSame($this->stubFilterValueCollection, $filter->getOptionCollection());
+    public function testFilterArrayRepresentationIsReturned()
+    {
+        $expectedArray = [
+            'code' => $this->testFilterNavigationCode,
+            'options' => []
+        ];
+
+        $this->assertSame($expectedArray, $this->filter->jsonSerialize());
     }
 }

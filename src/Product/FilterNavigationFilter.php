@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\Product;
 
-class FilterNavigationFilter
+class FilterNavigationFilter implements \JsonSerializable
 {
     /**
      * @var string
@@ -54,5 +54,16 @@ class FilterNavigationFilter
     public function getOptionCollection()
     {
         return $this->filterOptionCollection;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    function jsonSerialize()
+    {
+        return [
+            'code' => $this->filterCode,
+            'options' => $this->filterOptionCollection->jsonSerialize()
+        ];
     }
 }

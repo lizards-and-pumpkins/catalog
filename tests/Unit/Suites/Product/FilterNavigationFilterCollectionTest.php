@@ -89,6 +89,11 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(\IteratorAggregate::class, $this->filterCollection);
     }
 
+    public function testJsonSerializableInterfaceIsImplemented()
+    {
+        $this->assertInstanceOf(\JsonSerializable::class, $this->filterCollection);
+    }
+
     public function testExceptionIsThrownDuringAttemptToAccessCollectionViaIteratorWithoutInitializingCollection()
     {
         $this->setExpectedException(FilterCollectionInNotInitializedException::class);
@@ -328,5 +333,31 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
         $result = $this->filterCollection->getSelectedFilters();
 
         $this->assertSame($selectedFilters, $result);
+    }
+
+    public function testArrayRepresentationOfFilterNavigationIsReturned()
+    {
+        $selectedFilters = ['foo' => []];
+
+        $stubField1 = $this->createStubSearchDocumentField('foo', 'baz');
+        $stubField2 = $this->createStubSearchDocumentField('bar', 'qux');
+
+        $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([$stubField1, $stubField2]);
+
+        /** @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject $stubSearchDocumentCollection */
+        $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
+        $stubSearchDocumentCollection->method('getIterator')->willReturn(new \ArrayIterator([$stubSearchDocument]));
+
+        $this->filterCollection->initialize(
+            $stubSearchDocumentCollection,
+            $this->stubSearchCriteria,
+            $selectedFilters,
+            $this->stubContext
+        );
+
+        $result = $this->filterCollection->jsonSerialize();
+
+        $this->assertInternalType('array', $result);
+        $this->assertCount(1, $result);
     }
 }

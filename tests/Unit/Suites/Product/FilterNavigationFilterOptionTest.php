@@ -10,6 +10,16 @@ use LizardsAndPumpkins\Product\Exception\InvalidFilterNavigationFilterOptionValu
  */
 class FilterNavigationFilterOptionTest extends \PHPUnit_Framework_TestCase
 {
+    public function testJsonSerializableInterfaceIsImplemented()
+    {
+        $optionCode = 'foo';
+        $optionValue = 1;
+        $optionCount = 1;
+        $filterOption = FilterNavigationFilterOption::create($optionCode, $optionValue, $optionCount);
+
+        $this->assertInstanceOf(\JsonSerializable::class, $filterOption);
+    }
+
     public function testExceptionIsThrownIfOptionValueIsNeitherStringNorInteger()
     {
         $optionCode = 'foo';
@@ -54,5 +64,22 @@ class FilterNavigationFilterOptionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($optionValue, $filterOption->getValue());
         $this->assertSame($optionCount, $filterOption->getCount());
         $this->assertTrue($filterOption->isSelected());
+    }
+
+    public function testArrayRepresentationOfFilterOptionIsReturned()
+    {
+        $optionCode = 'foo';
+        $optionValue = 1;
+        $optionCount = 1;
+        $filterOption = FilterNavigationFilterOption::create($optionCode, $optionValue, $optionCount);
+
+        $expectedArray = [
+            'code' => $optionCode,
+            'value' => $optionValue,
+            'count' => $optionCount,
+            'is_selected' => false
+        ];
+
+        $this->assertSame($expectedArray, $filterOption->jsonSerialize());
     }
 }

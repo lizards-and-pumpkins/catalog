@@ -35,6 +35,11 @@ class FilterNavigationFilterOptionCollectionTest extends \PHPUnit_Framework_Test
         $this->assertInstanceOf(\IteratorAggregate::class, $this->filterOptionCollection);
     }
 
+    public function testJsonSerializableInterfaceIsImplemented()
+    {
+        $this->assertInstanceOf(\JsonSerializable::class, $this->filterOptionCollection);
+    }
+
     public function testCollectionIsInitiallyEmpty()
     {
         $this->assertCount(0, $this->filterOptionCollection);
@@ -66,5 +71,16 @@ class FilterNavigationFilterOptionCollectionTest extends \PHPUnit_Framework_Test
         $this->assertCount(2, $this->filterOptionCollection);
         $this->assertContains($stubFilterOptionA, $this->filterOptionCollection);
         $this->assertContains($stubFilterOptionB, $this->filterOptionCollection);
+    }
+
+    public function testArrayRepresentationOfFilterOptionCollectionIsReturned()
+    {
+        $stubFilterOption = $this->createStubFilterOption();
+        $this->filterOptionCollection->add($stubFilterOption);
+
+        $result = $this->filterOptionCollection->jsonSerialize();
+
+        $this->assertInternalType('array', $result);
+        $this->assertCount(1, $result);
     }
 }

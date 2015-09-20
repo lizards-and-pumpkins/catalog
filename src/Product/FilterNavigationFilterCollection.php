@@ -12,7 +12,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollec
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 use LizardsAndPumpkins\Product\Exception\FilterCollectionInNotInitializedException;
 
-class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
+class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate, \JsonSerializable
 {
     /**
      * @var FilterNavigationFilter[]
@@ -50,6 +50,15 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
     {
         $this->validateFiltersCollectionIsInitialized();
         return new \ArrayIterator($this->filters);
+    }
+
+    /**
+     * @return mixed[]
+     */
+    function jsonSerialize()
+    {
+        $this->validateFiltersCollectionIsInitialized();
+        return $this->filters;
     }
 
     /**

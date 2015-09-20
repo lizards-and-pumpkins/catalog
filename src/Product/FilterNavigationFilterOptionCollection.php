@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\Product;
 
-class FilterNavigationFilterOptionCollection implements \Countable, \IteratorAggregate
+class FilterNavigationFilterOptionCollection implements \Countable, \IteratorAggregate, \JsonSerializable
 {
     /**
      * @var FilterNavigationFilterOption[]
@@ -34,6 +34,14 @@ class FilterNavigationFilterOptionCollection implements \Countable, \IteratorAgg
      * @return FilterNavigationFilterOption[]
      */
     public function getOptions()
+    {
+        return $this->filterOptions;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    function jsonSerialize()
     {
         return $this->filterOptions;
     }
