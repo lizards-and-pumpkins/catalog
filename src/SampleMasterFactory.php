@@ -27,7 +27,6 @@ use LizardsAndPumpkins\Log\InMemoryLogger;
  * @method GenericSnippetKeyGenerator createProductSearchAutosuggestionMetaSnippetKeyGenerator
  * @method string[] getRequiredContexts
  * @method Product\ProductSourceBuilder createProductSourceBuilder
- * @method Product\FilterNavigationBlockRenderer createFilterNavigationBlockRenderer
  * @method Context\Context createContext
  * @method Product\FilterNavigationFilterCollection createFilterNavigationFilterCollection
  * @method PaginationBlockRenderer createPaginationBlockRenderer

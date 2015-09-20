@@ -218,9 +218,6 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $stubContext = $this->getMock(Context::class);
         $stubSnippetKeyGeneratorLocator = $this->createStubSnippetKeyGeneratorLocator();
 
-        /** @var BlockRenderer|\PHPUnit_Framework_MockObject_MockObject $stubFilterNavigationBlockRenderer */
-        $stubFilterNavigationBlockRenderer = $this->getMock(BlockRenderer::class, [], [], '', false);
-
         $this->stubFilterCollection = $this->getMock(FilterNavigationFilterCollection::class, [], [], '', false);
 
         $stubFilterNavigationAttributeCodes = ['foo'];
@@ -233,7 +230,6 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
             $this->mockDataPoolReader,
             $this->mockPageBuilder,
             $stubSnippetKeyGeneratorLocator,
-            $stubFilterNavigationBlockRenderer,
             $this->stubFilterCollection,
             $stubFilterNavigationAttributeCodes,
             $stubPaginationBlockRenderer

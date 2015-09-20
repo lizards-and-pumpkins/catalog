@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\Product;
 
+use LizardsAndPumpkins\Product\Exception\InvalidFilterNavigationFilterCodeException;
+
 class FilterNavigationFilter implements \JsonSerializable
 {
     /**
@@ -32,7 +34,7 @@ class FilterNavigationFilter implements \JsonSerializable
     public static function create($filterCode, FilterNavigationFilterOptionCollection $filterOptionCollection)
     {
         if (!is_string($filterCode)) {
-            throw new InvalidFilterNavigationFilterCode(
+            throw new InvalidFilterNavigationFilterCodeException(
                 sprintf('Filter code must be a string, got "%s".', gettype($filterCode))
             );
         }

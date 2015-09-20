@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\Product;
 
+use LizardsAndPumpkins\Product\Exception\InvalidFilterNavigationFilterCodeException;
+
 /**
  * @covers \LizardsAndPumpkins\Product\FilterNavigationFilter
  */
@@ -46,7 +48,7 @@ class FilterNavigationFilterTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownDuringAttemptToCreateFilterWithNonStringAttributeCode()
     {
-        $this->setExpectedException(InvalidFilterNavigationFilterCode::class);
+        $this->setExpectedException(InvalidFilterNavigationFilterCodeException::class);
         $invalidFilterNavigationCode = 1;
         FilterNavigationFilter::create($invalidFilterNavigationCode, $this->stubFilterValueCollection);
     }

@@ -7,6 +7,7 @@ use LizardsAndPumpkins\Product\Exception\InvalidFilterNavigationFilterOptionValu
 
 class FilterNavigationFilterOption implements \JsonSerializable
 {
+    /* TODO: Remove code as it is not used anymore */
     /**
      * @var string
      */

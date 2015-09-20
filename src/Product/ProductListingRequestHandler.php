@@ -48,11 +48,6 @@ class ProductListingRequestHandler implements HttpRequestHandler
     private $keyGeneratorLocator;
 
     /**
-     * @var BlockRenderer
-     */
-    private $filterNavigationBlockRenderer;
-
-    /**
      * @var FilterNavigationFilterCollection
      */
     private $filterNavigationFilterCollection;
@@ -72,7 +67,6 @@ class ProductListingRequestHandler implements HttpRequestHandler
      * @param DataPoolReader $dataPoolReader
      * @param PageBuilder $pageBuilder
      * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
-     * @param BlockRenderer $filterNavigationBlockRenderer
      * @param FilterNavigationFilterCollection $filterNavigationFilterCollection
      * @param string[] $filterNavigationAttributeCodes
      * @param BlockRenderer $paginationBlockRenderer
@@ -82,7 +76,6 @@ class ProductListingRequestHandler implements HttpRequestHandler
         DataPoolReader $dataPoolReader,
         PageBuilder $pageBuilder,
         SnippetKeyGeneratorLocator $keyGeneratorLocator,
-        BlockRenderer $filterNavigationBlockRenderer,
         FilterNavigationFilterCollection $filterNavigationFilterCollection,
         array $filterNavigationAttributeCodes,
         BlockRenderer $paginationBlockRenderer
@@ -91,7 +84,6 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $this->context = $context;
         $this->pageBuilder = $pageBuilder;
         $this->keyGeneratorLocator = $keyGeneratorLocator;
-        $this->filterNavigationBlockRenderer = $filterNavigationBlockRenderer;
         $this->filterNavigationFilterCollection = $filterNavigationFilterCollection;
         $this->filterNavigationAttributeCodes = $filterNavigationAttributeCodes;
         $this->paginationBlockRenderer = $paginationBlockRenderer;
@@ -351,10 +343,8 @@ class ProductListingRequestHandler implements HttpRequestHandler
 
     private function addFilterNavigationSnippetToPageBuilder()
     {
-        $dataObject = $this->filterNavigationFilterCollection;
-
         $snippetCode = 'filter_navigation';
-        $snippetContents = $this->filterNavigationBlockRenderer->render($dataObject, $this->context);
+        $snippetContents = json_encode($this->filterNavigationFilterCollection, JSON_PRETTY_PRINT);
 
         $this->addDynamicSnippetToPageBuilder($snippetCode, $snippetContents);
     }

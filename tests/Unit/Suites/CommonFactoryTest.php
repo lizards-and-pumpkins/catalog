@@ -484,12 +484,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
 
-    public function testFilterNavigationBlockRendererIsReturned()
-    {
-        $result = $this->commonFactory->createFilterNavigationBlockRenderer();
-        $this->assertInstanceOf(FilterNavigationBlockRenderer::class, $result);
-    }
-
     public function testImageProcessorCollectionIsReturned()
     {
         $result = $this->commonFactory->getImageProcessorCollection();

@@ -1253,18 +1253,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return FilterNavigationBlockRenderer
-     */
-    public function createFilterNavigationBlockRenderer()
-    {
-        return new FilterNavigationBlockRenderer(
-            $this->getMasterFactory()->createThemeLocator(),
-            $this->getMasterFactory()->createBlockStructure(),
-            $this->getMasterFactory()->getTranslatorRegistry()
-        );
-    }
-
-    /**
      * @return FilterNavigationFilterCollection
      */
     public function createFilterNavigationFilterCollection()
