@@ -29,7 +29,6 @@ use LizardsAndPumpkins\Log\InMemoryLogger;
  * @method Product\ProductSourceBuilder createProductSourceBuilder
  * @method Context\Context createContext
  * @method Product\FilterNavigationFilterCollection createFilterNavigationFilterCollection
- * @method PaginationBlockRenderer createPaginationBlockRenderer
  */
 class SampleMasterFactory implements MasterFactory
 {

@@ -16,12 +16,12 @@ use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\UnableToHandleRequestException;
 use LizardsAndPumpkins\PageBuilder;
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
-use LizardsAndPumpkins\Pagination;
-use LizardsAndPumpkins\Renderer\BlockRenderer;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
 
 class ProductListingRequestHandler implements HttpRequestHandler
 {
+    const PAGINATION_QUERY_PARAMETER_NAME = 'p';
+
     /**
      * @var ProductListingMetaInfoSnippetContent
      */
@@ -58,18 +58,12 @@ class ProductListingRequestHandler implements HttpRequestHandler
     private $filterNavigationAttributeCodes;
 
     /**
-     * @var BlockRenderer
-     */
-    private $paginationBlockRenderer;
-
-    /**
      * @param Context $context
      * @param DataPoolReader $dataPoolReader
      * @param PageBuilder $pageBuilder
      * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
      * @param FilterNavigationFilterCollection $filterNavigationFilterCollection
      * @param string[] $filterNavigationAttributeCodes
-     * @param BlockRenderer $paginationBlockRenderer
      */
     public function __construct(
         Context $context,
@@ -77,8 +71,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         PageBuilder $pageBuilder,
         SnippetKeyGeneratorLocator $keyGeneratorLocator,
         FilterNavigationFilterCollection $filterNavigationFilterCollection,
-        array $filterNavigationAttributeCodes,
-        BlockRenderer $paginationBlockRenderer
+        array $filterNavigationAttributeCodes
     ) {
         $this->dataPoolReader = $dataPoolReader;
         $this->context = $context;
@@ -86,7 +79,6 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $this->keyGeneratorLocator = $keyGeneratorLocator;
         $this->filterNavigationFilterCollection = $filterNavigationFilterCollection;
         $this->filterNavigationAttributeCodes = $filterNavigationAttributeCodes;
-        $this->paginationBlockRenderer = $paginationBlockRenderer;
     }
 
     /**
@@ -154,10 +146,10 @@ class ProductListingRequestHandler implements HttpRequestHandler
 
     private function addProductsInListingToPageBuilder(
         SearchDocumentCollection $searchDocumentCollection,
-        Pagination $pagination
+        HttpRequest $request
     ) {
-        $currentPageNumber = $pagination->getCurrentPageNumber();
-        $productsPerPage = $pagination->getNumberOfItemsPerPage();
+        $currentPageNumber = $request->getQueryParameter(self::PAGINATION_QUERY_PARAMETER_NAME);
+        $productsPerPage = (int)$this->getDefaultNumberOrProductsPerPage();
 
         $documents = $searchDocumentCollection->getDocuments();
         $currentPageDocuments = array_slice($documents, ($currentPageNumber - 1) * $productsPerPage, $productsPerPage);
@@ -313,12 +305,9 @@ class ProductListingRequestHandler implements HttpRequestHandler
             return;
         }
 
-        $numberOfProductsPerPage = (int)$this->getDefaultNumberOrProductsPerPage();
-        $pagination = Pagination::create($request, count($searchDocumentCollection), $numberOfProductsPerPage);
-
         $this->addFilterNavigationToPageBuilder($searchDocumentCollection, $originalCriteria, $selectedFilters);
-        $this->addProductsInListingToPageBuilder($searchDocumentCollection, $pagination);
-        $this->addPaginationToPageBuilder($pagination);
+        $this->addProductsInListingToPageBuilder($searchDocumentCollection, $request);
+        $this->addPaginationToPageBuilder($searchDocumentCollection);
         $this->addCollectionSizeToPageBuilder($searchDocumentCollection);
     }
 
@@ -349,14 +338,11 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $this->addDynamicSnippetToPageBuilder($snippetCode, $snippetContents);
     }
 
-    private function addPaginationToPageBuilder(Pagination $pagination)
+    private function addPaginationToPageBuilder(SearchDocumentCollection $searchDocumentCollection)
     {
-        $dataObject = $pagination;
-
-        $snippetCode = 'pagination';
-        $snippetContents = $this->paginationBlockRenderer->render($dataObject, $this->context);
-
-        $this->addDynamicSnippetToPageBuilder($snippetCode, $snippetContents);
+        $numberOfProductsPerPage = (int)$this->getDefaultNumberOrProductsPerPage();
+        $totalPagesCount = ceil(count($searchDocumentCollection) / $numberOfProductsPerPage);
+        $this->addDynamicSnippetToPageBuilder('total_pages_count', $totalPagesCount);
     }
 
     private function addCollectionSizeToPageBuilder(SearchDocumentCollection $searchDocumentCollection)

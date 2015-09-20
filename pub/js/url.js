@@ -1,7 +1,33 @@
 define({
-    toggleQueryParameter: function (parameterName, parameterValue) {
-        var queryParameters = this.getQueryParameters();
+    updateQueryParameter: function (parameterName, parameterValue) {
+        var queryParameters = this.getQueryParameters(),
+            urlWithoutQueryString = this.getUrlWithoutQueryString();
 
+        queryParameters[parameterName] = parameterValue;
+
+        return this.addQueryParametersToUrl(urlWithoutQueryString, queryParameters);
+    },
+
+    toggleQueryParameter: function (parameterName, parameterValue) {
+        var queryParameters = this.getQueryParameters(),
+            urlWithoutQueryString = this.getUrlWithoutQueryString();
+
+        queryParameters = this.toggleQueryParameterValue(queryParameters, parameterName, parameterValue);
+
+        return this.addQueryParametersToUrl(urlWithoutQueryString, queryParameters);
+    },
+
+    addQueryParametersToUrl: function (url, queryParameters) {
+        var queryString = this.buildQueryString(queryParameters);
+
+        if ('' === queryString) {
+            return url;
+        }
+
+        return url + '?' + queryString;
+    },
+
+    toggleQueryParameterValue: function (queryParameters, parameterName, parameterValue) {
         if (undefined === queryParameters[parameterName]) {
             queryParameters[parameterName] = parameterValue;
         } else {
@@ -20,14 +46,7 @@ define({
             }
         }
 
-        var urlWithoutQueryString = this.getUrlWithoutQueryString(),
-            queryString = this.buildQueryString(queryParameters);
-
-        if ('' === queryString) {
-            return urlWithoutQueryString;
-        }
-
-        return urlWithoutQueryString + '?' + queryString;
+        return queryParameters;
     },
 
     getQueryParameters: function () {
@@ -42,6 +61,16 @@ define({
             carry[keyValue[0]] = keyValue[1];
             return carry;
         }, {});
+    },
+
+    getQueryParameterValue: function (parameterName) {
+        var queryParameters = this.getQueryParameters();
+
+        if (!queryParameters.hasOwnProperty(parameterName)) {
+            return null;
+        }
+
+        return queryParameters[parameterName];
     },
 
     getUrlWithoutQueryString: function () {

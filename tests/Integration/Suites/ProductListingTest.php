@@ -105,8 +105,7 @@ class ProductListingTest extends AbstractIntegrationTest
             $pageBuilder,
             $this->factory->getSnippetKeyGeneratorLocator(),
             $this->factory->createFilterNavigationFilterCollection(),
-            $filterNavigationAttributeCodes,
-            $this->factory->createPaginationBlockRenderer()
+            $filterNavigationAttributeCodes
         );
     }
 
@@ -201,7 +200,7 @@ class ProductListingTest extends AbstractIntegrationTest
         $body = $page->getBody();
 
         /* TODO: read from XML */
-        $expectedProductName = 'Adilette';
+        $expectedProductName = 'Gel-Noosa';
         $unExpectedProductName = 'LED Armflasher';
 
         $this->assertContains($expectedProductName, $body);

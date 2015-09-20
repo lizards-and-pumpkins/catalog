@@ -20,7 +20,6 @@ use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\FilterNavigationFilterCollection;
 use LizardsAndPumpkins\Product\ProductListingMetaInfoBuilder;
 use LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder;
-use LizardsAndPumpkins\Product\FilterNavigationBlockRenderer;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEvent;
@@ -502,12 +501,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createFilterNavigationFilterCollection();
         $this->assertInstanceOf(FilterNavigationFilterCollection::class, $result);
-    }
-
-    public function testPaginationBlockRendererIsReturned()
-    {
-        $result = $this->commonFactory->createPaginationBlockRenderer();
-        $this->assertInstanceOf(PaginationBlockRenderer::class, $result);
     }
 
     public function testItReturnsAProcessTimeLoggingDomainEventHandlerDecorator()
