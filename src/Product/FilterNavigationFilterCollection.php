@@ -55,7 +55,7 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
     /**
      * @return mixed[]
      */
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         $this->validateFiltersCollectionIsInitialized();
         return $this->filters;

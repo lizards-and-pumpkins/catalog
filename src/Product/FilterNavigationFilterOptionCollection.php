@@ -41,7 +41,7 @@ class FilterNavigationFilterOptionCollection implements \Countable, \IteratorAgg
     /**
      * @return mixed[]
      */
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return $this->filterOptions;
     }
