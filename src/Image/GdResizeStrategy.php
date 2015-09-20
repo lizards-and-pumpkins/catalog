@@ -68,7 +68,7 @@ class GdResizeStrategy implements ImageProcessingStrategy
         $saveFunctionName = $this->getSaveFunctionName($imageInfo);
 
         if (!function_exists($saveFunctionName)) {
-            throw new InvalidBinaryImageDataException();
+            throw new InvalidBinaryImageDataException(sprintf('MIME type "%s" is not supported.', $imageInfo['mime']));
         }
     }
 
