@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 
+
 namespace LizardsAndPumpkins;
 
 use League\CLImate\CLImate;
@@ -14,7 +15,8 @@ class ListUrlKeys extends BaseCliCommand
 {
     const IDX_URL_KEY = 0;
     const IDX_CONTEXT = 1;
-    
+    const IDX_TYPE = 2;
+
     /**
      * @var MasterFactory
      */
@@ -44,26 +46,37 @@ class ListUrlKeys extends BaseCliCommand
      */
     protected function getCommandLineArgumentsArray(CLImate $CLImate)
     {
-        return array_merge([
+        return array_merge(parent::getCommandLineArgumentsArray($CLImate), [
             'withContext' => [
                 'prefix' => 'c',
                 'longPrefix' => 'withContext',
                 'description' => 'Display the context string together with the URL keys',
                 'noValue' => true
             ],
+            'type' => [
+                'prefix' => 't',
+                'longPrefix' => 'type',
+                'description' => 'Display url keys for page type only (listing or product or all)',
+                'required' => false,
+                'defaultValue' => 'all'
+            ],
             'dataVersion' => [
                 'description' => 'List url keys for the given catalog data version',
                 'defaultValue' => 'current',
                 'required' => false
             ]
-        ], parent::getCommandLineArgumentsArray($CLImate));
+        ]);
     }
 
     protected function execute(CLImate $climate)
     {
         $version = $this->getVersionToDisplay();
+        $type = $this->getArg('type');
         $rawUrlKeyRecords = $this->getDataPoolReader()->getUrlKeysForVersion($version);
-        $formattedUrlKeys = $this->getFormattedUrlKeysArray($rawUrlKeyRecords);
+        $urlKeyRecordsForType = array_filter($rawUrlKeyRecords, function ($rawUrlkeyRecord) use ($type) {
+            return $type === 'all' || $rawUrlkeyRecord[self::IDX_TYPE] === $type;
+        });
+        $formattedUrlKeys = $this->getFormattedUrlKeysArray($urlKeyRecordsForType);
         $this->outputArray($formattedUrlKeys);
     }
 
@@ -84,7 +97,7 @@ class ListUrlKeys extends BaseCliCommand
      */
     private function formatUrlKeysWithoutContext(array $rawUrlKeyRecords)
     {
-        $this->outputMessage('URL keys without context (without duplicates):');
+        $this->outputMessage('URL keys without context:');
         return array_unique(array_map(function (array $urlKeyRecord) {
             return $urlKeyRecord[self::IDX_URL_KEY];
         }, $rawUrlKeyRecords));

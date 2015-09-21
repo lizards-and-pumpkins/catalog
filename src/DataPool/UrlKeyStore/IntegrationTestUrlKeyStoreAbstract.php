@@ -3,10 +3,12 @@
 
 namespace LizardsAndPumpkins\DataPool\UrlKeyStore;
 
+use LizardsAndPumpkins\DataPool\UrlKeyStore\Exception\ContextDataIsNotAStringException;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\Exception\DataVersionIsNotAStringException;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\Exception\DataVersionToWriteIsEmptyStringException;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\Exception\UrlKeyIsNotAStringException;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\Exception\UrlKeyToWriteIsEmptyStringException;
+use LizardsAndPumpkins\DataPool\UrlKeyStore\Exception\UrlKeyTypeIsNotAStringException;
 
 class IntegrationTestUrlKeyStoreAbstract
 {
@@ -54,7 +56,21 @@ class IntegrationTestUrlKeyStoreAbstract
                 'The context data has to be string for use with the UrlKeyStore, got "%s"',
                 $this->getVariableType($contextDataString)
             );
-            throw new Exception\ContextDataIsNotAStringException($message);
+            throw new ContextDataIsNotAStringException($message);
+        }
+    }
+
+    /**
+     * @param mixed $urlKeyTypeString
+     */
+    final protected function validateUrlKeyTypeString($urlKeyTypeString)
+    {
+        if (!is_string($urlKeyTypeString)) {
+            $message = sprintf(
+                'The url key type has to be string, got "%s"',
+                $this->getVariableType($urlKeyTypeString)
+            );
+            throw new UrlKeyTypeIsNotAStringException($message);
         }
     }
 

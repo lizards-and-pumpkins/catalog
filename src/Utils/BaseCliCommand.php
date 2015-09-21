@@ -42,9 +42,14 @@ abstract class BaseCliCommand
     {
         $climate = $this->getCLImate();
         $this->prepareCommandLineArguments($climate);
-        $this->processBeforeExecute();
-        $this->execute($climate);
-        $this->processAfterExecute();
+
+        if ($this->getArg('help')) {
+            $climate->usage();
+        } else {
+            $this->processBeforeExecute();
+            $this->execute($climate);
+            $this->processAfterExecute();
+        }
     }
     
     private function handleException(\Exception $e)
@@ -72,6 +77,12 @@ abstract class BaseCliCommand
                 'prefix' => 'e',
                 'longPrefix' => 'environmentConfig',
                 'description' => 'Environment config settings, comma separated [foo=bar,baz=qux]',
+            ],
+            'help' => [
+                'prefix' => 'h',
+                'longPrefix' => 'help',
+                'description' => 'Usage help',
+                'noValue' => true
             ]
         ];
     }

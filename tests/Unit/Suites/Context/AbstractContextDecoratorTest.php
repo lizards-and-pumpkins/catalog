@@ -207,4 +207,20 @@ abstract class AbstractContextDecoratorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($this->decorator->isSubsetOf($otherContext));
     }
+
+    public function testItIsSerializable()
+    {
+        $this->mockDecoratedContext->expects($this->once())->method('jsonSerialize')->willReturn(
+            [$this->decoratedComponentCode => 'test']
+        );
+        
+        $result = $this->decorator->jsonSerialize();
+
+        $code = $this->getDecoratorUnderTestCode();
+        $this->getStubContextData()[$code];
+        
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey($code, $result);
+        $this->assertSame($result[$code], $this->getStubContextData()[$code]);
+    }
 }

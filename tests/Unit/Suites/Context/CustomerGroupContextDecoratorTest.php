@@ -3,6 +3,8 @@
 
 namespace LizardsAndPumpkins\Context;
 
+use LizardsAndPumpkins\Context\Exception\ContextCodeNotFoundException;
+
 /**
  * @covers \LizardsAndPumpkins\Context\CustomerGroupContextDecorator
  * @covers \LizardsAndPumpkins\Context\ContextDecorator

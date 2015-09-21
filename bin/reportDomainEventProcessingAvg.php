@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 
+
 namespace LizardsAndPumpkins;
 
 use League\CLImate\CLImate;
@@ -21,7 +22,7 @@ class CalculateAverageDomainEventProcessingTime extends BaseCliCommand
      */
     protected function getCommandLineArgumentsArray(CLImate $climate)
     {
-        return array_merge([
+        return array_merge(parent::getCommandLineArgumentsArray($climate), [
             'sortBy' => [
                 'prefix' => 's',
                 'longPrefix' => 'sortBy',
@@ -38,7 +39,7 @@ class CalculateAverageDomainEventProcessingTime extends BaseCliCommand
                 'description' => 'Log file',
                 'required' => true
             ]
-        ], parent::getCommandLineArgumentsArray($climate));
+        ]);
     }
 
     protected function execute(CLImate $climate)

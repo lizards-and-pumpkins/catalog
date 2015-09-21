@@ -2,6 +2,9 @@
 
 namespace LizardsAndPumpkins\Context;
 
+use LizardsAndPumpkins\Context\Exception\ContextDecoratorNotFoundException;
+use LizardsAndPumpkins\Context\Exception\InvalidContextDecoratorClassException;
+use LizardsAndPumpkins\Context\Exception\DataVersionMissingInContextDataSetException;
 use LizardsAndPumpkins\DataVersion;
 use LizardsAndPumpkins\Http\HttpRequest;
 
@@ -19,6 +22,17 @@ class ContextBuilder
     public function __construct(DataVersion $dataVersion)
     {
         $this->dataVersion = $dataVersion;
+    }
+    
+    public static function rehydrateContext(array $dataSet)
+    {
+        if (! isset($dataSet[VersionedContext::CODE])) {
+            throw new DataVersionMissingInContextDataSetException(
+                'The data version has to be part of the data set when using the static context factory method.'
+            );
+        }
+        $builder = new self(DataVersion::fromVersionString($dataSet[VersionedContext::CODE]));
+        return $builder->createContext($dataSet);
     }
 
     /**
@@ -77,10 +91,21 @@ class ContextBuilder
      */
     private function createContextForGivenCodes(array $contextDataSet, $decoratorCodes)
     {
-        $versionedContext = new VersionedContext($this->dataVersion);
+        $versionedContext = new VersionedContext($this->getVersionForContext($contextDataSet));
         return array_reduce($decoratorCodes, function ($context, $code) use ($contextDataSet) {
             return $this->createContextDecorator($context, $code, $contextDataSet);
         }, $versionedContext);
+    }
+
+    /**
+     * @param mixed[] $contextDataSet
+     * @return DataVersion
+     */
+    private function getVersionForContext(array $contextDataSet)
+    {
+        return isset($contextDataSet[VersionedContext::CODE]) ?
+            DataVersion::fromVersionString($contextDataSet[VersionedContext::CODE]) :
+            $this->dataVersion;
     }
 
     /**

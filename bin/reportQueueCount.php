@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 
+
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Queue\Queue;
@@ -15,16 +16,10 @@ class ReportQueueCount extends BaseCliCommand
      * @var SampleMasterFactory
      */
     private $factory;
-    
-    /**
-     * @var CLImate
-     */
-    private $climate;
 
     private function __construct(MasterFactory $factory, CLImate $climate)
     {
         $this->factory = $factory;
-        $this->climate = $climate;
         $this->setCLImate($climate);
     }
 
@@ -40,10 +35,10 @@ class ReportQueueCount extends BaseCliCommand
         return new self($factory, new CLImate());
     }
 
-    protected function execute(CLImate $cliimate)
+    protected function execute(CLImate $climate)
     {
         $tableData = $this->formatTableData($this->factory->getCommandQueue(), $this->factory->getEventQueue());
-        $this->climate->table($tableData);
+        $climate->table($tableData);
     }
 
     /**

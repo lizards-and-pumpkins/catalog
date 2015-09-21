@@ -56,15 +56,15 @@ class DataPoolWriter implements Clearable
 
     public function clear()
     {
-        $this->clearInstance($this->searchEngine);
-        $this->clearInstance($this->keyValueStore);
-        $this->clearInstance($this->urlKeyStorage);
+        $this->clearComponent($this->searchEngine);
+        $this->clearComponent($this->keyValueStore);
+        $this->clearComponent($this->urlKeyStorage);
     }
 
     /**
      * @param object $instance
      */
-    private function clearInstance($instance)
+    private function clearComponent($instance)
     {
         if ($instance instanceof Clearable) {
             $instance->clear();
@@ -77,7 +77,8 @@ class DataPoolWriter implements Clearable
             $version = (string) $urlKeyForContext->getContextValue(VersionedContext::CODE);
             $urlKey = (string) $urlKeyForContext->getUrlKey();
             $context = $urlKeyForContext->getContextAsString();
-            $this->urlKeyStorage->addUrlKeyForVersion($version, $urlKey, $context);
+            $urlKeyType = $urlKeyForContext->getType();
+            $this->urlKeyStorage->addUrlKeyForVersion($version, $urlKey, $context, $urlKeyType);
         }, $urlKeysForContextsCollection->getUrlKeys());
     }
 }

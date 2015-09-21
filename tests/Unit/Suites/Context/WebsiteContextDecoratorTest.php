@@ -3,6 +3,7 @@
 
 namespace LizardsAndPumpkins\Context;
 
+use LizardsAndPumpkins\Context\Exception\UnableToDetermineWebsiteContextException;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
