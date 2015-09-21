@@ -58,12 +58,23 @@ class ProductListingRequestHandler implements HttpRequestHandler
     private $filterNavigationAttributeCodes;
 
     /**
+     * @var BlockRenderer
+     */
+    private $paginationBlockRenderer;
+    /**
+     * @var
+     */
+    private $defaultNumberOfProductsPerPage;
+
+    /**
      * @param Context $context
      * @param DataPoolReader $dataPoolReader
      * @param PageBuilder $pageBuilder
      * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
      * @param FilterNavigationFilterCollection $filterNavigationFilterCollection
      * @param string[] $filterNavigationAttributeCodes
+     * @param BlockRenderer $paginationBlockRenderer
+     * @param int $defaultNumberOfProductsPerPage
      */
     public function __construct(
         Context $context,
@@ -71,7 +82,9 @@ class ProductListingRequestHandler implements HttpRequestHandler
         PageBuilder $pageBuilder,
         SnippetKeyGeneratorLocator $keyGeneratorLocator,
         FilterNavigationFilterCollection $filterNavigationFilterCollection,
-        array $filterNavigationAttributeCodes
+        array $filterNavigationAttributeCodes,
+        BlockRenderer $paginationBlockRenderer,
+        $defaultNumberOfProductsPerPage
     ) {
         $this->dataPoolReader = $dataPoolReader;
         $this->context = $context;
@@ -79,6 +92,8 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $this->keyGeneratorLocator = $keyGeneratorLocator;
         $this->filterNavigationFilterCollection = $filterNavigationFilterCollection;
         $this->filterNavigationAttributeCodes = $filterNavigationAttributeCodes;
+        $this->paginationBlockRenderer = $paginationBlockRenderer;
+        $this->defaultNumberOfProductsPerPage = $defaultNumberOfProductsPerPage;
     }
 
     /**
@@ -212,17 +227,11 @@ class ProductListingRequestHandler implements HttpRequestHandler
     }
 
     /**
-     * @return string
+     * @return int
      */
     private function getDefaultNumberOrProductsPerPage()
     {
-        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
-            DefaultNumberOfProductsPerPageSnippetRenderer::CODE
-        );
-        $snippetKey = $keyGenerator->getKeyForContext($this->context, []);
-        $defaultNumberOrProductsPerPage = $this->dataPoolReader->getSnippet($snippetKey);
-
-        return $defaultNumberOrProductsPerPage;
+        return $this->defaultNumberOfProductsPerPage;
     }
 
     /**

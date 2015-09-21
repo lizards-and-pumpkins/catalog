@@ -98,6 +98,7 @@ class ProductListingTest extends AbstractIntegrationTest
             $this->factory->getLogger()
         );
         $filterNavigationAttributeCodes = [];
+        $defaultNumberOfProductsPerPage = 9;
 
         return new ProductListingRequestHandler(
             $this->factory->createContext(),
@@ -105,7 +106,9 @@ class ProductListingTest extends AbstractIntegrationTest
             $pageBuilder,
             $this->factory->getSnippetKeyGeneratorLocator(),
             $this->factory->createFilterNavigationFilterCollection(),
-            $filterNavigationAttributeCodes
+            $filterNavigationAttributeCodes,
+            $this->factory->createPaginationBlockRenderer(),
+            $defaultNumberOfProductsPerPage
         );
     }
 
