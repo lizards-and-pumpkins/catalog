@@ -210,6 +210,5 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         file_put_contents($importFilePath, file_get_contents($fixtureFile));
 
         $this->catalogImport->importFile($importFilePath);
-
     }
 }
