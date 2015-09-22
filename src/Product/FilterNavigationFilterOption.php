@@ -5,13 +5,8 @@ namespace LizardsAndPumpkins\Product;
 use LizardsAndPumpkins\Product\Exception\InvalidFilterNavigationFilterOptionCountException;
 use LizardsAndPumpkins\Product\Exception\InvalidFilterNavigationFilterOptionValueException;
 
-class FilterNavigationFilterOption
+class FilterNavigationFilterOption implements \JsonSerializable
 {
-    /**
-     * @var string
-     */
-    private $code;
-
     /**
      * @var string
      */
@@ -28,53 +23,41 @@ class FilterNavigationFilterOption
     private $isSelected;
 
     /**
-     * @param string $code
      * @param string $value
      * @param int $count
      * @param bool $isSelected
      */
-    private function __construct($code, $value, $count, $isSelected)
+    private function __construct($value, $count, $isSelected)
     {
-        $this->code = $code;
         $this->value = $value;
         $this->count = $count;
         $this->isSelected = $isSelected;
     }
 
     /**
-     * @param string $code
      * @param string $value
      * @param int $count
      * @return FilterNavigationFilterOption
      */
-    public static function create($code, $value, $count)
+    public static function create($value, $count)
     {
         self::validateFilterOptionValue($value);
         self::validateFilterOptionCount($count);
 
-        return new self($code, $value, $count, false);
+        return new self($value, $count, false);
     }
 
     /**
-     * @param string $code
      * @param string $value
      * @param int $count
      * @return FilterNavigationFilterOption
      */
-    public static function createSelected($code, $value, $count)
+    public static function createSelected($value, $count)
     {
         self::validateFilterOptionValue($value);
         self::validateFilterOptionCount($count);
 
-        return new self($code, $value, $count, true);
-    }
-
-    /**
-     * @return string
-     */
-    public function getCode()
-    {
-        return $this->code;
+        return new self($value, $count, true);
     }
 
     /**
@@ -106,9 +89,9 @@ class FilterNavigationFilterOption
      */
     private static function validateFilterOptionValue($value)
     {
-        if (!is_string($value)) {
+        if (!is_string($value) && !is_int($value)) {
             throw new InvalidFilterNavigationFilterOptionValueException(
-                sprintf('Filter option value must be a string, "%s" given.', gettype($value))
+                sprintf('Filter option value must be either string or integer, "%s" given.', gettype($value))
             );
         }
     }
@@ -123,5 +106,17 @@ class FilterNavigationFilterOption
                 sprintf('Filter option count must be an integer, "%s" given.', gettype($count))
             );
         }
+    }
+
+    /**
+     * @return mixed[]
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'value' => $this->value,
+            'count' => $this->count,
+            'is_selected' => $this->isSelected
+        ];
     }
 }

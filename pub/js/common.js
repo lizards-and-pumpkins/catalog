@@ -2,7 +2,7 @@ define(['cookie', 'product_search_autosuggestion', 'lib/jquery.uniform.min'], fu
 
     jQuery(document).ready(function() {
 
-        jQuery('select, input[type=checkbox], input[type=radio]').not('#productListFilter input[type=checkbox], .alertPopUp select').uniform({selectAutoWidth: false});
+        jQuery('select, input[type=checkbox], input[type=radio]').not('.alertPopUp select').uniform({selectAutoWidth: false});
 
         nav = jQuery('.nav');
         nav.children().each(function(index) {

@@ -14,14 +14,12 @@ use LizardsAndPumpkins\Http\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\UnableToHandleRequestException;
 use LizardsAndPumpkins\PageBuilder;
-use LizardsAndPumpkins\Pagination;
 use LizardsAndPumpkins\Renderer\BlockRenderer;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
 
 /**
  * @covers \LizardsAndPumpkins\Product\ProductListingRequestHandler
- * @uses   \LizardsAndPumpkins\Pagination
  * @uses   \LizardsAndPumpkins\Product\ProductId
  * @uses   \LizardsAndPumpkins\Product\ProductListingMetaInfoSnippetContent
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
@@ -218,9 +216,6 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $stubContext = $this->getMock(Context::class);
         $stubSnippetKeyGeneratorLocator = $this->createStubSnippetKeyGeneratorLocator();
 
-        /** @var BlockRenderer|\PHPUnit_Framework_MockObject_MockObject $stubFilterNavigationBlockRenderer */
-        $stubFilterNavigationBlockRenderer = $this->getMock(BlockRenderer::class, [], [], '', false);
-
         $this->stubFilterCollection = $this->getMock(FilterNavigationFilterCollection::class, [], [], '', false);
 
         $stubFilterNavigationAttributeCodes = ['foo'];
@@ -233,7 +228,6 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
             $this->mockDataPoolReader,
             $this->mockPageBuilder,
             $stubSnippetKeyGeneratorLocator,
-            $stubFilterNavigationBlockRenderer,
             $this->stubFilterCollection,
             $stubFilterNavigationAttributeCodes,
             $stubPaginationBlockRenderer
@@ -321,7 +315,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $currentPageNumber = 2;
 
         $this->stubRequest->method('getQueryParameter')->willReturnMap(
-            [[Pagination::PAGINATION_QUERY_PARAMETER_NAME, $currentPageNumber]]
+            [[ProductListingRequestHandler::PAGINATION_QUERY_PARAMETER_NAME, $currentPageNumber]]
         );
 
         $productAId = ProductId::fromString('A');
@@ -376,7 +370,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->requestHandler->process($this->stubRequest);
     }
 
-    public function testPaginationSnippetIsAddedToPageBuilder()
+    public function testFilterNavigationSnippetIsAddedToPageBuilder()
     {
         $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
 
@@ -385,7 +379,21 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->requestHandler->process($this->stubRequest);
 
-        $snippetCode = 'pagination';
+        $snippetCode = 'filter_navigation';
+
+        $this->assertDynamicSnippetWasAddedToPageBuilder($addSnippetsToPageSpy, $snippetCode);
+    }
+
+    public function testTotalPagesCountSnippetIsAddedToPageBuilder()
+    {
+        $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
+
+        $addSnippetsToPageSpy = $this->any();
+        $this->mockPageBuilder->expects($addSnippetsToPageSpy)->method('addSnippetsToPage');
+
+        $this->requestHandler->process($this->stubRequest);
+
+        $snippetCode = 'total_pages_count';
 
         $this->assertDynamicSnippetWasAddedToPageBuilder($addSnippetsToPageSpy, $snippetCode);
     }

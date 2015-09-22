@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\LocaleContextDecorator;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
@@ -11,8 +12,10 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 use LizardsAndPumpkins\Product\Exception\FilterCollectionInNotInitializedException;
+use LizardsAndPumpkins\Renderer\Translation\Translator;
+use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
 
-class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
+class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate, \JsonSerializable
 {
     /**
      * @var FilterNavigationFilter[]
@@ -29,9 +32,15 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
      */
     private $dataPoolReader;
 
-    public function __construct(DataPoolReader $dataPoolReader)
+    /**
+     * @var TranslatorRegistry
+     */
+    private $translatorRegistry;
+
+    public function __construct(DataPoolReader $dataPoolReader, TranslatorRegistry $translatorRegistry)
     {
         $this->dataPoolReader = $dataPoolReader;
+        $this->translatorRegistry = $translatorRegistry;
     }
 
     /**
@@ -50,6 +59,15 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
     {
         $this->validateFiltersCollectionIsInitialized();
         return new \ArrayIterator($this->filters);
+    }
+
+    /**
+     * @return mixed[]
+     */
+    public function jsonSerialize()
+    {
+        $this->validateFiltersCollectionIsInitialized();
+        return $this->filters;
     }
 
     /**
@@ -103,7 +121,10 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
             );
         }
 
-        $this->initializeFiltersFromArray($filters);
+        $locale = $context->getValue(LocaleContextDecorator::CODE);
+        $translator = $this->translatorRegistry->getTranslatorForLocale($locale);
+
+        $this->initializeFiltersFromArray($filters, $translator);
     }
 
     /**
@@ -207,8 +228,9 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
 
     /**
      * @param array[] $filters
+     * @param Translator $translator
      */
-    private function initializeFiltersFromArray(array $filters)
+    private function initializeFiltersFromArray(array $filters, Translator $translator)
     {
         $this->filters = [];
 
@@ -216,17 +238,17 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
             $filterNavigationFilterOptionCollection = new FilterNavigationFilterOptionCollection;
             foreach ($filterOptions as $optionValue => $optionCount) {
                 if (in_array($optionValue, $this->selectedFilters[$filterCode])) {
-                    $filterOption = FilterNavigationFilterOption::createSelected(
-                        $filterCode,
-                        $optionValue,
-                        $optionCount
-                    );
+                    $filterOption = FilterNavigationFilterOption::createSelected($optionValue, $optionCount);
                 } else {
-                    $filterOption = FilterNavigationFilterOption::create($filterCode, $optionValue, $optionCount);
+                    $filterOption = FilterNavigationFilterOption::create($optionValue, $optionCount);
                 }
                 $filterNavigationFilterOptionCollection->add($filterOption);
             }
-            $this->filters[] = FilterNavigationFilter::create($filterCode, $filterNavigationFilterOptionCollection);
+            $this->filters[] = FilterNavigationFilter::create(
+                $filterCode,
+                $filterNavigationFilterOptionCollection,
+                $translator
+            );
         }
     }
 }

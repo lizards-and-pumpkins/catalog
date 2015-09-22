@@ -26,7 +26,6 @@ use LizardsAndPumpkins\Image\UpdateImageCommand;
 use LizardsAndPumpkins\Image\UpdateImageCommandHandler;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\DefaultNumberOfProductsPerPageSnippetRenderer;
-use LizardsAndPumpkins\Product\FilterNavigationBlockRenderer;
 use LizardsAndPumpkins\Product\FilterNavigationFilterCollection;
 use LizardsAndPumpkins\Product\PriceSnippetRenderer;
 use LizardsAndPumpkins\Product\Product;
@@ -736,7 +735,15 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createThemeLocator()
     {
-        return new ThemeLocator();
+        return ThemeLocator::fromPath($this->getMasterFactory()->getBasePathConfig());
+    }
+
+    /**
+     * @return string
+     */
+    public function getBasePathConfig()
+    {
+        return dirname(__DIR__);
     }
 
     /**
@@ -1253,35 +1260,12 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return FilterNavigationBlockRenderer
-     */
-    public function createFilterNavigationBlockRenderer()
-    {
-        return new FilterNavigationBlockRenderer(
-            $this->getMasterFactory()->createThemeLocator(),
-            $this->getMasterFactory()->createBlockStructure(),
-            $this->getMasterFactory()->getTranslatorRegistry()
-        );
-    }
-
-    /**
      * @return FilterNavigationFilterCollection
      */
     public function createFilterNavigationFilterCollection()
     {
         return new FilterNavigationFilterCollection(
-            $this->getMasterFactory()->createDataPoolReader()
-        );
-    }
-
-    /**
-     * @return PaginationBlockRenderer
-     */
-    public function createPaginationBlockRenderer()
-    {
-        return new PaginationBlockRenderer(
-            $this->getMasterFactory()->createThemeLocator(),
-            $this->getMasterFactory()->createBlockStructure(),
+            $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->getTranslatorRegistry()
         );
     }

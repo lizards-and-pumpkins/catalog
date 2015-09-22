@@ -110,7 +110,7 @@ abstract class BlockRenderer
         $blockClass = $layout->getAttribute('class');
         $this->validateBlockClass($blockClass);
 
-        $template = $layout->getAttribute('template');
+        $template = $this->themeLocator->getThemeDirectory() . '/' . $layout->getAttribute('template');
         $name = $layout->getAttribute('name');
 
         /** @var Block $blockInstance */

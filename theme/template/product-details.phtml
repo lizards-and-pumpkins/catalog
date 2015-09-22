@@ -17,10 +17,7 @@ $save = 0;
 ?>
 <div id="productView" class="configurable" itemscope itemtype="http://schema.org/Product">
     <form action="<?php /* TODO: Implement */ ?>" method="post" id="product_addtocart_form">
-        <div class="no-display">
-            <input type="hidden" name="product" value="<?= $this->getProductId() ?>" />
-            <input type="hidden" name="related_product" id="related-products-field" value="" />
-        </div>
+        <input type="hidden" name="product" value="<?= $this->getProductId() ?>" />
         <div class="product-essential">
             <div class="product-img-box">
                 <div class="main-image-area-wrapper">
@@ -107,8 +104,7 @@ $save = 0;
 
                 <div class="product-controls">
                     <?php if (1) : //$_product->isSaleable()): ?>
-                        <fieldset class="selects">
-
+                        <div class="selects">
                             <div class="input-box qty-box">
                                 <select name="qty" id="qty">
                                     <?php for ($i = 1; $i <= $maxQty; $i++): ?>
@@ -117,7 +113,7 @@ $save = 0;
                                 </select>
                             </div>
                             <div class="clearer"></div>
-                        </fieldset>
+                        </div>
 
                         <button type="submit" title="Add to Cart"><?= $this->__('Add to Cart') ?></button>
                     <?php endif ?>

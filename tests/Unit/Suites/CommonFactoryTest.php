@@ -20,7 +20,6 @@ use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\FilterNavigationFilterCollection;
 use LizardsAndPumpkins\Product\ProductListingMetaInfoBuilder;
 use LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder;
-use LizardsAndPumpkins\Product\FilterNavigationBlockRenderer;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEvent;
@@ -121,6 +120,7 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\Renderer\Translation\CsvTranslator
  * @uses   \LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry
  * @uses   \LizardsAndPumpkins\EnvironmentConfigReader
+ * @uses   \LizardsAndPumpkins\Utils\LocalFilesystem
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -484,12 +484,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
 
-    public function testFilterNavigationBlockRendererIsReturned()
-    {
-        $result = $this->commonFactory->createFilterNavigationBlockRenderer();
-        $this->assertInstanceOf(FilterNavigationBlockRenderer::class, $result);
-    }
-
     public function testImageProcessorCollectionIsReturned()
     {
         $result = $this->commonFactory->getImageProcessorCollection();
@@ -508,12 +502,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createFilterNavigationFilterCollection();
         $this->assertInstanceOf(FilterNavigationFilterCollection::class, $result);
-    }
-
-    public function testPaginationBlockRendererIsReturned()
-    {
-        $result = $this->commonFactory->createPaginationBlockRenderer();
-        $this->assertInstanceOf(PaginationBlockRenderer::class, $result);
     }
 
     public function testItReturnsAProcessTimeLoggingDomainEventHandlerDecorator()
