@@ -3,6 +3,7 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog\Import\Listing;
 
+use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\DataVersion;
@@ -36,10 +37,9 @@ class ProductListingPageSnippetProjector
     
     public function project(DataVersion $dataVersion)
     {
-        $allAvailableContextsForVersion = $this->contextSource->getAllAvailableContextsWithVersion($dataVersion);
-        foreach ($allAvailableContextsForVersion as $context) {
+        array_map(function (Context $context) {
             $snippet = $this->productListingPageSnippetRenderer->render($context);
             $this->dataPoolWriter->writeSnippet($snippet);
-        }
+        }, $this->contextSource->getAllAvailableContextsWithVersion($dataVersion));
     }
 }
