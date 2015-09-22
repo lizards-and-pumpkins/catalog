@@ -93,7 +93,7 @@ class LocalFilesystem
         $commonPartCount = 0;
         for ($max = min(count($pathParts), count($basePathParts)); $commonPartCount < $max; $commonPartCount ++) {
             if ($pathParts[$commonPartCount] !== $basePathParts[$commonPartCount]) {
-                return $commonPartCount;
+                break;
             }
         }
 
