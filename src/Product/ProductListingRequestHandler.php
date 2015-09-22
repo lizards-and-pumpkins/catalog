@@ -59,10 +59,6 @@ class ProductListingRequestHandler implements HttpRequestHandler
     private $filterNavigationAttributeCodes;
 
     /**
-     * @var BlockRenderer
-     */
-    private $paginationBlockRenderer;
-    /**
      * @var
      */
     private $defaultNumberOfProductsPerPage;
