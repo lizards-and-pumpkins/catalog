@@ -12,8 +12,6 @@ class LayoutReader
      */
     public function loadLayoutFromXmlFile($layoutXmlFilePath)
     {
-        chdir(__DIR__ . '/../..');
-
         if (!is_readable($layoutXmlFilePath) || is_dir($layoutXmlFilePath)) {
             throw new LayoutFileNotReadableException(sprintf(
                 'The layout file "%s" is not readable.',

@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <snippet xmlns="http://lizardsandpumpkins.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://lizardsandpumpkins.com ../../schema/snippet.xsd">
-    <block name="product_details_snippet" class="LizardsAndPumpkins\Renderer\Block" template="theme/template/2columns-left.phtml">
-        <block name="head" class="LizardsAndPumpkins\Renderer\Block" template="theme/template/head.phtml" />
-        <block name="header" class="LizardsAndPumpkins\Renderer\Block" template="theme/template/header.phtml" />
-        <block name="left" class="LizardsAndPumpkins\Renderer\Block" template="theme/template/left.phtml" />
-        <block name="content" class="LizardsAndPumpkins\Renderer\Block" template="theme/template/list.phtml" />
-        <block name="footer" class="LizardsAndPumpkins\Renderer\Block" template="theme/template/footer.phtml" />
+    <block name="product_details_snippet" class="LizardsAndPumpkins\Renderer\Block" template="template/2columns-left.phtml">
+        <block name="head" class="LizardsAndPumpkins\Renderer\Block" template="template/head.phtml" />
+        <block name="header" class="LizardsAndPumpkins\Renderer\Block" template="template/header.phtml" />
+        <block name="left" class="LizardsAndPumpkins\Renderer\Block" template="template/left.phtml" />
+        <block name="content" class="LizardsAndPumpkins\Renderer\Block" template="template/list.phtml" />
+        <block name="footer" class="LizardsAndPumpkins\Renderer\Block" template="template/footer.phtml" />
     </block>
 </snippet>

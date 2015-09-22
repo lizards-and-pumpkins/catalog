@@ -120,6 +120,7 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\Renderer\Translation\CsvTranslator
  * @uses   \LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry
  * @uses   \LizardsAndPumpkins\EnvironmentConfigReader
+ * @uses   \LizardsAndPumpkins\Utils\LocalFilesystem
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {

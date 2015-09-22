@@ -48,4 +48,89 @@ class LocalFilesystem
                 unlink($path->getPathname());
         }
     }
+
+    /**
+     * @param string $basePath
+     * @param string $path
+     * @return string
+     */
+    public function getRelativePath($basePath, $path)
+    {
+        if (0 === strpos($path, $basePath) || $basePath === $path . '/') {
+            return ltrim(substr($path, strlen($basePath)), '/');
+        }
+
+        if ($this->isRelativePath($path)) {
+            return $path;
+        }
+
+        return $this->buildRelativePath($basePath, $path);
+    }
+
+    /**
+     * @param string $basePath
+     * @param string $path
+     * @return string
+     */
+    private function buildRelativePath($basePath, $path)
+    {
+        $pathParts = explode('/', rtrim($path, '/'));
+        $basePathParts = explode('/', rtrim($basePath, '/'));
+        $commonDirCount = $this->getCountOfSharedDirectories($basePathParts, $pathParts);
+        $downPath = $this->buildDownPortionOfRelativePath($commonDirCount, $basePathParts);
+        $upPath = $this->buildUpPortionOfRelativePath($commonDirCount, $pathParts);
+
+        return $downPath . $upPath . (substr($path, - 1) === '/' ? '/' : '');
+    }
+
+    /**
+     * @param string[] $basePathParts
+     * @param string[] $pathParts
+     * @return int
+     */
+    private function getCountOfSharedDirectories(array $basePathParts, array $pathParts)
+    {
+        $commonPartCount = 0;
+        for ($max = min(count($pathParts), count($basePathParts)); $commonPartCount < $max; $commonPartCount ++) {
+            if ($pathParts[$commonPartCount] !== $basePathParts[$commonPartCount]) {
+                return $commonPartCount;
+            }
+        }
+
+        return $commonPartCount;
+    }
+
+    /**
+     * @param int $commonDirCount
+     * @param string[] $basePathParts
+     * @return string
+     */
+    private function buildDownPortionOfRelativePath($commonDirCount, array $basePathParts)
+    {
+        $numDown = count(array_slice($basePathParts, $commonDirCount));
+        return implode('/', array_fill(0, $numDown, '..'));
+    }
+
+    /**
+     * @param int $commonDirCount
+     * @param string[] $pathParts
+     * @return string
+     */
+    private function buildUpPortionOfRelativePath($commonDirCount, array $pathParts)
+    {
+        if ($commonDirCount === count($pathParts)) {
+            return '';
+        }
+
+        return '/' . implode('/', array_slice($pathParts, $commonDirCount));
+    }
+
+    /**
+     * @param string $path
+     * @return bool
+     */
+    private function isRelativePath($path)
+    {
+        return substr($path, 0, 1) !== '/';
+    }
 }

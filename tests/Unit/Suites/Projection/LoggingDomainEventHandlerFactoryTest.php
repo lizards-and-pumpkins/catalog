@@ -54,6 +54,7 @@ use LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler;
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
  * @uses   \LizardsAndPumpkins\IntegrationTestFactory
  * @uses   \LizardsAndPumpkins\Renderer\BlockRenderer
+ * @uses   \LizardsAndPumpkins\Renderer\ThemeLocator
  * @uses   \LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler
  * @uses   \LizardsAndPumpkins\DataVersion
  * @uses   \LizardsAndPumpkins\CommonFactory
@@ -71,6 +72,7 @@ use LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler;
  * @uses   \LizardsAndPumpkins\Image\ImageProcessor
  * @uses   \LizardsAndPumpkins\Image\ImageMagickResizeStrategy
  * @uses   \LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry
+ * @uses   \LizardsAndPumpkins\Utils\LocalFilesystem
  */
 class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 {

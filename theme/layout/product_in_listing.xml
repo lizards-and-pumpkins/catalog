@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
 <snippet xmlns="http://lizardsandpumpkins.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://lizardsandpumpkins.com ../../schema/snippet.xsd">
-    <block name="product" class="LizardsAndPumpkins\Product\Block\ProductBlock" template="theme/template/product-in-listing.phtml"/>
+    <block name="product" class="LizardsAndPumpkins\Product\Block\ProductBlock" template="template/product-in-listing.phtml"/>
 </snippet>

@@ -8,6 +8,7 @@ use LizardsAndPumpkins\TestFileFixtureTrait;
  * @covers \LizardsAndPumpkins\Renderer\ThemeLocator
  * @uses   \LizardsAndPumpkins\Renderer\Layout
  * @uses   \LizardsAndPumpkins\Renderer\LayoutReader
+ * @uses   \LizardsAndPumpkins\Utils\LocalFilesystem
  * @uses   \LizardsAndPumpkins\Utils\XPathParser
  */
 class ThemeLocatorTest extends \PHPUnit_Framework_TestCase
@@ -21,12 +22,13 @@ class ThemeLocatorTest extends \PHPUnit_Framework_TestCase
     
     protected function setUp()
     {
-        $this->locator = new ThemeLocator();
+        $testBasePath = sys_get_temp_dir();
+        $this->locator = ThemeLocator::fromPath($testBasePath);
     }
     
     public function testHardcodedThemeDirectoryIsReturned()
     {
-        $this->assertEquals('theme', $this->locator->getThemeDirectory());
+        $this->assertEquals('../../..' . sys_get_temp_dir() . '/theme', $this->locator->getThemeDirectory());
     }
 
     public function testLayoutObjectIsReturnedForGivenHandle()

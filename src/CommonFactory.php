@@ -735,7 +735,15 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createThemeLocator()
     {
-        return new ThemeLocator();
+        return ThemeLocator::fromPath($this->getMasterFactory()->getBasePathConfig());
+    }
+
+    /**
+     * @return string
+     */
+    public function getBasePathConfig()
+    {
+        return dirname(__DIR__);
     }
 
     /**
