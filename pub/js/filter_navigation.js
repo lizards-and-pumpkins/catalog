@@ -44,7 +44,7 @@ define(['url', 'jquery'], function (url, $) {
                         .prop('href', url.toggleQueryParameter(filterCode, filterOption.value))
                 );
 
-                if (-1 < selectedFilterOptions.indexOf(filterOption.value)) {
+                if (selectedFilterOptions.indexOf(filterOption.value) !== -1) {
                     option.addClass('active');
                 }
 
@@ -57,7 +57,7 @@ define(['url', 'jquery'], function (url, $) {
             return filterOptions.reduce(function (carry, filterOption) {
                 return carry.add(
                     $('<li/>').append(
-                        $('<a/>').html(-1 < selectedColors.indexOf(filterOption.value.toString()) ? '&#x2713;' : '&nbsp;')
+                        $('<a/>').html(selectedColors.indexOf(filterOption.value.toString()) !== -1 ? '&#x2713;' : '&nbsp;')
                             .css('background-color', '#' + filterOption.value)
                             .prop('href', url.toggleQueryParameter(filterCode, filterOption.value.toString()))
                     )
@@ -91,7 +91,7 @@ define(['url', 'jquery'], function (url, $) {
                             .html(priceFrom + ' &euro; - ' + priceTo + ' &euro; (' + priceRanges[rangeNumber] + ')')
                     );
 
-                if (-1 < selectedPriceRanges.indexOf(priceRangeString)) {
+                if (selectedPriceRanges.indexOf(priceRangeString) !== -1) {
                     option.addClass('active');
                 }
 
