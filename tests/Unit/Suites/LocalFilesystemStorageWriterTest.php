@@ -26,7 +26,7 @@ class LocalFilesystemStorageWriterTest extends \PHPUnit_Framework_TestCase
         $this->testBaseDirPath = sys_get_temp_dir() . '/lizards-and-pumpkins-result-image';
         mkdir($this->testBaseDirPath);
 
-        $this->writer = new LocalFilesystemStorageWriter($this->testBaseDirPath);
+        $this->writer = new LocalFilesystemStorageWriter();
     }
 
     protected function tearDown()
@@ -47,17 +47,17 @@ class LocalFilesystemStorageWriterTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(FileNotWritableException::class);
         chmod($this->testBaseDirPath, 0000);
-        $this->writer->putFileContents('foo', 'bar');
+        $this->writer->putFileContents($this->testBaseDirPath . '/foo', 'bar');
     }
 
     public function testFileContentsIsWritten()
     {
-        $fileName = 'foo';
+        $filePath = $this->testBaseDirPath . '/foo';
         $content = 'bar';
 
-        $this->writer->putFileContents($fileName, $content);
+        $this->writer->putFileContents($filePath, $content);
 
-        $actualContent = file_get_contents($this->testBaseDirPath . '/' . $fileName);
+        $actualContent = file_get_contents($filePath);
 
         $this->assertEquals($content, $actualContent);
     }

@@ -20,11 +20,11 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 use LizardsAndPumpkins\Http\HttpRouterChain;
 use LizardsAndPumpkins\Http\ResourceNotFoundRouter;
-use LizardsAndPumpkins\Image\ImageWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Image\ImageWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Image\ImageWasAddedDomainEvent;
+use LizardsAndPumpkins\Image\ImageWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Image\ImageProcessorCollection;
-use LizardsAndPumpkins\Image\UpdateImageCommand;
-use LizardsAndPumpkins\Image\UpdateImageCommandHandler;
+use LizardsAndPumpkins\Image\AddImageCommand;
+use LizardsAndPumpkins\Image\AddImageCommandHandler;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\DefaultNumberOfProductsPerPageSnippetRenderer;
 use LizardsAndPumpkins\Product\FilterNavigationFilterCollection;
@@ -953,12 +953,12 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @param ImageWasUpdatedDomainEvent $event
-     * @return ImageWasUpdatedDomainEventHandler
+     * @param ImageWasAddedDomainEvent $event
+     * @return ImageWasAddedDomainEventHandler
      */
-    public function createImageWasUpdatedDomainEventHandler(ImageWasUpdatedDomainEvent $event)
+    public function createImageWasAddedDomainEventHandler(ImageWasAddedDomainEvent $event)
     {
-        return new ImageWasUpdatedDomainEventHandler(
+        return new ImageWasAddedDomainEventHandler(
             $event,
             $this->getMasterFactory()->createImageProcessorCollection()
         );
@@ -1204,12 +1204,12 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @param UpdateImageCommand $command
-     * @return UpdateImageCommandHandler
+     * @param AddImageCommand $command
+     * @return AddImageCommandHandler
      */
-    public function createUpdateImageCommandHandler(UpdateImageCommand $command)
+    public function createAddImageCommandHandler(AddImageCommand $command)
     {
-        return new UpdateImageCommandHandler(
+        return new AddImageCommandHandler(
             $command,
             $this->getMasterFactory()->getEventQueue()
         );

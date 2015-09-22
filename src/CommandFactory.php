@@ -4,8 +4,8 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Content\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Content\UpdateContentBlockCommandHandler;
-use LizardsAndPumpkins\Image\UpdateImageCommand;
-use LizardsAndPumpkins\Image\UpdateImageCommandHandler;
+use LizardsAndPumpkins\Image\AddImageCommand;
+use LizardsAndPumpkins\Image\AddImageCommandHandler;
 use LizardsAndPumpkins\Product\UpdateMultipleProductStockQuantityCommand;
 use LizardsAndPumpkins\Product\UpdateMultipleProductStockQuantityCommandHandler;
 use LizardsAndPumpkins\Product\UpdateProductCommand;
@@ -52,8 +52,8 @@ interface CommandFactory
     public function createAddProductListingCommandHandler(AddProductListingCommand $command);
 
     /**
-     * @param UpdateImageCommand $command
-     * @return UpdateImageCommandHandler
+     * @param AddImageCommand $command
+     * @return AddImageCommandHandler
      */
-    public function createUpdateImageCommandHandler(UpdateImageCommand $command);
+    public function createAddImageCommandHandler(AddImageCommand $command);
 }

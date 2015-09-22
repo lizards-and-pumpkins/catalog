@@ -2,8 +2,8 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\Image\ImageWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Image\ImageWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Image\ImageWasAddedDomainEvent;
+use LizardsAndPumpkins\Image\ImageWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
@@ -13,8 +13,8 @@ use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
 
 /**
  * @covers \LizardsAndPumpkins\DomainEventHandlerLocator
- * @uses   \LizardsAndPumpkins\Image\ImageWasUpdatedDomainEvent
  * @uses   \LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent
+ * @uses   \LizardsAndPumpkins\Image\ImageWasAddedDomainEvent
  * @uses   \LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEvent
  * @uses   \LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent
  * @uses   \LizardsAndPumpkins\TemplateWasUpdatedDomainEvent
@@ -79,20 +79,20 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(TemplateWasUpdatedDomainEventHandler::class, $result);
     }
 
-    public function testImageWasUpdatedDomainEventHandlerIsLocatedAndReturned()
+    public function testImageWasAddedDomainEventHandlerIsLocatedAndReturned()
     {
-        $stubEventHandler = $this->getMock(ImageWasUpdatedDomainEventHandler::class, [], [], '', false);
-        $this->factory->method('createImageWasUpdatedDomainEventHandler')->willReturn($stubEventHandler);
+        $stubEventHandler = $this->getMock(ImageWasAddedDomainEventHandler::class, [], [], '', false);
+        $this->factory->method('createImageWasAddedDomainEventHandler')->willReturn($stubEventHandler);
 
-        /** @var ImageWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
-        $stubDomainEvent = $this->getMockBuilder(ImageWasUpdatedDomainEvent::class)
-            ->setMockClassName('ImageWasUpdatedDomainEvent')
+        /** @var ImageWasAddedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
+        $stubDomainEvent = $this->getMockBuilder(ImageWasAddedDomainEvent::class)
+            ->setMockClassName('ImageWasAddedDomainEvent')
             ->disableOriginalConstructor()
             ->getMock();
 
         $result = $this->locator->getHandlerFor($stubDomainEvent);
 
-        $this->assertInstanceOf(ImageWasUpdatedDomainEventHandler::class, $result);
+        $this->assertInstanceOf(ImageWasAddedDomainEventHandler::class, $result);
     }
 
     public function testProductListingWasAddedDomainEventHandlerIsLocatedAndReturned()

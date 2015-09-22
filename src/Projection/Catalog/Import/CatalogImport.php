@@ -4,7 +4,7 @@
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
 use LizardsAndPumpkins\DataVersion;
-use LizardsAndPumpkins\Image\UpdateImageCommand;
+use LizardsAndPumpkins\Image\AddImageCommand;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Product\ProductListingMetaInfoBuilder;
@@ -68,7 +68,8 @@ class CatalogImport
         $parser = CatalogXmlParser::fromFilePath($importFilePath);
         $parser->registerProductSourceCallback($this->createClosureForMethod('processProductXml'));
         $parser->registerListingCallback($this->createClosureForMethod('processListingXml'));
-        $parser->registerProductImageCallback($this->createClosureForMethod('processProductImageXml'));
+        $imageDirectoryPath = dirname($importFilePath) . '/product-images';
+        $parser->registerProductImageCallback($this->createClosureForProductImageXml($imageDirectoryPath));
         $parser->parse();
         $this->eventQueue->add(new CatalogWasImportedDomainEvent($version));
     }
@@ -102,6 +103,17 @@ class CatalogImport
     }
 
     /**
+     * @param string $imageDirectoryPath
+     * @return \Closure
+     */
+    private function createClosureForProductImageXml($imageDirectoryPath)
+    {
+        return function (...$args) use ($imageDirectoryPath) {
+            return $this->processProductImageXml($imageDirectoryPath, ...$args);
+        };
+    }
+
+    /**
      * @param string $productXml
      */
     private function processProductXml($productXml)
@@ -130,12 +142,13 @@ class CatalogImport
     }
 
     /**
+     * @param string $imageDirectoryPath
      * @param string $productImageXml
      */
-    private function processProductImageXml($productImageXml)
+    private function processProductImageXml($imageDirectoryPath, $productImageXml)
     {
         $fileNode = (new XPathParser($productImageXml))->getXmlNodesArrayByXPath('/image/file')[0];
         // todo: add version to command
-        $this->commandQueue->add(new UpdateImageCommand($fileNode['value']));
+        $this->commandQueue->add(new AddImageCommand($imageDirectoryPath . '/' . $fileNode['value']));
     }
 }

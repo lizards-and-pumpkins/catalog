@@ -138,32 +138,28 @@ class IntegrationTestFactory implements Factory
     public function createImageProcessor()
     {
         $strategySequence = $this->getMasterFactory()->createImageProcessingStrategySequence();
-        $fileStorageReader = $this->getMasterFactory()->createImageFileStorageReader();
-        $fileStorageWriter = $this->getMasterFactory()->createImageFileStorageWriter();
-
-        return new ImageProcessor($strategySequence, $fileStorageReader, $fileStorageWriter);
+        $fileStorageReader = $this->getMasterFactory()->createFileStorageReader();
+        $fileStorageWriter = $this->getMasterFactory()->createFileStorageWriter();
+        
+        $resultImageDir = $this->getMasterFactory()->getFileStorageBasePathConfig() . '/' . self::PROCESSED_IMAGES_DIR;
+        
+        return new ImageProcessor($strategySequence, $fileStorageReader, $fileStorageWriter, $resultImageDir);
     }
 
     /**
      * @return FileStorageReader
      */
-    public function createImageFileStorageReader()
+    public function createFileStorageReader()
     {
-        return new LocalFilesystemStorageReader(__DIR__ . '/../tests/shared-fixture/product-images');
+        return new LocalFilesystemStorageReader();
     }
 
     /**
      * @return FileStorageWriter
      */
-    public function createImageFileStorageWriter()
+    public function createFileStorageWriter()
     {
-        $resultImageDir = $this->getMasterFactory()->getFileStorageBasePathConfig() . '/' . self::PROCESSED_IMAGES_DIR;
-
-        if (!is_dir($resultImageDir)) {
-            mkdir($resultImageDir, 0777, true);
-        }
-
-        return new LocalFilesystemStorageWriter($resultImageDir);
+        return new LocalFilesystemStorageWriter();
     }
 
     /**

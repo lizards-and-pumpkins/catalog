@@ -12,10 +12,10 @@ use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\Http\HttpRouterChain;
 use LizardsAndPumpkins\Http\ResourceNotFoundRouter;
 use LizardsAndPumpkins\Image\ImageProcessorCollection;
-use LizardsAndPumpkins\Image\ImageWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Image\ImageWasUpdatedDomainEventHandler;
-use LizardsAndPumpkins\Image\UpdateImageCommand;
-use LizardsAndPumpkins\Image\UpdateImageCommandHandler;
+use LizardsAndPumpkins\Image\ImageWasAddedDomainEvent;
+use LizardsAndPumpkins\Image\ImageWasAddedDomainEventHandler;
+use LizardsAndPumpkins\Image\AddImageCommand;
+use LizardsAndPumpkins\Image\AddImageCommandHandler;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\FilterNavigationFilterCollection;
 use LizardsAndPumpkins\Product\ProductListingMetaInfoBuilder;
@@ -54,7 +54,7 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @covers \LizardsAndPumpkins\FactoryTrait
  * @uses   \LizardsAndPumpkins\DataVersion
  * @uses   \LizardsAndPumpkins\MasterFactoryTrait
- * @uses   \LizardsAndPumpkins\Image\UpdateImageCommandHandler
+ * @uses   \LizardsAndPumpkins\Image\AddImageCommandHandler
  * @uses   \LizardsAndPumpkins\IntegrationTestFactory
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolWriter
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
@@ -107,7 +107,7 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\SnippetRendererCollection
  * @uses   \LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductInListingSnippetRenderer
- * @uses   \LizardsAndPumpkins\Image\ImageWasUpdatedDomainEventHandler
+ * @uses   \LizardsAndPumpkins\Image\ImageWasAddedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Image\ImageMagickResizeStrategy
  * @uses   \LizardsAndPumpkins\Image\GdResizeStrategy
  * @uses   \LizardsAndPumpkins\Image\ImageProcessor
@@ -330,11 +330,11 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testImageImportEventDomainHandlerIsReturned()
     {
-        /* @var ImageWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
-        $stubDomainEvent = $this->getMock(ImageWasUpdatedDomainEvent::class, [], [], '', false);
-        $result = $this->commonFactory->createImageWasUpdatedDomainEventHandler($stubDomainEvent);
+        /* @var ImageWasAddedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
+        $stubDomainEvent = $this->getMock(ImageWasAddedDomainEvent::class, [], [], '', false);
+        $result = $this->commonFactory->createImageWasAddedDomainEventHandler($stubDomainEvent);
 
-        $this->assertInstanceOf(ImageWasUpdatedDomainEventHandler::class, $result);
+        $this->assertInstanceOf(ImageWasAddedDomainEventHandler::class, $result);
     }
 
     public function testSnippetKeyGeneratorIsReturned()
@@ -468,13 +468,13 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(AddProductListingCommandHandler::class, $result);
     }
 
-    public function testUpdateImageCommandHandlerIsReturned()
+    public function testAddImageCommandHandlerIsReturned()
     {
-        /** @var UpdateImageCommand|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
-        $stubCommand = $this->getMock(UpdateImageCommand::class, [], [], '', false);
-        $result = $this->commonFactory->createUpdateImageCommandHandler($stubCommand);
+        /** @var AddImageCommand|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
+        $stubCommand = $this->getMock(AddImageCommand::class, [], [], '', false);
+        $result = $this->commonFactory->createAddImageCommandHandler($stubCommand);
 
-        $this->assertInstanceOf(UpdateImageCommandHandler::class, $result);
+        $this->assertInstanceOf(AddImageCommandHandler::class, $result);
     }
 
     public function testContentBlockInProductListingSnippetKeyGeneratorIsReturned()

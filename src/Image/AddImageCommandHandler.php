@@ -5,10 +5,10 @@ namespace LizardsAndPumpkins\Image;
 use LizardsAndPumpkins\CommandHandler;
 use LizardsAndPumpkins\Queue\Queue;
 
-class UpdateImageCommandHandler implements CommandHandler
+class AddImageCommandHandler implements CommandHandler
 {
     /**
-     * @var UpdateImageCommand
+     * @var AddImageCommand
      */
     private $command;
 
@@ -17,7 +17,7 @@ class UpdateImageCommandHandler implements CommandHandler
      */
     private $domainEventQueue;
 
-    public function __construct(UpdateImageCommand $command, Queue $domainEventQueue)
+    public function __construct(AddImageCommand $command, Queue $domainEventQueue)
     {
         $this->command = $command;
         $this->domainEventQueue = $domainEventQueue;
@@ -25,7 +25,7 @@ class UpdateImageCommandHandler implements CommandHandler
 
     public function process()
     {
-        $imageFileName = $this->command->getImageFileName();
-        $this->domainEventQueue->add(new ImageWasUpdatedDomainEvent($imageFileName));
+        $imageFilePath = $this->command->getImageFilePath();
+        $this->domainEventQueue->add(new ImageWasAddedDomainEvent($imageFilePath));
     }
 }

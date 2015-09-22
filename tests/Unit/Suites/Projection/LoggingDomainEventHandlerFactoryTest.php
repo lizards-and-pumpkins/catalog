@@ -7,8 +7,8 @@ use LizardsAndPumpkins\CommonFactory;
 use LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\DomainEventHandler;
-use LizardsAndPumpkins\Image\ImageWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Image\ImageWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Image\ImageWasAddedDomainEvent;
+use LizardsAndPumpkins\Image\ImageWasAddedDomainEventHandler;
 use LizardsAndPumpkins\IntegrationTestFactory;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler;
@@ -71,7 +71,7 @@ use LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler;
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetProjector
  * @uses   \LizardsAndPumpkins\TemplateProjectorLocator
  * @uses   \LizardsAndPumpkins\Image\ImageProcessingStrategySequence
- * @uses   \LizardsAndPumpkins\Image\ImageWasUpdatedDomainEventHandler
+ * @uses   \LizardsAndPumpkins\Image\ImageWasAddedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Image\ImageProcessorCollection
  * @uses   \LizardsAndPumpkins\Image\ImageProcessor
  * @uses   \LizardsAndPumpkins\Image\ImageMagickResizeStrategy
@@ -118,11 +118,11 @@ class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertDecoratedDomainEventHandlerInstanceOf(TemplateWasUpdatedDomainEventHandler::class, $result);
     }
 
-    public function testItReturnsADecoratedImageWasUpdatedDomainEventHandler()
+    public function testItReturnsADecoratedImageWasAddedDomainEventHandler()
     {
-        $stubEvent = $this->getMock(ImageWasUpdatedDomainEvent::class, [], [], '', false);
-        $result = $this->factory->createImageWasUpdatedDomainEventHandler($stubEvent);
-        $this->assertDecoratedDomainEventHandlerInstanceOf(ImageWasUpdatedDomainEventHandler::class, $result);
+        $stubEvent = $this->getMock(ImageWasAddedDomainEvent::class, [], [], '', false);
+        $result = $this->factory->createImageWasAddedDomainEventHandler($stubEvent);
+        $this->assertDecoratedDomainEventHandlerInstanceOf(ImageWasAddedDomainEventHandler::class, $result);
     }
 
     public function testItReturnsADecoratedProductListingWasAddedDomainEventHandler()

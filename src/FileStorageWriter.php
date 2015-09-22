@@ -5,8 +5,8 @@ namespace LizardsAndPumpkins;
 interface FileStorageWriter
 {
     /**
-     * @param string $relativeFilePath
+     * @param string $filePath
      * @param string $contents
      */
-    public function putFileContents($relativeFilePath, $contents);
+    public function putFileContents($filePath, $contents);
 }
