@@ -3,16 +3,18 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
+use LizardsAndPumpkins\DataVersion;
 use LizardsAndPumpkins\Image\UpdateImageCommand;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Product\ProductListingMetaInfoBuilder;
 use LizardsAndPumpkins\Product\ProductSourceBuilder;
 use LizardsAndPumpkins\Product\UpdateProductCommand;
-use LizardsAndPumpkins\Product\UpdateProductListingCommand;
+use LizardsAndPumpkins\Product\AddProductListingCommand;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportFileDoesNotExistException;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportFileNotReadableException;
 use LizardsAndPumpkins\Queue\Queue;
+use LizardsAndPumpkins\Utils\UuidGenerator;
 use LizardsAndPumpkins\Utils\XPathParser;
 
 class CatalogImport
@@ -33,6 +35,11 @@ class CatalogImport
     private $productListingMetaInfoBuilder;
 
     /**
+     * @var Queue
+     */
+    private $eventQueue;
+
+    /**
      * @var Logger
      */
     private $logger;
@@ -41,12 +48,13 @@ class CatalogImport
         Queue $commandQueue,
         ProductSourceBuilder $productSourceBuilder,
         ProductListingMetaInfoBuilder $productListingMetaInfoBuilder,
+        Queue $eventQueue,
         Logger $logger
     ) {
-
         $this->commandQueue = $commandQueue;
         $this->productSourceBuilder = $productSourceBuilder;
         $this->productListingMetaInfoBuilder = $productListingMetaInfoBuilder;
+        $this->eventQueue = $eventQueue;
         $this->logger = $logger;
     }
 
@@ -55,12 +63,14 @@ class CatalogImport
      */
     public function importFile($importFilePath)
     {
+        $version = DataVersion::fromVersionString('-1'); // UuidGenerator::getUuid()
         $this->validateImportFilePath($importFilePath);
         $parser = CatalogXmlParser::fromFilePath($importFilePath);
         $parser->registerProductSourceCallback($this->createClosureForMethod('processProductXml'));
         $parser->registerListingCallback($this->createClosureForMethod('processListingXml'));
         $parser->registerProductImageCallback($this->createClosureForMethod('processProductImageXml'));
         $parser->parse();
+        $this->eventQueue->add(new CatalogWasImportedDomainEvent($version));
     }
 
     /**
@@ -98,6 +108,7 @@ class CatalogImport
     {
         try {
             $productSource = $this->productSourceBuilder->createProductSourceFromXml($productXml);
+            // todo: add version to command
             $this->commandQueue->add(new UpdateProductCommand($productSource));
         } catch (\Exception $exception) {
             $skuString = (new XPathParser($productXml))->getXmlNodesArrayByXPath('//@sku')[0]['value'];
@@ -114,7 +125,8 @@ class CatalogImport
     {
         $productListingMetaInfo = $this->productListingMetaInfoBuilder
             ->createProductListingMetaInfoFromXml($listingXml);
-        $this->commandQueue->add(new UpdateProductListingCommand($productListingMetaInfo));
+        // todo: add version to command
+        $this->commandQueue->add(new AddProductListingCommand($productListingMetaInfo));
     }
 
     /**
@@ -123,6 +135,7 @@ class CatalogImport
     private function processProductImageXml($productImageXml)
     {
         $fileNode = (new XPathParser($productImageXml))->getXmlNodesArrayByXPath('/image/file')[0];
+        // todo: add version to command
         $this->commandQueue->add(new UpdateImageCommand($fileNode['value']));
     }
 }

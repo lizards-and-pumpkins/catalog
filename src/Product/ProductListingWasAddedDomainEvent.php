@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\DomainEvent;
 
-class ProductListingWasUpdatedDomainEvent implements DomainEvent
+class ProductListingWasAddedDomainEvent implements DomainEvent
 {
     /**
      * @var string

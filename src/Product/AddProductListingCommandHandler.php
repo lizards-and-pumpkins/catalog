@@ -5,10 +5,10 @@ namespace LizardsAndPumpkins\Product;
 use LizardsAndPumpkins\CommandHandler;
 use LizardsAndPumpkins\Queue\Queue;
 
-class UpdateProductListingCommandHandler implements CommandHandler
+class AddProductListingCommandHandler implements CommandHandler
 {
     /**
-     * @var UpdateProductListingCommand
+     * @var AddProductListingCommand
      */
     private $command;
 
@@ -17,7 +17,7 @@ class UpdateProductListingCommandHandler implements CommandHandler
      */
     private $domainEventQueue;
 
-    public function __construct(UpdateProductListingCommand $command, Queue $domainEventQueue)
+    public function __construct(AddProductListingCommand $command, Queue $domainEventQueue)
     {
         $this->command = $command;
         $this->domainEventQueue = $domainEventQueue;
@@ -28,6 +28,6 @@ class UpdateProductListingCommandHandler implements CommandHandler
         $productListingMetaInfo = $this->command->getProductListingMetaInfo();
         $urlKey = $productListingMetaInfo->getUrlKey();
 
-        $this->domainEventQueue->add(new ProductListingWasUpdatedDomainEvent($urlKey, $productListingMetaInfo));
+        $this->domainEventQueue->add(new ProductListingWasAddedDomainEvent($urlKey, $productListingMetaInfo));
     }
 }

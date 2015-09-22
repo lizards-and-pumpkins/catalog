@@ -48,11 +48,6 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
     private $testMetaInfoKey = 'stub-meta-info-key';
 
     /**
-     * @var string
-     */
-    private $testDefaultNumberOfProductsPerPageSnippetKey = 'test-default-number-of-products-per-page-snippet-key';
-
-    /**
      * @var int
      */
     private $testDefaultNumberOfProductsPerPage = 1;
@@ -106,8 +101,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         )->getInfo());
 
         $this->mockDataPoolReader->method('getSnippet')->willReturnMap([
-            [$this->testMetaInfoKey, $testMetaInfoSnippetJson],
-            [$this->testDefaultNumberOfProductsPerPageSnippetKey, $this->testDefaultNumberOfProductsPerPage]
+            [$this->testMetaInfoKey, $testMetaInfoSnippetJson]
         ]);
 
         $this->mockDataPoolReader->method('getSnippets')->willReturn([]);
@@ -137,16 +131,11 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         $stubProductListingMetaInfoSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class, [], [], '', false);
         $stubProductListingMetaInfoSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->testMetaInfoKey);
-
-        $stubDefaultProductsPerPageSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class, [], [], '', false);
-        $stubDefaultProductsPerPageSnippetKeyGenerator->method('getKeyForContext')
-            ->willReturn($this->testDefaultNumberOfProductsPerPageSnippetKey);
-
+        
         $stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
         $stubSnippetKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')->willReturnMap([
             [ProductListingMetaInfoSnippetRenderer::CODE, $stubProductListingMetaInfoSnippetKeyGenerator],
             [ProductInListingSnippetRenderer::CODE, $this->stubProductInListingSnippetKeyGenerator],
-            [DefaultNumberOfProductsPerPageSnippetRenderer::CODE, $stubDefaultProductsPerPageSnippetKeyGenerator]
         ]);
 
         return $stubSnippetKeyGeneratorLocator;
@@ -244,6 +233,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
             $stubSnippetKeyGeneratorLocator,
             $this->stubFilterCollection,
             $stubFilterNavigationAttributeCodes,
+            $this->testDefaultNumberOfProductsPerPage,
             $this->mockSearchCriteriaBuilder
         );
 

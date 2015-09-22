@@ -45,18 +45,6 @@ class ProductListingMetaInfoSnippetRendererTest extends \PHPUnit_Framework_TestC
         return $mockProductListingMetaInfo;
     }
 
-    /**
-     * @return Snippet
-     */
-    private function getExpectedSnippet()
-    {
-        return Snippet::create($this->dummySnippetKey, json_encode([
-            'product_selection_criteria' => null,
-            'root_snippet_code'          => ProductListingSnippetRenderer::CODE,
-            'page_snippet_codes'         => [ProductListingSnippetRenderer::CODE]
-        ]));
-    }
-
     protected function setUp()
     {
         $stubContext = $this->getMock(Context::class);
@@ -95,9 +83,8 @@ class ProductListingMetaInfoSnippetRendererTest extends \PHPUnit_Framework_TestC
     public function testSnippetWithValidJsonAsContentInAListIsReturned()
     {
         $mockProductListingMetaInfo = $this->getMockProductListingMetaInfo();
-        $expectedSnippet = $this->getExpectedSnippet();
 
-        $this->mockSnippetList->expects($this->once())->method('add')->with($expectedSnippet);
+        $this->mockSnippetList->expects($this->once())->method('add')->with($this->isInstanceOf(Snippet::class));
 
         $this->renderer->render($mockProductListingMetaInfo);
     }

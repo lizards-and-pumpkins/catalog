@@ -58,6 +58,11 @@ class ProductListingRequestHandler implements HttpRequestHandler
     private $filterNavigationAttributeCodes;
 
     /**
+     * @var
+     */
+    private $defaultNumberOfProductsPerPage;
+
+    /**
      * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
@@ -69,6 +74,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
      * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
      * @param FilterNavigationFilterCollection $filterNavigationFilterCollection
      * @param string[] $filterNavigationAttributeCodes
+     * @param int $defaultNumberOfProductsPerPage
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
@@ -78,6 +84,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         SnippetKeyGeneratorLocator $keyGeneratorLocator,
         FilterNavigationFilterCollection $filterNavigationFilterCollection,
         array $filterNavigationAttributeCodes,
+        $defaultNumberOfProductsPerPage,
         SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->dataPoolReader = $dataPoolReader;
@@ -86,6 +93,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $this->keyGeneratorLocator = $keyGeneratorLocator;
         $this->filterNavigationFilterCollection = $filterNavigationFilterCollection;
         $this->filterNavigationAttributeCodes = $filterNavigationAttributeCodes;
+        $this->defaultNumberOfProductsPerPage = $defaultNumberOfProductsPerPage;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
@@ -117,7 +125,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $this->addProductListingContentToPage($documentCollection, $originalCriteria, $request, $selectedFilters);
 
         $keyGeneratorParams = [
-            'products_per_page' => $this->getDefaultNumberOrProductsPerPage(),
+            'products_per_page' => $this->defaultNumberOfProductsPerPage,
             PageMetaInfoSnippetContent::URL_KEY => ltrim($request->getUrlPathRelativeToWebFront(), '/')
         ];
 
@@ -157,7 +165,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         HttpRequest $request
     ) {
         $currentPageNumber = $request->getQueryParameter(self::PAGINATION_QUERY_PARAMETER_NAME);
-        $productsPerPage = (int)$this->getDefaultNumberOrProductsPerPage();
+        $productsPerPage = (int)$this->defaultNumberOfProductsPerPage;
 
         $documents = $searchDocumentCollection->getDocuments();
         $currentPageDocuments = array_slice($documents, ($currentPageNumber - 1) * $productsPerPage, $productsPerPage);
@@ -217,20 +225,6 @@ class ProductListingRequestHandler implements HttpRequestHandler
             $acc[$snippetCode] = $key;
             return $acc;
         }, []);
-    }
-
-    /**
-     * @return string
-     */
-    private function getDefaultNumberOrProductsPerPage()
-    {
-        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
-            DefaultNumberOfProductsPerPageSnippetRenderer::CODE
-        );
-        $snippetKey = $keyGenerator->getKeyForContext($this->context, []);
-        $defaultNumberOrProductsPerPage = $this->dataPoolReader->getSnippet($snippetKey);
-
-        return $defaultNumberOrProductsPerPage;
     }
 
     /**
@@ -344,7 +338,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
 
     private function addPaginationToPageBuilder(SearchDocumentCollection $searchDocumentCollection)
     {
-        $numberOfProductsPerPage = (int)$this->getDefaultNumberOrProductsPerPage();
+        $numberOfProductsPerPage = (int)$this->defaultNumberOfProductsPerPage;
         $totalPagesCount = ceil(count($searchDocumentCollection) / $numberOfProductsPerPage);
         $this->addDynamicSnippetToPageBuilder('total_pages_count', $totalPagesCount);
     }
