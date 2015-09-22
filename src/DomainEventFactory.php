@@ -8,10 +8,12 @@ use LizardsAndPumpkins\Image\ImageWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Image\ImageWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
-use LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
+use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEvent;
+use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHandler;
 
 interface DomainEventFactory
 {
@@ -34,10 +36,10 @@ interface DomainEventFactory
     public function createImageWasUpdatedDomainEventHandler(ImageWasUpdatedDomainEvent $event);
 
     /**
-     * @param ProductListingWasUpdatedDomainEvent $event
-     * @return ProductListingWasUpdatedDomainEventHandler
+     * @param ProductListingWasAddedDomainEvent $event
+     * @return ProductListingWasAddedDomainEventHandler
      */
-    public function createProductListingWasUpdatedDomainEventHandler(ProductListingWasUpdatedDomainEvent $event);
+    public function createProductListingWasAddedDomainEventHandler(ProductListingWasAddedDomainEvent $event);
 
     /**
      * @param ProductStockQuantityWasUpdatedDomainEvent $event
@@ -52,4 +54,10 @@ interface DomainEventFactory
      * @return ContentBlockWasUpdatedDomainEventHandler
      */
     public function createContentBlockWasUpdatedDomainEventHandler(ContentBlockWasUpdatedDomainEvent $event);
+
+    /**
+     * @param CatalogWasImportedDomainEvent $event
+     * @return CatalogWasImportedDomainEventHandler
+     */
+    public function createCatalogWasImportedDomainEventHandler(CatalogWasImportedDomainEvent $event);
 }

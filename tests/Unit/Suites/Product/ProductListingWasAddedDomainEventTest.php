@@ -5,9 +5,9 @@ namespace LizardsAndPumpkins\Product;
 use LizardsAndPumpkins\DomainEvent;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEvent
+ * @covers \LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent
  */
-class ProductListingWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
+class ProductListingWasAddedDomainEventTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ProductListingMetaInfo|\PHPUnit_Framework_MockObject_MockObject
@@ -15,7 +15,7 @@ class ProductListingWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCas
     private $stubProductListingMetaInfo;
 
     /**
-     * @var ProductListingWasUpdatedDomainEvent
+     * @var ProductListingWasAddedDomainEvent
      */
     private $domainEvent;
 
@@ -29,7 +29,7 @@ class ProductListingWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCas
             '',
             false
         );
-        $this->domainEvent = new ProductListingWasUpdatedDomainEvent(
+        $this->domainEvent = new ProductListingWasAddedDomainEvent(
             $dummyUrlKey,
             $this->stubProductListingMetaInfo
         );

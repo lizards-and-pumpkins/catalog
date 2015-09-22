@@ -6,10 +6,10 @@ use LizardsAndPumpkins\CommandHandler;
 use LizardsAndPumpkins\Queue\Queue;
 
 /**
- * @covers \LizardsAndPumpkins\Product\UpdateProductListingCommandHandler
- * @uses   \LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEvent
+ * @covers \LizardsAndPumpkins\Product\AddProductListingCommandHandler
+ * @uses   \LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent
  */
-class UpdateProductListingCommandHandlerTest extends \PHPUnit_Framework_TestCase
+class AddProductListingCommandHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Queue|\PHPUnit_Framework_MockObject_MockObject
@@ -17,7 +17,7 @@ class UpdateProductListingCommandHandlerTest extends \PHPUnit_Framework_TestCase
     private $mockDomainEventQueue;
 
     /**
-     * @var UpdateProductListingCommandHandler
+     * @var AddProductListingCommandHandler
      */
     private $commandHandler;
 
@@ -29,13 +29,13 @@ class UpdateProductListingCommandHandlerTest extends \PHPUnit_Framework_TestCase
         $stubProductListingMetaInfo = $this->getMock(ProductListingMetaInfo::class, [], [], '', false);
         $stubProductListingMetaInfo->method('getUrlKey')->willReturn('foo');
 
-        /** @var UpdateProductListingCommand|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
-        $stubCommand = $this->getMock(UpdateProductListingCommand::class, [], [], '', false);
+        /** @var AddProductListingCommand|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
+        $stubCommand = $this->getMock(AddProductListingCommand::class, [], [], '', false);
         $stubCommand->method('getProductListingMetaInfo')->willReturn($stubProductListingMetaInfo);
 
         $this->mockDomainEventQueue = $this->getMock(Queue::class);
 
-        $this->commandHandler = new UpdateProductListingCommandHandler($stubCommand, $this->mockDomainEventQueue);
+        $this->commandHandler = new AddProductListingCommandHandler($stubCommand, $this->mockDomainEventQueue);
     }
 
     public function testCommandHandlerInterfaceIsImplemented()
@@ -43,10 +43,10 @@ class UpdateProductListingCommandHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(CommandHandler::class, $this->commandHandler);
     }
 
-    public function testProductListingWasUpdatedDomainEventIsEmitted()
+    public function testProductListingWasAddedDomainEventIsEmitted()
     {
         $this->mockDomainEventQueue->expects($this->once())->method('add')
-            ->with($this->isInstanceOf(ProductListingWasUpdatedDomainEvent::class));
+            ->with($this->isInstanceOf(ProductListingWasAddedDomainEvent::class));
 
         $this->commandHandler->process();
     }

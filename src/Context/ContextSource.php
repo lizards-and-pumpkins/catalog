@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\Context;
 
+use LizardsAndPumpkins\DataVersion;
+
 abstract class ContextSource
 {
     /**
@@ -88,5 +90,18 @@ abstract class ContextSource
             $aggregatedResult[] = $matchingContextParts;
         }
         return $aggregatedResult;
+    }
+
+    /**
+     * @param DataVersion $version
+     * @return Context[]
+     */
+    public function getAllAvailableContextsWithVersion(DataVersion $version)
+    {
+        return $this->contextBuilder->createContextsFromDataSets(
+            array_map(function (array $dataSet) use ($version) {
+                return array_merge($dataSet, [VersionedContext::CODE => (string) $version]);
+            }, $this->getContextMatrix())
+        );
     }
 }

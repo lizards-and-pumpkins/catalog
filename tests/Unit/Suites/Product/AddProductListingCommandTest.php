@@ -5,9 +5,9 @@ namespace LizardsAndPumpkins\Product;
 use LizardsAndPumpkins\Command;
 
 /**
- * @covers \LizardsAndPumpkins\Product\UpdateProductListingCommand
+ * @covers \LizardsAndPumpkins\Product\AddProductListingCommand
  */
-class UpdateProductListingCommandTest extends \PHPUnit_Framework_TestCase
+class AddProductListingCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ProductListingMetaInfo|\PHPUnit_Framework_MockObject_MockObject
@@ -15,7 +15,7 @@ class UpdateProductListingCommandTest extends \PHPUnit_Framework_TestCase
     private $stubProductListingMetaInfo;
 
     /**
-     * @var UpdateProductListingCommand
+     * @var AddProductListingCommand
      */
     private $command;
 
@@ -28,7 +28,7 @@ class UpdateProductListingCommandTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->command = new UpdateProductListingCommand($this->stubProductListingMetaInfo);
+        $this->command = new AddProductListingCommand($this->stubProductListingMetaInfo);
     }
 
     public function testCommandInterFaceIsImplemented()

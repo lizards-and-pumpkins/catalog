@@ -5,10 +5,10 @@ namespace LizardsAndPumpkins\Product;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\DomainEventHandler;
 
-class ProductListingWasUpdatedDomainEventHandler implements DomainEventHandler
+class ProductListingWasAddedDomainEventHandler implements DomainEventHandler
 {
     /**
-     * @var ProductListingWasUpdatedDomainEvent
+     * @var ProductListingWasAddedDomainEvent
      */
     private $domainEvent;
 
@@ -23,7 +23,7 @@ class ProductListingWasUpdatedDomainEventHandler implements DomainEventHandler
     private $projector;
 
     public function __construct(
-        ProductListingWasUpdatedDomainEvent $domainEvent,
+        ProductListingWasAddedDomainEvent $domainEvent,
         ContextSource $contextSource,
         ProductListingMetaInfoSnippetProjector $projector
     ) {
@@ -35,8 +35,6 @@ class ProductListingWasUpdatedDomainEventHandler implements DomainEventHandler
     public function process()
     {
         $productListingMetaInfo = $this->domainEvent->getProductListingMetaInfo();
-        
-        
         
         $this->projector->project($productListingMetaInfo, $this->contextSource);
     }

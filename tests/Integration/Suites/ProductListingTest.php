@@ -10,7 +10,7 @@ use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Product\ProductListingMetaInfoSnippetContent;
 use LizardsAndPumpkins\Product\ProductListingRequestHandler;
-use LizardsAndPumpkins\Product\ProductListingSnippetRenderer;
+use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer;
 use LizardsAndPumpkins\Utils\XPathParser;
 
 class ProductListingTest extends AbstractIntegrationTest
@@ -98,6 +98,7 @@ class ProductListingTest extends AbstractIntegrationTest
             $this->factory->getLogger()
         );
         $filterNavigationAttributeCodes = [];
+        $defaultNumberOfProductsPerPage = 9;
 
         return new ProductListingRequestHandler(
             $this->factory->createContext(),
@@ -105,7 +106,8 @@ class ProductListingTest extends AbstractIntegrationTest
             $pageBuilder,
             $this->factory->getSnippetKeyGeneratorLocator(),
             $this->factory->createFilterNavigationFilterCollection(),
-            $filterNavigationAttributeCodes
+            $filterNavigationAttributeCodes,
+            $defaultNumberOfProductsPerPage
         );
     }
 
@@ -128,7 +130,7 @@ class ProductListingTest extends AbstractIntegrationTest
 
         $metaSnippetContent = ProductListingMetaInfoSnippetContent::create(
             $searchCriteria,
-            ProductListingSnippetRenderer::CODE,
+            ProductListingPageSnippetRenderer::CODE,
             $pageSnippetCodes
         );
 
@@ -138,7 +140,7 @@ class ProductListingTest extends AbstractIntegrationTest
     private function registerProductListingSnippetKeyGenerator()
     {
         $this->factory->getSnippetKeyGeneratorLocator()->register(
-            ProductListingSnippetRenderer::CODE,
+            ProductListingPageSnippetRenderer::CODE,
             $this->factory->createProductListingSnippetKeyGenerator()
         );
     }
@@ -232,28 +234,5 @@ class ProductListingTest extends AbstractIntegrationTest
         $body = $page->getBody();
 
         $this->assertContains($contentBlockContent, $body);
-    }
-
-    public function testProductListingSnippetIsAddedToDataPool()
-    {
-        $this->createProductListingFixture();
-
-        $logger = $this->factory->getLogger();
-        $this->failIfMessagesWhereLogged($logger);
-
-        $dataPoolReader = $this->factory->createDataPoolReader();
-
-        $keyGeneratorLocator = $this->factory->getSnippetKeyGeneratorLocator();
-        $keyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(ProductListingSnippetRenderer::CODE);
-
-        $contextSource = $this->factory->createContextSource();
-        $context = $contextSource->getAllAvailableContexts()[0];
-
-        $key = $keyGenerator->getKeyForContext($context, ['products_per_page' => 9]);
-        $html = $dataPoolReader->getSnippet($key);
-
-        $expectation = '<ul class="products-grid">';
-
-        $this->assertContains($expectation, $html);
     }
 }

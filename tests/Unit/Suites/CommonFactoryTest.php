@@ -22,8 +22,8 @@ use LizardsAndPumpkins\Product\ProductListingMetaInfoBuilder;
 use LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
-use LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
+use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductProjector;
 use LizardsAndPumpkins\Product\ProductSourceBuilder;
 use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEvent;
@@ -35,11 +35,14 @@ use LizardsAndPumpkins\Product\UpdateMultipleProductStockQuantityCommand;
 use LizardsAndPumpkins\Product\UpdateMultipleProductStockQuantityCommandHandler;
 use LizardsAndPumpkins\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Product\UpdateProductCommandHandler;
-use LizardsAndPumpkins\Product\UpdateProductListingCommand;
-use LizardsAndPumpkins\Product\UpdateProductListingCommandHandler;
+use LizardsAndPumpkins\Product\AddProductListingCommand;
+use LizardsAndPumpkins\Product\AddProductListingCommandHandler;
 use LizardsAndPumpkins\Product\UpdateProductStockQuantityCommand;
 use LizardsAndPumpkins\Product\UpdateProductStockQuantityCommandHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
+use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEvent;
+use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHandler;
+use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetProjector;
 use LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator;
 use LizardsAndPumpkins\Projection\UrlKeyForContextCollector;
 use LizardsAndPumpkins\Queue\Queue;
@@ -80,8 +83,8 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\Product\ProductListingTemplateProjector
  * @uses   \LizardsAndPumpkins\Product\ProductListingMetaInfoSnippetProjector
  * @uses   \LizardsAndPumpkins\Product\ProductListingMetaInfoBuilder
- * @uses   \LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEvent
- * @uses   \LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEventHandler
+ * @uses   \LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent
+ * @uses   \LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent
  * @uses   \LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetRenderer
@@ -94,12 +97,12 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Product\ProductStockQuantitySnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\UpdateProductCommandHandler
- * @uses   \LizardsAndPumpkins\Product\UpdateProductListingCommandHandler
+ * @uses   \LizardsAndPumpkins\Product\AddProductListingCommandHandler
  * @uses   \LizardsAndPumpkins\Product\UpdateProductStockQuantityCommandHandler
  * @uses   \LizardsAndPumpkins\Product\UpdateMultipleProductStockQuantityCommandHandler
  * @uses   \LizardsAndPumpkins\Product\ProductDetailViewBlockRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductDetailViewInContextSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductListingSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer
  * @uses   \LizardsAndPumpkins\GenericSnippetKeyGenerator
  * @uses   \LizardsAndPumpkins\SnippetRendererCollection
  * @uses   \LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder
@@ -115,6 +118,8 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\TemplateProjectorLocator
  * @uses   \LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHandler
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetProjector
  * @uses   \LizardsAndPumpkins\Projection\UrlKeyForContextCollector
  * @uses   \LizardsAndPumpkins\Renderer\ThemeLocator
  * @uses   \LizardsAndPumpkins\Renderer\Translation\CsvTranslator
@@ -161,13 +166,13 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(TemplateWasUpdatedDomainEventHandler::class, $result);
     }
 
-    public function testProductListingWasUpdatedDomainEventHandlerIsReturned()
+    public function testProductListingWasAddedDomainEventHandlerIsReturned()
     {
-        /** @var ProductListingWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
-        $stubDomainEvent = $this->getMock(ProductListingWasUpdatedDomainEvent::class, [], [], '', false);
-        $result = $this->commonFactory->createProductListingWasUpdatedDomainEventHandler($stubDomainEvent);
+        /** @var ProductListingWasAddedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
+        $stubDomainEvent = $this->getMock(ProductListingWasAddedDomainEvent::class, [], [], '', false);
+        $result = $this->commonFactory->createProductListingWasAddedDomainEventHandler($stubDomainEvent);
 
-        $this->assertInstanceOf(ProductListingWasUpdatedDomainEventHandler::class, $result);
+        $this->assertInstanceOf(ProductListingWasAddedDomainEventHandler::class, $result);
     }
 
     public function testProductProjectorIsReturned()
@@ -454,13 +459,13 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(UpdateProductCommandHandler::class, $result);
     }
 
-    public function testUpdateProductListingCommandHandlerIsReturned()
+    public function testAddProductListingCommandHandlerIsReturned()
     {
-        /** @var UpdateProductListingCommand|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
-        $stubCommand = $this->getMock(UpdateProductListingCommand::class, [], [], '', false);
-        $result = $this->commonFactory->createUpdateProductListingCommandHandler($stubCommand);
+        /** @var AddProductListingCommand|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
+        $stubCommand = $this->getMock(AddProductListingCommand::class, [], [], '', false);
+        $result = $this->commonFactory->createAddProductListingCommandHandler($stubCommand);
 
-        $this->assertInstanceOf(UpdateProductListingCommandHandler::class, $result);
+        $this->assertInstanceOf(AddProductListingCommandHandler::class, $result);
     }
 
     public function testUpdateImageCommandHandlerIsReturned()
@@ -542,5 +547,18 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createConfigReader();
         $this->assertInstanceOf(ConfigReader::class, $result);
+    }
+
+    public function testItReturnsACatalogWasImportedDomainEventHandler()
+    {
+        $stubEvent = $this->getMock(CatalogWasImportedDomainEvent::class, [], [], '', false);
+        $result = $this->commonFactory->createCatalogWasImportedDomainEventHandler($stubEvent);
+        $this->assertInstanceOf(CatalogWasImportedDomainEventHandler::class, $result);
+    }
+
+    public function testItReturnsAProductListingPageSnippetProjector()
+    {
+        $result = $this->commonFactory->createProductListingPageSnippetProjector();
+        $this->assertInstanceOf(ProductListingPageSnippetProjector::class, $result);
     }
 }
