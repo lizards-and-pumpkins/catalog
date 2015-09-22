@@ -209,9 +209,6 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         $stubFilterNavigationAttributeCodes = ['foo'];
 
-        /** @var BlockRenderer|\PHPUnit_Framework_MockObject_MockObject $stubPaginationBlockRenderer */
-        $stubPaginationBlockRenderer = $this->getMock(BlockRenderer::class, [], [], '', false);
-
         $this->requestHandler = new ProductListingRequestHandler(
             $stubContext,
             $this->mockDataPoolReader,
@@ -219,7 +216,6 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
             $stubSnippetKeyGeneratorLocator,
             $this->stubFilterCollection,
             $stubFilterNavigationAttributeCodes,
-            $stubPaginationBlockRenderer,
             $this->testDefaultNumberOfProductsPerPage
         );
 

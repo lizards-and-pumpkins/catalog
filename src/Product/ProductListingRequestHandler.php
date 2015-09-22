@@ -16,6 +16,7 @@ use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\UnableToHandleRequestException;
 use LizardsAndPumpkins\PageBuilder;
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
+use LizardsAndPumpkins\Renderer\BlockRenderer;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
 
 class ProductListingRequestHandler implements HttpRequestHandler
@@ -73,7 +74,6 @@ class ProductListingRequestHandler implements HttpRequestHandler
      * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
      * @param FilterNavigationFilterCollection $filterNavigationFilterCollection
      * @param string[] $filterNavigationAttributeCodes
-     * @param BlockRenderer $paginationBlockRenderer
      * @param int $defaultNumberOfProductsPerPage
      */
     public function __construct(
@@ -83,7 +83,6 @@ class ProductListingRequestHandler implements HttpRequestHandler
         SnippetKeyGeneratorLocator $keyGeneratorLocator,
         FilterNavigationFilterCollection $filterNavigationFilterCollection,
         array $filterNavigationAttributeCodes,
-        BlockRenderer $paginationBlockRenderer,
         $defaultNumberOfProductsPerPage
     ) {
         $this->dataPoolReader = $dataPoolReader;
@@ -92,7 +91,6 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $this->keyGeneratorLocator = $keyGeneratorLocator;
         $this->filterNavigationFilterCollection = $filterNavigationFilterCollection;
         $this->filterNavigationAttributeCodes = $filterNavigationAttributeCodes;
-        $this->paginationBlockRenderer = $paginationBlockRenderer;
         $this->defaultNumberOfProductsPerPage = $defaultNumberOfProductsPerPage;
     }
 
