@@ -45,16 +45,6 @@ class ProductListingMetaInfoSnippetRendererTest extends \PHPUnit_Framework_TestC
         return $mockProductListingMetaInfo;
     }
 
-    /**
-     * @return Snippet
-     */
-    private function getExpectedSnippet()
-    {
-        return Snippet::create($this->dummySnippetKey, json_encode([
-            'product_selection_criteria' => null,
-        ]));
-    }
-
     protected function setUp()
     {
         $stubContext = $this->getMock(Context::class);
