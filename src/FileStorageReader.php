@@ -5,8 +5,8 @@ namespace LizardsAndPumpkins;
 interface FileStorageReader
 {
     /**
-     * @param string $relativeFilePath
+     * @param string $filePath
      * @return string
      */
-    public function getFileContents($relativeFilePath);
+    public function getFileContents($filePath);
 }

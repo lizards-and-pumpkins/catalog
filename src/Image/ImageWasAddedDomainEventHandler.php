@@ -4,10 +4,10 @@ namespace LizardsAndPumpkins\Image;
 
 use LizardsAndPumpkins\DomainEventHandler;
 
-class ImageWasUpdatedDomainEventHandler implements DomainEventHandler
+class ImageWasAddedDomainEventHandler implements DomainEventHandler
 {
     /**
-     * @var ImageWasUpdatedDomainEvent
+     * @var ImageWasAddedDomainEvent
      */
     private $event;
 
@@ -16,7 +16,7 @@ class ImageWasUpdatedDomainEventHandler implements DomainEventHandler
      */
     private $imageProcessorCollection;
 
-    public function __construct(ImageWasUpdatedDomainEvent $event, ImageProcessorCollection $imageProcessorCollection)
+    public function __construct(ImageWasAddedDomainEvent $event, ImageProcessorCollection $imageProcessorCollection)
     {
         $this->event = $event;
         $this->imageProcessorCollection = $imageProcessorCollection;
@@ -24,6 +24,6 @@ class ImageWasUpdatedDomainEventHandler implements DomainEventHandler
 
     public function process()
     {
-        $this->imageProcessorCollection->process($this->event->getImageFileName());
+        $this->imageProcessorCollection->process($this->event->getImageFilePath());
     }
 }

@@ -4,8 +4,8 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEventHandler;
-use LizardsAndPumpkins\Image\ImageWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Image\ImageWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Image\ImageWasAddedDomainEvent;
+use LizardsAndPumpkins\Image\ImageWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
@@ -30,10 +30,10 @@ interface DomainEventFactory
     public function createTemplateWasUpdatedDomainEventHandler(TemplateWasUpdatedDomainEvent $event);
 
     /**
-     * @param ImageWasUpdatedDomainEvent $event
-     * @return ImageWasUpdatedDomainEventHandler
+     * @param ImageWasAddedDomainEvent $event
+     * @return ImageWasAddedDomainEventHandler
      */
-    public function createImageWasUpdatedDomainEventHandler(ImageWasUpdatedDomainEvent $event);
+    public function createImageWasAddedDomainEventHandler(ImageWasAddedDomainEvent $event);
 
     /**
      * @param ProductListingWasAddedDomainEvent $event

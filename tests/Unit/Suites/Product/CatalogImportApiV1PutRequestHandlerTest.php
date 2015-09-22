@@ -8,7 +8,7 @@ use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\Exception\CatalogImportApiDirectoryNotReadableException;
 use LizardsAndPumpkins\Product\Exception\CatalogImportFileNameNotFoundInRequestBodyException;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
-use org\bovigo\vfs\vfsStream;
+use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
  * @covers \LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler
@@ -19,6 +19,8 @@ use org\bovigo\vfs\vfsStream;
  */
 class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
+    use TestFileFixtureTrait;
+    
     /**
      * @var CatalogImportApiV1PutRequestHandler
      */
@@ -46,10 +48,9 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
 
     protected function setUp()
     {
-        vfsStream::setup('root');
-        $this->testImportDirectoryPath = vfsStream::url('root/catalog-import-directory');
-        mkdir($this->testImportDirectoryPath, 0700, true);
-
+        $this->testImportDirectoryPath = $this->getUniqueTempDir() . '/test/atalog-import-directory';
+        $this->createFixtureDirectory($this->testImportDirectoryPath);
+        
         $this->mockCatalogImport = $this->getMock(CatalogImport::class, [], [], '', false);
 
         $this->logger = $this->getMock(Logger::class);

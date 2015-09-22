@@ -9,10 +9,10 @@ use LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\DomainEventFactory;
 use LizardsAndPumpkins\Factory;
 use LizardsAndPumpkins\FactoryTrait;
-use LizardsAndPumpkins\Image\ImageWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Image\ImageWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler;
+use LizardsAndPumpkins\Image\ImageWasAddedDomainEvent;
+use LizardsAndPumpkins\Image\ImageWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
@@ -68,14 +68,14 @@ class LoggingDomainEventHandlerFactory implements Factory, DomainEventFactory
     }
 
     /**
-     * @param ImageWasUpdatedDomainEvent $event
-     * @return ImageWasUpdatedDomainEventHandler
+     * @param ImageWasAddedDomainEvent $event
+     * @return ImageWasAddedDomainEventHandler
      */
-    public function createImageWasUpdatedDomainEventHandler(ImageWasUpdatedDomainEvent $event)
+    public function createImageWasAddedDomainEventHandler(ImageWasAddedDomainEvent $event)
     {
         $domainEventFactory = $this->getDomainEventFactoryDelegate();
         return $domainEventFactory->createProcessTimeLoggingDomainEventDecorator(
-            $domainEventFactory->createImageWasUpdatedDomainEventHandler($event)
+            $domainEventFactory->createImageWasAddedDomainEventHandler($event)
         );
     }
 

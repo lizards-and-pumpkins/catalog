@@ -2,6 +2,9 @@
 
 namespace LizardsAndPumpkins\Image;
 
+use LizardsAndPumpkins\Image\Exception\InvalidBinaryImageDataException;
+use LizardsAndPumpkins\Image\Exception\InvalidColorException;
+
 class ImageMagickInscribeStrategy implements ImageProcessingStrategy
 {
     use ResizeStrategyTrait;

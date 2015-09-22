@@ -1,6 +1,6 @@
 <?php
 
-namespace LizardsAndPumpkins\Image;
+namespace LizardsAndPumpkins\Image\Exception;
 
 class InvalidColorException extends \OutOfBoundsException
 {

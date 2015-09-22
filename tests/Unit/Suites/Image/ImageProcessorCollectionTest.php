@@ -20,6 +20,6 @@ class ImageProcessorCollectionTest extends \PHPUnit_Framework_TestCase
         $collection->add($processor1);
         $collection->add($processor2);
 
-        $collection->process('imageFileName');
+        $collection->process('imageFilePath');
     }
 }
