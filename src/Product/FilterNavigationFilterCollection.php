@@ -7,9 +7,7 @@ use LizardsAndPumpkins\Context\LocaleContextDecorator;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterOrEqualThan;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionLessOrEqualThan;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
@@ -39,10 +37,19 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
      */
     private $translatorRegistry;
 
-    public function __construct(DataPoolReader $dataPoolReader, TranslatorRegistry $translatorRegistry)
-    {
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    public function __construct(
+        DataPoolReader $dataPoolReader,
+        TranslatorRegistry $translatorRegistry,
+        SearchCriteriaBuilder $searchCriteriaBuilder
+    ) {
         $this->dataPoolReader = $dataPoolReader;
         $this->translatorRegistry = $translatorRegistry;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
@@ -195,21 +202,8 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
                 continue;
             }
 
-            /* TODO: Remove duplication w/ ProductListingRequestHandler */
             $optionValuesCriteriaArray = array_map(function ($filterOptionValue) use ($filterCode) {
-
-                $regularExpression = sprintf(
-                    '/^([^%1$s]+)%1$s([^%1$s]+)/',
-                    ProductListingRequestHandler::FILTER_RANGE_DELIMITER
-                );
-
-                if (preg_match($regularExpression, $filterOptionValue, $range)) {
-                    $criterionFrom = SearchCriterionGreaterOrEqualThan::create($filterCode, $range[1]);
-                    $criterionTo = SearchCriterionLessOrEqualThan::create($filterCode, $range[2]);
-                    return CompositeSearchCriterion::createAnd($criterionFrom, $criterionTo);
-                }
-
-                return SearchCriterionEqual::create($filterCode, $filterOptionValue);
+                return $this->searchCriteriaBuilder->create($filterCode, $filterOptionValue);
             }, $filterOptionValues);
 
             $filterCriteria = CompositeSearchCriterion::createOr(...$optionValuesCriteriaArray);

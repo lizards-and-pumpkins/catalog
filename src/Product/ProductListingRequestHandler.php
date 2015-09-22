@@ -7,9 +7,7 @@ use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyNotFoundException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterOrEqualThan;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionLessOrEqualThan;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -23,8 +21,6 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
 class ProductListingRequestHandler implements HttpRequestHandler
 {
     const PAGINATION_QUERY_PARAMETER_NAME = 'p';
-
-    const FILTER_RANGE_DELIMITER = '~';
 
     /**
      * @var ProductListingMetaInfoSnippetContent
@@ -62,12 +58,18 @@ class ProductListingRequestHandler implements HttpRequestHandler
     private $filterNavigationAttributeCodes;
 
     /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
      * @param Context $context
      * @param DataPoolReader $dataPoolReader
      * @param PageBuilder $pageBuilder
      * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
      * @param FilterNavigationFilterCollection $filterNavigationFilterCollection
      * @param string[] $filterNavigationAttributeCodes
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
         Context $context,
@@ -75,7 +77,8 @@ class ProductListingRequestHandler implements HttpRequestHandler
         PageBuilder $pageBuilder,
         SnippetKeyGeneratorLocator $keyGeneratorLocator,
         FilterNavigationFilterCollection $filterNavigationFilterCollection,
-        array $filterNavigationAttributeCodes
+        array $filterNavigationAttributeCodes,
+        SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->dataPoolReader = $dataPoolReader;
         $this->context = $context;
@@ -83,6 +86,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $this->keyGeneratorLocator = $keyGeneratorLocator;
         $this->filterNavigationFilterCollection = $filterNavigationFilterCollection;
         $this->filterNavigationAttributeCodes = $filterNavigationAttributeCodes;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
@@ -262,16 +266,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
             }
 
             $optionValuesCriteriaArray = array_map(function ($filterOptionValue) use ($filterCode) {
-
-                $regularExpression = sprintf('/^([^%1$s]+)%1$s([^%1$s]+)/', self::FILTER_RANGE_DELIMITER);
-
-                if (preg_match($regularExpression, $filterOptionValue, $range)) {
-                    $criterionFrom = SearchCriterionGreaterOrEqualThan::create($filterCode, $range[1]);
-                    $criterionTo = SearchCriterionLessOrEqualThan::create($filterCode, $range[2]);
-                    return CompositeSearchCriterion::createAnd($criterionFrom, $criterionTo);
-                }
-
-                return SearchCriterionEqual::create($filterCode, $filterOptionValue);
+                return $this->searchCriteriaBuilder->create($filterCode, $filterOptionValue);
             }, $filterOptionValues);
 
             $filterCriteria = CompositeSearchCriterion::createOr(...$optionValuesCriteriaArray);

@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\Product;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
@@ -42,6 +43,11 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
      * @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubSearchCriteria;
+
+    /**
+     * @var SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubSearchCriteriaBuilder;
 
     /**
      * @param string $key
@@ -82,9 +88,12 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
         $stubTranslatorRegistry = $this->getMock(TranslatorRegistry::class, [], [], '', false);
         $stubTranslatorRegistry->method('getTranslatorForLocale')->willReturn($stubTranslator);
 
+        $this->stubSearchCriteriaBuilder = $this->getMock(SearchCriteriaBuilder::class);
+
         $this->filterCollection = new FilterNavigationFilterCollection(
             $this->stubDataPoolReader,
-            $stubTranslatorRegistry
+            $stubTranslatorRegistry,
+            $this->stubSearchCriteriaBuilder
         );
 
         $this->stubContext = $this->getMock(Context::class);
@@ -281,6 +290,9 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
 
         $this->stubDataPoolReader->method('getSearchDocumentsMatchingCriteria')
             ->willReturn($stubUnfilteredDocumentCollection);
+
+        $stubSearchCriteria = $this->getMock(SearchCriteria::class);
+        $this->stubSearchCriteriaBuilder->method('create')->willReturn($stubSearchCriteria);
 
         $this->filterCollection->initialize(
             $stubFilteredDocumentCollection,
