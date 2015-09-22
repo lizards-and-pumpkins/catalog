@@ -3,10 +3,12 @@
 
 namespace LizardsAndPumpkins\DataPool\UrlKeyStore;
 
+use LizardsAndPumpkins\DataPool\UrlKeyStore\Exception\ContextDataIsNotAStringException;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\Exception\DataVersionIsNotAStringException;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\Exception\DataVersionToWriteIsEmptyStringException;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\Exception\UrlKeyIsNotAStringException;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\Exception\UrlKeyToWriteIsEmptyStringException;
+use LizardsAndPumpkins\DataPool\UrlKeyStore\Exception\UrlKeyTypeIsNotAStringException;
 use LizardsAndPumpkins\Utils\Clearable;
 
 abstract class AbstractIntegrationTestUrlKeyStoreTest extends \PHPUnit_Framework_TestCase
@@ -42,7 +44,7 @@ abstract class AbstractIntegrationTestUrlKeyStoreTest extends \PHPUnit_Framework
             UrlKeyIsNotAStringException::class,
             'URL keys have to be strings for storage in the UrlKeyStore, got '
         );
-        $this->urlKeyStore->addUrlKeyForVersion('1.0', 123, 'dummy-context-string');
+        $this->urlKeyStore->addUrlKeyForVersion('1.0', 123, 'dummy-context-string', 'type-string');
     }
 
     public function testItThrowsAnExceptionIfAVersionToAddIsNotAString()
@@ -51,7 +53,7 @@ abstract class AbstractIntegrationTestUrlKeyStoreTest extends \PHPUnit_Framework
             DataVersionIsNotAStringException::class,
             'The data version has to be string for use with the UrlKeyStore, got '
         );
-        $this->urlKeyStore->addUrlKeyForVersion(123, 'test.html', 'dummy-context-string');
+        $this->urlKeyStore->addUrlKeyForVersion(123, 'test.html', 'dummy-context-string', 'type-string');
     }
 
     public function testItThrowsAnExceptionIfTheUrlKeyIsEmpty()
@@ -60,7 +62,7 @@ abstract class AbstractIntegrationTestUrlKeyStoreTest extends \PHPUnit_Framework
             UrlKeyToWriteIsEmptyStringException::class,
             'Invalid URL key: url key strings have to be one or more characters long'
         );
-        $this->urlKeyStore->addUrlKeyForVersion('1.0', '', 'dummy-context-string');
+        $this->urlKeyStore->addUrlKeyForVersion('1.0', '', 'dummy-context-string', 'type-string');
     }
 
     public function testItThrowsAnExceptionIfADataVersionToGetUrlKeysForIsNotAString()
@@ -78,7 +80,7 @@ abstract class AbstractIntegrationTestUrlKeyStoreTest extends \PHPUnit_Framework
             DataVersionToWriteIsEmptyStringException::class,
             'Invalid data version: version strings have to be one or more characters long'
         );
-        $this->urlKeyStore->addUrlKeyForVersion('', 'test.html', 'dummy-context-string');
+        $this->urlKeyStore->addUrlKeyForVersion('', 'test.html', 'dummy-context-string', 'type-string');
     }
 
     public function testItThrowsAnExceptionIfADataVersionToGetIsAnEmptyString()
@@ -92,15 +94,20 @@ abstract class AbstractIntegrationTestUrlKeyStoreTest extends \PHPUnit_Framework
 
     public function testItThrowsAnExceptionIfTheContextIsNotAString()
     {
-        
         $this->setExpectedException(
-            Exception\ContextDataIsNotAStringException::class,
+            ContextDataIsNotAStringException::class,
             'The context data has to be string for use with the UrlKeyStore, got '
         );
-        $this->urlKeyStore->addUrlKeyForVersion('1.0', 'test.html', []);
-        
-        
-        
+        $this->urlKeyStore->addUrlKeyForVersion('1.0', 'test.html', [], 'type-string');
+    }
+
+    public function testItThrowsAnExceptionIfTheUrlKeyTypeIsNotAString()
+    {
+        $this->setExpectedException(
+            UrlKeyTypeIsNotAStringException::class,
+            'The url key type has to be string, got '
+        );
+        $this->urlKeyStore->addUrlKeyForVersion('1.0', 'test.html', '', 42);
     }
 
     public function testItReturnsUrlKeysForAGivenVersion()
@@ -108,8 +115,12 @@ abstract class AbstractIntegrationTestUrlKeyStoreTest extends \PHPUnit_Framework
         $testUrlKey = 'example.html';
         $testVersion = '1.0';
         $testContext = 'dummy-context-string';
-        $this->urlKeyStore->addUrlKeyForVersion($testVersion, $testUrlKey, $testContext);
-        $this->assertSame([[$testUrlKey, $testContext]], $this->urlKeyStore->getForDataVersion($testVersion));
+        $testUrlKeyType = 'type-string';
+        $this->urlKeyStore->addUrlKeyForVersion($testVersion, $testUrlKey, $testContext, $testUrlKeyType);
+        $this->assertSame(
+            [[$testUrlKey, $testContext, $testUrlKeyType]],
+            $this->urlKeyStore->getForDataVersion($testVersion)
+        );
     }
 
     public function testItReturnsAnEmptyArrayForUnknownVersions()
@@ -119,17 +130,23 @@ abstract class AbstractIntegrationTestUrlKeyStoreTest extends \PHPUnit_Framework
 
     public function testItReturnsTheUrlKeysForTheGivenVersion()
     {
-        $this->urlKeyStore->addUrlKeyForVersion('1', 'aaa.html', 'dummy-context-string');
-        $this->urlKeyStore->addUrlKeyForVersion('2', 'bbb.html', 'dummy-context-string');
+        $this->urlKeyStore->addUrlKeyForVersion('1', 'aaa.html', 'dummy-context-string', 'type-string');
+        $this->urlKeyStore->addUrlKeyForVersion('2', 'bbb.html', 'dummy-context-string', 'type-string');
 
-        $this->assertSame([['aaa.html', 'dummy-context-string']], $this->urlKeyStore->getForDataVersion('1'));
-        $this->assertSame([['bbb.html', 'dummy-context-string']], $this->urlKeyStore->getForDataVersion('2'));
+        $this->assertSame(
+            [['aaa.html', 'dummy-context-string', 'type-string']],
+            $this->urlKeyStore->getForDataVersion('1')
+        );
+        $this->assertSame(
+            [['bbb.html', 'dummy-context-string', 'type-string']],
+            $this->urlKeyStore->getForDataVersion('2')
+        );
     }
 
     public function testItClearsTheStorage()
     {
-        $this->urlKeyStore->addUrlKeyForVersion('1', 'aaa.html', 'dummy-context-string');
-        $this->urlKeyStore->addUrlKeyForVersion('1', 'bbb.html', 'dummy-context-string');
+        $this->urlKeyStore->addUrlKeyForVersion('1', 'aaa.html', 'dummy-context-string', 'type-string');
+        $this->urlKeyStore->addUrlKeyForVersion('1', 'bbb.html', 'dummy-context-string', 'type-string');
         $this->urlKeyStore->clear();
         $this->assertSame([], $this->urlKeyStore->getForDataVersion('1'));
     }

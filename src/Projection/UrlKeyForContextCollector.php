@@ -12,6 +12,9 @@ use LizardsAndPumpkins\UrlKey;
 
 class UrlKeyForContextCollector
 {
+    const URL_KEY_TYPE_LISTING = 'listing';
+    const URL_KEY_TYPE_PRODUCT = 'product';
+    
     /**
      * @param ProductSource $productSource
      * @param ContextSource $contextSource
@@ -47,7 +50,7 @@ class UrlKeyForContextCollector
     private function getProductUrlKeyForContext(Product $product, Context $context)
     {
         $urlKey = $product->getFirstValueOfAttribute(Product::URL_KEY);
-        return new UrlKeyForContext(UrlKey::fromString($urlKey), $context);
+        return new UrlKeyForContext(UrlKey::fromString($urlKey), $context, self::URL_KEY_TYPE_PRODUCT);
     }
 
     /**
@@ -72,7 +75,7 @@ class UrlKeyForContextCollector
     private function getListingUrlKeysForContexts(ProductListingMetaInfo $listingInfo, array $contexts)
     {
         return array_map(function (Context $context) use ($listingInfo) {
-            return new UrlKeyForContext($listingInfo->getUrlKey(), $context);
+            return new UrlKeyForContext($listingInfo->getUrlKey(), $context, self::URL_KEY_TYPE_LISTING);
         }, $contexts);
     }
 }

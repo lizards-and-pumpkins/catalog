@@ -9,14 +9,14 @@ class ThemeLocator
     /**
      * @var string
      */
-    private $themeDirectoryRelativePath;
+    private $relativePathToThemeDirectory;
 
     /**
-     * @param string $themeDirectoryRelativePath
+     * @param string $relativePathToThemeDirectory
      */
-    private function __construct($themeDirectoryRelativePath)
+    private function __construct($relativePathToThemeDirectory)
     {
-        $this->themeDirectoryRelativePath = $themeDirectoryRelativePath;
+        $this->relativePathToThemeDirectory = $relativePathToThemeDirectory;
     }
 
     /**
@@ -34,7 +34,7 @@ class ThemeLocator
      */
     public function getThemeDirectory()
     {
-        return $this->themeDirectoryRelativePath;
+        return $this->relativePathToThemeDirectory;
     }
 
     /**
@@ -43,7 +43,7 @@ class ThemeLocator
      */
     public function getLayoutForHandle($layoutHandle)
     {
-        $layoutFile = $this->themeDirectoryRelativePath . '/layout/' . $layoutHandle. '.xml';
+        $layoutFile = $this->relativePathToThemeDirectory . '/layout/' . $layoutHandle. '.xml';
         return (new LayoutReader())->loadLayoutFromXmlFile($layoutFile);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Context;
 
+use LizardsAndPumpkins\Context\Exception\ContextCodeNotFoundException;
 use LizardsAndPumpkins\DataVersion;
 
 class VersionedContext implements Context
@@ -78,5 +79,13 @@ class VersionedContext implements Context
     {
         return $otherContext->supportsCode(self::CODE) &&
                $this->getValue(self::CODE) === $otherContext->getValue(self::CODE);
+    }
+
+    /**
+     * @return string[]
+     */
+    function jsonSerialize()
+    {
+        return [self::CODE => (string) $this->version];
     }
 }

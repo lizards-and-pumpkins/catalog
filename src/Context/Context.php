@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\Context;
 
-interface Context
+interface Context extends \JsonSerializable
 {
     /**
      * @return string

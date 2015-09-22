@@ -8,6 +8,18 @@ use LizardsAndPumpkins\CommonFactory;
 
 class ContextTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var MasterFactory
+     */
+    private $factory;
+    
+    protected function setUp()
+    {
+        $this->factory = new SampleMasterFactory();
+        $this->factory->register(new CommonFactory());
+        $this->factory->register(new IntegrationTestFactory());
+    }
+    
     public function testDecoratedContextSetIsCreated()
     {
         $xml = <<<EOX
@@ -18,11 +30,8 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     <name website="cy" locale="en_US">cy-en_US</name>
 </attributes></product>
 EOX;
-        $factory = new SampleMasterFactory();
-        $factory->register(new CommonFactory());
-        $factory->register(new IntegrationTestFactory());
-        $productSourceBuilder = $factory->createProductSourceBuilder();
-        $contextSource = $factory->createContextSource();
+        $productSourceBuilder = $this->factory->createProductSourceBuilder();
+        $contextSource = $this->factory->createContextSource();
         $productSource = $productSourceBuilder->createProductSourceFromXml($xml);
         $codes = ['website', 'locale', 'version'];
         $extractedValues = [];
@@ -39,5 +48,19 @@ EOX;
         }
 
         $this->assertCount(4, array_unique($extractedValues), 'There should be 4 unique values.');
+    }
+
+    public function testContextCanBeSerializedAndRehydrated()
+    {
+        /** @var ContextSource $contextSource */
+        /** @var ContextBuilder $contextBuilder */
+        /** @var Context $context */
+        $contextSource = $this->factory->createContextSource();
+        $contextBuilder = $this->factory->createContextBuilder();
+        foreach ($contextSource->getAllAvailableContexts() as $context) {
+            $jsonString = json_encode($context);
+            $rehydratedContext = $contextBuilder->createContext(json_decode($jsonString, true));
+            $this->assertSame($context->toString(), $rehydratedContext->toString());
+        }
     }
 }

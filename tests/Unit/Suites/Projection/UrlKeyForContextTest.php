@@ -12,6 +12,8 @@ use LizardsAndPumpkins\UrlKey;
  */
 class UrlKeyForContextTest extends \PHPUnit_Framework_TestCase
 {
+    private $urlKeyType = 'the-type';
+    
     /**
      * @var UrlKeyForContext
      */
@@ -31,7 +33,7 @@ class UrlKeyForContextTest extends \PHPUnit_Framework_TestCase
     {
         $this->testUrlKey = UrlKey::fromString('example.html');
         $this->stubContext = $this->getMock(Context::class);
-        $this->urlKeyForContext = new UrlKeyForContext($this->testUrlKey, $this->stubContext);
+        $this->urlKeyForContext = new UrlKeyForContext($this->testUrlKey, $this->stubContext, $this->urlKeyType);
     }
 
     public function testItReturnsTheUrlKey()
@@ -59,5 +61,10 @@ class UrlKeyForContextTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubContext->expects($this->once())->method('toString')->willReturn('result');
         $this->assertSame('result', $this->urlKeyForContext->getContextAsString());
+    }
+
+    public function testItReturnsTheUrlKeyType()
+    {
+        $this->assertSame($this->urlKeyType, $this->urlKeyForContext->getType());
     }
 }

@@ -79,7 +79,6 @@ class DataPoolWriterTest extends AbstractDataPoolTest
             ->with($testKey, $testContent);
 
         $this->dataPoolWriter->writeSnippet($mockSnippet);
-
     }
 
     /**
