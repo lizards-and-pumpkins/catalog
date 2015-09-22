@@ -16,17 +16,17 @@ class CatalogWasImportedDomainEventHandler implements DomainEventHandler
     /**
      * @var ProductListingPageSnippetProjector
      */
-    private $listingProjection;
+    private $listingProjector;
 
     public function __construct(CatalogWasImportedDomainEvent $event, ProductListingPageSnippetProjector $projection)
     {
         $this->event = $event;
-        $this->listingProjection = $projection;
+        $this->listingProjector = $projection;
     }
 
     public function process()
     {
         $version = $this->event->getDataVersion();
-        $this->listingProjection->project($version);
+        $this->listingProjector->project($version);
     }
 }
