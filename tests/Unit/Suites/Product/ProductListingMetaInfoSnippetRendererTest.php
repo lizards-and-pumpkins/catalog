@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\Product;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
+use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetList;
 use LizardsAndPumpkins\SnippetRenderer;
@@ -52,8 +53,6 @@ class ProductListingMetaInfoSnippetRendererTest extends \PHPUnit_Framework_TestC
     {
         return Snippet::create($this->dummySnippetKey, json_encode([
             'product_selection_criteria' => null,
-            'root_snippet_code'          => ProductListingSnippetRenderer::CODE,
-            'page_snippet_codes'         => [ProductListingSnippetRenderer::CODE]
         ]));
     }
 
@@ -95,9 +94,8 @@ class ProductListingMetaInfoSnippetRendererTest extends \PHPUnit_Framework_TestC
     public function testSnippetWithValidJsonAsContentInAListIsReturned()
     {
         $mockProductListingMetaInfo = $this->getMockProductListingMetaInfo();
-        $expectedSnippet = $this->getExpectedSnippet();
 
-        $this->mockSnippetList->expects($this->once())->method('add')->with($expectedSnippet);
+        $this->mockSnippetList->expects($this->once())->method('add')->with($this->isInstanceOf(Snippet::class));
 
         $this->renderer->render($mockProductListingMetaInfo);
     }

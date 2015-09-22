@@ -9,7 +9,7 @@ use LizardsAndPumpkins\Product\Exception\ProductAttributeContextPartsMismatchExc
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Product\ProductSource;
 use LizardsAndPumpkins\Product\UpdateProductCommand;
-use LizardsAndPumpkins\Product\UpdateProductListingCommand;
+use LizardsAndPumpkins\Product\AddProductListingCommand;
 use LizardsAndPumpkins\Product\ProductListingMetaInfo;
 use LizardsAndPumpkins\Product\ProductListingMetaInfoBuilder;
 use LizardsAndPumpkins\Product\ProductSourceBuilder;
@@ -20,13 +20,16 @@ use org\bovigo\vfs\vfsStream;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
- * @uses \LizardsAndPumpkins\Product\ProductId
- * @uses \LizardsAndPumpkins\Product\UpdateProductListingCommand
- * @uses \LizardsAndPumpkins\Product\UpdateProductCommand
- * @uses \LizardsAndPumpkins\Projection\Catalog\Import\ProductImportFailedMessage
- * @uses \LizardsAndPumpkins\Utils\XPathParser
- * @uses \LizardsAndPumpkins\Projection\Catalog\Import\CatalogXmlParser
- * @uses \LizardsAndPumpkins\Image\UpdateImageCommand
+ * @uses   \LizardsAndPumpkins\Product\ProductId
+ * @uses   \LizardsAndPumpkins\Product\AddProductListingCommand
+ * @uses   \LizardsAndPumpkins\Product\UpdateProductCommand
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImportFailedMessage
+ * @uses   \LizardsAndPumpkins\Utils\XPathParser
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogXmlParser
+ * @uses   \LizardsAndPumpkins\Image\UpdateImageCommand
+ * @uses   \LizardsAndPumpkins\Utils\UuidGenerator
+ * @uses   \LizardsAndPumpkins\DataVersion
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEvent
  */
 class CatalogImportTest extends \PHPUnit_Framework_TestCase
 {
@@ -61,6 +64,11 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     private $addToCommandQueueSpy;
 
     /**
+     * @var Queue|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockEventQueue;
+
+    /**
      * @param string $commandClass
      */
     private function assertCommandWasAddedToQueue($commandClass)
@@ -82,7 +90,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         /** @var ProductSource|\PHPUnit_Framework_MockObject_MockObject $stubProductSource */
         $productSource = $this->getMock(ProductSource::class, [], [], '', false);
         $productSource->method('getId')->willReturn(ProductId::fromString('dummy'));
-        
+
         $productSourceBuilder = $this->getMock(ProductSourceBuilder::class, [], [], '', false);
         $productSourceBuilder->method('createProductSourceFromXml')->willReturn($productSource);
         return $productSourceBuilder;
@@ -110,12 +118,14 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         $this->mockCommandQueue->expects($this->addToCommandQueueSpy)->method('add');
         $this->stubProductSourceBuilder = $this->createMockProductSourceBuilder();
         $this->stubProductListingMetaInfoBuilder = $this->createMockProductsPerPageForContextBuilder();
+        $this->mockEventQueue = $this->getMock(Queue::class);
         $this->logger = $this->getMock(Logger::class);
 
         $this->catalogImport = new CatalogImport(
             $this->mockCommandQueue,
             $this->stubProductSourceBuilder,
             $this->stubProductListingMetaInfoBuilder,
+            $this->mockEventQueue,
             $this->logger
         );
     }
@@ -175,8 +185,8 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         file_put_contents($importFilePath, file_get_contents($fixtureFile));
 
         $this->catalogImport->importFile($importFilePath);
-        
-        $this->assertCommandWasAddedToQueue(UpdateProductListingCommand::class);
+
+        $this->assertCommandWasAddedToQueue(AddProductListingCommand::class);
     }
 
     public function testUpdateImageCommandsAreEmitted()
@@ -186,7 +196,20 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         file_put_contents($importFilePath, file_get_contents($fixtureFile));
 
         $this->catalogImport->importFile($importFilePath);
-        
+
         $this->assertCommandWasAddedToQueue(UpdateImageCommand::class);
+    }
+
+    public function testItAddsAnCatalogWasImportedDomainEventToTheEventQueue()
+    {
+        $this->mockEventQueue->expects($this->once())->method('add')
+            ->with($this->isInstanceOf(CatalogWasImportedDomainEvent::class));
+
+        $importFilePath = vfsStream::url('root/catalog-import.xml');
+        $fixtureFile = __DIR__ . '/../../../../../shared-fixture/catalog.xml';
+        file_put_contents($importFilePath, file_get_contents($fixtureFile));
+
+        $this->catalogImport->importFile($importFilePath);
+
     }
 }

@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Command;
 
-class UpdateProductListingCommand implements Command
+class AddProductListingCommand implements Command
 {
     /**
      * @var ProductListingMetaInfo

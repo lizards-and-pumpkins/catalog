@@ -84,7 +84,7 @@ class VersionedContext implements Context
     /**
      * @return string[]
      */
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return [self::CODE => (string) $this->version];
     }

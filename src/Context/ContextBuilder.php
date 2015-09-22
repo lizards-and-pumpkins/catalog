@@ -23,7 +23,11 @@ class ContextBuilder
     {
         $this->dataVersion = $dataVersion;
     }
-    
+
+    /**
+     * @param array[] $dataSet
+     * @return Context
+     */
     public static function rehydrateContext(array $dataSet)
     {
         if (! isset($dataSet[VersionedContext::CODE])) {
@@ -60,6 +64,9 @@ class ContextBuilder
     private function validateAllPartsHaveDecorators(array $contextDataSet)
     {
         array_map(function ($code) {
+            if ($code === VersionedContext::CODE) {
+                return;
+            }
             $this->validateDecoratorClassExists($code, $this->getDecoratorClass($code));
         }, array_keys($contextDataSet));
     }

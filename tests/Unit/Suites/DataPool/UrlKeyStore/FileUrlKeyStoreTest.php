@@ -68,4 +68,13 @@ class FileUrlKeyStoreTest extends AbstractIntegrationTestUrlKeyStoreTest
             $urlKeyStore->getForDataVersion('1.0')
         );
     }
+
+    public function testItCreatesTheStorageDirectoryIfItDoesNotExist()
+    {
+        $urlKeyStore = $this->createUrlKeyStoreInstance();
+        rmdir($this->temporaryStoragePath);
+        $urlKeyStore->addUrlKeyForVersion('1.0', 'example.html', 'context-data', 'type-string');
+        $this->assertFileExists($this->temporaryStoragePath);
+        $this->assertTrue(is_dir($this->temporaryStoragePath));
+    }
 }

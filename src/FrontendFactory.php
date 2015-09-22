@@ -17,7 +17,7 @@ use LizardsAndPumpkins\Product\ProductDetailViewRequestHandler;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingMetaInfoSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingRequestHandler;
-use LizardsAndPumpkins\Product\ProductListingSnippetRenderer;
+use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer;
 use LizardsAndPumpkins\Product\MultipleProductStockQuantityApiV1PutRequestHandler;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionRequestHandler;
@@ -213,7 +213,7 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->createProductInListingSnippetKeyGenerator()
         );
         $snippetKeyGeneratorLocator->register(
-            ProductListingSnippetRenderer::CODE,
+            ProductListingPageSnippetRenderer::CODE,
             $this->getMasterFactory()->createProductListingSnippetKeyGenerator()
         );
         $snippetKeyGeneratorLocator->register(

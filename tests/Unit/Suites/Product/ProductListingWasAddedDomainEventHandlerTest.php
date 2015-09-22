@@ -6,9 +6,9 @@ use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\DomainEventHandler;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEventHandler
+ * @covers \LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler
  */
-class ProductListingWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
+class ProductListingWasAddedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ProductListingMetaInfoSnippetProjector|\PHPUnit_Framework_MockObject_MockObject
@@ -16,7 +16,7 @@ class ProductListingWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_
     private $mockProjector;
 
     /**
-     * @var ProductListingWasUpdatedDomainEventHandler
+     * @var ProductListingWasAddedDomainEventHandler
      */
     private $domainEventHandler;
 
@@ -24,8 +24,8 @@ class ProductListingWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_
     {
         $stubProductListingMetaInfo = $this->getMock(ProductListingMetaInfo::class, [], [], '', false);
 
-        /** @var ProductListingWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $mockDomainEvent */
-        $mockDomainEvent = $this->getMock(ProductListingWasUpdatedDomainEvent::class, [], [], '', false);
+        /** @var ProductListingWasAddedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $mockDomainEvent */
+        $mockDomainEvent = $this->getMock(ProductListingWasAddedDomainEvent::class, [], [], '', false);
         $mockDomainEvent->method('getProductListingMetaInfo')->willReturn($stubProductListingMetaInfo);
 
         $this->mockProjector = $this->getMock(ProductListingMetaInfoSnippetProjector::class, [], [], '', false);
@@ -33,7 +33,7 @@ class ProductListingWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_
         /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
         $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
 
-        $this->domainEventHandler = new ProductListingWasUpdatedDomainEventHandler(
+        $this->domainEventHandler = new ProductListingWasAddedDomainEventHandler(
             $mockDomainEvent,
             $stubContextSource,
             $this->mockProjector

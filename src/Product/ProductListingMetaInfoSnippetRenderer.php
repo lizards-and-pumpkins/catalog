@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\Product;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
+use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetList;
 use LizardsAndPumpkins\SnippetRenderer;
@@ -95,7 +96,7 @@ class ProductListingMetaInfoSnippetRenderer implements SnippetRenderer
 
         $metaSnippetContent = ProductListingMetaInfoSnippetContent::create(
             $productListingMetaInfo->getCriteria(),
-            ProductListingSnippetRenderer::CODE,
+            ProductListingPageSnippetRenderer::CODE,
             $pageSnippetCodes
         );
 

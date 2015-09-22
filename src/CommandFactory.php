@@ -10,8 +10,8 @@ use LizardsAndPumpkins\Product\UpdateMultipleProductStockQuantityCommand;
 use LizardsAndPumpkins\Product\UpdateMultipleProductStockQuantityCommandHandler;
 use LizardsAndPumpkins\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Product\UpdateProductCommandHandler;
-use LizardsAndPumpkins\Product\UpdateProductListingCommand;
-use LizardsAndPumpkins\Product\UpdateProductListingCommandHandler;
+use LizardsAndPumpkins\Product\AddProductListingCommand;
+use LizardsAndPumpkins\Product\AddProductListingCommandHandler;
 use LizardsAndPumpkins\Product\UpdateProductStockQuantityCommand;
 use LizardsAndPumpkins\Product\UpdateProductStockQuantityCommandHandler;
 
@@ -46,10 +46,10 @@ interface CommandFactory
     public function createUpdateProductCommandHandler(UpdateProductCommand $command);
 
     /**
-     * @param UpdateProductListingCommand $command
-     * @return UpdateProductListingCommandHandler
+     * @param AddProductListingCommand $command
+     * @return AddProductListingCommandHandler
      */
-    public function createUpdateProductListingCommandHandler(UpdateProductListingCommand $command);
+    public function createAddProductListingCommandHandler(AddProductListingCommand $command);
 
     /**
      * @param UpdateImageCommand $command

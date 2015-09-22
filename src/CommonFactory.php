@@ -46,9 +46,12 @@ use LizardsAndPumpkins\Product\ProductInListingBlockRenderer;
 use LizardsAndPumpkins\Product\ProductListingBlockRenderer;
 use LizardsAndPumpkins\Product\ProductListingMetaInfoSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingMetaInfoSnippetProjector;
-use LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEventHandler;
-use LizardsAndPumpkins\Product\ProductListingSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
+use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler;
+use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEvent;
+use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHandler;
+use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetProjector;
+use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductProjector;
 use LizardsAndPumpkins\Product\ProductListingMetaInfoBuilder;
 use LizardsAndPumpkins\Product\ProductSearchDocumentBuilder;
@@ -65,8 +68,8 @@ use LizardsAndPumpkins\Product\UpdateMultipleProductStockQuantityCommand;
 use LizardsAndPumpkins\Product\UpdateMultipleProductStockQuantityCommandHandler;
 use LizardsAndPumpkins\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Product\UpdateProductCommandHandler;
-use LizardsAndPumpkins\Product\UpdateProductListingCommand;
-use LizardsAndPumpkins\Product\UpdateProductListingCommandHandler;
+use LizardsAndPumpkins\Product\AddProductListingCommand;
+use LizardsAndPumpkins\Product\AddProductListingCommandHandler;
 use LizardsAndPumpkins\Product\UpdateProductStockQuantityCommand;
 use LizardsAndPumpkins\Product\UpdateProductStockQuantityCommandHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
@@ -155,7 +158,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         $templateProjectorLocator = new TemplateProjectorLocator();
         $templateProjectorLocator->register(
-            ProductListingSnippetRenderer::CODE,
+            ProductListingPageSnippetRenderer::CODE,
             $this->getMasterFactory()->createProductListingTemplateProjector()
         );
         $templateProjectorLocator->register(
@@ -167,12 +170,12 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @param ProductListingWasUpdatedDomainEvent $event
-     * @return ProductListingWasUpdatedDomainEventHandler
+     * @param ProductListingWasAddedDomainEvent $event
+     * @return ProductListingWasAddedDomainEventHandler
      */
-    public function createProductListingWasUpdatedDomainEventHandler(ProductListingWasUpdatedDomainEvent $event)
+    public function createProductListingWasAddedDomainEventHandler(ProductListingWasAddedDomainEvent $event)
     {
-        return new ProductListingWasUpdatedDomainEventHandler(
+        return new ProductListingWasAddedDomainEventHandler(
             $event,
             $this->getMasterFactory()->createContextSource(),
             $this->getMasterFactory()->createProductListingMetaInfoSnippetProjector()
@@ -367,19 +370,17 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     private function createProductListingRendererList()
     {
         return [
-            $this->getMasterFactory()->createProductListingSnippetRenderer(),
             $this->getMasterFactory()->createDefaultNumberOfProductsPerPageSnippetRenderer(),
             $this->getMasterFactory()->createProductSearchResultMetaSnippetRenderer(),
         ];
     }
 
     /**
-     * @return ProductListingSnippetRenderer
+     * @return ProductListingPageSnippetRenderer
      */
-    public function createProductListingSnippetRenderer()
+    public function createProductListingPageSnippetRenderer()
     {
-        return new ProductListingSnippetRenderer(
-            $this->getMasterFactory()->createSnippetList(),
+        return new ProductListingPageSnippetRenderer(
             $this->getMasterFactory()->createProductListingSnippetKeyGenerator(),
             $this->getMasterFactory()->createProductListingBlockRenderer()
         );
@@ -393,7 +394,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         $usedDataParts = [];
 
         return new GenericSnippetKeyGenerator(
-            ProductListingSnippetRenderer::CODE,
+            ProductListingPageSnippetRenderer::CODE,
             $this->getMasterFactory()->getRequiredContexts(),
             $usedDataParts
         );
@@ -1190,12 +1191,12 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @param UpdateProductListingCommand $command
-     * @return UpdateProductListingCommandHandler
+     * @param AddProductListingCommand $command
+     * @return AddProductListingCommandHandler
      */
-    public function createUpdateProductListingCommandHandler(UpdateProductListingCommand $command)
+    public function createAddProductListingCommandHandler(AddProductListingCommand $command)
     {
-        return new UpdateProductListingCommandHandler(
+        return new AddProductListingCommandHandler(
             $command,
             $this->getMasterFactory()->getEventQueue()
         );
@@ -1291,6 +1292,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $this->getMasterFactory()->getCommandQueue(),
             $this->getMasterFactory()->createProductSourceBuilder(),
             $this->getMasterFactory()->createProductListingMetaInfoBuilder(),
+            $this->getMasterFactory()->getEventQueue(),
             $this->getMasterFactory()->getLogger()
         );
     }
@@ -1336,5 +1338,27 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createConfigReader()
     {
         return EnvironmentConfigReader::fromGlobalState();
+    }
+
+    /**
+     * @param CatalogWasImportedDomainEvent $event
+     * @return CatalogWasImportedDomainEventHandler
+     */
+    public function createCatalogWasImportedDomainEventHandler(CatalogWasImportedDomainEvent $event)
+    {
+        $projection = $this->createProductListingPageSnippetProjector();
+        return new CatalogWasImportedDomainEventHandler($event, $projection);
+    }
+
+    /**
+     * @return ProductListingPageSnippetProjector
+     */
+    public function createProductListingPageSnippetProjector()
+    {
+        return new ProductListingPageSnippetProjector(
+            $this->getMasterFactory()->createProductListingPageSnippetRenderer(),
+            $this->getMasterFactory()->createDataPoolWriter(),
+            $this->getMasterFactory()->createContextSource()
+        );
     }
 }

@@ -10,12 +10,14 @@ use LizardsAndPumpkins\DomainEventHandler;
 use LizardsAndPumpkins\Image\ImageWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Image\ImageWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\IntegrationTestFactory;
-use LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
+use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEvent;
+use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHandler;
 use LizardsAndPumpkins\SampleMasterFactory;
 use LizardsAndPumpkins\TemplateWasUpdatedDomainEvent;
 use LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler;
@@ -34,7 +36,7 @@ use LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler;
  * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionTemplateProjector
  * @uses   \LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductListingSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductListingMetaInfoSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductListingTemplateProjector
@@ -43,7 +45,7 @@ use LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler;
  * @uses   \LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Product\ProductStockQuantityProjector
  * @uses   \LizardsAndPumpkins\Product\DefaultNumberOfProductsPerPageSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductListingWasUpdatedDomainEventHandler
+ * @uses   \LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler
  * @uses   \LizardsAndPumpkins\GenericSnippetKeyGenerator
  * @uses   \LizardsAndPumpkins\Context\ContextBuilder
  * @uses   \LizardsAndPumpkins\Context\ContextSource
@@ -65,6 +67,8 @@ use LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler;
  * @uses   \LizardsAndPumpkins\MasterFactoryTrait
  * @uses   \LizardsAndPumpkins\SnippetRendererCollection
  * @uses   \LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHandler
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetProjector
  * @uses   \LizardsAndPumpkins\TemplateProjectorLocator
  * @uses   \LizardsAndPumpkins\Image\ImageProcessingStrategySequence
  * @uses   \LizardsAndPumpkins\Image\ImageWasUpdatedDomainEventHandler
@@ -121,11 +125,11 @@ class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertDecoratedDomainEventHandlerInstanceOf(ImageWasUpdatedDomainEventHandler::class, $result);
     }
 
-    public function testItReturnsADecoratedProductListingWasUpdatedDomainEventHandler()
+    public function testItReturnsADecoratedProductListingWasAddedDomainEventHandler()
     {
-        $stubEvent = $this->getMock(ProductListingWasUpdatedDomainEvent::class, [], [], '', false);
-        $result = $this->factory->createProductListingWasUpdatedDomainEventHandler($stubEvent);
-        $this->assertDecoratedDomainEventHandlerInstanceOf(ProductListingWasUpdatedDomainEventHandler::class, $result);
+        $stubEvent = $this->getMock(ProductListingWasAddedDomainEvent::class, [], [], '', false);
+        $result = $this->factory->createProductListingWasAddedDomainEventHandler($stubEvent);
+        $this->assertDecoratedDomainEventHandlerInstanceOf(ProductListingWasAddedDomainEventHandler::class, $result);
     }
 
     public function testItReturnsADecoratedProductStockQuantityWasUpdatedDomainEventHandler()
@@ -143,5 +147,12 @@ class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
         $stubEvent = $this->getMock(ContentBlockWasUpdatedDomainEvent::class, [], [], '', false);
         $result = $this->factory->createContentBlockWasUpdatedDomainEventHandler($stubEvent);
         $this->assertDecoratedDomainEventHandlerInstanceOf(ContentBlockWasUpdatedDomainEventHandler::class, $result);
+    }
+
+    public function testItReturnsADecoratedCatalogWasImportedDomainEventHandler()
+    {
+        $stubEvent = $this->getMock(CatalogWasImportedDomainEvent::class, [], [], '', false);
+        $result = $this->factory->createCatalogWasImportedDomainEventHandler($stubEvent);
+        $this->assertDecoratedDomainEventHandlerInstanceOf(CatalogWasImportedDomainEventHandler::class, $result);
     }
 }
