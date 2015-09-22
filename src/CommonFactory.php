@@ -1346,8 +1346,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createCatalogWasImportedDomainEventHandler(CatalogWasImportedDomainEvent $event)
     {
-        $projection = $this->createProductListingPageSnippetProjector();
-        return new CatalogWasImportedDomainEventHandler($event, $projection);
+        $projector = $this->createProductListingPageSnippetProjector();
+        return new CatalogWasImportedDomainEventHandler($event, $projector);
     }
 
     /**
