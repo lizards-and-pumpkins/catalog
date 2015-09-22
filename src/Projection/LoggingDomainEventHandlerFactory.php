@@ -11,7 +11,6 @@ use LizardsAndPumpkins\Factory;
 use LizardsAndPumpkins\FactoryTrait;
 use LizardsAndPumpkins\Image\ImageWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Image\ImageWasUpdatedDomainEventHandler;
-use LizardsAndPumpkins\MasterFactory;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEvent;
