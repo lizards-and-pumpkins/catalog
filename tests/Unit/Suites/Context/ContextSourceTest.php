@@ -95,9 +95,9 @@ class ContextSourceTest extends \PHPUnit_Framework_TestCase
         $testVersion = DataVersion::fromVersionString('abc123');
         $this->stubContextBuilder->expects($this->once())->method('createContextsFromDataSets')
             ->willReturnCallback(function (array $dataSets) use ($testVersion) {
-                array_map(function($dataSet) use ($testVersion) {
+                array_map(function ($dataSet) use ($testVersion) {
                     $this->assertArrayHasKey(VersionedContext::CODE, $dataSet);
-                    //$this->assertSame($dataSet[VersionedContext::CODE], $testVersion);
+                    $this->assertSame($dataSet[VersionedContext::CODE], (string)$testVersion);
                 }, $dataSets);
             });
         $this->contextSource->getAllAvailableContextsWithVersion($testVersion);
