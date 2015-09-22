@@ -19,16 +19,28 @@ class ThemeLocatorTest extends \PHPUnit_Framework_TestCase
      * @var ThemeLocator
      */
     private $locator;
-    
+
+    /**
+     * @var string
+     */
+    private $preTestWorkingDirectory;
+
     protected function setUp()
     {
-        $testBasePath = sys_get_temp_dir();
+        $this->preTestWorkingDirectory = getcwd();
+        $testBasePath = realpath(sys_get_temp_dir());
+        chdir($testBasePath . '/..');
         $this->locator = ThemeLocator::fromPath($testBasePath);
     }
-    
-    public function testHardcodedThemeDirectoryIsReturned()
+
+    protected function tearDown()
     {
-        $this->assertEquals('../../..' . sys_get_temp_dir() . '/theme', $this->locator->getThemeDirectory());
+        chdir($this->preTestWorkingDirectory);
+    }
+    
+    public function testRelativePathToHardcodedThemeDirectoryIsReturned()
+    {
+        $this->assertEquals(basename(sys_get_temp_dir()) . '/theme', $this->locator->getThemeDirectory());
     }
 
     public function testLayoutObjectIsReturnedForGivenHandle()
