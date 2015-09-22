@@ -182,11 +182,11 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         $this->assertCommandWasAddedToQueue(UpdateProductCommand::class);
     }
 
-    public function testUpdateProductListingCommandsAreEmitted()
+    public function testAddProductListingCommandsAreEmitted()
     {
         $this->catalogImport->importFile($this->sharedFixtureFilePath);
         
-        $this->assertCommandWasAddedToQueue(UpdateProductListingCommand::class);
+        $this->assertCommandWasAddedToQueue(AddProductListingCommand::class);
     }
 
     public function testAddImageCommandsAreEmitted()
