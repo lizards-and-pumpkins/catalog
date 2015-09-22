@@ -118,12 +118,6 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
         $this->filterCollection->getFilters();
     }
 
-    public function testExceptionIsThrownDuringAttemptToRetrieveSelectedFiltersWithoutInitializingCollection()
-    {
-        $this->setExpectedException(FilterCollectionInNotInitializedException::class);
-        $this->filterCollection->getSelectedFilters();
-    }
-
     public function testExceptionIsThrownDuringAttemptToRetrieveFiltersCountWithoutInitializingCollection()
     {
         $this->setExpectedException(FilterCollectionInNotInitializedException::class);
@@ -198,7 +192,6 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $filters[0]->getOptionCollection());
         $this->assertSame('baz', $filters[0]->getOptionCollection()->getOptions()[0]->getValue());
         $this->assertSame(1, $filters[0]->getOptionCollection()->getOptions()[0]->getCount());
-        $this->assertFalse($filters[0]->getOptionCollection()->getOptions()[0]->isSelected());
     }
 
     public function testCollectionReflectsValuesFromSearchDocumentFieldsIfNoFiltersAreSelected()
@@ -228,7 +221,6 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $filters[0]->getOptionCollection());
         $this->assertSame('qux', $filters[0]->getOptionCollection()->getOptions()[0]->getValue());
         $this->assertSame(1, $filters[0]->getOptionCollection()->getOptions()[0]->getCount());
-        $this->assertFalse($filters[0]->getOptionCollection()->getOptions()[0]->isSelected());
     }
 
     public function testOnlyFiltersWhichHaveMatchingValuesInProductsCollectionAreReturned()
@@ -264,7 +256,6 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $filters[0]->getOptionCollection());
         $this->assertSame('baz', $filters[0]->getOptionCollection()->getOptions()[0]->getValue());
         $this->assertSame(1, $filters[0]->getOptionCollection()->getOptions()[0]->getCount());
-        $this->assertTrue($filters[0]->getOptionCollection()->getOptions()[0]->isSelected());
     }
 
     public function testSelectedFiltersHaveSiblingValuesForBroadeningProductsCollection()
@@ -306,45 +297,15 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(2, $filters[0]->getOptionCollection());
         $this->assertSame('baz', $filters[0]->getOptionCollection()->getOptions()[0]->getValue());
         $this->assertSame(1, $filters[0]->getOptionCollection()->getOptions()[0]->getCount());
-        $this->assertTrue($filters[0]->getOptionCollection()->getOptions()[0]->isSelected());
         $this->assertSame('qux', $filters[0]->getOptionCollection()->getOptions()[1]->getValue());
         $this->assertSame(1, $filters[0]->getOptionCollection()->getOptions()[1]->getCount());
-        $this->assertFalse($filters[0]->getOptionCollection()->getOptions()[1]->isSelected());
 
         $this->assertSame('bar', $filters[1]->getCode());
         $this->assertCount(2, $filters[1]->getOptionCollection());
         $this->assertSame('0 Eur - 100 Eur', $filters[1]->getOptionCollection()->getOptions()[0]->getValue());
         $this->assertSame(1, $filters[1]->getOptionCollection()->getOptions()[0]->getCount());
-        $this->assertTrue($filters[1]->getOptionCollection()->getOptions()[0]->isSelected());
         $this->assertSame('100 Eur - 200 Eur', $filters[1]->getOptionCollection()->getOptions()[1]->getValue());
         $this->assertSame(1, $filters[1]->getOptionCollection()->getOptions()[1]->getCount());
-        $this->assertFalse($filters[1]->getOptionCollection()->getOptions()[1]->isSelected());
-    }
-
-    public function testSelectedFiltersAndValuesAreReturned()
-    {
-        $selectedFilters = ['foo' => ['baz'], 'bar' => []];
-
-        $stubField = $this->createStubSearchDocumentField('foo', 'baz');
-        $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([$stubField]);
-
-        /** @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject $stubFilteredDocumentCollection */
-        $stubFilteredDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
-        $stubFilteredDocumentCollection->method('getIterator')->willReturn(new \ArrayIterator([$stubSearchDocument]));
-
-        $this->stubDataPoolReader->method('getSearchDocumentsMatchingCriteria')
-            ->willReturn($stubFilteredDocumentCollection);
-
-        $this->filterCollection->initialize(
-            $stubFilteredDocumentCollection,
-            $this->stubSearchCriteria,
-            $selectedFilters,
-            $this->stubContext
-        );
-
-        $result = $this->filterCollection->getSelectedFilters();
-
-        $this->assertSame($selectedFilters, $result);
     }
 
     public function testArrayRepresentationOfFilterNavigationIsReturned()

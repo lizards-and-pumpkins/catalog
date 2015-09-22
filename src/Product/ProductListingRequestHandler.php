@@ -8,6 +8,8 @@ use LizardsAndPumpkins\DataPool\KeyValue\KeyNotFoundException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterOrEqualThan;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionLessOrEqualThan;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -21,6 +23,8 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
 class ProductListingRequestHandler implements HttpRequestHandler
 {
     const PAGINATION_QUERY_PARAMETER_NAME = 'p';
+
+    const FILTER_RANGE_DELIMITER = '~';
 
     /**
      * @var ProductListingMetaInfoSnippetContent
@@ -53,7 +57,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
     private $filterNavigationFilterCollection;
 
     /**
-     * @var array
+     * @var string[]
      */
     private $filterNavigationAttributeCodes;
 
@@ -258,6 +262,15 @@ class ProductListingRequestHandler implements HttpRequestHandler
             }
 
             $optionValuesCriteriaArray = array_map(function ($filterOptionValue) use ($filterCode) {
+
+                $regularExpression = sprintf('/^([^%1$s]+)%1$s([^%1$s]+)/', self::FILTER_RANGE_DELIMITER);
+
+                if (preg_match($regularExpression, $filterOptionValue, $range)) {
+                    $criterionFrom = SearchCriterionGreaterOrEqualThan::create($filterCode, $range[1]);
+                    $criterionTo = SearchCriterionLessOrEqualThan::create($filterCode, $range[2]);
+                    return CompositeSearchCriterion::createAnd($criterionFrom, $criterionTo);
+                }
+
                 return SearchCriterionEqual::create($filterCode, $filterOptionValue);
             }, $filterOptionValues);
 
@@ -279,14 +292,10 @@ class ProductListingRequestHandler implements HttpRequestHandler
      */
     private function getSelectedFilterValuesFromRequest(HttpRequest $request)
     {
-        $selectedFilters = [];
-
-        foreach ($this->filterNavigationAttributeCodes as $filterCode) {
-            $rawAttributeValue = $request->getQueryParameter($filterCode);
-            $selectedFilters[$filterCode] = array_filter(explode(',', $rawAttributeValue));
-        }
-
-        return $selectedFilters;
+        return array_reduce($this->filterNavigationAttributeCodes, function ($carry, $attributeCode) use ($request) {
+            $carry[$attributeCode] = array_filter(explode(',', $request->getQueryParameter($attributeCode)));
+            return $carry;
+        }, []);
     }
 
     /**

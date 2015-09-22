@@ -18,20 +18,13 @@ class FilterNavigationFilterOption implements \JsonSerializable
     private $count;
 
     /**
-     * @var bool
-     */
-    private $isSelected;
-
-    /**
      * @param string $value
      * @param int $count
-     * @param bool $isSelected
      */
-    private function __construct($value, $count, $isSelected)
+    private function __construct($value, $count)
     {
         $this->value = $value;
         $this->count = $count;
-        $this->isSelected = $isSelected;
     }
 
     /**
@@ -44,20 +37,7 @@ class FilterNavigationFilterOption implements \JsonSerializable
         self::validateFilterOptionValue($value);
         self::validateFilterOptionCount($count);
 
-        return new self($value, $count, false);
-    }
-
-    /**
-     * @param string $value
-     * @param int $count
-     * @return FilterNavigationFilterOption
-     */
-    public static function createSelected($value, $count)
-    {
-        self::validateFilterOptionValue($value);
-        self::validateFilterOptionCount($count);
-
-        return new self($value, $count, true);
+        return new self($value, $count);
     }
 
     /**
@@ -74,14 +54,6 @@ class FilterNavigationFilterOption implements \JsonSerializable
     public function getCount()
     {
         return $this->count;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isSelected()
-    {
-        return $this->isSelected;
     }
 
     /**
@@ -116,7 +88,6 @@ class FilterNavigationFilterOption implements \JsonSerializable
         return [
             'value' => $this->value,
             'count' => $this->count,
-            'is_selected' => $this->isSelected
         ];
     }
 }

@@ -7,6 +7,8 @@ use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyNotFoundException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterOrEqualThan;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionLessOrEqualThan;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -186,6 +188,16 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals($expectedProductIds, $invokedProductIds);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount
+     */
+    private function createAddedSnippetsSpy()
+    {
+        $addSnippetsToPageSpy = $this->any();
+        $this->mockPageBuilder->expects($addSnippetsToPageSpy)->method('addSnippetsToPage');
+        return $addSnippetsToPageSpy;
     }
 
     /**
@@ -370,44 +382,67 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->requestHandler->process($this->stubRequest);
     }
 
-    public function testFilterNavigationSnippetIsAddedToPageBuilder()
+    public function testRangeFiltersAreAppliedToSelectionCriteriaIfSelected()
     {
-        $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
+        $this->prepareMockDataPoolReader();
 
-        $addSnippetsToPageSpy = $this->any();
-        $this->mockPageBuilder->expects($addSnippetsToPageSpy)->method('addSnippetsToPage');
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection();
+
+        $attributeCode = 'foo';
+        $fromRange = '1';
+        $toRange = '2';
+
+        $this->stubRequest->method('getQueryParameter')->willReturnMap([[
+            $attributeCode,
+            sprintf('%s%s%s', $fromRange, ProductListingRequestHandler::FILTER_RANGE_DELIMITER, $toRange)
+        ]]);
+
+        $filterGreaterOrEqualCriterion = SearchCriterionGreaterOrEqualThan::create($attributeCode, $fromRange);
+        $filterLessOrEqualCriterion = SearchCriterionLessOrEqualThan::create($attributeCode, $toRange);
+        $rangeCriteria = CompositeSearchCriterion::createAnd(
+            $filterGreaterOrEqualCriterion,
+            $filterLessOrEqualCriterion
+        );
+        $filterCriteria = CompositeSearchCriterion::createOr($rangeCriteria);
+        $originalCriteria = CompositeSearchCriterion::createAnd();
+        $expectedCriteria = CompositeSearchCriterion::createAnd($filterCriteria, $originalCriteria);
+
+        $this->mockDataPoolReader->expects($this->once())->method('getSearchDocumentsMatchingCriteria')
+            ->with($expectedCriteria)
+            ->willReturn($stubSearchDocumentCollection);
 
         $this->requestHandler->process($this->stubRequest);
+    }
 
+    public function testFilterNavigationSnippetIsAddedToPageBuilder()
+    {
         $snippetCode = 'filter_navigation';
+        $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
+        $addSnippetsToPageSpy = $this->createAddedSnippetsSpy();
+
+        $this->requestHandler->process($this->stubRequest);
 
         $this->assertDynamicSnippetWasAddedToPageBuilder($addSnippetsToPageSpy, $snippetCode);
     }
 
     public function testTotalPagesCountSnippetIsAddedToPageBuilder()
     {
+        $snippetCode = 'total_pages_count';
         $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
-
-        $addSnippetsToPageSpy = $this->any();
-        $this->mockPageBuilder->expects($addSnippetsToPageSpy)->method('addSnippetsToPage');
+        $addSnippetsToPageSpy = $this->createAddedSnippetsSpy();
 
         $this->requestHandler->process($this->stubRequest);
-
-        $snippetCode = 'total_pages_count';
 
         $this->assertDynamicSnippetWasAddedToPageBuilder($addSnippetsToPageSpy, $snippetCode);
     }
 
     public function testCollectionSizeSnippetIsAddedToPageBuilder()
     {
+        $snippetCode = 'collection_size';
         $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
-
-        $addSnippetsToPageSpy = $this->any();
-        $this->mockPageBuilder->expects($addSnippetsToPageSpy)->method('addSnippetsToPage');
+        $addSnippetsToPageSpy = $this->createAddedSnippetsSpy();
 
         $this->requestHandler->process($this->stubRequest);
-
-        $snippetCode = 'collection_size';
 
         $this->assertDynamicSnippetWasAddedToPageBuilder($addSnippetsToPageSpy, $snippetCode);
     }

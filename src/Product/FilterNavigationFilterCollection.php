@@ -8,6 +8,8 @@ use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterOrEqualThan;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionLessOrEqualThan;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
@@ -80,61 +82,40 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
     }
 
     /**
-     * @return array[]
-     */
-    public function getSelectedFilters()
-    {
-        $this->validateFiltersCollectionIsInitialized();
-        return $this->selectedFilters;
-    }
-
-    /**
-     * @param SearchDocumentCollection $originalSearchDocumentCollection
+     * @param SearchDocumentCollection $searchDocumentCollection
      * @param SearchCriteria $originalCriteria
      * @param array[] $selectedFilters
      * @param Context $context
      */
     public function initialize(
-        SearchDocumentCollection $originalSearchDocumentCollection,
+        SearchDocumentCollection $searchDocumentCollection,
         SearchCriteria $originalCriteria,
         array $selectedFilters,
         Context $context
     ) {
         $this->selectedFilters = $selectedFilters;
+        $attributeCodes = array_keys($this->selectedFilters);
 
-        $allowedFilterCodes = array_keys($this->selectedFilters);
-        $defaultFilters = $this->getFiltersAppliedToCollection($originalSearchDocumentCollection, $allowedFilterCodes);
+        $collectionOptionValues = $this->getCollectionOptionValuesForAttributes(
+            $searchDocumentCollection,
+            $attributeCodes
+        );
+        $selectedOptionValuesWithSiblings = $this->getSelectedOptionValuesWithSiblings($originalCriteria, $context);
+        $filters = array_merge($collectionOptionValues, $selectedOptionValuesWithSiblings);
 
-        $filters = [];
-        foreach ($this->selectedFilters as $selectedFilterCode => $selectedFilterValues) {
-            if (empty($selectedFilterValues)) {
-                if (isset($defaultFilters[$selectedFilterCode])) {
-                    $filters[$selectedFilterCode] = $defaultFilters[$selectedFilterCode];
-                }
-                continue;
-            }
-
-            $filters[$selectedFilterCode] = $this->getFilterOptionsWithApplicableSiblings(
-                $originalCriteria,
-                $context,
-                $selectedFilterCode
-            );
-        }
-
-        $locale = $context->getValue(LocaleContextDecorator::CODE);
-        $translator = $this->translatorRegistry->getTranslatorForLocale($locale);
+        $translator = $this->getTranslatorForContext($context);
 
         $this->initializeFiltersFromArray($filters, $translator);
     }
 
     /**
      * @param SearchDocumentCollection $searchDocumentCollection
-     * @param string[] $filtersCodesToFetch
+     * @param string[] $attributeCodes
      * @return array[]
      */
-    private function getFiltersAppliedToCollection(
+    private function getCollectionOptionValuesForAttributes(
         SearchDocumentCollection $searchDocumentCollection,
-        array $filtersCodesToFetch
+        array $attributeCodes
     ) {
         $filters = [];
 
@@ -143,7 +124,7 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
             /** @var SearchDocumentField $searchDocumentField */
             foreach ($searchDocument->getFieldsCollection() as $searchDocumentField) {
                 $filterCode = $searchDocumentField->getKey();
-                if (!in_array($filterCode, $filtersCodesToFetch)) {
+                if (!in_array($filterCode, $attributeCodes)) {
                     continue;
                 }
                 $filterValue = $searchDocumentField->getValue();
@@ -163,6 +144,25 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
     /**
      * @param SearchCriteria $originalCriteria
      * @param Context $context
+     * @return array
+     */
+    private function getSelectedOptionValuesWithSiblings(SearchCriteria $originalCriteria, Context $context)
+    {
+        $selectedAttributes = array_keys(array_filter($this->selectedFilters));
+
+        return array_reduce($selectedAttributes, function ($carry, $attributeCode) use ($originalCriteria, $context) {
+            $carry[$attributeCode] = $this->getFilterOptionsWithApplicableSiblings(
+                $originalCriteria,
+                $context,
+                $attributeCode
+            );
+            return $carry;
+        }, []);
+    }
+
+    /**
+     * @param SearchCriteria $originalCriteria
+     * @param Context $context
      * @param string $filterCode
      * @return array[]
      */
@@ -171,39 +171,44 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
         Context $context,
         $filterCode
     ) {
-        $customCriteria = $this->addFiltersExceptGivenOneToSearchCriteria(
-            $originalCriteria,
-            $this->selectedFilters,
-            $filterCode
-        );
+        $customCriteria = $this->addFiltersExceptGivenOneToSearchCriteria($originalCriteria, $filterCode);
         $searchDocumentCollection = $this->dataPoolReader->getSearchDocumentsMatchingCriteria(
             $customCriteria,
             $context
         );
-        $filter = $this->getFiltersAppliedToCollection($searchDocumentCollection, [$filterCode]);
+        $filter = $this->getCollectionOptionValuesForAttributes($searchDocumentCollection, [$filterCode]);
 
         return $filter[$filterCode];
     }
 
     /**
      * @param SearchCriteria $originalCriteria
-     * @param array[] $selectedFilters
      * @param string $filterCodeToExclude
      * @return SearchCriteria
      */
-    private function addFiltersExceptGivenOneToSearchCriteria(
-        SearchCriteria $originalCriteria,
-        array $selectedFilters,
-        $filterCodeToExclude
-    ) {
+    private function addFiltersExceptGivenOneToSearchCriteria(SearchCriteria $originalCriteria, $filterCodeToExclude)
+    {
         $filtersCriteriaArray = [];
 
-        foreach ($selectedFilters as $filterCode => $filterOptionValues) {
+        foreach ($this->selectedFilters as $filterCode => $filterOptionValues) {
             if ($filterCode === $filterCodeToExclude || empty($filterOptionValues)) {
                 continue;
             }
 
+            /* TODO: Remove duplication w/ ProductListingRequestHandler */
             $optionValuesCriteriaArray = array_map(function ($filterOptionValue) use ($filterCode) {
+
+                $regularExpression = sprintf(
+                    '/^([^%1$s]+)%1$s([^%1$s]+)/',
+                    ProductListingRequestHandler::FILTER_RANGE_DELIMITER
+                );
+
+                if (preg_match($regularExpression, $filterOptionValue, $range)) {
+                    $criterionFrom = SearchCriterionGreaterOrEqualThan::create($filterCode, $range[1]);
+                    $criterionTo = SearchCriterionLessOrEqualThan::create($filterCode, $range[2]);
+                    return CompositeSearchCriterion::createAnd($criterionFrom, $criterionTo);
+                }
+
                 return SearchCriterionEqual::create($filterCode, $filterOptionValue);
             }, $filterOptionValues);
 
@@ -237,11 +242,7 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
         foreach ($filters as $filterCode => $filterOptions) {
             $filterNavigationFilterOptionCollection = new FilterNavigationFilterOptionCollection;
             foreach ($filterOptions as $optionValue => $optionCount) {
-                if (in_array($optionValue, $this->selectedFilters[$filterCode])) {
-                    $filterOption = FilterNavigationFilterOption::createSelected($optionValue, $optionCount);
-                } else {
-                    $filterOption = FilterNavigationFilterOption::create($optionValue, $optionCount);
-                }
+                $filterOption = FilterNavigationFilterOption::create($optionValue, $optionCount);
                 $filterNavigationFilterOptionCollection->add($filterOption);
             }
             $this->filters[] = FilterNavigationFilter::create(
@@ -250,5 +251,15 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
                 $translator
             );
         }
+    }
+
+    /**
+     * @param Context $context
+     * @return Translator
+     */
+    private function getTranslatorForContext(Context $context)
+    {
+        $locale = $context->getValue(LocaleContextDecorator::CODE);
+        return $this->translatorRegistry->getTranslatorForLocale($locale);
     }
 }
