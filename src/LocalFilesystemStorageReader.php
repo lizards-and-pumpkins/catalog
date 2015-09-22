@@ -6,38 +6,16 @@ use LizardsAndPumpkins\Utils\Exception\FileNotReadableException;
 
 class LocalFilesystemStorageReader implements FileStorageReader
 {
-    /**
-     * @var string
-     */
-    private $baseDirPath;
 
     /**
-     * @param string $baseDirPath
-     */
-    public function __construct($baseDirPath)
-    {
-        $this->baseDirPath = $baseDirPath;
-    }
-
-    /**
-     * @param string $relativeFilePath
+     * @param string $filePath
      * @return string
      */
-    public function getFileContents($relativeFilePath)
+    public function getFileContents($filePath)
     {
-        $filePath = $this->getAbsoluteFilePath($relativeFilePath);
         $this->checkIfFileIsReadable($filePath);
 
         return file_get_contents($filePath);
-    }
-
-    /**
-     * @param string $relativeFilePath
-     * @return string
-     */
-    private function getAbsoluteFilePath($relativeFilePath)
-    {
-        return $this->baseDirPath . '/' . $relativeFilePath;
     }
 
     /**

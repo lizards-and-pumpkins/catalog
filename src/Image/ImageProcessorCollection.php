@@ -15,12 +15,12 @@ class ImageProcessorCollection
     }
 
     /**
-     * @param string $imageFileName
+     * @param string $imageFilePath
      */
-    public function process($imageFileName)
+    public function process($imageFilePath)
     {
         foreach ($this->processors as $processor) {
-            $processor->process($imageFileName);
+            $processor->process($imageFilePath);
         }
     }
 }

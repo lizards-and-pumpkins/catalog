@@ -2,6 +2,10 @@
 
 namespace LizardsAndPumpkins\Image;
 
+use LizardsAndPumpkins\Image\Exception\InvalidBinaryImageDataException;
+use LizardsAndPumpkins\Image\Exception\InvalidColorException;
+use LizardsAndPumpkins\Image\Exception\InvalidImageDimensionException;
+
 /**
  * @covers \LizardsAndPumpkins\Image\ImageMagickInscribeStrategy
  * @uses   \LizardsAndPumpkins\Image\ResizeStrategyTrait

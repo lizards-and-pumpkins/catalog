@@ -148,29 +148,29 @@ class SampleFactory implements Factory
     public function createOriginalImageProcessor()
     {
         $strategySequence = $this->getMasterFactory()->createOriginalImageProcessingStrategySequence();
-        $fileStorageReader = $this->getMasterFactory()->createOriginalImageFileStorageReader();
-        $fileStorageWriter = $this->getMasterFactory()->createOriginalImageFileStorageWriter();
-
-        return new ImageProcessor($strategySequence, $fileStorageReader, $fileStorageWriter);
+        $fileStorageReader = $this->getMasterFactory()->createFileStorageReader();
+        $fileStorageWriter = $this->getMasterFactory()->createFileStorageWriter();
+        
+        $resultImageDir = __DIR__ . '/../pub/media/product/original';
+        $this->createDirectoryIfNotExists($resultImageDir);
+        
+        return new ImageProcessor($strategySequence, $fileStorageReader, $fileStorageWriter, $resultImageDir);
     }
 
     /**
      * @return FileStorageReader
      */
-    public function createOriginalImageFileStorageReader()
+    public function createFileStorageReader()
     {
-        return new LocalFilesystemStorageReader(__DIR__ . '/../tests/shared-fixture/product-images');
+        return new LocalFilesystemStorageReader();
     }
 
     /**
      * @return FileStorageWriter
      */
-    public function createOriginalImageFileStorageWriter()
+    public function createFileStorageWriter()
     {
-        $resultImageDir = __DIR__ . '/../pub/media/product/original';
-        $this->createDirectoryIfNotExists($resultImageDir);
-
-        return new LocalFilesystemStorageWriter($resultImageDir);
+        return new LocalFilesystemStorageWriter();
     }
 
     /**
@@ -187,29 +187,13 @@ class SampleFactory implements Factory
     public function createProductDetailsPageImageProcessor()
     {
         $strategySequence = $this->getMasterFactory()->createProductDetailsPageImageProcessingStrategySequence();
-        $fileStorageReader = $this->getMasterFactory()->createProductDetailsPageImageFileStorageReader();
-        $fileStorageWriter = $this->getMasterFactory()->createProductDetailsPageImageFileStorageWriter();
+        $fileStorageReader = $this->getMasterFactory()->createFileStorageReader();
+        $fileStorageWriter = $this->getMasterFactory()->createFileStorageWriter();
 
-        return new ImageProcessor($strategySequence, $fileStorageReader, $fileStorageWriter);
-    }
-
-    /**
-     * @return FileStorageReader
-     */
-    public function createProductDetailsPageImageFileStorageReader()
-    {
-        return new LocalFilesystemStorageReader(__DIR__ . '/../tests/shared-fixture/product-images');
-    }
-
-    /**
-     * @return FileStorageWriter
-     */
-    public function createProductDetailsPageImageFileStorageWriter()
-    {
         $resultImageDir = __DIR__ . '/../pub/media/product/large';
         $this->createDirectoryIfNotExists($resultImageDir);
-
-        return new LocalFilesystemStorageWriter($resultImageDir);
+        
+        return new ImageProcessor($strategySequence, $fileStorageReader, $fileStorageWriter, $resultImageDir);
     }
 
     /**
@@ -231,29 +215,13 @@ class SampleFactory implements Factory
     public function createProductListingImageProcessor()
     {
         $strategySequence = $this->getMasterFactory()->createProductListingImageProcessingStrategySequence();
-        $fileStorageReader = $this->getMasterFactory()->createProductListingImageFileStorageReader();
-        $fileStorageWriter = $this->getMasterFactory()->createProductListingImageFileStorageWriter();
+        $fileStorageReader = $this->getMasterFactory()->createFileStorageReader();
+        $fileStorageWriter = $this->getMasterFactory()->createFileStorageWriter();
 
-        return new ImageProcessor($strategySequence, $fileStorageReader, $fileStorageWriter);
-    }
-
-    /**
-     * @return FileStorageReader
-     */
-    public function createProductListingImageFileStorageReader()
-    {
-        return new LocalFilesystemStorageReader(__DIR__ . '/../tests/shared-fixture/product-images');
-    }
-
-    /**
-     * @return FileStorageWriter
-     */
-    public function createProductListingImageFileStorageWriter()
-    {
         $resultImageDir = __DIR__ . '/../pub/media/product/medium';
         $this->createDirectoryIfNotExists($resultImageDir);
-
-        return new LocalFilesystemStorageWriter($resultImageDir);
+        
+        return new ImageProcessor($strategySequence, $fileStorageReader, $fileStorageWriter, $resultImageDir);
     }
 
     /**
@@ -275,29 +243,13 @@ class SampleFactory implements Factory
     public function createGalleyThumbnailImageProcessor()
     {
         $strategySequence = $this->getMasterFactory()->createGalleyThumbnailImageProcessingStrategySequence();
-        $fileStorageReader = $this->getMasterFactory()->createGalleyThumbnailImageFileStorageReader();
-        $fileStorageWriter = $this->getMasterFactory()->createGalleyThumbnailImageFileStorageWriter();
+        $fileStorageReader = $this->getMasterFactory()->createFileStorageReader();
+        $fileStorageWriter = $this->getMasterFactory()->createFileStorageWriter();
 
-        return new ImageProcessor($strategySequence, $fileStorageReader, $fileStorageWriter);
-    }
-
-    /**
-     * @return FileStorageReader
-     */
-    public function createGalleyThumbnailImageFileStorageReader()
-    {
-        return new LocalFilesystemStorageReader(__DIR__ . '/../tests/shared-fixture/product-images');
-    }
-
-    /**
-     * @return FileStorageWriter
-     */
-    public function createGalleyThumbnailImageFileStorageWriter()
-    {
         $resultImageDir = __DIR__ . '/../pub/media/product/small';
         $this->createDirectoryIfNotExists($resultImageDir);
-
-        return new LocalFilesystemStorageWriter($resultImageDir);
+        
+        return new ImageProcessor($strategySequence, $fileStorageReader, $fileStorageWriter, $resultImageDir);
     }
 
     /**
@@ -319,29 +271,13 @@ class SampleFactory implements Factory
     public function createSearchAutosuggestionImageProcessor()
     {
         $strategySequence = $this->getMasterFactory()->createSearchAutosuggestionImageProcessingStrategySequence();
-        $fileStorageReader = $this->getMasterFactory()->createSearchAutosuggestionImageFileStorageReader();
-        $fileStorageWriter = $this->getMasterFactory()->createSearchAutosuggestionImageFileStorageWriter();
-
-        return new ImageProcessor($strategySequence, $fileStorageReader, $fileStorageWriter);
-    }
-
-    /**
-     * @return FileStorageReader
-     */
-    public function createSearchAutosuggestionImageFileStorageReader()
-    {
-        return new LocalFilesystemStorageReader(__DIR__ . '/../tests/shared-fixture/product-images');
-    }
-
-    /**
-     * @return FileStorageWriter
-     */
-    public function createSearchAutosuggestionImageFileStorageWriter()
-    {
+        $fileStorageReader = $this->getMasterFactory()->createFileStorageReader();
+        $fileStorageWriter = $this->getMasterFactory()->createFileStorageWriter();
+        
         $resultImageDir = __DIR__ . '/../pub/media/product/search-autosuggestion';
         $this->createDirectoryIfNotExists($resultImageDir);
 
-        return new LocalFilesystemStorageWriter($resultImageDir);
+        return new ImageProcessor($strategySequence, $fileStorageReader, $fileStorageWriter, $resultImageDir);
     }
 
     /**

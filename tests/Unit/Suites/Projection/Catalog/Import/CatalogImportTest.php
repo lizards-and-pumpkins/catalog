@@ -3,7 +3,7 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
-use LizardsAndPumpkins\Image\UpdateImageCommand;
+use LizardsAndPumpkins\Image\AddImageCommand;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\Exception\ProductAttributeContextPartsMismatchException;
 use LizardsAndPumpkins\Product\ProductId;
@@ -16,7 +16,7 @@ use LizardsAndPumpkins\Product\ProductSourceBuilder;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportFileDoesNotExistException;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportFileNotReadableException;
 use LizardsAndPumpkins\Queue\Queue;
-use org\bovigo\vfs\vfsStream;
+use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
@@ -26,13 +26,19 @@ use org\bovigo\vfs\vfsStream;
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImportFailedMessage
  * @uses   \LizardsAndPumpkins\Utils\XPathParser
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogXmlParser
- * @uses   \LizardsAndPumpkins\Image\UpdateImageCommand
+ * @uses   \LizardsAndPumpkins\Image\AddImageCommand
  * @uses   \LizardsAndPumpkins\Utils\UuidGenerator
  * @uses   \LizardsAndPumpkins\DataVersion
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEvent
  */
 class CatalogImportTest extends \PHPUnit_Framework_TestCase
 {
+    use TestFileFixtureTrait;
+    
+    private $invalidProductsFixtureFile = __DIR__ . '/../../../../../shared-fixture/catalog-with-invalid-product.xml';
+    
+    private $sharedFixtureFilePath = __DIR__ . '/../../../../../shared-fixture/catalog.xml';
+
     /**
      * @var Queue|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -67,6 +73,11 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
      * @var Queue|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockEventQueue;
+    
+    /**
+     * @var string
+     */
+    private $testDirectoryPath;
 
     /**
      * @param string $commandClass
@@ -112,7 +123,9 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        vfsStream::setup('root');
+        $this->testDirectoryPath = $this->getUniqueTempDir();
+        $this->createFixtureDirectory($this->testDirectoryPath);
+        
         $this->mockCommandQueue = $this->getMock(Queue::class);
         $this->addToCommandQueueSpy = $this->any();
         $this->mockCommandQueue->expects($this->addToCommandQueueSpy)->method('add');
@@ -136,7 +149,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
             CatalogImportFileDoesNotExistException::class,
             'Catalog import file not found'
         );
-        $this->catalogImport->importFile(vfsStream::url('root/some-not-existing-file.xml'));
+        $this->catalogImport->importFile('/some-not-existing-file.xml');
     }
 
     public function testExceptionIsThrownIfImportFileIsNotReadable()
@@ -146,69 +159,48 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
             'Catalog import file is not readable'
         );
 
-        $importFilePath = vfsStream::url('root/some-not-readable-file.xml');
-        touch($importFilePath);
-        chmod($importFilePath, 0000);
+        $importFilePath = $this->testDirectoryPath . '/some-not-readable-file.xml';
+        $this->createFixtureFile($importFilePath, '', 0000);
 
         $this->catalogImport->importFile($importFilePath);
     }
 
     public function testExceptionIsLoggedIfProductSourceIsInvalid()
     {
-        $importFilePath = vfsStream::url('root/catalog-import.xml');
-        $fixtureFile = __DIR__ . '/../../../../../shared-fixture/catalog-with-invalid-product.xml';
-        file_put_contents($importFilePath, file_get_contents($fixtureFile));
-
         $this->stubProductSourceBuilder->method('createProductSourceFromXml')
             ->willThrowException(new ProductAttributeContextPartsMismatchException('dummy'));
 
         $this->logger->expects($this->atLeastOnce())->method('log')
             ->with($this->isInstanceOf(ProductImportFailedMessage::class));
 
-        $this->catalogImport->importFile($importFilePath);
+        $this->catalogImport->importFile($this->invalidProductsFixtureFile);
     }
 
     public function testUpdateProductCommandsAreEmitted()
     {
-        $importFilePath = vfsStream::url('root/catalog-import.xml');
-        $fixtureFile = __DIR__ . '/../../../../../shared-fixture/catalog.xml';
-        file_put_contents($importFilePath, file_get_contents($fixtureFile));
-
-        $this->catalogImport->importFile($importFilePath);
+        $this->catalogImport->importFile($this->sharedFixtureFilePath);
         $this->assertCommandWasAddedToQueue(UpdateProductCommand::class);
     }
 
     public function testUpdateProductListingCommandsAreEmitted()
     {
-        $importFilePath = vfsStream::url('root/catalog-import.xml');
-        $fixtureFile = __DIR__ . '/../../../../../shared-fixture/catalog.xml';
-        file_put_contents($importFilePath, file_get_contents($fixtureFile));
-
-        $this->catalogImport->importFile($importFilePath);
-
-        $this->assertCommandWasAddedToQueue(AddProductListingCommand::class);
+        $this->catalogImport->importFile($this->sharedFixtureFilePath);
+        
+        $this->assertCommandWasAddedToQueue(UpdateProductListingCommand::class);
     }
 
-    public function testUpdateImageCommandsAreEmitted()
+    public function testAddImageCommandsAreEmitted()
     {
-        $importFilePath = vfsStream::url('root/catalog-import.xml');
-        $fixtureFile = __DIR__ . '/../../../../../shared-fixture/catalog.xml';
-        file_put_contents($importFilePath, file_get_contents($fixtureFile));
-
-        $this->catalogImport->importFile($importFilePath);
-
-        $this->assertCommandWasAddedToQueue(UpdateImageCommand::class);
+        $this->catalogImport->importFile($this->sharedFixtureFilePath);
+        
+        $this->assertCommandWasAddedToQueue(AddImageCommand::class);
     }
 
-    public function testItAddsAnCatalogWasImportedDomainEventToTheEventQueue()
+    public function testItAddsACatalogWasImportedDomainEventToTheEventQueue()
     {
         $this->mockEventQueue->expects($this->once())->method('add')
             ->with($this->isInstanceOf(CatalogWasImportedDomainEvent::class));
 
-        $importFilePath = vfsStream::url('root/catalog-import.xml');
-        $fixtureFile = __DIR__ . '/../../../../../shared-fixture/catalog.xml';
-        file_put_contents($importFilePath, file_get_contents($fixtureFile));
-
-        $this->catalogImport->importFile($importFilePath);
+        $this->catalogImport->importFile($this->sharedFixtureFilePath);
     }
 }

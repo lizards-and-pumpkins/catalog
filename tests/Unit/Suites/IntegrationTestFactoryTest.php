@@ -82,23 +82,12 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testLocalFilesystemStorageWriterIsReturned()
     {
-        $this->assertInstanceOf(LocalFilesystemStorageWriter::class, $this->factory->createImageFileStorageWriter());
+        $this->assertInstanceOf(LocalFilesystemStorageWriter::class, $this->factory->createFileStorageWriter());
     }
 
     public function testLocalFilesystemStorageReaderIsReturned()
     {
-        $this->assertInstanceOf(LocalFilesystemStorageReader::class, $this->factory->createImageFileStorageReader());
-    }
-
-    public function testResizedImagesDirectoryIsCreated()
-    {
-        $resultImageDir = sys_get_temp_dir() . '/' . IntegrationTestFactory::PROCESSED_IMAGES_DIR;
-
-        (new LocalFilesystem())->removeDirectoryAndItsContent($resultImageDir);
-
-        $this->factory->createImageFileStorageWriter();
-
-        $this->assertTrue(is_dir($resultImageDir));
+        $this->assertInstanceOf(LocalFilesystemStorageReader::class, $this->factory->createFileStorageReader());
     }
 
     public function testImageProcessingStrategySequenceIsReturned()

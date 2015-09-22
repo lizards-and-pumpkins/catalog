@@ -7,7 +7,7 @@ use LizardsAndPumpkins\Utils\LocalFilesystem;
 
 /**
  * @covers \LizardsAndPumpkins\LocalFilesystemStorageReader
- * @uses \LizardsAndPumpkins\Utils\LocalFilesystem
+ * @uses   \LizardsAndPumpkins\Utils\LocalFilesystem
  */
 class LocalFilesystemStorageReaderTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,7 +26,7 @@ class LocalFilesystemStorageReaderTest extends \PHPUnit_Framework_TestCase
         $this->testBaseDirPath = sys_get_temp_dir() . '/lizards-and-pumpkins-local-filesystem-storage';
         mkdir($this->testBaseDirPath);
 
-        $this->reader = new LocalFilesystemStorageReader($this->testBaseDirPath);
+        $this->reader = new LocalFilesystemStorageReader();
     }
 
     protected function tearDown()
@@ -49,12 +49,12 @@ class LocalFilesystemStorageReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testFileContentsIsReturned()
     {
-        $fileName = 'foo';
+        $filePath = $this->testBaseDirPath . '/foo';
         $content = 'bar';
 
-        file_put_contents($this->testBaseDirPath . '/' . $fileName, $content);
+        file_put_contents($filePath, $content);
 
-        $result = $this->reader->getFileContents($fileName);
+        $result = $this->reader->getFileContents($filePath);
 
         $this->assertEquals($content, $result);
     }

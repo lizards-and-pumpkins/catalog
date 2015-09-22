@@ -6,10 +6,10 @@ use LizardsAndPumpkins\CommandHandler;
 use LizardsAndPumpkins\Queue\Queue;
 
 /**
- * @covers \LizardsAndPumpkins\Image\UpdateImageCommandHandler
- * @uses   \LizardsAndPumpkins\Image\ImageWasUpdatedDomainEvent
+ * @covers \LizardsAndPumpkins\Image\AddImageCommandHandler
+ * @uses   \LizardsAndPumpkins\Image\ImageWasAddedDomainEvent
  */
-class UpdateImageCommandHandlerTest extends \PHPUnit_Framework_TestCase
+class AddImageCommandHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Queue|\PHPUnit_Framework_MockObject_MockObject
@@ -17,19 +17,19 @@ class UpdateImageCommandHandlerTest extends \PHPUnit_Framework_TestCase
     private $mockDomainEventQueue;
 
     /**
-     * @var UpdateImageCommandHandler
+     * @var AddImageCommandHandler
      */
     private $commandHandler;
 
     protected function setUp()
     {
-        /** @var UpdateImageCommand|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
-        $stubCommand = $this->getMock(UpdateImageCommand::class, [], [], '', false);
+        /** @var AddImageCommand|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
+        $stubCommand = $this->getMock(AddImageCommand::class, [], [], '', false);
         $stubCommand->method('getImageFileName')->willReturn('foo.png');
 
         $this->mockDomainEventQueue = $this->getMock(Queue::class);
 
-        $this->commandHandler = new UpdateImageCommandHandler($stubCommand, $this->mockDomainEventQueue);
+        $this->commandHandler = new AddImageCommandHandler($stubCommand, $this->mockDomainEventQueue);
     }
 
     public function testCommandHandlerInterfaceIsImplemented()
@@ -37,10 +37,10 @@ class UpdateImageCommandHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(CommandHandler::class, $this->commandHandler);
     }
 
-    public function testImageWasUpdatedDomainEventIsEmitted()
+    public function testImageWasAddedDomainEventIsEmitted()
     {
         $this->mockDomainEventQueue->expects($this->once())->method('add')
-            ->with($this->isInstanceOf(ImageWasUpdatedDomainEvent::class));
+            ->with($this->isInstanceOf(ImageWasAddedDomainEvent::class));
 
         $this->commandHandler->process();
     }

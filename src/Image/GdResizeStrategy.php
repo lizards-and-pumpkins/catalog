@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\Image;
 
+use LizardsAndPumpkins\Image\Exception\InvalidBinaryImageDataException;
+
 class GdResizeStrategy implements ImageProcessingStrategy
 {
     use ResizeStrategyTrait;
