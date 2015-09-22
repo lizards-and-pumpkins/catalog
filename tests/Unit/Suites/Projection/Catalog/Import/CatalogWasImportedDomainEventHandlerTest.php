@@ -3,7 +3,6 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
-use LizardsAndPumpkins\CommandHandler;
 use LizardsAndPumpkins\DataVersion;
 use LizardsAndPumpkins\DomainEventHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetProjector;
