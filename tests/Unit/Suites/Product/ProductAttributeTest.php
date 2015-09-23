@@ -11,32 +11,6 @@ use LizardsAndPumpkins\Product\Exception\ProductAttributeDoesNotContainContextPa
  */
 class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @param string[] $attributeContext
-     * @return ProductAttribute
-     */
-    private function createProductAttributeWithArray(array $attributeContext)
-    {
-        return ProductAttribute::fromArray([
-            ProductAttribute::CODE => 'name',
-            ProductAttribute::CONTEXT_DATA => $attributeContext,
-            ProductAttribute::VALUE => 'dummy-test-value'
-        ]);
-    }
-
-    /**
-     * @param string[] $returnValueMap
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getContextMockWithReturnValueMap(array $returnValueMap)
-    {
-        $stubContext = $this->getMock(Context::class);
-        $stubContext->method('getSupportedCodes')->willReturn(array_column($returnValueMap, 0));
-        $stubContext->method('getValue')->willReturnMap($returnValueMap);
-
-        return $stubContext;
-    }
-
     public function testTrueIsReturnedIfAttributeHasGivenCode()
     {
         $attribute = ProductAttribute::fromArray([
@@ -105,72 +79,6 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ProductAttributeList::class, $attributeValue);
         $this->assertEquals(1, $attributeValue->getAttributesWithCode('bar')[0]->getValue());
         $this->assertEquals(2, $attributeValue->getAttributesWithCode('baz')[0]->getValue());
-    }
-
-    public function testIntegerIsReturnedForMatchScore()
-    {
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $this->getContextMockWithReturnValueMap([]);
-        $attribute = $this->createProductAttributeWithArray([]);
-
-        $this->assertInternalType('int', $attribute->getMatchScoreForContext($stubContext));
-    }
-
-    public function testOneIsReturnedForMatchScoreForContextWithOneMatch()
-    {
-        $testWebsiteCode = 'foo';
-        $attribute = $this->createProductAttributeWithArray(['website' => $testWebsiteCode, 'locale' => 'bar']);
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $this->getContextMockWithReturnValueMap([
-            ['website', $testWebsiteCode],
-            ['version', '1'],
-        ]);
-
-        $this->assertSame(1, $attribute->getMatchScoreForContext($stubContext));
-    }
-
-    public function testTwoIsReturnedForMatchScoreForContextWithTwoMatches()
-    {
-        $testWebsiteCode = 'foo';
-        $testLocaleCode = 'bar';
-        $attribute = $this->createProductAttributeWithArray([
-            'website' => $testWebsiteCode,
-            'locale' => $testLocaleCode
-        ]);
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $this->getContextMockWithReturnValueMap([
-            ['website', $testWebsiteCode],
-            ['locale', $testLocaleCode],
-            ['version', '1'],
-        ]);
-
-        $this->assertSame(2, $attribute->getMatchScoreForContext($stubContext));
-    }
-
-    public function testZeroIsReturnedForMatchScoreForContextWithNoMatches()
-    {
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $this->getContextMockWithReturnValueMap([
-            ['website', 'buz'],
-            ['locale', 'qux'],
-            ['version', '1'],
-        ]);
-        $attribute = $this->createProductAttributeWithArray(['website' => 'foo', 'locale' => 'bar']);
-
-        $this->assertSame(0, $attribute->getMatchScoreForContext($stubContext));
-    }
-
-    public function testOneIsReturnedForMatchScoreForContextWithOneMatchAndOneMiss()
-    {
-        $testLocaleCode = 'bar';
-        $attribute = $this->createProductAttributeWithArray(['website' => 'foo', 'locale' => $testLocaleCode]);
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $this->getContextMockWithReturnValueMap([
-            ['website', 'buz'],
-            ['locale', $testLocaleCode],
-            ['version', '1'],
-        ]);
-        $this->assertSame(1, $attribute->getMatchScoreForContext($stubContext));
     }
 
     public function testContextPartsOfAttributeAreReturned()
@@ -283,5 +191,19 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $this->assertTrue($attributeA->hasSameCodeAs($attributeB));
+    }
+
+    public function testItReturnsTheContextDataSet()
+    {
+        $contextDataSet = [
+            'foo' => 'bar',
+            'buz' => 'qux'
+        ];
+        $attribute = ProductAttribute::fromArray([
+            ProductAttribute::CODE => 'test',
+            ProductAttribute::CONTEXT_DATA => $contextDataSet,
+            ProductAttribute::VALUE => 'abc'
+        ]);
+        $this->assertSame($contextDataSet, $attribute->getContextDataSet());
     }
 }

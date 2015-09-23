@@ -152,8 +152,16 @@ abstract class ContextDecorator implements Context
      */
     public function jsonSerialize()
     {
-        return array_merge(
-            $this->component->jsonSerialize(), [$this->getCode() => $this->getValueFromContext()]
-        );
+        return array_merge($this->component->jsonSerialize(), [$this->getCode() => $this->getValueFromContext()]);
+    }
+
+    /**
+     * @param string[] $dataSet
+     * @return bool
+     */
+    public function matchesDataSet(array $dataSet)
+    {
+        $isMatch = !isset($dataSet[$this->getCode()]) || $this->getValueFromContext() === $dataSet[$this->getCode()];
+        return $isMatch && $this->component->matchesDataSet($dataSet);
     }
 }

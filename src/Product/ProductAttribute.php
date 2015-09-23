@@ -119,45 +119,6 @@ class ProductAttribute implements Attribute
     }
 
     /**
-     * @param Context $context
-     * @return int
-     */
-    public function getMatchScoreForContext(Context $context)
-    {
-        return array_reduce(
-            $context->getSupportedCodes(),
-            function ($score, $contextCode) use ($context) {
-                return $score + $this->getScoreIfContextPartIsSetAndMatches($contextCode, $context);
-            },
-            0
-        );
-    }
-
-    /**
-     * @param string $contextCode
-     * @param Context $context
-     * @return int
-     */
-    private function getScoreIfContextPartIsSetAndMatches($contextCode, Context $context)
-    {
-        return array_key_exists($contextCode, $this->contextData) ?
-            $this->getScoreIfContextPartMatches($contextCode, $context) :
-            0;
-    }
-
-    /**
-     * @param string $contextCode
-     * @param Context $context
-     * @return int
-     */
-    private function getScoreIfContextPartMatches($contextCode, Context $context)
-    {
-        return $context->getValue($contextCode) === $this->contextData[$contextCode] ?
-            1 :
-            0;
-    }
-
-    /**
      * @param string $contextPartCode
      * @return string
      */
@@ -177,5 +138,13 @@ class ProductAttribute implements Attribute
                 sprintf('The context part "%s" is not present on the attribute "%s"', $contextCode, $this->getCode())
             );
         }
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getContextDataSet()
+    {
+        return $this->contextData;
     }
 }
