@@ -34,7 +34,7 @@ class SampleFactory implements Factory
      */
     public function getProductListingFilterNavigationAttributeCodes()
     {
-        return ['gender', 'brand', 'color'];
+        return ['gender', 'brand', 'price', 'color'];
     }
 
     /**
@@ -42,7 +42,7 @@ class SampleFactory implements Factory
      */
     public function getProductSearchResultsFilterNavigationAttributeCodes()
     {
-        return ['gender', 'brand', 'category', 'color'];
+        return ['gender', 'brand', 'category', 'price', 'color'];
     }
 
     /**

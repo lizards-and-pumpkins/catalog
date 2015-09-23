@@ -9,6 +9,11 @@ class FilterNavigationFilterOptionCollection implements \Countable, \IteratorAgg
      */
     private $filterOptions = [];
 
+    public function __construct(FilterNavigationFilterOption ...$filterOptions)
+    {
+        $this->filterOptions = $filterOptions;
+    }
+
     /**
      * @return int
      */
@@ -23,11 +28,6 @@ class FilterNavigationFilterOptionCollection implements \Countable, \IteratorAgg
     public function getIterator()
     {
         return new \ArrayIterator($this->filterOptions);
-    }
-
-    public function add(FilterNavigationFilterOption $filterValue)
-    {
-        $this->filterOptions[] = $filterValue;
     }
 
     /**

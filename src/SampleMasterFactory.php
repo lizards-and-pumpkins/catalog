@@ -29,6 +29,7 @@ use LizardsAndPumpkins\Log\InMemoryLogger;
  * @method Product\ProductSourceBuilder createProductSourceBuilder
  * @method Context\Context createContext
  * @method Product\FilterNavigationFilterCollection createFilterNavigationFilterCollection
+ * @method DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder createSearchCriteriaBuilder
  */
 class SampleMasterFactory implements MasterFactory
 {

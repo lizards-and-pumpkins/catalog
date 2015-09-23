@@ -45,18 +45,6 @@ class FilterNavigationFilterOptionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($optionValue, $filterOption->getValue());
         $this->assertSame($optionCount, $filterOption->getCount());
-        $this->assertFalse($filterOption->isSelected());
-    }
-
-    public function testSelectedOptionIsCreated()
-    {
-        $optionValue = 'bar';
-        $optionCount = 1;
-        $filterOption = FilterNavigationFilterOption::createSelected($optionValue, $optionCount);
-
-        $this->assertSame($optionValue, $filterOption->getValue());
-        $this->assertSame($optionCount, $filterOption->getCount());
-        $this->assertTrue($filterOption->isSelected());
     }
 
     public function testArrayRepresentationOfFilterOptionIsReturned()
@@ -68,7 +56,6 @@ class FilterNavigationFilterOptionTest extends \PHPUnit_Framework_TestCase
         $expectedArray = [
             'value' => $optionValue,
             'count' => $optionCount,
-            'is_selected' => false
         ];
 
         $this->assertSame($expectedArray, $filterOption->jsonSerialize());

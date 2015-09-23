@@ -15,6 +15,7 @@ use LizardsAndPumpkins\Context\WebsiteContextDecorator;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 use LizardsAndPumpkins\Http\HttpRouterChain;
@@ -1267,8 +1268,17 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new FilterNavigationFilterCollection(
             $this->getMasterFactory()->createDataPoolReader(),
-            $this->getMasterFactory()->getTranslatorRegistry()
+            $this->getMasterFactory()->getTranslatorRegistry(),
+            $this->getMasterFactory()->createSearchCriteriaBuilder()
         );
+    }
+
+    /**
+     * @return SearchCriteriaBuilder
+     */
+    public function createSearchCriteriaBuilder()
+    {
+        return new SearchCriteriaBuilder;
     }
 
     /**

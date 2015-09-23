@@ -8,11 +8,6 @@ namespace LizardsAndPumpkins\Product;
 class FilterNavigationFilterOptionCollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var FilterNavigationFilterOptionCollection
-     */
-    private $filterOptionCollection;
-
-    /**
      * @return FilterNavigationFilterOption|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createStubFilterOption()
@@ -20,40 +15,31 @@ class FilterNavigationFilterOptionCollectionTest extends \PHPUnit_Framework_Test
         return $this->getMock(FilterNavigationFilterOption::class, [], [], '', false);
     }
 
-    protected function setUp()
-    {
-        $this->filterOptionCollection = new FilterNavigationFilterOptionCollection;
-    }
-
     public function testCountableInterfaceIsImplemented()
     {
-        $this->assertInstanceOf(\Countable::class, $this->filterOptionCollection);
+        $filterOptionCollection = new FilterNavigationFilterOptionCollection;
+        $this->assertInstanceOf(\Countable::class, $filterOptionCollection);
     }
 
     public function testIteratorAggregateInterfaceIsImplemented()
     {
-        $this->assertInstanceOf(\IteratorAggregate::class, $this->filterOptionCollection);
+        $filterOptionCollection = new FilterNavigationFilterOptionCollection;
+        $this->assertInstanceOf(\IteratorAggregate::class, $filterOptionCollection);
     }
 
     public function testJsonSerializableInterfaceIsImplemented()
     {
-        $this->assertInstanceOf(\JsonSerializable::class, $this->filterOptionCollection);
-    }
-
-    public function testCollectionIsInitiallyEmpty()
-    {
-        $this->assertCount(0, $this->filterOptionCollection);
+        $filterOptionCollection = new FilterNavigationFilterOptionCollection;
+        $this->assertInstanceOf(\JsonSerializable::class, $filterOptionCollection);
     }
 
     public function testCollectionIsAccessibleViaGetter()
     {
         $stubFilterOptionA = $this->createStubFilterOption();
         $stubFilterOptionB = $this->createStubFilterOption();
+        $filterOptionCollection = new FilterNavigationFilterOptionCollection($stubFilterOptionA, $stubFilterOptionB);
 
-        $this->filterOptionCollection->add($stubFilterOptionA);
-        $this->filterOptionCollection->add($stubFilterOptionB);
-
-        $result = $this->filterOptionCollection->getOptions();
+        $result = $filterOptionCollection->getOptions();
 
         $this->assertCount(2, $result);
         $this->assertContains($stubFilterOptionA, $result);
@@ -64,21 +50,19 @@ class FilterNavigationFilterOptionCollectionTest extends \PHPUnit_Framework_Test
     {
         $stubFilterOptionA = $this->createStubFilterOption();
         $stubFilterOptionB = $this->createStubFilterOption();
+        $filterOptionCollection = new FilterNavigationFilterOptionCollection($stubFilterOptionA, $stubFilterOptionB);
 
-        $this->filterOptionCollection->add($stubFilterOptionA);
-        $this->filterOptionCollection->add($stubFilterOptionB);
-
-        $this->assertCount(2, $this->filterOptionCollection);
-        $this->assertContains($stubFilterOptionA, $this->filterOptionCollection);
-        $this->assertContains($stubFilterOptionB, $this->filterOptionCollection);
+        $this->assertCount(2, $filterOptionCollection);
+        $this->assertContains($stubFilterOptionA, $filterOptionCollection);
+        $this->assertContains($stubFilterOptionB, $filterOptionCollection);
     }
 
     public function testArrayRepresentationOfFilterOptionCollectionIsReturned()
     {
         $stubFilterOption = $this->createStubFilterOption();
-        $this->filterOptionCollection->add($stubFilterOption);
+        $filterOptionCollection = new FilterNavigationFilterOptionCollection($stubFilterOption);
 
-        $result = $this->filterOptionCollection->jsonSerialize();
+        $result = $filterOptionCollection->jsonSerialize();
 
         $this->assertInternalType('array', $result);
         $this->assertCount(1, $result);

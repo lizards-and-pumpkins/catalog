@@ -107,7 +107,8 @@ class ProductListingTest extends AbstractIntegrationTest
             $this->factory->getSnippetKeyGeneratorLocator(),
             $this->factory->createFilterNavigationFilterCollection(),
             $filterNavigationAttributeCodes,
-            $defaultNumberOfProductsPerPage
+            $defaultNumberOfProductsPerPage,
+            $this->factory->createSearchCriteriaBuilder()
         );
     }
 

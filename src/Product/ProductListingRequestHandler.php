@@ -7,7 +7,7 @@ use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyNotFoundException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -16,7 +16,6 @@ use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\UnableToHandleRequestException;
 use LizardsAndPumpkins\PageBuilder;
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
-use LizardsAndPumpkins\Renderer\BlockRenderer;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
 
 class ProductListingRequestHandler implements HttpRequestHandler
@@ -54,7 +53,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
     private $filterNavigationFilterCollection;
 
     /**
-     * @var array
+     * @var string[]
      */
     private $filterNavigationAttributeCodes;
 
@@ -64,6 +63,11 @@ class ProductListingRequestHandler implements HttpRequestHandler
     private $defaultNumberOfProductsPerPage;
 
     /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
      * @param Context $context
      * @param DataPoolReader $dataPoolReader
      * @param PageBuilder $pageBuilder
@@ -71,6 +75,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
      * @param FilterNavigationFilterCollection $filterNavigationFilterCollection
      * @param string[] $filterNavigationAttributeCodes
      * @param int $defaultNumberOfProductsPerPage
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
         Context $context,
@@ -79,7 +84,8 @@ class ProductListingRequestHandler implements HttpRequestHandler
         SnippetKeyGeneratorLocator $keyGeneratorLocator,
         FilterNavigationFilterCollection $filterNavigationFilterCollection,
         array $filterNavigationAttributeCodes,
-        $defaultNumberOfProductsPerPage
+        $defaultNumberOfProductsPerPage,
+        SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->dataPoolReader = $dataPoolReader;
         $this->context = $context;
@@ -88,6 +94,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $this->filterNavigationFilterCollection = $filterNavigationFilterCollection;
         $this->filterNavigationAttributeCodes = $filterNavigationAttributeCodes;
         $this->defaultNumberOfProductsPerPage = $defaultNumberOfProductsPerPage;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
@@ -253,7 +260,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
             }
 
             $optionValuesCriteriaArray = array_map(function ($filterOptionValue) use ($filterCode) {
-                return SearchCriterionEqual::create($filterCode, $filterOptionValue);
+                return $this->searchCriteriaBuilder->fromRequestParameter($filterCode, $filterOptionValue);
             }, $filterOptionValues);
 
             $filterCriteria = CompositeSearchCriterion::createOr(...$optionValuesCriteriaArray);
@@ -274,14 +281,10 @@ class ProductListingRequestHandler implements HttpRequestHandler
      */
     private function getSelectedFilterValuesFromRequest(HttpRequest $request)
     {
-        $selectedFilters = [];
-
-        foreach ($this->filterNavigationAttributeCodes as $filterCode) {
-            $rawAttributeValue = $request->getQueryParameter($filterCode);
-            $selectedFilters[$filterCode] = array_filter(explode(',', $rawAttributeValue));
-        }
-
-        return $selectedFilters;
+        return array_reduce($this->filterNavigationAttributeCodes, function ($carry, $attributeCode) use ($request) {
+            $carry[$attributeCode] = array_filter(explode(',', $request->getQueryParameter($attributeCode)));
+            return $carry;
+        }, []);
     }
 
     /**
