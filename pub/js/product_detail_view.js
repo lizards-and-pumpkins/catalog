@@ -2,8 +2,8 @@ require([
     'common',
     'recently_viewed_products',
     'lib/styleselect',
-    'lib/jquery.jqzoom.min'
-], function(common, recentlyViewedProducts, styleSelect) {
+    'lib/zoom'
+], function(common, recentlyViewedProducts, styleSelect, zoom) {
 
     jQuery(document).ready(function() {
         require([
@@ -41,13 +41,7 @@ require([
     }
 
     function initializeZoom() {
-        jQuery('.main-image-area').jqzoom({
-            'zoomWidth': 595,
-            'zoomHeight': 389,
-            'xOffset': 5,
-            'title': false,
-            'preloadText': ''
-        });
+        new zoom(document.querySelector('.main-image-area'));
     }
 
     function initializeTabs() {

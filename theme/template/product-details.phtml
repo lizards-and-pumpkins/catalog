@@ -20,18 +20,13 @@ $save = 0;
         <input type="hidden" name="product" value="<?= $this->getProductId() ?>" />
         <div class="product-essential">
             <div class="product-img-box">
-                <div class="main-image-area-wrapper">
-                    <div id="wrap" style="top:0; position:relative">
-                        <a href="<?= $mainImage->getPath('original') ?>" class="main-image-area">
-                            <img src="<?= $mainImage->getPath('large') ?>" height="340" width="365" itemprop="image"  alt="<?= $mainImage->getLabel() ?>"/>
-                        </a>
-                        <div class="mousetrap" style="z-index: 9; position: absolute; width: 365px; height: 340px; left: 0; top: 0; cursor: move;"></div>
-                    </div>
-                </div>
+                <a href="<?= $mainImage->getPath('original') ?>" class="main-image-area">
+                    <img src="<?= $mainImage->getPath('large') ?>" height="340" width="365" itemprop="image" alt="<?= $mainImage->getLabel() ?>"/>
+                </a>
                 <div class="more-views">
                     <ul>
                         <li>
-                            <a href="" title=""><img src="<?= $mainImage->getPath('small') ?>" width="48" height="48" title=""/></a>
+                            <a href=""><img src="<?= $mainImage->getPath('small') ?>" width="48" height="48"/></a>
                         </li>
                     </ul>
                 </div>

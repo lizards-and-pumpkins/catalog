@@ -1,12 +1,10 @@
 @import "ekomi.css";
 @import "common.css";
 @import "product_grid.css";
-@import "lib/jquery.jqzoom.css";
-@import "dropdown.css";
+@import "lib/zoom.css";
+@import "lib/dropdown.css";
 
 .product-essential:after, #phoneTitlePlaceholder:after { content: ""; display: block; height: 0; clear: both; visibility: hidden }
-
-body.catalog-product-view div.wrapper {background-color: #fff;}
 
 .product-essential { padding: 5px; position: relative; background: #f0f0f0 }
 .product-collateral { margin: 30px 0 }
@@ -21,6 +19,7 @@ body.catalog-product-view div.wrapper {background-color: #fff;}
 .product-shop .delivery { color: #3d9b35; }
 .product-shop .note { line-height: 16px; }
 .product-img-box { float: left }
+.zoom-flyout { left: 370px; width: 595px; height: 393px }
 .more-views { overflow: hidden; width: 366px; position:relative; top:3px; height:50px; padding: 0; float: left; margin-top: 0 }
 .more-views ul { list-style: none; padding: 0; margin: 0 }
 .more-views li { float: left; list-style: none; padding: 0 1px 0 0; }
@@ -102,10 +101,6 @@ div.selector span { text-overflow: clip }
 
 #alertLayer { display: none }
 
-div.main-image-area-wrapper object#yt { z-index: 19998; position: relative; margin-top: 29px }
-div.product-view.cycles div.main-image-area-wrapper object#yt { margin-top: 0 }
-div.main-image-area-wrapper object#swf { height:340px !important }
-
 /* Tablet */
 @media (max-width: 974px) {
     .product-shop { width: auto }
@@ -141,7 +136,6 @@ div.main-image-area-wrapper object#swf { height:340px !important }
     #phoneTitlePlaceholder img { float: right }
 
     .product-img-box .flexslider { display: block }
-    .main-image-area-wrapper, .more-views, div.slideshow { display: none }
 }
 
 /* Clearer */
