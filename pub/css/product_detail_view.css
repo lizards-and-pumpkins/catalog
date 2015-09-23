@@ -1,8 +1,8 @@
 @import "ekomi.css";
 @import "common.css";
 @import "product_grid.css";
-@import "lib/uniform.default.css";
 @import "lib/jquery.jqzoom.css";
+@import "dropdown.css";
 
 .product-essential:after, #phoneTitlePlaceholder:after { content: ""; display: block; height: 0; clear: both; visibility: hidden }
 
@@ -81,10 +81,10 @@ form#product_addtocart_form { position: relative; display:block; z-index: 2; }
 
 .product-controls { margin-top: 12px }
 .product-controls .selects { margin: 0; width: 235px; float: left }
+.product-controls .selects > * { margin-right: 7px; float: left }
 .product-controls button { float: right }
 
 .tax-information { font-size:10px; line-height:1.4em; width:100px; color:#8E8E8E }
-.product-shop .input-box { padding-left: 8px; margin-right: 7px; float: left }
 .qty-box { width: 32px }
 
 .product-img-box .flexslider { display: none }

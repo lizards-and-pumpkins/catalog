@@ -1,0 +1,14 @@
+select[data-ss-uuid] { display: none; pointer-events: none }
+
+.style-select { display: block; position: relative; min-width: 50px; background-color: #ffffff }
+.style-select, .style-select * { padding: 0; margin: 0; -moz-box-sizing: border-box; box-sizing: border-box; text-align: left; line-height: 21px; cursor: pointer }
+
+.style-select .ss-selected-option { width: 100%; border-radius: 2px; padding: 6px; border: 1px solid #d0d0d0 }
+.style-select .ss-selected-option::after { content: "▾"; position: absolute; top: 6px; right: 12px; display: block }
+.style-select.open .ss-selected-option::after { content: "▴" }
+
+.style-select .ss-dropdown { top: 32px; left: 0; position: absolute; float: left; width: 100%; display: none; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); border: 1px solid #d0d0d0; border-top: 0 none }
+.style-select .ss-dropdown .ss-option { width: 100%; padding: 6px; background-color: white }
+.style-select .ss-dropdown .ss-option.highlighted { background-color: #f2f4f8 }
+.style-select .ss-dropdown .ss-option.ticked::before { content: "✓"; padding-right: 3px }
+.style-select.open .ss-dropdown { display: block }

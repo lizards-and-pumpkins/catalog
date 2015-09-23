@@ -105,13 +105,11 @@ $save = 0;
                 <div class="product-controls">
                     <?php if (1) : //$_product->isSaleable()): ?>
                         <div class="selects">
-                            <div class="input-box qty-box">
-                                <select name="qty" id="qty">
-                                    <?php for ($i = 1; $i <= $maxQty; $i++): ?>
-                                        <option value="<?= $i; ?>"><?= $i; ?></option>
-                                    <?php endfor; ?>
-                                </select>
-                            </div>
+                            <select name="qty" id="qty">
+                                <?php for ($i = 1; $i <= $maxQty; $i++): ?>
+                                    <option value="<?= $i; ?>"><?= $i; ?></option>
+                                <?php endfor; ?>
+                            </select>
                             <div class="clearer"></div>
                         </div>
 

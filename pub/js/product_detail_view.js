@@ -1,9 +1,9 @@
 require([
     'common',
     'recently_viewed_products',
-    'lib/jquery.jqzoom.min',
-    'lib/jquery.uniform.min'
-], function(common, recentlyViewedProducts) {
+    'lib/styleselect',
+    'lib/jquery.jqzoom.min'
+], function(common, recentlyViewedProducts, styleSelect) {
 
     jQuery(document).ready(function() {
         require([
@@ -11,6 +11,9 @@ require([
             '//platform.twitter.com/widgets.js',
             '//apis.google.com/js/plusone.js'
         ]);
+
+//        $('select').not('.alertPopUp select').uniform({selectAutoWidth: false});
+        styleSelect('select');
 
         adjustDetailsToWidth();
         jQuery(window).bind('resize orientationchange', adjustDetailsToWidth);
@@ -91,7 +94,7 @@ require([
                 for (var i = 0; i < selectedItemStockAvailable; i++) {
                     qty.append(jQuery('<option>' + (i + 1) + '</option>'));
                 }
-                jQuery.uniform.update('.qty-box select');
+                styleSelect('.qty-box select');
             } else {
                 jQuery('.product-shop span.availability.choose').show();
                 jQuery('.product-shop .selectedSize').html('');
@@ -106,8 +109,7 @@ require([
             /* Show popup */
             new ModalBox().show(jQuery('#alertLayer').html());
 
-            /* Apply uniform for drop-down */
-            jQuery('.modal-popup .alertPopUp select').uniform({selectAutoWidth: false});
+            styleSelect('.modal-popup .alertPopUp select');
 
             /* Bind action to button */
             jQuery('.alertPopUp button').on('click', function () {
