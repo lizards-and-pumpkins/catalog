@@ -5,7 +5,6 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\Exception\InvalidSearchDocumentFieldKeyException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\Exception\InvalidSearchDocumentFieldValueException;
 
-
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField
  */
