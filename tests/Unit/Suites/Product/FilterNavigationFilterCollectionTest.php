@@ -45,14 +45,14 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $key
-     * @param string $value
+     * @param string[] $values
      * @return SearchDocumentField|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubSearchDocumentField($key, $value)
+    private function createStubSearchDocumentField($key, array $values)
     {
         $stubSearchDocumentField = $this->getMock(SearchDocumentField::class, [], [], '', false);
         $stubSearchDocumentField->method('getKey')->willReturn($key);
-        $stubSearchDocumentField->method('getValue')->willReturn($value);
+        $stubSearchDocumentField->method('getValues')->willReturn($values);
 
         return $stubSearchDocumentField;
     }
@@ -152,7 +152,7 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
     {
         $selectedFilters = ['foo' => []];
 
-        $stubField = $this->createStubSearchDocumentField('foo', 'baz');
+        $stubField = $this->createStubSearchDocumentField('foo', ['baz']);
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([$stubField]);
 
         /** @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject $stubSearchDocumentCollection */
@@ -174,8 +174,8 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
     {
         $selectedFilters = ['foo' => []];
 
-        $stubField1 = $this->createStubSearchDocumentField('foo', 'baz');
-        $stubField2 = $this->createStubSearchDocumentField('bar', 'qux');
+        $stubField1 = $this->createStubSearchDocumentField('foo', ['baz']);
+        $stubField2 = $this->createStubSearchDocumentField('bar', ['qux']);
 
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([$stubField1, $stubField2]);
 
@@ -205,7 +205,7 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
     {
         $selectedFilters = ['foo' => [], 'bar' => []];
 
-        $stubField = $this->createStubSearchDocumentField('foo', 'qux');
+        $stubField = $this->createStubSearchDocumentField('foo', ['qux']);
 
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([$stubField]);
 
@@ -235,7 +235,7 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
     {
         $selectedFilters = ['foo' => ['baz'], 'bar' => []];
 
-        $stubField = $this->createStubSearchDocumentField('foo', 'baz');
+        $stubField = $this->createStubSearchDocumentField('foo', ['baz']);
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([$stubField]);
 
         /** @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject $stubFilteredDocumentCollection */
@@ -271,10 +271,10 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
     {
         $selectedFilters = ['foo' => ['baz'], 'bar' => ['0 Eur - 100 Eur']];
 
-        $stubField1 = $this->createStubSearchDocumentField('foo', 'baz');
-        $stubField2 = $this->createStubSearchDocumentField('foo', 'qux');
-        $stubField3 = $this->createStubSearchDocumentField('bar', '0 Eur - 100 Eur');
-        $stubField4 = $this->createStubSearchDocumentField('bar', '100 Eur - 200 Eur');
+        $stubField1 = $this->createStubSearchDocumentField('foo', ['baz']);
+        $stubField2 = $this->createStubSearchDocumentField('foo', ['qux']);
+        $stubField3 = $this->createStubSearchDocumentField('bar', ['0 Eur - 100 Eur']);
+        $stubField4 = $this->createStubSearchDocumentField('bar', ['100 Eur - 200 Eur']);
 
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields(
             [$stubField1, $stubField2, $stubField3, $stubField4]
@@ -325,7 +325,7 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
     {
         $selectedFilters = ['foo' => ['baz'], 'bar' => []];
 
-        $stubField = $this->createStubSearchDocumentField('foo', 'baz');
+        $stubField = $this->createStubSearchDocumentField('foo', ['baz']);
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([$stubField]);
 
         /** @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject $stubFilteredDocumentCollection */
@@ -351,8 +351,8 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
     {
         $selectedFilters = ['foo' => []];
 
-        $stubField1 = $this->createStubSearchDocumentField('foo', 'baz');
-        $stubField2 = $this->createStubSearchDocumentField('bar', 'qux');
+        $stubField1 = $this->createStubSearchDocumentField('foo', ['baz']);
+        $stubField2 = $this->createStubSearchDocumentField('bar', ['qux']);
 
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([$stubField1, $stubField2]);
 
