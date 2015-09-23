@@ -101,11 +101,11 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
         Context $context
     ) {
         $this->selectedFilters = $selectedFilters;
-        $attributeCodes = array_keys($this->selectedFilters);
+        $filterNames = array_keys($this->selectedFilters);
 
-        $collectionOptionValues = $this->getCollectionOptionValuesForAttributes(
+        $collectionOptionValues = $this->getOptionValuesForProductsInCollection(
             $searchDocumentCollection,
-            $attributeCodes
+            $filterNames
         );
         $selectedOptionValuesWithSiblings = $this->getSelectedOptionValuesWithSiblings($originalCriteria, $context);
         $filters = array_merge($collectionOptionValues, $selectedOptionValuesWithSiblings);
@@ -117,12 +117,12 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
 
     /**
      * @param SearchDocumentCollection $searchDocumentCollection
-     * @param string[] $attributeCodes
+     * @param string[] $filterNames
      * @return array[]
      */
-    private function getCollectionOptionValuesForAttributes(
+    private function getOptionValuesForProductsInCollection(
         SearchDocumentCollection $searchDocumentCollection,
-        array $attributeCodes
+        array $filterNames
     ) {
         $filters = [];
 
@@ -131,7 +131,7 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
             /** @var SearchDocumentField $searchDocumentField */
             foreach ($searchDocument->getFieldsCollection() as $searchDocumentField) {
                 $filterCode = $searchDocumentField->getKey();
-                if (!in_array($filterCode, $attributeCodes)) {
+                if (!in_array($filterCode, $filterNames)) {
                     continue;
                 }
                 $filterValue = $searchDocumentField->getValue();
@@ -183,7 +183,7 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
             $customCriteria,
             $context
         );
-        $filter = $this->getCollectionOptionValuesForAttributes($searchDocumentCollection, [$filterCode]);
+        $filter = $this->getOptionValuesForProductsInCollection($searchDocumentCollection, [$filterCode]);
 
         return $filter[$filterCode];
     }
