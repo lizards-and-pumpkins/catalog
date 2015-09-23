@@ -13,14 +13,14 @@ abstract class AbstractSearchCriterionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @param string $fieldKey
-     * @param string $fieldValue
+     * @param string[] $fieldValues
      * @return SearchDocumentField|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubSearchDocumentField($fieldKey, $fieldValue)
+    private function createStubSearchDocumentField($fieldKey, array $fieldValues)
     {
         $stubSearchDocumentField = $this->getMock(SearchDocumentField::class, [], [], '', false);
         $stubSearchDocumentField->method('getKey')->willReturn($fieldKey);
-        $stubSearchDocumentField->method('getValue')->willReturn($fieldValue);
+        $stubSearchDocumentField->method('getValues')->willReturn($fieldValues);
 
         return $stubSearchDocumentField;
     }
@@ -105,11 +105,11 @@ abstract class AbstractSearchCriterionTest extends \PHPUnit_Framework_TestCase
     public function testFalseIsReturnedIfGivenSearchDocumentContainsNoFieldWithNameMatchingCriterionFieldName()
     {
         $fieldName = 'foo';
-        $fieldValue = 'bar';
+        $fieldValues = ['bar'];
 
-        $criterion = $this->createInstanceOfClassUnderTest($fieldName, $fieldValue);
+        $criterion = $this->createInstanceOfClassUnderTest($fieldName, $fieldValues[0]);
 
-        $stubSearchDocumentField = $this->createStubSearchDocumentField('baz', $fieldValue);
+        $stubSearchDocumentField = $this->createStubSearchDocumentField('baz', $fieldValues);
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([$stubSearchDocumentField]);
 
         $this->assertFalse($criterion->matches($stubSearchDocument));
@@ -117,18 +117,18 @@ abstract class AbstractSearchCriterionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getNonMatchingValues
-     * @param string $searchDocumentFieldValue
+     * @param string[] $searchDocumentFieldValues
      * @param string $criterionFieldValue
      */
     public function testFalseIsReturnIfGivenSearchDocumentFieldValueIsNotMatchingCriterionValueOnOperation(
-        $searchDocumentFieldValue,
+        array $searchDocumentFieldValues,
         $criterionFieldValue
     ) {
         $fieldName = 'foo';
 
         $criterion = $this->createInstanceOfClassUnderTest($fieldName, $criterionFieldValue);
 
-        $stubSearchDocumentField = $this->createStubSearchDocumentField($fieldName, $searchDocumentFieldValue);
+        $stubSearchDocumentField = $this->createStubSearchDocumentField($fieldName, $searchDocumentFieldValues);
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([$stubSearchDocumentField]);
 
         $this->assertFalse($criterion->matches($stubSearchDocument));

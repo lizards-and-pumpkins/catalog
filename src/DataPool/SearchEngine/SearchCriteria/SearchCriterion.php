@@ -53,9 +53,9 @@ abstract class SearchCriterion implements SearchCriteria, \JsonSerializable
     public function jsonSerialize()
     {
         return [
-            'fieldName'     => $this->fieldName,
-            'fieldValue'    => $this->fieldValue,
-            'operation'     => $this->extractOperationNameFromClassName()
+            'fieldName' => $this->fieldName,
+            'fieldValue' => $this->fieldValue,
+            'operation' => $this->extractOperationNameFromClassName()
         ];
     }
 
@@ -71,11 +71,25 @@ abstract class SearchCriterion implements SearchCriteria, \JsonSerializable
                 continue;
             }
 
-            if ($this->hasValueMatchingOperator($searchDocumentField->getValue(), $this->fieldValue)) {
+            if ($this->hasValueMatchingOneOfFieldValues($searchDocumentField)) {
                 return true;
             }
         }
 
+        return false;
+    }
+
+    /**
+     * @param SearchDocumentField $searchDocumentField
+     * @return bool
+     */
+    private function hasValueMatchingOneOfFieldValues(SearchDocumentField $searchDocumentField)
+    {
+        foreach ($searchDocumentField->getValues() as $value) {
+            if ($this->hasValueMatchingOperator($value, $this->fieldValue)) {
+                return true;
+            }
+        }
         return false;
     }
 

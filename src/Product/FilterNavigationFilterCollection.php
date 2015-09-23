@@ -134,14 +134,15 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
                 if (!in_array($filterCode, $filterNames)) {
                     continue;
                 }
-                $filterValue = $searchDocumentField->getValue();
                 if (!isset($filters[$filterCode])) {
                     $filters[$filterCode] = [];
                 }
-                if (!isset($filters[$filterCode][$filterValue])) {
-                    $filters[$filterCode][$filterValue] = 0;
+                foreach ($searchDocumentField->getValues() as $filterValue) {
+                    if (!isset($filters[$filterCode][$filterValue])) {
+                        $filters[$filterCode][$filterValue] = 0;
+                    }
+                    $filters[$filterCode][$filterValue]++;
                 }
-                $filters[$filterCode][$filterValue] ++;
             }
         }
 

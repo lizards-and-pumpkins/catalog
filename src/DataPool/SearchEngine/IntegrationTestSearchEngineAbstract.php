@@ -138,7 +138,22 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     {
         /** @var SearchDocumentField $field */
         foreach ($searchDocument->getFieldsCollection() as $field) {
-            if (false !== stripos($field->getValue(), $queryString)) {
+            if ($this->isFieldWithMatchingValue($field, $queryString)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param SearchDocumentField $field
+     * @param string $queryString
+     * @return bool
+     */
+    private function isFieldWithMatchingValue(SearchDocumentField $field, $queryString)
+    {
+        foreach ($field->getValues() as $value) {
+            if (stripos($value, $queryString) !== false) {
                 return true;
             }
         }
