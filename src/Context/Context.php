@@ -37,4 +37,10 @@ interface Context extends \JsonSerializable
      * @return bool
      */
     public function isSubsetOf(Context $otherContext);
+
+    /**
+     * @param string[] $dataSet
+     * @return bool
+     */
+    public function matchesDataSet(array $dataSet);
 }

@@ -2,6 +2,9 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument;
 
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\Exception\InvalidSearchDocumentFieldKeyException;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\Exception\InvalidSearchDocumentFieldValueException;
+
 class SearchDocumentField
 {
     /**
@@ -10,34 +13,55 @@ class SearchDocumentField
     private $key;
 
     /**
-     * @var string
+     * @var string[]
      */
-    private $value;
+    private $values;
 
     /**
      * @param string $key
-     * @param string $value
+     * @param string[] $values
      */
-    private function __construct($key, $value)
+    private function __construct($key, array $values)
     {
         $this->key = $key;
-        $this->value = $value;
+        $this->values = $values;
     }
 
     /**
      * @param string $key
-     * @param string $value
+     * @param string[] $values
      * @return SearchDocumentField
      */
-    public static function fromKeyAndValue($key, $value)
+    public static function fromKeyAndValues($key, array $values)
+    {
+        self::validateKey($key);
+        array_map('self::validateValue', $values);
+
+        return new self((string) $key, $values);
+    }
+
+    /**
+     * @param mixed $value
+     */
+    public static function validateValue($value)
+    {
+        if (! is_scalar($value)) {
+            $type = is_object($value) ? get_class($value) : gettype($value);
+            $message = sprintf('Only string, integer, float and boolean attribute values are allowed, got "%s"', $type);
+            throw new InvalidSearchDocumentFieldValueException($message);
+        }
+    }
+
+    /**
+     * @param mixed $key
+     */
+    private static function validateKey($key)
     {
         if (!is_string($key) || !strlen($key) || !ctype_alpha($key{0})) {
             throw new InvalidSearchDocumentFieldKeyException(
                 'Search document field key must be a string led by a letter'
             );
         }
-
-        return new self((string) $key, (string) $value);
     }
 
     /**
@@ -49,10 +73,10 @@ class SearchDocumentField
     }
 
     /**
-     * @return string
+     * @return string[]
      */
-    public function getValue()
+    public function getValues()
     {
-        return $this->value;
+        return $this->values;
     }
 }

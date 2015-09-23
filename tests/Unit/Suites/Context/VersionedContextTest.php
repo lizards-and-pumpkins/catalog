@@ -116,4 +116,21 @@ class VersionedContextTest extends \PHPUnit_Framework_TestCase
         $expected = [VersionedContext::CODE => $this->testVersionValue];
         $this->assertSame($expected, $this->versionedContext->jsonSerialize());
     }
+
+    public function testItReturnsTrueIfTheDataSetIsEmpty()
+    {
+        $this->assertTrue($this->versionedContext->matchesDataSet([]));
+    }
+
+    public function testItReturnsFalseIfTheDataSetDoesNotMatch()
+    {
+        $dataSetToCompare = [VersionedContext::CODE => $this->testVersionValue . '9'];
+        $this->assertFalse($this->versionedContext->matchesDataSet($dataSetToCompare));
+    }
+
+    public function testItReturnsTrueIfTheDataSetDoesNotMatch()
+    {
+        $dataSetToCompare = [VersionedContext::CODE => $this->testVersionValue];
+        $this->assertTrue($this->versionedContext->matchesDataSet($dataSetToCompare));
+    }
 }
