@@ -51,7 +51,7 @@ define(['url'], function (url) {
                 option.appendChild(link);
 
                 if (selectedFilterOptions.indexOf(filterOption.value) !== -1) {
-                    option.addClass('active');
+                    option.className = 'active';
                 }
 
                 carry.push(option);
