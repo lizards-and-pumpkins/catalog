@@ -2,6 +2,10 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument;
 
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\Exception\InvalidSearchDocumentFieldKeyException;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\Exception\InvalidSearchDocumentFieldValueException;
+
+
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField
  */
@@ -10,12 +14,12 @@ class SearchDocumentFieldTest extends \PHPUnit_Framework_TestCase
     public function testDocumentFieldKeyAndValueAreSetAndReturned()
     {
         $key = 'foo';
-        $value = 'bar';
+        $values = ['bar'];
 
-        $searchDocumentField = SearchDocumentField::fromKeyAndValue($key, $value);
+        $searchDocumentField = SearchDocumentField::fromKeyAndValues($key, $values);
 
         $this->assertEquals($key, $searchDocumentField->getKey());
-        $this->assertEquals($value, $searchDocumentField->getValue());
+        $this->assertEquals($values, $searchDocumentField->getValues());
     }
 
     /**
@@ -25,7 +29,7 @@ class SearchDocumentFieldTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownIfInvalidKeyIsSpecified($invalidKey)
     {
         $this->setExpectedException(InvalidSearchDocumentFieldKeyException::class);
-        SearchDocumentField::fromKeyAndValue($invalidKey, 'foo');
+        SearchDocumentField::fromKeyAndValues($invalidKey, ['foo']);
     }
 
     /**
@@ -47,5 +51,14 @@ class SearchDocumentFieldTest extends \PHPUnit_Framework_TestCase
             [true],
             [false],
         ];
+    }
+
+    public function testItThrowsAnExceptionIfTheValuesContainNonScalars()
+    {
+        $this->setExpectedException(
+            InvalidSearchDocumentFieldValueException::class,
+            'Only string, integer, float and boolean attribute values are allowed, got "array"'
+        );
+        SearchDocumentField::fromKeyAndValues('foo', [[]]);
     }
 }

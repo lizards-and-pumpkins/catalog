@@ -20,6 +20,13 @@ class SearchDocumentFieldCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(\IteratorAggregate::class, $collection);
     }
 
+    public function testItShouldConvertStringValuesIntoArrays()
+    {
+        $fieldsArray = ['foo' => 'bar'];
+        $collection = SearchDocumentFieldCollection::fromArray($fieldsArray);
+        $this->assertSame(['bar'], $collection->getFields()[0]->getValues());
+    }
+
     public function testCollectionIsAccessibleViaGetter()
     {
         $fieldsArray = ['foo' => 'bar', 'baz' => 'qux'];
@@ -29,9 +36,9 @@ class SearchDocumentFieldCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(2, $collection);
         $this->assertContainsOnly(SearchDocumentField::class, $result);
         $this->assertEquals('foo', $result[0]->getKey());
-        $this->assertEquals('bar', $result[0]->getValue());
+        $this->assertEquals(['bar'], $result[0]->getValues());
         $this->assertEquals('baz', $result[1]->getKey());
-        $this->assertEquals('qux', $result[1]->getValue());
+        $this->assertEquals(['qux'], $result[1]->getValues());
     }
 
     public function testCollectionIsAccessibleViaIterator()
@@ -42,6 +49,6 @@ class SearchDocumentFieldCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $collection);
         $this->assertContainsOnly(SearchDocumentField::class, $collection);
         $this->assertEquals('foo', $collection->getIterator()->current()->getKey());
-        $this->assertEquals('bar', $collection->getIterator()->current()->getValue());
+        $this->assertEquals(['bar'], $collection->getIterator()->current()->getValues());
     }
 }
