@@ -283,7 +283,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             ->willReturn(new \ArrayIterator([$searchDocumentA, $searchDocumentB]));
         $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
 
-        $matchingSearchDocumentField = SearchDocumentField::fromKeyAndValues('foo', ['bar']);
+        $matchingSearchDocumentField = SearchDocumentField::fromKeyAndValue('foo', 'bar');
 
         /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubCriteria */
         $stubCriteria = $this->getMock(SearchCriteria::class);

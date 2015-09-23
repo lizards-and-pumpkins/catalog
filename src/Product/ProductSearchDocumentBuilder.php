@@ -72,23 +72,13 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
      */
     private function createSearchDocumentFieldsCollection(Product $product)
     {
-        $attributesMap = array_reduce($this->indexAttributeCodes, function ($carry, $attributeCode) use ($product) {
-            $codeAndValues = [$attributeCode => $this->getAttributeValuesForSearchDocument($product, $attributeCode)];
-            return array_merge($carry, $codeAndValues);
-        }, []);
+        $attributesMap = [];
+
+        foreach ($this->indexAttributeCodes as $attributeCode) {
+            /* TODO: handle case when attribute has more then one value for attribute (e.g. gender, category) */
+            $attributesMap[$attributeCode] = $product->getFirstValueOfAttribute($attributeCode);
+        }
 
         return SearchDocumentFieldCollection::fromArray($attributesMap);
-    }
-
-    /**
-     * @param Product $product
-     * @param string $attributeCode
-     * @return array[]
-     */
-    private function getAttributeValuesForSearchDocument(Product $product, $attributeCode)
-    {
-        return array_filter($product->getAllValuesOfAttribute($attributeCode), function ($value) {
-            return is_scalar($value);
-        });
     }
 }
