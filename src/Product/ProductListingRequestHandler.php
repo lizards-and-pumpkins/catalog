@@ -260,7 +260,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
             }
 
             $optionValuesCriteriaArray = array_map(function ($filterOptionValue) use ($filterCode) {
-                return $this->searchCriteriaBuilder->create($filterCode, $filterOptionValue);
+                return $this->searchCriteriaBuilder->fromRequestParameter($filterCode, $filterOptionValue);
             }, $filterOptionValues);
 
             $filterCriteria = CompositeSearchCriterion::createOr(...$optionValuesCriteriaArray);

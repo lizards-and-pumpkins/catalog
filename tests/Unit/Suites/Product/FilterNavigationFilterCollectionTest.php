@@ -292,7 +292,7 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
             ->willReturn($stubUnfilteredDocumentCollection);
 
         $stubSearchCriteria = $this->getMock(SearchCriteria::class);
-        $this->stubSearchCriteriaBuilder->method('create')->willReturn($stubSearchCriteria);
+        $this->stubSearchCriteriaBuilder->method('fromRequestParameter')->willReturn($stubSearchCriteria);
 
         $this->filterCollection->initialize(
             $stubFilteredDocumentCollection,

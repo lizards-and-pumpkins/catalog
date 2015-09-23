@@ -21,13 +21,13 @@ class SearchCriteriaBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testSearchCriterionEqualIsReturned()
     {
-        $fieldName = 'foo';
-        $fieldValue = 'bar';
-        $result = $this->builder->create($fieldName, $fieldValue);
+        $parameterName = 'foo';
+        $parameterValue = 'bar';
+        $result = $this->builder->fromRequestParameter($parameterName, $parameterValue);
 
         $expectedCriteriaJson = [
-            'fieldName' => $fieldName,
-            'fieldValue' => $fieldValue,
+            'fieldName' => $parameterName,
+            'fieldValue' => $parameterValue,
             'operation' => 'Equal'
         ];
 
@@ -37,17 +37,17 @@ class SearchCriteriaBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testRangeCriterionIsReturnedIsReturned()
     {
-        $fieldName = 'foo';
+        $parameterName = 'foo';
         $rangeFrom = '0';
         $rangeTo = '1';
-        $fieldValue = sprintf('%s%s%s', $rangeFrom, SearchCriteriaBuilder::FILTER_RANGE_DELIMITER, $rangeTo);
-        $result = $this->builder->create($fieldName, $fieldValue);
+        $parameterValue = sprintf('%s%s%s', $rangeFrom, SearchCriteriaBuilder::FILTER_RANGE_DELIMITER, $rangeTo);
+        $result = $this->builder->fromRequestParameter($parameterName, $parameterValue);
 
         $expectedCriteriaJson = [
             'condition' => CompositeSearchCriterion::AND_CONDITION,
             'criteria'  => [
-                SearchCriterionGreaterOrEqualThan::create($fieldName, $rangeFrom),
-                SearchCriterionLessOrEqualThan::create($fieldName, $rangeTo),
+                SearchCriterionGreaterOrEqualThan::create($parameterName, $rangeFrom),
+                SearchCriterionLessOrEqualThan::create($parameterName, $rangeTo),
             ]
         ];
 

@@ -363,7 +363,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->stubRequest->method('getQueryParameter')->willReturnMap([['foo', 'bar']]);
 
         $stubCriteria = $this->getMock(SearchCriteria::class);
-        $this->mockSearchCriteriaBuilder->expects($this->once())->method('create')->with('foo', 'bar')
+        $this->mockSearchCriteriaBuilder->expects($this->once())->method('fromRequestParameter')->with('foo', 'bar')
             ->willReturn($stubCriteria);
 
         $this->mockDataPoolReader->method('getSearchDocumentsMatchingCriteria')
@@ -386,8 +386,8 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->stubRequest->method('getQueryParameter')->willReturnMap([[$attributeCode, $filterValue]]);
 
         $stubCriteria = $this->getMock(SearchCriteria::class);
-        $this->mockSearchCriteriaBuilder->expects($this->once())->method('create')->with($attributeCode, $filterValue)
-            ->willReturn($stubCriteria);
+        $this->mockSearchCriteriaBuilder->expects($this->once())->method('fromRequestParameter')
+            ->with($attributeCode, $filterValue)->willReturn($stubCriteria);
 
         $this->mockDataPoolReader->method('getSearchDocumentsMatchingCriteria')
             ->willReturn($stubSearchDocumentCollection);
