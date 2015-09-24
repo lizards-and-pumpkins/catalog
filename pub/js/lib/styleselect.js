@@ -1,4 +1,4 @@
-define(function () {
+define(['lib/bind'], function (bind) {
 
     if (!Element.prototype.matches) {
         // See https://developer.mozilla.org/en-US/docs/Web/API/Element.matches
@@ -167,7 +167,7 @@ define(function () {
         Array.prototype.map.call(styleSelectOptions, function (unused, index) {
             var styleSelectOption = styleSelectOptions.item(index);
 
-            styleSelectOption.addEventListener('click', function (event) {
+            bind(styleSelectOption, 'click', function (event) {
                 var newValue = event.target.getAttribute('data-value'),
                     newLabel = event.target.textContent;
 
@@ -196,14 +196,14 @@ define(function () {
 
         // When a styled select box is clicked
         var styledSelectedOption = document.querySelector('.style-select[data-ss-uuid="' + uuid + '"] .ss-selected-option');
-        styledSelectedOption.addEventListener('click', function (event) {
+        bind(styledSelectedOption, 'click', function (event) {
             event.preventDefault();
             event.stopPropagation();
             toggleStyledSelect(event.target.parentNode);
         });
 
         // Clicking outside of the styled select box closes any open styled select boxes
-        document.querySelector('body').addEventListener('click', function (event) {
+        bind(document.querySelector('body'), 'click', function (event) {
             if (!isAncestorOf(event.target, '.style-select', true)) {
                 closeAllStyleSelectsExceptGiven();
             }

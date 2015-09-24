@@ -31,6 +31,7 @@ input[type=text], input[type=password], textarea { width: 100%; font-size: 13px;
 input[type=text], input[type=password] { padding: 6px 0 5px 0 }
 button { padding: 6px 21px; font-family: GeogrotesqueRegular, Helvetica, Arial, sans-serif; font-size: 22px; color: #fff; cursor: pointer; font-weight: normal; border-radius: 2px; border: none; background-color: #e46d06; margin: 0 }
 button:disabled, button.disabled { background-color: #999999 }
+textarea:focus, input:focus { outline: 0 }
 
 /* Main search form */
 #searchPanel form { width: 367px }
@@ -44,12 +45,12 @@ button:disabled, button.disabled { background-color: #999999 }
 #searchPanel button .search-button-image { background: url('../images/icons/icons-36-white.png') -1216px -4px; height: 32px; width: 50px; display: block }
 
 #search-autosuggestion { position: absolute; left: -1px; z-index: 200 }
-#search-autosuggestion ul { border: 1px solid #ccc; border-top: none; width: 299px; background: #ffffff }
+#search-autosuggestion ul { border: 1px solid #ccc; border-top: none; width: 299px; background: #ffffff; list-style: none; margin: 0; padding: 0 }
 #search-autosuggestion ul li { border-top: 1px solid #cccccc }
 #search-autosuggestion ul li a { color:#474747; display:block; font-family: GeogrotesqueRegular, Helvetica, Arial, sans-serif; font-size: 15px; height: 39px; line-height: 39px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
 #search-autosuggestion ul li.no-thumbnail a { padding-left: 16px }
 #search-autosuggestion ul li a:hover { background-color: #e9e9e9 }
-#search-autosuggestion ul li img { margin: 1px 16px 1px 1px }
+#search-autosuggestion ul li img { margin: 1px 16px 1px 1px; float: left }
 
 /* Header section */
 .logo { float: left; margin: 19px 40px 28px 0 }

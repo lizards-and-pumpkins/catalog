@@ -1,13 +1,5 @@
-define(function () {
+define(['lib/bind'], function (bind) {
     var dw, dh, rw, rh, lx, ly;
-
-    var bind = function (target, event, callback) {
-        if (target.attachEvent) {
-            target.attachEvent('on' + event, callback);
-        } else {
-            target.addEventListener(event, callback, false);
-        }
-    };
 
     var Zoom = function (element) {
         this.target = element;
