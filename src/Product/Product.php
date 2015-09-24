@@ -61,7 +61,7 @@ class Product implements \JsonSerializable
     /**
      * @return mixed
      */
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return [
             'product_id' => (string) $this->productId,
