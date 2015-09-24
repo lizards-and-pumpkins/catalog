@@ -168,9 +168,6 @@ class ProductAttributeList implements \Countable, \JsonSerializable
     public function jsonSerialize()
     {
         return array_reduce($this->attributes, function($carry, ProductAttribute $attribute) {
-            if (!isset($carry[$attribute->getCode()])) {
-                $carry[$attribute->getCode()] = [];
-            }
             $carry[$attribute->getCode()][] = $attribute->getValue();
             return $carry;
         }, []);
