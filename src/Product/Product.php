@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\Product;
 
-class Product
+class Product implements \JsonSerializable
 {
     const URL_KEY = 'url_key';
     const ID = 'product_id';
@@ -56,5 +56,16 @@ class Product
         return array_map(function (ProductAttribute $productAttribute) {
             return $productAttribute->getValue();
         }, $this->attributeList->getAttributesWithCode($attributeCode));
+    }
+
+    /**
+     * @return mixed
+     */
+    function jsonSerialize()
+    {
+        return [
+            'product_id' => (string) $this->productId,
+            'attributes' => $this->attributeList
+        ];
     }
 }

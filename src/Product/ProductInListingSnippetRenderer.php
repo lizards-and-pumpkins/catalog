@@ -20,22 +20,13 @@ class ProductInListingSnippetRenderer implements SnippetRenderer
     private $snippetList;
 
     /**
-     * @var ProductInListingBlockRenderer
-     */
-    private $blockRenderer;
-
-    /**
      * @var SnippetKeyGenerator
      */
     private $snippetKeyGenerator;
 
-    public function __construct(
-        SnippetList $snippetList,
-        ProductInListingBlockRenderer $blockRenderer,
-        SnippetKeyGenerator $snippetKeyGenerator
-    ) {
+    public function __construct(SnippetList $snippetList, SnippetKeyGenerator $snippetKeyGenerator)
+    {
         $this->snippetList = $snippetList;
-        $this->blockRenderer = $blockRenderer;
         $this->snippetKeyGenerator = $snippetKeyGenerator;
     }
 
@@ -65,9 +56,11 @@ class ProductInListingSnippetRenderer implements SnippetRenderer
 
     private function addProductInListingInContextSnippetsToList(Product $product, Context $context)
     {
-        $content = $this->blockRenderer->render($product, $context);
         $key = $this->snippetKeyGenerator->getKeyForContext($context, [Product::ID => $product->getId()]);
+        $content = json_encode($product);
+
         $contentSnippet = Snippet::create($key, $content);
+
         $this->snippetList->add($contentSnippet);
     }
 }

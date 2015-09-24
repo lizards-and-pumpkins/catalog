@@ -6,7 +6,7 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Product\Exception\ProductAttributeContextPartsMismatchException;
 use LizardsAndPumpkins\Product\Exception\ProductAttributeNotFoundException;
 
-class ProductAttributeList implements \Countable
+class ProductAttributeList implements \Countable, \JsonSerializable
 {
     /**
      * @var ProductAttribute[]
@@ -160,5 +160,19 @@ class ProductAttributeList implements \Countable
     public function count()
     {
         return count($this->attributes);
+    }
+
+    /**
+     * @return string[]
+     */
+    function jsonSerialize()
+    {
+        return array_reduce($this->attributes, function($carry, ProductAttribute $attribute) {
+            if (!isset($carry[$attribute->getCode()])) {
+                $carry[$attribute->getCode()] = [];
+            }
+            $carry[$attribute->getCode()][] = $attribute->getValue();
+            return $carry;
+        }, []);
     }
 }
