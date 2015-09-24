@@ -20,10 +20,8 @@
 .product-shop .note { line-height: 16px; }
 .product-img-box { float: left }
 .zoom-flyout { left: 370px; width: 595px; height: 393px }
-.more-views { overflow: hidden; width: 366px; position:relative; top:3px; height:50px; padding: 0; float: left; margin-top: 0 }
-.more-views ul { list-style: none; padding: 0; margin: 0 }
-.more-views li { float: left; list-style: none; padding: 0 1px 0 0; }
-.more-views a { display: block; margin-right: 1px; background-color: #fff; cursor: pointer }
+.more-views { width: 366px; list-style: none; padding: 0; margin: 0 0 0 -5px }
+.more-views li { display: inline-block; font-size: 0; padding: 3px 0 0 5px }
 
 /* Tabs */
 .product-collateral .tabs { list-style: none; padding: 0; margin: 0 }

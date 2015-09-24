@@ -23,13 +23,11 @@ $save = 0;
                 <a href="<?= $mainImage->getPath('original') ?>" class="main-image-area">
                     <img src="<?= $mainImage->getPath('large') ?>" height="340" width="365" itemprop="image" alt="<?= $mainImage->getLabel() ?>"/>
                 </a>
-                <div class="more-views">
-                    <ul>
-                        <li>
-                            <a href=""><img src="<?= $mainImage->getPath('small') ?>" width="48" height="48"/></a>
-                        </li>
-                    </ul>
-                </div>
+                <ul class="more-views">
+                    <li>
+                        <a href=""><img src="<?= $mainImage->getPath('small') ?>" width="48" height="48"/></a>
+                    </li>
+                </ul>
             </div>
             <div class="product-shop">
                 <div class="top">
