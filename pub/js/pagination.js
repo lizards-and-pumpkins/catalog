@@ -48,7 +48,7 @@ define(['url', 'jquery'], function (url, $) {
                 pagination.append(
                     $('<li/>').append(
                         $('<a/>').addClass('next')
-                            .prop('href', url.toggleQueryParameter(paginationQueryParameterName, totalPageCount))
+                            .prop('href', url.updateQueryParameter(paginationQueryParameterName, totalPageCount))
                             .html('&#9654;')
                     )
                 );

@@ -174,10 +174,12 @@ class ProductListingRequestHandler implements HttpRequestHandler
             ...$currentPageDocuments
         );
 
-        $snippetKeyToContentMap = $this->dataPoolReader->getSnippets($productInListingSnippetKeys);
-        $snippetCodeToKeyMap = $this->getProductInListingSnippetCodeToKeyMap($productInListingSnippetKeys);
+        $productSnippets = $this->dataPoolReader->getSnippets($productInListingSnippetKeys);
 
-        $this->pageBuilder->addSnippetsToPage($snippetCodeToKeyMap, $snippetKeyToContentMap);
+        $snippetKey = 'products_grid';
+        $snippetContents = '[' . implode(',', $productSnippets) . ']';
+
+        $this->addDynamicSnippetToPageBuilder($snippetKey, $snippetContents);
     }
 
     /**
@@ -212,19 +214,6 @@ class ProductListingRequestHandler implements HttpRequestHandler
         return array_map(function (SearchDocument $searchDocument) use ($keyGenerator) {
             return $keyGenerator->getKeyForContext($this->context, [Product::ID => $searchDocument->getProductId()]);
         }, $searchDocuments);
-    }
-
-    /**
-     * @param string[] $productInListingSnippetKeys
-     * @return string[]
-     */
-    private function getProductInListingSnippetCodeToKeyMap($productInListingSnippetKeys)
-    {
-        return array_reduce($productInListingSnippetKeys, function (array $acc, $key) {
-            $snippetCode = sprintf('product_%d', count($acc) + 1);
-            $acc[$snippetCode] = $key;
-            return $acc;
-        }, []);
     }
 
     /**

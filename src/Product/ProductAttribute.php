@@ -3,7 +3,6 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Attribute;
-use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Product\Exception\ProductAttributeDoesNotContainContextPartException;
 
 class ProductAttribute implements Attribute

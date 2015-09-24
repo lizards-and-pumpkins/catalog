@@ -17,28 +17,19 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
      */
     private $attributeList;
 
-    /**
-     * @param mixed[] $returnValueMap
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getStubContextWithReturnValueMap(array $returnValueMap)
-    {
-        $stubContext = $this->getMock(Context::class);
-        $stubContext->method('getSupportedCodes')
-            ->willReturn(array_column($returnValueMap, 0));
-        $stubContext->method('getValue')
-            ->willReturnMap($returnValueMap);
-        return $stubContext;
-    }
-
     protected function setUp()
     {
         $this->attributeList = new ProductAttributeList();
     }
 
-    public function testItImplementsCountable()
+    public function testCountableInterfaceIsImplemented()
     {
         $this->assertInstanceOf(\Countable::class, $this->attributeList);
+    }
+
+    public function testJsonSerializableInterfaceIsImplemented()
+    {
+        $this->assertInstanceOf(\JsonSerializable::class, $this->attributeList);
     }
 
     public function testItReturnsTheNumberOfAttributes()
@@ -124,6 +115,7 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
             ['code' => 'buz', 'contextData' => $contextDataB, 'value' => 'not-expected'],
         ];
 
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->getMock(Context::class);
         $stubContext->method('matchesDataSet')->willReturnMap([
             [$contextDataA, true],
@@ -197,5 +189,21 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
         $attributeArray = [['code' => 'foo', 'contextData' => [], 'value' => 'bar']];
         $attributeList = ProductAttributeList::fromArray($attributeArray);
         $this->assertTrue($attributeList->hasAttribute('foo'));
+    }
+
+    public function testArrayRepresentationOfAttributeListIsReturned()
+    {
+        $attributeArray = [
+            'code' => 'foo',
+            'contextData' => [],
+            'value' => 'bar'
+        ];
+        $attribute = ProductAttribute::fromArray($attributeArray);
+        $this->attributeList->add($attribute);
+
+        $result = $this->attributeList->jsonSerialize();
+        $expectedResult = ['foo' => ['bar']];
+
+        $this->assertSame($expectedResult, $result);
     }
 }

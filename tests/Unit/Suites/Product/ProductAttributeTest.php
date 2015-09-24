@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Product\Exception\ProductAttributeDoesNotContainContextPartException;
 
 /**

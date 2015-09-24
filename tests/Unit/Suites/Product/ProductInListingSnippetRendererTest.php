@@ -57,18 +57,10 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
     {
         $testSnippetList = new SnippetList;
 
-        /** @var ProductInListingBlockRenderer|\PHPUnit_Framework_MockObject_MockObject $stubBlockRenderer */
-        $stubBlockRenderer = $this->getMock(ProductInListingBlockRenderer::class, [], [], '', false);
-        $stubBlockRenderer->method('render')->willReturn('dummy content');
-
         $this->mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $this->mockSnippetKeyGenerator->method('getKeyForContext')->willReturn('stub-content-key');
 
-        $this->snippetRenderer = new ProductInListingSnippetRenderer(
-            $testSnippetList,
-            $stubBlockRenderer,
-            $this->mockSnippetKeyGenerator
-        );
+        $this->snippetRenderer = new ProductInListingSnippetRenderer($testSnippetList, $this->mockSnippetKeyGenerator);
 
         $stubContext = $this->getMock(Context::class);
 
