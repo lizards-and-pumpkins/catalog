@@ -1,4 +1,4 @@
-define(['cookie', 'search_autosuggestion'], function(cookie) {
+define(['lib/cookie', 'search_autosuggestion'], function(cookie) {
 
     jQuery(document).ready(function() {
         nav = jQuery('.nav');
