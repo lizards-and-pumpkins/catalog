@@ -92,7 +92,7 @@ class AttributeCode implements \JsonSerializable
     }
 
     /**
-     * @param string $attributeCode
+     * @param string|AttributeCode $attributeCode
      * @return bool
      */
     public function isEqualTo($attributeCode)
