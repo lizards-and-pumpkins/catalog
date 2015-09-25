@@ -155,8 +155,6 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
     {
         $this->importCatalog('catalog-with-invalid-product.xml');
 
-        $dataPoolReader = $this->factory->createDataPoolReader();
-
         $contextSource = $this->factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[0];
 
@@ -177,13 +175,15 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
             [Product::ID => $invalidProductId]
         );
 
+        $dataPoolReader = $this->factory->createDataPoolReader();
         $this->assertTrue($dataPoolReader->hasSnippet($validProductDetailViewSnippetKey));
         $this->assertFalse($dataPoolReader->hasSnippet($invalidProductDetailViewSnippetKey));
 
         $logger = $this->factory->getLogger();
         $messages = $logger->getMessages();
 
-        $importExceptionMessage = 'Attributes with different context parts can not be combined into one list';
+        $importExceptionMessage = 'The attribute "price" has multiple values with ' .
+            'different contexts which can not be part of one product attribute list';
         $expectedLoggedErrorMessage = sprintf(
             "Failed to import product ID: %s due to following reason:\n%s",
             $invalidProductId,

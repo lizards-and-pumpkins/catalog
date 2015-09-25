@@ -5,14 +5,14 @@ namespace LizardsAndPumpkins\Product;
 use LizardsAndPumpkins\Attribute;
 use LizardsAndPumpkins\Product\Exception\ProductAttributeDoesNotContainContextPartException;
 
-class ProductAttribute implements Attribute
+class ProductAttribute implements \JsonSerializable
 {
     const CODE = 'code';
     const VALUE = 'value';
     const CONTEXT_DATA = 'contextData';
     
     /**
-     * @var string
+     * @var AttributeCode
      */
     private $code;
 
@@ -27,11 +27,11 @@ class ProductAttribute implements Attribute
     private $value;
 
     /**
-     * @param string $code
+     * @param AttributeCode $code
      * @param string|ProductAttributeList $value
      * @param string[] $contextData
      */
-    private function __construct($code, $value, array $contextData = [])
+    private function __construct(AttributeCode $code, $value, array $contextData)
     {
         $this->code = $code;
         $this->contextData = $contextData;
@@ -45,7 +45,7 @@ class ProductAttribute implements Attribute
     public static function fromArray(array $attribute)
     {
         return new self(
-            $attribute[self::CODE],
+            AttributeCode::fromString($attribute[self::CODE]),
             self::getValueRecursive($attribute[self::VALUE]),
             $attribute[self::CONTEXT_DATA]
         );
@@ -59,7 +59,7 @@ class ProductAttribute implements Attribute
     {
         return is_array($attributeValue) ?
             ProductAttributeList::fromArray($attributeValue) :
-            $attributeValue;
+            (string) $attributeValue;
     }
     
     /**
@@ -89,11 +89,11 @@ class ProductAttribute implements Attribute
      */
     public function hasSameCodeAs(ProductAttribute $attribute)
     {
-        return $this->code === $attribute->getCode();
+        return strval($this->code) === strval($attribute->getCode());
     }
 
     /**
-     * @return string
+     * @return AttributeCode
      */
     public function getCode()
     {
@@ -101,12 +101,12 @@ class ProductAttribute implements Attribute
     }
 
     /**
-     * @param string $codeExpectation
+     * @param string|AttributeCode $codeToCompare
      * @return bool
      */
-    public function isCodeEqualsTo($codeExpectation)
+    public function isCodeEqualTo($codeToCompare)
     {
-        return $codeExpectation == $this->code;
+        return $this->code->isEqualTo($codeToCompare);
     }
 
     /**
@@ -145,5 +145,28 @@ class ProductAttribute implements Attribute
     public function getContextDataSet()
     {
         return $this->contextData;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    public function jsonSerialize()
+    {
+        return [
+            self::CODE => $this->code->jsonSerialize(),
+            self::CONTEXT_DATA => $this->contextData,
+            self::VALUE => $this->getSerializableValue($this->value)
+        ];
+    }
+
+    /**
+     * @param string|ProductAttributeList $value
+     * @return string|ProductAttributeList
+     */
+    private function getSerializableValue($value)
+    {
+        return is_object($value) ?
+            $value->jsonSerialize() :
+            (string) $value;
     }
 }

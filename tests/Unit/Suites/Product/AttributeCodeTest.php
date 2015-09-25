@@ -5,6 +5,9 @@ namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Product\Exception\InvalidAttributeCodeException;
 
+/**
+ * @covers LizardsAndPumpkins\Product\AttributeCode
+ */
 class AttributeCodeTest extends \PHPUnit_Framework_TestCase
 {
     public function testItReturnsAnAttributeCodeInstance()
@@ -18,13 +21,33 @@ class AttributeCodeTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('test_code', (string) AttributeCode::fromString('test_code'));
     }
 
-    public function testItThrowsAnExceptionIfTheCodeIsNotAString()
+    /**
+     * @dataProvider invalidAttributeCodeTypeProvider
+     */
+    public function testItThrowsAnExceptionIfTheCodeIsNotAString($invalidAttributeCode)
     {
+        $type = is_object($invalidAttributeCode) ?
+            get_class($invalidAttributeCode) :
+            gettype($invalidAttributeCode);
         $this->setExpectedException(
             InvalidAttributeCodeException::class,
-            'The attribute code has to be a string, got "integer"'
+            sprintf('The attribute code has to be a string, got "%s"', $type)
         );
-        AttributeCode::fromString(222);
+        AttributeCode::fromString($invalidAttributeCode);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function invalidAttributeCodeTypeProvider()
+    {
+        return [
+            'integer' => [222],
+            'null' => [null],
+            'array' => [['foo']],
+            'object' => [new \StdClass],
+            'float' => [2.2]
+        ];
     }
 
     public function testItThrowsAnExceptionIfTheAttributeCodeIsLessThenThreeCharactersLong()
@@ -81,13 +104,35 @@ class AttributeCodeTest extends \PHPUnit_Framework_TestCase
         AttributeCode::fromString('abc_');
     }
 
+    public function testItReturnsAnAttributeCodeIfInstantiatedWithAnAttributeCode()
+    {
+        $this->assertInstanceOf(AttributeCode::class, AttributeCode::fromString(AttributeCode::fromString('test')));
+    }
+
+    public function testItReturnsTrueIfTheGivenCodeIsEqual()
+    {
+        $attributeCode = AttributeCode::fromString('test');
+        $this->assertTrue($attributeCode->isEqualTo('test'));
+        $this->assertTrue(AttributeCode::fromString('test')->isEqualTo($attributeCode));
+    }
+
+    public function testItReturnsFalseIfTheGivenCodeIsNotEqual()
+    {
+        $attributeCode = AttributeCode::fromString('foo');
+        $this->assertFalse($attributeCode->isEqualTo('bar'));
+        $this->assertFalse(AttributeCode::fromString('bar')->isEqualTo($attributeCode));
+    }
+
     public function testItIsSerializable()
     {
         $this->assertInstanceOf(\JsonSerializable::class, AttributeCode::fromString('test'));
     }
 
-    public function testItReturnsTheAttributeCodeAsJson()
+    public function testItCanBeSerializedAndRehydrated()
     {
-        $this->assertSame('"test"', json_encode(AttributeCode::fromString('test')));
+        $sourceAttributeCode = AttributeCode::fromString('test');
+        $json = json_encode($sourceAttributeCode);
+        $rehydratedAttributeCode = AttributeCode::fromString(json_decode($json, true));
+        $this->assertTrue($sourceAttributeCode->isEqualTo($rehydratedAttributeCode));
     }
 }

@@ -7,6 +7,7 @@ use LizardsAndPumpkins\Product\Exception\ProductAttributeNotFoundException;
 
 /**
  * @covers \LizardsAndPumpkins\Product\Product
+ * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  */
 class ProductTest extends \PHPUnit_Framework_TestCase
 {

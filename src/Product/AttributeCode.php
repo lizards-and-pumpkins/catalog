@@ -26,6 +26,9 @@ class AttributeCode implements \JsonSerializable
      */
     public static function fromString($attributeCode)
     {
+        if ($attributeCode instanceof AttributeCode) {
+            return $attributeCode;
+        }
         self::validateAttributeCode($attributeCode);
         return new self($attributeCode);
     }
@@ -86,5 +89,14 @@ class AttributeCode implements \JsonSerializable
     public function jsonSerialize()
     {
         return $this->code;
+    }
+
+    /**
+     * @param string $attributeCode
+     * @return bool
+     */
+    public function isEqualTo($attributeCode)
+    {
+        return $this->code === (string) $attributeCode;
     }
 }
