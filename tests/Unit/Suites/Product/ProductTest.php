@@ -21,7 +21,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     private $stubProductId;
 
     /**
-     * @var Context
+     * @var Context|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubContext;
     
@@ -120,13 +120,15 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $testProductIdString = 'foo';
         $this->stubProductId->method('__toString')->willReturn($testProductIdString);
+        $this->stubContext->method('jsonSerialize')->willReturn([]);
 
         $result = $this->product->jsonSerialize();
 
         $this->assertInternalType('array', $result);
-        $this->assertCount(2, $result);
+        $this->assertCount(3, $result);
         $this->assertEquals($testProductIdString, $result['product_id']);
         $this->assertArrayHasKey('attributes', $result);
+        $this->assertArrayHasKey('context', $result);
     }
 
     public function testItReturnsTheInjectedContext()
