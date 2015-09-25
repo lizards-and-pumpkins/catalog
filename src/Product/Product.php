@@ -75,7 +75,7 @@ class Product implements \JsonSerializable
         return [
             'product_id' => (string) $this->productId,
             'attributes' => $this->attributeList,
-            'context' => $this->context->jsonSerialize()
+            'context' => $this->context
         ];
     }
 
