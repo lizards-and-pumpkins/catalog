@@ -61,9 +61,8 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
                     /** @var \Exception $exception */
                     $exception = $messageContext['exception'];
                     return (string) $logMessage . ' ' . $exception->getFile() . ':' . $exception->getLine();
-                } else {
-                    return (string) $logMessage;
                 }
+                return (string) $logMessage;
             }, $messages);
             $fainMessageString = implode(PHP_EOL, $failMessages);
             
