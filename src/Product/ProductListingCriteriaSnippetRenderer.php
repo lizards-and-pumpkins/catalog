@@ -48,18 +48,18 @@ class ProductListingCriteriaSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param ProductListingCriteria $productListingMetaInfo
+     * @param ProductListingCriteria $productListingCriteria
      * @return SnippetList
      */
-    public function render(ProductListingCriteria $productListingMetaInfo)
+    public function render(ProductListingCriteria $productListingCriteria)
     {
-        $contextData = $productListingMetaInfo->getContextData();
+        $contextData = $productListingCriteria->getContextData();
         $context = $this->contextBuilder->createContext($contextData);
 
-        $this->blockRenderer->render($productListingMetaInfo, $context);
+        $this->blockRenderer->render($productListingCriteria, $context);
 
-        $metaDataSnippetKey = $this->getProductListingMetaDataSnippetKey($productListingMetaInfo, $context);
-        $metaDataSnippetContent = $this->getProductListingPageMetaInfoSnippetContent($productListingMetaInfo);
+        $metaDataSnippetKey = $this->getProductListingMetaDataSnippetKey($productListingCriteria, $context);
+        $metaDataSnippetContent = $this->getProductListingPageMetaInfoSnippetContent($productListingCriteria);
         $snippet = Snippet::create($metaDataSnippetKey, $metaDataSnippetContent);
 
         $this->snippetList->add($snippet);
@@ -68,15 +68,15 @@ class ProductListingCriteriaSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param ProductListingCriteria $productListingMetaInfo
+     * @param ProductListingCriteria $productListingCriteria
      * @param Context $context
      * @return string
      */
     private function getProductListingMetaDataSnippetKey(
-        ProductListingCriteria $productListingMetaInfo,
+        ProductListingCriteria $productListingCriteria,
         Context $context
     ) {
-        $productListingUrlKey = $productListingMetaInfo->getUrlKey();
+        $productListingUrlKey = $productListingCriteria->getUrlKey();
         $snippetKey = $this->snippetKeyGenerator->getKeyForContext(
             $context,
             [PageMetaInfoSnippetContent::URL_KEY => $productListingUrlKey]
@@ -86,16 +86,16 @@ class ProductListingCriteriaSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param ProductListingCriteria $productListingMetaInfo
+     * @param ProductListingCriteria $productListingCriteria
      * @return string
      */
     private function getProductListingPageMetaInfoSnippetContent(
-        ProductListingCriteria $productListingMetaInfo
+        ProductListingCriteria $productListingCriteria
     ) {
         $pageSnippetCodes = $this->blockRenderer->getNestedSnippetCodes();
 
         $metaSnippetContent = ProductListingCriteriaSnippetContent::create(
-            $productListingMetaInfo->getCriteria(),
+            $productListingCriteria->getCriteria(),
             ProductListingPageSnippetRenderer::CODE,
             $pageSnippetCodes
         );
