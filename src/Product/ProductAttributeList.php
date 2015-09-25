@@ -39,7 +39,7 @@ class ProductAttributeList implements \Countable, \JsonSerializable
 
     private static function validateAttributesMayBeCombinedIntoList(ProductAttribute ...$attributes)
     {
-        array_map(function ($attributesByCode) {
+        array_map(function (array $attributesByCode) {
             self::validateAttributesHaveSameContextParts(...$attributesByCode);
         }, self::getAttributesGroupedByCode($attributes));
     }
