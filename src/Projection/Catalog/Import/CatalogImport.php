@@ -144,11 +144,11 @@ class CatalogImport
     public function addProductsFromSourceToQueue(ProductSource $productSource)
     {
         array_map(function (Context $context) use ($productSource) {
-            $this->addProductToQueue($productSource->getProductForContext($context));
+            $this->addCommandToQueue($productSource->getProductForContext($context));
         }, $this->contextSource->getAllAvailableContextsWithVersion($this->dataVersion));
     }
 
-    private function addProductToQueue(Product $product)
+    private function addCommandToQueue(Product $product)
     {
         $this->commandQueue->add(new UpdateProductCommand($product));
     }
