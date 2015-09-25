@@ -6,7 +6,7 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Product\Exception\ProductAttributeContextPartsMismatchException;
 use LizardsAndPumpkins\Product\Exception\ProductAttributeNotFoundException;
 
-class ProductAttributeList
+class ProductAttributeList implements \Countable, \JsonSerializable
 {
     /**
      * @var ProductAttribute[]
@@ -106,10 +106,10 @@ class ProductAttributeList
      */
     private function extractAttributesForContext(Context $context)
     {
-        return array_map(function ($code) use ($context) {
+        return array_reduce($this->attributeCodes, function (array $carry, $code) use ($context) {
             $attributesForCode = $this->getAttributesWithCode($code);
-            return $this->getBestMatchingAttributeForContext($attributesForCode, $context);
-        }, $this->attributeCodes);
+            return array_merge($carry, $this->getAttributesMatchingContext($attributesForCode, $context));
+        }, []);
     }
 
     /**
@@ -117,32 +117,11 @@ class ProductAttributeList
      * @param Context $context
      * @return ProductAttribute
      */
-    private function getBestMatchingAttributeForContext(array $productAttributes, Context $context)
+    private function getAttributesMatchingContext(array $productAttributes, Context $context)
     {
-        /** @var ProductAttribute $carry */
-        return array_reduce($productAttributes, function ($carry, ProductAttribute $attribute) use ($context) {
-            return is_null($carry) ?
-                $attribute :
-                $this->returnMostMatchingAttributeForContext($context, $carry, $attribute);
-        }, null);
-    }
-
-    /**
-     * @param Context $context
-     * @param ProductAttribute $attributeA
-     * @param ProductAttribute $attributeB
-     * @return ProductAttribute
-     */
-    private function returnMostMatchingAttributeForContext(
-        Context $context,
-        ProductAttribute $attributeA,
-        ProductAttribute $attributeB
-    ) {
-        $scoreB = $attributeB->getMatchScoreForContext($context);
-        $scoreA = $attributeA->getMatchScoreForContext($context);
-        return $scoreB > $scoreA ?
-            $attributeB :
-            $attributeA;
+        return array_filter($productAttributes, function (ProductAttribute $attribute) use ($context) {
+            return $context->matchesDataSet($attribute->getContextDataSet());
+        });
     }
 
     /**
@@ -173,5 +152,27 @@ class ProductAttributeList
     public function getAttributeCodes()
     {
         return array_values($this->attributeCodes);
+    }
+
+    /**
+     * @return int
+     */
+    public function count()
+    {
+        return count($this->attributes);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function jsonSerialize()
+    {
+        return array_reduce($this->attributes, function($carry, ProductAttribute $attribute) {
+            if (!isset($carry[$attribute->getCode()])) {
+                $carry[$attribute->getCode()] = [];
+            }
+            $carry[$attribute->getCode()][] = $attribute->getValue();
+            return $carry;
+        }, []);
     }
 }

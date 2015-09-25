@@ -21,8 +21,8 @@ class CompositeSearchCriterionTest extends \PHPUnit_Framework_TestCase
     {
         $searchDocumentFieldsArray = [];
 
-        foreach ($searchDocumentFieldsData as $fieldKey => $fieldValue) {
-            $searchDocumentFieldsArray[] = $this->createStubSearchDocumentField($fieldKey, $fieldValue);
+        foreach ($searchDocumentFieldsData as $fieldKey => $fieldValues) {
+            $searchDocumentFieldsArray[] = $this->createStubSearchDocumentField($fieldKey, $fieldValues);
         }
 
         $stubSearchDocumentFieldsCollection = $this->getMock(SearchDocumentFieldCollection::class, [], [], '', false);
@@ -37,14 +37,14 @@ class CompositeSearchCriterionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $fieldKey
-     * @param string $fieldValue
+     * @param string $fieldValues
      * @return SearchDocumentField|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubSearchDocumentField($fieldKey, $fieldValue)
+    private function createStubSearchDocumentField($fieldKey, $fieldValues)
     {
         $stubSearchDocumentField = $this->getMock(SearchDocumentField::class, [], [], '', false);
         $stubSearchDocumentField->method('getKey')->willReturn($fieldKey);
-        $stubSearchDocumentField->method('getValue')->willReturn($fieldValue);
+        $stubSearchDocumentField->method('getValues')->willReturn($fieldValues);
 
         return $stubSearchDocumentField;
     }
@@ -93,7 +93,7 @@ class CompositeSearchCriterionTest extends \PHPUnit_Framework_TestCase
         $testCriterionB = SearchCriterionEqual::create('baz', 'qux');
         $criteria = CompositeSearchCriterion::createAnd($testCriterionA, $testCriterionB);
 
-        $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields(['foo' => 'bar']);
+        $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields(['foo' => ['bar']]);
 
         $this->assertFalse($criteria->matches($stubSearchDocument));
     }
@@ -104,7 +104,7 @@ class CompositeSearchCriterionTest extends \PHPUnit_Framework_TestCase
         $testCriterionB = SearchCriterionEqual::create('baz', 'qux');
         $criteria = CompositeSearchCriterion::createAnd($testCriterionA, $testCriterionB);
 
-        $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields(['foo' => 'bar', 'baz' => 'qux']);
+        $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields(['foo' => ['bar'], 'baz' => ['qux']]);
 
         $this->assertTrue($criteria->matches($stubSearchDocument));
     }
@@ -115,7 +115,7 @@ class CompositeSearchCriterionTest extends \PHPUnit_Framework_TestCase
         $testCriterionB = SearchCriterionEqual::create('baz', 'qux');
         $criteria = CompositeSearchCriterion::createOr($testCriterionA, $testCriterionB);
 
-        $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields(['foo' => 'bar']);
+        $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields(['foo' => ['bar']]);
 
         $this->assertTrue($criteria->matches($stubSearchDocument));
     }

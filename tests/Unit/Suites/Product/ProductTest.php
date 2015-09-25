@@ -31,6 +31,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->product = new Product($this->stubProductId, $this->stubProductAttributeList);
     }
 
+    public function testJsonSerializableInterfaceIsImplemented()
+    {
+        $this->assertInstanceOf(\JsonSerializable::class, $this->product);
+    }
+
     public function testProductIdIsReturned()
     {
         $result = $this->product->getId();
@@ -102,5 +107,18 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $result = $this->product->getFirstValueOfAttribute('whatever');
 
         $this->assertSame('', $result);
+    }
+
+    public function testArrayRepresentationOfProductIsReturned()
+    {
+        $testProductIdString = 'foo';
+        $this->stubProductId->method('__toString')->willReturn($testProductIdString);
+
+        $result = $this->product->jsonSerialize();
+
+        $this->assertInternalType('array', $result);
+        $this->assertCount(2, $result);
+        $this->assertEquals($testProductIdString, $result['product_id']);
+        $this->assertArrayHasKey('attributes', $result);
     }
 }

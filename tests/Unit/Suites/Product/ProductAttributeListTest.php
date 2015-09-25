@@ -17,23 +17,30 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
      */
     private $attributeList;
 
-    /**
-     * @param mixed[] $returnValueMap
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getStubContextWithReturnValueMap(array $returnValueMap)
-    {
-        $stubContext = $this->getMock(Context::class);
-        $stubContext->method('getSupportedCodes')
-            ->willReturn(array_column($returnValueMap, 0));
-        $stubContext->method('getValue')
-            ->willReturnMap($returnValueMap);
-        return $stubContext;
-    }
-
     protected function setUp()
     {
-        $this->attributeList = new ProductAttributeList;
+        $this->attributeList = new ProductAttributeList();
+    }
+
+    public function testCountableInterfaceIsImplemented()
+    {
+        $this->assertInstanceOf(\Countable::class, $this->attributeList);
+    }
+
+    public function testJsonSerializableInterfaceIsImplemented()
+    {
+        $this->assertInstanceOf(\JsonSerializable::class, $this->attributeList);
+    }
+
+    public function testItReturnsTheNumberOfAttributes()
+    {
+        $attributeArray = [
+            'code' => 'foo',
+            'contextData' => [],
+            'value' => 'bar'
+        ];
+        $this->assertCount(1, ProductAttributeList::fromArray([$attributeArray]));
+        $this->assertCount(2, ProductAttributeList::fromArray([$attributeArray, $attributeArray]));
     }
 
     public function testAttributeIsAddedAndRetrievedFromProductAttributeList()
@@ -96,120 +103,27 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
         $this->assertContainsOnly(ProductAttribute::class, $result);
     }
 
-    /**
-     * @dataProvider extractAttributesDataProvider
-     * @param string $websiteCodeA
-     * @param string $websiteCodeB
-     * @param string $websiteCodeC
-     * @param string $langA
-     * @param string $langB
-     * @param string $langC
-     * @param string $valueA
-     * @param string $valueB
-     * @param string $valueC
-     * @param string[] $contextReturnValueMap
-     * @param string $expected
-     */
-    public function testAttributeValuesForAGivenContextAreExtracted(
-        $websiteCodeA,
-        $websiteCodeB,
-        $websiteCodeC,
-        $langA,
-        $langB,
-        $langC,
-        $valueA,
-        $valueB,
-        $valueC,
-        $contextReturnValueMap,
-        $expected
-    ) {
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $this->getStubContextWithReturnValueMap($contextReturnValueMap);
-        $attributeCode = 'name';
-        $attributesArray = [
-            [
-                'code' => $attributeCode,
-                'contextData' => ['website' => $websiteCodeA, 'locale' => $langA],
-                'value' => $valueA
-            ],
-            [
-                'code' => $attributeCode,
-                'contextData' => ['website' => $websiteCodeB, 'locale' => $langB],
-                'value' => $valueB
-            ],
-            [
-                'code' => $attributeCode,
-                'contextData' => ['website' => $websiteCodeC, 'locale' => $langC],
-                'value' => $valueC
-            ],
-        ];
-        $attributeList = ProductAttributeList::fromArray($attributesArray);
-        $attributeListForContext = $attributeList->getAttributeListForContext($stubContext);
-        $attributesWithCode = $attributeListForContext->getAttributesWithCode($attributeCode);
-        $result = $attributesWithCode[0];
-
-        $this->assertEquals($expected, $result->getValue());
-    }
-
-    /**
-     * @return array[]
-     */
-    public function extractAttributesDataProvider()
+    public function testAttributeValuesForAGivenContextAreExtracted()
     {
-        return [
-            'only-web-in-context' => [
-                'webA',
-                'webB',
-                'webC', // website codes
-                'lang',
-                'lang',
-                'lang', // locale codes
-                'AAA',
-                'BBB',
-                'CCC', // attribute values
-                [['website', 'webB']], // return value map
-                'BBB' // expected value
-            ],
-            'one-match' => [
-                'webA',
-                'webA',
-                'webB', // website codes
-                'langA',
-                'langB',
-                'langA', // locale codes
-                'AAA',
-                'BBB',
-                'CCC', // attribute values
-                [['website', 'webB'], ['locale', 'langA']], // return value map
-                'CCC' // expected value
-            ],
-            'two-match-pick-first' => [
-                'webA',
-                'webB',
-                'webC', // website codes
-                'langB',
-                'langA',
-                'langC', // locale codes
-                'AAA',
-                'BBB',
-                'CCC', // attribute values
-                [['website', 'webA'], ['locale', 'langA']], // return value map
-                'AAA' // expected value
-            ],
-            '3-match-pick-highest' => [
-                'webA',
-                'webB',
-                'webA', // website codes
-                'langB',
-                'langA',
-                'langA', // locale codes
-                'AAA',
-                'BBB',
-                'CCC', // attribute values
-                [['website', 'webA'], ['locale', 'langA']], // return value map
-                'CCC' // expected value
-            ],
+        $contextDataA = ['website' => 'A'];
+        $contextDataB = ['website' => 'B'];
+        $attributesArray = [
+            ['code' => 'foo', 'contextData' => $contextDataA, 'value' => 'expected'],
+            ['code' => 'foo', 'contextData' => $contextDataA, 'value' => 'expected'],
+            ['code' => 'bar', 'contextData' => $contextDataA, 'value' => 'expected'],
+            ['code' => 'foo', 'contextData' => $contextDataB, 'value' => 'not-expected'],
+            ['code' => 'buz', 'contextData' => $contextDataB, 'value' => 'not-expected'],
         ];
+
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
+        $stubContext = $this->getMock(Context::class);
+        $stubContext->method('matchesDataSet')->willReturnMap([
+            [$contextDataA, true],
+            [$contextDataB, false],
+        ]);
+        $originalAttributeList = ProductAttributeList::fromArray($attributesArray);
+        $matchingAttributeList = $originalAttributeList->getAttributeListForContext($stubContext);
+        $this->assertCount(3, $matchingAttributeList);
     }
 
     public function testExceptionIsThrownWhileCombiningAttributesWithSameCodeButDifferentContextPartsIntoList()
@@ -245,7 +159,7 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     {
         for ($i = 0; $i < $numAttributesToAdd; $i++) {
             $this->attributeList->add(ProductAttribute::fromArray([
-                'code' => 'attr_' . ($i +1),
+                'code' => 'attr_' . ($i + 1),
                 'contextData' => [],
                 'value' => 'value'
             ]));
@@ -272,9 +186,24 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
 
     public function testHasAttributeReturnsTrueForAttributesInTheList()
     {
-        $attributeArray = [[ 'code' => 'foo', 'contextData' => [], 'value' => 'bar']];
+        $attributeArray = [['code' => 'foo', 'contextData' => [], 'value' => 'bar']];
         $attributeList = ProductAttributeList::fromArray($attributeArray);
         $this->assertTrue($attributeList->hasAttribute('foo'));
+    }
 
+    public function testArrayRepresentationOfAttributeListIsReturned()
+    {
+        $attributeArray = [
+            'code' => 'foo',
+            'contextData' => [],
+            'value' => 'bar'
+        ];
+        $attribute = ProductAttribute::fromArray($attributeArray);
+        $this->attributeList->add($attribute);
+
+        $result = $this->attributeList->jsonSerialize();
+        $expectedResult = ['foo' => ['bar']];
+
+        $this->assertSame($expectedResult, $result);
     }
 }

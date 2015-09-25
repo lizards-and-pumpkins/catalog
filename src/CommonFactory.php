@@ -43,7 +43,6 @@ use LizardsAndPumpkins\Product\ProductSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionTemplateProjector;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
-use LizardsAndPumpkins\Product\ProductInListingBlockRenderer;
 use LizardsAndPumpkins\Product\ProductListingBlockRenderer;
 use LizardsAndPumpkins\Product\ProductListingMetaInfoSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingMetaInfoSnippetProjector;
@@ -577,7 +576,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new ProductInListingSnippetRenderer(
             $this->getMasterFactory()->createSnippetList(),
-            $this->getMasterFactory()->createProductInListingBlockRenderer(),
             $this->getMasterFactory()->createProductInListingSnippetKeyGenerator()
         );
     }
@@ -619,18 +617,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $this->getMasterFactory()->createSnippetList(),
             $this->getMasterFactory()->createProductBackOrderAvailabilitySnippetKeyGenerator(),
             $productBackOrderAvailabilityAttributeCode
-        );
-    }
-
-    /**
-     * @return ProductInListingBlockRenderer
-     */
-    public function createProductInListingBlockRenderer()
-    {
-        return new ProductInListingBlockRenderer(
-            $this->getMasterFactory()->createThemeLocator(),
-            $this->getMasterFactory()->createBlockStructure(),
-            $this->getMasterFactory()->getTranslatorRegistry()
         );
     }
 

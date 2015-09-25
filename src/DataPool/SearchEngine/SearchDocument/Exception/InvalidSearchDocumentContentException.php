@@ -1,7 +1,7 @@
 <?php
 
 
-namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument;
+namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\Exception;
 
 class InvalidSearchDocumentContentException extends \UnexpectedValueException
 {

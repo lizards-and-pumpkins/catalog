@@ -8,16 +8,7 @@
     <?php /* TODO: Handle singular form */ ?>
     <p class="amount">{{snippet collection_size}} <?= $this->__('Items') ?></p>
 </div>
-<ul class="products-grid">
-    <li>{{snippet product_1}}</li>
-    <li>{{snippet product_2}}</li>
-    <li>{{snippet product_3}}</li>
-    <li>{{snippet product_4}}</li>
-    <li>{{snippet product_5}}</li>
-    <li>{{snippet product_6}}</li>
-    <li>{{snippet product_7}}</li>
-    <li>{{snippet product_8}}</li>
-    <li>{{snippet product_9}}</li>
-</ul>
+<div id="products-grid-container"></div>
+<script>var productListingJson = {{snippet products_grid}}</script>
 <div id="pagination"></div>
 <script>var totalPagesCount = {{snippet total_pages_count}}</script>

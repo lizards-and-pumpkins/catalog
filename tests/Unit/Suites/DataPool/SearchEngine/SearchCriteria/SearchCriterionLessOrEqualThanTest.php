@@ -22,7 +22,7 @@ class SearchCriterionLessOrEqualThanTest extends AbstractSearchCriterionTest
     final public function getNonMatchingValues()
     {
         return [
-            ['2', '1'],
+            [['2'], '1'],
         ];
     }
 
@@ -32,8 +32,8 @@ class SearchCriterionLessOrEqualThanTest extends AbstractSearchCriterionTest
     final public function getMatchingValues()
     {
         return[
-            ['1', '2'],
-            ['1', '1'],
+            [['1'], '2'],
+            [['1'], '1'],
         ];
     }
 }

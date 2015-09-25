@@ -223,4 +223,30 @@ abstract class AbstractContextDecoratorTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey($code, $result);
         $this->assertSame($result[$code], $this->getStubContextData()[$code]);
     }
+
+    public function testItReturnsTrueIfTheDataSetIsEmpty()
+    {
+        $this->mockDecoratedContext->method('matchesDataSet')->willReturn(true);
+        $this->assertTrue($this->getDecoratorUnderTest()->matchesDataSet([]));
+    }
+
+    public function testItReturnsFalseIfTheDataSetDoesNotMatch()
+    {
+        $this->mockDecoratedContext->method('matchesDataSet')->willReturn(true);
+        $decoratorUnderTestCode = $this->getDecoratorUnderTestCode();
+        $dataSetToCompare = [
+            $decoratorUnderTestCode => $this->getDecoratorUnderTest()->getValue($decoratorUnderTestCode) . '...'
+        ];
+        $this->assertFalse($this->getDecoratorUnderTest()->matchesDataSet($dataSetToCompare));
+    }
+
+    public function testItReturnsTrueIfTheDataSetDoesNotMatch()
+    {
+        $this->mockDecoratedContext->method('matchesDataSet')->willReturn(true);
+        $decoratorUnderTestCode = $this->getDecoratorUnderTestCode();
+        $dataSetToCompare = [
+            $decoratorUnderTestCode => $this->getDecoratorUnderTest()->getValue($decoratorUnderTestCode)
+        ];
+        $this->assertTrue($this->getDecoratorUnderTest()->matchesDataSet($dataSetToCompare));
+    }
 }

@@ -88,4 +88,13 @@ class VersionedContext implements Context
     {
         return [self::CODE => (string) $this->version];
     }
+
+    /**
+     * @param string[] $dataSet
+     * @return bool
+     */
+    public function matchesDataSet(array $dataSet)
+    {
+        return !isset($dataSet[self::CODE]) || $dataSet[self::CODE] === (string) $this->version;
+    }
 }
