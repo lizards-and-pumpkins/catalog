@@ -16,10 +16,8 @@ class ProductWasUpdatedDomainEventHandler implements DomainEventHandler
      */
     private $projector;
 
-    public function __construct(
-        ProductWasUpdatedDomainEvent $event,
-        ProductProjector $projector
-    ) {
+    public function __construct(ProductWasUpdatedDomainEvent $event, ProductProjector $projector)
+    {
         $this->event = $event;
         $this->projector = $projector;
     }
