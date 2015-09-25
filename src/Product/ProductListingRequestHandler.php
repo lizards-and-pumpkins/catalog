@@ -23,7 +23,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
     const PAGINATION_QUERY_PARAMETER_NAME = 'p';
 
     /**
-     * @var ProductListingMetaInfoSnippetContent
+     * @var ProductListingCriteriaSnippetContent
      */
     private $pageMetaInfo;
 
@@ -142,7 +142,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $metaInfoSnippetKey = $this->getMetaInfoSnippetKey($request);
         $json = $this->getPageMetaInfoJsonIfExists($metaInfoSnippetKey);
         if ($json) {
-            $this->pageMetaInfo = ProductListingMetaInfoSnippetContent::fromJson($json);
+            $this->pageMetaInfo = ProductListingCriteriaSnippetContent::fromJson($json);
         }
     }
 
@@ -223,7 +223,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
     private function getMetaInfoSnippetKey(HttpRequest $request)
     {
         $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
-            ProductListingMetaInfoSnippetRenderer::CODE
+            ProductListingCriteriaSnippetRenderer::CODE
         );
         $urlKey = $request->getUrlPathRelativeToWebFront();
         $metaInfoSnippetKey = $keyGenerator->getKeyForContext(

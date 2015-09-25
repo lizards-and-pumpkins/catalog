@@ -22,17 +22,15 @@ class ProductWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCas
 
     protected function setUp()
     {
-        $stubProductSource = $this->getMock(ProductSource::class, [], [], '', false);
+        $stubProduct = $this->getMock(Product::class, [], [], '', false);
 
         $stubDomainEvent = $this->getMock(ProductWasUpdatedDomainEvent::class, [], [], '', false);
-        $stubDomainEvent->method('getProductSource')->willReturn($stubProductSource);
+        $stubDomainEvent->method('getProductSource')->willReturn($stubProduct);
 
-        $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
         $this->mockProductProjector = $this->getMock(ProductProjector::class, [], [], '', false);
 
         $this->domainEventHandler = new ProductWasUpdatedDomainEventHandler(
             $stubDomainEvent,
-            $stubContextSource,
             $this->mockProductProjector
         );
     }

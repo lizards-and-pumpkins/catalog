@@ -4,8 +4,8 @@ namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
+use LizardsAndPumpkins\DataVersion;
 use LizardsAndPumpkins\Product\Exception\DataNotStringException;
 use LizardsAndPumpkins\Product\Exception\InvalidConditionXmlAttributeException;
 use LizardsAndPumpkins\Product\Exception\InvalidCriterionOperationXmlAttributeException;
@@ -15,16 +15,27 @@ use LizardsAndPumpkins\Product\Exception\MissingUrlKeyXmlAttributeException;
 use LizardsAndPumpkins\UrlKey;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductListingMetaInfoBuilder
+ * @covers \LizardsAndPumpkins\Product\ProductListingCriteriaBuilder
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
- * @uses   \LizardsAndPumpkins\Product\ProductListingMetaInfo
+ * @uses   \LizardsAndPumpkins\Product\ProductListingCriteria
  * @uses   \LizardsAndPumpkins\Utils\XPathParser
  * @uses   \LizardsAndPumpkins\UrlKey
+ * @uses   \LizardsAndPumpkins\DataVersion
  */
-class ProductListingMetaInfoBuilderTest extends \PHPUnit_Framework_TestCase
+class ProductListingCriteriaBuilderTest extends \PHPUnit_Framework_TestCase
 {
-    public function testProductListingMetaInfoWithAndConditionIsCreatedFromXml()
+    /**
+     * @var DataVersion
+     */
+    private $testDataVersion;
+
+    protected function setUp()
+    {
+        $this->testDataVersion = DataVersion::fromVersionString('-1');
+    }
+
+    public function testProductListingCriteriaWithAndConditionIsCreatedFromXml()
     {
         $xml = <<<EOX
 <listing url_key="men-accessories" condition="and" website="ru" locale="en_US">
@@ -33,16 +44,16 @@ class ProductListingMetaInfoBuilderTest extends \PHPUnit_Framework_TestCase
 </listing>
 EOX;
 
-        $productListingMetaInfo = (new ProductListingMetaInfoBuilder())
-            ->createProductListingMetaInfoFromXml($xml);
+        $productListingCriteria = (new ProductListingCriteriaBuilder())
+            ->createProductListingCriteriaFromXml($xml, $this->testDataVersion);
 
-        $urlKey = $productListingMetaInfo->getUrlKey();
-        $context = $productListingMetaInfo->getContextData();
-        $result = $productListingMetaInfo->getCriteria();
+        $urlKey = $productListingCriteria->getUrlKey();
+        $context = $productListingCriteria->getContextData();
+        $result = $productListingCriteria->getCriteria();
 
-        $this->assertInstanceOf(ProductListingMetaInfo::class, $productListingMetaInfo);
+        $this->assertInstanceOf(ProductListingCriteria::class, $productListingCriteria);
         $this->assertEquals('men-accessories', $urlKey);
-        $this->assertEquals(['website' => 'ru', 'locale' => 'en_US'], $context);
+        $this->assertEquals(['version' => '-1', 'website' => 'ru', 'locale' => 'en_US'], $context);
 
         $expectedCriterion1 = SearchCriterionEqual::create('category', 'accessories');
         $expectedCriterion2 = SearchCriterionEqual::create('gender', 'male');
@@ -51,7 +62,7 @@ EOX;
         $this->assertEquals($expectedCriteria, $result);
     }
 
-    public function testProductListingMetaInfoWithOrConditionIsCreatedFromXml()
+    public function testProductListingCriteriaWithOrConditionIsCreatedFromXml()
     {
         $xml = <<<EOX
 <listing url_key="men-accessories" condition="or" website="ru" locale="en_US">
@@ -60,8 +71,9 @@ EOX;
 </listing>
 EOX;
 
-        $productListingMetaInfo = (new ProductListingMetaInfoBuilder())->createProductListingMetaInfoFromXml($xml);
-        $result = $productListingMetaInfo->getCriteria();
+        $productListingCriteria = (new ProductListingCriteriaBuilder())
+            ->createProductListingCriteriaFromXml($xml, $this->testDataVersion);
+        $result = $productListingCriteria->getCriteria();
 
         $expectedCriterion1 = SearchCriterionEqual::create('category', 'accessories');
         $expectedCriterion2 = SearchCriterionEqual::create('gender', 'male');
@@ -74,35 +86,35 @@ EOX;
     {
         $this->setExpectedException(MissingUrlKeyXmlAttributeException::class);
         $xml = '<listing />';
-        (new ProductListingMetaInfoBuilder())->createProductListingMetaInfoFromXml($xml);
+        (new ProductListingCriteriaBuilder())->createProductListingCriteriaFromXml($xml, $this->testDataVersion);
     }
 
     public function testExceptionIsThrownIfConditionAttributeOfListingNodeIsMissing()
     {
         $this->setExpectedException(MissingConditionXmlAttributeException::class);
         $xml = '<listing url_key="foo"/>';
-        (new ProductListingMetaInfoBuilder())->createProductListingMetaInfoFromXml($xml);
+        (new ProductListingCriteriaBuilder())->createProductListingCriteriaFromXml($xml, $this->testDataVersion);
     }
 
     public function testExceptionIsThrownIfConditionAttributeOfListingNodeIsInvalid()
     {
         $this->setExpectedException(InvalidConditionXmlAttributeException::class);
         $xml = '<listing url_key="foo" condition="bar"/>';
-        (new ProductListingMetaInfoBuilder())->createProductListingMetaInfoFromXml($xml);
+        (new ProductListingCriteriaBuilder())->createProductListingCriteriaFromXml($xml, $this->testDataVersion);
     }
 
     public function testExceptionIsThrownIfCriterionNodeDoesNotHaveOperationAttribute()
     {
         $this->setExpectedException(MissingCriterionOperationXmlAttributeException::class);
         $xml = '<listing url_key="foo" condition="and"><bar /></listing>';
-        (new ProductListingMetaInfoBuilder())->createProductListingMetaInfoFromXml($xml);
+        (new ProductListingCriteriaBuilder())->createProductListingCriteriaFromXml($xml, $this->testDataVersion);
     }
 
     public function testExceptionIsThrownIfCriterionOperationAttributeIsNotAValidClass()
     {
         $this->setExpectedException(InvalidCriterionOperationXmlAttributeException::class);
         $xml = '<listing url_key="foo" condition="and"><bar operation="baz" /></listing>';
-        (new ProductListingMetaInfoBuilder())->createProductListingMetaInfoFromXml($xml);
+        (new ProductListingCriteriaBuilder())->createProductListingCriteriaFromXml($xml, $this->testDataVersion);
     }
 
     public function testExceptionIsThrownIfCriterionOperationAttributeContainsNonCharacterData()
@@ -112,14 +124,14 @@ EOX;
             sprintf('Invalid operation in product listing XML "%s", only the letters a-z are allowed.', "a\\b")
         );
         $xml = '<listing url_key="foo" condition="and"><bar operation="a\\b" /></listing>';
-        (new ProductListingMetaInfoBuilder())->createProductListingMetaInfoFromXml($xml);
+        (new ProductListingCriteriaBuilder())->createProductListingCriteriaFromXml($xml, $this->testDataVersion);
     }
 
     public function testItThrowsAnExceptionIfTheContextArrayContainsNonStrings()
     {
         $expectedMessage = 'The context array has to contain only string values, found ';
         $this->setExpectedException(DataNotStringException::class, $expectedMessage);
-        (new ProductListingMetaInfoBuilder())->createProductListingMetaInfo(
+        (new ProductListingCriteriaBuilder())->createProductListingCriteria(
             UrlKey::fromString('http://example.com'),
             ['key' => 123],
             $this->getMock(SearchCriteria::class)
@@ -130,7 +142,7 @@ EOX;
     {
         $expectedMessage = 'The context array has to contain only string keys, found ';
         $this->setExpectedException(DataNotStringException::class, $expectedMessage);
-        (new ProductListingMetaInfoBuilder())->createProductListingMetaInfo(
+        (new ProductListingCriteriaBuilder())->createProductListingCriteria(
             UrlKey::fromString('http://example.com'),
             [0 => 'value'],
             $this->getMock(SearchCriteria::class)

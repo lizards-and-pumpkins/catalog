@@ -8,7 +8,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Product\Exception\MalformedSearchCriteriaMetaException;
 
-class ProductListingMetaInfoSnippetContent implements PageMetaInfoSnippetContent
+class ProductListingCriteriaSnippetContent implements PageMetaInfoSnippetContent
 {
     const KEY_CRITERIA = 'product_selection_criteria';
 
@@ -43,7 +43,7 @@ class ProductListingMetaInfoSnippetContent implements PageMetaInfoSnippetContent
      * @param SearchCriteria $selectionCriteria
      * @param string $rootSnippetCode
      * @param string[] $pageSnippetCodes
-     * @return ProductListingMetaInfoSnippetContent
+     * @return ProductListingCriteriaSnippetContent
      */
     public static function create(SearchCriteria $selectionCriteria, $rootSnippetCode, array $pageSnippetCodes)
     {
@@ -56,7 +56,7 @@ class ProductListingMetaInfoSnippetContent implements PageMetaInfoSnippetContent
 
     /**
      * @param string $json
-     * @return ProductListingMetaInfoSnippetContent
+     * @return ProductListingCriteriaSnippetContent
      */
     public static function fromJson($json)
     {

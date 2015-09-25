@@ -13,29 +13,20 @@ class ProductListingWasAddedDomainEventHandler implements DomainEventHandler
     private $domainEvent;
 
     /**
-     * @var ContextSource
-     */
-    private $contextSource;
-
-    /**
-     * @var ProductListingMetaInfoSnippetProjector
+     * @var ProductListingCriteriaSnippetProjector
      */
     private $projector;
 
     public function __construct(
         ProductListingWasAddedDomainEvent $domainEvent,
-        ContextSource $contextSource,
-        ProductListingMetaInfoSnippetProjector $projector
+        ProductListingCriteriaSnippetProjector $projector
     ) {
         $this->domainEvent = $domainEvent;
-        $this->contextSource = $contextSource;
         $this->projector = $projector;
     }
 
     public function process()
     {
-        $productListingMetaInfo = $this->domainEvent->getProductListingMetaInfo();
-        
-        $this->projector->project($productListingMetaInfo, $this->contextSource);
+        $this->projector->project($this->domainEvent->getProductListingCriteria());
     }
 }

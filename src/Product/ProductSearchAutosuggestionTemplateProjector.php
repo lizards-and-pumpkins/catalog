@@ -27,11 +27,10 @@ class ProductSearchAutosuggestionTemplateProjector implements Projector
 
     /**
      * @param mixed $projectionSourceData
-     * @param ContextSource $contextSource
      */
-    public function project($projectionSourceData, ContextSource $contextSource)
+    public function project($projectionSourceData)
     {
-        $snippetList = $this->snippetRendererCollection->render($projectionSourceData, $contextSource);
+        $snippetList = $this->snippetRendererCollection->render($projectionSourceData);
         $this->dataPoolWriter->writeSnippetList($snippetList);
     }
 }

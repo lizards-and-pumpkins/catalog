@@ -7,6 +7,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Log\Logger;
+use LizardsAndPumpkins\Log\LogMessage;
 use LizardsAndPumpkins\Queue\Queue;
 
 abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
@@ -54,8 +55,19 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
         $messages = $logger->getMessages();
 
         if (!empty($messages)) {
-            $messageString = implode(PHP_EOL, $messages);
-            $this->fail($messageString);
+            $failMessages = array_map(function (LogMessage $logMessage) {
+                $messageContext = $logMessage->getContext();
+                if (isset($messageContext['exception'])) {
+                    /** @var \Exception $exception */
+                    $exception = $messageContext['exception'];
+                    return (string) $logMessage . ' ' . $exception->getFile() . ':' . $exception->getLine();
+                } else {
+                    return (string) $logMessage;
+                }
+            }, $messages);
+            $fainMessageString = implode(PHP_EOL, $failMessages);
+            
+            $this->fail($fainMessageString);
         }
     }
 

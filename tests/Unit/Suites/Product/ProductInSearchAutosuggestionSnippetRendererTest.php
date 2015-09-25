@@ -28,29 +28,22 @@ class ProductInSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framewor
     private $snippetRenderer;
 
     /**
-     * @var ContextSource|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubContextSource;
-
-    /**
      * @param string $dummyProductIdString
-     * @return ProductSource|\PHPUnit_Framework_MockObject_MockObject
+     * @return Product|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function getStubProductSource($dummyProductIdString)
+    private function getStubProduct($dummyProductIdString)
     {
         $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
         $stubProductId->method('__toString')->willReturn($dummyProductIdString);
+        
+        $stubContext = $this->getMock(Context::class);
 
         /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
         $stubProduct = $this->getMock(Product::class, [], [], '', false);
         $stubProduct->method('getId')->willReturn($stubProductId);
+        $stubProduct->method('getContext')->willReturn($stubContext);
 
-        /** @var ProductSource|\PHPUnit_Framework_MockObject_MockObject $stubProductSource */
-        $stubProductSource = $this->getMock(ProductSource::class, [], [], '', false);
-        $stubProductSource->method('getId')->willReturn($stubProductId);
-        $stubProductSource->method('getProductForContext')->willReturn($stubProduct);
-
-        return $stubProductSource;
+        return $stubProduct;
     }
 
     protected function setUp()
@@ -71,11 +64,6 @@ class ProductInSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framewor
             $stubBlockRenderer,
             $this->mockSnippetKeyGenerator
         );
-
-        $stubContext = $this->getMock(Context::class);
-
-        $this->stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
-        $this->stubContextSource->method('getAllAvailableContexts')->willReturn([$stubContext]);
     }
 
     public function testSnippetRendererInterfaceIsImplemented()
@@ -86,15 +74,15 @@ class ProductInSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framewor
     public function testExceptionIsThrownIfProjectionSourceDataIsNotAProductSource()
     {
         $this->setExpectedException(InvalidProjectionSourceDataTypeException::class);
-        $this->snippetRenderer->render('invalid-projection-source-data', $this->stubContextSource);
+        $this->snippetRenderer->render('invalid-projection-source-data');
     }
 
     public function testProductInAutosuggestionInContextSnippetIsRendered()
     {
         $dummyProductId = 'foo';
-        $stubProductSource = $this->getStubProductSource($dummyProductId);
+        $stubProductSource = $this->getStubProduct($dummyProductId);
 
-        $result = $this->snippetRenderer->render($stubProductSource, $this->stubContextSource);
+        $result = $this->snippetRenderer->render($stubProductSource);
 
         $this->assertInstanceOf(SnippetList::class, $result);
         $this->assertCount(1, $result);
@@ -104,11 +92,11 @@ class ProductInSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framewor
     public function testProductIdIsPassedToKeyGenerator()
     {
         $dummyProductId = 'foo';
-        $stubProductSource = $this->getStubProductSource($dummyProductId);
+        $stubProductSource = $this->getStubProduct($dummyProductId);
 
         $this->mockSnippetKeyGenerator->expects($this->once())->method('getKeyForContext')
             ->with($this->anything(), [Product::ID => $dummyProductId]);
 
-        $this->snippetRenderer->render($stubProductSource, $this->stubContextSource);
+        $this->snippetRenderer->render($stubProductSource);
     }
 }

@@ -10,7 +10,7 @@ use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductDetailPageMetaInfoSnippetContent;
-use LizardsAndPumpkins\Product\ProductDetailViewInContextSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewRequestHandler;
 
 class FrontendRenderingTest extends AbstractIntegrationTest
@@ -36,7 +36,7 @@ class FrontendRenderingTest extends AbstractIntegrationTest
 
         $rootSnippetCode = 'root-snippet';
         $rootSnippetKeyGenerator = new GenericSnippetKeyGenerator(
-            ProductDetailViewInContextSnippetRenderer::CODE,
+            ProductDetailViewSnippetRenderer::CODE,
             $this->factory->getRequiredContexts(),
             [Product::ID]
         );

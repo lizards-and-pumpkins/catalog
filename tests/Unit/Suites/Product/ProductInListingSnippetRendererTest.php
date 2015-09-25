@@ -28,15 +28,10 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
     private $snippetRenderer;
 
     /**
-     * @var ContextSource|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubContextSource;
-
-    /**
      * @param string $dummyProductIdString
-     * @return ProductSource|\PHPUnit_Framework_MockObject_MockObject
+     * @return Product|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function getStubProductSource($dummyProductIdString)
+    private function getStubProduct($dummyProductIdString)
     {
         $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
         $stubProductId->method('__toString')->willReturn($dummyProductIdString);
@@ -44,13 +39,10 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
         $stubProduct = $this->getMock(Product::class, [], [], '', false);
         $stubProduct->method('getId')->willReturn($stubProductId);
-
-        /** @var ProductSource|\PHPUnit_Framework_MockObject_MockObject $stubProductSource */
-        $stubProductSource = $this->getMock(ProductSource::class, [], [], '', false);
-        $stubProductSource->method('getId')->willReturn($stubProductId);
-        $stubProductSource->method('getProductForContext')->willReturn($stubProduct);
-
-        return $stubProductSource;
+        
+        $stubProduct->method('getContext')->willReturn($this->getMock(Context::class));
+        
+        return $stubProduct;
     }
 
     protected function setUp()
@@ -61,11 +53,6 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->mockSnippetKeyGenerator->method('getKeyForContext')->willReturn('stub-content-key');
 
         $this->snippetRenderer = new ProductInListingSnippetRenderer($testSnippetList, $this->mockSnippetKeyGenerator);
-
-        $stubContext = $this->getMock(Context::class);
-
-        $this->stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
-        $this->stubContextSource->method('getAllAvailableContexts')->willReturn([$stubContext]);
     }
 
     public function testSnippetRendererInterfaceIsImplemented()
@@ -76,15 +63,15 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownIfProjectionSourceDataIsNotAProductSource()
     {
         $this->setExpectedException(InvalidProjectionSourceDataTypeException::class);
-        $this->snippetRenderer->render('invalid-projection-source-data', $this->stubContextSource);
+        $this->snippetRenderer->render('invalid-projection-source-data');
     }
 
     public function testProductInListingViewSnippetIsRendered()
     {
         $dummyProductId = 'foo';
-        $stubProductSource = $this->getStubProductSource($dummyProductId);
+        $stubProduct = $this->getStubProduct($dummyProductId);
 
-        $result = $this->snippetRenderer->render($stubProductSource, $this->stubContextSource);
+        $result = $this->snippetRenderer->render($stubProduct);
 
         $this->assertInstanceOf(SnippetList::class, $result);
         $this->assertCount(1, $result);
@@ -94,11 +81,11 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
     public function testProductIdIsPassedToKeyGenerator()
     {
         $dummyProductId = 'foo';
-        $stubProductSource = $this->getStubProductSource($dummyProductId);
+        $stubProductSource = $this->getStubProduct($dummyProductId);
 
         $this->mockSnippetKeyGenerator->expects($this->once())->method('getKeyForContext')
             ->with($this->anything(), [Product::ID => $dummyProductId]);
 
-        $this->snippetRenderer->render($stubProductSource, $this->stubContextSource);
+        $this->snippetRenderer->render($stubProductSource);
     }
 }

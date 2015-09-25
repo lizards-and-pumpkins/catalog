@@ -28,25 +28,32 @@ class ProductSearchResultMetaSnippetRenderer implements SnippetRenderer
      * @var BlockRenderer
      */
     private $blockRenderer;
+    
+    /**
+     * @var ContextSource
+     */
+    private $contextSource;
 
     public function __construct(
         SnippetList $snippetList,
         SnippetKeyGenerator $snippetKeyGenerator,
-        BlockRenderer $blockRenderer
+        BlockRenderer $blockRenderer,
+        ContextSource $contextSource
     ) {
         $this->snippetList = $snippetList;
         $this->snippetKeyGenerator = $snippetKeyGenerator;
         $this->blockRenderer = $blockRenderer;
+        $this->contextSource = $contextSource;
     }
 
     /**
      * @param mixed $dataObject
-     * @param ContextSource $contextSource
      * @return SnippetList
      */
-    public function render($dataObject, ContextSource $contextSource)
+    public function render($dataObject)
     {
-        foreach ($contextSource->getAllAvailableContexts() as $context) {
+        // todo: important! Use data version from $dataObject
+        foreach ($this->contextSource->getAllAvailableContexts() as $context) {
             $this->renderMetaInfoSnippetForContext($dataObject, $context);
         }
 
@@ -62,14 +69,14 @@ class ProductSearchResultMetaSnippetRenderer implements SnippetRenderer
         $rootSnippetCode = $this->blockRenderer->getRootSnippetCode();
         $pageSnippetCodes = $this->blockRenderer->getNestedSnippetCodes();
 
-        $numItemsPerPageForContext = $productsPerPageForContextList->getListOfAvailableNumberOfProductsPerPageForContext(
+        $itemPerPageForContext = $productsPerPageForContextList->getListOfAvailableNumberOfProductsPerPageForContext(
             $context
         );
 
-        foreach ($numItemsPerPageForContext as $numItemsPerPage) {
+        foreach ($itemPerPageForContext as $numProductsPerPage) {
             $metaSnippetKey = $this->snippetKeyGenerator->getKeyForContext(
                 $context,
-                ['products_per_page' => $numItemsPerPage]
+                ['products_per_page' => $numProductsPerPage]
             );
             $metaSnippetContent = $this->getMetaSnippetContentJson($rootSnippetCode, $pageSnippetCodes);
             $this->snippetList->add(Snippet::create($metaSnippetKey, $metaSnippetContent));

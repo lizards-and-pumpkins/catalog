@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Command;
+use LizardsAndPumpkins\DataVersion;
 
 /**
  * @covers \LizardsAndPumpkins\Product\AddProductListingCommand
@@ -10,9 +11,9 @@ use LizardsAndPumpkins\Command;
 class AddProductListingCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ProductListingMetaInfo|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductListingCriteria|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubProductListingMetaInfo;
+    private $stubProductListingCriteria;
 
     /**
      * @var AddProductListingCommand
@@ -21,14 +22,8 @@ class AddProductListingCommandTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubProductListingMetaInfo = $this->getMock(
-            ProductListingMetaInfo::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->command = new AddProductListingCommand($this->stubProductListingMetaInfo);
+        $this->stubProductListingCriteria = $this->getMock(ProductListingCriteria::class, [], [], '', false);
+        $this->command = new AddProductListingCommand($this->stubProductListingCriteria);
     }
 
     public function testCommandInterFaceIsImplemented()
@@ -36,9 +31,9 @@ class AddProductListingCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Command::class, $this->command);
     }
 
-    public function testProductListingMetaInfoIsReturned()
+    public function testProductListingCriteriaIsReturned()
     {
-        $result = $this->command->getProductListingMetaInfo();
-        $this->assertSame($this->stubProductListingMetaInfo, $result);
+        $result = $this->command->getProductListingCriteria();
+        $this->assertSame($this->stubProductListingCriteria, $result);
     }
 }

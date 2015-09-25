@@ -12,9 +12,9 @@ use LizardsAndPumpkins\Projection\UrlKeyForContextCollector;
 use LizardsAndPumpkins\Projection\UrlKeyForContextCollection;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductListingMetaInfoSnippetProjector
+ * @covers \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetProjector
  */
-class ProductListingMetaInfoSnippetProjectorTest extends \PHPUnit_Framework_TestCase
+class ProductListingCriteriaSnippetProjectorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var SnippetList|\PHPUnit_Framework_MockObject_MockObject
@@ -37,16 +37,16 @@ class ProductListingMetaInfoSnippetProjectorTest extends \PHPUnit_Framework_Test
     private $mockUrlKeyCollector;
 
     /**
-     * @var ProductListingMetaInfoSnippetProjector
+     * @var ProductListingCriteriaSnippetProjector
      */
     private $projector;
 
     /**
-     * @return ProductListingMetaInfo|\PHPUnit_Framework_MockObject_MockObject
+     * @return ProductListingCriteria|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createMockProductListingMetaInfo()
+    private function createMockProductListingCriteria()
     {
-        return $this->getMock(ProductListingMetaInfo::class, [], [], '', false);
+        return $this->getMock(ProductListingCriteria::class, [], [], '', false);
     }
 
     /**
@@ -65,9 +65,9 @@ class ProductListingMetaInfoSnippetProjectorTest extends \PHPUnit_Framework_Test
         $this->mockRendererCollection = $this->getMock(SnippetRendererCollection::class, [], [], '', false);
         $this->mockRendererCollection->method('render')->willReturn($this->stubSnippetList);
         
-        $this->mockUrlKeyCollector = $this->getMock(UrlKeyForContextCollector::class);
+        $this->mockUrlKeyCollector = $this->getMock(UrlKeyForContextCollector::class, [], [], '', false);
 
-        $this->projector = new ProductListingMetaInfoSnippetProjector(
+        $this->projector = new ProductListingCriteriaSnippetProjector(
             $this->mockRendererCollection,
             $this->mockUrlKeyCollector,
             $this->mockDataPoolWriter
@@ -76,36 +76,33 @@ class ProductListingMetaInfoSnippetProjectorTest extends \PHPUnit_Framework_Test
 
     public function testExceptionIsThrownIfProjectionSourceDataIsNotProduct()
     {
-        $stubContextSource = $this->createMockContextSource();
         $this->setExpectedException(InvalidProjectionSourceDataTypeException::class);
-        $this->projector->project('invalid-projection-source-data', $stubContextSource);
+        $this->projector->project('invalid-projection-source-data');
     }
 
     public function testSnippetListIsWrittenToTheDataPool()
     {
-        $stubProductListingMetaInfo = $this->createMockProductListingMetaInfo();
-        $stubContextSource = $this->createMockContextSource();
+        $stubProductListingCriteria = $this->createMockProductListingCriteria();
         $stubUrlKeyForContextCollection = $this->getMock(UrlKeyForContextCollection::class, [], [], '', false);
         $this->mockUrlKeyCollector->method('collectListingUrlKeys')->willReturn($stubUrlKeyForContextCollection);
 
         $this->mockDataPoolWriter->expects($this->once())->method('writeSnippetList')->with($this->stubSnippetList);
 
-        $this->projector->project($stubProductListingMetaInfo, $stubContextSource);
+        $this->projector->project($stubProductListingCriteria);
     }
 
     public function testUrlKeysForListingsAreCollectedAndWrittenToTheDataPool()
     {
-        $stubProductListingMetaInfo = $this->createMockProductListingMetaInfo();
-        $stubContextSource = $this->createMockContextSource();
+        $stubProductListingCriteria = $this->createMockProductListingCriteria();
         $stubUrlKeyForContextCollection = $this->getMock(UrlKeyForContextCollection::class, [], [], '', false);
         
         $this->mockUrlKeyCollector->expects($this->once())->method('collectListingUrlKeys')
-            ->with($stubProductListingMetaInfo, $stubContextSource)
+            ->with($stubProductListingCriteria)
             ->willReturn($stubUrlKeyForContextCollection);
         
         $this->mockDataPoolWriter->expects($this->once())->method('writeUrlKeyCollection')
             ->with($stubUrlKeyForContextCollection);
 
-        $this->projector->project($stubProductListingMetaInfo, $stubContextSource);
+        $this->projector->project($stubProductListingCriteria);
     }
 }

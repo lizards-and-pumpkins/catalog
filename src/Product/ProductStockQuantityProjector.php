@@ -28,15 +28,16 @@ class ProductStockQuantityProjector implements Projector
 
     /**
      * @param mixed $projectionSourceData
-     * @param ContextSource $contextSource
      */
-    public function project($projectionSourceData, ContextSource $contextSource)
+    public function project($projectionSourceData)
     {
         if (!($projectionSourceData instanceof ProductStockQuantitySource)) {
-            throw new InvalidProjectionSourceDataTypeException('First argument must be instance of ProductSource.');
+            throw new InvalidProjectionSourceDataTypeException(
+                'First argument must be a ProductStockQuantitySource instance.'
+            );
         }
 
-        $snippetList = $this->snippetRendererCollection->render($projectionSourceData, $contextSource);
+        $snippetList = $this->snippetRendererCollection->render($projectionSourceData);
         $this->dataPoolWriter->writeSnippetList($snippetList);
     }
 }

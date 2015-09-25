@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Content;
 
-use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\InvalidProjectionSourceDataTypeException;
 use LizardsAndPumpkins\Projector;
@@ -28,9 +27,8 @@ class ContentBlockProjector implements Projector
 
     /**
      * @param mixed $projectionSourceData
-     * @param ContextSource $contextSource
      */
-    public function project($projectionSourceData, ContextSource $contextSource)
+    public function project($projectionSourceData)
     {
         if (!($projectionSourceData instanceof ContentBlockSource)) {
             throw new InvalidProjectionSourceDataTypeException(
@@ -38,7 +36,7 @@ class ContentBlockProjector implements Projector
             );
         }
 
-        $snippetList = $this->snippetRendererCollection->render($projectionSourceData, $contextSource);
+        $snippetList = $this->snippetRendererCollection->render($projectionSourceData);
         $this->dataPoolWriter->writeSnippetList($snippetList);
     }
 }

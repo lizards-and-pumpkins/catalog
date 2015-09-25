@@ -152,7 +152,7 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
     /**
      * @param SearchCriteria $originalCriteria
      * @param Context $context
-     * @return array
+     * @return array[]
      */
     private function getSelectedOptionValuesWithSiblings(SearchCriteria $originalCriteria, Context $context)
     {

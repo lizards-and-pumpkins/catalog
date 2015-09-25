@@ -6,7 +6,6 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\InvalidProjectionSourceDataTypeException;
-use LizardsAndPumpkins\SampleContextSource;
 
 /**
  * @covers \LizardsAndPumpkins\Product\ProductSearchDocumentBuilder
@@ -17,11 +16,6 @@ use LizardsAndPumpkins\SampleContextSource;
  */
 class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var SampleContextSource|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubContextSource;
-
     /**
      * @var ProductSearchDocumentBuilder
      */
@@ -34,7 +28,6 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubContextSource = $this->getMock(SampleContextSource::class, [], [], '', false);
         $this->searchDocumentBuilder = new ProductSearchDocumentBuilder([$this->searchableAttributeCode]);
     }
 
@@ -45,21 +38,13 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testSearchDocumentCollectionIsReturned()
     {
-        $stubContext = $this->getMock(Context::class, [], [], '', false);
-        $this->stubContextSource->method('getAllAvailableContexts')->willReturn([$stubContext]);
-
         /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
         $stubProduct = $this->getMock(Product::class, [], [], '', false);
         $stubProduct->method('getAllValuesOfAttribute')->with($this->searchableAttributeCode)->willReturn(['bar']);
+        $stubProduct->method('getContext')->willReturn($this->getMock(Context::class, [], [], '', false));
+        $stubProduct->method('getId')->willReturn($this->getMock(ProductId::class, [], [], '', false));
 
-        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
-        $stubProduct->method('getId')->willReturn($stubProductId);
-
-        /** @var ProductSource|\PHPUnit_Framework_MockObject_MockObject $stubProductSource */
-        $stubProductSource = $this->getMock(ProductSource::class, [], [], '', false);
-        $stubProductSource->method('getProductForContext')->with($stubContext)->willReturn($stubProduct);
-
-        $result = $this->searchDocumentBuilder->aggregate($stubProductSource, $this->stubContextSource);
+        $result = $this->searchDocumentBuilder->aggregate($stubProduct);
 
         $this->assertInstanceOf(SearchDocumentCollection::class, $result);
     }
@@ -67,6 +52,6 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownIfProjectionSourceDataIsNotProduct()
     {
         $this->setExpectedException(InvalidProjectionSourceDataTypeException::class);
-        $this->searchDocumentBuilder->aggregate('invalid-projection-source-data', $this->stubContextSource);
+        $this->searchDocumentBuilder->aggregate('invalid-projection-source-data');
     }
 }

@@ -89,47 +89,39 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
             ->method('writeSearchDocumentCollection')
             ->with($this->stubSearchDocumentCollection);
 
-        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
-        $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
-        $stubProductSource = $this->getMock(ProductSource::class, [], [], '', false);
+        $stubProduct = $this->getMock(Product::class, [], [], '', false);
 
-        $this->projector->project($stubProductSource, $stubContextSource);
+        $this->projector->project($stubProduct);
     }
 
     public function testExceptionIsThrownIfProjectionSourceDataIsNotProduct()
     {
-        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
-        $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
         $this->setExpectedException(InvalidProjectionSourceDataTypeException::class);
 
-        $this->projector->project('invalid-projection-source-data', $stubContextSource);
+        $this->projector->project('invalid-projection-source-data');
     }
 
     public function testItWritesTheUrlKeyCollectionForTheDataVersionToTheDataPool()
     {
         $this->stubSearchDocumentBuilder->method('aggregate')->willReturn($this->stubSearchDocumentCollection);
 
-        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
-        $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
-        $stubProductSource = $this->getMock(ProductSource::class, [], [], '', false);
+        $stubProduct = $this->getMock(Product::class, [], [], '', false);
 
-        $urlKeyCollection = $this->stubUrlKeyCollector->collectProductUrlKeys($stubProductSource, $stubContextSource);
+        $urlKeyCollection = $this->stubUrlKeyCollector->collectProductUrlKeys($stubProduct);
         $this->mockDataPoolWriter->expects($this->once())->method('writeUrlKeyCollection')->with($urlKeyCollection);
 
-        $this->projector->project($stubProductSource, $stubContextSource);
+        $this->projector->project($stubProduct);
     }
 
     public function testItDelegatesToTheUrlKeyCollectorToCollectAllKeys()
     {
         $this->stubSearchDocumentBuilder->method('aggregate')->willReturn($this->stubSearchDocumentCollection);
 
-        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
-        $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
-        $stubProductSource = $this->getMock(ProductSource::class, [], [], '', false);
+        $stubProduct = $this->getMock(Product::class, [], [], '', false);
 
         $this->stubUrlKeyCollector->expects($this->once())->method('collectProductUrlKeys')
-            ->with($stubProductSource, $stubContextSource);
+            ->with($stubProduct);
 
-        $this->projector->project($stubProductSource, $stubContextSource);
+        $this->projector->project($stubProduct);
     }
 }

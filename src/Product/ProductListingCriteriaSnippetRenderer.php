@@ -11,7 +11,7 @@ use LizardsAndPumpkins\SnippetList;
 use LizardsAndPumpkins\SnippetRenderer;
 use LizardsAndPumpkins\Snippet;
 
-class ProductListingMetaInfoSnippetRenderer implements SnippetRenderer
+class ProductListingCriteriaSnippetRenderer implements SnippetRenderer
 {
     const CODE = 'product_listing_meta';
 
@@ -48,10 +48,10 @@ class ProductListingMetaInfoSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param ProductListingMetaInfo $productListingMetaInfo
+     * @param ProductListingCriteria $productListingMetaInfo
      * @return SnippetList
      */
-    public function render(ProductListingMetaInfo $productListingMetaInfo)
+    public function render(ProductListingCriteria $productListingMetaInfo)
     {
         $contextData = $productListingMetaInfo->getContextData();
         $context = $this->contextBuilder->createContext($contextData);
@@ -68,12 +68,12 @@ class ProductListingMetaInfoSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param ProductListingMetaInfo $productListingMetaInfo
+     * @param ProductListingCriteria $productListingMetaInfo
      * @param Context $context
      * @return string
      */
     private function getProductListingMetaDataSnippetKey(
-        ProductListingMetaInfo $productListingMetaInfo,
+        ProductListingCriteria $productListingMetaInfo,
         Context $context
     ) {
         $productListingUrlKey = $productListingMetaInfo->getUrlKey();
@@ -86,15 +86,15 @@ class ProductListingMetaInfoSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param ProductListingMetaInfo $productListingMetaInfo
+     * @param ProductListingCriteria $productListingMetaInfo
      * @return string
      */
     private function getProductListingPageMetaInfoSnippetContent(
-        ProductListingMetaInfo $productListingMetaInfo
+        ProductListingCriteria $productListingMetaInfo
     ) {
         $pageSnippetCodes = $this->blockRenderer->getNestedSnippetCodes();
 
-        $metaSnippetContent = ProductListingMetaInfoSnippetContent::create(
+        $metaSnippetContent = ProductListingCriteriaSnippetContent::create(
             $productListingMetaInfo->getCriteria(),
             ProductListingPageSnippetRenderer::CODE,
             $pageSnippetCodes

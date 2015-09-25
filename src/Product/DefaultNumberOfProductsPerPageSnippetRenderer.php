@@ -22,23 +22,30 @@ class DefaultNumberOfProductsPerPageSnippetRenderer implements SnippetRenderer
      * @var SnippetKeyGenerator
      */
     private $snippetKeyGenerator;
+    
+    /**
+     * @var ContextSource
+     */
+    private $contextSource;
 
-    public function __construct(SnippetList $snippetList, SnippetKeyGenerator $snippetKeyGenerator)
-    {
+    public function __construct(
+        SnippetList $snippetList,
+        SnippetKeyGenerator $snippetKeyGenerator,
+        ContextSource $contextSource
+    ) {
         $this->snippetList = $snippetList;
         $this->snippetKeyGenerator = $snippetKeyGenerator;
+        $this->contextSource = $contextSource;
     }
 
     /**
      * @param ProductsPerPageForContextList $productsPerPageForContextList
-     * @param ContextSource $contextSource
      * @return SnippetList
      */
-    public function render(ProductsPerPageForContextList $productsPerPageForContextList, ContextSource $contextSource)
+    public function render(ProductsPerPageForContextList $productsPerPageForContextList)
     {
         $contextParts = $this->snippetKeyGenerator->getContextPartsUsedForKey();
-        $contexts = $contextSource->getContextsForParts($contextParts);
-        foreach ($contexts as $context) {
+        foreach ($this->contextSource->getContextsForParts($contextParts) as $context) {
             $this->renderSnippetInContext($productsPerPageForContextList, $context);
         }
 

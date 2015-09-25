@@ -7,14 +7,14 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
 use LizardsAndPumpkins\Product\Exception\MalformedSearchCriteriaMetaException;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductListingMetaInfoSnippetContent
+ * @covers \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetContent
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
  */
-class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCase
+class ProductListingCriteriaSnippetContentTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ProductListingMetaInfoSnippetContent
+     * @var ProductListingCriteriaSnippetContent
      */
     private $pageMetaInfo;
 
@@ -36,7 +36,7 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
 
         $pageSnippetCodes = [$this->rootSnippetCode];
 
-        $this->pageMetaInfo = ProductListingMetaInfoSnippetContent::create(
+        $this->pageMetaInfo = ProductListingCriteriaSnippetContent::create(
             $this->stubSelectionCriteria,
             $this->rootSnippetCode,
             $pageSnippetCodes
@@ -51,9 +51,9 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
     public function testExpectedArrayKeysArePresentInJsonContent()
     {
         $keys = [
-            ProductListingMetaInfoSnippetContent::KEY_CRITERIA,
-            ProductListingMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE,
-            ProductListingMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES
+            ProductListingCriteriaSnippetContent::KEY_CRITERIA,
+            ProductListingCriteriaSnippetContent::KEY_ROOT_SNIPPET_CODE,
+            ProductListingCriteriaSnippetContent::KEY_PAGE_SNIPPET_CODES
         ];
 
         $result = $this->pageMetaInfo->getInfo();
@@ -66,33 +66,33 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
     public function testExceptionIsThrownIfTheRootSnippetCodeIsNoString()
     {
         $this->setExpectedException(\InvalidArgumentException::class);
-        ProductListingMetaInfoSnippetContent::create($this->stubSelectionCriteria, 1.0, []);
+        ProductListingCriteriaSnippetContent::create($this->stubSelectionCriteria, 1.0, []);
     }
 
     public function testRootSnippetCodeIsAddedToTheSnippetCodeListIfNotPresent()
     {
         $rootSnippetCode = 'root-snippet-code';
-        $pageMetaInfo = ProductListingMetaInfoSnippetContent::create(
+        $pageMetaInfo = ProductListingCriteriaSnippetContent::create(
             $this->stubSelectionCriteria,
             $rootSnippetCode,
             []
         );
         $this->assertContains(
             $rootSnippetCode,
-            $pageMetaInfo->getInfo()[ProductListingMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES]
+            $pageMetaInfo->getInfo()[ProductListingCriteriaSnippetContent::KEY_PAGE_SNIPPET_CODES]
         );
     }
 
     public function testJsonConstructorIsPresent()
     {
-        $pageMetaInfo = ProductListingMetaInfoSnippetContent::fromJson(json_encode($this->pageMetaInfo->getInfo()));
-        $this->assertInstanceOf(ProductListingMetaInfoSnippetContent::class, $pageMetaInfo);
+        $pageMetaInfo = ProductListingCriteriaSnippetContent::fromJson(json_encode($this->pageMetaInfo->getInfo()));
+        $this->assertInstanceOf(ProductListingCriteriaSnippetContent::class, $pageMetaInfo);
     }
     
     public function testExceptionIsThrownInCaseOfJsonErrors()
     {
         $this->setExpectedException(\OutOfBoundsException::class);
-        ProductListingMetaInfoSnippetContent::fromJson('malformed-json');
+        ProductListingCriteriaSnippetContent::fromJson('malformed-json');
     }
 
     /**
@@ -104,7 +104,7 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
         $this->setExpectedException(\RuntimeException::class, 'Missing key in input JSON');
         $pageInfo = $this->pageMetaInfo->getInfo();
         unset($pageInfo[$key]);
-        ProductListingMetaInfoSnippetContent::fromJson(json_encode($pageInfo));
+        ProductListingCriteriaSnippetContent::fromJson(json_encode($pageInfo));
     }
 
     /**
@@ -113,7 +113,7 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
     public function pageInfoArrayKeyProvider()
     {
         return [
-            [ProductListingMetaInfoSnippetContent::KEY_CRITERIA],
+            [ProductListingCriteriaSnippetContent::KEY_CRITERIA],
             [ProductDetailPageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE],
             [ProductDetailPageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES],
         ];
@@ -139,12 +139,12 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
         $this->setExpectedException(MalformedSearchCriteriaMetaException::class, 'Missing criteria condition.');
 
         $json = json_encode([
-            ProductListingMetaInfoSnippetContent::KEY_CRITERIA => [],
-            ProductListingMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
-            ProductListingMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
+            ProductListingCriteriaSnippetContent::KEY_CRITERIA => [],
+            ProductListingCriteriaSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
+            ProductListingCriteriaSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
         ]);
 
-        ProductListingMetaInfoSnippetContent::fromJson($json);
+        ProductListingCriteriaSnippetContent::fromJson($json);
     }
 
     public function testExceptionIsThrownIfSearchCriteriaCriteriaIsMissing()
@@ -152,12 +152,12 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
         $this->setExpectedException(MalformedSearchCriteriaMetaException::class, 'Missing criteria.');
 
         $json = json_encode([
-            ProductListingMetaInfoSnippetContent::KEY_CRITERIA => ['condition' => ''],
-            ProductListingMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
-            ProductListingMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
+            ProductListingCriteriaSnippetContent::KEY_CRITERIA => ['condition' => ''],
+            ProductListingCriteriaSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
+            ProductListingCriteriaSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
         ]);
 
-        ProductListingMetaInfoSnippetContent::fromJson($json);
+        ProductListingCriteriaSnippetContent::fromJson($json);
     }
 
     public function testExceptionIsThrownIfCriterionFieldNameIsMissing()
@@ -165,15 +165,15 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
         $this->setExpectedException(MalformedSearchCriteriaMetaException::class, 'Missing criterion field name.');
 
         $json = json_encode([
-            ProductListingMetaInfoSnippetContent::KEY_CRITERIA => [
+            ProductListingCriteriaSnippetContent::KEY_CRITERIA => [
                 'condition' => '',
                 'criteria'  => [[]]
             ],
-            ProductListingMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
-            ProductListingMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
+            ProductListingCriteriaSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
+            ProductListingCriteriaSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
         ]);
 
-        ProductListingMetaInfoSnippetContent::fromJson($json);
+        ProductListingCriteriaSnippetContent::fromJson($json);
     }
 
     public function testExceptionIsThrownIfCriterionFieldValueIsMissing()
@@ -181,17 +181,17 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
         $this->setExpectedException(MalformedSearchCriteriaMetaException::class, 'Missing criterion field value.');
 
         $json = json_encode([
-            ProductListingMetaInfoSnippetContent::KEY_CRITERIA => [
+            ProductListingCriteriaSnippetContent::KEY_CRITERIA => [
                 'condition' => '',
                 'criteria'  => [
                     ['fieldName' => 'foo']
                 ]
             ],
-            ProductListingMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
-            ProductListingMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
+            ProductListingCriteriaSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
+            ProductListingCriteriaSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
         ]);
 
-        ProductListingMetaInfoSnippetContent::fromJson($json);
+        ProductListingCriteriaSnippetContent::fromJson($json);
     }
 
     public function testExceptionIsThrownIfCriterionOperationIsMissing()
@@ -199,17 +199,17 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
         $this->setExpectedException(MalformedSearchCriteriaMetaException::class, 'Missing criterion operation.');
 
         $json = json_encode([
-            ProductListingMetaInfoSnippetContent::KEY_CRITERIA => [
+            ProductListingCriteriaSnippetContent::KEY_CRITERIA => [
                 'condition' => '',
                 'criteria'  => [
                     ['fieldName' => 'foo', 'fieldValue' => 'bar']
                 ]
             ],
-            ProductListingMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
-            ProductListingMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
+            ProductListingCriteriaSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
+            ProductListingCriteriaSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
         ]);
 
-        ProductListingMetaInfoSnippetContent::fromJson($json);
+        ProductListingCriteriaSnippetContent::fromJson($json);
     }
 
     public function testExceptionIsThrownIfCriterionOperationIsInvalid()
@@ -222,37 +222,37 @@ class ProductListingMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCa
         );
 
         $json = json_encode([
-            ProductListingMetaInfoSnippetContent::KEY_CRITERIA => [
+            ProductListingCriteriaSnippetContent::KEY_CRITERIA => [
                 'condition' => '',
                 'criteria'  => [
                     ['fieldName' => 'foo', 'fieldValue' => 'bar', 'operation' => $invalidOperationName]
                 ]
             ],
-            ProductListingMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
-            ProductListingMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
+            ProductListingCriteriaSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
+            ProductListingCriteriaSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
         ]);
 
-        ProductListingMetaInfoSnippetContent::fromJson($json);
+        ProductListingCriteriaSnippetContent::fromJson($json);
     }
 
-    public function testProductListingMetaInfoIsCreatedWithPassedSearchCriteria()
+    public function testProductListingCriteriaIsCreatedWithPassedSearchCriteria()
     {
         $fieldName = 'foo';
         $fieldValue = 'bar';
         $operation = 'Equal';
 
         $json = json_encode([
-            ProductListingMetaInfoSnippetContent::KEY_CRITERIA => [
+            ProductListingCriteriaSnippetContent::KEY_CRITERIA => [
                 'condition' => '',
                 'criteria'  => [
                     ['fieldName' => $fieldName, 'fieldValue' => $fieldValue, 'operation' => $operation]
                 ]
             ],
-            ProductListingMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
-            ProductListingMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
+            ProductListingCriteriaSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
+            ProductListingCriteriaSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
         ]);
 
-        $metaSnippetContent = ProductListingMetaInfoSnippetContent::fromJson($json);
+        $metaSnippetContent = ProductListingCriteriaSnippetContent::fromJson($json);
         $result = $metaSnippetContent->getSelectionCriteria();
 
         $className = SearchCriterion::class . $operation;

@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Product;
 
+use LizardsAndPumpkins\DataVersion;
 use LizardsAndPumpkins\DomainEvent;
 
 /**
@@ -10,10 +11,10 @@ use LizardsAndPumpkins\DomainEvent;
 class ProductListingWasAddedDomainEventTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ProductListingMetaInfo|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductListingCriteria|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubProductListingMetaInfo;
-
+    private $stubProductListingCriteria;
+    
     /**
      * @var ProductListingWasAddedDomainEvent
      */
@@ -21,18 +22,8 @@ class ProductListingWasAddedDomainEventTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $dummyUrlKey = 'foo';
-        $this->stubProductListingMetaInfo = $this->getMock(
-            ProductListingMetaInfo::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $this->domainEvent = new ProductListingWasAddedDomainEvent(
-            $dummyUrlKey,
-            $this->stubProductListingMetaInfo
-        );
+        $this->stubProductListingCriteria = $this->getMock(ProductListingCriteria::class, [], [], '', false);
+        $this->domainEvent = new ProductListingWasAddedDomainEvent($this->stubProductListingCriteria);
     }
 
     public function testDomainEventInterFaceIsImplemented()
@@ -40,9 +31,9 @@ class ProductListingWasAddedDomainEventTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(DomainEvent::class, $this->domainEvent);
     }
 
-    public function testProductListingMetaInfoIsReturned()
+    public function testProductListingCriteriaIsReturned()
     {
-        $result = $this->domainEvent->getProductListingMetaInfo();
-        $this->assertEquals($this->stubProductListingMetaInfo, $result);
+        $result = $this->domainEvent->getProductListingCriteria();
+        $this->assertEquals($this->stubProductListingCriteria, $result);
     }
 }

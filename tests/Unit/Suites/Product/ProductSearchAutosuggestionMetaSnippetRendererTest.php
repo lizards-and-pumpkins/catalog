@@ -51,16 +51,16 @@ class ProductSearchAutosuggestionMetaSnippetRendererTest extends \PHPUnit_Framew
 
         $testSnippetList = new SnippetList;
 
+        $stubContext = $this->getMock(Context::class);
+        $this->stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
+        $this->stubContextSource->method('getAllAvailableContexts')->willReturn([$stubContext]);
+
         $this->renderer = new ProductSearchAutosuggestionMetaSnippetRenderer(
             $testSnippetList,
             $stubSnippetKeyGenerator,
-            $stubBlockRenderer
+            $stubBlockRenderer,
+            $this->stubContextSource
         );
-
-        $stubContext = $this->getMock(Context::class);
-
-        $this->stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
-        $this->stubContextSource->method('getAllAvailableContexts')->willReturn([$stubContext]);
     }
 
     public function testSnippetRendererInterfaceIsImplemented()
@@ -70,7 +70,7 @@ class ProductSearchAutosuggestionMetaSnippetRendererTest extends \PHPUnit_Framew
 
     public function testSnippetListIsReturned()
     {
-        $result = $this->renderer->render('dummy-data-object', $this->stubContextSource);
+        $result = $this->renderer->render('dummy-data-object');
         $this->assertInstanceOf(SnippetList::class, $result);
     }
 
@@ -82,7 +82,7 @@ class ProductSearchAutosuggestionMetaSnippetRendererTest extends \PHPUnit_Framew
         ];
         $expectedSnippet = Snippet::create($this->dummySnippetKey, json_encode($expectedSnippetContent));
 
-        $result = $this->renderer->render('dummy-data-object', $this->stubContextSource);
+        $result = $this->renderer->render('dummy-data-object');
 
         $this->assertInstanceOf(SnippetList::class, $result);
         $this->assertCount(1, $result);

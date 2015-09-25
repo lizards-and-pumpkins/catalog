@@ -2,8 +2,6 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\Context\ContextSource;
-
 class SnippetRendererCollection
 {
     /**
@@ -28,13 +26,12 @@ class SnippetRendererCollection
     
     /**
      * @param mixed $projectionSourceData
-     * @param ContextSource $contextSource
      * @return SnippetList
      */
-    public function render($projectionSourceData, ContextSource $contextSource)
+    public function render($projectionSourceData)
     {
         foreach ($this->renderers as $renderer) {
-            $this->snippetList->merge($renderer->render($projectionSourceData, $contextSource));
+            $this->snippetList->merge($renderer->render($projectionSourceData));
         }
 
         return $this->snippetList;

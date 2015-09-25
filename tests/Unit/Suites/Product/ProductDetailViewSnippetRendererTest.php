@@ -10,16 +10,16 @@ use LizardsAndPumpkins\SnippetRenderer;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductDetailViewInContextSnippetRenderer
+ * @covers \LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer
  * @uses   \LizardsAndPumpkins\Snippet
  * @uses   \LizardsAndPumpkins\Product\ProductDetailPageMetaInfoSnippetContent
  */
-class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_TestCase
+class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
     use TestFileFixtureTrait;
 
     /**
-     * @var ProductDetailViewInContextSnippetRenderer
+     * @var ProductDetailViewSnippetRenderer
      */
     private $renderer;
 
@@ -53,7 +53,7 @@ class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_T
         $this->mockProductDetailPageMetaSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $this->mockProductDetailPageMetaSnippetKeyGenerator->method('getKeyForContext')->willReturn('stub-url-key');
 
-        $this->renderer = new ProductDetailViewInContextSnippetRenderer(
+        $this->renderer = new ProductDetailViewSnippetRenderer(
             $this->mockSnippetList,
             $stubProductDetailViewBlockRenderer,
             $this->mockProductDetailViewSnippetKeyGenerator,
@@ -72,8 +72,8 @@ class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_T
         /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
         $stubProduct = $this->getMock(Product::class, [], [], '', false);
         $stubProduct->method('getId')->willReturn(2);
-        $stubContext = $this->getMock(Context::class, [], [], '', false);
-        $this->renderer->render($stubProduct, $stubContext);
+        $stubProduct->method('getContext')->willReturn($this->getMock(Context::class));
+        $this->renderer->render($stubProduct);
     }
 
     public function testContainedJson()
@@ -81,8 +81,8 @@ class ProductDetailViewInContextSnippetRendererTest extends \PHPUnit_Framework_T
         /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
         $stubProduct = $this->getMock(Product::class, [], [], '', false);
         $stubProduct->method('getId')->willReturn(2);
-        $stubContext = $this->getMock(Context::class, [], [], '', false);
-        $this->renderer->render($stubProduct, $stubContext);
+        $stubProduct->method('getContext')->willReturn($this->getMock(Context::class));
+        $this->renderer->render($stubProduct);
 
         $method = new \ReflectionMethod($this->renderer, 'getProductDetailPageMetaSnippet');
         $method->setAccessible(true);

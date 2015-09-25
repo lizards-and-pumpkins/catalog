@@ -41,34 +41,23 @@ class ProductInSearchAutosuggestionSnippetRenderer implements SnippetRenderer
 
     /**
      * @param mixed $projectionSourceData
-     * @param ContextSource $contextSource
      * @return SnippetList
      */
-    public function render($projectionSourceData, ContextSource $contextSource)
+    public function render($projectionSourceData)
     {
-        if (!($projectionSourceData instanceof ProductSource)) {
-            throw new InvalidProjectionSourceDataTypeException('First argument must be instance of ProductSource.');
+        if (!($projectionSourceData instanceof Product)) {
+            throw new InvalidProjectionSourceDataTypeException('First argument must be a Product instance.');
         }
 
-        $this->addProductInSearchAutosuggestionSnippetsToList($projectionSourceData, $contextSource);
+        $this->addProductInSearchAutosuggestionSnippetsToList($projectionSourceData);
 
         return $this->snippetList;
     }
 
-    private function addProductInSearchAutosuggestionSnippetsToList(
-        ProductSource $productSource,
-        ContextSource $contextSource
-    ) {
-        foreach ($contextSource->getAllAvailableContexts() as $context) {
-            $productInContext = $productSource->getProductForContext($context);
-            $this->addProductInSearchAutosuggestionInContextSnippetsToList($productInContext, $context);
-        }
-    }
-
-    private function addProductInSearchAutosuggestionInContextSnippetsToList(Product $product, Context $context)
+    private function addProductInSearchAutosuggestionSnippetsToList(Product $product)
     {
-        $content = $this->blockRenderer->render($product, $context);
-        $key = $this->snippetKeyGenerator->getKeyForContext($context, [Product::ID => $product->getId()]);
+        $content = $this->blockRenderer->render($product, $product->getContext());
+        $key = $this->snippetKeyGenerator->getKeyForContext($product->getContext(), [Product::ID => $product->getId()]);
         $contentSnippet = Snippet::create($key, $content);
         $this->snippetList->add($contentSnippet);
     }

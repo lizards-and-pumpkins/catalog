@@ -33,7 +33,7 @@ class ProductBackOrderAvailabilitySnippetRendererTest extends \PHPUnit_Framework
     /**
      * @var string
      */
-    private $dummyBackOrderAvialabilityAttributeCode = 'foo';
+    private $dummyBackOrderAvailabilityAttributeCode = 'foo';
 
     protected function setUp()
     {
@@ -43,29 +43,13 @@ class ProductBackOrderAvailabilitySnippetRendererTest extends \PHPUnit_Framework
         $this->renderer = new ProductBackOrderAvailabilitySnippetRenderer(
             $this->mockSnippetList,
             $this->mockSnippetKeyGenerator,
-            $this->dummyBackOrderAvialabilityAttributeCode
+            $this->dummyBackOrderAvailabilityAttributeCode
         );
     }
 
     public function testSnippetRendererInterfaceIsImplemented()
     {
         $this->assertInstanceOf(SnippetRenderer::class, $this->renderer);
-    }
-
-    public function testEmptySnippetListIsReturned()
-    {
-        /** @var ProductSource|\PHPUnit_Framework_MockObject_MockObject $mockProductSource */
-        $mockProductSource = $this->getMock(ProductSource::class, [], [], '', false);
-
-        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $mockContextSource */
-        $mockContextSource = $this->getMock(ContextSource::class, [], [], '', false);
-        $mockContextSource->method('getAllAvailableContexts')
-            ->willReturn([]);
-
-        $result = $this->renderer->render($mockProductSource, $mockContextSource);
-
-        $this->assertInstanceOf(SnippetList::class, $result);
-        $this->assertEmpty($result);
     }
 
     public function testSnippetListContainingSnippetWithGivenKeyAndBackOrderAvailabilityIsReturned()
@@ -76,19 +60,10 @@ class ProductBackOrderAvailabilitySnippetRendererTest extends \PHPUnit_Framework
 
         $mockProduct = $this->getMock(Product::class, [], [], '', false);
         $mockProduct->method('getFirstValueOfAttribute')
-            ->with($this->dummyBackOrderAvialabilityAttributeCode)
+            ->with($this->dummyBackOrderAvailabilityAttributeCode)
             ->willReturn($dummyBackOrderAvailabilityAttributeValue);
-
-        /** @var ProductSource|\PHPUnit_Framework_MockObject_MockObject $mockProductSource */
-        $mockProductSource = $this->getMock(ProductSource::class, [], [], '', false);
-        $mockProductSource->method('getProductForContext')
-            ->willReturn($mockProduct);
-
-        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $mockContextSource */
-        $mockContextSource = $this->getMock(ContextSource::class, [], [], '', false);
-        $mockContextSource->method('getAllAvailableContexts')
-            ->willReturn([$stubContext]);
-
+        $mockProduct->method('getContext')->willReturn($stubContext);
+        
         $this->mockSnippetKeyGenerator->method('getKeyForContext')
             ->willReturn($dummyBackOrderAvailabilitySnippetKey);
 
@@ -101,6 +76,6 @@ class ProductBackOrderAvailabilitySnippetRendererTest extends \PHPUnit_Framework
             ->method('add')
             ->with($expectedSnippet);
 
-        $this->renderer->render($mockProductSource, $mockContextSource);
+        $this->renderer->render($mockProduct);
     }
 }

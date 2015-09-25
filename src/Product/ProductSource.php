@@ -45,6 +45,6 @@ class ProductSource
     public function getProductForContext(Context $context)
     {
         $attributes = $this->attributes->getAttributeListForContext($context);
-        return new Product($this->getId(), $attributes);
+        return new Product($this->getId(), $attributes, $context);
     }
 }

@@ -6,9 +6,9 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\UrlKey;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductListingMetaInfo
+ * @covers \LizardsAndPumpkins\Product\ProductListingCriteria
  */
-class ProductListingMetaInfoTest extends \PHPUnit_Framework_TestCase
+class ProductListingCriteriaTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var UrlKey|\PHPUnit_Framework_MockObject_MockObject
@@ -26,15 +26,15 @@ class ProductListingMetaInfoTest extends \PHPUnit_Framework_TestCase
     private $stubCriteria;
 
     /**
-     * @var ProductListingMetaInfo
+     * @var ProductListingCriteria
      */
-    private $productListingMetaInfo;
+    private $productListingCriteria;
 
     protected function setUp()
     {
         $this->stubUrlKey = $this->getMock(UrlKey::class, [], [], '', false);
         $this->stubCriteria = $this->getMock(SearchCriteria::class);
-        $this->productListingMetaInfo = new ProductListingMetaInfo(
+        $this->productListingCriteria = new ProductListingCriteria(
             $this->stubUrlKey,
             $this->dummyContextData,
             $this->stubCriteria
@@ -43,19 +43,19 @@ class ProductListingMetaInfoTest extends \PHPUnit_Framework_TestCase
 
     public function testProductListingUrlKeyIsReturned()
     {
-        $result = $this->productListingMetaInfo->getUrlKey();
+        $result = $this->productListingCriteria->getUrlKey();
         $this->assertSame($this->stubUrlKey, $result);
     }
 
     public function testProductListingContextDataIsReturned()
     {
-        $result = $this->productListingMetaInfo->getContextData();
+        $result = $this->productListingCriteria->getContextData();
         $this->assertSame($this->dummyContextData, $result);
     }
 
     public function testProductListingCriteriaAreReturned()
     {
-        $result = $this->productListingMetaInfo->getCriteria();
+        $result = $this->productListingCriteria->getCriteria();
         $this->assertSame($this->stubCriteria, $result);
     }
 }
