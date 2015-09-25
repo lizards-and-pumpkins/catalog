@@ -32,31 +32,27 @@ class ProductInListingSnippetRenderer implements SnippetRenderer
 
     /**
      * @param mixed $projectionSourceData
-     * @param ContextSource $contextSource
      * @return SnippetList
      */
-    public function render($projectionSourceData, ContextSource $contextSource)
+    public function render($projectionSourceData)
     {
-        if (!($projectionSourceData instanceof ProductSource)) {
-            throw new InvalidProjectionSourceDataTypeException('First argument must be instance of ProductSource.');
+        if (!($projectionSourceData instanceof Product)) {
+            throw new InvalidProjectionSourceDataTypeException('First argument must be a Product instance.');
         }
 
-        $this->addProductInListingSnippetsToList($projectionSourceData, $contextSource);
+        $this->addProductInListingSnippetsToList($projectionSourceData);
 
         return $this->snippetList;
     }
 
-    private function addProductInListingSnippetsToList(ProductSource $productSource, ContextSource $contextSource)
+    private function addProductInListingSnippetsToList(Product $product)
     {
-        foreach ($contextSource->getAllAvailableContexts() as $context) {
-            $productInContext = $productSource->getProductForContext($context);
-            $this->addProductInListingInContextSnippetsToList($productInContext, $context);
-        }
+        $this->addProductInListingInContextSnippetsToList($product);
     }
 
-    private function addProductInListingInContextSnippetsToList(Product $product, Context $context)
+    private function addProductInListingInContextSnippetsToList(Product $product)
     {
-        $key = $this->snippetKeyGenerator->getKeyForContext($context, [Product::ID => $product->getId()]);
+        $key = $this->snippetKeyGenerator->getKeyForContext($product->getContext(), [Product::ID => $product->getId()]);
         $content = json_encode($product);
 
         $contentSnippet = Snippet::create($key, $content);

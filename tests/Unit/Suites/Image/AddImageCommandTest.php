@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Image;
 
 use LizardsAndPumpkins\Command;
+use LizardsAndPumpkins\DataVersion;
 use LizardsAndPumpkins\Image\Exception\ImageFileDoesNotExistException;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
@@ -22,6 +23,12 @@ class AddImageCommandTest extends \PHPUnit_Framework_TestCase
      * @var string
      */
     private $imageFilePath;
+
+    /**
+     * @var DataVersion|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubDataVersion;
+    
     /**
      * @var AddImageCommand
      */
@@ -33,7 +40,8 @@ class AddImageCommandTest extends \PHPUnit_Framework_TestCase
         $this->imageFilePath = $this->fixtureDirectoryPath . '/foo.png';
         $this->createFixtureDirectory($this->fixtureDirectoryPath);
         $this->createFixtureFile($this->imageFilePath, '');
-        $this->command = new AddImageCommand($this->imageFilePath);
+        $this->stubDataVersion = $this->getMock(DataVersion::class, [], [], '', false);
+        $this->command = new AddImageCommand($this->imageFilePath, $this->stubDataVersion);
     }
 
     public function testCommandInterfaceIsImplemented()
@@ -53,6 +61,11 @@ class AddImageCommandTest extends \PHPUnit_Framework_TestCase
             ImageFileDoesNotExistException::class,
             'The image file does not exist: "foo.png"'
         );
-        new AddImageCommand('foo.png');
+        new AddImageCommand('foo.png', $this->stubDataVersion);
+    }
+
+    public function testItReturnsTheInjectedDataVersion()
+    {
+        $this->assertSame($this->stubDataVersion, $this->command->getDataVersion());
     }
 }

@@ -21,7 +21,7 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
 /**
  * @covers \LizardsAndPumpkins\Product\ProductListingRequestHandler
  * @uses   \LizardsAndPumpkins\Product\ProductId
- * @uses   \LizardsAndPumpkins\Product\ProductListingMetaInfoSnippetContent
+ * @uses   \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetContent
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
  */
@@ -94,7 +94,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         $pageSnippetCodes = ['child-snippet1'];
 
-        $testMetaInfoSnippetJson = json_encode(ProductListingMetaInfoSnippetContent::create(
+        $testMetaInfoSnippetJson = json_encode(ProductListingCriteriaSnippetContent::create(
             $stubSelectionCriteria,
             'root-snippet-code',
             $pageSnippetCodes
@@ -129,12 +129,12 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->stubProductInListingSnippetKeyGenerator->method('getKeyForContext')
             ->willReturn('stub-product-snippet-key');
 
-        $stubProductListingMetaInfoSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class, [], [], '', false);
-        $stubProductListingMetaInfoSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->testMetaInfoKey);
+        $stubProductListingCriteriaSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class, [], [], '', false);
+        $stubProductListingCriteriaSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->testMetaInfoKey);
         
         $stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
         $stubSnippetKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')->willReturnMap([
-            [ProductListingMetaInfoSnippetRenderer::CODE, $stubProductListingMetaInfoSnippetKeyGenerator],
+            [ProductListingCriteriaSnippetRenderer::CODE, $stubProductListingCriteriaSnippetKeyGenerator],
             [ProductInListingSnippetRenderer::CODE, $this->stubProductInListingSnippetKeyGenerator],
         ]);
 
@@ -280,7 +280,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->requestHandler->process($this->stubRequest);
 
         $this->assertAttributeInstanceOf(
-            ProductListingMetaInfoSnippetContent::class,
+            ProductListingCriteriaSnippetContent::class,
             'pageMetaInfo',
             $this->requestHandler
         );

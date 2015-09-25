@@ -28,25 +28,32 @@ class ProductSearchAutosuggestionMetaSnippetRenderer implements SnippetRenderer
      * @var BlockRenderer
      */
     private $blockRenderer;
+    
+    /**
+     * @var ContextSource
+     */
+    private $contextSource;
 
     public function __construct(
         SnippetList $snippetList,
         SnippetKeyGenerator $snippetKeyGenerator,
-        BlockRenderer $blockRenderer
+        BlockRenderer $blockRenderer,
+        ContextSource $contextSource
     ) {
         $this->snippetList = $snippetList;
         $this->snippetKeyGenerator = $snippetKeyGenerator;
         $this->blockRenderer = $blockRenderer;
+        $this->contextSource = $contextSource;
     }
 
     /**
      * @param mixed $dataObject
-     * @param ContextSource $contextSource
      * @return SnippetList
      */
-    public function render($dataObject, ContextSource $contextSource)
+    public function render($dataObject)
     {
-        foreach ($contextSource->getAllAvailableContexts() as $context) {
+        // todo: important! Use the data version embedded in $dataObject, whatever that may be!!
+        foreach ($this->contextSource->getAllAvailableContexts() as $context) {
             $this->renderMetaInfoSnippetForContext($dataObject, $context);
         }
 

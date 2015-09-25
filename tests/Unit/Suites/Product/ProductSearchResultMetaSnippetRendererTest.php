@@ -56,18 +56,20 @@ class ProductSearchResultMetaSnippetRendererTest extends \PHPUnit_Framework_Test
         $stubBlockRenderer->method('getRootSnippetCode')->willReturn($this->dummyRootSnippetCode);
         $stubBlockRenderer->method('getNestedSnippetCodes')->willReturn([]);
 
-        $this->renderer = new ProductSearchResultMetaSnippetRenderer(
-            $testSnippetList,
-            $stubSnippetKeyGenerator,
-            $stubBlockRenderer
-        );
-
         $stubContext = $this->getMock(Context::class);
-
         $this->stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
         $this->stubContextSource->method('getAllAvailableContexts')->willReturn([$stubContext]);
 
-        $this->stubProductsPerPageForContextList = $this->getMock(ProductsPerPageForContextList::class, [], [], '', false);
+        $this->renderer = new ProductSearchResultMetaSnippetRenderer(
+            $testSnippetList,
+            $stubSnippetKeyGenerator,
+            $stubBlockRenderer,
+            $this->stubContextSource
+        );
+
+        $this->stubProductsPerPageForContextList = $this->getMockBuilder(ProductsPerPageForContextList::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->stubProductsPerPageForContextList->method('getListOfAvailableNumberOfProductsPerPageForContext')
             ->willReturn([9]);
     }
@@ -79,19 +81,19 @@ class ProductSearchResultMetaSnippetRendererTest extends \PHPUnit_Framework_Test
 
     public function testSnippetListIsReturned()
     {
-        $result = $this->renderer->render($this->stubProductsPerPageForContextList, $this->stubContextSource);
+        $result = $this->renderer->render($this->stubProductsPerPageForContextList);
         $this->assertInstanceOf(SnippetList::class, $result);
     }
 
     public function testSnippetWithValidJsonAsContentAddedToList()
     {
         $expectedSnippetContent = [
-            ProductSearchResultMetaSnippetContent::KEY_ROOT_SNIPPET_CODE  => $this->dummyRootSnippetCode,
+            ProductSearchResultMetaSnippetContent::KEY_ROOT_SNIPPET_CODE => $this->dummyRootSnippetCode,
             ProductSearchResultMetaSnippetContent::KEY_PAGE_SNIPPET_CODES => [$this->dummyRootSnippetCode]
         ];
         $expectedSnippet = Snippet::create($this->dummySnippetKey, json_encode($expectedSnippetContent));
 
-        $result = $this->renderer->render($this->stubProductsPerPageForContextList, $this->stubContextSource);
+        $result = $this->renderer->render($this->stubProductsPerPageForContextList);
 
         $this->assertInstanceOf(SnippetList::class, $result);
         $this->assertCount(1, $result);

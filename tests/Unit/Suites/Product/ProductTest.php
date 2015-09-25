@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Product;
 
+use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Product\Exception\ProductAttributeNotFoundException;
 
 /**
@@ -20,6 +21,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     private $stubProductId;
 
     /**
+     * @var Context
+     */
+    private $stubContext;
+    
+    /**
      * @var ProductAttributeList|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubProductAttributeList;
@@ -28,7 +34,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubProductId = $this->getMock(ProductId::class, [], [], '', false);
         $this->stubProductAttributeList = $this->getMock(ProductAttributeList::class);
-        $this->product = new Product($this->stubProductId, $this->stubProductAttributeList);
+        $this->stubContext = $this->getMock(Context::class);
+        $this->product = new Product($this->stubProductId, $this->stubProductAttributeList, $this->stubContext);
     }
 
     public function testJsonSerializableInterfaceIsImplemented()
@@ -120,5 +127,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(2, $result);
         $this->assertEquals($testProductIdString, $result['product_id']);
         $this->assertArrayHasKey('attributes', $result);
+    }
+
+    public function testItReturnsTheInjectedContext()
+    {
+        $this->assertSame($this->stubContext, $this->product->getContext());
     }
 }

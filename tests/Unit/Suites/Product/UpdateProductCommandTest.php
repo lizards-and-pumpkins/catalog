@@ -10,9 +10,9 @@ use LizardsAndPumpkins\Command;
 class UpdateProductCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ProductSource|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubProductSource;
+    private $stubProduct;
 
     /**
      * @var UpdateProductCommand
@@ -21,8 +21,8 @@ class UpdateProductCommandTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubProductSource = $this->getMock(ProductSource::class, [], [], '', false);
-        $this->command = new UpdateProductCommand($this->stubProductSource);
+        $this->stubProduct = $this->getMock(Product::class, [], [], '', false);
+        $this->command = new UpdateProductCommand($this->stubProduct);
     }
 
     public function testCommandInterfaceIsImplemented()
@@ -32,7 +32,6 @@ class UpdateProductCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testProductSourceIsReturned()
     {
-        $result = $this->command->getProductSource();
-        $this->assertSame($this->stubProductSource, $result);
+        $this->assertSame($this->stubProduct, $this->command->getProduct());
     }
 }

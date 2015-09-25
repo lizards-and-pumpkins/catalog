@@ -7,7 +7,7 @@ use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpResourceNotFoundResponse;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductDetailViewInContextSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -62,7 +62,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $context = $contextSource->getAllAvailableContexts()[0];
 
         $productDetailViewKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
-            ProductDetailViewInContextSnippetRenderer::CODE
+            ProductDetailViewSnippetRenderer::CODE
         );
         $productDetailViewKey = $productDetailViewKeyGenerator->getKeyForContext(
             $context,
@@ -162,7 +162,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
 
         $keyGeneratorLocator = $this->factory->getSnippetKeyGeneratorLocator();
         $productDetailViewKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
-            ProductDetailViewInContextSnippetRenderer::CODE
+            ProductDetailViewSnippetRenderer::CODE
         );
 
         $validProductId = ProductId::fromString('288193NEU');

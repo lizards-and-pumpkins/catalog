@@ -39,24 +39,20 @@ class PriceSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param ProductSource $productSource
-     * @param ContextSource $contextSource
+     * @param Product $product
      * @return SnippetList
      */
-    public function render(ProductSource $productSource, ContextSource $contextSource)
+    public function render(Product $product)
     {
-        foreach ($contextSource->getAllAvailableContexts() as $context) {
-            $this->renderProductPriceInContext($productSource, $context);
-        }
+        $this->renderProductPriceInContext($product);
 
         return $this->snippetList;
     }
 
-    private function renderProductPriceInContext(ProductSource $productSource, Context $context)
+    private function renderProductPriceInContext(Product $product)
     {
-        $productInContext = $productSource->getProductForContext($context);
-        $key = $this->snippetKeyGenerator->getKeyForContext($context, [Product::ID => $productInContext->getId()]);
-        $priceString = $productInContext->getFirstValueOfAttribute($this->priceAttributeCode);
+        $key = $this->snippetKeyGenerator->getKeyForContext($product->getContext(), [Product::ID => $product->getId()]);
+        $priceString = $product->getFirstValueOfAttribute($this->priceAttributeCode);
         $price = Price::fromString($priceString);
         $snippet = Snippet::create($key, $price->getAmount());
         $this->snippetList->add($snippet);

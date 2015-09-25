@@ -9,7 +9,7 @@ use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetList;
 use LizardsAndPumpkins\SnippetRenderer;
 
-class ProductDetailViewInContextSnippetRenderer implements SnippetRenderer
+class ProductDetailViewSnippetRenderer implements SnippetRenderer
 {
     const CODE = 'product_detail_view';
 
@@ -57,13 +57,12 @@ class ProductDetailViewInContextSnippetRenderer implements SnippetRenderer
     
     /**
      * @param Product $product
-     * @param Context $context
      * @return SnippetList
      */
-    public function render(Product $product, Context $context)
+    public function render(Product $product)
     {
         $this->product = $product;
-        $this->context = $context;
+        $this->context = $product->getContext();
         $this->snippetList->clear();
 
         $this->addProductDetailViewSnippetsToSnippetList();

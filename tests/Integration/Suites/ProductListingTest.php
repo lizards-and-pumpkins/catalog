@@ -8,7 +8,7 @@ use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Product\ProductListingMetaInfoSnippetContent;
+use LizardsAndPumpkins\Product\ProductListingCriteriaSnippetContent;
 use LizardsAndPumpkins\Product\ProductListingRequestHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer;
 use LizardsAndPumpkins\Utils\XPathParser;
@@ -129,7 +129,7 @@ class ProductListingTest extends AbstractIntegrationTest
             'before_body_end'
         ];
 
-        $metaSnippetContent = ProductListingMetaInfoSnippetContent::create(
+        $metaSnippetContent = ProductListingCriteriaSnippetContent::create(
             $searchCriteria,
             ProductListingPageSnippetRenderer::CODE,
             $pageSnippetCodes
@@ -154,7 +154,7 @@ class ProductListingTest extends AbstractIntegrationTest
         );
     }
 
-    public function testProductListingMetaSnippetIsWrittenIntoDataPool()
+    public function testProductListingCriteriaSnippetIsWrittenIntoDataPool()
     {
         $this->importCatalog();
 
@@ -168,8 +168,8 @@ class ProductListingTest extends AbstractIntegrationTest
         $contextSource = $this->factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[0];
 
-        $productListingMetaInfoSnippetKeyGenerator = $this->factory->createProductListingMetaDataSnippetKeyGenerator();
-        $snippetKey = $productListingMetaInfoSnippetKeyGenerator->getKeyForContext(
+        $productListingCriteriaSnippetKeyGenerator = $this->factory->createProductListingCriteriaSnippetKeyGenerator();
+        $snippetKey = $productListingCriteriaSnippetKeyGenerator->getKeyForContext(
             $context,
             [PageMetaInfoSnippetContent::URL_KEY => $urlKey]
         );

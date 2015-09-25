@@ -11,11 +11,11 @@ use LizardsAndPumpkins\SnippetRenderer;
 use LizardsAndPumpkins\Snippet;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductListingMetaInfoSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductListingMetaInfoSnippetContent
+ * @covers \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetContent
  * @uses   \LizardsAndPumpkins\Snippet
  */
-class ProductListingMetaInfoSnippetRendererTest extends \PHPUnit_Framework_TestCase
+class ProductListingCriteriaSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var string
@@ -28,21 +28,21 @@ class ProductListingMetaInfoSnippetRendererTest extends \PHPUnit_Framework_TestC
     private $mockSnippetList;
 
     /**
-     * @var ProductListingMetaInfoSnippetRenderer
+     * @var ProductListingCriteriaSnippetRenderer
      */
     private $renderer;
 
     /**
-     * @return ProductListingMetaInfo|\PHPUnit_Framework_MockObject_MockObject
+     * @return ProductListingCriteria|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function getMockProductListingMetaInfo()
+    private function getMockProductListingCriteria()
     {
         $mockSearchCriteria = $this->getMock(CompositeSearchCriterion::class, [], [], '', false);
-        $mockProductListingMetaInfo = $this->getMock(ProductListingMetaInfo::class, [], [], '', false);
-        $mockProductListingMetaInfo->method('getContextData')->willReturn([]);
-        $mockProductListingMetaInfo->method('getCriteria')->willReturn($mockSearchCriteria);
+        $mockProductListingCriteria = $this->getMock(ProductListingCriteria::class, [], [], '', false);
+        $mockProductListingCriteria->method('getContextData')->willReturn([]);
+        $mockProductListingCriteria->method('getCriteria')->willReturn($mockSearchCriteria);
 
-        return $mockProductListingMetaInfo;
+        return $mockProductListingCriteria;
     }
 
     protected function setUp()
@@ -67,7 +67,7 @@ class ProductListingMetaInfoSnippetRendererTest extends \PHPUnit_Framework_TestC
 
         $this->mockSnippetList = $this->getMock(SnippetList::class);
 
-        $this->renderer = new ProductListingMetaInfoSnippetRenderer(
+        $this->renderer = new ProductListingCriteriaSnippetRenderer(
             $this->mockSnippetList,
             $stubProductListingBlockRenderer,
             $mockSnippetKeyGenerator,
@@ -82,10 +82,10 @@ class ProductListingMetaInfoSnippetRendererTest extends \PHPUnit_Framework_TestC
 
     public function testSnippetWithValidJsonAsContentInAListIsReturned()
     {
-        $mockProductListingMetaInfo = $this->getMockProductListingMetaInfo();
+        $mockProductListingCriteria = $this->getMockProductListingCriteria();
 
         $this->mockSnippetList->expects($this->once())->method('add')->with($this->isInstanceOf(Snippet::class));
 
-        $this->renderer->render($mockProductListingMetaInfo);
+        $this->renderer->render($mockProductListingCriteria);
     }
 }

@@ -20,7 +20,7 @@ use LizardsAndPumpkins\Log\InMemoryLogger;
  * @method GenericSnippetKeyGenerator createProductStockQuantityRendererSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createContentBlockSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createProductSearchResultMetaSnippetKeyGenerator
- * @method GenericSnippetKeyGenerator createProductListingMetaDataSnippetKeyGenerator
+ * @method GenericSnippetKeyGenerator createProductListingCriteriaSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createProductDetailPageMetaSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createContentBlockInProductListingSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createProductInSearchAutosuggestionSnippetKeyGenerator

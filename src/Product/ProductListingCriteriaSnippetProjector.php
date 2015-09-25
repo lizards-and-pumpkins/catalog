@@ -9,7 +9,7 @@ use LizardsAndPumpkins\Projector;
 use LizardsAndPumpkins\SnippetRendererCollection;
 use LizardsAndPumpkins\Projection\UrlKeyForContextCollector;
 
-class ProductListingMetaInfoSnippetProjector implements Projector
+class ProductListingCriteriaSnippetProjector implements Projector
 {
     /**
      * @var SnippetRendererCollection
@@ -38,30 +38,24 @@ class ProductListingMetaInfoSnippetProjector implements Projector
 
     /**
      * @param mixed $projectionSourceData
-     * @param ContextSource $contextSource
      */
-    public function project($projectionSourceData, ContextSource $contextSource)
+    public function project($projectionSourceData)
     {
-        if (!($projectionSourceData instanceof ProductListingMetaInfo)) {
+        if (!($projectionSourceData instanceof ProductListingCriteria)) {
             throw new InvalidProjectionSourceDataTypeException(
                 'First argument must be instance of ProductListingMetaInfo.'
             );
         }
 
-        $this->projectProductListing($projectionSourceData, $contextSource);
+        $this->projectProductListing($projectionSourceData);
     }
 
-    private function projectProductListing(
-        ProductListingMetaInfo $productListingMetaInfo,
-        ContextSource $contextSource
-    ) {
-        $snippetList = $this->snippetRendererCollection->render($productListingMetaInfo, $contextSource);
+    private function projectProductListing(ProductListingCriteria $listingCriteria)
+    {
+        $snippetList = $this->snippetRendererCollection->render($listingCriteria);
         $this->dataPoolWriter->writeSnippetList($snippetList);
         
-        $urlKeysInContextsCollection = $this->urlKeyForContextCollector->collectListingUrlKeys(
-            $productListingMetaInfo,
-            $contextSource
-        );
-        $this->dataPoolWriter->writeUrlKeyCollection($urlKeysInContextsCollection);
+        $urlKeysForContextsCollection = $this->urlKeyForContextCollector->collectListingUrlKeys($listingCriteria);
+        $this->dataPoolWriter->writeUrlKeyCollection($urlKeysForContextsCollection);
     }
 }

@@ -20,6 +20,7 @@ use LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler;
  * @uses   \LizardsAndPumpkins\SampleMasterFactory
  * @uses   \LizardsAndPumpkins\IntegrationTestFactory
  * @uses   \LizardsAndPumpkins\CommonFactory
+ * @uses   \LizardsAndPumpkins\Context\ContextSource
  * @uses   \LizardsAndPumpkins\Content\ContentBlocksApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\Context\ContextBuilder
  * @uses   \LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler

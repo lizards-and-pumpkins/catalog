@@ -18,7 +18,7 @@ use LizardsAndPumpkins\Image\AddImageCommand;
 use LizardsAndPumpkins\Image\AddImageCommandHandler;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\FilterNavigationFilterCollection;
-use LizardsAndPumpkins\Product\ProductListingMetaInfoBuilder;
+use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
 use LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
@@ -78,11 +78,12 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\Product\ProductBackOrderAvailabilitySnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductSourceBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductProjector
+ * @uses   \LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductListingMetaInfoSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductListingTemplateProjector
- * @uses   \LizardsAndPumpkins\Product\ProductListingMetaInfoSnippetProjector
- * @uses   \LizardsAndPumpkins\Product\ProductListingMetaInfoBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetProjector
+ * @uses   \LizardsAndPumpkins\Product\ProductListingCriteriaBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent
  * @uses   \LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent
@@ -92,7 +93,6 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionTemplateProjector
  * @uses   \LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductSearchDocumentBuilder
- * @uses   \LizardsAndPumpkins\Product\ProductSourceDetailViewSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductStockQuantityProjector
  * @uses   \LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Product\ProductStockQuantitySnippetRenderer
@@ -101,7 +101,6 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\Product\UpdateProductStockQuantityCommandHandler
  * @uses   \LizardsAndPumpkins\Product\UpdateMultipleProductStockQuantityCommandHandler
  * @uses   \LizardsAndPumpkins\Product\ProductDetailViewBlockRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductDetailViewInContextSnippetRenderer
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer
  * @uses   \LizardsAndPumpkins\GenericSnippetKeyGenerator
  * @uses   \LizardsAndPumpkins\SnippetRendererCollection
@@ -199,10 +198,10 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ProductSourceBuilder::class, $result);
     }
 
-    public function testProductListingMetaInfoBuilderIsReturned()
+    public function testProductListingCriteriaBuilderIsReturned()
     {
-        $result = $this->commonFactory->createProductListingMetaInfoBuilder();
-        $this->assertInstanceOf(ProductListingMetaInfoBuilder::class, $result);
+        $result = $this->commonFactory->createProductListingCriteriaBuilder();
+        $this->assertInstanceOf(ProductListingCriteriaBuilder::class, $result);
     }
 
     public function testProductsPerPageForContextListBuilderIsReturned()

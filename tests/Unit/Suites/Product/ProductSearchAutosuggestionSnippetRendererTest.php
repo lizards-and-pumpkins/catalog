@@ -15,7 +15,7 @@ use LizardsAndPumpkins\SnippetRenderer;
  * @uses   \LizardsAndPumpkins\Snippet
  * @uses   \LizardsAndPumpkins\SnippetList
  */
-class ProductSearchAutosuggestionSnipperRenderetTest extends \PHPUnit_Framework_TestCase
+class ProductSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ProductSearchAutosuggestionSnippetRenderer
@@ -37,17 +37,17 @@ class ProductSearchAutosuggestionSnipperRenderetTest extends \PHPUnit_Framework_
 
         /** @var BlockRenderer|\PHPUnit_Framework_MockObject_MockObject $stubBlockRenderer */
         $stubBlockRenderer = $this->getMock(BlockRenderer::class, [], [], '', false);
+        
+        $stubContext = $this->getMock(Context::class);
+        $this->stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
+        $this->stubContextSource->method('getAllAvailableContexts')->willReturn([$stubContext]);
 
         $this->snippetRenderer = new ProductSearchAutosuggestionSnippetRenderer(
             $testSnippetList,
             $stubSnippetKeyGenerator,
-            $stubBlockRenderer
+            $stubBlockRenderer,
+            $this->stubContextSource
         );
-
-        $stubContext = $this->getMock(Context::class);
-
-        $this->stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
-        $this->stubContextSource->method('getAllAvailableContexts')->willReturn([$stubContext]);
     }
 
     public function testSnippetRendererInterfaceIsImplemented()

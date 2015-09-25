@@ -24,6 +24,7 @@ class ImageWasAddedDomainEventHandler implements DomainEventHandler
 
     public function process()
     {
+        // todo: use $this->event->getDataVersion() and use it while processing...!
         $this->imageProcessorCollection->process($this->event->getImageFilePath());
     }
 }

@@ -7,20 +7,20 @@ use LizardsAndPumpkins\Command;
 class UpdateProductCommand implements Command
 {
     /**
-     * @var ProductSource
+     * @var Product
      */
-    private $productSource;
+    private $product;
 
-    public function __construct(ProductSource $productSource)
+    public function __construct(Product $product)
     {
-        $this->productSource = $productSource;
+        $this->product = $product;
     }
 
     /**
      * @return ProductSource
      */
-    public function getProductSource()
+    public function getProduct()
     {
-        return $this->productSource;
+        return $this->product;
     }
 }

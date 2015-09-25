@@ -2,9 +2,11 @@
 
 namespace LizardsAndPumpkins\Product;
 
+use LizardsAndPumpkins\Context\VersionedContext;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
+use LizardsAndPumpkins\DataVersion;
 use LizardsAndPumpkins\Product\Exception\DataNotStringException;
 use LizardsAndPumpkins\Product\Exception\InvalidConditionXmlAttributeException;
 use LizardsAndPumpkins\Product\Exception\InvalidCriterionOperationXmlAttributeException;
@@ -14,13 +16,14 @@ use LizardsAndPumpkins\Product\Exception\MissingUrlKeyXmlAttributeException;
 use LizardsAndPumpkins\UrlKey;
 use LizardsAndPumpkins\Utils\XPathParser;
 
-class ProductListingMetaInfoBuilder
+class ProductListingCriteriaBuilder
 {
     /**
      * @param string $xml
-     * @return ProductListingMetaInfo
+     * @param DataVersion $dataVersion
+     * @return ProductListingCriteria
      */
-    public function createProductListingMetaInfoFromXml($xml)
+    public function createProductListingCriteriaFromXml($xml, DataVersion $dataVersion)
     {
         $parser = new XPathParser($xml);
 
@@ -29,7 +32,7 @@ class ProductListingMetaInfoBuilder
         $urlKey = UrlKey::fromString($urlKeyString);
 
         $xmlNodeAttributes = $parser->getXmlNodesArrayByXPath('/listing/@*');
-        $contextData = $this->getFormattedContextData($xmlNodeAttributes);
+        $contextData = $this->getFormattedContextData($xmlNodeAttributes, $dataVersion);
 
         $criteriaNodes = $parser->getXmlNodesArrayByXPath('/listing/*');
         $criteriaConditionNodes = $parser->getXmlNodesArrayByXPath('/listing/@condition');
@@ -37,16 +40,16 @@ class ProductListingMetaInfoBuilder
         $criterionArray = array_map([$this, 'createCriterion'], $criteriaNodes);
         $criteria = $this->createSearchCriteria($criteriaConditionNodes, ...$criterionArray);
 
-        return $this->createProductListingMetaInfo($urlKey, $contextData, $criteria);
+        return $this->createProductListingCriteria($urlKey, $contextData, $criteria);
     }
 
     /**
      * @param UrlKey $urlKey
      * @param string[] $contextData
      * @param SearchCriteria $criteria
-     * @return ProductListingMetaInfo
+     * @return ProductListingCriteria
      */
-    public function createProductListingMetaInfo(UrlKey $urlKey, array $contextData, SearchCriteria $criteria)
+    public function createProductListingCriteria(UrlKey $urlKey, array $contextData, SearchCriteria $criteria)
     {
         $thingsToCheck = [['values', $contextData], ['keys', array_keys($contextData)]];
         array_map(function (array $thingToCheck) {
@@ -54,7 +57,7 @@ class ProductListingMetaInfoBuilder
             array_map($this->getStringValidatorWithMessage($message), $thingToCheck[1]);
         }, $thingsToCheck);
 
-        return new ProductListingMetaInfo($urlKey, $contextData, $criteria);
+        return new ProductListingCriteria($urlKey, $contextData, $criteria);
     }
 
     /**
@@ -85,11 +88,12 @@ class ProductListingMetaInfoBuilder
 
     /**
      * @param array[] $xmlNodeAttributes
-     * @return string[]
+     * @param DataVersion $dataVersion
+     * @return \string[]
      */
-    private function getFormattedContextData(array $xmlNodeAttributes)
+    private function getFormattedContextData(array $xmlNodeAttributes, DataVersion $dataVersion)
     {
-        $contextData = [];
+        $contextData = [VersionedContext::CODE => (string) $dataVersion];
 
         foreach ($xmlNodeAttributes as $xmlAttribute) {
             if (Product::URL_KEY !== $xmlAttribute['nodeName'] && 'condition' !== $xmlAttribute['nodeName']) {

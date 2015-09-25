@@ -3,11 +3,15 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\DataVersion;
 use LizardsAndPumpkins\Image\AddImageCommand;
 use LizardsAndPumpkins\Log\Logger;
+use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductId;
-use LizardsAndPumpkins\Product\ProductListingMetaInfoBuilder;
+use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
+use LizardsAndPumpkins\Product\ProductSource;
 use LizardsAndPumpkins\Product\ProductSourceBuilder;
 use LizardsAndPumpkins\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Product\AddProductListingCommand;
@@ -30,9 +34,9 @@ class CatalogImport
     private $productSourceBuilder;
 
     /**
-     * @var ProductListingMetaInfoBuilder
+     * @var ProductListingCriteriaBuilder
      */
-    private $productListingMetaInfoBuilder;
+    private $productListingCriteriaBuilder;
 
     /**
      * @var Queue
@@ -40,21 +44,33 @@ class CatalogImport
     private $eventQueue;
 
     /**
+     * @var ContextSource
+     */
+    private $contextSource;
+
+    /**
      * @var Logger
      */
     private $logger;
 
+    /**
+     * @var DataVersion
+     */
+    private $dataVersion;
+
     public function __construct(
         Queue $commandQueue,
         ProductSourceBuilder $productSourceBuilder,
-        ProductListingMetaInfoBuilder $productListingMetaInfoBuilder,
+        ProductListingCriteriaBuilder $productListingCriteriaBuilder,
         Queue $eventQueue,
+        ContextSource $contextSource,
         Logger $logger
     ) {
         $this->commandQueue = $commandQueue;
         $this->productSourceBuilder = $productSourceBuilder;
-        $this->productListingMetaInfoBuilder = $productListingMetaInfoBuilder;
+        $this->productListingCriteriaBuilder = $productListingCriteriaBuilder;
         $this->eventQueue = $eventQueue;
+        $this->contextSource = $contextSource;
         $this->logger = $logger;
     }
 
@@ -63,7 +79,7 @@ class CatalogImport
      */
     public function importFile($importFilePath)
     {
-        $version = DataVersion::fromVersionString('-1'); // UuidGenerator::getUuid()
+        $this->dataVersion = DataVersion::fromVersionString('-1'); // UuidGenerator::getUuid()
         $this->validateImportFilePath($importFilePath);
         $parser = CatalogXmlParser::fromFilePath($importFilePath);
         $parser->registerProductSourceCallback($this->createClosureForMethod('processProductXml'));
@@ -71,7 +87,7 @@ class CatalogImport
         $imageDirectoryPath = dirname($importFilePath) . '/product-images';
         $parser->registerProductImageCallback($this->createClosureForProductImageXml($imageDirectoryPath));
         $parser->parse();
-        $this->eventQueue->add(new CatalogWasImportedDomainEvent($version));
+        $this->eventQueue->add(new CatalogWasImportedDomainEvent($this->dataVersion));
     }
 
     /**
@@ -119,15 +135,34 @@ class CatalogImport
     private function processProductXml($productXml)
     {
         try {
-            $productSource = $this->productSourceBuilder->createProductSourceFromXml($productXml);
-            // todo: add version to command
-            $this->commandQueue->add(new UpdateProductCommand($productSource));
+            $this->addProductsFromSourceToQueue($this->productSourceBuilder->createProductSourceFromXml($productXml));
         } catch (\Exception $exception) {
-            $skuString = (new XPathParser($productXml))->getXmlNodesArrayByXPath('//@sku')[0]['value'];
-            $productId = ProductId::fromString($skuString);
-            $loggerMessage = new ProductImportFailedMessage($productId, $exception);
-            $this->logger->log($loggerMessage);
+            $this->logProductImportException($exception, $productXml);
         }
+    }
+
+    public function addProductsFromSourceToQueue(ProductSource $productSource)
+    {
+        array_map(function (Context $context) use ($productSource) {
+            $this->addCommandToQueue($productSource->getProductForContext($context));
+        }, $this->contextSource->getAllAvailableContextsWithVersion($this->dataVersion));
+    }
+
+    private function addCommandToQueue(Product $product)
+    {
+        $this->commandQueue->add(new UpdateProductCommand($product));
+    }
+
+    /**
+     * @param \Exception $exception
+     * @param string $productXml
+     */
+    private function logProductImportException(\Exception $exception, $productXml)
+    {
+        $skuString = (new XPathParser($productXml))->getXmlNodesArrayByXPath('//@sku')[0]['value'];
+        $productId = ProductId::fromString($skuString);
+        $loggerMessage = new ProductImportFailedMessage($productId, $exception);
+        $this->logger->log($loggerMessage);
     }
 
     /**
@@ -135,10 +170,9 @@ class CatalogImport
      */
     private function processListingXml($listingXml)
     {
-        $productListingMetaInfo = $this->productListingMetaInfoBuilder
-            ->createProductListingMetaInfoFromXml($listingXml);
-        // todo: add version to command
-        $this->commandQueue->add(new AddProductListingCommand($productListingMetaInfo));
+        $productListingCriteria = $this->productListingCriteriaBuilder
+            ->createProductListingCriteriaFromXml($listingXml, $this->dataVersion);
+        $this->commandQueue->add(new AddProductListingCommand($productListingCriteria));
     }
 
     /**
@@ -148,7 +182,7 @@ class CatalogImport
     private function processProductImageXml($imageDirectoryPath, $productImageXml)
     {
         $fileNode = (new XPathParser($productImageXml))->getXmlNodesArrayByXPath('/image/file')[0];
-        // todo: add version to command
-        $this->commandQueue->add(new AddImageCommand($imageDirectoryPath . '/' . $fileNode['value']));
+        $imageFilePath = $imageDirectoryPath . '/' . $fileNode['value'];
+        $this->commandQueue->add(new AddImageCommand($imageFilePath, $this->dataVersion));
     }
 }

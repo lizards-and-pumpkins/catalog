@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\Product;
 
+use LizardsAndPumpkins\Context\Context;
+
 class Product implements \JsonSerializable
 {
     const URL_KEY = 'url_key';
@@ -16,11 +18,18 @@ class Product implements \JsonSerializable
      * @var ProductAttributeList
      */
     private $attributeList;
+    
+    /**
+     * @var Context
+     */
+    private $context;
 
-    public function __construct(ProductId $productId, ProductAttributeList $attributeList)
+    public function __construct(ProductId $productId, ProductAttributeList $attributeList, Context $context)
     {
         $this->productId = $productId;
+        // todo: verify the context matches the attribute contexts
         $this->attributeList = $attributeList;
+        $this->context = $context;
     }
 
     /**
@@ -67,5 +76,13 @@ class Product implements \JsonSerializable
             'product_id' => (string) $this->productId,
             'attributes' => $this->attributeList
         ];
+    }
+
+    /**
+     * @return Context
+     */
+    public function getContext()
+    {
+        return $this->context;
     }
 }

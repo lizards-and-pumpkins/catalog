@@ -38,6 +38,7 @@ class TemplatesApiV1PutRequestHandler extends ApiRequestHandler
     protected function processRequest(HttpRequest $request)
     {
         $templateId = $this->extractTemplateIdFromRequest($request);
+        // todo: add command which validates input data to command queue, the have the command handler create the event
         $this->domainEventQueue->add(new TemplateWasUpdatedDomainEvent($templateId, $request->getRawBody()));
     }
 

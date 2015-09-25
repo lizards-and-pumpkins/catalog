@@ -2,8 +2,6 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\InvalidProjectionSourceDataTypeException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilder;
@@ -27,43 +25,28 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
 
     /**
      * @param mixed $projectionSourceData
-     * @param ContextSource $contextSource
      * @return SearchDocumentCollection
      */
-    public function aggregate($projectionSourceData, ContextSource $contextSource)
+    public function aggregate($projectionSourceData)
     {
-        if (!($projectionSourceData instanceof ProductSource)) {
-            throw new InvalidProjectionSourceDataTypeException('First argument must be instance of ProductSource.');
+        if (!($projectionSourceData instanceof Product)) {
+            throw new InvalidProjectionSourceDataTypeException('First argument must be a Product instance.');
         }
 
-        $searchDocuments = $this->createSearchDocuments($projectionSourceData, $contextSource);
+        $searchDocument = $this->createSearchDocument($projectionSourceData);
 
-        return new SearchDocumentCollection(...$searchDocuments);
+        return new SearchDocumentCollection($searchDocument);
     }
 
     /**
-     * @param ProductSource $productSource
-     * @param ContextSource $contextSource
+     * @param Product $product
      * @return SearchDocument[]
      */
-    private function createSearchDocuments(ProductSource $productSource, ContextSource $contextSource)
+    private function createSearchDocument(Product $product)
     {
-        return array_map(function (Context $context) use ($productSource) {
-            return $this->createSearchDocument($productSource, $context);
-        }, $contextSource->getAllAvailableContexts());
-    }
-
-    /**
-     * @param ProductSource $productSource
-     * @param Context $context
-     * @return SearchDocument
-     */
-    private function createSearchDocument(ProductSource $productSource, Context $context)
-    {
-        $product = $productSource->getProductForContext($context);
         $fieldsCollection = $this->createSearchDocumentFieldsCollection($product);
 
-        return new SearchDocument($fieldsCollection, $context, $product->getId());
+        return new SearchDocument($fieldsCollection, $product->getContext(), $product->getId());
     }
 
     /**

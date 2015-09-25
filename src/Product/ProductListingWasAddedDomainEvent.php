@@ -7,30 +7,20 @@ use LizardsAndPumpkins\DomainEvent;
 class ProductListingWasAddedDomainEvent implements DomainEvent
 {
     /**
-     * @var string
+     * @var ProductListingCriteria
      */
-    private $urlKey;
+    private $productListingCriteria;
 
-    /**
-     * @var ProductListingMetaInfo
-     */
-    private $productListingMetaInfo;
-
-    /**
-     * @param string $urlKey
-     * @param ProductListingMetaInfo $productListingMetaInfo
-     */
-    public function __construct($urlKey, ProductListingMetaInfo $productListingMetaInfo)
+    public function __construct(ProductListingCriteria $productListingCriteria)
     {
-        $this->urlKey = $urlKey;
-        $this->productListingMetaInfo = $productListingMetaInfo;
+        $this->productListingCriteria = $productListingCriteria;
     }
 
     /**
-     * @return ProductListingMetaInfo
+     * @return ProductListingCriteria
      */
-    public function getProductListingMetaInfo()
+    public function getProductListingCriteria()
     {
-        return $this->productListingMetaInfo;
+        return $this->productListingCriteria;
     }
 }

@@ -25,9 +25,7 @@ class UpdateProductCommandHandler implements CommandHandler
 
     public function process()
     {
-        $productSource = $this->command->getProductSource();
-        $productId = $productSource->getId();
-
-        $this->domainEventQueue->add(new ProductWasUpdatedDomainEvent($productId, $productSource));
+        $product = $this->command->getProduct();
+        $this->domainEventQueue->add(new ProductWasUpdatedDomainEvent($product->getId(), $product));
     }
 }

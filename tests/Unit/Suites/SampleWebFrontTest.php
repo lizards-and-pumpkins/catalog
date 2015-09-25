@@ -41,6 +41,7 @@ use LizardsAndPumpkins\Http\HttpRouterChain;
  * @uses   \LizardsAndPumpkins\Context\LocaleContextDecorator
  * @uses   \LizardsAndPumpkins\Context\VersionedContext
  * @uses   \LizardsAndPumpkins\Context\ContextBuilder
+ * @uses   \LizardsAndPumpkins\Context\ContextSource
  * @uses   \LizardsAndPumpkins\Api\ApiRouter
  * @uses   \LizardsAndPumpkins\Api\ApiRequestHandlerChain
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
