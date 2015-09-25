@@ -80,4 +80,14 @@ class AttributeCodeTest extends \PHPUnit_Framework_TestCase
         );
         AttributeCode::fromString('abc_');
     }
+
+    public function testItIsSerializable()
+    {
+        $this->assertInstanceOf(\JsonSerializable::class, AttributeCode::fromString('test'));
+    }
+
+    public function testItReturnsTheAttributeCodeAsJson()
+    {
+        $this->assertSame('"test"', json_encode(AttributeCode::fromString('test')));
+    }
 }

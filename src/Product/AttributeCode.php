@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Product\Exception\InvalidAttributeCodeException;
 
-class AttributeCode
+class AttributeCode implements \JsonSerializable
 {
     /**
      * @var string
@@ -76,6 +76,14 @@ class AttributeCode
      * @return string
      */
     public function __toString()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @return string
+     */
+    public function jsonSerialize()
     {
         return $this->code;
     }
