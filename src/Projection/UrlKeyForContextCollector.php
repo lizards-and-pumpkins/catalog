@@ -15,7 +15,7 @@ class UrlKeyForContextCollector
     const URL_KEY_TYPE_PRODUCT = 'product';
     
     /**
-     * @var
+     * @var ContextSource
      */
     private $contextSource;
 
