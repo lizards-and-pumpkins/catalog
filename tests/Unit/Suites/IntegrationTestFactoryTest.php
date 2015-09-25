@@ -18,7 +18,6 @@ use LizardsAndPumpkins\LocalFilesystemStorageWriter;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\SampleMasterFactory;
 use LizardsAndPumpkins\Queue\InMemory\InMemoryQueue;
-use LizardsAndPumpkins\Utils\LocalFilesystem;
 
 /**
  * @covers \LizardsAndPumpkins\IntegrationTestFactory

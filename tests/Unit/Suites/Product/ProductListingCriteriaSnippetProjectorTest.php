@@ -5,7 +5,6 @@ namespace LizardsAndPumpkins\Product;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\InvalidProjectionSourceDataTypeException;
-use LizardsAndPumpkins\Projection\UrlKeyForContextCollectionTest;
 use LizardsAndPumpkins\SnippetList;
 use LizardsAndPumpkins\SnippetRendererCollection;
 use LizardsAndPumpkins\Projection\UrlKeyForContextCollector;
@@ -47,14 +46,6 @@ class ProductListingCriteriaSnippetProjectorTest extends \PHPUnit_Framework_Test
     private function createMockProductListingCriteria()
     {
         return $this->getMock(ProductListingCriteria::class, [], [], '', false);
-    }
-
-    /**
-     * @return ContextSource|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createMockContextSource()
-    {
-        return $this->getMock(ContextSource::class, [], [], '', false);
     }
 
     protected function setUp()

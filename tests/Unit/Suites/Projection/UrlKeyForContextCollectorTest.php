@@ -29,11 +29,6 @@ class UrlKeyForContextCollectorTest extends \PHPUnit_Framework_TestCase
     private $stubContextSource;
 
     /**
-     * @var ProductSource|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubProductSource;
-
-    /**
      * @param string $urlKey
      * @return Product|\PHPUnit_Framework_MockObject_MockObject
      */

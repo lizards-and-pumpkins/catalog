@@ -7,7 +7,6 @@ namespace LizardsAndPumpkins;
 use League\CLImate\CLImate;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\Utils\BaseCliCommand;
-use TheSeer\phpDox\CLI;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 

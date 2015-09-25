@@ -3,14 +3,11 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
-use LizardsAndPumpkins\Product\ProductSource;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportSourceFilePathIsNotAStringException;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportSourceXmlFileDoesNotExistException;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportSourceXmlFileIsNotReadableException;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportSourceXMLNotAStringException;
 use LizardsAndPumpkins\TestFileFixtureTrait;
-use LizardsAndPumpkins\Utils\XPathParser;
-use SebastianBergmann\Money\XXX;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\Catalog\Import\CatalogXmlParser
@@ -220,22 +217,6 @@ EOT;
                 $actual = new \DOMDocument();
                 $actual->loadXML($xml);
                 $this->assertEqualXMLStructure($expected->firstChild, $actual->firstChild);
-            }
-        );
-        return $mockCallback;
-    }
-
-    /**
-     * @param \PHPUnit_Framework_Constraint $condition
-     * @param int $expectedCallCount
-     * @return \Closure|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createMockCallbackExpectingMatch(\PHPUnit_Framework_Constraint $condition, $expectedCallCount)
-    {
-        $mockCallback = $this->getMock(Callback::class, ['__invoke']);
-        $mockCallback->expects($this->exactly($expectedCallCount))->method('__invoke')->willReturnCallback(
-            function ($arg) use ($condition) {
-                $condition->evaluate($arg);
             }
         );
         return $mockCallback;

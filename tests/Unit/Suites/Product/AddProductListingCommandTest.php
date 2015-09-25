@@ -3,7 +3,6 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Command;
-use LizardsAndPumpkins\DataVersion;
 
 /**
  * @covers \LizardsAndPumpkins\Product\AddProductListingCommand

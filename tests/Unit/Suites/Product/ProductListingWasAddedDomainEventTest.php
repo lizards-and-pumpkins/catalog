@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\DataVersion;
 use LizardsAndPumpkins\DomainEvent;
 
 /**
