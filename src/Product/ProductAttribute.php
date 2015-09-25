@@ -161,7 +161,7 @@ class ProductAttribute implements \JsonSerializable
 
     /**
      * @param string|ProductAttributeList $value
-     * @return string|ProductAttributeList
+     * @return string|array[]
      */
     private function getSerializableValue($value)
     {
