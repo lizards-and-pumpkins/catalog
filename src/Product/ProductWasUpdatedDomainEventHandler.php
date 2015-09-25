@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\DomainEventHandler;
 
 class ProductWasUpdatedDomainEventHandler implements DomainEventHandler
