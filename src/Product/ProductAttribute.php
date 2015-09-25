@@ -89,7 +89,7 @@ class ProductAttribute implements \JsonSerializable
      */
     public function hasSameCodeAs(ProductAttribute $attribute)
     {
-        return strval($this->code) === strval($attribute->getCode());
+        return $this->code->isEqualTo($attribute->getCode());
     }
 
     /**
