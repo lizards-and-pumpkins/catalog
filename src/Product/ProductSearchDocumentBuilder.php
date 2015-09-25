@@ -2,8 +2,6 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\InvalidProjectionSourceDataTypeException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilder;
