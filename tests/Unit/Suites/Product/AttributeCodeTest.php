@@ -50,13 +50,29 @@ class AttributeCodeTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function testItThrowsAnExceptionIfTheAttributeCodeIsLessThenThreeCharactersLong()
+    /**
+     * @param string $shortAttributeCode
+     * @dataProvider tooShortAttributeCodeProvider
+     */
+    public function testItThrowsAnExceptionIfTheAttributeCodeIsLessThenThreeCharactersLong($shortAttributeCode)
     {
         $this->setExpectedException(
             InvalidAttributeCodeException::class,
-            'The attribute code has to be at least 3 characters long, got ""'
+            sprintf('The attribute code has to be at least 3 characters long, got "%s"', $shortAttributeCode)
         );
-        AttributeCode::fromString('');
+        AttributeCode::fromString($shortAttributeCode);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function tooShortAttributeCodeProvider()
+    {
+        return [
+            [''],
+            ['a'],
+            ['aa'],
+        ];
     }
 
     /**

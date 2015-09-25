@@ -53,8 +53,8 @@ class AttributeCode implements \JsonSerializable
             $message = sprintf('The attribute code has to be a string, got "%s"', self::getType($attributeCode));
             throw new InvalidAttributeCodeException($message);
         }
-        if (empty($attributeCode)) {
-            $message = sprintf('The attribute code has to be at least 3 characters long, got ""', $attributeCode);
+        if (strlen($attributeCode) < 3) {
+            $message = sprintf('The attribute code has to be at least 3 characters long, got "%s"', $attributeCode);
             throw new InvalidAttributeCodeException($message);
         }
         $chr = ord(substr($attributeCode, 0, 1));
