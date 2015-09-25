@@ -185,7 +185,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
             ProductAttribute::VALUE => 'valueB'
         ]);
 
-        $this->assertFalse($attributeA->hasSameCodeAs($attributeB));
+        $this->assertFalse($attributeA->isCodeEqualTo($attributeB));
     }
 
     public function testTrueIsReturnedIfAttributeCodesAreIdentical()
@@ -201,7 +201,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
             ProductAttribute::VALUE => 'valueB'
         ]);
 
-        $this->assertTrue($attributeA->hasSameCodeAs($attributeB));
+        $this->assertTrue($attributeA->isCodeEqualTo($attributeB));
     }
 
     public function testItReturnsTheContextDataSet()
