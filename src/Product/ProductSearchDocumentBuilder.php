@@ -33,9 +33,9 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
             throw new InvalidProjectionSourceDataTypeException('First argument must be a Product instance.');
         }
 
-        $searchDocuments = $this->createSearchDocument($projectionSourceData);
+        $searchDocument = $this->createSearchDocument($projectionSourceData);
 
-        return new SearchDocumentCollection($searchDocuments);
+        return new SearchDocumentCollection($searchDocument);
     }
 
     /**
