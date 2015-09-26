@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\DataPool\SearchEngine\Exception\SearchEngineNotAvailableException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
@@ -113,13 +114,10 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
      */
     private function getContextAsArray(Context $context)
     {
-        $contextArray = [];
-
-        foreach ($context->getSupportedCodes() as $contextCode) {
-            $contextArray[$contextCode] = $context->getValue($contextCode);
-        }
-
-        return $contextArray;
+        return array_reduce($context->getSupportedCodes(), function (array $carry, $contextCode) use ($context) {
+            $carry[$contextCode] = $context->getValue($contextCode);
+            return $carry;
+        }, []);
     }
 
     /**
