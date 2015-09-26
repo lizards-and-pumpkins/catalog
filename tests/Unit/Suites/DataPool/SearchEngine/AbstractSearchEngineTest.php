@@ -142,7 +142,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($result);
     }
 
-    public function testMultipleEntriesAreAddedToIndex()
+    public function testSearchDocumentsAreAddedToAndRetrievedFromSearchEngine()
     {
         $keyword = 'bar';
         $productAId = ProductId::fromString('A');
