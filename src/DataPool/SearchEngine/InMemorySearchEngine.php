@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 
 class InMemorySearchEngine extends IntegrationTestSearchEngineAbstract
 {
@@ -11,9 +12,11 @@ class InMemorySearchEngine extends IntegrationTestSearchEngineAbstract
      */
     private $index = [];
 
-    public function addSearchDocument(SearchDocument $searchDocument)
+    public function addSearchDocumentCollection(SearchDocumentCollection $searchDocumentCollection)
     {
-        $this->index[$this->getSearchDocumentIdentifier($searchDocument)] = $searchDocument;
+        array_map(function (SearchDocument $searchDocument) {
+            $this->index[$this->getSearchDocumentIdentifier($searchDocument)] = $searchDocument;
+        }, $searchDocumentCollection->getDocuments());
     }
 
     /**

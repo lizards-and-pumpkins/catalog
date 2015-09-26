@@ -16,11 +16,6 @@ use LizardsAndPumpkins\Product\ProductId;
 abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubSearchDocumentCollection;
-
-    /**
      * @var Context
      */
     private $testContext;
@@ -104,10 +99,22 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         return $contextBuilder->createContextsFromDataSets([$contextDataSet])[0];
     }
 
+    /**
+     * @param SearchDocument ...$searchDocuments
+     * @return SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubSearchDocumentCollection(SearchDocument ...$searchDocuments)
+    {
+        $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
+        $stubSearchDocumentCollection->method('getIterator')->willReturn(new \ArrayIterator($searchDocuments));
+        $stubSearchDocumentCollection->method('getDocuments')->willReturn($searchDocuments);
+
+        return $stubSearchDocumentCollection;
+    }
+
     protected function setUp()
     {
         $this->searchEngine = $this->createSearchEngineInstance();
-        $this->stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
         $this->testContext = $this->createContextFromDataParts([WebsiteContextDecorator::CODE => 'ru']);
     }
 
@@ -122,29 +129,14 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(0, $resultDocumentCollection);
     }
 
-    public function testEntryIsAddedIntoIndexAndThenFound()
-    {
-        $searchDocumentFieldName = 'foo';
-        $searchDocumentFieldValue = 'bar';
-        $productId = ProductId::fromString('id');
-
-        $searchDocument = $this->createSearchDocument(
-            [$searchDocumentFieldName => $searchDocumentFieldValue],
-            $productId
-        );
-
-        $this->searchEngine->addSearchDocument($searchDocument);
-        $result = $this->searchEngine->query($searchDocumentFieldValue, $this->testContext);
-
-        $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productId]);
-    }
-
     public function testEmptyCollectionIsReturnedIfQueryStringIsNotFoundInIndex()
     {
         $searchDocumentFields = ['foo' => 'bar'];
         $productId = ProductId::fromString('id');
         $searchDocument = $this->createSearchDocument($searchDocumentFields, $productId);
-        $this->searchEngine->addSearchDocument($searchDocument);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocument);
+
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
         $result = $this->searchEngine->query('baz', $this->testContext);
 
         $this->assertEmpty($result);
@@ -153,18 +145,14 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     public function testMultipleEntriesAreAddedToIndex()
     {
         $keyword = 'bar';
-
         $productAId = ProductId::fromString('A');
         $productBId = ProductId::fromString('B');
 
         $searchDocumentA = $this->createSearchDocument(['foo' => $keyword], $productAId);
         $searchDocumentB = $this->createSearchDocument(['baz' => $keyword], $productBId);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
 
-        $this->stubSearchDocumentCollection->method('getIterator')
-            ->willReturn(new \ArrayIterator([$searchDocumentA, $searchDocumentB]));
-        $this->stubSearchDocumentCollection->method('getDocuments')->willReturn([$searchDocumentA, $searchDocumentB]);
-
-        $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
         $result = $this->searchEngine->query($keyword, $this->testContext);
 
         $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productAId, $productBId]);
@@ -179,10 +167,9 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $searchDocumentA = $this->createSearchDocument(['foo' => $keyword], $productAId);
         $searchDocumentB = $this->createSearchDocument(['baz' => 'qux'], $productBId);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
 
-        $this->stubSearchDocumentCollection->method('getIterator')
-            ->willReturn(new \ArrayIterator([$searchDocumentA, $searchDocumentB]));
-        $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
         $result = $this->searchEngine->query($keyword, $this->testContext);
 
         $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productAId]);
@@ -196,15 +183,13 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $productBId = ProductId::fromString('B');
         $documentAContext = $this->createContextFromDataParts(['website' => 'value-1']);
         $documentBContext = $this->createContextFromDataParts(['website' => 'value-2']);
+        $queryContext = $this->createContextFromDataParts(['website' => 'value-2']);
 
         $searchDocumentA = $this->createSearchDocumentWithContext(['foo' => $keyword], $productAId, $documentAContext);
         $searchDocumentB = $this->createSearchDocumentWithContext(['foo' => $keyword], $productBId, $documentBContext);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
 
-        $this->stubSearchDocumentCollection->method('getIterator')
-            ->willReturn(new \ArrayIterator([$searchDocumentA, $searchDocumentB]));
-        $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
-
-        $queryContext = $this->createContextFromDataParts(['website' => 'value-2']);
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
         $result = $this->searchEngine->query($keyword, $queryContext);
 
         $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productBId]);
@@ -216,15 +201,13 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $productBId = ProductId::fromString('B');
         $documentAContext = $this->createContextFromDataParts(['website' => 'value1', 'locale' => 'value2']);
         $documentBContext = $this->createContextFromDataParts(['website' => 'value1', 'locale' => 'value2']);
+        $queryContext = $this->createContextFromDataParts(['locale' => 'value2']);
 
         $searchDocumentA = $this->createSearchDocumentWithContext(['foo' => 'bar'], $productAId, $documentAContext);
         $searchDocumentB = $this->createSearchDocumentWithContext(['foo' => 'bar'], $productBId, $documentBContext);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
 
-        $this->stubSearchDocumentCollection->method('getIterator')
-            ->willReturn(new \ArrayIterator([$searchDocumentA, $searchDocumentB]));
-        $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
-
-        $queryContext = $this->createContextFromDataParts(['locale' => 'value2']);
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
         $result = $this->searchEngine->query('bar', $queryContext);
 
         $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productAId, $productBId]);
@@ -234,13 +217,12 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     {
         $productId = ProductId::fromString('id');
         $documentContext = $this->createContextFromDataParts(['locale' => 'value2']);
-        $searchDocument = $this->createSearchDocumentWithContext(['foo' => 'bar'], $productId, $documentContext);
-
-        $this->stubSearchDocumentCollection->method('getIterator')
-            ->willReturn(new \ArrayIterator([$searchDocument]));
-        $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
-
         $queryContext = $this->createContextFromDataParts(['website' => 'value1', 'locale' => 'value2']);
+
+        $searchDocument = $this->createSearchDocumentWithContext(['foo' => 'bar'], $productId, $documentContext);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocument);
+
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
         $result = $this->searchEngine->query('bar', $queryContext);
 
         $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productId]);
@@ -253,10 +235,9 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $searchDocumentA = $this->createSearchDocument(['foo' => 'barbarism'], $productAId);
         $searchDocumentB = $this->createSearchDocument(['baz' => 'cabaret'], $productBId);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
 
-        $this->stubSearchDocumentCollection->method('getIterator')
-            ->willReturn(new \ArrayIterator([$searchDocumentA, $searchDocumentB]));
-        $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
         $result = $this->searchEngine->query('bar', $this->testContext);
 
         $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productAId, $productBId]);
@@ -280,10 +261,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $searchDocumentA = $this->createSearchDocument(['foo' => 'bar'], $productAId);
         $searchDocumentB = $this->createSearchDocument(['baz' => 'qux'], $productBId);
-
-        $this->stubSearchDocumentCollection->method('getIterator')
-            ->willReturn(new \ArrayIterator([$searchDocumentA, $searchDocumentB]));
-        $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
 
         $matchingSearchDocumentField = SearchDocumentField::fromKeyAndValues('foo', ['bar']);
 
@@ -295,6 +273,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             }
         );
 
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
         $result = $this->searchEngine->getSearchDocumentsMatchingCriteria($stubCriteria, $this->testContext);
 
         $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productAId]);
@@ -306,15 +285,13 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $searchDocumentA = $this->createSearchDocument(['foo' => 'bar'], $productId);
         $searchDocumentB = $this->createSearchDocument(['baz' => 'qux'], $productId);
-
-        $this->stubSearchDocumentCollection->method('getIterator')
-            ->willReturn(new \ArrayIterator([$searchDocumentA, $searchDocumentB]));
-        $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
 
         /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubCriteria */
         $stubCriteria = $this->getMock(SearchCriteria::class);
         $stubCriteria->method('matches')->willReturn(true);
 
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
         $result = $this->searchEngine->getSearchDocumentsMatchingCriteria($stubCriteria, $this->testContext);
 
         $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productId]);
@@ -336,7 +313,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $productId
         );
 
-        $this->searchEngine->addSearchDocument($searchDocument);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocument);
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
         $this->searchEngine->clear();
         $this->assertEmpty($this->searchEngine->query($searchDocumentFieldValue, $this->testContext));
     }
