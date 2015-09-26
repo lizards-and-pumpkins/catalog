@@ -118,8 +118,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     public function testEmptyCollectionIsReturnedRegardlessOfWhatHasBeenQueriedIfIndexIsEmpty()
     {
-        $result = $this->searchEngine->query('bar', $this->testContext);
-        $this->assertEmpty($result);
+        $resultDocumentCollection = $this->searchEngine->query('bar', $this->testContext);
+        $this->assertCount(0, $resultDocumentCollection);
     }
 
     public function testEntryIsAddedIntoIndexAndThenFound()
@@ -162,6 +162,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $this->stubSearchDocumentCollection->method('getIterator')
             ->willReturn(new \ArrayIterator([$searchDocumentA, $searchDocumentB]));
+        $this->stubSearchDocumentCollection->method('getDocuments')->willReturn([$searchDocumentA, $searchDocumentB]);
+
         $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
         $result = $this->searchEngine->query($keyword, $this->testContext);
 
