@@ -43,7 +43,10 @@ define(['lib/local_storage'], function(storage) {
 
             // TODO: Add "last" class to last element of the list.
 
-            return productList.innerHTML;
+            var temporaryContainer = document.createElement('DIV');
+            temporaryContainer.appendChild(productList);
+
+            return temporaryContainer.innerHTML;
         },
 
         removeProductFromListBySku: function(list, sku) {
