@@ -23,6 +23,7 @@ class AttributeCodeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider invalidAttributeCodeTypeProvider
+     * @param string $invalidAttributeCode
      */
     public function testItThrowsAnExceptionIfTheCodeIsNotAString($invalidAttributeCode)
     {
