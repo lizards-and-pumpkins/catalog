@@ -1,11 +1,16 @@
 require([
+    'lib/domReady',
     'common',
     'recently_viewed_products',
     'lib/styleselect',
-    'lib/zoom'
-], function(common, recentlyViewedProducts, styleSelect, zoom) {
+    'lib/zoom',
+    'lib/swiping_container'
+], function(domReady, common, recentlyViewedProducts, styleSelect, zoom, toggleSwipingArrows) {
 
-    jQuery(document).ready(function() {
+    var tabletWidth = 768,
+        siteFullWidth = 975;
+
+    domReady(function() {
         require([
             '//connect.facebook.net/de_DE/all.js#xfbml=1&status=0',
             '//platform.twitter.com/widgets.js',
@@ -15,10 +20,11 @@ require([
 //        $('select').not('.alertPopUp select').uniform({selectAutoWidth: false});
         styleSelect('select');
 
+        handleRecentlyViewedProducts();
+
         adjustDetailsToWidth();
         jQuery(window).bind('resize orientationchange', adjustDetailsToWidth);
 
-        handleRecentlyViewedProducts();
         initializeZoom();
         initializeTabs();
         observeSizeDropDown();
@@ -241,7 +247,7 @@ require([
                     }
                 });
                 productImageColumn.prepend(jQuery('<div/>', {'class': 'flexslider'}).append(imagesList));
-                jQuery('.flexslider').flexslider({'slideshow': false, 'animationLoop': false});
+//                jQuery('.flexslider').flexslider({'slideshow': false, 'animationLoop': false});
             }
 
             /* Hide "send" part of FB buttons block if not yet hidden */
@@ -315,6 +321,8 @@ require([
             }
 
         }
+
+        toggleSwipingArrows('.swipe-container', 'ul');
     }
 
     /**
