@@ -59,22 +59,17 @@ class ProductAttributeList implements \Countable, \JsonSerializable
     private static function validateAttributesHaveSameContextParts(ProductAttribute $first, ProductAttribute ...$others)
     {
         array_map(function (ProductAttribute $attributeToCompare) use ($first) {
-            if (! $first->hasSameContextPartsAs($attributeToCompare)) {
-                self::throwAttributeContextPartsMismatchException($first);
-                // @codeCoverageIgnoreStart
+            if (!$first->hasSameContextPartsAs($attributeToCompare)) {
+                $message = self::getAttributeContextPartsMismatchExceptionMessage($first);
+                throw new ProductAttributeContextPartsMismatchException($message);
             }
-            // @codeCoverageIgnoreEnd
         }, $others);
     }
 
-    private static function throwAttributeContextPartsMismatchException(ProductAttribute $attributeA)
+    private static function getAttributeContextPartsMismatchExceptionMessage(ProductAttribute $attribute)
     {
-        $message = sprintf(
-            'The attribute "%s" has multiple values with different contexts ' .
-            'which can not be part of one product attribute list',
-            $attributeA->getCode()
-        );
-        throw new ProductAttributeContextPartsMismatchException($message);
+        return sprintf('The attribute "%s" has multiple values with different contexts ' .
+            'which can not be part of one product attribute list', $attribute->getCode());
     }
 
     private function initializeAttributeCodesArray(ProductAttribute ...$attributes)
