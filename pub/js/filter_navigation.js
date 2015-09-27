@@ -1,4 +1,4 @@
-define(['url'], function (url) {
+define(['lib/url'], function (url) {
 
     var FilterNavigation = {
         generateLayeredNavigation: function (filterNavigationJson, filterNavigationPlaceholderSelector) {
