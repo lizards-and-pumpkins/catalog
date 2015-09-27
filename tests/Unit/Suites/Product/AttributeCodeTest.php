@@ -123,7 +123,9 @@ class AttributeCodeTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsAnAttributeCodeIfInstantiatedWithAnAttributeCode()
     {
-        $this->assertInstanceOf(AttributeCode::class, AttributeCode::fromString(AttributeCode::fromString('test')));
+        $attributeCode = AttributeCode::fromString(AttributeCode::fromString('test'));
+        $this->assertInstanceOf(AttributeCode::class, $attributeCode);
+        $this->assertEquals('test', $attributeCode);
     }
 
     public function testItReturnsTrueIfTheGivenCodeIsEqual()
