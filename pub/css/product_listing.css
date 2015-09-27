@@ -3,7 +3,6 @@
 @import "product_grid.css";
 
 /* Layered navigation */
-.filter-content { list-style: none; padding: 0; margin: 0 }
 .filter-content li a { padding: 10px 0 10px 34px; border-top: 1px solid #e4e4e4; color: inherit; display: block; background: url("../images/icon-checkbox.png") 10px 7px no-repeat; font-size: 11px }
 .filter-content li.active a { background-image: url("../images/icon-checkbox-active.png") }
 .block-title { padding: 8px 10px; background-color: #e4e4e4; font-size: 17px; font-family: GeogrotesqueRegular, Helvetica, Arial, sans-serif }
