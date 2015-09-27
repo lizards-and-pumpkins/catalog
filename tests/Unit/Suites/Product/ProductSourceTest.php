@@ -7,6 +7,7 @@ use LizardsAndPumpkins\Context\Context;
 /**
  * @covers \LizardsAndPumpkins\Product\ProductSource
  * @uses   \LizardsAndPumpkins\Product\Product
+ * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  */
 class ProductSourceTest extends \PHPUnit_Framework_TestCase
 {

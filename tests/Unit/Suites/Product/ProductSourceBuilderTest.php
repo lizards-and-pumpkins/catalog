@@ -12,6 +12,7 @@ use LizardsAndPumpkins\Product\Exception\ProductAttributeNotFoundException;
  * @uses   \LizardsAndPumpkins\Utils\XPathParser
  * @uses   \LizardsAndPumpkins\Product\ProductAttribute
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
+ * @uses   \LizardsAndPumpkins\Product\AttributeCode
  */
 class ProductSourceBuilderTest extends \PHPUnit_Framework_TestCase
 {

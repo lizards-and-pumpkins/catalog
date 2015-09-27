@@ -5,14 +5,14 @@ namespace LizardsAndPumpkins\Product;
 use LizardsAndPumpkins\Attribute;
 use LizardsAndPumpkins\Product\Exception\ProductAttributeDoesNotContainContextPartException;
 
-class ProductAttribute implements Attribute
+class ProductAttribute implements \JsonSerializable
 {
     const CODE = 'code';
     const VALUE = 'value';
     const CONTEXT_DATA = 'contextData';
     
     /**
-     * @var string
+     * @var AttributeCode
      */
     private $code;
 
@@ -27,11 +27,11 @@ class ProductAttribute implements Attribute
     private $value;
 
     /**
-     * @param string $code
+     * @param AttributeCode $code
      * @param string|ProductAttributeList $value
      * @param string[] $contextData
      */
-    private function __construct($code, $value, array $contextData = [])
+    private function __construct(AttributeCode $code, $value, array $contextData)
     {
         $this->code = $code;
         $this->contextData = $contextData;
@@ -45,7 +45,7 @@ class ProductAttribute implements Attribute
     public static function fromArray(array $attribute)
     {
         return new self(
-            $attribute[self::CODE],
+            AttributeCode::fromString($attribute[self::CODE]),
             self::getValueRecursive($attribute[self::VALUE]),
             $attribute[self::CONTEXT_DATA]
         );
@@ -59,7 +59,7 @@ class ProductAttribute implements Attribute
     {
         return is_array($attributeValue) ?
             ProductAttributeList::fromArray($attributeValue) :
-            $attributeValue;
+            (string) $attributeValue;
     }
     
     /**
@@ -84,16 +84,7 @@ class ProductAttribute implements Attribute
     }
 
     /**
-     * @param ProductAttribute $attribute
-     * @return bool
-     */
-    public function hasSameCodeAs(ProductAttribute $attribute)
-    {
-        return $this->code === $attribute->getCode();
-    }
-
-    /**
-     * @return string
+     * @return AttributeCode
      */
     public function getCode()
     {
@@ -101,12 +92,15 @@ class ProductAttribute implements Attribute
     }
 
     /**
-     * @param string $codeExpectation
+     * @param string|AttributeCode|ProductAttribute $attributeCode
      * @return bool
      */
-    public function isCodeEqualsTo($codeExpectation)
+    public function isCodeEqualTo($attributeCode)
     {
-        return $codeExpectation == $this->code;
+        $codeToCompare = $attributeCode instanceof ProductAttribute ?
+            $attributeCode->getCode() :
+            $attributeCode;
+        return $this->code->isEqualTo($codeToCompare);
     }
 
     /**
@@ -145,5 +139,17 @@ class ProductAttribute implements Attribute
     public function getContextDataSet()
     {
         return $this->contextData;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    public function jsonSerialize()
+    {
+        return [
+            self::CODE => $this->code,
+            self::CONTEXT_DATA => $this->contextData,
+            self::VALUE => $this->value
+        ];
     }
 }
