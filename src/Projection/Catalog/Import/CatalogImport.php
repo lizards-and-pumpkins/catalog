@@ -11,8 +11,8 @@ use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
-use LizardsAndPumpkins\Product\ProductSource;
-use LizardsAndPumpkins\Product\ProductSourceBuilder;
+use LizardsAndPumpkins\Product\ProductBuilder;
+use LizardsAndPumpkins\Product\ProductBuilderBuilder;
 use LizardsAndPumpkins\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Product\AddProductListingCommand;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportFileDoesNotExistException;
@@ -29,9 +29,9 @@ class CatalogImport
     private $commandQueue;
 
     /**
-     * @var ProductSourceBuilder
+     * @var ProductBuilderBuilder
      */
-    private $productSourceBuilder;
+    private $productBuilderBuilder;
 
     /**
      * @var ProductListingCriteriaBuilder
@@ -60,14 +60,14 @@ class CatalogImport
 
     public function __construct(
         Queue $commandQueue,
-        ProductSourceBuilder $productSourceBuilder,
+        ProductBuilderBuilder $productBuilderBuilder,
         ProductListingCriteriaBuilder $productListingCriteriaBuilder,
         Queue $eventQueue,
         ContextSource $contextSource,
         Logger $logger
     ) {
         $this->commandQueue = $commandQueue;
-        $this->productSourceBuilder = $productSourceBuilder;
+        $this->productBuilderBuilder = $productBuilderBuilder;
         $this->productListingCriteriaBuilder = $productListingCriteriaBuilder;
         $this->eventQueue = $eventQueue;
         $this->contextSource = $contextSource;
@@ -82,7 +82,7 @@ class CatalogImport
         $this->dataVersion = DataVersion::fromVersionString('-1'); // UuidGenerator::getUuid()
         $this->validateImportFilePath($importFilePath);
         $parser = CatalogXmlParser::fromFilePath($importFilePath);
-        $parser->registerProductSourceCallback($this->createClosureForMethod('processProductXml'));
+        $parser->registerProductCallback($this->createClosureForMethod('processProductXml'));
         $parser->registerListingCallback($this->createClosureForMethod('processListingXml'));
         $imageDirectoryPath = dirname($importFilePath) . '/product-images';
         $parser->registerProductImageCallback($this->createClosureForProductImageXml($imageDirectoryPath));
@@ -135,16 +135,16 @@ class CatalogImport
     private function processProductXml($productXml)
     {
         try {
-            $this->addProductsFromSourceToQueue($this->productSourceBuilder->createProductSourceFromXml($productXml));
+            $this->addProductsFromSourceToQueue($this->productBuilderBuilder->createProductBuilderFromXml($productXml));
         } catch (\Exception $exception) {
             $this->logProductImportException($exception, $productXml);
         }
     }
 
-    public function addProductsFromSourceToQueue(ProductSource $productSource)
+    public function addProductsFromSourceToQueue(ProductBuilder $productBuilder)
     {
-        array_map(function (Context $context) use ($productSource) {
-            $this->addCommandToQueue($productSource->getProductForContext($context));
+        array_map(function (Context $context) use ($productBuilder) {
+            $this->addCommandToQueue($productBuilder->getProductForContext($context));
         }, $this->contextSource->getAllAvailableContextsWithVersion($this->dataVersion));
     }
 

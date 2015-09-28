@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
 use LizardsAndPumpkins\Product\ProductAttributeList;
 use LizardsAndPumpkins\Product\ProductId;
-use LizardsAndPumpkins\Product\ProductSource;
+use LizardsAndPumpkins\Product\ProductBuilder;
 use LizardsAndPumpkins\Product\SampleSku;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportSourceFilePathIsNotAStringException;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportSourceXmlFileDoesNotExistException;
@@ -23,7 +23,7 @@ class CatalogXmlParser
     /**
      * @var callable[]
      */
-    private $productSourceCallbacks = [];
+    private $productCallbacks = [];
 
     /**
      * @var callable[]
@@ -35,7 +35,7 @@ class CatalogXmlParser
      */
     private $productImageCallbacks = [];
 
-    private function __construct(\XmlReader $xmlReader)
+    private function __construct(\XMLReader $xmlReader)
     {
         $this->xmlReader = $xmlReader;
     }
@@ -132,9 +132,9 @@ class CatalogXmlParser
             gettype($variable);
     }
 
-    public function registerProductSourceCallback(callable $callback)
+    public function registerProductCallback(callable $callback)
     {
-        $this->productSourceCallbacks[] = $callback;
+        $this->productCallbacks[] = $callback;
     }
 
     public function registerListingCallback(callable $callback)
@@ -152,7 +152,7 @@ class CatalogXmlParser
         while ($this->xmlReader->read()) {
             if ($this->isProductNode()) {
                 $productXml = $this->xmlReader->readOuterXml();
-                $this->processCallbacksWithArg($this->productSourceCallbacks, $productXml);
+                $this->processCallbacksWithArg($this->productCallbacks, $productXml);
                 $this->processImageCallbacksForProductXml($productXml);
             } elseif ($this->isListingNode()) {
                 $this->processCallbacksWithCurrentNode($this->listingCallbacks);

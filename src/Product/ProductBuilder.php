@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\Context;
 
-class ProductSource
+class ProductBuilder
 {
     /**
      * @var ProductId

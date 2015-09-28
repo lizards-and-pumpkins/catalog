@@ -17,7 +17,7 @@ class UpdateProductCommand implements Command
     }
 
     /**
-     * @return ProductSource
+     * @return ProductBuilder
      */
     public function getProduct()
     {

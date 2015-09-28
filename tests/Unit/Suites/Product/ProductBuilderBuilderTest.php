@@ -6,18 +6,18 @@ use LizardsAndPumpkins\Product\Exception\InvalidNumberOfSkusPerImportedProductEx
 use LizardsAndPumpkins\Product\Exception\ProductAttributeNotFoundException;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductSourceBuilder
- * @uses   \LizardsAndPumpkins\Product\ProductSource
+ * @covers \LizardsAndPumpkins\Product\ProductBuilderBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductId
  * @uses   \LizardsAndPumpkins\Utils\XPathParser
  * @uses   \LizardsAndPumpkins\Product\ProductAttribute
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  */
-class ProductSourceBuilderTest extends \PHPUnit_Framework_TestCase
+class ProductBuilderBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ProductSourceBuilder
+     * @var ProductBuilderBuilder
      */
     private $builder;
 
@@ -28,31 +28,31 @@ class ProductSourceBuilderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param mixed $expected
-     * @param ProductSource $productSource
+     * @param ProductBuilder $productBuilder
      * @param string $attributeCode
      */
     private function assertFirstProductAttributeInAListValueEquals(
         $expected,
-        ProductSource $productSource,
+        ProductBuilder $productBuilder,
         $attributeCode
     ) {
-        $property = new \ReflectionProperty($productSource, 'attributes');
+        $property = new \ReflectionProperty($productBuilder, 'attributes');
         $property->setAccessible(true);
         /** @var ProductAttributeList $attributeList */
-        $attributeList = $property->getValue($productSource);
+        $attributeList = $property->getValue($productBuilder);
         $this->assertEquals($expected, $attributeList->getAttributesWithCode($attributeCode)[0]->getValue());
     }
 
     protected function setUp()
     {
-        $this->builder = new ProductSourceBuilder();
+        $this->builder = new ProductBuilderBuilder();
 
         $xml = file_get_contents(__DIR__ . '/../../../shared-fixture/catalog.xml');
         $this->domDocument = new \DOMDocument();
         $this->domDocument->loadXML($xml);
     }
 
-    public function testProductSourceIsCreatedFromXml()
+    public function testProductBuilderIsCreatedFromXml()
     {
         /** @var \DOMElement $firstNode */
         $firstNode = $this->domDocument->getElementsByTagName('product')->item(0);
@@ -61,14 +61,14 @@ class ProductSourceBuilderTest extends \PHPUnit_Framework_TestCase
 
         $firstNodeXml = $this->domDocument->saveXML($firstNode);
 
-        $productSource = $this->builder->createProductSourceFromXml($firstNodeXml);
+        $productBuilder = $this->builder->createProductBuilderFromXml($firstNodeXml);
 
-        $this->assertInstanceOf(ProductSource::class, $productSource);
-        $this->assertEquals($expectedProductId, $productSource->getId());
-        $this->assertFirstProductAttributeInAListValueEquals($expectedAttribute, $productSource, 'special_price');
+        $this->assertInstanceOf(ProductBuilder::class, $productBuilder);
+        $this->assertEquals($expectedProductId, $productBuilder->getId());
+        $this->assertFirstProductAttributeInAListValueEquals($expectedAttribute, $productBuilder, 'special_price');
     }
 
-    public function testProductSourceIsCreatedFromXmlIgnoringAssociatedProducts()
+    public function testProductBuilderIsCreatedFromXmlIgnoringAssociatedProducts()
     {
         /** @var \DOMElement $secondNode */
         $secondNode = $this->domDocument->getElementsByTagName('product')->item(1);
@@ -76,14 +76,14 @@ class ProductSourceBuilderTest extends \PHPUnit_Framework_TestCase
         $expectedAttribute = $secondNode->getElementsByTagName('price')->item(0)->nodeValue;
 
         $secondNodeXml = $this->domDocument->saveXML($secondNode);
-        $productSource = $this->builder->createProductSourceFromXml($secondNodeXml);
+        $productBuilder = $this->builder->createProductBuilderFromXml($secondNodeXml);
 
-        $this->assertInstanceOf(ProductSource::class, $productSource);
-        $this->assertEquals($expectedSku, $productSource->getId());
-        $this->assertFirstProductAttributeInAListValueEquals($expectedAttribute, $productSource, 'price');
+        $this->assertInstanceOf(ProductBuilder::class, $productBuilder);
+        $this->assertEquals($expectedSku, $productBuilder->getId());
+        $this->assertFirstProductAttributeInAListValueEquals($expectedAttribute, $productBuilder, 'price');
     }
 
-    public function testProductSourceIsCreatedFromXmlIgnoringAssociatedProductsAttributes()
+    public function testProductBuilderIsCreatedFromXmlIgnoringAssociatedProductsAttributes()
     {
         $secondNode = $this->domDocument->getElementsByTagName('product')->item(1);
         $secondNodeXml = $this->domDocument->saveXML($secondNode);
@@ -93,13 +93,13 @@ class ProductSourceBuilderTest extends \PHPUnit_Framework_TestCase
             'Can not find an attribute with code "size".'
         );
 
-        $productSource = $this->builder->createProductSourceFromXml($secondNodeXml);
-        $this->assertFirstProductAttributeInAListValueEquals('nothing', $productSource, 'size');
+        $productBuilder = $this->builder->createProductBuilderFromXml($secondNodeXml);
+        $this->assertFirstProductAttributeInAListValueEquals('nothing', $productBuilder, 'size');
     }
 
     public function testExceptionIsThrownIfXmlHasNoEssentialData()
     {
         $this->setExpectedException(InvalidNumberOfSkusPerImportedProductException::class);
-        (new ProductSourceBuilder())->createProductSourceFromXml('<?xml version="1.0"?><node/>');
+        (new ProductBuilderBuilder())->createProductBuilderFromXml('<?xml version="1.0"?><node/>');
     }
 }

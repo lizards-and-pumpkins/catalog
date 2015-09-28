@@ -5,11 +5,11 @@ namespace LizardsAndPumpkins\Product;
 use LizardsAndPumpkins\Context\Context;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductSource
+ * @covers \LizardsAndPumpkins\Product\ProductBuilder
  * @uses   \LizardsAndPumpkins\Product\Product
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  */
-class ProductSourceTest extends \PHPUnit_Framework_TestCase
+class ProductBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ProductId|\PHPUnit_Framework_MockObject_MockObject
@@ -17,9 +17,9 @@ class ProductSourceTest extends \PHPUnit_Framework_TestCase
     private $stubProductId;
 
     /**
-     * @var ProductSource
+     * @var ProductBuilder
      */
-    private $productSource;
+    private $productBuilder;
 
     /**
      * @var ProductAttributeList|\PHPUnit_Framework_MockObject_MockObject
@@ -33,18 +33,18 @@ class ProductSourceTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getAttributeListForContext'])
             ->getMock();
 
-        $this->productSource = new ProductSource($this->stubProductId, $this->mockProductAttributeList);
+        $this->productBuilder = new ProductBuilder($this->stubProductId, $this->mockProductAttributeList);
     }
 
     public function testProductIdIsReturned()
     {
-        $result = $this->productSource->getId();
+        $result = $this->productBuilder->getId();
         $this->assertSame($this->stubProductId, $result);
     }
 
     public function testItReturnsTheAttributeList()
     {
-        $this->assertSame($this->mockProductAttributeList, $this->productSource->getAttributeList());
+        $this->assertSame($this->mockProductAttributeList, $this->productBuilder->getAttributeList());
     }
 
     public function testProductForContextIsReturned()
@@ -53,7 +53,7 @@ class ProductSourceTest extends \PHPUnit_Framework_TestCase
         $this->mockProductAttributeList->method('getAttributeListForContext')
             ->with($stubContext)
             ->willReturn($this->mockProductAttributeList);
-        $result = $this->productSource->getProductForContext($stubContext);
+        $result = $this->productBuilder->getProductForContext($stubContext);
         $this->assertInstanceOf(Product::class, $result);
     }
 }

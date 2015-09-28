@@ -59,7 +59,7 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(SnippetRenderer::class, $this->snippetRenderer);
     }
 
-    public function testExceptionIsThrownIfProjectionSourceDataIsNotAProductSource()
+    public function testExceptionIsThrownIfProjectionSourceDataIsNotAProductBuilder()
     {
         $this->setExpectedException(InvalidProjectionSourceDataTypeException::class);
         $this->snippetRenderer->render('invalid-projection-source-data');
@@ -80,11 +80,11 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
     public function testProductIdIsPassedToKeyGenerator()
     {
         $dummyProductId = 'foo';
-        $stubProductSource = $this->getStubProduct($dummyProductId);
+        $stubProductBuilder = $this->getStubProduct($dummyProductId);
 
         $this->mockSnippetKeyGenerator->expects($this->once())->method('getKeyForContext')
             ->with($this->anything(), [Product::ID => $dummyProductId]);
 
-        $this->snippetRenderer->render($stubProductSource);
+        $this->snippetRenderer->render($stubProductBuilder);
     }
 }
