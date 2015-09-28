@@ -227,15 +227,14 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $productAId = ProductId::fromString(uniqid());
         $productBId = ProductId::fromString(uniqid());
 
-        $searchDocumentA = $this->createSearchDocument(['foo' => 'barbarism'], $productAId);
-        $searchDocumentB = $this->createSearchDocument(['baz' => 'cabaret'], $productBId);
+        $searchDocumentA = $this->createSearchDocument(['foo' => 'Hidden bar here.'], $productAId);
+        $searchDocumentB = $this->createSearchDocument(['baz' => 'Here there is none.'], $productBId);
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
 
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
         $result = $this->searchEngine->query('bar', $this->testContext);
 
         $this->assertCollectionContainsDocumentForProductId($result, $productAId);
-        $this->assertCollectionContainsDocumentForProductId($result, $productBId);
     }
 
     public function testEmptyCollectionIsReturnedIfNoSearchDocumentsMatchesGivenCriteria()
