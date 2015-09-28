@@ -12,6 +12,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
 use LizardsAndPumpkins\DataVersion;
 use LizardsAndPumpkins\Product\ProductId;
+use LizardsAndPumpkins\Utils\Clearable;
 
 abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,7 +22,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     private $testContext;
 
     /**
-     * @var SearchEngine
+     * @var SearchEngine|Clearable
      */
     private $searchEngine;
 
