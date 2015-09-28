@@ -302,22 +302,22 @@ EOT;
         $this->assertInstanceOf(CatalogXmlParser::class, $instance);
     }
 
-    public function testItCallsAllRegisteredProductSourceCallbacksForOneProduct()
+    public function testItCallsAllRegisteredProductBuilderCallbacksForOneProduct()
     {
         $instance = CatalogXmlParser::fromXml($this->getCatalogXmlWithOneSimpleProduct());
         $expectedXml = $this->getSimpleProductXml();
         $callCount = 1;
-        $instance->registerProductSourceCallback($this->createMockCallbackExpectingXml($expectedXml, $callCount));
-        $instance->registerProductSourceCallback($this->createMockCallbackExpectingXml($expectedXml, $callCount));
+        $instance->registerProductCallback($this->createMockCallbackExpectingXml($expectedXml, $callCount));
+        $instance->registerProductCallback($this->createMockCallbackExpectingXml($expectedXml, $callCount));
         $instance->parse();
     }
 
-    public function testItCallsRegisteredProductSourceCallbackForTwoProducts()
+    public function testItCallsRegisteredProductBuilderCallbackForTwoProducts()
     {
         $instance = CatalogXmlParser::fromXml($this->getCatalogXmlWithTwoSimpleProducts());
         $expectedXml = $this->getSimpleProductXml();
         $callCount = 2;
-        $instance->registerProductSourceCallback($this->createMockCallbackExpectingXml($expectedXml, $callCount));
+        $instance->registerProductCallback($this->createMockCallbackExpectingXml($expectedXml, $callCount));
         $instance->parse();
     }
 

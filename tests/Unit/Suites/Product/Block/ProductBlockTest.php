@@ -13,6 +13,7 @@ use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
  * @covers \LizardsAndPumpkins\Product\Block\ProductBlock
+ * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Renderer\Block
  * @uses   \LizardsAndPumpkins\Image
  */

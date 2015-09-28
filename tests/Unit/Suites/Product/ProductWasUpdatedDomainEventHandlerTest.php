@@ -24,7 +24,7 @@ class ProductWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCas
         $stubProduct = $this->getMock(Product::class, [], [], '', false);
 
         $stubDomainEvent = $this->getMock(ProductWasUpdatedDomainEvent::class, [], [], '', false);
-        $stubDomainEvent->method('getProductSource')->willReturn($stubProduct);
+        $stubDomainEvent->method('getProductBuilder')->willReturn($stubProduct);
 
         $this->mockProductProjector = $this->getMock(ProductProjector::class, [], [], '', false);
 

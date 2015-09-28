@@ -5,13 +5,13 @@ namespace LizardsAndPumpkins\Product;
 use LizardsAndPumpkins\Product\Exception\InvalidNumberOfSkusPerImportedProductException;
 use LizardsAndPumpkins\Utils\XPathParser;
 
-class ProductSourceBuilder
+class ProductBuilderBuilder
 {
     /**
      * @param string $xml
-     * @return ProductSource
+     * @return ProductBuilder
      */
-    public function createProductSourceFromXml($xml)
+    public function createProductBuilderFromXml($xml)
     {
         $parser = new XPathParser($xml);
 
@@ -23,7 +23,7 @@ class ProductSourceBuilder
         $attributesArray = array_map([$this, 'nodeArrayAsAttributeArray'], $attributeNodes);
         $attributeList = ProductAttributeList::fromArray($attributesArray);
 
-        return new ProductSource($productId, $attributeList);
+        return new ProductBuilder($productId, $attributeList);
     }
     
     /**

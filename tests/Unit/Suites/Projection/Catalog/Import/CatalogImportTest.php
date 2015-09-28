@@ -10,12 +10,12 @@ use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\Exception\ProductAttributeContextPartsMismatchException;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductId;
-use LizardsAndPumpkins\Product\ProductSource;
+use LizardsAndPumpkins\Product\ProductBuilder;
 use LizardsAndPumpkins\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Product\AddProductListingCommand;
 use LizardsAndPumpkins\Product\ProductListingCriteria;
 use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
-use LizardsAndPumpkins\Product\ProductSourceBuilder;
+use LizardsAndPumpkins\Product\ProductBuilderBuilder;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportFileDoesNotExistException;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportFileNotReadableException;
 use LizardsAndPumpkins\Queue\Queue;
@@ -48,9 +48,9 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     private $mockCommandQueue;
 
     /**
-     * @var ProductSourceBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductBuilderBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubProductSourceBuilder;
+    private $stubProductBuilderBuilder;
 
     /**
      * @var ProductListingCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
@@ -102,18 +102,18 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return ProductSourceBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @return ProductBuilderBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createMockProductSourceBuilder()
+    private function createMockProductBuilderBuilder()
     {
-        /** @var ProductSource|\PHPUnit_Framework_MockObject_MockObject $stubProductSource */
-        $productSource = $this->getMock(ProductSource::class, [], [], '', false);
-        $productSource->method('getId')->willReturn(ProductId::fromString('dummy'));
-        $productSource->method('getProductForContext')->willReturn($this->getMock(Product::class, [], [], '', false));
+        /** @var ProductBuilder|\PHPUnit_Framework_MockObject_MockObject $stubProductBuilder */
+        $productBuilder = $this->getMock(ProductBuilder::class, [], [], '', false);
+        $productBuilder->method('getId')->willReturn(ProductId::fromString('dummy'));
+        $productBuilder->method('getProductForContext')->willReturn($this->getMock(Product::class, [], [], '', false));
 
-        $productSourceBuilder = $this->getMock(ProductSourceBuilder::class, [], [], '', false);
-        $productSourceBuilder->method('createProductSourceFromXml')->willReturn($productSource);
-        return $productSourceBuilder;
+        $productBuilderBuilder = $this->getMock(ProductBuilderBuilder::class, [], [], '', false);
+        $productBuilderBuilder->method('createProductBuilderFromXml')->willReturn($productBuilder);
+        return $productBuilderBuilder;
     }
 
     /**
@@ -138,7 +138,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         $this->mockCommandQueue = $this->getMock(Queue::class);
         $this->addToCommandQueueSpy = $this->any();
         $this->mockCommandQueue->expects($this->addToCommandQueueSpy)->method('add');
-        $this->stubProductSourceBuilder = $this->createMockProductSourceBuilder();
+        $this->stubProductBuilderBuilder = $this->createMockProductBuilderBuilder();
         $this->stubProductListingCriteriaBuilder = $this->createMockProductsPerPageForContextBuilder();
         $this->mockEventQueue = $this->getMock(Queue::class);
         $this->contextSource = $this->getMock(ContextSource::class, [], [], '', false);
@@ -149,7 +149,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
 
         $this->catalogImport = new CatalogImport(
             $this->mockCommandQueue,
-            $this->stubProductSourceBuilder,
+            $this->stubProductBuilderBuilder,
             $this->stubProductListingCriteriaBuilder,
             $this->mockEventQueue,
             $this->contextSource,
@@ -179,9 +179,9 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         $this->catalogImport->importFile($importFilePath);
     }
 
-    public function testExceptionIsLoggedIfProductSourceIsInvalid()
+    public function testExceptionIsLoggedIfProductBuilderIsInvalid()
     {
-        $this->stubProductSourceBuilder->method('createProductSourceFromXml')
+        $this->stubProductBuilderBuilder->method('createProductBuilderFromXml')
             ->willThrowException(new ProductAttributeContextPartsMismatchException('dummy'));
 
         $this->logger->expects($this->atLeastOnce())->method('log')
