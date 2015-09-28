@@ -67,10 +67,11 @@ EOT;
      */
     private function getSimpleProductXml($imageXml = null)
     {
+        $imageContent = isset($imageXml) ? $imageXml : ($this->getFirstImageXml() . $this->getSecondImageXml());
         return sprintf('
         <product type="simple" sku="test-sku" visible="true" tax_class_id="123">
+            %s
             <attributes>
-                %s
                 <category website="test1" locale="xx_XX">category-1</category>
                 <category website="test2" locale="xx_XX">category-1</category>
                 <category website="test2" locale="yy_YY">category-1</category>
@@ -87,7 +88,7 @@ EOT;
                 <style>Pumpkin</style>
             </attributes>
         </product>
-', isset($imageXml) ? $imageXml : ($this->getFirstImageXml() . $this->getSecondImageXml()));
+', $this->getImagesSectionWithContext($imageContent));
     }
 
     /**
@@ -100,6 +101,19 @@ EOT;
     <products>
     %s
     </products>
+', $content);
+    }
+
+    /**
+     * @param string $content
+     * @return string
+     */
+    private function getImagesSectionWithContext($content)
+    {
+        return sprintf('
+    <images>
+    %s
+    </images>
 ', $content);
     }
 

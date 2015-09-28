@@ -161,7 +161,7 @@ class CatalogXmlParser
      */
     private function processImageCallbacksForProductXml($productXml)
     {
-        $imageNodes = (new XPathParser($productXml))->getXmlNodesRawXmlArrayByXPath('/product/attributes/image');
+        $imageNodes = (new XPathParser($productXml))->getXmlNodesRawXmlArrayByXPath('/product/images/image');
         array_map(function ($imageXml) {
             $this->processCallbacksWithArg($this->productImageCallbacks, $imageXml);
         }, $imageNodes);

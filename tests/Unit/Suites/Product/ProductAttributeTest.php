@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Product;
 
+use LizardsAndPumpkins\Product\Exception\InvalidProductAttributeValueException;
 use LizardsAndPumpkins\Product\Exception\ProductAttributeDoesNotContainContextPartException;
 
 /**
@@ -41,7 +42,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
             ProductAttribute::VALUE => 'bar'
         ]);
 
-        $this->assertEquals('foo', (string) $attribute->getCode());
+        $this->assertEquals('foo', (string)$attribute->getCode());
     }
 
     public function testItReturnsAnAttributeCodeInstance()
@@ -51,7 +52,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
             ProductAttribute::CONTEXT_DATA => [],
             ProductAttribute::VALUE => 'test-value'
         ]);
-        
+
         $this->assertInstanceOf(AttributeCode::class, $attribute->getCode());
     }
 
@@ -66,9 +67,13 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $attribute->getValue());
     }
 
-    public function testAttributeWithSubAttributeIsReturned()
+    public function testItThrowsAnExceptionIfAttributeIsNotAScalar()
     {
-        $attribute = ProductAttribute::fromArray([
+        $this->setExpectedException(
+            InvalidProductAttributeValueException::class,
+            'The product attribute "foo" has to have a scalar value, got "array"'
+        );
+        ProductAttribute::fromArray([
             ProductAttribute::CODE => 'foo',
             ProductAttribute::CONTEXT_DATA => [],
             ProductAttribute::VALUE => [
@@ -77,19 +82,8 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
                     ProductAttribute::CONTEXT_DATA => [],
                     ProductAttribute::VALUE => 1
                 ],
-                [
-                    ProductAttribute::CODE => 'baz',
-                    ProductAttribute::CONTEXT_DATA => [],
-                    ProductAttribute::VALUE => 2
-                ]
             ]
         ]);
-
-        $attributeValue = $attribute->getValue();
-
-        $this->assertInstanceOf(ProductAttributeList::class, $attributeValue);
-        $this->assertEquals(1, $attributeValue->getAttributesWithCode('bar')[0]->getValue());
-        $this->assertEquals(2, $attributeValue->getAttributesWithCode('baz')[0]->getValue());
     }
 
     public function testContextPartsOfAttributeAreReturned()

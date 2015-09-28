@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Product;
 
+use LizardsAndPumpkins\Product\Exception\InvalidProductAttributeValueException;
 use LizardsAndPumpkins\Product\Exception\ProductAttributeDoesNotContainContextPartException;
 
 class ProductAttribute implements \JsonSerializable
@@ -43,24 +44,36 @@ class ProductAttribute implements \JsonSerializable
      */
     public static function fromArray(array $attribute)
     {
-        return new self(
-            AttributeCode::fromString($attribute[self::CODE]),
-            self::getValueRecursive($attribute[self::VALUE]),
-            $attribute[self::CONTEXT_DATA]
-        );
+        $code = AttributeCode::fromString($attribute[self::CODE]);
+        $value = $attribute[self::VALUE];
+        self::validateValue($value, $code);
+        return new self($code, (string) $value, $attribute[self::CONTEXT_DATA]);
     }
 
     /**
-     * @param string|mixed[] $attributeValue
-     * @return string|ProductAttributeList
+     * @param string $value
+     * @param AttributeCode $code
      */
-    private static function getValueRecursive($attributeValue)
+    private static function validateValue($value, AttributeCode $code)
     {
-        return is_array($attributeValue) ?
-            ProductAttributeList::fromArray($attributeValue) :
-            (string) $attributeValue;
+        if (!is_scalar($value)) {
+            $type = self::getType($value);
+            $message = sprintf('The product attribute "%s" has to have a scalar value, got "%s"', $code, $type);
+            throw new InvalidProductAttributeValueException($message);
+        }
     }
-    
+
+    /**
+     * @param mixed $variable
+     * @return string
+     */
+    private static function getType($variable)
+    {
+        return is_object($variable) ?
+            get_class($variable) :
+            gettype($variable);
+    }
+
     /**
      * @return string[]
      */
@@ -103,7 +116,7 @@ class ProductAttribute implements \JsonSerializable
     }
 
     /**
-     * @return string|ProductAttributeList
+     * @return string
      */
     public function getValue()
     {
