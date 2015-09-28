@@ -48,25 +48,20 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param SearchDocumentCollection $collection
-     * @param ProductId[] $productIds
+     * @param ProductId $productId
+     * @return bool
      */
-    private function assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds(
+    private function assertCollectionContainsDocumentForProductId(
         SearchDocumentCollection $collection,
-        array $productIds
+        ProductId $productId
     ) {
-        $this->assertCount(
-            count($productIds),
-            $collection,
-            'Failed asserting that the search document collection size matches the number of expected product ids.'
-        );
-        foreach ($productIds as $productId) {
-            if (!$this->isDocumentForProductIdInDocumentCollection($collection, $productId)) {
-                $this->fail(sprintf(
-                    'Failed asserting document for product ID "%s" is present in search document collection.',
-                    $productId
-                ));
+        foreach ($collection->getDocuments() as $document) {
+            if ($document->getProductId() == $productId) {
+                $this->assertTrue(true);
+                return;
             }
         }
+        $this->fail(sprintf('Failed asserting collection contains document for product ID: %s', $productId));
     }
 
     /**
@@ -74,17 +69,18 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
      * @param ProductId $productId
      * @return bool
      */
-    private function isDocumentForProductIdInDocumentCollection(
+    private function assertCollectionDoesNotContainDocumentForProductId(
         SearchDocumentCollection $collection,
         ProductId $productId
     ) {
-        $documents = $collection->getDocuments();
-        foreach ($documents as $document) {
+        foreach ($collection->getDocuments() as $document) {
             if ($document->getProductId() == $productId) {
-                return true;
+                $this->fail(
+                    sprintf('Failed asserting collection does not contain document for product ID: %s', $productId)
+                );
             }
         }
-        return false;
+        $this->assertTrue(true);
     }
 
     /**
@@ -123,30 +119,24 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(SearchEngine::class, $this->searchEngine);
     }
 
-    public function testEmptyCollectionIsReturnedRegardlessOfWhatHasBeenQueriedIfIndexIsEmpty()
-    {
-        $resultDocumentCollection = $this->searchEngine->query('bar', $this->testContext);
-        $this->assertCount(0, $resultDocumentCollection);
-    }
-
     public function testEmptyCollectionIsReturnedIfQueryStringIsNotFoundInIndex()
     {
         $searchDocumentFields = ['foo' => 'bar'];
-        $productId = ProductId::fromString('id');
+        $productId = ProductId::fromString(uniqid());
         $searchDocument = $this->createSearchDocument($searchDocumentFields, $productId);
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocument);
 
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
         $result = $this->searchEngine->query('baz', $this->testContext);
 
-        $this->assertEmpty($result);
+        $this->assertCount(0, $result);
     }
 
     public function testSearchDocumentsAreAddedToAndRetrievedFromSearchEngine()
     {
         $keyword = 'bar';
-        $productAId = ProductId::fromString('A');
-        $productBId = ProductId::fromString('B');
+        $productAId = ProductId::fromString(uniqid());
+        $productBId = ProductId::fromString(uniqid());
 
         $searchDocumentA = $this->createSearchDocument(['foo' => $keyword], $productAId);
         $searchDocumentB = $this->createSearchDocument(['baz' => $keyword], $productBId);
@@ -155,15 +145,16 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
         $result = $this->searchEngine->query($keyword, $this->testContext);
 
-        $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productAId, $productBId]);
+        $this->assertCollectionContainsDocumentForProductId($result, $productAId);
+        $this->assertCollectionContainsDocumentForProductId($result, $productBId);
     }
 
     public function testOnlyEntriesContainingRequestedStringAreReturned()
     {
         $keyword = 'bar';
 
-        $productAId = ProductId::fromString('A');
-        $productBId = ProductId::fromString('B');
+        $productAId = ProductId::fromString(uniqid());
+        $productBId = ProductId::fromString(uniqid());
 
         $searchDocumentA = $this->createSearchDocument(['foo' => $keyword], $productAId);
         $searchDocumentB = $this->createSearchDocument(['baz' => 'qux'], $productBId);
@@ -172,15 +163,16 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
         $result = $this->searchEngine->query($keyword, $this->testContext);
 
-        $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productAId]);
+        $this->assertCollectionContainsDocumentForProductId($result, $productAId);
+        $this->assertCollectionDoesNotContainDocumentForProductId($result, $productBId);
     }
 
     public function testOnlyMatchesWithMatchingContextsAreReturned()
     {
         $keyword = 'bar';
 
-        $productAId = ProductId::fromString('A');
-        $productBId = ProductId::fromString('B');
+        $productAId = ProductId::fromString(uniqid());
+        $productBId = ProductId::fromString(uniqid());
         $documentAContext = $this->createContextFromDataParts(['website' => 'value-1']);
         $documentBContext = $this->createContextFromDataParts(['website' => 'value-2']);
         $queryContext = $this->createContextFromDataParts(['website' => 'value-2']);
@@ -192,13 +184,14 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
         $result = $this->searchEngine->query($keyword, $queryContext);
 
-        $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productBId]);
+        $this->assertCollectionDoesNotContainDocumentForProductId($result, $productAId);
+        $this->assertCollectionContainsDocumentForProductId($result, $productBId);
     }
 
     public function testPartialContextsAreMatched()
     {
-        $productAId = ProductId::fromString('A');
-        $productBId = ProductId::fromString('B');
+        $productAId = ProductId::fromString(uniqid());
+        $productBId = ProductId::fromString(uniqid());
         $documentAContext = $this->createContextFromDataParts(['website' => 'value1', 'locale' => 'value2']);
         $documentBContext = $this->createContextFromDataParts(['website' => 'value1', 'locale' => 'value2']);
         $queryContext = $this->createContextFromDataParts(['locale' => 'value2']);
@@ -210,12 +203,13 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
         $result = $this->searchEngine->query('bar', $queryContext);
 
-        $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productAId, $productBId]);
+        $this->assertCollectionContainsDocumentForProductId($result, $productAId);
+        $this->assertCollectionContainsDocumentForProductId($result, $productBId);
     }
 
     public function testContextPartsThatAreNotInSearchDocumentContextAreIgnored()
     {
-        $productId = ProductId::fromString('id');
+        $productId = ProductId::fromString(uniqid());
         $documentContext = $this->createContextFromDataParts(['locale' => 'value2']);
         $queryContext = $this->createContextFromDataParts(['website' => 'value1', 'locale' => 'value2']);
 
@@ -225,13 +219,13 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
         $result = $this->searchEngine->query('bar', $queryContext);
 
-        $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productId]);
+        $this->assertCollectionContainsDocumentForProductId($result, $productId);
     }
 
     public function testEntriesContainingRequestedStringAreReturned()
     {
-        $productAId = ProductId::fromString('id01');
-        $productBId = ProductId::fromString('id02');
+        $productAId = ProductId::fromString(uniqid());
+        $productBId = ProductId::fromString(uniqid());
 
         $searchDocumentA = $this->createSearchDocument(['foo' => 'barbarism'], $productAId);
         $searchDocumentB = $this->createSearchDocument(['baz' => 'cabaret'], $productBId);
@@ -240,7 +234,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
         $result = $this->searchEngine->query('bar', $this->testContext);
 
-        $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productAId, $productBId]);
+        $this->assertCollectionContainsDocumentForProductId($result, $productAId);
+        $this->assertCollectionContainsDocumentForProductId($result, $productBId);
     }
 
     public function testEmptyCollectionIsReturnedIfNoSearchDocumentsMatchesGivenCriteria()
@@ -251,13 +246,13 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->searchEngine->getSearchDocumentsMatchingCriteria($stubCriteria, $this->testContext);
 
-        $this->assertEmpty($result);
+        $this->assertCount(0, $result);
     }
 
     public function testCollectionContainsOnlySearchDocumentsMatchingGivenCriteria()
     {
-        $productAId = ProductId::fromString('A');
-        $productBId = ProductId::fromString('B');
+        $productAId = ProductId::fromString(uniqid());
+        $productBId = ProductId::fromString(uniqid());
 
         $searchDocumentA = $this->createSearchDocument(['foo' => 'bar'], $productAId);
         $searchDocumentB = $this->createSearchDocument(['baz' => 'qux'], $productBId);
@@ -276,12 +271,13 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
         $result = $this->searchEngine->getSearchDocumentsMatchingCriteria($stubCriteria, $this->testContext);
 
-        $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productAId]);
+        $this->assertCollectionContainsDocumentForProductId($result, $productAId);
+        $this->assertCollectionDoesNotContainDocumentForProductId($result, $productBId);
     }
 
     public function testIfMultipleMatchingDocumentsHasSameProductIdOnlyOneInstanceIsReturned()
     {
-        $productId = ProductId::fromString('A');
+        $productId = ProductId::fromString(uniqid());
 
         $searchDocumentA = $this->createSearchDocument(['foo' => 'bar'], $productId);
         $searchDocumentB = $this->createSearchDocument(['baz' => 'qux'], $productId);
@@ -294,7 +290,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
         $result = $this->searchEngine->getSearchDocumentsMatchingCriteria($stubCriteria, $this->testContext);
 
-        $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productId]);
+        $this->assertCollectionContainsDocumentForProductId($result, $productId);
     }
 
     /**
