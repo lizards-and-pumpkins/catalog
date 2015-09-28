@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\WebsiteContextDecorator;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
@@ -239,7 +239,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     public function testEmptyCollectionIsReturnedIfNoSearchDocumentsMatchesGivenCriteria()
     {
-        $searchCriteria = (new SearchCriteriaBuilder)->fromRequestParameter('foo', 'bar');
+        $searchCriteria = SearchCriterionEqual::create('foo', 'some-value-which-is-definitely-absent-in-index');
         $result = $this->searchEngine->getSearchDocumentsMatchingCriteria($searchCriteria, $this->testContext);
 
         $this->assertCount(0, $result);
@@ -255,7 +255,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
-        $searchCriteria = (new SearchCriteriaBuilder)->fromRequestParameter('foo', 'bar');
+        $searchCriteria = SearchCriterionEqual::create('foo', 'bar');
         $result = $this->searchEngine->getSearchDocumentsMatchingCriteria($searchCriteria, $this->testContext);
 
         $this->assertCollectionContainsDocumentForProductId($result, $productAId);
