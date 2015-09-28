@@ -30,9 +30,9 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     <name website="cy" locale="en_US">cy-en_US</name>
 </attributes></product>
 EOX;
-        $productSourceBuilder = $this->factory->createProductSourceBuilder();
+        $productBuilderBuilder = $this->factory->createProductBuilderBuilder();
         $contextSource = $this->factory->createContextSource();
-        $productSource = $productSourceBuilder->createProductSourceFromXml($xml);
+        $productBuilder = $productBuilderBuilder->createProductBuilderFromXml($xml);
         $codes = ['website', 'locale', 'version'];
         $extractedValues = [];
         $contextCounter = 0;
@@ -41,7 +41,7 @@ EOX;
             $contextCounter++;
             $this->assertEmpty(array_diff($codes, $context->getSupportedCodes()));
             $expected = $context->getValue('website') . '-' . $context->getValue('locale');
-            $product = $productSource->getProductForContext($context);
+            $product = $productBuilder->getProductForContext($context);
             $attributeValue = $product->getFirstValueOfAttribute('name');
             $this->assertEquals($expected, $attributeValue);
             $extractedValues[] = $attributeValue;

@@ -30,7 +30,7 @@ class UpdateProductCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Command::class, $this->command);
     }
 
-    public function testProductSourceIsReturned()
+    public function testProductBuilderIsReturned()
     {
         $this->assertSame($this->stubProduct, $this->command->getProduct());
     }

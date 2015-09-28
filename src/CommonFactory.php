@@ -56,7 +56,7 @@ use LizardsAndPumpkins\Product\ProductProjector;
 use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
 use LizardsAndPumpkins\Product\ProductSearchDocumentBuilder;
 use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductSourceBuilder;
+use LizardsAndPumpkins\Product\ProductBuilderBuilder;
 use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
@@ -703,11 +703,11 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return ProductSourceBuilder
+     * @return ProductBuilderBuilder
      */
-    public function createProductSourceBuilder()
+    public function createProductBuilderBuilder()
     {
-        return new ProductSourceBuilder();
+        return new ProductBuilderBuilder();
     }
 
     /**
@@ -1279,7 +1279,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new CatalogImport(
             $this->getMasterFactory()->getCommandQueue(),
-            $this->getMasterFactory()->createProductSourceBuilder(),
+            $this->getMasterFactory()->createProductBuilderBuilder(),
             $this->getMasterFactory()->createProductListingCriteriaBuilder(),
             $this->getMasterFactory()->getEventQueue(),
             $this->getMasterFactory()->createContextSource(),

@@ -25,7 +25,7 @@ use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductProjector;
-use LizardsAndPumpkins\Product\ProductSourceBuilder;
+use LizardsAndPumpkins\Product\ProductBuilderBuilder;
 use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductStockQuantityProjector;
@@ -76,7 +76,7 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\Product\FilterNavigationFilterCollection
  * @uses   \LizardsAndPumpkins\Product\PriceSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductBackOrderAvailabilitySnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductSourceBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductBuilderBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductProjector
  * @uses   \LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer
@@ -192,10 +192,10 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
 
-    public function testProductSourceBuilderIsReturned()
+    public function testProductBuilderBuilderIsReturned()
     {
-        $result = $this->commonFactory->createProductSourceBuilder();
-        $this->assertInstanceOf(ProductSourceBuilder::class, $result);
+        $result = $this->commonFactory->createProductBuilderBuilder();
+        $this->assertInstanceOf(ProductBuilderBuilder::class, $result);
     }
 
     public function testProductListingCriteriaBuilderIsReturned()
