@@ -17,11 +17,6 @@ class ClearableStubSearchEngine implements SearchEngine, Clearable
         // Intentionally left empty
     }
 
-    public function addSearchDocument(SearchDocument $searchDocument)
-    {
-        // Intentionally left empty
-    }
-
     public function addSearchDocumentCollection(SearchDocumentCollection $searchDocumentCollection)
     {
         // Intentionally left empty

@@ -16,13 +16,6 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
      */
     abstract protected function getSearchDocuments();
 
-    final public function addSearchDocumentCollection(SearchDocumentCollection $searchDocumentCollection)
-    {
-        foreach ($searchDocumentCollection as $searchDocument) {
-            $this->addSearchDocument($searchDocument);
-        }
-    }
-
     /**
      * @param string $queryString
      * @param Context $queryContext

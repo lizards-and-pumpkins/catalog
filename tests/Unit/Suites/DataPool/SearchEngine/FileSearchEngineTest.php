@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
+use LizardsAndPumpkins\DataPool\SearchEngine\Exception\SearchEngineNotAvailableException;
 use LizardsAndPumpkins\Utils\LocalFilesystem;
 
 /**

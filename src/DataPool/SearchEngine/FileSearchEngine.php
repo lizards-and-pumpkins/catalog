@@ -4,7 +4,9 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\DataPool\SearchEngine\Exception\SearchEngineNotAvailableException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
 use LizardsAndPumpkins\DataVersion;
@@ -46,14 +48,16 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
         return new self($storagePath);
     }
 
-    public function addSearchDocument(SearchDocument $searchDocument)
+    public function addSearchDocumentCollection(SearchDocumentCollection $searchDocumentCollection)
     {
-        $searchDocumentFilePath = $this->storagePath . '/' . $this->getSearchDocumentIdentifier($searchDocument);
+        array_map(function (SearchDocument $searchDocument) {
+            $searchDocumentFilePath = $this->storagePath . '/' . $this->getSearchDocumentIdentifier($searchDocument);
 
-        $searchDocumentArrayRepresentation = $this->getArrayRepresentationOfSearchDocument($searchDocument);
-        $searchDocumentJson = json_encode($searchDocumentArrayRepresentation, JSON_PRETTY_PRINT);
+            $searchDocumentArrayRepresentation = $this->getArrayRepresentationOfSearchDocument($searchDocument);
+            $searchDocumentJson = json_encode($searchDocumentArrayRepresentation, JSON_PRETTY_PRINT);
 
-        file_put_contents($searchDocumentFilePath, $searchDocumentJson);
+            file_put_contents($searchDocumentFilePath, $searchDocumentJson);
+        }, $searchDocumentCollection->getDocuments());
     }
 
     /**
@@ -113,13 +117,10 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
      */
     private function getContextAsArray(Context $context)
     {
-        $contextArray = [];
-
-        foreach ($context->getSupportedCodes() as $contextCode) {
-            $contextArray[$contextCode] = $context->getValue($contextCode);
-        }
-
-        return $contextArray;
+        return array_reduce($context->getSupportedCodes(), function (array $carry, $contextCode) use ($context) {
+            $carry[$contextCode] = $context->getValue($contextCode);
+            return $carry;
+        }, []);
     }
 
     /**

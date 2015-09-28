@@ -4,17 +4,10 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 
 interface SearchEngine
 {
-    /**
-     * @param SearchDocument $searchDocument
-     * @return void
-     */
-    public function addSearchDocument(SearchDocument $searchDocument);
-
     /**
      * @param SearchDocumentCollection $searchDocumentCollection
      * @return void
