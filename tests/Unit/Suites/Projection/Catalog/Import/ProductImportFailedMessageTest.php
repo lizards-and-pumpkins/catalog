@@ -43,7 +43,7 @@ class ProductImportFailedMessageTest extends \PHPUnit_Framework_TestCase
     public function testProductIdIsReturnedAsContext()
     {
         $result = $this->logMessage->getContext();
-        $this->assertSame($this->stubProductId, $result);
+        $this->assertSame(['product_id' => $this->stubProductId], $result);
     }
 
     public function testLogMessageIncludesProductId()

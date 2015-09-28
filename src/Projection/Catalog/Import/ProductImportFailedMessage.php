@@ -36,10 +36,10 @@ class ProductImportFailedMessage implements LogMessage
     }
 
     /**
-     * @return ProductId
+     * @return ProductId[]
      */
     public function getContext()
     {
-        return $this->productId;
+        return ['product_id' => $this->productId];
     }
 }
