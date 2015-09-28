@@ -33,7 +33,7 @@ class ProductBuilder
     /**
      * @return ProductAttributeListBuilder
      */
-    public function getAttributeList()
+    public function getAttributeListBuilder()
     {
         return $this->attributes;
     }

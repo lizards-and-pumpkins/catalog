@@ -12,6 +12,7 @@ use LizardsAndPumpkins\Product\Exception\ProductAttributeNotFoundException;
  * @uses   \LizardsAndPumpkins\Utils\XPathParser
  * @uses   \LizardsAndPumpkins\Product\ProductAttribute
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeListBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  */
 class ProductBuilderBuilderTest extends \PHPUnit_Framework_TestCase
@@ -36,11 +37,33 @@ class ProductBuilderBuilderTest extends \PHPUnit_Framework_TestCase
         ProductBuilder $productBuilder,
         $attributeCode
     ) {
-        $property = new \ReflectionProperty($productBuilder, 'attributes');
+        $attributes = $this->getAttributesWithCodeFromInstance($productBuilder, $attributeCode);
+        $this->assertEquals($expected, $attributes[0]->getValue());
+    }
+
+    /**
+     * @param ProductBuilder $productBuilder
+     * @param string $attributeCode
+     * @return ProductAttribute[]
+     */
+    private function getAttributesWithCodeFromInstance(ProductBuilder $productBuilder, $attributeCode)
+    {
+        $attributes = $this->getAttributesArrayFromInstance($productBuilder);
+        return array_values(array_filter($attributes, function (ProductAttribute $attribute) use ($attributeCode) {
+            return $attribute->isCodeEqualTo($attributeCode);
+        }));
+    }
+
+    /**
+     * @param ProductBuilder $productBuilder
+     * @return ProductAttribute[]
+     */
+    private function getAttributesArrayFromInstance(ProductBuilder $productBuilder)
+    {
+        $attributeListBuilder = $productBuilder->getAttributeListBuilder();
+        $property = new \ReflectionProperty($attributeListBuilder, 'attributes');
         $property->setAccessible(true);
-        /** @var ProductAttributeListBuilder $attributeList */
-        $attributeList = $property->getValue($productBuilder);
-        $this->assertEquals($expected, $attributeList->getAttributesWithCode($attributeCode)[0]->getValue());
+        return $property->getValue($attributeListBuilder);
     }
 
     protected function setUp()
@@ -87,14 +110,9 @@ class ProductBuilderBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $secondNode = $this->domDocument->getElementsByTagName('product')->item(1);
         $secondNodeXml = $this->domDocument->saveXML($secondNode);
-
-        $this->setExpectedException(
-            ProductAttributeNotFoundException::class,
-            'Can not find an attribute with code "size".'
-        );
-
+        
         $productBuilder = $this->builder->createProductBuilderFromXml($secondNodeXml);
-        $this->assertFirstProductAttributeInAListValueEquals('nothing', $productBuilder, 'size');
+        $this->assertEmpty($this->getAttributesWithCodeFromInstance($productBuilder, 'size'));
     }
 
     public function testExceptionIsThrownIfXmlHasNoEssentialData()

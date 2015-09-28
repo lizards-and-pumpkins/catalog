@@ -15,7 +15,7 @@ class Product implements \JsonSerializable
     private $productId;
 
     /**
-     * @var ProductAttributeListBuilder
+     * @var ProductAttributeList
      */
     private $attributeList;
     
@@ -24,7 +24,7 @@ class Product implements \JsonSerializable
      */
     private $context;
 
-    public function __construct(ProductId $productId, ProductAttributeListBuilder $attributeList, Context $context)
+    public function __construct(ProductId $productId, ProductAttributeList $attributeList, Context $context)
     {
         $this->productId = $productId;
         // todo: verify the context matches the attribute contexts
@@ -42,7 +42,7 @@ class Product implements \JsonSerializable
 
     /**
      * @param string $attributeCode
-     * @return string|ProductAttributeListBuilder
+     * @return string|ProductAttributeList
      */
     public function getFirstValueOfAttribute($attributeCode)
     {
@@ -55,7 +55,7 @@ class Product implements \JsonSerializable
 
     /**
      * @param string $attributeCode
-     * @return string[]|ProductAttributeListBuilder[]|mixed[]
+     * @return mixed[]
      */
     public function getAllValuesOfAttribute($attributeCode)
     {

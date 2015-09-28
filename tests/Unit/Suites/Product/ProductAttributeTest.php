@@ -6,7 +6,7 @@ use LizardsAndPumpkins\Product\Exception\ProductAttributeDoesNotContainContextPa
 
 /**
  * @covers \LizardsAndPumpkins\Product\ProductAttribute
- * @uses   \LizardsAndPumpkins\Product\ProductAttributeListBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  */
 class ProductAttributeTest extends \PHPUnit_Framework_TestCase
@@ -87,7 +87,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 
         $attributeValue = $attribute->getValue();
 
-        $this->assertInstanceOf(ProductAttributeListBuilder::class, $attributeValue);
+        $this->assertInstanceOf(ProductAttributeList::class, $attributeValue);
         $this->assertEquals(1, $attributeValue->getAttributesWithCode('bar')[0]->getValue());
         $this->assertEquals(2, $attributeValue->getAttributesWithCode('baz')[0]->getValue());
     }

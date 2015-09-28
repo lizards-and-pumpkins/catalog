@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Context\Context;
  * @covers \LizardsAndPumpkins\Product\ProductBuilder
  * @uses   \LizardsAndPumpkins\Product\Product
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeListBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  */
 class ProductBuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -44,7 +45,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsTheAttributeList()
     {
-        $this->assertSame($this->mockProductAttributeListBuilder, $this->productBuilder->getAttributeList());
+        $this->assertSame($this->mockProductAttributeListBuilder, $this->productBuilder->getAttributeListBuilder());
     }
 
     public function testProductForContextIsReturned()
@@ -52,7 +53,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
         $stubContext = $this->getMock(Context::class);
         $this->mockProductAttributeListBuilder->method('getAttributeListForContext')
             ->with($stubContext)
-            ->willReturn($this->mockProductAttributeListBuilder);
+            ->willReturn($this->getMock(ProductAttributeList::class));
         $result = $this->productBuilder->getProductForContext($stubContext);
         $this->assertInstanceOf(Product::class, $result);
     }

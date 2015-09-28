@@ -7,7 +7,7 @@ use LizardsAndPumpkins\Product\Exception\ProductAttributeNotFoundException;
 
 /**
  * @covers \LizardsAndPumpkins\Product\Product
- * @uses   \LizardsAndPumpkins\Product\ProductAttributeListBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  */
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,16 +27,16 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     private $stubContext;
     
     /**
-     * @var ProductAttributeListBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductAttributeList|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubProductAttributeListBuilder;
+    private $stubProductAttributeList;
 
     public function setUp()
     {
         $this->stubProductId = $this->getMock(ProductId::class, [], [], '', false);
-        $this->stubProductAttributeListBuilder = $this->getMock(ProductAttributeListBuilder::class);
+        $this->stubProductAttributeList = $this->getMock(ProductAttributeList::class);
         $this->stubContext = $this->getMock(Context::class);
-        $this->product = new Product($this->stubProductId, $this->stubProductAttributeListBuilder, $this->stubContext);
+        $this->product = new Product($this->stubProductId, $this->stubProductAttributeList, $this->stubContext);
     }
 
     public function testJsonSerializableInterfaceIsImplemented()
@@ -58,10 +58,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $stubProductAttribute = $this->getMock(ProductAttribute::class, [], [], '', false);
         $stubProductAttribute->method('getValue')->willReturn($dummyAttributeValue);
 
-        $this->stubProductAttributeListBuilder->method('hasAttribute')
+        $this->stubProductAttributeList->method('hasAttribute')
             ->with($dummyAttributeCode)
             ->willReturn(true);
-        $this->stubProductAttributeListBuilder->method('getAttributesWithCode')
+        $this->stubProductAttributeList->method('getAttributesWithCode')
             ->with($dummyAttributeCode)
             ->willReturn([$stubProductAttribute]);
 
@@ -80,10 +80,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $stubProductAttributeB = $this->getMock(ProductAttribute::class, [], [], '', false);
         $stubProductAttributeB->method('getValue')->willReturn($dummyAttributeBValue);
 
-        $this->stubProductAttributeListBuilder->method('hasAttribute')
+        $this->stubProductAttributeList->method('hasAttribute')
             ->with($dummyAttributeCode)
             ->willReturn(true);
-        $this->stubProductAttributeListBuilder->method('getAttributesWithCode')
+        $this->stubProductAttributeList->method('getAttributesWithCode')
             ->with($dummyAttributeCode)
             ->willReturn([$stubProductAttributeA, $stubProductAttributeB]);
 
@@ -98,7 +98,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $stubProductAttribute = $this->getMock(ProductAttribute::class, [], [], '', false);
         $stubProductAttribute->method('getValue')->willThrowException(new ProductAttributeNotFoundException);
 
-        $this->stubProductAttributeListBuilder->method('getAttributesWithCode')->willReturn([$stubProductAttribute]);
+        $this->stubProductAttributeList->method('getAttributesWithCode')->willReturn([$stubProductAttribute]);
 
         $result = $this->product->getAllValuesOfAttribute('whatever');
 
@@ -110,7 +110,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $stubProductAttribute = $this->getMock(ProductAttribute::class, [], [], '', false);
         $stubProductAttribute->method('getValue')->willThrowException(new ProductAttributeNotFoundException);
 
-        $this->stubProductAttributeListBuilder->method('getAttributesWithCode')->willReturn([$stubProductAttribute]);
+        $this->stubProductAttributeList->method('getAttributesWithCode')->willReturn([$stubProductAttribute]);
 
         $result = $this->product->getFirstValueOfAttribute('whatever');
 

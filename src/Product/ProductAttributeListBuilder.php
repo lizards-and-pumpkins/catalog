@@ -4,19 +4,13 @@ namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Product\Exception\ProductAttributeContextPartsMismatchException;
-use LizardsAndPumpkins\Product\Exception\ProductAttributeNotFoundException;
 
-class ProductAttributeListBuilder implements \Countable, \JsonSerializable
+class ProductAttributeListBuilder
 {
     /**
      * @var ProductAttribute[]
      */
     private $attributes;
-
-    /**
-     * @var AttributeCode[]
-     */
-    private $attributeCodes;
 
     /**
      * @param mixed[] $attributesArray
@@ -34,7 +28,6 @@ class ProductAttributeListBuilder implements \Countable, \JsonSerializable
     {
         self::validateAttributesMayBeCombinedIntoList(...$attributes);
         $this->attributes = $attributes;
-        $this->initializeAttributeCodesArray(...$attributes);
     }
 
     private static function validateAttributesMayBeCombinedIntoList(ProductAttribute ...$attributes)
@@ -66,43 +59,14 @@ class ProductAttributeListBuilder implements \Countable, \JsonSerializable
         }, $others);
     }
 
+    /**
+     * @param ProductAttribute $attribute
+     * @return string
+     */
     private static function getAttributeContextPartsMismatchExceptionMessage(ProductAttribute $attribute)
     {
         return sprintf('The attribute "%s" has multiple values with different contexts ' .
             'which can not be part of one product attribute list', $attribute->getCode());
-    }
-
-    private function initializeAttributeCodesArray(ProductAttribute ...$attributes)
-    {
-        $this->attributeCodes = array_reduce($attributes, function (array $carry, ProductAttribute $attribute) {
-            return array_merge($carry, [(string)$attribute->getCode() => $attribute->getCode()]);
-        }, []);
-    }
-
-    /**
-     * @param string $code
-     * @return ProductAttribute[]
-     */
-    public function getAttributesWithCode($code)
-    {
-        $attributeCode = AttributeCode::fromString($code);
-        if (!$this->hasAttribute($attributeCode)) {
-            throw new ProductAttributeNotFoundException(sprintf('Can not find an attribute with code "%s".', $code));
-        }
-
-        return self::getAttributesByCodeFromArray($this->attributes, $code);
-    }
-
-    /**
-     * @param ProductAttribute[] $attributes
-     * @param string|AttributeCode $code
-     * @return ProductAttribute[]
-     */
-    private static function getAttributesByCodeFromArray(array $attributes, $code)
-    {
-        return array_values(array_filter($attributes, function (ProductAttribute $attribute) use ($code) {
-            return $attribute->isCodeEqualTo($code);
-        }));
     }
 
     /**
@@ -112,7 +76,7 @@ class ProductAttributeListBuilder implements \Countable, \JsonSerializable
     public function getAttributeListForContext(Context $context)
     {
         $extractedAttributes = $this->extractAttributesForContext($context);
-        return new self(...$extractedAttributes);
+        return new ProductAttributeList(...$extractedAttributes);
     }
 
     /**
@@ -121,10 +85,33 @@ class ProductAttributeListBuilder implements \Countable, \JsonSerializable
      */
     private function extractAttributesForContext(Context $context)
     {
-        return array_reduce($this->attributeCodes, function (array $carry, AttributeCode $code) use ($context) {
-            $attributesForCode = $this->getAttributesWithCode($code);
+        $attributeCodes = $this->getAttributeCode();
+        return array_reduce($attributeCodes, function (array $carry, AttributeCode $code) use ($context) {
+            $attributesForCode = $this->getAttributesByCodeFromArray($this->attributes, $code);
             return array_merge($carry, $this->getAttributesMatchingContext($attributesForCode, $context));
         }, []);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getAttributeCode()
+    {
+        return array_unique(array_map(function (ProductAttribute $attribute) {
+            return $attribute->getCode();
+        }, $this->attributes));
+    }
+
+    /**
+     * @param ProductAttribute[] $attributes
+     * @param string|AttributeCode $code
+     * @return ProductAttribute[]
+     */
+    private function getAttributesByCodeFromArray(array $attributes, $code)
+    {
+        return array_values(array_filter($attributes, function (ProductAttribute $attribute) use ($code) {
+            return $attribute->isCodeEqualTo($code);
+        }));
     }
 
     /**
@@ -137,38 +124,5 @@ class ProductAttributeListBuilder implements \Countable, \JsonSerializable
         return array_filter($productAttributes, function (ProductAttribute $attribute) use ($context) {
             return $context->matchesDataSet($attribute->getContextDataSet());
         });
-    }
-
-    /**
-     * @param string|AttributeCode $attributeCode
-     * @return bool
-     */
-    public function hasAttribute($attributeCode)
-    {
-        return isset($this->attributeCodes[(string)$attributeCode]);
-    }
-
-    /**
-     * @return AttributeCode[]
-     */
-    public function getAttributeCodes()
-    {
-        return array_values($this->attributeCodes);
-    }
-
-    /**
-     * @return int
-     */
-    public function count()
-    {
-        return count($this->attributes);
-    }
-
-    /**
-     * @return ProductAttribute[]
-     */
-    public function jsonSerialize()
-    {
-        return $this->attributes;
     }
 }

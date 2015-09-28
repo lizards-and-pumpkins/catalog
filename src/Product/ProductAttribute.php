@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\Attribute;
 use LizardsAndPumpkins\Product\Exception\ProductAttributeDoesNotContainContextPartException;
 
 class ProductAttribute implements \JsonSerializable
@@ -22,13 +21,13 @@ class ProductAttribute implements \JsonSerializable
     private $contextData;
 
     /**
-     * @var string|ProductAttributeListBuilder
+     * @var string|ProductAttributeList
      */
     private $value;
 
     /**
      * @param AttributeCode $code
-     * @param string|ProductAttributeListBuilder $value
+     * @param string|ProductAttributeList $value
      * @param string[] $contextData
      */
     private function __construct(AttributeCode $code, $value, array $contextData)
@@ -53,12 +52,12 @@ class ProductAttribute implements \JsonSerializable
 
     /**
      * @param string|mixed[] $attributeValue
-     * @return string|ProductAttributeListBuilder
+     * @return string|ProductAttributeList
      */
     private static function getValueRecursive($attributeValue)
     {
         return is_array($attributeValue) ?
-            ProductAttributeListBuilder::fromArray($attributeValue) :
+            ProductAttributeList::fromArray($attributeValue) :
             (string) $attributeValue;
     }
     
@@ -104,7 +103,7 @@ class ProductAttribute implements \JsonSerializable
     }
 
     /**
-     * @return string|ProductAttributeListBuilder
+     * @return string|ProductAttributeList
      */
     public function getValue()
     {
