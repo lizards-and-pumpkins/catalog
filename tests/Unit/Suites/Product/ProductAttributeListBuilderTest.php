@@ -7,21 +7,21 @@ use LizardsAndPumpkins\Product\Exception\ProductAttributeContextPartsMismatchExc
 use LizardsAndPumpkins\Product\Exception\ProductAttributeNotFoundException;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductAttributeList
+ * @covers \LizardsAndPumpkins\Product\ProductAttributeListBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductAttribute
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  */
-class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
+class ProductAttributeListBuilderTest extends \PHPUnit_Framework_TestCase
 {
 
     public function testCountableInterfaceIsImplemented()
     {
-        $this->assertInstanceOf(\Countable::class, new ProductAttributeList());
+        $this->assertInstanceOf(\Countable::class, new ProductAttributeListBuilder());
     }
 
     public function testJsonSerializableInterfaceIsImplemented()
     {
-        $this->assertInstanceOf(\JsonSerializable::class, new ProductAttributeList());
+        $this->assertInstanceOf(\JsonSerializable::class, new ProductAttributeListBuilder());
     }
 
     public function testItReturnsTheNumberOfAttributes()
@@ -31,8 +31,8 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
             'contextData' => [],
             'value' => 'bar'
         ];
-        $this->assertCount(1, ProductAttributeList::fromArray([$attributeArray]));
-        $this->assertCount(2, ProductAttributeList::fromArray([$attributeArray, $attributeArray]));
+        $this->assertCount(1, ProductAttributeListBuilder::fromArray([$attributeArray]));
+        $this->assertCount(2, ProductAttributeListBuilder::fromArray([$attributeArray, $attributeArray]));
     }
 
     public function testAnAttributeCanBeRetrievedUsingAString()
@@ -48,7 +48,7 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
             'value' => 'bar2'
         ];
 
-        $attributeList = new ProductAttributeList(
+        $attributeList = new ProductAttributeListBuilder(
             ProductAttribute::fromArray($attribute1),
             ProductAttribute::fromArray($attribute2)
         );
@@ -66,7 +66,7 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
             'value' => 'bar'
         ];
 
-        $attributeList = new ProductAttributeList(ProductAttribute::fromArray($attributeArray));
+        $attributeList = new ProductAttributeListBuilder(ProductAttribute::fromArray($attributeArray));
         
         $attributesWithCode = $attributeList->getAttributesWithCode(AttributeCode::fromString('foo'));
         $this->assertEquals('bar', $attributesWithCode[0]->getValue());
@@ -75,7 +75,7 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownIfNoAttributeWithGivenCodeIsSet()
     {
         $this->setExpectedException(ProductAttributeNotFoundException::class);
-        (new ProductAttributeList())->getAttributesWithCode('foo');
+        (new ProductAttributeListBuilder())->getAttributesWithCode('foo');
     }
 
     public function testAttributeListIsCreatedFromAttributesArray()
@@ -88,7 +88,7 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $attributeList = ProductAttributeList::fromArray($attributeArray);
+        $attributeList = ProductAttributeListBuilder::fromArray($attributeArray);
         $attributesWithCode = $attributeList->getAttributesWithCode('foo');
         $attributeWithCode = $attributesWithCode[0];
 
@@ -102,7 +102,7 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
             ['code' => 'foo', 'contextData' => [], 'value' => 'baz'],
         ];
 
-        $attributeList = ProductAttributeList::fromArray($attributeArray);
+        $attributeList = ProductAttributeListBuilder::fromArray($attributeArray);
         $result = $attributeList->getAttributesWithCode('foo');
 
         $this->assertCount(count($attributeArray), $result);
@@ -140,7 +140,7 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
             'The attribute "attribute_code2" has multiple values with different contexts ' .
             'which can not be part of one product attribute list'
         );
-        new ProductAttributeList($attributeA, $attributeB, $attributeC);
+        new ProductAttributeListBuilder($attributeA, $attributeB, $attributeC);
     }
 
     public function testAttributeValuesForAGivenContextAreExtracted()
@@ -161,7 +161,7 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
             [$contextDataA, true],
             [$contextDataB, false],
         ]);
-        $originalAttributeList = ProductAttributeList::fromArray($attributesArray);
+        $originalAttributeList = ProductAttributeListBuilder::fromArray($attributesArray);
         $matchingAttributeList = $originalAttributeList->getAttributeListForContext($stubContext);
         $this->assertCount(3, $matchingAttributeList);
     }
@@ -181,7 +181,7 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
                 'value' => 'value'
             ]);
         }
-        $attributeCodes = (new ProductAttributeList(...$attributes))->getAttributeCodes();
+        $attributeCodes = (new ProductAttributeListBuilder(...$attributes))->getAttributeCodes();
         $this->assertContainsOnly(AttributeCode::class, $attributeCodes);
         $this->assertSame(count($expected), count($attributeCodes));
         foreach ($expected as $idx => $expectedAttributeCodeString) {
@@ -204,13 +204,13 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
 
     public function testHasAttributeReturnsFalseForAttributesNotInTheList()
     {
-        $this->assertFalse((new ProductAttributeList())->hasAttribute('foo'));
+        $this->assertFalse((new ProductAttributeListBuilder())->hasAttribute('foo'));
     }
 
     public function testHasAttributeReturnsTrueForAttributesInTheList()
     {
         $attributeArray = [['code' => 'foo', 'contextData' => [], 'value' => 'bar']];
-        $attributeList = ProductAttributeList::fromArray($attributeArray);
+        $attributeList = ProductAttributeListBuilder::fromArray($attributeArray);
         $this->assertTrue($attributeList->hasAttribute('foo'));
     }
 
@@ -228,11 +228,11 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
                 'value' => 'buz'
             ]
         ];
-        $sourceAttributeList = ProductAttributeList::fromArray($attributesArray);
+        $sourceAttributeList = ProductAttributeListBuilder::fromArray($attributesArray);
 
         $json = json_encode($sourceAttributeList);
         
-        $rehydratedAttributeList = ProductAttributeList::fromArray(json_decode($json, true));
+        $rehydratedAttributeList = ProductAttributeListBuilder::fromArray(json_decode($json, true));
         $this->assertEquals($sourceAttributeList->getAttributeCodes(), $rehydratedAttributeList->getAttributeCodes());
     }
 }

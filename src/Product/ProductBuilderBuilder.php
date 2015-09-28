@@ -21,7 +21,7 @@ class ProductBuilderBuilder
 
         $attributeNodes = $parser->getXmlNodesArrayByXPath('/product/attributes/*');
         $attributesArray = array_map([$this, 'nodeArrayAsAttributeArray'], $attributeNodes);
-        $attributeList = ProductAttributeList::fromArray($attributesArray);
+        $attributeList = ProductAttributeListBuilder::fromArray($attributesArray);
 
         return new ProductBuilder($productId, $attributeList);
     }

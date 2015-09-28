@@ -3,10 +3,6 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
-use LizardsAndPumpkins\Product\ProductAttributeList;
-use LizardsAndPumpkins\Product\ProductId;
-use LizardsAndPumpkins\Product\ProductBuilder;
-use LizardsAndPumpkins\Product\SampleSku;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportSourceFilePathIsNotAStringException;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportSourceXmlFileDoesNotExistException;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportSourceXmlFileIsNotReadableException;

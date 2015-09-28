@@ -6,7 +6,7 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Product\Exception\ProductAttributeContextPartsMismatchException;
 use LizardsAndPumpkins\Product\Exception\ProductAttributeNotFoundException;
 
-class ProductAttributeList implements \Countable, \JsonSerializable
+class ProductAttributeListBuilder implements \Countable, \JsonSerializable
 {
     /**
      * @var ProductAttribute[]
@@ -20,7 +20,7 @@ class ProductAttributeList implements \Countable, \JsonSerializable
 
     /**
      * @param mixed[] $attributesArray
-     * @return ProductAttributeList
+     * @return ProductAttributeListBuilder
      */
     public static function fromArray(array $attributesArray)
     {
@@ -107,7 +107,7 @@ class ProductAttributeList implements \Countable, \JsonSerializable
 
     /**
      * @param Context $context
-     * @return ProductAttributeList
+     * @return ProductAttributeListBuilder
      */
     public function getAttributeListForContext(Context $context)
     {

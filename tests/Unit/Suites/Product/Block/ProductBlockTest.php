@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\Product\Block;
 use LizardsAndPumpkins\Image;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductAttribute;
-use LizardsAndPumpkins\Product\ProductAttributeList;
+use LizardsAndPumpkins\Product\ProductAttributeListBuilder;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Renderer\Block;
 use LizardsAndPumpkins\Renderer\BlockRenderer;
@@ -13,7 +13,7 @@ use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
  * @covers \LizardsAndPumpkins\Product\Block\ProductBlock
- * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
+ * @uses   \LizardsAndPumpkins\Product\ProductAttributeListBuilder
  * @uses   \LizardsAndPumpkins\Renderer\Block
  * @uses   \LizardsAndPumpkins\Image
  */
@@ -120,15 +120,15 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
     {
         $stubAttribute = $this->getMock(ProductAttribute::class, [], [], '', false);
 
-        $mockProductAttributeList = $this->getMock(ProductAttributeList::class);
-        $mockProductAttributeList->expects($this->exactly(2))
+        $mockProductAttributeListBuilder = $this->getMock(ProductAttributeListBuilder::class);
+        $mockProductAttributeListBuilder->expects($this->exactly(2))
             ->method('getAttributesWithCode')
             ->willReturn([$stubAttribute]);
 
         $this->stubProduct->expects($this->once())
             ->method('getFirstValueOfAttribute')
             ->with('image')
-            ->willReturn($mockProductAttributeList);
+            ->willReturn($mockProductAttributeListBuilder);
 
         $result = $this->productBlock->getMainProductImage();
 

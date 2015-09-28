@@ -22,13 +22,13 @@ class ProductAttribute implements \JsonSerializable
     private $contextData;
 
     /**
-     * @var string|ProductAttributeList
+     * @var string|ProductAttributeListBuilder
      */
     private $value;
 
     /**
      * @param AttributeCode $code
-     * @param string|ProductAttributeList $value
+     * @param string|ProductAttributeListBuilder $value
      * @param string[] $contextData
      */
     private function __construct(AttributeCode $code, $value, array $contextData)
@@ -53,12 +53,12 @@ class ProductAttribute implements \JsonSerializable
 
     /**
      * @param string|mixed[] $attributeValue
-     * @return string|ProductAttributeList
+     * @return string|ProductAttributeListBuilder
      */
     private static function getValueRecursive($attributeValue)
     {
         return is_array($attributeValue) ?
-            ProductAttributeList::fromArray($attributeValue) :
+            ProductAttributeListBuilder::fromArray($attributeValue) :
             (string) $attributeValue;
     }
     
@@ -104,7 +104,7 @@ class ProductAttribute implements \JsonSerializable
     }
 
     /**
-     * @return string|ProductAttributeList
+     * @return string|ProductAttributeListBuilder
      */
     public function getValue()
     {

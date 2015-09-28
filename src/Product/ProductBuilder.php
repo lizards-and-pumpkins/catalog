@@ -12,11 +12,11 @@ class ProductBuilder
     private $id;
 
     /**
-     * @var ProductAttributeList
+     * @var ProductAttributeListBuilder
      */
     private $attributes;
 
-    public function __construct(ProductId $id, ProductAttributeList $attributes)
+    public function __construct(ProductId $id, ProductAttributeListBuilder $attributes)
     {
         $this->id = $id;
         $this->attributes = $attributes;
@@ -31,7 +31,7 @@ class ProductBuilder
     }
 
     /**
-     * @return ProductAttributeList
+     * @return ProductAttributeListBuilder
      */
     public function getAttributeList()
     {

@@ -11,7 +11,7 @@ use LizardsAndPumpkins\Product\Exception\ProductAttributeNotFoundException;
  * @uses   \LizardsAndPumpkins\Product\ProductId
  * @uses   \LizardsAndPumpkins\Utils\XPathParser
  * @uses   \LizardsAndPumpkins\Product\ProductAttribute
- * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
+ * @uses   \LizardsAndPumpkins\Product\ProductAttributeListBuilder
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  */
 class ProductBuilderBuilderTest extends \PHPUnit_Framework_TestCase
@@ -38,7 +38,7 @@ class ProductBuilderBuilderTest extends \PHPUnit_Framework_TestCase
     ) {
         $property = new \ReflectionProperty($productBuilder, 'attributes');
         $property->setAccessible(true);
-        /** @var ProductAttributeList $attributeList */
+        /** @var ProductAttributeListBuilder $attributeList */
         $attributeList = $property->getValue($productBuilder);
         $this->assertEquals($expected, $attributeList->getAttributesWithCode($attributeCode)[0]->getValue());
     }
