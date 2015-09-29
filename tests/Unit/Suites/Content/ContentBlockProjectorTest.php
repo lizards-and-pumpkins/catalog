@@ -46,11 +46,9 @@ class ContentBlockProjectorTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(InvalidProjectionSourceDataTypeException::class);
 
-        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
-        $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
         $stubProjectionSourceData = 'stub-projection-source-data';
 
-        $this->projector->project($stubProjectionSourceData, $stubContextSource);
+        $this->projector->project($stubProjectionSourceData);
     }
 
     public function testSnippetListIsWrittenIntoDataPool()
@@ -60,10 +58,8 @@ class ContentBlockProjectorTest extends \PHPUnit_Framework_TestCase
         $this->mockSnippetRendererCollection->method('render')->willReturn($stubSnippetList);
         $this->mockDataPoolWriter->expects($this->once())->method('writeSnippetList')->with($stubSnippetList);
 
-        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
-        $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
         $stubContentBlockSource = $this->getMock(ContentBlockSource::class, [], [], '', false);
 
-        $this->projector->project($stubContentBlockSource, $stubContextSource);
+        $this->projector->project($stubContentBlockSource);
     }
 }

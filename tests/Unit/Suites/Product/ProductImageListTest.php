@@ -4,7 +4,6 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Product\Exception\ProductImageListNotMutableException;
-use LizardsAndPumpkins\Projection\Catalog\Import\ProductImageListBuilder;
 
 class ProductImageListTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,6 +27,7 @@ class ProductImageListTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param int $numberOfImages
      * @dataProvider numberOfImagesProvider
      */
     public function testItReturnsTheCorrectNumberOfImages($numberOfImages)

@@ -357,7 +357,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $stubCommand = $this->getMock(UpdateMultipleProductStockQuantityCommand::class, [], [], '', false);
         $result = $this->commonFactory->createUpdateMultipleProductStockQuantityCommandHandler($stubCommand);
 
-        $this->assertInstanceOf(UpdatemultipleProductStockQuantityCommandHandler::class, $result);
+        $this->assertInstanceOf(UpdateMultipleProductStockQuantityCommandHandler::class, $result);
     }
 
     public function testProductStockQuantitySourceBuilderIsReturned()

@@ -3,7 +3,6 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Product\Exception\InvalidNumberOfSkusPerImportedProductException;
-use LizardsAndPumpkins\Product\Exception\ProductAttributeNotFoundException;
 
 /**
  * @covers \LizardsAndPumpkins\Product\ProductXmlToProductBuilder
@@ -84,7 +83,6 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
         $firstNode = $this->domDocument->getElementsByTagName('product')->item(0);
         $expectedProductId = $firstNode->attributes->getNamedItem('sku')->nodeValue;
         $expectedAttribute = $firstNode->getElementsByTagName('special_price')->item(0)->nodeValue;
-        $expectedImageFile = $firstNode->getElementsByTagName('file')->item(0)->nodeValue;
 
         $firstNodeXml = $this->domDocument->saveXML($firstNode);
 
@@ -93,7 +91,6 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ProductBuilder::class, $productBuilder);
         $this->assertEquals($expectedProductId, $productBuilder->getId());
         $this->assertFirstProductAttributeInAListValueEquals($expectedAttribute, $productBuilder, 'special_price');
-        //$this->assertFirstProductImageValueEquals($expectedImageFile, $productBuilder, 'file');
     }
 
     public function testProductBuilderIsCreatedFromXmlIgnoringAssociatedProducts()

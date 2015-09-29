@@ -4,8 +4,6 @@ namespace LizardsAndPumpkins\Product\Block;
 
 use LizardsAndPumpkins\Image;
 use LizardsAndPumpkins\Product\Product;
-use LizardsAndPumpkins\Product\ProductAttribute;
-use LizardsAndPumpkins\Product\ProductAttributeList;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Renderer\Block;
 use LizardsAndPumpkins\Renderer\BlockRenderer;

@@ -46,7 +46,7 @@ class AttributeCodeTest extends \PHPUnit_Framework_TestCase
             'integer' => [222],
             'null' => [null],
             'array' => [['foo']],
-            'object' => [new \StdClass],
+            'object' => [new \stdClass],
             'float' => [2.2]
         ];
     }
@@ -77,6 +77,7 @@ class AttributeCodeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param string $attributeCode
      * @dataProvider attributeCodeWithInvalidFirstCharacterProvider
      */
     public function testItThrowsAnExceptionIfTheFirstCharacterIsNotAThroughZ($attributeCode)

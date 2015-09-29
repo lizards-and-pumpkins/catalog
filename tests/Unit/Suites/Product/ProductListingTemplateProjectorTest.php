@@ -60,6 +60,6 @@ class ProductListingTemplateProjectorTest extends \PHPUnit_Framework_TestCase
 
         $this->mockDataPoolWriter->expects($this->once())->method('writeSnippetList');
 
-        $this->projector->project($projectionSourceDataJson, $stubContextSource);
+        $this->projector->project($projectionSourceDataJson);
     }
 }

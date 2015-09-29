@@ -46,23 +46,19 @@ class ProductStockQuantityProjectorTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfProjectionDataIsNotInstanceOfProductStockQuantitySource()
     {
-        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
-        $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
         $this->setExpectedException(InvalidProjectionSourceDataTypeException::class);
 
-        $this->projector->project('invalid-projection-source-data', $stubContextSource);
+        $this->projector->project('invalid-projection-source-data');
     }
 
     public function testSnippetListIsWrittenIntoDataPool()
     {
-        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
-        $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
         $stubSnippetList = $this->getMock(SnippetList::class);
         $stubProductStockQuantitySource = $this->getMock(ProductStockQuantitySource::class, [], [], '', false);
 
         $this->mockSnippetRendererCollection->method('render')->willReturn($stubSnippetList);
         $this->mockDataPoolWriter->expects($this->once())->method('writeSnippetList')->with($stubSnippetList);
 
-        $this->projector->project($stubProductStockQuantitySource, $stubContextSource);
+        $this->projector->project($stubProductStockQuantitySource);
     }
 }
