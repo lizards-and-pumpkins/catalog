@@ -5,17 +5,15 @@
         <product type="simple" sku="118235-251" visible="true" tax_class_id="5">
             <images>
                 <image>
-                    <main>true</main>
                     <file>2013_pro_touch_118235-251.jpg</file>
                     <label>The main image label</label>
                 </image>
-                <!--image>
-                    <show_in_gallery>false</show_in_gallery>
-                    <file>118235/118235-251.2.png</file>
+                <image>
+                    <file>2013_pro_touch_118235-251.jpg</file>
                     <label locale="de_DE">Der Text zum zweiten Bild</label>
                     <label locale="en_US">A secondary image label</label>
                 </image>
-                <image>
+                <!--<image>
                     <main_listing>true</main_listing>
                     <file locale="de_DE">118235/118235-251.2de.png</file>
                     <file locale="de_US">118235/118235-251.2us.png</file>
@@ -377,7 +375,6 @@ LED Armflasher with elastic Band and Flasher]]></description>
         <product type="configurable" sku="218765-333" visible="true" tax_class_id="5">
             <images>
                 <image>
-                    <main>true</main>
                     <file>m18108_1.jpg</file>
                     <label locale="de_DE">Das Hauptbild</label>
                     <label locale="en_US">The main image label for this shoe</label>

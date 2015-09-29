@@ -6,7 +6,7 @@ use LizardsAndPumpkins\Product\Exception\InvalidNumberOfSkusPerImportedProductEx
 use LizardsAndPumpkins\Product\Exception\ProductAttributeNotFoundException;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductBuilderBuilder
+ * @covers \LizardsAndPumpkins\Product\ProductXmlToProductBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductId
  * @uses   \LizardsAndPumpkins\Utils\XPathParser
@@ -14,11 +14,13 @@ use LizardsAndPumpkins\Product\Exception\ProductAttributeNotFoundException;
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeListBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageListBuilder
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageBuilder
  */
-class ProductBuilderBuilderTest extends \PHPUnit_Framework_TestCase
+class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ProductBuilderBuilder
+     * @var ProductXmlToProductBuilder
      */
     private $builder;
 
@@ -38,6 +40,7 @@ class ProductBuilderBuilderTest extends \PHPUnit_Framework_TestCase
         $attributeCode
     ) {
         $attributes = $this->getAttributesWithCodeFromInstance($productBuilder, $attributeCode);
+        $this->assertNotEmpty($attributes);
         $this->assertEquals($expected, $attributes[0]->getValue());
     }
 
@@ -68,7 +71,7 @@ class ProductBuilderBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->builder = new ProductBuilderBuilder();
+        $this->builder = new ProductXmlToProductBuilder();
 
         $xml = file_get_contents(__DIR__ . '/../../../shared-fixture/catalog.xml');
         $this->domDocument = new \DOMDocument();
@@ -81,6 +84,7 @@ class ProductBuilderBuilderTest extends \PHPUnit_Framework_TestCase
         $firstNode = $this->domDocument->getElementsByTagName('product')->item(0);
         $expectedProductId = $firstNode->attributes->getNamedItem('sku')->nodeValue;
         $expectedAttribute = $firstNode->getElementsByTagName('special_price')->item(0)->nodeValue;
+        $expectedImageFile = $firstNode->getElementsByTagName('file')->item(0)->nodeValue;
 
         $firstNodeXml = $this->domDocument->saveXML($firstNode);
 
@@ -89,6 +93,7 @@ class ProductBuilderBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ProductBuilder::class, $productBuilder);
         $this->assertEquals($expectedProductId, $productBuilder->getId());
         $this->assertFirstProductAttributeInAListValueEquals($expectedAttribute, $productBuilder, 'special_price');
+        //$this->assertFirstProductImageValueEquals($expectedImageFile, $productBuilder, 'file');
     }
 
     public function testProductBuilderIsCreatedFromXmlIgnoringAssociatedProducts()
@@ -106,7 +111,7 @@ class ProductBuilderBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertFirstProductAttributeInAListValueEquals($expectedAttribute, $productBuilder, 'price');
     }
 
-    public function testProductBuilderIsCreatedFromXmlIgnoringAssociatedProductsAttributes()
+    public function testProductBuilderIsCreatedFromXmlIgnoringAssociatedProductAttributes()
     {
         $secondNode = $this->domDocument->getElementsByTagName('product')->item(1);
         $secondNodeXml = $this->domDocument->saveXML($secondNode);
@@ -118,6 +123,6 @@ class ProductBuilderBuilderTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownIfXmlHasNoEssentialData()
     {
         $this->setExpectedException(InvalidNumberOfSkusPerImportedProductException::class);
-        (new ProductBuilderBuilder())->createProductBuilderFromXml('<?xml version="1.0"?><node/>');
+        (new ProductXmlToProductBuilder())->createProductBuilderFromXml('<?xml version="1.0"?><node/>');
     }
 }

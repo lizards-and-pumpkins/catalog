@@ -20,7 +20,7 @@ class ProductAttributeList implements \Countable, \JsonSerializable
 
     /**
      * @param mixed[] $attributesArray
-     * @return ProductAttributeListBuilder
+     * @return ProductAttributeList
      */
     public static function fromArray(array $attributesArray)
     {

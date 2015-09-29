@@ -71,7 +71,7 @@ class ProductAttributeListBuilder
 
     /**
      * @param Context $context
-     * @return ProductAttributeListBuilder
+     * @return ProductAttributeList
      */
     public function getAttributeListForContext(Context $context)
     {

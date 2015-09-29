@@ -8,7 +8,7 @@ class Product implements \JsonSerializable
 {
     const URL_KEY = 'url_key';
     const ID = 'product_id';
-    
+
     /**
      * @var ProductId
      */
@@ -18,18 +18,27 @@ class Product implements \JsonSerializable
      * @var ProductAttributeList
      */
     private $attributeList;
-    
+
     /**
      * @var Context
      */
     private $context;
+    
+    /**
+     * @var ProductImageList
+     */
+    private $images;
 
-    public function __construct(ProductId $productId, ProductAttributeList $attributeList, Context $context)
-    {
+    public function __construct(
+        ProductId $productId,
+        ProductAttributeList $attributeList,
+        ProductImageList $images,
+        Context $context
+    ) {
         $this->productId = $productId;
-        // todo: verify the context matches the attribute contexts
         $this->attributeList = $attributeList;
         $this->context = $context;
+        $this->images = $images;
     }
 
     /**
@@ -42,12 +51,12 @@ class Product implements \JsonSerializable
 
     /**
      * @param string $attributeCode
-     * @return string|ProductAttributeList
+     * @return string
      */
     public function getFirstValueOfAttribute($attributeCode)
     {
         $attributeValues = $this->getAllValuesOfAttribute($attributeCode);
-        
+
         return isset($attributeValues[0]) ?
             $attributeValues[0] :
             '';
@@ -55,11 +64,11 @@ class Product implements \JsonSerializable
 
     /**
      * @param string $attributeCode
-     * @return mixed[]
+     * @return string[]
      */
     public function getAllValuesOfAttribute($attributeCode)
     {
-        if (! $this->attributeList->hasAttribute($attributeCode)) {
+        if (!$this->attributeList->hasAttribute($attributeCode)) {
             return [];
         }
         return array_map(function (ProductAttribute $productAttribute) {
@@ -68,13 +77,14 @@ class Product implements \JsonSerializable
     }
 
     /**
-     * @return mixed
+     * @return mixed[]
      */
     public function jsonSerialize()
     {
         return [
-            'product_id' => (string) $this->productId,
+            'product_id' => (string)$this->productId,
             'attributes' => $this->attributeList,
+            'images' => $this->images,
             'context' => $this->context
         ];
     }
@@ -85,5 +95,30 @@ class Product implements \JsonSerializable
     public function getContext()
     {
         return $this->context;
+    }
+
+    /**
+     * @return ProductImageList
+     */
+    public function getImages()
+    {
+        return $this->images;
+    }
+
+    /**
+     * @return int
+     */
+    public function getImageCount()
+    {
+        return count($this->images);
+    }
+
+    /**
+     * @param int $imageNumber
+     * @return ProductImage
+     */
+    public function getImageNumber($imageNumber)
+    {
+        return $this->images[$imageNumber -1];
     }
 }

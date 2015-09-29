@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Product\Exception\ProductAttributeNotFoundException;
 /**
  * @covers \LizardsAndPumpkins\Product\Product
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
+ * @uses   \LizardsAndPumpkins\Product\ProductImageList
  */
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,18 +26,29 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      * @var Context|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubContext;
-    
+
     /**
      * @var ProductAttributeList|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubProductAttributeList;
+
+    /**
+     * @var ProductImageList|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubProductImages;
 
     public function setUp()
     {
         $this->stubProductId = $this->getMock(ProductId::class, [], [], '', false);
         $this->stubProductAttributeList = $this->getMock(ProductAttributeList::class);
         $this->stubContext = $this->getMock(Context::class);
-        $this->product = new Product($this->stubProductId, $this->stubProductAttributeList, $this->stubContext);
+        $this->stubProductImages = $this->getMock(ProductImageList::class);
+        $this->product = new Product(
+            $this->stubProductId,
+            $this->stubProductAttributeList,
+            $this->stubProductImages,
+            $this->stubContext
+        );
     }
 
     public function testJsonSerializableInterfaceIsImplemented()
@@ -126,14 +138,33 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $result = $this->product->jsonSerialize();
 
         $this->assertInternalType('array', $result);
-        $this->assertCount(3, $result);
+        $this->assertCount(4, $result);
         $this->assertEquals($testProductIdString, $result['product_id']);
         $this->assertArrayHasKey('attributes', $result);
+        $this->assertArrayHasKey('images', $result);
         $this->assertArrayHasKey('context', $result);
     }
 
     public function testItReturnsTheInjectedContext()
     {
         $this->assertSame($this->stubContext, $this->product->getContext());
+    }
+
+    public function testItReturnsTheInjectedProductImages()
+    {
+        $this->assertSame($this->stubProductImages, $this->product->getImages());
+    }
+
+    public function testItReturnsTheNumberOfImages()
+    {
+        $this->stubProductImages->method('count')->willReturn(3);
+        $this->assertSame(3, $this->product->getImageCount());
+    }
+
+    public function testItReturnsTheSpecifiedImage()
+    {
+        $stubImage = $this->getMock(ProductImage::class, [], [], '', false);
+        $this->stubProductImages->method('offsetGet')->with(0)->willReturn($stubImage);
+        $this->assertSame($stubImage, $this->product->getImageNumber(1));
     }
 }
