@@ -77,6 +77,8 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param string $testCode
+     * @param string $expected
      * @dataProvider underscoreCodeDataProvider
      */
     public function testUnderscoresAreRemovesFromContextKey($testCode, $expected)

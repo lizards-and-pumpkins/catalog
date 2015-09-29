@@ -12,7 +12,7 @@ use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
 use LizardsAndPumpkins\Product\ProductBuilder;
-use LizardsAndPumpkins\Product\ProductBuilderBuilder;
+use LizardsAndPumpkins\Product\ProductXmlToProductBuilder;
 use LizardsAndPumpkins\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Product\AddProductListingCommand;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportFileDoesNotExistException;
@@ -29,9 +29,9 @@ class CatalogImport
     private $commandQueue;
 
     /**
-     * @var ProductBuilderBuilder
+     * @var ProductXmlToProductBuilder
      */
-    private $productBuilderBuilder;
+    private $productXmlToProductBuilder;
 
     /**
      * @var ProductListingCriteriaBuilder
@@ -60,14 +60,14 @@ class CatalogImport
 
     public function __construct(
         Queue $commandQueue,
-        ProductBuilderBuilder $productBuilderBuilder,
+        ProductXmlToProductBuilder $productXmlToProductBuilder,
         ProductListingCriteriaBuilder $productListingCriteriaBuilder,
         Queue $eventQueue,
         ContextSource $contextSource,
         Logger $logger
     ) {
         $this->commandQueue = $commandQueue;
-        $this->productBuilderBuilder = $productBuilderBuilder;
+        $this->productXmlToProductBuilder = $productXmlToProductBuilder;
         $this->productListingCriteriaBuilder = $productListingCriteriaBuilder;
         $this->eventQueue = $eventQueue;
         $this->contextSource = $contextSource;
@@ -125,7 +125,7 @@ class CatalogImport
     private function createClosureForProductImageXml($imageDirectoryPath)
     {
         return function (...$args) use ($imageDirectoryPath) {
-            return $this->processProductImageXml($imageDirectoryPath, ...$args);
+            $this->processProductImageXml($imageDirectoryPath, ...$args);
         };
     }
 
@@ -135,13 +135,15 @@ class CatalogImport
     private function processProductXml($productXml)
     {
         try {
-            $this->addProductsFromSourceToQueue($this->productBuilderBuilder->createProductBuilderFromXml($productXml));
+            $productBuilder = $this->productXmlToProductBuilder->createProductBuilderFromXml($productXml);
+            $this->addProductsFromBuilderToQueue($productBuilder);
         } catch (\Exception $exception) {
             $this->logProductImportException($exception, $productXml);
+            throw $exception;
         }
     }
 
-    public function addProductsFromSourceToQueue(ProductBuilder $productBuilder)
+    public function addProductsFromBuilderToQueue(ProductBuilder $productBuilder)
     {
         array_map(function (Context $context) use ($productBuilder) {
             $this->addCommandToQueue($productBuilder->getProductForContext($context));

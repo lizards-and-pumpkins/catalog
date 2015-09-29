@@ -1,9 +1,9 @@
 <?php
 
+
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Product\Exception\ProductAttributeContextPartsMismatchException;
+use LizardsAndPumpkins\Product\Exception\ConflictingContextDataForProductAttributeListException;
 use LizardsAndPumpkins\Product\Exception\ProductAttributeNotFoundException;
 
 class ProductAttributeList implements \Countable, \JsonSerializable
@@ -32,44 +32,61 @@ class ProductAttributeList implements \Countable, \JsonSerializable
 
     public function __construct(ProductAttribute ...$attributes)
     {
-        self::validateAttributesMayBeCombinedIntoList(...$attributes);
         $this->attributes = $attributes;
+        $this->validateAllAttributesHaveCompatibleContextData(...$attributes);
         $this->initializeAttributeCodesArray(...$attributes);
     }
 
-    private static function validateAttributesMayBeCombinedIntoList(ProductAttribute ...$attributes)
+    private function validateAllAttributesHaveCompatibleContextData(ProductAttribute ...$attributes)
     {
-        array_map(function (array $attributesByCode) {
-            self::validateAttributesHaveSameContextParts(...$attributesByCode);
-        }, self::getAttributesGroupedByCode($attributes));
-    }
+        array_reduce($attributes, function (array $attributeListContextParts, ProductAttribute $attribute) {
+            array_map(function ($contextPart) use ($attribute, $attributeListContextParts) {
+                $this->validateContextPartIsValidInAttributeList($attribute, $contextPart, $attributeListContextParts);
+            }, $attribute->getContextParts());
 
-    /**
-     * @param ProductAttribute[] $attributes
-     * @return array[]
-     */
-    private static function getAttributesGroupedByCode(array $attributes)
-    {
-        return array_reduce($attributes, function ($carry, ProductAttribute $attribute) {
-            $carry[(string)$attribute->getCode()][] = $attribute;
-            return $carry;
+            return array_merge($attributeListContextParts, $attribute->getContextDataSet());
         }, []);
     }
 
-    private static function validateAttributesHaveSameContextParts(ProductAttribute $first, ProductAttribute ...$others)
-    {
-        array_map(function (ProductAttribute $attributeToCompare) use ($first) {
-            if (!$first->hasSameContextPartsAs($attributeToCompare)) {
-                $message = self::getAttributeContextPartsMismatchExceptionMessage($first);
-                throw new ProductAttributeContextPartsMismatchException($message);
-            }
-        }, $others);
+    /**
+     * @param ProductAttribute $attribute
+     * @param string $part
+     * @param string[] $attributeListContextParts
+     */
+    private function validateContextPartIsValidInAttributeList(
+        ProductAttribute $attribute,
+        $part,
+        array $attributeListContextParts
+    ) {
+        if (isset($attributeListContextParts[$part])) {
+            $attributeContextPartValue = $attribute->getContextPartValue($part);
+            $this->validateContextPartValuesMatch($part, $attributeListContextParts[$part], $attributeContextPartValue);
+        }
     }
 
-    private static function getAttributeContextPartsMismatchExceptionMessage(ProductAttribute $attribute)
+    /**
+     * @param string $contextPart
+     * @param string $valueA
+     * @param string $valueB
+     */
+    private function validateContextPartValuesMatch($contextPart, $valueA, $valueB)
     {
-        return sprintf('The attribute "%s" has multiple values with different contexts ' .
-            'which can not be part of one product attribute list', $attribute->getCode());
+        if ($valueA !== $valueB) {
+            throw $this->getConflictingContextDataFoundException($contextPart, $valueA, $valueB);
+        }
+    }
+
+    /**
+     * @param string $contextPart
+     * @param string $valueA
+     * @param string $valueB
+     * @return ConflictingContextDataForProductAttributeListException
+     */
+    private function getConflictingContextDataFoundException($contextPart, $valueA, $valueB)
+    {
+        $message = sprintf('Conflicting context "%s" data set values found for attributes ' .
+            'to be included in one attribute list: "%s" != "%s"', $contextPart, $valueA, $valueB);
+        return new ConflictingContextDataForProductAttributeListException($message);
     }
 
     private function initializeAttributeCodesArray(ProductAttribute ...$attributes)
@@ -90,7 +107,7 @@ class ProductAttributeList implements \Countable, \JsonSerializable
             throw new ProductAttributeNotFoundException(sprintf('Can not find an attribute with code "%s".', $code));
         }
 
-        return self::getAttributesByCodeFromArray($this->attributes, $code);
+        return $this->getAttributesByCodeFromArray($this->attributes, $code);
     }
 
     /**
@@ -98,45 +115,11 @@ class ProductAttributeList implements \Countable, \JsonSerializable
      * @param string|AttributeCode $code
      * @return ProductAttribute[]
      */
-    private static function getAttributesByCodeFromArray(array $attributes, $code)
+    private function getAttributesByCodeFromArray(array $attributes, $code)
     {
         return array_values(array_filter($attributes, function (ProductAttribute $attribute) use ($code) {
             return $attribute->isCodeEqualTo($code);
         }));
-    }
-
-    /**
-     * @param Context $context
-     * @return ProductAttributeList
-     */
-    public function getAttributeListForContext(Context $context)
-    {
-        $extractedAttributes = $this->extractAttributesForContext($context);
-        return new self(...$extractedAttributes);
-    }
-
-    /**
-     * @param Context $context
-     * @return ProductAttribute[]
-     */
-    private function extractAttributesForContext(Context $context)
-    {
-        return array_reduce($this->attributeCodes, function (array $carry, AttributeCode $code) use ($context) {
-            $attributesForCode = $this->getAttributesWithCode($code);
-            return array_merge($carry, $this->getAttributesMatchingContext($attributesForCode, $context));
-        }, []);
-    }
-
-    /**
-     * @param ProductAttribute[] $productAttributes
-     * @param Context $context
-     * @return ProductAttribute
-     */
-    private function getAttributesMatchingContext(array $productAttributes, Context $context)
-    {
-        return array_filter($productAttributes, function (ProductAttribute $attribute) use ($context) {
-            return $context->matchesDataSet($attribute->getContextDataSet());
-        });
     }
 
     /**

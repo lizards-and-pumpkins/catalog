@@ -3,9 +3,10 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Product\Exception\InvalidNumberOfSkusPerImportedProductException;
+use LizardsAndPumpkins\Projection\Catalog\Import\ProductImageListBuilder;
 use LizardsAndPumpkins\Utils\XPathParser;
 
-class ProductBuilderBuilder
+class ProductXmlToProductBuilder
 {
     /**
      * @param string $xml
@@ -19,13 +20,13 @@ class ProductBuilderBuilder
         $skuString = $this->getSkuStringFromDomNodeArray($skuNode);
         $productId = ProductId::fromString($skuString);
 
-        $attributeNodes = $parser->getXmlNodesArrayByXPath('/product/attributes/*');
-        $attributesArray = array_map([$this, 'nodeArrayAsAttributeArray'], $attributeNodes);
-        $attributeList = ProductAttributeList::fromArray($attributesArray);
+        $attributeListBuilder = $this->createProductAttributeListBuilder($parser);
 
-        return new ProductBuilder($productId, $attributeList);
+        $imageListBuilder = $this->createProductImageListBuilder($parser, $productId);
+
+        return new ProductBuilder($productId, $attributeListBuilder, $imageListBuilder);
     }
-    
+
     /**
      * @param mixed[] $node
      * @return mixed[]
@@ -55,5 +56,30 @@ class ProductBuilderBuilder
         }
 
         return $nodeArray[0]['value'];
+    }
+
+    /**
+     * @param XPathParser $parser
+     * @return ProductAttributeListBuilder
+     */
+    private function createProductAttributeListBuilder(XPathParser $parser)
+    {
+        $attributeNodes = $parser->getXmlNodesArrayByXPath('/product/attributes/*');
+        $attributesArray = array_map([$this, 'nodeArrayAsAttributeArray'], $attributeNodes);
+        return ProductAttributeListBuilder::fromArray($attributesArray);
+    }
+
+    /**
+     * @param XPathParser $parser
+     * @param ProductId $productId
+     * @return ProductImageListBuilder
+     */
+    private function createProductImageListBuilder(XPathParser $parser, ProductId $productId)
+    {
+        $imagesNodes = $parser->getXmlNodesArrayByXPath('/product/images/image');
+        $imagesArray = array_map(function (array $imageNode) {
+            return $imageNode['value'];
+        }, array_map([$this, 'nodeArrayAsAttributeArray'], $imagesNodes));
+        return ProductImageListBuilder::fromArray($productId, $imagesArray);
     }
 }

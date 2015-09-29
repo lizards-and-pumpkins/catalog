@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Context;
 
 use LizardsAndPumpkins\IntegrationTestFactory;
+use LizardsAndPumpkins\MasterFactory;
 use LizardsAndPumpkins\SampleMasterFactory;
 use LizardsAndPumpkins\CommonFactory;
 
@@ -30,9 +31,9 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     <name website="cy" locale="en_US">cy-en_US</name>
 </attributes></product>
 EOX;
-        $productBuilderBuilder = $this->factory->createProductBuilderBuilder();
+        $productXmlToProductBuilder = $this->factory->createProductXmlToProductBuilder();
         $contextSource = $this->factory->createContextSource();
-        $productBuilder = $productBuilderBuilder->createProductBuilderFromXml($xml);
+        $productBuilder = $productXmlToProductBuilder->createProductBuilderFromXml($xml);
         $codes = ['website', 'locale', 'version'];
         $extractedValues = [];
         $contextCounter = 0;

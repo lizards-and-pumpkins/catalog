@@ -3,10 +3,6 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
-use LizardsAndPumpkins\Product\ProductAttributeList;
-use LizardsAndPumpkins\Product\ProductId;
-use LizardsAndPumpkins\Product\ProductBuilder;
-use LizardsAndPumpkins\Product\SampleSku;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportSourceFilePathIsNotAStringException;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportSourceXmlFileDoesNotExistException;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportSourceXmlFileIsNotReadableException;
@@ -151,9 +147,13 @@ class CatalogXmlParser
     {
         while ($this->xmlReader->read()) {
             if ($this->isProductNode()) {
-                $productXml = $this->xmlReader->readOuterXml();
-                $this->processCallbacksWithArg($this->productCallbacks, $productXml);
-                $this->processImageCallbacksForProductXml($productXml);
+                try {
+                    $productXml = $this->xmlReader->readOuterXml();
+                    $this->processCallbacksWithArg($this->productCallbacks, $productXml);
+                    $this->processImageCallbacksForProductXml($productXml);
+                } catch (\Exception $e) {
+                    // Intentionally left empty, continue parsing the next product
+                }
             } elseif ($this->isListingNode()) {
                 $this->processCallbacksWithCurrentNode($this->listingCallbacks);
             }
@@ -165,7 +165,7 @@ class CatalogXmlParser
      */
     private function processImageCallbacksForProductXml($productXml)
     {
-        $imageNodes = (new XPathParser($productXml))->getXmlNodesRawXmlArrayByXPath('/product/attributes/image');
+        $imageNodes = (new XPathParser($productXml))->getXmlNodesRawXmlArrayByXPath('/product/images/image');
         array_map(function ($imageXml) {
             $this->processCallbacksWithArg($this->productImageCallbacks, $imageXml);
         }, $imageNodes);

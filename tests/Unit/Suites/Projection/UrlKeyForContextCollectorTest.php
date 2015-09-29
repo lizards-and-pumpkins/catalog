@@ -7,7 +7,6 @@ use LizardsAndPumpkins\UrlKey;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Context\ContextSource;
-use LizardsAndPumpkins\Product\ProductBuilder;
 use LizardsAndPumpkins\Product\ProductListingCriteria;
 
 /**

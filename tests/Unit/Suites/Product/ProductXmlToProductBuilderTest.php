@@ -3,21 +3,23 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Product\Exception\InvalidNumberOfSkusPerImportedProductException;
-use LizardsAndPumpkins\Product\Exception\ProductAttributeNotFoundException;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductBuilderBuilder
+ * @covers \LizardsAndPumpkins\Product\ProductXmlToProductBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductId
  * @uses   \LizardsAndPumpkins\Utils\XPathParser
  * @uses   \LizardsAndPumpkins\Product\ProductAttribute
+ * @uses   \LizardsAndPumpkins\Product\ProductAttributeListBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageListBuilder
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageBuilder
  */
-class ProductBuilderBuilderTest extends \PHPUnit_Framework_TestCase
+class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ProductBuilderBuilder
+     * @var ProductXmlToProductBuilder
      */
     private $builder;
 
@@ -36,16 +38,39 @@ class ProductBuilderBuilderTest extends \PHPUnit_Framework_TestCase
         ProductBuilder $productBuilder,
         $attributeCode
     ) {
-        $property = new \ReflectionProperty($productBuilder, 'attributes');
+        $attributes = $this->getAttributesWithCodeFromInstance($productBuilder, $attributeCode);
+        $this->assertNotEmpty($attributes);
+        $this->assertEquals($expected, $attributes[0]->getValue());
+    }
+
+    /**
+     * @param ProductBuilder $productBuilder
+     * @param string $attributeCode
+     * @return ProductAttribute[]
+     */
+    private function getAttributesWithCodeFromInstance(ProductBuilder $productBuilder, $attributeCode)
+    {
+        $attributes = $this->getAttributesArrayFromInstance($productBuilder);
+        return array_values(array_filter($attributes, function (ProductAttribute $attribute) use ($attributeCode) {
+            return $attribute->isCodeEqualTo($attributeCode);
+        }));
+    }
+
+    /**
+     * @param ProductBuilder $productBuilder
+     * @return ProductAttribute[]
+     */
+    private function getAttributesArrayFromInstance(ProductBuilder $productBuilder)
+    {
+        $attributeListBuilder = $productBuilder->getAttributeListBuilder();
+        $property = new \ReflectionProperty($attributeListBuilder, 'attributes');
         $property->setAccessible(true);
-        /** @var ProductAttributeList $attributeList */
-        $attributeList = $property->getValue($productBuilder);
-        $this->assertEquals($expected, $attributeList->getAttributesWithCode($attributeCode)[0]->getValue());
+        return $property->getValue($attributeListBuilder);
     }
 
     protected function setUp()
     {
-        $this->builder = new ProductBuilderBuilder();
+        $this->builder = new ProductXmlToProductBuilder();
 
         $xml = file_get_contents(__DIR__ . '/../../../shared-fixture/catalog.xml');
         $this->domDocument = new \DOMDocument();
@@ -83,23 +108,18 @@ class ProductBuilderBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertFirstProductAttributeInAListValueEquals($expectedAttribute, $productBuilder, 'price');
     }
 
-    public function testProductBuilderIsCreatedFromXmlIgnoringAssociatedProductsAttributes()
+    public function testProductBuilderIsCreatedFromXmlIgnoringAssociatedProductAttributes()
     {
         $secondNode = $this->domDocument->getElementsByTagName('product')->item(1);
         $secondNodeXml = $this->domDocument->saveXML($secondNode);
-
-        $this->setExpectedException(
-            ProductAttributeNotFoundException::class,
-            'Can not find an attribute with code "size".'
-        );
-
+        
         $productBuilder = $this->builder->createProductBuilderFromXml($secondNodeXml);
-        $this->assertFirstProductAttributeInAListValueEquals('nothing', $productBuilder, 'size');
+        $this->assertEmpty($this->getAttributesWithCodeFromInstance($productBuilder, 'size'));
     }
 
     public function testExceptionIsThrownIfXmlHasNoEssentialData()
     {
         $this->setExpectedException(InvalidNumberOfSkusPerImportedProductException::class);
-        (new ProductBuilderBuilder())->createProductBuilderFromXml('<?xml version="1.0"?><node/>');
+        (new ProductXmlToProductBuilder())->createProductBuilderFromXml('<?xml version="1.0"?><node/>');
     }
 }

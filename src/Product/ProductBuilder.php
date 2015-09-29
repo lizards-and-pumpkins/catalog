@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Projection\Catalog\Import\ProductImageListBuilder;
 
 class ProductBuilder
 {
@@ -12,14 +13,23 @@ class ProductBuilder
     private $id;
 
     /**
-     * @var ProductAttributeList
+     * @var ProductAttributeListBuilder
      */
-    private $attributes;
+    private $attributeListBuilder;
+    
+    /**
+     * @var ProductImageListBuilder
+     */
+    private $imageListBuilder;
 
-    public function __construct(ProductId $id, ProductAttributeList $attributes)
-    {
+    public function __construct(
+        ProductId $id,
+        ProductAttributeListBuilder $attributeListBuilder,
+        ProductImageListBuilder $imageListBuilder
+    ) {
         $this->id = $id;
-        $this->attributes = $attributes;
+        $this->attributeListBuilder = $attributeListBuilder;
+        $this->imageListBuilder = $imageListBuilder;
     }
 
     /**
@@ -31,11 +41,11 @@ class ProductBuilder
     }
 
     /**
-     * @return ProductAttributeList
+     * @return ProductAttributeListBuilder
      */
-    public function getAttributeList()
+    public function getAttributeListBuilder()
     {
-        return $this->attributes;
+        return $this->attributeListBuilder;
     }
 
     /**
@@ -44,7 +54,8 @@ class ProductBuilder
      */
     public function getProductForContext(Context $context)
     {
-        $attributes = $this->attributes->getAttributeListForContext($context);
-        return new Product($this->getId(), $attributes, $context);
+        $attributes = $this->attributeListBuilder->getAttributeListForContext($context);
+        $images = $this->imageListBuilder->getImageListForContext($context);
+        return new Product($this->getId(), $attributes, $images, $context);
     }
 }

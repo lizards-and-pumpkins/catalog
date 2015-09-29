@@ -60,7 +60,6 @@ class ProductStockQuantitySnippetRendererTest extends \PHPUnit_Framework_TestCas
         $stubSnippetKey = 'bar';
         $stubQuantity = '1';
 
-        $stubSku = $this->getMock(Sku::class);
         $stubContext = $this->getMock(Context::class);
 
         $mockStock = $this->getMock(ProductStockQuantity::class, [], [], '', false);
@@ -68,8 +67,6 @@ class ProductStockQuantitySnippetRendererTest extends \PHPUnit_Framework_TestCas
             ->willReturn($stubQuantity);
 
         $mockProductStockQuantitySource = $this->getMock(ProductStockQuantitySource::class, [], [], '', false);
-        $mockProductStockQuantitySource->method('getSku')
-            ->willReturn($stubSku);
         $mockProductStockQuantitySource->method('getContextData')
             ->willReturn([]);
         $mockProductStockQuantitySource->method('getStock')

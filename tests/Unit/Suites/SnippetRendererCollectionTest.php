@@ -52,9 +52,7 @@ class SnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
         $this->mockRenderer->method('render')->willReturn($this->getMock(SnippetList::class));
         $this->mockRenderer2->method('render')->willReturn($this->getMock(SnippetList::class));
 
-        $stubContextSource = $this->getStubContextSource();
-
-        $snippetList = $this->rendererCollection->render('test-projection-source-data', $stubContextSource);
+        $snippetList = $this->rendererCollection->render('test-projection-source-data');
 
         $this->assertInstanceOf(SnippetList::class, $snippetList);
         $this->assertSame($this->stubSnippetList, $snippetList);

@@ -32,7 +32,8 @@ class Image
      */
     public function getPath($size)
     {
-        /* TODO: Re-implement w/o putting project specific data (size label, media dir) into general purpose class */
+        // TODO: Re-implement w/o putting project specific data (size label, media dir) into general purpose class
+        // Todo: Also the data version has to be part of the path
 
         return '/lizards-and-pumpkins/' . self::MEDIA_DIR . '/' . $size . '/' . $this->src;
     }

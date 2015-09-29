@@ -1,9 +1,9 @@
 <?php
 
+
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Product\Exception\ProductAttributeContextPartsMismatchException;
+use LizardsAndPumpkins\Product\Exception\ConflictingContextDataForProductAttributeListException;
 use LizardsAndPumpkins\Product\Exception\ProductAttributeNotFoundException;
 
 /**
@@ -13,7 +13,6 @@ use LizardsAndPumpkins\Product\Exception\ProductAttributeNotFoundException;
  */
 class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testCountableInterfaceIsImplemented()
     {
         $this->assertInstanceOf(\Countable::class, new ProductAttributeList());
@@ -52,7 +51,7 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
             ProductAttribute::fromArray($attribute1),
             ProductAttribute::fromArray($attribute2)
         );
-        
+
         $attributesWithCode = $attributeList->getAttributesWithCode('foo');
         $this->assertEquals('bar1', $attributesWithCode[0]->getValue());
         $this->assertEquals('bar2', $attributesWithCode[1]->getValue());
@@ -67,7 +66,7 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
         ];
 
         $attributeList = new ProductAttributeList(ProductAttribute::fromArray($attributeArray));
-        
+
         $attributesWithCode = $attributeList->getAttributesWithCode(AttributeCode::fromString('foo'));
         $this->assertEquals('bar', $attributesWithCode[0]->getValue());
     }
@@ -107,63 +106,6 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
 
         $this->assertCount(count($attributeArray), $result);
         $this->assertContainsOnly(ProductAttribute::class, $result);
-    }
-
-    public function testExceptionIsThrownWhenCombiningAttributesWithSameCodeButDifferentContextPartsIntoList()
-    {
-        $attributeA = ProductAttribute::fromArray([
-            'code' => 'attribute_code1',
-            'contextData' => [
-                'foo' => 'bar',
-                'baz' => 'qux',
-            ],
-            'value' => 'A'
-        ]);
-        $attributeB = ProductAttribute::fromArray([
-            'code' => 'attribute_code2',
-            'contextData' => [
-                'foo' => 'bar',
-                'baz' => 'qux',
-            ],
-            'value' => 'B'
-        ]);
-        $attributeC = ProductAttribute::fromArray([
-            'code' => 'attribute_code2',
-            'contextData' => [
-                'foo' => 'bar',
-            ],
-            'value' => 'C'
-        ]);
-
-        $this->setExpectedException(
-            ProductAttributeContextPartsMismatchException::class,
-            'The attribute "attribute_code2" has multiple values with different contexts ' .
-            'which can not be part of one product attribute list'
-        );
-        new ProductAttributeList($attributeA, $attributeB, $attributeC);
-    }
-
-    public function testAttributeValuesForAGivenContextAreExtracted()
-    {
-        $contextDataA = ['website' => 'A'];
-        $contextDataB = ['website' => 'B'];
-        $attributesArray = [
-            ['code' => 'foo', 'contextData' => $contextDataA, 'value' => 'expected'],
-            ['code' => 'foo', 'contextData' => $contextDataA, 'value' => 'expected'],
-            ['code' => 'bar', 'contextData' => $contextDataA, 'value' => 'expected'],
-            ['code' => 'foo', 'contextData' => $contextDataB, 'value' => 'not-expected'],
-            ['code' => 'buz', 'contextData' => $contextDataB, 'value' => 'not-expected'],
-        ];
-
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $this->getMock(Context::class);
-        $stubContext->method('matchesDataSet')->willReturnMap([
-            [$contextDataA, true],
-            [$contextDataB, false],
-        ]);
-        $originalAttributeList = ProductAttributeList::fromArray($attributesArray);
-        $matchingAttributeList = $originalAttributeList->getAttributeListForContext($stubContext);
-        $this->assertCount(3, $matchingAttributeList);
     }
 
     /**
@@ -231,8 +173,33 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
         $sourceAttributeList = ProductAttributeList::fromArray($attributesArray);
 
         $json = json_encode($sourceAttributeList);
-        
+
         $rehydratedAttributeList = ProductAttributeList::fromArray(json_decode($json, true));
         $this->assertEquals($sourceAttributeList->getAttributeCodes(), $rehydratedAttributeList->getAttributeCodes());
+    }
+
+    public function testItThrowsAnExceptionIfContextWithIncompatibleContextDataAreInjected()
+    {
+        $expectedMessage = 'Conflicting context "locale" data set values found ' .
+            'for attributes to be included in one attribute list: "xx_XX" != "yy_YY"';
+        $this->setExpectedException(ConflictingContextDataForProductAttributeListException::class, $expectedMessage);
+        $attributesArray = [
+            [
+                'code' => 'test1',
+                'contextData' => ['website' => 'a'],
+                'value' => 'test'
+            ],
+            [
+                'code' => 'test1',
+                'contextData' => ['website' => 'a', 'locale' => 'xx_XX'],
+                'value' => 'test'
+            ],
+            [
+                'code' => 'test2',
+                'contextData' => ['website' => 'a', 'locale' => 'yy_YY'],
+                'value' => 'test'
+            ]
+        ];
+        ProductAttributeList::fromArray($attributesArray);
     }
 }

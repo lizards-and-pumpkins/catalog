@@ -15,7 +15,7 @@ use LizardsAndPumpkins\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Product\AddProductListingCommand;
 use LizardsAndPumpkins\Product\ProductListingCriteria;
 use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
-use LizardsAndPumpkins\Product\ProductBuilderBuilder;
+use LizardsAndPumpkins\Product\ProductXmlToProductBuilder;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportFileDoesNotExistException;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportFileNotReadableException;
 use LizardsAndPumpkins\Queue\Queue;
@@ -48,9 +48,9 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     private $mockCommandQueue;
 
     /**
-     * @var ProductBuilderBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductXmlToProductBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubProductBuilderBuilder;
+    private $stubProductXmlToProductBuilder;
 
     /**
      * @var ProductListingCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
@@ -102,18 +102,18 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return ProductBuilderBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @return ProductXmlToProductBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createMockProductBuilderBuilder()
+    private function createMockProductXmlToProductBuilder()
     {
         /** @var ProductBuilder|\PHPUnit_Framework_MockObject_MockObject $stubProductBuilder */
         $productBuilder = $this->getMock(ProductBuilder::class, [], [], '', false);
         $productBuilder->method('getId')->willReturn(ProductId::fromString('dummy'));
         $productBuilder->method('getProductForContext')->willReturn($this->getMock(Product::class, [], [], '', false));
 
-        $productBuilderBuilder = $this->getMock(ProductBuilderBuilder::class, [], [], '', false);
-        $productBuilderBuilder->method('createProductBuilderFromXml')->willReturn($productBuilder);
-        return $productBuilderBuilder;
+        $productXmlToProductBuilder = $this->getMock(ProductXmlToProductBuilder::class, [], [], '', false);
+        $productXmlToProductBuilder->method('createProductBuilderFromXml')->willReturn($productBuilder);
+        return $productXmlToProductBuilder;
     }
 
     /**
@@ -138,7 +138,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         $this->mockCommandQueue = $this->getMock(Queue::class);
         $this->addToCommandQueueSpy = $this->any();
         $this->mockCommandQueue->expects($this->addToCommandQueueSpy)->method('add');
-        $this->stubProductBuilderBuilder = $this->createMockProductBuilderBuilder();
+        $this->stubProductXmlToProductBuilder = $this->createMockProductXmlToProductBuilder();
         $this->stubProductListingCriteriaBuilder = $this->createMockProductsPerPageForContextBuilder();
         $this->mockEventQueue = $this->getMock(Queue::class);
         $this->contextSource = $this->getMock(ContextSource::class, [], [], '', false);
@@ -149,7 +149,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
 
         $this->catalogImport = new CatalogImport(
             $this->mockCommandQueue,
-            $this->stubProductBuilderBuilder,
+            $this->stubProductXmlToProductBuilder,
             $this->stubProductListingCriteriaBuilder,
             $this->mockEventQueue,
             $this->contextSource,
@@ -181,7 +181,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsLoggedIfProductBuilderIsInvalid()
     {
-        $this->stubProductBuilderBuilder->method('createProductBuilderFromXml')
+        $this->stubProductXmlToProductBuilder->method('createProductBuilderFromXml')
             ->willThrowException(new ProductAttributeContextPartsMismatchException('dummy'));
 
         $this->logger->expects($this->atLeastOnce())->method('log')
