@@ -3,11 +3,13 @@
         xsi:schemaLocation="http://lizardsandpumpkins.com ../../schema/catalog.xsd">
     <products>
         <product type="simple" sku="288193NEU" visible="true" tax_class_id="5">
-            <attributes>
+            <images>
                 <image>
                     <file>288193_14.jpg</file>
                     <label/>
                 </image>
+            </images>
+            <attributes>
                 <url_key>adilette</url_key>
                 <name>Adilette</name>
                 <category>men-accessories</category>
@@ -19,11 +21,13 @@
             </attributes>
         </product>
         <product type="simple" sku="T4H2N-4701" visible="true" tax_class_id="5">
-            <attributes>
+            <images>
                 <image>
                     <file>t4h2n-4701_14.jpg</file>
                     <label/>
                 </image>
+            </images>
+            <attributes>
                 <url_key>gel-kayano-21</url_key>
                 <name>Gel-Kayano 21</name>
                 <category>men-accessories</category>

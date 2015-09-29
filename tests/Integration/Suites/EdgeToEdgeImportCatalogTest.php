@@ -176,8 +176,14 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         );
 
         $dataPoolReader = $this->factory->createDataPoolReader();
-        $this->assertTrue($dataPoolReader->hasSnippet($validProductDetailViewSnippetKey));
-        $this->assertFalse($dataPoolReader->hasSnippet($invalidProductDetailViewSnippetKey));
+        $this->assertTrue(
+            $dataPoolReader->hasSnippet($validProductDetailViewSnippetKey),
+            sprintf('Expected snippet "%s" not found in data pool', $validProductDetailViewSnippetKey)
+        );
+        $this->assertFalse(
+            $dataPoolReader->hasSnippet($invalidProductDetailViewSnippetKey),
+            sprintf('Unexpected product snippet "%s" found in data pool', $invalidProductDetailViewSnippetKey)
+        );
 
         $logger = $this->factory->getLogger();
         $messages = $logger->getMessages();

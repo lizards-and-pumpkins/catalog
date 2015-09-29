@@ -37,7 +37,6 @@ EOT;
     {
         return <<<EOT
                 <image>
-                    <main>true</main>
                     <file>first-image.jpg</file>
                     <label>The main image label</label>
                 </image>
@@ -52,7 +51,6 @@ EOT;
     {
         return <<<EOT
                 <image>
-                    <show_in_gallery>false</show_in_gallery>
                     <file>second-image.png</file>
                     <label locale="xx_XX">Second image label XX</label>
                     <label locale="yy_YY">Second image label YY</label>
@@ -86,6 +84,24 @@ EOT;
                 <description><![CDATA[A Description with some <strong>Tags</strong>]]></description>
                 <brand>Lizards</brand>
                 <style>Pumpkin</style>
+            </attributes>
+        </product>
+', $this->getImagesSectionWithContext($imageContent));
+    }
+
+    /**
+     * @param string|null $imageXml
+     * @return string
+     */
+    private function getInvalidSimpleProductXml($imageXml = null)
+    {
+        $imageContent = isset($imageXml) ? $imageXml : ($this->getFirstImageXml() . $this->getSecondImageXml());
+        return sprintf('
+        <product type="simple" sku="test-sku" visible="true" tax_class_id="123">
+            %s
+            <attributes>
+                <category website="test1">category-1</category>
+                <category locale="xx_XX">category-2</category>
             </attributes>
         </product>
 ', $this->getImagesSectionWithContext($imageContent));
@@ -219,18 +235,20 @@ EOT;
     /**
      * @param string $expectedXml
      * @param int $expectedCallCount
+     * @param string $callbackIdentifier
      * @return \Closure|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createMockCallbackExpectingXml($expectedXml, $expectedCallCount)
+    private function createMockCallbackExpectingXml($expectedXml, $expectedCallCount, $callbackIdentifier)
     {
         $mockCallback = $this->getMock(Callback::class, ['__invoke']);
         $expected = new \DOMDocument();
         $expected->loadXML($expectedXml);
         $mockCallback->expects($this->exactly($expectedCallCount))->method('__invoke')->willReturnCallback(
-            function ($xml) use ($expected) {
+            function ($xml) use ($expected, $callbackIdentifier) {
                 $actual = new \DOMDocument();
                 $actual->loadXML($xml);
-                $this->assertEqualXMLStructure($expected->firstChild, $actual->firstChild);
+                $message = sprintf('The argument XML for the callback "%s" did not match', $callbackIdentifier);
+                $this->assertEqualXMLStructure($expected->firstChild, $actual->firstChild, false, $message);
             }
         );
         return $mockCallback;
@@ -321,8 +339,10 @@ EOT;
         $instance = CatalogXmlParser::fromXml($this->getCatalogXmlWithOneSimpleProduct());
         $expectedXml = $this->getSimpleProductXml();
         $callCount = 1;
-        $instance->registerProductCallback($this->createMockCallbackExpectingXml($expectedXml, $callCount));
-        $instance->registerProductCallback($this->createMockCallbackExpectingXml($expectedXml, $callCount));
+        $productCallbackA = $this->createMockCallbackExpectingXml($expectedXml, $callCount, 'productCallbackA');
+        $productCallbackB = $this->createMockCallbackExpectingXml($expectedXml, $callCount, 'productCallbackB');
+        $instance->registerProductCallback($productCallbackA);
+        $instance->registerProductCallback($productCallbackB);
         $instance->parse();
     }
 
@@ -331,7 +351,8 @@ EOT;
         $instance = CatalogXmlParser::fromXml($this->getCatalogXmlWithTwoSimpleProducts());
         $expectedXml = $this->getSimpleProductXml();
         $callCount = 2;
-        $instance->registerProductCallback($this->createMockCallbackExpectingXml($expectedXml, $callCount));
+        $callback = $this->createMockCallbackExpectingXml($expectedXml, $callCount, 'productCallback');
+        $instance->registerProductCallback($callback);
         $instance->parse();
     }
 
@@ -340,7 +361,8 @@ EOT;
         $instance = CatalogXmlParser::fromXml($this->getCatalogXmlWithTwoListings());
         $expectedXml = $this->getListingXml();
         $expectedCallCount = 2;
-        $instance->registerListingCallback($this->createMockCallbackExpectingXml($expectedXml, $expectedCallCount));
+        $callback = $this->createMockCallbackExpectingXml($expectedXml, $expectedCallCount, 'imageCallback');
+        $instance->registerListingCallback($callback);
         $instance->parse();
     }
 
@@ -349,7 +371,28 @@ EOT;
         $instance = CatalogXmlParser::fromXml($this->getCatalogXmlWithOneProductImage());
         $callCount = 1;
         $expectedXml = $this->getFirstImageXml();
-        $instance->registerProductImageCallback($this->createMockCallbackExpectingXml($expectedXml, $callCount));
+        $callback = $this->createMockCallbackExpectingXml($expectedXml, $callCount, 'imageCallback');
+        $instance->registerProductImageCallback($callback);
+        $instance->parse();
+    }
+
+    public function testItDoesNotCallImageCallbacksForAProductIfProductCallbackThrowsException()
+    {
+        $imageXml = $this->getFirstImageXml();
+        $invalidProductXml = $this->getInvalidSimpleProductXml($imageXml);
+        $invalidCatalogXml = $this->getCatalogXmlWithContent(
+            $this->getProductSectionWithContent($invalidProductXml)
+        );
+        
+        $instance = CatalogXmlParser::fromXml($invalidCatalogXml);
+        
+        $productCallback = $this->getMock(Callback::class, ['__invoke']);
+        $productCallback->expects($this->once())->method('__invoke')->willThrowException(new \Exception('Test dummy'));
+        $instance->registerProductCallback($productCallback);
+        
+        $expectedImageCalls = 0;
+        $imageCallback = $this->createMockCallbackExpectingXml($imageXml, $expectedImageCalls, 'imageCallback');
+        $instance->registerProductImageCallback($imageCallback);
         $instance->parse();
     }
 }

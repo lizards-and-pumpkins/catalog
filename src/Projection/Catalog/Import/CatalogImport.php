@@ -125,7 +125,7 @@ class CatalogImport
     private function createClosureForProductImageXml($imageDirectoryPath)
     {
         return function (...$args) use ($imageDirectoryPath) {
-            return $this->processProductImageXml($imageDirectoryPath, ...$args);
+            $this->processProductImageXml($imageDirectoryPath, ...$args);
         };
     }
 
@@ -135,9 +135,11 @@ class CatalogImport
     private function processProductXml($productXml)
     {
         try {
-            $this->addProductsFromBuilderToQueue($this->productXmlToProductBuilder->createProductBuilderFromXml($productXml));
+            $productBuilder = $this->productXmlToProductBuilder->createProductBuilderFromXml($productXml);
+            $this->addProductsFromBuilderToQueue($productBuilder);
         } catch (\Exception $exception) {
             $this->logProductImportException($exception, $productXml);
+            throw $exception;
         }
     }
 

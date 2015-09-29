@@ -147,9 +147,13 @@ class CatalogXmlParser
     {
         while ($this->xmlReader->read()) {
             if ($this->isProductNode()) {
-                $productXml = $this->xmlReader->readOuterXml();
-                $this->processCallbacksWithArg($this->productCallbacks, $productXml);
-                $this->processImageCallbacksForProductXml($productXml);
+                try {
+                    $productXml = $this->xmlReader->readOuterXml();
+                    $this->processCallbacksWithArg($this->productCallbacks, $productXml);
+                    $this->processImageCallbacksForProductXml($productXml);
+                } catch (\Exception $e) {
+                    // Intentionally left empty, continue parsing the next product
+                }
             } elseif ($this->isListingNode()) {
                 $this->processCallbacksWithCurrentNode($this->listingCallbacks);
             }
