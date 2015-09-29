@@ -165,6 +165,24 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $stubImage = $this->getMock(ProductImage::class, [], [], '', false);
         $this->stubProductImages->method('offsetGet')->with(0)->willReturn($stubImage);
-        $this->assertSame($stubImage, $this->product->getImageNumber(1));
+        $this->assertSame($stubImage, $this->product->getImageByNumber(0));
+    }
+
+    public function testItReturnsTheGivenProductImageFile()
+    {
+        $stubImage = $this->getMock(ProductImage::class, [], [], '', false);
+        $stubImage->method('getFileName')->willReturn('test.jpg');
+        $this->stubProductImages->method('offsetGet')->with(0)->willReturn($stubImage);
+        $this->assertSame('test.jpg', $this->product->getImageFileNameByNumber(0));
+        $this->assertSame('test.jpg', $this->product->getMainImageFileName());
+    }
+
+    public function testItReturnsTheGivenProductImageLabel()
+    {
+        $stubImage = $this->getMock(ProductImage::class, [], [], '', false);
+        $stubImage->method('getLabel')->willReturn('Foo bar buz');
+        $this->stubProductImages->method('offsetGet')->with(0)->willReturn($stubImage);
+        $this->assertSame('Foo bar buz', $this->product->getImageLabelByNumber(0));
+        $this->assertSame('Foo bar buz', $this->product->getMainImageLabel());
     }
 }

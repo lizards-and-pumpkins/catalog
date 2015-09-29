@@ -117,8 +117,42 @@ class Product implements \JsonSerializable
      * @param int $imageNumber
      * @return ProductImage
      */
-    public function getImageNumber($imageNumber)
+    public function getImageByNumber($imageNumber)
     {
-        return $this->images[$imageNumber -1];
+        return $this->images[$imageNumber];
+    }
+
+    /**
+     * @param int $imageNumber
+     * @return string
+     */
+    public function getImageFileNameByNumber($imageNumber)
+    {
+        return $this->images[$imageNumber]->getFileName();
+    }
+
+    /**
+     * @param int $imageNumber
+     * @return string
+     */
+    public function getImageLabelByNumber($imageNumber)
+    {
+        return $this->images[$imageNumber]->getLabel();
+    }
+
+    /**
+     * @return string
+     */
+    public function getMainImageFileName()
+    {
+        return $this->getImageFileNameByNumber(0);
+    }
+
+    /**
+     * @return string
+     */
+    public function getMainImageLabel()
+    {
+        return $this->getImageLabelByNumber(0);
     }
 }
