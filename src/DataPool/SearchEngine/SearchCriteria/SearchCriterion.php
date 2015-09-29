@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\Exception\InvalidCriterionNameException;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\Exception\InvalidCriterionValueTypeException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 
@@ -35,11 +37,15 @@ abstract class SearchCriterion implements SearchCriteria, \JsonSerializable
     public static function create($fieldName, $fieldValue)
     {
         if (!is_string($fieldName)) {
-            throw new \InvalidArgumentException('Criterion field name should be a string');
+            throw new InvalidCriterionNameException(
+                sprintf('Criterion field name should be a string, got "%s".', gettype($fieldName))
+            );
         }
 
-        if (!is_string($fieldValue)) {
-            throw new \InvalidArgumentException('Criterion field value should be a string');
+        if (!is_string($fieldValue) && !is_int($fieldValue) && !is_float($fieldValue)) {
+            throw new InvalidCriterionValueTypeException(
+                sprintf('Criterion field value should be a string, integer or float, got "%s".', gettype($fieldValue))
+            );
         }
 
         $className = get_called_class();
