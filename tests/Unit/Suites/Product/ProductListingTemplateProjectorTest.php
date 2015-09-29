@@ -54,8 +54,6 @@ class ProductListingTemplateProjectorTest extends \PHPUnit_Framework_TestCase
 
     public function testSnippetListIsWrittenIntoDataPool()
     {
-        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
-        $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
         $projectionSourceDataJson = '{}';
 
         $this->mockDataPoolWriter->expects($this->once())->method('writeSnippetList');

@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Context;
 
 use LizardsAndPumpkins\IntegrationTestFactory;
+use LizardsAndPumpkins\MasterFactory;
 use LizardsAndPumpkins\SampleMasterFactory;
 use LizardsAndPumpkins\CommonFactory;
 
