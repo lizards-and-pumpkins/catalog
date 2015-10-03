@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Product\Exception\InvalidNumberOfSkusPerImportedProductException;
+use LizardsAndPumpkins\Projection\Catalog\Import\ProductBuilder;
 
 /**
  * @covers \LizardsAndPumpkins\Product\ProductXmlToProductBuilder

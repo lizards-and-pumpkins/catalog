@@ -1,9 +1,13 @@
 <?php
 
-namespace LizardsAndPumpkins\Product;
+namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Projection\Catalog\Import\ProductImageListBuilder;
+use LizardsAndPumpkins\Product\Product;
+use LizardsAndPumpkins\Product\ProductAttributeList;
+use LizardsAndPumpkins\Product\ProductAttributeListBuilder;
+use LizardsAndPumpkins\Product\ProductId;
+use LizardsAndPumpkins\Product\ProductImageList;
 
 /**
  * @covers \LizardsAndPumpkins\Product\ProductBuilder

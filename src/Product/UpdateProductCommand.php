@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Command;
+use LizardsAndPumpkins\Projection\Catalog\Import\ProductBuilder;
 
 class UpdateProductCommand implements Command
 {

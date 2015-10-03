@@ -23,7 +23,7 @@ class Product implements \JsonSerializable
      * @var Context
      */
     private $context;
-    
+
     /**
      * @var ProductImageList
      */
