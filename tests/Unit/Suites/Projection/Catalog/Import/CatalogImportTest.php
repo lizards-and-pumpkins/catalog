@@ -15,7 +15,7 @@ use LizardsAndPumpkins\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Product\AddProductListingCommand;
 use LizardsAndPumpkins\Product\ProductListingCriteria;
 use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
-use LizardsAndPumpkins\Product\ProductXmlToProductBuilder;
+use LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilder;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportFileDoesNotExistException;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportFileNotReadableException;
 use LizardsAndPumpkins\Queue\Queue;

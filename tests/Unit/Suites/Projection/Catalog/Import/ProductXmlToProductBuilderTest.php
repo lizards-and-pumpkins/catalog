@@ -1,9 +1,9 @@
 <?php
 
-namespace LizardsAndPumpkins\Product;
+namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
-use LizardsAndPumpkins\Product\Exception\InvalidNumberOfSkusPerImportedProductException;
-use LizardsAndPumpkins\Projection\Catalog\Import\ProductBuilder;
+use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidNumberOfSkusPerImportedProductException;
+use LizardsAndPumpkins\Product\ProductAttribute;
 
 /**
  * @covers \LizardsAndPumpkins\Product\ProductXmlToProductBuilder
@@ -83,7 +83,7 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $this->builder = new ProductXmlToProductBuilder();
 
-        $xml = file_get_contents(__DIR__ . '/../../../shared-fixture/catalog.xml');
+        $xml = file_get_contents(__DIR__ . '/../../../../../shared-fixture/catalog.xml');
         $this->domDocument = new \DOMDocument();
         $this->domDocument->loadXML($xml);
     }

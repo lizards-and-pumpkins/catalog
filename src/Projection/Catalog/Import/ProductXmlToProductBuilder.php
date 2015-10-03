@@ -1,11 +1,10 @@
 <?php
 
-namespace LizardsAndPumpkins\Product;
+namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
-use LizardsAndPumpkins\Product\Exception\InvalidNumberOfSkusPerImportedProductException;
-use LizardsAndPumpkins\Projection\Catalog\Import\ProductAttributeListBuilder;
-use LizardsAndPumpkins\Projection\Catalog\Import\ProductImageListBuilder;
-use LizardsAndPumpkins\Projection\Catalog\Import\ProductBuilder;
+use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidNumberOfSkusPerImportedProductException;
+use LizardsAndPumpkins\Product\ProductAttribute;
+use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Utils\XPathParser;
 
 class ProductXmlToProductBuilder
