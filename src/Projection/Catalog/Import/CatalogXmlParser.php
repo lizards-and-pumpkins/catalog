@@ -63,7 +63,7 @@ class CatalogXmlParser
     {
         self::validateSourceXmlIsString($xmlString);
         $xmlReader = new \XMLReader();
-        $xmlReader->xml($xmlString);
+        $xmlReader->XML($xmlString);
         return new self($xmlReader);
     }
 
