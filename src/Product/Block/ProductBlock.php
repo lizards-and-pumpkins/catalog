@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Product\Block;
 
 use LizardsAndPumpkins\Image;
+use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Renderer\Block;
@@ -74,7 +75,7 @@ class ProductBlock extends Block
     }
 
     /**
-     * @return SimpleProduct
+     * @return Product
      */
     private function getProduct()
     {

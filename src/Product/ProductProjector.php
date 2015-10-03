@@ -54,7 +54,7 @@ class ProductProjector implements Projector
         $this->projectProduct($projectionSourceData);
     }
 
-    private function projectProduct(SimpleProduct $product)
+    private function projectProduct(Product $product)
     {
         $snippetList = $this->rendererCollection->render($product);
         $this->dataPoolWriter->writeSnippetList($snippetList);

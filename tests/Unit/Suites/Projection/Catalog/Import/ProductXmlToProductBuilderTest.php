@@ -31,12 +31,12 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param mixed $expected
-     * @param SimpleProductBuilder $productBuilder
+     * @param ProductBuilder $productBuilder
      * @param string $attributeCode
      */
     private function assertFirstProductAttributeInAListValueEquals(
         $expected,
-        SimpleProductBuilder $productBuilder,
+        ProductBuilder $productBuilder,
         $attributeCode
     ) {
         $attributes = $this->getAttributesWithCodeFromInstance($productBuilder, $attributeCode);
@@ -45,11 +45,11 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param SimpleProductBuilder $productBuilder
+     * @param ProductBuilder $productBuilder
      * @param string $attributeCode
      * @return ProductAttribute[]
      */
-    private function getAttributesWithCodeFromInstance(SimpleProductBuilder $productBuilder, $attributeCode)
+    private function getAttributesWithCodeFromInstance(ProductBuilder $productBuilder, $attributeCode)
     {
         $attributes = $this->getAttributesArrayFromInstance($productBuilder);
         return array_values(array_filter($attributes, function (ProductAttribute $attribute) use ($attributeCode) {
@@ -58,10 +58,10 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param SimpleProductBuilder $productBuilder
+     * @param ProductBuilder $productBuilder
      * @return ProductAttribute[]
      */
-    private function getAttributesArrayFromInstance(SimpleProductBuilder $productBuilder)
+    private function getAttributesArrayFromInstance(ProductBuilder $productBuilder)
     {
         $attributeListBuilder = $this->getPrivatePropertyValue($productBuilder, 'attributeListBuilder');
         return $this->getPrivatePropertyValue($attributeListBuilder, 'attributes');
@@ -99,7 +99,7 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
 
         $productBuilder = $this->builder->createProductBuilderFromXml($firstNodeXml);
 
-        $this->assertInstanceOf(SimpleProductBuilder::class, $productBuilder);
+        $this->assertInstanceOf(ProductBuilder::class, $productBuilder);
         $this->assertEquals($expectedProductId, $productBuilder->getId());
         $this->assertFirstProductAttributeInAListValueEquals($expectedAttribute, $productBuilder, 'special_price');
     }
@@ -114,7 +114,7 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
         $secondNodeXml = $this->domDocument->saveXML($secondNode);
         $productBuilder = $this->builder->createProductBuilderFromXml($secondNodeXml);
 
-        $this->assertInstanceOf(SimpleProductBuilder::class, $productBuilder);
+        $this->assertInstanceOf(ProductBuilder::class, $productBuilder);
         $this->assertEquals($expectedSku, $productBuilder->getId());
         $this->assertFirstProductAttributeInAListValueEquals($expectedAttribute, $productBuilder, 'price');
     }

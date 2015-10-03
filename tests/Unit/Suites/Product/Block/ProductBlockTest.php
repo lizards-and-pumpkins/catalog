@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Product\Block;
 
 use LizardsAndPumpkins\Image;
+use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Renderer\Block;
@@ -20,7 +21,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
     use TestFileFixtureTrait;
 
     /**
-     * @var SimpleProduct|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubProduct;
 

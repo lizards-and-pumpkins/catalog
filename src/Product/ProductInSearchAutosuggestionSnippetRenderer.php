@@ -54,7 +54,7 @@ class ProductInSearchAutosuggestionSnippetRenderer implements SnippetRenderer
         return $this->snippetList;
     }
 
-    private function addProductInSearchAutosuggestionSnippetsToList(SimpleProduct $product)
+    private function addProductInSearchAutosuggestionSnippetsToList(Product $product)
     {
         $content = $this->blockRenderer->render($product, $product->getContext());
         $key = $this->snippetKeyGenerator->getKeyForContext($product->getContext(), [SimpleProduct::ID => $product->getId()]);

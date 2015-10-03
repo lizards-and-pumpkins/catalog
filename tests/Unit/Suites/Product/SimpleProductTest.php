@@ -13,7 +13,7 @@ use LizardsAndPumpkins\Product\Exception\ProductAttributeNotFoundException;
 class SimpleProductTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var SimpleProduct
+     * @var Product
      */
     private $product;
 

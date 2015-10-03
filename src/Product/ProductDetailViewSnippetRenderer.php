@@ -14,7 +14,7 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
     const CODE = 'product_detail_view';
 
     /**
-     * @var SimpleProduct
+     * @var Product
      */
     private $product;
 
@@ -54,12 +54,12 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
         $this->productDetailViewSnippetKeyGenerator = $productDetailViewSnippetKeyGenerator;
         $this->productDetailPageMetaSnippetKeyGenerator = $productDetailPageMetaSnippetKeyGenerator;
     }
-    
+
     /**
-     * @param SimpleProduct $product
+     * @param Product $product
      * @return SnippetList
      */
-    public function render(SimpleProduct $product)
+    public function render(Product $product)
     {
         $this->product = $product;
         $this->context = $product->getContext();

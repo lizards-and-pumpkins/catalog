@@ -45,12 +45,12 @@ class ProductInListingSnippetRenderer implements SnippetRenderer
         return $this->snippetList;
     }
 
-    private function addProductInListingSnippetsToList(SimpleProduct $product)
+    private function addProductInListingSnippetsToList(Product $product)
     {
         $this->addProductInListingInContextSnippetsToList($product);
     }
 
-    private function addProductInListingInContextSnippetsToList(SimpleProduct $product)
+    private function addProductInListingInContextSnippetsToList(Product $product)
     {
         $key = $this->snippetKeyGenerator->getKeyForContext($product->getContext(), [SimpleProduct::ID => $product->getId()]);
         $content = json_encode($product);

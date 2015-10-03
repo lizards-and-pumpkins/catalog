@@ -2,8 +2,8 @@
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductId;
-use LizardsAndPumpkins\Product\SimpleProduct;
 
 interface ProductBuilder
 {
@@ -14,7 +14,7 @@ interface ProductBuilder
 
     /**
      * @param Context $context
-     * @return SimpleProduct
+     * @return Product
      */
     public function getProductForContext(Context $context);
 }

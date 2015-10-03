@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\Projection;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextSource;
+use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\Product\ProductListingCriteria;
 use LizardsAndPumpkins\UrlKey;
@@ -25,10 +26,10 @@ class UrlKeyForContextCollector
     }
     
     /**
-     * @param SimpleProduct $product
+     * @param Product $product
      * @return UrlKeyForContextCollection
      */
-    public function collectProductUrlKeys(SimpleProduct $product)
+    public function collectProductUrlKeys(Product $product)
     {
         $urlKey = UrlKey::fromString($product->getFirstValueOfAttribute(SimpleProduct::URL_KEY));
         $urlKeyForContext = new UrlKeyForContext($urlKey, $product->getContext(), self::URL_KEY_TYPE_PRODUCT);

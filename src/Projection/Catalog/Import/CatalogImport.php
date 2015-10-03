@@ -8,11 +8,9 @@ use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\DataVersion;
 use LizardsAndPumpkins\Image\AddImageCommand;
 use LizardsAndPumpkins\Log\Logger;
-use LizardsAndPumpkins\Product\SimpleProduct;
+use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
-use LizardsAndPumpkins\Projection\Catalog\Import\SimpleProductBuilder;
-use LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilder;
 use LizardsAndPumpkins\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Product\AddProductListingCommand;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportFileDoesNotExistException;
@@ -144,14 +142,14 @@ class CatalogImport
         }
     }
 
-    public function addProductsFromBuilderToQueue(SimpleProductBuilder $productBuilder)
+    public function addProductsFromBuilderToQueue(ProductBuilder $productBuilder)
     {
         array_map(function (Context $context) use ($productBuilder) {
             $this->addCommandToQueue($productBuilder->getProductForContext($context));
         }, $this->contextSource->getAllAvailableContextsWithVersion($this->dataVersion));
     }
 
-    private function addCommandToQueue(SimpleProduct $product)
+    private function addCommandToQueue(Product $product)
     {
         $this->commandQueue->add(new UpdateProductCommand($product));
     }

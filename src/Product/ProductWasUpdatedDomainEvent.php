@@ -12,18 +12,18 @@ class ProductWasUpdatedDomainEvent implements DomainEvent
     private $productId;
 
     /**
-     * @var SimpleProduct
+     * @var Product
      */
     private $product;
 
-    public function __construct(ProductId $productId, SimpleProduct $product)
+    public function __construct(ProductId $productId, Product $product)
     {
         $this->productId = $productId;
         $this->product = $product;
     }
 
     /**
-     * @return SimpleProduct
+     * @return Product
      */
     public function getProduct()
     {

@@ -3,6 +3,7 @@
 
 namespace LizardsAndPumpkins\Projection;
 
+use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\UrlKey;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Product\SimpleProduct;
@@ -29,7 +30,7 @@ class UrlKeyForContextCollectorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $urlKey
-     * @return SimpleProduct|\PHPUnit_Framework_MockObject_MockObject
+     * @return Product|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createStubProductWithUrlKey($urlKey)
     {
@@ -49,7 +50,7 @@ class UrlKeyForContextCollectorTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsAUrlKeyCollectionForProducts()
     {
-        /** @var SimpleProduct|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
+        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
         $stubProduct = $this->createStubProductWithUrlKey('product.html');
         $collection = $this->urlKeyCollector->collectProductUrlKeys($stubProduct);
         $this->assertInstanceOf(UrlKeyForContextCollection::class, $collection);

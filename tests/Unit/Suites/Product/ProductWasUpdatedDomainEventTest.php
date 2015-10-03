@@ -10,7 +10,7 @@ use LizardsAndPumpkins\DomainEvent;
 class ProductWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var SimpleProduct|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubProduct;
 

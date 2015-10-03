@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\Product\ProductId;
 
@@ -43,7 +44,7 @@ class SimpleProductBuilder implements ProductBuilder
 
     /**
      * @param Context $context
-     * @return SimpleProduct
+     * @return Product
      */
     public function getProductForContext(Context $context)
     {

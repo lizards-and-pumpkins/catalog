@@ -39,17 +39,17 @@ class PriceSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param SimpleProduct $product
+     * @param Product $product
      * @return SnippetList
      */
-    public function render(SimpleProduct $product)
+    public function render(Product $product)
     {
         $this->renderProductPriceInContext($product);
 
         return $this->snippetList;
     }
 
-    private function renderProductPriceInContext(SimpleProduct $product)
+    private function renderProductPriceInContext(Product $product)
     {
         $key = $this->snippetKeyGenerator->getKeyForContext($product->getContext(), [SimpleProduct::ID => $product->getId()]);
         $priceString = $product->getFirstValueOfAttribute($this->priceAttributeCode);

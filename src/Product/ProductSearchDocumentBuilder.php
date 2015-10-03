@@ -39,10 +39,10 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
     }
 
     /**
-     * @param SimpleProduct $product
+     * @param Product $product
      * @return SearchDocument[]
      */
-    private function createSearchDocument(SimpleProduct $product)
+    private function createSearchDocument(Product $product)
     {
         $fieldsCollection = $this->createSearchDocumentFieldsCollection($product);
 
@@ -50,10 +50,10 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
     }
 
     /**
-     * @param SimpleProduct $product
+     * @param Product $product
      * @return SearchDocumentFieldCollection
      */
-    private function createSearchDocumentFieldsCollection(SimpleProduct $product)
+    private function createSearchDocumentFieldsCollection(Product $product)
     {
         $attributesMap = array_reduce($this->indexAttributeCodes, function ($carry, $attributeCode) use ($product) {
             $codeAndValues = [$attributeCode => $this->getAttributeValuesForSearchDocument($product, $attributeCode)];
@@ -64,11 +64,11 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
     }
 
     /**
-     * @param SimpleProduct $product
+     * @param Product $product
      * @param string $attributeCode
      * @return array[]
      */
-    private function getAttributeValuesForSearchDocument(SimpleProduct $product, $attributeCode)
+    private function getAttributeValuesForSearchDocument(Product $product, $attributeCode)
     {
         return array_filter($product->getAllValuesOfAttribute($attributeCode), function ($value) {
             return is_scalar($value);

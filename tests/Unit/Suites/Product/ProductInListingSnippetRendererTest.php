@@ -28,14 +28,14 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $dummyProductIdString
-     * @return SimpleProduct|\PHPUnit_Framework_MockObject_MockObject
+     * @return Product|\PHPUnit_Framework_MockObject_MockObject
      */
     private function getStubProduct($dummyProductIdString)
     {
         $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
         $stubProductId->method('__toString')->willReturn($dummyProductIdString);
 
-        /** @var SimpleProduct|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
+        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
         $stubProduct = $this->getMock(SimpleProduct::class, [], [], '', false);
         $stubProduct->method('getId')->willReturn($stubProductId);
         
