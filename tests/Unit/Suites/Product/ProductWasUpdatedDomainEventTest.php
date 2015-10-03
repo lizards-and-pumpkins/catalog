@@ -10,7 +10,7 @@ use LizardsAndPumpkins\DomainEvent;
 class ProductWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var SimpleProduct|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubProduct;
 
@@ -23,7 +23,7 @@ class ProductWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
     {
         /** @var ProductId|\PHPUnit_Framework_MockObject_MockObject $stubProductId */
         $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
-        $this->stubProduct = $this->getMock(Product::class, [], [], '', false);
+        $this->stubProduct = $this->getMock(SimpleProduct::class, [], [], '', false);
         $this->domainEvent = new ProductWasUpdatedDomainEvent($stubProductId, $this->stubProduct);
     }
 

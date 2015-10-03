@@ -8,7 +8,7 @@ use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Image\AddImageCommand;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\ProductAttributeContextPartsMismatchException;
-use LizardsAndPumpkins\Product\Product;
+use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Projection\Catalog\Import\ProductBuilder;
 use LizardsAndPumpkins\Product\UpdateProductCommand;
@@ -109,7 +109,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         /** @var ProductBuilder|\PHPUnit_Framework_MockObject_MockObject $stubProductBuilder */
         $productBuilder = $this->getMock(ProductBuilder::class, [], [], '', false);
         $productBuilder->method('getId')->willReturn(ProductId::fromString('dummy'));
-        $productBuilder->method('getProductForContext')->willReturn($this->getMock(Product::class, [], [], '', false));
+        $productBuilder->method('getProductForContext')->willReturn($this->getMock(SimpleProduct::class, [], [], '', false));
 
         $productXmlToProductBuilder = $this->getMock(ProductXmlToProductBuilder::class, [], [], '', false);
         $productXmlToProductBuilder->method('createProductBuilderFromXml')->willReturn($productBuilder);

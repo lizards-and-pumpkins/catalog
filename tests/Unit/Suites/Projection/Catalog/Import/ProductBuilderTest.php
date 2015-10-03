@@ -3,15 +3,15 @@
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Product\Product;
+use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\Product\ProductAttributeList;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Product\ProductImageList;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductBuilder
- * @uses   \LizardsAndPumpkins\Product\Product
- * @uses   \LizardsAndPumpkins\Product\ProductAttributeListBuilder
+ * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ProductBuilder
+ * @uses   \LizardsAndPumpkins\Product\SimpleProduct
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductAttributeListBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Product\ProductImageList
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageListBuilder
@@ -44,9 +44,8 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
         $this->mockProductAttributeListBuilder = $this->getMockBuilder(ProductAttributeListBuilder::class)
             ->setMethods(['getAttributeListForContext'])
             ->getMock();
-
         $this->mockProductImageListBuilder = $this->getMock(ProductImageListBuilder::class);
-
+        
         $this->productBuilder = new ProductBuilder(
             $this->stubProductId,
             $this->mockProductAttributeListBuilder,
@@ -73,6 +72,6 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->getMock(ProductImageList::class));
 
         $result = $this->productBuilder->getProductForContext($stubContext);
-        $this->assertInstanceOf(Product::class, $result);
+        $this->assertInstanceOf(SimpleProduct::class, $result);
     }
 }

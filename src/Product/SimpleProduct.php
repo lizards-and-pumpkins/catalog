@@ -4,8 +4,9 @@ namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\Context;
 
-class Product implements \JsonSerializable
+class SimpleProduct implements \JsonSerializable
 {
+    const TYPE_ID = 'simple';
     const URL_KEY = 'url_key';
     const ID = 'product_id';
 

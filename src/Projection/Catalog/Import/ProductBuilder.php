@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Product\Product;
+use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\Product\ProductId;
 
 class ProductBuilder
@@ -43,12 +43,12 @@ class ProductBuilder
 
     /**
      * @param Context $context
-     * @return Product
+     * @return SimpleProduct
      */
     public function getProductForContext(Context $context)
     {
         $attributes = $this->attributeListBuilder->getAttributeListForContext($context);
         $images = $this->imageListBuilder->getImageListForContext($context);
-        return new Product($this->getId(), $attributes, $images, $context);
+        return new SimpleProduct($this->getId(), $attributes, $images, $context);
     }
 }

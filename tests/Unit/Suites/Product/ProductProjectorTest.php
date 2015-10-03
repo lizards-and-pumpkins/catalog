@@ -88,7 +88,7 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
             ->method('writeSearchDocumentCollection')
             ->with($this->stubSearchDocumentCollection);
 
-        $stubProduct = $this->getMock(Product::class, [], [], '', false);
+        $stubProduct = $this->getMock(SimpleProduct::class, [], [], '', false);
 
         $this->projector->project($stubProduct);
     }
@@ -104,7 +104,7 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubSearchDocumentBuilder->method('aggregate')->willReturn($this->stubSearchDocumentCollection);
 
-        $stubProduct = $this->getMock(Product::class, [], [], '', false);
+        $stubProduct = $this->getMock(SimpleProduct::class, [], [], '', false);
 
         $urlKeyCollection = $this->stubUrlKeyCollector->collectProductUrlKeys($stubProduct);
         $this->mockDataPoolWriter->expects($this->once())->method('writeUrlKeyCollection')->with($urlKeyCollection);
@@ -116,7 +116,7 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubSearchDocumentBuilder->method('aggregate')->willReturn($this->stubSearchDocumentCollection);
 
-        $stubProduct = $this->getMock(Product::class, [], [], '', false);
+        $stubProduct = $this->getMock(SimpleProduct::class, [], [], '', false);
 
         $this->stubUrlKeyCollector->expects($this->once())->method('collectProductUrlKeys')
             ->with($stubProduct);

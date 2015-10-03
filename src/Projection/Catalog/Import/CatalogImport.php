@@ -8,7 +8,7 @@ use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\DataVersion;
 use LizardsAndPumpkins\Image\AddImageCommand;
 use LizardsAndPumpkins\Log\Logger;
-use LizardsAndPumpkins\Product\Product;
+use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
 use LizardsAndPumpkins\Projection\Catalog\Import\ProductBuilder;
@@ -151,7 +151,7 @@ class CatalogImport
         }, $this->contextSource->getAllAvailableContextsWithVersion($this->dataVersion));
     }
 
-    private function addCommandToQueue(Product $product)
+    private function addCommandToQueue(SimpleProduct $product)
     {
         $this->commandQueue->add(new UpdateProductCommand($product));
     }

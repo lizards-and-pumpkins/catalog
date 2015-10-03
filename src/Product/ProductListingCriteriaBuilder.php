@@ -96,7 +96,7 @@ class ProductListingCriteriaBuilder
         $contextData = [VersionedContext::CODE => (string) $dataVersion];
 
         foreach ($xmlNodeAttributes as $xmlAttribute) {
-            if (Product::URL_KEY !== $xmlAttribute['nodeName'] && 'condition' !== $xmlAttribute['nodeName']) {
+            if (SimpleProduct::URL_KEY !== $xmlAttribute['nodeName'] && 'condition' !== $xmlAttribute['nodeName']) {
                 $contextData[$xmlAttribute['nodeName']] = $xmlAttribute['value'];
             }
         }

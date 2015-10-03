@@ -6,7 +6,7 @@ use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Product\Product;
+use LizardsAndPumpkins\Product\SimpleProduct;
 
 class ProductStockQuantityTest extends AbstractIntegrationTest
 {
@@ -41,8 +41,8 @@ class ProductStockQuantityTest extends AbstractIntegrationTest
         $context = $contextSource->getAllAvailableContexts()[1];
 
         $snippetKeyGenerator = $factory->createProductStockQuantityRendererSnippetKeyGenerator();
-        $snippet1Key = $snippetKeyGenerator->getKeyForContext($context, [Product::ID => 'foo']);
-        $snippet2Key = $snippetKeyGenerator->getKeyForContext($context, [Product::ID => 'bar']);
+        $snippet1Key = $snippetKeyGenerator->getKeyForContext($context, [SimpleProduct::ID => 'foo']);
+        $snippet2Key = $snippetKeyGenerator->getKeyForContext($context, [SimpleProduct::ID => 'bar']);
 
         $dataPoolReader = $factory->createDataPoolReader();
 

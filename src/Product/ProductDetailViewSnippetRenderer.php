@@ -14,7 +14,7 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
     const CODE = 'product_detail_view';
 
     /**
-     * @var Product
+     * @var SimpleProduct
      */
     private $product;
 
@@ -56,10 +56,10 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
     }
     
     /**
-     * @param Product $product
+     * @param SimpleProduct $product
      * @return SnippetList
      */
-    public function render(Product $product)
+    public function render(SimpleProduct $product)
     {
         $this->product = $product;
         $this->context = $product->getContext();
@@ -75,7 +75,7 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
         $content = $this->blockRenderer->render($this->product, $this->context);
         $key = $this->productDetailViewSnippetKeyGenerator->getKeyForContext(
             $this->context,
-            [Product::ID => $this->product->getId()]
+            [SimpleProduct::ID => $this->product->getId()]
         );
         $contentSnippet = Snippet::create($key, $content);
         $this->snippetList->add($contentSnippet);
@@ -91,7 +91,7 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
     {
         $snippetKey = $this->productDetailPageMetaSnippetKeyGenerator->getKeyForContext(
             $this->context,
-            [PageMetaInfoSnippetContent::URL_KEY => $this->product->getFirstValueOfAttribute(Product::URL_KEY)]
+            [PageMetaInfoSnippetContent::URL_KEY => $this->product->getFirstValueOfAttribute(SimpleProduct::URL_KEY)]
         );
         $metaData = $this->getPageMetaSnippetContent();
         return Snippet::create($snippetKey, json_encode($metaData));

@@ -6,16 +6,16 @@ use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidNumberOfSkusPe
 use LizardsAndPumpkins\Product\ProductAttribute;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductXmlToProductBuilder
- * @uses   \LizardsAndPumpkins\Product\ProductBuilder
- * @uses   \LizardsAndPumpkins\Product\ProductId
- * @uses   \LizardsAndPumpkins\Utils\XPathParser
- * @uses   \LizardsAndPumpkins\Product\ProductAttribute
- * @uses   \LizardsAndPumpkins\Product\ProductAttributeListBuilder
- * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
- * @uses   \LizardsAndPumpkins\Product\AttributeCode
+ * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilder
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductBuilder
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductAttributeListBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageListBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductId
+ * @uses   \LizardsAndPumpkins\Product\ProductAttribute
+ * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
+ * @uses   \LizardsAndPumpkins\Product\AttributeCode
+ * @uses   \LizardsAndPumpkins\Utils\XPathParser
  */
 class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
 {

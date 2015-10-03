@@ -57,7 +57,7 @@ class ProductBackOrderAvailabilitySnippetRendererTest extends \PHPUnit_Framework
         $dummyBackOrderAvailabilitySnippetKey = 'bar';
         $dummyBackOrderAvailabilityAttributeValue = '1';
 
-        $mockProduct = $this->getMock(Product::class, [], [], '', false);
+        $mockProduct = $this->getMock(SimpleProduct::class, [], [], '', false);
         $mockProduct->method('getFirstValueOfAttribute')
             ->with($this->dummyBackOrderAvailabilityAttributeCode)
             ->willReturn($dummyBackOrderAvailabilityAttributeValue);

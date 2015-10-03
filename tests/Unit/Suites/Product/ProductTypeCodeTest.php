@@ -5,6 +5,9 @@ namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Product\Exception\InvalidProductTypeIdentifierException;
 
+/**
+ * @covers \LizardsAndPumpkins\Product\ProductTypeCode
+ */
 class ProductTypeCodeTest extends \PHPUnit_Framework_TestCase
 {
     public function testItThrowsAnExceptionIfTheTypeIsNotAString()

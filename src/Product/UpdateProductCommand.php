@@ -8,11 +8,11 @@ use LizardsAndPumpkins\Projection\Catalog\Import\ProductBuilder;
 class UpdateProductCommand implements Command
 {
     /**
-     * @var Product
+     * @var SimpleProduct
      */
     private $product;
 
-    public function __construct(Product $product)
+    public function __construct(SimpleProduct $product)
     {
         $this->product = $product;
     }

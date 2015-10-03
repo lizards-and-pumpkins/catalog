@@ -21,7 +21,7 @@ class ProductWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCas
 
     protected function setUp()
     {
-        $stubProduct = $this->getMock(Product::class, [], [], '', false);
+        $stubProduct = $this->getMock(SimpleProduct::class, [], [], '', false);
 
         $stubDomainEvent = $this->getMock(ProductWasUpdatedDomainEvent::class, [], [], '', false);
         $stubDomainEvent->method('getProductBuilder')->willReturn($stubProduct);

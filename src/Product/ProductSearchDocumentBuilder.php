@@ -29,7 +29,7 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
      */
     public function aggregate($projectionSourceData)
     {
-        if (!($projectionSourceData instanceof Product)) {
+        if (!($projectionSourceData instanceof SimpleProduct)) {
             throw new InvalidProjectionSourceDataTypeException('First argument must be a Product instance.');
         }
 
@@ -39,10 +39,10 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
     }
 
     /**
-     * @param Product $product
+     * @param SimpleProduct $product
      * @return SearchDocument[]
      */
-    private function createSearchDocument(Product $product)
+    private function createSearchDocument(SimpleProduct $product)
     {
         $fieldsCollection = $this->createSearchDocumentFieldsCollection($product);
 
@@ -50,10 +50,10 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
     }
 
     /**
-     * @param Product $product
+     * @param SimpleProduct $product
      * @return SearchDocumentFieldCollection
      */
-    private function createSearchDocumentFieldsCollection(Product $product)
+    private function createSearchDocumentFieldsCollection(SimpleProduct $product)
     {
         $attributesMap = array_reduce($this->indexAttributeCodes, function ($carry, $attributeCode) use ($product) {
             $codeAndValues = [$attributeCode => $this->getAttributeValuesForSearchDocument($product, $attributeCode)];
@@ -64,11 +64,11 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
     }
 
     /**
-     * @param Product $product
+     * @param SimpleProduct $product
      * @param string $attributeCode
      * @return array[]
      */
-    private function getAttributeValuesForSearchDocument(Product $product, $attributeCode)
+    private function getAttributeValuesForSearchDocument(SimpleProduct $product, $attributeCode)
     {
         return array_filter($product->getAllValuesOfAttribute($attributeCode), function ($value) {
             return is_scalar($value);

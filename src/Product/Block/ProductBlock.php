@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Product\Block;
 
 use LizardsAndPumpkins\Image;
-use LizardsAndPumpkins\Product\Product;
+use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Renderer\Block;
 
@@ -36,7 +36,7 @@ class ProductBlock extends Block
     public function getProductUrl()
     {
         /* TODO: Implement retrieval of base URL for context */
-        return '/lizards-and-pumpkins/' . $this->getFirstValueOfProductAttribute(Product::URL_KEY);
+        return '/lizards-and-pumpkins/' . $this->getFirstValueOfProductAttribute(SimpleProduct::URL_KEY);
     }
 
     /**
@@ -74,7 +74,7 @@ class ProductBlock extends Block
     }
 
     /**
-     * @return Product
+     * @return SimpleProduct
      */
     private function getProduct()
     {

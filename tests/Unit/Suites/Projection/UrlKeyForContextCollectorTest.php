@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\Projection;
 
 use LizardsAndPumpkins\UrlKey;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Product\Product;
+use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Product\ProductListingCriteria;
 
@@ -29,12 +29,12 @@ class UrlKeyForContextCollectorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $urlKey
-     * @return Product|\PHPUnit_Framework_MockObject_MockObject
+     * @return SimpleProduct|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createStubProductWithUrlKey($urlKey)
     {
-        $stubProduct = $this->getMock(Product::class, [], [], '', false);
-        $stubProduct->method('getFirstValueOfAttribute')->with(Product::URL_KEY)->willReturn($urlKey);
+        $stubProduct = $this->getMock(SimpleProduct::class, [], [], '', false);
+        $stubProduct->method('getFirstValueOfAttribute')->with(SimpleProduct::URL_KEY)->willReturn($urlKey);
         $stubProduct->method('getContext')->willReturn($this->getMock(Context::class));
         return $stubProduct;
     }
@@ -49,7 +49,7 @@ class UrlKeyForContextCollectorTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsAUrlKeyCollectionForProducts()
     {
-        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
+        /** @var SimpleProduct|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
         $stubProduct = $this->createStubProductWithUrlKey('product.html');
         $collection = $this->urlKeyCollector->collectProductUrlKeys($stubProduct);
         $this->assertInstanceOf(UrlKeyForContextCollection::class, $collection);

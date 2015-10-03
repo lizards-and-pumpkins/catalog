@@ -171,8 +171,8 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $invokedProductIds = array_reduce(
             $spy->getInvocations(),
             function (array $carry, \PHPUnit_Framework_MockObject_Invocation_Object $invocation) {
-                if (is_array($invocation->parameters[1]) && isset($invocation->parameters[1][Product::ID])) {
-                    $carry[] = $invocation->parameters[1][Product::ID];
+                if (is_array($invocation->parameters[1]) && isset($invocation->parameters[1][SimpleProduct::ID])) {
+                    $carry[] = $invocation->parameters[1][SimpleProduct::ID];
                 }
                 return $carry;
             },

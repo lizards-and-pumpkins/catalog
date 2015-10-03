@@ -137,7 +137,7 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->stubPageBuilder->method('buildPage')->with(
             $this->anything(),
             $this->anything(),
-            [Product::ID => $this->testProductId]
+            [SimpleProduct::ID => $this->testProductId]
         )->willReturn($this->getMock(DefaultHttpResponse::class, [], [], '', false));
         
         $this->assertInstanceOf(DefaultHttpResponse::class, $this->requestHandler->process($this->stubRequest));

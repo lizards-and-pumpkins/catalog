@@ -38,8 +38,8 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testSearchDocumentCollectionIsReturned()
     {
-        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
-        $stubProduct = $this->getMock(Product::class, [], [], '', false);
+        /** @var SimpleProduct|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
+        $stubProduct = $this->getMock(SimpleProduct::class, [], [], '', false);
         $stubProduct->method('getAllValuesOfAttribute')->with($this->searchableAttributeCode)->willReturn(['bar']);
         $stubProduct->method('getContext')->willReturn($this->getMock(Context::class, [], [], '', false));
         $stubProduct->method('getId')->willReturn($this->getMock(ProductId::class, [], [], '', false));

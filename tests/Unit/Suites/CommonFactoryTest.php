@@ -76,7 +76,7 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\Product\FilterNavigationFilterCollection
  * @uses   \LizardsAndPumpkins\Product\PriceSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductBackOrderAvailabilitySnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductXmlToProductBuilder
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductProjector
  * @uses   \LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer

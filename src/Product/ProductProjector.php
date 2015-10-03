@@ -47,14 +47,14 @@ class ProductProjector implements Projector
      */
     public function project($projectionSourceData)
     {
-        if (!($projectionSourceData instanceof Product)) {
+        if (!($projectionSourceData instanceof SimpleProduct)) {
             throw new InvalidProjectionSourceDataTypeException('First argument must be a Product instance.');
         }
 
         $this->projectProduct($projectionSourceData);
     }
 
-    private function projectProduct(Product $product)
+    private function projectProduct(SimpleProduct $product)
     {
         $snippetList = $this->rendererCollection->render($product);
         $this->dataPoolWriter->writeSnippetList($snippetList);

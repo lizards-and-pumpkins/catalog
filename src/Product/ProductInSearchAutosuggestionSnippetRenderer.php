@@ -45,7 +45,7 @@ class ProductInSearchAutosuggestionSnippetRenderer implements SnippetRenderer
      */
     public function render($projectionSourceData)
     {
-        if (!($projectionSourceData instanceof Product)) {
+        if (!($projectionSourceData instanceof SimpleProduct)) {
             throw new InvalidProjectionSourceDataTypeException('First argument must be a Product instance.');
         }
 
@@ -54,10 +54,10 @@ class ProductInSearchAutosuggestionSnippetRenderer implements SnippetRenderer
         return $this->snippetList;
     }
 
-    private function addProductInSearchAutosuggestionSnippetsToList(Product $product)
+    private function addProductInSearchAutosuggestionSnippetsToList(SimpleProduct $product)
     {
         $content = $this->blockRenderer->render($product, $product->getContext());
-        $key = $this->snippetKeyGenerator->getKeyForContext($product->getContext(), [Product::ID => $product->getId()]);
+        $key = $this->snippetKeyGenerator->getKeyForContext($product->getContext(), [SimpleProduct::ID => $product->getId()]);
         $contentSnippet = Snippet::create($key, $content);
         $this->snippetList->add($contentSnippet);
     }
