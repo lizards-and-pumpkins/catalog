@@ -53,12 +53,6 @@ class SimpleProductBuilderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testProductIdIsReturned()
-    {
-        $result = $this->productBuilder->getId();
-        $this->assertSame($this->stubProductId, $result);
-    }
-
     public function testProductForContextIsReturned()
     {
         $stubContext = $this->getMock(Context::class);

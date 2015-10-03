@@ -141,7 +141,6 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
         $productBuilder = $this->builder->createProductBuilderFromXml($simpleProductXml);
 
         $this->assertInstanceOf(SimpleProductBuilder::class, $productBuilder);
-        $this->assertEquals($expectedProductId, $productBuilder->getId());
         $this->assertFirstProductAttributeInAListValueEquals($expectedSpecialPrice, $productBuilder, 'special_price');
     }
 

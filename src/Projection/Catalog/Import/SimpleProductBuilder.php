@@ -35,14 +35,6 @@ class SimpleProductBuilder implements ProductBuilder
     }
 
     /**
-     * @return ProductId
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * @param Context $context
      * @return Product
      */
@@ -50,6 +42,6 @@ class SimpleProductBuilder implements ProductBuilder
     {
         $attributes = $this->attributeListBuilder->getAttributeListForContext($context);
         $images = $this->imageListBuilder->getImageListForContext($context);
-        return new SimpleProduct($this->getId(), $attributes, $images, $context);
+        return new SimpleProduct($this->id, $attributes, $images, $context);
     }
 }
