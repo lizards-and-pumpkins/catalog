@@ -7,7 +7,7 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Image\AddImageCommand;
 use LizardsAndPumpkins\Log\Logger;
-use LizardsAndPumpkins\Product\Exception\ProductAttributeContextPartsMismatchException;
+use LizardsAndPumpkins\Projection\Catalog\Import\Exception\ProductAttributeContextPartsMismatchException;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Projection\Catalog\Import\ProductBuilder;

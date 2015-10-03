@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Product\Exception\InvalidNumberOfSkusPerImportedProductException;
+use LizardsAndPumpkins\Projection\Catalog\Import\ProductAttributeListBuilder;
 use LizardsAndPumpkins\Projection\Catalog\Import\ProductImageListBuilder;
 use LizardsAndPumpkins\Projection\Catalog\Import\ProductBuilder;
 use LizardsAndPumpkins\Utils\XPathParser;
