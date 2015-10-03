@@ -57,11 +57,6 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->stubProductId, $result);
     }
 
-    public function testItReturnsTheAttributeList()
-    {
-        $this->assertSame($this->mockProductAttributeListBuilder, $this->productBuilder->getAttributeListBuilder());
-    }
-
     public function testProductForContextIsReturned()
     {
         $stubContext = $this->getMock(Context::class);

@@ -41,14 +41,6 @@ class ProductBuilder
     }
 
     /**
-     * @return ProductAttributeListBuilder
-     */
-    public function getAttributeListBuilder()
-    {
-        return $this->attributeListBuilder;
-    }
-
-    /**
      * @param Context $context
      * @return Product
      */

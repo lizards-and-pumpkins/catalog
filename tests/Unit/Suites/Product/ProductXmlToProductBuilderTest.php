@@ -62,10 +62,20 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private function getAttributesArrayFromInstance(ProductBuilder $productBuilder)
     {
-        $attributeListBuilder = $productBuilder->getAttributeListBuilder();
-        $property = new \ReflectionProperty($attributeListBuilder, 'attributes');
+        $attributeListBuilder = $this->getPrivatePropertyValue($productBuilder, 'attributeListBuilder');
+        return $this->getPrivatePropertyValue($attributeListBuilder, 'attributes');
+    }
+
+    /**
+     * @param object $object
+     * @param string $propertyName
+     * @return mixed
+     */
+    private function getPrivatePropertyValue($object, $propertyName)
+    {
+        $property = new \ReflectionProperty($object, $propertyName);
         $property->setAccessible(true);
-        return $property->getValue($attributeListBuilder);
+        return $property->getValue($object);
     }
 
     protected function setUp()
