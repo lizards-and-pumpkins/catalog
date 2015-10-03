@@ -9,14 +9,14 @@ use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Product\ProductImageList;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ProductBuilder
- * @uses   \LizardsAndPumpkins\Product\SimpleProduct
+ * @covers \LizardsAndPumpkins\Projection\Catalog\Import\SimpleProductBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductAttributeListBuilder
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageListBuilder
+ * @uses   \LizardsAndPumpkins\Product\SimpleProduct
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Product\ProductImageList
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageListBuilder
  */
-class ProductBuilderTest extends \PHPUnit_Framework_TestCase
+class SimpleProductBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ProductId|\PHPUnit_Framework_MockObject_MockObject
@@ -24,7 +24,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
     private $stubProductId;
 
     /**
-     * @var ProductBuilder
+     * @var SimpleProductBuilder
      */
     private $productBuilder;
 
@@ -46,7 +46,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->mockProductImageListBuilder = $this->getMock(ProductImageListBuilder::class);
         
-        $this->productBuilder = new ProductBuilder(
+        $this->productBuilder = new SimpleProductBuilder(
             $this->stubProductId,
             $this->mockProductAttributeListBuilder,
             $this->mockProductImageListBuilder

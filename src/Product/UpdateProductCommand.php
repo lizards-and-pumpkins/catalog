@@ -3,7 +3,6 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Command;
-use LizardsAndPumpkins\Projection\Catalog\Import\ProductBuilder;
 
 class UpdateProductCommand implements Command
 {
@@ -18,7 +17,7 @@ class UpdateProductCommand implements Command
     }
 
     /**
-     * @return ProductBuilder
+     * @return SimpleProduct
      */
     public function getProduct()
     {

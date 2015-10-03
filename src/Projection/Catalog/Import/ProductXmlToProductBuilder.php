@@ -11,7 +11,7 @@ class ProductXmlToProductBuilder
 {
     /**
      * @param string $xml
-     * @return ProductBuilder
+     * @return SimpleProductBuilder
      */
     public function createProductBuilderFromXml($xml)
     {
@@ -25,7 +25,7 @@ class ProductXmlToProductBuilder
 
         $imageListBuilder = $this->createProductImageListBuilder($parser, $productId);
 
-        return new ProductBuilder($productId, $attributeListBuilder, $imageListBuilder);
+        return new SimpleProductBuilder($productId, $attributeListBuilder, $imageListBuilder);
     }
 
     /**

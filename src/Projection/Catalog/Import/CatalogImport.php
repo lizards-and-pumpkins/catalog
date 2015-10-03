@@ -11,7 +11,7 @@ use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
-use LizardsAndPumpkins\Projection\Catalog\Import\ProductBuilder;
+use LizardsAndPumpkins\Projection\Catalog\Import\SimpleProductBuilder;
 use LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilder;
 use LizardsAndPumpkins\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Product\AddProductListingCommand;
@@ -144,7 +144,7 @@ class CatalogImport
         }
     }
 
-    public function addProductsFromBuilderToQueue(ProductBuilder $productBuilder)
+    public function addProductsFromBuilderToQueue(SimpleProductBuilder $productBuilder)
     {
         array_map(function (Context $context) use ($productBuilder) {
             $this->addCommandToQueue($productBuilder->getProductForContext($context));

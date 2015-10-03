@@ -7,7 +7,7 @@ use LizardsAndPumpkins\Product\ProductAttribute;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilder
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductBuilder
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\SimpleProductBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductAttributeListBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageListBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageBuilder
@@ -31,12 +31,12 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param mixed $expected
-     * @param ProductBuilder $productBuilder
+     * @param SimpleProductBuilder $productBuilder
      * @param string $attributeCode
      */
     private function assertFirstProductAttributeInAListValueEquals(
         $expected,
-        ProductBuilder $productBuilder,
+        SimpleProductBuilder $productBuilder,
         $attributeCode
     ) {
         $attributes = $this->getAttributesWithCodeFromInstance($productBuilder, $attributeCode);
@@ -45,11 +45,11 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param ProductBuilder $productBuilder
+     * @param SimpleProductBuilder $productBuilder
      * @param string $attributeCode
      * @return ProductAttribute[]
      */
-    private function getAttributesWithCodeFromInstance(ProductBuilder $productBuilder, $attributeCode)
+    private function getAttributesWithCodeFromInstance(SimpleProductBuilder $productBuilder, $attributeCode)
     {
         $attributes = $this->getAttributesArrayFromInstance($productBuilder);
         return array_values(array_filter($attributes, function (ProductAttribute $attribute) use ($attributeCode) {
@@ -58,10 +58,10 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param ProductBuilder $productBuilder
+     * @param SimpleProductBuilder $productBuilder
      * @return ProductAttribute[]
      */
-    private function getAttributesArrayFromInstance(ProductBuilder $productBuilder)
+    private function getAttributesArrayFromInstance(SimpleProductBuilder $productBuilder)
     {
         $attributeListBuilder = $this->getPrivatePropertyValue($productBuilder, 'attributeListBuilder');
         return $this->getPrivatePropertyValue($attributeListBuilder, 'attributes');
@@ -99,7 +99,7 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
 
         $productBuilder = $this->builder->createProductBuilderFromXml($firstNodeXml);
 
-        $this->assertInstanceOf(ProductBuilder::class, $productBuilder);
+        $this->assertInstanceOf(SimpleProductBuilder::class, $productBuilder);
         $this->assertEquals($expectedProductId, $productBuilder->getId());
         $this->assertFirstProductAttributeInAListValueEquals($expectedAttribute, $productBuilder, 'special_price');
     }
@@ -114,7 +114,7 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
         $secondNodeXml = $this->domDocument->saveXML($secondNode);
         $productBuilder = $this->builder->createProductBuilderFromXml($secondNodeXml);
 
-        $this->assertInstanceOf(ProductBuilder::class, $productBuilder);
+        $this->assertInstanceOf(SimpleProductBuilder::class, $productBuilder);
         $this->assertEquals($expectedSku, $productBuilder->getId());
         $this->assertFirstProductAttributeInAListValueEquals($expectedAttribute, $productBuilder, 'price');
     }
