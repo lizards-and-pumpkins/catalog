@@ -122,6 +122,7 @@ class ProductXmlToProductBuilder
      */
     private function createProductBuilderForProductType(ProductTypeCode $typeCode, XPathParser $parser)
     {
+        // todo: return product builder based on type code here.
         return $this->createSimpleProductBuilder($parser);
     }
 
