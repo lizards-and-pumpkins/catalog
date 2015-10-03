@@ -6,7 +6,7 @@ use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidNumberOfSkusPe
 use LizardsAndPumpkins\Product\ProductAttribute;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilder
+ * @covers \LizardsAndPumpkins\Projection\Catalog\Import\SimpleProductXmlToSimpleProductBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\SimpleProductBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductAttributeListBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageListBuilder
@@ -17,10 +17,10 @@ use LizardsAndPumpkins\Product\ProductAttribute;
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Utils\XPathParser
  */
-class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
+class SimpleProductXmlToSimpleProductBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ProductXmlToProductBuilder
+     * @var SimpleProductXmlToSimpleProductBuilder
      */
     private $builder;
 
@@ -81,7 +81,7 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->builder = new ProductXmlToProductBuilder();
+        $this->builder = new SimpleProductXmlToSimpleProductBuilder();
 
         $xml = file_get_contents(__DIR__ . '/../../../../../shared-fixture/catalog.xml');
         $this->domDocument = new \DOMDocument();
@@ -131,6 +131,6 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownIfXmlHasNoEssentialData()
     {
         $this->setExpectedException(InvalidNumberOfSkusPerImportedProductException::class);
-        (new ProductXmlToProductBuilder())->createProductBuilderFromXml('<?xml version="1.0"?><node/>');
+        (new SimpleProductXmlToSimpleProductBuilder())->createProductBuilderFromXml('<?xml version="1.0"?><node/>');
     }
 }
