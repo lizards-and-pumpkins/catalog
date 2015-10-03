@@ -113,16 +113,6 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
         return $domDocument->getElementsByTagName('special_price')->item(0)->nodeValue;
     }
 
-    /**
-     * @return string
-     */
-    private function getProductSkuFromXml($productXml)
-    {
-        $domDocument = new \DOMDocument();
-        $domDocument->loadXML($productXml);
-        return $domDocument->getElementsByTagName('product')->item(0)->attributes->getNamedItem('sku')->nodeValue;
-    }
-
     protected function setUp()
     {
         $this->builder = new ProductXmlToProductBuilder();
@@ -135,7 +125,6 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
     public function testSimpleProductBuilderIsCreatedFromXml()
     {
         $simpleProductXml = $this->getSimpleProductXml();
-        $expectedProductId = $this->getProductSkuFromXml($simpleProductXml);
         $expectedSpecialPrice = $this->getSpecialPriceFromProductXml($simpleProductXml);
 
         $productBuilder = $this->builder->createProductBuilderFromXml($simpleProductXml);
