@@ -27,7 +27,7 @@ class CatalogImport
     private $commandQueue;
 
     /**
-     * @var SimpleProductXmlToSimpleProductBuilder
+     * @var ProductXmlToProductBuilder
      */
     private $productXmlToProductBuilder;
 
@@ -58,7 +58,7 @@ class CatalogImport
 
     public function __construct(
         Queue $commandQueue,
-        SimpleProductXmlToSimpleProductBuilder $productXmlToProductBuilder,
+        ProductXmlToProductBuilder $productXmlToProductBuilder,
         ProductListingCriteriaBuilder $productListingCriteriaBuilder,
         Queue $eventQueue,
         ContextSource $contextSource,

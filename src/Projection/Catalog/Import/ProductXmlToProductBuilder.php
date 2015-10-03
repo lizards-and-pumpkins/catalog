@@ -7,7 +7,7 @@ use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Utils\XPathParser;
 
-class SimpleProductXmlToSimpleProductBuilder
+class ProductXmlToProductBuilder
 {
     /**
      * @param string $xml

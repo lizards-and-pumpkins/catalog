@@ -56,7 +56,7 @@ use LizardsAndPumpkins\Product\ProductProjector;
 use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
 use LizardsAndPumpkins\Product\ProductSearchDocumentBuilder;
 use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer;
-use LizardsAndPumpkins\Projection\Catalog\Import\SimpleProductXmlToSimpleProductBuilder;
+use LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilder;
 use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
@@ -703,11 +703,11 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return SimpleProductXmlToSimpleProductBuilder
+     * @return ProductXmlToProductBuilder
      */
     public function createProductXmlToProductBuilder()
     {
-        return new SimpleProductXmlToSimpleProductBuilder();
+        return new ProductXmlToProductBuilder();
     }
 
     /**
