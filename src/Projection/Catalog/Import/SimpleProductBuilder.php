@@ -6,7 +6,7 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\Product\ProductId;
 
-class SimpleProductBuilder
+class SimpleProductBuilder implements ProductBuilder
 {
     /**
      * @var ProductId
