@@ -6,7 +6,6 @@ namespace LizardsAndPumpkins\Projection;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\UrlKey;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Product\ProductListingCriteria;
 

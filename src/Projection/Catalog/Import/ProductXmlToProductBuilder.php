@@ -11,7 +11,7 @@ class ProductXmlToProductBuilder
 {
     /**
      * @param string $xml
-     * @return SimpleProductBuilder
+     * @return ProductBuilder
      */
     public function createProductBuilderFromXml($xml)
     {
