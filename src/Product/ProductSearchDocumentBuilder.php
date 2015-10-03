@@ -29,7 +29,7 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
      */
     public function aggregate($projectionSourceData)
     {
-        if (!($projectionSourceData instanceof SimpleProduct)) {
+        if (!($projectionSourceData instanceof Product)) {
             throw new InvalidProjectionSourceDataTypeException('First argument must be a Product instance.');
         }
 

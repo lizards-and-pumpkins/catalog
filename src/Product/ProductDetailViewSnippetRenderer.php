@@ -75,7 +75,7 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
         $content = $this->blockRenderer->render($this->product, $this->context);
         $key = $this->productDetailViewSnippetKeyGenerator->getKeyForContext(
             $this->context,
-            [SimpleProduct::ID => $this->product->getId()]
+            [Product::ID => $this->product->getId()]
         );
         $contentSnippet = Snippet::create($key, $content);
         $this->snippetList->add($contentSnippet);
@@ -91,7 +91,7 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
     {
         $snippetKey = $this->productDetailPageMetaSnippetKeyGenerator->getKeyForContext(
             $this->context,
-            [PageMetaInfoSnippetContent::URL_KEY => $this->product->getFirstValueOfAttribute(SimpleProduct::URL_KEY)]
+            [PageMetaInfoSnippetContent::URL_KEY => $this->product->getFirstValueOfAttribute(Product::URL_KEY)]
         );
         $metaData = $this->getPageMetaSnippetContent();
         return Snippet::create($snippetKey, json_encode($metaData));

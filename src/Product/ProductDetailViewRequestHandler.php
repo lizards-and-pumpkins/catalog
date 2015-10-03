@@ -73,7 +73,7 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
         }
 
         $keyGeneratorParams = [
-            SimpleProduct::ID => $this->pageMetaInfo->getProductId()
+            Product::ID => $this->pageMetaInfo->getProductId()
         ];
 
         return $this->pageBuilder->buildPage($this->pageMetaInfo, $this->context, $keyGeneratorParams);

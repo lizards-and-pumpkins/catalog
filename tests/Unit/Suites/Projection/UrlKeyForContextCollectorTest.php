@@ -34,8 +34,8 @@ class UrlKeyForContextCollectorTest extends \PHPUnit_Framework_TestCase
      */
     private function createStubProductWithUrlKey($urlKey)
     {
-        $stubProduct = $this->getMock(SimpleProduct::class, [], [], '', false);
-        $stubProduct->method('getFirstValueOfAttribute')->with(SimpleProduct::URL_KEY)->willReturn($urlKey);
+        $stubProduct = $this->getMock(Product::class);
+        $stubProduct->method('getFirstValueOfAttribute')->with(Product::URL_KEY)->willReturn($urlKey);
         $stubProduct->method('getContext')->willReturn($this->getMock(Context::class));
         return $stubProduct;
     }

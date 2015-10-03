@@ -212,7 +212,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
             ProductInListingSnippetRenderer::CODE
         );
         return array_map(function (SearchDocument $searchDocument) use ($keyGenerator) {
-            return $keyGenerator->getKeyForContext($this->context, [SimpleProduct::ID => $searchDocument->getProductId()]);
+            return $keyGenerator->getKeyForContext($this->context, [Product::ID => $searchDocument->getProductId()]);
         }, $searchDocuments);
     }
 

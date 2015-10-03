@@ -36,7 +36,7 @@ class ProductInListingSnippetRenderer implements SnippetRenderer
      */
     public function render($projectionSourceData)
     {
-        if (!($projectionSourceData instanceof SimpleProduct)) {
+        if (!($projectionSourceData instanceof Product)) {
             throw new InvalidProjectionSourceDataTypeException('First argument must be a Product instance.');
         }
 
@@ -52,7 +52,7 @@ class ProductInListingSnippetRenderer implements SnippetRenderer
 
     private function addProductInListingInContextSnippetsToList(Product $product)
     {
-        $key = $this->snippetKeyGenerator->getKeyForContext($product->getContext(), [SimpleProduct::ID => $product->getId()]);
+        $key = $this->snippetKeyGenerator->getKeyForContext($product->getContext(), [Product::ID => $product->getId()]);
         $content = json_encode($product);
 
         $contentSnippet = Snippet::create($key, $content);

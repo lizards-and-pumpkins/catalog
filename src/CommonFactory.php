@@ -29,6 +29,7 @@ use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\DefaultNumberOfProductsPerPageSnippetRenderer;
 use LizardsAndPumpkins\Product\FilterNavigationFilterCollection;
 use LizardsAndPumpkins\Product\PriceSnippetRenderer;
+use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\Product\ProductBackOrderAvailabilitySnippetRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewBlockRenderer;
@@ -538,7 +539,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductDetailViewSnippetKeyGenerator()
     {
-        $usedDataParts = [SimpleProduct::ID];
+        $usedDataParts = [Product::ID];
 
         return new GenericSnippetKeyGenerator(
             'product_detail_view',
@@ -617,7 +618,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductInListingSnippetKeyGenerator()
     {
-        $usedDataParts = [SimpleProduct::ID];
+        $usedDataParts = [Product::ID];
 
         return new GenericSnippetKeyGenerator(
             ProductInListingSnippetRenderer::CODE,
@@ -643,7 +644,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductInSearchAutosuggestionSnippetKeyGenerator()
     {
-        $usedDataParts = [SimpleProduct::ID];
+        $usedDataParts = [Product::ID];
 
         return new GenericSnippetKeyGenerator(
             ProductInSearchAutosuggestionSnippetRenderer::CODE,
@@ -657,7 +658,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createPriceSnippetKeyGenerator()
     {
-        $usedDataParts = [SimpleProduct::ID];
+        $usedDataParts = [Product::ID];
 
         return new GenericSnippetKeyGenerator(
             $this->getMasterFactory()->getRegularPriceSnippetKey(),
@@ -671,7 +672,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductBackOrderAvailabilitySnippetKeyGenerator()
     {
-        $usedDataParts = [SimpleProduct::ID];
+        $usedDataParts = [Product::ID];
 
         return new GenericSnippetKeyGenerator(
             $this->getMasterFactory()->getProductBackOrderAvailabilitySnippetKey(),
@@ -1035,7 +1036,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductStockQuantityRendererSnippetKeyGenerator()
     {
-        $usedDataParts = [SimpleProduct::ID];
+        $usedDataParts = [Product::ID];
 
         return new GenericSnippetKeyGenerator(
             ProductStockQuantitySnippetRenderer::CODE,

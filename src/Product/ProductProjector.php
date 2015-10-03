@@ -47,7 +47,7 @@ class ProductProjector implements Projector
      */
     public function project($projectionSourceData)
     {
-        if (!($projectionSourceData instanceof SimpleProduct)) {
+        if (!($projectionSourceData instanceof Product)) {
             throw new InvalidProjectionSourceDataTypeException('First argument must be a Product instance.');
         }
 

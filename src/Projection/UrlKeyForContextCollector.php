@@ -31,7 +31,7 @@ class UrlKeyForContextCollector
      */
     public function collectProductUrlKeys(Product $product)
     {
-        $urlKey = UrlKey::fromString($product->getFirstValueOfAttribute(SimpleProduct::URL_KEY));
+        $urlKey = UrlKey::fromString($product->getFirstValueOfAttribute(Product::URL_KEY));
         $urlKeyForContext = new UrlKeyForContext($urlKey, $product->getContext(), self::URL_KEY_TYPE_PRODUCT);
         return new UrlKeyForContextCollection($urlKeyForContext);
     }

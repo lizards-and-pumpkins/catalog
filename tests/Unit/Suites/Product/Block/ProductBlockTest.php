@@ -34,7 +34,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
     {
         /** @var  $stubBlockRenderer BlockRenderer|\PHPUnit_Framework_MockObject_MockObject */
         $stubBlockRenderer = $this->getMock(BlockRenderer::class, [], [], '', false);
-        $this->stubProduct = $this->getMock(SimpleProduct::class, [], [], '', false);
+        $this->stubProduct = $this->getMock(Product::class);
 
         $this->productBlock = new ProductBlock($stubBlockRenderer, 'foo.phtml', 'foo', $this->stubProduct);
     }
@@ -84,7 +84,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
     {
         $urlKey = 'foo';
 
-        $this->stubProduct->method('getFirstValueOfAttribute')->with(SimpleProduct::URL_KEY)->willReturn($urlKey);
+        $this->stubProduct->method('getFirstValueOfAttribute')->with(Product::URL_KEY)->willReturn($urlKey);
         $result = $this->productBlock->getProductUrl();
 
         $this->assertEquals('/lizards-and-pumpkins/' . $urlKey, $result);

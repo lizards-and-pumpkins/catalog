@@ -23,7 +23,7 @@ class ProductWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
     {
         /** @var ProductId|\PHPUnit_Framework_MockObject_MockObject $stubProductId */
         $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
-        $this->stubProduct = $this->getMock(SimpleProduct::class, [], [], '', false);
+        $this->stubProduct = $this->getMock(Product::class);
         $this->domainEvent = new ProductWasUpdatedDomainEvent($stubProductId, $this->stubProduct);
     }
 

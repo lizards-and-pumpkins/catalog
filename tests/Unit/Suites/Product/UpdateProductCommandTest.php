@@ -21,7 +21,7 @@ class UpdateProductCommandTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubProduct = $this->getMock(SimpleProduct::class, [], [], '', false);
+        $this->stubProduct = $this->getMock(Product::class);
         $this->command = new UpdateProductCommand($this->stubProduct);
     }
 
