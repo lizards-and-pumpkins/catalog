@@ -79,6 +79,49 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
         return $property->getValue($object);
     }
 
+    /**
+     * @return string
+     */
+    private function getSimpleProductXml()
+    {
+        $xpath = new \DOMXPath($this->domDocument);
+        $xpath->registerNamespace('lp', 'http://lizardsandpumpkins.com');
+        $firstSimpleProduct = $xpath->query("/lp:catalog/lp:products/lp:product[@type='simple'][1]")[0];
+        return $this->domDocument->saveXML($firstSimpleProduct);
+    }
+
+    /**
+     * @return string
+     */
+    private function getConfigurableProductXml()
+    {
+        $xpath = new \DOMXPath($this->domDocument);
+        $xpath->registerNamespace('lp', 'http://lizardsandpumpkins.com');
+        $firstConfigurableProduct = $xpath->query("/lp:catalog/lp:products/lp:product[@type='configurable'][1]")[0];
+        return $this->domDocument->saveXML($firstConfigurableProduct);
+    }
+
+    /**
+     * @param string $productXml
+     * @return string
+     */
+    private function getSpecialPriceFromProductXml($productXml)
+    {
+        $domDocument = new \DOMDocument();
+        $domDocument->loadXML($productXml);
+        return $domDocument->getElementsByTagName('special_price')->item(0)->nodeValue;
+    }
+
+    /**
+     * @return string
+     */
+    private function getProductSkuFromXml($productXml)
+    {
+        $domDocument = new \DOMDocument();
+        $domDocument->loadXML($productXml);
+        return $domDocument->getElementsByTagName('product')->item(0)->attributes->getNamedItem('sku')->nodeValue;
+    }
+
     protected function setUp()
     {
         $this->builder = new ProductXmlToProductBuilder();
@@ -88,35 +131,29 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
         $this->domDocument->loadXML($xml);
     }
 
-    public function testProductBuilderIsCreatedFromXml()
+    public function testSimpleProductBuilderIsCreatedFromXml()
     {
-        /** @var \DOMElement $firstNode */
-        $firstNode = $this->domDocument->getElementsByTagName('product')->item(0);
-        $expectedProductId = $firstNode->attributes->getNamedItem('sku')->nodeValue;
-        $expectedAttribute = $firstNode->getElementsByTagName('special_price')->item(0)->nodeValue;
+        $simpleProductXml = $this->getSimpleProductXml();
+        $expectedProductId = $this->getProductSkuFromXml($simpleProductXml);
+        $expectedSpecialPrice = $this->getSpecialPriceFromProductXml($simpleProductXml);
 
-        $firstNodeXml = $this->domDocument->saveXML($firstNode);
+        $productBuilder = $this->builder->createProductBuilderFromXml($simpleProductXml);
 
-        $productBuilder = $this->builder->createProductBuilderFromXml($firstNodeXml);
-
-        $this->assertInstanceOf(ProductBuilder::class, $productBuilder);
+        $this->assertInstanceOf(SimpleProductBuilder::class, $productBuilder);
         $this->assertEquals($expectedProductId, $productBuilder->getId());
-        $this->assertFirstProductAttributeInAListValueEquals($expectedAttribute, $productBuilder, 'special_price');
+        $this->assertFirstProductAttributeInAListValueEquals($expectedSpecialPrice, $productBuilder, 'special_price');
     }
 
-    public function testProductBuilderIsCreatedFromXmlIgnoringAssociatedProducts()
+    public function testConfigurableProductBuilderIsCreatedFromXml()
     {
-        /** @var \DOMElement $secondNode */
-        $secondNode = $this->domDocument->getElementsByTagName('product')->item(1);
-        $expectedSku = $secondNode->attributes->getNamedItem('sku')->nodeValue;
-        $expectedAttribute = $secondNode->getElementsByTagName('price')->item(0)->nodeValue;
+        $this->markTestSkipped('Skipped until ConfigurableProductBuilder is implemented');
+        $configurableProductXml = $this->getConfigurableProductXml();
+        $expectedProductId = $this->getProductSkuFromXml($configurableProductXml);
+        $expectedSpecialPrice = $this->getSpecialPriceFromProductXml($configurableProductXml);
 
-        $secondNodeXml = $this->domDocument->saveXML($secondNode);
-        $productBuilder = $this->builder->createProductBuilderFromXml($secondNodeXml);
+        $productBuilder = $this->builder->createProductBuilderFromXml($configurableProductXml);
 
-        $this->assertInstanceOf(ProductBuilder::class, $productBuilder);
-        $this->assertEquals($expectedSku, $productBuilder->getId());
-        $this->assertFirstProductAttributeInAListValueEquals($expectedAttribute, $productBuilder, 'price');
+        $this->assertInstanceOf(ConfigurableProductBuilder::class, $productBuilder);
     }
 
     public function testProductBuilderIsCreatedFromXmlIgnoringAssociatedProductAttributes()
@@ -131,6 +168,6 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownIfXmlHasNoEssentialData()
     {
         $this->setExpectedException(InvalidNumberOfSkusPerImportedProductException::class);
-        (new ProductXmlToProductBuilder())->createProductBuilderFromXml('<?xml version="1.0"?><node/>');
+        (new ProductXmlToProductBuilder())->createProductBuilderFromXml('<?xml version="1.0"?><catalog/>');
     }
 }

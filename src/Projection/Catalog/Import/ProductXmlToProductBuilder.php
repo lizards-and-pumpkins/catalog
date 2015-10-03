@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
+use LizardsAndPumpkins\Product\ProductTypeCode;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidNumberOfSkusPerImportedProductException;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductId;
@@ -17,15 +18,9 @@ class ProductXmlToProductBuilder
     {
         $parser = new XPathParser($xml);
 
-        $skuNode = $parser->getXmlNodesArrayByXPath('/product/@sku');
-        $skuString = $this->getSkuStringFromDomNodeArray($skuNode);
-        $productId = ProductId::fromString($skuString);
+        $productTypeCode = ProductTypeCode::fromString($this->getTypeCodeFromXml($parser));
 
-        $attributeListBuilder = $this->createProductAttributeListBuilder($parser);
-
-        $imageListBuilder = $this->createProductImageListBuilder($parser, $productId);
-
-        return new SimpleProductBuilder($productId, $attributeListBuilder, $imageListBuilder);
+        return $this->createProductBuilderForProductType($productTypeCode, $parser);
     }
 
     /**
@@ -82,5 +77,47 @@ class ProductXmlToProductBuilder
             return $imageNode['value'];
         }, array_map([$this, 'nodeArrayAsAttributeArray'], $imagesNodes));
         return ProductImageListBuilder::fromArray($productId, $imagesArray);
+    }
+
+    /**
+     * @param XPathParser $parser
+     * @return string
+     */
+    private function getSkuFromXml(XPathParser $parser)
+    {
+        $skuNode = $parser->getXmlNodesArrayByXPath('/product/@sku');
+        return $this->getSkuStringFromDomNodeArray($skuNode);
+    }
+
+    /**
+     * @param XPathParser $parser
+     * @return string
+     */
+    private function getTypeCodeFromXml(XPathParser $parser)
+    {
+        $skuNode = $parser->getXmlNodesArrayByXPath('/product/@type');
+        return $this->getSkuStringFromDomNodeArray($skuNode);
+    }
+
+    /**
+     * @param ProductTypeCode $typeCode
+     * @param XPathParser $parser
+     * @return SimpleProductBuilder
+     */
+    private function createProductBuilderForProductType(ProductTypeCode $typeCode, XPathParser $parser)
+    {
+        return $this->createSimpleProductBuilder($parser);
+    }
+
+    /**
+     * @param XPathParser $parser
+     * @return SimpleProductBuilder
+     */
+    private function createSimpleProductBuilder(XPathParser $parser)
+    {
+        $productId = ProductId::fromString($this->getSkuFromXml($parser));
+        $attributeListBuilder = $this->createProductAttributeListBuilder($parser);
+        $imageListBuilder = $this->createProductImageListBuilder($parser, $productId);
+        return new SimpleProductBuilder($productId, $attributeListBuilder, $imageListBuilder);
     }
 }
