@@ -2,8 +2,9 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
-use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidNumberOfSkusPerImportedProductException;
+use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidNumberOfSkusForImportedProductException;
 use LizardsAndPumpkins\Product\ProductAttribute;
+use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidProductTypeCodeForImportedProductException;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilder
@@ -148,8 +149,6 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $this->markTestSkipped('Skipped until ConfigurableProductBuilder is implemented');
         $configurableProductXml = $this->getConfigurableProductXml();
-        $expectedProductId = $this->getProductSkuFromXml($configurableProductXml);
-        $expectedSpecialPrice = $this->getSpecialPriceFromProductXml($configurableProductXml);
 
         $productBuilder = $this->builder->createProductBuilderFromXml($configurableProductXml);
 
@@ -165,9 +164,19 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($this->getAttributesWithCodeFromInstance($productBuilder, 'size'));
     }
 
-    public function testExceptionIsThrownIfXmlHasNoEssentialData()
+    public function testExceptionIsThrownIfSkuIsMissing()
     {
-        $this->setExpectedException(InvalidNumberOfSkusPerImportedProductException::class);
-        (new ProductXmlToProductBuilder())->createProductBuilderFromXml('<?xml version="1.0"?><catalog/>');
+        $this->setExpectedException(InvalidNumberOfSkusForImportedProductException::class);
+        $xml = '<product type="simple"></product>';
+        
+        (new ProductXmlToProductBuilder())->createProductBuilderFromXml($xml);
+    }
+
+    public function testExceptionIsThrownIfProductTypeCodeIsMissing()
+    {
+        $this->setExpectedException(InvalidProductTypeCodeForImportedProductException::class);
+        $xml = '<product sku="foo"></product>';
+
+        (new ProductXmlToProductBuilder())->createProductBuilderFromXml($xml);
     }
 }

@@ -3,9 +3,10 @@
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
 use LizardsAndPumpkins\Product\ProductTypeCode;
-use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidNumberOfSkusPerImportedProductException;
+use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidNumberOfSkusForImportedProductException;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductId;
+use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidProductTypeCodeForImportedProductException;
 use LizardsAndPumpkins\Utils\XPathParser;
 
 class ProductXmlToProductBuilder
@@ -46,8 +47,23 @@ class ProductXmlToProductBuilder
     private function getSkuStringFromDomNodeArray(array $nodeArray)
     {
         if (1 !== count($nodeArray)) {
-            throw new InvalidNumberOfSkusPerImportedProductException(
+            throw new InvalidNumberOfSkusForImportedProductException(
                 'There must be exactly one SKU in the imported product XML'
+            );
+        }
+
+        return $nodeArray[0]['value'];
+    }
+
+    /**
+     * @param mixed[] $nodeArray
+     * @return string
+     */
+    private function getTypeCodeStringFromDomNodeArray(array $nodeArray)
+    {
+        if (1 !== count($nodeArray)) {
+            throw new InvalidProductTypeCodeForImportedProductException(
+                'There must be exactly one product type code attribute specified on the import product XML'
             );
         }
 
@@ -95,8 +111,8 @@ class ProductXmlToProductBuilder
      */
     private function getTypeCodeFromXml(XPathParser $parser)
     {
-        $skuNode = $parser->getXmlNodesArrayByXPath('/product/@type');
-        return $this->getSkuStringFromDomNodeArray($skuNode);
+        $typeNode = $parser->getXmlNodesArrayByXPath('/product/@type');
+        return $this->getTypeCodeStringFromDomNodeArray($typeNode);
     }
 
     /**

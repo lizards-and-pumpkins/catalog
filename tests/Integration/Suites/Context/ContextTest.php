@@ -24,7 +24,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     public function testDecoratedContextSetIsCreated()
     {
         $xml = <<<EOX
-<product sku="test"><attributes>
+<product sku="test" type="simple"><attributes>
     <name website="ru" locale="de_DE">ru-de_DE</name>
     <name website="ru" locale="en_US">ru-en_US</name>
     <name website="cy" locale="de_DE">cy-de_DE</name>

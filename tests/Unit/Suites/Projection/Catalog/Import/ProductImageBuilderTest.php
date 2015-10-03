@@ -53,7 +53,7 @@ class ProductImageBuilderTest extends \PHPUnit_Framework_TestCase
         ProductImageBuilder::fromArray($this->testProductId, []);
     }
 
-    public function testItReturnsAProductImageForAgivenContext()
+    public function testItReturnsAProductImageForAGivenContext()
     {
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->getMock(Context::class);
