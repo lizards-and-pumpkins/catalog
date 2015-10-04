@@ -1,11 +1,13 @@
 <?php
 
-namespace LizardsAndPumpkins\Product;
+namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Projection\Catalog\Import\ProductImageListBuilder;
+use LizardsAndPumpkins\Product\Product;
+use LizardsAndPumpkins\Product\SimpleProduct;
+use LizardsAndPumpkins\Product\ProductId;
 
-class ProductBuilder
+class SimpleProductBuilder implements ProductBuilder
 {
     /**
      * @var ProductId
@@ -33,22 +35,6 @@ class ProductBuilder
     }
 
     /**
-     * @return ProductId
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return ProductAttributeListBuilder
-     */
-    public function getAttributeListBuilder()
-    {
-        return $this->attributeListBuilder;
-    }
-
-    /**
      * @param Context $context
      * @return Product
      */
@@ -56,6 +42,6 @@ class ProductBuilder
     {
         $attributes = $this->attributeListBuilder->getAttributeListForContext($context);
         $images = $this->imageListBuilder->getImageListForContext($context);
-        return new Product($this->getId(), $attributes, $images, $context);
+        return new SimpleProduct($this->id, $attributes, $images, $context);
     }
 }

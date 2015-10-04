@@ -1,19 +1,22 @@
 <?php
 
-namespace LizardsAndPumpkins\Product;
+namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Projection\Catalog\Import\ProductImageListBuilder;
+use LizardsAndPumpkins\Product\SimpleProduct;
+use LizardsAndPumpkins\Product\ProductAttributeList;
+use LizardsAndPumpkins\Product\ProductId;
+use LizardsAndPumpkins\Product\ProductImageList;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductBuilder
- * @uses   \LizardsAndPumpkins\Product\Product
- * @uses   \LizardsAndPumpkins\Product\ProductAttributeListBuilder
+ * @covers \LizardsAndPumpkins\Projection\Catalog\Import\SimpleProductBuilder
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductAttributeListBuilder
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageListBuilder
+ * @uses   \LizardsAndPumpkins\Product\SimpleProduct
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Product\ProductImageList
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageListBuilder
  */
-class ProductBuilderTest extends \PHPUnit_Framework_TestCase
+class SimpleProductBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ProductId|\PHPUnit_Framework_MockObject_MockObject
@@ -21,7 +24,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
     private $stubProductId;
 
     /**
-     * @var ProductBuilder
+     * @var SimpleProductBuilder
      */
     private $productBuilder;
 
@@ -38,28 +41,14 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->stubProductId = $this->getMock(ProductId::class, [], [], '', false);
-        $this->mockProductAttributeListBuilder = $this->getMockBuilder(ProductAttributeListBuilder::class)
-            ->setMethods(['getAttributeListForContext'])
-            ->getMock();
-
+        $this->mockProductAttributeListBuilder = $this->getMock(ProductAttributeListBuilder::class);
         $this->mockProductImageListBuilder = $this->getMock(ProductImageListBuilder::class);
-
-        $this->productBuilder = new ProductBuilder(
+        
+        $this->productBuilder = new SimpleProductBuilder(
             $this->stubProductId,
             $this->mockProductAttributeListBuilder,
             $this->mockProductImageListBuilder
         );
-    }
-
-    public function testProductIdIsReturned()
-    {
-        $result = $this->productBuilder->getId();
-        $this->assertSame($this->stubProductId, $result);
-    }
-
-    public function testItReturnsTheAttributeList()
-    {
-        $this->assertSame($this->mockProductAttributeListBuilder, $this->productBuilder->getAttributeListBuilder());
     }
 
     public function testProductForContextIsReturned()
@@ -75,6 +64,6 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->getMock(ProductImageList::class));
 
         $result = $this->productBuilder->getProductForContext($stubContext);
-        $this->assertInstanceOf(Product::class, $result);
+        $this->assertInstanceOf(SimpleProduct::class, $result);
     }
 }

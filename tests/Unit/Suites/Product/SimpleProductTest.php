@@ -6,11 +6,11 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Product\Exception\ProductAttributeNotFoundException;
 
 /**
- * @covers \LizardsAndPumpkins\Product\Product
+ * @covers \LizardsAndPumpkins\Product\SimpleProduct
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Product\ProductImageList
  */
-class ProductTest extends \PHPUnit_Framework_TestCase
+class SimpleProductTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Product
@@ -43,7 +43,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->stubProductAttributeList = $this->getMock(ProductAttributeList::class);
         $this->stubContext = $this->getMock(Context::class);
         $this->stubProductImages = $this->getMock(ProductImageList::class);
-        $this->product = new Product(
+        $this->product = new SimpleProduct(
             $this->stubProductId,
             $this->stubProductAttributeList,
             $this->stubProductImages,

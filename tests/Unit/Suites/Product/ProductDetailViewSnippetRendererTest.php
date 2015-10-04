@@ -70,7 +70,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockSnippetList->expects($this->exactly(2))->method('add');
         /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
-        $stubProduct = $this->getMock(Product::class, [], [], '', false);
+        $stubProduct = $this->getMock(Product::class);
         $stubProduct->method('getId')->willReturn(2);
         $stubProduct->method('getContext')->willReturn($this->getMock(Context::class));
         $this->renderer->render($stubProduct);
@@ -79,7 +79,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
     public function testContainedJson()
     {
         /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
-        $stubProduct = $this->getMock(Product::class, [], [], '', false);
+        $stubProduct = $this->getMock(Product::class);
         $stubProduct->method('getId')->willReturn(2);
         $stubProduct->method('getContext')->willReturn($this->getMock(Context::class));
         $this->renderer->render($stubProduct);

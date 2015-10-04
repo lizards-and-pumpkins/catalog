@@ -2,7 +2,7 @@
 <catalog xmlns="http://lizardsandpumpkins.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://lizardsandpumpkins.com ../../schema/catalog.xsd">
     <products>
-        <product type="simple" sku="288193NEU" visible="true" tax_class_id="5">
+        <product type="simple" sku="288193NEU">
             <images>
                 <image>
                     <file>288193_14.jpg</file>
@@ -20,7 +20,7 @@
                 <backorders>false</backorders>
             </attributes>
         </product>
-        <product type="simple" sku="T4H2N-4701" visible="true" tax_class_id="5">
+        <product type="simple" sku="T4H2N-4701">
             <images>
                 <image>
                     <file>t4h2n-4701_14.jpg</file>

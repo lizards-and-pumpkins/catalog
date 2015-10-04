@@ -72,8 +72,8 @@ class ListUrlKeys extends BaseCliCommand
         $version = $this->getVersionToDisplay();
         $type = $this->getArg('type');
         $rawUrlKeyRecords = $this->getDataPoolReader()->getUrlKeysForVersion($version);
-        $urlKeyRecordsForType = array_filter($rawUrlKeyRecords, function ($rawUrlkeyRecord) use ($type) {
-            return $type === 'all' || $rawUrlkeyRecord[self::IDX_TYPE] === $type;
+        $urlKeyRecordsForType = array_filter($rawUrlKeyRecords, function ($rawUrlKeyRecord) use ($type) {
+            return $type === 'all' || $rawUrlKeyRecord[self::IDX_TYPE] === $type;
         });
         $formattedUrlKeys = $this->getFormattedUrlKeysArray($urlKeyRecordsForType);
         $this->outputArray($formattedUrlKeys);

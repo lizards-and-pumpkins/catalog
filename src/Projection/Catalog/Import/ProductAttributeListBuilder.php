@@ -1,9 +1,12 @@
 <?php
 
-namespace LizardsAndPumpkins\Product;
+namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Product\Exception\ProductAttributeContextPartsMismatchException;
+use LizardsAndPumpkins\Product\AttributeCode;
+use LizardsAndPumpkins\Projection\Catalog\Import\Exception\ProductAttributeContextPartsMismatchException;
+use LizardsAndPumpkins\Product\ProductAttribute;
+use LizardsAndPumpkins\Product\ProductAttributeList;
 
 class ProductAttributeListBuilder
 {

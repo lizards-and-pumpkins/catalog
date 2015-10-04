@@ -67,7 +67,7 @@ EOT;
     {
         $imageContent = isset($imageXml) ? $imageXml : ($this->getFirstImageXml() . $this->getSecondImageXml());
         return sprintf('
-        <product type="simple" sku="test-sku" visible="true" tax_class_id="123">
+        <product type="simple" sku="test-sku">
             %s
             <attributes>
                 <category website="test1" locale="xx_XX">category-1</category>
@@ -97,7 +97,7 @@ EOT;
     {
         $imageContent = isset($imageXml) ? $imageXml : ($this->getFirstImageXml() . $this->getSecondImageXml());
         return sprintf('
-        <product type="simple" sku="test-sku" visible="true" tax_class_id="123">
+        <product type="simple" sku="test-sku">
             %s
             <attributes>
                 <category website="test1">category-1</category>

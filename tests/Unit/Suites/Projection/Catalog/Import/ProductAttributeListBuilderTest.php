@@ -1,12 +1,13 @@
 <?php
 
-namespace LizardsAndPumpkins\Product;
+namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Product\Exception\ProductAttributeContextPartsMismatchException;
+use LizardsAndPumpkins\Product\ProductAttribute;
+use LizardsAndPumpkins\Projection\Catalog\Import\Exception\ProductAttributeContextPartsMismatchException;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductAttributeListBuilder
+ * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ProductAttributeListBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Product\ProductAttribute
  * @uses   \LizardsAndPumpkins\Product\AttributeCode

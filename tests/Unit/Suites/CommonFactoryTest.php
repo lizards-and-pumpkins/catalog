@@ -25,7 +25,7 @@ use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductProjector;
-use LizardsAndPumpkins\Product\ProductXmlToProductBuilder;
+use LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilder;
 use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductStockQuantityProjector;
@@ -76,7 +76,7 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\Product\FilterNavigationFilterCollection
  * @uses   \LizardsAndPumpkins\Product\PriceSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductBackOrderAvailabilitySnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductXmlToProductBuilder
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductProjector
  * @uses   \LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer

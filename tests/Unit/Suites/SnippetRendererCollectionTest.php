@@ -96,12 +96,4 @@ class SnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
 
         $this->rendererCollection->render($testProjectionSourceData);
     }
-
-    /**
-     * @return ContextSource|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getStubContextSource()
-    {
-        return $this->getMock(ContextSource::class, [], [], '', false);
-    }
 }

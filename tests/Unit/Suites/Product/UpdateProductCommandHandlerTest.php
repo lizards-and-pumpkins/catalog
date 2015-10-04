@@ -25,7 +25,7 @@ class UpdateProductCommandHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
         /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
-        $stubProduct = $this->getMock(Product::class, [], [], '', false);
+        $stubProduct = $this->getMock(Product::class);
         $stubProduct->method('getId')->willReturn($stubProductId);
 
         /** @var UpdateProductCommand|\PHPUnit_Framework_MockObject_MockObject $stubCommand */

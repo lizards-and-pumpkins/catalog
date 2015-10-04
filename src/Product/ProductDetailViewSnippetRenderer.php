@@ -54,7 +54,7 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
         $this->productDetailViewSnippetKeyGenerator = $productDetailViewSnippetKeyGenerator;
         $this->productDetailPageMetaSnippetKeyGenerator = $productDetailPageMetaSnippetKeyGenerator;
     }
-    
+
     /**
      * @param Product $product
      * @return SnippetList

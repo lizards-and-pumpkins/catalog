@@ -38,7 +38,7 @@ class ProductInSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framewor
         $stubContext = $this->getMock(Context::class);
 
         /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
-        $stubProduct = $this->getMock(Product::class, [], [], '', false);
+        $stubProduct = $this->getMock(Product::class);
         $stubProduct->method('getId')->willReturn($stubProductId);
         $stubProduct->method('getContext')->willReturn($stubContext);
 

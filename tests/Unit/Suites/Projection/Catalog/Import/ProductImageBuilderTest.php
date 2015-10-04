@@ -11,9 +11,9 @@ use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidProductImageAt
 
 /**
  * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageBuilder
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductAttributeListBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductId
  * @uses   \LizardsAndPumpkins\Product\ProductImage
- * @uses   \LizardsAndPumpkins\Product\ProductAttributeListBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Product\ProductAttribute
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
@@ -53,7 +53,7 @@ class ProductImageBuilderTest extends \PHPUnit_Framework_TestCase
         ProductImageBuilder::fromArray($this->testProductId, []);
     }
 
-    public function testItReturnsAProductImageForAgivenContext()
+    public function testItReturnsAProductImageForAGivenContext()
     {
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->getMock(Context::class);

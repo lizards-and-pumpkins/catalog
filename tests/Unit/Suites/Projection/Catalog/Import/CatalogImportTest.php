@@ -7,15 +7,13 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Image\AddImageCommand;
 use LizardsAndPumpkins\Log\Logger;
-use LizardsAndPumpkins\Product\Exception\ProductAttributeContextPartsMismatchException;
 use LizardsAndPumpkins\Product\Product;
+use LizardsAndPumpkins\Projection\Catalog\Import\Exception\ProductAttributeContextPartsMismatchException;
 use LizardsAndPumpkins\Product\ProductId;
-use LizardsAndPumpkins\Product\ProductBuilder;
 use LizardsAndPumpkins\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Product\AddProductListingCommand;
 use LizardsAndPumpkins\Product\ProductListingCriteria;
 use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
-use LizardsAndPumpkins\Product\ProductXmlToProductBuilder;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportFileDoesNotExistException;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportFileNotReadableException;
 use LizardsAndPumpkins\Queue\Queue;
@@ -23,16 +21,16 @@ use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImportFailedMessage
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogXmlParser
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEvent
  * @uses   \LizardsAndPumpkins\Product\ProductId
  * @uses   \LizardsAndPumpkins\Product\AddProductListingCommand
  * @uses   \LizardsAndPumpkins\Product\UpdateProductCommand
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImportFailedMessage
  * @uses   \LizardsAndPumpkins\Utils\XPathParser
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogXmlParser
  * @uses   \LizardsAndPumpkins\Image\AddImageCommand
  * @uses   \LizardsAndPumpkins\Utils\UuidGenerator
  * @uses   \LizardsAndPumpkins\DataVersion
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEvent
  */
 class CatalogImportTest extends \PHPUnit_Framework_TestCase
 {
@@ -107,12 +105,12 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     private function createMockProductXmlToProductBuilder()
     {
         /** @var ProductBuilder|\PHPUnit_Framework_MockObject_MockObject $stubProductBuilder */
-        $productBuilder = $this->getMock(ProductBuilder::class, [], [], '', false);
-        $productBuilder->method('getId')->willReturn(ProductId::fromString('dummy'));
-        $productBuilder->method('getProductForContext')->willReturn($this->getMock(Product::class, [], [], '', false));
+        $stubProductBuilder = $this->getMock(ProductBuilder::class);
+        $stubProductBuilder->method('getId')->willReturn(ProductId::fromString('dummy'));
+        $stubProductBuilder->method('getProductForContext')->willReturn($this->getMock(Product::class));
 
         $productXmlToProductBuilder = $this->getMock(ProductXmlToProductBuilder::class, [], [], '', false);
-        $productXmlToProductBuilder->method('createProductBuilderFromXml')->willReturn($productBuilder);
+        $productXmlToProductBuilder->method('createProductBuilderFromXml')->willReturn($stubProductBuilder);
         return $productXmlToProductBuilder;
     }
 

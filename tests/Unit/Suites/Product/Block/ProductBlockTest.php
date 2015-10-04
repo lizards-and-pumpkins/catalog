@@ -33,7 +33,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
     {
         /** @var  $stubBlockRenderer BlockRenderer|\PHPUnit_Framework_MockObject_MockObject */
         $stubBlockRenderer = $this->getMock(BlockRenderer::class, [], [], '', false);
-        $this->stubProduct = $this->getMock(Product::class, [], [], '', false);
+        $this->stubProduct = $this->getMock(Product::class);
 
         $this->productBlock = new ProductBlock($stubBlockRenderer, 'foo.phtml', 'foo', $this->stubProduct);
     }
