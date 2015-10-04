@@ -28,6 +28,15 @@ class ProductTypeCodeTest extends \PHPUnit_Framework_TestCase
         ProductTypeCode::fromString('');
     }
 
+    public function testItTrimsWhitespaceWhenCheckingIfEmpty()
+    {
+        $this->setExpectedException(
+            InvalidProductTypeIdentifierException::class,
+            'The product type identifier can not be empty'
+        );
+        ProductTypeCode::fromString(' ');
+    }
+
     public function testItThrowsAnExceptionIfTheProductTypeStringIsNotValid()
     {
         $this->setExpectedException(
