@@ -3,10 +3,13 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\Product\Exception\ProductTypeCodeMismatchException;
+use LizardsAndPumpkins\Product\Exception\ProductTypeCodeMissingException;
 
 class SimpleProduct implements Product
 {
-    const TYPE_ID = 'simple';
+    const TYPE_CODE = 'simple';
 
     /**
      * @var ProductId
@@ -38,6 +41,51 @@ class SimpleProduct implements Product
         $this->attributeList = $attributeList;
         $this->context = $context;
         $this->images = $images;
+    }
+
+    /**
+     * @param mixed[] $sourceArray
+     * @return SimpleProduct
+     */
+    public static function fromArray(array $sourceArray)
+    {
+        self::validateSourceArray($sourceArray);
+        return new self(
+            ProductId::fromString($sourceArray['product_id']),
+            ProductAttributeList::fromArray($sourceArray['attributes']),
+            ProductImageList::fromArray($sourceArray['images']),
+            ContextBuilder::rehydrateContext($sourceArray['context'])
+        );
+    }
+
+    /**
+     * @param mixed[] $sourceArray
+     */
+    private static function validateSourceArray(array $sourceArray)
+    {
+        if (! isset($sourceArray[Product::TYPE_KEY])) {
+            $message = sprintf('The array key "%s" is missing from source array', Product::TYPE_KEY);
+            throw new ProductTypeCodeMissingException($message);
+        }
+        if (self::TYPE_CODE !== $sourceArray[Product::TYPE_KEY]) {
+            $variableType = self::getStringRepresentation($sourceArray[Product::TYPE_KEY]);
+            $message = sprintf('Expected the product type code string "%s", got "%s"', self::TYPE_CODE, $variableType);
+            throw new ProductTypeCodeMismatchException($message);
+        }
+    }
+
+    /**
+     * @param mixed $variable
+     * @return string
+     */
+    private static function getStringRepresentation($variable)
+    {
+        if (is_string($variable)) {
+            return $variable;
+        }
+        return is_object($variable) ?
+            get_class($variable) :
+            gettype($variable);
     }
 
     /**
@@ -76,12 +124,22 @@ class SimpleProduct implements Product
     }
 
     /**
+     * @param string $attributeCode
+     * @return bool
+     */
+    public function hasAttribute($attributeCode)
+    {
+        return $this->attributeList->hasAttribute($attributeCode);
+    }
+
+    /**
      * @return mixed[]
      */
     public function jsonSerialize()
     {
         return [
             'product_id' => (string) $this->productId,
+            'type_code' => self::TYPE_CODE,
             'attributes' => $this->attributeList,
             'images' => $this->images,
             'context' => $this->context

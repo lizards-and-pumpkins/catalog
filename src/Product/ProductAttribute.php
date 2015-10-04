@@ -10,7 +10,7 @@ class ProductAttribute implements \JsonSerializable
     const CODE = 'code';
     const VALUE = 'value';
     const CONTEXT_DATA = 'contextData';
-    
+
     /**
      * @var AttributeCode
      */
@@ -91,8 +91,9 @@ class ProductAttribute implements \JsonSerializable
         $ownContextParts = $this->getContextParts();
         $foreignContextParts = $attribute->getContextParts();
 
-        return !array_diff($ownContextParts, $foreignContextParts) &&
-               !array_diff($foreignContextParts, $ownContextParts);
+        return
+            !array_diff($ownContextParts, $foreignContextParts) &&
+            !array_diff($foreignContextParts, $ownContextParts);
     }
 
     /**
@@ -163,5 +164,48 @@ class ProductAttribute implements \JsonSerializable
             self::CONTEXT_DATA => $this->contextData,
             self::VALUE => $this->value
         ];
+    }
+
+    /**
+     * @param ProductAttribute $otherAttribute
+     * @return bool
+     */
+    public function isEqualTo(ProductAttribute $otherAttribute)
+    {
+        return
+            $this->isCodeEqualTo($otherAttribute) &&
+            $this->isValueEqualTo($otherAttribute) &&
+            $this->isContextDataSetEqualTo($otherAttribute);
+    }
+
+    /**
+     * @param ProductAttribute $otherAttribute
+     * @return bool
+     */
+    private function isValueEqualTo(ProductAttribute $otherAttribute)
+    {
+        return $this->value === $otherAttribute->getValue();
+    }
+
+    /**
+     * @param ProductAttribute $otherAttribute
+     * @return bool
+     */
+    private function isContextDataSetEqualTo(ProductAttribute $otherAttribute)
+    {
+        return $this->hasSameContextPartsAs($otherAttribute) && $this->hasSameContextPartValuesAs($otherAttribute);
+    }
+
+    /**
+     * @param ProductAttribute $otherAttribute
+     * @return bool
+     */
+    private function hasSameContextPartValuesAs(ProductAttribute $otherAttribute)
+    {
+        return array_reduce($otherAttribute->getContextParts(), function ($carry, $contextPart) use ($otherAttribute) {
+            $myValue = $this->getContextPartValue($contextPart);
+            $otherValue = $otherAttribute->getContextPartValue($contextPart);
+            return $carry && $myValue === $otherValue;
+        }, true);
     }
 }

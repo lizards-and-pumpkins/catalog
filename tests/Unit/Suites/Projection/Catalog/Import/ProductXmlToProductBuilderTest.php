@@ -16,6 +16,7 @@ use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidProductTypeCod
  * @uses   \LizardsAndPumpkins\Product\ProductAttribute
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
+ * @uses   \LizardsAndPumpkins\Product\ProductTypeCode
  * @uses   \LizardsAndPumpkins\Utils\XPathParser
  */
 class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase

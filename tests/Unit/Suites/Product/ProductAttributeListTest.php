@@ -26,9 +26,9 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsTheNumberOfAttributes()
     {
         $attributeArray = [
-            'code' => 'foo',
-            'contextData' => [],
-            'value' => 'bar'
+            ProductAttribute::CODE => 'foo',
+            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::VALUE => 'bar'
         ];
         $this->assertCount(1, ProductAttributeList::fromArray([$attributeArray]));
         $this->assertCount(2, ProductAttributeList::fromArray([$attributeArray, $attributeArray]));
@@ -37,14 +37,14 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     public function testAnAttributeCanBeRetrievedUsingAString()
     {
         $attribute1 = [
-            'code' => 'foo',
-            'contextData' => [],
-            'value' => 'bar1'
+            ProductAttribute::CODE => 'foo',
+            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::VALUE => 'bar1'
         ];
         $attribute2 = [
-            'code' => 'foo',
-            'contextData' => [],
-            'value' => 'bar2'
+            ProductAttribute::CODE => 'foo',
+            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::VALUE => 'bar2'
         ];
 
         $attributeList = new ProductAttributeList(
@@ -60,9 +60,9 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     public function testAnAttributeCanBeRetrievedUsingAnAttributeCodeInstance()
     {
         $attributeArray = [
-            'code' => 'foo',
-            'contextData' => [],
-            'value' => 'bar'
+            ProductAttribute::CODE => 'foo',
+            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::VALUE => 'bar'
         ];
 
         $attributeList = new ProductAttributeList(ProductAttribute::fromArray($attributeArray));
@@ -81,9 +81,9 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     {
         $attributeArray = [
             [
-                'code' => 'foo',
-                'contextData' => [],
-                'value' => 'bar'
+                ProductAttribute::CODE => 'foo',
+                ProductAttribute::CONTEXT_DATA => [],
+                ProductAttribute::VALUE => 'bar'
             ]
         ];
 
@@ -97,8 +97,8 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     public function testItMayContainMultipleProductAttributesWithTheSameCode()
     {
         $attributeArray = [
-            ['code' => 'foo', 'contextData' => [], 'value' => 'bar'],
-            ['code' => 'foo', 'contextData' => [], 'value' => 'baz'],
+            [ProductAttribute::CODE => 'foo', ProductAttribute::CONTEXT_DATA => [], ProductAttribute::VALUE => 'bar'],
+            [ProductAttribute::CODE => 'foo', ProductAttribute::CONTEXT_DATA => [], ProductAttribute::VALUE => 'baz'],
         ];
 
         $attributeList = ProductAttributeList::fromArray($attributeArray);
@@ -118,9 +118,9 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
         $attributes = [];
         for ($i = 0; $i < $numAttributesToAdd; $i++) {
             $attributes[] = ProductAttribute::fromArray([
-                'code' => 'attr_' . ($i + 1),
-                'contextData' => [],
-                'value' => 'value'
+                ProductAttribute::CODE => 'attr_' . ($i + 1),
+                ProductAttribute::CONTEXT_DATA => [],
+                ProductAttribute::VALUE => 'value'
             ]);
         }
         $attributeCodes = (new ProductAttributeList(...$attributes))->getAttributeCodes();
@@ -151,7 +151,11 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
 
     public function testHasAttributeReturnsTrueForAttributesInTheList()
     {
-        $attributeArray = [['code' => 'foo', 'contextData' => [], 'value' => 'bar']];
+        $attributeArray = [[
+            ProductAttribute::CODE => 'foo',
+            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::VALUE => 'bar'
+        ]];
         $attributeList = ProductAttributeList::fromArray($attributeArray);
         $this->assertTrue($attributeList->hasAttribute('foo'));
     }
@@ -160,14 +164,14 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     {
         $attributesArray = [
             [
-                'code' => 'foo',
-                'contextData' => [],
-                'value' => 'bar'
+                ProductAttribute::CODE => 'foo',
+                ProductAttribute::CONTEXT_DATA => [],
+                ProductAttribute::VALUE => 'bar'
             ],
             [
-                'code' => 'bar',
-                'contextData' => [],
-                'value' => 'buz'
+                ProductAttribute::CODE => 'bar',
+                ProductAttribute::CONTEXT_DATA => [],
+                ProductAttribute::VALUE => 'buz'
             ]
         ];
         $sourceAttributeList = ProductAttributeList::fromArray($attributesArray);
@@ -185,19 +189,19 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException(ConflictingContextDataForProductAttributeListException::class, $expectedMessage);
         $attributesArray = [
             [
-                'code' => 'test1',
-                'contextData' => ['website' => 'a'],
-                'value' => 'test'
+                ProductAttribute::CODE => 'test1',
+                ProductAttribute::CONTEXT_DATA => ['website' => 'a'],
+                ProductAttribute::VALUE => 'test'
             ],
             [
-                'code' => 'test1',
-                'contextData' => ['website' => 'a', 'locale' => 'xx_XX'],
-                'value' => 'test'
+                ProductAttribute::CODE => 'test1',
+                ProductAttribute::CONTEXT_DATA => ['website' => 'a', 'locale' => 'xx_XX'],
+                ProductAttribute::VALUE => 'test'
             ],
             [
-                'code' => 'test2',
-                'contextData' => ['website' => 'a', 'locale' => 'yy_YY'],
-                'value' => 'test'
+                ProductAttribute::CODE => 'test2',
+                ProductAttribute::CONTEXT_DATA => ['website' => 'a', 'locale' => 'yy_YY'],
+                ProductAttribute::VALUE => 'test'
             ]
         ];
         ProductAttributeList::fromArray($attributesArray);

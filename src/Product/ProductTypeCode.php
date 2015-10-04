@@ -3,13 +3,14 @@
 
 namespace LizardsAndPumpkins\Product;
 
+use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Product\Exception\InvalidProductTypeIdentifierException;
 
 class ProductTypeCode
 {
     private static $productTypeCode = [
-        'simple',
-        'configurable'
+        SimpleProduct::TYPE_CODE,
+        ConfigurableProduct::TYPE_CODE
     ];
 
     /**
