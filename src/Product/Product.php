@@ -26,11 +26,6 @@ interface Product extends \JsonSerializable
     public function getAllValuesOfAttribute($attributeCode);
 
     /**
-     * @return mixed[]
-     */
-    public function jsonSerialize();
-
-    /**
      * @return Context
      */
     public function getContext();
