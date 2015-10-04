@@ -81,7 +81,7 @@ class SimpleProduct implements Product
     public function jsonSerialize()
     {
         return [
-            'product_id' => (string)$this->productId,
+            'product_id' => (string) $this->productId,
             'attributes' => $this->attributeList,
             'images' => $this->images,
             'context' => $this->context
