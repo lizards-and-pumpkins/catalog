@@ -41,9 +41,7 @@ class SimpleProductBuilderTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->stubProductId = $this->getMock(ProductId::class, [], [], '', false);
-        $this->mockProductAttributeListBuilder = $this->getMockBuilder(ProductAttributeListBuilder::class)
-            ->setMethods(['getAttributeListForContext'])
-            ->getMock();
+        $this->mockProductAttributeListBuilder = $this->getMock(ProductAttributeListBuilder::class);
         $this->mockProductImageListBuilder = $this->getMock(ProductImageListBuilder::class);
         
         $this->productBuilder = new SimpleProductBuilder(
