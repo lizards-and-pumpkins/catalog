@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\Exception\InvalidCriterionNameException;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\Exception\InvalidCriterionValueTypeException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
@@ -76,14 +78,14 @@ abstract class AbstractSearchCriterionTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfFieldNameIsNotValid()
     {
-        $this->setExpectedException(\InvalidArgumentException::class, 'Criterion field name should be a string');
+        $this->setExpectedException(InvalidCriterionNameException::class);
         $this->createInstanceOfClassUnderTest(1, 'bar');
     }
 
     public function testExceptionIsThrownIfFieldValueIsNotValid()
     {
-        $this->setExpectedException(\InvalidArgumentException::class, 'Criterion field value should be a string');
-        $this->createInstanceOfClassUnderTest('foo', 1);
+        $this->setExpectedException(InvalidCriterionValueTypeException::class);
+        $this->createInstanceOfClassUnderTest('foo', []);
     }
 
     public function testArrayRepresentationOfCriterionIsReturned()

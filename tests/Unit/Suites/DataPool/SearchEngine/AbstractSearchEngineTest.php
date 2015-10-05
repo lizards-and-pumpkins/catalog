@@ -5,7 +5,14 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\WebsiteContextDecorator;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterOrEqualThan;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionLessOrEqualThan;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionLessThan;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionNotEqual;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
@@ -245,21 +252,78 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(0, $result);
     }
 
-    public function testCollectionContainsOnlySearchDocumentsMatchingGivenCriteria()
+    /**
+     * @dataProvider searchCriteriaProvider
+     * @param SearchCriteria $searchCriteria
+     */
+    public function testCollectionContainsOnlySearchDocumentsMatchingGivenCriteria(SearchCriteria $searchCriteria)
     {
         $productAId = ProductId::fromString(uniqid());
         $productBId = ProductId::fromString(uniqid());
 
         $searchDocumentA = $this->createSearchDocument(['foo' => 'bar'], $productAId);
-        $searchDocumentB = $this->createSearchDocument(['baz' => 'qux'], $productBId);
+        $searchDocumentB = $this->createSearchDocument(['foo' => 'baz'], $productBId);
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
-        $searchCriteria = SearchCriterionEqual::create('foo', 'bar');
         $result = $this->searchEngine->getSearchDocumentsMatchingCriteria($searchCriteria, $this->testContext);
 
         $this->assertCollectionContainsDocumentForProductId($result, $productAId);
         $this->assertCollectionDoesNotContainDocumentForProductId($result, $productBId);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function searchCriteriaProvider()
+    {
+        return [
+            [SearchCriterionEqual::create('foo', 'bar')],
+            [SearchCriterionNotEqual::create('foo', 'baz')],
+            [CompositeSearchCriterion::createAnd(
+                SearchCriterionEqual::create('foo', 'bar'),
+                SearchCriterionNotEqual::create('foo', 'baz')
+            )],
+        ];
+    }
+
+    /**
+     * @dataProvider searchRangeCriteriaProvider
+     * @param SearchCriteria $searchCriteria
+     */
+    public function testCollectionContainsOnlySearchDocumentsMatchingRangeCriteria(SearchCriteria $searchCriteria)
+    {
+        $productAId = ProductId::fromString(uniqid());
+        $productBId = ProductId::fromString(uniqid());
+
+        $searchDocumentA = $this->createSearchDocument(['price' => 10], $productAId);
+        $searchDocumentB = $this->createSearchDocument(['price' => 20], $productBId);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
+
+        $result = $this->searchEngine->getSearchDocumentsMatchingCriteria($searchCriteria, $this->testContext);
+
+        $this->assertCollectionContainsDocumentForProductId($result, $productAId);
+        $this->assertCollectionDoesNotContainDocumentForProductId($result, $productBId);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function searchRangeCriteriaProvider()
+    {
+        return [
+            [SearchCriterionLessThan::create('price', 20)],
+            [SearchCriterionLessOrEqualThan::create('price', 10)],
+            [CompositeSearchCriterion::createAnd(
+                SearchCriterionGreaterThan::create('price', 5),
+                SearchCriterionLessOrEqualThan::create('price', 10)
+            )],
+            [CompositeSearchCriterion::createAnd(
+                SearchCriterionGreaterOrEqualThan::create('price', 10),
+                SearchCriterionLessThan::create('price', 20)
+            )],
+        ];
     }
 
     public function testIfMultipleMatchingDocumentsHasSameProductIdOnlyOneInstanceIsReturned()
