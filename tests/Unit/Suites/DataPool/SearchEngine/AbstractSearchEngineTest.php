@@ -253,7 +253,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider getSearchCriteria
+     * @dataProvider searchCriteriaProvider
      * @param SearchCriteria $searchCriteria
      */
     public function testCollectionContainsOnlySearchDocumentsMatchingGivenCriteria(SearchCriteria $searchCriteria)
@@ -275,7 +275,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function getSearchCriteria()
+    public function searchCriteriaProvider()
     {
         return [
             [SearchCriterionEqual::create('foo', 'bar')],
@@ -288,7 +288,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider getSearchRangeCriteria
+     * @dataProvider searchRangeCriteriaProvider
      * @param SearchCriteria $searchCriteria
      */
     public function testCollectionContainsOnlySearchDocumentsMatchingRangeCriteria(SearchCriteria $searchCriteria)
@@ -310,7 +310,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function getSearchRangeCriteria()
+    public function searchRangeCriteriaProvider()
     {
         return [
             [SearchCriterionLessThan::create('price', 20)],
