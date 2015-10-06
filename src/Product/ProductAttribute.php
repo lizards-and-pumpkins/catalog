@@ -31,11 +31,12 @@ class ProductAttribute implements \JsonSerializable
      * @param string|ProductAttributeList $value
      * @param string[] $contextData
      */
-    private function __construct(AttributeCode $code, $value, array $contextData)
+    public function __construct(AttributeCode $code, $value, array $contextData)
     {
+        $this->validateValue($value, $code);
         $this->code = $code;
         $this->contextData = $contextData;
-        $this->value = $value;
+        $this->value = (string) $value;
     }
 
     /**
@@ -46,18 +47,17 @@ class ProductAttribute implements \JsonSerializable
     {
         $code = AttributeCode::fromString($attribute[self::CODE]);
         $value = $attribute[self::VALUE];
-        self::validateValue($value, $code);
-        return new self($code, (string) $value, $attribute[self::CONTEXT_DATA]);
+        return new self($code, $value, $attribute[self::CONTEXT_DATA]);
     }
 
     /**
      * @param string $value
      * @param AttributeCode $code
      */
-    private static function validateValue($value, AttributeCode $code)
+    private function validateValue($value, AttributeCode $code)
     {
         if (!is_scalar($value)) {
-            $type = self::getType($value);
+            $type = $this->getType($value);
             $message = sprintf('The product attribute "%s" has to have a scalar value, got "%s"', $code, $type);
             throw new InvalidProductAttributeValueException($message);
         }
@@ -67,7 +67,7 @@ class ProductAttribute implements \JsonSerializable
      * @param mixed $variable
      * @return string
      */
-    private static function getType($variable)
+    private function getType($variable)
     {
         return is_object($variable) ?
             get_class($variable) :
