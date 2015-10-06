@@ -5,19 +5,17 @@ namespace LizardsAndPumpkins\Product\Composite;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Product\Composite\Exception\AssociatedProductListDomainException;
-use LizardsAndPumpkins\Product\Exception\ProductTypeCodeMismatchException;
-use LizardsAndPumpkins\Product\Exception\ProductTypeCodeMissingException;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Product\ProductImage;
 use LizardsAndPumpkins\Product\ProductImageList;
-use LizardsAndPumpkins\Product\RehydratableProductTrait;
+use LizardsAndPumpkins\Product\RehydrateableProductTrait;
 use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\Product\Composite\Exception\ConfigurableProductAssociatedProductListInvariantViolationException;
 
 class ConfigurableProduct implements Product
 {
-    use RehydratableProductTrait;
+    use RehydrateableProductTrait;
     
     const TYPE_CODE = 'configurable';
     

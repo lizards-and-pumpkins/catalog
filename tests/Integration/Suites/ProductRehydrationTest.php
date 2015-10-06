@@ -21,10 +21,7 @@ class ProductRehydrationTest extends \PHPUnit_Framework_TestCase
 {
     private function assertBasicProductPropertyEqual(Product $sourceProduct, Product $rehydratedProduct)
     {
-        $this->assertSame(
-            (string) $sourceProduct->getId(),
-            (string) $rehydratedProduct->getId()
-        );
+        $this->assertEquals($sourceProduct->getId(), $rehydratedProduct->getId());
         $this->assertSame(
             $sourceProduct->getAllValuesOfAttribute('foo'),
             $rehydratedProduct->getAllValuesOfAttribute('foo')
@@ -53,8 +50,10 @@ class ProductRehydrationTest extends \PHPUnit_Framework_TestCase
     {
         if ($sourceProduct instanceof SimpleProduct) {
             $this->assertSimpleProductEquals($sourceProduct, $rehydratedProduct);
-        } else {
+        } elseif ($sourceProduct instanceof ConfigurableProduct) {
             $this->assertConfigurableProductEquals($sourceProduct, $rehydratedProduct);
+        } else {
+            $this->fail(sprintf('Unable to assert equality on unknown product class "%s"', get_class($sourceProduct)));
         }
     }
 
@@ -73,6 +72,7 @@ class ProductRehydrationTest extends \PHPUnit_Framework_TestCase
             count($sourceVariationAttributeList),
             count($rehydratedVariationAttributeList)
         );
+        
         foreach ($sourceVariationAttributeList as $idx => $attribute) {
             $this->assertTrue($attribute->isEqualTo($rehydratedVariationAttributeList->getAttributes()[$idx]));
         }
@@ -86,15 +86,12 @@ class ProductRehydrationTest extends \PHPUnit_Framework_TestCase
             count($sourceAssociatedProductList),
             count($rehydratedAssociatedProductList)
         );
-        /**
-         * @var Product $sourceAssociatedProduct
-         */
-        foreach ($sourceAssociatedProductList as $idx => $sourceAssociatedProduct) {
-            $this->assertProductEquals(
-                $sourceAssociatedProduct,
-                $rehydratedAssociatedProductList->getProducts()[$idx]
-            );
-        }
+        
+        array_map(function ($idx) use ($sourceAssociatedProductList, $rehydratedAssociatedProductList) {
+            $sourceAssociatedProduct = $sourceAssociatedProductList->getProducts()[$idx];
+            $rehydratedAssociatedProduct = $rehydratedAssociatedProductList->getProducts()[$idx];
+            $this->assertProductEquals($sourceAssociatedProduct, $rehydratedAssociatedProduct);
+        }, array_keys($sourceAssociatedProductList->getProducts()));
     }
 
     /**
@@ -104,29 +101,12 @@ class ProductRehydrationTest extends \PHPUnit_Framework_TestCase
     private function createSimpleProductWithId($productIdString)
     {
         $productId = ProductId::fromString($productIdString);
-        $testProductAttributes = ProductAttribute::fromArray(
-            [
-                ProductAttribute::CODE => 'foo',
-                ProductAttribute::CONTEXT_DATA => [],
-                ProductAttribute::VALUE => uniqid()
-            ]
-        );
-        $testProductAttributes = new ProductAttributeList($testProductAttributes);
+        $testProductAttribute = $this->createProductAttribute('foo', uniqid());
+        $testProductAttributes = new ProductAttributeList($testProductAttribute);
 
-        $imageFileAttribute = ProductAttribute::fromArray(
-            [
-                ProductAttribute::CODE => ProductImage::FILE,
-                ProductAttribute::CONTEXT_DATA => [],
-                ProductAttribute::VALUE => 'test.png'
-            ]
-        );
-        $imageLabelAttribute = ProductAttribute::fromArray(
-            [
-                ProductAttribute::CODE => ProductImage::LABEL,
-                ProductAttribute::CONTEXT_DATA => [],
-                ProductAttribute::VALUE => 'Product label'
-            ]
-        );
+        $imageFileAttribute = $this->createProductAttribute(ProductImage::FILE, 'test.jpg');
+        $imageLabelAttribute = $this->createProductAttribute(ProductImage::LABEL, 'Product Label');
+        
         $image = new ProductImage(new ProductAttributeList($imageFileAttribute, $imageLabelAttribute));
         $imageList = new ProductImageList($image);
 
@@ -134,6 +114,17 @@ class ProductRehydrationTest extends \PHPUnit_Framework_TestCase
         $stubContext->method('jsonSerialize')->willReturn([VersionedContext::CODE => '123']);
 
         return new SimpleProduct($productId, $testProductAttributes, $imageList, $stubContext);
+    }
+
+    /**
+     * @param string $code
+     * @param string $value
+     * @return ProductAttribute
+     */
+    private function createProductAttribute($code, $value)
+    {
+        $contextData = [];
+        return new ProductAttribute(AttributeCode::fromString($code), $value, $contextData);
     }
 
     /**

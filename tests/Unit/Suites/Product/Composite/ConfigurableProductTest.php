@@ -15,7 +15,7 @@ use LizardsAndPumpkins\Product\Composite\Exception\ConfigurableProductAssociated
 
 /**
  * @covers \LizardsAndPumpkins\Product\Composite\ConfigurableProduct
- * @covers \LizardsAndPumpkins\Product\RehydratableProductTrait
+ * @covers \LizardsAndPumpkins\Product\RehydrateableProductTrait
  * @uses   \LizardsAndPumpkins\Product\Composite\AssociatedProductList
  * @uses   \LizardsAndPumpkins\Product\Composite\ProductVariationAttributeList
  * @uses   \LizardsAndPumpkins\Product\ProductId

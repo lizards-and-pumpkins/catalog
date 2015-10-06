@@ -7,7 +7,7 @@ use LizardsAndPumpkins\Context\ContextBuilder;
 
 class SimpleProduct implements Product
 {
-    use RehydratableProductTrait;
+    use RehydrateableProductTrait;
     
     const TYPE_CODE = 'simple';
 
