@@ -4,11 +4,11 @@ namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
-use LizardsAndPumpkins\Product\Exception\ProductTypeCodeMismatchException;
-use LizardsAndPumpkins\Product\Exception\ProductTypeCodeMissingException;
 
 class SimpleProduct implements Product
 {
+    use RehydratableProductTrait;
+    
     const TYPE_CODE = 'simple';
 
     /**
@@ -49,43 +49,13 @@ class SimpleProduct implements Product
      */
     public static function fromArray(array $sourceArray)
     {
-        self::validateSourceArray($sourceArray);
+        self::validateTypeCodeInSourceArray(self::TYPE_CODE, $sourceArray);
         return new self(
             ProductId::fromString($sourceArray['product_id']),
             ProductAttributeList::fromArray($sourceArray['attributes']),
             ProductImageList::fromArray($sourceArray['images']),
             ContextBuilder::rehydrateContext($sourceArray['context'])
         );
-    }
-
-    /**
-     * @param mixed[] $sourceArray
-     */
-    private static function validateSourceArray(array $sourceArray)
-    {
-        if (! isset($sourceArray[Product::TYPE_KEY])) {
-            $message = sprintf('The array key "%s" is missing from source array', Product::TYPE_KEY);
-            throw new ProductTypeCodeMissingException($message);
-        }
-        if (self::TYPE_CODE !== $sourceArray[Product::TYPE_KEY]) {
-            $variableType = self::getStringRepresentation($sourceArray[Product::TYPE_KEY]);
-            $message = sprintf('Expected the product type code string "%s", got "%s"', self::TYPE_CODE, $variableType);
-            throw new ProductTypeCodeMismatchException($message);
-        }
-    }
-
-    /**
-     * @param mixed $variable
-     * @return string
-     */
-    private static function getStringRepresentation($variable)
-    {
-        if (is_string($variable)) {
-            return $variable;
-        }
-        return is_object($variable) ?
-            get_class($variable) :
-            gettype($variable);
     }
 
     /**

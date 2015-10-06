@@ -11,11 +11,14 @@ use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Product\ProductImage;
 use LizardsAndPumpkins\Product\ProductImageList;
+use LizardsAndPumpkins\Product\RehydratableProductTrait;
 use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\Product\Composite\Exception\ConfigurableProductAssociatedProductListInvariantViolationException;
 
 class ConfigurableProduct implements Product
 {
+    use RehydratableProductTrait;
+    
     const TYPE_CODE = 'configurable';
     
     /**
@@ -65,42 +68,12 @@ class ConfigurableProduct implements Product
      */
     public static function fromArray(array $sourceArray)
     {
-        self::validateSourceArray($sourceArray);
+        self::validateTypeCodeInSourceArray(self::TYPE_CODE, $sourceArray);
         return new self(
             SimpleProduct::fromArray($sourceArray['simple_product']),
             ProductVariationAttributeList::fromArray($sourceArray['variation_attributes']),
             AssociatedProductList::fromArray($sourceArray['associated_products'])
         );
-    }
-
-    /**
-     * @param mixed[] $sourceArray
-     */
-    private static function validateSourceArray(array $sourceArray)
-    {
-        if (! isset($sourceArray[Product::TYPE_KEY])) {
-            $message = sprintf('The array key "%s" is missing from source array', Product::TYPE_KEY);
-            throw new ProductTypeCodeMissingException($message);
-        }
-        if (self::TYPE_CODE !== $sourceArray[Product::TYPE_KEY]) {
-            $variableType = self::getStringRepresentation($sourceArray[Product::TYPE_KEY]);
-            $message = sprintf('Expected the product type code string "%s", got "%s"', self::TYPE_CODE, $variableType);
-            throw new ProductTypeCodeMismatchException($message);
-        }
-    }
-
-    /**
-     * @param mixed $variable
-     * @return string
-     */
-    private static function getStringRepresentation($variable)
-    {
-        if (is_string($variable)) {
-            return $variable;
-        }
-        return is_object($variable) ?
-            get_class($variable) :
-            gettype($variable);
     }
 
     /**

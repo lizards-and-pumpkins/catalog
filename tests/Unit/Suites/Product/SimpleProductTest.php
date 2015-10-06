@@ -10,6 +10,7 @@ use LizardsAndPumpkins\Product\Exception\ProductTypeCodeMissingException;
 
 /**
  * @covers \LizardsAndPumpkins\Product\SimpleProduct
+ * @covers \LizardsAndPumpkins\Product\RehydratableProductTrait
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Product\ProductImageList
  * @uses   \LizardsAndPumpkins\Product\ProductId

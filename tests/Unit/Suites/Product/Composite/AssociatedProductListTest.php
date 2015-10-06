@@ -20,6 +20,7 @@ use LizardsAndPumpkins\Product\SimpleProduct;
 /**
  * @covers \LizardsAndPumpkins\Product\Composite\AssociatedProductList
  * @uses   \LizardsAndPumpkins\Product\ProductId
+ * @uses   \LizardsAndPumpkins\Product\RehydratableProductTrait
  * @uses   \LizardsAndPumpkins\Product\SimpleProduct
  * @uses   \LizardsAndPumpkins\Product\ProductImageList
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
