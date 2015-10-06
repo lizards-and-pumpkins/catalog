@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins\Product;
 use LizardsAndPumpkins\Product\Exception\ProductTypeCodeMismatchException;
 use LizardsAndPumpkins\Product\Exception\ProductTypeCodeMissingException;
 
-trait RehydratableProductTrait
+trait RehydrateableProductTrait
 {
     /**
      * @param string $expectedType
