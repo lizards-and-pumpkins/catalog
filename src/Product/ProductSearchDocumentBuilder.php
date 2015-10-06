@@ -40,7 +40,7 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
 
     /**
      * @param Product $product
-     * @return SearchDocument[]
+     * @return SearchDocument
      */
     private function createSearchDocument(Product $product)
     {

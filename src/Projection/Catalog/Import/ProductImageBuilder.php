@@ -24,7 +24,7 @@ class ProductImageBuilder
 
     /**
      * @param ProductId $productId
-     * @param string[] $imageAttributesArray
+     * @param array[] $imageAttributesArray
      * @return ProductImageBuilder
      */
     public static function fromArray(ProductId $productId, array $imageAttributesArray)
@@ -49,7 +49,7 @@ class ProductImageBuilder
      */
     private static function validateItHasGivenImageAttribute(ProductId $productId, array $imageAttributesArray, $code)
     {
-        if (!self::hasAttribute($code, $imageAttributesArray)) {
+        if (!self::isAttributeInArray($code, $imageAttributesArray)) {
             $message = sprintf('The image attribute "%s" is missing for product "%s"', $code, $productId);
             throw new InvalidProductImageAttributeListException($message);
         }
@@ -60,7 +60,7 @@ class ProductImageBuilder
      * @param array[] $attributesArray
      * @return bool
      */
-    private static function hasAttribute($code, array $attributesArray)
+    private static function isAttributeInArray($code, array $attributesArray)
     {
         return array_reduce($attributesArray, function ($found, array $attribute) use ($code) {
             return $found || isset($attribute[ProductAttribute::CODE]) && $attribute[ProductAttribute::CODE] === $code;
