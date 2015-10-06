@@ -8,8 +8,6 @@ use LizardsAndPumpkins\Context\VersionedContext;
 use LizardsAndPumpkins\Product\Composite\Exception\DuplicateAssociatedProductException;
 use LizardsAndPumpkins\Product\Composite\Exception\ProductAttributeValueCombinationNotUniqueException;
 use LizardsAndPumpkins\Product\Composite\Exception\AssociatedProductIsMissingRequiredAttributesException;
-use LizardsAndPumpkins\Product\Composite\Exception\ProductTypeCodeMissingInAssociatedProductListSourceArrayException;
-use LizardsAndPumpkins\Product\Composite\Exception\UnknownProductTypeCodeInSourceArrayException;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductAttributeList;
@@ -36,14 +34,11 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
      */
     private function createArrayOfStubProductsWithSize($numberOfAssociatedProducts)
     {
-        return array_map(
-            function ($num) {
-                $stubProduct = $this->getMock(Product::class);
-                $stubProduct->method('getId')->willReturn($num);
-                return $stubProduct;
-            },
-            range(1, $numberOfAssociatedProducts)
-        );
+        return array_map(function ($num) {
+            $stubProduct = $this->getMock(Product::class);
+            $stubProduct->method('getId')->willReturn($num);
+            return $stubProduct;
+        }, range(1, $numberOfAssociatedProducts));
     }
 
     /**
@@ -81,12 +76,9 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
      */
     private function createStubProductAttributeReturnValueMap(ProductAttribute ...$attributes)
     {
-        return array_map(
-            function (ProductAttribute $attribute) {
-                return [$attribute->getCode(), [$attribute->getValue()]];
-            },
-            $attributes
-        );
+        return array_map(function (ProductAttribute $attribute) {
+            return [$attribute->getCode(), [$attribute->getValue()]];
+        }, $attributes);
     }
 
     /**
@@ -95,12 +87,9 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
      */
     private function createHasProductAttributeValueMap(ProductAttribute ...$attributes)
     {
-        return array_map(
-            function (ProductAttribute $attribute) {
-                return [$attribute->getCode(), true];
-            },
-            $attributes
-        );
+        return array_map(function (ProductAttribute $attribute) {
+            return [$attribute->getCode(), true];
+        }, $attributes);
     }
 
     public function testItReturnsTheInjectedProducts()
@@ -122,7 +111,6 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
     public function testItIsCountable($numberOfAssociatedProducts)
     {
         $stubProducts = $this->createArrayOfStubProductsWithSize($numberOfAssociatedProducts);
-
         $this->assertCount($numberOfAssociatedProducts, new AssociatedProductList(...$stubProducts));
     }
 
@@ -153,30 +141,6 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
         $json = json_encode($sourceAssociatedProductList);
         $rehydratedAssociatedProductList = AssociatedProductList::fromArray(json_decode($json, true));
         $this->assertInstanceOf(AssociatedProductList::class, $rehydratedAssociatedProductList);
-    }
-
-    public function testItThrowsAnExceptionIfAProductTypeCodeIsMissingFromSourceArray()
-    {
-        $this->setExpectedException(
-            ProductTypeCodeMissingInAssociatedProductListSourceArrayException::class,
-            'The product type code index is missing from an associated product source array'
-        );
-        AssociatedProductList::fromArray(
-            [
-                [
-                    'product_id' => 'the-type-code-key-is-missing-from-this-array (amongst-other-keys)'
-                ]
-            ]
-        );
-    }
-
-    public function testItThrowsAnExceptionIfAAnUnknownProductTypeCodeIsSetInTheProductSourceArray()
-    {
-        $this->setExpectedException(
-            UnknownProductTypeCodeInSourceArrayException::class,
-            'The product type code "dimple" is unknown'
-        );
-        AssociatedProductList::fromArray([[Product::TYPE_KEY => 'dimple']]);
     }
 
     public function testItThrowsAnExceptionIfTwoProductsWithTheSameIdAreInjectedAsAssociatedProducts()

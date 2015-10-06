@@ -121,20 +121,21 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
 
     public function testItCanBeCreatedFromAnArray()
     {
-        $result = ConfigurableProduct::fromArray(
-            [
-                Product::TYPE_KEY => ConfigurableProduct::TYPE_CODE,
-                'simple_product' => [
-                    Product::TYPE_KEY => SimpleProduct::TYPE_CODE,
-                    'product_id' => 'test',
-                    'attributes' => [],
-                    'images' => [],
-                    'context' => [VersionedContext::CODE => '123']
-                ],
-                'variation_attributes' => ['foo'],
-                'associated_products' => []
+        $result = ConfigurableProduct::fromArray([
+            Product::TYPE_KEY => ConfigurableProduct::TYPE_CODE,
+            'simple_product' => [
+                Product::TYPE_KEY => SimpleProduct::TYPE_CODE,
+                'product_id' => 'test',
+                'attributes' => [],
+                'images' => [],
+                'context' => [VersionedContext::CODE => '123']
+            ],
+            'variation_attributes' => ['foo'],
+            'associated_products' => [
+                'product_php_classes' => [],
+                'products' => []
             ]
-        );
+        ]);
         $this->assertInstanceOf(ConfigurableProduct::class, $result);
     }
 
@@ -151,7 +152,7 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
         );
         ConfigurableProduct::fromArray($allFieldsExceptTypeCode);
     }
-    
+
     /**
      * @param mixed $invalidTypeCode
      * @param string $typeCodeString
