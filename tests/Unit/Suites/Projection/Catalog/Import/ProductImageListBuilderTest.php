@@ -9,6 +9,17 @@ use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Product\ProductImage;
 use LizardsAndPumpkins\Product\ProductImageList;
 
+/**
+ * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageListBuilder
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductAttributeListBuilder
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductId
+ * @uses   \LizardsAndPumpkins\Product\ProductAttribute
+ * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
+ * @uses   \LizardsAndPumpkins\Product\AttributeCode
+ * @uses   \LizardsAndPumpkins\Product\ProductImageList
+ * @uses   \LizardsAndPumpkins\Product\ProductImage
+ */
 class ProductImageListBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**

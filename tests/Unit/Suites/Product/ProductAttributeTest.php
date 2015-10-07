@@ -235,4 +235,64 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($sourceAttribute->getValue(), $rehydratedAttribute->getValue());
         $this->assertSame($sourceAttribute->getContextDataSet(), $rehydratedAttribute->getContextDataSet());
     }
+
+    public function testItIsNotEqualIfTheCodeIsDifferent()
+    {
+        $attributeOne = ProductAttribute::fromArray([
+            ProductAttribute::CODE => 'test1',
+            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::VALUE => 'abc'
+        ]);
+        $attributeTwo = ProductAttribute::fromArray([
+            ProductAttribute::CODE => 'test2',
+            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::VALUE => 'abc'
+        ]);
+        $this->assertFalse($attributeOne->isEqualTo($attributeTwo));
+    }
+
+    public function testItIsNotEqualIfTheValueIsDifferent()
+    {
+        $attributeOne = ProductAttribute::fromArray([
+            ProductAttribute::CODE => 'test',
+            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::VALUE => 'abc'
+        ]);
+        $attributeTwo = ProductAttribute::fromArray([
+            ProductAttribute::CODE => 'test',
+            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::VALUE => 'def'
+        ]);
+        $this->assertFalse($attributeOne->isEqualTo($attributeTwo));
+    }
+
+    public function testItIsNotEqualIfTheContextDataIsDifferent()
+    {
+        $attributeOne = ProductAttribute::fromArray([
+            ProductAttribute::CODE => 'test',
+            ProductAttribute::CONTEXT_DATA => ['foo' => 'bar1'],
+            ProductAttribute::VALUE => 'abc'
+        ]);
+        $attributeTwo = ProductAttribute::fromArray([
+            ProductAttribute::CODE => 'test',
+            ProductAttribute::CONTEXT_DATA => ['foo' => 'bar2'],
+            ProductAttribute::VALUE => 'abc'
+        ]);
+        $this->assertFalse($attributeOne->isEqualTo($attributeTwo));
+    }
+
+    public function testItIsEqualIfTheCodeAndTheValueAndTheContextDataIsEqual()
+    {
+        $attributeOne = ProductAttribute::fromArray([
+            ProductAttribute::CODE => 'test',
+            ProductAttribute::CONTEXT_DATA => ['foo' => 'bar'],
+            ProductAttribute::VALUE => 'abc'
+        ]);
+        $attributeTwo = ProductAttribute::fromArray([
+            ProductAttribute::CODE => 'test',
+            ProductAttribute::CONTEXT_DATA => ['foo' => 'bar'],
+            ProductAttribute::VALUE => 'abc'
+        ]);
+        $this->assertTrue($attributeOne->isEqualTo($attributeTwo));
+    }
 }

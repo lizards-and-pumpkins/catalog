@@ -3,12 +3,20 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\VersionedContext;
 use LizardsAndPumpkins\Product\Exception\ProductAttributeNotFoundException;
+use LizardsAndPumpkins\Product\Exception\ProductTypeCodeMismatchException;
+use LizardsAndPumpkins\Product\Exception\ProductTypeCodeMissingException;
 
 /**
  * @covers \LizardsAndPumpkins\Product\SimpleProduct
+ * @covers \LizardsAndPumpkins\Product\RehydrateableProductTrait
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Product\ProductImageList
+ * @uses   \LizardsAndPumpkins\Product\ProductId
+ * @uses   \LizardsAndPumpkins\DataVersion
+ * @uses   \LizardsAndPumpkins\Context\ContextBuilder
+ * @uses   \LizardsAndPumpkins\Context\VersionedContext
  */
 class SimpleProductTest extends \PHPUnit_Framework_TestCase
 {
@@ -138,11 +146,70 @@ class SimpleProductTest extends \PHPUnit_Framework_TestCase
         $result = $this->product->jsonSerialize();
 
         $this->assertInternalType('array', $result);
-        $this->assertCount(4, $result);
         $this->assertEquals($testProductIdString, $result['product_id']);
+        $this->assertEquals(SimpleProduct::TYPE_CODE, $result['type_code']);
         $this->assertArrayHasKey('attributes', $result);
         $this->assertArrayHasKey('images', $result);
         $this->assertArrayHasKey('context', $result);
+    }
+
+    public function testItCanBeCreatedFromAnArray()
+    {
+        $result = SimpleProduct::fromArray([
+            Product::TYPE_KEY => SimpleProduct::TYPE_CODE,
+            'product_id' => 'test',
+            'attributes' => [],
+            'images' => [],
+            'context' => [VersionedContext::CODE => '123']
+        ]);
+        $this->assertInstanceOf(SimpleProduct::class, $result);
+    }
+
+    public function testItThrowsAnExceptionIfTheTypeCodeFieldIsMissingFromSourceArray()
+    {
+        $allFieldsExceptTypeCode = [
+            'product_id' => '',
+            'attributes' => [],
+            'images' => [],
+            'context' => []
+        ];
+        $this->setExpectedException(
+            ProductTypeCodeMissingException::class,
+            sprintf('The array key "%s" is missing from source array', Product::TYPE_KEY)
+        );
+        SimpleProduct::fromArray($allFieldsExceptTypeCode);
+    }
+
+    /**
+     * @param mixed $invalidTypeCode
+     * @param string $typeCodeString
+     * @dataProvider invalidProductTypeCodeProvider
+     */
+    public function testItThrowsAnExceptionIfTheTypeCodeInSourceArrayDoesNotMatch($invalidTypeCode, $typeCodeString)
+    {
+        $this->setExpectedException(
+            ProductTypeCodeMismatchException::class,
+            sprintf('Expected the product type code string "simple", got "%s"', $typeCodeString)
+        );
+        SimpleProduct::fromArray([
+            Product::TYPE_KEY => $invalidTypeCode,
+            'product_id' => '',
+            'attributes' => [],
+            'images' => [],
+            'context' => []
+        ]);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function invalidProductTypeCodeProvider()
+    {
+        return [
+            ['z1mp3l', 'z1mp3l'],
+            [$this, get_class($this)],
+            [123, 'integer'],
+        ];
     }
 
     public function testItReturnsTheInjectedContext()
@@ -184,5 +251,17 @@ class SimpleProductTest extends \PHPUnit_Framework_TestCase
         $this->stubProductImages->method('offsetGet')->with(0)->willReturn($stubImage);
         $this->assertSame('Foo bar buz', $this->product->getImageLabelByNumber(0));
         $this->assertSame('Foo bar buz', $this->product->getMainImageLabel());
+    }
+
+    public function testItReturnsTrueIfTheProductAttributeIsPresent()
+    {
+        $this->stubProductAttributeList->method('hasAttribute')->with('test')->willReturn(true);
+        $this->assertTrue($this->product->hasAttribute('test'));
+    }
+
+    public function testItReturnsFalseIfTheProductAttributeIsMissing()
+    {
+        $this->stubProductAttributeList->method('hasAttribute')->with('test')->willReturn(false);
+        $this->assertFalse($this->product->hasAttribute('test'));
     }
 }

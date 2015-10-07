@@ -3,6 +3,7 @@
 
 namespace LizardsAndPumpkins\Product;
 
+use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Product\Exception\InvalidProductTypeIdentifierException;
 
 /**
@@ -48,7 +49,7 @@ class ProductTypeCodeTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsAProductTypeIdentifierInstance()
     {
-        $this->assertInstanceOf(ProductTypeCode::class, ProductTypeCode::fromString('simple'));
+        $this->assertInstanceOf(ProductTypeCode::class, ProductTypeCode::fromString(SimpleProduct::TYPE_CODE));
     }
 
     /**
@@ -65,6 +66,6 @@ class ProductTypeCodeTest extends \PHPUnit_Framework_TestCase
      */
     public function validProductTypeStringProvider()
     {
-        return [['simple'], ['configurable']];
+        return [[SimpleProduct::TYPE_CODE], [ConfigurableProduct::TYPE_CODE]];
     }
 }

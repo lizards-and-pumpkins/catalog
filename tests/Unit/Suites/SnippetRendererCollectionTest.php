@@ -2,8 +2,6 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\Context\ContextSource;
-
 /**
  * @covers \LizardsAndPumpkins\SnippetRendererCollection
  */

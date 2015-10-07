@@ -3,10 +3,13 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\ContextBuilder;
 
 class SimpleProduct implements Product
 {
-    const TYPE_ID = 'simple';
+    use RehydrateableProductTrait;
+    
+    const TYPE_CODE = 'simple';
 
     /**
      * @var ProductId
@@ -38,6 +41,21 @@ class SimpleProduct implements Product
         $this->attributeList = $attributeList;
         $this->context = $context;
         $this->images = $images;
+    }
+
+    /**
+     * @param mixed[] $sourceArray
+     * @return SimpleProduct
+     */
+    public static function fromArray(array $sourceArray)
+    {
+        self::validateTypeCodeInSourceArray(self::TYPE_CODE, $sourceArray);
+        return new self(
+            ProductId::fromString($sourceArray['product_id']),
+            ProductAttributeList::fromArray($sourceArray['attributes']),
+            ProductImageList::fromArray($sourceArray['images']),
+            ContextBuilder::rehydrateContext($sourceArray['context'])
+        );
     }
 
     /**
@@ -76,12 +94,22 @@ class SimpleProduct implements Product
     }
 
     /**
+     * @param string $attributeCode
+     * @return bool
+     */
+    public function hasAttribute($attributeCode)
+    {
+        return $this->attributeList->hasAttribute($attributeCode);
+    }
+
+    /**
      * @return mixed[]
      */
     public function jsonSerialize()
     {
         return [
             'product_id' => (string) $this->productId,
+            'type_code' => self::TYPE_CODE,
             'attributes' => $this->attributeList,
             'images' => $this->images,
             'context' => $this->context

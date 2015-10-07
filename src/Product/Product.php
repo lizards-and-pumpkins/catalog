@@ -7,6 +7,7 @@ interface Product extends \JsonSerializable
 {
     const URL_KEY = 'url_key';
     const ID = 'product_id';
+    const TYPE_KEY = 'type_code';
     
     /**
      * @return ProductId
@@ -24,6 +25,12 @@ interface Product extends \JsonSerializable
      * @return string[]
      */
     public function getAllValuesOfAttribute($attributeCode);
+
+    /**
+     * @param string $attributeCode
+     * @return bool
+     */
+    public function hasAttribute($attributeCode);
 
     /**
      * @return Context

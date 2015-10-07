@@ -16,6 +16,7 @@ use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidProductTypeCod
  * @uses   \LizardsAndPumpkins\Product\ProductAttribute
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
+ * @uses   \LizardsAndPumpkins\Product\ProductTypeCode
  * @uses   \LizardsAndPumpkins\Utils\XPathParser
  */
 class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
@@ -145,11 +146,13 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testProductBuilderIsCreatedFromXmlIgnoringAssociatedProductAttributes()
     {
-        $secondNode = $this->domDocument->getElementsByTagName('product')->item(1);
-        $secondNodeXml = $this->domDocument->saveXML($secondNode);
+        $configurableProductXml = $this->getConfigurableProductXml();
         
-        $productBuilder = $this->builder->createProductBuilderFromXml($secondNodeXml);
-        $this->assertEmpty($this->getAttributesWithCodeFromInstance($productBuilder, 'size'));
+        $productBuilder = $this->builder->createProductBuilderFromXml($configurableProductXml);
+        $sizeAttributes = $this->getAttributesWithCodeFromInstance($productBuilder, 'size');
+        $this->assertEmpty($sizeAttributes, 'The configurable product builder has "size" attributes');
+        $colorAttributes = $this->getAttributesWithCodeFromInstance($productBuilder, 'color');
+        $this->assertEmpty($colorAttributes, 'The configurable product builder has "color" attributes');
     }
 
     public function testExceptionIsThrownIfSkuIsMissing()

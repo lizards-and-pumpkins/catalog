@@ -5,6 +5,11 @@ namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Product\Exception\ProductImageListNotMutableException;
 
+/**
+ * @covers \LizardsAndPumpkins\Product\ProductImageList
+ * @uses   \LizardsAndPumpkins\Product\ProductImage
+ * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
+ */
 class ProductImageListTest extends \PHPUnit_Framework_TestCase
 {
     /**
