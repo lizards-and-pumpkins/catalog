@@ -76,7 +76,7 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\Product\FilterNavigationFilterCollection
  * @uses   \LizardsAndPumpkins\Product\PriceSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductBackOrderAvailabilitySnippetRenderer
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilder
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator
  * @uses   \LizardsAndPumpkins\Product\ProductProjector
  * @uses   \LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer
@@ -192,9 +192,9 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
 
-    public function testProductXmlToProductBuilderIsReturned()
+    public function testProductXmlToProductBuilderLocatorIsReturned()
     {
-        $result = $this->commonFactory->createProductXmlToProductBuilder();
+        $result = $this->commonFactory->createProductXmlToProductBuilderLocator();
         $this->assertInstanceOf(ProductXmlToProductBuilderLocator::class, $result);
     }
 

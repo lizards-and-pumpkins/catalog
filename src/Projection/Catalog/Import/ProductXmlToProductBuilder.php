@@ -3,6 +3,7 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
+use LizardsAndPumpkins\Product\ProductTypeCode;
 use LizardsAndPumpkins\Utils\XPathParser;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductId;
@@ -10,6 +11,17 @@ use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidNumberOfSkusFo
 
 abstract class ProductXmlToProductBuilder
 {
+    /**
+     * @return ProductTypeCode
+     */
+    abstract function getSupportedProductTypeCode();
+
+    /**
+     * @param XPathParser $parser
+     * @return ProductBuilder
+     */
+    abstract public function createProductBuilder(XPathParser $parser);
+    
     /**
      * @param XPathParser $parser
      * @return string

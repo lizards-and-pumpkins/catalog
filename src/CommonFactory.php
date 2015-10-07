@@ -57,6 +57,9 @@ use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
 use LizardsAndPumpkins\Product\ProductSearchDocumentBuilder;
 use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer;
 use LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator;
+use LizardsAndPumpkins\Projection\Catalog\Import\SimpleProductXmlToProductBuilder;
+use LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToProductBuilder;
+use LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilder;
 use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
@@ -705,9 +708,37 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     /**
      * @return ProductXmlToProductBuilderLocator
      */
-    public function createProductXmlToProductBuilder()
+    public function createProductXmlToProductBuilderLocator()
     {
-        return new ProductXmlToProductBuilderLocator();
+        $productXmlToProductTypeBuilders = $this->getMasterFactory()->createProductXmlToProductTypeBuilders();
+        return new ProductXmlToProductBuilderLocator(...$productXmlToProductTypeBuilders);
+    }
+
+    /**
+     * @return ProductXmlToProductBuilder[]
+     */
+    public function createProductXmlToProductTypeBuilders()
+    {
+        return [
+            $this->getMasterFactory()->createSimpleProductXmlToProductBuilder(),
+            $this->getMasterFactory()->createConfigurableProductXmlToProductBuilder()
+        ];
+    }
+
+    /**
+     * @return SimpleProductXmlToProductBuilder
+     */
+    public function createSimpleProductXmlToProductBuilder()
+    {
+        return new SimpleProductXmlToProductBuilder();
+    }
+
+    /**
+     * @return ConfigurableProductXmlToProductBuilder
+     */
+    public function createConfigurableProductXmlToProductBuilder()
+    {
+        return new ConfigurableProductXmlToProductBuilder();
     }
 
     /**
@@ -1279,7 +1310,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new CatalogImport(
             $this->getMasterFactory()->getCommandQueue(),
-            $this->getMasterFactory()->createProductXmlToProductBuilder(),
+            $this->getMasterFactory()->createProductXmlToProductBuilderLocator(),
             $this->getMasterFactory()->createProductListingCriteriaBuilder(),
             $this->getMasterFactory()->getEventQueue(),
             $this->getMasterFactory()->createContextSource(),

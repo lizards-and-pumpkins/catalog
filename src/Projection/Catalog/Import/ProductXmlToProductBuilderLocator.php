@@ -5,62 +5,19 @@ namespace LizardsAndPumpkins\Projection\Catalog\Import;
 use LizardsAndPumpkins\Product\ProductTypeCode;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidProductTypeCodeForImportedProductException;
-use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidProductTypeFactoryMethodException;
+use LizardsAndPumpkins\Projection\Catalog\Import\Exception\NoMatchingProductTypeBuilderFactoryFound;
 use LizardsAndPumpkins\Utils\XPathParser;
 
-class ProductXmlToProductBuilderLocator extends ProductXmlToProductBuilder
+class ProductXmlToProductBuilderLocator
 {
     /**
-     * @var callable[]
+     * @var ProductXmlToProductBuilder[]
      */
-    private $customProductTypeBuilders;
+    private $productTypeBuilderFactories;
 
-    /**
-     * @param callable[] $customProductTypeBuildersFactoryMethods
-     */
-    public function __construct(array $customProductTypeBuildersFactoryMethods = [])
+    public function __construct(ProductXmlToProductBuilder ...$productTypeBuildersFactories)
     {
-        $this->validateFactoryMethods($customProductTypeBuildersFactoryMethods);
-        $this->customProductTypeBuilders = $customProductTypeBuildersFactoryMethods;
-    }
-
-    /**
-     * @param callable[] $customProductTypeBuildersFactoryMethods
-     */
-    private function validateFactoryMethods(array $customProductTypeBuildersFactoryMethods)
-    {
-        array_map(function ($factoryMethod) {
-            if (!is_callable($factoryMethod)) {
-                throw $this->createInvalidProductTypeFactoryException($factoryMethod);
-            }
-        }, $customProductTypeBuildersFactoryMethods);
-    }
-
-    /**
-     * @param mixed $invalidFactoryMethod
-     * @return InvalidProductTypeFactoryMethodException
-     */
-    private function createInvalidProductTypeFactoryException($invalidFactoryMethod)
-    {
-        $message = sprintf(
-            'Custom product type builder factory methods have to be callable, got "%s"',
-            $this->getVariableStringRepresentation($invalidFactoryMethod)
-        );
-        return new InvalidProductTypeFactoryMethodException($message);
-    }
-
-    /**
-     * @param mixed $variable
-     * @return string
-     */
-    private function getVariableStringRepresentation($variable)
-    {
-        if (is_string($variable)) {
-            return $variable;
-        }
-        return is_object($variable) ?
-            get_class($variable) :
-            gettype($variable);
+        $this->productTypeBuilderFactories = $productTypeBuildersFactories;
     }
 
     /**
@@ -108,33 +65,24 @@ class ProductXmlToProductBuilderLocator extends ProductXmlToProductBuilder
      */
     private function createProductBuilderForProductType(ProductTypeCode $typeCode, XPathParser $parser)
     {
-        if (isset($this->customProductTypeBuilders[(string) $typeCode])) {
-            $method = $this->customProductTypeBuilders[(string) $typeCode];
-            return $method($parser);
+        $builder = $this->getProductBuilderForProductType($typeCode);
+        return $builder->createProductBuilder($parser);
+    }
+
+    /**
+     * @param ProductTypeCode $typeCode
+     * @return ProductXmlToProductBuilder
+     */
+    private function getProductBuilderForProductType(ProductTypeCode $typeCode)
+    {
+        foreach ($this->productTypeBuilderFactories as $productTypeBuilderFactory) {
+            if ($typeCode->isEqualTo($productTypeBuilderFactory->getSupportedProductTypeCode())) {
+                return $productTypeBuilderFactory;
+            }
         }
-        $method = 'create' . ucwords($typeCode) . 'ProductBuilder';
-        return $this->{$method}($parser);
+        $message = sprintf('No product type builder factory for the product type code "%s" was found', $typeCode);
+        throw new NoMatchingProductTypeBuilderFactoryFound($message);
     }
 
-    /**
-     * @param XPathParser $parser
-     * @return SimpleProductBuilder
-     */
-    private function createSimpleProductBuilder(XPathParser $parser)
-    {
-        $productId = ProductId::fromString($this->getSkuFromXml($parser));
-        $attributeListBuilder = $this->createProductAttributeListBuilder($parser);
-        $imageListBuilder = $this->createProductImageListBuilder($parser, $productId);
-        return new SimpleProductBuilder($productId, $attributeListBuilder, $imageListBuilder);
-    }
 
-    /**
-     * @param XPathParser $parser
-     * @return ConfigurableProductBuilder
-     */
-    private function createConfigurableProductBuilder(XPathParser $parser)
-    {
-        $simpleProductBuilder = $this->createSimpleProductBuilder($parser);
-        return new ConfigurableProductBuilder($simpleProductBuilder);
-    }
 }

@@ -31,7 +31,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     <name website="cy" locale="en_US">cy-en_US</name>
 </attributes></product>
 EOX;
-        $productXmlToProductBuilder = $this->factory->createProductXmlToProductBuilder();
+        $productXmlToProductBuilder = $this->factory->createProductXmlToProductBuilderLocator();
         $contextSource = $this->factory->createContextSource();
         $productBuilder = $productXmlToProductBuilder->createProductBuilderFromXml($xml);
         $codes = ['website', 'locale', 'version'];

@@ -5,12 +5,14 @@ namespace LizardsAndPumpkins\Projection\Catalog\Import;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidNumberOfSkusForImportedProductException;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidProductTypeCodeForImportedProductException;
-use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidProductTypeFactoryMethodException;
+use LizardsAndPumpkins\Projection\Catalog\Import\Exception\NoMatchingProductTypeBuilderFactoryFound;
 use LizardsAndPumpkins\Utils\XPathParser;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator
  * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilder
+ * @covers \LizardsAndPumpkins\Projection\Catalog\Import\SimpleProductXmlToProductBuilder
+ * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToProductBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\SimpleProductBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductAttributeListBuilder
@@ -117,10 +119,21 @@ class ProductXmlToProductBuilderLocatorTest extends \PHPUnit_Framework_TestCase
         $domDocument->loadXML($productXml);
         return $domDocument->getElementsByTagName('special_price')->item(0)->nodeValue;
     }
+    
+    /**
+     * @return ProductXmlToProductBuilderLocator
+     */
+    private function createProductXmlToProductBuilderLocatorInstance()
+    {
+        return new ProductXmlToProductBuilderLocator(
+            new SimpleProductXmlToProductBuilder(),
+            new ConfigurableProductXmlToProductBuilder()
+        );
+    }
 
     protected function setUp()
     {
-        $this->xmlToProductBuilder = new ProductXmlToProductBuilderLocator();
+        $this->xmlToProductBuilder = $this->createProductXmlToProductBuilderLocatorInstance();
 
         $xml = file_get_contents(__DIR__ . '/../../../../../shared-fixture/catalog.xml');
         $this->domDocument = new \DOMDocument();
@@ -147,17 +160,6 @@ class ProductXmlToProductBuilderLocatorTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ConfigurableProductBuilder::class, $productBuilder);
     }
 
-    public function testCustomProductTypeBuilderIsCreatedFromXml()
-    {
-        $customProductTypeBuilder = $this->getMock(ProductBuilder::class);
-        $customProductTypeBuilderFactory = function (XPathParser $parser) use ($customProductTypeBuilder) {
-            return $customProductTypeBuilder;
-        };
-        $xmlToProductBuilder = new ProductXmlToProductBuilderLocator(['custom' => $customProductTypeBuilderFactory]);
-        $result = $xmlToProductBuilder->createProductBuilderFromXml('<product type="custom"></product>');
-        $this->assertSame($customProductTypeBuilder, $result);
-    }
-
     public function testProductBuilderIsCreatedFromXmlIgnoringAssociatedProductAttributes()
     {
         $configurableProductXml = $this->getConfigurableProductXml();
@@ -175,7 +177,7 @@ class ProductXmlToProductBuilderLocatorTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException(InvalidNumberOfSkusForImportedProductException::class);
         $xml = '<product type="simple"></product>';
 
-        (new ProductXmlToProductBuilderLocator())->createProductBuilderFromXml($xml);
+        $this->createProductXmlToProductBuilderLocatorInstance()->createProductBuilderFromXml($xml);
     }
 
     public function testExceptionIsThrownIfProductTypeCodeIsMissing()
@@ -183,15 +185,17 @@ class ProductXmlToProductBuilderLocatorTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException(InvalidProductTypeCodeForImportedProductException::class);
         $xml = '<product sku="foo"></product>';
 
-        (new ProductXmlToProductBuilderLocator())->createProductBuilderFromXml($xml);
+        $this->createProductXmlToProductBuilderLocatorInstance()->createProductBuilderFromXml($xml);
     }
 
-    public function testItThrowsAnExceptionIfANonCallableIsInjected()
+    public function testExceptionIsThrownIfNoFactoryForGivenTypeCodeIsFound()
     {
         $this->setExpectedException(
-            InvalidProductTypeFactoryMethodException::class,
-            'Custom product type builder factory methods have to be callable, got "foo"'
+            NoMatchingProductTypeBuilderFactoryFound::class,
+            'No product type builder factory for the product type code "invalid" was found'
         );
-        new ProductXmlToProductBuilderLocator(['test' => 'foo']);
+        $xml = '<product type="invalid" sku="test"></product>';
+
+        $this->createProductXmlToProductBuilderLocatorInstance()->createProductBuilderFromXml($xml);
     }
 }
