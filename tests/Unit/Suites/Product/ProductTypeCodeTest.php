@@ -38,15 +38,6 @@ class ProductTypeCodeTest extends \PHPUnit_Framework_TestCase
         ProductTypeCode::fromString(' ');
     }
 
-    public function testItThrowsAnExceptionIfTheProductTypeStringIsNotValid()
-    {
-        $this->setExpectedException(
-            InvalidProductTypeIdentifierException::class,
-            'The product type identifier "test" is invalid, expected one of "simple", "configurable"'
-        );
-        ProductTypeCode::fromString('test');
-    }
-
     public function testItReturnsAProductTypeIdentifierInstance()
     {
         $this->assertInstanceOf(ProductTypeCode::class, ProductTypeCode::fromString(SimpleProduct::TYPE_CODE));
@@ -66,6 +57,6 @@ class ProductTypeCodeTest extends \PHPUnit_Framework_TestCase
      */
     public function validProductTypeStringProvider()
     {
-        return [[SimpleProduct::TYPE_CODE], [ConfigurableProduct::TYPE_CODE]];
+        return [[SimpleProduct::TYPE_CODE], [ConfigurableProduct::TYPE_CODE], ['test']];
     }
 }

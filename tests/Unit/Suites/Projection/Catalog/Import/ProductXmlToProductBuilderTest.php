@@ -5,10 +5,13 @@ namespace LizardsAndPumpkins\Projection\Catalog\Import;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidNumberOfSkusForImportedProductException;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidProductTypeCodeForImportedProductException;
+use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidProductTypeFactoryMethodException;
+use LizardsAndPumpkins\Utils\XPathParser;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\SimpleProductBuilder
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductAttributeListBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageListBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageBuilder
@@ -24,7 +27,7 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var ProductXmlToProductBuilder
      */
-    private $builder;
+    private $xmlToProductBuilder;
 
     /**
      * @var \DOMDocument
@@ -116,7 +119,7 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->builder = new ProductXmlToProductBuilder();
+        $this->xmlToProductBuilder = new ProductXmlToProductBuilder();
 
         $xml = file_get_contents(__DIR__ . '/../../../../../shared-fixture/catalog.xml');
         $this->domDocument = new \DOMDocument();
@@ -128,7 +131,7 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
         $simpleProductXml = $this->getSimpleProductXml();
         $expectedSpecialPrice = $this->getSpecialPriceFromProductXml($simpleProductXml);
 
-        $productBuilder = $this->builder->createProductBuilderFromXml($simpleProductXml);
+        $productBuilder = $this->xmlToProductBuilder->createProductBuilderFromXml($simpleProductXml);
 
         $this->assertInstanceOf(SimpleProductBuilder::class, $productBuilder);
         $this->assertFirstProductAttributeInAListValueEquals($expectedSpecialPrice, $productBuilder, 'special_price');
@@ -136,22 +139,33 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testConfigurableProductBuilderIsCreatedFromXml()
     {
-        $this->markTestSkipped('Skipped until ConfigurableProductBuilder is implemented');
         $configurableProductXml = $this->getConfigurableProductXml();
 
-        $productBuilder = $this->builder->createProductBuilderFromXml($configurableProductXml);
+        $productBuilder = $this->xmlToProductBuilder->createProductBuilderFromXml($configurableProductXml);
 
         $this->assertInstanceOf(ConfigurableProductBuilder::class, $productBuilder);
+    }
+
+    public function testCustomProductTypeBuilderIsCreatedFromXml()
+    {
+        $customProductTypeBuilder = $this->getMock(ProductBuilder::class);
+        $customProductTypeBuilderFactory = function (XPathParser $parser) use ($customProductTypeBuilder) {
+            return $customProductTypeBuilder;
+        };
+        $xmlToProductBuilder = new ProductXmlToProductBuilder(['custom' => $customProductTypeBuilderFactory]);
+        $result = $xmlToProductBuilder->createProductBuilderFromXml('<product type="custom"></product>');
+        $this->assertSame($customProductTypeBuilder, $result);
     }
 
     public function testProductBuilderIsCreatedFromXmlIgnoringAssociatedProductAttributes()
     {
         $configurableProductXml = $this->getConfigurableProductXml();
-        
-        $productBuilder = $this->builder->createProductBuilderFromXml($configurableProductXml);
-        $sizeAttributes = $this->getAttributesWithCodeFromInstance($productBuilder, 'size');
+
+        $productBuilder = $this->xmlToProductBuilder->createProductBuilderFromXml($configurableProductXml);
+        $simpleProductBuilderDelegate = $this->getPrivatePropertyValue($productBuilder, 'simpleProductBuilderDelegate');
+        $sizeAttributes = $this->getAttributesWithCodeFromInstance($simpleProductBuilderDelegate, 'size');
         $this->assertEmpty($sizeAttributes, 'The configurable product builder has "size" attributes');
-        $colorAttributes = $this->getAttributesWithCodeFromInstance($productBuilder, 'color');
+        $colorAttributes = $this->getAttributesWithCodeFromInstance($simpleProductBuilderDelegate, 'color');
         $this->assertEmpty($colorAttributes, 'The configurable product builder has "color" attributes');
     }
 
@@ -159,7 +173,7 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(InvalidNumberOfSkusForImportedProductException::class);
         $xml = '<product type="simple"></product>';
-        
+
         (new ProductXmlToProductBuilder())->createProductBuilderFromXml($xml);
     }
 
@@ -169,5 +183,14 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
         $xml = '<product sku="foo"></product>';
 
         (new ProductXmlToProductBuilder())->createProductBuilderFromXml($xml);
+    }
+
+    public function testItThrowsAnExceptionIfANonCallableIsInjected()
+    {
+        $this->setExpectedException(
+            InvalidProductTypeFactoryMethodException::class,
+            'Custom product type builder factory methods have to be callable, got "foo"'
+        );
+        new ProductXmlToProductBuilder(['test' => 'foo']);
     }
 }

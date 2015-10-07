@@ -7,10 +7,47 @@ use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidNumberOfSkusFo
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidProductTypeCodeForImportedProductException;
+use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidProductTypeFactoryMethodException;
 use LizardsAndPumpkins\Utils\XPathParser;
 
 class ProductXmlToProductBuilder
 {
+    /**
+     * @var callable[]
+     */
+    private $customProductTypeBuilders;
+
+    /**
+     * @param callable[] $customProductTypeBuildersFactoryMethods
+     */
+    public function __construct(array $customProductTypeBuildersFactoryMethods = [])
+    {
+        array_map(function ($factoryMethod) {
+            if (! is_callable($factoryMethod)) {
+                $message = sprintf(
+                    'Custom product type builder factory methods have to be callable, got "%s"',
+                    $this->getVariableStringRepresentation($factoryMethod)
+                );
+                throw new InvalidProductTypeFactoryMethodException($message);
+            }
+        }, $customProductTypeBuildersFactoryMethods);
+        $this->customProductTypeBuilders = $customProductTypeBuildersFactoryMethods;
+    }
+
+    /**
+     * @param mixed $variable
+     * @return string
+     */
+    private function getVariableStringRepresentation($variable)
+    {
+        if (is_string($variable)) {
+            return $variable;
+        }
+        return is_object($variable) ?
+            get_class($variable) :
+            gettype($variable);
+    }
+
     /**
      * @param string $xml
      * @return ProductBuilder
@@ -122,7 +159,12 @@ class ProductXmlToProductBuilder
      */
     private function createProductBuilderForProductType(ProductTypeCode $typeCode, XPathParser $parser)
     {
-        // todo: return product builder based on type code here.
+        if (isset($this->customProductTypeBuilders[(string) $typeCode])) {
+            $method = $this->customProductTypeBuilders[(string) $typeCode];
+            return $method($parser);
+        }
+        $method = 'create' . ucwords($typeCode) . 'ProductBuilder';
+        return $this->{$method}($parser);
         return $this->createSimpleProductBuilder($parser);
     }
 
@@ -136,5 +178,15 @@ class ProductXmlToProductBuilder
         $attributeListBuilder = $this->createProductAttributeListBuilder($parser);
         $imageListBuilder = $this->createProductImageListBuilder($parser, $productId);
         return new SimpleProductBuilder($productId, $attributeListBuilder, $imageListBuilder);
+    }
+
+    /**
+     * @param XPathParser $parser
+     * @return ConfigurableProductBuilder
+     */
+    private function createConfigurableProductBuilder(XPathParser $parser)
+    {
+        $simpleProductBuilder = $this->createSimpleProductBuilder($parser);
+        return new ConfigurableProductBuilder($simpleProductBuilder);
     }
 }

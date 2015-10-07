@@ -8,11 +8,6 @@ use LizardsAndPumpkins\Product\Exception\InvalidProductTypeIdentifierException;
 
 class ProductTypeCode
 {
-    private static $productTypeCode = [
-        SimpleProduct::TYPE_CODE,
-        ConfigurableProduct::TYPE_CODE
-    ];
-
     /**
      * @var string
      */
@@ -47,9 +42,6 @@ class ProductTypeCode
         if (empty(trim($productTypeString))) {
             throw self::getEmptyProductTypeIdentifierException();
         }
-        if (!in_array($productTypeString, self::$productTypeCode)) {
-            throw self::getInvalidProductTypeIdentifierCodeException($productTypeString);
-        }
     }
 
     /**
@@ -80,17 +72,6 @@ class ProductTypeCode
     private static function getEmptyProductTypeIdentifierException()
     {
         return new InvalidProductTypeIdentifierException('The product type identifier can not be empty');
-    }
-
-    /**
-     * @param string $typeCode
-     * @return InvalidProductTypeIdentifierException
-     */
-    private static function getInvalidProductTypeIdentifierCodeException($typeCode)
-    {
-        $type = implode('", "', self::$productTypeCode);
-        $message = sprintf('The product type identifier "%s" is invalid, expected one of "%s"', $typeCode, $type);
-        return new InvalidProductTypeIdentifierException($message);
     }
 
     /**
