@@ -26,7 +26,7 @@ use LizardsAndPumpkins\Log\InMemoryLogger;
  * @method GenericSnippetKeyGenerator createProductInSearchAutosuggestionSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createProductSearchAutosuggestionMetaSnippetKeyGenerator
  * @method string[] getRequiredContexts
- * @method Projection\Catalog\Import\ProductXmlToProductBuilder createProductXmlToProductBuilder
+ * @method Projection\Catalog\Import\ProductXmlToProductBuilderLocator createProductXmlToProductBuilder
  * @method Context\Context createContext
  * @method Product\FilterNavigationFilterCollection createFilterNavigationFilterCollection
  * @method DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder createSearchCriteriaBuilder

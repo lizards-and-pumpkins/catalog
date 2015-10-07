@@ -46,7 +46,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     private $mockCommandQueue;
 
     /**
-     * @var ProductXmlToProductBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductXmlToProductBuilderLocator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubProductXmlToProductBuilder;
 
@@ -100,7 +100,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return ProductXmlToProductBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @return ProductXmlToProductBuilderLocator|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createMockProductXmlToProductBuilder()
     {
@@ -109,7 +109,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         $stubProductBuilder->method('getId')->willReturn(ProductId::fromString('dummy'));
         $stubProductBuilder->method('getProductForContext')->willReturn($this->getMock(Product::class));
 
-        $productXmlToProductBuilder = $this->getMock(ProductXmlToProductBuilder::class, [], [], '', false);
+        $productXmlToProductBuilder = $this->getMock(ProductXmlToProductBuilderLocator::class, [], [], '', false);
         $productXmlToProductBuilder->method('createProductBuilderFromXml')->willReturn($stubProductBuilder);
         return $productXmlToProductBuilder;
     }

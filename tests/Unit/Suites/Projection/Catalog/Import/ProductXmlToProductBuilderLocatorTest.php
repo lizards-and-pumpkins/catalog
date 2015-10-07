@@ -9,6 +9,7 @@ use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidProductTypeFac
 use LizardsAndPumpkins\Utils\XPathParser;
 
 /**
+ * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator
  * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\SimpleProductBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductBuilder
@@ -22,10 +23,10 @@ use LizardsAndPumpkins\Utils\XPathParser;
  * @uses   \LizardsAndPumpkins\Product\ProductTypeCode
  * @uses   \LizardsAndPumpkins\Utils\XPathParser
  */
-class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
+class ProductXmlToProductBuilderLocatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ProductXmlToProductBuilder
+     * @var ProductXmlToProductBuilderLocator
      */
     private $xmlToProductBuilder;
 
@@ -119,7 +120,7 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->xmlToProductBuilder = new ProductXmlToProductBuilder();
+        $this->xmlToProductBuilder = new ProductXmlToProductBuilderLocator();
 
         $xml = file_get_contents(__DIR__ . '/../../../../../shared-fixture/catalog.xml');
         $this->domDocument = new \DOMDocument();
@@ -152,7 +153,7 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
         $customProductTypeBuilderFactory = function (XPathParser $parser) use ($customProductTypeBuilder) {
             return $customProductTypeBuilder;
         };
-        $xmlToProductBuilder = new ProductXmlToProductBuilder(['custom' => $customProductTypeBuilderFactory]);
+        $xmlToProductBuilder = new ProductXmlToProductBuilderLocator(['custom' => $customProductTypeBuilderFactory]);
         $result = $xmlToProductBuilder->createProductBuilderFromXml('<product type="custom"></product>');
         $this->assertSame($customProductTypeBuilder, $result);
     }
@@ -174,7 +175,7 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException(InvalidNumberOfSkusForImportedProductException::class);
         $xml = '<product type="simple"></product>';
 
-        (new ProductXmlToProductBuilder())->createProductBuilderFromXml($xml);
+        (new ProductXmlToProductBuilderLocator())->createProductBuilderFromXml($xml);
     }
 
     public function testExceptionIsThrownIfProductTypeCodeIsMissing()
@@ -182,7 +183,7 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException(InvalidProductTypeCodeForImportedProductException::class);
         $xml = '<product sku="foo"></product>';
 
-        (new ProductXmlToProductBuilder())->createProductBuilderFromXml($xml);
+        (new ProductXmlToProductBuilderLocator())->createProductBuilderFromXml($xml);
     }
 
     public function testItThrowsAnExceptionIfANonCallableIsInjected()
@@ -191,6 +192,6 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
             InvalidProductTypeFactoryMethodException::class,
             'Custom product type builder factory methods have to be callable, got "foo"'
         );
-        new ProductXmlToProductBuilder(['test' => 'foo']);
+        new ProductXmlToProductBuilderLocator(['test' => 'foo']);
     }
 }

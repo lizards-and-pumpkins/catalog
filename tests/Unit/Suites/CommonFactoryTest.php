@@ -25,7 +25,7 @@ use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductProjector;
-use LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilder;
+use LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator;
 use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductStockQuantityProjector;
@@ -195,7 +195,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     public function testProductXmlToProductBuilderIsReturned()
     {
         $result = $this->commonFactory->createProductXmlToProductBuilder();
-        $this->assertInstanceOf(ProductXmlToProductBuilder::class, $result);
+        $this->assertInstanceOf(ProductXmlToProductBuilderLocator::class, $result);
     }
 
     public function testProductListingCriteriaBuilderIsReturned()
