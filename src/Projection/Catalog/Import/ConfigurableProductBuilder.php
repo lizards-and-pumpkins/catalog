@@ -4,21 +4,40 @@
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
 
 class ConfigurableProductBuilder implements ProductBuilder
 {
     /**
      * @var SimpleProductBuilder
      */
-    private $simpleProductBuilderDelegate;
+    private $simpleProductBuilder;
+    
+    /**
+     * @var ProductVariationAttributeListBuilder
+     */
+    private $variationAttributeListBuilder;
+    
+    /**
+     * @var AssociatedProductListBuilder
+     */
+    private $associatedProductListBuilder;
 
-    public function __construct(SimpleProductBuilder $simpleProductBuilder)
-    {
-        $this->simpleProductBuilderDelegate = $simpleProductBuilder;
+    public function __construct(
+        SimpleProductBuilder $simpleProductBuilder,
+        ProductVariationAttributeListBuilder $variationAttributeListBuilder,
+        AssociatedProductListBuilder $associatedProductListBuilder
+    ) {
+        $this->simpleProductBuilder = $simpleProductBuilder;
+        $this->variationAttributeListBuilder = $variationAttributeListBuilder;
+        $this->associatedProductListBuilder = $associatedProductListBuilder;
     }
     
     public function getProductForContext(Context $context)
     {
-        // TODO: Implement getProductForContext() method.
+        $simpleProduct = $this->simpleProductBuilder->getProductForContext($context);
+        $variationAttributeList = $this->variationAttributeListBuilder->getVariationAttributeListForContext($context);
+        $associatedProductList = $this->associatedProductListBuilder->getAssociatedProductListForContext($context);
+        return new ConfigurableProduct($simpleProduct, $variationAttributeList, $associatedProductList);
     }
 }
