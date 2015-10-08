@@ -11,6 +11,7 @@ class ProductImageImportCallbackFailureMessage implements LogMessage
      * @var \Exception
      */
     private $exception;
+    
     /**
      * @var string
      */
