@@ -6,23 +6,26 @@ use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidNumberOfSkusFo
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidProductTypeCodeForImportedProductException;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\NoMatchingProductTypeBuilderFactoryFound;
-use LizardsAndPumpkins\Utils\XPathParser;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator
  * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilder
  * @covers \LizardsAndPumpkins\Projection\Catalog\Import\SimpleProductXmlToProductBuilder
  * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToProductBuilder
+ * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToAssociatedProductListBuilder
+ * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToVariationAttributeList
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\SimpleProductBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductAttributeListBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageListBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageBuilder
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\AssociatedProductListBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductId
  * @uses   \LizardsAndPumpkins\Product\ProductAttribute
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Product\ProductTypeCode
+ * @uses   \LizardsAndPumpkins\Product\Composite\ProductVariationAttributeList
  * @uses   \LizardsAndPumpkins\Utils\XPathParser
  */
 class ProductXmlToProductBuilderLocatorTest extends \PHPUnit_Framework_TestCase
@@ -125,9 +128,12 @@ class ProductXmlToProductBuilderLocatorTest extends \PHPUnit_Framework_TestCase
      */
     private function createProductXmlToProductBuilderLocatorInstance()
     {
+        $productXmlToProductBuilderLocarorProxy = function () {
+            return $this->createProductXmlToProductBuilderLocatorInstance();
+        };
         return new ProductXmlToProductBuilderLocator(
             new SimpleProductXmlToProductBuilder(),
-            new ConfigurableProductXmlToProductBuilder()
+            new ConfigurableProductXmlToProductBuilder($productXmlToProductBuilderLocarorProxy)
         );
     }
 
@@ -165,7 +171,7 @@ class ProductXmlToProductBuilderLocatorTest extends \PHPUnit_Framework_TestCase
         $configurableProductXml = $this->getConfigurableProductXml();
 
         $productBuilder = $this->xmlToProductBuilder->createProductBuilderFromXml($configurableProductXml);
-        $simpleProductBuilderDelegate = $this->getPrivatePropertyValue($productBuilder, 'simpleProductBuilderDelegate');
+        $simpleProductBuilderDelegate = $this->getPrivatePropertyValue($productBuilder, 'simpleProductBuilder');
         $sizeAttributes = $this->getAttributesWithCodeFromInstance($simpleProductBuilderDelegate, 'size');
         $this->assertEmpty($sizeAttributes, 'The configurable product builder has "size" attributes');
         $colorAttributes = $this->getAttributesWithCodeFromInstance($simpleProductBuilderDelegate, 'color');

@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
+use LizardsAndPumpkins\Product\Composite\ProductVariationAttributeList;
 
 class ConfigurableProductBuilder implements ProductBuilder
 {
@@ -14,9 +15,9 @@ class ConfigurableProductBuilder implements ProductBuilder
     private $simpleProductBuilder;
     
     /**
-     * @var ProductVariationAttributeListBuilder
+     * @var ProductVariationAttributeList
      */
-    private $variationAttributeListBuilder;
+    private $variationAttributeList;
     
     /**
      * @var AssociatedProductListBuilder
@@ -25,19 +26,22 @@ class ConfigurableProductBuilder implements ProductBuilder
 
     public function __construct(
         SimpleProductBuilder $simpleProductBuilder,
-        ProductVariationAttributeListBuilder $variationAttributeListBuilder,
+        ProductVariationAttributeList $variationAttributeList,
         AssociatedProductListBuilder $associatedProductListBuilder
     ) {
         $this->simpleProductBuilder = $simpleProductBuilder;
-        $this->variationAttributeListBuilder = $variationAttributeListBuilder;
+        $this->variationAttributeList = $variationAttributeList;
         $this->associatedProductListBuilder = $associatedProductListBuilder;
     }
-    
+
+    /**
+     * @param Context $context
+     * @return ConfigurableProduct
+     */
     public function getProductForContext(Context $context)
     {
         $simpleProduct = $this->simpleProductBuilder->getProductForContext($context);
-        $variationAttributeList = $this->variationAttributeListBuilder->getVariationAttributeListForContext($context);
         $associatedProductList = $this->associatedProductListBuilder->getAssociatedProductListForContext($context);
-        return new ConfigurableProduct($simpleProduct, $variationAttributeList, $associatedProductList);
+        return new ConfigurableProduct($simpleProduct, $this->variationAttributeList, $associatedProductList);
     }
 }

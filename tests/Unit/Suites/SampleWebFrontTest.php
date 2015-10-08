@@ -34,6 +34,7 @@ use LizardsAndPumpkins\Http\HttpRouterChain;
  * @uses   \LizardsAndPumpkins\Product\ProductSearchRequestHandler
  * @uses   \LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToProductBuilder
  * @uses   \LizardsAndPumpkins\Http\ResourceNotFoundRouter
  * @uses   \LizardsAndPumpkins\Http\ResourceNotFoundRequestHandler
  * @uses   \LizardsAndPumpkins\Http\HttpRouterChain

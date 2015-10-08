@@ -118,6 +118,7 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHandler
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToProductBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetProjector
  * @uses   \LizardsAndPumpkins\Projection\UrlKeyForContextCollector
  * @uses   \LizardsAndPumpkins\Renderer\ThemeLocator

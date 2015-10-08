@@ -27,9 +27,7 @@ class ProductXmlToProductBuilderLocator
     public function createProductBuilderFromXml($xml)
     {
         $parser = new XPathParser($xml);
-
         $productTypeCode = ProductTypeCode::fromString($this->getTypeCodeFromXml($parser));
-
         return $this->createProductBuilderForProductType($productTypeCode, $parser);
     }
 

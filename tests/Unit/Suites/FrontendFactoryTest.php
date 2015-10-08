@@ -51,6 +51,7 @@ use LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler;
  * @uses   \LizardsAndPumpkins\Context\ContextDecorator
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
  * @uses   \LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToProductBuilder
  */
 class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
 {

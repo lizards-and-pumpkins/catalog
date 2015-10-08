@@ -11,6 +11,7 @@ use LizardsAndPumpkins\Product\SimpleProduct;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductBuilder
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\AssociatedProductListBuilder
  * @uses   \LizardsAndPumpkins\Product\Composite\AssociatedProductList
  * @uses   \LizardsAndPumpkins\Product\Composite\ConfigurableProduct
  */
@@ -22,9 +23,9 @@ class ConfigurableProductBuilderTest extends \PHPUnit_Framework_TestCase
     private $mockSimpleProductBuilder;
 
     /**
-     * @var ProductVariationAttributeListBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductVariationAttributeList|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockProductVariationAttributeListBuilder;
+    private $mockVariationAttributeList;
 
     /**
      * @var AssociatedProductListBuilder|\PHPUnit_Framework_MockObject_MockObject
@@ -42,32 +43,23 @@ class ConfigurableProductBuilderTest extends \PHPUnit_Framework_TestCase
         $this->mockSimpleProductBuilder->method('getProductForContext')->willReturn(
             $this->getMock(SimpleProduct::class, [], [], '', false)
         );
-        
-        $this->mockProductVariationAttributeListBuilder = $this->getMock(
-            ProductVariationAttributeListBuilder::class,
-            ['getVariationAttributeListForContext']
-        );
-        $mockVariationAttributeList = $this->getMock(ProductVariationAttributeList::class, [], [], '', false);
-        $mockVariationAttributeList->method('getAttributes')->willReturn([]);
-        $this->mockProductVariationAttributeListBuilder->method('getVariationAttributeListForContext')
-            ->willReturn($mockVariationAttributeList);
 
-        $this->mockAssociatedProductListBuilder = $this->getMock(
-            AssociatedProductListBuilder::class,
-            ['getAssociatedProductListForContext']
-        );
+        $this->mockVariationAttributeList = $this->getMock(ProductVariationAttributeList::class, [], [], '', false);
+        $this->mockVariationAttributeList->method('getAttributes')->willReturn([]);
+
+        $this->mockAssociatedProductListBuilder = $this->getMock(AssociatedProductListBuilder::class);
         $this->mockAssociatedProductListBuilder->method('getAssociatedProductListForContext')->willReturn(
             $this->getMock(AssociatedProductList::class)
         );
-        
-        
+
+
         $this->configurableProductBuilder = new ConfigurableProductBuilder(
             $this->mockSimpleProductBuilder,
-            $this->mockProductVariationAttributeListBuilder,
+            $this->mockVariationAttributeList,
             $this->mockAssociatedProductListBuilder
         );
     }
-    
+
     public function testItImplementsTheProductBuilderInterface()
     {
         $this->assertInstanceOf(ProductBuilder::class, $this->configurableProductBuilder);
@@ -76,7 +68,9 @@ class ConfigurableProductBuilderTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsAConfigurableProductInstanceForTheGivenContext()
     {
         $stubContext = $this->getMock(Context::class);
+        
         $result = $this->configurableProductBuilder->getProductForContext($stubContext);
+        
         $this->assertInstanceOf(ConfigurableProduct::class, $result);
     }
 }
