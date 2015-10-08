@@ -3,18 +3,18 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\DataPool\KeyValue\KeyNotFoundException;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\Utils\XPathParser;
 
 class ProductDetailViewSnippetsTest extends AbstractIntegrationTest
 {
     /**
-     * @var SampleMasterFactory
+     * @var SampleMasterFactory|CommonFactory
      */
     private $factory;
 
@@ -49,14 +49,53 @@ class ProductDetailViewSnippetsTest extends AbstractIntegrationTest
     }
 
     /**
+     * @return string
+     */
+    private function getSkuOfFirstConfigurableProductInFixture()
+    {
+        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
+        $parser = new XPathParser($xml);
+        $skuNode = $parser->getXmlNodesArrayByXPath('//catalog/products/product[@type="configurable"][1]/@sku');
+        return $skuNode[0]['value'];
+    }
+
+    /**
      * @param string $productIdString
      * @return string
      */
     private function getProductJsonSnippetForId($productIdString)
     {
         $key = $this->getProductJsonSnippetKeyForId($productIdString);
-        $reader = $this->factory->createDataPoolReader();
-        return $reader->getSnippet($key);
+        return $this->getSnippetFromDataPool($key);
+    }
+
+    /**
+     * @param string $productIdString
+     * @return string
+     */
+    private function getConfigurableProductVariationAttributesJsonSnippetForId($productIdString)
+    {
+        $key = $this->getConfigurableProductVariationAttributesJsonSnippetKeyForId($productIdString);
+        return $this->getSnippetFromDataPool($key);
+    }
+
+    /**
+     * @param string $productIdString
+     * @return string
+     */
+    private function getConfigurableProductAssociatedProductsJsonSnippetForId($productIdString)
+    {
+        $key = $this->getConfigurableProductAssociatedProductsJsonSnippetKeyForId($productIdString);
+        return $this->getSnippetFromDataPool($key);
+    }
+
+    /**
+     * @param string $key
+     * @return string
+     */
+    private function getSnippetFromDataPool($key)
+    {
+        return $this->factory->createDataPoolReader()->getSnippet($key);
     }
 
     /**
@@ -68,18 +107,64 @@ class ProductDetailViewSnippetsTest extends AbstractIntegrationTest
         /** @var SnippetKeyGenerator $keyGenerator */
         $keyGenerator = $this->factory->createProductJsonSnippetKeyGenerator();
         $context = $this->factory->createContext();
-        $key = $keyGenerator->getKeyForContext($context, ['product_id' => $productIdString]);
-        return $key;
+        return $keyGenerator->getKeyForContext($context, ['product_id' => $productIdString]);
     }
 
-    public function testProductJsonSnippetIsWrittenToDataPool()
+    /**
+     * @param string $productIdString
+     * @return string
+     */
+    private function getConfigurableProductVariationAttributesJsonSnippetKeyForId($productIdString)
+    {
+        /** @var SnippetKeyGenerator $keyGenerator */
+        $keyGenerator = $this->factory->createConfigurableProductVariationAttributesJsonSnippetKeyGenerator();
+        $context = $this->factory->createContext();
+        return $keyGenerator->getKeyForContext($context, ['product_id' => $productIdString]);
+    }
+
+    /**
+     * @param string $productIdString
+     * @return string
+     */
+    private function getConfigurableProductAssociatedProductsJsonSnippetKeyForId($productIdString)
+    {
+        /** @var SnippetKeyGenerator $keyGenerator */
+        $keyGenerator = $this->factory->createConfigurableProductAssociatedProductsJsonSnippetKeyGenerator();
+        $context = $this->factory->createContext();
+        return $keyGenerator->getKeyForContext($context, ['product_id' => $productIdString]);
+    }
+
+    public function testSimpleProductJsonSnippetIsWrittenToDataPool()
     {
         $this->importCatalog();
+        $this->failIfMessagesWhereLogged($this->factory->getLogger());
         
         $productIdString = $this->getSkuOfFirstSimpleProductInFixture();
 
         $snippet = $this->getProductJsonSnippetForId($productIdString);
 
         $this->assertEquals($productIdString, SimpleProduct::fromArray(json_decode($snippet, true))->getId());
+    }
+
+    public function testConfigurableProductJsonSnippetsAreNotWrittenForSimpleProducts()
+    {
+        $this->setExpectedException(KeyNotFoundException::class);
+        $this->importCatalog();
+
+        $productIdString = $this->getSkuOfFirstSimpleProductInFixture();
+        $this->getConfigurableProductVariationAttributesJsonSnippetForId($productIdString);
+    }
+
+    public function testConfigurableProductSnippetsAreWrittenToDataPool()
+    {
+        $this->importCatalog();
+        $this->failIfMessagesWhereLogged($this->factory->getLogger());
+
+        $productIdString = $this->getSkuOfFirstConfigurableProductInFixture();
+        $variationAttributes = $this->getConfigurableProductVariationAttributesJsonSnippetForId($productIdString);
+        $associatedProducts = $this->getConfigurableProductAssociatedProductsJsonSnippetForId($productIdString);
+        
+        $this->assertInternalType('array', json_decode($variationAttributes, true));
+        $this->assertInternalType('array', json_decode($associatedProducts, true));
     }
 }
