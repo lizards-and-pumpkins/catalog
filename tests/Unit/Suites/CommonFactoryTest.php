@@ -17,6 +17,7 @@ use LizardsAndPumpkins\Image\ImageWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Image\AddImageCommand;
 use LizardsAndPumpkins\Image\AddImageCommandHandler;
 use LizardsAndPumpkins\Log\Logger;
+use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\FilterNavigationFilterCollection;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
@@ -98,6 +99,7 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Product\ProductStockQuantitySnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductJsonSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\UpdateProductCommandHandler
  * @uses   \LizardsAndPumpkins\Product\AddProductListingCommandHandler
  * @uses   \LizardsAndPumpkins\Product\UpdateProductStockQuantityCommandHandler
@@ -579,6 +581,24 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsAProductJsonSnippetKeyGenerator()
     {
         $result = $this->commonFactory->createProductJsonSnippetKeyGenerator();
+        $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
+    }
+
+    public function testItReturnsAConfigurableProductJsonSnippetRenderer()
+    {
+        $result = $this->commonFactory->createConfigurableProductJsonSnippetRenderer();
+        $this->assertInstanceOf(ConfigurableProductJsonSnippetRenderer::class, $result);
+    }
+
+    public function testItReturnsAConfigurableProductVariationAttributesJsonSnippetKeyGenerator()
+    {
+        $result = $this->commonFactory->createConfigurableProductVariationAttributesJsonSnippetKeyGenerator();
+        $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
+    }
+
+    public function testItReturnsAConfigurableProductAssociatedProductsJsonSnippetKeyGenerator()
+    {
+        $result = $this->commonFactory->createConfigurableProductAssociatedProductsJsonSnippetKeyGenerator();
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
 }

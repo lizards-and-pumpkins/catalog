@@ -12,6 +12,9 @@ use LizardsAndPumpkins\SnippetRenderer;
 
 class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
 {
+    const VARIATION_ATTRIBUTES_CODE = 'configurable_product_variation_attributes';
+    const ASSOCIATED_PRODUCTS_CODE = 'configurable_product_associated_products';
+    
     /**
      * @var SnippetKeyGenerator
      */

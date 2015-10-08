@@ -26,6 +26,7 @@ use LizardsAndPumpkins\Image\ImageProcessorCollection;
 use LizardsAndPumpkins\Image\AddImageCommand;
 use LizardsAndPumpkins\Image\AddImageCommandHandler;
 use LizardsAndPumpkins\Log\Logger;
+use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\DefaultNumberOfProductsPerPageSnippetRenderer;
 use LizardsAndPumpkins\Product\FilterNavigationFilterCollection;
 use LizardsAndPumpkins\Product\PriceSnippetRenderer;
@@ -267,6 +268,45 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         
         return new GenericSnippetKeyGenerator(
             ProductJsonSnippetRenderer::CODE,
+            $this->getMasterFactory()->getRequiredContexts(),
+            $usedDataParts
+        );
+    }
+
+    /**
+     * @return ConfigurableProductJsonSnippetRenderer
+     */
+    public function createConfigurableProductJsonSnippetRenderer()
+    {
+        return new ConfigurableProductJsonSnippetRenderer(
+            $this->getMasterFactory()->createConfigurableProductVariationAttributesJsonSnippetKeyGenerator(),
+            $this->getMasterFactory()->createConfigurableProductAssociatedProductsJsonSnippetKeyGenerator()
+        );
+    }
+
+    /**
+     * @return SnippetKeyGenerator
+     */
+    public function createConfigurableProductVariationAttributesJsonSnippetKeyGenerator()
+    {
+        $usedDataParts = ['product_id'];
+
+        return new GenericSnippetKeyGenerator(
+            ConfigurableProductJsonSnippetRenderer::VARIATION_ATTRIBUTES_CODE,
+            $this->getMasterFactory()->getRequiredContexts(),
+            $usedDataParts
+        );
+    }
+
+    /**
+     * @return SnippetKeyGenerator
+     */
+    public function createConfigurableProductAssociatedProductsJsonSnippetKeyGenerator()
+    {
+        $usedDataParts = ['product_id'];
+
+        return new GenericSnippetKeyGenerator(
+            ConfigurableProductJsonSnippetRenderer::ASSOCIATED_PRODUCTS_CODE,
             $this->getMasterFactory()->getRequiredContexts(),
             $usedDataParts
         );
