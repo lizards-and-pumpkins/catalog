@@ -441,7 +441,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                         <stock_qty>45</stock_qty>
                         <color locale="en_US">Red</color>
                         <color locale="de_DE">Rot</color>
-                        <label>US 11.5 - EU 45</label>
+                        <size>US 11.5 - EU 45</size>
                     </attributes>
                 </product>
                 <product sku="218765-333-4" type="simple">
