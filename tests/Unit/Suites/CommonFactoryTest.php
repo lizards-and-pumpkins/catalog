@@ -18,6 +18,7 @@ use LizardsAndPumpkins\Image\AddImageCommand;
 use LizardsAndPumpkins\Image\AddImageCommandHandler;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\FilterNavigationFilterCollection;
+use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
 use LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
@@ -96,6 +97,7 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\Product\ProductStockQuantityProjector
  * @uses   \LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Product\ProductStockQuantitySnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductJsonSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\UpdateProductCommandHandler
  * @uses   \LizardsAndPumpkins\Product\AddProductListingCommandHandler
  * @uses   \LizardsAndPumpkins\Product\UpdateProductStockQuantityCommandHandler
@@ -566,5 +568,17 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createProductListingPageSnippetProjector();
         $this->assertInstanceOf(ProductListingPageSnippetProjector::class, $result);
+    }
+
+    public function testItReturnsAProductJsonSnippetRenderer()
+    {
+        $result = $this->commonFactory->createProductJsonSnippetRenderer();
+        $this->assertInstanceOf(ProductJsonSnippetRenderer::class, $result);
+    }
+
+    public function testItReturnsAProductJsonSnippetKeyGenerator()
+    {
+        $result = $this->commonFactory->createProductJsonSnippetKeyGenerator();
+        $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
 }

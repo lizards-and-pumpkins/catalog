@@ -35,6 +35,7 @@ use LizardsAndPumpkins\Product\ProductDetailViewBlockRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionBlockRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder;
 use LizardsAndPumpkins\Product\ProductListingTemplateProjector;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionBlockRenderer;
@@ -242,8 +243,33 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $this->getMasterFactory()->createProductInListingSnippetRenderer(),
             $this->getMasterFactory()->createProductInSearchAutosuggestionSnippetRenderer(),
             $this->getMasterFactory()->createPriceSnippetRenderer(),
+            $this->getMasterFactory()->createProductJsonSnippetRenderer(),
             $this->getMasterFactory()->createProductBackOrderAvailabilitySnippetRenderer()
         ];
+    }
+
+    /**
+     * @return ProductJsonSnippetRenderer
+     */
+    public function createProductJsonSnippetRenderer()
+    {
+        return new ProductJsonSnippetRenderer(
+            $this->createProductJsonSnippetKeyGenerator()
+        );
+    }
+
+    /**
+     * @return GenericSnippetKeyGenerator
+     */
+    public function createProductJsonSnippetKeyGenerator()
+    {
+        $usedDataParts = ['product_id'];
+        
+        return new GenericSnippetKeyGenerator(
+            ProductJsonSnippetRenderer::CODE,
+            $this->getMasterFactory()->getRequiredContexts(),
+            $usedDataParts
+        );
     }
 
     /**
