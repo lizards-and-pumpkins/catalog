@@ -5,26 +5,35 @@ namespace LizardsAndPumpkins\Projection\Catalog\Import;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidNumberOfSkusForImportedProductException;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidProductTypeCodeForImportedProductException;
+use LizardsAndPumpkins\Projection\Catalog\Import\Exception\NoMatchingProductTypeBuilderFactoryFoundException;
 
 /**
+ * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator
  * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilder
+ * @covers \LizardsAndPumpkins\Projection\Catalog\Import\SimpleProductXmlToProductBuilder
+ * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToProductBuilder
+ * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToAssociatedProductListBuilder
+ * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToVariationAttributeList
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\SimpleProductBuilder
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductAttributeListBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageListBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageBuilder
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\AssociatedProductListBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductId
  * @uses   \LizardsAndPumpkins\Product\ProductAttribute
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Product\ProductTypeCode
+ * @uses   \LizardsAndPumpkins\Product\Composite\ProductVariationAttributeList
  * @uses   \LizardsAndPumpkins\Utils\XPathParser
  */
-class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
+class ProductXmlToProductBuilderLocatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ProductXmlToProductBuilder
+     * @var ProductXmlToProductBuilderLocator
      */
-    private $builder;
+    private $xmlToProductBuilder;
 
     /**
      * @var \DOMDocument
@@ -113,10 +122,24 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
         $domDocument->loadXML($productXml);
         return $domDocument->getElementsByTagName('special_price')->item(0)->nodeValue;
     }
+    
+    /**
+     * @return ProductXmlToProductBuilderLocator
+     */
+    private function createProductXmlToProductBuilderLocatorInstance()
+    {
+        $productXmlToProductBuilderLocatorProxy = function () {
+            return $this->createProductXmlToProductBuilderLocatorInstance();
+        };
+        return new ProductXmlToProductBuilderLocator(
+            new SimpleProductXmlToProductBuilder(),
+            new ConfigurableProductXmlToProductBuilder($productXmlToProductBuilderLocatorProxy)
+        );
+    }
 
     protected function setUp()
     {
-        $this->builder = new ProductXmlToProductBuilder();
+        $this->xmlToProductBuilder = $this->createProductXmlToProductBuilderLocatorInstance();
 
         $xml = file_get_contents(__DIR__ . '/../../../../../shared-fixture/catalog.xml');
         $this->domDocument = new \DOMDocument();
@@ -128,7 +151,7 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
         $simpleProductXml = $this->getSimpleProductXml();
         $expectedSpecialPrice = $this->getSpecialPriceFromProductXml($simpleProductXml);
 
-        $productBuilder = $this->builder->createProductBuilderFromXml($simpleProductXml);
+        $productBuilder = $this->xmlToProductBuilder->createProductBuilderFromXml($simpleProductXml);
 
         $this->assertInstanceOf(SimpleProductBuilder::class, $productBuilder);
         $this->assertFirstProductAttributeInAListValueEquals($expectedSpecialPrice, $productBuilder, 'special_price');
@@ -136,10 +159,9 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testConfigurableProductBuilderIsCreatedFromXml()
     {
-        $this->markTestSkipped('Skipped until ConfigurableProductBuilder is implemented');
         $configurableProductXml = $this->getConfigurableProductXml();
 
-        $productBuilder = $this->builder->createProductBuilderFromXml($configurableProductXml);
+        $productBuilder = $this->xmlToProductBuilder->createProductBuilderFromXml($configurableProductXml);
 
         $this->assertInstanceOf(ConfigurableProductBuilder::class, $productBuilder);
     }
@@ -147,11 +169,12 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
     public function testProductBuilderIsCreatedFromXmlIgnoringAssociatedProductAttributes()
     {
         $configurableProductXml = $this->getConfigurableProductXml();
-        
-        $productBuilder = $this->builder->createProductBuilderFromXml($configurableProductXml);
-        $sizeAttributes = $this->getAttributesWithCodeFromInstance($productBuilder, 'size');
+
+        $productBuilder = $this->xmlToProductBuilder->createProductBuilderFromXml($configurableProductXml);
+        $simpleProductBuilderDelegate = $this->getPrivatePropertyValue($productBuilder, 'simpleProductBuilder');
+        $sizeAttributes = $this->getAttributesWithCodeFromInstance($simpleProductBuilderDelegate, 'size');
         $this->assertEmpty($sizeAttributes, 'The configurable product builder has "size" attributes');
-        $colorAttributes = $this->getAttributesWithCodeFromInstance($productBuilder, 'color');
+        $colorAttributes = $this->getAttributesWithCodeFromInstance($simpleProductBuilderDelegate, 'color');
         $this->assertEmpty($colorAttributes, 'The configurable product builder has "color" attributes');
     }
 
@@ -159,8 +182,8 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(InvalidNumberOfSkusForImportedProductException::class);
         $xml = '<product type="simple"></product>';
-        
-        (new ProductXmlToProductBuilder())->createProductBuilderFromXml($xml);
+
+        $this->createProductXmlToProductBuilderLocatorInstance()->createProductBuilderFromXml($xml);
     }
 
     public function testExceptionIsThrownIfProductTypeCodeIsMissing()
@@ -168,6 +191,17 @@ class ProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException(InvalidProductTypeCodeForImportedProductException::class);
         $xml = '<product sku="foo"></product>';
 
-        (new ProductXmlToProductBuilder())->createProductBuilderFromXml($xml);
+        $this->createProductXmlToProductBuilderLocatorInstance()->createProductBuilderFromXml($xml);
+    }
+
+    public function testExceptionIsThrownIfNoFactoryForGivenTypeCodeIsFound()
+    {
+        $this->setExpectedException(
+            NoMatchingProductTypeBuilderFactoryFoundException::class,
+            'No product type builder factory for the product type code "invalid" was found'
+        );
+        $xml = '<product type="invalid" sku="test"></product>';
+
+        $this->createProductXmlToProductBuilderLocatorInstance()->createProductBuilderFromXml($xml);
     }
 }

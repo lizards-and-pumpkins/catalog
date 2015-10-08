@@ -90,7 +90,7 @@ class GettextTranslatorTest extends \PHPUnit_Framework_TestCase
     public function testGivenStringIsTranslated()
     {
         if (empty(shell_exec('which msgfmt'))) {
-            $this->markTestSkipped('msgfmt is not installed.');
+            $this->markTestSkipped('The shell command msgfmt from gettext is not installed.');
         }
 
         $testThemeDirectoryPath = sys_get_temp_dir();

@@ -17,7 +17,9 @@ use LizardsAndPumpkins\Image\ImageWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Image\AddImageCommand;
 use LizardsAndPumpkins\Image\AddImageCommandHandler;
 use LizardsAndPumpkins\Log\Logger;
+use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\FilterNavigationFilterCollection;
+use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
 use LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
@@ -25,7 +27,7 @@ use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductProjector;
-use LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilder;
+use LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator;
 use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductStockQuantityProjector;
@@ -76,7 +78,7 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\Product\FilterNavigationFilterCollection
  * @uses   \LizardsAndPumpkins\Product\PriceSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductBackOrderAvailabilitySnippetRenderer
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilder
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator
  * @uses   \LizardsAndPumpkins\Product\ProductProjector
  * @uses   \LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer
@@ -96,6 +98,8 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\Product\ProductStockQuantityProjector
  * @uses   \LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Product\ProductStockQuantitySnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductJsonSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\UpdateProductCommandHandler
  * @uses   \LizardsAndPumpkins\Product\AddProductListingCommandHandler
  * @uses   \LizardsAndPumpkins\Product\UpdateProductStockQuantityCommandHandler
@@ -118,6 +122,7 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHandler
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToProductBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetProjector
  * @uses   \LizardsAndPumpkins\Projection\UrlKeyForContextCollector
  * @uses   \LizardsAndPumpkins\Renderer\ThemeLocator
@@ -192,10 +197,16 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
 
-    public function testProductXmlToProductBuilderIsReturned()
+    public function testProductXmlToProductBuilderLocatorIsReturned()
     {
-        $result = $this->commonFactory->createProductXmlToProductBuilder();
-        $this->assertInstanceOf(ProductXmlToProductBuilder::class, $result);
+        $result = $this->commonFactory->createProductXmlToProductBuilderLocator();
+        $this->assertInstanceOf(ProductXmlToProductBuilderLocator::class, $result);
+    }
+
+    public function testProductXmlToProductBuilderLocatorProxyFactoryIsReturned()
+    {
+        $proxy = $this->commonFactory->createProductXmlToProductBuilderLocatorProxyFactoryMethod();
+        $this->assertInstanceOf(ProductXmlToProductBuilderLocator::class, $proxy());
     }
 
     public function testProductListingCriteriaBuilderIsReturned()
@@ -559,5 +570,35 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createProductListingPageSnippetProjector();
         $this->assertInstanceOf(ProductListingPageSnippetProjector::class, $result);
+    }
+
+    public function testItReturnsAProductJsonSnippetRenderer()
+    {
+        $result = $this->commonFactory->createProductJsonSnippetRenderer();
+        $this->assertInstanceOf(ProductJsonSnippetRenderer::class, $result);
+    }
+
+    public function testItReturnsAProductJsonSnippetKeyGenerator()
+    {
+        $result = $this->commonFactory->createProductJsonSnippetKeyGenerator();
+        $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
+    }
+
+    public function testItReturnsAConfigurableProductJsonSnippetRenderer()
+    {
+        $result = $this->commonFactory->createConfigurableProductJsonSnippetRenderer();
+        $this->assertInstanceOf(ConfigurableProductJsonSnippetRenderer::class, $result);
+    }
+
+    public function testItReturnsAConfigurableProductVariationAttributesJsonSnippetKeyGenerator()
+    {
+        $result = $this->commonFactory->createConfigurableProductVariationAttributesJsonSnippetKeyGenerator();
+        $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
+    }
+
+    public function testItReturnsAConfigurableProductAssociatedProductsJsonSnippetKeyGenerator()
+    {
+        $result = $this->commonFactory->createConfigurableProductAssociatedProductsJsonSnippetKeyGenerator();
+        $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
 }

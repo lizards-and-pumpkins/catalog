@@ -24,6 +24,7 @@ use LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler;
  * @uses   \LizardsAndPumpkins\Content\ContentBlocksApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\Context\ContextBuilder
  * @uses   \LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator
  * @uses   \LizardsAndPumpkins\Product\FilterNavigationFilterCollection
  * @uses   \LizardsAndPumpkins\Http\GenericHttpRouter
  * @uses   \LizardsAndPumpkins\Product\ProductDetailViewRequestHandler
@@ -50,6 +51,7 @@ use LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler;
  * @uses   \LizardsAndPumpkins\Context\ContextDecorator
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
  * @uses   \LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToProductBuilder
  */
 class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
 {

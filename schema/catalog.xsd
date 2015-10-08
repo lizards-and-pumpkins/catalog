@@ -79,5 +79,6 @@
             </xs:element>
         </xs:all>
         <xs:attribute name="sku" type="xs:string" use="required" />
+        <xs:attribute name="type" type="xs:string" use="required" />
     </xs:complexType>
 </xs:schema>

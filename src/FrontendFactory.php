@@ -15,6 +15,7 @@ use LizardsAndPumpkins\Product\DefaultNumberOfProductsPerPageSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewRequestHandler;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingCriteriaSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingRequestHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer;
@@ -251,6 +252,10 @@ class FrontendFactory implements Factory
         $snippetKeyGeneratorLocator->register(
             ProductSearchAutosuggestionSnippetRenderer::CODE,
             $this->getMasterFactory()->createProductSearchAutosuggestionSnippetKeyGenerator()
+        );
+        $snippetKeyGeneratorLocator->register(
+            ProductJsonSnippetRenderer::CODE,
+            $this->getMasterFactory()->createProductJsonSnippetKeyGenerator()
         );
 
         return $snippetKeyGeneratorLocator;

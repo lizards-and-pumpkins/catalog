@@ -83,7 +83,7 @@ EOT;
                 <special_price website="test2">5.99</special_price>
                 <description><![CDATA[A Description with some <strong>Tags</strong>]]></description>
                 <brand>Lizards</brand>
-                <style>Pumpkin</style>
+                <thing>Pumpkin</thing>
             </attributes>
         </product>
 ', $this->getImagesSectionWithContext($imageContent));

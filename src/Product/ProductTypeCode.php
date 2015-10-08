@@ -4,26 +4,21 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
-use LizardsAndPumpkins\Product\Exception\InvalidProductTypeIdentifierException;
+use LizardsAndPumpkins\Product\Exception\InvalidProductTypeCodeException;
 
 class ProductTypeCode
 {
-    private static $productTypeCode = [
-        SimpleProduct::TYPE_CODE,
-        ConfigurableProduct::TYPE_CODE
-    ];
-
     /**
      * @var string
      */
-    private $productTypeString;
+    private $productTypeCodeString;
 
     /**
      * @param string $productTypeString
      */
     private function __construct($productTypeString)
     {
-        $this->productTypeString = $productTypeString;
+        $this->productTypeCodeString = $productTypeString;
     }
 
     /**
@@ -42,13 +37,10 @@ class ProductTypeCode
     private static function validateProductTypeString($productTypeString)
     {
         if (!is_string($productTypeString)) {
-            throw self::getInvalidProductTypeIdentifierTypeException($productTypeString);
+            throw self::getInvalidProductTypeCodeException($productTypeString);
         }
         if (empty(trim($productTypeString))) {
-            throw self::getEmptyProductTypeIdentifierException();
-        }
-        if (!in_array($productTypeString, self::$productTypeCode)) {
-            throw self::getInvalidProductTypeIdentifierCodeException($productTypeString);
+            throw self::getEmptyProductTypeCodeException();
         }
     }
 
@@ -65,32 +57,21 @@ class ProductTypeCode
 
     /**
      * @param mixed $productTypeId
-     * @return InvalidProductTypeIdentifierException
+     * @return InvalidProductTypeCodeException
      */
-    private static function getInvalidProductTypeIdentifierTypeException($productTypeId)
+    private static function getInvalidProductTypeCodeException($productTypeId)
     {
         $variableType = self::getVariableType($productTypeId);
-        $message = sprintf('The product type identifier has to be a string, got "%s"', $variableType);
-        return new InvalidProductTypeIdentifierException($message);
+        $message = sprintf('The product type code has to be a string, got "%s"', $variableType);
+        return new InvalidProductTypeCodeException($message);
     }
 
     /**
-     * @return InvalidProductTypeIdentifierException
+     * @return InvalidProductTypeCodeException
      */
-    private static function getEmptyProductTypeIdentifierException()
+    private static function getEmptyProductTypeCodeException()
     {
-        return new InvalidProductTypeIdentifierException('The product type identifier can not be empty');
-    }
-
-    /**
-     * @param string $typeCode
-     * @return InvalidProductTypeIdentifierException
-     */
-    private static function getInvalidProductTypeIdentifierCodeException($typeCode)
-    {
-        $type = implode('", "', self::$productTypeCode);
-        $message = sprintf('The product type identifier "%s" is invalid, expected one of "%s"', $typeCode, $type);
-        return new InvalidProductTypeIdentifierException($message);
+        return new InvalidProductTypeCodeException('The product type code can not be empty');
     }
 
     /**
@@ -98,6 +79,15 @@ class ProductTypeCode
      */
     public function __toString()
     {
-        return $this->productTypeString;
+        return $this->productTypeCodeString;
+    }
+
+    /**
+     * @param ProductTypeCode $otherProductTypeCode
+     * @return bool
+     */
+    public function isEqualTo(ProductTypeCode $otherProductTypeCode)
+    {
+        return $this->productTypeCodeString === $otherProductTypeCode->productTypeCodeString;
     }
 }

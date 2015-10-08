@@ -26,6 +26,7 @@ use LizardsAndPumpkins\Image\ImageProcessorCollection;
 use LizardsAndPumpkins\Image\AddImageCommand;
 use LizardsAndPumpkins\Image\AddImageCommandHandler;
 use LizardsAndPumpkins\Log\Logger;
+use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\DefaultNumberOfProductsPerPageSnippetRenderer;
 use LizardsAndPumpkins\Product\FilterNavigationFilterCollection;
 use LizardsAndPumpkins\Product\PriceSnippetRenderer;
@@ -35,6 +36,7 @@ use LizardsAndPumpkins\Product\ProductDetailViewBlockRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionBlockRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder;
 use LizardsAndPumpkins\Product\ProductListingTemplateProjector;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionBlockRenderer;
@@ -56,6 +58,9 @@ use LizardsAndPumpkins\Product\ProductProjector;
 use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
 use LizardsAndPumpkins\Product\ProductSearchDocumentBuilder;
 use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer;
+use LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator;
+use LizardsAndPumpkins\Projection\Catalog\Import\SimpleProductXmlToProductBuilder;
+use LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToProductBuilder;
 use LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilder;
 use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEvent;
@@ -239,8 +244,73 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $this->getMasterFactory()->createProductInListingSnippetRenderer(),
             $this->getMasterFactory()->createProductInSearchAutosuggestionSnippetRenderer(),
             $this->getMasterFactory()->createPriceSnippetRenderer(),
+            $this->getMasterFactory()->createProductJsonSnippetRenderer(),
+            $this->getMasterFactory()->createConfigurableProductJsonSnippetRenderer(),
             $this->getMasterFactory()->createProductBackOrderAvailabilitySnippetRenderer()
         ];
+    }
+
+    /**
+     * @return ProductJsonSnippetRenderer
+     */
+    public function createProductJsonSnippetRenderer()
+    {
+        return new ProductJsonSnippetRenderer(
+            $this->createProductJsonSnippetKeyGenerator()
+        );
+    }
+
+    /**
+     * @return GenericSnippetKeyGenerator
+     */
+    public function createProductJsonSnippetKeyGenerator()
+    {
+        $usedDataParts = ['product_id'];
+        
+        return new GenericSnippetKeyGenerator(
+            ProductJsonSnippetRenderer::CODE,
+            $this->getMasterFactory()->getRequiredContexts(),
+            $usedDataParts
+        );
+    }
+
+    /**
+     * @return ConfigurableProductJsonSnippetRenderer
+     */
+    public function createConfigurableProductJsonSnippetRenderer()
+    {
+        return new ConfigurableProductJsonSnippetRenderer(
+            $this->getMasterFactory()->createConfigurableProductVariationAttributesJsonSnippetKeyGenerator(),
+            $this->getMasterFactory()->createConfigurableProductAssociatedProductsJsonSnippetKeyGenerator()
+        );
+    }
+
+    /**
+     * @return SnippetKeyGenerator
+     */
+    public function createConfigurableProductVariationAttributesJsonSnippetKeyGenerator()
+    {
+        $usedDataParts = ['product_id'];
+
+        return new GenericSnippetKeyGenerator(
+            ConfigurableProductJsonSnippetRenderer::VARIATION_ATTRIBUTES_CODE,
+            $this->getMasterFactory()->getRequiredContexts(),
+            $usedDataParts
+        );
+    }
+
+    /**
+     * @return SnippetKeyGenerator
+     */
+    public function createConfigurableProductAssociatedProductsJsonSnippetKeyGenerator()
+    {
+        $usedDataParts = ['product_id'];
+
+        return new GenericSnippetKeyGenerator(
+            ConfigurableProductJsonSnippetRenderer::ASSOCIATED_PRODUCTS_CODE,
+            $this->getMasterFactory()->getRequiredContexts(),
+            $usedDataParts
+        );
     }
 
     /**
@@ -703,11 +773,51 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return ProductXmlToProductBuilder
+     * @return ProductXmlToProductBuilderLocator
      */
-    public function createProductXmlToProductBuilder()
+    public function createProductXmlToProductBuilderLocator()
     {
-        return new ProductXmlToProductBuilder();
+        $productXmlToProductTypeBuilders = $this->getMasterFactory()->createProductXmlToProductTypeBuilders();
+        return new ProductXmlToProductBuilderLocator(...$productXmlToProductTypeBuilders);
+    }
+
+    /**
+     * @return ProductXmlToProductBuilder[]
+     */
+    public function createProductXmlToProductTypeBuilders()
+    {
+        return [
+            $this->getMasterFactory()->createSimpleProductXmlToProductBuilder(),
+            $this->getMasterFactory()->createConfigurableProductXmlToProductBuilder()
+        ];
+    }
+
+    /**
+     * @return SimpleProductXmlToProductBuilder
+     */
+    public function createSimpleProductXmlToProductBuilder()
+    {
+        return new SimpleProductXmlToProductBuilder();
+    }
+
+    /**
+     * @return ConfigurableProductXmlToProductBuilder
+     */
+    public function createConfigurableProductXmlToProductBuilder()
+    {
+        $productTypeBuilderFactoryProxy = $this->getMasterFactory()
+            ->createProductXmlToProductBuilderLocatorProxyFactoryMethod();
+        return new ConfigurableProductXmlToProductBuilder($productTypeBuilderFactoryProxy);
+    }
+
+    /**
+     * @return \Closure
+     */
+    public function createProductXmlToProductBuilderLocatorProxyFactoryMethod()
+    {
+        return function () {
+            return $this->createProductXmlToProductBuilderLocator();
+        };
     }
 
     /**
@@ -1279,7 +1389,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new CatalogImport(
             $this->getMasterFactory()->getCommandQueue(),
-            $this->getMasterFactory()->createProductXmlToProductBuilder(),
+            $this->getMasterFactory()->createProductXmlToProductBuilderLocator(),
             $this->getMasterFactory()->createProductListingCriteriaBuilder(),
             $this->getMasterFactory()->getEventQueue(),
             $this->getMasterFactory()->createContextSource(),

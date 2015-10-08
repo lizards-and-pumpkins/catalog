@@ -14,7 +14,7 @@ use LizardsAndPumpkins\Utils\Clearable;
 abstract class AbstractIntegrationTestUrlKeyStoreTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var UrlKeyStore
+     * @var UrlKeyStore|Clearable
      */
     private $urlKeyStore;
 
