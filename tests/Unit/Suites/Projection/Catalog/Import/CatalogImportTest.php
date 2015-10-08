@@ -18,25 +18,26 @@ use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportFileDoes
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportFileNotReadableException;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\TestFileFixtureTrait;
+use LizardsAndPumpkins\Utils\XPathParser;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImportFailedMessage
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogXmlParser
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEvent
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImportCallbackFailureMessage
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageImportCallbackFailureMessage
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogListingImportCallbackFailureMessage
  * @uses   \LizardsAndPumpkins\Product\ProductId
  * @uses   \LizardsAndPumpkins\Product\AddProductListingCommand
  * @uses   \LizardsAndPumpkins\Product\UpdateProductCommand
- * @uses   \LizardsAndPumpkins\Utils\XPathParser
  * @uses   \LizardsAndPumpkins\Image\AddImageCommand
+ * @uses   \LizardsAndPumpkins\Utils\XPathParser
  * @uses   \LizardsAndPumpkins\Utils\UuidGenerator
  * @uses   \LizardsAndPumpkins\DataVersion
  */
 class CatalogImportTest extends \PHPUnit_Framework_TestCase
 {
     use TestFileFixtureTrait;
-    
-    private $invalidProductsFixtureFile = __DIR__ . '/../../../../../shared-fixture/catalog-with-invalid-product.xml';
     
     private $sharedFixtureFilePath = __DIR__ . '/../../../../../shared-fixture/catalog.xml';
 
@@ -58,7 +59,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Logger|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $logger;
+    private $mockLogger;
 
     /**
      * @var CatalogImport
@@ -143,7 +144,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         $this->contextSource->method('getAllAvailableContextsWithVersion')->willReturn(
             [$this->getMock(Context::class)]
         );
-        $this->logger = $this->getMock(Logger::class);
+        $this->mockLogger = $this->getMock(Logger::class);
 
         $this->catalogImport = new CatalogImport(
             $this->mockCommandQueue,
@@ -151,7 +152,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
             $this->stubProductListingCriteriaBuilder,
             $this->mockEventQueue,
             $this->contextSource,
-            $this->logger
+            $this->mockLogger
         );
     }
 
@@ -175,17 +176,6 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         $this->createFixtureFile($importFilePath, '', 0000);
 
         $this->catalogImport->importFile($importFilePath);
-    }
-
-    public function testExceptionIsLoggedIfProductBuilderIsInvalid()
-    {
-        $this->stubProductXmlToProductBuilder->method('createProductBuilderFromXml')
-            ->willThrowException(new ProductAttributeContextPartsMismatchException('dummy'));
-
-        $this->logger->expects($this->atLeastOnce())->method('log')
-            ->with($this->isInstanceOf(ProductImportFailedMessage::class));
-
-        $this->catalogImport->importFile($this->invalidProductsFixtureFile);
     }
 
     public function testUpdateProductCommandsAreEmitted()
@@ -215,4 +205,68 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
 
         $this->catalogImport->importFile($this->sharedFixtureFilePath);
     }
+
+    public function testItLogsExceptionsThrownWhileProcessingListingXml()
+    {
+        $this->mockLogger->expects($this->atLeastOnce())->method('log')
+            ->with($this->isInstanceOf(CatalogListingImportCallbackFailureMessage::class));
+
+        $mockCommandQueue = $this->getMock(Queue::class);
+        $mockCommandQueue->method('add')->willThrowException(new \Exception('dummy'));
+        
+        $this->catalogImport = new CatalogImport(
+            $mockCommandQueue,
+            $this->stubProductXmlToProductBuilder,
+            $this->stubProductListingCriteriaBuilder,
+            $this->mockEventQueue,
+            $this->contextSource,
+            $this->mockLogger
+        );
+
+        $fullXml = file_get_contents($this->sharedFixtureFilePath);
+        $onlyListingXml = (new XPathParser($fullXml))->getXmlNodesRawXmlArrayByXPath('/catalog/listings')[0];
+        $fixtureFile = $this->getUniqueTempDir() . '/listings.xml';
+        $this->createFixtureFile($fixtureFile, '<catalog>' . $onlyListingXml . '</catalog>');
+        $this->catalogImport->importFile($fixtureFile);
+    }
+
+    public function testItLogsExceptionsThrownDuringProductImport()
+    {
+        $this->mockLogger->expects($this->atLeastOnce())->method('log')
+            ->with($this->isInstanceOf(ProductImportCallbackFailureMessage::class));
+        
+        /** @var ProductBuilder|\PHPUnit_Framework_MockObject_MockObject $stubProductBuilder */
+        $stubProductBuilder = $this->getMock(ProductBuilder::class);
+        $stubProductBuilder->method('getProductForContext')->willThrowException(
+            new \Exception('dummy exception')
+        );
+
+        $stubProductXmlToProductBuilder = $this->getMock(ProductXmlToProductBuilderLocator::class, [], [], '', false);
+        $stubProductXmlToProductBuilder->method('createProductBuilderFromXml')->willReturn($stubProductBuilder);
+
+        $this->catalogImport = new CatalogImport(
+            $this->mockCommandQueue,
+            $stubProductXmlToProductBuilder,
+            $this->stubProductListingCriteriaBuilder,
+            $this->mockEventQueue,
+            $this->contextSource,
+            $this->mockLogger
+        );
+        
+        $this->catalogImport->importFile($this->sharedFixtureFilePath);
+    }
+
+    public function testItLogsExceptionsThrownDuringProductImageImport()
+    {
+        $this->mockLogger->expects($this->atLeastOnce())->method('log')
+            ->with($this->isInstanceOf(ProductImageImportCallbackFailureMessage::class));
+
+        $originalXml = file_get_contents($this->sharedFixtureFilePath);
+        $invalidImagesXml = preg_replace('#.(jpg|png)<#i', '.<', $originalXml);
+        $fixtureFile = $this->getUniqueTempDir() . '/listings.xml';
+        $this->createFixtureFile($fixtureFile, $invalidImagesXml);
+        $this->catalogImport->importFile($fixtureFile);
+    }
 }
+
+

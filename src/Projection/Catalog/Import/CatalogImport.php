@@ -80,7 +80,7 @@ class CatalogImport
         // Todo: once all projectors support using the passed data version of context data sets, use the UUID version
         $this->dataVersion = DataVersion::fromVersionString('-1'); // UuidGenerator::getUuid()
         $this->validateImportFilePath($importFilePath);
-        $parser = CatalogXmlParser::fromFilePath($importFilePath);
+        $parser = CatalogXmlParser::fromFilePath($importFilePath, $this->logger);
         $parser->registerProductCallback($this->createClosureForMethod('processProductXml'));
         $parser->registerListingCallback($this->createClosureForMethod('processListingXml'));
         $imageDirectoryPath = dirname($importFilePath) . '/product-images';
@@ -136,9 +136,12 @@ class CatalogImport
         try {
             $productBuilder = $this->productXmlToProductBuilder->createProductBuilderFromXml($productXml);
             $this->addProductsFromBuilderToQueue($productBuilder);
-        } catch (\Exception $exception) {
-            $this->logProductImportException($exception, $productXml);
-            throw $exception;
+        } catch (\Exception $exceptionWillInterruptFurtherProcessingOfThisProduct) {
+            $this->logger->log(new ProductImportCallbackFailureMessage(
+                $exceptionWillInterruptFurtherProcessingOfThisProduct,
+                $productXml
+            ));
+            throw $exceptionWillInterruptFurtherProcessingOfThisProduct;
         }
     }
 
@@ -155,15 +158,18 @@ class CatalogImport
     }
 
     /**
-     * @param \Exception $exception
-     * @param string $productXml
+     * @param string $imageDirectoryPath
+     * @param string $productImageXml
      */
-    private function logProductImportException(\Exception $exception, $productXml)
+    private function processProductImageXml($imageDirectoryPath, $productImageXml)
     {
-        $skuString = (new XPathParser($productXml))->getXmlNodesArrayByXPath('//@sku')[0]['value'];
-        $productId = ProductId::fromString($skuString);
-        $loggerMessage = new ProductImportFailedMessage($productId, $exception);
-        $this->logger->log($loggerMessage);
+        try {
+            $fileNode = (new XPathParser($productImageXml))->getXmlNodesArrayByXPath('/image/file')[0];
+            $imageFilePath = $imageDirectoryPath . '/' . $fileNode['value'];
+            $this->commandQueue->add(new AddImageCommand($imageFilePath, $this->dataVersion));
+        } catch (\Exception $exception) {
+            $this->logger->log(new ProductImageImportCallbackFailureMessage($exception, $productImageXml));
+        }
     }
 
     /**
@@ -171,19 +177,12 @@ class CatalogImport
      */
     private function processListingXml($listingXml)
     {
-        $productListingCriteria = $this->productListingCriteriaBuilder
-            ->createProductListingCriteriaFromXml($listingXml, $this->dataVersion);
-        $this->commandQueue->add(new AddProductListingCommand($productListingCriteria));
-    }
-
-    /**
-     * @param string $imageDirectoryPath
-     * @param string $productImageXml
-     */
-    private function processProductImageXml($imageDirectoryPath, $productImageXml)
-    {
-        $fileNode = (new XPathParser($productImageXml))->getXmlNodesArrayByXPath('/image/file')[0];
-        $imageFilePath = $imageDirectoryPath . '/' . $fileNode['value'];
-        $this->commandQueue->add(new AddImageCommand($imageFilePath, $this->dataVersion));
+        try {
+            $productListingCriteria = $this->productListingCriteriaBuilder
+                ->createProductListingCriteriaFromXml($listingXml, $this->dataVersion);
+            $this->commandQueue->add(new AddProductListingCommand($productListingCriteria));
+        } catch (\Exception $exception) {
+            $this->logger->log(new CatalogListingImportCallbackFailureMessage($exception, $listingXml));
+        }
     }
 }

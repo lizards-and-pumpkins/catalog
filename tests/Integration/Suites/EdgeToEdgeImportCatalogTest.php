@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpResourceNotFoundResponse;
+use LizardsAndPumpkins\Log\LogMessage;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
@@ -187,21 +188,22 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
 
         $logger = $this->factory->getLogger();
         $messages = $logger->getMessages();
-
+        
         $importExceptionMessage = 'The attribute "price" has multiple values with ' .
             'different contexts which can not be part of one product attribute list';
         $expectedLoggedErrorMessage = sprintf(
-            "Failed to import product ID: %s due to following reason:\n%s",
+            'Error during processing catalog product XML import for product "%s": %s',
             $invalidProductId,
             $importExceptionMessage
         );
         $this->assertContains($expectedLoggedErrorMessage, $messages, 'Product import failure was not logged.');
-
+        
         if (!empty($messages)) {
-            $messageString = implode(PHP_EOL, $messages);
-            if ($messageString !== $expectedLoggedErrorMessage) {
-                $this->fail($messageString);
-            }
+            array_map(function (LogMessage $message) use ($expectedLoggedErrorMessage) {
+                if ($expectedLoggedErrorMessage != $message) {
+                    $this->fail($message);
+                }
+            }, $messages);
         }
     }
 }
