@@ -128,7 +128,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     public function testEmptyCollectionIsReturnedIfQueryStringIsNotFoundInIndex()
     {
-        $searchDocumentFields = ['foo' => 'bar'];
+        $searchDocumentFields = ['foo' => 'bar', 'baz' => 'qux'];
         $productId = ProductId::fromString(uniqid());
         $searchDocument = $this->createSearchDocument($searchDocumentFields, $productId);
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocument);
