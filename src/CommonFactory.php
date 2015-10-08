@@ -245,6 +245,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $this->getMasterFactory()->createProductInSearchAutosuggestionSnippetRenderer(),
             $this->getMasterFactory()->createPriceSnippetRenderer(),
             $this->getMasterFactory()->createProductJsonSnippetRenderer(),
+            $this->getMasterFactory()->createConfigurableProductJsonSnippetRenderer(),
             $this->getMasterFactory()->createProductBackOrderAvailabilitySnippetRenderer()
         ];
     }
