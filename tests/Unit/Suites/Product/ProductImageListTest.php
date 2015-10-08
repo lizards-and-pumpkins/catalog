@@ -104,6 +104,16 @@ class ProductImageListTest extends \PHPUnit_Framework_TestCase
             'ProductImageList instances are immutable'
         );
         $imageList = new ProductImageList($this->getMock(ProductImage::class, [], [], '', false));
+        $imageList[0] = 123;
+    }
+
+    public function testItThrowsAnExceptionIfAnOffsetIsUnset()
+    {
+        $this->setExpectedException(
+            ProductImageListNotMutableException::class,
+            'ProductImageList instances are immutable'
+        );
+        $imageList = new ProductImageList($this->getMock(ProductImage::class, [], [], '', false));
         unset($imageList[0]);
     }
 
