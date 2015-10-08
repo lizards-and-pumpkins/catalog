@@ -128,12 +128,12 @@ class ProductXmlToProductBuilderLocatorTest extends \PHPUnit_Framework_TestCase
      */
     private function createProductXmlToProductBuilderLocatorInstance()
     {
-        $productXmlToProductBuilderLocarorProxy = function () {
+        $productXmlToProductBuilderLocatorProxy = function () {
             return $this->createProductXmlToProductBuilderLocatorInstance();
         };
         return new ProductXmlToProductBuilderLocator(
             new SimpleProductXmlToProductBuilder(),
-            new ConfigurableProductXmlToProductBuilder($productXmlToProductBuilderLocarorProxy)
+            new ConfigurableProductXmlToProductBuilder($productXmlToProductBuilderLocatorProxy)
         );
     }
 
