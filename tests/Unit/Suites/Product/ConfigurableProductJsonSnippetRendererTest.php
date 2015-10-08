@@ -19,6 +19,7 @@ class ConfigurableProductJsonSnippetRendererTest extends \PHPUnit_Framework_Test
 {
     private $testVariationAttributesSnippetKey = 'variations';
     private $testAssociatedProductsSnippetKey = 'associated_products';
+
     /**
      * @var ConfigurableProductJsonSnippetRenderer
      */
@@ -50,6 +51,15 @@ class ConfigurableProductJsonSnippetRendererTest extends \PHPUnit_Framework_Test
         $this->fail(sprintf('No snippet with key "%s" found in snippet list', $snippetKey));
     }
 
+    /**
+     * @param string $expected
+     * @param Snippet $snippet
+     */
+    private function assertSnippetContent($expected, Snippet $snippet)
+    {
+        $this->assertSame($expected, $snippet->getContent());
+    }
+
     protected function setUp()
     {
         $stubVariationAttributesJsonSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
@@ -72,24 +82,36 @@ class ConfigurableProductJsonSnippetRendererTest extends \PHPUnit_Framework_Test
         $this->stubConfigurableProduct->method('getAssociatedProducts')->willReturn($this->stubAssociatedProductList);
     }
 
-    public function testItReturnsAnEmptySnippetListIfTheProductIsNotConfigurable()
+    public function testItReturnsAnEmptyVariationAttributesJsonArraySnippetForNonConfigurableProducts()
     {
-        $stubOtherProductType = $this->getMock(Product::class, [], [], '', false);
-        $snippetList = $this->renderer->render($stubOtherProductType);
-        $this->assertCount(0, $snippetList);
+        $stubNonConfigurableProduct = $this->getMock(Product::class, [], [], '', false);
+        $stubNonConfigurableProduct->method('getContext')->willReturn($this->getMock(Context::class));
+        
+        $snippetList = $this->renderer->render($stubNonConfigurableProduct);
+        
+        $snippet = $this->getSnippetWithKey($this->testVariationAttributesSnippetKey, $snippetList);
+        $this->assertSnippetContent(json_encode([]), $snippet);
     }
 
-    public function testItRendersTwoSnippetsForAConfigurableProduct()
+    public function testItReturnsAnEmptyAssociatedProductsJsonArraySnippetForNonConfigurableProducts()
     {
-        $snippetList = $this->renderer->render($this->stubConfigurableProduct);
-        $this->assertCount(2, $snippetList);
+        $stubNonConfigurableProduct = $this->getMock(Product::class, [], [], '', false);
+        $stubNonConfigurableProduct->method('getContext')->willReturn($this->getMock(Context::class));
+        
+        $snippetList = $this->renderer->render($stubNonConfigurableProduct);
+        
+        $snippet = $this->getSnippetWithKey($this->testAssociatedProductsSnippetKey, $snippetList);
+        $this->assertSnippetContent(json_encode([]), $snippet);
     }
 
     public function testItAddsTheVariationAttributesJsonSnippetToTheResultingSnippetList()
     {
+        $this->stubConfigurableProduct->method('getVariationAttributes')->willReturn(['test1', 'test2']);
         $snippetList = $this->renderer->render($this->stubConfigurableProduct);
+        
         $snippet = $this->getSnippetWithKey($this->testVariationAttributesSnippetKey, $snippetList);
-        $this->assertInstanceOf(Snippet::class, $snippet);
+
+        $this->assertSnippetContent(json_encode(['test1', 'test2']), $snippet);
     }
 
     public function testItReturnsTheAssociatedProductsWithoutThePhpClassNames()
@@ -98,8 +120,10 @@ class ConfigurableProductJsonSnippetRendererTest extends \PHPUnit_Framework_Test
             AssociatedProductList::PHP_CLASSES_KEY => 'foo',
             'products' => ['a', 'b', 'c']
         ]);
+        
         $snippetList = $this->renderer->render($this->stubConfigurableProduct);
+        
         $snippet = $this->getSnippetWithKey($this->testAssociatedProductsSnippetKey, $snippetList);
-        $this->assertSame(['a', 'b', 'c'], json_decode($snippet->getContent(), true));
+        $this->assertSnippetContent(json_encode(['a', 'b', 'c']), $snippet);
     }
 }

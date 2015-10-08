@@ -11,6 +11,7 @@ use LizardsAndPumpkins\Http\GenericHttpRouter;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRouter;
 use LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler;
+use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\DefaultNumberOfProductsPerPageSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewRequestHandler;
@@ -256,6 +257,14 @@ class FrontendFactory implements Factory
         $snippetKeyGeneratorLocator->register(
             ProductJsonSnippetRenderer::CODE,
             $this->getMasterFactory()->createProductJsonSnippetKeyGenerator()
+        );
+        $snippetKeyGeneratorLocator->register(
+            ConfigurableProductJsonSnippetRenderer::VARIATION_ATTRIBUTES_CODE,
+            $this->getMasterFactory()->createConfigurableProductVariationAttributesJsonSnippetKeyGenerator()
+        );
+        $snippetKeyGeneratorLocator->register(
+            ConfigurableProductJsonSnippetRenderer::ASSOCIATED_PRODUCTS_CODE,
+            $this->getMasterFactory()->createConfigurableProductAssociatedProductsJsonSnippetKeyGenerator()
         );
 
         return $snippetKeyGeneratorLocator;

@@ -40,55 +40,74 @@ class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
      */
     public function render(Product $product)
     {
-        if (! ($product instanceof ConfigurableProduct)) {
-            return new SnippetList();
-        }
-        return $this->createConfigurableProductJsonSnippetList($product);
-    }
-
-    /**
-     * @param ConfigurableProduct $product
-     * @return SnippetList
-     */
-    private function createConfigurableProductJsonSnippetList(ConfigurableProduct $product)
-    {
         $snippetList = new SnippetList();
 
         $variationAttributesJsonSnippet = $this->createVariationAttributesJsonSnippet($product);
         $snippetList->add($variationAttributesJsonSnippet);
-        
+
         $associatedProductsJsonSnippet = $this->createAssociatedProductsJsonSnippet($product);
         $snippetList->add($associatedProductsJsonSnippet);
-        
+
         return $snippetList;
     }
 
     /**
-     * @param ConfigurableProduct $product
+     * @param Product $product
+     * @return bool
+     */
+    private function isConfigurableProduct(Product $product)
+    {
+        return $product instanceof ConfigurableProduct;
+    }
+
+    /**
+     * @param Product $product
      * @return Snippet
      */
-    private function createVariationAttributesJsonSnippet(ConfigurableProduct $product)
+    private function createVariationAttributesJsonSnippet(Product $product)
     {
         $key = $this->variationAttributesJsonSnippetKeyGenerator->getKeyForContext(
             $product->getContext(),
             ['product_id' => $product->getId()]
         );
-        $content = json_encode($product->getVariationAttributes());
-        return Snippet::create($key, $content);
+        return Snippet::create($key, $this->createVariationAttributesJsonSnippetContent($product));
     }
 
     /**
-     * @param ConfigurableProduct $product
+     * @param Product $product
+     * @return string
+     */
+    private function createVariationAttributesJsonSnippetContent(Product $product)
+    {
+        $content = $this->isConfigurableProduct($product) ?
+            $product->getVariationAttributes() :
+            [];
+        return json_encode($content);
+    }
+
+    /**
+     * @param Product $product
      * @return Snippet
      */
-    private function createAssociatedProductsJsonSnippet(ConfigurableProduct $product)
+    private function createAssociatedProductsJsonSnippet(Product $product)
     {
         $key = $this->associatedProductsJsonSnippetKeyGenerator->getKeyForContext(
             $product->getContext(),
             ['product_id' => $product->getId()]
         );
-        $content = $this->getAssociatedProductListJson($product->getAssociatedProducts());
-        return Snippet::create($key, $content);
+        return Snippet::create($key, $this->createAssociatedProductsJsonSnippetContent($product));
+    }
+
+    /**
+     * @param Product $product
+     * @return string
+     */
+    private function createAssociatedProductsJsonSnippetContent(Product $product)
+    {
+        $content = $this->isConfigurableProduct($product) ?
+            $this->getAssociatedProductListJson($product->getAssociatedProducts()) :
+            [];
+        return json_encode($content);
     }
 
     /**
@@ -97,6 +116,6 @@ class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
      */
     private function getAssociatedProductListJson(AssociatedProductList $associatedProductList)
     {
-        return json_encode($associatedProductList->jsonSerialize()['products']);
+        return $associatedProductList->jsonSerialize()['products'];
     }
 }
