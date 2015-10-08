@@ -199,6 +199,12 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ProductXmlToProductBuilderLocator::class, $result);
     }
 
+    public function testProductXmlToProductBuilderLocatorProxyFactoryIsReturned()
+    {
+        $proxy = $this->commonFactory->createProductXmlToProductBuilderLocatorProxyFactoryMethod();
+        $this->assertInstanceOf(ProductXmlToProductBuilderLocator::class, $proxy());
+    }
+
     public function testProductListingCriteriaBuilderIsReturned()
     {
         $result = $this->commonFactory->createProductListingCriteriaBuilder();

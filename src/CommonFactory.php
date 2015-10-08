@@ -738,10 +738,19 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createConfigurableProductXmlToProductBuilder()
     {
-        $productTypeBuilderFactoryProxy = function () {
-            return $this->createProductXmlToProductTypeBuilders();
-        };
+        $productTypeBuilderFactoryProxy = $this->getMasterFactory()
+            ->createProductXmlToProductBuilderLocatorProxyFactoryMethod();
         return new ConfigurableProductXmlToProductBuilder($productTypeBuilderFactoryProxy);
+    }
+
+    /**
+     * @return \Closure
+     */
+    public function createProductXmlToProductBuilderLocatorProxyFactoryMethod()
+    {
+        return function () {
+            return $this->createProductXmlToProductBuilderLocator();
+        };
     }
 
     /**
