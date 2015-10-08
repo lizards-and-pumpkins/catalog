@@ -35,7 +35,6 @@ use LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler;
  * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionTemplateProjector
  * @uses   \LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductListingTemplateProjector
@@ -46,6 +45,8 @@ use LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler;
  * @uses   \LizardsAndPumpkins\Product\DefaultNumberOfProductsPerPageSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Product\ProductJsonSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer
  * @uses   \LizardsAndPumpkins\GenericSnippetKeyGenerator
  * @uses   \LizardsAndPumpkins\Context\ContextBuilder
  * @uses   \LizardsAndPumpkins\Context\ContextSource
