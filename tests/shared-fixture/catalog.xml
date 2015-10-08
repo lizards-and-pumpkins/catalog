@@ -380,13 +380,13 @@ LED Armflasher with elastic Band and Flasher]]></description>
                     <label locale="en_US">The main image label for this shoe</label>
                 </image>
                 <!--image>
-                    <file locale="de_DE">218765/218765-333.2de.png</file>
-                    <file locale="en_US">218765/218765-333.2en.png</file>
+                    <file locale="de_DE">218765-333.2de.png</file>
+                    <file locale="en_US">218765-333.2en.png</file>
                     <label>Der Text zum zweiten Bild</label>
                 </image>-->
                 <image>
                     <main_listing>true</main_listing>
-                    <file>218765/218765-333.3.png</file>
+                    <file>218765-333.3.jpg</file>
                     <label>Yet another image label</label>
                 </image>
             </images>
