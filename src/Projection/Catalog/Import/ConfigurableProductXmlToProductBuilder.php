@@ -8,7 +8,7 @@ use LizardsAndPumpkins\Product\Composite\ProductVariationAttributeList;
 use LizardsAndPumpkins\Product\ProductTypeCode;
 use LizardsAndPumpkins\Utils\XPathParser;
 
-class ConfigurableProductXmlToProductBuilder extends ProductXmlToProductBuilder
+class ConfigurableProductXmlToProductBuilder implements ProductXmlToProductBuilder
 {
     /**
      * @var callable

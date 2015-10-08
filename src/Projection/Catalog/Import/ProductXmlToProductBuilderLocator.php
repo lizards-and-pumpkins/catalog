@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\Projection\Catalog\Import;
 use LizardsAndPumpkins\Product\ProductTypeCode;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidProductTypeCodeForImportedProductException;
-use LizardsAndPumpkins\Projection\Catalog\Import\Exception\NoMatchingProductTypeBuilderFactoryFound;
+use LizardsAndPumpkins\Projection\Catalog\Import\Exception\NoMatchingProductTypeBuilderFactoryFoundException;
 use LizardsAndPumpkins\Utils\XPathParser;
 
 class ProductXmlToProductBuilderLocator
@@ -79,7 +79,7 @@ class ProductXmlToProductBuilderLocator
             }
         }
         $message = sprintf('No product type builder factory for the product type code "%s" was found', $typeCode);
-        throw new NoMatchingProductTypeBuilderFactoryFound($message);
+        throw new NoMatchingProductTypeBuilderFactoryFoundException($message);
     }
 
 

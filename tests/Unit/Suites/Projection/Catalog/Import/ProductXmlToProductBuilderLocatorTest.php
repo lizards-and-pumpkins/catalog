@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\Projection\Catalog\Import;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidNumberOfSkusForImportedProductException;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidProductTypeCodeForImportedProductException;
-use LizardsAndPumpkins\Projection\Catalog\Import\Exception\NoMatchingProductTypeBuilderFactoryFound;
+use LizardsAndPumpkins\Projection\Catalog\Import\Exception\NoMatchingProductTypeBuilderFactoryFoundException;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator
@@ -197,7 +197,7 @@ class ProductXmlToProductBuilderLocatorTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownIfNoFactoryForGivenTypeCodeIsFound()
     {
         $this->setExpectedException(
-            NoMatchingProductTypeBuilderFactoryFound::class,
+            NoMatchingProductTypeBuilderFactoryFoundException::class,
             'No product type builder factory for the product type code "invalid" was found'
         );
         $xml = '<product type="invalid" sku="test"></product>';
