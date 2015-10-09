@@ -257,7 +257,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createProductJsonSnippetRenderer()
     {
         return new ProductJsonSnippetRenderer(
-            $this->createProductJsonSnippetKeyGenerator()
+            $this->getMasterFactory()->createProductJsonSnippetKeyGenerator(),
+            $this->getMasterFactory()->createInternalToPublicProductJsonData()
         );
     }
 

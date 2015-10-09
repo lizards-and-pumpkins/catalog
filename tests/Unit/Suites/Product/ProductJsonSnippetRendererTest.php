@@ -4,6 +4,7 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Projection\Catalog\InternalToPublicProductJsonData;
 use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetList;
@@ -64,7 +65,14 @@ class ProductJsonSnippetRendererTest extends \PHPUnit_Framework_TestCase
         /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $stubProductJsonKeyGenerator */
         $stubProductJsonKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $stubProductJsonKeyGenerator->method('getKeyForContext')->willReturn('test-key');
-        $this->snippetRenderer = new ProductJsonSnippetRenderer($stubProductJsonKeyGenerator);
+        
+        $stubInternalToPublicJson = $this->getMock(InternalToPublicProductJsonData::class);
+        $stubInternalToPublicJson->method('transformProduct')->willReturnArgument(0);
+        
+        $this->snippetRenderer = new ProductJsonSnippetRenderer(
+            $stubProductJsonKeyGenerator,
+            $stubInternalToPublicJson
+        );
         
         $this->stubProduct = $this->getMock(Product::class);
         $this->stubProduct->method('getContext')->willReturn($this->getMock(Context::class));

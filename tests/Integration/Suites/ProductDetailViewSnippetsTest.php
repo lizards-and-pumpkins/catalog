@@ -143,7 +143,9 @@ class ProductDetailViewSnippetsTest extends AbstractIntegrationTest
 
         $snippet = $this->getProductJsonSnippetForId($productIdString);
 
-        $this->assertEquals($productIdString, SimpleProduct::fromArray(json_decode($snippet, true))->getId());
+        $productData = json_decode($snippet, true);
+        $this->assertEquals($productIdString, $productData['product_id']);
+        $this->assertEquals('simple', $productData['type_code']);
     }
 
     public function testConfigurableProductJsonSnippetsAreAlsoWrittenForSimpleProducts()
