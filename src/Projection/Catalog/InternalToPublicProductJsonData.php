@@ -39,7 +39,7 @@ class InternalToPublicProductJsonData
      */
     private function getTransformation($key)
     {
-        $method = 'transform' . $this->keyToMethod($key);
+        $method = $this->keyToMethod($key);
 
         return function ($inputData) use ($method) {
             return method_exists($this, $method) ?
@@ -54,7 +54,7 @@ class InternalToPublicProductJsonData
      */
     private function keyToMethod($key)
     {
-        return str_replace('_', '', preg_replace_callback('/_([a-z])/', function ($m) {
+        return 'transform' . str_replace('_', '', preg_replace_callback('/_([a-z])/', function ($m) {
             return strtoupper($m[1]);
         }, $key));
     }
