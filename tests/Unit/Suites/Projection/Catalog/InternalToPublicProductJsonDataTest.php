@@ -4,6 +4,7 @@
 namespace LizardsAndPumpkins\Projection\Catalog;
 
 use LizardsAndPumpkins\Product\Composite\AssociatedProductList;
+use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\SimpleProduct;
 
 /**
@@ -32,7 +33,7 @@ class InternalToPublicProductJsonDataTest extends \PHPUnit_Framework_TestCase
     {
         $internalJsonData = [
             'product_id' => 'test',
-            'context' => [],
+            SimpleProduct::CONTEXT => [],
         ];
         $expectedData = [
             'product_id' => 'test',
@@ -46,9 +47,9 @@ class InternalToPublicProductJsonDataTest extends \PHPUnit_Framework_TestCase
             'product_id' => 'test',
             'attributes' => [
                 [
-                    'code' => 'foo',
-                    'context' => [],
-                    'value' => 'bar'
+                    ProductAttribute::CODE => 'foo',
+                    ProductAttribute::CONTEXT => [],
+                    ProductAttribute::VALUE => 'bar'
                 ],
             ],
         ];
@@ -67,19 +68,19 @@ class InternalToPublicProductJsonDataTest extends \PHPUnit_Framework_TestCase
             'product_id' => 'test',
             'attributes' => [
                 [
-                    'code' => 'foo',
-                    'context' => [],
-                    'value' => 'bar'
+                    ProductAttribute::CODE => 'foo',
+                    ProductAttribute::CONTEXT => [],
+                    ProductAttribute::VALUE => 'bar'
                 ],
                 [
-                    'code' => 'foo',
-                    'context' => [],
-                    'value' => 'buz'
+                    ProductAttribute::CODE => 'foo',
+                    ProductAttribute::CONTEXT => [],
+                    ProductAttribute::VALUE => 'buz'
                 ],
                 [
-                    'code' => 'foo',
-                    'context' => [],
-                    'value' => 'qux'
+                    ProductAttribute::CODE => 'foo',
+                    ProductAttribute::CONTEXT => [],
+                    ProductAttribute::VALUE => 'qux'
                 ],
             ],
         ];
@@ -100,26 +101,26 @@ class InternalToPublicProductJsonDataTest extends \PHPUnit_Framework_TestCase
             'images' => [
                 [
                     [
-                        'code' => 'file',
-                        'context' => [],
-                        'value' => 'foo.jpg'
+                        ProductAttribute::CODE => 'file',
+                        ProductAttribute::CONTEXT => [],
+                        ProductAttribute::VALUE => 'foo.jpg'
                     ],
                     [
-                        'code' => 'label',
-                        'context' => [],
-                        'value' => 'Image One'
+                        ProductAttribute::CODE => 'label',
+                        ProductAttribute::CONTEXT => [],
+                        ProductAttribute::VALUE => 'Image One'
                     ],
                 ],
                 [
                     [
-                        'code' => 'file',
-                        'context' => [],
-                        'value' => 'bar.jpg'
+                        ProductAttribute::CODE => 'file',
+                        ProductAttribute::CONTEXT => [],
+                        ProductAttribute::VALUE => 'bar.jpg'
                     ],
                     [
-                        'code' => 'label',
-                        'context' => [],
-                        'value' => 'Image Two'
+                        ProductAttribute::CODE => 'label',
+                        ProductAttribute::CONTEXT => [],
+                        ProductAttribute::VALUE => 'Image Two'
                     ],
                 ],
             ],
@@ -158,12 +159,12 @@ class InternalToPublicProductJsonDataTest extends \PHPUnit_Framework_TestCase
         $internalJsonData = [
             'simple_product' => [
                 'product_id' => 'test',
-                'context' => [],
+                SimpleProduct::CONTEXT => [],
                 'attributes' => [
                     [
-                        'code' => 'foo',
-                        'context' => [],
-                        'value' => 'bar'
+                        ProductAttribute::CODE => 'foo',
+                        ProductAttribute::CONTEXT => [],
+                        ProductAttribute::VALUE => 'bar'
                     ],
                 ],
                 'images' => [],
@@ -189,26 +190,26 @@ class InternalToPublicProductJsonDataTest extends \PHPUnit_Framework_TestCase
                 'products' => [
                     [
                         'product_id' => 'child',
-                        'context' => [],
+                        SimpleProduct::CONTEXT => [],
                         'attributes' => [
                             [
-                                'code' => 'foo',
-                                'context' => [],
-                                'value' => 'bar'
+                                ProductAttribute::CODE => 'foo',
+                                ProductAttribute::CONTEXT => [],
+                                ProductAttribute::VALUE => 'bar'
                             ],
                         ],
                         'images' => [
                             [
                                 [
-                                    'code' => 'file',
-                                    'context' => [],
-                                    'value' => 'image.jpg'
+                                    ProductAttribute::CODE => 'file',
+                                    ProductAttribute::CONTEXT => [],
+                                    ProductAttribute::VALUE => 'image.jpg'
                                 ]
                             ]
                         ],
                     ],
                 ],
-                AssociatedProductList::PHP_CLASSES_KEY => [
+                AssociatedProductList::PHP_CLASSES => [
                     SimpleProduct::class
                 ]
             ],

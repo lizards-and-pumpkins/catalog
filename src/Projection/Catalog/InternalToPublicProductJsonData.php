@@ -3,6 +3,11 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog;
 
+use LizardsAndPumpkins\Product\Composite\AssociatedProductList;
+use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
+use LizardsAndPumpkins\Product\ProductAttribute;
+use LizardsAndPumpkins\Product\SimpleProduct;
+
 class InternalToPublicProductJsonData
 {
     /**
@@ -13,8 +18,9 @@ class InternalToPublicProductJsonData
     {
         $publicProduct = $this->getPublicProductJsonData($internalProductJsonData);
 
-        return isset($internalProductJsonData['simple_product']) ?
-            array_merge($this->transformProduct($internalProductJsonData['simple_product']), $publicProduct) :
+        $simpleProductKey = ConfigurableProduct::SIMPLE_PRODUCT;
+        return isset($internalProductJsonData[$simpleProductKey]) ?
+            array_merge($this->transformProduct($internalProductJsonData[$simpleProductKey]), $publicProduct) :
             $publicProduct;
     }
 
@@ -25,7 +31,7 @@ class InternalToPublicProductJsonData
     private function getPublicProductJsonData(array $product)
     {
         return array_reduce(array_keys($product), function (array $carry, $key) use ($product) {
-            if ('context' === $key || 'simple_product' === $key) {
+            if (SimpleProduct::CONTEXT === $key || ConfigurableProduct::SIMPLE_PRODUCT === $key) {
                 return $carry;
             }
             $transformation = $this->getTransformation($key);
@@ -66,7 +72,8 @@ class InternalToPublicProductJsonData
     private function transformAttributes(array $attributes)
     {
         return array_reduce($attributes, function (array $carry, array $attribute) {
-            return array_merge($carry, [$attribute['code'] => $this->getAttributeValue($attribute, $carry)]);
+            $code = $attribute[ProductAttribute::CODE];
+            return array_merge($carry, [$code => $this->getAttributeValue($attribute, $carry)]);
         }, []);
     }
 
@@ -77,10 +84,10 @@ class InternalToPublicProductJsonData
      */
     private function getAttributeValue(array $attribute, array $carry)
     {
-        $code = $attribute['code'];
+        $code = $attribute[ProductAttribute::CODE];
         return array_key_exists($code, $carry) ?
             $this->getAttributeValuesAsArray($attribute, $carry[$code]) :
-            $attribute['value'];
+            $attribute[ProductAttribute::VALUE];
     }
 
     /**
@@ -93,7 +100,7 @@ class InternalToPublicProductJsonData
         $existingValues = is_array($existing) ?
             $existing :
             [$existing];
-        return array_merge($existingValues, [$attribute['value']]);
+        return array_merge($existingValues, [$attribute[ProductAttribute::VALUE]]);
     }
 
     /**
@@ -115,7 +122,7 @@ class InternalToPublicProductJsonData
     {
         return array_map(function (array $associatedProduct) {
             return $this->transformProduct($associatedProduct);
-        }, $internalAssociatedProductsJsonData['products']);
+        }, $internalAssociatedProductsJsonData[AssociatedProductList::PRODUCTS]);
     }
 
     /**

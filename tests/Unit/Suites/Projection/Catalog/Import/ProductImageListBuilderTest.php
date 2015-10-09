@@ -59,12 +59,12 @@ class ProductImageListBuilderTest extends \PHPUnit_Framework_TestCase
             [
                 ProductAttribute::CODE => ProductImage::FILE,
                 ProductAttribute::VALUE => $fileName,
-                ProductAttribute::CONTEXT_DATA => [],
+                ProductAttribute::CONTEXT => [],
             ],
             [
                 ProductAttribute::CODE => ProductImage::LABEL,
                 ProductAttribute::VALUE => $label,
-                ProductAttribute::CONTEXT_DATA => [],
+                ProductAttribute::CONTEXT => [],
             ],
         ];
     }

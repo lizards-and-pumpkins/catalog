@@ -7,6 +7,7 @@ use LizardsAndPumpkins\Context\ContextBuilder;
 
 class SimpleProduct implements Product
 {
+    const CONTEXT = 'context';
     use RehydrateableProductTrait;
     
     const TYPE_CODE = 'simple';
@@ -54,7 +55,7 @@ class SimpleProduct implements Product
             ProductId::fromString($sourceArray['product_id']),
             ProductAttributeList::fromArray($sourceArray['attributes']),
             ProductImageList::fromArray($sourceArray['images']),
-            ContextBuilder::rehydrateContext($sourceArray['context'])
+            ContextBuilder::rehydrateContext($sourceArray[self::CONTEXT])
         );
     }
 
@@ -112,7 +113,7 @@ class SimpleProduct implements Product
             'type_code' => self::TYPE_CODE,
             'attributes' => $this->attributeList,
             'images' => $this->images,
-            'context' => $this->context
+            self::CONTEXT => $this->context
         ];
     }
 

@@ -16,7 +16,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     {
         $attribute = ProductAttribute::fromArray([
             ProductAttribute::CODE => 'foo',
-            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::CONTEXT => [],
             ProductAttribute::VALUE => ProductAttribute::VALUE
         ]);
 
@@ -27,7 +27,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     {
         $attribute = ProductAttribute::fromArray([
             ProductAttribute::CODE => 'foo',
-            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::CONTEXT => [],
             ProductAttribute::VALUE => ProductAttribute::VALUE
         ]);
 
@@ -38,7 +38,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     {
         $attribute = ProductAttribute::fromArray([
             ProductAttribute::CODE => 'foo',
-            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::CONTEXT => [],
             ProductAttribute::VALUE => 'bar'
         ]);
 
@@ -49,7 +49,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     {
         $attribute = ProductAttribute::fromArray([
             ProductAttribute::CODE => 'test_code',
-            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::CONTEXT => [],
             ProductAttribute::VALUE => 'test-value'
         ]);
 
@@ -60,7 +60,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     {
         $attribute = ProductAttribute::fromArray([
             ProductAttribute::CODE => 'foo',
-            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::CONTEXT => [],
             ProductAttribute::VALUE => 'bar'
         ]);
 
@@ -75,11 +75,11 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
         );
         ProductAttribute::fromArray([
             ProductAttribute::CODE => 'foo',
-            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::CONTEXT => [],
             ProductAttribute::VALUE => [
                 [
                     ProductAttribute::CODE => 'bar',
-                    ProductAttribute::CONTEXT_DATA => [],
+                    ProductAttribute::CONTEXT => [],
                     ProductAttribute::VALUE => 1
                 ],
             ]
@@ -92,7 +92,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 
         $attribute = ProductAttribute::fromArray([
             ProductAttribute::CODE => 'attribute_a_code',
-            ProductAttribute::CONTEXT_DATA => $contextData,
+            ProductAttribute::CONTEXT => $contextData,
             ProductAttribute::VALUE => 'attributeAValue'
         ]);
 
@@ -107,7 +107,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
         );
         $attribute = ProductAttribute::fromArray([
             ProductAttribute::CODE => 'attribute_code',
-            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::CONTEXT => [],
             ProductAttribute::VALUE => 'attributeValue'
         ]);
         $attribute->getContextPartValue('foo');
@@ -117,7 +117,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     {
         $attribute = ProductAttribute::fromArray([
             ProductAttribute::CODE => 'attribute_code',
-            ProductAttribute::CONTEXT_DATA => ['foo' => 'bar'],
+            ProductAttribute::CONTEXT => ['foo' => 'bar'],
             ProductAttribute::VALUE => 'attributeValue'
         ]);
         $this->assertSame('bar', $attribute->getContextPartValue('foo'));
@@ -127,7 +127,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     {
         $attributeA = ProductAttribute::fromArray([
             ProductAttribute::CODE => 'attribute_a_code',
-            ProductAttribute::CONTEXT_DATA => [
+            ProductAttribute::CONTEXT => [
                 'foo' => 'bar',
                 'baz' => 'qux',
             ],
@@ -135,7 +135,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
         ]);
         $attributeB = ProductAttribute::fromArray([
             ProductAttribute::CODE => 'attribute_b_code',
-            ProductAttribute::CONTEXT_DATA => [
+            ProductAttribute::CONTEXT => [
                 'foo' => 'bar',
             ],
             ProductAttribute::VALUE => 'attributeBValue'
@@ -148,7 +148,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     {
         $attributeA = ProductAttribute::fromArray([
             ProductAttribute::CODE => 'attribute_a_code',
-            ProductAttribute::CONTEXT_DATA => [
+            ProductAttribute::CONTEXT => [
                 'foo' => 'bar',
                 'baz' => 'qux',
             ],
@@ -156,7 +156,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
         ]);
         $attributeB = ProductAttribute::fromArray([
             ProductAttribute::CODE => 'attribute_b_code',
-            ProductAttribute::CONTEXT_DATA => [
+            ProductAttribute::CONTEXT => [
                 'foo' => 'qux',
                 'baz' => 'bar'
             ],
@@ -170,12 +170,12 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     {
         $attributeA = ProductAttribute::fromArray([
             ProductAttribute::CODE => 'code_a',
-            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::CONTEXT => [],
             ProductAttribute::VALUE => 'valueA'
         ]);
         $attributeB = ProductAttribute::fromArray([
             ProductAttribute::CODE => 'code_b',
-            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::CONTEXT => [],
             ProductAttribute::VALUE => 'valueB'
         ]);
 
@@ -186,12 +186,12 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     {
         $attributeA = ProductAttribute::fromArray([
             ProductAttribute::CODE => 'code_a',
-            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::CONTEXT => [],
             ProductAttribute::VALUE => 'valueA'
         ]);
         $attributeB = ProductAttribute::fromArray([
             ProductAttribute::CODE => 'code_a',
-            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::CONTEXT => [],
             ProductAttribute::VALUE => 'valueB'
         ]);
 
@@ -206,7 +206,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
         ];
         $attribute = ProductAttribute::fromArray([
             ProductAttribute::CODE => 'test',
-            ProductAttribute::CONTEXT_DATA => $contextDataSet,
+            ProductAttribute::CONTEXT => $contextDataSet,
             ProductAttribute::VALUE => 'abc'
         ]);
         $this->assertSame($contextDataSet, $attribute->getContextDataSet());
@@ -216,7 +216,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     {
         $attribute = ProductAttribute::fromArray([
             ProductAttribute::CODE => 'test',
-            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::CONTEXT => [],
             ProductAttribute::VALUE => 'abc'
         ]);
         $this->assertInstanceOf(\JsonSerializable::class, $attribute);
@@ -226,7 +226,7 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     {
         $sourceAttribute = ProductAttribute::fromArray([
             ProductAttribute::CODE => 'test',
-            ProductAttribute::CONTEXT_DATA => ['foo' => 'bar'],
+            ProductAttribute::CONTEXT => ['foo' => 'bar'],
             ProductAttribute::VALUE => 'abc'
         ]);
         $json = json_encode($sourceAttribute);
@@ -240,12 +240,12 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     {
         $attributeOne = ProductAttribute::fromArray([
             ProductAttribute::CODE => 'test1',
-            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::CONTEXT => [],
             ProductAttribute::VALUE => 'abc'
         ]);
         $attributeTwo = ProductAttribute::fromArray([
             ProductAttribute::CODE => 'test2',
-            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::CONTEXT => [],
             ProductAttribute::VALUE => 'abc'
         ]);
         $this->assertFalse($attributeOne->isEqualTo($attributeTwo));
@@ -255,12 +255,12 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     {
         $attributeOne = ProductAttribute::fromArray([
             ProductAttribute::CODE => 'test',
-            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::CONTEXT => [],
             ProductAttribute::VALUE => 'abc'
         ]);
         $attributeTwo = ProductAttribute::fromArray([
             ProductAttribute::CODE => 'test',
-            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::CONTEXT => [],
             ProductAttribute::VALUE => 'def'
         ]);
         $this->assertFalse($attributeOne->isEqualTo($attributeTwo));
@@ -270,12 +270,12 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     {
         $attributeOne = ProductAttribute::fromArray([
             ProductAttribute::CODE => 'test',
-            ProductAttribute::CONTEXT_DATA => ['foo' => 'bar1'],
+            ProductAttribute::CONTEXT => ['foo' => 'bar1'],
             ProductAttribute::VALUE => 'abc'
         ]);
         $attributeTwo = ProductAttribute::fromArray([
             ProductAttribute::CODE => 'test',
-            ProductAttribute::CONTEXT_DATA => ['foo' => 'bar2'],
+            ProductAttribute::CONTEXT => ['foo' => 'bar2'],
             ProductAttribute::VALUE => 'abc'
         ]);
         $this->assertFalse($attributeOne->isEqualTo($attributeTwo));
@@ -285,12 +285,12 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
     {
         $attributeOne = ProductAttribute::fromArray([
             ProductAttribute::CODE => 'test',
-            ProductAttribute::CONTEXT_DATA => ['foo' => 'bar'],
+            ProductAttribute::CONTEXT => ['foo' => 'bar'],
             ProductAttribute::VALUE => 'abc'
         ]);
         $attributeTwo = ProductAttribute::fromArray([
             ProductAttribute::CODE => 'test',
-            ProductAttribute::CONTEXT_DATA => ['foo' => 'bar'],
+            ProductAttribute::CONTEXT => ['foo' => 'bar'],
             ProductAttribute::VALUE => 'abc'
         ]);
         $this->assertTrue($attributeOne->isEqualTo($attributeTwo));

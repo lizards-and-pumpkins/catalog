@@ -27,7 +27,7 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     {
         $attributeArray = [
             ProductAttribute::CODE => 'foo',
-            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::CONTEXT => [],
             ProductAttribute::VALUE => 'bar'
         ];
         $this->assertCount(1, ProductAttributeList::fromArray([$attributeArray]));
@@ -38,12 +38,12 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     {
         $attribute1 = [
             ProductAttribute::CODE => 'foo',
-            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::CONTEXT => [],
             ProductAttribute::VALUE => 'bar1'
         ];
         $attribute2 = [
             ProductAttribute::CODE => 'foo',
-            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::CONTEXT => [],
             ProductAttribute::VALUE => 'bar2'
         ];
 
@@ -61,7 +61,7 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     {
         $attributeArray = [
             ProductAttribute::CODE => 'foo',
-            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::CONTEXT => [],
             ProductAttribute::VALUE => 'bar'
         ];
 
@@ -82,7 +82,7 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
         $attributeArray = [
             [
                 ProductAttribute::CODE => 'foo',
-                ProductAttribute::CONTEXT_DATA => [],
+                ProductAttribute::CONTEXT => [],
                 ProductAttribute::VALUE => 'bar'
             ]
         ];
@@ -97,8 +97,8 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     public function testItMayContainMultipleProductAttributesWithTheSameCode()
     {
         $attributeArray = [
-            [ProductAttribute::CODE => 'foo', ProductAttribute::CONTEXT_DATA => [], ProductAttribute::VALUE => 'bar'],
-            [ProductAttribute::CODE => 'foo', ProductAttribute::CONTEXT_DATA => [], ProductAttribute::VALUE => 'baz'],
+            [ProductAttribute::CODE => 'foo', ProductAttribute::CONTEXT => [], ProductAttribute::VALUE => 'bar'],
+            [ProductAttribute::CODE => 'foo', ProductAttribute::CONTEXT => [], ProductAttribute::VALUE => 'baz'],
         ];
 
         $attributeList = ProductAttributeList::fromArray($attributeArray);
@@ -119,7 +119,7 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
         for ($i = 0; $i < $numAttributesToAdd; $i++) {
             $attributes[] = ProductAttribute::fromArray([
                 ProductAttribute::CODE => 'attr_' . ($i + 1),
-                ProductAttribute::CONTEXT_DATA => [],
+                ProductAttribute::CONTEXT => [],
                 ProductAttribute::VALUE => 'value'
             ]);
         }
@@ -153,7 +153,7 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     {
         $attributeArray = [[
             ProductAttribute::CODE => 'foo',
-            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::CONTEXT => [],
             ProductAttribute::VALUE => 'bar'
         ]];
         $attributeList = ProductAttributeList::fromArray($attributeArray);
@@ -165,12 +165,12 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
         $attributesArray = [
             [
                 ProductAttribute::CODE => 'foo',
-                ProductAttribute::CONTEXT_DATA => [],
+                ProductAttribute::CONTEXT => [],
                 ProductAttribute::VALUE => 'bar'
             ],
             [
                 ProductAttribute::CODE => 'bar',
-                ProductAttribute::CONTEXT_DATA => [],
+                ProductAttribute::CONTEXT => [],
                 ProductAttribute::VALUE => 'buz'
             ]
         ];
@@ -190,17 +190,17 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
         $attributesArray = [
             [
                 ProductAttribute::CODE => 'test1',
-                ProductAttribute::CONTEXT_DATA => ['website' => 'a'],
+                ProductAttribute::CONTEXT => ['website' => 'a'],
                 ProductAttribute::VALUE => 'test'
             ],
             [
                 ProductAttribute::CODE => 'test1',
-                ProductAttribute::CONTEXT_DATA => ['website' => 'a', 'locale' => 'xx_XX'],
+                ProductAttribute::CONTEXT => ['website' => 'a', 'locale' => 'xx_XX'],
                 ProductAttribute::VALUE => 'test'
             ],
             [
                 ProductAttribute::CODE => 'test2',
-                ProductAttribute::CONTEXT_DATA => ['website' => 'a', 'locale' => 'yy_YY'],
+                ProductAttribute::CONTEXT => ['website' => 'a', 'locale' => 'yy_YY'],
                 ProductAttribute::VALUE => 'test'
             ]
         ];
