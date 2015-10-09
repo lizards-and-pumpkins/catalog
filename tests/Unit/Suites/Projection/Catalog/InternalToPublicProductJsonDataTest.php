@@ -95,7 +95,6 @@ class InternalToPublicProductJsonDataTest extends \PHPUnit_Framework_TestCase
     
     public function testItFlattensImageAttributes()
     {
-
         $internalJsonData = [
             'product_id' => 'test',
             'images' => [
