@@ -98,8 +98,10 @@ class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
      */
     private function getVariationAttributesJsonData(ConfigurableProduct $product)
     {
-        $variationAttributesJsonData = $product->getVariationAttributes()->jsonSerialize();
-        return $this->internalToPublicProductJsonData->transformVariationAttributes($variationAttributesJsonData);
+        $variationAttributesJson = json_encode($product->getVariationAttributes());
+        return $this->internalToPublicProductJsonData->transformVariationAttributes(
+            json_decode($variationAttributesJson, true)
+        );
     }
 
     /**
@@ -133,7 +135,9 @@ class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
      */
     private function getAssociatedProductListJson(ConfigurableProduct $product)
     {
-        $associatedProductListJsonData = $product->getAssociatedProducts()->jsonSerialize();
-        return $this->internalToPublicProductJsonData->transformAssociatedProducts($associatedProductListJsonData);
+        $associatedProductListJson = json_encode($product->getAssociatedProducts());
+        return $this->internalToPublicProductJsonData->transformAssociatedProducts(
+            json_decode($associatedProductListJson, true)
+        );
     }
 }

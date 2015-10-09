@@ -146,13 +146,16 @@ class ProductDetailViewSnippetsTest extends AbstractIntegrationTest
         $this->assertEquals($productIdString, SimpleProduct::fromArray(json_decode($snippet, true))->getId());
     }
 
-    public function testConfigurableProductJsonSnippetsAreNotWrittenForSimpleProducts()
+    public function testConfigurableProductJsonSnippetsAreAlsoWrittenForSimpleProducts()
     {
-        $this->setExpectedException(KeyNotFoundException::class);
         $this->importCatalog();
+        $this->failIfMessagesWhereLogged($this->factory->getLogger());
 
         $productIdString = $this->getSkuOfFirstSimpleProductInFixture();
-        $this->getConfigurableProductVariationAttributesJsonSnippetForId($productIdString);
+        $variationsSnippet = $this->getConfigurableProductVariationAttributesJsonSnippetForId($productIdString);
+        $associatedProductSnippet = $this->getConfigurableProductAssociatedProductsJsonSnippetForId($productIdString);
+        $this->assertEmpty(json_decode($variationsSnippet, true));
+        $this->assertEmpty(json_decode($associatedProductSnippet, true));
     }
 
     public function testConfigurableProductSnippetsAreWrittenToDataPool()
