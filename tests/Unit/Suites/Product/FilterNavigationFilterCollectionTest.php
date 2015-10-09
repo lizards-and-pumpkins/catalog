@@ -78,6 +78,18 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
         return $stubSearchDocument;
     }
 
+    /**
+     * @param SearchDocument ...$searchDocuments
+     * @return SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubSearchDocumentCollection(SearchDocument ...$searchDocuments)
+    {
+        $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
+        $stubSearchDocumentCollection->method('getIterator')->willReturn(new \ArrayIterator($searchDocuments));
+
+        return $stubSearchDocumentCollection;
+    }
+
     protected function setUp()
     {
         $this->stubDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
@@ -137,9 +149,7 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
     {
         $selectedFilters = ['foo' => []];
 
-        /** @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject $stubSearchDocumentCollection */
-        $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
-        $stubSearchDocumentCollection->method('getIterator')->willReturn(new \ArrayIterator([]));
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection();
 
         $this->filterCollection->initialize(
             $stubSearchDocumentCollection,
@@ -157,10 +167,7 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
 
         $stubField = $this->createStubSearchDocumentField('foo', ['baz']);
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([$stubField]);
-
-        /** @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject $stubSearchDocumentCollection */
-        $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
-        $stubSearchDocumentCollection->method('getIterator')->willReturn(new \ArrayIterator([$stubSearchDocument]));
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($stubSearchDocument);
 
         $this->filterCollection->initialize(
             $stubSearchDocumentCollection,
@@ -181,10 +188,7 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
         $stubField2 = $this->createStubSearchDocumentField('bar', ['qux']);
 
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([$stubField1, $stubField2]);
-
-        /** @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject $stubSearchDocumentCollection */
-        $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
-        $stubSearchDocumentCollection->method('getIterator')->willReturn(new \ArrayIterator([$stubSearchDocument]));
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($stubSearchDocument);
 
         $this->filterCollection->initialize(
             $stubSearchDocumentCollection,
@@ -211,10 +215,7 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
         $stubField2 = $this->createStubSearchDocumentField('foo', ['baz']);
 
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([$stubField1, $stubField2]);
-
-        /** @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject $stubSearchDocumentCollection */
-        $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
-        $stubSearchDocumentCollection->method('getIterator')->willReturn(new \ArrayIterator([$stubSearchDocument]));
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($stubSearchDocument);
 
         $this->filterCollection->initialize(
             $stubSearchDocumentCollection,
@@ -237,10 +238,7 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
         $stubField = $this->createStubSearchDocumentField('foo', ['qux']);
 
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([$stubField]);
-
-        /** @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject $stubSearchDocumentCollection */
-        $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
-        $stubSearchDocumentCollection->method('getIterator')->willReturn(new \ArrayIterator([$stubSearchDocument]));
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($stubSearchDocument);
 
         $this->filterCollection->initialize(
             $stubSearchDocumentCollection,
@@ -265,14 +263,8 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
 
         $stubField = $this->createStubSearchDocumentField('foo', ['baz']);
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([$stubField]);
-
-        /** @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject $stubFilteredDocumentCollection */
-        $stubFilteredDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
-        $stubFilteredDocumentCollection->method('getIterator')->willReturn(new \ArrayIterator([$stubSearchDocument]));
-
-        /** @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject $stubUnfilteredDocumentCollection */
-        $stubUnfilteredDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
-        $stubUnfilteredDocumentCollection->method('getIterator')->willReturn(new \ArrayIterator([$stubSearchDocument]));
+        $stubFilteredDocumentCollection = $this->createStubSearchDocumentCollection($stubSearchDocument);
+        $stubUnfilteredDocumentCollection = $this->createStubSearchDocumentCollection($stubSearchDocument);
 
         $this->stubDataPoolReader->method('getSearchDocumentsMatchingCriteria')
             ->willReturn($stubUnfilteredDocumentCollection);
@@ -307,13 +299,8 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
             [$stubField1, $stubField2, $stubField3, $stubField4]
         );
 
-        /** @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject $stubFilteredDocumentCollection */
-        $stubFilteredDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
-        $stubFilteredDocumentCollection->method('getIterator')->willReturn(new \ArrayIterator([$stubSearchDocument]));
-
-        /** @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject $stubUnfilteredDocumentCollection */
-        $stubUnfilteredDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
-        $stubUnfilteredDocumentCollection->method('getIterator')->willReturn(new \ArrayIterator([$stubSearchDocument]));
+        $stubFilteredDocumentCollection = $this->createStubSearchDocumentCollection($stubSearchDocument);
+        $stubUnfilteredDocumentCollection = $this->createStubSearchDocumentCollection($stubSearchDocument);
 
         $this->stubDataPoolReader->method('getSearchDocumentsMatchingCriteria')
             ->willReturn($stubUnfilteredDocumentCollection);
@@ -355,10 +342,7 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
         $stubField2 = $this->createStubSearchDocumentField('bar', ['qux']);
 
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([$stubField1, $stubField2]);
-
-        /** @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject $stubSearchDocumentCollection */
-        $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
-        $stubSearchDocumentCollection->method('getIterator')->willReturn(new \ArrayIterator([$stubSearchDocument]));
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($stubSearchDocument);
 
         $this->filterCollection->initialize(
             $stubSearchDocumentCollection,
