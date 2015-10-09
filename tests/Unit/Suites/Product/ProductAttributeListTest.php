@@ -117,8 +117,12 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     {
         $attributes = [];
         for ($i = 0; $i < $numAttributesToAdd; $i++) {
-            $attributes[] = new ProductAttribute('attr_' . ($i + 1), 'value', []);
+            $code = 'attr_' . ($i + 1);
+            $value = 'some dummy value';
+            $contextData = [];
+            $attributes[] = new ProductAttribute($code, $value, $contextData);
         }
+        
         $attributeCodes = (new ProductAttributeList(...$attributes))->getAttributeCodes();
         $this->assertContainsOnly(AttributeCode::class, $attributeCodes);
         $this->assertSame(count($expected), count($attributeCodes));
