@@ -203,6 +203,33 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(1, $filters[0]->getOptionCollection()->getOptions()[0]->getCount());
     }
 
+    public function testFiltersInCollectionHasPreConfiguredOrder()
+    {
+        $selectedFilters = ['foo' => [], 'bar' => []];
+
+        $stubField1 = $this->createStubSearchDocumentField('bar', ['qux']);
+        $stubField2 = $this->createStubSearchDocumentField('foo', ['baz']);
+
+        $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([$stubField1, $stubField2]);
+
+        /** @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject $stubSearchDocumentCollection */
+        $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
+        $stubSearchDocumentCollection->method('getIterator')->willReturn(new \ArrayIterator([$stubSearchDocument]));
+
+        $this->filterCollection->initialize(
+            $stubSearchDocumentCollection,
+            $this->stubSearchCriteria,
+            $selectedFilters,
+            $this->stubContext
+        );
+
+        $resultFilterCodes = array_map(function(FilterNavigationFilter $filter) {
+            return $filter->getCode();
+        }, $this->filterCollection->getFilters());
+
+        $this->assertEquals(array_keys($selectedFilters), $resultFilterCodes);
+    }
+
     public function testCollectionReflectsValuesFromSearchDocumentFieldsIfNoFiltersAreSelected()
     {
         $selectedFilters = ['foo' => [], 'bar' => []];
