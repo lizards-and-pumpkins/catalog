@@ -3,7 +3,11 @@
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Product\AttributeCode;
+use LizardsAndPumpkins\Product\Price;
 use LizardsAndPumpkins\Product\Product;
+use LizardsAndPumpkins\Product\ProductAttribute;
+use LizardsAndPumpkins\Product\ProductAttributeList;
 use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\Product\ProductId;
 
@@ -18,7 +22,7 @@ class SimpleProductBuilder implements ProductBuilder
      * @var ProductAttributeListBuilder
      */
     private $attributeListBuilder;
-    
+
     /**
      * @var ProductImageListBuilder
      */
@@ -40,8 +44,51 @@ class SimpleProductBuilder implements ProductBuilder
      */
     public function getProductForContext(Context $context)
     {
-        $attributes = $this->attributeListBuilder->getAttributeListForContext($context);
+        $sourceAttributeList = $this->attributeListBuilder->getAttributeListForContext($context);
+        $attributesWithProperTypes = $this->ensureAttributeTypes($sourceAttributeList);
         $images = $this->imageListBuilder->getImageListForContext($context);
-        return new SimpleProduct($this->id, $attributes, $images, $context);
+        return new SimpleProduct($this->id, $attributesWithProperTypes, $images, $context);
+    }
+
+    /**
+     * @param ProductAttributeList $sourceAttributeList
+     * @return ProductAttributeList
+     */
+    private function ensureAttributeTypes(ProductAttributeList $sourceAttributeList)
+    {
+        $codes = $sourceAttributeList->getAttributeCodes();
+        $attributes = array_reduce($codes, function ($carry, $code) use ($sourceAttributeList) {
+            return array_merge($carry, array_map(
+                [$this, 'ensureAttributeType'],
+                $sourceAttributeList->getAttributesWithCode($code)
+            ));
+        }, []);
+        return new ProductAttributeList(...$attributes);
+    }
+
+
+    /**
+     * @param ProductAttribute $attribute
+     * @return ProductAttribute
+     */
+    private function ensureAttributeType(ProductAttribute $attribute)
+    {
+        if ($attribute->isCodeEqualTo('price')) {
+            return $this->ensurePriceAttributeTypeInt($attribute);
+        }
+        return $attribute;
+    }
+
+    /**
+     * @param ProductAttribute $attribute
+     * @return ProductAttribute
+     */
+    private function ensurePriceAttributeTypeInt(ProductAttribute $attribute)
+    {
+        if (is_int($attribute->getValue())) {
+            return $attribute;
+        }
+        $price = Price::fromString($attribute->getValue());
+        return new ProductAttribute($attribute->getCode(), $price->getAmount(), $attribute->getContextDataSet());
     }
 }

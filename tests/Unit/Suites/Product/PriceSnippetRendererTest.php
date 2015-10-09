@@ -56,7 +56,7 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
     {
         $stubContext = $this->getMock(Context::class);
         $dummyPriceSnippetKey = 'bar';
-        $dummyPriceAttributeValue = '1';
+        $dummyPriceAttributeValue = 1;
 
         $mockProduct = $this->getMock(Product::class);
         $mockProduct->method('getFirstValueOfAttribute')
@@ -68,8 +68,7 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->mockSnippetKeyGenerator->method('getKeyForContext')
             ->willReturn($dummyPriceSnippetKey);
 
-        $dummyPrice = Price::fromString($dummyPriceAttributeValue);
-        $expectedSnippet = Snippet::create($dummyPriceSnippetKey, $dummyPrice->getAmount());
+        $expectedSnippet = Snippet::create($dummyPriceSnippetKey, $dummyPriceAttributeValue);
 
         $this->mockSnippetList->expects($this->once())
             ->method('add')
