@@ -56,13 +56,7 @@ class SimpleProductBuilder implements ProductBuilder
      */
     private function ensureAttributeTypes(ProductAttributeList $sourceAttributeList)
     {
-        $codes = $sourceAttributeList->getAttributeCodes();
-        $attributes = array_reduce($codes, function ($carry, $code) use ($sourceAttributeList) {
-            return array_merge($carry, array_map(
-                [$this, 'ensureAttributeType'],
-                $sourceAttributeList->getAttributesWithCode($code)
-            ));
-        }, []);
+        $attributes = array_map([$this, 'ensureAttributeType'], $sourceAttributeList->getAllAttributes());
         return new ProductAttributeList(...$attributes);
     }
 
