@@ -22,6 +22,7 @@
 #pagination { text-align: right; padding: 43px 0 0 0; font-size: 12px }
 #pagination li { display: inline-block; border: 1px solid #b3b3b3; margin-left: 2px; background-color: #f0f0f0 }
 #pagination a, #pagination .current { padding: 4px 9px; display: inline-block; color: #000000 }
+#pagination .spacing { padding: 4px 6px }
 #pagination .current { color: #ffffff; background-color: #37a3d4; border-color: #1280ac }
 #pagination .next, #pagination .prev { padding: 4px 7px; color: #3c3c3c }
 #pagination .prev { background-position: -6px -5px }
