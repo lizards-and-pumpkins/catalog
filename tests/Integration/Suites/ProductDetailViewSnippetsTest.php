@@ -3,12 +3,10 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\DataPool\KeyValue\KeyNotFoundException;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\Utils\XPathParser;
 
 class ProductDetailViewSnippetsTest extends AbstractIntegrationTest

@@ -8,7 +8,6 @@ use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Image\AddImageCommand;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\Product;
-use LizardsAndPumpkins\Projection\Catalog\Import\Exception\ProductAttributeContextPartsMismatchException;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Product\AddProductListingCommand;
