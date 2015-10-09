@@ -27,7 +27,7 @@ class SimpleProductBuilderTest extends \PHPUnit_Framework_TestCase
      * @var ProductAttributeList|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockAttributeList;
-    
+
     /**
      * @var ProductId|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -47,6 +47,16 @@ class SimpleProductBuilderTest extends \PHPUnit_Framework_TestCase
      * @var ProductImageListBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockProductImageListBuilder;
+
+    /**
+     * @param string $code
+     * @param string $value
+     * @return ProductAttribute
+     */
+    private function createProductAttribute($code, $value)
+    {
+        return new ProductAttribute(AttributeCode::fromString($code), $value, []);
+    }
 
     public function setUp()
     {
@@ -81,18 +91,25 @@ class SimpleProductBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $sourcePrice = '11.99';
         $expectedPrice = 1199;
-        
-        $sourcePriceAttribute = new ProductAttribute(AttributeCode::fromString('price'), $sourcePrice, []);
-        
-        $this->mockAttributeList->method('getAttributeCodes')->willReturn(['price']);
-        $this->mockAttributeList->method('hasAttribute')->with('price')->willReturn(true);
-        $this->mockAttributeList->method('getAttributesWithCode')->with('price')->willReturn([$sourcePriceAttribute]);
+        $priceAttributeCodes = ['price', 'special_price'];
+
+        $sourcePriceAttribute = $this->createProductAttribute('price', $sourcePrice);
+        $sourceSpecialPriceAttribute = $this->createProductAttribute('special_price', $sourcePrice);
+
+        $this->mockAttributeList->method('getAttributeCodes')->willReturn($priceAttributeCodes);
+        $this->mockAttributeList->method('hasAttribute')->willReturn(true);
+        $this->mockAttributeList->method('getAttributesWithCode')->willReturnMap([
+            ['price', [$sourcePriceAttribute]],
+            ['special_price', [$sourceSpecialPriceAttribute]],
+        ]);
 
         $stubContext = $this->getMock(Context::class);
         $product = $this->productBuilder->getProductForContext($stubContext);
-        $price = $product->getFirstValueOfAttribute('price');
         
-        $this->assertInternalType('integer', $price);
-        $this->assertSame($expectedPrice, $price);
+        array_map(function ($priceAttributeCode) use ($product, $expectedPrice) {
+            $price = $product->getFirstValueOfAttribute($priceAttributeCode);
+            $this->assertInternalType('integer', $price);
+            $this->assertSame($expectedPrice, $price);
+        }, $priceAttributeCodes);
     }
 }

@@ -73,7 +73,7 @@ class SimpleProductBuilder implements ProductBuilder
      */
     private function ensureAttributeType(ProductAttribute $attribute)
     {
-        if ($attribute->isCodeEqualTo('price')) {
+        if ($attribute->isCodeEqualTo('price') || $attribute->isCodeEqualTo('special_price')) {
             return $this->ensurePriceAttributeTypeInt($attribute);
         }
         return $attribute;
