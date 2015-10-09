@@ -6,6 +6,8 @@ namespace LizardsAndPumpkins\Product;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Product\Composite\AssociatedProductList;
 use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
+use LizardsAndPumpkins\Product\Composite\ProductVariationAttributeList;
+use LizardsAndPumpkins\Projection\Catalog\InternalToPublicProductJsonData;
 use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetList;
@@ -19,6 +21,8 @@ class ConfigurableProductJsonSnippetRendererTest extends \PHPUnit_Framework_Test
 {
     private $testVariationAttributesSnippetKey = 'variations';
     private $testAssociatedProductsSnippetKey = 'associated_products';
+    private $testVariationAttributesJsonData = ['variations'];
+    private $testAssociatedAttributesJsonData = ['children'];
 
     /**
      * @var ConfigurableProductJsonSnippetRenderer
@@ -31,9 +35,9 @@ class ConfigurableProductJsonSnippetRendererTest extends \PHPUnit_Framework_Test
     private $stubConfigurableProduct;
 
     /**
-     * @var AssociatedProductList|\PHPUnit_Framework_MockObject_MockObject
+     * @var InternalToPublicProductJsonData|\PHPUnit_Framework_TestCase
      */
-    private $stubAssociatedProductList;
+    private $stubInternalToPublicProductJsonData;
 
     /**
      * @param string $snippetKey
@@ -65,30 +69,42 @@ class ConfigurableProductJsonSnippetRendererTest extends \PHPUnit_Framework_Test
         $stubVariationAttributesJsonSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $stubVariationAttributesJsonSnippetKeyGenerator->method('getKeyForContext')
             ->willReturn($this->testVariationAttributesSnippetKey);
-        
+
         $stubAssociatedProductsJsonSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $stubAssociatedProductsJsonSnippetKeyGenerator->method('getKeyForContext')
             ->willReturn($this->testAssociatedProductsSnippetKey);
         
+        $this->stubInternalToPublicProductJsonData = $this->getMock(InternalToPublicProductJsonData::class);
+        $this->stubInternalToPublicProductJsonData->method('transformVariationAttributes')
+            ->willReturn($this->testVariationAttributesJsonData);
+        $this->stubInternalToPublicProductJsonData->method('transformAssociatedProducts')
+            ->willReturn($this->testAssociatedAttributesJsonData);
+
         $this->renderer = new ConfigurableProductJsonSnippetRenderer(
             $stubVariationAttributesJsonSnippetKeyGenerator,
-            $stubAssociatedProductsJsonSnippetKeyGenerator
+            $stubAssociatedProductsJsonSnippetKeyGenerator,
+            $this->stubInternalToPublicProductJsonData
         );
-        
+
         $this->stubConfigurableProduct = $this->getMock(ConfigurableProduct::class, [], [], '', false);
         $this->stubConfigurableProduct->method('getContext')->willReturn($this->getMock(Context::class));
-        
-        $this->stubAssociatedProductList = $this->getMock(AssociatedProductList::class, [], [], '', false);
-        $this->stubConfigurableProduct->method('getAssociatedProducts')->willReturn($this->stubAssociatedProductList);
+
+        $stubAssociatedProductList = $this->getMock(AssociatedProductList::class, [], [], '', false);
+        $stubAssociatedProductList->method('jsonSerialize')->willReturn([]);
+        $this->stubConfigurableProduct->method('getAssociatedProducts')->willReturn($stubAssociatedProductList);
+
+        $stubVariationAttributes = $this->getMock(ProductVariationAttributeList::class, [], [], '', false);
+        $stubVariationAttributes->method('jsonSerialize')->willReturn([]);
+        $this->stubConfigurableProduct->method('getVariationAttributes')->willReturn($stubVariationAttributes);
     }
 
     public function testItReturnsAnEmptyVariationAttributesJsonArraySnippetForNonConfigurableProducts()
     {
         $stubNonConfigurableProduct = $this->getMock(Product::class, [], [], '', false);
         $stubNonConfigurableProduct->method('getContext')->willReturn($this->getMock(Context::class));
-        
+
         $snippetList = $this->renderer->render($stubNonConfigurableProduct);
-        
+
         $snippet = $this->getSnippetWithKey($this->testVariationAttributesSnippetKey, $snippetList);
         $this->assertSnippetContent(json_encode([]), $snippet);
     }
@@ -97,33 +113,28 @@ class ConfigurableProductJsonSnippetRendererTest extends \PHPUnit_Framework_Test
     {
         $stubNonConfigurableProduct = $this->getMock(Product::class, [], [], '', false);
         $stubNonConfigurableProduct->method('getContext')->willReturn($this->getMock(Context::class));
-        
+
         $snippetList = $this->renderer->render($stubNonConfigurableProduct);
-        
+
         $snippet = $this->getSnippetWithKey($this->testAssociatedProductsSnippetKey, $snippetList);
         $this->assertSnippetContent(json_encode([]), $snippet);
     }
 
     public function testItAddsTheVariationAttributesJsonSnippetToTheResultingSnippetList()
     {
-        $this->stubConfigurableProduct->method('getVariationAttributes')->willReturn(['test1', 'test2']);
         $snippetList = $this->renderer->render($this->stubConfigurableProduct);
-        
+
         $snippet = $this->getSnippetWithKey($this->testVariationAttributesSnippetKey, $snippetList);
 
-        $this->assertSnippetContent(json_encode(['test1', 'test2']), $snippet);
+        $this->assertSnippetContent(json_encode($this->testVariationAttributesJsonData), $snippet);
     }
 
-    public function testItReturnsTheAssociatedProductsWithoutThePhpClassNames()
+    public function testItAddsTheAssociatedProductsJsonSnippetToTheResultingSnippetList()
     {
-        $this->stubAssociatedProductList->method('jsonSerialize')->willReturn([
-            AssociatedProductList::PHP_CLASSES_KEY => 'foo',
-            'products' => ['a', 'b', 'c']
-        ]);
-        
         $snippetList = $this->renderer->render($this->stubConfigurableProduct);
-        
+
         $snippet = $this->getSnippetWithKey($this->testAssociatedProductsSnippetKey, $snippetList);
-        $this->assertSnippetContent(json_encode(['a', 'b', 'c']), $snippet);
+
+        $this->assertSnippetContent(json_encode($this->testAssociatedAttributesJsonData), $snippet);
     }
 }

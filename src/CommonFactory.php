@@ -77,6 +77,7 @@ use LizardsAndPumpkins\Product\AddProductListingCommandHandler;
 use LizardsAndPumpkins\Product\UpdateProductStockQuantityCommand;
 use LizardsAndPumpkins\Product\UpdateProductStockQuantityCommandHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
+use LizardsAndPumpkins\Projection\Catalog\InternalToPublicProductJsonData;
 use LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator;
 use LizardsAndPumpkins\Projection\UrlKeyForContextCollector;
 use LizardsAndPumpkins\Queue\Queue;
@@ -281,7 +282,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new ConfigurableProductJsonSnippetRenderer(
             $this->getMasterFactory()->createConfigurableProductVariationAttributesJsonSnippetKeyGenerator(),
-            $this->getMasterFactory()->createConfigurableProductAssociatedProductsJsonSnippetKeyGenerator()
+            $this->getMasterFactory()->createConfigurableProductAssociatedProductsJsonSnippetKeyGenerator(),
+            $this->getMasterFactory()->createInternalToPublicProductJsonData()
         );
     }
 
@@ -311,6 +313,14 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $this->getMasterFactory()->getRequiredContexts(),
             $usedDataParts
         );
+    }
+
+    /**
+     * @return InternalToPublicProductJsonData
+     */
+    public function createInternalToPublicProductJsonData()
+    {
+        return new InternalToPublicProductJsonData();
     }
 
     /**

@@ -45,6 +45,7 @@ use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEvent;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetProjector;
+use LizardsAndPumpkins\Projection\Catalog\InternalToPublicProductJsonData;
 use LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator;
 use LizardsAndPumpkins\Projection\UrlKeyForContextCollector;
 use LizardsAndPumpkins\Queue\Queue;
@@ -600,5 +601,11 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createConfigurableProductAssociatedProductsJsonSnippetKeyGenerator();
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
+    }
+
+    public function testItReturnsAnInternalToPublicProductJsonData()
+    {
+        $result = $this->commonFactory->createInternalToPublicProductJsonData();
+        $this->assertInstanceOf(InternalToPublicProductJsonData::class, $result);
     }
 }
