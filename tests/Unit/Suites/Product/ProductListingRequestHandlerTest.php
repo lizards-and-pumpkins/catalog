@@ -345,6 +345,31 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertKeyGeneratorWasOnlyTriggeredWithGivenProductIds($getKeyForContextSpy, ...$expectedProductIds);
     }
 
+    public function testProductsFromTheFirstPageAreAddedToPageBuilderIfCurrentPageIsNotSpecified()
+    {
+        $this->stubRequest->method('getQueryParameter')->willReturnMap(
+            [[ProductListingRequestHandler::PAGINATION_QUERY_PARAMETER_NAME, null]]
+        );
+
+        $productAId = ProductId::fromString('A');
+        $productBId = ProductId::fromString('B');
+        $productIds = [$productAId, $productBId];
+
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollectionContainingDocumentsWithGivenProductIds(
+            $productIds
+        );
+        $this->prepareMockDataPoolReaderWithStubSearchDocumentCollection($stubSearchDocumentCollection);
+
+        $getKeyForContextSpy = $this->any();
+        $this->stubProductInListingSnippetKeyGenerator->expects($getKeyForContextSpy)->method('getKeyForContext');
+
+        $this->requestHandler->process($this->stubRequest);
+
+        $expectedProductIds = array_slice($productIds, 0, $this->testDefaultNumberOfProductsPerPage);
+
+        $this->assertKeyGeneratorWasOnlyTriggeredWithGivenProductIds($getKeyForContextSpy, ...$expectedProductIds);
+    }
+
     public function testSelectedFiltersAreNotAppliedToEmptyCollection()
     {
         $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);

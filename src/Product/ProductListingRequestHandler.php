@@ -164,7 +164,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         SearchDocumentCollection $searchDocumentCollection,
         HttpRequest $request
     ) {
-        $currentPageNumber = $request->getQueryParameter(self::PAGINATION_QUERY_PARAMETER_NAME);
+        $currentPageNumber = max(1, $request->getQueryParameter(self::PAGINATION_QUERY_PARAMETER_NAME));
         $productsPerPage = (int)$this->defaultNumberOfProductsPerPage;
 
         $documents = $searchDocumentCollection->getDocuments();
