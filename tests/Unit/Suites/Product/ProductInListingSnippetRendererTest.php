@@ -4,6 +4,8 @@ namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\InvalidProjectionSourceDataTypeException;
+use LizardsAndPumpkins\Projection\Catalog\InternalToPublicProductJsonData;
+use LizardsAndPumpkins\Projection\Catalog\InternalToPublicProductJsonDataTest;
 use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetList;
@@ -22,6 +24,11 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
     private $mockSnippetKeyGenerator;
 
     /**
+     * @var InternalToPublicProductJsonData|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockInternalToPublicProductJson;
+
+    /**
      * @var ProductInListingSnippetRenderer
      */
     private $snippetRenderer;
@@ -38,20 +45,23 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
         $stubProduct = $this->getMock(Product::class);
         $stubProduct->method('getId')->willReturn($stubProductId);
-        
         $stubProduct->method('getContext')->willReturn($this->getMock(Context::class));
+        $stubProduct->method('jsonSerialize')->willReturn(['product_id' => $stubProductId]);
         
         return $stubProduct;
     }
 
     protected function setUp()
     {
-        $testSnippetList = new SnippetList;
-
         $this->mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $this->mockSnippetKeyGenerator->method('getKeyForContext')->willReturn('stub-content-key');
 
-        $this->snippetRenderer = new ProductInListingSnippetRenderer($testSnippetList, $this->mockSnippetKeyGenerator);
+        $this->mockInternalToPublicProductJson = $this->getMock(InternalToPublicProductJsonData::class);
+        
+        $this->snippetRenderer = new ProductInListingSnippetRenderer(
+            $this->mockSnippetKeyGenerator,
+            $this->mockInternalToPublicProductJson
+        );
     }
 
     public function testSnippetRendererInterfaceIsImplemented()
@@ -67,6 +77,9 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
     public function testProductInListingViewSnippetIsRendered()
     {
+        $this->mockInternalToPublicProductJson->expects($this->atLeastOnce())
+            ->method('transformProduct')->willReturnArgument(0);
+        
         $dummyProductId = 'foo';
         $stubProduct = $this->getStubProduct($dummyProductId);
 
@@ -80,11 +93,11 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
     public function testProductIdIsPassedToKeyGenerator()
     {
         $dummyProductId = 'foo';
-        $stubProductBuilder = $this->getStubProduct($dummyProductId);
+        $stubProduct = $this->getStubProduct($dummyProductId);
 
         $this->mockSnippetKeyGenerator->expects($this->once())->method('getKeyForContext')
             ->with($this->anything(), [Product::ID => $dummyProductId]);
 
-        $this->snippetRenderer->render($stubProductBuilder);
+        $this->snippetRenderer->render($stubProduct);
     }
 }

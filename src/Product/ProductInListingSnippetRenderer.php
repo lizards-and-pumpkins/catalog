@@ -2,9 +2,8 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\InvalidProjectionSourceDataTypeException;
+use LizardsAndPumpkins\Projection\Catalog\InternalToPublicProductJsonData;
 use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetRenderer;
@@ -15,19 +14,21 @@ class ProductInListingSnippetRenderer implements SnippetRenderer
     const CODE = 'product_in_listing';
 
     /**
-     * @var SnippetList
-     */
-    private $snippetList;
-
-    /**
      * @var SnippetKeyGenerator
      */
     private $snippetKeyGenerator;
+    
+    /**
+     * @var InternalToPublicProductJsonData
+     */
+    private $internalToPublicProductJsonData;
 
-    public function __construct(SnippetList $snippetList, SnippetKeyGenerator $snippetKeyGenerator)
-    {
-        $this->snippetList = $snippetList;
+    public function __construct(
+        SnippetKeyGenerator $snippetKeyGenerator,
+        InternalToPublicProductJsonData $internalToPublicProductJsonData
+    ) {
         $this->snippetKeyGenerator = $snippetKeyGenerator;
+        $this->internalToPublicProductJsonData = $internalToPublicProductJsonData;
     }
 
     /**
@@ -40,23 +41,21 @@ class ProductInListingSnippetRenderer implements SnippetRenderer
             throw new InvalidProjectionSourceDataTypeException('First argument must be a Product instance.');
         }
 
-        $this->addProductInListingSnippetsToList($projectionSourceData);
-
-        return $this->snippetList;
+        $snippetList = new SnippetList();
+        $snippet = $this->getProductInListingSnippet($projectionSourceData);
+        $snippetList->add($snippet);
+        return $snippetList;
     }
 
-    private function addProductInListingSnippetsToList(Product $product)
-    {
-        $this->addProductInListingInContextSnippetsToList($product);
-    }
-
-    private function addProductInListingInContextSnippetsToList(Product $product)
+    /**
+     * @param Product $product
+     * @return Snippet
+     */
+    private function getProductInListingSnippet(Product $product)
     {
         $key = $this->snippetKeyGenerator->getKeyForContext($product->getContext(), [Product::ID => $product->getId()]);
-        $content = json_encode($product);
-
-        $contentSnippet = Snippet::create($key, $content);
-
-        $this->snippetList->add($contentSnippet);
+        $internalJson = json_encode($product);
+        $publicJson = $this->internalToPublicProductJsonData->transformProduct(json_decode($internalJson, true));
+        return Snippet::create($key, json_encode($publicJson));
     }
 }
