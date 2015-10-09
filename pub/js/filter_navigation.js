@@ -1,4 +1,4 @@
-define(['url', 'jquery'], function (url, $) {
+define(['lib/url', 'jquery'], function (url, $) {
 
     var FilterNavigation = {
         generateLayeredNavigation: function (filterNavigationJson, filterNavigationPlaceholderSelector) {
