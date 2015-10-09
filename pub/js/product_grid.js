@@ -52,10 +52,7 @@ define(function () {
                     title = document.createElement('H2'),
                     gender = document.createElement('P'),
                     productUrl = getBaseUrl() + product['attributes']['url_key'],
-                    productImage = createProductImage(
-                        product['images'][0]['file'],
-                        product['images'][0]['label']
-                    );
+                    productImage = createProductImage(product['images'][0]['file'], product['images'][0]['label']);
 
                 title.textContent = product['attributes']['name'];
                 gender.textContent = turnIntoStringIfIsArray(product['attributes']['gender']);
