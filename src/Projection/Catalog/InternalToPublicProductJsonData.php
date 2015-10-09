@@ -48,9 +48,10 @@ class InternalToPublicProductJsonData
         $method = $this->keyToMethod($key);
 
         return function ($inputData) use ($method) {
-            return method_exists($this, $method) ?
-                call_user_func([$this, $method], $inputData) :
-                $inputData;
+            if (method_exists($this, $method)) {
+                return call_user_func([$this, $method], $inputData);
+            }
+            return $inputData;
         };
     }
 

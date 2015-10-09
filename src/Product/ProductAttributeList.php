@@ -154,4 +154,12 @@ class ProductAttributeList implements \Countable, \JsonSerializable
     {
         return $this->attributes;
     }
+
+    /**
+     * @return ProductAttribute[]
+     */
+    public function getAllAttributes()
+    {
+        return $this->attributes;
+    }
 }

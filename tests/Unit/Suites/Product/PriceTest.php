@@ -9,11 +9,6 @@ use LizardsAndPumpkins\Product\Exception\InvalidPriceSourceException;
  */
 class PriceTest extends \PHPUnit_Framework_TestCase
 {
-    public function testMoneyInterfaceIsImplemented()
-    {
-        $this->assertInstanceOf(Money::class, new Price(0));
-    }
-
     public function testExceptionIsThrownIfNonStringArgumentIsPassedToFromStringConstructor()
     {
         $this->setExpectedException(InvalidPriceSourceException::class, 'Can not create a price from integer');

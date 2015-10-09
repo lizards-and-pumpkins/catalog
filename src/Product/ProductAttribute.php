@@ -27,16 +27,17 @@ class ProductAttribute implements \JsonSerializable
     private $value;
 
     /**
-     * @param AttributeCode $code
+     * @param AttributeCode|string $code
      * @param string|ProductAttributeList $value
      * @param string[] $contextData
      */
-    public function __construct(AttributeCode $code, $value, array $contextData)
+    public function __construct($code, $value, array $contextData)
     {
-        $this->validateValue($value, $code);
-        $this->code = $code;
+        $attributeCode = AttributeCode::fromString($code);
+        $this->validateValue($value, $attributeCode);
+        $this->code = $attributeCode;
         $this->contextData = $contextData;
-        $this->value = (string) $value;
+        $this->value = $value;
     }
 
     /**
@@ -45,9 +46,7 @@ class ProductAttribute implements \JsonSerializable
      */
     public static function fromArray(array $attribute)
     {
-        $code = AttributeCode::fromString($attribute[self::CODE]);
-        $value = $attribute[self::VALUE];
-        return new self($code, $value, $attribute[self::CONTEXT]);
+        return new self($attribute[self::CODE], $attribute[self::VALUE], $attribute[self::CONTEXT]);
     }
 
     /**

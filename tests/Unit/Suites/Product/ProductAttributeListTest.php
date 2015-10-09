@@ -117,12 +117,12 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     {
         $attributes = [];
         for ($i = 0; $i < $numAttributesToAdd; $i++) {
-            $attributes[] = ProductAttribute::fromArray([
-                ProductAttribute::CODE => 'attr_' . ($i + 1),
-                ProductAttribute::CONTEXT => [],
-                ProductAttribute::VALUE => 'value'
-            ]);
+            $code = 'attr_' . ($i + 1);
+            $value = 'some dummy value';
+            $contextData = [];
+            $attributes[] = new ProductAttribute($code, $value, $contextData);
         }
+        
         $attributeCodes = (new ProductAttributeList(...$attributes))->getAttributeCodes();
         $this->assertContainsOnly(AttributeCode::class, $attributeCodes);
         $this->assertSame(count($expected), count($attributeCodes));
@@ -205,5 +205,17 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
             ]
         ];
         ProductAttributeList::fromArray($attributesArray);
+    }
+
+    public function testItReturnsAllAttributes()
+    {
+        $productAttributes = [
+            new ProductAttribute('number_one', 1, []),
+            new ProductAttribute('number_two', 2, []),
+            new ProductAttribute('number_three', 3, []),
+        ];
+        $productAttributeList = new ProductAttributeList(...$productAttributes);
+        
+        $this->assertSame($productAttributes, $productAttributeList->getAllAttributes());
     }
 }
