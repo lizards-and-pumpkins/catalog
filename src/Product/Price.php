@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Product\Exception\InvalidPriceSourceException;
 
-class Price implements Money
+class Price
 {
     const NUM_DECIMAL_POINTS = 2;
 
