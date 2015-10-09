@@ -10,8 +10,9 @@ use LizardsAndPumpkins\Product\Product;
 
 class AssociatedProductList implements \JsonSerializable, \IteratorAggregate
 {
-    const PHP_CLASSES_KEY = 'product_php_classes';
-    
+    const PHP_CLASSES = 'product_php_classes';
+    const PRODUCTS = 'products';
+
     /**
      * @var Product[]
      */
@@ -61,10 +62,10 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate
     private static function createAssociatedProductsFromArray(array $sourceArray)
     {
         return array_map(function ($idx) use ($sourceArray) {
-            $class = $sourceArray[self::PHP_CLASSES_KEY][$idx];
-            $productSourceArray = $sourceArray['products'][$idx];
+            $class = $sourceArray[self::PHP_CLASSES][$idx];
+            $productSourceArray = $sourceArray[self::PRODUCTS][$idx];
             return self::createAssociatedProductFromArray($class, $productSourceArray);
-        }, array_keys($sourceArray['products']));
+        }, array_keys($sourceArray[self::PRODUCTS]));
     }
 
     /**
@@ -83,8 +84,8 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate
     public function jsonSerialize()
     {
         return [
-            self::PHP_CLASSES_KEY => $this->getAssociatedProductClassNames(),
-            'products' => $this->getProducts()
+            self::PHP_CLASSES => $this->getAssociatedProductClassNames(),
+            self::PRODUCTS => $this->getProducts()
         ];
     }
 

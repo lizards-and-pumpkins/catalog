@@ -94,7 +94,7 @@ class SimpleProductXmlToProductBuilder implements ProductXmlToProductBuilder
             array_map([$this, 'nodeArrayAsAttributeArray'], $node['value']);
         return [
             ProductAttribute::CODE => $node['nodeName'],
-            ProductAttribute::CONTEXT_DATA => $node['attributes'],
+            ProductAttribute::CONTEXT => $node['attributes'],
             ProductAttribute::VALUE => $value,
         ];
     }

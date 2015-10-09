@@ -15,6 +15,7 @@ use LizardsAndPumpkins\Product\Composite\Exception\ConfigurableProductAssociated
 
 class ConfigurableProduct implements Product
 {
+    const SIMPLE_PRODUCT = 'simple_product';
     use RehydrateableProductTrait;
     
     const TYPE_CODE = 'configurable';
@@ -68,7 +69,7 @@ class ConfigurableProduct implements Product
     {
         self::validateTypeCodeInSourceArray(self::TYPE_CODE, $sourceArray);
         return new self(
-            SimpleProduct::fromArray($sourceArray['simple_product']),
+            SimpleProduct::fromArray($sourceArray[self::SIMPLE_PRODUCT]),
             ProductVariationAttributeList::fromArray($sourceArray['variation_attributes']),
             AssociatedProductList::fromArray($sourceArray['associated_products'])
         );
@@ -81,7 +82,7 @@ class ConfigurableProduct implements Product
     {
         return [
             Product::TYPE_KEY => self::TYPE_CODE,
-            'simple_product' => $this->simpleProductDelegate,
+            self::SIMPLE_PRODUCT => $this->simpleProductDelegate,
             'variation_attributes' => $this->variationAttributes,
             'associated_products' => $this->associatedProducts,
         ];

@@ -68,12 +68,12 @@ class ProductImageTest extends \PHPUnit_Framework_TestCase
     {
         $imageFileAttribute = ProductAttribute::fromArray([
             ProductAttribute::CODE => ProductImage::FILE,
-            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::CONTEXT => [],
             ProductAttribute::VALUE => 'test.png'
         ]);
         $imageLabelAttribute = ProductAttribute::fromArray([
             ProductAttribute::CODE => ProductImage::LABEL,
-            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::CONTEXT => [],
             ProductAttribute::VALUE => 'Foo bar buz'
         ]);
         $sourceProductImage = new ProductImage(new ProductAttributeList($imageFileAttribute, $imageLabelAttribute));

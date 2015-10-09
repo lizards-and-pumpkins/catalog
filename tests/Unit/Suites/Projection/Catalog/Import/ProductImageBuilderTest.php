@@ -28,7 +28,7 @@ class ProductImageBuilderTest extends \PHPUnit_Framework_TestCase
     private $testAttributeArray = [
         [
             ProductAttribute::CODE => ProductImage::FILE,
-            ProductAttribute::CONTEXT_DATA => [],
+            ProductAttribute::CONTEXT => [],
             ProductAttribute::VALUE => 'test.jpg'
         ]
     ];

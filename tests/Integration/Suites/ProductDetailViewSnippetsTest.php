@@ -3,12 +3,10 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\DataPool\KeyValue\KeyNotFoundException;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\Utils\XPathParser;
 
 class ProductDetailViewSnippetsTest extends AbstractIntegrationTest
@@ -143,16 +141,21 @@ class ProductDetailViewSnippetsTest extends AbstractIntegrationTest
 
         $snippet = $this->getProductJsonSnippetForId($productIdString);
 
-        $this->assertEquals($productIdString, SimpleProduct::fromArray(json_decode($snippet, true))->getId());
+        $productData = json_decode($snippet, true);
+        $this->assertEquals($productIdString, $productData['product_id']);
+        $this->assertEquals('simple', $productData['type_code']);
     }
 
-    public function testConfigurableProductJsonSnippetsAreNotWrittenForSimpleProducts()
+    public function testConfigurableProductJsonSnippetsAreAlsoWrittenForSimpleProducts()
     {
-        $this->setExpectedException(KeyNotFoundException::class);
         $this->importCatalog();
+        $this->failIfMessagesWhereLogged($this->factory->getLogger());
 
         $productIdString = $this->getSkuOfFirstSimpleProductInFixture();
-        $this->getConfigurableProductVariationAttributesJsonSnippetForId($productIdString);
+        $variationsSnippet = $this->getConfigurableProductVariationAttributesJsonSnippetForId($productIdString);
+        $associatedProductSnippet = $this->getConfigurableProductAssociatedProductsJsonSnippetForId($productIdString);
+        $this->assertEmpty(json_decode($variationsSnippet, true));
+        $this->assertEmpty(json_decode($associatedProductSnippet, true));
     }
 
     public function testConfigurableProductSnippetsAreWrittenToDataPool()

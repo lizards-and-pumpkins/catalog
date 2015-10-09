@@ -9,7 +9,7 @@ class ProductAttribute implements \JsonSerializable
 {
     const CODE = 'code';
     const VALUE = 'value';
-    const CONTEXT_DATA = 'contextData';
+    const CONTEXT = 'contextData';
 
     /**
      * @var AttributeCode
@@ -47,7 +47,7 @@ class ProductAttribute implements \JsonSerializable
     {
         $code = AttributeCode::fromString($attribute[self::CODE]);
         $value = $attribute[self::VALUE];
-        return new self($code, $value, $attribute[self::CONTEXT_DATA]);
+        return new self($code, $value, $attribute[self::CONTEXT]);
     }
 
     /**
@@ -161,7 +161,7 @@ class ProductAttribute implements \JsonSerializable
     {
         return [
             self::CODE => $this->code,
-            self::CONTEXT_DATA => $this->contextData,
+            self::CONTEXT => $this->contextData,
             self::VALUE => $this->value
         ];
     }
