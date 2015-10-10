@@ -131,6 +131,11 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     private $translatorRegistry;
 
     /**
+     * @var string
+     */
+    private $currentDataVersion;
+
+    /**
      * @param ProductWasUpdatedDomainEvent $event
      * @return ProductWasUpdatedDomainEventHandler
      */
@@ -882,10 +887,13 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     private function getCurrentDataVersion()
     {
-        /** @var DataPoolReader $dataPoolReader */
-        $dataPoolReader = $this->getMasterFactory()->createDataPoolReader();
+        if (null === $this->currentDataVersion) {
+            /** @var DataPoolReader $dataPoolReader */
+            $dataPoolReader = $this->getMasterFactory()->createDataPoolReader();
+            $this->currentDataVersion = $dataPoolReader->getCurrentDataVersion();
+        }
 
-        return $dataPoolReader->getCurrentDataVersion();
+        return $this->currentDataVersion;
     }
 
     /**
