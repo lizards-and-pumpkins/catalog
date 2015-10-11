@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\DomainEventHandler;
 
 class ProductWasUpdatedDomainEventHandler implements DomainEventHandler
@@ -17,24 +16,14 @@ class ProductWasUpdatedDomainEventHandler implements DomainEventHandler
      */
     private $projector;
 
-    /**
-     * @var ContextSource
-     */
-    private $contextSource;
-
-    public function __construct(
-        ProductWasUpdatedDomainEvent $event,
-        ContextSource $contextSource,
-        ProductProjector $projector
-    ) {
+    public function __construct(ProductWasUpdatedDomainEvent $event, ProductProjector $projector)
+    {
         $this->event = $event;
-        $this->contextSource = $contextSource;
         $this->projector = $projector;
     }
 
     public function process()
     {
-        $productSource = $this->event->getProductSource();
-        $this->projector->project($productSource, $this->contextSource);
+        $this->projector->project($this->event->getProduct());
     }
 }

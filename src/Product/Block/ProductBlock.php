@@ -45,16 +45,8 @@ class ProductBlock extends Block
     public function getMainProductImage()
     {
         $product = $this->getProduct();
-
-        /**
-         * todo: getAttributeValue should always return a string.
-         * todo: For images, it would be better to have a dedicated method, for example getImage or getAsset
-         */
-        $image = $product->getFirstValueOfAttribute('image');
-        $imageFile = $image->getAttributesWithCode('file')[0];
-        $imageLabel = $image->getAttributesWithCode('label')[0];
-
-        return new Image($imageFile->getValue(), $imageLabel->getValue());
+        
+        return new Image($product->getMainImageFileName(), $product->getMainImageLabel());
     }
 
     /**

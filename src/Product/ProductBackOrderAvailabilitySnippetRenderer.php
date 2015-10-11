@@ -42,25 +42,21 @@ class ProductBackOrderAvailabilitySnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param ProductSource $productSource
-     * @param ContextSource $contextSource
+     * @param Product $product
      * @return SnippetList
      */
-    public function render(ProductSource $productSource, ContextSource $contextSource)
+    public function render(Product $product)
     {
-        foreach ($contextSource->getAllAvailableContexts() as $context) {
-            $this->renderBackOrderAvailabilitySnippetInContext($productSource, $context);
-        }
+        $this->renderBackOrderAvailabilitySnippet($product);
 
         return $this->snippetList;
     }
 
-    private function renderBackOrderAvailabilitySnippetInContext(ProductSource $productSource, Context $context)
+    private function renderBackOrderAvailabilitySnippet(Product $product)
     {
-        $productInContext = $productSource->getProductForContext($context);
-
-        $snippetKey = $this->snippetKeyGenerator->getKeyForContext($context, [Product::ID => $productSource->getId()]);
-        $snippetContent = $productInContext->getFirstValueOfAttribute($this->backOrderAvailabilityAttributeCode);
+        $context = $product->getContext();
+        $snippetKey = $this->snippetKeyGenerator->getKeyForContext($context, [Product::ID => $product->getId()]);
+        $snippetContent = $product->getFirstValueOfAttribute($this->backOrderAvailabilityAttributeCode);
         $snippet = Snippet::create($snippetKey, $snippetContent);
 
         $this->snippetList->add($snippet);

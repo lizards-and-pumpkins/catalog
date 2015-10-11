@@ -79,7 +79,6 @@
             </xs:element>
         </xs:all>
         <xs:attribute name="sku" type="xs:string" use="required" />
-        <xs:attribute name="visible" type="xs:boolean" use="required" />
-        <xs:attribute name="tax_class_id" type="xs:integer" use="required" />
+        <xs:attribute name="type" type="xs:string" use="required" />
     </xs:complexType>
 </xs:schema>

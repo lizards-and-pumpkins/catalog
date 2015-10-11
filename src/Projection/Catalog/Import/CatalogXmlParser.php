@@ -3,10 +3,7 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
-use LizardsAndPumpkins\Product\ProductAttributeList;
-use LizardsAndPumpkins\Product\ProductId;
-use LizardsAndPumpkins\Product\ProductSource;
-use LizardsAndPumpkins\Product\SampleSku;
+use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportSourceFilePathIsNotAStringException;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportSourceXmlFileDoesNotExistException;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportSourceXmlFileIsNotReadableException;
@@ -21,9 +18,14 @@ class CatalogXmlParser
     private $xmlReader;
 
     /**
+     * @var Logger
+     */
+    private $logger;
+
+    /**
      * @var callable[]
      */
-    private $productSourceCallbacks = [];
+    private $productCallbacks = [];
 
     /**
      * @var callable[]
@@ -35,9 +37,10 @@ class CatalogXmlParser
      */
     private $productImageCallbacks = [];
 
-    private function __construct(\XmlReader $xmlReader)
+    private function __construct(\XMLReader $xmlReader, Logger $logger)
     {
         $this->xmlReader = $xmlReader;
+        $this->logger = $logger;
     }
 
     public function __destruct()
@@ -47,28 +50,30 @@ class CatalogXmlParser
 
     /**
      * @param string $sourceFilePath
+     * @param Logger $logger
      * @return CatalogXmlParser
      */
-    public static function fromFilePath($sourceFilePath)
+    public static function fromFilePath($sourceFilePath, Logger $logger)
     {
         self::validateSourceFilePathIsString($sourceFilePath);
         self::validateSourceFileExists($sourceFilePath);
         self::validateSourceFileIsReadable($sourceFilePath);
         $xmlReader = new \XMLReader();
         $xmlReader->open($sourceFilePath);
-        return new self($xmlReader);
+        return new self($xmlReader, $logger);
     }
 
     /**
      * @param string $xmlString
+     * @param Logger $logger
      * @return CatalogXmlParser
      */
-    public static function fromXml($xmlString)
+    public static function fromXml($xmlString, Logger $logger)
     {
         self::validateSourceXmlIsString($xmlString);
         $xmlReader = new \XMLReader();
-        $xmlReader->xml($xmlString);
-        return new self($xmlReader);
+        $xmlReader->XML($xmlString);
+        return new self($xmlReader, $logger);
     }
 
     /**
@@ -132,9 +137,9 @@ class CatalogXmlParser
             gettype($variable);
     }
 
-    public function registerProductSourceCallback(callable $callback)
+    public function registerProductCallback(callable $callback)
     {
-        $this->productSourceCallbacks[] = $callback;
+        $this->productCallbacks[] = $callback;
     }
 
     public function registerListingCallback(callable $callback)
@@ -151,12 +156,43 @@ class CatalogXmlParser
     {
         while ($this->xmlReader->read()) {
             if ($this->isProductNode()) {
-                $productXml = $this->xmlReader->readOuterXml();
-                $this->processCallbacksWithArg($this->productSourceCallbacks, $productXml);
-                $this->processImageCallbacksForProductXml($productXml);
+                $this->parseProductXml();
             } elseif ($this->isListingNode()) {
-                $this->processCallbacksWithCurrentNode($this->listingCallbacks);
+                $this->parseListingXml();
             }
+        }
+    }
+
+    private function parseProductXml()
+    {
+        $productXml = $this->xmlReader->readOuterXml();
+        try {
+            $this->processCallbacksWithArg($this->productCallbacks, $productXml);
+            $this->importProductImages($productXml);
+        } catch (\Exception $exception) {
+            $this->logger->log(new ProductImportCallbackFailureMessage($exception, $productXml));
+        }
+    }
+
+    /**
+     * @param string $productXml
+     */
+    private function importProductImages($productXml)
+    {
+        try {
+            $this->processImageCallbacksForProductXml($productXml);
+        } catch (\Exception $exception) {
+            $this->logger->log(new ProductImageImportCallbackFailureMessage($exception, $productXml));
+        }
+    }
+
+    private function parseListingXml()
+    {
+        $listingXml = $this->xmlReader->readOuterXml();
+        try {
+            $this->processCallbacksWithArg($this->listingCallbacks, $listingXml);
+        } catch (\Exception $exception) {
+            $this->logger->log(new CatalogListingImportCallbackFailureMessage($exception, $listingXml));
         }
     }
 
@@ -165,8 +201,10 @@ class CatalogXmlParser
      */
     private function processImageCallbacksForProductXml($productXml)
     {
-        $imageNodes = (new XPathParser($productXml))->getXmlNodesRawXmlArrayByXPath('/product/attributes/image');
-        array_map(function ($imageXml) {
+        $imageNodes = (new XPathParser($productXml))->getXmlNodesRawXmlArrayByXPath('/product/images/image');
+        // Suppress PHP printing warnings despite a wrapping try/catch block (what a fine PHP Bug).
+        // Note: the exception still gets raised as intended.
+        @array_map(function ($imageXml) {
             $this->processCallbacksWithArg($this->productImageCallbacks, $imageXml);
         }, $imageNodes);
     }
@@ -198,15 +236,6 @@ class CatalogXmlParser
             $this->xmlReader->nodeType === \XMLReader::ELEMENT &&
             $this->xmlReader->name === $name &&
             $this->xmlReader->depth === $depth;
-    }
-
-    /**
-     * @param callable[] $callbacks
-     */
-    private function processCallbacksWithCurrentNode(array $callbacks)
-    {
-        $xmlString = $this->xmlReader->readOuterXml();
-        $this->processCallbacksWithArg($callbacks, $xmlString);
     }
 
     /**

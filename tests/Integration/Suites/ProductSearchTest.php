@@ -33,6 +33,8 @@ class ProductSearchTest extends AbstractIntegrationTest
 
         $this->factory->createCommandConsumer()->process();
         $this->factory->createDomainEventConsumer()->process();
+        
+        $this->failIfMessagesWhereLogged($this->factory->getLogger());
     }
 
     private function importCatalog()

@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\Projector;
 use LizardsAndPumpkins\SnippetRendererCollection;
@@ -36,12 +35,11 @@ class ProductListingTemplateProjector implements Projector
 
     /**
      * @param mixed $productsPerPageSourceData
-     * @param ContextSource $contextSource
      */
-    public function project($productsPerPageSourceData, ContextSource $contextSource)
+    public function project($productsPerPageSourceData)
     {
         $productsPerPageList = $this->productsPerPageForContextListBuilder->fromJson($productsPerPageSourceData);
-        $snippetList = $this->snippetRendererCollection->render($productsPerPageList, $contextSource);
+        $snippetList = $this->snippetRendererCollection->render($productsPerPageList);
         $this->dataPoolWriter->writeSnippetList($snippetList);
     }
 }

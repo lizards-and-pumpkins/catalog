@@ -1,26 +1,26 @@
 <?xml version="1.0"?>
 <catalog xmlns="http://lizardsandpumpkins.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://lizardsandpumpkins.com ../../schema/catalog.xsd">
+         xsi:schemaLocation="http://lizardsandpumpkins.com ../../schema/catalog.xsd">
     <products>
-        <product type="simple" sku="118235-251" visible="true" tax_class_id="5">
-            <attributes>
+        <product type="simple" sku="118235-251">
+            <images>
                 <image>
-                    <main>true</main>
                     <file>2013_pro_touch_118235-251.jpg</file>
                     <label>The main image label</label>
                 </image>
-                <!--image>
-                    <show_in_gallery>false</show_in_gallery>
-                    <file>118235/118235-251.2.png</file>
+                <image>
+                    <file>2013_pro_touch_118235-251.jpg</file>
                     <label locale="de_DE">Der Text zum zweiten Bild</label>
                     <label locale="en_US">A secondary image label</label>
                 </image>
-                <image>
+                <!--<image>
                     <main_listing>true</main_listing>
                     <file locale="de_DE">118235/118235-251.2de.png</file>
                     <file locale="de_US">118235/118235-251.2us.png</file>
                     <label>A secondary image label</label>
                 </image-->
+            </images>
+            <attributes>
                 <category website="ru" locale="de_DE">sale</category>
                 <category website="ru" locale="de_DE">men</category>
                 <category website="ru" locale="de_DE">women</category>
@@ -34,8 +34,8 @@
                 <url_key locale="en_US">led-armflasher</url_key>
                 <name locale="de_DE">LED Arm-Signallampe</name>
                 <name locale="en_US">LED Armflasher</name>
-                <price website="ru">12.95</price>
                 <price website="ru">11.45</price>
+                <price website="cy">12.95</price>
                 <special_price website="ru">11.95</special_price>
                 <weight>11.2</weight>
                 <description locale="de_DE"><![CDATA[Pro Touch LED Armflasher<br />
@@ -53,13 +53,15 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 <color>000000</color>
             </attributes>
         </product>
-        
-        <product type="simple" sku="288193NEU" visible="true" tax_class_id="5">
-            <attributes>
+
+        <product type="simple" sku="288193NEU">
+            <images>
                 <image>
                     <file>288193_14.jpg</file>
                     <label/>
                 </image>
+            </images>
+            <attributes>
                 <url_key>adilette</url_key>
                 <name>Adilette</name>
                 <category>sale</category>
@@ -72,12 +74,14 @@ LED Armflasher with elastic Band and Flasher]]></description>
             </attributes>
         </product>
 
-        <product type="simple" sku="T4H2N-4701" visible="true" tax_class_id="5">
-            <attributes>
+        <product type="simple" sku="T4H2N-4701">
+            <images>
                 <image>
                     <file>t4h2n-4701_14.jpg</file>
                     <label/>
                 </image>
+            </images>
+            <attributes>
                 <url_key>gel-kayano-21</url_key>
                 <name>Gel-Kayano 21</name>
                 <category>sale</category>
@@ -91,12 +95,14 @@ LED Armflasher with elastic Band and Flasher]]></description>
             </attributes>
         </product>
 
-        <product type="simple" sku="L37069700" visible="true" tax_class_id="5">
-            <attributes>
+        <product type="simple" sku="L37069700">
+            <images>
                 <image>
                     <file>l37069700_14.jpg</file>
                     <label/>
                 </image>
+            </images>
+            <attributes>
                 <url_key>xa-pro-3d-gtx</url_key>
                 <name>XA Pro 3D GTX</name>
                 <category>sale</category>
@@ -110,12 +116,14 @@ LED Armflasher with elastic Band and Flasher]]></description>
             </attributes>
         </product>
 
-        <product type="simple" sku="T500N-4207" visible="true" tax_class_id="5">
-            <attributes>
+        <product type="simple" sku="T500N-4207">
+            <images>
                 <image>
                     <file>t500n-4207_14.jpg</file>
                     <label/>
                 </image>
+            </images>
+            <attributes>
                 <url_key>gt-2000-3</url_key>
                 <name>GT-2000 3</name>
                 <category>sale</category>
@@ -129,12 +137,14 @@ LED Armflasher with elastic Band and Flasher]]></description>
             </attributes>
         </product>
 
-        <product type="simple" sku="T507N-8501" visible="true" tax_class_id="5">
-            <attributes>
+        <product type="simple" sku="T507N-8501">
+            <images>
                 <image>
                     <file>t507n-8501_14.jpg</file>
                     <label/>
                 </image>
+            </images>
+            <attributes>
                 <url_key>gel-nimbus-17</url_key>
                 <name>Gel-Nimbus 17</name>
                 <category>sale</category>
@@ -148,12 +158,14 @@ LED Armflasher with elastic Band and Flasher]]></description>
             </attributes>
         </product>
 
-        <product type="simple" sku="T408Q-9030" visible="true" tax_class_id="5">
-            <attributes>
+        <product type="simple" sku="T408Q-9030">
+            <images>
                 <image>
                     <file>2014_asics_hw2014_t408q-9030_14_3.jpg</file>
                     <label/>
                 </image>
+            </images>
+            <attributes>
                 <url_key>gel-noosa-tri-9</url_key>
                 <name>Gel-Noosa Tri 9</name>
                 <category>sale</category>
@@ -167,12 +179,14 @@ LED Armflasher with elastic Band and Flasher]]></description>
             </attributes>
         </product>
 
-        <product type="simple" sku="T530N-0791" visible="true" tax_class_id="5">
-            <attributes>
+        <product type="simple" sku="T530N-0791">
+            <images>
                 <image>
                     <file>t530n-0791_14.jpg</file>
                     <label/>
                 </image>
+            </images>
+            <attributes>
                 <url_key>gel-noosa-tri-10</url_key>
                 <name>Gel-Noosa Tri 10</name>
                 <category>sale</category>
@@ -186,12 +200,14 @@ LED Armflasher with elastic Band and Flasher]]></description>
             </attributes>
         </product>
 
-        <product type="simple" sku="T530N-9030" visible="true" tax_class_id="5">
-            <attributes>
+        <product type="simple" sku="T530N-9030">
+            <images>
                 <image>
                     <file>t530n-9030_14.jpg</file>
                     <label/>
                 </image>
+            </images>
+            <attributes>
                 <url_key>gel-noosa-tri-10-2</url_key>
                 <name>Gel-Noosa Tri 10</name>
                 <category>sale</category>
@@ -205,12 +221,14 @@ LED Armflasher with elastic Band and Flasher]]></description>
             </attributes>
         </product>
 
-        <product type="simple" sku="T435N-0793" visible="true" tax_class_id="5">
-            <attributes>
+        <product type="simple" sku="T435N-0793">
+            <images>
                 <image>
                     <file>t435n-0793_14.jpg</file>
                     <label/>
                 </image>
+            </images>
+            <attributes>
                 <url_key>gel-nimbus-16</url_key>
                 <name>Gel-Nimbus 16</name>
                 <category>sale</category>
@@ -224,12 +242,14 @@ LED Armflasher with elastic Band and Flasher]]></description>
             </attributes>
         </product>
 
-        <product type="simple" sku="S20262-1" visible="true" tax_class_id="5">
-            <attributes>
+        <product type="simple" sku="S20262-1">
+            <images>
                 <image>
                     <file>s20262-1_14.jpg</file>
                     <label/>
                 </image>
+            </images>
+            <attributes>
                 <url_key>triumph-iso</url_key>
                 <name>Triumph Iso</name>
                 <category>sale</category>
@@ -244,12 +264,14 @@ LED Armflasher with elastic Band and Flasher]]></description>
             </attributes>
         </product>
 
-        <product type="simple" sku="T580N-2307" visible="true" tax_class_id="5">
-            <attributes>
+        <product type="simple" sku="T580N-2307">
+            <images>
                 <image>
                     <file>t580n-2307_14.jpg</file>
                     <label/>
                 </image>
+            </images>
+            <attributes>
                 <url_key>gel-noosa-10-4</url_key>
                 <name>Gel-Noosa 10</name>
                 <category>sale</category>
@@ -264,12 +286,14 @@ LED Armflasher with elastic Band and Flasher]]></description>
             </attributes>
         </product>
 
-        <product type="simple" sku="T580N-4907" visible="true" tax_class_id="5">
-            <attributes>
+        <product type="simple" sku="T580N-4907">
+            <images>
                 <image>
                     <file>t580n-4907_14.jpg</file>
                     <label/>
                 </image>
+            </images>
+            <attributes>
                 <url_key>gel-noosa-10-5</url_key>
                 <name>Gel-Noosa 10</name>
                 <category>sale</category>
@@ -284,12 +308,14 @@ LED Armflasher with elastic Band and Flasher]]></description>
             </attributes>
         </product>
 
-        <product type="simple" sku="T580N-0739" visible="true" tax_class_id="5">
-            <attributes>
+        <product type="simple" sku="T580N-0739">
+            <images>
                 <image>
                     <file>t580n-0739_14.jpg</file>
                     <label/>
                 </image>
+            </images>
+            <attributes>
                 <url_key>gel-noosa-10-3</url_key>
                 <name>Gel-Noosa 10</name>
                 <category>sale</category>
@@ -303,12 +329,14 @@ LED Armflasher with elastic Band and Flasher]]></description>
             </attributes>
         </product>
 
-        <product type="simple" sku="C523N-4907" visible="true" tax_class_id="5">
-            <attributes>
+        <product type="simple" sku="C523N-4907">
+            <images>
                 <image>
                     <file>c523n_4907_f_l_primary_asics_jpg.jpg</file>
                     <label/>
                 </image>
+            </images>
+            <attributes>
                 <url_key>gel-noosa-10-gs-9</url_key>
                 <name>Gel-Noosa Tri 10 GS</name>
                 <category>sale</category>
@@ -323,12 +351,14 @@ LED Armflasher with elastic Band and Flasher]]></description>
             </attributes>
         </product>
 
-        <product type="simple" sku="C523N-0791" visible="true" tax_class_id="5">
-            <attributes>
+        <product type="simple" sku="C523N-0791">
+            <images>
                 <image>
                     <file>c523n_0791_f_l_primary_asics_jpg.jpg</file>
                     <label/>
                 </image>
+            </images>
+            <attributes>
                 <url_key>gel-noosa-10-gs-8</url_key>
                 <name>Gel-Noosa Tri 10 GS</name>
                 <category>sale</category>
@@ -342,27 +372,25 @@ LED Armflasher with elastic Band and Flasher]]></description>
             </attributes>
         </product>
 
-        <product type="configurable" sku="218765-333" visible="true" tax_class_id="5">
-            <attributes>
+        <product type="configurable" sku="218765-333">
+            <images>
                 <image>
-                    <main>true</main>
                     <file>m18108_1.jpg</file>
                     <label locale="de_DE">Das Hauptbild</label>
                     <label locale="en_US">The main image label for this shoe</label>
                 </image>
                 <!--image>
-                    <file locale="de_DE">218765/218765-333.2de.png</file>
-                    <file locale="en_US">218765/218765-333.2en.png</file>
+                    <file locale="de_DE">218765-333.2de.png</file>
+                    <file locale="en_US">218765-333.2en.png</file>
                     <label>Der Text zum zweiten Bild</label>
-                </image>
+                </image>-->
                 <image>
                     <main_listing>true</main_listing>
-                    <file>218765/218765-333.3.png</file>
+                    <file>218765-333.3.jpg</file>
                     <label>Yet another image label</label>
-                </image-->
-                <pdf>
-                    <file>guarantee-document.pdf</file>
-                </pdf>
+                </image>
+            </images>
+            <attributes>
                 <url_key>adipure-360</url_key>
                 <category>sale</category>
                 <category>men-running-shoes</category>
@@ -386,91 +414,66 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 <brand>Adidas</brand>
                 <style>Natural-Running (Free)</style>
                 <gender>Herren</gender>
-                <color>a7fa41</color>
             </attributes>
+            <variations>
+                <attribute>color</attribute>
+                <attribute>size</attribute>
+            </variations>
             <associated_products>
-                <product sku="218765-333-1" visible="false" tax_class_id="5">
+                <product sku="218765-333-1" type="simple">
                     <attributes>
                         <stock_qty>5</stock_qty>
-                        <color>
-                            <label locale="en_US">Red</label>
-                            <label locale="de_DE">Rot</label>
-                        </color>
-                        <size>
-                            <label>US 12.5 - EU 47</label>
-                        </size>
+                        <color locale="en_US">Red</color>
+                        <color locale="de_DE">Rot</color>
+                        <size>US 12.5 - EU 47</size>
                     </attributes>
                 </product>
-                <product sku="218765-333-2" visible="false" tax_class_id="5">
+                <product sku="218765-333-2" type="simple">
                     <attributes>
                         <stock_qty>750</stock_qty>
-                        <color>
-                            <label locale="en_US">Red</label>
-                            <label locale="de_DE">Rot</label>
-                        </color>
-                        <size>
-                            <label>US 12 - EU 46</label>
-                        </size>
+                        <color locale="en_US">Red</color>
+                        <color locale="de_DE">Rot</color>
+                        <size>US 12 - EU 46</size>
                     </attributes>
                 </product>
-                <product sku="218765-333-3" visible="false" tax_class_id="5">
+                <product sku="218765-333-3" type="simple">
                     <attributes>
                         <stock_qty>45</stock_qty>
-                        <color>
-                            <label locale="en_US">Red</label>
-                            <label locale="de_DE">Rot</label>
-                        </color>
-                        <size>
-                            <label>US 11.5 - EU 45</label>
-                        </size>
+                        <color locale="en_US">Red</color>
+                        <color locale="de_DE">Rot</color>
+                        <size>US 11.5 - EU 45</size>
                     </attributes>
                 </product>
-                <product sku="218765-333-4" visible="false" tax_class_id="5">
+                <product sku="218765-333-4" type="simple">
                     <attributes>
                         <stock_qty>5</stock_qty>
-                        <color>
-                            <label locale="en_US">Red</label>
-                            <label locale="de_DE">Rot</label>
-                        </color>
-                        <size>
-                            <label>US 10 - EU 43</label>
-                        </size>
+                        <color locale="en_US">Red</color>
+                        <color locale="de_DE">Rot</color>
+                        <size>US 10 - EU 43</size>
                     </attributes>
                 </product>
-                <product sku="218765-333-5" visible="false" tax_class_id="5">
+                <product sku="218765-333-5" type="simple">
                     <attributes>
                         <stock_qty>5</stock_qty>
-                        <color>
-                            <label locale="en_US">Blue</label>
-                            <label locale="de_DE">Blau</label>
-                        </color>
-                        <size>
-                            <label>US 12.5 - EU 47</label>
-                        </size>
+                        <color locale="en_US">Blue</color>
+                        <color locale="de_DE">Blau</color>
+                        <size>US 12.5 - EU 47</size>
                     </attributes>
                 </product>
-                <product sku="218765-333-6" visible="false" tax_class_id="5">
+                <product sku="218765-333-6" type="simple">
                     <attributes>
                         <stock_qty>5</stock_qty>
-                        <color>
-                            <label locale="en_US">Blue</label>
-                            <label locale="de_DE">Blau</label>
-                        </color>
-                        <size>
-                            <label>US 12 - EU 46</label>
-                        </size>
+                        <color locale="en_US">Blue</color>
+                        <color locale="de_DE">Blau</color>
+                        <size>US 12 - EU 46</size>
                     </attributes>
                 </product>
-                <product sku="218765-333-7" visible="false" tax_class_id="5">
+                <product sku="218765-333-7" type="simple">
                     <attributes>
                         <stock_qty>5</stock_qty>
-                        <color>
-                            <label locale="en_US">Blue</label>
-                            <label locale="de_DE">Blau</label>
-                        </color>
-                        <size>
-                            <label>US 11.5 - EU 45</label>
-                        </size>
+                        <color locale="en_US">Blue</color>
+                        <color locale="de_DE">Blau</color>
+                        <size>US 11.5 - EU 45</size>
                     </attributes>
                 </product>
             </associated_products>

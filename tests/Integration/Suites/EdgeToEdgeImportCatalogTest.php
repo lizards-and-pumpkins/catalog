@@ -5,9 +5,10 @@ namespace LizardsAndPumpkins;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpResourceNotFoundResponse;
+use LizardsAndPumpkins\Log\LogMessage;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductDetailViewInContextSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -46,7 +47,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
     {
         $productId = ProductId::fromString('118235-251');
         $productName = 'LED Arm-Signallampe';
-        $productPrice = 1295;
+        $productPrice = 1145;
         $productBackOrderAvailability = 'true';
 
         $this->importCatalog('catalog.xml');
@@ -62,7 +63,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $context = $contextSource->getAllAvailableContexts()[0];
 
         $productDetailViewKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
-            ProductDetailViewInContextSnippetRenderer::CODE
+            ProductDetailViewSnippetRenderer::CODE
         );
         $productDetailViewKey = $productDetailViewKeyGenerator->getKeyForContext(
             $context,
@@ -155,14 +156,12 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
     {
         $this->importCatalog('catalog-with-invalid-product.xml');
 
-        $dataPoolReader = $this->factory->createDataPoolReader();
-
         $contextSource = $this->factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[0];
 
         $keyGeneratorLocator = $this->factory->getSnippetKeyGeneratorLocator();
         $productDetailViewKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
-            ProductDetailViewInContextSnippetRenderer::CODE
+            ProductDetailViewSnippetRenderer::CODE
         );
 
         $validProductId = ProductId::fromString('288193NEU');
@@ -177,25 +176,34 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
             [Product::ID => $invalidProductId]
         );
 
-        $this->assertTrue($dataPoolReader->hasSnippet($validProductDetailViewSnippetKey));
-        $this->assertFalse($dataPoolReader->hasSnippet($invalidProductDetailViewSnippetKey));
+        $dataPoolReader = $this->factory->createDataPoolReader();
+        $this->assertTrue(
+            $dataPoolReader->hasSnippet($validProductDetailViewSnippetKey),
+            sprintf('Expected snippet "%s" not found in data pool', $validProductDetailViewSnippetKey)
+        );
+        $this->assertFalse(
+            $dataPoolReader->hasSnippet($invalidProductDetailViewSnippetKey),
+            sprintf('Unexpected product snippet "%s" found in data pool', $invalidProductDetailViewSnippetKey)
+        );
 
         $logger = $this->factory->getLogger();
         $messages = $logger->getMessages();
-
-        $importExceptionMessage = 'Attributes with different context parts can not be combined into one list';
+        
+        $importExceptionMessage = 'The attribute "price" has multiple values with ' .
+            'different contexts which can not be part of one product attribute list';
         $expectedLoggedErrorMessage = sprintf(
-            "Failed to import product ID: %s due to following reason:\n%s",
+            'Error during processing catalog product XML import for product "%s": %s',
             $invalidProductId,
             $importExceptionMessage
         );
         $this->assertContains($expectedLoggedErrorMessage, $messages, 'Product import failure was not logged.');
-
+        
         if (!empty($messages)) {
-            $messageString = implode(PHP_EOL, $messages);
-            if ($messageString !== $expectedLoggedErrorMessage) {
-                $this->fail($messageString);
-            }
+            array_map(function (LogMessage $message) use ($expectedLoggedErrorMessage) {
+                if ($expectedLoggedErrorMessage != $message) {
+                    $this->fail($message);
+                }
+            }, $messages);
         }
     }
 }

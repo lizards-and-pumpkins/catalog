@@ -6,6 +6,11 @@ class SearchCriteriaBuilder
 {
     const FILTER_RANGE_DELIMITER = '~';
 
+    /**
+     * @param string $parameterName
+     * @param string $parameterValue
+     * @return SearchCriteria
+     */
     public function fromRequestParameter($parameterName, $parameterValue)
     {
         $rangeMatchExpression = sprintf('/^([^%1$s]+)%1$s([^%1$s]+)/', self::FILTER_RANGE_DELIMITER);

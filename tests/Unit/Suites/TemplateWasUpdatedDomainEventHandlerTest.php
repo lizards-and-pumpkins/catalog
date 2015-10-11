@@ -3,7 +3,6 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\ContextSource;
-use LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder;
 
 /**
  * @covers \LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler

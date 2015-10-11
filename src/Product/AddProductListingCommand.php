@@ -7,20 +7,20 @@ use LizardsAndPumpkins\Command;
 class AddProductListingCommand implements Command
 {
     /**
-     * @var ProductListingMetaInfo
+     * @var ProductListingCriteria
      */
-    private $productListingMetaInfo;
+    private $productListingCriteria;
 
-    public function __construct(ProductListingMetaInfo $productListingMetaInfo)
+    public function __construct(ProductListingCriteria $productListingCriteria)
     {
-        $this->productListingMetaInfo = $productListingMetaInfo;
+        $this->productListingCriteria = $productListingCriteria;
     }
 
     /**
-     * @return ProductListingMetaInfo
+     * @return ProductListingCriteria
      */
-    public function getProductListingMetaInfo()
+    public function getProductListingCriteria()
     {
-        return $this->productListingMetaInfo;
+        return $this->productListingCriteria;
     }
 }

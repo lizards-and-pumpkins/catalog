@@ -4,8 +4,6 @@ namespace LizardsAndPumpkins\Product\Block;
 
 use LizardsAndPumpkins\Image;
 use LizardsAndPumpkins\Product\Product;
-use LizardsAndPumpkins\Product\ProductAttribute;
-use LizardsAndPumpkins\Product\ProductAttributeList;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Renderer\Block;
 use LizardsAndPumpkins\Renderer\BlockRenderer;
@@ -13,6 +11,7 @@ use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
  * @covers \LizardsAndPumpkins\Product\Block\ProductBlock
+ * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Renderer\Block
  * @uses   \LizardsAndPumpkins\Image
  */
@@ -34,7 +33,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
     {
         /** @var  $stubBlockRenderer BlockRenderer|\PHPUnit_Framework_MockObject_MockObject */
         $stubBlockRenderer = $this->getMock(BlockRenderer::class, [], [], '', false);
-        $this->stubProduct = $this->getMock(Product::class, [], [], '', false);
+        $this->stubProduct = $this->getMock(Product::class);
 
         $this->productBlock = new ProductBlock($stubBlockRenderer, 'foo.phtml', 'foo', $this->stubProduct);
     }
@@ -117,20 +116,9 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
 
     public function testInstanceOfImageIsReturned()
     {
-        $stubAttribute = $this->getMock(ProductAttribute::class, [], [], '', false);
+        $this->stubProduct->method('getMainImageFileName')->willReturn('test.jpg');
+        $this->stubProduct->method('getMainImageLabel')->willReturn('');
 
-        $mockProductAttributeList = $this->getMock(ProductAttributeList::class);
-        $mockProductAttributeList->expects($this->exactly(2))
-            ->method('getAttributesWithCode')
-            ->willReturn([$stubAttribute]);
-
-        $this->stubProduct->expects($this->once())
-            ->method('getFirstValueOfAttribute')
-            ->with('image')
-            ->willReturn($mockProductAttributeList);
-
-        $result = $this->productBlock->getMainProductImage();
-
-        $this->assertInstanceOf(Image::class, $result);
+        $this->assertInstanceOf(Image::class, $this->productBlock->getMainProductImage());
     }
 }

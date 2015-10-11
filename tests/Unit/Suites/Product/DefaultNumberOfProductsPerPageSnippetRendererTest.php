@@ -26,6 +26,11 @@ class DefaultNumberOfProductsPerPageSnippetRendererTest extends \PHPUnit_Framewo
     private $stubSnippetKeyGenerator;
 
     /**
+     * @var ContextSource|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubContextSource;
+
+    /**
      * @var DefaultNumberOfProductsPerPageSnippetRenderer
      */
     private $renderer;
@@ -34,10 +39,13 @@ class DefaultNumberOfProductsPerPageSnippetRendererTest extends \PHPUnit_Framewo
     {
         $this->mockSnippetList = $this->getMock(SnippetList::class);
         $this->stubSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $this->stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
+        $this->stubContextSource->method('getContextsForParts')->willReturn([$this->getMock(Context::class)]);
 
         $this->renderer = new DefaultNumberOfProductsPerPageSnippetRenderer(
             $this->mockSnippetList,
-            $this->stubSnippetKeyGenerator
+            $this->stubSnippetKeyGenerator,
+            $this->stubContextSource
         );
     }
 
@@ -55,11 +63,6 @@ class DefaultNumberOfProductsPerPageSnippetRendererTest extends \PHPUnit_Framewo
         $stubProductsPerPageForContextList->method('getListOfAvailableNumberOfProductsPerPageForContext')
             ->willReturn([$dummyNumberOfProductsPerPage]);
 
-        $stubContext = $this->getMock(Context::class);
-        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
-        $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
-        $stubContextSource->method('getContextsForParts')->willReturn([$stubContext]);
-
         $this->stubSnippetKeyGenerator->method('getContextPartsUsedForKey')->willReturn(['foo']);
         $this->stubSnippetKeyGenerator->method('getKeyForContext')->willReturn($dummySnippetKey);
 
@@ -67,6 +70,6 @@ class DefaultNumberOfProductsPerPageSnippetRendererTest extends \PHPUnit_Framewo
 
         $this->mockSnippetList->expects($this->once())->method('add')->with($expectedSnippet);
 
-        $this->renderer->render($stubProductsPerPageForContextList, $stubContextSource);
+        $this->renderer->render($stubProductsPerPageForContextList);
     }
 }

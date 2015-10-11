@@ -2,17 +2,17 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\Attribute;
+use LizardsAndPumpkins\Product\Exception\InvalidProductAttributeValueException;
 use LizardsAndPumpkins\Product\Exception\ProductAttributeDoesNotContainContextPartException;
 
-class ProductAttribute implements Attribute
+class ProductAttribute implements \JsonSerializable
 {
     const CODE = 'code';
     const VALUE = 'value';
-    const CONTEXT_DATA = 'contextData';
-    
+    const CONTEXT = 'contextData';
+
     /**
-     * @var string
+     * @var AttributeCode
      */
     private $code;
 
@@ -27,13 +27,15 @@ class ProductAttribute implements Attribute
     private $value;
 
     /**
-     * @param string $code
+     * @param AttributeCode|string $code
      * @param string|ProductAttributeList $value
      * @param string[] $contextData
      */
-    private function __construct($code, $value, array $contextData = [])
+    public function __construct($code, $value, array $contextData)
     {
-        $this->code = $code;
+        $attributeCode = AttributeCode::fromString($code);
+        $this->validateValue($value, $attributeCode);
+        $this->code = $attributeCode;
         $this->contextData = $contextData;
         $this->value = $value;
     }
@@ -44,24 +46,33 @@ class ProductAttribute implements Attribute
      */
     public static function fromArray(array $attribute)
     {
-        return new self(
-            $attribute[self::CODE],
-            self::getValueRecursive($attribute[self::VALUE]),
-            $attribute[self::CONTEXT_DATA]
-        );
+        return new self($attribute[self::CODE], $attribute[self::VALUE], $attribute[self::CONTEXT]);
     }
 
     /**
-     * @param string|mixed[] $attributeValue
-     * @return string|ProductAttributeList
+     * @param string $value
+     * @param AttributeCode $code
      */
-    private static function getValueRecursive($attributeValue)
+    private function validateValue($value, AttributeCode $code)
     {
-        return is_array($attributeValue) ?
-            ProductAttributeList::fromArray($attributeValue) :
-            $attributeValue;
+        if (!is_scalar($value)) {
+            $type = $this->getType($value);
+            $message = sprintf('The product attribute "%s" has to have a scalar value, got "%s"', $code, $type);
+            throw new InvalidProductAttributeValueException($message);
+        }
     }
-    
+
+    /**
+     * @param mixed $variable
+     * @return string
+     */
+    private function getType($variable)
+    {
+        return is_object($variable) ?
+            get_class($variable) :
+            gettype($variable);
+    }
+
     /**
      * @return string[]
      */
@@ -79,21 +90,13 @@ class ProductAttribute implements Attribute
         $ownContextParts = $this->getContextParts();
         $foreignContextParts = $attribute->getContextParts();
 
-        return !array_diff($ownContextParts, $foreignContextParts) &&
-               !array_diff($foreignContextParts, $ownContextParts);
+        return
+            !array_diff($ownContextParts, $foreignContextParts) &&
+            !array_diff($foreignContextParts, $ownContextParts);
     }
 
     /**
-     * @param ProductAttribute $attribute
-     * @return bool
-     */
-    public function hasSameCodeAs(ProductAttribute $attribute)
-    {
-        return $this->code === $attribute->getCode();
-    }
-
-    /**
-     * @return string
+     * @return AttributeCode
      */
     public function getCode()
     {
@@ -101,16 +104,19 @@ class ProductAttribute implements Attribute
     }
 
     /**
-     * @param string $codeExpectation
+     * @param string|AttributeCode|ProductAttribute $attributeCode
      * @return bool
      */
-    public function isCodeEqualsTo($codeExpectation)
+    public function isCodeEqualTo($attributeCode)
     {
-        return $codeExpectation == $this->code;
+        $codeToCompare = $attributeCode instanceof ProductAttribute ?
+            $attributeCode->getCode() :
+            $attributeCode;
+        return $this->code->isEqualTo($codeToCompare);
     }
 
     /**
-     * @return string|ProductAttributeList
+     * @return string
      */
     public function getValue()
     {
@@ -145,5 +151,60 @@ class ProductAttribute implements Attribute
     public function getContextDataSet()
     {
         return $this->contextData;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    public function jsonSerialize()
+    {
+        return [
+            self::CODE => $this->code,
+            self::CONTEXT => $this->contextData,
+            self::VALUE => $this->value
+        ];
+    }
+
+    /**
+     * @param ProductAttribute $otherAttribute
+     * @return bool
+     */
+    public function isEqualTo(ProductAttribute $otherAttribute)
+    {
+        return
+            $this->isCodeEqualTo($otherAttribute) &&
+            $this->isValueEqualTo($otherAttribute) &&
+            $this->isContextDataSetEqualTo($otherAttribute);
+    }
+
+    /**
+     * @param ProductAttribute $otherAttribute
+     * @return bool
+     */
+    private function isValueEqualTo(ProductAttribute $otherAttribute)
+    {
+        return $this->value === $otherAttribute->getValue();
+    }
+
+    /**
+     * @param ProductAttribute $otherAttribute
+     * @return bool
+     */
+    private function isContextDataSetEqualTo(ProductAttribute $otherAttribute)
+    {
+        return $this->hasSameContextPartsAs($otherAttribute) && $this->hasSameContextPartValuesAs($otherAttribute);
+    }
+
+    /**
+     * @param ProductAttribute $otherAttribute
+     * @return bool
+     */
+    private function hasSameContextPartValuesAs(ProductAttribute $otherAttribute)
+    {
+        return array_reduce($otherAttribute->getContextParts(), function ($carry, $contextPart) use ($otherAttribute) {
+            $myValue = $this->getContextPartValue($contextPart);
+            $otherValue = $otherAttribute->getContextPartValue($contextPart);
+            return $carry && $myValue === $otherValue;
+        }, true);
     }
 }

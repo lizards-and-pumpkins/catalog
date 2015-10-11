@@ -3,39 +3,40 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Image\AddImageCommand;
 use LizardsAndPumpkins\Log\Logger;
-use LizardsAndPumpkins\Product\Exception\ProductAttributeContextPartsMismatchException;
+use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductId;
-use LizardsAndPumpkins\Product\ProductSource;
 use LizardsAndPumpkins\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Product\AddProductListingCommand;
-use LizardsAndPumpkins\Product\ProductListingMetaInfo;
-use LizardsAndPumpkins\Product\ProductListingMetaInfoBuilder;
-use LizardsAndPumpkins\Product\ProductSourceBuilder;
+use LizardsAndPumpkins\Product\ProductListingCriteria;
+use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportFileDoesNotExistException;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportFileNotReadableException;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\TestFileFixtureTrait;
+use LizardsAndPumpkins\Utils\XPathParser;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogXmlParser
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEvent
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImportCallbackFailureMessage
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageImportCallbackFailureMessage
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogListingImportCallbackFailureMessage
  * @uses   \LizardsAndPumpkins\Product\ProductId
  * @uses   \LizardsAndPumpkins\Product\AddProductListingCommand
  * @uses   \LizardsAndPumpkins\Product\UpdateProductCommand
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImportFailedMessage
- * @uses   \LizardsAndPumpkins\Utils\XPathParser
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogXmlParser
  * @uses   \LizardsAndPumpkins\Image\AddImageCommand
+ * @uses   \LizardsAndPumpkins\Utils\XPathParser
  * @uses   \LizardsAndPumpkins\Utils\UuidGenerator
  * @uses   \LizardsAndPumpkins\DataVersion
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEvent
  */
 class CatalogImportTest extends \PHPUnit_Framework_TestCase
 {
     use TestFileFixtureTrait;
-    
-    private $invalidProductsFixtureFile = __DIR__ . '/../../../../../shared-fixture/catalog-with-invalid-product.xml';
     
     private $sharedFixtureFilePath = __DIR__ . '/../../../../../shared-fixture/catalog.xml';
 
@@ -45,19 +46,19 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     private $mockCommandQueue;
 
     /**
-     * @var ProductSourceBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductXmlToProductBuilderLocator|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubProductSourceBuilder;
+    private $stubProductXmlToProductBuilder;
 
     /**
-     * @var ProductListingMetaInfoBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductListingCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubProductListingMetaInfoBuilder;
+    private $stubProductListingCriteriaBuilder;
 
     /**
      * @var Logger|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $logger;
+    private $mockLogger;
 
     /**
      * @var CatalogImport
@@ -80,6 +81,11 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     private $testDirectoryPath;
 
     /**
+     * @var ContextSource|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $contextSource;
+
+    /**
      * @param string $commandClass
      */
     private function assertCommandWasAddedToQueue($commandClass)
@@ -94,30 +100,31 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return ProductSourceBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @return ProductXmlToProductBuilderLocator|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createMockProductSourceBuilder()
+    private function createMockProductXmlToProductBuilder()
     {
-        /** @var ProductSource|\PHPUnit_Framework_MockObject_MockObject $stubProductSource */
-        $productSource = $this->getMock(ProductSource::class, [], [], '', false);
-        $productSource->method('getId')->willReturn(ProductId::fromString('dummy'));
+        /** @var ProductBuilder|\PHPUnit_Framework_MockObject_MockObject $stubProductBuilder */
+        $stubProductBuilder = $this->getMock(ProductBuilder::class);
+        $stubProductBuilder->method('getId')->willReturn(ProductId::fromString('dummy'));
+        $stubProductBuilder->method('getProductForContext')->willReturn($this->getMock(Product::class));
 
-        $productSourceBuilder = $this->getMock(ProductSourceBuilder::class, [], [], '', false);
-        $productSourceBuilder->method('createProductSourceFromXml')->willReturn($productSource);
-        return $productSourceBuilder;
+        $productXmlToProductBuilder = $this->getMock(ProductXmlToProductBuilderLocator::class, [], [], '', false);
+        $productXmlToProductBuilder->method('createProductBuilderFromXml')->willReturn($stubProductBuilder);
+        return $productXmlToProductBuilder;
     }
 
     /**
-     * @return ProductListingMetaInfoBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @return ProductListingCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createMockProductsPerPageForContextBuilder()
     {
-        $productListingMetaInfo = $this->getMock(ProductListingMetaInfo::class, [], [], '', false);
-        $productListingMetaInfo->method('getUrlKey')->willReturn('dummy-url-key');
+        $productListingCriteria = $this->getMock(ProductListingCriteria::class, [], [], '', false);
+        $productListingCriteria->method('getUrlKey')->willReturn('dummy-url-key');
 
-        $productsPerPageForContextBuilder = $this->getMock(ProductListingMetaInfoBuilder::class, [], [], '', false);
-        $productsPerPageForContextBuilder->method('createProductListingMetaInfoFromXml')
-            ->willReturn($productListingMetaInfo);
+        $productsPerPageForContextBuilder = $this->getMock(ProductListingCriteriaBuilder::class, [], [], '', false);
+        $productsPerPageForContextBuilder->method('createProductListingCriteriaFromXml')
+            ->willReturn($productListingCriteria);
         return $productsPerPageForContextBuilder;
     }
 
@@ -129,17 +136,22 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         $this->mockCommandQueue = $this->getMock(Queue::class);
         $this->addToCommandQueueSpy = $this->any();
         $this->mockCommandQueue->expects($this->addToCommandQueueSpy)->method('add');
-        $this->stubProductSourceBuilder = $this->createMockProductSourceBuilder();
-        $this->stubProductListingMetaInfoBuilder = $this->createMockProductsPerPageForContextBuilder();
+        $this->stubProductXmlToProductBuilder = $this->createMockProductXmlToProductBuilder();
+        $this->stubProductListingCriteriaBuilder = $this->createMockProductsPerPageForContextBuilder();
         $this->mockEventQueue = $this->getMock(Queue::class);
-        $this->logger = $this->getMock(Logger::class);
+        $this->contextSource = $this->getMock(ContextSource::class, [], [], '', false);
+        $this->contextSource->method('getAllAvailableContextsWithVersion')->willReturn(
+            [$this->getMock(Context::class)]
+        );
+        $this->mockLogger = $this->getMock(Logger::class);
 
         $this->catalogImport = new CatalogImport(
             $this->mockCommandQueue,
-            $this->stubProductSourceBuilder,
-            $this->stubProductListingMetaInfoBuilder,
+            $this->stubProductXmlToProductBuilder,
+            $this->stubProductListingCriteriaBuilder,
             $this->mockEventQueue,
-            $this->logger
+            $this->contextSource,
+            $this->mockLogger
         );
     }
 
@@ -163,17 +175,6 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         $this->createFixtureFile($importFilePath, '', 0000);
 
         $this->catalogImport->importFile($importFilePath);
-    }
-
-    public function testExceptionIsLoggedIfProductSourceIsInvalid()
-    {
-        $this->stubProductSourceBuilder->method('createProductSourceFromXml')
-            ->willThrowException(new ProductAttributeContextPartsMismatchException('dummy'));
-
-        $this->logger->expects($this->atLeastOnce())->method('log')
-            ->with($this->isInstanceOf(ProductImportFailedMessage::class));
-
-        $this->catalogImport->importFile($this->invalidProductsFixtureFile);
     }
 
     public function testUpdateProductCommandsAreEmitted()
@@ -203,4 +204,68 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
 
         $this->catalogImport->importFile($this->sharedFixtureFilePath);
     }
+
+    public function testItLogsExceptionsThrownWhileProcessingListingXml()
+    {
+        $this->mockLogger->expects($this->atLeastOnce())->method('log')
+            ->with($this->isInstanceOf(CatalogListingImportCallbackFailureMessage::class));
+
+        $mockCommandQueue = $this->getMock(Queue::class);
+        $mockCommandQueue->method('add')->willThrowException(new \Exception('dummy'));
+        
+        $this->catalogImport = new CatalogImport(
+            $mockCommandQueue,
+            $this->stubProductXmlToProductBuilder,
+            $this->stubProductListingCriteriaBuilder,
+            $this->mockEventQueue,
+            $this->contextSource,
+            $this->mockLogger
+        );
+
+        $fullXml = file_get_contents($this->sharedFixtureFilePath);
+        $onlyListingXml = (new XPathParser($fullXml))->getXmlNodesRawXmlArrayByXPath('/catalog/listings')[0];
+        $fixtureFile = $this->getUniqueTempDir() . '/listings.xml';
+        $this->createFixtureFile($fixtureFile, '<catalog>' . $onlyListingXml . '</catalog>');
+        $this->catalogImport->importFile($fixtureFile);
+    }
+
+    public function testItLogsExceptionsThrownDuringProductImport()
+    {
+        $this->mockLogger->expects($this->atLeastOnce())->method('log')
+            ->with($this->isInstanceOf(ProductImportCallbackFailureMessage::class));
+        
+        /** @var ProductBuilder|\PHPUnit_Framework_MockObject_MockObject $stubProductBuilder */
+        $stubProductBuilder = $this->getMock(ProductBuilder::class);
+        $stubProductBuilder->method('getProductForContext')->willThrowException(
+            new \Exception('dummy exception')
+        );
+
+        $stubProductXmlToProductBuilder = $this->getMock(ProductXmlToProductBuilderLocator::class, [], [], '', false);
+        $stubProductXmlToProductBuilder->method('createProductBuilderFromXml')->willReturn($stubProductBuilder);
+
+        $this->catalogImport = new CatalogImport(
+            $this->mockCommandQueue,
+            $stubProductXmlToProductBuilder,
+            $this->stubProductListingCriteriaBuilder,
+            $this->mockEventQueue,
+            $this->contextSource,
+            $this->mockLogger
+        );
+        
+        $this->catalogImport->importFile($this->sharedFixtureFilePath);
+    }
+
+    public function testItLogsExceptionsThrownDuringProductImageImport()
+    {
+        $this->mockLogger->expects($this->atLeastOnce())->method('log')
+            ->with($this->isInstanceOf(ProductImageImportCallbackFailureMessage::class));
+
+        $originalXml = file_get_contents($this->sharedFixtureFilePath);
+        $invalidImagesXml = preg_replace('#.(jpg|png)<#i', '.<', $originalXml);
+        $fixtureFile = $this->getUniqueTempDir() . '/listings.xml';
+        $this->createFixtureFile($fixtureFile, $invalidImagesXml);
+        $this->catalogImport->importFile($fixtureFile);
+    }
 }
+
+

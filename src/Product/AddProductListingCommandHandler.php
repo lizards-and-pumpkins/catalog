@@ -25,9 +25,8 @@ class AddProductListingCommandHandler implements CommandHandler
 
     public function process()
     {
-        $productListingMetaInfo = $this->command->getProductListingMetaInfo();
-        $urlKey = $productListingMetaInfo->getUrlKey();
+        $productListingCriteria = $this->command->getProductListingCriteria();
 
-        $this->domainEventQueue->add(new ProductListingWasAddedDomainEvent($urlKey, $productListingMetaInfo));
+        $this->domainEventQueue->add(new ProductListingWasAddedDomainEvent($productListingCriteria));
     }
 }

@@ -1,25 +1,22 @@
 define(['lib/url'], function (url) {
     var paginationQueryParameterName = 'p',
-        maxPaginationLinksToShow = 7;
+        maxNumberOfPagesAroundSelected = 2;
 
-    var createPreviousPaginationItem = function () {
+    var createPaginationItemWithLink = function (itemUrl, itemHtml, cssClass) {
         var item = document.createElement('LI'),
             link = document.createElement('A');
-        link.className = 'prev';
-        link.href = url.updateQueryParameter(paginationQueryParameterName, 1);
-        link.innerHTML = '&#9664;';
+        link.className = cssClass;
+        link.href = itemUrl;
+        link.innerHTML = itemHtml;
         item.appendChild(link);
 
         return item;
     };
 
-    var createNextPaginationItem = function (lastPageNumber) {
-        var item = document.createElement('LI'),
-            link = document.createElement('A');
-        link.className = 'next';
-        link.href = url.updateQueryParameter(paginationQueryParameterName, lastPageNumber);
-        link.innerHTML = '&#9654;';
-        item.appendChild(link);
+    var createPaginationItem = function (itemHtml, cssClass) {
+        var item = document.createElement('LI');
+        item.className = cssClass;
+        item.innerHTML = itemHtml;
 
         return item;
     };
@@ -33,35 +30,50 @@ define(['lib/url'], function (url) {
             }
 
             var pagination = document.createElement('OL'),
-                currentPageNumber = Math.max(1, url.getQueryParameterValue(paginationQueryParameterName));
+                selectedPageNumber = Math.max(1, url.getQueryParameterValue(paginationQueryParameterName));
 
-            if (totalPageCount && 1 < currentPageNumber) {
-                pagination.appendChild(createPreviousPaginationItem());
+            if (totalPageCount && 1 < selectedPageNumber) {
+                var previousPageUrl = url.updateQueryParameter(paginationQueryParameterName, selectedPageNumber - 1);
+                pagination.appendChild(createPaginationItemWithLink(previousPageUrl, '&#9664;', 'prev'));
             }
 
             for (var pageNumber = 1; pageNumber <= totalPageCount; pageNumber++) {
-                var paginationItem = document.createElement('LI');
-                if (totalPageCount > maxPaginationLinksToShow && currentPageNumber < totalPageCount - 1) {
-                    if (currentPageNumber === maxPaginationLinksToShow - 1) {
-                        paginationItem.textContent = '...';
-                        pagination.appendChild(paginationItem);
+                if (selectedPageNumber === pageNumber) {
+                    pagination.appendChild(createPaginationItem(pageNumber.toString(), 'current'));
+                    continue;
+                }
+
+                if (selectedPageNumber - maxNumberOfPagesAroundSelected > 0 && pageNumber == 1) {
+                    var firstPageUrl = url.updateQueryParameter(paginationQueryParameterName, 1);
+                    pagination.appendChild(createPaginationItemWithLink(firstPageUrl, pageNumber.toString(), ''));
+                    if (selectedPageNumber - maxNumberOfPagesAroundSelected - 1 > 1) {
+                        pagination.appendChild(createPaginationItem('...', 'spacing'));
                     }
                     continue;
                 }
-                if (currentPageNumber === pageNumber) {
-                    paginationItem.className = 'current';
-                    paginationItem.textContent = pageNumber.toString();
-                } else {
-                    var paginationLink = document.createElement('A');
-                    paginationLink.textContent = pageNumber.toString();
-                    paginationLink.href = url.updateQueryParameter(paginationQueryParameterName, pageNumber);
-                    paginationItem.appendChild(paginationLink);
+
+                if (selectedPageNumber + maxNumberOfPagesAroundSelected < totalPageCount && pageNumber == totalPageCount) {
+                    var lastPageUrl = url.updateQueryParameter(paginationQueryParameterName, totalPageCount);
+                    if (selectedPageNumber + maxNumberOfPagesAroundSelected + 1 < totalPageCount) {
+                        pagination.appendChild(createPaginationItem('...', 'spacing'));
+                    }
+                    pagination.appendChild(createPaginationItemWithLink(lastPageUrl, pageNumber.toString(), ''));
+                    continue;
                 }
-                pagination.appendChild(paginationItem);
+
+                if (pageNumber < selectedPageNumber - maxNumberOfPagesAroundSelected ||
+                    pageNumber > selectedPageNumber + maxNumberOfPagesAroundSelected
+                ) {
+                    continue;
+                }
+
+                var pageUrl = url.updateQueryParameter(paginationQueryParameterName, pageNumber);
+                pagination.appendChild(createPaginationItemWithLink(pageUrl, pageNumber.toString(), ''));
             }
 
-            if (totalPageCount && totalPageCount > currentPageNumber) {
-                pagination.appendChild(createNextPaginationItem(totalPageCount));
+            if (totalPageCount && totalPageCount > selectedPageNumber) {
+                var nextPageUrl = url.updateQueryParameter(paginationQueryParameterName, selectedPageNumber + 1);
+                pagination.appendChild(createPaginationItemWithLink(nextPageUrl, '&#9654;', 'next'));
             }
 
             paginationPlaceholder.appendChild(pagination);

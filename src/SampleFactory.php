@@ -51,7 +51,7 @@ class SampleFactory implements Factory
     public function createKeyValueStore()
     {
         $baseStorageDir = $this->getMasterFactory()->getFileStorageBasePathConfig();
-        $storagePath = $baseStorageDir . '/lizards-and-pumpkins/key-value-store';
+        $storagePath = $baseStorageDir . '/key-value-store';
         $this->createDirectoryIfNotExists($storagePath);
 
         return new FileKeyValueStore($storagePath);
@@ -63,8 +63,8 @@ class SampleFactory implements Factory
     public function createEventQueue()
     {
         $storageBasePath = $this->getMasterFactory()->getFileStorageBasePathConfig();
-        $storagePath = $storageBasePath . '/lizards-and-pumpkins/event-queue/content';
-        $lockFile = $storageBasePath . '/lizards-and-pumpkins/event-queue/lock';
+        $storagePath = $storageBasePath . '/event-queue/content';
+        $lockFile = $storageBasePath . '/event-queue/lock';
         return new FileQueue($storagePath, $lockFile);
     }
 
@@ -74,8 +74,8 @@ class SampleFactory implements Factory
     public function createCommandQueue()
     {
         $storageBasePath = $this->getMasterFactory()->getFileStorageBasePathConfig();
-        $storagePath = $storageBasePath . '/lizards-and-pumpkins/command-queue/content';
-        $lockFile = $storageBasePath . '/lizards-and-pumpkins/command-queue/lock';
+        $storagePath = $storageBasePath . '/command-queue/content';
+        $lockFile = $storageBasePath . '/command-queue/lock';
         return new FileQueue($storagePath, $lockFile);
     }
 
@@ -112,7 +112,7 @@ class SampleFactory implements Factory
     public function createSearchEngine()
     {
         $storageBasePath = $this->getMasterFactory()->getFileStorageBasePathConfig();
-        $searchEngineStoragePath = $storageBasePath . '/lizards-and-pumpkins/search-engine';
+        $searchEngineStoragePath = $storageBasePath . '/search-engine';
         $this->createDirectoryIfNotExists($searchEngineStoragePath);
 
         return FileSearchEngine::create($searchEngineStoragePath);
@@ -124,7 +124,7 @@ class SampleFactory implements Factory
     public function createUrlKeyStore()
     {
         $storageBasePath = $this->getMasterFactory()->getFileStorageBasePathConfig();
-        return new FileUrlKeyStore($storageBasePath . '/lizards-and-pumpkins/url-key-store');
+        return new FileUrlKeyStore($storageBasePath . '/url-key-store');
     }
 
     /**
@@ -302,7 +302,7 @@ class SampleFactory implements Factory
         $configReader = $this->getMasterFactory()->createConfigReader();
         $basePath = $configReader->get('file_storage_base_path');
         return null === $basePath ?
-            sys_get_temp_dir() :
+            sys_get_temp_dir() . '/lizards-and-pumpkins' :
             $basePath;
     }
     

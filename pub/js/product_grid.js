@@ -27,6 +27,14 @@ define(function () {
         return 'images/brands/brands-slider/' + brand + '.png';
     };
 
+    var turnIntoStringIfIsArray = function (operand) {
+        if (operand.isArray) {
+            return operand.join(', ');
+        }
+
+        return operand;
+    };
+
     return {
         renderGrid: function (productGridJson, productGridPlaceholderSelector) {
             var productGridPlaceholder = document.querySelector(productGridPlaceholderSelector);
@@ -44,13 +52,10 @@ define(function () {
                     title = document.createElement('H2'),
                     gender = document.createElement('P'),
                     productUrl = getBaseUrl() + product['attributes']['url_key'],
-                    productImage = createProductImage(
-                        product['attributes']['image'][0]['file'],
-                        product['attributes']['image'][0]['label']
-                    );
+                    productImage = createProductImage(product['images'][0]['file'], product['images'][0]['label']);
 
                 title.textContent = product['attributes']['name'];
-                gender.textContent = product['attributes']['gender'].join(', ');
+                gender.textContent = turnIntoStringIfIsArray(product['attributes']['gender']);
 
                 container.style.backgroundImage = 'url("' + getBrandLogoSrc(product['attributes']['brand']) + '")';
                 container.className = 'grid-cell-container';

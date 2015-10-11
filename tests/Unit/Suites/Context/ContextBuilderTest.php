@@ -77,6 +77,8 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param string $testCode
+     * @param string $expected
      * @dataProvider underscoreCodeDataProvider
      */
     public function testUnderscoresAreRemovesFromContextKey($testCode, $expected)
@@ -192,7 +194,6 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testItUsesTheVersionSuppliedInTheDataSetIfPresent()
     {
-        $testVersion = '100';
         $contextVersion111 = $this->builder->createContext([VersionedContext::CODE => '111']);
         $contextVersion222 = $this->builder->createContext([VersionedContext::CODE => '222']);
         $this->assertSame('111', $contextVersion111->getValue(VersionedContext::CODE));

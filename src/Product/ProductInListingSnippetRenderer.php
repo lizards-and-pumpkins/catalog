@@ -2,9 +2,8 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\InvalidProjectionSourceDataTypeException;
+use LizardsAndPumpkins\Projection\Catalog\InternalToPublicProductJsonData;
 use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetRenderer;
@@ -15,52 +14,48 @@ class ProductInListingSnippetRenderer implements SnippetRenderer
     const CODE = 'product_in_listing';
 
     /**
-     * @var SnippetList
-     */
-    private $snippetList;
-
-    /**
      * @var SnippetKeyGenerator
      */
     private $snippetKeyGenerator;
+    
+    /**
+     * @var InternalToPublicProductJsonData
+     */
+    private $internalToPublicProductJsonData;
 
-    public function __construct(SnippetList $snippetList, SnippetKeyGenerator $snippetKeyGenerator)
-    {
-        $this->snippetList = $snippetList;
+    public function __construct(
+        SnippetKeyGenerator $snippetKeyGenerator,
+        InternalToPublicProductJsonData $internalToPublicProductJsonData
+    ) {
         $this->snippetKeyGenerator = $snippetKeyGenerator;
+        $this->internalToPublicProductJsonData = $internalToPublicProductJsonData;
     }
 
     /**
      * @param mixed $projectionSourceData
-     * @param ContextSource $contextSource
      * @return SnippetList
      */
-    public function render($projectionSourceData, ContextSource $contextSource)
+    public function render($projectionSourceData)
     {
-        if (!($projectionSourceData instanceof ProductSource)) {
-            throw new InvalidProjectionSourceDataTypeException('First argument must be instance of ProductSource.');
+        if (!($projectionSourceData instanceof Product)) {
+            throw new InvalidProjectionSourceDataTypeException('First argument must be a Product instance.');
         }
 
-        $this->addProductInListingSnippetsToList($projectionSourceData, $contextSource);
-
-        return $this->snippetList;
+        $snippetList = new SnippetList();
+        $snippet = $this->getProductInListingSnippet($projectionSourceData);
+        $snippetList->add($snippet);
+        return $snippetList;
     }
 
-    private function addProductInListingSnippetsToList(ProductSource $productSource, ContextSource $contextSource)
+    /**
+     * @param Product $product
+     * @return Snippet
+     */
+    private function getProductInListingSnippet(Product $product)
     {
-        foreach ($contextSource->getAllAvailableContexts() as $context) {
-            $productInContext = $productSource->getProductForContext($context);
-            $this->addProductInListingInContextSnippetsToList($productInContext, $context);
-        }
-    }
-
-    private function addProductInListingInContextSnippetsToList(Product $product, Context $context)
-    {
-        $key = $this->snippetKeyGenerator->getKeyForContext($context, [Product::ID => $product->getId()]);
-        $content = json_encode($product);
-
-        $contentSnippet = Snippet::create($key, $content);
-
-        $this->snippetList->add($contentSnippet);
+        $key = $this->snippetKeyGenerator->getKeyForContext($product->getContext(), [Product::ID => $product->getId()]);
+        $internalJson = json_encode($product);
+        $publicJson = $this->internalToPublicProductJsonData->transformProduct(json_decode($internalJson, true));
+        return Snippet::create($key, json_encode($publicJson));
     }
 }

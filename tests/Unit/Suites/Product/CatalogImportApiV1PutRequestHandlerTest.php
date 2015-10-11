@@ -48,7 +48,7 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
 
     protected function setUp()
     {
-        $this->testImportDirectoryPath = $this->getUniqueTempDir() . '/test/atalog-import-directory';
+        $this->testImportDirectoryPath = $this->getUniqueTempDir() . '/test/catalog-import-directory';
         $this->createFixtureDirectory($this->testImportDirectoryPath);
         
         $this->mockCatalogImport = $this->getMock(CatalogImport::class, [], [], '', false);

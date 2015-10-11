@@ -10,9 +10,9 @@ use LizardsAndPumpkins\DomainEvent;
 class ProductWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ProductSource|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubProductSource;
+    private $stubProduct;
 
     /**
      * @var ProductWasUpdatedDomainEvent
@@ -23,8 +23,8 @@ class ProductWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
     {
         /** @var ProductId|\PHPUnit_Framework_MockObject_MockObject $stubProductId */
         $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
-        $this->stubProductSource = $this->getMock(ProductSource::class, [], [], '', false);
-        $this->domainEvent = new ProductWasUpdatedDomainEvent($stubProductId, $this->stubProductSource);
+        $this->stubProduct = $this->getMock(Product::class);
+        $this->domainEvent = new ProductWasUpdatedDomainEvent($stubProductId, $this->stubProduct);
     }
 
     public function testDomainEventInterfaceIsImplemented()
@@ -32,9 +32,9 @@ class ProductWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(DomainEvent::class, $this->domainEvent);
     }
 
-    public function testProductSourceIsReturned()
+    public function testProductIsReturned()
     {
-        $result = $this->domainEvent->getProductSource();
-        $this->assertSame($this->stubProductSource, $result);
+        $result = $this->domainEvent->getProduct();
+        $this->assertSame($this->stubProduct, $result);
     }
 }

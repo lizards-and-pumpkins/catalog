@@ -5,7 +5,6 @@ namespace LizardsAndPumpkins\Product;
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\Projection\UrlKeyForContextCollector;
 use LizardsAndPumpkins\Projector;
-use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\InvalidProjectionSourceDataTypeException;
 use LizardsAndPumpkins\SnippetRendererCollection;
 
@@ -45,26 +44,25 @@ class ProductProjector implements Projector
 
     /**
      * @param mixed $projectionSourceData
-     * @param ContextSource $contextSource
      */
-    public function project($projectionSourceData, ContextSource $contextSource)
+    public function project($projectionSourceData)
     {
-        if (!($projectionSourceData instanceof ProductSource)) {
-            throw new InvalidProjectionSourceDataTypeException('First argument must be instance of ProductSource.');
+        if (!($projectionSourceData instanceof Product)) {
+            throw new InvalidProjectionSourceDataTypeException('First argument must be a Product instance.');
         }
 
-        $this->projectProduct($projectionSourceData, $contextSource);
+        $this->projectProduct($projectionSourceData);
     }
 
-    private function projectProduct(ProductSource $productSource, ContextSource $contextSource)
+    private function projectProduct(Product $product)
     {
-        $snippetList = $this->rendererCollection->render($productSource, $contextSource);
+        $snippetList = $this->rendererCollection->render($product);
         $this->dataPoolWriter->writeSnippetList($snippetList);
 
-        $searchDocumentCollection = $this->searchDocumentBuilder->aggregate($productSource, $contextSource);
+        $searchDocumentCollection = $this->searchDocumentBuilder->aggregate($product);
         $this->dataPoolWriter->writeSearchDocumentCollection($searchDocumentCollection);
         
-        $urlKeysForContextsCollection = $this->urlKeyCollector->collectProductUrlKeys($productSource, $contextSource);
+        $urlKeysForContextsCollection = $this->urlKeyCollector->collectProductUrlKeys($product);
         $this->dataPoolWriter->writeUrlKeyCollection($urlKeysForContextsCollection);
     }
 }

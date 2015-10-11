@@ -30,7 +30,7 @@ class ProcessTimeLoggingDomainEventHandlerDecoratorTest extends \PHPUnit_Framewo
 
     protected function setUp()
     {
-        $this->mockDecoratedEventHandler = $this->getMock(DomainEventhandler::class);
+        $this->mockDecoratedEventHandler = $this->getMock(DomainEventHandler::class);
         $this->mockLogger = $this->getMock(Logger::class);
         $this->decorator = new ProcessTimeLoggingDomainEventHandlerDecorator(
             $this->mockDecoratedEventHandler,
@@ -49,13 +49,13 @@ class ProcessTimeLoggingDomainEventHandlerDecoratorTest extends \PHPUnit_Framewo
         $this->decorator->process();
     }
 
-    public function testItLoggsEachCallToProcess()
+    public function testItLogsEachCallToProcess()
     {
         $this->mockLogger->expects($this->once())->method('log');
         $this->decorator->process();
     }
 
-    public function testTheMessagFormat()
+    public function testTheMessageFormat()
     {
         $this->mockLogger->expects($this->once())->method('log')
             ->willReturnCallback(function (LogMessage $logMessage) {

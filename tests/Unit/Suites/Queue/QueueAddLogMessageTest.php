@@ -25,6 +25,7 @@ class QueueAddLogMessageTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array|int|float|string|resource|null $nonObject
+     * @param string $expected
      * @dataProvider nonObjectDataProvider
      */
     public function testItUsesTheDataTypeForTheStringRepresentationForNonObjects($nonObject, $expected)

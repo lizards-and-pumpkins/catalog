@@ -110,9 +110,11 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
         $selectedOptionValuesWithSiblings = $this->getSelectedOptionValuesWithSiblings($originalCriteria, $context);
         $filters = array_merge($collectionOptionValues, $selectedOptionValuesWithSiblings);
 
+        $sortedFilters = $this->sortFiltersArray($filters, $filterNames);
+
         $translator = $this->getTranslatorForContext($context);
 
-        $this->initializeFiltersFromArray($filters, $translator);
+        $this->initializeFiltersFromArray($sortedFilters, $translator);
     }
 
     /**
@@ -152,7 +154,7 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
     /**
      * @param SearchCriteria $originalCriteria
      * @param Context $context
-     * @return array
+     * @return array[]
      */
     private function getSelectedOptionValuesWithSiblings(SearchCriteria $originalCriteria, Context $context)
     {
@@ -252,5 +254,19 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
     {
         $locale = $context->getValue(LocaleContextDecorator::CODE);
         return $this->translatorRegistry->getTranslatorForLocale($locale);
+    }
+
+    /**
+     * @param array[] $filters
+     * @param string[] $sortOrder
+     * @return mixed
+     */
+    private function sortFiltersArray(array $filters, array $sortOrder)
+    {
+        uksort($filters, function ($keyA, $keyB) use ($sortOrder) {
+            return array_search($keyA, $sortOrder) - array_search($keyB, $sortOrder);
+        });
+
+        return $filters;
     }
 }

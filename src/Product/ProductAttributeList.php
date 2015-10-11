@@ -1,9 +1,9 @@
 <?php
 
+
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Product\Exception\ProductAttributeContextPartsMismatchException;
+use LizardsAndPumpkins\Product\Exception\ConflictingContextDataForProductAttributeListException;
 use LizardsAndPumpkins\Product\Exception\ProductAttributeNotFoundException;
 
 class ProductAttributeList implements \Countable, \JsonSerializable
@@ -11,12 +11,12 @@ class ProductAttributeList implements \Countable, \JsonSerializable
     /**
      * @var ProductAttribute[]
      */
-    private $attributes = [];
+    private $attributes;
 
     /**
-     * @var string[]
+     * @var AttributeCode[]
      */
-    private $attributeCodes = [];
+    private $attributeCodes;
 
     /**
      * @param mixed[] $attributesArray
@@ -24,43 +24,76 @@ class ProductAttributeList implements \Countable, \JsonSerializable
      */
     public static function fromArray(array $attributesArray)
     {
-        $attributeList = new self();
-
-        foreach ($attributesArray as $attributeArray) {
-            $attribute = ProductAttribute::fromArray($attributeArray);
-            $attributeList->add($attribute);
-        }
-
-        return $attributeList;
+        $attributes = array_map(function (array $attributeArray) {
+            return ProductAttribute::fromArray($attributeArray);
+        }, $attributesArray);
+        return new self(...$attributes);
     }
 
-    public function add(ProductAttribute $attribute)
+    public function __construct(ProductAttribute ...$attributes)
     {
-        $this->validateAttributeMayBeAddedToList($attribute);
-
-        $this->attributes[] = $attribute;
-        $this->addAttributeCode($attribute->getCode());
+        $this->attributes = $attributes;
+        $this->validateAllAttributesHaveCompatibleContextData(...$attributes);
+        $this->initializeAttributeCodesArray(...$attributes);
     }
-    
-    private function validateAttributeMayBeAddedToList(ProductAttribute $attribute)
+
+    private function validateAllAttributesHaveCompatibleContextData(ProductAttribute ...$attributes)
     {
-        foreach ($this->getAttributesByCodeWithoutValidation($attribute->getCode()) as $attributeInList) {
-            if (!$attribute->hasSameContextPartsAs($attributeInList)) {
-                throw new ProductAttributeContextPartsMismatchException(
-                    'Attributes with different context parts can not be combined into one list'
-                );
-            }
+        array_reduce($attributes, function (array $attributeListContextParts, ProductAttribute $attribute) {
+            array_map(function ($contextPart) use ($attribute, $attributeListContextParts) {
+                $this->validateContextPartIsValidInAttributeList($attribute, $contextPart, $attributeListContextParts);
+            }, $attribute->getContextParts());
+
+            return array_merge($attributeListContextParts, $attribute->getContextDataSet());
+        }, []);
+    }
+
+    /**
+     * @param ProductAttribute $attribute
+     * @param string $part
+     * @param string[] $attributeListContextParts
+     */
+    private function validateContextPartIsValidInAttributeList(
+        ProductAttribute $attribute,
+        $part,
+        array $attributeListContextParts
+    ) {
+        if (isset($attributeListContextParts[$part])) {
+            $attributeContextPartValue = $attribute->getContextPartValue($part);
+            $this->validateContextPartValuesMatch($part, $attributeListContextParts[$part], $attributeContextPartValue);
         }
     }
 
     /**
-     * @param string $attributeCode
+     * @param string $contextPart
+     * @param string $valueA
+     * @param string $valueB
      */
-    private function addAttributeCode($attributeCode)
+    private function validateContextPartValuesMatch($contextPart, $valueA, $valueB)
     {
-        if (!$this->hasAttribute($attributeCode)) {
-            $this->attributeCodes[$attributeCode] = $attributeCode;
+        if ($valueA !== $valueB) {
+            throw $this->getConflictingContextDataFoundException($contextPart, $valueA, $valueB);
         }
+    }
+
+    /**
+     * @param string $contextPart
+     * @param string $valueA
+     * @param string $valueB
+     * @return ConflictingContextDataForProductAttributeListException
+     */
+    private function getConflictingContextDataFoundException($contextPart, $valueA, $valueB)
+    {
+        $message = sprintf('Conflicting context "%s" data set values found for attributes ' .
+            'to be included in one attribute list: "%s" != "%s"', $contextPart, $valueA, $valueB);
+        return new ConflictingContextDataForProductAttributeListException($message);
+    }
+
+    private function initializeAttributeCodesArray(ProductAttribute ...$attributes)
+    {
+        $this->attributeCodes = array_reduce($attributes, function (array $carry, ProductAttribute $attribute) {
+            return array_merge($carry, [(string)$attribute->getCode() => $attribute->getCode()]);
+        }, []);
     }
 
     /**
@@ -69,85 +102,37 @@ class ProductAttributeList implements \Countable, \JsonSerializable
      */
     public function getAttributesWithCode($code)
     {
-        if (empty($code)) {
-            throw new ProductAttributeNotFoundException('Can not get an attribute with blank code.');
-        }
-        if (!$this->hasAttribute($code)) {
+        $attributeCode = AttributeCode::fromString($code);
+        if (!$this->hasAttribute($attributeCode)) {
             throw new ProductAttributeNotFoundException(sprintf('Can not find an attribute with code "%s".', $code));
         }
 
-        return $this->getAttributesByCodeWithoutValidation($code);
+        return $this->getAttributesByCodeFromArray($this->attributes, $code);
     }
 
     /**
-     * @param string $code
+     * @param ProductAttribute[] $attributes
+     * @param string|AttributeCode $code
      * @return ProductAttribute[]
      */
-    private function getAttributesByCodeWithoutValidation($code)
+    private function getAttributesByCodeFromArray(array $attributes, $code)
     {
-        return array_values(array_filter($this->attributes, function (ProductAttribute $attribute) use ($code) {
-            return $attribute->isCodeEqualsTo($code);
+        return array_values(array_filter($attributes, function (ProductAttribute $attribute) use ($code) {
+            return $attribute->isCodeEqualTo($code);
         }));
     }
 
     /**
-     * @param Context $context
-     * @return ProductAttributeList
-     */
-    public function getAttributeListForContext(Context $context)
-    {
-        $extractedAttributes = $this->extractAttributesForContext($context);
-        return $this->createAttributeListFromAttributeArray($extractedAttributes);
-    }
-
-    /**
-     * @param Context $context
-     * @return ProductAttribute[]
-     */
-    private function extractAttributesForContext(Context $context)
-    {
-        return array_reduce($this->attributeCodes, function (array $carry, $code) use ($context) {
-            $attributesForCode = $this->getAttributesWithCode($code);
-            return array_merge($carry, $this->getAttributesMatchingContext($attributesForCode, $context));
-        }, []);
-    }
-
-    /**
-     * @param ProductAttribute[] $productAttributes
-     * @param Context $context
-     * @return ProductAttribute
-     */
-    private function getAttributesMatchingContext(array $productAttributes, Context $context)
-    {
-        return array_filter($productAttributes, function (ProductAttribute $attribute) use ($context) {
-            return $context->matchesDataSet($attribute->getContextDataSet());
-        });
-    }
-
-    /**
-     * @param ProductAttribute[] $productAttributes
-     * @return ProductAttributeList
-     */
-    private function createAttributeListFromAttributeArray(array $productAttributes)
-    {
-        $attributeList = new self();
-        array_walk($productAttributes, function (ProductAttribute $attribute) use ($attributeList) {
-            $attributeList->add($attribute);
-        });
-        return $attributeList;
-    }
-
-    /**
-     * @param string $attributeCode
+     * @param string|AttributeCode $attributeCode
      * @return bool
      */
     public function hasAttribute($attributeCode)
     {
-        return isset($this->attributeCodes[$attributeCode]);
+        return isset($this->attributeCodes[(string)$attributeCode]);
     }
 
     /**
-     * @return string[]
+     * @return AttributeCode[]
      */
     public function getAttributeCodes()
     {
@@ -163,16 +148,18 @@ class ProductAttributeList implements \Countable, \JsonSerializable
     }
 
     /**
-     * @return string[]
+     * @return ProductAttribute[]
      */
     public function jsonSerialize()
     {
-        return array_reduce($this->attributes, function($carry, ProductAttribute $attribute) {
-            if (!isset($carry[$attribute->getCode()])) {
-                $carry[$attribute->getCode()] = [];
-            }
-            $carry[$attribute->getCode()][] = $attribute->getValue();
-            return $carry;
-        }, []);
+        return $this->attributes;
+    }
+
+    /**
+     * @return ProductAttribute[]
+     */
+    public function getAllAttributes()
+    {
+        return $this->attributes;
     }
 }

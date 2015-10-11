@@ -79,7 +79,7 @@ class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_Tes
         $this->assertInstanceOf(ProductDetailPageMetaInfoSnippetContent::class, $pageMetaInfo);
     }
     
-    public function testExceptionIsTrownInCaseOfJsonErrors()
+    public function testExceptionIsThrownInCaseOfJsonErrors()
     {
         $this->setExpectedException(\OutOfBoundsException::class);
         ProductDetailPageMetaInfoSnippetContent::fromJson('malformed-json');

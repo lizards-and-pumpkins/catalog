@@ -5,28 +5,30 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\WebsiteContextDecorator;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterOrEqualThan;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionLessOrEqualThan;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionLessThan;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionNotEqual;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
 use LizardsAndPumpkins\DataVersion;
 use LizardsAndPumpkins\Product\ProductId;
+use LizardsAndPumpkins\Utils\Clearable;
 
 abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubSearchDocumentCollection;
-
     /**
      * @var Context
      */
     private $testContext;
 
     /**
-     * @var SearchEngine
+     * @var SearchEngine|Clearable
      */
     private $searchEngine;
 
@@ -53,25 +55,20 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param SearchDocumentCollection $collection
-     * @param ProductId[] $productIds
+     * @param ProductId $productId
+     * @return bool
      */
-    private function assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds(
+    private function assertCollectionContainsDocumentForProductId(
         SearchDocumentCollection $collection,
-        array $productIds
+        ProductId $productId
     ) {
-        $this->assertCount(
-            count($productIds),
-            $collection,
-            'Failed asserting that the search document collection size matches the number of expected product ids.'
-        );
-        foreach ($productIds as $productId) {
-            if (!$this->isDocumentForProductIdInDocumentCollection($collection, $productId)) {
-                $this->fail(sprintf(
-                    'Failed asserting document for product ID "%s" is present in search document collection.',
-                    $productId
-                ));
+        foreach ($collection->getDocuments() as $document) {
+            if ($document->getProductId() == $productId) {
+                $this->assertTrue(true);
+                return;
             }
         }
+        $this->fail(sprintf('Failed asserting collection contains document for product ID: %s', $productId));
     }
 
     /**
@@ -79,17 +76,18 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
      * @param ProductId $productId
      * @return bool
      */
-    private function isDocumentForProductIdInDocumentCollection(
+    private function assertCollectionDoesNotContainDocumentForProductId(
         SearchDocumentCollection $collection,
         ProductId $productId
     ) {
-        $documents = $collection->getDocuments();
-        foreach ($documents as $document) {
+        foreach ($collection->getDocuments() as $document) {
             if ($document->getProductId() == $productId) {
-                return true;
+                $this->fail(
+                    sprintf('Failed asserting collection does not contain document for product ID: %s', $productId)
+                );
             }
         }
-        return false;
+        $this->assertTrue(true);
     }
 
     /**
@@ -104,10 +102,22 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         return $contextBuilder->createContextsFromDataSets([$contextDataSet])[0];
     }
 
+    /**
+     * @param SearchDocument ...$searchDocuments
+     * @return SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubSearchDocumentCollection(SearchDocument ...$searchDocuments)
+    {
+        $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
+        $stubSearchDocumentCollection->method('getIterator')->willReturn(new \ArrayIterator($searchDocuments));
+        $stubSearchDocumentCollection->method('getDocuments')->willReturn($searchDocuments);
+
+        return $stubSearchDocumentCollection;
+    }
+
     protected function setUp()
     {
         $this->searchEngine = $this->createSearchEngineInstance();
-        $this->stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
         $this->testContext = $this->createContextFromDataParts([WebsiteContextDecorator::CODE => 'ru']);
     }
 
@@ -116,206 +126,218 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(SearchEngine::class, $this->searchEngine);
     }
 
-    public function testEmptyCollectionIsReturnedRegardlessOfWhatHasBeenQueriedIfIndexIsEmpty()
-    {
-        $result = $this->searchEngine->query('bar', $this->testContext);
-        $this->assertEmpty($result);
-    }
-
-    public function testEntryIsAddedIntoIndexAndThenFound()
-    {
-        $searchDocumentFieldName = 'foo';
-        $searchDocumentFieldValue = 'bar';
-        $productId = ProductId::fromString('id');
-
-        $searchDocument = $this->createSearchDocument(
-            [$searchDocumentFieldName => $searchDocumentFieldValue],
-            $productId
-        );
-
-        $this->searchEngine->addSearchDocument($searchDocument);
-        $result = $this->searchEngine->query($searchDocumentFieldValue, $this->testContext);
-
-        $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productId]);
-    }
-
     public function testEmptyCollectionIsReturnedIfQueryStringIsNotFoundInIndex()
     {
-        $searchDocumentFields = ['foo' => 'bar'];
-        $productId = ProductId::fromString('id');
+        $searchDocumentFields = ['foo' => 'bar', 'baz' => 'qux'];
+        $productId = ProductId::fromString(uniqid());
         $searchDocument = $this->createSearchDocument($searchDocumentFields, $productId);
-        $this->searchEngine->addSearchDocument($searchDocument);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocument);
+
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
         $result = $this->searchEngine->query('baz', $this->testContext);
 
-        $this->assertEmpty($result);
+        $this->assertCount(0, $result);
     }
 
-    public function testMultipleEntriesAreAddedToIndex()
+    public function testSearchDocumentsAreAddedToAndRetrievedFromSearchEngine()
     {
         $keyword = 'bar';
-
-        $productAId = ProductId::fromString('A');
-        $productBId = ProductId::fromString('B');
+        $productAId = ProductId::fromString(uniqid());
+        $productBId = ProductId::fromString(uniqid());
 
         $searchDocumentA = $this->createSearchDocument(['foo' => $keyword], $productAId);
         $searchDocumentB = $this->createSearchDocument(['baz' => $keyword], $productBId);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
 
-        $this->stubSearchDocumentCollection->method('getIterator')
-            ->willReturn(new \ArrayIterator([$searchDocumentA, $searchDocumentB]));
-        $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
         $result = $this->searchEngine->query($keyword, $this->testContext);
 
-        $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productAId, $productBId]);
+        $this->assertCollectionContainsDocumentForProductId($result, $productAId);
+        $this->assertCollectionContainsDocumentForProductId($result, $productBId);
     }
 
     public function testOnlyEntriesContainingRequestedStringAreReturned()
     {
         $keyword = 'bar';
 
-        $productAId = ProductId::fromString('A');
-        $productBId = ProductId::fromString('B');
+        $productAId = ProductId::fromString(uniqid());
+        $productBId = ProductId::fromString(uniqid());
 
         $searchDocumentA = $this->createSearchDocument(['foo' => $keyword], $productAId);
         $searchDocumentB = $this->createSearchDocument(['baz' => 'qux'], $productBId);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
 
-        $this->stubSearchDocumentCollection->method('getIterator')
-            ->willReturn(new \ArrayIterator([$searchDocumentA, $searchDocumentB]));
-        $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
         $result = $this->searchEngine->query($keyword, $this->testContext);
 
-        $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productAId]);
+        $this->assertCollectionContainsDocumentForProductId($result, $productAId);
+        $this->assertCollectionDoesNotContainDocumentForProductId($result, $productBId);
     }
 
     public function testOnlyMatchesWithMatchingContextsAreReturned()
     {
         $keyword = 'bar';
 
-        $productAId = ProductId::fromString('A');
-        $productBId = ProductId::fromString('B');
+        $productAId = ProductId::fromString(uniqid());
+        $productBId = ProductId::fromString(uniqid());
         $documentAContext = $this->createContextFromDataParts(['website' => 'value-1']);
         $documentBContext = $this->createContextFromDataParts(['website' => 'value-2']);
+        $queryContext = $this->createContextFromDataParts(['website' => 'value-2']);
 
         $searchDocumentA = $this->createSearchDocumentWithContext(['foo' => $keyword], $productAId, $documentAContext);
         $searchDocumentB = $this->createSearchDocumentWithContext(['foo' => $keyword], $productBId, $documentBContext);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
 
-        $this->stubSearchDocumentCollection->method('getIterator')
-            ->willReturn(new \ArrayIterator([$searchDocumentA, $searchDocumentB]));
-        $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
-
-        $queryContext = $this->createContextFromDataParts(['website' => 'value-2']);
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
         $result = $this->searchEngine->query($keyword, $queryContext);
 
-        $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productBId]);
+        $this->assertCollectionDoesNotContainDocumentForProductId($result, $productAId);
+        $this->assertCollectionContainsDocumentForProductId($result, $productBId);
     }
 
     public function testPartialContextsAreMatched()
     {
-        $productAId = ProductId::fromString('A');
-        $productBId = ProductId::fromString('B');
+        $productAId = ProductId::fromString(uniqid());
+        $productBId = ProductId::fromString(uniqid());
         $documentAContext = $this->createContextFromDataParts(['website' => 'value1', 'locale' => 'value2']);
         $documentBContext = $this->createContextFromDataParts(['website' => 'value1', 'locale' => 'value2']);
+        $queryContext = $this->createContextFromDataParts(['locale' => 'value2']);
 
         $searchDocumentA = $this->createSearchDocumentWithContext(['foo' => 'bar'], $productAId, $documentAContext);
         $searchDocumentB = $this->createSearchDocumentWithContext(['foo' => 'bar'], $productBId, $documentBContext);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
 
-        $this->stubSearchDocumentCollection->method('getIterator')
-            ->willReturn(new \ArrayIterator([$searchDocumentA, $searchDocumentB]));
-        $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
-
-        $queryContext = $this->createContextFromDataParts(['locale' => 'value2']);
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
         $result = $this->searchEngine->query('bar', $queryContext);
 
-        $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productAId, $productBId]);
+        $this->assertCollectionContainsDocumentForProductId($result, $productAId);
+        $this->assertCollectionContainsDocumentForProductId($result, $productBId);
     }
 
     public function testContextPartsThatAreNotInSearchDocumentContextAreIgnored()
     {
-        $productId = ProductId::fromString('id');
+        $productId = ProductId::fromString(uniqid());
         $documentContext = $this->createContextFromDataParts(['locale' => 'value2']);
-        $searchDocument = $this->createSearchDocumentWithContext(['foo' => 'bar'], $productId, $documentContext);
-
-        $this->stubSearchDocumentCollection->method('getIterator')
-            ->willReturn(new \ArrayIterator([$searchDocument]));
-        $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
-
         $queryContext = $this->createContextFromDataParts(['website' => 'value1', 'locale' => 'value2']);
+
+        $searchDocument = $this->createSearchDocumentWithContext(['foo' => 'bar'], $productId, $documentContext);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocument);
+
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
         $result = $this->searchEngine->query('bar', $queryContext);
 
-        $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productId]);
+        $this->assertCollectionContainsDocumentForProductId($result, $productId);
     }
 
     public function testEntriesContainingRequestedStringAreReturned()
     {
-        $productAId = ProductId::fromString('id01');
-        $productBId = ProductId::fromString('id02');
+        $productAId = ProductId::fromString(uniqid());
+        $productBId = ProductId::fromString(uniqid());
 
-        $searchDocumentA = $this->createSearchDocument(['foo' => 'barbarism'], $productAId);
-        $searchDocumentB = $this->createSearchDocument(['baz' => 'cabaret'], $productBId);
+        $searchDocumentA = $this->createSearchDocument(['foo' => 'Hidden bar here.'], $productAId);
+        $searchDocumentB = $this->createSearchDocument(['baz' => 'Here there is none.'], $productBId);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
 
-        $this->stubSearchDocumentCollection->method('getIterator')
-            ->willReturn(new \ArrayIterator([$searchDocumentA, $searchDocumentB]));
-        $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
         $result = $this->searchEngine->query('bar', $this->testContext);
 
-        $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productAId, $productBId]);
+        $this->assertCollectionContainsDocumentForProductId($result, $productAId);
     }
 
     public function testEmptyCollectionIsReturnedIfNoSearchDocumentsMatchesGivenCriteria()
     {
-        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubCriteria */
-        $stubCriteria = $this->getMock(SearchCriteria::class);
-        $stubCriteria->method('matches')->willReturn(false);
+        $searchCriteria = SearchCriterionEqual::create('foo', 'some-value-which-is-definitely-absent-in-index');
+        $result = $this->searchEngine->getSearchDocumentsMatchingCriteria($searchCriteria, $this->testContext);
 
-        $result = $this->searchEngine->getSearchDocumentsMatchingCriteria($stubCriteria, $this->testContext);
-
-        $this->assertEmpty($result);
+        $this->assertCount(0, $result);
     }
 
-    public function testCollectionContainsOnlySearchDocumentsMatchingGivenCriteria()
+    /**
+     * @dataProvider searchCriteriaProvider
+     * @param SearchCriteria $searchCriteria
+     */
+    public function testCollectionContainsOnlySearchDocumentsMatchingGivenCriteria(SearchCriteria $searchCriteria)
     {
-        $productAId = ProductId::fromString('A');
-        $productBId = ProductId::fromString('B');
+        $productAId = ProductId::fromString(uniqid());
+        $productBId = ProductId::fromString(uniqid());
 
         $searchDocumentA = $this->createSearchDocument(['foo' => 'bar'], $productAId);
-        $searchDocumentB = $this->createSearchDocument(['baz' => 'qux'], $productBId);
+        $searchDocumentB = $this->createSearchDocument(['foo' => 'baz'], $productBId);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
-        $this->stubSearchDocumentCollection->method('getIterator')
-            ->willReturn(new \ArrayIterator([$searchDocumentA, $searchDocumentB]));
-        $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
+        $result = $this->searchEngine->getSearchDocumentsMatchingCriteria($searchCriteria, $this->testContext);
 
-        $matchingSearchDocumentField = SearchDocumentField::fromKeyAndValues('foo', ['bar']);
+        $this->assertCollectionContainsDocumentForProductId($result, $productAId);
+        $this->assertCollectionDoesNotContainDocumentForProductId($result, $productBId);
+    }
 
-        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubCriteria */
-        $stubCriteria = $this->getMock(SearchCriteria::class);
-        $stubCriteria->method('matches')->willReturnCallback(
-            function (SearchDocument $searchDocument) use ($matchingSearchDocumentField) {
-                return in_array($matchingSearchDocumentField, $searchDocument->getFieldsCollection()->getFields());
-            }
-        );
+    /**
+     * @return array[]
+     */
+    public function searchCriteriaProvider()
+    {
+        return [
+            [SearchCriterionEqual::create('foo', 'bar')],
+            [SearchCriterionNotEqual::create('foo', 'baz')],
+            [CompositeSearchCriterion::createAnd(
+                SearchCriterionEqual::create('foo', 'bar'),
+                SearchCriterionNotEqual::create('foo', 'baz')
+            )],
+        ];
+    }
 
-        $result = $this->searchEngine->getSearchDocumentsMatchingCriteria($stubCriteria, $this->testContext);
+    /**
+     * @dataProvider searchRangeCriteriaProvider
+     * @param SearchCriteria $searchCriteria
+     */
+    public function testCollectionContainsOnlySearchDocumentsMatchingRangeCriteria(SearchCriteria $searchCriteria)
+    {
+        $productAId = ProductId::fromString(uniqid());
+        $productBId = ProductId::fromString(uniqid());
 
-        $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productAId]);
+        $searchDocumentA = $this->createSearchDocument(['price' => 10], $productAId);
+        $searchDocumentB = $this->createSearchDocument(['price' => 20], $productBId);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
+
+        $result = $this->searchEngine->getSearchDocumentsMatchingCriteria($searchCriteria, $this->testContext);
+
+        $this->assertCollectionContainsDocumentForProductId($result, $productAId);
+        $this->assertCollectionDoesNotContainDocumentForProductId($result, $productBId);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function searchRangeCriteriaProvider()
+    {
+        return [
+            [SearchCriterionLessThan::create('price', 20)],
+            [SearchCriterionLessOrEqualThan::create('price', 10)],
+            [CompositeSearchCriterion::createAnd(
+                SearchCriterionGreaterThan::create('price', 5),
+                SearchCriterionLessOrEqualThan::create('price', 10)
+            )],
+            [CompositeSearchCriterion::createAnd(
+                SearchCriterionGreaterOrEqualThan::create('price', 10),
+                SearchCriterionLessThan::create('price', 20)
+            )],
+        ];
     }
 
     public function testIfMultipleMatchingDocumentsHasSameProductIdOnlyOneInstanceIsReturned()
     {
-        $productId = ProductId::fromString('A');
+        $productId = ProductId::fromString(uniqid());
 
         $searchDocumentA = $this->createSearchDocument(['foo' => 'bar'], $productId);
-        $searchDocumentB = $this->createSearchDocument(['baz' => 'qux'], $productId);
+        $searchDocumentB = $this->createSearchDocument(['baz' => 'bar'], $productId);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
 
-        $this->stubSearchDocumentCollection->method('getIterator')
-            ->willReturn(new \ArrayIterator([$searchDocumentA, $searchDocumentB]));
-        $this->searchEngine->addSearchDocumentCollection($this->stubSearchDocumentCollection);
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
+        $result = $this->searchEngine->query('bar', $this->testContext);
 
-        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubCriteria */
-        $stubCriteria = $this->getMock(SearchCriteria::class);
-        $stubCriteria->method('matches')->willReturn(true);
-
-        $result = $this->searchEngine->getSearchDocumentsMatchingCriteria($stubCriteria, $this->testContext);
-
-        $this->assertSearchDocumentCollectionContainsOnlyDocumentsForProductIds($result, [$productId]);
+        $this->assertCollectionContainsDocumentForProductId($result, $productId);
     }
 
     /**
@@ -334,7 +356,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $productId
         );
 
-        $this->searchEngine->addSearchDocument($searchDocument);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocument);
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
         $this->searchEngine->clear();
         $this->assertEmpty($this->searchEngine->query($searchDocumentFieldValue, $this->testContext));
     }

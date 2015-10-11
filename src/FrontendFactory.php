@@ -11,11 +11,13 @@ use LizardsAndPumpkins\Http\GenericHttpRouter;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRouter;
 use LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler;
+use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\DefaultNumberOfProductsPerPageSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductDetailViewInContextSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewRequestHandler;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductListingMetaInfoSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductListingCriteriaSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingRequestHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer;
 use LizardsAndPumpkins\Product\MultipleProductStockQuantityApiV1PutRequestHandler;
@@ -205,7 +207,7 @@ class FrontendFactory implements Factory
     {
         $snippetKeyGeneratorLocator = new SnippetKeyGeneratorLocator();
         $snippetKeyGeneratorLocator->register(
-            ProductDetailViewInContextSnippetRenderer::CODE,
+            ProductDetailViewSnippetRenderer::CODE,
             $this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator()
         );
         $snippetKeyGeneratorLocator->register(
@@ -233,8 +235,8 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->createDefaultNumberOfProductsPerPageSnippetKeyGenerator()
         );
         $snippetKeyGeneratorLocator->register(
-            ProductListingMetaInfoSnippetRenderer::CODE,
-            $this->getMasterFactory()->createProductListingMetaDataSnippetKeyGenerator()
+            ProductListingCriteriaSnippetRenderer::CODE,
+            $this->getMasterFactory()->createProductListingCriteriaSnippetKeyGenerator()
         );
         $snippetKeyGeneratorLocator->register(
             ProductSearchResultMetaSnippetRenderer::CODE,
@@ -251,6 +253,18 @@ class FrontendFactory implements Factory
         $snippetKeyGeneratorLocator->register(
             ProductSearchAutosuggestionSnippetRenderer::CODE,
             $this->getMasterFactory()->createProductSearchAutosuggestionSnippetKeyGenerator()
+        );
+        $snippetKeyGeneratorLocator->register(
+            ProductJsonSnippetRenderer::CODE,
+            $this->getMasterFactory()->createProductJsonSnippetKeyGenerator()
+        );
+        $snippetKeyGeneratorLocator->register(
+            ConfigurableProductJsonSnippetRenderer::VARIATION_ATTRIBUTES_CODE,
+            $this->getMasterFactory()->createConfigurableProductVariationAttributesJsonSnippetKeyGenerator()
+        );
+        $snippetKeyGeneratorLocator->register(
+            ConfigurableProductJsonSnippetRenderer::ASSOCIATED_PRODUCTS_CODE,
+            $this->getMasterFactory()->createConfigurableProductAssociatedProductsJsonSnippetKeyGenerator()
         );
 
         return $snippetKeyGeneratorLocator;

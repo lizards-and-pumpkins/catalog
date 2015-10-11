@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\Projector;
 use LizardsAndPumpkins\SnippetList;
@@ -54,12 +53,10 @@ class ProductListingTemplateProjectorTest extends \PHPUnit_Framework_TestCase
 
     public function testSnippetListIsWrittenIntoDataPool()
     {
-        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
-        $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
         $projectionSourceDataJson = '{}';
 
         $this->mockDataPoolWriter->expects($this->once())->method('writeSnippetList');
 
-        $this->projector->project($projectionSourceDataJson, $stubContextSource);
+        $this->projector->project($projectionSourceDataJson);
     }
 }

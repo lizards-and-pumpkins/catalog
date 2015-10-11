@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Context;
 
 use LizardsAndPumpkins\IntegrationTestFactory;
+use LizardsAndPumpkins\MasterFactory;
 use LizardsAndPumpkins\SampleMasterFactory;
 use LizardsAndPumpkins\CommonFactory;
 
@@ -23,16 +24,16 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     public function testDecoratedContextSetIsCreated()
     {
         $xml = <<<EOX
-<product sku="test"><attributes>
+<product sku="test" type="simple"><attributes>
     <name website="ru" locale="de_DE">ru-de_DE</name>
     <name website="ru" locale="en_US">ru-en_US</name>
     <name website="cy" locale="de_DE">cy-de_DE</name>
     <name website="cy" locale="en_US">cy-en_US</name>
 </attributes></product>
 EOX;
-        $productSourceBuilder = $this->factory->createProductSourceBuilder();
+        $productXmlToProductBuilder = $this->factory->createProductXmlToProductBuilderLocator();
         $contextSource = $this->factory->createContextSource();
-        $productSource = $productSourceBuilder->createProductSourceFromXml($xml);
+        $productBuilder = $productXmlToProductBuilder->createProductBuilderFromXml($xml);
         $codes = ['website', 'locale', 'version'];
         $extractedValues = [];
         $contextCounter = 0;
@@ -41,7 +42,7 @@ EOX;
             $contextCounter++;
             $this->assertEmpty(array_diff($codes, $context->getSupportedCodes()));
             $expected = $context->getValue('website') . '-' . $context->getValue('locale');
-            $product = $productSource->getProductForContext($context);
+            $product = $productBuilder->getProductForContext($context);
             $attributeValue = $product->getFirstValueOfAttribute('name');
             $this->assertEquals($expected, $attributeValue);
             $extractedValues[] = $attributeValue;

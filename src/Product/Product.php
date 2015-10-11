@@ -1,71 +1,77 @@
 <?php
-
 namespace LizardsAndPumpkins\Product;
 
-class Product implements \JsonSerializable
+use LizardsAndPumpkins\Context\Context;
+
+interface Product extends \JsonSerializable
 {
     const URL_KEY = 'url_key';
     const ID = 'product_id';
+    const TYPE_KEY = 'type_code';
     
-    /**
-     * @var ProductId
-     */
-    private $productId;
-
-    /**
-     * @var ProductAttributeList
-     */
-    private $attributeList;
-
-    public function __construct(ProductId $productId, ProductAttributeList $attributeList)
-    {
-        $this->productId = $productId;
-        $this->attributeList = $attributeList;
-    }
-
     /**
      * @return ProductId
      */
-    public function getId()
-    {
-        return $this->productId;
-    }
+    public function getId();
 
     /**
      * @param string $attributeCode
-     * @return string|ProductAttributeList
+     * @return string
      */
-    public function getFirstValueOfAttribute($attributeCode)
-    {
-        $attributeValues = $this->getAllValuesOfAttribute($attributeCode);
-        
-        return isset($attributeValues[0]) ?
-            $attributeValues[0] :
-            '';
-    }
+    public function getFirstValueOfAttribute($attributeCode);
 
     /**
      * @param string $attributeCode
-     * @return string[]|ProductAttributeList[]|mixed[]
+     * @return string[]
      */
-    public function getAllValuesOfAttribute($attributeCode)
-    {
-        if (! $this->attributeList->hasAttribute($attributeCode)) {
-            return [];
-        }
-        return array_map(function (ProductAttribute $productAttribute) {
-            return $productAttribute->getValue();
-        }, $this->attributeList->getAttributesWithCode($attributeCode));
-    }
+    public function getAllValuesOfAttribute($attributeCode);
 
     /**
-     * @return mixed
+     * @param string $attributeCode
+     * @return bool
      */
-    public function jsonSerialize()
-    {
-        return [
-            'product_id' => (string) $this->productId,
-            'attributes' => $this->attributeList
-        ];
-    }
+    public function hasAttribute($attributeCode);
+
+    /**
+     * @return Context
+     */
+    public function getContext();
+
+    /**
+     * @return ProductImageList
+     */
+    public function getImages();
+
+    /**
+     * @return int
+     */
+    public function getImageCount();
+
+    /**
+     * @param int $imageNumber
+     * @return ProductImage
+     */
+    public function getImageByNumber($imageNumber);
+
+    /**
+     * @param int $imageNumber
+     * @return string
+     */
+    public function getImageFileNameByNumber($imageNumber);
+
+    /**
+     * @param int $imageNumber
+     * @return string
+     */
+    public function getImageLabelByNumber($imageNumber);
+
+    /**
+     * @return string
+     */
+    public function getMainImageFileName();
+
+    /**
+     * @return string
+     */
+    public function getMainImageLabel();
 }

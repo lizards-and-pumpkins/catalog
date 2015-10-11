@@ -36,6 +36,6 @@ class TemplateWasUpdatedDomainEventHandler implements DomainEventHandler
         $projectionSourceData = $this->domainEvent->getProjectionSourceData();
         
         $projector = $this->projectorLocator->getTemplateProjectorForCode($this->domainEvent->getTemplateId());
-        $projector->project($projectionSourceData, $this->contextSource);
+        $projector->project($projectionSourceData);
     }
 }

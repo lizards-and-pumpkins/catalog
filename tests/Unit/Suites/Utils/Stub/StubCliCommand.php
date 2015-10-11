@@ -29,6 +29,7 @@ class StubCliCommand extends BaseCliCommand
     }
 
     /**
+     * @param CLImate $climate
      * @return array[]
      */
     protected function getCommandLineArgumentsArray(CLImate $climate)

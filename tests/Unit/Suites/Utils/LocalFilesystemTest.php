@@ -99,8 +99,8 @@ class LocalFilesystemTest extends \PHPUnit_Framework_TestCase
 
     public function testItSilentlyReturnsIfTheDirectoryDoesNotExist()
     {
-        $this->filesystem->removeDirectoryContents('some-non-existant-directory');
-        $this->assertTrue(true, 'Assert the code did not try to open a non-exitant directory throwing an exception');
+        $this->filesystem->removeDirectoryContents('some-non-existent-directory');
+        $this->assertTrue(true, 'Assert the code did not try to open a non-existent directory throwing an exception');
     }
 
     public function testItThrowsAnExceptionIfTheDirectoryIsAFile()
