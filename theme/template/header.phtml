@@ -39,15 +39,12 @@
         </div>
         <div class="logo">
             <strong>21run.com</strong>
-            <a href="/ru_de/" title="21run.com">
-                <img src="/lizards-and-pumpkins/images/logo_de.png" alt="21run.com"/>
-            </a>
+            <a href="/ru_de/" title="21run.com"><img src="/lizards-and-pumpkins/images/logo_de.png" alt="21run.com"/></a>
         </div>
         <div id="searchPanel">
-            <form autocomplete="off" action="/lizards-and-pumpkins/catalogsearch/result/">
+            <form autocomplete="off" action="/lizards-and-pumpkins/catalogsearch/result/" class="search-form">
                 <div class="input-box">
-                    <input id="search" type="text" name="q" value="" class="input-text" maxlength="128"
-                           placeholder="<?= $this->__('Enter search keyword') ?>"/>
+                    <input id="search" type="text" name="q" maxlength="128" placeholder="<?= $this->__('Enter search keyword') ?>"/>
                     <button type="submit" disabled="disabled" class="disabled"><span class="search-button-image"></span></button>
                     <div id="search-autosuggestion"></div>
                 </div>
@@ -71,253 +68,135 @@
             <p><a href="/ru_de/shop.html?&order=name"><img src="/lizards-and-pumpkins/images/Header_Gutschein_17_de.png" alt=""/></a>
             </p>
         </div>
-        <ul class="phone-bar">
-            <li class="first"><a href="/ru_de/customer/account/"><img src="/lizards-and-pumpkins/images/icon-phone-account.png" alt=""/></a></li>
+        <ul id="phone-meta-menu">
+            <li><a href="/ru_de/customer/account/"><img src="/lizards-and-pumpkins/images/icon-phone-account.png" alt=""/></a></li>
             <li><a href="/ru_de/checkout/cart/"><img src="/lizards-and-pumpkins/images/icon-phone-cart.png" alt=""/></a></li>
-            <li><a href="javascript: togglePhoneBlock('search')"><img src="/lizards-and-pumpkins/images/icon-phone-search.png" alt=""/></a></li>
-            <li><a href="javascript: togglePhoneBlock('lang')"><img src="/lizards-and-pumpkins/images/icon-phone-lang-deutsch.png" alt=""/></a></li>
-            <li class="last"><a href="javascript: togglePhoneBlock('store')"><img src="/lizards-and-pumpkins/images/icon-phone-store-21run-com.png" alt=""/></a></li>
+            <li class="active"><a href="#" data-block="search"><img src="/lizards-and-pumpkins/images/icon-phone-search.png" alt=""/></a></li>
+            <li><a href="#" data-block="lang"><img src="/lizards-and-pumpkins/images/icon-phone-lang-deutsch.png" alt=""/></a></li>
+            <li><a href="#" data-block="store"><img src="/lizards-and-pumpkins/images/icon-phone-store-21run-com.png" alt=""/></a></li>
         </ul>
-        <div id="phoneMenuPlaceholder">
-            <ul>
-                <li class="spot-0"></li>
-                <li class="spot-1"></li>
-                <li class="spot-2"></li>
-                <li class="spot-3"></li>
-                <li class="spot-4"></li>
-            </ul>
-            <div class="content"></div>
+        <div id="phone-meta-menu-content" class="search">
+            <form autocomplete="off" action="/lizards-and-pumpkins/catalogsearch/result/" class="search-form">
+                <div class="input-box">
+                    <input id="search" type="text" name="q" maxlength="128" placeholder="<?= $this->__('Enter search keyword') ?>"/>
+                    <button type="submit" disabled="disabled" class="disabled"><span class="search-button-image"></span></button>
+                    <div id="search-autosuggestion"></div>
+                </div>
+            </form>
+            <div class="store">
+                <a href="http://www.21streetwear.com/st_de/">21streetwear.com</a>
+                <a href="http://www.21cycles.com/cy_de/">21cycles.com</a>
+            </div>
+            <div class="lang">
+                <a href="/ru_en/?___from_store=ru_de" class="lang-ru_en">English</a>
+                <a href="/ru_fr/?___from_store=ru_de" class="lang-ru_fr">Français</a>
+                <a href="/ru_es/?___from_store=ru_de" class="lang-ru_es">Español</a>
+            </div>
         </div>
         <nav>
             <ul class="nav first last">
-                <li class="level0 nav-1 first level-top parent"><a href="/ru_de/herren.html"
-                                                                   class="level-top"><span>Herren</span></a>
+                <li class="level0 nav-1 first level-top parent"><a href="/ru_de/herren.html" class="level-top"><span>Herren</span></a>
                     <ul class="level0">
-                        <li class="level1 nav-1-1 first"><a
-                                href="/ru_de/herren/badeschuhe.html"><span>Badeschuhe</span></a>
-                        </li>
-                        <li class="level1 nav-1-2"><a
-                                href="/ru_de/herren/feldhockeyschuhe.html"><span>Feldhockeyschuhe</span></a>
-                        </li>
-                        <li class="level1 nav-1-3"><a href="/ru_de/herren/fitnessschuhe.html"><span>Fitnessschuhe</span></a>
-                        </li>
-                        <li class="level1 nav-1-4"><a
-                                href="/ru_de/herren/funktionsunterwasche.html"><span>Funktionsunterwäsche</span></a>
-                        </li>
-                        <li class="level1 nav-1-5"><a
-                                href="/ru_de/herren/handballschuhe.html"><span>Handballschuhe</span></a>
-                        </li>
-                        <li class="level1 nav-1-6"><a
-                                href="/ru_de/herren/herzfrequenzmesser.html"><span>Herzfrequenzmesser</span></a>
-                        </li>
-                        <li class="level1 nav-1-7"><a href="/ru_de/herren/kompression.html"><span>Kompression</span></a>
-                        </li>
-                        <li class="level1 nav-1-8"><a href="/ru_de/herren/kopfbedeckung.html"><span>Kopfbedeckung</span></a>
-                        </li>
-                        <li class="level1 nav-1-9"><a
-                                href="/ru_de/herren/laufhandschuhe.html"><span>Laufhandschuhe</span></a>
-                        </li>
-                        <li class="level1 nav-1-10"><a href="/ru_de/herren/laufhosen.html"><span>Laufhosen</span></a>
-                        </li>
-                        <li class="level1 nav-1-11"><a href="/ru_de/herren/laufjacken.html"><span>Laufjacken</span></a>
-                        </li>
-                        <li class="level1 nav-1-12"><a href="/ru_de/herren/laufschuhe.html"><span>Laufschuhe</span></a>
-                        </li>
-                        <li class="level1 nav-1-13"><a href="/ru_de/herren/laufshirts.html"><span>Laufshirts</span></a>
-                        </li>
-                        <li class="level1 nav-1-14"><a href="/ru_de/herren/laufsocken.html"><span>Laufsocken</span></a>
-                        </li>
-                        <li class="level1 nav-1-15"><a href="/ru_de/herren/laufwesten.html"><span>Laufwesten</span></a>
-                        </li>
-                        <li class="level1 nav-1-16"><a href="/ru_de/herren/laufzubehor.html"><span>Laufzubehör</span></a>
-                        </li>
-                        <li class="level1 nav-1-17"><a
-                                href="/ru_de/herren/outdoorschuhe.html"><span>Outdoorschuhe</span></a>
-                        </li>
-                        <li class="level1 nav-1-18"><a
-                                href="/ru_de/herren/reflektion-beleuchtung.html"><span>Reflektion / Beleuchtung</span></a>
-                        </li>
-                        <li class="level1 nav-1-19"><a href="/ru_de/herren/rucksacke.html"><span>Rucksäcke</span></a>
-                        </li>
-                        <li class="level1 nav-1-20"><a href="/ru_de/herren/schwimmen.html"><span>Schwimmen</span></a>
-                        </li>
-                        <li class="level1 nav-1-21"><a
-                                href="/ru_de/herren/spikes.html"><span>Spikes</span></a></li>
-                        <li class="level1 nav-1-22"><a href="/ru_de/herren/sportbrillen.html"><span>Sportbrillen</span></a>
-                        </li>
-                        <li class="level1 nav-1-23"><a
-                                href="/ru_de/herren/sporternahrung.html"><span>Sporternährung</span></a>
-                        </li>
-                        <li class="level1 nav-1-24"><a href="/ru_de/herren/sporttaschen.html"><span>Sporttaschen</span></a>
-                        </li>
-                        <li class="level1 nav-1-25"><a href="/ru_de/herren/sportuhren.html"><span>Sportuhren</span></a>
-                        </li>
-                        <li class="level1 nav-1-26"><a
-                                href="/ru_de/herren/sweatshirts-hoodies.html"><span>Sweatshirts &amp; Hoodies</span></a>
-                        </li>
-                        <li class="level1 nav-1-27"><a
-                                href="/ru_de/herren/trainingsanzuege.html"><span>Trainingsanzüge</span></a>
-                        </li>
-                        <li class="level1 nav-1-28"><a href="/ru_de/herren/triathlon.html"><span>Triathlon</span></a>
-                        </li>
-                        <li class="level1 nav-1-29"><a href="/ru_de/herren/trinksysteme.html"><span>Trinksysteme</span></a>
-                        </li>
-                        <li class="level1 nav-1-30"><a
-                                href="/ru_de/herren/universelle-hallenschuhe.html"><span>Universelle Hallenschuhe</span></a>
-                        </li>
-                        <li class="level1 nav-1-31"><a
-                                href="/ru_de/herren/volleyballschuhe.html"><span>Volleyballschuhe</span></a>
-                        </li>
-                        <li class="level1 nav-1-32"><a
-                                href="/ru_de/herren/walkingschuhe.html"><span>Walkingschuhe</span></a>
-                        </li>
-                        <li class="level1 nav-1-33 last"><a
-                                href="/ru_de/herren/wintersport.html"><span>Wintersport</span></a>
-                        </li>
-                    </ul>
-                </li>
+                        <li class="level1 nav-1-1 first"><a href="/ru_de/herren/badeschuhe.html"><span>Badeschuhe</span></a></li>
+                        <li class="level1 nav-1-2"><a href="/ru_de/herren/feldhockeyschuhe.html"><span>Feldhockeyschuhe</span></a></li>
+                        <li class="level1 nav-1-3"><a href="/ru_de/herren/fitnessschuhe.html"><span>Fitnessschuhe</span></a></li>
+                        <li class="level1 nav-1-4"><a href="/ru_de/herren/funktionsunterwasche.html"><span>Funktionsunterwäsche</span></a></li>
+                        <li class="level1 nav-1-5"><a href="/ru_de/herren/handballschuhe.html"><span>Handballschuhe</span></a></li>
+                        <li class="level1 nav-1-6"><a href="/ru_de/herren/herzfrequenzmesser.html"><span>Herzfrequenzmesser</span></a></li>
+                        <li class="level1 nav-1-7"><a href="/ru_de/herren/kompression.html"><span>Kompression</span></a></li>
+                        <li class="level1 nav-1-8"><a href="/ru_de/herren/kopfbedeckung.html"><span>Kopfbedeckung</span></a></li>
+                        <li class="level1 nav-1-9"><a href="/ru_de/herren/laufhandschuhe.html"><span>Laufhandschuhe</span></a></li>
+                        <li class="level1 nav-1-10"><a href="/ru_de/herren/laufhosen.html"><span>Laufhosen</span></a></li>
+                        <li class="level1 nav-1-11"><a href="/ru_de/herren/laufjacken.html"><span>Laufjacken</span></a></li>
+                        <li class="level1 nav-1-12"><a href="/ru_de/herren/laufschuhe.html"><span>Laufschuhe</span></a></li>
+                        <li class="level1 nav-1-13"><a href="/ru_de/herren/laufshirts.html"><span>Laufshirts</span></a></li>
+                        <li class="level1 nav-1-14"><a href="/ru_de/herren/laufsocken.html"><span>Laufsocken</span></a></li>
+                        <li class="level1 nav-1-15"><a href="/ru_de/herren/laufwesten.html"><span>Laufwesten</span></a></li>
+                        <li class="level1 nav-1-16"><a href="/ru_de/herren/laufzubehor.html"><span>Laufzubehör</span></a></li>
+                        <li class="level1 nav-1-17"><a href="/ru_de/herren/outdoorschuhe.html"><span>Outdoorschuhe</span></a></li>
+                        <li class="level1 nav-1-18"><a href="/ru_de/herren/reflektion-beleuchtung.html"><span>Reflektion / Beleuchtung</span></a></li>
+                        <li class="level1 nav-1-19"><a href="/ru_de/herren/rucksacke.html"><span>Rucksäcke</span></a></li>
+                        <li class="level1 nav-1-20"><a href="/ru_de/herren/schwimmen.html"><span>Schwimmen</span></a></li>
+                        <li class="level1 nav-1-21"><a href="/ru_de/herren/spikes.html"><span>Spikes</span></a></li>
+                        <li class="level1 nav-1-22"><a href="/ru_de/herren/sportbrillen.html"><span>Sportbrillen</span></a></li>
+                        <li class="level1 nav-1-23"><a href="/ru_de/herren/sporternahrung.html"><span>Sporternährung</span></a></li>
+                        <li class="level1 nav-1-24"><a href="/ru_de/herren/sporttaschen.html"><span>Sporttaschen</span></a></li>
+                        <li class="level1 nav-1-25"><a href="/ru_de/herren/sportuhren.html"><span>Sportuhren</span></a></li>
+                        <li class="level1 nav-1-26"><a href="/ru_de/herren/sweatshirts-hoodies.html"><span>Sweatshirts &amp; Hoodies</span></a></li>
+                        <li class="level1 nav-1-27"><a href="/ru_de/herren/trainingsanzuege.html"><span>Trainingsanzüge</span></a></li>
+                        <li class="level1 nav-1-28"><a href="/ru_de/herren/triathlon.html"><span>Triathlon</span></a></li>
+                        <li class="level1 nav-1-29"><a href="/ru_de/herren/trinksysteme.html"><span>Trinksysteme</span></a></li>
+                        <li class="level1 nav-1-30"><a href="/ru_de/herren/universelle-hallenschuhe.html"><span>Universelle Hallenschuhe</span></a></li>
+                        <li class="level1 nav-1-31"><a href="/ru_de/herren/volleyballschuhe.html"><span>Volleyballschuhe</span></a></li>
+                        <li class="level1 nav-1-32"><a href="/ru_de/herren/walkingschuhe.html"><span>Walkingschuhe</span></a></li>
+                        <li class="level1 nav-1-33 last"><a href="/ru_de/herren/wintersport.html"><span>Wintersport</span></a></li>
+                    </ul></li>
                 <li class="level0 nav-2 level-top parent"><a href="/ru_de/damen.html"
                                                              class="level-top"><span>Damen</span></a>
                     <ul class="level0">
-                        <li class="level1 nav-2-1 first"><a
-                                href="/ru_de/damen/badeschuhe.html"><span>Badeschuhe</span></a></li>
-                        <li class="level1 nav-2-2"><a
-                                href="/ru_de/damen/feldhockeyschuhe.html"><span>Feldhockeyschuhe</span></a>
-                        </li>
-                        <li class="level1 nav-2-3"><a href="/ru_de/damen/fitnessschuhe.html"><span>Fitnessschuhe</span></a>
-                        </li>
-                        <li class="level1 nav-2-4"><a href="/ru_de/damen/funktionsunterwasche.html"><span>Funktionsunterwäsche</span></a>
-                        </li>
-                        <li class="level1 nav-2-5"><a href="/ru_de/damen/handballschuhe.html"><span>Handballschuhe</span></a>
-                        </li>
-                        <li class="level1 nav-2-6"><a
-                                href="/ru_de/damen/herzfrequenzmesser.html"><span>Herzfrequenzmesser</span></a>
-                        </li>
-                        <li class="level1 nav-2-7"><a href="/ru_de/damen/kompression.html"><span>Kompression</span></a>
-                        </li>
-                        <li class="level1 nav-2-8"><a href="/ru_de/damen/kopfbedeckung.html"><span>Kopfbedeckung</span></a>
-                        </li>
-                        <li class="level1 nav-2-9"><a href="/ru_de/damen/laufhandschuhe.html"><span>Laufhandschuhe</span></a>
-                        </li>
-                        <li class="level1 nav-2-10"><a href="/ru_de/damen/laufhosen.html"><span>Laufhosen</span></a>
-                        </li>
-                        <li class="level1 nav-2-11"><a href="/ru_de/damen/laufjacken.html"><span>Laufjacken</span></a>
-                        </li>
-                        <li class="level1 nav-2-12"><a href="/ru_de/damen/laufschuhe.html"><span>Laufschuhe</span></a>
-                        </li>
-                        <li class="level1 nav-2-13"><a href="/ru_de/damen/laufshirts.html"><span>Laufshirts</span></a>
-                        </li>
-                        <li class="level1 nav-2-14"><a href="/ru_de/damen/laufsocken.html"><span>Laufsocken</span></a>
-                        </li>
-                        <li class="level1 nav-2-15"><a href="/ru_de/damen/laufwesten.html"><span>Laufwesten</span></a>
-                        </li>
-                        <li class="level1 nav-2-16"><a href="/ru_de/damen/laufzubehor.html"><span>Laufzubehör</span></a>
-                        </li>
-                        <li class="level1 nav-2-17"><a href="/ru_de/damen/outdoorschuhe.html"><span>Outdoorschuhe</span></a>
-                        </li>
-                        <li class="level1 nav-2-18"><a
-                                href="/ru_de/damen/reflektion-beleuchtung.html"><span>Reflektion / Beleuchtung</span></a>
-                        </li>
-                        <li class="level1 nav-2-19"><a href="/ru_de/damen/rucksacke.html"><span>Rucksäcke</span></a>
-                        </li>
-                        <li class="level1 nav-2-20"><a href="/ru_de/damen/schwimmen.html"><span>Schwimmen</span></a>
-                        </li>
-                        <li class="level1 nav-2-21"><a
-                                href="/ru_de/damen/spikes.html"><span>Spikes</span></a></li>
-                        <li class="level1 nav-2-22"><a
-                                href="/ru_de/catalog/category/view/s/sport-bhs/id/727/"><span>Sport BHs</span></a>
-                        </li>
-                        <li class="level1 nav-2-23"><a href="/ru_de/damen/sportbrillen.html"><span>Sportbrillen</span></a>
-                        </li>
-                        <li class="level1 nav-2-24"><a
-                                href="/ru_de/damen/sporternahrung.html"><span>Sporternährung</span></a>
-                        </li>
-                        <li class="level1 nav-2-25"><a href="/ru_de/damen/sporttaschen.html"><span>Sporttaschen</span></a>
-                        </li>
-                        <li class="level1 nav-2-26"><a href="/ru_de/damen/sportuhren.html"><span>Sportuhren</span></a>
-                        </li>
-                        <li class="level1 nav-2-27"><a href="/ru_de/damen/sweatshirts-hoodies.html"><span>Sweatshirts &amp; Hoodies</span></a>
-                        </li>
-                        <li class="level1 nav-2-28"><a
-                                href="/ru_de/damen/trainingsanzuege.html"><span>Trainingsanzüge</span></a>
-                        </li>
-                        <li class="level1 nav-2-29"><a href="/ru_de/damen/triathlon.html"><span>Triathlon</span></a>
-                        </li>
-                        <li class="level1 nav-2-30"><a href="/ru_de/damen/trinksysteme.html"><span>Trinksysteme</span></a>
-                        </li>
-                        <li class="level1 nav-2-31"><a
-                                href="/ru_de/damen/universelle-hallenschuhe.html"><span>Universelle Hallenschuhe</span></a>
-                        </li>
-                        <li class="level1 nav-2-32"><a
-                                href="/ru_de/damen/volleyballschuhe.html"><span>Volleyballschuhe</span></a>
-                        </li>
-                        <li class="level1 nav-2-33"><a href="/ru_de/damen/walkingschuhe.html"><span>Walkingschuhe</span></a>
-                        </li>
-                        <li class="level1 nav-2-34 last"><a
-                                href="/ru_de/damen/wintersport.html"><span>Wintersport</span></a>
-                        </li>
+                        <li class="level1 nav-2-1 first"><a href="/ru_de/damen/badeschuhe.html"><span>Badeschuhe</span></a></li>
+                        <li class="level1 nav-2-2"><a href="/ru_de/damen/feldhockeyschuhe.html"><span>Feldhockeyschuhe</span></a></li>
+                        <li class="level1 nav-2-3"><a href="/ru_de/damen/fitnessschuhe.html"><span>Fitnessschuhe</span></a></li>
+                        <li class="level1 nav-2-4"><a href="/ru_de/damen/funktionsunterwasche.html"><span>Funktionsunterwäsche</span></a></li>
+                        <li class="level1 nav-2-5"><a href="/ru_de/damen/handballschuhe.html"><span>Handballschuhe</span></a></li>
+                        <li class="level1 nav-2-6"><a href="/ru_de/damen/herzfrequenzmesser.html"><span>Herzfrequenzmesser</span></a></li>
+                        <li class="level1 nav-2-7"><a href="/ru_de/damen/kompression.html"><span>Kompression</span></a></li>
+                        <li class="level1 nav-2-8"><a href="/ru_de/damen/kopfbedeckung.html"><span>Kopfbedeckung</span></a></li>
+                        <li class="level1 nav-2-9"><a href="/ru_de/damen/laufhandschuhe.html"><span>Laufhandschuhe</span></a></li>
+                        <li class="level1 nav-2-10"><a href="/ru_de/damen/laufhosen.html"><span>Laufhosen</span></a></li>
+                        <li class="level1 nav-2-11"><a href="/ru_de/damen/laufjacken.html"><span>Laufjacken</span></a></li>
+                        <li class="level1 nav-2-12"><a href="/ru_de/damen/laufschuhe.html"><span>Laufschuhe</span></a></li>
+                        <li class="level1 nav-2-13"><a href="/ru_de/damen/laufshirts.html"><span>Laufshirts</span></a></li>
+                        <li class="level1 nav-2-14"><a href="/ru_de/damen/laufsocken.html"><span>Laufsocken</span></a></li>
+                        <li class="level1 nav-2-15"><a href="/ru_de/damen/laufwesten.html"><span>Laufwesten</span></a></li>
+                        <li class="level1 nav-2-16"><a href="/ru_de/damen/laufzubehor.html"><span>Laufzubehör</span></a></li>
+                        <li class="level1 nav-2-17"><a href="/ru_de/damen/outdoorschuhe.html"><span>Outdoorschuhe</span></a></li>
+                        <li class="level1 nav-2-18"><a href="/ru_de/damen/reflektion-beleuchtung.html"><span>Reflektion / Beleuchtung</span></a></li>
+                        <li class="level1 nav-2-19"><a href="/ru_de/damen/rucksacke.html"><span>Rucksäcke</span></a></li>
+                        <li class="level1 nav-2-20"><a href="/ru_de/damen/schwimmen.html"><span>Schwimmen</span></a></li>
+                        <li class="level1 nav-2-21"><a href="/ru_de/damen/spikes.html"><span>Spikes</span></a></li>
+                        <li class="level1 nav-2-22"><a href="/ru_de/catalog/category/view/s/sport-bhs/id/727/"><span>Sport BHs</span></a></li>
+                        <li class="level1 nav-2-23"><a href="/ru_de/damen/sportbrillen.html"><span>Sportbrillen</span></a></li>
+                        <li class="level1 nav-2-24"><a href="/ru_de/damen/sporternahrung.html"><span>Sporternährung</span></a></li>
+                        <li class="level1 nav-2-25"><a href="/ru_de/damen/sporttaschen.html"><span>Sporttaschen</span></a></li>
+                        <li class="level1 nav-2-26"><a href="/ru_de/damen/sportuhren.html"><span>Sportuhren</span></a></li>
+                        <li class="level1 nav-2-27"><a href="/ru_de/damen/sweatshirts-hoodies.html"><span>Sweatshirts &amp; Hoodies</span></a></li>
+                        <li class="level1 nav-2-28"><a href="/ru_de/damen/trainingsanzuege.html"><span>Trainingsanzüge</span></a></li>
+                        <li class="level1 nav-2-29"><a href="/ru_de/damen/triathlon.html"><span>Triathlon</span></a></li>
+                        <li class="level1 nav-2-30"><a href="/ru_de/damen/trinksysteme.html"><span>Trinksysteme</span></a></li>
+                        <li class="level1 nav-2-31"><a href="/ru_de/damen/universelle-hallenschuhe.html"><span>Universelle Hallenschuhe</span></a></li>
+                        <li class="level1 nav-2-32"><a href="/ru_de/damen/volleyballschuhe.html"><span>Volleyballschuhe</span></a></li>
+                        <li class="level1 nav-2-33"><a href="/ru_de/damen/walkingschuhe.html"><span>Walkingschuhe</span></a></li>
+                        <li class="level1 nav-2-34 last"><a href="/ru_de/damen/wintersport.html"><span>Wintersport</span></a></li>
                     </ul>
                 </li>
-                <li class="level0 nav-3 level-top parent"><a href="/ru_de/kinder.html"
-                                                             class="level-top"><span>Kinder</span></a>
+                <li class="level0 nav-3 level-top parent"><a href="/ru_de/kinder.html" class="level-top"><span>Kinder</span></a>
                     <ul class="level0">
-                        <li class="level1 nav-3-1 first"><a
-                                href="/ru_de/kinder/badeschuhe.html"><span>Badeschuhe</span></a>
-                        </li>
-                        <li class="level1 nav-3-2"><a
-                                href="/ru_de/kinder/feldhockeyschuhe.html"><span>Feldhockeyschuhe</span></a>
-                        </li>
-                        <li class="level1 nav-3-3"><a
-                                href="/ru_de/kinder/funktionsunterwasche.html"><span>Funktionsunterwäsche</span></a>
-                        </li>
-                        <li class="level1 nav-3-4"><a
-                                href="/ru_de/kinder/handballschuhe.html"><span>Handballschuhe</span></a>
-                        </li>
-                        <li class="level1 nav-3-5"><a href="/ru_de/kinder/kompression.html"><span>Kompression</span></a>
-                        </li>
-                        <li class="level1 nav-3-6"><a href="/ru_de/kinder/kopfbedeckung.html"><span>Kopfbedeckung</span></a>
-                        </li>
-                        <li class="level1 nav-3-7"><a
-                                href="/ru_de/kinder/laufhandschuhe.html"><span>Laufhandschuhe</span></a>
-                        </li>
-                        <li class="level1 nav-3-8"><a href="/ru_de/kinder/laufhosen.html"><span>Laufhosen</span></a>
-                        </li>
-                        <li class="level1 nav-3-9"><a href="/ru_de/kinder/laufjacken.html"><span>Laufjacken</span></a>
-                        </li>
-                        <li class="level1 nav-3-10"><a href="/ru_de/kinder/laufschuhe.html"><span>Laufschuhe</span></a>
-                        </li>
-                        <li class="level1 nav-3-11"><a href="/ru_de/kinder/laufshirts.html"><span>Laufshirts</span></a>
-                        </li>
-                        <li class="level1 nav-3-12"><a href="/ru_de/kinder/laufsocken.html"><span>Laufsocken</span></a>
-                        </li>
-                        <li class="level1 nav-3-13"><a href="/ru_de/kinder/laufzubehor.html"><span>Laufzubehör</span></a>
-                        </li>
-                        <li class="level1 nav-3-14"><a
-                                href="/ru_de/kinder/outdoorschuhe.html"><span>Outdoorschuhe</span></a>
-                        </li>
-                        <li class="level1 nav-3-15"><a href="/ru_de/kinder/rucksacke.html"><span>Rucksäcke</span></a>
-                        </li>
-                        <li class="level1 nav-3-16"><a href="/ru_de/kinder/schwimmen.html"><span>Schwimmen</span></a>
-                        </li>
-                        <li class="level1 nav-3-17"><a
-                                href="/ru_de/kinder/spikes.html"><span>Spikes</span></a></li>
-                        <li class="level1 nav-3-18"><a
-                                href="/ru_de/kinder/trainingsanzuege.html"><span>Trainingsanzüge</span></a>
-                        </li>
-                        <li class="level1 nav-3-19"><a href="/ru_de/kinder/triathlon.html"><span>Triathlon</span></a>
-                        </li>
-                        <li class="level1 nav-3-20"><a
-                                href="/ru_de/kinder/universelle-hallenschuhe.html"><span>Universelle Hallenschuhe</span></a>
-                        </li>
-                        <li class="level1 nav-3-21"><a
-                                href="/ru_de/kinder/walkingschuhe.html"><span>Walkingschuhe</span></a>
-                        </li>
-                        <li class="level1 nav-3-22 last"><a
-                                href="/ru_de/kinder/wintersport.html"><span>Wintersport</span></a>
-                        </li>
+                        <li class="level1 nav-3-1 first"><a href="/ru_de/kinder/badeschuhe.html"><span>Badeschuhe</span></a></li>
+                        <li class="level1 nav-3-2"><a href="/ru_de/kinder/feldhockeyschuhe.html"><span>Feldhockeyschuhe</span></a></li>
+                        <li class="level1 nav-3-3"><a href="/ru_de/kinder/funktionsunterwasche.html"><span>Funktionsunterwäsche</span></a></li>
+                        <li class="level1 nav-3-4"><a href="/ru_de/kinder/handballschuhe.html"><span>Handballschuhe</span></a></li>
+                        <li class="level1 nav-3-5"><a href="/ru_de/kinder/kompression.html"><span>Kompression</span></a></li>
+                        <li class="level1 nav-3-6"><a href="/ru_de/kinder/kopfbedeckung.html"><span>Kopfbedeckung</span></a></li>
+                        <li class="level1 nav-3-7"><a href="/ru_de/kinder/laufhandschuhe.html"><span>Laufhandschuhe</span></a></li>
+                        <li class="level1 nav-3-8"><a href="/ru_de/kinder/laufhosen.html"><span>Laufhosen</span></a></li>
+                        <li class="level1 nav-3-9"><a href="/ru_de/kinder/laufjacken.html"><span>Laufjacken</span></a></li>
+                        <li class="level1 nav-3-10"><a href="/ru_de/kinder/laufschuhe.html"><span>Laufschuhe</span></a></li>
+                        <li class="level1 nav-3-11"><a href="/ru_de/kinder/laufshirts.html"><span>Laufshirts</span></a></li>
+                        <li class="level1 nav-3-12"><a href="/ru_de/kinder/laufsocken.html"><span>Laufsocken</span></a></li>
+                        <li class="level1 nav-3-13"><a href="/ru_de/kinder/laufzubehor.html"><span>Laufzubehör</span></a></li>
+                        <li class="level1 nav-3-14"><a href="/ru_de/kinder/outdoorschuhe.html"><span>Outdoorschuhe</span></a></li>
+                        <li class="level1 nav-3-15"><a href="/ru_de/kinder/rucksacke.html"><span>Rucksäcke</span></a></li>
+                        <li class="level1 nav-3-16"><a href="/ru_de/kinder/schwimmen.html"><span>Schwimmen</span></a></li>
+                        <li class="level1 nav-3-17"><a href="/ru_de/kinder/spikes.html"><span>Spikes</span></a></li>
+                        <li class="level1 nav-3-18"><a href="/ru_de/kinder/trainingsanzuege.html"><span>Trainingsanzüge</span></a></li>
+                        <li class="level1 nav-3-19"><a href="/ru_de/kinder/triathlon.html"><span>Triathlon</span></a></li>
+                        <li class="level1 nav-3-20"><a href="/ru_de/kinder/universelle-hallenschuhe.html"><span>Universelle Hallenschuhe</span></a></li>
+                        <li class="level1 nav-3-21"><a href="/ru_de/kinder/walkingschuhe.html"><span>Walkingschuhe</span></a></li>
+                        <li class="level1 nav-3-22 last"><a href="/ru_de/kinder/wintersport.html"><span>Wintersport</span></a></li>
                     </ul>
                 </li>
-                <li class="level0 nav-4 last level-top">
+                <li class="level0 nav-4 level-top">
                     <a href="/lizards-and-pumpkins/sale" class="level-top"><span>Sale</span></a>
                 </li>
                 <li class="last level0">
@@ -376,9 +255,9 @@
                                         alt="" width="80" height="29"/></a><a
                                     href="/ru_de/x-bionic.html"><img
                                         src="/lizards-and-pumpkins/images/logos/white/x-bionic.png"
-                                        alt="" width="41" height="29"/></a></p></li>
+                                        alt="" width="41" height="29"/></a></p>
+                        </li>
                         <li class="separator"></li>
-
                         <li><a href="/ru_de/shop.html?brand=653">adidas</a></li>
                         <li><a href="/ru_de/shop.html?brand=502">Asics</a></li>
                         <li><a href="/ru_de/shop.html?brand=928">CEP</a></li>
@@ -401,11 +280,7 @@
                         <li><a href="/ru_de/shop.html?brand=15444">Under Armour</a></li>
                         <li><a href="/ru_de/x-bionic.html">X-Bionic</a></li>
                         <li><a href="/ru_de/shop.html?brand=1952">Zoot</a></li>
-                        <li class="brands-button">
-                            <button class="button" onclick="location.href='/ru_de/marken/'">Alle
-                                Marken
-                            </button>
-                        </li>
+                        <li class="brands-button"><button class="button" onclick="location.href='/ru_de/marken/'">Alle Marken</button></li>
                     </ul>
                 </li>
             </ul>

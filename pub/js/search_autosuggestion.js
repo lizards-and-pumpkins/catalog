@@ -1,4 +1,4 @@
-define(['lib/bind'], function (bind) {
+define(function () {
 
     function callAjax(url, callback) {
         var xmlhttp = new XMLHttpRequest;
@@ -11,26 +11,28 @@ define(['lib/bind'], function (bind) {
         xmlhttp.send();
     }
 
-    var autosuggestionBox = document.querySelector('#search-autosuggestion'),
-        searchInput = document.querySelector('#search'),
-        minimalLength = 3;
+    Array.prototype.map.call(document.querySelectorAll('.search-form'), function (searchForm) {
+        var autosuggestionBox = searchForm.querySelector('#search-autosuggestion'),
+            searchInput = searchForm.querySelector('#search'),
+            minimalLength = 3;
 
-    bind(searchInput, 'keyup', function (event) {
-        var value = event.target.value;
+        searchInput.addEventListener('keyup', function (event) {
+            var value = event.target.value;
 
-        if (value.length < minimalLength) {
-            autosuggestionBox.innerHTML = '';
-            return;
-        }
+            if (value.length < minimalLength) {
+                autosuggestionBox.innerHTML = '';
+                return;
+            }
 
-        /* TODO: Inject base URL */
+            /* TODO: Inject base URL */
 
-        callAjax('/lizards-and-pumpkins/catalogsearch/suggest?q=' + value, function (responseText) {
-            autosuggestionBox.innerHTML = responseText;
-        });
-    });
+            callAjax('/lizards-and-pumpkins/catalogsearch/suggest?q=' + value, function (responseText) {
+                autosuggestionBox.innerHTML = responseText;
+            });
+        }, true);
 
-    bind(searchInput, 'blur', function () {
+        searchInput.addEventListener('blur', function () {
 //        autosuggestionBox.innerHTML = '';
+        }, true);
     });
 });
