@@ -340,11 +340,6 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertCollectionContainsDocumentForProductId($result, $productId);
     }
 
-    /**
-     * @return SearchEngine
-     */
-    abstract protected function createSearchEngineInstance();
-
     public function testItClearsTheStorage()
     {
         $searchDocumentFieldName = 'foo';
@@ -361,4 +356,35 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->clear();
         $this->assertEmpty($this->searchEngine->query($searchDocumentFieldValue, $this->testContext));
     }
+
+    public function testDocumentIsUniqueForProductIdAndContextCombination()
+    {
+        $productAId = ProductId::fromString(uniqid());
+        $productBId = ProductId::fromString(uniqid());
+
+        $uniqueValue = uniqid();
+        $documentFields = ['foo' => $uniqueValue];
+
+        $searchDocumentA = $this->createSearchDocumentWithContext($documentFields, $productAId, $this->testContext);
+        $searchDocumentB = $this->createSearchDocumentWithContext($documentFields, $productBId, $this->testContext);
+        $searchDocumentC = $this->createSearchDocumentWithContext($documentFields, $productAId, $this->testContext);
+
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection(
+            $searchDocumentA,
+            $searchDocumentB,
+            $searchDocumentC
+        );
+
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
+        $result = $this->searchEngine->query($uniqueValue, $this->testContext);
+
+        $this->assertCount(2, $result);
+        $this->assertCollectionContainsDocumentForProductId($result, $productAId);
+        $this->assertCollectionContainsDocumentForProductId($result, $productBId);
+    }
+
+    /**
+     * @return SearchEngine
+     */
+    abstract protected function createSearchEngineInstance();
 }
