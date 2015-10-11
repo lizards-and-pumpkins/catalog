@@ -1,4 +1,4 @@
-define(['lib/url', 'jquery'], function (url, $) {
+define(['lib/url'], function (url) {
 
     var FilterNavigation = {
         generateLayeredNavigation: function (filterNavigationJson, filterNavigationPlaceholderSelector) {
@@ -6,9 +6,9 @@ define(['lib/url', 'jquery'], function (url, $) {
                 return;
             }
 
-            var filterNavigation = $(filterNavigationPlaceholderSelector);
+            var filterNavigation = document.querySelector(filterNavigationPlaceholderSelector);
 
-            if (!filterNavigation.length) {
+            if (null === filterNavigation) {
                 return;
             }
 
@@ -18,11 +18,16 @@ define(['lib/url', 'jquery'], function (url, $) {
                     filter.options
                 );
 
-                filterNavigation.append(
-                    $('<div/>').addClass('block-title roundedBorder expanded').text(filter.label)
-                ).append(
-                    $('<ol/>').addClass('filter-content scroll-pane filter-' + filter.code).append(options)
-                );
+                var heading = document.createElement('DIV');
+                heading.className = 'block-title roundedBorder expanded';
+                heading.textContent = filter.label;
+
+                var optionList = document.createElement('OL');
+                optionList.className = 'filter-content scroll-pane filter-' + filter.code;
+                options.map(function (option) { optionList.appendChild(option) });
+
+                filterNavigation.appendChild(heading);
+                filterNavigation.appendChild(optionList);
             });
         },
 
@@ -39,30 +44,34 @@ define(['lib/url', 'jquery'], function (url, $) {
         createDefaultFilterOptions: function (filterCode, filterOptions) {
             var selectedFilterOptions = this.getSelectedFilterValues(filterCode);
             return filterOptions.reduce(function (carry, filterOption) {
-                var option = $('<li/>').append(
-                    $('<a/>').text(filterOption.value + ' (' + filterOption.count + ')')
-                        .prop('href', url.toggleQueryParameter(filterCode, filterOption.value))
-                );
+                var option = document.createElement('LI'),
+                    link = document.createElement('A');
+                link.textContent = filterOption.value + ' (' + filterOption.count + ')';
+                link.href = url.toggleQueryParameter(filterCode, filterOption.value);
+                option.appendChild(link);
 
                 if (selectedFilterOptions.indexOf(filterOption.value) !== -1) {
-                    option.addClass('active');
+                    option.className = 'active';
                 }
 
-                return carry.add(option);
-            }, $());
+                carry.push(option);
+                return carry;
+            }, []);
         },
 
         createColorFilterOptions: function (filterCode, filterOptions) {
             var selectedColors = this.getSelectedFilterValues(filterCode);
             return filterOptions.reduce(function (carry, filterOption) {
-                return carry.add(
-                    $('<li/>').append(
-                        $('<a/>').html(selectedColors.indexOf(filterOption.value.toString()) !== -1 ? '&#x2713;' : '&nbsp;')
-                            .css('background-color', '#' + filterOption.value)
-                            .prop('href', url.toggleQueryParameter(filterCode, filterOption.value.toString()))
-                    )
-                );
-            }, $());
+                var option = document.createElement('LI'),
+                    link = document.createElement('A');
+                link.innerHTML = selectedColors.indexOf(filterOption.value.toString()) !== -1 ? '&#x2713;' : '&nbsp;';
+                link.style.backgroundColor = '#' + filterOption.value;
+                link.href = url.toggleQueryParameter(filterCode, filterOption.value.toString());
+                option.appendChild(link);
+
+                carry.push(option);
+                return carry;
+            }, []);
         },
 
         createPriceFilterOptions: function (filterCode, filterOptions) {
@@ -76,7 +85,7 @@ define(['lib/url', 'jquery'], function (url, $) {
                     carry[rangeNumber] += filterOption.count;
                     return carry;
                 }, {}),
-                options = $();
+                options = [];
 
             for (var rangeNumber in priceRanges) {
                 if (!priceRanges.hasOwnProperty(rangeNumber)) {
@@ -86,16 +95,17 @@ define(['lib/url', 'jquery'], function (url, $) {
                 var priceFrom = rangeNumber * priceStep,
                     priceTo = (parseInt(rangeNumber) + 1) * parseInt(priceStep) - 0.01,
                     priceRangeString = priceFrom + '~' + priceTo,
-                    option = $('<li/>').append(
-                        $('<a/>').prop('href', url.toggleQueryParameter(filterCode, priceRangeString))
-                            .html(priceFrom + ' &euro; - ' + priceTo + ' &euro; (' + priceRanges[rangeNumber] + ')')
-                    );
+                    option = document.createElement('LI'),
+                    link = document.createElement('A');
+                link.href = url.toggleQueryParameter(filterCode, priceRangeString);
+                link.innerHTML = priceFrom + ' &euro; - ' + priceTo + ' &euro; (' + priceRanges[rangeNumber] + ')';
+                option.appendChild(link);
 
                 if (selectedPriceRanges.indexOf(priceRangeString) !== -1) {
-                    option.addClass('active');
+                    option.className = 'active';
                 }
 
-                options = options.add(option);
+                options.push(option);
             }
 
             return options;

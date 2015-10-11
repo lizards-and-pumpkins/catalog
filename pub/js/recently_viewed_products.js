@@ -1,4 +1,4 @@
-define(['local_storage', 'jquery'], function(storage) {
+define(['lib/local_storage'], function(storage) {
     return {
 
         storageKey: 'recently-viewed-products',
@@ -30,19 +30,23 @@ define(['local_storage', 'jquery'], function(storage) {
                 return '';
             }
 
-            var productsList = jQuery('<ul/>').addClass('products-grid');
+            var productList = document.createElement('UL');
+            productList.className = 'product-grid';
 
-            for (var i = 0; i < products.length && productsList.length <= this.numProducts; i++) {
+            for (var i = 0; i < products.length && i < this.numProducts; i++) {
                 if (currentProduct.hasOwnProperty('sku') && products[i]['sku'] == currentProduct['sku']) {
                     continue;
                 }
 
-                productsList.append(jQuery(products[i]['html']));
+                productList.innerHTML += products[i]['html'];
             }
 
-            productsList.find('li').last().addClass('last');
+            // TODO: Add "last" class to last element of the list.
 
-            return jQuery('<div/>').append(productsList).html();
+            var temporaryContainer = document.createElement('DIV');
+            temporaryContainer.appendChild(productList);
+
+            return temporaryContainer.innerHTML;
         },
 
         removeProductFromListBySku: function(list, sku) {

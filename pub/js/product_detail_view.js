@@ -1,21 +1,31 @@
 require([
+    'lib/domReady',
     'common',
     'recently_viewed_products',
-    'lib/jquery.jqzoom.min',
-    'lib/jquery.uniform.min'
-], function(common, recentlyViewedProducts) {
+    'lib/styleselect',
+    'lib/zoom',
+    'lib/swiping_container',
+    'jquery'
+], function(domReady, common, recentlyViewedProducts, styleSelect, zoom, toggleSwipingArrows, jQuery) {
 
-    jQuery(document).ready(function() {
+    var tabletWidth = 768,
+        siteFullWidth = 975;
+
+    domReady(function() {
         require([
             '//connect.facebook.net/de_DE/all.js#xfbml=1&status=0',
             '//platform.twitter.com/widgets.js',
             '//apis.google.com/js/plusone.js'
         ]);
 
+//        $('select').not('.alertPopUp select').uniform({selectAutoWidth: false});
+        styleSelect('select');
+
+        handleRecentlyViewedProducts();
+
         adjustDetailsToWidth();
         jQuery(window).bind('resize orientationchange', adjustDetailsToWidth);
 
-        handleRecentlyViewedProducts();
         initializeZoom();
         initializeTabs();
         observeSizeDropDown();
@@ -38,13 +48,7 @@ require([
     }
 
     function initializeZoom() {
-        jQuery('.main-image-area').jqzoom({
-            'zoomWidth': 595,
-            'zoomHeight': 389,
-            'xOffset': 5,
-            'title': false,
-            'preloadText': ''
-        });
+        new zoom(document.querySelector('.main-image-area'));
     }
 
     function initializeTabs() {
@@ -91,7 +95,7 @@ require([
                 for (var i = 0; i < selectedItemStockAvailable; i++) {
                     qty.append(jQuery('<option>' + (i + 1) + '</option>'));
                 }
-                jQuery.uniform.update('.qty-box select');
+                styleSelect('.qty-box select');
             } else {
                 jQuery('.product-shop span.availability.choose').show();
                 jQuery('.product-shop .selectedSize').html('');
@@ -106,8 +110,7 @@ require([
             /* Show popup */
             new ModalBox().show(jQuery('#alertLayer').html());
 
-            /* Apply uniform for drop-down */
-            jQuery('.modal-popup .alertPopUp select').uniform({selectAutoWidth: false});
+            styleSelect('.modal-popup .alertPopUp select');
 
             /* Bind action to button */
             jQuery('.alertPopUp button').on('click', function () {
@@ -245,7 +248,7 @@ require([
                     }
                 });
                 productImageColumn.prepend(jQuery('<div/>', {'class': 'flexslider'}).append(imagesList));
-                jQuery('.flexslider').flexslider({'slideshow': false, 'animationLoop': false});
+//                jQuery('.flexslider').flexslider({'slideshow': false, 'animationLoop': false});
             }
 
             /* Hide "send" part of FB buttons block if not yet hidden */
@@ -319,6 +322,8 @@ require([
             }
 
         }
+
+        toggleSwipingArrows('.swipe-container', 'ul');
     }
 
     /**
