@@ -70,9 +70,8 @@ textarea:focus, input:focus { outline: 0 }
 /* Main navigation */
 header { position: relative; z-index: 100 }
 nav { clear: both; color: #ffffff }
-#navPlaceholder { display: none }
-.nav a, #navPlaceholder a { color: #ffffff }
-.nav > li, #navPlaceholder > li { float: left }
+.nav a { color: #ffffff }
+.nav > li { float: left }
 .nav > li { border-right: #1280ac solid 1px; border-left: #5ac0ec solid 1px }
 .nav > li.first { border-left: none }
 .nav > li.last { border-right: none }
@@ -80,27 +79,23 @@ nav { clear: both; color: #ffffff }
 .nav > li.hover > a, .nav > li:hover > a { background: #105a86; padding-top: 6px; border-top: 1px solid #0a4365; border-radius: 2px 2px 0 0 }
 .nav > li > ul { left: -100000px; border-radius: 2px }
 .nav > li.first > ul { border-radius: 0 2px 2px 2px }
-.nav > li > ul, #navPlaceholder > ul { position: absolute; background: #105a86; padding: 20px 0; width: 100% }
+.nav > li > ul { position: absolute; background: #105a86; padding: 20px 0; width: 100% }
 .nav > li:hover > ul { left: 0 }
-.nav li li, #navPlaceholder li { padding-bottom: 5px }
-.nav li li a, #navPlaceholder > ul > li > a { display: block; padding: 6px 0 1px 9px; margin: 0 17px; font-weight: bold; white-space: nowrap }
+.nav li li { padding-bottom: 5px }
+.nav li li a { display: block; padding: 6px 0 1px 9px; margin: 0 17px; font-weight: bold; white-space: nowrap }
 .nav li li a:hover { background: #3cabd9; border-radius: 2px }
 
 /* Brands Navigation */
-.nav .brands-glossary, .nav .brands-logos, #navPlaceholder .brands-glossary, #navPlaceholder .brands-logos,
-.nav .separator, #navPlaceholder .separator { width: auto !important; margin: 0 17px }
-.nav .brands-glossary a, #navPlaceholder .brands-glossary a { padding: 0 4px; margin: 2px 5px 12px; height: auto; display: inline-block; font-weight: normal }
-.nav .brands-glossary, #navPlaceholder .brands-glossary { border-bottom: #0d4a6e 1px solid }
-.nav .brands-logos, #navPlaceholder .brands-logos { border-bottom: #0d4a6e 1px solid; border-top: #4981a3 1px solid; padding: 15px 0 20px }
-.nav .separator, #navPlaceholder .separator { border-top: #4981a3 1px solid; margin-bottom: 20px }
+.nav .brands-glossary, .nav .brands-logos, .nav .separator { width: auto !important; margin: 0 17px }
+.nav .brands-glossary a { padding: 0 4px; margin: 2px 5px 12px; height: auto; display: inline-block; font-weight: normal }
+.nav .brands-glossary { border-bottom: #0d4a6e 1px solid }
+.nav .brands-logos { border-bottom: #0d4a6e 1px solid; border-top: #4981a3 1px solid; padding: 15px 0 20px }
+.nav .separator { border-top: #4981a3 1px solid; margin-bottom: 20px }
 .nav .brands-logos a { float: left; padding-left: 2px }
 .nav .brands-logos a:hover { background: none }
-.nav .brands-logos .brand-logos-title, #navPlaceholder .brands-logos .brand-logos-title { font-size: 18px; text-transform: uppercase; float: left; padding: 12px 15px 0 0 }
-.nav .brands-button, #navPlaceholder .brands-button { position: absolute; bottom: 0; right: 0; margin: 0 17px 30px 0 }
-#navPlaceholder .brands-logos { text-align: center }
-#navPlaceholder .brands-logos a { display: inline-block; margin: 10px 10px 0 }
-#navPlaceholder .brands-glossary a { margin: 2px 2px 12px }
-.nav .button, #navPlaceholder .button { background: #ffffff; color: #000000; border-color: #bdc3cc }
+.nav .brands-logos .brand-logos-title { font-size: 18px; text-transform: uppercase; float: left; padding: 12px 15px 0 0 }
+.nav .brands-button { position: absolute; bottom: 0; right: 0; margin: 0 17px 30px 0 }
+.nav .button { background: #ffffff; color: #000000; border-color: #bdc3cc }
 
 /* Footer blocks */
 .footer-block { float: left; font-size: 10px; width: 171px }
@@ -164,7 +159,6 @@ nav { clear: both; color: #ffffff }
 
 /* Tablet */
 @media (max-width: 974px) {
-    #navPlaceholder { display: block }
     .main, .header, .footer, .footer-block-info, .info-banner-inner-container { width: auto }
     .main-container .main { padding-left: 10px; padding-right: 10px; width: auto }
     .logo { padding-left: 10px }
@@ -172,7 +166,7 @@ nav { clear: both; color: #ffffff }
     .social .text h3 { margin-top: 10px }
     .flex-control-nav { display: none }
     .cms_header_small { display: none }
-    .nav .brands-logos .brand-logos-title, #navPlaceholder .brands-logos .brand-logos-title { float: none; padding: 0 }
+    .nav .brands-logos .brand-logos-title { float: none; padding: 0 }
 
     /* Footer blocks */
     .footer-block { width: 33% }
@@ -197,6 +191,7 @@ nav { clear: both; color: #ffffff }
     .nav.last { border-bottom: none }
     .nav > li { display: table-cell; float: none; text-align: center }
     .nav > li:hover > ul { left: -9999px }
+    .nav > li.hover > ul { left: 0 }
     #phone-meta-menu { display: table; width: 100%; clear: both }
     #phone-meta-menu li { display: table-cell; padding-bottom: 10px }
     #phone-meta-menu li a { display: block; border-right: #21719f solid 1px; padding: 11px 0; text-align: center; background-color: #228bb6 }
@@ -237,7 +232,7 @@ nav { clear: both; color: #ffffff }
 .roundedBorder { border-radius: 2px }
 
 /* Clearer */
-.clearer:after, .nav:after, #navPlaceholder > ul:after, .header-panel:after,
+.clearer:after, .nav:after, .header-panel:after,
 .nav .brands-logos:after { content: ""; display: block; height: 0; clear: both; visibility: hidden }
 
 /* Print */
