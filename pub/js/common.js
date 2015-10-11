@@ -117,12 +117,10 @@ define(['lib/domReady', 'lib/cookie', 'search_autosuggestion'], function (domRea
             return;
         }
 
-        var topLevelItems = Array.prototype.slice.call(document.querySelectorAll('.nav > li'));
-
         var widthSoFar = 0,
             newNav;
 
-        topLevelItems.map(function (item, index) {
+        Array.prototype.map.call(document.querySelectorAll('.nav > li'), function (item, index) {
             item.className = item.className.replace(/\bfirst\b|\blast\b/ig, '');
             if (0 === widthSoFar) {
                 newNav = document.createElement('UL');
@@ -135,16 +133,19 @@ define(['lib/domReady', 'lib/cookie', 'search_autosuggestion'], function (domRea
             if (navItemsOriginalWidth.length - 1 === index) {
                 newNav.className += ' last';
             }
+
             widthSoFar += navItemsOriginalWidth[index];
-            /* We are checking the width with the next element because if current element is wider than current
-             * view-port it will result in infinite loop */
-            var noMoreItemsWillFitIntoThisLine = widthSoFar + navItemsOriginalWidth[index + 1] > currentWidth ||
-                typeof navItemsOriginalWidth[index + 1] == 'undefined';
-            if (noMoreItemsWillFitIntoThisLine) {
+
+            var noMoreItemsWillFitIntoThisLine = widthSoFar + navItemsOriginalWidth[index + 1] > currentWidth,
+                noMoreItemsLeft = typeof navItemsOriginalWidth[index + 1] == 'undefined';
+
+            if (noMoreItemsWillFitIntoThisLine || noMoreItemsLeft) {
                 item.className += ' last';
             }
+
             newNav.appendChild(item);
-            if (noMoreItemsWillFitIntoThisLine) {
+
+            if (noMoreItemsWillFitIntoThisLine || noMoreItemsLeft) {
                 widthSoFar = 0;
                 nav[0].parentNode.appendChild(newNav);
             }
