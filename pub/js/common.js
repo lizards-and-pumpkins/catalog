@@ -68,6 +68,10 @@ define(['lib/domReady', 'lib/cookie', 'search_autosuggestion'], function (domRea
     }
 
     function mobileNavigationClickListener(event) {
+        if (this.querySelector('ul') === null) {
+            return;
+        }
+
         event.preventDefault();
 
         var elementWasAlreadySelected = this.className.match(/\bhover\b/ig);
