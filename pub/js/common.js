@@ -120,8 +120,7 @@ define(['lib/domReady', 'lib/cookie', 'search_autosuggestion'], function (domRea
         var topLevelItems = Array.prototype.slice.call(document.querySelectorAll('.nav > li'));
 
         var widthSoFar = 0,
-            newNav,
-            last;
+            newNav;
 
         topLevelItems.map(function (item, index) {
             item.className = item.className.replace(/\bfirst\b|\blast\b/ig, '');
@@ -139,14 +138,15 @@ define(['lib/domReady', 'lib/cookie', 'search_autosuggestion'], function (domRea
             widthSoFar += navItemsOriginalWidth[index];
             /* We are checking the width with the next element because if current element is wider than current
              * view-port it will result in infinite loop */
-            last = widthSoFar + navItemsOriginalWidth[index + 1] > currentWidth || typeof navItemsOriginalWidth[index + 1] == 'undefined';
-            if (last) {
+            var noMoreItemsWillFitIntoThisLine = widthSoFar + navItemsOriginalWidth[index + 1] > currentWidth ||
+                typeof navItemsOriginalWidth[index + 1] == 'undefined';
+            if (noMoreItemsWillFitIntoThisLine) {
                 item.className += ' last';
             }
             newNav.appendChild(item);
-            if (last) {
+            if (noMoreItemsWillFitIntoThisLine) {
                 widthSoFar = 0;
-                nav[0].parentNode.insertBefore(newNav, nav[0].parentNode.firstChild);
+                nav[0].parentNode.appendChild(newNav);
             }
         });
 
