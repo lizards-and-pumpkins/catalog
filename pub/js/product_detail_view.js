@@ -4,8 +4,9 @@ require([
     'recently_viewed_products',
     'lib/styleselect',
     'lib/zoom',
-    'lib/swiping_container'
-], function(domReady, common, recentlyViewedProducts, styleSelect, zoom, toggleSwipingArrows) {
+    'lib/swiping_container',
+    'jquery'
+], function(domReady, common, recentlyViewedProducts, styleSelect, zoom, toggleSwipingArrows, jQuery) {
 
     var tabletWidth = 768,
         siteFullWidth = 975;
