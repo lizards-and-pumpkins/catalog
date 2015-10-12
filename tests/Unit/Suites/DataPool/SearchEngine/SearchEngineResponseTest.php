@@ -3,7 +3,6 @@
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
-use LizardsAndPumpkins\Product\FilterNavigationFilterCollection;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse
@@ -16,9 +15,9 @@ class SearchEngineResponseTest extends \PHPUnit_Framework_TestCase
     private $stubSearchDocumentCollection;
 
     /**
-     * @var FilterNavigationFilterCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchEngineFacetFieldCollection|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubFilterCollection;
+    private $stubFacetFieldCollection;
 
     /**
      * @var SearchEngineResponse
@@ -28,11 +27,11 @@ class SearchEngineResponseTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
-        $this->stubFilterCollection = $this->getMock(FilterNavigationFilterCollection::class, [], [], '', false);
+        $this->stubFacetFieldCollection = $this->getMock(SearchEngineFacetFieldCollection::class, [], [], '', false);
 
         $this->searchEngineResponse = new SearchEngineResponse(
             $this->stubSearchDocumentCollection,
-            $this->stubFilterCollection
+            $this->stubFacetFieldCollection
         );
     }
 
@@ -41,8 +40,8 @@ class SearchEngineResponseTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->stubSearchDocumentCollection, $this->searchEngineResponse->getSearchDocuments());
     }
 
-    public function testFilterCollectionIsReturned()
+    public function testSearchEngineFacetFieldCollectionIsReturned()
     {
-        $this->assertSame($this->stubFilterCollection, $this->searchEngineResponse->getFilterCollection());
+        $this->assertSame($this->stubFacetFieldCollection, $this->searchEngineResponse->getFacetFieldCollection());
     }
 }

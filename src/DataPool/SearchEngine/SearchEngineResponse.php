@@ -3,7 +3,6 @@
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
-use LizardsAndPumpkins\Product\FilterNavigationFilterCollection;
 
 class SearchEngineResponse
 {
@@ -13,17 +12,17 @@ class SearchEngineResponse
     private $searchDocuments;
 
     /**
-     * @var FilterNavigationFilterCollection
+     * @var SearchEngineFacetFieldCollection
      */
-    private $filterCollection;
+    private $facetFieldCollection;
 
     public function __construct(
         SearchDocumentCollection $searchDocuments,
-        FilterNavigationFilterCollection $filterCollection
+        SearchEngineFacetFieldCollection $facetFieldCollection
     ) {
 
         $this->searchDocuments = $searchDocuments;
-        $this->filterCollection = $filterCollection;
+        $this->facetFieldCollection = $facetFieldCollection;
     }
 
     /**
@@ -35,10 +34,10 @@ class SearchEngineResponse
     }
 
     /**
-     * @return FilterNavigationFilterCollection
+     * @return SearchEngineFacetFieldCollection
      */
-    public function getFilterCollection()
+    public function getFacetFieldCollection()
     {
-        return $this->filterCollection;
+        return $this->facetFieldCollection;
     }
 }
