@@ -10,6 +10,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
@@ -82,7 +83,11 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         \PHPUnit_Framework_MockObject_MockObject $documentCollection
     ) {
         $this->prepareMockDataPoolReader();
-        $this->mockDataPoolReader->method('getSearchDocumentsMatchingCriteria')->willReturn($documentCollection);
+
+        $stubSearchEngineResponse = $this->getMock(SearchEngineResponse::class, [], [], '', false);
+        $stubSearchEngineResponse->method('getSearchDocuments')->willReturn($documentCollection);
+
+        $this->mockDataPoolReader->method('getSearchResultsMatchingCriteria')->willReturn($stubSearchEngineResponse);
     }
 
     private function prepareMockDataPoolReader()
@@ -391,8 +396,9 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->mockSearchCriteriaBuilder->expects($this->once())->method('fromRequestParameter')->with('foo', 'bar')
             ->willReturn($stubCriteria);
 
-        $this->mockDataPoolReader->method('getSearchDocumentsMatchingCriteria')
-            ->willReturn($stubSearchDocumentCollection);
+        $stubSearchEngineResponse = $this->getMock(SearchEngineResponse::class, [], [], '', false);
+        $stubSearchEngineResponse->method('getSearchDocuments')->willReturn($stubSearchDocumentCollection);
+        $this->mockDataPoolReader->method('getSearchResultsMatchingCriteria')->willReturn($stubSearchEngineResponse);
 
         $this->requestHandler->process($this->stubRequest);
     }
@@ -414,8 +420,9 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->mockSearchCriteriaBuilder->expects($this->once())->method('fromRequestParameter')
             ->with($attributeCode, $filterValue)->willReturn($stubCriteria);
 
-        $this->mockDataPoolReader->method('getSearchDocumentsMatchingCriteria')
-            ->willReturn($stubSearchDocumentCollection);
+        $stubSearchEngineResponse = $this->getMock(SearchEngineResponse::class, [], [], '', false);
+        $stubSearchEngineResponse->method('getSearchDocuments')->willReturn($stubSearchDocumentCollection);
+        $this->mockDataPoolReader->method('getSearchResultsMatchingCriteria')->willReturn($stubSearchEngineResponse);
 
         $this->requestHandler->process($this->stubRequest);
     }

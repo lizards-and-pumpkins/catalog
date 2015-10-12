@@ -266,7 +266,7 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
         $stubFilteredDocumentCollection = $this->createStubSearchDocumentCollection($stubSearchDocument);
         $stubUnfilteredDocumentCollection = $this->createStubSearchDocumentCollection($stubSearchDocument);
 
-        $this->stubDataPoolReader->method('getSearchDocumentsMatchingCriteria')
+        $this->stubDataPoolReader->method('getSearchResultsMatchingCriteria')
             ->willReturn($stubUnfilteredDocumentCollection);
 
         $this->filterCollection->initialize(
@@ -302,7 +302,7 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
         $stubFilteredDocumentCollection = $this->createStubSearchDocumentCollection($stubSearchDocument);
         $stubUnfilteredDocumentCollection = $this->createStubSearchDocumentCollection($stubSearchDocument);
 
-        $this->stubDataPoolReader->method('getSearchDocumentsMatchingCriteria')
+        $this->stubDataPoolReader->method('getSearchResultsMatchingCriteria')
             ->willReturn($stubUnfilteredDocumentCollection);
 
         $stubSearchCriteria = $this->getMock(SearchCriteria::class);

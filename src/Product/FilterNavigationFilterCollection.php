@@ -182,7 +182,7 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
         $filterCode
     ) {
         $customCriteria = $this->addFiltersExceptGivenOneToSearchCriteria($originalCriteria, $filterCode);
-        $searchDocumentCollection = $this->dataPoolReader->getSearchDocumentsMatchingCriteria(
+        $searchDocumentCollection = $this->dataPoolReader->getSearchResultsMatchingCriteria(
             $customCriteria,
             $context
         );

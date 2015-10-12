@@ -23,6 +23,11 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine;
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineFacetField
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineFacetFieldCollection
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineFacetFieldValue
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse
+ * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\DataVersion
  * @uses   \LizardsAndPumpkins\Product\ProductId
  */

@@ -5,9 +5,9 @@ namespace LizardsAndPumpkins\DataPool;
 use LizardsAndPumpkins\DataPool\Exception\InvalidKeyValueStoreKeyException;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 
 class DataPoolReader
@@ -161,7 +161,7 @@ class DataPoolReader
     /**
      * @param string $queryString
      * @param Context $context
-     * @return SearchDocumentCollection
+     * @return SearchEngineResponse
      */
     public function getSearchResults($queryString, Context $context)
     {
@@ -171,9 +171,9 @@ class DataPoolReader
     /**
      * @param SearchCriteria $criteria
      * @param Context $context
-     * @return SearchDocumentCollection
+     * @return SearchEngineResponse
      */
-    public function getSearchDocumentsMatchingCriteria(SearchCriteria $criteria, Context $context)
+    public function getSearchResultsMatchingCriteria(SearchCriteria $criteria, Context $context)
     {
         return $this->searchEngine->getSearchDocumentsMatchingCriteria($criteria, $context);
     }

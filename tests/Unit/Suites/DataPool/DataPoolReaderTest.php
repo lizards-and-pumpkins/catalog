@@ -212,7 +212,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
             ->method('getSearchDocumentsMatchingCriteria')
             ->with($mockCriteria, $stubContext);
 
-        $this->dataPoolReader->getSearchDocumentsMatchingCriteria($mockCriteria, $stubContext);
+        $this->dataPoolReader->getSearchResultsMatchingCriteria($mockCriteria, $stubContext);
     }
 
     public function testItDelegatesUrlKeyReadsToUrlKeyStorage()

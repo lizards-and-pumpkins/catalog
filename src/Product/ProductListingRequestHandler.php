@@ -194,12 +194,12 @@ class ProductListingRequestHandler implements HttpRequestHandler
             $selectedFilters
         );
 
-        $searchDocumentCollection = $this->dataPoolReader->getSearchDocumentsMatchingCriteria(
+        $searchEngineResponse = $this->dataPoolReader->getSearchResultsMatchingCriteria(
             $criteriaWithSelectedFiltersApplied,
             $this->context
         );
 
-        return $searchDocumentCollection;
+        return $searchEngineResponse->getSearchDocuments();
     }
 
     /**
