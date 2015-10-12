@@ -161,13 +161,11 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     private function createFacetFieldsCollectionFromSearchDocumentCollection(
         SearchDocumentCollection $documentCollection
     ) {
-        $attributeCount = $this->createAttributeValueCountArrayFromSearchDocumentCollection($documentCollection);
+        $attributeCounts = $this->createAttributeValueCountArrayFromSearchDocumentCollection($documentCollection);
         $facetFields = array_map(function ($attributeCode, $attributeValues) {
-            $facetFieldValues = array_map(function ($value, $count) {
-                return SearchEngineFacetFieldValue::create((string)$value, $count);
-            }, array_keys($attributeValues), $attributeValues);
+            $facetFieldValues = $this->getFacetFieldValuesFromAttributeValues($attributeValues);
             return new SearchEngineFacetField(AttributeCode::fromString($attributeCode), ...$facetFieldValues);
-        }, array_keys($attributeCount), $attributeCount);
+        }, array_keys($attributeCounts), $attributeCounts);
 
         return new SearchEngineFacetFieldCollection(...$facetFields);
     }
@@ -210,5 +208,16 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
         $facetFieldCollection = $this->createFacetFieldsCollectionFromSearchDocumentCollection($documentCollection);
 
         return new SearchEngineResponse($documentCollection, $facetFieldCollection);
+    }
+
+    /**
+     * @param int[] $attributeValues
+     * @return SearchEngineFacetFieldValue[]
+     */
+    function getFacetFieldValuesFromAttributeValues($attributeValues)
+    {
+        return array_map(function ($value, $count) {
+            return SearchEngineFacetFieldValue::create((string)$value, $count);
+        }, array_keys($attributeValues), $attributeValues);
     }
 }
