@@ -13,9 +13,9 @@ class SearchEngineFacetFieldTest extends \PHPUnit_Framework_TestCase
     {
         /** @var AttributeCode|\PHPUnit_Framework_MockObject_MockObject $stubAttributeCode */
         $stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
-        $facetFiled = new SearchEngineFacetField($stubAttributeCode);
+        $facetField = new SearchEngineFacetField($stubAttributeCode);
 
-        $this->assertSame($stubAttributeCode, $facetFiled->getAttributeCode());
+        $this->assertSame($stubAttributeCode, $facetField->getAttributeCode());
     }
 
     public function testFacetFieldValuesAreReturned()

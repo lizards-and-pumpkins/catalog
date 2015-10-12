@@ -9,43 +9,43 @@ class SearchEngineFacetFieldCollectionTest extends \PHPUnit_Framework_TestCase
 {
     public function testCountableInterfaceIsImplemented()
     {
-        $facetFiledCollection = new SearchEngineFacetFieldCollection;
-        $this->assertInstanceOf(\Countable::class, $facetFiledCollection);
+        $facetFieldCollection = new SearchEngineFacetFieldCollection;
+        $this->assertInstanceOf(\Countable::class, $facetFieldCollection);
     }
 
     public function testCollectionCountIsReturned()
     {
-        $stubFacetFiled = $this->getMock(SearchEngineFacetField::class, [], [], '', false);
-        $facetFiledCollection = new SearchEngineFacetFieldCollection($stubFacetFiled);
+        $stubFacetField = $this->getMock(SearchEngineFacetField::class, [], [], '', false);
+        $facetFieldCollection = new SearchEngineFacetFieldCollection($stubFacetField);
 
-        $this->assertCount(1, $facetFiledCollection);
+        $this->assertCount(1, $facetFieldCollection);
     }
 
     public function testCollectionCanBeRetrievedViaGetter()
     {
-        $stubFacetFiled = $this->getMock(SearchEngineFacetField::class, [], [], '', false);
-        $facetFiledCollection = new SearchEngineFacetFieldCollection($stubFacetFiled);
+        $stubFacetField = $this->getMock(SearchEngineFacetField::class, [], [], '', false);
+        $facetFieldCollection = new SearchEngineFacetFieldCollection($stubFacetField);
 
-        $result = $facetFiledCollection->getFacetFields();
-        $expectedFacetFieldsArray = [$stubFacetFiled];
+        $result = $facetFieldCollection->getFacetFields();
+        $expectedFacetFieldsArray = [$stubFacetField];
 
         $this->assertSame($expectedFacetFieldsArray, $result);
     }
 
     public function testIteratorAggregateInterfaceIsImplemented()
     {
-        $facetFiledCollection = new SearchEngineFacetFieldCollection;
-        $this->assertInstanceOf(\IteratorAggregate::class, $facetFiledCollection);
+        $facetFieldCollection = new SearchEngineFacetFieldCollection;
+        $this->assertInstanceOf(\IteratorAggregate::class, $facetFieldCollection);
     }
 
     public function testCollectionCanBeRetrievedViaIterator()
     {
-        $stubFacetFiled = $this->getMock(SearchEngineFacetField::class, [], [], '', false);
-        $facetFiledCollection = new SearchEngineFacetFieldCollection($stubFacetFiled);
+        $stubFacetField = $this->getMock(SearchEngineFacetField::class, [], [], '', false);
+        $facetFieldCollection = new SearchEngineFacetFieldCollection($stubFacetField);
 
-        $result = $facetFiledCollection->getIterator();
+        $result = $facetFieldCollection->getIterator();
 
         $this->assertCount(1, $result);
-        $this->assertSame($stubFacetFiled, $result->current());
+        $this->assertSame($stubFacetField, $result->current());
     }
 }
