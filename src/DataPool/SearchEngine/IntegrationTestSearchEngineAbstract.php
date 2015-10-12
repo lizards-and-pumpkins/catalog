@@ -20,7 +20,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     /**
      * @param string $queryString
      * @param Context $queryContext
-     * @return SearchDocumentCollection
+     * @return SearchEngineResponse
      */
     final public function query($queryString, Context $queryContext)
     {
@@ -69,7 +69,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     /**
      * @param SearchCriteria $criteria
      * @param Context $context
-     * @return SearchDocumentCollection
+     * @return SearchEngineResponse
      */
     final public function getSearchDocumentsMatchingCriteria(SearchCriteria $criteria, Context $context)
     {
