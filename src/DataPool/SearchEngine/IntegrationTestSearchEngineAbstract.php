@@ -7,6 +7,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
+use LizardsAndPumpkins\Product\AttributeCode;
 use LizardsAndPumpkins\Utils\Clearable;
 
 abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clearable
@@ -27,7 +28,9 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
         $matchingDocs = $this->getSearchDocumentsForQueryInContext($allSearchDocuments, $queryString, $queryContext);
 
         $searchDocumentCollection = new SearchDocumentCollection(...array_values($matchingDocs));
-        $facetFieldCollection = new SearchEngineFacetFieldCollection();
+        $facetFieldCollection = $this->createFacetFieldsCollectionFromSearchDocumentCollection(
+            $searchDocumentCollection
+        );
 
         return new SearchEngineResponse($searchDocumentCollection, $facetFieldCollection);
     }
@@ -83,7 +86,9 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
         );
 
         $searchDocumentCollection = new SearchDocumentCollection(...array_values($matchingDocuments));
-        $facetFieldCollection = new SearchEngineFacetFieldCollection();
+        $facetFieldCollection = $this->createFacetFieldsCollectionFromSearchDocumentCollection(
+            $searchDocumentCollection
+        );
 
         return new SearchEngineResponse($searchDocumentCollection, $facetFieldCollection);
     }
@@ -157,5 +162,51 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
             }
         }
         return false;
+    }
+
+    /**
+     * @param SearchDocumentCollection $documentCollection
+     * @return SearchEngineFacetFieldCollection
+     */
+    private function createFacetFieldsCollectionFromSearchDocumentCollection(
+        SearchDocumentCollection $documentCollection
+    ) {
+        $attributeCount = $this->createAttributeValueCountArrayFromSearchDocumentCollection($documentCollection);
+        $facetFields = array_map(function ($attributeCode, $attributeValues) {
+            $facetFieldValues = array_map(function ($value, $count) {
+                return SearchEngineFacetFieldValue::create((string)$value, $count);
+            }, array_keys($attributeValues), $attributeValues);
+            return new SearchEngineFacetField(AttributeCode::fromString($attributeCode), ...$facetFieldValues);
+        }, array_keys($attributeCount), $attributeCount);
+
+        return new SearchEngineFacetFieldCollection(...$facetFields);
+    }
+
+    /**
+     * @param SearchDocumentCollection $documentCollection
+     * @return mixed
+     */
+    private function createAttributeValueCountArrayFromSearchDocumentCollection(
+        SearchDocumentCollection $documentCollection
+    ) {
+        return array_reduce($documentCollection->getDocuments(), function ($carry, SearchDocument $document) {
+            return array_reduce(
+                $document->getFieldsCollection()->getFields(),
+                function ($carry, SearchDocumentField $searchDocumentField) {
+                    return array_reduce($searchDocumentField->getValues(),
+                        function ($carry, $value) use ($searchDocumentField) {
+                            if (!isset($carry[$searchDocumentField->getKey()][$value])) {
+                                $carry[$searchDocumentField->getKey()][$value] = 0;
+                            }
+                            $carry[$searchDocumentField->getKey()][$value] ++;
+
+                            return $carry;
+                        },
+                        $carry
+                    );
+                },
+                $carry
+            );
+        }, []);
     }
 }

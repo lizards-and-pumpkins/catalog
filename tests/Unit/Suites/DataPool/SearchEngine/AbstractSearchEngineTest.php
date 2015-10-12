@@ -17,6 +17,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
 use LizardsAndPumpkins\DataVersion;
+use LizardsAndPumpkins\Product\AttributeCode;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Utils\Clearable;
 
@@ -408,6 +409,34 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(2, $result);
         $this->assertCollectionContainsDocumentForProductId($result, $productAId);
         $this->assertCollectionContainsDocumentForProductId($result, $productBId);
+    }
+
+    public function testFacetFieldCollectionIsRetrievedFromSearchEngine()
+    {
+        $keyword = uniqid();
+        $productAId = ProductId::fromString(uniqid());
+        $productBId = ProductId::fromString(uniqid());
+
+        $searchDocumentA = $this->createSearchDocument(['foo' => $keyword], $productAId);
+        $searchDocumentB = $this->createSearchDocument(['baz' => $keyword], $productBId);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
+
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
+        $searchEngineResponse = $this->searchEngine->query($keyword, $this->testContext);
+
+        $expectedFooFacetField = new SearchEngineFacetField(
+            AttributeCode::fromString('foo'),
+            SearchEngineFacetFieldValue::create($keyword, 1)
+        );
+        $expectedBazFacetField = new SearchEngineFacetField(
+            AttributeCode::fromString('baz'),
+            SearchEngineFacetFieldValue::create($keyword, 1)
+        );
+        $result = $searchEngineResponse->getFacetFieldCollection();
+
+        $this->assertCount(2, $result->getFacetFields());
+        $this->assertContains($expectedFooFacetField, $result->getFacetFields(), '', false, false);
+        $this->assertContains($expectedBazFacetField, $result->getFacetFields(), '', false, false);
     }
 
     /**
