@@ -182,10 +182,8 @@ class FilterNavigationFilterCollection implements \Countable, \IteratorAggregate
         $filterCode
     ) {
         $customCriteria = $this->addFiltersExceptGivenOneToSearchCriteria($originalCriteria, $filterCode);
-        $searchDocumentCollection = $this->dataPoolReader->getSearchResultsMatchingCriteria(
-            $customCriteria,
-            $context
-        );
+        $searchEngineResponse = $this->dataPoolReader->getSearchResultsMatchingCriteria($customCriteria, $context);
+        $searchDocumentCollection = $searchEngineResponse->getSearchDocuments();
         $filter = $this->getOptionValuesForProductsInCollection($searchDocumentCollection, [$filterCode]);
 
         return $filter[$filterCode];
