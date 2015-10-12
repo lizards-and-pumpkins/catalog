@@ -2,8 +2,6 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
-use Traversable;
-
 class SearchEngineFacetFieldCollection implements \Countable, \IteratorAggregate
 {
     /**
