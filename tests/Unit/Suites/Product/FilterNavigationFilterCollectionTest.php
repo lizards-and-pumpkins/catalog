@@ -10,6 +10,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Product\Exception\FilterCollectionInNotInitializedException;
 use LizardsAndPumpkins\Renderer\Translation\Translator;
 use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
@@ -266,8 +267,9 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
         $stubFilteredDocumentCollection = $this->createStubSearchDocumentCollection($stubSearchDocument);
         $stubUnfilteredDocumentCollection = $this->createStubSearchDocumentCollection($stubSearchDocument);
 
-        $this->stubDataPoolReader->method('getSearchResultsMatchingCriteria')
-            ->willReturn($stubUnfilteredDocumentCollection);
+        $stubSearchEngineResponse = $this->getMock(SearchEngineResponse::class, [], [], '', false);
+        $stubSearchEngineResponse->method('getSearchDocuments')->willReturn($stubUnfilteredDocumentCollection);
+        $this->stubDataPoolReader->method('getSearchResultsMatchingCriteria')->willReturn($stubSearchEngineResponse);
 
         $this->filterCollection->initialize(
             $stubFilteredDocumentCollection,
@@ -302,8 +304,9 @@ class FilterNavigationFilterCollectionTest extends \PHPUnit_Framework_TestCase
         $stubFilteredDocumentCollection = $this->createStubSearchDocumentCollection($stubSearchDocument);
         $stubUnfilteredDocumentCollection = $this->createStubSearchDocumentCollection($stubSearchDocument);
 
-        $this->stubDataPoolReader->method('getSearchResultsMatchingCriteria')
-            ->willReturn($stubUnfilteredDocumentCollection);
+        $stubSearchEngineResponse = $this->getMock(SearchEngineResponse::class, [], [], '', false);
+        $stubSearchEngineResponse->method('getSearchDocuments')->willReturn($stubUnfilteredDocumentCollection);
+        $this->stubDataPoolReader->method('getSearchResultsMatchingCriteria')->willReturn($stubSearchEngineResponse);
 
         $stubSearchCriteria = $this->getMock(SearchCriteria::class);
         $this->stubSearchCriteriaBuilder->method('fromRequestParameter')->willReturn($stubSearchCriteria);
