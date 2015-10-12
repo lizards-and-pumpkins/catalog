@@ -214,7 +214,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
      * @param int[] $attributeValues
      * @return SearchEngineFacetFieldValueCount[]
      */
-    function getFacetFieldValuesFromAttributeValues($attributeValues)
+    private function getFacetFieldValuesFromAttributeValues($attributeValues)
     {
         return array_map(function ($value, $count) {
             return SearchEngineFacetFieldValueCount::create((string)$value, $count);
