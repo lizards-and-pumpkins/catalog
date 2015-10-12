@@ -426,11 +426,11 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $expectedFooFacetField = new SearchEngineFacetField(
             AttributeCode::fromString('foo'),
-            SearchEngineFacetFieldValue::create($keyword, 1)
+            SearchEngineFacetFieldValueCount::create($keyword, 1)
         );
         $expectedBazFacetField = new SearchEngineFacetField(
             AttributeCode::fromString('baz'),
-            SearchEngineFacetFieldValue::create($keyword, 1)
+            SearchEngineFacetFieldValueCount::create($keyword, 1)
         );
         $result = $searchEngineResponse->getFacetFieldCollection();
 

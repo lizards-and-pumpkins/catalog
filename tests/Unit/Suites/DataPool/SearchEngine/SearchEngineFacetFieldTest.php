@@ -23,8 +23,8 @@ class SearchEngineFacetFieldTest extends \PHPUnit_Framework_TestCase
         /** @var AttributeCode|\PHPUnit_Framework_MockObject_MockObject $stubAttributeCode */
         $stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
 
-        $stubFacetValueA = $this->getMock(SearchEngineFacetFieldValue::class, [], [], '', false);
-        $stubFacetValueB = $this->getMock(SearchEngineFacetFieldValue::class, [], [], '', false);
+        $stubFacetValueA = $this->getMock(SearchEngineFacetFieldValueCount::class, [], [], '', false);
+        $stubFacetValueB = $this->getMock(SearchEngineFacetFieldValueCount::class, [], [], '', false);
 
         $facetField = new SearchEngineFacetField($stubAttributeCode, $stubFacetValueA, $stubFacetValueB);
 

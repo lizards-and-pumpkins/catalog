@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine;
 use LizardsAndPumpkins\DataPool\SearchEngine\Exception\InvalidFacetFieldValueCountException;
 use LizardsAndPumpkins\DataPool\SearchEngine\Exception\InvalidFacetFieldValueException;
 
-class SearchEngineFacetFieldValue
+class SearchEngineFacetFieldValueCount
 {
     /**
      * @var string
@@ -30,7 +30,7 @@ class SearchEngineFacetFieldValue
     /**
      * @param mixed $value
      * @param mixed $count
-     * @return SearchEngineFacetFieldValue
+     * @return SearchEngineFacetFieldValueCount
      */
     public static function create($value, $count)
     {

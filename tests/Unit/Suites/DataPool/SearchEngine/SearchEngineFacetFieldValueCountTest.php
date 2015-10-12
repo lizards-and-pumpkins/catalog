@@ -6,22 +6,22 @@ use LizardsAndPumpkins\DataPool\SearchEngine\Exception\InvalidFacetFieldValueCou
 use LizardsAndPumpkins\DataPool\SearchEngine\Exception\InvalidFacetFieldValueException;
 
 /**
- * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineFacetFieldValue
+ * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineFacetFieldValueCount
  */
-class SearchEngineFacetFieldValueTest extends \PHPUnit_Framework_TestCase
+class SearchEngineFacetFieldValueCountTest extends \PHPUnit_Framework_TestCase
 {
     private $testFieldValue = 'foo';
 
     private $testFieldCount = 2;
 
     /**
-     * @var SearchEngineFacetFieldValue
+     * @var SearchEngineFacetFieldValueCount
      */
     private $facetFieldValue;
 
     protected function setUp()
     {
-        $this->facetFieldValue = SearchEngineFacetFieldValue::create($this->testFieldValue, $this->testFieldCount);
+        $this->facetFieldValue = SearchEngineFacetFieldValueCount::create($this->testFieldValue, $this->testFieldCount);
     }
 
     public function testExceptionIsThrownIfFacetFieldValueIsNotAString()
@@ -29,7 +29,7 @@ class SearchEngineFacetFieldValueTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException(InvalidFacetFieldValueException::class);
 
         $invalidValue = new \stdClass;
-        SearchEngineFacetFieldValue::create($invalidValue, $this->testFieldCount);
+        SearchEngineFacetFieldValueCount::create($invalidValue, $this->testFieldCount);
     }
 
     public function testExceptionIsThrownIfFacetFieldValueCountIsNotInteger()
@@ -37,7 +37,7 @@ class SearchEngineFacetFieldValueTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException(InvalidFacetFieldValueCountException::class);
 
         $invalidValueCount = [];
-        SearchEngineFacetFieldValue::create($this->testFieldValue, $invalidValueCount);
+        SearchEngineFacetFieldValueCount::create($this->testFieldValue, $invalidValueCount);
     }
 
     public function testFacetFieldValueIsReturned()

@@ -12,11 +12,11 @@ class SearchEngineFacetField
     private $attributeCode;
 
     /**
-     * @var SearchEngineFacetFieldValue[]
+     * @var SearchEngineFacetFieldValueCount[]
      */
     private $values;
 
-    public function __construct(AttributeCode $attributeCode, SearchEngineFacetFieldValue ...$facetFieldValues)
+    public function __construct(AttributeCode $attributeCode, SearchEngineFacetFieldValueCount ...$facetFieldValues)
     {
         $this->attributeCode = $attributeCode;
         $this->values = $facetFieldValues;
@@ -31,7 +31,7 @@ class SearchEngineFacetField
     }
 
     /**
-     * @return SearchEngineFacetFieldValue[]
+     * @return SearchEngineFacetFieldValueCount[]
      */
     public function getValues()
     {
