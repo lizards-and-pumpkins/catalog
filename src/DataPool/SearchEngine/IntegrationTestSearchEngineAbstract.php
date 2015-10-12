@@ -24,15 +24,10 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
      */
     final public function query($queryString, Context $queryContext)
     {
-        $allSearchDocuments = $this->getSearchDocuments();
-        $matchingDocs = $this->getSearchDocumentsForQueryInContext($allSearchDocuments, $queryString, $queryContext);
+        $allDocuments = $this->getSearchDocuments();
+        $matchingDocuments = $this->getSearchDocumentsForQueryInContext($allDocuments, $queryString, $queryContext);
 
-        $searchDocumentCollection = new SearchDocumentCollection(...array_values($matchingDocs));
-        $facetFieldCollection = $this->createFacetFieldsCollectionFromSearchDocumentCollection(
-            $searchDocumentCollection
-        );
-
-        return new SearchEngineResponse($searchDocumentCollection, $facetFieldCollection);
+        return $this->createSearchEngineResponse(...array_values($matchingDocuments));
     }
 
     /**
@@ -85,12 +80,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
             }
         );
 
-        $searchDocumentCollection = new SearchDocumentCollection(...array_values($matchingDocuments));
-        $facetFieldCollection = $this->createFacetFieldsCollectionFromSearchDocumentCollection(
-            $searchDocumentCollection
-        );
-
-        return new SearchEngineResponse($searchDocumentCollection, $facetFieldCollection);
+        return $this->createSearchEngineResponse(...array_values($matchingDocuments));
     }
 
     /**
@@ -208,5 +198,17 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
                 $carry
             );
         }, []);
+    }
+
+    /**
+     * @param SearchDocument ...$searchDocuments
+     * @return SearchEngineResponse
+     */
+    private function createSearchEngineResponse(SearchDocument ...$searchDocuments)
+    {
+        $documentCollection = new SearchDocumentCollection(...$searchDocuments);
+        $facetFieldCollection = $this->createFacetFieldsCollectionFromSearchDocumentCollection($documentCollection);
+
+        return new SearchEngineResponse($documentCollection, $facetFieldCollection);
     }
 }
