@@ -16,10 +16,10 @@ class SearchEngineFacetField
      */
     private $values;
 
-    public function __construct(AttributeCode $attributeCode, SearchEngineFacetFieldValue ...$facetFieldValue)
+    public function __construct(AttributeCode $attributeCode, SearchEngineFacetFieldValue ...$facetFieldValues)
     {
         $this->attributeCode = $attributeCode;
-        $this->values = $facetFieldValue;
+        $this->values = $facetFieldValues;
     }
 
     /**
