@@ -26,7 +26,10 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
         $allSearchDocuments = $this->getSearchDocuments();
         $matchingDocs = $this->getSearchDocumentsForQueryInContext($allSearchDocuments, $queryString, $queryContext);
 
-        return new SearchDocumentCollection(...array_values($matchingDocs));
+        $searchDocumentCollection = new SearchDocumentCollection(...array_values($matchingDocs));
+        $facetFieldCollection = new SearchEngineFacetFieldCollection();
+
+        return new SearchEngineResponse($searchDocumentCollection, $facetFieldCollection);
     }
 
     /**
@@ -79,7 +82,10 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
             }
         );
 
-        return new SearchDocumentCollection(...array_values($matchingDocuments));
+        $searchDocumentCollection = new SearchDocumentCollection(...array_values($matchingDocuments));
+        $facetFieldCollection = new SearchEngineFacetFieldCollection();
+
+        return new SearchEngineResponse($searchDocumentCollection, $facetFieldCollection);
     }
 
     /**
