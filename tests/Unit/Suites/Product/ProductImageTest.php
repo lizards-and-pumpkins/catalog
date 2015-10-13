@@ -84,4 +84,9 @@ class ProductImageTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($sourceProductImage->getFileName(), $rehydratedProductImage->getFileName());
         $this->assertSame($sourceProductImage->getLabel(), $rehydratedProductImage->getLabel());
     }
+
+    public function testItReturnsTheImageAttributeList()
+    {
+        $this->assertSame($this->stubAttributeList, $this->productImage->getAttributes());
+    }
 }

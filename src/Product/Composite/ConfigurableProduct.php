@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\Product\Composite;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Product\Composite\Exception\AssociatedProductListDomainException;
 use LizardsAndPumpkins\Product\Product;
+use LizardsAndPumpkins\Product\ProductAttributeList;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Product\ProductImage;
 use LizardsAndPumpkins\Product\ProductImageList;
@@ -15,9 +16,9 @@ use LizardsAndPumpkins\Product\Composite\Exception\ConfigurableProductAssociated
 
 class ConfigurableProduct implements Product
 {
-    const SIMPLE_PRODUCT = 'simple_product';
     use RehydrateableProductTrait;
     
+    const SIMPLE_PRODUCT = 'simple_product';
     const TYPE_CODE = 'configurable';
     
     /**
@@ -124,6 +125,14 @@ class ConfigurableProduct implements Product
     }
 
     /**
+     * @return ProductAttributeList
+     */
+    public function getAttributes()
+    {
+        return $this->simpleProductDelegate->getAttributes();
+    }
+
+    /**
      * @return Context
      */
     public function getContext()
@@ -204,5 +213,14 @@ class ConfigurableProduct implements Product
     public function getAssociatedProducts()
     {
         return $this->associatedProducts;
+    }
+
+    /**
+     * @param Context $context
+     * @return bool
+     */
+    public function isAvailableInContext(Context $context)
+    {
+        return $this->simpleProductDelegate->isAvailableInContext($context);
     }
 }

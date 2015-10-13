@@ -3,12 +3,14 @@
 
 namespace LizardsAndPumpkins\Product\Composite;
 
+use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\VersionedContext;
 use LizardsAndPumpkins\Product\Composite\Exception\AssociatedProductListDomainException;
 use LizardsAndPumpkins\Product\Composite\Exception\ProductAttributeValueCombinationNotUniqueException;
 use LizardsAndPumpkins\Product\Exception\ProductTypeCodeMismatchException;
 use LizardsAndPumpkins\Product\Exception\ProductTypeCodeMissingException;
 use LizardsAndPumpkins\Product\Product;
+use LizardsAndPumpkins\Product\ProductAttributeList;
 use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\Product\Composite\Exception\AssociatedProductIsMissingRequiredAttributesException;
 use LizardsAndPumpkins\Product\Composite\Exception\ConfigurableProductAssociatedProductListInvariantViolationException;
@@ -106,6 +108,13 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockSimpleProduct->method('hasAttribute')->with('test')->willReturn(true);
         $this->assertTrue($this->configurableProduct->hasAttribute('test'));
+    }
+
+    public function testItDelegatesToTheSimpleProductToGetAllAttributes()
+    {
+        $dummyAttributeList = $this->getMock(ProductAttributeList::class);
+        $this->mockSimpleProduct->method('getAttributes')->willReturn($dummyAttributeList);
+        $this->assertSame($dummyAttributeList, $this->configurableProduct->getAttributes());
     }
 
     public function testItIncludesTheCompositeObjectsInTheJsonRepresentation()
@@ -237,6 +246,12 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
         $testLabel = 'Test Label';
         $this->mockSimpleProduct->method('getMainImageLabel')->willReturn($testLabel);
         $this->assertSame($testLabel, $this->configurableProduct->getMainImageLabel());
+    }
+
+    public function testItDelegatesToTheSimpleProductToCheckIfItIsAvailableForAGivenContext()
+    {
+        $this->mockSimpleProduct->method('isAvailableInContext')->willReturn(true);
+        $this->assertTrue($this->configurableProduct->isAvailableInContext($this->getMock(Context::class)));
     }
 
     public function testItReturnsAProductVariationAttributeList()
