@@ -48,4 +48,18 @@ class SearchEngineFacetFieldCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $result);
         $this->assertSame($stubFacetField, $result->current());
     }
+
+    public function testJsonSerializableInterfaceIsImplemented()
+    {
+        $facetFieldCollection = new SearchEngineFacetFieldCollection;
+        $this->assertInstanceOf(\JsonSerializable::class, $facetFieldCollection);
+    }
+
+    public function testArrayRepresentationOfFacetFilterCollectionIsReturned()
+    {
+        $stubFacetField = $this->getMock(SearchEngineFacetField::class, [], [], '', false);
+        $facetFieldCollection = new SearchEngineFacetFieldCollection($stubFacetField);
+
+        $this->assertSame([$stubFacetField], $facetFieldCollection->jsonSerialize());
+    }
 }

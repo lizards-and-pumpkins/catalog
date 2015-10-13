@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
-class SearchEngineFacetFieldCollection implements \Countable, \IteratorAggregate
+class SearchEngineFacetFieldCollection implements \Countable, \IteratorAggregate, \JsonSerializable
 {
     /**
      * @var SearchEngineFacetField[]
@@ -34,6 +34,14 @@ class SearchEngineFacetFieldCollection implements \Countable, \IteratorAggregate
      * @return SearchEngineFacetField[]
      */
     public function getFacetFields()
+    {
+        return $this->facetFields;
+    }
+
+    /**
+     * @return SearchEngineFacetField[]
+     */
+    function jsonSerialize()
     {
         return $this->facetFields;
     }
