@@ -173,7 +173,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
 
         $criteria = $this->applyFiltersToSelectionCriteria($originalCriteria, $selectedFilters);
 
-        $currentPageNumber = (int) $request->getQueryParameter(self::PAGINATION_QUERY_PARAMETER_NAME);
+        $currentPageNumber = max(0, $request->getQueryParameter(self::PAGINATION_QUERY_PARAMETER_NAME) - 1);
         $productsPerPage = (int) $this->defaultNumberOfProductsPerPage;
 
         return $this->dataPoolReader->getSearchResultsMatchingCriteria(
