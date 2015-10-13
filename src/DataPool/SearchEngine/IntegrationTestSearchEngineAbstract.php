@@ -183,32 +183,83 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
         SearchDocumentCollection $documentCollection,
         array $facetFieldCodes
     ) {
-        return array_reduce(
-            $documentCollection->getDocuments(),
-            function ($carry, SearchDocument $document) use ($facetFieldCodes) {
-                return array_reduce(
-                    $document->getFieldsCollection()->getFields(),
-                    function ($carry, SearchDocumentField $searchDocumentField) use ($facetFieldCodes) {
-                        if (!in_array($searchDocumentField->getKey(), $facetFieldCodes)) {
-                            return $carry;
-                        }
-                        return array_reduce($searchDocumentField->getValues(),
-                            function ($carry, $value) use ($searchDocumentField) {
-                                if (!isset($carry[$searchDocumentField->getKey()][$value])) {
-                                    $carry[$searchDocumentField->getKey()][$value] = 0;
-                                }
-                                $carry[$searchDocumentField->getKey()][$value] ++;
+        $searchDocuments = $documentCollection->getDocuments();
+        return array_reduce($searchDocuments, function ($carry, SearchDocument $document) use ($facetFieldCodes) {
+            $searchDocumentValueCount = $this->getSearchDocumentFacetFieldValueCount($document, $facetFieldCodes);
+            return $this->sumKeyValueCounts($carry, $searchDocumentValueCount);
+        }, []);
+    }
 
-                                return $carry;
-                            },
-                            $carry
-                        );
-                    },
-                    $carry
-                );
-            },
-            []
-        );
+    /**
+     * @param SearchDocument $document
+     * @param string[] $facetFieldCodes
+     * @return array[]
+     */
+    private function getSearchDocumentFacetFieldValueCount(SearchDocument $document, array $facetFieldCodes)
+    {
+        $documentFields = $this->getFacetFieldsFromSearchDocument($document, $facetFieldCodes);
+        $result = array_reduce($documentFields, function ($carry, SearchDocumentField $searchDocumentField) {
+            $fieldValueCount = $this->getSearchDocumentFieldValuesCount($searchDocumentField);
+            return $this->sumKeyValueCounts($carry, [$searchDocumentField->getKey() => $fieldValueCount]);
+        }, []);
+        return $result;
+    }
+
+    /**
+     * @param SearchDocument $document
+     * @param string[] $facetFieldCodes
+     * @return SearchDocumentField[]
+     */
+    private function getFacetFieldsFromSearchDocument(SearchDocument $document, array $facetFieldCodes)
+    {
+        $allFields = $document->getFieldsCollection()->getFields();
+        return array_filter($allFields, function (SearchDocumentField $field) use ($facetFieldCodes) {
+            return in_array($field->getKey(), $facetFieldCodes);
+        });
+    }
+
+    /**
+     * @param SearchDocumentField $searchDocumentField
+     * @return int[]
+     */
+    private function getSearchDocumentFieldValuesCount(SearchDocumentField $searchDocumentField)
+    {
+        return array_reduce($searchDocumentField->getValues(), function ($carry, $value) use ($searchDocumentField) {
+            $count = isset($carry[$value]) ?
+                $carry[$value] + 1 :
+                1;
+            return array_merge($carry, [$value => $count]);
+        }, []);
+    }
+
+    /**
+     * @param array[] $keyValuesCountA
+     * @param array[] $keyValuesCountB
+     * @return array[]
+     */
+    private function sumKeyValueCounts($keyValuesCountA, $keyValuesCountB)
+    {
+        $allKeys = array_merge(array_keys($keyValuesCountA), array_keys($keyValuesCountB));
+        return array_reduce($allKeys, function ($carry, $key) use ($keyValuesCountA, $keyValuesCountB) {
+            $keyValuesA = isset($keyValuesCountA[$key]) ? $keyValuesCountA[$key] : [];
+            $keyValuesB = isset($keyValuesCountB[$key]) ? $keyValuesCountB[$key] : [];
+            return array_merge($carry, [$key => $this->sumValueCounts($keyValuesA, $keyValuesB)]);
+        }, []);
+    }
+
+    /**
+     * @param int[] $valuesCountA
+     * @param int[] $valuesCountB
+     * @return int[]
+     */
+    private function sumValueCounts(array $valuesCountA, array $valuesCountB)
+    {
+        $allValues = array_merge(array_keys($valuesCountA), array_keys($valuesCountB));
+        return array_reduce($allValues, function ($carry, $value) use ($valuesCountA, $valuesCountB) {
+            $valueACount = isset($valuesCountA[$value]) ? $valuesCountA[$value] : 0;
+            $valueBCount = isset($valuesCountB[$value]) ? $valuesCountB[$value] : 0;
+            return array_merge($carry, [$value => $valueACount + $valueBCount]);
+        }, []);
     }
 
     /**
