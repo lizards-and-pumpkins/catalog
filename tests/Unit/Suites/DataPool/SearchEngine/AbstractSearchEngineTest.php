@@ -584,9 +584,9 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $pageNumber = 1;
         $rowsPerPage = 1;
         $searchEngineResponse = $this->searchEngine->query($keyword, $this->testContext, [], $rowsPerPage, $pageNumber);
-        $result = $searchEngineResponse->getSearchDocuments();
 
-        $this->assertCount(1, $result);
+        $this->assertCount(1, $searchEngineResponse->getSearchDocuments());
+        $this->assertSame(2, $searchEngineResponse->getTotalNumberOfResults());
     }
 
     /**
