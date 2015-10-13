@@ -41,7 +41,7 @@ class SearchEngineFacetFieldCollection implements \Countable, \IteratorAggregate
     /**
      * @return SearchEngineFacetField[]
      */
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return $this->facetFields;
     }

@@ -41,7 +41,7 @@ class SearchEngineFacetField implements \JsonSerializable
     /**
      * @return mixed[]
      */
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return [
             (string) $this->attributeCode => array_reduce(
