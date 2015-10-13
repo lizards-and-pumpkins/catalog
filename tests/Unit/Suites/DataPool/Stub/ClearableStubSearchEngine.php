@@ -24,14 +24,21 @@ class ClearableStubSearchEngine implements SearchEngine, Clearable
     /**
      * @param string $queryString
      * @param Context $context
+     * @param string[] $facetFields
      * @return void
      */
-    public function query($queryString, Context $context)
+    public function query($queryString, Context $context, array $facetFields)
     {
         // Intentionally left empty
     }
 
-    public function getSearchDocumentsMatchingCriteria(SearchCriteria $criteria, Context $context)
+    /**
+     * @param SearchCriteria $criteria
+     * @param Context $context
+     * @param string[] $facetFields
+     * @return void
+     */
+    public function getSearchDocumentsMatchingCriteria(SearchCriteria $criteria, Context $context, array $facetFields)
     {
         // Intentionally left empty
     }

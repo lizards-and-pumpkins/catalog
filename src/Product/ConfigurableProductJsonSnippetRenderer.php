@@ -1,9 +1,7 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\Product\Composite\AssociatedProductList;
 use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Projection\Catalog\InternalToPublicProductJsonData;
 use LizardsAndPumpkins\Snippet;

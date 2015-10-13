@@ -7,6 +7,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
+use LizardsAndPumpkins\Product\AttributeCode;
 use LizardsAndPumpkins\Utils\Clearable;
 
 abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clearable
@@ -17,16 +18,14 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     abstract protected function getSearchDocuments();
 
     /**
-     * @param string $queryString
-     * @param Context $queryContext
-     * @return SearchDocumentCollection
+     * @inheritdoc
      */
-    final public function query($queryString, Context $queryContext)
+    final public function query($queryString, Context $queryContext, array $facetFields)
     {
-        $allSearchDocuments = $this->getSearchDocuments();
-        $matchingDocs = $this->getSearchDocumentsForQueryInContext($allSearchDocuments, $queryString, $queryContext);
+        $allDocuments = $this->getSearchDocuments();
+        $matchingDocuments = $this->getSearchDocumentsForQueryInContext($allDocuments, $queryString, $queryContext);
 
-        return new SearchDocumentCollection(...array_values($matchingDocs));
+        return $this->createSearchEngineResponse($facetFields, ...array_values($matchingDocuments));
     }
 
     /**
@@ -66,12 +65,13 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     }
 
     /**
-     * @param SearchCriteria $criteria
-     * @param Context $context
-     * @return SearchDocumentCollection
+     * @inheritdoc
      */
-    final public function getSearchDocumentsMatchingCriteria(SearchCriteria $criteria, Context $context)
-    {
+    final public function getSearchDocumentsMatchingCriteria(
+        SearchCriteria $criteria,
+        Context $context,
+        array $facetFields
+    ) {
         $matchingDocuments = array_filter(
             $this->getSearchDocuments(),
             function (SearchDocument $searchDocument) use ($criteria, $context) {
@@ -79,7 +79,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
             }
         );
 
-        return new SearchDocumentCollection(...array_values($matchingDocuments));
+        return $this->createSearchEngineResponse($facetFields, ...array_values($matchingDocuments));
     }
 
     /**
@@ -151,5 +151,141 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
             }
         }
         return false;
+    }
+
+    /**
+     * @param string[] $facetFieldCodes
+     * @param SearchDocumentCollection $documentCollection
+     * @return SearchEngineFacetFieldCollection
+     */
+    private function createFacetFieldsCollectionFromSearchDocumentCollection(
+        array $facetFieldCodes,
+        SearchDocumentCollection $documentCollection
+    ) {
+        $attributeCounts = $this->createAttributeValueCountArrayFromSearchDocumentCollection(
+            $documentCollection,
+            $facetFieldCodes
+        );
+        $facetFields = array_map(function ($attributeCode, $attributeValues) {
+            $facetFieldValues = $this->getFacetFieldValuesFromAttributeValues($attributeValues);
+            return new SearchEngineFacetField(AttributeCode::fromString($attributeCode), ...$facetFieldValues);
+        }, array_keys($attributeCounts), $attributeCounts);
+
+        return new SearchEngineFacetFieldCollection(...$facetFields);
+    }
+
+    /**
+     * @param SearchDocumentCollection $documentCollection
+     * @param string[] $facetFieldCodes
+     * @return array[]
+     */
+    private function createAttributeValueCountArrayFromSearchDocumentCollection(
+        SearchDocumentCollection $documentCollection,
+        array $facetFieldCodes
+    ) {
+        $searchDocuments = $documentCollection->getDocuments();
+        return array_reduce($searchDocuments, function ($carry, SearchDocument $document) use ($facetFieldCodes) {
+            $searchDocumentValueCount = $this->getSearchDocumentFacetFieldValueCount($document, $facetFieldCodes);
+            return $this->sumKeyValueCounts($carry, $searchDocumentValueCount);
+        }, []);
+    }
+
+    /**
+     * @param SearchDocument $document
+     * @param string[] $facetFieldCodes
+     * @return array[]
+     */
+    private function getSearchDocumentFacetFieldValueCount(SearchDocument $document, array $facetFieldCodes)
+    {
+        $documentFields = $this->getFacetFieldsFromSearchDocument($document, $facetFieldCodes);
+        $result = array_reduce($documentFields, function ($carry, SearchDocumentField $searchDocumentField) {
+            $fieldValueCount = $this->getSearchDocumentFieldValuesCount($searchDocumentField);
+            return $this->sumKeyValueCounts($carry, [$searchDocumentField->getKey() => $fieldValueCount]);
+        }, []);
+        return $result;
+    }
+
+    /**
+     * @param SearchDocument $document
+     * @param string[] $facetFieldCodes
+     * @return SearchDocumentField[]
+     */
+    private function getFacetFieldsFromSearchDocument(SearchDocument $document, array $facetFieldCodes)
+    {
+        $allFields = $document->getFieldsCollection()->getFields();
+        return array_filter($allFields, function (SearchDocumentField $field) use ($facetFieldCodes) {
+            return in_array($field->getKey(), $facetFieldCodes);
+        });
+    }
+
+    /**
+     * @param SearchDocumentField $searchDocumentField
+     * @return int[]
+     */
+    private function getSearchDocumentFieldValuesCount(SearchDocumentField $searchDocumentField)
+    {
+        return array_reduce($searchDocumentField->getValues(), function ($carry, $value) use ($searchDocumentField) {
+            $count = isset($carry[$value]) ?
+                $carry[$value] + 1 :
+                1;
+            return array_merge($carry, [$value => $count]);
+        }, []);
+    }
+
+    /**
+     * @param array[] $keyValuesCountA
+     * @param array[] $keyValuesCountB
+     * @return array[]
+     */
+    private function sumKeyValueCounts($keyValuesCountA, $keyValuesCountB)
+    {
+        $allKeys = array_merge(array_keys($keyValuesCountA), array_keys($keyValuesCountB));
+        return array_reduce($allKeys, function ($carry, $key) use ($keyValuesCountA, $keyValuesCountB) {
+            $keyValuesA = isset($keyValuesCountA[$key]) ? $keyValuesCountA[$key] : [];
+            $keyValuesB = isset($keyValuesCountB[$key]) ? $keyValuesCountB[$key] : [];
+            return array_merge($carry, [$key => $this->sumValueCounts($keyValuesA, $keyValuesB)]);
+        }, []);
+    }
+
+    /**
+     * @param int[] $valuesCountA
+     * @param int[] $valuesCountB
+     * @return int[]
+     */
+    private function sumValueCounts(array $valuesCountA, array $valuesCountB)
+    {
+        $allValues = array_merge(array_keys($valuesCountA), array_keys($valuesCountB));
+        return array_reduce($allValues, function ($carry, $value) use ($valuesCountA, $valuesCountB) {
+            $valueACount = isset($valuesCountA[$value]) ? $valuesCountA[$value] : 0;
+            $valueBCount = isset($valuesCountB[$value]) ? $valuesCountB[$value] : 0;
+            return array_merge($carry, [$value => $valueACount + $valueBCount]);
+        }, []);
+    }
+
+    /**
+     * @param string[] $facetFields
+     * @param SearchDocument ...$searchDocuments
+     * @return SearchEngineResponse
+     */
+    private function createSearchEngineResponse(array $facetFields, SearchDocument ...$searchDocuments)
+    {
+        $documentCollection = new SearchDocumentCollection(...$searchDocuments);
+        $facetFieldCollection = $this->createFacetFieldsCollectionFromSearchDocumentCollection(
+            $facetFields,
+            $documentCollection
+        );
+
+        return new SearchEngineResponse($documentCollection, $facetFieldCollection);
+    }
+
+    /**
+     * @param int[] $attributeValues
+     * @return SearchEngineFacetFieldValueCount[]
+     */
+    private function getFacetFieldValuesFromAttributeValues($attributeValues)
+    {
+        return array_map(function ($value, $count) {
+            return SearchEngineFacetFieldValueCount::create((string)$value, $count);
+        }, array_keys($attributeValues), $attributeValues);
     }
 }

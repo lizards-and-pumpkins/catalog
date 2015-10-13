@@ -25,7 +25,6 @@ use LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler;
  * @uses   \LizardsAndPumpkins\Context\ContextBuilder
  * @uses   \LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator
- * @uses   \LizardsAndPumpkins\Product\FilterNavigationFilterCollection
  * @uses   \LizardsAndPumpkins\Http\GenericHttpRouter
  * @uses   \LizardsAndPumpkins\Product\ProductDetailViewRequestHandler
  * @uses   \LizardsAndPumpkins\Product\ProductListingRequestHandler

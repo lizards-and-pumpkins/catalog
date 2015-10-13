@@ -51,13 +51,10 @@ class DefaultHttpResponseTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @runInSeparateProcess
+     * @requires extension xdebug
      */
     public function testGivenHeaderIsIncludedIntoResponse()
     {
-        if (!extension_loaded('xdebug')) {
-            $this->markTestSkipped('This test requires the PHP extension xdebug to be installed.');
-        }
-
         $customHeaderName = 'foo';
         $customHeaderValue = 'bar';
 

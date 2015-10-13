@@ -3,7 +3,6 @@
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
 use LizardsAndPumpkins\Product\ProductTypeCode;
-use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidProductTypeCodeForImportedProductException;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\NoMatchingProductTypeBuilderFactoryFoundException;
 use LizardsAndPumpkins\Utils\XPathParser;

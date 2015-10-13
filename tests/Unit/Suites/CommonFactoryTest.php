@@ -18,7 +18,6 @@ use LizardsAndPumpkins\Image\AddImageCommand;
 use LizardsAndPumpkins\Image\AddImageCommandHandler;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
-use LizardsAndPumpkins\Product\FilterNavigationFilterCollection;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
 use LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder;
@@ -76,7 +75,6 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Renderer\BlockRenderer
  * @uses   \LizardsAndPumpkins\Product\DefaultNumberOfProductsPerPageSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\FilterNavigationFilterCollection
  * @uses   \LizardsAndPumpkins\Product\PriceSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductBackOrderAvailabilitySnippetRenderer
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator
@@ -514,12 +512,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($resultA, $resultB);
     }
 
-    public function testFilterNavigationFilterCollectionIsReturned()
-    {
-        $result = $this->commonFactory->createFilterNavigationFilterCollection();
-        $this->assertInstanceOf(FilterNavigationFilterCollection::class, $result);
-    }
-
     public function testItReturnsAProcessTimeLoggingDomainEventHandlerDecorator()
     {
         /** @var ProductWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
@@ -562,6 +554,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsACatalogWasImportedDomainEventHandler()
     {
+        /** @var CatalogWasImportedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubEvent */
         $stubEvent = $this->getMock(CatalogWasImportedDomainEvent::class, [], [], '', false);
         $result = $this->commonFactory->createCatalogWasImportedDomainEventHandler($stubEvent);
         $this->assertInstanceOf(CatalogWasImportedDomainEventHandler::class, $result);

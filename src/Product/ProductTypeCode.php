@@ -1,9 +1,7 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Product\Exception\InvalidProductTypeCodeException;
 
 class ProductTypeCode

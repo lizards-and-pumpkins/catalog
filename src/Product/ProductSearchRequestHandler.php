@@ -118,7 +118,8 @@ class ProductSearchRequestHandler implements HttpRequestHandler
      */
     private function addSearchResultsToPageBuilder($queryString)
     {
-        $searchDocumentCollection = $this->dataPoolReader->getSearchResults($queryString, $this->context);
+        $searchEngineResponse = $this->dataPoolReader->getSearchResults($queryString, $this->context, []);
+        $searchDocumentCollection = $searchEngineResponse->getSearchDocuments();
 
         if (empty($searchDocumentCollection)) {
             return;

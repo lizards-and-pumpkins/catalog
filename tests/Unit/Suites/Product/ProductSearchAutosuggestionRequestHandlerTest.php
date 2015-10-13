@@ -6,6 +6,7 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
@@ -165,7 +166,9 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
         $this->stubDataPoolReader->method('getSnippets')->willReturn([]);
 
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection();
-        $this->stubDataPoolReader->method('getSearchResults')->willReturn($stubSearchDocumentCollection);
+        $stubSearchEngineResponse = $this->getMock(SearchEngineResponse::class, [], [], '', false);
+        $stubSearchEngineResponse->method('getSearchDocuments')->willReturn($stubSearchDocumentCollection);
+        $this->stubDataPoolReader->method('getSearchResults')->willReturn($stubSearchEngineResponse);
 
         $this->assertInstanceOf(HttpResponse::class, $this->requestHandler->process($this->stubHttpRequest));
     }
@@ -178,7 +181,9 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
         $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
         $stubSearchDocumentCollection->method('count')->willReturn(0);
 
-        $this->stubDataPoolReader->method('getSearchResults')->willReturn($stubSearchDocumentCollection);
+        $stubSearchEngineResponse = $this->getMock(SearchEngineResponse::class, [], [], '', false);
+        $stubSearchEngineResponse->method('getSearchDocuments')->willReturn($stubSearchDocumentCollection);
+        $this->stubDataPoolReader->method('getSearchResults')->willReturn($stubSearchEngineResponse);
 
         $metaSnippetContent = [
             'root_snippet_code'  => 'foo',
@@ -196,7 +201,9 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
         $this->prepareStubHttpRequest($queryString);
 
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection();
-        $this->stubDataPoolReader->method('getSearchResults')->willReturn($stubSearchDocumentCollection);
+        $stubSearchEngineResponse = $this->getMock(SearchEngineResponse::class, [], [], '', false);
+        $stubSearchEngineResponse->method('getSearchDocuments')->willReturn($stubSearchDocumentCollection);
+        $this->stubDataPoolReader->method('getSearchResults')->willReturn($stubSearchEngineResponse);
 
         $metaSnippetContent = [
             'root_snippet_code'  => 'foo',
