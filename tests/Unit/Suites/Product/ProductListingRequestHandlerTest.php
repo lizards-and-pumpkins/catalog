@@ -146,47 +146,6 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param ProductId[] $productIds
-     * @return SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubSearchDocumentCollectionContainingDocumentsWithGivenProductIds(array $productIds)
-    {
-        $stubSearchDocuments = array_map(function (ProductId $productId) {
-            $stubSearchDocument = $this->getMock(SearchDocument::class, [], [], '', false);
-            $stubSearchDocument->method('getProductId')->willReturn($productId);
-            return $stubSearchDocument;
-        }, $productIds);
-
-        $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
-        $stubSearchDocumentCollection->method('getDocuments')->willReturn($stubSearchDocuments);
-        $stubSearchDocumentCollection->method('count')->willReturn(count($stubSearchDocuments));
-
-        return $stubSearchDocumentCollection;
-    }
-
-    /**
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedRecorder $spy
-     * @param ProductId ...$expectedProductIds
-     */
-    private function assertKeyGeneratorWasOnlyTriggeredWithGivenProductIds(
-        \PHPUnit_Framework_MockObject_Matcher_InvokedRecorder $spy,
-        ProductId ...$expectedProductIds
-    ) {
-        $invokedProductIds = array_reduce(
-            $spy->getInvocations(),
-            function (array $carry, \PHPUnit_Framework_MockObject_Invocation_Object $invocation) {
-                if (is_array($invocation->parameters[1]) && isset($invocation->parameters[1][Product::ID])) {
-                    $carry[] = $invocation->parameters[1][Product::ID];
-                }
-                return $carry;
-            },
-            []
-        );
-
-        $this->assertEquals($expectedProductIds, $invokedProductIds);
-    }
-
-    /**
      * @return \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount
      */
     private function createAddedSnippetsSpy()
