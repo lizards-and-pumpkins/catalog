@@ -17,14 +17,16 @@ interface SearchEngine
     /**
      * @param string $queryString
      * @param Context $context
+     * @param string[] $facetFields
      * @return SearchEngineResponse
      */
-    public function query($queryString, Context $context);
+    public function query($queryString, Context $context, array $facetFields);
 
     /**
      * @param SearchCriteria $criteria
      * @param Context $context
+     * @param string[] $facetFields
      * @return SearchEngineResponse
      */
-    public function getSearchDocumentsMatchingCriteria(SearchCriteria $criteria, Context $context);
+    public function getSearchDocumentsMatchingCriteria(SearchCriteria $criteria, Context $context, array $facetFields);
 }

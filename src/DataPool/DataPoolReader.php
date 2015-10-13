@@ -161,21 +161,23 @@ class DataPoolReader
     /**
      * @param string $queryString
      * @param Context $context
+     * @param string[] $facetFields
      * @return SearchEngineResponse
      */
-    public function getSearchResults($queryString, Context $context)
+    public function getSearchResults($queryString, Context $context, array $facetFields)
     {
-        return $this->searchEngine->query($queryString, $context);
+        return $this->searchEngine->query($queryString, $context, $facetFields);
     }
 
     /**
      * @param SearchCriteria $criteria
      * @param Context $context
+     * @param string[] $facetFields
      * @return SearchEngineResponse
      */
-    public function getSearchResultsMatchingCriteria(SearchCriteria $criteria, Context $context)
+    public function getSearchResultsMatchingCriteria(SearchCriteria $criteria, Context $context, array $facetFields)
     {
-        return $this->searchEngine->getSearchDocumentsMatchingCriteria($criteria, $context);
+        return $this->searchEngine->getSearchDocumentsMatchingCriteria($criteria, $context, $facetFields);
     }
 
     /**

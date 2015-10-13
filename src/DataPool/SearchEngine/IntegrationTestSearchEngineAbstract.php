@@ -18,16 +18,14 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     abstract protected function getSearchDocuments();
 
     /**
-     * @param string $queryString
-     * @param Context $queryContext
-     * @return SearchEngineResponse
+     * @inheritdoc
      */
-    final public function query($queryString, Context $queryContext)
+    final public function query($queryString, Context $queryContext, array $facetFields)
     {
         $allDocuments = $this->getSearchDocuments();
         $matchingDocuments = $this->getSearchDocumentsForQueryInContext($allDocuments, $queryString, $queryContext);
 
-        return $this->createSearchEngineResponse(...array_values($matchingDocuments));
+        return $this->createSearchEngineResponse($facetFields, ...array_values($matchingDocuments));
     }
 
     /**
@@ -67,12 +65,13 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     }
 
     /**
-     * @param SearchCriteria $criteria
-     * @param Context $context
-     * @return SearchEngineResponse
+     * @inheritdoc
      */
-    final public function getSearchDocumentsMatchingCriteria(SearchCriteria $criteria, Context $context)
-    {
+    final public function getSearchDocumentsMatchingCriteria(
+        SearchCriteria $criteria,
+        Context $context,
+        array $facetFields
+    ) {
         $matchingDocuments = array_filter(
             $this->getSearchDocuments(),
             function (SearchDocument $searchDocument) use ($criteria, $context) {
@@ -80,7 +79,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
             }
         );
 
-        return $this->createSearchEngineResponse(...array_values($matchingDocuments));
+        return $this->createSearchEngineResponse($facetFields, ...array_values($matchingDocuments));
     }
 
     /**
@@ -155,13 +154,18 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     }
 
     /**
+     * @param string[] $facetFieldCodes
      * @param SearchDocumentCollection $documentCollection
      * @return SearchEngineFacetFieldCollection
      */
     private function createFacetFieldsCollectionFromSearchDocumentCollection(
+        array $facetFieldCodes,
         SearchDocumentCollection $documentCollection
     ) {
-        $attributeCounts = $this->createAttributeValueCountArrayFromSearchDocumentCollection($documentCollection);
+        $attributeCounts = $this->createAttributeValueCountArrayFromSearchDocumentCollection(
+            $documentCollection,
+            $facetFieldCodes
+        );
         $facetFields = array_map(function ($attributeCode, $attributeValues) {
             $facetFieldValues = $this->getFacetFieldValuesFromAttributeValues($attributeValues);
             return new SearchEngineFacetField(AttributeCode::fromString($attributeCode), ...$facetFieldValues);
@@ -172,40 +176,53 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
 
     /**
      * @param SearchDocumentCollection $documentCollection
-     * @return mixed
+     * @param string[] $facetFieldCodes
+     * @return array[]
      */
     private function createAttributeValueCountArrayFromSearchDocumentCollection(
-        SearchDocumentCollection $documentCollection
+        SearchDocumentCollection $documentCollection,
+        array $facetFieldCodes
     ) {
-        return array_reduce($documentCollection->getDocuments(), function ($carry, SearchDocument $document) {
-            return array_reduce(
-                $document->getFieldsCollection()->getFields(),
-                function ($carry, SearchDocumentField $searchDocumentField) {
-                    return array_reduce($searchDocumentField->getValues(),
-                        function ($carry, $value) use ($searchDocumentField) {
-                            if (!isset($carry[$searchDocumentField->getKey()][$value])) {
-                                $carry[$searchDocumentField->getKey()][$value] = 0;
-                            }
-                            $carry[$searchDocumentField->getKey()][$value] ++;
-
+        return array_reduce(
+            $documentCollection->getDocuments(),
+            function ($carry, SearchDocument $document) use ($facetFieldCodes) {
+                return array_reduce(
+                    $document->getFieldsCollection()->getFields(),
+                    function ($carry, SearchDocumentField $searchDocumentField) use ($facetFieldCodes) {
+                        if (!in_array($searchDocumentField->getKey(), $facetFieldCodes)) {
                             return $carry;
-                        },
-                        $carry
-                    );
-                },
-                $carry
-            );
-        }, []);
+                        }
+                        return array_reduce($searchDocumentField->getValues(),
+                            function ($carry, $value) use ($searchDocumentField) {
+                                if (!isset($carry[$searchDocumentField->getKey()][$value])) {
+                                    $carry[$searchDocumentField->getKey()][$value] = 0;
+                                }
+                                $carry[$searchDocumentField->getKey()][$value] ++;
+
+                                return $carry;
+                            },
+                            $carry
+                        );
+                    },
+                    $carry
+                );
+            },
+            []
+        );
     }
 
     /**
+     * @param string[] $facetFields
      * @param SearchDocument ...$searchDocuments
      * @return SearchEngineResponse
      */
-    private function createSearchEngineResponse(SearchDocument ...$searchDocuments)
+    private function createSearchEngineResponse(array $facetFields, SearchDocument ...$searchDocuments)
     {
         $documentCollection = new SearchDocumentCollection(...$searchDocuments);
-        $facetFieldCollection = $this->createFacetFieldsCollectionFromSearchDocumentCollection($documentCollection);
+        $facetFieldCollection = $this->createFacetFieldsCollectionFromSearchDocumentCollection(
+            $facetFields,
+            $documentCollection
+        );
 
         return new SearchEngineResponse($documentCollection, $facetFieldCollection);
     }

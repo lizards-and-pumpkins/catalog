@@ -184,7 +184,11 @@ class ProductListingRequestHandler implements HttpRequestHandler
 
         $criteria = $this->applyFiltersToSelectionCriteria($originalCriteria, $selectedFilters);
 
-        return $this->dataPoolReader->getSearchResultsMatchingCriteria($criteria, $this->context);
+        return $this->dataPoolReader->getSearchResultsMatchingCriteria(
+            $criteria,
+            $this->context,
+            $this->filterNavigationAttributeCodes
+        );
     }
 
     /**
