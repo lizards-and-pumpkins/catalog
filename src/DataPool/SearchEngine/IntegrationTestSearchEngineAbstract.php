@@ -273,6 +273,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
      */
     private function createSearchEngineResponse(array $facetFields, array $searchDocuments, $rowsPerPage, $pageNumber)
     {
+        $totalNumberOfResults = count($searchDocuments);
         $currentPageDocuments = array_slice($searchDocuments, $pageNumber * $rowsPerPage, $rowsPerPage);
 
         $documentCollection = new SearchDocumentCollection(...array_values($currentPageDocuments));
@@ -281,7 +282,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
             $documentCollection
         );
 
-        return new SearchEngineResponse($documentCollection, $facetFieldCollection);
+        return new SearchEngineResponse($documentCollection, $facetFieldCollection, $totalNumberOfResults);
     }
 
     /**
