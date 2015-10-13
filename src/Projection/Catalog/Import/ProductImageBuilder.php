@@ -1,11 +1,9 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Product\ProductAttribute;
-use LizardsAndPumpkins\Projection\Catalog\Import\ProductAttributeListBuilder;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Product\ProductImage;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidProductImageAttributeListException;
