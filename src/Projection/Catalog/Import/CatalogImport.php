@@ -148,8 +148,20 @@ class CatalogImport
     public function addProductsFromBuilderToQueue(ProductBuilder $productBuilder)
     {
         array_map(function (Context $context) use ($productBuilder) {
-            $this->addCommandToQueue($productBuilder->getProductForContext($context));
+            $product = $productBuilder->getProductForContext($context);
+            if ($product->isAvailableInContext($context)) {
+                $this->addCommandToQueue($product);
+            }
         }, $this->contextSource->getAllAvailableContextsWithVersion($this->dataVersion));
+    }
+
+    /**
+     * @param Product $product
+     * @return bool
+     */
+    private function isProductAvailableInContext(Product $product)
+    {
+        return count($product->getAttributes()) > 0;
     }
 
     private function addCommandToQueue(Product $product)

@@ -100,6 +100,20 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param string $commandClass
+     */
+    private function assertCommandWasNotAddedToQueue($commandClass)
+    {
+        $numberOfInvocations = array_sum(array_map(function ($invocation) use ($commandClass) {
+            /** @var \PHPUnit_Framework_MockObject_Invocation_Object $invocation */
+            return intval($commandClass === get_class($invocation->parameters[0]));
+        }, $this->addToCommandQueueSpy->getInvocations()));
+
+        $message = sprintf('Failed to assert that %s was not added to command queue.', $commandClass);
+        $this->assertSame(0, $numberOfInvocations, $message);
+    }
+
+    /**
      * @return ProductXmlToProductBuilderLocator|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createMockProductXmlToProductBuilder()
@@ -179,8 +193,24 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateProductCommandsAreEmitted()
     {
+        $stubProductBuilder = $this->stubProductXmlToProductBuilder->createProductBuilderFromXml('');
+        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $mockProduct */
+        $mockProduct = $stubProductBuilder->getProductForContext($this->getMock(Context::class));
+        $mockProduct->method('isAvailableInContext')->willReturn(true);
         $this->catalogImport->importFile($this->sharedFixtureFilePath);
+        
         $this->assertCommandWasAddedToQueue(UpdateProductCommand::class);
+    }
+
+    public function testUpdateProductCommandsAreNotEmittedIfTheProductDoesNotMatchAGivenContext()
+    {
+        $stubProductBuilder = $this->stubProductXmlToProductBuilder->createProductBuilderFromXml('');
+        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $mockProduct */
+        $mockProduct = $stubProductBuilder->getProductForContext($this->getMock(Context::class));
+        $mockProduct->method('isAvailableInContext')->willReturn(false);
+        $this->catalogImport->importFile($this->sharedFixtureFilePath);
+        
+        $this->assertCommandWasNotAddedToQueue(UpdateProductCommand::class);
     }
 
     public function testAddProductListingCommandsAreEmitted()
