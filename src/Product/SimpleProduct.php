@@ -7,9 +7,9 @@ use LizardsAndPumpkins\Context\ContextBuilder;
 
 class SimpleProduct implements Product
 {
-    const CONTEXT = 'context';
     use RehydrateableProductTrait;
     
+    const CONTEXT = 'context';
     const TYPE_CODE = 'simple';
 
     /**
@@ -104,6 +104,14 @@ class SimpleProduct implements Product
     }
 
     /**
+     * @return ProductAttributeList
+     */
+    public function getAttributes()
+    {
+        return $this->attributeList;
+    }
+    
+    /**
      * @return mixed[]
      */
     public function jsonSerialize()
@@ -182,5 +190,17 @@ class SimpleProduct implements Product
     public function getMainImageLabel()
     {
         return $this->getImageLabelByNumber(0);
+    }
+
+    /**
+     * @param Context $context
+     * @return bool
+     */
+    public function isAvailableInContext(Context $context)
+    {
+        $attributes = $this->attributeList->getAllAttributes();
+        return count($attributes) === 0 ?
+            false :
+            $context->matchesDataSet($attributes[0]->getContextDataSet());
     }
 }
