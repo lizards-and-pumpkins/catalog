@@ -129,7 +129,10 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     public function testSearchEngineResponseIsReturned()
     {
-        $result = $this->searchEngine->query('baz', $this->testContext, []);
+        $facetFields = [];
+        $rowsPerPage = 100;
+        $pageNumber = 0;
+        $result = $this->searchEngine->query('baz', $this->testContext, $facetFields, $rowsPerPage, $pageNumber);
         $this->assertInstanceOf(SearchEngineResponse::class, $result);
     }
 
@@ -141,9 +144,13 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocument);
 
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
-        $searchEngineResponse = $this->searchEngine->query('baz', $this->testContext, []);
 
-        $this->assertCount(0, $searchEngineResponse->getSearchDocuments());
+        $facetFields = [];
+        $rowsPerPage = 100;
+        $pageNumber = 0;
+        $result = $this->searchEngine->query('baz', $this->testContext, $facetFields, $rowsPerPage, $pageNumber);
+
+        $this->assertCount(0, $result->getSearchDocuments());
     }
 
     public function testSearchDocumentsAreAddedToAndRetrievedFromSearchEngine()
@@ -157,7 +164,17 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
 
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
-        $searchEngineResponse = $this->searchEngine->query($keyword, $this->testContext, []);
+
+        $facetFields = [];
+        $rowsPerPage = 100;
+        $pageNumber = 0;
+        $searchEngineResponse = $this->searchEngine->query(
+            $keyword,
+            $this->testContext,
+            $facetFields,
+            $rowsPerPage,
+            $pageNumber
+        );
         $result = $searchEngineResponse->getSearchDocuments();
 
         $this->assertCollectionContainsDocumentForProductId($result, $productAId);
@@ -176,7 +193,17 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
 
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
-        $searchEngineResponse = $this->searchEngine->query($keyword, $this->testContext, []);
+
+        $facetFields = [];
+        $rowsPerPage = 100;
+        $pageNumber = 0;
+        $searchEngineResponse = $this->searchEngine->query(
+            $keyword,
+            $this->testContext,
+            $facetFields,
+            $rowsPerPage,
+            $pageNumber
+        );
         $result = $searchEngineResponse->getSearchDocuments();
 
         $this->assertCollectionContainsDocumentForProductId($result, $productAId);
@@ -198,7 +225,17 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
 
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
-        $searchEngineResponse = $this->searchEngine->query($keyword, $queryContext, []);
+
+        $facetFields = [];
+        $rowsPerPage = 100;
+        $pageNumber = 0;
+        $searchEngineResponse = $this->searchEngine->query(
+            $keyword,
+            $queryContext,
+            $facetFields,
+            $rowsPerPage,
+            $pageNumber
+        );
         $result = $searchEngineResponse->getSearchDocuments();
 
         $this->assertCollectionDoesNotContainDocumentForProductId($result, $productAId);
@@ -207,18 +244,29 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     public function testPartialContextsAreMatched()
     {
+        $keyword = 'bar';
         $productAId = ProductId::fromString(uniqid());
         $productBId = ProductId::fromString(uniqid());
         $documentAContext = $this->createContextFromDataParts(['website' => 'value1', 'locale' => 'value2']);
         $documentBContext = $this->createContextFromDataParts(['website' => 'value1', 'locale' => 'value2']);
         $queryContext = $this->createContextFromDataParts(['locale' => 'value2']);
 
-        $searchDocumentA = $this->createSearchDocumentWithContext(['foo' => 'bar'], $productAId, $documentAContext);
-        $searchDocumentB = $this->createSearchDocumentWithContext(['foo' => 'bar'], $productBId, $documentBContext);
+        $searchDocumentA = $this->createSearchDocumentWithContext(['foo' => $keyword], $productAId, $documentAContext);
+        $searchDocumentB = $this->createSearchDocumentWithContext(['foo' => $keyword], $productBId, $documentBContext);
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
 
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
-        $searchEngineResponse = $this->searchEngine->query('bar', $queryContext, []);
+
+        $facetFields = [];
+        $rowsPerPage = 100;
+        $pageNumber = 0;
+        $searchEngineResponse = $this->searchEngine->query(
+            $keyword,
+            $queryContext,
+            $facetFields,
+            $rowsPerPage,
+            $pageNumber
+        );
         $result = $searchEngineResponse->getSearchDocuments();
 
         $this->assertCollectionContainsDocumentForProductId($result, $productAId);
@@ -227,15 +275,26 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     public function testContextPartsThatAreNotInSearchDocumentContextAreIgnored()
     {
+        $keyword = 'bar';
         $productId = ProductId::fromString(uniqid());
         $documentContext = $this->createContextFromDataParts(['locale' => 'value2']);
         $queryContext = $this->createContextFromDataParts(['website' => 'value1', 'locale' => 'value2']);
 
-        $searchDocument = $this->createSearchDocumentWithContext(['foo' => 'bar'], $productId, $documentContext);
+        $searchDocument = $this->createSearchDocumentWithContext(['foo' => $keyword], $productId, $documentContext);
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocument);
 
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
-        $searchEngineResponse = $this->searchEngine->query('bar', $queryContext, []);
+
+        $facetFields = [];
+        $rowsPerPage = 100;
+        $pageNumber = 0;
+        $searchEngineResponse = $this->searchEngine->query(
+            $keyword,
+            $queryContext,
+            $facetFields,
+            $rowsPerPage,
+            $pageNumber
+        );
         $result = $searchEngineResponse->getSearchDocuments();
 
         $this->assertCollectionContainsDocumentForProductId($result, $productId);
@@ -251,7 +310,17 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
 
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
-        $searchEngineResponse = $this->searchEngine->query('bar', $this->testContext, []);
+
+        $facetFields = [];
+        $rowsPerPage = 100;
+        $pageNumber = 0;
+        $searchEngineResponse = $this->searchEngine->query(
+            'bar',
+            $this->testContext,
+            $facetFields,
+            $rowsPerPage,
+            $pageNumber
+        );
         $result = $searchEngineResponse->getSearchDocuments();
 
         $this->assertCollectionContainsDocumentForProductId($result, $productAId);
@@ -260,10 +329,16 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     public function testEmptyCollectionIsReturnedIfNoSearchDocumentsMatchesGivenCriteria()
     {
         $searchCriteria = SearchCriterionEqual::create('foo', 'some-value-which-is-definitely-absent-in-index');
+
+        $facetFields = [];
+        $rowsPerPage = 100;
+        $pageNumber = 0;
         $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
             $searchCriteria,
             $this->testContext,
-            []
+            $facetFields,
+            $rowsPerPage,
+            $pageNumber
         );
 
         $this->assertCount(0, $searchEngineResponse->getSearchDocuments());
@@ -283,10 +358,15 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
+        $facetFields = [];
+        $rowsPerPage = 100;
+        $pageNumber = 0;
         $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
             $searchCriteria,
             $this->testContext,
-            []
+            $facetFields,
+            $rowsPerPage,
+            $pageNumber
         );
         $result = $searchEngineResponse->getSearchDocuments();
 
@@ -323,10 +403,15 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
+        $facetFields = [];
+        $rowsPerPage = 100;
+        $pageNumber = 0;
         $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
             $searchCriteria,
             $this->testContext,
-            []
+            $facetFields,
+            $rowsPerPage,
+            $pageNumber
         );
         $result = $searchEngineResponse->getSearchDocuments();
 
@@ -355,14 +440,25 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     public function testIfMultipleMatchingDocumentsHasSameProductIdOnlyOneInstanceIsReturned()
     {
+        $keyword = 'bar';
         $productId = ProductId::fromString(uniqid());
 
-        $searchDocumentA = $this->createSearchDocument(['foo' => 'bar'], $productId);
-        $searchDocumentB = $this->createSearchDocument(['baz' => 'bar'], $productId);
+        $searchDocumentA = $this->createSearchDocument(['foo' => $keyword], $productId);
+        $searchDocumentB = $this->createSearchDocument(['baz' => $keyword], $productId);
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
 
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
-        $searchEngineResponse = $this->searchEngine->query('bar', $this->testContext, []);
+
+        $facetFields = [];
+        $rowsPerPage = 100;
+        $pageNumber = 0;
+        $searchEngineResponse = $this->searchEngine->query(
+            $keyword,
+            $this->testContext,
+            $facetFields,
+            $rowsPerPage,
+            $pageNumber
+        );
         $result = $searchEngineResponse->getSearchDocuments();
 
         $this->assertCollectionContainsDocumentForProductId($result, $productId);
@@ -382,7 +478,17 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocument);
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
         $this->searchEngine->clear();
-        $searchEngineResponse = $this->searchEngine->query($searchDocumentFieldValue, $this->testContext, []);
+
+        $facetFields = [];
+        $rowsPerPage = 100;
+        $pageNumber = 0;
+        $searchEngineResponse = $this->searchEngine->query(
+            $searchDocumentFieldValue,
+            $this->testContext,
+            $facetFields,
+            $rowsPerPage,
+            $pageNumber
+        );
 
         $this->assertEmpty($searchEngineResponse->getSearchDocuments());
     }
@@ -406,7 +512,17 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
-        $searchEngineResponse = $this->searchEngine->query($uniqueValue, $this->testContext, []);
+
+        $facetFields = [];
+        $rowsPerPage = 100;
+        $pageNumber = 0;
+        $searchEngineResponse = $this->searchEngine->query(
+            $uniqueValue,
+            $this->testContext,
+            $facetFields,
+            $rowsPerPage,
+            $pageNumber
+        );
         $result = $searchEngineResponse->getSearchDocuments();
 
         $this->assertCount(2, $result);
@@ -425,7 +541,17 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
 
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
-        $searchEngineResponse = $this->searchEngine->query($keyword, $this->testContext, ['foo', 'bar']);
+
+        $facetFields = ['foo', 'bar'];
+        $rowsPerPage = 100;
+        $pageNumber = 0;
+        $searchEngineResponse = $this->searchEngine->query(
+            $keyword,
+            $this->testContext,
+            $facetFields,
+            $rowsPerPage,
+            $pageNumber
+        );
 
         $expectedFooFacetField = new SearchEngineFacetField(
             AttributeCode::fromString('foo'),
@@ -440,6 +566,27 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(2, $result->getFacetFields());
         $this->assertContains($expectedFooFacetField, $result->getFacetFields(), '', false, false);
         $this->assertContains($expectedBarFacetField, $result->getFacetFields(), '', false, false);
+    }
+
+    public function testOnlyProductsFromARequestedPageAreReturned()
+    {
+        $keyword = uniqid();
+
+        $productAId = ProductId::fromString(uniqid());
+        $productBId = ProductId::fromString(uniqid());
+
+        $searchDocumentA = $this->createSearchDocument(['foo' => $keyword], $productAId);
+        $searchDocumentB = $this->createSearchDocument(['foo' => $keyword], $productBId);
+
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
+
+        $pageNumber = 1;
+        $rowsPerPage = 1;
+        $searchEngineResponse = $this->searchEngine->query($keyword, $this->testContext, [], $rowsPerPage, $pageNumber);
+        $result = $searchEngineResponse->getSearchDocuments();
+
+        $this->assertCount(1, $result);
     }
 
     /**

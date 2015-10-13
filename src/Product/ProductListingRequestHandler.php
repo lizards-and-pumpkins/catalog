@@ -111,9 +111,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
             throw new UnableToHandleRequestException(sprintf('Unable to process request with handler %s', __CLASS__));
         }
 
-        $searchEngineResponse = $this->getSearchResultsMatchingCriteria($request);
-
-        $this->addProductListingContentToPage($searchEngineResponse, $request);
+        $this->addProductListingContentToPage($request);
 
         $keyGeneratorParams = [
             'products_per_page' => $this->defaultNumberOfProductsPerPage,
@@ -151,20 +149,11 @@ class ProductListingRequestHandler implements HttpRequestHandler
         return $snippet;
     }
 
-    private function addProductsInListingToPageBuilder(
-        SearchDocumentCollection $searchDocumentCollection,
-        HttpRequest $request
-    ) {
-        $currentPageNumber = max(1, $request->getQueryParameter(self::PAGINATION_QUERY_PARAMETER_NAME));
-        $productsPerPage = (int)$this->defaultNumberOfProductsPerPage;
-
+    private function addProductsInListingToPageBuilder(SearchDocumentCollection $searchDocumentCollection)
+    {
         $documents = $searchDocumentCollection->getDocuments();
-        $currentPageDocuments = array_slice($documents, ($currentPageNumber - 1) * $productsPerPage, $productsPerPage);
 
-        $productInListingSnippetKeys = $this->getProductInListingSnippetKeysForSearchDocuments(
-            ...$currentPageDocuments
-        );
-
+        $productInListingSnippetKeys = $this->getProductInListingSnippetKeysForSearchDocuments(...$documents);
         $productSnippets = $this->dataPoolReader->getSnippets($productInListingSnippetKeys);
 
         $snippetKey = 'products_grid';
@@ -184,10 +173,15 @@ class ProductListingRequestHandler implements HttpRequestHandler
 
         $criteria = $this->applyFiltersToSelectionCriteria($originalCriteria, $selectedFilters);
 
+        $currentPageNumber = (int) $request->getQueryParameter(self::PAGINATION_QUERY_PARAMETER_NAME);
+        $productsPerPage = (int) $this->defaultNumberOfProductsPerPage;
+
         return $this->dataPoolReader->getSearchResultsMatchingCriteria(
             $criteria,
             $this->context,
-            $this->filterNavigationAttributeCodes
+            $this->filterNavigationAttributeCodes,
+            $productsPerPage,
+            $currentPageNumber
         );
     }
 
@@ -265,12 +259,9 @@ class ProductListingRequestHandler implements HttpRequestHandler
         }, []);
     }
 
-    /**
-     * @param SearchEngineResponse $searchEngineResponse
-     * @param HttpRequest $request
-     */
-    private function addProductListingContentToPage(SearchEngineResponse $searchEngineResponse, HttpRequest $request)
+    private function addProductListingContentToPage(HttpRequest $request)
     {
+        $searchEngineResponse = $this->getSearchResultsMatchingCriteria($request);
         $searchDocumentCollection = $searchEngineResponse->getSearchDocuments();
 
         if (0 === count($searchDocumentCollection)) {
@@ -280,7 +271,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $facetFieldCollection = $searchEngineResponse->getFacetFieldCollection();
 
         $this->addFilterNavigationSnippetToPageBuilder($facetFieldCollection);
-        $this->addProductsInListingToPageBuilder($searchDocumentCollection, $request);
+        $this->addProductsInListingToPageBuilder($searchDocumentCollection);
         $this->addPaginationToPageBuilder($searchDocumentCollection);
         $this->addCollectionSizeToPageBuilder($searchDocumentCollection);
     }

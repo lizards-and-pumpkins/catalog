@@ -25,9 +25,11 @@ class ClearableStubSearchEngine implements SearchEngine, Clearable
      * @param string $queryString
      * @param Context $context
      * @param string[] $facetFields
+     * @param int $rowsPerPage
+     * @param int $pageNumber
      * @return void
      */
-    public function query($queryString, Context $context, array $facetFields)
+    public function query($queryString, Context $context, array $facetFields, $rowsPerPage, $pageNumber)
     {
         // Intentionally left empty
     }
@@ -36,10 +38,17 @@ class ClearableStubSearchEngine implements SearchEngine, Clearable
      * @param SearchCriteria $criteria
      * @param Context $context
      * @param string[] $facetFields
+     * @param int $rowsPerPage
+     * @param int $pageNumber
      * @return void
      */
-    public function getSearchDocumentsMatchingCriteria(SearchCriteria $criteria, Context $context, array $facetFields)
-    {
+    public function getSearchDocumentsMatchingCriteria(
+        SearchCriteria $criteria,
+        Context $context,
+        array $facetFields,
+        $rowsPerPage,
+        $pageNumber
+    ) {
         // Intentionally left empty
     }
 }

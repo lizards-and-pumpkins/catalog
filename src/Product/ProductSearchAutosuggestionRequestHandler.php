@@ -71,7 +71,17 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
         }
 
         $searchQueryString = $request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
-        $searchEngineResponse = $this->dataPoolReader->getSearchResults($searchQueryString, $this->context, []);
+
+        $facetFields = [];
+        $rowsPerPage = 100;
+        $pageNumber = 0;
+        $searchEngineResponse = $this->dataPoolReader->getSearchResults(
+            $searchQueryString,
+            $this->context,
+            $facetFields,
+            $rowsPerPage,
+            $pageNumber
+        );
         $searchDocumentsCollection = $searchEngineResponse->getSearchDocuments();
 
         $this->addSearchResultsToPageBuilder($searchDocumentsCollection);

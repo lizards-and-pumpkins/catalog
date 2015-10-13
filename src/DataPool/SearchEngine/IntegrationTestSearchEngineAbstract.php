@@ -20,12 +20,12 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     /**
      * @inheritdoc
      */
-    final public function query($queryString, Context $queryContext, array $facetFields)
+    final public function query($queryString, Context $queryContext, array $facetFields, $rowsPerPage, $pageNumber)
     {
         $allDocuments = $this->getSearchDocuments();
         $matchingDocuments = $this->getSearchDocumentsForQueryInContext($allDocuments, $queryString, $queryContext);
 
-        return $this->createSearchEngineResponse($facetFields, ...array_values($matchingDocuments));
+        return $this->createSearchEngineResponse($facetFields, $matchingDocuments, $rowsPerPage, $pageNumber);
     }
 
     /**
@@ -70,7 +70,9 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     final public function getSearchDocumentsMatchingCriteria(
         SearchCriteria $criteria,
         Context $context,
-        array $facetFields
+        array $facetFields,
+        $rowsPerPage,
+        $pageNumber
     ) {
         $matchingDocuments = array_filter(
             $this->getSearchDocuments(),
@@ -79,7 +81,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
             }
         );
 
-        return $this->createSearchEngineResponse($facetFields, ...array_values($matchingDocuments));
+        return $this->createSearchEngineResponse($facetFields, $matchingDocuments, $rowsPerPage, $pageNumber);
     }
 
     /**
@@ -264,12 +266,16 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
 
     /**
      * @param string[] $facetFields
-     * @param SearchDocument ...$searchDocuments
+     * @param SearchDocument[] $searchDocuments
+     * @param int $rowsPerPage
+     * @param int $pageNumber
      * @return SearchEngineResponse
      */
-    private function createSearchEngineResponse(array $facetFields, SearchDocument ...$searchDocuments)
+    private function createSearchEngineResponse(array $facetFields, array $searchDocuments, $rowsPerPage, $pageNumber)
     {
-        $documentCollection = new SearchDocumentCollection(...$searchDocuments);
+        $currentPageDocuments = array_slice($searchDocuments, $pageNumber * $rowsPerPage, $rowsPerPage);
+
+        $documentCollection = new SearchDocumentCollection(...array_values($currentPageDocuments));
         $facetFieldCollection = $this->createFacetFieldsCollectionFromSearchDocumentCollection(
             $facetFields,
             $documentCollection
