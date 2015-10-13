@@ -28,7 +28,6 @@ use LizardsAndPumpkins\Image\AddImageCommandHandler;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\DefaultNumberOfProductsPerPageSnippetRenderer;
-use LizardsAndPumpkins\Product\FilterNavigationFilterCollection;
 use LizardsAndPumpkins\Product\PriceSnippetRenderer;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductBackOrderAvailabilitySnippetRenderer;
@@ -1366,18 +1365,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             ProductSearchResultMetaSnippetRenderer::CODE,
             $this->getMasterFactory()->getRequiredContexts(),
             $usedDataParts
-        );
-    }
-
-    /**
-     * @return FilterNavigationFilterCollection
-     */
-    public function createFilterNavigationFilterCollection()
-    {
-        return new FilterNavigationFilterCollection(
-            $this->getMasterFactory()->createDataPoolReader(),
-            $this->getMasterFactory()->getTranslatorRegistry(),
-            $this->getMasterFactory()->createSearchCriteriaBuilder()
         );
     }
 

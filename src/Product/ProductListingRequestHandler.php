@@ -10,6 +10,8 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineFacetFieldCollection;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
@@ -48,11 +50,6 @@ class ProductListingRequestHandler implements HttpRequestHandler
     private $keyGeneratorLocator;
 
     /**
-     * @var FilterNavigationFilterCollection
-     */
-    private $filterNavigationFilterCollection;
-
-    /**
      * @var string[]
      */
     private $filterNavigationAttributeCodes;
@@ -72,7 +69,6 @@ class ProductListingRequestHandler implements HttpRequestHandler
      * @param DataPoolReader $dataPoolReader
      * @param PageBuilder $pageBuilder
      * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
-     * @param FilterNavigationFilterCollection $filterNavigationFilterCollection
      * @param string[] $filterNavigationAttributeCodes
      * @param int $defaultNumberOfProductsPerPage
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
@@ -82,7 +78,6 @@ class ProductListingRequestHandler implements HttpRequestHandler
         DataPoolReader $dataPoolReader,
         PageBuilder $pageBuilder,
         SnippetKeyGeneratorLocator $keyGeneratorLocator,
-        FilterNavigationFilterCollection $filterNavigationFilterCollection,
         array $filterNavigationAttributeCodes,
         $defaultNumberOfProductsPerPage,
         SearchCriteriaBuilder $searchCriteriaBuilder
@@ -91,7 +86,6 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $this->context = $context;
         $this->pageBuilder = $pageBuilder;
         $this->keyGeneratorLocator = $keyGeneratorLocator;
-        $this->filterNavigationFilterCollection = $filterNavigationFilterCollection;
         $this->filterNavigationAttributeCodes = $filterNavigationAttributeCodes;
         $this->defaultNumberOfProductsPerPage = $defaultNumberOfProductsPerPage;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
@@ -117,12 +111,9 @@ class ProductListingRequestHandler implements HttpRequestHandler
             throw new UnableToHandleRequestException(sprintf('Unable to process request with handler %s', __CLASS__));
         }
 
-        $selectedFilters = $this->getSelectedFilterValuesFromRequest($request);
-        $originalCriteria = $this->pageMetaInfo->getSelectionCriteria();
+        $searchEngineResponse = $this->getSearchResultsMatchingCriteria($request);
 
-        $documentCollection = $this->getSearchDocumentsMatchingCriteria($originalCriteria, $selectedFilters);
-
-        $this->addProductListingContentToPage($documentCollection, $originalCriteria, $request, $selectedFilters);
+        $this->addProductListingContentToPage($searchEngineResponse, $request);
 
         $keyGeneratorParams = [
             'products_per_page' => $this->defaultNumberOfProductsPerPage,
@@ -183,23 +174,17 @@ class ProductListingRequestHandler implements HttpRequestHandler
     }
 
     /**
-     * @param SearchCriteria $originalCriteria
-     * @param array[] $selectedFilters
-     * @return SearchDocumentCollection
+     * @param HttpRequest $request
+     * @return SearchEngineResponse
      */
-    private function getSearchDocumentsMatchingCriteria(SearchCriteria $originalCriteria, array $selectedFilters)
+    private function getSearchResultsMatchingCriteria(HttpRequest $request)
     {
-        $criteriaWithSelectedFiltersApplied = $this->applyFiltersToSelectionCriteria(
-            $originalCriteria,
-            $selectedFilters
-        );
+        $selectedFilters = $this->getSelectedFilterValuesFromRequest($request);
+        $originalCriteria = $this->pageMetaInfo->getSelectionCriteria();
 
-        $searchEngineResponse = $this->dataPoolReader->getSearchResultsMatchingCriteria(
-            $criteriaWithSelectedFiltersApplied,
-            $this->context
-        );
+        $criteria = $this->applyFiltersToSelectionCriteria($originalCriteria, $selectedFilters);
 
-        return $searchEngineResponse->getSearchDocuments();
+        return $this->dataPoolReader->getSearchResultsMatchingCriteria($criteria, $this->context);
     }
 
     /**
@@ -277,50 +262,29 @@ class ProductListingRequestHandler implements HttpRequestHandler
     }
 
     /**
-     * @param SearchDocumentCollection $searchDocumentCollection
-     * @param SearchCriteria $originalCriteria
+     * @param SearchEngineResponse $searchEngineResponse
      * @param HttpRequest $request
-     * @param array[] $selectedFilters
      */
-    private function addProductListingContentToPage(
-        SearchDocumentCollection $searchDocumentCollection,
-        SearchCriteria $originalCriteria,
-        HttpRequest $request,
-        array $selectedFilters
-    ) {
+    private function addProductListingContentToPage(SearchEngineResponse $searchEngineResponse, HttpRequest $request)
+    {
+        $searchDocumentCollection = $searchEngineResponse->getSearchDocuments();
+
         if (0 === count($searchDocumentCollection)) {
             return;
         }
 
-        $this->addFilterNavigationToPageBuilder($searchDocumentCollection, $originalCriteria, $selectedFilters);
+        $facetFieldCollection = $searchEngineResponse->getFacetFieldCollection();
+
+        $this->addFilterNavigationSnippetToPageBuilder($facetFieldCollection);
         $this->addProductsInListingToPageBuilder($searchDocumentCollection, $request);
         $this->addPaginationToPageBuilder($searchDocumentCollection);
         $this->addCollectionSizeToPageBuilder($searchDocumentCollection);
     }
 
-    /**
-     * @param SearchDocumentCollection $searchDocumentCollection
-     * @param SearchCriteria $originalCriteria
-     * @param array[] $selectedFilters
-     */
-    private function addFilterNavigationToPageBuilder(
-        SearchDocumentCollection $searchDocumentCollection,
-        SearchCriteria $originalCriteria,
-        array $selectedFilters
-    ) {
-        $this->filterNavigationFilterCollection->initialize(
-            $searchDocumentCollection,
-            $originalCriteria,
-            $selectedFilters,
-            $this->context
-        );
-        $this->addFilterNavigationSnippetToPageBuilder();
-    }
-
-    private function addFilterNavigationSnippetToPageBuilder()
+    private function addFilterNavigationSnippetToPageBuilder(SearchEngineFacetFieldCollection $facetFieldCollection)
     {
         $snippetCode = 'filter_navigation';
-        $snippetContents = json_encode($this->filterNavigationFilterCollection, JSON_PRETTY_PRINT);
+        $snippetContents = json_encode($facetFieldCollection, JSON_PRETTY_PRINT);
 
         $this->addDynamicSnippetToPageBuilder($snippetCode, $snippetContents);
     }

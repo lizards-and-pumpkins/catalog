@@ -105,7 +105,6 @@ class ProductListingTest extends AbstractIntegrationTest
             $dataPoolReader,
             $pageBuilder,
             $this->factory->getSnippetKeyGeneratorLocator(),
-            $this->factory->createFilterNavigationFilterCollection(),
             $filterNavigationAttributeCodes,
             $defaultNumberOfProductsPerPage,
             $this->factory->createSearchCriteriaBuilder()
