@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\Product\AttributeCode;
 
-class SearchEngineFacetField
+class SearchEngineFacetField implements \JsonSerializable
 {
     /**
      * @var AttributeCode
@@ -36,5 +36,21 @@ class SearchEngineFacetField
     public function getValues()
     {
         return $this->values;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    function jsonSerialize()
+    {
+        return [
+            (string) $this->attributeCode => array_reduce(
+                $this->values,
+                function($carry, SearchEngineFacetFieldValueCount $valueCount) {
+                    return array_merge($carry, [$valueCount->getValue() => $valueCount->getCount()]);
+                },
+                []
+            )
+        ];
     }
 }
