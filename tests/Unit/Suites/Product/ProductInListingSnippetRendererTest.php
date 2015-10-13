@@ -5,7 +5,6 @@ namespace LizardsAndPumpkins\Product;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\InvalidProjectionSourceDataTypeException;
 use LizardsAndPumpkins\Projection\Catalog\InternalToPublicProductJsonData;
-use LizardsAndPumpkins\Projection\Catalog\InternalToPublicProductJsonDataTest;
 use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetList;

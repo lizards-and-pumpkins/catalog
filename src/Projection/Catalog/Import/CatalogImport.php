@@ -155,15 +155,6 @@ class CatalogImport
         }, $this->contextSource->getAllAvailableContextsWithVersion($this->dataVersion));
     }
 
-    /**
-     * @param Product $product
-     * @return bool
-     */
-    private function isProductAvailableInContext(Product $product)
-    {
-        return count($product->getAttributes()) > 0;
-    }
-
     private function addCommandToQueue(Product $product)
     {
         $this->commandQueue->add(new UpdateProductCommand($product));
