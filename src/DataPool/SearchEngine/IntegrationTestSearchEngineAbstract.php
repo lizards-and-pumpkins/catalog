@@ -157,16 +157,16 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
 
     /**
      * @param string[] $facetFieldCodes
-     * @param SearchDocumentCollection $documentCollection
+     * @param SearchDocument ...$searchDocuments
      * @return SearchEngineFacetFieldCollection
      */
-    private function createFacetFieldsCollectionFromSearchDocumentCollection(
+    private function createFacetFieldsCollectionFromSearchDocuments(
         array $facetFieldCodes,
-        SearchDocumentCollection $documentCollection
+        SearchDocument ...$searchDocuments
     ) {
-        $attributeCounts = $this->createAttributeValueCountArrayFromSearchDocumentCollection(
-            $documentCollection,
-            $facetFieldCodes
+        $attributeCounts = $this->createAttributeValueCountArrayFromSearchDocuments(
+            $facetFieldCodes,
+            ...$searchDocuments
         );
         $facetFields = array_map(function ($attributeCode, $attributeValues) {
             $facetFieldValues = $this->getFacetFieldValuesFromAttributeValues($attributeValues);
@@ -177,15 +177,14 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     }
 
     /**
-     * @param SearchDocumentCollection $documentCollection
      * @param string[] $facetFieldCodes
+     * @param SearchDocument ...$searchDocuments
      * @return array[]
      */
-    private function createAttributeValueCountArrayFromSearchDocumentCollection(
-        SearchDocumentCollection $documentCollection,
-        array $facetFieldCodes
+    private function createAttributeValueCountArrayFromSearchDocuments(
+        array $facetFieldCodes,
+        SearchDocument ...$searchDocuments
     ) {
-        $searchDocuments = $documentCollection->getDocuments();
         return array_reduce($searchDocuments, function ($carry, SearchDocument $document) use ($facetFieldCodes) {
             $searchDocumentValueCount = $this->getSearchDocumentFacetFieldValueCount($document, $facetFieldCodes);
             return $this->sumKeyValueCounts($carry, $searchDocumentValueCount);
@@ -273,14 +272,14 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
      */
     private function createSearchEngineResponse(array $facetFields, array $searchDocuments, $rowsPerPage, $pageNumber)
     {
+        $facetFieldCollection = $this->createFacetFieldsCollectionFromSearchDocuments(
+            $facetFields,
+            ...array_values($searchDocuments)
+        );
+
         $totalNumberOfResults = count($searchDocuments);
         $currentPageDocuments = array_slice($searchDocuments, $pageNumber * $rowsPerPage, $rowsPerPage);
-
         $documentCollection = new SearchDocumentCollection(...array_values($currentPageDocuments));
-        $facetFieldCollection = $this->createFacetFieldsCollectionFromSearchDocumentCollection(
-            $facetFields,
-            $documentCollection
-        );
 
         return new SearchEngineResponse($documentCollection, $facetFieldCollection, $totalNumberOfResults);
     }
