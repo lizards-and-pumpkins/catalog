@@ -5,10 +5,12 @@
 ?>
 <?= $this->getChildOutput('content_block_in_product_listing') ?>
 <div class="toolbar roundedBorder">
-    <?php /* TODO: Handle singular form */ ?>
-    <p class="amount">{{snippet collection_size}} <?= $this->__('Items') ?></p>
+    <p class="amount"></p>
 </div>
 <div id="products-grid-container"></div>
 <script>var productListingJson = {{snippet products_grid}}</script>
 <div id="pagination"></div>
-<script>var totalPagesCount = {{snippet total_pages_count}}</script>
+<script>
+    var totalNumberOfResults = {{snippet total_number_of_results}},
+        productsPerPage = {{snippet products_per_page}}
+</script>

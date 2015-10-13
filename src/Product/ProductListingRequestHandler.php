@@ -272,8 +272,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
 
         $this->addFilterNavigationSnippetToPageBuilder($facetFieldCollection);
         $this->addProductsInListingToPageBuilder($searchDocumentCollection);
-        $this->addPaginationToPageBuilder($searchDocumentCollection);
-        $this->addCollectionSizeToPageBuilder($searchDocumentCollection);
+        $this->addPaginationSnippetsToPageBuilder($searchEngineResponse);
     }
 
     private function addFilterNavigationSnippetToPageBuilder(SearchEngineFacetFieldCollection $facetFieldCollection)
@@ -284,19 +283,13 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $this->addDynamicSnippetToPageBuilder($snippetCode, $snippetContents);
     }
 
-    private function addPaginationToPageBuilder(SearchDocumentCollection $searchDocumentCollection)
+    private function addPaginationSnippetsToPageBuilder(SearchEngineResponse $searchEngineResponse)
     {
-        $numberOfProductsPerPage = (int)$this->defaultNumberOfProductsPerPage;
-        $totalPagesCount = ceil(count($searchDocumentCollection) / $numberOfProductsPerPage);
-        $this->addDynamicSnippetToPageBuilder('total_pages_count', $totalPagesCount);
-    }
-
-    private function addCollectionSizeToPageBuilder(SearchDocumentCollection $searchDocumentCollection)
-    {
-        $snippetCode = 'collection_size';
-        $snippetContent = count($searchDocumentCollection);
-
-        $this->addDynamicSnippetToPageBuilder($snippetCode, $snippetContent);
+        $this->addDynamicSnippetToPageBuilder(
+            'total_number_of_results',
+            $searchEngineResponse->getTotalNumberOfResults()
+        );
+        $this->addDynamicSnippetToPageBuilder('products_per_page', (int) $this->defaultNumberOfProductsPerPage);
     }
 
     /**

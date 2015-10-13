@@ -326,9 +326,9 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertDynamicSnippetWasAddedToPageBuilder($addSnippetsToPageSpy, $snippetCode);
     }
 
-    public function testTotalPagesCountSnippetIsAddedToPageBuilder()
+    public function testTotalNumberOfResultsSnippetIsAddedToPageBuilder()
     {
-        $snippetCode = 'total_pages_count';
+        $snippetCode = 'total_number_of_results';
         $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
         $addSnippetsToPageSpy = $this->createAddedSnippetsSpy();
 
@@ -337,9 +337,9 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertDynamicSnippetWasAddedToPageBuilder($addSnippetsToPageSpy, $snippetCode);
     }
 
-    public function testCollectionSizeSnippetIsAddedToPageBuilder()
+    public function testNumberOfProductsPerPageSnippetIsAddedToPageBuilder()
     {
-        $snippetCode = 'collection_size';
+        $snippetCode = 'products_per_page';
         $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
         $addSnippetsToPageSpy = $this->createAddedSnippetsSpy();
 
