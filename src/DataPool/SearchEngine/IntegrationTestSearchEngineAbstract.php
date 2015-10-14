@@ -186,81 +186,68 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
         SearchDocument ...$searchDocuments
     ) {
         return array_reduce($searchDocuments, function ($carry, SearchDocument $document) use ($facetFieldCodes) {
-            $searchDocumentValueCount = $this->getSearchDocumentFacetFieldValueCount($document, $facetFieldCodes);
-            return $this->sumKeyValueCounts($carry, $searchDocumentValueCount);
+            return array_reduce(
+                $document->getFieldsCollection()->getFields(),
+                function ($carry, SearchDocumentField $documentField) use ($facetFieldCodes) {
+                    return in_array($documentField->getKey(), $facetFieldCodes) ?
+                        $this->addDocumentFieldValuesToCount($carry, $documentField->getKey(), $documentField) :
+                        $carry;
+                },
+                $carry
+            );
         }, []);
     }
 
     /**
-     * @param SearchDocument $document
-     * @param string[] $facetFieldCodes
+     * @param array[] $attributeValuesCounts
+     * @param string $attributeCode
+     * @param SearchDocumentField $documentField
      * @return array[]
      */
-    private function getSearchDocumentFacetFieldValueCount(SearchDocument $document, array $facetFieldCodes)
-    {
-        $documentFields = $this->getFacetFieldsFromSearchDocument($document, $facetFieldCodes);
-        $result = array_reduce($documentFields, function ($carry, SearchDocumentField $searchDocumentField) {
-            $fieldValueCount = $this->getSearchDocumentFieldValuesCount($searchDocumentField);
-            return $this->sumKeyValueCounts($carry, [$searchDocumentField->getKey() => $fieldValueCount]);
-        }, []);
-        return $result;
+    private function addDocumentFieldValuesToCount(
+        array $attributeValuesCounts,
+        $attributeCode,
+        SearchDocumentField $documentField
+    ) {
+        return array_reduce($documentField->getValues(), function ($carry, $value) use ($attributeCode) {
+            return $this->addValueToCount($carry, $attributeCode, $value);
+        }, $attributeValuesCounts);
     }
 
     /**
-     * @param SearchDocument $document
-     * @param string[] $facetFieldCodes
-     * @return SearchDocumentField[]
-     */
-    private function getFacetFieldsFromSearchDocument(SearchDocument $document, array $facetFieldCodes)
-    {
-        $allFields = $document->getFieldsCollection()->getFields();
-        return array_filter($allFields, function (SearchDocumentField $field) use ($facetFieldCodes) {
-            return in_array($field->getKey(), $facetFieldCodes);
-        });
-    }
-
-    /**
-     * @param SearchDocumentField $searchDocumentField
-     * @return int[]
-     */
-    private function getSearchDocumentFieldValuesCount(SearchDocumentField $searchDocumentField)
-    {
-        return array_reduce($searchDocumentField->getValues(), function ($carry, $value) use ($searchDocumentField) {
-            $count = isset($carry[$value]) ?
-                $carry[$value] + 1 :
-                1;
-            return array_merge($carry, [$value => $count]);
-        }, []);
-    }
-
-    /**
-     * @param array[] $keyValuesCountA
-     * @param array[] $keyValuesCountB
+     * @param array[] $attributeValuesCounts
+     * @param string $attributeCode
+     * @param string $newValue
      * @return array[]
      */
-    private function sumKeyValueCounts($keyValuesCountA, $keyValuesCountB)
+    private function addValueToCount(array $attributeValuesCounts, $attributeCode, $newValue)
     {
-        $allKeys = array_merge(array_keys($keyValuesCountA), array_keys($keyValuesCountB));
-        return array_reduce($allKeys, function ($carry, $key) use ($keyValuesCountA, $keyValuesCountB) {
-            $keyValuesA = isset($keyValuesCountA[$key]) ? $keyValuesCountA[$key] : [];
-            $keyValuesB = isset($keyValuesCountB[$key]) ? $keyValuesCountB[$key] : [];
-            return array_merge($carry, [$key => $this->sumValueCounts($keyValuesA, $keyValuesB)]);
-        }, []);
-    }
+        $valueWasFound = false;
+        $newValues = [];
 
-    /**
-     * @param int[] $valuesCountA
-     * @param int[] $valuesCountB
-     * @return int[]
-     */
-    private function sumValueCounts(array $valuesCountA, array $valuesCountB)
-    {
-        $allValues = array_merge(array_keys($valuesCountA), array_keys($valuesCountB));
-        return array_reduce($allValues, function ($carry, $value) use ($valuesCountA, $valuesCountB) {
-            $valueACount = isset($valuesCountA[$value]) ? $valuesCountA[$value] : 0;
-            $valueBCount = isset($valuesCountB[$value]) ? $valuesCountB[$value] : 0;
-            return array_merge($carry, [$value => $valueACount + $valueBCount]);
-        }, []);
+        foreach ($attributeValuesCounts as $currentAttributeCode => $currentAttributeValues) {
+            if ($currentAttributeCode !== $attributeCode) {
+                $newValues[$currentAttributeCode] = $currentAttributeValues;
+                continue;
+            }
+
+            $newAttributeValues = [];
+            foreach ($currentAttributeValues as $currentValueArray) {
+                if ($currentValueArray['value'] === $newValue) {
+                    $currentValueArray['count']++;
+                    $valueWasFound = true;
+                }
+                $newAttributeValues[] = $currentValueArray;
+            }
+
+            $newValues[$currentAttributeCode] = $newAttributeValues;
+        }
+
+        if (false === $valueWasFound) {
+            $newValues[$attributeCode][] = ['value' => $newValue, 'count' => 1];
+        }
+
+        return $newValues;
     }
 
     /**
@@ -290,8 +277,8 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
      */
     private function getFacetFieldValuesFromAttributeValues($attributeValues)
     {
-        return array_map(function ($value, $count) {
-            return SearchEngineFacetFieldValueCount::create((string)$value, $count);
-        }, array_keys($attributeValues), $attributeValues);
+        return array_map(function ($valueCounts) {
+            return SearchEngineFacetFieldValueCount::create((string) $valueCounts['value'], $valueCounts['count']);
+        }, $attributeValues);
     }
 }

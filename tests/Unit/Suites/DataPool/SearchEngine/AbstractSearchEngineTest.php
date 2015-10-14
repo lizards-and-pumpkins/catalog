@@ -536,8 +536,12 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $productAId = ProductId::fromString(uniqid());
         $productBId = ProductId::fromString(uniqid());
 
-        $searchDocumentA = $this->createSearchDocument(['foo' => $keyword], $productAId);
-        $searchDocumentB = $this->createSearchDocument(['bar' => $keyword, 'baz' => 'qux'], $productBId);
+        $valueACode = 'foo';
+        $valueBCode = 'bar';
+        $valueCCode = 'baz';
+
+        $searchDocumentA = $this->createSearchDocument([$valueACode => $keyword, $valueBCode => $keyword], $productAId);
+        $searchDocumentB = $this->createSearchDocument([$valueBCode => $keyword, $valueCCode => 'test'], $productBId);
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
 
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
@@ -554,12 +558,12 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         );
 
         $expectedFooFacetField = new SearchEngineFacetField(
-            AttributeCode::fromString('foo'),
+            AttributeCode::fromString($valueACode),
             SearchEngineFacetFieldValueCount::create($keyword, 1)
         );
         $expectedBarFacetField = new SearchEngineFacetField(
-            AttributeCode::fromString('bar'),
-            SearchEngineFacetFieldValueCount::create($keyword, 1)
+            AttributeCode::fromString($valueBCode),
+            SearchEngineFacetFieldValueCount::create($keyword, 2)
         );
         $result = $searchEngineResponse->getFacetFieldCollection();
 
