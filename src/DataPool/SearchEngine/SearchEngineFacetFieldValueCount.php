@@ -68,7 +68,7 @@ class SearchEngineFacetFieldValueCount implements \JsonSerializable
     /**
      * @return mixed[]
      */
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return [
             'value' => $this->value,
