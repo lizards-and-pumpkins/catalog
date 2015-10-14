@@ -226,7 +226,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
         $newValues = [];
 
         foreach ($attributeValuesCounts as $currentAttributeCode => $currentAttributeValues) {
-            if ($currentAttributeCode !== $attributeCode) {
+            if ((string) $currentAttributeCode !== $attributeCode) {
                 $newValues[$currentAttributeCode] = $currentAttributeValues;
                 continue;
             }
