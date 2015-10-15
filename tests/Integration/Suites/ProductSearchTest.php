@@ -2,11 +2,11 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchRequestHandler;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Product\ProductSearchRequestHandler;
 use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer;
 
 class ProductSearchTest extends AbstractIntegrationTest
@@ -67,12 +67,17 @@ class ProductSearchTest extends AbstractIntegrationTest
             $this->factory->getSnippetKeyGeneratorLocator(),
             $this->factory->getLogger()
         );
+        $filterNavigationAttributeCodes = [];
+        $defaultNumberOfProductsPerPage = 9;
 
         return new ProductSearchRequestHandler(
             $this->factory->createContext(),
             $dataPoolReader,
             $pageBuilder,
-            $this->factory->getSnippetKeyGeneratorLocator()
+            $this->factory->getSnippetKeyGeneratorLocator(),
+            $filterNavigationAttributeCodes,
+            $defaultNumberOfProductsPerPage,
+            $this->factory->createSearchCriteriaBuilder()
         );
     }
 
