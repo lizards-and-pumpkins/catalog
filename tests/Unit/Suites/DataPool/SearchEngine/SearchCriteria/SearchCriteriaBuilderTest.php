@@ -54,4 +54,21 @@ class SearchCriteriaBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(CompositeSearchCriterion::class, $result);
         $this->assertEquals($expectedCriteriaJson, $result->jsonSerialize());
     }
+
+    public function testCompositeCriteriaWithListOfFieldsMatchingSameStringAndOrConditionIsReturned()
+    {
+        $fields = ['foo', 'bar'];
+        $queryString = 'baz';
+        $result = $this->builder->anyOfFieldsContainString($fields, $queryString);
+
+        $expectedCriteriaJson = [
+            'condition' => CompositeSearchCriterion::OR_CONDITION,
+            'criteria'  => array_map(function ($fieldName) use ($queryString) {
+                return SearchCriterionLike::create($fieldName, $queryString);
+            }, $fields)
+        ];
+
+        $this->assertInstanceOf(CompositeSearchCriterion::class, $result);
+        $this->assertEquals($expectedCriteriaJson, $result->jsonSerialize());
+    }
 }

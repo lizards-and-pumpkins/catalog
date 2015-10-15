@@ -4,6 +4,8 @@ namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
@@ -81,11 +83,21 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
         $stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
         $stubSnippetKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')->willReturn($stubSnippetKeyGenerator);
 
+        $stubCriteria = $this->getMock(SearchCriteria::class);
+
+        /** @var SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject $stubSearchCriteriaBuilder */
+        $stubSearchCriteriaBuilder = $this->getMock(SearchCriteriaBuilder::class);
+        $stubSearchCriteriaBuilder->method('anyOfFieldsContainString')->willReturn($stubCriteria);
+
+        $testSearchableAttributeCodes = ['foo'];
+
         $this->requestHandler = new ProductSearchAutosuggestionRequestHandler(
             $stubContext,
             $this->stubDataPoolReader,
             $this->mockPageBuilder,
-            $stubSnippetKeyGeneratorLocator
+            $stubSnippetKeyGeneratorLocator,
+            $stubSearchCriteriaBuilder,
+            $testSearchableAttributeCodes
         );
 
         $this->stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
@@ -168,7 +180,7 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection();
         $stubSearchEngineResponse = $this->getMock(SearchEngineResponse::class, [], [], '', false);
         $stubSearchEngineResponse->method('getSearchDocuments')->willReturn($stubSearchDocumentCollection);
-        $this->stubDataPoolReader->method('getSearchResults')->willReturn($stubSearchEngineResponse);
+        $this->stubDataPoolReader->method('getSearchResultsMatchingCriteria')->willReturn($stubSearchEngineResponse);
 
         $this->assertInstanceOf(HttpResponse::class, $this->requestHandler->process($this->stubHttpRequest));
     }
@@ -183,7 +195,7 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
 
         $stubSearchEngineResponse = $this->getMock(SearchEngineResponse::class, [], [], '', false);
         $stubSearchEngineResponse->method('getSearchDocuments')->willReturn($stubSearchDocumentCollection);
-        $this->stubDataPoolReader->method('getSearchResults')->willReturn($stubSearchEngineResponse);
+        $this->stubDataPoolReader->method('getSearchResultsMatchingCriteria')->willReturn($stubSearchEngineResponse);
 
         $metaSnippetContent = [
             'root_snippet_code'  => 'foo',
@@ -203,7 +215,7 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection();
         $stubSearchEngineResponse = $this->getMock(SearchEngineResponse::class, [], [], '', false);
         $stubSearchEngineResponse->method('getSearchDocuments')->willReturn($stubSearchDocumentCollection);
-        $this->stubDataPoolReader->method('getSearchResults')->willReturn($stubSearchEngineResponse);
+        $this->stubDataPoolReader->method('getSearchResultsMatchingCriteria')->willReturn($stubSearchEngineResponse);
 
         $metaSnippetContent = [
             'root_snippet_code'  => 'foo',

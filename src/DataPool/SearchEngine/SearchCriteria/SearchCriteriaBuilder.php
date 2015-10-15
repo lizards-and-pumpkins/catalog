@@ -24,4 +24,18 @@ class SearchCriteriaBuilder
 
         return SearchCriterionEqual::create($parameterName, $parameterValue);
     }
+
+    /**
+     * @param string[] $fieldNames
+     * @param string $queryString
+     * @return CompositeSearchCriterion
+     */
+    public function anyOfFieldsContainString($fieldNames, $queryString)
+    {
+        return CompositeSearchCriterion::createOr(
+            ...array_map(function ($fieldName) use ($queryString) {
+                return SearchCriterionLike::create($fieldName, $queryString);
+            }, $fieldNames)
+        );
+    }
 }

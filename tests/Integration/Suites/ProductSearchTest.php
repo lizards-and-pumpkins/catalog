@@ -77,7 +77,8 @@ class ProductSearchTest extends AbstractIntegrationTest
             $this->factory->getSnippetKeyGeneratorLocator(),
             $filterNavigationAttributeCodes,
             $defaultNumberOfProductsPerPage,
-            $this->factory->createSearchCriteriaBuilder()
+            $this->factory->createSearchCriteriaBuilder(),
+            $this->factory->getSearchableAttributeCodes()
         );
     }
 

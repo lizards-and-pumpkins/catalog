@@ -2,13 +2,18 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\DataPool\DataPoolReader;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\UnableToHandleRequestException;
+use LizardsAndPumpkins\PageBuilder;
 use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetContent;
 use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
 
 class ProductSearchRequestHandler implements HttpRequestHandler
 {
@@ -17,6 +22,41 @@ class ProductSearchRequestHandler implements HttpRequestHandler
     const SEARCH_RESULTS_SLUG = 'catalogsearch/result';
     const QUERY_STRING_PARAMETER_NAME = 'q';
     const SEARCH_QUERY_MINIMUM_LENGTH = 3;
+
+    /**
+     * @var string[]
+     */
+    private $searchableAttributeCodes;
+
+    /**
+     * @param Context $context
+     * @param DataPoolReader $dataPoolReader
+     * @param PageBuilder $pageBuilder
+     * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
+     * @param string[] $filterNavigationAttributeCodes
+     * @param int $defaultNumberOfProductsPerPage
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param string[] $searchableAttributeCodes
+     */
+    public function __construct(
+        Context $context,
+        DataPoolReader $dataPoolReader,
+        PageBuilder $pageBuilder,
+        SnippetKeyGeneratorLocator $keyGeneratorLocator,
+        array $filterNavigationAttributeCodes,
+        $defaultNumberOfProductsPerPage,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        array $searchableAttributeCodes
+    ) {
+        $this->dataPoolReader = $dataPoolReader;
+        $this->context = $context;
+        $this->pageBuilder = $pageBuilder;
+        $this->keyGeneratorLocator = $keyGeneratorLocator;
+        $this->filterNavigationAttributeCodes = $filterNavigationAttributeCodes;
+        $this->defaultNumberOfProductsPerPage = $defaultNumberOfProductsPerPage;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->searchableAttributeCodes = $searchableAttributeCodes;
+    }
 
     /**
      * @param HttpRequest $request
@@ -37,7 +77,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
             throw new UnableToHandleRequestException(sprintf('Unable to process request with handler %s', __CLASS__));
         }
 
-        $searchEngineResponse = $this->getSearchResults($request);
+        $searchEngineResponse = $this->getSearchResultsMatchingCriteria($request);
         $this->addProductListingContentToPage($searchEngineResponse);
 
         $metaInfoSnippetKeyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
@@ -83,22 +123,27 @@ class ProductSearchRequestHandler implements HttpRequestHandler
      * @param HttpRequest $request
      * @return SearchEngineResponse
      */
-    private function getSearchResults(HttpRequest $request)
+    private function getSearchResultsMatchingCriteria(HttpRequest $request)
     {
+        $selectedFilters = $this->getSelectedFilterValuesFromRequest($request);
+
         $queryString = $request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
+        $originalCriteria = $this->searchCriteriaBuilder->anyOfFieldsContainString(
+            $this->searchableAttributeCodes,
+            $queryString
+        );
+
+        $criteria = $this->applyFiltersToSelectionCriteria($originalCriteria, $selectedFilters);
+
         $currentPageNumber = $this->getCurrentPageNumber($request);
+        $productsPerPage = (int) $this->defaultNumberOfProductsPerPage;
 
-        $rowsPerPage = $this->defaultNumberOfProductsPerPage;
-        $pageNumber = $currentPageNumber;
-
-        return $this->dataPoolReader->getSearchResults(
-            $queryString,
+        return $this->dataPoolReader->getSearchResultsMatchingCriteria(
+            $criteria,
             $this->context,
             $this->filterNavigationAttributeCodes,
-            $rowsPerPage,
-            $pageNumber
+            $productsPerPage,
+            $currentPageNumber
         );
     }
-
-    /* TODO: Apply selected filters to criteria */
 }

@@ -4,6 +4,8 @@ namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
@@ -53,33 +55,6 @@ trait ProductListingRequestHandlerTrait
      * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
-
-    /**
-     * @param Context $context
-     * @param DataPoolReader $dataPoolReader
-     * @param PageBuilder $pageBuilder
-     * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
-     * @param string[] $filterNavigationAttributeCodes
-     * @param int $defaultNumberOfProductsPerPage
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     */
-    public function __construct(
-        Context $context,
-        DataPoolReader $dataPoolReader,
-        PageBuilder $pageBuilder,
-        SnippetKeyGeneratorLocator $keyGeneratorLocator,
-        array $filterNavigationAttributeCodes,
-        $defaultNumberOfProductsPerPage,
-        SearchCriteriaBuilder $searchCriteriaBuilder
-    ) {
-        $this->dataPoolReader = $dataPoolReader;
-        $this->context = $context;
-        $this->pageBuilder = $pageBuilder;
-        $this->keyGeneratorLocator = $keyGeneratorLocator;
-        $this->filterNavigationAttributeCodes = $filterNavigationAttributeCodes;
-        $this->defaultNumberOfProductsPerPage = $defaultNumberOfProductsPerPage;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-    }
 
     /**
      * @param HttpRequest $request
@@ -158,5 +133,47 @@ trait ProductListingRequestHandlerTrait
         $snippetKeyToContentMap = [$snippetCode => $snippetContents];
 
         $this->pageBuilder->addSnippetsToPage($snippetCodeToKeyMap, $snippetKeyToContentMap);
+    }
+
+    /**
+     * @param SearchCriteria $originalCriteria
+     * @param array[] $filters
+     * @return SearchCriteria
+     */
+    private function applyFiltersToSelectionCriteria(SearchCriteria $originalCriteria, array $filters)
+    {
+        $filtersCriteriaArray = [];
+
+        foreach ($filters as $filterCode => $filterOptionValues) {
+            if (empty($filterOptionValues)) {
+                continue;
+            }
+
+            $optionValuesCriteriaArray = array_map(function ($filterOptionValue) use ($filterCode) {
+                return $this->searchCriteriaBuilder->fromRequestParameter($filterCode, $filterOptionValue);
+            }, $filterOptionValues);
+
+            $filterCriteria = CompositeSearchCriterion::createOr(...$optionValuesCriteriaArray);
+            $filtersCriteriaArray[] = $filterCriteria;
+        }
+
+        if (empty($filtersCriteriaArray)) {
+            return $originalCriteria;
+        }
+
+        $filtersCriteriaArray[] = $originalCriteria;
+        return CompositeSearchCriterion::createAnd(...$filtersCriteriaArray);
+    }
+
+    /**
+     * @param HttpRequest $request
+     * @return array[]
+     */
+    private function getSelectedFilterValuesFromRequest(HttpRequest $request)
+    {
+        return array_reduce($this->filterNavigationAttributeCodes, function ($carry, $attributeCode) use ($request) {
+            $carry[$attributeCode] = array_filter(explode(',', $request->getQueryParameter($attributeCode)));
+            return $carry;
+        }, []);
     }
 }

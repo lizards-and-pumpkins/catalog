@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpResourceNotFoundResponse;
@@ -109,10 +110,17 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
 
         $this->assertEquals($productBackOrderAvailability, $backOrderAvailabilitySnippetContents);
 
+        $criteria = SearchCriterionEqual::create('name', 'LED Arm-Signallampe');
         $facetFields = [];
         $rowsPerPage = 100;
         $pageNumber = 0;
-        $searchResults = $dataPoolReader->getSearchResults('led', $context, $facetFields, $rowsPerPage, $pageNumber);
+        $searchResults = $dataPoolReader->getSearchResultsMatchingCriteria(
+            $criteria,
+            $context,
+            $facetFields,
+            $rowsPerPage,
+            $pageNumber
+        );
 
         $this->assertEquals(
             $productId,

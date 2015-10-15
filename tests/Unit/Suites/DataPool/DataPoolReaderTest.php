@@ -190,19 +190,6 @@ class DataPoolReaderTest extends AbstractDataPoolTest
         $this->assertSame($currentDataVersion, $this->dataPoolReader->getCurrentDataVersion());
     }
 
-    public function testSearchResultsAreReturnedFromSearchEngine()
-    {
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $this->getMock(Context::class);
-
-        $this->getMockSearchEngine()->expects($this->once())->method('query');
-
-        $facetFields = [];
-        $rowsPerPage = 100;
-        $pageNumber = 0;
-        $this->dataPoolReader->getSearchResults('foo', $stubContext, $facetFields, $rowsPerPage, $pageNumber);
-    }
-
     public function testCriteriaQueriesAreDelegatedToSearchEngine()
     {
         /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $mockCriteria */

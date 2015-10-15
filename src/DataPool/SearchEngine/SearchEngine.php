@@ -15,16 +15,6 @@ interface SearchEngine
     public function addSearchDocumentCollection(SearchDocumentCollection $searchDocumentCollection);
 
     /**
-     * @param string $queryString
-     * @param Context $context
-     * @param string[] $facetFields
-     * @param int $rowsPerPage
-     * @param int $pageNumber
-     * @return SearchEngineResponse
-     */
-    public function query($queryString, Context $context, array $facetFields, $rowsPerPage, $pageNumber);
-
-    /**
      * @param SearchCriteria $criteria
      * @param Context $context
      * @param string[] $facetFields

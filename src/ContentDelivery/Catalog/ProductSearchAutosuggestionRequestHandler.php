@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -43,16 +44,40 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
      */
     private $keyGeneratorLocator;
 
+    /**
+     * @var string[]
+     */
+    private $searchableAttributeCodes;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $criteriaBuilder;
+
+    /**
+     * ProductSearchAutosuggestionRequestHandler constructor.
+     *
+     * @param Context $context
+     * @param DataPoolReader $dataPoolReader
+     * @param PageBuilder $pageBuilder
+     * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
+     * @param string[] $searchableAttributeCodes
+     * @param SearchCriteriaBuilder $criteriaBuilder
+     */
     public function __construct(
         Context $context,
         DataPoolReader $dataPoolReader,
         PageBuilder $pageBuilder,
-        SnippetKeyGeneratorLocator $keyGeneratorLocator
+        SnippetKeyGeneratorLocator $keyGeneratorLocator,
+        SearchCriteriaBuilder $criteriaBuilder,
+        array $searchableAttributeCodes
     ) {
         $this->context = $context;
         $this->dataPoolReader = $dataPoolReader;
         $this->pageBuilder = $pageBuilder;
         $this->keyGeneratorLocator = $keyGeneratorLocator;
+        $this->criteriaBuilder = $criteriaBuilder;
+        $this->searchableAttributeCodes = $searchableAttributeCodes;
     }
 
     /**
@@ -114,16 +139,17 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
     }
 
     /**
-     * @param $searchQueryString
+     * @param $queryString
      * @return SearchDocumentCollection
      */
-    private function getSearchResults($searchQueryString)
+    private function getSearchResults($queryString)
     {
+        $criteria = $this->criteriaBuilder->anyOfFieldsContainString($this->searchableAttributeCodes, $queryString);
         $facetFields = [];
-        $rowsPerPage = 100;
+        $rowsPerPage = 100; // TODO: Replace with configured number of suggestions to show
         $pageNumber = 0;
-        $searchEngineResponse = $this->dataPoolReader->getSearchResults(
-            $searchQueryString,
+        $searchEngineResponse = $this->dataPoolReader->getSearchResultsMatchingCriteria(
+            $criteria,
             $this->context,
             $facetFields,
             $rowsPerPage,

@@ -159,19 +159,6 @@ class DataPoolReader
     }
 
     /**
-     * @param string $queryString
-     * @param Context $context
-     * @param string[] $facetFields
-     * @param int $rowsPerPage
-     * @param int $pageNumber
-     * @return SearchEngineResponse
-     */
-    public function getSearchResults($queryString, Context $context, array $facetFields, $rowsPerPage, $pageNumber)
-    {
-        return $this->searchEngine->query($queryString, $context, $facetFields, $rowsPerPage, $pageNumber);
-    }
-
-    /**
      * @param SearchCriteria $criteria
      * @param Context $context
      * @param string[] $facetFields
