@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine;
 use LizardsAndPumpkins\DataPool\SearchEngine\Exception\InvalidFacetFieldValueCountException;
 use LizardsAndPumpkins\DataPool\SearchEngine\Exception\InvalidFacetFieldValueException;
 
-class SearchEngineFacetFieldValueCount
+class SearchEngineFacetFieldValueCount implements \JsonSerializable
 {
     /**
      * @var string
@@ -63,5 +63,16 @@ class SearchEngineFacetFieldValueCount
     public function getCount()
     {
         return $this->count;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'value' => $this->value,
+            'count' => $this->count
+        ];
     }
 }

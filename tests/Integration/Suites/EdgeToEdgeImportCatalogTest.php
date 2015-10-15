@@ -109,7 +109,10 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
 
         $this->assertEquals($productBackOrderAvailability, $backOrderAvailabilitySnippetContents);
 
-        $searchResults = $dataPoolReader->getSearchResults('led', $context, []);
+        $facetFields = [];
+        $rowsPerPage = 100;
+        $pageNumber = 0;
+        $searchResults = $dataPoolReader->getSearchResults('led', $context, $facetFields, $rowsPerPage, $pageNumber);
 
         $this->assertEquals(
             $productId,

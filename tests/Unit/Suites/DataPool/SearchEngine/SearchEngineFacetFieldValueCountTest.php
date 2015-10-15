@@ -49,4 +49,18 @@ class SearchEngineFacetFieldValueCountTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertSame($this->testFieldCount, $this->facetFieldValue->getCount());
     }
+
+    public function testJsonSerializableInterfaceIsImplemented()
+    {
+        $this->assertInstanceOf(\JsonSerializable::class, $this->facetFieldValue);
+    }
+
+    public function testArrayRepresentationOfFacetFieldValueCountIsReturned()
+    {
+        $expectedArray = [
+            'value' => $this->testFieldValue,
+            'count' => $this->testFieldCount
+        ];
+        $this->assertSame($expectedArray, $this->facetFieldValue->jsonSerialize());
+    }
 }

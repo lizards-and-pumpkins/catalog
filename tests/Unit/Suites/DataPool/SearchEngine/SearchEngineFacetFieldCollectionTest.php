@@ -7,6 +7,19 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine;
  */
 class SearchEngineFacetFieldCollectionTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @param $attributeCode
+     * @param \PHPUnit_Framework_MockObject_MockObject[] $stubFacetFieldValueCount
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubFacetField($attributeCode, array $stubFacetFieldValueCount)
+    {
+        $stubFacetField = $this->getMock(SearchEngineFacetField::class, [], [], '', false);
+        $stubFacetField->method('getAttributeCode')->willReturn($attributeCode);
+        $stubFacetField->method('getValues')->willReturn($stubFacetFieldValueCount);
+        return $stubFacetField;
+    }
+
     public function testCountableInterfaceIsImplemented()
     {
         $facetFieldCollection = new SearchEngineFacetFieldCollection;
@@ -57,9 +70,21 @@ class SearchEngineFacetFieldCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayRepresentationOfFacetFilterCollectionIsReturned()
     {
-        $stubFacetField = $this->getMock(SearchEngineFacetField::class, [], [], '', false);
-        $facetFieldCollection = new SearchEngineFacetFieldCollection($stubFacetField);
+        $attributeCodeA = 'foo';
+        $stubFacetFieldAValueCount = $this->getMock(SearchEngineFacetFieldValueCount::class, [], [], '', false);
+        $stubFacetFieldA = $this->createStubFacetField($attributeCodeA, [$stubFacetFieldAValueCount]);
 
-        $this->assertSame([$stubFacetField], $facetFieldCollection->jsonSerialize());
+        $attributeCodeB = 'bar';
+        $stubFacetFieldBValueCount = $this->getMock(SearchEngineFacetFieldValueCount::class, [], [], '', false);
+        $stubFacetFieldB = $this->createStubFacetField($attributeCodeB, [$stubFacetFieldBValueCount]);
+
+        $facetFieldCollection = new SearchEngineFacetFieldCollection($stubFacetFieldA, $stubFacetFieldB);
+
+        $expectedArray = [
+            $attributeCodeA => [$stubFacetFieldAValueCount],
+            $attributeCodeB => [$stubFacetFieldBValueCount]
+        ];
+
+        $this->assertSame($expectedArray, $facetFieldCollection->jsonSerialize());
     }
 }

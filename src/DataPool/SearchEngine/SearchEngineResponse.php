@@ -16,13 +16,24 @@ class SearchEngineResponse
      */
     private $facetFieldCollection;
 
+    /**
+     * @var int
+     */
+    private $totalNumberOfResults;
+
+    /**
+     * @param SearchDocumentCollection $searchDocuments
+     * @param SearchEngineFacetFieldCollection $facetFieldCollection
+     * @param int $totalNumberOfResults
+     */
     public function __construct(
         SearchDocumentCollection $searchDocuments,
-        SearchEngineFacetFieldCollection $facetFieldCollection
+        SearchEngineFacetFieldCollection $facetFieldCollection,
+        $totalNumberOfResults
     ) {
-
         $this->searchDocuments = $searchDocuments;
         $this->facetFieldCollection = $facetFieldCollection;
+        $this->totalNumberOfResults = $totalNumberOfResults;
     }
 
     /**
@@ -39,5 +50,13 @@ class SearchEngineResponse
     public function getFacetFieldCollection()
     {
         return $this->facetFieldCollection;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTotalNumberOfResults()
+    {
+        return $this->totalNumberOfResults;
     }
 }

@@ -197,7 +197,10 @@ class DataPoolReaderTest extends AbstractDataPoolTest
 
         $this->getMockSearchEngine()->expects($this->once())->method('query');
 
-        $this->dataPoolReader->getSearchResults('foo', $stubContext, []);
+        $facetFields = [];
+        $rowsPerPage = 100;
+        $pageNumber = 0;
+        $this->dataPoolReader->getSearchResults('foo', $stubContext, $facetFields, $rowsPerPage, $pageNumber);
     }
 
     public function testCriteriaQueriesAreDelegatedToSearchEngine()
@@ -212,7 +215,16 @@ class DataPoolReaderTest extends AbstractDataPoolTest
             ->method('getSearchDocumentsMatchingCriteria')
             ->with($mockCriteria, $stubContext);
 
-        $this->dataPoolReader->getSearchResultsMatchingCriteria($mockCriteria, $stubContext, []);
+        $facetFields = [];
+        $rowsPerPage = 100;
+        $pageNumber = 0;
+        $this->dataPoolReader->getSearchResultsMatchingCriteria(
+            $mockCriteria,
+            $stubContext,
+            $facetFields,
+            $rowsPerPage,
+            $pageNumber
+        );
     }
 
     public function testItDelegatesUrlKeyReadsToUrlKeyStorage()

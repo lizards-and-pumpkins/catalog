@@ -22,8 +22,9 @@ define(['lib/url'], function (url) {
     };
 
     return {
-        generatePagination: function (totalPageCount, paginationPlaceholderSelector) {
-            var paginationPlaceholder = document.querySelector(paginationPlaceholderSelector);
+        generatePagination: function (totalNumberOfResults, productsPerPage, paginationPlaceholderSelector) {
+            var paginationPlaceholder = document.querySelector(paginationPlaceholderSelector),
+                totalPageCount = Math.ceil(totalNumberOfResults / productsPerPage);
 
             if (null === paginationPlaceholderSelector) {
                 return;

@@ -24,6 +24,8 @@ class SearchEngineResponseTest extends \PHPUnit_Framework_TestCase
      */
     private $searchEngineResponse;
 
+    private $testTotalNumberOfResults = 5;
+
     protected function setUp()
     {
         $this->stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
@@ -31,7 +33,8 @@ class SearchEngineResponseTest extends \PHPUnit_Framework_TestCase
 
         $this->searchEngineResponse = new SearchEngineResponse(
             $this->stubSearchDocumentCollection,
-            $this->stubFacetFieldCollection
+            $this->stubFacetFieldCollection,
+            $this->testTotalNumberOfResults
         );
     }
 
@@ -43,5 +46,10 @@ class SearchEngineResponseTest extends \PHPUnit_Framework_TestCase
     public function testSearchEngineFacetFieldCollectionIsReturned()
     {
         $this->assertSame($this->stubFacetFieldCollection, $this->searchEngineResponse->getFacetFieldCollection());
+    }
+
+    public function testTotalNumberOfResultsIsReturned()
+    {
+        $this->assertSame($this->testTotalNumberOfResults, $this->searchEngineResponse->getTotalNumberOfResults());
     }
 }

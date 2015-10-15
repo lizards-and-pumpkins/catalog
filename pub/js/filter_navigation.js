@@ -12,19 +12,18 @@ define(['lib/url'], function (url) {
                 return;
             }
 
-            filterNavigationJson.map(function (filter) {
-                var attributeCode = Object.keys(filter).shift();
-                var options = FilterNavigation[FilterNavigation.getFilterOptionBuilderName(attributeCode)](
-                    attributeCode,
-                    filter[attributeCode]
+            Object.keys(filterNavigationJson).map(function (filterCode) {
+                var options = FilterNavigation[FilterNavigation.getFilterOptionBuilderName(filterCode)](
+                    filterCode,
+                    filterNavigationJson[filterCode]
                 );
 
                 var heading = document.createElement('DIV');
                 heading.className = 'block-title roundedBorder expanded';
-                heading.textContent = attributeCode; // TODO: Translate
+                heading.textContent = filterCode;
 
                 var optionList = document.createElement('OL');
-                optionList.className = 'filter-content scroll-pane filter-' + attributeCode;
+                optionList.className = 'filter-content scroll-pane filter-' + filterCode;
                 options.map(function (option) { optionList.appendChild(option) });
 
                 filterNavigation.appendChild(heading);
@@ -44,14 +43,14 @@ define(['lib/url'], function (url) {
 
         createDefaultFilterOptions: function (filterCode, filterOptions) {
             var selectedFilterOptions = this.getSelectedFilterValues(filterCode);
-            return Object.keys(filterOptions).reduce(function (carry, value) {
+            return filterOptions.reduce(function (carry, filterOption) {
                 var option = document.createElement('LI'),
                     link = document.createElement('A');
-                link.textContent = value + ' (' + filterOptions[value] + ')';
-                link.href = url.toggleQueryParameter(filterCode, value);
+                link.textContent = filterOption.value + ' (' + filterOption.count + ')';
+                link.href = url.toggleQueryParameter(filterCode, filterOption.value);
                 option.appendChild(link);
 
-                if (selectedFilterOptions.indexOf(value) !== -1) {
+                if (selectedFilterOptions.indexOf(filterOption.value) !== -1) {
                     option.className = 'active';
                 }
 
@@ -62,12 +61,12 @@ define(['lib/url'], function (url) {
 
         createColorFilterOptions: function (filterCode, filterOptions) {
             var selectedColors = this.getSelectedFilterValues(filterCode);
-            return Object.keys(filterOptions).reduce(function (carry, value) {
+            return filterOptions.reduce(function (carry, filterOption) {
                 var option = document.createElement('LI'),
                     link = document.createElement('A');
-                link.innerHTML = selectedColors.indexOf(value.toString()) !== -1 ? '&#x2713;' : '&nbsp;';
-                link.style.backgroundColor = '#' + value;
-                link.href = url.toggleQueryParameter(filterCode, value.toString());
+                link.innerHTML = selectedColors.indexOf(filterOption.value.toString()) !== -1 ? '&#x2713;' : '&nbsp;';
+                link.style.backgroundColor = '#' + filterOption.value;
+                link.href = url.toggleQueryParameter(filterCode, filterOption.value.toString());
                 option.appendChild(link);
 
                 carry.push(option);
@@ -78,12 +77,12 @@ define(['lib/url'], function (url) {
         createPriceFilterOptions: function (filterCode, filterOptions) {
             var priceStep = 20,
                 selectedPriceRanges = this.getSelectedFilterValues(filterCode),
-                priceRanges = Object.keys(filterOptions).reduce(function (carry, value) {
-                    var rangeNumber = Math.floor(value / priceStep);
+                priceRanges = filterOptions.reduce(function (carry, filterOption) {
+                    var rangeNumber = Math.floor(filterOption.value / priceStep);
                     if (typeof carry[rangeNumber] === 'undefined') {
                         carry[rangeNumber] = 0;
                     }
-                    carry[rangeNumber] += filterOptions[value];
+                    carry[rangeNumber] += filterOption.count;
                     return carry;
                 }, {}),
                 options = [];

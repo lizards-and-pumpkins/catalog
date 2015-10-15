@@ -43,6 +43,8 @@ class SearchEngineFacetFieldCollection implements \Countable, \IteratorAggregate
      */
     public function jsonSerialize()
     {
-        return $this->facetFields;
+        return array_reduce($this->facetFields, function ($carry, SearchEngineFacetField $facetField) {
+            return array_merge($carry, [(string) $facetField->getAttributeCode() => $facetField->getValues()]);
+        }, []);
     }
 }
