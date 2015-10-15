@@ -1,6 +1,6 @@
 <?php
 
-namespace LizardsAndPumpkins\Product;
+namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
@@ -11,10 +11,12 @@ use LizardsAndPumpkins\Http\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Http\UnableToHandleRequestException;
 use LizardsAndPumpkins\PageBuilder;
+use LizardsAndPumpkins\Product\Product;
+use LizardsAndPumpkins\Product\ProductDetailPageMetaInfoSnippetContent;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductDetailViewRequestHandler
+ * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductDetailViewRequestHandler
  * @uses   \LizardsAndPumpkins\Product\ProductDetailPageMetaInfoSnippetContent
  */
 class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase

@@ -5,6 +5,10 @@ namespace LizardsAndPumpkins;
 use LizardsAndPumpkins\Api\ApiRequestHandlerChain;
 use LizardsAndPumpkins\Api\ApiRouter;
 use LizardsAndPumpkins\Content\ContentBlocksApiV1PutRequestHandler;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductDetailViewRequestHandler;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchAutosuggestionRequestHandler;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\SimpleEuroPriceSnippetTransformation;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Http\GenericHttpRouter;
@@ -12,19 +16,14 @@ use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRouter;
 use LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler;
 use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
-use LizardsAndPumpkins\Product\DefaultNumberOfProductsPerPageSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductDetailViewRequestHandler;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingCriteriaSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductListingRequestHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer;
 use LizardsAndPumpkins\Product\MultipleProductStockQuantityApiV1PutRequestHandler;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductSearchAutosuggestionRequestHandler;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductSearchRequestHandler;
 use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\Utils\Directory;
@@ -230,10 +229,6 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->createContentBlockSnippetKeyGenerator()
         );
         $snippetKeyGeneratorLocator->register(
-            DefaultNumberOfProductsPerPageSnippetRenderer::CODE,
-            $this->getMasterFactory()->createDefaultNumberOfProductsPerPageSnippetKeyGenerator()
-        );
-        $snippetKeyGeneratorLocator->register(
             ProductListingCriteriaSnippetRenderer::CODE,
             $this->getMasterFactory()->createProductListingCriteriaSnippetKeyGenerator()
         );
@@ -329,7 +324,10 @@ class FrontendFactory implements Factory
             $this->createContext(),
             $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->createPageBuilder(),
-            $this->getMasterFactory()->getSnippetKeyGeneratorLocator()
+            $this->getMasterFactory()->getSnippetKeyGeneratorLocator(),
+            $this->getMasterFactory()->getProductSearchResultsFilterNavigationAttributeCodes(),
+            $this->getDefaultNumberOfProductsPerPageConfig(),
+            $this->getMasterFactory()->createSearchCriteriaBuilder()
         );
     }
 

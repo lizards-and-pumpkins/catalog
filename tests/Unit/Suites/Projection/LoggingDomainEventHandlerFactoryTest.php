@@ -42,7 +42,6 @@ use LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler;
  * @uses   \LizardsAndPumpkins\Product\ProductStockQuantitySnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Product\ProductStockQuantityProjector
- * @uses   \LizardsAndPumpkins\Product\DefaultNumberOfProductsPerPageSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Product\ProductJsonSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer

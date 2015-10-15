@@ -186,16 +186,29 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
         SearchDocument ...$searchDocuments
     ) {
         return array_reduce($searchDocuments, function ($carry, SearchDocument $document) use ($facetFieldCodes) {
-            return array_reduce(
-                $document->getFieldsCollection()->getFields(),
-                function ($carry, SearchDocumentField $documentField) use ($facetFieldCodes) {
-                    return in_array($documentField->getKey(), $facetFieldCodes) ?
-                        $this->addDocumentFieldValuesToCount($carry, $documentField->getKey(), $documentField) :
-                        $carry;
-                },
-                $carry
-            );
+            return $this->addDocumentToCount($carry, $document, $facetFieldCodes);
         }, []);
+    }
+
+    /**
+     * @param array[] $attributeValuesCount
+     * @param SearchDocument $document
+     * @param string[] $facetFieldCodes
+     * @return array[]
+     */
+    private function addDocumentToCount(array $attributeValuesCount, SearchDocument $document, array $facetFieldCodes)
+    {
+        return array_reduce(
+            $document->getFieldsCollection()->getFields(),
+            function ($carry, SearchDocumentField $documentField) use ($facetFieldCodes) {
+                if (!in_array($documentField->getKey(), $facetFieldCodes)) {
+                    return $carry;
+                }
+
+                return $this->addDocumentFieldValuesToCount($carry, $documentField->getKey(), $documentField);
+            },
+            $attributeValuesCount
+        );
     }
 
     /**

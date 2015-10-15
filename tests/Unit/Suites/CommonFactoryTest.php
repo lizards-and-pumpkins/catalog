@@ -74,7 +74,6 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\TemplateWasUpdatedDomainEvent
  * @uses   \LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Renderer\BlockRenderer
- * @uses   \LizardsAndPumpkins\Product\DefaultNumberOfProductsPerPageSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\PriceSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductBackOrderAvailabilitySnippetRenderer
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator

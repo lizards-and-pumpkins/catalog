@@ -1,0 +1,162 @@
+<?php
+
+namespace LizardsAndPumpkins\ContentDelivery\Catalog;
+
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\DataPool\DataPoolReader;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineFacetFieldCollection;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
+use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\PageBuilder;
+use LizardsAndPumpkins\Product\Product;
+use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
+
+trait ProductListingRequestHandlerTrait
+{
+    private $paginationQueryParameterName = 'p';
+
+    /**
+     * @var Context
+     */
+    private $context;
+
+    /**
+     * @var DataPoolReader
+     */
+    private $dataPoolReader;
+
+    /**
+     * @var PageBuilder
+     */
+    private $pageBuilder;
+
+    /**
+     * @var SnippetKeyGeneratorLocator
+     */
+    private $keyGeneratorLocator;
+
+    /**
+     * @var string[]
+     */
+    private $filterNavigationAttributeCodes;
+
+    /**
+     * @var int
+     */
+    private $defaultNumberOfProductsPerPage;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
+     * @param Context $context
+     * @param DataPoolReader $dataPoolReader
+     * @param PageBuilder $pageBuilder
+     * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
+     * @param string[] $filterNavigationAttributeCodes
+     * @param int $defaultNumberOfProductsPerPage
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     */
+    public function __construct(
+        Context $context,
+        DataPoolReader $dataPoolReader,
+        PageBuilder $pageBuilder,
+        SnippetKeyGeneratorLocator $keyGeneratorLocator,
+        array $filterNavigationAttributeCodes,
+        $defaultNumberOfProductsPerPage,
+        SearchCriteriaBuilder $searchCriteriaBuilder
+    ) {
+        $this->dataPoolReader = $dataPoolReader;
+        $this->context = $context;
+        $this->pageBuilder = $pageBuilder;
+        $this->keyGeneratorLocator = $keyGeneratorLocator;
+        $this->filterNavigationAttributeCodes = $filterNavigationAttributeCodes;
+        $this->defaultNumberOfProductsPerPage = $defaultNumberOfProductsPerPage;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+    }
+
+    /**
+     * @param HttpRequest $request
+     * @return int
+     */
+    private function getCurrentPageNumber(HttpRequest $request)
+    {
+        return max(0, $request->getQueryParameter($this->paginationQueryParameterName) - 1);
+    }
+
+    private function addProductListingContentToPage(SearchEngineResponse $searchEngineResponse)
+    {
+        $searchDocumentCollection = $searchEngineResponse->getSearchDocuments();
+
+        if (0 === count($searchDocumentCollection)) {
+            return;
+        }
+
+        $facetFieldCollection = $searchEngineResponse->getFacetFieldCollection();
+
+        $this->addFilterNavigationSnippetToPageBuilder($facetFieldCollection);
+        $this->addProductsInListingToPageBuilder($searchDocumentCollection);
+        $this->addPaginationSnippetsToPageBuilder($searchEngineResponse);
+    }
+
+    private function addProductsInListingToPageBuilder(SearchDocumentCollection $searchDocumentCollection)
+    {
+        $documents = $searchDocumentCollection->getDocuments();
+        $productInListingSnippetKeys = $this->getProductInListingSnippetKeysForSearchDocuments(...$documents);
+        $productSnippets = $this->dataPoolReader->getSnippets($productInListingSnippetKeys);
+
+        $snippetKey = 'products_grid';
+        $snippetContents = '[' . implode(',', $productSnippets) . ']';
+
+        $this->addDynamicSnippetToPageBuilder($snippetKey, $snippetContents);
+    }
+
+    /**
+     * @param SearchDocument ...$searchDocuments
+     * @return string[]
+     */
+    private function getProductInListingSnippetKeysForSearchDocuments(SearchDocument ...$searchDocuments)
+    {
+        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
+            ProductInListingSnippetRenderer::CODE
+        );
+        return array_map(function (SearchDocument $searchDocument) use ($keyGenerator) {
+            return $keyGenerator->getKeyForContext($this->context, [Product::ID => $searchDocument->getProductId()]);
+        }, $searchDocuments);
+    }
+
+    private function addFilterNavigationSnippetToPageBuilder(SearchEngineFacetFieldCollection $facetFieldCollection)
+    {
+        $snippetCode = 'filter_navigation';
+        $snippetContents = json_encode($facetFieldCollection, JSON_PRETTY_PRINT);
+
+        $this->addDynamicSnippetToPageBuilder($snippetCode, $snippetContents);
+    }
+
+    private function addPaginationSnippetsToPageBuilder(SearchEngineResponse $searchEngineResponse)
+    {
+        $this->addDynamicSnippetToPageBuilder(
+            'total_number_of_results',
+            $searchEngineResponse->getTotalNumberOfResults()
+        );
+        $this->addDynamicSnippetToPageBuilder('products_per_page', (int) $this->defaultNumberOfProductsPerPage);
+    }
+
+    /**
+     * @param string $snippetCode
+     * @param string $snippetContents
+     */
+    private function addDynamicSnippetToPageBuilder($snippetCode, $snippetContents)
+    {
+        $snippetCodeToKeyMap = [$snippetCode => $snippetCode];
+        $snippetKeyToContentMap = [$snippetCode => $snippetContents];
+
+        $this->pageBuilder->addSnippetsToPage($snippetCodeToKeyMap, $snippetKeyToContentMap);
+    }
+}

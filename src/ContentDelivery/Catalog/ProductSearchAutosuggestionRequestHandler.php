@@ -1,6 +1,6 @@
 <?php
 
-namespace LizardsAndPumpkins\Product;
+namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
@@ -11,6 +11,10 @@ use LizardsAndPumpkins\Http\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\UnableToHandleRequestException;
 use LizardsAndPumpkins\PageBuilder;
+use LizardsAndPumpkins\Product\Product;
+use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetContent;
+use LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetRenderer;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
 
 class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
@@ -71,19 +75,7 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
         }
 
         $searchQueryString = $request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
-
-        $facetFields = [];
-        $rowsPerPage = 100;
-        $pageNumber = 0;
-        $searchEngineResponse = $this->dataPoolReader->getSearchResults(
-            $searchQueryString,
-            $this->context,
-            $facetFields,
-            $rowsPerPage,
-            $pageNumber
-        );
-        $searchDocumentsCollection = $searchEngineResponse->getSearchDocuments();
-
+        $searchDocumentsCollection = $this->getSearchResults($searchQueryString);
         $this->addSearchResultsToPageBuilder($searchDocumentsCollection);
 
         $metaInfoSnippetContent = $this->getMetaInfoSnippetContent();
@@ -119,6 +111,26 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
         }
 
         return true;
+    }
+
+    /**
+     * @param $searchQueryString
+     * @return SearchDocumentCollection
+     */
+    private function getSearchResults($searchQueryString)
+    {
+        $facetFields = [];
+        $rowsPerPage = 100;
+        $pageNumber = 0;
+        $searchEngineResponse = $this->dataPoolReader->getSearchResults(
+            $searchQueryString,
+            $this->context,
+            $facetFields,
+            $rowsPerPage,
+            $pageNumber
+        );
+        $searchDocumentsCollection = $searchEngineResponse->getSearchDocuments();
+        return $searchDocumentsCollection;
     }
 
     private function addSearchResultsToPageBuilder(SearchDocumentCollection $searchDocumentCollection)

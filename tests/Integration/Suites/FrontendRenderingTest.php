@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductDetailViewRequestHandler;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\VersionedContext;
 use LizardsAndPumpkins\Http\HttpHeaders;
@@ -11,7 +12,6 @@ use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductDetailPageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductDetailViewRequestHandler;
 
 class FrontendRenderingTest extends AbstractIntegrationTest
 {

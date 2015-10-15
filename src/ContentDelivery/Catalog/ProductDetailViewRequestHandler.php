@@ -1,6 +1,6 @@
 <?php
 
-namespace LizardsAndPumpkins\Product;
+namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
@@ -11,6 +11,8 @@ use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\UnableToHandleRequestException;
 use LizardsAndPumpkins\PageBuilder;
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
+use LizardsAndPumpkins\Product\Product;
+use LizardsAndPumpkins\Product\ProductDetailPageMetaInfoSnippetContent;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 
 class ProductDetailViewRequestHandler implements HttpRequestHandler

@@ -17,6 +17,11 @@ use LizardsAndPumpkins\Http\HttpRouterChain;
  * @uses   \LizardsAndPumpkins\FrontendFactory
  * @uses   \LizardsAndPumpkins\CommonFactory
  * @uses   \LizardsAndPumpkins\Content\ContentBlocksApiV1PutRequestHandler
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductDetailViewRequestHandler
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandlerTrait
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchAutosuggestionRequestHandler
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchRequestHandler
  * @uses   \LizardsAndPumpkins\IntegrationTestFactory
  * @uses   \LizardsAndPumpkins\DataVersion
  * @uses   \LizardsAndPumpkins\PageBuilder
@@ -26,11 +31,7 @@ use LizardsAndPumpkins\Http\HttpRouterChain;
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
  * @uses   \LizardsAndPumpkins\Http\GenericHttpRouter
  * @uses   \LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler
- * @uses   \LizardsAndPumpkins\Product\ProductDetailViewRequestHandler
- * @uses   \LizardsAndPumpkins\Product\ProductListingRequestHandler
  * @uses   \LizardsAndPumpkins\Product\MultipleProductStockQuantityApiV1PutRequestHandler
- * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionRequestHandler
- * @uses   \LizardsAndPumpkins\Product\ProductSearchRequestHandler
  * @uses   \LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToProductBuilder

@@ -27,7 +27,6 @@ use LizardsAndPumpkins\Image\AddImageCommand;
 use LizardsAndPumpkins\Image\AddImageCommandHandler;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
-use LizardsAndPumpkins\Product\DefaultNumberOfProductsPerPageSnippetRenderer;
 use LizardsAndPumpkins\Product\PriceSnippetRenderer;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductBackOrderAvailabilitySnippetRenderer;
@@ -456,7 +455,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     private function createProductListingRendererList()
     {
         return [
-            $this->getMasterFactory()->createDefaultNumberOfProductsPerPageSnippetRenderer(),
             $this->getMasterFactory()->createProductSearchResultMetaSnippetRenderer(),
         ];
     }
@@ -495,32 +493,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $this->getMasterFactory()->createThemeLocator(),
             $this->getMasterFactory()->createBlockStructure(),
             $this->getMasterFactory()->getTranslatorRegistry()
-        );
-    }
-
-    /**
-     * @return DefaultNumberOfProductsPerPageSnippetRenderer
-     */
-    public function createDefaultNumberOfProductsPerPageSnippetRenderer()
-    {
-        return new DefaultNumberOfProductsPerPageSnippetRenderer(
-            $this->getMasterFactory()->createSnippetList(),
-            $this->getMasterFactory()->createDefaultNumberOfProductsPerPageSnippetKeyGenerator(),
-            $this->getMasterFactory()->createContextSource()
-        );
-    }
-
-    /**
-     * @return SnippetKeyGenerator
-     */
-    public function createDefaultNumberOfProductsPerPageSnippetKeyGenerator()
-    {
-        $usedDataParts = [];
-
-        return new GenericSnippetKeyGenerator(
-            DefaultNumberOfProductsPerPageSnippetRenderer::CODE,
-            $this->getMasterFactory()->getRequiredContexts(),
-            $usedDataParts
         );
     }
 

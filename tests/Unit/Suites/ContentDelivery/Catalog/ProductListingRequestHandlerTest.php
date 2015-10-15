@@ -1,6 +1,6 @@
 <?php
 
-namespace LizardsAndPumpkins\Product;
+namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
@@ -17,11 +17,15 @@ use LizardsAndPumpkins\Http\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\UnableToHandleRequestException;
 use LizardsAndPumpkins\PageBuilder;
+use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductListingCriteriaSnippetContent;
+use LizardsAndPumpkins\Product\ProductListingCriteriaSnippetRenderer;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductListingRequestHandler
+ * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler
+ * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandlerTrait
  * @uses   \LizardsAndPumpkins\Product\ProductId
  * @uses   \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetContent
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
@@ -135,7 +139,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         $stubProductListingCriteriaSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class, [], [], '', false);
         $stubProductListingCriteriaSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->testMetaInfoKey);
-        
+
         $stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
         $stubSnippetKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')->willReturnMap([
             [ProductListingCriteriaSnippetRenderer::CODE, $stubProductListingCriteriaSnippetKeyGenerator],
@@ -241,7 +245,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertAttributeInstanceOf(
             ProductListingCriteriaSnippetContent::class,
-            'pageMetaInfo',
+            'lazyLoadedPageMetaInfo',
             $this->requestHandler
         );
     }

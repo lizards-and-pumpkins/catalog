@@ -20,16 +20,17 @@ use LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler;
  * @uses   \LizardsAndPumpkins\SampleMasterFactory
  * @uses   \LizardsAndPumpkins\IntegrationTestFactory
  * @uses   \LizardsAndPumpkins\CommonFactory
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductDetailViewRequestHandler
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandlerTrait
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchAutosuggestionRequestHandler
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchRequestHandler
  * @uses   \LizardsAndPumpkins\Context\ContextSource
  * @uses   \LizardsAndPumpkins\Content\ContentBlocksApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\Context\ContextBuilder
  * @uses   \LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator
  * @uses   \LizardsAndPumpkins\Http\GenericHttpRouter
- * @uses   \LizardsAndPumpkins\Product\ProductDetailViewRequestHandler
- * @uses   \LizardsAndPumpkins\Product\ProductListingRequestHandler
- * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionRequestHandler
- * @uses   \LizardsAndPumpkins\Product\ProductSearchRequestHandler
  * @uses   \LizardsAndPumpkins\Product\MultipleProductStockQuantityApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
  * @uses   \LizardsAndPumpkins\DataVersion

@@ -1,6 +1,6 @@
 <?php
 
-namespace LizardsAndPumpkins\Product;
+namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
@@ -16,7 +16,7 @@ use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductSearchAutosuggestionRequestHandler
+ * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchAutosuggestionRequestHandler
  * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetContent
  */
 class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_TestCase

@@ -9,7 +9,7 @@ use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Product\ProductListingCriteriaSnippetContent;
-use LizardsAndPumpkins\Product\ProductListingRequestHandler;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer;
 use LizardsAndPumpkins\Utils\XPathParser;
 
