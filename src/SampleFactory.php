@@ -15,6 +15,7 @@ use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Log\Writer\FileLogMessageWriter;
 use LizardsAndPumpkins\Log\Writer\LogMessageWriter;
 use LizardsAndPumpkins\Log\WritingLoggerDecorator;
+use LizardsAndPumpkins\Product\Price;
 use LizardsAndPumpkins\Queue\File\FileQueue;
 use LizardsAndPumpkins\Queue\Queue;
 
@@ -62,14 +63,14 @@ class SampleFactory implements Factory
      */
     private function getPriceRanges()
     {
-        $rangeStep = 20;
-        $rangesTo = 500;
-        $base = 100;
-        $priceRanges = [['from' => '*', 'to' => $rangeStep * $base - 1]];
+        $base = pow(10, Price::NUM_DECIMAL_POINTS);
+        $rangeStep = 20 * $base;
+        $rangesTo = 500 * $base;
+        $priceRanges = [['from' => '*', 'to' => $rangeStep - 1]];
         for ($i = $rangeStep; $i < $rangesTo; $i += $rangeStep) {
-            $priceRanges[] = ['from' => $i * $base, 'to' => ($i + $rangeStep) * $base - 1];
+            $priceRanges[] = ['from' => $i, 'to' => $i + $rangeStep - 1];
         }
-        $priceRanges[] = ['from' => $rangesTo * $base, 'to' => '*'];
+        $priceRanges[] = ['from' => $rangesTo, 'to' => '*'];
 
         return $priceRanges;
     }
