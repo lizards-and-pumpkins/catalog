@@ -10,6 +10,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineFacetFieldCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -309,7 +310,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $fromRange = '1';
         $toRange = '2';
 
-        $filterValue = sprintf('%s%s%s', $fromRange, SearchCriteriaBuilder::FILTER_RANGE_DELIMITER, $toRange);
+        $filterValue = sprintf('%s%s%s', $fromRange, SearchEngine::RANGE_DELIMITER, $toRange);
         $this->stubRequest->method('getQueryParameter')->willReturnMap([[$attributeCode, $filterValue]]);
 
         $stubCriteria = $this->getMock(SearchCriteria::class);

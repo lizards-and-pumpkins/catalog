@@ -2,10 +2,10 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
+
 class SearchCriteriaBuilder
 {
-    const FILTER_RANGE_DELIMITER = '~';
-
     /**
      * @param string $parameterName
      * @param string $parameterValue
@@ -13,11 +13,11 @@ class SearchCriteriaBuilder
      */
     public function fromRequestParameter($parameterName, $parameterValue)
     {
-        $rangeMatchExpression = sprintf('/^([^%1$s]+)%1$s([^%1$s]+)/', self::FILTER_RANGE_DELIMITER);
+        $range = explode(SearchEngine::RANGE_DELIMITER, $parameterValue);
 
-        if (preg_match($rangeMatchExpression, $parameterValue, $range)) {
-            $criterionFrom = SearchCriterionGreaterOrEqualThan::create($parameterName, $range[1]);
-            $criterionTo = SearchCriterionLessOrEqualThan::create($parameterName, $range[2]);
+        if (count($range) === 2) {
+            $criterionFrom = SearchCriterionGreaterOrEqualThan::create($parameterName, $range[0]);
+            $criterionTo = SearchCriterionLessOrEqualThan::create($parameterName, $range[1]);
 
             return CompositeSearchCriterion::createAnd($criterionFrom, $criterionTo);
         }

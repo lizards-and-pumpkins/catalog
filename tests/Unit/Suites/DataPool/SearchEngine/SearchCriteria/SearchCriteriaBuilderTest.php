@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
+
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
@@ -40,7 +42,7 @@ class SearchCriteriaBuilderTest extends \PHPUnit_Framework_TestCase
         $parameterName = 'foo';
         $rangeFrom = '0';
         $rangeTo = '1';
-        $parameterValue = sprintf('%s%s%s', $rangeFrom, SearchCriteriaBuilder::FILTER_RANGE_DELIMITER, $rangeTo);
+        $parameterValue = sprintf('%s%s%s', $rangeFrom, SearchEngine::RANGE_DELIMITER, $rangeTo);
         $result = $this->builder->fromRequestParameter($parameterName, $parameterValue);
 
         $expectedCriteriaJson = [

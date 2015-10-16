@@ -227,7 +227,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
         return array_reduce($configuredRanges, function ($carry, array $range) use ($attributeValues) {
             $rangeCount = $this->sumAttributeValuesCountsInRange($range, $attributeValues);
             if ($rangeCount > 0) {
-                $rangeCode = sprintf(SearchEngine::RANGE_PATTERN, $range['from'], $range['to']);
+                $rangeCode = $range['from'] . SearchEngine::RANGE_DELIMITER . $range['to'];
                 $carry[] = SearchEngineFacetFieldValueCount::create($rangeCode, $rangeCount);
             }
 

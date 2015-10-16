@@ -8,7 +8,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollec
 
 interface SearchEngine
 {
-    const RANGE_PATTERN = '%s TO %s';
+    const RANGE_DELIMITER = ' TO ';
     const RANGE_WILDCARD = '*';
 
     /**

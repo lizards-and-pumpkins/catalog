@@ -548,12 +548,12 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             new SearchEngineFacetField(
                 AttributeCode::fromString($fieldCode),
                 SearchEngineFacetFieldValueCount::create(
-                    sprintf(SearchEngine::RANGE_PATTERN, SearchEngine::RANGE_WILDCARD, 10),
+                    SearchEngine::RANGE_WILDCARD . SearchEngine::RANGE_DELIMITER . '10',
                     1
                 ),
-                SearchEngineFacetFieldValueCount::create(sprintf(SearchEngine::RANGE_PATTERN, 10, 20), 1),
+                SearchEngineFacetFieldValueCount::create('10' . SearchEngine::RANGE_DELIMITER . '20', 1),
                 SearchEngineFacetFieldValueCount::create(
-                    sprintf(SearchEngine::RANGE_PATTERN, 30, SearchEngine::RANGE_WILDCARD),
+                    '30' . SearchEngine::RANGE_DELIMITER . SearchEngine::RANGE_WILDCARD,
                     1
                 )
             )
