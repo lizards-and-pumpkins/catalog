@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine;
+use LizardsAndPumpkins\DataPool\SearchEngine\Solr\SolrSearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\FileUrlKeyStore;
 use LizardsAndPumpkins\Image\ImageMagickInscribeStrategy;
 use LizardsAndPumpkins\Image\ImageProcessor;
@@ -43,6 +44,32 @@ class SampleFactory implements Factory
     public function getProductSearchResultsFilterNavigationAttributeCodes()
     {
         return ['gender', 'brand', 'category', 'price', 'color'];
+    }
+
+    /**
+     * @return array[]
+     */
+    public function getAttributeRanges()
+    {
+        return [
+            'price' => $this->getPriceRanges(),
+        ];
+    }
+
+    /**
+     * @return array[]
+     */
+    private function getPriceRanges()
+    {
+        $rangeStep = 20;
+        $rangesTo = 500;
+        $priceRanges = [['from' => '*', 'to' => $rangeStep]];
+        for ($i = $rangeStep; $i < $rangesTo; $i += $rangeStep) {
+            $priceRanges[] = ['from' => $i, 'to' => $i + $rangeStep];
+        }
+        $priceRanges[] = ['from' => $rangesTo, 'to' => '*'];
+
+        return $priceRanges;
     }
 
     /**

@@ -205,4 +205,22 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertFileExists($fileStorageBasePath);
         $this->assertTrue(is_dir($fileStorageBasePath));
     }
+
+    public function testArrayOfAttributeRangesIsReturned()
+    {
+        $result = $this->factory->getAttributeRanges();
+
+        $this->assertInternalType('array', $result);
+        $this->assertContainsOnly('array', $result);
+
+        array_map(function (array $attributeRanges) {
+            $this->assertInternalType('array', $attributeRanges);
+            $this->assertContainsOnly('array', $attributeRanges);
+            array_map(function (array $range) {
+                $this->assertCount(2, $range);
+                $this->assertArrayHasKey('from', $range);
+                $this->assertArrayHasKey('to', $range);
+            }, $attributeRanges);
+        }, $result);
+    }
 }
