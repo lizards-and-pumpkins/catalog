@@ -58,7 +58,7 @@ define({
 
         return queryString.split('&').reduce(function (carry, item) {
             var keyValue = item.split('=');
-            carry[keyValue[0]] = keyValue[1];
+            carry[keyValue[0]] = decodeURI(keyValue[1]);
             return carry;
         }, {});
     },
