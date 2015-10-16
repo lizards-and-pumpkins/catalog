@@ -132,13 +132,13 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     {
         $criteria = SearchCriterionEqual::create('foo', 'bar');
 
-        $facetFields = [];
+        $facetFiltersConfig = [];
         $rowsPerPage = 100;
         $pageNumber = 0;
         $result = $this->searchEngine->getSearchDocumentsMatchingCriteria(
             $criteria,
             $this->testContext,
-            $facetFields,
+            $facetFiltersConfig,
             $rowsPerPage,
             $pageNumber
         );
@@ -478,7 +478,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             SearchCriterionEqual::create($fieldCCode, $keyword)
         );
 
-        $facetFields = ['foo', 'bar'];
+        $facetFields = ['foo' => [], 'bar' => []];
         $rowsPerPage = 100;
         $pageNumber = 0;
         $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(

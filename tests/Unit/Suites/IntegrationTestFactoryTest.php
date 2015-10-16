@@ -42,6 +42,22 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
      */
     private $factory;
 
+    /**
+     * @param array[] $filterRanges
+     */
+    private function assertFilterRangesFormat(array $filterRanges)
+    {
+        array_map(function (array $filterRanges) {
+            $this->assertInternalType('array', $filterRanges);
+            $this->assertContainsOnly('array', $filterRanges);
+            array_map(function (array $range) {
+                $this->assertCount(2, $range);
+                $this->assertArrayHasKey('from', $range);
+                $this->assertArrayHasKey('to', $range);
+            }, $filterRanges);
+        }, $filterRanges);
+    }
+
     public function setUp()
     {
         $masterFactory = new SampleMasterFactory();
@@ -107,18 +123,20 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayOfProductListingFilterNavigationAttributeCodesIsReturned()
     {
-        $result = $this->factory->getProductListingFilterNavigationAttributeCodes();
+        $result = $this->factory->getProductListingFilterNavigationConfig();
 
         $this->assertInternalType('array', $result);
-        $this->assertContainsOnly('string', $result);
+        $this->assertContainsOnly('array', $result);
+        $this->assertFilterRangesFormat($result);
     }
 
     public function testArrayOfProductSearchResultsFilterNavigationAttributeCodesIsReturned()
     {
-        $result = $this->factory->getProductSearchResultsFilterNavigationAttributeCodes();
+        $result = $this->factory->getProductSearchResultsFilterNavigationConfig();
 
         $this->assertInternalType('array', $result);
-        $this->assertContainsOnly('string', $result);
+        $this->assertContainsOnly('array', $result);
+        $this->assertFilterRangesFormat($result);
     }
 
     public function testImageProcessorCollectionIsReturned()

@@ -33,26 +33,27 @@ class SampleFactory implements Factory
     /**
      * @return string[]
      */
-    public function getProductListingFilterNavigationAttributeCodes()
+    public function getProductListingFilterNavigationConfig()
     {
-        return ['gender', 'brand', 'price', 'color'];
+        return [
+            'gender' => [],
+            'brand' => [],
+            'price' => $this->getPriceRanges(),
+            'color' => [],
+        ];
     }
 
     /**
      * @return string[]
      */
-    public function getProductSearchResultsFilterNavigationAttributeCodes()
-    {
-        return ['gender', 'brand', 'category', 'price', 'color'];
-    }
-
-    /**
-     * @return array[]
-     */
-    public function getAttributeRanges()
+    public function getProductSearchResultsFilterNavigationConfig()
     {
         return [
+            'gender' => [],
+            'brand' => [],
+            'category' => [],
             'price' => $this->getPriceRanges(),
+            'color' => [],
         ];
     }
 

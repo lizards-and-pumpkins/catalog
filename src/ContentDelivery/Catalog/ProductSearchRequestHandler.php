@@ -52,7 +52,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         $this->context = $context;
         $this->pageBuilder = $pageBuilder;
         $this->keyGeneratorLocator = $keyGeneratorLocator;
-        $this->filterNavigationAttributeCodes = $filterNavigationAttributeCodes;
+        $this->filterNavigationConfig = $filterNavigationAttributeCodes;
         $this->defaultNumberOfProductsPerPage = $defaultNumberOfProductsPerPage;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->searchableAttributeCodes = $searchableAttributeCodes;
@@ -141,7 +141,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         return $this->dataPoolReader->getSearchResultsMatchingCriteria(
             $criteria,
             $this->context,
-            $this->filterNavigationAttributeCodes,
+            $this->filterNavigationConfig,
             $productsPerPage,
             $currentPageNumber
         );

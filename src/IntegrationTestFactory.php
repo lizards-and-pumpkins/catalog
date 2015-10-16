@@ -57,20 +57,48 @@ class IntegrationTestFactory implements Factory
         return ['name', 'category', 'brand'];
     }
 
+
     /**
      * @return string[]
      */
-    public function getProductListingFilterNavigationAttributeCodes()
+    public function getProductListingFilterNavigationConfig()
     {
-        return ['brand', 'gender'];
+        return [
+            'gender' => [],
+            'brand' => [],
+            'price' => $this->getPriceRanges(),
+            'color' => [],
+        ];
     }
 
     /**
      * @return string[]
      */
-    public function getProductSearchResultsFilterNavigationAttributeCodes()
+    public function getProductSearchResultsFilterNavigationConfig()
     {
-        return ['brand', 'category', 'gender'];
+        return [
+            'gender' => [],
+            'brand' => [],
+            'category' => [],
+            'price' => $this->getPriceRanges(),
+            'color' => [],
+        ];
+    }
+
+    /**
+     * @return array[]
+     */
+    private function getPriceRanges()
+    {
+        $rangeStep = 20;
+        $rangesTo = 500;
+        $priceRanges = [['from' => '*', 'to' => $rangeStep]];
+        for ($i = $rangeStep; $i < $rangesTo; $i += $rangeStep) {
+            $priceRanges[] = ['from' => $i, 'to' => $i + $rangeStep];
+        }
+        $priceRanges[] = ['from' => $rangesTo, 'to' => '*'];
+
+        return $priceRanges;
     }
 
     /**

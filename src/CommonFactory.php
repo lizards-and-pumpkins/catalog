@@ -271,7 +271,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createProductJsonSnippetKeyGenerator()
     {
         $usedDataParts = ['product_id'];
-        
+
         return new GenericSnippetKeyGenerator(
             ProductJsonSnippetRenderer::CODE,
             $this->getMasterFactory()->getRequiredContexts(),
@@ -987,8 +987,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         $indexAttributeCodes = array_merge(
             $this->getMasterFactory()->getSearchableAttributeCodes(),
-            $this->getMasterFactory()->getProductListingFilterNavigationAttributeCodes(),
-            $this->getMasterFactory()->getProductSearchResultsFilterNavigationAttributeCodes()
+            array_keys($this->getMasterFactory()->getProductListingFilterNavigationConfig()),
+            array_keys($this->getMasterFactory()->getProductSearchResultsFilterNavigationConfig())
         );
 
         return new ProductSearchDocumentBuilder($indexAttributeCodes);

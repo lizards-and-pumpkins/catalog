@@ -161,7 +161,7 @@ class DataPoolReader
     /**
      * @param SearchCriteria $criteria
      * @param Context $context
-     * @param string[] $facetFields
+     * @param string[] $facetFiltersConfig
      * @param int $rowsPerPage
      * @param int $pageNumber
      * @return SearchEngineResponse
@@ -169,14 +169,14 @@ class DataPoolReader
     public function getSearchResultsMatchingCriteria(
         SearchCriteria $criteria,
         Context $context,
-        array $facetFields,
+        array $facetFiltersConfig,
         $rowsPerPage,
         $pageNumber
     ) {
         return $this->searchEngine->getSearchDocumentsMatchingCriteria(
             $criteria,
             $context,
-            $facetFields,
+            $facetFiltersConfig,
             $rowsPerPage,
             $pageNumber
         );

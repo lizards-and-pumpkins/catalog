@@ -202,13 +202,13 @@ class DataPoolReaderTest extends AbstractDataPoolTest
             ->method('getSearchDocumentsMatchingCriteria')
             ->with($mockCriteria, $stubContext);
 
-        $facetFields = [];
+        $facetFiltersConfig = [];
         $rowsPerPage = 100;
         $pageNumber = 0;
         $this->dataPoolReader->getSearchResultsMatchingCriteria(
             $mockCriteria,
             $stubContext,
-            $facetFields,
+            $facetFiltersConfig,
             $rowsPerPage,
             $pageNumber
         );

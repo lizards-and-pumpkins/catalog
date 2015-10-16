@@ -187,7 +187,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $stubContext = $this->getMock(Context::class);
         $stubSnippetKeyGeneratorLocator = $this->createStubSnippetKeyGeneratorLocator();
 
-        $stubFilterNavigationAttributeCodes = ['foo'];
+        $testFilterNavigationConfig = ['foo' => []];
 
         $this->mockSearchCriteriaBuilder = $this->getMock(SearchCriteriaBuilder::class);
 
@@ -196,7 +196,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
             $this->mockDataPoolReader,
             $this->mockPageBuilder,
             $stubSnippetKeyGeneratorLocator,
-            $stubFilterNavigationAttributeCodes,
+            $testFilterNavigationConfig,
             $this->testDefaultNumberOfProductsPerPage,
             $this->mockSearchCriteriaBuilder
         );

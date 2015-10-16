@@ -23,7 +23,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     final public function getSearchDocumentsMatchingCriteria(
         SearchCriteria $criteria,
         Context $context,
-        array $facetFields,
+        array $facetFiltersConfig,
         $rowsPerPage,
         $pageNumber
     ) {
@@ -34,7 +34,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
             }
         );
 
-        return $this->createSearchEngineResponse($facetFields, $matchingDocuments, $rowsPerPage, $pageNumber);
+        return $this->createSearchEngineResponse($facetFiltersConfig, $matchingDocuments, $rowsPerPage, $pageNumber);
     }
 
     /**
@@ -47,14 +47,15 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     }
 
     /**
-     * @param string[] $facetFieldCodes
+     * @param string[] $facetFiltersConfig
      * @param SearchDocument ...$searchDocuments
      * @return SearchEngineFacetFieldCollection
      */
     private function createFacetFieldsCollectionFromSearchDocuments(
-        array $facetFieldCodes,
+        array $facetFiltersConfig,
         SearchDocument ...$searchDocuments
     ) {
+        $facetFieldCodes = array_keys($facetFiltersConfig);
         $attributeCounts = $this->createAttributeValueCountArrayFromSearchDocuments(
             $facetFieldCodes,
             ...$searchDocuments
@@ -155,16 +156,20 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     }
 
     /**
-     * @param string[] $facetFields
+     * @param string[] $facetFiltersConfig
      * @param SearchDocument[] $searchDocuments
      * @param int $rowsPerPage
      * @param int $pageNumber
      * @return SearchEngineResponse
      */
-    private function createSearchEngineResponse(array $facetFields, array $searchDocuments, $rowsPerPage, $pageNumber)
-    {
+    private function createSearchEngineResponse(
+        array $facetFiltersConfig,
+        array $searchDocuments,
+        $rowsPerPage,
+        $pageNumber
+    ) {
         $facetFieldCollection = $this->createFacetFieldsCollectionFromSearchDocuments(
-            $facetFields,
+            $facetFiltersConfig,
             ...array_values($searchDocuments)
         );
 

@@ -26,7 +26,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
      * @param DataPoolReader $dataPoolReader
      * @param PageBuilder $pageBuilder
      * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
-     * @param string[] $filterNavigationAttributeCodes
+     * @param string[] $filterNavigationConfig
      * @param int $defaultNumberOfProductsPerPage
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
@@ -35,7 +35,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         DataPoolReader $dataPoolReader,
         PageBuilder $pageBuilder,
         SnippetKeyGeneratorLocator $keyGeneratorLocator,
-        array $filterNavigationAttributeCodes,
+        array $filterNavigationConfig,
         $defaultNumberOfProductsPerPage,
         SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
@@ -43,7 +43,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $this->context = $context;
         $this->pageBuilder = $pageBuilder;
         $this->keyGeneratorLocator = $keyGeneratorLocator;
-        $this->filterNavigationAttributeCodes = $filterNavigationAttributeCodes;
+        $this->filterNavigationConfig = $filterNavigationConfig;
         $this->defaultNumberOfProductsPerPage = $defaultNumberOfProductsPerPage;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
@@ -133,7 +133,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         return $this->dataPoolReader->getSearchResultsMatchingCriteria(
             $criteria,
             $this->context,
-            $this->filterNavigationAttributeCodes,
+            $this->filterNavigationConfig,
             $productsPerPage,
             $currentPageNumber
         );

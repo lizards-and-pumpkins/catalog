@@ -9,6 +9,7 @@ use LizardsAndPumpkins\Content\UpdateContentBlockCommandHandler;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\Http\HttpRouterChain;
 use LizardsAndPumpkins\Http\ResourceNotFoundRouter;
 use LizardsAndPumpkins\Image\ImageProcessorCollection;
@@ -599,5 +600,11 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createInternalToPublicProductJsonData();
         $this->assertInstanceOf(InternalToPublicProductJsonData::class, $result);
+    }
+
+    public function testSearchCriteriaBuilderIsReturned()
+    {
+        $result = $this->commonFactory->createSearchCriteriaBuilder();
+        $this->assertInstanceOf(SearchCriteriaBuilder::class, $result);
     }
 }

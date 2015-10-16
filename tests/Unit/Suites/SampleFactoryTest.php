@@ -43,6 +43,22 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
      */
     private $factory;
 
+    /**
+     * @param array[] $filterRanges
+     */
+    private function assertFilterRangesFormat(array $filterRanges)
+    {
+        array_map(function (array $filterRanges) {
+            $this->assertInternalType('array', $filterRanges);
+            $this->assertContainsOnly('array', $filterRanges);
+            array_map(function (array $range) {
+                $this->assertCount(2, $range);
+                $this->assertArrayHasKey('from', $range);
+                $this->assertArrayHasKey('to', $range);
+            }, $filterRanges);
+        }, $filterRanges);
+    }
+
     protected function setUp()
     {
         $masterFactory = new SampleMasterFactory();
@@ -106,18 +122,20 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayOfProductListingFilterNavigationAttributeCodesIsReturned()
     {
-        $result = $this->factory->getProductListingFilterNavigationAttributeCodes();
+        $result = $this->factory->getProductListingFilterNavigationConfig();
 
         $this->assertInternalType('array', $result);
-        $this->assertContainsOnly('string', $result);
+        $this->assertContainsOnly('array', $result);
+        $this->assertFilterRangesFormat($result);
     }
 
     public function testArrayOfProductSearchResultsFilterNavigationAttributeCodesIsReturned()
     {
-        $result = $this->factory->getProductSearchResultsFilterNavigationAttributeCodes();
+        $result = $this->factory->getProductSearchResultsFilterNavigationConfig();
 
         $this->assertInternalType('array', $result);
-        $this->assertContainsOnly('string', $result);
+        $this->assertContainsOnly('array', $result);
+        $this->assertFilterRangesFormat($result);
     }
 
     public function testImageProcessorCollectionIsReturned()
@@ -204,23 +222,5 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('string', $fileStorageBasePath);
         $this->assertFileExists($fileStorageBasePath);
         $this->assertTrue(is_dir($fileStorageBasePath));
-    }
-
-    public function testArrayOfAttributeRangesIsReturned()
-    {
-        $result = $this->factory->getAttributeRanges();
-
-        $this->assertInternalType('array', $result);
-        $this->assertContainsOnly('array', $result);
-
-        array_map(function (array $attributeRanges) {
-            $this->assertInternalType('array', $attributeRanges);
-            $this->assertContainsOnly('array', $attributeRanges);
-            array_map(function (array $range) {
-                $this->assertCount(2, $range);
-                $this->assertArrayHasKey('from', $range);
-                $this->assertArrayHasKey('to', $range);
-            }, $attributeRanges);
-        }, $result);
     }
 }

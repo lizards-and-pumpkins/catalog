@@ -24,7 +24,7 @@ class ClearableStubSearchEngine implements SearchEngine, Clearable
     /**
      * @param SearchCriteria $criteria
      * @param Context $context
-     * @param string[] $facetFields
+     * @param string[] $facetFiltersConfig
      * @param int $rowsPerPage
      * @param int $pageNumber
      * @return void
@@ -32,7 +32,7 @@ class ClearableStubSearchEngine implements SearchEngine, Clearable
     public function getSearchDocumentsMatchingCriteria(
         SearchCriteria $criteria,
         Context $context,
-        array $facetFields,
+        array $facetFiltersConfig,
         $rowsPerPage,
         $pageNumber
     ) {

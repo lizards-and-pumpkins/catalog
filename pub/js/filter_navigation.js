@@ -74,43 +74,6 @@ define(['lib/url'], function (url) {
             }, []);
         },
 
-        createPriceFilterOptions: function (filterCode, filterOptions) {
-            var priceStep = 20,
-                selectedPriceRanges = this.getSelectedFilterValues(filterCode),
-                priceRanges = filterOptions.reduce(function (carry, filterOption) {
-                    var rangeNumber = Math.floor(filterOption.value / priceStep);
-                    if (typeof carry[rangeNumber] === 'undefined') {
-                        carry[rangeNumber] = 0;
-                    }
-                    carry[rangeNumber] += filterOption.count;
-                    return carry;
-                }, {}),
-                options = [];
-
-            for (var rangeNumber in priceRanges) {
-                if (!priceRanges.hasOwnProperty(rangeNumber)) {
-                    continue;
-                }
-
-                var priceFrom = rangeNumber * priceStep,
-                    priceTo = (parseInt(rangeNumber) + 1) * parseInt(priceStep) - 0.01,
-                    priceRangeString = priceFrom + '~' + priceTo,
-                    option = document.createElement('LI'),
-                    link = document.createElement('A');
-                link.href = url.toggleQueryParameter(filterCode, priceRangeString);
-                link.innerHTML = priceFrom + ' &euro; - ' + priceTo + ' &euro; (' + priceRanges[rangeNumber] + ')';
-                option.appendChild(link);
-
-                if (selectedPriceRanges.indexOf(priceRangeString) !== -1) {
-                    option.className = 'active';
-                }
-
-                options.push(option);
-            }
-
-            return options;
-        },
-
         getSelectedFilterValues: function(filterCode) {
             var rawSelectedValues = url.getQueryParameterValue(filterCode);
 

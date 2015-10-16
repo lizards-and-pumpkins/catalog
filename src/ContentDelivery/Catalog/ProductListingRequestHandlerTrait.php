@@ -44,7 +44,7 @@ trait ProductListingRequestHandlerTrait
     /**
      * @var string[]
      */
-    private $filterNavigationAttributeCodes;
+    private $filterNavigationConfig;
 
     /**
      * @var int
@@ -171,8 +171,8 @@ trait ProductListingRequestHandlerTrait
      */
     private function getSelectedFilterValuesFromRequest(HttpRequest $request)
     {
-        return array_reduce($this->filterNavigationAttributeCodes, function ($carry, $attributeCode) use ($request) {
-            $carry[$attributeCode] = array_filter(explode(',', $request->getQueryParameter($attributeCode)));
+        return array_reduce(array_keys($this->filterNavigationConfig), function ($carry, $filterName) use ($request) {
+            $carry[$filterName] = array_filter(explode(',', $request->getQueryParameter($filterName)));
             return $carry;
         }, []);
     }
