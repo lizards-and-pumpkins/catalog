@@ -303,10 +303,12 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         return [
             [SearchCriterionEqual::create('foo', 'bar')],
             [SearchCriterionNotEqual::create('foo', 'baz')],
-            [CompositeSearchCriterion::createAnd(
-                SearchCriterionEqual::create('foo', 'bar'),
-                SearchCriterionNotEqual::create('foo', 'baz')
-            )],
+            [
+                CompositeSearchCriterion::createAnd(
+                    SearchCriterionEqual::create('foo', 'bar'),
+                    SearchCriterionNotEqual::create('foo', 'baz')
+                )
+            ],
         ];
     }
 
@@ -348,14 +350,18 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         return [
             [SearchCriterionLessThan::create('price', 20)],
             [SearchCriterionLessOrEqualThan::create('price', 10)],
-            [CompositeSearchCriterion::createAnd(
-                SearchCriterionGreaterThan::create('price', 5),
-                SearchCriterionLessOrEqualThan::create('price', 10)
-            )],
-            [CompositeSearchCriterion::createAnd(
-                SearchCriterionGreaterOrEqualThan::create('price', 10),
-                SearchCriterionLessThan::create('price', 20)
-            )],
+            [
+                CompositeSearchCriterion::createAnd(
+                    SearchCriterionGreaterThan::create('price', 5),
+                    SearchCriterionLessOrEqualThan::create('price', 10)
+                )
+            ],
+            [
+                CompositeSearchCriterion::createAnd(
+                    SearchCriterionGreaterOrEqualThan::create('price', 10),
+                    SearchCriterionLessThan::create('price', 20)
+                )
+            ],
         ];
     }
 
@@ -502,6 +508,59 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(2, $result->getFacetFields());
         $this->assertContains($expectedFooFacetField, $result->getFacetFields(), '', false, false);
         $this->assertContains($expectedBarFacetField, $result->getFacetFields(), '', false, false);
+    }
+
+    public function testFacetFieldCollectionContainsConfiguredRanges()
+    {
+        $productAId = ProductId::fromString('A');
+        $productBId = ProductId::fromString('B');
+        $productCId = ProductId::fromString('C');
+
+        $fieldCode = 'price';
+
+        $documentA = $this->createSearchDocument([$fieldCode => 1], $productAId);
+        $documentB = $this->createSearchDocument([$fieldCode => 11], $productBId);
+        $documentC = $this->createSearchDocument([$fieldCode => 31], $productCId);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($documentA, $documentB, $documentC);
+
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
+
+        $criteria = SearchCriterionGreaterOrEqualThan::create($fieldCode, 0);
+        $facetFields = [
+            $fieldCode => [
+                ['from' => SearchEngine::RANGE_WILDCARD, 'to' => '10'],
+                ['from' => '10', 'to' => '20'],
+                ['from' => '20', 'to' => '30'],
+                ['from' => '30', 'to' => SearchEngine::RANGE_WILDCARD],
+            ]
+        ];
+        $rowsPerPage = 100;
+        $pageNumber = 0;
+        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+            $criteria,
+            $this->testContext,
+            $facetFields,
+            $rowsPerPage,
+            $pageNumber
+        );
+
+        $expectedFacetFields = [
+            new SearchEngineFacetField(
+                AttributeCode::fromString($fieldCode),
+                SearchEngineFacetFieldValueCount::create(
+                    sprintf(SearchEngine::RANGE_PATTERN, SearchEngine::RANGE_WILDCARD, 10),
+                    1
+                ),
+                SearchEngineFacetFieldValueCount::create(sprintf(SearchEngine::RANGE_PATTERN, 10, 20), 1),
+                SearchEngineFacetFieldValueCount::create(
+                    sprintf(SearchEngine::RANGE_PATTERN, 30, SearchEngine::RANGE_WILDCARD),
+                    1
+                )
+            )
+        ];
+        $searchEngineResponse = $searchEngineResponse->getFacetFieldCollection();
+
+        $this->assertEquals($expectedFacetFields, $searchEngineResponse->getFacetFields());
     }
 
     public function testOnlyProductsFromARequestedPageAreReturned()

@@ -64,11 +64,12 @@ class SampleFactory implements Factory
     {
         $rangeStep = 20;
         $rangesTo = 500;
-        $priceRanges = [['from' => '*', 'to' => $rangeStep]];
+        $base = 100;
+        $priceRanges = [['from' => '*', 'to' => $rangeStep * $base - 1]];
         for ($i = $rangeStep; $i < $rangesTo; $i += $rangeStep) {
-            $priceRanges[] = ['from' => $i, 'to' => $i + $rangeStep];
+            $priceRanges[] = ['from' => $i * $base, 'to' => ($i + $rangeStep) * $base - 1];
         }
-        $priceRanges[] = ['from' => $rangesTo, 'to' => '*'];
+        $priceRanges[] = ['from' => $rangesTo * $base, 'to' => '*'];
 
         return $priceRanges;
     }

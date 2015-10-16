@@ -60,8 +60,13 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
             $facetFieldCodes,
             ...$searchDocuments
         );
-        $facetFields = array_map(function ($attributeCode, $attributeValues) {
-            $facetFieldValues = $this->getFacetFieldValuesFromAttributeValues($attributeValues);
+
+        $facetFields = array_map(function ($attributeCode, $attributeValues) use ($facetFiltersConfig) {
+            $facetFieldValues = $this->getFacetFieldValuesFromAttributeValues(
+                $attributeCode,
+                $attributeValues,
+                $facetFiltersConfig
+            );
             return new SearchEngineFacetField(AttributeCode::fromString($attributeCode), ...$facetFieldValues);
         }, array_keys($attributeCounts), $attributeCounts);
 
@@ -131,7 +136,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
         $newValues = [];
 
         foreach ($attributeValuesCounts as $currentAttributeCode => $currentAttributeValues) {
-            if ((string) $currentAttributeCode !== $attributeCode) {
+            if ((string)$currentAttributeCode !== $attributeCode) {
                 $newValues[$currentAttributeCode] = $currentAttributeValues;
                 continue;
             }
@@ -139,7 +144,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
             $newAttributeValues = [];
             foreach ($currentAttributeValues as $currentValueArray) {
                 if ($currentValueArray['value'] === $newValue) {
-                    $currentValueArray['count']++;
+                    $currentValueArray['count'] ++;
                     $valueWasFound = true;
                 }
                 $newAttributeValues[] = $currentValueArray;
@@ -181,13 +186,70 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     }
 
     /**
-     * @param int[] $attributeValues
+     * @param string $attributeCode
+     * @param array[] $attributeValues
+     * @param array[] $facetFiltersConfig
      * @return SearchEngineFacetFieldValueCount[]
      */
-    private function getFacetFieldValuesFromAttributeValues($attributeValues)
+    private function getFacetFieldValuesFromAttributeValues(
+        $attributeCode,
+        array $attributeValues,
+        array $facetFiltersConfig
+    ) {
+        $configuredRanges = $facetFiltersConfig[$attributeCode];
+
+        if (!empty($configuredRanges)) {
+            return $this->createRangedFacetFieldFromAttributeValues($attributeValues, $configuredRanges);
+        }
+
+        return $this->createDefaultFacetFieldFromAttributeValues($attributeValues);
+    }
+
+    /**
+     * @param array[] $attributeValues
+     * @return SearchEngineFacetFieldValueCount[]
+     */
+    private function createDefaultFacetFieldFromAttributeValues(array $attributeValues)
     {
         return array_map(function ($valueCounts) {
-            return SearchEngineFacetFieldValueCount::create((string) $valueCounts['value'], $valueCounts['count']);
+            return SearchEngineFacetFieldValueCount::create((string)$valueCounts['value'],
+                $valueCounts['count']);
         }, $attributeValues);
+    }
+
+    /**
+     * @param array[] $attributeValues
+     * @param array[] $configuredRanges
+     * @return SearchEngineFacetFieldValueCount[]
+     */
+    private function createRangedFacetFieldFromAttributeValues(array $attributeValues, $configuredRanges)
+    {
+        return array_reduce($configuredRanges, function ($carry, array $range) use ($attributeValues) {
+            $rangeCount = $this->sumAttributeValuesCountsInRange($range, $attributeValues);
+            if ($rangeCount > 0) {
+                $rangeCode = sprintf(SearchEngine::RANGE_PATTERN, $range['from'], $range['to']);
+                $carry[] = SearchEngineFacetFieldValueCount::create($rangeCode, $rangeCount);
+            }
+
+            return $carry;
+        }, []);
+    }
+
+    /**
+     * @param mixed[] $range
+     * @param array[] $attributeValues
+     * @return int
+     */
+    private function sumAttributeValuesCountsInRange(array $range, $attributeValues)
+    {
+        return array_reduce($attributeValues, function ($carry, array $valueCounts) use ($range) {
+            if ((SearchEngine::RANGE_WILDCARD === $range['from'] || $valueCounts['value'] >= $range['from']) &&
+                (SearchEngine::RANGE_WILDCARD === $range['to'] || $valueCounts['value'] <= $range['to'])
+            ) {
+                $carry += $valueCounts['count'];
+            }
+
+            return $carry;
+        }, 0);
     }
 }
