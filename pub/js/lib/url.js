@@ -1,33 +1,36 @@
-define({
-    updateQueryParameter: function (parameterName, parameterValue) {
-        var queryParameters = this.getQueryParameters(),
-            urlWithoutQueryString = this.getUrlWithoutQueryString();
+define(function () {
 
-        queryParameters[parameterName] = parameterValue;
+    function getUrlWithoutQueryString() {
+        return location.href.split('?')[0];
+    }
 
-        return this.addQueryParametersToUrl(urlWithoutQueryString, queryParameters);
-    },
+    function buildQueryString(parameters) {
+        var pairs = [];
 
-    toggleQueryParameter: function (parameterName, parameterValue) {
-        var queryParameters = this.getQueryParameters(),
-            urlWithoutQueryString = this.getUrlWithoutQueryString();
-
-        queryParameters = this.toggleQueryParameterValue(queryParameters, parameterName, parameterValue);
-
-        return this.addQueryParametersToUrl(urlWithoutQueryString, queryParameters);
-    },
-
-    addQueryParametersToUrl: function (url, queryParameters) {
-        var queryString = this.buildQueryString(queryParameters);
-
-        if ('' === queryString) {
-            return url;
+        for (var key in parameters) {
+            if (parameters.hasOwnProperty(key)) {
+                pairs.push(key + '=' + parameters[key]);
+            }
         }
 
-        return url + '?' + queryString;
-    },
+        return pairs.join('&');
+    }
 
-    toggleQueryParameterValue: function (queryParameters, parameterName, parameterValue) {
+    function getQueryParameters() {
+        var queryString = location.search.replace(/^\?/, '');
+
+        if ('' === queryString) {
+            return {};
+        }
+
+        return queryString.split('&').reduce(function (carry, item) {
+            var keyValue = item.split('=');
+            carry[keyValue[0]] = decodeURI(keyValue[1]);
+            return carry;
+        }, {});
+    }
+
+    function toggleQueryParameterValue(queryParameters, parameterName, parameterValue) {
         if (undefined === queryParameters[parameterName]) {
             queryParameters[parameterName] = parameterValue;
         } else {
@@ -47,45 +50,45 @@ define({
         }
 
         return queryParameters;
-    },
+    }
 
-    getQueryParameters: function () {
-        var queryString = location.search.replace(/^\?/, '');
+    function addQueryParametersToUrl(url, queryParameters) {
+        var queryString = buildQueryString(queryParameters);
 
         if ('' === queryString) {
-            return {};
+            return url;
         }
 
-        return queryString.split('&').reduce(function (carry, item) {
-            var keyValue = item.split('=');
-            carry[keyValue[0]] = keyValue[1];
-            return carry;
-        }, {});
-    },
-
-    getQueryParameterValue: function (parameterName) {
-        var queryParameters = this.getQueryParameters();
-
-        if (!queryParameters.hasOwnProperty(parameterName)) {
-            return null;
-        }
-
-        return queryParameters[parameterName];
-    },
-
-    getUrlWithoutQueryString: function () {
-        return location.href.split('?')[0];
-    },
-
-    buildQueryString: function (parameters) {
-        var pairs = [];
-
-        for (var key in parameters) {
-            if (parameters.hasOwnProperty(key)) {
-                pairs.push(key + '=' + parameters[key]);
-            }
-        }
-
-        return pairs.join('&');
+        return url + '?' + queryString;
     }
+
+    return {
+        updateQueryParameter: function (parameterName, parameterValue) {
+            var queryParameters = getQueryParameters(),
+                urlWithoutQueryString = getUrlWithoutQueryString();
+
+            queryParameters[parameterName] = parameterValue;
+
+            return addQueryParametersToUrl(urlWithoutQueryString, queryParameters);
+        },
+
+        toggleQueryParameter: function (parameterName, parameterValue) {
+            var queryParameters = getQueryParameters(),
+                urlWithoutQueryString = getUrlWithoutQueryString();
+
+            queryParameters = toggleQueryParameterValue(queryParameters, parameterName, parameterValue);
+
+            return addQueryParametersToUrl(urlWithoutQueryString, queryParameters);
+        },
+
+        getQueryParameterValue: function (parameterName) {
+            var queryParameters = getQueryParameters();
+
+            if (!queryParameters.hasOwnProperty(parameterName)) {
+                return null;
+            }
+
+            return queryParameters[parameterName];
+        }
+    };
 });
