@@ -129,4 +129,20 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($testImageFileName, $this->productBlock->getMainProductFileName());
     }
+
+    public function testGettingProductImageCountIsDelegatedToProduct()
+    {
+        $testImagesCount = 3;
+        $this->stubProduct->method('getImageCount')->willReturn($testImagesCount);
+
+        $this->assertSame($testImagesCount, $this->productBlock->getProductImageCount());
+    }
+
+    public function testGettingProductImageFileNameIsDelegatedToProduct()
+    {
+        $testFileName = 'foo.png';
+        $this->stubProduct->method('getImageFileNameByNumber')->willReturn($testFileName);
+
+        $this->assertSame($testFileName, $this->productBlock->getProductImageFileNameByNumber(0));
+    }
 }

@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Product\Block;
 
-use LizardsAndPumpkins\Image;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Renderer\Block;
@@ -85,5 +84,22 @@ class ProductBlock extends Block
     private function getProduct()
     {
         return $this->getDataObject();
+    }
+
+    /**
+     * @return int
+     */
+    public function getProductImageCount()
+    {
+        return $this->getProduct()->getImageCount();
+    }
+
+    /**
+     * @param int $imageNumber
+     * @return string
+     */
+    public function getProductImageFileNameByNumber($imageNumber)
+    {
+        return $this->getProduct()->getImageFileNameByNumber($imageNumber);
     }
 }
