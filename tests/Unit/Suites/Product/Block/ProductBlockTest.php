@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Product\Block;
 
-use LizardsAndPumpkins\Image;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Renderer\Block;
@@ -13,7 +12,6 @@ use LizardsAndPumpkins\TestFileFixtureTrait;
  * @covers \LizardsAndPumpkins\Product\Block\ProductBlock
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Renderer\Block
- * @uses   \LizardsAndPumpkins\Image
  */
 class ProductBlockTest extends \PHPUnit_Framework_TestCase
 {
