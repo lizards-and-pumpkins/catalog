@@ -64,7 +64,7 @@ div.product-shop div.price-box p.regular-price { font-size: 24px; font-weight: n
 #recently-viewed-products { position: relative; display: none }
 #recently-viewed-products .heading { margin-bottom: 15px }
 
-form#product_addtocart_form { position: relative; display:block; z-index: 2; }
+#productView form { position: relative; display:block; z-index: 2; }
 
 .super-attribute-select,
 .super-attribute-select option { width: 200px; }
@@ -75,7 +75,7 @@ form#product_addtocart_form { position: relative; display:block; z-index: 2; }
 .product-shop .product-main-info .main-information { float: left }
 
 .product-controls { margin-top: 12px }
-.product-controls .selects { margin: 0; width: 235px; float: left }
+.product-controls .selects { margin: 0; float: left }
 .product-controls .selects > * { margin-right: 7px; float: left }
 .product-controls button { float: right }
 
@@ -134,5 +134,5 @@ div.selector span { text-overflow: clip }
 }
 
 /* Clearer */
-.product-shop .product-title:after, .socialSharing:after, .product-main-info:after,
+.product-shop .product-title:after, .socialSharing:after, .product-main-info:after, .product-controls:after
 #phoneTitlePlaceholder:after { content: ""; display: block; height: 0; clear: both; visibility: hidden }

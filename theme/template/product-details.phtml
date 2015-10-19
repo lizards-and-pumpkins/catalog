@@ -8,8 +8,6 @@ use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
 <?php
 
 $mainImage = $this->getMainProductImage();
-
-$maxQty = 5; // Temporary hardcoded
 $brand = $this->getFirstValueOfProductAttribute('brand');
 $brandLogo = strtolower(preg_replace('/\W/', '_', trim($brand))) . '.png';
 
@@ -18,7 +16,7 @@ $save = 0;
 
 ?>
 <div id="productView" class="configurable" itemscope itemtype="http://schema.org/Product">
-    <form action="<?php /* TODO: Implement */ ?>" method="post" id="product_addtocart_form">
+    <form action="<?php /* TODO: Implement */ ?>" method="post">
         <input type="hidden" name="product" value="<?= $this->getProductId() ?>" />
         <div class="product-essential">
             <div id="phoneTitlePlaceholder"></div>
@@ -97,20 +95,8 @@ $save = 0;
                 </div>
 
                 <div class="product-controls">
-                    <?php if (1) : //$_product->isSaleable()): ?>
-                        <div class="selects">
-                            <select name="qty" id="qty">
-                                <?php for ($i = 1; $i <= $maxQty; $i++): ?>
-                                    <option value="<?= $i; ?>"><?= $i; ?></option>
-                                <?php endfor; ?>
-                            </select>
-                            <div class="clearer"></div>
-                        </div>
-
-                        <button type="submit" title="Add to Cart"><?= $this->__('Add to Cart') ?></button>
-                    <?php endif ?>
-
-                    <div class="clearer"></div>
+                    <div class="selects"></div>
+                    <button type="submit" disabled="disabled"><?= $this->__('Add to Cart') ?></button>
                 </div>
             </div>
         </div>

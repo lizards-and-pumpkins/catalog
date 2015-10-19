@@ -8,12 +8,13 @@ require([
 ], function(domReady, common, recentlyViewedProducts, styleSelect, zoom, toggleSwipingArrows) {
 
     var tabletWidth = 768,
-        siteFullWidth = 975;
+        siteFullWidth = 975,
+        maxQty = 5,
+        selectBoxIdPrefix = 'variation_';
 
     domReady(function() {
-        styleSelect('select');
-
         handleRecentlyViewedProducts();
+        showNextSelectBox();
 
         adjustToPageWidth();
         window.addEventListener('resize', adjustToPageWidth);
@@ -21,7 +22,6 @@ require([
 
         initializeZoom();
         initializeTabs();
-        fixIOS5Bug();
 
         require([
             '//connect.facebook.net/de_DE/all.js#xfbml=1&status=0',
@@ -29,6 +29,164 @@ require([
             '//apis.google.com/js/plusone.js'
         ]);
     });
+
+    function deleteAllSelectBoxesAfter(previousBoxAttribute) {
+        var attributeCodes = variation_attributes.slice(variation_attributes.indexOf(previousBoxAttribute) + 1);
+        attributeCodes.push('qty');
+
+        attributeCodes.map(function (code) {
+            var selectBoxToDelete = document.getElementById(selectBoxIdPrefix + code);
+            if (null !== selectBoxToDelete) {
+                var styledSelectUuid = selectBoxToDelete.getAttribute('data-ss-uuid'),
+                    styledSelect = document.querySelector('div[data-ss-uuid="' + styledSelectUuid + '"]');
+                selectBoxToDelete.parentNode.removeChild(selectBoxToDelete);
+                styledSelect.parentNode.removeChild(styledSelect);
+            }
+        });
+    }
+
+    function getSelectedVariationValues() {
+        return variation_attributes.reduce(function(carry, attributeCode) {
+            var selectBox = document.getElementById(selectBoxIdPrefix + attributeCode);
+            if (null !== selectBox) {
+                carry[attributeCode] =  selectBox.value;
+            }
+            return carry;
+        }, {});
+    }
+
+    function getAssociatedProductsMatchingSelection() {
+        var selectedAttributes = getSelectedVariationValues();
+
+        return associated_products.filter(function (product) {
+            return Object.keys(product['attributes']).reduce(function (carry, attributeCode) {
+                if (false === carry) {
+                    return carry;
+                }
+                return Object.keys(selectedAttributes).reduce(function (carry, selectedAttributeCode) {
+                    if (false === carry || selectedAttributeCode !== attributeCode) {
+                        return carry;
+                    }
+                    return selectedAttributes[selectedAttributeCode] === product['attributes'][attributeCode];
+                }, carry);
+            }, true);
+        });
+    }
+
+    function isConfigurableProduct() {
+        return (typeof variation_attributes === 'object') &&
+            (typeof associated_products === 'object') &&
+            (variation_attributes.length > 0);
+    }
+
+    function showNextSelectBox(previousBoxAttribute) {
+        var selectContainer = document.querySelector('.selects'),
+            addToCartButton = document.querySelector('.product-controls button'),
+            productIdField = document.querySelector('input[name="product"]');
+
+        if (!isConfigurableProduct()) {
+            selectContainer.appendChild(createQtySelectBox(maxQty));
+            styleSelect('#' + selectBoxIdPrefix + 'qty');
+            addToCartButton.disabled = '';
+            return;
+        }
+
+        productIdField.value = '';
+        addToCartButton.disabled = 'disabled';
+
+        if (previousBoxAttribute) {
+            deleteAllSelectBoxesAfter(previousBoxAttribute);
+            if ('' === document.getElementById(selectBoxIdPrefix + previousBoxAttribute).value) {
+                return;
+            }
+        }
+
+        var matchingProducts = getAssociatedProductsMatchingSelection(),
+            variationAttributeCode = variation_attributes[variation_attributes.indexOf(previousBoxAttribute) + 1];
+
+        if (typeof variationAttributeCode === 'undefined') {
+            var selectedProductStock = matchingProducts[0]['attributes']['stock_qty'];
+            productIdField.value = matchingProducts[0]['product_id'];
+            selectContainer.appendChild(createQtySelectBox(selectedProductStock));
+            styleSelect('#' + selectBoxIdPrefix + 'qty');
+            addToCartButton.disabled = '';
+            return;
+        }
+
+        var options = getVariationAttributeOptionValuesArray(matchingProducts, variationAttributeCode);
+
+        selectContainer.appendChild(createSelect(variationAttributeCode, options));
+        styleSelect('#' + selectBoxIdPrefix + variationAttributeCode);
+    }
+
+    function createQtySelectBox(limit) {
+        var numberOfItemsToShow = Math.min(limit, maxQty),
+            select = document.createElement('SELECT');
+
+        select.id = selectBoxIdPrefix + 'qty';
+
+        for (var i = 1; i <= numberOfItemsToShow; i++) {
+            var option = document.createElement('OPTION');
+            option.textContent = i;
+            option.value = i;
+            select.appendChild(option);
+        }
+
+        return select;
+    }
+
+    function getVariationAttributeOptionValuesArray(products, attributeCode) {
+        return products.reduce(function (carry, associatedProduct) {
+            var optionIsAlreadyPresent = false;
+
+            for (var i=0; i<carry.length; i++) {
+                if (carry[i]['value'] === associatedProduct['attributes'][attributeCode]) {
+                    optionIsAlreadyPresent = true;
+
+                    if (true === carry[i]['disabled'] && associatedProduct['attributes']['stock_qty'] > 0) {
+                        carry[i]['disabled'] = false;
+                    }
+                }
+            }
+
+            if (false === optionIsAlreadyPresent) {
+                carry.push({
+                    'value': associatedProduct['attributes'][attributeCode],
+                    'disabled': 0 == associatedProduct['attributes']['stock_qty']
+                });
+            }
+
+            return carry;
+        }, []);
+    }
+
+    function createSelect(name, options) {
+        var variationSelect = document.createElement('SELECT');
+        variationSelect.id = selectBoxIdPrefix + name;
+        variationSelect.addEventListener('change', function () { showNextSelectBox(name); }, true);
+
+        var defaultOption = document.createElement('OPTION');
+        defaultOption.textContent = 'Select ' + name;
+        variationSelect.appendChild(defaultOption);
+
+        options.map(function (option) {
+            variationSelect.appendChild(createSelectOption(option));
+        });
+
+        return variationSelect;
+    }
+
+    function createSelectOption(option) {
+        var variationOption = document.createElement('OPTION');
+        variationOption.textContent = option['value'];
+        variationOption.value = option['value'];
+
+        if (option['disabled']) {
+            variationOption.disabled = 'disabled';
+        }
+
+        return variationOption;
+    }
 
     function handleRecentlyViewedProducts() {
         var recentlyViewedProductsListHtml = recentlyViewedProducts.getRecentlyViewedProductsHtml(product);
@@ -72,15 +230,6 @@ require([
                 activeTabContent.style.display = 'block';
             }, true);
         });
-    }
-
-    function fixIOS5Bug() {
-        if (navigator.userAgent.match(/\(iP[^)]+OS\s5/)) {
-            var disabledOptions = document.querySelectorAll('#switcher-container option:disabled');
-            Array.prototype.map.call(disabledOptions, function (option) {
-                option.parentNode.removeChild(option);
-            });
-        }
     }
 
     function adjustToPageWidth() {
