@@ -372,16 +372,16 @@ LED Armflasher with elastic Band and Flasher]]></description>
             </attributes>
         </product>
 
-        <product type="configurable" sku="218765-333">
+        <product type="configurable" sku="M29540">
             <images>
                 <image>
-                    <file>m18108_1.jpg</file>
+                    <file>m29540_standardview.jpg</file>
                     <label locale="de_DE">Das Hauptbild</label>
                     <label locale="en_US">The main image label for this shoe</label>
                 </image>
                 <image>
                     <main_listing>true</main_listing>
-                    <file>218765-333.3.jpg</file>
+                    <file>m29540_backview.jpg</file>
                     <label>Yet another image label</label>
                 </image>
             </images>
@@ -392,23 +392,18 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 <category>specials</category>
                 <stock_qty>5</stock_qty>
                 <backorders>true</backorders>
-                <name>adiPure 360</name>
-                <price>12.95</price>
-                <short_description><![CDATA[<div>Adidas adiPure 360</div>
-
-<li>Techfit bietet Unterstützung in den wichtigen Bereichen.</li>
-<li>Technisierte Maschen: Die ungleichmäßige Maschenstruktur vereint dichte und offene Maschen.</li>
-<li>Flex Grooves: Flexibilität für ein natürliches Laufgefühl.</li>
-<li>Nahtloses textiles und Hightech-Obermaterial aus Mesh</li>
-<li>Dichteres und offeneres Mesh-Muster für Stützung und Atmungsaktivität, wo es gebraucht wird.</li>
-<li>Komfortables Synthetikfutter</li>
-<li>Ultraweiches, wasserfestes SUPERCLOUD EVA-Fußbett für schnelltrocknenden Komfort</li>
-<li>Flex-Rillen für einen angenehmen und natürlichen Lauf</li>
-<li>ABRIEBFESTE Gummiaußensohle</li>
-]]></short_description>
+                <name>Adipure 360.2 Prima</name>
+                <price>89.95</price>
+                <special_price>44.97</special_price>
+                <description><![CDATA[Adidas adiPure 360.2 Prima<br><br>
+- Flex Grooves: Flexibilität für ein natürliches Laufgefühl.<br>
+- Atmungsaktives Mesh: Ermöglicht Luftzirkulation, die für ein angenehmes Gefühl am Fuß sorgt<br>
+- Die All-Over-Graphik Ausführung  des Schuhs gibt dir einen einzigartigen Look<br><br>
+TEXTILE/SYNTHETICS]]></description>
                 <brand>Adidas</brand>
                 <style>Natural-Running (Free)</style>
-                <gender>Herren</gender>
+                <gender>Damen</gender>
+                <color>e23369</color>
             </attributes>
             <variations>
                 <attribute>color</attribute>

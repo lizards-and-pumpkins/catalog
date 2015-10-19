@@ -17,9 +17,9 @@
 .product-shop .delivery { color: #3d9b35; }
 .product-shop .note { line-height: 16px; }
 .product-img-box { display: table-cell; width: 366px; vertical-align: top }
-.zoom-flyout { left: 370px; width: 595px; height: 393px }
-.more-views { width: 366px; margin-left: -5px }
-.more-views li { display: inline-block; font-size: 0; padding: 3px 0 0 5px }
+.zoom-flyout { left: 370px; width: 603px; height: 393px }
+.more-views { margin-left: -5px; font-size: 0 }
+.more-views li { display: inline-block; padding: 3px 0 0 5px }
 
 /* Tabs */
 .product-collateral .tabs li { display: inline }

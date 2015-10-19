@@ -19,6 +19,7 @@ require([
         window.addEventListener('resize', adjustToPageWidth);
         window.addEventListener('orientationchange', adjustToPageWidth);
 
+        handleProductImages();
         initializeZoom();
         initializeTabs();
         fixIOS5Bug();
@@ -40,6 +41,20 @@ require([
         }
 
         recentlyViewedProducts.addProductIntoLocalStorage(product);
+    }
+
+    function handleProductImages() {
+        var mainImage = document.querySelector('.main-image-area img'),
+            thumbnails = document.querySelectorAll('.more-views a');
+
+        Array.prototype.map.call(thumbnails, function (thumbnail) {
+            thumbnail.addEventListener('click', function(event) {
+                event.preventDefault();
+                mainImage.src = this.getAttribute('data-image');
+                mainImage.parentNode.href = this.getAttribute('href');
+                initializeZoom();
+            }, true);
+        });
     }
 
     function initializeZoom() {

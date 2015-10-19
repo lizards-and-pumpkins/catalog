@@ -11,6 +11,8 @@ $maxQty = 5; // Temporary hardcoded
 $brand = $this->getFirstValueOfProductAttribute('brand');
 $brandLogo = strtolower(preg_replace('/\W/', '_', trim($brand))) . '.png';
 
+$productImageCount = $this->getProductImageCount();
+
 /* TODO: Implement calculation of save */
 $save = 0;
 
@@ -25,9 +27,11 @@ $save = 0;
                     <img src="media/product/large/<?= $this->getMainProductFileName() ?>" height="340" width="365" itemprop="image" alt="<?= $this->getMainProductImageLabel() ?>"/>
                 </a>
                 <ul class="more-views">
+                    <?php for ($i=0; $i<$productImageCount; $i++) : ?>
                     <li>
-                        <a href=""><img src="media/product/small/<?= $this->getMainProductFileName() ?>" width="48" height="48"/></a>
+                        <a href="media/product/original/<?= $this->getProductImageFileNameByNumber($i) ?>" data-image="media/product/large/<?= $this->getProductImageFileNameByNumber($i) ?>"><img src="media/product/small/<?= $this->getProductImageFileNameByNumber($i) ?>" width="48" height="48"/></a>
                     </li>
+                    <?php endfor ?>
                 </ul>
             </div>
             <div class="product-shop">
