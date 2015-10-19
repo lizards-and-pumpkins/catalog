@@ -114,11 +114,19 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedProductBrandLogoSrc, $result);
     }
 
-    public function testInstanceOfImageIsReturned()
+    public function testGettingMainImageLabelIsDelegatedToProduct()
     {
-        $this->stubProduct->method('getMainImageFileName')->willReturn('test.jpg');
-        $this->stubProduct->method('getMainImageLabel')->willReturn('');
+        $testImageLabel = 'foo';
+        $this->stubProduct->method('getMainImageLabel')->willReturn($testImageLabel);
 
-        $this->assertInstanceOf(Image::class, $this->productBlock->getMainProductImage());
+        $this->assertSame($testImageLabel, $this->productBlock->getMainProductImageLabel());
+    }
+
+    public function testGettingMainImageFileNameIsDelegatedToProduct()
+    {
+        $testImageFileName = 'foo.png';
+        $this->stubProduct->method('getMainImageFileName')->willReturn($testImageFileName);
+
+        $this->assertSame($testImageFileName, $this->productBlock->getMainProductFileName());
     }
 }

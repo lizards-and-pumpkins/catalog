@@ -40,16 +40,6 @@ class ProductBlock extends Block
     }
 
     /**
-     * @return Image
-     */
-    public function getMainProductImage()
-    {
-        $product = $this->getProduct();
-        
-        return new Image($product->getMainImageFileName(), $product->getMainImageLabel());
-    }
-
-    /**
      * @return ProductId
      */
     public function getProductId()
@@ -71,6 +61,22 @@ class ProductBlock extends Block
         }
 
         return '/lizards-and-pumpkins/' . $fileName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMainProductImageLabel()
+    {
+        return $this->getProduct()->getMainImageLabel();
+    }
+
+    /**
+     * @return string
+     */
+    public function getMainProductFileName()
+    {
+        return $this->getProduct()->getMainImageFileName();
     }
 
     /**
