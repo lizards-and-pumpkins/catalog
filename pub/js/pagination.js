@@ -22,6 +22,10 @@ define(['lib/url'], function (url) {
     };
 
     return {
+        getPaginationQueryParameterName: function() {
+            return paginationQueryParameterName;
+        },
+
         generatePagination: function (totalNumberOfResults, productsPerPage, paginationPlaceholderSelector) {
             var paginationPlaceholder = document.querySelector(paginationPlaceholderSelector),
                 totalPageCount = Math.ceil(totalNumberOfResults / productsPerPage);
