@@ -140,6 +140,7 @@ require([
             }
 
             /* TODO: Implement image slider */
+            /* TODO: From 767px to 366px an "original" image could be used and below 366px a "large" one. */
 
             /* Hide "send" part of FB buttons block if not yet hidden */
             fbEnsureInit(processFbButton);
