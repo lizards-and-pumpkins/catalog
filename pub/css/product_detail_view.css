@@ -4,10 +4,10 @@
 @import "lib/zoom.css";
 @import "lib/dropdown.css";
 
-.product-essential { padding: 5px; background: #f0f0f0; display: table; width: 100% }
+.product-essential { background: #f0f0f0; display: table; width: 100% }
 .product-collateral { margin: 30px 0 }
 
-.product-shop { display: table-cell; padding: 15px 10px; vertical-align: top }
+.product-shop { display: table-cell; padding: 10px 15px; vertical-align: top }
 .product-shop .top { border-bottom: 1px solid #fff; margin-bottom: 10px; padding-bottom: 15px }
 .product-shop p { margin: 0 0 5px 0; }
 #switcher-container p { margin: 0; }
@@ -16,7 +16,7 @@
 .product-shop .artikel-nummer { font-size: 11px; margin: -3px 0 0 0; }
 .product-shop .delivery { color: #3d9b35; }
 .product-shop .note { line-height: 16px; }
-.product-img-box { display: table-cell; width: 366px; vertical-align: top }
+.product-img-box { display: table-cell; width: 366px; vertical-align: top; padding: 5px }
 .zoom-flyout { left: 370px; width: 603px; height: 393px }
 .more-views { margin-left: -5px; font-size: 0 }
 .more-views li { display: inline-block; padding: 3px 0 0 5px }
@@ -99,7 +99,6 @@ div.selector span { text-overflow: clip }
 
 /* Tablet */
 @media (max-width: 974px) {
-    .product-shop { width: auto }
     .product-shop .price-information { text-align: center; float: none; border-top: 1px solid #fff; margin-top: 10px; padding: 15px 0 5px 0; clear: both }
     .product-shop .price-information p { display: inline-block; margin: 0 5px }
     .product-shop .price-information .tax-information { width: auto }
@@ -117,6 +116,7 @@ div.selector span { text-overflow: clip }
     .product-img-box:after { content: ""; display: block; height: 0; clear: both; visibility: hidden }
     .main-container .main { padding-left: 0; padding-right: 0 }
     .product-essential, .product-shop, .product-img-box { display: block }
+    .product-shop { padding: 10px 5px }
     .product-img-box { width: auto }
     .product-shop .articleInformations { padding-top: 0; margin: 10px 0 0 0 }
     .product-shop .similarProducts { display: block; float: left; margin: 10px 0 0 0 }
