@@ -16,8 +16,8 @@
 .product-shop .artikel-nummer { font-size: 11px; margin: -3px 0 0 0; }
 .product-shop .delivery { color: #3d9b35; }
 .product-shop .note { line-height: 16px; }
-.product-img-box { display: table-cell; width: 366px; vertical-align: top; padding: 5px }
-.zoom-flyout { left: 370px; width: 603px; height: 393px }
+.product-img-box { display: table-cell; width: 375px; vertical-align: top; padding: 5px }
+.zoom-flyout { left: 370px; width: 594px; height: 393px }
 .more-views { margin-left: -5px; font-size: 0 }
 .more-views li { display: inline-block; padding: 3px 0 0 5px }
 
