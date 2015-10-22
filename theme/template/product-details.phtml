@@ -142,7 +142,7 @@ $save = 0;
 
         var html = '<li style="background-image:url(\'/media/brands/brands-small/<?= $brandLogo ?>\')" class="item">';
         html += '<div class="grid-cell-container">';
-        html += '<a href="<?php /* TODO: Product URL */ ?>" class="product-image"><img src="<?php /* TODO: 188x115 thumbnail URL */ ?>" width="188" height="115" alt="<?= $this->getFirstValueOfProductAttribute('name') ?>" /></a>';
+        html += '<a href="<?php /* TODO: Product URL */ ?>" class="product-image"><img src="media/product/medium/<?= $this->getMainProductFileName() ?>" width="188" height="115" alt="<?= $this->getMainProductImageLabel() ?>" /></a>';
         html += '<h2 class="product-name"><a href="<?php /* TODO: Product URL */ ?>"><?= $this->getFirstValueOfProductAttribute('name') ?></a></h2>';
         html += '<a href="<?php /* TODO: Product URL */ ?>"><?= $this->getChildOutput('price') ?></a>';
         <?php if ($gender) : ?>
