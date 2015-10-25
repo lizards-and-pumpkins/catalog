@@ -48,7 +48,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
 
     /**
      * @param string[] $facetFiltersConfig
-     * @param SearchDocument ...$searchDocuments
+     * @param SearchDocument[] $searchDocuments
      * @return SearchEngineFacetFieldCollection
      */
     private function createFacetFieldsCollectionFromSearchDocuments(
@@ -75,7 +75,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
 
     /**
      * @param string[] $facetFieldCodes
-     * @param SearchDocument ...$searchDocuments
+     * @param SearchDocument[] $searchDocuments
      * @return array[]
      */
     private function createAttributeValueCountArrayFromSearchDocuments(
