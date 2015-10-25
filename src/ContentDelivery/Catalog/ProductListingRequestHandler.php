@@ -59,7 +59,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
      */
     public function canProcess(HttpRequest $request)
     {
-        return false !== $this->getPageMetaInfoSnippet($request);
+        return $this->getPageMetaInfoSnippet($request) !== false;
     }
 
     /**
