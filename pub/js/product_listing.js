@@ -3,8 +3,8 @@ require(
     function (domReady, productGrid, filterNavigation, pagination) {
         domReady(function () {
             productGrid.renderGrid(productListingJson, '#products-grid-container');
-            filterNavigation.generateLayeredNavigation(filterNavigationJson, '#filter-navigation');
-            pagination.generatePagination(totalNumberOfResults, productsPerPage, '#pagination');
+            filterNavigation.renderLayeredNavigation(filterNavigationJson, '#filter-navigation');
+            pagination.renderPagination(totalNumberOfResults, productsPerPage, '#pagination');
             setTotalNumberOfProductsInSelection(totalNumberOfResults, '.toolbar .amount')
         });
 

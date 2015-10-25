@@ -1,7 +1,21 @@
 define(['lib/url'], function (url) {
 
+    function getSelectedFilterValues(filterCode) {
+        var rawSelectedValues = url.getQueryParameterValue(filterCode);
+
+        if (null === rawSelectedValues) {
+            return [];
+        }
+
+        return rawSelectedValues.split(',');
+    }
+
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
     var FilterNavigation = {
-        generateLayeredNavigation: function (filterNavigationJson, filterNavigationPlaceholderSelector) {
+        renderLayeredNavigation: function (filterNavigationJson, filterNavigationPlaceholderSelector) {
             if (typeof filterNavigationJson !== 'object') {
                 return;
             }
@@ -32,7 +46,7 @@ define(['lib/url'], function (url) {
         },
 
         getFilterOptionBuilderName: function (filterCode) {
-            var functionName = 'create' + this.capitalizeFirstLetter(filterCode) + 'FilterOptions';
+            var functionName = 'create' + capitalizeFirstLetter(filterCode) + 'FilterOptions';
 
             if (typeof this[functionName] === 'function') {
                 return functionName;
@@ -42,7 +56,7 @@ define(['lib/url'], function (url) {
         },
 
         createDefaultFilterOptions: function (filterCode, filterOptions) {
-            var selectedFilterOptions = this.getSelectedFilterValues(filterCode);
+            var selectedFilterOptions = getSelectedFilterValues(filterCode);
             return filterOptions.reduce(function (carry, filterOption) {
                 var option = document.createElement('LI'),
                     link = document.createElement('A');
@@ -60,7 +74,7 @@ define(['lib/url'], function (url) {
         },
 
         createColorFilterOptions: function (filterCode, filterOptions) {
-            var selectedColors = this.getSelectedFilterValues(filterCode);
+            var selectedColors = getSelectedFilterValues(filterCode);
             return filterOptions.reduce(function (carry, filterOption) {
                 var option = document.createElement('LI'),
                     link = document.createElement('A');
@@ -72,20 +86,6 @@ define(['lib/url'], function (url) {
                 carry.push(option);
                 return carry;
             }, []);
-        },
-
-        getSelectedFilterValues: function(filterCode) {
-            var rawSelectedValues = url.getQueryParameterValue(filterCode);
-
-            if (null === rawSelectedValues) {
-                return [];
-            }
-
-            return rawSelectedValues.split(',');
-        },
-
-        capitalizeFirstLetter: function (string) {
-            return string.charAt(0).toUpperCase() + string.slice(1);
         }
     };
 
