@@ -20,11 +20,8 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
 
     public function testUrlIsReturned()
     {
-        $url = 'http://www.example.com/seo-url/';
-
         /** @var HttpUrl|\PHPUnit_Framework_MockObject_MockObject $stubHttpUrl */
         $stubHttpUrl = $this->getMock(HttpUrl::class, [], [], '', false);
-        $stubHttpUrl->method('__toString')->willReturn($url);
 
         $httpRequest = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
@@ -34,7 +31,7 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
         );
         $result = $httpRequest->getUrl();
 
-        $this->assertEquals($url, $result);
+        $this->assertSame($stubHttpUrl, $result);
     }
 
     public function testUrlPathRelativeToWebFrontIsReturned()
