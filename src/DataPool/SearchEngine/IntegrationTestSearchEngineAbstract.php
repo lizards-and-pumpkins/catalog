@@ -60,10 +60,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
                 continue;
             }
 
-            $optionValuesCriteriaArray = array_map(function ($filterOptionValue) use ($filterCode) {
-                return $this->getSearchCriteriaBuilder()->fromRequestParameter($filterCode, $filterOptionValue);
-            }, $filterOptionValues);
-
+            $optionValuesCriteriaArray = $this->createOptionValuesCriteriaArray($filterCode, $filterOptionValues);
             $filterCriteria = CompositeSearchCriterion::createOr(...$optionValuesCriteriaArray);
             $filtersCriteriaArray[] = $filterCriteria;
         }
@@ -74,6 +71,18 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
 
         $filtersCriteriaArray[] = $originalCriteria;
         return CompositeSearchCriterion::createAnd(...$filtersCriteriaArray);
+    }
+
+    /**
+     * @param string $filterCode
+     * @param string[] $filterOptionValues
+     * @return SearchCriteria[]
+     */
+    private function createOptionValuesCriteriaArray($filterCode, array $filterOptionValues)
+    {
+        return array_map(function ($filterOptionValue) use ($filterCode) {
+            return $this->getSearchCriteriaBuilder()->fromRequestParameter($filterCode, $filterOptionValue);
+        }, $filterOptionValues);
     }
 
     /**
