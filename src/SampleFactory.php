@@ -145,7 +145,9 @@ class SampleFactory implements Factory
         $searchEngineStoragePath = $storageBasePath . '/search-engine';
         $this->createDirectoryIfNotExists($searchEngineStoragePath);
 
-        return FileSearchEngine::create($searchEngineStoragePath);
+        $searchCriteriaBuilder = $this->getMasterFactory()->createSearchCriteriaBuilder();
+
+        return FileSearchEngine::create($searchEngineStoragePath, $searchCriteriaBuilder);
     }
 
     /**
