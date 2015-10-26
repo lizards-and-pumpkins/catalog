@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine;
-use LizardsAndPumpkins\DataPool\SearchEngine\Solr\SolrSearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\FileUrlKeyStore;
 use LizardsAndPumpkins\Image\ImageMagickInscribeStrategy;
 use LizardsAndPumpkins\Image\ImageProcessor;
