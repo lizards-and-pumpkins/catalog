@@ -69,8 +69,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
             return $originalCriteria;
         }
 
-        $filtersCriteriaArray[] = $originalCriteria;
-        return CompositeSearchCriterion::createAnd(...$filtersCriteriaArray);
+        return CompositeSearchCriterion::createAnd($originalCriteria, ...$filtersCriteriaArray);
     }
 
     /**
