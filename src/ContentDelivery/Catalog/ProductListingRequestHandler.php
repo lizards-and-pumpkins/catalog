@@ -5,7 +5,6 @@ namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyNotFoundException;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestHandler;
@@ -28,7 +27,6 @@ class ProductListingRequestHandler implements HttpRequestHandler
      * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
      * @param string[] $filterNavigationConfig
      * @param int $defaultNumberOfProductsPerPage
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
         Context $context,
@@ -36,8 +34,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         PageBuilder $pageBuilder,
         SnippetKeyGeneratorLocator $keyGeneratorLocator,
         array $filterNavigationConfig,
-        $defaultNumberOfProductsPerPage,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        $defaultNumberOfProductsPerPage
     ) {
         $this->dataPoolReader = $dataPoolReader;
         $this->context = $context;
@@ -45,7 +42,6 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $this->keyGeneratorLocator = $keyGeneratorLocator;
         $this->filterNavigationConfig = $filterNavigationConfig;
         $this->defaultNumberOfProductsPerPage = $defaultNumberOfProductsPerPage;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
@@ -122,16 +118,14 @@ class ProductListingRequestHandler implements HttpRequestHandler
      */
     private function getSearchResultsMatchingCriteria(HttpRequest $request)
     {
+        $criteria = $this->getPageMetaInfoSnippet($request)->getSelectionCriteria();
         $selectedFilters = $this->getSelectedFilterValuesFromRequest($request);
-        $originalCriteria = $this->getPageMetaInfoSnippet($request)->getSelectionCriteria();
-
-        $criteria = $this->applyFiltersToSelectionCriteria($originalCriteria, $selectedFilters);
-
-        $currentPageNumber = $this->getCurrentPageNumber($request);
         $productsPerPage = (int) $this->defaultNumberOfProductsPerPage;
+        $currentPageNumber = $this->getCurrentPageNumber($request);
 
         return $this->dataPoolReader->getSearchResultsMatchingCriteria(
             $criteria,
+            $selectedFilters,
             $this->context,
             $this->filterNavigationConfig,
             $productsPerPage,

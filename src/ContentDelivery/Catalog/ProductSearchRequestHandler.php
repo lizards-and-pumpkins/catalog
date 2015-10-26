@@ -128,18 +128,16 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         $selectedFilters = $this->getSelectedFilterValuesFromRequest($request);
 
         $queryString = $request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
-        $originalCriteria = $this->searchCriteriaBuilder->anyOfFieldsContainString(
+        $criteria = $this->searchCriteriaBuilder->anyOfFieldsContainString(
             $this->searchableAttributeCodes,
             $queryString
         );
-
-        $criteria = $this->applyFiltersToSelectionCriteria($originalCriteria, $selectedFilters);
-
-        $currentPageNumber = $this->getCurrentPageNumber($request);
         $productsPerPage = (int) $this->defaultNumberOfProductsPerPage;
+        $currentPageNumber = $this->getCurrentPageNumber($request);
 
         return $this->dataPoolReader->getSearchResultsMatchingCriteria(
             $criteria,
+            $selectedFilters,
             $this->context,
             $this->filterNavigationConfig,
             $productsPerPage,

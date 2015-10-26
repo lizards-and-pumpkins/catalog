@@ -6,11 +6,8 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyNotFoundException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineFacetFieldCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -68,11 +65,6 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
      * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubProductInListingSnippetKeyGenerator;
-
-    /**
-     * @var SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $mockSearchCriteriaBuilder;
 
     private function prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection()
     {
@@ -190,16 +182,13 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         $testFilterNavigationConfig = ['foo' => []];
 
-        $this->mockSearchCriteriaBuilder = $this->getMock(SearchCriteriaBuilder::class);
-
         $this->requestHandler = new ProductListingRequestHandler(
             $stubContext,
             $this->mockDataPoolReader,
             $this->mockPageBuilder,
             $stubSnippetKeyGeneratorLocator,
             $testFilterNavigationConfig,
-            $this->testDefaultNumberOfProductsPerPage,
-            $this->mockSearchCriteriaBuilder
+            $this->testDefaultNumberOfProductsPerPage
         );
 
         $this->stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
@@ -275,47 +264,6 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
 
         $this->mockPageBuilder->expects($this->atLeastOnce())->method('addSnippetsToPage');
-
-        $this->requestHandler->process($this->stubRequest);
-    }
-
-    public function testSelectedFiltersAreNotAppliedToEmptyCollection()
-    {
-        $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
-        $stubSearchDocumentCollection->method('count')->willReturn(0);
-        $stubSearchDocumentCollection->expects($this->never())->method('getCollectionFilteredByCriteria');
-        $this->prepareMockDataPoolReaderWithStubSearchDocumentCollection($stubSearchDocumentCollection);
-
-        $this->requestHandler->process($this->stubRequest);
-    }
-
-    public function testFiltersAreAppliedToSelectionCriteriaIfSelected()
-    {
-        $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
-
-        $this->stubRequest->method('getQueryParameter')->willReturnMap([['foo', 'bar']]);
-
-        $stubCriteria = $this->getMock(SearchCriteria::class);
-        $this->mockSearchCriteriaBuilder->expects($this->once())->method('fromRequestParameter')->with('foo', 'bar')
-            ->willReturn($stubCriteria);
-
-        $this->requestHandler->process($this->stubRequest);
-    }
-
-    public function testRangeFiltersAreAppliedToSelectionCriteriaIfSelected()
-    {
-        $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
-
-        $attributeCode = 'foo';
-        $fromRange = '1';
-        $toRange = '2';
-
-        $filterValue = sprintf('%s%s%s', $fromRange, SearchEngine::RANGE_DELIMITER, $toRange);
-        $this->stubRequest->method('getQueryParameter')->willReturnMap([[$attributeCode, $filterValue]]);
-
-        $stubCriteria = $this->getMock(SearchCriteria::class);
-        $this->mockSearchCriteriaBuilder->expects($this->once())->method('fromRequestParameter')
-            ->with($attributeCode, $filterValue)->willReturn($stubCriteria);
 
         $this->requestHandler->process($this->stubRequest);
     }

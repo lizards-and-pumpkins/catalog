@@ -195,18 +195,20 @@ class DataPoolReaderTest extends AbstractDataPoolTest
         /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $mockCriteria */
         $mockCriteria = $this->getMock(SearchCriteria::class);
 
+        $selectedFilters = [];
+
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->getMock(Context::class);
 
-        $this->getMockSearchEngine()->expects($this->once())
-            ->method('getSearchDocumentsMatchingCriteria')
-            ->with($mockCriteria, $stubContext);
+        $this->getMockSearchEngine()->expects($this->once())->method('getSearchDocumentsMatchingCriteria')
+            ->with($mockCriteria, $selectedFilters, $stubContext);
 
         $facetFiltersConfig = [];
         $rowsPerPage = 100;
         $pageNumber = 0;
         $this->dataPoolReader->getSearchResultsMatchingCriteria(
             $mockCriteria,
+            $selectedFilters,
             $stubContext,
             $facetFiltersConfig,
             $rowsPerPage,

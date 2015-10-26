@@ -4,8 +4,6 @@ namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
@@ -93,7 +91,7 @@ trait ProductListingRequestHandlerTrait
     }
 
     /**
-     * @param SearchDocument ...$searchDocuments
+     * @param SearchDocument[] $searchDocuments
      * @return string[]
      */
     private function getProductInListingSnippetKeysForSearchDocuments(SearchDocument ...$searchDocuments)
@@ -133,36 +131,6 @@ trait ProductListingRequestHandlerTrait
         $snippetKeyToContentMap = [$snippetCode => $snippetContents];
 
         $this->pageBuilder->addSnippetsToPage($snippetCodeToKeyMap, $snippetKeyToContentMap);
-    }
-
-    /**
-     * @param SearchCriteria $originalCriteria
-     * @param array[] $filters
-     * @return SearchCriteria
-     */
-    private function applyFiltersToSelectionCriteria(SearchCriteria $originalCriteria, array $filters)
-    {
-        $filtersCriteriaArray = [];
-
-        foreach ($filters as $filterCode => $filterOptionValues) {
-            if (empty($filterOptionValues)) {
-                continue;
-            }
-
-            $optionValuesCriteriaArray = array_map(function ($filterOptionValue) use ($filterCode) {
-                return $this->searchCriteriaBuilder->fromRequestParameter($filterCode, $filterOptionValue);
-            }, $filterOptionValues);
-
-            $filterCriteria = CompositeSearchCriterion::createOr(...$optionValuesCriteriaArray);
-            $filtersCriteriaArray[] = $filterCriteria;
-        }
-
-        if (empty($filtersCriteriaArray)) {
-            return $originalCriteria;
-        }
-
-        $filtersCriteriaArray[] = $originalCriteria;
-        return CompositeSearchCriterion::createAnd(...$filtersCriteriaArray);
     }
 
     /**

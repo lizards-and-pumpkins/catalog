@@ -30,6 +30,7 @@ use LizardsAndPumpkins\Log\InMemoryLogger;
  * @method Context\Context createContext
  * @method DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder createSearchCriteriaBuilder
  * @method string[] getSearchableAttributeCodes
+ * @method array[] getProductListingFilterNavigationConfig
  */
 class SampleMasterFactory implements MasterFactory
 {

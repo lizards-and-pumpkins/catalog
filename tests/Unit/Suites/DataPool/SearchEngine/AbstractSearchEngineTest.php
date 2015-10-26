@@ -105,7 +105,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param SearchDocument ...$searchDocuments
+     * @param SearchDocument[] $searchDocuments
      * @return SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createStubSearchDocumentCollection(SearchDocument ...$searchDocuments)
@@ -131,12 +131,13 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     public function testSearchEngineResponseIsReturned()
     {
         $criteria = SearchCriterionEqual::create('foo', 'bar');
-
+        $selectedFilters = [];
         $facetFiltersConfig = [];
         $rowsPerPage = 100;
         $pageNumber = 0;
         $result = $this->searchEngine->getSearchDocumentsMatchingCriteria(
             $criteria,
+            $selectedFilters,
             $this->testContext,
             $facetFiltersConfig,
             $rowsPerPage,
@@ -164,12 +165,13 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
         $criteria = SearchCriterionEqual::create($fieldName, $fieldValue);
-
+        $selectedFilters = [];
         $facetFields = [];
         $rowsPerPage = 100;
         $pageNumber = 0;
         $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
             $criteria,
+            $selectedFilters,
             $queryContext,
             $facetFields,
             $rowsPerPage,
@@ -200,12 +202,13 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
         $criteria = SearchCriterionEqual::create($fieldName, $fieldValue);
-
+        $selectedFilters = [];
         $facetFields = [];
         $rowsPerPage = 100;
         $pageNumber = 0;
         $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
             $criteria,
+            $selectedFilters,
             $queryContext,
             $facetFields,
             $rowsPerPage,
@@ -231,12 +234,13 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
         $criteria = SearchCriterionLike::create($fieldName, 'bar');
-
+        $selectedFilters = [];
         $facetFields = [];
         $rowsPerPage = 100;
         $pageNumber = 0;
         $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
             $criteria,
+            $selectedFilters,
             $this->testContext,
             $facetFields,
             $rowsPerPage,
@@ -250,12 +254,13 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     public function testEmptyCollectionIsReturnedIfNoSearchDocumentsMatchesGivenCriteria()
     {
         $searchCriteria = SearchCriterionEqual::create('foo', 'some-value-which-is-definitely-absent-in-index');
-
+        $selectedFilters = [];
         $facetFields = [];
         $rowsPerPage = 100;
         $pageNumber = 0;
         $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
             $searchCriteria,
+            $selectedFilters,
             $this->testContext,
             $facetFields,
             $rowsPerPage,
@@ -279,11 +284,13 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
+        $selectedFilters = [];
         $facetFields = [];
         $rowsPerPage = 100;
         $pageNumber = 0;
         $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
             $searchCriteria,
+            $selectedFilters,
             $this->testContext,
             $facetFields,
             $rowsPerPage,
@@ -326,11 +333,13 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
+        $selectedFilters = [];
         $facetFields = [];
         $rowsPerPage = 100;
         $pageNumber = 0;
         $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
             $searchCriteria,
+            $selectedFilters,
             $this->testContext,
             $facetFields,
             $rowsPerPage,
@@ -378,12 +387,13 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
         $criteria = SearchCriterionEqual::create($fieldName, $fieldValue);
-
+        $selectedFilters = [];
         $facetFields = [];
         $rowsPerPage = 100;
         $pageNumber = 0;
         $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
             $criteria,
+            $selectedFilters,
             $this->testContext,
             $facetFields,
             $rowsPerPage,
@@ -407,12 +417,13 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->clear();
 
         $criteria = SearchCriterionEqual::create($fieldName, $fieldValue);
-
+        $selectedFilters = [];
         $facetFields = [];
         $rowsPerPage = 100;
         $pageNumber = 0;
         $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
             $criteria,
+            $selectedFilters,
             $this->testContext,
             $facetFields,
             $rowsPerPage,
@@ -444,12 +455,13 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
         $criteria = SearchCriterionEqual::create($fieldName, $uniqueValue);
-
+        $selectedFilters = [];
         $facetFields = [];
         $rowsPerPage = 100;
         $pageNumber = 0;
         $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
             $criteria,
+            $selectedFilters,
             $this->testContext,
             $facetFields,
             $rowsPerPage,
@@ -484,11 +496,13 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             SearchCriterionEqual::create($fieldCCode, $keyword)
         );
 
+        $selectedFilters = [];
         $facetFields = ['foo' => [], 'bar' => []];
         $rowsPerPage = 100;
         $pageNumber = 0;
         $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
             $criteria,
+            $selectedFilters,
             $this->testContext,
             $facetFields,
             $rowsPerPage,
@@ -526,6 +540,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
         $criteria = SearchCriterionGreaterOrEqualThan::create($fieldCode, 0);
+        $selectedFilters = [];
         $facetFields = [
             $fieldCode => [
                 ['from' => SearchEngine::RANGE_WILDCARD, 'to' => '10'],
@@ -538,6 +553,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $pageNumber = 0;
         $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
             $criteria,
+            $selectedFilters,
             $this->testContext,
             $facetFields,
             $rowsPerPage,
@@ -578,11 +594,12 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
         $criteria = SearchCriterionEqual::create($field, $keyword);
-
+        $selectedFilters = [];
         $pageNumber = 1;
         $rowsPerPage = 1;
         $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
             $criteria,
+            $selectedFilters,
             $this->testContext,
             [],
             $rowsPerPage,
@@ -591,6 +608,45 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $this->assertCount(1, $searchEngineResponse->getSearchDocuments());
         $this->assertSame(2, $searchEngineResponse->getTotalNumberOfResults());
+    }
+
+    public function testSelectedFiltersAreAddedToCriteria()
+    {
+        $keywordA = uniqid();
+        $keywordB = uniqid();
+
+        $productAId = ProductId::fromString(uniqid());
+        $productBId = ProductId::fromString(uniqid());
+
+        $fieldACode = 'foo';
+        $fieldBCode = 'bar';
+
+        $documentA = $this->createSearchDocument([$fieldACode => $keywordA, $fieldBCode => $keywordB], $productAId);
+        $documentB = $this->createSearchDocument([$fieldACode => $keywordA], $productBId);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($documentA, $documentB);
+
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
+
+        $criteria = SearchCriterionEqual::create($fieldACode, $keywordA);
+
+        $selectedFilters = [$fieldBCode => [$keywordB]];
+        $facetFields = [];
+        $rowsPerPage = 100;
+        $pageNumber = 0;
+        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+            $criteria,
+            $selectedFilters,
+            $this->testContext,
+            $facetFields,
+            $rowsPerPage,
+            $pageNumber
+        );
+
+        $result = $searchEngineResponse->getSearchDocuments();
+
+        $this->assertCount(1, $result);
+        $this->assertCollectionContainsDocumentForProductId($result, $productAId);
+        $this->assertCollectionDoesNotContainDocumentForProductId($result, $productBId);
     }
 
     /**

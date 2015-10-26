@@ -23,6 +23,7 @@ use LizardsAndPumpkins\Http\HttpRouterChain;
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchAutosuggestionRequestHandler
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchRequestHandler
  * @uses   \LizardsAndPumpkins\IntegrationTestFactory
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine
  * @uses   \LizardsAndPumpkins\DataVersion
  * @uses   \LizardsAndPumpkins\PageBuilder
  * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator

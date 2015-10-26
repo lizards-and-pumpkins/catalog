@@ -54,6 +54,7 @@ use LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler;
  * @uses   \LizardsAndPumpkins\Content\ContentBlockProjector
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolWriter
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine
  * @uses   \LizardsAndPumpkins\IntegrationTestFactory
  * @uses   \LizardsAndPumpkins\Renderer\BlockRenderer
  * @uses   \LizardsAndPumpkins\Renderer\ThemeLocator

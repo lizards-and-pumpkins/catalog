@@ -111,11 +111,13 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $this->assertEquals($productBackOrderAvailability, $backOrderAvailabilitySnippetContents);
 
         $criteria = SearchCriterionEqual::create('name', 'LED Arm-Signallampe');
+        $selectedFilters = [];
         $facetFields = [];
         $rowsPerPage = 100;
         $pageNumber = 0;
         $searchResults = $dataPoolReader->getSearchResultsMatchingCriteria(
             $criteria,
+            $selectedFilters,
             $context,
             $facetFields,
             $rowsPerPage,

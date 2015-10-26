@@ -120,7 +120,9 @@ class IntegrationTestFactory implements Factory
      */
     public function createSearchEngine()
     {
-        return new InMemorySearchEngine();
+        return new InMemorySearchEngine(
+            $this->getMasterFactory()->createSearchCriteriaBuilder()
+        );
     }
 
     /**

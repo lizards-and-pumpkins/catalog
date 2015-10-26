@@ -145,11 +145,13 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
     private function getSearchResults($queryString)
     {
         $criteria = $this->criteriaBuilder->anyOfFieldsContainString($this->searchableAttributeCodes, $queryString);
+        $selectedFilters = [];
         $facetFields = [];
         $rowsPerPage = 100; // TODO: Replace with configured number of suggestions to show
         $pageNumber = 0;
         $searchEngineResponse = $this->dataPoolReader->getSearchResultsMatchingCriteria(
             $criteria,
+            $selectedFilters,
             $this->context,
             $facetFields,
             $rowsPerPage,

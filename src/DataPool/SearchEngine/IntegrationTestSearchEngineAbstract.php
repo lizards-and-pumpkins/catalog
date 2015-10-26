@@ -3,7 +3,9 @@
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
@@ -18,15 +20,22 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     abstract protected function getSearchDocuments();
 
     /**
+     * @return SearchCriteriaBuilder
+     */
+    abstract protected function getSearchCriteriaBuilder();
+
+    /**
      * @inheritdoc
      */
     final public function getSearchDocumentsMatchingCriteria(
-        SearchCriteria $criteria,
+        SearchCriteria $originalCriteria,
+        array $selectedFilters,
         Context $context,
         array $facetFiltersConfig,
         $rowsPerPage,
         $pageNumber
     ) {
+        $criteria = $this->applyFiltersToSelectionCriteria($originalCriteria, $selectedFilters);
         $matchingDocuments = array_filter(
             $this->getSearchDocuments(),
             function (SearchDocument $searchDocument) use ($criteria, $context) {
@@ -35,6 +44,36 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
         );
 
         return $this->createSearchEngineResponse($facetFiltersConfig, $matchingDocuments, $rowsPerPage, $pageNumber);
+    }
+
+    /**
+     * @param SearchCriteria $originalCriteria
+     * @param array[] $filters
+     * @return SearchCriteria
+     */
+    private function applyFiltersToSelectionCriteria(SearchCriteria $originalCriteria, array $filters)
+    {
+        $filtersCriteriaArray = [];
+
+        foreach ($filters as $filterCode => $filterOptionValues) {
+            if (empty($filterOptionValues)) {
+                continue;
+            }
+
+            $optionValuesCriteriaArray = array_map(function ($filterOptionValue) use ($filterCode) {
+                return $this->getSearchCriteriaBuilder()->fromRequestParameter($filterCode, $filterOptionValue);
+            }, $filterOptionValues);
+
+            $filterCriteria = CompositeSearchCriterion::createOr(...$optionValuesCriteriaArray);
+            $filtersCriteriaArray[] = $filterCriteria;
+        }
+
+        if (empty($filtersCriteriaArray)) {
+            return $originalCriteria;
+        }
+
+        $filtersCriteriaArray[] = $originalCriteria;
+        return CompositeSearchCriterion::createAnd(...$filtersCriteriaArray);
     }
 
     /**

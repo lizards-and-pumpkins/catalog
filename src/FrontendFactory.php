@@ -185,8 +185,7 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->createPageBuilder(),
             $this->getMasterFactory()->getSnippetKeyGeneratorLocator(),
             $this->getMasterFactory()->getProductListingFilterNavigationConfig(),
-            $this->getDefaultNumberOfProductsPerPageConfig(),
-            $this->getMasterFactory()->createSearchCriteriaBuilder()
+            $this->getDefaultNumberOfProductsPerPageConfig()
         );
     }
 

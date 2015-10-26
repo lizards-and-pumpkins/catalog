@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\Exception\SearchEngineNotAvailableException;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\Utils\LocalFilesystem;
 
 /**
@@ -16,6 +17,7 @@ use LizardsAndPumpkins\Utils\LocalFilesystem;
  * @uses   \LizardsAndPumpkins\Context\WebsiteContextDecorator
  * @uses   \LizardsAndPumpkins\DataVersion
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterOrEqualThan
@@ -46,11 +48,13 @@ class FileSearchEngineTest extends AbstractSearchEngineTest
     /**
      * @return SearchEngine
      */
-    protected function createSearchEngineInstance()
+    final protected function createSearchEngineInstance()
     {
         $this->prepareTemporaryStorage();
 
-        return FileSearchEngine::create($this->temporaryStorage);
+        $searchCriteriaBuilder = new SearchCriteriaBuilder;
+
+        return FileSearchEngine::create($this->temporaryStorage, $searchCriteriaBuilder);
     }
 
     private function prepareTemporaryStorage()
@@ -73,6 +77,9 @@ class FileSearchEngineTest extends AbstractSearchEngineTest
     public function testExceptionIsThrownIfSearchEngineStorageDirIsNotWritable()
     {
         $this->setExpectedException(SearchEngineNotAvailableException::class);
-        FileSearchEngine::create('non-existing-path');
+
+        $searchCriteriaBuilder = new SearchCriteriaBuilder;
+
+        FileSearchEngine::create('non-existing-path', $searchCriteriaBuilder);
     }
 }

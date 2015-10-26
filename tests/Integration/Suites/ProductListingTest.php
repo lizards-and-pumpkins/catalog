@@ -47,8 +47,7 @@ class ProductListingTest extends AbstractIntegrationTest
         $httpHeaders = HttpHeaders::fromArray([
             'Accept' => 'application/vnd.lizards-and-pumpkins.templates.v1+json'
         ]);
-        $httpRequestBodyString = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.json');
-        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
+        $httpRequestBody = HttpRequestBody::fromString('');
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
@@ -106,8 +105,7 @@ class ProductListingTest extends AbstractIntegrationTest
             $pageBuilder,
             $this->factory->getSnippetKeyGeneratorLocator(),
             $filterNavigationAttributeCodes,
-            $defaultNumberOfProductsPerPage,
-            $this->factory->createSearchCriteriaBuilder()
+            $defaultNumberOfProductsPerPage
         );
     }
 
