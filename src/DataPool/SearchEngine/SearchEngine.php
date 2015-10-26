@@ -19,7 +19,7 @@ interface SearchEngine
 
     /**
      * @param SearchCriteria $criteria
-     * @param array[] $selectedFilters
+     * @param array[] $filterSelection
      * @param Context $context
      * @param string[] $facetFiltersConfig
      * @param int $rowsPerPage
@@ -28,7 +28,7 @@ interface SearchEngine
      */
     public function getSearchDocumentsMatchingCriteria(
         SearchCriteria $criteria,
-        array $selectedFilters,
+        array $filterSelection,
         Context $context,
         array $facetFiltersConfig,
         $rowsPerPage,

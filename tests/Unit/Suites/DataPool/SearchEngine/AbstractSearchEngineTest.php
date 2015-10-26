@@ -574,9 +574,9 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
                 )
             )
         ];
-        $searchEngineResponse = $searchEngineResponse->getFacetFieldCollection();
+        $facetFieldsCollection = $searchEngineResponse->getFacetFieldCollection();
 
-        $this->assertEquals($expectedFacetFields, $searchEngineResponse->getFacetFields());
+        $this->assertEquals($expectedFacetFields, $facetFieldsCollection->getFacetFields());
     }
 
     public function testOnlyProductsFromARequestedPageAreReturned()
@@ -630,7 +630,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $criteria = SearchCriterionEqual::create($fieldACode, $keywordA);
 
         $selectedFilters = [$fieldBCode => [$keywordB]];
-        $facetFields = [];
+        $facetFields = [$fieldACode => [], $fieldBCode => []];
         $rowsPerPage = 100;
         $pageNumber = 0;
         $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
@@ -647,6 +647,45 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $result);
         $this->assertCollectionContainsDocumentForProductId($result, $productAId);
         $this->assertCollectionDoesNotContainDocumentForProductId($result, $productBId);
+    }
+
+    public function testSelectedFiltersOptionValueSiblingsAreIncludedIntoFilterOptionValues()
+    {
+        $fieldACode = 'foo';
+        $fieldBCode = 'bar';
+
+        $fieldValueA = uniqid();
+        $fieldValueB = uniqid();
+        $keyword = uniqid();
+
+        $productAId = ProductId::fromString(uniqid());
+        $productBId = ProductId::fromString(uniqid());
+
+        $documentA = $this->createSearchDocument([$fieldACode => $fieldValueA, $fieldBCode => $keyword], $productAId);
+        $documentB = $this->createSearchDocument([$fieldACode => $fieldValueB, $fieldBCode => $keyword], $productBId);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($documentA, $documentB);
+
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
+
+        $criteria = SearchCriterionEqual::create($fieldBCode, $keyword);
+        $selectedFilters = [$fieldACode => [$fieldValueB]];
+        $facetFields = [$fieldACode => []];
+        $rowsPerPage = 100;
+        $pageNumber = 0;
+
+        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+            $criteria,
+            $selectedFilters,
+            $this->testContext,
+            $facetFields,
+            $rowsPerPage,
+            $pageNumber
+        );
+
+        $result = $searchEngineResponse->getFacetFieldCollection()->getFacetFields();
+
+        $this->assertCount(1, $result);
+        $this->assertCount(2, $result[0]->getValues());
     }
 
     /**

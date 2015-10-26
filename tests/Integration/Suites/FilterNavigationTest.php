@@ -75,4 +75,30 @@ class FilterNavigationTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNotEquals($initialFilterNavigation, $filterNavigation);
     }
+
+    /**
+     * @depends testListingPageContainsValidFilterNavigationJson
+     * @param array[] $initialFilterNavigation
+     */
+    public function testSiblingOptionsValuesOfSelectedFilterValueArePresent(array $initialFilterNavigation)
+    {
+        $filterCode = key($initialFilterNavigation);
+        $filterValue = $initialFilterNavigation[$filterCode][0]['value'];
+        $url = $this->testUrl . '?' . $filterCode . '=' . rawurlencode($filterValue);
+
+        $request = HttpRequest::fromParameters(
+            HttpRequest::METHOD_GET,
+            HttpUrl::fromString($url),
+            HttpHeaders::fromArray([]),
+            HttpRequestBody::fromString('')
+        );
+
+        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+
+        $productListingRequestHandler = $this->getProductListingRequestHandler();
+        $page = $productListingRequestHandler->process($request);
+        $filterNavigation = $this->extractFilterNavigation($page->getBody());
+
+        $this->assertEquals($initialFilterNavigation[$filterCode], $filterNavigation[$filterCode]);
+    }
 }
