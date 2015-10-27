@@ -261,11 +261,13 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testProductsInListingAreAddedToPageBuilder()
     {
+        $snippetCode = 'products_grid';
         $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
-
-        $this->mockPageBuilder->expects($this->atLeastOnce())->method('addSnippetsToPage');
+        $addSnippetsToPageSpy = $this->createAddedSnippetsSpy();
 
         $this->requestHandler->process($this->stubRequest);
+
+        $this->assertDynamicSnippetWasAddedToPageBuilder($addSnippetsToPageSpy, $snippetCode);
     }
 
     public function testFilterNavigationSnippetIsAddedToPageBuilder()
