@@ -9,6 +9,8 @@ use LizardsAndPumpkins\SnippetList;
 
 class PriceSnippetRenderer implements SnippetRenderer
 {
+    const CODE = 'price';
+
     /**
      * @var SnippetList
      */

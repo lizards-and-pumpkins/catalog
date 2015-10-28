@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Api\ApiRouter;
 use LizardsAndPumpkins\Content\ContentBlocksApiV1PutRequestHandler;
+use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\PricesJsonSnippetTransformation;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\SimpleEuroPriceSnippetTransformation;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Http\GenericHttpRouter;
@@ -131,6 +132,12 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->frontendFactory->createPriceSnippetTransformation();
         $this->assertInstanceOf(SimpleEuroPriceSnippetTransformation::class, $result);
+    }
+
+    public function testItReturnsAProductPricesJsonSnippetTransformation()
+    {
+        $result = $this->frontendFactory->createPricesJsonSnippetTransformation();
+        $this->assertInstanceOf(PricesJsonSnippetTransformation::class, $result);
     }
 
     public function testProductSearchAutosuggestionRouterIsReturned()

@@ -11,6 +11,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineFacetFieldCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\PageBuilder;
+use LizardsAndPumpkins\Product\PriceSnippetRenderer;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
@@ -82,12 +83,13 @@ trait ProductListingRequestHandlerTrait
     {
         $documents = $searchDocumentCollection->getDocuments();
         $productInListingSnippetKeys = $this->getProductInListingSnippetKeysForSearchDocuments(...$documents);
-        $productSnippets = $this->dataPoolReader->getSnippets($productInListingSnippetKeys);
+        $productPriceSnippetKeys = $this->getProductPriceSnippetKeysForSearchDocuments(...$documents);
 
-        $snippetKey = 'products_grid';
-        $snippetContents = '[' . implode(',', $productSnippets) . ']';
+        $snippetKeysToFetch = array_merge($productInListingSnippetKeys, $productPriceSnippetKeys);
+        $snippets = $this->dataPoolReader->getSnippets($snippetKeysToFetch);
 
-        $this->addDynamicSnippetToPageBuilder($snippetKey, $snippetContents);
+        $this->addProductGridSnippetToPageBuilder($snippets, $productInListingSnippetKeys);
+        $this->addProductPricesSnippetToPageBuilder($snippets, $productPriceSnippetKeys);
     }
 
     /**
@@ -96,12 +98,59 @@ trait ProductListingRequestHandlerTrait
      */
     private function getProductInListingSnippetKeysForSearchDocuments(SearchDocument ...$searchDocuments)
     {
-        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
-            ProductInListingSnippetRenderer::CODE
-        );
+        return $this->getSnippetKeysForGivenSnippetCode(ProductInListingSnippetRenderer::CODE, ...$searchDocuments);
+    }
+
+    /**
+     * @param SearchDocument[] $searchDocuments
+     * @return string[]
+     */
+    private function getProductPriceSnippetKeysForSearchDocuments(SearchDocument ...$searchDocuments)
+    {
+        return $this->getSnippetKeysForGivenSnippetCode(PriceSnippetRenderer::CODE, ...$searchDocuments);
+    }
+
+    /**
+     * @param string $snippetCode
+     * @param SearchDocument[] $searchDocuments
+     * @return string[]
+     */
+    private function getSnippetKeysForGivenSnippetCode($snippetCode, SearchDocument ...$searchDocuments)
+    {
+        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
         return array_map(function (SearchDocument $searchDocument) use ($keyGenerator) {
             return $keyGenerator->getKeyForContext($this->context, [Product::ID => $searchDocument->getProductId()]);
         }, $searchDocuments);
+    }
+
+    /**
+     * @param string[] $snippets
+     * @param string[] $productInListingSnippetKeys
+     */
+    private function addProductGridSnippetToPageBuilder($snippets, $productInListingSnippetKeys)
+    {
+        $this->addCombinedSnippetsWithGivenKeysToPageBuilder($snippets, $productInListingSnippetKeys, 'product_grid');
+    }
+
+    /**
+     * @param string[] $snippets
+     * @param string[] $productPriceSnippetKeys
+     */
+    private function addProductPricesSnippetToPageBuilder($snippets, $productPriceSnippetKeys)
+    {
+        $this->addCombinedSnippetsWithGivenKeysToPageBuilder($snippets, $productPriceSnippetKeys, 'product_prices');
+    }
+
+    /**
+     * @param string[] $allSnippets
+     * @param string[] $snippetKeysToUse
+     * @param string $combinedSnippetKey
+     */
+    private function addCombinedSnippetsWithGivenKeysToPageBuilder($allSnippets, $snippetKeysToUse, $combinedSnippetKey)
+    {
+        $matchingSnippets = array_intersect_key($allSnippets, array_flip($snippetKeysToUse));
+        $combinedSnippetContent = '[' . implode(',', $matchingSnippets) . ']';
+        $this->addDynamicSnippetToPageBuilder($combinedSnippetKey, $combinedSnippetContent);
     }
 
     private function addFilterNavigationSnippetToPageBuilder(SearchEngineFacetFieldCollection $facetFieldCollection)

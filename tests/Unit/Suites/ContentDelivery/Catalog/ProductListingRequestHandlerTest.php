@@ -15,9 +15,7 @@ use LizardsAndPumpkins\Http\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\UnableToHandleRequestException;
 use LizardsAndPumpkins\PageBuilder;
-use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingCriteriaSnippetContent;
-use LizardsAndPumpkins\Product\ProductListingCriteriaSnippetRenderer;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
 
@@ -60,11 +58,6 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
      * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubRequest;
-
-    /**
-     * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubProductInListingSnippetKeyGenerator;
 
     private function prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection()
     {
@@ -126,18 +119,12 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private function createStubSnippetKeyGeneratorLocator()
     {
-        $this->stubProductInListingSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
-        $this->stubProductInListingSnippetKeyGenerator->method('getKeyForContext')
-            ->willReturn('stub-product-snippet-key');
-
         $stubProductListingCriteriaSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class, [], [], '', false);
         $stubProductListingCriteriaSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->testMetaInfoKey);
 
         $stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
-        $stubSnippetKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')->willReturnMap([
-            [ProductListingCriteriaSnippetRenderer::CODE, $stubProductListingCriteriaSnippetKeyGenerator],
-            [ProductInListingSnippetRenderer::CODE, $this->stubProductInListingSnippetKeyGenerator],
-        ]);
+        $stubSnippetKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')
+            ->willReturn($stubProductListingCriteriaSnippetKeyGenerator);
 
         return $stubSnippetKeyGeneratorLocator;
     }
@@ -261,13 +248,16 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testProductsInListingAreAddedToPageBuilder()
     {
-        $snippetCode = 'products_grid';
+        $productGridSnippetCode = 'product_grid';
+        $productPricesSnippetCode = 'product_prices';
+
         $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
         $addSnippetsToPageSpy = $this->createAddedSnippetsSpy();
 
         $this->requestHandler->process($this->stubRequest);
 
-        $this->assertDynamicSnippetWasAddedToPageBuilder($addSnippetsToPageSpy, $snippetCode);
+        $this->assertDynamicSnippetWasAddedToPageBuilder($addSnippetsToPageSpy, $productGridSnippetCode);
+        $this->assertDynamicSnippetWasAddedToPageBuilder($addSnippetsToPageSpy, $productPricesSnippetCode);
     }
 
     public function testFilterNavigationSnippetIsAddedToPageBuilder()

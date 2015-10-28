@@ -9,6 +9,7 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\ProductDetailViewRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchAutosuggestionRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchRequestHandler;
+use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\PricesJsonSnippetTransformation;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\SimpleEuroPriceSnippetTransformation;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Http\GenericHttpRouter;
@@ -16,6 +17,7 @@ use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRouter;
 use LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler;
 use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
+use LizardsAndPumpkins\Product\PriceSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
@@ -291,8 +293,13 @@ class FrontendFactory implements Factory
     private function registerSnippetTransformations(PageBuilder $pageBuilder)
     {
         $pageBuilder->registerSnippetTransformation(
-            'price',
+            PriceSnippetRenderer::CODE,
             $this->getMasterFactory()->createPriceSnippetTransformation()
+        );
+
+        $pageBuilder->registerSnippetTransformation(
+            'product_prices',
+            $this->getMasterFactory()->createPricesJsonSnippetTransformation()
         );
     }
 
@@ -360,5 +367,13 @@ class FrontendFactory implements Factory
     public function createPriceSnippetTransformation()
     {
         return new SimpleEuroPriceSnippetTransformation();
+    }
+
+    /**
+     * @return PricesJsonSnippetTransformation
+     */
+    public function createPricesJsonSnippetTransformation()
+    {
+        return new PricesJsonSnippetTransformation($this->getMasterFactory()->createPriceSnippetTransformation());
     }
 }

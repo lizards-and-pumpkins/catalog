@@ -1011,7 +1011,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function getRegularPriceSnippetKey()
     {
-        return 'price';
+        return PriceSnippetRenderer::CODE;
     }
 
     /**

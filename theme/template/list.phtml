@@ -8,9 +8,12 @@
     <p class="amount"></p>
 </div>
 <div id="products-grid-container"></div>
-<script>var productListingJson = {{snippet products_grid}}</script>
+<script>
+    var productListingJson = {{snippet product_grid}},
+        productPrices = {{snippet product_prices}};
+</script>
 <div id="pagination"></div>
 <script>
     var totalNumberOfResults = {{snippet total_number_of_results}},
-        productsPerPage = {{snippet products_per_page}}
+        productsPerPage = {{snippet products_per_page}};
 </script>
