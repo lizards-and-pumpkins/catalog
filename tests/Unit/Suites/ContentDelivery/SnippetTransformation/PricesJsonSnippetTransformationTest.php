@@ -4,6 +4,9 @@ namespace LizardsAndPumpkins\ContentDelivery\SnippetTransformation;
 
 use LizardsAndPumpkins\Context\Context;
 
+/**
+ * @covers \LizardsAndPumpkins\ContentDelivery\SnippetTransformation\PricesJsonSnippetTransformation
+ */
 class PricesJsonSnippetTransformationTest extends \PHPUnit_Framework_TestCase
 {
     /**
