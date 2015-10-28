@@ -53,10 +53,12 @@ define(function () {
                     gender = document.createElement('P'),
                     productUrl = getBaseUrl() + product['attributes']['url_key'],
                     productImage = createProductImage(product['images'][0]['file'], product['images'][0]['label']),
-                    priceNode = document.createTextNode(productPrices[index]);
+                    price = document.createElement('SPAN');
 
                 title.textContent = product['attributes']['name'];
                 gender.textContent = turnIntoStringIfIsArray(product['attributes']['gender']);
+                price.textContent = productPrices[index];
+                price.className = 'regular-price';
 
                 container.style.backgroundImage = 'url("' + getBrandLogoSrc(product['attributes']['brand']) + '")';
                 container.className = 'grid-cell-container';
@@ -64,7 +66,7 @@ define(function () {
                 container.appendChild(wrapIntoProductLink(productImage, productUrl));
                 container.appendChild(wrapIntoProductLink(title, productUrl));
                 container.appendChild(gender);
-                container.appendChild(priceNode);
+                container.appendChild(price);
                 productLi.appendChild(container);
                 grid.appendChild(productLi);
             });
