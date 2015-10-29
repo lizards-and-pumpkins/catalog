@@ -73,7 +73,6 @@ class ProductListingRequestHandler implements HttpRequestHandler
 
         $metaInfo = $this->getPageMetaInfoSnippet($request);
         $keyGeneratorParams = [
-            'products_per_page' => $this->defaultNumberOfProductsPerPage,
             PageMetaInfoSnippetContent::URL_KEY => ltrim($request->getUrlPathRelativeToWebFront(), '/')
         ];
 
