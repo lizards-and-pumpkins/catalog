@@ -1,7 +1,8 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Http;
+
+use LizardsAndPumpkins\Http\Exception\InvalidHttpRequestBodyException;
 
 /**
  * @covers \LizardsAndPumpkins\Http\HttpRequestBody

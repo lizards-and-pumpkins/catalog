@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\Http;
 
+use LizardsAndPumpkins\Http\Exception\UnableToRouteRequestException;
+
 class HttpRouterChain implements HttpRouter
 {
     /**

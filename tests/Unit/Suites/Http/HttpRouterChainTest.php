@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\Http;
 
+use LizardsAndPumpkins\Http\Exception\UnableToRouteRequestException;
+
 /**
  * @covers LizardsAndPumpkins\Http\HttpRouterChain
  */

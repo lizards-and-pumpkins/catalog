@@ -1,6 +1,6 @@
 <?php
 
-namespace LizardsAndPumpkins\Http;
+namespace LizardsAndPumpkins\Http\Exception;
 
 class InvalidResponseBodyException extends \LogicException
 {

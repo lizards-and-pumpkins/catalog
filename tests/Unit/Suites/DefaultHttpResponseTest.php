@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Http\HttpResponse;
-use LizardsAndPumpkins\Http\InvalidResponseBodyException;
+use LizardsAndPumpkins\Http\Exception\InvalidResponseBodyException;
 
 /**
  * @covers \LizardsAndPumpkins\DefaultHttpResponse
