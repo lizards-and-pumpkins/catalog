@@ -87,9 +87,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         $metaInfoSnippetJson = $this->dataPoolReader->getSnippet($metaInfoSnippetKey);
         $metaInfoSnippetContent = ProductSearchResultMetaSnippetContent::fromJson($metaInfoSnippetJson);
 
-        $keyGeneratorParams = [
-            'products_per_page' => $this->defaultNumberOfProductsPerPage
-        ];
+        $keyGeneratorParams = [];
 
         return $this->pageBuilder->buildPage($metaInfoSnippetContent, $this->context, $keyGeneratorParams);
     }
