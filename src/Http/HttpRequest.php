@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\Http;
 
+use LizardsAndPumpkins\Http\Exception\CookieNotSetException;
+
 abstract class HttpRequest
 {
     const METHOD_GET = 'GET';
@@ -139,5 +141,35 @@ abstract class HttpRequest
     public function getQueryParametersExceptGiven($queryParameterToBeExcluded)
     {
         return $this->url->getQueryParametersExceptGiven($queryParameterToBeExcluded);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getCookies()
+    {
+        return $_COOKIE;
+    }
+
+    /**
+     * @param string $cookieName
+     * @return bool
+     */
+    public function hasCookie($cookieName)
+    {
+        return isset($_COOKIE[$cookieName]);
+    }
+
+    /**
+     * @param string $cookieName
+     * @return string
+     */
+    public function getCookieValue($cookieName)
+    {
+        if (!$this->hasCookie($cookieName)) {
+            throw new CookieNotSetException(sprintf('Cookie with "%s" name is not set.', $cookieName));
+        }
+
+        return $_COOKIE[$cookieName];
     }
 }
