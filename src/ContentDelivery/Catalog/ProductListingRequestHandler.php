@@ -20,6 +20,8 @@ class ProductListingRequestHandler implements HttpRequestHandler
 {
     use ProductListingRequestHandlerTrait;
 
+    const PRODUCTS_PER_PAGE_COOKIE_NAME = 'products_per_page';
+
     /**
      * @param Context $context
      * @param DataPoolReader $dataPoolReader
@@ -69,7 +71,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         }
 
         $searchEngineResponse = $this->getSearchResultsMatchingCriteria($request);
-        $this->addProductListingContentToPage($searchEngineResponse);
+        $this->addProductListingContentToPage($searchEngineResponse, $request);
 
         $metaInfo = $this->getPageMetaInfoSnippet($request);
         $keyGeneratorParams = [
@@ -119,7 +121,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
     {
         $criteria = $this->getPageMetaInfoSnippet($request)->getSelectionCriteria();
         $selectedFilters = $this->getSelectedFilterValuesFromRequest($request);
-        $productsPerPage = (int) $this->defaultNumberOfProductsPerPage;
+        $productsPerPage = $this->getNumberOfProductsPerPage($request);
         $currentPageNumber = $this->getCurrentPageNumber($request);
 
         return $this->dataPoolReader->getSearchResultsMatchingCriteria(

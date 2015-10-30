@@ -33,7 +33,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
      * @param DataPoolReader $dataPoolReader
      * @param PageBuilder $pageBuilder
      * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
-     * @param string[] $filterNavigationAttributeCodes
+     * @param string[] $filterNavigationConfig
      * @param int $defaultNumberOfProductsPerPage
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param string[] $searchableAttributeCodes
@@ -43,7 +43,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         DataPoolReader $dataPoolReader,
         PageBuilder $pageBuilder,
         SnippetKeyGeneratorLocator $keyGeneratorLocator,
-        array $filterNavigationAttributeCodes,
+        array $filterNavigationConfig,
         $defaultNumberOfProductsPerPage,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         array $searchableAttributeCodes
@@ -52,7 +52,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         $this->context = $context;
         $this->pageBuilder = $pageBuilder;
         $this->keyGeneratorLocator = $keyGeneratorLocator;
-        $this->filterNavigationConfig = $filterNavigationAttributeCodes;
+        $this->filterNavigationConfig = $filterNavigationConfig;
         $this->defaultNumberOfProductsPerPage = $defaultNumberOfProductsPerPage;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->searchableAttributeCodes = $searchableAttributeCodes;
@@ -78,7 +78,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         }
 
         $searchEngineResponse = $this->getSearchResultsMatchingCriteria($request);
-        $this->addProductListingContentToPage($searchEngineResponse);
+        $this->addProductListingContentToPage($searchEngineResponse, $request);
 
         $metaInfoSnippetKeyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
             ProductSearchResultMetaSnippetRenderer::CODE
@@ -130,7 +130,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
             $this->searchableAttributeCodes,
             $queryString
         );
-        $productsPerPage = (int) $this->defaultNumberOfProductsPerPage;
+        $productsPerPage = $this->getNumberOfProductsPerPage($request);
         $currentPageNumber = $this->getCurrentPageNumber($request);
 
         return $this->dataPoolReader->getSearchResultsMatchingCriteria(
