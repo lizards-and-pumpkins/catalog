@@ -16,6 +16,8 @@
 /* Toolbar */
 .toolbar { margin-bottom: 15px; background: #e3e3e3; border-top: 1px solid #dfdfdf; color: #474747; padding: 0 30px }
 .toolbar .amount { float:left; width: 220px; font-size: 16px; margin: 25px 0 }
+.toolbar .limiter { float: right; margin: 25px 0 }
+.toolbar .limiter label { font-weight: bold }
 
 /* Pagination */
 #pagination { text-align: right; padding: 43px 0 0 0; font-size: 12px }

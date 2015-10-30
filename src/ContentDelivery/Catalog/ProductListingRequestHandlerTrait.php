@@ -171,10 +171,7 @@ trait ProductListingRequestHandlerTrait
             'total_number_of_results',
             $searchEngineResponse->getTotalNumberOfResults()
         );
-        $this->addDynamicSnippetToPageBuilder(
-            'products_per_page',
-            $productsPerPage->getSelectedNumberOfProductsPerPage()
-        );
+        $this->addDynamicSnippetToPageBuilder('products_per_page', json_encode($productsPerPage));
     }
 
     /**

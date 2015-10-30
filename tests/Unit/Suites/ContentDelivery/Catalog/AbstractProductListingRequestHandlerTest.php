@@ -166,14 +166,8 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->getMock(Context::class);
         $stubSnippetKeyGeneratorLocator = $this->createStubSnippetKeyGeneratorLocator();
-
         $testFilterNavigationConfig = ['foo' => []];
-
-        /** @var ProductsPerPage|\PHPUnit_Framework_MockObject_MockObject $stubProductsPerPage */
-        $stubProductsPerPage = $this->getMock(ProductsPerPage::class, [], [], '', false);
-        $stubProductsPerPage->method('getSelectedNumberOfProductsPerPage')
-            ->willReturn($this->testDefaultNumberOfProductsPerPage);
-        $stubProductsPerPage->method('getNumbersOfProductsPerPage')->willReturn([1, 2, 3]);
+        $productsPerPage = ProductsPerPage::create([1, 2, 3], $this->testDefaultNumberOfProductsPerPage);
 
         $this->requestHandler = $this->createRequestHandler(
             $stubContext,
@@ -181,7 +175,7 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
             $this->mockPageBuilder,
             $stubSnippetKeyGeneratorLocator,
             $testFilterNavigationConfig,
-            $stubProductsPerPage
+            $productsPerPage
         );
 
         $this->stubRequest = $this->createStubRequest();
@@ -195,22 +189,30 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
     public function testNumberOfProductsPerPageSnippetWithFirstAvailableNumberOfProductsPerPageIsAddedToPageBuilder()
     {
         $snippetCode = 'products_per_page';
+        $expectedSnippetContent = json_encode([
+            ['number' => 1, 'selected' => true],
+            ['number' => 2, 'selected' => false],
+            ['number' => 3, 'selected' => false],
+        ]);
+
         $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
         $addSnippetsToPageSpy = $this->createAddedSnippetsSpy();
 
         $this->requestHandler->process($this->stubRequest);
 
-        $this->assertDynamicSnippetWasAddedToPageBuilder(
-            $addSnippetsToPageSpy,
-            $snippetCode,
-            $this->testDefaultNumberOfProductsPerPage
-        );
+        $this->assertDynamicSnippetWasAddedToPageBuilder($addSnippetsToPageSpy, $snippetCode, $expectedSnippetContent);
     }
 
     public function testNumberOfProductsPerPageSnippetWithNumberOfProductsPerPageStoredInCookieIsAddedToPageBuilder()
     {
-        $snippetCode = 'products_per_page';
         $productsPerPage = 2;
+
+        $snippetCode = 'products_per_page';
+        $expectedSnippetContent = json_encode([
+            ['number' => 1, 'selected' => false],
+            ['number' => 2, 'selected' => true],
+            ['number' => 3, 'selected' => false],
+        ]);
 
         $this->stubRequest->method('hasCookie')->with(ProductListingRequestHandler::PRODUCTS_PER_PAGE_COOKIE_NAME)
             ->willReturn(true);
@@ -222,7 +224,7 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
 
         $this->requestHandler->process($this->stubRequest);
 
-        $this->assertDynamicSnippetWasAddedToPageBuilder($addSnippetsToPageSpy, $snippetCode, $productsPerPage);
+        $this->assertDynamicSnippetWasAddedToPageBuilder($addSnippetsToPageSpy, $snippetCode, $expectedSnippetContent);
     }
 
     public function testPageIsReturned()
