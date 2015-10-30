@@ -65,7 +65,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
                 return (string) $logMessage;
             }, $messages);
             $fainMessageString = implode(PHP_EOL, $failMessages);
-            
+
             $this->fail($fainMessageString);
         }
     }

@@ -52,6 +52,11 @@ class FrontendFactory implements Factory
     private $snippetKeyGeneratorLocator;
 
     /**
+     * @var ProductsPerPage
+     */
+    private $lazyLoadedProductsPerPageConfig;
+
+    /**
      * @return ApiRouter
      */
     public function createApiRouter()
@@ -195,12 +200,19 @@ class FrontendFactory implements Factory
     /**
      * @return ProductsPerPage
      */
-    private function getProductsPerPageConfig()
+    public function getProductsPerPageConfig()
     {
-        $numbersOfProductsPerPage = [9, 12, 18];
-        $selectedNumberOfProductsPerPage = 9;
+        if (null === $this->lazyLoadedProductsPerPageConfig) {
+            $numbersOfProductsPerPage = [9, 12, 18];
+            $selectedNumberOfProductsPerPage = 9;
 
-        return new ProductsPerPage($numbersOfProductsPerPage, $selectedNumberOfProductsPerPage);
+            $this->lazyLoadedProductsPerPageConfig = new ProductsPerPage(
+                $numbersOfProductsPerPage,
+                $selectedNumberOfProductsPerPage
+            );
+        }
+
+        return $this->lazyLoadedProductsPerPageConfig;
     }
 
     /**

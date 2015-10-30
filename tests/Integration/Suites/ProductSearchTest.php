@@ -68,7 +68,7 @@ class ProductSearchTest extends AbstractIntegrationTest
             $this->factory->getLogger()
         );
         $filterNavigationAttributeCodes = [];
-        $defaultNumberOfProductsPerPage = 9;
+        $productsPerPage = $this->factory->getProductsPerPageConfig();
 
         return new ProductSearchRequestHandler(
             $this->factory->createContext(),
@@ -76,7 +76,7 @@ class ProductSearchTest extends AbstractIntegrationTest
             $pageBuilder,
             $this->factory->getSnippetKeyGeneratorLocator(),
             $filterNavigationAttributeCodes,
-            $defaultNumberOfProductsPerPage,
+            $productsPerPage,
             $this->factory->createSearchCriteriaBuilder(),
             $this->factory->getSearchableAttributeCodes()
         );

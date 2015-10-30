@@ -8,56 +8,17 @@ use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
+use LizardsAndPumpkins\Log\Logger;
+use LizardsAndPumpkins\Log\LogMessage;
 use LizardsAndPumpkins\Product\ProductListingCriteriaSnippetContent;
-use LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer;
 use LizardsAndPumpkins\Utils\XPathParser;
 
-class ProductListingTest extends AbstractIntegrationTest
+class ProductListingTest extends \PHPUnit_Framework_TestCase
 {
+    use ProductListingTestTrait;
+
     private $testUrl = 'http://example.com/sale';
-
-    /**
-     * @var SampleMasterFactory
-     */
-    private $factory;
-
-    private function importCatalog()
-    {
-        $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
-        $httpHeaders = HttpHeaders::fromArray([
-            'Accept' => 'application/vnd.lizards-and-pumpkins.catalog_import.v1+json'
-        ]);
-        $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
-        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
-        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
-
-        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-
-        $website = new InjectableSampleWebFront($request, $this->factory);
-        $website->runWithoutSendingResponse();
-
-        $this->factory->createCommandConsumer()->process();
-        $this->factory->createDomainEventConsumer()->process();
-    }
-
-    private function createProductListingFixture()
-    {
-        $httpUrl = HttpUrl::fromString('http://example.com/api/templates/product_listing');
-        $httpHeaders = HttpHeaders::fromArray([
-            'Accept' => 'application/vnd.lizards-and-pumpkins.templates.v1+json'
-        ]);
-        $httpRequestBody = HttpRequestBody::fromString('');
-        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
-
-        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-
-        $website = new InjectableSampleWebFront($request, $this->factory);
-        $website->runWithoutSendingResponse();
-
-        $this->factory->createCommandConsumer()->process();
-        $this->factory->createDomainEventConsumer()->process();
-    }
 
     /**
      * @param string $contentBlockContent
@@ -86,30 +47,6 @@ class ProductListingTest extends AbstractIntegrationTest
     }
 
     /**
-     * @return ProductListingRequestHandler
-     */
-    private function getProductListingRequestHandler()
-    {
-        $dataPoolReader = $this->factory->createDataPoolReader();
-        $pageBuilder = new PageBuilder(
-            $dataPoolReader,
-            $this->factory->getSnippetKeyGeneratorLocator(),
-            $this->factory->getLogger()
-        );
-        $filterNavigationAttributeCodes = [];
-        $defaultNumberOfProductsPerPage = 9;
-
-        return new ProductListingRequestHandler(
-            $this->factory->createContext(),
-            $dataPoolReader,
-            $pageBuilder,
-            $this->factory->getSnippetKeyGeneratorLocator(),
-            $filterNavigationAttributeCodes,
-            $defaultNumberOfProductsPerPage
-        );
-    }
-
-    /**
      * @return mixed[]
      */
     private function getStubMetaInfo()
@@ -135,20 +72,32 @@ class ProductListingTest extends AbstractIntegrationTest
         return $metaSnippetContent->getInfo();
     }
 
-    private function registerProductListingSnippetKeyGenerator()
-    {
-        $this->factory->getSnippetKeyGeneratorLocator()->register(
-            ProductListingPageSnippetRenderer::CODE,
-            $this->factory->createProductListingSnippetKeyGenerator()
-        );
-    }
-
     private function registerContentBlockInProductListingSnippetKeyGenerator()
     {
         $this->factory->getSnippetKeyGeneratorLocator()->register(
             'content_block_in_product_listing',
             $this->factory->createContentBlockInProductListingSnippetKeyGenerator()
         );
+    }
+
+    private function failIfMessagesWhereLogged(Logger $logger)
+    {
+        $messages = $logger->getMessages();
+
+        if (!empty($messages)) {
+            $failMessages = array_map(function (LogMessage $logMessage) {
+                $messageContext = $logMessage->getContext();
+                if (isset($messageContext['exception'])) {
+                    /** @var \Exception $exception */
+                    $exception = $messageContext['exception'];
+                    return (string) $logMessage . ' ' . $exception->getFile() . ':' . $exception->getLine();
+                }
+                return (string) $logMessage;
+            }, $messages);
+            $failMessageString = implode(PHP_EOL, $failMessages);
+
+            $this->fail($failMessageString);
+        }
     }
 
     public function testProductListingCriteriaSnippetIsWrittenIntoDataPool()

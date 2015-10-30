@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Api\ApiRouter;
 use LizardsAndPumpkins\Content\ContentBlocksApiV1PutRequestHandler;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\PricesJsonSnippetTransformation;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\SimpleEuroPriceSnippetTransformation;
 use LizardsAndPumpkins\Context\Context;
@@ -145,5 +146,14 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->frontendFactory->createProductSearchAutosuggestionRouter();
         $this->assertInstanceOf(GenericHttpRouter::class, $result);
+    }
+
+    public function testSameProductsPerPageIsReturnedViaGetter()
+    {
+        $result1 = $this->frontendFactory->getProductsPerPageConfig();
+        $result2 = $this->frontendFactory->getProductsPerPageConfig();
+
+        $this->assertInstanceOf(ProductsPerPage::class, $result1);
+        $this->assertSame($result1, $result2);
     }
 }

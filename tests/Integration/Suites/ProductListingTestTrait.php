@@ -102,7 +102,7 @@ trait ProductListingTestTrait
             $this->factory->getLogger()
         );
         $filterNavigationConfig = $this->factory->getProductListingFilterNavigationConfig();
-        $defaultNumberOfProductsPerPage = 9;
+        $productsPerPage = $this->factory->getProductsPerPageConfig();
 
         return new ProductListingRequestHandler(
             $this->factory->createContext(),
@@ -110,7 +110,7 @@ trait ProductListingTestTrait
             $pageBuilder,
             $this->factory->getSnippetKeyGeneratorLocator(),
             $filterNavigationConfig,
-            $defaultNumberOfProductsPerPage
+            $productsPerPage
         );
     }
 
