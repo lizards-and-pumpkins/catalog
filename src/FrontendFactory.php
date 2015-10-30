@@ -187,16 +187,16 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->createPageBuilder(),
             $this->getMasterFactory()->getSnippetKeyGeneratorLocator(),
             $this->getMasterFactory()->getProductListingFilterNavigationConfig(),
-            $this->getDefaultNumberOfProductsPerPageConfig()
+            $this->getAvailableNumbersOfProductsPerPageConfig()
         );
     }
 
     /**
-     * @return int
+     * @return int[]
      */
-    private function getDefaultNumberOfProductsPerPageConfig()
+    private function getAvailableNumbersOfProductsPerPageConfig()
     {
-        return 9;
+        return [9, 12, 18];
     }
 
     /**
@@ -332,7 +332,7 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->createPageBuilder(),
             $this->getMasterFactory()->getSnippetKeyGeneratorLocator(),
             $this->getMasterFactory()->getProductSearchResultsFilterNavigationConfig(),
-            $this->getDefaultNumberOfProductsPerPageConfig(),
+            $this->getAvailableNumbersOfProductsPerPageConfig(),
             $this->getMasterFactory()->createSearchCriteriaBuilder(),
             $this->getMasterFactory()->getSearchableAttributeCodes()
         );

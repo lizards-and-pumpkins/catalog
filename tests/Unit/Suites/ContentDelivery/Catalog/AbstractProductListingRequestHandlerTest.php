@@ -27,9 +27,9 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
     private $mockPageBuilder;
 
     /**
-     * @var int
+     * @var int[]
      */
-    private $testDefaultNumberOfProductsPerPage = 1;
+    private $testAvailableNumberOfProductsPerPage = [1];
 
     /**
      * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
@@ -131,7 +131,7 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
      * @param PageBuilder $pageBuilder
      * @param SnippetKeyGeneratorLocator $snippetKeyGeneratorLocator
      * @param array[] $filterNavigationConfig
-     * @param int $defaultNumberOfProductsPerPage
+     * @param int[] $availableNumbersOfProductsPerPage
      * @return HttpRequestHandler
      */
     abstract protected function createRequestHandler(
@@ -140,7 +140,7 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
         PageBuilder $pageBuilder,
         SnippetKeyGeneratorLocator $snippetKeyGeneratorLocator,
         array $filterNavigationConfig,
-        $defaultNumberOfProductsPerPage
+        array $availableNumbersOfProductsPerPage
     );
 
     /**
@@ -175,7 +175,7 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
             $this->mockPageBuilder,
             $stubSnippetKeyGeneratorLocator,
             $testFilterNavigationConfig,
-            $this->testDefaultNumberOfProductsPerPage
+            $this->testAvailableNumberOfProductsPerPage
         );
 
         $this->stubRequest = $this->createStubRequest();
@@ -186,7 +186,7 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
         $this->assertInstanceOf(HttpRequestHandler::class, $this->requestHandler);
     }
 
-    public function testNumberOfProductsPerPageSnippetWithDefaultNumberOfProductsPerPageIsAddedToPageBuilder()
+    public function testNumberOfProductsPerPageSnippetWithFirstAvailableNumberOfProductsPerPageIsAddedToPageBuilder()
     {
         $snippetCode = 'products_per_page';
         $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
@@ -197,7 +197,7 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
         $this->assertDynamicSnippetWasAddedToPageBuilder(
             $addSnippetsToPageSpy,
             $snippetCode,
-            $this->testDefaultNumberOfProductsPerPage
+            $this->testAvailableNumberOfProductsPerPage[0]
         );
     }
 
@@ -274,7 +274,7 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
         $this->assertDynamicSnippetWithAnyValueWasAddedToPageBuilder($addSnippetsToPageSpy, $snippetCode);
     }
 
-    public function testDefaultNumberOfProductsPerPageIsRequestedFromDataPool()
+    public function testFirstAvailableNumberOfProductsPerPageIsRequestedFromDataPool()
     {
         $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
 
@@ -284,7 +284,7 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
         $this->requestHandler->process($this->stubRequest);
 
         array_map(function (\PHPUnit_Framework_MockObject_Invocation_Static $invocation) {
-            $this->assertSame($this->testDefaultNumberOfProductsPerPage, $invocation->parameters[4]);
+            $this->assertSame($this->testAvailableNumberOfProductsPerPage[0], $invocation->parameters[4]);
         }, $spy->getInvocations());
     }
 

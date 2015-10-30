@@ -42,7 +42,7 @@ class ProductListingRequestHandlerTest extends AbstractProductListingRequestHand
 
         $stubSnippetKeyGeneratorLocator = $this->createStubSnippetKeyGeneratorLocator();
         $testFilterNavigationConfig = [];
-        $testDefaultNumberOfProductsPerPage = 1;
+        $testAvailableNumbersOfProductsPerPage = [1];
 
         return $this->createRequestHandler(
             $stubContext,
@@ -50,7 +50,7 @@ class ProductListingRequestHandlerTest extends AbstractProductListingRequestHand
             $stubPageBuilder,
             $stubSnippetKeyGeneratorLocator,
             $testFilterNavigationConfig,
-            $testDefaultNumberOfProductsPerPage
+            $testAvailableNumbersOfProductsPerPage
         );
     }
 
@@ -63,7 +63,7 @@ class ProductListingRequestHandlerTest extends AbstractProductListingRequestHand
         PageBuilder $pageBuilder,
         SnippetKeyGeneratorLocator $snippetKeyGeneratorLocator,
         array $filterNavigationConfig,
-        $defaultNumberOfProductsPerPage
+        array $availableNumbersOfProductsPerPage
     ) {
         return new ProductListingRequestHandler(
             $context,
@@ -71,7 +71,7 @@ class ProductListingRequestHandlerTest extends AbstractProductListingRequestHand
             $pageBuilder,
             $snippetKeyGeneratorLocator,
             $filterNavigationConfig,
-            $defaultNumberOfProductsPerPage
+            $availableNumbersOfProductsPerPage
         );
     }
 

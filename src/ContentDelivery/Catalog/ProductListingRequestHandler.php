@@ -28,7 +28,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
      * @param PageBuilder $pageBuilder
      * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
      * @param string[] $filterNavigationConfig
-     * @param int $defaultNumberOfProductsPerPage
+     * @param int[] $defaultNumberOfProductsPerPage
      */
     public function __construct(
         Context $context,
@@ -36,7 +36,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         PageBuilder $pageBuilder,
         SnippetKeyGeneratorLocator $keyGeneratorLocator,
         array $filterNavigationConfig,
-        $defaultNumberOfProductsPerPage
+        array $defaultNumberOfProductsPerPage
     ) {
         $this->dataPoolReader = $dataPoolReader;
         $this->context = $context;

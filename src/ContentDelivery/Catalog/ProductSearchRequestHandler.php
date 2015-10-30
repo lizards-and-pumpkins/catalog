@@ -34,7 +34,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
      * @param PageBuilder $pageBuilder
      * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
      * @param string[] $filterNavigationConfig
-     * @param int $defaultNumberOfProductsPerPage
+     * @param int[] $defaultNumberOfProductsPerPage
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param string[] $searchableAttributeCodes
      */
@@ -44,7 +44,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         PageBuilder $pageBuilder,
         SnippetKeyGeneratorLocator $keyGeneratorLocator,
         array $filterNavigationConfig,
-        $defaultNumberOfProductsPerPage,
+        array $defaultNumberOfProductsPerPage,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         array $searchableAttributeCodes
     ) {
