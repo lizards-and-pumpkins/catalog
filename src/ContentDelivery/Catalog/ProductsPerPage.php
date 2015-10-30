@@ -28,16 +28,16 @@ class ProductsPerPage
     }
 
     /**
-     * @param mixed[] $numbersOfProducstPerPage
+     * @param mixed[] $numbersOfProductsPerPage
      * @param mixed $selectedNumberOfProductsPerPage
      * @return ProductsPerPage
      */
-    public static function create(array $numbersOfProducstPerPage, $selectedNumberOfProductsPerPage)
+    public static function create(array $numbersOfProductsPerPage, $selectedNumberOfProductsPerPage)
     {
-        self::validateNumbersOfProductsPerPage($numbersOfProducstPerPage);
-        self::validateSelectedNumberOfProductsPerPage($numbersOfProducstPerPage, $selectedNumberOfProductsPerPage);
+        self::validateNumbersOfProductsPerPage($numbersOfProductsPerPage);
+        self::validateSelectedNumberOfProductsPerPage($numbersOfProductsPerPage, $selectedNumberOfProductsPerPage);
 
-        return new self($numbersOfProducstPerPage, $selectedNumberOfProductsPerPage);
+        return new self($numbersOfProductsPerPage, $selectedNumberOfProductsPerPage);
     }
 
     /**

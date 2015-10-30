@@ -46,9 +46,9 @@ trait ProductListingRequestHandlerTrait
     private $filterNavigationConfig;
 
     /**
-     * @var int
+     * @var ProductsPerPage
      */
-    private $defaultNumberOfProductsPerPage;
+    private $productsPerPage;
 
     /**
      * @var SearchCriteriaBuilder
@@ -64,8 +64,10 @@ trait ProductListingRequestHandlerTrait
         return max(0, $request->getQueryParameter($this->paginationQueryParameterName) - 1);
     }
 
-    private function addProductListingContentToPage(SearchEngineResponse $searchEngineResponse, HttpRequest $request)
-    {
+    private function addProductListingContentToPage(
+        SearchEngineResponse $searchEngineResponse,
+        ProductsPerPage $productsPerPage
+    ) {
         $searchDocumentCollection = $searchEngineResponse->getSearchDocuments();
 
         if (0 === count($searchDocumentCollection)) {
@@ -76,7 +78,7 @@ trait ProductListingRequestHandlerTrait
 
         $this->addFilterNavigationSnippetToPageBuilder($facetFieldCollection);
         $this->addProductsInListingToPageBuilder($searchDocumentCollection);
-        $this->addPaginationSnippetsToPageBuilder($searchEngineResponse, $request);
+        $this->addPaginationSnippetsToPageBuilder($searchEngineResponse, $productsPerPage);
     }
 
     private function addProductsInListingToPageBuilder(SearchDocumentCollection $searchDocumentCollection)
@@ -163,13 +165,16 @@ trait ProductListingRequestHandlerTrait
 
     private function addPaginationSnippetsToPageBuilder(
         SearchEngineResponse $searchEngineResponse,
-        HttpRequest $request
+        ProductsPerPage $productsPerPage
     ) {
         $this->addDynamicSnippetToPageBuilder(
             'total_number_of_results',
             $searchEngineResponse->getTotalNumberOfResults()
         );
-        $this->addDynamicSnippetToPageBuilder('products_per_page', $this->getNumberOfProductsPerPage($request));
+        $this->addDynamicSnippetToPageBuilder(
+            'products_per_page',
+            $productsPerPage->getSelectedNumberOfProductsPerPage()
+        );
     }
 
     /**
@@ -198,14 +203,16 @@ trait ProductListingRequestHandlerTrait
 
     /**
      * @param HttpRequest $request
-     * @return int
+     * @return ProductsPerPage
      */
-    private function getNumberOfProductsPerPage(HttpRequest $request)
+    private function getProductsPerPage(HttpRequest $request)
     {
         if ($request->hasCookie(ProductListingRequestHandler::PRODUCTS_PER_PAGE_COOKIE_NAME) === true) {
-            return (int) $request->getCookieValue(ProductListingRequestHandler::PRODUCTS_PER_PAGE_COOKIE_NAME);
+            $numbersOfProductsPerPage = $this->productsPerPage->getNumbersOfProductsPerPage();
+            $selected = $request->getCookieValue(ProductListingRequestHandler::PRODUCTS_PER_PAGE_COOKIE_NAME);
+            return ProductsPerPage::create($numbersOfProductsPerPage, $selected);
         }
 
-        return (int) $this->defaultNumberOfProductsPerPage;
+        return $this->productsPerPage;
     }
 }

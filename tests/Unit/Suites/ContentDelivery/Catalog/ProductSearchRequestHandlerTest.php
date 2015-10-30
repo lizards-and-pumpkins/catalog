@@ -38,7 +38,10 @@ class ProductSearchRequestHandlerTest extends AbstractProductListingRequestHandl
 
         $stubSnippetKeyGeneratorLocator = $this->createStubSnippetKeyGeneratorLocator();
         $testFilterNavigationConfig = [];
-        $testAvailableNumbersOfProductsPerPage = [1];
+
+        /** @var ProductsPerPage|\PHPUnit_Framework_MockObject_MockObject $stubProductsPerPage */
+        $stubProductsPerPage = $this->getMock(ProductsPerPage::class, [], [], '', false);;
+
         $stubDataPoolReader = $this->createStubDataPoolReader();
 
         return $this->createRequestHandler(
@@ -47,7 +50,7 @@ class ProductSearchRequestHandlerTest extends AbstractProductListingRequestHandl
             $stubPageBuilder,
             $stubSnippetKeyGeneratorLocator,
             $testFilterNavigationConfig,
-            $testAvailableNumbersOfProductsPerPage
+            $stubProductsPerPage
         );
     }
 
@@ -60,7 +63,7 @@ class ProductSearchRequestHandlerTest extends AbstractProductListingRequestHandl
         PageBuilder $pageBuilder,
         SnippetKeyGeneratorLocator $snippetKeyGeneratorLocator,
         array $filterNavigationConfig,
-        array $availableNumbersOfProductsPerPage
+        ProductsPerPage $productsPerPage
     ) {
         $stubCriteria = $this->getMock(SearchCriteria::class);
 
@@ -76,7 +79,7 @@ class ProductSearchRequestHandlerTest extends AbstractProductListingRequestHandl
             $pageBuilder,
             $snippetKeyGeneratorLocator,
             $filterNavigationConfig,
-            $availableNumbersOfProductsPerPage,
+            $productsPerPage,
             $stubSearchCriteriaBuilder,
             $testSearchableAttributeCodes
         );

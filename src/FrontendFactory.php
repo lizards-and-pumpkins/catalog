@@ -9,6 +9,7 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\ProductDetailViewRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchAutosuggestionRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchRequestHandler;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\PricesJsonSnippetTransformation;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\SimpleEuroPriceSnippetTransformation;
 use LizardsAndPumpkins\Context\ContextBuilder;
@@ -187,16 +188,19 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->createPageBuilder(),
             $this->getMasterFactory()->getSnippetKeyGeneratorLocator(),
             $this->getMasterFactory()->getProductListingFilterNavigationConfig(),
-            $this->getAvailableNumbersOfProductsPerPageConfig()
+            $this->getProductsPerPageConfig()
         );
     }
 
     /**
-     * @return int[]
+     * @return ProductsPerPage
      */
-    private function getAvailableNumbersOfProductsPerPageConfig()
+    private function getProductsPerPageConfig()
     {
-        return [9, 12, 18];
+        $numbersOfProductsPerPage = [9, 12, 18];
+        $selectedNumberOfProductsPerPage = 9;
+
+        return new ProductsPerPage($numbersOfProductsPerPage, $selectedNumberOfProductsPerPage);
     }
 
     /**
@@ -332,7 +336,7 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->createPageBuilder(),
             $this->getMasterFactory()->getSnippetKeyGeneratorLocator(),
             $this->getMasterFactory()->getProductSearchResultsFilterNavigationConfig(),
-            $this->getAvailableNumbersOfProductsPerPageConfig(),
+            $this->getProductsPerPageConfig(),
             $this->getMasterFactory()->createSearchCriteriaBuilder(),
             $this->getMasterFactory()->getSearchableAttributeCodes()
         );

@@ -34,7 +34,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
      * @param PageBuilder $pageBuilder
      * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
      * @param string[] $filterNavigationConfig
-     * @param int[] $defaultNumberOfProductsPerPage
+     * @param ProductsPerPage $productsPerPage
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param string[] $searchableAttributeCodes
      */
@@ -44,7 +44,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         PageBuilder $pageBuilder,
         SnippetKeyGeneratorLocator $keyGeneratorLocator,
         array $filterNavigationConfig,
-        array $defaultNumberOfProductsPerPage,
+        ProductsPerPage $productsPerPage,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         array $searchableAttributeCodes
     ) {
@@ -53,7 +53,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         $this->pageBuilder = $pageBuilder;
         $this->keyGeneratorLocator = $keyGeneratorLocator;
         $this->filterNavigationConfig = $filterNavigationConfig;
-        $this->defaultNumberOfProductsPerPage = $defaultNumberOfProductsPerPage;
+        $this->productsPerPage = $productsPerPage;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->searchableAttributeCodes = $searchableAttributeCodes;
     }
@@ -77,8 +77,9 @@ class ProductSearchRequestHandler implements HttpRequestHandler
             throw new UnableToHandleRequestException(sprintf('Unable to process request with handler %s', __CLASS__));
         }
 
+        $productsPerPage = $this->getProductsPerPage($request);
         $searchEngineResponse = $this->getSearchResultsMatchingCriteria($request);
-        $this->addProductListingContentToPage($searchEngineResponse, $request);
+        $this->addProductListingContentToPage($searchEngineResponse, $productsPerPage);
 
         $metaInfoSnippetKeyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
             ProductSearchResultMetaSnippetRenderer::CODE
@@ -130,7 +131,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
             $this->searchableAttributeCodes,
             $queryString
         );
-        $productsPerPage = $this->getNumberOfProductsPerPage($request);
+        $productsPerPage = $this->getProductsPerPage($request);
         $currentPageNumber = $this->getCurrentPageNumber($request);
 
         return $this->dataPoolReader->getSearchResultsMatchingCriteria(
@@ -138,7 +139,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
             $selectedFilters,
             $this->context,
             $this->filterNavigationConfig,
-            $productsPerPage,
+            $productsPerPage->getSelectedNumberOfProductsPerPage(),
             $currentPageNumber
         );
     }

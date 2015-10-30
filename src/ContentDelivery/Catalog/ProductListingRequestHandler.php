@@ -28,7 +28,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
      * @param PageBuilder $pageBuilder
      * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
      * @param string[] $filterNavigationConfig
-     * @param int[] $defaultNumberOfProductsPerPage
+     * @param ProductsPerPage $productsPerPage
      */
     public function __construct(
         Context $context,
@@ -36,14 +36,14 @@ class ProductListingRequestHandler implements HttpRequestHandler
         PageBuilder $pageBuilder,
         SnippetKeyGeneratorLocator $keyGeneratorLocator,
         array $filterNavigationConfig,
-        array $defaultNumberOfProductsPerPage
+        ProductsPerPage $productsPerPage
     ) {
         $this->dataPoolReader = $dataPoolReader;
         $this->context = $context;
         $this->pageBuilder = $pageBuilder;
         $this->keyGeneratorLocator = $keyGeneratorLocator;
         $this->filterNavigationConfig = $filterNavigationConfig;
-        $this->defaultNumberOfProductsPerPage = $defaultNumberOfProductsPerPage;
+        $this->productsPerPage = $productsPerPage;
     }
 
     /**
@@ -70,8 +70,9 @@ class ProductListingRequestHandler implements HttpRequestHandler
             throw new UnableToHandleRequestException(sprintf('Unable to process request with handler %s', __CLASS__));
         }
 
-        $searchEngineResponse = $this->getSearchResultsMatchingCriteria($request);
-        $this->addProductListingContentToPage($searchEngineResponse, $request);
+        $productsPerPage = $this->getProductsPerPage($request);
+        $searchEngineResponse = $this->getSearchResultsMatchingCriteria($request, $productsPerPage);
+        $this->addProductListingContentToPage($searchEngineResponse, $productsPerPage);
 
         $metaInfo = $this->getPageMetaInfoSnippet($request);
         $keyGeneratorParams = [
@@ -115,13 +116,13 @@ class ProductListingRequestHandler implements HttpRequestHandler
 
     /**
      * @param HttpRequest $request
+     * @param ProductsPerPage $productsPerPage
      * @return SearchEngineResponse
      */
-    private function getSearchResultsMatchingCriteria(HttpRequest $request)
+    private function getSearchResultsMatchingCriteria(HttpRequest $request, ProductsPerPage $productsPerPage)
     {
         $criteria = $this->getPageMetaInfoSnippet($request)->getSelectionCriteria();
         $selectedFilters = $this->getSelectedFilterValuesFromRequest($request);
-        $productsPerPage = $this->getNumberOfProductsPerPage($request);
         $currentPageNumber = $this->getCurrentPageNumber($request);
 
         return $this->dataPoolReader->getSearchResultsMatchingCriteria(
@@ -129,7 +130,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
             $selectedFilters,
             $this->context,
             $this->filterNavigationConfig,
-            $productsPerPage,
+            $productsPerPage->getSelectedNumberOfProductsPerPage(),
             $currentPageNumber
         );
     }
