@@ -11,15 +11,37 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\Exception\InvalidSelectedNumberOf
 class ProductsPerPageTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var int[]
+     */
+    private $numbersOfProductsPerPage = [10, 20, 30];
+
+    /**
+     * @var int
+     */
+    private $selectedNumberOfProductsPerPage = 20;
+
+    /**
+     * @var ProductsPerPage
+     */
+    private $productsPerPage;
+
+    protected function setUp()
+    {
+        $this->productsPerPage = ProductsPerPage::create(
+            $this->numbersOfProductsPerPage,
+            $this->selectedNumberOfProductsPerPage
+        );
+    }
+
+    /**
      * @dataProvider invalidNumbersOfProductsPerPageDataProvider
      * @param mixed[] $invalidNumbersOfProductsPerPage
      */
     public function testExceptionIsThrownIfNumbersOfProductsPerPageIsNotArrayOfIntegers(
         array $invalidNumbersOfProductsPerPage
     ) {
-        $selectedNumberOfProductsPerPage = 1;
         $this->setExpectedException(InvalidNumberOfProductsPerPageException::class);
-        ProductsPerPage::create($invalidNumbersOfProductsPerPage, $selectedNumberOfProductsPerPage);
+        ProductsPerPage::create($invalidNumbersOfProductsPerPage, $this->selectedNumberOfProductsPerPage);
     }
 
     public function invalidNumbersOfProductsPerPageDataProvider()
@@ -33,37 +55,44 @@ class ProductsPerPageTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfSelectedNumberOfProductsIsNotInteger()
     {
-        $numbersOfProductsPrePage = [1, 2, 3];
         $invalidSelectedNumberOfProductsPerPage = '1';
         $this->setExpectedException(InvalidSelectedNumberOfProductsPerPageException::class);
-        ProductsPerPage::create($numbersOfProductsPrePage, $invalidSelectedNumberOfProductsPerPage);
+        ProductsPerPage::create($this->numbersOfProductsPerPage, $invalidSelectedNumberOfProductsPerPage);
     }
 
     public function testExceptionIsThrownIfSelectedNUmberOfProductsPerPageIsAbsentInTheList()
     {
-        $numbersOfProductsPrePage = [1, 2, 3];
         $selectedNumberOfProductsPerPage = 4;
         $this->setExpectedException(InvalidSelectedNumberOfProductsPerPageException::class);
-        ProductsPerPage::create($numbersOfProductsPrePage, $selectedNumberOfProductsPerPage);
+        ProductsPerPage::create($this->numbersOfProductsPerPage, $selectedNumberOfProductsPerPage);
     }
 
     public function testNumbersOfProductsPerPageIsReturn()
     {
-        $numbersOfProductsPrePage = [10, 20, 30];
-        $selectedNumberOfProductsPerPage = 20;
-
-        $productPerPage = ProductsPerPage::create($numbersOfProductsPrePage, $selectedNumberOfProductsPerPage);
-
-        $this->assertSame($numbersOfProductsPrePage, $productPerPage->getNumbersOfProductsPerPage());
+        $result = $this->productsPerPage->getNumbersOfProductsPerPage();
+        $this->assertSame($this->numbersOfProductsPerPage, $result);
     }
 
     public function testSelectedNumberOfProductsPerPageIsReturned()
     {
-        $numbersOfProductsPrePage = [10, 20, 30];
-        $selectedNumberOfProductsPerPage = 20;
+        $result = $this->productsPerPage->getSelectedNumberOfProductsPerPage();
+        $this->assertSame($this->selectedNumberOfProductsPerPage, $result);
+    }
 
-        $productPerPage = ProductsPerPage::create($numbersOfProductsPrePage, $selectedNumberOfProductsPerPage);
+    public function testJsonSerializeInterfaceIsImplement()
+    {
+        $this->assertInstanceOf(\JsonSerializable::class, $this->productsPerPage);
+    }
 
-        $this->assertSame($selectedNumberOfProductsPerPage, $productPerPage->getSelectedNumberOfProductsPerPage());
+    public function testArrayRepresentationOfProductsPerPageIsReturned()
+    {
+        $expectedArray = array_map(function ($numberOfProductsPerPage) {
+            return [
+                'number' => $numberOfProductsPerPage,
+                'selected' => $numberOfProductsPerPage === $this->selectedNumberOfProductsPerPage
+            ];
+        }, $this->numbersOfProductsPerPage);
+
+        $this->assertSame($expectedArray, $this->productsPerPage->jsonSerialize());
     }
 }

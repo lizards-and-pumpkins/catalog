@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 use LizardsAndPumpkins\ContentDelivery\Catalog\Exception\InvalidNumberOfProductsPerPageException;
 use LizardsAndPumpkins\ContentDelivery\Catalog\Exception\InvalidSelectedNumberOfProductsPerPageException;
 
-class ProductsPerPage
+class ProductsPerPage implements \JsonSerializable
 {
     /**
      * @var int[]
@@ -94,5 +94,15 @@ class ProductsPerPage
                 'Selected number of products per page is not from the list of available numbers of products per page.'
             );
         }
+    }
+
+    public function jsonSerialize()
+    {
+        return array_map(function ($numberOfProductsPerPage) {
+            return [
+                'number' => $numberOfProductsPerPage,
+                'selected' => $numberOfProductsPerPage === $this->selectedNumberOfProductsPerPage
+            ];
+        }, $this->numbersOfProductsPerPage);
     }
 }
