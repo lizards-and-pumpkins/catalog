@@ -204,12 +204,43 @@ trait ProductListingRequestHandlerTrait
      */
     private function getProductsPerPage(HttpRequest $request)
     {
+        $productsPerPageQueryStringValue = $this->getProductsPerPageQueryStringValue($request);
+        if (null !== $productsPerPageQueryStringValue) {
+            $numbersOfProductsPerPage = $this->productsPerPage->getNumbersOfProductsPerPage();
+            return ProductsPerPage::create($numbersOfProductsPerPage, (int) $productsPerPageQueryStringValue);
+        }
+
         if ($request->hasCookie(ProductListingRequestHandler::PRODUCTS_PER_PAGE_COOKIE_NAME) === true) {
             $numbersOfProductsPerPage = $this->productsPerPage->getNumbersOfProductsPerPage();
-            $selected = $request->getCookieValue(ProductListingRequestHandler::PRODUCTS_PER_PAGE_COOKIE_NAME);
+            $selected = (int) $request->getCookieValue(ProductListingRequestHandler::PRODUCTS_PER_PAGE_COOKIE_NAME);
             return ProductsPerPage::create($numbersOfProductsPerPage, $selected);
         }
 
         return $this->productsPerPage;
+    }
+
+    /**
+     * @param HttpRequest $request
+     */
+    private function processCookies(HttpRequest $request)
+    {
+        $productsPerPage = $this->getProductsPerPageQueryStringValue($request);
+
+        if (null !== $productsPerPage) {
+            setcookie(
+                ProductListingRequestHandler::PRODUCTS_PER_PAGE_COOKIE_NAME,
+                $productsPerPage,
+                time() + ProductListingRequestHandler::PRODUCTS_PER_PAGE_COOKIE_TTL
+            );
+        }
+    }
+
+    /**
+     * @param HttpRequest $request
+     * @return string
+     */
+    private function getProductsPerPageQueryStringValue(HttpRequest $request)
+    {
+        return $request->getQueryParameter(ProductListingRequestHandler::PRODUCTS_PER_PAGE_QUERY_PARAMETER_NAME);
     }
 }

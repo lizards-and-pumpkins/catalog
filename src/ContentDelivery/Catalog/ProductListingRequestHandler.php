@@ -21,6 +21,8 @@ class ProductListingRequestHandler implements HttpRequestHandler
     use ProductListingRequestHandlerTrait;
 
     const PRODUCTS_PER_PAGE_COOKIE_NAME = 'products_per_page';
+    const PRODUCTS_PER_PAGE_COOKIE_TTL = 3600 * 24 * 30;
+    const PRODUCTS_PER_PAGE_QUERY_PARAMETER_NAME = 'limit';
 
     /**
      * @param Context $context
@@ -69,6 +71,8 @@ class ProductListingRequestHandler implements HttpRequestHandler
         if (!$this->canProcess($request)) {
             throw new UnableToHandleRequestException(sprintf('Unable to process request with handler %s', __CLASS__));
         }
+
+        $this->processCookies($request);
 
         $productsPerPage = $this->getProductsPerPage($request);
         $searchEngineResponse = $this->getSearchResultsMatchingCriteria($request, $productsPerPage);

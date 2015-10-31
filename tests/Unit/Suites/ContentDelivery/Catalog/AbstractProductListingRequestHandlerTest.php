@@ -126,6 +126,17 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
     }
 
     /**
+     * @param int $productsPerPage
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedRecorder $spy
+     */
+    private function assertGivenNumberOfProductsPerPageWasRequestedFromDataPool($productsPerPage, $spy)
+    {
+        array_map(function (\PHPUnit_Framework_MockObject_Invocation_Static $invocation) use ($productsPerPage) {
+            $this->assertSame($productsPerPage, $invocation->parameters[4]);
+        }, $spy->getInvocations());
+    }
+
+    /**
      * @param Context $context
      * @param DataPoolReader $dataPoolReader
      * @param PageBuilder $pageBuilder
@@ -291,9 +302,10 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
 
         $this->requestHandler->process($this->stubRequest);
 
-        array_map(function (\PHPUnit_Framework_MockObject_Invocation_Static $invocation) {
-            $this->assertSame($this->testDefaultNumberOfProductsPerPage, $invocation->parameters[4]);
-        }, $spy->getInvocations());
+        $this->assertGivenNumberOfProductsPerPageWasRequestedFromDataPool(
+            $this->testDefaultNumberOfProductsPerPage,
+            $spy
+        );
     }
 
     public function testNumberOfProductsPerPageStoredInCookieIsRequestedFromDataPool()
@@ -312,8 +324,66 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
 
         $this->requestHandler->process($this->stubRequest);
 
-        array_map(function (\PHPUnit_Framework_MockObject_Invocation_Static $invocation) use ($productsPerPage) {
-            $this->assertSame($productsPerPage, $invocation->parameters[4]);
-        }, $spy->getInvocations());
+        $this->assertGivenNumberOfProductsPerPageWasRequestedFromDataPool($productsPerPage, $spy);
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testNumberOfProductsPerPageFromQueryStringIsRequestedFromDataPool()
+    {
+        $productsPerPage = 3;
+
+        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubHttpRequest */
+        $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+        $stubHttpRequest->method('getUrlPathRelativeToWebFront')
+            ->willReturn(ProductSearchRequestHandler::SEARCH_RESULTS_SLUG);
+        $stubHttpRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
+        $stubHttpRequest->method('getQueryParameter')->willReturnMap([
+            [ProductListingRequestHandler::PRODUCTS_PER_PAGE_QUERY_PARAMETER_NAME, $productsPerPage],
+            [ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME, 'whatever'],
+        ]);
+
+        $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
+
+        $spy = $this->any();
+        $this->mockDataPoolReader->expects($spy)->method('getSearchResultsMatchingCriteria');
+
+        $this->requestHandler->process($stubHttpRequest);
+
+        $this->assertGivenNumberOfProductsPerPageWasRequestedFromDataPool($productsPerPage, $spy);
+    }
+
+    /**
+     * @runInSeparateProcess
+     * @requires extension xdebug
+     */
+    public function testProductsPrePageCookieIsSetIfCorrespondingParameterIsPresentInRequest()
+    {
+        $selectedNumberOfProductsPerPage = 2;
+
+        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubHttpRequest */
+        $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+        $stubHttpRequest->method('getUrlPathRelativeToWebFront')
+            ->willReturn(ProductSearchRequestHandler::SEARCH_RESULTS_SLUG);
+        $stubHttpRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
+        $stubHttpRequest->method('getQueryParameter')->willReturnMap([
+            [ProductListingRequestHandler::PRODUCTS_PER_PAGE_QUERY_PARAMETER_NAME, $selectedNumberOfProductsPerPage],
+            [ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME, 'whatever'],
+        ]);
+
+        $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
+        $this->requestHandler->process($stubHttpRequest);
+
+        $headers = xdebug_get_headers();
+        $expectedCookie = sprintf(
+            'Set-Cookie: %s=%s; expires=%s; Max-Age=%s',
+            ProductListingRequestHandler::PRODUCTS_PER_PAGE_COOKIE_NAME,
+            $selectedNumberOfProductsPerPage,
+            gmdate('D, d-M-Y H:i:s T', time() + ProductListingRequestHandler::PRODUCTS_PER_PAGE_COOKIE_TTL),
+            ProductListingRequestHandler::PRODUCTS_PER_PAGE_COOKIE_TTL
+        );
+
+        $this->assertContains($expectedCookie, $headers);
     }
 }

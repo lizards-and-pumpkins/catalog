@@ -77,6 +77,8 @@ class ProductSearchRequestHandler implements HttpRequestHandler
             throw new UnableToHandleRequestException(sprintf('Unable to process request with handler %s', __CLASS__));
         }
 
+        $this->processCookies($request);
+
         $productsPerPage = $this->getProductsPerPage($request);
         $searchEngineResponse = $this->getSearchResultsMatchingCriteria($request);
         $this->addProductListingContentToPage($searchEngineResponse, $productsPerPage);
