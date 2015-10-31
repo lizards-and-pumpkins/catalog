@@ -16,6 +16,7 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
 /**
  * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler
  * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandlerTrait
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage
  * @uses   \LizardsAndPumpkins\Product\ProductId
  * @uses   \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetContent
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion

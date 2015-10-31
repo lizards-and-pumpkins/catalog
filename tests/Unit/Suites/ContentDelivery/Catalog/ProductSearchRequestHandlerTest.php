@@ -16,6 +16,7 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
 /**
  * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchRequestHandler
  * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandlerTrait
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage
  * @uses   \LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetContent
  */
 class ProductSearchRequestHandlerTest extends AbstractProductListingRequestHandlerTest
