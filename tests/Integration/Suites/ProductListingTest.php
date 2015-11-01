@@ -91,14 +91,24 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
                 if (isset($messageContext['exception'])) {
                     /** @var \Exception $exception */
                     $exception = $messageContext['exception'];
-                    return (string) $logMessage . ' ' . $exception->getFile() . ':' . $exception->getLine();
+                    return (string)$logMessage . ' ' . $exception->getFile() . ':' . $exception->getLine();
                 }
-                return (string) $logMessage;
+                return (string)$logMessage;
             }, $messages);
             $failMessageString = implode(PHP_EOL, $failMessages);
 
             $this->fail($failMessageString);
         }
+    }
+
+    /**
+     * @param string $html
+     * @return mixed[]
+     */
+    private function extractProductListingJsonFromPageHtml($html)
+    {
+        $productListingJsonString = preg_replace('/.*var productListingJson = |,\n\s*productPrices.*/ism', '', $html);
+        return json_decode($productListingJsonString, true);
     }
 
     public function testProductListingCriteriaSnippetIsWrittenIntoDataPool()
@@ -173,7 +183,7 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-        
+
         $this->registerContentBlockInProductListingSnippetKeyGenerator();
 
         $productListingRequestHandler = $this->getProductListingRequestHandler();
@@ -209,6 +219,8 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
 
         $_COOKIE = $originalState;
 
-        $this->assertSame($numberOfProductsPerPage, substr_count($body, '{"product_id":"'));
+        $productListingJson = $this->extractProductListingJsonFromPageHtml($body);
+
+        $this->assertCount($numberOfProductsPerPage, $productListingJson);
     }
 }
