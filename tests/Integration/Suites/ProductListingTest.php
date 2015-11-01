@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
 use LizardsAndPumpkins\Http\HttpHeaders;
@@ -132,7 +133,6 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
     {
         $this->importCatalog();
         $this->createProductListingFixture();
-
         $this->registerProductListingSnippetKeyGenerator();
 
         $request = HttpRequest::fromParameters(
@@ -181,5 +181,34 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
         $body = $page->getBody();
 
         $this->assertContains($contentBlockContent, $body);
+    }
+
+    public function testSpecifiedNumberOfProductIsRetured()
+    {
+        $numberOfProductsPerPage = 12;
+
+        $originalState = $_COOKIE;
+        $_COOKIE[ProductListingRequestHandler::PRODUCTS_PER_PAGE_COOKIE_NAME] = $numberOfProductsPerPage;
+
+        $this->importCatalog();
+        $this->createProductListingFixture();
+        $this->registerProductListingSnippetKeyGenerator();
+
+        $request = HttpRequest::fromParameters(
+            HttpRequest::METHOD_GET,
+            HttpUrl::fromString($this->testUrl),
+            HttpHeaders::fromArray([]),
+            HttpRequestBody::fromString('')
+        );
+
+        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+
+        $productListingRequestHandler = $this->getProductListingRequestHandler();
+        $page = $productListingRequestHandler->process($request);
+        $body = $page->getBody();
+
+        $_COOKIE = $originalState;
+
+        $this->assertSame($numberOfProductsPerPage, substr_count($body, '{"product_id":"'));
     }
 }
