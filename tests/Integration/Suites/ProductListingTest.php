@@ -183,7 +183,7 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
         $this->assertContains($contentBlockContent, $body);
     }
 
-    public function testSpecifiedNumberOfProductIsRetured()
+    public function testSpecifiedNumberOfProductIsReturned()
     {
         $numberOfProductsPerPage = 12;
 
