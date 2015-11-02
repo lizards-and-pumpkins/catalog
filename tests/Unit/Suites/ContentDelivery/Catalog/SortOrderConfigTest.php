@@ -11,11 +11,6 @@ use LizardsAndPumpkins\Product\AttributeCode;
 class SortOrderConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var SortOrderConfig
-     */
-    private $sortOrderConfig;
-
-    /**
      * @var AttributeCode|\PHPUnit_Framework_MockObject_MockObject $stubAttributeCode
      */
     private $stubAttributeCode;
@@ -28,7 +23,6 @@ class SortOrderConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
-        $this->sortOrderConfig = SortOrderConfig::create($this->stubAttributeCode, $this->testSelectedDirection);
     }
 
     public function testExceptionIsThrownIfInvalidSelectedSortingDirectionsIsSpecified()
@@ -38,13 +32,21 @@ class SortOrderConfigTest extends \PHPUnit_Framework_TestCase
         SortOrderConfig::create($this->stubAttributeCode, $selectedDirection);
     }
 
-    public function testAttributeCodeIsReturned()
+    public function testUnselectedSortOrderConfigCanBeCreated()
     {
-        $this->assertSame($this->stubAttributeCode, $this->sortOrderConfig->getAttributeCode());
+        $sortOrderConfig = SortOrderConfig::create($this->stubAttributeCode, $this->testSelectedDirection);
+
+        $this->assertSame($this->stubAttributeCode, $sortOrderConfig->getAttributeCode());
+        $this->assertSame($this->testSelectedDirection, $sortOrderConfig->getSelectedDirection());
+        $this->assertFalse($sortOrderConfig->isSelected());
     }
 
-    public function testSelectedDirectionIsReturned()
+    public function testSelectedSortOrderConfigCanBeCreated()
     {
-        $this->assertSame($this->testSelectedDirection, $this->sortOrderConfig->getSelectedDirection());
+        $sortOrderConfig = SortOrderConfig::createSelected($this->stubAttributeCode, $this->testSelectedDirection);
+
+        $this->assertSame($this->stubAttributeCode, $sortOrderConfig->getAttributeCode());
+        $this->assertSame($this->testSelectedDirection, $sortOrderConfig->getSelectedDirection());
+        $this->assertTrue($sortOrderConfig->isSelected());
     }
 }

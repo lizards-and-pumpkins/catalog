@@ -19,13 +19,20 @@ class SortOrderConfig
     private $selectedDirection;
 
     /**
+     * @var bool
+     */
+    private $isSelected;
+
+    /**
      * @param AttributeCode $attributeCode
      * @param string $selectedDirection
+     * @param bool $isSelected
      */
-    public function __construct(AttributeCode $attributeCode, $selectedDirection)
+    public function __construct(AttributeCode $attributeCode, $selectedDirection, $isSelected)
     {
         $this->attributeCode = $attributeCode;
         $this->selectedDirection = $selectedDirection;
+        $this->isSelected = $isSelected;
     }
 
     /**
@@ -36,7 +43,18 @@ class SortOrderConfig
     public static function create(AttributeCode $attributeCode, $selectedDirection)
     {
         self::validateSortingDirections($attributeCode, $selectedDirection);
-        return new self($attributeCode, $selectedDirection);
+        return new self($attributeCode, $selectedDirection, false);
+    }
+
+    /**
+     * @param AttributeCode $attributeCode
+     * @param string $selectedDirection
+     * @return SortOrderConfig
+     */
+    public static function createSelected(AttributeCode $attributeCode, $selectedDirection)
+    {
+        self::validateSortingDirections($attributeCode, $selectedDirection);
+        return new self($attributeCode, $selectedDirection, true);
     }
 
     /**
@@ -68,5 +86,13 @@ class SortOrderConfig
     public function getSelectedDirection()
     {
         return $this->selectedDirection;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSelected()
+    {
+        return $this->isSelected;
     }
 }
