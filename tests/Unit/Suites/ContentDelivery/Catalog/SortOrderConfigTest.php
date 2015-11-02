@@ -21,11 +21,6 @@ class SortOrderConfigTest extends \PHPUnit_Framework_TestCase
     private $stubAttributeCode;
 
     /**
-     * @var string[]
-     */
-    private $testDirections = ['asc', 'desc'];
-
-    /**
      * @var string
      */
     private $testSelectedDirection = 'asc';
@@ -33,51 +28,19 @@ class SortOrderConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
-        $this->sortOrderConfig = SortOrderConfig::create(
-            $this->stubAttributeCode,
-            $this->testDirections,
-            $this->testSelectedDirection
-        );
-    }
-
-    /**
-     * @dataProvider invalidDirectionsProvider
-     * @param mixed[] $directions
-     */
-    public function testExceptionIsThrownDuringAttemptToCreateSortOrderConfigWithInvalidDirections(array $directions)
-    {
-        $this->setExpectedException(InvalidSortingDirectionsException::class);
-        SortOrderConfig::create($this->stubAttributeCode, $directions, $this->testSelectedDirection);
-    }
-
-    /**
-     * @return array[]
-     */
-    public function invalidDirectionsProvider()
-    {
-        return [
-            [[]],
-            [['foo']],
-            [['asc', 'foo']],
-        ];
+        $this->sortOrderConfig = SortOrderConfig::create($this->stubAttributeCode, $this->testSelectedDirection);
     }
 
     public function testExceptionIsThrownIfInvalidSelectedSortingDirectionsIsSpecified()
     {
-        $directions = ['asc'];
-        $selectedDirection = 'desc';
+        $selectedDirection = 'foo';
         $this->setExpectedException(InvalidSortingDirectionsException::class);
-        SortOrderConfig::create($this->stubAttributeCode, $directions, $selectedDirection);
+        SortOrderConfig::create($this->stubAttributeCode, $selectedDirection);
     }
 
     public function testAttributeCodeIsReturned()
     {
         $this->assertSame($this->stubAttributeCode, $this->sortOrderConfig->getAttributeCode());
-    }
-
-    public function testSortingDirectionsAreReturned()
-    {
-        $this->assertSame($this->testDirections, $this->sortOrderConfig->getDirections());
     }
 
     public function testSelectedDirectionIsReturned()

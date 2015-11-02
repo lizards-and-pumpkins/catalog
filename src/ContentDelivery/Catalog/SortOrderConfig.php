@@ -14,37 +14,29 @@ class SortOrderConfig
     private $attributeCode;
 
     /**
-     * @var string[]
-     */
-    private $directions;
-
-    /**
      * @var string
      */
     private $selectedDirection;
 
     /**
      * @param AttributeCode $attributeCode
-     * @param string[] $directions
      * @param string $selectedDirection
      */
-    public function __construct(AttributeCode $attributeCode, array $directions, $selectedDirection)
+    public function __construct(AttributeCode $attributeCode, $selectedDirection)
     {
         $this->attributeCode = $attributeCode;
-        $this->directions = $directions;
         $this->selectedDirection = $selectedDirection;
     }
 
     /**
      * @param AttributeCode $attributeCode
-     * @param mixed[] $directions
      * @param string $selectedDirection
      * @return SortOrderConfig
      */
-    public static function create(AttributeCode $attributeCode, array $directions, $selectedDirection)
+    public static function create(AttributeCode $attributeCode, $selectedDirection)
     {
-        self::validateSortingDirections($attributeCode, $directions, $selectedDirection);
-        return new self($attributeCode, $directions, $selectedDirection);
+        self::validateSortingDirections($attributeCode, $selectedDirection);
+        return new self($attributeCode, $selectedDirection);
     }
 
     /**
@@ -56,43 +48,17 @@ class SortOrderConfig
     }
 
     /**
-     * @return string[]
-     */
-    public function getDirections()
-    {
-        return $this->directions;
-    }
-
-    /**
      * @param AttributeCode $attributeCode
-     * @param mixed[] $directions
-     * @param mixed $selectedDirection
+     * @param mixed $direction
      */
-    private static function validateSortingDirections(
-        AttributeCode $attributeCode,
-        array $directions,
-        $selectedDirection
-    ) {
-        array_map(function ($direction) use ($attributeCode) {
-            if (SearchEngine::SORT_DIRECTION_ASC !== $direction && SearchEngine::SORT_DIRECTION_DESC !== $direction) {
-                throw new InvalidSortingDirectionsException(
-                    sprintf('Invalid sorting direction "%s" specified for attribute "%s".', $direction, $attributeCode)
-                );
-            }
-        }, $directions);
-
-        if (!in_array($selectedDirection, $directions)) {
+    private static function validateSortingDirections(AttributeCode $attributeCode, $direction)
+    {
+        if (SearchEngine::SORT_DIRECTION_ASC !== $direction && SearchEngine::SORT_DIRECTION_DESC !== $direction) {
             throw new InvalidSortingDirectionsException(sprintf(
                 'Invalid selected sorting direction "%s" specified for attribute "%s".',
-                $selectedDirection,
+                $direction,
                 $attributeCode
             ));
-        }
-
-        if (empty($directions)) {
-            throw new InvalidSortingDirectionsException(
-                sprintf('No sorting directions specified for attribute "%s".', $attributeCode)
-            );
         }
     }
 
