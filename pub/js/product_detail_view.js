@@ -10,10 +10,12 @@ require([
     var tabletWidth = 768,
         siteFullWidth = 975,
         maxQty = 5,
-        selectBoxIdPrefix = 'variation_';
+        selectBoxIdPrefix = 'variation_',
+        addToCartButton;
 
     domReady(function() {
         handleRecentlyViewedProducts();
+        initializeAddToCartButton();
         showNextSelectBox();
 
         adjustToPageWidth();
@@ -29,6 +31,17 @@ require([
             '//apis.google.com/js/plusone.js'
         ]);
     });
+
+    function initializeAddToCartButton() {
+        addToCartButton = document.querySelector('.product-controls button');
+        addToCartButton.addEventListener('click', function() {
+            var baseUrl = '/ru_de/', // TODO: Implement
+                productId = document.querySelector('input[name="product"]').value,
+                qty = document.getElementById(selectBoxIdPrefix + 'qty').value;
+
+            document.location.href = baseUrl + 'cart/cart/add/sku/' + productId + '/qty/' + qty + '/';
+        }, true);
+    }
 
     function deleteAllSelectBoxesAfter(previousBoxAttribute) {
         var attributeCodes = variation_attributes.slice(variation_attributes.indexOf(previousBoxAttribute) + 1);
@@ -81,7 +94,6 @@ require([
 
     function showNextSelectBox(previousBoxAttribute) {
         var selectContainer = document.querySelector('.selects'),
-            addToCartButton = document.querySelector('.product-controls button'),
             productIdField = document.querySelector('input[name="product"]');
 
         if (!isConfigurableProduct()) {

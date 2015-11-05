@@ -15,92 +15,91 @@ $brandLogo = strtolower(preg_replace('/\W/', '_', trim($brand))) . '.png';
 $save = 0;
 
 ?>
-<div id="productView" class="configurable" itemscope itemtype="http://schema.org/Product">
-    <form action="<?php /* TODO: Implement */ ?>" method="post">
-        <input type="hidden" name="product" value="<?= $this->getProductId() ?>" />
-        <div class="product-essential">
-            <div id="phoneTitlePlaceholder"></div>
-            <div class="product-img-box">
-                <a href="<?= $mainImage->getPath('original') ?>" class="main-image-area">
-                    <img src="<?= $mainImage->getPath('large') ?>" height="340" width="365" itemprop="image" alt="<?= $mainImage->getLabel() ?>"/>
-                </a>
-                <ul class="more-views">
-                    <li>
-                        <a href=""><img src="<?= $mainImage->getPath('small') ?>" width="48" height="48"/></a>
-                    </li>
-                </ul>
+<div itemscope itemtype="http://schema.org/Product">
+    <div class="product-essential">
+        <div id="phoneTitlePlaceholder"></div>
+        <div class="product-img-box">
+            <a href="<?= $mainImage->getPath('original') ?>" class="main-image-area">
+                <img src="<?= $mainImage->getPath('large') ?>" height="340" width="365" itemprop="image" alt="<?= $mainImage->getLabel() ?>"/>
+            </a>
+            <ul class="more-views">
+                <li>
+                    <a href=""><img src="<?= $mainImage->getPath('small') ?>" width="48" height="48"/></a>
+                </li>
+            </ul>
+        </div>
+        <div class="product-shop">
+            <div class="top">
+                <div class="product-title">
+                    <img src="images/logos/<?= $brandLogo ?>" width="95" id="brandLogo" />
+                    <h1 itemprop="name"><?= $this->getFirstValueOfProductAttribute('name') ?></h1>
+                    <p class="similarProducts">
+                        <?= $this->__('More by') ?> <a href="" itemprop="brand"><?= $brand ?></a>
+                    </p>
+                </div>
+                <div class="articleInformations">
+                    <p class="articleNumber"><?= $this->__('SKU# ') ?> <?= $this->getProductId() ?></p>
+                    <meta itemprop="sku" content="<?= $this->getProductId() ?>" />
+                </div>
+
+                <div class="socialSharing en_US">
+                    <div class="item twitterLike"><a href="https://twitter.com/share" class="twitter-share-button">Tweet</a></div>
+                    <div class="item g-plusone" data-size="medium"></div>
+                    <div class="item fb-like" data-href="<!--= $this->getProductUrl($_product) -->" data-send="true" data-layout="button_count" data-width="200" data-show-faces="false" data-action="recommend"></div>
+                    <div class="item print"><a href="javascript:" onclick="window.print()"><?= $this->__('Print') ?> <img src="images/icons/printico.gif" alt="print" /></a></div>
+                </div>
             </div>
-            <div class="product-shop">
-                <div class="top">
-                    <div class="product-title">
-                        <img src="images/logos/<?= $brandLogo ?>" width="95" id="brandLogo" />
-                        <h1 itemprop="name"><?= $this->getFirstValueOfProductAttribute('name') ?></h1>
-                        <p class="similarProducts">
-                            <?= $this->__('More by') ?> <a href="" itemprop="brand"><?= $brand ?></a>
+
+            <div class="product-main-info">
+                <div class="main-information">
+                    <?php if ($gender = $this->getImplodedValuesOfProductAttribute('gender', ', ')) : ?>
+                        <p><strong><?= $this->__('Gender') ?>:</strong> <?= $gender ?></p>
+                    <?php endif ?>
+
+                    <?php if (($style = $this->getImplodedValuesOfProductAttribute('style', ', '))) : ?>
+                        <p><strong><?= $this->__('Style') ?>:</strong> <?= $style ?></p>
+                    <?php endif ?>
+
+                    <?php /* TODO: Move the complete condition below into JavaScript */ ?>
+                    <?php if (0) : //$_product->isSaleable() && $this->hasOptions()): ?>
+                        <p class="size">
+                            <strong><?= $this->__('Selected size') ?>: </strong>
+                            <span class="selectedSize"><?= $this->__('Choose size') ?></span>
                         </p>
-                    </div>
-                    <div class="articleInformations">
-                        <p class="articleNumber"><?= $this->__('SKU# ') ?> <?= $this->getProductId() ?></p>
-                        <meta itemprop="sku" content="<?= $this->getProductId() ?>" />
-                    </div>
-
-                    <div class="socialSharing en_US">
-                        <div class="item twitterLike"><a href="https://twitter.com/share" class="twitter-share-button">Tweet</a></div>
-                        <div class="item g-plusone" data-size="medium"></div>
-                        <div class="item fb-like" data-href="<!--= $this->getProductUrl($_product) -->" data-send="true" data-layout="button_count" data-width="200" data-show-faces="false" data-action="recommend"></div>
-                        <div class="item print"><a href="javascript:" onclick="window.print()"><?= $this->__('Print') ?> <img src="images/icons/printico.gif" alt="print" /></a></div>
-                    </div>
-                </div>
-
-                <div class="product-main-info">
-                    <div class="main-information">
-                        <?php if ($gender = $this->getImplodedValuesOfProductAttribute('gender', ', ')) : ?>
-                            <p><strong><?= $this->__('Gender') ?>:</strong> <?= $gender ?></p>
-                        <?php endif ?>
-
-                        <?php if (($style = $this->getImplodedValuesOfProductAttribute('style', ', '))) : ?>
-                            <p><strong><?= $this->__('Style') ?>:</strong> <?= $style ?></p>
-                        <?php endif ?>
-
-                        <?php if (0) : //$_product->isSaleable() && $this->hasOptions()): ?>
-                            <p class="size">
-                                <strong><?= $this->__('Selected size') ?>: </strong>
-                                <span class="selectedSize"><?= $this->__('Choose size') ?></span>
-                            </p>
-                            <p class="availability">
-                                <strong><?= $this->__('Availability:') ?> </strong>
-                                <span class="availability choose"><?= $this->__('Choose size') ?></span>
-                                <span class="availability true"><?= $this->__('In Stock') ?></span>
-                                <span class="availability false"><?= $this->__('not available') ?></span>
-                                <span class="info"><?= $this->__('Versandinfo'); ?></span>
-                            </p>
+                        <p class="availability">
+                            <strong><?= $this->__('Availability:') ?> </strong>
+                            <span class="availability choose"><?= $this->__('Choose size') ?></span>
+                            <span class="availability true"><?= $this->__('In Stock') ?></span>
+                            <span class="availability false"><?= $this->__('not available') ?></span>
+                            <span class="info"><?= $this->__('Versandinfo'); ?></span>
+                        </p>
+                    <?php else: ?>
+                        <?php if (1) : //$_product->isSaleable() && $stockItem->getQty() > 0): ?>
+                            <p class="availability"><strong><?= $this->__('Availability:') ?></strong> <span class="true"><?= $this->__('In stock') ?></span> <span class="info"><?= $this->__('Versandinfo') ?></span></p>
+                        <?php elseif (0) : //$_product->isSaleable() && $stockItem->getBackorders() > 0): ?>
+                            <p class="availability"><strong><?= $this->__('Availability:') ?></strong> <span class="true"><?= $this->__('3-5 days after order') ?></span> <span class="info"><?= $this->__('Versandinfo'); ?></span></p>
                         <?php else: ?>
-                            <?php if (1) : //$_product->isSaleable() && $stockItem->getQty() > 0): ?>
-                                <p class="availability"><strong><?= $this->__('Availability:') ?></strong> <span class="true"><?= $this->__('In stock') ?></span> <span class="info"><?= $this->__('Versandinfo') ?></span></p>
-                            <?php elseif (0) : //$_product->isSaleable() && $stockItem->getBackorders() > 0): ?>
-                                <p class="availability"><strong><?= $this->__('Availability:') ?></strong> <span class="true"><?= $this->__('3-5 days after order') ?></span> <span class="info"><?= $this->__('Versandinfo'); ?></span></p>
-                            <?php else: ?>
-                                <?php $schemaOrgStockStatus = 'OutOfStock' ?>
-                                <p class="availability"><strong><?= $this->__('Availability:') ?></strong> <span class="false"><?= $this->__('Out of stock') ?></span> <span class="info"><?= $this->__('Versandinfo'); ?></span></p>
-                            <?php endif ?>
+                            <?php $schemaOrgStockStatus = 'OutOfStock' ?>
+                            <p class="availability"><strong><?= $this->__('Availability:') ?></strong> <span class="false"><?= $this->__('Out of stock') ?></span> <span class="info"><?= $this->__('Versandinfo'); ?></span></p>
                         <?php endif ?>
-                    </div>
-
-                    <div class="price-information" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
-                        <div class="price-box">
-                            <span class="regular-price"><?= $this->getChildOutput('price') ?></span>
-                        </div>
-                    </div>
-                    <span class="regular-price"><?= $this->getChildOutput('special_price') ?></span>
+                    <?php endif ?>
                 </div>
 
-                <div class="product-controls">
-                    <div class="selects"></div>
-                    <button type="submit" disabled="disabled"><?= $this->__('Add to Cart') ?></button>
+                <div class="price-information" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
+                    <div class="price-box">
+                        <span class="regular-price"><?= $this->getChildOutput('price') ?></span>
+                    </div>
                 </div>
+                <span class="regular-price"><?= $this->getChildOutput('special_price') ?></span>
+            </div>
+
+            <div class="product-controls">
+                <input type="hidden" name="product" value="<?= $this->getProductId() ?>"/>
+                <div class="selects"></div>
+                <button disabled="disabled"><?= $this->__('Add to Cart') ?></button>
             </div>
         </div>
-    </form>
+    </div>
 
     <?= $this->getChildOutput('all-models') ?>
 
