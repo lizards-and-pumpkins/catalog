@@ -73,7 +73,8 @@ trait ProductListingRequestHandlerTrait
 
     private function addProductListingContentToPage(
         SearchEngineResponse $searchEngineResponse,
-        ProductsPerPage $productsPerPage
+        ProductsPerPage $productsPerPage,
+        SortOrderConfig $selectedSortOrderConfig
     ) {
         $searchDocumentCollection = $searchEngineResponse->getSearchDocuments();
 
@@ -86,6 +87,7 @@ trait ProductListingRequestHandlerTrait
         $this->addFilterNavigationSnippetToPageBuilder($facetFieldCollection);
         $this->addProductsInListingToPageBuilder($searchDocumentCollection);
         $this->addPaginationSnippetsToPageBuilder($searchEngineResponse, $productsPerPage);
+        $this->addSortOrderSnippetToPageBuilder($selectedSortOrderConfig);
     }
 
     private function addProductsInListingToPageBuilder(SearchDocumentCollection $searchDocumentCollection)
@@ -179,6 +181,34 @@ trait ProductListingRequestHandlerTrait
             $searchEngineResponse->getTotalNumberOfResults()
         );
         $this->addDynamicSnippetToPageBuilder('products_per_page', json_encode($productsPerPage));
+    }
+
+    private function addSortOrderSnippetToPageBuilder(SortOrderConfig $selectedSortOrderConfig)
+    {
+        $sortOrderConfig = $this->getSortOrderConfigsWithGivenConfigSelected($selectedSortOrderConfig);
+        $this->addDynamicSnippetToPageBuilder('sort_order_config', json_encode($sortOrderConfig));
+    }
+
+    /**
+     * @param SortOrderConfig $selectedSortOrderConfig
+     * @return SortOrderConfig[]
+     */
+    private function getSortOrderConfigsWithGivenConfigSelected(SortOrderConfig $selectedSortOrderConfig)
+    {
+        return array_map(function (SortOrderConfig $sortOrderConfig) use ($selectedSortOrderConfig) {
+            if ($sortOrderConfig->getAttributeCode() == $selectedSortOrderConfig->getAttributeCode()) {
+                return $selectedSortOrderConfig;
+            }
+
+            if ($sortOrderConfig->isSelected() === true) {
+                return SortOrderConfig::create(
+                    $sortOrderConfig->getAttributeCode(),
+                    $sortOrderConfig->getSelectedDirection()
+                );
+            }
+
+            return $sortOrderConfig;
+        }, $this->sortOrderConfigs);
     }
 
     /**

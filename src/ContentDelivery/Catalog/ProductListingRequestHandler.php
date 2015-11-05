@@ -84,8 +84,13 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $this->processCookies($request);
 
         $productsPerPage = $this->getProductsPerPage($request);
-        $searchEngineResponse = $this->getSearchResultsMatchingCriteria($request, $productsPerPage);
-        $this->addProductListingContentToPage($searchEngineResponse, $productsPerPage);
+        $selectedSortOrderConfig = $this->getSelectedSortOrderConfig($request);
+        $searchEngineResponse = $this->getSearchResultsMatchingCriteria(
+            $request,
+            $productsPerPage,
+            $selectedSortOrderConfig
+        );
+        $this->addProductListingContentToPage($searchEngineResponse, $productsPerPage, $selectedSortOrderConfig);
 
         $metaInfo = $this->getPageMetaInfoSnippet($request);
         $keyGeneratorParams = [
@@ -130,14 +135,17 @@ class ProductListingRequestHandler implements HttpRequestHandler
     /**
      * @param HttpRequest $request
      * @param ProductsPerPage $productsPerPage
+     * @param SortOrderConfig $selectedSortOrderConfig
      * @return SearchEngineResponse
      */
-    private function getSearchResultsMatchingCriteria(HttpRequest $request, ProductsPerPage $productsPerPage)
-    {
+    private function getSearchResultsMatchingCriteria(
+        HttpRequest $request,
+        ProductsPerPage $productsPerPage,
+        SortOrderConfig $selectedSortOrderConfig
+    ) {
         $criteria = $this->getPageMetaInfoSnippet($request)->getSelectionCriteria();
         $selectedFilters = $this->getSelectedFilterValuesFromRequest($request);
         $currentPageNumber = $this->getCurrentPageNumber($request);
-        $selectedSortOrderConfig = $this->getSelectedSortOrderConfig($request);
 
         return $this->dataPoolReader->getSearchResultsMatchingCriteria(
             $criteria,

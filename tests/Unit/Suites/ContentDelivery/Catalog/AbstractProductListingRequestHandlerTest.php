@@ -44,9 +44,9 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
     private $requestHandler;
 
     /**
-     * @var SortOrderConfig|\PHPUnit_Framework_MockObject_MockObject $stubSortOrderConfig
+     * @var SortOrderConfig[]|\PHPUnit_Framework_MockObject_MockObject[] $stubSortOrderConfigs
      */
-    private $stubSortOrderConfig;
+    private $stubSortOrderConfigs;
 
     private function prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection()
     {
@@ -208,8 +208,19 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
         $testFilterNavigationConfig = ['foo' => []];
         $productsPerPage = ProductsPerPage::create([1, 2, 3], $this->testDefaultNumberOfProductsPerPage);
 
-        $this->stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
-        $this->stubSortOrderConfig->method('isSelected')->willReturn(true);
+        $stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
+
+        $stubUnselectedSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
+        $stubUnselectedSortOrderConfig->method('isSelected')->willReturn(false);
+        $stubUnselectedSortOrderConfig->method('getSelectedDirection')->willReturn(SearchEngine::SORT_DIRECTION_ASC);
+        $stubUnselectedSortOrderConfig->method('getAttributeCode')->willReturn($stubAttributeCode);
+
+        $stubSelectedSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
+        $stubSelectedSortOrderConfig->method('isSelected')->willReturn(true);
+        $stubSelectedSortOrderConfig->method('getSelectedDirection')->willReturn(SearchEngine::SORT_DIRECTION_ASC);
+        $stubSelectedSortOrderConfig->method('getAttributeCode')->willReturn($stubAttributeCode);
+
+        $this->stubSortOrderConfigs = [$stubUnselectedSortOrderConfig, $stubSelectedSortOrderConfig];
 
         $this->requestHandler = $this->createRequestHandler(
             $stubContext,
@@ -218,7 +229,7 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
             $stubSnippetKeyGeneratorLocator,
             $testFilterNavigationConfig,
             $productsPerPage,
-            $this->stubSortOrderConfig
+            ...$this->stubSortOrderConfigs
         );
 
         $this->stubRequest = $this->createStubRequest();
@@ -438,7 +449,7 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
     public function testDefaultSortOrderConfigIsPassedToDataPool()
     {
         $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
-        $this->setExpectedSortOrderConfig($this->stubSortOrderConfig);
+        $this->setExpectedSortOrderConfig($this->stubSortOrderConfigs[1]);
 
         $this->requestHandler->process($this->stubRequest);
     }
@@ -541,5 +552,17 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
 
         $this->assertContains($expectedSortOrderCookie, $headers);
         $this->assertContains($expectedSortDirectionCookie, $headers);
+    }
+
+    public function testSortOrderConfigSnippetIsAddedToPageBuilder()
+    {
+        $snippetCode = 'sort_order_config';
+
+        $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
+        $addSnippetsToPageSpy = $this->createAddedSnippetsSpy();
+
+        $this->requestHandler->process($this->stubRequest);
+
+        $this->assertDynamicSnippetWithAnyValueWasAddedToPageBuilder($addSnippetsToPageSpy, $snippetCode);
     }
 }

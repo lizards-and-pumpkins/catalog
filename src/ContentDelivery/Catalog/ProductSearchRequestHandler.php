@@ -83,8 +83,13 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         $this->processCookies($request);
 
         $productsPerPage = $this->getProductsPerPage($request);
-        $searchEngineResponse = $this->getSearchResultsMatchingCriteria($request);
-        $this->addProductListingContentToPage($searchEngineResponse, $productsPerPage);
+        $selectedSortOrderConfig = $this->getSelectedSortOrderConfig($request);
+        $searchEngineResponse = $this->getSearchResultsMatchingCriteria(
+            $request,
+            $productsPerPage,
+            $selectedSortOrderConfig
+        );
+        $this->addProductListingContentToPage($searchEngineResponse, $productsPerPage, $selectedSortOrderConfig);
 
         $metaInfoSnippetKeyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
             ProductSearchResultMetaSnippetRenderer::CODE
@@ -125,10 +130,15 @@ class ProductSearchRequestHandler implements HttpRequestHandler
 
     /**
      * @param HttpRequest $request
+     * @param ProductsPerPage $productsPerPage
+     * @param SortOrderConfig $selectedSortOrderConfig
      * @return SearchEngineResponse
      */
-    private function getSearchResultsMatchingCriteria(HttpRequest $request)
-    {
+    private function getSearchResultsMatchingCriteria(
+        HttpRequest $request,
+        ProductsPerPage $productsPerPage,
+        SortOrderConfig $selectedSortOrderConfig
+    ) {
         $selectedFilters = $this->getSelectedFilterValuesFromRequest($request);
 
         $queryString = $request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
@@ -136,9 +146,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
             $this->searchableAttributeCodes,
             $queryString
         );
-        $productsPerPage = $this->getProductsPerPage($request);
         $currentPageNumber = $this->getCurrentPageNumber($request);
-        $selectedSortOrderConfig = $this->getSelectedSortOrderConfig($request);
 
         return $this->dataPoolReader->getSearchResultsMatchingCriteria(
             $criteria,
