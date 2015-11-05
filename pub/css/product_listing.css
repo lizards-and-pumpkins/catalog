@@ -1,6 +1,7 @@
 @import "ekomi.css";
 @import "common.css";
 @import "product_grid.css";
+@import "lib/dropdown.css";
 
 /* Layered navigation */
 .filter-content li a { padding: 10px 0 10px 34px; border-top: 1px solid #e4e4e4; color: inherit; display: block; background: url("../images/icon-checkbox.png") 10px 7px no-repeat; font-size: 11px }
@@ -18,6 +19,9 @@
 .toolbar .amount { float:left; width: 220px; font-size: 16px; margin: 25px 0 }
 .toolbar .limiter { float: right; margin: 25px 0 }
 .toolbar .limiter label { font-weight: bold }
+.toolbar .sort-by { float: left; margin: 19px 0; width: 300px }
+.toolbar .sort-by label { display: inline-block; font-weight: bold; margin: 7px 10px 0 0 }
+.toolbar .style-select { display: inline-block; min-width: 100px; z-index: 1 }
 
 /* Pagination */
 #pagination { text-align: right; padding: 43px 0 0 0; font-size: 12px }

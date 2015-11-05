@@ -1,4 +1,15 @@
 define({
+    updateQueryParameters: function (parameters) {
+        var queryParameters = this.getQueryParameters(),
+            urlWithoutQueryString = this.getUrlWithoutQueryString();
+
+        Object.keys(parameters).map(function (parameterName) {
+            queryParameters[parameterName] = parameters[parameterName];
+        });
+
+        return this.addQueryParametersToUrl(urlWithoutQueryString, queryParameters);
+    },
+
     updateQueryParameter: function (parameterName, parameterValue) {
         var queryParameters = this.getQueryParameters(),
             urlWithoutQueryString = this.getUrlWithoutQueryString();
