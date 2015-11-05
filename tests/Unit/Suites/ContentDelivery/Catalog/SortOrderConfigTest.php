@@ -49,4 +49,26 @@ class SortOrderConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->testSelectedDirection, $sortOrderConfig->getSelectedDirection());
         $this->assertTrue($sortOrderConfig->isSelected());
     }
+
+    public function testJsonSerializableInterfaceIsImplemented()
+    {
+        $sortOrderConfig = SortOrderConfig::create($this->stubAttributeCode, $this->testSelectedDirection);
+        $this->assertInstanceOf(\JsonSerializable::class, $sortOrderConfig);
+    }
+
+    public function testArrayRepresentationOfSortOrderConfigIsReturned()
+    {
+        $attributeCode = 'foo';
+
+        $this->stubAttributeCode->method('__toString')->willReturn($attributeCode);
+
+        $sortOrderConfig = SortOrderConfig::create($this->stubAttributeCode, $this->testSelectedDirection);
+        $expectedArray = [
+            'code' => $attributeCode,
+            'selectedDirection' => $this->testSelectedDirection,
+            'selected' => false
+        ];
+
+        $this->assertEquals($expectedArray, $sortOrderConfig->jsonSerialize());
+    }
 }

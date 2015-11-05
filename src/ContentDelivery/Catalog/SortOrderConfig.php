@@ -6,7 +6,7 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\Exception\InvalidSortingDirection
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\Product\AttributeCode;
 
-class SortOrderConfig
+class SortOrderConfig implements \JsonSerializable
 {
     /**
      * @var AttributeCode
@@ -94,5 +94,17 @@ class SortOrderConfig
     public function isSelected()
     {
         return $this->isSelected;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'code' => (string) $this->attributeCode,
+            'selectedDirection' => $this->selectedDirection,
+            'selected' => $this->isSelected
+        ];
     }
 }
