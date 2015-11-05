@@ -69,6 +69,7 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
             $this->factory->getSnippetKeyGeneratorLocator(),
             $this->factory->getLogger()
         );
+        $sortOrderConfigs = $this->factory->getProductSearchAutosuggestionSortOrderConfig();
 
         return new ProductSearchAutosuggestionRequestHandler(
             $this->factory->createContext(),
@@ -76,7 +77,8 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
             $pageBuilder,
             $this->factory->getSnippetKeyGeneratorLocator(),
             $this->factory->createSearchCriteriaBuilder(),
-            $this->factory->getSearchableAttributeCodes()
+            $this->factory->getSearchableAttributeCodes(),
+            $sortOrderConfigs
         );
     }
 

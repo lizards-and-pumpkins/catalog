@@ -2,11 +2,15 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler;
+use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpResourceNotFoundResponse;
 use LizardsAndPumpkins\Log\LogMessage;
+use LizardsAndPumpkins\Product\AttributeCode;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
@@ -115,13 +119,15 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $facetFields = [];
         $rowsPerPage = 100;
         $pageNumber = 0;
+        $sortOrderConfig = SortOrderConfig::create(AttributeCode::fromString('name'), SearchEngine::SORT_DIRECTION_ASC);
         $searchResults = $dataPoolReader->getSearchResultsMatchingCriteria(
             $criteria,
             $selectedFilters,
             $context,
             $facetFields,
             $rowsPerPage,
-            $pageNumber
+            $pageNumber,
+            $sortOrderConfig
         );
 
         $this->assertEquals(

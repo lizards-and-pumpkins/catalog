@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\DataPool;
 
+use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\DataPool\Exception\InvalidKeyValueStoreKeyException;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
@@ -165,6 +166,7 @@ class DataPoolReader
      * @param string[] $facetFiltersConfig
      * @param int $rowsPerPage
      * @param int $pageNumber
+     * @param SortOrderConfig $sortOrderConfig
      * @return SearchEngineResponse
      */
     public function getSearchResultsMatchingCriteria(
@@ -173,7 +175,8 @@ class DataPoolReader
         Context $context,
         array $facetFiltersConfig,
         $rowsPerPage,
-        $pageNumber
+        $pageNumber,
+        SortOrderConfig $sortOrderConfig
     ) {
         return $this->searchEngine->getSearchDocumentsMatchingCriteria(
             $criteria,
@@ -181,7 +184,8 @@ class DataPoolReader
             $context,
             $facetFiltersConfig,
             $rowsPerPage,
-            $pageNumber
+            $pageNumber,
+            $sortOrderConfig
         );
     }
 

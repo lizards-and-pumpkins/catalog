@@ -37,6 +37,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
      * @param ProductsPerPage $productsPerPage
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param string[] $searchableAttributeCodes
+     * @param SortOrderConfig[] $sortOrderConfigs
      */
     public function __construct(
         Context $context,
@@ -46,7 +47,8 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         array $filterNavigationConfig,
         ProductsPerPage $productsPerPage,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        array $searchableAttributeCodes
+        array $searchableAttributeCodes,
+        SortOrderConfig ...$sortOrderConfigs
     ) {
         $this->dataPoolReader = $dataPoolReader;
         $this->context = $context;
@@ -56,6 +58,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         $this->productsPerPage = $productsPerPage;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->searchableAttributeCodes = $searchableAttributeCodes;
+        $this->sortOrderConfigs = $sortOrderConfigs;
     }
 
     /**
@@ -135,6 +138,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         );
         $productsPerPage = $this->getProductsPerPage($request);
         $currentPageNumber = $this->getCurrentPageNumber($request);
+        $selectedSortOrderConfig = $this->getSelectedSortOrderConfig($request);
 
         return $this->dataPoolReader->getSearchResultsMatchingCriteria(
             $criteria,
@@ -142,7 +146,8 @@ class ProductSearchRequestHandler implements HttpRequestHandler
             $this->context,
             $this->filterNavigationConfig,
             $productsPerPage->getSelectedNumberOfProductsPerPage(),
-            $currentPageNumber
+            $currentPageNumber,
+            $selectedSortOrderConfig
         );
     }
 }

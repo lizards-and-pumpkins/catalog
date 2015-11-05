@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
+use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
@@ -10,6 +11,8 @@ interface SearchEngine
 {
     const RANGE_DELIMITER = ' TO ';
     const RANGE_WILDCARD = '*';
+    const SORT_DIRECTION_ASC = 'asc';
+    const SORT_DIRECTION_DESC = 'desc';
 
     /**
      * @param SearchDocumentCollection $searchDocumentCollection
@@ -24,6 +27,7 @@ interface SearchEngine
      * @param string[] $facetFiltersConfig
      * @param int $rowsPerPage
      * @param int $pageNumber
+     * @param SortOrderConfig $sortOrderConfig
      * @return SearchEngineResponse
      */
     public function getSearchDocumentsMatchingCriteria(
@@ -32,6 +36,7 @@ interface SearchEngine
         Context $context,
         array $facetFiltersConfig,
         $rowsPerPage,
-        $pageNumber
+        $pageNumber,
+        SortOrderConfig $sortOrderConfig
     );
 }

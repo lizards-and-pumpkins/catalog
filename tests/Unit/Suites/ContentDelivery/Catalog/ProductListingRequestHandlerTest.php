@@ -17,6 +17,8 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
  * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler
  * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandlerTrait
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
+ * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Product\ProductId
  * @uses   \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetContent
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
@@ -66,7 +68,8 @@ class ProductListingRequestHandlerTest extends AbstractProductListingRequestHand
         PageBuilder $pageBuilder,
         SnippetKeyGeneratorLocator $snippetKeyGeneratorLocator,
         array $filterNavigationConfig,
-        ProductsPerPage $productsPerPage
+        ProductsPerPage $productsPerPage,
+        SortOrderConfig ...$sortOrderConfigs
     ) {
         return new ProductListingRequestHandler(
             $context,
@@ -74,7 +77,8 @@ class ProductListingRequestHandlerTest extends AbstractProductListingRequestHand
             $pageBuilder,
             $snippetKeyGeneratorLocator,
             $filterNavigationConfig,
-            $productsPerPage
+            $productsPerPage,
+            ...$sortOrderConfigs
         );
     }
 

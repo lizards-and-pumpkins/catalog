@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
+use LizardsAndPumpkins\ContentDelivery\Catalog\Exception\NoSelectedSortOrderException;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
@@ -11,6 +12,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineFacetFieldCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\PageBuilder;
+use LizardsAndPumpkins\Product\AttributeCode;
 use LizardsAndPumpkins\Product\PriceSnippetRenderer;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
@@ -54,6 +56,11 @@ trait ProductListingRequestHandlerTrait
      * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
+
+    /**
+     * @var SortOrderConfig[]
+     */
+    private $sortOrderConfigs;
 
     /**
      * @param HttpRequest $request
@@ -225,12 +232,29 @@ trait ProductListingRequestHandlerTrait
     private function processCookies(HttpRequest $request)
     {
         $productsPerPage = $this->getProductsPerPageQueryStringValue($request);
-
-        if (null !== $productsPerPage) {
+        if ($productsPerPage !== null) {
             setcookie(
                 ProductListingRequestHandler::PRODUCTS_PER_PAGE_COOKIE_NAME,
                 $productsPerPage,
                 time() + ProductListingRequestHandler::PRODUCTS_PER_PAGE_COOKIE_TTL
+            );
+        }
+
+        $sortOrder = $this->getSortOrderQueryStringValue($request);
+        if ($sortOrder !== null) {
+            setcookie(
+                ProductListingRequestHandler::SORT_ORDER_COOKIE_NAME,
+                $sortOrder,
+                time() + ProductListingRequestHandler::SORT_ORDER_COOKIE_TTL
+            );
+        }
+
+        $sortDirection = $this->getSortDirectionQueryStringValue($request);
+        if ($sortDirection !== null) {
+            setcookie(
+                ProductListingRequestHandler::SORT_DIRECTION_COOKIE_NAME,
+                $sortDirection,
+                time() + ProductListingRequestHandler::SORT_DIRECTION_COOKIE_TTL
             );
         }
     }
@@ -242,5 +266,64 @@ trait ProductListingRequestHandlerTrait
     private function getProductsPerPageQueryStringValue(HttpRequest $request)
     {
         return $request->getQueryParameter(ProductListingRequestHandler::PRODUCTS_PER_PAGE_QUERY_PARAMETER_NAME);
+    }
+
+    /**
+     * @param HttpRequest $request
+     * @return SortOrderConfig
+     */
+    private function getSelectedSortOrderConfig(HttpRequest $request)
+    {
+        $sortOrderQueryStringValue = $this->getSortOrderQueryStringValue($request);
+        $sortDirectionQueryStringValue = $this->getSortDirectionQueryStringValue($request);
+
+        if ($sortOrderQueryStringValue !== null && $sortDirectionQueryStringValue !== null) {
+            return $this->createSelectedSortOrderConfig($sortOrderQueryStringValue, $sortDirectionQueryStringValue);
+        }
+
+        if ($request->hasCookie(ProductListingRequestHandler::SORT_ORDER_COOKIE_NAME) === true &&
+            $request->hasCookie(ProductListingRequestHandler::SORT_DIRECTION_COOKIE_NAME) === true
+        ) {
+            $sortOrder = $request->getCookieValue(ProductListingRequestHandler::SORT_ORDER_COOKIE_NAME);
+            $direction = $request->getCookieValue(ProductListingRequestHandler::SORT_DIRECTION_COOKIE_NAME);
+            return $this->createSelectedSortOrderConfig($sortOrder, $direction);
+        }
+
+        foreach ($this->sortOrderConfigs as $sortOrderConfig) {
+            if ($sortOrderConfig->isSelected()) {
+                return $sortOrderConfig;
+            }
+        }
+
+        throw new NoSelectedSortOrderException('No selected sort order config is found.');
+    }
+
+    /**
+     * @param string $attributeCodeString
+     * @param string $direction
+     * @return SortOrderConfig
+     */
+    private function createSelectedSortOrderConfig($attributeCodeString, $direction)
+    {
+        $attributeCode = AttributeCode::fromString($attributeCodeString);
+        return SortOrderConfig::createSelected($attributeCode, $direction);
+    }
+
+    /**
+     * @param HttpRequest $request
+     * @return string
+     */
+    private function getSortOrderQueryStringValue(HttpRequest $request)
+    {
+        return $request->getQueryParameter(ProductListingRequestHandler::SORT_ORDER_QUERY_PARAMETER_NAME);
+    }
+
+    /**
+     * @param HttpRequest $request
+     * @return string
+     */
+    private function getSortDirectionQueryStringValue(HttpRequest $request)
+    {
+        return $request->getQueryParameter(ProductListingRequestHandler::SORT_DIRECTION_QUERY_PARAMETER_NAME);
     }
 }

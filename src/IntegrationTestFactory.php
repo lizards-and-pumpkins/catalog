@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine;
@@ -13,6 +14,7 @@ use LizardsAndPumpkins\Image\ImageProcessor;
 use LizardsAndPumpkins\Image\ImageProcessorCollection;
 use LizardsAndPumpkins\Image\ImageProcessingStrategySequence;
 use LizardsAndPumpkins\Log\InMemoryLogger;
+use LizardsAndPumpkins\Product\AttributeCode;
 use LizardsAndPumpkins\Queue\InMemory\InMemoryQueue;
 use LizardsAndPumpkins\Queue\Queue;
 
@@ -50,6 +52,21 @@ class IntegrationTestFactory implements Factory
     private $urlKeyStore;
 
     /**
+     * @var SortOrderConfig[]
+     */
+    private $lazyLoadedProductListingSortOrderConfig;
+
+    /**
+     * @var SortOrderConfig[]
+     */
+    private $lazyLoadedProductSearchSortOrderConfig;
+
+    /**
+     * @var SortOrderConfig
+     */
+    private $lazyLoadedProductSearchAutosuggestionSortOrderConfig;
+
+    /**
      * @return string[]
      */
     public function getSearchableAttributeCodes()
@@ -67,6 +84,7 @@ class IntegrationTestFactory implements Factory
             'gender' => [],
             'brand' => [],
             'color' => [],
+            'price' => [],
         ];
     }
 
@@ -80,6 +98,7 @@ class IntegrationTestFactory implements Factory
             'brand' => [],
             'category' => [],
             'color' => [],
+            'price' => [],
         ];
     }
 
@@ -288,5 +307,48 @@ class IntegrationTestFactory implements Factory
     public function getFileStorageBasePathConfig()
     {
         return sys_get_temp_dir();
+    }
+
+    /**
+     * @return SortOrderConfig[]
+     */
+    public function getProductListingSortOrderConfig()
+    {
+        if (null === $this->lazyLoadedProductListingSortOrderConfig) {
+            $this->lazyLoadedProductListingSortOrderConfig = [
+                SortOrderConfig::createSelected(AttributeCode::fromString('name'), SearchEngine::SORT_DIRECTION_ASC),
+            ];
+        }
+
+        return $this->lazyLoadedProductListingSortOrderConfig;
+    }
+
+    /**
+     * @return SortOrderConfig[]
+     */
+    public function getProductSearchSortOrderConfig()
+    {
+        if (null === $this->lazyLoadedProductSearchSortOrderConfig) {
+            $this->lazyLoadedProductSearchSortOrderConfig = [
+                SortOrderConfig::createSelected(AttributeCode::fromString('name'), SearchEngine::SORT_DIRECTION_ASC),
+            ];
+        }
+
+        return $this->lazyLoadedProductSearchSortOrderConfig;
+    }
+
+    /**
+     * @return SortOrderConfig
+     */
+    public function getProductSearchAutosuggestionSortOrderConfig()
+    {
+        if (null === $this->lazyLoadedProductSearchAutosuggestionSortOrderConfig) {
+            $this->lazyLoadedProductSearchAutosuggestionSortOrderConfig = SortOrderConfig::createSelected(
+                AttributeCode::fromString('name'),
+                SearchEngine::SORT_DIRECTION_ASC
+            );
+        }
+
+        return $this->lazyLoadedProductSearchAutosuggestionSortOrderConfig;
     }
 }

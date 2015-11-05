@@ -55,14 +55,20 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
     private $criteriaBuilder;
 
     /**
+     * @var SortOrderConfig
+     */
+    private $sortOrderConfig;
+
+    /**
      * ProductSearchAutosuggestionRequestHandler constructor.
      *
      * @param Context $context
      * @param DataPoolReader $dataPoolReader
      * @param PageBuilder $pageBuilder
      * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
-     * @param string[] $searchableAttributeCodes
      * @param SearchCriteriaBuilder $criteriaBuilder
+     * @param string[] $searchableAttributeCodes
+     * @param SortOrderConfig $sortOrderConfig
      */
     public function __construct(
         Context $context,
@@ -70,7 +76,8 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
         PageBuilder $pageBuilder,
         SnippetKeyGeneratorLocator $keyGeneratorLocator,
         SearchCriteriaBuilder $criteriaBuilder,
-        array $searchableAttributeCodes
+        array $searchableAttributeCodes,
+        SortOrderConfig $sortOrderConfig
     ) {
         $this->context = $context;
         $this->dataPoolReader = $dataPoolReader;
@@ -78,6 +85,7 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
         $this->keyGeneratorLocator = $keyGeneratorLocator;
         $this->criteriaBuilder = $criteriaBuilder;
         $this->searchableAttributeCodes = $searchableAttributeCodes;
+        $this->sortOrderConfig = $sortOrderConfig;
     }
 
     /**
@@ -155,9 +163,11 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
             $this->context,
             $facetFields,
             $rowsPerPage,
-            $pageNumber
+            $pageNumber,
+            $this->sortOrderConfig
         );
         $searchDocumentsCollection = $searchEngineResponse->getSearchDocuments();
+
         return $searchDocumentsCollection;
     }
 

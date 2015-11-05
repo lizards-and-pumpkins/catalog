@@ -103,6 +103,7 @@ trait ProductListingTestTrait
         );
         $filterNavigationConfig = $this->factory->getProductListingFilterNavigationConfig();
         $productsPerPage = $this->factory->getProductsPerPageConfig();
+        $sortOrderConfigs = $this->factory->getProductListingSortOrderConfig();
 
         return new ProductListingRequestHandler(
             $this->factory->createContext(),
@@ -110,7 +111,8 @@ trait ProductListingTestTrait
             $pageBuilder,
             $this->factory->getSnippetKeyGeneratorLocator(),
             $filterNavigationConfig,
-            $productsPerPage
+            $productsPerPage,
+            ...$sortOrderConfigs
         );
     }
 

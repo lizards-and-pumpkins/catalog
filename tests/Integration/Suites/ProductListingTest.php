@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
@@ -109,6 +110,21 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
     {
         $productListingJsonString = preg_replace('/.*var productListingJson = |,\n\s*productPrices.*/ism', '', $html);
         return json_decode($productListingJsonString, true);
+    }
+
+    /**
+     * @param array[] $productListingJson
+     */
+    private function assertJsonProductsAreSortedByPriceAscendant(array $productListingJson)
+    {
+        array_reduce($productListingJson, function($previousPrice, $productJson) {
+            $productPrice = $productJson['attributes']['price'];
+            if ($previousPrice > $productPrice) {
+                $this->fail('Failed asserting that product JSON is sorted by price.');
+            }
+        }, 0);
+
+        $this->assertTrue(true);
     }
 
     public function testProductListingCriteriaSnippetIsWrittenIntoDataPool()
@@ -222,5 +238,38 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
         $productListingJson = $this->extractProductListingJsonFromPageHtml($body);
 
         $this->assertCount($numberOfProductsPerPage, $productListingJson);
+    }
+
+    public function testProductsIsSpecifiedSortOrderAndDirectionAreReturned()
+    {
+        $sortOrder = 'price';
+        $sortDirection = SearchEngine::SORT_DIRECTION_ASC;
+
+        $originalState = $_COOKIE;
+        $_COOKIE[ProductListingRequestHandler::SORT_ORDER_COOKIE_NAME] = $sortOrder;
+        $_COOKIE[ProductListingRequestHandler::SORT_DIRECTION_COOKIE_NAME] = $sortDirection;
+
+        $this->importCatalog();
+        $this->createProductListingFixture();
+        $this->registerProductListingSnippetKeyGenerator();
+
+        $request = HttpRequest::fromParameters(
+            HttpRequest::METHOD_GET,
+            HttpUrl::fromString($this->testUrl),
+            HttpHeaders::fromArray([]),
+            HttpRequestBody::fromString('')
+        );
+
+        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+
+        $productListingRequestHandler = $this->getProductListingRequestHandler();
+        $page = $productListingRequestHandler->process($request);
+        $body = $page->getBody();
+
+        $_COOKIE = $originalState;
+
+        $productListingJson = $this->extractProductListingJsonFromPageHtml($body);
+
+        $this->assertJsonProductsAreSortedByPriceAscendant($productListingJson);
     }
 }

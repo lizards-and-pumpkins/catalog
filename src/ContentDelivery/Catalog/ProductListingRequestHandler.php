@@ -23,6 +23,12 @@ class ProductListingRequestHandler implements HttpRequestHandler
     const PRODUCTS_PER_PAGE_COOKIE_NAME = 'products_per_page';
     const PRODUCTS_PER_PAGE_COOKIE_TTL = 3600 * 24 * 30;
     const PRODUCTS_PER_PAGE_QUERY_PARAMETER_NAME = 'limit';
+    const SORT_ORDER_COOKIE_NAME = 'sort_order';
+    const SORT_DIRECTION_COOKIE_NAME = 'sort_direction';
+    const SORT_ORDER_COOKIE_TTL = 3600 * 24 * 30;
+    const SORT_DIRECTION_COOKIE_TTL = 3600 * 24 * 30;
+    const SORT_ORDER_QUERY_PARAMETER_NAME = 'order';
+    const SORT_DIRECTION_QUERY_PARAMETER_NAME = 'dir';
 
     /**
      * @param Context $context
@@ -31,6 +37,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
      * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
      * @param string[] $filterNavigationConfig
      * @param ProductsPerPage $productsPerPage
+     * @param SortOrderConfig[] $sortOrderConfigs
      */
     public function __construct(
         Context $context,
@@ -38,7 +45,8 @@ class ProductListingRequestHandler implements HttpRequestHandler
         PageBuilder $pageBuilder,
         SnippetKeyGeneratorLocator $keyGeneratorLocator,
         array $filterNavigationConfig,
-        ProductsPerPage $productsPerPage
+        ProductsPerPage $productsPerPage,
+        SortOrderConfig ...$sortOrderConfigs
     ) {
         $this->dataPoolReader = $dataPoolReader;
         $this->context = $context;
@@ -46,6 +54,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $this->keyGeneratorLocator = $keyGeneratorLocator;
         $this->filterNavigationConfig = $filterNavigationConfig;
         $this->productsPerPage = $productsPerPage;
+        $this->sortOrderConfigs = $sortOrderConfigs;
     }
 
     /**
@@ -128,6 +137,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $criteria = $this->getPageMetaInfoSnippet($request)->getSelectionCriteria();
         $selectedFilters = $this->getSelectedFilterValuesFromRequest($request);
         $currentPageNumber = $this->getCurrentPageNumber($request);
+        $selectedSortOrderConfig = $this->getSelectedSortOrderConfig($request);
 
         return $this->dataPoolReader->getSearchResultsMatchingCriteria(
             $criteria,
@@ -135,7 +145,8 @@ class ProductListingRequestHandler implements HttpRequestHandler
             $this->context,
             $this->filterNavigationConfig,
             $productsPerPage->getSelectedNumberOfProductsPerPage(),
-            $currentPageNumber
+            $currentPageNumber,
+            $selectedSortOrderConfig
         );
     }
 

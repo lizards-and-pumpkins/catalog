@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
+use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
@@ -33,7 +34,8 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
         Context $context,
         array $facetFiltersConfig,
         $rowsPerPage,
-        $pageNumber
+        $pageNumber,
+        SortOrderConfig $sortOrderConfig
     ) {
         $selectedFilters = array_filter($filterSelection);
         $criteria = $this->applyFiltersToSelectionCriteria($originalCriteria, $selectedFilters);
@@ -50,7 +52,9 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
             $allDocuments
         );
 
-        return $this->createSearchEngineResponse($facetFieldCollection, $matchingDocuments, $rowsPerPage, $pageNumber);
+        $sortedDocuments = $this->getSortedDocuments($sortOrderConfig, ...array_values($matchingDocuments));
+
+        return $this->createSearchEngineResponse($facetFieldCollection, $sortedDocuments, $rowsPerPage, $pageNumber);
     }
 
     /**
@@ -381,5 +385,62 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
         return array_filter($documents, function (SearchDocument $document) use ($criteria, $context) {
             return $criteria->matches($document) && $context->isSubsetOf($document->getContext());
         });
+    }
+
+    /**
+     * @param SortOrderConfig $sortOrderConfig
+     * @param SearchDocument[] $unsortedDocuments
+     * @return SearchDocument[]
+     */
+    private function getSortedDocuments(SortOrderConfig $sortOrderConfig, SearchDocument ...$unsortedDocuments)
+    {
+        $result = $unsortedDocuments;
+        $field = $sortOrderConfig->getAttributeCode();
+        $direction = $sortOrderConfig->getSelectedDirection();
+
+        usort($result, function (SearchDocument $documentA, SearchDocument $documentB) use ($field, $direction) {
+            $fieldA = $this->getSearchDocumentFieldValue($documentA, $field);
+            $fieldB = $this->getSearchDocumentFieldValue($documentB, $field);
+
+            if ($fieldA === $fieldB) {
+                return 0;
+            }
+
+            if (SearchEngine::SORT_DIRECTION_ASC === $direction && $fieldA < $fieldB ||
+                SearchEngine::SORT_DIRECTION_DESC === $direction && $fieldA > $fieldB
+            ) {
+                return -1;
+            }
+
+            return 1;
+        });
+
+        return $result;
+    }
+
+    /**
+     * @param SearchDocument $document
+     * @param AttributeCode $fieldName
+     * @return mixed
+     */
+    private function getSearchDocumentFieldValue(SearchDocument $document, AttributeCode $fieldName)
+    {
+        foreach ($document->getFieldsCollection()->getFields() as $field) {
+            if ($field->getKey() === (string) $fieldName) {
+                $values = $field->getValues();
+
+                if (count($values) === 1) {
+                    if (is_string($values[0])) {
+                        return strtolower($values[0]);
+                    }
+
+                    return $values[0];
+                }
+
+                return null;
+            }
+        }
+
+        return null;
     }
 }

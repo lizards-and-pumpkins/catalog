@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Tests\Integration;
 
 use LizardsAndPumpkins\CommonFactory;
+use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\FileUrlKeyStore;
@@ -19,6 +20,7 @@ use LizardsAndPumpkins\SampleFactory;
 
 /**
  * @covers \LizardsAndPumpkins\SampleFactory
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
  * @uses   \LizardsAndPumpkins\FactoryTrait
  * @uses   \LizardsAndPumpkins\Log\InMemoryLogger
  * @uses   \LizardsAndPumpkins\Log\WritingLoggerDecorator
@@ -35,6 +37,7 @@ use LizardsAndPumpkins\SampleFactory;
  * @uses   \LizardsAndPumpkins\MasterFactoryTrait
  * @uses   \LizardsAndPumpkins\EnvironmentConfigReader
  * @uses   \LizardsAndPumpkins\CommonFactory
+ * @uses   \LizardsAndPumpkins\Product\AttributeCode
  */
 class SampleFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -222,5 +225,35 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('string', $fileStorageBasePath);
         $this->assertFileExists($fileStorageBasePath);
         $this->assertTrue(is_dir($fileStorageBasePath));
+    }
+
+    public function testSameInstanceOfProductListingSortOrderConfigIsReturnedOnMultipleCalls()
+    {
+        $this->assertContainsOnly(SortOrderConfig::class, $this->factory->getProductListingSortOrderConfig());
+        $this->assertSame(
+            $this->factory->getProductListingSortOrderConfig(),
+            $this->factory->getProductListingSortOrderConfig()
+        );
+    }
+
+    public function testSameInstanceOfProductSearchSortOrderConfigIsReturnedOnMultipleCalls()
+    {
+        $this->assertContainsOnly(SortOrderConfig::class, $this->factory->getProductSearchSortOrderConfig());
+        $this->assertSame(
+            $this->factory->getProductSearchSortOrderConfig(),
+            $this->factory->getProductSearchSortOrderConfig()
+        );
+    }
+
+    public function testSameInstanceOfProductSearchAutosuggestionSortOrderConfigIsReturnedOnMultipleCalls()
+    {
+        $this->assertInstanceOf(
+            SortOrderConfig::class,
+            $this->factory->getProductSearchAutosuggestionSortOrderConfig()
+        );
+        $this->assertSame(
+            $this->factory->getProductSearchAutosuggestionSortOrderConfig(),
+            $this->factory->getProductSearchAutosuggestionSortOrderConfig()
+        );
     }
 }

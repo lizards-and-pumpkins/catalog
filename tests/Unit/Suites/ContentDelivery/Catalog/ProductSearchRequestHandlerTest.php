@@ -17,6 +17,8 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
  * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchRequestHandler
  * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandlerTrait
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
+ * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetContent
  */
 class ProductSearchRequestHandlerTest extends AbstractProductListingRequestHandlerTest
@@ -64,7 +66,8 @@ class ProductSearchRequestHandlerTest extends AbstractProductListingRequestHandl
         PageBuilder $pageBuilder,
         SnippetKeyGeneratorLocator $snippetKeyGeneratorLocator,
         array $filterNavigationConfig,
-        ProductsPerPage $productsPerPage
+        ProductsPerPage $productsPerPage,
+        SortOrderConfig ...$sortOrderConfigs
     ) {
         $stubCriteria = $this->getMock(SearchCriteria::class);
 
@@ -82,7 +85,8 @@ class ProductSearchRequestHandlerTest extends AbstractProductListingRequestHandl
             $filterNavigationConfig,
             $productsPerPage,
             $stubSearchCriteriaBuilder,
-            $testSearchableAttributeCodes
+            $testSearchableAttributeCodes,
+            ...$sortOrderConfigs
         );
     }
 

@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\DataPool;
 
+use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\Exception\InvalidKeyValueStoreKeyException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
@@ -206,13 +207,17 @@ class DataPoolReaderTest extends AbstractDataPoolTest
         $facetFiltersConfig = [];
         $rowsPerPage = 100;
         $pageNumber = 0;
+        /** @var SortOrderConfig|\PHPUnit_Framework_MockObject_MockObject $sortOrderConfig */
+        $sortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);;
+
         $this->dataPoolReader->getSearchResultsMatchingCriteria(
             $mockCriteria,
             $selectedFilters,
             $stubContext,
             $facetFiltersConfig,
             $rowsPerPage,
-            $pageNumber
+            $pageNumber,
+            $sortOrderConfig
         );
     }
 

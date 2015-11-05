@@ -2,16 +2,19 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
+use LizardsAndPumpkins\ContentDelivery\Catalog\Exception\NoSelectedSortOrderException;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineFacetFieldCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\PageBuilder;
+use LizardsAndPumpkins\Product\AttributeCode;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
 
 abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
@@ -20,7 +23,6 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
      * @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockDataPoolReader;
-
     /**
      * @var PageBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -40,6 +42,11 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
      * @var HttpRequestHandler
      */
     private $requestHandler;
+
+    /**
+     * @var SortOrderConfig|\PHPUnit_Framework_MockObject_MockObject $stubSortOrderConfig
+     */
+    private $stubSortOrderConfig;
 
     private function prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection()
     {
@@ -127,13 +134,32 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
 
     /**
      * @param int $productsPerPage
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedRecorder $spy
      */
-    private function assertGivenNumberOfProductsPerPageWasRequestedFromDataPool($productsPerPage, $spy)
+    private function setExpectedNumberOfProductPerPage($productsPerPage)
     {
-        array_map(function (\PHPUnit_Framework_MockObject_Invocation_Static $invocation) use ($productsPerPage) {
-            $this->assertSame($productsPerPage, $invocation->parameters[4]);
-        }, $spy->getInvocations());
+        $this->mockDataPoolReader->expects($this->once())->method('getSearchResultsMatchingCriteria')->with(
+            $this->anything(),
+            $this->anything(),
+            $this->anything(),
+            $this->anything(),
+            $productsPerPage
+        );
+    }
+
+    /**
+     * @param SortOrderConfig|\PHPUnit_Framework_MockObject_MockObject $expectedSortOrderConfig
+     */
+    private function setExpectedSortOrderConfig($expectedSortOrderConfig)
+    {
+        $this->mockDataPoolReader->expects($this->once())->method('getSearchResultsMatchingCriteria')->with(
+            $this->anything(),
+            $this->anything(),
+            $this->anything(),
+            $this->anything(),
+            $this->anything(),
+            $this->anything(),
+            $expectedSortOrderConfig
+        );
     }
 
     /**
@@ -143,6 +169,7 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
      * @param SnippetKeyGeneratorLocator $snippetKeyGeneratorLocator
      * @param array[] $filterNavigationConfig
      * @param ProductsPerPage $productsPerPage
+     * @param SortOrderConfig[] $sortOrderConfigs
      * @return HttpRequestHandler
      */
     abstract protected function createRequestHandler(
@@ -151,7 +178,8 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
         PageBuilder $pageBuilder,
         SnippetKeyGeneratorLocator $snippetKeyGeneratorLocator,
         array $filterNavigationConfig,
-        ProductsPerPage $productsPerPage
+        ProductsPerPage $productsPerPage,
+        SortOrderConfig ...$sortOrderConfigs
     );
 
     /**
@@ -180,13 +208,17 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
         $testFilterNavigationConfig = ['foo' => []];
         $productsPerPage = ProductsPerPage::create([1, 2, 3], $this->testDefaultNumberOfProductsPerPage);
 
+        $this->stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
+        $this->stubSortOrderConfig->method('isSelected')->willReturn(true);
+
         $this->requestHandler = $this->createRequestHandler(
             $stubContext,
             $this->mockDataPoolReader,
             $this->mockPageBuilder,
             $stubSnippetKeyGeneratorLocator,
             $testFilterNavigationConfig,
-            $productsPerPage
+            $productsPerPage,
+            $this->stubSortOrderConfig
         );
 
         $this->stubRequest = $this->createStubRequest();
@@ -225,10 +257,12 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
             ['number' => 3, 'selected' => false],
         ]);
 
-        $this->stubRequest->method('hasCookie')->with(ProductListingRequestHandler::PRODUCTS_PER_PAGE_COOKIE_NAME)
-            ->willReturn(true);
-        $this->stubRequest->method('getCookieValue')->with(ProductListingRequestHandler::PRODUCTS_PER_PAGE_COOKIE_NAME)
-            ->willReturn($productsPerPage);
+        $this->stubRequest->method('hasCookie')->willReturnMap([
+            [ProductListingRequestHandler::PRODUCTS_PER_PAGE_COOKIE_NAME, true]
+        ]);
+        $this->stubRequest->method('getCookieValue')->willReturnMap([
+            [ProductListingRequestHandler::PRODUCTS_PER_PAGE_COOKIE_NAME, $productsPerPage]
+        ]);
 
         $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
         $addSnippetsToPageSpy = $this->createAddedSnippetsSpy();
@@ -296,35 +330,26 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
     public function testDefaultNumberOfProductsPerPageIsRequestedFromDataPool()
     {
         $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
-
-        $spy = $this->any();
-        $this->mockDataPoolReader->expects($spy)->method('getSearchResultsMatchingCriteria');
+        $this->setExpectedNumberOfProductPerPage($this->testDefaultNumberOfProductsPerPage);
 
         $this->requestHandler->process($this->stubRequest);
-
-        $this->assertGivenNumberOfProductsPerPageWasRequestedFromDataPool(
-            $this->testDefaultNumberOfProductsPerPage,
-            $spy
-        );
     }
 
     public function testNumberOfProductsPerPageStoredInCookieIsRequestedFromDataPool()
     {
         $productsPerPage = 2;
 
-        $this->stubRequest->method('hasCookie')->with(ProductListingRequestHandler::PRODUCTS_PER_PAGE_COOKIE_NAME)
-            ->willReturn(true);
-        $this->stubRequest->method('getCookieValue')->with(ProductListingRequestHandler::PRODUCTS_PER_PAGE_COOKIE_NAME)
-            ->willReturn($productsPerPage);
+        $this->stubRequest->method('hasCookie')->willReturnMap([
+            [ProductListingRequestHandler::PRODUCTS_PER_PAGE_COOKIE_NAME, true]
+        ]);
+        $this->stubRequest->method('getCookieValue')->willReturnMap([
+            [ProductListingRequestHandler::PRODUCTS_PER_PAGE_COOKIE_NAME, $productsPerPage]
+        ]);
 
         $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
-
-        $spy = $this->any();
-        $this->mockDataPoolReader->expects($spy)->method('getSearchResultsMatchingCriteria');
+        $this->setExpectedNumberOfProductPerPage($productsPerPage);
 
         $this->requestHandler->process($this->stubRequest);
-
-        $this->assertGivenNumberOfProductsPerPageWasRequestedFromDataPool($productsPerPage, $spy);
     }
 
     /**
@@ -345,20 +370,16 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
         ]);
 
         $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
-
-        $spy = $this->any();
-        $this->mockDataPoolReader->expects($spy)->method('getSearchResultsMatchingCriteria');
+        $this->setExpectedNumberOfProductPerPage($productsPerPage);
 
         $this->requestHandler->process($stubHttpRequest);
-
-        $this->assertGivenNumberOfProductsPerPageWasRequestedFromDataPool($productsPerPage, $spy);
     }
 
     /**
      * @runInSeparateProcess
      * @requires extension xdebug
      */
-    public function testProductsPrePageCookieIsSetIfCorrespondingParameterIsPresentInRequest()
+    public function testProductsPrePageCookieIsSetIfCorrespondingQueryParameterIsPresent()
     {
         $selectedNumberOfProductsPerPage = 2;
 
@@ -385,5 +406,140 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
         );
 
         $this->assertContains($expectedCookie, $headers);
+    }
+
+    public function testExceptionIsThrownIfNoSortOrderConfigIsSelected()
+    {
+        $this->setExpectedException(NoSelectedSortOrderException::class);
+
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
+        $stubContext = $this->getMock(Context::class);
+        $stubSnippetKeyGeneratorLocator = $this->createStubSnippetKeyGeneratorLocator();
+        $testFilterNavigationConfig = ['foo' => []];
+        $productsPerPage = ProductsPerPage::create([1, 2, 3], $this->testDefaultNumberOfProductsPerPage);
+
+        /** @var SortOrderConfig|\PHPUnit_Framework_MockObject_MockObject $stubSortOrderConfig */
+        $stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
+
+        $requestHandler = $this->createRequestHandler(
+            $stubContext,
+            $this->mockDataPoolReader,
+            $this->mockPageBuilder,
+            $stubSnippetKeyGeneratorLocator,
+            $testFilterNavigationConfig,
+            $productsPerPage,
+            $stubSortOrderConfig
+        );
+
+        $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
+        $requestHandler->process($this->stubRequest);
+    }
+
+    public function testDefaultSortOrderConfigIsPassedToDataPool()
+    {
+        $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
+        $this->setExpectedSortOrderConfig($this->stubSortOrderConfig);
+
+        $this->requestHandler->process($this->stubRequest);
+    }
+
+    public function testSortOrderConfigBasedOnCookieValueIsPassedToDataPool()
+    {
+        $attributeCode = 'foo';
+        $direction = SearchEngine::SORT_DIRECTION_ASC;
+
+        $this->stubRequest->method('hasCookie')->willReturnMap([
+            [ProductListingRequestHandler::SORT_ORDER_COOKIE_NAME, true],
+            [ProductListingRequestHandler::SORT_DIRECTION_COOKIE_NAME, true],
+        ]);
+        $this->stubRequest->method('getCookieValue')->willReturnMap([
+            [ProductListingRequestHandler::SORT_ORDER_COOKIE_NAME, $attributeCode],
+            [ProductListingRequestHandler::SORT_DIRECTION_COOKIE_NAME, $direction],
+        ]);
+
+        $expectedSortOrderConfig = SortOrderConfig::createSelected(
+            AttributeCode::fromString($attributeCode),
+            $direction
+        );
+
+        $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
+        $this->setExpectedSortOrderConfig($expectedSortOrderConfig);
+
+        $this->requestHandler->process($this->stubRequest);
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testSortOrderAndDirectionFromQueryStringArePassedToDataPool()
+    {
+        $attributeCode = 'foo';
+        $direction = SearchEngine::SORT_DIRECTION_ASC;
+
+        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubHttpRequest */
+        $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+        $stubHttpRequest->method('getUrlPathRelativeToWebFront')
+            ->willReturn(ProductSearchRequestHandler::SEARCH_RESULTS_SLUG);
+        $stubHttpRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
+        $stubHttpRequest->method('getQueryParameter')->willReturnMap([
+            [ProductListingRequestHandler::SORT_ORDER_QUERY_PARAMETER_NAME, $attributeCode],
+            [ProductListingRequestHandler::SORT_DIRECTION_QUERY_PARAMETER_NAME, $direction],
+            [ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME, 'whatever'],
+        ]);
+
+        $expectedSortOrderConfig = SortOrderConfig::createSelected(
+            AttributeCode::fromString($attributeCode),
+            $direction
+        );
+
+        $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
+        $this->setExpectedSortOrderConfig($expectedSortOrderConfig);
+
+        $this->requestHandler->process($stubHttpRequest);
+    }
+
+    /**
+     * @runInSeparateProcess
+     * @requires extension xdebug
+     */
+    public function testSortOrderAndDirectionsCookiesAreSetIfCorrespondingQueryParameterIsPresent()
+    {
+        $attributeCode = 'foo';
+        $direction = SearchEngine::SORT_DIRECTION_ASC;
+
+        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubHttpRequest */
+        $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+        $stubHttpRequest->method('getUrlPathRelativeToWebFront')
+            ->willReturn(ProductSearchRequestHandler::SEARCH_RESULTS_SLUG);
+        $stubHttpRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
+        $stubHttpRequest->method('getQueryParameter')->willReturnMap([
+            [ProductListingRequestHandler::SORT_ORDER_QUERY_PARAMETER_NAME, $attributeCode],
+            [ProductListingRequestHandler::SORT_DIRECTION_QUERY_PARAMETER_NAME, $direction],
+            [ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME, 'whatever'],
+        ]);
+
+        $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
+        $this->requestHandler->process($stubHttpRequest);
+
+        $headers = xdebug_get_headers();
+
+        $expectedSortOrderCookie = sprintf(
+            'Set-Cookie: %s=%s; expires=%s; Max-Age=%s',
+            ProductListingRequestHandler::SORT_ORDER_COOKIE_NAME,
+            $attributeCode,
+            gmdate('D, d-M-Y H:i:s T', time() + ProductListingRequestHandler::SORT_ORDER_COOKIE_TTL),
+            ProductListingRequestHandler::SORT_ORDER_COOKIE_TTL
+        );
+
+        $expectedSortDirectionCookie = sprintf(
+            'Set-Cookie: %s=%s; expires=%s; Max-Age=%s',
+            ProductListingRequestHandler::SORT_DIRECTION_COOKIE_NAME,
+            $direction,
+            gmdate('D, d-M-Y H:i:s T', time() + ProductListingRequestHandler::SORT_DIRECTION_COOKIE_TTL),
+            ProductListingRequestHandler::SORT_DIRECTION_COOKIE_TTL
+        );
+
+        $this->assertContains($expectedSortOrderCookie, $headers);
+        $this->assertContains($expectedSortDirectionCookie, $headers);
     }
 }

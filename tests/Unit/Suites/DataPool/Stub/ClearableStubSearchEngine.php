@@ -3,6 +3,7 @@
 
 namespace LizardsAndPumpkins\DataPool\Stub;
 
+use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
@@ -28,6 +29,7 @@ class ClearableStubSearchEngine implements SearchEngine, Clearable
      * @param string[] $facetFiltersConfig
      * @param int $rowsPerPage
      * @param int $pageNumber
+     * @param SortOrderConfig $sortOrderConfig
      * @return void
      */
     public function getSearchDocumentsMatchingCriteria(
@@ -36,7 +38,8 @@ class ClearableStubSearchEngine implements SearchEngine, Clearable
         Context $context,
         array $facetFiltersConfig,
         $rowsPerPage,
-        $pageNumber
+        $pageNumber,
+        SortOrderConfig $sortOrderConfig
     ) {
         // Intentionally left empty
     }

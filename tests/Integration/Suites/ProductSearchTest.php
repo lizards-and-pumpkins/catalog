@@ -69,6 +69,7 @@ class ProductSearchTest extends AbstractIntegrationTest
         );
         $filterNavigationAttributeCodes = [];
         $productsPerPage = $this->factory->getProductsPerPageConfig();
+        $sortOrderConfigs = $this->factory->getProductSearchSortOrderConfig();
 
         return new ProductSearchRequestHandler(
             $this->factory->createContext(),
@@ -78,7 +79,8 @@ class ProductSearchTest extends AbstractIntegrationTest
             $filterNavigationAttributeCodes,
             $productsPerPage,
             $this->factory->createSearchCriteriaBuilder(),
-            $this->factory->getSearchableAttributeCodes()
+            $this->factory->getSearchableAttributeCodes(),
+            ...$sortOrderConfigs
         );
     }
 

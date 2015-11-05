@@ -91,13 +91,17 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
 
         $testSearchableAttributeCodes = ['foo'];
 
+        /** @var SortOrderConfig|\PHPUnit_Framework_MockObject_MockObject $sortOrderConfig */
+        $sortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);;
+
         $this->requestHandler = new ProductSearchAutosuggestionRequestHandler(
             $stubContext,
             $this->stubDataPoolReader,
             $this->mockPageBuilder,
             $stubSnippetKeyGeneratorLocator,
             $stubSearchCriteriaBuilder,
-            $testSearchableAttributeCodes
+            $testSearchableAttributeCodes,
+            $sortOrderConfig
         );
 
         $this->stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
