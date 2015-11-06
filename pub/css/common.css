@@ -232,7 +232,7 @@ nav { clear: both; color: #ffffff }
 .roundedBorder { border-radius: 2px }
 
 /* Clearer */
-.clearer:after, .nav:after, .header-panel:after,
+.clearer:after, .nav:after, .header-panel:after, .header:after,
 .nav .brands-logos:after { content: ""; display: block; height: 0; clear: both; visibility: hidden }
 
 /* Print */
