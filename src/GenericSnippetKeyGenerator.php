@@ -66,18 +66,14 @@ class GenericSnippetKeyGenerator implements SnippetKeyGenerator
      */
     private function getSnippetKeyDataAsString(array $data)
     {
-        $dataString = '';
-
-        foreach ($this->usedDataParts as $dataKey) {
+        return array_reduce($this->usedDataParts, function ($carry, $dataKey) use ($data) {
             if (!isset($data[$dataKey])) {
                 throw new MissingSnippetKeyGenerationDataException(
                     sprintf('"%s" is missing in snippet generation data.', $dataKey)
                 );
             }
 
-            $dataString .= '_' . $data[$dataKey];
-        }
-
-        return $dataString;
+            return $carry . '_' . $data[$dataKey];
+        }, '');
     }
 }
