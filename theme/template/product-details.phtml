@@ -60,35 +60,15 @@ $save = 0;
                         <p><strong><?= $this->__('Style') ?>:</strong> <?= $style ?></p>
                     <?php endif ?>
 
-                    <?php /* TODO: Move the complete condition below into JavaScript */ ?>
-                    <?php if (0) : //$_product->isSaleable() && $this->hasOptions()): ?>
-                        <p class="size">
-                            <strong><?= $this->__('Selected size') ?>: </strong>
-                            <span class="selectedSize"><?= $this->__('Choose size') ?></span>
-                        </p>
-                        <p class="availability">
-                            <strong><?= $this->__('Availability:') ?> </strong>
-                            <span class="availability choose"><?= $this->__('Choose size') ?></span>
-                            <span class="availability true"><?= $this->__('In Stock') ?></span>
-                            <span class="availability false"><?= $this->__('not available') ?></span>
-                            <span class="info"><?= $this->__('Versandinfo'); ?></span>
-                        </p>
-                    <?php else: ?>
-                        <?php if (1) : //$_product->isSaleable() && $stockItem->getQty() > 0): ?>
-                            <p class="availability"><strong><?= $this->__('Availability:') ?></strong> <span class="true"><?= $this->__('In stock') ?></span> <span class="info"><?= $this->__('Versandinfo') ?></span></p>
-                        <?php elseif (0) : //$_product->isSaleable() && $stockItem->getBackorders() > 0): ?>
-                            <p class="availability"><strong><?= $this->__('Availability:') ?></strong> <span class="true"><?= $this->__('3-5 days after order') ?></span> <span class="info"><?= $this->__('Versandinfo'); ?></span></p>
-                        <?php else: ?>
-                            <?php $schemaOrgStockStatus = 'OutOfStock' ?>
-                            <p class="availability"><strong><?= $this->__('Availability:') ?></strong> <span class="false"><?= $this->__('Out of stock') ?></span> <span class="info"><?= $this->__('Versandinfo'); ?></span></p>
-                        <?php endif ?>
-                    <?php endif ?>
+                    <p>
+                        <strong><?= $this->__('Availability:') ?> </strong>
+                        <span class="availability"><?= $this->__('In Stock') ?></span>
+                        <span class="info"><?= $this->__('Versandinfo'); ?></span>
+                    </p>
                 </div>
 
                 <div class="price-information" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
-                    <div class="price-box">
-                        <span class="regular-price"><?= $this->getChildOutput('price') ?></span>
-                    </div>
+                    <span class="regular-price"><?= $this->getChildOutput('price') ?></span>
                 </div>
                 <span class="regular-price"><?= $this->getChildOutput('special_price') ?></span>
             </div>
