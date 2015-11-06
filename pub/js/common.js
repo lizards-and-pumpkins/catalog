@@ -113,6 +113,10 @@ define(['lib/domReady', 'lib/cookie', 'search_autosuggestion'], function (domRea
         var currentWidth = document.body.clientWidth,
             nav = Array.prototype.slice.call(document.querySelectorAll('.nav'));
 
+        if (0 === nav.length) {
+            return;
+        }
+
         if (Math.ceil(nav[0].offsetWidth / currentWidth) === nav.length && nav[0].offsetWidth <= currentWidth) {
             return;
         }
