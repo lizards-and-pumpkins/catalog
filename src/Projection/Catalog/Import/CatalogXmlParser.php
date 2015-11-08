@@ -32,11 +32,6 @@ class CatalogXmlParser
      */
     private $listingCallbacks = [];
 
-    /**
-     * @var callable[]
-     */
-    private $productImageCallbacks = [];
-
     private function __construct(\XMLReader $xmlReader, Logger $logger)
     {
         $this->xmlReader = $xmlReader;
@@ -147,11 +142,6 @@ class CatalogXmlParser
         $this->listingCallbacks[] = $callback;
     }
 
-    public function registerProductImageCallback(callable $callback)
-    {
-        $this->productImageCallbacks[] = $callback;
-    }
-
     public function parse()
     {
         while ($this->xmlReader->read()) {
@@ -168,21 +158,8 @@ class CatalogXmlParser
         $productXml = $this->xmlReader->readOuterXml();
         try {
             $this->processCallbacksWithArg($this->productCallbacks, $productXml);
-            $this->importProductImages($productXml);
         } catch (\Exception $exception) {
             $this->logger->log(new ProductImportCallbackFailureMessage($exception, $productXml));
-        }
-    }
-
-    /**
-     * @param string $productXml
-     */
-    private function importProductImages($productXml)
-    {
-        try {
-            $this->processImageCallbacksForProductXml($productXml);
-        } catch (\Exception $exception) {
-            $this->logger->log(new ProductImageImportCallbackFailureMessage($exception, $productXml));
         }
     }
 
@@ -195,20 +172,7 @@ class CatalogXmlParser
             $this->logger->log(new CatalogListingImportCallbackFailureMessage($exception, $listingXml));
         }
     }
-
-    /**
-     * @param string $productXml
-     */
-    private function processImageCallbacksForProductXml($productXml)
-    {
-        $imageNodes = (new XPathParser($productXml))->getXmlNodesRawXmlArrayByXPath('/product/images/image');
-        // Suppress PHP printing warnings despite a wrapping try/catch block (what a fine PHP Bug).
-        // Note: the exception still gets raised as intended.
-        @array_map(function ($imageXml) {
-            $this->processCallbacksWithArg($this->productImageCallbacks, $imageXml);
-        }, $imageNodes);
-    }
-
+    
     /**
      * @return bool
      */
