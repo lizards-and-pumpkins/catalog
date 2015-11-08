@@ -50,14 +50,27 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         return $stubProduct;
     }
 
+    /**
+     * @param SnippetKeyGenerator $snippetKeyGenerator
+     * @param InternalToPublicProductJsonData $internalToPublicProductJsonData
+     * @return ProductInListingSnippetRenderer
+     */
+    private function createInstanceUnderTest($snippetKeyGenerator, $internalToPublicProductJsonData)
+    {
+        return new ProductInListingSnippetRenderer(
+            $snippetKeyGenerator,
+            $internalToPublicProductJsonData
+        );
+    }
+
     protected function setUp()
     {
         $this->mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $this->mockSnippetKeyGenerator->method('getKeyForContext')->willReturn('stub-content-key');
 
         $this->mockInternalToPublicProductJson = $this->getMock(InternalToPublicProductJsonData::class);
-        
-        $this->snippetRenderer = new ProductInListingSnippetRenderer(
+
+        $this->snippetRenderer = $this->createInstanceUnderTest(
             $this->mockSnippetKeyGenerator,
             $this->mockInternalToPublicProductJson
         );
@@ -94,9 +107,16 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $dummyProductId = 'foo';
         $stubProduct = $this->getStubProduct($dummyProductId);
 
-        $this->mockSnippetKeyGenerator->expects($this->once())->method('getKeyForContext')
-            ->with($this->anything(), [Product::ID => $dummyProductId]);
+        $mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $mockSnippetKeyGenerator->expects($this->once())->method('getKeyForContext')
+            ->with($this->anything(), [Product::ID => $stubProduct->getId()])
+            ->willReturn('stub-content-key');
 
-        $this->snippetRenderer->render($stubProduct);
+        $snippetRenderer = $this->createInstanceUnderTest(
+            $mockSnippetKeyGenerator,
+            $this->mockInternalToPublicProductJson
+        );
+
+        $snippetRenderer->render($stubProduct);
     }
 }
