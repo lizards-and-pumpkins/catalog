@@ -7,7 +7,7 @@ interface Context extends \JsonSerializable
     /**
      * @return string
      */
-    public function toString();
+    public function __toString();
 
     /**
      * @param string[] $requestedParts

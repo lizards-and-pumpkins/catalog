@@ -216,11 +216,7 @@ class PageBuilder
      */
     private function formatSnippetNotAvailableErrorMessage($snippetKey)
     {
-        return sprintf(
-            'Snippet not available (key "%s", context "%s")',
-            $snippetKey,
-            $this->context->toString()
-        );
+        return sprintf('Snippet not available (key "%s", context "%s")', $snippetKey, $this->context);
     }
 
     /**
