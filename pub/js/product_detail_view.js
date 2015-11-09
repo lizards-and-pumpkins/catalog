@@ -97,9 +97,7 @@ require([
             productIdField = document.querySelector('input[name="product"]');
 
         if (!isConfigurableProduct()) {
-            selectContainer.appendChild(createQtySelectBox(maxQty));
-            styleSelect('#' + selectBoxIdPrefix + 'qty');
-            addToCartButton.disabled = '';
+            showQtyBoxAndReleaseAddToCartButton(selectContainer, maxQty);
             return;
         }
 
@@ -119,14 +117,21 @@ require([
         if (typeof variationAttributeCode === 'undefined') {
             var selectedProductStock = matchingProducts[0]['attributes']['stock_qty'];
             productIdField.value = matchingProducts[0]['product_id'];
-            selectContainer.appendChild(createQtySelectBox(selectedProductStock));
-            styleSelect('#' + selectBoxIdPrefix + 'qty');
-            addToCartButton.disabled = '';
+            showQtyBoxAndReleaseAddToCartButton(selectContainer, selectedProductStock);
             return;
         }
 
-        var options = getVariationAttributeOptionValuesArray(matchingProducts, variationAttributeCode);
+        addVariationSelectBox(matchingProducts, variationAttributeCode, selectContainer);
+    }
 
+    function showQtyBoxAndReleaseAddToCartButton(parentContainer, maxQty) {
+        parentContainer.appendChild(createQtySelectBox(maxQty));
+        styleSelect('#' + selectBoxIdPrefix + 'qty');
+        addToCartButton.disabled = '';
+    }
+
+    function addVariationSelectBox(matchingProducts, variationAttributeCode, selectContainer) {
+        var options = getVariationAttributeOptionValuesArray(matchingProducts, variationAttributeCode);
         selectContainer.appendChild(createSelect(variationAttributeCode, options));
         styleSelect('#' + selectBoxIdPrefix + variationAttributeCode);
     }
