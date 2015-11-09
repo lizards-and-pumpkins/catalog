@@ -1,18 +1,4 @@
 define(function () {
-    updateQueryParameters: function (parameters) {
-        var queryParameters = this.getQueryParameters(),
-            urlWithoutQueryString = this.getUrlWithoutQueryString();
-
-        Object.keys(parameters).map(function (parameterName) {
-            queryParameters[parameterName] = parameters[parameterName];
-        });
-
-        return this.addQueryParametersToUrl(urlWithoutQueryString, queryParameters);
-    },
-
-    updateQueryParameter: function (parameterName, parameterValue) {
-        var queryParameters = this.getQueryParameters(),
-            urlWithoutQueryString = this.getUrlWithoutQueryString();
 
     function getUrlWithoutQueryString(url) {
         return url.split('?')[0];
@@ -73,16 +59,21 @@ define(function () {
             return url;
         }
 
-        return queryString.split('&').reduce(function (carry, item) {
-            var keyValue = item.split('=');
-            carry[keyValue[0]] = decodeURI(keyValue[1]);
-            return carry;
-        }, {});
-    },
         return url + '?' + queryString;
     }
 
     return {
+        updateQueryParameters: function (parameters) {
+            var queryParameters = getQueryParameters(location.href),
+                urlWithoutQueryString = getUrlWithoutQueryString(location.href);
+
+            Object.keys(parameters).map(function (parameterName) {
+                queryParameters[parameterName] = parameters[parameterName];
+            });
+
+            return addQueryParametersToUrl(urlWithoutQueryString, queryParameters);
+        },
+
         updateQueryParameter: function (parameterName, parameterValue) {
             var queryParameters = getQueryParameters(location.href),
                 urlWithoutQueryString = getUrlWithoutQueryString(location.href);
