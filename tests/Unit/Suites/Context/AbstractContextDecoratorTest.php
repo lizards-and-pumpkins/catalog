@@ -110,17 +110,15 @@ abstract class AbstractContextDecoratorTest extends \PHPUnit_Framework_TestCase
     public function testComponentIdIsIncludedIntoIdentifier()
     {
         $expected = $this->decoratedComponentCode . ':123';
-        $this->mockDecoratedContext->expects($this->once())
-            ->method('toString')
-            ->willReturn($expected);
-        $this->assertContains($expected, $this->getDecoratorUnderTest()->toString());
+        $this->mockDecoratedContext->method('__toString')->willReturn($expected);
+        $this->assertContains($expected, (string) $this->getDecoratorUnderTest());
     }
 
     public function testIdentifierContainingCodeAndValueIsReturned()
     {
         $code = $this->getDecoratorUnderTestCode();
         $expected = $code . ':' . $this->getDecoratorUnderTest()->getValue($code);
-        $this->assertContains($expected, $this->getDecoratorUnderTest()->toString());
+        $this->assertContains($expected, (string) $this->getDecoratorUnderTest());
     }
 
     public function testDecoratorIdIsNotIncludedInPartialIdIfNotRequested()

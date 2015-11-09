@@ -380,53 +380,7 @@ EOT;
         $instance->registerListingCallback($callback);
         $instance->parse();
     }
-
-    public function testItCallsAllRegisteredImageCallbacks()
-    {
-        $instance = CatalogXmlParser::fromXml($this->getCatalogXmlWithOneProductImage(), $this->mockLogger);
-        $callCount = 1;
-        $expectedXml = $this->getFirstImageXml();
-        $callback = $this->createMockCallbackExpectingXml($expectedXml, $callCount, 'imageCallback');
-        $instance->registerProductImageCallback($callback);
-        $instance->parse();
-    }
-
-    public function testItDoesNotCallImageCallbacksForAProductIfProductCallbackThrowsException()
-    {
-        $imageXml = $this->getFirstImageXml();
-        $invalidProductXml = $this->getInvalidSimpleProductXml($imageXml);
-        $invalidCatalogXml = $this->getCatalogXmlWithContent(
-            $this->getProductSectionWithContent($invalidProductXml)
-        );
-        
-        $this->mockLogger->expects($this->once())->method('log')
-            ->with($this->isInstanceOf(ProductImportCallbackFailureMessage::class));
-        
-        $instance = CatalogXmlParser::fromXml($invalidCatalogXml, $this->mockLogger);
-        
-        $productCallback = $this->getMock(Callback::class, ['__invoke']);
-        $productCallback->expects($this->once())->method('__invoke')->willThrowException(new \Exception('Test dummy'));
-        $instance->registerProductCallback($productCallback);
-        
-        $expectedImageCalls = 0;
-        $imageCallback = $this->createMockCallbackExpectingXml($imageXml, $expectedImageCalls, 'imageCallback');
-        $instance->registerProductImageCallback($imageCallback);
-        $instance->parse();
-    }
-
-    public function testItLogsAnExceptionsWhileProcessingImageCallbacks()
-    {
-        $this->mockLogger->expects($this->once())->method('log')
-            ->with($this->isInstanceOf(ProductImageImportCallbackFailureMessage::class));
-
-        $instance = CatalogXmlParser::fromXml($this->getCatalogXmlWithOneSimpleProduct(), $this->mockLogger);
-
-        $imageCallback = $this->getMock(Callback::class, ['__invoke']);
-        $imageCallback->expects($this->once())->method('__invoke')->willThrowException(new \Exception('Test dummy'));
-        $instance->registerProductImageCallback($imageCallback);
-        $instance->parse();
-    }
-
+    
     public function testItLogsAnExceptionsWhileProcessingListingCallbacks()
     {
         $this->mockLogger->expects($this->once())->method('log')

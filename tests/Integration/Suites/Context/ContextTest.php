@@ -61,7 +61,7 @@ EOX;
         foreach ($contextSource->getAllAvailableContexts() as $context) {
             $jsonString = json_encode($context);
             $rehydratedContext = $contextBuilder->createContext(json_decode($jsonString, true));
-            $this->assertSame($context->toString(), $rehydratedContext->toString());
+            $this->assertSame((string) $context, (string) $rehydratedContext);
         }
     }
 }

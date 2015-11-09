@@ -53,6 +53,11 @@ class CatalogImport
      */
     private $dataVersion;
 
+    /**
+     * @var string
+     */
+    private $imageDirectoryPath;
+
     public function __construct(
         Queue $commandQueue,
         ProductXmlToProductBuilderLocator $productXmlToProductBuilder,
@@ -80,8 +85,7 @@ class CatalogImport
         $parser = CatalogXmlParser::fromFilePath($importFilePath, $this->logger);
         $parser->registerProductCallback($this->createClosureForMethod('processProductXml'));
         $parser->registerListingCallback($this->createClosureForMethod('processListingXml'));
-        $imageDirectoryPath = dirname($importFilePath) . '/product-images';
-        $parser->registerProductImageCallback($this->createClosureForProductImageXml($imageDirectoryPath));
+        $this->imageDirectoryPath = dirname($importFilePath) . '/product-images';
         $parser->parse();
         $this->eventQueue->add(new CatalogWasImportedDomainEvent($this->dataVersion));
     }
@@ -115,24 +119,12 @@ class CatalogImport
     }
 
     /**
-     * @param string $imageDirectoryPath
-     * @return \Closure
-     */
-    private function createClosureForProductImageXml($imageDirectoryPath)
-    {
-        return function (...$args) use ($imageDirectoryPath) {
-            $this->processProductImageXml($imageDirectoryPath, ...$args);
-        };
-    }
-
-    /**
      * @param string $productXml
      */
     private function processProductXml($productXml)
     {
         try {
-            $productBuilder = $this->productXmlToProductBuilder->createProductBuilderFromXml($productXml);
-            $this->addProductsFromBuilderToQueue($productBuilder);
+            $this->addProductsAndProductImagesToQueue($productXml);
         } catch (\Exception $exceptionWillInterruptFurtherProcessingOfThisProduct) {
             $this->logger->log(new ProductImportCallbackFailureMessage(
                 $exceptionWillInterruptFurtherProcessingOfThisProduct,
@@ -142,34 +134,50 @@ class CatalogImport
         }
     }
 
-    public function addProductsFromBuilderToQueue(ProductBuilder $productBuilder)
+    /**
+     * @param string $productXml
+     */
+    public function addProductsAndProductImagesToQueue($productXml)
     {
-        array_map(function (Context $context) use ($productBuilder) {
+        $productBuilder = $this->productXmlToProductBuilder->createProductBuilderFromXml($productXml);
+        array_map(function (Context $context) use ($productBuilder, $productXml) {
             $product = $productBuilder->getProductForContext($context);
             if ($product->isAvailableInContext($context)) {
                 $this->addCommandToQueue($product);
+                $this->processImagesInProductXml($productXml);
             }
         }, $this->contextSource->getAllAvailableContextsWithVersion($this->dataVersion));
+    }
+
+
+    /**
+     * @param string $productXml
+     */
+    private function processImagesInProductXml($productXml)
+    {
+        $imageNodes = (new XPathParser($productXml))->getXmlNodesRawXmlArrayByXPath('/product/images/image');
+        // Suppress PHP printing warnings despite a wrapping try/catch block (what a fine PHP Bug).
+        // Note: the exception still gets raised as intended.
+        @array_map([$this, 'processProductImageXml'], $imageNodes);
+    }
+
+    /**
+     * @param string $productImageXml
+     */
+    private function processProductImageXml($productImageXml)
+    {
+        try {
+            $fileNode = (new XPathParser($productImageXml))->getXmlNodesArrayByXPath('/image/file')[0];
+            $imageFilePath = $this->imageDirectoryPath . '/' . $fileNode['value'];
+            $this->commandQueue->add(new AddImageCommand($imageFilePath, $this->dataVersion));
+        } catch (\Exception $exception) {
+            $this->logger->log(new ProductImageImportCallbackFailureMessage($exception, $productImageXml));
+        }
     }
 
     private function addCommandToQueue(Product $product)
     {
         $this->commandQueue->add(new UpdateProductCommand($product));
-    }
-
-    /**
-     * @param string $imageDirectoryPath
-     * @param string $productImageXml
-     */
-    private function processProductImageXml($imageDirectoryPath, $productImageXml)
-    {
-        try {
-            $fileNode = (new XPathParser($productImageXml))->getXmlNodesArrayByXPath('/image/file')[0];
-            $imageFilePath = $imageDirectoryPath . '/' . $fileNode['value'];
-            $this->commandQueue->add(new AddImageCommand($imageFilePath, $this->dataVersion));
-        } catch (\Exception $exception) {
-            $this->logger->log(new ProductImageImportCallbackFailureMessage($exception, $productImageXml));
-        }
     }
 
     /**

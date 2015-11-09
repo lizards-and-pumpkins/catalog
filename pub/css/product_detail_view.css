@@ -4,10 +4,10 @@
 @import "lib/zoom.css";
 @import "lib/dropdown.css";
 
-.product-essential { padding: 5px; background: #f0f0f0; display: table; width: 100% }
+.product-essential { background: #f0f0f0; display: table; width: 100% }
 .product-collateral { margin: 30px 0 }
 
-.product-shop { display: table-cell; padding: 15px 10px; vertical-align: top }
+.product-shop { display: table-cell; padding: 10px 15px; vertical-align: top }
 .product-shop .top { border-bottom: 1px solid #fff; margin-bottom: 10px; padding-bottom: 15px }
 .product-shop p { margin: 0 0 5px 0; }
 #switcher-container p { margin: 0; }
@@ -16,10 +16,13 @@
 .product-shop .artikel-nummer { font-size: 11px; margin: -3px 0 0 0; }
 .product-shop .delivery { color: #3d9b35; }
 .product-shop .note { line-height: 16px; }
-.product-img-box { display: table-cell; width: 366px; vertical-align: top }
-.zoom-flyout { left: 370px; width: 595px; height: 393px }
-.more-views { width: 366px; margin-left: -5px }
-.more-views li { display: inline-block; font-size: 0; padding: 3px 0 0 5px }
+
+/* Images */
+.product-img-box { display: table-cell; width: 375px; vertical-align: top; padding: 5px }
+.zoom-flyout { left: 370px; width: 594px; height: 393px }
+.more-views { margin-left: -5px; font-size: 0 }
+.more-views li { display: inline-block; padding: 3px 0 0 5px }
+.main-image-area > img { width: 365px }
 
 /* Tabs */
 .product-collateral .tabs li { display: inline }
@@ -30,11 +33,6 @@
 .product-shop .product-title { float: left; min-width: 50% }
 .product-shop .product-title img { float: left }
 .product-shop .similarProducts { font-size: 11px; margin-top: 5px }
-
-.slideshow { position: absolute; top:20px; left: 227px; z-index:10; }
-.slideshow object { width:125px; height:20px; }
-div.panorama,
-div.youTubeHolder { position: absolute; left:5px; top:5px; height: 340px; overflow: hidden; }
 .product-shop h1 { font-size: inherit }
 .product-shop div.top div.informations { position: absolute; top:60px; right:20px; }
 div.product-shop div.top div.informations div.price-box p.retail-price span.price { font-size: 18px; }
@@ -99,7 +97,6 @@ div.selector span { text-overflow: clip }
 
 /* Tablet */
 @media (max-width: 974px) {
-    .product-shop { width: auto }
     .product-shop .price-information { text-align: center; float: none; border-top: 1px solid #fff; margin-top: 10px; padding: 15px 0 5px 0; clear: both }
     .product-shop .price-information p { display: inline-block; margin: 0 5px }
     .product-shop .price-information .tax-information { width: auto }
@@ -117,6 +114,7 @@ div.selector span { text-overflow: clip }
     .product-img-box:after { content: ""; display: block; height: 0; clear: both; visibility: hidden }
     .main-container .main { padding-left: 0; padding-right: 0 }
     .product-essential, .product-shop, .product-img-box { display: block }
+    .product-shop { padding: 10px 5px }
     .product-img-box { width: auto }
     .product-shop .articleInformations { padding-top: 0; margin: 10px 0 0 0 }
     .product-shop .similarProducts { display: block; float: left; margin: 10px 0 0 0 }
@@ -126,11 +124,13 @@ div.selector span { text-overflow: clip }
     .socialSharing .cc { clear: both }
     .main .product-controls button { width: 100%; font-size: 22px; padding: 10px 0 }
 
-    #phoneTitlePlaceholder h1 { float: left; font-size: 13px; text-transform: capitalize }
+    #phoneTitlePlaceholder h1 { float: left; font-size: 13px; text-transform: capitalize; padding: 5px }
     #phoneTitlePlaceholder img { float: right }
 
     .product-img-box .flexslider { display: block }
-    /* .main-image-area, .more-views, div.slideshow { display: none } */
+    .more-views { display: none }
+    .main-image-area > img { width: 100% }
+    .zoom { position: static; display: inline }
 }
 
 /* Clearer */

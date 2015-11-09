@@ -50,7 +50,11 @@ class CalculateAverageDomainEventProcessingTime extends BaseCliCommand
             $this->getArg('sortBy'),
             $this->getArg('direction')
         );
-        $climate->table($tableData);
+        if (!$tableData) {
+            $climate->yellow('No data to report');
+        } else {
+            $climate->table($tableData);
+        }
     }
 
     /**

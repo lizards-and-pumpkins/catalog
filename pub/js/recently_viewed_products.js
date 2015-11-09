@@ -1,8 +1,15 @@
 define(['lib/local_storage'], function(storage) {
-    return {
 
-        storageKey: 'recently-viewed-products',
-        numProducts: 4,
+    var storageKey = 'recently-viewed-products',
+        numProducts = 4;
+
+    function removeProductFromListBySku(list, sku) {
+        return list.filter(function (item) {
+            return item['sku'] !== sku;
+        });
+    }
+
+    return {
 
         addProductIntoLocalStorage: function(product) {
 
@@ -10,56 +17,32 @@ define(['lib/local_storage'], function(storage) {
                 return;
             }
 
-            var recentlyViewedProducts = storage.get(this.storageKey) || [];
+            var recentlyViewedProducts = storage.get(storageKey) || [];
 
-            recentlyViewedProducts = this.removeProductFromListBySku(recentlyViewedProducts, product['sku']);
+            recentlyViewedProducts = removeProductFromListBySku(recentlyViewedProducts, product['sku']);
             recentlyViewedProducts.unshift(product);
 
-            if (recentlyViewedProducts.length > this.numProducts + 1) {
+            if (recentlyViewedProducts.length > numProducts + 1) {
                 recentlyViewedProducts.shift();
             }
 
-            storage.set(this.storageKey, recentlyViewedProducts);
+            storage.set(storageKey, recentlyViewedProducts);
         },
 
         getRecentlyViewedProductsHtml: function(currentProduct) {
 
-            var products = storage.get(this.storageKey);
+            var products = storage.get(storageKey) || [];
 
-            if (null === products || !products.hasOwnProperty('length') || !products.length) {
-                return '';
-            }
-
-            var productList = document.createElement('UL');
-            productList.className = 'product-grid';
-
-            for (var i = 0; i < products.length && i < this.numProducts; i++) {
-                if (currentProduct.hasOwnProperty('sku') && products[i]['sku'] == currentProduct['sku']) {
-                    continue;
+            var liHtml = products.reduce(function (carry, product) {
+                if (currentProduct.hasOwnProperty('sku') && product['sku'] !== currentProduct['sku']) {
+                    carry += product['html'];
                 }
-
-                productList.innerHTML += products[i]['html'];
-            }
+                return carry;
+            }, '');
 
             // TODO: Add "last" class to last element of the list.
 
-            var temporaryContainer = document.createElement('DIV');
-            temporaryContainer.appendChild(productList);
-
-            return temporaryContainer.innerHTML;
-        },
-
-        removeProductFromListBySku: function(list, sku) {
-
-            var newList = [];
-
-            for (var i = 0; i < list.length; i++) {
-                if (list[i]['sku'] != sku) {
-                    newList.push(list[i]);
-                }
-            }
-
-            return newList
+            return '<ul class="products-grid">' + liHtml + '</ul>';
         }
     }
 });

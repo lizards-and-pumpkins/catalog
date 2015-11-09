@@ -119,7 +119,8 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
         $stubProduct = $this->getMock(Product::class);
 
         $this->stubUrlKeyCollector->expects($this->once())->method('collectProductUrlKeys')
-            ->with($stubProduct);
+            ->with($stubProduct)
+            ->willReturn($this->getMock(UrlKeyForContextCollection::class, [], [], '', false));
 
         $this->projector->project($stubProduct);
     }
