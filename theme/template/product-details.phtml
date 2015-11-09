@@ -7,9 +7,12 @@ use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
 ?>
 <?php
 
+$maxQty = 5; // Temporary hardcoded
 $mainImage = $this->getMainProductImage();
 $brand = $this->getFirstValueOfProductAttribute('brand');
 $brandLogo = strtolower(preg_replace('/\W/', '_', trim($brand))) . '.png';
+
+$productImageCount = $this->getProductImageCount();
 
 /* TODO: Implement calculation of save */
 $save = 0;
@@ -22,25 +25,25 @@ $save = 0;
             <a href="<?= $mainImage->getPath('original') ?>" class="main-image-area">
                 <img src="<?= $mainImage->getPath('large') ?>" height="340" width="365" itemprop="image" alt="<?= $mainImage->getLabel() ?>"/>
             </a>
-            <ul class="more-views">
-                <li>
-                    <a href=""><img src="<?= $mainImage->getPath('small') ?>" width="48" height="48"/></a>
-                </li>
-            </ul>
-        </div>
-        <div class="product-shop">
-            <div class="top">
-                <div class="product-title">
-                    <img src="images/logos/<?= $brandLogo ?>" width="95" id="brandLogo" />
-                    <h1 itemprop="name"><?= $this->getFirstValueOfProductAttribute('name') ?></h1>
-                    <p class="similarProducts">
-                        <?= $this->__('More by') ?> <a href="" itemprop="brand"><?= $brand ?></a>
-                    </p>
-                </div>
-                <div class="articleInformations">
-                    <p class="articleNumber"><?= $this->__('SKU# ') ?> <?= $this->getProductId() ?></p>
-                    <meta itemprop="sku" content="<?= $this->getProductId() ?>" />
-                </div>
+                <ul class="more-views">
+                    <li>
+                        <a href=""><img src="<?= $mainImage->getPath('small') ?>" width="48" height="48"/></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="product-shop">
+                <div class="top">
+                    <div class="product-title">
+                        <img src="images/logos/<?= $brandLogo ?>" width="95" id="brandLogo" />
+                        <h1 itemprop="name"><?= $this->getFirstValueOfProductAttribute('name') ?></h1>
+                        <p class="similarProducts">
+                            <?= $this->__('More by') ?> <a href="" itemprop="brand"><?= $brand ?></a>
+                        </p>
+                    </div>
+                    <div class="articleInformations">
+                        <p class="articleNumber"><?= $this->__('SKU# ') ?> <?= $this->getProductId() ?></p>
+                        <meta itemprop="sku" content="<?= $this->getProductId() ?>" />
+                    </div>
 
                 <div class="socialSharing en_US">
                     <div class="item twitterLike"><a href="https://twitter.com/share" class="twitter-share-button">Tweet</a></div>
@@ -105,14 +108,14 @@ $save = 0;
 
         var html = '<li style="background-image:url(\'/media/brands/brands-small/<?= $brandLogo ?>\')" class="item">';
         html += '<div class="grid-cell-container">';
-        html += '<a href="<?php /* TODO: Product URL */ ?>" class="product-image"><img src="<?php /* TODO: 188x115 thumbnail URL */ ?>" width="188" height="115" alt="<?= $this->getFirstValueOfProductAttribute('name') ?>" /></a>';
+        html += '<a href="<?php /* TODO: Product URL */ ?>" class="product-image"><img src="media/product/medium/<?= $this->getMainProductFileName() ?>" width="188" height="115" alt="<?= $this->getMainProductImageLabel() ?>" /></a>';
         html += '<h2 class="product-name"><a href="<?php /* TODO: Product URL */ ?>"><?= $this->getFirstValueOfProductAttribute('name') ?></a></h2>';
         html += '<a href="<?php /* TODO: Product URL */ ?>"><?= $this->getChildOutput('price') ?></a>';
         <?php if ($gender) : ?>
         html += '<p class="product-category"><a href="<?php /* TODO: Product URL */ ?>"><?= is_array($gender) ? implode(',', $gender) : $gender ?></a></p>';
         <?php endif; ?>
         <?php if ($save > 0) : ?>
-        html += '<p class="you-save"><a href="<?php /* TODO: Product URL */ ?>"><?= $this->__('You save %s', '<strong>' . $save . '%</strong>'); ?></a></p>';
+        html += '<p class="you-save"><a href="<?php /* TODO: Product URL */ ?>"><?= sprintf($this->__('You save %s'), '<strong>' . $save . '%</strong>') ?></a></p>';
         <?php endif; ?>
         html += '</div>';
         html += '</li>';

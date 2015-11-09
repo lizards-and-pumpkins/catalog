@@ -91,9 +91,9 @@ abstract class ContextDecorator implements Context
     /**
      * @return string
      */
-    public function toString()
+    public function __toString()
     {
-        return $this->buildIdString() . '_' . $this->component->toString();
+        return $this->buildIdString() . '_' . $this->component->__toString();
     }
 
     /**

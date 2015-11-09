@@ -3,14 +3,9 @@
  * @var \LizardsAndPumpkins\Product\Block\ProductBlock $this
  */
 ?>
-<?php
-
-$productImage = $this->getMainProductImage();
-
-?>
 <li>
     <a href="<?= $this->getProductUrl() ?>">
-        <img src="<?= $productImage->getPath('search-autosuggestion') ?>" alt="<?= $productImage->getLabel() ?>" width="60" height="37"/>
+        <img src="media/product/search-autosuggestion/<?= $this->getMainProductFileName() ?>" alt="<?= $this->getMainProductImageLabel() ?>" width="60" height="37"/>
         <?= $this->getFirstValueOfProductAttribute('name') ?>
     </a>
 </li>

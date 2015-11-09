@@ -71,14 +71,6 @@ class UrlKeyForContext
     /**
      * @return string
      */
-    public function getContextAsString()
-    {
-        return $this->context->toString();
-    }
-
-    /**
-     * @return string
-     */
     public function getType()
     {
         return $this->urlKeyTypeString;

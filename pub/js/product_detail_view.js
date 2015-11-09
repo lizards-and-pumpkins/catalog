@@ -22,6 +22,7 @@ require([
         window.addEventListener('resize', adjustToPageWidth);
         window.addEventListener('orientationchange', adjustToPageWidth);
 
+        handleProductImages();
         initializeZoom();
         initializeTabs();
 
@@ -217,6 +218,20 @@ require([
         recentlyViewedProducts.addProductIntoLocalStorage(product);
     }
 
+    function handleProductImages() {
+        var mainImage = document.querySelector('.main-image-area img'),
+            thumbnails = document.querySelectorAll('.more-views a');
+
+        Array.prototype.map.call(thumbnails, function (thumbnail) {
+            thumbnail.addEventListener('click', function(event) {
+                event.preventDefault();
+                mainImage.src = this.getAttribute('data-image');
+                mainImage.parentNode.href = this.getAttribute('href');
+                initializeZoom();
+            }, true);
+        });
+    }
+
     function initializeZoom() {
         new zoom(document.querySelector('.main-image-area'));
     }
@@ -291,6 +306,7 @@ require([
             }
 
             /* TODO: Implement image slider */
+            /* TODO: From 767px to 366px an "original" image could be used and below 366px a "large" one. */
 
             /* Hide "send" part of FB buttons block if not yet hidden */
             fbEnsureInit(processFbButton);

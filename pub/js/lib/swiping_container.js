@@ -28,6 +28,10 @@ define(function () {
                 scrollPosition = outerContainer.scrollLeft,
                 innerContainer = outerContainer.querySelector(innerContainerSelector);
 
+            if (null === innerContainer) {
+                return;
+            }
+
             outerContainer.addEventListener('scroll', function () {
                 toggleSwipingArrows(outerContainerSelector, 'ul');
             }, true);
