@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Product\Block;
 
-use LizardsAndPumpkins\Image;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Renderer\Block;
@@ -13,7 +12,6 @@ use LizardsAndPumpkins\TestFileFixtureTrait;
  * @covers \LizardsAndPumpkins\Product\Block\ProductBlock
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Renderer\Block
- * @uses   \LizardsAndPumpkins\Image
  */
 class ProductBlockTest extends \PHPUnit_Framework_TestCase
 {
@@ -114,11 +112,35 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedProductBrandLogoSrc, $result);
     }
 
-    public function testInstanceOfImageIsReturned()
+    public function testGettingMainImageLabelIsDelegatedToProduct()
     {
-        $this->stubProduct->method('getMainImageFileName')->willReturn('test.jpg');
-        $this->stubProduct->method('getMainImageLabel')->willReturn('');
+        $testImageLabel = 'foo';
+        $this->stubProduct->method('getMainImageLabel')->willReturn($testImageLabel);
 
-        $this->assertInstanceOf(Image::class, $this->productBlock->getMainProductImage());
+        $this->assertSame($testImageLabel, $this->productBlock->getMainProductImageLabel());
+    }
+
+    public function testGettingMainImageFileNameIsDelegatedToProduct()
+    {
+        $testImageFileName = 'foo.png';
+        $this->stubProduct->method('getMainImageFileName')->willReturn($testImageFileName);
+
+        $this->assertSame($testImageFileName, $this->productBlock->getMainProductFileName());
+    }
+
+    public function testGettingProductImageCountIsDelegatedToProduct()
+    {
+        $testImagesCount = 3;
+        $this->stubProduct->method('getImageCount')->willReturn($testImagesCount);
+
+        $this->assertSame($testImagesCount, $this->productBlock->getProductImageCount());
+    }
+
+    public function testGettingProductImageFileNameIsDelegatedToProduct()
+    {
+        $testFileName = 'foo.png';
+        $this->stubProduct->method('getImageFileNameByNumber')->willReturn($testFileName);
+
+        $this->assertSame($testFileName, $this->productBlock->getProductImageFileNameByNumber(0));
     }
 }
