@@ -135,16 +135,16 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
         $result = $this->builder->createFromRequest($stubRequest);
         $this->assertInstanceOf(Context::class, $result);
     }
-    
+
     public function testContextDecoratorsReceiveRequestAsPartOfSourceData()
     {
         /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubRequest */
         $stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
         $this->builder->registerContextDecorator('request_test', TestContextDecorator::class);
-        
+
         /** @var TestContextDecorator $context */
         $context = $this->builder->createFromRequest($stubRequest);
-        
+
         $rawSourceData = $context->getRawSourceDataForTest();
         $this->assertArrayHasKey('request', $rawSourceData);
         $this->assertSame($stubRequest, $rawSourceData['request']);
@@ -154,10 +154,10 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $contextSourceA = ['stub_valid_test' => 'dummy', 'website' => 'test'];
         $contextSourceB = ['website' => 'test', 'stub_valid_test' => 'dummy'];
-        
+
         $contextA = $this->builder->createContext($contextSourceA);
         $contextB = $this->builder->createContext($contextSourceB);
-        
+
         $this->assertSame((string) $contextA, (string) $contextB, 'Context decorator order depends on input');
     }
 
@@ -165,7 +165,7 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $contextDataSetA = [['stub_valid_test' => 'dummy', 'website' => 'test']];
         $contextDataSetB = [['website' => 'test', 'stub_valid_test' => 'dummy']];
-        
+
         $setA = $this->builder->createContextsFromDataSets($contextDataSetA);
         $setB = $this->builder->createContextsFromDataSets($contextDataSetB);
 
@@ -177,7 +177,7 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $builderA = $this->builder;
         $builderB = new ContextBuilder(DataVersion::fromVersionString('1'));
-        
+
         $builderA->registerContextDecorator('locale', LocaleContextDecorator::class);
         $builderA->registerContextDecorator('website', WebsiteContextDecorator::class);
 
@@ -189,7 +189,7 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
         $contextB = $builderB->createContext($contextSource);
 
         $message = 'Context decorator order depends on registration order';
-        $this->assertSame($contextA->__toString(), $contextB->__toString(), $message);
+        $this->assertSame((string) $contextA, (string) $contextB, $message);
     }
 
     public function testItUsesTheVersionSuppliedInTheDataSetIfPresent()
@@ -222,9 +222,9 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
             LocaleContextDecorator::CODE => 'xx_XX',
             VersionedContext::CODE => '42'
         ];
-        
+
         $context = ContextBuilder::rehydrateContext($dataSet);
-        
+
         $this->assertInstanceOf(Context::class, $context);
         $this->assertSame('test', $context->getValue(WebsiteContextDecorator::CODE));
         $this->assertSame('xx_XX', $context->getValue(LocaleContextDecorator::CODE));
