@@ -1,4 +1,4 @@
-define(['lib/url'], function (url) {
+define(['lib/url', 'pagination'], function (url, pagination) {
 
     var FilterNavigation = {
         generateLayeredNavigation: function (filterNavigationJson, filterNavigationPlaceholderSelector) {
@@ -45,9 +45,11 @@ define(['lib/url'], function (url) {
             var selectedFilterOptions = this.getSelectedFilterValues(filterCode);
             return filterOptions.reduce(function (carry, filterOption) {
                 var option = document.createElement('LI'),
-                    link = document.createElement('A');
+                    link = document.createElement('A'),
+                    newUrl = url.toggleQueryParameter(filterCode, filterOption.value);
+
                 link.textContent = filterOption.value + ' (' + filterOption.count + ')';
-                link.href = url.toggleQueryParameter(filterCode, filterOption.value);
+                link.href = url.removeQueryParameterFromUrl(newUrl, pagination.getPaginationQueryParameterName());
                 option.appendChild(link);
 
                 if (selectedFilterOptions.indexOf(filterOption.value) !== -1) {
@@ -63,10 +65,12 @@ define(['lib/url'], function (url) {
             var selectedColors = this.getSelectedFilterValues(filterCode);
             return filterOptions.reduce(function (carry, filterOption) {
                 var option = document.createElement('LI'),
-                    link = document.createElement('A');
+                    link = document.createElement('A'),
+                    newUrl = url.toggleQueryParameter(filterCode, filterOption.value.toString());
+
                 link.innerHTML = selectedColors.indexOf(filterOption.value.toString()) !== -1 ? '&#x2713;' : '&nbsp;';
                 link.style.backgroundColor = '#' + filterOption.value;
-                link.href = url.toggleQueryParameter(filterCode, filterOption.value.toString());
+                link.href = url.removeQueryParameterFromUrl(newUrl, pagination.getPaginationQueryParameterName());
                 option.appendChild(link);
 
                 carry.push(option);
@@ -96,8 +100,10 @@ define(['lib/url'], function (url) {
                     priceTo = (parseInt(rangeNumber) + 1) * parseInt(priceStep) - 0.01,
                     priceRangeString = priceFrom + '~' + priceTo,
                     option = document.createElement('LI'),
-                    link = document.createElement('A');
-                link.href = url.toggleQueryParameter(filterCode, priceRangeString);
+                    link = document.createElement('A'),
+                    newUrl = url.toggleQueryParameter(filterCode, priceRangeString);
+
+                link.href = url.removeQueryParameterFromUrl(newUrl, pagination.getPaginationQueryParameterName());
                 link.innerHTML = priceFrom + ' &euro; - ' + priceTo + ' &euro; (' + priceRanges[rangeNumber] + ')';
                 option.appendChild(link);
 

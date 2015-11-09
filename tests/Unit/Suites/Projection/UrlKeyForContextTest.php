@@ -57,12 +57,6 @@ class UrlKeyForContextTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('result', $this->urlKeyForContext->getContextValue('test'));
     }
 
-    public function testItDelegatesToTheContextWhenGettingTheContextAsAString()
-    {
-        $this->stubContext->expects($this->once())->method('toString')->willReturn('result');
-        $this->assertSame('result', $this->urlKeyForContext->getContextAsString());
-    }
-
     public function testItReturnsTheUrlKeyType()
     {
         $this->assertSame($this->urlKeyType, $this->urlKeyForContext->getType());

@@ -28,6 +28,10 @@ define(['lib/bind'], function (bind) {
                 scrollPosition = outerContainer.scrollLeft,
                 innerContainer = outerContainer.querySelector(innerContainerSelector);
 
+            if (null === innerContainer) {
+                return;
+            }
+
             bind(outerContainer, 'scroll', function () {
                 toggleSwipingArrows(outerContainerSelector, 'ul');
             });
