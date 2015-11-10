@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\Exception\SnippetKeyGeneratorNotRegisteredException;
+
 /**
  * @covers \LizardsAndPumpkins\SnippetKeyGeneratorLocator
  * @uses   \LizardsAndPumpkins\GenericSnippetKeyGenerator

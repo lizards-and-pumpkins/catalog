@@ -1,7 +1,8 @@
 <?php
 
-
 namespace LizardsAndPumpkins;
+
+use LizardsAndPumpkins\Exception\SnippetKeyGeneratorNotRegisteredException;
 
 class SnippetKeyGeneratorLocator
 {
