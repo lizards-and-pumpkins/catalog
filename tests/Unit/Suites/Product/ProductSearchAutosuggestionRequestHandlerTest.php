@@ -13,7 +13,7 @@ use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\UnableToHandleRequestException;
 use LizardsAndPumpkins\PageBuilder;
 use LizardsAndPumpkins\SnippetKeyGenerator;
-use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocatorStrategy;
 
 /**
  * @covers \LizardsAndPumpkins\Product\ProductSearchAutosuggestionRequestHandler
@@ -77,15 +77,15 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
 
         $stubSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
 
-        /** @var SnippetKeyGeneratorLocator|\PHPUnit_Framework_MockObject_MockObject $stubSnippetKeyGeneratorLocator */
-        $stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
-        $stubSnippetKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')->willReturn($stubSnippetKeyGenerator);
+        /** @var SnippetKeyGeneratorLocatorStrategy|\PHPUnit_Framework_MockObject_MockObject $stubKeyGeneratorLocator */
+        $stubKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocatorStrategy::class);
+        $stubKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')->willReturn($stubSnippetKeyGenerator);
 
         $this->requestHandler = new ProductSearchAutosuggestionRequestHandler(
             $stubContext,
             $this->stubDataPoolReader,
             $this->mockPageBuilder,
-            $stubSnippetKeyGeneratorLocator
+            $stubKeyGeneratorLocator
         );
 
         $this->stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);

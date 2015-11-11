@@ -9,6 +9,7 @@ use LizardsAndPumpkins\Content\UpdateContentBlockCommandHandler;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\Http\HttpRouterChain;
 use LizardsAndPumpkins\Http\ResourceNotFoundRouter;
 use LizardsAndPumpkins\Image\ImageProcessorCollection;
@@ -65,6 +66,7 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Content\ContentBlockProjector
  * @uses   \LizardsAndPumpkins\Content\UpdateContentBlockCommandHandler
+ * @uses   \LizardsAndPumpkins\ContentBlockSnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\Context\ContextBuilder
  * @uses   \LizardsAndPumpkins\Context\ContextSource
  * @uses   \LizardsAndPumpkins\CommandConsumer
@@ -600,5 +602,20 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createInternalToPublicProductJsonData();
         $this->assertInstanceOf(InternalToPublicProductJsonData::class, $result);
+    }
+
+    public function testSearchCriteriaBuilderIsReturned()
+    {
+        $result = $this->commonFactory->createSearchCriteriaBuilder();
+        $this->assertInstanceOf(SearchCriteriaBuilder::class, $result);
+    }
+
+    public function testContentBlockSnippetKeyGeneratorLocatorReturnsSnippetKeyGenerator()
+    {
+        $snippetCode = 'content_block_foo';
+        $locatorStrategy = $this->commonFactory->createContentBlockSnippetKeyGeneratorLocatorStrategy();
+        $result = $locatorStrategy->getKeyGeneratorForSnippetCode($snippetCode);
+
+        $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
 }

@@ -1,7 +1,6 @@
 #!/usr/bin/env php
 <?php
 
-
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Http\HttpHeaders;
@@ -38,8 +37,11 @@ class ApiApp extends WebFront
     
     public function processQueues()
     {
+        /** @var CommandConsumer $commandConsumer */
         $commandConsumer = $this->getMasterFactory()->createCommandConsumer();
         $commandConsumer->process();
+
+        /** @var DomainEventConsumer $domainEventConsumer */
         $domainEventConsumer = $this->getMasterFactory()->createDomainEventConsumer();
         $domainEventConsumer->process();
     }
@@ -76,5 +78,25 @@ $catalogImportRequest = HttpRequest::fromParameters(
 
 $catalogImport = new ApiApp($catalogImportRequest);
 $catalogImport->runWithoutSendingResponse();
+
+
+$contentFileNames = glob(__DIR__ . '/../tests/shared-fixture/content-blocks/*.html');
+array_map(function ($contentFileName) {
+    $contentBlockContent = file_get_contents($contentFileName);
+    $httpRequestBodyString = json_encode([
+        'content' => $contentBlockContent,
+        'context' => ['website' => 'ru', 'locale' => 'de_DE']
+    ]);
+
+    $blockId = preg_replace('/.*\/|\.html$/ism', '', $contentFileName);
+    $contentBlockImportRequest = HttpRequest::fromParameters(
+        HttpRequest::METHOD_PUT,
+        HttpUrl::fromString('http://example.com/api/content_blocks/' . $blockId),
+        HttpHeaders::fromArray(['Accept' => 'application/vnd.lizards-and-pumpkins.content_blocks.v1+json']),
+        HttpRequestBody::fromString($httpRequestBodyString)
+    );
+
+    (new ApiApp($contentBlockImportRequest))->runWithoutSendingResponse();
+}, $contentFileNames);
 
 $catalogImport->processQueues();

@@ -18,7 +18,7 @@ use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\UnableToHandleRequestException;
 use LizardsAndPumpkins\PageBuilder;
 use LizardsAndPumpkins\SnippetKeyGenerator;
-use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocatorStrategy;
 
 /**
  * @covers \LizardsAndPumpkins\Product\ProductListingRequestHandler
@@ -125,7 +125,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return SnippetKeyGeneratorLocator|\PHPUnit_Framework_MockObject_MockObject
+     * @return SnippetKeyGeneratorLocatorStrategy|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createStubSnippetKeyGeneratorLocator()
     {
@@ -136,13 +136,13 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $stubProductListingCriteriaSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class, [], [], '', false);
         $stubProductListingCriteriaSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->testMetaInfoKey);
         
-        $stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
-        $stubSnippetKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')->willReturnMap([
+        $stubSnippetKeyGeneratorLocatorStrategy = $this->getMock(SnippetKeyGeneratorLocatorStrategy::class);
+        $stubSnippetKeyGeneratorLocatorStrategy->method('getKeyGeneratorForSnippetCode')->willReturnMap([
             [ProductListingCriteriaSnippetRenderer::CODE, $stubProductListingCriteriaSnippetKeyGenerator],
             [ProductInListingSnippetRenderer::CODE, $this->stubProductInListingSnippetKeyGenerator],
         ]);
 
-        return $stubSnippetKeyGeneratorLocator;
+        return $stubSnippetKeyGeneratorLocatorStrategy;
     }
 
     /**

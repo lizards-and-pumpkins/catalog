@@ -11,7 +11,7 @@ use LizardsAndPumpkins\Http\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\UnableToHandleRequestException;
 use LizardsAndPumpkins\PageBuilder;
-use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocatorStrategy;
 
 class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
 {
@@ -35,20 +35,20 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
     private $pageBuilder;
 
     /**
-     * @var SnippetKeyGeneratorLocator
+     * @var SnippetKeyGeneratorLocatorStrategy
      */
-    private $keyGeneratorLocator;
+    private $keyGeneratorLocatorStrategy;
 
     public function __construct(
         Context $context,
         DataPoolReader $dataPoolReader,
         PageBuilder $pageBuilder,
-        SnippetKeyGeneratorLocator $keyGeneratorLocator
+        SnippetKeyGeneratorLocatorStrategy $keyGeneratorLocatorStrategy
     ) {
         $this->context = $context;
         $this->dataPoolReader = $dataPoolReader;
         $this->pageBuilder = $pageBuilder;
-        $this->keyGeneratorLocator = $keyGeneratorLocator;
+        $this->keyGeneratorLocatorStrategy = $keyGeneratorLocatorStrategy;
     }
 
     /**
@@ -188,7 +188,7 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
      */
     private function getMetaInfoSnippetContent()
     {
-        $metaInfoSnippetKeyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
+        $metaInfoSnippetKeyGenerator = $this->keyGeneratorLocatorStrategy->getKeyGeneratorForSnippetCode(
             ProductSearchAutosuggestionMetaSnippetRenderer::CODE
         );
         $metaInfoSnippetKey = $metaInfoSnippetKeyGenerator->getKeyForContext($this->context, []);
@@ -203,7 +203,7 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
      */
     private function getProductInAutosuggestionSnippetKeys(SearchDocumentCollection $searchDocumentCollection)
     {
-        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
+        $keyGenerator = $this->keyGeneratorLocatorStrategy->getKeyGeneratorForSnippetCode(
             ProductInSearchAutosuggestionSnippetRenderer::CODE
         );
 

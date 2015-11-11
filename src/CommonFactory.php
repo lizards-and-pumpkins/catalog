@@ -766,17 +766,28 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
+     * @param string $snippetCode
      * @return SnippetKeyGenerator
      */
-    public function createContentBlockSnippetKeyGenerator()
+    public function createContentBlockSnippetKeyGenerator($snippetCode)
     {
-        $usedDataParts = ['content_block_id'];
+        $usedDataParts = [];
 
         return new GenericSnippetKeyGenerator(
-            $this->getMasterFactory()->getContentBlockSnippetKey(),
+            $snippetCode,
             $this->getMasterFactory()->getRequiredContexts(),
             $usedDataParts
         );
+    }
+
+    /**
+     * @return ContentBlockSnippetKeyGeneratorLocatorStrategy
+     */
+    public function createContentBlockSnippetKeyGeneratorLocatorStrategy()
+    {
+        return new ContentBlockSnippetKeyGeneratorLocatorStrategy(function ($snippetCode) {
+            return $this->getMasterFactory()->createContentBlockSnippetKeyGenerator($snippetCode);
+        });
     }
 
     /**
@@ -1051,14 +1062,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return string
-     */
-    public function getContentBlockSnippetKey()
-    {
-        return 'content_block';
-    }
-
-    /**
      * @param ImageWasAddedDomainEvent $event
      * @return ImageWasAddedDomainEventHandler
      */
@@ -1238,7 +1241,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new ContentBlockWasUpdatedDomainEventHandler(
             $event,
-            $this->getMasterFactory()->createContextSource(),
             $this->getMasterFactory()->createContentBlockProjector()
         );
     }
@@ -1280,7 +1282,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new ContentBlockSnippetRenderer(
             $this->getMasterFactory()->createSnippetList(),
-            $this->getMasterFactory()->createContentBlockSnippetKeyGenerator(),
+            $this->getMasterFactory()->createContentBlockSnippetKeyGeneratorLocatorStrategy(),
             $this->getMasterFactory()->createContextBuilder()
         );
     }

@@ -11,9 +11,10 @@ class ContentBlockImportTest extends AbstractIntegrationTest
 {
     public function testContentBlockSnippetIsWrittenIntoDataPool()
     {
+        $snippetCode = 'content_block_foo';
         $contentBlockContent = 'bar';
 
-        $httpUrl = HttpUrl::fromString('http://example.com/api/content_blocks/foo');
+        $httpUrl = HttpUrl::fromString('http://example.com/api/content_blocks/' . $snippetCode);
         $httpHeaders = HttpHeaders::fromArray([
             'Accept' => 'application/vnd.lizards-and-pumpkins.content_blocks.v1+json'
         ]);
@@ -44,8 +45,9 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $contextSource = $factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[1];
 
-        $snippetKeyGenerator = $factory->createContentBlockSnippetKeyGenerator();
-        $snippetKey = $snippetKeyGenerator->getKeyForContext($context, ['content_block_id' => 'foo']);
+        $snippetKeyGeneratorLocatorStrategy = $factory->createContentBlockSnippetKeyGeneratorLocatorStrategy();
+        $snippetKeyGenerator = $snippetKeyGeneratorLocatorStrategy->getKeyGeneratorForSnippetCode($snippetCode);
+        $snippetKey = $snippetKeyGenerator->getKeyForContext($context, []);
 
         $dataPoolReader = $factory->createDataPoolReader();
 

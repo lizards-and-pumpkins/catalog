@@ -10,9 +10,9 @@ use LizardsAndPumpkins\Exception\SnippetCodeCanNotBeProcessedException;
 class ContentBlockSnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Closure
+     * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $testClosure;
+    private $stubSnippetKeyGenerator;
 
     /**
      * @var ContentBlockSnippetKeyGeneratorLocatorStrategy
@@ -21,8 +21,9 @@ class ContentBlockSnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framew
 
     protected function setUp()
     {
-        $this->testClosure = function () { };
-        $this->strategy = new ContentBlockSnippetKeyGeneratorLocatorStrategy($this->testClosure);
+        $this->stubSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $testClosure = function () { return $this->stubSnippetKeyGenerator; };
+        $this->strategy = new ContentBlockSnippetKeyGeneratorLocatorStrategy($testClosure);
     }
 
     public function testSnippetKeyGeneratorLocatorStrategyInterfaceIsImplemented()
@@ -53,6 +54,6 @@ class ContentBlockSnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framew
     {
         $snippetCode = 'content_block_foo';
         $result = $this->strategy->getKeyGeneratorForSnippetCode($snippetCode);
-        $this->assertSame($this->testClosure, $result);
+        $this->assertSame($this->stubSnippetKeyGenerator, $result);
     }
 }

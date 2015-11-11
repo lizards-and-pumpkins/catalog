@@ -24,6 +24,7 @@ use LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\LoggingDomainEventHandlerFactory
+ * @uses   \LizardsAndPumpkins\ContentBlockSnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\Product\ProductBackOrderAvailabilitySnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductProjector
  * @uses   \LizardsAndPumpkins\Product\ProductInListingSnippetRenderer

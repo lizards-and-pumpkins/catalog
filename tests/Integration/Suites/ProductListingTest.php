@@ -8,7 +8,6 @@ use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Product\ProductListingCriteriaSnippetContent;
 use LizardsAndPumpkins\Product\ProductListingRequestHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer;
 use LizardsAndPumpkins\Utils\XPathParser;
@@ -61,32 +60,6 @@ class ProductListingTest extends AbstractIntegrationTest
     }
 
     /**
-     * @param string $contentBlockContent
-     */
-    private function addContentBlockToDataPool($contentBlockContent)
-    {
-        $testUrlKey = preg_replace('/.*\//', '', $this->testUrl);
-        $httpUrl = HttpUrl::fromString('http://example.com/api/content_blocks/in_product_listing_' . $testUrlKey);
-        $httpHeaders = HttpHeaders::fromArray([
-            'Accept' => 'application/vnd.lizards-and-pumpkins.content_blocks.v1+json'
-        ]);
-        $httpRequestBodyString = json_encode([
-            'content' => $contentBlockContent,
-            'context' => ['website' => 'ru', 'locale' => 'de_DE']
-        ]);
-        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
-        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
-
-        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-
-        $website = new InjectableSampleWebFront($request, $this->factory);
-        $website->runWithoutSendingResponse();
-
-        $this->factory->createCommandConsumer()->process();
-        $this->factory->createDomainEventConsumer()->process();
-    }
-
-    /**
      * @return ProductListingRequestHandler
      */
     private function getProductListingRequestHandler()
@@ -94,7 +67,7 @@ class ProductListingTest extends AbstractIntegrationTest
         $dataPoolReader = $this->factory->createDataPoolReader();
         $pageBuilder = new PageBuilder(
             $dataPoolReader,
-            $this->factory->getSnippetKeyGeneratorLocator(),
+            $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy(),
             $this->factory->getLogger()
         );
         $filterNavigationAttributeCodes = [];
@@ -104,52 +77,20 @@ class ProductListingTest extends AbstractIntegrationTest
             $this->factory->createContext(),
             $dataPoolReader,
             $pageBuilder,
-            $this->factory->getSnippetKeyGeneratorLocator(),
+            $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy(),
             $filterNavigationAttributeCodes,
             $defaultNumberOfProductsPerPage,
             $this->factory->createSearchCriteriaBuilder()
         );
     }
 
-    /**
-     * @return mixed[]
-     */
-    private function getStubMetaInfo()
-    {
-        $searchCriterion1 = SearchCriterionEqual::create('category', 'sale');
-        $searchCriterion2 = SearchCriterionEqual::create('brand', 'Adidas');
-        $searchCriteria = CompositeSearchCriterion::createAnd($searchCriterion1, $searchCriterion2);
-
-        $pageSnippetCodes = [
-            'global_notices',
-            'breadcrumbsContainer',
-            'global_messages',
-            'content_block_in_product_listing',
-            'before_body_end'
-        ];
-
-        $metaSnippetContent = ProductListingCriteriaSnippetContent::create(
-            $searchCriteria,
-            ProductListingPageSnippetRenderer::CODE,
-            $pageSnippetCodes
-        );
-
-        return $metaSnippetContent->getInfo();
-    }
-
     private function registerProductListingSnippetKeyGenerator()
     {
-        $this->factory->getSnippetKeyGeneratorLocator()->register(
+        $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy()->register(
             ProductListingPageSnippetRenderer::CODE,
-            $this->factory->createProductListingSnippetKeyGenerator()
-        );
-    }
-
-    private function registerContentBlockInProductListingSnippetKeyGenerator()
-    {
-        $this->factory->getSnippetKeyGeneratorLocator()->register(
-            'content_block_in_product_listing',
-            $this->factory->createContentBlockInProductListingSnippetKeyGenerator()
+            function () {
+                $this->factory->createProductListingSnippetKeyGenerator();
+            }
         );
     }
 
@@ -174,11 +115,16 @@ class ProductListingTest extends AbstractIntegrationTest
         );
 
         $dataPoolReader = $this->factory->createDataPoolReader();
-        $metaInfoSnippet = $dataPoolReader->getSnippet($snippetKey);
+        $metaInfoSnippetJson = $dataPoolReader->getSnippet($snippetKey);
+        $metaInfoSnippet = json_decode($metaInfoSnippetJson, true);
 
-        $expectedMetaInfoContent = json_encode($this->getStubMetaInfo());
+        $expectedCriteria = CompositeSearchCriterion::createAnd(
+            SearchCriterionEqual::create('category', 'sale'),
+            SearchCriterionEqual::create('brand', 'Adidas')
+        );
 
-        $this->assertSame($expectedMetaInfoContent, $metaInfoSnippet);
+        $this->assertEquals(ProductListingPageSnippetRenderer::CODE, $metaInfoSnippet['root_snippet_code']);
+        $this->assertEquals(json_encode($expectedCriteria), json_encode($metaInfoSnippet['product_selection_criteria']));
     }
 
     public function testProductListingPageHtmlIsReturned()
@@ -207,32 +153,5 @@ class ProductListingTest extends AbstractIntegrationTest
 
         $this->assertContains($expectedProductName, $body);
         $this->assertNotContains($unExpectedProductName, $body);
-    }
-
-    public function testContentBlockIsPresentAtProductListingPage()
-    {
-        $this->importCatalog();
-        $this->createProductListingFixture();
-
-        $contentBlockContent = '<div>Content Block</div>';
-
-        $this->addContentBlockToDataPool($contentBlockContent);
-
-        $request = HttpRequest::fromParameters(
-            HttpRequest::METHOD_GET,
-            HttpUrl::fromString($this->testUrl),
-            HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
-        );
-
-        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-        
-        $this->registerContentBlockInProductListingSnippetKeyGenerator();
-
-        $productListingRequestHandler = $this->getProductListingRequestHandler();
-        $page = $productListingRequestHandler->process($request);
-        $body = $page->getBody();
-
-        $this->assertContains($contentBlockContent, $body);
     }
 }

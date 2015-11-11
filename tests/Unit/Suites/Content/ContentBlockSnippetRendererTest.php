@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Content;
 
+use LizardsAndPumpkins\ContentBlockSnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Snippet;
@@ -21,9 +22,9 @@ class ContentBlockSnippetRendererTest extends \PHPUnit_Framework_TestCase
     private $mockSnippetList;
 
     /**
-     * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContentBlockSnippetKeyGeneratorLocatorStrategy|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockSnippetKeyGenerator;
+    private $stubSnippetKeyGeneratorLocatorStrategy;
 
     /**
      * @var ContextBuilder|\PHPUnit_Framework_MockObject_MockObject
@@ -38,12 +39,18 @@ class ContentBlockSnippetRendererTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->mockSnippetList = $this->getMock(SnippetList::class);
-        $this->mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $this->stubSnippetKeyGeneratorLocatorStrategy = $this->getMock(
+            ContentBlockSnippetKeyGeneratorLocatorStrategy::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->mockContextBuilder = $this->getMock(ContextBuilder::class, [], [], '', false);
 
         $this->renderer = new ContentBlockSnippetRenderer(
             $this->mockSnippetList,
-            $this->mockSnippetKeyGenerator,
+            $this->stubSnippetKeyGeneratorLocatorStrategy,
             $this->mockContextBuilder
         );
     }
@@ -59,11 +66,16 @@ class ContentBlockSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $dummyContentBlockContent = 'bar';
         $stubContext = $this->getMock(Context::class);
 
+        /** @var ContentBlockSource|\PHPUnit_Framework_MockObject_MockObject $mockContentBlockSource */
         $mockContentBlockSource = $this->getMock(ContentBlockSource::class, [], [], '', false);
         $mockContentBlockSource->method('getContent')->willReturn($dummyContentBlockContent);
         $mockContentBlockSource->method('getContextData')->willReturn([]);
 
-        $this->mockSnippetKeyGenerator->method('getKeyForContext')->willReturn($stubSnippetKey);
+        $stubKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $stubKeyGenerator->method('getKeyForContext')->willReturn($stubSnippetKey);
+
+        $this->stubSnippetKeyGeneratorLocatorStrategy->method('getKeyGeneratorForSnippetCode')
+            ->willReturn($stubKeyGenerator);
         $this->mockContextBuilder->method('createContext')->willReturn($stubContext);
 
         $expectedSnippet = Snippet::create($stubSnippetKey, $dummyContentBlockContent);

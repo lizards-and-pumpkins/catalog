@@ -18,7 +18,7 @@ use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\UnableToHandleRequestException;
 use LizardsAndPumpkins\PageBuilder;
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
-use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocatorStrategy;
 
 class ProductListingRequestHandler implements HttpRequestHandler
 {
@@ -45,9 +45,9 @@ class ProductListingRequestHandler implements HttpRequestHandler
     private $pageBuilder;
 
     /**
-     * @var SnippetKeyGeneratorLocator
+     * @var SnippetKeyGeneratorLocatorStrategy
      */
-    private $keyGeneratorLocator;
+    private $keyGeneratorLocatorStrategy;
 
     /**
      * @var string[]
@@ -68,7 +68,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
      * @param Context $context
      * @param DataPoolReader $dataPoolReader
      * @param PageBuilder $pageBuilder
-     * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
+     * @param SnippetKeyGeneratorLocatorStrategy $keyGeneratorLocatorStrategy
      * @param string[] $filterNavigationAttributeCodes
      * @param int $defaultNumberOfProductsPerPage
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
@@ -77,7 +77,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         Context $context,
         DataPoolReader $dataPoolReader,
         PageBuilder $pageBuilder,
-        SnippetKeyGeneratorLocator $keyGeneratorLocator,
+        SnippetKeyGeneratorLocatorStrategy $keyGeneratorLocatorStrategy,
         array $filterNavigationAttributeCodes,
         $defaultNumberOfProductsPerPage,
         SearchCriteriaBuilder $searchCriteriaBuilder
@@ -85,7 +85,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $this->dataPoolReader = $dataPoolReader;
         $this->context = $context;
         $this->pageBuilder = $pageBuilder;
-        $this->keyGeneratorLocator = $keyGeneratorLocator;
+        $this->keyGeneratorLocatorStrategy = $keyGeneratorLocatorStrategy;
         $this->filterNavigationAttributeCodes = $filterNavigationAttributeCodes;
         $this->defaultNumberOfProductsPerPage = $defaultNumberOfProductsPerPage;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
@@ -186,12 +186,12 @@ class ProductListingRequestHandler implements HttpRequestHandler
     }
 
     /**
-     * @param SearchDocument ...$searchDocuments
+     * @param SearchDocument[] $searchDocuments
      * @return string[]
      */
     private function getProductInListingSnippetKeysForSearchDocuments(SearchDocument ...$searchDocuments)
     {
-        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
+        $keyGenerator = $this->keyGeneratorLocatorStrategy->getKeyGeneratorForSnippetCode(
             ProductInListingSnippetRenderer::CODE
         );
         return array_map(function (SearchDocument $searchDocument) use ($keyGenerator) {
@@ -205,7 +205,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
      */
     private function getMetaInfoSnippetKey(HttpRequest $request)
     {
-        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
+        $keyGenerator = $this->keyGeneratorLocatorStrategy->getKeyGeneratorForSnippetCode(
             ProductListingCriteriaSnippetRenderer::CODE
         );
         $urlKey = $request->getUrlPathRelativeToWebFront();

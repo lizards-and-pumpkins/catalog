@@ -35,6 +35,6 @@ class ContentBlockSnippetKeyGeneratorLocatorStrategy implements SnippetKeyGenera
             );
         }
 
-        return $this->closure;
+        return call_user_func($this->closure, $snippetCode);
     }
 }
