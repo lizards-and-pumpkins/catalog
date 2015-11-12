@@ -88,7 +88,7 @@ array_map(function ($contentFileName) {
         'context' => ['website' => 'ru', 'locale' => 'de_DE']
     ]);
 
-    $blockId = preg_replace('/.*\/|\.html$/ism', '', $contentFileName);
+    $blockId = preg_replace('/.*\/|\.html$/im', '', $contentFileName);
     $contentBlockImportRequest = HttpRequest::fromParameters(
         HttpRequest::METHOD_PUT,
         HttpUrl::fromString('http://example.com/api/content_blocks/' . $blockId),
