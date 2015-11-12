@@ -32,7 +32,7 @@ h1 { font-size: 26px; font-weight: normal; color: #323232; text-transform: upper
 input[type=text], input[type=password], textarea { width: 100%; font-size: 13px; border: none; margin: 0 }
 input[type=text], input[type=password] { padding: 6px 0 5px 0 }
 button { padding: 6px 21px; font-family: GeogrotesqueRegular, Helvetica, Arial, sans-serif; font-size: 22px; color: #fff; cursor: pointer; font-weight: normal; border-radius: 2px; border: none; background-color: #e46d06; margin: 0 }
-button:disabled, button.disabled { background-color: #999999 }
+button:disabled { background-color: #999999; cursor: default }
 textarea:focus, input:focus { outline: 0 }
 
 /* Main search form */
@@ -42,8 +42,6 @@ textarea:focus, input:focus { outline: 0 }
 .search-form input:focus { cursor: text }
 .search-form button { padding: 0; border-radius: 0 2px 2px 0; position: absolute; right: -1px; top: -1px; cursor: pointer; background-color: #e46d06 }
 .search-form button:disabled { cursor: default; background-color: #999999 }
-/* IE8 will cough up once it will see :disabled and will ignore the complete selector so it has to be duplicated */
-.search-form button.disabled { cursor: default; background-color: #999999 }
 .search-form .search-button-image { background: url('../images/icons/icons-36-white.png') -1216px -4px; height: 32px; width: 50px; display: block }
 
 #search-autosuggestion { position: absolute; left: -1px; z-index: 200 }
