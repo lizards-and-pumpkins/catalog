@@ -46,6 +46,11 @@ class RegistrySnippetKeyGeneratorLocatorStrategy implements SnippetKeyGeneratorL
                 (is_scalar($snippetCode) ? $snippetCode : gettype($snippetCode))
             ));
         }
+
+        if (empty(trim($snippetCode))) {
+            throw new InvalidSnippetCodeException('Snippet code must not be empty');
+
+        }
     }
 
     /**

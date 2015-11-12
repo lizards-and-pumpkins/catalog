@@ -60,6 +60,27 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework_
         $this->strategy->getKeyGeneratorForSnippetCode($stubSnippetRenderer);
     }
 
+    /**
+     * @dataProvider emptySnippetCodeDataProvider
+     * @param string $emptySnippetCode
+     */
+    public function testExceptionIsThrownIfEmptyStringSnippetRendererCodeIsPassed($emptySnippetCode)
+    {
+        $this->setExpectedException(InvalidSnippetCodeException::class, 'Snippet code must not be empty');
+        $this->strategy->getKeyGeneratorForSnippetCode($emptySnippetCode);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function emptySnippetCodeDataProvider()
+    {
+        return [
+            [''],
+            [' '],
+        ];
+    }
+
     public function testKeyGeneratorForSnippetCodesIsReturned()
     {
         $snippetCode = 'foo';
