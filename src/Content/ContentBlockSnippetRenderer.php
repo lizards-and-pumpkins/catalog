@@ -2,9 +2,9 @@
 
 namespace LizardsAndPumpkins\Content;
 
-use LizardsAndPumpkins\ContentBlockSnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Snippet;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocator\ContentBlockSnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\SnippetList;
 use LizardsAndPumpkins\SnippetRenderer;
 

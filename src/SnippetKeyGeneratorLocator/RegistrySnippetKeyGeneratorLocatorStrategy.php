@@ -1,8 +1,9 @@
 <?php
 
-namespace LizardsAndPumpkins;
+namespace LizardsAndPumpkins\SnippetKeyGeneratorLocator;
 
-use LizardsAndPumpkins\Exception\SnippetCodeCanNotBeProcessedException;
+use LizardsAndPumpkins\Exception\InvalidSnippetCodeException;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocator\Exception\SnippetCodeCanNotBeProcessedException;
 
 class RegistrySnippetKeyGeneratorLocatorStrategy implements SnippetKeyGeneratorLocator
 {

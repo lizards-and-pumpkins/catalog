@@ -8,6 +8,7 @@ use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\ProductDetailPageMetaInfoSnippetContent;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 
 /**
  * @covers \LizardsAndPumpkins\PageBuilder

@@ -84,6 +84,7 @@ use LizardsAndPumpkins\Renderer\BlockStructure;
 use LizardsAndPumpkins\Renderer\ThemeLocator;
 use LizardsAndPumpkins\Renderer\Translation\CsvTranslator;
 use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocator\ContentBlockSnippetKeyGeneratorLocatorStrategy;
 
 class CommonFactory implements Factory, DomainEventFactory, CommandFactory
 {

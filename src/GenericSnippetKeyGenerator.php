@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Exception\InvalidSnippetCodeException;
 
 class GenericSnippetKeyGenerator implements SnippetKeyGenerator
 {

@@ -1,11 +1,14 @@
 <?php
 
-namespace LizardsAndPumpkins;
+namespace LizardsAndPumpkins\SnippetKeyGeneratorLocator;
 
-use LizardsAndPumpkins\Exception\SnippetCodeCanNotBeProcessedException;
+use LizardsAndPumpkins\Exception\InvalidSnippetCodeException;
+use LizardsAndPumpkins\SnippetKeyGenerator;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocator\Exception\SnippetCodeCanNotBeProcessedException;
+use LizardsAndPumpkins\SnippetRenderer;
 
 /**
- * @covers \LizardsAndPumpkins\RegistrySnippetKeyGeneratorLocatorStrategy
+ * @covers \LizardsAndPumpkins\SnippetKeyGeneratorLocator\RegistrySnippetKeyGeneratorLocatorStrategy
  */
 class RegistrySnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework_TestCase
 {

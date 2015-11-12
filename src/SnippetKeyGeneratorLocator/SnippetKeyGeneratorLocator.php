@@ -1,6 +1,8 @@
 <?php
 
-namespace LizardsAndPumpkins;
+namespace LizardsAndPumpkins\SnippetKeyGeneratorLocator;
+
+use LizardsAndPumpkins\SnippetKeyGenerator;
 
 interface SnippetKeyGeneratorLocator
 {

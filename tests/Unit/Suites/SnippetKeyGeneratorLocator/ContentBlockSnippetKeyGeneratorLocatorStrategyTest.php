@@ -1,11 +1,12 @@
 <?php
 
-namespace LizardsAndPumpkins;
+namespace LizardsAndPumpkins\SnippetKeyGeneratorLocator;
 
-use LizardsAndPumpkins\Exception\SnippetCodeCanNotBeProcessedException;
+use LizardsAndPumpkins\SnippetKeyGenerator;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocator\Exception\SnippetCodeCanNotBeProcessedException;
 
 /**
- * @covers \LizardsAndPumpkins\ContentBlockSnippetKeyGeneratorLocatorStrategy
+ * @covers \LizardsAndPumpkins\SnippetKeyGeneratorLocator\ContentBlockSnippetKeyGeneratorLocatorStrategy
  */
 class ContentBlockSnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework_TestCase
 {
@@ -42,7 +43,7 @@ class ContentBlockSnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framew
         $snippetCode = 'content_block_foo';
         $this->assertTrue($this->strategy->canHandle($snippetCode));
     }
-    
+
     public function testExceptionIsThrownDuringAttemptToSnippetKeyGeneratorForUnsupportedSnippetCode()
     {
         $unsupportedSnippetCode = 'foo';
