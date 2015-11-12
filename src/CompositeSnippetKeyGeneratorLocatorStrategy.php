@@ -17,7 +17,7 @@ class CompositeSnippetKeyGeneratorLocatorStrategy implements SnippetKeyGenerator
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function canHandle($snippetCode)
     {
@@ -31,7 +31,7 @@ class CompositeSnippetKeyGeneratorLocatorStrategy implements SnippetKeyGenerator
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getKeyGeneratorForSnippetCode($snippetCode)
     {

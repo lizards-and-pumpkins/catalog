@@ -12,7 +12,7 @@ class RegistrySnippetKeyGeneratorLocatorStrategy implements SnippetKeyGeneratorL
     private $closures = [];
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function canHandle($snippetCode)
     {
@@ -20,7 +20,7 @@ class RegistrySnippetKeyGeneratorLocatorStrategy implements SnippetKeyGeneratorL
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getKeyGeneratorForSnippetCode($snippetCode)
     {

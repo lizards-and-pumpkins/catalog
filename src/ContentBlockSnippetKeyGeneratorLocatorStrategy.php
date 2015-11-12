@@ -17,7 +17,7 @@ class ContentBlockSnippetKeyGeneratorLocatorStrategy implements SnippetKeyGenera
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function canHandle($snippetCode)
     {
@@ -25,7 +25,7 @@ class ContentBlockSnippetKeyGeneratorLocatorStrategy implements SnippetKeyGenera
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getKeyGeneratorForSnippetCode($snippetCode)
     {
