@@ -1,6 +1,9 @@
 require(
     ['lib/domReady', 'product_grid', 'filter_navigation', 'pagination', 'lib/url', 'lib/styleselect', 'common'],
     function (domReady, productGrid, filterNavigation, pagination, url, styleSelect) {
+
+        var previousViewportWidth;
+
         domReady(function () {
             productGrid.renderGrid(productListingJson, productPrices, '#products-grid-container');
             filterNavigation.renderLayeredNavigation(filterNavigationJson, '#filter-navigation');
@@ -8,7 +11,42 @@ require(
             setTotalNumberOfProductsInSelection(totalNumberOfResults, '.toolbar .amount');
             renderProductsPerPageLinks(productsPerPage, '.toolbar .limiter');
             renderSortingDropDown(sortOrderConfig, '.toolbar .sort-by');
+            bindLayeredNavigationButtonsActions();
+
+            adjustToPageWidth();
+            window.addEventListener('resize', adjustToPageWidth);
+            window.addEventListener('orientationchange', adjustToPageWidth);
         });
+
+        function adjustToPageWidth() {
+            if (!isViewportWidthChanged()) {
+                return;
+            }
+
+            addClassToLastElementOfEachRow('last');
+        }
+
+        function isViewportWidthChanged() {
+            if (document.body.clientWidth === previousViewportWidth) {
+                return false;
+            }
+
+            previousViewportWidth = document.body.clientWidth;
+            return true;
+        }
+
+        function addClassToLastElementOfEachRow(className) {
+            var grid = document.querySelector('.products-grid'),
+                cells = Array.prototype.slice.call(grid.querySelectorAll('li')),
+                colsPerRow = Math.floor(grid.clientWidth / cells[0].clientWidth);
+
+            cells.map(function (cell, index) {
+                cell.className = cell.className.replace(/\blast\b/ig, '');
+                if (!((index + 1) % colsPerRow)) {
+                    cell.className += ' ' + className;
+                }
+            });
+        }
 
         function setTotalNumberOfProductsInSelection(totalNumberOfResults, selector) {
             Array.prototype.map.call(document.querySelectorAll(selector), function (targetElement) {
@@ -85,6 +123,17 @@ require(
             sortingOption.selected = config['selected'];
 
             return sortingOption;
+        }
+
+        function bindLayeredNavigationButtonsActions() {
+            var filtersButton = document.getElementById('filters-button'),
+                filters = document.getElementById('filter-navigation');
+
+            filtersButton.addEventListener('click', function () {
+                this.className = this.className.replace(/\bexpanded\b|\bcollapsed\b/ig, '');
+                this.className += 'block' === filters.style.display ? ' collapsed' : ' expanded';
+                filters.style.display = 'block' === filters.style.display ? 'none' : 'block';
+            }, true);
         }
     }
 );
