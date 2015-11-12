@@ -419,7 +419,7 @@ TEXTILE/SYNTHETICS]]></description>
                 </product>
                 <product sku="218765-333-2" type="simple">
                     <attributes>
-                        <stock_qty>750</stock_qty>
+                        <stock_qty>0</stock_qty>
                         <color locale="en_US">Red</color>
                         <color locale="de_DE">Rot</color>
                         <size>US 12 - EU 46</size>

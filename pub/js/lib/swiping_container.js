@@ -1,4 +1,4 @@
-define(['lib/bind'], function (bind) {
+define(function () {
 
     var createArrow = function (className, outerContainer, direction) {
         var arrow = outerContainer.parentNode.querySelector('.' + className);
@@ -6,9 +6,9 @@ define(['lib/bind'], function (bind) {
         if (null === arrow) {
             arrow = document.createElement('A');
             arrow.className = className;
-            bind(arrow, 'click', function () {
+            arrow.addEventListener('click', function () {
                 swipeHorizontal(outerContainer, direction)
-            });
+            }, true);
 
             outerContainer.appendChild(arrow);
         }
@@ -32,9 +32,9 @@ define(['lib/bind'], function (bind) {
                 return;
             }
 
-            bind(outerContainer, 'scroll', function () {
+            outerContainer.addEventListener('scroll', function () {
                 toggleSwipingArrows(outerContainerSelector, 'ul');
-            });
+            }, true);
 
             prevArr.style.opacity = scrollPosition > 0 ? 1 : 0;
             nextArr.style.opacity = innerContainer.offsetWidth - document.body.clientWidth > scrollPosition ? 1 : 0;
