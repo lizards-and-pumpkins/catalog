@@ -25,7 +25,7 @@ class CompositeSnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework
     {
         $this->stubSnippetKeyGeneratorClosure = function () { };
 
-        $stubSnippetKeyGeneratorLocatorStrategy = $this->getMock(SnippetKeyGeneratorLocatorStrategy::class);
+        $stubSnippetKeyGeneratorLocatorStrategy = $this->getMock(SnippetKeyGeneratorLocator::class);
         $stubSnippetKeyGeneratorLocatorStrategy->method('canHandle')->willReturnMap([
             [$this->supportedSnippetCode, true]
         ]);
@@ -38,7 +38,7 @@ class CompositeSnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework
 
     public function testSnippetKeyGeneratorLocatorStrategyInterfaceIsImplemented()
     {
-        $this->assertInstanceOf(SnippetKeyGeneratorLocatorStrategy::class, $this->strategy);
+        $this->assertInstanceOf(SnippetKeyGeneratorLocator::class, $this->strategy);
     }
 
     public function testFalseIsReturnedIfNoUnderlyingStrategyCanHandleSnippetCode()

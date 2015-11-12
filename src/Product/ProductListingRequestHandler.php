@@ -18,7 +18,7 @@ use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\UnableToHandleRequestException;
 use LizardsAndPumpkins\PageBuilder;
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
-use LizardsAndPumpkins\SnippetKeyGeneratorLocatorStrategy;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
 
 class ProductListingRequestHandler implements HttpRequestHandler
 {
@@ -45,7 +45,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
     private $pageBuilder;
 
     /**
-     * @var SnippetKeyGeneratorLocatorStrategy
+     * @var SnippetKeyGeneratorLocator
      */
     private $keyGeneratorLocator;
 
@@ -68,7 +68,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
      * @param Context $context
      * @param DataPoolReader $dataPoolReader
      * @param PageBuilder $pageBuilder
-     * @param SnippetKeyGeneratorLocatorStrategy $keyGeneratorLocator
+     * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
      * @param string[] $filterNavigationAttributeCodes
      * @param int $defaultNumberOfProductsPerPage
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
@@ -77,7 +77,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         Context $context,
         DataPoolReader $dataPoolReader,
         PageBuilder $pageBuilder,
-        SnippetKeyGeneratorLocatorStrategy $keyGeneratorLocator,
+        SnippetKeyGeneratorLocator $keyGeneratorLocator,
         array $filterNavigationAttributeCodes,
         $defaultNumberOfProductsPerPage,
         SearchCriteriaBuilder $searchCriteriaBuilder

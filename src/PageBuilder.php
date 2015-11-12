@@ -26,7 +26,7 @@ class PageBuilder
     private $snippetKeyToContentMap = [];
 
     /**
-     * @var SnippetKeyGeneratorLocatorStrategy
+     * @var SnippetKeyGeneratorLocator
      */
     private $keyGeneratorLocator;
 
@@ -52,7 +52,7 @@ class PageBuilder
 
     public function __construct(
         DataPoolReader $dataPoolReader,
-        SnippetKeyGeneratorLocatorStrategy $keyGeneratorLocator,
+        SnippetKeyGeneratorLocator $keyGeneratorLocator,
         Logger $logger
     ) {
         $this->dataPoolReader = $dataPoolReader;

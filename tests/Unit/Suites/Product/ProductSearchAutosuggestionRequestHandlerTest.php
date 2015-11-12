@@ -13,7 +13,7 @@ use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\UnableToHandleRequestException;
 use LizardsAndPumpkins\PageBuilder;
 use LizardsAndPumpkins\SnippetKeyGenerator;
-use LizardsAndPumpkins\SnippetKeyGeneratorLocatorStrategy;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
 
 /**
  * @covers \LizardsAndPumpkins\Product\ProductSearchAutosuggestionRequestHandler
@@ -77,8 +77,8 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
 
         $stubSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
 
-        /** @var SnippetKeyGeneratorLocatorStrategy|\PHPUnit_Framework_MockObject_MockObject $stubKeyGeneratorLocator */
-        $stubKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocatorStrategy::class);
+        /** @var SnippetKeyGeneratorLocator|\PHPUnit_Framework_MockObject_MockObject $stubKeyGeneratorLocator */
+        $stubKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
         $stubKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')->willReturn($stubSnippetKeyGenerator);
 
         $this->requestHandler = new ProductSearchAutosuggestionRequestHandler(

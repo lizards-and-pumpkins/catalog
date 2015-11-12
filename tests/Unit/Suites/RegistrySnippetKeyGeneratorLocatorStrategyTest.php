@@ -27,7 +27,7 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework_
 
     public function testSnippetKeyGeneratorLocatorStrategyInterfaceIsImplemented()
     {
-        $this->assertInstanceOf(SnippetKeyGeneratorLocatorStrategy::class, $this->strategy);
+        $this->assertInstanceOf(SnippetKeyGeneratorLocator::class, $this->strategy);
     }
 
     public function testFalseIsReturnedIfSnippetCodeCanNotBeHandled()

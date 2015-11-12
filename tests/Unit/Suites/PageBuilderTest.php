@@ -58,9 +58,9 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
     private $contextIdFixture = 'v12';
 
     /**
-     * @var SnippetKeyGeneratorLocatorStrategy|\PHPUnit_Framework_MockObject_MockObject
+     * @var SnippetKeyGeneratorLocator|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubSnippetKeyGeneratorLocatorStrategy;
+    private $stubSnippetKeyGeneratorLocator;
 
     /**
      * @param string $snippetCode
@@ -189,14 +189,14 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->mockDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
 
-        $this->stubSnippetKeyGeneratorLocatorStrategy = $this->getMock(SnippetKeyGeneratorLocatorStrategy::class);
-        $this->fakeSnippetKeyGeneratorLocator($this->stubSnippetKeyGeneratorLocatorStrategy);
+        $this->stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
+        $this->fakeSnippetKeyGeneratorLocator($this->stubSnippetKeyGeneratorLocator);
 
         $this->stubLogger = $this->getMock(Logger::class);
 
         $this->pageBuilder = new PageBuilder(
             $this->mockDataPoolReader,
-            $this->stubSnippetKeyGeneratorLocatorStrategy,
+            $this->stubSnippetKeyGeneratorLocator,
             $this->stubLogger
         );
     }
@@ -348,8 +348,8 @@ EOH;
 
     public function testChildSnippetsAreGracefullyHandledWithNoKeyGenerator()
     {
-        /** @var SnippetKeyGeneratorLocatorStrategy|\PHPUnit_Framework_MockObject_MockObject $stubKeyGeneratorLocator */
-        $stubKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocatorStrategy::class);
+        /** @var SnippetKeyGeneratorLocator|\PHPUnit_Framework_MockObject_MockObject $stubKeyGeneratorLocator */
+        $stubKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
         $this->fakeSnippetKeyGeneratorLocatorForRootOnly($stubKeyGeneratorLocator);
 
         $this->pageBuilder = new PageBuilder(

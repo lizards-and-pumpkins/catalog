@@ -28,7 +28,7 @@ class ContentBlockSnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framew
 
     public function testSnippetKeyGeneratorLocatorStrategyInterfaceIsImplemented()
     {
-        $this->assertInstanceOf(SnippetKeyGeneratorLocatorstrategy::class, $this->strategy);
+        $this->assertInstanceOf(SnippetKeyGeneratorLocator::class, $this->strategy);
     }
 
     public function testFalseIsReturnedIfSnippetCodeIsNotSupported()

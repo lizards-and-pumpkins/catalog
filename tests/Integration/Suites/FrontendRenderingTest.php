@@ -89,7 +89,7 @@ class FrontendRenderingTest extends AbstractIntegrationTest
         $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
         
         $context = new VersionedContext(DataVersion::fromVersionString('1'));
-        $snippetKeyGeneratorLocatorStrategy = $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy();
+        $snippetKeyGeneratorLocator = $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy();
         $productDetailPageMetaSnippetKeyGenerator = $this->factory->createProductDetailPageMetaSnippetKeyGenerator();
         $productDetailPageMetaSnippetKey = $productDetailPageMetaSnippetKeyGenerator->getKeyForContext(
             $context,
@@ -97,7 +97,7 @@ class FrontendRenderingTest extends AbstractIntegrationTest
         );
 
         $this->addPageMetaInfoFixtureToKeyValueStorage(
-            $snippetKeyGeneratorLocatorStrategy,
+            $snippetKeyGeneratorLocator,
             $productDetailPageMetaSnippetKey,
             $context
         );
@@ -108,7 +108,7 @@ class FrontendRenderingTest extends AbstractIntegrationTest
         $pageBuilder = new ProductDetailViewRequestHandler(
             $context,
             $dataPoolReader,
-            new PageBuilder($dataPoolReader, $snippetKeyGeneratorLocatorStrategy, $logger),
+            new PageBuilder($dataPoolReader, $snippetKeyGeneratorLocator, $logger),
             $productDetailPageMetaSnippetKeyGenerator
         );
         $page = $pageBuilder->process($request);

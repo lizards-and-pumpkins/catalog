@@ -4,14 +4,14 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Exception\SnippetCodeCanNotBeProcessedException;
 
-class CompositeSnippetKeyGeneratorLocatorStrategy implements SnippetKeyGeneratorLocatorStrategy
+class CompositeSnippetKeyGeneratorLocatorStrategy implements SnippetKeyGeneratorLocator
 {
     /**
-     * @var SnippetKeyGeneratorLocatorStrategy[]
+     * @var SnippetKeyGeneratorLocator[]
      */
     private $strategies;
 
-    public function __construct(SnippetKeyGeneratorLocatorStrategy ...$strategies)
+    public function __construct(SnippetKeyGeneratorLocator ...$strategies)
     {
         $this->strategies = $strategies;
     }

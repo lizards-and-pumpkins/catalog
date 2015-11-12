@@ -24,7 +24,7 @@ class ContentBlockSnippetRendererTest extends \PHPUnit_Framework_TestCase
     /**
      * @var ContentBlockSnippetKeyGeneratorLocatorStrategy|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubSnippetKeyGeneratorLocatorStrategy;
+    private $stubSnippetKeyGeneratorLocator;
 
     /**
      * @var ContextBuilder|\PHPUnit_Framework_MockObject_MockObject
@@ -39,7 +39,7 @@ class ContentBlockSnippetRendererTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->mockSnippetList = $this->getMock(SnippetList::class);
-        $this->stubSnippetKeyGeneratorLocatorStrategy = $this->getMock(
+        $this->stubSnippetKeyGeneratorLocator = $this->getMock(
             ContentBlockSnippetKeyGeneratorLocatorStrategy::class,
             [],
             [],
@@ -50,7 +50,7 @@ class ContentBlockSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
         $this->renderer = new ContentBlockSnippetRenderer(
             $this->mockSnippetList,
-            $this->stubSnippetKeyGeneratorLocatorStrategy,
+            $this->stubSnippetKeyGeneratorLocator,
             $this->mockContextBuilder
         );
     }
@@ -74,7 +74,7 @@ class ContentBlockSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $stubKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $stubKeyGenerator->method('getKeyForContext')->willReturn($stubSnippetKey);
 
-        $this->stubSnippetKeyGeneratorLocatorStrategy->method('getKeyGeneratorForSnippetCode')
+        $this->stubSnippetKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')
             ->willReturn($stubKeyGenerator);
         $this->mockContextBuilder->method('createContext')->willReturn($stubContext);
 

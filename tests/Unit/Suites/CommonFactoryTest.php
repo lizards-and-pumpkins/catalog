@@ -613,8 +613,8 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     public function testContentBlockSnippetKeyGeneratorLocatorReturnsSnippetKeyGenerator()
     {
         $snippetCode = 'content_block_foo';
-        $locatorStrategy = $this->commonFactory->createContentBlockSnippetKeyGeneratorLocatorStrategy();
-        $result = $locatorStrategy->getKeyGeneratorForSnippetCode($snippetCode);
+        $snippetKeyGeneratorLocator = $this->commonFactory->createContentBlockSnippetKeyGeneratorLocatorStrategy();
+        $result = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
 
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }

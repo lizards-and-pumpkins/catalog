@@ -10,7 +10,7 @@ use LizardsAndPumpkins\Http\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\UnableToHandleRequestException;
 use LizardsAndPumpkins\PageBuilder;
-use LizardsAndPumpkins\SnippetKeyGeneratorLocatorStrategy;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
 
 class ProductSearchRequestHandler implements HttpRequestHandler
 {
@@ -34,7 +34,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
     private $pageBuilder;
 
     /**
-     * @var SnippetKeyGeneratorLocatorStrategy
+     * @var SnippetKeyGeneratorLocator
      */
     private $keyGeneratorLocator;
 
@@ -42,7 +42,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         Context $context,
         DataPoolReader $dataPoolReader,
         PageBuilder $pageBuilder,
-        SnippetKeyGeneratorLocatorStrategy $keyGeneratorLocator
+        SnippetKeyGeneratorLocator $keyGeneratorLocator
     ) {
         $this->context = $context;
         $this->dataPoolReader = $dataPoolReader;

@@ -45,7 +45,7 @@ class FrontendFactory implements Factory
     }
 
     /**
-     * @var SnippetKeyGeneratorLocatorStrategy
+     * @var SnippetKeyGeneratorLocator
      */
     private $snippetKeyGeneratorLocator;
 
@@ -200,7 +200,7 @@ class FrontendFactory implements Factory
     }
 
     /**
-     * @return SnippetKeyGeneratorLocatorStrategy
+     * @return SnippetKeyGeneratorLocator
      */
     public function createSnippetKeyGeneratorLocator()
     {
@@ -305,7 +305,7 @@ class FrontendFactory implements Factory
     }
 
     /**
-     * @return SnippetKeyGeneratorLocatorStrategy
+     * @return SnippetKeyGeneratorLocator
      */
     public function getSnippetKeyGeneratorLocator()
     {

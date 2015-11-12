@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Exception\SnippetCodeCanNotBeProcessedException;
 
-class ContentBlockSnippetKeyGeneratorLocatorStrategy implements SnippetKeyGeneratorLocatorStrategy
+class ContentBlockSnippetKeyGeneratorLocatorStrategy implements SnippetKeyGeneratorLocator
 {
     /**
      * @var \Closure

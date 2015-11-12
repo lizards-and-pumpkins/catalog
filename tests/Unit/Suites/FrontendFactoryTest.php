@@ -123,7 +123,7 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result1 = $this->frontendFactory->getSnippetKeyGeneratorLocator();
         $result2 = $this->frontendFactory->getSnippetKeyGeneratorLocator();
-        $this->assertInstanceOf(SnippetKeyGeneratorLocatorStrategy::class, $result1);
+        $this->assertInstanceOf(SnippetKeyGeneratorLocator::class, $result1);
         $this->assertSame($result1, $result2);
     }
 
@@ -156,8 +156,8 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testContentBlockSnippetKeyGeneratorLocatorReturnsSnippetKeyGenerator($snippetCode)
     {
-        $locatorStrategy = $this->frontendFactory->createRegistrySnippetKeyGeneratorLocatorStrategy();
-        $result = $locatorStrategy->getKeyGeneratorForSnippetCode($snippetCode);
+        $snippetKeyGeneratorLocator = $this->frontendFactory->createRegistrySnippetKeyGeneratorLocatorStrategy();
+        $result = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
 
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }

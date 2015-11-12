@@ -45,8 +45,8 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $contextSource = $factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[1];
 
-        $snippetKeyGeneratorLocatorStrategy = $factory->createContentBlockSnippetKeyGeneratorLocatorStrategy();
-        $snippetKeyGenerator = $snippetKeyGeneratorLocatorStrategy->getKeyGeneratorForSnippetCode($snippetCode);
+        $snippetKeyGeneratorLocator = $factory->createContentBlockSnippetKeyGeneratorLocatorStrategy();
+        $snippetKeyGenerator = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
         $snippetKey = $snippetKeyGenerator->getKeyForContext($context, []);
 
         $dataPoolReader = $factory->createDataPoolReader();

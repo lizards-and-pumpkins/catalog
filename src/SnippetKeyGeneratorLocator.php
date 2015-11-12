@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins;
 
-interface SnippetKeyGeneratorLocatorStrategy
+interface SnippetKeyGeneratorLocator
 {
     /**
      * @param string $snippetCode
