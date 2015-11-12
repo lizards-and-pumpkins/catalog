@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Content;
 
 use LizardsAndPumpkins\Api\ApiRequestHandler;
 use LizardsAndPumpkins\Content\Exception\ContentBlockContentIsMissingInRequestBodyException;
-use LizardsAndPumpkins\Content\Exception\ContentBlockContextIsMissingInRequestBodyException;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Queue\Queue;
 
