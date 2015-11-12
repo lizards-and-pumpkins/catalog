@@ -215,93 +215,93 @@ class FrontendFactory implements Factory
      */
     public function createRegistrySnippetKeyGeneratorLocatorStrategy()
     {
-        $snippetKeyGeneratorLocatorStrategy = new RegistrySnippetKeyGeneratorLocatorStrategy;
-        $snippetKeyGeneratorLocatorStrategy->register(
+        $registryKeyGeneratorLocator = new RegistrySnippetKeyGeneratorLocatorStrategy;
+        $registryKeyGeneratorLocator->register(
             ProductDetailViewSnippetRenderer::CODE,
             function () {
                 return $this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator();
             }
         );
-        $snippetKeyGeneratorLocatorStrategy->register(
+        $registryKeyGeneratorLocator->register(
             ProductInListingSnippetRenderer::CODE,
             function () {
                 return $this->getMasterFactory()->createProductInListingSnippetKeyGenerator();
             }
         );
-        $snippetKeyGeneratorLocatorStrategy->register(
+        $registryKeyGeneratorLocator->register(
             ProductListingPageSnippetRenderer::CODE,
             function () {
                 return $this->getMasterFactory()->createProductListingSnippetKeyGenerator();
             }
         );
-        $snippetKeyGeneratorLocatorStrategy->register(
+        $registryKeyGeneratorLocator->register(
             $this->getMasterFactory()->getRegularPriceSnippetKey(),
             function () {
                 return $this->getMasterFactory()->createPriceSnippetKeyGenerator();
             }
         );
-        $snippetKeyGeneratorLocatorStrategy->register(
+        $registryKeyGeneratorLocator->register(
             $this->getMasterFactory()->getProductBackOrderAvailabilitySnippetKey(),
             function () {
                 return $this->getMasterFactory()->createProductBackOrderAvailabilitySnippetKeyGenerator();
             }
         );
-        $snippetKeyGeneratorLocatorStrategy->register(
+        $registryKeyGeneratorLocator->register(
             DefaultNumberOfProductsPerPageSnippetRenderer::CODE,
             function () {
                 return $this->getMasterFactory()->createDefaultNumberOfProductsPerPageSnippetKeyGenerator();
             }
         );
-        $snippetKeyGeneratorLocatorStrategy->register(
+        $registryKeyGeneratorLocator->register(
             ProductListingCriteriaSnippetRenderer::CODE,
             function () {
                 return $this->getMasterFactory()->createProductListingCriteriaSnippetKeyGenerator();
             }
         );
-        $snippetKeyGeneratorLocatorStrategy->register(
+        $registryKeyGeneratorLocator->register(
             ProductSearchResultMetaSnippetRenderer::CODE,
             function () {
                 return $this->getMasterFactory()->createProductSearchResultMetaSnippetKeyGenerator();
             }
         );
-        $snippetKeyGeneratorLocatorStrategy->register(
+        $registryKeyGeneratorLocator->register(
             ProductInSearchAutosuggestionSnippetRenderer::CODE,
             function () {
                 return $this->getMasterFactory()->createProductInSearchAutosuggestionSnippetKeyGenerator();
             }
         );
-        $snippetKeyGeneratorLocatorStrategy->register(
+        $registryKeyGeneratorLocator->register(
             ProductSearchAutosuggestionMetaSnippetRenderer::CODE,
             function () {
                 return $this->getMasterFactory()->createProductSearchAutosuggestionMetaSnippetKeyGenerator();
             }
         );
-        $snippetKeyGeneratorLocatorStrategy->register(
+        $registryKeyGeneratorLocator->register(
             ProductSearchAutosuggestionSnippetRenderer::CODE,
             function () {
                 return $this->getMasterFactory()->createProductSearchAutosuggestionSnippetKeyGenerator();
             }
         );
-        $snippetKeyGeneratorLocatorStrategy->register(
+        $registryKeyGeneratorLocator->register(
             ProductJsonSnippetRenderer::CODE,
             function () {
                 return $this->getMasterFactory()->createProductJsonSnippetKeyGenerator();
             }
         );
-        $snippetKeyGeneratorLocatorStrategy->register(
+        $registryKeyGeneratorLocator->register(
             ConfigurableProductJsonSnippetRenderer::VARIATION_ATTRIBUTES_CODE,
             function () {
                 return $this->getMasterFactory()->createConfigurableProductVariationAttributesJsonSnippetKeyGenerator();
             }
         );
-        $snippetKeyGeneratorLocatorStrategy->register(
+        $registryKeyGeneratorLocator->register(
             ConfigurableProductJsonSnippetRenderer::ASSOCIATED_PRODUCTS_CODE,
             function () {
                 return $this->getMasterFactory()->createConfigurableProductAssociatedProductsJsonSnippetKeyGenerator();
             }
         );
 
-        return $snippetKeyGeneratorLocatorStrategy;
+        return $registryKeyGeneratorLocator;
     }
 
     /**

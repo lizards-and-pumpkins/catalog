@@ -9,14 +9,14 @@ class RegistrySnippetKeyGeneratorLocatorStrategy implements SnippetKeyGeneratorL
     /**
      * @var \Closure[]
      */
-    private $closures = [];
+    private $keyGeneratorFactoryClosures = [];
 
     /**
      * {@inheritdoc}
      */
     public function canHandle($snippetCode)
     {
-        return array_key_exists($snippetCode, $this->closures);
+        return array_key_exists($snippetCode, $this->keyGeneratorFactoryClosures);
     }
 
     /**
@@ -32,7 +32,7 @@ class RegistrySnippetKeyGeneratorLocatorStrategy implements SnippetKeyGeneratorL
             );
         }
 
-        return call_user_func($this->closures[$snippetCode]);
+        return call_user_func($this->keyGeneratorFactoryClosures[$snippetCode]);
     }
 
     /**
@@ -50,11 +50,11 @@ class RegistrySnippetKeyGeneratorLocatorStrategy implements SnippetKeyGeneratorL
 
     /**
      * @param string $snippetCode
-     * @param \Closure $closure
+     * @param \Closure $keyGeneratorFactoryClosure
      */
-    public function register($snippetCode, \Closure $closure)
+    public function register($snippetCode, \Closure $keyGeneratorFactoryClosure)
     {
         $this->validateSnippetCode($snippetCode);
-        $this->closures[$snippetCode] = $closure;
+        $this->keyGeneratorFactoryClosures[$snippetCode] = $keyGeneratorFactoryClosure;
     }
 }

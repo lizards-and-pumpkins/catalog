@@ -9,11 +9,11 @@ class ContentBlockSnippetKeyGeneratorLocatorStrategy implements SnippetKeyGenera
     /**
      * @var \Closure
      */
-    private $closure;
+    private $contentBlockKeyGeneratorClosure;
 
-    public function __construct(\Closure $closure)
+    public function __construct(\Closure $contentBlockKeyGeneratorClosure)
     {
-        $this->closure = $closure;
+        $this->contentBlockKeyGeneratorClosure = $contentBlockKeyGeneratorClosure;
     }
 
     /**
@@ -35,6 +35,6 @@ class ContentBlockSnippetKeyGeneratorLocatorStrategy implements SnippetKeyGenera
             );
         }
 
-        return call_user_func($this->closure, $snippetCode);
+        return call_user_func($this->contentBlockKeyGeneratorClosure, $snippetCode);
     }
 }

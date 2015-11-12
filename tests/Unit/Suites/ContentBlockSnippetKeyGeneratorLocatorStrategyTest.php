@@ -22,8 +22,8 @@ class ContentBlockSnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framew
     protected function setUp()
     {
         $this->stubSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
-        $testClosure = function () { return $this->stubSnippetKeyGenerator; };
-        $this->strategy = new ContentBlockSnippetKeyGeneratorLocatorStrategy($testClosure);
+        $testKeyGeneratorFactoryClosure = function () { return $this->stubSnippetKeyGenerator; };
+        $this->strategy = new ContentBlockSnippetKeyGeneratorLocatorStrategy($testKeyGeneratorFactoryClosure);
     }
 
     public function testSnippetKeyGeneratorLocatorStrategyInterfaceIsImplemented()

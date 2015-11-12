@@ -47,7 +47,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
     /**
      * @var SnippetKeyGeneratorLocatorStrategy
      */
-    private $keyGeneratorLocatorStrategy;
+    private $keyGeneratorLocator;
 
     /**
      * @var string[]
@@ -68,7 +68,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
      * @param Context $context
      * @param DataPoolReader $dataPoolReader
      * @param PageBuilder $pageBuilder
-     * @param SnippetKeyGeneratorLocatorStrategy $keyGeneratorLocatorStrategy
+     * @param SnippetKeyGeneratorLocatorStrategy $keyGeneratorLocator
      * @param string[] $filterNavigationAttributeCodes
      * @param int $defaultNumberOfProductsPerPage
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
@@ -77,7 +77,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         Context $context,
         DataPoolReader $dataPoolReader,
         PageBuilder $pageBuilder,
-        SnippetKeyGeneratorLocatorStrategy $keyGeneratorLocatorStrategy,
+        SnippetKeyGeneratorLocatorStrategy $keyGeneratorLocator,
         array $filterNavigationAttributeCodes,
         $defaultNumberOfProductsPerPage,
         SearchCriteriaBuilder $searchCriteriaBuilder
@@ -85,7 +85,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $this->dataPoolReader = $dataPoolReader;
         $this->context = $context;
         $this->pageBuilder = $pageBuilder;
-        $this->keyGeneratorLocatorStrategy = $keyGeneratorLocatorStrategy;
+        $this->keyGeneratorLocator = $keyGeneratorLocator;
         $this->filterNavigationAttributeCodes = $filterNavigationAttributeCodes;
         $this->defaultNumberOfProductsPerPage = $defaultNumberOfProductsPerPage;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
@@ -191,7 +191,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
      */
     private function getProductInListingSnippetKeysForSearchDocuments(SearchDocument ...$searchDocuments)
     {
-        $keyGenerator = $this->keyGeneratorLocatorStrategy->getKeyGeneratorForSnippetCode(
+        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
             ProductInListingSnippetRenderer::CODE
         );
         return array_map(function (SearchDocument $searchDocument) use ($keyGenerator) {
@@ -205,7 +205,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
      */
     private function getMetaInfoSnippetKey(HttpRequest $request)
     {
-        $keyGenerator = $this->keyGeneratorLocatorStrategy->getKeyGeneratorForSnippetCode(
+        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
             ProductListingCriteriaSnippetRenderer::CODE
         );
         $urlKey = $request->getUrlPathRelativeToWebFront();

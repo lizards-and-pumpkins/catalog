@@ -28,7 +28,7 @@ class PageBuilder
     /**
      * @var SnippetKeyGeneratorLocatorStrategy
      */
-    private $keyGeneratorLocatorStrategy;
+    private $keyGeneratorLocator;
 
     /**
      * @var Context
@@ -52,11 +52,11 @@ class PageBuilder
 
     public function __construct(
         DataPoolReader $dataPoolReader,
-        SnippetKeyGeneratorLocatorStrategy $keyGeneratorLocatorStrategy,
+        SnippetKeyGeneratorLocatorStrategy $keyGeneratorLocator,
         Logger $logger
     ) {
         $this->dataPoolReader = $dataPoolReader;
-        $this->keyGeneratorLocatorStrategy = $keyGeneratorLocatorStrategy;
+        $this->keyGeneratorLocator = $keyGeneratorLocator;
         $this->logger = $logger;
     }
 
@@ -120,7 +120,7 @@ class PageBuilder
     private function tryToGetSnippetKey($snippetCode)
     {
         try {
-            $keyGenerator = $this->keyGeneratorLocatorStrategy->getKeyGeneratorForSnippetCode($snippetCode);
+            $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
             $keyForContext = $keyGenerator->getKeyForContext($this->context, $this->keyGeneratorParams);
         } catch (\Exception $e) {
             $keyForContext = '';

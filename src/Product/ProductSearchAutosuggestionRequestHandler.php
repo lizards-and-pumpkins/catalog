@@ -37,18 +37,18 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
     /**
      * @var SnippetKeyGeneratorLocatorStrategy
      */
-    private $keyGeneratorLocatorStrategy;
+    private $keyGeneratorLocator;
 
     public function __construct(
         Context $context,
         DataPoolReader $dataPoolReader,
         PageBuilder $pageBuilder,
-        SnippetKeyGeneratorLocatorStrategy $keyGeneratorLocatorStrategy
+        SnippetKeyGeneratorLocatorStrategy $keyGeneratorLocator
     ) {
         $this->context = $context;
         $this->dataPoolReader = $dataPoolReader;
         $this->pageBuilder = $pageBuilder;
-        $this->keyGeneratorLocatorStrategy = $keyGeneratorLocatorStrategy;
+        $this->keyGeneratorLocator = $keyGeneratorLocator;
     }
 
     /**
@@ -188,7 +188,7 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
      */
     private function getMetaInfoSnippetContent()
     {
-        $metaInfoSnippetKeyGenerator = $this->keyGeneratorLocatorStrategy->getKeyGeneratorForSnippetCode(
+        $metaInfoSnippetKeyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
             ProductSearchAutosuggestionMetaSnippetRenderer::CODE
         );
         $metaInfoSnippetKey = $metaInfoSnippetKeyGenerator->getKeyForContext($this->context, []);
@@ -203,7 +203,7 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
      */
     private function getProductInAutosuggestionSnippetKeys(SearchDocumentCollection $searchDocumentCollection)
     {
-        $keyGenerator = $this->keyGeneratorLocatorStrategy->getKeyGeneratorForSnippetCode(
+        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
             ProductInSearchAutosuggestionSnippetRenderer::CODE
         );
 
