@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\Renderer;
 
+use LizardsAndPumpkins\Renderer\Exception\TemplateFileNotReadableException;
+
 class Block
 {
     /**

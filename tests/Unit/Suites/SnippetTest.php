@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\Exception\InvalidKeyException;
+
 /**
  * @covers \LizardsAndPumpkins\Snippet
  */

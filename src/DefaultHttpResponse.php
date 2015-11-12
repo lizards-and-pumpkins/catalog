@@ -2,9 +2,9 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\Http\Exception\InvalidResponseBodyException;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpResponse;
-use LizardsAndPumpkins\Http\InvalidResponseBodyException;
 
 class DefaultHttpResponse implements HttpResponse
 {

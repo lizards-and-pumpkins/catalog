@@ -3,6 +3,9 @@
 
 namespace LizardsAndPumpkins\Renderer;
 
+use LizardsAndPumpkins\Renderer\Exception\BlockDoesNotExistException;
+use LizardsAndPumpkins\Renderer\Exception\BlockIsNotAChildOfParentBlockException;
+
 class BlockStructure
 {
     /**

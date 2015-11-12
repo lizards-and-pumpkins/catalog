@@ -2,6 +2,9 @@
 
 namespace LizardsAndPumpkins\Http;
 
+use LizardsAndPumpkins\Http\Exception\HeaderNotPresentException;
+use LizardsAndPumpkins\Http\Exception\InvalidHttpHeadersException;
+
 /**
  * @covers LizardsAndPumpkins\Http\HttpHeaders
  */

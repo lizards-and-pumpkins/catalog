@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\Content;
 
+use LizardsAndPumpkins\Content\Exception\InvalidContentBlockIdException;
+
 /**
  * @covers \LizardsAndPumpkins\Content\ContentBlockId
  */
