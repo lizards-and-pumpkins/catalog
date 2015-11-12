@@ -1,4 +1,4 @@
-define(['lib/bind'], function (bind) {
+define(function () {
 
     if (!Element.prototype.matches) {
         // See https://developer.mozilla.org/en-US/docs/Web/API/Element.matches
@@ -125,15 +125,20 @@ define(['lib/bind'], function (bind) {
         var optionsHTML = '<div class="ss-dropdown">';
         Array.prototype.map.call(realOptions, function (realOption, index) {
             var text = realOption.textContent,
-                value = realOption.getAttribute('value') || '';
+                value = realOption.getAttribute('value') || '',
+                cssClass = 'ss-option';
 
             if (index === selectedIndex) {
                 // Mark first item as selected-option - this is where we store state for the styled select box
                 // aria-hidden=true so screen readers ignore the styles selext box in favor of the real one (which is visible by default)
                 selectedOptionHTML = '<div class="ss-selected-option" tabindex="0" data-value="' + value + '">' + text + '</div>'
             }
-            // Continue building optionsHTML
-            optionsHTML += '<div class="ss-option" data-value="' + value + '">' + text + '</div>';
+
+            if (realOption.disabled) {
+                cssClass += ' disabled';
+            }
+
+            optionsHTML += '<div class="' + cssClass + '" data-value="' + value + '">' + text + '</div>';
         });
         optionsHTML += '</div>';
         styleSelectHTML += selectedOptionHTML += optionsHTML += '</div>';
@@ -161,18 +166,25 @@ define(['lib/bind'], function (bind) {
             });
 
             realSelect.value = newValue;
+
+            var changeEvent = new CustomEvent('change');
+            realSelect.dispatchEvent(changeEvent);
         };
 
         // Change real select box when a styled option is clicked
         Array.prototype.map.call(styleSelectOptions, function (unused, index) {
             var styleSelectOption = styleSelectOptions.item(index);
 
-            bind(styleSelectOption, 'click', function (event) {
+            if (styleSelectOption.className.match(/\bdisabled\b/)) {
+                return;
+            }
+
+            styleSelectOption.addEventListener('click', function (event) {
                 var newValue = event.target.getAttribute('data-value'),
                     newLabel = event.target.textContent;
 
                 changeRealSelectBox(newValue, newLabel)
-            });
+            }, true);
 
             if (styleSelectOption.dataset.value === realSelect.value) {
                 styleSelectOption.classList.add('ticked');
@@ -196,17 +208,17 @@ define(['lib/bind'], function (bind) {
 
         // When a styled select box is clicked
         var styledSelectedOption = document.querySelector('.style-select[data-ss-uuid="' + uuid + '"] .ss-selected-option');
-        bind(styledSelectedOption, 'click', function (event) {
+        styledSelectedOption.addEventListener('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
             toggleStyledSelect(event.target.parentNode);
-        });
+        }, true);
 
         // Clicking outside of the styled select box closes any open styled select boxes
-        bind(document.querySelector('body'), 'click', function (event) {
+        document.querySelector('body').addEventListener('click', function (event) {
             if (!isAncestorOf(event.target, '.style-select', true)) {
                 closeAllStyleSelectsExceptGiven();
             }
-        })
+        }, true);
     };
 });
