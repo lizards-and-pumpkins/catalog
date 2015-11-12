@@ -46,7 +46,7 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework_
         $this->assertTrue($this->strategy->canHandle($snippetCode));
     }
 
-    public function testExceptionIsThrownDuringAttemptToSnippetKeyGeneratorForUnsupportedSnippetCode()
+    public function testExceptionIsThrownDuringAttemptToLocateSnippetKeyGeneratorForUnsupportedSnippetCode()
     {
         $unsupportedSnippetCode = 'foo';
         $this->setExpectedException(SnippetCodeCanNotBeProcessedException::class);
