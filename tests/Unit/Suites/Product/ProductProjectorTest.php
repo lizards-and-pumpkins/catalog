@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
-use LizardsAndPumpkins\InvalidProjectionSourceDataTypeException;
+use LizardsAndPumpkins\Exception\InvalidProjectionSourceDataTypeException;
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\Projection\UrlKeyForContextCollection;
 use LizardsAndPumpkins\Projection\UrlKeyForContextCollector;
@@ -104,6 +104,7 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubSearchDocumentBuilder->method('aggregate')->willReturn($this->stubSearchDocumentCollection);
 
+        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
         $stubProduct = $this->getMock(Product::class);
 
         $urlKeyCollection = $this->stubUrlKeyCollector->collectProductUrlKeys($stubProduct);

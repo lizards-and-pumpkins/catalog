@@ -1,7 +1,6 @@
 <?php
 
-
-namespace LizardsAndPumpkins;
+namespace LizardsAndPumpkins\Exception;
 
 class InvalidPageMetaSnippetException extends \OutOfBoundsException
 {

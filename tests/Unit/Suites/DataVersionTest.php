@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\Exception\InvalidVersionException;
+
 /**
  * @covers LizardsAndPumpkins\DataVersion
  */

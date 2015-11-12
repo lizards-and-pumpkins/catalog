@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\Exception\UnableToFindCommandHandlerException;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Queue\Queue;
 

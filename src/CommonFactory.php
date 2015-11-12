@@ -18,6 +18,7 @@ use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
+use LizardsAndPumpkins\Exception\UndefinedFactoryMethodException;
 use LizardsAndPumpkins\Http\HttpRouterChain;
 use LizardsAndPumpkins\Http\ResourceNotFoundRouter;
 use LizardsAndPumpkins\Image\ImageWasAddedDomainEvent;

@@ -10,6 +10,8 @@ use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
+use LizardsAndPumpkins\Exception\NoMasterFactorySetException;
+use LizardsAndPumpkins\Exception\UndefinedFactoryMethodException;
 use LizardsAndPumpkins\Http\HttpRouterChain;
 use LizardsAndPumpkins\Http\ResourceNotFoundRouter;
 use LizardsAndPumpkins\Image\ImageProcessorCollection;

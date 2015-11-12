@@ -1,6 +1,6 @@
 <?php
 
-namespace LizardsAndPumpkins;
+namespace LizardsAndPumpkins\Exception;
 
 class InvalidTemplateProjectorCodeException extends \OutOfBoundsException
 {
