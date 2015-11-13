@@ -44,7 +44,7 @@
     "repositories": [
         {
             "type": "composer",
-            "url": "http://packages.brera.io"
+            "url": "http://packages.lizardsandpumpkins.com"
         }
     ],
     "scripts": {
