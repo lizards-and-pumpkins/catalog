@@ -16,7 +16,7 @@ use LizardsAndPumpkins\Product\AttributeCode;
 use LizardsAndPumpkins\Product\PriceSnippetRenderer;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
-use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 
 trait ProductListingRequestHandlerTrait
 {
