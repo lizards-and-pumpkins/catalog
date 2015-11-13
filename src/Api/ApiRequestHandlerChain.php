@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\Api;
 
+use LizardsAndPumpkins\Api\Exception\ApiVersionMustBeIntException;
+
 class ApiRequestHandlerChain
 {
     private $requestHandlers = [];

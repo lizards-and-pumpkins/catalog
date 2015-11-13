@@ -9,6 +9,9 @@ use LizardsAndPumpkins\Content\UpdateContentBlockCommandHandler;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
+use LizardsAndPumpkins\Exception\NoMasterFactorySetException;
+use LizardsAndPumpkins\Exception\UndefinedFactoryMethodException;
 use LizardsAndPumpkins\Http\HttpRouterChain;
 use LizardsAndPumpkins\Http\ResourceNotFoundRouter;
 use LizardsAndPumpkins\Image\ImageProcessorCollection;
@@ -105,6 +108,7 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\Product\UpdateMultipleProductStockQuantityCommandHandler
  * @uses   \LizardsAndPumpkins\Product\ProductDetailViewBlockRenderer
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer
+ * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\ContentBlockSnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\GenericSnippetKeyGenerator
  * @uses   \LizardsAndPumpkins\SnippetRendererCollection
  * @uses   \LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder
@@ -600,5 +604,20 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createInternalToPublicProductJsonData();
         $this->assertInstanceOf(InternalToPublicProductJsonData::class, $result);
+    }
+
+    public function testSearchCriteriaBuilderIsReturned()
+    {
+        $result = $this->commonFactory->createSearchCriteriaBuilder();
+        $this->assertInstanceOf(SearchCriteriaBuilder::class, $result);
+    }
+
+    public function testContentBlockSnippetKeyGeneratorLocatorReturnsSnippetKeyGenerator()
+    {
+        $snippetCode = 'content_block_foo';
+        $snippetKeyGeneratorLocator = $this->commonFactory->createContentBlockSnippetKeyGeneratorLocatorStrategy();
+        $result = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
+
+        $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
 }

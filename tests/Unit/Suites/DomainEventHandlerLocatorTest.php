@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\Exception\UnableToFindDomainEventHandlerException;
 use LizardsAndPumpkins\Image\ImageWasAddedDomainEvent;
 use LizardsAndPumpkins\Image\ImageWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;

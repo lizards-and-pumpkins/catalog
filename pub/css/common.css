@@ -99,11 +99,11 @@ nav { clear: both; color: #ffffff }
 .footer-block { float: left; font-size: 10px; width: 171px }
 .footer-block ul { height: 138px; overflow: hidden; margin: 0 25px 0 0 }
 .footer-block ul li:first-child { margin-top: 10px; }
-.footer-block-info { clear: both; padding-top: 30px; font-size: 10px; color: #a0a0a0 }
+.footer-block-info { clear: both; padding-top: 17px; font-size: 10px; color: #a0a0a0 }
 .footer-block a { color: #323232; border-color: #323232; font-size: 10px; letter-spacing: .075em }
 .footer-block li { margin-bottom: 9px }
 .footer-block .footer-block-title { border-bottom: 1px solid black; font-size: 10px; font-weight: bold; margin-right: 25px }
-.footer-block-wide { float: left; width: 365px }
+.footer-block-wide { float: right; text-align: right; width: 365px }
 .footer-block-wide img { margin-bottom: 21px }
 
 /* Footer Social */
@@ -230,7 +230,7 @@ nav { clear: both; color: #ffffff }
 .roundedBorder { border-radius: 2px }
 
 /* Clearer */
-.clearer:after, .nav:after, .header-panel:after,
+.clearer:after, .nav:after, .header-panel:after, .header:after,
 .nav .brands-logos:after { content: ""; display: block; height: 0; clear: both; visibility: hidden }
 
 /* Print */

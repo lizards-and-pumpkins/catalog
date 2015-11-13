@@ -4,6 +4,9 @@
 namespace LizardsAndPumpkins\Log\Writer;
 
 use LizardsAndPumpkins\Log\LogMessage;
+use LizardsAndPumpkins\Log\Writer\Exception\UnableToCreateLogDirectoryException;
+use LizardsAndPumpkins\Log\Writer\Exception\UnableToCreateLogFileException;
+use LizardsAndPumpkins\Log\Writer\Exception\UnableToWriteToLogFileException;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**

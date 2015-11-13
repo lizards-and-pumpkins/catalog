@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\InvalidProjectionSourceDataTypeException;
+use LizardsAndPumpkins\Exception\InvalidProjectionSourceDataTypeException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;

@@ -10,20 +10,16 @@
 </head>
 <body>
 <div class="wrapper 1column">
-    <?= $this->getChildOutput('global_notices') ?>
     <div class="page">
         <?= $this->getChildOutput('header') ?>
         <div class="main-container col1-layout">
             <div class="main">
                 <div class="col-main">
-                    <?= $this->getChildOutput('breadcrumbsContainer') ?>
-                    <?= $this->getChildOutput('global_messages') ?>
                     <?= $this->getChildOutput('content') ?>
                 </div>
             </div>
         </div>
         <?= $this->getChildOutput('footer') ?>
-        <?= $this->getChildOutput('before_body_end') ?>
     </div>
 </div>
 </body>

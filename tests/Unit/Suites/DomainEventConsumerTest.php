@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\Exception\UnableToFindDomainEventHandlerException;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Queue\Queue;
 

@@ -20,7 +20,6 @@ use LizardsAndPumpkins\Http\HttpRouterChain;
  * @uses   \LizardsAndPumpkins\IntegrationTestFactory
  * @uses   \LizardsAndPumpkins\DataVersion
  * @uses   \LizardsAndPumpkins\PageBuilder
- * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator
  * @uses   \LizardsAndPumpkins\GenericSnippetKeyGenerator
  * @uses   \LizardsAndPumpkins\TemplatesApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
@@ -34,6 +33,9 @@ use LizardsAndPumpkins\Http\HttpRouterChain;
  * @uses   \LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToProductBuilder
+ * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\CompositeSnippetKeyGeneratorLocatorStrategy
+ * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\ContentBlockSnippetKeyGeneratorLocatorStrategy
+ * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\RegistrySnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\Http\ResourceNotFoundRouter
  * @uses   \LizardsAndPumpkins\Http\ResourceNotFoundRequestHandler
  * @uses   \LizardsAndPumpkins\Http\HttpRouterChain

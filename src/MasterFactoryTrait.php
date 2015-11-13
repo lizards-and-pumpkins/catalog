@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\Exception\UndefinedFactoryMethodException;
+
 trait MasterFactoryTrait
 {
     /**

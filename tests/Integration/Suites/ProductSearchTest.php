@@ -64,7 +64,7 @@ class ProductSearchTest extends AbstractIntegrationTest
         $dataPoolReader = $this->factory->createDataPoolReader();
         $pageBuilder = new PageBuilder(
             $dataPoolReader,
-            $this->factory->getSnippetKeyGeneratorLocator(),
+            $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy(),
             $this->factory->getLogger()
         );
 
@@ -72,15 +72,17 @@ class ProductSearchTest extends AbstractIntegrationTest
             $this->factory->createContext(),
             $dataPoolReader,
             $pageBuilder,
-            $this->factory->getSnippetKeyGeneratorLocator()
+            $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy()
         );
     }
 
     private function registerProductSearchResultMetaSnippetKeyGenerator()
     {
-        $this->factory->getSnippetKeyGeneratorLocator()->register(
+        $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy()->register(
             ProductSearchResultMetaSnippetRenderer::CODE,
-            $this->factory->createProductSearchResultMetaSnippetKeyGenerator()
+            function () {
+                return$this->factory->createProductSearchResultMetaSnippetKeyGenerator();
+            }
         );
     }
 
@@ -95,21 +97,13 @@ class ProductSearchTest extends AbstractIntegrationTest
         $metaInfoSnippetKey = $metaInfoSnippetKeyGenerator->getKeyForContext($context, []);
 
         $dataPoolReader = $this->factory->createDataPoolReader();
-        $metaInfoSnippet = $dataPoolReader->getSnippet($metaInfoSnippetKey);
+        $metaInfoSnippetJson = $dataPoolReader->getSnippet($metaInfoSnippetKey);
+        $metaInfoSnippet = json_decode($metaInfoSnippetJson, true);
 
-        $expectedMetaInfoContent = [
-            'root_snippet_code'  => 'product_listing',
-            'page_snippet_codes' => [
-                'product_listing',
-                'global_notices',
-                'breadcrumbsContainer',
-                'global_messages',
-                'content_block_in_product_listing',
-                'before_body_end'
-            ]
-        ];
+        $expectedRootSnippetCode = 'product_listing';
 
-        $this->assertSame(json_encode($expectedMetaInfoContent), $metaInfoSnippet);
+        $this->assertSame($expectedRootSnippetCode, $metaInfoSnippet['root_snippet_code']);
+        $this->assertContains($expectedRootSnippetCode, $metaInfoSnippet['page_snippet_codes']);
     }
 
     public function testProductListingPageHtmlIsReturned()

@@ -3,6 +3,9 @@
 
 namespace LizardsAndPumpkins\Http;
 
+use LizardsAndPumpkins\Http\Exception\HeaderNotPresentException;
+use LizardsAndPumpkins\Http\Exception\InvalidHttpHeadersException;
+
 class HttpHeaders
 {
     /**

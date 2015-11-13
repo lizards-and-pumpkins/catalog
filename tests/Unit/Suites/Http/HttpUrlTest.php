@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\Http;
 
+use LizardsAndPumpkins\Http\Exception\UnknownProtocolException;
+
 /**
  * @covers \LizardsAndPumpkins\Http\HttpUrl
  */

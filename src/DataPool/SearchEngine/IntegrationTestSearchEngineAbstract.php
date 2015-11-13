@@ -18,7 +18,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     abstract protected function getSearchDocuments();
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     final public function query($queryString, Context $queryContext, array $facetFields, $rowsPerPage, $pageNumber)
     {
@@ -65,7 +65,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     final public function getSearchDocumentsMatchingCriteria(
         SearchCriteria $criteria,

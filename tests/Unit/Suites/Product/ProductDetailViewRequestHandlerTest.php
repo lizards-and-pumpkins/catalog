@@ -4,12 +4,12 @@ namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
-use LizardsAndPumpkins\DataPool\KeyValue\KeyNotFoundException;
+use LizardsAndPumpkins\DataPool\KeyValue\Exception\KeyNotFoundException;
 use LizardsAndPumpkins\DefaultHttpResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Http\UnableToHandleRequestException;
+use LizardsAndPumpkins\Http\Exception\UnableToHandleRequestException;
 use LizardsAndPumpkins\PageBuilder;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 

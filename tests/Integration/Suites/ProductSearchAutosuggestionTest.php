@@ -66,7 +66,7 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
         $dataPoolReader = $this->factory->createDataPoolReader();
         $pageBuilder = new PageBuilder(
             $dataPoolReader,
-            $this->factory->getSnippetKeyGeneratorLocator(),
+            $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy(),
             $this->factory->getLogger()
         );
 
@@ -74,23 +74,27 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
             $this->factory->createContext(),
             $dataPoolReader,
             $pageBuilder,
-            $this->factory->getSnippetKeyGeneratorLocator()
+            $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy()
         );
     }
 
     private function registerProductSearchAutosuggestionMetaSnippetKeyGenerator()
     {
-        $this->factory->getSnippetKeyGeneratorLocator()->register(
+        $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy()->register(
             ProductSearchAutosuggestionMetaSnippetRenderer::CODE,
-            $this->factory->createProductSearchAutosuggestionMetaSnippetKeyGenerator()
+            function () {
+                return $this->factory->createProductSearchAutosuggestionMetaSnippetKeyGenerator();
+            }
         );
     }
 
     private function registerProductInSearchAutosuggestionSnippetKeyGenerator()
     {
-        $this->factory->getSnippetKeyGeneratorLocator()->register(
+        $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy()->register(
             ProductInSearchAutosuggestionSnippetRenderer::CODE,
-            $this->factory->createProductInSearchAutosuggestionSnippetKeyGenerator()
+            function () {
+                return $this->factory->createProductInSearchAutosuggestionSnippetKeyGenerator();
+            }
         );
     }
 
@@ -122,7 +126,7 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
 
         $dataPoolReader = $this->factory->createDataPoolReader();
 
-        $keyGeneratorLocator = $this->factory->getSnippetKeyGeneratorLocator();
+        $keyGeneratorLocator = $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy();
         $keyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
             ProductSearchAutosuggestionSnippetRenderer::CODE
         );

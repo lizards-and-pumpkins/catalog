@@ -2,6 +2,9 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\Exception\EmptyVersionException;
+use LizardsAndPumpkins\Exception\InvalidVersionException;
+
 class DataVersion
 {
     /**

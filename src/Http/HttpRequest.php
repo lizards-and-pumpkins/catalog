@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\Http;
 
+use LizardsAndPumpkins\Http\Exception\UnsupportedRequestMethodException;
+
 abstract class HttpRequest
 {
     const METHOD_GET = 'GET';

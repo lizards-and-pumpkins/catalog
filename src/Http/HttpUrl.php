@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins\Http;
 
 use League\Url\UrlImmutable;
 use League\Url\AbstractUrl;
+use LizardsAndPumpkins\Http\Exception\UnknownProtocolException;
 
 class HttpUrl
 {

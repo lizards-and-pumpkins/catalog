@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\InvalidProjectionSourceDataTypeException;
+use LizardsAndPumpkins\Exception\InvalidProjectionSourceDataTypeException;
 use LizardsAndPumpkins\Projection\Catalog\InternalToPublicProductJsonData;
 use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetKeyGenerator;

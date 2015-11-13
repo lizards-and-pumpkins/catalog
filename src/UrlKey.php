@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\Exception\InvalidUrlKeySourceException;
+
 class UrlKey
 {
     private $urlKey;

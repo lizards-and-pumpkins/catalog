@@ -3,6 +3,8 @@
 namespace LizardsAndPumpkins\Content;
 
 use LizardsAndPumpkins\Api\ApiRequestHandler;
+use LizardsAndPumpkins\Content\Exception\ContentBlockBodyIsMissingInRequestBodyException;
+use LizardsAndPumpkins\Content\Exception\ContentBlockContextIsMissingInRequestBodyException;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Queue\Queue;
 
@@ -62,7 +64,7 @@ class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
     protected function validateRequestBody(array $requestBody)
     {
         if (!isset($requestBody['content'])) {
-            throw new ContentBlockContentIsMissingInRequestBodyException(
+            throw new ContentBlockBodyIsMissingInRequestBodyException(
                 'Content block content is missing in request body.'
             );
         }

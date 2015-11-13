@@ -13,12 +13,12 @@ use LizardsAndPumpkins\Log\InMemoryLogger;
  * @method Context\ContextSource createContextSource
  * @method DomainEventConsumer createDomainEventConsumer
  * @method CommandConsumer createCommandConsumer
- * @method SnippetKeyGeneratorLocator getSnippetKeyGeneratorLocator
+ * @method SnippetKeyGeneratorLocator\RegistrySnippetKeyGeneratorLocatorStrategy createRegistrySnippetKeyGeneratorLocatorStrategy
  * @method InMemoryLogger getLogger
  * @method GenericSnippetKeyGenerator createProductDetailViewSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createProductListingSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createProductStockQuantityRendererSnippetKeyGenerator
- * @method GenericSnippetKeyGenerator createContentBlockSnippetKeyGenerator
+ * @method SnippetKeyGeneratorLocator\ContentBlockSnippetKeyGeneratorLocatorStrategy createContentBlockSnippetKeyGeneratorLocatorStrategy
  * @method GenericSnippetKeyGenerator createProductSearchResultMetaSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createProductListingCriteriaSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createProductDetailPageMetaSnippetKeyGenerator
