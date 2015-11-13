@@ -1,8 +1,8 @@
 <?php
 
-
 namespace LizardsAndPumpkins\ContentDelivery\SnippetTransformation;
 
+use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\Exception\NoValidLocaleInContextException;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\LocaleContextDecorator;
 use SebastianBergmann\Money\EUR;
@@ -35,7 +35,7 @@ class LocaleAwareEuroPriceSnippetTransformation implements SnippetTransformation
     {
         $locale = $context->getValue(LocaleContextDecorator::CODE);
         if (is_null($locale)) {
-            throw new NoValidLocaleInContext('No valid locale in context');
+            throw new NoValidLocaleInContextException('No valid locale in context');
         }
         return $locale;
     }

@@ -1,8 +1,8 @@
 <?php
 
-
 namespace LizardsAndPumpkins\ContentDelivery\SnippetTransformation;
 
+use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\Exception\NoValidLocaleInContextException;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\LocaleContextDecorator;
 
@@ -61,7 +61,7 @@ class LocaleAwareEuroPriceSnippetTransformationTest extends \PHPUnit_Framework_T
 
     public function testItThrowsAnExceptionIfTheContextReturnsNoValidLocale()
     {
-        $this->setExpectedException(NoValidLocaleInContext::class, "No valid locale in context");
+        $this->setExpectedException(NoValidLocaleInContextException::class, "No valid locale in context");
         call_user_func($this->transformation, 0, $this->mockContext);
     }
 
