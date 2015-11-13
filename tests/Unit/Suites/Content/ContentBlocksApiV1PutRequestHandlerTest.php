@@ -3,6 +3,8 @@
 namespace LizardsAndPumpkins\Content;
 
 use LizardsAndPumpkins\Api\ApiRequestHandler;
+use LizardsAndPumpkins\Content\Exception\ContentBlockBodyIsMissingInRequestBodyException;
+use LizardsAndPumpkins\Content\Exception\ContentBlockContextIsMissingInRequestBodyException;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Queue\Queue;
 
@@ -66,7 +68,7 @@ class ContentBlocksApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
 
     public function testExceptionIsThrownIfContentBlockContentIsMissingInRequestBody()
     {
-        $this->setExpectedException(ContentBlockContentIsMissingInRequestBodyException::class);
+        $this->setExpectedException(ContentBlockBodyIsMissingInRequestBodyException::class);
         $this->mockRequest->method('getRawBody')->willReturn(json_encode([]));
         $this->requestHandler->process($this->mockRequest);
     }

@@ -5,9 +5,11 @@ namespace LizardsAndPumpkins;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\SnippetTransformation;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
+use LizardsAndPumpkins\Exception\InvalidPageMetaSnippetException;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\ProductDetailPageMetaInfoSnippetContent;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 
 /**
  * @covers \LizardsAndPumpkins\PageBuilder
@@ -348,13 +350,13 @@ EOH;
 
     public function testChildSnippetsAreGracefullyHandledWithNoKeyGenerator()
     {
-        /** @var SnippetKeyGeneratorLocator|\PHPUnit_Framework_MockObject_MockObject $stubSnippetKeyGeneratorLocator */
-        $stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
-        $this->fakeSnippetKeyGeneratorLocatorForRootOnly($stubSnippetKeyGeneratorLocator);
+        /** @var SnippetKeyGeneratorLocator|\PHPUnit_Framework_MockObject_MockObject $stubKeyGeneratorLocator */
+        $stubKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
+        $this->fakeSnippetKeyGeneratorLocatorForRootOnly($stubKeyGeneratorLocator);
 
         $this->pageBuilder = new PageBuilder(
             $this->mockDataPoolReader,
-            $stubSnippetKeyGeneratorLocator,
+            $stubKeyGeneratorLocator,
             $this->stubLogger
         );
 

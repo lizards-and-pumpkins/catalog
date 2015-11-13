@@ -2,6 +2,9 @@
 
 namespace LizardsAndPumpkins\Renderer;
 
+use LizardsAndPumpkins\Renderer\Exception\BlockRendererMustHaveOneRootBlockException;
+use LizardsAndPumpkins\Renderer\Exception\CanNotInstantiateBlockException;
+use LizardsAndPumpkins\Renderer\Exception\MethodNotYetAvailableException;
 use LizardsAndPumpkins\Renderer\Stubs\StubBlock;
 use LizardsAndPumpkins\Renderer\Stubs\StubBlockRenderer;
 use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;

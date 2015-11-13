@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Content;
 
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
-use LizardsAndPumpkins\InvalidProjectionSourceDataTypeException;
+use LizardsAndPumpkins\Exception\InvalidProjectionSourceDataTypeException;
 use LizardsAndPumpkins\Projector;
 use LizardsAndPumpkins\SnippetRendererCollection;
 

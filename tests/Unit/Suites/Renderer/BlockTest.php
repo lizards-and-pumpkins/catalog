@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Renderer;
 
+use LizardsAndPumpkins\Renderer\Exception\TemplateFileNotReadableException;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**

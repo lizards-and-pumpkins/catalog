@@ -148,11 +148,16 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
         );
 
         $dataPoolReader = $this->factory->createDataPoolReader();
-        $metaInfoSnippet = $dataPoolReader->getSnippet($snippetKey);
+        $metaInfoSnippetJson = $dataPoolReader->getSnippet($snippetKey);
+        $metaInfoSnippet = json_decode($metaInfoSnippetJson, true);
 
-        $expectedMetaInfoContent = json_encode($this->getStubMetaInfo());
+        $expectedCriteria = CompositeSearchCriterion::createAnd(
+            SearchCriterionEqual::create('category', 'sale'),
+            SearchCriterionEqual::create('brand', 'Adidas')
+        );
 
-        $this->assertSame($expectedMetaInfoContent, $metaInfoSnippet);
+        $this->assertEquals(ProductListingPageSnippetRenderer::CODE, $metaInfoSnippet['root_snippet_code']);
+        $this->assertEquals(json_encode($expectedCriteria), json_encode($metaInfoSnippet['product_selection_criteria']));
     }
 
     public function testProductListingPageHtmlIsReturned()
@@ -180,96 +185,5 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
 
         $this->assertContains($expectedProductName, $body);
         $this->assertNotContains($unExpectedProductName, $body);
-    }
-
-    public function testContentBlockIsPresentAtProductListingPage()
-    {
-        $this->importCatalog();
-        $this->createProductListingFixture();
-
-        $contentBlockContent = '<div>Content Block</div>';
-
-        $this->addContentBlockToDataPool($contentBlockContent);
-
-        $request = HttpRequest::fromParameters(
-            HttpRequest::METHOD_GET,
-            HttpUrl::fromString($this->testUrl),
-            HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
-        );
-
-        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-
-        $this->registerContentBlockInProductListingSnippetKeyGenerator();
-
-        $productListingRequestHandler = $this->getProductListingRequestHandler();
-        $page = $productListingRequestHandler->process($request);
-        $body = $page->getBody();
-
-        $this->assertContains($contentBlockContent, $body);
-    }
-
-    public function testSpecifiedNumberOfProductIsReturned()
-    {
-        $numberOfProductsPerPage = 12;
-
-        $originalState = $_COOKIE;
-        $_COOKIE[ProductListingRequestHandler::PRODUCTS_PER_PAGE_COOKIE_NAME] = $numberOfProductsPerPage;
-
-        $this->importCatalog();
-        $this->createProductListingFixture();
-        $this->registerProductListingSnippetKeyGenerator();
-
-        $request = HttpRequest::fromParameters(
-            HttpRequest::METHOD_GET,
-            HttpUrl::fromString($this->testUrl),
-            HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
-        );
-
-        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-
-        $productListingRequestHandler = $this->getProductListingRequestHandler();
-        $page = $productListingRequestHandler->process($request);
-        $body = $page->getBody();
-
-        $_COOKIE = $originalState;
-
-        $productListingJson = $this->extractProductListingJsonFromPageHtml($body);
-
-        $this->assertCount($numberOfProductsPerPage, $productListingJson);
-    }
-
-    public function testProductsIsSpecifiedSortOrderAndDirectionAreReturned()
-    {
-        $sortOrder = 'price';
-        $sortDirection = SearchEngine::SORT_DIRECTION_ASC;
-
-        $originalState = $_COOKIE;
-        $_COOKIE[ProductListingRequestHandler::SORT_ORDER_COOKIE_NAME] = $sortOrder;
-        $_COOKIE[ProductListingRequestHandler::SORT_DIRECTION_COOKIE_NAME] = $sortDirection;
-
-        $this->importCatalog();
-        $this->createProductListingFixture();
-        $this->registerProductListingSnippetKeyGenerator();
-
-        $request = HttpRequest::fromParameters(
-            HttpRequest::METHOD_GET,
-            HttpUrl::fromString($this->testUrl),
-            HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
-        );
-
-        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-
-        $productListingRequestHandler = $this->getProductListingRequestHandler();
-        $page = $productListingRequestHandler->process($request);
-        $body = $page->getBody();
-
-        $_COOKIE = $originalState;
-
-        $productListingJson = $this->extractProductListingJsonFromPageHtml($body);
-
-        $this->assertJsonProductsAreSortedByPriceAscendant($productListingJson);
     }
 }

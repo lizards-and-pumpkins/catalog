@@ -12,6 +12,7 @@ use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductDetailPageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocator\RegistrySnippetKeyGeneratorLocatorStrategy;
 
 class FrontendRenderingTest extends AbstractIntegrationTest
 {
@@ -23,12 +24,12 @@ class FrontendRenderingTest extends AbstractIntegrationTest
     private $factory;
 
     /**
-     * @param SnippetKeyGeneratorLocator $snippetKeyGeneratorLocator
+     * @param RegistrySnippetKeyGeneratorLocatorStrategy $snippetKeyGeneratorLocator
      * @param string $productDetailPageMetaSnippetKey
      * @param Context $context
      */
     private function addPageMetaInfoFixtureToKeyValueStorage(
-        SnippetKeyGeneratorLocator $snippetKeyGeneratorLocator,
+        RegistrySnippetKeyGeneratorLocatorStrategy $snippetKeyGeneratorLocator,
         $productDetailPageMetaSnippetKey,
         Context $context
     ) {
@@ -40,20 +41,20 @@ class FrontendRenderingTest extends AbstractIntegrationTest
             $this->factory->getRequiredContexts(),
             [Product::ID]
         );
-        $snippetKeyGeneratorLocator->register($rootSnippetCode, $rootSnippetKeyGenerator);
-        $snippetKeyGeneratorLocator->register(
-            'head',
-            new GenericSnippetKeyGenerator('head', $this->factory->getRequiredContexts(), [])
-        );
-        $snippetKeyGeneratorLocator->register(
-            'body',
-            new GenericSnippetKeyGenerator('body', $this->factory->getRequiredContexts(), [])
-        );
+        $snippetKeyGeneratorLocator->register($rootSnippetCode, function () use ($rootSnippetKeyGenerator) {
+            return $rootSnippetKeyGenerator;
+        });
+        $snippetKeyGeneratorLocator->register('head', function () {
+            return new GenericSnippetKeyGenerator('head', $this->factory->getRequiredContexts(), []);
+        });
+        $snippetKeyGeneratorLocator->register('body', function () {
+            return new GenericSnippetKeyGenerator('body', $this->factory->getRequiredContexts(), []);
+        });
 
-        $pageSnippet = Snippet::create(
-            $rootSnippetKeyGenerator->getKeyForContext($context, [Product::ID => $this->testProductId]),
-            '<html><head>{{snippet head}}</head><body>{{snippet body}}</body></html>'
-        );
+        $snippetKey = $rootSnippetKeyGenerator->getKeyForContext($context, [Product::ID => $this->testProductId]);
+        $snippetContent = '<html><head>{{snippet head}}</head><body>{{snippet body}}</body></html>';
+
+        $pageSnippet = Snippet::create($snippetKey, $snippetContent);
         $dataPoolWriter->writeSnippet($pageSnippet);
 
         $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::create(
@@ -89,13 +90,12 @@ class FrontendRenderingTest extends AbstractIntegrationTest
         $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
         
         $context = new VersionedContext(DataVersion::fromVersionString('1'));
-        $snippetKeyGeneratorLocator = $this->factory->getSnippetKeyGeneratorLocator();
+        $snippetKeyGeneratorLocator = $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy();
         $productDetailPageMetaSnippetKeyGenerator = $this->factory->createProductDetailPageMetaSnippetKeyGenerator();
         $productDetailPageMetaSnippetKey = $productDetailPageMetaSnippetKeyGenerator->getKeyForContext(
             $context,
             [PageMetaInfoSnippetContent::URL_KEY => $urlKey]
         );
-
 
         $this->addPageMetaInfoFixtureToKeyValueStorage(
             $snippetKeyGeneratorLocator,

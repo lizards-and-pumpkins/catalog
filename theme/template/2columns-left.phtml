@@ -10,7 +10,6 @@
 </head>
 <body>
 <div class="wrapper 2columns-left">
-    <?= $this->getChildOutput('global_notices') ?>
     <div class="page">
         <?= $this->getChildOutput('header') ?>
         <div class="main-container col2-left-layout">
@@ -19,14 +18,11 @@
                     <?= $this->getChildOutput('left') ?>
                 </div>
                 <div class="col-main">
-                    <?= $this->getChildOutput('breadcrumbsContainer') ?>
-                    <?= $this->getChildOutput('global_messages') ?>
                     <?= $this->getChildOutput('content') ?>
                 </div>
             </div>
         </div>
         <?= $this->getChildOutput('footer') ?>
-        <?= $this->getChildOutput('before_body_end') ?>
     </div>
 </div>
 </body>

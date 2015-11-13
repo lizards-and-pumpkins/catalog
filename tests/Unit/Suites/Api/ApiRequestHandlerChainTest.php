@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\Api;
 
+use LizardsAndPumpkins\Api\Exception\ApiVersionMustBeIntException;
+
 /**
  * @covers LizardsAndPumpkins\Api\ApiRequestHandlerChain
  */

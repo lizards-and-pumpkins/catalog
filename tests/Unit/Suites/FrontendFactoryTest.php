@@ -14,6 +14,18 @@ use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpsUrl;
 use LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler;
+use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
+use LizardsAndPumpkins\Product\DefaultNumberOfProductsPerPageSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductListingCriteriaSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductSearchAutosuggestionSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer;
+use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 
 /**
  * @covers \LizardsAndPumpkins\FrontendFactory
@@ -39,11 +51,13 @@ use LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler;
  * @uses   \LizardsAndPumpkins\Http\GenericHttpRouter
  * @uses   \LizardsAndPumpkins\Product\MultipleProductStockQuantityApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine
+ * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\CompositeSnippetKeyGeneratorLocatorStrategy
+ * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\ContentBlockSnippetKeyGeneratorLocatorStrategy
+ * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\RegistrySnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
  * @uses   \LizardsAndPumpkins\DataVersion
  * @uses   \LizardsAndPumpkins\Api\ApiRouter
  * @uses   \LizardsAndPumpkins\Api\ApiRequestHandlerChain
- * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator
  * @uses   \LizardsAndPumpkins\GenericSnippetKeyGenerator
  * @uses   \LizardsAndPumpkins\PageBuilder
  * @uses   \LizardsAndPumpkins\Renderer\BlockRenderer
@@ -158,5 +172,40 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(ProductsPerPage::class, $result1);
         $this->assertSame($result1, $result2);
+    }
+
+    /**
+     * @dataProvider registeredSnippetCodeDataProvider
+     * @param string $snippetCode
+     */
+    public function testContentBlockSnippetKeyGeneratorLocatorReturnsSnippetKeyGenerator($snippetCode)
+    {
+        $snippetKeyGeneratorLocator = $this->frontendFactory->createRegistrySnippetKeyGeneratorLocatorStrategy();
+        $result = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
+
+        $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function registeredSnippetCodeDataProvider()
+    {
+        return [
+            [ProductDetailViewSnippetRenderer::CODE],
+            [ProductInSearchAutosuggestionSnippetRenderer::CODE],
+            [ProductInListingSnippetRenderer::CODE],
+            [ProductListingPageSnippetRenderer::CODE],
+            ['price'],
+            ['backorders'],
+            [DefaultNumberOfProductsPerPageSnippetRenderer::CODE],
+            [ProductListingCriteriaSnippetRenderer::CODE],
+            [ProductSearchResultMetaSnippetRenderer::CODE],
+            [ProductSearchAutosuggestionMetaSnippetRenderer::CODE],
+            [ProductSearchAutosuggestionSnippetRenderer::CODE],
+            [ProductJsonSnippetRenderer::CODE],
+            [ConfigurableProductJsonSnippetRenderer::VARIATION_ATTRIBUTES_CODE],
+            [ConfigurableProductJsonSnippetRenderer::ASSOCIATED_PRODUCTS_CODE],
+        ];
     }
 }

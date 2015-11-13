@@ -2,6 +2,9 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\Exception\InvalidTemplateProjectorCodeException;
+use LizardsAndPumpkins\Exception\UnableToLocateTemplateProjectorException;
+
 class TemplateProjectorLocator
 {
     /**

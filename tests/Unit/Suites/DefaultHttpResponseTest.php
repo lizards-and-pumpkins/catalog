@@ -2,8 +2,8 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\Exception\InvalidResponseBodyException;
+use LizardsAndPumpkins\Http\HttpResponse;
 
 /**
  * @covers \LizardsAndPumpkins\DefaultHttpResponse

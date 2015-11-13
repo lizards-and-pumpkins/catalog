@@ -4,6 +4,9 @@ namespace LizardsAndPumpkins\Renderer;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\LocaleContextDecorator;
+use LizardsAndPumpkins\Renderer\Exception\BlockRendererMustHaveOneRootBlockException;
+use LizardsAndPumpkins\Renderer\Exception\CanNotInstantiateBlockException;
+use LizardsAndPumpkins\Renderer\Exception\MethodNotYetAvailableException;
 use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
 
 abstract class BlockRenderer

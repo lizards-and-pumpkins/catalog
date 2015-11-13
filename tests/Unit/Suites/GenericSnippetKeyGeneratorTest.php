@@ -3,6 +3,8 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Exception\InvalidSnippetCodeException;
+use LizardsAndPumpkins\Exception\MissingSnippetKeyGenerationDataException;
 
 /**
  * @covers \LizardsAndPumpkins\GenericSnippetKeyGenerator

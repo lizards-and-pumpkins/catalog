@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\Content;
 
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Snippet;
-use LizardsAndPumpkins\SnippetKeyGenerator;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocator\ContentBlockSnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\SnippetList;
 use LizardsAndPumpkins\SnippetRenderer;
 
@@ -18,9 +18,9 @@ class ContentBlockSnippetRenderer implements SnippetRenderer
     private $snippetList;
 
     /**
-     * @var SnippetKeyGenerator
+     * @var ContentBlockSnippetKeyGeneratorLocatorStrategy
      */
-    private $snippetKeyGenerator;
+    private $snippetKeyGeneratorLocator;
 
     /**
      * @var ContextBuilder
@@ -29,11 +29,11 @@ class ContentBlockSnippetRenderer implements SnippetRenderer
 
     public function __construct(
         SnippetList $snippetList,
-        SnippetKeyGenerator $snippetKeyGenerator,
+        ContentBlockSnippetKeyGeneratorLocatorStrategy $snippetKeyGeneratorLocator,
         ContextBuilder $contextBuilder
     ) {
         $this->snippetList = $snippetList;
-        $this->snippetKeyGenerator = $snippetKeyGenerator;
+        $this->snippetKeyGeneratorLocator = $snippetKeyGeneratorLocator;
         $this->contextBuilder = $contextBuilder;
     }
 
@@ -43,10 +43,13 @@ class ContentBlockSnippetRenderer implements SnippetRenderer
      */
     public function render(ContentBlockSource $contentBlockSource)
     {
+        $snippetCode = (string) $contentBlockSource->getContentBlockId();
+        $keyGenerator = $this->snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
+
         $context = $this->contextBuilder->createContext($contentBlockSource->getContextData());
-        $key = $this->snippetKeyGenerator->getKeyForContext($context, [
-            'content_block_id' => (string) $contentBlockSource->getContentBlockId()
-        ]);
+        $keyGeneratorParameters = [];
+
+        $key = $keyGenerator->getKeyForContext($context, $keyGeneratorParameters);
         $content = $contentBlockSource->getContent();
         $snippet = Snippet::create($key, $content);
         $this->snippetList->add($snippet);

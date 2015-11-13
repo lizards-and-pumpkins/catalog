@@ -26,7 +26,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     abstract protected function getSearchCriteriaBuilder();
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     final public function getSearchDocumentsMatchingCriteria(
         SearchCriteria $originalCriteria,

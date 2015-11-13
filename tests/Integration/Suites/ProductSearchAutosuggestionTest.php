@@ -66,7 +66,7 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
         $dataPoolReader = $this->factory->createDataPoolReader();
         $pageBuilder = new PageBuilder(
             $dataPoolReader,
-            $this->factory->getSnippetKeyGeneratorLocator(),
+            $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy(),
             $this->factory->getLogger()
         );
         $sortOrderConfigs = $this->factory->getProductSearchAutosuggestionSortOrderConfig();
@@ -75,7 +75,7 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
             $this->factory->createContext(),
             $dataPoolReader,
             $pageBuilder,
-            $this->factory->getSnippetKeyGeneratorLocator(),
+            $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy(),
             $this->factory->createSearchCriteriaBuilder(),
             $this->factory->getSearchableAttributeCodes(),
             $sortOrderConfigs
@@ -84,17 +84,21 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
 
     private function registerProductSearchAutosuggestionMetaSnippetKeyGenerator()
     {
-        $this->factory->getSnippetKeyGeneratorLocator()->register(
+        $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy()->register(
             ProductSearchAutosuggestionMetaSnippetRenderer::CODE,
-            $this->factory->createProductSearchAutosuggestionMetaSnippetKeyGenerator()
+            function () {
+                return $this->factory->createProductSearchAutosuggestionMetaSnippetKeyGenerator();
+            }
         );
     }
 
     private function registerProductInSearchAutosuggestionSnippetKeyGenerator()
     {
-        $this->factory->getSnippetKeyGeneratorLocator()->register(
+        $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy()->register(
             ProductInSearchAutosuggestionSnippetRenderer::CODE,
-            $this->factory->createProductInSearchAutosuggestionSnippetKeyGenerator()
+            function () {
+                return $this->factory->createProductInSearchAutosuggestionSnippetKeyGenerator();
+            }
         );
     }
 

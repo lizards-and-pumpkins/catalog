@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Content;
 
-use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\DomainEventHandler;
 
 /**
@@ -28,12 +27,10 @@ class ContentBlockWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_Te
     protected function setUp()
     {
         $this->mockDomainEvent = $this->getMock(ContentBlockWasUpdatedDomainEvent::class, [], [], '', false);
-        $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
         $this->mockProjector = $this->getMock(ContentBlockProjector::class, [], [], '', false);
 
         $this->domainEventHandler = new ContentBlockWasUpdatedDomainEventHandler(
             $this->mockDomainEvent,
-            $stubContextSource,
             $this->mockProjector
         );
     }

@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Renderer;
 
+use LizardsAndPumpkins\Renderer\Exception\LayoutFileNotReadableException;
 use LizardsAndPumpkins\Utils\XPathParser;
 
 class LayoutReader
