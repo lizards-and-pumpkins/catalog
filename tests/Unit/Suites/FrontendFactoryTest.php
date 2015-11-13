@@ -15,7 +15,6 @@ use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpsUrl;
 use LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler;
 use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
-use LizardsAndPumpkins\Product\DefaultNumberOfProductsPerPageSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
@@ -198,7 +197,6 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
             [ProductListingPageSnippetRenderer::CODE],
             ['price'],
             ['backorders'],
-            [DefaultNumberOfProductsPerPageSnippetRenderer::CODE],
             [ProductListingCriteriaSnippetRenderer::CODE],
             [ProductSearchResultMetaSnippetRenderer::CODE],
             [ProductSearchAutosuggestionMetaSnippetRenderer::CODE],

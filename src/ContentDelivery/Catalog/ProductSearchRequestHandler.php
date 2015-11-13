@@ -13,7 +13,7 @@ use LizardsAndPumpkins\Http\Exception\UnableToHandleRequestException;
 use LizardsAndPumpkins\PageBuilder;
 use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetContent;
 use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer;
-use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 
 class ProductSearchRequestHandler implements HttpRequestHandler
 {

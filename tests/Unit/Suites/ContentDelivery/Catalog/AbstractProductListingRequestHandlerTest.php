@@ -15,7 +15,7 @@ use LizardsAndPumpkins\Http\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\PageBuilder;
 use LizardsAndPumpkins\Product\AttributeCode;
-use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 
 abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {

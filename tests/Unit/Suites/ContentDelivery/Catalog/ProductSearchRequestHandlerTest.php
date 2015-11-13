@@ -11,7 +11,7 @@ use LizardsAndPumpkins\Http\Exception\UnableToHandleRequestException;
 use LizardsAndPumpkins\PageBuilder;
 use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetContent;
 use LizardsAndPumpkins\SnippetKeyGenerator;
-use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 
 /**
  * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchRequestHandler
@@ -58,7 +58,7 @@ class ProductSearchRequestHandlerTest extends AbstractProductListingRequestHandl
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     final protected function createRequestHandler(
         Context $context,
@@ -91,7 +91,7 @@ class ProductSearchRequestHandlerTest extends AbstractProductListingRequestHandl
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     final protected function createStubSnippetKeyGeneratorLocator()
     {
@@ -106,7 +106,7 @@ class ProductSearchRequestHandlerTest extends AbstractProductListingRequestHandl
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     final protected function createStubDataPoolReader()
     {
@@ -128,7 +128,7 @@ class ProductSearchRequestHandlerTest extends AbstractProductListingRequestHandl
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     final protected function createStubRequest()
     {

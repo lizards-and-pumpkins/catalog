@@ -4,14 +4,14 @@ namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
-use LizardsAndPumpkins\DataPool\KeyValue\KeyNotFoundException;
+use LizardsAndPumpkins\DataPool\KeyValue\Exception\KeyNotFoundException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\Http\Exception\UnableToHandleRequestException;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\PageBuilder;
 use LizardsAndPumpkins\Product\ProductListingCriteriaSnippetContent;
 use LizardsAndPumpkins\SnippetKeyGenerator;
-use LizardsAndPumpkins\SnippetKeyGeneratorLocator;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 
 /**
  * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler
@@ -60,7 +60,7 @@ class ProductListingRequestHandlerTest extends AbstractProductListingRequestHand
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     final protected function createRequestHandler(
         Context $context,
@@ -83,7 +83,7 @@ class ProductListingRequestHandlerTest extends AbstractProductListingRequestHand
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     final protected function createStubSnippetKeyGeneratorLocator()
     {
@@ -98,7 +98,7 @@ class ProductListingRequestHandlerTest extends AbstractProductListingRequestHand
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     final protected function createStubDataPoolReader()
     {
@@ -126,7 +126,7 @@ class ProductListingRequestHandlerTest extends AbstractProductListingRequestHand
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     final protected function createStubRequest()
     {

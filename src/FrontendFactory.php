@@ -267,12 +267,6 @@ class FrontendFactory implements Factory
             }
         );
         $registrySnippetKeyGeneratorLocator->register(
-            DefaultNumberOfProductsPerPageSnippetRenderer::CODE,
-            function () {
-                return $this->getMasterFactory()->createDefaultNumberOfProductsPerPageSnippetKeyGenerator();
-            }
-        );
-        $registrySnippetKeyGeneratorLocator->register(
             ProductListingCriteriaSnippetRenderer::CODE,
             function () {
                 return $this->getMasterFactory()->createProductListingCriteriaSnippetKeyGenerator();

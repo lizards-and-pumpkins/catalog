@@ -84,9 +84,11 @@ trait ProductListingTestTrait
 
     private function registerProductListingSnippetKeyGenerator()
     {
-        $this->factory->getSnippetKeyGeneratorLocator()->register(
+        $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy()->register(
             ProductListingPageSnippetRenderer::CODE,
-            $this->factory->createProductListingSnippetKeyGenerator()
+            function () {
+                return $this->factory->createProductListingSnippetKeyGenerator();
+            }
         );
     }
 
@@ -98,7 +100,7 @@ trait ProductListingTestTrait
         $dataPoolReader = $this->factory->createDataPoolReader();
         $pageBuilder = new PageBuilder(
             $dataPoolReader,
-            $this->factory->getSnippetKeyGeneratorLocator(),
+            $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy(),
             $this->factory->getLogger()
         );
         $filterNavigationConfig = $this->factory->getProductListingFilterNavigationConfig();
@@ -109,7 +111,7 @@ trait ProductListingTestTrait
             $this->factory->createContext(),
             $dataPoolReader,
             $pageBuilder,
-            $this->factory->getSnippetKeyGeneratorLocator(),
+            $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy(),
             $filterNavigationConfig,
             $productsPerPage,
             ...$sortOrderConfigs
