@@ -7,6 +7,22 @@ namespace LizardsAndPumpkins\ContentDelivery\Catalog;
  */
 class FacetFieldRangeCollectionTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var FacetFieldRangeCollection
+     */
+    private $collection;
+
+    /**
+     * @var FacetFieldRange|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubFacetFieldRange;
+
+    protected function setUp()
+    {
+        $this->stubFacetFieldRange = $this->getMock(FacetFieldRange::class, [], [], '', false);
+        $this->collection = new FacetFieldRangeCollection($this->stubFacetFieldRange);
+    }
+
     public function testIteratorAggregateInterfaceIsImplemented()
     {
         $collection = new FacetFieldRangeCollection;
@@ -15,20 +31,24 @@ class FacetFieldRangeCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testFacetFieldRangesAreAccessibleViaArrayIterator()
     {
-        $stubFacetFieldRange = $this->getMock(FacetFieldRange::class, [], [], '', false);
-        $collection = new FacetFieldRangeCollection($stubFacetFieldRange);
-
-        $result = $collection->getIterator();
+        $result = $this->collection->getIterator();
 
         $this->assertCount(1, $result);
-        $this->assertSame($stubFacetFieldRange, $result->current());
+        $this->assertSame($this->stubFacetFieldRange, $result->current());
     }
 
     public function testFacetFieldRangesAreAccessibleViaGetter()
     {
-        $stubFacetFieldRange = $this->getMock(FacetFieldRange::class, [], [], '', false);
-        $collection = new FacetFieldRangeCollection($stubFacetFieldRange);
+        $this->assertSame([$this->stubFacetFieldRange], $this->collection->getRanges());
+    }
 
-        $this->assertSame([$stubFacetFieldRange], $collection->getRanges());
+    public function testCountableInterfaceIsImplemented()
+    {
+        $this->assertInstanceOf(\Countable::class, $this->collection);
+    }
+
+    public function testCollectionCountIsReturned()
+    {
+        $this->assertCount(1, $this->collection);
     }
 }

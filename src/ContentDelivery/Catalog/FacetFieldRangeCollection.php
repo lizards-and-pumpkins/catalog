@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
-class FacetFieldRangeCollection implements \IteratorAggregate
+class FacetFieldRangeCollection implements \IteratorAggregate, \Countable
 {
     /**
      * @var FacetFieldRange[]
@@ -28,5 +28,13 @@ class FacetFieldRangeCollection implements \IteratorAggregate
     public function getRanges()
     {
         return $this->facetFieldRanges;
+    }
+
+    /**
+     * @return int
+     */
+    public function count()
+    {
+        return count($this->facetFieldRanges);
     }
 }
