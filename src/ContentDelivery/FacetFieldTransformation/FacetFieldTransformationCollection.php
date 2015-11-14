@@ -14,6 +14,9 @@ class FacetFieldTransformationCollection implements \IteratorAggregate
         $this->facetFieldTransformations = $facetFieldTransformations;
     }
 
+    /**
+     * @return \ArrayIterator
+     */
     public function getIterator()
     {
         return new \ArrayIterator($this->facetFieldTransformations);
