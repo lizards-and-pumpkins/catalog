@@ -2,8 +2,6 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation;
 
-use LizardsAndPumpkins\Context\Context;
-
 /**
  * @covers \LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\EuroPriceRangeTransformation
  */
@@ -14,25 +12,9 @@ class EuroPriceRangeTransformationTest extends \PHPUnit_Framework_TestCase
      */
     private $transformation;
 
-    /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubContext;
-
-    /**
-     * @param string $expected
-     * @param string $input
-     */
-    private function assertIsTransformedTo($expected, $input)
-    {
-        $transformation = $this->transformation;
-        $this->assertSame($expected, $transformation($input, $this->stubContext));
-    }
-
     protected function setUp()
     {
         $this->transformation = new EuroPriceRangeTransformation;
-        $this->stubContext = $this->getMock(Context::class);
     }
 
     public function testFacetFieldTransformationInterfaceIsImplemented()
@@ -40,18 +22,14 @@ class EuroPriceRangeTransformationTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(FacetFieldTransformation::class, $this->transformation);
     }
 
-    public function testTransformationIsCallable()
-    {
-        $this->assertTrue(is_callable($this->transformation));
-    }
-
     /**
      * @dataProvider nonMatchingInputDataProvider
      * @param string $nonMatchingInput
      */
-    public function testNonMatchingInputIsNotModified($nonMatchingInput)
+    public function testNonMatchingInputIsNotEncoded($nonMatchingInput)
     {
-        $this->assertIsTransformedTo($nonMatchingInput, $nonMatchingInput);
+        $result = $this->transformation->encode($nonMatchingInput);
+        $this->assertSame($nonMatchingInput, $result);
     }
 
     public function nonMatchingInputDataProvider()
@@ -64,24 +42,67 @@ class EuroPriceRangeTransformationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider priceRangeTransformationProvider
+     * @dataProvider matchingInputDataProvider
      * @param string $input
      * @param string $expectation
      */
-    public function testTransformedPriceRangeIsReturned($input, $expectation)
+    public function testEncodedPriceRangeIsReturned($input, $expectation)
     {
-        $this->assertIsTransformedTo($expectation, $input);
+        $result = $this->transformation->encode($input);
+        $this->assertSame($expectation, $result);
     }
 
     /**
      * @return array[]
      */
-    public function priceRangeTransformationProvider()
+    public function matchingInputDataProvider()
     {
         return [
             ['1 TO 2', '0,01 € - 0,02 €'],
             ['1 TO 20', '0,01 € - 0,20 €'],
             ['1000 TO 1999', '10,00 € - 19,99 €'],
+        ];
+    }
+
+    /**
+     * @dataProvider nonMatchingEncodedInputDataProvider
+     * @param string $nonMatchingEncodedInput
+     */
+    public function testNonMatchingEncodedInputIsNotDecoded($nonMatchingEncodedInput)
+    {
+        $result = $this->transformation->decode($nonMatchingEncodedInput);
+        $this->assertSame($nonMatchingEncodedInput, $result);
+    }
+
+    public function nonMatchingEncodedInputDataProvider()
+    {
+        return [
+            ['foo'],
+            ['a - b'],
+            ['1.5 - 2 €'],
+        ];
+    }
+
+    /**
+     * @dataProvider matchingEncodedInputDataProvider
+     * @param string $input
+     * @param string $expectation
+     */
+    public function testDecodedPriceRangeIsReturned($input, $expectation)
+    {
+        $result = $this->transformation->decode($input);
+        $this->assertSame($expectation, $result);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function matchingEncodedInputDataProvider()
+    {
+        return [
+            ['0,01 € - 0,02 €', '1 TO 2'],
+            ['0,01 € - 0,20 €', '1 TO 20'],
+            ['10,00 € - 19,99 €', '1000 TO 1999'],
         ];
     }
 }
