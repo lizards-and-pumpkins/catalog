@@ -7,6 +7,7 @@ use LizardsAndPumpkins\Product\AttributeCode;
 
 /**
  * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfig
+ * @uses   \LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationCollection
  */
 class FacetFilterConfigTest extends \PHPUnit_Framework_TestCase
 {
