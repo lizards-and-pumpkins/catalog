@@ -861,6 +861,41 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedDocuments, $searchEngineResponse->getSearchDocuments()->getDocuments());
     }
 
+    public function testMultivaluedFieldIsIndexedAndReturned()
+    {
+        $productId = ProductId::fromString('id');
+
+        $fieldCode = 'code_' . uniqid();
+        $fieldValueA = 'bar';
+        $fieldValueB = 'baz';
+        $fieldValues = [$fieldValueA, $fieldValueB];
+
+        $document = $this->createSearchDocument([$fieldCode => $fieldValues], $productId);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($document);
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
+
+        $criteria = SearchCriterionEqual::create($fieldCode, $fieldValueA);
+        $selectedFilters = [];
+        $facetFields = [];
+        $rowsPerPage = 100;
+        $pageNumber = 0;
+        $sortOrderConfig = $this->createStubSortOrderConfig($fieldCode, SearchEngine::SORT_DIRECTION_ASC);
+
+        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+            $criteria,
+            $selectedFilters,
+            $this->testContext,
+            $facetFields,
+            $rowsPerPage,
+            $pageNumber,
+            $sortOrderConfig
+        );
+        $documents = $searchEngineResponse->getSearchDocuments()->getDocuments();
+
+        $this->assertCount(1, $documents);
+        $this->assertSame($fieldValues, $documents[0]->getFieldsCollection()->getFields()[0]->getValues());
+    }
+
     /**
      * @return SearchEngine
      */
