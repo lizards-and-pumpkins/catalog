@@ -18,19 +18,12 @@ class ProductListingTemplateProjector implements Projector
      */
     private $dataPoolWriter;
     
-    /**
-     * @var ProductsPerPageForContextListBuilder
-     */
-    private $productsPerPageForContextListBuilder;
-
     public function __construct(
         SnippetRendererCollection $snippetRendererCollection,
-        DataPoolWriter $dataPoolWriter,
-        ProductsPerPageForContextListBuilder $productsPerPageForContextListBuilder
+        DataPoolWriter $dataPoolWriter
     ) {
         $this->snippetRendererCollection = $snippetRendererCollection;
         $this->dataPoolWriter = $dataPoolWriter;
-        $this->productsPerPageForContextListBuilder = $productsPerPageForContextListBuilder;
     }
 
     /**
@@ -38,7 +31,7 @@ class ProductListingTemplateProjector implements Projector
      */
     public function project($productsPerPageSourceData)
     {
-        $productsPerPageList = $this->productsPerPageForContextListBuilder->fromJson($productsPerPageSourceData);
+        $productsPerPageList = [];
         $snippetList = $this->snippetRendererCollection->render($productsPerPageList);
         $this->dataPoolWriter->writeSnippetList($snippetList);
     }

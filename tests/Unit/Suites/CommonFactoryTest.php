@@ -23,7 +23,6 @@ use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
-use LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
@@ -111,7 +110,6 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\ContentBlockSnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\GenericSnippetKeyGenerator
  * @uses   \LizardsAndPumpkins\SnippetRendererCollection
- * @uses   \LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductInListingSnippetRenderer
  * @uses   \LizardsAndPumpkins\Image\ImageWasAddedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Image\ImageMagickResizeStrategy
@@ -216,12 +214,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createProductListingCriteriaBuilder();
         $this->assertInstanceOf(ProductListingCriteriaBuilder::class, $result);
-    }
-
-    public function testProductsPerPageForContextListBuilderIsReturned()
-    {
-        $result = $this->commonFactory->createProductsPerPageForContextListBuilder();
-        $this->assertInstanceOf(ProductsPerPageForContextListBuilder::class, $result);
     }
 
     public function testThemeLocatorIsReturned()
