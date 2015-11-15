@@ -14,7 +14,6 @@ use LizardsAndPumpkins\Utils\LocalFilesystem;
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFieldRangeCollection
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfig
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfigCollection
- * @uses   \LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationCollection
  * @uses   \LizardsAndPumpkins\Context\ContextBuilder
  * @uses   \LizardsAndPumpkins\Context\ContextDecorator
  * @uses   \LizardsAndPumpkins\Context\LocaleContextDecorator

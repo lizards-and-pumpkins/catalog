@@ -2,11 +2,9 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\ContentDelivery\Catalog\FacetFieldRangeCollection;
 use LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfig;
 use LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfigCollection;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
-use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationCollection;
 use LizardsAndPumpkins\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine;
@@ -85,26 +83,10 @@ class IntegrationTestFactory implements Factory
     public function getProductListingFilterNavigationConfig()
     {
         return new FacetFilterConfigCollection(
-            new FacetFilterConfig(
-                AttributeCode::fromString('gender'),
-                new FacetFieldRangeCollection,
-                new FacetFieldTransformationCollection
-            ),
-            new FacetFilterConfig(
-                AttributeCode::fromString('brand'),
-                new FacetFieldRangeCollection,
-                new FacetFieldTransformationCollection
-            ),
-            new FacetFilterConfig(
-                AttributeCode::fromString('price'),
-                new FacetFieldRangeCollection,
-                new FacetFieldTransformationCollection
-            ),
-            new FacetFilterConfig(
-                AttributeCode::fromString('color'),
-                new FacetFieldRangeCollection,
-                new FacetFieldTransformationCollection
-            )
+            new FacetFilterConfig(AttributeCode::fromString('gender')),
+            new FacetFilterConfig(AttributeCode::fromString('brand')),
+            new FacetFilterConfig(AttributeCode::fromString('price')),
+            new FacetFilterConfig(AttributeCode::fromString('color'))
         );
     }
 
@@ -114,31 +96,11 @@ class IntegrationTestFactory implements Factory
     public function getProductSearchResultsFilterNavigationConfig()
     {
         return new FacetFilterConfigCollection(
-            new FacetFilterConfig(
-                AttributeCode::fromString('gender'),
-                new FacetFieldRangeCollection,
-                new FacetFieldTransformationCollection
-            ),
-            new FacetFilterConfig(
-                AttributeCode::fromString('brand'),
-                new FacetFieldRangeCollection,
-                new FacetFieldTransformationCollection
-            ),
-            new FacetFilterConfig(
-                AttributeCode::fromString('category'),
-                new FacetFieldRangeCollection,
-                new FacetFieldTransformationCollection
-            ),
-            new FacetFilterConfig(
-                AttributeCode::fromString('price'),
-                new FacetFieldRangeCollection,
-                new FacetFieldTransformationCollection
-            ),
-            new FacetFilterConfig(
-                AttributeCode::fromString('color'),
-                new FacetFieldRangeCollection,
-                new FacetFieldTransformationCollection
-            )
+            new FacetFilterConfig(AttributeCode::fromString('gender')),
+            new FacetFilterConfig(AttributeCode::fromString('brand')),
+            new FacetFilterConfig(AttributeCode::fromString('category')),
+            new FacetFilterConfig(AttributeCode::fromString('price')),
+            new FacetFilterConfig(AttributeCode::fromString('color'))
         );
     }
 

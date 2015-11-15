@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
-use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationCollection;
 use LizardsAndPumpkins\Product\AttributeCode;
 
 class FacetFilterConfig
@@ -17,19 +16,24 @@ class FacetFilterConfig
      */
     private $rangeCollection;
 
-    /**
-     * @var FacetFieldTransformationCollection
-     */
-    private $transformationCollection;
-
-    public function __construct(
-        AttributeCode $attributeCode,
-        FacetFieldRangeCollection $rangeCollection,
-        FacetFieldTransformationCollection $transformationCollection
-    ) {
+    public function __construct(AttributeCode $attributeCode)
+    {
         $this->attributeCode = $attributeCode;
-        $this->transformationCollection = $transformationCollection;
-        $this->rangeCollection = $rangeCollection;
+    }
+
+    /**
+     * @param AttributeCode $attributeCode
+     * @param FacetFieldRangeCollection $facetFieldRangeCollection
+     * @return FacetFilterConfig
+     */
+    public static function createRanged(
+        AttributeCode $attributeCode,
+        FacetFieldRangeCollection $facetFieldRangeCollection
+    ) {
+        $config = new self($attributeCode);
+        $config->setRangeCollection($facetFieldRangeCollection);
+
+        return $config;
     }
 
     /**
@@ -41,18 +45,15 @@ class FacetFilterConfig
     }
 
     /**
-     * @return FacetFieldTransformationCollection
-     */
-    public function getTransformations()
-    {
-        return $this->transformationCollection;
-    }
-
-    /**
      * @return FacetFieldRangeCollection
      */
     public function getRangeCollection()
     {
         return $this->rangeCollection;
+    }
+
+    private function setRangeCollection(FacetFieldRangeCollection $facetFieldRangeCollection)
+    {
+        $this->rangeCollection = $facetFieldRangeCollection;
     }
 }

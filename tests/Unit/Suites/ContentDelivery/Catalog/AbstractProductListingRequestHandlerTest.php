@@ -3,7 +3,6 @@
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
 use LizardsAndPumpkins\ContentDelivery\Catalog\Exception\NoSelectedSortOrderException;
-use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationCollection;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
@@ -207,11 +206,7 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
         $stubContext = $this->getMock(Context::class);
         $stubSnippetKeyGeneratorLocator = $this->createStubSnippetKeyGeneratorLocator();
         $testFacetFilterConfigCollection = new FacetFilterConfigCollection(
-            new FacetFilterConfig(
-                AttributeCode::fromString('foo'),
-                new FacetFieldRangeCollection,
-                new FacetFieldTransformationCollection
-            )
+            new FacetFilterConfig(AttributeCode::fromString('foo'))
         );
         $productsPerPage = ProductsPerPage::create([1, 2, 3], $this->testDefaultNumberOfProductsPerPage);
 
@@ -434,11 +429,7 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
         $stubContext = $this->getMock(Context::class);
         $stubSnippetKeyGeneratorLocator = $this->createStubSnippetKeyGeneratorLocator();
         $testFacetFilterConfigCollection = new FacetFilterConfigCollection(
-            new FacetFilterConfig(
-                AttributeCode::fromString('foo'),
-                new FacetFieldRangeCollection,
-                new FacetFieldTransformationCollection
-            )
+            new FacetFilterConfig(AttributeCode::fromString('foo'))
         );
         $productsPerPage = ProductsPerPage::create([1, 2, 3], $this->testDefaultNumberOfProductsPerPage);
 

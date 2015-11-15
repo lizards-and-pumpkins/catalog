@@ -7,7 +7,6 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\FacetFieldRangeCollection;
 use LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfig;
 use LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfigCollection;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
-use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationCollection;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\WebsiteContextDecorator;
@@ -550,16 +549,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         );
 
         $testFacetFilterConfigCollection = new FacetFilterConfigCollection(
-            new FacetFilterConfig(
-                AttributeCode::fromString('foo'),
-                new FacetFieldRangeCollection,
-                new FacetFieldTransformationCollection
-            ),
-            new FacetFilterConfig(
-                AttributeCode::fromString('bar'),
-                new FacetFieldRangeCollection,
-                new FacetFieldTransformationCollection
-            )
+            new FacetFilterConfig(AttributeCode::fromString('foo')),
+            new FacetFilterConfig(AttributeCode::fromString('bar'))
         );
 
         $selectedFilters = [];
@@ -608,15 +599,16 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
         $testFacetFilterConfigCollection = new FacetFilterConfigCollection(
-            new FacetFilterConfig(
+            FacetFilterConfig::createRanged(
                 AttributeCode::fromString($fieldCode),
-                new FacetFieldRangeCollection(
+                FacetFieldRangeCollection::create(
+                    '%s%s',
+                    '%s%s',
                     new FacetFieldRange(SearchEngine::RANGE_WILDCARD, 10),
                     new FacetFieldRange(10, 20),
                     new FacetFieldRange(20, 30),
                     new FacetFieldRange(30, SearchEngine::RANGE_WILDCARD)
-                ),
-                new FacetFieldTransformationCollection
+                )
             )
         );
 
@@ -710,16 +702,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $criteria = SearchCriterionEqual::create($fieldACode, $keywordA);
 
         $testFacetFilterConfigCollection = new FacetFilterConfigCollection(
-            new FacetFilterConfig(
-                AttributeCode::fromString($fieldACode),
-                new FacetFieldRangeCollection,
-                new FacetFieldTransformationCollection
-            ),
-            new FacetFilterConfig(
-                AttributeCode::fromString($fieldBCode),
-                new FacetFieldRangeCollection,
-                new FacetFieldTransformationCollection
-            )
+            new FacetFilterConfig(AttributeCode::fromString($fieldACode)),
+            new FacetFilterConfig(AttributeCode::fromString($fieldBCode))
         );
 
         $selectedFilters = [$fieldBCode => [$keywordB]];
@@ -763,11 +747,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
         $testFacetFilterConfigCollection = new FacetFilterConfigCollection(
-            new FacetFilterConfig(
-                AttributeCode::fromString($fieldACode),
-                new FacetFieldRangeCollection,
-                new FacetFieldTransformationCollection
-            )
+            new FacetFilterConfig(AttributeCode::fromString($fieldACode))
         );
 
         $criteria = SearchCriterionEqual::create($fieldBCode, $keyword);
