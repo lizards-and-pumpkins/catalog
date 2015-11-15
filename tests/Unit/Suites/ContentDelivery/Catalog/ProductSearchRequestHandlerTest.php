@@ -16,8 +16,12 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 /**
  * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchRequestHandler
  * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandlerTrait
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFieldRangeCollection
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfig
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfigCollection
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
+ * @uses   \LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationCollection
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetContent
  */
@@ -40,7 +44,7 @@ class ProductSearchRequestHandlerTest extends AbstractProductListingRequestHandl
         $stubPageBuilder = $this->getMock(PageBuilder::class, [], [], '', false);
 
         $stubSnippetKeyGeneratorLocator = $this->createStubSnippetKeyGeneratorLocator();
-        $testFilterNavigationConfig = [];
+        $testFacetFieldConfigCollection = new FacetFilterConfigCollection;
 
         /** @var ProductsPerPage|\PHPUnit_Framework_MockObject_MockObject $stubProductsPerPage */
         $stubProductsPerPage = $this->getMock(ProductsPerPage::class, [], [], '', false);;
@@ -52,7 +56,7 @@ class ProductSearchRequestHandlerTest extends AbstractProductListingRequestHandl
             $stubDataPoolReader,
             $stubPageBuilder,
             $stubSnippetKeyGeneratorLocator,
-            $testFilterNavigationConfig,
+            $testFacetFieldConfigCollection,
             $stubProductsPerPage
         );
     }
@@ -65,7 +69,7 @@ class ProductSearchRequestHandlerTest extends AbstractProductListingRequestHandl
         DataPoolReader $dataPoolReader,
         PageBuilder $pageBuilder,
         SnippetKeyGeneratorLocator $snippetKeyGeneratorLocator,
-        array $filterNavigationConfig,
+        FacetFilterConfigCollection $facetFilterConfigCollection,
         ProductsPerPage $productsPerPage,
         SortOrderConfig ...$sortOrderConfigs
     ) {
@@ -82,7 +86,7 @@ class ProductSearchRequestHandlerTest extends AbstractProductListingRequestHandl
             $dataPoolReader,
             $pageBuilder,
             $snippetKeyGeneratorLocator,
-            $filterNavigationConfig,
+            $facetFilterConfigCollection,
             $productsPerPage,
             $stubSearchCriteriaBuilder,
             $testSearchableAttributeCodes,

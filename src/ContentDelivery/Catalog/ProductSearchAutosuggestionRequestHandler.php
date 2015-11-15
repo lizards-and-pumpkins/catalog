@@ -154,14 +154,14 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
     {
         $criteria = $this->criteriaBuilder->anyOfFieldsContainString($this->searchableAttributeCodes, $queryString);
         $selectedFilters = [];
-        $facetFields = [];
+        $testFacetFilterConfigCollection = new FacetFilterConfigCollection;
         $rowsPerPage = 100; // TODO: Replace with configured number of suggestions to show
         $pageNumber = 0;
         $searchEngineResponse = $this->dataPoolReader->getSearchResultsMatchingCriteria(
             $criteria,
             $selectedFilters,
             $this->context,
-            $facetFields,
+            $testFacetFilterConfigCollection,
             $rowsPerPage,
             $pageNumber,
             $this->sortOrderConfig

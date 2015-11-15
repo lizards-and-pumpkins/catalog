@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
 use LizardsAndPumpkins\ContentDelivery\Catalog\Exception\NoSelectedSortOrderException;
+use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationCollection;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
@@ -167,7 +168,7 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
      * @param DataPoolReader $dataPoolReader
      * @param PageBuilder $pageBuilder
      * @param SnippetKeyGeneratorLocator $snippetKeyGeneratorLocator
-     * @param array[] $filterNavigationConfig
+     * @param FacetFilterConfigCollection $facetFilterConfigCollection
      * @param ProductsPerPage $productsPerPage
      * @param SortOrderConfig[] $sortOrderConfigs
      * @return HttpRequestHandler
@@ -177,7 +178,7 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
         DataPoolReader $dataPoolReader,
         PageBuilder $pageBuilder,
         SnippetKeyGeneratorLocator $snippetKeyGeneratorLocator,
-        array $filterNavigationConfig,
+        FacetFilterConfigCollection $facetFilterConfigCollection,
         ProductsPerPage $productsPerPage,
         SortOrderConfig ...$sortOrderConfigs
     );
@@ -205,7 +206,13 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->getMock(Context::class);
         $stubSnippetKeyGeneratorLocator = $this->createStubSnippetKeyGeneratorLocator();
-        $testFilterNavigationConfig = ['foo' => []];
+        $testFacetFilterConfigCollection = new FacetFilterConfigCollection(
+            new FacetFilterConfig(
+                AttributeCode::fromString('foo'),
+                new FacetFieldRangeCollection,
+                new FacetFieldTransformationCollection
+            )
+        );
         $productsPerPage = ProductsPerPage::create([1, 2, 3], $this->testDefaultNumberOfProductsPerPage);
 
         $stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
@@ -227,7 +234,7 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
             $this->mockDataPoolReader,
             $this->mockPageBuilder,
             $stubSnippetKeyGeneratorLocator,
-            $testFilterNavigationConfig,
+            $testFacetFilterConfigCollection,
             $productsPerPage,
             ...$this->stubSortOrderConfigs
         );
@@ -426,7 +433,13 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->getMock(Context::class);
         $stubSnippetKeyGeneratorLocator = $this->createStubSnippetKeyGeneratorLocator();
-        $testFilterNavigationConfig = ['foo' => []];
+        $testFacetFilterConfigCollection = new FacetFilterConfigCollection(
+            new FacetFilterConfig(
+                AttributeCode::fromString('foo'),
+                new FacetFieldRangeCollection,
+                new FacetFieldTransformationCollection
+            )
+        );
         $productsPerPage = ProductsPerPage::create([1, 2, 3], $this->testDefaultNumberOfProductsPerPage);
 
         /** @var SortOrderConfig|\PHPUnit_Framework_MockObject_MockObject $stubSortOrderConfig */
@@ -437,7 +450,7 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
             $this->mockDataPoolReader,
             $this->mockPageBuilder,
             $stubSnippetKeyGeneratorLocator,
-            $testFilterNavigationConfig,
+            $testFacetFilterConfigCollection,
             $productsPerPage,
             $stubSortOrderConfig
         );

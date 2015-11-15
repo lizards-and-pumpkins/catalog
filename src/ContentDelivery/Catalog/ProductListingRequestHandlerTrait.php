@@ -43,9 +43,9 @@ trait ProductListingRequestHandlerTrait
     private $keyGeneratorLocator;
 
     /**
-     * @var string[]
+     * @var FacetFilterConfigCollection
      */
-    private $filterNavigationConfig;
+    private $facetFilterConfigCollection;
 
     /**
      * @var ProductsPerPage
@@ -229,7 +229,8 @@ trait ProductListingRequestHandlerTrait
      */
     private function getSelectedFilterValuesFromRequest(HttpRequest $request)
     {
-        return array_reduce(array_keys($this->filterNavigationConfig), function ($carry, $filterName) use ($request) {
+        $facetFilterAttributeCodes = $this->facetFilterConfigCollection->getAttributeCodes();
+        return array_reduce($facetFilterAttributeCodes, function ($carry, $filterName) use ($request) {
             $carry[$filterName] = array_filter(explode(',', $request->getQueryParameter($filterName)));
             return $carry;
         }, []);

@@ -51,7 +51,7 @@ class FacetFilterConfig
     /**
      * @return FacetFieldRangeCollection
      */
-    public function getRanges()
+    public function getRangeCollection()
     {
         return $this->rangeCollection;
     }

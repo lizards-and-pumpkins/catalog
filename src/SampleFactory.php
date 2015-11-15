@@ -2,7 +2,12 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\ContentDelivery\Catalog\FacetFieldRange;
+use LizardsAndPumpkins\ContentDelivery\Catalog\FacetFieldRangeCollection;
+use LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfig;
+use LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfigCollection;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
+use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationCollection;
 use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
@@ -53,12 +58,28 @@ class SampleFactory implements Factory
      */
     public function getProductListingFilterNavigationConfig()
     {
-        return [
-            'gender' => [],
-            'brand' => [],
-            'price' => $this->getPriceRanges(),
-            'color' => [],
-        ];
+        return new FacetFilterConfigCollection(
+            new FacetFilterConfig(
+                AttributeCode::fromString('gender'),
+                new FacetFieldRangeCollection,
+                new FacetFieldTransformationCollection
+            ),
+            new FacetFilterConfig(
+                AttributeCode::fromString('brand'),
+                new FacetFieldRangeCollection,
+                new FacetFieldTransformationCollection
+            ),
+            new FacetFilterConfig(
+                AttributeCode::fromString('price'),
+                $this->getPriceRanges(),
+                new FacetFieldTransformationCollection
+            ),
+            new FacetFilterConfig(
+                AttributeCode::fromString('color'),
+                new FacetFieldRangeCollection,
+                new FacetFieldTransformationCollection
+            )
+        );
     }
 
     /**
@@ -66,30 +87,50 @@ class SampleFactory implements Factory
      */
     public function getProductSearchResultsFilterNavigationConfig()
     {
-        return [
-            'gender' => [],
-            'brand' => [],
-            'category' => [],
-            'price' => $this->getPriceRanges(),
-            'color' => [],
-        ];
+        return new FacetFilterConfigCollection(
+            new FacetFilterConfig(
+                AttributeCode::fromString('gender'),
+                new FacetFieldRangeCollection,
+                new FacetFieldTransformationCollection
+            ),
+            new FacetFilterConfig(
+                AttributeCode::fromString('brand'),
+                new FacetFieldRangeCollection,
+                new FacetFieldTransformationCollection
+            ),
+            new FacetFilterConfig(
+                AttributeCode::fromString('category'),
+                new FacetFieldRangeCollection,
+                new FacetFieldTransformationCollection
+            ),
+            new FacetFilterConfig(
+                AttributeCode::fromString('price'),
+                $this->getPriceRanges(),
+                new FacetFieldTransformationCollection
+            ),
+            new FacetFilterConfig(
+                AttributeCode::fromString('color'),
+                new FacetFieldRangeCollection,
+                new FacetFieldTransformationCollection
+            )
+        );
     }
 
     /**
-     * @return array[]
+     * @return FacetFieldRangeCollection
      */
     private function getPriceRanges()
     {
         $base = pow(10, Price::NUM_DECIMAL_POINTS);
         $rangeStep = 20 * $base;
         $rangesTo = 500 * $base;
-        $priceRanges = [['from' => '*', 'to' => $rangeStep - 1]];
+        $priceRanges = [new FacetFieldRange('*', $rangeStep - 1)];
         for ($i = $rangeStep; $i < $rangesTo; $i += $rangeStep) {
-            $priceRanges[] = ['from' => $i, 'to' => $i + $rangeStep - 1];
+            $priceRanges[] = new FacetFieldRange($i, $i + $rangeStep - 1);
         }
-        $priceRanges[] = ['from' => $rangesTo, 'to' => '*'];
+        $priceRanges[] = new FacetFieldRange($rangesTo, '*');
 
-        return $priceRanges;
+        return new FacetFieldRangeCollection(...$priceRanges);
     }
 
     /**

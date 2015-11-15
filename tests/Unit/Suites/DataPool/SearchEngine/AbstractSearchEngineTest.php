@@ -2,7 +2,12 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
+use LizardsAndPumpkins\ContentDelivery\Catalog\FacetFieldRange;
+use LizardsAndPumpkins\ContentDelivery\Catalog\FacetFieldRangeCollection;
+use LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfig;
+use LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfigCollection;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
+use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationCollection;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\WebsiteContextDecorator;
@@ -150,7 +155,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     {
         $criteria = SearchCriterionEqual::create('foo', 'bar');
         $selectedFilters = [];
-        $facetFiltersConfig = [];
+        $testFacetFilterConfigCollection = new FacetFilterConfigCollection;
         $rowsPerPage = 100;
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig('whatever', SearchEngine::SORT_DIRECTION_ASC);
@@ -159,7 +164,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $criteria,
             $selectedFilters,
             $this->testContext,
-            $facetFiltersConfig,
+            $testFacetFilterConfigCollection,
             $rowsPerPage,
             $pageNumber,
             $sortOrderConfig
@@ -187,7 +192,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $criteria = SearchCriterionEqual::create($fieldName, $fieldValue);
         $selectedFilters = [];
-        $facetFields = [];
+        $testFacetFilterConfigCollection = new FacetFilterConfigCollection;
         $rowsPerPage = 100;
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig('whatever', SearchEngine::SORT_DIRECTION_ASC);
@@ -196,7 +201,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $criteria,
             $selectedFilters,
             $queryContext,
-            $facetFields,
+            $testFacetFilterConfigCollection,
             $rowsPerPage,
             $pageNumber,
             $sortOrderConfig
@@ -227,7 +232,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $criteria = SearchCriterionEqual::create($fieldName, $fieldValue);
         $selectedFilters = [];
-        $facetFields = [];
+        $testFacetFilterConfigCollection = new FacetFilterConfigCollection;
         $rowsPerPage = 100;
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig('whatever', SearchEngine::SORT_DIRECTION_ASC);
@@ -236,7 +241,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $criteria,
             $selectedFilters,
             $queryContext,
-            $facetFields,
+            $testFacetFilterConfigCollection,
             $rowsPerPage,
             $pageNumber,
             $sortOrderConfig
@@ -262,7 +267,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $criteria = SearchCriterionLike::create($fieldName, 'bar');
         $selectedFilters = [];
-        $facetFields = [];
+        $testFacetFilterConfigCollection = new FacetFilterConfigCollection;
         $rowsPerPage = 100;
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig('whatever', SearchEngine::SORT_DIRECTION_ASC);
@@ -271,7 +276,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $criteria,
             $selectedFilters,
             $this->testContext,
-            $facetFields,
+            $testFacetFilterConfigCollection,
             $rowsPerPage,
             $pageNumber,
             $sortOrderConfig
@@ -285,7 +290,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     {
         $searchCriteria = SearchCriterionEqual::create('foo', 'some-value-which-is-definitely-absent-in-index');
         $selectedFilters = [];
-        $facetFields = [];
+        $testFacetFilterConfigCollection = new FacetFilterConfigCollection;
         $rowsPerPage = 100;
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig('whatever', SearchEngine::SORT_DIRECTION_ASC);
@@ -294,7 +299,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $searchCriteria,
             $selectedFilters,
             $this->testContext,
-            $facetFields,
+            $testFacetFilterConfigCollection,
             $rowsPerPage,
             $pageNumber,
             $sortOrderConfig
@@ -318,7 +323,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
         $selectedFilters = [];
-        $facetFields = [];
+        $testFacetFilterConfigCollection = new FacetFilterConfigCollection;
         $rowsPerPage = 100;
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig('whatever', SearchEngine::SORT_DIRECTION_ASC);
@@ -327,7 +332,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $searchCriteria,
             $selectedFilters,
             $this->testContext,
-            $facetFields,
+            $testFacetFilterConfigCollection,
             $rowsPerPage,
             $pageNumber,
             $sortOrderConfig
@@ -370,7 +375,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
         $selectedFilters = [];
-        $facetFields = [];
+        $testFacetFilterConfigCollection = new FacetFilterConfigCollection;
         $rowsPerPage = 100;
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig('whatever', SearchEngine::SORT_DIRECTION_ASC);
@@ -379,7 +384,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $searchCriteria,
             $selectedFilters,
             $this->testContext,
-            $facetFields,
+            $testFacetFilterConfigCollection,
             $rowsPerPage,
             $pageNumber,
             $sortOrderConfig
@@ -427,7 +432,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $criteria = SearchCriterionEqual::create($fieldName, $fieldValue);
         $selectedFilters = [];
-        $facetFields = [];
+        $testFacetFilterConfigCollection = new FacetFilterConfigCollection;
         $rowsPerPage = 100;
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig('whatever', SearchEngine::SORT_DIRECTION_ASC);
@@ -436,7 +441,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $criteria,
             $selectedFilters,
             $this->testContext,
-            $facetFields,
+            $testFacetFilterConfigCollection,
             $rowsPerPage,
             $pageNumber,
             $sortOrderConfig
@@ -460,7 +465,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $criteria = SearchCriterionEqual::create($fieldName, $fieldValue);
         $selectedFilters = [];
-        $facetFields = [];
+        $testFacetFilterConfigCollection = new FacetFilterConfigCollection;
         $rowsPerPage = 100;
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig('whatever', SearchEngine::SORT_DIRECTION_ASC);
@@ -469,7 +474,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $criteria,
             $selectedFilters,
             $this->testContext,
-            $facetFields,
+            $testFacetFilterConfigCollection,
             $rowsPerPage,
             $pageNumber,
             $sortOrderConfig
@@ -501,7 +506,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $criteria = SearchCriterionEqual::create($fieldName, $uniqueValue);
         $selectedFilters = [];
-        $facetFields = [];
+        $testFacetFilterConfigCollection = new FacetFilterConfigCollection;
         $rowsPerPage = 100;
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig('whatever', SearchEngine::SORT_DIRECTION_ASC);
@@ -510,7 +515,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $criteria,
             $selectedFilters,
             $this->testContext,
-            $facetFields,
+            $testFacetFilterConfigCollection,
             $rowsPerPage,
             $pageNumber,
             $sortOrderConfig
@@ -544,8 +549,20 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             SearchCriterionEqual::create($fieldCCode, $keyword)
         );
 
+        $testFacetFilterConfigCollection = new FacetFilterConfigCollection(
+            new FacetFilterConfig(
+                AttributeCode::fromString('foo'),
+                new FacetFieldRangeCollection,
+                new FacetFieldTransformationCollection
+            ),
+            new FacetFilterConfig(
+                AttributeCode::fromString('bar'),
+                new FacetFieldRangeCollection,
+                new FacetFieldTransformationCollection
+            )
+        );
+
         $selectedFilters = [];
-        $facetFields = ['foo' => [], 'bar' => []];
         $rowsPerPage = 100;
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig('whatever', SearchEngine::SORT_DIRECTION_ASC);
@@ -554,7 +571,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $criteria,
             $selectedFilters,
             $this->testContext,
-            $facetFields,
+            $testFacetFilterConfigCollection,
             $rowsPerPage,
             $pageNumber,
             $sortOrderConfig
@@ -590,16 +607,21 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
+        $testFacetFilterConfigCollection = new FacetFilterConfigCollection(
+            new FacetFilterConfig(
+                AttributeCode::fromString($fieldCode),
+                new FacetFieldRangeCollection(
+                    new FacetFieldRange(SearchEngine::RANGE_WILDCARD, 10),
+                    new FacetFieldRange(10, 20),
+                    new FacetFieldRange(20, 30),
+                    new FacetFieldRange(30, SearchEngine::RANGE_WILDCARD)
+                ),
+                new FacetFieldTransformationCollection
+            )
+        );
+
         $criteria = SearchCriterionGreaterOrEqualThan::create($fieldCode, 0);
         $selectedFilters = [];
-        $facetFields = [
-            $fieldCode => [
-                ['from' => SearchEngine::RANGE_WILDCARD, 'to' => '10'],
-                ['from' => '10', 'to' => '20'],
-                ['from' => '20', 'to' => '30'],
-                ['from' => '30', 'to' => SearchEngine::RANGE_WILDCARD],
-            ]
-        ];
         $rowsPerPage = 100;
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig('whatever', SearchEngine::SORT_DIRECTION_ASC);
@@ -608,7 +630,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $criteria,
             $selectedFilters,
             $this->testContext,
-            $facetFields,
+            $testFacetFilterConfigCollection,
             $rowsPerPage,
             $pageNumber,
             $sortOrderConfig
@@ -650,6 +672,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $criteria = SearchCriterionEqual::create($field, $keyword);
         $selectedFilters = [];
         $pageNumber = 1;
+        $testFacetFilterConfigCollection = new FacetFilterConfigCollection;
         $rowsPerPage = 1;
         $sortOrderConfig = $this->createStubSortOrderConfig('whatever', SearchEngine::SORT_DIRECTION_ASC);
 
@@ -657,7 +680,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $criteria,
             $selectedFilters,
             $this->testContext,
-            [],
+            $testFacetFilterConfigCollection,
             $rowsPerPage,
             $pageNumber,
             $sortOrderConfig
@@ -686,8 +709,20 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $criteria = SearchCriterionEqual::create($fieldACode, $keywordA);
 
+        $testFacetFilterConfigCollection = new FacetFilterConfigCollection(
+            new FacetFilterConfig(
+                AttributeCode::fromString($fieldACode),
+                new FacetFieldRangeCollection,
+                new FacetFieldTransformationCollection
+            ),
+            new FacetFilterConfig(
+                AttributeCode::fromString($fieldBCode),
+                new FacetFieldRangeCollection,
+                new FacetFieldTransformationCollection
+            )
+        );
+
         $selectedFilters = [$fieldBCode => [$keywordB]];
-        $facetFields = [$fieldACode => [], $fieldBCode => []];
         $rowsPerPage = 100;
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig('whatever', SearchEngine::SORT_DIRECTION_ASC);
@@ -696,7 +731,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $criteria,
             $selectedFilters,
             $this->testContext,
-            $facetFields,
+            $testFacetFilterConfigCollection,
             $rowsPerPage,
             $pageNumber,
             $sortOrderConfig
@@ -727,9 +762,16 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
+        $testFacetFilterConfigCollection = new FacetFilterConfigCollection(
+            new FacetFilterConfig(
+                AttributeCode::fromString($fieldACode),
+                new FacetFieldRangeCollection,
+                new FacetFieldTransformationCollection
+            )
+        );
+
         $criteria = SearchCriterionEqual::create($fieldBCode, $keyword);
         $selectedFilters = [$fieldACode => [$fieldValueB]];
-        $facetFields = [$fieldACode => []];
         $rowsPerPage = 100;
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig('whatever', SearchEngine::SORT_DIRECTION_ASC);
@@ -738,7 +780,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $criteria,
             $selectedFilters,
             $this->testContext,
-            $facetFields,
+            $testFacetFilterConfigCollection,
             $rowsPerPage,
             $pageNumber,
             $sortOrderConfig
@@ -767,7 +809,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $criteria = SearchCriterionGreaterOrEqualThan::create($fieldCode, 0);
         $selectedFilters = [];
-        $facetFields = [];
+        $testFacetFilterConfigCollection = new FacetFilterConfigCollection;
         $rowsPerPage = 100;
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig($fieldCode, SearchEngine::SORT_DIRECTION_DESC);
@@ -776,7 +818,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $criteria,
             $selectedFilters,
             $this->testContext,
-            $facetFields,
+            $testFacetFilterConfigCollection,
             $rowsPerPage,
             $pageNumber,
             $sortOrderConfig
@@ -804,7 +846,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $criteria = SearchCriterionGreaterOrEqualThan::create($fieldCode, 0);
         $selectedFilters = [];
-        $facetFields = [];
+        $testFacetFilterConfigCollection = new FacetFilterConfigCollection;
         $rowsPerPage = 100;
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig($fieldCode, SearchEngine::SORT_DIRECTION_DESC);
@@ -813,7 +855,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $criteria,
             $selectedFilters,
             $this->testContext,
-            $facetFields,
+            $testFacetFilterConfigCollection,
             $rowsPerPage,
             $pageNumber,
             $sortOrderConfig
@@ -841,7 +883,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $criteria = SearchCriterionGreaterOrEqualThan::create($fieldCode, 0);
         $selectedFilters = [];
-        $facetFields = [];
+        $testFacetFilterConfigCollection = new FacetFilterConfigCollection;
         $rowsPerPage = 100;
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig($fieldCode, SearchEngine::SORT_DIRECTION_ASC);
@@ -850,7 +892,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $criteria,
             $selectedFilters,
             $this->testContext,
-            $facetFields,
+            $testFacetFilterConfigCollection,
             $rowsPerPage,
             $pageNumber,
             $sortOrderConfig

@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Tests\Integration;
 
 use LizardsAndPumpkins\CommonFactory;
+use LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfig;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine;
@@ -24,7 +25,12 @@ use LizardsAndPumpkins\Queue\InMemory\InMemoryQueue;
 /**
  * @covers \LizardsAndPumpkins\IntegrationTestFactory
  * @uses   \LizardsAndPumpkins\CommonFactory
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFieldRange
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFieldRangeCollection
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfig
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfigCollection
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
+ * @uses   \LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationCollection
  * @uses   \LizardsAndPumpkins\DataPool\KeyValue\InMemory\InMemoryKeyValueStore
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine
  * @uses   \LizardsAndPumpkins\FactoryTrait
@@ -47,22 +53,6 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
      * @var IntegrationTestFactory
      */
     private $factory;
-
-    /**
-     * @param array[] $filterRanges
-     */
-    private function assertFilterRangesFormat(array $filterRanges)
-    {
-        array_map(function (array $filterRanges) {
-            $this->assertInternalType('array', $filterRanges);
-            $this->assertContainsOnly('array', $filterRanges);
-            array_map(function (array $range) {
-                $this->assertCount(2, $range);
-                $this->assertArrayHasKey('from', $range);
-                $this->assertArrayHasKey('to', $range);
-            }, $filterRanges);
-        }, $filterRanges);
-    }
 
     public function setUp()
     {
@@ -130,20 +120,15 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayOfProductListingFilterNavigationAttributeCodesIsReturned()
     {
-        $result = $this->factory->getProductListingFilterNavigationConfig();
-
-        $this->assertInternalType('array', $result);
-        $this->assertContainsOnly('array', $result);
-        $this->assertFilterRangesFormat($result);
+        $this->assertContainsOnly(FacetFilterConfig::class, $this->factory->getProductListingFilterNavigationConfig());
     }
 
     public function testArrayOfProductSearchResultsFilterNavigationAttributeCodesIsReturned()
     {
-        $result = $this->factory->getProductSearchResultsFilterNavigationConfig();
-
-        $this->assertInternalType('array', $result);
-        $this->assertContainsOnly('array', $result);
-        $this->assertFilterRangesFormat($result);
+        $this->assertContainsOnly(
+            FacetFilterConfig::class,
+            $this->factory->getProductSearchResultsFilterNavigationConfig()
+        );
     }
 
     public function testImageProcessorCollectionIsReturned()

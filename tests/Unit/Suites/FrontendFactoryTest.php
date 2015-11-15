@@ -33,6 +33,9 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
  * @uses   \LizardsAndPumpkins\SampleMasterFactory
  * @uses   \LizardsAndPumpkins\IntegrationTestFactory
  * @uses   \LizardsAndPumpkins\CommonFactory
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfig
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfigCollection
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFieldRangeCollection
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductDetailViewRequestHandler
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandlerTrait
@@ -40,6 +43,7 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchRequestHandler
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
+ * @uses   \LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationCollection
  * @uses   \LizardsAndPumpkins\ContentDelivery\SnippetTransformation\PricesJsonSnippetTransformation
  * @uses   \LizardsAndPumpkins\Context\ContextSource
  * @uses   \LizardsAndPumpkins\Content\ContentBlocksApiV1PutRequestHandler

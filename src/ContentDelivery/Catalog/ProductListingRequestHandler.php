@@ -30,21 +30,12 @@ class ProductListingRequestHandler implements HttpRequestHandler
     const SORT_ORDER_QUERY_PARAMETER_NAME = 'order';
     const SORT_DIRECTION_QUERY_PARAMETER_NAME = 'dir';
 
-    /**
-     * @param Context $context
-     * @param DataPoolReader $dataPoolReader
-     * @param PageBuilder $pageBuilder
-     * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
-     * @param string[] $filterNavigationConfig
-     * @param ProductsPerPage $productsPerPage
-     * @param SortOrderConfig[] $sortOrderConfigs
-     */
     public function __construct(
         Context $context,
         DataPoolReader $dataPoolReader,
         PageBuilder $pageBuilder,
         SnippetKeyGeneratorLocator $keyGeneratorLocator,
-        array $filterNavigationConfig,
+        FacetFilterConfigCollection $facetFilterConfigCollection,
         ProductsPerPage $productsPerPage,
         SortOrderConfig ...$sortOrderConfigs
     ) {
@@ -52,7 +43,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $this->context = $context;
         $this->pageBuilder = $pageBuilder;
         $this->keyGeneratorLocator = $keyGeneratorLocator;
-        $this->filterNavigationConfig = $filterNavigationConfig;
+        $this->facetFilterConfigCollection = $facetFilterConfigCollection;
         $this->productsPerPage = $productsPerPage;
         $this->sortOrderConfigs = $sortOrderConfigs;
     }
@@ -151,7 +142,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
             $criteria,
             $selectedFilters,
             $this->context,
-            $this->filterNavigationConfig,
+            $this->facetFilterConfigCollection,
             $productsPerPage->getSelectedNumberOfProductsPerPage(),
             $currentPageNumber,
             $selectedSortOrderConfig

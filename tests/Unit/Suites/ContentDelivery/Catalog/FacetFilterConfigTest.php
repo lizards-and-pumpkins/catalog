@@ -50,7 +50,7 @@ class FacetFilterConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testFacetFieldRangeCollectionIsReturned()
     {
-        $this->assertSame($this->stubFacetFieldRangeCollection, $this->facetFilterConfig->getRanges());
+        $this->assertSame($this->stubFacetFieldRangeCollection, $this->facetFilterConfig->getRangeCollection());
     }
 
     public function testFacetFilterTransformationsCollectionIsReturned()

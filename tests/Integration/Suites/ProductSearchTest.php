@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfigCollection;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchRequestHandler;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -67,7 +68,7 @@ class ProductSearchTest extends AbstractIntegrationTest
             $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy(),
             $this->factory->getLogger()
         );
-        $filterNavigationAttributeCodes = [];
+        $testFacetFilterConfigCollection = new FacetFilterConfigCollection;
         $productsPerPage = $this->factory->getProductsPerPageConfig();
         $sortOrderConfigs = $this->factory->getProductSearchSortOrderConfig();
 
@@ -76,7 +77,7 @@ class ProductSearchTest extends AbstractIntegrationTest
             $dataPoolReader,
             $pageBuilder,
             $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy(),
-            $filterNavigationAttributeCodes,
+            $testFacetFilterConfigCollection,
             $productsPerPage,
             $this->factory->createSearchCriteriaBuilder(),
             $this->factory->getSearchableAttributeCodes(),
