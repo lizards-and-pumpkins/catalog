@@ -1000,8 +1000,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         $indexAttributeCodes = array_merge(
             $this->getMasterFactory()->getSearchableAttributeCodes(),
-            $this->getMasterFactory()->getProductListingFilterNavigationConfig()->getAttributeCodes(),
-            $this->getMasterFactory()->getProductSearchResultsFilterNavigationConfig()->getAttributeCodes()
+            array_keys($this->getMasterFactory()->getProductListingFilterNavigationConfig()),
+            array_keys($this->getMasterFactory()->getProductSearchResultsFilterNavigationConfig())
         );
 
         return new ProductSearchDocumentBuilder($indexAttributeCodes);

@@ -2,10 +2,6 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\ContentDelivery\Catalog\FacetFieldRange;
-use LizardsAndPumpkins\ContentDelivery\Catalog\FacetFieldRangeCollection;
-use LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfig;
-use LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfigCollection;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine;
@@ -57,12 +53,12 @@ class SampleFactory implements Factory
      */
     public function getProductListingFilterNavigationConfig()
     {
-        return new FacetFilterConfigCollection(
-            new FacetFilterConfig(AttributeCode::fromString('gender')),
-            new FacetFilterConfig(AttributeCode::fromString('brand')),
-            FacetFilterConfig::createRanged(AttributeCode::fromString('price'), $this->getPriceRanges()),
-            new FacetFilterConfig(AttributeCode::fromString('color'))
-        );
+        return [
+            'gender' => [],
+            'brand' => [],
+            'price' => $this->getPriceRanges(),
+            'color' => [],
+        ];
     }
 
     /**
@@ -70,30 +66,30 @@ class SampleFactory implements Factory
      */
     public function getProductSearchResultsFilterNavigationConfig()
     {
-        return new FacetFilterConfigCollection(
-            new FacetFilterConfig(AttributeCode::fromString('gender')),
-            new FacetFilterConfig(AttributeCode::fromString('brand')),
-            new FacetFilterConfig(AttributeCode::fromString('category')),
-            FacetFilterConfig::createRanged(AttributeCode::fromString('price'), $this->getPriceRanges()),
-            new FacetFilterConfig(AttributeCode::fromString('color'))
-        );
+        return [
+            'gender' => [],
+            'brand' => [],
+            'category' => [],
+            'price' => $this->getPriceRanges(),
+            'color' => [],
+        ];
     }
 
     /**
-     * @return FacetFieldRangeCollection
+     * @return array[]
      */
     private function getPriceRanges()
     {
         $base = pow(10, Price::NUM_DECIMAL_POINTS);
         $rangeStep = 20 * $base;
         $rangesTo = 500 * $base;
-        $priceRanges = [new FacetFieldRange('*', $rangeStep - 1)];
+        $priceRanges = [['from' => '*', 'to' => $rangeStep - 1]];
         for ($i = $rangeStep; $i < $rangesTo; $i += $rangeStep) {
-            $priceRanges[] = new FacetFieldRange($i, $i + $rangeStep - 1);
+            $priceRanges[] = ['from' => $i, 'to' => $i + $rangeStep - 1];
         }
-        $priceRanges[] = new FacetFieldRange($rangesTo, '*');
+        $priceRanges[] = ['from' => $rangesTo, 'to' => '*'];
 
-        return FacetFieldRangeCollection::create('%s € - %s €', '%s-%s', ...$priceRanges);
+        return $priceRanges;
     }
 
     /**

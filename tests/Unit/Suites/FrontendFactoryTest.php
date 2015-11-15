@@ -33,9 +33,6 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
  * @uses   \LizardsAndPumpkins\SampleMasterFactory
  * @uses   \LizardsAndPumpkins\IntegrationTestFactory
  * @uses   \LizardsAndPumpkins\CommonFactory
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfig
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfigCollection
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFieldRangeCollection
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductDetailViewRequestHandler
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandlerTrait

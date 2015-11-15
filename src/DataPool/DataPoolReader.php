@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\DataPool;
 
-use LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfigCollection;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\DataPool\Exception\InvalidKeyValueStoreKeyException;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
@@ -164,7 +163,7 @@ class DataPoolReader
      * @param SearchCriteria $criteria
      * @param array[] $selectedFilters
      * @param Context $context
-     * @param FacetFilterConfigCollection $facetFilterConfigCollection
+     * @param string[] $facetFiltersConfig
      * @param int $rowsPerPage
      * @param int $pageNumber
      * @param SortOrderConfig $sortOrderConfig
@@ -174,7 +173,7 @@ class DataPoolReader
         SearchCriteria $criteria,
         array $selectedFilters,
         Context $context,
-        FacetFilterConfigCollection $facetFilterConfigCollection,
+        array $facetFiltersConfig,
         $rowsPerPage,
         $pageNumber,
         SortOrderConfig $sortOrderConfig
@@ -183,7 +182,7 @@ class DataPoolReader
             $criteria,
             $selectedFilters,
             $context,
-            $facetFilterConfigCollection,
+            $facetFiltersConfig,
             $rowsPerPage,
             $pageNumber,
             $sortOrderConfig

@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
-use LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfigCollection;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
@@ -25,7 +24,7 @@ interface SearchEngine
      * @param SearchCriteria $criteria
      * @param array[] $filterSelection
      * @param Context $context
-     * @param FacetFilterConfigCollection $facetFilterConfigCollection
+     * @param string[] $facetFiltersConfig
      * @param int $rowsPerPage
      * @param int $pageNumber
      * @param SortOrderConfig $sortOrderConfig
@@ -35,7 +34,7 @@ interface SearchEngine
         SearchCriteria $criteria,
         array $filterSelection,
         Context $context,
-        FacetFilterConfigCollection $facetFilterConfigCollection,
+        array $facetFiltersConfig,
         $rowsPerPage,
         $pageNumber,
         SortOrderConfig $sortOrderConfig

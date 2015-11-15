@@ -19,7 +19,6 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 
 /**
  * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchAutosuggestionRequestHandler
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfigCollection
  * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetContent
  */
 class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_TestCase

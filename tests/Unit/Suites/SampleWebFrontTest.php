@@ -17,9 +17,6 @@ use LizardsAndPumpkins\Http\HttpRouterChain;
  * @uses   \LizardsAndPumpkins\FrontendFactory
  * @uses   \LizardsAndPumpkins\CommonFactory
  * @uses   \LizardsAndPumpkins\Content\ContentBlocksApiV1PutRequestHandler
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfig
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfigCollection
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFieldRangeCollection
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductDetailViewRequestHandler
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandlerTrait
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler

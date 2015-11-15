@@ -69,9 +69,6 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Content\ContentBlockProjector
  * @uses   \LizardsAndPumpkins\Content\UpdateContentBlockCommandHandler
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfig
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfigCollection
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFieldRangeCollection
  * @uses   \LizardsAndPumpkins\Context\ContextBuilder
  * @uses   \LizardsAndPumpkins\Context\ContextSource
  * @uses   \LizardsAndPumpkins\CommandConsumer
@@ -81,7 +78,6 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\TemplateWasUpdatedDomainEvent
  * @uses   \LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Renderer\BlockRenderer
- * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Product\PriceSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductBackOrderAvailabilitySnippetRenderer
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator

@@ -3,7 +3,6 @@
 namespace LizardsAndPumpkins\Tests\Integration;
 
 use LizardsAndPumpkins\CommonFactory;
-use LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfig;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine;
@@ -21,10 +20,6 @@ use LizardsAndPumpkins\SampleFactory;
 
 /**
  * @covers \LizardsAndPumpkins\SampleFactory
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFieldRange
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFieldRangeCollection
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfig
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfigCollection
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
  * @uses   \LizardsAndPumpkins\FactoryTrait
  * @uses   \LizardsAndPumpkins\Log\InMemoryLogger
@@ -50,6 +45,22 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
      * @var SampleFactory
      */
     private $factory;
+
+    /**
+     * @param array[] $filterRanges
+     */
+    private function assertFilterRangesFormat(array $filterRanges)
+    {
+        array_map(function (array $filterRanges) {
+            $this->assertInternalType('array', $filterRanges);
+            $this->assertContainsOnly('array', $filterRanges);
+            array_map(function (array $range) {
+                $this->assertCount(2, $range);
+                $this->assertArrayHasKey('from', $range);
+                $this->assertArrayHasKey('to', $range);
+            }, $filterRanges);
+        }, $filterRanges);
+    }
 
     protected function setUp()
     {
@@ -114,15 +125,20 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayOfProductListingFilterNavigationAttributeCodesIsReturned()
     {
-        $this->assertContainsOnly(FacetFilterConfig::class, $this->factory->getProductListingFilterNavigationConfig());
+        $result = $this->factory->getProductListingFilterNavigationConfig();
+
+        $this->assertInternalType('array', $result);
+        $this->assertContainsOnly('array', $result);
+        $this->assertFilterRangesFormat($result);
     }
 
     public function testArrayOfProductSearchResultsFilterNavigationAttributeCodesIsReturned()
     {
-        $this->assertContainsOnly(
-            FacetFilterConfig::class,
-            $this->factory->getProductSearchResultsFilterNavigationConfig()
-        );
+        $result = $this->factory->getProductSearchResultsFilterNavigationConfig();
+
+        $this->assertInternalType('array', $result);
+        $this->assertContainsOnly('array', $result);
+        $this->assertFilterRangesFormat($result);
     }
 
     public function testImageProcessorCollectionIsReturned()

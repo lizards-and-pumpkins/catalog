@@ -10,10 +10,6 @@ use LizardsAndPumpkins\Utils\LocalFilesystem;
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\IntegrationTestSearchEngineAbstract
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFieldRange
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFieldRangeCollection
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfig
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfigCollection
  * @uses   \LizardsAndPumpkins\Context\ContextBuilder
  * @uses   \LizardsAndPumpkins\Context\ContextDecorator
  * @uses   \LizardsAndPumpkins\Context\LocaleContextDecorator

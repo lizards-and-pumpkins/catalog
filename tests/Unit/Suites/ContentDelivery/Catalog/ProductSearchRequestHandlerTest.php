@@ -16,9 +16,6 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 /**
  * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchRequestHandler
  * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandlerTrait
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFieldRangeCollection
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfig
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FacetFilterConfigCollection
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
@@ -43,7 +40,7 @@ class ProductSearchRequestHandlerTest extends AbstractProductListingRequestHandl
         $stubPageBuilder = $this->getMock(PageBuilder::class, [], [], '', false);
 
         $stubSnippetKeyGeneratorLocator = $this->createStubSnippetKeyGeneratorLocator();
-        $testFacetFieldConfigCollection = new FacetFilterConfigCollection;
+        $testFilterNavigationConfig = [];
 
         /** @var ProductsPerPage|\PHPUnit_Framework_MockObject_MockObject $stubProductsPerPage */
         $stubProductsPerPage = $this->getMock(ProductsPerPage::class, [], [], '', false);;
@@ -55,7 +52,7 @@ class ProductSearchRequestHandlerTest extends AbstractProductListingRequestHandl
             $stubDataPoolReader,
             $stubPageBuilder,
             $stubSnippetKeyGeneratorLocator,
-            $testFacetFieldConfigCollection,
+            $testFilterNavigationConfig,
             $stubProductsPerPage
         );
     }
@@ -68,7 +65,7 @@ class ProductSearchRequestHandlerTest extends AbstractProductListingRequestHandl
         DataPoolReader $dataPoolReader,
         PageBuilder $pageBuilder,
         SnippetKeyGeneratorLocator $snippetKeyGeneratorLocator,
-        FacetFilterConfigCollection $facetFilterConfigCollection,
+        array $filterNavigationConfig,
         ProductsPerPage $productsPerPage,
         SortOrderConfig ...$sortOrderConfigs
     ) {
@@ -85,7 +82,7 @@ class ProductSearchRequestHandlerTest extends AbstractProductListingRequestHandl
             $dataPoolReader,
             $pageBuilder,
             $snippetKeyGeneratorLocator,
-            $facetFilterConfigCollection,
+            $filterNavigationConfig,
             $productsPerPage,
             $stubSearchCriteriaBuilder,
             $testSearchableAttributeCodes,

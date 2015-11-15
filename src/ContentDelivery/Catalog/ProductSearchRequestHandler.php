@@ -33,7 +33,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
      * @param DataPoolReader $dataPoolReader
      * @param PageBuilder $pageBuilder
      * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
-     * @param FacetFilterConfigCollection $facetFilterConfigCollection
+     * @param string[] $filterNavigationConfig
      * @param ProductsPerPage $productsPerPage
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param string[] $searchableAttributeCodes
@@ -44,7 +44,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         DataPoolReader $dataPoolReader,
         PageBuilder $pageBuilder,
         SnippetKeyGeneratorLocator $keyGeneratorLocator,
-        FacetFilterConfigCollection $facetFilterConfigCollection,
+        array $filterNavigationConfig,
         ProductsPerPage $productsPerPage,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         array $searchableAttributeCodes,
@@ -54,7 +54,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         $this->context = $context;
         $this->pageBuilder = $pageBuilder;
         $this->keyGeneratorLocator = $keyGeneratorLocator;
-        $this->facetFilterConfigCollection = $facetFilterConfigCollection;
+        $this->filterNavigationConfig = $filterNavigationConfig;
         $this->productsPerPage = $productsPerPage;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->searchableAttributeCodes = $searchableAttributeCodes;
@@ -152,7 +152,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
             $criteria,
             $selectedFilters,
             $this->context,
-            $this->facetFilterConfigCollection,
+            $this->filterNavigationConfig,
             $productsPerPage->getSelectedNumberOfProductsPerPage(),
             $currentPageNumber,
             $selectedSortOrderConfig
