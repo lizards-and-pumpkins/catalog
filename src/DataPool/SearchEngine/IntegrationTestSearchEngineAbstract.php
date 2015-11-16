@@ -334,8 +334,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     private function createDefaultFacetFieldFromAttributeValues(array $attributeValues)
     {
         return array_map(function ($valueCounts) {
-            return SearchEngineFacetFieldValueCount::create((string)$valueCounts['value'],
-                $valueCounts['count']);
+            return SearchEngineFacetFieldValueCount::create((string)$valueCounts['value'], $valueCounts['count']);
         }, $attributeValues);
     }
 
