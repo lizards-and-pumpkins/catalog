@@ -167,7 +167,7 @@ trait ProductListingRequestHandlerTrait
     private function addFilterNavigationSnippetToPageBuilder(SearchEngineFacetFieldCollection $facetFieldCollection)
     {
         $snippetCode = 'filter_navigation';
-        $snippetContents = json_encode($facetFieldCollection, JSON_PRETTY_PRINT);
+        $snippetContents = json_encode($facetFieldCollection);
 
         $this->addDynamicSnippetToPageBuilder($snippetCode, $snippetContents);
     }
