@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
+use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
 use LizardsAndPumpkins\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine;
@@ -316,7 +317,10 @@ class IntegrationTestFactory implements Factory
     {
         if (null === $this->lazyLoadedProductListingSortOrderConfig) {
             $this->lazyLoadedProductListingSortOrderConfig = [
-                SortOrderConfig::createSelected(AttributeCode::fromString('name'), SearchEngine::SORT_DIRECTION_ASC),
+                SortOrderConfig::createSelected(
+                    AttributeCode::fromString('name'),
+                    SortOrderDirection::create(SortOrderDirection::ASC)
+                ),
             ];
         }
 
@@ -330,7 +334,10 @@ class IntegrationTestFactory implements Factory
     {
         if (null === $this->lazyLoadedProductSearchSortOrderConfig) {
             $this->lazyLoadedProductSearchSortOrderConfig = [
-                SortOrderConfig::createSelected(AttributeCode::fromString('name'), SearchEngine::SORT_DIRECTION_ASC),
+                SortOrderConfig::createSelected(
+                    AttributeCode::fromString('name'),
+                    SortOrderDirection::create(SortOrderDirection::ASC)
+                ),
             ];
         }
 
@@ -345,7 +352,7 @@ class IntegrationTestFactory implements Factory
         if (null === $this->lazyLoadedProductSearchAutosuggestionSortOrderConfig) {
             $this->lazyLoadedProductSearchAutosuggestionSortOrderConfig = SortOrderConfig::createSelected(
                 AttributeCode::fromString('name'),
-                SearchEngine::SORT_DIRECTION_ASC
+                SortOrderDirection::create(SortOrderDirection::ASC)
             );
         }
 

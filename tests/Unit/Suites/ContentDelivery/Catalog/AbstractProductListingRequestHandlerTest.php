@@ -7,7 +7,6 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineFacetFieldCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -210,14 +209,16 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
 
         $stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
 
+        $stubSortOrderDirection = $this->getMock(SortOrderDirection::class, [], [], '', false);
+
         $stubUnselectedSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
         $stubUnselectedSortOrderConfig->method('isSelected')->willReturn(false);
-        $stubUnselectedSortOrderConfig->method('getSelectedDirection')->willReturn(SearchEngine::SORT_DIRECTION_ASC);
+        $stubUnselectedSortOrderConfig->method('getSelectedDirection')->willReturn($stubSortOrderDirection);
         $stubUnselectedSortOrderConfig->method('getAttributeCode')->willReturn($stubAttributeCode);
 
         $stubSelectedSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
         $stubSelectedSortOrderConfig->method('isSelected')->willReturn(true);
-        $stubSelectedSortOrderConfig->method('getSelectedDirection')->willReturn(SearchEngine::SORT_DIRECTION_ASC);
+        $stubSelectedSortOrderConfig->method('getSelectedDirection')->willReturn($stubSortOrderDirection);
         $stubSelectedSortOrderConfig->method('getAttributeCode')->willReturn($stubAttributeCode);
 
         $this->stubSortOrderConfigs = [$stubUnselectedSortOrderConfig, $stubSelectedSortOrderConfig];
@@ -457,7 +458,7 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
     public function testSortOrderConfigBasedOnCookieValueIsPassedToDataPool()
     {
         $attributeCode = 'foo';
-        $direction = SearchEngine::SORT_DIRECTION_ASC;
+        $direction = SortOrderDirection::ASC;
 
         $this->stubRequest->method('hasCookie')->willReturnMap([
             [ProductListingRequestHandler::SORT_ORDER_COOKIE_NAME, true],
@@ -470,7 +471,7 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
 
         $expectedSortOrderConfig = SortOrderConfig::createSelected(
             AttributeCode::fromString($attributeCode),
-            $direction
+            SortOrderDirection::create($direction)
         );
 
         $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
@@ -485,7 +486,7 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
     public function testSortOrderAndDirectionFromQueryStringArePassedToDataPool()
     {
         $attributeCode = 'foo';
-        $direction = SearchEngine::SORT_DIRECTION_ASC;
+        $direction = SortOrderDirection::ASC;
 
         /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubHttpRequest */
         $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
@@ -500,7 +501,7 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
 
         $expectedSortOrderConfig = SortOrderConfig::createSelected(
             AttributeCode::fromString($attributeCode),
-            $direction
+            SortOrderDirection::create($direction)
         );
 
         $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
@@ -516,7 +517,7 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
     public function testSortOrderAndDirectionsCookiesAreSetIfCorrespondingQueryParameterIsPresent()
     {
         $attributeCode = 'foo';
-        $direction = SearchEngine::SORT_DIRECTION_ASC;
+        $direction = SortOrderDirection::ASC;
 
         /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubHttpRequest */
         $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);

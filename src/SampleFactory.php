@@ -3,9 +3,9 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
+use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
 use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\FileUrlKeyStore;
 use LizardsAndPumpkins\Image\ImageMagickInscribeStrategy;
 use LizardsAndPumpkins\Image\ImageProcessor;
@@ -372,9 +372,18 @@ class SampleFactory implements Factory
     {
         if (null === $this->lazyLoadedProductListingSortOrderConfig) {
             $this->lazyLoadedProductListingSortOrderConfig = [
-                SortOrderConfig::createSelected(AttributeCode::fromString('name'), SearchEngine::SORT_DIRECTION_ASC),
-                SortOrderConfig::create(AttributeCode::fromString('price'), SearchEngine::SORT_DIRECTION_ASC),
-                SortOrderConfig::create(AttributeCode::fromString('created_at'), SearchEngine::SORT_DIRECTION_ASC),
+                SortOrderConfig::createSelected(
+                    AttributeCode::fromString('name'),
+                    SortOrderDirection::create(SortOrderDirection::ASC)
+                ),
+                SortOrderConfig::create(
+                    AttributeCode::fromString('price'),
+                    SortOrderDirection::create(SortOrderDirection::ASC)
+                ),
+                SortOrderConfig::create(
+                    AttributeCode::fromString('created_at'),
+                    SortOrderDirection::create(SortOrderDirection::ASC)
+                ),
             ];
         }
 
@@ -388,9 +397,18 @@ class SampleFactory implements Factory
     {
         if (null === $this->lazyLoadedProductSearchSortOrderConfig) {
             $this->lazyLoadedProductSearchSortOrderConfig = [
-                SortOrderConfig::createSelected(AttributeCode::fromString('name'), SearchEngine::SORT_DIRECTION_ASC),
-                SortOrderConfig::create(AttributeCode::fromString('price'), SearchEngine::SORT_DIRECTION_ASC),
-                SortOrderConfig::create(AttributeCode::fromString('created_at'), SearchEngine::SORT_DIRECTION_ASC),
+                SortOrderConfig::createSelected(
+                    AttributeCode::fromString('name'),
+                    SortOrderDirection::create(SortOrderDirection::ASC)
+                ),
+                SortOrderConfig::create(
+                    AttributeCode::fromString('price'),
+                    SortOrderDirection::create(SortOrderDirection::ASC)
+                ),
+                SortOrderConfig::create(
+                    AttributeCode::fromString('created_at'),
+                    SortOrderDirection::create(SortOrderDirection::ASC)
+                ),
             ];
         }
 
@@ -405,7 +423,7 @@ class SampleFactory implements Factory
         if (null === $this->lazyLoadedProductSearchAutosuggestionSortOrderConfig) {
             $this->lazyLoadedProductSearchAutosuggestionSortOrderConfig = SortOrderConfig::createSelected(
                 AttributeCode::fromString('name'),
-                SearchEngine::SORT_DIRECTION_ASC
+                SortOrderDirection::create(SortOrderDirection::ASC)
             );
         }
 

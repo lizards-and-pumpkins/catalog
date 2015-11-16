@@ -305,7 +305,8 @@ trait ProductListingRequestHandlerTrait
         $sortDirectionQueryStringValue = $this->getSortDirectionQueryStringValue($request);
 
         if ($sortOrderQueryStringValue !== null && $sortDirectionQueryStringValue !== null) {
-            return $this->createSelectedSortOrderConfig($sortOrderQueryStringValue, $sortDirectionQueryStringValue);
+            $sortOrderDirection = SortOrderDirection::create($sortDirectionQueryStringValue);
+            return $this->createSelectedSortOrderConfig($sortOrderQueryStringValue, $sortOrderDirection);
         }
 
         if ($request->hasCookie(ProductListingRequestHandler::SORT_ORDER_COOKIE_NAME) &&
@@ -313,7 +314,9 @@ trait ProductListingRequestHandlerTrait
         ) {
             $sortOrder = $request->getCookieValue(ProductListingRequestHandler::SORT_ORDER_COOKIE_NAME);
             $direction = $request->getCookieValue(ProductListingRequestHandler::SORT_DIRECTION_COOKIE_NAME);
-            return $this->createSelectedSortOrderConfig($sortOrder, $direction);
+            $sortOrderDirection = SortOrderDirection::create($direction);
+
+            return $this->createSelectedSortOrderConfig($sortOrder, $sortOrderDirection);
         }
 
         foreach ($this->sortOrderConfigs as $sortOrderConfig) {
@@ -327,10 +330,10 @@ trait ProductListingRequestHandlerTrait
 
     /**
      * @param string $attributeCodeString
-     * @param string $direction
+     * @param SortOrderDirection $direction
      * @return SortOrderConfig
      */
-    private function createSelectedSortOrderConfig($attributeCodeString, $direction)
+    private function createSelectedSortOrderConfig($attributeCodeString, SortOrderDirection $direction)
     {
         $attributeCode = AttributeCode::fromString($attributeCodeString);
         return SortOrderConfig::createSelected($attributeCode, $direction);

@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
+use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
@@ -406,8 +407,8 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
                 return 0;
             }
 
-            if (SearchEngine::SORT_DIRECTION_ASC === $direction && $fieldA < $fieldB ||
-                SearchEngine::SORT_DIRECTION_DESC === $direction && $fieldA > $fieldB
+            if (SortOrderDirection::ASC === $direction && $fieldA < $fieldB ||
+                SortOrderDirection::DESC === $direction && $fieldA > $fieldB
             ) {
                 return -1;
             }
