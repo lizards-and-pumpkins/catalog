@@ -167,7 +167,7 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
         $cookieFormat = 'Set-Cookie: %s=%s; expires=%s; Max-Age=%s';
 
         $expectedHeader = sprintf($cookieFormat, $name, $value, gmdate('D, d-M-Y H:i:s T', time() + $ttl), $ttl);
-        $expectedHeader1 = sprintf($cookieFormat, $name, $value, gmdate('D, d-M-Y H:i:s T', time() + $ttl + 1), $ttl);
+        $expectedHeader1 = sprintf($cookieFormat, $name, $value, gmdate('D, d-M-Y H:i:s T', time() + $ttl - 1), $ttl);
 
         $headers = xdebug_get_headers();
 
