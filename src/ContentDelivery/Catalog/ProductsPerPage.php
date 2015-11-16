@@ -21,7 +21,7 @@ class ProductsPerPage implements \JsonSerializable
      * @param int[] $numbersOfProductsPerPage
      * @param int $selectedNumberOfProductsPerPage
      */
-    public function __construct(array $numbersOfProductsPerPage, $selectedNumberOfProductsPerPage)
+    private function __construct(array $numbersOfProductsPerPage, $selectedNumberOfProductsPerPage)
     {
         $this->numbersOfProductsPerPage = $numbersOfProductsPerPage;
         $this->selectedNumberOfProductsPerPage = $selectedNumberOfProductsPerPage;

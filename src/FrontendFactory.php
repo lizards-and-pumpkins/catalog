@@ -210,7 +210,7 @@ class FrontendFactory implements Factory
             $numbersOfProductsPerPage = [9, 12, 18];
             $selectedNumberOfProductsPerPage = 9;
 
-            $this->lazyLoadedProductsPerPageConfig = new ProductsPerPage(
+            $this->lazyLoadedProductsPerPageConfig = ProductsPerPage::create(
                 $numbersOfProductsPerPage,
                 $selectedNumberOfProductsPerPage
             );
