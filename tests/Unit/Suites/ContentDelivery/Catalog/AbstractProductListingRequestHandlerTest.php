@@ -404,7 +404,7 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
      * @runInSeparateProcess
      * @requires extension xdebug
      */
-    public function testProductsPrePageCookieIsSetIfCorrespondingQueryParameterIsPresent()
+    public function testProductsPerPageCookieIsSetIfCorrespondingQueryParameterIsPresent()
     {
         $selectedNumberOfProductsPerPage = 2;
 
