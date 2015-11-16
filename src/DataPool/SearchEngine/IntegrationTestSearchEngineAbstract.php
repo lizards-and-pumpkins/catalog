@@ -271,7 +271,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
             $newAttributeValues = [];
             foreach ($currentAttributeValues as $currentValueArray) {
                 if ($currentValueArray['value'] === $newValue) {
-                    $currentValueArray['count'] ++;
+                    $currentValueArray['count']++;
                     $valueWasFound = true;
                 }
                 $newAttributeValues[] = $currentValueArray;
