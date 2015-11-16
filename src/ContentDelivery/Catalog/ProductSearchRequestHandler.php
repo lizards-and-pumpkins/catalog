@@ -142,7 +142,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         $selectedFilters = $this->getSelectedFilterValuesFromRequest($request);
 
         $queryString = $request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
-        $criteria = $this->searchCriteriaBuilder->anyOfFieldsContainString(
+        $criteria = $this->searchCriteriaBuilder->createCriteriaForAnyOfGivenFieldsContainsString(
             $this->searchableAttributeCodes,
             $queryString
         );

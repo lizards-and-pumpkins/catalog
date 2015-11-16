@@ -73,7 +73,8 @@ class ProductSearchRequestHandlerTest extends AbstractProductListingRequestHandl
 
         /** @var SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject $stubSearchCriteriaBuilder */
         $stubSearchCriteriaBuilder = $this->getMock(SearchCriteriaBuilder::class);
-        $stubSearchCriteriaBuilder->method('anyOfFieldsContainString')->willReturn($stubCriteria);
+        $stubSearchCriteriaBuilder->method('createCriteriaForAnyOfGivenFieldsContainsString')
+            ->willReturn($stubCriteria);
 
         $testSearchableAttributeCodes = ['foo'];
 

@@ -61,7 +61,7 @@ class SearchCriteriaBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $fields = ['foo', 'bar'];
         $queryString = 'baz';
-        $result = $this->builder->anyOfFieldsContainString($fields, $queryString);
+        $result = $this->builder->createCriteriaForAnyOfGivenFieldsContainsString($fields, $queryString);
 
         $expectedCriteriaJson = [
             'condition' => CompositeSearchCriterion::OR_CONDITION,

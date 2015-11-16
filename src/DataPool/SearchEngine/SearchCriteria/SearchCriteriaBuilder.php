@@ -30,7 +30,7 @@ class SearchCriteriaBuilder
      * @param string $queryString
      * @return CompositeSearchCriterion
      */
-    public function anyOfFieldsContainString($fieldNames, $queryString)
+    public function createCriteriaForAnyOfGivenFieldsContainsString(array $fieldNames, $queryString)
     {
         return CompositeSearchCriterion::createOr(
             ...array_map(function ($fieldName) use ($queryString) {
