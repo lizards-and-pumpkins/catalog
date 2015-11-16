@@ -399,8 +399,8 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
         $direction = $sortOrderConfig->getSelectedDirection();
 
         usort($result, function (SearchDocument $documentA, SearchDocument $documentB) use ($field, $direction) {
-            $fieldA = $this->getSearchDocumentFieldValue($documentA, $field);
-            $fieldB = $this->getSearchDocumentFieldValue($documentB, $field);
+            $fieldA = $this->getSortableSearchDocumentFieldValue($documentA, $field);
+            $fieldB = $this->getSortableSearchDocumentFieldValue($documentB, $field);
 
             if ($fieldA === $fieldB) {
                 return 0;
@@ -421,9 +421,9 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     /**
      * @param SearchDocument $document
      * @param AttributeCode $fieldName
-     * @return string
+     * @return mixed
      */
-    private function getSearchDocumentFieldValue(SearchDocument $document, AttributeCode $fieldName)
+    private function getSortableSearchDocumentFieldValue(SearchDocument $document, AttributeCode $fieldName)
     {
         foreach ($document->getFieldsCollection()->getFields() as $field) {
             if ($field->getKey() !== (string) $fieldName) {
@@ -436,10 +436,10 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
                 return $this->getFormattedSearchDocumentValue($values[0]);
             }
 
-            return '';
+            return null;
         }
 
-        return '';
+        return null;
     }
 
     /**
