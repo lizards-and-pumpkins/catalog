@@ -247,7 +247,7 @@ trait ProductListingRequestHandlerTrait
             return ProductsPerPage::create($numbersOfProductsPerPage, (int) $productsPerPageQueryStringValue);
         }
 
-        if ($request->hasCookie(ProductListingRequestHandler::PRODUCTS_PER_PAGE_COOKIE_NAME) === true) {
+        if ($request->hasCookie(ProductListingRequestHandler::PRODUCTS_PER_PAGE_COOKIE_NAME)) {
             $numbersOfProductsPerPage = $this->productsPerPage->getNumbersOfProductsPerPage();
             $selected = (int) $request->getCookieValue(ProductListingRequestHandler::PRODUCTS_PER_PAGE_COOKIE_NAME);
             return ProductsPerPage::create($numbersOfProductsPerPage, $selected);
@@ -308,8 +308,8 @@ trait ProductListingRequestHandlerTrait
             return $this->createSelectedSortOrderConfig($sortOrderQueryStringValue, $sortDirectionQueryStringValue);
         }
 
-        if ($request->hasCookie(ProductListingRequestHandler::SORT_ORDER_COOKIE_NAME) === true &&
-            $request->hasCookie(ProductListingRequestHandler::SORT_DIRECTION_COOKIE_NAME) === true
+        if ($request->hasCookie(ProductListingRequestHandler::SORT_ORDER_COOKIE_NAME) &&
+            $request->hasCookie(ProductListingRequestHandler::SORT_DIRECTION_COOKIE_NAME)
         ) {
             $sortOrder = $request->getCookieValue(ProductListingRequestHandler::SORT_ORDER_COOKIE_NAME);
             $direction = $request->getCookieValue(ProductListingRequestHandler::SORT_DIRECTION_COOKIE_NAME);
