@@ -147,7 +147,7 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
     }
 
     /**
-     * @param $queryString
+     * @param string $queryString
      * @return SearchDocumentCollection
      */
     private function getSearchResults($queryString)
