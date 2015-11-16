@@ -256,9 +256,6 @@ trait ProductListingRequestHandlerTrait
         return $this->productsPerPage;
     }
 
-    /**
-     * @param HttpRequest $request
-     */
     private function processCookies(HttpRequest $request)
     {
         $productsPerPage = $this->getProductsPerPageQueryStringValue($request);
