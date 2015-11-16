@@ -76,7 +76,7 @@ class ProductsPerPage implements \JsonSerializable
 
     /**
      * @param mixed[] $numbersOfProductsPerPage
-     * @param $selectedNumberOfProductsPerPage
+     * @param mixed $selectedNumberOfProductsPerPage
      */
     private static function validateSelectedNumberOfProductsPerPage(
         array $numbersOfProductsPerPage,
