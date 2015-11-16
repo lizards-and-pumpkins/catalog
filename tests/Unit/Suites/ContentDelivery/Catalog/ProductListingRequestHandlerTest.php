@@ -88,7 +88,7 @@ class ProductListingRequestHandlerTest extends AbstractProductListingRequestHand
      */
     final protected function createStubSnippetKeyGeneratorLocator()
     {
-        $stubMetaInfoSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class, [], [], '', false);
+        $stubMetaInfoSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $stubMetaInfoSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->testMetaInfoKey);
 
         $stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
