@@ -13,6 +13,10 @@ class FilterNavigationTest extends \PHPUnit_Framework_TestCase
 
     private $testUrl = 'http://example.com/sale';
 
+    /**
+     * @param string $html
+     * @return mixed[]
+     */
     private function extractFilterNavigation($html)
     {
         preg_match('/var filterNavigationJson = ({[^<]+})/ism', $html, $matches);
