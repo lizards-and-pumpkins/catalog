@@ -582,19 +582,20 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $productBId = ProductId::fromString('B');
         $productCId = ProductId::fromString('C');
 
-        $fieldCode = 'price';
+        $fieldName = 'price';
+        $fieldValue = 0;
 
-        $documentA = $this->createSearchDocument([$fieldCode => 1], $productAId);
-        $documentB = $this->createSearchDocument([$fieldCode => 11], $productBId);
-        $documentC = $this->createSearchDocument([$fieldCode => 31], $productCId);
+        $documentA = $this->createSearchDocument([$fieldName => 1], $productAId);
+        $documentB = $this->createSearchDocument([$fieldName => 11], $productBId);
+        $documentC = $this->createSearchDocument([$fieldName => 31], $productCId);
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($documentA, $documentB, $documentC);
 
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
-        $criteria = SearchCriterionGreaterOrEqualThan::create($fieldCode, 0);
+        $criteria = SearchCriterionGreaterOrEqualThan::create($fieldName, $fieldValue);
         $selectedFilters = [];
         $facetFields = [
-            $fieldCode => [
+            $fieldName => [
                 ['from' => SearchEngine::RANGE_WILDCARD, 'to' => '10'],
                 ['from' => '10', 'to' => '20'],
                 ['from' => '20', 'to' => '30'],
@@ -617,7 +618,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $expectedFacetFields = [
             new SearchEngineFacetField(
-                AttributeCode::fromString($fieldCode),
+                AttributeCode::fromString($fieldName),
                 SearchEngineFacetFieldValueCount::create(
                     SearchEngine::RANGE_WILDCARD . SearchEngine::RANGE_DELIMITER . '10',
                     1
@@ -757,21 +758,22 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $productBId = ProductId::fromString('B');
         $productCId = ProductId::fromString('C');
 
-        $fieldCode = 'price';
+        $fieldName = 'price';
+        $fieldValue = 0;
 
-        $documentA = $this->createSearchDocument([$fieldCode => 3], $productAId);
-        $documentB = $this->createSearchDocument([$fieldCode => 1], $productBId);
-        $documentC = $this->createSearchDocument([$fieldCode => 2], $productCId);
+        $documentA = $this->createSearchDocument([$fieldName => 3], $productAId);
+        $documentB = $this->createSearchDocument([$fieldName => 1], $productBId);
+        $documentC = $this->createSearchDocument([$fieldName => 2], $productCId);
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($documentA, $documentB, $documentC);
 
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
-        $criteria = SearchCriterionGreaterOrEqualThan::create($fieldCode, 0);
+        $criteria = SearchCriterionGreaterOrEqualThan::create($fieldName, $fieldValue);
         $selectedFilters = [];
         $facetFields = [];
         $rowsPerPage = 100;
         $pageNumber = 0;
-        $sortOrderConfig = $this->createStubSortOrderConfig($fieldCode, SortOrderDirection::DESC);
+        $sortOrderConfig = $this->createStubSortOrderConfig($fieldName, SortOrderDirection::DESC);
 
         $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
             $criteria,
@@ -795,6 +797,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $productCId = ProductId::fromString('C');
 
         $fieldCode = 'foo';
+        $fieldValue = 0;
 
         $documentA = $this->createSearchDocument([$fieldCode => ['foo', 'bar']], $productAId);
         $documentB = $this->createSearchDocument([$fieldCode => ['bar', 'baz']], $productBId);
@@ -803,7 +806,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
-        $criteria = SearchCriterionGreaterOrEqualThan::create($fieldCode, 0);
+        $criteria = SearchCriterionGreaterOrEqualThan::create($fieldCode, $fieldValue);
         $selectedFilters = [];
         $facetFields = [];
         $rowsPerPage = 100;
@@ -832,6 +835,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $productCId = ProductId::fromString('C');
 
         $fieldCode = 'foo';
+        $fieldValue = 0;
 
         $documentA = $this->createSearchDocument([$fieldCode => 'abc'], $productAId);
         $documentB = $this->createSearchDocument([$fieldCode => 'Acd'], $productBId);
@@ -840,7 +844,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
-        $criteria = SearchCriterionGreaterOrEqualThan::create($fieldCode, 0);
+        $criteria = SearchCriterionGreaterOrEqualThan::create($fieldCode, $fieldValue);
         $selectedFilters = [];
         $facetFields = [];
         $rowsPerPage = 100;
