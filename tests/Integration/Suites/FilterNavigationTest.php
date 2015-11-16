@@ -33,7 +33,7 @@ class FilterNavigationTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->importCatalog();
-        $this->createProductListingFixture();
+        $this->prepareProductListingFixture();
         $this->registerProductListingSnippetKeyGenerator();
     }
 
@@ -46,9 +46,9 @@ class FilterNavigationTest extends \PHPUnit_Framework_TestCase
             HttpRequestBody::fromString('')
         );
 
-        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+        $this->factory = $this->createIntegrationTestMasterFactoryForRequest($request);
 
-        $productListingRequestHandler = $this->getProductListingRequestHandler();
+        $productListingRequestHandler = $this->createProductListingRequestHandler();
         $page = $productListingRequestHandler->process($request);
 
         return $this->extractFilterNavigation($page->getBody());
@@ -71,9 +71,9 @@ class FilterNavigationTest extends \PHPUnit_Framework_TestCase
             HttpRequestBody::fromString('')
         );
 
-        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+        $this->factory = $this->createIntegrationTestMasterFactoryForRequest($request);
 
-        $productListingRequestHandler = $this->getProductListingRequestHandler();
+        $productListingRequestHandler = $this->createProductListingRequestHandler();
         $page = $productListingRequestHandler->process($request);
         $filterNavigation = $this->extractFilterNavigation($page->getBody());
 
@@ -97,9 +97,9 @@ class FilterNavigationTest extends \PHPUnit_Framework_TestCase
             HttpRequestBody::fromString('')
         );
 
-        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+        $this->factory = $this->createIntegrationTestMasterFactoryForRequest($request);
 
-        $productListingRequestHandler = $this->getProductListingRequestHandler();
+        $productListingRequestHandler = $this->createProductListingRequestHandler();
         $page = $productListingRequestHandler->process($request);
         $filterNavigation = $this->extractFilterNavigation($page->getBody());
 
