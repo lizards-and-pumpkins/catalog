@@ -421,26 +421,37 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     /**
      * @param SearchDocument $document
      * @param AttributeCode $fieldName
-     * @return mixed
+     * @return string
      */
     private function getSearchDocumentFieldValue(SearchDocument $document, AttributeCode $fieldName)
     {
         foreach ($document->getFieldsCollection()->getFields() as $field) {
-            if ($field->getKey() === (string) $fieldName) {
-                $values = $field->getValues();
-
-                if (count($values) === 1) {
-                    if (is_string($values[0])) {
-                        return strtolower($values[0]);
-                    }
-
-                    return $values[0];
-                }
-
-                return null;
+            if ($field->getKey() !== (string) $fieldName) {
+                continue;
             }
+
+            $values = $field->getValues();
+
+            if (count($values) === 1) {
+                return $this->getFormattedSearchDocumentValue($values[0]);
+            }
+
+            return '';
         }
 
-        return null;
+        return '';
+    }
+
+    /**
+     * @param mixed $value
+     * @return string
+     */
+    private function getFormattedSearchDocumentValue($value)
+    {
+        if (is_string($value)) {
+            return strtolower($value);
+        }
+
+        return $value;
     }
 }
