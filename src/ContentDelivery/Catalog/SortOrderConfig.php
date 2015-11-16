@@ -28,7 +28,7 @@ class SortOrderConfig implements \JsonSerializable
      * @param string $selectedDirection
      * @param bool $isSelected
      */
-    public function __construct(AttributeCode $attributeCode, $selectedDirection, $isSelected)
+    private function __construct(AttributeCode $attributeCode, $selectedDirection, $isSelected)
     {
         $this->attributeCode = $attributeCode;
         $this->selectedDirection = $selectedDirection;
