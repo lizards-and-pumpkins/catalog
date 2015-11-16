@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\ContentDelivery\Catalog\FilterNavigationPriceRangesBuilder;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
 use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
@@ -17,7 +18,6 @@ use LizardsAndPumpkins\Log\Writer\FileLogMessageWriter;
 use LizardsAndPumpkins\Log\Writer\LogMessageWriter;
 use LizardsAndPumpkins\Log\WritingLoggerDecorator;
 use LizardsAndPumpkins\Product\AttributeCode;
-use LizardsAndPumpkins\Product\Price;
 use LizardsAndPumpkins\Queue\File\FileQueue;
 use LizardsAndPumpkins\Queue\Queue;
 
@@ -56,7 +56,7 @@ class SampleFactory implements Factory
         return [
             'gender' => [],
             'brand' => [],
-            'price' => $this->getPriceRanges(),
+            'price' => FilterNavigationPriceRangesBuilder::getPriceRanges(),
             'color' => [],
         ];
     }
@@ -70,26 +70,9 @@ class SampleFactory implements Factory
             'gender' => [],
             'brand' => [],
             'category' => [],
-            'price' => $this->getPriceRanges(),
+            'price' => FilterNavigationPriceRangesBuilder::getPriceRanges(),
             'color' => [],
         ];
-    }
-
-    /**
-     * @return array[]
-     */
-    private function getPriceRanges()
-    {
-        $base = pow(10, Price::NUM_DECIMAL_POINTS);
-        $rangeStep = 20 * $base;
-        $rangesTo = 500 * $base;
-        $priceRanges = [['from' => '*', 'to' => $rangeStep - 1]];
-        for ($i = $rangeStep; $i < $rangesTo; $i += $rangeStep) {
-            $priceRanges[] = ['from' => $i, 'to' => $i + $rangeStep - 1];
-        }
-        $priceRanges[] = ['from' => $rangesTo, 'to' => '*'];
-
-        return $priceRanges;
     }
 
     /**
