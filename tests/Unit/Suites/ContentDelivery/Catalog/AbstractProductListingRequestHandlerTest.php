@@ -175,6 +175,24 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
     }
 
     /**
+     * @param bool $selected
+     * @return SortOrderConfig|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubSortOrderConfig($selected)
+    {
+        $stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
+
+        $stubSortOrderDirection = $this->getMock(SortOrderDirection::class, [], [], '', false);
+
+        $stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
+        $stubSortOrderConfig->method('isSelected')->willReturn($selected);
+        $stubSortOrderConfig->method('getSelectedDirection')->willReturn($stubSortOrderDirection);
+        $stubSortOrderConfig->method('getAttributeCode')->willReturn($stubAttributeCode);
+
+        return $stubSortOrderConfig;
+    }
+
+    /**
      * @param Context $context
      * @param DataPoolReader $dataPoolReader
      * @param PageBuilder $pageBuilder
@@ -220,20 +238,8 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
         $testFilterNavigationConfig = ['foo' => []];
         $productsPerPage = ProductsPerPage::create([1, 2, 3], $this->testDefaultNumberOfProductsPerPage);
 
-        $stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
-
-        $stubSortOrderDirection = $this->getMock(SortOrderDirection::class, [], [], '', false);
-
-        $stubUnselectedSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
-        $stubUnselectedSortOrderConfig->method('isSelected')->willReturn(false);
-        $stubUnselectedSortOrderConfig->method('getSelectedDirection')->willReturn($stubSortOrderDirection);
-        $stubUnselectedSortOrderConfig->method('getAttributeCode')->willReturn($stubAttributeCode);
-
-        $stubSelectedSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
-        $stubSelectedSortOrderConfig->method('isSelected')->willReturn(true);
-        $stubSelectedSortOrderConfig->method('getSelectedDirection')->willReturn($stubSortOrderDirection);
-        $stubSelectedSortOrderConfig->method('getAttributeCode')->willReturn($stubAttributeCode);
-
+        $stubUnselectedSortOrderConfig = $this->createStubSortOrderConfig(false);
+        $stubSelectedSortOrderConfig = $this->createStubSortOrderConfig(true);
         $this->stubSortOrderConfigs = [$stubUnselectedSortOrderConfig, $stubSelectedSortOrderConfig];
 
         $this->requestHandler = $this->createRequestHandler(
