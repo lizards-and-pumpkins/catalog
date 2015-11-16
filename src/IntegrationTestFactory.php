@@ -55,17 +55,17 @@ class IntegrationTestFactory implements Factory
     /**
      * @var SortOrderConfig[]
      */
-    private $lazyLoadedProductListingSortOrderConfig;
+    private $memoizedProductListingSortOrderConfig;
 
     /**
      * @var SortOrderConfig[]
      */
-    private $lazyLoadedProductSearchSortOrderConfig;
+    private $memoizedProductSearchSortOrderConfig;
 
     /**
      * @var SortOrderConfig
      */
-    private $lazyLoadedProductSearchAutosuggestionSortOrderConfig;
+    private $memoizedProductSearchAutosuggestionSortOrderConfig;
 
     /**
      * @return string[]
@@ -315,8 +315,8 @@ class IntegrationTestFactory implements Factory
      */
     public function getProductListingSortOrderConfig()
     {
-        if (null === $this->lazyLoadedProductListingSortOrderConfig) {
-            $this->lazyLoadedProductListingSortOrderConfig = [
+        if (null === $this->memoizedProductListingSortOrderConfig) {
+            $this->memoizedProductListingSortOrderConfig = [
                 SortOrderConfig::createSelected(
                     AttributeCode::fromString('name'),
                     SortOrderDirection::create(SortOrderDirection::ASC)
@@ -324,7 +324,7 @@ class IntegrationTestFactory implements Factory
             ];
         }
 
-        return $this->lazyLoadedProductListingSortOrderConfig;
+        return $this->memoizedProductListingSortOrderConfig;
     }
 
     /**
@@ -332,8 +332,8 @@ class IntegrationTestFactory implements Factory
      */
     public function getProductSearchSortOrderConfig()
     {
-        if (null === $this->lazyLoadedProductSearchSortOrderConfig) {
-            $this->lazyLoadedProductSearchSortOrderConfig = [
+        if (null === $this->memoizedProductSearchSortOrderConfig) {
+            $this->memoizedProductSearchSortOrderConfig = [
                 SortOrderConfig::createSelected(
                     AttributeCode::fromString('name'),
                     SortOrderDirection::create(SortOrderDirection::ASC)
@@ -341,7 +341,7 @@ class IntegrationTestFactory implements Factory
             ];
         }
 
-        return $this->lazyLoadedProductSearchSortOrderConfig;
+        return $this->memoizedProductSearchSortOrderConfig;
     }
 
     /**
@@ -349,13 +349,13 @@ class IntegrationTestFactory implements Factory
      */
     public function getProductSearchAutosuggestionSortOrderConfig()
     {
-        if (null === $this->lazyLoadedProductSearchAutosuggestionSortOrderConfig) {
-            $this->lazyLoadedProductSearchAutosuggestionSortOrderConfig = SortOrderConfig::createSelected(
+        if (null === $this->memoizedProductSearchAutosuggestionSortOrderConfig) {
+            $this->memoizedProductSearchAutosuggestionSortOrderConfig = SortOrderConfig::createSelected(
                 AttributeCode::fromString('name'),
                 SortOrderDirection::create(SortOrderDirection::ASC)
             );
         }
 
-        return $this->lazyLoadedProductSearchAutosuggestionSortOrderConfig;
+        return $this->memoizedProductSearchAutosuggestionSortOrderConfig;
     }
 }

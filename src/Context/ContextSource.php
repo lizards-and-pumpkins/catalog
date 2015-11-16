@@ -14,7 +14,7 @@ abstract class ContextSource
     /**
      * @var Context[]
      */
-    private $lazyLoadedAllAvailableContexts;
+    private $memoizedAllAvailableContexts;
 
     public function __construct(ContextBuilder $contextBuilder)
     {
@@ -26,13 +26,13 @@ abstract class ContextSource
      */
     public function getAllAvailableContexts()
     {
-        if (null === $this->lazyLoadedAllAvailableContexts) {
-            $this->lazyLoadedAllAvailableContexts = $this->contextBuilder->createContextsFromDataSets(
+        if (null === $this->memoizedAllAvailableContexts) {
+            $this->memoizedAllAvailableContexts = $this->contextBuilder->createContextsFromDataSets(
                 $this->getContextMatrix()
             );
         }
 
-        return $this->lazyLoadedAllAvailableContexts;
+        return $this->memoizedAllAvailableContexts;
     }
 
     /**

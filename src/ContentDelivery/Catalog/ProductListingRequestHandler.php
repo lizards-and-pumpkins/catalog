@@ -60,7 +60,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
     /**
      * @var ProductListingCriteriaSnippetContent|bool
      */
-    private $lazyLoadedPageMetaInfo;
+    private $memoizedPageMetaInfo;
 
     /**
      * @param HttpRequest $request
@@ -106,16 +106,16 @@ class ProductListingRequestHandler implements HttpRequestHandler
      */
     private function getPageMetaInfoSnippet(HttpRequest $request)
     {
-        if (null === $this->lazyLoadedPageMetaInfo) {
-            $this->lazyLoadedPageMetaInfo = false;
+        if (null === $this->memoizedPageMetaInfo) {
+            $this->memoizedPageMetaInfo = false;
             $metaInfoSnippetKey = $this->getMetaInfoSnippetKey($request);
             $json = $this->getPageMetaInfoJsonIfExists($metaInfoSnippetKey);
             if ($json) {
-                $this->lazyLoadedPageMetaInfo = ProductListingCriteriaSnippetContent::fromJson($json);
+                $this->memoizedPageMetaInfo = ProductListingCriteriaSnippetContent::fromJson($json);
             }
         }
 
-        return $this->lazyLoadedPageMetaInfo;
+        return $this->memoizedPageMetaInfo;
     }
 
     /**

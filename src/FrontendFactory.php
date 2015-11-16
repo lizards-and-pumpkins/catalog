@@ -57,7 +57,7 @@ class FrontendFactory implements Factory
     /**
      * @var ProductsPerPage
      */
-    private $lazyLoadedProductsPerPageConfig;
+    private $memoizedProductsPerPageConfig;
 
     /**
      * @return ApiRouter
@@ -206,17 +206,17 @@ class FrontendFactory implements Factory
      */
     public function getProductsPerPageConfig()
     {
-        if (null === $this->lazyLoadedProductsPerPageConfig) {
+        if (null === $this->memoizedProductsPerPageConfig) {
             $numbersOfProductsPerPage = [9, 12, 18];
             $selectedNumberOfProductsPerPage = 9;
 
-            $this->lazyLoadedProductsPerPageConfig = ProductsPerPage::create(
+            $this->memoizedProductsPerPageConfig = ProductsPerPage::create(
                 $numbersOfProductsPerPage,
                 $selectedNumberOfProductsPerPage
             );
         }
 
-        return $this->lazyLoadedProductsPerPageConfig;
+        return $this->memoizedProductsPerPageConfig;
     }
 
     /**
