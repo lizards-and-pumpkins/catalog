@@ -7,22 +7,22 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 class SearchCriteriaBuilder
 {
     /**
-     * @param string $parameterName
-     * @param string $parameterValue
+     * @param string $fieldName
+     * @param string $fieldValue
      * @return SearchCriteria
      */
-    public function fromRequestParameter($parameterName, $parameterValue)
+    public function fromFieldNameAndValue($fieldName, $fieldValue)
     {
-        $range = explode(SearchEngine::RANGE_DELIMITER, $parameterValue);
+        $range = explode(SearchEngine::RANGE_DELIMITER, $fieldValue);
 
         if (count($range) === 2) {
-            $criterionFrom = SearchCriterionGreaterOrEqualThan::create($parameterName, $range[0]);
-            $criterionTo = SearchCriterionLessOrEqualThan::create($parameterName, $range[1]);
+            $criterionFrom = SearchCriterionGreaterOrEqualThan::create($fieldName, $range[0]);
+            $criterionTo = SearchCriterionLessOrEqualThan::create($fieldName, $range[1]);
 
             return CompositeSearchCriterion::createAnd($criterionFrom, $criterionTo);
         }
 
-        return SearchCriterionEqual::create($parameterName, $parameterValue);
+        return SearchCriterionEqual::create($fieldName, $fieldValue);
     }
 
     /**

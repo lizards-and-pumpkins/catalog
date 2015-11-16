@@ -164,7 +164,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     private function createOptionValuesCriteriaArray($filterCode, array $filterOptionValues)
     {
         return array_map(function ($filterOptionValue) use ($filterCode) {
-            return $this->getSearchCriteriaBuilder()->fromRequestParameter($filterCode, $filterOptionValue);
+            return $this->getSearchCriteriaBuilder()->fromFieldNameAndValue($filterCode, $filterOptionValue);
         }, $filterOptionValues);
     }
 
