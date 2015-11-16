@@ -60,7 +60,7 @@ class ProductsPerPageTest extends \PHPUnit_Framework_TestCase
         ProductsPerPage::create($this->numbersOfProductsPerPage, $invalidSelectedNumberOfProductsPerPage);
     }
 
-    public function testExceptionIsThrownIfSelectedNUmberOfProductsPerPageIsAbsentInTheList()
+    public function testExceptionIsThrownIfSelectedNumberOfProductsPerPageIsAbsentInTheList()
     {
         $selectedNumberOfProductsPerPage = 4;
         $this->setExpectedException(InvalidSelectedNumberOfProductsPerPageException::class);
