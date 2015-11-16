@@ -57,7 +57,7 @@ class SearchCriteriaBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedCriteriaJson, $result->jsonSerialize());
     }
 
-    public function testCompositeCriteriaWithListOfFieldsMatchingSameStringAndOrConditionIsReturned()
+    public function testCompositeCriteriaWithListOfFieldsMatchingSameStringWithOrConditionIsReturned()
     {
         $fields = ['foo', 'bar'];
         $queryString = 'baz';
