@@ -162,6 +162,18 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
         );
     }
 
+    private function assertCookieHasBeenSet($name, $value, $ttl)
+    {
+        $cookieFormat = 'Set-Cookie: %s=%s; expires=%s; Max-Age=%s';
+
+        $expectedHeader = sprintf($cookieFormat, $name, $value, gmdate('D, d-M-Y H:i:s T', time() + $ttl), $ttl);
+        $expectedHeader1 = sprintf($cookieFormat, $name, $value, gmdate('D, d-M-Y H:i:s T', time() + $ttl + 1), $ttl);
+
+        $headers = xdebug_get_headers();
+
+        $this->assertTrue(in_array($expectedHeader, $headers) || in_array($expectedHeader1, $headers));
+    }
+
     /**
      * @param Context $context
      * @param DataPoolReader $dataPoolReader
@@ -409,16 +421,11 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
         $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
         $this->requestHandler->process($stubHttpRequest);
 
-        $headers = xdebug_get_headers();
-        $expectedCookie = sprintf(
-            'Set-Cookie: %s=%s; expires=%s; Max-Age=%s',
+        $this->assertCookieHasBeenSet(
             ProductListingRequestHandler::PRODUCTS_PER_PAGE_COOKIE_NAME,
             $selectedNumberOfProductsPerPage,
-            gmdate('D, d-M-Y H:i:s T', time() + ProductListingRequestHandler::PRODUCTS_PER_PAGE_COOKIE_TTL),
             ProductListingRequestHandler::PRODUCTS_PER_PAGE_COOKIE_TTL
         );
-
-        $this->assertContains($expectedCookie, $headers);
     }
 
     public function testExceptionIsThrownIfNoSortOrderConfigIsSelected()
@@ -534,26 +541,17 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
         $this->prepareMockDataPoolReaderWithDefaultStubSearchDocumentCollection();
         $this->requestHandler->process($stubHttpRequest);
 
-        $headers = xdebug_get_headers();
-
-        $expectedSortOrderCookie = sprintf(
-            'Set-Cookie: %s=%s; expires=%s; Max-Age=%s',
+        $this->assertCookieHasBeenSet(
             ProductListingRequestHandler::SORT_ORDER_COOKIE_NAME,
             $attributeCode,
-            gmdate('D, d-M-Y H:i:s T', time() + ProductListingRequestHandler::SORT_ORDER_COOKIE_TTL),
             ProductListingRequestHandler::SORT_ORDER_COOKIE_TTL
         );
 
-        $expectedSortDirectionCookie = sprintf(
-            'Set-Cookie: %s=%s; expires=%s; Max-Age=%s',
+        $this->assertCookieHasBeenSet(
             ProductListingRequestHandler::SORT_DIRECTION_COOKIE_NAME,
             $direction,
-            gmdate('D, d-M-Y H:i:s T', time() + ProductListingRequestHandler::SORT_DIRECTION_COOKIE_TTL),
             ProductListingRequestHandler::SORT_DIRECTION_COOKIE_TTL
         );
-
-        $this->assertContains($expectedSortOrderCookie, $headers);
-        $this->assertContains($expectedSortDirectionCookie, $headers);
     }
 
     public function testSortOrderConfigSnippetIsAddedToPageBuilder()
