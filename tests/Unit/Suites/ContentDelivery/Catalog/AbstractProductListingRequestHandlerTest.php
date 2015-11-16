@@ -22,6 +22,7 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
      * @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockDataPoolReader;
+
     /**
      * @var PageBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -89,16 +90,16 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedRecorder $spy
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedRecorder $addSnippetsToPageSpy
      * @param string $snippetCode
      */
     private function assertDynamicSnippetWithAnyValueWasAddedToPageBuilder(
-        \PHPUnit_Framework_MockObject_Matcher_InvokedRecorder $spy,
+        \PHPUnit_Framework_MockObject_Matcher_InvokedRecorder $addSnippetsToPageSpy,
         $snippetCode
     ) {
         $numberOfTimesSnippetWasAddedToPageBuilder = array_sum(array_map(function ($invocation) use ($snippetCode) {
             return intval([$snippetCode => $snippetCode] === $invocation->parameters[0]);
-        }, $spy->getInvocations()));
+        }, $addSnippetsToPageSpy->getInvocations()));
 
         $this->assertEquals(
             1,
@@ -108,12 +109,12 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedRecorder $spy
+     * @param \PHPUnit_Framework_MockObject_Matcher_InvokedRecorder $addSnippetsToPageSpy
      * @param string $snippetCode
      * @param string $snippetValue
      */
     private function assertDynamicSnippetWasAddedToPageBuilder(
-        \PHPUnit_Framework_MockObject_Matcher_InvokedRecorder $spy,
+        \PHPUnit_Framework_MockObject_Matcher_InvokedRecorder $addSnippetsToPageSpy,
         $snippetCode,
         $snippetValue
     ) {
@@ -121,7 +122,7 @@ abstract class AbstractProductListingRequestHandlerTest extends \PHPUnit_Framewo
             array_map(function ($invocation) use ($snippetCode, $snippetValue) {
                 return intval([$snippetCode => $snippetCode] === $invocation->parameters[0] &&
                               [$snippetCode => $snippetValue] === $invocation->parameters[1]);
-            }, $spy->getInvocations())
+            }, $addSnippetsToPageSpy->getInvocations())
         );
 
         $this->assertEquals(1, $numberOfTimesSnippetWasAddedToPageBuilder, sprintf(
