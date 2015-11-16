@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
-use LizardsAndPumpkins\ContentDelivery\Catalog\Exception\InvalidSortingDirectionsException;
+use LizardsAndPumpkins\ContentDelivery\Catalog\Exception\InvalidSortingDirectionException;
 use LizardsAndPumpkins\Product\AttributeCode;
 
 /**
@@ -28,7 +28,7 @@ class SortOrderConfigTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownIfInvalidSelectedSortingDirectionsIsSpecified()
     {
         $selectedDirection = 'foo';
-        $this->setExpectedException(InvalidSortingDirectionsException::class);
+        $this->setExpectedException(InvalidSortingDirectionException::class);
         SortOrderConfig::create($this->stubAttributeCode, $selectedDirection);
     }
 

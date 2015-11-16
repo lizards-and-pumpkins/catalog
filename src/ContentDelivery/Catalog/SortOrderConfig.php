@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
-use LizardsAndPumpkins\ContentDelivery\Catalog\Exception\InvalidSortingDirectionsException;
+use LizardsAndPumpkins\ContentDelivery\Catalog\Exception\InvalidSortingDirectionException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\Product\AttributeCode;
 
@@ -72,7 +72,7 @@ class SortOrderConfig implements \JsonSerializable
     private static function validateSortingDirections(AttributeCode $attributeCode, $direction)
     {
         if (SearchEngine::SORT_DIRECTION_ASC !== $direction && SearchEngine::SORT_DIRECTION_DESC !== $direction) {
-            throw new InvalidSortingDirectionsException(sprintf(
+            throw new InvalidSortingDirectionException(sprintf(
                 'Invalid selected sorting direction "%s" specified for attribute "%s".',
                 $direction,
                 $attributeCode
