@@ -178,7 +178,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     }
 
     /**
-     * @param string[] $facetFiltersConfig
+     * @param array[] $facetFiltersConfig
      * @param SearchDocument[] $searchDocuments
      * @return SearchEngineFacetField[]
      */
@@ -444,7 +444,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
 
     /**
      * @param mixed $value
-     * @return string
+     * @return mixed
      */
     private function getFormattedSearchDocumentValue($value)
     {

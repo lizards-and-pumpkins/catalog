@@ -62,7 +62,7 @@ class SortOrderConfig implements \JsonSerializable
     }
 
     /**
-     * @return SortOrderDirection
+     * @return string
      */
     public function getSelectedDirection()
     {
