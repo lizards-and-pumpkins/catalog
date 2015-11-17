@@ -97,25 +97,7 @@ trait ProductListingTestTrait
      */
     private function createProductListingRequestHandler()
     {
-        $dataPoolReader = $this->factory->createDataPoolReader();
-        $pageBuilder = new PageBuilder(
-            $dataPoolReader,
-            $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy(),
-            $this->factory->getLogger()
-        );
-        $filterNavigationConfig = $this->factory->getProductListingFilterNavigationConfig();
-        $productsPerPage = $this->factory->getProductsPerPageConfig();
-        $sortOrderConfigs = $this->factory->getProductListingSortOrderConfig();
-
-        return new ProductListingRequestHandler(
-            $this->factory->createContext(),
-            $dataPoolReader,
-            $pageBuilder,
-            $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy(),
-            $filterNavigationConfig,
-            $productsPerPage,
-            ...$sortOrderConfigs
-        );
+        return $this->factory->createProductListingRequestHandler();
     }
 
     /**

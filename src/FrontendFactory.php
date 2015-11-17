@@ -6,6 +6,8 @@ use LizardsAndPumpkins\Api\ApiRequestHandlerChain;
 use LizardsAndPumpkins\Api\ApiRouter;
 use LizardsAndPumpkins\Content\ContentBlocksApiV1PutRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductDetailViewRequestHandler;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingPageContentBuilder;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingPageRequest;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchAutosuggestionRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchRequestHandler;
@@ -188,14 +190,37 @@ class FrontendFactory implements Factory
     /**
      * @return ProductListingRequestHandler
      */
-    private function createProductListingRequestHandler()
+    public function createProductListingRequestHandler()
     {
         return new ProductListingRequestHandler(
             $this->createContext(),
             $this->getMasterFactory()->createDataPoolReader(),
-            $this->getMasterFactory()->createPageBuilder(),
-            $this->getMasterFactory()->getSnippetKeyGeneratorLocator(),
+            $this->getMasterFactory()->createProductListingCriteriaSnippetKeyGenerator(),
             $this->getMasterFactory()->getProductListingFilterNavigationConfig(),
+            $this->createProductListingPageContentBuilder(),
+            $this->createProductListingPageRequest()
+        );
+    }
+
+    /**
+     * @return ProductListingPageContentBuilder
+     */
+    private function createProductListingPageContentBuilder()
+    {
+        return new ProductListingPageContentBuilder(
+            $this->getMasterFactory()->createDataPoolReader(),
+            $this->getMasterFactory()->getSnippetKeyGeneratorLocator(),
+            $this->getMasterFactory()->createPageBuilder(),
+            ...$this->getMasterFactory()->getProductListingSortOrderConfig()
+        );
+    }
+
+    /**
+     * @return ProductListingPageRequest
+     */
+    private function createProductListingPageRequest()
+    {
+        return new ProductListingPageRequest(
             $this->getMasterFactory()->getProductsPerPageConfig(),
             ...$this->getMasterFactory()->getProductListingSortOrderConfig()
         );
@@ -377,18 +402,17 @@ class FrontendFactory implements Factory
     /**
      * @return ProductSearchRequestHandler
      */
-    private function createProductSearchRequestHandler()
+    public function createProductSearchRequestHandler()
     {
         return new ProductSearchRequestHandler(
             $this->createContext(),
             $this->getMasterFactory()->createDataPoolReader(),
-            $this->getMasterFactory()->createPageBuilder(),
-            $this->getMasterFactory()->getSnippetKeyGeneratorLocator(),
+            $this->getMasterFactory()->createProductSearchResultMetaSnippetKeyGenerator(),
             $this->getMasterFactory()->getProductSearchResultsFilterNavigationConfig(),
-            $this->getMasterFactory()->getProductsPerPageConfig(),
             $this->getMasterFactory()->createSearchCriteriaBuilder(),
             $this->getMasterFactory()->getSearchableAttributeCodes(),
-            ...$this->getMasterFactory()->getProductSearchSortOrderConfig()
+            $this->createProductListingPageContentBuilder(),
+            $this->createProductListingPageRequest()
         );
     }
 

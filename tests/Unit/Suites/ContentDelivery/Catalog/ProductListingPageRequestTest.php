@@ -7,6 +7,10 @@ use LizardsAndPumpkins\Http\HttpRequest;
 
 /**
  * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingPageRequest
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection
+ * @uses   \LizardsAndPumpkins\Product\AttributeCode
  */
 class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
 {

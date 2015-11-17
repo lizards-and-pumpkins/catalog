@@ -6,6 +6,9 @@ use LizardsAndPumpkins\Product\Price;
 
 class FilterNavigationPriceRangesBuilder
 {
+    /**
+     * @return array[]
+     */
     public static function getPriceRanges()
     {
         $base = pow(10, Price::NUM_DECIMAL_POINTS);

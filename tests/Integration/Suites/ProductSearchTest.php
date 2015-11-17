@@ -61,27 +61,7 @@ class ProductSearchTest extends AbstractIntegrationTest
      */
     private function getProductSearchRequestHandler()
     {
-        $dataPoolReader = $this->factory->createDataPoolReader();
-        $pageBuilder = new PageBuilder(
-            $dataPoolReader,
-            $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy(),
-            $this->factory->getLogger()
-        );
-        $filterNavigationAttributeCodes = [];
-        $productsPerPage = $this->factory->getProductsPerPageConfig();
-        $sortOrderConfigs = $this->factory->getProductSearchSortOrderConfig();
-
-        return new ProductSearchRequestHandler(
-            $this->factory->createContext(),
-            $dataPoolReader,
-            $pageBuilder,
-            $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy(),
-            $filterNavigationAttributeCodes,
-            $productsPerPage,
-            $this->factory->createSearchCriteriaBuilder(),
-            $this->factory->getSearchableAttributeCodes(),
-            ...$sortOrderConfigs
-        );
+        return $this->factory->createProductSearchRequestHandler();
     }
 
     private function registerProductSearchResultMetaSnippetKeyGenerator()
