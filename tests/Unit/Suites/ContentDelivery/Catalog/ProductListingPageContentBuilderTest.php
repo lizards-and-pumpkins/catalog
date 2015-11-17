@@ -21,16 +21,6 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubDataPoolReader;
-
-    /**
-     * @var SnippetKeyGeneratorLocator|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubSnippetKeyGeneratorLocator;
-
-    /**
      * @var PageBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockPageBuilder;
@@ -148,22 +138,24 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
-        $this->stubDataPoolReader->method('getSnippets')->willReturn([]);
+        /** @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject $stubDataPoolReader */
+        $stubDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
+        $stubDataPoolReader->method('getSnippets')->willReturn([]);
 
         $stubSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $stubSnippetKeyGenerator->method('getKeyForContext')->willReturn('bar');
 
-        $this->stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
-        $this->stubSnippetKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')
+        /** @var SnippetKeyGeneratorLocator|\PHPUnit_Framework_MockObject_MockObject $stubSnippetKeyGeneratorLocator */
+        $stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
+        $stubSnippetKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')
             ->willReturn($stubSnippetKeyGenerator);
 
         $this->mockPageBuilder = $this->createMockPageBuilder();
         $this->stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
 
         $this->pageContentBuilder = new ProductListingPageContentBuilder(
-            $this->stubDataPoolReader,
-            $this->stubSnippetKeyGeneratorLocator,
+            $stubDataPoolReader,
+            $stubSnippetKeyGeneratorLocator,
             $this->mockPageBuilder,
             $this->stubSortOrderConfig
         );
