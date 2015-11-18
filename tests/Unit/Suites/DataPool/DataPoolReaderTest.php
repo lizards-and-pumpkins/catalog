@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\DataPool;
 
+use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\Exception\InvalidKeyValueStoreKeyException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
@@ -190,40 +191,33 @@ class DataPoolReaderTest extends AbstractDataPoolTest
         $this->assertSame($currentDataVersion, $this->dataPoolReader->getCurrentDataVersion());
     }
 
-    public function testSearchResultsAreReturnedFromSearchEngine()
-    {
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $this->getMock(Context::class);
-
-        $this->getMockSearchEngine()->expects($this->once())->method('query');
-
-        $facetFields = [];
-        $rowsPerPage = 100;
-        $pageNumber = 0;
-        $this->dataPoolReader->getSearchResults('foo', $stubContext, $facetFields, $rowsPerPage, $pageNumber);
-    }
-
     public function testCriteriaQueriesAreDelegatedToSearchEngine()
     {
         /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $mockCriteria */
         $mockCriteria = $this->getMock(SearchCriteria::class);
 
+        $selectedFilters = [];
+
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->getMock(Context::class);
 
-        $this->getMockSearchEngine()->expects($this->once())
-            ->method('getSearchDocumentsMatchingCriteria')
-            ->with($mockCriteria, $stubContext);
+        $this->getMockSearchEngine()->expects($this->once())->method('getSearchDocumentsMatchingCriteria')
+            ->with($mockCriteria, $selectedFilters, $stubContext);
 
-        $facetFields = [];
+        $facetFiltersConfig = [];
         $rowsPerPage = 100;
         $pageNumber = 0;
+        /** @var SortOrderConfig|\PHPUnit_Framework_MockObject_MockObject $sortOrderConfig */
+        $sortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);;
+
         $this->dataPoolReader->getSearchResultsMatchingCriteria(
             $mockCriteria,
+            $selectedFilters,
             $stubContext,
-            $facetFields,
+            $facetFiltersConfig,
             $rowsPerPage,
-            $pageNumber
+            $pageNumber,
+            $sortOrderConfig
         );
     }
 

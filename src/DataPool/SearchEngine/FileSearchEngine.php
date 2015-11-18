@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\Exception\SearchEngineNotAvailableException;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
@@ -25,18 +26,26 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
     private $storagePath;
 
     /**
-     * @param string $storagePath
+     * @var SearchCriteriaBuilder
      */
-    private function __construct($storagePath)
+    private $searchCriteriaBuilder;
+
+    /**
+     * @param string $storagePath
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     */
+    private function __construct($storagePath, SearchCriteriaBuilder $searchCriteriaBuilder)
     {
         $this->storagePath = $storagePath;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
      * @param string $storagePath
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @return FileSearchEngine
      */
-    public static function create($storagePath)
+    public static function create($storagePath, SearchCriteriaBuilder $searchCriteriaBuilder)
     {
         if (!is_writable($storagePath)) {
             throw new SearchEngineNotAvailableException(sprintf(
@@ -45,7 +54,7 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
             ));
         }
 
-        return new self($storagePath);
+        return new self($storagePath, $searchCriteriaBuilder);
     }
 
     public function addSearchDocumentCollection(SearchDocumentCollection $searchDocumentCollection)
@@ -63,7 +72,7 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
     /**
      * @return SearchDocument[]
      */
-    protected function getSearchDocuments()
+    final protected function getSearchDocuments()
     {
         $searchDocuments = [];
 
@@ -157,5 +166,13 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
     public function clear()
     {
         (new LocalFilesystem())->removeDirectoryContents($this->storagePath);
+    }
+
+    /**
+     * @return SearchCriteriaBuilder
+     */
+    final protected function getSearchCriteriaBuilder()
+    {
+        return $this->searchCriteriaBuilder;
     }
 }

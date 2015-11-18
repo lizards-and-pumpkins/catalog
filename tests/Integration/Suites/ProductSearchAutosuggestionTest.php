@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchAutosuggestionRequestHandler;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
@@ -10,7 +11,6 @@ use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductSearchAutosuggestionRequestHandler;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionSnippetRenderer;
 
 class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
@@ -69,12 +69,16 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
             $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy(),
             $this->factory->getLogger()
         );
+        $sortOrderConfigs = $this->factory->getProductSearchAutosuggestionSortOrderConfig();
 
         return new ProductSearchAutosuggestionRequestHandler(
             $this->factory->createContext(),
             $dataPoolReader,
             $pageBuilder,
-            $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy()
+            $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy(),
+            $this->factory->createSearchCriteriaBuilder(),
+            $this->factory->getSearchableAttributeCodes(),
+            $sortOrderConfigs
         );
     }
 
@@ -126,7 +130,7 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
 
         $dataPoolReader = $this->factory->createDataPoolReader();
 
-        $keyGeneratorLocator = $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy();
+        $keyGeneratorLocator = $this->factory->getSnippetKeyGeneratorLocator();
         $keyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
             ProductSearchAutosuggestionSnippetRenderer::CODE
         );

@@ -1,6 +1,6 @@
 <?php
 
-namespace LizardsAndPumpkins\Product;
+namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
@@ -11,6 +11,8 @@ use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\Exception\UnableToHandleRequestException;
 use LizardsAndPumpkins\PageBuilder;
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
+use LizardsAndPumpkins\Product\Product;
+use LizardsAndPumpkins\Product\ProductDetailPageMetaInfoSnippetContent;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 
 class ProductDetailViewRequestHandler implements HttpRequestHandler
@@ -19,6 +21,11 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
      * @var ProductDetailPageMetaInfoSnippetContent
      */
     private $pageMetaInfo;
+
+    /**
+     * @var string
+     */
+    private $requestObjectHash;
 
     /**
      * @var DataPoolReader
@@ -81,7 +88,10 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
 
     private function loadPageMetaInfoSnippet(HttpRequest $request)
     {
-        if (is_null($this->pageMetaInfo)) {
+        $requestObjectHash = spl_object_hash($request);
+
+        if ($requestObjectHash !== $this->requestObjectHash) {
+            $this->requestObjectHash = $requestObjectHash;
             $this->pageMetaInfo = false;
             $metaInfoSnippetKey = $this->getMetaInfoSnippetKey($request);
             $json = $this->getPageMetaInfoJsonIfExists($metaInfoSnippetKey);

@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
+use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
 use LizardsAndPumpkins\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine;
@@ -13,6 +15,7 @@ use LizardsAndPumpkins\Image\ImageProcessor;
 use LizardsAndPumpkins\Image\ImageProcessorCollection;
 use LizardsAndPumpkins\Image\ImageProcessingStrategySequence;
 use LizardsAndPumpkins\Log\InMemoryLogger;
+use LizardsAndPumpkins\Product\AttributeCode;
 use LizardsAndPumpkins\Queue\InMemory\InMemoryQueue;
 use LizardsAndPumpkins\Queue\Queue;
 
@@ -50,6 +53,21 @@ class IntegrationTestFactory implements Factory
     private $urlKeyStore;
 
     /**
+     * @var SortOrderConfig[]
+     */
+    private $memoizedProductListingSortOrderConfig;
+
+    /**
+     * @var SortOrderConfig[]
+     */
+    private $memoizedProductSearchSortOrderConfig;
+
+    /**
+     * @var SortOrderConfig
+     */
+    private $memoizedProductSearchAutosuggestionSortOrderConfig;
+
+    /**
      * @return string[]
      */
     public function getSearchableAttributeCodes()
@@ -57,20 +75,32 @@ class IntegrationTestFactory implements Factory
         return ['name', 'category', 'brand'];
     }
 
+
     /**
      * @return string[]
      */
-    public function getProductListingFilterNavigationAttributeCodes()
+    public function getProductListingFilterNavigationConfig()
     {
-        return ['brand', 'gender'];
+        return [
+            'gender' => [],
+            'brand' => [],
+            'color' => [],
+            'price' => [],
+        ];
     }
 
     /**
      * @return string[]
      */
-    public function getProductSearchResultsFilterNavigationAttributeCodes()
+    public function getProductSearchResultsFilterNavigationConfig()
     {
-        return ['brand', 'category', 'gender'];
+        return [
+            'gender' => [],
+            'brand' => [],
+            'category' => [],
+            'color' => [],
+            'price' => [],
+        ];
     }
 
     /**
@@ -110,7 +140,9 @@ class IntegrationTestFactory implements Factory
      */
     public function createSearchEngine()
     {
-        return new InMemorySearchEngine();
+        return new InMemorySearchEngine(
+            $this->getMasterFactory()->createSearchCriteriaBuilder()
+        );
     }
 
     /**
@@ -276,5 +308,54 @@ class IntegrationTestFactory implements Factory
     public function getFileStorageBasePathConfig()
     {
         return sys_get_temp_dir();
+    }
+
+    /**
+     * @return SortOrderConfig[]
+     */
+    public function getProductListingSortOrderConfig()
+    {
+        if (null === $this->memoizedProductListingSortOrderConfig) {
+            $this->memoizedProductListingSortOrderConfig = [
+                SortOrderConfig::createSelected(
+                    AttributeCode::fromString('name'),
+                    SortOrderDirection::create(SortOrderDirection::ASC)
+                ),
+            ];
+        }
+
+        return $this->memoizedProductListingSortOrderConfig;
+    }
+
+    /**
+     * @return SortOrderConfig[]
+     */
+    public function getProductSearchSortOrderConfig()
+    {
+        if (null === $this->memoizedProductSearchSortOrderConfig) {
+            $this->memoizedProductSearchSortOrderConfig = [
+                SortOrderConfig::createSelected(
+                    AttributeCode::fromString('name'),
+                    SortOrderDirection::create(SortOrderDirection::ASC)
+                ),
+            ];
+        }
+
+        return $this->memoizedProductSearchSortOrderConfig;
+    }
+
+    /**
+     * @return SortOrderConfig
+     */
+    public function getProductSearchAutosuggestionSortOrderConfig()
+    {
+        if (null === $this->memoizedProductSearchAutosuggestionSortOrderConfig) {
+            $this->memoizedProductSearchAutosuggestionSortOrderConfig = SortOrderConfig::createSelected(
+                AttributeCode::fromString('name'),
+                SortOrderDirection::create(SortOrderDirection::ASC)
+            );
+        }
+
+        return $this->memoizedProductSearchAutosuggestionSortOrderConfig;
     }
 }

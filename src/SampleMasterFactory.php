@@ -28,8 +28,15 @@ use LizardsAndPumpkins\Log\InMemoryLogger;
  * @method string[] getRequiredContexts
  * @method Projection\Catalog\Import\ProductXmlToProductBuilderLocator createProductXmlToProductBuilderLocator
  * @method Context\Context createContext
- * @method Product\FilterNavigationFilterCollection createFilterNavigationFilterCollection
  * @method DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder createSearchCriteriaBuilder
+ * @method string[] getSearchableAttributeCodes
+ * @method array[] getProductListingFilterNavigationConfig
+ * @method ContentDelivery\Catalog\ProductsPerPage getProductsPerPageConfig
+ * @method ContentDelivery\Catalog\SortOrderConfig[] getProductListingSortOrderConfig
+ * @method ContentDelivery\Catalog\SortOrderConfig[] getProductSearchSortOrderConfig
+ * @method ContentDelivery\Catalog\SortOrderConfig getProductSearchAutosuggestionSortOrderConfig
+ * @method ContentDelivery\Catalog\ProductListingRequestHandler createProductListingRequestHandler
+ * @method ContentDelivery\Catalog\ProductSearchRequestHandler createProductSearchRequestHandler
  */
 class SampleMasterFactory implements MasterFactory
 {

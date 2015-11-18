@@ -63,6 +63,17 @@ define(function () {
     }
 
     return {
+        updateQueryParameters: function (parameters) {
+            var queryParameters = getQueryParameters(location.href),
+                urlWithoutQueryString = getUrlWithoutQueryString(location.href);
+
+            Object.keys(parameters).map(function (parameterName) {
+                queryParameters[parameterName] = parameters[parameterName];
+            });
+
+            return addQueryParametersToUrl(urlWithoutQueryString, queryParameters);
+        },
+
         updateQueryParameter: function (parameterName, parameterValue) {
             var queryParameters = getQueryParameters(location.href),
                 urlWithoutQueryString = getUrlWithoutQueryString(location.href);

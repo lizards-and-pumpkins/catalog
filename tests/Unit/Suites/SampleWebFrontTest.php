@@ -17,19 +17,27 @@ use LizardsAndPumpkins\Http\HttpRouterChain;
  * @uses   \LizardsAndPumpkins\FrontendFactory
  * @uses   \LizardsAndPumpkins\CommonFactory
  * @uses   \LizardsAndPumpkins\Content\ContentBlocksApiV1PutRequestHandler
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductDetailViewRequestHandler
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingPageContentBuilder
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingPageRequest
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchAutosuggestionRequestHandler
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchRequestHandler
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection
+ * @uses   \LizardsAndPumpkins\ContentDelivery\SnippetTransformation\PricesJsonSnippetTransformation
  * @uses   \LizardsAndPumpkins\IntegrationTestFactory
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine
  * @uses   \LizardsAndPumpkins\DataVersion
  * @uses   \LizardsAndPumpkins\PageBuilder
  * @uses   \LizardsAndPumpkins\GenericSnippetKeyGenerator
  * @uses   \LizardsAndPumpkins\TemplatesApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
  * @uses   \LizardsAndPumpkins\Http\GenericHttpRouter
+ * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler
- * @uses   \LizardsAndPumpkins\Product\ProductDetailViewRequestHandler
- * @uses   \LizardsAndPumpkins\Product\ProductListingRequestHandler
  * @uses   \LizardsAndPumpkins\Product\MultipleProductStockQuantityApiV1PutRequestHandler
- * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionRequestHandler
- * @uses   \LizardsAndPumpkins\Product\ProductSearchRequestHandler
  * @uses   \LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToProductBuilder

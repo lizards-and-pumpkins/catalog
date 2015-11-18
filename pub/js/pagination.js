@@ -2,7 +2,7 @@ define(['lib/url'], function (url) {
     var paginationQueryParameterName = 'p',
         maxNumberOfPagesAroundSelected = 2;
 
-    var createPaginationItemWithLink = function (itemUrl, itemHtml, cssClass) {
+    function createPaginationItemWithLink(itemUrl, itemHtml, cssClass) {
         var item = document.createElement('LI'),
             link = document.createElement('A');
         link.className = cssClass;
@@ -11,24 +11,32 @@ define(['lib/url'], function (url) {
         item.appendChild(link);
 
         return item;
-    };
+    }
 
-    var createPaginationItem = function (itemHtml, cssClass) {
+    function createPaginationItem(itemHtml, cssClass) {
         var item = document.createElement('LI');
         item.className = cssClass;
         item.innerHTML = itemHtml;
 
         return item;
-    };
+    }
+
+    function getSelectedNumberOfProductsPerPage(productsPerPage) {
+        for (var i = 0; i < productsPerPage.length; i++) {
+            if (true === productsPerPage[i]['selected']) {
+                return productsPerPage[i]['number'];
+            }
+        }
+    }
 
     return {
         getPaginationQueryParameterName: function() {
             return paginationQueryParameterName;
         },
 
-        generatePagination: function (totalNumberOfResults, productsPerPage, paginationPlaceholderSelector) {
+        renderPagination: function (totalNumberOfResults, productsPerPage, paginationPlaceholderSelector) {
             var paginationPlaceholder = document.querySelector(paginationPlaceholderSelector),
-                totalPageCount = Math.ceil(totalNumberOfResults / productsPerPage);
+                totalPageCount = Math.ceil(totalNumberOfResults / getSelectedNumberOfProductsPerPage(productsPerPage));
 
             if (null === paginationPlaceholderSelector) {
                 return;

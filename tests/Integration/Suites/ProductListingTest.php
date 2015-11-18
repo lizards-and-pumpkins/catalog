@@ -8,90 +8,35 @@ use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Product\ProductListingRequestHandler;
+use LizardsAndPumpkins\Log\Logger;
+use LizardsAndPumpkins\Log\LogMessage;
 use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer;
 use LizardsAndPumpkins\Utils\XPathParser;
 
-class ProductListingTest extends AbstractIntegrationTest
+class ProductListingTest extends \PHPUnit_Framework_TestCase
 {
+    use ProductListingTestTrait;
+
     private $testUrl = 'http://example.com/sale';
 
-    /**
-     * @var SampleMasterFactory
-     */
-    private $factory;
-
-    private function importCatalog()
+    private function failIfMessagesWhereLogged(Logger $logger)
     {
-        $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
-        $httpHeaders = HttpHeaders::fromArray([
-            'Accept' => 'application/vnd.lizards-and-pumpkins.catalog_import.v1+json'
-        ]);
-        $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
-        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
-        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
+        $messages = $logger->getMessages();
 
-        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+        if (!empty($messages)) {
+            $failMessages = array_map(function (LogMessage $logMessage) {
+                $messageContext = $logMessage->getContext();
+                if (isset($messageContext['exception'])) {
+                    /** @var \Exception $exception */
+                    $exception = $messageContext['exception'];
+                    return (string)$logMessage . ' ' . $exception->getFile() . ':' . $exception->getLine();
+                }
+                return (string)$logMessage;
+            }, $messages);
+            $failMessageString = implode(PHP_EOL, $failMessages);
 
-        $website = new InjectableSampleWebFront($request, $this->factory);
-        $website->runWithoutSendingResponse();
-
-        $this->factory->createCommandConsumer()->process();
-        $this->factory->createDomainEventConsumer()->process();
-    }
-
-    private function createProductListingFixture()
-    {
-        $httpUrl = HttpUrl::fromString('http://example.com/api/templates/product_listing');
-        $httpHeaders = HttpHeaders::fromArray([
-            'Accept' => 'application/vnd.lizards-and-pumpkins.templates.v1+json'
-        ]);
-        $httpRequestBodyString = file_get_contents(__DIR__ . '/../../shared-fixture/product-listing-root-snippet.json');
-        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
-        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
-
-        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-
-        $website = new InjectableSampleWebFront($request, $this->factory);
-        $website->runWithoutSendingResponse();
-
-        $this->factory->createCommandConsumer()->process();
-        $this->factory->createDomainEventConsumer()->process();
-    }
-
-    /**
-     * @return ProductListingRequestHandler
-     */
-    private function getProductListingRequestHandler()
-    {
-        $dataPoolReader = $this->factory->createDataPoolReader();
-        $pageBuilder = new PageBuilder(
-            $dataPoolReader,
-            $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy(),
-            $this->factory->getLogger()
-        );
-        $filterNavigationAttributeCodes = [];
-        $defaultNumberOfProductsPerPage = 9;
-
-        return new ProductListingRequestHandler(
-            $this->factory->createContext(),
-            $dataPoolReader,
-            $pageBuilder,
-            $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy(),
-            $filterNavigationAttributeCodes,
-            $defaultNumberOfProductsPerPage,
-            $this->factory->createSearchCriteriaBuilder()
-        );
-    }
-
-    private function registerProductListingSnippetKeyGenerator()
-    {
-        $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy()->register(
-            ProductListingPageSnippetRenderer::CODE,
-            function () {
-                $this->factory->createProductListingSnippetKeyGenerator();
-            }
-        );
+            $this->fail($failMessageString);
+        }
     }
 
     public function testProductListingCriteriaSnippetIsWrittenIntoDataPool()
@@ -130,8 +75,7 @@ class ProductListingTest extends AbstractIntegrationTest
     public function testProductListingPageHtmlIsReturned()
     {
         $this->importCatalog();
-        $this->createProductListingFixture();
-
+        $this->prepareProductListingFixture();
         $this->registerProductListingSnippetKeyGenerator();
 
         $request = HttpRequest::fromParameters(
@@ -141,9 +85,9 @@ class ProductListingTest extends AbstractIntegrationTest
             HttpRequestBody::fromString('')
         );
 
-        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+        $this->factory = $this->createIntegrationTestMasterFactoryForRequest($request);
 
-        $productListingRequestHandler = $this->getProductListingRequestHandler();
+        $productListingRequestHandler = $this->createProductListingRequestHandler();
         $page = $productListingRequestHandler->process($request);
         $body = $page->getBody();
 

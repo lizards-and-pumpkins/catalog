@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
+
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
@@ -23,7 +25,7 @@ class SearchCriteriaBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $parameterName = 'foo';
         $parameterValue = 'bar';
-        $result = $this->builder->fromRequestParameter($parameterName, $parameterValue);
+        $result = $this->builder->fromFieldNameAndValue($parameterName, $parameterValue);
 
         $expectedCriteriaJson = [
             'fieldName' => $parameterName,
@@ -40,8 +42,8 @@ class SearchCriteriaBuilderTest extends \PHPUnit_Framework_TestCase
         $parameterName = 'foo';
         $rangeFrom = '0';
         $rangeTo = '1';
-        $parameterValue = sprintf('%s%s%s', $rangeFrom, SearchCriteriaBuilder::FILTER_RANGE_DELIMITER, $rangeTo);
-        $result = $this->builder->fromRequestParameter($parameterName, $parameterValue);
+        $parameterValue = sprintf('%s%s%s', $rangeFrom, SearchEngine::RANGE_DELIMITER, $rangeTo);
+        $result = $this->builder->fromFieldNameAndValue($parameterName, $parameterValue);
 
         $expectedCriteriaJson = [
             'condition' => CompositeSearchCriterion::AND_CONDITION,
@@ -49,6 +51,23 @@ class SearchCriteriaBuilderTest extends \PHPUnit_Framework_TestCase
                 SearchCriterionGreaterOrEqualThan::create($parameterName, $rangeFrom),
                 SearchCriterionLessOrEqualThan::create($parameterName, $rangeTo),
             ]
+        ];
+
+        $this->assertInstanceOf(CompositeSearchCriterion::class, $result);
+        $this->assertEquals($expectedCriteriaJson, $result->jsonSerialize());
+    }
+
+    public function testCompositeCriteriaWithListOfFieldsMatchingSameStringWithOrConditionIsReturned()
+    {
+        $fields = ['foo', 'bar'];
+        $queryString = 'baz';
+        $result = $this->builder->createCriteriaForAnyOfGivenFieldsContainsString($fields, $queryString);
+
+        $expectedCriteriaJson = [
+            'condition' => CompositeSearchCriterion::OR_CONDITION,
+            'criteria'  => array_map(function ($fieldName) use ($queryString) {
+                return SearchCriterionLike::create($fieldName, $queryString);
+            }, $fields)
         ];
 
         $this->assertInstanceOf(CompositeSearchCriterion::class, $result);

@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\Tests\Integration;
 
+use LizardsAndPumpkins\CommonFactory;
+use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
@@ -21,7 +23,11 @@ use LizardsAndPumpkins\Queue\InMemory\InMemoryQueue;
 
 /**
  * @covers \LizardsAndPumpkins\IntegrationTestFactory
+ * @uses   \LizardsAndPumpkins\CommonFactory
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection
  * @uses   \LizardsAndPumpkins\DataPool\KeyValue\InMemory\InMemoryKeyValueStore
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine
  * @uses   \LizardsAndPumpkins\FactoryTrait
  * @uses   \LizardsAndPumpkins\Image\ImageMagickResizeStrategy
  * @uses   \LizardsAndPumpkins\Image\GdResizeStrategy
@@ -32,6 +38,7 @@ use LizardsAndPumpkins\Queue\InMemory\InMemoryQueue;
  * @uses   \LizardsAndPumpkins\LocalFilesystemStorageReader
  * @uses   \LizardsAndPumpkins\LocalFilesystemStorageWriter
  * @uses   \LizardsAndPumpkins\MasterFactoryTrait
+ * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Queue\InMemory\InMemoryQueue
  * @uses   \LizardsAndPumpkins\Utils\LocalFilesystem
  */
@@ -42,11 +49,28 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
      */
     private $factory;
 
+    /**
+     * @param array[] $filterRanges
+     */
+    private function assertFilterRangesFormat(array $filterRanges)
+    {
+        array_map(function (array $filterRanges) {
+            $this->assertInternalType('array', $filterRanges);
+            $this->assertContainsOnly('array', $filterRanges);
+            array_map(function (array $range) {
+                $this->assertCount(2, $range);
+                $this->assertArrayHasKey('from', $range);
+                $this->assertArrayHasKey('to', $range);
+            }, $filterRanges);
+        }, $filterRanges);
+    }
+
     public function setUp()
     {
         $masterFactory = new SampleMasterFactory();
         $this->factory = new IntegrationTestFactory();
         $masterFactory->register($this->factory);
+        $masterFactory->register(new CommonFactory);
     }
 
     public function testInMemoryKeyValueStoreIsReturned()
@@ -107,18 +131,20 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayOfProductListingFilterNavigationAttributeCodesIsReturned()
     {
-        $result = $this->factory->getProductListingFilterNavigationAttributeCodes();
+        $result = $this->factory->getProductListingFilterNavigationConfig();
 
         $this->assertInternalType('array', $result);
-        $this->assertContainsOnly('string', $result);
+        $this->assertContainsOnly('array', $result);
+        $this->assertFilterRangesFormat($result);
     }
 
     public function testArrayOfProductSearchResultsFilterNavigationAttributeCodesIsReturned()
     {
-        $result = $this->factory->getProductSearchResultsFilterNavigationAttributeCodes();
+        $result = $this->factory->getProductSearchResultsFilterNavigationConfig();
 
         $this->assertInternalType('array', $result);
-        $this->assertContainsOnly('string', $result);
+        $this->assertContainsOnly('array', $result);
+        $this->assertFilterRangesFormat($result);
     }
 
     public function testImageProcessorCollectionIsReturned()
@@ -139,6 +165,7 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsTheSetKeyValueStore()
     {
+        /** @var KeyValueStore|\PHPUnit_Framework_MockObject_MockObject $stubKeyValueStore */
         $stubKeyValueStore = $this->getMock(KeyValueStore::class);
         $this->factory->setKeyValueStore($stubKeyValueStore);
         $this->assertSame($stubKeyValueStore, $this->factory->getKeyValueStore());
@@ -152,6 +179,7 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsTheSetEventQueue()
     {
+        /** @var Queue|\PHPUnit_Framework_MockObject_MockObject $stubEventQueue */
         $stubEventQueue = $this->getMock(Queue::class);
         $this->factory->setEventQueue($stubEventQueue);
         $this->assertSame($stubEventQueue, $this->factory->getEventQueue());
@@ -165,6 +193,7 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsTheSetCommandQueue()
     {
+        /** @var Queue|\PHPUnit_Framework_MockObject_MockObject $stubCommandQueue */
         $stubCommandQueue = $this->getMock(Queue::class);
         $this->factory->setCommandQueue($stubCommandQueue);
         $this->assertSame($stubCommandQueue, $this->factory->getCommandQueue());
@@ -178,6 +207,7 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsTheSetSearchEngine()
     {
+        /** @var SearchEngine|\PHPUnit_Framework_MockObject_MockObject $stubSearchEngine */
         $stubSearchEngine = $this->getMock(SearchEngine::class);
         $this->factory->setSearchEngine($stubSearchEngine);
         $this->assertSame($stubSearchEngine, $this->factory->getSearchEngine());
@@ -191,6 +221,7 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsTheSetUrlKeyStore()
     {
+        /** @var UrlKeyStore|\PHPUnit_Framework_MockObject_MockObject $stubUrlKeyStore */
         $stubUrlKeyStore = $this->getMock(UrlKeyStore::class);
         $this->factory->setUrlKeyStore($stubUrlKeyStore);
         $this->assertSame($stubUrlKeyStore, $this->factory->getUrlKeyStore());
@@ -202,5 +233,35 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('string', $fileStorageBasePath);
         $this->assertFileExists($fileStorageBasePath);
         $this->assertTrue(is_dir($fileStorageBasePath));
+    }
+
+    public function testSameInstanceOfProductListingSortOrderConfigIsReturnedOnMultipleCalls()
+    {
+        $this->assertContainsOnly(SortOrderConfig::class, $this->factory->getProductListingSortOrderConfig());
+        $this->assertSame(
+            $this->factory->getProductListingSortOrderConfig(),
+            $this->factory->getProductListingSortOrderConfig()
+        );
+    }
+
+    public function testSameInstanceOfProductSearchSortOrderConfigIsReturnedOnMultipleCalls()
+    {
+        $this->assertContainsOnly(SortOrderConfig::class, $this->factory->getProductSearchSortOrderConfig());
+        $this->assertSame(
+            $this->factory->getProductSearchSortOrderConfig(),
+            $this->factory->getProductSearchSortOrderConfig()
+        );
+    }
+
+    public function testSameInstanceOfProductSearchAutosuggestionSortOrderConfigIsReturnedOnMultipleCalls()
+    {
+        $this->assertInstanceOf(
+            SortOrderConfig::class,
+            $this->factory->getProductSearchAutosuggestionSortOrderConfig()
+        );
+        $this->assertSame(
+            $this->factory->getProductSearchAutosuggestionSortOrderConfig(),
+            $this->factory->getProductSearchAutosuggestionSortOrderConfig()
+        );
     }
 }

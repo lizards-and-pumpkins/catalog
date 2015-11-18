@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Http;
 
+use LizardsAndPumpkins\Http\Exception\CookieNotSetException;
 use LizardsAndPumpkins\Http\Exception\UnsupportedRequestMethodException;
 
 abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
@@ -22,11 +23,8 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
 
     public function testUrlIsReturned()
     {
-        $url = 'http://www.example.com/seo-url/';
-
         /** @var HttpUrl|\PHPUnit_Framework_MockObject_MockObject $stubHttpUrl */
         $stubHttpUrl = $this->getMock(HttpUrl::class, [], [], '', false);
-        $stubHttpUrl->method('__toString')->willReturn($url);
 
         $httpRequest = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
@@ -36,7 +34,7 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
         );
         $result = $httpRequest->getUrl();
 
-        $this->assertEquals($url, $result);
+        $this->assertSame($stubHttpUrl, $result);
     }
 
     public function testUrlPathRelativeToWebFrontIsReturned()
@@ -154,5 +152,65 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
         $result = $request->getQueryParametersExceptGiven($queryParameterToBeExcluded);
 
         $this->assertSame($queryParametersWithParameterExcluded, $result);
+    }
+
+    public function testArrayOfCookiesIsReturned()
+    {
+        $expectedCookies = ['foo' => 'bar', 'baz' => 'qux'];
+
+        $originalState = $_COOKIE;
+        $_COOKIE = $expectedCookies;
+
+        $request = HttpRequest::fromGlobalState();
+        $result = $request->getCookies();
+
+        $_COOKIE = $originalState;
+
+        $this->assertSame($expectedCookies, $result);
+    }
+
+    public function testFalseIsReturnedIfRequestedCookieIsNotSet()
+    {
+        $request = HttpRequest::fromGlobalState();
+        $this->assertFalse($request->hasCookie('foo'));
+    }
+
+    public function testTrueIsReturnedIfRequestedCookieIsSet()
+    {
+        $expectedCookieKey = 'foo';
+
+        $originalState = $_COOKIE;
+        $_COOKIE[$expectedCookieKey] = 'whatever';
+
+        $request = HttpRequest::fromGlobalState();
+        $result = $request->hasCookie($expectedCookieKey);
+
+        $_COOKIE = $originalState;
+
+        $this->assertTrue($result);
+    }
+
+    public function testExceptionIsThrownDuringAttemptToGetValueOfCookieWhichIsNotSet()
+    {
+        $request = HttpRequest::fromGlobalState();
+        $this->setExpectedException(CookieNotSetException::class);
+        $request->getCookieValue('foo');
+    }
+
+    public function testCookieValueIsReturned()
+    {
+        $expectedCookieName = 'foo';
+        $expectedCookieValue = 'bar';
+
+        $originalState = $_COOKIE;
+        $_COOKIE = [$expectedCookieName => $expectedCookieValue];
+
+        $request = HttpRequest::fromGlobalState();
+        $result = $request->getCookieValue($expectedCookieName);
+
+        $_COOKIE = $originalState;
+
+        $this->assertSame($expectedCookieValue, $result);
+
     }
 }

@@ -1,21 +1,29 @@
 @import "ekomi.css";
 @import "common.css";
 @import "product_grid.css";
+@import "lib/dropdown.css";
 
-/* Layered navigation */
+/* Filter navigation */
+#filter-navigation { display: block }
 .filter-content li a { padding: 10px 0 10px 34px; border-top: 1px solid #e4e4e4; color: inherit; display: block; background: url("../images/icon-checkbox.png") 10px 7px no-repeat; font-size: 11px }
 .filter-content li.active a { background-image: url("../images/icon-checkbox-active.png") }
-.block-title { padding: 8px 10px; background-color: #e4e4e4; font-size: 17px; font-family: GeogrotesqueRegular, Helvetica, Arial, sans-serif }
+.block-title, #filters-button { padding: 8px 10px; background-color: #e4e4e4; font-size: 17px; font-family: GeogrotesqueRegular, Helvetica, Arial, sans-serif }
 .expanded, .collapsed { background-position: top right; background-repeat: no-repeat }
 .expanded { background-image: url(../images/minus.png) }
 .collapsed { background-image: url(../images/plus.png) }
-.filter-color { text-align: center; margin: 4px 0 }
+.filter-color { text-align: center; padding: 4px 0 }
 .filter-color li { display: inline-block; margin: 4px }
 .filter-color li a { background: none; width: 26px; height: 26px; border-radius: 2px; border: #ececec solid 1px; padding: 0; font-size: 18px; text-align: center; line-height: 25px; color: #37a3d4 }
+#filters-button { display: none }
 
 /* Toolbar */
 .toolbar { margin-bottom: 15px; background: #e3e3e3; border-top: 1px solid #dfdfdf; color: #474747; padding: 0 30px }
 .toolbar .amount { float:left; width: 220px; font-size: 16px; margin: 25px 0 }
+.toolbar .limiter { float: right; margin: 25px 0 }
+.toolbar .limiter label { font-weight: bold }
+.toolbar .sort-by { float: left; margin: 19px 0; width: 300px }
+.toolbar .sort-by label { display: inline-block; font-weight: bold; margin: 7px 10px 0 0 }
+.toolbar .style-select { display: inline-block; min-width: 100px; z-index: 1 }
 
 /* Pagination */
 #pagination { text-align: right; padding: 43px 0 0 0; font-size: 12px }
@@ -25,6 +33,29 @@
 #pagination .current { color: #ffffff; background-color: #37a3d4; border-color: #1280ac }
 #pagination .next, #pagination .prev { padding: 4px 7px; color: #3c3c3c }
 #pagination .prev { background-position: -6px -5px }
+
+/* Tablet */
+@media (max-width: 974px) {
+    .products-grid li { width: 50% }
+    .grid-cell-container img { width: 100% }
+
+    /* Toolbar */
+    .toolbar { padding: 5px 10px }
+    .toolbar .limiter, .toolbar .amount, .toolbar .sort-by { float: none; margin: 5px 0 }
+}
+
+/* Phone */
+@media (max-width: 767px) {
+    .col-main { padding-top: 15px }
+    #filters-button { display: block; width: 100%; padding: 0 }
+    #filters-button .inner-container { padding: 8px 10px }
+
+    /* Filter navigation */
+    #filter-navigation { display: none }
+    .block-title { background-color: #3cabd9; border-radius: 0; border: #228bb6 solid 1px; color: #ffffff }
+    .filter-content { border-left: #c1c1c1 solid 1px; border-right: #cfcfcf solid 1px }
+    #filters-button { border-bottom: #cfcfcf solid 1px }
+}
 
 /* Clearer */
 .toolbar:after { content: ""; display: block; height: 0; clear: both; visibility: hidden }

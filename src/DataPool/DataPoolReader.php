@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\DataPool;
 
+use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\DataPool\Exception\InvalidKeyValueStoreKeyException;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
@@ -159,39 +160,32 @@ class DataPoolReader
     }
 
     /**
-     * @param string $queryString
-     * @param Context $context
-     * @param string[] $facetFields
-     * @param int $rowsPerPage
-     * @param int $pageNumber
-     * @return SearchEngineResponse
-     */
-    public function getSearchResults($queryString, Context $context, array $facetFields, $rowsPerPage, $pageNumber)
-    {
-        return $this->searchEngine->query($queryString, $context, $facetFields, $rowsPerPage, $pageNumber);
-    }
-
-    /**
      * @param SearchCriteria $criteria
+     * @param array[] $selectedFilters
      * @param Context $context
-     * @param string[] $facetFields
+     * @param string[] $facetFiltersConfig
      * @param int $rowsPerPage
      * @param int $pageNumber
+     * @param SortOrderConfig $sortOrderConfig
      * @return SearchEngineResponse
      */
     public function getSearchResultsMatchingCriteria(
         SearchCriteria $criteria,
+        array $selectedFilters,
         Context $context,
-        array $facetFields,
+        array $facetFiltersConfig,
         $rowsPerPage,
-        $pageNumber
+        $pageNumber,
+        SortOrderConfig $sortOrderConfig
     ) {
         return $this->searchEngine->getSearchDocumentsMatchingCriteria(
             $criteria,
+            $selectedFilters,
             $context,
-            $facetFields,
+            $facetFiltersConfig,
             $rowsPerPage,
-            $pageNumber
+            $pageNumber,
+            $sortOrderConfig
         );
     }
 

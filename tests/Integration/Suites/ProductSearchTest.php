@@ -2,11 +2,11 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchRequestHandler;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Product\ProductSearchRequestHandler;
 use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer;
 
 class ProductSearchTest extends AbstractIntegrationTest
@@ -61,19 +61,7 @@ class ProductSearchTest extends AbstractIntegrationTest
      */
     private function getProductSearchRequestHandler()
     {
-        $dataPoolReader = $this->factory->createDataPoolReader();
-        $pageBuilder = new PageBuilder(
-            $dataPoolReader,
-            $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy(),
-            $this->factory->getLogger()
-        );
-
-        return new ProductSearchRequestHandler(
-            $this->factory->createContext(),
-            $dataPoolReader,
-            $pageBuilder,
-            $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy()
-        );
+        return $this->factory->createProductSearchRequestHandler();
     }
 
     private function registerProductSearchResultMetaSnippetKeyGenerator()

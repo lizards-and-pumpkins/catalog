@@ -2,26 +2,40 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
+
 class SearchCriteriaBuilder
 {
-    const FILTER_RANGE_DELIMITER = '~';
-
     /**
-     * @param string $parameterName
-     * @param string $parameterValue
+     * @param string $fieldName
+     * @param string $fieldValue
      * @return SearchCriteria
      */
-    public function fromRequestParameter($parameterName, $parameterValue)
+    public function fromFieldNameAndValue($fieldName, $fieldValue)
     {
-        $rangeMatchExpression = sprintf('/^([^%1$s]+)%1$s([^%1$s]+)/', self::FILTER_RANGE_DELIMITER);
+        $range = explode(SearchEngine::RANGE_DELIMITER, $fieldValue);
 
-        if (preg_match($rangeMatchExpression, $parameterValue, $range)) {
-            $criterionFrom = SearchCriterionGreaterOrEqualThan::create($parameterName, $range[1]);
-            $criterionTo = SearchCriterionLessOrEqualThan::create($parameterName, $range[2]);
+        if (count($range) === 2) {
+            $criterionFrom = SearchCriterionGreaterOrEqualThan::create($fieldName, $range[0]);
+            $criterionTo = SearchCriterionLessOrEqualThan::create($fieldName, $range[1]);
 
             return CompositeSearchCriterion::createAnd($criterionFrom, $criterionTo);
         }
 
-        return SearchCriterionEqual::create($parameterName, $parameterValue);
+        return SearchCriterionEqual::create($fieldName, $fieldValue);
+    }
+
+    /**
+     * @param string[] $fieldNames
+     * @param string $queryString
+     * @return CompositeSearchCriterion
+     */
+    public function createCriteriaForAnyOfGivenFieldsContainsString(array $fieldNames, $queryString)
+    {
+        return CompositeSearchCriterion::createOr(
+            ...array_map(function ($fieldName) use ($queryString) {
+                return SearchCriterionLike::create($fieldName, $queryString);
+            }, $fieldNames)
+        );
     }
 }

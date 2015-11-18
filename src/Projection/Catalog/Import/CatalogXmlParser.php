@@ -8,7 +8,6 @@ use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportSourceFi
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportSourceXmlFileDoesNotExistException;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportSourceXmlFileIsNotReadableException;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportSourceXMLNotAStringException;
-use LizardsAndPumpkins\Utils\XPathParser;
 
 class CatalogXmlParser
 {

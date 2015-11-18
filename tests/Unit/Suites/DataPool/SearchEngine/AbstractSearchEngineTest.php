@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
+use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
+use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\WebsiteContextDecorator;
@@ -12,6 +14,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreat
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionLessOrEqualThan;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionLessThan;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionLike;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionNotEqual;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
@@ -104,7 +107,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param SearchDocument ...$searchDocuments
+     * @param SearchDocument[] $searchDocuments
      * @return SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createStubSearchDocumentCollection(SearchDocument ...$searchDocuments)
@@ -114,6 +117,23 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $stubSearchDocumentCollection->method('getDocuments')->willReturn($searchDocuments);
 
         return $stubSearchDocumentCollection;
+    }
+
+    /**
+     * @param string $sortByFieldCode
+     * @param string $sortDirection
+     * @return SortOrderConfig|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubSortOrderConfig($sortByFieldCode, $sortDirection)
+    {
+        $stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
+        $stubAttributeCode->method('__toString')->willReturn($sortByFieldCode);
+
+        $sortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
+        $sortOrderConfig->method('getAttributeCode')->willReturn($stubAttributeCode);
+        $sortOrderConfig->method('getSelectedDirection')->willReturn($sortDirection);
+
+        return $sortOrderConfig;
     }
 
     protected function setUp()
@@ -129,90 +149,29 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     public function testSearchEngineResponseIsReturned()
     {
-        $facetFields = [];
+        $criteria = SearchCriterionEqual::create('foo', 'bar');
+        $selectedFilters = [];
+        $facetFiltersConfig = [];
         $rowsPerPage = 100;
         $pageNumber = 0;
-        $result = $this->searchEngine->query('baz', $this->testContext, $facetFields, $rowsPerPage, $pageNumber);
+        $sortOrderConfig = $this->createStubSortOrderConfig('whatever', SortOrderDirection::ASC);
+
+        $result = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+            $criteria,
+            $selectedFilters,
+            $this->testContext,
+            $facetFiltersConfig,
+            $rowsPerPage,
+            $pageNumber,
+            $sortOrderConfig
+        );
         $this->assertInstanceOf(SearchEngineResponse::class, $result);
-    }
-
-    public function testEmptyCollectionIsReturnedIfQueryStringIsNotFoundInIndex()
-    {
-        $searchDocumentFields = ['foo' => 'bar', 'baz' => 'qux'];
-        $productId = ProductId::fromString(uniqid());
-        $searchDocument = $this->createSearchDocument($searchDocumentFields, $productId);
-        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocument);
-
-        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
-
-        $facetFields = [];
-        $rowsPerPage = 100;
-        $pageNumber = 0;
-        $result = $this->searchEngine->query('baz', $this->testContext, $facetFields, $rowsPerPage, $pageNumber);
-
-        $this->assertCount(0, $result->getSearchDocuments());
-    }
-
-    public function testSearchDocumentsAreAddedToAndRetrievedFromSearchEngine()
-    {
-        $keyword = 'bar';
-        $productAId = ProductId::fromString(uniqid());
-        $productBId = ProductId::fromString(uniqid());
-
-        $searchDocumentA = $this->createSearchDocument(['foo' => $keyword], $productAId);
-        $searchDocumentB = $this->createSearchDocument(['baz' => $keyword], $productBId);
-        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
-
-        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
-
-        $facetFields = [];
-        $rowsPerPage = 100;
-        $pageNumber = 0;
-        $searchEngineResponse = $this->searchEngine->query(
-            $keyword,
-            $this->testContext,
-            $facetFields,
-            $rowsPerPage,
-            $pageNumber
-        );
-        $result = $searchEngineResponse->getSearchDocuments();
-
-        $this->assertCollectionContainsDocumentForProductId($result, $productAId);
-        $this->assertCollectionContainsDocumentForProductId($result, $productBId);
-    }
-
-    public function testOnlyEntriesContainingRequestedStringAreReturned()
-    {
-        $keyword = 'bar';
-
-        $productAId = ProductId::fromString(uniqid());
-        $productBId = ProductId::fromString(uniqid());
-
-        $searchDocumentA = $this->createSearchDocument(['foo' => $keyword], $productAId);
-        $searchDocumentB = $this->createSearchDocument(['baz' => 'qux'], $productBId);
-        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
-
-        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
-
-        $facetFields = [];
-        $rowsPerPage = 100;
-        $pageNumber = 0;
-        $searchEngineResponse = $this->searchEngine->query(
-            $keyword,
-            $this->testContext,
-            $facetFields,
-            $rowsPerPage,
-            $pageNumber
-        );
-        $result = $searchEngineResponse->getSearchDocuments();
-
-        $this->assertCollectionContainsDocumentForProductId($result, $productAId);
-        $this->assertCollectionDoesNotContainDocumentForProductId($result, $productBId);
     }
 
     public function testOnlyMatchesWithMatchingContextsAreReturned()
     {
-        $keyword = 'bar';
+        $fieldName = 'foo';
+        $fieldValue = 'bar';
 
         $productAId = ProductId::fromString(uniqid());
         $productBId = ProductId::fromString(uniqid());
@@ -220,21 +179,28 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $documentBContext = $this->createContextFromDataParts(['website' => 'value-2']);
         $queryContext = $this->createContextFromDataParts(['website' => 'value-2']);
 
-        $searchDocumentA = $this->createSearchDocumentWithContext(['foo' => $keyword], $productAId, $documentAContext);
-        $searchDocumentB = $this->createSearchDocumentWithContext(['foo' => $keyword], $productBId, $documentBContext);
+        $documentFields = [$fieldName => $fieldValue];
+        $searchDocumentA = $this->createSearchDocumentWithContext($documentFields, $productAId, $documentAContext);
+        $searchDocumentB = $this->createSearchDocumentWithContext($documentFields, $productBId, $documentBContext);
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
 
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
+        $criteria = SearchCriterionEqual::create($fieldName, $fieldValue);
+        $selectedFilters = [];
         $facetFields = [];
         $rowsPerPage = 100;
         $pageNumber = 0;
-        $searchEngineResponse = $this->searchEngine->query(
-            $keyword,
+        $sortOrderConfig = $this->createStubSortOrderConfig('whatever', SortOrderDirection::ASC);
+
+        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+            $criteria,
+            $selectedFilters,
             $queryContext,
             $facetFields,
             $rowsPerPage,
-            $pageNumber
+            $pageNumber,
+            $sortOrderConfig
         );
         $result = $searchEngineResponse->getSearchDocuments();
 
@@ -244,28 +210,37 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     public function testPartialContextsAreMatched()
     {
-        $keyword = 'bar';
+        $fieldName = 'foo';
+        $fieldValue = 'bar';
+
         $productAId = ProductId::fromString(uniqid());
         $productBId = ProductId::fromString(uniqid());
         $documentAContext = $this->createContextFromDataParts(['website' => 'value1', 'locale' => 'value2']);
         $documentBContext = $this->createContextFromDataParts(['website' => 'value1', 'locale' => 'value2']);
         $queryContext = $this->createContextFromDataParts(['locale' => 'value2']);
 
-        $searchDocumentA = $this->createSearchDocumentWithContext(['foo' => $keyword], $productAId, $documentAContext);
-        $searchDocumentB = $this->createSearchDocumentWithContext(['foo' => $keyword], $productBId, $documentBContext);
+        $documentFields = [$fieldName => $fieldValue];
+        $searchDocumentA = $this->createSearchDocumentWithContext($documentFields, $productAId, $documentAContext);
+        $searchDocumentB = $this->createSearchDocumentWithContext($documentFields, $productBId, $documentBContext);
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
 
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
+        $criteria = SearchCriterionEqual::create($fieldName, $fieldValue);
+        $selectedFilters = [];
         $facetFields = [];
         $rowsPerPage = 100;
         $pageNumber = 0;
-        $searchEngineResponse = $this->searchEngine->query(
-            $keyword,
+        $sortOrderConfig = $this->createStubSortOrderConfig('whatever', SortOrderDirection::ASC);
+
+        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+            $criteria,
+            $selectedFilters,
             $queryContext,
             $facetFields,
             $rowsPerPage,
-            $pageNumber
+            $pageNumber,
+            $sortOrderConfig
         );
         $result = $searchEngineResponse->getSearchDocuments();
 
@@ -273,53 +248,34 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertCollectionContainsDocumentForProductId($result, $productBId);
     }
 
-    public function testContextPartsThatAreNotInSearchDocumentContextAreIgnored()
-    {
-        $keyword = 'bar';
-        $productId = ProductId::fromString(uniqid());
-        $documentContext = $this->createContextFromDataParts(['locale' => 'value2']);
-        $queryContext = $this->createContextFromDataParts(['website' => 'value1', 'locale' => 'value2']);
-
-        $searchDocument = $this->createSearchDocumentWithContext(['foo' => $keyword], $productId, $documentContext);
-        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocument);
-
-        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
-
-        $facetFields = [];
-        $rowsPerPage = 100;
-        $pageNumber = 0;
-        $searchEngineResponse = $this->searchEngine->query(
-            $keyword,
-            $queryContext,
-            $facetFields,
-            $rowsPerPage,
-            $pageNumber
-        );
-        $result = $searchEngineResponse->getSearchDocuments();
-
-        $this->assertCollectionContainsDocumentForProductId($result, $productId);
-    }
-
     public function testEntriesContainingRequestedStringAreReturned()
     {
+        $fieldName = 'foo';
+
         $productAId = ProductId::fromString(uniqid());
         $productBId = ProductId::fromString(uniqid());
 
-        $searchDocumentA = $this->createSearchDocument(['foo' => 'Hidden bar here.'], $productAId);
-        $searchDocumentB = $this->createSearchDocument(['baz' => 'Here there is none.'], $productBId);
+        $searchDocumentA = $this->createSearchDocument([$fieldName => 'Hidden bar here.'], $productAId);
+        $searchDocumentB = $this->createSearchDocument([$fieldName => 'Here there is none.'], $productBId);
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
 
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
+        $criteria = SearchCriterionLike::create($fieldName, 'bar');
+        $selectedFilters = [];
         $facetFields = [];
         $rowsPerPage = 100;
         $pageNumber = 0;
-        $searchEngineResponse = $this->searchEngine->query(
-            'bar',
+        $sortOrderConfig = $this->createStubSortOrderConfig('whatever', SortOrderDirection::ASC);
+
+        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+            $criteria,
+            $selectedFilters,
             $this->testContext,
             $facetFields,
             $rowsPerPage,
-            $pageNumber
+            $pageNumber,
+            $sortOrderConfig
         );
         $result = $searchEngineResponse->getSearchDocuments();
 
@@ -329,16 +285,20 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     public function testEmptyCollectionIsReturnedIfNoSearchDocumentsMatchesGivenCriteria()
     {
         $searchCriteria = SearchCriterionEqual::create('foo', 'some-value-which-is-definitely-absent-in-index');
-
+        $selectedFilters = [];
         $facetFields = [];
         $rowsPerPage = 100;
         $pageNumber = 0;
+        $sortOrderConfig = $this->createStubSortOrderConfig('whatever', SortOrderDirection::ASC);
+
         $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
             $searchCriteria,
+            $selectedFilters,
             $this->testContext,
             $facetFields,
             $rowsPerPage,
-            $pageNumber
+            $pageNumber,
+            $sortOrderConfig
         );
 
         $this->assertCount(0, $searchEngineResponse->getSearchDocuments());
@@ -358,15 +318,20 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
+        $selectedFilters = [];
         $facetFields = [];
         $rowsPerPage = 100;
         $pageNumber = 0;
+        $sortOrderConfig = $this->createStubSortOrderConfig('whatever', SortOrderDirection::ASC);
+
         $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
             $searchCriteria,
+            $selectedFilters,
             $this->testContext,
             $facetFields,
             $rowsPerPage,
-            $pageNumber
+            $pageNumber,
+            $sortOrderConfig
         );
         $result = $searchEngineResponse->getSearchDocuments();
 
@@ -382,10 +347,12 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         return [
             [SearchCriterionEqual::create('foo', 'bar')],
             [SearchCriterionNotEqual::create('foo', 'baz')],
-            [CompositeSearchCriterion::createAnd(
-                SearchCriterionEqual::create('foo', 'bar'),
-                SearchCriterionNotEqual::create('foo', 'baz')
-            )],
+            [
+                CompositeSearchCriterion::createAnd(
+                    SearchCriterionEqual::create('foo', 'bar'),
+                    SearchCriterionNotEqual::create('foo', 'baz')
+                )
+            ],
         ];
     }
 
@@ -403,15 +370,20 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
+        $selectedFilters = [];
         $facetFields = [];
         $rowsPerPage = 100;
         $pageNumber = 0;
+        $sortOrderConfig = $this->createStubSortOrderConfig('whatever', SortOrderDirection::ASC);
+
         $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
             $searchCriteria,
+            $selectedFilters,
             $this->testContext,
             $facetFields,
             $rowsPerPage,
-            $pageNumber
+            $pageNumber,
+            $sortOrderConfig
         );
         $result = $searchEngineResponse->getSearchDocuments();
 
@@ -427,37 +399,48 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         return [
             [SearchCriterionLessThan::create('price', 20)],
             [SearchCriterionLessOrEqualThan::create('price', 10)],
-            [CompositeSearchCriterion::createAnd(
-                SearchCriterionGreaterThan::create('price', 5),
-                SearchCriterionLessOrEqualThan::create('price', 10)
-            )],
-            [CompositeSearchCriterion::createAnd(
-                SearchCriterionGreaterOrEqualThan::create('price', 10),
-                SearchCriterionLessThan::create('price', 20)
-            )],
+            [
+                CompositeSearchCriterion::createAnd(
+                    SearchCriterionGreaterThan::create('price', 5),
+                    SearchCriterionLessOrEqualThan::create('price', 10)
+                )
+            ],
+            [
+                CompositeSearchCriterion::createAnd(
+                    SearchCriterionGreaterOrEqualThan::create('price', 10),
+                    SearchCriterionLessThan::create('price', 20)
+                )
+            ],
         ];
     }
 
     public function testIfMultipleMatchingDocumentsHasSameProductIdOnlyOneInstanceIsReturned()
     {
-        $keyword = 'bar';
+        $fieldName = 'foo';
+        $fieldValue = 'bar';
         $productId = ProductId::fromString(uniqid());
 
-        $searchDocumentA = $this->createSearchDocument(['foo' => $keyword], $productId);
-        $searchDocumentB = $this->createSearchDocument(['baz' => $keyword], $productId);
+        $searchDocumentA = $this->createSearchDocument([$fieldName => $fieldValue], $productId);
+        $searchDocumentB = $this->createSearchDocument([$fieldName => $fieldValue], $productId);
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
 
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
+        $criteria = SearchCriterionEqual::create($fieldName, $fieldValue);
+        $selectedFilters = [];
         $facetFields = [];
         $rowsPerPage = 100;
         $pageNumber = 0;
-        $searchEngineResponse = $this->searchEngine->query(
-            $keyword,
+        $sortOrderConfig = $this->createStubSortOrderConfig('whatever', SortOrderDirection::ASC);
+
+        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+            $criteria,
+            $selectedFilters,
             $this->testContext,
             $facetFields,
             $rowsPerPage,
-            $pageNumber
+            $pageNumber,
+            $sortOrderConfig
         );
         $result = $searchEngineResponse->getSearchDocuments();
 
@@ -466,28 +449,31 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     public function testItClearsTheStorage()
     {
-        $searchDocumentFieldName = 'foo';
-        $searchDocumentFieldValue = 'bar';
+        $fieldName = 'foo';
+        $fieldValue = 'bar';
         $productId = ProductId::fromString('id');
 
-        $searchDocument = $this->createSearchDocument(
-            [$searchDocumentFieldName => $searchDocumentFieldValue],
-            $productId
-        );
-
+        $searchDocument = $this->createSearchDocument([$fieldName => $fieldValue], $productId);
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocument);
+
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
         $this->searchEngine->clear();
 
+        $criteria = SearchCriterionEqual::create($fieldName, $fieldValue);
+        $selectedFilters = [];
         $facetFields = [];
         $rowsPerPage = 100;
         $pageNumber = 0;
-        $searchEngineResponse = $this->searchEngine->query(
-            $searchDocumentFieldValue,
+        $sortOrderConfig = $this->createStubSortOrderConfig('whatever', SortOrderDirection::ASC);
+
+        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+            $criteria,
+            $selectedFilters,
             $this->testContext,
             $facetFields,
             $rowsPerPage,
-            $pageNumber
+            $pageNumber,
+            $sortOrderConfig
         );
 
         $this->assertEmpty($searchEngineResponse->getSearchDocuments());
@@ -498,8 +484,9 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $productAId = ProductId::fromString(uniqid());
         $productBId = ProductId::fromString(uniqid());
 
+        $fieldName = 'foo';
         $uniqueValue = uniqid();
-        $documentFields = ['foo' => $uniqueValue];
+        $documentFields = [$fieldName => $uniqueValue];
 
         $searchDocumentA = $this->createSearchDocumentWithContext($documentFields, $productAId, $this->testContext);
         $searchDocumentB = $this->createSearchDocumentWithContext($documentFields, $productBId, $this->testContext);
@@ -513,15 +500,21 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
+        $criteria = SearchCriterionEqual::create($fieldName, $uniqueValue);
+        $selectedFilters = [];
         $facetFields = [];
         $rowsPerPage = 100;
         $pageNumber = 0;
-        $searchEngineResponse = $this->searchEngine->query(
-            $uniqueValue,
+        $sortOrderConfig = $this->createStubSortOrderConfig('whatever', SortOrderDirection::ASC);
+
+        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+            $criteria,
+            $selectedFilters,
             $this->testContext,
             $facetFields,
             $rowsPerPage,
-            $pageNumber
+            $pageNumber,
+            $sortOrderConfig
         );
         $result = $searchEngineResponse->getSearchDocuments();
 
@@ -536,33 +529,44 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $productAId = ProductId::fromString(uniqid());
         $productBId = ProductId::fromString(uniqid());
 
-        $valueACode = 'foo';
-        $valueBCode = 'bar';
-        $valueCCode = 'baz';
+        $fieldACode = 'foo';
+        $fieldBCode = 'bar';
+        $fieldCCode = 'baz';
 
-        $searchDocumentA = $this->createSearchDocument([$valueACode => $keyword, $valueBCode => $keyword], $productAId);
-        $searchDocumentB = $this->createSearchDocument([$valueBCode => $keyword, $valueCCode => 'test'], $productBId);
+        $searchDocumentA = $this->createSearchDocument([$fieldACode => $keyword, $fieldBCode => $keyword], $productAId);
+        $searchDocumentB = $this->createSearchDocument([$fieldBCode => $keyword, $fieldCCode => 'test'], $productBId);
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
 
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
-        $facetFields = ['foo', 'bar'];
+        $criteria = CompositeSearchCriterion::createOr(
+            SearchCriterionEqual::create($fieldACode, $keyword),
+            SearchCriterionEqual::create($fieldBCode, $keyword),
+            SearchCriterionEqual::create($fieldCCode, $keyword)
+        );
+
+        $selectedFilters = [];
+        $facetFields = ['foo' => [], 'bar' => []];
         $rowsPerPage = 100;
         $pageNumber = 0;
-        $searchEngineResponse = $this->searchEngine->query(
-            $keyword,
+        $sortOrderConfig = $this->createStubSortOrderConfig('whatever', SortOrderDirection::ASC);
+
+        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+            $criteria,
+            $selectedFilters,
             $this->testContext,
             $facetFields,
             $rowsPerPage,
-            $pageNumber
+            $pageNumber,
+            $sortOrderConfig
         );
 
         $expectedFooFacetField = new SearchEngineFacetField(
-            AttributeCode::fromString($valueACode),
+            AttributeCode::fromString($fieldACode),
             SearchEngineFacetFieldValueCount::create($keyword, 1)
         );
         $expectedBarFacetField = new SearchEngineFacetField(
-            AttributeCode::fromString($valueBCode),
+            AttributeCode::fromString($fieldBCode),
             SearchEngineFacetFieldValueCount::create($keyword, 2)
         );
         $result = $searchEngineResponse->getFacetFieldCollection();
@@ -572,25 +576,329 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertContains($expectedBarFacetField, $result->getFacetFields(), '', false, false);
     }
 
+    public function testFacetFieldCollectionContainsConfiguredRanges()
+    {
+        $productAId = ProductId::fromString('A');
+        $productBId = ProductId::fromString('B');
+        $productCId = ProductId::fromString('C');
+
+        $fieldName = 'price';
+        $fieldValue = 0;
+
+        $documentA = $this->createSearchDocument([$fieldName => 1], $productAId);
+        $documentB = $this->createSearchDocument([$fieldName => 11], $productBId);
+        $documentC = $this->createSearchDocument([$fieldName => 31], $productCId);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($documentA, $documentB, $documentC);
+
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
+
+        $criteria = SearchCriterionGreaterOrEqualThan::create($fieldName, $fieldValue);
+        $selectedFilters = [];
+        $facetFields = [
+            $fieldName => [
+                ['from' => SearchEngine::RANGE_WILDCARD, 'to' => '10'],
+                ['from' => '10', 'to' => '20'],
+                ['from' => '20', 'to' => '30'],
+                ['from' => '30', 'to' => SearchEngine::RANGE_WILDCARD],
+            ]
+        ];
+        $rowsPerPage = 100;
+        $pageNumber = 0;
+        $sortOrderConfig = $this->createStubSortOrderConfig('whatever', SortOrderDirection::ASC);
+
+        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+            $criteria,
+            $selectedFilters,
+            $this->testContext,
+            $facetFields,
+            $rowsPerPage,
+            $pageNumber,
+            $sortOrderConfig
+        );
+
+        $expectedFacetFields = [
+            new SearchEngineFacetField(
+                AttributeCode::fromString($fieldName),
+                SearchEngineFacetFieldValueCount::create(
+                    SearchEngine::RANGE_WILDCARD . SearchEngine::RANGE_DELIMITER . '10',
+                    1
+                ),
+                SearchEngineFacetFieldValueCount::create('10' . SearchEngine::RANGE_DELIMITER . '20', 1),
+                SearchEngineFacetFieldValueCount::create(
+                    '30' . SearchEngine::RANGE_DELIMITER . SearchEngine::RANGE_WILDCARD,
+                    1
+                )
+            )
+        ];
+        $facetFieldsCollection = $searchEngineResponse->getFacetFieldCollection();
+
+        $this->assertEquals($expectedFacetFields, $facetFieldsCollection->getFacetFields());
+    }
+
     public function testOnlyProductsFromARequestedPageAreReturned()
     {
+        $field = 'foo';
         $keyword = uniqid();
 
         $productAId = ProductId::fromString(uniqid());
         $productBId = ProductId::fromString(uniqid());
 
-        $searchDocumentA = $this->createSearchDocument(['foo' => $keyword], $productAId);
-        $searchDocumentB = $this->createSearchDocument(['foo' => $keyword], $productBId);
+        $searchDocumentA = $this->createSearchDocument([$field => $keyword], $productAId);
+        $searchDocumentB = $this->createSearchDocument([$field => $keyword], $productBId);
 
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($searchDocumentA, $searchDocumentB);
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
+        $criteria = SearchCriterionEqual::create($field, $keyword);
+        $selectedFilters = [];
         $pageNumber = 1;
         $rowsPerPage = 1;
-        $searchEngineResponse = $this->searchEngine->query($keyword, $this->testContext, [], $rowsPerPage, $pageNumber);
+        $sortOrderConfig = $this->createStubSortOrderConfig('whatever', SortOrderDirection::ASC);
+
+        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+            $criteria,
+            $selectedFilters,
+            $this->testContext,
+            [],
+            $rowsPerPage,
+            $pageNumber,
+            $sortOrderConfig
+        );
 
         $this->assertCount(1, $searchEngineResponse->getSearchDocuments());
         $this->assertSame(2, $searchEngineResponse->getTotalNumberOfResults());
+    }
+
+    public function testSelectedFiltersAreAddedToCriteria()
+    {
+        $keywordA = uniqid();
+        $keywordB = uniqid();
+
+        $productAId = ProductId::fromString(uniqid());
+        $productBId = ProductId::fromString(uniqid());
+
+        $fieldACode = 'foo';
+        $fieldBCode = 'bar';
+
+        $documentA = $this->createSearchDocument([$fieldACode => $keywordA, $fieldBCode => $keywordB], $productAId);
+        $documentB = $this->createSearchDocument([$fieldACode => $keywordA], $productBId);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($documentA, $documentB);
+
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
+
+        $criteria = SearchCriterionEqual::create($fieldACode, $keywordA);
+
+        $selectedFilters = [$fieldBCode => [$keywordB]];
+        $facetFields = [$fieldACode => [], $fieldBCode => []];
+        $rowsPerPage = 100;
+        $pageNumber = 0;
+        $sortOrderConfig = $this->createStubSortOrderConfig('whatever', SortOrderDirection::ASC);
+
+        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+            $criteria,
+            $selectedFilters,
+            $this->testContext,
+            $facetFields,
+            $rowsPerPage,
+            $pageNumber,
+            $sortOrderConfig
+        );
+
+        $result = $searchEngineResponse->getSearchDocuments();
+
+        $this->assertCount(1, $result);
+        $this->assertCollectionContainsDocumentForProductId($result, $productAId);
+        $this->assertCollectionDoesNotContainDocumentForProductId($result, $productBId);
+    }
+
+    public function testSelectedFiltersOptionValueSiblingsAreIncludedIntoFilterOptionValues()
+    {
+        $fieldACode = 'foo';
+        $fieldBCode = 'bar';
+
+        $fieldValueA = uniqid();
+        $fieldValueB = uniqid();
+        $keyword = uniqid();
+
+        $productAId = ProductId::fromString(uniqid());
+        $productBId = ProductId::fromString(uniqid());
+
+        $documentA = $this->createSearchDocument([$fieldACode => $fieldValueA, $fieldBCode => $keyword], $productAId);
+        $documentB = $this->createSearchDocument([$fieldACode => $fieldValueB, $fieldBCode => $keyword], $productBId);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($documentA, $documentB);
+
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
+
+        $criteria = SearchCriterionEqual::create($fieldBCode, $keyword);
+        $selectedFilters = [$fieldACode => [$fieldValueB]];
+        $facetFields = [$fieldACode => []];
+        $rowsPerPage = 100;
+        $pageNumber = 0;
+        $sortOrderConfig = $this->createStubSortOrderConfig('whatever', SortOrderDirection::ASC);
+
+        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+            $criteria,
+            $selectedFilters,
+            $this->testContext,
+            $facetFields,
+            $rowsPerPage,
+            $pageNumber,
+            $sortOrderConfig
+        );
+
+        $result = $searchEngineResponse->getFacetFieldCollection()->getFacetFields();
+
+        $this->assertCount(1, $result);
+        $this->assertCount(2, $result[0]->getValues());
+    }
+
+    public function testReturnedDocumentsCollectionIsSortedAccordingToGivenOrder()
+    {
+        $productAId = ProductId::fromString('A');
+        $productBId = ProductId::fromString('B');
+        $productCId = ProductId::fromString('C');
+
+        $fieldName = 'price';
+        $fieldValue = 0;
+
+        $documentA = $this->createSearchDocument([$fieldName => 3], $productAId);
+        $documentB = $this->createSearchDocument([$fieldName => 1], $productBId);
+        $documentC = $this->createSearchDocument([$fieldName => 2], $productCId);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($documentA, $documentB, $documentC);
+
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
+
+        $criteria = SearchCriterionGreaterOrEqualThan::create($fieldName, $fieldValue);
+        $selectedFilters = [];
+        $facetFields = [];
+        $rowsPerPage = 100;
+        $pageNumber = 0;
+        $sortOrderConfig = $this->createStubSortOrderConfig($fieldName, SortOrderDirection::DESC);
+
+        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+            $criteria,
+            $selectedFilters,
+            $this->testContext,
+            $facetFields,
+            $rowsPerPage,
+            $pageNumber,
+            $sortOrderConfig
+        );
+
+        $expectedDocuments = [$documentA, $documentC, $documentB];
+
+        $this->assertEquals($expectedDocuments, $searchEngineResponse->getSearchDocuments()->getDocuments());
+    }
+
+    public function testDocumentsCollectionIsNotSortedByMultivaluedAttribute()
+    {
+        $productAId = ProductId::fromString('A');
+        $productBId = ProductId::fromString('B');
+        $productCId = ProductId::fromString('C');
+
+        $fieldCode = 'foo';
+        $fieldValue = 0;
+
+        $documentA = $this->createSearchDocument([$fieldCode => ['foo', 'bar']], $productAId);
+        $documentB = $this->createSearchDocument([$fieldCode => ['bar', 'baz']], $productBId);
+        $documentC = $this->createSearchDocument([$fieldCode => ['baz', 'qux']], $productCId);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($documentA, $documentB, $documentC);
+
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
+
+        $criteria = SearchCriterionGreaterOrEqualThan::create($fieldCode, $fieldValue);
+        $selectedFilters = [];
+        $facetFields = [];
+        $rowsPerPage = 100;
+        $pageNumber = 0;
+        $sortOrderConfig = $this->createStubSortOrderConfig($fieldCode, SortOrderDirection::DESC);
+
+        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+            $criteria,
+            $selectedFilters,
+            $this->testContext,
+            $facetFields,
+            $rowsPerPage,
+            $pageNumber,
+            $sortOrderConfig
+        );
+
+        $unExpectedDocuments = [$documentA, $documentB, $documentC];
+
+        $this->assertNotEquals($unExpectedDocuments, $searchEngineResponse->getSearchDocuments()->getDocuments());
+    }
+
+    public function testReturnedDocumentsCollectionIsSortedByStringValuesCaseInsensitively()
+    {
+        $productAId = ProductId::fromString('A');
+        $productBId = ProductId::fromString('B');
+        $productCId = ProductId::fromString('C');
+
+        $fieldCode = 'foo';
+        $fieldValue = 0;
+
+        $documentA = $this->createSearchDocument([$fieldCode => 'abc'], $productAId);
+        $documentB = $this->createSearchDocument([$fieldCode => 'Acd'], $productBId);
+        $documentC = $this->createSearchDocument([$fieldCode => 'aCa'], $productCId);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($documentA, $documentB, $documentC);
+
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
+
+        $criteria = SearchCriterionGreaterOrEqualThan::create($fieldCode, $fieldValue);
+        $selectedFilters = [];
+        $facetFields = [];
+        $rowsPerPage = 100;
+        $pageNumber = 0;
+        $sortOrderConfig = $this->createStubSortOrderConfig($fieldCode, SortOrderDirection::ASC);
+
+        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+            $criteria,
+            $selectedFilters,
+            $this->testContext,
+            $facetFields,
+            $rowsPerPage,
+            $pageNumber,
+            $sortOrderConfig
+        );
+
+        $expectedDocuments = [$documentA, $documentC, $documentB];
+
+        $this->assertEquals($expectedDocuments, $searchEngineResponse->getSearchDocuments()->getDocuments());
+    }
+
+    public function testMultivaluedFieldIsIndexedAndReturned()
+    {
+        $productId = ProductId::fromString('id');
+
+        $fieldCode = 'code_' . uniqid();
+        $fieldValueA = 'bar';
+        $fieldValueB = 'baz';
+        $fieldValues = [$fieldValueA, $fieldValueB];
+
+        $document = $this->createSearchDocument([$fieldCode => $fieldValues], $productId);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($document);
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
+
+        $criteria = SearchCriterionEqual::create($fieldCode, $fieldValueA);
+        $selectedFilters = [];
+        $facetFields = [];
+        $rowsPerPage = 100;
+        $pageNumber = 0;
+        $sortOrderConfig = $this->createStubSortOrderConfig($fieldCode, SortOrderDirection::ASC);
+
+        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+            $criteria,
+            $selectedFilters,
+            $this->testContext,
+            $facetFields,
+            $rowsPerPage,
+            $pageNumber,
+            $sortOrderConfig
+        );
+        $documents = $searchEngineResponse->getSearchDocuments()->getDocuments();
+
+        $this->assertCount(1, $documents);
+        $this->assertSame($fieldValues, $documents[0]->getFieldsCollection()->getFields()[0]->getValues());
     }
 
     /**

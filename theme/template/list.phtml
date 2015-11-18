@@ -5,11 +5,15 @@
 ?>
 <div class="toolbar roundedBorder">
     <p class="amount"></p>
+    <div class="sort-by"><label><?= $this->__('Sort By') ?></label></div>
+    <div class="limiter"><label><?= $this->__('Items') ?>: </label></div>
 </div>
 <div id="products-grid-container"></div>
-<script>var productListingJson = {{snippet products_grid}}</script>
 <div id="pagination"></div>
 <script>
-    var totalNumberOfResults = {{snippet total_number_of_results}},
-        productsPerPage = {{snippet products_per_page}}
+    var productListingJson = {{snippet product_grid}},
+        productPrices = {{snippet product_prices}},
+        totalNumberOfResults = {{snippet total_number_of_results}},
+        productsPerPage = {{snippet products_per_page}},
+        sortOrderConfig = {{snippet sort_order_config}};
 </script>

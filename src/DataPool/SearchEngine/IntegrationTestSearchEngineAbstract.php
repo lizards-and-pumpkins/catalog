@@ -2,8 +2,12 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
+use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
+use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
@@ -18,70 +22,150 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     abstract protected function getSearchDocuments();
 
     /**
-     * {@inheritdoc}
+     * @return SearchCriteriaBuilder
      */
-    final public function query($queryString, Context $queryContext, array $facetFields, $rowsPerPage, $pageNumber)
-    {
-        $allDocuments = $this->getSearchDocuments();
-        $matchingDocuments = $this->getSearchDocumentsForQueryInContext($allDocuments, $queryString, $queryContext);
-
-        return $this->createSearchEngineResponse($facetFields, $matchingDocuments, $rowsPerPage, $pageNumber);
-    }
-
-    /**
-     * @param SearchDocument[] $searchDocuments
-     * @param string $queryString
-     * @param Context $queryContext
-     * @return SearchDocument[]
-     */
-    private function getSearchDocumentsForQueryInContext(array $searchDocuments, $queryString, Context $queryContext)
-    {
-        $docsMatchingContext = $this->getSearchDocumentsMatchingContext($searchDocuments, $queryContext);
-        return $this->getSearchDocumentsMatchingQueryString($docsMatchingContext, $queryString);
-    }
-
-    /**
-     * @param SearchDocument[] $searchDocuments
-     * @param Context $context
-     * @return SearchDocument[]
-     */
-    private function getSearchDocumentsMatchingContext(array $searchDocuments, Context $context)
-    {
-        return array_filter($searchDocuments, function (SearchDocument $searchDocument) use ($context) {
-            return $this->hasMatchingContext($context, $searchDocument);
-        });
-    }
-
-    /**
-     * @param SearchDocument[] $searchDocuments
-     * @param string $queryString
-     * @return SearchDocument[]
-     */
-    private function getSearchDocumentsMatchingQueryString(array $searchDocuments, $queryString)
-    {
-        return array_filter($searchDocuments, function (SearchDocument $searchDocument) use ($queryString) {
-            return $this->isAnyFieldValueOfSearchDocumentMatchesQueryString($searchDocument, $queryString);
-        });
-    }
+    abstract protected function getSearchCriteriaBuilder();
 
     /**
      * {@inheritdoc}
      */
     final public function getSearchDocumentsMatchingCriteria(
-        SearchCriteria $criteria,
+        SearchCriteria $originalCriteria,
+        array $filterSelection,
         Context $context,
-        array $facetFields,
+        array $facetFiltersConfig,
         $rowsPerPage,
-        $pageNumber
+        $pageNumber,
+        SortOrderConfig $sortOrderConfig
     ) {
-        $matchingDocuments = array_filter(
-            $this->getSearchDocuments(),
-            function (SearchDocument $searchDocument) use ($criteria, $context) {
-                return $criteria->matches($searchDocument) && $context->isSubsetOf($searchDocument->getContext());
-            }
+        $selectedFilters = array_filter($filterSelection);
+        $criteria = $this->applyFiltersToSelectionCriteria($originalCriteria, $selectedFilters);
+
+        $allDocuments = $this->getSearchDocuments();
+        $matchingDocuments = $this->filterDocumentsMatchingCriteria($allDocuments, $criteria, $context);
+
+        $facetFieldCollection = $this->createFacetFieldCollection(
+            $originalCriteria,
+            $context,
+            $facetFiltersConfig,
+            $selectedFilters,
+            $matchingDocuments,
+            $allDocuments
         );
 
-        return $this->createSearchEngineResponse($facetFields, $matchingDocuments, $rowsPerPage, $pageNumber);
+        $sortedDocuments = $this->getSortedDocuments($sortOrderConfig, ...array_values($matchingDocuments));
+
+        return $this->createSearchEngineResponse($facetFieldCollection, $sortedDocuments, $rowsPerPage, $pageNumber);
+    }
+
+    /**
+     * @param SearchCriteria $originalCriteria
+     * @param array[] $filters
+     * @return SearchCriteria
+     */
+    private function applyFiltersToSelectionCriteria(SearchCriteria $originalCriteria, array $filters)
+    {
+        if (empty($filters)) {
+            return $originalCriteria;
+        }
+
+        $filtersCriteriaArray = $this->createSearchEngineCriteriaForFilters($filters);
+
+        return CompositeSearchCriterion::createAnd($originalCriteria, ...$filtersCriteriaArray);
+    }
+
+    /**
+     * @param array[] $filters
+     * @return CompositeSearchCriterion[]
+     */
+    private function createSearchEngineCriteriaForFilters(array $filters)
+    {
+        return array_map(function ($filterCode, $filterOptionValues) {
+            $optionValuesCriteriaArray = $this->createOptionValuesCriteriaArray($filterCode, $filterOptionValues);
+            return CompositeSearchCriterion::createOr(...$optionValuesCriteriaArray);
+        }, array_keys($filters), $filters);
+    }
+
+    /**
+     * @param SearchCriteria $originalCriteria
+     * @param Context $context
+     * @param array[] $facetFiltersConfig
+     * @param array[] $selectedFilters
+     * @param SearchDocument[] $matchingDocuments
+     * @param SearchDocument[] $allDocuments
+     * @return SearchEngineFacetFieldCollection
+     */
+    private function createFacetFieldCollection(
+        SearchCriteria $originalCriteria,
+        Context $context,
+        array $facetFiltersConfig,
+        $selectedFilters,
+        $matchingDocuments,
+        $allDocuments
+    ) {
+        $facetFiltersConfigExceptSelectedFilters = array_diff_key($facetFiltersConfig, $selectedFilters);
+        $facetFieldsForUnselectedFilters = $this->createFacetFieldsFromSearchDocuments(
+            $facetFiltersConfigExceptSelectedFilters,
+            ...array_values($matchingDocuments)
+        );
+
+        $facetFieldsForSelectedFilters = $this->getSelectedFiltersFacetValuesWithSiblings(
+            $originalCriteria,
+            $context,
+            $selectedFilters,
+            $allDocuments,
+            $facetFiltersConfig
+        );
+
+        $facetFieldArray = array_merge($facetFieldsForSelectedFilters, $facetFieldsForUnselectedFilters);
+
+        return new SearchEngineFacetFieldCollection(...$facetFieldArray);
+    }
+
+    /**
+     * @param SearchCriteria $originalCriteria
+     * @param Context $context
+     * @param array[] $selectedFilters
+     * @param SearchDocument[] $allDocuments
+     * @param array[] $facetFilterConfig
+     * @return SearchEngineFacetField[]
+     */
+    private function getSelectedFiltersFacetValuesWithSiblings(
+        SearchCriteria $originalCriteria,
+        Context $context,
+        array $selectedFilters,
+        array $allDocuments,
+        array $facetFilterConfig
+    ) {
+        $facetFieldsForSelectedFilters = [];
+
+        foreach (array_keys($selectedFilters) as $filterCode) {
+            $selectedFiltersExceptCurrentOne = array_diff_key($selectedFilters, [$filterCode => []]);
+
+            $criteria = $this->applyFiltersToSelectionCriteria($originalCriteria, $selectedFiltersExceptCurrentOne);
+            $matchingDocuments = $this->filterDocumentsMatchingCriteria($allDocuments, $criteria, $context);
+
+            $facetFields = $this->createFacetFieldsFromSearchDocuments(
+                [$filterCode => $facetFilterConfig[$filterCode]],
+                ...array_values($matchingDocuments)
+            );
+
+            $facetFieldsForSelectedFilters[] = $facetFields[0];
+        }
+
+        return $facetFieldsForSelectedFilters;
+    }
+
+    /**
+     * @param string $filterCode
+     * @param string[] $filterOptionValues
+     * @return SearchCriteria[]
+     */
+    private function createOptionValuesCriteriaArray($filterCode, array $filterOptionValues)
+    {
+        return array_map(function ($filterOptionValue) use ($filterCode) {
+            return $this->getSearchCriteriaBuilder()->fromFieldNameAndValue($filterCode, $filterOptionValue);
+        }, $filterOptionValues);
     }
 
     /**
@@ -94,91 +178,31 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     }
 
     /**
-     * @param Context $queryContext
-     * @param SearchDocument $searchDocument
-     * @return bool
+     * @param array[] $facetFiltersConfig
+     * @param SearchDocument[] $searchDocuments
+     * @return SearchEngineFacetField[]
      */
-    private function hasMatchingContext(Context $queryContext, SearchDocument $searchDocument)
+    private function createFacetFieldsFromSearchDocuments(array $facetFiltersConfig, SearchDocument ...$searchDocuments)
     {
-        $hasAtLeastOneMatchingContextPart = false;
-        $documentContext = $searchDocument->getContext();
-        foreach ($queryContext->getSupportedCodes() as $code) {
-            if ($documentContext->supportsCode($code)) {
-                if (!$this->hasMatchingContextValue($queryContext, $documentContext, $code)) {
-                    return false;
-                }
-                $hasAtLeastOneMatchingContextPart = true;
-            }
-        }
-        return $hasAtLeastOneMatchingContextPart;
-    }
-
-    /**
-     * @param Context $queryContext
-     * @param Context $documentContext
-     * @param string $code
-     * @return bool
-     */
-    private function hasMatchingContextValue(Context $queryContext, Context $documentContext, $code)
-    {
-        return $queryContext->getValue($code) === $documentContext->getValue($code);
-    }
-
-    /**
-     * @param SearchDocument $searchDocument
-     * @param string $queryString
-     * @return bool
-     */
-    private function isAnyFieldValueOfSearchDocumentMatchesQueryString(SearchDocument $searchDocument, $queryString)
-    {
-        /** @var SearchDocumentField $field */
-        foreach ($searchDocument->getFieldsCollection() as $field) {
-            if ($this->isFieldWithMatchingValue($field, $queryString)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * @param SearchDocumentField $field
-     * @param string $queryString
-     * @return bool
-     */
-    private function isFieldWithMatchingValue(SearchDocumentField $field, $queryString)
-    {
-        foreach ($field->getValues() as $value) {
-            if (stripos($value, $queryString) !== false) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * @param string[] $facetFieldCodes
-     * @param SearchDocument ...$searchDocuments
-     * @return SearchEngineFacetFieldCollection
-     */
-    private function createFacetFieldsCollectionFromSearchDocuments(
-        array $facetFieldCodes,
-        SearchDocument ...$searchDocuments
-    ) {
+        $facetFieldCodes = array_keys($facetFiltersConfig);
         $attributeCounts = $this->createAttributeValueCountArrayFromSearchDocuments(
             $facetFieldCodes,
             ...$searchDocuments
         );
-        $facetFields = array_map(function ($attributeCode, $attributeValues) {
-            $facetFieldValues = $this->getFacetFieldValuesFromAttributeValues($attributeValues);
+
+        return array_map(function ($attributeCode, $attributeValues) use ($facetFiltersConfig) {
+            $facetFieldValues = $this->getFacetFieldValuesFromAttributeValues(
+                $attributeCode,
+                $attributeValues,
+                $facetFiltersConfig
+            );
             return new SearchEngineFacetField(AttributeCode::fromString($attributeCode), ...$facetFieldValues);
         }, array_keys($attributeCounts), $attributeCounts);
-
-        return new SearchEngineFacetFieldCollection(...$facetFields);
     }
 
     /**
      * @param string[] $facetFieldCodes
-     * @param SearchDocument ...$searchDocuments
+     * @param SearchDocument[] $searchDocuments
      * @return array[]
      */
     private function createAttributeValueCountArrayFromSearchDocuments(
@@ -186,16 +210,29 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
         SearchDocument ...$searchDocuments
     ) {
         return array_reduce($searchDocuments, function ($carry, SearchDocument $document) use ($facetFieldCodes) {
-            return array_reduce(
-                $document->getFieldsCollection()->getFields(),
-                function ($carry, SearchDocumentField $documentField) use ($facetFieldCodes) {
-                    return in_array($documentField->getKey(), $facetFieldCodes) ?
-                        $this->addDocumentFieldValuesToCount($carry, $documentField->getKey(), $documentField) :
-                        $carry;
-                },
-                $carry
-            );
+            return $this->addDocumentToCount($carry, $document, $facetFieldCodes);
         }, []);
+    }
+
+    /**
+     * @param array[] $attributeValuesCount
+     * @param SearchDocument $document
+     * @param string[] $facetFieldCodes
+     * @return array[]
+     */
+    private function addDocumentToCount(array $attributeValuesCount, SearchDocument $document, array $facetFieldCodes)
+    {
+        return array_reduce(
+            $document->getFieldsCollection()->getFields(),
+            function ($carry, SearchDocumentField $documentField) use ($facetFieldCodes) {
+                if (!in_array($documentField->getKey(), $facetFieldCodes)) {
+                    return $carry;
+                }
+
+                return $this->addDocumentFieldValuesToCount($carry, $documentField->getKey(), $documentField);
+            },
+            $attributeValuesCount
+        );
     }
 
     /**
@@ -226,7 +263,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
         $newValues = [];
 
         foreach ($attributeValuesCounts as $currentAttributeCode => $currentAttributeValues) {
-            if ((string) $currentAttributeCode !== $attributeCode) {
+            if ((string)$currentAttributeCode !== $attributeCode) {
                 $newValues[$currentAttributeCode] = $currentAttributeValues;
                 continue;
             }
@@ -251,19 +288,18 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     }
 
     /**
-     * @param string[] $facetFields
+     * @param SearchEngineFacetFieldCollection $facetFieldCollection
      * @param SearchDocument[] $searchDocuments
      * @param int $rowsPerPage
      * @param int $pageNumber
      * @return SearchEngineResponse
      */
-    private function createSearchEngineResponse(array $facetFields, array $searchDocuments, $rowsPerPage, $pageNumber)
-    {
-        $facetFieldCollection = $this->createFacetFieldsCollectionFromSearchDocuments(
-            $facetFields,
-            ...array_values($searchDocuments)
-        );
-
+    private function createSearchEngineResponse(
+        SearchEngineFacetFieldCollection $facetFieldCollection,
+        array $searchDocuments,
+        $rowsPerPage,
+        $pageNumber
+    ) {
         $totalNumberOfResults = count($searchDocuments);
         $currentPageDocuments = array_slice($searchDocuments, $pageNumber * $rowsPerPage, $rowsPerPage);
         $documentCollection = new SearchDocumentCollection(...array_values($currentPageDocuments));
@@ -272,13 +308,150 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     }
 
     /**
-     * @param int[] $attributeValues
+     * @param string $attributeCode
+     * @param array[] $attributeValues
+     * @param array[] $facetFiltersConfig
      * @return SearchEngineFacetFieldValueCount[]
      */
-    private function getFacetFieldValuesFromAttributeValues($attributeValues)
+    private function getFacetFieldValuesFromAttributeValues(
+        $attributeCode,
+        array $attributeValues,
+        array $facetFiltersConfig
+    ) {
+        $configuredRanges = $facetFiltersConfig[$attributeCode];
+
+        if (!empty($configuredRanges)) {
+            return $this->createRangedFacetFieldFromAttributeValues($attributeValues, $configuredRanges);
+        }
+
+        return $this->createDefaultFacetFieldFromAttributeValues($attributeValues);
+    }
+
+    /**
+     * @param array[] $attributeValues
+     * @return SearchEngineFacetFieldValueCount[]
+     */
+    private function createDefaultFacetFieldFromAttributeValues(array $attributeValues)
     {
         return array_map(function ($valueCounts) {
-            return SearchEngineFacetFieldValueCount::create((string) $valueCounts['value'], $valueCounts['count']);
+            return SearchEngineFacetFieldValueCount::create((string)$valueCounts['value'], $valueCounts['count']);
         }, $attributeValues);
+    }
+
+    /**
+     * @param array[] $attributeValues
+     * @param array[] $configuredRanges
+     * @return SearchEngineFacetFieldValueCount[]
+     */
+    private function createRangedFacetFieldFromAttributeValues(array $attributeValues, $configuredRanges)
+    {
+        return array_reduce($configuredRanges, function ($carry, array $range) use ($attributeValues) {
+            $rangeCount = $this->sumAttributeValuesCountsInRange($range, $attributeValues);
+            if ($rangeCount > 0) {
+                $rangeCode = $range['from'] . SearchEngine::RANGE_DELIMITER . $range['to'];
+                $carry[] = SearchEngineFacetFieldValueCount::create($rangeCode, $rangeCount);
+            }
+
+            return $carry;
+        }, []);
+    }
+
+    /**
+     * @param mixed[] $range
+     * @param array[] $attributeValues
+     * @return int
+     */
+    private function sumAttributeValuesCountsInRange(array $range, $attributeValues)
+    {
+        return array_reduce($attributeValues, function ($carry, array $valueCounts) use ($range) {
+            if ((SearchEngine::RANGE_WILDCARD === $range['from'] || $valueCounts['value'] >= $range['from']) &&
+                (SearchEngine::RANGE_WILDCARD === $range['to'] || $valueCounts['value'] <= $range['to'])
+            ) {
+                $carry += $valueCounts['count'];
+            }
+
+            return $carry;
+        }, 0);
+    }
+
+    /**
+     * @param SearchDocument[] $documents
+     * @param SearchCriteria $criteria
+     * @param Context $context
+     * @return SearchDocument[]
+     */
+    private function filterDocumentsMatchingCriteria(array $documents, SearchCriteria $criteria, Context $context)
+    {
+        return array_filter($documents, function (SearchDocument $document) use ($criteria, $context) {
+            return $criteria->matches($document) && $context->isSubsetOf($document->getContext());
+        });
+    }
+
+    /**
+     * @param SortOrderConfig $sortOrderConfig
+     * @param SearchDocument[] $unsortedDocuments
+     * @return SearchDocument[]
+     */
+    private function getSortedDocuments(SortOrderConfig $sortOrderConfig, SearchDocument ...$unsortedDocuments)
+    {
+        $result = $unsortedDocuments;
+        $field = $sortOrderConfig->getAttributeCode();
+        $direction = $sortOrderConfig->getSelectedDirection();
+
+        usort($result, function (SearchDocument $documentA, SearchDocument $documentB) use ($field, $direction) {
+            $fieldA = $this->getSortableSearchDocumentFieldValue($documentA, $field);
+            $fieldB = $this->getSortableSearchDocumentFieldValue($documentB, $field);
+
+            if ($fieldA === $fieldB) {
+                return 0;
+            }
+
+            if (SortOrderDirection::ASC === $direction && $fieldA < $fieldB ||
+                SortOrderDirection::DESC === $direction && $fieldA > $fieldB
+            ) {
+                return -1;
+            }
+
+            return 1;
+        });
+
+        return $result;
+    }
+
+    /**
+     * @param SearchDocument $document
+     * @param AttributeCode $fieldName
+     * @return mixed
+     */
+    private function getSortableSearchDocumentFieldValue(SearchDocument $document, AttributeCode $fieldName)
+    {
+        foreach ($document->getFieldsCollection()->getFields() as $field) {
+            if ($field->getKey() !== (string) $fieldName) {
+                continue;
+            }
+
+            $values = $field->getValues();
+
+            if (count($values) === 1) {
+                return $this->getFormattedSearchDocumentValue($values[0]);
+            }
+
+            return null;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param mixed $value
+     * @return mixed
+     */
+    private function getFormattedSearchDocumentValue($value)
+    {
+        if (is_string($value)) {
+            return strtolower($value);
+        }
+
+        return $value;
     }
 }

@@ -45,7 +45,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
     {
         $factory = new SampleMasterFactory();
         $factory->register(new CommonFactory());
-        $factory->register($this->createIntegrationTestFactory());
+        $factory->register($this->createIntegrationTestFactory($factory));
         $factory->register(new FrontendFactory($request));
         return $factory;
     }
@@ -65,17 +65,19 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
                 return (string) $logMessage;
             }, $messages);
             $fainMessageString = implode(PHP_EOL, $failMessages);
-            
+
             $this->fail($fainMessageString);
         }
     }
 
     /**
+     * @param MasterFactory $masterFactory
      * @return IntegrationTestFactory
      */
-    private function createIntegrationTestFactory()
+    private function createIntegrationTestFactory(MasterFactory $masterFactory)
     {
         $factory = new IntegrationTestFactory();
+        $factory->setMasterFactory($masterFactory);
         if ($this->isFirstInstantiationOfFactory()) {
             $this->storeInMemoryObjects($factory);
         } else {

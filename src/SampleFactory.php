@@ -2,6 +2,9 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\ContentDelivery\Catalog\FilterNavigationPriceRangesBuilder;
+use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
+use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
 use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\FileUrlKeyStore;
@@ -14,12 +17,28 @@ use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Log\Writer\FileLogMessageWriter;
 use LizardsAndPumpkins\Log\Writer\LogMessageWriter;
 use LizardsAndPumpkins\Log\WritingLoggerDecorator;
+use LizardsAndPumpkins\Product\AttributeCode;
 use LizardsAndPumpkins\Queue\File\FileQueue;
 use LizardsAndPumpkins\Queue\Queue;
 
 class SampleFactory implements Factory
 {
     use FactoryTrait;
+
+    /**
+     * @var SortOrderConfig[]
+     */
+    private $memoizedProductListingSortOrderConfig;
+
+    /**
+     * @var SortOrderConfig[]
+     */
+    private $memoizedProductSearchSortOrderConfig;
+
+    /**
+     * @var SortOrderConfig
+     */
+    private $memoizedProductSearchAutosuggestionSortOrderConfig;
 
     /**
      * @return string[]
@@ -32,17 +51,28 @@ class SampleFactory implements Factory
     /**
      * @return string[]
      */
-    public function getProductListingFilterNavigationAttributeCodes()
+    public function getProductListingFilterNavigationConfig()
     {
-        return ['gender', 'brand', 'price', 'color'];
+        return [
+            'gender' => [],
+            'brand' => [],
+            'price' => FilterNavigationPriceRangesBuilder::getPriceRanges(),
+            'color' => [],
+        ];
     }
 
     /**
      * @return string[]
      */
-    public function getProductSearchResultsFilterNavigationAttributeCodes()
+    public function getProductSearchResultsFilterNavigationConfig()
     {
-        return ['gender', 'brand', 'category', 'price', 'color'];
+        return [
+            'gender' => [],
+            'brand' => [],
+            'category' => [],
+            'price' => FilterNavigationPriceRangesBuilder::getPriceRanges(),
+            'color' => [],
+        ];
     }
 
     /**
@@ -115,7 +145,9 @@ class SampleFactory implements Factory
         $searchEngineStoragePath = $storageBasePath . '/search-engine';
         $this->createDirectoryIfNotExists($searchEngineStoragePath);
 
-        return FileSearchEngine::create($searchEngineStoragePath);
+        $searchCriteriaBuilder = $this->getMasterFactory()->createSearchCriteriaBuilder();
+
+        return FileSearchEngine::create($searchEngineStoragePath, $searchCriteriaBuilder);
     }
 
     /**
@@ -314,5 +346,70 @@ class SampleFactory implements Factory
         if (!is_dir($path)) {
             mkdir($path, 0777, true);
         }
+    }
+
+    /**
+     * @return SortOrderConfig[]
+     */
+    public function getProductListingSortOrderConfig()
+    {
+        if (null === $this->memoizedProductListingSortOrderConfig) {
+            $this->memoizedProductListingSortOrderConfig = [
+                SortOrderConfig::createSelected(
+                    AttributeCode::fromString('name'),
+                    SortOrderDirection::create(SortOrderDirection::ASC)
+                ),
+                SortOrderConfig::create(
+                    AttributeCode::fromString('price'),
+                    SortOrderDirection::create(SortOrderDirection::ASC)
+                ),
+                SortOrderConfig::create(
+                    AttributeCode::fromString('created_at'),
+                    SortOrderDirection::create(SortOrderDirection::ASC)
+                ),
+            ];
+        }
+
+        return $this->memoizedProductListingSortOrderConfig;
+    }
+
+    /**
+     * @return SortOrderConfig[]
+     */
+    public function getProductSearchSortOrderConfig()
+    {
+        if (null === $this->memoizedProductSearchSortOrderConfig) {
+            $this->memoizedProductSearchSortOrderConfig = [
+                SortOrderConfig::createSelected(
+                    AttributeCode::fromString('name'),
+                    SortOrderDirection::create(SortOrderDirection::ASC)
+                ),
+                SortOrderConfig::create(
+                    AttributeCode::fromString('price'),
+                    SortOrderDirection::create(SortOrderDirection::ASC)
+                ),
+                SortOrderConfig::create(
+                    AttributeCode::fromString('created_at'),
+                    SortOrderDirection::create(SortOrderDirection::ASC)
+                ),
+            ];
+        }
+
+        return $this->memoizedProductSearchSortOrderConfig;
+    }
+
+    /**
+     * @return SortOrderConfig
+     */
+    public function getProductSearchAutosuggestionSortOrderConfig()
+    {
+        if (null === $this->memoizedProductSearchAutosuggestionSortOrderConfig) {
+            $this->memoizedProductSearchAutosuggestionSortOrderConfig = SortOrderConfig::createSelected(
+                AttributeCode::fromString('name'),
+                SortOrderDirection::create(SortOrderDirection::ASC)
+            );
+        }
+
+        return $this->memoizedProductSearchAutosuggestionSortOrderConfig;
     }
 }

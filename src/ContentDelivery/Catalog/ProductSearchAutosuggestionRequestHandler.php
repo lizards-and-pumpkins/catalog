@@ -1,9 +1,10 @@
 <?php
 
-namespace LizardsAndPumpkins\Product;
+namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -11,6 +12,10 @@ use LizardsAndPumpkins\Http\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\Exception\UnableToHandleRequestException;
 use LizardsAndPumpkins\PageBuilder;
+use LizardsAndPumpkins\Product\Product;
+use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetContent;
+use LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetRenderer;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 
 class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
@@ -39,16 +44,48 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
      */
     private $keyGeneratorLocator;
 
+    /**
+     * @var string[]
+     */
+    private $searchableAttributeCodes;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $criteriaBuilder;
+
+    /**
+     * @var SortOrderConfig
+     */
+    private $sortOrderConfig;
+
+    /**
+     * ProductSearchAutosuggestionRequestHandler constructor.
+     *
+     * @param Context $context
+     * @param DataPoolReader $dataPoolReader
+     * @param PageBuilder $pageBuilder
+     * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
+     * @param SearchCriteriaBuilder $criteriaBuilder
+     * @param string[] $searchableAttributeCodes
+     * @param SortOrderConfig $sortOrderConfig
+     */
     public function __construct(
         Context $context,
         DataPoolReader $dataPoolReader,
         PageBuilder $pageBuilder,
-        SnippetKeyGeneratorLocator $keyGeneratorLocator
+        SnippetKeyGeneratorLocator $keyGeneratorLocator,
+        SearchCriteriaBuilder $criteriaBuilder,
+        array $searchableAttributeCodes,
+        SortOrderConfig $sortOrderConfig
     ) {
         $this->context = $context;
         $this->dataPoolReader = $dataPoolReader;
         $this->pageBuilder = $pageBuilder;
         $this->keyGeneratorLocator = $keyGeneratorLocator;
+        $this->criteriaBuilder = $criteriaBuilder;
+        $this->searchableAttributeCodes = $searchableAttributeCodes;
+        $this->sortOrderConfig = $sortOrderConfig;
     }
 
     /**
@@ -71,19 +108,7 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
         }
 
         $searchQueryString = $request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
-
-        $facetFields = [];
-        $rowsPerPage = 100;
-        $pageNumber = 0;
-        $searchEngineResponse = $this->dataPoolReader->getSearchResults(
-            $searchQueryString,
-            $this->context,
-            $facetFields,
-            $rowsPerPage,
-            $pageNumber
-        );
-        $searchDocumentsCollection = $searchEngineResponse->getSearchDocuments();
-
+        $searchDocumentsCollection = $this->getSearchResults($searchQueryString);
         $this->addSearchResultsToPageBuilder($searchDocumentsCollection);
 
         $metaInfoSnippetContent = $this->getMetaInfoSnippetContent();
@@ -119,6 +144,31 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
         }
 
         return true;
+    }
+
+    /**
+     * @param string $queryString
+     * @return SearchDocumentCollection
+     */
+    private function getSearchResults($queryString)
+    {
+        $criteria = $this->criteriaBuilder->createCriteriaForAnyOfGivenFieldsContainsString($this->searchableAttributeCodes, $queryString);
+        $selectedFilters = [];
+        $facetFields = [];
+        $rowsPerPage = 100; // TODO: Replace with configured number of suggestions to show
+        $pageNumber = 0;
+        $searchEngineResponse = $this->dataPoolReader->getSearchResultsMatchingCriteria(
+            $criteria,
+            $selectedFilters,
+            $this->context,
+            $facetFields,
+            $rowsPerPage,
+            $pageNumber,
+            $this->sortOrderConfig
+        );
+        $searchDocumentsCollection = $searchEngineResponse->getSearchDocuments();
+
+        return $searchDocumentsCollection;
     }
 
     private function addSearchResultsToPageBuilder(SearchDocumentCollection $searchDocumentCollection)

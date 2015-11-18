@@ -4,6 +4,8 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Api\ApiRouter;
 use LizardsAndPumpkins\Content\ContentBlocksApiV1PutRequestHandler;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
+use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\PricesJsonSnippetTransformation;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\SimpleEuroPriceSnippetTransformation;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Http\GenericHttpRouter;
@@ -13,7 +15,6 @@ use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpsUrl;
 use LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler;
 use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
-use LizardsAndPumpkins\Product\DefaultNumberOfProductsPerPageSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
@@ -32,17 +33,25 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
  * @uses   \LizardsAndPumpkins\SampleMasterFactory
  * @uses   \LizardsAndPumpkins\IntegrationTestFactory
  * @uses   \LizardsAndPumpkins\CommonFactory
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductDetailViewRequestHandler
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingPageContentBuilder
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingPageRequest
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchAutosuggestionRequestHandler
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchRequestHandler
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection
+ * @uses   \LizardsAndPumpkins\ContentDelivery\SnippetTransformation\PricesJsonSnippetTransformation
  * @uses   \LizardsAndPumpkins\Context\ContextSource
  * @uses   \LizardsAndPumpkins\Content\ContentBlocksApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\Context\ContextBuilder
+ * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator
  * @uses   \LizardsAndPumpkins\Http\GenericHttpRouter
- * @uses   \LizardsAndPumpkins\Product\ProductDetailViewRequestHandler
- * @uses   \LizardsAndPumpkins\Product\ProductListingRequestHandler
- * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionRequestHandler
- * @uses   \LizardsAndPumpkins\Product\ProductSearchRequestHandler
  * @uses   \LizardsAndPumpkins\Product\MultipleProductStockQuantityApiV1PutRequestHandler
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine
  * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\CompositeSnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\ContentBlockSnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\RegistrySnippetKeyGeneratorLocatorStrategy
@@ -145,10 +154,25 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(SimpleEuroPriceSnippetTransformation::class, $result);
     }
 
+    public function testItReturnsAProductPricesJsonSnippetTransformation()
+    {
+        $result = $this->frontendFactory->createPricesJsonSnippetTransformation();
+        $this->assertInstanceOf(PricesJsonSnippetTransformation::class, $result);
+    }
+
     public function testProductSearchAutosuggestionRouterIsReturned()
     {
         $result = $this->frontendFactory->createProductSearchAutosuggestionRouter();
         $this->assertInstanceOf(GenericHttpRouter::class, $result);
+    }
+
+    public function testSameProductsPerPageIsReturnedViaGetter()
+    {
+        $result1 = $this->frontendFactory->getProductsPerPageConfig();
+        $result2 = $this->frontendFactory->getProductsPerPageConfig();
+
+        $this->assertInstanceOf(ProductsPerPage::class, $result1);
+        $this->assertSame($result1, $result2);
     }
 
     /**
@@ -175,7 +199,6 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
             [ProductListingPageSnippetRenderer::CODE],
             ['price'],
             ['backorders'],
-            [DefaultNumberOfProductsPerPageSnippetRenderer::CODE],
             [ProductListingCriteriaSnippetRenderer::CODE],
             [ProductSearchResultMetaSnippetRenderer::CODE],
             [ProductSearchAutosuggestionMetaSnippetRenderer::CODE],
