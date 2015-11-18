@@ -9,5 +9,5 @@
 .products-grid .regular-price, .products-grid .special-price { font-size: 15px; font-weight: bold; position: absolute; bottom: 23px; right: 14px }
 .products-grid li .new-product { background: #3CABD9; color: #ffffff; font-family: GeogrotesqueRegular, Helvetica, Arial, sans-serif; font-size: 1.2em; overflow: hidden; padding: 3px 7px; text-transform: uppercase; position: absolute; left: 0; top: 0; vertical-align: baseline }
 
-.swipe-container .products-grid li { float: none; width: auto }
+.swipe-container .products-grid li { display: table-cell; width: auto }
 .swipe-container .products-grid li .grid-cell-container { border-bottom: none; width: 213px }

@@ -23,7 +23,7 @@ define(['lib/local_storage'], function(storage) {
             recentlyViewedProducts.unshift(product);
 
             if (recentlyViewedProducts.length > numProducts + 1) {
-                recentlyViewedProducts.shift();
+                recentlyViewedProducts.pop();
             }
 
             storage.set(storageKey, recentlyViewedProducts);
@@ -33,14 +33,16 @@ define(['lib/local_storage'], function(storage) {
 
             var products = storage.get(storageKey) || [];
 
-            var liHtml = products.reduce(function (carry, product) {
+            var liHtml = products.reduce(function (carry, product, index) {
                 if (currentProduct.hasOwnProperty('sku') && product['sku'] !== currentProduct['sku']) {
-                    carry += product['html'];
+                    var elementHtml = product['html'];
+                    if (index === products.length - 1) {
+                        elementHtml = elementHtml.replace(/class="item"/igm, 'class="item last"');
+                    }
+                    carry += elementHtml;
                 }
                 return carry;
             }, '');
-
-            // TODO: Add "last" class to last element of the list.
 
             return '<ul class="products-grid">' + liHtml + '</ul>';
         }
