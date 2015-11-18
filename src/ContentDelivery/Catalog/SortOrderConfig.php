@@ -2,8 +2,6 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
-use LizardsAndPumpkins\ContentDelivery\Catalog\Exception\InvalidSortingDirectionsException;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\Product\AttributeCode;
 
 class SortOrderConfig implements \JsonSerializable
@@ -25,10 +23,10 @@ class SortOrderConfig implements \JsonSerializable
 
     /**
      * @param AttributeCode $attributeCode
-     * @param string $selectedDirection
+     * @param SortOrderDirection $selectedDirection
      * @param bool $isSelected
      */
-    public function __construct(AttributeCode $attributeCode, $selectedDirection, $isSelected)
+    private function __construct(AttributeCode $attributeCode, SortOrderDirection $selectedDirection, $isSelected)
     {
         $this->attributeCode = $attributeCode;
         $this->selectedDirection = $selectedDirection;
@@ -37,23 +35,21 @@ class SortOrderConfig implements \JsonSerializable
 
     /**
      * @param AttributeCode $attributeCode
-     * @param string $selectedDirection
+     * @param SortOrderDirection $selectedDirection
      * @return SortOrderConfig
      */
-    public static function create(AttributeCode $attributeCode, $selectedDirection)
+    public static function create(AttributeCode $attributeCode, SortOrderDirection $selectedDirection)
     {
-        self::validateSortingDirections($attributeCode, $selectedDirection);
         return new self($attributeCode, $selectedDirection, false);
     }
 
     /**
      * @param AttributeCode $attributeCode
-     * @param string $selectedDirection
+     * @param SortOrderDirection $selectedDirection
      * @return SortOrderConfig
      */
-    public static function createSelected(AttributeCode $attributeCode, $selectedDirection)
+    public static function createSelected(AttributeCode $attributeCode, SortOrderDirection $selectedDirection)
     {
-        self::validateSortingDirections($attributeCode, $selectedDirection);
         return new self($attributeCode, $selectedDirection, true);
     }
 
@@ -63,21 +59,6 @@ class SortOrderConfig implements \JsonSerializable
     public function getAttributeCode()
     {
         return $this->attributeCode;
-    }
-
-    /**
-     * @param AttributeCode $attributeCode
-     * @param mixed $direction
-     */
-    private static function validateSortingDirections(AttributeCode $attributeCode, $direction)
-    {
-        if (SearchEngine::SORT_DIRECTION_ASC !== $direction && SearchEngine::SORT_DIRECTION_DESC !== $direction) {
-            throw new InvalidSortingDirectionsException(sprintf(
-                'Invalid selected sorting direction "%s" specified for attribute "%s".',
-                $direction,
-                $attributeCode
-            ));
-        }
     }
 
     /**
@@ -103,7 +84,7 @@ class SortOrderConfig implements \JsonSerializable
     {
         return [
             'code' => (string) $this->attributeCode,
-            'selectedDirection' => $this->selectedDirection,
+            'selectedDirection' => $this->selectedDirection->getDirection(),
             'selected' => $this->isSelected
         ];
     }

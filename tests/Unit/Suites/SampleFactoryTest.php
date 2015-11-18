@@ -20,7 +20,9 @@ use LizardsAndPumpkins\SampleFactory;
 
 /**
  * @covers \LizardsAndPumpkins\SampleFactory
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FilterNavigationPriceRangesBuilder
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection
  * @uses   \LizardsAndPumpkins\FactoryTrait
  * @uses   \LizardsAndPumpkins\Log\InMemoryLogger
  * @uses   \LizardsAndPumpkins\Log\WritingLoggerDecorator

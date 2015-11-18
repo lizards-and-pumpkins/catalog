@@ -10,57 +10,70 @@ use LizardsAndPumpkins\Http\Exception\UnableToHandleRequestException;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
-use LizardsAndPumpkins\PageBuilder;
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Product\ProductListingCriteriaSnippetContent;
-use LizardsAndPumpkins\Product\ProductListingCriteriaSnippetRenderer;
-use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
+use LizardsAndPumpkins\SnippetKeyGenerator;
 
 class ProductListingRequestHandler implements HttpRequestHandler
 {
-    use ProductListingRequestHandlerTrait;
+    /**
+     * @var DataPoolReader
+     */
+    private $dataPoolReader;
 
-    const PRODUCTS_PER_PAGE_COOKIE_NAME = 'products_per_page';
-    const PRODUCTS_PER_PAGE_COOKIE_TTL = 3600 * 24 * 30;
-    const PRODUCTS_PER_PAGE_QUERY_PARAMETER_NAME = 'limit';
-    const SORT_ORDER_COOKIE_NAME = 'sort_order';
-    const SORT_DIRECTION_COOKIE_NAME = 'sort_direction';
-    const SORT_ORDER_COOKIE_TTL = 3600 * 24 * 30;
-    const SORT_DIRECTION_COOKIE_TTL = 3600 * 24 * 30;
-    const SORT_ORDER_QUERY_PARAMETER_NAME = 'order';
-    const SORT_DIRECTION_QUERY_PARAMETER_NAME = 'dir';
+    /**
+     * @var Context
+     */
+    private $context;
+
+    /**
+     * @var SnippetKeyGenerator
+     */
+    private $metaInfoSnippetKeyGenerator;
+
+    /**
+     * @var string[]
+     */
+    private $filterNavigationConfig;
+
+    /**
+     * @var ProductListingPageContentBuilder
+     */
+    private $productListingPageContentBuilder;
+
+    /**
+     * @var ProductListingPageRequest
+     */
+    private $productListingPageRequest;
 
     /**
      * @param Context $context
      * @param DataPoolReader $dataPoolReader
-     * @param PageBuilder $pageBuilder
-     * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
+     * @param SnippetKeyGenerator $metaInfoSnippetKeyGenerator
      * @param string[] $filterNavigationConfig
-     * @param ProductsPerPage $productsPerPage
-     * @param SortOrderConfig[] $sortOrderConfigs
+     * @param ProductListingPageContentBuilder $productListingPageContentBuilder
+     * @param ProductListingPageRequest $productListingPageRequest
      */
     public function __construct(
         Context $context,
         DataPoolReader $dataPoolReader,
-        PageBuilder $pageBuilder,
-        SnippetKeyGeneratorLocator $keyGeneratorLocator,
+        SnippetKeyGenerator $metaInfoSnippetKeyGenerator,
         array $filterNavigationConfig,
-        ProductsPerPage $productsPerPage,
-        SortOrderConfig ...$sortOrderConfigs
+        ProductListingPageContentBuilder $productListingPageContentBuilder,
+        ProductListingPageRequest $productListingPageRequest
     ) {
         $this->dataPoolReader = $dataPoolReader;
         $this->context = $context;
-        $this->pageBuilder = $pageBuilder;
-        $this->keyGeneratorLocator = $keyGeneratorLocator;
+        $this->metaInfoSnippetKeyGenerator = $metaInfoSnippetKeyGenerator;
         $this->filterNavigationConfig = $filterNavigationConfig;
-        $this->productsPerPage = $productsPerPage;
-        $this->sortOrderConfigs = $sortOrderConfigs;
+        $this->productListingPageContentBuilder = $productListingPageContentBuilder;
+        $this->productListingPageRequest = $productListingPageRequest;
     }
 
     /**
      * @var ProductListingCriteriaSnippetContent|bool
      */
-    private $lazyLoadedPageMetaInfo;
+    private $memoizedPageMetaInfo;
 
     /**
      * @param HttpRequest $request
@@ -81,23 +94,29 @@ class ProductListingRequestHandler implements HttpRequestHandler
             throw new UnableToHandleRequestException(sprintf('Unable to process request with handler %s', __CLASS__));
         }
 
-        $this->processCookies($request);
+        $this->productListingPageRequest->processCookies($request);
 
-        $productsPerPage = $this->getProductsPerPage($request);
-        $selectedSortOrderConfig = $this->getSelectedSortOrderConfig($request);
+        $productsPerPage = $this->productListingPageRequest->getProductsPerPage($request);
+        $selectedSortOrderConfig = $this->productListingPageRequest->getSelectedSortOrderConfig($request);
         $searchEngineResponse = $this->getSearchResultsMatchingCriteria(
             $request,
             $productsPerPage,
             $selectedSortOrderConfig
         );
-        $this->addProductListingContentToPage($searchEngineResponse, $productsPerPage, $selectedSortOrderConfig);
 
         $metaInfo = $this->getPageMetaInfoSnippet($request);
         $keyGeneratorParams = [
             PageMetaInfoSnippetContent::URL_KEY => ltrim($request->getUrlPathRelativeToWebFront(), '/')
         ];
 
-        return $this->pageBuilder->buildPage($metaInfo, $this->context, $keyGeneratorParams);
+        return $this->productListingPageContentBuilder->buildPageContent(
+            $metaInfo,
+            $this->context,
+            $keyGeneratorParams,
+            $searchEngineResponse,
+            $productsPerPage,
+            $selectedSortOrderConfig
+        );
     }
 
     /**
@@ -106,16 +125,16 @@ class ProductListingRequestHandler implements HttpRequestHandler
      */
     private function getPageMetaInfoSnippet(HttpRequest $request)
     {
-        if (null === $this->lazyLoadedPageMetaInfo) {
-            $this->lazyLoadedPageMetaInfo = false;
+        if (null === $this->memoizedPageMetaInfo) {
+            $this->memoizedPageMetaInfo = false;
             $metaInfoSnippetKey = $this->getMetaInfoSnippetKey($request);
             $json = $this->getPageMetaInfoJsonIfExists($metaInfoSnippetKey);
             if ($json) {
-                $this->lazyLoadedPageMetaInfo = ProductListingCriteriaSnippetContent::fromJson($json);
+                $this->memoizedPageMetaInfo = ProductListingCriteriaSnippetContent::fromJson($json);
             }
         }
 
-        return $this->lazyLoadedPageMetaInfo;
+        return $this->memoizedPageMetaInfo;
     }
 
     /**
@@ -144,8 +163,11 @@ class ProductListingRequestHandler implements HttpRequestHandler
         SortOrderConfig $selectedSortOrderConfig
     ) {
         $criteria = $this->getPageMetaInfoSnippet($request)->getSelectionCriteria();
-        $selectedFilters = $this->getSelectedFilterValuesFromRequest($request);
-        $currentPageNumber = $this->getCurrentPageNumber($request);
+        $selectedFilters = $this->productListingPageRequest->getSelectedFilterValues(
+            $request,
+            $this->filterNavigationConfig
+        );
+        $currentPageNumber = $this->productListingPageRequest->getCurrentPageNumber($request);
 
         return $this->dataPoolReader->getSearchResultsMatchingCriteria(
             $criteria,
@@ -164,11 +186,8 @@ class ProductListingRequestHandler implements HttpRequestHandler
      */
     private function getMetaInfoSnippetKey(HttpRequest $request)
     {
-        $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
-            ProductListingCriteriaSnippetRenderer::CODE
-        );
         $urlKey = $request->getUrlPathRelativeToWebFront();
-        $metaInfoSnippetKey = $keyGenerator->getKeyForContext(
+        $metaInfoSnippetKey = $this->metaInfoSnippetKeyGenerator->getKeyForContext(
             $this->context,
             [PageMetaInfoSnippetContent::URL_KEY => $urlKey]
         );

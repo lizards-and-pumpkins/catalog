@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
+use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
@@ -163,7 +164,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     private function createOptionValuesCriteriaArray($filterCode, array $filterOptionValues)
     {
         return array_map(function ($filterOptionValue) use ($filterCode) {
-            return $this->getSearchCriteriaBuilder()->fromRequestParameter($filterCode, $filterOptionValue);
+            return $this->getSearchCriteriaBuilder()->fromFieldNameAndValue($filterCode, $filterOptionValue);
         }, $filterOptionValues);
     }
 
@@ -177,7 +178,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     }
 
     /**
-     * @param string[] $facetFiltersConfig
+     * @param array[] $facetFiltersConfig
      * @param SearchDocument[] $searchDocuments
      * @return SearchEngineFacetField[]
      */
@@ -270,7 +271,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
             $newAttributeValues = [];
             foreach ($currentAttributeValues as $currentValueArray) {
                 if ($currentValueArray['value'] === $newValue) {
-                    $currentValueArray['count'] ++;
+                    $currentValueArray['count']++;
                     $valueWasFound = true;
                 }
                 $newAttributeValues[] = $currentValueArray;
@@ -333,8 +334,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     private function createDefaultFacetFieldFromAttributeValues(array $attributeValues)
     {
         return array_map(function ($valueCounts) {
-            return SearchEngineFacetFieldValueCount::create((string)$valueCounts['value'],
-                $valueCounts['count']);
+            return SearchEngineFacetFieldValueCount::create((string)$valueCounts['value'], $valueCounts['count']);
         }, $attributeValues);
     }
 
@@ -399,15 +399,15 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
         $direction = $sortOrderConfig->getSelectedDirection();
 
         usort($result, function (SearchDocument $documentA, SearchDocument $documentB) use ($field, $direction) {
-            $fieldA = $this->getSearchDocumentFieldValue($documentA, $field);
-            $fieldB = $this->getSearchDocumentFieldValue($documentB, $field);
+            $fieldA = $this->getSortableSearchDocumentFieldValue($documentA, $field);
+            $fieldB = $this->getSortableSearchDocumentFieldValue($documentB, $field);
 
             if ($fieldA === $fieldB) {
                 return 0;
             }
 
-            if (SearchEngine::SORT_DIRECTION_ASC === $direction && $fieldA < $fieldB ||
-                SearchEngine::SORT_DIRECTION_DESC === $direction && $fieldA > $fieldB
+            if (SortOrderDirection::ASC === $direction && $fieldA < $fieldB ||
+                SortOrderDirection::DESC === $direction && $fieldA > $fieldB
             ) {
                 return -1;
             }
@@ -423,24 +423,35 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
      * @param AttributeCode $fieldName
      * @return mixed
      */
-    private function getSearchDocumentFieldValue(SearchDocument $document, AttributeCode $fieldName)
+    private function getSortableSearchDocumentFieldValue(SearchDocument $document, AttributeCode $fieldName)
     {
         foreach ($document->getFieldsCollection()->getFields() as $field) {
-            if ($field->getKey() === (string) $fieldName) {
-                $values = $field->getValues();
-
-                if (count($values) === 1) {
-                    if (is_string($values[0])) {
-                        return strtolower($values[0]);
-                    }
-
-                    return $values[0];
-                }
-
-                return null;
+            if ($field->getKey() !== (string) $fieldName) {
+                continue;
             }
+
+            $values = $field->getValues();
+
+            if (count($values) === 1) {
+                return $this->getFormattedSearchDocumentValue($values[0]);
+            }
+
+            return null;
         }
 
         return null;
+    }
+
+    /**
+     * @param mixed $value
+     * @return mixed
+     */
+    private function getFormattedSearchDocumentValue($value)
+    {
+        if (is_string($value)) {
+            return strtolower($value);
+        }
+
+        return $value;
     }
 }

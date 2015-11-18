@@ -3,8 +3,8 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
+use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpResourceNotFoundResponse;
@@ -118,7 +118,10 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $facetFields = [];
         $rowsPerPage = 100;
         $pageNumber = 0;
-        $sortOrderConfig = SortOrderConfig::create(AttributeCode::fromString('name'), SearchEngine::SORT_DIRECTION_ASC);
+        $sortOrderConfig = SortOrderConfig::create(
+            AttributeCode::fromString('name'),
+            SortOrderDirection::create(SortOrderDirection::ASC)
+        );
         $searchResults = $dataPoolReader->getSearchResultsMatchingCriteria(
             $criteria,
             $selectedFilters,

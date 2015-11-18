@@ -13,6 +13,10 @@ class FilterNavigationTest extends \PHPUnit_Framework_TestCase
 
     private $testUrl = 'http://example.com/sale';
 
+    /**
+     * @param string $html
+     * @return mixed[]
+     */
     private function extractFilterNavigation($html)
     {
         preg_match('/var filterNavigationJson = ({[^<]+})/ism', $html, $matches);
@@ -29,7 +33,7 @@ class FilterNavigationTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->importCatalog();
-        $this->createProductListingFixture();
+        $this->prepareProductListingFixture();
         $this->registerProductListingSnippetKeyGenerator();
     }
 
@@ -42,9 +46,9 @@ class FilterNavigationTest extends \PHPUnit_Framework_TestCase
             HttpRequestBody::fromString('')
         );
 
-        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+        $this->factory = $this->createIntegrationTestMasterFactoryForRequest($request);
 
-        $productListingRequestHandler = $this->getProductListingRequestHandler();
+        $productListingRequestHandler = $this->createProductListingRequestHandler();
         $page = $productListingRequestHandler->process($request);
 
         return $this->extractFilterNavigation($page->getBody());
@@ -67,9 +71,9 @@ class FilterNavigationTest extends \PHPUnit_Framework_TestCase
             HttpRequestBody::fromString('')
         );
 
-        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+        $this->factory = $this->createIntegrationTestMasterFactoryForRequest($request);
 
-        $productListingRequestHandler = $this->getProductListingRequestHandler();
+        $productListingRequestHandler = $this->createProductListingRequestHandler();
         $page = $productListingRequestHandler->process($request);
         $filterNavigation = $this->extractFilterNavigation($page->getBody());
 
@@ -93,9 +97,9 @@ class FilterNavigationTest extends \PHPUnit_Framework_TestCase
             HttpRequestBody::fromString('')
         );
 
-        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+        $this->factory = $this->createIntegrationTestMasterFactoryForRequest($request);
 
-        $productListingRequestHandler = $this->getProductListingRequestHandler();
+        $productListingRequestHandler = $this->createProductListingRequestHandler();
         $page = $productListingRequestHandler->process($request);
         $filterNavigation = $this->extractFilterNavigation($page->getBody());
 

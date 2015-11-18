@@ -11,8 +11,6 @@ interface SearchEngine
 {
     const RANGE_DELIMITER = ' TO ';
     const RANGE_WILDCARD = '*';
-    const SORT_DIRECTION_ASC = 'asc';
-    const SORT_DIRECTION_DESC = 'desc';
 
     /**
      * @param SearchDocumentCollection $searchDocumentCollection

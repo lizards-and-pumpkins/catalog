@@ -75,7 +75,7 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
     public function testProductListingPageHtmlIsReturned()
     {
         $this->importCatalog();
-        $this->createProductListingFixture();
+        $this->prepareProductListingFixture();
         $this->registerProductListingSnippetKeyGenerator();
 
         $request = HttpRequest::fromParameters(
@@ -85,9 +85,9 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
             HttpRequestBody::fromString('')
         );
 
-        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+        $this->factory = $this->createIntegrationTestMasterFactoryForRequest($request);
 
-        $productListingRequestHandler = $this->getProductListingRequestHandler();
+        $productListingRequestHandler = $this->createProductListingRequestHandler();
         $page = $productListingRequestHandler->process($request);
         $body = $page->getBody();
 

@@ -207,6 +207,7 @@ require([
     }
 
     function handleRecentlyViewedProducts() {
+        recentlyViewedProducts.addProductIntoLocalStorage(product);
         var recentlyViewedProductsListHtml = recentlyViewedProducts.getRecentlyViewedProductsHtml(product);
 
         if (recentlyViewedProductsListHtml.indexOf('</li>') !== -1) {
@@ -214,8 +215,6 @@ require([
             container.innerHTML = recentlyViewedProductsListHtml;
             container.parentNode.style.display = 'block';
         }
-
-        recentlyViewedProducts.addProductIntoLocalStorage(product);
     }
 
     function handleProductImages() {

@@ -10,18 +10,39 @@ use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\Exception\UnableToHandleRequestException;
-use LizardsAndPumpkins\PageBuilder;
 use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetContent;
-use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer;
-use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
+use LizardsAndPumpkins\SnippetKeyGenerator;
 
 class ProductSearchRequestHandler implements HttpRequestHandler
 {
-    use ProductListingRequestHandlerTrait;
-
     const SEARCH_RESULTS_SLUG = 'catalogsearch/result';
     const QUERY_STRING_PARAMETER_NAME = 'q';
     const SEARCH_QUERY_MINIMUM_LENGTH = 3;
+
+    /**
+     * @var DataPoolReader
+     */
+    private $dataPoolReader;
+
+    /**
+     * @var Context
+     */
+    private $context;
+
+    /**
+     * @var SnippetKeyGenerator
+     */
+    private $metaInfoSnippetKeyGenerator;
+
+    /**
+     * @var string[]
+     */
+    private $filterNavigationConfig;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
 
     /**
      * @var string[]
@@ -29,36 +50,43 @@ class ProductSearchRequestHandler implements HttpRequestHandler
     private $searchableAttributeCodes;
 
     /**
+     * @var ProductListingPageContentBuilder
+     */
+    private $productListingPageContentBuilder;
+
+    /**
+     * @var ProductListingPageRequest
+     */
+    private $productListingPageRequest;
+
+    /**
      * @param Context $context
      * @param DataPoolReader $dataPoolReader
-     * @param PageBuilder $pageBuilder
-     * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
+     * @param SnippetKeyGenerator $metaInfoSnippetKeyGenerator
      * @param string[] $filterNavigationConfig
-     * @param ProductsPerPage $productsPerPage
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param string[] $searchableAttributeCodes
-     * @param SortOrderConfig[] $sortOrderConfigs
+     * @param ProductListingPageContentBuilder $productListingPageContentBuilder
+     * @param ProductListingPageRequest $productListingPageRequest
      */
     public function __construct(
         Context $context,
         DataPoolReader $dataPoolReader,
-        PageBuilder $pageBuilder,
-        SnippetKeyGeneratorLocator $keyGeneratorLocator,
+        SnippetKeyGenerator $metaInfoSnippetKeyGenerator,
         array $filterNavigationConfig,
-        ProductsPerPage $productsPerPage,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         array $searchableAttributeCodes,
-        SortOrderConfig ...$sortOrderConfigs
+        ProductListingPageContentBuilder $productListingPageContentBuilder,
+        ProductListingPageRequest $productListingPageRequest
     ) {
         $this->dataPoolReader = $dataPoolReader;
         $this->context = $context;
-        $this->pageBuilder = $pageBuilder;
-        $this->keyGeneratorLocator = $keyGeneratorLocator;
+        $this->metaInfoSnippetKeyGenerator = $metaInfoSnippetKeyGenerator;
         $this->filterNavigationConfig = $filterNavigationConfig;
-        $this->productsPerPage = $productsPerPage;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->searchableAttributeCodes = $searchableAttributeCodes;
-        $this->sortOrderConfigs = $sortOrderConfigs;
+        $this->productListingPageContentBuilder = $productListingPageContentBuilder;
+        $this->productListingPageRequest = $productListingPageRequest;
     }
 
     /**
@@ -80,27 +108,27 @@ class ProductSearchRequestHandler implements HttpRequestHandler
             throw new UnableToHandleRequestException(sprintf('Unable to process request with handler %s', __CLASS__));
         }
 
-        $this->processCookies($request);
+        $this->productListingPageRequest->processCookies($request);
 
-        $productsPerPage = $this->getProductsPerPage($request);
-        $selectedSortOrderConfig = $this->getSelectedSortOrderConfig($request);
+        $productsPerPage = $this->productListingPageRequest->getProductsPerPage($request);
+        $selectedSortOrderConfig = $this->productListingPageRequest->getSelectedSortOrderConfig($request);
         $searchEngineResponse = $this->getSearchResultsMatchingCriteria(
             $request,
             $productsPerPage,
             $selectedSortOrderConfig
         );
-        $this->addProductListingContentToPage($searchEngineResponse, $productsPerPage, $selectedSortOrderConfig);
 
-        $metaInfoSnippetKeyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
-            ProductSearchResultMetaSnippetRenderer::CODE
-        );
-        $metaInfoSnippetKey = $metaInfoSnippetKeyGenerator->getKeyForContext($this->context, []);
-        $metaInfoSnippetJson = $this->dataPoolReader->getSnippet($metaInfoSnippetKey);
-        $metaInfoSnippetContent = ProductSearchResultMetaSnippetContent::fromJson($metaInfoSnippetJson);
-
+        $metaInfoSnippetContent = $this->getPageMetaInfo();
         $keyGeneratorParams = [];
 
-        return $this->pageBuilder->buildPage($metaInfoSnippetContent, $this->context, $keyGeneratorParams);
+        return $this->productListingPageContentBuilder->buildPageContent(
+            $metaInfoSnippetContent,
+            $this->context,
+            $keyGeneratorParams,
+            $searchEngineResponse,
+            $productsPerPage,
+            $selectedSortOrderConfig
+        );
     }
 
     /**
@@ -139,14 +167,17 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         ProductsPerPage $productsPerPage,
         SortOrderConfig $selectedSortOrderConfig
     ) {
-        $selectedFilters = $this->getSelectedFilterValuesFromRequest($request);
+        $selectedFilters = $this->productListingPageRequest->getSelectedFilterValues(
+            $request,
+            $this->filterNavigationConfig
+        );
 
         $queryString = $request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
-        $criteria = $this->searchCriteriaBuilder->anyOfFieldsContainString(
+        $criteria = $this->searchCriteriaBuilder->createCriteriaForAnyOfGivenFieldsContainsString(
             $this->searchableAttributeCodes,
             $queryString
         );
-        $currentPageNumber = $this->getCurrentPageNumber($request);
+        $currentPageNumber = $this->productListingPageRequest->getCurrentPageNumber($request);
 
         return $this->dataPoolReader->getSearchResultsMatchingCriteria(
             $criteria,
@@ -157,5 +188,17 @@ class ProductSearchRequestHandler implements HttpRequestHandler
             $currentPageNumber,
             $selectedSortOrderConfig
         );
+    }
+
+    /**
+     * @return ProductSearchResultMetaSnippetContent
+     */
+    private function getPageMetaInfo()
+    {
+        $metaInfoSnippetKey = $this->metaInfoSnippetKeyGenerator->getKeyForContext($this->context, []);
+        $metaInfoSnippetJson = $this->dataPoolReader->getSnippet($metaInfoSnippetKey);
+        $metaInfoSnippetContent = ProductSearchResultMetaSnippetContent::fromJson($metaInfoSnippetJson);
+
+        return $metaInfoSnippetContent;
     }
 }

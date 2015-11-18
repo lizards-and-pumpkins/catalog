@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog\Exception;
 
-class InvalidSortingDirectionsException extends \LogicException
+class InvalidSortOrderDirectionException extends \LogicException
 {
 
 }

@@ -55,7 +55,7 @@ trait ProductListingTestTrait
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
-        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+        $this->factory = $this->createIntegrationTestMasterFactoryForRequest($request);
 
         $website = new InjectableSampleWebFront($request, $this->factory);
         $website->runWithoutSendingResponse();
@@ -64,7 +64,7 @@ trait ProductListingTestTrait
         $this->factory->createDomainEventConsumer()->process();
     }
 
-    private function createProductListingFixture()
+    private function prepareProductListingFixture()
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/templates/product_listing');
         $httpHeaders = HttpHeaders::fromArray([
@@ -73,7 +73,7 @@ trait ProductListingTestTrait
         $httpRequestBody = HttpRequestBody::fromString('');
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
-        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+        $this->factory = $this->createIntegrationTestMasterFactoryForRequest($request);
 
         $website = new InjectableSampleWebFront($request, $this->factory);
         $website->runWithoutSendingResponse();
@@ -95,34 +95,16 @@ trait ProductListingTestTrait
     /**
      * @return ProductListingRequestHandler
      */
-    private function getProductListingRequestHandler()
+    private function createProductListingRequestHandler()
     {
-        $dataPoolReader = $this->factory->createDataPoolReader();
-        $pageBuilder = new PageBuilder(
-            $dataPoolReader,
-            $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy(),
-            $this->factory->getLogger()
-        );
-        $filterNavigationConfig = $this->factory->getProductListingFilterNavigationConfig();
-        $productsPerPage = $this->factory->getProductsPerPageConfig();
-        $sortOrderConfigs = $this->factory->getProductListingSortOrderConfig();
-
-        return new ProductListingRequestHandler(
-            $this->factory->createContext(),
-            $dataPoolReader,
-            $pageBuilder,
-            $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy(),
-            $filterNavigationConfig,
-            $productsPerPage,
-            ...$sortOrderConfigs
-        );
+        return $this->factory->createProductListingRequestHandler();
     }
 
     /**
      * @param HttpRequest $request
      * @return SampleMasterFactory
      */
-    private function prepareIntegrationTestMasterFactoryForRequest(HttpRequest $request)
+    private function createIntegrationTestMasterFactoryForRequest(HttpRequest $request)
     {
         $masterFactory = new SampleMasterFactory;
         $masterFactory->register(new CommonFactory);
@@ -141,9 +123,9 @@ trait ProductListingTestTrait
         $factory = new IntegrationTestFactory();
         $factory->setMasterFactory($masterFactory);
         if ($this->isFirstInstantiationOfFactory()) {
-            $this->storeInMemoryObjects($factory);
+            $this->retrieveInMemoryObjectsFromFactory($factory);
         } else {
-            $this->persistInMemoryObjectsOnFactory($factory);
+            $this->injectInMemoryObjectsIntoFactory($factory);
         }
         return $factory;
     }
@@ -156,7 +138,7 @@ trait ProductListingTestTrait
         return null === $this->keyValueStore;
     }
 
-    private function storeInMemoryObjects(IntegrationTestFactory $factory)
+    private function retrieveInMemoryObjectsFromFactory(IntegrationTestFactory $factory)
     {
         $this->keyValueStore = $factory->getKeyValueStore();
         $this->eventQueue = $factory->getEventQueue();
@@ -165,7 +147,7 @@ trait ProductListingTestTrait
         $this->urlKeyStore = $factory->getUrlKeyStore();
     }
 
-    private function persistInMemoryObjectsOnFactory(IntegrationTestFactory $factory)
+    private function injectInMemoryObjectsIntoFactory(IntegrationTestFactory $factory)
     {
         $factory->setKeyValueStore($this->keyValueStore);
         $factory->setEventQueue($this->eventQueue);

@@ -6,107 +6,54 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\KeyValue\Exception\KeyNotFoundException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\Exception\UnableToHandleRequestException;
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\PageBuilder;
+use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Product\ProductListingCriteriaSnippetContent;
 use LizardsAndPumpkins\SnippetKeyGenerator;
-use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 
 /**
  * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler
- * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandlerTrait
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
- * @uses   \LizardsAndPumpkins\Product\AttributeCode
- * @uses   \LizardsAndPumpkins\Product\ProductId
  * @uses   \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetContent
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
  */
-class ProductListingRequestHandlerTest extends AbstractProductListingRequestHandlerTest
+class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var ProductListingPageRequest|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockProductListingPageRequest;
+
+    /**
+     * @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockDataPoolReader;
+
+    /**
+     * @var ProductListingRequestHandler
+     */
+    private $requestHandler;
+
     /**
      * @var string
      */
     private $testMetaInfoKey = 'stub-meta-info-key';
 
     /**
-     * @param DataPoolReader|\PHPUnit_Framework_MockObject_MockObject $stubDataPoolReader
-     * @return ProductListingRequestHandler
+     * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createRequestHandlerWithGivenStubDataPoolReader(DataPoolReader $stubDataPoolReader)
-    {
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $this->getMock(Context::class);
-
-        /** @var PageBuilder|\PHPUnit_Framework_MockObject_MockObject $stubPageBuilder */
-        $stubPageBuilder = $this->getMock(PageBuilder::class, [], [], '', false);
-
-        $stubSnippetKeyGeneratorLocator = $this->createStubSnippetKeyGeneratorLocator();
-        $testFilterNavigationConfig = [];
-
-        /** @var ProductsPerPage|\PHPUnit_Framework_MockObject_MockObject $stubProductsPerPage */
-        $stubProductsPerPage = $this->getMock(ProductsPerPage::class, [], [], '', false);;
-
-        return $this->createRequestHandler(
-            $stubContext,
-            $stubDataPoolReader,
-            $stubPageBuilder,
-            $stubSnippetKeyGeneratorLocator,
-            $testFilterNavigationConfig,
-            $stubProductsPerPage
-        );
-    }
+    private $stubRequest;
 
     /**
-     * {@inheritdoc}
+     * @return DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
      */
-    final protected function createRequestHandler(
-        Context $context,
-        DataPoolReader $dataPoolReader,
-        PageBuilder $pageBuilder,
-        SnippetKeyGeneratorLocator $snippetKeyGeneratorLocator,
-        array $filterNavigationConfig,
-        ProductsPerPage $productsPerPage,
-        SortOrderConfig ...$sortOrderConfigs
-    ) {
-        return new ProductListingRequestHandler(
-            $context,
-            $dataPoolReader,
-            $pageBuilder,
-            $snippetKeyGeneratorLocator,
-            $filterNavigationConfig,
-            $productsPerPage,
-            ...$sortOrderConfigs
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    final protected function createStubSnippetKeyGeneratorLocator()
-    {
-        $stubMetaInfoSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class, [], [], '', false);
-        $stubMetaInfoSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->testMetaInfoKey);
-
-        $stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
-        $stubSnippetKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')
-            ->willReturn($stubMetaInfoSnippetKeyGenerator);
-
-        return $stubSnippetKeyGeneratorLocator;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    final protected function createStubDataPoolReader()
+    private function createMockDataPoolReader()
     {
         /** @var CompositeSearchCriterion|\PHPUnit_Framework_MockObject_MockObject $stubSelectionCriteria */
         $stubSelectionCriteria = $this->getMock(CompositeSearchCriterion::class, [], [], '', false);
         $stubSelectionCriteria->method('jsonSerialize')
             ->willReturn(['condition' => CompositeSearchCriterion::AND_CONDITION, 'criteria' => []]);
-
         $pageSnippetCodes = ['child-snippet1'];
 
         $testMetaInfoSnippetJson = json_encode(ProductListingCriteriaSnippetContent::create(
@@ -115,75 +62,109 @@ class ProductListingRequestHandlerTest extends AbstractProductListingRequestHand
             $pageSnippetCodes
         )->getInfo());
 
-        $stubDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
+        $stubSearchEngineResponse = $this->getMock(SearchEngineResponse::class, [], [], '', false);
 
-        $stubDataPoolReader->method('getSnippets')->willReturn([]);
-        $stubDataPoolReader->method('getSnippet')->willReturnMap([
+        $mockDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
+        $mockDataPoolReader->method('getSearchResultsMatchingCriteria')->willReturn($stubSearchEngineResponse);
+        $mockDataPoolReader->method('getSnippet')->willReturnMap([
             [$this->testMetaInfoKey, $testMetaInfoSnippetJson]
         ]);
 
-        return $stubDataPoolReader;
+        return $mockDataPoolReader;
     }
 
     /**
-     * {@inheritdoc}
+     * @return ProductListingPageRequest|\PHPUnit_Framework_MockObject_MockObject
      */
-    final protected function createStubRequest()
+    private function createStubProductListingPageRequest()
     {
-        return $this->getMock(HttpRequest::class, [], [], '', false);
+        $stubProductsPerPage = $this->getMock(ProductsPerPage::class, [], [], '', false);
+        $stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
+
+        $stubProductListingPageRequest = $this->getMock(ProductListingPageRequest::class, [], [], '', false);
+        $stubProductListingPageRequest->method('getProductsPerPage')->willReturn($stubProductsPerPage);
+        $stubProductListingPageRequest->method('getSelectedSortOrderConfig')->willReturn($stubSortOrderConfig);
+        $stubProductListingPageRequest->method('getSelectedFilterValues')->willReturn([]);
+
+        return $stubProductListingPageRequest;
+    }
+
+    /**
+     * @return ProductListingPageContentBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubProductListingPageContentBuilder()
+    {
+        $stubHttpResponse = $this->getMock(HttpResponse::class);
+        $stubPageContentBuilder = $this->getMock(ProductListingPageContentBuilder::class, [], [], '', false);
+        $stubPageContentBuilder->method('buildPageContent')->willReturn($stubHttpResponse);
+
+        return $stubPageContentBuilder;
+    }
+
+    protected function setUp()
+    {
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
+        $stubContext = $this->getMock(Context::class);
+
+        $this->mockDataPoolReader = $this->createMockDataPoolReader();
+
+        /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $stubSnippetKeyGenerator */
+        $stubSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $stubSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->testMetaInfoKey);
+
+        $testFilterNavigationConfig = [];
+        $stubProductListingPageContentBuilder = $this->createStubProductListingPageContentBuilder();
+
+        $this->mockProductListingPageRequest = $this->createStubProductListingPageRequest();
+
+        $this->stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+
+        $this->requestHandler = new ProductListingRequestHandler(
+            $stubContext,
+            $this->mockDataPoolReader,
+            $stubSnippetKeyGenerator,
+            $testFilterNavigationConfig,
+            $stubProductListingPageContentBuilder,
+            $this->mockProductListingPageRequest
+        );
     }
 
     public function testFalseIsReturnedIfThePageMetaInfoContentSnippetCanNotBeLoaded()
     {
-        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubRequest */
-        $stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
-
-        /** @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject $stubDataPoolReader */
-        $stubDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
-        $stubDataPoolReader->method('getSnippet')->willThrowException(new KeyNotFoundException);
-
-        $requestHandler = $this->createRequestHandlerWithGivenStubDataPoolReader($stubDataPoolReader);
-
-        $this->assertFalse($requestHandler->canProcess($stubRequest));
+        $this->mockDataPoolReader->method('getSnippet')->willThrowException(new KeyNotFoundException);
+        $this->assertFalse($this->requestHandler->canProcess($this->stubRequest));
     }
 
     public function testTrueIsReturnedIfThePageMetaInfoContentSnippetCanBeLoaded()
     {
-        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubRequest */
-        $stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
-        $stubDataPoolReader = $this->createStubDataPoolReader();
-
-        $requestHandler = $this->createRequestHandlerWithGivenStubDataPoolReader($stubDataPoolReader);
-
-        $this->assertTrue($requestHandler->canProcess($stubRequest));
+        $this->assertTrue($this->requestHandler->canProcess($this->stubRequest));
     }
 
     public function testPageMetaInfoIsOnlyLoadedOnce()
     {
-        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubRequest */
-        $stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
-
-        $mockDataPoolReader = $this->createStubDataPoolReader();
-        $mockDataPoolReader->expects($this->once())->method('getSnippet')->with($this->testMetaInfoKey);
-
-        $requestHandler = $this->createRequestHandlerWithGivenStubDataPoolReader($mockDataPoolReader);
-
-        $requestHandler->canProcess($stubRequest);
-        $requestHandler->canProcess($stubRequest);
+        $this->mockDataPoolReader->expects($this->once())->method('getSnippet')->with($this->testMetaInfoKey);
+        $this->requestHandler->canProcess($this->stubRequest);
+        $this->requestHandler->process($this->stubRequest);
     }
 
     public function testExceptionIsThrownIfProcessWithoutMetaInfoContentIsCalled()
     {
-        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubRequest */
-        $stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
-
-        /** @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject $stubDataPoolReader */
-        $stubDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
-
-        $requestHandler = $this->createRequestHandlerWithGivenStubDataPoolReader($stubDataPoolReader);
-
+        $this->mockDataPoolReader->method('getSnippet')->willThrowException(new KeyNotFoundException);
         $this->setExpectedException(UnableToHandleRequestException::class);
+        $this->requestHandler->process($this->stubRequest);
+    }
 
-        $requestHandler->process($stubRequest);
+    public function testCookieProcessingIsTriggered()
+    {
+        $this->mockDataPoolReader->expects($this->once())->method('getSnippet')->with($this->testMetaInfoKey);
+        $this->mockProductListingPageRequest->expects($this->once())->method('processCookies');
+        $this->requestHandler->process($this->stubRequest);
+    }
+
+    public function testHttpResponseIsReturned()
+    {
+        $this->mockDataPoolReader->expects($this->once())->method('getSnippet')->with($this->testMetaInfoKey);
+        $result = $this->requestHandler->process($this->stubRequest);
+        $this->assertInstanceOf(HttpResponse::class, $result);
     }
 }

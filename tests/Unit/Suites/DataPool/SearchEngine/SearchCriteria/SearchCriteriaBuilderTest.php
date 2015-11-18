@@ -25,7 +25,7 @@ class SearchCriteriaBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $parameterName = 'foo';
         $parameterValue = 'bar';
-        $result = $this->builder->fromRequestParameter($parameterName, $parameterValue);
+        $result = $this->builder->fromFieldNameAndValue($parameterName, $parameterValue);
 
         $expectedCriteriaJson = [
             'fieldName' => $parameterName,
@@ -43,7 +43,7 @@ class SearchCriteriaBuilderTest extends \PHPUnit_Framework_TestCase
         $rangeFrom = '0';
         $rangeTo = '1';
         $parameterValue = sprintf('%s%s%s', $rangeFrom, SearchEngine::RANGE_DELIMITER, $rangeTo);
-        $result = $this->builder->fromRequestParameter($parameterName, $parameterValue);
+        $result = $this->builder->fromFieldNameAndValue($parameterName, $parameterValue);
 
         $expectedCriteriaJson = [
             'condition' => CompositeSearchCriterion::AND_CONDITION,
@@ -57,11 +57,11 @@ class SearchCriteriaBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedCriteriaJson, $result->jsonSerialize());
     }
 
-    public function testCompositeCriteriaWithListOfFieldsMatchingSameStringAndOrConditionIsReturned()
+    public function testCompositeCriteriaWithListOfFieldsMatchingSameStringWithOrConditionIsReturned()
     {
         $fields = ['foo', 'bar'];
         $queryString = 'baz';
-        $result = $this->builder->anyOfFieldsContainString($fields, $queryString);
+        $result = $this->builder->createCriteriaForAnyOfGivenFieldsContainsString($fields, $queryString);
 
         $expectedCriteriaJson = [
             'condition' => CompositeSearchCriterion::OR_CONDITION,

@@ -2,10 +2,11 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\ContentDelivery\Catalog\FilterNavigationPriceRangesBuilder;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
+use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
 use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\FileUrlKeyStore;
 use LizardsAndPumpkins\Image\ImageMagickInscribeStrategy;
 use LizardsAndPumpkins\Image\ImageProcessor;
@@ -17,7 +18,6 @@ use LizardsAndPumpkins\Log\Writer\FileLogMessageWriter;
 use LizardsAndPumpkins\Log\Writer\LogMessageWriter;
 use LizardsAndPumpkins\Log\WritingLoggerDecorator;
 use LizardsAndPumpkins\Product\AttributeCode;
-use LizardsAndPumpkins\Product\Price;
 use LizardsAndPumpkins\Queue\File\FileQueue;
 use LizardsAndPumpkins\Queue\Queue;
 
@@ -28,17 +28,17 @@ class SampleFactory implements Factory
     /**
      * @var SortOrderConfig[]
      */
-    private $lazyLoadedProductListingSortOrderConfig;
+    private $memoizedProductListingSortOrderConfig;
 
     /**
      * @var SortOrderConfig[]
      */
-    private $lazyLoadedProductSearchSortOrderConfig;
+    private $memoizedProductSearchSortOrderConfig;
 
     /**
      * @var SortOrderConfig
      */
-    private $lazyLoadedProductSearchAutosuggestionSortOrderConfig;
+    private $memoizedProductSearchAutosuggestionSortOrderConfig;
 
     /**
      * @return string[]
@@ -56,7 +56,7 @@ class SampleFactory implements Factory
         return [
             'gender' => [],
             'brand' => [],
-            'price' => $this->getPriceRanges(),
+            'price' => FilterNavigationPriceRangesBuilder::getPriceRanges(),
             'color' => [],
         ];
     }
@@ -70,26 +70,9 @@ class SampleFactory implements Factory
             'gender' => [],
             'brand' => [],
             'category' => [],
-            'price' => $this->getPriceRanges(),
+            'price' => FilterNavigationPriceRangesBuilder::getPriceRanges(),
             'color' => [],
         ];
-    }
-
-    /**
-     * @return array[]
-     */
-    private function getPriceRanges()
-    {
-        $base = pow(10, Price::NUM_DECIMAL_POINTS);
-        $rangeStep = 20 * $base;
-        $rangesTo = 500 * $base;
-        $priceRanges = [['from' => '*', 'to' => $rangeStep - 1]];
-        for ($i = $rangeStep; $i < $rangesTo; $i += $rangeStep) {
-            $priceRanges[] = ['from' => $i, 'to' => $i + $rangeStep - 1];
-        }
-        $priceRanges[] = ['from' => $rangesTo, 'to' => '*'];
-
-        return $priceRanges;
     }
 
     /**
@@ -370,15 +353,24 @@ class SampleFactory implements Factory
      */
     public function getProductListingSortOrderConfig()
     {
-        if (null === $this->lazyLoadedProductListingSortOrderConfig) {
-            $this->lazyLoadedProductListingSortOrderConfig = [
-                SortOrderConfig::createSelected(AttributeCode::fromString('name'), SearchEngine::SORT_DIRECTION_ASC),
-                SortOrderConfig::create(AttributeCode::fromString('price'), SearchEngine::SORT_DIRECTION_ASC),
-                SortOrderConfig::create(AttributeCode::fromString('created_at'), SearchEngine::SORT_DIRECTION_ASC),
+        if (null === $this->memoizedProductListingSortOrderConfig) {
+            $this->memoizedProductListingSortOrderConfig = [
+                SortOrderConfig::createSelected(
+                    AttributeCode::fromString('name'),
+                    SortOrderDirection::create(SortOrderDirection::ASC)
+                ),
+                SortOrderConfig::create(
+                    AttributeCode::fromString('price'),
+                    SortOrderDirection::create(SortOrderDirection::ASC)
+                ),
+                SortOrderConfig::create(
+                    AttributeCode::fromString('created_at'),
+                    SortOrderDirection::create(SortOrderDirection::ASC)
+                ),
             ];
         }
 
-        return $this->lazyLoadedProductListingSortOrderConfig;
+        return $this->memoizedProductListingSortOrderConfig;
     }
 
     /**
@@ -386,15 +378,24 @@ class SampleFactory implements Factory
      */
     public function getProductSearchSortOrderConfig()
     {
-        if (null === $this->lazyLoadedProductSearchSortOrderConfig) {
-            $this->lazyLoadedProductSearchSortOrderConfig = [
-                SortOrderConfig::createSelected(AttributeCode::fromString('name'), SearchEngine::SORT_DIRECTION_ASC),
-                SortOrderConfig::create(AttributeCode::fromString('price'), SearchEngine::SORT_DIRECTION_ASC),
-                SortOrderConfig::create(AttributeCode::fromString('created_at'), SearchEngine::SORT_DIRECTION_ASC),
+        if (null === $this->memoizedProductSearchSortOrderConfig) {
+            $this->memoizedProductSearchSortOrderConfig = [
+                SortOrderConfig::createSelected(
+                    AttributeCode::fromString('name'),
+                    SortOrderDirection::create(SortOrderDirection::ASC)
+                ),
+                SortOrderConfig::create(
+                    AttributeCode::fromString('price'),
+                    SortOrderDirection::create(SortOrderDirection::ASC)
+                ),
+                SortOrderConfig::create(
+                    AttributeCode::fromString('created_at'),
+                    SortOrderDirection::create(SortOrderDirection::ASC)
+                ),
             ];
         }
 
-        return $this->lazyLoadedProductSearchSortOrderConfig;
+        return $this->memoizedProductSearchSortOrderConfig;
     }
 
     /**
@@ -402,13 +403,13 @@ class SampleFactory implements Factory
      */
     public function getProductSearchAutosuggestionSortOrderConfig()
     {
-        if (null === $this->lazyLoadedProductSearchAutosuggestionSortOrderConfig) {
-            $this->lazyLoadedProductSearchAutosuggestionSortOrderConfig = SortOrderConfig::createSelected(
+        if (null === $this->memoizedProductSearchAutosuggestionSortOrderConfig) {
+            $this->memoizedProductSearchAutosuggestionSortOrderConfig = SortOrderConfig::createSelected(
                 AttributeCode::fromString('name'),
-                SearchEngine::SORT_DIRECTION_ASC
+                SortOrderDirection::create(SortOrderDirection::ASC)
             );
         }
 
-        return $this->lazyLoadedProductSearchAutosuggestionSortOrderConfig;
+        return $this->memoizedProductSearchAutosuggestionSortOrderConfig;
     }
 }

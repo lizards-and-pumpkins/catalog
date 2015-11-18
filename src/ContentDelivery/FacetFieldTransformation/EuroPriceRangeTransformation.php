@@ -14,16 +14,14 @@ class EuroPriceRangeTransformation implements FacetFieldTransformation
      */
     public function encode($input)
     {
-        if (!preg_match('/^\d+' . SearchEngine::RANGE_DELIMITER . '\d+$/', $input)) {
+        if (!preg_match('/^(\d+)' . SearchEngine::RANGE_DELIMITER . '(\d+)$/', $input, $range)) {
             return $input;
         }
 
-        $range = explode(SearchEngine::RANGE_DELIMITER, $input);
-
         return sprintf(
             '%s € - %s €',
-            number_format($range[0] / self::PRICE_BASE, self::DECIMAL_POINTS, ',', '.'),
-            number_format($range[1] / self::PRICE_BASE, self::DECIMAL_POINTS, ',', '.')
+            number_format($range[1] / self::PRICE_BASE, self::DECIMAL_POINTS, ',', '.'),
+            number_format($range[2] / self::PRICE_BASE, self::DECIMAL_POINTS, ',', '.')
         );
     }
 

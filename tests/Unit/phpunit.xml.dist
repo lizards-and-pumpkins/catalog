@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <phpunit
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.5/phpunit.xsd"
+        xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/5.0/phpunit.xsd"
         backupGlobals="false"
         backupStaticAttributes="false"
         cacheTokens="false"
@@ -16,6 +16,7 @@
         stopOnError="false"
         stopOnFailure="false"
         stopOnIncomplete="false"
+        stopOnRisky="false"
         stopOnSkipped="false"
         timeoutForSmallTests="1"
         timeoutForMediumTests="10"
@@ -23,7 +24,6 @@
         checkForUnintentionallyCoveredCode="true"
         beStrictAboutTestsThatDoNotTestAnything="true"
         beStrictAboutOutputDuringTests="true"
-        beStrictAboutTestSize="false"
         verbose="false">
     <testsuite name="Lizards and Pumpkins Unit Tests">
         <directory>Suites</directory>

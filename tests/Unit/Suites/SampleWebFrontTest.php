@@ -18,12 +18,14 @@ use LizardsAndPumpkins\Http\HttpRouterChain;
  * @uses   \LizardsAndPumpkins\CommonFactory
  * @uses   \LizardsAndPumpkins\Content\ContentBlocksApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductDetailViewRequestHandler
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandlerTrait
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingPageContentBuilder
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingPageRequest
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchAutosuggestionRequestHandler
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchRequestHandler
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection
  * @uses   \LizardsAndPumpkins\ContentDelivery\SnippetTransformation\PricesJsonSnippetTransformation
  * @uses   \LizardsAndPumpkins\IntegrationTestFactory
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine

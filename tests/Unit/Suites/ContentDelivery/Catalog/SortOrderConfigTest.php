@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
-use LizardsAndPumpkins\ContentDelivery\Catalog\Exception\InvalidSortingDirectionsException;
 use LizardsAndPumpkins\Product\AttributeCode;
 
 /**
@@ -18,41 +17,41 @@ class SortOrderConfigTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    private $testSelectedDirection = 'asc';
+    private $testDirection = SortOrderDirection::ASC;
+
+    /**
+     * @var SortOrderDirection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubSortOrderDirection;
 
     protected function setUp()
     {
         $this->stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
-    }
-
-    public function testExceptionIsThrownIfInvalidSelectedSortingDirectionsIsSpecified()
-    {
-        $selectedDirection = 'foo';
-        $this->setExpectedException(InvalidSortingDirectionsException::class);
-        SortOrderConfig::create($this->stubAttributeCode, $selectedDirection);
+        $this->stubSortOrderDirection = $this->getMock(SortOrderDirection::class, [], [], '', false);
+        $this->stubSortOrderDirection->method('getDirection')->willReturn($this->testDirection);
     }
 
     public function testUnselectedSortOrderConfigCanBeCreated()
     {
-        $sortOrderConfig = SortOrderConfig::create($this->stubAttributeCode, $this->testSelectedDirection);
+        $sortOrderConfig = SortOrderConfig::create($this->stubAttributeCode, $this->stubSortOrderDirection);
 
         $this->assertSame($this->stubAttributeCode, $sortOrderConfig->getAttributeCode());
-        $this->assertSame($this->testSelectedDirection, $sortOrderConfig->getSelectedDirection());
+        $this->assertSame($this->stubSortOrderDirection, $sortOrderConfig->getSelectedDirection());
         $this->assertFalse($sortOrderConfig->isSelected());
     }
 
     public function testSelectedSortOrderConfigCanBeCreated()
     {
-        $sortOrderConfig = SortOrderConfig::createSelected($this->stubAttributeCode, $this->testSelectedDirection);
+        $sortOrderConfig = SortOrderConfig::createSelected($this->stubAttributeCode, $this->stubSortOrderDirection);
 
         $this->assertSame($this->stubAttributeCode, $sortOrderConfig->getAttributeCode());
-        $this->assertSame($this->testSelectedDirection, $sortOrderConfig->getSelectedDirection());
+        $this->assertSame($this->stubSortOrderDirection, $sortOrderConfig->getSelectedDirection());
         $this->assertTrue($sortOrderConfig->isSelected());
     }
 
     public function testJsonSerializableInterfaceIsImplemented()
     {
-        $sortOrderConfig = SortOrderConfig::create($this->stubAttributeCode, $this->testSelectedDirection);
+        $sortOrderConfig = SortOrderConfig::create($this->stubAttributeCode, $this->stubSortOrderDirection);
         $this->assertInstanceOf(\JsonSerializable::class, $sortOrderConfig);
     }
 
@@ -62,10 +61,10 @@ class SortOrderConfigTest extends \PHPUnit_Framework_TestCase
 
         $this->stubAttributeCode->method('__toString')->willReturn($attributeCode);
 
-        $sortOrderConfig = SortOrderConfig::create($this->stubAttributeCode, $this->testSelectedDirection);
+        $sortOrderConfig = SortOrderConfig::create($this->stubAttributeCode, $this->stubSortOrderDirection);
         $expectedArray = [
             'code' => $attributeCode,
-            'selectedDirection' => $this->testSelectedDirection,
+            'selectedDirection' => $this->testDirection,
             'selected' => false
         ];
 

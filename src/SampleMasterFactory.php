@@ -35,6 +35,8 @@ use LizardsAndPumpkins\Log\InMemoryLogger;
  * @method ContentDelivery\Catalog\SortOrderConfig[] getProductListingSortOrderConfig
  * @method ContentDelivery\Catalog\SortOrderConfig[] getProductSearchSortOrderConfig
  * @method ContentDelivery\Catalog\SortOrderConfig getProductSearchAutosuggestionSortOrderConfig
+ * @method ContentDelivery\Catalog\ProductListingRequestHandler createProductListingRequestHandler
+ * @method ContentDelivery\Catalog\ProductSearchRequestHandler createProductSearchRequestHandler
  */
 class SampleMasterFactory implements MasterFactory
 {
