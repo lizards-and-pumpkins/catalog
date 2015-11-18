@@ -23,7 +23,7 @@ define(['lib/local_storage'], function(storage) {
             recentlyViewedProducts.unshift(product);
 
             if (recentlyViewedProducts.length > numProducts + 1) {
-                recentlyViewedProducts.shift();
+                recentlyViewedProducts.pop();
             }
 
             storage.set(storageKey, recentlyViewedProducts);
