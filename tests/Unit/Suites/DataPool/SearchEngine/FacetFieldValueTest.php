@@ -40,16 +40,6 @@ class FacetFieldValueTest extends \PHPUnit_Framework_TestCase
         FacetFieldValue::create($this->testFieldValue, $invalidValueCount);
     }
 
-    public function testFacetFieldValueIsReturned()
-    {
-        $this->assertSame($this->testFieldValue, $this->facetFieldValue->getValue());
-    }
-
-    public function testFacetFieldValueCountIsReturned()
-    {
-        $this->assertSame($this->testFieldCount, $this->facetFieldValue->getCount());
-    }
-
     public function testJsonSerializableInterfaceIsImplemented()
     {
         $this->assertInstanceOf(\JsonSerializable::class, $this->facetFieldValue);

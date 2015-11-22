@@ -50,22 +50,6 @@ class FacetFieldValue implements \JsonSerializable
     }
 
     /**
-     * @return string
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
-
-    /**
-     * @return int
-     */
-    public function getCount()
-    {
-        return $this->count;
-    }
-
-    /**
      * @return mixed[]
      */
     public function jsonSerialize()
