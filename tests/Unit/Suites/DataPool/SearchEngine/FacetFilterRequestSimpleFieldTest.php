@@ -10,7 +10,7 @@ use LizardsAndPumpkins\Product\AttributeCode;
 class FacetFilterRequestSimpleFieldTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var AttributeCode
+     * @var AttributeCode|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubAttributeCode;
 
