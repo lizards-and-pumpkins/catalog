@@ -12,7 +12,7 @@ class SortOrderConfig implements \JsonSerializable
     private $attributeCode;
 
     /**
-     * @var string
+     * @var SortOrderDirection
      */
     private $selectedDirection;
 
@@ -62,7 +62,7 @@ class SortOrderConfig implements \JsonSerializable
     }
 
     /**
-     * @return string
+     * @return SortOrderDirection
      */
     public function getSelectedDirection()
     {
