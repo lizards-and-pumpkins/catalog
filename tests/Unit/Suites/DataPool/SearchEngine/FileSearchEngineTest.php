@@ -33,6 +33,10 @@ use LizardsAndPumpkins\Utils\LocalFilesystem;
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldCollection
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldValue
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestRangedField
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Product\ProductId

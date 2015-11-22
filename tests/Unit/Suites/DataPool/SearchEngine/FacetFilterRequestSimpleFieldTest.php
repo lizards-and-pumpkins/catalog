@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine;
 use LizardsAndPumpkins\Product\AttributeCode;
 
 /**
- * @covers \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestField
+ * @covers \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
  */
 class FacetFilterRequestSimpleFieldTest extends \PHPUnit_Framework_TestCase
 {

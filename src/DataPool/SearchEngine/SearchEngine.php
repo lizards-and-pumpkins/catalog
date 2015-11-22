@@ -22,7 +22,7 @@ interface SearchEngine
      * @param SearchCriteria $criteria
      * @param array[] $filterSelection
      * @param Context $context
-     * @param string[] $facetFiltersConfig
+     * @param FacetFilterRequest $facetFilterRequest
      * @param int $rowsPerPage
      * @param int $pageNumber
      * @param SortOrderConfig $sortOrderConfig
@@ -32,7 +32,7 @@ interface SearchEngine
         SearchCriteria $criteria,
         array $filterSelection,
         Context $context,
-        array $facetFiltersConfig,
+        FacetFilterRequest $facetFilterRequest,
         $rowsPerPage,
         $pageNumber,
         SortOrderConfig $sortOrderConfig

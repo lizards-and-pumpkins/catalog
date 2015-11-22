@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequestBody;
@@ -115,7 +116,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
 
         $criteria = SearchCriterionEqual::create('name', 'LED Arm-Signallampe');
         $selectedFilters = [];
-        $facetFields = [];
+        $facetFilterRequest = new FacetFilterRequest;
         $rowsPerPage = 100;
         $pageNumber = 0;
         $sortOrderConfig = SortOrderConfig::create(
@@ -126,7 +127,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
             $criteria,
             $selectedFilters,
             $context,
-            $facetFields,
+            $facetFilterRequest,
             $rowsPerPage,
             $pageNumber,
             $sortOrderConfig

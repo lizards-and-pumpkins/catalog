@@ -6,6 +6,8 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
 use LizardsAndPumpkins\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField;
 use LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\InMemoryUrlKeyStore;
@@ -81,12 +83,12 @@ class IntegrationTestFactory implements Factory
      */
     public function getProductListingFilterNavigationConfig()
     {
-        return [
-            'gender' => [],
-            'brand' => [],
-            'color' => [],
-            'price' => [],
-        ];
+        return new FacetFilterRequest(
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('gender')),
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('brand')),
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('price')),
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('color'))
+        );
     }
 
     /**
@@ -94,13 +96,13 @@ class IntegrationTestFactory implements Factory
      */
     public function getProductSearchResultsFilterNavigationConfig()
     {
-        return [
-            'gender' => [],
-            'brand' => [],
-            'category' => [],
-            'color' => [],
-            'price' => [],
-        ];
+        return new FacetFilterRequest(
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('gender')),
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('brand')),
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('category')),
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('price')),
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('color'))
+        );
     }
 
     /**

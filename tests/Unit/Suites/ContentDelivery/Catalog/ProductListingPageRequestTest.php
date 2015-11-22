@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
 use LizardsAndPumpkins\ContentDelivery\Catalog\Exception\NoSelectedSortOrderException;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
 use LizardsAndPumpkins\Http\HttpRequest;
 
 /**
@@ -72,13 +73,16 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
         $filterAName = 'foo';
         $filterBName = 'bar';
 
-        $testFilterNavigationConfig = [$filterAName => [], $filterBName => []];
+        /** @var FacetFilterRequest|\PHPUnit_Framework_MockObject_MockObject $stubFacetFilterRequest */
+        $stubFacetFilterRequest = $this->getMock(FacetFilterRequest::class, [], [], '', false);
+        $stubFacetFilterRequest->method('getAttributeCodeStrings')->willReturn([$filterAName, $filterBName]);
+
         $this->stubRequest->method('getQueryParameter')->willReturnMap([
             [$filterAName, 'baz,qux'],
             [$filterBName, null]
         ]);
 
-        $result = $this->pageRequest->getSelectedFilterValues($this->stubRequest, $testFilterNavigationConfig);
+        $result = $this->pageRequest->getSelectedFilterValues($this->stubRequest, $stubFacetFilterRequest);
         $expectedFilterValues = ['foo' => ['baz', 'qux'], 'bar' => []];
 
         $this->assertSame($expectedFilterValues, $result);

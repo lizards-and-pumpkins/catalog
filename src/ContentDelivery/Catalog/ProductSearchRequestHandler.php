@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -37,7 +38,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
     /**
      * @var string[]
      */
-    private $filterNavigationConfig;
+    private $facetFilterRequest;
 
     /**
      * @var SearchCriteriaBuilder
@@ -63,7 +64,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
      * @param Context $context
      * @param DataPoolReader $dataPoolReader
      * @param SnippetKeyGenerator $metaInfoSnippetKeyGenerator
-     * @param string[] $filterNavigationConfig
+     * @param FacetFilterRequest $facetFilterRequest
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param string[] $searchableAttributeCodes
      * @param ProductListingPageContentBuilder $productListingPageContentBuilder
@@ -73,7 +74,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         Context $context,
         DataPoolReader $dataPoolReader,
         SnippetKeyGenerator $metaInfoSnippetKeyGenerator,
-        array $filterNavigationConfig,
+        FacetFilterRequest $facetFilterRequest,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         array $searchableAttributeCodes,
         ProductListingPageContentBuilder $productListingPageContentBuilder,
@@ -82,7 +83,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         $this->dataPoolReader = $dataPoolReader;
         $this->context = $context;
         $this->metaInfoSnippetKeyGenerator = $metaInfoSnippetKeyGenerator;
-        $this->filterNavigationConfig = $filterNavigationConfig;
+        $this->facetFilterRequest = $facetFilterRequest;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->searchableAttributeCodes = $searchableAttributeCodes;
         $this->productListingPageContentBuilder = $productListingPageContentBuilder;
@@ -169,7 +170,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
     ) {
         $selectedFilters = $this->productListingPageRequest->getSelectedFilterValues(
             $request,
-            $this->filterNavigationConfig
+            $this->facetFilterRequest
         );
 
         $queryString = $request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
@@ -183,7 +184,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
             $criteria,
             $selectedFilters,
             $this->context,
-            $this->filterNavigationConfig,
+            $this->facetFilterRequest,
             $productsPerPage->getSelectedNumberOfProductsPerPage(),
             $currentPageNumber,
             $selectedSortOrderConfig

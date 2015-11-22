@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
@@ -125,7 +126,9 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $stubSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $stubSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->testMetaInfoKey);
 
-        $testFilterNavigationConfig = [];
+        /** @var FacetFilterRequest|\PHPUnit_Framework_MockObject_MockObject  $stubFacetFilterRequest */
+        $stubFacetFilterRequest = $this->getMock(FacetFilterRequest::class, [], [], '', false);
+
         $stubProductListingPageContentBuilder = $this->createStubProductListingPageContentBuilder();
         $stubSearchCriteriaBuilder = $this->createStubSearchCriteriaBuilder();
         $testSearchableAttributeCodes = [];
@@ -138,7 +141,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
             $stubContext,
             $this->mockDataPoolReader,
             $stubSnippetKeyGenerator,
-            $testFilterNavigationConfig,
+            $stubFacetFilterRequest,
             $stubSearchCriteriaBuilder,
             $testSearchableAttributeCodes,
             $stubProductListingPageContentBuilder,
