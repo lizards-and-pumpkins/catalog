@@ -561,13 +561,13 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $sortOrderConfig
         );
 
-        $expectedFooFacetField = new SearchEngineFacetField(
+        $expectedFooFacetField = new FacetField(
             AttributeCode::fromString($fieldACode),
-            SearchEngineFacetFieldValueCount::create($keyword, 1)
+            FacetFieldValue::create($keyword, 1)
         );
-        $expectedBarFacetField = new SearchEngineFacetField(
+        $expectedBarFacetField = new FacetField(
             AttributeCode::fromString($fieldBCode),
-            SearchEngineFacetFieldValueCount::create($keyword, 2)
+            FacetFieldValue::create($keyword, 2)
         );
         $result = $searchEngineResponse->getFacetFieldCollection();
 
@@ -617,14 +617,14 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         );
 
         $expectedFacetFields = [
-            new SearchEngineFacetField(
+            new FacetField(
                 AttributeCode::fromString($fieldName),
-                SearchEngineFacetFieldValueCount::create(
+                FacetFieldValue::create(
                     SearchEngine::RANGE_WILDCARD . SearchEngine::RANGE_DELIMITER . '10',
                     1
                 ),
-                SearchEngineFacetFieldValueCount::create('10' . SearchEngine::RANGE_DELIMITER . '20', 1),
-                SearchEngineFacetFieldValueCount::create(
+                FacetFieldValue::create('10' . SearchEngine::RANGE_DELIMITER . '20', 1),
+                FacetFieldValue::create(
                     '30' . SearchEngine::RANGE_DELIMITER . SearchEngine::RANGE_WILDCARD,
                     1
                 )

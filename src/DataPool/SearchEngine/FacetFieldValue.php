@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine;
 use LizardsAndPumpkins\DataPool\SearchEngine\Exception\InvalidFacetFieldValueCountException;
 use LizardsAndPumpkins\DataPool\SearchEngine\Exception\InvalidFacetFieldValueException;
 
-class SearchEngineFacetFieldValueCount implements \JsonSerializable
+class FacetFieldValue implements \JsonSerializable
 {
     /**
      * @var string
@@ -30,7 +30,7 @@ class SearchEngineFacetFieldValueCount implements \JsonSerializable
     /**
      * @param mixed $value
      * @param mixed $count
-     * @return SearchEngineFacetFieldValueCount
+     * @return FacetFieldValue
      */
     public static function create($value, $count)
     {

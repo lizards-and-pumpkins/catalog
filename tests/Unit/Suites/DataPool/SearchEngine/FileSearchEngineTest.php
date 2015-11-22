@@ -30,9 +30,9 @@ use LizardsAndPumpkins\Utils\LocalFilesystem;
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineFacetField
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineFacetFieldCollection
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineFacetFieldValueCount
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetField
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldCollection
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldValue
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Product\ProductId

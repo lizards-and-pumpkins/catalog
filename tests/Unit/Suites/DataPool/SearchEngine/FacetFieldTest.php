@@ -5,15 +5,15 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine;
 use LizardsAndPumpkins\Product\AttributeCode;
 
 /**
- * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineFacetField
+ * @covers \LizardsAndPumpkins\DataPool\SearchEngine\FacetField
  */
-class SearchEngineFacetFieldTest extends \PHPUnit_Framework_TestCase
+class FacetFieldTest extends \PHPUnit_Framework_TestCase
 {
     public function testFacetFieldAttributeCodeIsReturned()
     {
         /** @var AttributeCode|\PHPUnit_Framework_MockObject_MockObject $stubAttributeCode */
         $stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
-        $facetField = new SearchEngineFacetField($stubAttributeCode);
+        $facetField = new FacetField($stubAttributeCode);
 
         $this->assertSame($stubAttributeCode, $facetField->getAttributeCode());
     }
@@ -23,10 +23,10 @@ class SearchEngineFacetFieldTest extends \PHPUnit_Framework_TestCase
         /** @var AttributeCode|\PHPUnit_Framework_MockObject_MockObject $stubAttributeCode */
         $stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
 
-        $stubFacetValueA = $this->getMock(SearchEngineFacetFieldValueCount::class, [], [], '', false);
-        $stubFacetValueB = $this->getMock(SearchEngineFacetFieldValueCount::class, [], [], '', false);
+        $stubFacetValueA = $this->getMock(FacetFieldValue::class, [], [], '', false);
+        $stubFacetValueB = $this->getMock(FacetFieldValue::class, [], [], '', false);
 
-        $facetField = new SearchEngineFacetField($stubAttributeCode, $stubFacetValueA, $stubFacetValueB);
+        $facetField = new FacetField($stubAttributeCode, $stubFacetValueA, $stubFacetValueB);
 
         $result = $facetField->getValues();
         $expectedValuesArray = [$stubFacetValueA, $stubFacetValueB];

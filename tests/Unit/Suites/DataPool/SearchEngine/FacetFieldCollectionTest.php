@@ -3,9 +3,9 @@
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 /**
- * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineFacetFieldCollection
+ * @covers \LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldCollection
  */
-class SearchEngineFacetFieldCollectionTest extends \PHPUnit_Framework_TestCase
+class FacetFieldCollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @param $attributeCode
@@ -14,7 +14,7 @@ class SearchEngineFacetFieldCollectionTest extends \PHPUnit_Framework_TestCase
      */
     private function createStubFacetField($attributeCode, array $stubFacetFieldValueCount)
     {
-        $stubFacetField = $this->getMock(SearchEngineFacetField::class, [], [], '', false);
+        $stubFacetField = $this->getMock(FacetField::class, [], [], '', false);
         $stubFacetField->method('getAttributeCode')->willReturn($attributeCode);
         $stubFacetField->method('getValues')->willReturn($stubFacetFieldValueCount);
         return $stubFacetField;
@@ -22,22 +22,22 @@ class SearchEngineFacetFieldCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testCountableInterfaceIsImplemented()
     {
-        $facetFieldCollection = new SearchEngineFacetFieldCollection;
+        $facetFieldCollection = new FacetFieldCollection;
         $this->assertInstanceOf(\Countable::class, $facetFieldCollection);
     }
 
     public function testCollectionCountIsReturned()
     {
-        $stubFacetField = $this->getMock(SearchEngineFacetField::class, [], [], '', false);
-        $facetFieldCollection = new SearchEngineFacetFieldCollection($stubFacetField);
+        $stubFacetField = $this->getMock(FacetField::class, [], [], '', false);
+        $facetFieldCollection = new FacetFieldCollection($stubFacetField);
 
         $this->assertCount(1, $facetFieldCollection);
     }
 
     public function testCollectionCanBeRetrievedViaGetter()
     {
-        $stubFacetField = $this->getMock(SearchEngineFacetField::class, [], [], '', false);
-        $facetFieldCollection = new SearchEngineFacetFieldCollection($stubFacetField);
+        $stubFacetField = $this->getMock(FacetField::class, [], [], '', false);
+        $facetFieldCollection = new FacetFieldCollection($stubFacetField);
 
         $result = $facetFieldCollection->getFacetFields();
         $expectedFacetFieldsArray = [$stubFacetField];
@@ -47,14 +47,14 @@ class SearchEngineFacetFieldCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testIteratorAggregateInterfaceIsImplemented()
     {
-        $facetFieldCollection = new SearchEngineFacetFieldCollection;
+        $facetFieldCollection = new FacetFieldCollection;
         $this->assertInstanceOf(\IteratorAggregate::class, $facetFieldCollection);
     }
 
     public function testCollectionCanBeRetrievedViaIterator()
     {
-        $stubFacetField = $this->getMock(SearchEngineFacetField::class, [], [], '', false);
-        $facetFieldCollection = new SearchEngineFacetFieldCollection($stubFacetField);
+        $stubFacetField = $this->getMock(FacetField::class, [], [], '', false);
+        $facetFieldCollection = new FacetFieldCollection($stubFacetField);
 
         $result = $facetFieldCollection->getIterator();
 
@@ -64,21 +64,21 @@ class SearchEngineFacetFieldCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testJsonSerializableInterfaceIsImplemented()
     {
-        $facetFieldCollection = new SearchEngineFacetFieldCollection;
+        $facetFieldCollection = new FacetFieldCollection;
         $this->assertInstanceOf(\JsonSerializable::class, $facetFieldCollection);
     }
 
     public function testArrayRepresentationOfFacetFilterCollectionIsReturned()
     {
         $attributeCodeA = 'foo';
-        $stubFacetFieldAValueCount = $this->getMock(SearchEngineFacetFieldValueCount::class, [], [], '', false);
+        $stubFacetFieldAValueCount = $this->getMock(FacetFieldValue::class, [], [], '', false);
         $stubFacetFieldA = $this->createStubFacetField($attributeCodeA, [$stubFacetFieldAValueCount]);
 
         $attributeCodeB = 'bar';
-        $stubFacetFieldBValueCount = $this->getMock(SearchEngineFacetFieldValueCount::class, [], [], '', false);
+        $stubFacetFieldBValueCount = $this->getMock(FacetFieldValue::class, [], [], '', false);
         $stubFacetFieldB = $this->createStubFacetField($attributeCodeB, [$stubFacetFieldBValueCount]);
 
-        $facetFieldCollection = new SearchEngineFacetFieldCollection($stubFacetFieldA, $stubFacetFieldB);
+        $facetFieldCollection = new FacetFieldCollection($stubFacetFieldA, $stubFacetFieldB);
 
         $expectedArray = [
             $attributeCodeA => [$stubFacetFieldAValueCount],
