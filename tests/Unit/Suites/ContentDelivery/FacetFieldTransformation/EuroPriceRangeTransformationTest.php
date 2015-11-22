@@ -2,6 +2,9 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation;
 
+use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\Exception\InvalidTransformationInputException;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange;
+
 /**
  * @covers \LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\EuroPriceRangeTransformation
  */
@@ -23,44 +26,30 @@ class EuroPriceRangeTransformationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider nonMatchingInputDataProvider
-     * @param string $nonMatchingInput
-     */
-    public function testNonMatchingInputIsNotEncoded($nonMatchingInput)
-    {
-        $result = $this->transformation->encode($nonMatchingInput);
-        $this->assertSame($nonMatchingInput, $result);
-    }
-
-    public function nonMatchingInputDataProvider()
-    {
-        return [
-            ['foo'],
-            ['a TO b'],
-            ['1.5 TO 2'],
-        ];
-    }
-
-    /**
-     * @dataProvider matchingInputDataProvider
-     * @param string $input
+     * @dataProvider rangeDataProvider
+     * @param int $rangeFrom
+     * @param int $rangeTo
      * @param string $expectation
      */
-    public function testEncodedPriceRangeIsReturned($input, $expectation)
+    public function testEncodedPriceRangeIsReturned($rangeFrom, $rangeTo, $expectation)
     {
-        $result = $this->transformation->encode($input);
-        $this->assertSame($expectation, $result);
+        /** @var FacetFilterRange|\PHPUnit_Framework_MockObject_MockObject $stubFacetFilterRange */
+        $stubFacetFilterRange = $this->getMock(FacetFilterRange::class, [], [], '', false);
+        $stubFacetFilterRange->method('from')->willReturn($rangeFrom);
+        $stubFacetFilterRange->method('to')->willReturn($rangeTo);
+
+        $this->assertSame($expectation, $this->transformation->encode($stubFacetFilterRange));
     }
 
     /**
      * @return array[]
      */
-    public function matchingInputDataProvider()
+    public function rangeDataProvider()
     {
         return [
-            ['1 TO 2', '0,01 € - 0,02 €'],
-            ['1 TO 20', '0,01 € - 0,20 €'],
-            ['1000 TO 1999', '10,00 € - 19,99 €'],
+            [1, 2, '0,01 € - 0,02 €'],
+            [1, 20, '0,01 € - 0,20 €'],
+            [1000, 1999, '10,00 € - 19,99 €'],
         ];
     }
 
@@ -68,10 +57,10 @@ class EuroPriceRangeTransformationTest extends \PHPUnit_Framework_TestCase
      * @dataProvider nonMatchingEncodedInputDataProvider
      * @param string $nonMatchingEncodedInput
      */
-    public function testNonMatchingEncodedInputIsNotDecoded($nonMatchingEncodedInput)
+    public function testExceptionIsThrownIfInputCanNotBeDecoded($nonMatchingEncodedInput)
     {
-        $result = $this->transformation->decode($nonMatchingEncodedInput);
-        $this->assertSame($nonMatchingEncodedInput, $result);
+        $this->setExpectedException(InvalidTransformationInputException::class);
+        $this->transformation->decode($nonMatchingEncodedInput);
     }
 
     public function nonMatchingEncodedInputDataProvider()
@@ -86,12 +75,16 @@ class EuroPriceRangeTransformationTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider matchingEncodedInputDataProvider
      * @param string $input
-     * @param string $expectation
+     * @param int $rangeFrom
+     * @param int $rangeTo
      */
-    public function testDecodedPriceRangeIsReturned($input, $expectation)
+    public function testFilterPricePriceRangeIsReturned($input, $rangeFrom, $rangeTo)
     {
         $result = $this->transformation->decode($input);
-        $this->assertSame($expectation, $result);
+
+        $this->assertInstanceOf(FacetFilterRange::class, $result);
+        $this->assertEquals($rangeFrom, $result->from());
+        $this->assertEquals($rangeTo, $result->to());
     }
 
     /**
@@ -100,9 +93,9 @@ class EuroPriceRangeTransformationTest extends \PHPUnit_Framework_TestCase
     public function matchingEncodedInputDataProvider()
     {
         return [
-            ['0,01 € - 0,02 €', '1 TO 2'],
-            ['0,01 € - 0,20 €', '1 TO 20'],
-            ['10,00 € - 19,99 €', '1000 TO 1999'],
+            ['0,01 € - 0,02 €', 1, 2],
+            ['0,01 € - 0,20 €', 1, 20],
+            ['10,00 € - 19,99 €', 1000, 1999],
         ];
     }
 }
