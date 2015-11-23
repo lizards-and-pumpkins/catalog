@@ -47,14 +47,14 @@ class HttpBaseUrlTest extends \PHPUnit_Framework_TestCase
         HttpBaseUrl::fromString('http://example.com');
     }
 
-    public function testItThrowsAnExceptionIfTheInputStringDoesNotMatchAValdDomainAndRequestPath()
+    public function testItThrowsAnExceptionIfTheInputStringDoesNotContainAValidDomain()
     {
-        $invalidBaseUrl = 'http://example_domain.com/';
+        $baseUrlWithInvalidDomain = 'http://example_domain.com/';
         $this->setExpectedException(
             InvalidBaseUrlSourceDataException::class,
-            sprintf('The base URL "%s" is invalid', $invalidBaseUrl)
+            sprintf('The base URL "%s" is invalid', $baseUrlWithInvalidDomain)
         );
-        HttpBaseUrl::fromString($invalidBaseUrl);
+        HttpBaseUrl::fromString($baseUrlWithInvalidDomain);
     }
 
     public function testItReturnsABaseUrlInstance()
