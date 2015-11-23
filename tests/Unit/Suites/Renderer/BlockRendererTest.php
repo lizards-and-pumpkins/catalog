@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Renderer;
 
+use LizardsAndPumpkins\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Renderer\Exception\BlockRendererMustHaveOneRootBlockException;
 use LizardsAndPumpkins\Renderer\Exception\CanNotInstantiateBlockException;
 use LizardsAndPumpkins\Renderer\Exception\MethodNotYetAvailableException;
@@ -20,14 +21,16 @@ class BlockRendererTest extends AbstractBlockRendererTest
      * @param ThemeLocator $stubThemeLocator
      * @param BlockStructure $stubBlockStructure
      * @param TranslatorRegistry $stubTranslatorRegistry
+     * @param BaseUrlBuilder $baseUrlBuilder
      * @return StubBlockRenderer
      */
     protected function createRendererInstance(
         ThemeLocator $stubThemeLocator,
         BlockStructure $stubBlockStructure,
-        TranslatorRegistry $stubTranslatorRegistry
+        TranslatorRegistry $stubTranslatorRegistry,
+        BaseUrlBuilder $baseUrlBuilder
     ) {
-        return new StubBlockRenderer($stubThemeLocator, $stubBlockStructure, $stubTranslatorRegistry);
+        return new StubBlockRenderer($stubThemeLocator, $stubBlockStructure, $stubTranslatorRegistry, $baseUrlBuilder);
     }
 
     public function testExceptionIsThrownIfNoRootBlockIsDefined()

@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Renderer;
 
+use LizardsAndPumpkins\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Renderer\Exception\TemplateFileNotReadableException;
 
 class Block
@@ -25,17 +26,23 @@ class Block
      * @var string
      */
     private $blockName;
+    /**
+     * @var BaseUrlBuilder
+     */
+    private $baseUrlBuilder;
 
     /**
      * @param BlockRenderer $blockRenderer
+     * @param BaseUrlBuilder $baseUrlBuilder
      * @param string $template
      * @param string $name
      * @param mixed $dataObject
      */
-    final public function __construct(BlockRenderer $blockRenderer, $template, $name, $dataObject)
+    final public function __construct(BlockRenderer $blockRenderer, BaseUrlBuilder $baseUrlBuilder, $template, $name, $dataObject)
     {
         // TODO Decouple from template rendering logic
         $this->blockRenderer = $blockRenderer;
+        $this->baseUrlBuilder = $baseUrlBuilder;
         $this->template = $template;
         $this->blockName = $name;
         $this->dataObject = $dataObject;

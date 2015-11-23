@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Product;
 
+use LizardsAndPumpkins\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Renderer\AbstractBlockRendererTest;
 use LizardsAndPumpkins\Renderer\BlockRenderer;
 use LizardsAndPumpkins\Renderer\BlockStructure;
@@ -18,13 +19,20 @@ class ProductListingBlockRendererTest extends AbstractBlockRendererTest
      * @param ThemeLocator $stubThemeLocator
      * @param BlockStructure $stubBlockStructure
      * @param TranslatorRegistry $stubTranslatorRegistry
+     * @param BaseUrlBuilder $baseUrlBuilder
      * @return BlockRenderer
      */
     protected function createRendererInstance(
         ThemeLocator $stubThemeLocator,
         BlockStructure $stubBlockStructure,
-        TranslatorRegistry $stubTranslatorRegistry
+        TranslatorRegistry $stubTranslatorRegistry,
+        BaseUrlBuilder $baseUrlBuilder
     ) {
-        return new ProductListingBlockRenderer($stubThemeLocator, $stubBlockStructure, $stubTranslatorRegistry);
+        return new ProductListingBlockRenderer(
+            $stubThemeLocator,
+            $stubBlockStructure,
+            $stubTranslatorRegistry,
+            $baseUrlBuilder
+        );
     }
 }

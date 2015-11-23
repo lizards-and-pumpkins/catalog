@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Renderer;
 
+use LizardsAndPumpkins\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Renderer\Exception\TemplateFileNotReadableException;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
@@ -33,6 +34,11 @@ class BlockTest extends \PHPUnit_Framework_TestCase
     private $mockBlockRenderer;
 
     /**
+     * @var BaseUrlBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockBaseUrlBuilder;
+
+    /**
      * @var Block
      */
     private $block;
@@ -41,9 +47,11 @@ class BlockTest extends \PHPUnit_Framework_TestCase
     {
         $this->testTemplateFilePath = $this->getUniqueTempDir() . '/test-template.phtml';
         $this->mockBlockRenderer = $this->getMock(BlockRenderer::class, [], [], '', false);
+        $this->mockBaseUrlBuilder = $this->getMock(BaseUrlBuilder::class);
 
         $this->block = new Block(
             $this->mockBlockRenderer,
+            $this->mockBaseUrlBuilder,
             $this->testTemplateFilePath,
             $this->testBlockName,
             $this->testProjectionSourceData

@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Product\Block;
 
+use LizardsAndPumpkins\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Renderer\Block;
@@ -29,11 +30,19 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        /** @var  $stubBlockRenderer BlockRenderer|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var BlockRenderer|\PHPUnit_Framework_MockObject_MockObject $stubBlockRenderer */
+        /** @var BaseUrlBuilder|\PHPUnit_Framework_MockObject_MockObject $stubBaseUrlBuilder */
+        $stubBaseUrlBuilder = $this->getMock(BaseUrlBuilder::class);
         $stubBlockRenderer = $this->getMock(BlockRenderer::class, [], [], '', false);
         $this->stubProduct = $this->getMock(Product::class);
 
-        $this->productBlock = new ProductBlock($stubBlockRenderer, 'foo.phtml', 'foo', $this->stubProduct);
+        $this->productBlock = new ProductBlock(
+            $stubBlockRenderer,
+            $stubBaseUrlBuilder,
+            'foo.phtml',
+            'foo',
+            $this->stubProduct
+        );
     }
 
     public function testBlockClassIsExtended()

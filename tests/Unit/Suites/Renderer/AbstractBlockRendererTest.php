@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Renderer;
 
+use LizardsAndPumpkins\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Renderer\Translation\Translator;
 use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
@@ -45,6 +46,8 @@ abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
         $this->stubBlockStructure = new BlockStructure();
 
         $this->stubTranslator = $this->getMock(Translator::class, [], [], '', false);
+        
+        $stubBaseUrlBuilder = $this->getMock(BaseUrlBuilder::class);
 
         /** @var TranslatorRegistry|\PHPUnit_Framework_MockObject_MockObject $stubTranslatorRegistry */
         $stubTranslatorRegistry = $this->getMock(TranslatorRegistry::class, [], [], '', false);
@@ -53,7 +56,8 @@ abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
         $this->blockRenderer = $this->createRendererInstance(
             $this->stubThemeLocator,
             $this->stubBlockStructure,
-            $stubTranslatorRegistry
+            $stubTranslatorRegistry,
+            $stubBaseUrlBuilder
         );
     }
 
@@ -79,12 +83,14 @@ abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
      * @param ThemeLocator $stubThemeLocator
      * @param BlockStructure $stubBlockStructure
      * @param TranslatorRegistry $stubTranslatorRegistry
+     * @param BaseUrlBuilder $baseUrlBuilder
      * @return BlockRenderer
      */
     abstract protected function createRendererInstance(
         ThemeLocator $stubThemeLocator,
         BlockStructure $stubBlockStructure,
-        TranslatorRegistry $stubTranslatorRegistry
+        TranslatorRegistry $stubTranslatorRegistry,
+        BaseUrlBuilder $baseUrlBuilder
     );
 
     /**
