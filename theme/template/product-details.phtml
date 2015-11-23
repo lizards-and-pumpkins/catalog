@@ -21,13 +21,13 @@ $save = 0;
     <div class="product-essential">
         <div id="phoneTitlePlaceholder"></div>
         <div class="product-img-box">
-            <a href="media/product/original/<?= $this->getMainProductFileName() ?>" class="main-image-area">
-                <img src="media/product/large/<?= $this->getMainProductFileName() ?>" itemprop="image" alt="<?= $this->getMainProductImageLabel() ?>"/>
+            <a href="<?= $this->getBaseUrl() ?>media/product/original/<?= $this->getMainProductFileName() ?>" class="main-image-area">
+                <img src="<?= $this->getBaseUrl() ?>media/product/large/<?= $this->getMainProductFileName() ?>" itemprop="image" alt="<?= $this->getMainProductImageLabel() ?>"/>
             </a>
             <ul class="more-views">
                 <?php for ($i=0; $i<$productImageCount; $i++) : ?>
                     <li>
-                        <a href="media/product/original/<?= $this->getProductImageFileNameByNumber($i) ?>" data-image="media/product/large/<?= $this->getProductImageFileNameByNumber($i) ?>"><img src="media/product/small/<?= $this->getProductImageFileNameByNumber($i) ?>" width="48" height="48"/></a>
+                        <a href="<?= $this->getBaseUrl() ?>media/product/original/<?= $this->getProductImageFileNameByNumber($i) ?>" data-image="media/product/large/<?= $this->getProductImageFileNameByNumber($i) ?>"><img src="<?= $this->getBaseUrl() ?>media/product/small/<?= $this->getProductImageFileNameByNumber($i) ?>" width="48" height="48"/></a>
                     </li>
                 <?php endfor ?>
             </ul>
@@ -35,7 +35,7 @@ $save = 0;
         <div class="product-shop">
             <div class="top">
                 <div class="product-title">
-                    <img src="images/logos/<?= $brandLogo ?>" width="95" id="brandLogo" />
+                    <img src="<?= $this->getBaseUrl() ?>images/logos/<?= $brandLogo ?>" width="95" id="brandLogo" />
                     <h1 itemprop="name"><?= $this->getFirstValueOfProductAttribute('name') ?></h1>
                     <p class="similarProducts">
                         <?= $this->__('More by') ?> <a href="" itemprop="brand"><?= $brand ?></a>
@@ -50,7 +50,7 @@ $save = 0;
                     <div class="item twitterLike"><a href="https://twitter.com/share" class="twitter-share-button">Tweet</a></div>
                     <div class="item g-plusone" data-size="medium"></div>
                     <div class="item fb-like" data-href="<!--= $this->getProductUrl($_product) -->" data-send="true" data-layout="button_count" data-width="200" data-show-faces="false" data-action="recommend"></div>
-                    <div class="item print"><a href="javascript:" onclick="window.print()"><?= $this->__('Print') ?> <img src="images/icons/printico.gif" alt="print" /></a></div>
+                    <div class="item print"><a href="javascript:" onclick="window.print()"><?= $this->__('Print') ?> <img src="<?= $this->getBaseUrl() ?>images/icons/printico.gif" alt="print" /></a></div>
                 </div>
             </div>
 

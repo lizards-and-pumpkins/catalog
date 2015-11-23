@@ -1,6 +1,6 @@
 <ul>
     <li class="no-thumbnail">
-        <a href="/lizards-and-pumpkins/catalogsearch/result?q={{snippet query_string}}">
+        <a href="<?= $this->getBaseUrl() ?>catalogsearch/result?q={{snippet query_string}}">
             {{snippet query_string}} ({{snippet total_number_of_results}} <?= $this->__('Ergebnisse') ?>)
         </a>
     </li>
@@ -10,6 +10,6 @@
     {{snippet product_4}}
     {{snippet product_5}}
     <li class="no-thumbnail">
-        <a href="/lizards-and-pumpkins/catalogsearch/result?q={{snippet query_string}}"><?= $this->__('weitere Suchergebnisse') ?></a>
+        <a href="<?= $this->getBaseUrl() ?>catalogsearch/result?q={{snippet query_string}}"><?= $this->__('weitere Suchergebnisse') ?></a>
     </li>
 </ul>
