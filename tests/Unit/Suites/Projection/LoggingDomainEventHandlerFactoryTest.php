@@ -36,7 +36,6 @@ use LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler;
  * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionTemplateProjector
  * @uses   \LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductListingTemplateProjector
  * @uses   \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetProjector
  * @uses   \LizardsAndPumpkins\Product\ProductStockQuantitySnippetRenderer
@@ -80,6 +79,8 @@ use LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler;
  * @uses   \LizardsAndPumpkins\Image\ImageMagickResizeStrategy
  * @uses   \LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry
  * @uses   \LizardsAndPumpkins\Utils\LocalFilesystem
+ * @uses   \LizardsAndPumpkins\EnvironmentConfigReader
+ * @uses   \LizardsAndPumpkins\BaseUrl\WebsiteBaseUrlBuilder
  */
 class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 {

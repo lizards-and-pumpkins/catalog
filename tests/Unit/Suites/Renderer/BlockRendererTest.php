@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Renderer;
 
+use LizardsAndPumpkins\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Renderer\Exception\BlockRendererMustHaveOneRootBlockException;
 use LizardsAndPumpkins\Renderer\Exception\CanNotInstantiateBlockException;
 use LizardsAndPumpkins\Renderer\Exception\MethodNotYetAvailableException;
@@ -20,14 +21,16 @@ class BlockRendererTest extends AbstractBlockRendererTest
      * @param ThemeLocator $stubThemeLocator
      * @param BlockStructure $stubBlockStructure
      * @param TranslatorRegistry $stubTranslatorRegistry
+     * @param BaseUrlBuilder $baseUrlBuilder
      * @return StubBlockRenderer
      */
     protected function createRendererInstance(
         ThemeLocator $stubThemeLocator,
         BlockStructure $stubBlockStructure,
-        TranslatorRegistry $stubTranslatorRegistry
+        TranslatorRegistry $stubTranslatorRegistry,
+        BaseUrlBuilder $baseUrlBuilder
     ) {
-        return new StubBlockRenderer($stubThemeLocator, $stubBlockStructure, $stubTranslatorRegistry);
+        return new StubBlockRenderer($stubThemeLocator, $stubBlockStructure, $stubTranslatorRegistry, $baseUrlBuilder);
     }
 
     public function testExceptionIsThrownIfNoRootBlockIsDefined()
@@ -196,5 +199,18 @@ class BlockRendererTest extends AbstractBlockRendererTest
         $this->getStubTranslator()->method('translate')->with($originalString)->willReturn($translatedString);
 
         $this->assertSame($translatedString, $this->getBlockRenderer()->translate($originalString));
+    }
+
+    public function testItDelegatesGettingTheBaseUrlToTheBaseUrlBuilder()
+    {
+        $this->getMockBaseUrlBuilder()->expects($this->once())->method('create')->with($this->getStubContext());
+
+        $testDir = $this->getUniqueTempDir();
+        $this->createFixtureDirectory($testDir);
+        $this->createFixtureFile($testDir . '/test-template.php', 'test template content');
+        $this->addStubRootBlock(StubBlock::class, $testDir . '/test-template.php');
+        $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
+        
+        $this->getBlockRenderer()->getBaseUrl();
     }
 }

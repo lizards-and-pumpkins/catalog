@@ -1,5 +1,6 @@
 <?php
 
+
 namespace LizardsAndPumpkins\Renderer;
 
 use LizardsAndPumpkins\Renderer\Exception\TemplateFileNotReadableException;
@@ -108,5 +109,12 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $this->mockBlockRenderer->method('translate')->with($testSourceString)->willReturn($testTranslatedString);
 
         $this->assertEquals($testTranslatedString, $this->block->__($testSourceString));
+    }
+
+    public function testItDelegatesFetchingTheBaseUrlToTheBlockRenderer()
+    {
+        $dummyBaseUrl = 'dummy base url';
+        $this->mockBlockRenderer->expects($this->once())->method('getBaseUrl')->willReturn($dummyBaseUrl);
+        $this->assertSame($dummyBaseUrl, $this->block->getBaseUrl());
     }
 }

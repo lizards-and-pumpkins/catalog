@@ -417,7 +417,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return new ProductSearchAutosuggestionBlockRenderer(
             $this->getMasterFactory()->createThemeLocator(),
             $this->getMasterFactory()->createBlockStructure(),
-            $this->getMasterFactory()->getTranslatorRegistry()
+            $this->getMasterFactory()->getTranslatorRegistry(),
+            $this->getMasterFactory()->createBaseUrlBuilder()
         );
     }
 
@@ -486,7 +487,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return new ProductListingBlockRenderer(
             $this->getMasterFactory()->createThemeLocator(),
             $this->getMasterFactory()->createBlockStructure(),
-            $this->getMasterFactory()->getTranslatorRegistry()
+            $this->getMasterFactory()->getTranslatorRegistry(),
+            $this->getMasterFactory()->createBaseUrlBuilder()
         );
     }
 
@@ -580,7 +582,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return new ProductDetailViewBlockRenderer(
             $this->getMasterFactory()->createThemeLocator(),
             $this->getMasterFactory()->createBlockStructure(),
-            $this->getMasterFactory()->getTranslatorRegistry()
+            $this->getMasterFactory()->getTranslatorRegistry(),
+            $this->getMasterFactory()->createBaseUrlBuilder()
         );
     }
 
@@ -685,7 +688,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return new ProductInSearchAutosuggestionBlockRenderer(
             $this->getMasterFactory()->createThemeLocator(),
             $this->getMasterFactory()->createBlockStructure(),
-            $this->getMasterFactory()->getTranslatorRegistry()
+            $this->getMasterFactory()->getTranslatorRegistry(),
+            $this->getMasterFactory()->createBaseUrlBuilder()
         );
     }
 
