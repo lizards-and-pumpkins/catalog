@@ -45,7 +45,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
     {
         $factory = new SampleMasterFactory();
         $factory->register(new CommonFactory());
-        $factory->register($this->createIntegrationTestFactory($factory));
+        $this->registerIntegrationTestFactory($factory);
         $factory->register(new FrontendFactory($request));
         return $factory;
     }
@@ -74,10 +74,9 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
      * @param MasterFactory $masterFactory
      * @return IntegrationTestFactory
      */
-    private function createIntegrationTestFactory(MasterFactory $masterFactory)
+    private function registerIntegrationTestFactory(MasterFactory $masterFactory)
     {
-        $factory = new IntegrationTestFactory();
-        $factory->setMasterFactory($masterFactory);
+        $factory = new IntegrationTestFactory($masterFactory);
         if ($this->isFirstInstantiationOfFactory()) {
             $this->storeInMemoryObjects($factory);
         } else {

@@ -148,7 +148,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $masterFactory = new SampleMasterFactory();
-        $masterFactory->register(new IntegrationTestFactory());
+        new IntegrationTestFactory($masterFactory);
         $this->commonFactory = new CommonFactory();
         $masterFactory->register($this->commonFactory);
     }

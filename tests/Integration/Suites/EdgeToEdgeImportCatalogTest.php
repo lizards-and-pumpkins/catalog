@@ -169,7 +169,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $url, $headers, $requestBody);
 
         $website = new SampleWebFront($request);
-        $website->registerFactory(new IntegrationTestFactory());
+        new IntegrationTestFactory($website->getMasterFactory());
         $response = $website->runWithoutSendingResponse();
         $this->assertInstanceOf(HttpResourceNotFoundResponse::class, $response);
     }

@@ -56,7 +56,7 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $masterFactory = new SampleMasterFactory();
-        $this->factory = new IntegrationTestFactory();
+        $this->factory = new IntegrationTestFactory($masterFactory);
         $masterFactory->register($this->factory);
         $masterFactory->register(new CommonFactory);
     }

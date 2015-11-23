@@ -70,6 +70,11 @@ class IntegrationTestFactory implements Factory
      */
     private $memoizedProductSearchAutosuggestionSortOrderConfig;
 
+    public function __construct(MasterFactory $masterFactory)
+    {
+        $masterFactory->register($this);
+    }
+
     /**
      * @return string[]
      */
@@ -77,7 +82,6 @@ class IntegrationTestFactory implements Factory
     {
         return ['name', 'category', 'brand'];
     }
-
 
     /**
      * @return string[]

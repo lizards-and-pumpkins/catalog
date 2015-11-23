@@ -120,7 +120,7 @@ trait ProductListingTestTrait
      */
     private function createIntegrationTestFactory(MasterFactory $masterFactory)
     {
-        $factory = new IntegrationTestFactory();
+        $factory = new IntegrationTestFactory($masterFactory);
         $factory->setMasterFactory($masterFactory);
         if ($this->isFirstInstantiationOfFactory()) {
             $this->retrieveInMemoryObjectsFromFactory($factory);

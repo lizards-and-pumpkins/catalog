@@ -88,7 +88,7 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $masterFactory = new SampleMasterFactory();
-        $masterFactory->register(new IntegrationTestFactory());
+        new IntegrationTestFactory($masterFactory);
         $masterFactory->register(new CommonFactory());
 
         $request = HttpRequest::fromParameters(

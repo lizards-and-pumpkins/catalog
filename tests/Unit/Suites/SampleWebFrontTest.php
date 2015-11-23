@@ -135,7 +135,7 @@ class SampleWebFrontTest extends \PHPUnit_Framework_TestCase
         $stubHttpRequest->method('getUrlPathRelativeToWebFront')->willReturn('foo');
 
         $webFront = new SampleWebFront($stubHttpRequest);
-        $webFront->registerFactory(new IntegrationTestFactory());
+        new IntegrationTestFactory($webFront->getMasterFactory());
         $webFront->runWithoutSendingResponse();
 
         $this->assertInstanceOf(SampleMasterFactory::class, $webFront->getMasterFactory());
