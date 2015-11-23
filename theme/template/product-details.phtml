@@ -45,13 +45,6 @@ $save = 0;
                     <p class="articleNumber"><?= $this->__('SKU# ') ?> <?= $this->getProductId() ?></p>
                     <meta itemprop="sku" content="<?= $this->getProductId() ?>" />
                 </div>
-
-                <div class="socialSharing en_US">
-                    <div class="item twitterLike"><a href="https://twitter.com/share" class="twitter-share-button">Tweet</a></div>
-                    <div class="item g-plusone" data-size="medium"></div>
-                    <div class="item fb-like" data-href="<!--= $this->getProductUrl($_product) -->" data-send="true" data-layout="button_count" data-width="200" data-show-faces="false" data-action="recommend"></div>
-                    <div class="item print"><a href="javascript:" onclick="window.print()"><?= $this->__('Print') ?> <img src="<?= $this->getBaseUrl() ?>images/icons/printico.gif" alt="print" /></a></div>
-                </div>
             </div>
 
             <div class="product-main-info">
@@ -81,6 +74,13 @@ $save = 0;
                 <input type="hidden" name="product" value="<?= $this->getProductId() ?>"/>
                 <div class="selects"></div>
                 <button disabled="disabled"><?= $this->__('Add to Cart') ?></button>
+            </div>
+
+            <div class="social-media-icons">
+                <a class="fb" href="https://www.facebook.com/sharer/sharer.php?u=<?php /* TODO: Product URL */ ?>" target="_blank"></a>
+                <a class="google" href="https://plus.google.com/share?url=<?php /* TODO: Product URL */ ?>" target="_blank"></a>
+                <a class="twitter" href="https://twitter.com/intent/tweet?url=<?php /* TODO: Product URL */ ?>" target="_blank"></a>
+                <a class="pinterest" href="https://www.pinterest.com/pin/create/button/?url=<?php /* TODO: Product URL */ ?>&media=<?= $this->getBaseUrl() ?>media/product/large/<?= $this->getMainProductFileName() ?>&description=<?= $this->getFirstValueOfProductAttribute('name') ?>" target="_blank"></a>
             </div>
         </div>
     </div>
@@ -127,5 +127,3 @@ $save = 0;
 
     </script>
 </div>
-
-<div id="fb-root"></div>

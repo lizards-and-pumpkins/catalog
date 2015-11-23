@@ -25,12 +25,6 @@ require([
         handleProductImages();
         initializeZoom();
         initializeTabs();
-
-        require([
-            '//connect.facebook.net/de_DE/all.js#xfbml=1&status=0',
-            '//platform.twitter.com/widgets.js',
-            '//apis.google.com/js/plusone.js'
-        ]);
     });
 
     function initializeAddToCartButton() {
@@ -268,7 +262,6 @@ require([
         /* Maybe it makes sense to initialize variables on load only ? */
             productTitle = document.querySelector('.product-essential h1'),
             brandLogo = document.getElementById('brandLogo'),
-            socialIcons = document.querySelector('.socialSharing'),
             productTopContainer = document.querySelector('.product-shop > .top'),
             productControls = document.querySelector('.product-controls'),
             price = document.querySelector('.price-information'),
@@ -300,15 +293,8 @@ require([
                 productControls.appendChild(articleInformation);
             }
 
-            if (!isParent(productControls, socialIcons)) {
-                productControls.appendChild(socialIcons);
-            }
-
             /* TODO: Implement image slider */
             /* TODO: From 767px to 366px an "original" image could be used and below 366px a "large" one. */
-
-            /* Hide "send" part of FB buttons block if not yet hidden */
-            fbEnsureInit(processFbButton);
         } else {
             var originalTitleContainer = document.querySelector('.product-title');
 
@@ -328,16 +314,9 @@ require([
                 productTopContainer.appendChild(articleInformation);
             }
 
-            if (!isParent(productTopContainer, socialIcons)) {
-                productTopContainer.appendChild(socialIcons);
-            }
-
             if (!isParent(productMainInfo, price)) {
                 productMainInfo.appendChild(price);
             }
-
-            /* Revert "send" part of FB buttons block if not yet recovered */
-            fbEnsureInit(processFbButton);
         }
 
         /* Tablet only */
@@ -374,32 +353,5 @@ require([
             node = node.parentNode;
         }
         return false;
-    }
-
-    /**
-     * Wrapper for a FB calls. Makes sure FB.init() was already executed, otherwise will wait until it is.
-     */
-    function fbEnsureInit(callback) {
-        if (typeof FB == 'undefined') {
-            setTimeout(function () { fbEnsureInit(callback) }, 50);
-        } else if (callback) {
-            callback();
-        }
-    }
-
-    function processFbButton() {
-        var fbContainer = document.querySelector('.fb-like');
-
-        if (document.body.clientWidth < tabletWidth) {
-            if (fbContainer.getAttribute('data-send')) {
-                fbContainer.removeAttribute('data-send');
-                FB.XFBML.parse();
-            }
-        } else {
-            if (typeof fbContainer == 'undefined' || typeof fbContainer.getAttribute('data-send') == 'undefined') {
-                fbContainer.setAttribute('data-send', true);
-                FB.XFBML.parse();
-            }
-        }
     }
 });
