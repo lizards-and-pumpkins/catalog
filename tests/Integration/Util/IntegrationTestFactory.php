@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\BaseUrl\IntegrationTestFixedBaseUrlBuilder;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
 use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
@@ -84,7 +85,7 @@ class IntegrationTestFactory implements Factory
     }
 
     /**
-     * @return string[]
+     * @return array[]
      */
     public function getProductListingFilterNavigationConfig()
     {
@@ -97,7 +98,7 @@ class IntegrationTestFactory implements Factory
     }
 
     /**
-     * @return string[]
+     * @return array[]
      */
     public function getProductSearchResultsFilterNavigationConfig()
     {
@@ -208,6 +209,14 @@ class IntegrationTestFactory implements Factory
     public function createFileStorageWriter()
     {
         return new LocalFilesystemStorageWriter();
+    }
+
+    /**
+     * @return IntegrationTestFixedBaseUrlBuilder
+     */
+    public function createBaseUrlBuilder()
+    {
+        return new IntegrationTestFixedBaseUrlBuilder();
     }
 
     /**

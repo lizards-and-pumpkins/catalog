@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Renderer;
 
+use LizardsAndPumpkins\BaseUrl;
 use LizardsAndPumpkins\Renderer\Exception\TemplateFileNotReadableException;
 
 class Block
@@ -47,6 +48,14 @@ class Block
     public function getBlockName()
     {
         return $this->blockName;
+    }
+
+    /**
+     * @return BaseUrl
+     */
+    public function getBaseUrl()
+    {
+        return $this->blockRenderer->getBaseUrl();
     }
 
     /**

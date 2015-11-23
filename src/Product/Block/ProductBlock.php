@@ -34,8 +34,7 @@ class ProductBlock extends Block
      */
     public function getProductUrl()
     {
-        /* TODO: Implement retrieval of base URL for context */
-        return '/lizards-and-pumpkins/' . $this->getFirstValueOfProductAttribute(Product::URL_KEY);
+        return $this->getBaseUrl() . $this->getFirstValueOfProductAttribute(Product::URL_KEY);
     }
 
     /**
@@ -59,7 +58,7 @@ class ProductBlock extends Block
             return '';
         }
 
-        return '/lizards-and-pumpkins/' . $fileName;
+        return $this->getBaseUrl() . $fileName;
     }
 
     /**

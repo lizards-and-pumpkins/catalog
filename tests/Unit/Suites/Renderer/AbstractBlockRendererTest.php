@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Renderer;
 
+use LizardsAndPumpkins\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Renderer\Translation\Translator;
 use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
@@ -36,56 +37,10 @@ abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
      */
     private $stubTranslator;
 
-    protected function setUp()
-    {
-        $this->stubLayout = $this->getMock(Layout::class, [], [], '', false);
-        $this->stubThemeLocator = $this->getMock(ThemeLocator::class, [], [], '', false);
-        $this->stubThemeLocator->method('getLayoutForHandle')->willReturn($this->stubLayout);
-
-        $this->stubBlockStructure = new BlockStructure();
-
-        $this->stubTranslator = $this->getMock(Translator::class, [], [], '', false);
-
-        /** @var TranslatorRegistry|\PHPUnit_Framework_MockObject_MockObject $stubTranslatorRegistry */
-        $stubTranslatorRegistry = $this->getMock(TranslatorRegistry::class, [], [], '', false);
-        $stubTranslatorRegistry->method('getTranslatorForLocale')->willReturn($this->stubTranslator);
-
-        $this->blockRenderer = $this->createRendererInstance(
-            $this->stubThemeLocator,
-            $this->stubBlockStructure,
-            $stubTranslatorRegistry
-        );
-    }
-
-    public function testBlockRendererAbstractClassIsExtended()
-    {
-        $this->assertInstanceOf(BlockRenderer::class, $this->blockRenderer);
-    }
-
-    public function testBlockLayoutHandleIsNonEmptyString()
-    {
-        $result = $this->blockRenderer->getLayoutHandle();
-
-        $this->assertInternalType('string', $result);
-        $this->assertNotEmpty(trim($result));
-    }
-
-    public function testBlockRendererClassIsExtended()
-    {
-        $this->assertInstanceOf(BlockRenderer::class, $this->blockRenderer);
-    }
-
     /**
-     * @param ThemeLocator $stubThemeLocator
-     * @param BlockStructure $stubBlockStructure
-     * @param TranslatorRegistry $stubTranslatorRegistry
-     * @return BlockRenderer
+     * @var BaseUrlBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    abstract protected function createRendererInstance(
-        ThemeLocator $stubThemeLocator,
-        BlockStructure $stubBlockStructure,
-        TranslatorRegistry $stubTranslatorRegistry
-    );
+    private $mockBaseUrlBuilder;
 
     /**
      * @return Layout|\PHPUnit_Framework_MockObject_MockObject
@@ -117,6 +72,14 @@ abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
     final protected function getStubTranslator()
     {
         return $this->stubTranslator;
+    }
+
+    /**
+     * @return BaseUrlBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    final protected function getMockBaseUrlBuilder()
+    {
+        return $this->mockBaseUrlBuilder;
     }
 
     /**
@@ -164,5 +127,61 @@ abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
             ['name', $nameInLayout],
         ]);
         return $stubBlockLayout;
+    }
+
+    /**
+     * @param ThemeLocator $stubThemeLocator
+     * @param BlockStructure $stubBlockStructure
+     * @param TranslatorRegistry $stubTranslatorRegistry
+     * @param BaseUrlBuilder $baseUrlBuilder
+     * @return BlockRenderer
+     */
+    abstract protected function createRendererInstance(
+        ThemeLocator $stubThemeLocator,
+        BlockStructure $stubBlockStructure,
+        TranslatorRegistry $stubTranslatorRegistry,
+        BaseUrlBuilder $baseUrlBuilder
+    );
+
+    protected function setUp()
+    {
+        $this->stubLayout = $this->getMock(Layout::class, [], [], '', false);
+        $this->stubThemeLocator = $this->getMock(ThemeLocator::class, [], [], '', false);
+        $this->stubThemeLocator->method('getLayoutForHandle')->willReturn($this->stubLayout);
+
+        $this->stubBlockStructure = new BlockStructure();
+
+        $this->stubTranslator = $this->getMock(Translator::class, [], [], '', false);
+        
+        $this->mockBaseUrlBuilder = $this->getMock(BaseUrlBuilder::class);
+
+        /** @var TranslatorRegistry|\PHPUnit_Framework_MockObject_MockObject $stubTranslatorRegistry */
+        $stubTranslatorRegistry = $this->getMock(TranslatorRegistry::class, [], [], '', false);
+        $stubTranslatorRegistry->method('getTranslatorForLocale')->willReturn($this->stubTranslator);
+
+        $this->blockRenderer = $this->createRendererInstance(
+            $this->stubThemeLocator,
+            $this->stubBlockStructure,
+            $stubTranslatorRegistry,
+            $this->mockBaseUrlBuilder
+        );
+    }
+
+    public function testBlockRendererAbstractClassIsExtended()
+    {
+        $this->assertInstanceOf(BlockRenderer::class, $this->blockRenderer);
+    }
+
+    public function testBlockLayoutHandleIsNonEmptyString()
+    {
+        $result = $this->blockRenderer->getLayoutHandle();
+
+        $this->assertInternalType('string', $result);
+        $this->assertNotEmpty(trim($result));
+    }
+
+    public function testBlockRendererClassIsExtended()
+    {
+        $this->assertInstanceOf(BlockRenderer::class, $this->blockRenderer);
     }
 }

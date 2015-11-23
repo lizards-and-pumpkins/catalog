@@ -27,13 +27,17 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
      */
     private $productBlock;
 
+    /**
+     * @var BlockRenderer|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubBlockRenderer;
+
     protected function setUp()
     {
-        /** @var  $stubBlockRenderer BlockRenderer|\PHPUnit_Framework_MockObject_MockObject */
-        $stubBlockRenderer = $this->getMock(BlockRenderer::class, [], [], '', false);
+        $this->stubBlockRenderer = $this->getMock(BlockRenderer::class, [], [], '', false);
         $this->stubProduct = $this->getMock(Product::class);
 
-        $this->productBlock = new ProductBlock($stubBlockRenderer, 'foo.phtml', 'foo', $this->stubProduct);
+        $this->productBlock = new ProductBlock($this->stubBlockRenderer, 'foo.phtml', 'foo', $this->stubProduct);
     }
 
     public function testBlockClassIsExtended()
@@ -80,11 +84,13 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
     public function testProductUrlIsReturned()
     {
         $urlKey = 'foo';
-
+        $testBaseUrl = '/lizards-and-pumpkins/';
+        
+        $this->stubBlockRenderer->method('getBaseUrl')->willReturn($testBaseUrl);
         $this->stubProduct->method('getFirstValueOfAttribute')->with(Product::URL_KEY)->willReturn($urlKey);
         $result = $this->productBlock->getProductUrl();
 
-        $this->assertEquals('/lizards-and-pumpkins/' . $urlKey, $result);
+        $this->assertEquals($testBaseUrl . $urlKey, $result);
     }
 
     public function testEmptyStringIsReturnedIfProductBrandLogoImageFileDoesNotExist()
@@ -100,13 +106,15 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
     public function testProductBrandLogoSrcIsReturned()
     {
         $testProductBrandName = 'foo';
+        $testBaseUrl = '/lizards-and-pumpkins/';
+        
+        $this->stubBlockRenderer->method('getBaseUrl')->willReturn($testBaseUrl);
         $this->stubProduct->method('getFirstValueOfAttribute')->with('brand')->willReturn($testProductBrandName);
 
         $brandLogoSrc = 'images/brands/brands-slider/' . $testProductBrandName . '.png';
         $this->createFixtureFile('pub/' . $brandLogoSrc, '');
 
-        /* TODO: Fix it once retrieving base URL is implemented */
-        $expectedProductBrandLogoSrc = '/lizards-and-pumpkins/' . $brandLogoSrc;
+        $expectedProductBrandLogoSrc = $testBaseUrl . $brandLogoSrc;
         $result = $this->productBlock->getBrandLogoSrc();
 
         $this->assertEquals($expectedProductBrandLogoSrc, $result);

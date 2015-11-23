@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Renderer;
 
+use LizardsAndPumpkins\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\LocaleContextDecorator;
 use LizardsAndPumpkins\Renderer\Exception\BlockRendererMustHaveOneRootBlockException;
@@ -45,15 +46,22 @@ abstract class BlockRenderer
      * @var Block
      */
     private $outermostBlock;
+    
+    /**
+     * @var BaseUrlBuilder
+     */
+    private $baseUrlBuilder;
 
     public function __construct(
         ThemeLocator $themeLocator,
         BlockStructure $blockStructure,
-        TranslatorRegistry $translatorRegistry
+        TranslatorRegistry $translatorRegistry,
+        BaseUrlBuilder $baseUrlBuilder
     ) {
         $this->themeLocator = $themeLocator;
         $this->blockStructure = $blockStructure;
         $this->translatorRegistry = $translatorRegistry;
+        $this->baseUrlBuilder = $baseUrlBuilder;
     }
 
     /**
@@ -210,6 +218,14 @@ abstract class BlockRenderer
     {
         $locale = $this->context->getValue(LocaleContextDecorator::CODE);
         return $this->translatorRegistry->getTranslatorForLocale($locale)->translate($string);
+    }
+
+    /**
+     * @return \LizardsAndPumpkins\BaseUrl
+     */
+    public function getBaseUrl()
+    {
+        return $this->baseUrlBuilder->create($this->context);
     }
 
     /**

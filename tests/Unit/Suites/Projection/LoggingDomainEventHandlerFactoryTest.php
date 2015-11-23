@@ -8,7 +8,6 @@ use LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\DomainEventHandler;
 use LizardsAndPumpkins\Image\ImageWasAddedDomainEvent;
 use LizardsAndPumpkins\Image\ImageWasAddedDomainEventHandler;
-use LizardsAndPumpkins\IntegrationTestFactory;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEvent;
@@ -20,6 +19,7 @@ use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHa
 use LizardsAndPumpkins\SampleMasterFactory;
 use LizardsAndPumpkins\TemplateWasUpdatedDomainEvent;
 use LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\UnitTestFactory;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\LoggingDomainEventHandlerFactory
@@ -36,7 +36,6 @@ use LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler;
  * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionTemplateProjector
  * @uses   \LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductListingTemplateProjector
  * @uses   \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetProjector
  * @uses   \LizardsAndPumpkins\Product\ProductStockQuantitySnippetRenderer
@@ -59,7 +58,7 @@ use LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler;
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder
- * @uses   \LizardsAndPumpkins\IntegrationTestFactory
+ * @uses   \LizardsAndPumpkins\UnitTestFactory
  * @uses   \LizardsAndPumpkins\Renderer\BlockRenderer
  * @uses   \LizardsAndPumpkins\Renderer\ThemeLocator
  * @uses   \LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler
@@ -83,6 +82,8 @@ use LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler;
  * @uses   \LizardsAndPumpkins\Image\ImageMagickResizeStrategy
  * @uses   \LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry
  * @uses   \LizardsAndPumpkins\Utils\LocalFilesystem
+ * @uses   \LizardsAndPumpkins\EnvironmentConfigReader
+ * @uses   \LizardsAndPumpkins\BaseUrl\WebsiteBaseUrlBuilder
  */
 class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -105,7 +106,7 @@ class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $masterFactory = new SampleMasterFactory();
         $masterFactory->register(new CommonFactory());
-        new IntegrationTestFactory($masterFactory);
+        $masterFactory->register(new UnitTestFactory());
         $this->factory = new LoggingDomainEventHandlerFactory();
         $masterFactory->register($this->factory);
     }
