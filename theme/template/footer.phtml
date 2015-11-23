@@ -1,38 +1,43 @@
+<?php
+/**
+ * @var \LizardsAndPumpkins\Renderer\Block $this
+ */
+?>
 <div class="footer-container">
     <div class="footer">
         <div class="footer-block">
             <div class="footer-block-title">21run.com</div>
             <ul id="footer-list-about">
-                <li><a href="/ru_de/about-us">Über uns</a></li>
-                <li><a href="/ru_de/affiliate-program">Partnerprogramm</a></li>
-                <li><a href="/ru_de/terms-conditions">AGB</a></li>
-                <li><a href="/ru_de/data-protection">Datenschutz</a></li>
-                <li><a href="/ru_de/cancellation">Widerrufsbelehrung</a></li>
-                <li><a href="/ru_de/imprint">Impressum</a></li>
+                <li><a href="<?= $this->getBaseUrl() ?>about-us">Über uns</a></li>
+                <li><a href="<?= $this->getBaseUrl() ?>affiliate-program">Partnerprogramm</a></li>
+                <li><a href="<?= $this->getBaseUrl() ?>terms-conditions">AGB</a></li>
+                <li><a href="<?= $this->getBaseUrl() ?>data-protection">Datenschutz</a></li>
+                <li><a href="<?= $this->getBaseUrl() ?>cancellation">Widerrufsbelehrung</a></li>
+                <li><a href="<?= $this->getBaseUrl() ?>imprint">Impressum</a></li>
             </ul>
         </div>
         <div class="footer-block">
             <div class="footer-block-title">Kundenservice</div>
             <ul>
-                <li><a href="/ru_de/contacts">Kontakt</a></li>
-                <li><a href="/ru_de/service">Unser Service</a></li>
-                <li><a href="/ru_de/shipping">Versand</a></li>
-                <li><a href="/ru_de/groessentabelle">Größen-Kompass</a></li>
-                <li><a href="/ru_de/exchange">Rücksendung / Umtausch</a></li>
-                <li><a href="/ru_de/faq">FAQ</a></li>
+                <li><a href="<?= $this->getBaseUrl() ?>contacts">Kontakt</a></li>
+                <li><a href="<?= $this->getBaseUrl() ?>service">Unser Service</a></li>
+                <li><a href="<?= $this->getBaseUrl() ?>shipping">Versand</a></li>
+                <li><a href="<?= $this->getBaseUrl() ?>groessentabelle">Größen-Kompass</a></li>
+                <li><a href="<?= $this->getBaseUrl() ?>exchange">Rücksendung / Umtausch</a></li>
+                <li><a href="<?= $this->getBaseUrl() ?>faq">FAQ</a></li>
             </ul>
         </div>
         <div class="footer-block">
             <div class="footer-block-title">Mein Konto</div>
             <ul>
-                <li><a href="/ru_de/customer/account">Mein Konto</a></li>
-                <li><a href="/ru_de/sales/order/history">Lieferstatus</a></li>
-                <li><a href="/ru_de/newsletter">Newsletter</a></li>
+                <li><a href="<?= $this->getBaseUrl() ?>customer/account">Mein Konto</a></li>
+                <li><a href="<?= $this->getBaseUrl() ?>sales/order/history">Lieferstatus</a></li>
+                <li><a href="<?= $this->getBaseUrl() ?>newsletter">Newsletter</a></li>
             </ul>
         </div>
         <div class="footer-block-wide">
-            <img src="/lizards-and-pumpkins/images/footer-banner-newsletter.png" alt="" />
-            <img src="/lizards-and-pumpkins/images/footer-payment-methods.png" alt="" />
+            <img src="<?= $this->getBaseUrl() ?>images/footer-banner-newsletter.png" alt="" />
+            <img src="<?= $this->getBaseUrl() ?>images/footer-payment-methods.png" alt="" />
         </div>
         <div class="footer-block-info">
             <p>

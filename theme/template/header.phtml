@@ -17,32 +17,32 @@
             <span id="language-select" class="drop-container">
                 <span class="drop">Deutsch</span>
                 <span class="drop-list">
-                    <a href="/ru_en/" class="lang-ru_en">English</a>
-                    <a href="/ru_fr/" class="lang-ru_fr">Français</a>
-                    <a href="/ru_es/" class="lang-ru_es">Español</a>
+                    <a href="/en/" class="lang-ru_en">English</a>
+                    <a href="/fr/" class="lang-ru_fr">Français</a>
+                    <a href="/es/" class="lang-ru_es">Español</a>
                 </span>
         	</span>
             <span class="sep"></span>
-            <a href="/ru_de/checkout/onepage/"><?= $this->__('Checkout') ?></a>
+            <a href="<?= $this->getBaseUrl() ?>checkout/onepage/"><?= $this->__('Checkout') ?></a>
             <span class="sep"></span>
-            <a href="/ru_de/checkout/cart/">
+            <a href="<?= $this->getBaseUrl() ?>checkout/cart/">
                 <strong>
                     <?php /* TODO: Handle pural form */ ?>
                     <span id="meta-menu-cart-num-items">0</span> <?= $this->__('Items') ?> <span id="meta-menu-cart-total">0,00 €</span>
                 </strong>
             </a>
             <span class="sep"></span>
-            <a href="/ru_de/customer/account/"><?= $this->__('My Account') ?></a>
+            <a href="<?= $this->getBaseUrl() ?>customer/account/"><?= $this->__('My Account') ?></a>
             <span class="sep"></span>
-            <a href="/ru_de/customer/account/" id="meta-menu-login-link"><?= $this->__('Login') ?></a>
-            <a href="/ru_de/customer/account/logout/" id="meta-menu-logout-link"><?= $this->__('Logout') ?></a>
+            <a href="<?= $this->getBaseUrl() ?>customer/account/" id="meta-menu-login-link"><?= $this->__('Login') ?></a>
+            <a href="<?= $this->getBaseUrl() ?>customer/account/logout/" id="meta-menu-logout-link"><?= $this->__('Logout') ?></a>
         </div>
         <div class="logo">
             <strong>21run.com</strong>
-            <a href="/ru_de/" title="21run.com"><img src="/lizards-and-pumpkins/images/logo_de.png" alt="21run.com"/></a>
+            <a href="<?= $this->getBaseUrl() ?>" title="21run.com"><img src="<?= $this->getBaseUrl() ?>images/logo_de.png" alt="21run.com"/></a>
         </div>
         <div id="searchPanel">
-            <form autocomplete="off" action="/lizards-and-pumpkins/catalogsearch/result/" class="search-form">
+            <form autocomplete="off" action="<?= $this->getBaseUrl() ?>catalogsearch/result/" class="search-form">
                 <div class="input-box">
                     <input id="search" type="text" name="q" maxlength="128" placeholder="<?= $this->__('Enter search keyword') ?>"/>
                     <button type="submit" disabled="disabled" class="disabled">
@@ -70,14 +70,14 @@
             <?= $this->getChildOutput('content_block_cms_header_small') ?>
         </div>
         <ul id="phone-meta-menu">
-            <li><a href="/ru_de/customer/account/"><img src="/lizards-and-pumpkins/images/icon-phone-account.png" alt=""/></a></li>
-            <li><a href="/ru_de/checkout/cart/"><img src="/lizards-and-pumpkins/images/icon-phone-cart.png" alt=""/></a></li>
-            <li class="active"><a href="#" data-block="search"><img src="/lizards-and-pumpkins/images/icon-phone-search.png" alt=""/></a></li>
-            <li><a href="#" data-block="lang"><img src="/lizards-and-pumpkins/images/icon-phone-lang-deutsch.png" alt=""/></a></li>
-            <li><a href="#" data-block="store"><img src="/lizards-and-pumpkins/images/icon-phone-store-21run-com.png" alt=""/></a></li>
+            <li><a href="<?= $this->getBaseUrl() ?>customer/account/"><img src="<?= $this->getBaseUrl() ?>images/icon-phone-account.png" alt=""/></a></li>
+            <li><a href="<?= $this->getBaseUrl() ?>checkout/cart/"><img src="<?= $this->getBaseUrl() ?>images/icon-phone-cart.png" alt=""/></a></li>
+            <li class="active"><a href="#" data-block="search"><img src="<?= $this->getBaseUrl() ?>images/icon-phone-search.png" alt=""/></a></li>
+            <li><a href="#" data-block="lang"><img src="<?= $this->getBaseUrl() ?>images/icon-phone-lang-deutsch.png" alt=""/></a></li>
+            <li><a href="#" data-block="store"><img src="<?= $this->getBaseUrl() ?>images/icon-phone-store-21run-com.png" alt=""/></a></li>
         </ul>
         <div id="phone-meta-menu-content" class="search">
-            <form autocomplete="off" action="/lizards-and-pumpkins/catalogsearch/result/" class="search-form">
+            <form autocomplete="off" action="<?= $this->getBaseUrl() ?>catalogsearch/result/" class="search-form">
                 <div class="input-box">
                     <input id="search" type="text" name="q" maxlength="128" placeholder="<?= $this->__('Enter search keyword') ?>"/>
                     <button type="submit" disabled="disabled" class="disabled">
@@ -91,9 +91,9 @@
                 <a href="http://www.21cycles.com/">21cycles.com</a>
             </div>
             <div class="lang">
-                <a href="/ru_en/" class="lang-ru_en">English</a>
-                <a href="/ru_fr/" class="lang-ru_fr">Français</a>
-                <a href="/ru_es/" class="lang-ru_es">Español</a>
+                <a href="/en/" class="lang-ru_en">English</a>
+                <a href="/fr/" class="lang-ru_fr">Français</a>
+                <a href="/es/" class="lang-ru_es">Español</a>
             </div>
         </div>
         <?= $this->getChildOutput('content_block_main_navigation') ?>

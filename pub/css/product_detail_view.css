@@ -43,13 +43,16 @@
 .product-main-info .info { font-size: 10px; border-bottom: 1px dotted #000; margin: 0 0 0 5px; cursor:pointer }
 
 /* Social buttons */
-.socialSharing { padding-top: 15px; clear: both }
-.socialSharing .item { float:left }
-.socialSharing div.gplus-container { float:left; width: 200px }
-.socialSharing .item.twitterLike { margin-right: 5px }
-.socialSharing .item.fb-like { margin-left: -27px }
-.socialSharing #___plusone_0 { float:left !important }
-.socialSharing .print { float: right; font-size: 11px }
+.social-media-icons { font-size: 0; margin-top: 20px }
+.social-media-icons a { background-image: url("../images/icons/social-media-icons.png"); width: 26px; height: 26px; display: inline-block; margin-right: 3px }
+.fb { background-position: 0 0 }
+.fb:hover { background-position: 0 26px }
+.google { background-position: -26px 0 }
+.google:hover { background-position: -26px 26px }
+.twitter { background-position: -52px 0 }
+.twitter:hover { background-position: -52px 26px }
+.pinterest { background-position: -78px 0 }
+.pinterest:hover { background-position: -78px 26px }
 
 #recently-viewed-products { position: relative; display: none }
 #recently-viewed-products .heading { margin-bottom: 15px }
@@ -68,12 +71,8 @@
 @media (max-width: 974px) {
     .product-shop .price-information { text-align: center; float: none; border-top: 1px solid #fff; margin-top: 10px; padding: 15px 0 5px 0; clear: both }
     .product-shop .price-information p { display: inline-block; margin: 0 5px }
-    .product-shop .articleInformations { padding-top: 17px }
+    .product-shop .articleInformations { float: none; padding: 17px 0; text-align: left }
     .product-controls button { float: left; clear: both; margin: 15px 0 7px 0 }
-
-    .socialSharing .print { clear: both; float: left; margin: 17px 0 10px 0 }
-    .socialSharing .cc { clear: none }
-    .socialSharing.fr_FR div.item.fb-like { clear: both; margin: 5px 0 0 0 }
 }
 
 /* Phone */
@@ -87,9 +86,6 @@
     .product-shop .articleInformations { padding-top: 0; margin: 10px 0 0 0 }
     .product-shop .similarProducts { display: block; float: left; margin: 10px 0 0 0 }
     .product-shop .price-information { border-top: none; padding: 0; margin: 0 }
-    .socialSharing { padding-top: 7px; clear: both }
-    .socialSharing .print { display: none }
-    .socialSharing .cc { clear: both }
     .main .product-controls button { width: 100%; font-size: 22px; padding: 10px 0 }
 
     #phoneTitlePlaceholder h1 { float: left; font-size: 13px; text-transform: capitalize; padding: 5px }
@@ -102,5 +98,5 @@
 }
 
 /* Clearer */
-.product-shop .product-title:after, .socialSharing:after, .product-main-info:after, .product-controls:after,
+.product-shop .product-title:after, .product-main-info:after, .top:after, .product-controls:after,
 #phoneTitlePlaceholder:after { content: ""; display: block; height: 0; clear: both; visibility: hidden }
