@@ -4,7 +4,9 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
+use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 use LizardsAndPumpkins\Image\ImageProcessingStrategy;
@@ -65,7 +67,7 @@ class UnitTestFactory implements Factory
      */
     public function getProductListingFilterNavigationConfig()
     {
-        return [];
+        return $this->mockObjectGenerator->getMock(FacetFilterRequest::class, [], [], '', true, true, true, true, true);
     }
 
     /**
@@ -73,7 +75,7 @@ class UnitTestFactory implements Factory
      */
     public function getProductSearchResultsFilterNavigationConfig()
     {
-        return [];
+        return $this->mockObjectGenerator->getMock(FacetFilterRequest::class, [], [], '', true, true, true, true, true);
     }
 
     /**
@@ -257,5 +259,10 @@ class UnitTestFactory implements Factory
     public function getFileStorageBasePathConfig()
     {
         return '';
+    }
+
+    public function createFacetFieldTransformationRegistry()
+    {
+        return $this->mockObjectGenerator->getMock(FacetFieldTransformationRegistry::class);
     }
 }
