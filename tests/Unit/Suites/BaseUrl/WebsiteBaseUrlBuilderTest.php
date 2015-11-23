@@ -4,6 +4,7 @@
 namespace LizardsAndPumpkins\BaseUrl;
 
 use LizardsAndPumpkins\BaseUrl;
+use LizardsAndPumpkins\BaseUrl\Exception\NoConfiguredBaseUrlException;
 use LizardsAndPumpkins\ConfigReader;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\WebsiteContextDecorator;
@@ -32,13 +33,14 @@ class WebsiteBaseUrlBuilderTest extends \PHPUnit_Framework_TestCase
     private $stubConfigReader;
 
     /**
+     * @param string $baseUrlString
      * @return ConfigReader|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubConfigReader()
+    private function createStubConfigReader($baseUrlString)
     {
         $stubConfigReader = $this->getMock(ConfigReader::class);
         $configKey = WebsiteBaseUrlBuilder::CONFIG_PREFIX . 'test_website';
-        $stubConfigReader->method('get')->with($configKey)->willReturn($this->testBaseUrl);
+        $stubConfigReader->method('get')->with($configKey)->willReturn($baseUrlString);
         return $stubConfigReader;
     }
 
@@ -54,7 +56,7 @@ class WebsiteBaseUrlBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubConfigReader = $this->createStubConfigReader();
+        $this->stubConfigReader = $this->createStubConfigReader($this->testBaseUrl);
         $this->websiteBaseUrlBuilder = new WebsiteBaseUrlBuilder($this->stubConfigReader);
 
         $this->stubContext = $this->createStubContext();
@@ -73,5 +75,16 @@ class WebsiteBaseUrlBuilderTest extends \PHPUnit_Framework_TestCase
     public function testItImplementsTheBaseUrlBuilderInterface()
     {
         $this->assertInstanceOf(BaseUrlBuilder::class, $this->websiteBaseUrlBuilder);
+    }
+
+    public function testItThrowsAnExceptionIfTheConfigReaderReturnsNoValue()
+    {
+        $this->setExpectedException(
+            NoConfiguredBaseUrlException::class,
+            'No base URL configuration found for the website "test_website"'
+        );
+        $emptyBaseUrl = null;
+        $emptyStubConfigReader = $this->createStubConfigReader($emptyBaseUrl);
+        (new WebsiteBaseUrlBuilder($emptyStubConfigReader))->create($this->stubContext);
     }
 }
