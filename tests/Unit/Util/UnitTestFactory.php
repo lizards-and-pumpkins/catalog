@@ -60,7 +60,6 @@ class UnitTestFactory implements Factory
         return [];
     }
 
-
     /**
      * @return string[]
      */
