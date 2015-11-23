@@ -129,4 +129,12 @@ class HttpUrl
 
         return $resultQuery;
     }
+
+    /**
+     * @return string
+     */
+    public function getHost()
+    {
+        return (string) $this->url->getHost();
+    }
 }
