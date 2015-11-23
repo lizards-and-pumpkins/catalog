@@ -36,7 +36,6 @@ use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionBlockRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder;
 use LizardsAndPumpkins\Product\ProductListingTemplateProjector;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionBlockRenderer;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetRenderer;
@@ -188,14 +187,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $event,
             $this->getMasterFactory()->createProductListingCriteriaSnippetProjector()
         );
-    }
-
-    /**
-     * @return ProductsPerPageForContextListBuilder
-     */
-    public function createProductsPerPageForContextListBuilder()
-    {
-        return new ProductsPerPageForContextListBuilder($this->getMasterFactory()->createContextBuilder());
     }
 
     /**
@@ -435,8 +426,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new ProductListingTemplateProjector(
             $this->createProductListingTemplateRendererCollection(),
-            $this->getMasterFactory()->createDataPoolWriter(),
-            $this->getMasterFactory()->createProductsPerPageForContextListBuilder()
+            $this->getMasterFactory()->createDataPoolWriter()
         );
     }
 

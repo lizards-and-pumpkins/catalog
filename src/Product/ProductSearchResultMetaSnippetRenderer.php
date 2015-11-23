@@ -60,27 +60,20 @@ class ProductSearchResultMetaSnippetRenderer implements SnippetRenderer
         return $this->snippetList;
     }
 
-    private function renderMetaInfoSnippetForContext(
-        ProductsPerPageForContextList $productsPerPageForContextList,
-        Context $context
-    ) {
-        $this->blockRenderer->render($productsPerPageForContextList, $context);
+    /**
+     * @param mixed $dataObject
+     * @param Context $context
+     */
+    private function renderMetaInfoSnippetForContext($dataObject, Context $context)
+    {
+        $this->blockRenderer->render($dataObject, $context);
 
         $rootSnippetCode = $this->blockRenderer->getRootSnippetCode();
         $pageSnippetCodes = $this->blockRenderer->getNestedSnippetCodes();
 
-        $itemPerPageForContext = $productsPerPageForContextList->getListOfAvailableNumberOfProductsPerPageForContext(
-            $context
-        );
-
-        foreach ($itemPerPageForContext as $numProductsPerPage) {
-            $metaSnippetKey = $this->snippetKeyGenerator->getKeyForContext(
-                $context,
-                ['products_per_page' => $numProductsPerPage]
-            );
-            $metaSnippetContent = $this->getMetaSnippetContentJson($rootSnippetCode, $pageSnippetCodes);
-            $this->snippetList->add(Snippet::create($metaSnippetKey, $metaSnippetContent));
-        }
+        $metaSnippetKey = $this->snippetKeyGenerator->getKeyForContext($context, []);
+        $metaSnippetContent = $this->getMetaSnippetContentJson($rootSnippetCode, $pageSnippetCodes);
+        $this->snippetList->add(Snippet::create($metaSnippetKey, $metaSnippetContent));
     }
 
     /**
