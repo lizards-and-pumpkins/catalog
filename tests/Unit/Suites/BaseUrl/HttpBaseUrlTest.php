@@ -1,64 +1,72 @@
 <?php
 
 
-namespace LizardsAndPumpkins;
+namespace LizardsAndPumpkins\BaseUrl;
 
-class BaseUrlTest extends \PHPUnit_Framework_TestCase
+use LizardsAndPumpkins\BaseUrl;
+use LizardsAndPumpkins\BaseUrl\Exception\InvalidBaseUrlSourceDataException;
+
+class HttpBaseUrlTest extends \PHPUnit_Framework_TestCase
 {
     public function testItShouldThrowAnExceptionIfTheSourceIsNotAString()
     {
         $this->setExpectedException(
-            Exception\InvalidBaseUrlSourceDataException::class,
+            InvalidBaseUrlSourceDataException::class,
             'The input for the base URL has to be a string, got '
         );
-        BaseUrl::fromString(123);
+        HttpBaseUrl::fromString(123);
     }
 
     public function testItThrowsAnExceptionIfTheSourceStringIsEmpty()
     {
         $this->setExpectedException(
-            Exception\InvalidBaseUrlSourceDataException::class,
+            InvalidBaseUrlSourceDataException::class,
             'Invalid empty source data for the base URL specified'
         );
-        BaseUrl::fromString(' ');
+        HttpBaseUrl::fromString(' ');
     }
 
     public function testItThrowsAnExceptionIfTheInputStringDoesNotContainTheProtocol()
     {
         $this->setExpectedException(
-            Exception\InvalidBaseUrlSourceDataException::class,
+            InvalidBaseUrlSourceDataException::class,
             'The base URL input string does not contain the protocol'
         );
-        BaseUrl::fromString('example.com/');
+        HttpBaseUrl::fromString('example.com/');
     }
 
     public function testItThrowsAnExceptionIfTheInputStringDoesNotEndWithASlash()
     {
         $this->setExpectedException(
-            Exception\InvalidBaseUrlSourceDataException::class,
+            InvalidBaseUrlSourceDataException::class,
             'The base URL input string does not end with the required trailing slash'
         );
-        BaseUrl::fromString('http://example.com');
+        HttpBaseUrl::fromString('http://example.com');
     }
 
     public function testItThrowsAnExceptionIfTheInputStringDoesNotMatchAValdDomainAndRequestPath()
     {
         $invalidBaseUrl = 'http://example_domain.com/';
         $this->setExpectedException(
-            Exception\InvalidBaseUrlSourceDataException::class,
+            InvalidBaseUrlSourceDataException::class,
             sprintf('The base URL "%s" is invalid', $invalidBaseUrl)
         );
-        BaseUrl::fromString($invalidBaseUrl);
+        HttpBaseUrl::fromString($invalidBaseUrl);
     }
 
     public function testItReturnsABaseUrlInstance()
     {
-        $this->assertInstanceOf(BaseUrl::class, BaseUrl::fromString('https://example.com/'));
+        $this->assertInstanceOf(HttpBaseUrl::class, HttpBaseUrl::fromString('https://example.com/'));
     }
 
     public function testItCanBeCastToAString()
     {
         $baseUrlString = 'http://example.com/';
-        $this->assertSame($baseUrlString, (string) BaseUrl::fromString($baseUrlString));
+        $this->assertSame($baseUrlString, (string) HttpBaseUrl::fromString($baseUrlString));
+    }
+
+    public function testItImplementsTheBaseUrlInterface()
+    {
+        $this->assertInstanceOf(BaseUrl::class, HttpBaseUrl::fromString('http://example.com/foo/'));
     }
 }

@@ -1,11 +1,12 @@
 <?php
 
 
-namespace LizardsAndPumpkins;
+namespace LizardsAndPumpkins\BaseUrl;
 
-use LizardsAndPumpkins\Exception\InvalidBaseUrlSourceDataException;
+use LizardsAndPumpkins\BaseUrl;
+use LizardsAndPumpkins\BaseUrl\Exception\InvalidBaseUrlSourceDataException;
 
-class BaseUrl
+class HttpBaseUrl implements BaseUrl
 {
     /**
      * @var string
@@ -23,7 +24,7 @@ class BaseUrl
 
     /**
      * @param string $baseUrlString
-     * @return BaseUrl
+     * @return HttpBaseUrl
      */
     public static function fromString($baseUrlString)
     {
