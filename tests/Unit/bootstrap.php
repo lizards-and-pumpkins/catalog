@@ -9,6 +9,7 @@ if (!defined('PHPUNIT_COMPOSER_INSTALL')) {
 }
 
 require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '/Util/UnitTestFactory.php';
 
 // Closure autoloader from
 // https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader-examples.md#closure-example

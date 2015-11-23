@@ -9,7 +9,6 @@ use LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\DomainEventHandler;
 use LizardsAndPumpkins\Image\ImageWasAddedDomainEvent;
 use LizardsAndPumpkins\Image\ImageWasAddedDomainEventHandler;
-use LizardsAndPumpkins\IntegrationTestFactory;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEvent;
@@ -21,6 +20,7 @@ use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHa
 use LizardsAndPumpkins\SampleMasterFactory;
 use LizardsAndPumpkins\TemplateWasUpdatedDomainEvent;
 use LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\UnitTestFactory;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\LoggingDomainEventHandlerFactory
@@ -55,7 +55,7 @@ use LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler;
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolWriter
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine
- * @uses   \LizardsAndPumpkins\IntegrationTestFactory
+ * @uses   \LizardsAndPumpkins\UnitTestFactory
  * @uses   \LizardsAndPumpkins\Renderer\BlockRenderer
  * @uses   \LizardsAndPumpkins\Renderer\ThemeLocator
  * @uses   \LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler
@@ -103,7 +103,7 @@ class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $masterFactory = new SampleMasterFactory();
         $masterFactory->register(new CommonFactory());
-        $masterFactory->register(new IntegrationTestFactory());
+        $masterFactory->register(new UnitTestFactory());
         $this->factory = new LoggingDomainEventHandlerFactory();
         $masterFactory->register($this->factory);
     }

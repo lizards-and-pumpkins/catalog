@@ -78,7 +78,7 @@ class IntegrationTestFactory implements Factory
 
 
     /**
-     * @return string[]
+     * @return array[]
      */
     public function getProductListingFilterNavigationConfig()
     {
@@ -91,7 +91,7 @@ class IntegrationTestFactory implements Factory
     }
 
     /**
-     * @return string[]
+     * @return array[]
      */
     public function getProductSearchResultsFilterNavigationConfig()
     {

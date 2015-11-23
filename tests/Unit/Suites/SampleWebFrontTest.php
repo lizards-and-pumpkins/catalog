@@ -27,7 +27,7 @@ use LizardsAndPumpkins\Http\HttpRouterChain;
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection
  * @uses   \LizardsAndPumpkins\ContentDelivery\SnippetTransformation\PricesJsonSnippetTransformation
- * @uses   \LizardsAndPumpkins\IntegrationTestFactory
+ * @uses   \LizardsAndPumpkins\UnitTestFactory
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine
  * @uses   \LizardsAndPumpkins\DataVersion
  * @uses   \LizardsAndPumpkins\PageBuilder
@@ -132,7 +132,7 @@ class SampleWebFrontTest extends \PHPUnit_Framework_TestCase
         $stubHttpRequest->method('getUrlPathRelativeToWebFront')->willReturn('foo');
 
         $webFront = new SampleWebFront($stubHttpRequest);
-        $webFront->registerFactory(new IntegrationTestFactory());
+        $webFront->registerFactory(new UnitTestFactory());
         $webFront->runWithoutSendingResponse();
 
         $this->assertInstanceOf(SampleMasterFactory::class, $webFront->getMasterFactory());
