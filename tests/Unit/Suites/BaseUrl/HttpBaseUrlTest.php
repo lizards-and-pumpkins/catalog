@@ -6,6 +6,9 @@ namespace LizardsAndPumpkins\BaseUrl;
 use LizardsAndPumpkins\BaseUrl;
 use LizardsAndPumpkins\BaseUrl\Exception\InvalidBaseUrlSourceDataException;
 
+/**
+ * @covers \LizardsAndPumpkins\BaseUrl\HttpBaseUrl
+ */
 class HttpBaseUrlTest extends \PHPUnit_Framework_TestCase
 {
     public function testItShouldThrowAnExceptionIfTheSourceIsNotAString()

@@ -8,6 +8,10 @@ use LizardsAndPumpkins\ConfigReader;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\WebsiteContextDecorator;
 
+/**
+ * @covers \LizardsAndPumpkins\BaseUrl\WebsiteBaseUrlBuilder
+ * @uses   \LizardsAndPumpkins\BaseUrl\HttpBaseUrl
+ */
 class WebsiteBaseUrlBuilderTest extends \PHPUnit_Framework_TestCase
 {
     private $testBaseUrl = 'http://example.com/';
