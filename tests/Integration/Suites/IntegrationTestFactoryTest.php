@@ -21,27 +21,6 @@ use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\SampleMasterFactory;
 use LizardsAndPumpkins\Queue\InMemory\InMemoryQueue;
 
-/**
- * @covers \LizardsAndPumpkins\IntegrationTestFactory
- * @uses   \LizardsAndPumpkins\CommonFactory
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection
- * @uses   \LizardsAndPumpkins\DataPool\KeyValue\InMemory\InMemoryKeyValueStore
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine
- * @uses   \LizardsAndPumpkins\FactoryTrait
- * @uses   \LizardsAndPumpkins\Image\ImageMagickResizeStrategy
- * @uses   \LizardsAndPumpkins\Image\GdResizeStrategy
- * @uses   \LizardsAndPumpkins\Image\ImageProcessor
- * @uses   \LizardsAndPumpkins\Image\ImageProcessorCollection
- * @uses   \LizardsAndPumpkins\Image\ImageProcessingStrategySequence
- * @uses   \LizardsAndPumpkins\Log\InMemoryLogger
- * @uses   \LizardsAndPumpkins\LocalFilesystemStorageReader
- * @uses   \LizardsAndPumpkins\LocalFilesystemStorageWriter
- * @uses   \LizardsAndPumpkins\MasterFactoryTrait
- * @uses   \LizardsAndPumpkins\Product\AttributeCode
- * @uses   \LizardsAndPumpkins\Queue\InMemory\InMemoryQueue
- * @uses   \LizardsAndPumpkins\Utils\LocalFilesystem
- */
 class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**

@@ -61,7 +61,7 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\DataVersion
  * @uses   \LizardsAndPumpkins\MasterFactoryTrait
  * @uses   \LizardsAndPumpkins\Image\AddImageCommandHandler
- * @uses   \LizardsAndPumpkins\IntegrationTestFactory
+ * @uses   \LizardsAndPumpkins\UnitTestFactory
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolWriter
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine
@@ -144,7 +144,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $masterFactory = new SampleMasterFactory();
-        $masterFactory->register(new IntegrationTestFactory());
+        $masterFactory->register(new UnitTestFactory());
         $this->commonFactory = new CommonFactory();
         $masterFactory->register($this->commonFactory);
     }
