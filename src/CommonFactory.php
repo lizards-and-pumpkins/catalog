@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\BaseUrl\BaseUrlBuilder;
+use LizardsAndPumpkins\BaseUrl\WebsiteBaseUrlBuilder;
 use LizardsAndPumpkins\Content\ContentBlockProjector;
 use LizardsAndPumpkins\Content\ContentBlockSnippetRenderer;
 use LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEvent;
@@ -37,7 +39,6 @@ use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionBlockRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder;
 use LizardsAndPumpkins\Product\ProductListingTemplateProjector;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionBlockRenderer;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetRenderer;
@@ -194,14 +195,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $event,
             $this->getMasterFactory()->createProductListingCriteriaSnippetProjector()
         );
-    }
-
-    /**
-     * @return ProductsPerPageForContextListBuilder
-     */
-    public function createProductsPerPageForContextListBuilder()
-    {
-        return new ProductsPerPageForContextListBuilder($this->getMasterFactory()->createContextBuilder());
     }
 
     /**
@@ -441,8 +434,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new ProductListingTemplateProjector(
             $this->createProductListingTemplateRendererCollection(),
-            $this->getMasterFactory()->createDataPoolWriter(),
-            $this->getMasterFactory()->createProductsPerPageForContextListBuilder()
+            $this->getMasterFactory()->createDataPoolWriter()
         );
     }
 
@@ -1450,6 +1442,14 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $this->getMasterFactory()->createDataPoolWriter(),
             $this->getMasterFactory()->createContextSource()
         );
+    }
+
+    /**
+     * @return BaseUrlBuilder
+     */
+    public function createBaseUrlBuilder()
+    {
+        return new WebsiteBaseUrlBuilder($this->getMasterFactory()->createConfigReader());
     }
 
     /**

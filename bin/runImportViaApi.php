@@ -48,12 +48,11 @@ class ApiApp extends WebFront
 }
 
 
-$httpRequestBodyContent = file_get_contents(__DIR__ . '/../tests/shared-fixture/product-listing-root-snippet.json');
 $productListingImportRequest = HttpRequest::fromParameters(
     HttpRequest::METHOD_PUT,
     HttpUrl::fromString('http://example.com/api/templates/product_listing'),
     HttpHeaders::fromArray(['Accept' => 'application/vnd.lizards-and-pumpkins.templates.v1+json']),
-    HttpRequestBody::fromString($httpRequestBodyContent)
+    HttpRequestBody::fromString('')
 );
 $productListingImport = new ApiApp($productListingImportRequest);
 $productListingImport->runWithoutSendingResponse();
