@@ -2,7 +2,8 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation;
 
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
+use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\Exception\InvalidTransformationInputException;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange;
 
 class EuroPriceRangeTransformation implements FacetFieldTransformation
 {
@@ -12,35 +13,22 @@ class EuroPriceRangeTransformation implements FacetFieldTransformation
     /**
      * {@inheritdoc}
      */
-    public function encode($input)
+    public function encode(FacetFilterRange $range)
     {
-        if (!preg_match('/^(\d+)' . SearchEngine::RANGE_DELIMITER . '(\d+)$/', $input, $range)) {
-            return $input;
-        }
-
-        return sprintf(
-            '%s € - %s €',
-            number_format($range[1] / self::PRICE_BASE, self::DECIMAL_POINTS, ',', '.'),
-            number_format($range[2] / self::PRICE_BASE, self::DECIMAL_POINTS, ',', '.')
-        );
+        return sprintf('%s € - %s €', $this->priceIntToString($range->from()), $this->priceIntToString($range->to()));
     }
 
     /**
      * @param string $input
-     * @return string
+     * @return FacetFilterRange
      */
     public function decode($input)
     {
-        if (!preg_match('/^([\d,]+) € - ([\d,]+) €$/', $input, $range)) {
-            return $input;
+        if (!preg_match('/^([\d.]+)-([\d.]+)$/', $input, $range)) {
+            throw new InvalidTransformationInputException(sprintf('Price range "%s" can not be decoded.', $input));
         }
 
-        return sprintf(
-            '%s%s%s',
-            $this->priceStringToInt($range[1]),
-            SearchEngine::RANGE_DELIMITER,
-            $this->priceStringToInt($range[2])
-        );
+        return FacetFilterRange::create($this->priceStringToInt($range[1]), $this->priceStringToInt($range[2]));
     }
 
     /**
@@ -50,5 +38,14 @@ class EuroPriceRangeTransformation implements FacetFieldTransformation
     private function priceStringToInt($price)
     {
         return round(str_replace(',', '.', $price) * self::PRICE_BASE);
+    }
+
+    /**
+     * @param int $price
+     * @return string
+     */
+    private function priceIntToString($price)
+    {
+        return number_format($price / self::PRICE_BASE, self::DECIMAL_POINTS, ',', '.');
     }
 }

@@ -2,12 +2,13 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange;
 use LizardsAndPumpkins\Product\Price;
 
 class FilterNavigationPriceRangesBuilder
 {
     /**
-     * @return array[]
+     * @return FacetFilterRange[]
      */
     public static function getPriceRanges()
     {
@@ -15,11 +16,11 @@ class FilterNavigationPriceRangesBuilder
         $rangeStep = 20 * $base;
         $rangesTo = 500 * $base;
 
-        $priceRanges = [['from' => '*', 'to' => $rangeStep - 1]];
+        $priceRanges = [FacetFilterRange::create(null,  $rangeStep - 1)];
         for ($i = $rangeStep; $i < $rangesTo; $i += $rangeStep) {
-            $priceRanges[] = ['from' => $i, 'to' => $i + $rangeStep - 1];
+            $priceRanges[] = FacetFilterRange::create($i, $i + $rangeStep - 1);
         }
-        $priceRanges[] = ['from' => $rangesTo, 'to' => '*'];
+        $priceRanges[] = FacetFilterRange::create($rangesTo, null);
 
         return $priceRanges;
     }

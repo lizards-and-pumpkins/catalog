@@ -2,7 +2,9 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
+use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformation;
+use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder
@@ -12,13 +14,19 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 class SearchCriteriaBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var FacetFieldTransformationRegistry|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubFacetFieldTransformationRegistry;
+
+    /**
      * @var SearchCriteriaBuilder
      */
     private $builder;
 
     protected function setUp()
     {
-        $this->builder = new SearchCriteriaBuilder;
+        $this->stubFacetFieldTransformationRegistry = $this->getMock(FacetFieldTransformationRegistry::class);
+        $this->builder = new SearchCriteriaBuilder($this->stubFacetFieldTransformationRegistry);
     }
 
     public function testSearchCriterionEqualIsReturned()
@@ -37,12 +45,25 @@ class SearchCriteriaBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedCriteriaJson, $result->jsonSerialize());
     }
 
-    public function testRangeCriterionIsReturnedIsReturned()
+    public function testRangeCriterionIsReturned()
     {
         $parameterName = 'foo';
         $rangeFrom = '0';
         $rangeTo = '1';
-        $parameterValue = sprintf('%s%s%s', $rangeFrom, SearchEngine::RANGE_DELIMITER, $rangeTo);
+        $parameterValue = 'whatever';
+
+        $stubFacetFieldRange = $this->getMock(FacetFilterRange::class, [], [], '', false);
+        $stubFacetFieldRange->method('from')->willReturn($rangeFrom);
+        $stubFacetFieldRange->method('to')->willReturn($rangeTo);
+
+        $stubFacetFieldTransformation = $this->getMock(FacetFieldTransformation::class);
+        $stubFacetFieldTransformation->method('decode')->willReturn($stubFacetFieldRange);
+
+        $this->stubFacetFieldTransformationRegistry->method('hasTransformationForCode')->willReturn(true);
+        $this->stubFacetFieldTransformationRegistry->method('getTransformationByCode')
+            ->willReturn($stubFacetFieldTransformation);
+
+        /** @var CompositeSearchCriterion $result */
         $result = $this->builder->fromFieldNameAndValue($parameterName, $parameterValue);
 
         $expectedCriteriaJson = [

@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\KeyValue\Exception\KeyNotFoundException;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\Exception\UnableToHandleRequestException;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -32,9 +33,9 @@ class ProductListingRequestHandler implements HttpRequestHandler
     private $metaInfoSnippetKeyGenerator;
 
     /**
-     * @var string[]
+     * @var FacetFilterRequest
      */
-    private $filterNavigationConfig;
+    private $facetFilterRequest;
 
     /**
      * @var ProductListingPageContentBuilder
@@ -46,26 +47,18 @@ class ProductListingRequestHandler implements HttpRequestHandler
      */
     private $productListingPageRequest;
 
-    /**
-     * @param Context $context
-     * @param DataPoolReader $dataPoolReader
-     * @param SnippetKeyGenerator $metaInfoSnippetKeyGenerator
-     * @param string[] $filterNavigationConfig
-     * @param ProductListingPageContentBuilder $productListingPageContentBuilder
-     * @param ProductListingPageRequest $productListingPageRequest
-     */
     public function __construct(
         Context $context,
         DataPoolReader $dataPoolReader,
         SnippetKeyGenerator $metaInfoSnippetKeyGenerator,
-        array $filterNavigationConfig,
+        FacetFilterRequest $facetFilterRequest,
         ProductListingPageContentBuilder $productListingPageContentBuilder,
         ProductListingPageRequest $productListingPageRequest
     ) {
-        $this->dataPoolReader = $dataPoolReader;
         $this->context = $context;
+        $this->dataPoolReader = $dataPoolReader;
         $this->metaInfoSnippetKeyGenerator = $metaInfoSnippetKeyGenerator;
-        $this->filterNavigationConfig = $filterNavigationConfig;
+        $this->facetFilterRequest = $facetFilterRequest;
         $this->productListingPageContentBuilder = $productListingPageContentBuilder;
         $this->productListingPageRequest = $productListingPageRequest;
     }
@@ -165,7 +158,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $criteria = $this->getPageMetaInfoSnippet($request)->getSelectionCriteria();
         $selectedFilters = $this->productListingPageRequest->getSelectedFilterValues(
             $request,
-            $this->filterNavigationConfig
+            $this->facetFilterRequest
         );
         $currentPageNumber = $this->productListingPageRequest->getCurrentPageNumber($request);
 
@@ -173,7 +166,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
             $criteria,
             $selectedFilters,
             $this->context,
-            $this->filterNavigationConfig,
+            $this->facetFilterRequest,
             $productsPerPage->getSelectedNumberOfProductsPerPage(),
             $currentPageNumber,
             $selectedSortOrderConfig

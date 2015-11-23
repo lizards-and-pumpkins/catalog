@@ -6,7 +6,7 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineFacetFieldCollection;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\PageBuilder;
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
@@ -71,7 +71,7 @@ class ProductListingPageContentBuilder
         return $this->pageBuilder->buildPage($metaInfo, $context, $keyGeneratorParams);
     }
 
-    private function addFilterNavigationSnippetToPageBuilder(SearchEngineFacetFieldCollection $facetFieldCollection)
+    private function addFilterNavigationSnippetToPageBuilder(FacetFieldCollection $facetFieldCollection)
     {
         $snippetCode = 'filter_navigation';
         $snippetContents = json_encode($facetFieldCollection);

@@ -12,7 +12,7 @@ class SearchEngineResponse
     private $searchDocuments;
 
     /**
-     * @var SearchEngineFacetFieldCollection
+     * @var FacetFieldCollection
      */
     private $facetFieldCollection;
 
@@ -23,12 +23,12 @@ class SearchEngineResponse
 
     /**
      * @param SearchDocumentCollection $searchDocuments
-     * @param SearchEngineFacetFieldCollection $facetFieldCollection
+     * @param FacetFieldCollection $facetFieldCollection
      * @param int $totalNumberOfResults
      */
     public function __construct(
         SearchDocumentCollection $searchDocuments,
-        SearchEngineFacetFieldCollection $facetFieldCollection,
+        FacetFieldCollection $facetFieldCollection,
         $totalNumberOfResults
     ) {
         $this->searchDocuments = $searchDocuments;
@@ -45,7 +45,7 @@ class SearchEngineResponse
     }
 
     /**
-     * @return SearchEngineFacetFieldCollection
+     * @return FacetFieldCollection
      */
     public function getFacetFieldCollection()
     {

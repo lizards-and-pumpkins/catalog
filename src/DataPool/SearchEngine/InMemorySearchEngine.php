@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
+use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
@@ -18,9 +19,17 @@ class InMemorySearchEngine extends IntegrationTestSearchEngineAbstract
      */
     private $searchCriteriaBuilder;
 
-    public function __construct(SearchCriteriaBuilder $searchCriteriaBuilder)
-    {
+    /**
+     * @var FacetFieldTransformationRegistry
+     */
+    private $facetFieldTransformationRegistry;
+
+    public function __construct(
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        FacetFieldTransformationRegistry $facetFieldTransformationRegistry
+    ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->facetFieldTransformationRegistry = $facetFieldTransformationRegistry;
     }
 
     public function addSearchDocumentCollection(SearchDocumentCollection $searchDocumentCollection)
@@ -49,5 +58,13 @@ class InMemorySearchEngine extends IntegrationTestSearchEngineAbstract
     final protected function getSearchCriteriaBuilder()
     {
         return $this->searchCriteriaBuilder;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    final protected function getFacetFieldTransformationRegistry()
+    {
+        return $this->facetFieldTransformationRegistry;
     }
 }

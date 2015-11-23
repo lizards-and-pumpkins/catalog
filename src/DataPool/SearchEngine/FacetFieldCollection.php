@@ -2,14 +2,14 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
-class SearchEngineFacetFieldCollection implements \Countable, \IteratorAggregate, \JsonSerializable
+class FacetFieldCollection implements \Countable, \IteratorAggregate, \JsonSerializable
 {
     /**
-     * @var SearchEngineFacetField[]
+     * @var FacetField[]
      */
     private $facetFields;
 
-    public function __construct(SearchEngineFacetField ...$facetFields)
+    public function __construct(FacetField ...$facetFields)
     {
         $this->facetFields = $facetFields;
     }
@@ -31,7 +31,7 @@ class SearchEngineFacetFieldCollection implements \Countable, \IteratorAggregate
     }
 
     /**
-     * @return SearchEngineFacetField[]
+     * @return FacetField[]
      */
     public function getFacetFields()
     {
@@ -39,11 +39,11 @@ class SearchEngineFacetFieldCollection implements \Countable, \IteratorAggregate
     }
 
     /**
-     * @return SearchEngineFacetField[]
+     * @return FacetField[]
      */
     public function jsonSerialize()
     {
-        return array_reduce($this->facetFields, function ($carry, SearchEngineFacetField $facetField) {
+        return array_reduce($this->facetFields, function ($carry, FacetField $facetField) {
             return array_merge($carry, [(string) $facetField->getAttributeCode() => $facetField->getValues()]);
         }, []);
     }

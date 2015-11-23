@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\Product\AttributeCode;
 
-class SearchEngineFacetField
+class FacetField
 {
     /**
      * @var AttributeCode
@@ -12,11 +12,11 @@ class SearchEngineFacetField
     private $attributeCode;
 
     /**
-     * @var SearchEngineFacetFieldValueCount[]
+     * @var FacetFieldValue[]
      */
     private $values;
 
-    public function __construct(AttributeCode $attributeCode, SearchEngineFacetFieldValueCount ...$facetFieldValues)
+    public function __construct(AttributeCode $attributeCode, FacetFieldValue ...$facetFieldValues)
     {
         $this->attributeCode = $attributeCode;
         $this->values = $facetFieldValues;
@@ -31,7 +31,7 @@ class SearchEngineFacetField
     }
 
     /**
-     * @return SearchEngineFacetFieldValueCount[]
+     * @return FacetFieldValue[]
      */
     public function getValues()
     {

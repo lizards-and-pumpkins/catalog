@@ -5,7 +5,12 @@ namespace LizardsAndPumpkins;
 use LizardsAndPumpkins\ContentDelivery\Catalog\FilterNavigationPriceRangesBuilder;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
+use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\EuroPriceRangeTransformation;
+use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestRangedField;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\FileUrlKeyStore;
 use LizardsAndPumpkins\Image\ImageMagickInscribeStrategy;
@@ -53,12 +58,15 @@ class SampleFactory implements Factory
      */
     public function getProductListingFilterNavigationConfig()
     {
-        return [
-            'gender' => [],
-            'brand' => [],
-            'price' => FilterNavigationPriceRangesBuilder::getPriceRanges(),
-            'color' => [],
-        ];
+        return new FacetFilterRequest(
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('gender')),
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('brand')),
+            new FacetFilterRequestRangedField(
+                AttributeCode::fromString('price'),
+                ...FilterNavigationPriceRangesBuilder::getPriceRanges()
+            ),
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('color'))
+        );
     }
 
     /**
@@ -66,13 +74,16 @@ class SampleFactory implements Factory
      */
     public function getProductSearchResultsFilterNavigationConfig()
     {
-        return [
-            'gender' => [],
-            'brand' => [],
-            'category' => [],
-            'price' => FilterNavigationPriceRangesBuilder::getPriceRanges(),
-            'color' => [],
-        ];
+        return new FacetFilterRequest(
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('gender')),
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('brand')),
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('category')),
+            new FacetFilterRequestRangedField(
+                AttributeCode::fromString('price'),
+                ...FilterNavigationPriceRangesBuilder::getPriceRanges()
+            ),
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('color'))
+        );
     }
 
     /**
@@ -145,9 +156,11 @@ class SampleFactory implements Factory
         $searchEngineStoragePath = $storageBasePath . '/search-engine';
         $this->createDirectoryIfNotExists($searchEngineStoragePath);
 
-        $searchCriteriaBuilder = $this->getMasterFactory()->createSearchCriteriaBuilder();
-
-        return FileSearchEngine::create($searchEngineStoragePath, $searchCriteriaBuilder);
+        return FileSearchEngine::create(
+            $searchEngineStoragePath,
+            $this->getMasterFactory()->createSearchCriteriaBuilder(),
+            $this->getMasterFactory()->getFacetFieldTransformationRegistry()
+        );
     }
 
     /**
@@ -157,6 +170,17 @@ class SampleFactory implements Factory
     {
         $storageBasePath = $this->getMasterFactory()->getFileStorageBasePathConfig();
         return new FileUrlKeyStore($storageBasePath . '/url-key-store');
+    }
+
+    /**
+     * @return FacetFieldTransformationRegistry
+     */
+    public function createFacetFieldTransformationRegistry()
+    {
+        $registry = new FacetFieldTransformationRegistry;
+        $registry->register('price', new EuroPriceRangeTransformation);
+
+        return $registry;
     }
 
     /**

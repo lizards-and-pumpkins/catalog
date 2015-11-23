@@ -15,7 +15,7 @@ class SearchEngineResponseTest extends \PHPUnit_Framework_TestCase
     private $stubSearchDocumentCollection;
 
     /**
-     * @var SearchEngineFacetFieldCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var FacetFieldCollection|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubFacetFieldCollection;
 
@@ -29,7 +29,7 @@ class SearchEngineResponseTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
-        $this->stubFacetFieldCollection = $this->getMock(SearchEngineFacetFieldCollection::class, [], [], '', false);
+        $this->stubFacetFieldCollection = $this->getMock(FacetFieldCollection::class, [], [], '', false);
 
         $this->searchEngineResponse = new SearchEngineResponse(
             $this->stubSearchDocumentCollection,

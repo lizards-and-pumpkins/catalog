@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\Tests\Integration;
 use LizardsAndPumpkins\CommonFactory;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
 use LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\FileUrlKeyStore;
 use LizardsAndPumpkins\Image\ImageProcessor;
@@ -23,12 +24,18 @@ use LizardsAndPumpkins\SampleFactory;
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FilterNavigationPriceRangesBuilder
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection
+ * @uses   \LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry
  * @uses   \LizardsAndPumpkins\FactoryTrait
  * @uses   \LizardsAndPumpkins\Log\InMemoryLogger
  * @uses   \LizardsAndPumpkins\Log\WritingLoggerDecorator
  * @uses   \LizardsAndPumpkins\Log\Writer\FileLogMessageWriter
  * @uses   \LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestRangedField
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder
  * @uses   \LizardsAndPumpkins\DataPool\UrlKeyStore\FileUrlKeyStore
  * @uses   \LizardsAndPumpkins\Image\ImageMagickInscribeStrategy
  * @uses   \LizardsAndPumpkins\Image\ImageProcessor
@@ -47,22 +54,6 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
      * @var SampleFactory
      */
     private $factory;
-
-    /**
-     * @param array[] $filterRanges
-     */
-    private function assertFilterRangesFormat(array $filterRanges)
-    {
-        array_map(function (array $filterRanges) {
-            $this->assertInternalType('array', $filterRanges);
-            $this->assertContainsOnly('array', $filterRanges);
-            array_map(function (array $range) {
-                $this->assertCount(2, $range);
-                $this->assertArrayHasKey('from', $range);
-                $this->assertArrayHasKey('to', $range);
-            }, $filterRanges);
-        }, $filterRanges);
-    }
 
     protected function setUp()
     {
@@ -125,22 +116,16 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertContainsOnly('string', $result);
     }
 
-    public function testArrayOfProductListingFilterNavigationAttributeCodesIsReturned()
+    public function testProductListingFilterNavigationConfigIsInstanceOfFacetFilterRequest()
     {
         $result = $this->factory->getProductListingFilterNavigationConfig();
-
-        $this->assertInternalType('array', $result);
-        $this->assertContainsOnly('array', $result);
-        $this->assertFilterRangesFormat($result);
+        $this->assertInstanceOf(FacetFilterRequest::class, $result);
     }
 
-    public function testArrayOfProductSearchResultsFilterNavigationAttributeCodesIsReturned()
+    public function testProductSearchResultsFilterNavigationConfigIsInstanceOfFacetFilterRequest()
     {
         $result = $this->factory->getProductSearchResultsFilterNavigationConfig();
-
-        $this->assertInternalType('array', $result);
-        $this->assertContainsOnly('array', $result);
-        $this->assertFilterRangesFormat($result);
+        $this->assertInstanceOf(FacetFilterRequest::class, $result);
     }
 
     public function testImageProcessorCollectionIsReturned()

@@ -10,6 +10,7 @@ use LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Content\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Content\UpdateContentBlockCommandHandler;
+use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Context\LocaleContextDecorator;
@@ -135,6 +136,11 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      * @var string
      */
     private $currentDataVersion;
+
+    /**
+     * @var FacetFieldTransformationRegistry
+     */
+    private $memoizedFacetFieldTransformationRegistry;
 
     /**
      * @param ProductWasUpdatedDomainEvent $event
@@ -996,8 +1002,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         $indexAttributeCodes = array_merge(
             $this->getMasterFactory()->getSearchableAttributeCodes(),
-            array_keys($this->getMasterFactory()->getProductListingFilterNavigationConfig()),
-            array_keys($this->getMasterFactory()->getProductSearchResultsFilterNavigationConfig())
+            $this->getMasterFactory()->getProductListingFilterNavigationConfig()->getAttributeCodeStrings(),
+            $this->getMasterFactory()->getProductSearchResultsFilterNavigationConfig()->getAttributeCodeStrings()
         );
 
         return new ProductSearchDocumentBuilder($indexAttributeCodes);
@@ -1345,7 +1351,9 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createSearchCriteriaBuilder()
     {
-        return new SearchCriteriaBuilder;
+        return new SearchCriteriaBuilder(
+            $this->getMasterFactory()->getFacetFieldTransformationRegistry()
+        );
     }
 
     /**
@@ -1446,5 +1454,18 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createBaseUrlBuilder()
     {
         return new WebsiteBaseUrlBuilder($this->getMasterFactory()->createConfigReader());
+    }
+
+    /**
+     * @return FacetFieldTransformationRegistry
+     */
+    public function getFacetFieldTransformationRegistry()
+    {
+        if (null === $this->memoizedFacetFieldTransformationRegistry) {
+            $this->memoizedFacetFieldTransformationRegistry = $this->getMasterFactory()
+                ->createFacetFieldTransformationRegistry();
+        }
+
+        return $this->memoizedFacetFieldTransformationRegistry;
     }
 }

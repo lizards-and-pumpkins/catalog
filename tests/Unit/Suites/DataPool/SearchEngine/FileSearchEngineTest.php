@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
+use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\DataPool\SearchEngine\Exception\SearchEngineNotAvailableException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\Utils\LocalFilesystem;
@@ -30,9 +31,13 @@ use LizardsAndPumpkins\Utils\LocalFilesystem;
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineFacetField
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineFacetFieldCollection
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineFacetFieldValueCount
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetField
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldCollection
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldValue
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestRangedField
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Product\ProductId
@@ -46,15 +51,20 @@ class FileSearchEngineTest extends AbstractSearchEngineTest
     private $temporaryStorage;
 
     /**
-     * @return SearchEngine
+     * {@inheritdoc}
      */
-    final protected function createSearchEngineInstance()
-    {
+    final protected function createSearchEngineInstance(
+        FacetFieldTransformationRegistry $facetFieldTransformationRegistry
+    ) {
         $this->prepareTemporaryStorage();
 
-        $searchCriteriaBuilder = new SearchCriteriaBuilder;
+        $searchCriteriaBuilder = new SearchCriteriaBuilder($facetFieldTransformationRegistry);
 
-        return FileSearchEngine::create($this->temporaryStorage, $searchCriteriaBuilder);
+        return FileSearchEngine::create(
+            $this->temporaryStorage,
+            $searchCriteriaBuilder,
+            $facetFieldTransformationRegistry
+        );
     }
 
     private function prepareTemporaryStorage()
@@ -78,8 +88,13 @@ class FileSearchEngineTest extends AbstractSearchEngineTest
     {
         $this->setExpectedException(SearchEngineNotAvailableException::class);
 
-        $searchCriteriaBuilder = new SearchCriteriaBuilder;
+        $stubFacetFieldTransformationRegistry = $this->getMock(FacetFieldTransformationRegistry::class);
+        $searchCriteriaBuilder = new SearchCriteriaBuilder($stubFacetFieldTransformationRegistry);
 
-        FileSearchEngine::create('non-existing-path', $searchCriteriaBuilder);
+        FileSearchEngine::create(
+            'non-existing-path',
+            $searchCriteriaBuilder,
+            $stubFacetFieldTransformationRegistry
+        );
     }
 }

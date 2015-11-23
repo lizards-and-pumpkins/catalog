@@ -18,7 +18,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     {
         $this->factory = new SampleMasterFactory();
         $this->factory->register(new CommonFactory());
-        $this->factory->register(new IntegrationTestFactory());
+        new IntegrationTestFactory($this->factory);
     }
     
     public function testDecoratedContextSetIsCreated()

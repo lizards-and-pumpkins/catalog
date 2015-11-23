@@ -4,7 +4,9 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
+use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\DataPool\SearchEngine\Exception\NoFacetFieldTransformationRegisteredException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
@@ -27,13 +29,18 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     abstract protected function getSearchCriteriaBuilder();
 
     /**
+     * @return FacetFieldTransformationRegistry
+     */
+    abstract protected function getFacetFieldTransformationRegistry();
+
+    /**
      * {@inheritdoc}
      */
     final public function getSearchDocumentsMatchingCriteria(
         SearchCriteria $originalCriteria,
         array $filterSelection,
         Context $context,
-        array $facetFiltersConfig,
+        FacetFilterRequest $facetFilterRequest,
         $rowsPerPage,
         $pageNumber,
         SortOrderConfig $sortOrderConfig
@@ -47,7 +54,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
         $facetFieldCollection = $this->createFacetFieldCollection(
             $originalCriteria,
             $context,
-            $facetFiltersConfig,
+            $facetFilterRequest,
             $selectedFilters,
             $matchingDocuments,
             $allDocuments
@@ -89,23 +96,27 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     /**
      * @param SearchCriteria $originalCriteria
      * @param Context $context
-     * @param array[] $facetFiltersConfig
+     * @param FacetFilterRequest $facetFilterRequest
      * @param array[] $selectedFilters
      * @param SearchDocument[] $matchingDocuments
      * @param SearchDocument[] $allDocuments
-     * @return SearchEngineFacetFieldCollection
+     * @return FacetFieldCollection
      */
     private function createFacetFieldCollection(
         SearchCriteria $originalCriteria,
         Context $context,
-        array $facetFiltersConfig,
+        FacetFilterRequest $facetFilterRequest,
         $selectedFilters,
         $matchingDocuments,
         $allDocuments
     ) {
-        $facetFiltersConfigExceptSelectedFilters = array_diff_key($facetFiltersConfig, $selectedFilters);
+        $facetFilterAttributeCodeStrings = $facetFilterRequest->getAttributeCodeStrings();
+        $selectedFilterCodes = array_keys($selectedFilters);
+        $unselectedFilterCodes = array_diff($facetFilterAttributeCodeStrings, $selectedFilterCodes);
+
         $facetFieldsForUnselectedFilters = $this->createFacetFieldsFromSearchDocuments(
-            $facetFiltersConfigExceptSelectedFilters,
+            $unselectedFilterCodes,
+            $facetFilterRequest,
             ...array_values($matchingDocuments)
         );
 
@@ -114,12 +125,12 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
             $context,
             $selectedFilters,
             $allDocuments,
-            $facetFiltersConfig
+            $facetFilterRequest
         );
 
         $facetFieldArray = array_merge($facetFieldsForSelectedFilters, $facetFieldsForUnselectedFilters);
 
-        return new SearchEngineFacetFieldCollection(...$facetFieldArray);
+        return new FacetFieldCollection(...$facetFieldArray);
     }
 
     /**
@@ -127,15 +138,15 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
      * @param Context $context
      * @param array[] $selectedFilters
      * @param SearchDocument[] $allDocuments
-     * @param array[] $facetFilterConfig
-     * @return SearchEngineFacetField[]
+     * @param FacetFilterRequest $facetFilterRequest
+     * @return FacetField[]
      */
     private function getSelectedFiltersFacetValuesWithSiblings(
         SearchCriteria $originalCriteria,
         Context $context,
         array $selectedFilters,
         array $allDocuments,
-        array $facetFilterConfig
+        FacetFilterRequest $facetFilterRequest
     ) {
         $facetFieldsForSelectedFilters = [];
 
@@ -146,7 +157,8 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
             $matchingDocuments = $this->filterDocumentsMatchingCriteria($allDocuments, $criteria, $context);
 
             $facetFields = $this->createFacetFieldsFromSearchDocuments(
-                [$filterCode => $facetFilterConfig[$filterCode]],
+                [$filterCode],
+                $facetFilterRequest,
                 ...array_values($matchingDocuments)
             );
 
@@ -178,26 +190,38 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     }
 
     /**
-     * @param array[] $facetFiltersConfig
+     * @param string[] $fieldCodes
+     * @param FacetFilterRequest $facetFilterRequest
      * @param SearchDocument[] $searchDocuments
-     * @return SearchEngineFacetField[]
+     * @return FacetField[]
      */
-    private function createFacetFieldsFromSearchDocuments(array $facetFiltersConfig, SearchDocument ...$searchDocuments)
-    {
-        $facetFieldCodes = array_keys($facetFiltersConfig);
-        $attributeCounts = $this->createAttributeValueCountArrayFromSearchDocuments(
-            $facetFieldCodes,
-            ...$searchDocuments
-        );
+    private function createFacetFieldsFromSearchDocuments(
+        array $fieldCodes,
+        FacetFilterRequest $facetFilterRequest,
+        SearchDocument ...$searchDocuments
+    ) {
+        $attributeCounts = $this->createAttributeValueCountArrayFromSearchDocuments($fieldCodes, ...$searchDocuments);
 
-        return array_map(function ($attributeCode, $attributeValues) use ($facetFiltersConfig) {
-            $facetFieldValues = $this->getFacetFieldValuesFromAttributeValues(
-                $attributeCode,
-                $attributeValues,
-                $facetFiltersConfig
-            );
-            return new SearchEngineFacetField(AttributeCode::fromString($attributeCode), ...$facetFieldValues);
-        }, array_keys($attributeCounts), $attributeCounts);
+        return array_reduce(
+            $facetFilterRequest->getFields(),
+            function (array $carry, FacetFilterRequestField $field) use ($attributeCounts, $fieldCodes) {
+                $attributeCode = $field->getAttributeCode();
+
+                if (!in_array((string)$attributeCode, $fieldCodes)) {
+                    return $carry;
+                }
+
+                $facetFieldValues = $this->getFacetFieldValuesFromAttributeValues(
+                    $attributeCounts[(string) $attributeCode],
+                    $field
+                );
+
+                $carry[] = new FacetField($attributeCode, ...$facetFieldValues);
+
+                return $carry;
+            },
+            []
+        );
     }
 
     /**
@@ -288,14 +312,14 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     }
 
     /**
-     * @param SearchEngineFacetFieldCollection $facetFieldCollection
+     * @param FacetFieldCollection $facetFieldCollection
      * @param SearchDocument[] $searchDocuments
      * @param int $rowsPerPage
      * @param int $pageNumber
      * @return SearchEngineResponse
      */
     private function createSearchEngineResponse(
-        SearchEngineFacetFieldCollection $facetFieldCollection,
+        FacetFieldCollection $facetFieldCollection,
         array $searchDocuments,
         $rowsPerPage,
         $pageNumber
@@ -308,70 +332,95 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     }
 
     /**
-     * @param string $attributeCode
      * @param array[] $attributeValues
-     * @param array[] $facetFiltersConfig
-     * @return SearchEngineFacetFieldValueCount[]
+     * @param FacetFilterRequestField $facetFilterRequestField
+     * @return FacetFieldValue[]
      */
     private function getFacetFieldValuesFromAttributeValues(
-        $attributeCode,
         array $attributeValues,
-        array $facetFiltersConfig
+        FacetFilterRequestField $facetFilterRequestField
     ) {
-        $configuredRanges = $facetFiltersConfig[$attributeCode];
-
-        if (!empty($configuredRanges)) {
-            return $this->createRangedFacetFieldFromAttributeValues($attributeValues, $configuredRanges);
+        if ($facetFilterRequestField->isRanged()) {
+            return $this->createRangedFacetFieldFromAttributeValues($attributeValues, $facetFilterRequestField);
         }
 
-        return $this->createDefaultFacetFieldFromAttributeValues($attributeValues);
+        return $this->createSimpleFacetFieldFromAttributeValues($attributeValues);
     }
 
     /**
      * @param array[] $attributeValues
-     * @return SearchEngineFacetFieldValueCount[]
+     * @return FacetFieldValue[]
      */
-    private function createDefaultFacetFieldFromAttributeValues(array $attributeValues)
+    private function createSimpleFacetFieldFromAttributeValues(array $attributeValues)
     {
         return array_map(function ($valueCounts) {
-            return SearchEngineFacetFieldValueCount::create((string)$valueCounts['value'], $valueCounts['count']);
+            return FacetFieldValue::create((string)$valueCounts['value'], $valueCounts['count']);
         }, $attributeValues);
     }
 
     /**
      * @param array[] $attributeValues
-     * @param array[] $configuredRanges
-     * @return SearchEngineFacetFieldValueCount[]
+     * @param FacetFilterRequestRangedField $facetFilterRequestRangedField
+     * @return FacetFieldValue[]
      */
-    private function createRangedFacetFieldFromAttributeValues(array $attributeValues, $configuredRanges)
-    {
-        return array_reduce($configuredRanges, function ($carry, array $range) use ($attributeValues) {
-            $rangeCount = $this->sumAttributeValuesCountsInRange($range, $attributeValues);
-            if ($rangeCount > 0) {
-                $rangeCode = $range['from'] . SearchEngine::RANGE_DELIMITER . $range['to'];
-                $carry[] = SearchEngineFacetFieldValueCount::create($rangeCode, $rangeCount);
-            }
+    private function createRangedFacetFieldFromAttributeValues(
+        array $attributeValues,
+        FacetFilterRequestRangedField $facetFilterRequestRangedField
+    ) {
+        $attributeCode = (string) $facetFilterRequestRangedField->getAttributeCode();
 
-            return $carry;
-        }, []);
+        return array_reduce(
+            $facetFilterRequestRangedField->getRanges(),
+            function ($carry, FacetFilterRange $range) use ($attributeValues, $attributeCode) {
+                $rangeCount = $this->sumAttributeValuesCountsInRange($range, $attributeValues);
+
+                if ($rangeCount > 0) {
+                    $rangeCode = $this->getRangedFilterCode($range, $attributeCode);
+                    $carry[] = FacetFieldValue::create($rangeCode, $rangeCount);
+                }
+
+                return $carry;
+            },
+            []
+        );
     }
 
     /**
-     * @param mixed[] $range
+     * @param FacetFilterRange $range
      * @param array[] $attributeValues
      * @return int
      */
-    private function sumAttributeValuesCountsInRange(array $range, $attributeValues)
+    private function sumAttributeValuesCountsInRange(FacetFilterRange $range, $attributeValues)
     {
         return array_reduce($attributeValues, function ($carry, array $valueCounts) use ($range) {
-            if ((SearchEngine::RANGE_WILDCARD === $range['from'] || $valueCounts['value'] >= $range['from']) &&
-                (SearchEngine::RANGE_WILDCARD === $range['to'] || $valueCounts['value'] <= $range['to'])
+            if ((null === $range->from() || $valueCounts['value'] >= $range->from()) &&
+                (null === $range->to() || $valueCounts['value'] <= $range->to())
             ) {
                 $carry += $valueCounts['count'];
             }
 
             return $carry;
         }, 0);
+    }
+
+    /**
+     * @param FacetFilterRange $range
+     * @param string $attributeCode
+     * @return string
+     */
+    private function getRangedFilterCode(FacetFilterRange $range, $attributeCode)
+    {
+        $transformationRegistry = $this->getFacetFieldTransformationRegistry();
+
+        if (!$transformationRegistry->hasTransformationForCode($attributeCode)) {
+            throw new NoFacetFieldTransformationRegisteredException(
+                sprintf('No facet field transformation is geristered for "%s" attribute.', $attributeCode)
+            );
+        }
+
+        $transformation = $transformationRegistry->getTransformationByCode($attributeCode);
+
+        return $transformation->encode($range);
     }
 
     /**

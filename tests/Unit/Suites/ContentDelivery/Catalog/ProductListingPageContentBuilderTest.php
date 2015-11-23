@@ -6,7 +6,7 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineFacetFieldCollection;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\PageBuilder;
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
@@ -127,7 +127,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
         $stubSearchDocumentCollection->method('count')->willReturn(1);
         $stubSearchDocumentCollection->method('getDocuments')->willReturn([$stubSearchDocument]);
 
-        $stubFacetFieldCollection = $this->getMock(SearchEngineFacetFieldCollection::class, [], [], '', false);
+        $stubFacetFieldCollection = $this->getMock(FacetFieldCollection::class, [], [], '', false);
 
         $stubSearchEngineResponse = $this->getMock(SearchEngineResponse::class, [], [], '', false);
         $stubSearchEngineResponse->method('getSearchDocuments')->willReturn($stubSearchDocumentCollection);
