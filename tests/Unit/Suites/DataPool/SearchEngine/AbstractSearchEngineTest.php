@@ -4,9 +4,12 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
+use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformation;
+use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\WebsiteContextDecorator;
+use LizardsAndPumpkins\DataPool\SearchEngine\Exception\NoFacetFieldTransformationRegisteredException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
@@ -26,6 +29,11 @@ use LizardsAndPumpkins\Utils\Clearable;
 
 abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var FacetFieldTransformationRegistry|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubFacetFieldTransformationRegistry;
+
     /**
      * @var Context
      */
@@ -138,7 +146,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->searchEngine = $this->createSearchEngineInstance();
+        $this->stubFacetFieldTransformationRegistry = $this->getMock(FacetFieldTransformationRegistry::class);
+        $this->searchEngine = $this->createSearchEngineInstance($this->stubFacetFieldTransformationRegistry);
         $this->testContext = $this->createContextFromDataParts([WebsiteContextDecorator::CODE => 'ru']);
     }
 
@@ -579,6 +588,46 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertContains($expectedBarFacetField, $result->getFacetFields(), '', false, false);
     }
 
+    public function testExceptionIsThrownIfNoTransformationIsRegisteredForRangedFacetField()
+    {
+        $productId = ProductId::fromString('id');
+
+        $fieldName = 'price';
+        $fieldValue = 0;
+
+        $document = $this->createSearchDocument([$fieldName => 1], $productId);
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($document);
+
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
+
+        $this->stubFacetFieldTransformationRegistry->method('hasTransformationForCode')->willReturn(false);
+
+        $facetFieldRequest = new FacetFilterRequest(
+            new FacetFilterRequestRangedField(
+                AttributeCode::fromString($fieldName),
+                FacetFilterRange::create(1, 10)
+            )
+        );
+
+        $criteria = SearchCriterionGreaterOrEqualThan::create($fieldName, $fieldValue);
+        $selectedFilters = [];
+        $rowsPerPage = 100;
+        $pageNumber = 0;
+        $sortOrderConfig = $this->createStubSortOrderConfig('whatever', SortOrderDirection::ASC);
+
+        $this->setExpectedException(NoFacetFieldTransformationRegisteredException::class);
+
+        $this->searchEngine->getSearchDocumentsMatchingCriteria(
+            $criteria,
+            $selectedFilters,
+            $this->testContext,
+            $facetFieldRequest,
+            $rowsPerPage,
+            $pageNumber,
+            $sortOrderConfig
+        );
+    }
+
     public function testFacetFieldCollectionContainsConfiguredRanges()
     {
         $productAId = ProductId::fromString('A');
@@ -594,6 +643,15 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($documentA, $documentB, $documentC);
 
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
+
+        $stubFacetFieldTransformation = $this->getMock(FacetFieldTransformation::class);
+        $stubFacetFieldTransformation->method('encode')->willReturnCallback(function (FacetFilterRange $range) {
+            return sprintf('%s-%s', $range->from(), $range->to());
+        });
+
+        $this->stubFacetFieldTransformationRegistry->method('hasTransformationForCode')->willReturn(true);
+        $this->stubFacetFieldTransformationRegistry->method('getTransformationByCode')
+            ->willReturn($stubFacetFieldTransformation);
 
         $facetFieldRequest = new FacetFilterRequest(
             new FacetFilterRequestRangedField(
@@ -624,9 +682,9 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $expectedFacetFields = [
             new FacetField(
                 AttributeCode::fromString($fieldName),
-                FacetFieldValue::create(SearchEngine::RANGE_DELIMITER . '10', 1),
-                FacetFieldValue::create('10' . SearchEngine::RANGE_DELIMITER . '20', 1),
-                FacetFieldValue::create('30' . SearchEngine::RANGE_DELIMITER, 1)
+                FacetFieldValue::create('-10', 1),
+                FacetFieldValue::create('10-20', 1),
+                FacetFieldValue::create('30-', 1)
             )
         ];
         $facetFieldsCollection = $searchEngineResponse->getFacetFieldCollection();
@@ -909,7 +967,10 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param FacetFieldTransformationRegistry $facetFieldTransformationRegistry
      * @return SearchEngine
      */
-    abstract protected function createSearchEngineInstance();
+    abstract protected function createSearchEngineInstance(
+        FacetFieldTransformationRegistry $facetFieldTransformationRegistry
+    );
 }

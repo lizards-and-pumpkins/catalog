@@ -2,10 +2,20 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
+use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
 
 class SearchCriteriaBuilder
 {
+    /**
+     * @var FacetFieldTransformationRegistry
+     */
+    private $facetFieldTransformationRegistry;
+
+    public function __construct(FacetFieldTransformationRegistry $facetFieldTransformationRegistry)
+    {
+        $this->facetFieldTransformationRegistry = $facetFieldTransformationRegistry;
+    }
+
     /**
      * @param string $fieldName
      * @param string $fieldValue
@@ -13,11 +23,12 @@ class SearchCriteriaBuilder
      */
     public function fromFieldNameAndValue($fieldName, $fieldValue)
     {
-        $range = explode(SearchEngine::RANGE_DELIMITER, $fieldValue);
+        if ($this->facetFieldTransformationRegistry->hasTransformationForCode($fieldName)) {
+            $transformation = $this->facetFieldTransformationRegistry->getTransformationByCode($fieldName);
+            $range = $transformation->decode($fieldValue);
 
-        if (count($range) === 2) {
-            $criterionFrom = SearchCriterionGreaterOrEqualThan::create($fieldName, $range[0]);
-            $criterionTo = SearchCriterionLessOrEqualThan::create($fieldName, $range[1]);
+            $criterionFrom = SearchCriterionGreaterOrEqualThan::create($fieldName, $range->from());
+            $criterionTo = SearchCriterionLessOrEqualThan::create($fieldName, $range->to());
 
             return CompositeSearchCriterion::createAnd($criterionFrom, $criterionTo);
         }

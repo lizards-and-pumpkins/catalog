@@ -24,6 +24,7 @@ use LizardsAndPumpkins\SampleFactory;
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FilterNavigationPriceRangesBuilder
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection
+ * @uses   \LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry
  * @uses   \LizardsAndPumpkins\FactoryTrait
  * @uses   \LizardsAndPumpkins\Log\InMemoryLogger
  * @uses   \LizardsAndPumpkins\Log\WritingLoggerDecorator
@@ -34,6 +35,7 @@ use LizardsAndPumpkins\SampleFactory;
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestRangedField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder
  * @uses   \LizardsAndPumpkins\DataPool\UrlKeyStore\FileUrlKeyStore
  * @uses   \LizardsAndPumpkins\Image\ImageMagickInscribeStrategy
  * @uses   \LizardsAndPumpkins\Image\ImageProcessor

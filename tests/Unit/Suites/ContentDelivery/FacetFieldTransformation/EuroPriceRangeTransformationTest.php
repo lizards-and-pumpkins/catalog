@@ -7,6 +7,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange;
 
 /**
  * @covers \LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\EuroPriceRangeTransformation
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange
  */
 class EuroPriceRangeTransformationTest extends \PHPUnit_Framework_TestCase
 {
@@ -93,9 +94,9 @@ class EuroPriceRangeTransformationTest extends \PHPUnit_Framework_TestCase
     public function matchingEncodedInputDataProvider()
     {
         return [
-            ['0,01 € - 0,02 €', 1, 2],
-            ['0,01 € - 0,20 €', 1, 20],
-            ['10,00 € - 19,99 €', 1000, 1999],
+            ['0.01-0.02', 1, 2],
+            ['0.01-0.20', 1, 20],
+            ['10.00-19.99', 1000, 1999],
         ];
     }
 }

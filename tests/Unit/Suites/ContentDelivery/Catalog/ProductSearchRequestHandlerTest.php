@@ -108,7 +108,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
     private function createStubSearchCriteriaBuilder()
     {
         $stubSearchCriteria = $this->getMock(SearchCriteria::class);
-        $stubSearchCriteriaBuilder = $this->getMock(SearchCriteriaBuilder::class);
+        $stubSearchCriteriaBuilder = $this->getMock(SearchCriteriaBuilder::class, [], [], '', false);
         $stubSearchCriteriaBuilder->method('createCriteriaForAnyOfGivenFieldsContainsString')
             ->willReturn($stubSearchCriteria);
 

@@ -31,6 +31,7 @@ use LizardsAndPumpkins\Http\HttpRouterChain;
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder
  * @uses   \LizardsAndPumpkins\DataVersion
  * @uses   \LizardsAndPumpkins\PageBuilder
  * @uses   \LizardsAndPumpkins\GenericSnippetKeyGenerator

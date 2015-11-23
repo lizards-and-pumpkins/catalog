@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
+use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
@@ -143,8 +144,17 @@ class IntegrationTestFactory implements Factory
     public function createSearchEngine()
     {
         return new InMemorySearchEngine(
-            $this->getMasterFactory()->createSearchCriteriaBuilder()
+            $this->getMasterFactory()->createSearchCriteriaBuilder(),
+            $this->getMasterFactory()->getFacetFieldTransformationRegistry()
         );
+    }
+
+    /**
+     * @return FacetFieldTransformationRegistry
+     */
+    public function createFacetFieldTransformationRegistry()
+    {
+        return new FacetFieldTransformationRegistry;
     }
 
     /**

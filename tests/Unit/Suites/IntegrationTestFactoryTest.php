@@ -31,6 +31,7 @@ use LizardsAndPumpkins\Queue\InMemory\InMemoryQueue;
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder
  * @uses   \LizardsAndPumpkins\FactoryTrait
  * @uses   \LizardsAndPumpkins\Image\ImageMagickResizeStrategy
  * @uses   \LizardsAndPumpkins\Image\GdResizeStrategy

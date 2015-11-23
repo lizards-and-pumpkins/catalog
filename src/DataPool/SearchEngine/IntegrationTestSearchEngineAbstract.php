@@ -4,7 +4,9 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
+use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\DataPool\SearchEngine\Exception\NoFacetFieldTransformationRegisteredException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
@@ -25,6 +27,11 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
      * @return SearchCriteriaBuilder
      */
     abstract protected function getSearchCriteriaBuilder();
+
+    /**
+     * @return FacetFieldTransformationRegistry
+     */
+    abstract protected function getFacetFieldTransformationRegistry();
 
     /**
      * {@inheritdoc}
@@ -337,14 +344,14 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
             return $this->createRangedFacetFieldFromAttributeValues($attributeValues, $facetFilterRequestField);
         }
 
-        return $this->createDefaultFacetFieldFromAttributeValues($attributeValues);
+        return $this->createSimpleFacetFieldFromAttributeValues($attributeValues);
     }
 
     /**
      * @param array[] $attributeValues
      * @return FacetFieldValue[]
      */
-    private function createDefaultFacetFieldFromAttributeValues(array $attributeValues)
+    private function createSimpleFacetFieldFromAttributeValues(array $attributeValues)
     {
         return array_map(function ($valueCounts) {
             return FacetFieldValue::create((string)$valueCounts['value'], $valueCounts['count']);
@@ -360,16 +367,22 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
         array $attributeValues,
         FacetFilterRequestRangedField $facetFilterRequestRangedField
     ) {
-        $ranges = $facetFilterRequestRangedField->getRanges();
-        return array_reduce($ranges, function ($carry, FacetFilterRange $range) use ($attributeValues) {
-            $rangeCount = $this->sumAttributeValuesCountsInRange($range, $attributeValues);
-            if ($rangeCount > 0) {
-                $rangeCode = $range->from() . SearchEngine::RANGE_DELIMITER . $range->to();
-                $carry[] = FacetFieldValue::create($rangeCode, $rangeCount);
-            }
+        $attributeCode = (string) $facetFilterRequestRangedField->getAttributeCode();
 
-            return $carry;
-        }, []);
+        return array_reduce(
+            $facetFilterRequestRangedField->getRanges(),
+            function ($carry, FacetFilterRange $range) use ($attributeValues, $attributeCode) {
+                $rangeCount = $this->sumAttributeValuesCountsInRange($range, $attributeValues);
+
+                if ($rangeCount > 0) {
+                    $rangeCode = $this->getRangedFilterCode($range, $attributeCode);
+                    $carry[] = FacetFieldValue::create($rangeCode, $rangeCount);
+                }
+
+                return $carry;
+            },
+            []
+        );
     }
 
     /**
@@ -388,6 +401,26 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
 
             return $carry;
         }, 0);
+    }
+
+    /**
+     * @param FacetFilterRange $range
+     * @param string $attributeCode
+     * @return string
+     */
+    private function getRangedFilterCode(FacetFilterRange $range, $attributeCode)
+    {
+        $transformationRegistry = $this->getFacetFieldTransformationRegistry();
+
+        if (!$transformationRegistry->hasTransformationForCode($attributeCode)) {
+            throw new NoFacetFieldTransformationRegisteredException(
+                sprintf('No facet field transformation is geristered for "%s" attribute.', $attributeCode)
+            );
+        }
+
+        $transformation = $transformationRegistry->getTransformationByCode($attributeCode);
+
+        return $transformation->encode($range);
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
+use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 
 /**
@@ -42,12 +43,13 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilde
 class InMemorySearchEngineTest extends AbstractSearchEngineTest
 {
     /**
-     * @return SearchEngine
+     * {@inheritdoc}
      */
-    final protected function createSearchEngineInstance()
-    {
-        $searchCriteriaBuilder = new SearchCriteriaBuilder;
+    final protected function createSearchEngineInstance(
+        FacetFieldTransformationRegistry $facetFieldTransformationRegistry
+    ) {
+        $searchCriteriaBuilder = new SearchCriteriaBuilder($facetFieldTransformationRegistry);
 
-        return new InMemorySearchEngine($searchCriteriaBuilder);
+        return new InMemorySearchEngine($searchCriteriaBuilder, $facetFieldTransformationRegistry);
     }
 }

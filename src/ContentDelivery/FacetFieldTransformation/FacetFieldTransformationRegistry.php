@@ -24,15 +24,19 @@ class FacetFieldTransformationRegistry
      */
     public function getTransformationByCode($code)
     {
-        self::validateCode($code);
-
-        if (!isset($this->transformations[$code])) {
+        if (!$this->hasTransformationForCode($code)) {
             throw new UnableToFindTransformationException(
                 sprintf('No facet field transformation with code "%s" is registered.', $code)
             );
         }
 
         return $this->transformations[$code];
+    }
+
+    public function hasTransformationForCode($code)
+    {
+        self::validateCode($code);
+        return isset($this->transformations[$code]);
     }
 
     /**

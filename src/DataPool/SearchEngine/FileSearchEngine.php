@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
+use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\Exception\SearchEngineNotAvailableException;
@@ -31,22 +32,36 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
     private $searchCriteriaBuilder;
 
     /**
+     * @var FacetFieldTransformationRegistry
+     */
+    private $facetFieldTransformationRegistry;
+
+    /**
      * @param string $storagePath
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param FacetFieldTransformationRegistry $facetFieldTransformationRegistry
      */
-    private function __construct($storagePath, SearchCriteriaBuilder $searchCriteriaBuilder)
-    {
+    private function __construct(
+        $storagePath,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        FacetFieldTransformationRegistry $facetFieldTransformationRegistry
+    ) {
         $this->storagePath = $storagePath;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->facetFieldTransformationRegistry = $facetFieldTransformationRegistry;
     }
 
     /**
      * @param string $storagePath
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param FacetFieldTransformationRegistry $facetFieldTransformationRegistry
      * @return FileSearchEngine
      */
-    public static function create($storagePath, SearchCriteriaBuilder $searchCriteriaBuilder)
-    {
+    public static function create(
+        $storagePath,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        FacetFieldTransformationRegistry $facetFieldTransformationRegistry
+    ) {
         if (!is_writable($storagePath)) {
             throw new SearchEngineNotAvailableException(sprintf(
                 'Directory "%s" is not writable by the filesystem search engine.',
@@ -54,7 +69,7 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
             ));
         }
 
-        return new self($storagePath, $searchCriteriaBuilder);
+        return new self($storagePath, $searchCriteriaBuilder, $facetFieldTransformationRegistry);
     }
 
     public function addSearchDocumentCollection(SearchDocumentCollection $searchDocumentCollection)
@@ -174,5 +189,13 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
     final protected function getSearchCriteriaBuilder()
     {
         return $this->searchCriteriaBuilder;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    final protected function getFacetFieldTransformationRegistry()
+    {
+        return $this->facetFieldTransformationRegistry;
     }
 }

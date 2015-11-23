@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Projection;
 
 use LizardsAndPumpkins\CommonFactory;
@@ -59,6 +58,7 @@ use LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler;
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder
  * @uses   \LizardsAndPumpkins\IntegrationTestFactory
  * @uses   \LizardsAndPumpkins\Renderer\BlockRenderer
  * @uses   \LizardsAndPumpkins\Renderer\ThemeLocator

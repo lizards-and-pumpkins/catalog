@@ -9,9 +9,6 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollec
 
 interface SearchEngine
 {
-    const RANGE_DELIMITER = ' TO ';
-    const RANGE_WILDCARD = '*';
-
     /**
      * @param SearchDocumentCollection $searchDocumentCollection
      * @return void

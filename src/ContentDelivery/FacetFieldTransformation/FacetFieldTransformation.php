@@ -14,7 +14,7 @@ interface FacetFieldTransformation
 
     /**
      * @param string $input
-     * @return string
+     * @return FacetFilterRange
      */
     public function decode($input);
 }

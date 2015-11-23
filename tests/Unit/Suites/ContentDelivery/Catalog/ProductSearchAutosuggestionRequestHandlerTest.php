@@ -87,7 +87,7 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
         $stubCriteria = $this->getMock(SearchCriteria::class);
 
         /** @var SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject $stubSearchCriteriaBuilder */
-        $stubSearchCriteriaBuilder = $this->getMock(SearchCriteriaBuilder::class);
+        $stubSearchCriteriaBuilder = $this->getMock(SearchCriteriaBuilder::class, [], [], '', false);
         $stubSearchCriteriaBuilder->method('createCriteriaForAnyOfGivenFieldsContainsString')
             ->willReturn($stubCriteria);
 

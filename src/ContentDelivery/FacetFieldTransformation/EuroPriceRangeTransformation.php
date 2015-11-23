@@ -24,7 +24,7 @@ class EuroPriceRangeTransformation implements FacetFieldTransformation
      */
     public function decode($input)
     {
-        if (!preg_match('/^([\d,]+) € - ([\d,]+) €$/', $input, $range)) {
+        if (!preg_match('/^([\d.]+)-([\d.]+)$/', $input, $range)) {
             throw new InvalidTransformationInputException(sprintf('Price range "%s" can not be decoded.', $input));
         }
 

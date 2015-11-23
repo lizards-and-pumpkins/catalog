@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
+use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\DataPool\SearchEngine\Exception\SearchEngineNotAvailableException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\Utils\LocalFilesystem;
@@ -50,15 +51,20 @@ class FileSearchEngineTest extends AbstractSearchEngineTest
     private $temporaryStorage;
 
     /**
-     * @return SearchEngine
+     * {@inheritdoc}
      */
-    final protected function createSearchEngineInstance()
-    {
+    final protected function createSearchEngineInstance(
+        FacetFieldTransformationRegistry $facetFieldTransformationRegistry
+    ) {
         $this->prepareTemporaryStorage();
 
-        $searchCriteriaBuilder = new SearchCriteriaBuilder;
+        $searchCriteriaBuilder = new SearchCriteriaBuilder($facetFieldTransformationRegistry);
 
-        return FileSearchEngine::create($this->temporaryStorage, $searchCriteriaBuilder);
+        return FileSearchEngine::create(
+            $this->temporaryStorage,
+            $searchCriteriaBuilder,
+            $facetFieldTransformationRegistry
+        );
     }
 
     private function prepareTemporaryStorage()
@@ -82,8 +88,13 @@ class FileSearchEngineTest extends AbstractSearchEngineTest
     {
         $this->setExpectedException(SearchEngineNotAvailableException::class);
 
-        $searchCriteriaBuilder = new SearchCriteriaBuilder;
+        $stubFacetFieldTransformationRegistry = $this->getMock(FacetFieldTransformationRegistry::class);
+        $searchCriteriaBuilder = new SearchCriteriaBuilder($stubFacetFieldTransformationRegistry);
 
-        FileSearchEngine::create('non-existing-path', $searchCriteriaBuilder);
+        FileSearchEngine::create(
+            'non-existing-path',
+            $searchCriteriaBuilder,
+            $stubFacetFieldTransformationRegistry
+        );
     }
 }

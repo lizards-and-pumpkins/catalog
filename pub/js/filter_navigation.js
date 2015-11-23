@@ -90,6 +90,29 @@ define(['lib/url', 'pagination'], function (url, pagination) {
                 carry.push(option);
                 return carry;
             }, []);
+        },
+
+        createPriceFilterOptions: function (filterCode, filterOptions) {
+            var selectedFilterOptions = getSelectedFilterValues(filterCode);
+            return filterOptions.reduce(function (carry, filterOption) {
+
+                var ranges = filterOption.value.match(/(\d+,\d+)/g),
+                    parameterValue = ranges.join('-').replace(/,/g, '.'),
+                    option = document.createElement('LI'),
+                    link = document.createElement('A'),
+                    newUrl = url.toggleQueryParameter(filterCode, parameterValue);
+
+                link.textContent = filterOption.value + ' (' + filterOption.count + ')';
+                link.href = url.removeQueryParameterFromUrl(newUrl, pagination.getPaginationQueryParameterName());
+                option.appendChild(link);
+
+                if (selectedFilterOptions.indexOf(parameterValue) !== -1) {
+                    option.className = 'active';
+                }
+
+                carry.push(option);
+                return carry;
+            }, []);
         }
     };
 

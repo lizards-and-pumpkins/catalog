@@ -40,10 +40,20 @@ class FacetFieldTransformationRegistryTest extends \PHPUnit_Framework_TestCase
      * @dataProvider invalidTransformationCodeDataProvider
      * @param mixed $invalidCode
      */
-    public function testExceptionIsThrownDuringAttempToRetrieveTransformationByInvalidCode($invalidCode)
+    public function testExceptionIsThrownDuringAttemptToRetrieveTransformationByInvalidCode($invalidCode)
     {
         $this->setExpectedException(InvalidTransformationCodeException::class);
         $this->registry->getTransformationByCode($invalidCode);
+    }
+
+    /**
+     * @dataProvider invalidTransformationCodeDataProvider
+     * @param mixed $invalidCode
+     */
+    public function testExceptionIsThrownDuringAttemptToCheckIfTransformationForInvalidCodeIsRegistered($invalidCode)
+    {
+        $this->setExpectedException(InvalidTransformationCodeException::class);
+        $this->registry->hasTransformationForCode($invalidCode);
     }
 
     /**
@@ -57,6 +67,19 @@ class FacetFieldTransformationRegistryTest extends \PHPUnit_Framework_TestCase
             [null],
             [['foo']]
         ];
+    }
+
+    public function testFalseIsReturnedIfNoTransformationWithGivenCodeIsRegistered()
+    {
+        $code = 'foo';
+        $this->assertFalse($this->registry->hasTransformationForCode($code));
+    }
+
+    public function testTrueIsReturnedIfTransformationWithGivenCodeIsRegistered()
+    {
+        $code = 'foo';
+        $this->registry->register($code, $this->stubFacetFieldTransformation);
+        $this->assertTrue($this->registry->hasTransformationForCode($code));
     }
 
     public function testExceptionIsThrownIfNoTransformationWithGivenCodeIsRegistered()
