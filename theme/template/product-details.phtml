@@ -77,10 +77,10 @@ $save = 0;
             </div>
 
             <div class="social-media-icons">
-                <a class="fb" href="https://www.facebook.com/sharer/sharer.php?u=<?php /* TODO: Product URL */ ?>" target="_blank"></a>
-                <a class="google" href="https://plus.google.com/share?url=<?php /* TODO: Product URL */ ?>" target="_blank"></a>
-                <a class="twitter" href="https://twitter.com/intent/tweet?url=<?php /* TODO: Product URL */ ?>" target="_blank"></a>
-                <a class="pinterest" href="https://www.pinterest.com/pin/create/button/?url=<?php /* TODO: Product URL */ ?>&media=<?= $this->getBaseUrl() ?>media/product/large/<?= $this->getMainProductFileName() ?>&description=<?= $this->getFirstValueOfProductAttribute('name') ?>" target="_blank"></a>
+                <a class="fb" href="https://www.facebook.com/sharer/sharer.php?u=<?= $this->getProductUrl() ?>" target="_blank"></a>
+                <a class="google" href="https://plus.google.com/share?url=<?= $this->getProductUrl() ?>" target="_blank"></a>
+                <a class="twitter" href="https://twitter.com/intent/tweet?url=<?= $this->getProductUrl() ?>" target="_blank"></a>
+                <a class="pinterest" href="https://www.pinterest.com/pin/create/button/?url=<?= $this->getProductUrl() ?>&media=<?= $this->getBaseUrl() ?>media/product/large/<?= $this->getMainProductFileName() ?>&description=<?= $this->getFirstValueOfProductAttribute('name') ?>" target="_blank"></a>
             </div>
         </div>
     </div>
@@ -109,14 +109,14 @@ $save = 0;
 
         var html = '<li style="background-image:url(\'/media/brands/brands-small/<?= $brandLogo ?>\')" class="item">';
         html += '<div class="grid-cell-container">';
-        html += '<a href="<?php /* TODO: Product URL */ ?>" class="product-image"><img src="media/product/medium/<?= $this->getMainProductFileName() ?>" width="188" height="115" alt="<?= $this->getMainProductImageLabel() ?>" /></a>';
-        html += '<h2 class="product-name"><a href="<?php /* TODO: Product URL */ ?>"><?= $this->getFirstValueOfProductAttribute('name') ?></a></h2>';
-        html += '<a href="<?php /* TODO: Product URL */ ?>"><?= $this->getChildOutput('price') ?></a>';
+        html += '<a href="<?= $this->getProductUrl() ?>" class="product-image"><img src="media/product/medium/<?= $this->getMainProductFileName() ?>" width="188" height="115" alt="<?= $this->getMainProductImageLabel() ?>" /></a>';
+        html += '<h2 class="product-name"><a href="<?= $this->getProductUrl() ?>"><?= $this->getFirstValueOfProductAttribute('name') ?></a></h2>';
+        html += '<a href="<?= $this->getProductUrl() ?>"><?= $this->getChildOutput('price') ?></a>';
         <?php if ($gender) : ?>
-        html += '<p class="product-category"><a href="<?php /* TODO: Product URL */ ?>"><?= is_array($gender) ? implode(',', $gender) : $gender ?></a></p>';
+        html += '<p class="product-category"><a href="<?= $this->getProductUrl() ?>"><?= is_array($gender) ? implode(',', $gender) : $gender ?></a></p>';
         <?php endif; ?>
         <?php if ($save > 0) : ?>
-        html += '<p class="you-save"><a href="<?php /* TODO: Product URL */ ?>"><?= sprintf($this->__('You save %s'), '<strong>' . $save . '%</strong>') ?></a></p>';
+        html += '<p class="you-save"><a href="<?= $this->getProductUrl() ?>"><?= sprintf($this->__('You save %s'), '<strong>' . $save . '%</strong>') ?></a></p>';
         <?php endif; ?>
         html += '</div>';
         html += '</li>';
