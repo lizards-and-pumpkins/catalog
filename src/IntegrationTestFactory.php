@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\BaseUrl\IntegrationTestFixedBaseUrlBuilder;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
 use LizardsAndPumpkins\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
@@ -192,6 +193,14 @@ class IntegrationTestFactory implements Factory
     public function createFileStorageWriter()
     {
         return new LocalFilesystemStorageWriter();
+    }
+
+    /**
+     * @return IntegrationTestFixedBaseUrlBuilder
+     */
+    public function createBaseUrlBuilder()
+    {
+        return new IntegrationTestFixedBaseUrlBuilder();
     }
 
     /**

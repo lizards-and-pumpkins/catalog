@@ -22,9 +22,15 @@ spl_autoload_register(function ($class) {
 
     $relativeClass = substr($class, $len);
 
-    $file = __DIR__ . '/Suites/' . str_replace('\\', '/', $relativeClass) . '.php';
+    $files = [
+        __DIR__ . '/Suites/' . str_replace('\\', '/', $relativeClass) . '.php',
+        __DIR__ . '/Util/' . str_replace('\\', '/', $relativeClass) . '.php',
+    ];
 
-    if (file_exists($file)) {
-        require $file;
+    foreach ($files as $file) {
+        if (file_exists($file)) {
+            require $file;
+            return;
+        }
     }
 });
