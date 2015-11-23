@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\BaseUrl\BaseUrlBuilder;
+use LizardsAndPumpkins\BaseUrl\WebsiteBaseUrlBuilder;
 use LizardsAndPumpkins\Content\ContentBlockProjector;
 use LizardsAndPumpkins\Content\ContentBlockSnippetRenderer;
 use LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEvent;
@@ -1432,5 +1434,13 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $this->getMasterFactory()->createDataPoolWriter(),
             $this->getMasterFactory()->createContextSource()
         );
+    }
+
+    /**
+     * @return BaseUrlBuilder
+     */
+    public function createBaseUrlBuilder()
+    {
+        return new WebsiteBaseUrlBuilder($this->getMasterFactory()->createConfigReader());
     }
 }

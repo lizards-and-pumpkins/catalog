@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Content\UpdateContentBlockCommand;
@@ -56,6 +57,7 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
 /**
  * @covers \LizardsAndPumpkins\CommonFactory
  * @covers \LizardsAndPumpkins\FactoryTrait
+ * @uses   \LizardsAndPumpkins\BaseUrl\WebsiteBaseUrlBuilder
  * @uses   \LizardsAndPumpkins\DataVersion
  * @uses   \LizardsAndPumpkins\MasterFactoryTrait
  * @uses   \LizardsAndPumpkins\Image\AddImageCommandHandler
@@ -611,5 +613,11 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $result = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
 
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
+    }
+
+    public function testItReturnsABaseUrlBuilder()
+    {
+        $result = $this->commonFactory->createBaseUrlBuilder();
+        $this->assertInstanceOf(BaseUrlBuilder::class, $result);
     }
 }
