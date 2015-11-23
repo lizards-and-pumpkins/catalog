@@ -31,7 +31,7 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
  * @covers \LizardsAndPumpkins\FactoryTrait
  * @uses   \LizardsAndPumpkins\MasterFactoryTrait
  * @uses   \LizardsAndPumpkins\SampleMasterFactory
- * @uses   \LizardsAndPumpkins\IntegrationTestFactory
+ * @uses   \LizardsAndPumpkins\UnitTestFactory
  * @uses   \LizardsAndPumpkins\CommonFactory
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductDetailViewRequestHandler
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingPageContentBuilder
@@ -84,7 +84,7 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $masterFactory = new SampleMasterFactory();
-        $masterFactory->register(new IntegrationTestFactory());
+        $masterFactory->register(new UnitTestFactory());
         $masterFactory->register(new CommonFactory());
 
         $request = HttpRequest::fromParameters(

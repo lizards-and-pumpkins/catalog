@@ -13,7 +13,7 @@ use LizardsAndPumpkins\Queue\Queue;
  * @uses   \LizardsAndPumpkins\MasterFactoryTrait
  * @uses   \LizardsAndPumpkins\Queue\LoggingQueueDecorator
  * @uses   \LizardsAndPumpkins\CommonFactory
- * @uses   \LizardsAndPumpkins\IntegrationTestFactory
+ * @uses   \LizardsAndPumpkins\UnitTestFactory
  */
 class LoggingQueueFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,7 +28,7 @@ class LoggingQueueFactoryTest extends \PHPUnit_Framework_TestCase
 
         $masterFactory = new SampleMasterFactory();
         $masterFactory->register(new CommonFactory());
-        $masterFactory->register(new IntegrationTestFactory());
+        $masterFactory->register(new UnitTestFactory());
         $masterFactory->register($this->factory);
     }
 

@@ -49,7 +49,7 @@ class SampleFactory implements Factory
     }
 
     /**
-     * @return string[]
+     * @return array[]
      */
     public function getProductListingFilterNavigationConfig()
     {
@@ -62,7 +62,7 @@ class SampleFactory implements Factory
     }
 
     /**
-     * @return string[]
+     * @return array[]
      */
     public function getProductSearchResultsFilterNavigationConfig()
     {
