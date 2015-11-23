@@ -125,7 +125,7 @@ abstract class BlockRenderer
         $name = $layout->getAttribute('name');
 
         /** @var Block $blockInstance */
-        $blockInstance = new $blockClass($this, $this->baseUrlBuilder, $template, $name, $this->dataObject);
+        $blockInstance = new $blockClass($this, $template, $name, $this->dataObject);
         $this->blockStructure->addBlock($blockInstance);
         $this->addDeclaredChildBlocks($layout, $name);
 
@@ -218,6 +218,14 @@ abstract class BlockRenderer
     {
         $locale = $this->context->getValue(LocaleContextDecorator::CODE);
         return $this->translatorRegistry->getTranslatorForLocale($locale)->translate($string);
+    }
+
+    /**
+     * @return \LizardsAndPumpkins\BaseUrl
+     */
+    public function getBaseUrl()
+    {
+        return $this->baseUrlBuilder->create($this->context);
     }
 
     /**

@@ -34,11 +34,6 @@ class BlockTest extends \PHPUnit_Framework_TestCase
     private $mockBlockRenderer;
 
     /**
-     * @var BaseUrlBuilder|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $mockBaseUrlBuilder;
-
-    /**
      * @var Block
      */
     private $block;
@@ -47,11 +42,9 @@ class BlockTest extends \PHPUnit_Framework_TestCase
     {
         $this->testTemplateFilePath = $this->getUniqueTempDir() . '/test-template.phtml';
         $this->mockBlockRenderer = $this->getMock(BlockRenderer::class, [], [], '', false);
-        $this->mockBaseUrlBuilder = $this->getMock(BaseUrlBuilder::class);
 
         $this->block = new Block(
             $this->mockBlockRenderer,
-            $this->mockBaseUrlBuilder,
             $this->testTemplateFilePath,
             $this->testBlockName,
             $this->testProjectionSourceData
@@ -116,5 +109,12 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $this->mockBlockRenderer->method('translate')->with($testSourceString)->willReturn($testTranslatedString);
 
         $this->assertEquals($testTranslatedString, $this->block->__($testSourceString));
+    }
+
+    public function testItDelegatesFetchingTheBaseUrlToTheBlockRenderer()
+    {
+        $dummyBaseUrl = 'dummy base url';
+        $this->mockBlockRenderer->expects($this->once())->method('getBaseUrl')->willReturn($dummyBaseUrl);
+        $this->assertSame($dummyBaseUrl, $this->block->getBaseUrl());
     }
 }

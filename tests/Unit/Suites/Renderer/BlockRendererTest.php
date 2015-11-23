@@ -200,4 +200,17 @@ class BlockRendererTest extends AbstractBlockRendererTest
 
         $this->assertSame($translatedString, $this->getBlockRenderer()->translate($originalString));
     }
+
+    public function testItDelegatesGettingTheBaseUrlToTheBaseUrlBuilder()
+    {
+        $this->getMockBaseUrlBuilder()->expects($this->once())->method('create')->with($this->getStubContext());
+
+        $testDir = $this->getUniqueTempDir();
+        $this->createFixtureDirectory($testDir);
+        $this->createFixtureFile($testDir . '/test-template.php', 'test template content');
+        $this->addStubRootBlock(StubBlock::class, $testDir . '/test-template.php');
+        $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
+        
+        $this->getBlockRenderer()->getBaseUrl();
+    }
 }
