@@ -1,8 +1,8 @@
 <?php
 
+
 namespace LizardsAndPumpkins\Renderer;
 
-use LizardsAndPumpkins\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Renderer\Exception\TemplateFileNotReadableException;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
