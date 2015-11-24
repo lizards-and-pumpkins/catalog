@@ -173,4 +173,12 @@ abstract class HttpRequest
 
         return $_COOKIE[$cookieName];
     }
+
+    /**
+     * @return string
+     */
+    public function getHost()
+    {
+        return $this->url->getHost();
+    }
 }

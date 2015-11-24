@@ -14,6 +14,7 @@ class ContextBuilder
      * @var string[]
      */
     private $registeredContextDecorators = [];
+    
     /**
      * @var
      */
