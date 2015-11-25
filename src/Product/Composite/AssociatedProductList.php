@@ -116,7 +116,7 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate
     }
 
     /**
-     * @param string ...$attributeCodes
+     * @param string[] $attributeCodes
      */
     public function validateUniqueValueCombinationForEachProductAttribute(...$attributeCodes)
     {
@@ -151,7 +151,7 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate
     /**
      * @param string $productId1
      * @param string $productId2
-     * @param string ...$attrCodes
+     * @param string[] $attrCodes
      * @return ProductAttributeValueCombinationNotUniqueException
      */
     private function createProductAttributeValueCombinationNotUniqueException($productId1, $productId2, ...$attrCodes)
@@ -166,7 +166,7 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate
     }
 
     /**
-     * @param string ...$attributeCodes
+     * @param string[] $attributeCodes
      */
     private function validateAllProductsHaveTheAttributes(...$attributeCodes)
     {
