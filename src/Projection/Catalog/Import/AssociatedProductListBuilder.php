@@ -13,6 +13,11 @@ class AssociatedProductListBuilder
      */
     private $productBuilders;
 
+    /**
+     * @var AssociatedProductList[]
+     */
+    private $memoizedProductLists = [];
+
     public function __construct(ProductBuilder ...$productBuilders)
     {
         $this->productBuilders = $productBuilders;
@@ -24,9 +29,25 @@ class AssociatedProductListBuilder
      */
     public function getAssociatedProductListForContext(Context $context)
     {
+        if (! isset($this->memoizedProductLists[(string) $context])) {
+            $this->memoizedProductLists[(string) $context] = $this->createAssociatedProductList($context);
+        }
+        return $this->memoizedProductLists[(string) $context];
+    }
+
+    /**
+     * @param Context $context
+     * @return AssociatedProductList
+     */
+    private function createAssociatedProductList(Context $context)
+    {
+        $builders = array_filter($this->productBuilders, function (ProductBuilder $productBuilder) use ($context) {
+            return $productBuilder->isAvailableForContext($context);
+        });
+
         $productsForContext = array_map(function (ProductBuilder $productBuilder) use ($context) {
             return $productBuilder->getProductForContext($context);
-        }, $this->productBuilders);
+        }, $builders);
         return new AssociatedProductList(...$productsForContext);
     }
 }

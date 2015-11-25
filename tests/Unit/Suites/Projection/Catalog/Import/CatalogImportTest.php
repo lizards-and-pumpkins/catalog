@@ -145,12 +145,11 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     /**
      * @param bool $isAvailableInContext
      */
-    private function setProductIsAvailableInContextFixture($isAvailableInContext)
+    private function setProductIsAvailableForContextFixture($isAvailableInContext)
     {
         $stubProductBuilder = $this->stubProductXmlToProductBuilder->createProductBuilderFromXml('');
-        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $mockProduct */
-        $mockProduct = $stubProductBuilder->getProductForContext($this->getMock(Context::class));
-        $mockProduct->method('isAvailableInContext')->willReturn($isAvailableInContext);
+        $stubProductBuilder->method('isAvailableForContext')->willReturn($isAvailableInContext);
+        $stubProductBuilder->getProductForContext($this->getMock(Context::class));
     }
 
     protected function setUp()
@@ -204,7 +203,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateProductCommandsAreEmitted()
     {
-        $this->setProductIsAvailableInContextFixture(true);
+        $this->setProductIsAvailableForContextFixture(true);
         $this->catalogImport->importFile($this->sharedFixtureFilePath);
         
         $this->assertCommandWasAddedToQueue(UpdateProductCommand::class);
@@ -212,7 +211,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateProductCommandsAreNotEmittedIfTheProductDoesNotMatchAGivenContext()
     {
-        $this->setProductIsAvailableInContextFixture(false);
+        $this->setProductIsAvailableForContextFixture(false);
         $this->catalogImport->importFile($this->sharedFixtureFilePath);
         
         $this->assertCommandWasNotAddedToQueue(UpdateProductCommand::class);
@@ -220,6 +219,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
 
     public function testAddProductListingCommandsAreEmitted()
     {
+        $this->setProductIsAvailableForContextFixture(true);
         $this->catalogImport->importFile($this->sharedFixtureFilePath);
         
         $this->assertCommandWasAddedToQueue(AddProductListingCommand::class);
@@ -227,7 +227,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
 
     public function testAddImageCommandsAreEmitted()
     {
-        $this->setProductIsAvailableInContextFixture(true);
+        $this->setProductIsAvailableForContextFixture(true);
         
         $this->catalogImport->importFile($this->sharedFixtureFilePath);
         
@@ -236,7 +236,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
 
     public function testAddImageCommandsAreNotEmittedIfTheProductDoesNotMatchAGivenContext()
     {
-        $this->setProductIsAvailableInContextFixture(false);
+        $this->setProductIsAvailableForContextFixture(false);
         $this->catalogImport->importFile($this->sharedFixtureFilePath);
 
         $this->assertCommandWasNotAddedToQueue(AddImageCommand::class);
@@ -281,6 +281,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         
         /** @var ProductBuilder|\PHPUnit_Framework_MockObject_MockObject $stubProductBuilder */
         $stubProductBuilder = $this->getMock(ProductBuilder::class);
+        $stubProductBuilder->method('isAvailableForContext')->willReturn(true);
         $stubProductBuilder->method('getProductForContext')->willThrowException(
             new \Exception('dummy exception')
         );
@@ -302,7 +303,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
 
     public function testItLogsExceptionsThrownDuringProductImageImport()
     {
-        $this->setProductIsAvailableInContextFixture(true);
+        $this->setProductIsAvailableForContextFixture(true);
         $this->mockLogger->expects($this->atLeastOnce())->method('log')
             ->with($this->isInstanceOf(ProductImageImportCallbackFailureMessage::class));
 

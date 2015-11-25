@@ -39,6 +39,16 @@ class SimpleProductBuilder implements ProductBuilder
 
     /**
      * @param Context $context
+     * @return bool
+     */
+    public function isAvailableForContext(Context $context)
+    {
+        $sourceAttributeList = $this->attributeListBuilder->getAttributeListForContext($context);
+        return count($sourceAttributeList) > 0;
+    }
+
+    /**
+     * @param Context $context
      * @return Product
      */
     public function getProductForContext(Context $context)

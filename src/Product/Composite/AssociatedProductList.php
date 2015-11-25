@@ -8,7 +8,7 @@ use LizardsAndPumpkins\Product\Composite\Exception\ProductAttributeValueCombinat
 use LizardsAndPumpkins\Product\Composite\Exception\AssociatedProductIsMissingRequiredAttributesException;
 use LizardsAndPumpkins\Product\Product;
 
-class AssociatedProductList implements \JsonSerializable, \IteratorAggregate
+class AssociatedProductList implements \JsonSerializable, \IteratorAggregate, \Countable
 {
     const PHP_CLASSES = 'product_php_classes';
     const PRODUCTS = 'products';
@@ -200,5 +200,13 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate
             );
             throw new AssociatedProductIsMissingRequiredAttributesException($message);
         }
+    }
+
+    /**
+     * @return int
+     */
+    public function count()
+    {
+        return count($this->products);
     }
 }
