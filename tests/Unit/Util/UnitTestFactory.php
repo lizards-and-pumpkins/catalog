@@ -261,8 +261,19 @@ class UnitTestFactory implements Factory
         return '';
     }
 
+    /**
+     * @return FacetFieldTransformationRegistry
+     */
     public function createFacetFieldTransformationRegistry()
     {
         return $this->mockObjectGenerator->getMock(FacetFieldTransformationRegistry::class);
+    }
+
+    /**
+     * @return WebsiteMap
+     */
+    public function createWebsiteMap()
+    {
+        return $this->mockObjectGenerator->getMock(WebsiteMap::class, [], [], '', false);
     }
 }

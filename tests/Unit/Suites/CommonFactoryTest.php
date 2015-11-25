@@ -632,21 +632,21 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsAVersionContextPartBuilder()
     {
-        $result = $this->commonFactory->createContextVersionBuilder();
+        $result = $this->commonFactory->createVersionContextPartBuilder();
         $this->assertInstanceOf(ContextPartBuilder::class, $result);
         $this->assertInstanceOf(ContextBuilder\ContextVersion::class, $result);
     }
 
     public function testItReturnsAWebsiteContextPartBuilder()
     {
-        $result = $this->commonFactory->createContextWebsiteBuilder();
+        $result = $this->commonFactory->createWebsiteContextPartBuilder();
         $this->assertInstanceOf(ContextPartBuilder::class, $result);
         $this->assertInstanceOf(ContextBuilder\ContextWebsite::class, $result);
     }
 
     public function testItReturnsALocaleContextPartBuilder()
     {
-        $result = $this->commonFactory->createContextLocaleBuilder();
+        $result = $this->commonFactory->createLocaleContextPartBuilder();
         $this->assertInstanceOf(ContextPartBuilder::class, $result);
         $this->assertInstanceOf(ContextBuilder\ContextLocale::class, $result);
     }

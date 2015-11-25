@@ -30,7 +30,7 @@ class WebsiteMap
      */
     public static function fromArray(array $hostToWebsiteMap)
     {
-        return new self($hostToWebsiteMap);
+        return new static($hostToWebsiteMap);
     }
 
     /**
@@ -43,7 +43,7 @@ class WebsiteMap
             self::buildArrayMapFromString($configReader->get(self::CONFIG_KEY)) :
             [];
         
-        return new self($hostToWebsiteMap);
+        return new static($hostToWebsiteMap);
     }
 
     /**
