@@ -16,7 +16,7 @@ class DecoratedContextBuilder implements ContextBuilder
     private $registeredContextDecorators = [];
     
     /**
-     * @var
+     * @var DataVersion
      */
     private $dataVersion;
 
@@ -73,13 +73,13 @@ class DecoratedContextBuilder implements ContextBuilder
     }
 
     /**
-     * @param mixed[] $contextDataSet
+     * @param mixed[] $inputDataSet
      * @return Context
      */
-    public function createContext(array $contextDataSet)
+    public function createContext(array $inputDataSet)
     {
-        $decoratorCodes = $this->getContextCodesFromDataSetAndRegisteredCodes($contextDataSet);
-        return $this->createContextForGivenCodes($contextDataSet, $decoratorCodes);
+        $decoratorCodes = $this->getContextCodesFromDataSetAndRegisteredCodes($inputDataSet);
+        return $this->createContextForGivenCodes($inputDataSet, $decoratorCodes);
     }
 
     /**

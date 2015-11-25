@@ -18,10 +18,10 @@ interface ContextBuilder
     public function createContextsFromDataSets(array $contextDataSets);
 
     /**
-     * @param mixed[] $contextDataSet
+     * @param mixed[] $inputDataSet
      * @return Context
      */
-    public function createContext(array $contextDataSet);
+    public function createContext(array $inputDataSet);
 
     /**
      * @param string[] $dataSet
