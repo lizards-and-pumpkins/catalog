@@ -15,12 +15,6 @@ interface Product extends \JsonSerializable
     public function getId();
 
     /**
-     * @param Context $context
-     * @return bool
-     */
-    public function isAvailableInContext(Context $context);
-
-    /**
      * @param string $attributeCode
      * @return string
      */

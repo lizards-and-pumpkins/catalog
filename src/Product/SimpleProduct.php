@@ -191,16 +191,4 @@ class SimpleProduct implements Product
     {
         return $this->getImageLabelByNumber(0);
     }
-
-    /**
-     * @param Context $context
-     * @return bool
-     */
-    public function isAvailableInContext(Context $context)
-    {
-        $attributes = $this->attributeList->getAllAttributes();
-        return count($attributes) === 0 ?
-            false :
-            $context->matchesDataSet($attributes[0]->getContextDataSet());
-    }
 }
