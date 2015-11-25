@@ -851,16 +851,16 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createContextBuilder()
     {
         return new SelfContainedContextBuilder(
-            $this->getMasterFactory()->createContextVersionBuilder(),
-            $this->getMasterFactory()->createContextWebsiteBuilder(),
-            $this->getMasterFactory()->createContextLocaleBuilder()
+            $this->getMasterFactory()->createVersionContextPartBuilder(),
+            $this->getMasterFactory()->createWebsiteContextPartBuilder(),
+            $this->getMasterFactory()->createLocaleContextPartBuilder()
         );
     }
 
     /**
      * @return ContextBuilder\ContextVersion
      */
-    public function createContextVersionBuilder()
+    public function createVersionContextPartBuilder()
     {
         $dataVersion = $this->getCurrentDataVersion();
         return new ContextBuilder\ContextVersion(DataVersion::fromVersionString($dataVersion));
@@ -869,7 +869,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     /**
      * @return ContextBuilder\ContextWebsite
      */
-    public function createContextWebsiteBuilder()
+    public function createWebsiteContextPartBuilder()
     {
         return new ContextBuilder\ContextWebsite($this->getMasterFactory()->createWebsiteMap());
     }
@@ -877,7 +877,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     /**
      * @return ContextBuilder\ContextLocale
      */
-    public function createContextLocaleBuilder()
+    public function createLocaleContextPartBuilder()
     {
         return new ContextBuilder\ContextLocale();
     }
