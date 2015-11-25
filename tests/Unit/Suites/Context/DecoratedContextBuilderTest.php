@@ -17,18 +17,18 @@ use LizardsAndPumpkins\Http\HttpRequest;
  * @uses   \LizardsAndPumpkins\Context\ContextDecorator
  * @uses   \LizardsAndPumpkins\DataVersion
  */
-class ContextBuilderTest extends \PHPUnit_Framework_TestCase
+class DecoratedContextBuilderTest extends \PHPUnit_Framework_TestCase
 {
     private $testVersion = '1';
 
     /**
-     * @var ContextBuilder
+     * @var DecoratedContextBuilder
      */
     private $builder;
 
     protected function setUp()
     {
-        $this->builder = new ContextBuilder(DataVersion::fromVersionString($this->testVersion));
+        $this->builder = new DecoratedContextBuilder(DataVersion::fromVersionString($this->testVersion));
     }
 
     public function testNoExceptionIsThrownForIndividualContextCreationWithCodesWithoutMatchingDecorator()
@@ -176,7 +176,7 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
     public function testContextDecoratorOrderIsIndependentOfDecoratorRegistrationOrder()
     {
         $builderA = $this->builder;
-        $builderB = new ContextBuilder(DataVersion::fromVersionString('1'));
+        $builderB = new DecoratedContextBuilder(DataVersion::fromVersionString('1'));
 
         $builderA->registerContextDecorator('locale', LocaleContextDecorator::class);
         $builderA->registerContextDecorator('website', WebsiteContextDecorator::class);
@@ -212,7 +212,7 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
             DataVersionMissingInContextDataSetException::class,
             'The data version has to be part of the data set when using the static context factory method.'
         );
-        ContextBuilder::rehydrateContext([]);
+        DecoratedContextBuilder::rehydrateContext([]);
     }
 
     public function testItReturnsAContextWithTheMatchingValues()
@@ -223,7 +223,7 @@ class ContextBuilderTest extends \PHPUnit_Framework_TestCase
             VersionedContext::CODE => '42'
         ];
 
-        $context = ContextBuilder::rehydrateContext($dataSet);
+        $context = DecoratedContextBuilder::rehydrateContext($dataSet);
 
         $this->assertInstanceOf(Context::class, $context);
         $this->assertSame('test', $context->getValue(WebsiteContextDecorator::CODE));

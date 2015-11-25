@@ -17,7 +17,7 @@ class ContextSourceTest extends \PHPUnit_Framework_TestCase
     private $contextSource;
 
     /**
-     * @var ContextBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var DecoratedContextBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubContextBuilder;
 
@@ -33,7 +33,7 @@ class ContextSourceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubContextBuilder = $this->getMock(ContextBuilder::class, [], [], '', false);
+        $this->stubContextBuilder = $this->getMock(ContextBuilder::class);
         $this->contextSource = new StubContextSource($this->stubContextBuilder, $this->testContextMatrix);
     }
 

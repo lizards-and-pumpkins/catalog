@@ -12,6 +12,7 @@ use LizardsAndPumpkins\Content\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Content\UpdateContentBlockCommandHandler;
 use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\Context\DecoratedContextBuilder;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Context\LocaleContextDecorator;
 use LizardsAndPumpkins\Context\WebsiteContextDecorator;
@@ -862,7 +863,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createContextBuilderWithVersion(DataVersion $version)
     {
-        $contextBuilder = new ContextBuilder($version);
+        $contextBuilder = new DecoratedContextBuilder($version);
         $contextBuilder->registerContextDecorator('website', WebsiteContextDecorator::class);
         $contextBuilder->registerContextDecorator('locale', LocaleContextDecorator::class);
         return $contextBuilder;

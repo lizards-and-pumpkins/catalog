@@ -7,7 +7,7 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
 use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformation;
 use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\Context\DecoratedContextBuilder;
 use LizardsAndPumpkins\Context\WebsiteContextDecorator;
 use LizardsAndPumpkins\DataPool\SearchEngine\Exception\NoFacetFieldTransformationRegisteredException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
@@ -109,7 +109,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     private function createContextFromDataParts(array $contextDataSet)
     {
         $dataVersion = DataVersion::fromVersionString('-1');
-        $contextBuilder = new ContextBuilder($dataVersion);
+        $contextBuilder = new DecoratedContextBuilder($dataVersion);
 
         return $contextBuilder->createContextsFromDataSets([$contextDataSet])[0];
     }

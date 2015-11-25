@@ -3,7 +3,7 @@
 
 namespace LizardsAndPumpkins\Product\Composite;
 
-use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\Context\DecoratedContextBuilder;
 use LizardsAndPumpkins\Context\VersionedContext;
 use LizardsAndPumpkins\Product\Composite\Exception\DuplicateAssociatedProductException;
 use LizardsAndPumpkins\Product\Composite\Exception\ProductAttributeValueCombinationNotUniqueException;
@@ -134,7 +134,7 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
             ProductId::fromString('test'),
             new ProductAttributeList(),
             new ProductImageList(),
-            ContextBuilder::rehydrateContext([VersionedContext::CODE => '25732342'])
+            DecoratedContextBuilder::rehydrateContext([VersionedContext::CODE => '25732342'])
         );
         $sourceAssociatedProductList = new AssociatedProductList($associatedProduct);
 

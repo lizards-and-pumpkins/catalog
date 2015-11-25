@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\Context\DecoratedContextBuilder;
 use LizardsAndPumpkins\Context\LocaleContextDecorator;
 use LizardsAndPumpkins\Context\WebsiteContextDecorator;
 
@@ -22,7 +23,7 @@ class SampleContextSourceTest extends \PHPUnit_Framework_TestCase
         ];
 
         /** @var ContextBuilder|\PHPUnit_Framework_MockObject_MockObject $stubContextBuilder */
-        $stubContextBuilder = $this->getMock(ContextBuilder::class, [], [], '', false);
+        $stubContextBuilder = $this->getMock(ContextBuilder::class);
         $stubContextBuilder->expects($this->once())
             ->method('createContextsFromDataSets')
             ->with($expectedContextMatrix);

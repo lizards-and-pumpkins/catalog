@@ -5,15 +5,15 @@ namespace LizardsAndPumpkins\Context;
 
 use LizardsAndPumpkins\Context\Exception\ContextCodeNotFoundException;
 
-class CompleteContextTest extends \PHPUnit_Framework_TestCase
+class SelfContainedContextTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @param string[] $data
-     * @return CompleteContext
+     * @return SelfContainedContext
      */
     private function createContext(array $data)
     {
-        return CompleteContext::fromArray($data);
+        return SelfContainedContext::fromArray($data);
     }
     
     public function testItImplementsTheContextInterface()

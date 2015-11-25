@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\Context;
 
 use LizardsAndPumpkins\Context\Exception\ContextCodeNotFoundException;
 
-class CompleteContext implements Context
+class SelfContainedContext implements Context
 {
     /**
      * @var string[]
@@ -22,7 +22,7 @@ class CompleteContext implements Context
 
     /**
      * @param string[] $contextParts
-     * @return CompleteContext
+     * @return SelfContainedContext
      */
     public static function fromArray(array $contextParts)
     {

@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\Context\DecoratedContextBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\Exception\SearchEngineNotAvailableException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
@@ -171,7 +171,7 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
     private function createContextFromDataSet($dataSet)
     {
         $dataVersion = DataVersion::fromVersionString($dataSet['version']);
-        $contextBuilder = new ContextBuilder($dataVersion);
+        $contextBuilder = new DecoratedContextBuilder($dataVersion);
 
         unset($dataSet['version']);
 
