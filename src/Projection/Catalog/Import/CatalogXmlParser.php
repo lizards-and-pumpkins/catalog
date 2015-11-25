@@ -207,7 +207,7 @@ class CatalogXmlParser
      */
     private function processCallbacksWithArg(array $callbacks, $argument)
     {
-        array_map(function (callable $callback) use ($argument) {
+        @array_map(function (callable $callback) use ($argument) {
             call_user_func($callback, $argument);
         }, $callbacks);
     }

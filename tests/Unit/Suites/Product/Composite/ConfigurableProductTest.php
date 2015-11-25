@@ -248,12 +248,6 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($testLabel, $this->configurableProduct->getMainImageLabel());
     }
 
-    public function testItDelegatesToTheSimpleProductToCheckIfItIsAvailableForAGivenContext()
-    {
-        $this->mockSimpleProduct->method('isAvailableInContext')->willReturn(true);
-        $this->assertTrue($this->configurableProduct->isAvailableInContext($this->getMock(Context::class)));
-    }
-
     public function testItReturnsAProductVariationAttributeList()
     {
         $this->assertSame(

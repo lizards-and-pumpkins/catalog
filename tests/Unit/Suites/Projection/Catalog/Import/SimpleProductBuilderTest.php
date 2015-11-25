@@ -115,4 +115,20 @@ class SimpleProductBuilderTest extends \PHPUnit_Framework_TestCase
             $this->assertSame($expectedPrice, $price);
         }, $priceAttributeCodes);
     }
+
+    public function testProductIsAvailableForContextIfAttributesCanBeCollected()
+    {
+        $this->mockAttributeList->method('count')->willReturn(2);
+        $stubContext = $this->getMock(Context::class);
+        
+        $this->assertTrue($this->productBuilder->isAvailableForContext($stubContext));
+    }
+
+    public function testProductIsNotAvailableForContextIfNoAttributesCanBeCollected()
+    {
+        $this->mockAttributeList->method('count')->willReturn(0);
+        $stubContext = $this->getMock(Context::class);
+        
+        $this->assertFalse($this->productBuilder->isAvailableForContext($stubContext));
+    }
 }

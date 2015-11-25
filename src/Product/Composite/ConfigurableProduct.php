@@ -214,13 +214,4 @@ class ConfigurableProduct implements Product
     {
         return $this->associatedProducts;
     }
-
-    /**
-     * @param Context $context
-     * @return bool
-     */
-    public function isAvailableInContext(Context $context)
-    {
-        return $this->simpleProductDelegate->isAvailableInContext($context);
-    }
 }

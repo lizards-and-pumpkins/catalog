@@ -41,7 +41,7 @@ class UrlKeyForContextCollector
      */
     public function collectListingUrlKeys(ProductListingCriteria $listingCriteria)
     {
-        $contexts = $this->contextSource->getContextsForParts($listingCriteria->getContextData());
+        $contexts = $this->contextSource->getContextsForParts(array_keys($listingCriteria->getContextData()));
         $urlKeysForContexts = $this->getListingUrlKeysForContexts($listingCriteria, $contexts);
         return new UrlKeyForContextCollection(...$urlKeysForContexts);
     }

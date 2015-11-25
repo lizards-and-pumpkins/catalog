@@ -141,8 +141,8 @@ class CatalogImport
     {
         $productBuilder = $this->productXmlToProductBuilder->createProductBuilderFromXml($productXml);
         array_map(function (Context $context) use ($productBuilder, $productXml) {
-            $product = $productBuilder->getProductForContext($context);
-            if ($product->isAvailableInContext($context)) {
+            if ($productBuilder->isAvailableForContext($context)) {
+                $product = $productBuilder->getProductForContext($context);
                 $this->addCommandToQueue($product);
                 $this->processImagesInProductXml($productXml);
             }

@@ -269,37 +269,4 @@ class SimpleProductTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(ProductAttributeList::class, $this->product->getAttributes());
     }
-
-    public function testItReturnsFalseIfTheProductHasAnEmptyAttributeList()
-    {
-        $this->stubProductAttributeList->method('getAllAttributes')->willReturn([]);
-
-        $this->assertFalse($this->product->isAvailableInContext($this->getMock(Context::class)));
-    }
-
-    public function testItReturnsTrueIfTheProductHasOneAttributeMatchingTheContext()
-    {
-        
-        $stubProductAttribute = $this->getMock(ProductAttribute::class, [], [], '', false);
-        $stubProductAttribute->method('getContextDataSet')->willReturn([]);
-        $this->stubProductAttributeList->method('getAllAttributes')->willReturn([$stubProductAttribute]);
-
-        $stubContext = $this->getMock(Context::class);
-        $stubContext->method('matchesDataSet')->willReturn(true);
-        
-        $this->assertTrue($this->product->isAvailableInContext($stubContext));
-    }
-
-    public function testItReturnsFalseIfTheProductHasOneAttributeNotMatchingTheContext()
-    {
-        
-        $stubProductAttribute = $this->getMock(ProductAttribute::class, [], [], '', false);
-        $stubProductAttribute->method('getContextDataSet')->willReturn([]);
-        $this->stubProductAttributeList->method('getAllAttributes')->willReturn([$stubProductAttribute]);
-
-        $stubContext = $this->getMock(Context::class);
-        $stubContext->method('matchesDataSet')->willReturn(false);
-        
-        $this->assertFalse($this->product->isAvailableInContext($stubContext));
-    }
 }

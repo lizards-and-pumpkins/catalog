@@ -31,6 +31,7 @@ class AssociatedProductListBuilderTest extends \PHPUnit_Framework_TestCase
         });
         $this->stubProductBuilder = $this->getMock(ProductBuilder::class);
         $this->stubProductBuilder->method('getProductForContext')->willReturn($stubProduct);
+        $this->stubProductBuilder->method('isAvailableForContext')->willReturn(true);
         
         $this->builder = new AssociatedProductListBuilder(
             $this->stubProductBuilder,
@@ -41,6 +42,7 @@ class AssociatedProductListBuilderTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsAnAssociatedProductList()
     {
         $stubContext = $this->getMock(Context::class);
+        $stubContext->method('__toString')->willReturn('test');
         
         $associatedProductList = $this->builder->getAssociatedProductListForContext($stubContext);
         

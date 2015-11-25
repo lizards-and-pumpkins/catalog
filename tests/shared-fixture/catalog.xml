@@ -467,6 +467,59 @@ TEXTILE/SYNTHETICS]]></description>
                 </product>
             </associated_products>
         </product>
+
+        <product type="configurable" sku="product-with-single-locale">
+            <images>
+                <image>
+                    <file>m29540_standardview.jpg</file>
+                    <label locale="de_DE">Das Hauptbild</label>
+                </image>
+                <image>
+                    <main_listing>true</main_listing>
+                    <file>m29540_backview.jpg</file>
+                    <label>Yet another image label</label>
+                </image>
+            </images>
+            <attributes>
+                <url_key>adipure-360</url_key>
+                <category>sale</category>
+                <category>men-running-shoes</category>
+                <category>specials</category>
+                <stock_qty>5</stock_qty>
+                <backorders>true</backorders>
+                <name>Adipure 360.2 Prima</name>
+                <price>89.95</price>
+                <special_price>44.97</special_price>
+                <description><![CDATA[Adidas adiPure 360.2 Prima<br><br>
+- Flex Grooves: Flexibilität für ein natürliches Laufgefühl.<br>
+- Atmungsaktives Mesh: Ermöglicht Luftzirkulation, die für ein angenehmes Gefühl am Fuß sorgt<br>
+- Die All-Over-Graphik Ausführung  des Schuhs gibt dir einen einzigartigen Look<br><br>
+TEXTILE/SYNTHETICS]]></description>
+                <brand>Adidas</brand>
+                <style>Natural-Running (Free)</style>
+                <gender>Damen</gender>
+            </attributes>
+            <variations>
+                <attribute>color</attribute>
+                <attribute>size</attribute>
+            </variations>
+            <associated_products>
+                <product sku="218765-333-1" type="simple">
+                    <attributes>
+                        <stock_qty>5</stock_qty>
+                        <color locale="de_DE">Rot</color>
+                        <size>US 12.5 - EU 47</size>
+                    </attributes>
+                </product>
+                <product sku="218765-333-2" type="simple">
+                    <attributes>
+                        <stock_qty>0</stock_qty>
+                        <color locale="de_DE">Rot</color>
+                        <size>US 12 - EU 46</size>
+                    </attributes>
+                </product>
+            </associated_products>
+        </product>
     </products>
     <listings>
         <listing url_key="adidas-sale" condition="and" website="ru" locale="de_DE">

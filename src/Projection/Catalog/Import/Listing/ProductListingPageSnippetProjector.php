@@ -37,7 +37,7 @@ class ProductListingPageSnippetProjector
     
     public function project(DataVersion $dataVersion)
     {
-        array_map(function (Context $context) {
+        @array_map(function (Context $context) {
             $snippet = $this->productListingPageSnippetRenderer->render($context);
             $this->dataPoolWriter->writeSnippet($snippet);
         }, $this->contextSource->getAllAvailableContextsWithVersion($dataVersion));
