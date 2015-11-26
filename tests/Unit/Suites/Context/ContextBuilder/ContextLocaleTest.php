@@ -3,6 +3,7 @@
 
 namespace LizardsAndPumpkins\Context\ContextBuilder;
 
+use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Http\HttpRequest;
 
 /**
@@ -49,6 +50,6 @@ class ContextLocaleTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsTheLocaleFromTheRequestIfNotExplicitlySpecifiedInInputArray()
     {
         $this->stubRequest->method('getUrlPathRelativeToWebFront')->willReturn('/fr/foo');
-        $this->assertSame('fr_FR', $this->contextLocale->getValue(['request' => $this->stubRequest]));
+        $this->assertSame('fr_FR', $this->contextLocale->getValue([ContextBuilder::REQUEST => $this->stubRequest]));
     }
 }

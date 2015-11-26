@@ -3,6 +3,7 @@
 
 namespace LizardsAndPumpkins\Context\ContextBuilder;
 
+use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\ContextBuilder\Exception\UnableToDetermineContextWebsiteException;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\WebsiteMap;
@@ -30,8 +31,8 @@ class ContextWebsite implements ContextPartBuilder
         if (isset($inputDataSet[self::CODE])) {
             return (string) $inputDataSet[self::CODE];
         }
-        if (isset($inputDataSet['request'])) {
-            return (string) $this->getWebsiteFromRequest($inputDataSet['request']);
+        if (isset($inputDataSet[ContextBuilder::REQUEST])) {
+            return (string) $this->getWebsiteFromRequest($inputDataSet[ContextBuilder::REQUEST]);
         }
         $message = 'Unable to determine context website because neither the ' .
             'website nor the request are set in the input array.';
