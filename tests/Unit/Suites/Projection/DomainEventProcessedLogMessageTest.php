@@ -39,4 +39,9 @@ class DomainEventProcessedLogMessageTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('domain_event_handler', $this->logMessage->getContext());
         $this->assertSame($this->stubDomainEventHandler, $this->logMessage->getContext()['domain_event_handler']);
     }
+
+    public function testItIncludesTheDomainEventHandlerClassNameInTheSynopsis()
+    {
+        $this->assertContains(get_class($this->stubDomainEventHandler), $this->logMessage->getContextSynopsis());
+    }
 }

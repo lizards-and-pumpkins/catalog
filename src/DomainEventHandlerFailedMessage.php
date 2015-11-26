@@ -41,4 +41,12 @@ class DomainEventHandlerFailedMessage implements LogMessage
     {
         return ['exception' => $this->exception];
     }
+
+    /**
+     * @return string
+     */
+    public function getContextSynopsis()
+    {
+        return sprintf('File: %s:%s', $this->exception->getFile(), $this->exception->getLine());
+    }
 }

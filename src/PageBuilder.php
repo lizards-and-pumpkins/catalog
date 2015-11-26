@@ -160,7 +160,7 @@ class PageBuilder
     {
         $missingSnippetCodes = $this->getNotLoadedSnippetCodes();
         if (count($missingSnippetCodes) > 0) {
-            $this->logger->log(new MissingSnippetCodeMessage($missingSnippetCodes, ['context' => $this->context]));
+            $this->logger->log(new MissingSnippetCodeMessage($missingSnippetCodes, $this->context));
         }
     }
 

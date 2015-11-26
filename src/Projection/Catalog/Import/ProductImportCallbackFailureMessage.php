@@ -66,4 +66,12 @@ class ProductImportCallbackFailureMessage implements LogMessage
             $node[0]['value'] :
             $this->unknownSku;
     }
+
+    /**
+     * @return string
+     */
+    public function getContextSynopsis()
+    {
+        return sprintf('File: %s:%d', $this->exception->getFile(), $this->exception->getLine());
+    }
 }

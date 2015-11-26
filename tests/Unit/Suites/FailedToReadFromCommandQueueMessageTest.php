@@ -15,12 +15,12 @@ class FailedToReadFromCommandQueueMessageTest extends \PHPUnit_Framework_TestCas
     /**
      * @var \Exception
      */
-    private $stubException;
+    private $testException;
 
     protected function setUp()
     {
-        $this->stubException = new \Exception('foo');
-        $this->message = new FailedToReadFromCommandQueueMessage($this->stubException);
+        $this->testException = new \Exception('foo');
+        $this->message = new FailedToReadFromCommandQueueMessage($this->testException);
     }
 
     public function testLogMessageIsReturned()
@@ -36,6 +36,13 @@ class FailedToReadFromCommandQueueMessageTest extends \PHPUnit_Framework_TestCas
     {
         $result = $this->message->getContext();
 
-        $this->assertSame(['exception' => $this->stubException], $result);
+        $this->assertSame(['exception' => $this->testException], $result);
+    }
+
+    public function testItIncludesTheExceptionFileAndLineInTheSynopsis()
+    {
+        $synopsis = $this->message->getContextSynopsis();
+        $this->assertContains($this->testException->getFile(), $synopsis);
+        $this->assertContains((string) $this->testException->getLine(), $synopsis);
     }
 }

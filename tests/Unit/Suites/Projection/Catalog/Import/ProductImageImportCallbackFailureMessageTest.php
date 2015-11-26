@@ -55,4 +55,12 @@ class ProductImageImportCallbackFailureMessageTest extends \PHPUnit_Framework_Te
         $this->assertArrayHasKey('product_image_xml', $this->logMessage->getContext());
         $this->assertSame($this->testInvalidImageXml, $this->logMessage->getContext()['product_image_xml']);
     }
+
+    public function testTheContextSynopsisIncludesTheFileAndLine()
+    {
+        $synopsis = $this->logMessage->getContextSynopsis();
+        $this->assertContains($this->testException->getFile(), $synopsis);
+        $this->assertContains((string) $this->testException->getLine(), $synopsis);
+        $this->assertContains($this->testInvalidImageXml, $synopsis);
+    }
 }
