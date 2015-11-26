@@ -28,6 +28,7 @@ class ContextCountryTest extends \PHPUnit_Framework_TestCase
     {
         $json = json_encode(['country' => $cookieCountry]);
         $this->stubRequest->method('getCookieValue')->with(ContextCountry::COOKIE_NAME)->willReturn($json);
+        $this->stubRequest->method('hasCookie')->with(ContextCountry::COOKIE_NAME)->willReturn(true);
     }
 
     protected function setUp()

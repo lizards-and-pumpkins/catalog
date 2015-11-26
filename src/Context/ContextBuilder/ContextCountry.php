@@ -45,7 +45,9 @@ class ContextCountry implements ContextPartBuilder
      */
     private function getCountryFromRequest(HttpRequest $request)
     {
-        $cookieData = json_decode($request->getCookieValue(self::COOKIE_NAME), true);
+        $cookieData = $request->hasCookie(self::COOKIE_NAME) ?
+            json_decode($request->getCookieValue(self::COOKIE_NAME), true) :
+            false;
         return $cookieData && isset($cookieData[$this->cookieDataKey]) ?
             (string) $cookieData[$this->cookieDataKey] :
             $this->defaultCountry;
