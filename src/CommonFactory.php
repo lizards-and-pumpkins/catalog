@@ -12,6 +12,9 @@ use LizardsAndPumpkins\Content\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Content\UpdateContentBlockCommandHandler;
 use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale as LocaleContextPartBuilder;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion as VersionContextPartBuilder;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite as WebsiteContextPartBuilder;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
@@ -858,28 +861,28 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return ContextBuilder\ContextVersion
+     * @return VersionContextPartBuilder
      */
     public function createVersionContextPartBuilder()
     {
         $dataVersion = $this->getCurrentDataVersion();
-        return new ContextBuilder\ContextVersion(DataVersion::fromVersionString($dataVersion));
+        return new VersionContextPartBuilder(DataVersion::fromVersionString($dataVersion));
     }
 
     /**
-     * @return ContextBuilder\ContextWebsite
+     * @return WebsiteContextPartBuilder
      */
     public function createWebsiteContextPartBuilder()
     {
-        return new ContextBuilder\ContextWebsite($this->getMasterFactory()->createWebsiteMap());
+        return new WebsiteContextPartBuilder($this->getMasterFactory()->createWebsiteMap());
     }
 
     /**
-     * @return ContextBuilder\ContextLocale
+     * @return LocaleContextPartBuilder
      */
     public function createLocaleContextPartBuilder()
     {
-        return new ContextBuilder\ContextLocale();
+        return new LocaleContextPartBuilder();
     }
 
     /**
