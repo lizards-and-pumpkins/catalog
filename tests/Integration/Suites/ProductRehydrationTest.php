@@ -4,7 +4,7 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\VersionedContext;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion;
 use LizardsAndPumpkins\Product\AttributeCode;
 use LizardsAndPumpkins\Product\Composite\AssociatedProductList;
 use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
@@ -111,7 +111,7 @@ class ProductRehydrationTest extends \PHPUnit_Framework_TestCase
         $imageList = new ProductImageList($image);
 
         $stubContext = $this->getMock(Context::class);
-        $stubContext->method('jsonSerialize')->willReturn([VersionedContext::CODE => '123']);
+        $stubContext->method('jsonSerialize')->willReturn([ContextVersion::CODE => '123']);
 
         return new SimpleProduct($productId, $testProductAttributes, $imageList, $stubContext);
     }
@@ -129,7 +129,7 @@ class ProductRehydrationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $idString
-     * @param Product ...$childProducts
+     * @param Product[] $childProducts
      * @return ConfigurableProduct
      */
     private function createConfigurableProductWithIdAndAssociatedProducts($idString, Product ...$childProducts)

@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\DecoratedContextBuilder;
+use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
 
 class SimpleProduct implements Product
 {
@@ -55,7 +56,7 @@ class SimpleProduct implements Product
             ProductId::fromString($sourceArray['product_id']),
             ProductAttributeList::fromArray($sourceArray['attributes']),
             ProductImageList::fromArray($sourceArray['images']),
-            DecoratedContextBuilder::rehydrateContext($sourceArray[self::CONTEXT])
+            SelfContainedContextBuilder::rehydrateContext($sourceArray[self::CONTEXT])
         );
     }
 

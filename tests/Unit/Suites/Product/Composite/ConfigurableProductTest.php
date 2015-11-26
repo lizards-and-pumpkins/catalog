@@ -3,8 +3,7 @@
 
 namespace LizardsAndPumpkins\Product\Composite;
 
-use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\VersionedContext;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion;
 use LizardsAndPumpkins\Product\Composite\Exception\AssociatedProductListDomainException;
 use LizardsAndPumpkins\Product\Composite\Exception\ProductAttributeValueCombinationNotUniqueException;
 use LizardsAndPumpkins\Product\Exception\ProductTypeCodeMismatchException;
@@ -27,7 +26,6 @@ use LizardsAndPumpkins\Product\Composite\Exception\ConfigurableProductAssociated
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\DataVersion
  * @uses   \LizardsAndPumpkins\Context\ContextBuilder
- * @uses   \LizardsAndPumpkins\Context\VersionedContext
  */
 class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
 {
@@ -137,7 +135,7 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
                 'product_id' => 'test',
                 'attributes' => [],
                 'images' => [],
-                'context' => [VersionedContext::CODE => '123']
+                'context' => [ContextVersion::CODE => '123']
             ],
             'variation_attributes' => ['foo'],
             'associated_products' => [

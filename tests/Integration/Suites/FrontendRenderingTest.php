@@ -4,7 +4,8 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductDetailViewRequestHandler;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\VersionedContext;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion;
+use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
@@ -89,7 +90,7 @@ class FrontendRenderingTest extends AbstractIntegrationTest
         
         $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
         
-        $context = new VersionedContext(DataVersion::fromVersionString('1'));
+        $context = SelfContainedContextBuilder::rehydrateContext([ContextVersion::CODE => '-1']);
         $snippetKeyGeneratorLocator = $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy();
         $productDetailPageMetaSnippetKeyGenerator = $this->factory->createProductDetailPageMetaSnippetKeyGenerator();
         $productDetailPageMetaSnippetKey = $productDetailPageMetaSnippetKeyGenerator->getKeyForContext(

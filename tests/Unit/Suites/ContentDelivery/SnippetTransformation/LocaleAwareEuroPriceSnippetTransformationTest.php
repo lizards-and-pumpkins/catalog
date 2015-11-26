@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\ContentDelivery\SnippetTransformation;
 
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\Exception\NoValidLocaleInContextException;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\LocaleContextDecorator;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
 
 /**
  * @covers \LizardsAndPumpkins\ContentDelivery\SnippetTransformation\LocaleAwareEuroPriceSnippetTransformation
@@ -28,7 +28,7 @@ class LocaleAwareEuroPriceSnippetTransformationTest extends \PHPUnit_Framework_T
      */
     private function assertIsTransformedTo($expected, $input, $locale)
     {
-        $this->mockContext->method('getValue')->with(LocaleContextDecorator::CODE)->willReturn($locale);
+        $this->mockContext->method('getValue')->with(ContextLocale::CODE)->willReturn($locale);
         $transformation = $this->transformation;
         $this->assertSame($expected, $transformation($input, $this->mockContext));
     }

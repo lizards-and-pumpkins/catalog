@@ -3,8 +3,8 @@
 
 namespace LizardsAndPumpkins\Product\Composite;
 
-use LizardsAndPumpkins\Context\DecoratedContextBuilder;
-use LizardsAndPumpkins\Context\VersionedContext;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion;
+use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
 use LizardsAndPumpkins\Product\Composite\Exception\DuplicateAssociatedProductException;
 use LizardsAndPumpkins\Product\Composite\Exception\ProductAttributeValueCombinationNotUniqueException;
 use LizardsAndPumpkins\Product\Composite\Exception\AssociatedProductIsMissingRequiredAttributesException;
@@ -24,7 +24,6 @@ use LizardsAndPumpkins\Product\SimpleProduct;
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\DataVersion
  * @uses   \LizardsAndPumpkins\Context\ContextBuilder
- * @uses   \LizardsAndPumpkins\Context\VersionedContext
  */
 class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
 {
@@ -134,7 +133,7 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
             ProductId::fromString('test'),
             new ProductAttributeList(),
             new ProductImageList(),
-            DecoratedContextBuilder::rehydrateContext([VersionedContext::CODE => '25732342'])
+            SelfContainedContextBuilder::rehydrateContext([ContextVersion::CODE => '25732342'])
         );
         $sourceAssociatedProductList = new AssociatedProductList($associatedProduct);
 

@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\VersionedContext;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion;
 use LizardsAndPumpkins\Product\Exception\ProductAttributeNotFoundException;
 use LizardsAndPumpkins\Product\Exception\ProductTypeCodeMismatchException;
 use LizardsAndPumpkins\Product\Exception\ProductTypeCodeMissingException;
@@ -16,7 +16,6 @@ use LizardsAndPumpkins\Product\Exception\ProductTypeCodeMissingException;
  * @uses   \LizardsAndPumpkins\Product\ProductId
  * @uses   \LizardsAndPumpkins\DataVersion
  * @uses   \LizardsAndPumpkins\Context\ContextBuilder
- * @uses   \LizardsAndPumpkins\Context\VersionedContext
  */
 class SimpleProductTest extends \PHPUnit_Framework_TestCase
 {
@@ -160,7 +159,7 @@ class SimpleProductTest extends \PHPUnit_Framework_TestCase
             'product_id' => 'test',
             'attributes' => [],
             'images' => [],
-            'context' => [VersionedContext::CODE => '123']
+            'context' => [ContextVersion::CODE => '123']
         ]);
         $this->assertInstanceOf(SimpleProduct::class, $result);
     }
