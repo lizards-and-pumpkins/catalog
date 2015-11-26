@@ -11,6 +11,6 @@ class IntegrationTestWebsiteMap extends WebsiteMap
      */
     public function getCodeByHost($code)
     {
-        return 'test';
+        return 'ru';
     }
 }
