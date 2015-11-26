@@ -47,7 +47,11 @@ use LizardsAndPumpkins\UnitTestFactory;
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer
  * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\ContentBlockSnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\GenericSnippetKeyGenerator
- * @uses   \LizardsAndPumpkins\Context\ContextBuilder
+ * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
+ * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
+ * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextVersion
+ * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite
+ * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextLocale
  * @uses   \LizardsAndPumpkins\Context\ContextSource
  * @uses   \LizardsAndPumpkins\Content\ContentBlockSnippetRenderer
  * @uses   \LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEventHandler

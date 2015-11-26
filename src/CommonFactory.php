@@ -13,8 +13,7 @@ use LizardsAndPumpkins\Content\UpdateContentBlockCommandHandler;
 use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\ContextSource;
-use LizardsAndPumpkins\Context\LocaleContextDecorator;
-use LizardsAndPumpkins\Context\WebsiteContextDecorator;
+use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
@@ -851,21 +850,44 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createContextBuilder()
     {
-        $version = $this->getCurrentDataVersion();
-
-        return $this->createContextBuilderWithVersion(DataVersion::fromVersionString($version));
+        return new SelfContainedContextBuilder(
+            $this->getMasterFactory()->createVersionContextPartBuilder(),
+            $this->getMasterFactory()->createWebsiteContextPartBuilder(),
+            $this->getMasterFactory()->createLocaleContextPartBuilder()
+        );
     }
 
     /**
-     * @param DataVersion $version
-     * @return ContextBuilder
+     * @return ContextBuilder\ContextVersion
      */
-    public function createContextBuilderWithVersion(DataVersion $version)
+    public function createVersionContextPartBuilder()
     {
-        $contextBuilder = new ContextBuilder($version);
-        $contextBuilder->registerContextDecorator('website', WebsiteContextDecorator::class);
-        $contextBuilder->registerContextDecorator('locale', LocaleContextDecorator::class);
-        return $contextBuilder;
+        $dataVersion = $this->getCurrentDataVersion();
+        return new ContextBuilder\ContextVersion(DataVersion::fromVersionString($dataVersion));
+    }
+
+    /**
+     * @return ContextBuilder\ContextWebsite
+     */
+    public function createWebsiteContextPartBuilder()
+    {
+        return new ContextBuilder\ContextWebsite($this->getMasterFactory()->createWebsiteMap());
+    }
+
+    /**
+     * @return ContextBuilder\ContextLocale
+     */
+    public function createLocaleContextPartBuilder()
+    {
+        return new ContextBuilder\ContextLocale();
+    }
+
+    /**
+     * @return WebsiteMap
+     */
+    public function createWebsiteMap()
+    {
+        return WebsiteMap::fromConfig($this->getMasterFactory()->createConfigReader());
     }
 
     /**

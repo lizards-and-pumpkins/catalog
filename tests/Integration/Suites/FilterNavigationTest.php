@@ -37,6 +37,9 @@ class FilterNavigationTest extends \PHPUnit_Framework_TestCase
         $this->registerProductListingSnippetKeyGenerator();
     }
 
+    /**
+     * @return mixed[]
+     */
     public function testListingPageContainsValidFilterNavigationJson()
     {
         $request = HttpRequest::fromParameters(

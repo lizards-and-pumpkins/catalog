@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\Renderer;
 
 use LizardsAndPumpkins\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\LocaleContextDecorator;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
 use LizardsAndPumpkins\Renderer\Exception\BlockRendererMustHaveOneRootBlockException;
 use LizardsAndPumpkins\Renderer\Exception\CanNotInstantiateBlockException;
 use LizardsAndPumpkins\Renderer\Exception\MethodNotYetAvailableException;
@@ -216,7 +216,7 @@ abstract class BlockRenderer
      */
     public function translate($string)
     {
-        $locale = $this->context->getValue(LocaleContextDecorator::CODE);
+        $locale = $this->context->getValue(ContextLocale::CODE);
         return $this->translatorRegistry->getTranslatorForLocale($locale)->translate($string);
     }
 

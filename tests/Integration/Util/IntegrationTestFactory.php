@@ -383,4 +383,12 @@ class IntegrationTestFactory implements Factory
 
         return $this->memoizedProductSearchAutosuggestionSortOrderConfig;
     }
+
+    /**
+     * @return WebsiteMap
+     */
+    public function createWebsiteMap()
+    {
+        return IntegrationTestWebsiteMap::fromArray([]);
+    }
 }

@@ -2,8 +2,7 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument;
 
-use LizardsAndPumpkins\Context\VersionedContext;
-use LizardsAndPumpkins\DataVersion;
+use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Product\ProductId;
 
 /**
@@ -11,7 +10,6 @@ use LizardsAndPumpkins\Product\ProductId;
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection
  * @uses   \LizardsAndPumpkins\DataVersion
- * @uses   \LizardsAndPumpkins\Context\VersionedContext
  * @uses   \LizardsAndPumpkins\Context\ContextBuilder
  */
 class SearchDocumentTest extends \PHPUnit_Framework_TestCase
@@ -21,7 +19,8 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
         /** @var SearchDocumentFieldCollection|\PHPUnit_Framework_MockObject_MockObject $stubDocumentFieldsCollection */
         $stubDocumentFieldsCollection = $this->getMock(SearchDocumentFieldCollection::class, [], [], '', false);
 
-        $testContext = new VersionedContext(DataVersion::fromVersionString('123'));
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $testContext */
+        $testContext = $this->getMock(Context::class);
 
         /** @var ProductId|\PHPUnit_Framework_MockObject_MockObject $stubProductId */
         $stubProductId = $this->getMock(ProductId::class, [], [], '', false);

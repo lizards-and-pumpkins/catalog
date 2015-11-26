@@ -7,7 +7,7 @@ use LizardsAndPumpkins\BaseUrl;
 use LizardsAndPumpkins\BaseUrl\Exception\NoConfiguredBaseUrlException;
 use LizardsAndPumpkins\ConfigReader;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\WebsiteContextDecorator;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite;
 
 /**
  * @covers \LizardsAndPumpkins\BaseUrl\WebsiteBaseUrlBuilder
@@ -50,7 +50,7 @@ class WebsiteBaseUrlBuilderTest extends \PHPUnit_Framework_TestCase
     private function createStubContext()
     {
         $stubContext = $this->getMock(Context::class);
-        $stubContext->method('getValue')->with(WebsiteContextDecorator::CODE)->willReturn('test_website');
+        $stubContext->method('getValue')->with(ContextWebsite::CODE)->willReturn('test_website');
         return $stubContext;
     }
 
