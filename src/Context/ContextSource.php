@@ -41,9 +41,9 @@ abstract class ContextSource
      */
     public function getContextsForParts(array $requestedContextParts)
     {
-        return $this->contextBuilder->createContextsFromDataSets(
-            $this->getContextMatrixForParts($requestedContextParts)
-        );
+        $contextDataSets = $this->getContextMatrixForParts($requestedContextParts);
+        
+        return $this->contextBuilder->createContextsFromDataSets($contextDataSets);
     }
 
     /**

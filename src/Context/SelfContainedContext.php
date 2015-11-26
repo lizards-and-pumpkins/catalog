@@ -97,7 +97,7 @@ class SelfContainedContext implements Context
     public function matchesDataSet(array $dataSet)
     {
         foreach ($this->getSupportedCodes() as $code) {
-            if (!isset($dataSet[$code]) || $this->getValue($code) !== $dataSet[$code]) {
+            if (isset($dataSet[$code]) && $this->getValue($code) !== $dataSet[$code]) {
                 return false;
             }
         }

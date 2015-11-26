@@ -31,7 +31,7 @@ class ContextWebsite implements ContextPartBuilder
             return (string) $inputDataSet[self::CODE];
         }
         if (isset($inputDataSet['request'])) {
-            return (string) $this->getHostFromRequest($inputDataSet['request']);
+            return (string) $this->getWebsiteFromRequest($inputDataSet['request']);
         }
         $message = 'Unable to determine context website because neither the ' .
             'website nor the request are set in the input array.';
@@ -50,7 +50,7 @@ class ContextWebsite implements ContextPartBuilder
      * @param HttpRequest $request
      * @return string
      */
-    private function getHostFromRequest(HttpRequest $request)
+    private function getWebsiteFromRequest(HttpRequest $request)
     {
         return $this->websiteMap->getCodeByHost($request->getHost());
     }

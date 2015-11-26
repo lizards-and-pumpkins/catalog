@@ -117,23 +117,49 @@ class SelfContainedContextTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($contextB->isSubsetOf($contextA));
     }
 
-    public function testItDoesNotMatchADataSetMissingPartsOfTheContext()
+    /**
+     * @param string[] $contextDataSet
+     * @param string[] $matchingDataSet
+     * @dataProvider matchingDataSetProvider
+     */
+    public function testItMatchesDataSetsWhereAllSharedPartsHaveTheSameValue($contextDataSet, $matchingDataSet)
     {
-        $this->assertFalse($this->createContext(['key1' => 'value1'])->matchesDataSet(['key2' => 'value2']));
-        $context = $this->createContext(['key1' => 'value1', 'key2' => 'value2']);
-        $this->assertFalse($context->matchesDataSet(['key1' => 'value1']));
+        $this->assertTrue($this->createContext($contextDataSet)->matchesDataSet($matchingDataSet));
     }
 
-    public function testItDoesNotMatchADataSetWithAllPartsOfTheContextButValuesAreDifferent()
+    /**
+     * @return array[]
+     */
+    public function matchingDataSetProvider()
     {
-        $this->assertFalse($this->createContext(['key1' => 'value1'])->matchesDataSet(['key1' => 'XXX']));
-        $context = $this->createContext(['key1' => 'value1', 'key2' => 'value2']);
-        $this->assertFalse($context->matchesDataSet(['key1' => 'value1', 'key2' => 'XXX']));
+        return [
+            [[], []],
+            [['key1' => 'value1'], []],
+            [[], ['key2' => 'value2']],
+            [['key1' => 'value1'], ['key2' => 'value2']],
+            [['key1' => 'value1', 'key2' => 'value2'], ['key1' => 'value1']],
+        ];
     }
 
-    public function testItMatchesAContextIfAllPartsArePresetntAndTheValuesMatch()
+    /**
+     * @dataProvider nonMatchingDataSetProvider
+     * @param string[] $contextDataSet
+     * @param string[] $nonMatchingSet
+     */
+    public function testItDoesNotMatchADataSetWhereTheValueOfACommonPartIsDifferent($contextDataSet, $nonMatchingSet)
     {
-        $this->assertTrue($this->createContext(['key1' => 'value1'])->matchesDataSet(['key1' => 'value1']));
+        $this->assertFalse($this->createContext($contextDataSet)->matchesDataSet($nonMatchingSet));
+    }
+
+    /**
+     * @return array[]
+     */
+    public function nonMatchingDataSetProvider()
+    {
+        return [
+            [['key1' => 'value1'], ['key1' => 'XXX']],
+            [['key1' => 'value1', 'key2' => 'value2'], ['key1' => 'value1', 'key2' => 'XXX']],
+        ];
     }
 
     public function testItReturnsTheContextPartsArrayToJsonSerialize()
