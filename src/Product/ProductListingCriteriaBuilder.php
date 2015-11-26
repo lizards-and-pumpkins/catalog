@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\Context\VersionedContext;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
@@ -89,11 +89,11 @@ class ProductListingCriteriaBuilder
     /**
      * @param array[] $xmlNodeAttributes
      * @param DataVersion $dataVersion
-     * @return \string[]
+     * @return string[]
      */
     private function getFormattedContextData(array $xmlNodeAttributes, DataVersion $dataVersion)
     {
-        $contextData = [VersionedContext::CODE => (string) $dataVersion];
+        $contextData = [ContextVersion::CODE => (string) $dataVersion];
 
         foreach ($xmlNodeAttributes as $xmlAttribute) {
             if (Product::URL_KEY !== $xmlAttribute['nodeName'] && 'condition' !== $xmlAttribute['nodeName']) {
@@ -106,7 +106,7 @@ class ProductListingCriteriaBuilder
 
     /**
      * @param array[] $criteriaCondition
-     * @param SearchCriterion|SearchCriterion ...$criterionArray
+     * @param SearchCriterion[] $criterionArray
      * @return CompositeSearchCriterion
      */
     private function createSearchCriteria(array $criteriaCondition, SearchCriterion ...$criterionArray)

@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Context;
 
+use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion;
 use LizardsAndPumpkins\DataVersion;
 
 abstract class ContextSource
@@ -41,9 +42,9 @@ abstract class ContextSource
      */
     public function getContextsForParts(array $requestedContextParts)
     {
-        return $this->contextBuilder->createContextsFromDataSets(
-            $this->getContextMatrixForParts($requestedContextParts)
-        );
+        $contextDataSets = $this->getContextMatrixForParts($requestedContextParts);
+        
+        return $this->contextBuilder->createContextsFromDataSets($contextDataSets);
     }
 
     /**
@@ -100,7 +101,7 @@ abstract class ContextSource
     {
         return $this->contextBuilder->createContextsFromDataSets(
             array_map(function (array $dataSet) use ($version) {
-                return array_merge($dataSet, [VersionedContext::CODE => (string) $version]);
+                return array_merge($dataSet, [ContextVersion::CODE => (string) $version]);
             }, $this->getContextMatrix())
         );
     }

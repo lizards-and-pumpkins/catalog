@@ -44,8 +44,12 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection
  * @uses   \LizardsAndPumpkins\ContentDelivery\SnippetTransformation\PricesJsonSnippetTransformation
  * @uses   \LizardsAndPumpkins\Context\ContextSource
+ * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
+ * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
+ * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextVersion
+ * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite
+ * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextLocale
  * @uses   \LizardsAndPumpkins\Content\ContentBlocksApiV1PutRequestHandler
- * @uses   \LizardsAndPumpkins\Context\ContextBuilder
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator
@@ -71,8 +75,6 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
  * @uses   \LizardsAndPumpkins\Http\HttpUrl
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  * @uses   \LizardsAndPumpkins\Http\HttpRequestBody
- * @uses   \LizardsAndPumpkins\Context\VersionedContext
- * @uses   \LizardsAndPumpkins\Context\ContextDecorator
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
  * @uses   \LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToProductBuilder
@@ -87,8 +89,8 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $masterFactory = new SampleMasterFactory();
-        $masterFactory->register(new UnitTestFactory());
         $masterFactory->register(new CommonFactory());
+        $masterFactory->register(new UnitTestFactory());
 
         $request = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,

@@ -40,7 +40,7 @@ class ProductStockQuantitySnippetRendererTest extends \PHPUnit_Framework_TestCas
     protected function setUp()
     {
         $this->mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
-        $this->mockContextBuilder = $this->getMock(ContextBuilder::class, [], [], '', false);
+        $this->mockContextBuilder = $this->getMock(ContextBuilder::class);
         $this->mockSnippetList = $this->getMock(SnippetList::class);
 
         $this->renderer = new ProductStockQuantitySnippetRenderer(

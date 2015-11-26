@@ -2,9 +2,9 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite;
 use LizardsAndPumpkins\Context\ContextSource;
-use LizardsAndPumpkins\Context\LocaleContextDecorator;
-use LizardsAndPumpkins\Context\WebsiteContextDecorator;
 
 class SampleContextSource extends ContextSource
 {
@@ -14,10 +14,10 @@ class SampleContextSource extends ContextSource
     protected function getContextMatrix()
     {
         return [
-            [WebsiteContextDecorator::CODE => 'ru', LocaleContextDecorator::CODE => 'de_DE'],
-            [WebsiteContextDecorator::CODE => 'ru', LocaleContextDecorator::CODE => 'en_US'],
-            [WebsiteContextDecorator::CODE => 'cy', LocaleContextDecorator::CODE => 'de_DE'],
-            [WebsiteContextDecorator::CODE => 'cy', LocaleContextDecorator::CODE => 'en_US'],
+            [ContextWebsite::CODE => 'ru', ContextLocale::CODE => 'de_DE'],
+            [ContextWebsite::CODE => 'ru', ContextLocale::CODE => 'en_US'],
+            [ContextWebsite::CODE => 'cy', ContextLocale::CODE => 'de_DE'],
+            [ContextWebsite::CODE => 'cy', ContextLocale::CODE => 'en_US'],
         ];
     }
 }

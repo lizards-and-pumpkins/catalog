@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\DataPool;
 
-use LizardsAndPumpkins\Context\VersionedContext;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
@@ -74,7 +74,7 @@ class DataPoolWriter implements Clearable
     public function writeUrlKeyCollection(UrlKeyForContextCollection $urlKeysForContextsCollection)
     {
         array_map(function (UrlKeyForContext $urlKeyForContext) {
-            $version = (string) $urlKeyForContext->getContextValue(VersionedContext::CODE);
+            $version = (string) $urlKeyForContext->getContextValue(ContextVersion::CODE);
             $urlKey = (string) $urlKeyForContext->getUrlKey();
             $context = (string) $urlKeyForContext;
             $urlKeyType = $urlKeyForContext->getType();
