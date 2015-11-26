@@ -4,7 +4,6 @@
 namespace LizardsAndPumpkins\Context\ContextBuilder;
 
 use LizardsAndPumpkins\Context\ContextBuilder;
-use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
 use LizardsAndPumpkins\Http\HttpRequest;
 
 /**
@@ -60,7 +59,7 @@ class ContextCountryTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsTheCountryFromTheRequestIfNotPartOfTheInputDataSet()
     {
         $this->setRequestCountry('en');
-        $inputDataSet = [SelfContainedContextBuilder::REQUEST => $this->stubRequest];
+        $inputDataSet = [ContextBuilder::REQUEST => $this->stubRequest];
         
         $this->assertSame('en', $this->contextCountry->getValue($inputDataSet));
     }
@@ -69,7 +68,7 @@ class ContextCountryTest extends \PHPUnit_Framework_TestCase
     {
         $this->setRequestCountry('en');
         $inputDataSet = [
-            SelfContainedContextBuilder::REQUEST => $this->stubRequest,
+            ContextBuilder::REQUEST => $this->stubRequest,
             ContextCountry::CODE => 'de'
         ];
         $this->assertSame('de', $this->contextCountry->getValue($inputDataSet));
