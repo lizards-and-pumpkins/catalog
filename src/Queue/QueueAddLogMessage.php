@@ -49,4 +49,12 @@ class QueueAddLogMessage implements LogMessage
             'data' => $this->data
         ];
     }
+
+    /**
+     * @return string
+     */
+    public function getContextSynopsis()
+    {
+        return sprintf('Queue Class: %s', get_class($this->queue));
+    }
 }

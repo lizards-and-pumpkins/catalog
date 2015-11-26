@@ -10,7 +10,7 @@ class CommandHandlerFailedMessageTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Exception
      */
-    private $stubException;
+    private $testException;
 
     /**
      * @var CommandHandlerFailedMessage
@@ -27,9 +27,9 @@ class CommandHandlerFailedMessageTest extends \PHPUnit_Framework_TestCase
         /** @var Command|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
         $stubCommand = $this->getMockBuilder(Command::class)->setMockClassName('Command')->getMock();
 
-        $this->stubException = new \Exception($this->exceptionMessage);
+        $this->testException = new \Exception($this->exceptionMessage);
 
-        $this->message = new CommandHandlerFailedMessage($stubCommand, $this->stubException);
+        $this->message = new CommandHandlerFailedMessage($stubCommand, $this->testException);
     }
 
     public function testLogMessageIsReturned()
@@ -46,6 +46,13 @@ class CommandHandlerFailedMessageTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->message->getContext();
 
-        $this->assertSame(['exception' => $this->stubException], $result);
+        $this->assertSame(['exception' => $this->testException], $result);
+    }
+
+    public function testItIncludesTheExceptionFileAndLineInTheSynopsis()
+    {
+        $synopsis = $this->message->getContextSynopsis();
+        $this->assertContains($this->testException->getFile(), $synopsis);
+        $this->assertContains((string) $this->testException->getLine(), $synopsis);
     }
 }

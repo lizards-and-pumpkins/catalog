@@ -13,4 +13,9 @@ interface LogMessage
      * @return mixed[]
      */
     public function getContext();
+
+    /**
+     * @return string
+     */
+    public function getContextSynopsis();
 }

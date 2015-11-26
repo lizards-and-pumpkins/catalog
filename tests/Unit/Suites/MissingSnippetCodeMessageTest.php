@@ -20,14 +20,14 @@ class MissingSnippetCodeMessageTest extends \PHPUnit_Framework_TestCase
     private $missingSnippetCodes;
 
     /**
-     * @var string[]
+     * @var Context|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubContext;
 
     protected function setUp()
     {
         $this->missingSnippetCodes = ['foo', 'bar'];
-        $this->stubContext = ['context' => $this->getMock(Context::class)];
+        $this->stubContext = $this->getMock(Context::class);
 
         $this->message = new MissingSnippetCodeMessage($this->missingSnippetCodes, $this->stubContext);
     }
@@ -43,6 +43,13 @@ class MissingSnippetCodeMessageTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->message->getContext();
 
-        $this->assertSame($this->stubContext, $result);
+        $this->assertSame(['context' => $this->stubContext], $result);
+    }
+
+    public function testItIncludesTheContextStringInTheSynopsis()
+    {
+        $contextString = 'the context string representation';
+        $this->stubContext->method('__toString')->willReturn($contextString);
+        $this->assertContains($contextString, $this->message->getContextSynopsis());
     }
 }

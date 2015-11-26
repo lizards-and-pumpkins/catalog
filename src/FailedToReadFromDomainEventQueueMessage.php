@@ -34,4 +34,12 @@ class FailedToReadFromDomainEventQueueMessage implements LogMessage
     {
         return ['exception' => $this->exception];
     }
+
+    /**
+     * @return string
+     */
+    public function getContextSynopsis()
+    {
+        return sprintf('File: %s:%d', $this->exception->getFile(), $this->exception->getLine());
+    }
 }

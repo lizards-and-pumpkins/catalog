@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Log\LogMessage;
 
 class MissingSnippetCodeMessage implements LogMessage
@@ -12,15 +13,15 @@ class MissingSnippetCodeMessage implements LogMessage
     private $missingSnippetCodes;
 
     /**
-     * @var mixed[]
+     * @var Context
      */
     private $context;
 
     /**
      * @param string[] $missingSnippetCodes
-     * @param mixed[] $context
+     * @param Context $context
      */
-    public function __construct(array $missingSnippetCodes, array $context = [])
+    public function __construct(array $missingSnippetCodes, Context $context)
     {
         $this->missingSnippetCodes = $missingSnippetCodes;
         $this->context = $context;
@@ -42,6 +43,14 @@ class MissingSnippetCodeMessage implements LogMessage
      */
     public function getContext()
     {
-        return $this->context;
+        return ['context' => $this->context];
+    }
+
+    /**
+     * @return string
+     */
+    public function getContextSynopsis()
+    {
+        return sprintf('Context: %s', $this->context);
     }
 }

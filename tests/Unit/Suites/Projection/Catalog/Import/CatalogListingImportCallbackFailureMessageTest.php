@@ -58,4 +58,11 @@ class CatalogListingImportCallbackFailureMessageTest extends \PHPUnit_Framework_
         $this->assertArrayHasKey('listing_xml', $contextArray);
         $this->assertSame($this->testListingXml, $contextArray['listing_xml']);
     }
+
+    public function testTheContextSynopsisIncludesTheFileAndLine()
+    {
+        $synopsis = $this->logMessage->getContextSynopsis();
+        $this->assertContains($this->testException->getFile(), $synopsis);
+        $this->assertContains((string) $this->testException->getLine(), $synopsis);
+    }
 }

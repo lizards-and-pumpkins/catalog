@@ -48,4 +48,14 @@ class ProductImageImportCallbackFailureMessage implements LogMessage
             'product_image_xml' => $this->productImageXml
         ];
     }
+
+    /**
+     * @return string
+     */
+    public function getContextSynopsis()
+    {
+        $exceptionSynopsis = sprintf('File: %s:%d', $this->exception->getFile(), $this->exception->getLine());
+        $xmlSynopsis = sprintf('Image XML: %s', $this->productImageXml);
+        return $exceptionSynopsis . "\t" . $xmlSynopsis;
+    }
 }

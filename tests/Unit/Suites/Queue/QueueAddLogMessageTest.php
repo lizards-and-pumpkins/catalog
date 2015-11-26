@@ -61,4 +61,10 @@ class QueueAddLogMessageTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('data', $logMessage->getContext());
         $this->assertSame($this, $logMessage->getContext()['data']);
     }
+
+    public function testTheContextSynopsisIncludesTheQueueClassName()
+    {
+        $logMessage = new QueueAddLogMessage($this, $this->stubQueue);
+        $this->assertContains(get_class($this->stubQueue), $logMessage->getContextSynopsis());
+    }
 }

@@ -60,4 +60,11 @@ class ProductImportCallbackFailureMessageTest extends \PHPUnit_Framework_TestCas
         $expected = 'Error during processing catalog product XML import for product "test-id": Test Message';
         $this->assertSame($expected, (string) $logMessage);
     }
+
+    public function testItIncludesTheExceptionFileAndLineInTheSynopsis()
+    {
+        $synopsis = $this->logMessage->getContextSynopsis();
+        $this->assertContains($this->testException->getFile(), $synopsis);
+        $this->assertContains((string) $this->testException->getLine(), $synopsis);
+    }
 }
