@@ -26,11 +26,10 @@ class SelfContainedContextBuilder implements ContextBuilder
      */
     public function createContext(array $inputDataSet)
     {
-        $foo = $inputDataSet;
-        $contextDataSet = array_reduce(
+        $contextDataSet = @array_reduce(
             $this->partBuilders,
-            function ($carry, ContextPartBuilder $builder) use ($foo) {
-                return array_merge((array) $carry, $this->getPart($builder, $foo));
+            function ($carry, ContextPartBuilder $builder) use ($inputDataSet) {
+                return array_merge((array) $carry, $this->getPart($builder, $inputDataSet));
             }
         );
         return SelfContainedContext::fromArray($contextDataSet);
@@ -43,8 +42,7 @@ class SelfContainedContextBuilder implements ContextBuilder
      */
     private function getPart(ContextPartBuilder $partBuilder, $inputDataSet)
     {
-        $inputDataSet1 = $inputDataSet;
-        return [$partBuilder->getCode() => $partBuilder->getValue($inputDataSet1)];
+        return [$partBuilder->getCode() => $partBuilder->getValue($inputDataSet)];
     }
 
     /**
