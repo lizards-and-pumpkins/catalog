@@ -65,6 +65,7 @@ class FileLogMessageWriterTest extends \PHPUnit_Framework_TestCase
         $this->writer = new FileLogMessageWriter($this->testLogFilePath);
         $this->stubLogMessage = $this->getMock(LogMessage::class);
         $this->stubLogMessage->method('__toString')->willReturn('test log message');
+        $this->stubLogMessage->method('getContextSynopsis')->willReturn('test context synopsis');
     }
 
     protected function tearDown()
@@ -136,9 +137,7 @@ class FileLogMessageWriterTest extends \PHPUnit_Framework_TestCase
         $iso8601pattern = '/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d\+\d\d:\d\d/';
         $this->assertRegExp($iso8601pattern, $content);
 
-        $expected = 'Array ( [0] => a => stdClass [1] => b => Array(3) [2] => c => (string) string [3] => ' .
-                    'd => boolean [4] => e => RuntimeException';
-        $this->assertContains($expected, $content);
+        $this->assertContains($this->stubLogMessage->getContextSynopsis(), $content);
 
         $this->assertContains(get_class($this->stubLogMessage), $content);
     }

@@ -49,6 +49,6 @@ class DomainEventProcessedLogMessage implements LogMessage
      */
     public function getContextSynopsis()
     {
-        return sprintf('DomainEventHandler: %s', get_class($this->domainEventHandler));
+        return sprintf('DomainEventHandler Class: %s', get_class($this->domainEventHandler));
     }
 }
