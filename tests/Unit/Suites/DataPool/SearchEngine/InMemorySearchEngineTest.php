@@ -9,7 +9,8 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilde
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\IntegrationTestSearchEngineAbstract
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual
- * @uses   \LizardsAndPumpkins\Context\ContextBuilder
+ * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
+ * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion

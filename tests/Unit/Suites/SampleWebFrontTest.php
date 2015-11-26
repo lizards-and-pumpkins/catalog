@@ -50,7 +50,11 @@ use LizardsAndPumpkins\Http\HttpRouterChain;
  * @uses   \LizardsAndPumpkins\Http\ResourceNotFoundRouter
  * @uses   \LizardsAndPumpkins\Http\ResourceNotFoundRequestHandler
  * @uses   \LizardsAndPumpkins\Http\HttpRouterChain
- * @uses   \LizardsAndPumpkins\Context\ContextBuilder
+ * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
+ * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
+ * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextVersion
+ * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite
+ * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextLocale
  * @uses   \LizardsAndPumpkins\Context\ContextSource
  * @uses   \LizardsAndPumpkins\Api\ApiRouter
  * @uses   \LizardsAndPumpkins\Api\ApiRequestHandlerChain

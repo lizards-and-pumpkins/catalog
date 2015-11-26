@@ -5,6 +5,9 @@ namespace LizardsAndPumpkins\Context;
 
 use LizardsAndPumpkins\Context\Exception\ContextCodeNotFoundException;
 
+/**
+ * @covers \LizardsAndPumpkins\Context\SelfContainedContext
+ */
 class SelfContainedContextTest extends \PHPUnit_Framework_TestCase
 {
     /**

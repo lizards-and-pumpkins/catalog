@@ -25,7 +25,8 @@ use LizardsAndPumpkins\Product\Composite\Exception\ConfigurableProductAssociated
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\DataVersion
- * @uses   \LizardsAndPumpkins\Context\ContextBuilder
+ * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
+ * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
  */
 class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
 {

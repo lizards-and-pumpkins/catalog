@@ -15,7 +15,8 @@ use LizardsAndPumpkins\Product\Exception\ProductTypeCodeMissingException;
  * @uses   \LizardsAndPumpkins\Product\ProductImageList
  * @uses   \LizardsAndPumpkins\Product\ProductId
  * @uses   \LizardsAndPumpkins\DataVersion
- * @uses   \LizardsAndPumpkins\Context\ContextBuilder
+ * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
+ * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
  */
 class SimpleProductTest extends \PHPUnit_Framework_TestCase
 {

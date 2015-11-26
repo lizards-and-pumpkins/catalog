@@ -23,7 +23,8 @@ use LizardsAndPumpkins\Product\SimpleProduct;
  * @uses   \LizardsAndPumpkins\Product\ProductImageList
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\DataVersion
- * @uses   \LizardsAndPumpkins\Context\ContextBuilder
+ * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
+ * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
  */
 class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
 {

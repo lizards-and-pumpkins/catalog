@@ -5,6 +5,9 @@ namespace LizardsAndPumpkins\Context\ContextBuilder;
 
 use LizardsAndPumpkins\Http\HttpRequest;
 
+/**
+ * @covers \LizardsAndPumpkins\Context\ContextBuilder\ContextLocale
+ */
 class ContextLocaleTest extends \PHPUnit_Framework_TestCase
 {
     /**
