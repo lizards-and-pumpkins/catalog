@@ -5,6 +5,8 @@ use LizardsAndPumpkins\Http\HttpRequest;
 
 interface ContextBuilder
 {
+    const REQUEST = 'request';
+    
     /**
      * @param HttpRequest $request
      * @return Context

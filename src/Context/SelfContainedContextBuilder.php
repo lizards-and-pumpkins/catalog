@@ -8,8 +8,6 @@ use LizardsAndPumpkins\Http\HttpRequest;
 
 class SelfContainedContextBuilder implements ContextBuilder
 {
-    const REQUEST = 'request';
-
     /**
      * @var ContextPartBuilder[]
      */
