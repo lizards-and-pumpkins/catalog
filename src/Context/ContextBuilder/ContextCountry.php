@@ -3,7 +3,7 @@
 
 namespace LizardsAndPumpkins\Context\ContextBuilder;
 
-use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
+use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Http\HttpRequest;
 
 class ContextCountry implements ContextPartBuilder
@@ -25,8 +25,8 @@ class ContextCountry implements ContextPartBuilder
         if (isset($inputDataSet[self::CODE])) {
             return (string) $inputDataSet[self::CODE];
         }
-        if (isset($inputDataSet[SelfContainedContextBuilder::REQUEST])) {
-            return $this->getCountryFromRequest($inputDataSet[SelfContainedContextBuilder::REQUEST]);
+        if (isset($inputDataSet[ContextBuilder::REQUEST])) {
+            return $this->getCountryFromRequest($inputDataSet[ContextBuilder::REQUEST]);
         }
         return $this->defaultCountry;
     }
