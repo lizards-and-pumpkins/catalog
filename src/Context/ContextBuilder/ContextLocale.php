@@ -10,7 +10,11 @@ class ContextLocale implements ContextPartBuilder
     const CODE = 'locale';
 
     private $default = 'de_DE';
-    
+
+    /*
+     * TODO: The mapping array can be moved to configuration or a factory or a dedicated
+     * TODO: class or the configuration once the business rules have become more stable.
+     */
     private $languageToLocaleMap = [
         'de' => 'de_DE',
         'en' => 'en_US',
