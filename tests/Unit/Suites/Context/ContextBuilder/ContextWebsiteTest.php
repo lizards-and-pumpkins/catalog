@@ -3,6 +3,7 @@
 
 namespace LizardsAndPumpkins\Context\ContextBuilder;
 
+use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\ContextBuilder\Exception\UnableToDetermineContextWebsiteException;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\WebsiteMap;
@@ -66,6 +67,6 @@ class ContextWebsiteTest extends \PHPUnit_Framework_TestCase
         
         $this->stubRequest->method('getHost')->willReturn('example.com');
         
-        $this->assertSame('web', $this->contextWebsite->getValue(['request' => $this->stubRequest]));
+        $this->assertSame('web', $this->contextWebsite->getValue([ContextBuilder::REQUEST => $this->stubRequest]));
     }
 }

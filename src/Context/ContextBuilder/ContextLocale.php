@@ -3,6 +3,7 @@
 
 namespace LizardsAndPumpkins\Context\ContextBuilder;
 
+use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Http\HttpRequest;
 
 class ContextLocale implements ContextPartBuilder
@@ -34,8 +35,8 @@ class ContextLocale implements ContextPartBuilder
         if (isset($inputDataSet[self::CODE])) {
             return (string) $inputDataSet[self::CODE];
         }
-        if (isset($inputDataSet['request'])) {
-            return $this->getLocaleFromRequest($inputDataSet['request']);
+        if (isset($inputDataSet[ContextBuilder::REQUEST])) {
+            return $this->getLocaleFromRequest($inputDataSet[ContextBuilder::REQUEST]);
         }
         return $this->default;
     }
