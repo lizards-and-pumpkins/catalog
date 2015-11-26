@@ -78,6 +78,7 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextVersion
  * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite
  * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextLocale
+ * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextCountry
  * @uses   \LizardsAndPumpkins\Context\ContextSource
  * @uses   \LizardsAndPumpkins\WebsiteMap
  * @uses   \LizardsAndPumpkins\CommandConsumer
@@ -655,5 +656,12 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createWebsiteMap();
         $this->assertInstanceOf(WebsiteMap::class, $result);
+    }
+
+    public function testItReturnsACountryContextPartBuilder()
+    {
+        $result = $this->commonFactory->createCountryContextPartBuilder();
+        $this->assertInstanceOf(ContextPartBuilder::class, $result);
+        $this->assertInstanceOf(ContextBuilder\ContextCountry::class, $result);
     }
 }
