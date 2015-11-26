@@ -67,7 +67,7 @@ class SelfContainedContextBuilderTest extends \PHPUnit_Framework_TestCase
         $stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
         $this->stubContextPartBuilders[0]->expects($this->once())
             ->method('getValue')
-            ->with($this->arrayHasKey(SelfContainedContextBuilder::REQUEST));
+            ->with($this->arrayHasKey(ContextBuilder::REQUEST));
         $this->assertInstanceOf(Context::class, $this->contextBuilder->createFromRequest($stubRequest));
     }
 
