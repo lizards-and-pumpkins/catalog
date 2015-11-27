@@ -7,6 +7,7 @@ use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Product\ProductTypeCode;
 use LizardsAndPumpkins\Product\SimpleProduct;
+use LizardsAndPumpkins\Product\Tax\ProductTaxClass;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidNumberOfSkusForImportedProductException;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\TaxClassAttributeMissingForImportedProductException;
 use LizardsAndPumpkins\Utils\XPathParser;
@@ -28,10 +29,10 @@ class SimpleProductXmlToProductBuilder implements ProductXmlToProductBuilder
     public function createProductBuilder(XPathParser $parser)
     {
         $productId = ProductId::fromString($this->getSkuFromXml($parser));
-        $taxClass = $this->getTaxClassFromXml($parser);
+        $taxClass = ProductTaxClass::fromString($this->getTaxClassFromXml($parser));
         $attributeListBuilder = $this->createProductAttributeListBuilder($parser);
         $imageListBuilder = $this->createProductImageListBuilder($parser, $productId);
-        return new SimpleProductBuilder($productId, $attributeListBuilder, $imageListBuilder);
+        return new SimpleProductBuilder($productId, $taxClass, $attributeListBuilder, $imageListBuilder);
     }
 
     /**
