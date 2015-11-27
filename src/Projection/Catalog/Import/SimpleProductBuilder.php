@@ -64,7 +64,7 @@ class SimpleProductBuilder implements ProductBuilder
         $sourceAttributeList = $this->attributeListBuilder->getAttributeListForContext($context);
         $attributesWithProperTypes = $this->ensureAttributeTypes($sourceAttributeList);
         $images = $this->imageListBuilder->getImageListForContext($context);
-        return new SimpleProduct($this->id, $attributesWithProperTypes, $images, $context);
+        return new SimpleProduct($this->id, $this->taxClass, $attributesWithProperTypes, $images, $context);
     }
 
     /**

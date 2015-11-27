@@ -22,6 +22,7 @@ use LizardsAndPumpkins\Utils\XPathParser;
  * @uses   \LizardsAndPumpkins\Product\ProductTypeCode
  * @uses   \LizardsAndPumpkins\Product\ProductId
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
+ * @uses   \LizardsAndPumpkins\Product\Tax\ProductTaxClass
  * @uses   \LizardsAndPumpkins\Product\Composite\ProductVariationAttributeList
  * @uses   \LizardsAndPumpkins\Utils\XPathParser
  */

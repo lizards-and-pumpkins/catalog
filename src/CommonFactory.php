@@ -12,6 +12,7 @@ use LizardsAndPumpkins\Content\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Content\UpdateContentBlockCommandHandler;
 use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextCountry as CountryContextPartBuilder;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale as LocaleContextPartBuilder;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion as VersionContextPartBuilder;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite as WebsiteContextPartBuilder;
@@ -887,11 +888,11 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return ContextBuilder\ContextCountry
+     * @return CountryContextPartBuilder
      */
     public function createCountryContextPartBuilder()
     {
-        return new ContextBuilder\ContextCountry();
+        return new CountryContextPartBuilder();
     }
 
     /**

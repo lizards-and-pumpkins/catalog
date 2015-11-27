@@ -26,6 +26,7 @@ use LizardsAndPumpkins\Projection\Catalog\Import\Exception\TaxClassAttributeMiss
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Product\ProductTypeCode
+ * @uses   \LizardsAndPumpkins\Product\Tax\ProductTaxClass
  * @uses   \LizardsAndPumpkins\Product\Composite\ProductVariationAttributeList
  * @uses   \LizardsAndPumpkins\Utils\XPathParser
  */

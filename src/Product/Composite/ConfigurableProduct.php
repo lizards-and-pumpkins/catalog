@@ -13,6 +13,7 @@ use LizardsAndPumpkins\Product\ProductImageList;
 use LizardsAndPumpkins\Product\RehydrateableProductTrait;
 use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\Product\Composite\Exception\ConfigurableProductAssociatedProductListInvariantViolationException;
+use LizardsAndPumpkins\Product\Tax\ProductTaxClass;
 
 class ConfigurableProduct implements Product
 {
@@ -213,5 +214,13 @@ class ConfigurableProduct implements Product
     public function getAssociatedProducts()
     {
         return $this->associatedProducts;
+    }
+
+    /**
+     * @return ProductTaxClass
+     */
+    public function getTaxClass()
+    {
+        return $this->simpleProductDelegate->getTaxClass();
     }
 }

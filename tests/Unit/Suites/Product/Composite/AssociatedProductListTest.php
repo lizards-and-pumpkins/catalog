@@ -14,10 +14,12 @@ use LizardsAndPumpkins\Product\ProductAttributeList;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Product\ProductImageList;
 use LizardsAndPumpkins\Product\SimpleProduct;
+use LizardsAndPumpkins\Product\Tax\ProductTaxClass;
 
 /**
  * @covers \LizardsAndPumpkins\Product\Composite\AssociatedProductList
  * @uses   \LizardsAndPumpkins\Product\ProductId
+ * @uses   \LizardsAndPumpkins\Product\Tax\ProductTaxClass
  * @uses   \LizardsAndPumpkins\Product\RehydrateableProductTrait
  * @uses   \LizardsAndPumpkins\Product\SimpleProduct
  * @uses   \LizardsAndPumpkins\Product\ProductImageList
@@ -132,6 +134,7 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
     {
         $associatedProduct = new SimpleProduct(
             ProductId::fromString('test'),
+            ProductTaxClass::fromString('test'),
             new ProductAttributeList(),
             new ProductImageList(),
             SelfContainedContextBuilder::rehydrateContext([ContextVersion::CODE => '25732342'])

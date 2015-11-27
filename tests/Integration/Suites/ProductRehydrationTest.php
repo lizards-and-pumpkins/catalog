@@ -16,6 +16,7 @@ use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Product\ProductImage;
 use LizardsAndPumpkins\Product\ProductImageList;
 use LizardsAndPumpkins\Product\SimpleProduct;
+use LizardsAndPumpkins\Product\Tax\ProductTaxClass;
 
 class ProductRehydrationTest extends \PHPUnit_Framework_TestCase
 {
@@ -101,6 +102,9 @@ class ProductRehydrationTest extends \PHPUnit_Framework_TestCase
     private function createSimpleProductWithId($productIdString)
     {
         $productId = ProductId::fromString($productIdString);
+        
+        $productTaxClass = ProductTaxClass::fromString('test');
+        
         $testProductAttribute = $this->createProductAttribute('foo', uniqid());
         $testProductAttributes = new ProductAttributeList($testProductAttribute);
 
@@ -113,7 +117,7 @@ class ProductRehydrationTest extends \PHPUnit_Framework_TestCase
         $stubContext = $this->getMock(Context::class);
         $stubContext->method('jsonSerialize')->willReturn([ContextVersion::CODE => '123']);
 
-        return new SimpleProduct($productId, $testProductAttributes, $imageList, $stubContext);
+        return new SimpleProduct($productId, $productTaxClass, $testProductAttributes, $imageList, $stubContext);
     }
 
     /**

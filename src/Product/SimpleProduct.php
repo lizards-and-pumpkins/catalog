@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\Product;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\DecoratedContextBuilder;
 use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
+use LizardsAndPumpkins\Product\Tax\ProductTaxClass;
 
 class SimpleProduct implements Product
 {
@@ -32,14 +33,21 @@ class SimpleProduct implements Product
      * @var ProductImageList
      */
     private $images;
+    
+    /**
+     * @var ProductTaxClass
+     */
+    private $taxClass;
 
     public function __construct(
         ProductId $productId,
+        ProductTaxClass $taxClass,
         ProductAttributeList $attributeList,
         ProductImageList $images,
         Context $context
     ) {
         $this->productId = $productId;
+        $this->taxClass = $taxClass;
         $this->attributeList = $attributeList;
         $this->context = $context;
         $this->images = $images;
@@ -54,6 +62,7 @@ class SimpleProduct implements Product
         self::validateTypeCodeInSourceArray(self::TYPE_CODE, $sourceArray);
         return new self(
             ProductId::fromString($sourceArray['product_id']),
+            ProductTaxClass::fromString($sourceArray['tax_class']),
             ProductAttributeList::fromArray($sourceArray['attributes']),
             ProductImageList::fromArray($sourceArray['images']),
             SelfContainedContextBuilder::rehydrateContext($sourceArray[self::CONTEXT])
@@ -119,6 +128,7 @@ class SimpleProduct implements Product
     {
         return [
             'product_id' => (string) $this->productId,
+            'tax_class' => (string) $this->taxClass,
             'type_code' => self::TYPE_CODE,
             'attributes' => $this->attributeList,
             'images' => $this->images,
@@ -191,5 +201,13 @@ class SimpleProduct implements Product
     public function getMainImageLabel()
     {
         return $this->getImageLabelByNumber(0);
+    }
+
+    /**
+     * @return ProductTaxClass
+     */
+    public function getTaxClass()
+    {
+        return $this->taxClass;
     }
 }
