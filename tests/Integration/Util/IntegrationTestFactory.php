@@ -389,13 +389,13 @@ class IntegrationTestFactory implements Factory
      */
     public function createHostToWebsiteMap()
     {
-        return IntegrationTestHostToWebsiteMap::fromArray([]);
+        return new IntegrationTestHostToWebsiteMap();
     }
 
     /**
-     * @return WebsiteToCountryMap21Run
+     * @return WebsiteToCountryMap
      */
-    public function getWebsiteToCountryMap()
+    public function createWebsiteToCountryMap()
     {
         return new WebsiteToCountryMap21Run();
     }
