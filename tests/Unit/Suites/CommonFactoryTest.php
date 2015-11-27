@@ -658,7 +658,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ContextLocale::class, $result);
     }
 
-    public function testItReturnsAWebsiteMap()
+    public function testItReturnsAHostToWebsiteMap()
     {
         $result = $this->commonFactory->createHostToWebsiteMap();
         $this->assertInstanceOf(HostToWebsiteMap::class, $result);
