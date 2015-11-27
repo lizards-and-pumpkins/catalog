@@ -17,6 +17,7 @@ use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 use LizardsAndPumpkins\Utils\XPathParser;
 
 class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest

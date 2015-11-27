@@ -3,6 +3,7 @@
 
 namespace LizardsAndPumpkins\Context\ContextBuilder;
 
+use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\ContextBuilder\Exception\UnableToDetermineContextWebsiteException;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\WebsiteMap;
@@ -51,21 +52,37 @@ class ContextWebsiteTest extends \PHPUnit_Framework_TestCase
             'Unable to determine context website because neither the ' .
             'website nor the request are set in the input array.'
         );
-        $this->contextWebsite->getValue([]);
+        $inputDataSet = [];
+        $otherContextParts = [];
+        $this->contextWebsite->getValue($inputDataSet, $otherContextParts);
     }
 
-    public function testItReturnsTheWebsiteIfPresentInTheInput()
+    /**
+     * @param string $websiteCode
+     * @dataProvider websiteCodeProvider
+     */
+    public function testItReturnsTheWebsiteIfPresentInTheInput($websiteCode)
     {
-        $this->assertSame('webA', $this->contextWebsite->getValue([ContextWebsite::CODE => 'webA']));
-        $this->assertSame('webB', $this->contextWebsite->getValue([ContextWebsite::CODE => 'webB']));
+        $inputDataSet = [ContextWebsite::CODE => $websiteCode];
+        $otherContextParts = [];
+        $this->assertSame($websiteCode, $this->contextWebsite->getValue($inputDataSet, $otherContextParts));
+    }
+
+    /**
+     * @return array[]
+     */
+    public function websiteCodeProvider()
+    {
+        return [['webA'], ['webB']];
     }
 
     public function testItReturnsTheWebsiteBasedOnTheRequestIfNotExplicitlySet()
     {
-        $this->stubWebsiteMap->method('getCodeByHost')->willReturn('web');
-        
+        $this->stubWebsiteMap->method('getWebsiteCodeByHost')->willReturn('web');
         $this->stubRequest->method('getHost')->willReturn('example.com');
-        
-        $this->assertSame('web', $this->contextWebsite->getValue(['request' => $this->stubRequest]));
+
+        $inputDataSet = [ContextBuilder::REQUEST => $this->stubRequest];
+        $otherContextParts = [];
+        $this->assertSame('web', $this->contextWebsite->getValue($inputDataSet, $otherContextParts));
     }
 }

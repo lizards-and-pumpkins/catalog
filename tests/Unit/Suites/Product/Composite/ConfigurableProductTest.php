@@ -24,6 +24,7 @@ use LizardsAndPumpkins\Product\Composite\Exception\ConfigurableProductAssociated
  * @uses   \LizardsAndPumpkins\Product\ProductImageList
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
+ * @uses   \LizardsAndPumpkins\Product\Tax\ProductTaxClass
  * @uses   \LizardsAndPumpkins\DataVersion
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
@@ -134,6 +135,7 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
             'simple_product' => [
                 Product::TYPE_KEY => SimpleProduct::TYPE_CODE,
                 'product_id' => 'test',
+                'tax_class' => 'test tax class',
                 'attributes' => [],
                 'images' => [],
                 'context' => [ContextVersion::CODE => '123']
@@ -287,5 +289,11 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
             [new AssociatedProductIsMissingRequiredAttributesException()],
             [new ProductAttributeValueCombinationNotUniqueException()]
         ];
+    }
+
+    public function testItDelegatesToTheSimpleProductToGetTheTaxClass()
+    {
+        $this->mockSimpleProduct->method('getTaxClass')->willReturn('test');
+        $this->assertSame('test', $this->configurableProduct->getTaxClass());
     }
 }

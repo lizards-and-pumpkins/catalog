@@ -8,7 +8,11 @@ use LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Content\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Content\UpdateContentBlockCommandHandler;
 use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextCountry;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextPartBuilder;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
@@ -78,6 +82,7 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextVersion
  * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite
  * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextLocale
+ * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextCountry
  * @uses   \LizardsAndPumpkins\Context\ContextSource
  * @uses   \LizardsAndPumpkins\WebsiteMap
  * @uses   \LizardsAndPumpkins\CommandConsumer
@@ -634,26 +639,33 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createVersionContextPartBuilder();
         $this->assertInstanceOf(ContextPartBuilder::class, $result);
-        $this->assertInstanceOf(ContextBuilder\ContextVersion::class, $result);
+        $this->assertInstanceOf(ContextVersion::class, $result);
     }
 
     public function testItReturnsAWebsiteContextPartBuilder()
     {
         $result = $this->commonFactory->createWebsiteContextPartBuilder();
         $this->assertInstanceOf(ContextPartBuilder::class, $result);
-        $this->assertInstanceOf(ContextBuilder\ContextWebsite::class, $result);
+        $this->assertInstanceOf(ContextWebsite::class, $result);
     }
 
     public function testItReturnsALocaleContextPartBuilder()
     {
         $result = $this->commonFactory->createLocaleContextPartBuilder();
         $this->assertInstanceOf(ContextPartBuilder::class, $result);
-        $this->assertInstanceOf(ContextBuilder\ContextLocale::class, $result);
+        $this->assertInstanceOf(ContextLocale::class, $result);
     }
 
     public function testItReturnsAWebsiteMap()
     {
         $result = $this->commonFactory->createWebsiteMap();
         $this->assertInstanceOf(WebsiteMap::class, $result);
+    }
+
+    public function testItReturnsACountryContextPartBuilder()
+    {
+        $result = $this->commonFactory->createCountryContextPartBuilder();
+        $this->assertInstanceOf(ContextPartBuilder::class, $result);
+        $this->assertInstanceOf(ContextCountry::class, $result);
     }
 }

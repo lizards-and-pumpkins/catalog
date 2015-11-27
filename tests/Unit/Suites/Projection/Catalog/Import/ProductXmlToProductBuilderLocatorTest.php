@@ -6,6 +6,7 @@ use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidNumberOfSkusFo
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidProductTypeCodeForImportedProductException;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\NoMatchingProductTypeBuilderFactoryFoundException;
+use LizardsAndPumpkins\Projection\Catalog\Import\Exception\TaxClassAttributeMissingForImportedProductException;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator
@@ -25,6 +26,7 @@ use LizardsAndPumpkins\Projection\Catalog\Import\Exception\NoMatchingProductType
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Product\ProductTypeCode
+ * @uses   \LizardsAndPumpkins\Product\Tax\ProductTaxClass
  * @uses   \LizardsAndPumpkins\Product\Composite\ProductVariationAttributeList
  * @uses   \LizardsAndPumpkins\Utils\XPathParser
  */
@@ -181,7 +183,7 @@ class ProductXmlToProductBuilderLocatorTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownIfSkuIsMissing()
     {
         $this->setExpectedException(InvalidNumberOfSkusForImportedProductException::class);
-        $xml = '<product type="simple"></product>';
+        $xml = '<product type="simple" tax_class="test"></product>';
 
         $this->createProductXmlToProductBuilderLocatorInstance()->createProductBuilderFromXml($xml);
     }
@@ -189,7 +191,15 @@ class ProductXmlToProductBuilderLocatorTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownIfProductTypeCodeIsMissing()
     {
         $this->setExpectedException(InvalidProductTypeCodeForImportedProductException::class);
-        $xml = '<product sku="foo"></product>';
+        $xml = '<product sku="foo" tax_class="test"></product>';
+
+        $this->createProductXmlToProductBuilderLocatorInstance()->createProductBuilderFromXml($xml);
+    }
+
+    public function testExceptionIsThrownIfTaxClassIsMissing()
+    {
+        $this->setExpectedException(TaxClassAttributeMissingForImportedProductException::class);
+        $xml = '<product sku="foo" type="simple"></product>';
 
         $this->createProductXmlToProductBuilderLocatorInstance()->createProductBuilderFromXml($xml);
     }
@@ -200,7 +210,7 @@ class ProductXmlToProductBuilderLocatorTest extends \PHPUnit_Framework_TestCase
             NoMatchingProductTypeBuilderFactoryFoundException::class,
             'No product type builder factory for the product type code "invalid" was found'
         );
-        $xml = '<product type="invalid" sku="test"></product>';
+        $xml = '<product type="invalid" sku="test" tax_class="test"></product>';
 
         $this->createProductXmlToProductBuilderLocatorInstance()->createProductBuilderFromXml($xml);
     }

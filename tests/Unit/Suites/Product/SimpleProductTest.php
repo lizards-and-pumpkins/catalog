@@ -7,6 +7,7 @@ use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion;
 use LizardsAndPumpkins\Product\Exception\ProductAttributeNotFoundException;
 use LizardsAndPumpkins\Product\Exception\ProductTypeCodeMismatchException;
 use LizardsAndPumpkins\Product\Exception\ProductTypeCodeMissingException;
+use LizardsAndPumpkins\Product\Tax\ProductTaxClass;
 
 /**
  * @covers \LizardsAndPumpkins\Product\SimpleProduct
@@ -14,6 +15,7 @@ use LizardsAndPumpkins\Product\Exception\ProductTypeCodeMissingException;
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Product\ProductImageList
  * @uses   \LizardsAndPumpkins\Product\ProductId
+ * @uses   \LizardsAndPumpkins\Product\Tax\ProductTaxClass
  * @uses   \LizardsAndPumpkins\DataVersion
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
@@ -45,14 +47,21 @@ class SimpleProductTest extends \PHPUnit_Framework_TestCase
      */
     private $stubProductImages;
 
+    /**
+     * @var ProductTaxClass|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubTaxClass;
+
     public function setUp()
     {
         $this->stubProductId = $this->getMock(ProductId::class, [], [], '', false);
+        $this->stubTaxClass = $this->getMock(ProductTaxClass::class, [], [], '', false);
         $this->stubProductAttributeList = $this->getMock(ProductAttributeList::class);
         $this->stubContext = $this->getMock(Context::class);
         $this->stubProductImages = $this->getMock(ProductImageList::class);
         $this->product = new SimpleProduct(
             $this->stubProductId,
+            $this->stubTaxClass,
             $this->stubProductAttributeList,
             $this->stubProductImages,
             $this->stubContext
@@ -66,8 +75,12 @@ class SimpleProductTest extends \PHPUnit_Framework_TestCase
 
     public function testProductIdIsReturned()
     {
-        $result = $this->product->getId();
-        $this->assertSame($this->stubProductId, $result);
+        $this->assertSame($this->stubProductId, $this->product->getId());
+    }
+
+    public function testItReturnsTheProductTaxClass()
+    {
+        $this->assertSame($this->stubTaxClass, $this->product->getTaxClass());
     }
 
     public function testAttributeValueIsReturned()
@@ -141,12 +154,15 @@ class SimpleProductTest extends \PHPUnit_Framework_TestCase
     {
         $testProductIdString = 'foo';
         $this->stubProductId->method('__toString')->willReturn($testProductIdString);
+        $testTaxClass = 'bar';
+        $this->stubTaxClass->method('__toString')->willReturn($testTaxClass);
         $this->stubContext->method('jsonSerialize')->willReturn([]);
 
         $result = $this->product->jsonSerialize();
 
         $this->assertInternalType('array', $result);
         $this->assertEquals($testProductIdString, $result['product_id']);
+        $this->assertEquals($testTaxClass, $result['tax_class']);
         $this->assertEquals(SimpleProduct::TYPE_CODE, $result['type_code']);
         $this->assertArrayHasKey('attributes', $result);
         $this->assertArrayHasKey('images', $result);
@@ -158,6 +174,7 @@ class SimpleProductTest extends \PHPUnit_Framework_TestCase
         $result = SimpleProduct::fromArray([
             Product::TYPE_KEY => SimpleProduct::TYPE_CODE,
             'product_id' => 'test',
+            'tax_class' => 'test tax class',
             'attributes' => [],
             'images' => [],
             'context' => [ContextVersion::CODE => '123']

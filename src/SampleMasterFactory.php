@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Log\InMemoryLogger;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 
 /**
  * @method DataPool\DataPoolWriter createDataPoolWriter
@@ -13,7 +14,8 @@ use LizardsAndPumpkins\Log\InMemoryLogger;
  * @method Context\ContextSource createContextSource
  * @method DomainEventConsumer createDomainEventConsumer
  * @method CommandConsumer createCommandConsumer
- * @method SnippetKeyGeneratorLocator\RegistrySnippetKeyGeneratorLocatorStrategy createRegistrySnippetKeyGeneratorLocatorStrategy
+ * @method SnippetKeyGeneratorLocator createRegistrySnippetKeyGeneratorLocatorStrategy
+ * @method SnippetKeyGeneratorLocator getSnippetKeyGeneratorLocator
  * @method InMemoryLogger getLogger
  * @method GenericSnippetKeyGenerator createProductDetailViewSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createProductListingSnippetKeyGenerator

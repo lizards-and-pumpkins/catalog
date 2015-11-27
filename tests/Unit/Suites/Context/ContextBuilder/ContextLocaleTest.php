@@ -3,6 +3,7 @@
 
 namespace LizardsAndPumpkins\Context\ContextBuilder;
 
+use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Http\HttpRequest;
 
 /**
@@ -38,17 +39,23 @@ class ContextLocaleTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsTheDefaultLocaleIfItCanNotBeDeterminedFromTheInputDataSets()
     {
-        $this->assertSame('de_DE', $this->contextLocale->getValue([]));
+        $inputDataSet = [];
+        $otherContextParts = [];
+        $this->assertSame('de_DE', $this->contextLocale->getValue($inputDataSet, $otherContextParts));
     }
 
     public function testItReturnsTheLocaleFromTheInputArrayIfItIsPresent()
     {
-        $this->assertSame('xx_XX', $this->contextLocale->getValue([ContextLocale::CODE => 'xx_XX']));
+        $inputDataSet = [ContextLocale::CODE => 'xx_XX'];
+        $otherContextParts = [];
+        $this->assertSame('xx_XX', $this->contextLocale->getValue($inputDataSet, $otherContextParts));
     }
 
     public function testItReturnsTheLocaleFromTheRequestIfNotExplicitlySpecifiedInInputArray()
     {
         $this->stubRequest->method('getUrlPathRelativeToWebFront')->willReturn('/fr/foo');
-        $this->assertSame('fr_FR', $this->contextLocale->getValue(['request' => $this->stubRequest]));
+        $inputDataSet = [ContextBuilder::REQUEST => $this->stubRequest];
+        $otherContextParts = [];
+        $this->assertSame('fr_FR', $this->contextLocale->getValue($inputDataSet, $otherContextParts));
     }
 }

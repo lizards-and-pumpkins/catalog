@@ -9,6 +9,7 @@ use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\Product\ProductAttributeList;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Product\ProductImageList;
+use LizardsAndPumpkins\Product\Tax\ProductTaxClass;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\Catalog\Import\SimpleProductBuilder
@@ -71,8 +72,11 @@ class SimpleProductBuilderTest extends \PHPUnit_Framework_TestCase
         $this->mockProductImageListBuilder->method('getImageListForContext')
             ->willReturn($this->getMock(ProductImageList::class));
 
+        $stubTaxClass = $this->getMock(ProductTaxClass::class, [], [], '', false);
+        
         $this->productBuilder = new SimpleProductBuilder(
             $this->stubProductId,
+            $stubTaxClass,
             $this->mockProductAttributeListBuilder,
             $this->mockProductImageListBuilder
         );

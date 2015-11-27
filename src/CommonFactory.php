@@ -12,6 +12,7 @@ use LizardsAndPumpkins\Content\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Content\UpdateContentBlockCommandHandler;
 use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextCountry as CountryContextPartBuilder;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale as LocaleContextPartBuilder;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion as VersionContextPartBuilder;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite as WebsiteContextPartBuilder;
@@ -856,6 +857,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return new SelfContainedContextBuilder(
             $this->getMasterFactory()->createVersionContextPartBuilder(),
             $this->getMasterFactory()->createWebsiteContextPartBuilder(),
+            $this->getMasterFactory()->createCountryContextPartBuilder(),
             $this->getMasterFactory()->createLocaleContextPartBuilder()
         );
     }
@@ -883,6 +885,14 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createLocaleContextPartBuilder()
     {
         return new LocaleContextPartBuilder();
+    }
+
+    /**
+     * @return CountryContextPartBuilder
+     */
+    public function createCountryContextPartBuilder()
+    {
+        return new CountryContextPartBuilder();
     }
 
     /**

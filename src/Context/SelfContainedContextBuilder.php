@@ -8,8 +8,6 @@ use LizardsAndPumpkins\Http\HttpRequest;
 
 class SelfContainedContextBuilder implements ContextBuilder
 {
-    const REQUEST = 'request';
-
     /**
      * @var ContextPartBuilder[]
      */
@@ -29,20 +27,22 @@ class SelfContainedContextBuilder implements ContextBuilder
         $contextDataSet = @array_reduce(
             $this->partBuilders,
             function ($carry, ContextPartBuilder $builder) use ($inputDataSet) {
-                return array_merge((array) $carry, $this->getPart($builder, $inputDataSet));
-            }
+                return array_merge($carry, $this->getPart($builder, $inputDataSet, $carry));
+            },
+            []
         );
         return SelfContainedContext::fromArray($contextDataSet);
     }
 
     /**
      * @param ContextPartBuilder $partBuilder
-     * @param string $inputDataSet
+     * @param mixed[] $inputDataSet
+     * @param string[] $carry
      * @return string[]
      */
-    private function getPart(ContextPartBuilder $partBuilder, $inputDataSet)
+    private function getPart(ContextPartBuilder $partBuilder, array $inputDataSet, array $carry)
     {
-        return [$partBuilder->getCode() => $partBuilder->getValue($inputDataSet)];
+        return [$partBuilder->getCode() => $partBuilder->getValue($inputDataSet, $carry)];
     }
 
     /**

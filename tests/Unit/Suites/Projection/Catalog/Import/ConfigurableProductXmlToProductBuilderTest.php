@@ -22,6 +22,7 @@ use LizardsAndPumpkins\Utils\XPathParser;
  * @uses   \LizardsAndPumpkins\Product\ProductTypeCode
  * @uses   \LizardsAndPumpkins\Product\ProductId
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
+ * @uses   \LizardsAndPumpkins\Product\Tax\ProductTaxClass
  * @uses   \LizardsAndPumpkins\Product\Composite\ProductVariationAttributeList
  * @uses   \LizardsAndPumpkins\Utils\XPathParser
  */
@@ -52,7 +53,7 @@ class ConfigurableProductXmlToProductBuilderTest extends \PHPUnit_Framework_Test
     public function testItReturnsAConfigurableProductBuilderInstance()
     {
         $xml = '
-<product type="configurable" sku="test">
+<product type="configurable" sku="test" tax_class="test">
     <variations>
         <attribute>test</attribute>
     </variations>

@@ -7,7 +7,9 @@ use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Product\ProductTypeCode;
 use LizardsAndPumpkins\Product\SimpleProduct;
+use LizardsAndPumpkins\Product\Tax\ProductTaxClass;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidNumberOfSkusForImportedProductException;
+use LizardsAndPumpkins\Projection\Catalog\Import\Exception\TaxClassAttributeMissingForImportedProductException;
 use LizardsAndPumpkins\Utils\XPathParser;
 
 class SimpleProductXmlToProductBuilder implements ProductXmlToProductBuilder
@@ -27,11 +29,11 @@ class SimpleProductXmlToProductBuilder implements ProductXmlToProductBuilder
     public function createProductBuilder(XPathParser $parser)
     {
         $productId = ProductId::fromString($this->getSkuFromXml($parser));
+        $taxClass = ProductTaxClass::fromString($this->getTaxClassFromXml($parser));
         $attributeListBuilder = $this->createProductAttributeListBuilder($parser);
         $imageListBuilder = $this->createProductImageListBuilder($parser, $productId);
-        return new SimpleProductBuilder($productId, $attributeListBuilder, $imageListBuilder);
+        return new SimpleProductBuilder($productId, $taxClass, $attributeListBuilder, $imageListBuilder);
     }
-
 
     /**
      * @param XPathParser $parser
@@ -41,6 +43,16 @@ class SimpleProductXmlToProductBuilder implements ProductXmlToProductBuilder
     {
         $skuNode = $parser->getXmlNodesArrayByXPath('/product/@sku');
         return $this->getSkuStringFromDomNodeArray($skuNode);
+    }
+
+    /**
+     * @param XPathParser $parser
+     * @return string
+     */
+    public function getTaxClassFromXml(XPathParser $parser)
+    {
+        $skuNode = $parser->getXmlNodesArrayByXPath('/product/@tax_class');
+        return $this->getTaxClassStringFromDomNodeArray($skuNode);
     }
 
     /**
@@ -77,6 +89,21 @@ class SimpleProductXmlToProductBuilder implements ProductXmlToProductBuilder
         if (1 !== count($nodeArray)) {
             throw new InvalidNumberOfSkusForImportedProductException(
                 'There must be exactly one SKU in the imported product XML'
+            );
+        }
+
+        return $nodeArray[0]['value'];
+    }
+
+    /**
+     * @param mixed[] $nodeArray
+     * @return string
+     */
+    private function getTaxClassStringFromDomNodeArray(array $nodeArray)
+    {
+        if (1 !== count($nodeArray)) {
+            throw new TaxClassAttributeMissingForImportedProductException(
+                'The tax_class attribute is missing in the imported product XML'
             );
         }
 

@@ -38,13 +38,13 @@ class WebsiteMapTest extends \PHPUnit_Framework_TestCase
             UnknownWebsiteHostException::class,
             'No website code found for host "www.example.com"'
         );
-        $this->websiteMap->getCodeByHost('www.example.com');
+        $this->websiteMap->getWebsiteCodeByHost('www.example.com');
     }
 
     public function testItReturnsTheCodeIfSet()
     {
-        $this->assertSame($this->testMap['example.com'], $this->websiteMap->getCodeByHost('example.com'));
-        $this->assertSame($this->testMap['127.0.0.1'], $this->websiteMap->getCodeByHost('127.0.0.1'));
+        $this->assertSame($this->testMap['example.com'], $this->websiteMap->getWebsiteCodeByHost('example.com'));
+        $this->assertSame($this->testMap['127.0.0.1'], $this->websiteMap->getWebsiteCodeByHost('127.0.0.1'));
     }
 
     public function testItReturnsAWebsiteMapInstance()
@@ -59,8 +59,8 @@ class WebsiteMapTest extends \PHPUnit_Framework_TestCase
 
         $websiteMap = WebsiteMap::fromConfig($this->stubConfigReader);
         
-        $this->assertSame('aaa', $websiteMap->getCodeByHost('example.com'));
-        $this->assertSame('bbb', $websiteMap->getCodeByHost('127.0.0.1'));
+        $this->assertSame('aaa', $websiteMap->getWebsiteCodeByHost('example.com'));
+        $this->assertSame('bbb', $websiteMap->getWebsiteCodeByHost('127.0.0.1'));
     }
 
     public function testItThrowsAnExceptionIfAMapValueNotMatchesTheExpectedFormat()

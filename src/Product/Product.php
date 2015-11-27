@@ -2,6 +2,7 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Product\Tax\ProductTaxClass;
 
 interface Product extends \JsonSerializable
 {
@@ -79,4 +80,9 @@ interface Product extends \JsonSerializable
      * @return string
      */
     public function getMainImageLabel();
+
+    /**
+     * @return ProductTaxClass
+     */
+    public function getTaxClass();
 }

@@ -86,7 +86,7 @@ class WebsiteMap
      * @param string $host
      * @return string
      */
-    public function getCodeByHost($host)
+    public function getWebsiteCodeByHost($host)
     {
         if (!isset($this->hostToWebsiteMap[$host])) {
             throw new UnknownWebsiteHostException(sprintf('No website code found for host "%s"', $host));

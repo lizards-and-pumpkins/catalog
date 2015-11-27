@@ -9,7 +9,7 @@ class IntegrationTestWebsiteMap extends WebsiteMap
      * @param string $code
      * @return string
      */
-    public function getCodeByHost($code)
+    public function getWebsiteCodeByHost($code)
     {
         return 'ru';
     }

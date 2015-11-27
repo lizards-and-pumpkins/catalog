@@ -9,6 +9,7 @@ use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductAttributeList;
 use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\Product\ProductId;
+use LizardsAndPumpkins\Product\Tax\ProductTaxClass;
 
 class SimpleProductBuilder implements ProductBuilder
 {
@@ -26,15 +27,22 @@ class SimpleProductBuilder implements ProductBuilder
      * @var ProductImageListBuilder
      */
     private $imageListBuilder;
+    
+    /**
+     * @var ProductTaxClass
+     */
+    private $taxClass;
 
     public function __construct(
         ProductId $id,
+        ProductTaxClass $taxClass,
         ProductAttributeListBuilder $attributeListBuilder,
         ProductImageListBuilder $imageListBuilder
     ) {
         $this->id = $id;
         $this->attributeListBuilder = $attributeListBuilder;
         $this->imageListBuilder = $imageListBuilder;
+        $this->taxClass = $taxClass;
     }
 
     /**
@@ -56,7 +64,7 @@ class SimpleProductBuilder implements ProductBuilder
         $sourceAttributeList = $this->attributeListBuilder->getAttributeListForContext($context);
         $attributesWithProperTypes = $this->ensureAttributeTypes($sourceAttributeList);
         $images = $this->imageListBuilder->getImageListForContext($context);
-        return new SimpleProduct($this->id, $attributesWithProperTypes, $images, $context);
+        return new SimpleProduct($this->id, $this->taxClass, $attributesWithProperTypes, $images, $context);
     }
 
     /**
