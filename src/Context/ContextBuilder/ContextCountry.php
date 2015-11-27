@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\Context\ContextBuilder;
 
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\WebsiteToCountryMap;
 
 class ContextCountry implements ContextPartBuilder
 {
@@ -15,7 +16,17 @@ class ContextCountry implements ContextPartBuilder
     private $cookieDataKey = 'country';
     
     private $defaultCountry = 'de';
+    
+    /**
+     * @var WebsiteToCountryMap
+     */
+    private $websiteToCountryMap;
 
+    public function __construct(WebsiteToCountryMap $websiteToCountryMap)
+    {
+        $this->websiteToCountryMap = $websiteToCountryMap;
+    }
+    
     /**
      * @param mixed[] $inputDataSet
      * @param string[] $otherContextParts
@@ -29,7 +40,7 @@ class ContextCountry implements ContextPartBuilder
         if (isset($inputDataSet[ContextBuilder::REQUEST])) {
             return $this->getCountryFromRequest($inputDataSet[ContextBuilder::REQUEST]);
         }
-        return $this->defaultCountry;
+        return $this->websiteToCountryMap->getCountry($this->getWebsiteCode($otherContextParts));
     }
 
     /**
@@ -52,5 +63,16 @@ class ContextCountry implements ContextPartBuilder
         return $cookieData && isset($cookieData[$this->cookieDataKey]) ?
             (string) $cookieData[$this->cookieDataKey] :
             $this->defaultCountry;
+    }
+
+    /**
+     * @param string[] $otherContextParts
+     * @return string
+     */
+    private function getWebsiteCode(array $otherContextParts)
+    {
+        return isset($otherContextParts[ContextWebsite::CODE]) ?
+            $otherContextParts[ContextWebsite::CODE] :
+            '';
     }
 }

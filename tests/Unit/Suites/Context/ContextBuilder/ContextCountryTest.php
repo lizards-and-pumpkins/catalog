@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\Context\ContextBuilder;
 
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\WebsiteToCountryMap;
 
 /**
  * @covers \LizardsAndPumpkins\Context\ContextBuilder\ContextCountry
@@ -22,6 +23,11 @@ class ContextCountryTest extends \PHPUnit_Framework_TestCase
     private $stubRequest;
 
     /**
+     * @var WebsiteToCountryMap|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubWebsiteToCountryMap;
+
+    /**
      * @param string $cookieCountry
      */
     private function setRequestCountry($cookieCountry)
@@ -34,7 +40,9 @@ class ContextCountryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
-        $this->contextCountry = new ContextCountry();
+        $this->stubWebsiteToCountryMap = $this->getMock(WebsiteToCountryMap::class);
+        $this->stubWebsiteToCountryMap->method('getCountry')->willReturn('default');
+        $this->contextCountry = new ContextCountry($this->stubWebsiteToCountryMap);
     }
 
     public function testItIsAContextPartBuilder()
@@ -47,11 +55,11 @@ class ContextCountryTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(ContextCountry::CODE, $this->contextCountry->getCode());
     }
 
-    public function testItReturnsTheDefaultCountryIfNothingIsSpecifiedInTheRequest()
+    public function testItReturnsTheReturnValueOfTheWebsiteToCountryMapIfNothingIsSpecifiedInTheRequest()
     {
         $inputDataSet = [];
         $otherContextParts = [];
-        $this->assertSame('de', $this->contextCountry->getValue($inputDataSet, $otherContextParts));
+        $this->assertSame('default', $this->contextCountry->getValue($inputDataSet, $otherContextParts));
     }
 
     public function testItReturnsTheValueFromTheInputDataSetIfPresent()

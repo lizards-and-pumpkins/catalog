@@ -892,7 +892,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createCountryContextPartBuilder()
     {
-        return new CountryContextPartBuilder();
+        return new CountryContextPartBuilder($this->getMasterFactory()->createWebsiteToCountryMap());
     }
 
     /**
