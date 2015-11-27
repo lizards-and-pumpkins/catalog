@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductDetailViewRequestHandler;
+use LizardsAndPumpkins\ContentDelivery\PageBuilder;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion;
 use LizardsAndPumpkins\Context\SelfContainedContextBuilder;

@@ -1,15 +1,21 @@
 <?php
 
-namespace LizardsAndPumpkins;
+namespace LizardsAndPumpkins\ContentDelivery;
 
+use LizardsAndPumpkins\ContentDelivery\PageBuilder\PageSnippets;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
-use LizardsAndPumpkins\Exception\InvalidPageMetaSnippetException;
+use LizardsAndPumpkins\DefaultHttpResponse;
 use LizardsAndPumpkins\Log\Logger;
+use LizardsAndPumpkins\MissingSnippetCodeMessage;
+use LizardsAndPumpkins\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 
 class PageBuilder
 {
+    /**
+     * @var string
+     */
     private $rootSnippetCode;
 
     /**
@@ -52,6 +58,11 @@ class PageBuilder
      */
     private $snippetTransformations = [];
 
+    /**
+     * @var PageSnippets
+     */
+    private $pageSnippets;
+
     public function __construct(
         DataPoolReader $dataPoolReader,
         SnippetKeyGeneratorLocator $keyGeneratorLocator,
@@ -73,12 +84,14 @@ class PageBuilder
         $this->context = $context;
         $this->keyGeneratorParams = $keyGeneratorParams;
 
-        $this->initFromMetaInfo($metaInfo);
-        $this->loadSnippets();
+        $codeToKeyMap = $this->initFromMetaInfo($metaInfo);
+        $keyToContentMap = $this->loadSnippets();
+        $this->pageSnippets = PageSnippets::fromKeyCodeAndContent($codeToKeyMap, $keyToContentMap);
+        
         $this->logMissingSnippets();
         $this->applySnippetTransformations();
 
-        $content = $this->buildPageContent();
+        $content = $this->pageSnippets->buildPageContent($this->rootSnippetCode);
 
         return DefaultHttpResponse::create($content, []);
     }
@@ -93,6 +106,10 @@ class PageBuilder
         $this->snippetKeyToContentMap = array_merge($this->snippetKeyToContentMap, $snippetKeyToContentMap);
     }
 
+    /**
+     * @param PageMetaInfoSnippetContent $metaInfo
+     * @return string[]
+     */
     private function initFromMetaInfo(PageMetaInfoSnippetContent $metaInfo)
     {
         $this->rootSnippetCode = $metaInfo->getRootSnippetCode();
@@ -101,6 +118,7 @@ class PageBuilder
             $snippetCodes,
             array_map([$this, 'tryToGetSnippetKey'], $snippetCodes)
         ));
+        return $this->snippetCodeToKeyMap;
     }
 
     /**
@@ -130,6 +148,9 @@ class PageBuilder
         return $keyForContext;
     }
 
+    /**
+     * @return string[]
+     */
     private function loadSnippets()
     {
         $keys = $this->getSnippetKeysInContext();
@@ -137,6 +158,7 @@ class PageBuilder
             $this->snippetKeyToContentMap,
             $this->dataPoolReader->getSnippets($keys)
         );
+        return $this->snippetKeyToContentMap;
     }
 
     /**
@@ -158,148 +180,11 @@ class PageBuilder
 
     private function logMissingSnippets()
     {
-        $missingSnippetCodes = $this->getNotLoadedSnippetCodes();
+        $missingSnippetCodes = $this->pageSnippets->getNotLoadedSnippetCodes();
         if (count($missingSnippetCodes) > 0) {
             $this->logger->log(new MissingSnippetCodeMessage($missingSnippetCodes, $this->context));
         }
     }
-
-    /**
-     * @return string[]
-     */
-    private function getNotLoadedSnippetCodes()
-    {
-        $missingSnippetCodes = [];
-        foreach ($this->snippetCodeToKeyMap as $code => $key) {
-            if (!isset($this->snippetKeyToContentMap[$key])) {
-                $missingSnippetCodes[] = $code;
-            }
-        }
-        return $missingSnippetCodes;
-    }
-
-    /**
-     * @return string
-     */
-    private function buildPageContent()
-    {
-        list($rootSnippet, $childSnippets) = $this->separateRootAndChildSnippets();
-        $childSnippetsCodes = $this->getLoadedChildSnippetCodes();
-        $childSnippetPlaceholdersToContentMap = $this->mergePlaceholderAndSnippets($childSnippetsCodes, $childSnippets);
-        return $this->injectSnippetsIntoContent($rootSnippet, $childSnippetPlaceholdersToContentMap);
-    }
-
-    /**
-     * @return string[]
-     */
-    private function separateRootAndChildSnippets()
-    {
-        $rootSnippetKey = $this->snippetCodeToKeyMap[$this->rootSnippetCode];
-        $rootSnippet = $this->getSnippetByKey($rootSnippetKey);
-        $childSnippets = array_diff_key($this->snippetKeyToContentMap, [$rootSnippetKey => $rootSnippet]);
-        return [$rootSnippet, $childSnippets];
-    }
-
-    /**
-     * @param string $snippetKey
-     * @return string
-     */
-    private function getSnippetByKey($snippetKey)
-    {
-        if (!array_key_exists($snippetKey, $this->snippetKeyToContentMap)) {
-            throw new InvalidPageMetaSnippetException($this->formatSnippetNotAvailableErrorMessage($snippetKey));
-        }
-        return $this->snippetKeyToContentMap[$snippetKey];
-    }
-
-    /**
-     * @param string $snippetKey
-     * @return string string
-     */
-    private function formatSnippetNotAvailableErrorMessage($snippetKey)
-    {
-        return sprintf('Snippet not available (key "%s", context "%s")', $snippetKey, $this->context);
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getLoadedChildSnippetCodes()
-    {
-        return array_filter(array_keys($this->snippetCodeToKeyMap), function ($code) {
-            return $code !== $this->rootSnippetCode &&
-            array_key_exists($this->snippetCodeToKeyMap[$code], $this->snippetKeyToContentMap);
-        });
-    }
-
-    /**
-     * @param string[] $snippetCodes
-     * @param string[] $snippets
-     * @return string[]
-     */
-    private function mergePlaceholderAndSnippets(array $snippetCodes, array $snippets)
-    {
-        $snippetPlaceholders = $this->buildPlaceholdersFromCodes($snippetCodes);
-        return array_combine($snippetPlaceholders, $snippets);
-    }
-
-    /**
-     * @param string[] $snippetCodes
-     * @return string[]
-     */
-    private function buildPlaceholdersFromCodes(array $snippetCodes)
-    {
-        return array_map([$this, 'buildPlaceholderFromCode'], $snippetCodes);
-    }
-
-    /**
-     * @param string $code
-     * @return string
-     */
-    private function buildPlaceholderFromCode($code)
-    {
-        // TODO delegate placeholder creation (and also use the delegate during import)
-        /** @see LizardsAndPumpkins\Renderer\BlockRenderer::getBlockPlaceholder() * */
-
-        return sprintf('{{snippet %s}}', $code);
-    }
-
-    /**
-     * @param string $content
-     * @param string[] $snippetPlaceholdersToContentMap
-     * @return string
-     */
-    private function injectSnippetsIntoContent($content, array $snippetPlaceholdersToContentMap)
-    {
-        return $this->removePlaceholders(
-            $this->replaceAsLongAsSomethingIsReplaced($content, $snippetPlaceholdersToContentMap)
-        );
-    }
-
-    /**
-     * @param string $content
-     * @return string
-     */
-    private function removePlaceholders($content)
-    {
-        $pattern = $this->buildPlaceholderFromCode('[^}]*');
-        return preg_replace('/' . $pattern . '/', '', $content);
-    }
-
-    /**
-     * @param string $content
-     * @param string[] $snippets
-     * @return string
-     */
-    private function replaceAsLongAsSomethingIsReplaced($content, array $snippets)
-    {
-        do {
-            $content = str_replace(array_keys($snippets), array_values($snippets), $content, $count);
-        } while ($count);
-
-        return $content;
-    }
-
     /**
      * @param string[] $snippetCodes
      * @return string[]
@@ -324,18 +209,10 @@ class PageBuilder
      */
     private function getCodesOfSnippetsWithTransformations()
     {
-        return array_filter(array_keys($this->snippetTransformations), [$this, 'hasSnippetWithCode']);
-    }
-
-    /**
-     * @param string $snippetCode
-     * @return bool
-     */
-    private function hasSnippetWithCode($snippetCode)
-    {
-        return
-            array_key_exists($snippetCode, $this->snippetCodeToKeyMap) &&
-            array_key_exists($this->snippetCodeToKeyMap[$snippetCode], $this->snippetKeyToContentMap);
+        return array_intersect(
+            array_keys($this->snippetTransformations),
+            $this->pageSnippets->getLoadedSnippetCodes()
+        );
     }
 
     /**
@@ -343,11 +220,13 @@ class PageBuilder
      */
     private function applyTransformationToSnippetByCode($snippetCode)
     {
-        $snippetKey = $this->snippetCodeToKeyMap[$snippetCode];
-        $this->snippetKeyToContentMap[$snippetKey] = array_reduce(
-            $this->getTransformationsForSnippetByCode($snippetCode),
-            [$this, 'applyTransformationToSnippetContent'],
-            $this->getSnippetByKey($snippetKey)
+        $this->pageSnippets->updateSnippetByCode(
+            $snippetCode,
+            array_reduce(
+                $this->getTransformationsForSnippetByCode($snippetCode),
+                [$this, 'applyTransformationToSnippetContent'],
+                $this->pageSnippets->getSnippetByCode($snippetCode)
+            )
         );
     }
 
