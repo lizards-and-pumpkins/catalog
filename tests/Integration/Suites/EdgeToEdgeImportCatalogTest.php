@@ -182,7 +182,6 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $contextSource = $this->factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[0];
 
-        /** @var SnippetKeyGeneratorLocator $keyGeneratorLocator */
         $keyGeneratorLocator = $this->factory->getSnippetKeyGeneratorLocator();
         $productDetailViewKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
             ProductDetailViewSnippetRenderer::CODE
