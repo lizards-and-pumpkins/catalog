@@ -660,6 +660,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createHostToWebsiteMap();
         $this->assertInstanceOf(HostToWebsiteMap::class, $result);
+        $this->assertInstanceOf(ConfigurableHostToWebsiteMap::class, $result);
     }
 
     public function testItReturnsACountryContextPartBuilder()

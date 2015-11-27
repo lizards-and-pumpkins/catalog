@@ -52,9 +52,17 @@ class WebsiteToCountryMap21RunTest extends \PHPUnit_Framework_TestCase
         $this->websiteToCountryMap->getCountry(' ');
     }
 
+    public function testItReturnsTheDefaultCountry()
+    {
+        $this->assertSame('DE', $this->websiteToCountryMap->getDefaultCountry());
+    }
+
     public function testItReturnsGermanyAsTheDefault()
     {
-        $this->assertSame('DE', $this->websiteToCountryMap->getCountry('undefined website'));
+        $this->assertSame(
+            $this->websiteToCountryMap->getDefaultCountry(),
+            $this->websiteToCountryMap->getCountry('undefined website')
+        );
     }
 
     /**

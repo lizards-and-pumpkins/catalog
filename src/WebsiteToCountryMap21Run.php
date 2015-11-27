@@ -66,4 +66,12 @@ class WebsiteToCountryMap21Run implements WebsiteToCountryMap
             throw new InvalidWebsiteCodeException('The website code can not be an empty string');
         }
     }
+
+    /**
+     * @return string
+     */
+    public function getDefaultCountry()
+    {
+        return $this->defaultCountry;
+    }
 }

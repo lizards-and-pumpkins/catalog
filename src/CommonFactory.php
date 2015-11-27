@@ -900,7 +900,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createHostToWebsiteMap()
     {
-        return HostToWebsiteMap::fromConfig($this->getMasterFactory()->createConfigReader());
+        return ConfigurableHostToWebsiteMap::fromConfig($this->getMasterFactory()->createConfigReader());
     }
 
     /**

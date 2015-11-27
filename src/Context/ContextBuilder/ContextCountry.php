@@ -15,8 +15,6 @@ class ContextCountry implements ContextPartBuilder
     
     private $cookieDataKey = 'country';
     
-    private $defaultCountry = 'de';
-    
     /**
      * @var WebsiteToCountryMap
      */
@@ -62,7 +60,7 @@ class ContextCountry implements ContextPartBuilder
             false;
         return $cookieData && isset($cookieData[$this->cookieDataKey]) ?
             (string) $cookieData[$this->cookieDataKey] :
-            $this->defaultCountry;
+            $this->websiteToCountryMap->getDefaultCountry();
     }
 
     /**

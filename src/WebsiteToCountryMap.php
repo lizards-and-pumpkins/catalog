@@ -10,4 +10,9 @@ interface WebsiteToCountryMap
      * @return string
      */
     public function getCountry($websiteCode);
+
+    /**
+     * @return string
+     */
+    public function getDefaultCountry();
 }
