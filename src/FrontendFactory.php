@@ -373,6 +373,7 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->getLogger()
         );
         $this->registerSnippetTransformations($pageBuilder);
+
         return $pageBuilder;
     }
 
@@ -380,6 +381,11 @@ class FrontendFactory implements Factory
     {
         $pageBuilder->registerSnippetTransformation(
             PriceSnippetRenderer::PRICE,
+            $this->getMasterFactory()->createPriceSnippetTransformation()
+        );
+
+        $pageBuilder->registerSnippetTransformation(
+            PriceSnippetRenderer::SPECIAL_PRICE,
             $this->getMasterFactory()->createPriceSnippetTransformation()
         );
 
