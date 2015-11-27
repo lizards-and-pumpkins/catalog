@@ -42,7 +42,7 @@ class ContextCountryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ContextPartBuilder::class, $this->contextCountry);
     }
 
-    public function testItReturnsTheCorrectCode()
+    public function testItReturnsTheCountryContextPartCode()
     {
         $this->assertSame(ContextCountry::CODE, $this->contextCountry->getCode());
     }
