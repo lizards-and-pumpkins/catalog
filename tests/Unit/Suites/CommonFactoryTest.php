@@ -8,7 +8,11 @@ use LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Content\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Content\UpdateContentBlockCommandHandler;
 use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextCountry;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextPartBuilder;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
@@ -635,21 +639,21 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createVersionContextPartBuilder();
         $this->assertInstanceOf(ContextPartBuilder::class, $result);
-        $this->assertInstanceOf(ContextBuilder\ContextVersion::class, $result);
+        $this->assertInstanceOf(ContextVersion::class, $result);
     }
 
     public function testItReturnsAWebsiteContextPartBuilder()
     {
         $result = $this->commonFactory->createWebsiteContextPartBuilder();
         $this->assertInstanceOf(ContextPartBuilder::class, $result);
-        $this->assertInstanceOf(ContextBuilder\ContextWebsite::class, $result);
+        $this->assertInstanceOf(ContextWebsite::class, $result);
     }
 
     public function testItReturnsALocaleContextPartBuilder()
     {
         $result = $this->commonFactory->createLocaleContextPartBuilder();
         $this->assertInstanceOf(ContextPartBuilder::class, $result);
-        $this->assertInstanceOf(ContextBuilder\ContextLocale::class, $result);
+        $this->assertInstanceOf(ContextLocale::class, $result);
     }
 
     public function testItReturnsAWebsiteMap()
@@ -662,6 +666,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createCountryContextPartBuilder();
         $this->assertInstanceOf(ContextPartBuilder::class, $result);
-        $this->assertInstanceOf(ContextBuilder\ContextCountry::class, $result);
+        $this->assertInstanceOf(ContextCountry::class, $result);
     }
 }
