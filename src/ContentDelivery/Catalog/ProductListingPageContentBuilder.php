@@ -117,7 +117,7 @@ class ProductListingPageContentBuilder
      */
     private function getProductPriceSnippetKeysForSearchDocuments(Context $context, SearchDocument ...$searchDocuments)
     {
-        return $this->getSnippetKeysForGivenSnippetCode(PriceSnippetRenderer::CODE, $context, ...$searchDocuments);
+        return $this->getSnippetKeysForGivenSnippetCode(PriceSnippetRenderer::PRICE, $context, ...$searchDocuments);
     }
 
     /**

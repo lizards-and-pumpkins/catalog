@@ -9,7 +9,8 @@ use LizardsAndPumpkins\SnippetList;
 
 class PriceSnippetRenderer implements SnippetRenderer
 {
-    const CODE = 'price';
+    const PRICE = 'price';
+    const SPECIAL_PRICE = 'special_price';
 
     /**
      * @var SnippetList
@@ -51,6 +52,10 @@ class PriceSnippetRenderer implements SnippetRenderer
 
     private function renderProductPriceInContext(Product $product)
     {
+        if (!$product->hasAttribute($this->priceAttributeCode)) {
+            return;
+        }
+
         $key = $this->snippetKeyGenerator->getKeyForContext($product->getContext(), [Product::ID => $product->getId()]);
         $amount = $product->getFirstValueOfAttribute($this->priceAttributeCode);
         $price = new Price($amount);

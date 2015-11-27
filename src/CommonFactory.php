@@ -255,6 +255,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $this->getMasterFactory()->createProductInListingSnippetRenderer(),
             $this->getMasterFactory()->createProductInSearchAutosuggestionSnippetRenderer(),
             $this->getMasterFactory()->createPriceSnippetRenderer(),
+            $this->getMasterFactory()->createSpecialPriceSnippetRenderer(),
             $this->getMasterFactory()->createProductTaxClassSnippetRenderer(),
             $this->getMasterFactory()->createProductJsonSnippetRenderer(),
             $this->getMasterFactory()->createConfigurableProductJsonSnippetRenderer(),
@@ -666,6 +667,20 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
+     * @return PriceSnippetRenderer
+     */
+    public function createSpecialPriceSnippetRenderer()
+    {
+        $productSpecialPriceAttributeCode = 'special_price';
+
+        return new PriceSnippetRenderer(
+            $this->getMasterFactory()->createSnippetList(),
+            $this->getMasterFactory()->createSpecialPriceSnippetKeyGenerator(),
+            $productSpecialPriceAttributeCode
+        );
+    }
+
+    /**
      * @return ProductBackOrderAvailabilitySnippetRenderer
      */
     public function createProductBackOrderAvailabilitySnippetRenderer()
@@ -728,7 +743,21 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         $usedDataParts = [Product::ID];
 
         return new GenericSnippetKeyGenerator(
-            $this->getMasterFactory()->getRegularPriceSnippetKey(),
+            PriceSnippetRenderer::PRICE,
+            $this->getMasterFactory()->getRequiredContexts(),
+            $usedDataParts
+        );
+    }
+
+    /**
+     * @return SnippetKeyGenerator
+     */
+    public function createSpecialPriceSnippetKeyGenerator()
+    {
+        $usedDataParts = [Product::ID];
+
+        return new GenericSnippetKeyGenerator(
+            PriceSnippetRenderer::SPECIAL_PRICE,
             $this->getMasterFactory()->getRequiredContexts(),
             $usedDataParts
         );
@@ -1058,14 +1087,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         }
 
         return $this->searchEngine;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRegularPriceSnippetKey()
-    {
-        return PriceSnippetRenderer::CODE;
     }
 
     /**

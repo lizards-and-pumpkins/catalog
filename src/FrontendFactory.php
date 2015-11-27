@@ -282,9 +282,15 @@ class FrontendFactory implements Factory
             }
         );
         $registrySnippetKeyGeneratorLocator->register(
-            $this->getMasterFactory()->getRegularPriceSnippetKey(),
+            PriceSnippetRenderer::PRICE,
             function () {
                 return $this->getMasterFactory()->createPriceSnippetKeyGenerator();
+            }
+        );
+        $registrySnippetKeyGeneratorLocator->register(
+            PriceSnippetRenderer::SPECIAL_PRICE,
+            function () {
+                return $this->getMasterFactory()->createSpecialPriceSnippetKeyGenerator();
             }
         );
         $registrySnippetKeyGeneratorLocator->register(
@@ -373,7 +379,7 @@ class FrontendFactory implements Factory
     private function registerSnippetTransformations(PageBuilder $pageBuilder)
     {
         $pageBuilder->registerSnippetTransformation(
-            PriceSnippetRenderer::CODE,
+            PriceSnippetRenderer::PRICE,
             $this->getMasterFactory()->createPriceSnippetTransformation()
         );
 
