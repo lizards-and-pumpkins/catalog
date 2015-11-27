@@ -10,7 +10,7 @@ use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Http\Exception\UnableToHandleRequestException;
-use LizardsAndPumpkins\PageBuilder;
+use LizardsAndPumpkins\ContentDelivery\PageBuilder;
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductDetailPageMetaInfoSnippetContent;

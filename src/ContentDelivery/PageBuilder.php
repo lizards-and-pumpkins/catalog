@@ -1,15 +1,21 @@
 <?php
 
-namespace LizardsAndPumpkins;
+namespace LizardsAndPumpkins\ContentDelivery;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
+use LizardsAndPumpkins\DefaultHttpResponse;
 use LizardsAndPumpkins\Exception\InvalidPageMetaSnippetException;
 use LizardsAndPumpkins\Log\Logger;
+use LizardsAndPumpkins\MissingSnippetCodeMessage;
+use LizardsAndPumpkins\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 
 class PageBuilder
 {
+    /**
+     * @var string
+     */
     private $rootSnippetCode;
 
     /**

@@ -68,7 +68,7 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
  * @uses   \LizardsAndPumpkins\Api\ApiRouter
  * @uses   \LizardsAndPumpkins\Api\ApiRequestHandlerChain
  * @uses   \LizardsAndPumpkins\GenericSnippetKeyGenerator
- * @uses   \LizardsAndPumpkins\PageBuilder
+ * @uses   \LizardsAndPumpkins\ContentDelivery\PageBuilder
  * @uses   \LizardsAndPumpkins\Renderer\BlockRenderer
  * @uses   \LizardsAndPumpkins\TemplatesApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\Utils\Directory

@@ -8,7 +8,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
-use LizardsAndPumpkins\PageBuilder;
+use LizardsAndPumpkins\ContentDelivery\PageBuilder;
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Product\PriceSnippetRenderer;
 use LizardsAndPumpkins\Product\Product;
