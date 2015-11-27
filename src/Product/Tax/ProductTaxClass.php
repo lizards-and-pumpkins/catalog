@@ -15,7 +15,7 @@ class ProductTaxClass
     /**
      * @param string $name
      */
-    public function __construct($name)
+    private function __construct($name)
     {
         $this->validateName($name);
         $this->name = $name;
@@ -33,7 +33,7 @@ class ProductTaxClass
     /**
      * @return string
      */
-    public function getName()
+    public function __toString()
     {
         return $this->name;
     }

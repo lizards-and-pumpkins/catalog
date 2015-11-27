@@ -12,8 +12,8 @@ class ProductTaxClassTest extends \PHPUnit_Framework_TestCase
 {
     public function testItReturnsTheInjectedTaxClassValue()
     {
-        $this->assertSame('test1', (new ProductTaxClass('test1'))->getName());
-        $this->assertSame('test2', (new ProductTaxClass('test2'))->getName());
+        $this->assertSame('test1', (string) ProductTaxClass::fromString('test1'));
+        $this->assertSame('test2', (string) ProductTaxClass::fromString('test2'));
     }
 
     /**
@@ -26,7 +26,7 @@ class ProductTaxClassTest extends \PHPUnit_Framework_TestCase
             InvalidTaxClassNameException::class,
             'The tax class name can not be empty'
         );
-        new ProductTaxClass($emptyName);
+        ProductTaxClass::fromString($emptyName);
     }
 
     /**
@@ -51,7 +51,7 @@ class ProductTaxClassTest extends \PHPUnit_Framework_TestCase
             InvalidTaxClassNameException::class,
             'The tax class name has to be a string, got "' . $expectedType . '"'
         );
-        new ProductTaxClass($nonString);
+        ProductTaxClass::fromString($nonString);
     }
 
     /**
