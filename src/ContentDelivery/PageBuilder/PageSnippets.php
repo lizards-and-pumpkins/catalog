@@ -1,4 +1,6 @@
 <?php
+
+
 namespace LizardsAndPumpkins\ContentDelivery\PageBuilder;
 
 interface PageSnippets
