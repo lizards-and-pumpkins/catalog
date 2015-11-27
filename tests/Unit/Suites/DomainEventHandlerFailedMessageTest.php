@@ -36,7 +36,7 @@ class DomainEventHandlerFailedMessageTest extends \PHPUnit_Framework_TestCase
     public function testLogMessageIsReturned()
     {
         $expectation = sprintf(
-            "Failure during processing DomainEvent domain event with following message:\n\n%s",
+            "Failure during processing DomainEvent domain event with following message:\n%s",
             $this->exceptionMessage
         );
 
