@@ -8,9 +8,9 @@ use LizardsAndPumpkins\ContentDelivery\PageBuilder\Exception\NonExistingSnippetE
 use LizardsAndPumpkins\ContentDelivery\PageBuilder\Exception\PageContentBuildAlreadyTriggeredException;
 
 /**
- * @covers \LizardsAndPumpkins\ContentDelivery\PageBuilder\PageBuilderPageSnippets
+ * @covers \LizardsAndPumpkins\ContentDelivery\PageBuilder\PageBuilderSnippets
  */
-class PageBuilderPageSnippetsTest extends \PHPUnit_Framework_TestCase
+class PageBuilderSnippetsTest extends \PHPUnit_Framework_TestCase
 {
     private $testKey = 'a-key';
 
@@ -19,7 +19,7 @@ class PageBuilderPageSnippetsTest extends \PHPUnit_Framework_TestCase
     private $testContent = 'some content';
 
     /**
-     * @var PageBuilderPageSnippets
+     * @var PageBuilderSnippets
      */
     private $pageSnippets;
 
@@ -27,15 +27,15 @@ class PageBuilderPageSnippetsTest extends \PHPUnit_Framework_TestCase
     {
         $codeToKeyMap = [$this->testCode => $this->testKey];
         $keyToContentMap = [$this->testKey => $this->testContent];
-        $this->pageSnippets = PageBuilderPageSnippets::fromKeyCodeAndContent($codeToKeyMap, $keyToContentMap);
+        $this->pageSnippets = PageBuilderSnippets::fromKeyCodeAndContent($codeToKeyMap, $keyToContentMap);
     }
 
     public function testItReturnsAPageSnippetInstance()
     {
         $codeToKeyMap = [];
         $keyToContentMap = [];
-        $pageSnippets = PageBuilderPageSnippets::fromKeyCodeAndContent($codeToKeyMap, $keyToContentMap);
-        $this->assertInstanceOf(PageBuilderPageSnippets::class, $pageSnippets);
+        $pageSnippets = PageBuilderSnippets::fromKeyCodeAndContent($codeToKeyMap, $keyToContentMap);
+        $this->assertInstanceOf(PageBuilderSnippets::class, $pageSnippets);
     }
 
     public function testItImplementsThePageSnippetsInterface()
@@ -47,7 +47,7 @@ class PageBuilderPageSnippetsTest extends \PHPUnit_Framework_TestCase
     {
         $codeToKeyMap = ['found' => 'found_key', 'missing' => 'missing_key'];
         $keyToContentMap = ['found_key' => 'found_content'];
-        $pageSnippets = PageBuilderPageSnippets::fromKeyCodeAndContent($codeToKeyMap, $keyToContentMap);
+        $pageSnippets = PageBuilderSnippets::fromKeyCodeAndContent($codeToKeyMap, $keyToContentMap);
         $this->assertSame(['missing'], $pageSnippets->getNotLoadedSnippetCodes());
     }
 
@@ -55,7 +55,7 @@ class PageBuilderPageSnippetsTest extends \PHPUnit_Framework_TestCase
     {
         $codeToKeyMap = ['found' => 'found_key', 'missing' => 'missing_key'];
         $keyToContentMap = ['found_key' => 'found_content'];
-        $pageSnippets = PageBuilderPageSnippets::fromKeyCodeAndContent($codeToKeyMap, $keyToContentMap);
+        $pageSnippets = PageBuilderSnippets::fromKeyCodeAndContent($codeToKeyMap, $keyToContentMap);
         $this->assertSame(['found'], $pageSnippets->getSnippetCodes());
     }
 
