@@ -391,4 +391,12 @@ class IntegrationTestFactory implements Factory
     {
         return IntegrationTestWebsiteMap::fromArray([]);
     }
+
+    /**
+     * @return WebsiteToCountryMap21Run
+     */
+    public function getWebsiteToCountryMap()
+    {
+        return new WebsiteToCountryMap21Run();
+    }
 }

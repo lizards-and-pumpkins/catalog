@@ -436,4 +436,12 @@ class SampleFactory implements Factory
 
         return $this->memoizedProductSearchAutosuggestionSortOrderConfig;
     }
+
+    /**
+     * @return WebsiteToCountryMap21Run
+     */
+    public function getWebsiteToCountryMap()
+    {
+        return new WebsiteToCountryMap21Run();
+    }
 }
