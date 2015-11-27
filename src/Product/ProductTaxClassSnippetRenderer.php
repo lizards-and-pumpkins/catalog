@@ -10,6 +10,8 @@ use LizardsAndPumpkins\SnippetRenderer;
 
 class ProductTaxClassSnippetRenderer implements SnippetRenderer
 {
+    const CODE = 'product_tax_class';
+    
     /**
      * @var SnippetList
      */

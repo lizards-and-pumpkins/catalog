@@ -9,6 +9,10 @@ use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetList;
 use LizardsAndPumpkins\SnippetRenderer;
 
+/**
+ * @covers \LizardsAndPumpkins\Product\ProductTaxClassSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Snippet
+ */
 class ProductTaxClassSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
     /**
