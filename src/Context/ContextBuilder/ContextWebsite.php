@@ -54,6 +54,6 @@ class ContextWebsite implements ContextPartBuilder
      */
     private function getWebsiteFromRequest(HttpRequest $request)
     {
-        return $this->websiteMap->getCodeByHost($request->getHost());
+        return $this->websiteMap->getWebsiteCodeByHost($request->getHost());
     }
 }
