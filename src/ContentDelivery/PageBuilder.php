@@ -284,16 +284,6 @@ class PageBuilder
 
     /**
      * @param string $content
-     * @return string
-     */
-    private function removePlaceholders($content)
-    {
-        $pattern = $this->buildPlaceholderFromCode('[^}]*');
-        return preg_replace('/' . $pattern . '/', '', $content);
-    }
-
-    /**
-     * @param string $content
      * @param string[] $snippets
      * @return string
      */
@@ -304,6 +294,16 @@ class PageBuilder
         } while ($count);
 
         return $content;
+    }
+
+    /**
+     * @param string $content
+     * @return string
+     */
+    private function removePlaceholders($content)
+    {
+        $pattern = $this->buildPlaceholderFromCode('[^}]*');
+        return preg_replace('/' . $pattern . '/', '', $content);
     }
 
     /**
