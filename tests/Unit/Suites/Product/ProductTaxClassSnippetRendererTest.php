@@ -56,12 +56,11 @@ class ProductTaxClassSnippetRendererTest extends \PHPUnit_Framework_TestCase
     {
         $dummyTaxClass = 'test';
         $dummyTaxClassSnippetKey = 'test-key';
-        $stubContext = $this->getMock(Context::class);
-
-        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $mockProduct */
-        $mockProduct = $this->getMock(Product::class);
-        $mockProduct->method('getTaxClass')->willReturn($dummyTaxClass);
-        $mockProduct->method('getContext')->willReturn($stubContext);
+        
+        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
+        $stubProduct = $this->getMock(Product::class);
+        $stubProduct->method('getTaxClass')->willReturn($dummyTaxClass);
+        $stubProduct->method('getContext')->willReturn($this->getMock(Context::class));
 
         $this->mockSnippetKeyGenerator->method('getKeyForContext')
             ->willReturn($dummyTaxClassSnippetKey);
@@ -72,6 +71,18 @@ class ProductTaxClassSnippetRendererTest extends \PHPUnit_Framework_TestCase
             ->method('add')
             ->with($expectedSnippet);
 
-        $this->snippetRenderer->render($mockProduct);
+        $this->snippetRenderer->render($stubProduct);
+    }
+
+    public function testItReturnsTheSnippetList()
+    {
+        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
+        $stubProduct = $this->getMock(Product::class);
+        $stubProduct->method('getTaxClass')->willReturn('test');
+        $stubProduct->method('getContext')->willReturn($this->getMock(Context::class));
+
+        $this->mockSnippetKeyGenerator->method('getKeyForContext')->willReturn('foo');
+        
+        $this->assertSame($this->mockSnippetList, $this->snippetRenderer->render($stubProduct));
     }
 }

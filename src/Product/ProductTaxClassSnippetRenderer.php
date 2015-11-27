@@ -27,11 +27,16 @@ class ProductTaxClassSnippetRenderer implements SnippetRenderer
         $this->snippetList = $snippetList;
         $this->keyGenerator = $keyGenerator;
     }
-    
+
+    /**
+     * @param Product $product
+     * @return SnippetList
+     */
     public function render(Product $product)
     {
         $key = $this->keyGenerator->getKeyForContext($product->getContext(), [Product::ID => $product->getId()]);
         $snippet = Snippet::create($key, $product->getTaxClass());
         $this->snippetList->add($snippet);
+        return $this->snippetList;
     }
 }
