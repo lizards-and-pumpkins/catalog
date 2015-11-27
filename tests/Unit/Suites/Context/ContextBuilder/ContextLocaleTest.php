@@ -39,17 +39,17 @@ class ContextLocaleTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsTheDefaultLocaleIfItCanNotBeDeterminedFromTheInputDataSets()
     {
-        $this->assertSame('de_DE', $this->contextLocale->getValue([]));
+        $this->assertSame('de_DE', $this->contextLocale->getValue([], []));
     }
 
     public function testItReturnsTheLocaleFromTheInputArrayIfItIsPresent()
     {
-        $this->assertSame('xx_XX', $this->contextLocale->getValue([ContextLocale::CODE => 'xx_XX']));
+        $this->assertSame('xx_XX', $this->contextLocale->getValue([ContextLocale::CODE => 'xx_XX'], []));
     }
 
     public function testItReturnsTheLocaleFromTheRequestIfNotExplicitlySpecifiedInInputArray()
     {
         $this->stubRequest->method('getUrlPathRelativeToWebFront')->willReturn('/fr/foo');
-        $this->assertSame('fr_FR', $this->contextLocale->getValue([ContextBuilder::REQUEST => $this->stubRequest]));
+        $this->assertSame('fr_FR', $this->contextLocale->getValue([ContextBuilder::REQUEST => $this->stubRequest], []));
     }
 }

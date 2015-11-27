@@ -32,9 +32,10 @@ class ContextLocale implements ContextPartBuilder
 
     /**
      * @param mixed[] $inputDataSet
+     * @param string[] $otherContextParts
      * @return string
      */
-    public function getValue(array $inputDataSet)
+    public function getValue(array $inputDataSet, array $otherContextParts)
     {
         if (isset($inputDataSet[self::CODE])) {
             return (string) $inputDataSet[self::CODE];

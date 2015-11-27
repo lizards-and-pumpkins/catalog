@@ -37,11 +37,11 @@ class ContextVersionTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsTheVersionFromTheInputArrayIfPresent()
     {
-        $this->assertSame('1.0', $this->contextVersion->getValue([ContextVersion::CODE => '1.0']));
+        $this->assertSame('1.0', $this->contextVersion->getValue([ContextVersion::CODE => '1.0'], []));
     }
 
     public function testItReturnsTheInjectedDataVersionValueIfTheInputContainsNoVersion()
     {
-        $this->assertSame($this->testVersionString, $this->contextVersion->getValue([]));
+        $this->assertSame($this->testVersionString, $this->contextVersion->getValue([], []));
     }
 }
