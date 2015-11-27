@@ -62,4 +62,9 @@ class ProductTaxClassTest extends \PHPUnit_Framework_TestCase
             [$this, get_class($this)]
         ];
     }
+
+    public function testTheNamedConstructorReturnsATaxClassInstance()
+    {
+        $this->assertInstanceOf(ProductTaxClass::class, ProductTaxClass::fromString('test'));
+    }
 }

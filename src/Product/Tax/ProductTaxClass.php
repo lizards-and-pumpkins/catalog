@@ -22,6 +22,15 @@ class ProductTaxClass
     }
 
     /**
+     * @param string $name
+     * @return ProductTaxClass
+     */
+    public static function fromString($name)
+    {
+        return new self($name);
+    }
+
+    /**
      * @return string
      */
     public function getName()
