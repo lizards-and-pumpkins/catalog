@@ -1,10 +1,12 @@
 <?php
 
 
-namespace LizardsAndPumpkins;
+namespace LizardsAndPumpkins\Website;
 
-use LizardsAndPumpkins\Exception\InvalidWebsiteMapConfigRecordException;
-use LizardsAndPumpkins\Exception\UnknownWebsiteHostException;
+use LizardsAndPumpkins\ConfigReader;
+use LizardsAndPumpkins\Website\Exception\InvalidWebsiteMapConfigRecordException;
+use LizardsAndPumpkins\Website\Exception\UnknownWebsiteHostException;
+use LizardsAndPumpkins\Website\HostToWebsiteMap;
 
 class ConfigurableHostToWebsiteMap implements HostToWebsiteMap
 {

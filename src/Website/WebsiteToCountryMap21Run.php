@@ -1,9 +1,10 @@
 <?php
 
 
-namespace LizardsAndPumpkins;
+namespace LizardsAndPumpkins\Website;
 
-use LizardsAndPumpkins\Exception\InvalidWebsiteCodeException;
+use LizardsAndPumpkins\Website\Exception\InvalidWebsiteCodeException;
+use LizardsAndPumpkins\Website\WebsiteToCountryMap;
 
 class WebsiteToCountryMap21Run implements WebsiteToCountryMap
 {

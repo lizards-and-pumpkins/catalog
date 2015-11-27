@@ -18,7 +18,7 @@ use LizardsAndPumpkins\Log\WritingLoggerDecorator;
 use LizardsAndPumpkins\Queue\File\FileQueue;
 use LizardsAndPumpkins\SampleMasterFactory;
 use LizardsAndPumpkins\SampleFactory;
-use LizardsAndPumpkins\WebsiteToCountryMap;
+use LizardsAndPumpkins\Website\WebsiteToCountryMap;
 
 /**
  * @covers \LizardsAndPumpkins\SampleFactory

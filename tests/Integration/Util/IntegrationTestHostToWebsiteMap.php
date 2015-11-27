@@ -3,6 +3,8 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\Website\HostToWebsiteMap;
+
 class IntegrationTestHostToWebsiteMap implements HostToWebsiteMap
 {
     /**

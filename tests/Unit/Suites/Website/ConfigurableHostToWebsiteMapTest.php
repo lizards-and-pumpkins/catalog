@@ -1,10 +1,11 @@
 <?php
 
 
-namespace LizardsAndPumpkins;
+namespace LizardsAndPumpkins\Website;
 
-use LizardsAndPumpkins\Exception\InvalidWebsiteMapConfigRecordException;
-use LizardsAndPumpkins\Exception\UnknownWebsiteHostException;
+use LizardsAndPumpkins\ConfigReader;
+use LizardsAndPumpkins\Website\Exception\InvalidWebsiteMapConfigRecordException;
+use LizardsAndPumpkins\Website\Exception\UnknownWebsiteHostException;
 
 /**
  * @covers \LizardsAndPumpkins\ConfigurableHostToWebsiteMap
@@ -49,7 +50,8 @@ class ConfigurableHostToWebsiteMapTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsAWebsiteMapInstance()
     {
-        $this->assertInstanceOf(ConfigurableHostToWebsiteMap::class, ConfigurableHostToWebsiteMap::fromConfig($this->stubConfigReader));
+        $instance = ConfigurableHostToWebsiteMap::fromConfig($this->stubConfigReader);
+        $this->assertInstanceOf(ConfigurableHostToWebsiteMap::class, $instance);
     }
 
     public function testItUsesAMapFromTheConfiguration()

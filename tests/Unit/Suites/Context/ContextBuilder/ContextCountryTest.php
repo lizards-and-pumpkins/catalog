@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\Context\ContextBuilder;
 
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\WebsiteToCountryMap;
+use LizardsAndPumpkins\Website\WebsiteToCountryMap;
 
 /**
  * @covers \LizardsAndPumpkins\Context\ContextBuilder\ContextCountry

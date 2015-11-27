@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\Context\ContextBuilder;
 
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\ContextBuilder\Exception\UnableToDetermineContextWebsiteException;
-use LizardsAndPumpkins\HostToWebsiteMap;
+use LizardsAndPumpkins\Website\HostToWebsiteMap;
 use LizardsAndPumpkins\Http\HttpRequest;
 
 class ContextWebsite implements ContextPartBuilder

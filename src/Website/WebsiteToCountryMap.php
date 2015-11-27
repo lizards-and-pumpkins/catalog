@@ -1,7 +1,7 @@
 <?php
 
 
-namespace LizardsAndPumpkins;
+namespace LizardsAndPumpkins\Website;
 
 interface WebsiteToCountryMap
 {

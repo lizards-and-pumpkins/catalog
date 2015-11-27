@@ -90,6 +90,8 @@ use LizardsAndPumpkins\Renderer\ThemeLocator;
 use LizardsAndPumpkins\Renderer\Translation\CsvTranslator;
 use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\ContentBlockSnippetKeyGeneratorLocatorStrategy;
+use LizardsAndPumpkins\Website\ConfigurableHostToWebsiteMap;
+use LizardsAndPumpkins\Website\HostToWebsiteMap;
 
 class CommonFactory implements Factory, DomainEventFactory, CommandFactory
 {

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace LizardsAndPumpkins\Exception;
+namespace LizardsAndPumpkins\Website\Exception;
 
 class InvalidWebsiteCodeException extends \InvalidArgumentException
 {

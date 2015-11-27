@@ -1,9 +1,9 @@
 <?php
 
 
-namespace LizardsAndPumpkins;
+namespace LizardsAndPumpkins\Website;
 
-use LizardsAndPumpkins\Exception\InvalidWebsiteCodeException;
+use LizardsAndPumpkins\Website\Exception\InvalidWebsiteCodeException;
 
 class WebsiteToCountryMap21RunTest extends \PHPUnit_Framework_TestCase
 {
