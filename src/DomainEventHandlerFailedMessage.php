@@ -28,7 +28,7 @@ class DomainEventHandlerFailedMessage implements LogMessage
     public function __toString()
     {
         return sprintf(
-            "Failure during processing %s domain event with following message:\n\n%s",
+            "Failure during processing %s domain event with following message:\n%s",
             get_class($this->domainEvent),
             $this->exception->getMessage()
         );

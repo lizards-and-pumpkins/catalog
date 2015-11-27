@@ -400,6 +400,6 @@ class IntegrationTestFactory implements Factory
      */
     public function createWebsiteToCountryMap()
     {
-        return new WebsiteToCountryMap21Run();
+        return new IntegrationTestWebsiteToCountryMap();
     }
 }
