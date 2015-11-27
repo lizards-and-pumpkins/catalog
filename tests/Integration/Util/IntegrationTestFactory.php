@@ -22,6 +22,9 @@ use LizardsAndPumpkins\Log\InMemoryLogger;
 use LizardsAndPumpkins\Product\AttributeCode;
 use LizardsAndPumpkins\Queue\InMemory\InMemoryQueue;
 use LizardsAndPumpkins\Queue\Queue;
+use LizardsAndPumpkins\Website\HostToWebsiteMap;
+use LizardsAndPumpkins\Website\WebsiteToCountryMap;
+use LizardsAndPumpkins\Website\WebsiteToCountryMap21Run;
 
 class IntegrationTestFactory implements Factory
 {
@@ -385,10 +388,18 @@ class IntegrationTestFactory implements Factory
     }
 
     /**
-     * @return WebsiteMap
+     * @return HostToWebsiteMap
      */
-    public function createWebsiteMap()
+    public function createHostToWebsiteMap()
     {
-        return IntegrationTestWebsiteMap::fromArray([]);
+        return new IntegrationTestHostToWebsiteMap();
+    }
+
+    /**
+     * @return WebsiteToCountryMap
+     */
+    public function createWebsiteToCountryMap()
+    {
+        return new WebsiteToCountryMap21Run();
     }
 }

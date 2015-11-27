@@ -25,6 +25,7 @@ use LizardsAndPumpkins\Log\WritingLoggerDecorator;
 use LizardsAndPumpkins\Product\AttributeCode;
 use LizardsAndPumpkins\Queue\File\FileQueue;
 use LizardsAndPumpkins\Queue\Queue;
+use LizardsAndPumpkins\Website\WebsiteToCountryMap21Run;
 
 class SampleFactory implements Factory
 {
@@ -435,5 +436,13 @@ class SampleFactory implements Factory
         }
 
         return $this->memoizedProductSearchAutosuggestionSortOrderConfig;
+    }
+
+    /**
+     * @return WebsiteToCountryMap21Run
+     */
+    public function createWebsiteToCountryMap()
+    {
+        return new WebsiteToCountryMap21Run();
     }
 }

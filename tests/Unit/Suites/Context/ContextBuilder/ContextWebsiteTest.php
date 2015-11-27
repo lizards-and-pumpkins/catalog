@@ -5,8 +5,8 @@ namespace LizardsAndPumpkins\Context\ContextBuilder;
 
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\ContextBuilder\Exception\UnableToDetermineContextWebsiteException;
+use LizardsAndPumpkins\Website\HostToWebsiteMap;
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\WebsiteMap;
 
 /**
  * @covers \LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite
@@ -19,7 +19,7 @@ class ContextWebsiteTest extends \PHPUnit_Framework_TestCase
     private $contextWebsite;
 
     /**
-     * @var WebsiteMap|\PHPUnit_Framework_MockObject_MockObject
+     * @var HostToWebsiteMap|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubWebsiteMap;
 
@@ -30,7 +30,7 @@ class ContextWebsiteTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubWebsiteMap = $this->getMock(WebsiteMap::class, [], [], '', false);
+        $this->stubWebsiteMap = $this->getMock(HostToWebsiteMap::class);
         $this->contextWebsite = new ContextWebsite($this->stubWebsiteMap);
         $this->stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
     }

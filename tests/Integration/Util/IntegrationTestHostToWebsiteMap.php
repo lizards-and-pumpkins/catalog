@@ -3,7 +3,9 @@
 
 namespace LizardsAndPumpkins;
 
-class IntegrationTestWebsiteMap extends WebsiteMap
+use LizardsAndPumpkins\Website\HostToWebsiteMap;
+
+class IntegrationTestHostToWebsiteMap implements HostToWebsiteMap
 {
     /**
      * @param string $code

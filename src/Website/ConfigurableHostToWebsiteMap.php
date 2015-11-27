@@ -1,12 +1,14 @@
 <?php
 
 
-namespace LizardsAndPumpkins;
+namespace LizardsAndPumpkins\Website;
 
-use LizardsAndPumpkins\Exception\InvalidWebsiteMapConfigRecordException;
-use LizardsAndPumpkins\Exception\UnknownWebsiteHostException;
+use LizardsAndPumpkins\ConfigReader;
+use LizardsAndPumpkins\Website\Exception\InvalidWebsiteMapConfigRecordException;
+use LizardsAndPumpkins\Website\Exception\UnknownWebsiteHostException;
+use LizardsAndPumpkins\Website\HostToWebsiteMap;
 
-class WebsiteMap
+class ConfigurableHostToWebsiteMap implements HostToWebsiteMap
 {
     const CONFIG_KEY = 'website_map';
     const RECORD_SEPARATOR = '|';
@@ -26,7 +28,7 @@ class WebsiteMap
 
     /**
      * @param string[] $hostToWebsiteMap
-     * @return WebsiteMap
+     * @return ConfigurableHostToWebsiteMap
      */
     public static function fromArray(array $hostToWebsiteMap)
     {
@@ -35,7 +37,7 @@ class WebsiteMap
 
     /**
      * @param ConfigReader $configReader
-     * @return WebsiteMap
+     * @return ConfigurableHostToWebsiteMap
      */
     public static function fromConfig(ConfigReader $configReader)
     {

@@ -90,6 +90,8 @@ use LizardsAndPumpkins\Renderer\ThemeLocator;
 use LizardsAndPumpkins\Renderer\Translation\CsvTranslator;
 use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\ContentBlockSnippetKeyGeneratorLocatorStrategy;
+use LizardsAndPumpkins\Website\ConfigurableHostToWebsiteMap;
+use LizardsAndPumpkins\Website\HostToWebsiteMap;
 
 class CommonFactory implements Factory, DomainEventFactory, CommandFactory
 {
@@ -876,7 +878,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createWebsiteContextPartBuilder()
     {
-        return new WebsiteContextPartBuilder($this->getMasterFactory()->createWebsiteMap());
+        return new WebsiteContextPartBuilder($this->getMasterFactory()->createHostToWebsiteMap());
     }
 
     /**
@@ -892,15 +894,15 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createCountryContextPartBuilder()
     {
-        return new CountryContextPartBuilder();
+        return new CountryContextPartBuilder($this->getMasterFactory()->createWebsiteToCountryMap());
     }
 
     /**
-     * @return WebsiteMap
+     * @return HostToWebsiteMap
      */
-    public function createWebsiteMap()
+    public function createHostToWebsiteMap()
     {
-        return WebsiteMap::fromConfig($this->getMasterFactory()->createConfigReader());
+        return ConfigurableHostToWebsiteMap::fromConfig($this->getMasterFactory()->createConfigReader());
     }
 
     /**

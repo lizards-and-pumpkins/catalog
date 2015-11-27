@@ -18,6 +18,7 @@ use LizardsAndPumpkins\Log\WritingLoggerDecorator;
 use LizardsAndPumpkins\Queue\File\FileQueue;
 use LizardsAndPumpkins\SampleMasterFactory;
 use LizardsAndPumpkins\SampleFactory;
+use LizardsAndPumpkins\Website\WebsiteToCountryMap;
 
 /**
  * @covers \LizardsAndPumpkins\SampleFactory
@@ -242,5 +243,10 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
             $this->factory->getProductSearchAutosuggestionSortOrderConfig(),
             $this->factory->getProductSearchAutosuggestionSortOrderConfig()
         );
+    }
+
+    public function testItReturnsAWebsiteToCountryMapInstance()
+    {
+        $this->assertInstanceOf(WebsiteToCountryMap::class, $this->factory->createWebsiteToCountryMap());
     }
 }

@@ -14,6 +14,8 @@ use LizardsAndPumpkins\Image\ImageProcessor;
 use LizardsAndPumpkins\Image\ImageProcessorCollection;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Queue\Queue;
+use LizardsAndPumpkins\Website\HostToWebsiteMap;
+use LizardsAndPumpkins\Website\WebsiteToCountryMap;
 
 class UnitTestFactory implements Factory
 {
@@ -270,10 +272,18 @@ class UnitTestFactory implements Factory
     }
 
     /**
-     * @return WebsiteMap
+     * @return HostToWebsiteMap
      */
-    public function createWebsiteMap()
+    public function createHostToWebsiteMap()
     {
-        return $this->mockObjectGenerator->getMock(WebsiteMap::class, [], [], '', false);
+        return $this->mockObjectGenerator->getMock(HostToWebsiteMap::class);
+    }
+
+    /**
+     * @return WebsiteToCountryMap
+     */
+    public function createWebsiteToCountryMap()
+    {
+        return $this->mockObjectGenerator->getMock(WebsiteToCountryMap::class);
     }
 }

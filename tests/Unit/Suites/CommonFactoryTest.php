@@ -58,6 +58,8 @@ use LizardsAndPumpkins\Projection\UrlKeyForContextCollector;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\Renderer\ThemeLocator;
 use LizardsAndPumpkins\Renderer\Translation\Translator;
+use LizardsAndPumpkins\Website\ConfigurableHostToWebsiteMap;
+use LizardsAndPumpkins\Website\HostToWebsiteMap;
 
 /**
  * @covers \LizardsAndPumpkins\CommonFactory
@@ -84,7 +86,6 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextLocale
  * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextCountry
  * @uses   \LizardsAndPumpkins\Context\ContextSource
- * @uses   \LizardsAndPumpkins\WebsiteMap
  * @uses   \LizardsAndPumpkins\CommandConsumer
  * @uses   \LizardsAndPumpkins\CommandHandlerLocator
  * @uses   \LizardsAndPumpkins\DomainEventConsumer
@@ -147,6 +148,7 @@ use LizardsAndPumpkins\Renderer\Translation\Translator;
  * @uses   \LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry
  * @uses   \LizardsAndPumpkins\EnvironmentConfigReader
  * @uses   \LizardsAndPumpkins\Utils\LocalFilesystem
+ * @uses   \LizardsAndPumpkins\Website\ConfigurableHostToWebsiteMap
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -658,8 +660,9 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsAWebsiteMap()
     {
-        $result = $this->commonFactory->createWebsiteMap();
-        $this->assertInstanceOf(WebsiteMap::class, $result);
+        $result = $this->commonFactory->createHostToWebsiteMap();
+        $this->assertInstanceOf(HostToWebsiteMap::class, $result);
+        $this->assertInstanceOf(ConfigurableHostToWebsiteMap::class, $result);
     }
 
     public function testItReturnsACountryContextPartBuilder()
