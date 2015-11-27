@@ -8,7 +8,7 @@ use LizardsAndPumpkins\Website\Exception\InvalidWebsiteMapConfigRecordException;
 use LizardsAndPumpkins\Website\Exception\UnknownWebsiteHostException;
 
 /**
- * @covers \LizardsAndPumpkins\ConfigurableHostToWebsiteMap
+ * @covers \LizardsAndPumpkins\Website\ConfigurableHostToWebsiteMap
  */
 class ConfigurableHostToWebsiteMapTest extends \PHPUnit_Framework_TestCase
 {

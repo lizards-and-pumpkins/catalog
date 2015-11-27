@@ -86,7 +86,6 @@ use LizardsAndPumpkins\Website\HostToWebsiteMap;
  * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextLocale
  * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextCountry
  * @uses   \LizardsAndPumpkins\Context\ContextSource
- * @uses   \LizardsAndPumpkins\WebsiteMap
  * @uses   \LizardsAndPumpkins\CommandConsumer
  * @uses   \LizardsAndPumpkins\CommandHandlerLocator
  * @uses   \LizardsAndPumpkins\DomainEventConsumer
@@ -149,6 +148,7 @@ use LizardsAndPumpkins\Website\HostToWebsiteMap;
  * @uses   \LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry
  * @uses   \LizardsAndPumpkins\EnvironmentConfigReader
  * @uses   \LizardsAndPumpkins\Utils\LocalFilesystem
+ * @uses   \LizardsAndPumpkins\Website\ConfigurableHostToWebsiteMap
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
