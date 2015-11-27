@@ -15,7 +15,7 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 
 /**
  * @covers \LizardsAndPumpkins\ContentDelivery\PageBuilder
- * @covers \LizardsAndPumpkins\ContentDelivery\PageBuilder\PageSnippets
+ * @covers \LizardsAndPumpkins\ContentDelivery\PageBuilder\PageBuilderPageSnippets
  * @uses   \LizardsAndPumpkins\DefaultHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  * @uses   \LizardsAndPumpkins\MissingSnippetCodeMessage

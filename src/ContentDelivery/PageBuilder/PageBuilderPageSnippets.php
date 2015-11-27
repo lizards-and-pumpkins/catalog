@@ -7,7 +7,7 @@ use LizardsAndPumpkins\ContentDelivery\PageBuilder\Exception\InvalidSnippetConte
 use LizardsAndPumpkins\ContentDelivery\PageBuilder\Exception\NonExistingSnippetException;
 use LizardsAndPumpkins\ContentDelivery\PageBuilder\Exception\PageContentBuildAlreadyTriggeredException;
 
-class PageSnippets
+class PageBuilderPageSnippets
 {
     /**
      * @var string[]
@@ -39,7 +39,7 @@ class PageSnippets
     /**
      * @param string[] $codeToKeyMap
      * @param string[] $keyToContentMap
-     * @return PageSnippets
+     * @return PageBuilderPageSnippets
      */
     public static function fromKeyCodeAndContent(array $codeToKeyMap, array $keyToContentMap)
     {

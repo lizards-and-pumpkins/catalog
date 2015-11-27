@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\ContentDelivery;
 
-use LizardsAndPumpkins\ContentDelivery\PageBuilder\PageSnippets;
+use LizardsAndPumpkins\ContentDelivery\PageBuilder\PageBuilderPageSnippets;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DefaultHttpResponse;
@@ -59,7 +59,7 @@ class PageBuilder
     private $snippetTransformations = [];
 
     /**
-     * @var PageSnippets
+     * @var PageBuilderPageSnippets
      */
     private $pageSnippets;
 
@@ -86,7 +86,7 @@ class PageBuilder
 
         $codeToKeyMap = $this->initFromMetaInfo($metaInfo);
         $keyToContentMap = $this->loadSnippets();
-        $this->pageSnippets = PageSnippets::fromKeyCodeAndContent($codeToKeyMap, $keyToContentMap);
+        $this->pageSnippets = PageBuilderPageSnippets::fromKeyCodeAndContent($codeToKeyMap, $keyToContentMap);
         
         $this->logMissingSnippets();
         $this->applySnippetTransformations();
