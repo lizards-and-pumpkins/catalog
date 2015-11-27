@@ -2,10 +2,10 @@
 
 namespace LizardsAndPumpkins\ContentDelivery;
 
+use LizardsAndPumpkins\ContentDelivery\PageBuilder\Exception\NonExistingSnippetException;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\SnippetTransformation;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
-use LizardsAndPumpkins\Exception\InvalidPageMetaSnippetException;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
@@ -298,7 +298,7 @@ EOH;
         $allSnippetContent = [];
         $this->setPageMetaInfoFixture($this->testRootSnippetCode, $childSnippetCodes);
         $this->setPageContentSnippetFixture($allSnippetCodes, $allSnippetContent);
-        $this->setExpectedException(InvalidPageMetaSnippetException::class);
+        $this->setExpectedException(NonExistingSnippetException::class);
 
         $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
     }

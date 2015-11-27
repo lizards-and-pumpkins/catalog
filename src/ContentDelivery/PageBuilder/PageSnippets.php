@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\ContentDelivery\PageBuilder;
 
 use LizardsAndPumpkins\ContentDelivery\PageBuilder\Exception\InvalidSnippetContentException;
 use LizardsAndPumpkins\ContentDelivery\PageBuilder\Exception\NonExistingSnippetException;
-use LizardsAndPumpkins\Exception\InvalidPageMetaSnippetException;
+use LizardsAndPumpkins\ContentDelivery\PageBuilder\Exception\PageContentBuildAlreadyTriggeredException;
 
 class PageSnippets
 {
@@ -23,6 +23,8 @@ class PageSnippets
      * @var string[]
      */
     private $keyToContentMap;
+    
+    private $pageWasBuilt = false;
 
     /**
      * @param string[] $codeToKeyMap
@@ -50,6 +52,7 @@ class PageSnippets
      */
     public function buildPageContent($rootSnippetCode)
     {
+        $this->guardAgainstMultipleInvocations();
         list($rootSnippet, $childSnippets) = $this->separateRootAndChildSnippets($rootSnippetCode);
         $childSnippetsCodes = $this->getLoadedChildSnippetCodes($rootSnippetCode);
         $childSnippetPlaceholdersToContentMap = $this->mergePlaceholderAndSnippets($childSnippetsCodes, $childSnippets);
@@ -112,7 +115,7 @@ class PageSnippets
     public function getSnippetByKey($snippetKey)
     {
         if (!array_key_exists($snippetKey, $this->keyToContentMap)) {
-            throw new InvalidPageMetaSnippetException($this->formatSnippetNotAvailableErrorMessage($snippetKey));
+            throw new NonExistingSnippetException($this->formatSnippetNotAvailableErrorMessage($snippetKey));
         }
         return $this->keyToContentMap[$snippetKey];
     }
@@ -266,5 +269,14 @@ class PageSnippets
     {
         $message = sprintf('The snippet %s "%s" does not exist on the current page', $specType, $snippetSpec);
         return new NonExistingSnippetException($message);
+    }
+
+    private function guardAgainstMultipleInvocations()
+    {
+        if ($this->pageWasBuilt) {
+            $message = 'The method buildPageContent() may only be called once an an instance';
+            throw new PageContentBuildAlreadyTriggeredException($message);
+        }
+        $this->pageWasBuilt = true;
     }
 }

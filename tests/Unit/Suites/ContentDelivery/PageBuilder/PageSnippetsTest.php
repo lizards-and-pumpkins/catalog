@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\ContentDelivery\PageBuilder;
 
 use LizardsAndPumpkins\ContentDelivery\PageBuilder\Exception\InvalidSnippetContentException;
 use LizardsAndPumpkins\ContentDelivery\PageBuilder\Exception\NonExistingSnippetException;
+use LizardsAndPumpkins\ContentDelivery\PageBuilder\Exception\PageContentBuildAlreadyTriggeredException;
 
 /**
  * @covers \LizardsAndPumpkins\ContentDelivery\PageBuilder\PageSnippets
@@ -114,5 +115,15 @@ class PageSnippetsTest extends \PHPUnit_Framework_TestCase
             'Invalid snippet content for the code "a-code" specified: expected string, got "integer"'
         );
         $this->pageSnippets->updateSnippetByCode('a-code', 123);
+    }
+
+    public function testItThrowsAnExceptionIfThePageIsBuiltTwice()
+    {
+        $this->setExpectedException(
+            PageContentBuildAlreadyTriggeredException::class,
+            'The method buildPageContent() may only be called once an an instance'
+        );
+        $this->pageSnippets->buildPageContent($this->testCode);
+        $this->pageSnippets->buildPageContent($this->testCode);
     }
 }
