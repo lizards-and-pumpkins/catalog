@@ -49,20 +49,24 @@ class ContextCountryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsTheDefaultCountryIfNothingIsSpecifiedInTheRequest()
     {
-        $this->assertSame('de', $this->contextCountry->getValue([], []));
+        $inputDataSet = [];
+        $otherContextParts = [];
+        $this->assertSame('de', $this->contextCountry->getValue($inputDataSet, $otherContextParts));
     }
 
     public function testItReturnsTheValueFromTheInputDataSetIfPresent()
     {
-        $this->assertSame('fr', $this->contextCountry->getValue([ContextCountry::CODE => 'fr'], []));
+        $inputDataSet = [ContextCountry::CODE => 'fr'];
+        $otherContextParts = [];
+        $this->assertSame('fr', $this->contextCountry->getValue($inputDataSet, $otherContextParts));
     }
 
     public function testItReturnsTheCountryFromTheRequestIfNotPartOfTheInputDataSet()
     {
         $this->setRequestCountry('en');
         $inputDataSet = [ContextBuilder::REQUEST => $this->stubRequest];
-        
-        $this->assertSame('en', $this->contextCountry->getValue($inputDataSet, []));
+        $otherContextParts = [];
+        $this->assertSame('en', $this->contextCountry->getValue($inputDataSet, $otherContextParts));
     }
 
     public function testItPrefersTheExplicitValueIfBothSourcesArePresentInTheInputDataSet()
@@ -72,6 +76,7 @@ class ContextCountryTest extends \PHPUnit_Framework_TestCase
             ContextBuilder::REQUEST => $this->stubRequest,
             ContextCountry::CODE => 'fr'
         ];
-        $this->assertSame('fr', $this->contextCountry->getValue($inputDataSet, []));
+        $otherContextParts = [];
+        $this->assertSame('fr', $this->contextCountry->getValue($inputDataSet, $otherContextParts));
     }
 }
