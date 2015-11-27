@@ -15,6 +15,7 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 
 /**
  * @covers \LizardsAndPumpkins\ContentDelivery\PageBuilder
+ * @covers \LizardsAndPumpkins\ContentDelivery\PageBuilder\PageSnippets
  * @uses   \LizardsAndPumpkins\DefaultHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  * @uses   \LizardsAndPumpkins\MissingSnippetCodeMessage
@@ -395,7 +396,8 @@ EOH;
     {
         /** @var callable|\PHPUnit_Framework_MockObject_MockObject $mockTransformation */
         $mockTransformation = $this->getMock(SnippetTransformation::class);
-        $mockTransformation->expects($this->once())->method('__invoke')->with('<h1>My Website!</h1>');
+        $mockTransformation->expects($this->once())->method('__invoke')->with('<h1>My Website!</h1>')
+            ->willReturn('Transformed Content');
         $this->pageBuilder->registerSnippetTransformation('body', $mockTransformation);
 
         $rootSnippetContent = '<html><head>{{snippet head}}</head><body>{{snippet body}}</body></html>';
