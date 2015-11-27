@@ -67,8 +67,8 @@ class PricesJsonSnippetTransformationTest extends \PHPUnit_Framework_TestCase
     {
         $transformedPrice = '9000 EUR';
         $this->stubPriceSnippetTransformation->method('__invoke')->willReturn($transformedPrice);
-        $input = json_encode(['123', '456']);
-        $expected = json_encode([$transformedPrice, $transformedPrice]);
+        $input = json_encode([['123'], ['456', '789']]);
+        $expected = json_encode([[$transformedPrice], [$transformedPrice, $transformedPrice]]);
         $this->assertTransformation($expected, $input);
     }
 }
