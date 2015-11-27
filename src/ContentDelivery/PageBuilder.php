@@ -211,7 +211,7 @@ class PageBuilder
     {
         return array_intersect(
             array_keys($this->snippetTransformations),
-            $this->pageSnippets->getLoadedSnippetCodes()
+            $this->pageSnippets->getSnippetCodes()
         );
     }
 

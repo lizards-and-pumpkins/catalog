@@ -29,13 +29,18 @@ class PageBuilderPageSnippetsTest extends \PHPUnit_Framework_TestCase
         $keyToContentMap = [$this->testKey => $this->testContent];
         $this->pageSnippets = PageBuilderPageSnippets::fromKeyCodeAndContent($codeToKeyMap, $keyToContentMap);
     }
-    
+
     public function testItReturnsAPageSnippetInstance()
     {
         $codeToKeyMap = [];
         $keyToContentMap = [];
         $pageSnippets = PageBuilderPageSnippets::fromKeyCodeAndContent($codeToKeyMap, $keyToContentMap);
         $this->assertInstanceOf(PageBuilderPageSnippets::class, $pageSnippets);
+    }
+
+    public function testItImplementsThePageSnippetsInterface()
+    {
+        $this->assertInstanceOf(PageSnippets::class, $this->pageSnippets);
     }
 
     public function testItReturnsTheNotLoadedSnippetCodes()
@@ -51,7 +56,7 @@ class PageBuilderPageSnippetsTest extends \PHPUnit_Framework_TestCase
         $codeToKeyMap = ['found' => 'found_key', 'missing' => 'missing_key'];
         $keyToContentMap = ['found_key' => 'found_content'];
         $pageSnippets = PageBuilderPageSnippets::fromKeyCodeAndContent($codeToKeyMap, $keyToContentMap);
-        $this->assertSame(['found'], $pageSnippets->getLoadedSnippetCodes());
+        $this->assertSame(['found'], $pageSnippets->getSnippetCodes());
     }
 
     public function testItReturnsTheSnippetKeyForAGivenCode()
@@ -114,7 +119,7 @@ class PageBuilderPageSnippetsTest extends \PHPUnit_Framework_TestCase
             InvalidSnippetContentException::class,
             'Invalid snippet content for the code "a-code" specified: expected string, got "integer"'
         );
-        $this->pageSnippets->updateSnippetByCode('a-code', 123);
+        $this->pageSnippets->updateSnippetByCode($this->testCode, 123);
     }
 
     public function testItThrowsAnExceptionIfThePageIsBuiltTwice()
@@ -125,5 +130,15 @@ class PageBuilderPageSnippetsTest extends \PHPUnit_Framework_TestCase
         );
         $this->pageSnippets->buildPageContent($this->testCode);
         $this->pageSnippets->buildPageContent($this->testCode);
+    }
+
+    public function testItReturnsTrueIfASnippetIsPresent()
+    {
+        $this->assertTrue($this->pageSnippets->hasSnippetCode($this->testCode));
+    }
+
+    public function testItReturnsFalseIfASnippetIsNotPresent()
+    {
+        $this->assertFalse($this->pageSnippets->hasSnippetCode('not-present-code'));
     }
 }

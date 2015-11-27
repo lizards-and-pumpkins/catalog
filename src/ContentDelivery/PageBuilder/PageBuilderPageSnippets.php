@@ -7,7 +7,7 @@ use LizardsAndPumpkins\ContentDelivery\PageBuilder\Exception\InvalidSnippetConte
 use LizardsAndPumpkins\ContentDelivery\PageBuilder\Exception\NonExistingSnippetException;
 use LizardsAndPumpkins\ContentDelivery\PageBuilder\Exception\PageContentBuildAlreadyTriggeredException;
 
-class PageBuilderPageSnippets
+class PageBuilderPageSnippets implements PageSnippets
 {
     /**
      * @var string[]
@@ -75,7 +75,7 @@ class PageBuilderPageSnippets
     /**
      * @return string[]
      */
-    public function getLoadedSnippetCodes()
+    public function getSnippetCodes()
     {
         if (! isset($this->memoizedLoadedSnippetCodes)) {
             $this->memoizedLoadedSnippetCodes = array_keys(array_filter($this->codeToKeyMap, function ($key) {
@@ -91,7 +91,7 @@ class PageBuilderPageSnippets
      */
     private function getLoadedChildSnippetCodes($rootSnippetCode)
     {
-        return array_filter($this->getLoadedSnippetCodes(), function ($code) use ($rootSnippetCode) {
+        return array_filter($this->getSnippetCodes(), function ($code) use ($rootSnippetCode) {
             return $code !== $rootSnippetCode;
         });
     }
@@ -278,5 +278,23 @@ class PageBuilderPageSnippets
             throw new PageContentBuildAlreadyTriggeredException($message);
         }
         $this->pageWasBuilt = true;
+    }
+
+    /**
+     * @param string $snippetCode
+     * @return bool
+     */
+    public function hasSnippetCode($snippetCode)
+    {
+        return isset($this->codeToKeyMap[$snippetCode]) && $this->hasSnippetKey($this->codeToKeyMap[$snippetCode]);
+    }
+
+    /**
+     * @param string $snippetKey
+     * @return bool
+     */
+    private function hasSnippetKey($snippetKey)
+    {
+        return isset($this->keyToContentMap[$snippetKey]);
     }
 }
