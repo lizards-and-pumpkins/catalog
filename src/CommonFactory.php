@@ -876,7 +876,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createWebsiteContextPartBuilder()
     {
-        return new WebsiteContextPartBuilder($this->getMasterFactory()->createWebsiteMap());
+        return new WebsiteContextPartBuilder($this->getMasterFactory()->createHostToWebsiteMap());
     }
 
     /**
@@ -896,11 +896,11 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return WebsiteMap
+     * @return HostToWebsiteMap
      */
-    public function createWebsiteMap()
+    public function createHostToWebsiteMap()
     {
-        return WebsiteMap::fromConfig($this->getMasterFactory()->createConfigReader());
+        return HostToWebsiteMap::fromConfig($this->getMasterFactory()->createConfigReader());
     }
 
     /**

@@ -270,10 +270,10 @@ class UnitTestFactory implements Factory
     }
 
     /**
-     * @return WebsiteMap
+     * @return HostToWebsiteMap
      */
-    public function createWebsiteMap()
+    public function createHostToWebsiteMap()
     {
-        return $this->mockObjectGenerator->getMock(WebsiteMap::class, [], [], '', false);
+        return $this->mockObjectGenerator->getMock(HostToWebsiteMap::class, [], [], '', false);
     }
 }

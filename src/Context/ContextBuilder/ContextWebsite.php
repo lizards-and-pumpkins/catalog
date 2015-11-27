@@ -6,18 +6,18 @@ namespace LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\ContextBuilder\Exception\UnableToDetermineContextWebsiteException;
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\WebsiteMap;
+use LizardsAndPumpkins\HostToWebsiteMap;
 
 class ContextWebsite implements ContextPartBuilder
 {
     const CODE = 'website';
     
     /**
-     * @var WebsiteMap
+     * @var HostToWebsiteMap
      */
     private $websiteMap;
 
-    public function __construct(WebsiteMap $websiteMap)
+    public function __construct(HostToWebsiteMap $websiteMap)
     {
         $this->websiteMap = $websiteMap;
     }

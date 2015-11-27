@@ -385,11 +385,11 @@ class IntegrationTestFactory implements Factory
     }
 
     /**
-     * @return WebsiteMap
+     * @return HostToWebsiteMap
      */
-    public function createWebsiteMap()
+    public function createHostToWebsiteMap()
     {
-        return IntegrationTestWebsiteMap::fromArray([]);
+        return IntegrationTestHostToWebsiteMap::fromArray([]);
     }
 
     /**

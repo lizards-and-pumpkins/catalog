@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins;
 use LizardsAndPumpkins\Exception\InvalidWebsiteMapConfigRecordException;
 use LizardsAndPumpkins\Exception\UnknownWebsiteHostException;
 
-class WebsiteMap
+class HostToWebsiteMap
 {
     const CONFIG_KEY = 'website_map';
     const RECORD_SEPARATOR = '|';
@@ -26,7 +26,7 @@ class WebsiteMap
 
     /**
      * @param string[] $hostToWebsiteMap
-     * @return WebsiteMap
+     * @return HostToWebsiteMap
      */
     public static function fromArray(array $hostToWebsiteMap)
     {
@@ -35,7 +35,7 @@ class WebsiteMap
 
     /**
      * @param ConfigReader $configReader
-     * @return WebsiteMap
+     * @return HostToWebsiteMap
      */
     public static function fromConfig(ConfigReader $configReader)
     {

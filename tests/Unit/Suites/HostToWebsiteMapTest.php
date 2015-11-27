@@ -7,12 +7,12 @@ use LizardsAndPumpkins\Exception\InvalidWebsiteMapConfigRecordException;
 use LizardsAndPumpkins\Exception\UnknownWebsiteHostException;
 
 /**
- * @covers \LizardsAndPumpkins\WebsiteMap
+ * @covers \LizardsAndPumpkins\HostToWebsiteMap
  */
-class WebsiteMapTest extends \PHPUnit_Framework_TestCase
+class HostToWebsiteMapTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var WebsiteMap
+     * @var HostToWebsiteMap
      */
     private $websiteMap;
     
@@ -28,7 +28,7 @@ class WebsiteMapTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->websiteMap = WebsiteMap::fromArray($this->testMap);
+        $this->websiteMap = HostToWebsiteMap::fromArray($this->testMap);
         $this->stubConfigReader = $this->getMock(ConfigReader::class);
     }
     
@@ -49,15 +49,15 @@ class WebsiteMapTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsAWebsiteMapInstance()
     {
-        $this->assertInstanceOf(WebsiteMap::class, WebsiteMap::fromConfig($this->stubConfigReader));
+        $this->assertInstanceOf(HostToWebsiteMap::class, HostToWebsiteMap::fromConfig($this->stubConfigReader));
     }
 
     public function testItUsesAMapFromTheConfiguration()
     {
         $map = 'example.com=aaa|127.0.0.1=bbb';
-        $this->stubConfigReader->method('get')->with(WebsiteMap::CONFIG_KEY)->willReturn($map);
+        $this->stubConfigReader->method('get')->with(HostToWebsiteMap::CONFIG_KEY)->willReturn($map);
 
-        $websiteMap = WebsiteMap::fromConfig($this->stubConfigReader);
+        $websiteMap = HostToWebsiteMap::fromConfig($this->stubConfigReader);
         
         $this->assertSame('aaa', $websiteMap->getWebsiteCodeByHost('example.com'));
         $this->assertSame('bbb', $websiteMap->getWebsiteCodeByHost('127.0.0.1'));
@@ -72,6 +72,6 @@ class WebsiteMapTest extends \PHPUnit_Framework_TestCase
         $map = 'test=';
         $this->stubConfigReader->method('get')->willReturn($map);
 
-        WebsiteMap::fromConfig($this->stubConfigReader);
+        HostToWebsiteMap::fromConfig($this->stubConfigReader);
     }
 }
