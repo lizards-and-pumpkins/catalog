@@ -247,6 +247,6 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsAWebsiteToCountryMapInstance()
     {
-        $this->assertInstanceOf(WebsiteToCountryMap::class, $this->factory->getWebsiteToCountryMap());
+        $this->assertInstanceOf(WebsiteToCountryMap::class, $this->factory->createWebsiteToCountryMap());
     }
 }

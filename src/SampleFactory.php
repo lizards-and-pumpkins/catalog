@@ -440,7 +440,7 @@ class SampleFactory implements Factory
     /**
      * @return WebsiteToCountryMap21Run
      */
-    public function getWebsiteToCountryMap()
+    public function createWebsiteToCountryMap()
     {
         return new WebsiteToCountryMap21Run();
     }
