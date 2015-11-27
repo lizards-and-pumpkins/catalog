@@ -3,6 +3,8 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\PageBuilder;
 
+use LizardsAndPumpkins\ContentDelivery\PageBuilder\Exception\InvalidSnippetContentException;
+use LizardsAndPumpkins\ContentDelivery\PageBuilder\Exception\NonExistingSnippetException;
 use LizardsAndPumpkins\Exception\InvalidPageMetaSnippetException;
 
 class PageSnippets
@@ -206,8 +208,12 @@ class PageSnippets
      * @param string $snippetKey
      * @param string $content
      */
-    public function setSnippetByKey($snippetKey, $content)
+    public function updateSnippetByKey($snippetKey, $content)
     {
+        if (! isset($this->keyToContentMap[$snippetKey])) {
+            throw $this->createNonExistingSnippetException('key', $snippetKey);
+        }
+        $this->validateContent('key', $snippetKey, $content);
         $this->keyToContentMap[$snippetKey] = $content;
     }
 
@@ -215,9 +221,13 @@ class PageSnippets
      * @param string $snippetCode
      * @param string $content
      */
-    public function setSnippetByCode($snippetCode, $content)
+    public function updateSnippetByCode($snippetCode, $content)
     {
-        $this->setSnippetByKey($this->codeToKeyMap[$snippetCode], $content);
+        if (! isset($this->codeToKeyMap[$snippetCode])) {
+            throw $this->createNonExistingSnippetException('code', $snippetCode);
+        }
+        $this->validateContent('code', $snippetCode, $content);
+        $this->updateSnippetByKey($this->codeToKeyMap[$snippetCode], $content);
     }
 
     /**
@@ -227,5 +237,34 @@ class PageSnippets
     public function getSnippetByCode($snippetCode)
     {
         return $this->getSnippetByKey($this->codeToKeyMap[$snippetCode]);
+    }
+
+    /**
+     * @param string $specType
+     * @param string $snippetSpec
+     * @param mixed $content
+     */
+    private function validateContent($specType, $snippetSpec, $content)
+    {
+        if (!is_string($content)) {
+            $message = sprintf(
+                'Invalid snippet content for the %s "%s" specified: expected string, got "%s"',
+                $specType,
+                $snippetSpec,
+                gettype($content)
+            );
+            throw new InvalidSnippetContentException($message);
+        }
+    }
+
+    /**
+     * @param string $specType
+     * @param string $snippetSpec
+     * @return NonExistingSnippetException
+     */
+    private function createNonExistingSnippetException($specType, $snippetSpec)
+    {
+        $message = sprintf('The snippet %s "%s" does not exist on the current page', $specType, $snippetSpec);
+        return new NonExistingSnippetException($message);
     }
 }

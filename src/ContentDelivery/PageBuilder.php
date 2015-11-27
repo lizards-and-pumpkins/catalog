@@ -220,7 +220,7 @@ class PageBuilder
      */
     private function applyTransformationToSnippetByCode($snippetCode)
     {
-        $this->pageSnippets->setSnippetByCode(
+        $this->pageSnippets->updateSnippetByCode(
             $snippetCode,
             array_reduce(
                 $this->getTransformationsForSnippetByCode($snippetCode),

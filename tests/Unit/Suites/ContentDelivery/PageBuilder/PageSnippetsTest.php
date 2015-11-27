@@ -3,6 +3,9 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\PageBuilder;
 
+use LizardsAndPumpkins\ContentDelivery\PageBuilder\Exception\InvalidSnippetContentException;
+use LizardsAndPumpkins\ContentDelivery\PageBuilder\Exception\NonExistingSnippetException;
+
 /**
  * @covers \LizardsAndPumpkins\ContentDelivery\PageBuilder\PageSnippets
  */
@@ -67,13 +70,49 @@ class PageSnippetsTest extends \PHPUnit_Framework_TestCase
 
     public function testItUpdatesASnippetWithTheGivenKey()
     {
-        $this->pageSnippets->setSnippetByKey($this->testKey, 'new content');
+        $this->pageSnippets->updateSnippetByKey($this->testKey, 'new content');
         $this->assertSame('new content', $this->pageSnippets->getSnippetByKey($this->testKey));
+    }
+
+    public function testItThrowsAnExceptionIfTheGivenKeyIsNotKnown()
+    {
+        $this->setExpectedException(
+            NonExistingSnippetException::class,
+            'The snippet key "not-existing-key" does not exist on the current page'
+        );
+        $this->pageSnippets->updateSnippetByKey('not-existing-key', 'new content');
+    }
+
+    public function testItThrowsAnExceptionIfTheSnippetContentIsNotAStringWithKeySpec()
+    {
+        $this->setExpectedException(
+            InvalidSnippetContentException::class,
+            'Invalid snippet content for the key "a-key" specified: expected string, got "NULL"'
+        );
+        $this->pageSnippets->updateSnippetByKey('a-key', null);
     }
 
     public function testItUpdatesASnippetWithTheGivenCode()
     {
-        $this->pageSnippets->setSnippetByCode($this->testCode, 'new content');
+        $this->pageSnippets->updateSnippetByCode($this->testCode, 'new content');
         $this->assertSame('new content', $this->pageSnippets->getSnippetByKey($this->testKey));
+    }
+
+    public function testItThrowsAnExceptionWhenUpdatingANonExistingSnippet()
+    {
+        $this->setExpectedException(
+            NonExistingSnippetException::class,
+            'The snippet code "not-existing-code" does not exist on the current page'
+        );
+        $this->pageSnippets->updateSnippetByCode('not-existing-code', 'new content');
+    }
+
+    public function testItThrowsAnExceptionIfTheSnippetContentIsNotAStringWithCodeSpec()
+    {
+        $this->setExpectedException(
+            InvalidSnippetContentException::class,
+            'Invalid snippet content for the code "a-code" specified: expected string, got "integer"'
+        );
+        $this->pageSnippets->updateSnippetByCode('a-code', 123);
     }
 }
