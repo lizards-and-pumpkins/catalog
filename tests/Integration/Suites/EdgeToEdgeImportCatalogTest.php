@@ -17,6 +17,7 @@ use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 use LizardsAndPumpkins\Utils\XPathParser;
 
 class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
@@ -181,6 +182,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $contextSource = $this->factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[0];
 
+        /** @var SnippetKeyGeneratorLocator $keyGeneratorLocator */
         $keyGeneratorLocator = $this->factory->getSnippetKeyGeneratorLocator();
         $productDetailViewKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
             ProductDetailViewSnippetRenderer::CODE
