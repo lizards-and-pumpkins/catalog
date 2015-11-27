@@ -9,16 +9,10 @@ interface PageSnippets
     public function getSnippetCodes();
 
     /**
-     * @param string $snippetKey
-     * @return string
+     * @param string $snippetCode
+     * @return bool
      */
-    public function getSnippetByKey($snippetKey);
-
-    /**
-     * @param string $snippetKey
-     * @param string $content
-     */
-    public function updateSnippetByKey($snippetKey, $content);
+    public function hasSnippetCode($snippetCode);
 
     /**
      * @param string $snippetCode
@@ -31,10 +25,4 @@ interface PageSnippets
      * @param string $content
      */
     public function updateSnippetByCode($snippetCode, $content);
-
-    /**
-     * @param string $snippetCode
-     * @return bool
-     */
-    public function hasSnippetCode($snippetCode);
 }

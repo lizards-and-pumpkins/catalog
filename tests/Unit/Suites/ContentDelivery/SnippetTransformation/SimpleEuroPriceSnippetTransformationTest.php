@@ -3,6 +3,7 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\SnippetTransformation;
 
+use LizardsAndPumpkins\ContentDelivery\PageBuilder\PageSnippets;
 use LizardsAndPumpkins\Context\Context;
 
 /**
@@ -21,19 +22,25 @@ class SimpleEuroPriceSnippetTransformationTest extends \PHPUnit_Framework_TestCa
     private $stubContext;
 
     /**
+     * @var PageSnippets|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubPageSnippets;
+
+    /**
      * @param string $expected
      * @param int|string|null $input
      */
     private function assertIsTransformedTo($expected, $input)
     {
         $transformation = $this->transformation;
-        $this->assertSame($expected, $transformation($input, $this->stubContext));
+        $this->assertSame($expected, $transformation($input, $this->stubContext, $this->stubPageSnippets));
     }
 
     protected function setUp()
     {
         $this->transformation = new SimpleEuroPriceSnippetTransformation();
         $this->stubContext = $this->getMock(Context::class);
+        $this->stubPageSnippets = $this->getMock(PageSnippets::class);
     }
 
     public function testItIsCallable()

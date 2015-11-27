@@ -237,7 +237,7 @@ class PageBuilder
      */
     private function applyTransformationToSnippetContent($content, callable $transformation)
     {
-        return $transformation($content, $this->context);
+        return $transformation($content, $this->context, $this->pageSnippets);
     }
 
     /**
