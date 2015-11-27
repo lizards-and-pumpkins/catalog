@@ -5,6 +5,9 @@ namespace LizardsAndPumpkins\Product\Tax;
 
 use LizardsAndPumpkins\Product\Tax\Exception\InvalidTaxClassNameException;
 
+/**
+ * @covers \LizardsAndPumpkins\Product\Tax\ProductTaxClass
+ */
 class ProductTaxClassTest extends \PHPUnit_Framework_TestCase
 {
     public function testItReturnsTheInjectedTaxClassValue()
