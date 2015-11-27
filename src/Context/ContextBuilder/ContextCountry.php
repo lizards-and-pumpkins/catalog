@@ -14,7 +14,7 @@ class ContextCountry implements ContextPartBuilder
     
     private $cookieDataKey = 'country';
     
-    private $defaultCountry = 'fr';
+    private $defaultCountry = 'de';
 
     /**
      * @param mixed[] $inputDataSet

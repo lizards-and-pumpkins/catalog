@@ -49,12 +49,12 @@ class ContextCountryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsTheDefaultCountryIfNothingIsSpecifiedInTheRequest()
     {
-        $this->assertSame('fr', $this->contextCountry->getValue([]));
+        $this->assertSame('de', $this->contextCountry->getValue([]));
     }
 
     public function testItReturnsTheValueFromTheInputDataSetIfPresent()
     {
-        $this->assertSame('de', $this->contextCountry->getValue([ContextCountry::CODE => 'de']));
+        $this->assertSame('fr', $this->contextCountry->getValue([ContextCountry::CODE => 'fr']));
     }
 
     public function testItReturnsTheCountryFromTheRequestIfNotPartOfTheInputDataSet()
@@ -70,8 +70,8 @@ class ContextCountryTest extends \PHPUnit_Framework_TestCase
         $this->setRequestCountry('en');
         $inputDataSet = [
             ContextBuilder::REQUEST => $this->stubRequest,
-            ContextCountry::CODE => 'de'
+            ContextCountry::CODE => 'fr'
         ];
-        $this->assertSame('de', $this->contextCountry->getValue($inputDataSet));
+        $this->assertSame('fr', $this->contextCountry->getValue($inputDataSet));
     }
 }
