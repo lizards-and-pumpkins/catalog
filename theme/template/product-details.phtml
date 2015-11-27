@@ -42,7 +42,7 @@ $save = 0;
                     </p>
                 </div>
                 <div class="articleInformations">
-                    <p class="articleNumber"><?= $this->__('SKU# ') ?> <?= $this->getProductId() ?></p>
+                    <p class="articleNumber"><?= $this->__('SKU') ?>: <?= $this->getProductId() ?></p>
                     <meta itemprop="sku" content="<?= $this->getProductId() ?>" />
                 </div>
             </div>
@@ -50,11 +50,11 @@ $save = 0;
             <div class="product-main-info">
                 <div class="main-information">
                     <?php if ($gender = $this->getImplodedValuesOfProductAttribute('gender', ', ')) : ?>
-                        <p><strong><?= $this->__('Gender') ?>:</strong> <?= $gender ?></p>
+                        <p><strong><?= $this->__('gender') ?>:</strong> <?= $gender ?></p>
                     <?php endif ?>
 
                     <?php if (($style = $this->getImplodedValuesOfProductAttribute('style', ', '))) : ?>
-                        <p><strong><?= $this->__('Style') ?>:</strong> <?= $style ?></p>
+                        <p><strong><?= $this->__('style') ?>:</strong> <?= $style ?></p>
                     <?php endif ?>
 
                     <p>
@@ -96,7 +96,54 @@ $save = 0;
             <?= $this->getFirstValueOfProductAttribute('description') ?>
         </div>
         <div id="additional-information" class="tab-content">
-            [ TODO ]
+            <div><?= $this->__('Additional information') ?></div>
+            <table>
+                <colgroup><col width="25%"><col></colgroup>
+                <tbody>
+                <tr>
+                    <th><?= $this->__('SKU') ?></th>
+                    <td><?= $this->getProductId() ?></td>
+                </tr>
+                <?php if ($mpn = $this->getFirstValueOfProductAttribute('mpn')) : ?>
+                <tr>
+                    <th><?= $this->__('mpn') ?></th>
+                    <td><?= $mpn ?></td>
+                </tr>
+                <?php endif ?>
+                <tr>
+                    <th><?= $this->__('Price') ?></th>
+                    <td><?= $this->getChildOutput('price') ?></td>
+                </tr>
+                <tr>
+                    <th><?= $this->__('brand') ?></th>
+                    <td><?= $this->getFirstValueOfProductAttribute('brand') ?></td>
+                </tr>
+                <?php if ($gender) : ?>
+                <tr>
+                    <th><?= $this->__('gender') ?></th>
+                    <td><?= $gender ?></td>
+                </tr>
+                <?php endif ?>
+                <?php if ($productGroup = $this->getFirstValueOfProductAttribute('product_group')) : ?>
+                <tr>
+                    <th><?= $this->__('product_group') ?></th>
+                    <td><?= $productGroup ?></td>
+                </tr>
+                <?php endif ?>
+                <?php if ($series = $this->getFirstValueOfProductAttribute('series')) : ?>
+                <tr>
+                    <th><?= $this->__('series') ?></th>
+                    <td><?= $series ?></td>
+                </tr>
+                <?php endif ?>
+                <?php if ($style) : ?>
+                <tr>
+                    <th><?= $this->__('style') ?></th>
+                    <td><?= $style ?></td>
+                </tr>
+                <?php endif ?>
+                </tbody>
+            </table>
         </div>
     </div>
 

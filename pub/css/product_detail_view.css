@@ -11,7 +11,6 @@
 .product-shop .top { border-bottom: 1px solid #fff; margin-bottom: 10px; padding-bottom: 15px }
 .product-shop p { margin: 0 0 5px 0; }
 #switcher-container p { margin: 0; }
-#product-attribute-specs-table .retail-price { text-decoration: line-through; }
 .product-shop .regular-price { font-size: 24px; }
 .product-shop .delivery { color: #3d9b35; }
 .product-shop .note { line-height: 16px; }
@@ -53,6 +52,11 @@
 .twitter:hover { background-position: -52px 26px }
 .pinterest { background-position: -78px 0 }
 .pinterest:hover { background-position: -78px 26px }
+
+/* Additional information */
+#additional-information div { font-weight: bold; font-size: 15px; margin-bottom: 10px }
+#additional-information table { width: 100%; text-align: left; border-collapse: collapse }
+#additional-information th, #additional-information td { font-weight: normal; border: #cccccc solid 1px; padding: 2px 5px }
 
 #recently-viewed-products { position: relative; display: none }
 #recently-viewed-products .heading { margin-bottom: 15px }
