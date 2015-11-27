@@ -52,7 +52,7 @@ class ConfigurableProductXmlToProductBuilderTest extends \PHPUnit_Framework_Test
     public function testItReturnsAConfigurableProductBuilderInstance()
     {
         $xml = '
-<product type="configurable" sku="test">
+<product type="configurable" sku="test" tax_class="test">
     <variations>
         <attribute>test</attribute>
     </variations>
