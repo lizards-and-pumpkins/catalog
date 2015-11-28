@@ -70,8 +70,24 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
      */
     private function getAttributeValuesForSearchDocument(Product $product, $attributeCode)
     {
-        return array_filter($product->getAllValuesOfAttribute($attributeCode), function ($value) {
+        return array_filter($this->getProductAttributeValues($product, $attributeCode), function ($value) {
             return is_scalar($value);
         });
+    }
+
+    /**
+     * @param Product $product
+     * @param string $attributeCode
+     * @return string[]
+     */
+    private function getProductAttributeValues(Product $product, $attributeCode)
+    {
+        $specialPriceAttributeCode = PriceSnippetRenderer::SPECIAL_PRICE;
+
+        if (PriceSnippetRenderer::PRICE === $attributeCode && $product->hasAttribute($specialPriceAttributeCode)) {
+            return $product->getAllValuesOfAttribute($specialPriceAttributeCode);
+        }
+
+        return $product->getAllValuesOfAttribute($attributeCode);
     }
 }
