@@ -327,17 +327,6 @@ require([
             }
         }
 
-        /* Tablet only */
-        if (currentWidth < siteFullWidth && currentWidth >= tabletWidth) {
-            if (!isParent(productTopContainer, articleInformation)) {
-                productTopContainer.appendChild(articleInformation);
-            }
-        } else if (currentWidth >= siteFullWidth) {
-            if (!isParent(productTopContainer, articleInformation)) {
-                productTopContainer.appendChild(articleInformation);
-            }
-        }
-
         toggleSwipingArrows('.swipe-container', 'ul');
     }
 
