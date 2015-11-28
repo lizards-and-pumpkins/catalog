@@ -48,6 +48,19 @@ $save = 0;
             </div>
 
             <div class="product-main-info">
+                <script>
+
+                    var regularPrice = '<?= $this->getChildOutput('price') ?>',
+                        specialPrice = '<?= $this->getChildOutput('special_price') ?>';
+
+                </script>
+                <div class="price-information">
+                    <div id="old-price"></div>
+                    <div id="regular-price" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer"></div>
+                    <div class="tax-information">
+                        <?= $this->__('incl. VAT, plus &euro; 1.99 insurance and handling plus delivery charge') ?>
+                    </div>
+                </div>
                 <div class="main-information">
                     <?php if ($gender = $this->getImplodedValuesOfProductAttribute('gender', ', ')) : ?>
                         <p><strong><?= $this->__('gender') ?>:</strong> <?= $gender ?></p>
@@ -63,11 +76,6 @@ $save = 0;
                         <span class="info"><?= $this->__('Versandinfo'); ?></span>
                     </p>
                 </div>
-
-                <div class="price-information" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
-                    <span class="regular-price"><?= $this->getChildOutput('price') ?></span>
-                </div>
-                <span class="regular-price"><?= $this->getChildOutput('special_price') ?></span>
             </div>
 
             <div class="product-controls">
