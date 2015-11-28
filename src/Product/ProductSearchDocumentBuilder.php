@@ -70,9 +70,7 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
      */
     private function getAttributeValuesForSearchDocument(Product $product, $attributeCode)
     {
-        return array_filter($this->getProductAttributeValues($product, $attributeCode), function ($value) {
-            return is_scalar($value);
-        });
+        return array_filter($this->getProductAttributeValues($product, $attributeCode), 'is_scalar');
     }
 
     /**
