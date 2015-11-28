@@ -206,13 +206,14 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
             $facetFilterRequest->getFields(),
             function (array $carry, FacetFilterRequestField $field) use ($attributeCounts, $fieldCodes) {
                 $attributeCode = $field->getAttributeCode();
+                $attributeCodeString = (string) $attributeCode;
 
-                if (!in_array((string)$attributeCode, $fieldCodes)) {
+                if (!in_array($attributeCodeString, $fieldCodes) || !isset($attributeCounts[$attributeCodeString])) {
                     return $carry;
                 }
 
                 $facetFieldValues = $this->getFacetFieldValuesFromAttributeValues(
-                    $attributeCounts[(string) $attributeCode],
+                    $attributeCounts[$attributeCodeString],
                     $field
                 );
 
