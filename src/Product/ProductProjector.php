@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilder;
 use LizardsAndPumpkins\Projection\UrlKeyForContextCollector;
 use LizardsAndPumpkins\Projector;
 use LizardsAndPumpkins\Exception\InvalidProjectionSourceDataTypeException;
@@ -16,7 +17,7 @@ class ProductProjector implements Projector
     private $rendererCollection;
 
     /**
-     * @var ProductSearchDocumentBuilder
+     * @var SearchDocumentBuilder
      */
     private $searchDocumentBuilder;
 
@@ -32,7 +33,7 @@ class ProductProjector implements Projector
 
     public function __construct(
         SnippetRendererCollection $rendererCollection,
-        ProductSearchDocumentBuilder $searchDocumentBuilder,
+        SearchDocumentBuilder $searchDocumentBuilder,
         UrlKeyForContextCollector $urlKeyCollector,
         DataPoolWriter $dataPoolWriter
     ) {
