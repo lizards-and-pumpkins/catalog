@@ -1,10 +1,12 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Website;
 
 use LizardsAndPumpkins\Website\Exception\InvalidWebsiteCodeException;
 
+/**
+ * @covers \LizardsAndPumpkins\Website\WebsiteToCountryMap21Run
+ */
 class WebsiteToCountryMap21RunTest extends \PHPUnit_Framework_TestCase
 {
     /**
