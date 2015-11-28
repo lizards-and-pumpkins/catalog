@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\SnippetTransformation;
 
+use LizardsAndPumpkins\ContentDelivery\PageBuilder\PageSnippets;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\Exception\NoValidLocaleInContextException;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
@@ -22,6 +23,11 @@ class LocaleAwareEuroPriceSnippetTransformationTest extends \PHPUnit_Framework_T
     private $mockContext;
 
     /**
+     * @var PageSnippets
+     */
+    private $stubPageSnippets;
+
+    /**
      * @param string $expected
      * @param int|string|null $input
      * @param string $locale
@@ -30,13 +36,14 @@ class LocaleAwareEuroPriceSnippetTransformationTest extends \PHPUnit_Framework_T
     {
         $this->mockContext->method('getValue')->with(ContextLocale::CODE)->willReturn($locale);
         $transformation = $this->transformation;
-        $this->assertSame($expected, $transformation($input, $this->mockContext));
+        $this->assertSame($expected, $transformation($input, $this->mockContext, $this->stubPageSnippets));
     }
     
     protected function setUp()
     {
         $this->transformation = new LocaleAwareEuroPriceSnippetTransformation();
         $this->mockContext = $this->getMock(Context::class);
+        $this->stubPageSnippets = $this->getMock(PageSnippets::class);
     }
 
     public function testItReturnsNullInputAsAnEmptyString()
@@ -61,8 +68,8 @@ class LocaleAwareEuroPriceSnippetTransformationTest extends \PHPUnit_Framework_T
 
     public function testItThrowsAnExceptionIfTheContextReturnsNoValidLocale()
     {
-        $this->setExpectedException(NoValidLocaleInContextException::class, "No valid locale in context");
-        call_user_func($this->transformation, 0, $this->mockContext);
+        $this->setExpectedException(NoValidLocaleInContextException::class, 'No valid locale in context');
+        call_user_func($this->transformation, 0, $this->mockContext, $this->stubPageSnippets);
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\SnippetTransformation;
 
+use LizardsAndPumpkins\ContentDelivery\PageBuilder\PageSnippets;
 use LizardsAndPumpkins\Context\Context;
 
 /**
@@ -25,17 +26,24 @@ class PricesJsonSnippetTransformationTest extends \PHPUnit_Framework_TestCase
     private $stubPriceSnippetTransformation;
 
     /**
+     * @var PageSnippets|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubPageSnippets;
+
+    /**
      * @param mixed $expected
      * @param mixed $input
      */
     private function assertTransformation($expected, $input)
     {
-        $result = call_user_func($this->pricesJsonSnippetTransformation, $input, $this->stubContext);
+        $callable = $this->pricesJsonSnippetTransformation;
+        $result = call_user_func($callable, $input, $this->stubContext, $this->stubPageSnippets);
         $this->assertSame($expected, $result);
     }
 
     protected function setUp()
     {
+        $this->stubPageSnippets = $this->getMock(PageSnippets::class);
         $this->stubContext = $this->getMock(Context::class);
         $this->stubPriceSnippetTransformation = $this->getMock(SnippetTransformation::class);
         $this->pricesJsonSnippetTransformation = new PricesJsonSnippetTransformation(
