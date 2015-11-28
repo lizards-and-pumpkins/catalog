@@ -31,7 +31,7 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
         $this->searchDocumentBuilder = new ProductSearchDocumentBuilder([$this->searchableAttributeCode]);
     }
 
-    public function testSearchIndexerInterfaceIsImplemented()
+    public function testSearchDocumentBuilderInterfaceIsImplemented()
     {
         $this->assertInstanceOf(SearchDocumentBuilder::class, $this->searchDocumentBuilder);
     }
