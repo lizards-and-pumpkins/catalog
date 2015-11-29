@@ -36,19 +36,10 @@ use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductProjector;
 use LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator;
-use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
-use LizardsAndPumpkins\Product\ProductStockQuantityProjector;
-use LizardsAndPumpkins\Product\ProductStockQuantitySnippetRenderer;
-use LizardsAndPumpkins\Product\ProductStockQuantitySourceBuilder;
-use LizardsAndPumpkins\Product\UpdateMultipleProductStockQuantityCommand;
-use LizardsAndPumpkins\Product\UpdateMultipleProductStockQuantityCommandHandler;
 use LizardsAndPumpkins\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Product\UpdateProductCommandHandler;
 use LizardsAndPumpkins\Product\AddProductListingCommand;
 use LizardsAndPumpkins\Product\AddProductListingCommandHandler;
-use LizardsAndPumpkins\Product\UpdateProductStockQuantityCommand;
-use LizardsAndPumpkins\Product\UpdateProductStockQuantityCommandHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEvent;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHandler;
@@ -114,16 +105,11 @@ use LizardsAndPumpkins\Website\HostToWebsiteMap;
  * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionTemplateProjector
  * @uses   \LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductSearchDocumentBuilder
- * @uses   \LizardsAndPumpkins\Product\ProductStockQuantityProjector
- * @uses   \LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler
- * @uses   \LizardsAndPumpkins\Product\ProductStockQuantitySnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductTaxClassSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductJsonSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\UpdateProductCommandHandler
  * @uses   \LizardsAndPumpkins\Product\AddProductListingCommandHandler
- * @uses   \LizardsAndPumpkins\Product\UpdateProductStockQuantityCommandHandler
- * @uses   \LizardsAndPumpkins\Product\UpdateMultipleProductStockQuantityCommandHandler
  * @uses   \LizardsAndPumpkins\Product\ProductDetailViewBlockRenderer
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer
  * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\ContentBlockSnippetKeyGeneratorLocatorStrategy
@@ -368,60 +354,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(GenericSnippetKeyGenerator::class, $result);
     }
 
-    public function testUpdateProductStockQuantityCommandHandlerIsReturned()
-    {
-        /** @var UpdateProductStockQuantityCommand|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
-        $stubCommand = $this->getMock(UpdateProductStockQuantityCommand::class, [], [], '', false);
-        $result = $this->commonFactory->createUpdateProductStockQuantityCommandHandler($stubCommand);
-
-        $this->assertInstanceOf(UpdateProductStockQuantityCommandHandler::class, $result);
-    }
-
-    public function testUpdateMultipleProductStockQuantityCommandHandlerIsReturned()
-    {
-        /** @var UpdateMultipleProductStockQuantityCommand|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
-        $stubCommand = $this->getMock(UpdateMultipleProductStockQuantityCommand::class, [], [], '', false);
-        $result = $this->commonFactory->createUpdateMultipleProductStockQuantityCommandHandler($stubCommand);
-
-        $this->assertInstanceOf(UpdateMultipleProductStockQuantityCommandHandler::class, $result);
-    }
-
-    public function testProductStockQuantitySourceBuilderIsReturned()
-    {
-        $result = $this->commonFactory->createProductStockQuantitySourceBuilder();
-        $this->assertInstanceOf(ProductStockQuantitySourceBuilder::class, $result);
-    }
-
-    public function testProductStockQuantityProjectorIsReturned()
-    {
-        $result = $this->commonFactory->createProductStockQuantityProjector();
-        $this->assertInstanceOf(ProductStockQuantityProjector::class, $result);
-    }
-
-    public function testSnippetRendererCollectionIsReturned()
-    {
-        $result = $this->commonFactory->createProductStockQuantitySnippetRendererCollection();
-        $this->assertInstanceOf(SnippetRendererCollection::class, $result);
-    }
-
-    public function testArrayOfSnippetRenderersIsReturned()
-    {
-        $result = $this->commonFactory->createProductStockQuantitySnippetRendererList();
-        $this->assertContainsOnly(SnippetRenderer::class, $result);
-    }
-
-    public function testProductStockQuantitySnippetRendererIsReturned()
-    {
-        $result = $this->commonFactory->createProductStockQuantitySnippetRenderer();
-        $this->assertInstanceOf(ProductStockQuantitySnippetRenderer::class, $result);
-    }
-
-    public function testSnippetKeyGeneratorIsReturnedAsProductStockQuantityRendererSnippetKeyGenerator()
-    {
-        $result = $this->commonFactory->createProductStockQuantityRendererSnippetKeyGenerator();
-        $this->assertInstanceOf(GenericSnippetKeyGenerator::class, $result);
-    }
-
     public function testCommandConsumerIsReturned()
     {
         $result = $this->commonFactory->createCommandConsumer();
@@ -446,15 +378,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createCommandHandlerLocator();
         $this->assertInstanceOf(CommandHandlerLocator::class, $result);
-    }
-
-    public function testProductStockQuantityWasUpdatedDomainEventHandlerIsReturned()
-    {
-        /** @var ProductStockQuantityWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
-        $stubDomainEvent = $this->getMock(ProductStockQuantityWasUpdatedDomainEvent::class, [], [], '', false);
-        $result = $this->commonFactory->createProductStockQuantityWasUpdatedDomainEventHandler($stubDomainEvent);
-
-        $this->assertInstanceOf(ProductStockQuantityWasUpdatedDomainEventHandler::class, $result);
     }
 
     public function testUpdateContentBlockCommandHandlerIsReturned()

@@ -10,8 +10,6 @@ use LizardsAndPumpkins\Image\ImageWasAddedDomainEvent;
 use LizardsAndPumpkins\Image\ImageWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler;
-use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEvent;
@@ -39,9 +37,6 @@ use LizardsAndPumpkins\UnitTestFactory;
  * @uses   \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductListingTemplateProjector
  * @uses   \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetProjector
- * @uses   \LizardsAndPumpkins\Product\ProductStockQuantitySnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler
- * @uses   \LizardsAndPumpkins\Product\ProductStockQuantityProjector
  * @uses   \LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Product\ProductJsonSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer
@@ -143,16 +138,6 @@ class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
         $stubEvent = $this->getMock(ProductListingWasAddedDomainEvent::class, [], [], '', false);
         $result = $this->factory->createProductListingWasAddedDomainEventHandler($stubEvent);
         $this->assertDecoratedDomainEventHandlerInstanceOf(ProductListingWasAddedDomainEventHandler::class, $result);
-    }
-
-    public function testItReturnsADecoratedProductStockQuantityWasUpdatedDomainEventHandler()
-    {
-        $stubEvent = $this->getMock(ProductStockQuantityWasUpdatedDomainEvent::class, [], [], '', false);
-        $result = $this->factory->createProductStockQuantityWasUpdatedDomainEventHandler($stubEvent);
-        $this->assertDecoratedDomainEventHandlerInstanceOf(
-            ProductStockQuantityWasUpdatedDomainEventHandler::class,
-            $result
-        );
     }
 
     public function testItReturnsADecoratedContentBlockWasUpdatedDomainEventHandler()

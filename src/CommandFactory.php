@@ -6,33 +6,13 @@ use LizardsAndPumpkins\Content\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Content\UpdateContentBlockCommandHandler;
 use LizardsAndPumpkins\Image\AddImageCommand;
 use LizardsAndPumpkins\Image\AddImageCommandHandler;
-use LizardsAndPumpkins\Product\UpdateMultipleProductStockQuantityCommand;
-use LizardsAndPumpkins\Product\UpdateMultipleProductStockQuantityCommandHandler;
 use LizardsAndPumpkins\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Product\UpdateProductCommandHandler;
 use LizardsAndPumpkins\Product\AddProductListingCommand;
 use LizardsAndPumpkins\Product\AddProductListingCommandHandler;
-use LizardsAndPumpkins\Product\UpdateProductStockQuantityCommand;
-use LizardsAndPumpkins\Product\UpdateProductStockQuantityCommandHandler;
 
 interface CommandFactory
 {
-    /**
-     * @param UpdateProductStockQuantityCommand $command
-     * @return UpdateProductStockQuantityCommandHandler
-     */
-    public function createUpdateProductStockQuantityCommandHandler(
-        UpdateProductStockQuantityCommand $command
-    );
-
-    /**
-     * @param UpdateMultipleProductStockQuantityCommand $command
-     * @return UpdateMultipleProductStockQuantityCommandHandler
-     */
-    public function createUpdateMultipleProductStockQuantityCommandHandler(
-        UpdateMultipleProductStockQuantityCommand $command
-    );
-
     /**
      * @param UpdateContentBlockCommand $command
      * @return UpdateContentBlockCommandHandler

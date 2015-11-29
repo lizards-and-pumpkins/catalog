@@ -68,11 +68,6 @@ use LizardsAndPumpkins\Projection\Catalog\Import\SimpleProductXmlToProductBuilde
 use LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToProductBuilder;
 use LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilder;
 use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
-use LizardsAndPumpkins\Product\ProductStockQuantityProjector;
-use LizardsAndPumpkins\Product\ProductStockQuantitySnippetRenderer;
-use LizardsAndPumpkins\Product\ProductStockQuantitySourceBuilder;
 use LizardsAndPumpkins\Product\UpdateMultipleProductStockQuantityCommand;
 use LizardsAndPumpkins\Product\UpdateMultipleProductStockQuantityCommandHandler;
 use LizardsAndPumpkins\Product\UpdateProductCommand;
@@ -1122,96 +1117,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @param UpdateProductStockQuantityCommand $command
-     * @return UpdateProductStockQuantityCommandHandler
-     */
-    public function createUpdateProductStockQuantityCommandHandler(UpdateProductStockQuantityCommand $command)
-    {
-        return new UpdateProductStockQuantityCommandHandler(
-            $command,
-            $this->getMasterFactory()->getEventQueue(),
-            $this->getMasterFactory()->createProductStockQuantitySourceBuilder()
-        );
-    }
-
-    /**
-     * @param UpdateMultipleProductStockQuantityCommand $command
-     * @return UpdateMultipleProductStockQuantityCommandHandler
-     */
-    public function createUpdateMultipleProductStockQuantityCommandHandler(
-        UpdateMultipleProductStockQuantityCommand $command
-    ) {
-        return new UpdateMultipleProductStockQuantityCommandHandler(
-            $command,
-            $this->getMasterFactory()->getCommandQueue()
-        );
-    }
-
-    /**
-     * @return ProductStockQuantitySourceBuilder
-     */
-    public function createProductStockQuantitySourceBuilder()
-    {
-        return new ProductStockQuantitySourceBuilder();
-    }
-
-    /**
-     * @return ProductStockQuantityProjector
-     */
-    public function createProductStockQuantityProjector()
-    {
-        return new ProductStockQuantityProjector(
-            $this->getMasterFactory()->createDataPoolWriter(),
-            $this->getMasterFactory()->createProductStockQuantitySnippetRendererCollection()
-        );
-    }
-
-    /**
-     * @return SnippetRendererCollection
-     */
-    public function createProductStockQuantitySnippetRendererCollection()
-    {
-        return new SnippetRendererCollection(
-            $this->getMasterFactory()->createProductStockQuantitySnippetRendererList(),
-            $this->getMasterFactory()->createSnippetList()
-        );
-    }
-
-    /**
-     * @return SnippetRenderer[]
-     */
-    public function createProductStockQuantitySnippetRendererList()
-    {
-        return [$this->getMasterFactory()->createProductStockQuantitySnippetRenderer()];
-    }
-
-    /**
-     * @return ProductStockQuantitySnippetRenderer
-     */
-    public function createProductStockQuantitySnippetRenderer()
-    {
-        return new ProductStockQuantitySnippetRenderer(
-            $this->getMasterFactory()->createProductStockQuantityRendererSnippetKeyGenerator(),
-            $this->getMasterFactory()->createContextBuilder(),
-            $this->getMasterFactory()->createSnippetList()
-        );
-    }
-
-    /**
-     * @return SnippetKeyGenerator
-     */
-    public function createProductStockQuantityRendererSnippetKeyGenerator()
-    {
-        $usedDataParts = [Product::ID];
-
-        return new GenericSnippetKeyGenerator(
-            ProductStockQuantitySnippetRenderer::CODE,
-            $this->getMasterFactory()->getRequiredContexts(),
-            $usedDataParts
-        );
-    }
-
-    /**
      * @return CommandConsumer
      */
     public function createCommandConsumer()
@@ -1241,20 +1146,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createCommandHandlerLocator()
     {
         return new CommandHandlerLocator($this);
-    }
-
-    /**
-     * @param ProductStockQuantityWasUpdatedDomainEvent $event
-     * @return ProductStockQuantityWasUpdatedDomainEventHandler
-     */
-    public function createProductStockQuantityWasUpdatedDomainEventHandler(
-        ProductStockQuantityWasUpdatedDomainEvent $event
-    ) {
-        return new ProductStockQuantityWasUpdatedDomainEventHandler(
-            $event,
-            $this->getMasterFactory()->createContextSource(),
-            $this->getMasterFactory()->createProductStockQuantityProjector()
-        );
     }
 
     /**

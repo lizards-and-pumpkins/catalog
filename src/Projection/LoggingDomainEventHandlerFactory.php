@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Projection;
 
 use LizardsAndPumpkins\CommonFactory;
@@ -13,8 +12,6 @@ use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Image\ImageWasAddedDomainEvent;
 use LizardsAndPumpkins\Image\ImageWasAddedDomainEventHandler;
-use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEvent;
@@ -88,19 +85,6 @@ class LoggingDomainEventHandlerFactory implements Factory, DomainEventFactory
         $domainEventFactory = $this->getDomainEventFactoryDelegate();
         return $domainEventFactory->createProcessTimeLoggingDomainEventDecorator(
             $domainEventFactory->createProductListingWasAddedDomainEventHandler($event)
-        );
-    }
-
-    /**
-     * @param ProductStockQuantityWasUpdatedDomainEvent $event
-     * @return ProductStockQuantityWasUpdatedDomainEventHandler
-     */
-    public function createProductStockQuantityWasUpdatedDomainEventHandler(
-        ProductStockQuantityWasUpdatedDomainEvent $event
-    ) {
-        $domainEventFactory = $this->getDomainEventFactoryDelegate();
-        return $domainEventFactory->createProcessTimeLoggingDomainEventDecorator(
-            $domainEventFactory->createProductStockQuantityWasUpdatedDomainEventHandler($event)
         );
     }
 

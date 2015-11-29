@@ -40,7 +40,6 @@ use LizardsAndPumpkins\Http\HttpRouterChain;
  * @uses   \LizardsAndPumpkins\Http\GenericHttpRouter
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler
- * @uses   \LizardsAndPumpkins\Product\MultipleProductStockQuantityApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToProductBuilder

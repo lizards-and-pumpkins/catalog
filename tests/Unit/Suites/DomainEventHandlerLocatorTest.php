@@ -9,14 +9,11 @@ use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler;
-use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
 
 /**
  * @covers \LizardsAndPumpkins\DomainEventHandlerLocator
  * @uses   \LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent
  * @uses   \LizardsAndPumpkins\Image\ImageWasAddedDomainEvent
- * @uses   \LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEvent
  * @uses   \LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent
  * @uses   \LizardsAndPumpkins\TemplateWasUpdatedDomainEvent
  */
@@ -110,21 +107,5 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         $result = $this->locator->getHandlerFor($stubDomainEvent);
 
         $this->assertInstanceOf(ProductListingWasAddedDomainEventHandler::class, $result);
-    }
-
-    public function testProductStockQuantityChangedDomainEventHandlerIsLocatedAndReturned()
-    {
-        $stubEventHandler = $this->getMock(ProductStockQuantityWasUpdatedDomainEventHandler::class, [], [], '', false);
-        $this->factory->method('createProductStockQuantityWasUpdatedDomainEventHandler')->willReturn($stubEventHandler);
-
-        /** @var ProductStockQuantityWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
-        $stubDomainEvent = $this->getMockBuilder(ProductStockQuantityWasUpdatedDomainEvent::class)
-            ->setMockClassName('ProductStockQuantityWasUpdatedDomainEvent')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $result = $this->locator->getHandlerFor($stubDomainEvent);
-
-        $this->assertInstanceOf(ProductStockQuantityWasUpdatedDomainEventHandler::class, $result);
     }
 }
