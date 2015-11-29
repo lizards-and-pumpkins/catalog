@@ -21,10 +21,4 @@ interface PageSnippets
      * @return string
      */
     public function getSnippetByCode($snippetCode);
-
-    /**
-     * @param string $snippetCode
-     * @param string $content
-     */
-    public function updateSnippetByCode($snippetCode, $content);
 }
