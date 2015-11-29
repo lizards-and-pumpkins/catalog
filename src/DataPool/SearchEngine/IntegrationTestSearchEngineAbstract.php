@@ -433,7 +433,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     private function filterDocumentsMatchingCriteria(array $documents, SearchCriteria $criteria, Context $context)
     {
         return array_filter($documents, function (SearchDocument $document) use ($criteria, $context) {
-            return $criteria->matches($document) && $context->isSubsetOf($document->getContext());
+            return $criteria->matches($document) && $context->contains($document->getContext());
         });
     }
 

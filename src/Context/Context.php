@@ -39,6 +39,12 @@ interface Context extends \JsonSerializable
     public function isSubsetOf(Context $otherContext);
 
     /**
+     * @param Context $otherContext
+     * @return bool
+     */
+    public function contains(Context $otherContext);
+
+    /**
      * @param string[] $dataSet
      * @return bool
      */
