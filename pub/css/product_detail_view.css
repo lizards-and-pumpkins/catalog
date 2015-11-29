@@ -8,10 +8,9 @@
 .product-collateral { margin: 30px 0 }
 
 .product-shop { display: table-cell; padding: 10px 15px; vertical-align: top }
-.product-shop .top { border-bottom: 1px solid #fff; margin-bottom: 10px; padding-bottom: 15px }
+.product-shop .top { border-bottom: 1px solid #fff; padding-bottom: 15px }
 .product-shop p { margin: 0 0 5px 0; }
 #switcher-container p { margin: 0; }
-.product-shop .regular-price { font-size: 24px; }
 .product-shop .delivery { color: #3d9b35; }
 .product-shop .note { line-height: 16px; }
 
@@ -32,7 +31,6 @@
 .product-shop .product-title img { float: left }
 .product-shop .similarProducts { font-size: 11px; margin-top: 5px }
 .product-shop h1 { font-size: inherit }
-.product-shop div.top div.informations { position: absolute; top:60px; right:20px; }
 .product-shop .articleInformations { float: right; padding-top: 21px; font-size: 11px }
 .product-shop .articleInformations p { width:150px; float:right; text-align: right }
 
@@ -63,18 +61,23 @@
 
 .product-shop .productAlert { cursor: pointer; display: block; margin-top: 5px }
 .alertPopUp p { margin: 10px 0 }
-.product-shop .price-information { float: right; text-align: right }
-.product-shop .product-main-info .main-information { float: left }
+.product-shop .product-main-info .main-information { float: left; padding: 10px 0 }
 
-.product-controls { margin-top: 12px }
+/* Price */
+.price-information { float: right; padding: 10px 0; text-align: right }
+#regular-price { font-size: 24px }
+#old-price { font-size: 18px; text-decoration: line-through }
+.tax-information { font-size: 10px; color: #8e8e8e; width: 100px; line-height: 1.4em; margin-top: 5px }
+
 .product-controls .selects { margin: 0; float: left }
 .product-controls .selects > * { margin-right: 7px; float: left }
 .product-controls button { float: right }
 
 /* Tablet */
 @media (max-width: 974px) {
-    .product-shop .price-information { text-align: center; float: none; border-top: 1px solid #fff; margin-top: 10px; padding: 15px 0 5px 0; clear: both }
-    .product-shop .price-information p { display: inline-block; margin: 0 5px }
+    .price-information { text-align: center; float: none; border-bottom: 1px solid #fff; clear: both }
+    #regular-price, #old-price { display: inline-block; margin: 0 5px }
+    .tax-information { width: auto }
     .product-shop .articleInformations { float: none; padding: 17px 0; text-align: left }
     .product-controls button { float: left; clear: both; margin: 15px 0 7px 0 }
 }
@@ -89,7 +92,6 @@
     .product-img-box { width: auto }
     .product-shop .articleInformations { padding-top: 0; margin: 10px 0 0 0 }
     .product-shop .similarProducts { display: block; float: left; margin: 10px 0 0 0 }
-    .product-shop .price-information { border-top: none; padding: 0; margin: 0 }
     .main .product-controls button { width: 100%; font-size: 22px; padding: 10px 0 }
 
     #phoneTitlePlaceholder h1 { float: left; font-size: 13px; text-transform: capitalize; padding: 5px }

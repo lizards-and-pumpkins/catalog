@@ -28,12 +28,16 @@ class PricesJsonSnippetTransformation implements SnippetTransformation
         if (!is_string($input)) {
             return '';
         }
-        $prices = json_decode($input);
-        if (!is_array($prices)) {
+
+        $allPrices = json_decode($input);
+        if (!is_array($allPrices)) {
             return '';
         }
-        return json_encode(array_map(function ($price) use ($context, $pageSnippets) {
-            return call_user_func($this->priceSnippetTransformation, $price, $context, $pageSnippets);
-        }, $prices));
+
+        return json_encode(array_map(function (array $prices) use ($context, $pageSnippets) {
+            return array_map(function ($price) use ($context, $pageSnippets) {
+                return call_user_func($this->priceSnippetTransformation, $price, $context, $pageSnippets);
+            }, $prices);
+        }, $allPrices));
     }
 }

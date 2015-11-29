@@ -14,6 +14,7 @@ require([
         addToCartButton;
 
     domReady(function() {
+        renderPrices();
         handleRecentlyViewedProducts();
         initializeAddToCartButton();
         showNextSelectBox();
@@ -26,6 +27,23 @@ require([
         initializeZoom();
         initializeTabs();
     });
+
+    function renderPrices() {
+        var regularPrice = document.getElementById('regular-price'),
+            oldPrice = document.getElementById('old-price');
+
+        if (null === regularPrice || typeof window.regularPrice === 'undefined') {
+            return;
+        }
+
+        if ('' === window.specialPrice) {
+            regularPrice.textContent = window.regularPrice;
+            return;
+        }
+
+        oldPrice.textContent = window.regularPrice;
+        regularPrice.textContent = window.specialPrice;
+    }
 
     function initializeAddToCartButton() {
         addToCartButton = document.querySelector('.product-controls button');
@@ -264,8 +282,6 @@ require([
             brandLogo = document.getElementById('brandLogo'),
             productTopContainer = document.querySelector('.product-shop > .top'),
             productControls = document.querySelector('.product-controls'),
-            price = document.querySelector('.price-information'),
-            productMainInfo = document.querySelector('.product-main-info'),
             similarProductsLink = document.querySelector('.similarProducts'),
             articleInformation = document.querySelector('.articleInformations');
 
@@ -279,10 +295,6 @@ require([
 
             if (!isParent(phoneTitlePlaceholder, brandLogo)) {
                 phoneTitlePlaceholder.appendChild(brandLogo);
-            }
-
-            if (!isParent(productTopContainer, price)) {
-                productTopContainer.appendChild(price);
             }
 
             if (!isParent(productControls, similarProductsLink)) {
@@ -308,32 +320,6 @@ require([
 
             if (!isParent(originalTitleContainer, similarProductsLink)) {
                 originalTitleContainer.appendChild(similarProductsLink);
-            }
-
-            if (!isParent(productTopContainer, articleInformation)) {
-                productTopContainer.appendChild(articleInformation);
-            }
-
-            if (!isParent(productMainInfo, price)) {
-                productMainInfo.appendChild(price);
-            }
-        }
-
-        /* Tablet only */
-        if (currentWidth < siteFullWidth && currentWidth >= tabletWidth) {
-
-            if (!isParent(productTopContainer, price)) {
-                productTopContainer.appendChild(price);
-            }
-
-            if (!isParent(productTopContainer, articleInformation)) {
-                productTopContainer.appendChild(articleInformation);
-            }
-
-        } else if (currentWidth >= siteFullWidth) {
-
-            if (!isParent(productMainInfo, price)) {
-                productMainInfo.appendChild(price);
             }
 
             if (!isParent(productTopContainer, articleInformation)) {

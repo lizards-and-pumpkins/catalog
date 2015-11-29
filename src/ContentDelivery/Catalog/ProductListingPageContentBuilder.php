@@ -85,13 +85,14 @@ class ProductListingPageContentBuilder
     ) {
         $documents = $searchDocumentCollection->getDocuments();
         $productInListingSnippetKeys = $this->getProductInListingSnippetKeysForSearchDocuments($context, ...$documents);
-        $productPriceSnippetKeys = $this->getProductPriceSnippetKeysForSearchDocuments($context, ...$documents);
+        $priceSnippetKeys = $this->getPriceSnippetKeysForSearchDocuments($context, ...$documents);
+        $specialPriceSnippetKeys = $this->getSpecialPriceSnippetKeysForSearchDocuments($context, ...$documents);
 
-        $snippetKeysToFetch = array_merge($productInListingSnippetKeys, $productPriceSnippetKeys);
+        $snippetKeysToFetch = array_merge($productInListingSnippetKeys, $priceSnippetKeys, $specialPriceSnippetKeys);
         $snippets = $this->dataPoolReader->getSnippets($snippetKeysToFetch);
 
         $this->addProductGridSnippetToPageBuilder($snippets, $productInListingSnippetKeys);
-        $this->addProductPricesSnippetToPageBuilder($snippets, $productPriceSnippetKeys);
+        $this->addProductPricesSnippetToPageBuilder($snippets, $priceSnippetKeys, $specialPriceSnippetKeys);
     }
 
     /**
@@ -112,12 +113,22 @@ class ProductListingPageContentBuilder
 
     /**
      * @param Context $context
-     * @param SearchDocument[] $searchDocuments
+     * @param SearchDocument[] $documents
      * @return string[]
      */
-    private function getProductPriceSnippetKeysForSearchDocuments(Context $context, SearchDocument ...$searchDocuments)
+    private function getPriceSnippetKeysForSearchDocuments(Context $context, SearchDocument ...$documents)
     {
-        return $this->getSnippetKeysForGivenSnippetCode(PriceSnippetRenderer::CODE, $context, ...$searchDocuments);
+        return $this->getSnippetKeysForGivenSnippetCode(PriceSnippetRenderer::PRICE, $context, ...$documents);
+    }
+
+    /**
+     * @param Context $context
+     * @param SearchDocument[] $documents
+     * @return string[]
+     */
+    private function getSpecialPriceSnippetKeysForSearchDocuments(Context $context, SearchDocument ...$documents)
+    {
+        return $this->getSnippetKeysForGivenSnippetCode(PriceSnippetRenderer::SPECIAL_PRICE, $context, ...$documents);
     }
 
     /**
@@ -143,28 +154,44 @@ class ProductListingPageContentBuilder
      */
     private function addProductGridSnippetToPageBuilder($snippets, $productInListingSnippetKeys)
     {
-        $this->addCombinedSnippetsWithGivenKeysToPageBuilder($snippets, $productInListingSnippetKeys, 'product_grid');
+        $matchingSnippets = array_intersect_key($snippets, array_flip($productInListingSnippetKeys));
+        $combinedSnippetContent = '[' . implode(',', $matchingSnippets) . ']';
+        $this->addDynamicSnippetToPageBuilder('product_grid', $combinedSnippetContent);
     }
 
     /**
      * @param string[] $snippets
-     * @param string[] $productPriceSnippetKeys
+     * @param string[] $priceSnippetKeys
+     * @param string[] $specialPriceSnippetKeys
      */
-    private function addProductPricesSnippetToPageBuilder($snippets, $productPriceSnippetKeys)
+    private function addProductPricesSnippetToPageBuilder($snippets, $priceSnippetKeys, $specialPriceSnippetKeys)
     {
-        $this->addCombinedSnippetsWithGivenKeysToPageBuilder($snippets, $productPriceSnippetKeys, 'product_prices');
+        $prices = array_map(function ($index) use ($snippets, $priceSnippetKeys, $specialPriceSnippetKeys) {
+            return $this->getPriceSnippetsArray($snippets, $priceSnippetKeys[$index], $specialPriceSnippetKeys[$index]);
+        }, array_keys($priceSnippetKeys));
+
+        $this->addDynamicSnippetToPageBuilder('product_prices', json_encode($prices));
     }
 
     /**
-     * @param string[] $allSnippets
-     * @param string[] $snippetKeysToUse
-     * @param string $combinedSnippetKey
+     * @param string[] $snippets
+     * @param string $priceSnippetKey
+     * @param string $specialPriceSnippetKey
+     * @return string[]
      */
-    private function addCombinedSnippetsWithGivenKeysToPageBuilder($allSnippets, $snippetKeysToUse, $combinedSnippetKey)
+    private function getPriceSnippetsArray(array $snippets, $priceSnippetKey, $specialPriceSnippetKey)
     {
-        $matchingSnippets = array_intersect_key($allSnippets, array_flip($snippetKeysToUse));
-        $combinedSnippetContent = '[' . implode(',', $matchingSnippets) . ']';
-        $this->addDynamicSnippetToPageBuilder($combinedSnippetKey, $combinedSnippetContent);
+        $price = [];
+
+        if (isset($snippets[$priceSnippetKey])) {
+            $price[] = $snippets[$priceSnippetKey];
+        }
+
+        if (isset($snippets[$specialPriceSnippetKey])) {
+            $price[] = $snippets[$specialPriceSnippetKey];
+        }
+
+        return $price;
     }
 
     private function addPaginationSnippetsToPageBuilder(

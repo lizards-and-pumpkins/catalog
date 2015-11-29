@@ -52,28 +52,35 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(SnippetRenderer::class, $this->renderer);
     }
 
+    public function testNothingIsAddedToSnippetListIfProductDoesNotHaveARequiredAttribute()
+    {
+        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
+        $stubProduct = $this->getMock(Product::class);
+        $stubProduct->method('hasAttribute')->with($this->dummyPriceAttributeCode)->willReturn(false);
+
+        $this->mockSnippetList->expects($this->never())->method('add');
+
+        $this->renderer->render($stubProduct);
+    }
+
     public function testSnippetListContainingSnippetWithGivenKeyAndPriceIsReturned()
     {
         $stubContext = $this->getMock(Context::class);
         $dummyPriceSnippetKey = 'bar';
         $dummyPriceAttributeValue = 1;
 
-        $mockProduct = $this->getMock(Product::class);
-        $mockProduct->method('getFirstValueOfAttribute')
-            ->with($this->dummyPriceAttributeCode)
+        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
+        $stubProduct = $this->getMock(Product::class);
+        $stubProduct->method('hasAttribute')->with($this->dummyPriceAttributeCode)->willReturn(true);
+        $stubProduct->method('getContext')->willReturn($stubContext);
+        $stubProduct->method('getFirstValueOfAttribute')->with($this->dummyPriceAttributeCode)
             ->willReturn($dummyPriceAttributeValue);
-        
-        $mockProduct->method('getContext')->willReturn($stubContext);
 
-        $this->mockSnippetKeyGenerator->method('getKeyForContext')
-            ->willReturn($dummyPriceSnippetKey);
+        $this->mockSnippetKeyGenerator->method('getKeyForContext')->willReturn($dummyPriceSnippetKey);
 
         $expectedSnippet = Snippet::create($dummyPriceSnippetKey, $dummyPriceAttributeValue);
+        $this->mockSnippetList->expects($this->once())->method('add')->with($expectedSnippet);
 
-        $this->mockSnippetList->expects($this->once())
-            ->method('add')
-            ->with($expectedSnippet);
-
-        $this->renderer->render($mockProduct);
+        $this->renderer->render($stubProduct);
     }
 }

@@ -15,6 +15,7 @@ use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpsUrl;
 use LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler;
 use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
+use LizardsAndPumpkins\Product\PriceSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
@@ -184,7 +185,7 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
      * @dataProvider registeredSnippetCodeDataProvider
      * @param string $snippetCode
      */
-    public function testContentBlockSnippetKeyGeneratorLocatorReturnsSnippetKeyGenerator($snippetCode)
+    public function testSnippetKeyGeneratorForGivenCodeIsReturned($snippetCode)
     {
         $snippetKeyGeneratorLocator = $this->frontendFactory->createRegistrySnippetKeyGeneratorLocatorStrategy();
         $result = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
@@ -202,7 +203,8 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
             [ProductInSearchAutosuggestionSnippetRenderer::CODE],
             [ProductInListingSnippetRenderer::CODE],
             [ProductListingPageSnippetRenderer::CODE],
-            ['price'],
+            [PriceSnippetRenderer::PRICE],
+            [PriceSnippetRenderer::SPECIAL_PRICE],
             ['backorders'],
             [ProductListingCriteriaSnippetRenderer::CODE],
             [ProductSearchResultMetaSnippetRenderer::CODE],

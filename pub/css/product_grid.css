@@ -6,7 +6,9 @@
 .products-grid .product-image { display: block; margin: 0 0 10px 0 }
 .products-grid h2 { font-size: 14px; margin-bottom: 5px; position: relative; width: 220px }
 .products-grid .retail-price { text-decoration: line-through; position: relative; margin-bottom: 5px }
-.products-grid .regular-price, .products-grid .special-price { font-size: 15px; font-weight: bold; position: absolute; bottom: 23px; right: 14px }
+.products-grid .regular-price, .products-grid .special-price, .products-grid .old-price { position: absolute; right: 14px }
+.products-grid .regular-price, .products-grid .special-price { font-size: 15px; font-weight: bold;  bottom: 20px }
+.products-grid .old-price { text-decoration: line-through; bottom: 40px }
 .products-grid li .new-product { background: #3CABD9; color: #ffffff; font-family: GeogrotesqueRegular, Helvetica, Arial, sans-serif; font-size: 1.2em; overflow: hidden; padding: 3px 7px; text-transform: uppercase; position: absolute; left: 0; top: 0; vertical-align: baseline }
 
 .swipe-container .products-grid li { display: table-cell; width: auto }
