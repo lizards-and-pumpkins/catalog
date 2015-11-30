@@ -22,7 +22,6 @@ use LizardsAndPumpkins\UnitTestFactory;
 /**
  * @covers \LizardsAndPumpkins\Projection\LoggingDomainEventHandlerFactory
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
- * @uses   \LizardsAndPumpkins\Product\ProductBackOrderAvailabilitySnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductProjector
  * @uses   \LizardsAndPumpkins\Product\ProductInListingSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductSearchDocumentBuilder

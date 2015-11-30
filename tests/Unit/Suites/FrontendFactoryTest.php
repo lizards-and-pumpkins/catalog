@@ -204,7 +204,6 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
             [ProductListingPageSnippetRenderer::CODE],
             [PriceSnippetRenderer::PRICE],
             [PriceSnippetRenderer::SPECIAL_PRICE],
-            ['backorders'],
             [ProductListingCriteriaSnippetRenderer::CODE],
             [ProductSearchResultMetaSnippetRenderer::CODE],
             [ProductSearchAutosuggestionMetaSnippetRenderer::CODE],

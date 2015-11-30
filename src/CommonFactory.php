@@ -36,7 +36,6 @@ use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\PriceSnippetRenderer;
 use LizardsAndPumpkins\Product\Product;
-use LizardsAndPumpkins\Product\ProductBackOrderAvailabilitySnippetRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewBlockRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionBlockRenderer;
@@ -253,8 +252,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $this->getMasterFactory()->createSpecialPriceSnippetRenderer(),
             $this->getMasterFactory()->createProductTaxClassSnippetRenderer(),
             $this->getMasterFactory()->createProductJsonSnippetRenderer(),
-            $this->getMasterFactory()->createConfigurableProductJsonSnippetRenderer(),
-            $this->getMasterFactory()->createProductBackOrderAvailabilitySnippetRenderer()
+            $this->getMasterFactory()->createConfigurableProductJsonSnippetRenderer()
         ];
     }
 
@@ -676,20 +674,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return ProductBackOrderAvailabilitySnippetRenderer
-     */
-    public function createProductBackOrderAvailabilitySnippetRenderer()
-    {
-        $productBackOrderAvailabilityAttributeCode = 'backorders';
-
-        return new ProductBackOrderAvailabilitySnippetRenderer(
-            $this->getMasterFactory()->createSnippetList(),
-            $this->getMasterFactory()->createProductBackOrderAvailabilitySnippetKeyGenerator(),
-            $productBackOrderAvailabilityAttributeCode
-        );
-    }
-
-    /**
      * @return SnippetKeyGenerator
      */
     public function createProductInListingSnippetKeyGenerator()
@@ -753,20 +737,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
 
         return new GenericSnippetKeyGenerator(
             PriceSnippetRenderer::SPECIAL_PRICE,
-            $this->getMasterFactory()->getRequiredContexts(),
-            $usedDataParts
-        );
-    }
-
-    /**
-     * @return SnippetKeyGenerator
-     */
-    public function createProductBackOrderAvailabilitySnippetKeyGenerator()
-    {
-        $usedDataParts = [Product::ID];
-
-        return new GenericSnippetKeyGenerator(
-            $this->getMasterFactory()->getProductBackOrderAvailabilitySnippetKey(),
             $this->getMasterFactory()->getRequiredContexts(),
             $usedDataParts
         );
@@ -1082,14 +1052,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         }
 
         return $this->searchEngine;
-    }
-
-    /**
-     * @return string
-     */
-    public function getProductBackOrderAvailabilitySnippetKey()
-    {
-        return 'backorders';
     }
 
     /**

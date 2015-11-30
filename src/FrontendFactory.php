@@ -274,12 +274,6 @@ class FrontendFactory implements Factory
             }
         );
         $registrySnippetKeyGeneratorLocator->register(
-            $this->getMasterFactory()->getProductBackOrderAvailabilitySnippetKey(),
-            function () {
-                return $this->getMasterFactory()->createProductBackOrderAvailabilitySnippetKeyGenerator();
-            }
-        );
-        $registrySnippetKeyGeneratorLocator->register(
             ProductListingCriteriaSnippetRenderer::CODE,
             function () {
                 return $this->getMasterFactory()->createProductListingCriteriaSnippetKeyGenerator();

@@ -17,7 +17,6 @@ use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 use LizardsAndPumpkins\Utils\XPathParser;
 
 class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
@@ -54,7 +53,6 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $productId = ProductId::fromString('118235-251');
         $productName = 'LED Arm-Signallampe';
         $productPrice = 1145;
-        $productBackOrderAvailability = 'true';
 
         $this->importCatalog('catalog.xml');
 
@@ -105,15 +103,6 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $priceSnippetContents = $dataPoolReader->getSnippet($priceSnippetKey);
 
         $this->assertEquals($productPrice, $priceSnippetContents);
-
-        $backOrderAvailabilitySnippetKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('backorders');
-        $backOrderAvailabilitySnippetKey = $backOrderAvailabilitySnippetKeyGenerator->getKeyForContext(
-            $context,
-            [Product::ID => $productId]
-        );
-        $backOrderAvailabilitySnippetContents = $dataPoolReader->getSnippet($backOrderAvailabilitySnippetKey);
-
-        $this->assertEquals($productBackOrderAvailability, $backOrderAvailabilitySnippetContents);
 
         $criteria = SearchCriterionEqual::create('name', 'LED Arm-Signallampe');
         $selectedFilters = [];
