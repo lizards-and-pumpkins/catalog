@@ -222,9 +222,9 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $productAId = ProductId::fromString(uniqid());
         $productBId = ProductId::fromString(uniqid());
-        $documentAContext = $this->createContextFromDataParts(['website' => 'value1', 'locale' => 'value2']);
-        $documentBContext = $this->createContextFromDataParts(['website' => 'value1', 'locale' => 'value2']);
-        $queryContext = $this->createContextFromDataParts(['locale' => 'value2']);
+        $documentAContext = $this->createContextFromDataParts(['locale' => 'value2']);
+        $documentBContext = $this->createContextFromDataParts([ 'locale' => 'value2']);
+        $queryContext = $this->createContextFromDataParts(['website' => 'value1', 'locale' => 'value2']);
 
         $documentFields = [$fieldName => $fieldValue];
         $searchDocumentA = $this->createSearchDocumentWithContext($documentFields, $productAId, $documentAContext);

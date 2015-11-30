@@ -56,11 +56,11 @@ class ContextCountryTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(ContextCountry::CODE, $this->contextCountry->getCode());
     }
 
-    public function testItReturnsTheReturnValueOfTheWebsiteToCountryMapIfNothingIsSpecifiedInTheRequest()
+    public function testItReturnsNullIfTheCountryIsNotInTheInputAndNoRequestIsPresentEither()
     {
         $inputDataSet = [];
         $otherContextParts = [];
-        $this->assertSame('default', $this->contextCountry->getValue($inputDataSet, $otherContextParts));
+        $this->assertNull($this->contextCountry->getValue($inputDataSet, $otherContextParts));
     }
 
     public function testItReturnsTheValueFromTheInputDataSetIfPresent()

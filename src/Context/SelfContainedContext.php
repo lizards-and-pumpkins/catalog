@@ -91,6 +91,15 @@ class SelfContainedContext implements Context
     }
 
     /**
+     * @param Context $otherContext
+     * @return bool
+     */
+    public function contains(Context $otherContext)
+    {
+        return $otherContext->isSubsetOf($this);
+    }
+
+    /**
      * @param string[] $dataSet
      * @return bool
      */

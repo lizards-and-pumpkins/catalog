@@ -42,7 +42,10 @@ class SelfContainedContextBuilder implements ContextBuilder
      */
     private function getPart(ContextPartBuilder $partBuilder, array $inputDataSet, array $carry)
     {
-        return [$partBuilder->getCode() => $partBuilder->getValue($inputDataSet, $carry)];
+        $value = $partBuilder->getValue($inputDataSet, $carry);
+        return null === $value ?
+            [] :
+            [$partBuilder->getCode() => $value];
     }
 
     /**

@@ -199,15 +199,6 @@ class PageBuilderSnippets implements PageSnippets
     }
 
     /**
-     * @param string $snippetCode
-     * @return string
-     */
-    public function getKeyByCode($snippetCode)
-    {
-        return $this->codeToKeyMap[$snippetCode];
-    }
-
-    /**
      * @param string $snippetKey
      * @param string $content
      */
