@@ -1029,7 +1029,10 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductSearchDocumentBuilder()
     {
+        $availabilityAttributeCodes = ['backorders', 'stock_qty'];
+
         $indexAttributeCodes = array_merge(
+            $availabilityAttributeCodes,
             $this->getMasterFactory()->getSearchableAttributeCodes(),
             $this->getMasterFactory()->getProductListingFilterNavigationConfig()->getAttributeCodeStrings(),
             $this->getMasterFactory()->getProductSearchResultsFilterNavigationConfig()->getAttributeCodeStrings()
