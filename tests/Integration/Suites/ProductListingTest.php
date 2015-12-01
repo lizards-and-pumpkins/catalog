@@ -73,6 +73,9 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(json_encode($expectedCriteria), json_encode($metaInfoSnippet['product_selection_criteria']));
     }
 
+    /**
+     * @return HttpResponse
+     */
     public function testProductListingPageHtmlIsReturned()
     {
         $this->importCatalog();
