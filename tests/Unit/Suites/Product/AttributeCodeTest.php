@@ -117,7 +117,7 @@ class AttributeCodeTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(
             InvalidAttributeCodeException::class,
-            'The attribute code may not and with an underscore, got "abc_"'
+            'The attribute code may not end with an underscore, got "abc_"'
         );
         AttributeCode::fromString('abc_');
     }
