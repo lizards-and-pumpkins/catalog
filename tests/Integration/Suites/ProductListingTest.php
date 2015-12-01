@@ -4,9 +4,11 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
+use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Log\LogMessage;
@@ -59,6 +61,10 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
         $metaInfoSnippet = json_decode($metaInfoSnippetJson, true);
 
         $expectedCriteria = CompositeSearchCriterion::createAnd(
+            CompositeSearchCriterion::createOr(
+                SearchCriterionGreaterThan::create('stock_qty', '0'),
+                SearchCriterionEqual::create('backorders', 'true')
+            ),
             SearchCriterionEqual::create('category', 'sale'),
             SearchCriterionEqual::create('brand', 'Adidas')
         );
@@ -88,6 +94,23 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
 
         $expectedProductName = 'Gel-Noosa';
         $unExpectedProductName = 'LED Armflasher';
+
+        $this->assertContains($expectedProductName, $body);
+        $this->assertNotContains($unExpectedProductName, $body);
+
+        return $page;
+    }
+
+    /**
+     * @depends testProductListingPageHtmlIsReturned
+     * @param HttpResponse $page
+     */
+    public function testProductListingPageDoesNotContainOutOfStockProducts(HttpResponse $page)
+    {
+        $expectedProductName = 'Adilette';
+        $unExpectedProductName = 'Adilette Out Of Stock';
+
+        $body = $page->getBody();
 
         $this->assertContains($expectedProductName, $body);
         $this->assertNotContains($unExpectedProductName, $body);

@@ -68,7 +68,27 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 <price>14.92</price>
                 <brand>Adidas</brand>
                 <gender>Herren</gender>
-                <stock_qty>5</stock_qty>
+                <stock_qty>0</stock_qty>
+                <backorders>true</backorders>
+                <color>d90000</color>
+            </attributes>
+        </product>
+
+        <product type="simple" sku="288193NEU-OUT-OF-STOCK" tax_class="19%">
+            <images>
+                <image>
+                    <file>288193_14.jpg</file>
+                    <label/>
+                </image>
+            </images>
+            <attributes>
+                <url_key>adilette-out-of-stock</url_key>
+                <name>Adilette Out Of Stock</name>
+                <category>sale</category>
+                <price>14.92</price>
+                <brand>Adidas</brand>
+                <gender>Herren</gender>
+                <stock_qty>0</stock_qty>
                 <backorders>false</backorders>
                 <color>d90000</color>
             </attributes>
@@ -522,12 +542,24 @@ TEXTILE/SYNTHETICS]]></description>
         </product>
     </products>
     <listings>
-        <listing url_key="adidas-sale" condition="and" website="ru" locale="de_DE">
-            <category operation="Equal">sale</category>
-            <brand operation="Equal">Adidas</brand>
+        <listing url_key="adidas-sale" website="ru" locale="de_DE">
+            <criteria condition="and">
+                <criteria condition="or">
+                    <stock_qty operation="GreaterThan">0</stock_qty>
+                    <backorders operation="Equal">true</backorders>
+                </criteria>
+                <category operation="Equal">sale</category>
+                <brand operation="Equal">Adidas</brand>
+            </criteria>
         </listing>
-        <listing url_key="sale" condition="and" website="ru" locale="de_DE">
-            <category operation="Equal">sale</category>
+        <listing url_key="sale" website="ru" locale="de_DE">
+            <criteria condition="and">
+                <criteria condition="or">
+                    <stock_qty operation="GreaterThan">0</stock_qty>
+                    <backorders operation="Equal">true</backorders>
+                </criteria>
+                <category operation="Equal">sale</category>
+            </criteria>
         </listing>
     </listings>
 </catalog>

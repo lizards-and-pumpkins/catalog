@@ -63,6 +63,7 @@ class ProductListingCriteriaSnippetContent implements PageMetaInfoSnippetContent
         $pageInfo = self::decodeJson($json);
         self::validateRequiredKeysArePresent($pageInfo);
 
+        self::validateSearchCriteriaMetaInfo($pageInfo[self::KEY_CRITERIA]);
         $searchCriteria = self::createSearchCriteriaFromMetaInfo($pageInfo[self::KEY_CRITERIA]);
 
         return static::create(
@@ -152,10 +153,10 @@ class ProductListingCriteriaSnippetContent implements PageMetaInfoSnippetContent
      */
     private static function createSearchCriteriaFromMetaInfo(array $metaInfo)
     {
-        self::validateSearchCriteriaMetaInfo($metaInfo);
-
         $criterionArray = array_map(function (array $criterionMetaInfo) {
-            self::validateSearchCriterionMetaInfo($criterionMetaInfo);
+            if (isset($criterionMetaInfo['condition'])) {
+                return self::createSearchCriteriaFromMetaInfo($criterionMetaInfo);
+            }
 
             return call_user_func(
                 [self::getCriterionClassNameForOperation($criterionMetaInfo['operation']), 'create'],
@@ -164,7 +165,10 @@ class ProductListingCriteriaSnippetContent implements PageMetaInfoSnippetContent
             );
         }, $metaInfo['criteria']);
 
-        return CompositeSearchCriterion::createAnd(...$criterionArray);
+        return call_user_func(
+            [CompositeSearchCriterion::class, self::getCriteriaConstructorNameForCondition($metaInfo['condition'])],
+            ...$criterionArray
+        );
     }
 
     /**
@@ -176,13 +180,29 @@ class ProductListingCriteriaSnippetContent implements PageMetaInfoSnippetContent
             throw new MalformedSearchCriteriaMetaException('Missing criteria condition.');
         }
 
+        $condition = $metaInfo['condition'];
+        if (!method_exists(CompositeSearchCriterion::class, self::getCriteriaConstructorNameForCondition($condition))) {
+            throw new MalformedSearchCriteriaMetaException(
+                sprintf('Unknown criteria condition "%s".', $metaInfo['condition'])
+            );
+        }
+
         if (!isset($metaInfo['criteria'])) {
             throw new MalformedSearchCriteriaMetaException('Missing criteria.');
         }
+
+        array_map(function(array $criteria) {
+            if (isset($criteria['condition'])) {
+                self::validateSearchCriteriaMetaInfo($criteria);
+                return;
+            }
+
+            self::validateSearchCriterionMetaInfo($criteria);
+        }, $metaInfo['criteria']);
     }
 
     /**
-     * @param string[] $criterionArray
+     * @param mixed[] $criterionArray
      */
     private static function validateSearchCriterionMetaInfo(array $criterionArray)
     {
@@ -212,5 +232,14 @@ class ProductListingCriteriaSnippetContent implements PageMetaInfoSnippetContent
     private static function getCriterionClassNameForOperation($operationName)
     {
         return SearchCriterion::class . $operationName;
+    }
+
+    /**
+     * @param string $condition
+     * @return string
+     */
+    private static function getCriteriaConstructorNameForCondition($condition)
+    {
+        return 'create' . ucfirst($condition);
     }
 }

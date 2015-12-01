@@ -46,18 +46,24 @@
                         <xs:sequence maxOccurs="unbounded">
                             <xs:element name="listing">
                                 <xs:complexType>
-                                    <xs:sequence maxOccurs="unbounded">
-                                        <xs:any processContents="skip" />
+                                    <xs:sequence>
+                                        <xs:element name="criteria" maxOccurs="1">
+                                            <xs:complexType>
+                                                <xs:sequence maxOccurs="unbounded">
+                                                    <xs:any processContents="skip" />
+                                                </xs:sequence>
+                                                <xs:attribute name="condition" use="required">
+                                                    <xs:simpleType>
+                                                        <xs:restriction base="xs:string">
+                                                            <xs:enumeration value="or" />
+                                                            <xs:enumeration value="and" />
+                                                        </xs:restriction>
+                                                    </xs:simpleType>
+                                                </xs:attribute>
+                                            </xs:complexType>
+                                        </xs:element>
                                     </xs:sequence>
                                     <xs:attribute name="url_key" type="xs:string" use="required" />
-                                    <xs:attribute name="condition" use="required">
-                                        <xs:simpleType>
-                                            <xs:restriction base="xs:string">
-                                                <xs:enumeration value="or" />
-                                                <xs:enumeration value="and" />
-                                            </xs:restriction>
-                                        </xs:simpleType>
-                                    </xs:attribute>
                                     <xs:anyAttribute processContents="skip" />
                                 </xs:complexType>
                             </xs:element>

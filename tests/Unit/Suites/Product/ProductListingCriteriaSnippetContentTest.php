@@ -31,8 +31,13 @@ class ProductListingCriteriaSnippetContentTest extends \PHPUnit_Framework_TestCa
     protected function setUp()
     {
         $this->stubSelectionCriteria = $this->getMock(CompositeSearchCriterion::class, [], [], '', false);
-        $this->stubSelectionCriteria->method('jsonSerialize')
-            ->willReturn(['condition' => CompositeSearchCriterion::AND_CONDITION, 'criteria' => []]);
+        $this->stubSelectionCriteria->method('jsonSerialize')->willReturn([
+            'condition' => CompositeSearchCriterion::AND_CONDITION,
+            'criteria' => [[
+                'condition' => CompositeSearchCriterion::AND_CONDITION,
+                'criteria' => []
+            ]]
+        ]);
 
         $pageSnippetCodes = [$this->rootSnippetCode];
 
@@ -147,12 +152,34 @@ class ProductListingCriteriaSnippetContentTest extends \PHPUnit_Framework_TestCa
         ProductListingCriteriaSnippetContent::fromJson($json);
     }
 
+    public function testExceptionIsThrownIfSearchCriteriaConditionIsInvalid()
+    {
+        $invalidCriteriaOperation = 'foo';
+
+        $this->setExpectedException(
+            MalformedSearchCriteriaMetaException::class,
+            sprintf('Unknown criteria condition "%s".', $invalidCriteriaOperation)
+        );
+
+        $json = json_encode([
+            ProductListingCriteriaSnippetContent::KEY_CRITERIA => [
+                'condition' => $invalidCriteriaOperation
+            ],
+            ProductListingCriteriaSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
+            ProductListingCriteriaSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
+        ]);
+
+        ProductListingCriteriaSnippetContent::fromJson($json);
+    }
+
     public function testExceptionIsThrownIfSearchCriteriaCriteriaIsMissing()
     {
         $this->setExpectedException(MalformedSearchCriteriaMetaException::class, 'Missing criteria.');
 
         $json = json_encode([
-            ProductListingCriteriaSnippetContent::KEY_CRITERIA => ['condition' => ''],
+            ProductListingCriteriaSnippetContent::KEY_CRITERIA => [
+                'condition' => CompositeSearchCriterion::AND_CONDITION
+            ],
             ProductListingCriteriaSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
             ProductListingCriteriaSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
         ]);
@@ -166,7 +193,7 @@ class ProductListingCriteriaSnippetContentTest extends \PHPUnit_Framework_TestCa
 
         $json = json_encode([
             ProductListingCriteriaSnippetContent::KEY_CRITERIA => [
-                'condition' => '',
+                'condition' => CompositeSearchCriterion::AND_CONDITION,
                 'criteria'  => [[]]
             ],
             ProductListingCriteriaSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
@@ -182,7 +209,7 @@ class ProductListingCriteriaSnippetContentTest extends \PHPUnit_Framework_TestCa
 
         $json = json_encode([
             ProductListingCriteriaSnippetContent::KEY_CRITERIA => [
-                'condition' => '',
+                'condition' => CompositeSearchCriterion::AND_CONDITION,
                 'criteria'  => [
                     ['fieldName' => 'foo']
                 ]
@@ -200,7 +227,7 @@ class ProductListingCriteriaSnippetContentTest extends \PHPUnit_Framework_TestCa
 
         $json = json_encode([
             ProductListingCriteriaSnippetContent::KEY_CRITERIA => [
-                'condition' => '',
+                'condition' => CompositeSearchCriterion::AND_CONDITION,
                 'criteria'  => [
                     ['fieldName' => 'foo', 'fieldValue' => 'bar']
                 ]
@@ -223,7 +250,7 @@ class ProductListingCriteriaSnippetContentTest extends \PHPUnit_Framework_TestCa
 
         $json = json_encode([
             ProductListingCriteriaSnippetContent::KEY_CRITERIA => [
-                'condition' => '',
+                'condition' => CompositeSearchCriterion::AND_CONDITION,
                 'criteria'  => [
                     ['fieldName' => 'foo', 'fieldValue' => 'bar', 'operation' => $invalidOperationName]
                 ]
@@ -243,7 +270,7 @@ class ProductListingCriteriaSnippetContentTest extends \PHPUnit_Framework_TestCa
 
         $json = json_encode([
             ProductListingCriteriaSnippetContent::KEY_CRITERIA => [
-                'condition' => '',
+                'condition' => CompositeSearchCriterion::AND_CONDITION,
                 'criteria'  => [
                     ['fieldName' => $fieldName, 'fieldValue' => $fieldValue, 'operation' => $operation]
                 ]
