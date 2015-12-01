@@ -7,6 +7,7 @@ use LizardsAndPumpkins\ContentDelivery\PageBuilder;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
+use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductId;
@@ -147,6 +148,9 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
         $this->assertContains($expectation, $html);
     }
 
+    /**
+     * @return HttpResponse
+     */
     public function testSearchAutosuggestionHtmlIsReturned()
     {
         $this->importCatalog();
@@ -172,6 +176,23 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
 
         $expectedProductName = 'Adilette';
         $unExpectedProductName = 'LED Armflasher';
+
+        $this->assertContains($expectedProductName, $body);
+        $this->assertNotContains($unExpectedProductName, $body);
+
+        return $page;
+    }
+
+    /**
+     * @depends testSearchAutosuggestionHtmlIsReturned
+     * @param HttpResponse $page
+     */
+    public function testAutosuggestionHtmlPageDoesNotContainOutOfStockProducts(HttpResponse $page)
+    {
+        $expectedProductName = 'Adilette';
+        $unExpectedProductName = 'Adilette Out Of Stock';
+
+        $body = $page->getBody();
 
         $this->assertContains($expectedProductName, $body);
         $this->assertNotContains($unExpectedProductName, $body);

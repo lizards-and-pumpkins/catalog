@@ -75,9 +75,15 @@ class SearchCriteriaBuilderTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->builder->createCriteriaForAnyOfGivenFieldsContainsString($fields, $queryString);
 
-        $expectedCriteria = CompositeSearchCriterion::createOr(
-            SearchCriterionLike::create('foo', $queryString),
-            SearchCriterionLike::create('bar', $queryString)
+        $expectedCriteria = CompositeSearchCriterion::createAnd(
+            CompositeSearchCriterion::createOr(
+                SearchCriterionLike::create('foo', $queryString),
+                SearchCriterionLike::create('bar', $queryString)
+            ),
+            CompositeSearchCriterion::createOr(
+                SearchCriterionGreaterThan::create('stock_qty', 0),
+                SearchCriterionEqual::create('backorders', 'true')
+            )
         );
 
         $this->assertEquals($expectedCriteria, $result);

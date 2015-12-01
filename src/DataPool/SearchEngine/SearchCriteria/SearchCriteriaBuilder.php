@@ -43,10 +43,16 @@ class SearchCriteriaBuilder
      */
     public function createCriteriaForAnyOfGivenFieldsContainsString(array $fieldNames, $queryString)
     {
-        return CompositeSearchCriterion::createOr(
-            ...array_map(function ($fieldName) use ($queryString) {
-                return SearchCriterionLike::create($fieldName, $queryString);
-            }, $fieldNames)
+        return CompositeSearchCriterion::createAnd(
+            CompositeSearchCriterion::createOr(
+                ...array_map(function ($fieldName) use ($queryString) {
+                    return SearchCriterionLike::create($fieldName, $queryString);
+                }, $fieldNames)
+            ),
+            CompositeSearchCriterion::createOr(
+                SearchCriterionGreaterThan::create('stock_qty', 0),
+                SearchCriterionEqual::create('backorders', 'true')
+            )
         );
     }
 }
