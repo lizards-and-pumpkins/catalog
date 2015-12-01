@@ -55,9 +55,10 @@ EOX;
         $this->assertEquals('men-accessories', $urlKey);
         $this->assertEquals(['version' => '-1', 'website' => 'ru', 'locale' => 'en_US'], $context);
 
-        $expectedCriterion1 = SearchCriterionEqual::create('category', 'accessories');
-        $expectedCriterion2 = SearchCriterionEqual::create('gender', 'male');
-        $expectedCriteria = CompositeSearchCriterion::createAnd($expectedCriterion1, $expectedCriterion2);
+        $expectedCriteria = CompositeSearchCriterion::createAnd(
+            SearchCriterionEqual::create('category', 'accessories'),
+            SearchCriterionEqual::create('gender', 'male')
+        );
 
         $this->assertEquals($expectedCriteria, $result);
     }
@@ -75,9 +76,10 @@ EOX;
             ->createProductListingCriteriaFromXml($xml, $this->testDataVersion);
         $result = $productListingCriteria->getCriteria();
 
-        $expectedCriterion1 = SearchCriterionEqual::create('category', 'accessories');
-        $expectedCriterion2 = SearchCriterionEqual::create('gender', 'male');
-        $expectedCriteria = CompositeSearchCriterion::createOr($expectedCriterion1, $expectedCriterion2);
+        $expectedCriteria = CompositeSearchCriterion::createOr(
+            SearchCriterionEqual::create('category', 'accessories'),
+            SearchCriterionEqual::create('gender', 'male')
+        );
 
         $this->assertEquals($expectedCriteria, $result);
     }
@@ -129,23 +131,27 @@ EOX;
 
     public function testItThrowsAnExceptionIfTheContextArrayContainsNonStrings()
     {
+        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubSearchCriteria */
+        $stubSearchCriteria = $this->getMock(SearchCriteria::class);
         $expectedMessage = 'The context array has to contain only string values, found ';
         $this->setExpectedException(DataNotStringException::class, $expectedMessage);
         (new ProductListingCriteriaBuilder())->createProductListingCriteria(
             UrlKey::fromString('http://example.com'),
             ['key' => 123],
-            $this->getMock(SearchCriteria::class)
+            $stubSearchCriteria
         );
     }
 
     public function testItThrowsAnExceptionIfTheContextArrayKeysAreNotStrings()
     {
+        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubSearchCriteria */
+        $stubSearchCriteria = $this->getMock(SearchCriteria::class);
         $expectedMessage = 'The context array has to contain only string keys, found ';
         $this->setExpectedException(DataNotStringException::class, $expectedMessage);
         (new ProductListingCriteriaBuilder())->createProductListingCriteria(
             UrlKey::fromString('http://example.com'),
             [0 => 'value'],
-            $this->getMock(SearchCriteria::class)
+            $stubSearchCriteria
         );
     }
 }
