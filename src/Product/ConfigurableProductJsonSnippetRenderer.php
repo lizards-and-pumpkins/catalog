@@ -84,10 +84,12 @@ class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
      */
     private function createVariationAttributesJsonSnippetContent(Product $product)
     {
-        $content = $this->isConfigurableProduct($product) ?
-            $this->getVariationAttributesJsonData($product) :
-            [];
-        return json_encode($content);
+        if ($this->isConfigurableProduct($product)) {
+            /** @var Composite\ConfigurableProduct $product */
+            return json_encode($this->getVariationAttributesJsonData($product));
+        }
+
+        return json_encode([]);
     }
 
     /**
@@ -121,10 +123,12 @@ class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
      */
     private function createAssociatedProductsJsonSnippetContent(Product $product)
     {
-        $content = $this->isConfigurableProduct($product) ?
-            $this->getAssociatedProductListJson($product) :
-            [];
-        return json_encode($content);
+        if ($this->isConfigurableProduct($product)) {
+            /** @var Composite\ConfigurableProduct $product */
+            return json_encode($this->getAssociatedProductListJson($product));
+        }
+
+        return json_encode([]);
     }
 
     /**
