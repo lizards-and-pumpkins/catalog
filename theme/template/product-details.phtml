@@ -7,7 +7,7 @@ use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
 ?>
 <?php
 
-$maxQty = 5; // Temporary hardcoded
+$maxPurchasableQty = $this->getMaxPurchasableQuantity();
 $brand = $this->getFirstValueOfProductAttribute('brand');
 $brandLogo = strtolower(preg_replace('/\W/', '_', trim($brand))) . '.png';
 
