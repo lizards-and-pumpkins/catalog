@@ -100,7 +100,8 @@ class ConfigurableProductJsonSnippetRendererTest extends \PHPUnit_Framework_Test
 
     public function testItReturnsAnEmptyVariationAttributesJsonArraySnippetForNonConfigurableProducts()
     {
-        $stubNonConfigurableProduct = $this->getMock(Product::class, [], [], '', false);
+        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubNonConfigurableProduct */
+        $stubNonConfigurableProduct = $this->getMock(Product::class);
         $stubNonConfigurableProduct->method('getContext')->willReturn($this->getMock(Context::class));
 
         $snippetList = $this->renderer->render($stubNonConfigurableProduct);
@@ -111,7 +112,8 @@ class ConfigurableProductJsonSnippetRendererTest extends \PHPUnit_Framework_Test
 
     public function testItReturnsAnEmptyAssociatedProductsJsonArraySnippetForNonConfigurableProducts()
     {
-        $stubNonConfigurableProduct = $this->getMock(Product::class, [], [], '', false);
+        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubNonConfigurableProduct */
+        $stubNonConfigurableProduct = $this->getMock(Product::class);
         $stubNonConfigurableProduct->method('getContext')->willReturn($this->getMock(Context::class));
 
         $snippetList = $this->renderer->render($stubNonConfigurableProduct);
