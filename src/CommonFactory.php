@@ -13,13 +13,9 @@ use LizardsAndPumpkins\Content\UpdateContentBlockCommandHandler;
 use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextCountry as CountryContextPartBuilder;
-use LizardsAndPumpkins\Context\ContextBuilder\ContextCountry;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale as LocaleContextPartBuilder;
-use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion as VersionContextPartBuilder;
-use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite as WebsiteContextPartBuilder;
-use LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
@@ -772,7 +768,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     private function getPriceSnippetKeyContextPartCodes()
     {
-        return [ContextWebsite::CODE, ContextCountry::CODE];
+        return [WebsiteContextPartBuilder::CODE, CountryContextPartBuilder::CODE];
     }
 
     /**
@@ -1376,7 +1372,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function getRequiredContexts()
     {
-        return [ContextWebsite::CODE, ContextLocale::CODE, ContextVersion::CODE];
+        return [WebsiteContextPartBuilder::CODE, LocaleContextPartBuilder::CODE, VersionContextPartBuilder::CODE];
     }
 
     /**
