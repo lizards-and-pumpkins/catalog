@@ -13,9 +13,13 @@ use LizardsAndPumpkins\Content\UpdateContentBlockCommandHandler;
 use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextCountry as CountryContextPartBuilder;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextCountry;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale as LocaleContextPartBuilder;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion as VersionContextPartBuilder;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite as WebsiteContextPartBuilder;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
@@ -742,7 +746,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
 
         return new GenericSnippetKeyGenerator(
             PriceSnippetRenderer::PRICE,
-            $this->getMasterFactory()->getRequiredContexts(),
+            $this->getPriceSnippetKeyContextPartCodes(),
             $usedDataParts
         );
     }
@@ -756,9 +760,17 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
 
         return new GenericSnippetKeyGenerator(
             PriceSnippetRenderer::SPECIAL_PRICE,
-            $this->getMasterFactory()->getRequiredContexts(),
+            $this->getPriceSnippetKeyContextPartCodes(),
             $usedDataParts
         );
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getPriceSnippetKeyContextPartCodes()
+    {
+        return [ContextWebsite::CODE, ContextCountry::CODE];
     }
 
     /**
@@ -1362,7 +1374,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function getRequiredContexts()
     {
-        return ['website', 'locale', 'version'];
+        return [ContextWebsite::CODE, ContextLocale::CODE, ContextVersion::CODE];
     }
 
     /**
