@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins;
 
-class TwentyOneRunTaxableCountries implements \IteratorAggregate, TaxableCountries
+class TwentyOneRunTaxableCountries implements TaxableCountries
 {
     private static $countries = [
         'DE',
