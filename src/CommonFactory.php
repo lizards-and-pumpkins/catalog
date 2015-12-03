@@ -662,8 +662,9 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         $productRegularPriceAttributeCode = 'price';
 
         return new PriceSnippetRenderer(
-            $this->getMasterFactory()->createSnippetList(),
+            $this->getMasterFactory()->createTaxableCountries(),
             $this->getMasterFactory()->createPriceSnippetKeyGenerator(),
+            $this->createContextBuilder(),
             $productRegularPriceAttributeCode
         );
     }
@@ -676,8 +677,9 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         $productSpecialPriceAttributeCode = 'special_price';
 
         return new PriceSnippetRenderer(
-            $this->getMasterFactory()->createSnippetList(),
+            $this->getMasterFactory()->createTaxableCountries(),
             $this->getMasterFactory()->createSpecialPriceSnippetKeyGenerator(),
+            $this->createContextBuilder(),
             $productSpecialPriceAttributeCode
         );
     }
