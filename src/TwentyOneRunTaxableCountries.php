@@ -17,12 +17,18 @@ class TwentyOneRunTaxableCountries implements TaxableCountries
         'IT',
         'BE',
     ];
-    
+
+    /**
+     * @return string[]
+     */
     public function getCountries()
     {
         return self::$countries;
     }
-    
+
+    /**
+     * @return \ArrayIterator
+     */
     public function getIterator()
     {
         return new \ArrayIterator(self::$countries);
