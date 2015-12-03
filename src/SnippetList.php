@@ -4,8 +4,13 @@ namespace LizardsAndPumpkins;
 
 class SnippetList implements \Countable, \IteratorAggregate
 {
-    private $snippets = [];
+    private $snippets;
 
+    public function __construct(Snippet ...$snippets)
+    {
+        $this->snippets = $snippets;
+    }
+    
     public function clear()
     {
         $this->snippets = [];
