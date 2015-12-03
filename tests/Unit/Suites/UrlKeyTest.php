@@ -42,10 +42,10 @@ class UrlKeyTest extends \PHPUnit_Framework_TestCase
         return [
             ['foo', 'foo'],
             ['foo_:bar', 'foo__bar'],
-            ['foo1/bar', 'foo1_bar'],
+            ['foo1/bar', 'foo1/bar'],
             ['bar.html', 'bar.html'],
-            ['/foo%', '_foo_'],
-            ['///', '___'],
+            ['/foo%', '/foo_'],
+            ['///', '///'],
             ['$&"#', '$___'],
             ['$-_.+!*\'(),', '$-_.+!*\'(),']
         ];
