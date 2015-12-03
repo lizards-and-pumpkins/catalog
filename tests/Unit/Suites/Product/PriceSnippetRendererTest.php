@@ -28,17 +28,17 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
     /**
      * @var TaxableCountries|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockTaxableCountries;
+    private $stubTaxableCountries;
 
     /**
      * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockSnippetKeyGenerator;
+    private $stubSnippetKeyGenerator;
 
     /**
      * @var ContextBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockContextBuilder;
+    private $stubContextBuilder;
 
     /**
      * @var string
@@ -48,7 +48,7 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
     /**
      * @return Product|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createMockProduct()
+    private function createStubProduct()
     {
         $stubProduct = $this->getMock(Product::class);
         $stubProduct->method('getContext')->willReturn($this->getMock(Context::class));
@@ -57,19 +57,19 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockTaxableCountries = $this->getMock(TaxableCountries::class);
-        $this->mockTaxableCountries->method('getIterator')->willReturn(new \ArrayIterator($this->testCountries));
-        $this->mockTaxableCountries->method('getCountries')->willReturn($this->testCountries);
+        $this->stubTaxableCountries = $this->getMock(TaxableCountries::class);
+        $this->stubTaxableCountries->method('getIterator')->willReturn(new \ArrayIterator($this->testCountries));
+        $this->stubTaxableCountries->method('getCountries')->willReturn($this->testCountries);
         
-        $this->mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $this->stubSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         
-        $this->mockContextBuilder = $this->getMock(ContextBuilder::class);
-        $this->mockContextBuilder->method('expandContext')->willReturn($this->getMock(Context::class));
+        $this->stubContextBuilder = $this->getMock(ContextBuilder::class);
+        $this->stubContextBuilder->method('expandContext')->willReturn($this->getMock(Context::class));
 
         $this->renderer = new PriceSnippetRenderer(
-            $this->mockTaxableCountries,
-            $this->mockSnippetKeyGenerator,
-            $this->mockContextBuilder,
+            $this->stubTaxableCountries,
+            $this->stubSnippetKeyGenerator,
+            $this->stubContextBuilder,
             $this->dummyPriceAttributeCode
         );
     }
@@ -81,12 +81,12 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsASnippetList()
     {
-        $this->assertInstanceOf(SnippetList::class, $this->renderer->render($this->createMockProduct()));
+        $this->assertInstanceOf(SnippetList::class, $this->renderer->render($this->createStubProduct()));
     }
 
     public function testNothingIsAddedToSnippetListIfProductDoesNotHaveARequiredAttribute()
     {
-        $stubProduct = $this->createMockProduct();
+        $stubProduct = $this->createStubProduct();
         $stubProduct->method('hasAttribute')->with($this->dummyPriceAttributeCode)->willReturn(false);
 
         $snippetList = $this->renderer->render($stubProduct);
@@ -99,13 +99,13 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $dummyPriceAttributeValue = 1;
 
         /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
-        $stubProduct = $this->createMockProduct();
+        $stubProduct = $this->createStubProduct();
         $stubProduct->method('hasAttribute')->with($this->dummyPriceAttributeCode)->willReturn(true);
         $stubProduct->method('getFirstValueOfAttribute')
             ->with($this->dummyPriceAttributeCode)
             ->willReturn($dummyPriceAttributeValue);
 
-        $this->mockSnippetKeyGenerator->method('getKeyForContext')->willReturn($dummyPriceSnippetKey);
+        $this->stubSnippetKeyGenerator->method('getKeyForContext')->willReturn($dummyPriceSnippetKey);
 
         $snippetList = $this->renderer->render($stubProduct);
         $this->assertCount(2, $snippetList);
