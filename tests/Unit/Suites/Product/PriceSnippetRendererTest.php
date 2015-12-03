@@ -14,6 +14,7 @@ use LizardsAndPumpkins\TaxableCountries;
  * @covers \LizardsAndPumpkins\Product\PriceSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\Price
  * @uses   \LizardsAndPumpkins\Snippet
+ * @uses   \LizardsAndPumpkins\SnippetList
  */
 class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {

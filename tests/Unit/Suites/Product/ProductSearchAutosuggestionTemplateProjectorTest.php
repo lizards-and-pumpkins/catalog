@@ -26,7 +26,7 @@ class ProductSearchAutosuggestionTemplateProjectorTest extends \PHPUnit_Framewor
     {
         $this->mockDataPoolWriter = $this->getMock(DataPoolWriter::class, [], [], '', false);
 
-        $stubSnippetList = $this->getMock(SnippetList::class);
+        $stubSnippetList = $this->getMock(SnippetList::class, [], [], '', false);
 
         /** @var SnippetRendererCollection|\PHPUnit_Framework_MockObject_MockObject $stubSnippetRendererCollection */
         $stubSnippetRendererCollection = $this->getMock(SnippetRendererCollection::class, [], [], '', false);

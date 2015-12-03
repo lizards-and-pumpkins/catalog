@@ -31,7 +31,7 @@ class ProductListingTemplateProjectorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $stubProductsPerPageForContextListBuilder->method('fromJson')->willReturn($stubRootSnippetSourceList);
 
-        $stubSnippetList = $this->getMock(SnippetList::class);
+        $stubSnippetList = $this->getMock(SnippetList::class, [], [], '', false);
 
         /** @var SnippetRendererCollection|\PHPUnit_Framework_MockObject_MockObject $stubSnippetRendererCollection */
         $stubSnippetRendererCollection = $this->getMock(SnippetRendererCollection::class, [], [], '', false);

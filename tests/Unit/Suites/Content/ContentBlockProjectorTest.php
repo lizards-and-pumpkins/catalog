@@ -52,7 +52,7 @@ class ContentBlockProjectorTest extends \PHPUnit_Framework_TestCase
 
     public function testSnippetListIsWrittenIntoDataPool()
     {
-        $stubSnippetList = $this->getMock(SnippetList::class);
+        $stubSnippetList = $this->getMock(SnippetList::class, [], [], '', false);
 
         $this->mockSnippetRendererCollection->method('render')->willReturn($stubSnippetList);
         $this->mockDataPoolWriter->expects($this->once())->method('writeSnippetList')->with($stubSnippetList);

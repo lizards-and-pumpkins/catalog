@@ -40,7 +40,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockSnippetList = $this->getMock(SnippetList::class);
+        $this->mockSnippetList = $this->getMock(SnippetList::class, [], [], '', false);
 
         $stubProductDetailViewBlockRenderer = $this->getMock(ProductDetailViewBlockRenderer::class, [], [], '', false);
         $stubProductDetailViewBlockRenderer->method('render')->willReturn('dummy content');
