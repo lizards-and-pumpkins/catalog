@@ -93,7 +93,7 @@ class SelfContainedContextBuilder implements ContextBuilder
     private function extractDataSetFromContext(Context $context)
     {
         return array_reduce($context->getSupportedCodes(), function ($carry, $code) use ($context) {
-            return array_merge((array) $carry, [$code => $context->getValue($code)]);
-        });
+            return array_merge($carry, [$code => $context->getValue($code)]);
+        }, []);
     }
 }
