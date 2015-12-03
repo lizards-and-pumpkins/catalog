@@ -37,7 +37,7 @@ class PriceSnippetRenderer implements SnippetRenderer
     private $contextBuilder;
 
     /**
-     * @param SnippetList|TaxableCountries $taxableCountries
+     * @param TaxableCountries $taxableCountries
      * @param SnippetKeyGenerator $snippetKeyGenerator
      * @param ContextBuilder $contextBuilder
      * @param string $priceAttributeCode
