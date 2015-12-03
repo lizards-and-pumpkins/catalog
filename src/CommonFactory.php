@@ -47,7 +47,6 @@ use LizardsAndPumpkins\Product\ProductSearchAutosuggestionBlockRenderer;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionTemplateProjector;
-use LizardsAndPumpkins\Product\ProductTaxClassSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductListingBlockRenderer;
@@ -256,7 +255,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $this->getMasterFactory()->createProductInSearchAutosuggestionSnippetRenderer(),
             $this->getMasterFactory()->createPriceSnippetRenderer(),
             $this->getMasterFactory()->createSpecialPriceSnippetRenderer(),
-            $this->getMasterFactory()->createProductTaxClassSnippetRenderer(),
             $this->getMasterFactory()->createProductJsonSnippetRenderer(),
             $this->getMasterFactory()->createConfigurableProductJsonSnippetRenderer(),
             $this->getMasterFactory()->createProductBackOrderAvailabilitySnippetRenderer()
@@ -1527,28 +1525,5 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         }
 
         return $this->memoizedFacetFieldTransformationRegistry;
-    }
-
-    /**
-     * @return ProductTaxClassSnippetRenderer
-     */
-    public function createProductTaxClassSnippetRenderer()
-    {
-        return new ProductTaxClassSnippetRenderer(
-            $this->getMasterFactory()->createSnippetList(),
-            $this->getMasterFactory()->createTaxClassSnippetKeyGenerator()
-        );
-    }
-
-    /**
-     * @return SnippetKeyGenerator
-     */
-    public function createTaxClassSnippetKeyGenerator()
-    {
-        $snippetKey = ProductTaxClassSnippetRenderer::CODE;
-        $requiredContextParts = [];
-        $usedDataParts = [Product::ID];
-
-        return new GenericSnippetKeyGenerator($snippetKey, $requiredContextParts, $usedDataParts);
     }
 }
