@@ -18,6 +18,7 @@ use LizardsAndPumpkins\Log\WritingLoggerDecorator;
 use LizardsAndPumpkins\Queue\File\FileQueue;
 use LizardsAndPumpkins\SampleMasterFactory;
 use LizardsAndPumpkins\SampleFactory;
+use LizardsAndPumpkins\TaxableCountries;
 use LizardsAndPumpkins\Website\WebsiteToCountryMap;
 
 /**
@@ -248,5 +249,11 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsAWebsiteToCountryMapInstance()
     {
         $this->assertInstanceOf(WebsiteToCountryMap::class, $this->factory->createWebsiteToCountryMap());
+    }
+
+    public function testItReturnsATaxableCountryInstance()
+    {
+        $result = $this->factory->createTaxableCountries();
+        $this->assertInstanceOf(TaxableCountries::class, $result);
     }
 }

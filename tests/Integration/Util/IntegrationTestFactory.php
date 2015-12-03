@@ -401,4 +401,12 @@ class IntegrationTestFactory implements Factory
     {
         return new IntegrationTestWebsiteToCountryMap();
     }
+
+    /**
+     * @return TwentyOneRunTaxableCountries
+     */
+    public function createTaxableCountries()
+    {
+        return new TwentyOneRunTaxableCountries();
+    }
 }
