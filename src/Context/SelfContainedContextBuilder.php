@@ -74,4 +74,26 @@ class SelfContainedContextBuilder implements ContextBuilder
     {
         return SelfContainedContext::fromArray($dataSet);
     }
+
+    /**
+     * @param Context $context
+     * @param string[] $additionDataSet
+     * @return Context
+     */
+    public function expandContext(Context $context, array $additionDataSet)
+    {
+        $originalDataSet = $this->extractDataSetFromContext($context);
+        return $this->createContext(array_merge($originalDataSet, $additionDataSet));
+    }
+
+    /**
+     * @param Context $context
+     * @return string[]
+     */
+    private function extractDataSetFromContext(Context $context)
+    {
+        return array_reduce($context->getSupportedCodes(), function ($carry, $code) use ($context) {
+            return array_merge((array) $carry, [$code => $context->getValue($code)]);
+        });
+    }
 }
