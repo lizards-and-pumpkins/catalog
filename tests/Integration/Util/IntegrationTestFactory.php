@@ -407,6 +407,6 @@ class IntegrationTestFactory implements Factory
      */
     public function createTaxableCountries()
     {
-        return new TwentyOneRunTaxableCountries();
+        return new IntegrationTestTaxableCountries();
     }
 }
