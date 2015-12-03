@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Log\InMemoryLogger;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocator\ContentBlockSnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 
 /**
@@ -12,6 +13,7 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
  * @method Queue\Queue getEventQueue
  * @method Context\Context getContext
  * @method Context\ContextSource createContextSource
+ * @method Context\ContextBuilder createContextBuilder
  * @method DomainEventConsumer createDomainEventConsumer
  * @method CommandConsumer createCommandConsumer
  * @method SnippetKeyGeneratorLocator createRegistrySnippetKeyGeneratorLocatorStrategy
@@ -20,7 +22,7 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
  * @method GenericSnippetKeyGenerator createProductDetailViewSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createProductListingSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createProductStockQuantityRendererSnippetKeyGenerator
- * @method SnippetKeyGeneratorLocator\ContentBlockSnippetKeyGeneratorLocatorStrategy createContentBlockSnippetKeyGeneratorLocatorStrategy
+ * @method ContentBlockSnippetKeyGeneratorLocatorStrategy createContentBlockSnippetKeyGeneratorLocatorStrategy
  * @method GenericSnippetKeyGenerator createProductSearchResultMetaSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createProductListingCriteriaSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createProductDetailPageMetaSnippetKeyGenerator

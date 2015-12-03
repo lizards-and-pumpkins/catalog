@@ -53,7 +53,7 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->stubSnippetList = $this->getMock(SnippetList::class);
+        $this->stubSnippetList = $this->getMock(SnippetList::class, [], [], '', false);
         $this->mockDataPoolWriter = $this->getMock(DataPoolWriter::class, [], [], '', false);
         $this->stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
 

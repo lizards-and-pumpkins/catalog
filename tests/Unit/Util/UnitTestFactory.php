@@ -286,4 +286,12 @@ class UnitTestFactory implements Factory
     {
         return $this->mockObjectGenerator->getMock(WebsiteToCountryMap::class);
     }
+
+    /**
+     * @return TaxableCountries
+     */
+    public function createTaxableCountries()
+    {
+        return $this->mockObjectGenerator->getMock(TaxableCountries::class);
+    }
 }

@@ -4,6 +4,7 @@
 namespace LizardsAndPumpkins\Context;
 
 use LizardsAndPumpkins\Context\ContextBuilder\ContextPartBuilder;
+use LizardsAndPumpkins\Context\Stubs\FromInputCopyingTestContextPartBuilder;
 use LizardsAndPumpkins\Http\HttpRequest;
 
 /**
@@ -95,5 +96,19 @@ class SelfContainedContextBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(['foo', 'baz'], $context->getSupportedCodes());
         $this->assertSame('bar', $context->getValue('foo'));
         $this->assertSame('qux', $context->getValue('baz'));
+    }
+
+    public function testItReturnsAnExpandedContext()
+    {
+        $fooContextPart = new FromInputCopyingTestContextPartBuilder('foo');
+        $bazContextPart = new FromInputCopyingTestContextPartBuilder('baz');
+        $builder = new SelfContainedContextBuilder($fooContextPart, $bazContextPart);
+        
+        $originalContext = $builder->createContext(['foo' => 'bar']);
+        $expandedContext = $builder->expandContext($originalContext, ['baz' => 'qux']);
+        $this->assertInstanceOf(Context::class, $expandedContext);
+        $this->assertNotSame($originalContext, $expandedContext);
+        $this->assertSame('bar', $expandedContext->getValue('foo'));
+        $this->assertSame('qux', $expandedContext->getValue('baz'));
     }
 }

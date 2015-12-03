@@ -44,7 +44,7 @@ class DataPoolWriterTest extends AbstractDataPoolTest
 
         $mockSnippet = $this->getMockSnippet($testKey, $testContent);
 
-        $mockSnippetList = $this->getMock(SnippetList::class);
+        $mockSnippetList = $this->getMock(SnippetList::class, [], [], '', false);
         $mockSnippetList->expects($this->once())
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([$mockSnippet]));

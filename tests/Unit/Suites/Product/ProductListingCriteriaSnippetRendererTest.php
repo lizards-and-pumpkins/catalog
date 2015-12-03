@@ -65,7 +65,7 @@ class ProductListingCriteriaSnippetRendererTest extends \PHPUnit_Framework_TestC
         $mockContextBuilder = $this->getMock(ContextBuilder::class);
         $mockContextBuilder->method('createContext')->willReturn($stubContext);
 
-        $this->mockSnippetList = $this->getMock(SnippetList::class);
+        $this->mockSnippetList = $this->getMock(SnippetList::class, [], [], '', false);
 
         $this->renderer = new ProductListingCriteriaSnippetRenderer(
             $this->mockSnippetList,

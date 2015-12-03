@@ -36,7 +36,7 @@ class ProductBackOrderAvailabilitySnippetRendererTest extends \PHPUnit_Framework
 
     protected function setUp()
     {
-        $this->mockSnippetList = $this->getMock(SnippetList::class);
+        $this->mockSnippetList = $this->getMock(SnippetList::class, [], [], '', false);
         $this->mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
 
         $this->renderer = new ProductBackOrderAvailabilitySnippetRenderer(

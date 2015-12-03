@@ -2,10 +2,14 @@
 
 namespace LizardsAndPumpkins\Product;
 
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextCountry;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetRenderer;
 use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetList;
+use LizardsAndPumpkins\TaxableCountries;
 
 class PriceSnippetRenderer implements SnippetRenderer
 {
@@ -13,9 +17,9 @@ class PriceSnippetRenderer implements SnippetRenderer
     const SPECIAL_PRICE = 'special_price';
 
     /**
-     * @var SnippetList
+     * @var TaxableCountries
      */
-    private $snippetList;
+    private $taxableCountries;
 
     /**
      * @var SnippetKeyGenerator
@@ -28,14 +32,25 @@ class PriceSnippetRenderer implements SnippetRenderer
     private $priceAttributeCode;
 
     /**
-     * @param SnippetList $snippetList
+     * @var ContextBuilder
+     */
+    private $contextBuilder;
+
+    /**
+     * @param TaxableCountries $taxableCountries
      * @param SnippetKeyGenerator $snippetKeyGenerator
+     * @param ContextBuilder $contextBuilder
      * @param string $priceAttributeCode
      */
-    public function __construct(SnippetList $snippetList, SnippetKeyGenerator $snippetKeyGenerator, $priceAttributeCode)
-    {
-        $this->snippetList = $snippetList;
+    public function __construct(
+        TaxableCountries $taxableCountries,
+        SnippetKeyGenerator $snippetKeyGenerator,
+        ContextBuilder $contextBuilder,
+        $priceAttributeCode
+    ) {
+        $this->taxableCountries = $taxableCountries;
         $this->snippetKeyGenerator = $snippetKeyGenerator;
+        $this->contextBuilder = $contextBuilder;
         $this->priceAttributeCode = $priceAttributeCode;
     }
 
@@ -45,21 +60,72 @@ class PriceSnippetRenderer implements SnippetRenderer
      */
     public function render(Product $product)
     {
-        $this->renderProductPriceInContext($product);
-
-        return $this->snippetList;
+        return $this->renderProductPrice($product);
     }
 
-    private function renderProductPriceInContext(Product $product)
+    /**
+     * @param Product $product
+     * @return SnippetList
+     */
+    private function renderProductPrice(Product $product)
     {
-        if (!$product->hasAttribute($this->priceAttributeCode)) {
-            return;
-        }
+        return new SnippetList(...$this->getPriceSnippets($product));
+    }
 
-        $key = $this->snippetKeyGenerator->getKeyForContext($product->getContext(), [Product::ID => $product->getId()]);
+    /**
+     * @param Product $product
+     * @return Snippet[]
+     */
+    private function getPriceSnippets(Product $product)
+    {
+        return $product->hasAttribute($this->priceAttributeCode) ?
+            $this->createPriceSnippetForEachCountry($product) :
+            [];
+    }
+
+    /**
+     * @param Product $product
+     * @return Snippet[]
+     */
+    private function createPriceSnippetForEachCountry(Product $product)
+    {
+        return array_map(function ($country) use ($product) {
+            return $this->createPriceSnipperForCountry($product, $country);
+        }, $this->taxableCountries->getCountries());
+    }
+
+    /**
+     * @param Product $product
+     * @param string $country
+     * @return Snippet
+     */
+    private function createPriceSnipperForCountry(Product $product, $country)
+    {
+        $key = $this->getSnippetKeyForCountry($product, $country);
         $amount = $product->getFirstValueOfAttribute($this->priceAttributeCode);
         $price = new Price($amount);
-        $snippet = Snippet::create($key, $price->getAmount());
-        $this->snippetList->add($snippet);
+        // todo: apply tax here
+        return Snippet::create($key, $price->getAmount());
+    }
+
+    /**
+     * @param Product $product
+     * @param string $country
+     * @return string
+     */
+    private function getSnippetKeyForCountry(Product $product, $country)
+    {
+        $context = $this->getProductContextWithCountry($product, $country);
+        return $this->snippetKeyGenerator->getKeyForContext($context, [Product::ID => $product->getId()]);
+    }
+
+    /**
+     * @param Product $product
+     * @param string $country
+     * @return Context
+     */
+    private function getProductContextWithCountry(Product $product, $country)
+    {
+        return $this->contextBuilder->expandContext($product->getContext(), [ContextCountry::CODE => $country]);
     }
 }

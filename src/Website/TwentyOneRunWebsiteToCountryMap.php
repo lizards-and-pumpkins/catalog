@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins\Website;
 use LizardsAndPumpkins\Website\Exception\InvalidWebsiteCodeException;
 use LizardsAndPumpkins\Website\WebsiteToCountryMap;
 
-class WebsiteToCountryMap21Run implements WebsiteToCountryMap
+class TwentyOneRunWebsiteToCountryMap implements WebsiteToCountryMap
 {
     private $defaultCountry = 'DE';
 

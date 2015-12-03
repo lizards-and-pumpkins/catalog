@@ -30,4 +30,11 @@ interface ContextBuilder
      * @return Context
      */
     public static function rehydrateContext(array $dataSet);
+
+    /**
+     * @param Context $context
+     * @param string[] $additionDataSet
+     * @return Context
+     */
+    public function expandContext(Context $context, array $additionDataSet);
 }
