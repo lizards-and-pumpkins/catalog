@@ -101,14 +101,14 @@ class SelfContainedContextBuilderTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsAnExpandedContext()
     {
         $fooContextPart = new FromInputCopyingTestContextPartBuilder('foo');
-        $buzContextPart = new FromInputCopyingTestContextPartBuilder('buz');
-        $builder = new SelfContainedContextBuilder($fooContextPart, $buzContextPart);
+        $bazContextPart = new FromInputCopyingTestContextPartBuilder('baz');
+        $builder = new SelfContainedContextBuilder($fooContextPart, $bazContextPart);
         
         $originalContext = $builder->createContext(['foo' => 'bar']);
-        $expandedContext = $builder->expandContext($originalContext, ['buz' => 'qux']);
+        $expandedContext = $builder->expandContext($originalContext, ['baz' => 'qux']);
         $this->assertInstanceOf(Context::class, $expandedContext);
         $this->assertNotSame($originalContext, $expandedContext);
         $this->assertSame('bar', $expandedContext->getValue('foo'));
-        $this->assertSame('qux', $expandedContext->getValue('buz'));
+        $this->assertSame('qux', $expandedContext->getValue('baz'));
     }
 }
