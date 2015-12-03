@@ -60,14 +60,14 @@ class PriceSnippetRenderer implements SnippetRenderer
      */
     public function render(Product $product)
     {
-        return $this->renderProductPriceInContexts($product);
+        return $this->renderProductPrice($product);
     }
 
     /**
      * @param Product $product
      * @return SnippetList
      */
-    private function renderProductPriceInContexts(Product $product)
+    private function renderProductPrice(Product $product)
     {
         return new SnippetList(...$this->getPriceSnippets($product));
     }
@@ -104,6 +104,7 @@ class PriceSnippetRenderer implements SnippetRenderer
         $key = $this->getSnippetKeyForCountry($product, $country);
         $amount = $product->getFirstValueOfAttribute($this->priceAttributeCode);
         $price = new Price($amount);
+        // todo: apply tax here
         return Snippet::create($key, $price->getAmount());
     }
 
