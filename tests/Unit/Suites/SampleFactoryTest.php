@@ -253,7 +253,6 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsATaxableCountryInstance()
     {
-        $result = $this->factory->createTaxableCountries();
-        $this->assertInstanceOf(TaxableCountries::class, $result);
+        $this->assertInstanceOf(TaxableCountries::class, $this->factory->createTaxableCountries());
     }
 }
