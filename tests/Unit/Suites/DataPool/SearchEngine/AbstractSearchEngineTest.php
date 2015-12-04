@@ -856,23 +856,20 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     public function testDocumentsCollectionIsNotSortedByMultivaluedAttribute()
     {
-        $productAId = ProductId::fromString('A');
-        $productBId = ProductId::fromString('B');
-        $productCId = ProductId::fromString('C');
-
+        // TODO: Currently this test is problematic. Refactor once sorting by multiple fields is supported.
         $fieldCode = 'foo';
         $fieldValue = 0;
 
-        $documentA = $this->createSearchDocument([$fieldCode => ['foo', 'bar']], $productAId);
-        $documentB = $this->createSearchDocument([$fieldCode => ['bar', 'baz']], $productBId);
-        $documentC = $this->createSearchDocument([$fieldCode => ['baz', 'qux']], $productCId);
+        $documentA = $this->createSearchDocument([$fieldCode => ['foo', 'bar']], ProductId::fromString('A'));
+        $documentB = $this->createSearchDocument([$fieldCode => ['bar', 'baz']], ProductId::fromString('B'));
+        $documentC = $this->createSearchDocument([$fieldCode => 'qux'], ProductId::fromString('C'));
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($documentA, $documentB, $documentC);
 
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
         $criteria = SearchCriterionGreaterOrEqualThan::create($fieldCode, $fieldValue);
         $selectedFilters = [];
-        $facetFilterRequest = new FacetFilterRequest;
+        $facetFilterRequest = new FacetFilterRequest();
         $rowsPerPage = 100;
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig($fieldCode, SortOrderDirection::DESC);
@@ -887,9 +884,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $sortOrderConfig
         );
 
-        $unExpectedDocuments = [$documentA, $documentB, $documentC];
-
-        $this->assertNotEquals($unExpectedDocuments, $searchEngineResponse->getSearchDocuments()->getDocuments());
+        $this->assertEquals($documentC, $searchEngineResponse->getSearchDocuments()->getDocuments()[0]);
     }
 
     public function testReturnedDocumentsCollectionIsSortedByStringValuesCaseInsensitively()
