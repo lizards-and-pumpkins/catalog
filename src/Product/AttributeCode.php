@@ -70,7 +70,7 @@ class AttributeCode implements \JsonSerializable
             throw new InvalidAttributeCodeException($message);
         }
         if (substr($attributeCode, -1) === '_') {
-            $message = sprintf('The attribute code may not and with an underscore, got "%s"', $attributeCode);
+            $message = sprintf('The attribute code may not end with an underscore, got "%s"', $attributeCode);
             throw new InvalidAttributeCodeException($message);
         }
     }

@@ -288,7 +288,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
         $newValues = [];
 
         foreach ($attributeValuesCounts as $currentAttributeCode => $currentAttributeValues) {
-            if ((string)$currentAttributeCode !== $attributeCode) {
+            if ((string) $currentAttributeCode !== $attributeCode) {
                 $newValues[$currentAttributeCode] = $currentAttributeValues;
                 continue;
             }
@@ -355,7 +355,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     private function createSimpleFacetFieldFromAttributeValues(array $attributeValues)
     {
         return array_map(function ($valueCounts) {
-            return FacetFieldValue::create((string)$valueCounts['value'], $valueCounts['count']);
+            return FacetFieldValue::create((string) $valueCounts['value'], $valueCounts['count']);
         }, $attributeValues);
     }
 
@@ -433,7 +433,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     private function filterDocumentsMatchingCriteria(array $documents, SearchCriteria $criteria, Context $context)
     {
         return array_filter($documents, function (SearchDocument $document) use ($criteria, $context) {
-            return $criteria->matches($document) && $context->isSubsetOf($document->getContext());
+            return $criteria->matches($document) && $context->contains($document->getContext());
         });
     }
 

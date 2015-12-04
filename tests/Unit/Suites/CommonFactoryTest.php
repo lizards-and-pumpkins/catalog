@@ -29,7 +29,6 @@ use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
-use LizardsAndPumpkins\Product\ProductTaxClassSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
@@ -133,6 +132,7 @@ use LizardsAndPumpkins\Website\HostToWebsiteMap;
  * @uses   \LizardsAndPumpkins\Renderer\ThemeLocator
  * @uses   \LizardsAndPumpkins\Renderer\Translation\CsvTranslator
  * @uses   \LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry
+ * @uses   \LizardsAndPumpkins\SnippetList
  * @uses   \LizardsAndPumpkins\EnvironmentConfigReader
  * @uses   \LizardsAndPumpkins\Utils\LocalFilesystem
  * @uses   \LizardsAndPumpkins\Website\ConfigurableHostToWebsiteMap
@@ -594,18 +594,5 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $result = $this->commonFactory->createCountryContextPartBuilder();
         $this->assertInstanceOf(ContextPartBuilder::class, $result);
         $this->assertInstanceOf(ContextCountry::class, $result);
-    }
-
-    public function testItReturnsAProductTaxClassSnippetRenderer()
-    {
-        $result = $this->commonFactory->createProductTaxClassSnippetRenderer();
-        $this->assertInstanceOf(ProductTaxClassSnippetRenderer::class, $result);
-    }
-
-    public function testItReturnsAProductTaxClassKeyGenerator()
-    {
-        $result = $this->commonFactory->createTaxClassSnippetKeyGenerator();
-        $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
-        $this->assertSame([], $result->getContextPartsUsedForKey());
     }
 }

@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins;
 
 /**
  * @covers \LizardsAndPumpkins\SnippetRendererCollection
+ * @uses   \LizardsAndPumpkins\SnippetList
  */
 class SnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
 {

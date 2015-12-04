@@ -5,18 +5,18 @@ namespace LizardsAndPumpkins\Website;
 use LizardsAndPumpkins\Website\Exception\InvalidWebsiteCodeException;
 
 /**
- * @covers \LizardsAndPumpkins\Website\WebsiteToCountryMap21Run
+ * @covers \LizardsAndPumpkins\Website\TwentyOneRunWebsiteToCountryMap
  */
-class WebsiteToCountryMap21RunTest extends \PHPUnit_Framework_TestCase
+class TwentyOneRunWebsiteToCountryMapTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var WebsiteToCountryMap21Run
+     * @var TwentyOneRunWebsiteToCountryMap
      */
     private $websiteToCountryMap;
 
     protected function setUp()
     {
-        $this->websiteToCountryMap = new WebsiteToCountryMap21Run();
+        $this->websiteToCountryMap = new TwentyOneRunWebsiteToCountryMap();
     }
 
     /**

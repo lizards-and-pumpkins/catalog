@@ -46,7 +46,6 @@ use LizardsAndPumpkins\Product\ProductSearchAutosuggestionBlockRenderer;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionTemplateProjector;
-use LizardsAndPumpkins\Product\ProductTaxClassSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductListingBlockRenderer;
@@ -246,7 +245,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $this->getMasterFactory()->createProductInSearchAutosuggestionSnippetRenderer(),
             $this->getMasterFactory()->createPriceSnippetRenderer(),
             $this->getMasterFactory()->createSpecialPriceSnippetRenderer(),
-            $this->getMasterFactory()->createProductTaxClassSnippetRenderer(),
             $this->getMasterFactory()->createProductJsonSnippetRenderer(),
             $this->getMasterFactory()->createConfigurableProductJsonSnippetRenderer()
         ];
@@ -649,8 +647,9 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         $productRegularPriceAttributeCode = 'price';
 
         return new PriceSnippetRenderer(
-            $this->getMasterFactory()->createSnippetList(),
+            $this->getMasterFactory()->createTaxableCountries(),
             $this->getMasterFactory()->createPriceSnippetKeyGenerator(),
+            $this->createContextBuilder(),
             $productRegularPriceAttributeCode
         );
     }
@@ -663,8 +662,9 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         $productSpecialPriceAttributeCode = 'special_price';
 
         return new PriceSnippetRenderer(
-            $this->getMasterFactory()->createSnippetList(),
+            $this->getMasterFactory()->createTaxableCountries(),
             $this->getMasterFactory()->createSpecialPriceSnippetKeyGenerator(),
+            $this->createContextBuilder(),
             $productSpecialPriceAttributeCode
         );
     }
@@ -719,7 +719,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
 
         return new GenericSnippetKeyGenerator(
             PriceSnippetRenderer::PRICE,
-            $this->getMasterFactory()->getRequiredContexts(),
+            $this->getPriceSnippetKeyContextPartCodes(),
             $usedDataParts
         );
     }
@@ -733,9 +733,17 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
 
         return new GenericSnippetKeyGenerator(
             PriceSnippetRenderer::SPECIAL_PRICE,
-            $this->getMasterFactory()->getRequiredContexts(),
+            $this->getPriceSnippetKeyContextPartCodes(),
             $usedDataParts
         );
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getPriceSnippetKeyContextPartCodes()
+    {
+        return [WebsiteContextPartBuilder::CODE, CountryContextPartBuilder::CODE];
     }
 
     /**
@@ -1216,7 +1224,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function getRequiredContexts()
     {
-        return ['website', 'locale', 'version'];
+        return [WebsiteContextPartBuilder::CODE, LocaleContextPartBuilder::CODE, VersionContextPartBuilder::CODE];
     }
 
     /**
@@ -1379,28 +1387,5 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         }
 
         return $this->memoizedFacetFieldTransformationRegistry;
-    }
-
-    /**
-     * @return ProductTaxClassSnippetRenderer
-     */
-    public function createProductTaxClassSnippetRenderer()
-    {
-        return new ProductTaxClassSnippetRenderer(
-            $this->getMasterFactory()->createSnippetList(),
-            $this->getMasterFactory()->createTaxClassSnippetKeyGenerator()
-        );
-    }
-
-    /**
-     * @return SnippetKeyGenerator
-     */
-    public function createTaxClassSnippetKeyGenerator()
-    {
-        $snippetKey = ProductTaxClassSnippetRenderer::CODE;
-        $requiredContextParts = [];
-        $usedDataParts = [Product::ID];
-
-        return new GenericSnippetKeyGenerator($snippetKey, $requiredContextParts, $usedDataParts);
     }
 }

@@ -170,4 +170,28 @@ class SelfContainedContextTest extends \PHPUnit_Framework_TestCase
         $contextParts = ['key1' => 'value1', 'key2' => 'value2'];
         $this->assertSame($contextParts, $this->createContext($contextParts)->jsonSerialize());
     }
+
+    public function testItContainsOtherContextIfTheOtherContextIsASubsetOfTheCurrentContext()
+    {
+        $contextA = $this->createContext(['key1' => 'value1', 'key2' => 'value2']);
+        $contextB = $this->createContext(['key1' => 'value1']);
+
+        $this->assertTrue($contextA->contains($contextB));
+    }
+
+    public function testItNotContainsOtherContextIfTheOtherContextValueIsDifferent()
+    {
+        $contextA = $this->createContext(['key1' => 'value1', 'key2' => 'value2']);
+        $contextB = $this->createContext(['key1' => 'value2']);
+
+        $this->assertFalse($contextA->contains($contextB));
+    }
+
+    public function testItNotContainOtherContextIfTheOtherContextHasPartsTheCurrentContextDoesNotHave()
+    {
+        $contextA = $this->createContext(['key1' => 'value1', 'key2' => 'value2']);
+        $contextB = $this->createContext(['key1' => 'value1']);
+
+        $this->assertFalse($contextB->contains($contextA));
+    }
 }

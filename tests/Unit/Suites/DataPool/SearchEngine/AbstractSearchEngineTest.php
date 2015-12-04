@@ -221,9 +221,9 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $productAId = ProductId::fromString(uniqid());
         $productBId = ProductId::fromString(uniqid());
-        $documentAContext = $this->createContextFromDataParts(['website' => 'value1', 'locale' => 'value2']);
-        $documentBContext = $this->createContextFromDataParts(['website' => 'value1', 'locale' => 'value2']);
-        $queryContext = $this->createContextFromDataParts(['locale' => 'value2']);
+        $documentAContext = $this->createContextFromDataParts(['locale' => 'value2']);
+        $documentBContext = $this->createContextFromDataParts([ 'locale' => 'value2']);
+        $queryContext = $this->createContextFromDataParts(['website' => 'value1', 'locale' => 'value2']);
 
         $documentFields = [$fieldName => $fieldValue];
         $searchDocumentA = $this->createSearchDocumentWithContext($documentFields, $productAId, $documentAContext);
@@ -855,23 +855,20 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     public function testDocumentsCollectionIsNotSortedByMultivaluedAttribute()
     {
-        $productAId = ProductId::fromString('A');
-        $productBId = ProductId::fromString('B');
-        $productCId = ProductId::fromString('C');
-
+        // TODO: Currently this test is problematic. Refactor once sorting by multiple fields is supported.
         $fieldCode = 'foo';
         $fieldValue = 0;
 
-        $documentA = $this->createSearchDocument([$fieldCode => ['foo', 'bar']], $productAId);
-        $documentB = $this->createSearchDocument([$fieldCode => ['bar', 'baz']], $productBId);
-        $documentC = $this->createSearchDocument([$fieldCode => ['baz', 'qux']], $productCId);
+        $documentA = $this->createSearchDocument([$fieldCode => ['xxx', 'yyy']], ProductId::fromString('A'));
+        $documentB = $this->createSearchDocument([$fieldCode => ['zzz', 'rrr']], ProductId::fromString('B'));
+        $documentC = $this->createSearchDocument([$fieldCode => 'qux'], ProductId::fromString('C'));
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($documentA, $documentB, $documentC);
 
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
 
         $criteria = SearchCriterionGreaterOrEqualThan::create($fieldCode, $fieldValue);
         $selectedFilters = [];
-        $facetFilterRequest = new FacetFilterRequest;
+        $facetFilterRequest = new FacetFilterRequest();
         $rowsPerPage = 100;
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig($fieldCode, SortOrderDirection::DESC);
@@ -886,9 +883,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $sortOrderConfig
         );
 
-        $unExpectedDocuments = [$documentA, $documentB, $documentC];
-
-        $this->assertNotEquals($unExpectedDocuments, $searchEngineResponse->getSearchDocuments()->getDocuments());
+        $this->assertEquals($documentC, $searchEngineResponse->getSearchDocuments()->getDocuments()[0]);
     }
 
     public function testReturnedDocumentsCollectionIsSortedByStringValuesCaseInsensitively()

@@ -4,6 +4,7 @@
 namespace LizardsAndPumpkins\Context;
 
 use LizardsAndPumpkins\Context\ContextBuilder\ContextPartBuilder;
+use LizardsAndPumpkins\Context\Stubs\FromInputCopyingTestContextPartBuilder;
 use LizardsAndPumpkins\Http\HttpRequest;
 
 /**
@@ -24,7 +25,7 @@ class SelfContainedContextBuilderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $code
-     * @param string $value
+     * @param string|null $value
      * @return ContextPartBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createMockContextPartBuilder($code, $value)
@@ -40,6 +41,7 @@ class SelfContainedContextBuilderTest extends \PHPUnit_Framework_TestCase
         $this->stubContextPartBuilders = [
             $this->createMockContextPartBuilder('aaa', 'value_a'),
             $this->createMockContextPartBuilder('bbb', 'value_b'),
+            $this->createMockContextPartBuilder('ccc', null),
         ];
         $this->contextBuilder = new SelfContainedContextBuilder(...$this->stubContextPartBuilders);
     }
@@ -61,6 +63,13 @@ class SelfContainedContextBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($context->supportsCode('bbb'));
     }
 
+    public function testItIgnoresContextPartBuildersThatReturnNull()
+    {
+        $context = $this->contextBuilder->createContext([]);
+        $this->assertFalse($context->supportsCode('ccc'));
+        $this->assertNotContains('ccc', $context->getSupportedCodes());
+    }
+
     public function testItReturnsAContextFromTheRequest()
     {
         /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubRequest */
@@ -71,7 +80,7 @@ class SelfContainedContextBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Context::class, $this->contextBuilder->createFromRequest($stubRequest));
     }
 
-    public function testItReturnsOneContextForEacDataSet()
+    public function testItReturnsOneContextForEachDataSet()
     {
         $dataSets = [ [], [], [] ];
         $result = $this->contextBuilder->createContextsFromDataSets($dataSets);
@@ -87,5 +96,19 @@ class SelfContainedContextBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(['foo', 'baz'], $context->getSupportedCodes());
         $this->assertSame('bar', $context->getValue('foo'));
         $this->assertSame('qux', $context->getValue('baz'));
+    }
+
+    public function testItReturnsAnExpandedContext()
+    {
+        $fooContextPart = new FromInputCopyingTestContextPartBuilder('foo');
+        $bazContextPart = new FromInputCopyingTestContextPartBuilder('baz');
+        $builder = new SelfContainedContextBuilder($fooContextPart, $bazContextPart);
+        
+        $originalContext = $builder->createContext(['foo' => 'bar']);
+        $expandedContext = $builder->expandContext($originalContext, ['baz' => 'qux']);
+        $this->assertInstanceOf(Context::class, $expandedContext);
+        $this->assertNotSame($originalContext, $expandedContext);
+        $this->assertSame('bar', $expandedContext->getValue('foo'));
+        $this->assertSame('qux', $expandedContext->getValue('baz'));
     }
 }

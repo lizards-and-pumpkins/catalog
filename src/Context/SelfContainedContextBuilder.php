@@ -42,7 +42,10 @@ class SelfContainedContextBuilder implements ContextBuilder
      */
     private function getPart(ContextPartBuilder $partBuilder, array $inputDataSet, array $carry)
     {
-        return [$partBuilder->getCode() => $partBuilder->getValue($inputDataSet, $carry)];
+        $value = $partBuilder->getValue($inputDataSet, $carry);
+        return null === $value ?
+            [] :
+            [$partBuilder->getCode() => $value];
     }
 
     /**
@@ -70,5 +73,27 @@ class SelfContainedContextBuilder implements ContextBuilder
     public static function rehydrateContext(array $dataSet)
     {
         return SelfContainedContext::fromArray($dataSet);
+    }
+
+    /**
+     * @param Context $context
+     * @param string[] $additionDataSet
+     * @return Context
+     */
+    public function expandContext(Context $context, array $additionDataSet)
+    {
+        $originalDataSet = $this->extractDataSetFromContext($context);
+        return $this->createContext(array_merge($originalDataSet, $additionDataSet));
+    }
+
+    /**
+     * @param Context $context
+     * @return string[]
+     */
+    private function extractDataSetFromContext(Context $context)
+    {
+        return array_reduce($context->getSupportedCodes(), function ($carry, $code) use ($context) {
+            return array_merge($carry, [$code => $context->getValue($code)]);
+        }, []);
     }
 }

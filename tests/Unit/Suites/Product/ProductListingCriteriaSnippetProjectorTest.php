@@ -49,7 +49,7 @@ class ProductListingCriteriaSnippetProjectorTest extends \PHPUnit_Framework_Test
 
     protected function setUp()
     {
-        $this->stubSnippetList = $this->getMock(SnippetList::class);
+        $this->stubSnippetList = $this->getMock(SnippetList::class, [], [], '', false);
         $this->mockDataPoolWriter = $this->getMock(DataPoolWriter::class, [], [], '', false);
 
         $this->mockRendererCollection = $this->getMock(SnippetRendererCollection::class, [], [], '', false);

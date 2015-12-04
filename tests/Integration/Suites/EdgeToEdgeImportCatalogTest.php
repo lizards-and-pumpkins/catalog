@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextCountry;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
 use LizardsAndPumpkins\Http\HttpHeaders;
@@ -98,11 +99,14 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
             sprintf('Product in listing snippet HTML does not contain the expected product name "%s"', $productName)
         );
 
-        $priceSnippetKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('price');
-        $priceSnippetKey = $priceSnippetKeyGenerator->getKeyForContext($context, [Product::ID => $productId]);
-        $priceSnippetContents = $dataPoolReader->getSnippet($priceSnippetKey);
+        foreach ($this->factory->createTaxableCountries() as $country) {
+            $contextWithCountry = $this->factory->createContextBuilder()->expandContext($context, [ContextCountry::CODE => $country]);
+            $priceSnippetKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('price');
+            $priceSnippetKey = $priceSnippetKeyGenerator->getKeyForContext($contextWithCountry, [Product::ID => $productId]);
+            $priceSnippetContents = $dataPoolReader->getSnippet($priceSnippetKey);
+            $this->assertEquals($productPrice, $priceSnippetContents);
+        }
 
-        $this->assertEquals($productPrice, $priceSnippetContents);
 
         $criteria = SearchCriterionEqual::create('name', 'LED Arm-Signallampe');
         $selectedFilters = [];

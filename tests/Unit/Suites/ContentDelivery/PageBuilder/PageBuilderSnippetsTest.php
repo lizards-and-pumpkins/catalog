@@ -59,11 +59,6 @@ class PageBuilderSnippetsTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(['found'], $pageSnippets->getSnippetCodes());
     }
 
-    public function testItReturnsTheSnippetKeyForAGivenCode()
-    {
-        $this->assertSame($this->testKey, $this->pageSnippets->getKeyByCode($this->testCode));
-    }
-
     public function testItReturnsTheSnippetContentForAGivenKey()
     {
         $this->assertSame('some content', $this->pageSnippets->getSnippetByKey($this->testKey));

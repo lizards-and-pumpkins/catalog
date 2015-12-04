@@ -24,7 +24,6 @@ use LizardsAndPumpkins\Queue\InMemory\InMemoryQueue;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\Website\HostToWebsiteMap;
 use LizardsAndPumpkins\Website\WebsiteToCountryMap;
-use LizardsAndPumpkins\Website\WebsiteToCountryMap21Run;
 
 class IntegrationTestFactory implements Factory
 {
@@ -401,5 +400,13 @@ class IntegrationTestFactory implements Factory
     public function createWebsiteToCountryMap()
     {
         return new IntegrationTestWebsiteToCountryMap();
+    }
+
+    /**
+     * @return TwentyOneRunTaxableCountries
+     */
+    public function createTaxableCountries()
+    {
+        return new IntegrationTestTaxableCountries();
     }
 }

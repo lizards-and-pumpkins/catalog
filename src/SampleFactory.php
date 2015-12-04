@@ -25,7 +25,7 @@ use LizardsAndPumpkins\Log\WritingLoggerDecorator;
 use LizardsAndPumpkins\Product\AttributeCode;
 use LizardsAndPumpkins\Queue\File\FileQueue;
 use LizardsAndPumpkins\Queue\Queue;
-use LizardsAndPumpkins\Website\WebsiteToCountryMap21Run;
+use LizardsAndPumpkins\Website\TwentyOneRunWebsiteToCountryMap;
 
 class SampleFactory implements Factory
 {
@@ -439,10 +439,18 @@ class SampleFactory implements Factory
     }
 
     /**
-     * @return WebsiteToCountryMap21Run
+     * @return TwentyOneRunWebsiteToCountryMap
      */
     public function createWebsiteToCountryMap()
     {
-        return new WebsiteToCountryMap21Run();
+        return new TwentyOneRunWebsiteToCountryMap();
+    }
+
+    /**
+     * @return TaxableCountries
+     */
+    public function createTaxableCountries()
+    {
+        return new TwentyOneRunTaxableCountries();
     }
 }

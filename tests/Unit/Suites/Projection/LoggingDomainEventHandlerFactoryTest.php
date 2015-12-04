@@ -27,7 +27,6 @@ use LizardsAndPumpkins\UnitTestFactory;
  * @uses   \LizardsAndPumpkins\Product\ProductSearchDocumentBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\PriceSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductTaxClassSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionSnippetRenderer
@@ -70,6 +69,7 @@ use LizardsAndPumpkins\UnitTestFactory;
  * @uses   \LizardsAndPumpkins\FactoryTrait
  * @uses   \LizardsAndPumpkins\MasterFactoryTrait
  * @uses   \LizardsAndPumpkins\SnippetRendererCollection
+ * @uses   \LizardsAndPumpkins\SnippetList
  * @uses   \LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetProjector

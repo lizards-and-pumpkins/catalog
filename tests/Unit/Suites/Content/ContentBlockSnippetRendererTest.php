@@ -39,7 +39,7 @@ class ContentBlockSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockSnippetList = $this->getMock(SnippetList::class);
+        $this->mockSnippetList = $this->getMock(SnippetList::class, [], [], '', false);
         $this->stubSnippetKeyGeneratorLocator = $this->getMock(
             ContentBlockSnippetKeyGeneratorLocatorStrategy::class,
             [],
