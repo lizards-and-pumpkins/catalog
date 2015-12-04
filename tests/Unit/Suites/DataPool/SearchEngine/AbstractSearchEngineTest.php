@@ -860,8 +860,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $fieldCode = 'foo';
         $fieldValue = 0;
 
-        $documentA = $this->createSearchDocument([$fieldCode => ['foo', 'bar']], ProductId::fromString('A'));
-        $documentB = $this->createSearchDocument([$fieldCode => ['bar', 'baz']], ProductId::fromString('B'));
+        $documentA = $this->createSearchDocument([$fieldCode => ['xxx', 'yyy']], ProductId::fromString('A'));
+        $documentB = $this->createSearchDocument([$fieldCode => ['zzz', 'rrr']], ProductId::fromString('B'));
         $documentC = $this->createSearchDocument([$fieldCode => 'qux'], ProductId::fromString('C'));
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($documentA, $documentB, $documentC);
 
