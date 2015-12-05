@@ -23,6 +23,7 @@ use LizardsAndPumpkins\Log\Writer\FileLogMessageWriter;
 use LizardsAndPumpkins\Log\Writer\LogMessageWriter;
 use LizardsAndPumpkins\Log\WritingLoggerDecorator;
 use LizardsAndPumpkins\Product\AttributeCode;
+use LizardsAndPumpkins\Projection\Catalog\TwentyOneRunProductViewLocator;
 use LizardsAndPumpkins\Queue\File\FileQueue;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\Website\TwentyOneRunWebsiteToCountryMap;
@@ -452,5 +453,13 @@ class SampleFactory implements Factory
     public function createTaxableCountries()
     {
         return new TwentyOneRunTaxableCountries();
+    }
+
+    /**
+     * @return TwentyOneRunProductViewLocator
+     */
+    public function createProductViewLocator()
+    {
+        return new TwentyOneRunProductViewLocator();
     }
 }

@@ -206,6 +206,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createProductProjector()
     {
         return new ProductProjector(
+            $this->getMasterFactory()->createProductViewLocator(),
             $this->getMasterFactory()->createProductSnippetRendererCollection(),
             $this->getMasterFactory()->createProductSearchDocumentBuilder(),
             $this->createUrlKeyForContextCollector(),
