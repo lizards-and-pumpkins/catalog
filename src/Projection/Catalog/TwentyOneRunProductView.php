@@ -31,6 +31,14 @@ class TwentyOneRunProductView implements ProductView
     }
 
     /**
+     * @return Product
+     */
+    public function getOriginalProduct()
+    {
+        return $this->product;
+    }
+
+    /**
      * @return ProductId
      */
     public function getId()

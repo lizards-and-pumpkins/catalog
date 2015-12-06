@@ -87,6 +87,11 @@ class TwentyOneRunProductViewTest extends \PHPUnit_Framework_TestCase
         $this->productView = new TwentyOneRunProductView($this->mockProduct);
     }
 
+    public function testOriginalProductIsReturned()
+    {
+        $this->assertSame($this->mockProduct, $this->productView->getOriginalProduct());
+    }
+
     public function testProductViewInterfaceIsImplemented()
     {
         $this->assertInstanceOf(ProductView::class, $this->productView);
