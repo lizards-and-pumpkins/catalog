@@ -8,7 +8,6 @@ require([
 ], function(domReady, common, recentlyViewedProducts, styleSelect, zoom, toggleSwipingArrows) {
 
     var tabletWidth = 768,
-        siteFullWidth = 975,
         selectBoxIdPrefix = 'variation_',
         addToCartButton;
 
@@ -25,6 +24,7 @@ require([
         handleProductImages();
         initializeZoom();
         initializeTabs();
+        showAvailabilityStatus();
     });
 
     function renderPrices() {
@@ -109,7 +109,10 @@ require([
             productIdField = document.querySelector('input[name="product"]');
 
         if (!isConfigurableProduct()) {
-            showQtyBoxAndReleaseAddToCartButton(selectContainer, stockQty);
+            var stockQuantity = parseInt(stockQty, 10);
+            if (stockQuantity > 0) {
+                showQtyBoxAndReleaseAddToCartButton(selectContainer, stockQuantity);
+            }
             return;
         }
 
@@ -326,6 +329,36 @@ require([
         }
 
         toggleSwipingArrows('.swipe-container', 'ul');
+    }
+
+    function showAvailabilityStatus() {
+        if (!isInStock()) {
+            var inStockLabel = document.querySelector('.in-stock'),
+                outOfStockLabel = document.querySelector('.out-of-stock');
+
+            inStockLabel.style.display = 'none';
+            outOfStockLabel.style.display = 'inline';
+        }
+    }
+
+    function isInStock() {
+        if (isConfigurableProduct() && atLeastOneAssociatedProductIsInStock()) {
+            return true;
+        }
+
+        return !isConfigurableProduct() && parseInt(stockQty) > 0;
+    }
+
+    function atLeastOneAssociatedProductIsInStock() {
+        var numberOfAssociatedProducts = associated_products.length;
+
+        for (var i = 0; i < numberOfAssociatedProducts; i++) {
+            if (parseInt(associated_products[i]['attributes']['stock_qty'], 10) > 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     function isParent(parent, child) {
