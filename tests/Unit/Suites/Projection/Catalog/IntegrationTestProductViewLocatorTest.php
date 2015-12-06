@@ -5,19 +5,19 @@ namespace LizardsAndPumpkins\Projection\Catalog;
 use LizardsAndPumpkins\Product\Product;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\Catalog\TwentyOneRunProductViewLocator
- * @uses   \LizardsAndPumpkins\Projection\Catalog\TwentyOneRunProductView
+ * @covers \LizardsAndPumpkins\Projection\Catalog\IntegrationTestProductViewLocator
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\IntegrationTestProductView
  */
-class TwentyOneRunProductViewLocatorTest extends \PHPUnit_Framework_TestCase
+class IntegrationTestProductViewLocatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var TwentyOneRunProductViewLocator
+     * @var IntegrationTestProductViewLocator
      */
     private $locator;
 
     protected function setUp()
     {
-        $this->locator = new TwentyOneRunProductViewLocator();
+        $this->locator = new IntegrationTestProductViewLocator();
     }
 
     public function testProductViewInterfaceIsImplemented()

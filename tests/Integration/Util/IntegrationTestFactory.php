@@ -20,6 +20,8 @@ use LizardsAndPumpkins\Image\ImageProcessorCollection;
 use LizardsAndPumpkins\Image\ImageProcessingStrategySequence;
 use LizardsAndPumpkins\Log\InMemoryLogger;
 use LizardsAndPumpkins\Product\AttributeCode;
+use LizardsAndPumpkins\Projection\Catalog\IntegrationTestProductViewLocator;
+use LizardsAndPumpkins\Projection\Catalog\ProductViewLocator;
 use LizardsAndPumpkins\Queue\InMemory\InMemoryQueue;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\Website\HostToWebsiteMap;
@@ -403,10 +405,18 @@ class IntegrationTestFactory implements Factory
     }
 
     /**
-     * @return TwentyOneRunTaxableCountries
+     * @return TaxableCountries
      */
     public function createTaxableCountries()
     {
         return new IntegrationTestTaxableCountries();
+    }
+
+    /**
+     * @return ProductViewLocator
+     */
+    public function createProductViewLocator()
+    {
+        return new IntegrationTestProductViewLocator();
     }
 }

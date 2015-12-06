@@ -18,6 +18,7 @@ use LizardsAndPumpkins\Log\InMemoryLogger;
 use LizardsAndPumpkins\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
 use LizardsAndPumpkins\LocalFilesystemStorageReader;
 use LizardsAndPumpkins\LocalFilesystemStorageWriter;
+use LizardsAndPumpkins\Projection\Catalog\ProductViewLocator;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\SampleMasterFactory;
 use LizardsAndPumpkins\Queue\InMemory\InMemoryQueue;
@@ -221,5 +222,10 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
             $this->factory->getProductSearchAutosuggestionSortOrderConfig(),
             $this->factory->getProductSearchAutosuggestionSortOrderConfig()
         );
+    }
+
+    public function testProductViewLocatorIsReturned()
+    {
+        $this->assertInstanceOf(ProductViewLocator::class, $this->factory->createProductViewLocator());
     }
 }
