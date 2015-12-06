@@ -184,7 +184,7 @@ class TwentyOneRunProductView implements ProductView
      */
     private function filterProductAttributeList(ProductAttributeList $attributeList)
     {
-        $attributeCodesToBeRemoved = ['price', 'special_price'];
+        $attributeCodesToBeRemoved = ['price', 'special_price', 'backorders'];
 
         $filteredAttributes = array_reduce(
             $attributeList->getAllAttributes(),
