@@ -124,19 +124,4 @@ class ProductSearchTest extends AbstractIntegrationTest
 
         return $page;
     }
-
-    /**
-     * @depends testProductListingPageHtmlIsReturned
-     * @param HttpResponse $page
-     */
-    public function testProductListingPageDoesNotContainOutOfStockProducts(HttpResponse $page)
-    {
-        $expectedProductName = 'Adilette';
-        $unExpectedProductName = 'Adilette Out Of Stock';
-
-        $body = $page->getBody();
-
-        $this->assertContains($expectedProductName, $body);
-        $this->assertNotContains($unExpectedProductName, $body);
-    }
 }

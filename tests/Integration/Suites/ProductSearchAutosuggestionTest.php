@@ -182,19 +182,4 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
 
         return $page;
     }
-
-    /**
-     * @depends testSearchAutosuggestionHtmlIsReturned
-     * @param HttpResponse $page
-     */
-    public function testAutosuggestionHtmlPageDoesNotContainOutOfStockProducts(HttpResponse $page)
-    {
-        $expectedProductName = 'Adilette';
-        $unExpectedProductName = 'Adilette Out Of Stock';
-
-        $body = $page->getBody();
-
-        $this->assertContains($expectedProductName, $body);
-        $this->assertNotContains($unExpectedProductName, $body);
-    }
 }

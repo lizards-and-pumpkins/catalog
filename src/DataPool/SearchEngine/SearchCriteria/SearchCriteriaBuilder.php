@@ -49,10 +49,7 @@ class SearchCriteriaBuilder
                     return SearchCriterionLike::create($fieldName, $queryString);
                 }, $fieldNames)
             ),
-            CompositeSearchCriterion::createOr(
-                SearchCriterionGreaterThan::create('stock_qty', 0),
-                SearchCriterionEqual::create('backorders', 'true')
-            )
+            SearchCriterionGreaterThan::create('stock_qty', 0)
         );
     }
 }

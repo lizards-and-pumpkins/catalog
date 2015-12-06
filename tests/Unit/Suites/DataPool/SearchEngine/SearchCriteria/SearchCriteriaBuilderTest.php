@@ -80,10 +80,7 @@ class SearchCriteriaBuilderTest extends \PHPUnit_Framework_TestCase
                 SearchCriterionLike::create('foo', $queryString),
                 SearchCriterionLike::create('bar', $queryString)
             ),
-            CompositeSearchCriterion::createOr(
-                SearchCriterionGreaterThan::create('stock_qty', 0),
-                SearchCriterionEqual::create('backorders', 'true')
-            )
+            SearchCriterionGreaterThan::create('stock_qty', 0)
         );
 
         $this->assertEquals($expectedCriteria, $result);

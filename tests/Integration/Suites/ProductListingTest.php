@@ -61,10 +61,7 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
         $metaInfoSnippet = json_decode($metaInfoSnippetJson, true);
 
         $expectedCriteria = CompositeSearchCriterion::createAnd(
-            CompositeSearchCriterion::createOr(
-                SearchCriterionGreaterThan::create('stock_qty', '0'),
-                SearchCriterionEqual::create('backorders', 'true')
-            ),
+            SearchCriterionGreaterThan::create('stock_qty', '0'),
             SearchCriterionEqual::create('category', 'sale'),
             SearchCriterionEqual::create('brand', 'Adidas')
         );
@@ -102,20 +99,5 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
         $this->assertNotContains($unExpectedProductName, $body);
 
         return $page;
-    }
-
-    /**
-     * @depends testProductListingPageHtmlIsReturned
-     * @param HttpResponse $page
-     */
-    public function testProductListingPageDoesNotContainOutOfStockProducts(HttpResponse $page)
-    {
-        $expectedProductName = 'Adilette';
-        $unExpectedProductName = 'Adilette Out Of Stock';
-
-        $body = $page->getBody();
-
-        $this->assertContains($expectedProductName, $body);
-        $this->assertNotContains($unExpectedProductName, $body);
     }
 }
