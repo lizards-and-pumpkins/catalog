@@ -151,34 +151,4 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($testFileName, $this->productBlock->getProductImageFileNameByNumber(0));
     }
-
-    public function testMaxPurchasableQuantityIsReturnedIfProductIsAvailableForBackorders()
-    {
-        $this->stubProduct->method('getFirstValueOfAttribute')->willReturnMap([
-            ['backorders', 'true'],
-            ['stock_qty', 1],
-        ]);
-
-        $this->assertSame(ProductBlock::MAX_PURCHASABLE_QUANTITY, $this->productBlock->getMaxPurchasableQuantity());
-    }
-
-    public function testMaxPurchasableQuantityIsReturnedIfItIsSmallerThanStockQuantity()
-    {
-        $this->stubProduct->method('getFirstValueOfAttribute')->willReturnMap([
-            ['backorders', 'false'],
-            ['stock_qty', 6],
-        ]);
-
-        $this->assertSame(ProductBlock::MAX_PURCHASABLE_QUANTITY, $this->productBlock->getMaxPurchasableQuantity());
-    }
-
-    public function testStockQuantityIsReturnedIfItIsSmallerThanMaxPurchasableQuantity()
-    {
-        $this->stubProduct->method('getFirstValueOfAttribute')->willReturnMap([
-            ['backorders', 'false'],
-            ['stock_qty', 4],
-        ]);
-
-        $this->assertSame(4, $this->productBlock->getMaxPurchasableQuantity());
-    }
 }

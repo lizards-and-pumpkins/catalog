@@ -13,6 +13,8 @@ use LizardsAndPumpkins\Product\Tax\ProductTaxClass;
 
 class TwentyOneRunProductView implements ProductView
 {
+    const MAX_PURCHASABLE_QTY = 5;
+
     /**
      * @var Product
      */
@@ -184,13 +186,40 @@ class TwentyOneRunProductView implements ProductView
     {
         $attributeCodesToBeRemoved = ['price', 'special_price'];
 
-        $filteredAttributes = array_filter(
+        $filteredAttributes = array_reduce(
             $attributeList->getAllAttributes(),
-            function (ProductAttribute $attribute) use ($attributeCodesToBeRemoved) {
-                return !in_array((string) $attribute->getCode(), $attributeCodesToBeRemoved);
-            }
+            function (array $carry, ProductAttribute $attribute) use ($attributeCodesToBeRemoved, $attributeList) {
+                if (in_array((string) $attribute->getCode(), $attributeCodesToBeRemoved)) {
+                    return $carry;
+                }
+
+                if ((string) $attribute->getCode() === 'stock_qty' &&
+                    ($attribute->getValue() > self::MAX_PURCHASABLE_QTY ||
+                     $this->product->getFirstValueOfAttribute('backorders') === 'true')
+                ) {
+                    $carry[] = $this->createStockQtyAttributeAtMaximumPurchasableLevel($attribute);
+                    return $carry;
+                }
+
+                $carry[] = $attribute;
+                return $carry;
+            },
+            []
         );
 
         return new ProductAttributeList(...$filteredAttributes);
+    }
+
+    /**
+     * @param ProductAttribute $attribute
+     * @return ProductAttribute
+     */
+    private function createStockQtyAttributeAtMaximumPurchasableLevel(ProductAttribute $attribute)
+    {
+        return ProductAttribute::fromArray([
+            ProductAttribute::CODE => 'stock_qty',
+            ProductAttribute::VALUE => self::MAX_PURCHASABLE_QTY,
+            ProductAttribute::CONTEXT => $attribute->getContextDataSet(),
+        ]);
     }
 }

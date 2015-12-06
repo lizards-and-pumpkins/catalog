@@ -8,8 +8,6 @@ use LizardsAndPumpkins\Renderer\Block;
 
 class ProductBlock extends Block
 {
-    const MAX_PURCHASABLE_QUANTITY = 5;
-
     /**
      * @param string $attributeCode
      * @return string
@@ -102,17 +100,5 @@ class ProductBlock extends Block
     public function getProductImageFileNameByNumber($imageNumber)
     {
         return $this->getProduct()->getImageFileNameByNumber($imageNumber);
-    }
-
-    public function getMaxPurchasableQuantity()
-    {
-        $isAvailableForBackorders = 'true' === $this->getFirstValueOfProductAttribute('backorders');
-        $stockQuantity = (int) $this->getFirstValueOfProductAttribute('stock_qty');
-
-        if ($isAvailableForBackorders || $stockQuantity > self::MAX_PURCHASABLE_QUANTITY) {
-            return self::MAX_PURCHASABLE_QUANTITY;
-        }
-
-        return $stockQuantity;
     }
 }

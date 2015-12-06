@@ -46,7 +46,9 @@ class TwentyOneRunProductViewTest extends \PHPUnit_Framework_TestCase
 
         $stubProductAttribute = $this->getMock(ProductAttribute::class, [], [], '', false);
         $stubProductAttribute->method('getCode')->willReturn($stubAttributeCode);
-        $stubProductAttribute->method('isCodeEqualTo')->with($attributeCodeString)->willReturn(true);
+        $stubProductAttribute->method('isCodeEqualTo')->willReturnCallback(function ($code) use ($attributeCodeString) {
+            return $code === $attributeCodeString;
+        });
         $stubProductAttribute->method('getContextParts')->willReturn([]);
         $stubProductAttribute->method('getContextDataSet')->willReturn([]);
 
@@ -317,5 +319,33 @@ class TwentyOneRunProductViewTest extends \PHPUnit_Framework_TestCase
         $this->assertContains($nonPriceAttribute, $attributesList->getAllAttributes());
         $this->assertNotContains($priceAttribute, $attributesList->getAllAttributes());
         $this->assertNotContains($specialPriceAttribute, $attributesList->getAllAttributes());
+    }
+
+    public function testMaximumPurchasableQuantityIsReturnedIfProductIsAvailableForBackorders()
+    {
+        $stockAttributeCode = 'stock_qty';
+
+        $stockQtyAttribute = $this->createStubAttributeWithCodeAndValue($stockAttributeCode, 1);
+        $backordersAttribute = $this->createStubAttributeWithCodeAndValue('backorders', 'true');
+        $stubAttributeList = $this->createStubProductAttributeList($stockQtyAttribute, $backordersAttribute);
+
+        $this->mockProduct->method('getAttributes')->willReturn($stubAttributeList);
+        $this->mockProduct->method('getFirstValueOfAttribute')->with('backorders')->willReturn('true');
+        $result = $this->productView->getFirstValueOfAttribute($stockAttributeCode);
+
+        $this->assertSame(TwentyOneRunProductView::MAX_PURCHASABLE_QTY, $result);
+    }
+
+    public function testMaximumPurchasableQuantityIsReturnedIfProductQuantityIsGreaterThanMaximumPurchasableQuantity()
+    {
+        $stockAttributeCode = 'stock_qty';
+
+        $stockQtyAttribute = $this->createStubAttributeWithCodeAndValue($stockAttributeCode, 6);
+        $stubAttributeList = $this->createStubProductAttributeList($stockQtyAttribute);
+
+        $this->mockProduct->method('getAttributes')->willReturn($stubAttributeList);
+        $result = $this->productView->getFirstValueOfAttribute($stockAttributeCode);
+
+        $this->assertSame(TwentyOneRunProductView::MAX_PURCHASABLE_QTY, $result);
     }
 }
