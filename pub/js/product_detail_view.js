@@ -9,7 +9,6 @@ require([
 
     var tabletWidth = 768,
         siteFullWidth = 975,
-        maxQty = 5,
         selectBoxIdPrefix = 'variation_',
         addToCartButton;
 
@@ -110,7 +109,7 @@ require([
             productIdField = document.querySelector('input[name="product"]');
 
         if (!isConfigurableProduct()) {
-            showQtyBoxAndReleaseAddToCartButton(selectContainer, maxQty);
+            showQtyBoxAndReleaseAddToCartButton(selectContainer, stockQty);
             return;
         }
 
@@ -149,13 +148,12 @@ require([
         styleSelect('#' + selectBoxIdPrefix + variationAttributeCode);
     }
 
-    function createQtySelectBox(limit) {
-        var numberOfItemsToShow = Math.min(limit, maxQty),
-            select = document.createElement('SELECT');
+    function createQtySelectBox(maxQty) {
+        var select = document.createElement('SELECT');
 
         select.id = selectBoxIdPrefix + 'qty';
 
-        for (var i = 1; i <= numberOfItemsToShow; i++) {
+        for (var i = 1; i <= maxQty; i++) {
             var option = document.createElement('OPTION');
             option.textContent = i;
             option.value = i;

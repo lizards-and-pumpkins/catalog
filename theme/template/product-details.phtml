@@ -50,7 +50,8 @@ $save = 0;
                 <script>
 
                     var regularPrice = '<?= $this->getChildOutput('price') ?>',
-                        specialPrice = '<?= $this->getChildOutput('special_price') ?>';
+                        specialPrice = '<?= $this->getChildOutput('special_price') ?>',
+                        stockQty = '<?= $this->getProductStockQuantity() ?>';
 
                 </script>
                 <div class="price-information">

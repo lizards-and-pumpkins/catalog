@@ -68,7 +68,27 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 <price>14.92</price>
                 <brand>Adidas</brand>
                 <gender>Herren</gender>
-                <stock_qty>5</stock_qty>
+                <stock_qty>1</stock_qty>
+                <backorders>false</backorders>
+                <color>d90000</color>
+            </attributes>
+        </product>
+
+        <product type="simple" sku="288193NEU-OUT-OF-STOCK" tax_class="19%">
+            <images>
+                <image>
+                    <file>288193_14.jpg</file>
+                    <label/>
+                </image>
+            </images>
+            <attributes>
+                <url_key>adilette-out-of-stock</url_key>
+                <name>Adilette Out Of Stock</name>
+                <category>sale</category>
+                <price>14.92</price>
+                <brand>Adidas</brand>
+                <gender>Herren</gender>
+                <stock_qty>0</stock_qty>
                 <backorders>false</backorders>
                 <color>d90000</color>
             </attributes>
