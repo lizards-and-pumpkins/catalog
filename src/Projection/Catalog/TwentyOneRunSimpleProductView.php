@@ -11,7 +11,7 @@ use LizardsAndPumpkins\Product\ProductImage;
 use LizardsAndPumpkins\Product\ProductImageList;
 use LizardsAndPumpkins\Product\Tax\ProductTaxClass;
 
-class TwentyOneRunProductView implements ProductView
+class TwentyOneRunSimpleProductView implements ProductView
 {
     const MAX_PURCHASABLE_QTY = 5;
 

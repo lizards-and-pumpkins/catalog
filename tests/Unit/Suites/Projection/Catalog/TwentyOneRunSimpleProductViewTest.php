@@ -8,12 +8,12 @@ use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductAttributeList;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\Catalog\TwentyOneRunProductView
+ * @covers \LizardsAndPumpkins\Projection\Catalog\TwentyOneRunSimpleProductView
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Product\ProductAttribute
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  */
-class TwentyOneRunProductViewTest extends \PHPUnit_Framework_TestCase
+class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Product|\PHPUnit_Framework_MockObject_MockObject
@@ -21,7 +21,7 @@ class TwentyOneRunProductViewTest extends \PHPUnit_Framework_TestCase
     private $mockProduct;
 
     /**
-     * @var TwentyOneRunProductView
+     * @var TwentyOneRunSimpleProductView
      */
     private $productView;
 
@@ -84,7 +84,7 @@ class TwentyOneRunProductViewTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->mockProduct = $this->getMock(Product::class);
-        $this->productView = new TwentyOneRunProductView($this->mockProduct);
+        $this->productView = new TwentyOneRunSimpleProductView($this->mockProduct);
     }
 
     public function testOriginalProductIsReturned()
@@ -381,7 +381,7 @@ class TwentyOneRunProductViewTest extends \PHPUnit_Framework_TestCase
         $this->mockProduct->method('getFirstValueOfAttribute')->with('backorders')->willReturn('true');
         $result = $this->productView->getFirstValueOfAttribute($stockAttributeCode);
 
-        $this->assertSame(TwentyOneRunProductView::MAX_PURCHASABLE_QTY, $result);
+        $this->assertSame(TwentyOneRunSimpleProductView::MAX_PURCHASABLE_QTY, $result);
     }
 
     public function testMaximumPurchasableQuantityIsReturnedIfProductQuantityIsGreaterThanMaximumPurchasableQuantity()
@@ -394,6 +394,6 @@ class TwentyOneRunProductViewTest extends \PHPUnit_Framework_TestCase
         $this->mockProduct->method('getAttributes')->willReturn($stubAttributeList);
         $result = $this->productView->getFirstValueOfAttribute($stockAttributeCode);
 
-        $this->assertSame(TwentyOneRunProductView::MAX_PURCHASABLE_QTY, $result);
+        $this->assertSame(TwentyOneRunSimpleProductView::MAX_PURCHASABLE_QTY, $result);
     }
 }
