@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\Product;
 use LizardsAndPumpkins\Product\Composite\AssociatedProductList;
 use LizardsAndPumpkins\Product\Composite\ProductVariationAttributeList;
 
-interface CompositeProduct
+interface CompositeProduct extends Product
 {
     /**
      * @return ProductVariationAttributeList
