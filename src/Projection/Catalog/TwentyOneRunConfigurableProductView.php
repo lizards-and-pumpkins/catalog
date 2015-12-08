@@ -19,6 +19,11 @@ class TwentyOneRunConfigurableProductView implements CompositeProductView
     const MAX_PURCHASABLE_QTY = 5;
 
     /**
+     * @var ProductViewLocator
+     */
+    private $productViewLocator;
+
+    /**
      * @var ConfigurableProduct
      */
     private $product;
@@ -28,8 +33,9 @@ class TwentyOneRunConfigurableProductView implements CompositeProductView
      */
     private $memoizedProductAttributesList;
 
-    public function __construct(ConfigurableProduct $product)
+    public function __construct(ProductViewLocator $productViewLocator, ConfigurableProduct $product)
     {
+        $this->productViewLocator = $productViewLocator;
         $this->product = $product;
     }
 
@@ -200,7 +206,11 @@ class TwentyOneRunConfigurableProductView implements CompositeProductView
      */
     public function getAssociatedProducts()
     {
-        return $this->product->getAssociatedProducts();
+        $associatedProductViews = array_map(function (Product $associatedProduct) {
+            return $this->productViewLocator->createForProduct($associatedProduct);
+        }, $this->product->getAssociatedProducts()->getProducts());
+
+        return new AssociatedProductList(...$associatedProductViews);
     }
 
     /**

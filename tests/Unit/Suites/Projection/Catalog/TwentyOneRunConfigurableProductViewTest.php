@@ -3,13 +3,19 @@
 namespace LizardsAndPumpkins\Projection\Catalog;
 
 use LizardsAndPumpkins\Product\AttributeCode;
+use LizardsAndPumpkins\Product\Composite\AssociatedProductList;
 use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
+use LizardsAndPumpkins\Product\CompositeProduct;
+use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductAttributeList;
+use LizardsAndPumpkins\Product\ProductId;
+use LizardsAndPumpkins\Product\SimpleProduct;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\Catalog\TwentyOneRunConfigurableProductView
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
+ * @uses   \LizardsAndPumpkins\Product\Composite\AssociatedProductList
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  */
 class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCase
@@ -23,6 +29,11 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
      * @var TwentyOneRunConfigurableProductView
      */
     private $productView;
+
+    /**
+     * @var ProductViewLocator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubProductViewLocator;
 
     /**
      * @param $attributeCodeString
@@ -80,10 +91,65 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
         return $stubAttributeList;
     }
 
+    /**
+     * @param $productIdString
+     * @return SimpleProduct|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubSimpleProductWithId($productIdString)
+    {
+        $stubSimpleProductId = $this->getMock(ProductId::class, [], [], '', false);
+        $stubSimpleProductId->method('__toString')->willReturn($productIdString);
+
+        $stubSimpleProduct = $this->getMock(SimpleProduct::class, [], [], '', false);
+        $stubSimpleProduct->method('getId')->willReturn($stubSimpleProductId);
+
+        return $stubSimpleProduct;
+    }
+
+    /**
+     * @param $productIdString
+     * @return ConfigurableProduct|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubConfigurableProductWithId($productIdString)
+    {
+        $stubConfigurableProductId = $this->getMock(ProductId::class, [], [], '', false);
+        $stubConfigurableProductId->method('__toString')->willReturn($productIdString);
+
+        $stubConfigurableProduct = $this->getMock(ConfigurableProduct::class, [], [], '', false);
+        $stubConfigurableProduct->method('getId')->willReturn($stubConfigurableProductId);
+
+        return $stubConfigurableProduct;
+    }
+
+    /**
+     * @return ProductViewLocator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubProductViewLocator()
+    {
+        $stubProductViewLocator = $this->getMock(ProductViewLocator::class);
+        $stubProductViewLocator->method('createForProduct')->willReturnCallback(function (Product $product) {
+            if ($product instanceof CompositeProduct) {
+                $stubCompositeProductView = $this->getMock(CompositeProductView::class);
+                $stubCompositeProductView->method('getId')->willReturn($product->getId());
+
+                return $stubCompositeProductView;
+            }
+
+            $stubProductView = $this->getMock(ProductView::class);
+            $stubProductView->method('getId')->willReturn($product->getId());
+
+            return $stubProductView;
+        });
+
+        return $stubProductViewLocator;
+    }
+
     protected function setUp()
     {
+        $this->stubProductViewLocator = $this->createStubProductViewLocator();
         $this->mockProduct = $this->getMock(ConfigurableProduct::class, [], [], '', false);
-        $this->productView = new TwentyOneRunConfigurableProductView($this->mockProduct);
+
+        $this->productView = new TwentyOneRunConfigurableProductView($this->stubProductViewLocator, $this->mockProduct);
     }
 
     public function testProductViewInterfaceIsImplemented()
@@ -374,9 +440,17 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
         $this->productView->getVariationAttributes();
     }
 
-    public function testGettingAssociatedProductsIsDelegatedToOriginalProduct()
+    public function testAssociatedProductsAreInstancesOfCorrespondentViews()
     {
-        $this->mockProduct->expects($this->once())->method('getAssociatedProducts');
-        $this->productView->getAssociatedProducts();
+        $stubSimpleProduct = $this->createStubSimpleProductWithId('foo');
+        $stubConfigurableProduct = $this->createStubConfigurableProductWithId('bar');
+
+        $stubAssociatedProductsList = $this->getMock(AssociatedProductList::class, [], [], '', false);
+        $stubAssociatedProductsList->method('getProducts')->willReturn([$stubSimpleProduct, $stubConfigurableProduct]);
+
+        $this->mockProduct->method('getAssociatedProducts')->willReturn($stubAssociatedProductsList);
+
+        $result = $this->productView->getAssociatedProducts();
+        $this->assertContainsOnlyInstancesOf(ProductView::class, $result);
     }
 }

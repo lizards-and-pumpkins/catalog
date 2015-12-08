@@ -14,7 +14,7 @@ class TwentyOneRunProductViewLocator implements ProductViewLocator
     public function createForProduct(Product $product)
     {
         if ($product instanceof ConfigurableProduct) {
-            return new TwentyOneRunConfigurableProductView($product);
+            return new TwentyOneRunConfigurableProductView($this, $product);
         }
 
         return new TwentyOneRunSimpleProductView($product);
