@@ -1,11 +1,11 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Product\Composite;
 
 use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion;
 use LizardsAndPumpkins\Product\Composite\Exception\AssociatedProductListDomainException;
 use LizardsAndPumpkins\Product\Composite\Exception\ProductAttributeValueCombinationNotUniqueException;
+use LizardsAndPumpkins\Product\CompositeProduct;
 use LizardsAndPumpkins\Product\Exception\ProductTypeCodeMismatchException;
 use LizardsAndPumpkins\Product\Exception\ProductTypeCodeMissingException;
 use LizardsAndPumpkins\Product\Product;
@@ -75,6 +75,11 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
     public function testItImplementsTheProductInterface()
     {
         $this->assertInstanceOf(Product::class, $this->configurableProduct);
+    }
+
+    public function testCompositeProductInterfaceIsImplemented()
+    {
+        $this->assertInstanceOf(CompositeProduct::class, $this->configurableProduct);
     }
 
     public function testItDelegatesToTheSimpleProductToFetchTheId()

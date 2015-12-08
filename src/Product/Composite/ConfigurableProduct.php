@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\Product\Composite;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Product\Composite\Exception\AssociatedProductListDomainException;
+use LizardsAndPumpkins\Product\CompositeProduct;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductAttributeList;
 use LizardsAndPumpkins\Product\ProductId;
@@ -15,7 +16,7 @@ use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\Product\Composite\Exception\ConfigurableProductAssociatedProductListInvariantViolationException;
 use LizardsAndPumpkins\Product\Tax\ProductTaxClass;
 
-class ConfigurableProduct implements Product
+class ConfigurableProduct implements Product, CompositeProduct
 {
     use RehydrateableProductTrait;
     
