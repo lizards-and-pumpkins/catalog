@@ -7,6 +7,7 @@ use LizardsAndPumpkins\Product\Product;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\Catalog\TwentyOneRunProductViewLocator
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\TwentyOneRunConfigurableProductView
  * @uses   \LizardsAndPumpkins\Projection\Catalog\TwentyOneRunSimpleProductView
  */
 class TwentyOneRunProductViewLocatorTest extends \PHPUnit_Framework_TestCase

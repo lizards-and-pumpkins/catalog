@@ -9,6 +9,8 @@ use LizardsAndPumpkins\Product\ProductAttributeList;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\Catalog\TwentyOneRunConfigurableProductView
+ * @uses   \LizardsAndPumpkins\Product\AttributeCode
+ * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  */
 class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCase
 {
