@@ -431,7 +431,7 @@ TEXTILE/SYNTHETICS]]></description>
             <associated_products>
                 <product sku="218765-333-1" type="simple" tax_class="19%">
                     <attributes>
-                        <stock_qty>5</stock_qty>
+                        <stock_qty>6</stock_qty>
                         <color locale="en_US">Red</color>
                         <color locale="de_DE">Rot</color>
                         <size>US 12.5 - EU 47</size>

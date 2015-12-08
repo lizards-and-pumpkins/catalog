@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog;
 
+use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Product\Product;
 
 /**
@@ -25,13 +26,23 @@ class TwentyOneRunProductViewLocatorTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ProductViewLocator::class, $this->locator);
     }
 
-    public function testProductViewIsReturned()
+    public function testSimpleProductViewIsReturned()
     {
         /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
         $stubProduct = $this->getMock(Product::class);
 
         $result = $this->locator->createForProduct($stubProduct);
 
-        $this->assertInstanceOf(ProductView::class, $result);
+        $this->assertInstanceOf(TwentyOneRunSimpleProductView::class, $result);
+    }
+
+    public function testConfigurableProductViewIsReturned()
+    {
+        /** @var ConfigurableProduct|\PHPUnit_Framework_MockObject_MockObject $stubConfigurableProduct */
+        $stubConfigurableProduct = $this->getMock(ConfigurableProduct::class, [], [], '', false);
+
+        $result = $this->locator->createForProduct($stubConfigurableProduct);
+
+        $this->assertInstanceOf(TwentyOneRunConfigurableProductView::class, $result);
     }
 }
