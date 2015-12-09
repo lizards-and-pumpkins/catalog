@@ -17,14 +17,14 @@ class SearchEngineResponse
     private $totalNumberOfResults;
 
     /**
-     * @var \LizardsAndPumpkins\Product\ProductId[]
+     * @var ProductId[]
      */
     private $productIds;
 
     /**
      * @param FacetFieldCollection $facetFieldCollection
      * @param int $totalNumberOfResults
-     * @param \LizardsAndPumpkins\Product\ProductId[] $productIds
+     * @param ProductId[] $productIds
      */
     public function __construct(
         FacetFieldCollection $facetFieldCollection,
@@ -37,7 +37,7 @@ class SearchEngineResponse
     }
 
     /**
-     * @return \LizardsAndPumpkins\Product\ProductId[]
+     * @return ProductId[]
      */
     public function getProductIds()
     {
