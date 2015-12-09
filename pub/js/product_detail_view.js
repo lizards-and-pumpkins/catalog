@@ -48,8 +48,7 @@ require([
     function initializeAddToCartButton() {
         addToCartButton = document.querySelector('.product-controls button');
         addToCartButton.addEventListener('click', function() {
-            var baseUrl = '/ru_de/', // TODO: Implement
-                productId = document.querySelector('input[name="product"]').value,
+            var productId = document.querySelector('input[name="product"]').value,
                 qty = document.getElementById(selectBoxIdPrefix + 'qty').value;
 
             document.location.href = baseUrl + 'cart/cart/add/sku/' + productId + '/qty/' + qty + '/';
