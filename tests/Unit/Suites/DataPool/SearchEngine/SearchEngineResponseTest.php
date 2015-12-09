@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
+use LizardsAndPumpkins\Product\ProductId;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse
@@ -10,9 +10,9 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollec
 class SearchEngineResponseTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductId|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubSearchDocumentCollection;
+    private $stubProductId;
 
     /**
      * @var FacetFieldCollection|\PHPUnit_Framework_MockObject_MockObject
@@ -28,19 +28,19 @@ class SearchEngineResponseTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
+        $this->stubProductId = $this->getMock(ProductId::class, [], [], '', false);
         $this->stubFacetFieldCollection = $this->getMock(FacetFieldCollection::class, [], [], '', false);
 
         $this->searchEngineResponse = new SearchEngineResponse(
-            $this->stubSearchDocumentCollection,
             $this->stubFacetFieldCollection,
-            $this->testTotalNumberOfResults
+            $this->testTotalNumberOfResults,
+            $this->stubProductId
         );
     }
 
-    public function testSearchDocumentCollectionIsReturned()
+    public function testProductIdsAreReturned()
     {
-        $this->assertSame($this->stubSearchDocumentCollection, $this->searchEngineResponse->getSearchDocuments());
+        $this->assertSame([$this->stubProductId], $this->searchEngineResponse->getProductIds());
     }
 
     public function testSearchEngineFacetFieldCollectionIsReturned()
