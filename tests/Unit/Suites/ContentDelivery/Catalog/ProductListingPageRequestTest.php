@@ -37,22 +37,24 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
 
     private function assertCookieHasBeenSet($name, $value, $ttl)
     {
-        $cookieFormat = 'Set-Cookie: %s=%s; expires=%s; Max-Age=%s';
-
-        $expectedHeader = sprintf($cookieFormat, $name, $value, gmdate('D, d-M-Y H:i:s T', time() + $ttl), $ttl);
-        $expectedHeader1 = sprintf($cookieFormat, $name, $value, gmdate('D, d-M-Y H:i:s T', time() + $ttl - 1), $ttl);
-
-        $headers = xdebug_get_headers();
-
-        $this->assertTrue(in_array($expectedHeader, $headers) || in_array($expectedHeader1, $headers));
+        $this->assertContains([$name, $value, time() + $ttl], $_SESSION['lizard_and_pumpkins_cookies']);
     }
 
     protected function setUp()
     {
+        $_SESSION['lizard_and_pumpkins_cookies'] = [];
+
         $this->stubProductsPerPage = $this->getMock(ProductsPerPage::class, [], [], '', false);
         $this->stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
         $this->pageRequest = new ProductListingPageRequest($this->stubProductsPerPage, $this->stubSortOrderConfig);
         $this->stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+    }
+
+    protected function tearDown()
+    {
+        if (isset($_SESSION['lizard_and_pumpkins_cookies'])) {
+            unset($_SESSION['lizard_and_pumpkins_cookies']);
+        }
     }
 
     public function testCurrentPageIsZeroByDefault()
@@ -183,10 +185,6 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($sortOrderDirection, $result->getSelectedDirection()->getDirection());
     }
 
-    /**
-     * @runInSeparateProcess
-     * @requires extension xdebug
-     */
     public function testProductsPerPageCookieIsSetIfCorrespondingQueryParameterIsPresent()
     {
         $selectedNumberOfProductsPerPage = 2;
@@ -204,10 +202,6 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @runInSeparateProcess
-     * @requires extension xdebug
-     */
     public function testSortOrderCookieIsSetIfCorrespondingQueryParameterIsPresent()
     {
         $sortOrderAttributeName = 'foo';
@@ -225,10 +219,6 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @runInSeparateProcess
-     * @requires extension xdebug
-     */
     public function testSortOrderDirectionCookieIsSetIfCorrespondingQueryParameterIsPresent()
     {
         $sortOrderDirection = SortOrderDirection::ASC;
@@ -245,4 +235,8 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
             ProductListingPageRequest::SORT_DIRECTION_COOKIE_TTL
         );
     }
+}
+
+function setcookie($name, $value, $expire) {
+    $_SESSION['lizard_and_pumpkins_cookies'][] = [$name, $value, $expire];
 }
