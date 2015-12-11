@@ -73,14 +73,6 @@ class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('', $this->productView->getFirstValueOfAttribute($priceAttributeCode));
     }
 
-    public function priceAttributeCodeProvider()
-    {
-        return [
-            ['price'],
-            ['special_price']
-        ];
-    }
-
     public function testGettingFirstValueOfBackordersAttributeReturnsEmptyString()
     {
         $testAttributeCode = 'backorders';
@@ -312,5 +304,13 @@ class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
         $result = $this->productView->getFirstValueOfAttribute($stockAttributeCode);
 
         $this->assertSame(TwentyOneRunSimpleProductView::MAX_PURCHASABLE_QTY, $result);
+    }
+
+    public function priceAttributeCodeProvider()
+    {
+        return [
+            ['price'],
+            ['special_price']
+        ];
     }
 }

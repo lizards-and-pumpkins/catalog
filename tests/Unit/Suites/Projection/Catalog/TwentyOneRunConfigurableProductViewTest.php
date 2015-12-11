@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog;
 
-use LizardsAndPumpkins\Product\AttributeCode;
 use LizardsAndPumpkins\Product\Composite\AssociatedProductList;
 use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Product\CompositeProduct;
@@ -34,62 +33,6 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
      * @var ProductViewLocator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubProductViewLocator;
-
-    /**
-     * @param $attributeCodeString
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getStubAttributeCode($attributeCodeString)
-    {
-        $stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
-        $stubAttributeCode->method('__toString')->willReturn($attributeCodeString);
-
-        return $stubAttributeCode;
-    }
-
-    /**
-     * @param string $attributeCodeString
-     * @return ProductAttribute|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubAttributeWithCode($attributeCodeString)
-    {
-        $stubAttributeCode = $this->getStubAttributeCode($attributeCodeString);
-
-        $stubProductAttribute = $this->getMock(ProductAttribute::class, [], [], '', false);
-        $stubProductAttribute->method('getCode')->willReturn($stubAttributeCode);
-        $stubProductAttribute->method('isCodeEqualTo')->willReturnCallback(function ($code) use ($attributeCodeString) {
-            return $code === $attributeCodeString;
-        });
-        $stubProductAttribute->method('getContextParts')->willReturn([]);
-        $stubProductAttribute->method('getContextDataSet')->willReturn([]);
-
-        return $stubProductAttribute;
-    }
-
-    /**
-     * @param string $attributeCodeString
-     * @param mixed $attributeValue
-     * @return ProductAttribute|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubAttributeWithCodeAndValue($attributeCodeString, $attributeValue)
-    {
-        $stubProductAttribute = $this->createStubAttributeWithCode($attributeCodeString);
-        $stubProductAttribute->method('getValue')->willReturn($attributeValue);
-
-        return $stubProductAttribute;
-    }
-
-    /**
-     * @param ProductAttribute[] ...$stubProductAttributes
-     * @return ProductAttributeList|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubProductAttributeList(ProductAttribute ...$stubProductAttributes)
-    {
-        $stubAttributeList = $this->getMock(ProductAttributeList::class, [], [], '', false);
-        $stubAttributeList->method('getAllAttributes')->willReturn($stubProductAttributes);
-
-        return $stubAttributeList;
-    }
 
     /**
      * @param $productIdString
@@ -128,16 +71,11 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
     {
         $stubProductViewLocator = $this->getMock(ProductViewLocator::class);
         $stubProductViewLocator->method('createForProduct')->willReturnCallback(function (Product $product) {
-            if ($product instanceof CompositeProduct) {
-                $stubCompositeProductView = $this->getMock(CompositeProductView::class);
-                $stubCompositeProductView->method('getId')->willReturn($product->getId());
-
-                return $stubCompositeProductView;
-            }
-
-            $stubProductView = $this->getMock(ProductView::class);
+            $stubProductViewType = $product instanceof CompositeProduct ?
+                CompositeProductView::class :
+                ProductView::class;
+            $stubProductView = $this->getMock($stubProductViewType);
             $stubProductView->method('getId')->willReturn($product->getId());
-
             return $stubProductView;
         });
 
@@ -173,36 +111,26 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
         $testAttributeCode = 'foo';
         $testAttributeValue = 'bar';
 
-        $stubAttribute = $this->createStubAttributeWithCodeAndValue($testAttributeCode, $testAttributeValue);
-        $stubAttributeList = $this->createStubProductAttributeList($stubAttribute);
-        $stubAttributeList->method('hasAttribute')->with($testAttributeCode)->willReturn(true);
-        $this->mockProduct->method('getAttributes')->willReturn($stubAttributeList);
+        $attribute = new ProductAttribute($testAttributeCode, $testAttributeValue, []);
+        $attributeList = new ProductAttributeList($attribute);
+        $this->mockProduct->method('getAttributes')->willReturn($attributeList);
 
         $this->assertSame($testAttributeValue, $this->productView->getFirstValueOfAttribute($testAttributeCode));
     }
 
-    public function testGettingFirstValueOfPriceAttributeReturnsEmptyString()
+    /**
+     * @dataProvider priceAttributeCodeProvider
+     * @param string $priceAttributeCode
+     */
+    public function testGettingFirstValueOfPriceAttributeReturnsEmptyString($priceAttributeCode)
     {
-        $testAttributeCode = 'price';
         $testAttributeValue = 1000;
 
-        $stubPriceAttribute = $this->createStubAttributeWithCodeAndValue($testAttributeCode, $testAttributeValue);
-        $stubAttributeList = $this->createStubProductAttributeList($stubPriceAttribute);
-        $this->mockProduct->method('getAttributes')->willReturn($stubAttributeList);
+        $attribute = new ProductAttribute($priceAttributeCode, $testAttributeValue, []);
+        $attributeList = new ProductAttributeList($attribute);
+        $this->mockProduct->method('getAttributes')->willReturn($attributeList);
 
-        $this->assertSame('', $this->productView->getFirstValueOfAttribute($testAttributeCode));
-    }
-
-    public function testGettingFirstValueOfSpecialPriceAttributeReturnsEmptyString()
-    {
-        $testAttributeCode = 'special_price';
-        $testAttributeValue = 1000;
-
-        $stubPriceAttribute = $this->createStubAttributeWithCodeAndValue($testAttributeCode, $testAttributeValue);
-        $stubAttributeList = $this->createStubProductAttributeList($stubPriceAttribute);
-        $this->mockProduct->method('getAttributes')->willReturn($stubAttributeList);
-
-        $this->assertSame('', $this->productView->getFirstValueOfAttribute($testAttributeCode));
+        $this->assertSame('', $this->productView->getFirstValueOfAttribute($priceAttributeCode));
     }
 
     public function testGettingFirstValueOfBackordersAttributeReturnsEmptyString()
@@ -210,9 +138,9 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
         $testAttributeCode = 'backorders';
         $testAttributeValue = true;
 
-        $stubPriceAttribute = $this->createStubAttributeWithCodeAndValue($testAttributeCode, $testAttributeValue);
-        $stubAttributeList = $this->createStubProductAttributeList($stubPriceAttribute);
-        $this->mockProduct->method('getAttributes')->willReturn($stubAttributeList);
+        $attribute = new ProductAttribute($testAttributeCode, $testAttributeValue, []);
+        $attributeList = new ProductAttributeList($attribute);
+        $this->mockProduct->method('getAttributes')->willReturn($attributeList);
 
         $this->assertSame('', $this->productView->getFirstValueOfAttribute($testAttributeCode));
     }
@@ -222,38 +150,26 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
         $testAttributeCode = 'foo';
         $testAttributeValue = 'bar';
 
-        $stubAttribute = $this->createStubAttributeWithCodeAndValue($testAttributeCode, $testAttributeValue);
-        $stubAttributeList = $this->createStubProductAttributeList($stubAttribute);
-        $stubAttributeList->method('hasAttribute')->with($testAttributeCode)->willReturn(true);
-        $this->mockProduct->method('getAttributes')->willReturn($stubAttributeList);
+        $attribute = new ProductAttribute($testAttributeCode, $testAttributeValue, []);
+        $attributeList = new ProductAttributeList($attribute);
+        $this->mockProduct->method('getAttributes')->willReturn($attributeList);
 
         $this->assertSame([$testAttributeValue], $this->productView->getAllValuesOfAttribute($testAttributeCode));
     }
 
-    public function testGettingAllValuesOfPriceAttributeReturnsEmptyArray()
+    /**
+     * @dataProvider priceAttributeCodeProvider
+     * @param string $priceAttributeCode
+     */
+    public function testGettingAllValuesOfPriceAttributeReturnsEmptyArray($priceAttributeCode)
     {
-        $testAttributeCode = 'price';
         $testAttributeValue = 1000;
 
-        $stubAttribute = $this->createStubAttributeWithCodeAndValue($testAttributeCode, $testAttributeValue);
-        $stubAttributeList = $this->createStubProductAttributeList($stubAttribute);
-        $stubAttributeList->method('hasAttribute')->with($testAttributeCode)->willReturn(true);
-        $this->mockProduct->method('getAttributes')->willReturn($stubAttributeList);
+        $attribute = new ProductAttribute($priceAttributeCode, $testAttributeValue, []);
+        $attributeList = new ProductAttributeList($attribute);
+        $this->mockProduct->method('getAttributes')->willReturn($attributeList);
 
         $this->assertSame([], $this->productView->getAllValuesOfAttribute($testAttributeValue));
-    }
-
-    public function testGettingAllValuesOfSpecialPriceAttributeReturnsEmptyArray()
-    {
-        $testAttributeCode = 'special_price';
-        $testAttributeValue = 1000;
-
-        $stubAttribute = $this->createStubAttributeWithCodeAndValue($testAttributeCode, $testAttributeValue);
-        $stubAttributeList = $this->createStubProductAttributeList($stubAttribute);
-        $stubAttributeList->method('hasAttribute')->with($testAttributeCode)->willReturn(true);
-        $this->mockProduct->method('getAttributes')->willReturn($stubAttributeList);
-
-        $this->assertSame([], $this->productView->getAllValuesOfAttribute($testAttributeCode));
     }
 
     public function testGettingAllValuesOfBackordersAttributeReturnsEmptyArray()
@@ -261,10 +177,9 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
         $testAttributeCode = 'backorders';
         $testAttributeValue = true;
 
-        $stubAttribute = $this->createStubAttributeWithCodeAndValue($testAttributeCode, $testAttributeValue);
-        $stubAttributeList = $this->createStubProductAttributeList($stubAttribute);
-        $stubAttributeList->method('hasAttribute')->with($testAttributeCode)->willReturn(true);
-        $this->mockProduct->method('getAttributes')->willReturn($stubAttributeList);
+        $attribute = new ProductAttribute($testAttributeCode, $testAttributeValue, []);
+        $attributeList = new ProductAttributeList($attribute);
+        $this->mockProduct->method('getAttributes')->willReturn($attributeList);
 
         $this->assertSame([], $this->productView->getAllValuesOfAttribute($testAttributeCode));
     }
@@ -272,70 +187,57 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
     public function testCheckingIfProductHasAnAttributeIsDelegatedToOriginalProduct()
     {
         $testAttributeCode = 'foo';
+        $testAttributeValue = 'bar';
 
-        $stubAttribute = $this->createStubAttributeWithCode($testAttributeCode);
-        $stubAttributeList = $this->createStubProductAttributeList($stubAttribute);
-        $stubAttributeList->method('hasAttribute')->with($testAttributeCode)->willReturn(true);
-
-        $this->mockProduct->method('getAttributes')->willReturn($stubAttributeList);
+        $attribute = new ProductAttribute($testAttributeCode, $testAttributeValue, []);
+        $attributeList = new ProductAttributeList($attribute);
+        $this->mockProduct->method('getAttributes')->willReturn($attributeList);
 
         $this->assertTrue($this->productView->hasAttribute($testAttributeCode));
     }
 
-    public function testProductViewAttributeListDoesNotHavePrice()
+    /**
+     * @dataProvider priceAttributeCodeProvider
+     * @param string $priceAttributeCode
+     */
+    public function testProductViewAttributeListDoesNotHavePrice($priceAttributeCode)
     {
-        $priceAttributeCodeString = 'price';
+        $testAttributeValue = 1000;
 
-        $stubPriceAttribute = $this->createStubAttributeWithCode($priceAttributeCodeString);
-        $stubAttributeList = $this->createStubProductAttributeList($stubPriceAttribute);
-        $stubAttributeList->method('hasAttribute')->with($priceAttributeCodeString)->willReturn(true);
+        $attribute = new ProductAttribute($priceAttributeCode, $testAttributeValue, []);
+        $attributeList = new ProductAttributeList($attribute);
+        $this->mockProduct->method('getAttributes')->willReturn($attributeList);
 
-        $this->mockProduct->method('getAttributes')->willReturn($stubAttributeList);
-
-        $this->assertFalse($this->productView->hasAttribute($priceAttributeCodeString));
-    }
-
-    public function testProductViewAttributeListDoesNotHaveSpecialPrice()
-    {
-        $specialPriceAttributeCodeString = 'special_price';
-
-        $stubSpecialPriceAttribute = $this->createStubAttributeWithCode($specialPriceAttributeCodeString);
-        $stubAttributeList = $this->createStubProductAttributeList($stubSpecialPriceAttribute);
-        $stubAttributeList->method('hasAttribute')->with($specialPriceAttributeCodeString)->willReturn(true);
-
-        $this->mockProduct->method('getAttributes')->willReturn($stubAttributeList);
-
-        $this->assertFalse($this->productView->hasAttribute($specialPriceAttributeCodeString));
+        $this->assertFalse($this->productView->hasAttribute($priceAttributeCode));
     }
 
     public function testProductViewAttributeListDoesNotHaveBackorders()
     {
-        $specialPriceAttributeCodeString = 'backorders';
+        $testAttributeCode = 'backorders';
+        $testAttributeValue = true;
 
-        $stubSpecialPriceAttribute = $this->createStubAttributeWithCode($specialPriceAttributeCodeString);
-        $stubAttributeList = $this->createStubProductAttributeList($stubSpecialPriceAttribute);
-        $stubAttributeList->method('hasAttribute')->with($specialPriceAttributeCodeString)->willReturn(true);
+        $attribute = new ProductAttribute($testAttributeCode, $testAttributeValue, []);
+        $attributeList = new ProductAttributeList($attribute);
+        $this->mockProduct->method('getAttributes')->willReturn($attributeList);
 
-        $this->mockProduct->method('getAttributes')->willReturn($stubAttributeList);
-
-        $this->assertFalse($this->productView->hasAttribute($specialPriceAttributeCodeString));
+        $this->assertFalse($this->productView->hasAttribute($testAttributeCode));
     }
 
     public function testFilteredProductAttributeListIsReturned()
     {
-        $nonPriceAttribute = $this->createStubAttributeWithCode('foo');
-        $priceAttribute = $this->createStubAttributeWithCode('price');
-        $specialPriceAttribute = $this->createStubAttributeWithCode('special_price');
-        $backordersAttribute = $this->createStubAttributeWithCode('backorders');
+        $nonPriceAttribute = new ProductAttribute('foo', 'bar', []);
+        $priceAttribute = new ProductAttribute('price', 1000, []);
+        $specialPriceAttribute = new ProductAttribute('special_price', 900, []);
+        $backordersAttribute = new ProductAttribute('backorders', true, []);
 
-        $stubAttributeList = $this->createStubProductAttributeList(
+        $attributeList = new ProductAttributeList(
             $nonPriceAttribute,
             $priceAttribute,
             $specialPriceAttribute,
             $backordersAttribute
         );
 
-        $this->mockProduct->method('getAttributes')->willReturn($stubAttributeList);
+        $this->mockProduct->method('getAttributes')->willReturn($attributeList);
 
         $result = $this->productView->getAttributes();
 
@@ -345,8 +247,8 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
 
     public function testProductAttributeListIsMemoized()
     {
-        $stubAttributeList = $this->createStubProductAttributeList();
-        $this->mockProduct->expects($this->once())->method('getAttributes')->willReturn($stubAttributeList);
+        $attributeList = new ProductAttributeList();
+        $this->mockProduct->expects($this->once())->method('getAttributes')->willReturn($attributeList);
 
         $this->productView->getAttributes();
         $this->productView->getAttributes();
@@ -411,19 +313,19 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
 
     public function testJsonSerializedProductViewHasNoPrices()
     {
-        $nonPriceAttribute = $this->createStubAttributeWithCode('foo');
-        $priceAttribute = $this->createStubAttributeWithCode('price');
-        $specialPriceAttribute = $this->createStubAttributeWithCode('special_price');
-        $backordersAttribute = $this->createStubAttributeWithCode('backorders');
+        $nonPriceAttribute = new ProductAttribute('foo', 'bar', []);
+        $priceAttribute = new ProductAttribute('price', 1000, []);
+        $specialPriceAttribute = new ProductAttribute('special_price', 900, []);
+        $backordersAttribute = new ProductAttribute('backorders', true, []);
 
-        $stubAttributeList = $this->createStubProductAttributeList(
+        $attributeList = new ProductAttributeList(
             $nonPriceAttribute,
             $priceAttribute,
             $specialPriceAttribute,
             $backordersAttribute
         );
 
-        $this->mockProduct->method('getAttributes')->willReturn($stubAttributeList);
+        $this->mockProduct->method('getAttributes')->willReturn($attributeList);
         $this->mockProduct->method('jsonSerialize')->willReturn([]);
 
         $result = $this->productView->jsonSerialize();
@@ -440,7 +342,7 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
         $this->productView->getVariationAttributes();
     }
 
-    public function testAssociatedProductsAreInstancesOfCorrespondentViews()
+    public function testAssociatedProductsAreReturnedAsProductViewInstances()
     {
         $stubSimpleProduct = $this->createStubSimpleProductWithId('foo');
         $stubConfigurableProduct = $this->createStubConfigurableProductWithId('bar');
@@ -452,5 +354,13 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
 
         $result = $this->productView->getAssociatedProducts();
         $this->assertContainsOnlyInstancesOf(ProductView::class, $result);
+    }
+
+    public function priceAttributeCodeProvider()
+    {
+        return [
+            ['price'],
+            ['special_price']
+        ];
     }
 }
