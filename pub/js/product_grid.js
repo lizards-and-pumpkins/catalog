@@ -1,12 +1,4 @@
 define(function () {
-    var lazyLoadedBaseUrl = null;
-
-    var getBaseUrl = function () {
-        if (null === lazyLoadedBaseUrl) {
-            lazyLoadedBaseUrl = location.href.replace(/[^\/]*$/, '');
-        }
-        return lazyLoadedBaseUrl;
-    };
 
     var wrapIntoProductLink = function (element, url) {
         var link = document.createElement('A');
@@ -17,14 +9,14 @@ define(function () {
 
     var createProductImage = function (fileName, alt) {
         var image = new Image();
-        image.src = 'media/product/medium/' + fileName;
+        image.src = baseUrl + 'media/product/medium/' + fileName;
         image.alt = alt;
         return image;
     };
 
     var getBrandLogoSrc = function (brandName) {
         var brand = brandName.toString().toLocaleLowerCase().replace(/\W/, '_');
-        return 'images/brands/brands-slider/' + brand + '.png';
+        return baseUrl + 'images/brands/brands-slider/' + brand + '.png';
     };
 
     var turnIntoStringIfIsArray = function (operand) {
@@ -51,7 +43,7 @@ define(function () {
                     container = document.createElement('DIV'),
                     title = document.createElement('H2'),
                     gender = document.createElement('P'),
-                    productUrl = getBaseUrl() + product['attributes']['url_key'],
+                    productUrl = baseUrl + product['attributes']['url_key'],
                     productImage = createProductImage(product['images'][0]['file'], product['images'][0]['label']),
                     price = document.createElement('SPAN'),
                     hasSpecialPrice = 2 === productPrices[index].length;

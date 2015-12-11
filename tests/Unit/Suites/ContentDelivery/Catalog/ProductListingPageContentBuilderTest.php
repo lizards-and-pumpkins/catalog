@@ -4,13 +4,12 @@ namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\ContentDelivery\PageBuilder;
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Product\AttributeCode;
+use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 
@@ -128,16 +127,11 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private function createStubSearchEngineResponse()
     {
-        $stubSearchDocument = $this->getMock(SearchDocument::class, [], [], '', false);
-
-        $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
-        $stubSearchDocumentCollection->method('count')->willReturn(1);
-        $stubSearchDocumentCollection->method('getDocuments')->willReturn([$stubSearchDocument]);
-
+        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
         $stubFacetFieldCollection = $this->getMock(FacetFieldCollection::class, [], [], '', false);
 
         $stubSearchEngineResponse = $this->getMock(SearchEngineResponse::class, [], [], '', false);
-        $stubSearchEngineResponse->method('getSearchDocuments')->willReturn($stubSearchDocumentCollection);
+        $stubSearchEngineResponse->method('getProductIds')->willReturn([$stubProductId]);
         $stubSearchEngineResponse->method('getFacetFieldCollection')->willReturn($stubFacetFieldCollection);
 
         return $stubSearchEngineResponse;

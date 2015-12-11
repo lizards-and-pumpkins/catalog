@@ -51,7 +51,8 @@ $save = 0;
 
                     var regularPrice = '<?= $this->getChildOutput('price') ?>',
                         specialPrice = '<?= $this->getChildOutput('special_price') ?>',
-                        stockQty = '<?= $this->getProductStockQuantity() ?>';
+                        stockQty = '<?= $this->getProductStockQuantity() ?>',
+                        baseUrl = '<?= $this->getBaseUrl() ?>';
 
                 </script>
                 <div class="price-information">

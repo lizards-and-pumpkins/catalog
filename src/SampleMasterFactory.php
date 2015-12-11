@@ -40,6 +40,7 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
  * @method ContentDelivery\Catalog\SortOrderConfig getProductSearchAutosuggestionSortOrderConfig
  * @method ContentDelivery\Catalog\ProductListingRequestHandler createProductListingRequestHandler
  * @method ContentDelivery\Catalog\ProductSearchRequestHandler createProductSearchRequestHandler
+ * @method TwentyOneRunTaxableCountries createTaxableCountries
  */
 class SampleMasterFactory implements MasterFactory
 {

@@ -4,14 +4,13 @@ namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\ContentDelivery\PageBuilder;
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Product\PriceSnippetRenderer;
 use LizardsAndPumpkins\Product\Product;
+use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 
@@ -57,13 +56,13 @@ class ProductListingPageContentBuilder
         ProductsPerPage $productsPerPage,
         SortOrderConfig $selectedSortOrderConfig
     ) {
-        $searchDocumentCollection = $searchEngineResponse->getSearchDocuments();
+        $productIds = $searchEngineResponse->getProductIds();
 
-        if (count($searchDocumentCollection) > 0) {
+        if (count($productIds) > 0) {
             $facetFieldCollection = $searchEngineResponse->getFacetFieldCollection();
 
             $this->addFilterNavigationSnippetToPageBuilder($facetFieldCollection);
-            $this->addProductsInListingToPageBuilder($context, $searchDocumentCollection);
+            $this->addProductsInListingToPageBuilder($context, ...$productIds);
             $this->addPaginationSnippetsToPageBuilder($searchEngineResponse, $productsPerPage);
             $this->addSortOrderSnippetToPageBuilder($selectedSortOrderConfig);
         }
@@ -79,14 +78,11 @@ class ProductListingPageContentBuilder
         $this->addDynamicSnippetToPageBuilder($snippetCode, $snippetContents);
     }
 
-    private function addProductsInListingToPageBuilder(
-        Context $context,
-        SearchDocumentCollection $searchDocumentCollection
-    ) {
-        $documents = $searchDocumentCollection->getDocuments();
-        $productInListingSnippetKeys = $this->getProductInListingSnippetKeysForSearchDocuments($context, ...$documents);
-        $priceSnippetKeys = $this->getPriceSnippetKeysForSearchDocuments($context, ...$documents);
-        $specialPriceSnippetKeys = $this->getSpecialPriceSnippetKeysForSearchDocuments($context, ...$documents);
+    private function addProductsInListingToPageBuilder(Context $context, ProductId ...$productIds)
+    {
+        $productInListingSnippetKeys = $this->getProductInListingSnippetKeys($context, ...$productIds);
+        $priceSnippetKeys = $this->getPriceSnippetKeys($context, ...$productIds);
+        $specialPriceSnippetKeys = $this->getSpecialPriceSnippetKeys($context, ...$productIds);
 
         $snippetKeysToFetch = array_merge($productInListingSnippetKeys, $priceSnippetKeys, $specialPriceSnippetKeys);
         $snippets = $this->dataPoolReader->getSnippets($snippetKeysToFetch);
@@ -97,55 +93,51 @@ class ProductListingPageContentBuilder
 
     /**
      * @param Context $context
-     * @param SearchDocument[] $searchDocuments
+     * @param ProductId[] $productIds
      * @return string[]
      */
-    private function getProductInListingSnippetKeysForSearchDocuments(
-        Context $context,
-        SearchDocument ...$searchDocuments
-    ) {
+    private function getProductInListingSnippetKeys(Context $context, ProductId ...$productIds)
+    {
         return $this->getSnippetKeysForGivenSnippetCode(
             ProductInListingSnippetRenderer::CODE,
             $context,
-            ...$searchDocuments
+            ...$productIds
         );
     }
 
     /**
      * @param Context $context
-     * @param SearchDocument[] $documents
+     * @param ProductId[] $productIds
      * @return string[]
      */
-    private function getPriceSnippetKeysForSearchDocuments(Context $context, SearchDocument ...$documents)
+    private function getPriceSnippetKeys(Context $context, ProductId ...$productIds)
     {
-        return $this->getSnippetKeysForGivenSnippetCode(PriceSnippetRenderer::PRICE, $context, ...$documents);
+        return $this->getSnippetKeysForGivenSnippetCode(PriceSnippetRenderer::PRICE, $context, ...$productIds);
     }
 
     /**
      * @param Context $context
-     * @param SearchDocument[] $documents
+     * @param ProductId[] $productIds
      * @return string[]
      */
-    private function getSpecialPriceSnippetKeysForSearchDocuments(Context $context, SearchDocument ...$documents)
+    private function getSpecialPriceSnippetKeys(Context $context, ProductId ...$productIds)
     {
-        return $this->getSnippetKeysForGivenSnippetCode(PriceSnippetRenderer::SPECIAL_PRICE, $context, ...$documents);
+        return $this->getSnippetKeysForGivenSnippetCode(PriceSnippetRenderer::SPECIAL_PRICE, $context, ...$productIds);
     }
 
     /**
      * @param string $snippetCode
      * @param Context $context
-     * @param SearchDocument[] $searchDocuments
+     * @param ProductId[] $productIds
      * @return string[]
      */
-    private function getSnippetKeysForGivenSnippetCode(
-        $snippetCode,
-        Context $context,
-        SearchDocument ...$searchDocuments
-    ) {
+    private function getSnippetKeysForGivenSnippetCode($snippetCode, Context $context, ProductId ...$productIds)
+    {
         $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
-        return array_map(function (SearchDocument $searchDocument) use ($keyGenerator, $context) {
-            return $keyGenerator->getKeyForContext($context, [Product::ID => $searchDocument->getProductId()]);
-        }, $searchDocuments);
+
+        return array_map(function (ProductId $productId) use ($keyGenerator, $context) {
+            return $keyGenerator->getKeyForContext($context, [Product::ID => $productId]);
+        }, $productIds);
     }
 
     /**

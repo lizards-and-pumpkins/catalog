@@ -6,14 +6,13 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\Exception\UnableToHandleRequestException;
 use LizardsAndPumpkins\ContentDelivery\PageBuilder;
 use LizardsAndPumpkins\Product\Product;
+use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetContent;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetRenderer;
@@ -109,12 +108,12 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
         }
 
         $searchQueryString = $request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
-        $searchDocumentsCollection = $this->getSearchResults($searchQueryString);
-        $this->addSearchResultsToPageBuilder($searchDocumentsCollection);
+        $productIds = $this->getSearchResults($searchQueryString);
+        $this->addSearchResultsToPageBuilder(...$productIds);
 
         $metaInfoSnippetContent = $this->getMetaInfoSnippetContent();
 
-        $this->addTotalNumberOfResultsSnippetToPageBuilder(count($searchDocumentsCollection));
+        $this->addTotalNumberOfResultsSnippetToPageBuilder(count($productIds));
         $this->addSearchQueryStringSnippetToPageBuilder($searchQueryString);
 
         $keyGeneratorParams = [];
@@ -149,11 +148,14 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
 
     /**
      * @param string $queryString
-     * @return SearchDocumentCollection
+     * @return ProductId[]
      */
     private function getSearchResults($queryString)
     {
-        $criteria = $this->criteriaBuilder->createCriteriaForAnyOfGivenFieldsContainsString($this->searchableAttributeCodes, $queryString);
+        $criteria = $this->criteriaBuilder->createCriteriaForAnyOfGivenFieldsContainsString(
+            $this->searchableAttributeCodes,
+            $queryString
+        );
         $selectedFilters = [];
         $facetFilterRequest = new FacetFilterRequest;
         $rowsPerPage = 100; // TODO: Replace with configured number of suggestions to show
@@ -167,18 +169,17 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
             $pageNumber,
             $this->sortOrderConfig
         );
-        $searchDocumentsCollection = $searchEngineResponse->getSearchDocuments();
 
-        return $searchDocumentsCollection;
+        return $searchEngineResponse->getProductIds();
     }
 
-    private function addSearchResultsToPageBuilder(SearchDocumentCollection $searchDocumentCollection)
+    private function addSearchResultsToPageBuilder(ProductId ...$productIds)
     {
-        if (0 === count($searchDocumentCollection)) {
+        if (0 === count($productIds)) {
             return;
         }
 
-        $productInAutosuggestionSnippetKeys = $this->getProductInAutosuggestionSnippetKeys($searchDocumentCollection);
+        $productInAutosuggestionSnippetKeys = $this->getProductInAutosuggestionSnippetKeys(...$productIds);
         $snippetKeyToContentMap = $this->dataPoolReader->getSnippets($productInAutosuggestionSnippetKeys);
         $snippetCodeToKeyMap = $this->getProductInAutosuggestionSnippetCodeToKeyMap(
             $productInAutosuggestionSnippetKeys
@@ -249,17 +250,17 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
     }
 
     /**
-     * @param SearchDocumentCollection $searchDocumentCollection
+     * @param ProductId[] $productIds
      * @return string[]
      */
-    private function getProductInAutosuggestionSnippetKeys(SearchDocumentCollection $searchDocumentCollection)
+    private function getProductInAutosuggestionSnippetKeys(ProductId ...$productIds)
     {
         $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
             ProductInSearchAutosuggestionSnippetRenderer::CODE
         );
 
-        return array_map(function (SearchDocument $searchDocument) use ($keyGenerator) {
-            return $keyGenerator->getKeyForContext($this->context, [Product::ID => $searchDocument->getProductId()]);
-        }, $searchDocumentCollection->getDocuments());
+        return array_map(function (ProductId $productId) use ($keyGenerator) {
+            return $keyGenerator->getKeyForContext($this->context, [Product::ID => $productId]);
+        }, $productIds);
     }
 }

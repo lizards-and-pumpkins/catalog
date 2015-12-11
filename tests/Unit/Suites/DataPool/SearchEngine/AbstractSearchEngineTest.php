@@ -66,43 +66,6 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param SearchDocumentCollection $collection
-     * @param ProductId $productId
-     * @return bool
-     */
-    private function assertCollectionContainsDocumentForProductId(
-        SearchDocumentCollection $collection,
-        ProductId $productId
-    ) {
-        foreach ($collection->getDocuments() as $document) {
-            if ($document->getProductId() == $productId) {
-                $this->assertTrue(true);
-                return;
-            }
-        }
-        $this->fail(sprintf('Failed asserting collection contains document for product ID: %s', $productId));
-    }
-
-    /**
-     * @param SearchDocumentCollection $collection
-     * @param ProductId $productId
-     * @return bool
-     */
-    private function assertCollectionDoesNotContainDocumentForProductId(
-        SearchDocumentCollection $collection,
-        ProductId $productId
-    ) {
-        foreach ($collection->getDocuments() as $document) {
-            if ($document->getProductId() == $productId) {
-                $this->fail(
-                    sprintf('Failed asserting collection does not contain document for product ID: %s', $productId)
-                );
-            }
-        }
-        $this->assertTrue(true);
-    }
-
-    /**
      * @param string[] $contextDataSet
      * @return Context
      */
@@ -208,10 +171,10 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $pageNumber,
             $sortOrderConfig
         );
-        $result = $searchEngineResponse->getSearchDocuments();
+        $result = $searchEngineResponse->getProductIds();
 
-        $this->assertCollectionDoesNotContainDocumentForProductId($result, $productAId);
-        $this->assertCollectionContainsDocumentForProductId($result, $productBId);
+        $this->assertNotContains($productAId, $result, '', false, false);
+        $this->assertContains($productBId, $result, '', false, false);
     }
 
     public function testPartialContextsAreMatched()
@@ -248,10 +211,10 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $pageNumber,
             $sortOrderConfig
         );
-        $result = $searchEngineResponse->getSearchDocuments();
+        $result = $searchEngineResponse->getProductIds();
 
-        $this->assertCollectionContainsDocumentForProductId($result, $productAId);
-        $this->assertCollectionContainsDocumentForProductId($result, $productBId);
+        $this->assertContains($productAId, $result, '', false, false);
+        $this->assertContains($productBId, $result, '', false, false);
     }
 
     public function testEntriesContainingRequestedStringAreReturned()
@@ -283,9 +246,9 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $pageNumber,
             $sortOrderConfig
         );
-        $result = $searchEngineResponse->getSearchDocuments();
+        $result = $searchEngineResponse->getProductIds();
 
-        $this->assertCollectionContainsDocumentForProductId($result, $productAId);
+        $this->assertContains($productAId, $result, '', false, false);
     }
 
     public function testEmptyCollectionIsReturnedIfNoSearchDocumentsMatchesGivenCriteria()
@@ -307,7 +270,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $sortOrderConfig
         );
 
-        $this->assertCount(0, $searchEngineResponse->getSearchDocuments());
+        $this->assertCount(0, $searchEngineResponse->getProductIds());
     }
 
     /**
@@ -339,10 +302,10 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $pageNumber,
             $sortOrderConfig
         );
-        $result = $searchEngineResponse->getSearchDocuments();
+        $result = $searchEngineResponse->getProductIds();
 
-        $this->assertCollectionContainsDocumentForProductId($result, $productAId);
-        $this->assertCollectionDoesNotContainDocumentForProductId($result, $productBId);
+        $this->assertContains($productAId, $result, '', false, false);
+        $this->assertNotContains($productBId, $result, '', false, false);
     }
 
     /**
@@ -391,10 +354,10 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $pageNumber,
             $sortOrderConfig
         );
-        $result = $searchEngineResponse->getSearchDocuments();
+        $result = $searchEngineResponse->getProductIds();
 
-        $this->assertCollectionContainsDocumentForProductId($result, $productAId);
-        $this->assertCollectionDoesNotContainDocumentForProductId($result, $productBId);
+        $this->assertContains($productAId, $result, '', false, false);
+        $this->assertNotContains($productBId, $result, '', false, false);
     }
 
     /**
@@ -448,9 +411,9 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $pageNumber,
             $sortOrderConfig
         );
-        $result = $searchEngineResponse->getSearchDocuments();
+        $result = $searchEngineResponse->getProductIds();
 
-        $this->assertCollectionContainsDocumentForProductId($result, $productId);
+        $this->assertContains($productId, $result, '', false, false);
     }
 
     public function testItClearsTheStorage()
@@ -482,7 +445,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $sortOrderConfig
         );
 
-        $this->assertEmpty($searchEngineResponse->getSearchDocuments());
+        $this->assertCount(0, $searchEngineResponse->getProductIds());
     }
 
     public function testDocumentIsUniqueForProductIdAndContextCombination()
@@ -522,11 +485,11 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $pageNumber,
             $sortOrderConfig
         );
-        $result = $searchEngineResponse->getSearchDocuments();
+        $result = $searchEngineResponse->getProductIds();
 
         $this->assertCount(2, $result);
-        $this->assertCollectionContainsDocumentForProductId($result, $productAId);
-        $this->assertCollectionContainsDocumentForProductId($result, $productBId);
+        $this->assertContains($productAId, $result, '', false, false);
+        $this->assertContains($productBId, $result, '', false, false);
     }
 
     public function testFacetFieldCollectionOnlyContainsSpecifiedAttributes()
@@ -721,7 +684,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $sortOrderConfig
         );
 
-        $this->assertCount(1, $searchEngineResponse->getSearchDocuments());
+        $this->assertCount(1, $searchEngineResponse->getProductIds());
         $this->assertSame(2, $searchEngineResponse->getTotalNumberOfResults());
     }
 
@@ -764,11 +727,11 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $sortOrderConfig
         );
 
-        $result = $searchEngineResponse->getSearchDocuments();
+        $result = $searchEngineResponse->getProductIds();
 
         $this->assertCount(1, $result);
-        $this->assertCollectionContainsDocumentForProductId($result, $productAId);
-        $this->assertCollectionDoesNotContainDocumentForProductId($result, $productBId);
+        $this->assertContains($productAId, $result, '', false, false);
+        $this->assertNotContains($productBId, $result, '', false, false);
     }
 
     public function testSelectedFiltersOptionValueSiblingsAreIncludedIntoFilterOptionValues()
@@ -815,7 +778,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(2, $result[0]->getValues());
     }
 
-    public function testReturnedDocumentsCollectionIsSortedAccordingToGivenOrder()
+    public function testSearchResultsAreSortedAccordingToGivenOrder()
     {
         $productAId = ProductId::fromString('A');
         $productBId = ProductId::fromString('B');
@@ -848,20 +811,25 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $sortOrderConfig
         );
 
-        $expectedDocuments = [$documentA, $documentC, $documentB];
+        $expectedProductIds = [$productAId, $productCId, $productBId];
 
-        $this->assertEquals($expectedDocuments, $searchEngineResponse->getSearchDocuments()->getDocuments());
+        $this->assertEquals($expectedProductIds, $searchEngineResponse->getProductIds());
     }
 
-    public function testDocumentsCollectionIsNotSortedByMultivaluedAttribute()
+    public function testSearchResultsAreNotSortedByMultivaluedAttribute()
     {
         // TODO: Currently this test is problematic. Refactor once sorting by multiple fields is supported.
         $fieldCode = 'foo';
         $fieldValue = 0;
 
-        $documentA = $this->createSearchDocument([$fieldCode => ['xxx', 'yyy']], ProductId::fromString('A'));
-        $documentB = $this->createSearchDocument([$fieldCode => ['zzz', 'rrr']], ProductId::fromString('B'));
-        $documentC = $this->createSearchDocument([$fieldCode => 'qux'], ProductId::fromString('C'));
+        $productIdA = ProductId::fromString('A');
+        $productIdB = ProductId::fromString('B');
+        $productIdC = ProductId::fromString('C');
+
+        $documentA = $this->createSearchDocument([$fieldCode => ['xxx', 'yyy']], $productIdA);
+        $documentB = $this->createSearchDocument([$fieldCode => ['zzz', 'rrr']], $productIdB);
+        $documentC = $this->createSearchDocument([$fieldCode => 'qux'], $productIdC);
+
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($documentA, $documentB, $documentC);
 
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
@@ -883,10 +851,10 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $sortOrderConfig
         );
 
-        $this->assertEquals($documentC, $searchEngineResponse->getSearchDocuments()->getDocuments()[0]);
+        $this->assertEquals($productIdC, $searchEngineResponse->getProductIds()[0]);
     }
 
-    public function testReturnedDocumentsCollectionIsSortedByStringValuesCaseInsensitively()
+    public function testSearchResultsAreSortedByStringValuesCaseInsensitively()
     {
         $productAId = ProductId::fromString('A');
         $productBId = ProductId::fromString('B');
@@ -919,44 +887,9 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             $sortOrderConfig
         );
 
-        $expectedDocuments = [$documentA, $documentC, $documentB];
+        $expectedProductIds = [$productAId, $productCId, $productBId];
 
-        $this->assertEquals($expectedDocuments, $searchEngineResponse->getSearchDocuments()->getDocuments());
-    }
-
-    public function testMultivaluedFieldIsIndexedAndReturned()
-    {
-        $productId = ProductId::fromString('id');
-
-        $fieldCode = 'code_' . uniqid();
-        $fieldValueA = 'bar';
-        $fieldValueB = 'baz';
-        $fieldValues = [$fieldValueA, $fieldValueB];
-
-        $document = $this->createSearchDocument([$fieldCode => $fieldValues], $productId);
-        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($document);
-        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
-
-        $criteria = SearchCriterionEqual::create($fieldCode, $fieldValueA);
-        $selectedFilters = [];
-        $facetFilterRequest = new FacetFilterRequest;
-        $rowsPerPage = 100;
-        $pageNumber = 0;
-        $sortOrderConfig = $this->createStubSortOrderConfig($fieldCode, SortOrderDirection::ASC);
-
-        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
-            $criteria,
-            $selectedFilters,
-            $this->testContext,
-            $facetFilterRequest,
-            $rowsPerPage,
-            $pageNumber,
-            $sortOrderConfig
-        );
-        $documents = $searchEngineResponse->getSearchDocuments()->getDocuments();
-
-        $this->assertCount(1, $documents);
-        $this->assertSame($fieldValues, $documents[0]->getFieldsCollection()->getFields()[0]->getValues());
+        $this->assertEquals($expectedProductIds, $searchEngineResponse->getProductIds());
     }
 
     /**

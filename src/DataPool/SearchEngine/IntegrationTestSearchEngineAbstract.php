@@ -11,7 +11,6 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCrite
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 use LizardsAndPumpkins\Product\AttributeCode;
 use LizardsAndPumpkins\Utils\Clearable;
@@ -327,9 +326,11 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     ) {
         $totalNumberOfResults = count($searchDocuments);
         $currentPageDocuments = array_slice($searchDocuments, $pageNumber * $rowsPerPage, $rowsPerPage);
-        $documentCollection = new SearchDocumentCollection(...array_values($currentPageDocuments));
+        $productIds = array_map(function (SearchDocument $document) {
+            return $document->getProductId();
+        }, $currentPageDocuments);
 
-        return new SearchEngineResponse($documentCollection, $facetFieldCollection, $totalNumberOfResults);
+        return new SearchEngineResponse($facetFieldCollection, $totalNumberOfResults, ...$productIds);
     }
 
     /**

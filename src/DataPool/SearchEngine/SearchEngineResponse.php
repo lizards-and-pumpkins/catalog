@@ -2,15 +2,10 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
+use LizardsAndPumpkins\Product\ProductId;
 
 class SearchEngineResponse
 {
-    /**
-     * @var SearchDocumentCollection
-     */
-    private $searchDocuments;
-
     /**
      * @var FacetFieldCollection
      */
@@ -22,26 +17,31 @@ class SearchEngineResponse
     private $totalNumberOfResults;
 
     /**
-     * @param SearchDocumentCollection $searchDocuments
+     * @var ProductId[]
+     */
+    private $productIds;
+
+    /**
      * @param FacetFieldCollection $facetFieldCollection
      * @param int $totalNumberOfResults
+     * @param ProductId[] $productIds
      */
     public function __construct(
-        SearchDocumentCollection $searchDocuments,
         FacetFieldCollection $facetFieldCollection,
-        $totalNumberOfResults
+        $totalNumberOfResults,
+        ProductId ...$productIds
     ) {
-        $this->searchDocuments = $searchDocuments;
         $this->facetFieldCollection = $facetFieldCollection;
         $this->totalNumberOfResults = $totalNumberOfResults;
+        $this->productIds = $productIds;
     }
 
     /**
-     * @return SearchDocumentCollection
+     * @return ProductId[]
      */
-    public function getSearchDocuments()
+    public function getProductIds()
     {
-        return $this->searchDocuments;
+        return $this->productIds;
     }
 
     /**
