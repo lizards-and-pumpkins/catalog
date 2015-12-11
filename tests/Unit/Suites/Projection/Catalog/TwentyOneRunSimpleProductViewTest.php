@@ -116,28 +116,27 @@ class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($testAttributeValue, $this->productView->getFirstValueOfAttribute($testAttributeCode));
     }
 
-    public function testGettingFirstValueOfPriceAttributeReturnsEmptyString()
+    /**
+     * @dataProvider priceAttributeCodeProvider
+     * @param string $priceAttributeCode
+     */
+    public function testGettingFirstValueOfPriceAttributeReturnsEmptyString($priceAttributeCode)
     {
-        $testAttributeCode = 'price';
         $testAttributeValue = 1000;
 
-        $stubPriceAttribute = $this->createStubAttributeWithCodeAndValue($testAttributeCode, $testAttributeValue);
+        $stubPriceAttribute = $this->createStubAttributeWithCodeAndValue($priceAttributeCode, $testAttributeValue);
         $stubAttributeList = $this->createStubProductAttributeList($stubPriceAttribute);
         $this->mockProduct->method('getAttributes')->willReturn($stubAttributeList);
 
-        $this->assertSame('', $this->productView->getFirstValueOfAttribute($testAttributeCode));
+        $this->assertSame('', $this->productView->getFirstValueOfAttribute($priceAttributeCode));
     }
 
-    public function testGettingFirstValueOfSpecialPriceAttributeReturnsEmptyString()
+    public function priceAttributeCodeProvider()
     {
-        $testAttributeCode = 'special_price';
-        $testAttributeValue = 1000;
-
-        $stubPriceAttribute = $this->createStubAttributeWithCodeAndValue($testAttributeCode, $testAttributeValue);
-        $stubAttributeList = $this->createStubProductAttributeList($stubPriceAttribute);
-        $this->mockProduct->method('getAttributes')->willReturn($stubAttributeList);
-
-        $this->assertSame('', $this->productView->getFirstValueOfAttribute($testAttributeCode));
+        return [
+            ['price'],
+            ['special_price']
+        ];
     }
 
     public function testGettingFirstValueOfBackordersAttributeReturnsEmptyString()
