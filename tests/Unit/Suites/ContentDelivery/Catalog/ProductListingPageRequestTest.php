@@ -31,20 +31,23 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
     private $pageRequest;
 
     /**
+     * @var array[]
+     */
+    private static $setCookieValues = [];
+
+    /**
      * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubRequest;
 
     private function assertCookieHasBeenSet($name, $value, $ttl)
     {
-        $cookieFormat = 'Set-Cookie: %s=%s; expires=%s; Max-Age=%s';
+        $this->assertContains([$name, $value, time() + $ttl], self::$setCookieValues);
+    }
 
-        $expectedHeader = sprintf($cookieFormat, $name, $value, gmdate('D, d-M-Y H:i:s T', time() + $ttl), $ttl);
-        $expectedHeader1 = sprintf($cookieFormat, $name, $value, gmdate('D, d-M-Y H:i:s T', time() + $ttl - 1), $ttl);
-
-        $headers = xdebug_get_headers();
-
-        $this->assertTrue(in_array($expectedHeader, $headers) || in_array($expectedHeader1, $headers));
+    public static function trackSetCookieCalls($name, $value, $expire)
+    {
+        self::$setCookieValues[] = [$name, $value, $expire];
     }
 
     protected function setUp()
@@ -53,6 +56,11 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
         $this->stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
         $this->pageRequest = new ProductListingPageRequest($this->stubProductsPerPage, $this->stubSortOrderConfig);
         $this->stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+    }
+
+    protected function tearDown()
+    {
+        self::$setCookieValues = [];
     }
 
     public function testCurrentPageIsZeroByDefault()
@@ -183,10 +191,6 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($sortOrderDirection, $result->getSelectedDirection()->getDirection());
     }
 
-    /**
-     * @runInSeparateProcess
-     * @requires extension xdebug
-     */
     public function testProductsPerPageCookieIsSetIfCorrespondingQueryParameterIsPresent()
     {
         $selectedNumberOfProductsPerPage = 2;
@@ -204,10 +208,6 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @runInSeparateProcess
-     * @requires extension xdebug
-     */
     public function testSortOrderCookieIsSetIfCorrespondingQueryParameterIsPresent()
     {
         $sortOrderAttributeName = 'foo';
@@ -225,10 +225,6 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @runInSeparateProcess
-     * @requires extension xdebug
-     */
     public function testSortOrderDirectionCookieIsSetIfCorrespondingQueryParameterIsPresent()
     {
         $sortOrderDirection = SortOrderDirection::ASC;
@@ -245,4 +241,9 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
             ProductListingPageRequest::SORT_DIRECTION_COOKIE_TTL
         );
     }
+}
+
+function setcookie($name, $value, $expire)
+{
+    ProductListingPageRequestTest::trackSetCookieCalls($name, $value, $expire);
 }
