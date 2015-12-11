@@ -16,7 +16,7 @@ use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\Product\Composite\Exception\ConfigurableProductAssociatedProductListInvariantViolationException;
 use LizardsAndPumpkins\Product\Tax\ProductTaxClass;
 
-class ConfigurableProduct implements Product, CompositeProduct
+class ConfigurableProduct implements CompositeProduct
 {
     use RehydrateableProductTrait;
     
