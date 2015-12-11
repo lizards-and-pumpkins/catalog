@@ -47,7 +47,7 @@ class ProductTaxClass
             $message = sprintf('The tax class name has to be a string, got "%s"', $this->getVariableType($name));
             throw new InvalidTaxClassNameException($message);
         }
-        if (empty(trim($name))) {
+        if ('' === trim($name)) {
             throw new InvalidTaxClassNameException('The tax class name can not be empty');
         }
     }

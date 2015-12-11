@@ -3,8 +3,7 @@
 
 namespace LizardsAndPumpkins\Website;
 
-use LizardsAndPumpkins\Website\Exception\InvalidWebsiteCodeException;
-use LizardsAndPumpkins\Website\WebsiteToCountryMap;
+use LizardsAndPumpkins\Country\Country;
 
 class TwentyOneRunWebsiteToCountryMap implements WebsiteToCountryMap
 {
@@ -16,63 +15,30 @@ class TwentyOneRunWebsiteToCountryMap implements WebsiteToCountryMap
     ];
 
     /**
-     * @param string $websiteCode
-     * @return string
+     * @param Website $website
+     * @return Country
      */
-    public function getCountry($websiteCode)
+    public function getCountry(Website $website)
     {
-        $this->validateWebsiteCode($websiteCode);
-        return isset($this->map[$websiteCode]) ?
-            $this->map[$websiteCode] :
-            $this->defaultCountry;
+        return Country::from2CharIso3166($this->getCountryFromMap((string) $website));
     }
-
+    
     /**
-     * @param mixed $variable
-     * @return string
-     */
-    private function getVariableType($variable)
-    {
-        return is_object($variable) ?
-            get_class($variable) :
-            gettype($variable);
-    }
-
-    /**
-     * @param mixed $websiteCode
-     */
-    private function validateWebsiteCode($websiteCode)
-    {
-        $this->validateWebsiteIsString($websiteCode);
-        $this->validateWebsiteIsNotEmpty($websiteCode);
-    }
-
-    /**
-     * @param mixed $websiteCode
-     */
-    private function validateWebsiteIsString($websiteCode)
-    {
-        if (!is_string($websiteCode)) {
-            $type = $this->getVariableType($websiteCode);
-            throw new InvalidWebsiteCodeException(sprintf('The website code must be a string, got "%s"', $type));
-        }
-    }
-
-    /**
-     * @param string $websiteCode
-     */
-    private function validateWebsiteIsNotEmpty($websiteCode)
-    {
-        if (empty(trim($websiteCode))) {
-            throw new InvalidWebsiteCodeException('The website code can not be an empty string');
-        }
-    }
-
-    /**
-     * @return string
+     * @return Country
      */
     public function getDefaultCountry()
     {
-        return $this->defaultCountry;
+        return Country::from2CharIso3166($this->defaultCountry);
+    }
+
+    /**
+     * @param string $mapKey
+     * @return string
+     */
+    private function getCountryFromMap($mapKey)
+    {
+        return isset($this->map[$mapKey]) ?
+            $this->map[$mapKey] :
+            $this->defaultCountry;
     }
 }
