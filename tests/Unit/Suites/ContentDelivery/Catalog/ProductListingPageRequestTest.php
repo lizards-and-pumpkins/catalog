@@ -31,19 +31,27 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
     private $pageRequest;
 
     /**
+     * @var array[]
+     */
+    private static $setCookieValues = [];
+
+    /**
      * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubRequest;
 
     private function assertCookieHasBeenSet($name, $value, $ttl)
     {
-        $this->assertContains([$name, $value, time() + $ttl], $_SESSION['lizard_and_pumpkins_cookies']);
+        $this->assertContains([$name, $value, time() + $ttl], self::$setCookieValues);
+    }
+
+    public static function trackSetCookieCalls($name, $value, $expire)
+    {
+        self::$setCookieValues[] = [$name, $value, $expire];
     }
 
     protected function setUp()
     {
-        $_SESSION['lizard_and_pumpkins_cookies'] = [];
-
         $this->stubProductsPerPage = $this->getMock(ProductsPerPage::class, [], [], '', false);
         $this->stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
         $this->pageRequest = new ProductListingPageRequest($this->stubProductsPerPage, $this->stubSortOrderConfig);
@@ -52,9 +60,7 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
-        if (isset($_SESSION['lizard_and_pumpkins_cookies'])) {
-            unset($_SESSION['lizard_and_pumpkins_cookies']);
-        }
+        self::$setCookieValues = [];
     }
 
     public function testCurrentPageIsZeroByDefault()
@@ -237,6 +243,7 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
     }
 }
 
-function setcookie($name, $value, $expire) {
-    $_SESSION['lizard_and_pumpkins_cookies'][] = [$name, $value, $expire];
+function setcookie($name, $value, $expire)
+{
+    ProductListingPageRequestTest::trackSetCookieCalls($name, $value, $expire);
 }
