@@ -6,14 +6,13 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\Exception\UnableToHandleRequestException;
 use LizardsAndPumpkins\ContentDelivery\PageBuilder;
+use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 
@@ -55,19 +54,6 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
         $this->stubHttpRequest->method('getQueryParameter')
             ->with(ProductSearchAutosuggestionRequestHandler::QUERY_STRING_PARAMETER_NAME)
             ->willReturn($queryString);
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubSearchDocumentCollection()
-    {
-        $stubSearchDocument = $this->getMock(SearchDocument::class, [], [], '', false);
-        $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
-        $stubSearchDocumentCollection->method('getDocuments')->willReturn([$stubSearchDocument]);
-        $stubSearchDocumentCollection->method('count')->willReturn(1);
-
-        return $stubSearchDocumentCollection;
     }
 
     protected function setUp()
@@ -183,9 +169,11 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
         $this->stubDataPoolReader->method('getSnippet')->willReturn(json_encode($metaSnippetContent));
         $this->stubDataPoolReader->method('getSnippets')->willReturn([]);
 
-        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection();
+        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
+
         $stubSearchEngineResponse = $this->getMock(SearchEngineResponse::class, [], [], '', false);
-        $stubSearchEngineResponse->method('getSearchDocuments')->willReturn($stubSearchDocumentCollection);
+        $stubSearchEngineResponse->method('getProductIds')->willReturn([$stubProductId]);
+
         $this->stubDataPoolReader->method('getSearchResultsMatchingCriteria')->willReturn($stubSearchEngineResponse);
 
         $this->assertInstanceOf(HttpResponse::class, $this->requestHandler->process($this->stubHttpRequest));
@@ -196,11 +184,8 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
         $queryString = 'foo';
         $this->prepareStubHttpRequest($queryString);
 
-        $stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
-        $stubSearchDocumentCollection->method('count')->willReturn(0);
-
         $stubSearchEngineResponse = $this->getMock(SearchEngineResponse::class, [], [], '', false);
-        $stubSearchEngineResponse->method('getSearchDocuments')->willReturn($stubSearchDocumentCollection);
+        $stubSearchEngineResponse->method('getProductIds')->willReturn([]);
         $this->stubDataPoolReader->method('getSearchResultsMatchingCriteria')->willReturn($stubSearchEngineResponse);
 
         $metaSnippetContent = [
@@ -218,9 +203,11 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
         $queryString = 'foo';
         $this->prepareStubHttpRequest($queryString);
 
-        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection();
+        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
+
         $stubSearchEngineResponse = $this->getMock(SearchEngineResponse::class, [], [], '', false);
-        $stubSearchEngineResponse->method('getSearchDocuments')->willReturn($stubSearchDocumentCollection);
+        $stubSearchEngineResponse->method('getProductIds')->willReturn([$stubProductId]);
+
         $this->stubDataPoolReader->method('getSearchResultsMatchingCriteria')->willReturn($stubSearchEngineResponse);
 
         $metaSnippetContent = [
