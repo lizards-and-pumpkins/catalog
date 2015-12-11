@@ -8,7 +8,6 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreat
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
-use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Log\LogMessage;
@@ -70,9 +69,6 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(json_encode($expectedCriteria), json_encode($metaInfoSnippet['product_selection_criteria']));
     }
 
-    /**
-     * @return HttpResponse
-     */
     public function testProductListingPageHtmlIsReturned()
     {
         $this->importCatalog();
@@ -97,7 +93,5 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
 
         $this->assertContains($expectedProductName, $body);
         $this->assertNotContains($unExpectedProductName, $body);
-
-        return $page;
     }
 }

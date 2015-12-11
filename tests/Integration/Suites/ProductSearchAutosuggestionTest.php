@@ -7,7 +7,6 @@ use LizardsAndPumpkins\ContentDelivery\PageBuilder;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
-use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductId;
@@ -148,9 +147,6 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
         $this->assertContains($expectation, $html);
     }
 
-    /**
-     * @return HttpResponse
-     */
     public function testSearchAutosuggestionHtmlIsReturned()
     {
         $this->importCatalog();
@@ -179,7 +175,5 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
 
         $this->assertContains($expectedProductName, $body);
         $this->assertNotContains($unExpectedProductName, $body);
-
-        return $page;
     }
 }
