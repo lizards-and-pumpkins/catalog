@@ -6,7 +6,6 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCrite
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan;
 use LizardsAndPumpkins\DataVersion;
-use LizardsAndPumpkins\Product\Exception\InvalidConditionXmlAttributeException;
 use LizardsAndPumpkins\Product\Exception\InvalidCriterionOperationXmlAttributeException;
 use LizardsAndPumpkins\Product\Exception\InvalidNumberOfCriteriaXmlNodesException;
 use LizardsAndPumpkins\Product\Exception\MissingConditionXmlAttributeException;
@@ -132,13 +131,6 @@ EOX;
     {
         $this->setExpectedException(MissingConditionXmlAttributeException::class);
         $xml = '<listing url_key="foo"><criteria/></listing>';
-        $this->criteriaBuilder->createProductListingCriteriaFromXml($xml, $this->testDataVersion);
-    }
-
-    public function testExceptionIsThrownIfConditionAttributeOfListingNodeIsInvalid()
-    {
-        $this->setExpectedException(InvalidConditionXmlAttributeException::class);
-        $xml = '<listing url_key="foo"><criteria condition="bar"/></listing>';
         $this->criteriaBuilder->createProductListingCriteriaFromXml($xml, $this->testDataVersion);
     }
 

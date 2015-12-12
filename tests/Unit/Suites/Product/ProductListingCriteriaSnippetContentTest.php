@@ -152,26 +152,6 @@ class ProductListingCriteriaSnippetContentTest extends \PHPUnit_Framework_TestCa
         ProductListingCriteriaSnippetContent::fromJson($json);
     }
 
-    public function testExceptionIsThrownIfSearchCriteriaConditionIsInvalid()
-    {
-        $invalidCriteriaOperation = 'foo';
-
-        $this->setExpectedException(
-            MalformedSearchCriteriaMetaException::class,
-            sprintf('Unknown criteria condition "%s".', $invalidCriteriaOperation)
-        );
-
-        $json = json_encode([
-            ProductListingCriteriaSnippetContent::KEY_CRITERIA => [
-                'condition' => $invalidCriteriaOperation
-            ],
-            ProductListingCriteriaSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
-            ProductListingCriteriaSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
-        ]);
-
-        ProductListingCriteriaSnippetContent::fromJson($json);
-    }
-
     public function testExceptionIsThrownIfSearchCriteriaCriteriaIsMissing()
     {
         $this->setExpectedException(MalformedSearchCriteriaMetaException::class, 'Missing criteria.');

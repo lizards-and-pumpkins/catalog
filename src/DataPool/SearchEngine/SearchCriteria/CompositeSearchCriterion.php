@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\Exception\InvalidCriterionConditionException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 
 class CompositeSearchCriterion implements SearchCriteria, \JsonSerializable
@@ -27,6 +28,24 @@ class CompositeSearchCriterion implements SearchCriteria, \JsonSerializable
     {
         $this->condition = $condition;
         $this->criteria = $criteria;
+    }
+
+    /**
+     * @param string $condition
+     * @param SearchCriteria[] ...$criteria
+     * @return CompositeSearchCriterion
+     */
+    public static function create($condition, SearchCriteria ...$criteria)
+    {
+        if (strcasecmp($condition, self::AND_CONDITION) === 0) {
+            return new self($condition, ...$criteria);
+        }
+
+        if (strcasecmp($condition, self::OR_CONDITION) === 0) {
+            return new self($condition, ...$criteria);
+        }
+
+        throw new InvalidCriterionConditionException(sprintf('Unknown search criteria condition "%s".', $condition));
     }
 
     /**

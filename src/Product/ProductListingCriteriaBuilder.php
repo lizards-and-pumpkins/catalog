@@ -6,7 +6,6 @@ use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
 use LizardsAndPumpkins\DataVersion;
-use LizardsAndPumpkins\Product\Exception\InvalidConditionXmlAttributeException;
 use LizardsAndPumpkins\Product\Exception\InvalidCriterionOperationXmlAttributeException;
 use LizardsAndPumpkins\Product\Exception\InvalidNumberOfCriteriaXmlNodesException;
 use LizardsAndPumpkins\Product\Exception\MissingConditionXmlAttributeException;
@@ -91,12 +90,7 @@ class ProductListingCriteriaBuilder
             return $this->createCriterion($childNode);
         }, $criteriaNode['value']);
 
-        $condition = $criteriaNode['attributes']['condition'];
-
-        return call_user_func(
-            [CompositeSearchCriterion::class, $this->getCriteriaConstructorNameForCondition($condition)],
-            ...$criterionArray
-        );
+        return CompositeSearchCriterion::create($criteriaNode['attributes']['condition'], ...$criterionArray);
     }
 
     /**
@@ -117,17 +111,6 @@ class ProductListingCriteriaBuilder
         if (!isset($criteriaNode['attributes']['condition'])) {
             throw new MissingConditionXmlAttributeException(
                 'Missing "condition" attribute in product listing XML.'
-            );
-        }
-
-        $condition = $criteriaNode['attributes']['condition'];
-
-        if (!method_exists(
-            CompositeSearchCriterion::class,
-            $this->getCriteriaConstructorNameForCondition($condition))
-        ) {
-            throw new InvalidConditionXmlAttributeException(
-                sprintf('"condition" attribute value "%s" in product listing XML is invalid.', $condition)
             );
         }
     }
@@ -159,14 +142,5 @@ class ProductListingCriteriaBuilder
     private function getCriterionClassNameForOperation($operationName)
     {
         return SearchCriterion::class . $operationName;
-    }
-
-    /**
-     * @param string $condition
-     * @return string
-     */
-    private function getCriteriaConstructorNameForCondition($condition)
-    {
-        return 'create' . ucfirst($condition);
     }
 }
