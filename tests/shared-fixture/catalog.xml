@@ -491,16 +491,16 @@ TEXTILE/SYNTHETICS]]></description>
     </products>
     <listings>
         <listing url_key="adidas-sale" website="ru" locale="de_DE">
-            <criteria condition="and">
-                <stock_qty operation="GreaterThan">0</stock_qty>
-                <category operation="Equal">sale</category>
-                <brand operation="Equal">Adidas</brand>
+            <criteria type="and">
+                <stock_qty is="GreaterThan">0</stock_qty>
+                <category is="Equal">sale</category>
+                <brand is="Equal">Adidas</brand>
             </criteria>
         </listing>
         <listing url_key="sale" website="ru" locale="de_DE">
-            <criteria condition="and">
-                <stock_qty operation="GreaterThan">0</stock_qty>
-                <category operation="Equal">sale</category>
+            <criteria type="and">
+                <stock_qty is="GreaterThan">0</stock_qty>
+                <category is="Equal">sale</category>
             </criteria>
         </listing>
     </listings>

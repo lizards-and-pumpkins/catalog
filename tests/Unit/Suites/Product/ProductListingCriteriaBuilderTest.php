@@ -8,7 +8,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreat
 use LizardsAndPumpkins\DataVersion;
 use LizardsAndPumpkins\Product\Exception\InvalidCriterionOperationXmlAttributeException;
 use LizardsAndPumpkins\Product\Exception\InvalidNumberOfCriteriaXmlNodesException;
-use LizardsAndPumpkins\Product\Exception\MissingConditionXmlAttributeException;
+use LizardsAndPumpkins\Product\Exception\MissingTypeXmlAttributeException;
 use LizardsAndPumpkins\Product\Exception\MissingCriterionOperationXmlAttributeException;
 use LizardsAndPumpkins\Product\Exception\MissingUrlKeyXmlAttributeException;
 
@@ -39,13 +39,13 @@ class ProductListingCriteriaBuilderTest extends \PHPUnit_Framework_TestCase
         $this->testDataVersion = DataVersion::fromVersionString('-1');
     }
 
-    public function testProductListingCriteriaWithAndConditionIsCreatedFromXml()
+    public function testProductListingCriteriaWithAndTypeIsCreatedFromXml()
     {
         $xml = <<<EOX
 <listing url_key="men-accessories" website="ru" locale="en_US">
-    <criteria condition="and">
-        <category operation="Equal">accessories</category>
-        <gender operation="Equal">male</gender>
+    <criteria type="and">
+        <category is="Equal">accessories</category>
+        <gender is="Equal">male</gender>
     </criteria>
 </listing>
 EOX;
@@ -65,13 +65,13 @@ EOX;
         $this->assertEquals($expectedCriteria, $criteria->getCriteria());
     }
 
-    public function testProductListingCriteriaWithOrConditionIsCreatedFromXml()
+    public function testProductListingCriteriaWithOrTypeIsCreatedFromXml()
     {
         $xml = <<<EOX
 <listing url_key="men-accessories" website="ru" locale="en_US">
-    <criteria condition="or">
-        <category operation="Equal">accessories</category>
-        <gender operation="Equal">male</gender>
+    <criteria type="or">
+        <category is="Equal">accessories</category>
+        <gender is="Equal">male</gender>
     </criteria>
 </listing>
 EOX;
@@ -90,11 +90,11 @@ EOX;
     {
         $xml = <<<EOX
 <listing url_key="men-accessories" website="ru" locale="en_US">
-    <criteria condition="and">
-        <category operation="Equal">accessories</category>
-        <criteria condition="or">
-            <stock_qty operation="GreaterThan">0</stock_qty>
-            <backorders operation="Equal">true</backorders>
+    <criteria type="and">
+        <category is="Equal">accessories</category>
+        <criteria type="or">
+            <stock_qty is="GreaterThan">0</stock_qty>
+            <backorders is="Equal">true</backorders>
         </criteria>
     </criteria>
 </listing>
@@ -127,9 +127,9 @@ EOX;
         $this->criteriaBuilder->createProductListingCriteriaFromXml($xml, $this->testDataVersion);
     }
 
-    public function testExceptionIsThrownIfConditionAttributeOfListingNodeIsMissing()
+    public function testExceptionIsThrownIfTypeAttributeOfListingNodeIsMissing()
     {
-        $this->setExpectedException(MissingConditionXmlAttributeException::class);
+        $this->setExpectedException(MissingTypeXmlAttributeException::class);
         $xml = '<listing url_key="foo"><criteria/></listing>';
         $this->criteriaBuilder->createProductListingCriteriaFromXml($xml, $this->testDataVersion);
     }
@@ -137,14 +137,14 @@ EOX;
     public function testExceptionIsThrownIfCriterionNodeDoesNotHaveOperationAttribute()
     {
         $this->setExpectedException(MissingCriterionOperationXmlAttributeException::class);
-        $xml = '<listing url_key="foo"><criteria condition="and"><bar/></criteria></listing>';
+        $xml = '<listing url_key="foo"><criteria type="and"><bar/></criteria></listing>';
         $this->criteriaBuilder->createProductListingCriteriaFromXml($xml, $this->testDataVersion);
     }
 
     public function testExceptionIsThrownIfCriterionOperationAttributeIsNotAValidClass()
     {
         $this->setExpectedException(InvalidCriterionOperationXmlAttributeException::class);
-        $xml = '<listing url_key="foo"><criteria condition="and"><bar operation="baz"/></criteria></listing>';
+        $xml = '<listing url_key="foo"><criteria type="and"><bar is="baz"/></criteria></listing>';
         $this->criteriaBuilder->createProductListingCriteriaFromXml($xml, $this->testDataVersion);
     }
 }

@@ -52,7 +52,7 @@
                                                 <xs:sequence maxOccurs="unbounded">
                                                     <xs:any processContents="skip" />
                                                 </xs:sequence>
-                                                <xs:attribute name="condition" use="required">
+                                                <xs:attribute name="type" use="required">
                                                     <xs:simpleType>
                                                         <xs:restriction base="xs:string">
                                                             <xs:enumeration value="or" />
