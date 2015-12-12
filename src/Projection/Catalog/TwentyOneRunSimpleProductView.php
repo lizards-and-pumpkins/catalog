@@ -224,10 +224,6 @@ class TwentyOneRunSimpleProductView implements ProductView
      */
     private function createStockQtyAttributeAtMaximumPurchasableLevel(ProductAttribute $attribute)
     {
-        return ProductAttribute::fromArray([
-            ProductAttribute::CODE => 'stock_qty',
-            ProductAttribute::VALUE => self::MAX_PURCHASABLE_QTY,
-            ProductAttribute::CONTEXT => $attribute->getContextDataSet(),
-        ]);
+        return new ProductAttribute('stock_qty', self::MAX_PURCHASABLE_QTY, $attribute->getContextDataSet());
     }
 }
