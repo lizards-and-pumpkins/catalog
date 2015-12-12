@@ -2,16 +2,11 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog;
 
-use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductAttributeList;
-use LizardsAndPumpkins\Product\ProductId;
-use LizardsAndPumpkins\Product\ProductImage;
-use LizardsAndPumpkins\Product\ProductImageList;
-use LizardsAndPumpkins\Product\Tax\ProductTaxClass;
 
-class TwentyOneRunSimpleProductView implements ProductView
+class TwentyOneRunSimpleProductView extends AbstractProductView
 {
     const MAX_PURCHASABLE_QTY = 5;
 
@@ -31,7 +26,7 @@ class TwentyOneRunSimpleProductView implements ProductView
     }
 
     /**
-     * @return Product
+     * {@inheritdoc}
      */
     public function getOriginalProduct()
     {
@@ -39,16 +34,7 @@ class TwentyOneRunSimpleProductView implements ProductView
     }
 
     /**
-     * @return ProductId
-     */
-    public function getId()
-    {
-        return $this->product->getId();
-    }
-
-    /**
-     * @param string $attributeCode
-     * @return string
+     * {@inheritdoc}
      */
     public function getFirstValueOfAttribute($attributeCode)
     {
@@ -62,8 +48,7 @@ class TwentyOneRunSimpleProductView implements ProductView
     }
 
     /**
-     * @param string $attributeCode
-     * @return string[]
+     * {@inheritdoc}
      */
     public function getAllValuesOfAttribute($attributeCode)
     {
@@ -79,8 +64,7 @@ class TwentyOneRunSimpleProductView implements ProductView
     }
 
     /**
-     * @param string $attributeCode
-     * @return bool
+     * {@inheritdoc}
      */
     public function hasAttribute($attributeCode)
     {
@@ -88,7 +72,7 @@ class TwentyOneRunSimpleProductView implements ProductView
     }
 
     /**
-     * @return ProductAttributeList
+     * {@inheritdoc}
      */
     public function getAttributes()
     {
@@ -101,82 +85,7 @@ class TwentyOneRunSimpleProductView implements ProductView
     }
 
     /**
-     * @return Context
-     */
-    public function getContext()
-    {
-        return $this->product->getContext();
-    }
-
-    /**
-     * @return ProductImageList
-     */
-    public function getImages()
-    {
-        return $this->product->getImages();
-    }
-
-    /**
-     * @return int
-     */
-    public function getImageCount()
-    {
-        return $this->product->getImageCount();
-    }
-
-    /**
-     * @param int $imageNumber
-     * @return ProductImage
-     */
-    public function getImageByNumber($imageNumber)
-    {
-        return $this->product->getImageByNumber($imageNumber);
-    }
-
-    /**
-     * @param int $imageNumber
-     * @return string
-     */
-    public function getImageFileNameByNumber($imageNumber)
-    {
-        return $this->product->getImageFileNameByNumber($imageNumber);
-    }
-
-    /**
-     * @param int $imageNumber
-     * @return string
-     */
-    public function getImageLabelByNumber($imageNumber)
-    {
-        return $this->product->getImageLabelByNumber($imageNumber);
-    }
-
-    /**
-     * @return string
-     */
-    public function getMainImageFileName()
-    {
-        return $this->product->getMainImageFileName();
-    }
-
-    /**
-     * @return string
-     */
-    public function getMainImageLabel()
-    {
-        return $this->product->getMainImageLabel();
-    }
-
-    /**
-     * @return ProductTaxClass
-     */
-    public function getTaxClass()
-    {
-        return $this->product->getTaxClass();
-    }
-
-    /**
-     * @return mixed[]
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {
