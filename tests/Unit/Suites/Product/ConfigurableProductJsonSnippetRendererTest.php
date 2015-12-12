@@ -110,11 +110,11 @@ class ConfigurableProductJsonSnippetRendererTest extends \PHPUnit_Framework_Test
 
     public function testItReturnsAnEmptyAssociatedProductsJsonArraySnippetForNonCompositeProducts()
     {
-        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubNonConfigurableProduct */
-        $stubNonConfigurableProduct = $this->getMock(Product::class);
-        $stubNonConfigurableProduct->method('getContext')->willReturn($this->getMock(Context::class));
+        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubNonCompositeProduct */
+        $stubNonCompositeProduct = $this->getMock(Product::class);
+        $stubNonCompositeProduct->method('getContext')->willReturn($this->getMock(Context::class));
 
-        $snippetList = $this->renderer->render($stubNonConfigurableProduct);
+        $snippetList = $this->renderer->render($stubNonCompositeProduct);
 
         $snippet = $this->getSnippetWithKey($this->testAssociatedProductsSnippetKey, $snippetList);
         $this->assertSnippetContent(json_encode([]), $snippet);
