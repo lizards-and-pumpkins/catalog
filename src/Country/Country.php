@@ -25,7 +25,7 @@ class Country
      */
     public static function from2CharIso3166($isoString)
     {
-        if ($isoString instanceof Country) {
+        if ($isoString instanceof self) {
             return $isoString;
         }
         self::validateType($isoString);

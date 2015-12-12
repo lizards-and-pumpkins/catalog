@@ -24,7 +24,7 @@ class Website
      */
     public static function fromString($websiteCode)
     {
-        if ($websiteCode instanceof Website) {
+        if ($websiteCode instanceof self) {
             return $websiteCode;
         }
         if (! is_string($websiteCode)) {

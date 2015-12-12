@@ -11,5 +11,5 @@ interface TaxService
      * @param Price $price
      * @return Price
      */
-    public function apply(Price $price);
+    public function applyTo(Price $price);
 }

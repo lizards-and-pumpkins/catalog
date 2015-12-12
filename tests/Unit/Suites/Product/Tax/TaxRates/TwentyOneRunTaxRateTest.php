@@ -7,6 +7,7 @@ use LizardsAndPumpkins\Product\Price;
 /**
  * @covers \LizardsAndPumpkins\Product\Tax\TaxRates\TwentyOneRunTaxRate
  * @uses   \LizardsAndPumpkins\Product\Tax\TaxRates\TwentyOneRunGenericTaxRateService
+ * @uses   \LizardsAndPumpkins\Product\Price
  */
 class TwentyOneRunTaxRateTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,7 +26,7 @@ class TwentyOneRunTaxRateTest extends \PHPUnit_Framework_TestCase
      */
     public function testItAppliesTheTaxRate($rate, $price, $expected)
     {
-        $result = TwentyOneRunTaxRate::create($rate)->apply(new Price($price));
+        $result = TwentyOneRunTaxRate::create($rate)->applyTo(new Price($price));
         $message = sprintf('Expected tax rate %s applied to %d to be %s, got %s', $rate, $price, $expected, $result);
         $this->assertSame($expected, $result->getAmount(), $message);
     }

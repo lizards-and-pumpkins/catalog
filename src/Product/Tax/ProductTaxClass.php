@@ -27,7 +27,9 @@ class ProductTaxClass
      */
     public static function fromString($name)
     {
-        return new self($name);
+        return $name instanceof self ?
+            $name :
+            new self($name);
     }
 
     /**
