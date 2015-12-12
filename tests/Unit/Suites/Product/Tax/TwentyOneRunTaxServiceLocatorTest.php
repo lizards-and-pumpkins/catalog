@@ -12,6 +12,7 @@ use LizardsAndPumpkins\Product\Tax\TaxRates\TwentyOneRunTaxRate;
  * @uses   \LizardsAndPumpkins\Country\Country
  * @uses   \LizardsAndPumpkins\Website\Website
  * @uses   \LizardsAndPumpkins\Product\Tax\TaxRates\TwentyOneRunTaxRate
+ * @uses   \LizardsAndPumpkins\Product\Tax\TaxRates\TwentyOneRunGenericTaxRateService
  */
 class TwentyOneRunTaxServiceLocatorTest extends \PHPUnit_Framework_TestCase
 {

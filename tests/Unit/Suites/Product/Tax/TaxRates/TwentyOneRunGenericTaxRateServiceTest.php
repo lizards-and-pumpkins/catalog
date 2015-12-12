@@ -7,6 +7,7 @@ use LizardsAndPumpkins\Product\Tax\TaxService;
 
 /**
  * @covers \LizardsAndPumpkins\Product\Tax\TaxRates\TwentyOneRunGenericTaxRateService
+ * @uses   \LizardsAndPumpkins\Product\Tax\TaxRates\TwentyOneRunTaxRate
  */
 class TwentyOneRunGenericTaxRateServiceTest extends \PHPUnit_Framework_TestCase
 {

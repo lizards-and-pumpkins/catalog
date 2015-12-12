@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins\Product\Tax\TaxRates;
 
 /**
  * @covers \LizardsAndPumpkins\Product\Tax\TaxRates\TwentyOneRunTaxRate
+ * @uses   \LizardsAndPumpkins\Product\Tax\TaxRates\TwentyOneRunGenericTaxRateService
  */
 class TwentyOneRunTaxRateTest extends \PHPUnit_Framework_TestCase
 {
