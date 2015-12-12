@@ -127,20 +127,22 @@ class TwentyOneRunConfigurableProductView extends AbstractProductView implements
      */
     private function filterProductAttributeList(ProductAttributeList $attributeList)
     {
-        $attributeCodesToBeRemoved = ['price', 'special_price', 'backorders'];
-
-        $filteredAttributes = array_reduce(
-            $attributeList->getAllAttributes(),
-            function (array $carry, ProductAttribute $attribute) use ($attributeCodesToBeRemoved) {
-                if (!in_array((string) $attribute->getCode(), $attributeCodesToBeRemoved)) {
-                    $carry[] = $attribute;
-                }
-
-                return $carry;
-            },
-            []
-        );
+        $filteredAttributes = $this->removeScreenedAttributes($attributeList);
 
         return new ProductAttributeList(...$filteredAttributes);
+    }
+
+    /**
+     * @param ProductAttributeList $attributeList
+     * @return ProductAttribute[]
+     */
+    private function removeScreenedAttributes(ProductAttributeList $attributeList)
+    {
+        $attributeCodesToBeRemoved = ['price', 'special_price', 'backorders'];
+        $attributes = $attributeList->getAllAttributes();
+
+        return array_filter($attributes, function (ProductAttribute $attribute) use ($attributeCodesToBeRemoved) {
+            return !in_array((string) $attribute->getCode(), $attributeCodesToBeRemoved);
+        });
     }
 }
