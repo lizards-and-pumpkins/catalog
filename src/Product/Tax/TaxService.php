@@ -3,11 +3,13 @@
 
 namespace LizardsAndPumpkins\Product\Tax;
 
+use LizardsAndPumpkins\Product\Price;
+
 interface TaxService
 {
     /**
-     * @param int $price
-     * @return int
+     * @param Price $price
+     * @return Price
      */
-    public function apply($price);
+    public function apply(Price $price);
 }

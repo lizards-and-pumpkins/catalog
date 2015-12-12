@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Product\Tax\TaxRates;
 
+use LizardsAndPumpkins\Product\Price;
 use LizardsAndPumpkins\Product\Tax\TaxService;
 
 abstract class TwentyOneRunTaxRate implements TaxService
@@ -28,12 +29,12 @@ abstract class TwentyOneRunTaxRate implements TaxService
     }
 
     /**
-     * @param int $price
-     * @return int
+     * @param Price $price
+     * @return Price
      */
-    public function apply($price)
+    public function apply(Price $price)
     {
-        $result = round($price * $this->getFactor(), 0, PHP_ROUND_HALF_DOWN);
-        return (int) $result;
+        $result = round($price->getAmount() * $this->getFactor(), 0, PHP_ROUND_HALF_DOWN);
+        return new Price((int) $result);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\Product\Tax\TaxRates;
 
+use LizardsAndPumpkins\Product\Price;
+
 /**
  * @covers \LizardsAndPumpkins\Product\Tax\TaxRates\TwentyOneRunTaxRate
  * @uses   \LizardsAndPumpkins\Product\Tax\TaxRates\TwentyOneRunGenericTaxRateService
@@ -23,9 +25,9 @@ class TwentyOneRunTaxRateTest extends \PHPUnit_Framework_TestCase
      */
     public function testItAppliesTheTaxRate($rate, $price, $expected)
     {
-        $result = TwentyOneRunTaxRate::create($rate)->apply($price);
+        $result = TwentyOneRunTaxRate::create($rate)->apply(new Price($price));
         $message = sprintf('Expected tax rate %s applied to %d to be %s, got %s', $rate, $price, $expected, $result);
-        $this->assertSame($expected, $result, $message);
+        $this->assertSame($expected, $result->getAmount(), $message);
     }
 
     /**
