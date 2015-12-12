@@ -63,7 +63,7 @@ class ProductListingCriteriaSnippetContent implements PageMetaInfoSnippetContent
         $pageInfo = self::decodeJson($json);
         self::validateRequiredKeysArePresent($pageInfo);
 
-        self::validateSearchCriteriaMetaInfo($pageInfo[self::KEY_CRITERIA]);
+        self::validateProductListingSearchCriteria($pageInfo[self::KEY_CRITERIA]);
         $searchCriteria = self::createSearchCriteriaFromMetaInfo($pageInfo[self::KEY_CRITERIA]);
 
         return static::create(
@@ -174,7 +174,7 @@ class ProductListingCriteriaSnippetContent implements PageMetaInfoSnippetContent
     /**
      * @param mixed[] $metaInfo
      */
-    private static function validateSearchCriteriaMetaInfo(array $metaInfo)
+    private static function validateProductListingSearchCriteria(array $metaInfo)
     {
         if (!isset($metaInfo['condition'])) {
             throw new MalformedSearchCriteriaMetaException('Missing criteria condition.');
@@ -193,7 +193,7 @@ class ProductListingCriteriaSnippetContent implements PageMetaInfoSnippetContent
 
         array_map(function(array $criteria) {
             if (isset($criteria['condition'])) {
-                self::validateSearchCriteriaMetaInfo($criteria);
+                self::validateProductListingSearchCriteria($criteria);
                 return;
             }
 
