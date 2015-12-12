@@ -1,6 +1,6 @@
 <?php
 
-namespace LizardsAndPumpkins\Tax;
+namespace LizardsAndPumpkins\Product\Tax;
 
 use LizardsAndPumpkins\Country\Country;
 use LizardsAndPumpkins\Website\Website;
@@ -17,10 +17,30 @@ class TwentyOneRunTaxServiceLocatorOptions implements TaxServiceLocatorOptions
      */
     private $website;
 
-    public function __construct(Country $country, Website $website)
+    /**
+     * @var ProductTaxClass
+     */
+    private $productTaxClass;
+
+    public function __construct(Website $website, ProductTaxClass $productTaxClass, Country $country)
     {
-        $this->country = $country;
         $this->website = $website;
+        $this->productTaxClass = $productTaxClass;
+        $this->country = $country;
+    }
+
+    /**
+     * @param string $websiteCode
+     * @param string $productTaxClass
+     * @param string $countryCode
+     */
+    public static function fromStrings($websiteCode, $productTaxClass, $countryCode)
+    {
+        return new self(
+            Website::fromString($websiteCode),
+            ProductTaxClass::fromString($productTaxClass),
+            Country::from2CharIso3166($countryCode)
+        );
     }
 
     /**
@@ -37,5 +57,13 @@ class TwentyOneRunTaxServiceLocatorOptions implements TaxServiceLocatorOptions
     public function getWebsite()
     {
         return $this->website;
+    }
+
+    /**
+     * @return ProductTaxClass
+     */
+    public function getProductTaxClass()
+    {
+        return $this->productTaxClass;
     }
 }

@@ -1,12 +1,13 @@
 <?php
 
-namespace LizardsAndPumpkins\Tax;
+namespace LizardsAndPumpkins\Product\Tax;
 
 use LizardsAndPumpkins\Country\Country;
 use LizardsAndPumpkins\Website\Website;
 
 /**
- * @covers \LizardsAndPumpkins\Tax\TwentyOneRunTaxServiceLocatorOptions
+ * @covers \LizardsAndPumpkins\Product\Tax\TwentyOneRunTaxServiceLocatorOptions
+ * @uses   \LizardsAndPumpkins\Product\Tax\ProductTaxClass
  * @uses   \LizardsAndPumpkins\Country\Country
  * @uses   \LizardsAndPumpkins\Website\Website
  */
@@ -27,13 +28,20 @@ class TwentyOneRunTaxServiceLocatorOptionsTest extends \PHPUnit_Framework_TestCa
      */
     private $testWebsite;
 
+    /**
+     * @var ProductTaxClass
+     */
+    private $testProductTaxClass;
+
     protected function setUp()
     {
-        $this->testCountry = Country::fromIso3661('de');
+        $this->testCountry = Country::from2CharIso3166('de');
         $this->testWebsite = Website::fromString('test');
+        $this->testProductTaxClass = ProductTaxClass::fromString('test tax class');
         $this->taxServiceLocatorOptions = new TwentyOneRunTaxServiceLocatorOptions(
-            $this->testCountry,
-            $this->testWebsite
+            $this->testWebsite,
+            $this->testProductTaxClass,
+            $this->testCountry
         );
     }
 
@@ -50,5 +58,19 @@ class TwentyOneRunTaxServiceLocatorOptionsTest extends \PHPUnit_Framework_TestCa
     public function testItReturnsTheInjectedWebsite()
     {
         $this->assertSame($this->testWebsite, $this->taxServiceLocatorOptions->getWebsite());
+    }
+
+    public function testItReturnsTheInjectedProductTaxClass()
+    {
+        $this->assertSame($this->testProductTaxClass, $this->taxServiceLocatorOptions->getProductTaxClass());
+    }
+
+    public function testItReturnsAServiceLocatorOptionsInstanceFromScalars()
+    {
+        $websiteCode = 'website';
+        $productTaxClass = 'taxclass';
+        $countryCode = 'de';
+        $locator = TwentyOneRunTaxServiceLocatorOptions::fromStrings($websiteCode, $productTaxClass, $countryCode);
+        $this->assertInstanceOf(TwentyOneRunTaxServiceLocatorOptions::class, $locator);
     }
 }

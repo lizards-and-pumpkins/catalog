@@ -1,7 +1,7 @@
 <?php
 
 
-namespace LizardsAndPumpkins\Tax;
+namespace LizardsAndPumpkins\Product\Tax;
 
 interface TaxServiceLocatorOptions
 {

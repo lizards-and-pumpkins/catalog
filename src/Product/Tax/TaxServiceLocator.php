@@ -1,8 +1,13 @@
 <?php
 
 
-namespace LizardsAndPumpkins\Tax;
+namespace LizardsAndPumpkins\Product\Tax;
 
 interface TaxServiceLocator
 {
+    /**
+     * @param TaxServiceLocatorOptions $options
+     * @return TaxService
+     */
+    public function get(TaxServiceLocatorOptions $options);
 }

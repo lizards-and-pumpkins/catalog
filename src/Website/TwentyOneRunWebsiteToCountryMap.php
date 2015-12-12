@@ -20,7 +20,8 @@ class TwentyOneRunWebsiteToCountryMap implements WebsiteToCountryMap
      */
     public function getCountry(Website $website)
     {
-        return Country::from2CharIso3166($this->getCountryFromMap((string) $website));
+        $countryCode = $this->getCountryFromMap((string) $website);
+        return Country::from2CharIso3166($countryCode);
     }
     
     /**
@@ -39,6 +40,6 @@ class TwentyOneRunWebsiteToCountryMap implements WebsiteToCountryMap
     {
         return isset($this->map[$mapKey]) ?
             $this->map[$mapKey] :
-            $this->defaultCountry;
+            $this->getDefaultCountry();
     }
 }
