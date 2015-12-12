@@ -101,30 +101,40 @@ class TwentyOneRunSimpleProductView extends AbstractProductView
      */
     private function filterProductAttributeList(ProductAttributeList $attributeList)
     {
-        $attributeCodesToBeRemoved = ['price', 'special_price', 'backorders'];
+        $filteredAttributes = $this->removeScreenedAttributes($attributeList);
+        $attributesWithProcessedStockQty = $this->processStockQtyAttribute($filteredAttributes);
 
-        $filteredAttributes = array_reduce(
-            $attributeList->getAllAttributes(),
-            function (array $carry, ProductAttribute $attribute) use ($attributeCodesToBeRemoved, $attributeList) {
-                if (in_array((string) $attribute->getCode(), $attributeCodesToBeRemoved)) {
-                    return $carry;
-                }
+        return new ProductAttributeList(...$attributesWithProcessedStockQty);
+    }
 
-                if ((string) $attribute->getCode() === 'stock_qty' &&
-                    ($attribute->getValue() > self::MAX_PURCHASABLE_QTY ||
-                     $this->product->getFirstValueOfAttribute('backorders') === 'true')
-                ) {
-                    $carry[] = $this->createStockQtyAttributeAtMaximumPurchasableLevel($attribute);
-                    return $carry;
-                }
+    /**
+     * @param ProductAttribute $stockQty
+     * @return ProductAttribute
+     */
+    private function getBoundedStockQtyAttribute(ProductAttribute $stockQty)
+    {
+        if ($this->isOverMaxQtyToShow($stockQty) || $this->hasBackorders()) {
+            return $this->createStockQtyAttributeAtMaximumPurchasableLevel($stockQty);
+        }
 
-                $carry[] = $attribute;
-                return $carry;
-            },
-            []
-        );
+        return $stockQty;
+    }
 
-        return new ProductAttributeList(...$filteredAttributes);
+    /**
+     * @param ProductAttribute $stockQty
+     * @return bool
+     */
+    private function isOverMaxQtyToShow(ProductAttribute $stockQty)
+    {
+        return $stockQty->getValue() > self::MAX_PURCHASABLE_QTY;
+    }
+
+    /**
+     * @return bool
+     */
+    private function hasBackorders()
+    {
+        return $this->product->getFirstValueOfAttribute('backorders') === 'true';
     }
 
     /**
@@ -134,5 +144,33 @@ class TwentyOneRunSimpleProductView extends AbstractProductView
     private function createStockQtyAttributeAtMaximumPurchasableLevel(ProductAttribute $attribute)
     {
         return new ProductAttribute('stock_qty', self::MAX_PURCHASABLE_QTY, $attribute->getContextDataSet());
+    }
+
+    /**
+     * @param ProductAttributeList $attributeList
+     * @return ProductAttribute[]
+     */
+    private function removeScreenedAttributes(ProductAttributeList $attributeList)
+    {
+        $attributeCodesToBeRemoved = ['price', 'special_price', 'backorders'];
+        $attributes = $attributeList->getAllAttributes();
+
+        return array_filter($attributes, function (ProductAttribute $attribute) use ($attributeCodesToBeRemoved) {
+            return !in_array((string) $attribute->getCode(), $attributeCodesToBeRemoved);
+        });
+    }
+
+    /**
+     * @param ProductAttribute[] $filteredAttributes
+     * @return ProductAttribute[]
+     */
+    private function processStockQtyAttribute(array $filteredAttributes)
+    {
+        return array_map(function (ProductAttribute $attribute) {
+            if ($attribute->getCode() == 'stock_qty') {
+                return $this->getBoundedStockQtyAttribute($attribute);
+            }
+            return $attribute;
+        }, $filteredAttributes);
     }
 }
