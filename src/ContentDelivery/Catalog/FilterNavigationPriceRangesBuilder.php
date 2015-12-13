@@ -16,7 +16,7 @@ class FilterNavigationPriceRangesBuilder
         $rangeStep = 20 * $base;
         $rangesTo = 500 * $base;
 
-        $priceRanges = [FacetFilterRange::create(null,  $rangeStep - 1)];
+        $priceRanges = [FacetFilterRange::create(null, $rangeStep - 1)];
         for ($i = $rangeStep; $i < $rangesTo; $i += $rangeStep) {
             $priceRanges[] = FacetFilterRange::create($i, $i + $rangeStep - 1);
         }

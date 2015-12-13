@@ -3,16 +3,18 @@
 
 namespace LizardsAndPumpkins\Website;
 
+use LizardsAndPumpkins\Country\Country;
+
 interface WebsiteToCountryMap
 {
     /**
-     * @param string $websiteCode
-     * @return string
+     * @param Website $website
+     * @return Country
      */
-    public function getCountry($websiteCode);
+    public function getCountry(Website $website);
 
     /**
-     * @return string
+     * @return Country
      */
     public function getDefaultCountry();
 }

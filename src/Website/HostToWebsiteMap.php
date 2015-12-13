@@ -7,7 +7,7 @@ interface HostToWebsiteMap
 {
     /**
      * @param string $host
-     * @return string
+     * @return Website
      */
     public function getWebsiteCodeByHost($host);
 }

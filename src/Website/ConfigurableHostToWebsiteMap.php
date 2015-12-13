@@ -19,7 +19,7 @@ class ConfigurableHostToWebsiteMap implements HostToWebsiteMap
     private $hostToWebsiteMap;
 
     /**
-     * @param string[] $hostToWebsiteMap
+     * @param Website[] $hostToWebsiteMap
      */
     private function __construct(array $hostToWebsiteMap)
     {
@@ -32,7 +32,7 @@ class ConfigurableHostToWebsiteMap implements HostToWebsiteMap
      */
     public static function fromArray(array $hostToWebsiteMap)
     {
-        return new static($hostToWebsiteMap);
+        return new static(self::createWebsites($hostToWebsiteMap));
     }
 
     /**
@@ -44,8 +44,19 @@ class ConfigurableHostToWebsiteMap implements HostToWebsiteMap
         $hostToWebsiteMap = $configReader->get(self::CONFIG_KEY) ?
             self::buildArrayMapFromString($configReader->get(self::CONFIG_KEY)) :
             [];
-        
-        return new static($hostToWebsiteMap);
+
+        return new static(self::createWebsites($hostToWebsiteMap));
+    }
+
+    /**
+     * @param string[] $map
+     * @return Website[]
+     */
+    private static function createWebsites(array $map)
+    {
+        return array_reduce(array_keys($map), function (array $carry, $host) use ($map) {
+            return array_merge($carry, [$host => Website::fromString($map[$host])]);
+        }, []);
     }
 
     /**
@@ -55,7 +66,7 @@ class ConfigurableHostToWebsiteMap implements HostToWebsiteMap
     private static function buildArrayMapFromString($configValue)
     {
         $pairs = array_map('self::splitConfigRecord', explode(self::RECORD_SEPARATOR, $configValue));
-        
+
         return self::flatten($pairs);
     }
 
@@ -65,11 +76,11 @@ class ConfigurableHostToWebsiteMap implements HostToWebsiteMap
      */
     private static function splitConfigRecord($mapping)
     {
-        if (! preg_match('/^([^=]+)=(.+)/', $mapping, $matches)) {
+        if (!preg_match('/^([^=]+)=(.+)/', $mapping, $matches)) {
             $message = sprintf('Unable to parse the website to code mapping record "%s"', $mapping);
             throw new InvalidWebsiteMapConfigRecordException($message);
         }
-        
+
         return [$matches[1] => $matches[2]];
     }
 
@@ -86,7 +97,7 @@ class ConfigurableHostToWebsiteMap implements HostToWebsiteMap
 
     /**
      * @param string $host
-     * @return string
+     * @return Website
      */
     public function getWebsiteCodeByHost($host)
     {

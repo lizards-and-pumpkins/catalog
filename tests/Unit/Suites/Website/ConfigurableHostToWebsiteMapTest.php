@@ -9,6 +9,7 @@ use LizardsAndPumpkins\Website\Exception\UnknownWebsiteHostException;
 
 /**
  * @covers \LizardsAndPumpkins\Website\ConfigurableHostToWebsiteMap
+ * @uses   \LizardsAndPumpkins\Website\Website
  */
 class ConfigurableHostToWebsiteMapTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,10 +17,13 @@ class ConfigurableHostToWebsiteMapTest extends \PHPUnit_Framework_TestCase
      * @var ConfigurableHostToWebsiteMap
      */
     private $websiteMap;
-    
+
+    /**
+     * @var string[]
+     */
     private $testMap = [
         'example.com' => 'web1',
-        '127.0.0.1' => 'dev',
+        '127.0.0.1'   => 'exampleDev',
     ];
 
     /**
@@ -27,12 +31,18 @@ class ConfigurableHostToWebsiteMapTest extends \PHPUnit_Framework_TestCase
      */
     private $stubConfigReader;
 
+    private function assertWebsiteEqual(Website $expected, Website $actual)
+    {
+        $message = sprintf('Expected website "%s", got "%s"', $expected, $actual);
+        $this->assertTrue($actual->isEqual($expected), $message);
+    }
+
     protected function setUp()
     {
         $this->websiteMap = ConfigurableHostToWebsiteMap::fromArray($this->testMap);
         $this->stubConfigReader = $this->getMock(ConfigReader::class);
     }
-    
+
     public function testItThrowsAnExceptionIfAHostNameIsNotKnown()
     {
         $this->setExpectedException(
@@ -44,8 +54,10 @@ class ConfigurableHostToWebsiteMapTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsTheCodeIfSet()
     {
-        $this->assertSame($this->testMap['example.com'], $this->websiteMap->getWebsiteCodeByHost('example.com'));
-        $this->assertSame($this->testMap['127.0.0.1'], $this->websiteMap->getWebsiteCodeByHost('127.0.0.1'));
+        $websiteOne = Website::fromString($this->testMap['example.com']);
+        $websiteTwo = Website::fromString($this->testMap['127.0.0.1']);
+        $this->assertWebsiteEqual($websiteOne, $this->websiteMap->getWebsiteCodeByHost('example.com'));
+        $this->assertWebsiteEqual($websiteTwo, $this->websiteMap->getWebsiteCodeByHost('127.0.0.1'));
     }
 
     public function testItReturnsAWebsiteMapInstance()
@@ -60,9 +72,9 @@ class ConfigurableHostToWebsiteMapTest extends \PHPUnit_Framework_TestCase
         $this->stubConfigReader->method('get')->with(ConfigurableHostToWebsiteMap::CONFIG_KEY)->willReturn($map);
 
         $websiteMap = ConfigurableHostToWebsiteMap::fromConfig($this->stubConfigReader);
-        
-        $this->assertSame('aaa', $websiteMap->getWebsiteCodeByHost('example.com'));
-        $this->assertSame('bbb', $websiteMap->getWebsiteCodeByHost('127.0.0.1'));
+
+        $this->assertWebsiteEqual(Website::fromString('aaa'), $websiteMap->getWebsiteCodeByHost('example.com'));
+        $this->assertWebsiteEqual(Website::fromString('bbb'), $websiteMap->getWebsiteCodeByHost('127.0.0.1'));
     }
 
     public function testItThrowsAnExceptionIfAMapValueNotMatchesTheExpectedFormat()

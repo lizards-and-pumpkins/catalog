@@ -15,6 +15,7 @@ use LizardsAndPumpkins\LocalFilesystemStorageReader;
 use LizardsAndPumpkins\LocalFilesystemStorageWriter;
 use LizardsAndPumpkins\Log\Writer\FileLogMessageWriter;
 use LizardsAndPumpkins\Log\WritingLoggerDecorator;
+use LizardsAndPumpkins\Product\Tax\TaxServiceLocator;
 use LizardsAndPumpkins\Queue\File\FileQueue;
 use LizardsAndPumpkins\SampleMasterFactory;
 use LizardsAndPumpkins\SampleFactory;
@@ -254,5 +255,10 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsATaxableCountryInstance()
     {
         $this->assertInstanceOf(TaxableCountries::class, $this->factory->createTaxableCountries());
+    }
+
+    public function testItReturnsATaxServiceLocator()
+    {
+        $this->assertInstanceOf(TaxServiceLocator::class, $this->factory->createTaxServiceLocator());
     }
 }

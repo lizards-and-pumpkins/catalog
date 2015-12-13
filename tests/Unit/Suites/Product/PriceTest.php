@@ -28,4 +28,10 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(100, $result);
     }
+
+    public function testItReturnsTheAmountAsAString()
+    {
+        $price = new Price(123);
+        $this->assertSame('123', (string) $price);
+    }
 }

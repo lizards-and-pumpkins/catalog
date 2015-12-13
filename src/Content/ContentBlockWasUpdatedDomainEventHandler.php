@@ -16,7 +16,7 @@ class ContentBlockWasUpdatedDomainEventHandler implements DomainEventHandler
      */
     private $projector;
 
-    public function __construct(ContentBlockWasUpdatedDomainEvent $domainEvent, ContentBlockProjector $projector )
+    public function __construct(ContentBlockWasUpdatedDomainEvent $domainEvent, ContentBlockProjector $projector)
     {
         $this->domainEvent = $domainEvent;
         $this->projector = $projector;
