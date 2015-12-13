@@ -147,6 +147,7 @@ class PriceSnippetRenderer implements SnippetRenderer
     {
         $amount = $product->getFirstValueOfAttribute($this->priceAttributeCode);
         $price = new Price($amount);
+        // todo: change tax rate instantiation so it does not refer to concrete classes in generic code
         $taxServiceLocatorOptions = TwentyOneRunTaxServiceLocatorOptions::fromStrings(
             $product->getContext()->getValue(ContextWebsite::CODE),
             $product->getTaxClass(),

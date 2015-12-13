@@ -13,7 +13,7 @@ class TwentyOneRunGenericTaxRateServiceTest extends \PHPUnit_Framework_TestCase
 {
     public function testItImplementsTheTwentyOneRunTaxRateService()
     {
-        $this->assertInstanceOf(TaxService::class, new TwentyOneRunGenericTaxRateService(19));
+        $this->assertInstanceOf(TaxService::class, TwentyOneRunGenericTaxRateService::fromInt(19));
     }
 
     public function testItThrowsAnExceptionIfTheTaxRateIsNotAnInteger()
@@ -22,7 +22,7 @@ class TwentyOneRunGenericTaxRateServiceTest extends \PHPUnit_Framework_TestCase
             InvalidTaxRateException::class,
             'The tax rate has to be an integer value, got "'
         );
-        new TwentyOneRunGenericTaxRateService('10');
+        TwentyOneRunGenericTaxRateService::fromInt('10');
     }
 
     public function testItThrowsAnExceptionIfTheTaxRateIsZero()
@@ -31,11 +31,11 @@ class TwentyOneRunGenericTaxRateServiceTest extends \PHPUnit_Framework_TestCase
             InvalidTaxRateException::class,
             'The tax rate must not be zero'
         );
-        new TwentyOneRunGenericTaxRateService(0);
+        TwentyOneRunGenericTaxRateService::fromInt(0);
     }
 
     public function testItReturnsTheInjectedFactor()
     {
-        $this->assertSame(19, (new TwentyOneRunGenericTaxRateService(19))->getRate());
+        $this->assertSame(19, TwentyOneRunGenericTaxRateService::fromInt(19)->getRate());
     }
 }

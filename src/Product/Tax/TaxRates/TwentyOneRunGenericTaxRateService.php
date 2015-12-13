@@ -14,10 +14,19 @@ class TwentyOneRunGenericTaxRateService extends TwentyOneRunTaxRate
     /**
      * @param int $rate
      */
-    public function __construct($rate)
+    private function __construct($rate)
     {
         $this->validateRate($rate);
         $this->rate = $rate;
+    }
+
+    /**
+     * @param int $rate
+     * @return TwentyOneRunGenericTaxRateService
+     */
+    public static function fromInt($rate)
+    {
+        return new self($rate);
     }
 
     /**

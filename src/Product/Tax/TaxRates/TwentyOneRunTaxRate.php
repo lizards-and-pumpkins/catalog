@@ -9,10 +9,11 @@ abstract class TwentyOneRunTaxRate implements TaxService
 {
     /**
      * @param int|string $rate
+     * @return TwentyOneRunGenericTaxRateService
      */
     public static function create($rate)
     {
-        return new TwentyOneRunGenericTaxRateService($rate);
+        return TwentyOneRunGenericTaxRateService::fromInt($rate);
     }
     
     /**
