@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Product\Tax;
 
 use LizardsAndPumpkins\Product\Price;
