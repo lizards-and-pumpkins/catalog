@@ -24,8 +24,13 @@ class TwentyOneRunTaxServiceLocator implements TaxServiceLocator
         [['ru', 'fr'], ['19%', '7%'],    'IT', 21],
         [['ru', 'fr'], ['19%', '7%'],    'BE', 21],
         [['cy'],       ['21cycles.com'], 'DE', 19],
-        [['cy'],       ['VR 7%'],        'DE', 07],
+        [['cy'],       ['VR 7%'],        'DE',  7],
     ];
+    
+    private static $websiteIdx = 0;
+    private static $taxClassIdx = 1;
+    private static $countryIdx = 2;
+    private static $rateIdx = 3;
 
     /**
      * @param TaxServiceLocatorOptions $options
@@ -35,7 +40,7 @@ class TwentyOneRunTaxServiceLocator implements TaxServiceLocator
     {
         foreach (self::$rateTable as $rule) {
             if ($this->isMatchingRule($rule, $options)) {
-                return TwentyOneRunTaxRate::create($rule[$rateIdx = 3]);
+                return TwentyOneRunTaxRate::create($rule[self::$rateIdx]);
             }
         }
         throw $this->createUnableToLocateServiceException($options);
@@ -48,13 +53,10 @@ class TwentyOneRunTaxServiceLocator implements TaxServiceLocator
      */
     private function isMatchingRule(array $rule, TaxServiceLocatorOptions $options)
     {
-        $websiteIdx = 0;
-        $taxClassIdx = 1;
-        $countryIdx = 2;
         return
-            in_array($this->getWebsite($options), $rule[$websiteIdx]) &&
-            in_array($this->getProductTaxClass($options), $rule[$taxClassIdx]) &&
-            $this->getCountry($options) === $rule[$countryIdx];
+            in_array($this->getWebsite($options), $rule[self::$websiteIdx]) &&
+            in_array($this->getProductTaxClass($options), $rule[self::$taxClassIdx]) &&
+            $this->getCountry($options) === $rule[self::$countryIdx];
     }
     
     /**
