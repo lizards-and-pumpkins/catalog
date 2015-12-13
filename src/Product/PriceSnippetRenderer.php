@@ -101,7 +101,7 @@ class PriceSnippetRenderer implements SnippetRenderer
     private function createPriceSnippetForEachCountry(Product $product)
     {
         return @array_map(function ($country) use ($product) {
-            return $this->createPriceSnipperForCountry($product, $country);
+            return $this->createPriceSnippetForCountry($product, $country);
         }, $this->taxableCountries->getCountries());
     }
 
@@ -110,7 +110,7 @@ class PriceSnippetRenderer implements SnippetRenderer
      * @param string $country
      * @return Snippet
      */
-    private function createPriceSnipperForCountry(Product $product, $country)
+    private function createPriceSnippetForCountry(Product $product, $country)
     {
         $key = $this->getSnippetKeyForCountry($product, $country);
         $price = $this->getPriceIncludingTax($product, $country);
