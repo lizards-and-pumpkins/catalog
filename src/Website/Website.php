@@ -14,7 +14,7 @@ class Website
     /**
      * @param string $websiteCode
      */
-    public function __construct($websiteCode)
+    private function __construct($websiteCode)
     {
         $this->websiteCode = $websiteCode;
     }
@@ -41,6 +41,7 @@ class Website
 
     /**
      * @param mixed $variable
+     * @return string
      */
     private static function getType($variable)
     {
@@ -59,6 +60,7 @@ class Website
 
     /**
      * @param Website $otherWebsite
+     * @return bool
      */
     public function isEqual(Website $otherWebsite)
     {
