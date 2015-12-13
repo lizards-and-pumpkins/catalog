@@ -18,9 +18,10 @@ class Website
     {
         $this->websiteCode = $websiteCode;
     }
-    
+
     /**
      * @param string $websiteCode
+     * @return Website
      */
     public static function fromString($websiteCode)
     {
