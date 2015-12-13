@@ -46,7 +46,7 @@ class TwentyOneRunGenericTaxRateService extends TwentyOneRunTaxRate
     /**
      * @return float
      */
-    protected function getFactor()
+    final protected function getFactor()
     {
         return 1 + $this->rate / 100;
     }
