@@ -10,7 +10,7 @@ use LizardsAndPumpkins\Product\ProductImage;
 use LizardsAndPumpkins\Product\ProductImageList;
 use LizardsAndPumpkins\Product\Tax\ProductTaxClass;
 
-class IntegrationTestProductView implements ProductView
+class IntegrationTestProductView extends AbstractProductView
 {
     /**
      * @var Product
