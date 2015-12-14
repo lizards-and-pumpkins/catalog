@@ -40,7 +40,7 @@ class TwentyOneRunTaxServiceLocator implements TaxServiceLocator
     {
         foreach (self::$rateTable as $rule) {
             if ($this->isMatchingRule($rule, $options)) {
-                return TwentyOneRunTaxRate::create($rule[self::$rateIdx]);
+                return TwentyOneRunTaxRate::fromInt($rule[self::$rateIdx]);
             }
         }
         throw $this->createUnableToLocateServiceException($options);
