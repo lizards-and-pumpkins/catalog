@@ -179,15 +179,15 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->createProductListingCriteriaSnippetKeyGenerator(),
             $this->getMasterFactory()->getProductListingFilterNavigationConfig(),
-            $this->createProductListingPageContentBuilder(),
-            $this->createProductListingPageRequest()
+            $this->getMasterFactory()->createProductListingPageContentBuilder(),
+            $this->getMasterFactory()->createProductListingPageRequest()
         );
     }
 
     /**
      * @return ProductListingPageContentBuilder
      */
-    private function createProductListingPageContentBuilder()
+    public function createProductListingPageContentBuilder()
     {
         return new ProductListingPageContentBuilder(
             $this->getMasterFactory()->createDataPoolReader(),
@@ -200,7 +200,7 @@ class FrontendFactory implements Factory
     /**
      * @return ProductListingPageRequest
      */
-    private function createProductListingPageRequest()
+    public function createProductListingPageRequest()
     {
         return new ProductListingPageRequest(
             $this->getMasterFactory()->getProductsPerPageConfig(),
@@ -399,8 +399,8 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->getProductSearchResultsFilterNavigationConfig(),
             $this->getMasterFactory()->createSearchCriteriaBuilder(),
             $this->getMasterFactory()->getSearchableAttributeCodes(),
-            $this->createProductListingPageContentBuilder(),
-            $this->createProductListingPageRequest()
+            $this->getMasterFactory()->createProductListingPageContentBuilder(),
+            $this->getMasterFactory()->createProductListingPageRequest()
         );
     }
 

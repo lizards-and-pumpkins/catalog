@@ -23,10 +23,19 @@ class SearchCriteriaBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private $builder;
 
+    /**
+     * @var SearchCriteria
+     */
+    private $stubGlobalProductListingCriteria;
+
     protected function setUp()
     {
         $this->stubFacetFieldTransformationRegistry = $this->getMock(FacetFieldTransformationRegistry::class);
-        $this->builder = new SearchCriteriaBuilder($this->stubFacetFieldTransformationRegistry);
+        $this->stubGlobalProductListingCriteria = $this->getMock(SearchCriteria::class);
+        $this->builder = new SearchCriteriaBuilder(
+            $this->stubFacetFieldTransformationRegistry,
+            $this->stubGlobalProductListingCriteria
+        );
     }
 
     public function testSearchCriterionEqualIsReturned()
@@ -80,7 +89,7 @@ class SearchCriteriaBuilderTest extends \PHPUnit_Framework_TestCase
                 SearchCriterionLike::create('foo', $queryString),
                 SearchCriterionLike::create('bar', $queryString)
             ),
-            SearchCriterionGreaterThan::create('stock_qty', 0)
+            $this->stubGlobalProductListingCriteria
         );
 
         $this->assertEquals($expectedCriteria, $result);

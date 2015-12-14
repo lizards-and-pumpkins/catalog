@@ -66,6 +66,7 @@ use LizardsAndPumpkins\Website\HostToWebsiteMap;
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
  * @uses   \LizardsAndPumpkins\Content\ContentBlockSnippetRenderer
  * @uses   \LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEvent
  * @uses   \LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEventHandler

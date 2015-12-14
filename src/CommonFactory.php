@@ -21,7 +21,9 @@ use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 use LizardsAndPumpkins\Exception\UndefinedFactoryMethodException;
@@ -1273,8 +1275,17 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createSearchCriteriaBuilder()
     {
         return new SearchCriteriaBuilder(
-            $this->getMasterFactory()->getFacetFieldTransformationRegistry()
+            $this->getMasterFactory()->getFacetFieldTransformationRegistry(),
+            $this->getMasterFactory()->createGlobalProductListingCriteria()
         );
+    }
+
+    /**
+     * @return SearchCriteria
+     */
+    public function createGlobalProductListingCriteria()
+    {
+        return SearchCriterionGreaterThan::create('stock_qty', 0);
     }
 
     /**
