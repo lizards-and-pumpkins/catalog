@@ -3,24 +3,26 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\Country\Country;
+use LizardsAndPumpkins\Website\Website;
 use LizardsAndPumpkins\Website\WebsiteToCountryMap;
 
 class IntegrationTestWebsiteToCountryMap implements WebsiteToCountryMap
 {
     /**
-     * @param string $websiteCode
-     * @return string
+     * @param Website $website
+     * @return Country
      */
-    public function getCountry($websiteCode)
+    public function getCountry(Website $website)
     {
-        return 'DE';
+        return Country::from2CharIso3166('DE');
     }
 
     /**
-     * @return string
+     * @return Country
      */
     public function getDefaultCountry()
     {
-        return 'DE';
+        return Country::from2CharIso3166('DE');
     }
 }

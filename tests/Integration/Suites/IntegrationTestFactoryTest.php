@@ -1,8 +1,7 @@
 <?php
 
-namespace LizardsAndPumpkins\Tests\Integration;
+namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\CommonFactory;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
@@ -13,14 +12,11 @@ use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 use LizardsAndPumpkins\Image\ImageProcessor;
 use LizardsAndPumpkins\Image\ImageProcessorCollection;
 use LizardsAndPumpkins\Image\ImageProcessingStrategySequence;
-use LizardsAndPumpkins\IntegrationTestFactory;
 use LizardsAndPumpkins\Log\InMemoryLogger;
 use LizardsAndPumpkins\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
-use LizardsAndPumpkins\LocalFilesystemStorageReader;
-use LizardsAndPumpkins\LocalFilesystemStorageWriter;
+use LizardsAndPumpkins\Product\Tax\TaxServiceLocator;
 use LizardsAndPumpkins\Projection\Catalog\ProductViewLocator;
 use LizardsAndPumpkins\Queue\Queue;
-use LizardsAndPumpkins\SampleMasterFactory;
 use LizardsAndPumpkins\Queue\InMemory\InMemoryQueue;
 
 class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
@@ -222,6 +218,11 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
             $this->factory->getProductSearchAutosuggestionSortOrderConfig(),
             $this->factory->getProductSearchAutosuggestionSortOrderConfig()
         );
+    }
+
+    public function testItReturnsAnIntegrationTestTaxServiceLocator()
+    {
+        $this->assertInstanceOf(TaxServiceLocator::class, $this->factory->createTaxServiceLocator());
     }
 
     public function testProductViewLocatorIsReturned()

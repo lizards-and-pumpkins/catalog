@@ -14,6 +14,7 @@ use LizardsAndPumpkins\Image\ImageProcessor;
 use LizardsAndPumpkins\Image\ImageProcessorCollection;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Projection\Catalog\ProductViewLocator;
+use LizardsAndPumpkins\Product\Tax\TaxServiceLocator;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\Website\HostToWebsiteMap;
 use LizardsAndPumpkins\Website\WebsiteToCountryMap;
@@ -302,5 +303,13 @@ class UnitTestFactory implements Factory
     public function createProductViewLocator()
     {
         return $this->mockObjectGenerator->getMock(ProductViewLocator::class);
+    }
+
+    /**
+     * @return TaxServiceLocator
+     */
+    public function createTaxServiceLocator()
+    {
+        return $this->mockObjectGenerator->getMock(TaxServiceLocator::class);
     }
 }

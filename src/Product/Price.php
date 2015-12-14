@@ -60,4 +60,12 @@ class Price
 
         return intval($priceFloat * $base);
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->amount;
+    }
 }

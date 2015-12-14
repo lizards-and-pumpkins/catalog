@@ -54,6 +54,12 @@ class ProductTaxClassTest extends \PHPUnit_Framework_TestCase
         ProductTaxClass::fromString($nonString);
     }
 
+    public function testItReturnsTheGivenTaxClassInstanceIfATaxClassInstanceIsGiven()
+    {
+        $testClass = ProductTaxClass::fromString('test');
+        $this->assertSame($testClass, ProductTaxClass::fromString($testClass));
+    }
+
     /**
      * @return array[]
      */

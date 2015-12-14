@@ -651,6 +651,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
 
         return new PriceSnippetRenderer(
             $this->getMasterFactory()->createTaxableCountries(),
+            $this->getMasterFactory()->createTaxServiceLocator(),
             $this->getMasterFactory()->createPriceSnippetKeyGenerator(),
             $this->createContextBuilder(),
             $productRegularPriceAttributeCode
@@ -666,6 +667,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
 
         return new PriceSnippetRenderer(
             $this->getMasterFactory()->createTaxableCountries(),
+            $this->getMasterFactory()->createTaxServiceLocator(),
             $this->getMasterFactory()->createSpecialPriceSnippetKeyGenerator(),
             $this->createContextBuilder(),
             $productSpecialPriceAttributeCode

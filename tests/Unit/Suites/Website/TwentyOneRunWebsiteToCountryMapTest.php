@@ -2,10 +2,12 @@
 
 namespace LizardsAndPumpkins\Website;
 
-use LizardsAndPumpkins\Website\Exception\InvalidWebsiteCodeException;
+use LizardsAndPumpkins\Country\Country;
 
 /**
  * @covers \LizardsAndPumpkins\Website\TwentyOneRunWebsiteToCountryMap
+ * @uses   \LizardsAndPumpkins\Website\Website
+ * @uses   \LizardsAndPumpkins\Country\Country
  */
 class TwentyOneRunWebsiteToCountryMapTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,67 +16,40 @@ class TwentyOneRunWebsiteToCountryMapTest extends \PHPUnit_Framework_TestCase
      */
     private $websiteToCountryMap;
 
+    private function assertCountryEqual(Country $expected, Country $actual)
+    {
+        $message = sprintf('Expected country "%s", got "%s"', $expected, $actual);
+        $this->assertTrue($actual->isEqualTo($expected), $message);
+    }
+    
     protected function setUp()
     {
         $this->websiteToCountryMap = new TwentyOneRunWebsiteToCountryMap();
     }
 
-    /**
-     * @param mixed $invalidWebsiteCode
-     * @param string $expectedType
-     * @dataProvider invalidWebsiteCodeProvider
-     */
-    public function testItThrowsAnExceptionIfTheWebsiteCodeIsNotAString($invalidWebsiteCode, $expectedType)
-    {
-        $this->setExpectedException(
-            InvalidWebsiteCodeException::class,
-            'The website code must be a string, got "' . $expectedType . '"'
-        );
-        $this->websiteToCountryMap->getCountry($invalidWebsiteCode);
-    }
-
-    /**
-     * @return array[]
-     */
-    public function invalidWebsiteCodeProvider()
-    {
-        return [
-            [123, 'integer'],
-            [[], 'array'],
-            [$this, get_class($this)]
-        ];
-    }
-
-    public function testItThrowsAnExceptionIfTheWebsiteCodeIsEmpty()
-    {
-        $this->setExpectedException(
-            InvalidWebsiteCodeException::class,
-            'The website code can not be an empty string'
-        );
-        $this->websiteToCountryMap->getCountry(' ');
-    }
-
     public function testItReturnsTheDefaultCountry()
     {
-        $this->assertSame('DE', $this->websiteToCountryMap->getDefaultCountry());
+        $defaultCountry = $this->websiteToCountryMap->getDefaultCountry();
+        $this->assertCountryEqual(Country::from2CharIso3166('DE'), $defaultCountry);
     }
 
     public function testItReturnsGermanyAsTheDefault()
     {
-        $this->assertSame(
+        
+        $this->assertCountryEqual(
             $this->websiteToCountryMap->getDefaultCountry(),
-            $this->websiteToCountryMap->getCountry('undefined website')
+            $this->websiteToCountryMap->getCountry(Website::fromString('unknown website'))
         );
     }
 
     /**
      * @dataProvider websiteToCountryDataProvider
-     * @param string $websiteCode
-     * @param string $expectedCountry
+     * @param Website $website
+     * @param Country $expectedCountry
      */
-    public function testItReturnsTheCountryForAGivenWebsiteCode($websiteCode, $expectedCountry)
+    public function testItReturnsTheCountryForAGivenWebsite(Website $website, Country $expectedCountry)
     {
-        $this->assertSame($expectedCountry, $this->websiteToCountryMap->getCountry($websiteCode));
+        $this->assertCountryEqual($expectedCountry, $this->websiteToCountryMap->getCountry($website));
     }
 
     /**
@@ -83,9 +58,9 @@ class TwentyOneRunWebsiteToCountryMapTest extends \PHPUnit_Framework_TestCase
     public function websiteToCountryDataProvider()
     {
         return [
-            ['ru', 'DE'],
-            ['fr', 'FR'],
-            ['cy', 'DE'],
+            [Website::fromString('ru'), Country::from2CharIso3166('DE')],
+            [Website::fromString('fr'), Country::from2CharIso3166('FR')],
+            [Website::fromString('cy'), Country::from2CharIso3166('DE')],
         ];
     }
 }

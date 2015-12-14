@@ -5,6 +5,9 @@ namespace LizardsAndPumpkins\Product;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextCountry;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite;
+use LizardsAndPumpkins\Product\Tax\TaxServiceLocator;
+use LizardsAndPumpkins\Product\Tax\TwentyOneRunTaxServiceLocatorOptions;
 use LizardsAndPumpkins\Projection\Catalog\ProductView;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetRenderer;
@@ -38,18 +41,26 @@ class PriceSnippetRenderer implements SnippetRenderer
     private $contextBuilder;
 
     /**
+     * @var TaxServiceLocator
+     */
+    private $taxServiceLocator;
+
+    /**
      * @param TaxableCountries $taxableCountries
+     * @param TaxServiceLocator $taxServiceLocator
      * @param SnippetKeyGenerator $snippetKeyGenerator
      * @param ContextBuilder $contextBuilder
      * @param string $priceAttributeCode
      */
     public function __construct(
         TaxableCountries $taxableCountries,
+        TaxServiceLocator $taxServiceLocator,
         SnippetKeyGenerator $snippetKeyGenerator,
         ContextBuilder $contextBuilder,
         $priceAttributeCode
     ) {
         $this->taxableCountries = $taxableCountries;
+        $this->taxServiceLocator = $taxServiceLocator;
         $this->snippetKeyGenerator = $snippetKeyGenerator;
         $this->contextBuilder = $contextBuilder;
         $this->priceAttributeCode = $priceAttributeCode;
@@ -82,8 +93,8 @@ class PriceSnippetRenderer implements SnippetRenderer
      */
     private function createPriceSnippetForEachCountry(Product $product)
     {
-        return array_map(function ($country) use ($product) {
-            return $this->createPriceSnipperForCountry($product, $country);
+        return @array_map(function ($country) use ($product) {
+            return $this->createPriceSnippetForCountry($product, $country);
         }, $this->taxableCountries->getCountries());
     }
 
@@ -92,12 +103,10 @@ class PriceSnippetRenderer implements SnippetRenderer
      * @param string $country
      * @return Snippet
      */
-    private function createPriceSnipperForCountry(Product $product, $country)
+    private function createPriceSnippetForCountry(Product $product, $country)
     {
         $key = $this->getSnippetKeyForCountry($product, $country);
-        $amount = $product->getFirstValueOfAttribute($this->priceAttributeCode);
-        $price = new Price($amount);
-        // todo: apply tax here
+        $price = $this->getPriceIncludingTax($product, $country);
         return Snippet::create($key, $price->getAmount());
     }
 
@@ -120,5 +129,23 @@ class PriceSnippetRenderer implements SnippetRenderer
     private function getProductContextWithCountry(Product $product, $country)
     {
         return $this->contextBuilder->expandContext($product->getContext(), [ContextCountry::CODE => $country]);
+    }
+
+    /**
+     * @param Product $product
+     * @param string $country
+     * @return Price
+     */
+    private function getPriceIncludingTax(Product $product, $country)
+    {
+        $amount = $product->getFirstValueOfAttribute($this->priceAttributeCode);
+        $price = new Price($amount);
+        // todo: change tax rate instantiation so it does not refer to concrete classes in generic code
+        $taxServiceLocatorOptions = TwentyOneRunTaxServiceLocatorOptions::fromStrings(
+            $product->getContext()->getValue(ContextWebsite::CODE),
+            $product->getTaxClass(),
+            $country
+        );
+        return $this->taxServiceLocator->get($taxServiceLocatorOptions)->applyTo($price);
     }
 }

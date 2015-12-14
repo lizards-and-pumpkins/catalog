@@ -23,6 +23,7 @@ use LizardsAndPumpkins\Log\Writer\FileLogMessageWriter;
 use LizardsAndPumpkins\Log\Writer\LogMessageWriter;
 use LizardsAndPumpkins\Log\WritingLoggerDecorator;
 use LizardsAndPumpkins\Product\AttributeCode;
+use LizardsAndPumpkins\Product\Tax\TwentyOneRunTaxServiceLocator;
 use LizardsAndPumpkins\Projection\Catalog\TwentyOneRunProductViewLocator;
 use LizardsAndPumpkins\Queue\File\FileQueue;
 use LizardsAndPumpkins\Queue\Queue;
@@ -453,6 +454,14 @@ class SampleFactory implements Factory
     public function createTaxableCountries()
     {
         return new TwentyOneRunTaxableCountries();
+    }
+
+    /**
+     * @return TwentyOneRunTaxServiceLocator
+     */
+    public function createTaxServiceLocator()
+    {
+        return new TwentyOneRunTaxServiceLocator();
     }
 
     /**

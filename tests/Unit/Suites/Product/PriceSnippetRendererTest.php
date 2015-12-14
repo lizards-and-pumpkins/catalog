@@ -4,6 +4,10 @@ namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextCountry;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite;
+use LizardsAndPumpkins\Product\Tax\TaxService;
+use LizardsAndPumpkins\Product\Tax\TaxServiceLocator;
 use LizardsAndPumpkins\Projection\Catalog\ProductView;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetRenderer;
@@ -13,8 +17,12 @@ use LizardsAndPumpkins\TaxableCountries;
 /**
  * @covers \LizardsAndPumpkins\Product\PriceSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\Price
+ * @uses   \LizardsAndPumpkins\Product\Tax\ProductTaxClass
+ * @uses   \LizardsAndPumpkins\Product\Tax\TwentyOneRunTaxServiceLocatorOptions
  * @uses   \LizardsAndPumpkins\Snippet
  * @uses   \LizardsAndPumpkins\SnippetList
+ * @uses   \LizardsAndPumpkins\Website\Website
+ * @uses   \LizardsAndPumpkins\Country\Country
  */
 class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
@@ -41,6 +49,11 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
     private $stubContextBuilder;
 
     /**
+     * @var TaxServiceLocator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubTaxServiceLocator;
+
+    /**
      * @var string
      */
     private $testPriceAttributeCode = 'foo';
@@ -61,6 +74,11 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $stubTaxService = $this->getMock(TaxService::class);
+        $stubTaxService->method('applyTo')->willReturnArgument(0);
+        $this->stubTaxServiceLocator = $this->getMock(TaxServiceLocator::class);
+        $this->stubTaxServiceLocator->method('get')->willReturn($stubTaxService);
+
         $this->stubTaxableCountries = $this->getMock(TaxableCountries::class);
         $this->stubTaxableCountries->method('getIterator')->willReturn(new \ArrayIterator($this->testCountries));
         $this->stubTaxableCountries->method('getCountries')->willReturn($this->testCountries);
@@ -72,6 +90,7 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
         $this->renderer = new PriceSnippetRenderer(
             $this->stubTaxableCountries,
+            $this->stubTaxServiceLocator,
             $this->stubSnippetKeyGenerator,
             $this->stubContextBuilder,
             $this->testPriceAttributeCode
@@ -108,6 +127,8 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $stubProduct->method('getFirstValueOfAttribute')
             ->with($this->testPriceAttributeCode)
             ->willReturn($dummyPriceAttributeValue);
+        $stubProduct->method('getTaxClass')->willReturn('test class');
+        $this->stubContextWebsiteAndCountry($stubProduct);
 
         /** @var ProductView|\PHPUnit_Framework_MockObject_MockObject $stubProductView */
         $stubProductView = $this->getMock(ProductView::class);
@@ -117,5 +138,18 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
         $snippetList = $this->renderer->render($stubProductView);
         $this->assertCount(2, $snippetList);
+    }
+
+    /**
+     * @param Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct
+     */
+    private function stubContextWebsiteAndCountry($stubProduct)
+    {
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
+        $stubContext = $stubProduct->getContext();
+        $stubContext->method('getValue')->willReturnMap([
+            [ContextWebsite::CODE, 'test website'],
+            [ContextCountry::CODE, 'XX'],
+        ]);
     }
 }

@@ -24,6 +24,7 @@ use LizardsAndPumpkins\Projection\Catalog\IntegrationTestProductViewLocator;
 use LizardsAndPumpkins\Projection\Catalog\ProductViewLocator;
 use LizardsAndPumpkins\Queue\InMemory\InMemoryQueue;
 use LizardsAndPumpkins\Queue\Queue;
+use LizardsAndPumpkins\Tax\IntegrationTestTaxServiceLocator;
 use LizardsAndPumpkins\Website\HostToWebsiteMap;
 use LizardsAndPumpkins\Website\WebsiteToCountryMap;
 
@@ -410,6 +411,14 @@ class IntegrationTestFactory implements Factory
     public function createTaxableCountries()
     {
         return new IntegrationTestTaxableCountries();
+    }
+
+    /**
+     * @return IntegrationTestTaxServiceLocator
+     */
+    public function createTaxServiceLocator()
+    {
+        return new IntegrationTestTaxServiceLocator();
     }
 
     /**
