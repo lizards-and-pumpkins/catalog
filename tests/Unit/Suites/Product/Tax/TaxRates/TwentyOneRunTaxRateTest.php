@@ -7,8 +7,8 @@ use LizardsAndPumpkins\Product\Tax\TaxRates\Exception\InvalidTaxRateException;
 use LizardsAndPumpkins\Product\Tax\TaxService;
 
 /**
- * @covers \LizardsAndPumpkins\Product\Tax\TaxRates\TwentyOneRunGenericTaxRateService
- * @uses   \LizardsAndPumpkins\Product\Tax\TaxRates\TwentyOneRunTaxRate
+ * @covers \LizardsAndPumpkins\Product\Tax\TaxRates\TwentyOneRunTaxRate
+ * @uses \LizardsAndPumpkins\Product\Price
  */
 class TwentyOneRunTaxRateTest extends \PHPUnit_Framework_TestCase
 {

@@ -9,10 +9,10 @@ use LizardsAndPumpkins\Product\Tax\TaxServiceLocatorOptions;
 class IntegrationTestTaxServiceLocator implements TaxServiceLocator
 {
     /**
-     * @param TaxServiceLocatorOptions $options
+     * @param mixed[] $options
      * @return TaxService
      */
-    public function get(TaxServiceLocatorOptions $options)
+    public function get(array $options)
     {
         return new IntegrationTestTaxService();
     }

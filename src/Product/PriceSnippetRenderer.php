@@ -112,20 +112,10 @@ class PriceSnippetRenderer implements SnippetRenderer
      */
     private function createPriceSnippetForCountry(Product $product, $country)
     {
-        $key = $this->getSnippetKeyForCountry($product, $country);
-        $price = $this->getPriceIncludingTax($product, $country);
-        return Snippet::create($key, $price->getAmount());
-    }
-
-    /**
-     * @param Product $product
-     * @param string $country
-     * @return string
-     */
-    private function getSnippetKeyForCountry(Product $product, $country)
-    {
         $context = $this->getProductContextWithCountry($product, $country);
-        return $this->snippetKeyGenerator->getKeyForContext($context, [Product::ID => $product->getId()]);
+        $key = $this->getSnippetKeyForCountry($product, $context);
+        $price = $this->getPriceIncludingTax($product, $context);
+        return Snippet::create($key, $price->getAmount());
     }
 
     /**
@@ -141,18 +131,27 @@ class PriceSnippetRenderer implements SnippetRenderer
     /**
      * @param Product $product
      * @param string $country
+     * @return string
+     */
+    private function getSnippetKeyForCountry(Product $product, $context)
+    {
+        return $this->snippetKeyGenerator->getKeyForContext($context, [Product::ID => $product->getId()]);
+    }
+
+    /**
+     * @param Product $product
+     * @param Context $context
      * @return Price
      */
-    private function getPriceIncludingTax(Product $product, $country)
+    private function getPriceIncludingTax(Product $product, Context $context)
     {
         $amount = $product->getFirstValueOfAttribute($this->priceAttributeCode);
-        $price = new Price($amount);
-        // todo: change tax rate instantiation so it does not refer to concrete classes in generic code
-        $taxServiceLocatorOptions = TwentyOneRunTaxServiceLocatorOptions::fromStrings(
-            $product->getContext()->getValue(ContextWebsite::CODE),
-            $product->getTaxClass(),
-            $country
-        );
-        return $this->taxServiceLocator->get($taxServiceLocatorOptions)->applyTo($price);
+        $taxServiceLocatorOptions = [
+            TaxServiceLocator::OPTION_WEBSITE => $context->getValue(ContextWebsite::CODE),
+            TaxServiceLocator::OPTION_PRODUCT_TAX_CLASS => $product->getTaxClass(),
+            TaxServiceLocator::OPTION_COUNTRY => $context->getValue(ContextCountry::CODE),
+        ];
+        
+        return $this->taxServiceLocator->get($taxServiceLocatorOptions)->applyTo(new Price($amount));
     }
 }

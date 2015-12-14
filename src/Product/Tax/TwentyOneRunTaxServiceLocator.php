@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Product\Tax;
 
+use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Country\Country;
 use LizardsAndPumpkins\Product\Tax\Exception\UnableToLocateTaxServiceException;
 use LizardsAndPumpkins\Product\Tax\TaxRates\TwentyOneRunTaxRate;
@@ -33,70 +34,104 @@ class TwentyOneRunTaxServiceLocator implements TaxServiceLocator
     private static $rateIdx = 3;
 
     /**
-     * @param TaxServiceLocatorOptions $options
+     * @var Website
+     */
+    private $website;
+
+    /**
+     * @var Country
+     */
+    private $country;
+
+    /**
+     * @var ProductTaxClass
+     */
+    private $taxClass;
+
+    /**
+     * @param mixed[] $options
      * @return TaxService
      */
-    public function get(TaxServiceLocatorOptions $options)
+    public function get(array $options)
+    {
+        $this->website = $this->getWebsiteFromOptions($options);
+        $this->taxClass = $this->getProductTaxClassFromOptions($options);
+        $this->country = $this->getCountryFromOptions($options);
+        
+        return $this->findRule();
+    }
+
+    /**
+     * @return TwentyOneRunTaxRate
+     */
+    private function findRule()
     {
         foreach (self::$rateTable as $rule) {
-            if ($this->isMatchingRule($rule, $options)) {
+            if ($this->isMatchingRule($rule)) {
                 return TwentyOneRunTaxRate::fromInt($rule[self::$rateIdx]);
             }
         }
-        throw $this->createUnableToLocateServiceException($options);
+        throw $this->createUnableToLocateServiceException();
     }
 
     /**
      * @param mixed[] $rule
-     * @param TaxServiceLocatorOptions $options
      * @return bool
      */
-    private function isMatchingRule(array $rule, TaxServiceLocatorOptions $options)
+    private function isMatchingRule(array $rule)
     {
         return
-            in_array($this->getWebsite($options), $rule[self::$websiteIdx]) &&
-            in_array($this->getProductTaxClass($options), $rule[self::$taxClassIdx]) &&
-            $this->getCountry($options) === $rule[self::$countryIdx];
+            in_array((string) $this->website, $rule[self::$websiteIdx]) &&
+            in_array((string) $this->taxClass, $rule[self::$taxClassIdx]) &&
+            (string) $this->country === $rule[self::$countryIdx];
     }
-    
+
     /**
-     * @param TwentyOneRunTaxServiceLocatorOptions $options
+     * @param mixed[] $options
+     * @return Context
+     */
+    private function getContextFromOptions(array $options)
+    {
+        return $options[self::OPTION_CONTEXT];
+    }
+
+    /**
+     * @param mixed[] $options
      * @return Country
      */
-    private function getCountry(TwentyOneRunTaxServiceLocatorOptions $options)
+    private function getCountryFromOptions(array $options)
     {
-        return (string) $options->getCountry();
+        return Country::from2CharIso3166($options[self::OPTION_COUNTRY]);
     }
 
     /**
-     * @param TwentyOneRunTaxServiceLocatorOptions $options
+     * @param mixed[] $options
      * @return ProductTaxClass
      */
-    private function getProductTaxClass(TwentyOneRunTaxServiceLocatorOptions $options)
+    private function getProductTaxClassFromOptions(array $options)
     {
-        return (string) $options->getProductTaxClass();
+        return ProductTaxClass::fromString($options[self::OPTION_PRODUCT_TAX_CLASS]);
     }
 
     /**
-     * @param TwentyOneRunTaxServiceLocatorOptions $options
+     * @param mixed[] $options
      * @return Website
      */
-    private function getWebsite(TwentyOneRunTaxServiceLocatorOptions $options)
+    private function getWebsiteFromOptions(array $options)
     {
-        return (string) $options->getWebsite();
+        return Website::fromString($options[self::OPTION_WEBSITE]);
     }
 
     /**
-     * @param TaxServiceLocatorOptions $options
      * @return UnableToLocateTaxServiceException
      */
-    private function createUnableToLocateServiceException(TaxServiceLocatorOptions $options)
+    private function createUnableToLocateServiceException()
     {
         $message = sprintf(
             'Unable to locate a tax service for website "%s", product tax class "%s" and country "%s"',
-            $this->getWebsite($options),
-            $this->getProductTaxClass($options),
-            $this->getCountry($options)
+            $this->website,
+            $this->taxClass,
+            $this->country
         );
         return new UnableToLocateTaxServiceException($message);
     }
