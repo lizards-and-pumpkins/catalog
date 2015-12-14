@@ -858,44 +858,6 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertOrder($expectedOrder, $searchEngineResponse->getProductIds());
     }
 
-    public function testSearchResultsAreSortedByStringValuesCaseInsensitively()
-    {
-        $productAId = ProductId::fromString('A');
-        $productBId = ProductId::fromString('B');
-        $productCId = ProductId::fromString('C');
-
-        $fieldCode = 'foo';
-        $fieldValue = 0;
-
-        $documentA = $this->createSearchDocument([$fieldCode => 1], $productAId);
-        $documentB = $this->createSearchDocument([$fieldCode => 3], $productBId);
-        $documentC = $this->createSearchDocument([$fieldCode => 2], $productCId);
-        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($documentA, $documentB, $documentC);
-
-        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
-
-        $criteria = SearchCriterionGreaterOrEqualThan::create($fieldCode, $fieldValue);
-        $selectedFilters = [];
-        $facetFilterRequest = new FacetFilterRequest;
-        $rowsPerPage = 100;
-        $pageNumber = 0;
-        $sortOrderConfig = $this->createStubSortOrderConfig($fieldCode, SortOrderDirection::ASC);
-
-        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
-            $criteria,
-            $selectedFilters,
-            $this->testContext,
-            $facetFilterRequest,
-            $rowsPerPage,
-            $pageNumber,
-            $sortOrderConfig
-        );
-
-        $expectedOrder = [$productAId, $productCId, $productBId];
-
-        $this->assertOrder($expectedOrder, $searchEngineResponse->getProductIds());
-    }
-
     /**
      * @param FacetFieldTransformationRegistry $facetFieldTransformationRegistry
      * @return SearchEngine
