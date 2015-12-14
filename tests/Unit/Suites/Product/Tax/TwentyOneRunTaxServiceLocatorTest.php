@@ -7,7 +7,6 @@ use LizardsAndPumpkins\Product\Tax\TaxRates\TwentyOneRunTaxRate;
 
 /**
  * @covers \LizardsAndPumpkins\Product\Tax\TwentyOneRunTaxServiceLocator
- * @uses   \LizardsAndPumpkins\Product\Tax\TwentyOneRunTaxServiceLocatorOptions
  * @uses   \LizardsAndPumpkins\Product\Tax\ProductTaxClass
  * @uses   \LizardsAndPumpkins\Country\Country
  * @uses   \LizardsAndPumpkins\Website\Website

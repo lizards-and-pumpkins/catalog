@@ -18,7 +18,6 @@ use LizardsAndPumpkins\TaxableCountries;
  * @covers \LizardsAndPumpkins\Product\PriceSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\Price
  * @uses   \LizardsAndPumpkins\Product\Tax\ProductTaxClass
- * @uses   \LizardsAndPumpkins\Product\Tax\TwentyOneRunTaxServiceLocatorOptions
  * @uses   \LizardsAndPumpkins\Snippet
  * @uses   \LizardsAndPumpkins\SnippetList
  * @uses   \LizardsAndPumpkins\Website\Website
