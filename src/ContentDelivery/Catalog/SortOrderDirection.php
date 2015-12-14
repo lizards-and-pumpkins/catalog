@@ -40,7 +40,7 @@ class SortOrderDirection
     /**
      * @return string
      */
-    public function getDirection()
+    public function __toString()
     {
         return $this->direction;
     }

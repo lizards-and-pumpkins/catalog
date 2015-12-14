@@ -166,7 +166,7 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($result->isSelected());
         $this->assertSame($sortOrderAttributeName, (string) $result->getAttributeCode());
-        $this->assertSame($sortOrderDirection, $result->getSelectedDirection()->getDirection());
+        $this->assertSame($sortOrderDirection, (string) $result->getSelectedDirection());
     }
 
     public function testSelectedSortOrderConfigForAttributeAndDirectionSpecifiedInCookieIsReturned()
@@ -188,7 +188,7 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($result->isSelected());
         $this->assertSame($sortOrderAttributeName, (string) $result->getAttributeCode());
-        $this->assertSame($sortOrderDirection, $result->getSelectedDirection()->getDirection());
+        $this->assertSame($sortOrderDirection, (string) $result->getSelectedDirection());
     }
 
     public function testProductsPerPageCookieIsSetIfCorrespondingQueryParameterIsPresent()

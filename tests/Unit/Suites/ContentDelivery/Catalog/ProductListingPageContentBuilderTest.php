@@ -344,6 +344,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
         $stubAttributeCodeA->method('__toString')->willReturn('B');
 
         $stubSortOrderDirection = $this->getMock(SortOrderDirection::class, [], [], '', false);
+        $stubSortOrderDirection->method('__toString')->willReturn(SortOrderDirection::ASC);
 
         $this->stubSelectedSortOrderConfig->method('getAttributeCode')->willReturn($stubAttributeCodeA);
 
@@ -363,7 +364,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
         );
 
         $snippetCode = 'sort_order_config';
-        $expectedSnippetValue = '[{"code":"","selectedDirection":null,"selected":false}]';
+        $expectedSnippetValue = '[{"code":"","selectedDirection":"asc","selected":false}]';
 
         $this->assertDynamicSnippetWasAddedToPageBuilder($snippetCode, $expectedSnippetValue);
     }

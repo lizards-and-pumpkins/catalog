@@ -84,7 +84,7 @@ class SortOrderConfig implements \JsonSerializable
     {
         return [
             'code' => (string) $this->attributeCode,
-            'selectedDirection' => $this->selectedDirection->getDirection(),
+            'selectedDirection' => (string) $this->selectedDirection,
             'selected' => $this->isSelected
         ];
     }
