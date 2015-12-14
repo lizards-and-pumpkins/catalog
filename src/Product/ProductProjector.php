@@ -4,9 +4,9 @@ namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilder;
+use LizardsAndPumpkins\Projection\Catalog\ProductViewLocator;
 use LizardsAndPumpkins\Projection\UrlKeyForContextCollector;
 use LizardsAndPumpkins\Projector;
-use LizardsAndPumpkins\Exception\InvalidProjectionSourceDataTypeException;
 use LizardsAndPumpkins\SnippetRendererCollection;
 
 class ProductProjector implements Projector
@@ -31,12 +31,19 @@ class ProductProjector implements Projector
      */
     private $urlKeyCollector;
 
+    /**
+     * @var ProductViewLocator
+     */
+    private $productViewLocator;
+
     public function __construct(
+        ProductViewLocator $productViewLocator,
         SnippetRendererCollection $rendererCollection,
         SearchDocumentBuilder $searchDocumentBuilder,
         UrlKeyForContextCollector $urlKeyCollector,
         DataPoolWriter $dataPoolWriter
     ) {
+        $this->productViewLocator = $productViewLocator;
         $this->rendererCollection = $rendererCollection;
         $this->searchDocumentBuilder = $searchDocumentBuilder;
         $this->urlKeyCollector = $urlKeyCollector;
@@ -48,11 +55,8 @@ class ProductProjector implements Projector
      */
     public function project($projectionSourceData)
     {
-        if (!($projectionSourceData instanceof Product)) {
-            throw new InvalidProjectionSourceDataTypeException('First argument must be a Product instance.');
-        }
-
-        $this->projectProduct($projectionSourceData);
+        $productView = $this->productViewLocator->createForProduct($projectionSourceData);
+        $this->projectProduct($productView);
     }
 
     private function projectProduct(Product $product)

@@ -151,4 +151,12 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($testFileName, $this->productBlock->getProductImageFileNameByNumber(0));
     }
+
+    public function testProductStockQuantityIsReturned()
+    {
+        $testStockQuantity = 3;
+        $this->stubProduct->method('getFirstValueOfAttribute')->with('stock_qty')->willReturn($testStockQuantity);
+
+        $this->assertSame($testStockQuantity, $this->productBlock->getProductStockQuantity());
+    }
 }

@@ -6,6 +6,7 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchRequestHandler;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
+use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer;
 
@@ -93,6 +94,9 @@ class ProductSearchTest extends AbstractIntegrationTest
         $this->assertContains($expectedRootSnippetCode, $metaInfoSnippet['page_snippet_codes']);
     }
 
+    /**
+     * @return HttpResponse
+     */
     public function testProductListingPageHtmlIsReturned()
     {
         $this->importCatalog();
@@ -112,11 +116,12 @@ class ProductSearchTest extends AbstractIntegrationTest
         $page = $productSearchResultRequestHandler->process($request);
         $body = $page->getBody();
 
-        /* TODO: read from XML */
         $expectedProductName = 'Adilette';
         $unExpectedProductName = 'LED Armflasher';
 
         $this->assertContains($expectedProductName, $body);
         $this->assertNotContains($unExpectedProductName, $body);
+
+        return $page;
     }
 }

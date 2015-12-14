@@ -36,7 +36,6 @@ use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\PriceSnippetRenderer;
 use LizardsAndPumpkins\Product\Product;
-use LizardsAndPumpkins\Product\ProductBackOrderAvailabilitySnippetRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewBlockRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionBlockRenderer;
@@ -67,19 +66,10 @@ use LizardsAndPumpkins\Projection\Catalog\Import\SimpleProductXmlToProductBuilde
 use LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToProductBuilder;
 use LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilder;
 use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
-use LizardsAndPumpkins\Product\ProductStockQuantityProjector;
-use LizardsAndPumpkins\Product\ProductStockQuantitySnippetRenderer;
-use LizardsAndPumpkins\Product\ProductStockQuantitySourceBuilder;
-use LizardsAndPumpkins\Product\UpdateMultipleProductStockQuantityCommand;
-use LizardsAndPumpkins\Product\UpdateMultipleProductStockQuantityCommandHandler;
 use LizardsAndPumpkins\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Product\UpdateProductCommandHandler;
 use LizardsAndPumpkins\Product\AddProductListingCommand;
 use LizardsAndPumpkins\Product\AddProductListingCommandHandler;
-use LizardsAndPumpkins\Product\UpdateProductStockQuantityCommand;
-use LizardsAndPumpkins\Product\UpdateProductStockQuantityCommandHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
 use LizardsAndPumpkins\Projection\Catalog\InternalToPublicProductJsonData;
 use LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator;
@@ -216,6 +206,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createProductProjector()
     {
         return new ProductProjector(
+            $this->getMasterFactory()->createProductViewLocator(),
             $this->getMasterFactory()->createProductSnippetRendererCollection(),
             $this->getMasterFactory()->createProductSearchDocumentBuilder(),
             $this->createUrlKeyForContextCollector(),
@@ -256,8 +247,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $this->getMasterFactory()->createPriceSnippetRenderer(),
             $this->getMasterFactory()->createSpecialPriceSnippetRenderer(),
             $this->getMasterFactory()->createProductJsonSnippetRenderer(),
-            $this->getMasterFactory()->createConfigurableProductJsonSnippetRenderer(),
-            $this->getMasterFactory()->createProductBackOrderAvailabilitySnippetRenderer()
+            $this->getMasterFactory()->createConfigurableProductJsonSnippetRenderer()
         ];
     }
 
@@ -683,20 +673,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return ProductBackOrderAvailabilitySnippetRenderer
-     */
-    public function createProductBackOrderAvailabilitySnippetRenderer()
-    {
-        $productBackOrderAvailabilityAttributeCode = 'backorders';
-
-        return new ProductBackOrderAvailabilitySnippetRenderer(
-            $this->getMasterFactory()->createSnippetList(),
-            $this->getMasterFactory()->createProductBackOrderAvailabilitySnippetKeyGenerator(),
-            $productBackOrderAvailabilityAttributeCode
-        );
-    }
-
-    /**
      * @return SnippetKeyGenerator
      */
     public function createProductInListingSnippetKeyGenerator()
@@ -771,20 +747,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     private function getPriceSnippetKeyContextPartCodes()
     {
         return [WebsiteContextPartBuilder::CODE, CountryContextPartBuilder::CODE];
-    }
-
-    /**
-     * @return SnippetKeyGenerator
-     */
-    public function createProductBackOrderAvailabilitySnippetKeyGenerator()
-    {
-        $usedDataParts = [Product::ID];
-
-        return new GenericSnippetKeyGenerator(
-            $this->getMasterFactory()->getProductBackOrderAvailabilitySnippetKey(),
-            $this->getMasterFactory()->getRequiredContexts(),
-            $usedDataParts
-        );
     }
 
     /**
@@ -1078,7 +1040,10 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductSearchDocumentBuilder()
     {
+        $availabilityAttributeCodes = ['backorders', 'stock_qty'];
+
         $indexAttributeCodes = array_merge(
+            $availabilityAttributeCodes,
             $this->getMasterFactory()->getSearchableAttributeCodes(),
             $this->getMasterFactory()->getProductListingFilterNavigationConfig()->getAttributeCodeStrings(),
             $this->getMasterFactory()->getProductSearchResultsFilterNavigationConfig()->getAttributeCodeStrings()
@@ -1097,14 +1062,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         }
 
         return $this->searchEngine;
-    }
-
-    /**
-     * @return string
-     */
-    public function getProductBackOrderAvailabilitySnippetKey()
-    {
-        return 'backorders';
     }
 
     /**
@@ -1129,96 +1086,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         }
 
         return $this->imageProcessorCollection;
-    }
-
-    /**
-     * @param UpdateProductStockQuantityCommand $command
-     * @return UpdateProductStockQuantityCommandHandler
-     */
-    public function createUpdateProductStockQuantityCommandHandler(UpdateProductStockQuantityCommand $command)
-    {
-        return new UpdateProductStockQuantityCommandHandler(
-            $command,
-            $this->getMasterFactory()->getEventQueue(),
-            $this->getMasterFactory()->createProductStockQuantitySourceBuilder()
-        );
-    }
-
-    /**
-     * @param UpdateMultipleProductStockQuantityCommand $command
-     * @return UpdateMultipleProductStockQuantityCommandHandler
-     */
-    public function createUpdateMultipleProductStockQuantityCommandHandler(
-        UpdateMultipleProductStockQuantityCommand $command
-    ) {
-        return new UpdateMultipleProductStockQuantityCommandHandler(
-            $command,
-            $this->getMasterFactory()->getCommandQueue()
-        );
-    }
-
-    /**
-     * @return ProductStockQuantitySourceBuilder
-     */
-    public function createProductStockQuantitySourceBuilder()
-    {
-        return new ProductStockQuantitySourceBuilder();
-    }
-
-    /**
-     * @return ProductStockQuantityProjector
-     */
-    public function createProductStockQuantityProjector()
-    {
-        return new ProductStockQuantityProjector(
-            $this->getMasterFactory()->createDataPoolWriter(),
-            $this->getMasterFactory()->createProductStockQuantitySnippetRendererCollection()
-        );
-    }
-
-    /**
-     * @return SnippetRendererCollection
-     */
-    public function createProductStockQuantitySnippetRendererCollection()
-    {
-        return new SnippetRendererCollection(
-            $this->getMasterFactory()->createProductStockQuantitySnippetRendererList(),
-            $this->getMasterFactory()->createSnippetList()
-        );
-    }
-
-    /**
-     * @return SnippetRenderer[]
-     */
-    public function createProductStockQuantitySnippetRendererList()
-    {
-        return [$this->getMasterFactory()->createProductStockQuantitySnippetRenderer()];
-    }
-
-    /**
-     * @return ProductStockQuantitySnippetRenderer
-     */
-    public function createProductStockQuantitySnippetRenderer()
-    {
-        return new ProductStockQuantitySnippetRenderer(
-            $this->getMasterFactory()->createProductStockQuantityRendererSnippetKeyGenerator(),
-            $this->getMasterFactory()->createContextBuilder(),
-            $this->getMasterFactory()->createSnippetList()
-        );
-    }
-
-    /**
-     * @return SnippetKeyGenerator
-     */
-    public function createProductStockQuantityRendererSnippetKeyGenerator()
-    {
-        $usedDataParts = [Product::ID];
-
-        return new GenericSnippetKeyGenerator(
-            ProductStockQuantitySnippetRenderer::CODE,
-            $this->getMasterFactory()->getRequiredContexts(),
-            $usedDataParts
-        );
     }
 
     /**
@@ -1251,20 +1118,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createCommandHandlerLocator()
     {
         return new CommandHandlerLocator($this);
-    }
-
-    /**
-     * @param ProductStockQuantityWasUpdatedDomainEvent $event
-     * @return ProductStockQuantityWasUpdatedDomainEventHandler
-     */
-    public function createProductStockQuantityWasUpdatedDomainEventHandler(
-        ProductStockQuantityWasUpdatedDomainEvent $event
-    ) {
-        return new ProductStockQuantityWasUpdatedDomainEventHandler(
-            $event,
-            $this->getMasterFactory()->createContextSource(),
-            $this->getMasterFactory()->createProductStockQuantityProjector()
-        );
     }
 
     /**
@@ -1422,7 +1275,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createSearchCriteriaBuilder()
     {
         return new SearchCriteriaBuilder(
-            $this->getMasterFactory()->getFacetFieldTransformationRegistry()
+            $this->getMasterFactory()->getFacetFieldTransformationRegistry(),
+            $this->getMasterFactory()->createGlobalProductListingCriteria()
         );
     }
 

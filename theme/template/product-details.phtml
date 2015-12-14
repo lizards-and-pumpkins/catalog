@@ -7,7 +7,6 @@ use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
 ?>
 <?php
 
-$maxQty = 5; // Temporary hardcoded
 $brand = $this->getFirstValueOfProductAttribute('brand');
 $brandLogo = strtolower(preg_replace('/\W/', '_', trim($brand))) . '.png';
 
@@ -52,6 +51,7 @@ $save = 0;
 
                     var regularPrice = '<?= $this->getChildOutput('price') ?>',
                         specialPrice = '<?= $this->getChildOutput('special_price') ?>',
+                        stockQty = '<?= $this->getProductStockQuantity() ?>',
                         baseUrl = '<?= $this->getBaseUrl() ?>';
 
                 </script>
@@ -73,7 +73,8 @@ $save = 0;
 
                     <p>
                         <strong><?= $this->__('Availability:') ?> </strong>
-                        <span class="availability"><?= $this->__('In Stock') ?></span>
+                        <span class="in-stock"><?= $this->__('In Stock') ?></span>
+                        <span class="out-of-stock"><?= $this->__('Out Of Stock') ?></span>
                         <span class="info"><?= $this->__('Versandinfo'); ?></span>
                     </p>
                 </div>

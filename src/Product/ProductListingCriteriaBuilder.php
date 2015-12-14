@@ -4,13 +4,11 @@ namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
 use LizardsAndPumpkins\DataVersion;
-use LizardsAndPumpkins\Product\Exception\DataNotStringException;
-use LizardsAndPumpkins\Product\Exception\InvalidConditionXmlAttributeException;
 use LizardsAndPumpkins\Product\Exception\InvalidCriterionOperationXmlAttributeException;
-use LizardsAndPumpkins\Product\Exception\MissingConditionXmlAttributeException;
+use LizardsAndPumpkins\Product\Exception\InvalidNumberOfCriteriaXmlNodesException;
+use LizardsAndPumpkins\Product\Exception\MissingTypeXmlAttributeException;
 use LizardsAndPumpkins\Product\Exception\MissingCriterionOperationXmlAttributeException;
 use LizardsAndPumpkins\Product\Exception\MissingUrlKeyXmlAttributeException;
 use LizardsAndPumpkins\UrlKey;
@@ -34,43 +32,17 @@ class ProductListingCriteriaBuilder
         $xmlNodeAttributes = $parser->getXmlNodesArrayByXPath('/listing/@*');
         $contextData = $this->getFormattedContextData($xmlNodeAttributes, $dataVersion);
 
-        $criteriaNodes = $parser->getXmlNodesArrayByXPath('/listing/*');
-        $criteriaConditionNodes = $parser->getXmlNodesArrayByXPath('/listing/@condition');
+        $criteriaNodes = $parser->getXmlNodesArrayByXPath('/listing/criteria');
 
-        $criterionArray = array_map([$this, 'createCriterion'], $criteriaNodes);
-        $criteria = $this->createSearchCriteria($criteriaConditionNodes, ...$criterionArray);
+        if (count($criteriaNodes) !== 1) {
+            throw new InvalidNumberOfCriteriaXmlNodesException(
+                'Product listing XML must contain exactly one "criteria" node.'
+            );
+        }
 
-        return $this->createProductListingCriteria($urlKey, $contextData, $criteria);
-    }
-
-    /**
-     * @param UrlKey $urlKey
-     * @param string[] $contextData
-     * @param SearchCriteria $criteria
-     * @return ProductListingCriteria
-     */
-    public function createProductListingCriteria(UrlKey $urlKey, array $contextData, SearchCriteria $criteria)
-    {
-        $thingsToCheck = [['values', $contextData], ['keys', array_keys($contextData)]];
-        array_map(function (array $thingToCheck) {
-            $message = sprintf('The context array has to contain only string %s, found "%%s"', $thingToCheck[0]);
-            array_map($this->getStringValidatorWithMessage($message), $thingToCheck[1]);
-        }, $thingsToCheck);
+        $criteria = $this->createSearchCriteria($criteriaNodes[0]);
 
         return new ProductListingCriteria($urlKey, $contextData, $criteria);
-    }
-
-    /**
-     * @param string $message
-     * @return callable
-     */
-    private function getStringValidatorWithMessage($message)
-    {
-        return function ($data) use ($message) {
-            if (!is_string($data)) {
-                throw new DataNotStringException(sprintf($message, $this->getTypeOfData($data)));
-            }
-        };
     }
 
     /**
@@ -93,40 +65,32 @@ class ProductListingCriteriaBuilder
      */
     private function getFormattedContextData(array $xmlNodeAttributes, DataVersion $dataVersion)
     {
-        $contextData = [ContextVersion::CODE => (string) $dataVersion];
-
-        foreach ($xmlNodeAttributes as $xmlAttribute) {
-            if (Product::URL_KEY !== $xmlAttribute['nodeName'] && 'condition' !== $xmlAttribute['nodeName']) {
-                $contextData[$xmlAttribute['nodeName']] = $xmlAttribute['value'];
+        return array_reduce($xmlNodeAttributes, function (array $carry, array $xmlAttribute) {
+            if (Product::URL_KEY !== $xmlAttribute['nodeName']) {
+                $carry[$xmlAttribute['nodeName']] = $xmlAttribute['value'];
             }
-        }
-
-        return $contextData;
+            return $carry;
+        }, [ContextVersion::CODE => (string) $dataVersion]);
     }
 
     /**
-     * @param array[] $criteriaCondition
-     * @param SearchCriterion[] $criterionArray
+     * @param array[] $criteriaNode
      * @return CompositeSearchCriterion
      */
-    private function createSearchCriteria(array $criteriaCondition, SearchCriterion ...$criterionArray)
+    private function createSearchCriteria(array $criteriaNode)
     {
-        if (empty($criteriaCondition)) {
-            throw new MissingConditionXmlAttributeException('Missing "condition" attribute in product listing XML.');
-        }
+        $this->validateCriteriaNode($criteriaNode);
 
-        if (CompositeSearchCriterion::AND_CONDITION === $criteriaCondition[0]['value']) {
-            return CompositeSearchCriterion::createAnd(...$criterionArray);
-        }
+        $criterionArray = array_map(function (array $childNode) {
+            if ('criteria' === $childNode['nodeName']) {
+                return $this->createSearchCriteria($childNode);
+            }
 
-        if (CompositeSearchCriterion::OR_CONDITION === $criteriaCondition[0]['value']) {
-            return CompositeSearchCriterion::createOr(...$criterionArray);
-        }
+            $this->validateCriterionNode($childNode);
+            return $this->createCriterion($childNode);
+        }, $criteriaNode['value']);
 
-        throw new InvalidConditionXmlAttributeException(sprintf(
-            '"condition" attribute value "%s" in product listing XML is invalid.',
-            $criteriaCondition[0]['value']
-        ));
+        return CompositeSearchCriterion::create($criteriaNode['attributes']['type'], ...$criterionArray);
     }
 
     /**
@@ -135,37 +99,32 @@ class ProductListingCriteriaBuilder
      */
     private function createCriterion(array $criterionNode)
     {
-        $this->validateSearchCriterionMetaInfo($criterionNode);
-
-        $className = $this->getCriterionClassNameForOperation($criterionNode['attributes']['operation']);
-
+        $className = $this->getCriterionClassNameForOperation($criterionNode['attributes']['is']);
         return call_user_func([$className, 'create'], $criterionNode['nodeName'], $criterionNode['value']);
+    }
+
+    /**
+     * @param array[] $criteriaNode
+     */
+    private function validateCriteriaNode(array $criteriaNode)
+    {
+        if (!isset($criteriaNode['attributes']['type'])) {
+            throw new MissingTypeXmlAttributeException('Missing "type" attribute in product listing XML.');
+        }
     }
 
     /**
      * @param array[] $criterionNode
      */
-    private function validateSearchCriterionMetaInfo(array $criterionNode)
+    private function validateCriterionNode(array $criterionNode)
     {
-        if (!isset($criterionNode['attributes']['operation'])) {
+        if (!isset($criterionNode['attributes']['is'])) {
             throw new MissingCriterionOperationXmlAttributeException(
-                'Missing "operation" attribute in product listing condition XML node.'
+                'Missing "is" attribute in product listing type XML node.'
             );
         }
-        $this->validateSearchCriteriaOperationString($criterionNode['attributes']['operation']);
-    }
 
-    /**
-     * @param string $operation
-     */
-    private function validateSearchCriteriaOperationString($operation)
-    {
-        if (!preg_match('/^[a-z]+$/i', $operation)) {
-            throw new InvalidCriterionOperationXmlAttributeException(sprintf(
-                'Invalid operation in product listing XML "%s", only the letters a-z are allowed.',
-                $operation
-            ));
-        }
+        $operation = $criterionNode['attributes']['is'];
 
         if (!class_exists($this->getCriterionClassNameForOperation($operation))) {
             throw new InvalidCriterionOperationXmlAttributeException(
@@ -181,16 +140,5 @@ class ProductListingCriteriaBuilder
     private function getCriterionClassNameForOperation($operationName)
     {
         return SearchCriterion::class . $operationName;
-    }
-
-    /**
-     * @param mixed $data
-     * @return string
-     */
-    private function getTypeOfData($data)
-    {
-        return is_object($data) ?
-            get_class($data) :
-            gettype($data);
     }
 }

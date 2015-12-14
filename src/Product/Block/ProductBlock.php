@@ -101,4 +101,12 @@ class ProductBlock extends Block
     {
         return $this->getProduct()->getImageFileNameByNumber($imageNumber);
     }
+
+    /**
+     * @return int
+     */
+    public function getProductStockQuantity()
+    {
+        return $this->getProduct()->getFirstValueOfAttribute('stock_qty');
+    }
 }

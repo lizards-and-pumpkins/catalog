@@ -10,8 +10,6 @@ use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler;
-use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Product\ProductStockQuantityWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEvent;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHandler;
 
@@ -40,14 +38,6 @@ interface DomainEventFactory
      * @return ProductListingWasAddedDomainEventHandler
      */
     public function createProductListingWasAddedDomainEventHandler(ProductListingWasAddedDomainEvent $event);
-
-    /**
-     * @param ProductStockQuantityWasUpdatedDomainEvent $event
-     * @return ProductStockQuantityWasUpdatedDomainEventHandler
-     */
-    public function createProductStockQuantityWasUpdatedDomainEventHandler(
-        ProductStockQuantityWasUpdatedDomainEvent $event
-    );
 
     /**
      * @param ContentBlockWasUpdatedDomainEvent $event

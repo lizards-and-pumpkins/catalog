@@ -3,16 +3,14 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan;
 use LizardsAndPumpkins\DataVersion;
-use LizardsAndPumpkins\Product\Exception\DataNotStringException;
-use LizardsAndPumpkins\Product\Exception\InvalidConditionXmlAttributeException;
 use LizardsAndPumpkins\Product\Exception\InvalidCriterionOperationXmlAttributeException;
-use LizardsAndPumpkins\Product\Exception\MissingConditionXmlAttributeException;
+use LizardsAndPumpkins\Product\Exception\InvalidNumberOfCriteriaXmlNodesException;
+use LizardsAndPumpkins\Product\Exception\MissingTypeXmlAttributeException;
 use LizardsAndPumpkins\Product\Exception\MissingCriterionOperationXmlAttributeException;
 use LizardsAndPumpkins\Product\Exception\MissingUrlKeyXmlAttributeException;
-use LizardsAndPumpkins\UrlKey;
 
 /**
  * @covers \LizardsAndPumpkins\Product\ProductListingCriteriaBuilder
@@ -26,126 +24,127 @@ use LizardsAndPumpkins\UrlKey;
 class ProductListingCriteriaBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var ProductListingCriteriaBuilder
+     */
+    private $criteriaBuilder;
+
+    /**
      * @var DataVersion
      */
     private $testDataVersion;
 
     protected function setUp()
     {
+        $this->criteriaBuilder = new ProductListingCriteriaBuilder();
         $this->testDataVersion = DataVersion::fromVersionString('-1');
     }
 
-    public function testProductListingCriteriaWithAndConditionIsCreatedFromXml()
+    public function testProductListingCriteriaWithAndTypeIsCreatedFromXml()
     {
         $xml = <<<EOX
-<listing url_key="men-accessories" condition="and" website="ru" locale="en_US">
-    <category operation="Equal">accessories</category>
-    <gender operation="Equal">male</gender>
+<listing url_key="men-accessories" website="ru" locale="en_US">
+    <criteria type="and">
+        <category is="Equal">accessories</category>
+        <gender is="Equal">male</gender>
+    </criteria>
 </listing>
 EOX;
 
-        $productListingCriteria = (new ProductListingCriteriaBuilder())
-            ->createProductListingCriteriaFromXml($xml, $this->testDataVersion);
+        $criteria = $this->criteriaBuilder->createProductListingCriteriaFromXml($xml, $this->testDataVersion);
 
-        $urlKey = $productListingCriteria->getUrlKey();
-        $context = $productListingCriteria->getContextData();
-        $result = $productListingCriteria->getCriteria();
+        $expectedUrlKey = 'men-accessories';
+        $expectedContextData = ['version' => '-1', 'website' => 'ru', 'locale' => 'en_US'];
+        $expectedCriteria = CompositeSearchCriterion::createAnd(
+            SearchCriterionEqual::create('category', 'accessories'),
+            SearchCriterionEqual::create('gender', 'male')
+        );
 
-        $this->assertInstanceOf(ProductListingCriteria::class, $productListingCriteria);
-        $this->assertEquals('men-accessories', $urlKey);
-        $this->assertEquals(['version' => '-1', 'website' => 'ru', 'locale' => 'en_US'], $context);
-
-        $expectedCriterion1 = SearchCriterionEqual::create('category', 'accessories');
-        $expectedCriterion2 = SearchCriterionEqual::create('gender', 'male');
-        $expectedCriteria = CompositeSearchCriterion::createAnd($expectedCriterion1, $expectedCriterion2);
-
-        $this->assertEquals($expectedCriteria, $result);
+        $this->assertInstanceOf(ProductListingCriteria::class, $criteria);
+        $this->assertEquals($expectedUrlKey, $criteria->getUrlKey());
+        $this->assertEquals($expectedContextData, $criteria->getContextData());
+        $this->assertEquals($expectedCriteria, $criteria->getCriteria());
     }
 
-    public function testProductListingCriteriaWithOrConditionIsCreatedFromXml()
+    public function testProductListingCriteriaWithOrTypeIsCreatedFromXml()
     {
         $xml = <<<EOX
-<listing url_key="men-accessories" condition="or" website="ru" locale="en_US">
-    <category operation="Equal">accessories</category>
-    <gender operation="Equal">male</gender>
+<listing url_key="men-accessories" website="ru" locale="en_US">
+    <criteria type="or">
+        <category is="Equal">accessories</category>
+        <gender is="Equal">male</gender>
+    </criteria>
 </listing>
 EOX;
 
-        $productListingCriteria = (new ProductListingCriteriaBuilder())
-            ->createProductListingCriteriaFromXml($xml, $this->testDataVersion);
-        $result = $productListingCriteria->getCriteria();
+        $criteria = $this->criteriaBuilder->createProductListingCriteriaFromXml($xml, $this->testDataVersion);
 
-        $expectedCriterion1 = SearchCriterionEqual::create('category', 'accessories');
-        $expectedCriterion2 = SearchCriterionEqual::create('gender', 'male');
-        $expectedCriteria = CompositeSearchCriterion::createOr($expectedCriterion1, $expectedCriterion2);
+        $expectedCriteria = CompositeSearchCriterion::createOr(
+            SearchCriterionEqual::create('category', 'accessories'),
+            SearchCriterionEqual::create('gender', 'male')
+        );
 
-        $this->assertEquals($expectedCriteria, $result);
+        $this->assertEquals($expectedCriteria, $criteria->getCriteria());
+    }
+
+    public function testMultiLevelProductListingCriteriaIsCreatedFromXml()
+    {
+        $xml = <<<EOX
+<listing url_key="men-accessories" website="ru" locale="en_US">
+    <criteria type="and">
+        <category is="Equal">accessories</category>
+        <criteria type="or">
+            <stock_qty is="GreaterThan">0</stock_qty>
+            <backorders is="Equal">true</backorders>
+        </criteria>
+    </criteria>
+</listing>
+EOX;
+
+        $criteria = $this->criteriaBuilder->createProductListingCriteriaFromXml($xml, $this->testDataVersion);
+
+        $expectedCriteria = CompositeSearchCriterion::createAnd(
+            SearchCriterionEqual::create('category', 'accessories'),
+            CompositeSearchCriterion::createOr(
+                SearchCriterionGreaterThan::create('stock_qty', 0),
+                SearchCriterionEqual::create('backorders', 'true')
+            )
+        );
+
+        $this->assertEquals($expectedCriteria, $criteria->getCriteria());
     }
 
     public function testExceptionIsThrownIfUrlKeyAttributeIsMissing()
     {
         $this->setExpectedException(MissingUrlKeyXmlAttributeException::class);
         $xml = '<listing />';
-        (new ProductListingCriteriaBuilder())->createProductListingCriteriaFromXml($xml, $this->testDataVersion);
+        $this->criteriaBuilder->createProductListingCriteriaFromXml($xml, $this->testDataVersion);
     }
 
-    public function testExceptionIsThrownIfConditionAttributeOfListingNodeIsMissing()
+    public function testExceptionIsThrownIfCriteriaNodeDoesNotExist()
     {
-        $this->setExpectedException(MissingConditionXmlAttributeException::class);
+        $this->setExpectedException(InvalidNumberOfCriteriaXmlNodesException::class);
         $xml = '<listing url_key="foo"/>';
-        (new ProductListingCriteriaBuilder())->createProductListingCriteriaFromXml($xml, $this->testDataVersion);
+        $this->criteriaBuilder->createProductListingCriteriaFromXml($xml, $this->testDataVersion);
     }
 
-    public function testExceptionIsThrownIfConditionAttributeOfListingNodeIsInvalid()
+    public function testExceptionIsThrownIfTypeAttributeOfListingNodeIsMissing()
     {
-        $this->setExpectedException(InvalidConditionXmlAttributeException::class);
-        $xml = '<listing url_key="foo" condition="bar"/>';
-        (new ProductListingCriteriaBuilder())->createProductListingCriteriaFromXml($xml, $this->testDataVersion);
+        $this->setExpectedException(MissingTypeXmlAttributeException::class);
+        $xml = '<listing url_key="foo"><criteria/></listing>';
+        $this->criteriaBuilder->createProductListingCriteriaFromXml($xml, $this->testDataVersion);
     }
 
     public function testExceptionIsThrownIfCriterionNodeDoesNotHaveOperationAttribute()
     {
         $this->setExpectedException(MissingCriterionOperationXmlAttributeException::class);
-        $xml = '<listing url_key="foo" condition="and"><bar /></listing>';
-        (new ProductListingCriteriaBuilder())->createProductListingCriteriaFromXml($xml, $this->testDataVersion);
+        $xml = '<listing url_key="foo"><criteria type="and"><bar/></criteria></listing>';
+        $this->criteriaBuilder->createProductListingCriteriaFromXml($xml, $this->testDataVersion);
     }
 
     public function testExceptionIsThrownIfCriterionOperationAttributeIsNotAValidClass()
     {
         $this->setExpectedException(InvalidCriterionOperationXmlAttributeException::class);
-        $xml = '<listing url_key="foo" condition="and"><bar operation="baz" /></listing>';
-        (new ProductListingCriteriaBuilder())->createProductListingCriteriaFromXml($xml, $this->testDataVersion);
-    }
-
-    public function testExceptionIsThrownIfCriterionOperationAttributeContainsNonCharacterData()
-    {
-        $this->setExpectedException(
-            InvalidCriterionOperationXmlAttributeException::class,
-            sprintf('Invalid operation in product listing XML "%s", only the letters a-z are allowed.', "a\\b")
-        );
-        $xml = '<listing url_key="foo" condition="and"><bar operation="a\\b" /></listing>';
-        (new ProductListingCriteriaBuilder())->createProductListingCriteriaFromXml($xml, $this->testDataVersion);
-    }
-
-    public function testItThrowsAnExceptionIfTheContextArrayContainsNonStrings()
-    {
-        $expectedMessage = 'The context array has to contain only string values, found ';
-        $this->setExpectedException(DataNotStringException::class, $expectedMessage);
-        (new ProductListingCriteriaBuilder())->createProductListingCriteria(
-            UrlKey::fromString('http://example.com'),
-            ['key' => 123],
-            $this->getMock(SearchCriteria::class)
-        );
-    }
-
-    public function testItThrowsAnExceptionIfTheContextArrayKeysAreNotStrings()
-    {
-        $expectedMessage = 'The context array has to contain only string keys, found ';
-        $this->setExpectedException(DataNotStringException::class, $expectedMessage);
-        (new ProductListingCriteriaBuilder())->createProductListingCriteria(
-            UrlKey::fromString('http://example.com'),
-            [0 => 'value'],
-            $this->getMock(SearchCriteria::class)
-        );
+        $xml = '<listing url_key="foo"><criteria type="and"><bar is="baz"/></criteria></listing>';
+        $this->criteriaBuilder->createProductListingCriteriaFromXml($xml, $this->testDataVersion);
     }
 }

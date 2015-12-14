@@ -16,7 +16,6 @@ use LizardsAndPumpkins\ContentDelivery\PageBuilder;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\PricesJsonSnippetTransformation;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\SimpleEuroPriceSnippetTransformation;
 use LizardsAndPumpkins\Context\ContextBuilder;
-use LizardsAndPumpkins\Context\DecoratedContextBuilder;
 use LizardsAndPumpkins\Http\GenericHttpRouter;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRouter;
@@ -28,7 +27,6 @@ use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingCriteriaSnippetRenderer;
 use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer;
-use LizardsAndPumpkins\Product\MultipleProductStockQuantityApiV1PutRequestHandler;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer;
@@ -36,7 +34,6 @@ use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\CompositeSnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\RegistrySnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
-use LizardsAndPumpkins\Utils\Directory;
 use LizardsAndPumpkins\Context\Context;
 
 class FrontendFactory implements Factory
@@ -96,12 +93,6 @@ class FrontendFactory implements Factory
         );
 
         $requestHandlerChain->register(
-            'put_multiple_product_stock_quantity',
-            $version,
-            $this->getMasterFactory()->createMultipleProductStockQuantityApiV1PutRequestHandler()
-        );
-
-        $requestHandlerChain->register(
             'put_templates',
             $version,
             $this->getMasterFactory()->createTemplatesApiV1PutRequestHandler()
@@ -127,18 +118,6 @@ class FrontendFactory implements Factory
     {
         return new ContentBlocksApiV1PutRequestHandler(
             $this->getMasterFactory()->getCommandQueue()
-        );
-    }
-
-    /**
-     * @return MultipleProductStockQuantityApiV1PutRequestHandler
-     */
-    public function createMultipleProductStockQuantityApiV1PutRequestHandler()
-    {
-        return MultipleProductStockQuantityApiV1PutRequestHandler::create(
-            $this->getMasterFactory()->getCommandQueue(),
-            Directory::fromPath($this->getCatalogImportDirectoryConfig()),
-            $this->getMasterFactory()->createProductStockQuantitySourceBuilder()
         );
     }
 
@@ -199,15 +178,15 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->createProductListingCriteriaSnippetKeyGenerator(),
             $this->getMasterFactory()->getProductListingFilterNavigationConfig(),
-            $this->createProductListingPageContentBuilder(),
-            $this->createProductListingPageRequest()
+            $this->getMasterFactory()->createProductListingPageContentBuilder(),
+            $this->getMasterFactory()->createProductListingPageRequest()
         );
     }
 
     /**
      * @return ProductListingPageContentBuilder
      */
-    private function createProductListingPageContentBuilder()
+    public function createProductListingPageContentBuilder()
     {
         return new ProductListingPageContentBuilder(
             $this->getMasterFactory()->createDataPoolReader(),
@@ -220,7 +199,7 @@ class FrontendFactory implements Factory
     /**
      * @return ProductListingPageRequest
      */
-    private function createProductListingPageRequest()
+    public function createProductListingPageRequest()
     {
         return new ProductListingPageRequest(
             $this->getMasterFactory()->getProductsPerPageConfig(),
@@ -291,12 +270,6 @@ class FrontendFactory implements Factory
             PriceSnippetRenderer::SPECIAL_PRICE,
             function () {
                 return $this->getMasterFactory()->createSpecialPriceSnippetKeyGenerator();
-            }
-        );
-        $registrySnippetKeyGeneratorLocator->register(
-            $this->getMasterFactory()->getProductBackOrderAvailabilitySnippetKey(),
-            function () {
-                return $this->getMasterFactory()->createProductBackOrderAvailabilitySnippetKeyGenerator();
             }
         );
         $registrySnippetKeyGeneratorLocator->register(
@@ -425,8 +398,8 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->getProductSearchResultsFilterNavigationConfig(),
             $this->getMasterFactory()->createSearchCriteriaBuilder(),
             $this->getMasterFactory()->getSearchableAttributeCodes(),
-            $this->createProductListingPageContentBuilder(),
-            $this->createProductListingPageRequest()
+            $this->getMasterFactory()->createProductListingPageContentBuilder(),
+            $this->getMasterFactory()->createProductListingPageRequest()
         );
     }
 

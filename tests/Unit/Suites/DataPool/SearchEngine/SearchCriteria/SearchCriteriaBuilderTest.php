@@ -23,26 +23,30 @@ class SearchCriteriaBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private $builder;
 
+    /**
+     * @var SearchCriteria
+     */
+    private $stubGlobalProductListingCriteria;
+
     protected function setUp()
     {
         $this->stubFacetFieldTransformationRegistry = $this->getMock(FacetFieldTransformationRegistry::class);
-        $this->builder = new SearchCriteriaBuilder($this->stubFacetFieldTransformationRegistry);
+        $this->stubGlobalProductListingCriteria = $this->getMock(SearchCriteria::class);
+        $this->builder = new SearchCriteriaBuilder(
+            $this->stubFacetFieldTransformationRegistry,
+            $this->stubGlobalProductListingCriteria
+        );
     }
 
     public function testSearchCriterionEqualIsReturned()
     {
         $parameterName = 'foo';
         $parameterValue = 'bar';
+
         $result = $this->builder->fromFieldNameAndValue($parameterName, $parameterValue);
+        $expectedCriteria = SearchCriterionEqual::create($parameterName, $parameterValue);
 
-        $expectedCriteriaJson = [
-            'fieldName' => $parameterName,
-            'fieldValue' => $parameterValue,
-            'operation' => 'Equal'
-        ];
-
-        $this->assertInstanceOf(SearchCriterionEqual::class, $result);
-        $this->assertEquals($expectedCriteriaJson, $result->jsonSerialize());
+        $this->assertEquals($expectedCriteria, $result);
     }
 
     public function testRangeCriterionIsReturned()
@@ -63,35 +67,31 @@ class SearchCriteriaBuilderTest extends \PHPUnit_Framework_TestCase
         $this->stubFacetFieldTransformationRegistry->method('getTransformationByCode')
             ->willReturn($stubFacetFieldTransformation);
 
-        /** @var CompositeSearchCriterion $result */
         $result = $this->builder->fromFieldNameAndValue($parameterName, $parameterValue);
 
-        $expectedCriteriaJson = [
-            'condition' => CompositeSearchCriterion::AND_CONDITION,
-            'criteria'  => [
-                SearchCriterionGreaterOrEqualThan::create($parameterName, $rangeFrom),
-                SearchCriterionLessOrEqualThan::create($parameterName, $rangeTo),
-            ]
-        ];
+        $expectedCriteria = CompositeSearchCriterion::createAnd(
+            SearchCriterionGreaterOrEqualThan::create($parameterName, $rangeFrom),
+            SearchCriterionLessOrEqualThan::create($parameterName, $rangeTo)
+        );
 
-        $this->assertInstanceOf(CompositeSearchCriterion::class, $result);
-        $this->assertEquals($expectedCriteriaJson, $result->jsonSerialize());
+        $this->assertEquals($expectedCriteria, $result);
     }
 
     public function testCompositeCriteriaWithListOfFieldsMatchingSameStringWithOrConditionIsReturned()
     {
         $fields = ['foo', 'bar'];
         $queryString = 'baz';
+
         $result = $this->builder->createCriteriaForAnyOfGivenFieldsContainsString($fields, $queryString);
 
-        $expectedCriteriaJson = [
-            'condition' => CompositeSearchCriterion::OR_CONDITION,
-            'criteria'  => array_map(function ($fieldName) use ($queryString) {
-                return SearchCriterionLike::create($fieldName, $queryString);
-            }, $fields)
-        ];
+        $expectedCriteria = CompositeSearchCriterion::createAnd(
+            CompositeSearchCriterion::createOr(
+                SearchCriterionLike::create('foo', $queryString),
+                SearchCriterionLike::create('bar', $queryString)
+            ),
+            $this->stubGlobalProductListingCriteria
+        );
 
-        $this->assertInstanceOf(CompositeSearchCriterion::class, $result);
-        $this->assertEquals($expectedCriteriaJson, $result->jsonSerialize());
+        $this->assertEquals($expectedCriteria, $result);
     }
 }

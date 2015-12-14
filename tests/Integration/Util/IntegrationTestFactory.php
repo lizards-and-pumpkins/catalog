@@ -11,6 +11,9 @@ use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField;
 use LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\InMemoryUrlKeyStore;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
@@ -20,6 +23,8 @@ use LizardsAndPumpkins\Image\ImageProcessorCollection;
 use LizardsAndPumpkins\Image\ImageProcessingStrategySequence;
 use LizardsAndPumpkins\Log\InMemoryLogger;
 use LizardsAndPumpkins\Product\AttributeCode;
+use LizardsAndPumpkins\Projection\Catalog\IntegrationTestProductViewLocator;
+use LizardsAndPumpkins\Projection\Catalog\ProductViewLocator;
 use LizardsAndPumpkins\Queue\InMemory\InMemoryQueue;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\Tax\IntegrationTestTaxServiceLocator;
@@ -404,7 +409,7 @@ class IntegrationTestFactory implements Factory
     }
 
     /**
-     * @return TwentyOneRunTaxableCountries
+     * @return TaxableCountries
      */
     public function createTaxableCountries()
     {
@@ -417,5 +422,21 @@ class IntegrationTestFactory implements Factory
     public function createTaxServiceLocator()
     {
         return new IntegrationTestTaxServiceLocator();
+    }
+
+    /**
+     * @return ProductViewLocator
+     */
+    public function createProductViewLocator()
+    {
+        return new IntegrationTestProductViewLocator();
+    }
+
+    /**
+     * @return SearchCriteria
+     */
+    public function createGlobalProductListingCriteria()
+    {
+        return SearchCriterionGreaterThan::create('stock_qty', 0);
     }
 }

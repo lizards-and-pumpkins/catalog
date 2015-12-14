@@ -16,6 +16,7 @@ use LizardsAndPumpkins\LocalFilesystemStorageWriter;
 use LizardsAndPumpkins\Log\Writer\FileLogMessageWriter;
 use LizardsAndPumpkins\Log\WritingLoggerDecorator;
 use LizardsAndPumpkins\Product\Tax\TaxServiceLocator;
+use LizardsAndPumpkins\Projection\Catalog\ProductViewLocator;
 use LizardsAndPumpkins\Queue\File\FileQueue;
 use LizardsAndPumpkins\SampleMasterFactory;
 use LizardsAndPumpkins\SampleFactory;
@@ -39,6 +40,7 @@ use LizardsAndPumpkins\Website\WebsiteToCountryMap;
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
  * @uses   \LizardsAndPumpkins\DataPool\UrlKeyStore\FileUrlKeyStore
  * @uses   \LizardsAndPumpkins\Image\ImageMagickInscribeStrategy
  * @uses   \LizardsAndPumpkins\Image\ImageProcessor
@@ -260,5 +262,10 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsATaxServiceLocator()
     {
         $this->assertInstanceOf(TaxServiceLocator::class, $this->factory->createTaxServiceLocator());
+    }
+
+    public function testProductViewLocatorIsReturned()
+    {
+        $this->assertInstanceOf(ProductViewLocator::class, $this->factory->createProductViewLocator());
     }
 }

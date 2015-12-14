@@ -86,10 +86,10 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
      */
     private function createSearchEngineCriteriaForFilters(array $filters)
     {
-        return array_map(function ($filterCode, $filterOptionValues) {
-            $optionValuesCriteriaArray = $this->createOptionValuesCriteriaArray($filterCode, $filterOptionValues);
+        return array_map(function ($filterCode) use ($filters) {
+            $optionValuesCriteriaArray = $this->createOptionValuesCriteriaArray($filterCode, $filters[$filterCode]);
             return CompositeSearchCriterion::createOr(...$optionValuesCriteriaArray);
-        }, array_keys($filters), $filters);
+        }, array_keys($filters));
     }
 
     /**

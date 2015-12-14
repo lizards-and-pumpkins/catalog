@@ -11,9 +11,17 @@ class SearchCriteriaBuilder
      */
     private $facetFieldTransformationRegistry;
 
-    public function __construct(FacetFieldTransformationRegistry $facetFieldTransformationRegistry)
-    {
+    /**
+     * @var SearchCriteria
+     */
+    private $globalProductListingCriteria;
+
+    public function __construct(
+        FacetFieldTransformationRegistry $facetFieldTransformationRegistry,
+        SearchCriteria $globalProductListingCriteria
+    ) {
         $this->facetFieldTransformationRegistry = $facetFieldTransformationRegistry;
+        $this->globalProductListingCriteria = $globalProductListingCriteria;
     }
 
     /**
@@ -43,10 +51,13 @@ class SearchCriteriaBuilder
      */
     public function createCriteriaForAnyOfGivenFieldsContainsString(array $fieldNames, $queryString)
     {
-        return CompositeSearchCriterion::createOr(
-            ...array_map(function ($fieldName) use ($queryString) {
-                return SearchCriterionLike::create($fieldName, $queryString);
-            }, $fieldNames)
+        return CompositeSearchCriterion::createAnd(
+            CompositeSearchCriterion::createOr(
+                ...array_map(function ($fieldName) use ($queryString) {
+                    return SearchCriterionLike::create($fieldName, $queryString);
+                }, $fieldNames)
+            ),
+            $this->globalProductListingCriteria
         );
     }
 }

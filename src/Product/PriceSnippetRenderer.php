@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Context\ContextBuilder\ContextCountry;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite;
 use LizardsAndPumpkins\Product\Tax\TaxServiceLocator;
 use LizardsAndPumpkins\Product\Tax\TwentyOneRunTaxServiceLocatorOptions;
+use LizardsAndPumpkins\Projection\Catalog\ProductView;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetRenderer;
 use LizardsAndPumpkins\Snippet;
@@ -66,21 +67,13 @@ class PriceSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param Product $product
+     * @param ProductView $productView
      * @return SnippetList
      */
-    public function render(Product $product)
+    public function render(ProductView $productView)
     {
-        return $this->renderProductPrice($product);
-    }
-
-    /**
-     * @param Product $product
-     * @return SnippetList
-     */
-    private function renderProductPrice(Product $product)
-    {
-        return new SnippetList(...$this->getPriceSnippets($product));
+        $originalProduct = $productView->getOriginalProduct();
+        return new SnippetList(...$this->getPriceSnippets($originalProduct));
     }
 
     /**

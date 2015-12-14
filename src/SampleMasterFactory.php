@@ -2,8 +2,8 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\Log\InMemoryLogger;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\ContentBlockSnippetKeyGeneratorLocatorStrategy;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocator\RegistrySnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 
 /**
@@ -16,9 +16,9 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
  * @method Context\ContextBuilder createContextBuilder
  * @method DomainEventConsumer createDomainEventConsumer
  * @method CommandConsumer createCommandConsumer
- * @method SnippetKeyGeneratorLocator createRegistrySnippetKeyGeneratorLocatorStrategy
+ * @method RegistrySnippetKeyGeneratorLocatorStrategy createRegistrySnippetKeyGeneratorLocatorStrategy
  * @method SnippetKeyGeneratorLocator getSnippetKeyGeneratorLocator
- * @method InMemoryLogger getLogger
+ * @method Log\InMemoryLogger getLogger
  * @method GenericSnippetKeyGenerator createProductDetailViewSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createProductListingSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createProductStockQuantityRendererSnippetKeyGenerator

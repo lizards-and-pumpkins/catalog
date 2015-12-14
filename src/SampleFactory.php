@@ -12,6 +12,8 @@ use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestRangedField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\FileUrlKeyStore;
 use LizardsAndPumpkins\Image\ImageMagickInscribeStrategy;
 use LizardsAndPumpkins\Image\ImageProcessor;
@@ -24,6 +26,7 @@ use LizardsAndPumpkins\Log\Writer\LogMessageWriter;
 use LizardsAndPumpkins\Log\WritingLoggerDecorator;
 use LizardsAndPumpkins\Product\AttributeCode;
 use LizardsAndPumpkins\Product\Tax\TwentyOneRunTaxServiceLocator;
+use LizardsAndPumpkins\Projection\Catalog\TwentyOneRunProductViewLocator;
 use LizardsAndPumpkins\Queue\File\FileQueue;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\Website\TwentyOneRunWebsiteToCountryMap;
@@ -461,5 +464,21 @@ class SampleFactory implements Factory
     public function createTaxServiceLocator()
     {
         return new TwentyOneRunTaxServiceLocator();
+    }
+
+    /**
+     * @return TwentyOneRunProductViewLocator
+     */
+    public function createProductViewLocator()
+    {
+        return new TwentyOneRunProductViewLocator();
+    }
+
+    /**
+     * @return SearchCriteria
+     */
+    public function createGlobalProductListingCriteria()
+    {
+        return SearchCriterionGreaterThan::create('stock_qty', 0);
     }
 }

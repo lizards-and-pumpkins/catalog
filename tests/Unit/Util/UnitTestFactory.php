@@ -7,12 +7,14 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 use LizardsAndPumpkins\Image\ImageProcessingStrategy;
 use LizardsAndPumpkins\Image\ImageProcessor;
 use LizardsAndPumpkins\Image\ImageProcessorCollection;
 use LizardsAndPumpkins\Log\Logger;
+use LizardsAndPumpkins\Projection\Catalog\ProductViewLocator;
 use LizardsAndPumpkins\Product\Tax\TaxServiceLocator;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\Website\HostToWebsiteMap;
@@ -297,10 +299,26 @@ class UnitTestFactory implements Factory
     }
 
     /**
+     * @return ProductViewLocator
+     */
+    public function createProductViewLocator()
+    {
+        return $this->mockObjectGenerator->getMock(ProductViewLocator::class);
+    }
+
+    /**
      * @return TaxServiceLocator
      */
     public function createTaxServiceLocator()
     {
         return $this->mockObjectGenerator->getMock(TaxServiceLocator::class);
+    }
+
+    /**
+     * @return SearchCriteria
+     */
+    public function createGlobalProductListingCriteria()
+    {
+        return $this->mockObjectGenerator->getMock(SearchCriteria::class);
     }
 }

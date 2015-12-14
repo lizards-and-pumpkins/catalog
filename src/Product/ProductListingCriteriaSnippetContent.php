@@ -63,6 +63,7 @@ class ProductListingCriteriaSnippetContent implements PageMetaInfoSnippetContent
         $pageInfo = self::decodeJson($json);
         self::validateRequiredKeysArePresent($pageInfo);
 
+        self::validateProductListingSearchCriteria($pageInfo[self::KEY_CRITERIA]);
         $searchCriteria = self::createSearchCriteriaFromMetaInfo($pageInfo[self::KEY_CRITERIA]);
 
         return static::create(
@@ -152,10 +153,10 @@ class ProductListingCriteriaSnippetContent implements PageMetaInfoSnippetContent
      */
     private static function createSearchCriteriaFromMetaInfo(array $metaInfo)
     {
-        self::validateSearchCriteriaMetaInfo($metaInfo);
-
         $criterionArray = array_map(function (array $criterionMetaInfo) {
-            self::validateSearchCriterionMetaInfo($criterionMetaInfo);
+            if (isset($criterionMetaInfo['condition'])) {
+                return self::createSearchCriteriaFromMetaInfo($criterionMetaInfo);
+            }
 
             return call_user_func(
                 [self::getCriterionClassNameForOperation($criterionMetaInfo['operation']), 'create'],
@@ -164,13 +165,13 @@ class ProductListingCriteriaSnippetContent implements PageMetaInfoSnippetContent
             );
         }, $metaInfo['criteria']);
 
-        return CompositeSearchCriterion::createAnd(...$criterionArray);
+        return CompositeSearchCriterion::create($metaInfo['condition'], ...$criterionArray);
     }
 
     /**
      * @param mixed[] $metaInfo
      */
-    private static function validateSearchCriteriaMetaInfo(array $metaInfo)
+    private static function validateProductListingSearchCriteria(array $metaInfo)
     {
         if (!isset($metaInfo['condition'])) {
             throw new MalformedSearchCriteriaMetaException('Missing criteria condition.');
@@ -179,10 +180,19 @@ class ProductListingCriteriaSnippetContent implements PageMetaInfoSnippetContent
         if (!isset($metaInfo['criteria'])) {
             throw new MalformedSearchCriteriaMetaException('Missing criteria.');
         }
+
+        array_map(function(array $criteria) {
+            if (isset($criteria['condition'])) {
+                self::validateProductListingSearchCriteria($criteria);
+                return;
+            }
+
+            self::validateSearchCriterionMetaInfo($criteria);
+        }, $metaInfo['criteria']);
     }
 
     /**
-     * @param string[] $criterionArray
+     * @param mixed[] $criterionArray
      */
     private static function validateSearchCriterionMetaInfo(array $criterionArray)
     {

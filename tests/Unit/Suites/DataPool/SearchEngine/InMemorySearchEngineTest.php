@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 
 /**
@@ -45,7 +46,11 @@ class InMemorySearchEngineTest extends AbstractSearchEngineTest
     final protected function createSearchEngineInstance(
         FacetFieldTransformationRegistry $facetFieldTransformationRegistry
     ) {
-        $searchCriteriaBuilder = new SearchCriteriaBuilder($facetFieldTransformationRegistry);
+        $stubGlobalProductListingCriteria = $this->getMock(SearchCriteria::class);
+        $searchCriteriaBuilder = new SearchCriteriaBuilder(
+            $facetFieldTransformationRegistry,
+            $stubGlobalProductListingCriteria
+        );
 
         return new InMemorySearchEngine($searchCriteriaBuilder, $facetFieldTransformationRegistry);
     }

@@ -4,8 +4,9 @@ namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
-use LizardsAndPumpkins\Exception\InvalidProjectionSourceDataTypeException;
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
+use LizardsAndPumpkins\Projection\Catalog\ProductView;
+use LizardsAndPumpkins\Projection\Catalog\ProductViewLocator;
 use LizardsAndPumpkins\Projection\UrlKeyForContextCollection;
 use LizardsAndPumpkins\Projection\UrlKeyForContextCollector;
 use LizardsAndPumpkins\SnippetList;
@@ -51,6 +52,11 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
      */
     private $stubUrlKeyCollector;
 
+    /**
+     * @var ProductViewLocator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $productViewLocator;
+
     public function setUp()
     {
         $this->stubSnippetList = $this->getMock(SnippetList::class, [], [], '', false);
@@ -61,13 +67,18 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
         $this->mockRendererCollection->method('render')->willReturn($this->stubSnippetList);
 
         $this->stubSearchDocumentBuilder = $this->getMock(SearchDocumentBuilder::class);
+        $this->stubSearchDocumentBuilder->method('aggregate')->willReturn($this->stubSearchDocumentCollection);
 
+        $stubUrlKeyForContextCollection = $this->getMock(UrlKeyForContextCollection::class, [], [], '', false);
         $this->stubUrlKeyCollector = $this->getMock(UrlKeyForContextCollector::class, [], [], '', false);
-        $this->stubUrlKeyCollector->method('collectProductUrlKeys')->willReturn(
-            $this->getMock(UrlKeyForContextCollection::class, [], [], '', false)
-        );
+        $this->stubUrlKeyCollector->method('collectProductUrlKeys')->willReturn($stubUrlKeyForContextCollection);
+
+        $stubProductView = $this->getMock(ProductView::class);
+        $this->productViewLocator = $this->getMock(ProductViewLocator::class, [], [], '', false);
+        $this->productViewLocator->method('createForProduct')->willReturn($stubProductView);
 
         $this->projector = new ProductProjector(
+            $this->productViewLocator,
             $this->mockRendererCollection,
             $this->stubSearchDocumentBuilder,
             $this->stubUrlKeyCollector,
@@ -75,11 +86,17 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testProductViewLocatorIsCalled()
+    {
+        $this->productViewLocator->expects($this->once())->method('createForProduct');
+
+        $stubProduct = $this->getMock(Product::class);
+
+        $this->projector->project($stubProduct);
+    }
+
     public function testSnippetListAndSearchDocumentAreSetOnDataPoolWriter()
     {
-        $this->stubSearchDocumentBuilder->expects($this->once())->method('aggregate')
-            ->willReturn($this->stubSearchDocumentCollection);
-
         $this->mockDataPoolWriter->expects($this->once())->method('writeSnippetList')->with($this->stubSnippetList);
         $this->mockDataPoolWriter->expects($this->once())->method('writeSearchDocumentCollection')
             ->with($this->stubSearchDocumentCollection);
@@ -89,17 +106,8 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
         $this->projector->project($stubProduct);
     }
 
-    public function testExceptionIsThrownIfProjectionSourceDataIsNotProduct()
-    {
-        $this->setExpectedException(InvalidProjectionSourceDataTypeException::class);
-
-        $this->projector->project('invalid-projection-source-data');
-    }
-
     public function testItWritesTheUrlKeyCollectionForTheDataVersionToTheDataPool()
     {
-        $this->stubSearchDocumentBuilder->method('aggregate')->willReturn($this->stubSearchDocumentCollection);
-
         /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
         $stubProduct = $this->getMock(Product::class);
 
@@ -111,10 +119,8 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
 
     public function testItDelegatesToTheUrlKeyCollectorToCollectAllKeys()
     {
-        $this->stubSearchDocumentBuilder->method('aggregate')->willReturn($this->stubSearchDocumentCollection);
-
         $stubProduct = $this->getMock(Product::class);
-        $this->stubUrlKeyCollector->expects($this->once())->method('collectProductUrlKeys')->with($stubProduct)
+        $this->stubUrlKeyCollector->expects($this->once())->method('collectProductUrlKeys')
             ->willReturn($this->getMock(UrlKeyForContextCollection::class, [], [], '', false));
 
         $this->projector->project($stubProduct);

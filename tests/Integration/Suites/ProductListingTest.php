@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
@@ -11,13 +12,10 @@ use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Log\LogMessage;
 use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer;
-use LizardsAndPumpkins\Utils\XPathParser;
 
 class ProductListingTest extends \PHPUnit_Framework_TestCase
 {
     use ProductListingTestTrait;
-
-    private $testUrl = 'http://example.com/sale';
 
     private function failIfMessagesWhereLogged(Logger $logger)
     {
@@ -43,9 +41,7 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
     {
         $this->importCatalog();
 
-        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
-        $urlKeyNode = (new XPathParser($xml))->getXmlNodesArrayByXPath('//catalog/listings/listing[1]/@url_key');
-        $urlKey = $urlKeyNode[0]['value'];
+        $urlKey = 'adidas-sale';
 
         $logger = $this->factory->getLogger();
         $this->failIfMessagesWhereLogged($logger);
@@ -64,6 +60,7 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
         $metaInfoSnippet = json_decode($metaInfoSnippetJson, true);
 
         $expectedCriteria = CompositeSearchCriterion::createAnd(
+            SearchCriterionGreaterThan::create('stock_qty', '0'),
             SearchCriterionEqual::create('category', 'sale'),
             SearchCriterionEqual::create('brand', 'Adidas')
         );
@@ -80,7 +77,7 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
 
         $request = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
-            HttpUrl::fromString($this->testUrl),
+            HttpUrl::fromString('http://example.com/sale'),
             HttpHeaders::fromArray([]),
             HttpRequestBody::fromString('')
         );
@@ -91,7 +88,6 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
         $page = $productListingRequestHandler->process($request);
         $body = $page->getBody();
 
-        /* TODO: read from XML */
         $expectedProductName = 'Gel-Noosa';
         $unExpectedProductName = 'LED Armflasher';
 

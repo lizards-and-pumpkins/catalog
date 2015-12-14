@@ -56,11 +56,11 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
  * @uses   \LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator
  * @uses   \LizardsAndPumpkins\Http\GenericHttpRouter
- * @uses   \LizardsAndPumpkins\Product\MultipleProductStockQuantityApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
  * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\CompositeSnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\ContentBlockSnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\RegistrySnippetKeyGeneratorLocatorStrategy
@@ -205,7 +205,6 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
             [ProductListingPageSnippetRenderer::CODE],
             [PriceSnippetRenderer::PRICE],
             [PriceSnippetRenderer::SPECIAL_PRICE],
-            ['backorders'],
             [ProductListingCriteriaSnippetRenderer::CODE],
             [ProductSearchResultMetaSnippetRenderer::CODE],
             [ProductSearchAutosuggestionMetaSnippetRenderer::CODE],

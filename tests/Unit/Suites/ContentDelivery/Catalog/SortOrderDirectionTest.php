@@ -20,6 +20,6 @@ class SortOrderDirectionTest extends \PHPUnit_Framework_TestCase
     {
         $direction = 'asc';
         $result = SortOrderDirection::create($direction);
-        $this->assertSame($direction, $result->getDirection());
+        $this->assertSame($direction, (string) $result);
     }
 }

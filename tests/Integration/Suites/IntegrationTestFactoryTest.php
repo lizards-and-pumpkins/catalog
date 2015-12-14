@@ -15,6 +15,7 @@ use LizardsAndPumpkins\Image\ImageProcessingStrategySequence;
 use LizardsAndPumpkins\Log\InMemoryLogger;
 use LizardsAndPumpkins\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
 use LizardsAndPumpkins\Product\Tax\TaxServiceLocator;
+use LizardsAndPumpkins\Projection\Catalog\ProductViewLocator;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\Queue\InMemory\InMemoryQueue;
 
@@ -222,5 +223,10 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsAnIntegrationTestTaxServiceLocator()
     {
         $this->assertInstanceOf(TaxServiceLocator::class, $this->factory->createTaxServiceLocator());
+    }
+
+    public function testProductViewLocatorIsReturned()
+    {
+        $this->assertInstanceOf(ProductViewLocator::class, $this->factory->createProductViewLocator());
     }
 }

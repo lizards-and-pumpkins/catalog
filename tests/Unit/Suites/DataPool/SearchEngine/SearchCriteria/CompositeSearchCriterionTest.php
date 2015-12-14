@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\Exception\InvalidCriterionConditionException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
@@ -118,5 +119,33 @@ class CompositeSearchCriterionTest extends \PHPUnit_Framework_TestCase
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields(['foo' => ['bar']]);
 
         $this->assertTrue($criteria->matches($stubSearchDocument));
+    }
+
+    public function testExceptionIsThrownIfConditionIsNotSupported()
+    {
+        $invalidCondition = 'foo';
+        $this->setExpectedException(InvalidCriterionConditionException::class);
+        CompositeSearchCriterion::create($invalidCondition);
+    }
+
+    /**
+     * @dataProvider criteriaConditionProvider
+     * @param string $condition
+     */
+    public function testCriteriaWithArbitraryConditionIsCreated($condition)
+    {
+        $result = CompositeSearchCriterion::create($condition);
+        $this->assertInstanceOf(CompositeSearchCriterion::class, $result);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function criteriaConditionProvider()
+    {
+        return [
+            [CompositeSearchCriterion::AND_CONDITION],
+            [CompositeSearchCriterion::OR_CONDITION],
+        ];
     }
 }
