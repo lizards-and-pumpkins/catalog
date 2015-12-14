@@ -93,6 +93,9 @@ class TwentyOneRunConfigurableProductView extends AbstractProductView implements
         return $this->memoizedProductAttributesList;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function jsonSerialize()
     {
         $productData = $this->product->jsonSerialize();
