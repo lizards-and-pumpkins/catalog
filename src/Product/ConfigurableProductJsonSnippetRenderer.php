@@ -84,7 +84,6 @@ class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
     private function createVariationAttributesJsonSnippetContent(Product $product)
     {
         if ($this->isCompositeProduct($product)) {
-            /** @var CompositeProduct $product */
             return json_encode($this->getVariationAttributesJsonData($product));
         }
 
@@ -123,7 +122,6 @@ class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
     private function createAssociatedProductsJsonSnippetContent(Product $product)
     {
         if ($this->isCompositeProduct($product)) {
-            /** @var CompositeProduct $product */
             return json_encode($this->getAssociatedProductListJson($product));
         }
 
