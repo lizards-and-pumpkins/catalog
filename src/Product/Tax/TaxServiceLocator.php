@@ -4,9 +4,13 @@ namespace LizardsAndPumpkins\Product\Tax;
 
 interface TaxServiceLocator
 {
+    const OPTION_COUNTRY = 'country';
+    const OPTION_WEBSITE = 'website';
+    const OPTION_PRODUCT_TAX_CLASS = 'product_tax_class';
+    
     /**
-     * @param TaxServiceLocatorOptions $options
+     * @param mixed[] $options
      * @return TaxService
      */
-    public function get(TaxServiceLocatorOptions $options);
+    public function get(array $options);
 }

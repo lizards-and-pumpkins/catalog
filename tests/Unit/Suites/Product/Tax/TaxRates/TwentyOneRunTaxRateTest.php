@@ -3,19 +3,48 @@
 namespace LizardsAndPumpkins\Product\Tax\TaxRates;
 
 use LizardsAndPumpkins\Product\Price;
+use LizardsAndPumpkins\Product\Tax\TaxRates\Exception\InvalidTaxRateException;
+use LizardsAndPumpkins\Product\Tax\TaxService;
 
 /**
  * @covers \LizardsAndPumpkins\Product\Tax\TaxRates\TwentyOneRunTaxRate
- * @uses   \LizardsAndPumpkins\Product\Tax\TaxRates\TwentyOneRunGenericTaxRateService
- * @uses   \LizardsAndPumpkins\Product\Price
+ * @uses \LizardsAndPumpkins\Product\Price
  */
 class TwentyOneRunTaxRateTest extends \PHPUnit_Framework_TestCase
 {
+    public function testItImplementsTheTwentyOneRunTaxRateService()
+    {
+        $this->assertInstanceOf(TaxService::class, TwentyOneRunTaxRate::fromInt(19));
+    }
+
     public function testItReturnsATaxServiceInstanceMatchingTheGivenRate()
     {
-        $this->assertInstanceOf(TwentyOneRunTaxRate::class, TwentyOneRunTaxRate::create(20));
-        $this->assertInstanceOf(TwentyOneRunTaxRate::class, TwentyOneRunTaxRate::create(19));
-        $this->assertInstanceOf(TwentyOneRunTaxRate::class, TwentyOneRunTaxRate::create(18));
+        $this->assertInstanceOf(TwentyOneRunTaxRate::class, TwentyOneRunTaxRate::fromInt(20));
+        $this->assertInstanceOf(TwentyOneRunTaxRate::class, TwentyOneRunTaxRate::fromInt(19));
+        $this->assertInstanceOf(TwentyOneRunTaxRate::class, TwentyOneRunTaxRate::fromInt(18));
+    }
+
+    public function testItThrowsAnExceptionIfTheTaxRateIsNotAnInteger()
+    {
+        $this->setExpectedException(
+            InvalidTaxRateException::class,
+            'The tax rate has to be an integer value, got "'
+        );
+        TwentyOneRunTaxRate::fromInt('10');
+    }
+
+    public function testItThrowsAnExceptionIfTheTaxRateIsZero()
+    {
+        $this->setExpectedException(
+            InvalidTaxRateException::class,
+            'The tax rate must not be zero'
+        );
+        TwentyOneRunTaxRate::fromInt(0);
+    }
+
+    public function testItReturnsTheInjectedFactor()
+    {
+        $this->assertSame(19, TwentyOneRunTaxRate::fromInt(19)->getRate());
     }
 
     /**
@@ -26,7 +55,7 @@ class TwentyOneRunTaxRateTest extends \PHPUnit_Framework_TestCase
      */
     public function testItAppliesTheTaxRate($rate, $price, $expected)
     {
-        $result = TwentyOneRunTaxRate::create($rate)->applyTo(new Price($price));
+        $result = TwentyOneRunTaxRate::fromInt($rate)->applyTo(new Price($price));
         $message = sprintf('Expected tax rate %s applied to %d to be %s, got %s', $rate, $price, $expected, $result);
         $this->assertSame($expected, $result->getAmount(), $message);
     }
@@ -49,7 +78,7 @@ class TwentyOneRunTaxRateTest extends \PHPUnit_Framework_TestCase
             [19, 1, 1],
             [19, 0, 0],
             [19, -1, -1],
-            
+
             [25, 1000, 1250],
             [25, 125, 156],
             [25, 124, 155],
@@ -61,7 +90,7 @@ class TwentyOneRunTaxRateTest extends \PHPUnit_Framework_TestCase
             [25, 1, 1],
             [25, 0, 0],
             [25, -1, -1],
-            
+
             [20, 1000, 1200],
             [20, 125, 150],
             [20, 124, 149],
@@ -73,7 +102,7 @@ class TwentyOneRunTaxRateTest extends \PHPUnit_Framework_TestCase
             [20, 1, 1],
             [20, 0, 0],
             [20, -1, -1],
-            
+
             [21, 1000, 1210],
             [21, 125, 151],
             [21, 124, 150],
@@ -85,7 +114,7 @@ class TwentyOneRunTaxRateTest extends \PHPUnit_Framework_TestCase
             [21, 1, 1],
             [21, 0, 0],
             [21, -1, -1],
-            
+
             [24, 1000, 1240],
             [24, 125, 155],
             [24, 124, 154],
@@ -97,7 +126,7 @@ class TwentyOneRunTaxRateTest extends \PHPUnit_Framework_TestCase
             [24, 1, 1],
             [24, 0, 0],
             [24, -1, -1],
-            
+
             [17, 1000, 1170],
             [17, 125, 146],
             [17, 124, 145],
@@ -109,7 +138,7 @@ class TwentyOneRunTaxRateTest extends \PHPUnit_Framework_TestCase
             [17, 1, 1],
             [17, 0, 0],
             [17, -1, -1],
-            
+
             [7, 1000, 1070],
             [7, 125, 134],
             [7, 124, 133],

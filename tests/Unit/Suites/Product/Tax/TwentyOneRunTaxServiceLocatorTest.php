@@ -7,12 +7,10 @@ use LizardsAndPumpkins\Product\Tax\TaxRates\TwentyOneRunTaxRate;
 
 /**
  * @covers \LizardsAndPumpkins\Product\Tax\TwentyOneRunTaxServiceLocator
- * @uses   \LizardsAndPumpkins\Product\Tax\TwentyOneRunTaxServiceLocatorOptions
  * @uses   \LizardsAndPumpkins\Product\Tax\ProductTaxClass
  * @uses   \LizardsAndPumpkins\Country\Country
  * @uses   \LizardsAndPumpkins\Website\Website
  * @uses   \LizardsAndPumpkins\Product\Tax\TaxRates\TwentyOneRunTaxRate
- * @uses   \LizardsAndPumpkins\Product\Tax\TaxRates\TwentyOneRunGenericTaxRateService
  */
 class TwentyOneRunTaxServiceLocatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,11 +23,15 @@ class TwentyOneRunTaxServiceLocatorTest extends \PHPUnit_Framework_TestCase
      * @param string $website
      * @param string $taxClass
      * @param string $country
-     * @return TwentyOneRunTaxServiceLocatorOptions
+     * @return mixed[]
      */
     private function createTaxServiceLocatorOptions($website, $taxClass, $country)
     {
-        return TwentyOneRunTaxServiceLocatorOptions::fromStrings($website, $taxClass, $country);
+        return [
+            TaxServiceLocator::OPTION_PRODUCT_TAX_CLASS => $taxClass,
+            TaxServiceLocator::OPTION_COUNTRY => $country,
+            TaxServiceLocator::OPTION_WEBSITE => $website
+        ];
     }
 
     /**
