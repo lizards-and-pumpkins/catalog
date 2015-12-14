@@ -12,6 +12,8 @@ use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestRangedField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\FileUrlKeyStore;
 use LizardsAndPumpkins\Image\ImageMagickInscribeStrategy;
 use LizardsAndPumpkins\Image\ImageProcessor;
@@ -470,5 +472,13 @@ class SampleFactory implements Factory
     public function createProductViewLocator()
     {
         return new TwentyOneRunProductViewLocator();
+    }
+
+    /**
+     * @return SearchCriteria
+     */
+    public function createGlobalProductListingCriteria()
+    {
+        return SearchCriterionGreaterThan::create('stock_qty', 0);
     }
 }

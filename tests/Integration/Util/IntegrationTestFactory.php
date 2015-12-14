@@ -11,6 +11,9 @@ use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField;
 use LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\InMemoryUrlKeyStore;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
@@ -427,5 +430,13 @@ class IntegrationTestFactory implements Factory
     public function createProductViewLocator()
     {
         return new IntegrationTestProductViewLocator();
+    }
+
+    /**
+     * @return SearchCriteria
+     */
+    public function createGlobalProductListingCriteria()
+    {
+        return SearchCriterionGreaterThan::create('stock_qty', 0);
     }
 }

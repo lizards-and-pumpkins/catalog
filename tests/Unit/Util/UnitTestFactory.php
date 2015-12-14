@@ -7,6 +7,7 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 use LizardsAndPumpkins\Image\ImageProcessingStrategy;
@@ -311,5 +312,13 @@ class UnitTestFactory implements Factory
     public function createTaxServiceLocator()
     {
         return $this->mockObjectGenerator->getMock(TaxServiceLocator::class);
+    }
+
+    /**
+     * @return SearchCriteria
+     */
+    public function createGlobalProductListingCriteria()
+    {
+        return $this->mockObjectGenerator->getMock(SearchCriteria::class);
     }
 }

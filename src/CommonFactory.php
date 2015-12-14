@@ -1283,14 +1283,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return SearchCriteria
-     */
-    public function createGlobalProductListingCriteria()
-    {
-        return SearchCriterionGreaterThan::create('stock_qty', 0);
-    }
-
-    /**
      * @param DomainEventHandler $eventHandlerToDecorate
      * @return ProcessTimeLoggingDomainEventHandlerDecorator
      */
