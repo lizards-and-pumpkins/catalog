@@ -15,12 +15,17 @@ class ContentBlockSourceTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    private $stubContentBlockContent = 'bar';
+    private $testContentBlockContent = 'bar';
 
     /**
      * @var string[]
      */
-    private $stubContextData = ['baz' => 'qux'];
+    private $testContextData = ['baz' => 'qux'];
+
+    /**
+     * @var mixed[]
+     */
+    private $testKeyGeneratorParams = ['url_key' => 'foo'];
 
     /**
      * @var ContentBlockSource
@@ -32,26 +37,29 @@ class ContentBlockSourceTest extends \PHPUnit_Framework_TestCase
         $this->stubContentBlockId = $this->getMock(ContentBlockId::class, [], [], '', false);
         $this->contentBlockSource = new ContentBlockSource(
             $this->stubContentBlockId,
-            $this->stubContentBlockContent,
-            $this->stubContextData
+            $this->testContentBlockContent,
+            $this->testContextData,
+            $this->testKeyGeneratorParams
         );
     }
 
     public function testContentBlockIdIsReturned()
     {
-        $result = $this->contentBlockSource->getContentBlockId();
-        $this->assertEquals($this->stubContentBlockId, $result);
+        $this->assertEquals($this->stubContentBlockId, $this->contentBlockSource->getContentBlockId());
     }
 
     public function testContentBlockContentIsReturned()
     {
-        $result = $this->contentBlockSource->getContent();
-        $this->assertEquals($this->stubContentBlockContent, $result);
+        $this->assertSame($this->testContentBlockContent, $this->contentBlockSource->getContent());
     }
 
     public function testContextDataIsReturned()
     {
-        $result = $this->contentBlockSource->getContextData();
-        $this->assertEquals($this->stubContextData, $result);
+        $this->assertSame($this->testContextData, $this->contentBlockSource->getContextData());
+    }
+
+    public function testKeyGeneratorParamsAreReturned()
+    {
+        $this->assertSame($this->testKeyGeneratorParams, $this->contentBlockSource->getKeyGeneratorParams());
     }
 }

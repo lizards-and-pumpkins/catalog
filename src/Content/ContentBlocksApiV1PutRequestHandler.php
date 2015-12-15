@@ -5,6 +5,8 @@ namespace LizardsAndPumpkins\Content;
 use LizardsAndPumpkins\Api\ApiRequestHandler;
 use LizardsAndPumpkins\Content\Exception\ContentBlockBodyIsMissingInRequestBodyException;
 use LizardsAndPumpkins\Content\Exception\ContentBlockContextIsMissingInRequestBodyException;
+use LizardsAndPumpkins\Content\Exception\ContentBlockKeyGeneratorParamsMissingInRequestBodyException;
+use LizardsAndPumpkins\Content\Exception\InvalidContentBlockKeyGeneratorParams;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Queue\Queue;
 
@@ -53,7 +55,12 @@ class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
 
         $contentBlockIdString = $this->extractContentBlockIdFromUrl($request);
         $contentBlockId = ContentBlockId::fromString($contentBlockIdString);
-        $contentBlockSource = new ContentBlockSource($contentBlockId, $requestBody['content'], $requestBody['context']);
+        $contentBlockSource = new ContentBlockSource(
+            $contentBlockId,
+            $requestBody['content'],
+            $requestBody['context'],
+            $requestBody['key_generator_params']
+        );
 
         $this->commandQueue->add(new UpdateContentBlockCommand($contentBlockSource));
     }
@@ -79,6 +86,19 @@ class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
             throw new InvalidContentBlockContext(
                 sprintf('Content block context supposed to be an array, got %s.', gettype($requestBody['context']))
             );
+        }
+
+        if (!isset($requestBody['key_generator_params'])) {
+            throw new ContentBlockKeyGeneratorParamsMissingInRequestBodyException(
+                'Content block key generators params are missing in request body.'
+            );
+        }
+
+        if (!is_array($requestBody['key_generator_params'])) {
+            throw new InvalidContentBlockKeyGeneratorParams(sprintf(
+                'Content block key generator params supposed to be an array, got %s.',
+                gettype($requestBody['key_generator_params'])
+            ));
         }
     }
 

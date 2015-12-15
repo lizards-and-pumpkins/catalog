@@ -503,5 +503,11 @@ TEXTILE/SYNTHETICS]]></description>
                 <category is="Equal">sale</category>
             </criteria>
         </listing>
+        <listing url_key="asics" website="ru" locale="de_DE">
+            <criteria type="and">
+                <stock_qty is="GreaterThan">0</stock_qty>
+                <brand is="Equal">Asics</brand>
+            </criteria>
+        </listing>
     </listings>
 </catalog>

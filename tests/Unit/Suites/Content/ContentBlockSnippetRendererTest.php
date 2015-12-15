@@ -61,7 +61,7 @@ class ContentBlockSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(SnippetRenderer::class, $this->renderer);
     }
 
-    public function testSnippetListContains()
+    public function testSnippetIsAddedToList()
     {
         $stubSnippetKey = 'foo';
         $dummyContentBlockContent = 'bar';
@@ -71,6 +71,7 @@ class ContentBlockSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $mockContentBlockSource = $this->getMock(ContentBlockSource::class, [], [], '', false);
         $mockContentBlockSource->method('getContent')->willReturn($dummyContentBlockContent);
         $mockContentBlockSource->method('getContextData')->willReturn([]);
+        $mockContentBlockSource->method('getKeyGeneratorParams')->willReturn([]);
 
         $stubKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $stubKeyGenerator->method('getKeyForContext')->willReturn($stubSnippetKey);

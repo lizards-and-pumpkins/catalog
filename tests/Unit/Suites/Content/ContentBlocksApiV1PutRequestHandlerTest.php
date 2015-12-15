@@ -5,6 +5,8 @@ namespace LizardsAndPumpkins\Content;
 use LizardsAndPumpkins\Api\ApiRequestHandler;
 use LizardsAndPumpkins\Content\Exception\ContentBlockBodyIsMissingInRequestBodyException;
 use LizardsAndPumpkins\Content\Exception\ContentBlockContextIsMissingInRequestBodyException;
+use LizardsAndPumpkins\Content\Exception\ContentBlockKeyGeneratorParamsMissingInRequestBodyException;
+use LizardsAndPumpkins\Content\Exception\InvalidContentBlockKeyGeneratorParams;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Queue\Queue;
 
@@ -87,9 +89,24 @@ class ContentBlocksApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
         $this->requestHandler->process($this->mockRequest);
     }
 
+    public function testExceptionIsThrownIfContentBlockKeyGeneratorParamsAreMissingInRequestBody()
+    {
+        $this->setExpectedException(ContentBlockKeyGeneratorParamsMissingInRequestBodyException::class);
+        $this->mockRequest->method('getRawBody')->willReturn(json_encode(['content' => '', 'context' => []]));
+        $this->requestHandler->process($this->mockRequest);
+    }
+
+    public function testExceptionIsThrownIfContentBlockKeyGeneratorParamsIsNotAnArray()
+    {
+        $this->setExpectedException(InvalidContentBlockKeyGeneratorParams::class);
+        $this->mockRequest->method('getRawBody')
+            ->willReturn(json_encode(['content' => '', 'context' => [], 'key_generator_params' => 1]));
+        $this->requestHandler->process($this->mockRequest);
+    }
+
     public function testUpdateContentBlockCommandIsEmitted()
     {
-        $requestBody = ['content' => 'bar', 'context' => ['baz' => 'qux']];
+        $requestBody = ['content' => 'bar', 'context' => ['baz' => 'qux'], 'key_generator_params' => []];
         $this->mockRequest->method('getRawBody')->willReturn(json_encode($requestBody));
         $this->mockRequest->method('getUrl')->willReturn('http://example.com/api/content_blocks/foo');
 

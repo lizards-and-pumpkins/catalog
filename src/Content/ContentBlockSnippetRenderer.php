@@ -45,7 +45,7 @@ class ContentBlockSnippetRenderer implements SnippetRenderer
         $keyGenerator = $this->snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
 
         $context = $this->contextBuilder->createContext($contentBlockSource->getContextData());
-        $keyGeneratorParameters = [];
+        $keyGeneratorParameters = $contentBlockSource->getKeyGeneratorParams();
 
         $key = $keyGenerator->getKeyForContext($context, $keyGeneratorParameters);
         $content = $contentBlockSource->getContent();
