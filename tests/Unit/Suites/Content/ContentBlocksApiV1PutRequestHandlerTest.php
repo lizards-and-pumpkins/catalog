@@ -5,8 +5,7 @@ namespace LizardsAndPumpkins\Content;
 use LizardsAndPumpkins\Api\ApiRequestHandler;
 use LizardsAndPumpkins\Content\Exception\ContentBlockBodyIsMissingInRequestBodyException;
 use LizardsAndPumpkins\Content\Exception\ContentBlockContextIsMissingInRequestBodyException;
-use LizardsAndPumpkins\Content\Exception\ContentBlockKeyGeneratorParamsMissingInRequestBodyException;
-use LizardsAndPumpkins\Content\Exception\InvalidContentBlockKeyGeneratorParams;
+use LizardsAndPumpkins\Content\Exception\InvalidContentBlockUrlKey;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Queue\Queue;
 
@@ -89,24 +88,17 @@ class ContentBlocksApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
         $this->requestHandler->process($this->mockRequest);
     }
 
-    public function testExceptionIsThrownIfContentBlockKeyGeneratorParamsAreMissingInRequestBody()
+    public function testExceptionIsThrownIfContentBlockUrlKeyIsInvalid()
     {
-        $this->setExpectedException(ContentBlockKeyGeneratorParamsMissingInRequestBodyException::class);
-        $this->mockRequest->method('getRawBody')->willReturn(json_encode(['content' => '', 'context' => []]));
-        $this->requestHandler->process($this->mockRequest);
-    }
-
-    public function testExceptionIsThrownIfContentBlockKeyGeneratorParamsIsNotAnArray()
-    {
-        $this->setExpectedException(InvalidContentBlockKeyGeneratorParams::class);
+        $this->setExpectedException(InvalidContentBlockUrlKey::class);
         $this->mockRequest->method('getRawBody')
-            ->willReturn(json_encode(['content' => '', 'context' => [], 'key_generator_params' => 1]));
+            ->willReturn(json_encode(['content' => '', 'context' => [], 'url_key' => 1]));
         $this->requestHandler->process($this->mockRequest);
     }
 
     public function testUpdateContentBlockCommandIsEmitted()
     {
-        $requestBody = ['content' => 'bar', 'context' => ['baz' => 'qux'], 'key_generator_params' => []];
+        $requestBody = ['content' => 'bar', 'context' => ['baz' => 'qux']];
         $this->mockRequest->method('getRawBody')->willReturn(json_encode($requestBody));
         $this->mockRequest->method('getUrl')->willReturn('http://example.com/api/content_blocks/foo');
 

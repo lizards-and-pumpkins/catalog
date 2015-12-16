@@ -5,8 +5,7 @@ namespace LizardsAndPumpkins\Content;
 use LizardsAndPumpkins\Api\ApiRequestHandler;
 use LizardsAndPumpkins\Content\Exception\ContentBlockBodyIsMissingInRequestBodyException;
 use LizardsAndPumpkins\Content\Exception\ContentBlockContextIsMissingInRequestBodyException;
-use LizardsAndPumpkins\Content\Exception\ContentBlockKeyGeneratorParamsMissingInRequestBodyException;
-use LizardsAndPumpkins\Content\Exception\InvalidContentBlockKeyGeneratorParams;
+use LizardsAndPumpkins\Content\Exception\InvalidContentBlockUrlKey;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Queue\Queue;
 
@@ -55,11 +54,18 @@ class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
 
         $contentBlockIdString = $this->extractContentBlockIdFromUrl($request);
         $contentBlockId = ContentBlockId::fromString($contentBlockIdString);
+
+        $keyGeneratorParams = [];
+
+        if (isset($requestBody['url_key'])) {
+            $keyGeneratorParams['url_key'] = $requestBody['url_key'];
+        }
+
         $contentBlockSource = new ContentBlockSource(
             $contentBlockId,
             $requestBody['content'],
             $requestBody['context'],
-            $requestBody['key_generator_params']
+            $keyGeneratorParams
         );
 
         $this->commandQueue->add(new UpdateContentBlockCommand($contentBlockSource));
@@ -88,17 +94,10 @@ class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
             );
         }
 
-        if (!isset($requestBody['key_generator_params'])) {
-            throw new ContentBlockKeyGeneratorParamsMissingInRequestBodyException(
-                'Content block key generators params are missing in request body.'
+        if (isset($requestBody['url_key']) && !is_array($requestBody['url_key'])) {
+            throw new InvalidContentBlockUrlKey(
+                sprintf('Content block URL key must be a string, got %s.', gettype($requestBody['url_key']))
             );
-        }
-
-        if (!is_array($requestBody['key_generator_params'])) {
-            throw new InvalidContentBlockKeyGeneratorParams(sprintf(
-                'Content block key generator params supposed to be an array, got %s.',
-                gettype($requestBody['key_generator_params'])
-            ));
         }
     }
 

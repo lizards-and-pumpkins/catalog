@@ -21,7 +21,6 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $httpRequestBodyString = json_encode([
             'content' => $contentBlockContent,
             'context' => ['website' => 'ru', 'locale' => 'en_US'],
-            'key_generator_params' => [],
         ]);
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
