@@ -94,7 +94,7 @@ class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
             );
         }
 
-        if (isset($requestBody['url_key']) && !is_array($requestBody['url_key'])) {
+        if (isset($requestBody['url_key']) && !is_string($requestBody['url_key'])) {
             throw new InvalidContentBlockUrlKey(
                 sprintf('Content block URL key must be a string, got %s.', gettype($requestBody['url_key']))
             );
