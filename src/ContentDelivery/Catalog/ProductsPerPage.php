@@ -28,8 +28,8 @@ class ProductsPerPage implements \JsonSerializable
     }
 
     /**
-     * @param mixed[] $numbersOfProductsPerPage
-     * @param mixed $selectedNumberOfProductsPerPage
+     * @param int[] $numbersOfProductsPerPage
+     * @param int $selectedNumberOfProductsPerPage
      * @return ProductsPerPage
      */
     public static function create(array $numbersOfProductsPerPage, $selectedNumberOfProductsPerPage)

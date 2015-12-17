@@ -3,7 +3,6 @@
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\Exception\InvalidSearchDocumentFieldKeyException;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\Exception\InvalidSearchDocumentFieldValueException;
 
 class SearchDocumentField
 {
@@ -38,18 +37,6 @@ class SearchDocumentField
         array_map('self::validateValue', $values);
 
         return new self((string) $key, $values);
-    }
-
-    /**
-     * @param mixed $value
-     */
-    public static function validateValue($value)
-    {
-        if (! is_scalar($value)) {
-            $type = is_object($value) ? get_class($value) : gettype($value);
-            $message = sprintf('Only string, integer, float and boolean attribute values are allowed, got "%s"', $type);
-            throw new InvalidSearchDocumentFieldValueException($message);
-        }
     }
 
     /**

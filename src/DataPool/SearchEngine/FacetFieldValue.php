@@ -28,8 +28,8 @@ class FacetFieldValue implements \JsonSerializable
     }
 
     /**
-     * @param mixed $value
-     * @param mixed $count
+     * @param string $value
+     * @param int $count
      * @return FacetFieldValue
      */
     public static function create($value, $count)
