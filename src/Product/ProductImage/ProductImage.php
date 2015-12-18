@@ -55,12 +55,4 @@ class ProductImage implements \JsonSerializable
     {
         return $this->attributeList;
     }
-
-    /**
-     * @return ProductAttributeList
-     */
-    public function getAttributes()
-    {
-        return $this->attributeList;
-    }
 }
