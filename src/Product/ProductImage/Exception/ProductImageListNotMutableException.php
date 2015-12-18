@@ -1,7 +1,7 @@
 <?php
 
 
-namespace LizardsAndPumpkins\Product\Exception;
+namespace LizardsAndPumpkins\Product\ProductImage\Exception;
 
 class ProductImageListNotMutableException extends \LogicException
 {

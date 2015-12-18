@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\Projection\Catalog;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductAttributeList;
-use LizardsAndPumpkins\Product\ProductImage;
+use LizardsAndPumpkins\Product\ProductImage\ProductImage;
 
 abstract class AbstractProductView implements ProductView
 {

@@ -8,7 +8,7 @@ use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\Product\ProductAttributeList;
 use LizardsAndPumpkins\Product\ProductId;
-use LizardsAndPumpkins\Product\ProductImageList;
+use LizardsAndPumpkins\Product\ProductImage\ProductImageList;
 use LizardsAndPumpkins\Product\Tax\ProductTaxClass;
 
 /**
@@ -19,7 +19,7 @@ use LizardsAndPumpkins\Product\Tax\ProductTaxClass;
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Product\ProductAttribute
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
- * @uses   \LizardsAndPumpkins\Product\ProductImageList
+ * @uses   \LizardsAndPumpkins\Product\ProductImage\ProductImageList
  * @uses   \LizardsAndPumpkins\Product\Price
  */
 class SimpleProductBuilderTest extends \PHPUnit_Framework_TestCase

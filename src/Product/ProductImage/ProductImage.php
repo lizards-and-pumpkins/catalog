@@ -1,7 +1,9 @@
 <?php
 
 
-namespace LizardsAndPumpkins\Product;
+namespace LizardsAndPumpkins\Product\ProductImage;
+
+use LizardsAndPumpkins\Product\ProductAttributeList;
 
 class ProductImage implements \JsonSerializable
 {

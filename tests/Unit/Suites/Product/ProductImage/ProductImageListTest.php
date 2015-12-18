@@ -1,13 +1,14 @@
 <?php
 
 
-namespace LizardsAndPumpkins\Product;
+namespace LizardsAndPumpkins\Product\ProductImage;
 
-use LizardsAndPumpkins\Product\Exception\ProductImageListNotMutableException;
+use LizardsAndPumpkins\Product\ProductAttributeList;
+use LizardsAndPumpkins\Product\ProductImage\Exception\ProductImageListNotMutableException;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductImageList
- * @uses   \LizardsAndPumpkins\Product\ProductImage
+ * @covers \LizardsAndPumpkins\Product\ProductImage\ProductImageList
+ * @uses   \LizardsAndPumpkins\Product\ProductImage\ProductImage
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  */
 class ProductImageListTest extends \PHPUnit_Framework_TestCase
