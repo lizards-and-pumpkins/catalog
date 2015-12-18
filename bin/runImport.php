@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins;
 use League\CLImate\CLImate;
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
+use LizardsAndPumpkins\Projection\LoggingDomainEventHandlerFactory;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\Utils\BaseCliCommand;
 
@@ -42,6 +43,7 @@ class RunImport extends BaseCliCommand
         $factory = new SampleMasterFactory();
         $factory->register(new CommonFactory());
         $factory->register(new TwentyOneRunFactory());
+        $factory->register(new LoggingDomainEventHandlerFactory());
 
         return new self($factory, new CLImate());
     }
@@ -136,11 +138,7 @@ class RunImport extends BaseCliCommand
         );
     }
 
-    /**
-     * @param Queue $queue
-     * @param CommandConsumer|DomainEventConsumer $consumer
-     */
-    private function processQueueWhileMessagesPending(Queue $queue, $consumer)
+    private function processQueueWhileMessagesPending(Queue $queue, QueueMessageConsumer $consumer)
     {
         while ($queue->count()) {
             $consumer->process();

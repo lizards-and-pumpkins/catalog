@@ -7,7 +7,7 @@ use LizardsAndPumpkins\Product\AttributeCode;
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest
  */
-class FacetFilterRequestTest extends \PHPUnit_Framework_TestCase
+class FacetFiltersToIncludeInResultTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var FacetFilterRequestField|\PHPUnit_Framework_MockObject_MockObject

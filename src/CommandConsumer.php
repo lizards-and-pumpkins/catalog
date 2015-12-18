@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Queue\Queue;
 
-class CommandConsumer
+class CommandConsumer implements QueueMessageConsumer
 {
     private $maxNumberOfMessagesToProcess = 200;
 

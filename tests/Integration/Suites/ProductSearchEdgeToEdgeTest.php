@@ -10,7 +10,7 @@ use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer;
 
-class ProductSearchTest extends AbstractIntegrationTest
+class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
 {
     /**
      * @var SampleMasterFactory
