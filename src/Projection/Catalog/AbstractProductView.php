@@ -2,6 +2,11 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog;
 
+use LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite;
+use LizardsAndPumpkins\Product\ProductAttribute;
+use LizardsAndPumpkins\Product\ProductAttributeList;
+use LizardsAndPumpkins\Product\ProductImage;
+
 abstract class AbstractProductView implements ProductView
 {
     /**
@@ -73,7 +78,9 @@ abstract class AbstractProductView implements ProductView
      */
     public function getImageByNumber($imageNumber)
     {
-        return $this->getOriginalProduct()->getImageByNumber($imageNumber);
+        return $imageNumber > $this->getImageCount() ?
+            $this->getPlaceholderImage() :
+            $this->getOriginalProduct()->getImageByNumber($imageNumber);
     }
 
     /**
@@ -81,7 +88,9 @@ abstract class AbstractProductView implements ProductView
      */
     public function getImageFileNameByNumber($imageNumber)
     {
-        return $this->getOriginalProduct()->getImageFileNameByNumber($imageNumber);
+        return $imageNumber > $this->getImageCount() ?
+            $this->getPlaceholderImageFileName() :
+            $this->getOriginalProduct()->getImageFileNameByNumber($imageNumber);
     }
 
     /**
@@ -89,7 +98,9 @@ abstract class AbstractProductView implements ProductView
      */
     public function getImageLabelByNumber($imageNumber)
     {
-        return $this->getOriginalProduct()->getImageLabelByNumber($imageNumber);
+        return $imageNumber > $this->getImageCount() ?
+            $this->getPlaceholderImageLabel() :
+            $this->getOriginalProduct()->getImageLabelByNumber($imageNumber);
     }
 
     /**
@@ -97,7 +108,9 @@ abstract class AbstractProductView implements ProductView
      */
     public function getMainImageFileName()
     {
-        return $this->getOriginalProduct()->getMainImageFileName();
+        return $this->getImageCount() === 0 ?
+            $this->getPlaceholderImageFileName() :
+            $this->getOriginalProduct()->getMainImageFileName();
     }
 
     /**
@@ -105,7 +118,9 @@ abstract class AbstractProductView implements ProductView
      */
     public function getMainImageLabel()
     {
-        return $this->getOriginalProduct()->getMainImageLabel();
+        return $this->getImageCount() === 0?
+            $this->getPlaceholderImageLabel() :
+            $this->getOriginalProduct()->getMainImageLabel();
     }
 
     /**
@@ -122,5 +137,32 @@ abstract class AbstractProductView implements ProductView
     public function jsonSerialize()
     {
         return $this->getOriginalProduct()->jsonSerialize();
+    }
+
+    /**
+     * @return ProductImage
+     */
+    private function getPlaceholderImage()
+    {
+        $contextData = [];
+        $fileName = new ProductAttribute(ProductImage::FILE, $this->getPlaceholderImageFileName(), $contextData);
+        $label = new ProductAttribute(ProductImage::LABEL, $this->getPlaceholderImageLabel(), $contextData);
+        return new ProductImage(new ProductAttributeList($fileName, $label));
+    }
+
+    /**
+     * @return string
+     */
+    private function getPlaceholderImageFileName()
+    {
+        return sprintf('placeholder/placeholder-image-%s.jpg', $this->getContext()->getValue(ContextWebsite::CODE));
+    }
+
+    /**
+     * @return string
+     */
+    private function getPlaceholderImageLabel()
+    {
+        return '';
     }
 }
