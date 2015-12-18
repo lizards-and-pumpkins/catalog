@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Projection\Catalog;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductImage;
 
@@ -16,7 +16,7 @@ use LizardsAndPumpkins\Product\ProductImage;
  */
 class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
 {
-    private $expectedPlaceholderImageFile = 'placeholder/placeholder-image-website.jpg';
+    private $expectedPlaceholderImageFile = 'placeholder/placeholder-image-de_DE.jpg';
 
     private $expectedPlaceholderImageLabel = '';
 
@@ -32,19 +32,19 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $websiteCode = 'website';
-        $this->productView = $this->createProductViewInstanceWithWebsiteCode($websiteCode);
+        $localeCode = 'de_DE';
+        $this->productView = $this->createProductViewInstanceWithWebsiteCode($localeCode);
         $this->mockProduct = $this->productView->getOriginalProduct();
     }
 
     /**
-     * @param string $websiteCode
+     * @param string $localeCode
      * @return StubProductView
      */
-    private function createProductViewInstanceWithWebsiteCode($websiteCode)
+    private function createProductViewInstanceWithWebsiteCode($localeCode)
     {
         $stubContext = $this->getMock(Context::class);
-        $stubContext->method('getValue')->with(ContextWebsite::CODE)->willReturn($websiteCode);
+        $stubContext->method('getValue')->with(ContextLocale::CODE)->willReturn($localeCode);
         /** @var Product|\PHPUnit_Framework_MockObject_MockObject $mockProduct */
         $mockProduct = $this->getMock(Product::class);
         $mockProduct->method('getContext')->willReturn($stubContext);
@@ -203,26 +203,26 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider websiteCodeDataProvider
+     * @dataProvider localeCodeDataProvider
      */
-    public function testThePlaceholderImageFileNameContainsTheWebsiteCodeAsASuffix($websiteCode)
+    public function testThePlaceholderImageFileNameContainsTheWebsiteCodeAsASuffix($localeCode)
     {
-        $productView = $this->createProductViewInstanceWithWebsiteCode($websiteCode);
+        $productView = $this->createProductViewInstanceWithWebsiteCode($localeCode);
         $productView->getOriginalProduct()->method('getImageCount')->willReturn(0);
 
         $placeholderImageName = $productView->getMainImageFileName();
 
-        $this->assertRegExp("#-{$websiteCode}\\.(jpe?g|png|svg)$#", $placeholderImageName);
+        $this->assertRegExp("#-{$localeCode}\\.(jpe?g|png|svg)$#", $placeholderImageName);
     }
 
     /**
      * @return array[]
      */
-    public function websiteCodeDataProvider()
+    public function localeCodeDataProvider()
     {
         return [
-            ['foo'],
-            ['bar'],
+            ['de_DE'],
+            ['fr_FR'],
         ];
     }
 }

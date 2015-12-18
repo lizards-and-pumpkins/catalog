@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog;
 
-use LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductAttributeList;
 use LizardsAndPumpkins\Product\ProductImage;
@@ -142,7 +142,7 @@ abstract class AbstractProductView implements ProductView
     /**
      * @return ProductImage
      */
-    private function getPlaceholderImage()
+    protected function getPlaceholderImage()
     {
         $contextData = [];
         $fileName = new ProductAttribute(ProductImage::FILE, $this->getPlaceholderImageFileName(), $contextData);
@@ -153,15 +153,15 @@ abstract class AbstractProductView implements ProductView
     /**
      * @return string
      */
-    private function getPlaceholderImageFileName()
+    protected function getPlaceholderImageFileName()
     {
-        return sprintf('placeholder/placeholder-image-%s.jpg', $this->getContext()->getValue(ContextWebsite::CODE));
+        return sprintf('placeholder/placeholder-image-%s.jpg', $this->getContext()->getValue(ContextLocale::CODE));
     }
 
     /**
      * @return string
      */
-    private function getPlaceholderImageLabel()
+    protected function getPlaceholderImageLabel()
     {
         return '';
     }
