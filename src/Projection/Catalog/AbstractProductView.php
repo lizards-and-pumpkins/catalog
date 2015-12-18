@@ -118,7 +118,7 @@ abstract class AbstractProductView implements ProductView
      */
     public function getMainImageLabel()
     {
-        return $this->getImageCount() === 0?
+        return $this->getImageCount() === 0 ?
             $this->getPlaceholderImageLabel() :
             $this->getOriginalProduct()->getMainImageLabel();
     }
