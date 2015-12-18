@@ -143,7 +143,7 @@ class CatalogImport
         array_map(function (Context $context) use ($productBuilder, $productXml) {
             if ($productBuilder->isAvailableForContext($context)) {
                 $product = $productBuilder->getProductForContext($context);
-                $this->addCommandToQueue($product);
+                $this->addUpdateProductCommandToQueue($product);
                 $this->processImagesInProductXml($productXml);
             }
         }, $this->contextSource->getAllAvailableContextsWithVersion($this->dataVersion));
@@ -175,7 +175,7 @@ class CatalogImport
         }
     }
 
-    private function addCommandToQueue(Product $product)
+    private function addUpdateProductCommandToQueue(Product $product)
     {
         $this->commandQueue->add(new UpdateProductCommand($product));
     }
