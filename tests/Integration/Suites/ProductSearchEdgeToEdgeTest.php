@@ -37,25 +37,6 @@ class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
         $this->failIfMessagesWhereLogged($this->factory->getLogger());
     }
 
-    private function importCatalog()
-    {
-        $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
-        $httpHeaders = HttpHeaders::fromArray([
-            'Accept' => 'application/vnd.lizards-and-pumpkins.catalog_import.v1+json'
-        ]);
-        $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
-        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
-        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
-
-        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-
-        $website = new InjectableDefaultWebFront($request, $this->factory);
-        $website->runWithoutSendingResponse();
-
-        $this->factory->createCommandConsumer()->process();
-        $this->factory->createDomainEventConsumer()->process();
-    }
-
     /**
      * @return ProductSearchRequestHandler
      */
@@ -99,7 +80,6 @@ class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
      */
     public function testProductListingPageHtmlIsReturned()
     {
-        $this->importCatalog();
         $this->addTemplateWasUpdatedDomainEventToSetupProductListingFixture();
 
         $request = HttpRequest::fromParameters(
