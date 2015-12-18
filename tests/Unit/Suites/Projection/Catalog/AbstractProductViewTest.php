@@ -34,7 +34,7 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
      * @param string $localeCode
      * @return StubProductView
      */
-    private function createProductViewInstanceWithWebsiteCode($localeCode)
+    private function createProductViewInstanceWithLocaleCode($localeCode)
     {
         $stubContext = $this->getMock(Context::class);
         $stubContext->method('getValue')->with(ContextLocale::CODE)->willReturn($localeCode);
@@ -47,7 +47,7 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $localeCode = 'de_DE';
-        $this->productView = $this->createProductViewInstanceWithWebsiteCode($localeCode);
+        $this->productView = $this->createProductViewInstanceWithLocaleCode($localeCode);
         $this->mockProduct = $this->productView->getOriginalProduct();
     }
 
@@ -207,7 +207,7 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
      */
     public function testThePlaceholderImageFileNameContainsTheWebsiteCodeAsASuffix($localeCode)
     {
-        $productView = $this->createProductViewInstanceWithWebsiteCode($localeCode);
+        $productView = $this->createProductViewInstanceWithLocaleCode($localeCode);
         $productView->getOriginalProduct()->method('getImageCount')->willReturn(0);
 
         $placeholderImageName = $productView->getMainImageFileName();
