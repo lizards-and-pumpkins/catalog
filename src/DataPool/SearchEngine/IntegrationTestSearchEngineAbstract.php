@@ -39,7 +39,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
         SearchCriteria $originalCriteria,
         array $filterSelection,
         Context $context,
-        FacetFilterRequest $facetFilterRequest,
+        FacetFiltersToIncludeInResult $facetFilterRequest,
         $rowsPerPage,
         $pageNumber,
         SortOrderConfig $sortOrderConfig
@@ -95,7 +95,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     /**
      * @param SearchCriteria $originalCriteria
      * @param Context $context
-     * @param FacetFilterRequest $facetFilterRequest
+     * @param FacetFiltersToIncludeInResult $facetFilterRequest
      * @param array[] $selectedFilters
      * @param SearchDocument[] $matchingDocuments
      * @param SearchDocument[] $allDocuments
@@ -104,10 +104,10 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     private function createFacetFieldCollection(
         SearchCriteria $originalCriteria,
         Context $context,
-        FacetFilterRequest $facetFilterRequest,
-        $selectedFilters,
-        $matchingDocuments,
-        $allDocuments
+        FacetFiltersToIncludeInResult $facetFilterRequest,
+        array $selectedFilters,
+        array $matchingDocuments,
+        array $allDocuments
     ) {
         $facetFilterAttributeCodeStrings = $facetFilterRequest->getAttributeCodeStrings();
         $selectedFilterCodes = array_keys($selectedFilters);
@@ -137,7 +137,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
      * @param Context $context
      * @param array[] $selectedFilters
      * @param SearchDocument[] $allDocuments
-     * @param FacetFilterRequest $facetFilterRequest
+     * @param FacetFiltersToIncludeInResult $facetFilterRequest
      * @return FacetField[]
      */
     private function getSelectedFiltersFacetValuesWithSiblings(
@@ -145,7 +145,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
         Context $context,
         array $selectedFilters,
         array $allDocuments,
-        FacetFilterRequest $facetFilterRequest
+        FacetFiltersToIncludeInResult $facetFilterRequest
     ) {
         $facetFieldsForSelectedFilters = [];
 
@@ -190,13 +190,13 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
 
     /**
      * @param string[] $fieldCodes
-     * @param FacetFilterRequest $facetFilterRequest
+     * @param FacetFiltersToIncludeInResult $facetFilterRequest
      * @param SearchDocument[] $searchDocuments
      * @return FacetField[]
      */
     private function createFacetFieldsFromSearchDocuments(
         array $fieldCodes,
-        FacetFilterRequest $facetFilterRequest,
+        FacetFiltersToIncludeInResult $facetFilterRequest,
         SearchDocument ...$searchDocuments
     ) {
         $attributeCounts = $this->createAttributeValueCountArrayFromSearchDocuments($fieldCodes, ...$searchDocuments);

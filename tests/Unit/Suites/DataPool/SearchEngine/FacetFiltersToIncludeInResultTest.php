@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine;
 use LizardsAndPumpkins\Product\AttributeCode;
 
 /**
- * @covers \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest
+ * @covers \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
  */
 class FacetFiltersToIncludeInResultTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,14 +15,14 @@ class FacetFiltersToIncludeInResultTest extends \PHPUnit_Framework_TestCase
     private $stubFacetFilterRequestField;
 
     /**
-     * @var FacetFilterRequest
+     * @var FacetFiltersToIncludeInResult
      */
     private $facetFilterRequest;
 
     protected function setUp()
     {
         $this->stubFacetFilterRequestField = $this->getMock(FacetFilterRequestField::class);
-        $this->facetFilterRequest = new FacetFilterRequest($this->stubFacetFilterRequestField);
+        $this->facetFilterRequest = new FacetFiltersToIncludeInResult($this->stubFacetFilterRequestField);
     }
 
     public function testFacetFilterRequestFieldsAreReturned()

@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\DataPool;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\Exception\InvalidKeyValueStoreKeyException;
-use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 
 /**
@@ -205,8 +205,8 @@ class DataPoolReaderTest extends AbstractDataPoolTest
         $this->getMockSearchEngine()->expects($this->once())->method('getSearchDocumentsMatchingCriteria')
             ->with($mockCriteria, $selectedFilters, $stubContext);
 
-        /** @var FacetFilterRequest|\PHPUnit_Framework_MockObject_MockObject $stubFacetFilterRequest */
-        $stubFacetFilterRequest = $this->getMock(FacetFilterRequest::class, [], [], '', false);;
+        /** @var FacetFiltersToIncludeInResult|\PHPUnit_Framework_MockObject_MockObject $stubFacetFilterRequest */
+        $stubFacetFilterRequest = $this->getMock(FacetFiltersToIncludeInResult::class, [], [], '', false);;
 
         $rowsPerPage = 100;
         $pageNumber = 0;

@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\KeyValue\Exception\KeyNotFoundException;
-use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\Exception\UnableToHandleRequestException;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -33,7 +33,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
     private $metaInfoSnippetKeyGenerator;
 
     /**
-     * @var FacetFilterRequest
+     * @var FacetFiltersToIncludeInResult
      */
     private $facetFilterRequest;
 
@@ -51,7 +51,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         Context $context,
         DataPoolReader $dataPoolReader,
         SnippetKeyGenerator $metaInfoSnippetKeyGenerator,
-        FacetFilterRequest $facetFilterRequest,
+        FacetFiltersToIncludeInResult $facetFilterRequest,
         ProductListingPageContentBuilder $productListingPageContentBuilder,
         ProductListingPageRequest $productListingPageRequest
     ) {

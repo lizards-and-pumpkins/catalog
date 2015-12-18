@@ -109,7 +109,8 @@ class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
             HttpRequestBody::fromString('')
         );
         $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-        
+        $this->importCatalogFixture($this->factory);
+
         $this->registerProductSearchResultMetaSnippetKeyGenerator();
         
         $productSearchResultRequestHandler = $this->getProductSearchRequestHandler();

@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
-use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -61,8 +61,6 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
     private $sortOrderConfig;
 
     /**
-     * ProductSearchAutosuggestionRequestHandler constructor.
-     *
      * @param Context $context
      * @param DataPoolReader $dataPoolReader
      * @param PageBuilder $pageBuilder
@@ -158,8 +156,8 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
             $queryString
         );
         $selectedFilters = [];
-        $facetFilterRequest = new FacetFilterRequest;
-        $rowsPerPage = 5; // TODO: Replace with configured number of suggestions to show
+        $facetFilterRequest = new FacetFiltersToIncludeInResult;
+        $rowsPerPage = 100; // TODO: Replace with configured number of suggestions to show
         $pageNumber = 0;
 
         return $this->dataPoolReader->getSearchResultsMatchingCriteria(

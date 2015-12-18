@@ -13,7 +13,7 @@ use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransf
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
-use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestRangedField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine;
@@ -84,7 +84,7 @@ class TwentyOneRunFactory implements Factory
      */
     public function getProductListingFilterNavigationConfig()
     {
-        return new FacetFilterRequest(
+        return new FacetFiltersToIncludeInResult(
             new FacetFilterRequestSimpleField(AttributeCode::fromString('gender')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('product_group')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('style')),
@@ -104,7 +104,7 @@ class TwentyOneRunFactory implements Factory
      */
     public function getProductSearchResultsFilterNavigationConfig()
     {
-        return new FacetFilterRequest(
+        return new FacetFiltersToIncludeInResult(
             new FacetFilterRequestSimpleField(AttributeCode::fromString('gender')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('product_group')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('style')),
