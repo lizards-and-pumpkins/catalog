@@ -88,15 +88,6 @@ class TwentyOneRunTaxServiceLocator implements TaxServiceLocator
 
     /**
      * @param mixed[] $options
-     * @return Context
-     */
-    private function getContextFromOptions(array $options)
-    {
-        return $options[self::OPTION_CONTEXT];
-    }
-
-    /**
-     * @param mixed[] $options
      * @return Country
      */
     private function getCountryFromOptions(array $options)
