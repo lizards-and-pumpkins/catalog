@@ -18,7 +18,7 @@ class SearchDocumentFieldCollection implements \Countable, \IteratorAggregate
     }
 
     /**
-     * @param mixed[] $fieldsArray
+     * @param string[] $fieldsArray
      * @return SearchDocumentFieldCollection
      */
     public static function fromArray(array $fieldsArray)

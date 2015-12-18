@@ -35,13 +35,13 @@ class SearchDocumentField
     public static function fromKeyAndValues($key, array $values)
     {
         self::validateKey($key);
-        array_map('self::validateValue', $values);
+        array_map([self::class, 'validateValue'], $values);
 
         return new self((string) $key, $values);
     }
 
     /**
-     * @param mixed $value
+     * @param string $value
      */
     public static function validateValue($value)
     {

@@ -13,7 +13,7 @@ use LizardsAndPumpkins\DataPool\UrlKeyStore\Exception\UrlKeyTypeIsNotAStringExce
 class IntegrationTestUrlKeyStoreAbstract
 {
     /**
-     * @param mixed $urlKey
+     * @param string $urlKey
      */
     final protected function validateUrlKeyString($urlKey)
     {
@@ -29,7 +29,7 @@ class IntegrationTestUrlKeyStoreAbstract
     }
 
     /**
-     * @param mixed $dataVersionString
+     * @param string $dataVersionString
      */
     final protected function validateDataVersionString($dataVersionString)
     {
@@ -47,7 +47,7 @@ class IntegrationTestUrlKeyStoreAbstract
     }
 
     /**
-     * @param mixed $contextDataString
+     * @param string $contextDataString
      */
     final protected function validateContextDataString($contextDataString)
     {
@@ -61,7 +61,7 @@ class IntegrationTestUrlKeyStoreAbstract
     }
 
     /**
-     * @param mixed $urlKeyTypeString
+     * @param string $urlKeyTypeString
      */
     final protected function validateUrlKeyTypeString($urlKeyTypeString)
     {
