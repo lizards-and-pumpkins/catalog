@@ -30,13 +30,6 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
      */
     private $mockProduct;
 
-    protected function setUp()
-    {
-        $localeCode = 'de_DE';
-        $this->productView = $this->createProductViewInstanceWithWebsiteCode($localeCode);
-        $this->mockProduct = $this->productView->getOriginalProduct();
-    }
-
     /**
      * @param string $localeCode
      * @return StubProductView
@@ -49,6 +42,13 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
         $mockProduct = $this->getMock(Product::class);
         $mockProduct->method('getContext')->willReturn($stubContext);
         return new StubProductView($mockProduct);
+    }
+
+    protected function setUp()
+    {
+        $localeCode = 'de_DE';
+        $this->productView = $this->createProductViewInstanceWithWebsiteCode($localeCode);
+        $this->mockProduct = $this->productView->getOriginalProduct();
     }
 
     public function testGettingProductIdIsDelegatedToOriginalProduct()
