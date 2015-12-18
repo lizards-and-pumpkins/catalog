@@ -4,14 +4,14 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 
-class SearchCriteriaAnything implements SearchCriteria, \JsonSerializable
+class SearchCriterionAnything implements SearchCriteria, \JsonSerializable
 {
     private function __construct()
     {
     }
 
     /**
-     * @return SearchCriteriaAnything
+     * @return SearchCriterionAnything
      */
     public static function create()
     {

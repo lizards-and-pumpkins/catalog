@@ -7,7 +7,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaAnything
  */
-class SearchCriteriaAnythingTest extends \PHPUnit_Framework_TestCase
+class SearchCriterionAnythingTest extends \PHPUnit_Framework_TestCase
 {
     public function testItImplementsTheSearchCriteriaInterface()
     {
