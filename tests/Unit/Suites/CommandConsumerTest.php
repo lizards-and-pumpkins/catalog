@@ -42,6 +42,11 @@ class CommandConsumerTest extends \PHPUnit_Framework_TestCase
         $this->commandConsumer = new CommandConsumer($this->stubQueue, $this->mockLocator, $this->mockLogger);
     }
 
+    public function testItIsAQueueMessageConsumer()
+    {
+        $this->assertInstanceOf(QueueMessageConsumer::class, $this->commandConsumer);
+    }
+
     public function testItCallsNextIfQueueIsReady()
     {
         $stubCommand = $this->getMock(Command::class);
