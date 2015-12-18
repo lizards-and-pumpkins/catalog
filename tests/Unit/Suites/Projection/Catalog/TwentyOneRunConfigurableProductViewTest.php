@@ -37,7 +37,7 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
     private $stubProductViewLocator;
 
     /**
-     * @param $productIdString
+     * @param string $productIdString
      * @return SimpleProduct|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createStubSimpleProductWithId($productIdString)
@@ -52,7 +52,7 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
     }
 
     /**
-     * @param $productIdString
+     * @param string $productIdString
      * @return ConfigurableProduct|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createStubConfigurableProductWithId($productIdString)
@@ -295,6 +295,9 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
         $this->assertContainsOnlyInstancesOf(ProductView::class, $result);
     }
 
+    /**
+     * @return array[]
+     */
     public function priceAttributeCodeProvider()
     {
         return [
