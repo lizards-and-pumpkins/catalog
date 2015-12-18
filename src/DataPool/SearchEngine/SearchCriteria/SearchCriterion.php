@@ -48,9 +48,7 @@ abstract class SearchCriterion implements SearchCriteria, \JsonSerializable
             );
         }
 
-        $className = get_called_class();
-
-        return new $className($fieldName, $fieldValue);
+        return new static($fieldName, $fieldValue);
     }
 
     /**
