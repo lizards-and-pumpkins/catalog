@@ -41,7 +41,7 @@ use LizardsAndPumpkins\Website\WebsiteToCountryMap;
  * @uses   \LizardsAndPumpkins\Log\Writer\FileLogMessageWriter
  * @uses   \LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestRangedField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine

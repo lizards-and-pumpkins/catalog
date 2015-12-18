@@ -9,7 +9,7 @@ use LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaAnything;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionAnything;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\Product\AttributeCode;
 
@@ -51,7 +51,7 @@ class SearchEngineTest extends AbstractIntegrationTest
 
         foreach ($selectedFiltersList as $selectedFilters) {
             $searchEngineResponse = $searchEngine->getSearchDocumentsMatchingCriteria(
-                SearchCriteriaAnything::create(),
+                SearchCriterionAnything::create(),
                 $selectedFilters,
                 $context,
                 $facetFieldRequest,

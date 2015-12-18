@@ -25,6 +25,7 @@ use LizardsAndPumpkins\Utils\LocalFilesystem;
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionLessOrEqualThan
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionLessThan
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionLike
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionAnything
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField
@@ -33,7 +34,7 @@ use LizardsAndPumpkins\Utils\LocalFilesystem;
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldCollection
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldValue
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestRangedField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse

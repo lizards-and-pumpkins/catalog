@@ -53,7 +53,7 @@ use LizardsAndPumpkins\UnitTestFactory;
  * @uses   \LizardsAndPumpkins\Content\ContentBlockProjector
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolWriter
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder

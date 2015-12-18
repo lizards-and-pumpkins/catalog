@@ -5,29 +5,29 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 
 /**
- * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaAnything
+ * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionAnything
  */
 class SearchCriterionAnythingTest extends \PHPUnit_Framework_TestCase
 {
     public function testItImplementsTheSearchCriteriaInterface()
     {
-        $this->assertInstanceOf(SearchCriteria::class, SearchCriteriaAnything::create());
+        $this->assertInstanceOf(SearchCriteria::class, SearchCriterionAnything::create());
     }
 
     public function testItMatchesAnySearchDocument()
     {
         $mockSearchDocument = $this->getMock(SearchDocument::class, [], [], '', false);
-        $this->assertTrue(SearchCriteriaAnything::create()->matches($mockSearchDocument));
+        $this->assertTrue(SearchCriterionAnything::create()->matches($mockSearchDocument));
     }
 
     public function testItImplementsJsonSerializable()
     {
-        $this->assertInstanceOf(\JsonSerializable::class, SearchCriteriaAnything::create());
+        $this->assertInstanceOf(\JsonSerializable::class, SearchCriterionAnything::create());
     }
 
     public function testItReturnsAnArrayRepresentationWhenJsonSerialized()
     {
-        $result = SearchCriteriaAnything::create()->jsonSerialize();
+        $result = SearchCriterionAnything::create()->jsonSerialize();
         
         $expectation = [
             'fieldName'  => '',

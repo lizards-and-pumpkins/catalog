@@ -13,7 +13,7 @@ use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\Exception\NoFacetFieldTransformationRegisteredException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaAnything;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionAnything;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterOrEqualThan;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan;
@@ -870,7 +870,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsAnEmptyArrayForRequestsWithSelectedFacetsIfTheSearchEngineIndexIsEmpty()
     {
-        $criteria = SearchCriteriaAnything::create();
+        $criteria = SearchCriterionAnything::create();
         $selectedFilters = ['foo' => ['bar']];
         $facetFilterRequest = new FacetFiltersToIncludeInResult();
         $rowsPerPage = 100;
