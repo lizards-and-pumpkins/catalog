@@ -244,6 +244,9 @@ class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(TwentyOneRunSimpleProductView::MAX_PURCHASABLE_QTY, $result);
     }
 
+    /**
+     * @return array[]
+     */
     public function priceAttributeCodeProvider()
     {
         return [
