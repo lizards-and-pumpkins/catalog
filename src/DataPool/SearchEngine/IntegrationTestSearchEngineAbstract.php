@@ -109,6 +109,9 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
         array $matchingDocuments,
         array $allDocuments
     ) {
+        if (count($matchingDocuments) === 0) {
+            return new FacetFieldCollection();
+        }
         $facetFilterAttributeCodeStrings = $facetFilterRequest->getAttributeCodeStrings();
         $selectedFilterCodes = array_keys($selectedFilters);
         $unselectedFilterCodes = array_diff($facetFilterAttributeCodeStrings, $selectedFilterCodes);

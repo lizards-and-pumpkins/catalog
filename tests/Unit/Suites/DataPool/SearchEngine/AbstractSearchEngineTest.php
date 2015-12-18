@@ -13,6 +13,7 @@ use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\Exception\NoFacetFieldTransformationRegisteredException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaAnything;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterOrEqualThan;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan;
@@ -43,6 +44,14 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
      * @var SearchEngine|Clearable
      */
     private $searchEngine;
+
+    /**
+     * @param FacetFieldTransformationRegistry $facetFieldTransformationRegistry
+     * @return SearchEngine
+     */
+    abstract protected function createSearchEngineInstance(
+        FacetFieldTransformationRegistry $facetFieldTransformationRegistry
+    );
 
     /**
      * @param string[] $fields
@@ -859,11 +868,24 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertOrder($expectedOrder, $searchEngineResponse->getProductIds());
     }
 
-    /**
-     * @param FacetFieldTransformationRegistry $facetFieldTransformationRegistry
-     * @return SearchEngine
-     */
-    abstract protected function createSearchEngineInstance(
-        FacetFieldTransformationRegistry $facetFieldTransformationRegistry
-    );
+    public function testItReturnsAnEmptyArrayForRequestsWithSelectedFacetsIfTheSearchEngineIndexIsEmpty()
+    {
+        $criteria = SearchCriteriaAnything::create();
+        $selectedFilters = ['foo' => ['bar']];
+        $facetFilterRequest = new FacetFiltersToIncludeInResult();
+        $rowsPerPage = 100;
+        $pageNumber = 0;
+        $sortOrderConfig = $this->createStubSortOrderConfig('foo', SortOrderDirection::DESC);
+
+        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+            $criteria,
+            $selectedFilters,
+            $this->testContext,
+            $facetFilterRequest,
+            $rowsPerPage,
+            $pageNumber,
+            $sortOrderConfig
+        );
+        $this->assertSame([], $searchEngineResponse->getProductIds());
+    }
 }
