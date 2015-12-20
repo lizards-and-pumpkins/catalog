@@ -56,17 +56,32 @@ class ProductProjector implements Projector
     public function project($projectionSourceData)
     {
         $productView = $this->productViewLocator->createForProduct($projectionSourceData);
+
         $this->projectProduct($productView);
+        $this->aggregateSearchDocuments($projectionSourceData);
+        $this->storeProductUrlKeys($productView);
     }
 
     private function projectProduct(Product $product)
     {
         $snippetList = $this->rendererCollection->render($product);
         $this->dataPoolWriter->writeSnippetList($snippetList);
+    }
 
+    /**
+     * @param Product $product
+     */
+    private function aggregateSearchDocuments(Product $product)
+    {
         $searchDocumentCollection = $this->searchDocumentBuilder->aggregate($product);
         $this->dataPoolWriter->writeSearchDocumentCollection($searchDocumentCollection);
-        
+    }
+
+    /**
+     * @param Product $product
+     */
+    private function storeProductUrlKeys(Product $product)
+    {
         $urlKeysForContextsCollection = $this->urlKeyCollector->collectProductUrlKeys($product);
         $this->dataPoolWriter->writeUrlKeyCollection($urlKeysForContextsCollection);
     }
