@@ -2,6 +2,8 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Product\ProductImage\ProductImage;
+use LizardsAndPumpkins\Product\ProductImage\ProductImageList;
 use LizardsAndPumpkins\Product\Tax\ProductTaxClass;
 
 interface Product extends \JsonSerializable

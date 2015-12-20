@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\Projection\Catalog\Import;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductId;
-use LizardsAndPumpkins\Product\ProductImage;
+use LizardsAndPumpkins\Product\ProductImage\ProductImage;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidProductImageAttributeListException;
 
 class ProductImageBuilder

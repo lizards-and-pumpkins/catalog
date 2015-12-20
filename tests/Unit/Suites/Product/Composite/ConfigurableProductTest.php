@@ -21,7 +21,7 @@ use LizardsAndPumpkins\Product\Composite\Exception\ConfigurableProductAssociated
  * @uses   \LizardsAndPumpkins\Product\Composite\ProductVariationAttributeList
  * @uses   \LizardsAndPumpkins\Product\ProductId
  * @uses   \LizardsAndPumpkins\Product\SimpleProduct
- * @uses   \LizardsAndPumpkins\Product\ProductImageList
+ * @uses   \LizardsAndPumpkins\Product\ProductImage\ProductImageList
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Product\Tax\ProductTaxClass

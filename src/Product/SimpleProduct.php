@@ -4,6 +4,8 @@ namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
+use LizardsAndPumpkins\Product\ProductImage\ProductImage;
+use LizardsAndPumpkins\Product\ProductImage\ProductImageList;
 use LizardsAndPumpkins\Product\Tax\ProductTaxClass;
 
 class SimpleProduct implements Product

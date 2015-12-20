@@ -6,14 +6,14 @@ namespace LizardsAndPumpkins\Projection\Catalog\Import;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductId;
-use LizardsAndPumpkins\Product\ProductImage;
+use LizardsAndPumpkins\Product\ProductImage\ProductImage;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidProductImageAttributeListException;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductAttributeListBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductId
- * @uses   \LizardsAndPumpkins\Product\ProductImage
+ * @uses   \LizardsAndPumpkins\Product\ProductImage\ProductImage
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Product\ProductAttribute
  * @uses   \LizardsAndPumpkins\Product\AttributeCode

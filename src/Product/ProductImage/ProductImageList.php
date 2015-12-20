@@ -1,9 +1,9 @@
 <?php
 
 
-namespace LizardsAndPumpkins\Product;
+namespace LizardsAndPumpkins\Product\ProductImage;
 
-use LizardsAndPumpkins\Product\Exception\ProductImageListNotMutableException;
+use LizardsAndPumpkins\Product\ProductImage\Exception\ProductImageListNotMutableException;
 
 class ProductImageList implements \Countable, \IteratorAggregate, \ArrayAccess, \JsonSerializable
 {

@@ -6,8 +6,8 @@ namespace LizardsAndPumpkins\Projection\Catalog\Import;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductId;
-use LizardsAndPumpkins\Product\ProductImage;
-use LizardsAndPumpkins\Product\ProductImageList;
+use LizardsAndPumpkins\Product\ProductImage\ProductImage;
+use LizardsAndPumpkins\Product\ProductImage\ProductImageList;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageListBuilder
@@ -17,8 +17,8 @@ use LizardsAndPumpkins\Product\ProductImageList;
  * @uses   \LizardsAndPumpkins\Product\ProductAttribute
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
- * @uses   \LizardsAndPumpkins\Product\ProductImageList
- * @uses   \LizardsAndPumpkins\Product\ProductImage
+ * @uses   \LizardsAndPumpkins\Product\ProductImage\ProductImageList
+ * @uses   \LizardsAndPumpkins\Product\ProductImage\ProductImage
  */
 class ProductImageListBuilderTest extends \PHPUnit_Framework_TestCase
 {

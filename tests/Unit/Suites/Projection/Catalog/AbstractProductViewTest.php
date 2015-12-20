@@ -5,11 +5,11 @@ namespace LizardsAndPumpkins\Projection\Catalog;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
 use LizardsAndPumpkins\Product\Product;
-use LizardsAndPumpkins\Product\ProductImage;
+use LizardsAndPumpkins\Product\ProductImage\ProductImage;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\Catalog\AbstractProductView
- * @uses   \LizardsAndPumpkins\Product\ProductImage
+ * @uses   \LizardsAndPumpkins\Product\ProductImage\ProductImage
  * @uses   \LizardsAndPumpkins\Product\ProductAttribute
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
