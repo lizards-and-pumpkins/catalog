@@ -110,7 +110,9 @@ use LizardsAndPumpkins\Website\HostToWebsiteMap;
  * @uses   \LizardsAndPumpkins\Product\AddProductListingCommandHandler
  * @uses   \LizardsAndPumpkins\Product\ProductDetailViewBlockRenderer
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer
+ * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\CompositeSnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\ContentBlockSnippetKeyGeneratorLocatorStrategy
+ * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\GenericSnippetKeyGenerator
  * @uses   \LizardsAndPumpkins\SnippetRendererCollection
  * @uses   \LizardsAndPumpkins\Product\ProductInListingSnippetRenderer
@@ -546,9 +548,18 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(SearchCriteriaBuilder::class, $result);
     }
 
-    public function testContentBlockSnippetKeyGeneratorLocatorReturnsSnippetKeyGenerator()
+    public function testSnippetKeyGeneratorForContentBlockIsReturned()
     {
         $snippetCode = 'content_block_foo';
+        $snippetKeyGeneratorLocator = $this->commonFactory->createContentBlockSnippetKeyGeneratorLocatorStrategy();
+        $result = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
+
+        $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
+    }
+
+    public function testSnippetKeyGeneratorForProductListingContentBlockIsReturned()
+    {
+        $snippetCode = 'product_listing_content_block_foo';
         $snippetKeyGeneratorLocator = $this->commonFactory->createContentBlockSnippetKeyGeneratorLocatorStrategy();
         $result = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
 

@@ -20,15 +20,22 @@ class ContentBlockSource
     private $contextData;
 
     /**
+     * @var mixed[]
+     */
+    private $keyGeneratorParams;
+
+    /**
      * @param ContentBlockId $contentBlockId
      * @param string $content
      * @param string[] $contextData
+     * @param mixed[] $keyGeneratorParams
      */
-    public function __construct(ContentBlockId $contentBlockId, $content, array $contextData)
+    public function __construct(ContentBlockId $contentBlockId, $content, array $contextData, array $keyGeneratorParams)
     {
         $this->contentBlockId = $contentBlockId;
         $this->content = $content;
         $this->contextData = $contextData;
+        $this->keyGeneratorParams = $keyGeneratorParams;
     }
 
     /**
@@ -53,5 +60,13 @@ class ContentBlockSource
     public function getContextData()
     {
         return $this->contextData;
+    }
+
+    /**
+     * @return mixed[]
+     */
+    public function getKeyGeneratorParams()
+    {
+        return $this->keyGeneratorParams;
     }
 }
