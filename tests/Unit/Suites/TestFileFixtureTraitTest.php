@@ -93,7 +93,7 @@ class TestFileFixtureTraitTest extends \PHPUnit_Framework_TestCase
         $file = $this->getTestFilePath();
         $this->createFixtureFile($file, '');
 
-        $this->assertFileMode($file, 0500);
+        $this->assertFileMode($file, 0600);
     }
 
     public function testFileWithGivenModeIsCreated()

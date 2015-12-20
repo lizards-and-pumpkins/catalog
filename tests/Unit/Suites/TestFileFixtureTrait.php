@@ -25,11 +25,19 @@ trait TestFileFixtureTrait
      * @param string $content
      * @param int $mode
      */
-    public function createFixtureFile($filePath, $content, $mode = 0500)
+    public function createFixtureFile($filePath, $content, $mode = 0600)
     {
         $realFile = $this->getAbsolutePath($filePath);
         $this->createMissingDirectories($realFile);
         $this->createFile($content, $realFile, $mode);
+        $this->fixtureFiles[] = $realFile;
+    }
+
+    /**
+     * @param string $realFile
+     */
+    public function addFileToCleanupAfterTest($realFile)
+    {
         $this->fixtureFiles[] = $realFile;
     }
 
@@ -51,9 +59,11 @@ trait TestFileFixtureTrait
         return sys_get_temp_dir() . '/lizards-and-pumpkins/test/' . $this->getUniqueId();
     }
 
-    protected function tearDown()
+    /**
+     * @after
+     */
+    protected function cleanupFilesystemFixtures()
     {
-        parent::tearDown();
         $this->cleanUpFixtureFiles();
         $this->cleanUpFixtureDirsRecursively(array_reverse($this->fixtureDirs));
     }
@@ -157,10 +167,12 @@ trait TestFileFixtureTrait
     private function cleanUpFixtureFiles()
     {
         array_map(function ($file) {
-            if (! is_writable($file)) {
-                chmod($file, 0500);
+            if (file_exists($file)) {
+                if (!is_writable($file)) {
+                    chmod($file, 0500);
+                }
+                unlink($file);
             }
-            unlink($file);
         }, $this->fixtureFiles);
     }
 
@@ -172,7 +184,9 @@ trait TestFileFixtureTrait
         if (0 == count($dirs)) {
             return;
         }
-        rmdir($dirs[0]);
+        if (is_dir($dirs[0])) {
+            rmdir($dirs[0]);
+        }
         $this->cleanUpFixtureDirsRecursively(array_slice($dirs, 1));
     }
 
