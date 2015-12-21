@@ -24,7 +24,7 @@ class FilesystemFileStorage implements FileStorage, FileToFileStorage
      * @param StorageAgnosticFileUri $identifier
      * @return File
      */
-    public function file(StorageAgnosticFileUri $identifier)
+    public function getFileReference(StorageAgnosticFileUri $identifier)
     {
         $filesystemPath = $this->buildFileSystemPath($identifier);
         return FileInStorage::create(FilesystemFileUri::fromString($filesystemPath), $this);
@@ -36,7 +36,7 @@ class FilesystemFileStorage implements FileStorage, FileToFileStorage
      */
     public function contains(StorageAgnosticFileUri $identifier)
     {
-        $file = $this->file($identifier);
+        $file = $this->getFileReference($identifier);
         return $this->isPresent($file);
     }
 
@@ -57,7 +57,7 @@ class FilesystemFileStorage implements FileStorage, FileToFileStorage
             $message = sprintf('Unable to get contents of non-existing file "%s"', $identifier);
             throw new FileDoesNotExistException($message);
         }
-        $file = $this->file($identifier);
+        $file = $this->getFileReference($identifier);
         return FileContent::fromString($this->read($file));
     }
 
