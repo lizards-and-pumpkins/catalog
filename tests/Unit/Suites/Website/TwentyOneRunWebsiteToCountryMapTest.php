@@ -30,7 +30,7 @@ class TwentyOneRunWebsiteToCountryMapTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsTheDefaultCountry()
     {
         $defaultCountry = $this->websiteToCountryMap->getDefaultCountry();
-        $this->assertCountryEqual(Country::from2CharIso3166('DE'), $defaultCountry);
+        $this->assertCountryEqual(Country::from2CharIso3166('FR'), $defaultCountry);
     }
 
     public function testItReturnsGermanyAsTheDefault()
@@ -60,7 +60,7 @@ class TwentyOneRunWebsiteToCountryMapTest extends \PHPUnit_Framework_TestCase
         return [
             [Website::fromString('ru'), Country::from2CharIso3166('DE')],
             [Website::fromString('fr'), Country::from2CharIso3166('FR')],
-            [Website::fromString('cy'), Country::from2CharIso3166('DE')],
+            [Website::fromString('cy'), Country::from2CharIso3166('FR')],
         ];
     }
 }
