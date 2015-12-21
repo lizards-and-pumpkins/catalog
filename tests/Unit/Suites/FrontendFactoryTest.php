@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Api\ApiRouter;
 use LizardsAndPumpkins\Content\ContentBlocksApiV1PutRequestHandler;
-use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\PricesJsonSnippetTransformation;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\SimpleEuroPriceSnippetTransformation;
 use LizardsAndPumpkins\Context\Context;
@@ -40,7 +39,6 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchAutosuggestionRequestHandler
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchRequestHandler
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection
  * @uses   \LizardsAndPumpkins\ContentDelivery\SnippetTransformation\PricesJsonSnippetTransformation
@@ -171,15 +169,6 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->frontendFactory->createProductSearchAutosuggestionRouter();
         $this->assertInstanceOf(GenericHttpRouter::class, $result);
-    }
-
-    public function testSameProductsPerPageIsReturnedViaGetter()
-    {
-        $result1 = $this->frontendFactory->getProductsPerPageConfig();
-        $result2 = $this->frontendFactory->getProductsPerPageConfig();
-
-        $this->assertInstanceOf(ProductsPerPage::class, $result1);
-        $this->assertSame($result1, $result2);
     }
 
     /**

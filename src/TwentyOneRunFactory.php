@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\ContentDelivery\Catalog\FilterNavigationPriceRangesBuilder;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
 use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\EuroPriceRangeTransformation;
@@ -49,6 +50,11 @@ class TwentyOneRunFactory implements Factory
      * @var SortOrderConfig
      */
     private $memoizedProductSearchAutosuggestionSortOrderConfig;
+
+    /**
+     * @var ProductsPerPage
+     */
+    private $memoizedProductsPerPageConfig;
 
     /**
      * @return string[]
@@ -443,6 +449,24 @@ class TwentyOneRunFactory implements Factory
         }
 
         return $this->memoizedProductSearchAutosuggestionSortOrderConfig;
+    }
+
+    /**
+     * @return ProductsPerPage
+     */
+    public function getProductsPerPageConfig()
+    {
+        if (null === $this->memoizedProductsPerPageConfig) {
+            $numbersOfProductsPerPage = [60, 120];
+            $selectedNumberOfProductsPerPage = 60;
+
+            $this->memoizedProductsPerPageConfig = ProductsPerPage::create(
+                $numbersOfProductsPerPage,
+                $selectedNumberOfProductsPerPage
+            );
+        }
+
+        return $this->memoizedProductsPerPageConfig;
     }
 
     /**

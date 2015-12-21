@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Tests\Integration;
 
 use LizardsAndPumpkins\CommonFactory;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
@@ -26,6 +27,7 @@ use LizardsAndPumpkins\Website\WebsiteToCountryMap;
 /**
  * @covers \LizardsAndPumpkins\TwentyOneRunFactory
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FilterNavigationPriceRangesBuilder
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection
  * @uses   \LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry
@@ -247,6 +249,15 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
             $this->factory->getProductSearchAutosuggestionSortOrderConfig(),
             $this->factory->getProductSearchAutosuggestionSortOrderConfig()
         );
+    }
+
+    public function testSameInstanceOfProductsPerPageIsReturned()
+    {
+        $result1 = $this->factory->getProductsPerPageConfig();
+        $result2 = $this->factory->getProductsPerPageConfig();
+
+        $this->assertInstanceOf(ProductsPerPage::class, $result1);
+        $this->assertSame($result1, $result2);
     }
 
     public function testItReturnsAWebsiteToCountryMapInstance()

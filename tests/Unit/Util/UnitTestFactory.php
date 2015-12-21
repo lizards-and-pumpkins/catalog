@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\BaseUrl\BaseUrlBuilder;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
@@ -320,5 +321,13 @@ class UnitTestFactory implements Factory
     public function createGlobalProductListingCriteria()
     {
         return $this->mockObjectGenerator->getMock(SearchCriteria::class);
+    }
+
+    /**
+     * @return ProductsPerPage
+     */
+    public function getProductsPerPageConfig()
+    {
+        return $this->mockObjectGenerator->getMock(ProductsPerPage::class, [], [], '', false);
     }
 }
