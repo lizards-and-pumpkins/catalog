@@ -31,7 +31,7 @@ use LizardsAndPumpkins\Queue\File\FileQueue;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\Website\TwentyOneRunWebsiteToCountryMap;
 
-class SampleFactory implements Factory
+class TwentyOneRunFactory implements Factory
 {
     use FactoryTrait;
 

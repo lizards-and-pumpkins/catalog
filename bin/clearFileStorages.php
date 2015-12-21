@@ -29,7 +29,7 @@ class ClearFileStorage extends BaseCliCommand
     {
         $factory = new SampleMasterFactory();
         $factory->register(new CommonFactory());
-        $factory->register(new SampleFactory());
+        $factory->register(new TwentyOneRunFactory());
         
         return new self($factory, new CLImate());
     }

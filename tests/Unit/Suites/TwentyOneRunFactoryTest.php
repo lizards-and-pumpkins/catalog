@@ -19,12 +19,12 @@ use LizardsAndPumpkins\Product\Tax\TaxServiceLocator;
 use LizardsAndPumpkins\Projection\Catalog\ProductViewLocator;
 use LizardsAndPumpkins\Queue\File\FileQueue;
 use LizardsAndPumpkins\SampleMasterFactory;
-use LizardsAndPumpkins\SampleFactory;
+use LizardsAndPumpkins\TwentyOneRunFactory;
 use LizardsAndPumpkins\TaxableCountries;
 use LizardsAndPumpkins\Website\WebsiteToCountryMap;
 
 /**
- * @covers \LizardsAndPumpkins\SampleFactory
+ * @covers \LizardsAndPumpkins\TwentyOneRunFactory
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FilterNavigationPriceRangesBuilder
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection
@@ -53,10 +53,10 @@ use LizardsAndPumpkins\Website\WebsiteToCountryMap;
  * @uses   \LizardsAndPumpkins\CommonFactory
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  */
-class SampleFactoryTest extends \PHPUnit_Framework_TestCase
+class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var SampleFactory
+     * @var TwentyOneRunFactory
      */
     private $factory;
 
@@ -64,7 +64,7 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $masterFactory = new SampleMasterFactory();
         $masterFactory->register(new CommonFactory());
-        $this->factory = new SampleFactory();
+        $this->factory = new TwentyOneRunFactory();
         $masterFactory->register($this->factory);
     }
 
