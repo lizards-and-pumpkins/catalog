@@ -44,7 +44,6 @@ define(function () {
                     title = document.createElement('H2'),
                     gender = document.createElement('P'),
                     productUrl = baseUrl + product['attributes']['url_key'],
-                    productImage = createProductImage(product['images'][0]['file'], product['images'][0]['label']),
                     price = document.createElement('SPAN'),
                     hasSpecialPrice = 2 === productPrices[index].length;
 
@@ -57,7 +56,11 @@ define(function () {
                 container.style.backgroundImage = 'url("' + getBrandLogoSrc(product['attributes']['brand']) + '")';
                 container.className = 'grid-cell-container';
 
-                container.appendChild(wrapIntoProductLink(productImage, productUrl));
+                if (product['images'].length > 0) {
+                    var productImage = createProductImage(product['images'][0]['file'], product['images'][0]['label']);
+                    container.appendChild(wrapIntoProductLink(productImage, productUrl));
+                }
+
                 container.appendChild(wrapIntoProductLink(title, productUrl));
                 container.appendChild(gender);
                 container.appendChild(price);
