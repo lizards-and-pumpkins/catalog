@@ -35,7 +35,7 @@
 #pagination .prev { background-position: -6px -5px }
 
 /* Scrolling */
-.filter-content { max-height: 200px; overflow: scroll }
+.filter-container { max-height: 220px; overflow: scroll }
 
 /* Tablet */
 @media (max-width: 974px) {
