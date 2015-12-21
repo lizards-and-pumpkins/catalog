@@ -155,7 +155,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
 
         $httpRequestBodyString = json_encode([
             'content' => $contentBlockContent,
-            'context' => ['version' => -1, 'website' => 'ru', 'locale' => 'de_DE'],
+            'context' => ['version' => -1, 'website' => 'fr', 'locale' => 'fr_FR'],
             'url_key' => $productListingUrlKey
         ]);
 

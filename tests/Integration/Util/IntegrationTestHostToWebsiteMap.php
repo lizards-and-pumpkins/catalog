@@ -13,6 +13,6 @@ class IntegrationTestHostToWebsiteMap implements HostToWebsiteMap
      */
     public function getWebsiteCodeByHost($code)
     {
-        return 'ru';
+        return 'fr';
     }
 }

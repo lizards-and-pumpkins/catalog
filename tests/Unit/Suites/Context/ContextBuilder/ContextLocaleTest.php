@@ -41,7 +41,7 @@ class ContextLocaleTest extends \PHPUnit_Framework_TestCase
     {
         $inputDataSet = [];
         $otherContextParts = [];
-        $this->assertSame('de_DE', $this->contextLocale->getValue($inputDataSet, $otherContextParts));
+        $this->assertSame('fr_FR', $this->contextLocale->getValue($inputDataSet, $otherContextParts));
     }
 
     public function testItReturnsTheLocaleFromTheInputArrayIfItIsPresent()

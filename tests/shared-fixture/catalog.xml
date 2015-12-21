@@ -438,6 +438,7 @@ TEXTILE/SYNTHETICS]]></description>
                         <stock_qty>6</stock_qty>
                         <color locale="en_US">Red</color>
                         <color locale="de_DE">Rot</color>
+                        <color locale="fr_FR">Rouge</color>
                         <size>US 12.5 - EU 47</size>
                     </attributes>
                 </product>
@@ -446,6 +447,7 @@ TEXTILE/SYNTHETICS]]></description>
                         <stock_qty>0</stock_qty>
                         <color locale="en_US">Red</color>
                         <color locale="de_DE">Rot</color>
+                        <color locale="fr_FR">Rouge</color>
                         <size>US 12 - EU 46</size>
                     </attributes>
                 </product>
@@ -454,6 +456,7 @@ TEXTILE/SYNTHETICS]]></description>
                         <stock_qty>45</stock_qty>
                         <color locale="en_US">Red</color>
                         <color locale="de_DE">Rot</color>
+                        <color locale="fr_FR">Rouge</color>
                         <size>US 11.5 - EU 45</size>
                     </attributes>
                 </product>
@@ -462,6 +465,7 @@ TEXTILE/SYNTHETICS]]></description>
                         <stock_qty>5</stock_qty>
                         <color locale="en_US">Red</color>
                         <color locale="de_DE">Rot</color>
+                        <color locale="fr_FR">Rouge</color>
                         <size>US 10 - EU 43</size>
                     </attributes>
                 </product>
@@ -470,6 +474,7 @@ TEXTILE/SYNTHETICS]]></description>
                         <stock_qty>5</stock_qty>
                         <color locale="en_US">Blue</color>
                         <color locale="de_DE">Blau</color>
+                        <color locale="fr_FR">Bleu</color>
                         <size>US 12.5 - EU 47</size>
                     </attributes>
                 </product>
@@ -478,6 +483,7 @@ TEXTILE/SYNTHETICS]]></description>
                         <stock_qty>5</stock_qty>
                         <color locale="en_US">Blue</color>
                         <color locale="de_DE">Blau</color>
+                        <color locale="fr_FR">Bleu</color>
                         <size>US 12 - EU 46</size>
                     </attributes>
                 </product>
@@ -486,6 +492,7 @@ TEXTILE/SYNTHETICS]]></description>
                         <stock_qty>5</stock_qty>
                         <color locale="en_US">Blue</color>
                         <color locale="de_DE">Blau</color>
+                        <color locale="fr_FR">Bleu</color>
                         <size>US 11.5 - EU 45</size>
                     </attributes>
                 </product>
@@ -507,7 +514,13 @@ TEXTILE/SYNTHETICS]]></description>
                 <category is="Equal">sale</category>
             </criteria>
         </listing>
-        <listing url_key="asics" website="ru" locale="de_DE">
+        <listing url_key="sale" website="fr" locale="fr_FR">
+            <criteria type="and">
+                <stock_qty is="GreaterThan">0</stock_qty>
+                <category is="Equal">sale</category>
+            </criteria>
+        </listing>
+        <listing url_key="asics" website="fr" locale="fr_FR">
             <criteria type="and">
                 <stock_qty is="GreaterThan">0</stock_qty>
                 <brand is="Equal">Asics</brand>
