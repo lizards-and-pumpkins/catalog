@@ -65,11 +65,14 @@ class TwentyOneRunFactory implements Factory
     {
         return new FacetFilterRequest(
             new FacetFilterRequestSimpleField(AttributeCode::fromString('gender')),
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('size')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('brand')),
             new FacetFilterRequestRangedField(
                 AttributeCode::fromString('price'),
                 ...FilterNavigationPriceRangesBuilder::getPriceRanges()
             ),
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('series')),
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('size')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('color'))
         );
     }
@@ -81,8 +84,8 @@ class TwentyOneRunFactory implements Factory
     {
         return new FacetFilterRequest(
             new FacetFilterRequestSimpleField(AttributeCode::fromString('gender')),
-            new FacetFilterRequestSimpleField(AttributeCode::fromString('brand')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('category')),
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('brand')),
             new FacetFilterRequestRangedField(
                 AttributeCode::fromString('price'),
                 ...FilterNavigationPriceRangesBuilder::getPriceRanges()
