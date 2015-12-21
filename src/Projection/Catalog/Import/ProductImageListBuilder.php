@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Product\ProductId;
-use LizardsAndPumpkins\Product\ProductImageList;
+use LizardsAndPumpkins\Product\ProductImage\ProductImageList;
 
 class ProductImageListBuilder
 {

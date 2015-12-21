@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\Content;
 use LizardsAndPumpkins\Api\ApiRequestHandler;
 use LizardsAndPumpkins\Content\Exception\ContentBlockBodyIsMissingInRequestBodyException;
 use LizardsAndPumpkins\Content\Exception\ContentBlockContextIsMissingInRequestBodyException;
+use LizardsAndPumpkins\Content\Exception\InvalidContentBlockUrlKey;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Queue\Queue;
 
@@ -53,7 +54,19 @@ class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
 
         $contentBlockIdString = $this->extractContentBlockIdFromUrl($request);
         $contentBlockId = ContentBlockId::fromString($contentBlockIdString);
-        $contentBlockSource = new ContentBlockSource($contentBlockId, $requestBody['content'], $requestBody['context']);
+
+        $keyGeneratorParams = [];
+
+        if (isset($requestBody['url_key'])) {
+            $keyGeneratorParams['url_key'] = $requestBody['url_key'];
+        }
+
+        $contentBlockSource = new ContentBlockSource(
+            $contentBlockId,
+            $requestBody['content'],
+            $requestBody['context'],
+            $keyGeneratorParams
+        );
 
         $this->commandQueue->add(new UpdateContentBlockCommand($contentBlockSource));
     }
@@ -78,6 +91,12 @@ class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
         if (!is_array($requestBody['context'])) {
             throw new InvalidContentBlockContext(
                 sprintf('Content block context supposed to be an array, got %s.', gettype($requestBody['context']))
+            );
+        }
+
+        if (isset($requestBody['url_key']) && !is_string($requestBody['url_key'])) {
+            throw new InvalidContentBlockUrlKey(
+                sprintf('Content block URL key must be a string, got %s.', gettype($requestBody['url_key']))
             );
         }
     }

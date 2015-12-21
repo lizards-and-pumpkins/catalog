@@ -82,12 +82,20 @@ $catalogImport->runWithoutSendingResponse();
 $contentFileNames = glob(__DIR__ . '/../tests/shared-fixture/content-blocks/*.html');
 array_map(function ($contentFileName) {
     $contentBlockContent = file_get_contents($contentFileName);
-    $httpRequestBodyString = json_encode([
-        'content' => $contentBlockContent,
-        'context' => ['website' => 'ru', 'locale' => 'de_DE']
-    ]);
-
     $blockId = preg_replace('/.*\/|\.html$/i', '', $contentFileName);
+
+    $httpRequestBody = [
+        'content'              => $contentBlockContent,
+        'context'              => ['website' => 'ru', 'locale' => 'de_DE'],
+    ];
+
+    if (strpos($blockId, 'product_listing_content_block_') === 0) {
+        $httpRequestBody['url_key'] = preg_replace('/.*_/', '', $blockId);
+        $blockId = preg_replace('/_[^_]+$/', '', $blockId);
+    }
+
+    $httpRequestBodyString = json_encode($httpRequestBody);
+
     $contentBlockImportRequest = HttpRequest::fromParameters(
         HttpRequest::METHOD_PUT,
         HttpUrl::fromString('http://example.com/api/content_blocks/' . $blockId),

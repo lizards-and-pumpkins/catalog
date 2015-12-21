@@ -1,7 +1,9 @@
 <?php
 
 
-namespace LizardsAndPumpkins\Product;
+namespace LizardsAndPumpkins\Product\ProductImage;
+
+use LizardsAndPumpkins\Product\ProductAttributeList;
 
 class ProductImage implements \JsonSerializable
 {
@@ -50,14 +52,6 @@ class ProductImage implements \JsonSerializable
      * @return ProductAttributeList
      */
     public function jsonSerialize()
-    {
-        return $this->attributeList;
-    }
-
-    /**
-     * @return ProductAttributeList
-     */
-    public function getAttributes()
     {
         return $this->attributeList;
     }

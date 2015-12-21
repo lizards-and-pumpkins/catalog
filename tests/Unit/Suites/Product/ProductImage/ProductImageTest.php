@@ -1,10 +1,13 @@
 <?php
 
 
-namespace LizardsAndPumpkins\Product;
+namespace LizardsAndPumpkins\Product\ProductImage;
+
+use LizardsAndPumpkins\Product\ProductAttribute;
+use LizardsAndPumpkins\Product\ProductAttributeList;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductImage
+ * @covers \LizardsAndPumpkins\Product\ProductImage\ProductImage
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Product\ProductAttribute
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
@@ -83,10 +86,5 @@ class ProductImageTest extends \PHPUnit_Framework_TestCase
         
         $this->assertSame($sourceProductImage->getFileName(), $rehydratedProductImage->getFileName());
         $this->assertSame($sourceProductImage->getLabel(), $rehydratedProductImage->getLabel());
-    }
-
-    public function testItReturnsTheImageAttributeList()
-    {
-        $this->assertSame($this->stubAttributeList, $this->productImage->getAttributes());
     }
 }

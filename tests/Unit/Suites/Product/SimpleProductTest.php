@@ -7,13 +7,15 @@ use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion;
 use LizardsAndPumpkins\Product\Exception\ProductAttributeNotFoundException;
 use LizardsAndPumpkins\Product\Exception\ProductTypeCodeMismatchException;
 use LizardsAndPumpkins\Product\Exception\ProductTypeCodeMissingException;
+use LizardsAndPumpkins\Product\ProductImage\ProductImage;
+use LizardsAndPumpkins\Product\ProductImage\ProductImageList;
 use LizardsAndPumpkins\Product\Tax\ProductTaxClass;
 
 /**
  * @covers \LizardsAndPumpkins\Product\SimpleProduct
  * @covers \LizardsAndPumpkins\Product\RehydrateableProductTrait
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
- * @uses   \LizardsAndPumpkins\Product\ProductImageList
+ * @uses   \LizardsAndPumpkins\Product\ProductImage\ProductImageList
  * @uses   \LizardsAndPumpkins\Product\ProductId
  * @uses   \LizardsAndPumpkins\Product\Tax\ProductTaxClass
  * @uses   \LizardsAndPumpkins\DataVersion

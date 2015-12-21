@@ -79,7 +79,10 @@ use LizardsAndPumpkins\Renderer\BlockStructure;
 use LizardsAndPumpkins\Renderer\ThemeLocator;
 use LizardsAndPumpkins\Renderer\Translation\CsvTranslator;
 use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocator\CompositeSnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\ContentBlockSnippetKeyGeneratorLocatorStrategy;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocator\ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 use LizardsAndPumpkins\Website\ConfigurableHostToWebsiteMap;
 use LizardsAndPumpkins\Website\HostToWebsiteMap;
 
@@ -765,13 +768,33 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return ContentBlockSnippetKeyGeneratorLocatorStrategy
+     * @param string $snippetCode
+     * @return SnippetKeyGenerator
+     */
+    public function createProductListingContentBlockSnippetKeyGenerator($snippetCode)
+    {
+        $usedDataParts = [PageMetaInfoSnippetContent::URL_KEY];
+
+        return new GenericSnippetKeyGenerator(
+            $snippetCode,
+            $this->getMasterFactory()->getRequiredContexts(),
+            $usedDataParts
+        );
+    }
+
+    /**
+     * @return SnippetKeyGeneratorLocator
      */
     public function createContentBlockSnippetKeyGeneratorLocatorStrategy()
     {
-        return new ContentBlockSnippetKeyGeneratorLocatorStrategy(function ($snippetCode) {
-            return $this->getMasterFactory()->createContentBlockSnippetKeyGenerator($snippetCode);
-        });
+        return new CompositeSnippetKeyGeneratorLocatorStrategy(
+            new ContentBlockSnippetKeyGeneratorLocatorStrategy(function ($snippetCode) {
+                return $this->getMasterFactory()->createContentBlockSnippetKeyGenerator($snippetCode);
+            }),
+            new ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy(function ($snippetCode) {
+                return $this->getMasterFactory()->createProductListingContentBlockSnippetKeyGenerator($snippetCode);
+            })
+        );
     }
 
     /**
