@@ -1065,12 +1065,12 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         $availabilityAttributeCodes = ['backorders', 'stock_qty'];
 
-        $indexAttributeCodes = array_merge(
+        $indexAttributeCodes = array_unique(array_merge(
             $availabilityAttributeCodes,
             $this->getMasterFactory()->getSearchableAttributeCodes(),
             $this->getMasterFactory()->getProductListingFilterNavigationConfig()->getAttributeCodeStrings(),
             $this->getMasterFactory()->getProductSearchResultsFilterNavigationConfig()->getAttributeCodeStrings()
-        );
+        ));
 
         return new ProductSearchDocumentBuilder($indexAttributeCodes);
     }
