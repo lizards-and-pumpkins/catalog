@@ -7,10 +7,10 @@ use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite;
 
 /**
- * @covers \LizardsAndPumpkins\SampleContextSource
+ * @covers \LizardsAndPumpkins\TwentyOneRunContextSource
  * @uses   \LizardsAndPumpkins\Context\ContextSource
  */
-class SampleContextSourceTest extends \PHPUnit_Framework_TestCase
+class TwentyOneRunContextSourceTest extends \PHPUnit_Framework_TestCase
 {
     public function testExpectedContextMatrixIsReturned()
     {
@@ -19,6 +19,7 @@ class SampleContextSourceTest extends \PHPUnit_Framework_TestCase
             [ContextWebsite::CODE => 'ru', ContextLocale::CODE => 'en_US'],
             [ContextWebsite::CODE => 'cy', ContextLocale::CODE => 'de_DE'],
             [ContextWebsite::CODE => 'cy', ContextLocale::CODE => 'en_US'],
+            [ContextWebsite::CODE => 'fr', ContextLocale::CODE => 'fr_FR'],
         ];
 
         /** @var ContextBuilder|\PHPUnit_Framework_MockObject_MockObject $stubContextBuilder */
@@ -27,6 +28,6 @@ class SampleContextSourceTest extends \PHPUnit_Framework_TestCase
             ->method('createContextsFromDataSets')
             ->with($expectedContextMatrix);
 
-        (new SampleContextSource($stubContextBuilder))->getAllAvailableContexts();
+        (new TwentyOneRunContextSource($stubContextBuilder))->getAllAvailableContexts();
     }
 }

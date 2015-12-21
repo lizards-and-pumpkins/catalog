@@ -877,7 +877,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createContextSource()
     {
-        return new SampleContextSource($this->getMasterFactory()->createContextBuilder());
+        return new TwentyOneRunContextSource($this->getMasterFactory()->createContextBuilder());
     }
 
     /**

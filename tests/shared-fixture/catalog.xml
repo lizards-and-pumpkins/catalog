@@ -28,12 +28,15 @@
                 <category website="ru" locale="de_DE">women-accessories</category>
                 <category website="ru" locale="en_US">sale</category>
                 <category website="ru" locale="en_US">women-accessories</category>
+                <category website="fr" locale="fr_FR">sale</category>
                 <stock_qty>5</stock_qty>
                 <backorders>true</backorders>
                 <url_key locale="de_DE">led-arm-signallampe</url_key>
                 <url_key locale="en_US">led-armflasher</url_key>
+                <url_key locale="fr_FR">armer-conduit</url_key>
                 <name locale="de_DE">LED Arm-Signallampe</name>
                 <name locale="en_US">LED Armflasher</name>
+                <name locale="fr_FR">Armer Conduit</name>
                 <price website="ru">11.45</price>
                 <price website="fr">12.95</price>
                 <special_price website="ru">10.95</special_price>
