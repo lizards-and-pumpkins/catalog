@@ -40,12 +40,16 @@ define(['lib/url', 'pagination'], function (url, pagination) {
                 heading.className = 'block-title roundedBorder expanded';
                 heading.textContent = filterCode;
 
+                var filterContainer = document.createElement('DIV');
+                filterContainer.className = 'filter-container';
+
                 var optionList = document.createElement('OL');
                 optionList.className = 'filter-content scroll-pane filter-' + filterCode;
                 options.map(function (option) { optionList.appendChild(option) });
 
                 filterNavigation.appendChild(heading);
-                filterNavigation.appendChild(optionList);
+                filterContainer.appendChild(optionList);
+                filterNavigation.appendChild(filterContainer);
             });
         },
 
