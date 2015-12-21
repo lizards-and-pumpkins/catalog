@@ -85,8 +85,8 @@ array_map(function ($contentFileName) {
     $blockId = preg_replace('/.*\/|\.html$/i', '', $contentFileName);
 
     $httpRequestBody = [
-        'content'              => $contentBlockContent,
-        'context'              => ['website' => 'ru', 'locale' => 'de_DE'],
+        'content' => $contentBlockContent,
+        'context' => ['website' => 'fr', 'locale' => 'fr_FR'],
     ];
 
     if (strpos($blockId, 'product_listing_content_block_') === 0) {
