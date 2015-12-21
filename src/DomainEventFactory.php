@@ -12,6 +12,8 @@ use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEvent;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHandler;
+use LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEventHandler;
 
 interface DomainEventFactory
 {

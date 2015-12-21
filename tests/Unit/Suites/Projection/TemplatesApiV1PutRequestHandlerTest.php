@@ -1,17 +1,17 @@
 <?php
 
-namespace LizardsAndPumpkins;
+namespace LizardsAndPumpkins\Projection;
 
 use LizardsAndPumpkins\Api\ApiRequestHandler;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Queue\Queue;
 
 /**
- * @covers \LizardsAndPumpkins\TemplatesApiV1PutRequestHandler
+ * @covers \LizardsAndPumpkins\Projection\TemplatesApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\Api\ApiRequestHandler
  * @uses   \LizardsAndPumpkins\DefaultHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
- * @uses   \LizardsAndPumpkins\TemplateWasUpdatedDomainEvent
+ * @uses   \LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEvent
  */
 class TemplatesApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {

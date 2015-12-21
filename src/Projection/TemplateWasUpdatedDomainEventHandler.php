@@ -1,8 +1,9 @@
 <?php
 
-namespace LizardsAndPumpkins;
+namespace LizardsAndPumpkins\Projection;
 
 use LizardsAndPumpkins\Context\ContextSource;
+use LizardsAndPumpkins\DomainEventHandler;
 
 class TemplateWasUpdatedDomainEventHandler implements DomainEventHandler
 {

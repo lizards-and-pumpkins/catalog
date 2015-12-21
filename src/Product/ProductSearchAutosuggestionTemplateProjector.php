@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
-use LizardsAndPumpkins\Projector;
+use LizardsAndPumpkins\Projection\Projector;
 use LizardsAndPumpkins\SnippetRendererCollection;
 
 class ProductSearchAutosuggestionTemplateProjector implements Projector

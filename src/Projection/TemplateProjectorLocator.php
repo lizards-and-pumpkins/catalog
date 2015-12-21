@@ -1,6 +1,6 @@
 <?php
 
-namespace LizardsAndPumpkins;
+namespace LizardsAndPumpkins\Projection;
 
 use LizardsAndPumpkins\Exception\InvalidTemplateProjectorCodeException;
 use LizardsAndPumpkins\Exception\UnableToLocateTemplateProjectorException;

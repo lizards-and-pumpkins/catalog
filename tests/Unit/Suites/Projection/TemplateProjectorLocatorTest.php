@@ -1,12 +1,12 @@
 <?php
 
-namespace LizardsAndPumpkins;
+namespace LizardsAndPumpkins\Projection;
 
 use LizardsAndPumpkins\Exception\InvalidTemplateProjectorCodeException;
 use LizardsAndPumpkins\Exception\UnableToLocateTemplateProjectorException;
 
 /**
- * @covers \LizardsAndPumpkins\TemplateProjectorLocator
+ * @covers \LizardsAndPumpkins\Projection\TemplateProjectorLocator
  */
 class TemplateProjectorLocatorTest extends \PHPUnit_Framework_TestCase
 {

@@ -5,8 +5,8 @@ namespace LizardsAndPumpkins\Product;
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilder;
 use LizardsAndPumpkins\Projection\Catalog\ProductViewLocator;
+use LizardsAndPumpkins\Projection\Projector;
 use LizardsAndPumpkins\Projection\UrlKeyForContextCollector;
-use LizardsAndPumpkins\Projector;
 use LizardsAndPumpkins\SnippetRendererCollection;
 
 class ProductProjector implements Projector

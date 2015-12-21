@@ -1,9 +1,11 @@
 <?php
 
-namespace LizardsAndPumpkins;
+namespace LizardsAndPumpkins\Projection;
+
+use LizardsAndPumpkins\DomainEvent;
 
 /**
- * @covers \LizardsAndPumpkins\TemplateWasUpdatedDomainEvent
+ * @covers \LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEvent
  */
 class TemplateWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,11 +1,12 @@
 <?php
 
-namespace LizardsAndPumpkins;
+namespace LizardsAndPumpkins\Projection;
 
 use LizardsAndPumpkins\Context\ContextSource;
+use LizardsAndPumpkins\DomainEventHandler;
 
 /**
- * @covers \LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler
+ * @covers \LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEventHandler
  */
 class TemplateWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
