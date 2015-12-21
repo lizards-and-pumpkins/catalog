@@ -27,6 +27,10 @@ define(['lib/url', 'pagination'], function (url, pagination) {
             }
 
             Object.keys(filterNavigationJson).map(function (filterCode) {
+                if (filterNavigationJson[filterCode].length === 0) {
+                    return;
+                }
+
                 var options = FilterNavigation[FilterNavigation.getFilterOptionBuilderName(filterCode)](
                     filterCode,
                     filterNavigationJson[filterCode]
