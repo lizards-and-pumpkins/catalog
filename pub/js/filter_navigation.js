@@ -27,7 +27,7 @@ define(['lib/url', 'pagination'], function (url, pagination) {
             }
 
             Object.keys(filterNavigationJson).map(function (filterCode) {
-                if (filterNavigationJson[filterCode].length === 0) {
+                if (0 === filterNavigationJson[filterCode].length) {
                     return;
                 }
 
@@ -99,6 +99,9 @@ define(['lib/url', 'pagination'], function (url, pagination) {
         createPriceFilterOptions: function (filterCode, filterOptions) {
             var selectedFilterOptions = getSelectedFilterValues(filterCode);
             return filterOptions.reduce(function (carry, filterOption) {
+                if (0 === filterOption.count) {
+                    return carry;
+                }
 
                 var ranges = filterOption.value.match(/(\d+,\d+)/g),
                     parameterValue = ranges.join('-').replace(/,/g, '.'),
