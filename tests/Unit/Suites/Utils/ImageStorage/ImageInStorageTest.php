@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Utils\ImageStorage;
 
+use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Utils\FileStorage\FileContent;
 use LizardsAndPumpkins\Utils\FileStorage\StorageSpecificFileUri;
@@ -68,8 +69,9 @@ class ImageInStorageTest extends \PHPUnit_Framework_TestCase
     {
         $testUrl = 'http://example.com/media/image.svg';
         $this->stubImageStorage->method('url')->willReturn($testUrl);
+        $stubContext = $this->getMock(Context::class);
         
-        $result = $this->createImageInStorage()->getUrl();
+        $result = $this->createImageInStorage()->getUrl($stubContext);
         
         $this->assertInstanceOf(HttpUrl::class, $result);
         $this->assertSame($testUrl, (string) $result);

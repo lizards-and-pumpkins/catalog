@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Utils\ImageStorage;
 
+use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Utils\FileStorage\File;
 use LizardsAndPumpkins\Utils\FileStorage\FileContent;
@@ -18,7 +19,7 @@ class FilesystemImageStorage implements ImageStorage, ImageToImageStorage
     /**
      * @var HttpUrl
      */
-    private $mediaBaseUrl;
+    private $mediaBaseUrlBuilder;
 
     /**
      * @var
@@ -26,15 +27,17 @@ class FilesystemImageStorage implements ImageStorage, ImageToImageStorage
     private $mediaBaseDirectory;
 
     /**
-     * FilesystemImageStorage constructor.
      * @param FilesystemFileStorage $fileStorage
-     * @param HttpUrl $mediaBaseUrl
+     * @param HttpUrl $mediaBaseUrlBuilder
      * @param string $mediaBaseDirectory
      */
-    public function __construct(FilesystemFileStorage $fileStorage, HttpUrl $mediaBaseUrl, $mediaBaseDirectory)
-    {
+    public function __construct(
+        FilesystemFileStorage $fileStorage,
+        MediaBaseUrlBuilder $mediaBaseUrlBuilder,
+        $mediaBaseDirectory
+    ) {
         $this->fileStorage = $fileStorage;
-        $this->mediaBaseUrl = $mediaBaseUrl;
+        $this->mediaBaseUrlBuilder = $mediaBaseUrlBuilder;
         $this->mediaBaseDirectory = rtrim($mediaBaseDirectory, '/');
     }
 
@@ -73,12 +76,13 @@ class FilesystemImageStorage implements ImageStorage, ImageToImageStorage
 
     /**
      * @param StorageAgnosticFileUri $identifier
+     * @param Context $context
      * @return HttpUrl
      */
-    public function getUrl(StorageAgnosticFileUri $identifier)
+    public function getUrl(StorageAgnosticFileUri $identifier, Context $context)
     {
         $image = $this->getFileReference($identifier);
-        return $image->getUrl();
+        return $image->getUrl($context);
     }
 
     /**
@@ -106,10 +110,11 @@ class FilesystemImageStorage implements ImageStorage, ImageToImageStorage
 
     /**
      * @param Image $image
+     * @param Context $context
      * @return string
      */
-    public function url(Image $image)
+    public function url(Image $image, Context $context)
     {
-        return $this->mediaBaseUrl . substr($image, strlen($this->mediaBaseDirectory));
+        return $this->mediaBaseUrlBuilder->create($context) . substr($image, strlen($this->mediaBaseDirectory));
     }
 }

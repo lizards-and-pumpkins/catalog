@@ -14,10 +14,12 @@ use LizardsAndPumpkins\Image\ImageProcessorCollection;
 use LizardsAndPumpkins\Image\ImageProcessingStrategySequence;
 use LizardsAndPumpkins\Log\InMemoryLogger;
 use LizardsAndPumpkins\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
+use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
 use LizardsAndPumpkins\Product\Tax\TaxServiceLocator;
 use LizardsAndPumpkins\Projection\Catalog\ProductViewLocator;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\Queue\InMemory\InMemoryQueue;
+use LizardsAndPumpkins\Utils\ImageStorage\ImageStorage;
 
 class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -228,5 +230,15 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
     public function testProductViewLocatorIsReturned()
     {
         $this->assertInstanceOf(ProductViewLocator::class, $this->factory->createProductViewLocator());
+    }
+
+    public function testItReturnsAProductImageFileLocator()
+    {
+        $this->assertInstanceOf(ProductImageFileLocator::class, $this->factory->createProductImageFileLocator());
+    }
+
+    public function testItReturnsAnImageStorage()
+    {
+        $this->assertInstanceOf(ImageStorage::class, $this->factory->createImageStorage());
     }
 }

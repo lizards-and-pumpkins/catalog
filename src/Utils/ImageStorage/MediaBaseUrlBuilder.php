@@ -1,17 +1,15 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Utils\ImageStorage;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Utils\FileStorage\File;
 
-interface Image extends File
+interface MediaBaseUrlBuilder
 {
     /**
      * @param Context $context
      * @return HttpUrl
      */
-    public function getUrl(Context $context);
+    public function create(Context $context);
 }

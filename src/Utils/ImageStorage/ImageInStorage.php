@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Utils\ImageStorage;
 
 use LizardsAndPumpkins\BaseUrl;
+use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Utils\FileStorage\FileContent;
 use LizardsAndPumpkins\Utils\FileStorage\StorageSpecificFileUri;
@@ -59,13 +60,14 @@ class ImageInStorage implements Image
     ) {
         return new self($fileURI, $imageStorage, $fileContent);
     }
-    
+
     /**
+     * @param Context $context
      * @return HttpUrl
      */
-    public function getUrl()
+    public function getUrl(Context $context)
     {
-        return HttpUrl::fromString($this->imageStorage->url($this));
+        return HttpUrl::fromString($this->imageStorage->url($this, $context));
     }
 
     /**
