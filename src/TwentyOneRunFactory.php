@@ -73,7 +73,7 @@ class TwentyOneRunFactory implements Factory
         return new FacetFilterRequest(
             new FacetFilterRequestSimpleField(AttributeCode::fromString('gender')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('product_group')),
-            new FacetFilterRequestSimpleField(AttributeCode::fromString('size')),
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('style')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('brand')),
             new FacetFilterRequestRangedField(
                 AttributeCode::fromString('price'),
