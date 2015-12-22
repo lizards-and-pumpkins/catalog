@@ -61,7 +61,7 @@ class TwentyOneRunFactory implements Factory
      */
     public function getSearchableAttributeCodes()
     {
-        return ['name', 'category', 'brand'];
+        return ['name', 'brand'];
     }
 
     /**
