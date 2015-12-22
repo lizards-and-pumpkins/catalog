@@ -13,7 +13,9 @@ use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestRangedField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\FileUrlKeyStore;
@@ -519,6 +521,9 @@ class TwentyOneRunFactory implements Factory
      */
     public function createGlobalProductListingCriteria()
     {
-        return SearchCriterionGreaterThan::create('stock_qty', 0);
+        return CompositeSearchCriterion::createOr(
+            SearchCriterionGreaterThan::create('stock_qty', 0),
+            SearchCriterionEqual::create('backorders', 'true')
+        );
     }
 }
