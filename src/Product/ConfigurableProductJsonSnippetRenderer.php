@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Product;
 
+use LizardsAndPumpkins\Product\Composite\AssociatedProductList;
 use LizardsAndPumpkins\Projection\Catalog\CompositeProductView;
 use LizardsAndPumpkins\Projection\Catalog\InternalToPublicProductJsonData;
 use LizardsAndPumpkins\Projection\Catalog\ProductView;
@@ -14,17 +15,17 @@ class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
 {
     const VARIATION_ATTRIBUTES_CODE = 'configurable_product_variation_attributes';
     const ASSOCIATED_PRODUCTS_CODE = 'configurable_product_associated_products';
-    
+
     /**
      * @var SnippetKeyGenerator
      */
     private $variationAttributesJsonSnippetKeyGenerator;
-    
+
     /**
      * @var SnippetKeyGenerator
      */
     private $associatedProductsJsonSnippetKeyGenerator;
-    
+
     /**
      * @var InternalToPublicProductJsonData
      */
@@ -39,7 +40,7 @@ class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
         $this->associatedProductsJsonSnippetKeyGenerator = $associatedProductsJsonSnippetKeyGenerator;
         $this->internalToPublicProductJsonData = $internalToPublicProductJsonData;
     }
-    
+
     /**
      * @param ProductView $product
      * @return SnippetList
@@ -58,12 +59,12 @@ class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param ProductView $product
+     * @param ProductView $productView
      * @return bool
      */
-    private function isCompositeProduct(ProductView $product)
+    private function isCompositeProduct(ProductView $productView)
     {
-        return $product instanceof CompositeProductView;
+        return $productView instanceof CompositeProductView;
     }
 
     /**

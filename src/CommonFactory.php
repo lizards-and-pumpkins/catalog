@@ -603,7 +603,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         $usedDataParts = [Product::ID];
 
         return new GenericSnippetKeyGenerator(
-            'product_detail_view',
+            'product_detail_view_content',
             $this->getMasterFactory()->getRequiredContexts(),
             $usedDataParts
         );

@@ -123,7 +123,7 @@ class InternalToPublicProductJsonData
     {
         return array_map(function (array $associatedProduct) {
             return $this->transformProduct($associatedProduct);
-        }, $internalAssociatedProductsJsonData[AssociatedProductList::PRODUCTS]);
+        }, $internalAssociatedProductsJsonData);
     }
 
     /**

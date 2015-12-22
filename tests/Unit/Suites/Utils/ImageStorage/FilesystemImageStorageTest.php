@@ -66,7 +66,7 @@ class FilesystemImageStorageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->testMediaBaseDirectory = $this->getUniqueTempDir() . '/media';
+        $this->testMediaBaseDirectory = $this->getUniqueTempDir() . '/media/';
         $this->testFileUri = FilesystemFileUri::fromString($this->testMediaBaseDirectory . '/test/image.svg');
         $this->mockFilesystemFileStorage = $this->getMock(FilesystemFileStorage::class, [], [], '', false);
         $this->testFile = FileInStorage::create($this->testFileUri, $this->mockFilesystemFileStorage);

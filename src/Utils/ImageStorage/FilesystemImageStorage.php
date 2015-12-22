@@ -115,6 +115,6 @@ class FilesystemImageStorage implements ImageStorage, ImageToImageStorage
      */
     public function url(Image $image, Context $context)
     {
-        return $this->mediaBaseUrlBuilder->create($context) . substr($image, strlen($this->mediaBaseDirectory));
+        return $this->mediaBaseUrlBuilder->create($context) . substr($image, strlen($this->mediaBaseDirectory) + 1);
     }
 }

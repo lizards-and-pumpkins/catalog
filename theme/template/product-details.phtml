@@ -26,7 +26,7 @@ $save = 0;
             <ul class="more-views">
                 <?php for ($i=0; $i<$productImageCount; $i++) : ?>
                     <li>
-                        <a href="<?= $this->getProductImageUrlByNumber($i, 'original') ?>" data-image="<?= $this->getProductImageUrlByNumber($i, 'large') ?>"><img src=<?= $this->getProductImageUrlByNumber($i, 'small') ?> width="48" height="48"/></a>
+                        <a href="<?= $this->getProductImageUrlByNumber($i, 'original') ?>" data-image="<?= $this->getProductImageUrlByNumber($i, 'large') ?>"><img src="<?= $this->getProductImageUrlByNumber($i, 'small') ?>" width="48" height="48"/></a>
                     </li>
                 <?php endfor ?>
             </ul>
