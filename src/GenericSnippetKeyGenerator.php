@@ -48,6 +48,8 @@ class GenericSnippetKeyGenerator implements SnippetKeyGenerator
      */
     public function getKeyForContext(Context $context, array $data)
     {
+        $this->validateDataContainsRequiredParts($data);
+
         $snippetKeyData = $this->getSnippetKeyDataAsString($data);
         $snippetKey = $this->snippetCode . $snippetKeyData . '_' . $context->getIdForParts($this->contextParts);
 
@@ -63,18 +65,26 @@ class GenericSnippetKeyGenerator implements SnippetKeyGenerator
     }
 
     /**
+     * @param mixed[] $data
+     */
+    private function validateDataContainsRequiredParts(array $data)
+    {
+        $missingDataParts = array_diff($this->usedDataParts, array_keys($data));
+
+        if (count($missingDataParts) > 0) {
+            throw new MissingSnippetKeyGenerationDataException(
+                sprintf('"%s" is missing in snippet generation data.', implode(', ', $missingDataParts))
+            );
+        }
+    }
+
+    /**
      * @param string[] $data
      * @return string
      */
     private function getSnippetKeyDataAsString(array $data)
     {
         return array_reduce($this->usedDataParts, function ($carry, $dataKey) use ($data) {
-            if (!isset($data[$dataKey])) {
-                throw new MissingSnippetKeyGenerationDataException(
-                    sprintf('"%s" is missing in snippet generation data.', $dataKey)
-                );
-            }
-
             return $carry . '_' . $data[$dataKey];
         }, '');
     }
