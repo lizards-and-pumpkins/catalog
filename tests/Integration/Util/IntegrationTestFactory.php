@@ -125,6 +125,14 @@ class IntegrationTestFactory implements Factory
     }
 
     /**
+     * @return string[]
+     */
+    public function getAdditionalAttributesToIndex()
+    {
+        return ['backorders', 'stock_qty'];
+    }
+
+    /**
      * @return InMemoryKeyValueStore
      */
     public function createKeyValueStore()

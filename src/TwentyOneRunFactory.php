@@ -106,6 +106,14 @@ class TwentyOneRunFactory implements Factory
     }
 
     /**
+     * @return string[]
+     */
+    public function getAdditionalAttributesToIndex()
+    {
+        return ['backorders', 'stock_qty'];
+    }
+
+    /**
      * @return FileKeyValueStore
      */
     public function createKeyValueStore()

@@ -135,6 +135,14 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(FacetFilterRequest::class, $result);
     }
 
+    public function testArrayOfAdditionalAttributeCodesForSearchEngineIsReturned()
+    {
+        $result = $this->factory->getAdditionalAttributesToIndex();
+
+        $this->assertInternalType('array', $result);
+        $this->assertContainsOnly('string', $result);
+    }
+
     public function testImageProcessorCollectionIsReturned()
     {
         $this->assertInstanceOf(ImageProcessorCollection::class, $this->factory->createImageProcessorCollection());

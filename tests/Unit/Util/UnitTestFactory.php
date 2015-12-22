@@ -330,4 +330,12 @@ class UnitTestFactory implements Factory
     {
         return $this->mockObjectGenerator->getMock(ProductsPerPage::class, [], [], '', false);
     }
+
+    /**
+     * @return string[]
+     */
+    public function getAdditionalAttributesToIndex()
+    {
+        return [];
+    }
 }
