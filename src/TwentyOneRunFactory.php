@@ -408,7 +408,7 @@ class TwentyOneRunFactory implements Factory
                 ),
                 SortOrderConfig::create(
                     AttributeCode::fromString('created_at'),
-                    SortOrderDirection::create(SortOrderDirection::ASC)
+                    SortOrderDirection::create(SortOrderDirection::DESC)
                 ),
             ];
         }
