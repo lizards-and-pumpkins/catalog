@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Product\ProductImage;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite;
 use LizardsAndPumpkins\Product\ProductImage\Exception\InvalidImageFileNameException;
 use LizardsAndPumpkins\Product\ProductImage\Exception\InvalidImageVariantCodeException;
@@ -93,8 +94,8 @@ class TwentyOneRunProductImageFileLocator implements ProductImageFileLocator
      */
     public function getPlaceholder($imageVariantCode, Context $context)
     {
-        $websiteCode = $context->getValue(ContextWebsite::CODE);
-        $identifier = sprintf('product/placeholder/%s/%s.jpg', $imageVariantCode, $websiteCode);
+        $localeCode = $context->getValue(ContextLocale::CODE);
+        $identifier = sprintf('product/placeholder/%s/placeholder-image-%s.jpg', $imageVariantCode, $localeCode);
         $placeholderIdentifier = $this->createIdentifierForString($identifier);
         return $this->imageStorage->getFileReference($placeholderIdentifier);
     }
