@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\Projection\Catalog;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductAttributeList;
+use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
 
 class TwentyOneRunSimpleProductView extends AbstractProductView
 {
@@ -20,9 +21,15 @@ class TwentyOneRunSimpleProductView extends AbstractProductView
      */
     private $memoizedProductAttributesList;
 
-    public function __construct(Product $product)
+    /**
+     * @var ProductImageFileLocator
+     */
+    private $productImageFileLocator;
+
+    public function __construct(Product $product, ProductImageFileLocator $productImageFileLocator)
     {
         $this->product = $product;
+        $this->productImageFileLocator = $productImageFileLocator;
     }
 
     /**
@@ -172,5 +179,13 @@ class TwentyOneRunSimpleProductView extends AbstractProductView
             }
             return $attribute;
         }, $filteredAttributes);
+    }
+
+    /**
+     * @return ProductImageFileLocator
+     */
+    final protected function getProductImageFileLocator()
+    {
+        return $this->productImageFileLocator;
     }
 }

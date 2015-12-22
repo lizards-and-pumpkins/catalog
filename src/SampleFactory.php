@@ -486,7 +486,9 @@ class SampleFactory implements Factory
      */
     public function createProductViewLocator()
     {
-        return new TwentyOneRunProductViewLocator();
+        return new TwentyOneRunProductViewLocator(
+            $this->getMasterFactory()->createProductImageFileLocator()
+        );
     }
 
     /**

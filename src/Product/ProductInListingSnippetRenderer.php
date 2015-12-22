@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Exception\InvalidProjectionSourceDataTypeException;
 use LizardsAndPumpkins\Projection\Catalog\InternalToPublicProductJsonData;
+use LizardsAndPumpkins\Projection\Catalog\ProductView;
 use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetRenderer;
@@ -37,8 +38,8 @@ class ProductInListingSnippetRenderer implements SnippetRenderer
      */
     public function render($projectionSourceData)
     {
-        if (!($projectionSourceData instanceof Product)) {
-            throw new InvalidProjectionSourceDataTypeException('First argument must be a Product instance.');
+        if (!($projectionSourceData instanceof ProductView)) {
+            throw new InvalidProjectionSourceDataTypeException('First argument must be a ProductView instance.');
         }
 
         $snippetList = new SnippetList();
@@ -48,10 +49,10 @@ class ProductInListingSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param Product $product
+     * @param ProductView $product
      * @return Snippet
      */
-    private function getProductInListingSnippet(Product $product)
+    private function getProductInListingSnippet(ProductView $product)
     {
         $key = $this->snippetKeyGenerator->getKeyForContext($product->getContext(), [Product::ID => $product->getId()]);
         $internalJson = json_encode($product);

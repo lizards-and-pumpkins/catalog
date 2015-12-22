@@ -4,8 +4,11 @@ namespace LizardsAndPumpkins\Projection\Catalog;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
+use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductImage\ProductImage;
+use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
+use LizardsAndPumpkins\Utils\ImageStorage\Image;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\Catalog\AbstractProductView
@@ -16,8 +19,6 @@ use LizardsAndPumpkins\Product\ProductImage\ProductImage;
  */
 class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
 {
-    private $expectedPlaceholderImageFile = 'placeholder/placeholder-image-de_DE.jpg';
-
     private $expectedPlaceholderImageLabel = '';
 
     /**
@@ -31,24 +32,43 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
     private $mockProduct;
 
     /**
-     * @param string $localeCode
+     * @var ProductImageFileLocator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockImageFileLocator;
+
+    /**
      * @return StubProductView
      */
-    private function createProductViewInstanceWithLocaleCode($localeCode)
+    private function createProductViewInstance()
     {
-        $stubContext = $this->getMock(Context::class);
-        $stubContext->method('getValue')->with(ContextLocale::CODE)->willReturn($localeCode);
         /** @var Product|\PHPUnit_Framework_MockObject_MockObject $mockProduct */
+        /** @var ProductImageFileLocator|\PHPUnit_Framework_MockObject_MockObject $mockImageFileLocator */
         $mockProduct = $this->getMock(Product::class);
-        $mockProduct->method('getContext')->willReturn($stubContext);
-        return new StubProductView($mockProduct);
+        $mockProduct->method('getContext')->willReturn($this->getMock(Context::class));
+
+        $mockImage = $this->getMock(Image::class);
+        $mockPlaceholderImage = $this->getMock(Image::class);
+        
+        $mockImageFileLocator = $this->getMock(ProductImageFileLocator::class);
+        
+        $mockImageFileLocator->method('get')->willReturn($mockImage);
+        $mockImageFileLocator->method('getPlaceholder')->willReturn($mockPlaceholderImage);
+        
+        $mockImage->method('getUrl')->willReturn($this->getMock(HttpUrl::class, [], [], '', false));
+        
+        return new StubProductView($mockProduct, $mockImageFileLocator);
     }
 
     protected function setUp()
     {
-        $localeCode = 'de_DE';
-        $this->productView = $this->createProductViewInstanceWithLocaleCode($localeCode);
+        $this->productView = $this->createProductViewInstance();
         $this->mockProduct = $this->productView->getOriginalProduct();
+        $this->mockImageFileLocator = $this->productView->imageFileLocator;
+    }
+
+    public function testItIsJsonSerializable()
+    {
+        $this->assertInstanceOf(\JsonSerializable::class, $this->productView);
     }
 
     public function testGettingProductIdIsDelegatedToOriginalProduct()
@@ -92,8 +112,13 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
 
     public function testGettingProductImagesIsDelegatedToOriginalProduct()
     {
-        $this->mockProduct->expects($this->once())->method('getImages');
-        $this->productView->getImages();
+        $variantCode = 'medium';
+        $stubProductImage = $this->getMock(ProductImage::class, [], [], '', false);
+        $this->mockProduct->method('getImages')->willReturn(new \ArrayIterator([$stubProductImage]));
+        $result = $this->productView->getImages($variantCode);
+        $this->assertInternalType('array', $result);
+        $this->assertContainsOnlyInstancesOf(Image::class, $result);
+        $this->assertCount(1, $result);
     }
 
     public function testGettingProductImageCountIsDelegatedToOriginalProduct()
@@ -105,17 +130,24 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
     public function testGettingProductImageByNumberIsDelegatedToOriginalProduct()
     {
         $testImageNumber = 1;
+        $variantCode = 'medium';
         $this->mockProduct->method('getImageCount')->willReturn(1);
-        $this->mockProduct->expects($this->once())->method('getImageByNumber')->with($testImageNumber);
-        $this->productView->getImageByNumber($testImageNumber);
+        $this->mockProduct->expects($this->once())
+            ->method('getImageByNumber')->with($testImageNumber)
+            ->willReturn($this->getMock(ProductImage::class, [], [], '', false));
+        $this->productView->getImageByNumber($testImageNumber, $variantCode);
     }
 
-    public function testGettingProductImageFileNameByNumberIsDelegatedToOriginalProduct()
+    public function testGettingProductImageUrlByNumberReturnsAHttpUrlInstance()
     {
         $testImageNumber = 1;
+        $variantCode = 'medium';
         $this->mockProduct->method('getImageCount')->willReturn(1);
-        $this->mockProduct->expects($this->once())->method('getImageFileNameByNumber')->with($testImageNumber);
-        $this->productView->getImageFileNameByNumber($testImageNumber);
+        $this->mockProduct->expects($this->once())
+            ->method('getImageByNumber')->with($testImageNumber)
+            ->willReturn($this->getMock(ProductImage::class, [], [], '', false));
+        $result = $this->productView->getImageUrlByNumber($testImageNumber, $variantCode);
+        $this->assertInstanceOf(HttpUrl::class, $result);
     }
 
     public function testGettingProductImageLabelByNumberIsDelegatedToOriginalProduct()
@@ -126,11 +158,15 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
         $this->productView->getImageLabelByNumber($testImageNumber);
     }
 
-    public function testGettingProductMainImageFileNameIsDelegatedToOriginalProduct()
+    public function testGettingProductMainImageUrlReturnsAHttpUrlInstance()
     {
+        $variantCode = 'medium';
         $this->mockProduct->method('getImageCount')->willReturn(1);
-        $this->mockProduct->expects($this->once())->method('getMainImageFileName');
-        $this->productView->getMainImageFileName();
+        $this->mockProduct->expects($this->once())
+            ->method('getImageByNumber')
+            ->willReturn($this->getMock(ProductImage::class, [], [], '', false));
+        $result = $this->productView->getMainImageUrl($variantCode);
+        $this->assertInstanceOf(HttpUrl::class, $result);
     }
 
     public function testGettingProductMainImageLabelIsDelegatedToOriginalProduct()
@@ -138,12 +174,6 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
         $this->mockProduct->method('getImageCount')->willReturn(1);
         $this->mockProduct->expects($this->once())->method('getMainImageLabel');
         $this->productView->getMainImageLabel();
-    }
-
-    public function testGettingProductTaxClassIsDelegatedToOriginalProduct()
-    {
-        $this->mockProduct->expects($this->once())->method('getTaxClass');
-        $this->productView->getTaxClass();
     }
 
     public function testGettingProductArrayRepresentationIsDelegatedToOriginalProduct()
@@ -157,21 +187,30 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
         $testImageNumber = 2;
         $this->mockProduct->method('getImageCount')->willReturn(1);
 
-        $image = $this->productView->getImageByNumber($testImageNumber);
+        $variantCode = 'small';
+        $expectedPlaceholderImage = $this->productView->imageFileLocator->getPlaceholder(
+            $variantCode,
+            $this->mockProduct->getContext()
+        );
 
-        $this->assertInstanceOf(ProductImage::class, $image);
-        $this->assertSame($this->expectedPlaceholderImageFile, $image->getFileName());
-        $this->assertSame($this->expectedPlaceholderImageLabel, $image->getLabel());
+        $image = $this->productView->getImageByNumber($testImageNumber, $variantCode);
+
+        $this->assertSame($expectedPlaceholderImage, $image);
+        
     }
 
-    public function testGettingAnImageFileNameByNumberHigherThenTheImageCountWillReturnThePlaceholderImageFileName()
+    public function testGettingAnImageUrlByNumberHigherThenTheImageCountWillReturnThePlaceholderImageUrl()
     {
         $testImageNumber = 2;
         $this->mockProduct->method('getImageCount')->willReturn(1);
 
-        $imageFileName = $this->productView->getImageFileNameByNumber($testImageNumber);
-
-        $this->assertSame($this->expectedPlaceholderImageFile, $imageFileName);
+        $variantCode = 'medium';
+        $stubHttpUrl = $this->getMock(HttpUrl::class, [], [], '', false);
+        /** @var \PHPUnit_Framework_MockObject_MockObject $placeholderImage */
+        $placeholderImage = $this->mockImageFileLocator->getPlaceholder($variantCode, $this->mockProduct->getContext());
+        $placeholderImage->expects($this->once())->method('getUrl')->willReturn($stubHttpUrl);
+        
+        $this->assertSame($stubHttpUrl, $this->productView->getImageUrlByNumber($testImageNumber, $variantCode));
     }
 
     public function testGettingAnImageLabelByNumberHigherThenTheImageCountWillReturnAnEmptyString()
@@ -184,13 +223,19 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->expectedPlaceholderImageLabel, $imageLabel);
     }
 
-    public function testGettingTheMainImageFileNameFromAProductWithoutImagesWillReturnThePlaceholderImageFileName()
+    public function testGettingTheMainImageUrlFromAProductWithoutImagesWillReturnThePlaceholderImageUrl()
     {
         $this->mockProduct->method('getImageCount')->willReturn(0);
 
-        $imageFileName = $this->productView->getMainImageFileName();
+        $variantCode = 'medium';
+        $stubHttpUrl = $this->getMock(HttpUrl::class, [], [], '', false);
+        /** @var \PHPUnit_Framework_MockObject_MockObject $placeholderImage */
+        $placeholderImage = $this->mockImageFileLocator->getPlaceholder($variantCode, $this->mockProduct->getContext());
+        $placeholderImage->expects($this->once())->method('getUrl')->willReturn($stubHttpUrl);
 
-        $this->assertSame($this->expectedPlaceholderImageFile, $imageFileName);
+        $result = $this->productView->getMainImageUrl($variantCode);
+        
+        $this->assertSame($stubHttpUrl, $result);
     }
 
     public function testGettingTheMainImageLabelFromAProductWithoutImagesWillReturnAnEmptyString()
@@ -200,29 +245,5 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
         $imageLabel = $this->productView->getMainImageLabel();
 
         $this->assertSame($this->expectedPlaceholderImageLabel, $imageLabel);
-    }
-
-    /**
-     * @dataProvider localeCodeDataProvider
-     */
-    public function testThePlaceholderImageFileNameContainsTheWebsiteCodeAsASuffix($localeCode)
-    {
-        $productView = $this->createProductViewInstanceWithLocaleCode($localeCode);
-        $productView->getOriginalProduct()->method('getImageCount')->willReturn(0);
-
-        $placeholderImageName = $productView->getMainImageFileName();
-
-        $this->assertRegExp("#-{$localeCode}\\.(jpe?g|png|svg)$#", $placeholderImageName);
-    }
-
-    /**
-     * @return array[]
-     */
-    public function localeCodeDataProvider()
-    {
-        return [
-            ['de_DE'],
-            ['fr_FR'],
-        ];
     }
 }

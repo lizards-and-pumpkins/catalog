@@ -9,6 +9,7 @@ use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductAttributeList;
 use LizardsAndPumpkins\Product\ProductId;
+use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
 use LizardsAndPumpkins\Product\SimpleProduct;
 
 /**
@@ -35,6 +36,11 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
      * @var ProductViewLocator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubProductViewLocator;
+
+    /**
+     * @var ProductImageFileLocator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubProductImageFileLocator;
 
     /**
      * @param string $productIdString
@@ -88,8 +94,13 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
     {
         $this->stubProductViewLocator = $this->createStubProductViewLocator();
         $this->mockProduct = $this->getMock(ConfigurableProduct::class, [], [], '', false);
+        $this->stubProductImageFileLocator = $this->getMock(ProductImageFileLocator::class);
 
-        $this->productView = new TwentyOneRunConfigurableProductView($this->stubProductViewLocator, $this->mockProduct);
+        $this->productView = new TwentyOneRunConfigurableProductView(
+            $this->stubProductViewLocator,
+            $this->mockProduct,
+            $this->stubProductImageFileLocator
+        );
     }
 
     public function testProductViewInterfaceIsImplemented()

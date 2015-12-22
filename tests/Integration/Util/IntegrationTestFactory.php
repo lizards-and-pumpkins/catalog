@@ -431,7 +431,7 @@ class IntegrationTestFactory implements Factory
      */
     public function createProductViewLocator()
     {
-        return new IntegrationTestProductViewLocator();
+        return new IntegrationTestProductViewLocator($this->getMasterFactory()->createProductImageFileLocator());
     }
 
     /**

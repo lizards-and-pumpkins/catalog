@@ -2,9 +2,18 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog;
 
-use LizardsAndPumpkins\Product\CompositeProduct;
+use LizardsAndPumpkins\Product\Composite\AssociatedProductList;
+use LizardsAndPumpkins\Product\Composite\ProductVariationAttributeList;
 
-interface CompositeProductView extends CompositeProduct, ProductView
+interface CompositeProductView extends ProductView
 {
+    /**
+     * @return ProductVariationAttributeList
+     */
+    public function getVariationAttributes();
 
+    /**
+     * @return ProductView[]
+     */
+    public function getAssociatedProducts();
 }

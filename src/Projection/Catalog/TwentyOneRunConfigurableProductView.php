@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Product\Composite\ProductVariationAttributeList;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductAttributeList;
+use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
 
 class TwentyOneRunConfigurableProductView extends AbstractProductView implements CompositeProductView
 {
@@ -28,10 +29,19 @@ class TwentyOneRunConfigurableProductView extends AbstractProductView implements
      */
     private $memoizedProductAttributesList;
 
-    public function __construct(ProductViewLocator $productViewLocator, ConfigurableProduct $product)
-    {
+    /**
+     * @var ProductImageFileLocator
+     */
+    private $productImageFileLocator;
+
+    public function __construct(
+        ProductViewLocator $productViewLocator,
+        ConfigurableProduct $product,
+        ProductImageFileLocator $productImageFileLocator
+    ) {
         $this->productViewLocator = $productViewLocator;
         $this->product = $product;
+        $this->productImageFileLocator = $productImageFileLocator;
     }
 
     /**
@@ -113,15 +123,13 @@ class TwentyOneRunConfigurableProductView extends AbstractProductView implements
     }
 
     /**
-     * @return AssociatedProductList
+     * @return ProductView[]
      */
     public function getAssociatedProducts()
     {
-        $associatedProductViews = array_map(function (Product $associatedProduct) {
+        return array_map(function (Product $associatedProduct) {
             return $this->productViewLocator->createForProduct($associatedProduct);
         }, $this->product->getAssociatedProducts()->getProducts());
-
-        return new AssociatedProductList(...$associatedProductViews);
     }
 
     /**
@@ -147,5 +155,13 @@ class TwentyOneRunConfigurableProductView extends AbstractProductView implements
         return array_filter($attributes, function (ProductAttribute $attribute) use ($attributeCodesToBeRemoved) {
             return !in_array((string) $attribute->getCode(), $attributeCodesToBeRemoved);
         });
+    }
+
+    /**
+     * @return ProductImageFileLocator
+     */
+    protected function getProductImageFileLocator()
+    {
+        return $this->productImageFileLocator;
     }
 }

@@ -64,7 +64,7 @@ class TwentyOneRunProductImageFileLocator implements ProductImageFileLocator
         $imageIdentifier = $this->buildIdentifier($imageFileName, $imageVariantCode);
         return $this->imageStorage->contains($imageIdentifier) ?
             $this->imageStorage->getFileReference($imageIdentifier) :
-            $this->getPlaceholderImage($imageVariantCode, $context);
+            $this->getPlaceholder($imageVariantCode, $context);
     }
 
     /**
@@ -91,7 +91,7 @@ class TwentyOneRunProductImageFileLocator implements ProductImageFileLocator
      * @param Context $context
      * @return Image
      */
-    private function getPlaceholderImage($imageVariantCode, Context $context)
+    public function getPlaceholder($imageVariantCode, Context $context)
     {
         $placeholderImageFileName = $context->getValue(ContextWebsite::CODE);
         $identifier = sprintf('product/placeholder/%s/%s', $imageVariantCode, $placeholderImageFileName);

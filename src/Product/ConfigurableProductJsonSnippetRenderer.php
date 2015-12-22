@@ -2,7 +2,9 @@
 
 namespace LizardsAndPumpkins\Product;
 
+use LizardsAndPumpkins\Projection\Catalog\CompositeProductView;
 use LizardsAndPumpkins\Projection\Catalog\InternalToPublicProductJsonData;
+use LizardsAndPumpkins\Projection\Catalog\ProductView;
 use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetList;
@@ -39,10 +41,10 @@ class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
     }
     
     /**
-     * @param Product $product
+     * @param ProductView $product
      * @return SnippetList
      */
-    public function render(Product $product)
+    public function render(ProductView $product)
     {
         $snippetList = new SnippetList();
 
@@ -56,19 +58,19 @@ class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param Product $product
+     * @param ProductView $product
      * @return bool
      */
-    private function isCompositeProduct(Product $product)
+    private function isCompositeProduct(ProductView $product)
     {
-        return $product instanceof CompositeProduct;
+        return $product instanceof CompositeProductView;
     }
 
     /**
-     * @param Product $product
+     * @param ProductView $product
      * @return Snippet
      */
-    private function createVariationAttributesJsonSnippet(Product $product)
+    private function createVariationAttributesJsonSnippet(ProductView $product)
     {
         $key = $this->variationAttributesJsonSnippetKeyGenerator->getKeyForContext(
             $product->getContext(),
@@ -78,10 +80,10 @@ class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param Product $product
+     * @param ProductView $product
      * @return string
      */
-    private function createVariationAttributesJsonSnippetContent(Product $product)
+    private function createVariationAttributesJsonSnippetContent(ProductView $product)
     {
         if ($this->isCompositeProduct($product)) {
             return json_encode($this->getVariationAttributesJsonData($product));
@@ -91,10 +93,10 @@ class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param CompositeProduct $product
+     * @param CompositeProductView $product
      * @return string[]
      */
-    private function getVariationAttributesJsonData(CompositeProduct $product)
+    private function getVariationAttributesJsonData(CompositeProductView $product)
     {
         $variationAttributesJson = json_encode($product->getVariationAttributes());
         return $this->internalToPublicProductJsonData->transformVariationAttributes(
@@ -103,10 +105,10 @@ class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param Product $product
+     * @param ProductView $product
      * @return Snippet
      */
-    private function createAssociatedProductsJsonSnippet(Product $product)
+    private function createAssociatedProductsJsonSnippet(ProductView $product)
     {
         $key = $this->associatedProductsJsonSnippetKeyGenerator->getKeyForContext(
             $product->getContext(),
@@ -116,10 +118,10 @@ class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param Product $product
+     * @param ProductView $product
      * @return string
      */
-    private function createAssociatedProductsJsonSnippetContent(Product $product)
+    private function createAssociatedProductsJsonSnippetContent(ProductView $product)
     {
         if ($this->isCompositeProduct($product)) {
             return json_encode($this->getAssociatedProductListJson($product));
@@ -129,10 +131,10 @@ class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param CompositeProduct $product
+     * @param CompositeProductView $product
      * @return array[]
      */
-    private function getAssociatedProductListJson(CompositeProduct $product)
+    private function getAssociatedProductListJson(CompositeProductView $product)
     {
         $associatedProductListJson = json_encode($product->getAssociatedProducts());
         return $this->internalToPublicProductJsonData->transformAssociatedProducts(

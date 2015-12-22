@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\Projection\Catalog;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductAttributeList;
+use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\Catalog\TwentyOneRunSimpleProductView
@@ -28,7 +29,8 @@ class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->mockProduct = $this->getMock(Product::class);
-        $this->productView = new TwentyOneRunSimpleProductView($this->mockProduct);
+        $stubProductImageFileLocator = $this->getMock(ProductImageFileLocator::class);
+        $this->productView = new TwentyOneRunSimpleProductView($this->mockProduct, $stubProductImageFileLocator);
     }
 
     public function testOriginalProductIsReturned()

@@ -5,7 +5,7 @@
 ?>
 <li>
     <a href="<?= $this->getProductUrl() ?>">
-        <img src="<?= $this->getBaseUrl() ?>media/product/search-autosuggestion/<?= $this->getMainProductFileName() ?>" alt="<?= $this->getMainProductImageLabel() ?>" width="60" height="37"/>
+        <img src="<?= $this->getMainProductImageUrl('search-autosuggestion') ?>" alt="<?= $this->getMainProductImageLabel() ?>" width="60" height="37"/>
         <?= $this->getFirstValueOfProductAttribute('name') ?>
     </a>
 </li>

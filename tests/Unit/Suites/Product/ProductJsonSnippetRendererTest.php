@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Projection\Catalog\InternalToPublicProductJsonData;
+use LizardsAndPumpkins\Projection\Catalog\ProductView;
 use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetList;
@@ -22,9 +23,9 @@ class ProductJsonSnippetRendererTest extends \PHPUnit_Framework_TestCase
     private $snippetRenderer;
 
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductView|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubProduct;
+    private $stubProductView;
 
     /**
      * @param \Iterator $iterator
@@ -74,17 +75,17 @@ class ProductJsonSnippetRendererTest extends \PHPUnit_Framework_TestCase
             $stubInternalToPublicJson
         );
         
-        $this->stubProduct = $this->getMock(Product::class);
-        $this->stubProduct->method('getContext')->willReturn($this->getMock(Context::class));
+        $this->stubProductView = $this->getMock(ProductView::class);
+        $this->stubProductView->method('getContext')->willReturn($this->getMock(Context::class));
     }
 
     public function testItReturnsTheJsonSerializedProduct()
     {
         $expectedJsonContent = ['product_id' => 'test-dummy'];
         
-        $this->stubProduct->method('jsonSerialize')->willReturn($expectedJsonContent);
+        $this->stubProductView->method('jsonSerialize')->willReturn($expectedJsonContent);
         
-        $snippetList = $this->snippetRenderer->render($this->stubProduct);
+        $snippetList = $this->snippetRenderer->render($this->stubProductView);
         
         $this->assertInstanceOf(SnippetList::class, $snippetList);
         $this->assertCount(1, $snippetList);

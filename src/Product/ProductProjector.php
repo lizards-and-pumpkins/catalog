@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilder;
+use LizardsAndPumpkins\Projection\Catalog\ProductView;
 use LizardsAndPumpkins\Projection\Catalog\ProductViewLocator;
 use LizardsAndPumpkins\Projection\UrlKeyForContextCollector;
 use LizardsAndPumpkins\Projector;
@@ -51,35 +52,29 @@ class ProductProjector implements Projector
     }
 
     /**
-     * @param mixed $projectionSourceData
+     * @param Product $product
      */
-    public function project($projectionSourceData)
+    public function project($product)
     {
-        $productView = $this->productViewLocator->createForProduct($projectionSourceData);
+        $productView = $this->productViewLocator->createForProduct($product);
 
-        $this->projectProduct($productView);
-        $this->aggregateSearchDocuments($projectionSourceData);
-        $this->storeProductUrlKeys($productView);
+        $this->projectProductView($productView);
+        $this->aggregateSearchDocuments($product);
+        $this->storeProductUrlKeys($product);
     }
 
-    private function projectProduct(Product $product)
+    private function projectProductView(ProductView $product)
     {
         $snippetList = $this->rendererCollection->render($product);
         $this->dataPoolWriter->writeSnippetList($snippetList);
     }
 
-    /**
-     * @param Product $product
-     */
     private function aggregateSearchDocuments(Product $product)
     {
         $searchDocumentCollection = $this->searchDocumentBuilder->aggregate($product);
         $this->dataPoolWriter->writeSearchDocumentCollection($searchDocumentCollection);
     }
 
-    /**
-     * @param Product $product
-     */
     private function storeProductUrlKeys(Product $product)
     {
         $urlKeysForContextsCollection = $this->urlKeyCollector->collectProductUrlKeys($product);
