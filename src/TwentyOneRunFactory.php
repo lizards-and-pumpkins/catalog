@@ -15,6 +15,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\FileUrlKeyStore;
 use LizardsAndPumpkins\Image\ImageMagickInscribeStrategy;
 use LizardsAndPumpkins\Image\ImageProcessor;
@@ -61,7 +62,7 @@ class TwentyOneRunFactory implements Factory
      */
     public function getSearchableAttributeCodes()
     {
-        return ['name', 'brand'];
+        return ['name', 'brand', 'product_group'];
     }
 
     /**
@@ -71,6 +72,7 @@ class TwentyOneRunFactory implements Factory
     {
         return new FacetFilterRequest(
             new FacetFilterRequestSimpleField(AttributeCode::fromString('gender')),
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('product_group')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('size')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('brand')),
             new FacetFilterRequestRangedField(
@@ -90,12 +92,15 @@ class TwentyOneRunFactory implements Factory
     {
         return new FacetFilterRequest(
             new FacetFilterRequestSimpleField(AttributeCode::fromString('gender')),
-            new FacetFilterRequestSimpleField(AttributeCode::fromString('category')),
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('product_group')),
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('style')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('brand')),
             new FacetFilterRequestRangedField(
                 AttributeCode::fromString('price'),
                 ...FilterNavigationPriceRangesBuilder::getPriceRanges()
             ),
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('series')),
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('size')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('color'))
         );
     }
@@ -162,7 +167,7 @@ class TwentyOneRunFactory implements Factory
     }
 
     /**
-     * @return FileSearchEngine
+     * @return SearchEngine
      */
     public function createSearchEngine()
     {
