@@ -489,27 +489,6 @@ TEXTILE/SYNTHETICS]]></description>
             </associated_products>
         </product>
 
-        <product type="simple" sku="missing-image" tax_class="19%">
-            <images>
-                <image>
-                    <file>what-are-you-looking-at.png</file>
-                    <label/>
-                </image>
-            </images>
-            <attributes>
-                <url_key>missing-image</url_key>
-                <name>Missing Image</name>
-                <category>sale</category>
-                <price>23.45</price>
-                <brand>Asics</brand>
-                <style>Lightweight/Stabil</style>
-                <gender>Herren</gender>
-                <stock_qty>55</stock_qty>
-                <backorders>true</backorders>
-                <color>a7fa41</color>
-            </attributes>
-        </product>
-
         <product type="simple" sku="no-image" tax_class="19%">
             <images/>
             <attributes>

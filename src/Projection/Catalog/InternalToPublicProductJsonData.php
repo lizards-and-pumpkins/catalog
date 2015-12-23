@@ -105,17 +105,6 @@ class InternalToPublicProductJsonData
     }
 
     /**
-     * @param array[] $images
-     * @return array[]
-     */
-    private function transformImages(array $images)
-    {
-        return array_map(function (array $imageAttributeList) {
-            return $this->transformAttributes($imageAttributeList);
-        }, $images);
-    }
-
-    /**
      * @param array[] $internalAssociatedProductsJsonData
      * @return array[]
      */

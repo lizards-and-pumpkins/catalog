@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog;
 
+use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Product\Composite\AssociatedProductList;
 use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Product\CompositeProduct;
@@ -11,6 +12,7 @@ use LizardsAndPumpkins\Product\ProductAttributeList;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
 use LizardsAndPumpkins\Product\SimpleProduct;
+use LizardsAndPumpkins\Utils\ImageStorage\Image;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\Catalog\TwentyOneRunConfigurableProductView
@@ -95,6 +97,7 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
         $this->stubProductViewLocator = $this->createStubProductViewLocator();
         $this->mockProduct = $this->getMock(ConfigurableProduct::class, [], [], '', false);
         $this->stubProductImageFileLocator = $this->getMock(ProductImageFileLocator::class);
+        $this->stubProductImageFileLocator->method('getPlaceholder')->willReturn($this->getMock(Image::class));
 
         $this->productView = new TwentyOneRunConfigurableProductView(
             $this->stubProductViewLocator,
@@ -277,6 +280,8 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
 
         $this->mockProduct->method('getAttributes')->willReturn($attributeList);
         $this->mockProduct->method('jsonSerialize')->willReturn([]);
+        $this->mockProduct->method('getImages')->willReturn(new \ArrayIterator([]));
+        $this->mockProduct->method('getContext')->willReturn($this->getMock(Context::class));
 
         $result = $this->productView->jsonSerialize();
 

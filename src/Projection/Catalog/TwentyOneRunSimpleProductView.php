@@ -5,7 +5,9 @@ namespace LizardsAndPumpkins\Projection\Catalog;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductAttributeList;
+use LizardsAndPumpkins\Product\ProductImage\ProductImage;
 use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
+use LizardsAndPumpkins\Product\ProductImage\TwentyOneRunProductImageFileLocator;
 
 class TwentyOneRunSimpleProductView extends AbstractProductView
 {
@@ -99,6 +101,9 @@ class TwentyOneRunSimpleProductView extends AbstractProductView
         $productData = $this->product->jsonSerialize();
         $productData['attributes'] = $this->getAttributes();
 
+        unset($productData['images']);
+        $productData['images'] = $this->getAllProductImageUrls();
+
         return $productData;
     }
 
@@ -187,5 +192,34 @@ class TwentyOneRunSimpleProductView extends AbstractProductView
     final protected function getProductImageFileLocator()
     {
         return $this->productImageFileLocator;
+    }
+
+    /**
+     * @return array[]
+     */
+    private function getAllProductImageUrls()
+    {
+        $imageUrls = [];
+        foreach ([
+                     TwentyOneRunProductImageFileLocator::ORIGINAL,
+                     TwentyOneRunProductImageFileLocator::LARGE,
+                     TwentyOneRunProductImageFileLocator::MEDIUM,
+                     TwentyOneRunProductImageFileLocator::SMALL,
+                     TwentyOneRunProductImageFileLocator::SEARCH_AUTOSUGGESTION,
+                 ] as $variantCode) {
+            $imageUrls[$variantCode] = array_map(function (ProductImage $productImage) use ($variantCode) {
+                $context = $this->getContext();
+                $image = $this->productImageFileLocator->get($productImage->getFileName(), $variantCode, $context);
+                return ['url' => (string) $image->getUrl($context), 'label' => $productImage->getLabel()];
+            }, iterator_to_array($this->product->getImages()));
+            if (count($imageUrls[$variantCode]) === 0) {
+                $placeholder = $this->productImageFileLocator->getPlaceholder($variantCode, $this->getContext());
+                $imageUrls[$variantCode][] = [
+                    'url' => $placeholder->getUrl($this->getContext()),
+                    'label' => ''
+                ];
+            }
+        };
+        return $imageUrls;
     }
 }

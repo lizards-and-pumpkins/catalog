@@ -7,9 +7,9 @@ define(function () {
         return link;
     };
 
-    var createProductImage = function (fileName, alt) {
+    var createProductImage = function (imageUrl, alt) {
         var image = new Image();
-        image.src = baseUrl + 'media/product/medium/' + fileName;
+        image.src = imageUrl;
         image.alt = alt;
         return image;
     };
@@ -39,12 +39,13 @@ define(function () {
             grid.className = 'products-grid';
 
             productGridJson.map(function (product, index) {
+                var mainImage = product['images']['medium'][0];
                 var productLi = document.createElement('LI'),
                     container = document.createElement('DIV'),
                     title = document.createElement('H2'),
                     gender = document.createElement('P'),
                     productUrl = baseUrl + product['attributes']['url_key'],
-                    productImage = createProductImage(product['images'][0]['file'], product['images'][0]['label']),
+                    productImage = createProductImage(mainImage['url'], mainImage['label']),
                     price = document.createElement('SPAN'),
                     hasSpecialPrice = 2 === productPrices[index].length;
 
