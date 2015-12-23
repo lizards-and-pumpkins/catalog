@@ -1070,7 +1070,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $this->getMasterFactory()->getSearchableAttributeCodes(),
             $this->getMasterFactory()->getProductListingFilterNavigationConfig()->getAttributeCodeStrings(),
             $this->getMasterFactory()->getProductSearchResultsFilterNavigationConfig()->getAttributeCodeStrings(),
-            $this->getMasterFactory()->getAdditionalAttributesToIndex()
+            $this->getMasterFactory()->getAdditionalAttributesForSearchIndex()
         ));
 
         return new ProductSearchDocumentBuilder($indexAttributeCodes);

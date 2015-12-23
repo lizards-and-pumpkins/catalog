@@ -110,7 +110,7 @@ class TwentyOneRunFactory implements Factory
     /**
      * @return string[]
      */
-    public function getAdditionalAttributesToIndex()
+    public function getAdditionalAttributesForSearchIndex()
     {
         return ['backorders', 'stock_qty', 'category', 'created_at'];
     }

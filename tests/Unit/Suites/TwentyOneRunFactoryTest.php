@@ -137,7 +137,7 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayOfAdditionalAttributeCodesForSearchEngineIsReturned()
     {
-        $result = $this->factory->getAdditionalAttributesToIndex();
+        $result = $this->factory->getAdditionalAttributesForSearchIndex();
 
         $this->assertInternalType('array', $result);
         $this->assertContainsOnly('string', $result);
