@@ -20,7 +20,7 @@ class ImageProcessingStrategySequence implements ImageProcessingStrategy
      */
     public function processBinaryImageData($imageBinaryData)
     {
-        return array_reduce($this->strategies, function ($carryImageBinaryData, ImageProcessingStrategy $strategy) {
+        return @array_reduce($this->strategies, function ($carryImageBinaryData, ImageProcessingStrategy $strategy) {
             return $strategy->processBinaryImageData($carryImageBinaryData);
         }, $imageBinaryData);
     }

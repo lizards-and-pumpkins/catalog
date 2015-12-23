@@ -16,12 +16,16 @@ use LizardsAndPumpkins\LocalFilesystemStorageReader;
 use LizardsAndPumpkins\LocalFilesystemStorageWriter;
 use LizardsAndPumpkins\Log\Writer\FileLogMessageWriter;
 use LizardsAndPumpkins\Log\WritingLoggerDecorator;
+use LizardsAndPumpkins\Product\ProductImage\TwentyOneRunProductImageFileLocator;
 use LizardsAndPumpkins\Product\Tax\TaxServiceLocator;
 use LizardsAndPumpkins\Projection\Catalog\ProductViewLocator;
 use LizardsAndPumpkins\Queue\File\FileQueue;
 use LizardsAndPumpkins\SampleMasterFactory;
 use LizardsAndPumpkins\TwentyOneRunFactory;
 use LizardsAndPumpkins\TaxableCountries;
+use LizardsAndPumpkins\Utils\FileStorage\FilesystemFileStorage;
+use LizardsAndPumpkins\Utils\ImageStorage\ImageStorage;
+use LizardsAndPumpkins\Utils\ImageStorage\MediaBaseUrlBuilder;
 use LizardsAndPumpkins\Website\WebsiteToCountryMap;
 
 /**
@@ -54,7 +58,13 @@ use LizardsAndPumpkins\Website\WebsiteToCountryMap;
  * @uses   \LizardsAndPumpkins\MasterFactoryTrait
  * @uses   \LizardsAndPumpkins\EnvironmentConfigReader
  * @uses   \LizardsAndPumpkins\CommonFactory
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\TwentyOneRunProductViewLocator
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
+ * @uses   \LizardsAndPumpkins\Product\ProductImage\TwentyOneRunProductImageFileLocator
+ * @uses   \LizardsAndPumpkins\Utils\ImageStorage\MediaDirectoryBaseUrlBuilder
+ * @uses   \LizardsAndPumpkins\Utils\ImageStorage\FilesystemImageStorage
+ * @uses   \LizardsAndPumpkins\Utils\FileStorage\FilesystemFileStorage
+ * @uses   \LizardsAndPumpkins\BaseUrl\WebsiteBaseUrlBuilder
  */
 class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -287,5 +297,16 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
     public function testProductViewLocatorIsReturned()
     {
         $this->assertInstanceOf(ProductViewLocator::class, $this->factory->createProductViewLocator());
+    }
+
+    public function testItReturnsAProductImageFileLocatorInstance()
+    {
+        $result = $this->factory->createProductImageFileLocator();
+        $this->assertInstanceOf(TwentyOneRunProductImageFileLocator::class, $result);
+    }
+
+    public function testItReturnsAnImageStorage()
+    {
+        $this->assertInstanceOf(ImageStorage::class, $this->factory->createImageStorage());
     }
 }

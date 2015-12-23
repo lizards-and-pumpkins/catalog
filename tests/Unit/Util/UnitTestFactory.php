@@ -15,6 +15,7 @@ use LizardsAndPumpkins\Image\ImageProcessingStrategy;
 use LizardsAndPumpkins\Image\ImageProcessor;
 use LizardsAndPumpkins\Image\ImageProcessorCollection;
 use LizardsAndPumpkins\Log\Logger;
+use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
 use LizardsAndPumpkins\Projection\Catalog\ProductViewLocator;
 use LizardsAndPumpkins\Product\Tax\TaxServiceLocator;
 use LizardsAndPumpkins\Queue\Queue;
@@ -321,6 +322,14 @@ class UnitTestFactory implements Factory
     public function createGlobalProductListingCriteria()
     {
         return $this->mockObjectGenerator->getMock(SearchCriteria::class);
+    }
+
+    /**
+     * @return ProductImageFileLocator
+     */
+    public function createProductImageFileLocator()
+    {
+        return $this->mockObjectGenerator->getMock(ProductImageFileLocator::class);
     }
 
     /**

@@ -105,17 +105,6 @@ class InternalToPublicProductJsonData
     }
 
     /**
-     * @param array[] $images
-     * @return array[]
-     */
-    private function transformImages(array $images)
-    {
-        return array_map(function (array $imageAttributeList) {
-            return $this->transformAttributes($imageAttributeList);
-        }, $images);
-    }
-
-    /**
      * @param array[] $internalAssociatedProductsJsonData
      * @return array[]
      */
@@ -123,7 +112,7 @@ class InternalToPublicProductJsonData
     {
         return array_map(function (array $associatedProduct) {
             return $this->transformProduct($associatedProduct);
-        }, $internalAssociatedProductsJsonData[AssociatedProductList::PRODUCTS]);
+        }, $internalAssociatedProductsJsonData);
     }
 
     /**

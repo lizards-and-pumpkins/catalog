@@ -51,6 +51,8 @@ use LizardsAndPumpkins\Projection\UrlKeyForContextCollector;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\Renderer\ThemeLocator;
 use LizardsAndPumpkins\Renderer\Translation\Translator;
+use LizardsAndPumpkins\Utils\FileStorage\FilesystemFileStorage;
+use LizardsAndPumpkins\Utils\ImageStorage\MediaBaseUrlBuilder;
 use LizardsAndPumpkins\Website\ConfigurableHostToWebsiteMap;
 use LizardsAndPumpkins\Website\HostToWebsiteMap;
 
@@ -140,6 +142,8 @@ use LizardsAndPumpkins\Website\HostToWebsiteMap;
  * @uses   \LizardsAndPumpkins\EnvironmentConfigReader
  * @uses   \LizardsAndPumpkins\Utils\LocalFilesystem
  * @uses   \LizardsAndPumpkins\Website\ConfigurableHostToWebsiteMap
+ * @uses   \LizardsAndPumpkins\Utils\FileStorage\FilesystemFileStorage
+ * @uses   \LizardsAndPumpkins\Utils\ImageStorage\MediaDirectoryBaseUrlBuilder
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -607,5 +611,22 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $result = $this->commonFactory->createCountryContextPartBuilder();
         $this->assertInstanceOf(ContextPartBuilder::class, $result);
         $this->assertInstanceOf(ContextCountry::class, $result);
+    }
+
+    public function testItReturnsAFilesystemFileStorage()
+    {
+        $this->assertInstanceOf(FilesystemFileStorage::class, $this->commonFactory->createFilesystemFileStorage());
+    }
+
+    public function testItReturnsTheMediaBaseDirectoryConfiguration()
+    {
+        $baseDirectory = $this->commonFactory->getMediaBaseDirectoryConfig();
+        $this->assertInternalType('string', $baseDirectory);
+    }
+
+    public function testItReturnsAMediaDirectoryBaseUrlBuilderinstance()
+    {
+        $result = $this->commonFactory->createMediaBaseUrlBuilder();
+        $this->assertInstanceOf(MediaBaseUrlBuilder::class, $result);
     }
 }

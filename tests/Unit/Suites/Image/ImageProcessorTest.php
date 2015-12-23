@@ -96,7 +96,5 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
             'Unable to create the target directory for processed images "'
         );
         $this->imageProcessor->process('will-not-get-this-far.jpg');
-
-        $this->assertFileExists($this->targetImageDirectoryPath);
     }
 }

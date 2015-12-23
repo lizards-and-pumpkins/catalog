@@ -2,12 +2,16 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\BaseUrl\BaseUrlBuilder;
+use LizardsAndPumpkins\BaseUrl\WebsiteBaseUrlBuilder;
 use LizardsAndPumpkins\ContentDelivery\Catalog\FilterNavigationPriceRangesBuilder;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
 use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\EuroPriceRangeTransformation;
 use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestRangedField;
@@ -19,6 +23,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\FileUrlKeyStore;
+use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Image\ImageMagickInscribeStrategy;
 use LizardsAndPumpkins\Image\ImageProcessor;
 use LizardsAndPumpkins\Image\ImageProcessorCollection;
@@ -29,10 +34,17 @@ use LizardsAndPumpkins\Log\Writer\FileLogMessageWriter;
 use LizardsAndPumpkins\Log\Writer\LogMessageWriter;
 use LizardsAndPumpkins\Log\WritingLoggerDecorator;
 use LizardsAndPumpkins\Product\AttributeCode;
+use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
+use LizardsAndPumpkins\Product\ProductImage\TwentyOneRunProductImageFileLocator;
 use LizardsAndPumpkins\Product\Tax\TwentyOneRunTaxServiceLocator;
 use LizardsAndPumpkins\Projection\Catalog\TwentyOneRunProductViewLocator;
 use LizardsAndPumpkins\Queue\File\FileQueue;
 use LizardsAndPumpkins\Queue\Queue;
+use LizardsAndPumpkins\Utils\FileStorage\FilesystemFileStorage;
+use LizardsAndPumpkins\Utils\ImageStorage\FilesystemImageStorage;
+use LizardsAndPumpkins\Utils\ImageStorage\ImageStorage;
+use LizardsAndPumpkins\Utils\ImageStorage\MediaBaseUrlBuilder;
+use LizardsAndPumpkins\Utils\ImageStorage\MediaDirectoryBaseUrlBuilder;
 use LizardsAndPumpkins\Website\TwentyOneRunWebsiteToCountryMap;
 
 class TwentyOneRunFactory implements Factory
@@ -513,7 +525,9 @@ class TwentyOneRunFactory implements Factory
      */
     public function createProductViewLocator()
     {
-        return new TwentyOneRunProductViewLocator();
+        return new TwentyOneRunProductViewLocator(
+            $this->getMasterFactory()->createProductImageFileLocator()
+        );
     }
 
     /**
@@ -524,6 +538,28 @@ class TwentyOneRunFactory implements Factory
         return CompositeSearchCriterion::createOr(
             SearchCriterionGreaterThan::create('stock_qty', 0),
             SearchCriterionEqual::create('backorders', 'true')
+        );
+    }
+
+    /**
+     * @return ProductImageFileLocator
+     */
+    public function createProductImageFileLocator()
+    {
+        return new TwentyOneRunProductImageFileLocator(
+            $this->getMasterFactory()->createImageStorage()
+        );
+    }
+
+    /**
+     * @return ImageStorage
+     */
+    public function createImageStorage()
+    {
+        return new FilesystemImageStorage(
+            $this->getMasterFactory()->createFilesystemFileStorage(),
+            $this->getMasterFactory()->createMediaBaseUrlBuilder(),
+            $this->getMasterFactory()->getMediaBaseDirectoryConfig()
         );
     }
 }

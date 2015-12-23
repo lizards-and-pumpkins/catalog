@@ -8,7 +8,7 @@ interface FileStorage
      * @param StorageAgnosticFileUri $identifier
      * @return File
      */
-    public function file(StorageAgnosticFileUri $identifier);
+    public function getFileReference(StorageAgnosticFileUri $identifier);
 
     /**
      * @param StorageAgnosticFileUri $identifier

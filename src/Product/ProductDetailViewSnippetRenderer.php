@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
+use LizardsAndPumpkins\Projection\Catalog\ProductView;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetList;
@@ -13,9 +14,9 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
     const CODE = 'product_detail_view';
 
     /**
-     * @var Product
+     * @var ProductView
      */
-    private $product;
+    private $productView;
 
     /**
      * @var SnippetList
@@ -50,12 +51,12 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param Product $product
+     * @param ProductView $product
      * @return SnippetList
      */
-    public function render(Product $product)
+    public function render(ProductView $product)
     {
-        $this->product = $product;
+        $this->productView = $product;
         $this->snippetList->clear();
 
         $this->addProductDetailViewSnippetsToSnippetList();
@@ -65,10 +66,10 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
 
     private function addProductDetailViewSnippetsToSnippetList()
     {
-        $content = $this->blockRenderer->render($this->product, $this->product->getContext());
+        $content = $this->blockRenderer->render($this->productView, $this->productView->getContext());
         $key = $this->productDetailViewSnippetKeyGenerator->getKeyForContext(
-            $this->product->getContext(),
-            [Product::ID => $this->product->getId()]
+            $this->productView->getContext(),
+            [Product::ID => $this->productView->getId()]
         );
         $contentSnippet = Snippet::create($key, $content);
         $this->snippetList->add($contentSnippet);
@@ -83,8 +84,8 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
     private function getProductDetailPageMetaSnippet()
     {
         $snippetKey = $this->productDetailPageMetaSnippetKeyGenerator->getKeyForContext(
-            $this->product->getContext(),
-            [PageMetaInfoSnippetContent::URL_KEY => $this->product->getFirstValueOfAttribute(Product::URL_KEY)]
+            $this->productView->getContext(),
+            [PageMetaInfoSnippetContent::URL_KEY => $this->productView->getFirstValueOfAttribute(Product::URL_KEY)]
         );
         $metaData = $this->getPageMetaSnippetContent();
         return Snippet::create($snippetKey, json_encode($metaData));
@@ -97,7 +98,7 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
     {
         $rootBlockName = $this->blockRenderer->getRootSnippetCode();
         $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::create(
-            (string) $this->product->getId(),
+            (string) $this->productView->getId(),
             $rootBlockName,
             $this->blockRenderer->getNestedSnippetCodes()
         );

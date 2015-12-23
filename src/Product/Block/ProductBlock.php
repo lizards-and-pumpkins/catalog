@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins\Product\Block;
 
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductId;
+use LizardsAndPumpkins\Projection\Catalog\ProductView;
 use LizardsAndPumpkins\Renderer\Block;
 
 class ProductBlock extends Block
@@ -70,15 +71,16 @@ class ProductBlock extends Block
     }
 
     /**
+     * @param string $variantCode
      * @return string
      */
-    public function getMainProductFileName()
+    public function getMainProductImageUrl($variantCode)
     {
-        return $this->getProduct()->getMainImageFileName();
+        return $this->getProduct()->getMainImageUrl($variantCode);
     }
 
     /**
-     * @return Product
+     * @return ProductView
      */
     private function getProduct()
     {
@@ -95,11 +97,12 @@ class ProductBlock extends Block
 
     /**
      * @param int $imageNumber
+     * @param string $variantCode
      * @return string
      */
-    public function getProductImageFileNameByNumber($imageNumber)
+    public function getProductImageUrlByNumber($imageNumber, $variantCode)
     {
-        return $this->getProduct()->getImageFileNameByNumber($imageNumber);
+        return $this->getProduct()->getImageUrlByNumber($imageNumber, $variantCode);
     }
 
     /**
