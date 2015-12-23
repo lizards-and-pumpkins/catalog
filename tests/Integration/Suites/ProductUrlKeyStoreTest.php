@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Http\HttpHeaders;
@@ -30,7 +29,7 @@ class ProductUrlKeyStoreTest extends AbstractIntegrationTest
 
         $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
 
-        $website = new InjectableSampleWebFront($request, $this->factory);
+        $website = new InjectableDefaultWebFront($request, $this->factory);
         $website->runWithoutSendingResponse();
 
         $this->factory->createCommandConsumer()->process();

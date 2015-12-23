@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Http\HttpRouterChain;
 
-class SampleWebFront extends WebFront
+class DefaultWebFront extends WebFront
 {
     /**
      * @return MasterFactory
