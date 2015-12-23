@@ -45,23 +45,9 @@ class TwentyOneRunProductImageFileLocator implements ProductImageFileLocator
      */
     public function get($imageFileName, $imageVariantCode, Context $context)
     {
-        if (! is_string($imageFileName)) {
-            throw new InvalidImageFileNameException(sprintf(
-                'The image file name must be a string, got "%s"',
-                $this->getInvalidTypeStringRepresentation($imageFileName)
-            ));
-        }
-        if ('' === trim($imageFileName)) {
-            throw new InvalidImageFileNameException('The image file name must not be empty');
-        }
-        if (! in_array($imageVariantCode, $this->imageVariantCodes)) {
-            throw new InvalidImageVariantCodeException(sprintf(
-                'The image variant code must be one of %s, got "%s"',
-                implode(', ', $this->imageVariantCodes),
-                $this->getInvalidTypeStringRepresentation($imageVariantCode)
-            ));
-        }
-        
+        $this->validateImageFileName($imageFileName);
+        $this->validateImageVariantCode($imageVariantCode);
+
         $imageIdentifier = $this->buildIdentifier($imageFileName, $imageVariantCode);
         return $this->imageStorage->contains($imageIdentifier) ?
             $this->imageStorage->getFileReference($imageIdentifier) :
@@ -79,7 +65,7 @@ class TwentyOneRunProductImageFileLocator implements ProductImageFileLocator
     }
 
     /**
-     * @param string $uriString
+     * @param string $identifier
      * @return StorageAgnosticFileUri
      */
     private function createIdentifierForString($identifier)
@@ -113,5 +99,35 @@ class TwentyOneRunProductImageFileLocator implements ProductImageFileLocator
             return get_class($imageVariantCode);
         }
         return gettype($imageVariantCode);
+    }
+
+    /**
+     * @param string $imageFileName
+     */
+    private function validateImageFileName($imageFileName)
+    {
+        if (!is_string($imageFileName)) {
+            throw new InvalidImageFileNameException(sprintf(
+                'The image file name must be a string, got "%s"',
+                $this->getInvalidTypeStringRepresentation($imageFileName)
+            ));
+        }
+        if ('' === trim($imageFileName)) {
+            throw new InvalidImageFileNameException('The image file name must not be empty');
+        }
+    }
+
+    /**
+     * @param string $imageVariantCode
+     */
+    private function validateImageVariantCode($imageVariantCode)
+    {
+        if (!in_array($imageVariantCode, $this->imageVariantCodes)) {
+            throw new InvalidImageVariantCodeException(sprintf(
+                'The image variant code must be one of %s, got "%s"',
+                implode(', ', $this->imageVariantCodes),
+                $this->getInvalidTypeStringRepresentation($imageVariantCode)
+            ));
+        }
     }
 }

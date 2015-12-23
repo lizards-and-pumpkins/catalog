@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Product\ProductImage;
 
 use LizardsAndPumpkins\Context\Context;
