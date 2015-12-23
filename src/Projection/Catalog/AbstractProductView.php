@@ -177,4 +177,51 @@ abstract class AbstractProductView implements ProductView
     {
         return '';
     }
+
+    /**
+     * @return array[]
+     */
+    final protected function getAllProductImageUrls()
+    {
+        $imageUrls = [];
+        foreach ($this->getProductImageFileLocator()->getVariantCodes() as $variantCode) {
+            $imageUrls[$variantCode] = $this->getProductImagesAsImageArray($variantCode);
+
+            if (count($imageUrls[$variantCode]) === 0) {
+                $imageUrls[$variantCode][] = $this->getPlaceholderImageArray($variantCode);
+            }
+        };
+        return $imageUrls;
+    }
+
+    /**
+     * @param string $variantCode
+     * @return array[]
+     */
+    private function getProductImagesAsImageArray($variantCode)
+    {
+        return array_map(function (ProductImage $productImage) use ($variantCode) {
+            return $this->imageToArray($this->convertImage($productImage, $variantCode), $productImage->getLabel());
+        }, iterator_to_array($this->getOriginalProduct()->getImages()));
+    }
+
+    /**
+     * @param string $variantCode
+     * @return string[]
+     */
+    private function getPlaceholderImageArray($variantCode)
+    {
+        $placeholder = $this->getProductImageFileLocator()->getPlaceholder($variantCode, $this->getContext());
+        return $this->imageToArray($placeholder, '');
+    }
+
+    /**
+     * @param Image $image
+     * @param string $label
+     * @return string[]
+     */
+    private function imageToArray(Image $image, $label)
+    {
+        return ['url' => (string) $image->getUrl($this->getContext()), 'label' => $label];
+    }
 }
