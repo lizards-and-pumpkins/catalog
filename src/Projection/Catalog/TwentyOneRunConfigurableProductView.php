@@ -8,6 +8,10 @@ use LizardsAndPumpkins\Product\Composite\ProductVariationAttributeList;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductAttributeList;
+use LizardsAndPumpkins\Product\ProductImage\ProductImage;
+use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
+use LizardsAndPumpkins\Product\ProductImage\TwentyOneRunProductImageFileLocator;
+use LizardsAndPumpkins\Utils\ImageStorage\Image;
 
 class TwentyOneRunConfigurableProductView extends AbstractProductView implements CompositeProductView
 {
@@ -28,10 +32,19 @@ class TwentyOneRunConfigurableProductView extends AbstractProductView implements
      */
     private $memoizedProductAttributesList;
 
-    public function __construct(ProductViewLocator $productViewLocator, ConfigurableProduct $product)
-    {
+    /**
+     * @var ProductImageFileLocator
+     */
+    private $productImageFileLocator;
+
+    public function __construct(
+        ProductViewLocator $productViewLocator,
+        ConfigurableProduct $product,
+        ProductImageFileLocator $productImageFileLocator
+    ) {
         $this->productViewLocator = $productViewLocator;
         $this->product = $product;
+        $this->productImageFileLocator = $productImageFileLocator;
     }
 
     /**
@@ -101,6 +114,9 @@ class TwentyOneRunConfigurableProductView extends AbstractProductView implements
         $productData = $this->product->jsonSerialize();
         $productData['attributes'] = $this->getAttributes();
 
+        unset($productData['images']);
+        $productData['images'] = $this->getAllProductImageUrls();
+
         return $productData;
     }
 
@@ -113,15 +129,13 @@ class TwentyOneRunConfigurableProductView extends AbstractProductView implements
     }
 
     /**
-     * @return AssociatedProductList
+     * @return ProductView[]
      */
     public function getAssociatedProducts()
     {
-        $associatedProductViews = array_map(function (Product $associatedProduct) {
+        return array_map(function (Product $associatedProduct) {
             return $this->productViewLocator->createForProduct($associatedProduct);
         }, $this->product->getAssociatedProducts()->getProducts());
-
-        return new AssociatedProductList(...$associatedProductViews);
     }
 
     /**
@@ -147,5 +161,70 @@ class TwentyOneRunConfigurableProductView extends AbstractProductView implements
         return array_filter($attributes, function (ProductAttribute $attribute) use ($attributeCodesToBeRemoved) {
             return !in_array((string) $attribute->getCode(), $attributeCodesToBeRemoved);
         });
+    }
+
+    /**
+     * @return ProductImageFileLocator
+     */
+    final protected function getProductImageFileLocator()
+    {
+        return $this->productImageFileLocator;
+    }
+
+    /**
+     * @return array[]
+     */
+    private function getAllProductImageUrls()
+    {
+        $imageUrls = [];
+        foreach ($this->productImageFileLocator->getVariantCodes() as $variantCode) {
+            $imageUrls[$variantCode] = $this->getProductImagesAsImageArray($variantCode);
+            
+            if (count($imageUrls[$variantCode]) === 0) {
+                $imageUrls[$variantCode][] = $this->getPlaceholderImageArray($variantCode);
+            }
+        };
+        return $imageUrls;
+    }
+
+    /**
+     * @param string $variantCode
+     * @return array[]
+     */
+    private function getProductImagesAsImageArray($variantCode)
+    {
+        return array_map(function (ProductImage $image) use ($variantCode) {
+            return $this->imageToArray($this->convertImage($image, $variantCode), $image->getLabel());
+        }, iterator_to_array($this->product->getImages()));
+    }
+
+    /**
+     * @param string $variantCode
+     * @return string[]
+     */
+    private function getPlaceholderImageArray($variantCode)
+    {
+        $placeholder = $this->productImageFileLocator->getPlaceholder($variantCode, $this->getContext());
+        return $this->imageToArray($placeholder, '');
+    }
+
+    /**
+     * @param ProductImage $productImage
+     * @param string $variantCode
+     * @return Image
+     */
+    private function convertImage(ProductImage $productImage, $variantCode)
+    {
+        return $this->productImageFileLocator->get($productImage->getFileName(), $variantCode, $this->getContext());
+    }
+
+    /**
+     * @param Image $image
+     * @param string $label
+     * @return string[]
+     */
+    private function imageToArray(Image $image, $label)
+    {
+        return ['url' => (string) $image->getUrl($this->getContext()), 'label' => $label];
     }
 }

@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Projection\Catalog;
 
 use LizardsAndPumpkins\Product\Product;
+use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\Catalog\IntegrationTestProductView
@@ -22,7 +23,8 @@ class IntegrationTestProductViewTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->mockProduct = $this->getMock(Product::class);
-        $this->productView = new IntegrationTestProductView($this->mockProduct);
+        $stubProductImageFileLocator = $this->getMock(ProductImageFileLocator::class);
+        $this->productView = new IntegrationTestProductView($this->mockProduct, $stubProductImageFileLocator);
     }
 
     public function testOriginalProductIsReturned()

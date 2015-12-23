@@ -2,7 +2,9 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog;
 
+use LizardsAndPumpkins\IntegrationTestProductImageFileLocator;
 use LizardsAndPumpkins\Product\Product;
+use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
 
 class StubProductView extends AbstractProductView
 {
@@ -11,16 +13,30 @@ class StubProductView extends AbstractProductView
      */
     private $product;
 
-    public function __construct(Product $product)
+    /**
+     * @var ProductImageFileLocator
+     */
+    public $imageFileLocator;
+
+    public function __construct(Product $product, ProductImageFileLocator $imageFileLocator)
     {
         $this->product = $product;
+        $this->imageFileLocator = $imageFileLocator;
     }
 
     /**
-     * {@inheritdoc}
+     * @return Product
      */
     public function getOriginalProduct()
     {
         return $this->product;
+    }
+
+    /**
+     * @return ProductImageFileLocator
+     */
+    final protected function getProductImageFileLocator()
+    {
+        return $this->imageFileLocator;
     }
 }

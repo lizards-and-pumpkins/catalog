@@ -2,8 +2,10 @@
 
 namespace LizardsAndPumpkins\Product\Block;
 
+use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductId;
+use LizardsAndPumpkins\Projection\Catalog\ProductView;
 use LizardsAndPumpkins\Renderer\Block;
 use LizardsAndPumpkins\Renderer\BlockRenderer;
 use LizardsAndPumpkins\TestFileFixtureTrait;
@@ -18,9 +20,9 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
     use TestFileFixtureTrait;
 
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductView|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubProduct;
+    private $stubProductView;
 
     /**
      * @var ProductBlock
@@ -35,9 +37,9 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->stubBlockRenderer = $this->getMock(BlockRenderer::class, [], [], '', false);
-        $this->stubProduct = $this->getMock(Product::class);
+        $this->stubProductView = $this->getMock(ProductView::class);
 
-        $this->productBlock = new ProductBlock($this->stubBlockRenderer, 'foo.phtml', 'foo', $this->stubProduct);
+        $this->productBlock = new ProductBlock($this->stubBlockRenderer, 'foo.phtml', 'foo', $this->stubProductView);
     }
 
     public function testBlockClassIsExtended()
@@ -50,7 +52,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
         $attributeCode = 'name';
         $attributeValue = 'foo';
 
-        $this->stubProduct->method('getFirstValueOfAttribute')->with($attributeCode)->willReturn($attributeValue);
+        $this->stubProductView->method('getFirstValueOfAttribute')->with($attributeCode)->willReturn($attributeValue);
         $result = $this->productBlock->getFirstValueOfProductAttribute($attributeCode);
 
         $this->assertEquals($attributeValue, $result);
@@ -63,7 +65,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
         $attributeValueB = 'baz';
         $glue = ' in love with ';
 
-        $this->stubProduct->method('getAllValuesOfAttribute')->willReturn([$attributeValueA, $attributeValueB]);
+        $this->stubProductView->method('getAllValuesOfAttribute')->willReturn([$attributeValueA, $attributeValueB]);
 
         $result = $this->productBlock->getImplodedValuesOfProductAttribute($attributeCode, $glue);
         $expected = $attributeValueA . $glue . $attributeValueB;
@@ -75,7 +77,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
     {
         $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
 
-        $this->stubProduct->method('getId')->willReturn($stubProductId);
+        $this->stubProductView->method('getId')->willReturn($stubProductId);
         $result = $this->productBlock->getProductId();
 
         $this->assertEquals($stubProductId, $result);
@@ -85,9 +87,9 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
     {
         $urlKey = 'foo';
         $testBaseUrl = '/lizards-and-pumpkins/';
-        
+
         $this->stubBlockRenderer->method('getBaseUrl')->willReturn($testBaseUrl);
-        $this->stubProduct->method('getFirstValueOfAttribute')->with(Product::URL_KEY)->willReturn($urlKey);
+        $this->stubProductView->method('getFirstValueOfAttribute')->with(Product::URL_KEY)->willReturn($urlKey);
         $result = $this->productBlock->getProductUrl();
 
         $this->assertEquals($testBaseUrl . $urlKey, $result);
@@ -96,7 +98,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
     public function testEmptyStringIsReturnedIfProductBrandLogoImageFileDoesNotExist()
     {
         $testProductBrandName = 'foo';
-        $this->stubProduct->method('getFirstValueOfAttribute')->with('brand')->willReturn($testProductBrandName);
+        $this->stubProductView->method('getFirstValueOfAttribute')->with('brand')->willReturn($testProductBrandName);
 
         $result = $this->productBlock->getBrandLogoSrc();
 
@@ -107,9 +109,9 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
     {
         $testProductBrandName = 'foo';
         $testBaseUrl = '/lizards-and-pumpkins/';
-        
+
         $this->stubBlockRenderer->method('getBaseUrl')->willReturn($testBaseUrl);
-        $this->stubProduct->method('getFirstValueOfAttribute')->with('brand')->willReturn($testProductBrandName);
+        $this->stubProductView->method('getFirstValueOfAttribute')->with('brand')->willReturn($testProductBrandName);
 
         $brandLogoSrc = 'images/brands/brands-slider/' . $testProductBrandName . '.png';
         $this->createFixtureFile('pub/' . $brandLogoSrc, '');
@@ -123,39 +125,41 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
     public function testGettingMainImageLabelIsDelegatedToProduct()
     {
         $testImageLabel = 'foo';
-        $this->stubProduct->method('getMainImageLabel')->willReturn($testImageLabel);
+        $this->stubProductView->method('getMainImageLabel')->willReturn($testImageLabel);
 
         $this->assertSame($testImageLabel, $this->productBlock->getMainProductImageLabel());
     }
 
     public function testGettingMainImageFileNameIsDelegatedToProduct()
     {
-        $testImageFileName = 'foo.png';
-        $this->stubProduct->method('getMainImageFileName')->willReturn($testImageFileName);
+        $testImageUrl = $this->getMock(HttpUrl::class, [], [], '', false);
+        $this->stubProductView->method('getMainImageUrl')->willReturn($testImageUrl);
 
-        $this->assertSame($testImageFileName, $this->productBlock->getMainProductFileName());
+        $variantCode = 'small';
+        $this->assertSame($testImageUrl, $this->productBlock->getMainProductImageUrl($variantCode));
     }
 
     public function testGettingProductImageCountIsDelegatedToProduct()
     {
         $testImagesCount = 3;
-        $this->stubProduct->method('getImageCount')->willReturn($testImagesCount);
+        $this->stubProductView->method('getImageCount')->willReturn($testImagesCount);
 
         $this->assertSame($testImagesCount, $this->productBlock->getProductImageCount());
     }
 
     public function testGettingProductImageFileNameIsDelegatedToProduct()
     {
-        $testFileName = 'foo.png';
-        $this->stubProduct->method('getImageFileNameByNumber')->willReturn($testFileName);
+        $testUrl = $this->getMock(HttpUrl::class, [], [], '', false);
+        $variantCode = 'medium';
+        $this->stubProductView->method('getImageUrlByNumber')->willReturn($testUrl);
 
-        $this->assertSame($testFileName, $this->productBlock->getProductImageFileNameByNumber(0));
+        $this->assertSame($testUrl, $this->productBlock->getProductImageUrlByNumber(0, $variantCode));
     }
 
     public function testProductStockQuantityIsReturned()
     {
         $testStockQuantity = 3;
-        $this->stubProduct->method('getFirstValueOfAttribute')->with('stock_qty')->willReturn($testStockQuantity);
+        $this->stubProductView->method('getFirstValueOfAttribute')->with('stock_qty')->willReturn($testStockQuantity);
 
         $this->assertSame($testStockQuantity, $this->productBlock->getProductStockQuantity());
     }

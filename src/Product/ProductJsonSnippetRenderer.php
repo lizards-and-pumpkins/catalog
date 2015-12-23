@@ -4,6 +4,7 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Projection\Catalog\InternalToPublicProductJsonData;
+use LizardsAndPumpkins\Projection\Catalog\ProductView;
 use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetList;
@@ -31,10 +32,10 @@ class ProductJsonSnippetRenderer
     }
 
     /**
-     * @param Product $product
+     * @param ProductView $product
      * @return SnippetList
      */
-    public function render(Product $product)
+    public function render(ProductView $product)
     {
         $snippetList = new SnippetList();
         $snippetList->add($this->createProductJsonSnippet($product));
@@ -42,10 +43,10 @@ class ProductJsonSnippetRenderer
     }
 
     /**
-     * @param Product $product
+     * @param ProductView $product
      * @return Snippet
      */
-    private function createProductJsonSnippet(Product $product)
+    private function createProductJsonSnippet(ProductView $product)
     {
         $key = $this->productJsonKeyGenerator->getKeyForContext(
             $product->getContext(),
@@ -56,10 +57,10 @@ class ProductJsonSnippetRenderer
     }
 
     /**
-     * @param Product $product
+     * @param ProductView $product
      * @return string
      */
-    private function getJson(Product $product)
+    private function getJson(ProductView $product)
     {
         $internalJsonData = json_decode(json_encode($product), true);
         $publicJsonData = $this->internalToPublicProductJsonData->transformProduct($internalJsonData);

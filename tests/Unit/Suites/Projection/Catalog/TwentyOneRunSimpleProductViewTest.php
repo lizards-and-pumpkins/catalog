@@ -2,9 +2,13 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog;
 
+use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductAttributeList;
+use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
+use LizardsAndPumpkins\Product\ProductImage\ProductImageList;
+use LizardsAndPumpkins\Utils\ImageStorage\Image;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\Catalog\TwentyOneRunSimpleProductView
@@ -12,6 +16,7 @@ use LizardsAndPumpkins\Product\ProductAttributeList;
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Product\ProductAttribute
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
+ * @uses   \LizardsAndPumpkins\Product\ProductImage\ProductImageList
  */
 class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,7 +33,9 @@ class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->mockProduct = $this->getMock(Product::class);
-        $this->productView = new TwentyOneRunSimpleProductView($this->mockProduct);
+        $stubProductImageFileLocator = $this->getMock(ProductImageFileLocator::class);
+        $stubProductImageFileLocator->method('getPlaceholder')->willReturn($this->getMock(Image::class));
+        $this->productView = new TwentyOneRunSimpleProductView($this->mockProduct, $stubProductImageFileLocator);
     }
 
     public function testOriginalProductIsReturned()
@@ -195,6 +202,7 @@ class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
         $priceAttribute = new ProductAttribute('price', 1000, []);
         $specialPriceAttribute = new ProductAttribute('special_price', 900, []);
         $backordersAttribute = new ProductAttribute('backorders', true, []);
+        $imageList = new ProductImageList();
 
         $attributeList = new ProductAttributeList(
             $nonPriceAttribute,
@@ -204,7 +212,9 @@ class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->mockProduct->method('getAttributes')->willReturn($attributeList);
+        $this->mockProduct->method('getImages')->willReturn($imageList);
         $this->mockProduct->method('jsonSerialize')->willReturn([]);
+        $this->mockProduct->method('getContext')->willReturn($this->getMock(Context::class));
 
         $result = $this->productView->jsonSerialize();
 

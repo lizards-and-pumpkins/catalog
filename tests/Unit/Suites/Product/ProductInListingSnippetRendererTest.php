@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\Product;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Exception\InvalidProjectionSourceDataTypeException;
 use LizardsAndPumpkins\Projection\Catalog\InternalToPublicProductJsonData;
+use LizardsAndPumpkins\Projection\Catalog\ProductView;
 use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetList;
@@ -34,15 +35,15 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $dummyProductIdString
-     * @return Product|\PHPUnit_Framework_MockObject_MockObject
+     * @return ProductView|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function getStubProduct($dummyProductIdString)
+    private function getStubProductView($dummyProductIdString)
     {
         $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
         $stubProductId->method('__toString')->willReturn($dummyProductIdString);
 
-        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
-        $stubProduct = $this->getMock(Product::class);
+        /** @var ProductView|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
+        $stubProduct = $this->getMock(ProductView::class);
         $stubProduct->method('getId')->willReturn($stubProductId);
         $stubProduct->method('getContext')->willReturn($this->getMock(Context::class));
         $stubProduct->method('jsonSerialize')->willReturn(['product_id' => $stubProductId]);
@@ -93,7 +94,7 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
             ->method('transformProduct')->willReturnArgument(0);
         
         $dummyProductId = 'foo';
-        $stubProduct = $this->getStubProduct($dummyProductId);
+        $stubProduct = $this->getStubProductView($dummyProductId);
 
         $result = $this->snippetRenderer->render($stubProduct);
 
@@ -105,7 +106,7 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
     public function testProductIdIsPassedToKeyGenerator()
     {
         $dummyProductId = 'foo';
-        $stubProduct = $this->getStubProduct($dummyProductId);
+        $stubProduct = $this->getStubProductView($dummyProductId);
 
         $mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $mockSnippetKeyGenerator->expects($this->once())->method('getKeyForContext')

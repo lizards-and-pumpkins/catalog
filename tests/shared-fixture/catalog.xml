@@ -489,6 +489,22 @@ TEXTILE/SYNTHETICS]]></description>
             </associated_products>
         </product>
 
+        <product type="simple" sku="no-image" tax_class="19%">
+            <images/>
+            <attributes>
+                <url_key>no-image</url_key>
+                <name>No Image</name>
+                <category>sale</category>
+                <price>5.55</price>
+                <brand>Asics</brand>
+                <style>Lightweight/Stabil</style>
+                <gender>Herren</gender>
+                <stock_qty>55</stock_qty>
+                <backorders>true</backorders>
+                <color>a7fa41</color>
+            </attributes>
+        </product>
+
     </products>
     <listings>
         <listing url_key="adidas-sale" website="ru" locale="de_DE">

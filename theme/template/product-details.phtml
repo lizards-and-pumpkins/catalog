@@ -20,13 +20,13 @@ $save = 0;
     <div class="product-essential">
         <div id="phoneTitlePlaceholder"></div>
         <div class="product-img-box">
-            <a href="<?= $this->getBaseUrl() ?>media/product/original/<?= $this->getMainProductFileName() ?>" class="main-image-area">
-                <img src="<?= $this->getBaseUrl() ?>media/product/large/<?= $this->getMainProductFileName() ?>" itemprop="image" alt="<?= $this->getMainProductImageLabel() ?>"/>
+            <a href="<?= $this->getMainProductImageUrl('original') ?>" class="main-image-area">
+                <img src="<?= $this->getMainProductImageUrl('large') ?>" itemprop="image" alt="<?= $this->getMainProductImageLabel() ?>"/>
             </a>
             <ul class="more-views">
                 <?php for ($i=0; $i<$productImageCount; $i++) : ?>
                     <li>
-                        <a href="<?= $this->getBaseUrl() ?>media/product/original/<?= $this->getProductImageFileNameByNumber($i) ?>" data-image="media/product/large/<?= $this->getProductImageFileNameByNumber($i) ?>"><img src="<?= $this->getBaseUrl() ?>media/product/small/<?= $this->getProductImageFileNameByNumber($i) ?>" width="48" height="48"/></a>
+                        <a href="<?= $this->getProductImageUrlByNumber($i, 'original') ?>" data-image="<?= $this->getProductImageUrlByNumber($i, 'large') ?>"><img src="<?= $this->getProductImageUrlByNumber($i, 'small') ?>" width="48" height="48"/></a>
                     </li>
                 <?php endfor ?>
             </ul>
@@ -90,7 +90,7 @@ $save = 0;
                 <a class="fb" href="https://www.facebook.com/sharer/sharer.php?u=<?= $this->getProductUrl() ?>" target="_blank"></a>
                 <a class="google" href="https://plus.google.com/share?url=<?= $this->getProductUrl() ?>" target="_blank"></a>
                 <a class="twitter" href="https://twitter.com/intent/tweet?url=<?= $this->getProductUrl() ?>" target="_blank"></a>
-                <a class="pinterest" href="https://www.pinterest.com/pin/create/button/?url=<?= $this->getProductUrl() ?>&media=<?= $this->getBaseUrl() ?>media/product/large/<?= $this->getMainProductFileName() ?>&description=<?= $this->getFirstValueOfProductAttribute('name') ?>" target="_blank"></a>
+                <a class="pinterest" href="https://www.pinterest.com/pin/create/button/?url=<?= $this->getProductUrl() ?>&media=<?= $this->getMainProductImageUrl('large') ?>&description=<?= $this->getFirstValueOfProductAttribute('name') ?>" target="_blank"></a>
             </div>
         </div>
     </div>
@@ -166,7 +166,7 @@ $save = 0;
 
         var html = '<li style="background-image:url(\'/media/brands/brands-small/<?= $brandLogo ?>\')" class="item">';
         html += '<div class="grid-cell-container">';
-        html += '<a href="<?= $this->getProductUrl() ?>" class="product-image"><img src="media/product/medium/<?= $this->getMainProductFileName() ?>" width="188" height="115" alt="<?= $this->getMainProductImageLabel() ?>" /></a>';
+        html += '<a href="<?= $this->getProductUrl() ?>" class="product-image"><img src="<?= $this->getMainProductImageUrl('medium') ?>" width="188" height="115" alt="<?= $this->getMainProductImageLabel() ?>" /></a>';
         html += '<h2 class="product-name"><a href="<?= $this->getProductUrl() ?>"><?= $this->getFirstValueOfProductAttribute('name') ?></a></h2>';
         html += '<a href="<?= $this->getProductUrl() ?>"><?= $this->getChildOutput('price') ?></a>';
         <?php if ($gender) : ?>

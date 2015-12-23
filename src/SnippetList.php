@@ -41,7 +41,7 @@ class SnippetList implements \Countable, \IteratorAggregate
     {
         $this->snippets = array_merge(
             $this->snippets,
-            $other->getIterator()->getArrayCopy()
+            iterator_to_array($other)
         );
     }
 }

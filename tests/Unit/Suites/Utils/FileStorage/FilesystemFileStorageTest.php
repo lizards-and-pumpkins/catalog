@@ -53,7 +53,7 @@ class FilesystemFileStorageTest extends \PHPUnit_Framework_TestCase
     {
         $fileURI = StorageAgnosticFileUri::fromString('test/readme.md');
 
-        $file = $this->fileStorage->file($fileURI);
+        $file = $this->fileStorage->getFileReference($fileURI);
         $this->assertInstanceOf(File::class, $file);
     }
 

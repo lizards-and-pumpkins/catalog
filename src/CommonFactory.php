@@ -83,6 +83,9 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\CompositeSnippetKeyGeneratorLo
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\ContentBlockSnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
+use LizardsAndPumpkins\Utils\FileStorage\FilesystemFileStorage;
+use LizardsAndPumpkins\Utils\ImageStorage\MediaBaseUrlBuilder;
+use LizardsAndPumpkins\Utils\ImageStorage\MediaDirectoryBaseUrlBuilder;
 use LizardsAndPumpkins\Website\ConfigurableHostToWebsiteMap;
 use LizardsAndPumpkins\Website\HostToWebsiteMap;
 
@@ -600,7 +603,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         $usedDataParts = [Product::ID];
 
         return new GenericSnippetKeyGenerator(
-            'product_detail_view',
+            'product_detail_view_content',
             $this->getMasterFactory()->getRequiredContexts(),
             $usedDataParts
         );
@@ -1414,5 +1417,38 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         }
 
         return $this->memoizedFacetFieldTransformationRegistry;
+    }
+
+    /**
+     * @return FilesystemFileStorage
+     */
+    public function createFilesystemFileStorage()
+    {
+        return new FilesystemFileStorage($this->getMasterFactory()->getMediaBaseDirectoryConfig());
+    }
+
+    /**
+     * @return string
+     */
+    public function getMediaBaseDirectoryConfig()
+    {
+        /** @var ConfigReader $configReader */
+        $configReader = $this->getMasterFactory()->createConfigReader();
+        $mediaBasePath = $configReader->get('media_base_path');
+        return null === $mediaBasePath ?
+            __DIR__ . '/../pub/media' :
+            $mediaBasePath;
+    }
+
+    /**
+     * @return MediaBaseUrlBuilder
+     */
+    public function createMediaBaseUrlBuilder()
+    {
+        $mediaBaseUrlPath = 'media/';
+        return new MediaDirectoryBaseUrlBuilder(
+            $this->getMasterFactory()->createBaseUrlBuilder(),
+            $mediaBaseUrlPath
+        );
     }
 }

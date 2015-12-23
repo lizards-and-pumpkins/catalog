@@ -2,13 +2,18 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog;
 
-use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
-use LizardsAndPumpkins\Product\ProductAttribute;
-use LizardsAndPumpkins\Product\ProductAttributeList;
+use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Product\ProductImage\ProductImage;
+use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
+use LizardsAndPumpkins\Utils\ImageStorage\Image;
 
 abstract class AbstractProductView implements ProductView
 {
+    /**
+     * @return ProductImageFileLocator
+     */
+    abstract protected function getProductImageFileLocator();
+
     /**
      * {@inheritdoc}
      */
@@ -58,11 +63,27 @@ abstract class AbstractProductView implements ProductView
     }
 
     /**
+     * @param ProductImage $productImage
+     * @param string $variation
+     * @return Image
+     */
+    private function convertImage(ProductImage $productImage, $variation)
+    {
+        return $this->getProductImageFileLocator()->get(
+            $productImage->getFileName(),
+            $variation,
+            $this->getContext()
+        );
+    }
+
+    /**
      * {@inheritdoc}
      */
-    public function getImages()
+    public function getImages($variantCode)
     {
-        return $this->getOriginalProduct()->getImages();
+        return array_map(function (ProductImage $productImage) use ($variantCode) {
+            return $this->convertImage($productImage, $variantCode);
+        }, iterator_to_array($this->getOriginalProduct()->getImages()));
     }
 
     /**
@@ -76,21 +97,21 @@ abstract class AbstractProductView implements ProductView
     /**
      * {@inheritdoc}
      */
-    public function getImageByNumber($imageNumber)
+    public function getImageByNumber($imageNumber, $variantCode)
     {
         return $imageNumber > $this->getImageCount() ?
-            $this->getPlaceholderImage() :
-            $this->getOriginalProduct()->getImageByNumber($imageNumber);
+            $this->getPlaceholderImage($variantCode) :
+            $this->convertImage($this->getOriginalProduct()->getImageByNumber($imageNumber), $variantCode);
     }
 
     /**
-     * {@inheritdoc}
+     * @param int $imageNumber
+     * @param string $variantCode
+     * @return HttpUrl
      */
-    public function getImageFileNameByNumber($imageNumber)
+    public function getImageUrlByNumber($imageNumber, $variantCode)
     {
-        return $imageNumber > $this->getImageCount() ?
-            $this->getPlaceholderImageFileName() :
-            $this->getOriginalProduct()->getImageFileNameByNumber($imageNumber);
+        return $this->getImageByNumber($imageNumber, $variantCode)->getUrl($this->getContext());
     }
 
     /**
@@ -104,13 +125,13 @@ abstract class AbstractProductView implements ProductView
     }
 
     /**
-     * {@inheritdoc}
+     * @return HttpUrl
      */
-    public function getMainImageFileName()
+    public function getMainImageUrl($variantCode)
     {
         return $this->getImageCount() === 0 ?
-            $this->getPlaceholderImageFileName() :
-            $this->getOriginalProduct()->getMainImageFileName();
+            $this->getPlaceholderImageUrl($variantCode) :
+            $this->getImageUrlByNumber(0, $variantCode);
     }
 
     /**
@@ -126,36 +147,27 @@ abstract class AbstractProductView implements ProductView
     /**
      * {@inheritdoc}
      */
-    public function getTaxClass()
-    {
-        return $this->getOriginalProduct()->getTaxClass();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function jsonSerialize()
     {
         return $this->getOriginalProduct()->jsonSerialize();
     }
 
     /**
-     * @return ProductImage
+     * @param string $variantCode
+     * @return Image
      */
-    protected function getPlaceholderImage()
+    protected function getPlaceholderImage($variantCode)
     {
-        $contextData = [];
-        $fileName = new ProductAttribute(ProductImage::FILE, $this->getPlaceholderImageFileName(), $contextData);
-        $label = new ProductAttribute(ProductImage::LABEL, $this->getPlaceholderImageLabel(), $contextData);
-        return new ProductImage(new ProductAttributeList($fileName, $label));
+        return $this->getProductImageFileLocator()->getPlaceholder($variantCode, $this->getContext());
     }
 
     /**
+     * @param string $variantCode
      * @return string
      */
-    protected function getPlaceholderImageFileName()
+    protected function getPlaceholderImageUrl($variantCode)
     {
-        return sprintf('placeholder/placeholder-image-%s.jpg', $this->getContext()->getValue(ContextLocale::CODE));
+        return $this->getPlaceholderImage($variantCode)->getUrl($this->getContext());
     }
 
     /**

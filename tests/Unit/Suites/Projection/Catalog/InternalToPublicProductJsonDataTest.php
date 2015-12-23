@@ -93,53 +93,6 @@ class InternalToPublicProductJsonDataTest extends \PHPUnit_Framework_TestCase
         $this->assertPublicJson($expectedData, $internalJsonData);
     }
     
-    public function testItFlattensImageAttributes()
-    {
-        $internalJsonData = [
-            'product_id' => 'test',
-            'images' => [
-                [
-                    [
-                        ProductAttribute::CODE => 'file',
-                        ProductAttribute::CONTEXT => [],
-                        ProductAttribute::VALUE => 'foo.jpg'
-                    ],
-                    [
-                        ProductAttribute::CODE => 'label',
-                        ProductAttribute::CONTEXT => [],
-                        ProductAttribute::VALUE => 'Image One'
-                    ],
-                ],
-                [
-                    [
-                        ProductAttribute::CODE => 'file',
-                        ProductAttribute::CONTEXT => [],
-                        ProductAttribute::VALUE => 'bar.jpg'
-                    ],
-                    [
-                        ProductAttribute::CODE => 'label',
-                        ProductAttribute::CONTEXT => [],
-                        ProductAttribute::VALUE => 'Image Two'
-                    ],
-                ],
-            ],
-        ];
-        $expectedData = [
-            'product_id' => 'test',
-            'images' => [
-                [
-                    'file' => 'foo.jpg',
-                    'label' => 'Image One'
-                ],
-                [
-                    'file' => 'bar.jpg',
-                    'label' => 'Image Two'
-                ],
-            ]
-        ];
-        $this->assertPublicJson($expectedData, $internalJsonData);
-    }
-
     public function testItKeepsVariationAttributes()
     {
         $internalJsonData = [
@@ -177,57 +130,6 @@ class InternalToPublicProductJsonDataTest extends \PHPUnit_Framework_TestCase
             ],
             'images' => [],
             'variation_attributes' => ['foo'],
-        ];
-        $this->assertPublicJson($expectedData, $internalJsonData);
-    }
-
-    public function testItFlattensAssociatedProducts()
-    {
-        $internalJsonData = [
-            'product_id' => 'parent',
-            'associated_products' => [
-                'products' => [
-                    [
-                        'product_id' => 'child',
-                        SimpleProduct::CONTEXT => [],
-                        'attributes' => [
-                            [
-                                ProductAttribute::CODE => 'foo',
-                                ProductAttribute::CONTEXT => [],
-                                ProductAttribute::VALUE => 'bar'
-                            ],
-                        ],
-                        'images' => [
-                            [
-                                [
-                                    ProductAttribute::CODE => 'file',
-                                    ProductAttribute::CONTEXT => [],
-                                    ProductAttribute::VALUE => 'image.jpg'
-                                ]
-                            ]
-                        ],
-                    ],
-                ],
-                AssociatedProductList::PHP_CLASSES => [
-                    SimpleProduct::class
-                ]
-            ],
-        ];
-        $expectedData = [
-            'product_id' => 'parent',
-            'associated_products' => [
-                [
-                    'product_id' => 'child',
-                    'attributes' => [
-                        'foo' => 'bar'
-                    ],
-                    'images' => [
-                        [
-                            'file' => 'image.jpg'
-                        ]
-                    ]
-                ]
-            ],
         ];
         $this->assertPublicJson($expectedData, $internalJsonData);
     }

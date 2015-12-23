@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Exception\InvalidProjectionSourceDataTypeException;
+use LizardsAndPumpkins\Projection\Catalog\ProductView;
 use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetList;
@@ -33,17 +34,16 @@ class ProductInSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framewor
 
     /**
      * @param string $dummyProductIdString
-     * @return Product|\PHPUnit_Framework_MockObject_MockObject
+     * @return ProductView|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function getStubProduct($dummyProductIdString)
+    private function getStubProductView($dummyProductIdString)
     {
         $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
         $stubProductId->method('__toString')->willReturn($dummyProductIdString);
         
         $stubContext = $this->getMock(Context::class);
 
-        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
-        $stubProduct = $this->getMock(Product::class);
+        $stubProduct = $this->getMock(ProductView::class);
         $stubProduct->method('getId')->willReturn($stubProductId);
         $stubProduct->method('getContext')->willReturn($stubContext);
 
@@ -97,9 +97,9 @@ class ProductInSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framewor
     public function testProductInAutosuggestionInContextSnippetIsRendered()
     {
         $dummyProductId = 'foo';
-        $stubProductBuilder = $this->getStubProduct($dummyProductId);
+        $stubProductView = $this->getStubProductView($dummyProductId);
 
-        $result = $this->snippetRenderer->render($stubProductBuilder);
+        $result = $this->snippetRenderer->render($stubProductView);
 
         $this->assertInstanceOf(SnippetList::class, $result);
         $this->assertCount(1, $result);
@@ -109,7 +109,7 @@ class ProductInSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framewor
     public function testProductIdIsPassedToKeyGenerator()
     {
         $dummyProductId = 'foo';
-        $stubProduct = $this->getStubProduct($dummyProductId);
+        $stubProduct = $this->getStubProductView($dummyProductId);
 
         $mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $mockSnippetKeyGenerator->expects($this->once())->method('getKeyForContext')
