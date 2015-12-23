@@ -7,7 +7,7 @@ use LizardsAndPumpkins\Country\Country;
 
 class TwentyOneRunWebsiteToCountryMap implements WebsiteToCountryMap
 {
-    private $defaultCountry = 'DE';
+    private $defaultCountry = 'FR';
 
     private $map = [
         'ru' => 'DE',

@@ -15,8 +15,6 @@ use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEvent;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHandler;
 use LizardsAndPumpkins\SampleMasterFactory;
-use LizardsAndPumpkins\TemplateWasUpdatedDomainEvent;
-use LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\UnitTestFactory;
 
 /**
@@ -65,7 +63,6 @@ use LizardsAndPumpkins\UnitTestFactory;
  * @uses   \LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler
  * @uses   \LizardsAndPumpkins\DataVersion
  * @uses   \LizardsAndPumpkins\CommonFactory
- * @uses   \LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler
  * @uses   \LizardsAndPumpkins\LocalFilesystemStorageReader
  * @uses   \LizardsAndPumpkins\LocalFilesystemStorageWriter
  * @uses   \LizardsAndPumpkins\FactoryTrait
@@ -75,8 +72,9 @@ use LizardsAndPumpkins\UnitTestFactory;
  * @uses   \LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetProjector
+ * @uses   \LizardsAndPumpkins\Projection\TemplateProjectorLocator
+ * @uses   \LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Projection\UrlKeyForContextCollector
- * @uses   \LizardsAndPumpkins\TemplateProjectorLocator
  * @uses   \LizardsAndPumpkins\Image\ImageProcessingStrategySequence
  * @uses   \LizardsAndPumpkins\Image\ImageWasAddedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Image\ImageProcessorCollection

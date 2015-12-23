@@ -16,8 +16,6 @@ use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEvent;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHandler;
-use LizardsAndPumpkins\TemplateWasUpdatedDomainEvent;
-use LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler;
 
 class LoggingDomainEventHandlerFactory implements Factory, DomainEventFactory
 {

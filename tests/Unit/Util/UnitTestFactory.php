@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\BaseUrl\BaseUrlBuilder;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
@@ -329,5 +330,21 @@ class UnitTestFactory implements Factory
     public function createProductImageFileLocator()
     {
         return $this->mockObjectGenerator->getMock(ProductImageFileLocator::class);
+    }
+
+    /**
+     * @return ProductsPerPage
+     */
+    public function getProductsPerPageConfig()
+    {
+        return $this->mockObjectGenerator->getMock(ProductsPerPage::class, [], [], '', false);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getAdditionalAttributesForSearchIndex()
+    {
+        return [];
     }
 }

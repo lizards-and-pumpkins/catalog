@@ -10,7 +10,7 @@ use LizardsAndPumpkins\Http\HttpRouter;
 use LizardsAndPumpkins\Http\HttpRouterChain;
 
 /**
- * @covers \LizardsAndPumpkins\SampleWebFront
+ * @covers \LizardsAndPumpkins\DefaultWebFront
  * @covers \LizardsAndPumpkins\WebFront
  * @uses   \LizardsAndPumpkins\FactoryTrait
  * @uses   \LizardsAndPumpkins\MasterFactoryTrait
@@ -36,14 +36,13 @@ use LizardsAndPumpkins\Http\HttpRouterChain;
  * @uses   \LizardsAndPumpkins\DataVersion
  * @uses   \LizardsAndPumpkins\ContentDelivery\PageBuilder
  * @uses   \LizardsAndPumpkins\GenericSnippetKeyGenerator
- * @uses   \LizardsAndPumpkins\TemplatesApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
  * @uses   \LizardsAndPumpkins\Http\GenericHttpRouter
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler
- * @uses   \LizardsAndPumpkins\Product\ProductsPerPageForContextListBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToProductBuilder
+ * @uses   \LizardsAndPumpkins\Projection\TemplatesApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\CompositeSnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\ContentBlockSnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy
@@ -65,10 +64,10 @@ use LizardsAndPumpkins\Http\HttpRouterChain;
  * @uses   \LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry
  * @uses   \LizardsAndPumpkins\Utils\Directory
  */
-class SampleWebFrontTest extends \PHPUnit_Framework_TestCase
+class DefaultWebFrontTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var SampleWebFront
+     * @var DefaultWebFront
      */
     private $webFront;
 
@@ -94,9 +93,7 @@ class SampleWebFrontTest extends \PHPUnit_Framework_TestCase
         );
 
         /** @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject $stubMasterFactory */
-        $stubMasterFactory = $this->getMockBuilder(MasterFactory::class)
-            ->setMethods($stubFactoryMethods)
-            ->getMock();
+        $stubMasterFactory = $this->getMockBuilder(MasterFactory::class)->setMethods($stubFactoryMethods)->getMock();
 
         /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubHttpRequest */
         $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
@@ -105,8 +102,7 @@ class SampleWebFrontTest extends \PHPUnit_Framework_TestCase
         $this->mockHttpResponse = $this->getMock(HttpResponse::class);
 
         array_map(function ($methodName) use ($stubMasterFactory) {
-            $stubMasterFactory->method($methodName)
-                ->willReturn($this->getMock(HttpRouter::class));
+            $stubMasterFactory->method($methodName)->willReturn($this->getMock(HttpRouter::class));
         }, $routerFactoryMethods);
 
         $stubMasterFactory->method('getContext')->willReturn($this->getMock(Context::class));
@@ -115,7 +111,7 @@ class SampleWebFrontTest extends \PHPUnit_Framework_TestCase
         $mockRouterChain->method('route')->willReturn($mockHttpRequestHandler);
         $mockHttpRequestHandler->method('process')->willReturn($this->mockHttpResponse);
 
-        $this->webFront = new TestSampleWebFront($stubHttpRequest, $stubMasterFactory);
+        $this->webFront = new TestDefaultWebFront($stubHttpRequest, $stubMasterFactory);
     }
 
     public function testMasterFactoryIsReturned()
@@ -136,7 +132,7 @@ class SampleWebFrontTest extends \PHPUnit_Framework_TestCase
         $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
         $stubHttpRequest->method('getUrlPathRelativeToWebFront')->willReturn('foo');
 
-        $webFront = new SampleWebFront($stubHttpRequest);
+        $webFront = new DefaultWebFront($stubHttpRequest);
         $webFront->registerFactory(new UnitTestFactory());
         $webFront->runWithoutSendingResponse();
 

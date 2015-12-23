@@ -39,8 +39,8 @@ define(function () {
             grid.className = 'products-grid';
 
             productGridJson.map(function (product, index) {
-                var mainImage = product['images']['medium'][0];
-                var productLi = document.createElement('LI'),
+                var mainImage = product['images']['medium'][0],
+                    productLi = document.createElement('LI'),
                     container = document.createElement('DIV'),
                     title = document.createElement('H2'),
                     gender = document.createElement('P'),

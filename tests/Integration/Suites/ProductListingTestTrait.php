@@ -57,7 +57,7 @@ trait ProductListingTestTrait
 
         $this->factory = $this->createIntegrationTestMasterFactoryForRequest($request);
 
-        $website = new InjectableSampleWebFront($request, $this->factory);
+        $website = new InjectableDefaultWebFront($request, $this->factory);
         $website->runWithoutSendingResponse();
 
         $this->factory->createCommandConsumer()->process();
@@ -75,7 +75,7 @@ trait ProductListingTestTrait
 
         $this->factory = $this->createIntegrationTestMasterFactoryForRequest($request);
 
-        $website = new InjectableSampleWebFront($request, $this->factory);
+        $website = new InjectableDefaultWebFront($request, $this->factory);
         $website->runWithoutSendingResponse();
 
         $this->factory->createCommandConsumer()->process();

@@ -24,7 +24,7 @@ class ApiApp extends WebFront
     protected function registerFactories(MasterFactory $factory)
     {
         $factory->register(new CommonFactory());
-        $factory->register(new SampleFactory());
+        $factory->register(new TwentyOneRunFactory());
         $factory->register(new LoggingQueueFactory());
         $factory->register(new FrontendFactory($this->getRequest()));
     }
@@ -85,8 +85,8 @@ array_map(function ($contentFileName) {
     $blockId = preg_replace('/.*\/|\.html$/i', '', $contentFileName);
 
     $httpRequestBody = [
-        'content'              => $contentBlockContent,
-        'context'              => ['website' => 'ru', 'locale' => 'de_DE'],
+        'content' => $contentBlockContent,
+        'context' => ['website' => 'fr', 'locale' => 'fr_FR'],
     ];
 
     if (strpos($blockId, 'product_listing_content_block_') === 0) {

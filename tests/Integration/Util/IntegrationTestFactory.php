@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\BaseUrl\IntegrationTestFixedBaseUrlBuilder;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
 use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
@@ -81,6 +82,11 @@ class IntegrationTestFactory implements Factory
      */
     private $memoizedProductSearchAutosuggestionSortOrderConfig;
 
+    /**
+     * @var ProductsPerPage
+     */
+    private $memoizedProductsPerPageConfig;
+
     public function __construct(MasterFactory $masterFactory)
     {
         $masterFactory->register($this);
@@ -119,6 +125,14 @@ class IntegrationTestFactory implements Factory
             new FacetFilterRequestSimpleField(AttributeCode::fromString('price')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('color'))
         );
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getAdditionalAttributesForSearchIndex()
+    {
+        return ['backorders', 'stock_qty'];
     }
 
     /**
@@ -377,6 +391,24 @@ class IntegrationTestFactory implements Factory
         }
 
         return $this->memoizedProductSearchSortOrderConfig;
+    }
+
+    /**
+     * @return ProductsPerPage
+     */
+    public function getProductsPerPageConfig()
+    {
+        if (null === $this->memoizedProductsPerPageConfig) {
+            $numbersOfProductsPerPage = [9, 12, 18];
+            $selectedNumberOfProductsPerPage = 9;
+
+            $this->memoizedProductsPerPageConfig = ProductsPerPage::create(
+                $numbersOfProductsPerPage,
+                $selectedNumberOfProductsPerPage
+            );
+        }
+
+        return $this->memoizedProductsPerPageConfig;
     }
 
     /**

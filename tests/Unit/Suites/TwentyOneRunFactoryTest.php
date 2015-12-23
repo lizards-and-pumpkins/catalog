@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Tests\Integration;
 
 use LizardsAndPumpkins\CommonFactory;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
@@ -20,7 +21,7 @@ use LizardsAndPumpkins\Product\Tax\TaxServiceLocator;
 use LizardsAndPumpkins\Projection\Catalog\ProductViewLocator;
 use LizardsAndPumpkins\Queue\File\FileQueue;
 use LizardsAndPumpkins\SampleMasterFactory;
-use LizardsAndPumpkins\SampleFactory;
+use LizardsAndPumpkins\TwentyOneRunFactory;
 use LizardsAndPumpkins\TaxableCountries;
 use LizardsAndPumpkins\Utils\FileStorage\FilesystemFileStorage;
 use LizardsAndPumpkins\Utils\ImageStorage\ImageStorage;
@@ -28,8 +29,9 @@ use LizardsAndPumpkins\Utils\ImageStorage\MediaBaseUrlBuilder;
 use LizardsAndPumpkins\Website\WebsiteToCountryMap;
 
 /**
- * @covers \LizardsAndPumpkins\SampleFactory
+ * @covers \LizardsAndPumpkins\TwentyOneRunFactory
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FilterNavigationPriceRangesBuilder
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection
  * @uses   \LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry
@@ -43,6 +45,7 @@ use LizardsAndPumpkins\Website\WebsiteToCountryMap;
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestRangedField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
  * @uses   \LizardsAndPumpkins\DataPool\UrlKeyStore\FileUrlKeyStore
@@ -63,10 +66,10 @@ use LizardsAndPumpkins\Website\WebsiteToCountryMap;
  * @uses   \LizardsAndPumpkins\Utils\FileStorage\FilesystemFileStorage
  * @uses   \LizardsAndPumpkins\BaseUrl\WebsiteBaseUrlBuilder
  */
-class SampleFactoryTest extends \PHPUnit_Framework_TestCase
+class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var SampleFactory
+     * @var TwentyOneRunFactory
      */
     private $factory;
 
@@ -74,7 +77,7 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $masterFactory = new SampleMasterFactory();
         $masterFactory->register(new CommonFactory());
-        $this->factory = new SampleFactory();
+        $this->factory = new TwentyOneRunFactory();
         $masterFactory->register($this->factory);
     }
 
@@ -141,6 +144,14 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->factory->getProductSearchResultsFilterNavigationConfig();
         $this->assertInstanceOf(FacetFilterRequest::class, $result);
+    }
+
+    public function testArrayOfAdditionalAttributeCodesForSearchEngineIsReturned()
+    {
+        $result = $this->factory->getAdditionalAttributesForSearchIndex();
+
+        $this->assertInternalType('array', $result);
+        $this->assertContainsOnly('string', $result);
     }
 
     public function testImageProcessorCollectionIsReturned()
@@ -257,6 +268,15 @@ class SampleFactoryTest extends \PHPUnit_Framework_TestCase
             $this->factory->getProductSearchAutosuggestionSortOrderConfig(),
             $this->factory->getProductSearchAutosuggestionSortOrderConfig()
         );
+    }
+
+    public function testSameInstanceOfProductsPerPageIsReturned()
+    {
+        $result1 = $this->factory->getProductsPerPageConfig();
+        $result2 = $this->factory->getProductsPerPageConfig();
+
+        $this->assertInstanceOf(ProductsPerPage::class, $result1);
+        $this->assertSame($result1, $result2);
     }
 
     public function testItReturnsAWebsiteToCountryMapInstance()

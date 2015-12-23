@@ -34,6 +34,9 @@
 #pagination .next, #pagination .prev { padding: 4px 7px; color: #3c3c3c }
 #pagination .prev { background-position: -6px -5px }
 
+/* Scrolling */
+.filter-container { max-height: 220px; overflow: scroll }
+
 /* Tablet */
 @media (max-width: 974px) {
     .products-grid li { width: 50% }

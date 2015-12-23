@@ -6,6 +6,7 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
@@ -108,12 +109,12 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
         }
 
         $searchQueryString = $request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
-        $productIds = $this->getSearchResults($searchQueryString);
-        $this->addSearchResultsToPageBuilder(...$productIds);
+        $response = $this->getSearchEngineResponse($searchQueryString);
+        $this->addSearchResultsToPageBuilder(...$response->getProductIds());
 
         $metaInfoSnippetContent = $this->getMetaInfoSnippetContent();
 
-        $this->addTotalNumberOfResultsSnippetToPageBuilder(count($productIds));
+        $this->addTotalNumberOfResultsSnippetToPageBuilder($response->getTotalNumberOfResults());
         $this->addSearchQueryStringSnippetToPageBuilder($searchQueryString);
 
         $keyGeneratorParams = [];
@@ -148,9 +149,9 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
 
     /**
      * @param string $queryString
-     * @return ProductId[]
+     * @return SearchEngineResponse
      */
-    private function getSearchResults($queryString)
+    private function getSearchEngineResponse($queryString)
     {
         $criteria = $this->criteriaBuilder->createCriteriaForAnyOfGivenFieldsContainsString(
             $this->searchableAttributeCodes,
@@ -158,9 +159,10 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
         );
         $selectedFilters = [];
         $facetFilterRequest = new FacetFilterRequest;
-        $rowsPerPage = 100; // TODO: Replace with configured number of suggestions to show
+        $rowsPerPage = 5; // TODO: Replace with configured number of suggestions to show
         $pageNumber = 0;
-        $searchEngineResponse = $this->dataPoolReader->getSearchResultsMatchingCriteria(
+
+        return $this->dataPoolReader->getSearchResultsMatchingCriteria(
             $criteria,
             $selectedFilters,
             $this->context,
@@ -169,8 +171,6 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
             $pageNumber,
             $this->sortOrderConfig
         );
-
-        return $searchEngineResponse->getProductIds();
     }
 
     private function addSearchResultsToPageBuilder(ProductId ...$productIds)

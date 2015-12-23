@@ -6,23 +6,6 @@
 <header class="header-container">
     <div class="header">
         <div class="header-panel">
-            <span id="part" class="drop-container">
-                <span class="drop">21run.com</span>
-                <span class="drop-list">
-                    <a href="http://www.21streetwear.com/">21streetwear.com</a>
-                    <a href="http://www.21cycles.com/">21cycles.com</a>
-                </span>
-	        </span>
-            <span class="sep"></span>
-            <span id="language-select" class="drop-container">
-                <span class="drop">Deutsch</span>
-                <span class="drop-list">
-                    <a href="/en/" class="lang-ru_en">English</a>
-                    <a href="/fr/" class="lang-ru_fr">Français</a>
-                    <a href="/es/" class="lang-ru_es">Español</a>
-                </span>
-        	</span>
-            <span class="sep"></span>
             <a href="<?= $this->getBaseUrl() ?>checkout/onepage/"><?= $this->__('Checkout') ?></a>
             <span class="sep"></span>
             <a href="<?= $this->getBaseUrl() ?>checkout/cart/">
@@ -39,7 +22,7 @@
         </div>
         <div class="logo">
             <strong>21run.com</strong>
-            <a href="<?= $this->getBaseUrl() ?>" title="21run.com"><img src="<?= $this->getBaseUrl() ?>images/logo_de.png" alt="21run.com"/></a>
+            <a href="<?= $this->getBaseUrl() ?>" title="21run.com"><img src="<?= $this->getBaseUrl() ?>images/logo_fr.png" alt="21run.com"/></a>
         </div>
         <div id="searchPanel">
             <form autocomplete="off" action="<?= $this->getBaseUrl() ?>catalogsearch/result/" class="search-form">
@@ -73,8 +56,6 @@
             <li><a href="<?= $this->getBaseUrl() ?>customer/account/"><img src="<?= $this->getBaseUrl() ?>images/icon-phone-account.png" alt=""/></a></li>
             <li><a href="<?= $this->getBaseUrl() ?>checkout/cart/"><img src="<?= $this->getBaseUrl() ?>images/icon-phone-cart.png" alt=""/></a></li>
             <li class="active"><a href="#" data-block="search"><img src="<?= $this->getBaseUrl() ?>images/icon-phone-search.png" alt=""/></a></li>
-            <li><a href="#" data-block="lang"><img src="<?= $this->getBaseUrl() ?>images/icon-phone-lang-deutsch.png" alt=""/></a></li>
-            <li><a href="#" data-block="store"><img src="<?= $this->getBaseUrl() ?>images/icon-phone-store-21run-com.png" alt=""/></a></li>
         </ul>
         <div id="phone-meta-menu-content" class="search">
             <form autocomplete="off" action="<?= $this->getBaseUrl() ?>catalogsearch/result/" class="search-form">
@@ -86,15 +67,6 @@
                     <div id="search-autosuggestion"></div>
                 </div>
             </form>
-            <div class="store">
-                <a href="http://www.21streetwear.com/">21streetwear.com</a>
-                <a href="http://www.21cycles.com/">21cycles.com</a>
-            </div>
-            <div class="lang">
-                <a href="/en/" class="lang-ru_en">English</a>
-                <a href="/fr/" class="lang-ru_fr">Français</a>
-                <a href="/es/" class="lang-ru_es">Español</a>
-            </div>
         </div>
         <?= $this->getChildOutput('content_block_main_navigation') ?>
     </div>

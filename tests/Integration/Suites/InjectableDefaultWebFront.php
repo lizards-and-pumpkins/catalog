@@ -1,17 +1,16 @@
 <?php
 
-
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Http\HttpRequest;
 
-class TestSampleWebFront extends SampleWebFront
+class InjectableDefaultWebFront extends DefaultWebFront
 {
     /**
      * @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $testMasterFactory;
-
+    
     public function __construct(HttpRequest $request, MasterFactory $testMasterFactory)
     {
         parent::__construct($request);
@@ -24,5 +23,10 @@ class TestSampleWebFront extends SampleWebFront
     protected function createMasterFactory()
     {
         return $this->testMasterFactory;
+    }
+
+    protected function registerFactories(MasterFactory $masterFactory)
+    {
+        // The injected testing master factory already should have all factories set
     }
 }

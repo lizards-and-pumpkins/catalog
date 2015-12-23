@@ -73,6 +73,9 @@ use LizardsAndPumpkins\Product\AddProductListingCommandHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
 use LizardsAndPumpkins\Projection\Catalog\InternalToPublicProductJsonData;
 use LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator;
+use LizardsAndPumpkins\Projection\TemplateProjectorLocator;
+use LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Projection\UrlKeyForContextCollector;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\Renderer\BlockStructure;
@@ -877,7 +880,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createContextSource()
     {
-        return new SampleContextSource($this->getMasterFactory()->createContextBuilder());
+        return new TwentyOneRunContextSource($this->getMasterFactory()->createContextBuilder());
     }
 
     /**
@@ -1066,13 +1069,11 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductSearchDocumentBuilder()
     {
-        $availabilityAttributeCodes = ['backorders', 'stock_qty'];
-
         $indexAttributeCodes = array_unique(array_merge(
-            $availabilityAttributeCodes,
             $this->getMasterFactory()->getSearchableAttributeCodes(),
             $this->getMasterFactory()->getProductListingFilterNavigationConfig()->getAttributeCodeStrings(),
-            $this->getMasterFactory()->getProductSearchResultsFilterNavigationConfig()->getAttributeCodeStrings()
+            $this->getMasterFactory()->getProductSearchResultsFilterNavigationConfig()->getAttributeCodeStrings(),
+            $this->getMasterFactory()->getAdditionalAttributesForSearchIndex()
         ));
 
         return new ProductSearchDocumentBuilder($indexAttributeCodes);

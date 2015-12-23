@@ -1,6 +1,8 @@
 <?php
 
-namespace LizardsAndPumpkins;
+namespace LizardsAndPumpkins\Projection;
+
+use LizardsAndPumpkins\DomainEvent;
 
 class TemplateWasUpdatedDomainEvent implements DomainEvent
 {

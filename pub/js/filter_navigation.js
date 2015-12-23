@@ -27,6 +27,10 @@ define(['lib/url', 'pagination'], function (url, pagination) {
             }
 
             Object.keys(filterNavigationJson).map(function (filterCode) {
+                if (0 === filterNavigationJson[filterCode].length) {
+                    return;
+                }
+
                 var options = FilterNavigation[FilterNavigation.getFilterOptionBuilderName(filterCode)](
                     filterCode,
                     filterNavigationJson[filterCode]
@@ -36,12 +40,16 @@ define(['lib/url', 'pagination'], function (url, pagination) {
                 heading.className = 'block-title roundedBorder expanded';
                 heading.textContent = filterCode;
 
+                var filterContainer = document.createElement('DIV');
+                filterContainer.className = 'filter-container';
+
                 var optionList = document.createElement('OL');
                 optionList.className = 'filter-content scroll-pane filter-' + filterCode;
                 options.map(function (option) { optionList.appendChild(option) });
 
                 filterNavigation.appendChild(heading);
-                filterNavigation.appendChild(optionList);
+                filterContainer.appendChild(optionList);
+                filterNavigation.appendChild(filterContainer);
             });
         },
 
@@ -95,6 +103,9 @@ define(['lib/url', 'pagination'], function (url, pagination) {
         createPriceFilterOptions: function (filterCode, filterOptions) {
             var selectedFilterOptions = getSelectedFilterValues(filterCode);
             return filterOptions.reduce(function (carry, filterOption) {
+                if (0 === filterOption.count) {
+                    return carry;
+                }
 
                 var ranges = filterOption.value.match(/(\d+,\d+)/g),
                     parameterValue = ranges.join('-').replace(/,/g, '.'),

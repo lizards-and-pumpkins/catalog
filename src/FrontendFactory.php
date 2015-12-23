@@ -11,7 +11,6 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingPageRequest;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchAutosuggestionRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchRequestHandler;
-use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
 use LizardsAndPumpkins\ContentDelivery\PageBuilder;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\PricesJsonSnippetTransformation;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\SimpleEuroPriceSnippetTransformation;
@@ -31,6 +30,7 @@ use LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
+use LizardsAndPumpkins\Projection\TemplatesApiV1PutRequestHandler;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\CompositeSnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\RegistrySnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
@@ -54,11 +54,6 @@ class FrontendFactory implements Factory
      * @var SnippetKeyGeneratorLocator
      */
     private $snippetKeyGeneratorLocator;
-
-    /**
-     * @var ProductsPerPage
-     */
-    private $memoizedProductsPerPageConfig;
 
     /**
      * @return ApiRouter
@@ -205,24 +200,6 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->getProductsPerPageConfig(),
             ...$this->getMasterFactory()->getProductListingSortOrderConfig()
         );
-    }
-
-    /**
-     * @return ProductsPerPage
-     */
-    public function getProductsPerPageConfig()
-    {
-        if (null === $this->memoizedProductsPerPageConfig) {
-            $numbersOfProductsPerPage = [9, 12, 18];
-            $selectedNumberOfProductsPerPage = 9;
-
-            $this->memoizedProductsPerPageConfig = ProductsPerPage::create(
-                $numbersOfProductsPerPage,
-                $selectedNumberOfProductsPerPage
-            );
-        }
-
-        return $this->memoizedProductsPerPageConfig;
     }
 
     /**

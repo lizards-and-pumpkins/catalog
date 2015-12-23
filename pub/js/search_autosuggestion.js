@@ -24,9 +24,7 @@ define(function () {
                 return;
             }
 
-            /* TODO: Inject base URL */
-
-            callAjax('/lizards-and-pumpkins/catalogsearch/suggest?q=' + value, function (responseText) {
+            callAjax(baseUrl + 'catalogsearch/suggest?q=' + value, function (responseText) {
                 autosuggestionBox.innerHTML = responseText;
             });
         }, true);

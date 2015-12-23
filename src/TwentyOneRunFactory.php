@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins;
 use LizardsAndPumpkins\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\BaseUrl\WebsiteBaseUrlBuilder;
 use LizardsAndPumpkins\ContentDelivery\Catalog\FilterNavigationPriceRangesBuilder;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
 use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\EuroPriceRangeTransformation;
@@ -16,8 +17,11 @@ use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestRangedField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\FileUrlKeyStore;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Image\ImageMagickInscribeStrategy;
@@ -43,7 +47,7 @@ use LizardsAndPumpkins\Utils\ImageStorage\MediaBaseUrlBuilder;
 use LizardsAndPumpkins\Utils\ImageStorage\MediaDirectoryBaseUrlBuilder;
 use LizardsAndPumpkins\Website\TwentyOneRunWebsiteToCountryMap;
 
-class SampleFactory implements Factory
+class TwentyOneRunFactory implements Factory
 {
     use FactoryTrait;
 
@@ -63,11 +67,16 @@ class SampleFactory implements Factory
     private $memoizedProductSearchAutosuggestionSortOrderConfig;
 
     /**
+     * @var ProductsPerPage
+     */
+    private $memoizedProductsPerPageConfig;
+
+    /**
      * @return string[]
      */
     public function getSearchableAttributeCodes()
     {
-        return ['name', 'category', 'brand'];
+        return ['name', 'brand', 'product_group'];
     }
 
     /**
@@ -77,7 +86,8 @@ class SampleFactory implements Factory
     {
         return new FacetFilterRequest(
             new FacetFilterRequestSimpleField(AttributeCode::fromString('gender')),
-            new FacetFilterRequestSimpleField(AttributeCode::fromString('size')),
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('product_group')),
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('style')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('brand')),
             new FacetFilterRequestRangedField(
                 AttributeCode::fromString('price'),
@@ -96,14 +106,25 @@ class SampleFactory implements Factory
     {
         return new FacetFilterRequest(
             new FacetFilterRequestSimpleField(AttributeCode::fromString('gender')),
-            new FacetFilterRequestSimpleField(AttributeCode::fromString('category')),
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('product_group')),
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('style')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('brand')),
             new FacetFilterRequestRangedField(
                 AttributeCode::fromString('price'),
                 ...FilterNavigationPriceRangesBuilder::getPriceRanges()
             ),
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('series')),
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('size')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('color'))
         );
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getAdditionalAttributesForSearchIndex()
+    {
+        return ['backorders', 'stock_qty', 'category', 'created_at'];
     }
 
     /**
@@ -168,7 +189,7 @@ class SampleFactory implements Factory
     }
 
     /**
-     * @return FileSearchEngine
+     * @return SearchEngine
      */
     public function createSearchEngine()
     {
@@ -409,7 +430,7 @@ class SampleFactory implements Factory
                 ),
                 SortOrderConfig::create(
                     AttributeCode::fromString('created_at'),
-                    SortOrderDirection::create(SortOrderDirection::ASC)
+                    SortOrderDirection::create(SortOrderDirection::DESC)
                 ),
             ];
         }
@@ -458,6 +479,24 @@ class SampleFactory implements Factory
     }
 
     /**
+     * @return ProductsPerPage
+     */
+    public function getProductsPerPageConfig()
+    {
+        if (null === $this->memoizedProductsPerPageConfig) {
+            $numbersOfProductsPerPage = [60, 120];
+            $selectedNumberOfProductsPerPage = 60;
+
+            $this->memoizedProductsPerPageConfig = ProductsPerPage::create(
+                $numbersOfProductsPerPage,
+                $selectedNumberOfProductsPerPage
+            );
+        }
+
+        return $this->memoizedProductsPerPageConfig;
+    }
+
+    /**
      * @return TwentyOneRunWebsiteToCountryMap
      */
     public function createWebsiteToCountryMap()
@@ -496,7 +535,10 @@ class SampleFactory implements Factory
      */
     public function createGlobalProductListingCriteria()
     {
-        return SearchCriterionGreaterThan::create('stock_qty', 0);
+        return CompositeSearchCriterion::createOr(
+            SearchCriterionGreaterThan::create('stock_qty', 0),
+            SearchCriterionEqual::create('backorders', 'true')
+        );
     }
 
     /**

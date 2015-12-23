@@ -1,6 +1,6 @@
 <?php
 
-namespace LizardsAndPumpkins;
+namespace LizardsAndPumpkins\Projection;
 
 use LizardsAndPumpkins\Api\ApiRequestHandler;
 use LizardsAndPumpkins\Http\HttpRequest;

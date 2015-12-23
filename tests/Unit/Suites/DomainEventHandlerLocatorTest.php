@@ -9,13 +9,15 @@ use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler;
+use LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEventHandler;
 
 /**
  * @covers \LizardsAndPumpkins\DomainEventHandlerLocator
  * @uses   \LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent
  * @uses   \LizardsAndPumpkins\Image\ImageWasAddedDomainEvent
  * @uses   \LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent
- * @uses   \LizardsAndPumpkins\TemplateWasUpdatedDomainEvent
+ * @uses   \LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEvent
  */
 class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 {

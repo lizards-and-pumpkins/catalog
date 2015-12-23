@@ -24,7 +24,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
-        (new InjectableSampleWebFront($request, $this->factory))->runWithoutSendingResponse();
+        (new InjectableDefaultWebFront($request, $this->factory))->runWithoutSendingResponse();
 
         $this->factory->createCommandConsumer()->process();
         $this->factory->createDomainEventConsumer()->process();
@@ -65,7 +65,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $domainCommandQueue = $this->factory->getCommandQueue();
         $this->assertEquals(0, $domainCommandQueue->count());
 
-        $response = (new InjectableSampleWebFront($request, $this->factory))->runWithoutSendingResponse();
+        $response = (new InjectableDefaultWebFront($request, $this->factory))->runWithoutSendingResponse();
 
         $this->assertEquals('"OK"', $response->getBody());
         $this->assertEquals(1, $domainCommandQueue->count());
@@ -155,7 +155,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
 
         $httpRequestBodyString = json_encode([
             'content' => $contentBlockContent,
-            'context' => ['version' => -1, 'website' => 'ru', 'locale' => 'de_DE'],
+            'context' => ['version' => -1, 'website' => 'fr', 'locale' => 'fr_FR'],
             'url_key' => $productListingUrlKey
         ]);
 

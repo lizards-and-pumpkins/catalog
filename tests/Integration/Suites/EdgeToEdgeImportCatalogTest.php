@@ -42,7 +42,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
 
         $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
 
-        $website = new InjectableSampleWebFront($request, $this->factory);
+        $website = new InjectableDefaultWebFront($request, $this->factory);
         $website->runWithoutSendingResponse();
 
         $this->factory->createCommandConsumer()->process();
@@ -136,7 +136,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
 
         $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
         $urlKeys = (new XPathParser($xml))->getXmlNodesArrayByXPath(
-            '//catalog/products/product/attributes/url_key[@locale="de_DE"]'
+            '//catalog/products/product/attributes/url_key[@locale="fr_FR"]'
         );
 
         $httpUrl = HttpUrl::fromString('http://example.com/' . $urlKeys[0]['value']);
@@ -145,7 +145,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
         $this->prepareIntegrationTestMasterFactoryForRequest($request);
         
-        $website = new InjectableSampleWebFront($request, $this->factory);
+        $website = new InjectableDefaultWebFront($request, $this->factory);
         $response = $website->runWithoutSendingResponse();
 
         $this->assertContains('<body>', $response->getBody());
@@ -158,7 +158,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $requestBody = HttpRequestBody::fromString('');
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $url, $headers, $requestBody);
 
-        $website = new SampleWebFront($request);
+        $website = new DefaultWebFront($request);
         new IntegrationTestFactory($website->getMasterFactory());
         $response = $website->runWithoutSendingResponse();
         $this->assertInstanceOf(HttpResourceNotFoundResponse::class, $response);

@@ -45,6 +45,8 @@ use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHa
 use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetProjector;
 use LizardsAndPumpkins\Projection\Catalog\InternalToPublicProductJsonData;
 use LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator;
+use LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Projection\UrlKeyForContextCollector;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\Renderer\ThemeLocator;
@@ -84,12 +86,9 @@ use LizardsAndPumpkins\Website\HostToWebsiteMap;
  * @uses   \LizardsAndPumpkins\CommandHandlerLocator
  * @uses   \LizardsAndPumpkins\DomainEventConsumer
  * @uses   \LizardsAndPumpkins\DomainEventHandlerLocator
- * @uses   \LizardsAndPumpkins\TemplateWasUpdatedDomainEvent
- * @uses   \LizardsAndPumpkins\TemplateWasUpdatedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Renderer\BlockRenderer
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Product\PriceSnippetRenderer
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator
  * @uses   \LizardsAndPumpkins\Product\ProductProjector
  * @uses   \LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer
@@ -111,7 +110,6 @@ use LizardsAndPumpkins\Website\HostToWebsiteMap;
  * @uses   \LizardsAndPumpkins\Product\UpdateProductCommandHandler
  * @uses   \LizardsAndPumpkins\Product\AddProductListingCommandHandler
  * @uses   \LizardsAndPumpkins\Product\ProductDetailViewBlockRenderer
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer
  * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\CompositeSnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\ContentBlockSnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy
@@ -126,12 +124,16 @@ use LizardsAndPumpkins\Website\HostToWebsiteMap;
  * @uses   \LizardsAndPumpkins\Image\ImageProcessingStrategySequence
  * @uses   \LizardsAndPumpkins\LocalFilesystemStorageReader
  * @uses   \LizardsAndPumpkins\LocalFilesystemStorageWriter
- * @uses   \LizardsAndPumpkins\TemplateProjectorLocator
  * @uses   \LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToProductBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetProjector
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator
+ * @uses   \LizardsAndPumpkins\Projection\TemplateProjectorLocator
+ * @uses   \LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEvent
+ * @uses   \LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Projection\UrlKeyForContextCollector
  * @uses   \LizardsAndPumpkins\Renderer\ThemeLocator
  * @uses   \LizardsAndPumpkins\Renderer\Translation\CsvTranslator

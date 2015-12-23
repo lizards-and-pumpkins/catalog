@@ -9,7 +9,7 @@ class ContextLocale implements ContextPartBuilder
 {
     const CODE = 'locale';
 
-    private $default = 'de_DE';
+    private $default = 'fr_FR';
 
     /*
      * TODO: The mapping array can be moved to configuration or a factory or a dedicated
