@@ -16,6 +16,7 @@ use LizardsAndPumpkins\Utils\ImageStorage\Image;
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Product\ProductAttribute
  * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
+ * @uses   \LizardsAndPumpkins\Product\ProductImage\ProductImageList
  */
 class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
 {
