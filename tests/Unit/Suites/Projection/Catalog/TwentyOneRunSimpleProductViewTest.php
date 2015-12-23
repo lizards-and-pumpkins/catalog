@@ -35,6 +35,7 @@ class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
         $this->mockProduct = $this->getMock(Product::class);
         $stubProductImageFileLocator = $this->getMock(ProductImageFileLocator::class);
         $stubProductImageFileLocator->method('getPlaceholder')->willReturn($this->getMock(Image::class));
+        $stubProductImageFileLocator->method('getVariantCodes')->willReturn(['large']);
         $this->productView = new TwentyOneRunSimpleProductView($this->mockProduct, $stubProductImageFileLocator);
     }
 
