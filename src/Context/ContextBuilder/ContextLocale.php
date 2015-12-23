@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Context\ContextBuilder;
 
 use LizardsAndPumpkins\Context\ContextBuilder;
@@ -52,20 +51,13 @@ class ContextLocale implements ContextPartBuilder
      */
     private function getLocaleFromRequest(HttpRequest $request)
     {
-        $language = $this->getLanguageFromRequest($request);
-        return isset($this->languageToLocaleMap[$language]) ?
-            $this->languageToLocaleMap[$language] :
-            $this->default;
-    }
+        $language = $this->getFirstRequestPathPart($request);
 
-    /**
-     * @param HttpRequest $request
-     * @return string
-     */
-    private function getLanguageFromRequest(HttpRequest $request)
-    {
-        $firstPathPart = $this->getFirstRequestPathPart($request);
-        return (string) substr($firstPathPart, 0, 2);
+        if (isset($this->languageToLocaleMap[$language])) {
+            return $this->languageToLocaleMap[$language];
+        }
+
+        return $this->default;
     }
 
     /**
@@ -74,9 +66,7 @@ class ContextLocale implements ContextPartBuilder
      */
     private function getFirstRequestPathPart(HttpRequest $request)
     {
-        $path = ltrim($request->getUrlPathRelativeToWebFront(), '/');
-        return '' !== $path ?
-            explode('/', $path)[0] :
-            '';
+        $pathTokens = explode('/', $request->getUrlPathRelativeToWebFront());
+        return $pathTokens[0];
     }
 }

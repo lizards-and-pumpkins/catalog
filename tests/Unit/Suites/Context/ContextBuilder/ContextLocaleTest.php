@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Context\ContextBuilder;
 
 use LizardsAndPumpkins\Context\ContextBuilder;
@@ -41,21 +40,64 @@ class ContextLocaleTest extends \PHPUnit_Framework_TestCase
     {
         $inputDataSet = [];
         $otherContextParts = [];
+
         $this->assertSame('fr_FR', $this->contextLocale->getValue($inputDataSet, $otherContextParts));
+    }
+
+    /**
+     * @dataProvider urlPathWithoutLocaleProvider
+     * @param string $urlPathRelativeToWebFront
+     */
+    public function testItReturnsTheDefaultLocaleIfItCanNotBeDeterminedFromRequest($urlPathRelativeToWebFront)
+    {
+        $this->stubRequest->method('getUrlPathRelativeToWebFront')->willReturn($urlPathRelativeToWebFront);
+        $inputDataSet = [ContextBuilder::REQUEST => $this->stubRequest];
+        $otherContextParts = [];
+
+        $this->assertSame('fr_FR', $this->contextLocale->getValue($inputDataSet, $otherContextParts));
+    }
+
+    /**
+     * @return array[]
+     */
+    public function urlPathWithoutLocaleProvider()
+    {
+        return [
+            ['foo'],
+            ['enuresis'],
+            [''],
+        ];
     }
 
     public function testItReturnsTheLocaleFromTheInputArrayIfItIsPresent()
     {
         $inputDataSet = [ContextLocale::CODE => 'xx_XX'];
         $otherContextParts = [];
+
         $this->assertSame('xx_XX', $this->contextLocale->getValue($inputDataSet, $otherContextParts));
     }
 
-    public function testItReturnsTheLocaleFromTheRequestIfNotExplicitlySpecifiedInInputArray()
+    /**
+     * @dataProvider urlPathWithLocaleProvider
+     * @param string $urlPathRelativeToWebFront
+     */
+    public function testItReturnsTheLocaleFromTheRequestIfNotExplicitlySpecifiedInInputArray($urlPathRelativeToWebFront)
     {
-        $this->stubRequest->method('getUrlPathRelativeToWebFront')->willReturn('/fr/foo');
+        $this->stubRequest->method('getUrlPathRelativeToWebFront')->willReturn($urlPathRelativeToWebFront);
         $inputDataSet = [ContextBuilder::REQUEST => $this->stubRequest];
         $otherContextParts = [];
-        $this->assertSame('fr_FR', $this->contextLocale->getValue($inputDataSet, $otherContextParts));
+
+        $this->assertSame('en_US', $this->contextLocale->getValue($inputDataSet, $otherContextParts));
+    }
+
+    /**
+     * @return array[]
+     */
+    public function urlPathWithLocaleProvider()
+    {
+        return [
+            ['en/foo'],
+            ['en'],
+        ];
     }
 }
