@@ -130,4 +130,12 @@ class TwentyOneRunProductImageFileLocator implements ProductImageFileLocator
             ));
         }
     }
+
+    /**
+     * @return string[]
+     */
+    public function getVariantCodes()
+    {
+        return $this->imageVariantCodes;
+    }
 }

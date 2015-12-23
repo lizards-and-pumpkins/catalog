@@ -98,6 +98,7 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
         $this->mockProduct = $this->getMock(ConfigurableProduct::class, [], [], '', false);
         $this->stubProductImageFileLocator = $this->getMock(ProductImageFileLocator::class);
         $this->stubProductImageFileLocator->method('getPlaceholder')->willReturn($this->getMock(Image::class));
+        $this->stubProductImageFileLocator->method('getVariantCodes')->willReturn(['large']);
 
         $this->productView = new TwentyOneRunConfigurableProductView(
             $this->stubProductViewLocator,

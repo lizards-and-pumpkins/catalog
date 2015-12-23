@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Utils\ImageStorage;
 
 use LizardsAndPumpkins\Context\Context;

@@ -34,7 +34,7 @@ class IntegrationTestProductView extends AbstractProductView
     /**
      * @return ProductImageFileLocator
      */
-    protected function getProductImageFileLocator()
+    final protected function getProductImageFileLocator()
     {
         return $this->productImageFileLocator;
     }

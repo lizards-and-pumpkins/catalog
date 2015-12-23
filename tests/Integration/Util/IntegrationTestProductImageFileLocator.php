@@ -42,4 +42,16 @@ class IntegrationTestProductImageFileLocator implements ProductImageFileLocator
         $identifierString = sprintf('product/placeholder/%s.jpg', $imageVariantCode);
         return $this->imageStorage->getFileReference(StorageAgnosticFileUri::fromString($identifierString));
     }
+
+    /**
+     * @return string[]
+     */
+    public function getVariantCodes()
+    {
+        return [
+            'small',
+            'medium',
+            'large'
+        ];
+    }
 }

@@ -158,4 +158,22 @@ class TwentyOneRunProductImageFileLocatorTest extends \PHPUnit_Framework_TestCas
 
         $this->assertSame($stubPlaceholderImage, $result);
     }
+
+    public function testItReturnsAllValidImageVariantCodes()
+    {
+        $validImageVariantCodes = [
+            TwentyOneRunProductImageFileLocator::SMALL,
+            TwentyOneRunProductImageFileLocator::MEDIUM,
+            TwentyOneRunProductImageFileLocator::LARGE,
+            TwentyOneRunProductImageFileLocator::ORIGINAL,
+            TwentyOneRunProductImageFileLocator::SEARCH_AUTOSUGGESTION,
+        ];
+
+        $result = $this->productImageFileLocator->getVariantCodes();
+        
+        sort($result);
+        sort($validImageVariantCodes);
+        
+        $this->assertSame($validImageVariantCodes, $result);
+    }
 }

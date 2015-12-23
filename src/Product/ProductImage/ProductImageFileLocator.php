@@ -21,4 +21,9 @@ interface ProductImageFileLocator
      * @return Image
      */
     public function getPlaceholder($imageVariantCode, Context $context);
+
+    /**
+     * @return string[]
+     */
+    public function getVariantCodes();
 }
