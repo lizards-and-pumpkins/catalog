@@ -1,7 +1,6 @@
 #!/usr/bin/env php
 <?php
 
-
 namespace LizardsAndPumpkins;
 
 use League\CLImate\CLImate;
@@ -10,7 +9,11 @@ use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\Utils\BaseCliCommand;
 
-require_once __DIR__ . '/../vendor/autoload.php';
+if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
+    require_once __DIR__ . '/../vendor/autoload.php';
+} else {
+    require_once __DIR__ . '/../../../autoload.php';
+}
 
 class RunImport extends BaseCliCommand
 {
