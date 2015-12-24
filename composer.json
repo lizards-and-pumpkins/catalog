@@ -47,6 +47,17 @@
             "url": "http://packages.lizardsandpumpkins.com"
         }
     ],
+    "bin": [
+        "bin/clearFileStorages.php",
+        "bin/commandConsumer.php",
+        "bin/consumerSupervisor.sh",
+        "bin/eventConsumer.php",
+        "bin/listUrlKeys.php",
+        "bin/reportDomainEventProcessingAvg.php",
+        "bin/reportQueueCount.php",
+        "bin/runImport.php",
+        "bin/runImportViaApi.php"
+    ],
     "scripts": {
         "test": [
             "vendor/bin/phpunit -c tests/Unit/phpunit.xml.dist",
