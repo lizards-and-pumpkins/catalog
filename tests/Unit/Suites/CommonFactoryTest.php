@@ -29,6 +29,8 @@ use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
+use LizardsAndPumpkins\Product\ProductSearch\DefaultSearchableAttributeValueCollector;
+use LizardsAndPumpkins\Product\ProductSearch\SearchableAttributeValueCollectorLocator;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
@@ -104,7 +106,9 @@ use LizardsAndPumpkins\Website\HostToWebsiteMap;
  * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionTemplateProjector
  * @uses   \LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductSearchDocumentBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductSearch\ProductSearchDocumentBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductSearch\SearchableAttributeValueCollectorLocator
+ * @uses   \LizardsAndPumpkins\Product\ProductSearch\DefaultSearchableAttributeValueCollector
  * @uses   \LizardsAndPumpkins\Product\ProductJsonSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\UpdateProductCommandHandler
@@ -628,5 +632,17 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createMediaBaseUrlBuilder();
         $this->assertInstanceOf(MediaBaseUrlBuilder::class, $result);
+    }
+
+    public function testItReturnsASearchableAttributeValueCollectorLocator()
+    {
+        $result = $this->commonFactory->createSearchableAttributeValueCollectorLocator();
+        $this->assertInstanceOf(SearchableAttributeValueCollectorLocator::class, $result);
+    }
+
+    public function testItReturnsADefaultSearchableAttributeValueCollector()
+    {
+        $result = $this->commonFactory->createDefaultSearchableAttributeValueCollector();
+        $this->assertInstanceOf(DefaultSearchableAttributeValueCollector::class, $result);
     }
 }

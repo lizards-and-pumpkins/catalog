@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\ContentBlockSnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\RegistrySnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
@@ -42,6 +43,7 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
  * @method ContentDelivery\Catalog\ProductListingRequestHandler createProductListingRequestHandler
  * @method ContentDelivery\Catalog\ProductSearchRequestHandler createProductSearchRequestHandler
  * @method TwentyOneRunTaxableCountries createTaxableCountries
+ * @method SearchEngine getSearchEngine
  */
 class SampleMasterFactory implements MasterFactory
 {

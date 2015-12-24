@@ -1,6 +1,6 @@
 <?php
 
-namespace LizardsAndPumpkins\Product;
+namespace LizardsAndPumpkins\Product\ProductSearch;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
@@ -8,16 +8,26 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilde
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 use LizardsAndPumpkins\Exception\InvalidProjectionSourceDataTypeException;
+use LizardsAndPumpkins\Product\PriceSnippetRenderer;
+use LizardsAndPumpkins\Product\Product;
+use LizardsAndPumpkins\Product\ProductId;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductSearchDocumentBuilder
+ * @covers \LizardsAndPumpkins\Product\ProductSearch\ProductSearchDocumentBuilder
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection
+ * @uses   \LizardsAndPumpkins\Product\ProductSearch\DefaultSearchableAttributeValueCollector
+ * @uses   \LizardsAndPumpkins\Product\AttributeCode
  */
 class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var SearchableAttributeValueCollectorLocator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubValueCollectorLocator;
+
     /**
      * @param array[] $attributesMap
      * @return Product|\PHPUnit_Framework_MockObject_MockObject
@@ -52,31 +62,50 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertContains($searchDocumentField, $document->getFieldsCollection()->getFields(), '', false, false);
     }
 
+    /**
+     * @param string[] $searchableAttributes
+     * @return ProductSearchDocumentBuilder
+     */
+    private function createInstance(array $searchableAttributes)
+    {
+        return new ProductSearchDocumentBuilder($searchableAttributes, $this->stubValueCollectorLocator);
+    }
+
+    protected function setUp()
+    {
+        $this->stubValueCollectorLocator = $this->getMock(SearchableAttributeValueCollectorLocator::class, [], [], '', false);
+        $this->stubValueCollectorLocator->method('forProduct')
+            ->willReturn(new DefaultSearchableAttributeValueCollector());
+    }
+
     public function testSearchDocumentBuilderInterfaceIsImplemented()
     {
-        $this->assertInstanceOf(SearchDocumentBuilder::class, new ProductSearchDocumentBuilder([]));
+        $this->assertInstanceOf(
+            SearchDocumentBuilder::class,
+            $this->createInstance([])
+        );
     }
 
     public function testExceptionIsThrownIfProjectionSourceDataIsNotProduct()
     {
         $this->setExpectedException(InvalidProjectionSourceDataTypeException::class);
-        (new ProductSearchDocumentBuilder([]))->aggregate('invalid-projection-source-data');
+        $this->createInstance([])->aggregate('invalid-projection-source-data');
     }
 
     public function testSearchDocumentCollectionWithDocumentContainingIndexedAttributeIsReturned()
     {
-        $searchableAttributeCode = 'foo';
+        $searchableAttribute = 'foo';
         $attributeValues = ['bar'];
 
-        $attributesMap = [[$searchableAttributeCode, $attributeValues]];
+        $attributesMap = [[$searchableAttribute, $attributeValues]];
         $stubProduct = $this->createStubProduct($attributesMap);
 
-        $searchDocumentBuilder = new ProductSearchDocumentBuilder([$searchableAttributeCode]);
+        $searchDocumentBuilder = $this->createInstance([$searchableAttribute]);
         $result = $searchDocumentBuilder->aggregate($stubProduct);
 
         $this->assertInstanceOf(SearchDocumentCollection::class, $result);
         $this->assertCount(1, $result);
-        $this->assertDocumentContainsField($result->getDocuments()[0], $searchableAttributeCode, $attributeValues);
+        $this->assertDocumentContainsField($result->getDocuments()[0], $searchableAttribute, $attributeValues);
     }
 
     public function testProductPriceIsIndexedIfProductHasNoSpecialPrice()
@@ -87,7 +116,7 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
         $attributesMap = [[$priceAttributeCode, $priceValues]];
         $stubProduct = $this->createStubProduct($attributesMap);
 
-        $searchDocumentBuilder = new ProductSearchDocumentBuilder([$priceAttributeCode]);
+        $searchDocumentBuilder = $this->createInstance([$priceAttributeCode]);
         $result = $searchDocumentBuilder->aggregate($stubProduct);
 
         $this->assertInstanceOf(SearchDocumentCollection::class, $result);
@@ -106,7 +135,7 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
         $attributesMap = [[$priceAttributeCode, $priceValues], [$specialPriceAttributeCode, $specialPriceValues]];
         $stubProduct = $this->createStubProduct($attributesMap);
 
-        $searchDocumentBuilder = new ProductSearchDocumentBuilder([$priceAttributeCode]);
+        $searchDocumentBuilder = $this->createInstance([$priceAttributeCode]);
         $result = $searchDocumentBuilder->aggregate($stubProduct);
 
         $this->assertInstanceOf(SearchDocumentCollection::class, $result);

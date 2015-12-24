@@ -888,4 +888,35 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertSame([], $searchEngineResponse->getProductIds());
     }
+
+    public function testItDoesNotReturnAnyFacetsIfTheRequestedFacetFiltersAreEmpty()
+    {
+        $fieldValue = ['qux', 'bar', 'baz'];
+
+        $documentA = $this->createSearchDocument(['foo' => $fieldValue], ProductId::fromString('A'));
+        $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($documentA);
+
+        $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
+        
+        
+        $criteria = SearchCriterionAnything::create();
+        $selectedFilters = ['foo' => ['bar']];
+        $facetFiltersToIncludeInResult = new FacetFiltersToIncludeInResult();
+        $rowsPerPage = 100;
+        $pageNumber = 0;
+        $sortOrderConfig = $this->createStubSortOrderConfig('foo', SortOrderDirection::DESC);
+        
+        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+            $criteria,
+            $selectedFilters,
+            $this->testContext,
+            $facetFiltersToIncludeInResult,
+            $rowsPerPage,
+            $pageNumber,
+            $sortOrderConfig
+        );
+
+        $this->assertContains('A', $searchEngineResponse->getProductIds());
+        $this->assertCount(0, $searchEngineResponse->getFacetFieldCollection());
+    }
 }

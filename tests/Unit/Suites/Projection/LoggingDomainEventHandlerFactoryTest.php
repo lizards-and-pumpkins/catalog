@@ -22,7 +22,8 @@ use LizardsAndPumpkins\UnitTestFactory;
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Product\ProductProjector
  * @uses   \LizardsAndPumpkins\Product\ProductInListingSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductSearchDocumentBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductSearch\ProductSearchDocumentBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductSearch\SearchableAttributeValueCollectorLocator
  * @uses   \LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\PriceSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer

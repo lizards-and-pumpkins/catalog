@@ -150,8 +150,11 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
         array $allDocuments,
         FacetFiltersToIncludeInResult $facetFilterRequest
     ) {
+        if (count($facetFilterRequest->getFields()) === 0) {
+            return [];
+        }
+        
         $facetFieldsForSelectedFilters = [];
-
         foreach (array_keys($selectedFilters) as $filterCode) {
             $selectedFiltersExceptCurrentOne = array_diff_key($selectedFilters, [$filterCode => []]);
 
@@ -192,25 +195,30 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     }
 
     /**
-     * @param string[] $fieldCodes
+     * @param string[] $selectedFacetFieldCodes
      * @param FacetFiltersToIncludeInResult $facetFilterRequest
      * @param SearchDocument[] $searchDocuments
      * @return FacetField[]
      */
     private function createFacetFieldsFromSearchDocuments(
-        array $fieldCodes,
+        array $selectedFacetFieldCodes,
         FacetFiltersToIncludeInResult $facetFilterRequest,
         SearchDocument ...$searchDocuments
     ) {
-        $attributeCounts = $this->createAttributeValueCountArrayFromSearchDocuments($fieldCodes, ...$searchDocuments);
+        $attributeCounts = $this->createAttributeValueCountArrayFromSearchDocuments(
+            $selectedFacetFieldCodes,
+            ...$searchDocuments
+        );
 
         return array_reduce(
             $facetFilterRequest->getFields(),
-            function (array $carry, FacetFilterRequestField $field) use ($attributeCounts, $fieldCodes) {
+            function (array $carry, FacetFilterRequestField $field) use ($attributeCounts, $selectedFacetFieldCodes) {
                 $attributeCode = $field->getAttributeCode();
                 $attributeCodeString = (string) $attributeCode;
 
-                if (!in_array($attributeCodeString, $fieldCodes) || !isset($attributeCounts[$attributeCodeString])) {
+                $isSelectedFilter = in_array($attributeCodeString, $selectedFacetFieldCodes);
+                $hasMatchingDocuments = isset($attributeCounts[$attributeCodeString]);
+                if (!$isSelectedFilter || !$hasMatchingDocuments) {
                     return $carry;
                 }
 

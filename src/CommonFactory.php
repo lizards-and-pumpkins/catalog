@@ -42,6 +42,8 @@ use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionBlockRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingTemplateProjector;
+use LizardsAndPumpkins\Product\ProductSearch\DefaultSearchableAttributeValueCollector;
+use LizardsAndPumpkins\Product\ProductSearch\SearchableAttributeValueCollectorLocator;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionBlockRenderer;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionSnippetRenderer;
@@ -59,7 +61,7 @@ use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnipp
 use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductProjector;
 use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
-use LizardsAndPumpkins\Product\ProductSearchDocumentBuilder;
+use LizardsAndPumpkins\Product\ProductSearch\ProductSearchDocumentBuilder;
 use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer;
 use LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator;
 use LizardsAndPumpkins\Projection\Catalog\Import\SimpleProductXmlToProductBuilder;
@@ -1076,7 +1078,10 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $this->getMasterFactory()->getAdditionalAttributesForSearchIndex()
         ));
 
-        return new ProductSearchDocumentBuilder($indexAttributeCodes);
+        return new ProductSearchDocumentBuilder(
+            $indexAttributeCodes,
+            $this->getMasterFactory()->createSearchableAttributeValueCollectorLocator()
+        );
     }
 
     /**
@@ -1451,5 +1456,21 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $this->getMasterFactory()->createBaseUrlBuilder(),
             $mediaBaseUrlPath
         );
+    }
+
+    /**
+     * @return SearchableAttributeValueCollectorLocator
+     */
+    public function createSearchableAttributeValueCollectorLocator()
+    {
+        return new SearchableAttributeValueCollectorLocator($this->getMasterFactory());
+    }
+
+    /**
+     * @return DefaultSearchableAttributeValueCollector
+     */
+    public function createDefaultSearchableAttributeValueCollector()
+    {
+        return new DefaultSearchableAttributeValueCollector();
     }
 }
