@@ -23,6 +23,7 @@ class DefaultSearchableAttributeValueCollector implements SearchableAttributeVal
         $this->specialPriceAttribute = AttributeCode::fromString(PriceSnippetRenderer::SPECIAL_PRICE);
         $this->priceAttribute = AttributeCode::fromString(PriceSnippetRenderer::PRICE);
     }
+    
     /**
      * @param Product $product
      * @param AttributeCode $attributeCode
@@ -30,9 +31,10 @@ class DefaultSearchableAttributeValueCollector implements SearchableAttributeVal
      */
     public function getValues(Product $product, AttributeCode $attributeCode)
     {
-        return $this->useSpecialPriceInsteadOfPrice($product, $attributeCode) ?
+        $values = $this->useSpecialPriceInsteadOfPrice($product, $attributeCode) ?
             $this->getAttributeValuesFromProduct($product, $this->specialPriceAttribute) :
             $this->getAttributeValuesFromProduct($product, $attributeCode);
+        return array_filter($values, 'is_scalar');
     }
 
     /**
@@ -42,7 +44,7 @@ class DefaultSearchableAttributeValueCollector implements SearchableAttributeVal
      */
     private function useSpecialPriceInsteadOfPrice(Product $product, AttributeCode $attributeCode)
     {
-        return $this->priceAttribute->isEqualTo($attributeCode) && $this->hasSpecialPrice($product);
+        return $attributeCode->isEqualTo($this->priceAttribute) && $this->hasSpecialPrice($product);
     }
 
     /**
@@ -59,8 +61,8 @@ class DefaultSearchableAttributeValueCollector implements SearchableAttributeVal
      * @param AttributeCode $attributeCode
      * @return string[]
      */
-    private function getAttributeValuesFromProduct(Product $product, AttributeCode $attributeCode)
+    protected function getAttributeValuesFromProduct(Product $product, AttributeCode $attributeCode)
     {
-        return array_filter($product->getAllValuesOfAttribute((string) $attributeCode), 'is_scalar');
+        return $product->getAllValuesOfAttribute((string) $attributeCode);
     }
 }
