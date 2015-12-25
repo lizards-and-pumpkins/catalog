@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Product\ProductSearch;
 
 use LizardsAndPumpkins\MasterFactory;
+use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Product\Product;
 
 class SearchableAttributeValueCollectorLocator
@@ -23,6 +24,10 @@ class SearchableAttributeValueCollectorLocator
      */
     public function forProduct(Product $product)
     {
-        return $this->factory->createDefaultSearchableAttributeValueCollector();
+        return $product instanceof ConfigurableProduct ?
+            $this->factory->createConfigurableProductSearchableAttributeValueCollector() :
+            $this->factory->createDefaultSearchableAttributeValueCollector();
     }
+    
+    
 }

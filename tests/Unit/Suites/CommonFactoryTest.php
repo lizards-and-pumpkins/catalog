@@ -29,6 +29,7 @@ use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
+use LizardsAndPumpkins\Product\ProductSearch\ConfigurableProductSearchableAttributeValueCollector;
 use LizardsAndPumpkins\Product\ProductSearch\DefaultSearchableAttributeValueCollector;
 use LizardsAndPumpkins\Product\ProductSearch\SearchableAttributeValueCollectorLocator;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
@@ -644,5 +645,11 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createDefaultSearchableAttributeValueCollector();
         $this->assertInstanceOf(DefaultSearchableAttributeValueCollector::class, $result);
+    }
+
+    public function testItReturnsAConfigurableProductSearchableAttributeValueCollector()
+    {
+        $result = $this->commonFactory->createConfigurableProductSearchableAttributeValueCollector();
+        $this->assertInstanceOf(ConfigurableProductSearchableAttributeValueCollector::class, $result);
     }
 }

@@ -42,6 +42,7 @@ use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionBlockRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingTemplateProjector;
+use LizardsAndPumpkins\Product\ProductSearch\ConfigurableProductSearchableAttributeValueCollector;
 use LizardsAndPumpkins\Product\ProductSearch\DefaultSearchableAttributeValueCollector;
 use LizardsAndPumpkins\Product\ProductSearch\SearchableAttributeValueCollectorLocator;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionBlockRenderer;
@@ -1472,5 +1473,13 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createDefaultSearchableAttributeValueCollector()
     {
         return new DefaultSearchableAttributeValueCollector();
+    }
+
+    /**
+     * @return ConfigurableProductSearchableAttributeValueCollector
+     */
+    public function createConfigurableProductSearchableAttributeValueCollector()
+    {
+        return new ConfigurableProductSearchableAttributeValueCollector();
     }
 }

@@ -30,7 +30,6 @@ class SearchEngineTest extends AbstractIntegrationTest
             ContextWebsite::CODE => 'ru',
         ]);
         $facetFieldRequest = new FacetFiltersToIncludeInResult(
-            new FacetFilterRequestSimpleField(AttributeCode::fromString('size')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('color'))
         );
         $rowsPerPage = 100;
@@ -43,24 +42,17 @@ class SearchEngineTest extends AbstractIntegrationTest
         /** @var SearchEngine $searchEngine */
         $searchEngine = $this->factory->getSearchEngine();
 
-        $selectedFiltersList = [
-            ['color' => ['Red'], 'size' => ['US 12.5 - EU 47']],
-            ['size'  => ['US 12.5 - EU 47']],
-            ['color' => ['Red']],
-        ];
+        $selectedFilters = ['color' => ['Red']];
+        $searchEngineResponse = $searchEngine->getSearchDocumentsMatchingCriteria(
+            SearchCriterionAnything::create(),
+            $selectedFilters,
+            $context,
+            $facetFieldRequest,
+            $rowsPerPage,
+            $pageNumber,
+            $sortOrderConfig
+        );
 
-        foreach ($selectedFiltersList as $selectedFilters) {
-            $searchEngineResponse = $searchEngine->getSearchDocumentsMatchingCriteria(
-                SearchCriterionAnything::create(),
-                $selectedFilters,
-                $context,
-                $facetFieldRequest,
-                $rowsPerPage,
-                $pageNumber,
-                $sortOrderConfig
-            );
-
-            $this->assertContains('M29540', $searchEngineResponse->getProductIds());
-        }
+        $this->assertContains('M29540', $searchEngineResponse->getProductIds());
     }
 }

@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Product\ProductSearch;
 
 use LizardsAndPumpkins\MasterFactory;
+use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Product\Product;
 
 /**
@@ -20,19 +21,32 @@ class SearchableAttributeValueCollectorLocatorTest extends \PHPUnit_Framework_Te
     protected function setUp()
     {
         /** @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject $stubFactory */
-        $methods = get_class_methods(MasterFactory::class);
+        $realMethods = get_class_methods(MasterFactory::class);
+        $testMethods = [
+            'createDefaultSearchableAttributeValueCollector',
+            'createConfigurableProductSearchableAttributeValueCollector'
+        ];
         $stubFactory = $this->getMockBuilder(MasterFactory::class)
-            ->setMethods(array_merge($methods, ['createDefaultSearchableAttributeValueCollector']))
+            ->setMethods(array_merge($realMethods, $testMethods))
             ->getMock();
         $stubFactory->method('createDefaultSearchableAttributeValueCollector')
             ->willReturn(new DefaultSearchableAttributeValueCollector());
+        $stubFactory->method('createConfigurableProductSearchableAttributeValueCollector')
+            ->willReturn(new ConfigurableProductSearchableAttributeValueCollector());
         $this->locator = new SearchableAttributeValueCollectorLocator($stubFactory);
     }
 
-    public function testItReturnsADefault()
+    public function testItReturnsADefaultCollector()
     {
         $product = $this->getMock(Product::class);
         $result = $this->locator->forProduct($product);
         $this->assertInstanceOf(DefaultSearchableAttributeValueCollector::class, $result);
+    }
+
+    public function testItReturnsAConfigurableProductAttributeValueCollectorForAConfigurableProduct()
+    {
+        $configurableProduct = $this->getMock(ConfigurableProduct::class, [], [], '', false);
+        $result = $this->locator->forProduct($configurableProduct);
+        $this->assertInstanceOf(ConfigurableProductSearchableAttributeValueCollector::class, $result);
     }
 }
