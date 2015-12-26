@@ -23,7 +23,7 @@ use LizardsAndPumpkins\UnitTestFactory;
  * @uses   \LizardsAndPumpkins\Product\ProductProjector
  * @uses   \LizardsAndPumpkins\Product\ProductInListingSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductSearch\ProductSearchDocumentBuilder
- * @uses   \LizardsAndPumpkins\Product\ProductSearch\SearchableAttributeValueCollectorLocator
+ * @uses   \LizardsAndPumpkins\Product\ProductSearch\AttributeValueCollectorLocator
  * @uses   \LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\PriceSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer

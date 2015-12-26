@@ -18,13 +18,13 @@ use LizardsAndPumpkins\Product\ProductId;
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection
- * @uses   \LizardsAndPumpkins\Product\ProductSearch\DefaultSearchableAttributeValueCollector
+ * @uses   \LizardsAndPumpkins\Product\ProductSearch\DefaultAttributeValueCollector
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  */
 class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var SearchableAttributeValueCollectorLocator|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeValueCollectorLocator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubValueCollectorLocator;
 
@@ -73,11 +73,11 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubValueCollectorLocator = $this->getMockBuilder(SearchableAttributeValueCollectorLocator::class)
+        $this->stubValueCollectorLocator = $this->getMockBuilder(AttributeValueCollectorLocator::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->stubValueCollectorLocator->method('forProduct')
-            ->willReturn(new DefaultSearchableAttributeValueCollector());
+            ->willReturn(new DefaultAttributeValueCollector());
     }
 
     public function testSearchDocumentBuilderInterfaceIsImplemented()

@@ -19,15 +19,15 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
     private $indexAttributeCodes;
 
     /**
-     * @var SearchableAttributeValueCollectorLocator
+     * @var AttributeValueCollectorLocator
      */
     private $valueCollectorLocator;
 
     /**
      * @param string[] $indexAttributeCodes
-     * @param SearchableAttributeValueCollectorLocator $valueCollector
+     * @param AttributeValueCollectorLocator $valueCollector
      */
-    public function __construct(array $indexAttributeCodes, SearchableAttributeValueCollectorLocator $valueCollector)
+    public function __construct(array $indexAttributeCodes, AttributeValueCollectorLocator $valueCollector)
     {
         $this->indexAttributeCodes = $indexAttributeCodes;
         $this->valueCollectorLocator = $valueCollector;

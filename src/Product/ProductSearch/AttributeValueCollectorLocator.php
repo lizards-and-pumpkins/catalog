@@ -6,7 +6,7 @@ use LizardsAndPumpkins\MasterFactory;
 use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Product\Product;
 
-class SearchableAttributeValueCollectorLocator
+class AttributeValueCollectorLocator
 {
     /**
      * @var MasterFactory
@@ -20,12 +20,12 @@ class SearchableAttributeValueCollectorLocator
     
     /**
      * @param Product $product
-     * @return DefaultSearchableAttributeValueCollector
+     * @return DefaultAttributeValueCollector
      */
     public function forProduct(Product $product)
     {
         return $product instanceof ConfigurableProduct ?
-            $this->factory->createConfigurableProductSearchableAttributeValueCollector() :
-            $this->factory->createDefaultSearchableAttributeValueCollector();
+            $this->factory->createConfigurableProductAttributeValueCollector() :
+            $this->factory->createDefaultAttributeValueCollector();
     }
 }

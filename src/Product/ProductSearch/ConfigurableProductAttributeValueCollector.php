@@ -6,7 +6,7 @@ use LizardsAndPumpkins\Product\AttributeCode;
 use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Product\Product;
 
-class ConfigurableProductSearchableAttributeValueCollector extends DefaultSearchableAttributeValueCollector
+class ConfigurableProductAttributeValueCollector extends DefaultAttributeValueCollector
 {
     /**
      * @param Product $product

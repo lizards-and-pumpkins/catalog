@@ -7,13 +7,13 @@ use LizardsAndPumpkins\Product\PriceSnippetRenderer;
 use LizardsAndPumpkins\Product\Product;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductSearch\DefaultSearchableAttributeValueCollector
+ * @covers \LizardsAndPumpkins\Product\ProductSearch\DefaultAttributeValueCollector
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  */
-class DefaultSearchableAttributeValueCollectorTest extends \PHPUnit_Framework_TestCase
+class DefaultAttributeValueCollectorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var DefaultSearchableAttributeValueCollector
+     * @var DefaultAttributeValueCollector
      */
     private $attributeValueCollector;
 
@@ -25,12 +25,12 @@ class DefaultSearchableAttributeValueCollectorTest extends \PHPUnit_Framework_Te
     protected function setUp()
     {
         $this->mockProduct = $this->getMock(Product::class);
-        $this->attributeValueCollector = new DefaultSearchableAttributeValueCollector();
+        $this->attributeValueCollector = new DefaultAttributeValueCollector();
     }
     
     public function testItImplementsTheSearchableProductAttributeValueCollectorInterface()
     {
-        $this->assertInstanceOf(SearchableAttributeValueCollector::class, $this->attributeValueCollector);
+        $this->assertInstanceOf(AttributeValueCollector::class, $this->attributeValueCollector);
     }
 
     public function testItReturnsTheProductAttributeValues()

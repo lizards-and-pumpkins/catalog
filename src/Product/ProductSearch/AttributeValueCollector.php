@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\Product\ProductSearch;
 use LizardsAndPumpkins\Product\AttributeCode;
 use LizardsAndPumpkins\Product\Product;
 
-interface SearchableAttributeValueCollector
+interface AttributeValueCollector
 {
     /**
      * @param Product $product

@@ -29,9 +29,9 @@ use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
-use LizardsAndPumpkins\Product\ProductSearch\ConfigurableProductSearchableAttributeValueCollector;
-use LizardsAndPumpkins\Product\ProductSearch\DefaultSearchableAttributeValueCollector;
-use LizardsAndPumpkins\Product\ProductSearch\SearchableAttributeValueCollectorLocator;
+use LizardsAndPumpkins\Product\ProductSearch\ConfigurableProductAttributeValueCollector;
+use LizardsAndPumpkins\Product\ProductSearch\DefaultAttributeValueCollector;
+use LizardsAndPumpkins\Product\ProductSearch\AttributeValueCollectorLocator;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
@@ -108,8 +108,8 @@ use LizardsAndPumpkins\Website\HostToWebsiteMap;
  * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionTemplateProjector
  * @uses   \LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductSearch\ProductSearchDocumentBuilder
- * @uses   \LizardsAndPumpkins\Product\ProductSearch\SearchableAttributeValueCollectorLocator
- * @uses   \LizardsAndPumpkins\Product\ProductSearch\DefaultSearchableAttributeValueCollector
+ * @uses   \LizardsAndPumpkins\Product\ProductSearch\AttributeValueCollectorLocator
+ * @uses   \LizardsAndPumpkins\Product\ProductSearch\DefaultAttributeValueCollector
  * @uses   \LizardsAndPumpkins\Product\ProductJsonSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\UpdateProductCommandHandler
@@ -635,21 +635,21 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(MediaBaseUrlBuilder::class, $result);
     }
 
-    public function testItReturnsASearchableAttributeValueCollectorLocator()
+    public function testItReturnsAnAttributeValueCollectorLocator()
     {
-        $result = $this->commonFactory->createSearchableAttributeValueCollectorLocator();
-        $this->assertInstanceOf(SearchableAttributeValueCollectorLocator::class, $result);
+        $result = $this->commonFactory->createAttributeValueCollectorLocator();
+        $this->assertInstanceOf(AttributeValueCollectorLocator::class, $result);
     }
 
-    public function testItReturnsADefaultSearchableAttributeValueCollector()
+    public function testItReturnsADefaultAttributeValueCollector()
     {
-        $result = $this->commonFactory->createDefaultSearchableAttributeValueCollector();
-        $this->assertInstanceOf(DefaultSearchableAttributeValueCollector::class, $result);
+        $result = $this->commonFactory->createDefaultAttributeValueCollector();
+        $this->assertInstanceOf(DefaultAttributeValueCollector::class, $result);
     }
 
-    public function testItReturnsAConfigurableProductSearchableAttributeValueCollector()
+    public function testItReturnsAConfigurableProductAttributeValueCollector()
     {
-        $result = $this->commonFactory->createConfigurableProductSearchableAttributeValueCollector();
-        $this->assertInstanceOf(ConfigurableProductSearchableAttributeValueCollector::class, $result);
+        $result = $this->commonFactory->createConfigurableProductAttributeValueCollector();
+        $this->assertInstanceOf(ConfigurableProductAttributeValueCollector::class, $result);
     }
 }

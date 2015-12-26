@@ -6,7 +6,7 @@ use LizardsAndPumpkins\Product\AttributeCode;
 use LizardsAndPumpkins\Product\PriceSnippetRenderer;
 use LizardsAndPumpkins\Product\Product;
 
-class DefaultSearchableAttributeValueCollector implements SearchableAttributeValueCollector
+class DefaultAttributeValueCollector implements AttributeValueCollector
 {
     /**
      * @var AttributeCode

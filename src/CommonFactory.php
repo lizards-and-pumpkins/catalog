@@ -42,9 +42,9 @@ use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionBlockRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingTemplateProjector;
-use LizardsAndPumpkins\Product\ProductSearch\ConfigurableProductSearchableAttributeValueCollector;
-use LizardsAndPumpkins\Product\ProductSearch\DefaultSearchableAttributeValueCollector;
-use LizardsAndPumpkins\Product\ProductSearch\SearchableAttributeValueCollectorLocator;
+use LizardsAndPumpkins\Product\ProductSearch\ConfigurableProductAttributeValueCollector;
+use LizardsAndPumpkins\Product\ProductSearch\DefaultAttributeValueCollector;
+use LizardsAndPumpkins\Product\ProductSearch\AttributeValueCollectorLocator;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionBlockRenderer;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionSnippetRenderer;
@@ -1081,7 +1081,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
 
         return new ProductSearchDocumentBuilder(
             $indexAttributeCodes,
-            $this->getMasterFactory()->createSearchableAttributeValueCollectorLocator()
+            $this->getMasterFactory()->createAttributeValueCollectorLocator()
         );
     }
 
@@ -1460,26 +1460,26 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return SearchableAttributeValueCollectorLocator
+     * @return AttributeValueCollectorLocator
      */
-    public function createSearchableAttributeValueCollectorLocator()
+    public function createAttributeValueCollectorLocator()
     {
-        return new SearchableAttributeValueCollectorLocator($this->getMasterFactory());
+        return new AttributeValueCollectorLocator($this->getMasterFactory());
     }
 
     /**
-     * @return DefaultSearchableAttributeValueCollector
+     * @return DefaultAttributeValueCollector
      */
-    public function createDefaultSearchableAttributeValueCollector()
+    public function createDefaultAttributeValueCollector()
     {
-        return new DefaultSearchableAttributeValueCollector();
+        return new DefaultAttributeValueCollector();
     }
 
     /**
-     * @return ConfigurableProductSearchableAttributeValueCollector
+     * @return ConfigurableProductAttributeValueCollector
      */
-    public function createConfigurableProductSearchableAttributeValueCollector()
+    public function createConfigurableProductAttributeValueCollector()
     {
-        return new ConfigurableProductSearchableAttributeValueCollector();
+        return new ConfigurableProductAttributeValueCollector();
     }
 }

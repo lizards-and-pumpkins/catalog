@@ -9,15 +9,15 @@ use LizardsAndPumpkins\Product\Composite\ProductVariationAttributeList;
 use LizardsAndPumpkins\Product\Product;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductSearch\ConfigurableProductSearchableAttributeValueCollector
- * @uses   \LizardsAndPumpkins\Product\ProductSearch\DefaultSearchableAttributeValueCollector
+ * @covers \LizardsAndPumpkins\Product\ProductSearch\ConfigurableProductAttributeValueCollector
+ * @uses   \LizardsAndPumpkins\Product\ProductSearch\DefaultAttributeValueCollector
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Product\Composite\AssociatedProductList
  */
-class ConfigurableProductSearchableAttributeValueCollectorTest extends \PHPUnit_Framework_TestCase
+class ConfigurableProductAttributeValueCollectorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ConfigurableProductSearchableAttributeValueCollector
+     * @var ConfigurableProductAttributeValueCollector
      */
     private $valueCollector;
 
@@ -62,12 +62,12 @@ class ConfigurableProductSearchableAttributeValueCollectorTest extends \PHPUnit_
 
     protected function setUp()
     {
-        $this->valueCollector = new ConfigurableProductSearchableAttributeValueCollector();
+        $this->valueCollector = new ConfigurableProductAttributeValueCollector();
     }
 
     public function testItIsASearchableAttributeValueCollector()
     {
-        $this->assertInstanceOf(SearchableAttributeValueCollector::class, $this->valueCollector);
+        $this->assertInstanceOf(AttributeValueCollector::class, $this->valueCollector);
     }
 
     public function testItReturnsTheAttributeValuesForConfigurableProducts()
