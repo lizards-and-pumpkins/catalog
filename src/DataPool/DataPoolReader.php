@@ -179,7 +179,7 @@ class DataPoolReader
         $pageNumber,
         SortOrderConfig $sortOrderConfig
     ) {
-        return $this->searchEngine->getSearchDocumentsMatchingCriteria(
+        return $this->searchEngine->query(
             $criteria,
             $selectedFilters,
             $context,

@@ -33,7 +33,7 @@ class ClearableStubSearchEngine implements SearchEngine, Clearable
      * @param SortOrderConfig $sortOrderConfig
      * @return void
      */
-    public function getSearchDocumentsMatchingCriteria(
+    public function query(
         SearchCriteria $criteria,
         array $filterSelection,
         Context $context,

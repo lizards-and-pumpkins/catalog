@@ -202,7 +202,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->getMock(Context::class);
 
-        $this->getMockSearchEngine()->expects($this->once())->method('getSearchDocumentsMatchingCriteria')
+        $this->getMockSearchEngine()->expects($this->once())->method('query')
             ->with($mockCriteria, $selectedFilters, $stubContext);
 
         /** @var FacetFiltersToIncludeInResult|\PHPUnit_Framework_MockObject_MockObject $stubFacetFilterRequest */

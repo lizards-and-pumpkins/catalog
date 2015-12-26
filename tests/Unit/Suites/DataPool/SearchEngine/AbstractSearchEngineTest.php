@@ -191,7 +191,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
 
-        $result = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+        $result = $this->searchEngine->query(
             $criteria,
             $selectedFilters,
             $this->testContext,
@@ -228,7 +228,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
 
-        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+        $searchEngineResponse = $this->searchEngine->query(
             $criteria,
             $selectedFilters,
             $queryContext,
@@ -268,7 +268,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
 
-        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+        $searchEngineResponse = $this->searchEngine->query(
             $criteria,
             $selectedFilters,
             $queryContext,
@@ -303,7 +303,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
 
-        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+        $searchEngineResponse = $this->searchEngine->query(
             $criteria,
             $selectedFilters,
             $this->testContext,
@@ -326,7 +326,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
 
-        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+        $searchEngineResponse = $this->searchEngine->query(
             $searchCriteria,
             $selectedFilters,
             $this->testContext,
@@ -359,7 +359,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
 
-        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+        $searchEngineResponse = $this->searchEngine->query(
             $searchCriteria,
             $selectedFilters,
             $this->testContext,
@@ -411,7 +411,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
 
-        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+        $searchEngineResponse = $this->searchEngine->query(
             $searchCriteria,
             $selectedFilters,
             $this->testContext,
@@ -468,7 +468,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
 
-        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+        $searchEngineResponse = $this->searchEngine->query(
             $criteria,
             $selectedFilters,
             $this->testContext,
@@ -501,7 +501,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
 
-        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+        $searchEngineResponse = $this->searchEngine->query(
             $criteria,
             $selectedFilters,
             $this->testContext,
@@ -542,7 +542,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
 
-        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+        $searchEngineResponse = $this->searchEngine->query(
             $criteria,
             $selectedFilters,
             $this->testContext,
@@ -590,7 +590,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
 
-        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+        $searchEngineResponse = $this->searchEngine->query(
             $criteria,
             $selectedFilters,
             $this->testContext,
@@ -635,7 +635,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $this->setExpectedException(NoFacetFieldTransformationRegisteredException::class);
 
-        $this->searchEngine->getSearchDocumentsMatchingCriteria(
+        $this->searchEngine->query(
             $criteria,
             $selectedFilters,
             $this->testContext,
@@ -687,7 +687,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
 
-        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+        $searchEngineResponse = $this->searchEngine->query(
             $criteria,
             $selectedFilters,
             $this->testContext,
@@ -725,7 +725,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $pageNumber = 1;
         $sortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
 
-        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+        $searchEngineResponse = $this->searchEngine->query(
             $criteria,
             $selectedFilters,
             $this->testContext,
@@ -768,7 +768,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
 
-        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+        $searchEngineResponse = $this->searchEngine->query(
             $criteria,
             $selectedFilters,
             $this->testContext,
@@ -813,7 +813,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
 
-        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+        $searchEngineResponse = $this->searchEngine->query(
             $criteria,
             $selectedFilters,
             $this->testContext,
@@ -853,7 +853,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig($fieldName, SortOrderDirection::DESC);
 
-        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+        $searchEngineResponse = $this->searchEngine->query(
             $criteria,
             $selectedFilters,
             $this->testContext,
@@ -877,7 +877,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig('foo', SortOrderDirection::DESC);
 
-        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+        $searchEngineResponse = $this->searchEngine->query(
             $criteria,
             $selectedFilters,
             $this->testContext,
@@ -906,7 +906,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $pageNumber = 0;
         $sortOrderConfig = $this->createStubSortOrderConfig('foo', SortOrderDirection::DESC);
         
-        $searchEngineResponse = $this->searchEngine->getSearchDocumentsMatchingCriteria(
+        $searchEngineResponse = $this->searchEngine->query(
             $criteria,
             $selectedFilters,
             $this->testContext,

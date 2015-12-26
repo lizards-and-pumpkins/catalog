@@ -25,7 +25,7 @@ interface SearchEngine
      * @param SortOrderConfig $sortOrderConfig
      * @return SearchEngineResponse
      */
-    public function getSearchDocumentsMatchingCriteria(
+    public function query(
         SearchCriteria $criteria,
         array $filterSelection,
         Context $context,

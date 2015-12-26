@@ -43,7 +43,7 @@ class SearchEngineTest extends AbstractIntegrationTest
         $searchEngine = $this->factory->getSearchEngine();
 
         $selectedFilters = ['color' => ['Red']];
-        $searchEngineResponse = $searchEngine->getSearchDocumentsMatchingCriteria(
+        $searchEngineResponse = $searchEngine->query(
             SearchCriterionAnything::create(),
             $selectedFilters,
             $context,
