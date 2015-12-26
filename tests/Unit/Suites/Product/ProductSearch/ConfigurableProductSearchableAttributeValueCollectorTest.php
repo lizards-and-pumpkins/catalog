@@ -43,9 +43,9 @@ class ConfigurableProductSearchableAttributeValueCollectorTest extends \PHPUnit_
      */
     private function createMockProductWithAttributeValues($variationAttribute, array $values)
     {
-        $stubAssociatedProductA = $this->getMock(Product::class);
-        $stubAssociatedProductA->method('getAllValuesOfAttribute')->with($variationAttribute)->willReturn($values);
-        return $stubAssociatedProductA;
+        $stubAssociatedProduct = $this->getMock(Product::class);
+        $stubAssociatedProduct->method('getAllValuesOfAttribute')->with($variationAttribute)->willReturn($values);
+        return $stubAssociatedProduct;
     }
 
     /**

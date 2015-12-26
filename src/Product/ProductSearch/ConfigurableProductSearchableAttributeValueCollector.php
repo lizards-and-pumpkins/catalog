@@ -28,8 +28,7 @@ class ConfigurableProductSearchableAttributeValueCollector extends DefaultSearch
      */
     private function isVariationAttribute(ConfigurableProduct $product, AttributeCode $attributeCode)
     {
-        $productVariationAttributeList = $product->getVariationAttributes();
-        foreach ($productVariationAttributeList as $variationAttribute) {
+        foreach ($product->getVariationAttributes() as $variationAttribute) {
             if ($attributeCode->isEqualTo($variationAttribute)) {
                 return true;
             }

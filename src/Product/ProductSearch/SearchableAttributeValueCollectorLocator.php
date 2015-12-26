@@ -28,6 +28,4 @@ class SearchableAttributeValueCollectorLocator
             $this->factory->createConfigurableProductSearchableAttributeValueCollector() :
             $this->factory->createDefaultSearchableAttributeValueCollector();
     }
-    
-    
 }

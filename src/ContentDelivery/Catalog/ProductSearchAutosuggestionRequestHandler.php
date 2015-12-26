@@ -157,7 +157,7 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
         );
         $selectedFilters = [];
         $facetFilterRequest = new FacetFiltersToIncludeInResult;
-        $rowsPerPage = 100; // TODO: Replace with configured number of suggestions to show
+        $rowsPerPage = 5; // TODO: Replace with configured number of suggestions to show
         $pageNumber = 0;
 
         return $this->dataPoolReader->getSearchResultsMatchingCriteria(

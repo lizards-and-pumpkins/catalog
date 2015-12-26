@@ -73,17 +73,16 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubValueCollectorLocator = $this->getMock(SearchableAttributeValueCollectorLocator::class, [], [], '', false);
+        $this->stubValueCollectorLocator = $this->getMockBuilder(SearchableAttributeValueCollectorLocator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->stubValueCollectorLocator->method('forProduct')
             ->willReturn(new DefaultSearchableAttributeValueCollector());
     }
 
     public function testSearchDocumentBuilderInterfaceIsImplemented()
     {
-        $this->assertInstanceOf(
-            SearchDocumentBuilder::class,
-            $this->createInstance([])
-        );
+        $this->assertInstanceOf(SearchDocumentBuilder::class, $this->createInstance([]));
     }
 
     public function testExceptionIsThrownIfProjectionSourceDataIsNotProduct()

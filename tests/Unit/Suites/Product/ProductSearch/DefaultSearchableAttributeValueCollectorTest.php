@@ -36,7 +36,7 @@ class DefaultSearchableAttributeValueCollectorTest extends \PHPUnit_Framework_Te
     public function testItReturnsTheProductAttributeValues()
     {
         $testAttributeCode = AttributeCode::fromString('foo');
-        $attributeValues = ['a', 'b', 'c']; 
+        $attributeValues = ['a', 'b', 'c'];
         $this->mockProduct->expects($this->once())
             ->method('getAllValuesOfAttribute')->with($testAttributeCode)
             ->willReturn($attributeValues);

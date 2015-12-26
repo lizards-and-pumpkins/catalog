@@ -1,9 +1,6 @@
 <?php
 
-
 namespace LizardsAndPumpkins;
-
-use LizardsAndPumpkins\Queue\Queue;
 
 interface QueueMessageConsumer
 {
