@@ -1,12 +1,15 @@
 <?php
 
-namespace LizardsAndPumpkins\Product;
+namespace LizardsAndPumpkins\Product\ProductSearch;
 
 use LizardsAndPumpkins\Exception\InvalidProjectionSourceDataTypeException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
+use LizardsAndPumpkins\Product\AttributeCode;
+use LizardsAndPumpkins\Product\PriceSnippetRenderer;
+use LizardsAndPumpkins\Product\Product;
 
 class ProductSearchDocumentBuilder implements SearchDocumentBuilder
 {
@@ -16,15 +19,22 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
     private $indexAttributeCodes;
 
     /**
-     * @param string[] $indexAttributeCodes
+     * @var AttributeValueCollectorLocator
      */
-    public function __construct(array $indexAttributeCodes)
+    private $valueCollectorLocator;
+
+    /**
+     * @param string[] $indexAttributeCodes
+     * @param AttributeValueCollectorLocator $valueCollector
+     */
+    public function __construct(array $indexAttributeCodes, AttributeValueCollectorLocator $valueCollector)
     {
         $this->indexAttributeCodes = $indexAttributeCodes;
+        $this->valueCollectorLocator = $valueCollector;
     }
 
     /**
-     * @param mixed $projectionSourceData
+     * @param Product $projectionSourceData
      * @return SearchDocumentCollection
      */
     public function aggregate($projectionSourceData)
@@ -70,22 +80,7 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
      */
     private function getAttributeValuesForSearchDocument(Product $product, $attributeCode)
     {
-        return array_filter($this->getProductAttributeValues($product, $attributeCode), 'is_scalar');
-    }
-
-    /**
-     * @param Product $product
-     * @param string $attributeCode
-     * @return string[]
-     */
-    private function getProductAttributeValues(Product $product, $attributeCode)
-    {
-        $specialPriceAttributeCode = PriceSnippetRenderer::SPECIAL_PRICE;
-
-        if (PriceSnippetRenderer::PRICE === $attributeCode && $product->hasAttribute($specialPriceAttributeCode)) {
-            return $product->getAllValuesOfAttribute($specialPriceAttributeCode);
-        }
-
-        return $product->getAllValuesOfAttribute($attributeCode);
+        $collector = $this->valueCollectorLocator->forProduct($product);
+        return $collector->getValues($product, AttributeCode::fromString($attributeCode));
     }
 }

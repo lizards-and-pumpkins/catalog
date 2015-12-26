@@ -22,7 +22,8 @@ use LizardsAndPumpkins\UnitTestFactory;
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Product\ProductProjector
  * @uses   \LizardsAndPumpkins\Product\ProductInListingSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductSearchDocumentBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductSearch\ProductSearchDocumentBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductSearch\AttributeValueCollectorLocator
  * @uses   \LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\PriceSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer
@@ -53,7 +54,7 @@ use LizardsAndPumpkins\UnitTestFactory;
  * @uses   \LizardsAndPumpkins\Content\ContentBlockProjector
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolWriter
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder

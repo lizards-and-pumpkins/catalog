@@ -42,6 +42,11 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
         $this->domainEventConsumer = new DomainEventConsumer($this->stubQueue, $this->mockLocator, $this->mockLogger);
     }
 
+    public function testItIsAQueueMessageConsumer()
+    {
+        $this->assertInstanceOf(QueueMessageConsumer::class, $this->domainEventConsumer);
+    }
+
     public function testItCallsNextIfQueueIsReady()
     {
         $stubDomainEvent = $this->getMock(DomainEvent::class);

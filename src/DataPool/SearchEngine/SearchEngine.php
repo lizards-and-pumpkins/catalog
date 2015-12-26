@@ -19,17 +19,17 @@ interface SearchEngine
      * @param SearchCriteria $criteria
      * @param array[] $filterSelection
      * @param Context $context
-     * @param FacetFilterRequest $facetFilterRequest
+     * @param FacetFiltersToIncludeInResult $facetFilterRequest
      * @param int $rowsPerPage
      * @param int $pageNumber
      * @param SortOrderConfig $sortOrderConfig
      * @return SearchEngineResponse
      */
-    public function getSearchDocumentsMatchingCriteria(
+    public function query(
         SearchCriteria $criteria,
         array $filterSelection,
         Context $context,
-        FacetFilterRequest $facetFilterRequest,
+        FacetFiltersToIncludeInResult $facetFilterRequest,
         $rowsPerPage,
         $pageNumber,
         SortOrderConfig $sortOrderConfig

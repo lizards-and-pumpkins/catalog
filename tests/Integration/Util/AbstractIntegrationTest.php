@@ -5,9 +5,13 @@ namespace LizardsAndPumpkins;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
+use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Http\HttpRequestBody;
+use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Log\LogMessage;
+use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
 use LizardsAndPumpkins\Queue\Queue;
 
 abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
@@ -43,10 +47,19 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
      */
     final protected function prepareIntegrationTestMasterFactoryForRequest(HttpRequest $request)
     {
+        $factory = $this->prepareIntegrationTestMasterFactory();
+        $factory->register(new FrontendFactory($request));
+        return $factory;
+    }
+    
+    /**
+     * @return SampleMasterFactory
+     */
+    final protected function prepareIntegrationTestMasterFactory()
+    {
         $factory = new SampleMasterFactory();
         $factory->register(new CommonFactory());
         $this->registerIntegrationTestFactory($factory);
-        $factory->register(new FrontendFactory($request));
         return $factory;
     }
 
@@ -109,5 +122,22 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
         $factory->setCommandQueue($this->commandQueue);
         $factory->setSearchEngine($this->searchEngine);
         $factory->setUrlKeyStore($this->urlKeyStore);
+    }
+
+    final protected function importCatalogFixture(MasterFactory $factory)
+    {
+        /** @var CatalogImport $import */
+        $import = $factory->createCatalogImport();
+        $import->importFile(__DIR__ . '/../../shared-fixture/catalog.xml');
+
+        $this->processQueueWhileMessagesPending($factory->getCommandQueue(), $factory->createCommandConsumer());
+        $this->processQueueWhileMessagesPending($factory->getEventQueue(), $factory->createDomainEventConsumer());
+    }
+    
+    private function processQueueWhileMessagesPending(Queue $queue, QueueMessageConsumer $consumer)
+    {
+        while ($queue->count()) {
+            $consumer->process();
+        }
     }
 }

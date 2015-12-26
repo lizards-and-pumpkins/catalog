@@ -29,6 +29,9 @@ use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
+use LizardsAndPumpkins\Product\ProductSearch\ConfigurableProductAttributeValueCollector;
+use LizardsAndPumpkins\Product\ProductSearch\DefaultAttributeValueCollector;
+use LizardsAndPumpkins\Product\ProductSearch\AttributeValueCollectorLocator;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
@@ -66,7 +69,7 @@ use LizardsAndPumpkins\Website\HostToWebsiteMap;
  * @uses   \LizardsAndPumpkins\UnitTestFactory
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolWriter
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder
@@ -104,7 +107,9 @@ use LizardsAndPumpkins\Website\HostToWebsiteMap;
  * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionTemplateProjector
  * @uses   \LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductSearchDocumentBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductSearch\ProductSearchDocumentBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductSearch\AttributeValueCollectorLocator
+ * @uses   \LizardsAndPumpkins\Product\ProductSearch\DefaultAttributeValueCollector
  * @uses   \LizardsAndPumpkins\Product\ProductJsonSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\UpdateProductCommandHandler
@@ -628,5 +633,23 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createMediaBaseUrlBuilder();
         $this->assertInstanceOf(MediaBaseUrlBuilder::class, $result);
+    }
+
+    public function testItReturnsAnAttributeValueCollectorLocator()
+    {
+        $result = $this->commonFactory->createAttributeValueCollectorLocator();
+        $this->assertInstanceOf(AttributeValueCollectorLocator::class, $result);
+    }
+
+    public function testItReturnsADefaultAttributeValueCollector()
+    {
+        $result = $this->commonFactory->createDefaultAttributeValueCollector();
+        $this->assertInstanceOf(DefaultAttributeValueCollector::class, $result);
+    }
+
+    public function testItReturnsAConfigurableProductAttributeValueCollector()
+    {
+        $result = $this->commonFactory->createConfigurableProductAttributeValueCollector();
+        $this->assertInstanceOf(ConfigurableProductAttributeValueCollector::class, $result);
     }
 }

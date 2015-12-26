@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\KeyValue\Exception\KeyNotFoundException;
-use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\Exception\UnableToHandleRequestException;
@@ -113,8 +113,8 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $stubSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $stubSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->testMetaInfoKey);
 
-        /** @var FacetFilterRequest|\PHPUnit_Framework_MockObject_MockObject $stubFacetFilterRequest */
-        $stubFacetFilterRequest = $this->getMock(FacetFilterRequest::class, [], [], '', false);
+        /** @var FacetFiltersToIncludeInResult|\PHPUnit_Framework_MockObject_MockObject $stubFacetFilterRequest */
+        $stubFacetFilterRequest = $this->getMock(FacetFiltersToIncludeInResult::class, [], [], '', false);
 
         $stubProductListingPageContentBuilder = $this->createStubProductListingPageContentBuilder();
 

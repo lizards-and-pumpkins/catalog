@@ -6,7 +6,7 @@ use LizardsAndPumpkins\CommonFactory;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
-use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\FileUrlKeyStore;
 use LizardsAndPumpkins\Image\ImageProcessor;
@@ -41,7 +41,7 @@ use LizardsAndPumpkins\Website\WebsiteToCountryMap;
  * @uses   \LizardsAndPumpkins\Log\Writer\FileLogMessageWriter
  * @uses   \LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestRangedField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine
@@ -137,13 +137,13 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
     public function testProductListingFilterNavigationConfigIsInstanceOfFacetFilterRequest()
     {
         $result = $this->factory->getProductListingFilterNavigationConfig();
-        $this->assertInstanceOf(FacetFilterRequest::class, $result);
+        $this->assertInstanceOf(FacetFiltersToIncludeInResult::class, $result);
     }
 
     public function testProductSearchResultsFilterNavigationConfigIsInstanceOfFacetFilterRequest()
     {
         $result = $this->factory->getProductSearchResultsFilterNavigationConfig();
-        $this->assertInstanceOf(FacetFilterRequest::class, $result);
+        $this->assertInstanceOf(FacetFiltersToIncludeInResult::class, $result);
     }
 
     public function testArrayOfAdditionalAttributeCodesForSearchEngineIsReturned()

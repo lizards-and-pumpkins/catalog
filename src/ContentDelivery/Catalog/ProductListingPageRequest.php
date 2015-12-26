@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
 use LizardsAndPumpkins\ContentDelivery\Catalog\Exception\NoSelectedSortOrderException;
-use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Product\AttributeCode;
 
@@ -47,10 +47,10 @@ class ProductListingPageRequest
 
     /**
      * @param HttpRequest $request
-     * @param FacetFilterRequest $facetFilterRequest
+     * @param FacetFiltersToIncludeInResult $facetFilterRequest
      * @return array[]
      */
-    public function getSelectedFilterValues(HttpRequest $request, FacetFilterRequest $facetFilterRequest)
+    public function getSelectedFilterValues(HttpRequest $request, FacetFiltersToIncludeInResult $facetFilterRequest)
     {
         $facetFilterAttributeCodeStrings = $facetFilterRequest->getAttributeCodeStrings();
         return array_reduce($facetFilterAttributeCodeStrings, function (array $carry, $filterName) use ($request) {

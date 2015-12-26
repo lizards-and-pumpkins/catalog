@@ -9,7 +9,7 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
 use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
-use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField;
 use LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
@@ -105,7 +105,7 @@ class IntegrationTestFactory implements Factory
      */
     public function getProductListingFilterNavigationConfig()
     {
-        return new FacetFilterRequest(
+        return new FacetFiltersToIncludeInResult(
             new FacetFilterRequestSimpleField(AttributeCode::fromString('gender')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('brand')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('price')),
@@ -118,7 +118,7 @@ class IntegrationTestFactory implements Factory
      */
     public function getProductSearchResultsFilterNavigationConfig()
     {
-        return new FacetFilterRequest(
+        return new FacetFiltersToIncludeInResult(
             new FacetFilterRequestSimpleField(AttributeCode::fromString('gender')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('brand')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('category')),

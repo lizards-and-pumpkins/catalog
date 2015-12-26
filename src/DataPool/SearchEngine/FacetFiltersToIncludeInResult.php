@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
-class FacetFilterRequest
+class FacetFiltersToIncludeInResult
 {
     /**
      * @var FacetFilterRequestField[]

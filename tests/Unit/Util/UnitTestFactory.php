@@ -7,7 +7,7 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
-use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
@@ -74,7 +74,7 @@ class UnitTestFactory implements Factory
      */
     public function getProductListingFilterNavigationConfig()
     {
-        return $this->mockObjectGenerator->getMock(FacetFilterRequest::class, [], [], '', true, true, true, true, true);
+        return $this->mockObjectGenerator->getMock(FacetFiltersToIncludeInResult::class, [], [], '', true, true, true, true, true);
     }
 
     /**
@@ -82,7 +82,7 @@ class UnitTestFactory implements Factory
      */
     public function getProductSearchResultsFilterNavigationConfig()
     {
-        return $this->mockObjectGenerator->getMock(FacetFilterRequest::class, [], [], '', true, true, true, true, true);
+        return $this->mockObjectGenerator->getMock(FacetFiltersToIncludeInResult::class, [], [], '', true, true, true, true, true);
     }
 
     /**

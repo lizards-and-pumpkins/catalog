@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\DataPool\Stub;
 
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
@@ -27,17 +27,17 @@ class ClearableStubSearchEngine implements SearchEngine, Clearable
      * @param SearchCriteria $criteria
      * @param array $filterSelection
      * @param Context $context
-     * @param FacetFilterRequest $facetFilterRequest
+     * @param FacetFiltersToIncludeInResult $facetFilterRequest
      * @param int $rowsPerPage
      * @param int $pageNumber
      * @param SortOrderConfig $sortOrderConfig
      * @return void
      */
-    public function getSearchDocumentsMatchingCriteria(
+    public function query(
         SearchCriteria $criteria,
         array $filterSelection,
         Context $context,
-        FacetFilterRequest $facetFilterRequest,
+        FacetFiltersToIncludeInResult $facetFilterRequest,
         $rowsPerPage,
         $pageNumber,
         SortOrderConfig $sortOrderConfig

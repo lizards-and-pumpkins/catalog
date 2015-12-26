@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
-use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\InMemoryUrlKeyStore;
@@ -95,13 +95,13 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
     public function testProductListingFilterNavigationConfigIsInstanceOfFacetFilterRequest()
     {
         $result = $this->factory->getProductListingFilterNavigationConfig();
-        $this->assertInstanceOf(FacetFilterRequest::class, $result);
+        $this->assertInstanceOf(FacetFiltersToIncludeInResult::class, $result);
     }
 
     public function testProductSearchResultsFilterNavigationConfigIsInstanceOfFacetFilterRequest()
     {
         $result = $this->factory->getProductSearchResultsFilterNavigationConfig();
-        $this->assertInstanceOf(FacetFilterRequest::class, $result);
+        $this->assertInstanceOf(FacetFiltersToIncludeInResult::class, $result);
     }
 
     public function testImageProcessorCollectionIsReturned()

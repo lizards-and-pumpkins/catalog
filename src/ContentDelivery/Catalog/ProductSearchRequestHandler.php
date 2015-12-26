@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
-use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequest;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -64,7 +64,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
      * @param Context $context
      * @param DataPoolReader $dataPoolReader
      * @param SnippetKeyGenerator $metaInfoSnippetKeyGenerator
-     * @param FacetFilterRequest $facetFilterRequest
+     * @param FacetFiltersToIncludeInResult $facetFilterRequest
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param string[] $searchableAttributeCodes
      * @param ProductListingPageContentBuilder $productListingPageContentBuilder
@@ -74,7 +74,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         Context $context,
         DataPoolReader $dataPoolReader,
         SnippetKeyGenerator $metaInfoSnippetKeyGenerator,
-        FacetFilterRequest $facetFilterRequest,
+        FacetFiltersToIncludeInResult $facetFilterRequest,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         array $searchableAttributeCodes,
         ProductListingPageContentBuilder $productListingPageContentBuilder,
