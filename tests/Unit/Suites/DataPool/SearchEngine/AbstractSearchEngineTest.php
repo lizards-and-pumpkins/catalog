@@ -891,16 +891,16 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     public function testItDoesNotReturnAnyFacetsIfTheRequestedFacetFiltersAreEmpty()
     {
-        $fieldValue = ['qux', 'bar', 'baz'];
+        $fieldValue = ['foo', 'bar', 'baz'];
 
-        $documentA = $this->createSearchDocument(['foo' => $fieldValue], ProductId::fromString('A'));
+        $documentA = $this->createSearchDocument(['qux' => $fieldValue], ProductId::fromString('A'));
         $stubSearchDocumentCollection = $this->createStubSearchDocumentCollection($documentA);
 
         $this->searchEngine->addSearchDocumentCollection($stubSearchDocumentCollection);
         
         
         $criteria = SearchCriterionAnything::create();
-        $selectedFilters = ['foo' => ['bar']];
+        $selectedFilters = ['qux' => ['bar']];
         $facetFiltersToIncludeInResult = new FacetFiltersToIncludeInResult();
         $rowsPerPage = 100;
         $pageNumber = 0;
