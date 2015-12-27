@@ -115,7 +115,7 @@ require(
 
         function createSortingSelectOption(config) {
             var sortingOption = document.createElement('OPTION');
-            sortingOption.textContent = config['code'];
+            sortingOption.textContent = attributeTranslation[config['code']];
             sortingOption.value = url.updateQueryParameters({
                 "order": config['code'],
                 "dir": config['selectedDirection']

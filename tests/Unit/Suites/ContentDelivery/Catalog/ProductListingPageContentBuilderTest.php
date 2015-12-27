@@ -80,9 +80,9 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
     private $addSnippetsToPageSpy;
 
     /**
-     * @var TranslatorRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Translator|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubTranslatorRegistry;
+    private $stubTranslator;
 
     /**
      * @var FacetFieldCollection|\PHPUnit_Framework_MockObject_MockObject
@@ -178,14 +178,20 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
             ->willReturn($stubSnippetKeyGenerator);
 
         $this->mockPageBuilder = $this->createMockPageBuilder();
-        $this->stubTranslatorRegistry = $this->getMock(TranslatorRegistry::class, [], [], '', false);
+
+        $this->stubTranslator = $this->getMock(Translator::class);
+
+        /** @var TranslatorRegistry|\PHPUnit_Framework_MockObject_MockObject $stubTranslatorRegistry */
+        $stubTranslatorRegistry = $this->getMock(TranslatorRegistry::class, [], [], '', false);
+        $stubTranslatorRegistry->method('getTranslatorForLocale')->willReturn($this->stubTranslator);
+
         $this->stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
 
         $this->pageContentBuilder = new ProductListingPageContentBuilder(
             $this->stubDataPoolReader,
             $stubSnippetKeyGeneratorLocator,
             $this->mockPageBuilder,
-            $this->stubTranslatorRegistry,
+            $stubTranslatorRegistry,
             $this->stubSortOrderConfig
         );
 
@@ -409,23 +415,25 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertDynamicSnippetWasAddedToPageBuilder($snippetCode, $expectedSnippetValue);
     }
 
-    public function testFilterAttributeTranslationsAreAddedToPageBuilder()
+    public function testAttributeTranslationsAreAddedToPageBuilder()
     {
-        $stubAttributeACode = 'A';
-        $stubFacetFieldA = $this->createStubFacetField($stubAttributeACode);
+        $stubAttributeACodeString = 'A';
+        $stubFacetFieldA = $this->createStubFacetField($stubAttributeACodeString);
 
-        $stubAttributeBCode = 'B';
-        $stubFacetFieldB = $this->createStubFacetField($stubAttributeBCode);
+        $stubAttributeBCodeString = 'B';
+        $stubFacetFieldB = $this->createStubFacetField($stubAttributeBCodeString);
+
+        $stubAttributeCCodeString = 'C';
+        $stubAttributeCCode = $this->getMock(AttributeCode::class, [], [], '', false);
+        $stubAttributeCCode->method('__toString')->willReturn($stubAttributeCCodeString);
 
         $this->stubFacetFieldCollection->method('getFacetFields')->willReturn([$stubFacetFieldA, $stubFacetFieldB]);
+        $this->stubSortOrderConfig->method('getAttributeCode')->willReturn($stubAttributeCCode);
         $this->stubDataPoolReader->method('getSnippets')->willReturn([]);
 
-        $stubTranslator = $this->getMock(Translator::class);
-        $stubTranslator->method('translate')->willReturnCallback(function ($string) {
+        $this->stubTranslator->method('translate')->willReturnCallback(function ($string) {
             return sprintf('%s en français', $string);
         });
-
-        $this->stubTranslatorRegistry->method('getTranslatorForLocale')->willReturn($stubTranslator);
 
         $this->pageContentBuilder->buildPageContent(
             $this->stubPageMetaInfoSnippetContent,
@@ -437,7 +445,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
         );
 
         $snippetCode = 'attribute_translation';
-        $expectedSnippetValue = '{"A":"A en fran\u00e7ais","B":"B en fran\u00e7ais"}';
+        $expectedSnippetValue = '{"A":"A en fran\u00e7ais","B":"B en fran\u00e7ais","C":"C en fran\u00e7ais"}';
 
         $this->assertDynamicSnippetWasAddedToPageBuilder($snippetCode, $expectedSnippetValue);
     }

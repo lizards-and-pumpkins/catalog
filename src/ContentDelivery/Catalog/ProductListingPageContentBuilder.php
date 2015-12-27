@@ -14,6 +14,7 @@ use LizardsAndPumpkins\Product\PriceSnippetRenderer;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
+use LizardsAndPumpkins\Renderer\Translation\Translator;
 use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 
@@ -252,14 +253,45 @@ class ProductListingPageContentBuilder
         FacetFieldCollection $facetFieldCollection,
         Context $context
     ) {
-        $facetFields = $facetFieldCollection->getFacetFields();
         $translator = $this->translatorRegistry->getTranslatorForLocale($context->getValue(ContextLocale::CODE));
 
-        $translations = array_reduce($facetFields, function (array $carry, FacetField $facetField) use ($translator) {
+        $facetFieldAttributesTranslations = $this->getFilterAttributesTranslations($facetFieldCollection, $translator);
+        $sortingAttributeTranslations = $this->getSortingAttributesTranslations($translator);
+
+        $translationsJson = json_encode(array_merge($facetFieldAttributesTranslations, $sortingAttributeTranslations));
+
+        $this->addDynamicSnippetToPageBuilder('attribute_translation', $translationsJson);
+    }
+
+    /**
+     * @param FacetFieldCollection $facetFields
+     * @param Translator $translator
+     * @return string[]
+     */
+    private function getFilterAttributesTranslations(FacetFieldCollection $facetFields, Translator $translator)
+    {
+        $facetFields = $facetFields->getFacetFields();
+
+        return array_reduce($facetFields, function (array $carry, FacetField $facetField) use ($translator) {
             $attributeCodeString = (string) $facetField->getAttributeCode();
             return array_merge($carry, [$attributeCodeString => $translator->translate($attributeCodeString)]);
         }, []);
+    }
 
-        $this->addDynamicSnippetToPageBuilder('attribute_translation', json_encode($translations));
+    /**
+     * @param Translator $translator
+     * @return string[]
+     */
+    private function getSortingAttributesTranslations(Translator $translator)
+    {
+        return array_reduce(
+            $this->sortOrderConfigs,
+            function (array $carry, SortOrderConfig $sortOrderConfig) use ($translator) {
+                $attributeCodeString = (string) $sortOrderConfig->getAttributeCode();
+
+                return array_merge($carry, [$attributeCodeString => $translator->translate($attributeCodeString)]);
+            },
+            []
+        );
     }
 }
