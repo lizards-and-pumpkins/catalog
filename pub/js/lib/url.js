@@ -9,7 +9,7 @@ define(function () {
 
         for (var key in parameters) {
             if (parameters.hasOwnProperty(key)) {
-                pairs.push(encodeURIComponent(key + '=' + parameters[key]));
+                pairs.push(encodeURIComponent(key) + '=' + encodeURIComponent(parameters[key]));
             }
         }
 
