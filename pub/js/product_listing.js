@@ -50,8 +50,8 @@ require(
 
         function setTotalNumberOfProductsInSelection(totalNumberOfResults, selector) {
             Array.prototype.map.call(document.querySelectorAll(selector), function (targetElement) {
-                var textNode = document.createTextNode(totalNumberOfResults + ' Items');
-                targetElement.appendChild(textNode);
+                var textNode = document.createTextNode(totalNumberOfResults);
+                targetElement.insertBefore(textNode, targetElement.firstChild);
             });
         }
 
