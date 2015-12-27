@@ -15,12 +15,12 @@ define(['lib/url', 'pagination'], function (url, pagination) {
     }
 
     var FilterNavigation = {
-        renderLayeredNavigation: function (filterNavigationJson, filterNavigationPlaceholderSelector) {
+        renderLayeredNavigation: function (filterNavigationJson, placeholderSelector, attributesTranslation) {
             if (typeof filterNavigationJson !== 'object') {
                 return;
             }
 
-            var filterNavigation = document.querySelector(filterNavigationPlaceholderSelector);
+            var filterNavigation = document.querySelector(placeholderSelector);
 
             if (null === filterNavigation) {
                 return;
@@ -38,7 +38,7 @@ define(['lib/url', 'pagination'], function (url, pagination) {
 
                 var heading = document.createElement('DIV');
                 heading.className = 'block-title roundedBorder expanded';
-                heading.textContent = filterCode;
+                heading.textContent = attributesTranslation[filterCode];
 
                 var filterContainer = document.createElement('DIV');
                 filterContainer.className = 'filter-container';

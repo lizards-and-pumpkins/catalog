@@ -3,7 +3,9 @@
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\ContentDelivery\PageBuilder;
@@ -12,6 +14,7 @@ use LizardsAndPumpkins\Product\PriceSnippetRenderer;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
+use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 
 class ProductListingPageContentBuilder
@@ -32,6 +35,11 @@ class ProductListingPageContentBuilder
     private $pageBuilder;
 
     /**
+     * @var TranslatorRegistry
+     */
+    private $translatorRegistry;
+
+    /**
      * @var SortOrderConfig[]
      */
     private $sortOrderConfigs;
@@ -40,12 +48,14 @@ class ProductListingPageContentBuilder
         DataPoolReader $dataPoolReader,
         SnippetKeyGeneratorLocator $keyGeneratorLocator,
         PageBuilder $pageBuilder,
+        TranslatorRegistry $translatorRegistry,
         SortOrderConfig ...$sortOrderConfigs
     ) {
         $this->dataPoolReader = $dataPoolReader;
         $this->keyGeneratorLocator = $keyGeneratorLocator;
         $this->pageBuilder = $pageBuilder;
         $this->sortOrderConfigs = $sortOrderConfigs;
+        $this->translatorRegistry = $translatorRegistry;
     }
 
     public function buildPageContent(
@@ -65,6 +75,7 @@ class ProductListingPageContentBuilder
             $this->addProductsInListingToPageBuilder($context, ...$productIds);
             $this->addPaginationSnippetsToPageBuilder($searchEngineResponse, $productsPerPage);
             $this->addSortOrderSnippetToPageBuilder($selectedSortOrderConfig);
+            $this->addFilterAttributeTranslationsToPageBuilder($facetFieldCollection, $context);
         }
 
         return $this->pageBuilder->buildPage($metaInfo, $context, $keyGeneratorParams);
@@ -235,5 +246,20 @@ class ProductListingPageContentBuilder
         $snippetKeyToContentMap = [$snippetCode => $snippetContents];
 
         $this->pageBuilder->addSnippetsToPage($snippetCodeToKeyMap, $snippetKeyToContentMap);
+    }
+
+    private function addFilterAttributeTranslationsToPageBuilder(
+        FacetFieldCollection $facetFieldCollection,
+        Context $context
+    ) {
+        $facetFields = $facetFieldCollection->getFacetFields();
+        $translator = $this->translatorRegistry->getTranslatorForLocale($context->getValue(ContextLocale::CODE));
+
+        $translations = array_reduce($facetFields, function (array $carry, FacetField $facetField) use ($translator) {
+            $attributeCodeString = (string) $facetField->getAttributeCode();
+            return array_merge($carry, [$attributeCodeString => $translator->translate($attributeCodeString)]);
+        }, []);
+
+        $this->addDynamicSnippetToPageBuilder('attribute_translation', json_encode($translations));
     }
 }

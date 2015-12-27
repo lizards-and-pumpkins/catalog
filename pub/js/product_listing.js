@@ -6,7 +6,7 @@ require(
 
         domReady(function () {
             productGrid.renderGrid(productListingJson, productPrices, '#products-grid-container');
-            filterNavigation.renderLayeredNavigation(filterNavigationJson, '#filter-navigation');
+            filterNavigation.renderLayeredNavigation(filterNavigationJson, '#filter-navigation', attributeTranslation);
             pagination.renderPagination(totalNumberOfResults, productsPerPage, '#pagination');
             setTotalNumberOfProductsInSelection(totalNumberOfResults, '.toolbar .amount');
             renderProductsPerPageLinks(productsPerPage, '.toolbar .limiter');
