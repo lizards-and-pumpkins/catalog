@@ -50,8 +50,8 @@ require(
 
         function setTotalNumberOfProductsInSelection(totalNumberOfResults, selector) {
             Array.prototype.map.call(document.querySelectorAll(selector), function (targetElement) {
-                var textNode = document.createTextNode(totalNumberOfResults + ' Items');
-                targetElement.appendChild(textNode);
+                var textNode = document.createTextNode(totalNumberOfResults);
+                targetElement.insertBefore(textNode, targetElement.firstChild);
             });
         }
 
@@ -115,7 +115,7 @@ require(
 
         function createSortingSelectOption(config) {
             var sortingOption = document.createElement('OPTION');
-            sortingOption.textContent = config['code'];
+            sortingOption.textContent = getAttributeTranslation(config['code']);
             sortingOption.value = url.updateQueryParameters({
                 "order": config['code'],
                 "dir": config['selectedDirection']
@@ -134,6 +134,14 @@ require(
                 this.className += 'block' === filters.style.display ? ' collapsed' : ' expanded';
                 filters.style.display = 'block' === filters.style.display ? 'none' : 'block';
             }, true);
+        }
+
+        function getAttributeTranslation(string) {
+            if (typeof attributeTranslation !== 'object' || !attributeTranslation.hasOwnProperty(string)) {
+                return string;
+            }
+
+            return attributeTranslation[string];
         }
     }
 );

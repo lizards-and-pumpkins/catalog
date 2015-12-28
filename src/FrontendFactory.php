@@ -193,6 +193,7 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->getSnippetKeyGeneratorLocator(),
             $this->getMasterFactory()->createPageBuilder(),
+            $this->getMasterFactory()->getTranslatorRegistry(),
             ...$this->getMasterFactory()->getProductListingSortOrderConfig()
         );
     }

@@ -2,15 +2,12 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\BaseUrl\BaseUrlBuilder;
-use LizardsAndPumpkins\BaseUrl\WebsiteBaseUrlBuilder;
 use LizardsAndPumpkins\ContentDelivery\Catalog\FilterNavigationPriceRangesBuilder;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
 use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\EuroPriceRangeTransformation;
 use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
-use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
@@ -23,7 +20,6 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\FileUrlKeyStore;
-use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Image\ImageMagickInscribeStrategy;
 use LizardsAndPumpkins\Image\ImageProcessor;
 use LizardsAndPumpkins\Image\ImageProcessorCollection;
@@ -40,11 +36,8 @@ use LizardsAndPumpkins\Product\Tax\TwentyOneRunTaxServiceLocator;
 use LizardsAndPumpkins\Projection\Catalog\TwentyOneRunProductViewLocator;
 use LizardsAndPumpkins\Queue\File\FileQueue;
 use LizardsAndPumpkins\Queue\Queue;
-use LizardsAndPumpkins\Utils\FileStorage\FilesystemFileStorage;
 use LizardsAndPumpkins\Utils\ImageStorage\FilesystemImageStorage;
 use LizardsAndPumpkins\Utils\ImageStorage\ImageStorage;
-use LizardsAndPumpkins\Utils\ImageStorage\MediaBaseUrlBuilder;
-use LizardsAndPumpkins\Utils\ImageStorage\MediaDirectoryBaseUrlBuilder;
 use LizardsAndPumpkins\Website\TwentyOneRunWebsiteToCountryMap;
 
 class TwentyOneRunFactory implements Factory
@@ -80,7 +73,7 @@ class TwentyOneRunFactory implements Factory
     }
 
     /**
-     * @return array[]
+     * @return FacetFiltersToIncludeInResult
      */
     public function getProductListingFilterNavigationConfig()
     {
@@ -100,7 +93,7 @@ class TwentyOneRunFactory implements Factory
     }
 
     /**
-     * @return array[]
+     * @return FacetFiltersToIncludeInResult
      */
     public function getProductSearchResultsFilterNavigationConfig()
     {
