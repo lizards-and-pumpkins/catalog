@@ -15,6 +15,23 @@ use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\Product\Tax\ProductTaxClass;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 
+/**
+ * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\RelationType\BrandAndGenderProductRelations
+ * @uses   \LizardsAndPumpkins\Product\Tax\ProductTaxClass
+ * @uses   \LizardsAndPumpkins\Product\ProductImage\ProductImageList
+ * @uses   \LizardsAndPumpkins\Product\SimpleProduct
+ * @uses   \LizardsAndPumpkins\Product\ProductId
+ * @uses   \LizardsAndPumpkins\Product\AttributeCode
+ * @uses   \LizardsAndPumpkins\Product\ProductAttribute
+ * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
+ * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
+ * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
+ * @uses   \LizardsAndPumpkins\Product\RehydrateableProductTrait
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection
+ */
 class BrandAndGenderProductRelationsTest extends \PHPUnit_Framework_TestCase
 {
     /**
