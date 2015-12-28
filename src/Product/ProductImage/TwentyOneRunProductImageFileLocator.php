@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Product\ProductImage;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
-use LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite;
 use LizardsAndPumpkins\Product\ProductImage\Exception\InvalidImageFileNameException;
 use LizardsAndPumpkins\Product\ProductImage\Exception\InvalidImageVariantCodeException;
 use LizardsAndPumpkins\Utils\FileStorage\StorageAgnosticFileUri;
