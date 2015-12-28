@@ -240,8 +240,10 @@ class TwentyOneRunFactory implements Factory
         $strategySequence = $this->getMasterFactory()->createOriginalImageProcessingStrategySequence();
         $fileStorageReader = $this->getMasterFactory()->createFileStorageReader();
         $fileStorageWriter = $this->getMasterFactory()->createFileStorageWriter();
-        
-        $resultImageDir = __DIR__ . '/../pub/media/product/original';
+
+        $resultImageDir = $this->getMasterFactory()->getMediaBaseDirectoryConfig() . '/product/' .
+                          TwentyOneRunProductImageFileLocator::ORIGINAL;
+
         $this->createDirectoryIfNotExists($resultImageDir);
         
         return new ImageProcessor($strategySequence, $fileStorageReader, $fileStorageWriter, $resultImageDir);
@@ -280,7 +282,9 @@ class TwentyOneRunFactory implements Factory
         $fileStorageReader = $this->getMasterFactory()->createFileStorageReader();
         $fileStorageWriter = $this->getMasterFactory()->createFileStorageWriter();
 
-        $resultImageDir = __DIR__ . '/../pub/media/product/large';
+        $resultImageDir = $this->getMasterFactory()->getMediaBaseDirectoryConfig() . '/product/' .
+                          TwentyOneRunProductImageFileLocator::LARGE;
+
         $this->createDirectoryIfNotExists($resultImageDir);
         
         return new ImageProcessor($strategySequence, $fileStorageReader, $fileStorageWriter, $resultImageDir);
@@ -308,7 +312,9 @@ class TwentyOneRunFactory implements Factory
         $fileStorageReader = $this->getMasterFactory()->createFileStorageReader();
         $fileStorageWriter = $this->getMasterFactory()->createFileStorageWriter();
 
-        $resultImageDir = __DIR__ . '/../pub/media/product/medium';
+        $resultImageDir = $this->getMasterFactory()->getMediaBaseDirectoryConfig() . '/product/' .
+                          TwentyOneRunProductImageFileLocator::MEDIUM;
+
         $this->createDirectoryIfNotExists($resultImageDir);
         
         return new ImageProcessor($strategySequence, $fileStorageReader, $fileStorageWriter, $resultImageDir);
@@ -336,7 +342,9 @@ class TwentyOneRunFactory implements Factory
         $fileStorageReader = $this->getMasterFactory()->createFileStorageReader();
         $fileStorageWriter = $this->getMasterFactory()->createFileStorageWriter();
 
-        $resultImageDir = __DIR__ . '/../pub/media/product/small';
+        $resultImageDir = $this->getMasterFactory()->getMediaBaseDirectoryConfig() . '/product/' .
+                          TwentyOneRunProductImageFileLocator::SMALL;
+
         $this->createDirectoryIfNotExists($resultImageDir);
         
         return new ImageProcessor($strategySequence, $fileStorageReader, $fileStorageWriter, $resultImageDir);
@@ -363,8 +371,10 @@ class TwentyOneRunFactory implements Factory
         $strategySequence = $this->getMasterFactory()->createSearchAutosuggestionImageProcessingStrategySequence();
         $fileStorageReader = $this->getMasterFactory()->createFileStorageReader();
         $fileStorageWriter = $this->getMasterFactory()->createFileStorageWriter();
-        
-        $resultImageDir = __DIR__ . '/../pub/media/product/search-autosuggestion';
+
+        $resultImageDir = $this->getMasterFactory()->getMediaBaseDirectoryConfig() . '/product/' .
+                          TwentyOneRunProductImageFileLocator::SEARCH_AUTOSUGGESTION;
+
         $this->createDirectoryIfNotExists($resultImageDir);
 
         return new ImageProcessor($strategySequence, $fileStorageReader, $fileStorageWriter, $resultImageDir);
