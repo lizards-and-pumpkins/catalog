@@ -14,8 +14,16 @@ define(['lib/url', 'pagination'], function (url, pagination) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
+    function getAttributeTranslation(string) {
+        if (typeof attributeTranslation !== 'object' || !attributeTranslation.hasOwnProperty(string)) {
+            return string;
+        }
+
+        return attributeTranslation[string];
+    }
+
     var FilterNavigation = {
-        renderLayeredNavigation: function (filterNavigationJson, placeholderSelector, attributesTranslation) {
+        renderLayeredNavigation: function (filterNavigationJson, placeholderSelector) {
             if (typeof filterNavigationJson !== 'object') {
                 return;
             }
@@ -38,7 +46,7 @@ define(['lib/url', 'pagination'], function (url, pagination) {
 
                 var heading = document.createElement('DIV');
                 heading.className = 'block-title roundedBorder expanded';
-                heading.textContent = attributesTranslation[filterCode];
+                heading.textContent = getAttributeTranslation(filterCode);
 
                 var filterContainer = document.createElement('DIV');
                 filterContainer.className = 'filter-container';

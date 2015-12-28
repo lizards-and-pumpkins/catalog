@@ -6,7 +6,7 @@ require(
 
         domReady(function () {
             productGrid.renderGrid(productListingJson, productPrices, '#products-grid-container');
-            filterNavigation.renderLayeredNavigation(filterNavigationJson, '#filter-navigation', attributeTranslation);
+            filterNavigation.renderLayeredNavigation(filterNavigationJson, '#filter-navigation');
             pagination.renderPagination(totalNumberOfResults, productsPerPage, '#pagination');
             setTotalNumberOfProductsInSelection(totalNumberOfResults, '.toolbar .amount');
             renderProductsPerPageLinks(productsPerPage, '.toolbar .limiter');
@@ -115,7 +115,7 @@ require(
 
         function createSortingSelectOption(config) {
             var sortingOption = document.createElement('OPTION');
-            sortingOption.textContent = attributeTranslation[config['code']];
+            sortingOption.textContent = getAttributeTranslation(config['code']);
             sortingOption.value = url.updateQueryParameters({
                 "order": config['code'],
                 "dir": config['selectedDirection']
@@ -134,6 +134,14 @@ require(
                 this.className += 'block' === filters.style.display ? ' collapsed' : ' expanded';
                 filters.style.display = 'block' === filters.style.display ? 'none' : 'block';
             }, true);
+        }
+
+        function getAttributeTranslation(string) {
+            if (typeof attributeTranslation !== 'object' || !attributeTranslation.hasOwnProperty(string)) {
+                return string;
+            }
+
+            return attributeTranslation[string];
         }
     }
 );
