@@ -4,6 +4,9 @@ namespace LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations;
 
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\Exception\InvalidProductRelationTypeCodeException;
 
+/**
+ * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationTypeCode
+ */
 class ProductRelationTypeCodeTest extends \PHPUnit_Framework_TestCase
 {
     public function testItReturnsAProductRelationTypeCodeInstance()
