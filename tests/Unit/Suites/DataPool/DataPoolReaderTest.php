@@ -7,9 +7,15 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\Exception\InvalidKeyValueStoreKeyException;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
+use LizardsAndPumpkins\Product\ProductId;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\DataPoolReader
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection
+ * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Product\ProductId
  * @uses   \LizardsAndPumpkins\Http\HttpUrl
  */
@@ -229,5 +235,39 @@ class DataPoolReaderTest extends AbstractDataPoolTest
         $expected = ['test.html'];
         $this->getMockUrlKeyStore()->expects($this->once())->method('getForDataVersion')->willReturn($expected);
         $this->assertSame($expected, $this->dataPoolReader->getUrlKeysForVersion('1.0'));
+    }
+
+    public function testItDelegatesQueriesForProductIdsToTheSearchEngine()
+    {
+        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubCriteria */
+        $stubCriteria = $this->getMock(SearchCriteria::class);
+
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
+        $stubContext = $this->getMock(Context::class);
+        
+        /** @var SortOrderConfig|\PHPUnit_Framework_MockObject_MockObject $stubSortBy */
+        $stubSortBy = $this->getMock(SortOrderConfig::class, [], [], '', false);
+
+        $rowsPerPage = 1000;
+        $pageNumber = 1;
+        
+        /** @var ProductId[]|\PHPUnit_Framework_MockObject_MockObject[] $matchingProductIds */
+        $matchingProductIds = [$this->getMock(ProductId::class, [], [], '', false)];
+
+        /** @var SearchEngineResponse|\PHPUnit_Framework_MockObject_MockObject $stubSearchResponse */
+        $stubSearchResponse = $this->getMock(SearchEngineResponse::class, [], [], '', false);
+        $stubSearchResponse->method('getProductIds')->willReturn($matchingProductIds);
+
+        $this->getMockSearchEngine()->expects($this->once())
+            ->method('query')->willReturn($stubSearchResponse);
+
+        $result = $this->dataPoolReader->getProductIdsMatchingCriteria(
+            $stubCriteria,
+            $stubContext,
+            $stubSortBy,
+            $rowsPerPage,
+            $pageNumber
+        );
+        $this->assertSame($matchingProductIds, $result);
     }
 }
