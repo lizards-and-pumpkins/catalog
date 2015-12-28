@@ -131,7 +131,13 @@ class FrontendFactory implements Factory
      */
     private function getCatalogImportDirectoryConfig()
     {
-        return __DIR__ . '/../tests/shared-fixture';
+        /** @var ConfigReader $configReader */
+        $configReader = $this->getMasterFactory()->createConfigReader();
+        $catalogImportDirectory = $configReader->get('catalog_import_directory');
+
+        return null === $catalogImportDirectory ?
+            __DIR__ . '/../tests/shared-fixture' :
+            $catalogImportDirectory;
     }
 
     /**
