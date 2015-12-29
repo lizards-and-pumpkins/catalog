@@ -116,4 +116,20 @@ class BrandAndGenderProductRelationsTest extends \PHPUnit_Framework_TestCase
         $result = $this->brandAndGenderProductRelations->getById($stubProductId);
         $this->assertSame($stubMatchingProductIds, $result);
     }
+
+    public function testTheReturnedArrayIsNumericallyIndexed()
+    {
+        /** @var ProductId|\PHPUnit_Framework_MockObject_MockObject $stubProductId */
+        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
+
+        $productJson = $this->getProductJsonWithBrandAndGender('Pooma', 'Ladies');
+        $this->stubDataPoolReader->method('getSnippet')->willReturn($productJson);
+        $stubMatchingProductIds = ['some-non-numeric-key' => $this->getMock(ProductId::class, [], [], '', false)];
+        $this->stubDataPoolReader
+            ->method('getProductIdsMatchingCriteria')
+            ->willReturn($stubMatchingProductIds);
+
+        $result = $this->brandAndGenderProductRelations->getById($stubProductId);
+        $this->assertSame([0], array_keys($result));
+    }
 }
