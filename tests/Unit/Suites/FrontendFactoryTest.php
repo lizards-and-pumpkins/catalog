@@ -4,6 +4,8 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Api\ApiRouter;
 use LizardsAndPumpkins\Content\ContentBlocksApiV1PutRequestHandler;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsLocator;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsService;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\PricesJsonSnippetTransformation;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\SimpleEuroPriceSnippetTransformation;
 use LizardsAndPumpkins\Context\Context;
@@ -42,6 +44,7 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection
  * @uses   \LizardsAndPumpkins\ContentDelivery\SnippetTransformation\PricesJsonSnippetTransformation
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsService
  * @uses   \LizardsAndPumpkins\Context\ContextSource
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
@@ -204,5 +207,17 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
             [ConfigurableProductJsonSnippetRenderer::VARIATION_ATTRIBUTES_CODE],
             [ConfigurableProductJsonSnippetRenderer::ASSOCIATED_PRODUCTS_CODE],
         ];
+    }
+
+    public function testItReturnsAProductRelationsService()
+    {
+        $result = $this->frontendFactory->createProductRelationsService();
+        $this->assertInstanceOf(ProductRelationsService::class, $result);
+    }
+
+    public function testItReturnsAProductRelationsLocator()
+    {
+        $result = $this->frontendFactory->createProductRelationsLocator();
+        $this->assertInstanceOf(ProductRelationsLocator::class, $result);
     }
 }

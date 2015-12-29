@@ -9,6 +9,8 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\ProductDetailViewRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingPageContentBuilder;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingPageRequest;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsLocator;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsService;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchAutosuggestionRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\PageBuilder;
@@ -425,5 +427,26 @@ class FrontendFactory implements Factory
     public function createPricesJsonSnippetTransformation()
     {
         return new PricesJsonSnippetTransformation($this->getMasterFactory()->createPriceSnippetTransformation());
+    }
+
+    /**
+     * @return ProductRelationsService
+     */
+    public function createProductRelationsService()
+    {
+        return new ProductRelationsService(
+            $this->getMasterFactory()->createProductRelationsLocator(),
+            $this->getMasterFactory()->createDataPoolReader(),
+            $this->getMasterFactory()->createProductJsonSnippetKeyGenerator(),
+            $this->getMasterFactory()->createContext()
+        );
+    }
+
+    /**
+     * @return ProductRelationsLocator
+     */
+    public function createProductRelationsLocator()
+    {
+        return new ProductRelationsLocator();
     }
 }
