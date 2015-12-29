@@ -5,18 +5,18 @@ namespace LizardsAndPumpkins\Api;
 use LizardsAndPumpkins\Api\Exception\ApiVersionMustBeIntException;
 
 /**
- * @covers LizardsAndPumpkins\Api\ApiRequestHandlerChain
+ * @covers LizardsAndPumpkins\Api\ApiRequestHandlerLocator
  */
-class ApiRequestHandlerChainTest extends \PHPUnit_Framework_TestCase
+class ApiRequestHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ApiRequestHandlerChain
+     * @var ApiRequestHandlerLocator
      */
     private $requestHandlerChain;
 
     protected function setUp()
     {
-        $this->requestHandlerChain = new ApiRequestHandlerChain();
+        $this->requestHandlerChain = new ApiRequestHandlerLocator();
     }
 
     public function testExceptionIsThrownDuringAttemptToRegisterRequestHandlerWithNonIntVersion()

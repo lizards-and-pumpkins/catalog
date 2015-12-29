@@ -17,7 +17,7 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
     private $apiRouter;
 
     /**
-     * @var ApiRequestHandlerChain|\PHPUnit_Framework_MockObject_MockObject
+     * @var ApiRequestHandlerLocator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubApiRequestHandlerChain;
 
@@ -28,7 +28,7 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubApiRequestHandlerChain = $this->getMock(ApiRequestHandlerChain::class);
+        $this->stubApiRequestHandlerChain = $this->getMock(ApiRequestHandlerLocator::class);
         $this->apiRouter = new ApiRouter($this->stubApiRequestHandlerChain);
 
         $this->stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);

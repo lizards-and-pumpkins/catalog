@@ -59,7 +59,7 @@ use LizardsAndPumpkins\Http\HttpRouterChain;
  * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextCountry
  * @uses   \LizardsAndPumpkins\Context\ContextSource
  * @uses   \LizardsAndPumpkins\Api\ApiRouter
- * @uses   \LizardsAndPumpkins\Api\ApiRequestHandlerChain
+ * @uses   \LizardsAndPumpkins\Api\ApiRequestHandlerLocator
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
  * @uses   \LizardsAndPumpkins\Renderer\BlockRenderer
  * @uses   \LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry

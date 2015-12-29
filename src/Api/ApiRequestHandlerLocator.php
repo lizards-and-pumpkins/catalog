@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\Api;
 
 use LizardsAndPumpkins\Api\Exception\ApiVersionMustBeIntException;
 
-class ApiRequestHandlerChain
+class ApiRequestHandlerLocator
 {
     private $requestHandlers = [];
 
@@ -17,7 +17,7 @@ class ApiRequestHandlerChain
     {
         $this->validateApiVersion($version);
 
-        $key = $this->getRequestHandlerChainKey($code, $version);
+        $key = $this->getRequestProcessorLocatorKey($code, $version);
         $this->requestHandlers[$key] = $requestHandler;
     }
 
@@ -30,7 +30,7 @@ class ApiRequestHandlerChain
     {
         $this->validateApiVersion($version);
 
-        $key = $this->getRequestHandlerChainKey($code, $version);
+        $key = $this->getRequestProcessorLocatorKey($code, $version);
 
         if (!isset($this->requestHandlers[$key])) {
             return new NullApiRequestHandler;
@@ -44,7 +44,7 @@ class ApiRequestHandlerChain
      * @param string $version
      * @return string
      */
-    private function getRequestHandlerChainKey($code, $version)
+    private function getRequestProcessorLocatorKey($code, $version)
     {
         return sprintf('v%s_%s', $version, $code);
     }

@@ -68,7 +68,7 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
  * @uses   \LizardsAndPumpkins\DataVersion
  * @uses   \LizardsAndPumpkins\Api\ApiRouter
- * @uses   \LizardsAndPumpkins\Api\ApiRequestHandlerChain
+ * @uses   \LizardsAndPumpkins\Api\ApiRequestHandlerLocator
  * @uses   \LizardsAndPumpkins\GenericSnippetKeyGenerator
  * @uses   \LizardsAndPumpkins\ContentDelivery\PageBuilder
  * @uses   \LizardsAndPumpkins\Renderer\BlockRenderer
