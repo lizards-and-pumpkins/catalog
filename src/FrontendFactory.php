@@ -9,8 +9,11 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\ProductDetailViewRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingPageContentBuilder;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingPageRequest;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsApiV1GetRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsLocator;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsService;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationTypeCode;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\RelationType\BrandAndGenderProductRelations;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchAutosuggestionRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\PageBuilder;
@@ -93,6 +96,12 @@ class FrontendFactory implements Factory
             'put_templates',
             $version,
             $this->getMasterFactory()->createTemplatesApiV1PutRequestHandler()
+        );
+        
+        $requestHandlerLocator->register(
+            'get_products',
+            $version,
+            $this->getMasterFactory()->createProductRelationsApiV1GetRequestHandler()
         );
     }
 
@@ -443,10 +452,37 @@ class FrontendFactory implements Factory
     }
 
     /**
+     * @return BrandAndGenderProductRelations
+     */
+    public function createBrandAndGenderProductRelations()
+    {
+        return new BrandAndGenderProductRelations(
+            $this->getMasterFactory()->createDataPoolReader(),
+            $this->getMasterFactory()->createProductJsonSnippetKeyGenerator(),
+            $this->getMasterFactory()->createContext()
+        );
+    }
+
+    /**
      * @return ProductRelationsLocator
      */
     public function createProductRelationsLocator()
     {
-        return new ProductRelationsLocator();
+        $productRelationsLocator = new ProductRelationsLocator();
+        $productRelationsLocator->register(
+            ProductRelationTypeCode::fromString('related-models'),
+            [$this->getMasterFactory(), 'createBrandAndGenderProductRelations']
+        );
+        return $productRelationsLocator;
+    }
+
+    /**
+     * @return ProductRelationsApiV1GetRequestHandler
+     */
+    public function createProductRelationsApiV1GetRequestHandler()
+    {
+        return new ProductRelationsApiV1GetRequestHandler(
+            $this->getMasterFactory()->createProductRelationsService()
+        );
     }
 }

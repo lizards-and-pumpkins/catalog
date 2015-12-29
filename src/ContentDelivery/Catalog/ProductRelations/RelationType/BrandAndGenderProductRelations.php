@@ -8,6 +8,7 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionNotEqual;
 use LizardsAndPumpkins\Product\AttributeCode;
@@ -50,13 +51,13 @@ class BrandAndGenderProductRelations implements ProductRelations
     public function getById(ProductId $productId)
     {
         $key = $this->productJsonSnippetKeyGenerator->getKeyForContext($this->context, [Product::ID => $productId]);
-        $product = SimpleProduct::fromArray(json_decode($this->dataPoolReader->getSnippet($key), true));
+        $productData = json_decode($this->dataPoolReader->getSnippet($key), true);
 
-        $criteria = $this->createCriteria($product);
+        $criteria = $this->createCriteria($productData);
         $sortBy = $this->createSortOrderConfig();
         $rowsPerPage = 5;
         $pageNumber = 1;
-        
+
         return $this->dataPoolReader->getProductIdsMatchingCriteria(
             $criteria,
             $this->context,
@@ -67,15 +68,15 @@ class BrandAndGenderProductRelations implements ProductRelations
     }
 
     /**
-     * @param Product $product
+     * @param mixed[] $productData
      * @return CompositeSearchCriterion
      */
-    private function createCriteria(Product $product)
+    private function createCriteria(array $productData)
     {
         return CompositeSearchCriterion::createAnd(
-            SearchCriterionEqual::create('brand', $product->getFirstValueOfAttribute('brand')),
-            SearchCriterionEqual::create('gender', $product->getFirstValueOfAttribute('gender')),
-            SearchCriterionNotEqual::create('product_id', (string) $product->getId())
+            $this->getBrandCriteria($productData),
+            $this->getGenderCriteria($productData),
+            SearchCriterionNotEqual::create('product_id', $productData['product_id'])
         );
     }
 
@@ -88,5 +89,38 @@ class BrandAndGenderProductRelations implements ProductRelations
             AttributeCode::fromString('created_at'),
             SortOrderDirection::create(SortOrderDirection::ASC)
         );
+    }
+
+    /**
+     * @param mixed[] $productData
+     * @return SearchCriterion
+     */
+    private function getBrandCriteria(array $productData)
+    {
+        return SearchCriterionEqual::create('brand', $productData['attributes']['brand']);
+    }
+
+    /**
+     * @param mixed[] $productData
+     * @return SearchCriterion
+     */
+    private function getGenderCriteria(array $productData)
+    {
+        if (is_array($productData['attributes']['gender'])) {
+            return CompositeSearchCriterion::createOr(...array_map(function ($gender) {
+                return $this->createGenderCriterion($gender);
+            }, $productData['attributes']['gender']));
+        }
+
+        return $this->createGenderCriterion($productData['attributes']['gender']);
+    }
+
+    /**
+     * @param string $gender
+     * @return SearchCriterion
+     */
+    private function createGenderCriterion($gender)
+    {
+        return SearchCriterionEqual::create('gender', $gender);
     }
 }

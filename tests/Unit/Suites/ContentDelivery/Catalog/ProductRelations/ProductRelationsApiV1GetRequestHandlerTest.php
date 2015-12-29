@@ -7,17 +7,17 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\Exception\Unable
 use LizardsAndPumpkins\Http\HttpRequest;
 
 /**
- * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsApiV1RequestHandler
+ * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsApiV1GetRequestHandler
  * @uses   \LizardsAndPumpkins\Api\ApiRequestHandler
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationTypeCode
  * @uses   \LizardsAndPumpkins\Product\ProductId
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  * @uses   \LizardsAndPumpkins\DefaultHttpResponse
  */
-class ProductRelationsApiV1RequestHandlerTest extends \PHPUnit_Framework_TestCase
+class ProductRelationsApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ProductRelationsApiV1RequestHandler
+     * @var ProductRelationsApiV1GetRequestHandler
      */
     private $requestHandler;
 
@@ -44,7 +44,7 @@ class ProductRelationsApiV1RequestHandlerTest extends \PHPUnit_Framework_TestCas
     {
         $this->mockProductRelationsService = $this->getMock(ProductRelationsService::class, [], [], '', false);
 
-        $this->requestHandler = new ProductRelationsApiV1RequestHandler($this->mockProductRelationsService);
+        $this->requestHandler = new ProductRelationsApiV1GetRequestHandler($this->mockProductRelationsService);
         $this->stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
     }
 

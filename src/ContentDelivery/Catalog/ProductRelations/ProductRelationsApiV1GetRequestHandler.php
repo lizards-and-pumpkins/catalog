@@ -7,7 +7,7 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\Exception\Unable
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Product\ProductId;
 
-class ProductRelationsApiV1RequestHandler extends ApiRequestHandler
+class ProductRelationsApiV1GetRequestHandler extends ApiRequestHandler
 {
     /**
      * @var ProductRelationsService
