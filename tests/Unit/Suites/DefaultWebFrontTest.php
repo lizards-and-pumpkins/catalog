@@ -27,6 +27,10 @@ use LizardsAndPumpkins\Http\HttpRouterChain;
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection
  * @uses   \LizardsAndPumpkins\ContentDelivery\SnippetTransformation\PricesJsonSnippetTransformation
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationTypeCode
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsLocator
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsService
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsApiV1GetRequestHandler
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
  * @uses   \LizardsAndPumpkins\UnitTestFactory
