@@ -4,7 +4,9 @@
     <block name="product_details_snippet" class="LizardsAndPumpkins\Renderer\Block" template="template/1column.phtml">
         <block name="head" class="LizardsAndPumpkins\Renderer\Block" template="template/head.phtml" />
         <block name="header" class="LizardsAndPumpkins\Renderer\Block" template="template/header.phtml" />
-        <block name="content" class="LizardsAndPumpkins\Product\Block\ProductBlock" template="template/product-details.phtml"/>
+        <block name="content" class="LizardsAndPumpkins\Product\Block\ProductBlock" template="template/product-details.phtml">
+            <block name="all-models" class="LizardsAndPumpkins\Renderer\Block" template="template/all-models.phtml" />
+        </block>
         <block name="footer" class="LizardsAndPumpkins\Renderer\Block" template="template/footer.phtml" />
     </block>
 </snippet>
