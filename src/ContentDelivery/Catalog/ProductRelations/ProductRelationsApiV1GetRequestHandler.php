@@ -46,7 +46,7 @@ class ProductRelationsApiV1GetRequestHandler extends ApiRequestHandler
             $this->getProductRelationTypeCode($request),
             $this->getProductId($request)
         );
-        return json_encode($relatedProductsData);
+        return json_encode(['data' => $relatedProductsData]);
     }
 
     /**

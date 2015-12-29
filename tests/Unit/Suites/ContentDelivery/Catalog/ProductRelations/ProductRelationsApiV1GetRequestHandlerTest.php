@@ -132,6 +132,6 @@ class ProductRelationsApiV1GetRequestHandlerTest extends \PHPUnit_Framework_Test
         $this->stubRequest->method('getUrlPathRelativeToWebFront')->willReturn($this->testMatchingRequestPath);
 
         $response = $this->requestHandler->process($this->stubRequest);
-        $this->assertSame(json_encode($testProductData), $response->getBody());
+        $this->assertSame(json_encode(['data' => $testProductData]), $response->getBody());
     }
 }

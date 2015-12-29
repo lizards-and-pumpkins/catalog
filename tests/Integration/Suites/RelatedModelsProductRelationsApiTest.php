@@ -37,7 +37,7 @@ class RelatedModelsProductRelationsApiTest extends AbstractIntegrationTest
         $website = new InjectableDefaultWebFront($request, $factory);
         $response = $website->runWithoutSendingResponse();
 
-        $this->assertEquals(json_encode([]), $response->getBody());
+        $this->assertEquals(json_encode(['data' => []]), $response->getBody());
     }
 
     public function testRelatedProductsWithMatchingBrandAndGenderAreReturned()
@@ -57,7 +57,7 @@ class RelatedModelsProductRelationsApiTest extends AbstractIntegrationTest
 
         $website = new InjectableDefaultWebFront($request, $factory);
         $response = $website->runWithoutSendingResponse();
-        $matches = json_decode($response->getBody(), true);
+        $matches = json_decode($response->getBody(), true)['data'];
 
         $this->assertCount(count($expectedProductIds), $matches);
         
