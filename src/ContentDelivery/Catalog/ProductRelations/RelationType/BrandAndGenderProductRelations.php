@@ -9,6 +9,7 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionNotEqual;
 use LizardsAndPumpkins\Product\AttributeCode;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductId;
@@ -51,14 +52,8 @@ class BrandAndGenderProductRelations implements ProductRelations
         $key = $this->productJsonSnippetKeyGenerator->getKeyForContext($this->context, [Product::ID => $productId]);
         $product = SimpleProduct::fromArray(json_decode($this->dataPoolReader->getSnippet($key), true));
 
-        $criteria = CompositeSearchCriterion::createAnd(
-            SearchCriterionEqual::create('brand', $product->getFirstValueOfAttribute('brand')),
-            SearchCriterionEqual::create('gender', $product->getFirstValueOfAttribute('gender'))
-        );
-        $sortBy = SortOrderConfig::create(
-            AttributeCode::fromString('created_at'),
-            SortOrderDirection::create(SortOrderDirection::ASC)
-        );
+        $criteria = $this->createCriteria($product);
+        $sortBy = $this->createSortOrderConfig();
         $rowsPerPage = 5;
         $pageNumber = 1;
         
@@ -68,6 +63,30 @@ class BrandAndGenderProductRelations implements ProductRelations
             $sortBy,
             $rowsPerPage,
             $pageNumber
+        );
+    }
+
+    /**
+     * @param Product $product
+     * @return CompositeSearchCriterion
+     */
+    private function createCriteria(Product $product)
+    {
+        return CompositeSearchCriterion::createAnd(
+            SearchCriterionEqual::create('brand', $product->getFirstValueOfAttribute('brand')),
+            SearchCriterionEqual::create('gender', $product->getFirstValueOfAttribute('gender')),
+            SearchCriterionNotEqual::create('product_id', (string) $product->getId())
+        );
+    }
+
+    /**
+     * @return SortOrderConfig
+     */
+    private function createSortOrderConfig()
+    {
+        return SortOrderConfig::create(
+            AttributeCode::fromString('created_at'),
+            SortOrderDirection::create(SortOrderDirection::ASC)
         );
     }
 }
