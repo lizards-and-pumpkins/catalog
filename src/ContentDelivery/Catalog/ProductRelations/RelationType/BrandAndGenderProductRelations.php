@@ -8,13 +8,12 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionNotEqual;
 use LizardsAndPumpkins\Product\AttributeCode;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductId;
-use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 
 class BrandAndGenderProductRelations implements ProductRelations
@@ -93,34 +92,34 @@ class BrandAndGenderProductRelations implements ProductRelations
 
     /**
      * @param mixed[] $productData
-     * @return SearchCriterion
+     * @return SearchCriteria
      */
     private function getBrandCriteria(array $productData)
     {
-        return SearchCriterionEqual::create('brand', $productData['attributes']['brand']);
+        return $this->createSearchCriteriaMatching('brand', $productData['attributes']['brand']);
     }
 
     /**
      * @param mixed[] $productData
-     * @return SearchCriterion
+     * @return SearchCriteria
      */
     private function getGenderCriteria(array $productData)
     {
-        if (is_array($productData['attributes']['gender'])) {
-            return CompositeSearchCriterion::createOr(...array_map(function ($gender) {
-                return $this->createGenderCriterion($gender);
-            }, $productData['attributes']['gender']));
-        }
-
-        return $this->createGenderCriterion($productData['attributes']['gender']);
+        return $this->createSearchCriteriaMatching('gender', $productData['attributes']['gender']);
     }
 
     /**
-     * @param string $gender
-     * @return SearchCriterion
+     * @param string $attributeCode
+     * @param string|string[] $valueToMatch
+     * @return SearchCriteria
      */
-    private function createGenderCriterion($gender)
+    private function createSearchCriteriaMatching($attributeCode, $valueToMatch)
     {
-        return SearchCriterionEqual::create('gender', $gender);
+        if (is_array($valueToMatch)) {
+            return CompositeSearchCriterion::createOr(...array_map(function ($value) use ($attributeCode) {
+                return $this->createSearchCriteriaMatching($attributeCode, $value);
+            }, $valueToMatch));
+        }
+        return SearchCriterionEqual::create($attributeCode, $valueToMatch);
     }
 }
