@@ -1,16 +1,4 @@
-define(function () {
-
-    function callAjax(url, callback) {
-        var xmlhttp = new XMLHttpRequest;
-        xmlhttp.onreadystatechange = function () {
-            if (4 === xmlhttp.readyState && 200 === xmlhttp.status) {
-                callback(xmlhttp.responseText);
-            }
-        };
-        xmlhttp.open('GET', url, true);
-        xmlhttp.send();
-    }
-
+define(['lib/ajax'], function (callAjax) {
     Array.prototype.map.call(document.querySelectorAll('.search-form'), function (searchForm) {
         var autosuggestionBox = searchForm.querySelector('#search-autosuggestion'),
             searchInput = searchForm.querySelector('#search'),
