@@ -6,6 +6,14 @@ use LizardsAndPumpkins\Api\ApiRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\Exception\UnableToProcessProductRelationsRequestException;
 use LizardsAndPumpkins\Http\HttpRequest;
 
+/**
+ * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsApiV1RequestHandler
+ * @uses   \LizardsAndPumpkins\Api\ApiRequestHandler
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationTypeCode
+ * @uses   \LizardsAndPumpkins\Product\ProductId
+ * @uses   \LizardsAndPumpkins\Http\HttpHeaders
+ * @uses   \LizardsAndPumpkins\DefaultHttpResponse
+ */
 class ProductRelationsApiV1RequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -35,7 +43,7 @@ class ProductRelationsApiV1RequestHandlerTest extends \PHPUnit_Framework_TestCas
     protected function setUp()
     {
         $this->mockProductRelationsService = $this->getMock(ProductRelationsService::class, [], [], '', false);
-        
+
         $this->requestHandler = new ProductRelationsApiV1RequestHandler($this->mockProductRelationsService);
         $this->stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
     }
@@ -105,7 +113,7 @@ class ProductRelationsApiV1RequestHandlerTest extends \PHPUnit_Framework_TestCas
             UnableToProcessProductRelationsRequestException::class,
             sprintf('Unable to process a %s request to "%s"', HttpRequest::METHOD_POST, $this->testMatchingRequestPath)
         );
-        
+
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_POST);
         $this->stubRequest->method('getUrlPathRelativeToWebFront')->willReturn($this->testMatchingRequestPath);
         $this->requestHandler->process($this->stubRequest);
@@ -114,7 +122,7 @@ class ProductRelationsApiV1RequestHandlerTest extends \PHPUnit_Framework_TestCas
     public function testItDelegatesToTheProductRelationsServiceToFetchRelatedProducts()
     {
         $testProductData = [
-            ['Dummy Product Data']
+            ['Dummy Product Data'],
         ];
         $this->mockProductRelationsService->expects($this->once())
             ->method('getRelatedProductData')
@@ -122,7 +130,7 @@ class ProductRelationsApiV1RequestHandlerTest extends \PHPUnit_Framework_TestCas
 
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
         $this->stubRequest->method('getUrlPathRelativeToWebFront')->willReturn($this->testMatchingRequestPath);
-        
+
         $response = $this->requestHandler->process($this->stubRequest);
         $this->assertSame(json_encode($testProductData), $response->getBody());
     }

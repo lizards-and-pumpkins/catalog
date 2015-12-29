@@ -28,8 +28,8 @@ class ProductRelationsApiV1RequestHandler extends ApiRequestHandler
         if ($request->getMethod() !== HttpRequest::METHOD_GET) {
             return false;
         }
-        $parts = $this->getRequestPathParts($request);
         // Matching path example: /api/products/example-sku/relations/upsells
+        $parts = $this->getRequestPathParts($request);
         return count($parts) > 4 && 'products' === $parts[1] && 'relations' === $parts[3];
     }
 
@@ -37,18 +37,16 @@ class ProductRelationsApiV1RequestHandler extends ApiRequestHandler
      * @param HttpRequest $request
      * @return string
      */
-    protected function getResponseBody(HttpRequest $request)
+    final protected function getResponseBody(HttpRequest $request)
     {
         if (! $this->canProcess($request)) {
-            $requestPath = $request->getUrlPathRelativeToWebFront();
-            $message = sprintf('Unable to process a %s request to "%s"', $request->getMethod(), $requestPath);
-            throw new UnableToProcessProductRelationsRequestException($message);
+            throw $this->getUnableToProcessRequestException($request);
         }
-        $relatedProducts = $this->productRelationsService->getRelatedProductData(
+        $relatedProductsData = $this->productRelationsService->getRelatedProductData(
             $this->getProductRelationTypeCode($request),
             $this->getProductId($request)
         );
-        return json_encode($relatedProducts);
+        return json_encode($relatedProductsData);
     }
 
     /**
@@ -73,8 +71,19 @@ class ProductRelationsApiV1RequestHandler extends ApiRequestHandler
      * @param HttpRequest $request
      * @return ProductRelationTypeCode
      */
-    protected function getProductRelationTypeCode(HttpRequest $request)
+    private function getProductRelationTypeCode(HttpRequest $request)
     {
         return ProductRelationTypeCode::fromString($this->getRequestPathParts($request)[4]);
+    }
+
+    /**
+     * @param HttpRequest $request
+     * @return UnableToProcessProductRelationsRequestException
+     */
+    private function getUnableToProcessRequestException(HttpRequest $request)
+    {
+        $requestPath = $request->getUrlPathRelativeToWebFront();
+        $message = sprintf('Unable to process a %s request to "%s"', $request->getMethod(), $requestPath);
+        return new UnableToProcessProductRelationsRequestException($message);
     }
 }
