@@ -202,8 +202,7 @@ class FrontendFactory implements Factory
     public function createProductListingPageContentBuilder()
     {
         return new ProductListingPageContentBuilder(
-            $this->getMasterFactory()->createDataPoolReader(),
-            $this->getMasterFactory()->getSnippetKeyGeneratorLocator(),
+            $this->getMasterFactory()->createProductJsonService(),
             $this->getMasterFactory()->createPageBuilder(),
             $this->getMasterFactory()->getTranslatorRegistry(),
             ...$this->getMasterFactory()->getProductListingSortOrderConfig()

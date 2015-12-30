@@ -141,7 +141,7 @@ class ProductJsonService
      * @param string $specialPrice
      * @return array[]
      */
-    public function addPricesToProductData(array $productData, $price, $specialPrice)
+    private function addPricesToProductData(array $productData, $price, $specialPrice)
     {
         $productData['attributes']['raw_price'] = $price;
         $productData['attributes']['price'] = $this->formatPriceSnippet($price);
@@ -158,7 +158,7 @@ class ProductJsonService
      * @param string $price
      * @return string
      */
-    public function formatPriceSnippet($price)
+    private function formatPriceSnippet($price)
     {
         $locale = $this->getLocaleString($this->context);
         return (new IntlFormatter($locale))->format(new EUR((int) $price));

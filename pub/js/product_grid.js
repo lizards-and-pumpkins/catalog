@@ -28,7 +28,7 @@ define(function () {
     };
 
     return {
-        renderGrid: function (productGridJson, productPrices, productGridPlaceholderSelector) {
+        renderGrid: function (productGridJson, productGridPlaceholderSelector) {
             var productGridPlaceholder = document.querySelector(productGridPlaceholderSelector);
 
             if (null === productGridPlaceholder) {
@@ -38,7 +38,7 @@ define(function () {
             var grid = document.createElement('UL');
             grid.className = 'products-grid';
 
-            productGridJson.map(function (product, index) {
+            productGridJson.map(function (product) {
                 var mainImage = product['images']['medium'][0],
                     productLi = document.createElement('LI'),
                     container = document.createElement('DIV'),
@@ -47,12 +47,12 @@ define(function () {
                     productUrl = baseUrl + product['attributes']['url_key'],
                     productImage = createProductImage(mainImage['url'], mainImage['label']),
                     price = document.createElement('SPAN'),
-                    hasSpecialPrice = 2 === productPrices[index].length;
+                    hasSpecialPrice = product['attributes']['special_price'];
 
                 title.textContent = product['attributes']['name'];
                 gender.textContent = turnIntoStringIfIsArray(product['attributes']['gender']);
 
-                price.textContent = productPrices[index][0];
+                price.textContent = product['attributes']['price'];
                 price.className = hasSpecialPrice ? 'old-price' : 'regular-price';
 
                 container.style.backgroundImage = 'url("' + getBrandLogoSrc(product['attributes']['brand']) + '")';
@@ -65,7 +65,7 @@ define(function () {
 
                 if (hasSpecialPrice) {
                     var specialPrice = document.createElement('SPAN');
-                    specialPrice.textContent = productPrices[index][1];
+                    specialPrice.textContent = product['attributes']['special_price'];
                     specialPrice.className = 'special-price';
                     container.appendChild(specialPrice);
                 }
