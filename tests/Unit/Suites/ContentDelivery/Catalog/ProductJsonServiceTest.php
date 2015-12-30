@@ -16,7 +16,7 @@ class ProductJsonServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubDataPoolReader;
+    private $mockDataPoolReader;
 
     /**
      * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
@@ -50,7 +50,7 @@ class ProductJsonServiceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
+        $this->mockDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
         $this->stubProductJsonSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $this->stubPriceSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $this->stubSpecialPriceSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
@@ -60,7 +60,7 @@ class ProductJsonServiceTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $this->productJsonService = new ProductJsonService(
-            $this->stubDataPoolReader,
+            $this->mockDataPoolReader,
             $this->stubProductJsonSnippetKeyGenerator,
             $this->stubPriceSnippetKeyGenerator,
             $this->stubSpecialPriceSnippetKeyGenerator,
@@ -78,7 +78,7 @@ class ProductJsonServiceTest extends \PHPUnit_Framework_TestCase
         $this->stubPriceSnippetKeyGenerator->method('getKeyForContext')->willReturn($priceSnippetKey);
         $this->stubSpecialPriceSnippetKeyGenerator->method('getKeyForContext')->willReturn($specialPriceSnippetKey);
         
-        $this->stubDataPoolReader->expects($this->once())
+        $this->mockDataPoolReader->expects($this->once())
             ->method('getSnippets')->with([$jsonSnippetKey, $priceSnippetKey, $specialPriceSnippetKey])
             ->willReturn([
                 $jsonSnippetKey => json_encode($this->dummyProductData),
@@ -101,7 +101,7 @@ class ProductJsonServiceTest extends \PHPUnit_Framework_TestCase
         $this->stubPriceSnippetKeyGenerator->method('getKeyForContext')->willReturn($priceSnippetKey);
         $this->stubSpecialPriceSnippetKeyGenerator->method('getKeyForContext')->willReturn($specialPriceSnippetKey);
         
-        $this->stubDataPoolReader
+        $this->mockDataPoolReader
             ->method('getSnippets')
             ->willReturn([
                 $jsonSnippetKey => json_encode($this->dummyProductData),
