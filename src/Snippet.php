@@ -6,7 +6,7 @@ use LizardsAndPumpkins\Exception\InvalidKeyException;
 
 class Snippet
 {
-    const KEY_PATTERN = '#^[a-zA-Z0-9:_\-\.]+$#';
+    const KEY_PATTERN = '#^[a-zA-Z0-9:_\-\./]+$#';
     
     /**
      * @var string

@@ -27,14 +27,14 @@ class SnippetTest extends \PHPUnit_Framework_TestCase
     public function invalidKeyProvider()
     {
         return [
-        [null],
-        [''],
-        [123],
-        [new \stdClass()],
-        [[]],
-        ['äöü'],
-        ['%'],
-        ['$']
+            [null],
+            [''],
+            [123],
+            [new \stdClass()],
+            [[]],
+            ['äöü'],
+            ['%'],
+            ['$']
         ];
     }
 
@@ -55,10 +55,12 @@ class SnippetTest extends \PHPUnit_Framework_TestCase
     public function validKeyProvider()
     {
         return [
-        ['abcdef'],
-        ['-_-'],
-        ['a'],
-        ['1'],
+            ['abcdef'],
+            ['-_-'],
+            ['a'],
+            ['1'],
+            ['foo.bar'],
+            ['foo/bar'],
         ];
     }
 
