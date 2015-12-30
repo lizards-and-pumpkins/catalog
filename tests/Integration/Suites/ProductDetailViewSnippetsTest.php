@@ -131,18 +131,26 @@ class ProductDetailViewSnippetsTest extends AbstractIntegrationTest
         return $keyGenerator->getKeyForContext($context, ['product_id' => $productIdString]);
     }
 
-    public function testSimpleProductJsonSnippetIsWrittenToDataPool()
+    public function testProductJsonSnippetsAreWrittenToDataPool()
     {
         $this->importCatalog();
         $this->failIfMessagesWhereLogged($this->factory->getLogger());
         
-        $productIdString = $this->getSkuOfFirstSimpleProductInFixture();
+        $simpleProductIdString = $this->getSkuOfFirstSimpleProductInFixture();
 
-        $snippet = $this->getProductJsonSnippetForId($productIdString);
+        $simpleProductSnippet = $this->getProductJsonSnippetForId($simpleProductIdString);
 
-        $productData = json_decode($snippet, true);
-        $this->assertEquals($productIdString, $productData['product_id']);
-        $this->assertEquals('simple', $productData['type_code']);
+        $simpleProductData = json_decode($simpleProductSnippet, true);
+        $this->assertEquals($simpleProductIdString, $simpleProductData['product_id']);
+        $this->assertEquals('simple', $simpleProductData['type_code']);
+
+
+        $configProductIdString = $this->getSkuOfFirstConfigurableProductInFixture();
+        $variationAttributes = $this->getConfigurableProductVariationAttributesJsonSnippetForId($configProductIdString);
+        $associatedProducts = $this->getConfigurableProductAssociatedProductsJsonSnippetForId($configProductIdString);
+
+        $this->assertInternalType('array', json_decode($variationAttributes, true));
+        $this->assertInternalType('array', json_decode($associatedProducts, true));
     }
 
     public function testConfigurableProductJsonSnippetsAreAlsoWrittenForSimpleProducts()
@@ -155,18 +163,5 @@ class ProductDetailViewSnippetsTest extends AbstractIntegrationTest
         $associatedProductSnippet = $this->getConfigurableProductAssociatedProductsJsonSnippetForId($productIdString);
         $this->assertEmpty(json_decode($variationsSnippet, true));
         $this->assertEmpty(json_decode($associatedProductSnippet, true));
-    }
-
-    public function testConfigurableProductSnippetsAreWrittenToDataPool()
-    {
-        $this->importCatalog();
-        $this->failIfMessagesWhereLogged($this->factory->getLogger());
-
-        $productIdString = $this->getSkuOfFirstConfigurableProductInFixture();
-        $variationAttributes = $this->getConfigurableProductVariationAttributesJsonSnippetForId($productIdString);
-        $associatedProducts = $this->getConfigurableProductAssociatedProductsJsonSnippetForId($productIdString);
-        
-        $this->assertInternalType('array', json_decode($variationAttributes, true));
-        $this->assertInternalType('array', json_decode($associatedProducts, true));
     }
 }

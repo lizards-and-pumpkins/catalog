@@ -2,10 +2,11 @@ require([
     'lib/domReady',
     'common',
     'recently_viewed_products',
+    'related_models',
     'lib/styleselect',
     'lib/zoom',
     'lib/swiping_container'
-], function(domReady, common, recentlyViewedProducts, styleSelect, zoom, toggleSwipingArrows) {
+], function(domReady, common, recentlyViewedProducts, loadRelatedModels, styleSelect, zoom, toggleSwipingArrows) {
 
     var tabletWidth = 768,
         selectBoxIdPrefix = 'variation_',
@@ -25,6 +26,7 @@ require([
         initializeZoom();
         initializeTabs();
         showAvailabilityStatus();
+        loadRelatedModels(document.querySelector('meta[itemprop="sku"]').content);
     });
 
     function renderPrices() {

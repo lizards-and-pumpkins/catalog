@@ -34,10 +34,12 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private function createStubProduct(array $attributesMap)
     {
+        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
+        $stubProductId->method('__toString')->willReturn('test-id');
         $stubProduct = $this->getMock(Product::class);
         $stubProduct->method('getAllValuesOfAttribute')->willReturnMap($attributesMap);
         $stubProduct->method('getContext')->willReturn($this->getMock(Context::class));
-        $stubProduct->method('getId')->willReturn($this->getMock(ProductId::class, [], [], '', false));
+        $stubProduct->method('getId')->willReturn($stubProductId);
         $stubProduct->method('hasAttribute')->willReturnCallback(function ($attributeCode) use ($attributesMap) {
             foreach ($attributesMap as $attributeMap) {
                 if ($attributeMap[0] === $attributeCode) {
@@ -140,5 +142,20 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(SearchDocumentCollection::class, $result);
         $this->assertCount(1, $result);
         $this->assertDocumentContainsField($result->getDocuments()[0], $priceAttributeCode, $specialPriceValues);
+    }
+
+    public function testItIncludesTheProductIdInTheSearchDocumentFields()
+    {
+        $searchableAttribute = 'foo';
+        $attributeValues = ['bar'];
+
+        $attributesMap = [[$searchableAttribute, $attributeValues]];
+        $stubProduct = $this->createStubProduct($attributesMap);
+
+        $searchDocumentBuilder = $this->createInstance([$searchableAttribute]);
+        $result = $searchDocumentBuilder->aggregate($stubProduct);
+
+        $this->assertCount(1, $result);
+        $this->assertDocumentContainsField($result->getDocuments()[0], 'product_id', [(string) $stubProduct->getId()]);
     }
 }

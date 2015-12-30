@@ -2,13 +2,19 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\Api\ApiRequestHandlerChain;
+use LizardsAndPumpkins\Api\ApiRequestHandlerLocator;
 use LizardsAndPumpkins\Api\ApiRouter;
 use LizardsAndPumpkins\Content\ContentBlocksApiV1PutRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductDetailViewRequestHandler;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingPageContentBuilder;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingPageRequest;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsApiV1GetRequestHandler;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsLocator;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsService;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationTypeCode;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\RelationType\BrandAndGenderProductRelations;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchAutosuggestionRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\PageBuilder;
@@ -60,37 +66,43 @@ class FrontendFactory implements Factory
      */
     public function createApiRouter()
     {
-        $requestHandlerChain = new ApiRequestHandlerChain();
-        $this->registerApiRequestHandlers($requestHandlerChain);
+        $requestHandlerLocator = new ApiRequestHandlerLocator();
+        $this->registerApiRequestHandlers($requestHandlerLocator);
 
-        return new ApiRouter($requestHandlerChain);
+        return new ApiRouter($requestHandlerLocator);
     }
 
-    private function registerApiRequestHandlers(ApiRequestHandlerChain $requestHandlerChain)
+    private function registerApiRequestHandlers(ApiRequestHandlerLocator $requestHandlerLocator)
     {
-        $this->registerApiV1RequestHandlers($requestHandlerChain);
+        $this->registerApiV1RequestHandlers($requestHandlerLocator);
     }
 
-    private function registerApiV1RequestHandlers(ApiRequestHandlerChain $requestHandlerChain)
+    private function registerApiV1RequestHandlers(ApiRequestHandlerLocator $requestHandlerLocator)
     {
         $version = 1;
 
-        $requestHandlerChain->register(
+        $requestHandlerLocator->register(
             'put_catalog_import',
             $version,
             $this->getMasterFactory()->createCatalogImportApiV1PutRequestHandler()
         );
 
-        $requestHandlerChain->register(
+        $requestHandlerLocator->register(
             'put_content_blocks',
             $version,
             $this->getMasterFactory()->createContentBlocksApiV1PutRequestHandler()
         );
 
-        $requestHandlerChain->register(
+        $requestHandlerLocator->register(
             'put_templates',
             $version,
             $this->getMasterFactory()->createTemplatesApiV1PutRequestHandler()
+        );
+        
+        $requestHandlerLocator->register(
+            'get_products',
+            $version,
+            $this->getMasterFactory()->createProductRelationsApiV1GetRequestHandler()
         );
     }
 
@@ -190,8 +202,7 @@ class FrontendFactory implements Factory
     public function createProductListingPageContentBuilder()
     {
         return new ProductListingPageContentBuilder(
-            $this->getMasterFactory()->createDataPoolReader(),
-            $this->getMasterFactory()->getSnippetKeyGeneratorLocator(),
+            $this->getMasterFactory()->createProductJsonService(),
             $this->getMasterFactory()->createPageBuilder(),
             $this->getMasterFactory()->getTranslatorRegistry(),
             ...$this->getMasterFactory()->getProductListingSortOrderConfig()
@@ -425,5 +436,66 @@ class FrontendFactory implements Factory
     public function createPricesJsonSnippetTransformation()
     {
         return new PricesJsonSnippetTransformation($this->getMasterFactory()->createPriceSnippetTransformation());
+    }
+
+    /**
+     * @return ProductRelationsService
+     */
+    public function createProductRelationsService()
+    {
+        return new ProductRelationsService(
+            $this->getMasterFactory()->createProductRelationsLocator(),
+            $this->getMasterFactory()->createProductJsonService(),
+            $this->getMasterFactory()->createContext()
+        );
+    }
+
+    /**
+     * @return BrandAndGenderProductRelations
+     */
+    public function createBrandAndGenderProductRelations()
+    {
+        return new BrandAndGenderProductRelations(
+            $this->getMasterFactory()->createDataPoolReader(),
+            $this->getMasterFactory()->createProductJsonSnippetKeyGenerator(),
+            $this->getMasterFactory()->createContext()
+        );
+    }
+
+    /**
+     * @return ProductRelationsLocator
+     */
+    public function createProductRelationsLocator()
+    {
+        $productRelationsLocator = new ProductRelationsLocator();
+        $productRelationsLocator->register(
+            ProductRelationTypeCode::fromString('related-models'),
+            [$this->getMasterFactory(), 'createBrandAndGenderProductRelations']
+        );
+        return $productRelationsLocator;
+    }
+
+    /**
+     * @return ProductRelationsApiV1GetRequestHandler
+     */
+    public function createProductRelationsApiV1GetRequestHandler()
+    {
+        return new ProductRelationsApiV1GetRequestHandler(
+            $this->getMasterFactory()->createProductRelationsService()
+        );
+    }
+
+    /**
+     * @return ProductJsonService
+     */
+    public function createProductJsonService()
+    {
+        return new ProductJsonService(
+            $this->getMasterFactory()->createDataPoolReader(),
+            $this->getMasterFactory()->createProductJsonSnippetKeyGenerator(),
+            $this->getMasterFactory()->createPriceSnippetKeyGenerator(),
+            $this->getMasterFactory()->createSpecialPriceSnippetKeyGenerator(),
+            $this->getMasterFactory()->createContext()
+        );
     }
 }

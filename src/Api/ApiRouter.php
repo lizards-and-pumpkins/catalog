@@ -10,13 +10,13 @@ class ApiRouter implements HttpRouter
     const API_URL_PREFIX = 'api';
 
     /**
-     * @var ApiRequestHandlerChain
+     * @var ApiRequestHandlerLocator
      */
-    private $requestHandlerChain;
+    private $requestHandlerLocator;
 
-    public function __construct(ApiRequestHandlerChain $requestHandlerChain)
+    public function __construct(ApiRequestHandlerLocator $requestHandlerLocator)
     {
-        $this->requestHandlerChain = $requestHandlerChain;
+        $this->requestHandlerLocator = $requestHandlerLocator;
     }
 
     /**
@@ -46,7 +46,7 @@ class ApiRouter implements HttpRouter
             return null;
         }
 
-        $apiRequestHandler = $this->requestHandlerChain->getApiRequestHandler(
+        $apiRequestHandler = $this->requestHandlerLocator->getApiRequestHandler(
             strtolower($request->getMethod() . '_' . $requestHandlerCode),
             (int)$matchedVersion[1]
         );

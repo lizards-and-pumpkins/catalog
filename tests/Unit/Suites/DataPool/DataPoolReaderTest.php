@@ -270,4 +270,38 @@ class DataPoolReaderTest extends AbstractDataPoolTest
         );
         $this->assertSame($matchingProductIds, $result);
     }
+
+    public function testTheReturnedProductIdArrayIsNumericallyIndexed()
+    {
+        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubCriteria */
+        $stubCriteria = $this->getMock(SearchCriteria::class);
+
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
+        $stubContext = $this->getMock(Context::class);
+        
+        /** @var SortOrderConfig|\PHPUnit_Framework_MockObject_MockObject $stubSortBy */
+        $stubSortBy = $this->getMock(SortOrderConfig::class, [], [], '', false);
+
+        $rowsPerPage = 1000;
+        $pageNumber = 1;
+        
+        /** @var ProductId[]|\PHPUnit_Framework_MockObject_MockObject[] $matchingProductIds */
+        $matchingProductIds = ['non-numeric-key' => $this->getMock(ProductId::class, [], [], '', false)];
+
+        /** @var SearchEngineResponse|\PHPUnit_Framework_MockObject_MockObject $stubSearchResponse */
+        $stubSearchResponse = $this->getMock(SearchEngineResponse::class, [], [], '', false);
+        $stubSearchResponse->method('getProductIds')->willReturn($matchingProductIds);
+
+        $this->getMockSearchEngine()->expects($this->once())
+            ->method('query')->willReturn($stubSearchResponse);
+
+        $result = $this->dataPoolReader->getProductIdsMatchingCriteria(
+            $stubCriteria,
+            $stubContext,
+            $stubSortBy,
+            $rowsPerPage,
+            $pageNumber
+        );
+        $this->assertSame([0], array_keys($result));
+    }
 }

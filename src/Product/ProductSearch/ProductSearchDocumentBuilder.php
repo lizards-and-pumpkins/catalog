@@ -70,7 +70,9 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
             return array_merge($carry, $codeAndValues);
         }, []);
 
-        return SearchDocumentFieldCollection::fromArray($attributesMap);
+        return SearchDocumentFieldCollection::fromArray(
+            array_merge($attributesMap, ['product_id' => (string) $product->getId()])
+        );
     }
 
     /**
