@@ -54,7 +54,7 @@ class BrandAndGenderProductRelations implements ProductRelations
 
         $criteria = $this->createCriteria($productData);
         $sortBy = $this->createSortOrderConfig();
-        $rowsPerPage = 5;
+        $rowsPerPage = 20;
         $pageNumber = 1;
 
         return $this->dataPoolReader->getProductIdsMatchingCriteria(
