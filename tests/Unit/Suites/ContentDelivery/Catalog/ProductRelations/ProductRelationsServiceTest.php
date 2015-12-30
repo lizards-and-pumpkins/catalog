@@ -68,10 +68,11 @@ class ProductRelationsServiceTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockProductRelations->expects($this->once())->method('getById')->willReturn([]);
         
-        $this->productRelationsService->getRelatedProductData(
+        $result = $this->productRelationsService->getRelatedProductData(
             $this->stubProductRelationTypeCode,
             $this->stubProductId
         );
+        $this->assertSame([], $result);
     }
 
     public function testItFetchesTheRelatedProductJsonSnippetsFromTheProductJsonService()
