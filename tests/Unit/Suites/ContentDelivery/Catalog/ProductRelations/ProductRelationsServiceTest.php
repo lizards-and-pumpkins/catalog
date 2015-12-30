@@ -2,10 +2,9 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations;
 
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\Product\ProductId;
-use LizardsAndPumpkins\SnippetKeyGenerator;
 
 /**
  * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsService
@@ -23,16 +22,6 @@ class ProductRelationsServiceTest extends \PHPUnit_Framework_TestCase
     private $stubProductRelationsLocator;
 
     /**
-     * @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $mockDataPoolReader;
-
-    /**
-     * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $mockProductJsonSnippetKeyGenerator;
-
-    /**
      * @var ProductId|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubProductId;
@@ -41,6 +30,11 @@ class ProductRelationsServiceTest extends \PHPUnit_Framework_TestCase
      * @var ProductRelationTypeCode|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubProductRelationTypeCode;
+
+    /**
+     * @var ProductJsonService|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubProductJsonService;
 
     /**
      * @var ProductRelationsService
@@ -57,8 +51,7 @@ class ProductRelationsServiceTest extends \PHPUnit_Framework_TestCase
         $this->mockProductRelations = $this->getMock(ProductRelations::class);
         $this->stubProductRelationsLocator = $this->getMock(ProductRelationsLocator::class);
         $this->stubProductRelationsLocator->method('locate')->willReturn($this->mockProductRelations);
-        $this->mockDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
-        $this->mockProductJsonSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $this->stubProductJsonService = $this->getMock(ProductJsonService::class, [], [], '', false);
         $this->stubContext = $this->getMock(Context::class);
         
         $this->stubProductId = $this->getMock(ProductId::class, [], [], '', false);
@@ -66,8 +59,7 @@ class ProductRelationsServiceTest extends \PHPUnit_Framework_TestCase
         
         $this->productRelationsService = new ProductRelationsService(
             $this->stubProductRelationsLocator,
-            $this->mockDataPoolReader,
-            $this->mockProductJsonSnippetKeyGenerator,
+            $this->stubProductJsonService,
             $this->stubContext
         );
     }
@@ -82,18 +74,17 @@ class ProductRelationsServiceTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testItFetchesTheRelatedProductJsonSnippetsFromTheDataPool()
+    public function testItFetchesTheRelatedProductJsonSnippetsFromTheProductJsonService()
     {
         $stubRelatedProductIds = [$this->getMock(ProductId::class, [], [], '', false)];
         $stubRelatedProductData = [
             ['Dummy Product Data 1'],
             ['Dummy Product Data 2'],
         ];
-        $stubRelatedProductJsonSnippets = array_map('json_encode', $stubRelatedProductData);
         
         $this->mockProductRelations->method('getById')->willReturn($stubRelatedProductIds);
 
-        $this->mockDataPoolReader->method('getSnippets')->willReturn($stubRelatedProductJsonSnippets);
+        $this->stubProductJsonService->method('get')->willReturn($stubRelatedProductData);
         
         $this->assertSame($stubRelatedProductData, $this->productRelationsService->getRelatedProductData(
             $this->stubProductRelationTypeCode,

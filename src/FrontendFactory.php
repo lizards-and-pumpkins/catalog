@@ -6,6 +6,7 @@ use LizardsAndPumpkins\Api\ApiRequestHandlerLocator;
 use LizardsAndPumpkins\Api\ApiRouter;
 use LizardsAndPumpkins\Content\ContentBlocksApiV1PutRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductDetailViewRequestHandler;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingPageContentBuilder;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingPageRequest;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler;
@@ -445,8 +446,7 @@ class FrontendFactory implements Factory
     {
         return new ProductRelationsService(
             $this->getMasterFactory()->createProductRelationsLocator(),
-            $this->getMasterFactory()->createDataPoolReader(),
-            $this->getMasterFactory()->createProductJsonSnippetKeyGenerator(),
+            $this->getMasterFactory()->createProductJsonService(),
             $this->getMasterFactory()->createContext()
         );
     }
@@ -483,6 +483,20 @@ class FrontendFactory implements Factory
     {
         return new ProductRelationsApiV1GetRequestHandler(
             $this->getMasterFactory()->createProductRelationsService()
+        );
+    }
+
+    /**
+     * @return ProductJsonService
+     */
+    public function createProductJsonService()
+    {
+        return new ProductJsonService(
+            $this->getMasterFactory()->createDataPoolReader(),
+            $this->getMasterFactory()->createProductJsonSnippetKeyGenerator(),
+            $this->getMasterFactory()->createPriceSnippetKeyGenerator(),
+            $this->getMasterFactory()->createSpecialPriceSnippetKeyGenerator(),
+            $this->getMasterFactory()->createContext()
         );
     }
 }

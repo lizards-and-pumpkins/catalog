@@ -2,11 +2,9 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations;
 
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\DataPool\DataPoolReader;
-use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductId;
-use LizardsAndPumpkins\SnippetKeyGenerator;
 
 class ProductRelationsService
 {
@@ -16,29 +14,22 @@ class ProductRelationsService
     private $productRelationsLocator;
 
     /**
-     * @var DataPoolReader
-     */
-    private $dataPoolReader;
-
-    /**
-     * @var SnippetKeyGenerator
-     */
-    private $productJsonSnippetKeyGenerator;
-
-    /**
      * @var Context
      */
     private $context;
 
+    /**
+     * @var ProductJsonService
+     */
+    private $productJsonService;
+
     public function __construct(
         ProductRelationsLocator $productRelationsLocator,
-        DataPoolReader $dataPoolReader,
-        SnippetKeyGenerator $productJsonSnippetKeyGenerator,
+        ProductJsonService $productJsonService,
         Context $context
     ) {
         $this->productRelationsLocator = $productRelationsLocator;
-        $this->dataPoolReader = $dataPoolReader;
-        $this->productJsonSnippetKeyGenerator = $productJsonSnippetKeyGenerator;
+        $this->productJsonService = $productJsonService;
         $this->context = $context;
     }
 
@@ -65,28 +56,6 @@ class ProductRelationsService
      */
     private function getProductDataByProductIds(array $productIds)
     {
-        $productJsonSnippets = $this->dataPoolReader->getSnippets($this->getProductJsonSnippetKeys($productIds));
-        
-        return array_map([$this, 'decodeProductJsonSnippet'], $productJsonSnippets);
-    }
-
-    /**
-     * @param ProductId[] $productIds
-     * @return string[]
-     */
-    private function getProductJsonSnippetKeys(array $productIds)
-    {
-        return array_map(function (ProductId $productId) {
-            return $this->productJsonSnippetKeyGenerator->getKeyForContext($this->context, [Product::ID => $productId]);
-        }, $productIds);
-    }
-
-    /**
-     * @param string $productJson
-     * @return mixed[]
-     */
-    private function decodeProductJsonSnippet($productJson)
-    {
-        return json_decode($productJson, true);
+        return $this->productJsonService->get(...$productIds);
     }
 }

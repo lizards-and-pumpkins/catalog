@@ -119,7 +119,7 @@ class ProductJsonService
 
         return array_map(function ($productJsonSnippetKey, $priceKey, $specialPriceKey) use ($snippets) {
             $productData = json_decode($snippets[$productJsonSnippetKey], true);
-            return $this->addPricesToProductData($productData, $snippets[$priceKey], $snippets[$specialPriceKey]);
+            return $this->addPricesToProductData($productData, $snippets[$priceKey], @$snippets[$specialPriceKey]);
         }, $productJsonSnippetKeys, $priceSnippetKeys, $specialPriceSnippetKeys);
     }
 
@@ -146,8 +146,10 @@ class ProductJsonService
         $productData['attributes']['raw_price'] = $price;
         $productData['attributes']['price'] = $this->formatPriceSnippet($price);
 
-        $productData['attributes']['raw_special_price'] = $specialPrice;
-        $productData['attributes']['special_price'] = $this->formatPriceSnippet($specialPrice);
+        if (null !== $specialPrice) {
+            $productData['attributes']['raw_special_price'] = $specialPrice;
+            $productData['attributes']['special_price'] = $this->formatPriceSnippet($specialPrice);
+        }
         
         return $productData;
     }
