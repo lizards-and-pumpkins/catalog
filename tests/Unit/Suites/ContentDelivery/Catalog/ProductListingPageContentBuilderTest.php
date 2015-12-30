@@ -87,7 +87,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var ProductJsonService|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockProductJsonService;
+    private $stubProductJsonService;
 
     private function createMockPageBuilder()
     {
@@ -167,7 +167,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockProductJsonService = $this->getMock(ProductJsonService::class, [], [], '', false);
+        $this->stubProductJsonService = $this->getMock(ProductJsonService::class, [], [], '', false);
         $this->mockPageBuilder = $this->createMockPageBuilder();
         $this->stubTranslator = $this->getMock(Translator::class);
 
@@ -178,7 +178,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
         $this->stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
 
         $this->pageContentBuilder = new ProductListingPageContentBuilder(
-            $this->mockProductJsonService,
+            $this->stubProductJsonService,
             $this->mockPageBuilder,
             $stubTranslatorRegistry,
             $this->stubSortOrderConfig
@@ -209,7 +209,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testProductsInListingAreAddedToPageBuilder()
     {
-        $this->mockProductJsonService->method('get')->willReturn([]);
+        $this->stubProductJsonService->method('get')->willReturn([]);
         $this->stubFacetFieldCollection->method('getFacetFields')->willReturn([]);
 
         $this->pageContentBuilder->buildPageContent(
@@ -293,7 +293,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
         $this->stubSortOrderConfig->method('getAttributeCode')->willReturn($stubAttributeCode);
         $this->stubSortOrderConfig->method('jsonSerialize')->willReturn($initialSortOrderConfigRepresentation);
 
-        $this->mockProductJsonService->method('get')->willReturn([]);
+        $this->stubProductJsonService->method('get')->willReturn([]);
         $this->stubFacetFieldCollection->method('getFacetFields')->willReturn([]);
 
         $this->pageContentBuilder->buildPageContent(
@@ -327,7 +327,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
         $this->stubSortOrderConfig->method('getAttributeCode')->willReturn($stubAttributeCodeB);
         $this->stubSortOrderConfig->method('jsonSerialize')->willReturn($initialSortOrderConfigRepresentation);
 
-        $this->mockProductJsonService->method('get')->willReturn([]);
+        $this->stubProductJsonService->method('get')->willReturn([]);
         $this->stubFacetFieldCollection->method('getFacetFields')->willReturn([]);
 
         $this->pageContentBuilder->buildPageContent(
@@ -361,7 +361,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
         $this->stubSortOrderConfig->method('getSelectedDirection')->willReturn($stubSortOrderDirection);
         $this->stubSortOrderConfig->method('isSelected')->willReturn(true);
 
-        $this->mockProductJsonService->method('get')->willReturn([]);
+        $this->stubProductJsonService->method('get')->willReturn([]);
         $this->stubFacetFieldCollection->method('getFacetFields')->willReturn([]);
 
         $this->pageContentBuilder->buildPageContent(
@@ -393,7 +393,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->stubFacetFieldCollection->method('getFacetFields')->willReturn([$stubFacetFieldA, $stubFacetFieldB]);
         $this->stubSortOrderConfig->method('getAttributeCode')->willReturn($stubAttributeCCode);
-        $this->mockProductJsonService->method('get')->willReturn([]);
+        $this->stubProductJsonService->method('get')->willReturn([]);
 
         $this->stubTranslator->method('translate')->willReturnCallback(function ($string) {
             return sprintf('%s en français', $string);
