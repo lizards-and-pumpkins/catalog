@@ -59,13 +59,11 @@ class ProductJsonService
      */
     public function get(ProductId ...$productIds)
     {
-        $productsData = $this->buildProductData(
+        return $this->buildProductData(
             $this->getProductJsonSnippetKeys($productIds),
             $this->getPriceSnippetKeys($productIds),
             $this->getSpecialPriceSnippetKeys($productIds)
         );
-        
-        return $productsData;
     }
 
     /**
