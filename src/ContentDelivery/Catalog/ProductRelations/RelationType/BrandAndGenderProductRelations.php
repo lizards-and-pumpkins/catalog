@@ -57,13 +57,13 @@ class BrandAndGenderProductRelations implements ProductRelations
         $rowsPerPage = 5;
         $pageNumber = 1;
 
-        return array_values($this->dataPoolReader->getProductIdsMatchingCriteria(
+        return $this->dataPoolReader->getProductIdsMatchingCriteria(
             $criteria,
             $this->context,
             $sortBy,
             $rowsPerPage,
             $pageNumber
-        ));
+        );
     }
 
     /**

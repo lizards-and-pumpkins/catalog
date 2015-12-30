@@ -229,6 +229,6 @@ class DataPoolReader
             $pageNumber,
             $sortOrderConfig
         );
-        return $searchResult->getProductIds();
+        return array_values($searchResult->getProductIds());
     }
 }
