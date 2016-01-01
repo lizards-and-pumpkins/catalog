@@ -8,10 +8,10 @@ use LizardsAndPumpkins\Website\HostToWebsiteMap;
 class IntegrationTestHostToWebsiteMap implements HostToWebsiteMap
 {
     /**
-     * @param string $code
+     * @param string $host
      * @return string
      */
-    public function getWebsiteCodeByHost($code)
+    public function getWebsiteCodeByHost($host)
     {
         return 'fr';
     }
