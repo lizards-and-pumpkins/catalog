@@ -17,9 +17,9 @@ define(function () {
             return {};
         }
 
-        return decodeURIComponent(urlParts[1]).split('&').reduce(function (carry, item) {
+        return urlParts[1].split('&').reduce(function (carry, item) {
             var keyValue = item.split('=');
-            carry[keyValue[0]] = decodeURI(keyValue[1]);
+            carry[keyValue[0]] = decodeURIComponent(keyValue[1]);
             return carry;
         }, {});
     }
