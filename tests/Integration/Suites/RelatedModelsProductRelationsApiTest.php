@@ -44,8 +44,9 @@ class RelatedModelsProductRelationsApiTest extends AbstractIntegrationTest
     {
         $testProductId = 'T500N-4207';
         $expectedProductIds = ['T4H2N-4701', 'T408Q-9030'];
-        
-        $httpUrl = HttpUrl::fromString('http://example.com/api/products/' . $testProductId . '/relations/related-models');
+
+        $urlString = sprintf('http://example.com/api/products/%s/relations/related-models', $testProductId);
+        $httpUrl = HttpUrl::fromString($urlString);
         $httpHeaders = HttpHeaders::fromArray([
             'Accept' => 'application/vnd.lizards-and-pumpkins.product_relations.v1+json'
         ]);
@@ -59,7 +60,7 @@ class RelatedModelsProductRelationsApiTest extends AbstractIntegrationTest
         $response = $website->runWithoutSendingResponse();
         $matches = json_decode($response->getBody(), true)['data'];
 
-        $this->assertCount(count($expectedProductIds), $matches);
+        $this->assertGreaterThan(count($expectedProductIds), count($matches));
         
         foreach ($expectedProductIds as $expectedProductId) {
             $this->assertContainsProductData($expectedProductId, $matches);
