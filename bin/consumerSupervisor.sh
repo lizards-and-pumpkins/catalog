@@ -7,16 +7,21 @@ RESTART_INTERVAL=3
 while test $# -ne 0
 do
     case "$1" in
-        "-l")
+        "-l"|"--log")
                 LOG="$2"
                 shift
                 ;;
-        "-i")
+        "-i"|"--restart-interval")
                 RESTART_INTERVAL="$2"
                 shift
                 ;;
-        "-e")
+        "-e"|"--exit-on-error")
                 EXIT_ON_ERROR=true
+                ;;
+        "-h"|"--help")
+                echo "Usage:"
+                echo "${0} [-l|--log logfile] [-i|--restart-interval secs] [-e|--exit-on-error] script-to-supervise"
+                exit 1
                 ;;
         *)
                 CONSUMER_SCRIPT="$1"
