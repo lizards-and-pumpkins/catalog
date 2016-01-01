@@ -40,7 +40,7 @@ class RelatedModelsProductRelationsApiTest extends AbstractIntegrationTest
         $this->assertEquals(json_encode(['data' => []]), $response->getBody());
     }
 
-    public function testRelatedProductsWithMatchingBrandAndGenderAreReturned()
+    public function testRelatedProductsWithMatchingBrandAndSeriesAndGenderAreReturned()
     {
         $testProductId = 'T500N-4207';
         $expectedProductIds = ['T4H2N-4701', 'T408Q-9030'];
@@ -60,7 +60,7 @@ class RelatedModelsProductRelationsApiTest extends AbstractIntegrationTest
         $response = $website->runWithoutSendingResponse();
         $matches = json_decode($response->getBody(), true)['data'];
 
-        $this->assertGreaterThan(count($expectedProductIds), count($matches));
+        $this->assertCount(count($expectedProductIds), $matches);
         
         foreach ($expectedProductIds as $expectedProductId) {
             $this->assertContainsProductData($expectedProductId, $matches);

@@ -63,18 +63,19 @@ class BrandAndGenderProductRelationsTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $brand
      * @param string $gender
+     * @param string $series
      * @return string
      */
-    private function getProductJsonWithBrandAndGender($brand, $gender)
+    private function getStubProductDataWithBrandAndGenderAndSeries($brand, $gender, $series)
     {
-        $product = [
+        return [
             'product_id' => 'test',
             'attributes' => [
                 'brand' => $brand,
                 'gender' => $gender,
+                'series' => $series,
             ]
         ];
-        return json_encode($product);
     }
 
     protected function setUp()
@@ -95,12 +96,41 @@ class BrandAndGenderProductRelationsTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ProductRelations::class, $this->brandAndGenderProductRelations);
     }
 
-    public function testItQueriesTheDataPoolForProductIdsMatchingTheBrandAndGender()
+    /**
+     * @param string $missingAttribute
+     * @dataProvider missingRequiredAttributeProvider
+     */
+    public function testItReturnsAnEmptyArrayIfARequiredAttributeIsMissing($missingAttribute)
     {
         /** @var ProductId|\PHPUnit_Framework_MockObject_MockObject $stubProductId */
         $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
 
-        $productJson = $this->getProductJsonWithBrandAndGender('Pooma', 'Ladies');
+        $productData = $this->getStubProductDataWithBrandAndGenderAndSeries('Pooma', 'Ladies', 'Example');
+        unset($productData['attributes'][$missingAttribute]);
+        $this->stubDataPoolReader->method('getSnippet')->willReturn(json_encode($productData));
+        
+        $result = $this->brandAndGenderProductRelations->getById($stubProductId);
+        $this->assertSame([], $result);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function missingRequiredAttributeProvider()
+    {
+        return [
+            ['gender'],
+            ['brand'],
+            ['series'],
+        ];
+    }
+
+    public function testItQueriesTheDataPoolForProductIdsMatchingTheBrandAndSeriesAndGender()
+    {
+        /** @var ProductId|\PHPUnit_Framework_MockObject_MockObject $stubProductId */
+        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
+
+        $productJson =json_encode($this->getStubProductDataWithBrandAndGenderAndSeries('Pooma', 'Ladies', 'Example'));
         $this->stubDataPoolReader->method('getSnippet')->willReturn($productJson);
 
         $stubMatchingProductIds = [$this->getMock(ProductId::class, [], [], '', false)];
@@ -110,6 +140,7 @@ class BrandAndGenderProductRelationsTest extends \PHPUnit_Framework_TestCase
                 $json = json_decode(json_encode($criteria), true);
                 $this->failIfNotContainsCondition($json['criteria'], 'brand', 'Equal', 'Pooma');
                 $this->failIfNotContainsCondition($json['criteria'], 'gender', 'Equal', 'Ladies');
+                $this->failIfNotContainsCondition($json['criteria'], 'series', 'Equal', 'Example');
                 return $stubMatchingProductIds;
             });
 
