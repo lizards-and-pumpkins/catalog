@@ -10,7 +10,7 @@ use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 
 /**
- * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\RelationType\BrandAndGenderProductRelations
+ * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\RelationType\SameSeriesProductRelations
  * @uses   \LizardsAndPumpkins\Product\ProductId
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
@@ -18,12 +18,12 @@ use LizardsAndPumpkins\SnippetKeyGenerator;
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection
  */
-class BrandAndGenderProductRelationsTest extends \PHPUnit_Framework_TestCase
+class SameSeriesProductRelationsTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var BrandAndGenderProductRelations
+     * @var SameSeriesProductRelations
      */
-    private $brandAndGenderProductRelations;
+    private $sameSeriesProductRelations;
 
     /**
      * @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
@@ -84,7 +84,7 @@ class BrandAndGenderProductRelationsTest extends \PHPUnit_Framework_TestCase
         $this->stubProductJsonSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $this->stubContext = $this->getMock(Context::class);
 
-        $this->brandAndGenderProductRelations = new BrandAndGenderProductRelations(
+        $this->sameSeriesProductRelations = new SameSeriesProductRelations(
             $this->stubDataPoolReader,
             $this->stubProductJsonSnippetKeyGenerator,
             $this->stubContext
@@ -93,7 +93,7 @@ class BrandAndGenderProductRelationsTest extends \PHPUnit_Framework_TestCase
 
     public function testItImplementsTheProductRelationsInterface()
     {
-        $this->assertInstanceOf(ProductRelations::class, $this->brandAndGenderProductRelations);
+        $this->assertInstanceOf(ProductRelations::class, $this->sameSeriesProductRelations);
     }
 
     /**
@@ -109,7 +109,7 @@ class BrandAndGenderProductRelationsTest extends \PHPUnit_Framework_TestCase
         unset($productData['attributes'][$missingAttribute]);
         $this->stubDataPoolReader->method('getSnippet')->willReturn(json_encode($productData));
         
-        $result = $this->brandAndGenderProductRelations->getById($stubProductId);
+        $result = $this->sameSeriesProductRelations->getById($stubProductId);
         $this->assertSame([], $result);
     }
 
@@ -144,7 +144,7 @@ class BrandAndGenderProductRelationsTest extends \PHPUnit_Framework_TestCase
                 return $stubMatchingProductIds;
             });
 
-        $result = $this->brandAndGenderProductRelations->getById($stubProductId);
+        $result = $this->sameSeriesProductRelations->getById($stubProductId);
         $this->assertSame($stubMatchingProductIds, $result);
     }
 }

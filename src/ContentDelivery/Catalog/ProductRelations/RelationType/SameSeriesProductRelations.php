@@ -16,7 +16,7 @@ use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 
-class BrandAndGenderProductRelations implements ProductRelations
+class SameSeriesProductRelations implements ProductRelations
 {
     /**
      * @var DataPoolReader

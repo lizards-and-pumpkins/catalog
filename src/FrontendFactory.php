@@ -14,7 +14,7 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelations
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsLocator;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsService;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationTypeCode;
-use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\RelationType\BrandAndGenderProductRelations;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\RelationType\SameSeriesProductRelations;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchAutosuggestionRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\PageBuilder;
@@ -451,11 +451,11 @@ class FrontendFactory implements Factory
     }
 
     /**
-     * @return BrandAndGenderProductRelations
+     * @return SameSeriesProductRelations
      */
-    public function createBrandAndGenderProductRelations()
+    public function createSameSeriesProductRelations()
     {
-        return new BrandAndGenderProductRelations(
+        return new SameSeriesProductRelations(
             $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->createProductJsonSnippetKeyGenerator(),
             $this->getMasterFactory()->createContext()
@@ -470,7 +470,7 @@ class FrontendFactory implements Factory
         $productRelationsLocator = new ProductRelationsLocator();
         $productRelationsLocator->register(
             ProductRelationTypeCode::fromString('related-models'),
-            [$this->getMasterFactory(), 'createBrandAndGenderProductRelations']
+            [$this->getMasterFactory(), 'createSameSeriesProductRelations']
         );
         return $productRelationsLocator;
     }

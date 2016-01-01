@@ -22,7 +22,7 @@ class RelatedModelsProductRelationsApiTest extends AbstractIntegrationTest
         $this->assertTrue($found, $message);
     }
     
-    public function testNoRelatedModelsAreReturnsForAProductWithoutSharedBrandAndGender()
+    public function testNoRelatedModelsAreReturnsForAProductWithoutSharedSeriesAndBrandAndGender()
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/products/118235-251/relations/related-models');
         $httpHeaders = HttpHeaders::fromArray([
