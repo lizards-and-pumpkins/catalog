@@ -54,7 +54,7 @@ class ProductListingPageRequest
     {
         $facetFilterAttributeCodeStrings = $facetFilterRequest->getAttributeCodeStrings();
         return array_reduce($facetFilterAttributeCodeStrings, function (array $carry, $filterName) use ($request) {
-            $carry[$filterName] = array_filter(explode(',', $request->getQueryParameter($filterName)));
+            $carry[$filterName] = array_filter(explode(',', urldecode($request->getQueryParameter($filterName))));
             return $carry;
         }, []);
     }

@@ -5,15 +5,9 @@ define(function () {
     }
 
     function buildQueryString(parameters) {
-        var pairs = [];
-
-        for (var key in parameters) {
-            if (parameters.hasOwnProperty(key)) {
-                pairs.push(encodeURIComponent(key) + '=' + encodeURIComponent(parameters[key]));
-            }
-        }
-
-        return pairs.join('&');
+        return Object.keys(parameters).map(function (key) {
+            return encodeURIComponent(key) + '=' + encodeURIComponent(parameters[key]);
+        }).join('&');
     }
 
     function getQueryParameters(url) {
@@ -23,7 +17,7 @@ define(function () {
             return {};
         }
 
-        return urlParts[1].split('&').reduce(function (carry, item) {
+        return decodeURIComponent(urlParts[1]).split('&').reduce(function (carry, item) {
             var keyValue = item.split('=');
             carry[keyValue[0]] = decodeURI(keyValue[1]);
             return carry;
