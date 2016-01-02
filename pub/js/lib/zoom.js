@@ -1,4 +1,4 @@
-define(['lib/bind'], function (bind) {
+define(function () {
     var dw, dh, rw, rh, lx, ly;
 
     var Zoom = function (element) {
@@ -24,30 +24,30 @@ define(['lib/bind'], function (bind) {
         this.notice = document.createElement('div');
         this.notice.className = 'zoom-notice';
 
-        bind(this.target, 'click', function (event) {
+        this.target.addEventListener('click', function (event) {
             event.preventDefault();
-        });
+        }, true);
 
-        bind(this.target, 'mouseover', function (event) {
+        this.target.addEventListener('mouseover', function (event) {
             if (!self.isOpen) {
                 event.preventDefault();
                 self._show(this, event);
             }
-        });
+        }, true);
 
-        bind(this.target, 'mousemove', function (event) {
+        this.target.addEventListener('mousemove', function (event) {
             if (self.isOpen) {
                 event.preventDefault();
                 self._move(event);
             }
-        });
+        }, true);
 
-        bind(this.target, 'mouseout', function (event) {
+        this.target.addEventListener('mouseout', function (event) {
             if (self.isOpen) {
                 event.preventDefault();
                 self.hide();
             }
-        });
+        }, true);
     };
 
     Zoom.prototype._show = function (link, e) {
