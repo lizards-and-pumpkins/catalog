@@ -106,6 +106,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
             </images>
             <attributes>
                 <url_key>gel-kayano-21</url_key>
+                <series>Example</series>
                 <name>Gel-Kayano 21</name>
                 <category>sale</category>
                 <price>106.95</price>
@@ -148,6 +149,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
             </images>
             <attributes>
                 <url_key>gt-2000-3</url_key>
+                <series>Example</series>
                 <name>GT-2000 3</name>
                 <category>sale</category>
                 <price>89.90</price>
@@ -190,6 +192,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
             </images>
             <attributes>
                 <url_key>gel-noosa-tri-9</url_key>
+                <series>Example</series>
                 <name>Gel-Noosa Tri 9</name>
                 <category>sale</category>
                 <price>83.97</price>

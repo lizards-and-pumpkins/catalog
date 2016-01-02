@@ -132,7 +132,7 @@ class IntegrationTestFactory implements Factory
      */
     public function getAdditionalAttributesForSearchIndex()
     {
-        return ['backorders', 'stock_qty'];
+        return ['backorders', 'stock_qty', 'series'];
     }
 
     /**

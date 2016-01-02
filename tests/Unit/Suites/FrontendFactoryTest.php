@@ -8,8 +8,8 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsApiV1GetRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsLocator;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsService;
-use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\RelationType\BrandAndGenderProductRelations;
-use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\RelationType\BrandAndGenderProductRelationsTest;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\RelationType\SameSeriesProductRelations;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\RelationType\SameSeriesProductRelationsTest;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\PricesJsonSnippetTransformation;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\SimpleEuroPriceSnippetTransformation;
 use LizardsAndPumpkins\Context\Context;
@@ -52,7 +52,7 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsService
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsLocator
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationTypeCode
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\RelationType\BrandAndGenderProductRelations
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\RelationType\SameSeriesProductRelations
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsApiV1GetRequestHandler
  * @uses   \LizardsAndPumpkins\Context\ContextSource
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
@@ -236,10 +236,10 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ProductRelationsApiV1GetRequestHandler::class, $result);
     }
 
-    public function testItReturnsBrandAndGenderProductRelations()
+    public function testItReturnsSameSeriesProductRelations()
     {
-        $result = $this->frontendFactory->createBrandAndGenderProductRelations();
-        $this->assertInstanceOf(BrandAndGenderProductRelations::class, $result);
+        $result = $this->frontendFactory->createSameSeriesProductRelations();
+        $this->assertInstanceOf(SameSeriesProductRelations::class, $result);
     }
 
     public function testItReturnsAProductJsonService()
