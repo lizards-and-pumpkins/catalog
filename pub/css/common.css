@@ -19,7 +19,7 @@ li { margin: 0; padding: 0 }
 .swipe-container li { display: table-cell }
 
 h1 { font-size: 26px; font-weight: normal; color: #323232; text-transform: uppercase }
-.heading { color: #323232; font-family: GeogrotesqueRegular, Helvetica, Arial, sans-serif; font-size: 26px }
+.heading { color: #323232; font-family: GeogrotesqueRegular, Helvetica, Arial, sans-serif; font-size: 26px; font-weight: normal }
 
 /* Layout */
 .col2-left-layout .main { display: table }

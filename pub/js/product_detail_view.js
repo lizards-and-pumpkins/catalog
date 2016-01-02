@@ -6,7 +6,7 @@ require([
     'lib/styleselect',
     'lib/zoom',
     'lib/swiping_container'
-], function(domReady, common, recentlyViewedProducts, loadRelatedModels, styleSelect, zoom, toggleSwipingArrows) {
+], function(domReady, common, recentlyViewedProducts, loadRelatedModels, styleSelect, zoom, initializeSwiping) {
 
     var tabletWidth = 768,
         selectBoxIdPrefix = 'variation_',
@@ -329,7 +329,7 @@ require([
             }
         }
 
-        toggleSwipingArrows('.swipe-container', 'ul');
+        initializeSwiping('.swipe-container', 'ul');
     }
 
     function showAvailabilityStatus() {

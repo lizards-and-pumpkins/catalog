@@ -74,6 +74,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 <stock_qty>1</stock_qty>
                 <backorders>false</backorders>
                 <color>d90000</color>
+                <series>Adilette</series>
             </attributes>
         </product>
 
@@ -94,6 +95,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 <stock_qty>0</stock_qty>
                 <backorders>false</backorders>
                 <color>d90000</color>
+                <series>Adilette</series>
             </attributes>
         </product>
 
@@ -116,6 +118,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 <stock_qty>5</stock_qty>
                 <backorders>true</backorders>
                 <color>263698</color>
+                <series>Gel-Kayano</series>
             </attributes>
         </product>
 
@@ -137,6 +140,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 <stock_qty>5</stock_qty>
                 <backorders>true</backorders>
                 <color>fdf93c</color>
+                <series>XA</series>
             </attributes>
         </product>
 
@@ -159,6 +163,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 <stock_qty>5</stock_qty>
                 <backorders>true</backorders>
                 <color>263698</color>
+                <series>GT</series>
             </attributes>
         </product>
 
@@ -180,6 +185,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 <stock_qty>5</stock_qty>
                 <backorders>true</backorders>
                 <color>a7fa41</color>
+                <series>Gel-Nimbus</series>
             </attributes>
         </product>
 
@@ -202,6 +208,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 <stock_qty>5</stock_qty>
                 <backorders>true</backorders>
                 <color>a7fa41</color>
+                <series>Gel-Noosa</series>
             </attributes>
         </product>
 
@@ -223,6 +230,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 <stock_qty>5</stock_qty>
                 <backorders>true</backorders>
                 <color>a7fa41</color>
+                <series>Gel-Noosa</series>
             </attributes>
         </product>
 
@@ -244,6 +252,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 <stock_qty>5</stock_qty>
                 <backorders>true</backorders>
                 <color>fd5224</color>
+                <series>Gel-Noosa</series>
             </attributes>
         </product>
 
@@ -265,6 +274,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 <stock_qty>5</stock_qty>
                 <backorders>true</backorders>
                 <color>a7fa41</color>
+                <series>Gel-Nimbus</series>
             </attributes>
         </product>
 
@@ -287,6 +297,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 <backorders>false</backorders>
                 <color>263698</color>
                 <color>a7fa41</color>
+                <series>Iso</series>
             </attributes>
         </product>
 
@@ -309,6 +320,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 <backorders>true</backorders>
                 <color>fd5224</color>
                 <color>a7fa41</color>
+                <series>Gel-Noosa</series>
             </attributes>
         </product>
 
@@ -331,6 +343,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 <backorders>true</backorders>
                 <color>b01c64</color>
                 <color>a7fa41</color>
+                <series>Gel-Noosa</series>
             </attributes>
         </product>
 
@@ -353,6 +366,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 <stock_qty>5</stock_qty>
                 <backorders>true</backorders>
                 <color>fd5224</color>
+                <series>Gel-Noosa</series>
             </attributes>
         </product>
 
@@ -375,6 +389,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 <backorders>true</backorders>
                 <color>263698</color>
                 <color>a7fa41</color>
+                <series>Gel-Noosa</series>
             </attributes>
         </product>
 
@@ -396,6 +411,7 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 <stock_qty>5</stock_qty>
                 <backorders>true</backorders>
                 <color>a7fa41</color>
+                <series>Gel-Noosa</series>
             </attributes>
         </product>
 
@@ -430,6 +446,7 @@ TEXTILE/SYNTHETICS]]></description>
                 <brand>Adidas</brand>
                 <style>Natural-Running (Free)</style>
                 <gender>Damen</gender>
+                <series>Adipure</series>
             </attributes>
             <variations>
                 <attribute>color</attribute>
@@ -506,6 +523,7 @@ TEXTILE/SYNTHETICS]]></description>
                 <stock_qty>55</stock_qty>
                 <backorders>true</backorders>
                 <color>a7fa41</color>
+                <series>Gel-Kayano</series>
             </attributes>
         </product>
 
