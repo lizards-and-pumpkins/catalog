@@ -1,2 +1,9 @@
-<div id="all-models"></div>
-
+<?php
+/**
+ * @var LizardsAndPumpkins\Product\Block\ProductBlock $this
+ */
+?>
+<div class="all-models">
+    <h2 class="heading"><?= sprintf($this->__('Other %s %s models for %s'), $this->getFirstValueOfProductAttribute('brand'), $this->getFirstValueOfProductAttribute('series'), $this->getImplodedValuesOfProductAttribute('gender', ', ')) ?></h2>
+    <div id="all-models" class="swipe-container"></div>
+</div>

@@ -74,6 +74,9 @@
 .product-controls .selects > * { margin-right: 7px; float: left }
 .product-controls button { float: right }
 
+.all-models { position: relative }
+.all-models h2 { display: none }
+
 /* Tablet */
 @media (max-width: 974px) {
     .price-information { text-align: center; float: none; border-bottom: 1px solid #fff; clear: both }
