@@ -1,4 +1,4 @@
-define(['lib/ajax', 'product_grid', 'lib/swiping_container'], function (callAjax, productGrid, toggleSwipingArrows) {
+define(['lib/ajax', 'product_grid', 'lib/swiping_container'], function (callAjax, productGrid, initializeSwiping) {
     
     return function (productId) {
         callAjax(baseUrl + 'api/products/' + productId + '/relations/related-models', function (responseText) {
@@ -9,7 +9,7 @@ define(['lib/ajax', 'product_grid', 'lib/swiping_container'], function (callAjax
                 heading.style.display = 'block';
 
                 productGrid.renderGrid(productGridJson, '#all-models');
-                toggleSwipingArrows('#all-models', 'ul');
+                initializeSwiping('#all-models', 'ul');
             }
 
         }, 'application/vnd.lizards-and-pumpkins.product_relations.v1+json');
