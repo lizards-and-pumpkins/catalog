@@ -21,7 +21,7 @@ class ProductXmlToProductBuilderLocator
 
     /**
      * @param string $xml
-     * @return ProductBuilder
+     * @return ProductBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
     public function createProductBuilderFromXml($xml)
     {

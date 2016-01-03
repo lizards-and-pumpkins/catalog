@@ -57,18 +57,16 @@ class ProductSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framework_
 
     public function testSnippetListIsReturned()
     {
-        $stubProductsPerPageForContextList = $this->getMock(ProductsPerPageForContextList::class, [], [], '', false);
-
-        $result = $this->snippetRenderer->render($stubProductsPerPageForContextList);
+        $dataObject = [];
+        $result = $this->snippetRenderer->render($dataObject);
 
         $this->assertInstanceOf(SnippetList::class, $result);
     }
 
     public function testSnippetIsAddedToSnippetList()
     {
-        $stubProductsPerPageForContextList = $this->getMock(ProductsPerPageForContextList::class, [], [], '', false);
-
-        $result = $this->snippetRenderer->render($stubProductsPerPageForContextList);
+        $dataObject = [];
+        $result = $this->snippetRenderer->render($dataObject);
 
         $this->assertInstanceOf(SnippetList::class, $result);
         $this->assertCount(1, $result);

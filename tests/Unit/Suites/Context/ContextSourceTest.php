@@ -18,7 +18,7 @@ class ContextSourceTest extends \PHPUnit_Framework_TestCase
     private $contextSource;
 
     /**
-     * @var DecoratedContextBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubContextBuilder;
 
