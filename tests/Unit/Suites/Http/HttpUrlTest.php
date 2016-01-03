@@ -99,6 +99,8 @@ class HttpUrlTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider requestHostDataProvider
+     * @param string $host
+     * @param string $expected
      */
     public function testItReturnsTheRequestHost($host, $expected)
     {

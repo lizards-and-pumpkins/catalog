@@ -11,6 +11,7 @@ class FilesystemFileUriTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @param mixed $notStringURI
+     * @param string $expectedType
      * @dataProvider invalidNonStringFileUriProvider
      */
     public function testItThrowsAnExceptionIfTheFileUriIsNotAString($notStringURI, $expectedType)

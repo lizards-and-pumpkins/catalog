@@ -56,6 +56,7 @@ class TwentyOneRunProductImageFileLocatorTest extends \PHPUnit_Framework_TestCas
 
     /**
      * @param mixed $invalidImageVariantCode
+     * @param string $invalidType
      * @dataProvider invalidImageVariantCodeProvider
      */
     public function testItThrowsAnExceptionIfImageVariantCodeNotValid($invalidImageVariantCode, $invalidType)
