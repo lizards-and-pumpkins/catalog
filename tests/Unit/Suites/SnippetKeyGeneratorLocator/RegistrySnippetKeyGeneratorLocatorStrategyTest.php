@@ -43,7 +43,7 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework_
     {
         $snippetCode = 'foo';
         $testClosure = function () {
-
+            // intentionally left empty
         };
 
         $this->strategy->register($snippetCode, $testClosure);
@@ -102,7 +102,7 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework_
     {
         $invalidSnippetCode = 123;
         $testClosure = function () {
-
+            // intentionally left empty
         };
 
         $this->setExpectedException(InvalidSnippetCodeException::class, 'Expected snippet code to be a string');
@@ -114,7 +114,7 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework_
     {
         $snippetCode = 'foo';
         $testClosure = function () {
-
+            // intentionally left empty
         };
 
         $this->strategy->register($snippetCode, $testClosure);

@@ -24,7 +24,7 @@ class CompositeSnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework
     protected function setUp()
     {
         $this->stubSnippetKeyGeneratorClosure = function () {
-
+            // intentionally left empty
         };
 
         $stubSnippetKeyGeneratorLocatorStrategy = $this->getMock(SnippetKeyGeneratorLocator::class);
