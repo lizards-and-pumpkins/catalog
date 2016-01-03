@@ -427,7 +427,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
 
         if (!$transformationRegistry->hasTransformationForCode($attributeCode)) {
             throw new NoFacetFieldTransformationRegisteredException(
-                sprintf('No facet field transformation is geristered for "%s" attribute.', $attributeCode)
+                sprintf('No facet field transformation is registered for "%s" attribute.', $attributeCode)
             );
         }
 
