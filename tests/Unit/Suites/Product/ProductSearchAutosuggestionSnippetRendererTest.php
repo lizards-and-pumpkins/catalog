@@ -57,7 +57,7 @@ class ProductSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framework_
 
     public function testSnippetListIsReturned()
     {
-        $dataObject = [];
+        $dataObject = new \stdClass();
         $result = $this->snippetRenderer->render($dataObject);
 
         $this->assertInstanceOf(SnippetList::class, $result);
@@ -65,7 +65,7 @@ class ProductSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framework_
 
     public function testSnippetIsAddedToSnippetList()
     {
-        $dataObject = [];
+        $dataObject = new \stdClass();
         $result = $this->snippetRenderer->render($dataObject);
 
         $this->assertInstanceOf(SnippetList::class, $result);
