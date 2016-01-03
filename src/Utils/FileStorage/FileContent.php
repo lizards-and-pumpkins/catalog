@@ -35,6 +35,7 @@ class FileContent
 
     /**
      * @param mixed $variable
+     * @return string
      */
     private static function getVariableType($variable)
     {

@@ -50,6 +50,7 @@ class MediaDirectoryBaseUrlBuilder implements MediaBaseUrlBuilder
 
     /**
      * @param mixed $variable
+     * @return string
      */
     private function getVariableType($variable)
     {
