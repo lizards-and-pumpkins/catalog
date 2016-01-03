@@ -98,24 +98,6 @@ EOT;
     }
 
     /**
-     * @param string|null $imageXml
-     * @return string
-     */
-    private function getInvalidSimpleProductXml($imageXml = null)
-    {
-        $imageContent = isset($imageXml) ? $imageXml : ($this->getFirstImageXml() . $this->getSecondImageXml());
-        return sprintf('
-        <product type="simple" sku="test-sku">
-            %s
-            <attributes>
-                <category website="test1">category-1</category>
-                <category locale="xx_XX">category-2</category>
-            </attributes>
-        </product>
-', $this->getImagesSectionWithContext($imageContent));
-    }
-
-    /**
      * @param string $content
      * @return string
      */
@@ -202,20 +184,6 @@ EOT;
             $this->getListingSectionWithContent(
                 $this->getListingXml() .
                 $this->getListingXml()
-            )
-        );
-    }
-
-    /**
-     * @return string
-     */
-    private function getCatalogXmlWithOneProductImage()
-    {
-        return $this->getCatalogXmlWithContent(
-            $this->getProductSectionWithContent(
-                $this->getSimpleProductXml(
-                    $this->getFirstImageXml()
-                )
             )
         );
     }
