@@ -49,14 +49,11 @@ class ProductSearchAutosuggestionMetaSnippetRendererTest extends \PHPUnit_Framew
         $stubBlockRenderer->method('getRootSnippetCode')->willReturn($this->dummyRootSnippetCode);
         $stubBlockRenderer->method('getNestedSnippetCodes')->willReturn([]);
 
-        $testSnippetList = new SnippetList;
-
         $stubContext = $this->getMock(Context::class);
         $this->stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
         $this->stubContextSource->method('getAllAvailableContexts')->willReturn([$stubContext]);
 
         $this->renderer = new ProductSearchAutosuggestionMetaSnippetRenderer(
-            $testSnippetList,
             $stubSnippetKeyGenerator,
             $stubBlockRenderer,
             $this->stubContextSource

@@ -15,11 +15,6 @@ class ProductSearchAutosuggestionMetaSnippetRenderer implements SnippetRenderer
     const CODE = 'product_search_autosuggestion_meta';
 
     /**
-     * @var SnippetList
-     */
-    private $snippetList;
-
-    /**
      * @var SnippetKeyGenerator
      */
     private $snippetKeyGenerator;
@@ -35,12 +30,10 @@ class ProductSearchAutosuggestionMetaSnippetRenderer implements SnippetRenderer
     private $contextSource;
 
     public function __construct(
-        SnippetList $snippetList,
         SnippetKeyGenerator $snippetKeyGenerator,
         BlockRenderer $blockRenderer,
         ContextSource $contextSource
     ) {
-        $this->snippetList = $snippetList;
         $this->snippetKeyGenerator = $snippetKeyGenerator;
         $this->blockRenderer = $blockRenderer;
         $this->contextSource = $contextSource;
@@ -53,16 +46,17 @@ class ProductSearchAutosuggestionMetaSnippetRenderer implements SnippetRenderer
     public function render($dataObject)
     {
         // todo: important! Use the data version embedded in $dataObject, whatever that may be!!
-        foreach ($this->contextSource->getAllAvailableContexts() as $context) {
-            $this->renderMetaInfoSnippetForContext($dataObject, $context);
-        }
+        $snippets = array_map(function (Context $context) use ($dataObject) {
+            return $this->renderMetaInfoSnippetForContext($dataObject, $context);
+        }, $this->contextSource->getAllAvailableContexts());
 
-        return $this->snippetList;
+        return new SnippetList(...$snippets);
     }
 
     /**
      * @param mixed $dataObject
      * @param Context $context
+     * @return Snippet
      */
     private function renderMetaInfoSnippetForContext($dataObject, Context $context)
     {
@@ -74,7 +68,7 @@ class ProductSearchAutosuggestionMetaSnippetRenderer implements SnippetRenderer
         $metaSnippetKey = $this->snippetKeyGenerator->getKeyForContext($context, []);
         $metaSnippetContent = $this->getMetaSnippetContentJson($rootSnippetCode, $pageSnippetCodes);
 
-        $this->snippetList->add(Snippet::create($metaSnippetKey, $metaSnippetContent));
+        return Snippet::create($metaSnippetKey, $metaSnippetContent);
     }
 
     /**

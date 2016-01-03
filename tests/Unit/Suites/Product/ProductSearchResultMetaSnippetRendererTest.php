@@ -34,19 +34,12 @@ class ProductSearchResultMetaSnippetRendererTest extends \PHPUnit_Framework_Test
     private $renderer;
 
     /**
-     * @var ProductsPerPageForContextList|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubProductsPerPageForContextList;
-
-    /**
      * @var ContextSource|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubContextSource;
 
     protected function setUp()
     {
-        $testSnippetList = new SnippetList;
-
         /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $stubSnippetKeyGenerator */
         $stubSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $stubSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->dummySnippetKey);
@@ -61,17 +54,10 @@ class ProductSearchResultMetaSnippetRendererTest extends \PHPUnit_Framework_Test
         $this->stubContextSource->method('getAllAvailableContexts')->willReturn([$stubContext]);
 
         $this->renderer = new ProductSearchResultMetaSnippetRenderer(
-            $testSnippetList,
             $stubSnippetKeyGenerator,
             $stubBlockRenderer,
             $this->stubContextSource
         );
-
-        $this->stubProductsPerPageForContextList = $this->getMockBuilder(ProductsPerPageForContextList::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->stubProductsPerPageForContextList->method('getListOfAvailableNumberOfProductsPerPageForContext')
-            ->willReturn([9]);
     }
 
     public function testSnippetRendererInterfaceIsImplemented()
@@ -81,7 +67,9 @@ class ProductSearchResultMetaSnippetRendererTest extends \PHPUnit_Framework_Test
 
     public function testSnippetListIsReturned()
     {
-        $result = $this->renderer->render($this->stubProductsPerPageForContextList);
+        $dataObject = [];
+        $result = $this->renderer->render($dataObject);
+
         $this->assertInstanceOf(SnippetList::class, $result);
     }
 
@@ -93,7 +81,8 @@ class ProductSearchResultMetaSnippetRendererTest extends \PHPUnit_Framework_Test
         ];
         $expectedSnippet = Snippet::create($this->dummySnippetKey, json_encode($expectedSnippetContent));
 
-        $result = $this->renderer->render($this->stubProductsPerPageForContextList);
+        $dataObject = [];
+        $result = $this->renderer->render($dataObject);
 
         $this->assertInstanceOf(SnippetList::class, $result);
         $this->assertCount(1, $result);

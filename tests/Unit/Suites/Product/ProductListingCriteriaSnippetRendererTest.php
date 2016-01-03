@@ -14,18 +14,14 @@ use LizardsAndPumpkins\Snippet;
  * @covers \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetContent
  * @uses   \LizardsAndPumpkins\Snippet
+ * @uses   \LizardsAndPumpkins\SnippetList
  */
 class ProductListingCriteriaSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var string
+     * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $dummySnippetKey = 'foo';
-
-    /**
-     * @var SnippetList|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $mockSnippetList;
+    private $stubSnippetKeyGenerator;
 
     /**
      * @var ProductListingCriteriaSnippetRenderer
@@ -35,43 +31,34 @@ class ProductListingCriteriaSnippetRendererTest extends \PHPUnit_Framework_TestC
     /**
      * @return ProductListingCriteria|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function getMockProductListingCriteria()
+    private function createStubProductListingCriteria()
     {
-        $mockSearchCriteria = $this->getMock(CompositeSearchCriterion::class, [], [], '', false);
-        $mockProductListingCriteria = $this->getMock(ProductListingCriteria::class, [], [], '', false);
-        $mockProductListingCriteria->method('getContextData')->willReturn([]);
-        $mockProductListingCriteria->method('getCriteria')->willReturn($mockSearchCriteria);
+        $stubSearchCriteria = $this->getMock(CompositeSearchCriterion::class, [], [], '', false);
+        $stubProductListingCriteria = $this->getMock(ProductListingCriteria::class, [], [], '', false);
+        $stubProductListingCriteria->method('getContextData')->willReturn([]);
+        $stubProductListingCriteria->method('getCriteria')->willReturn($stubSearchCriteria);
 
-        return $mockProductListingCriteria;
+        return $stubProductListingCriteria;
     }
 
     protected function setUp()
     {
-        $stubContext = $this->getMock(Context::class);
+        /** @var ProductListingBlockRenderer|\PHPUnit_Framework_MockObject_MockObject $stubListingBlockRenderer */
+        $stubListingBlockRenderer = $this->getMock(ProductListingBlockRenderer::class, [], [], '', false);
+        $stubListingBlockRenderer->method('render')->willReturn('dummy content');
+        $stubListingBlockRenderer->method('getRootSnippetCode')->willReturn('dummy root block code');
+        $stubListingBlockRenderer->method('getNestedSnippetCodes')->willReturn([]);
 
-        /**
-         * @var ProductListingBlockRenderer|\PHPUnit_Framework_MockObject_MockObject $stubProductListingBlockRenderer
-         */
-        $stubProductListingBlockRenderer = $this->getMock(ProductListingBlockRenderer::class, [], [], '', false);
-        $stubProductListingBlockRenderer->method('render')->willReturn('dummy content');
-        $stubProductListingBlockRenderer->method('getRootSnippetCode')->willReturn('dummy root block code');
-        $stubProductListingBlockRenderer->method('getNestedSnippetCodes')->willReturn([]);
+        $this->stubSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
 
-        /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $mockSnippetKeyGenerator */
-        $mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
-        $mockSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->dummySnippetKey);
-
-        /** @var ContextBuilder|\PHPUnit_Framework_MockObject_MockObject $mockContextBuilder */
-        $mockContextBuilder = $this->getMock(ContextBuilder::class);
-        $mockContextBuilder->method('createContext')->willReturn($stubContext);
-
-        $this->mockSnippetList = $this->getMock(SnippetList::class, [], [], '', false);
+        /** @var ContextBuilder|\PHPUnit_Framework_MockObject_MockObject $stubContextBuilder */
+        $stubContextBuilder = $this->getMock(ContextBuilder::class);
+        $stubContextBuilder->method('createContext')->willReturn($this->getMock(Context::class));
 
         $this->renderer = new ProductListingCriteriaSnippetRenderer(
-            $this->mockSnippetList,
-            $stubProductListingBlockRenderer,
-            $mockSnippetKeyGenerator,
-            $mockContextBuilder
+            $stubListingBlockRenderer,
+            $this->stubSnippetKeyGenerator,
+            $stubContextBuilder
         );
     }
 
@@ -82,10 +69,21 @@ class ProductListingCriteriaSnippetRendererTest extends \PHPUnit_Framework_TestC
 
     public function testSnippetWithValidJsonAsContentInAListIsReturned()
     {
-        $mockProductListingCriteria = $this->getMockProductListingCriteria();
+        $testSnippetKey = 'foo';
+        $this->stubSnippetKeyGenerator->method('getKeyForContext')->willReturn($testSnippetKey);
 
-        $this->mockSnippetList->expects($this->once())->method('add')->with($this->isInstanceOf(Snippet::class));
+        $stubProductListingCriteria = $this->createStubProductListingCriteria();
+        $result = $this->renderer->render($stubProductListingCriteria);
 
-        $this->renderer->render($mockProductListingCriteria);
+        $expectedSnippetContents = json_encode([
+            'product_selection_criteria' => null,
+            'root_snippet_code' => 'product_listing',
+            'page_snippet_codes' => ['product_listing']
+        ]);
+
+        $expectedSnippet = Snippet::create($testSnippetKey, $expectedSnippetContents);
+
+        $this->assertInstanceOf(SnippetList::class, $result);
+        $this->assertEquals([$expectedSnippet], iterator_to_array($result));
     }
 }

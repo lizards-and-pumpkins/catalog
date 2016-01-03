@@ -15,11 +15,6 @@ class ProductSearchAutosuggestionSnippetRenderer implements SnippetRenderer
     const CODE = 'product_search_autosuggestion';
 
     /**
-     * @var SnippetList
-     */
-    private $snippetList;
-
-    /**
      * @var SnippetKeyGenerator
      */
     private $snippetKeyGenerator;
@@ -35,12 +30,10 @@ class ProductSearchAutosuggestionSnippetRenderer implements SnippetRenderer
     private $contextSource;
 
     public function __construct(
-        SnippetList $snippetList,
         SnippetKeyGenerator $snippetKeyGenerator,
         BlockRenderer $blockRenderer,
         ContextSource $contextSource
     ) {
-        $this->snippetList = $snippetList;
         $this->snippetKeyGenerator = $snippetKeyGenerator;
         $this->blockRenderer = $blockRenderer;
         $this->contextSource = $contextSource;
@@ -52,15 +45,12 @@ class ProductSearchAutosuggestionSnippetRenderer implements SnippetRenderer
      */
     public function render($dataObject)
     {
-        $this->snippetList->clear();
-
         // todo: important! use the data version from $dataObject, whatever that is
-        foreach ($this->contextSource->getAllAvailableContexts() as $context) {
-            $snippet = $this->createSearchAutosuggestionSnippetForContext($dataObject, $context);
-            $this->snippetList->add($snippet);
-        }
+        $snippets = array_map(function(Context $context) use ($dataObject) {
+            return $this->createSearchAutosuggestionSnippetForContext($dataObject, $context);
+        }, $this->contextSource->getAllAvailableContexts());
 
-        return $this->snippetList;
+        return new SnippetList(...$snippets);
     }
 
     /**

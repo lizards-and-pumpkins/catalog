@@ -11,11 +11,6 @@ class SnippetList implements \Countable, \IteratorAggregate
         $this->snippets = $snippets;
     }
     
-    public function clear()
-    {
-        $this->snippets = [];
-    }
-
     public function add(Snippet $snippet)
     {
         $this->snippets[] = $snippet;
@@ -39,9 +34,6 @@ class SnippetList implements \Countable, \IteratorAggregate
 
     public function merge(SnippetList $other)
     {
-        $this->snippets = array_merge(
-            $this->snippets,
-            iterator_to_array($other)
-        );
+        $this->snippets = array_merge($this->snippets, iterator_to_array($other));
     }
 }

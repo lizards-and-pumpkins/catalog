@@ -50,24 +50,6 @@ class ProductInSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framewor
         return $stubProduct;
     }
 
-    /**
-     * @param SnippetList $testSnippetList
-     * @param ProductInSearchAutosuggestionBlockRenderer $stubBlockRenderer
-     * @param SnippetKeyGenerator $snippetKeyGenerator
-     * @return ProductInSearchAutosuggestionSnippetRenderer
-     */
-    private function createInstanceUnderTest(
-        SnippetList $testSnippetList,
-        ProductInSearchAutosuggestionBlockRenderer $stubBlockRenderer,
-        SnippetKeyGenerator $snippetKeyGenerator
-    ) {
-        return new ProductInSearchAutosuggestionSnippetRenderer(
-            $testSnippetList,
-            $stubBlockRenderer,
-            $snippetKeyGenerator
-        );
-    }
-
     protected function setUp()
     {
         $this->mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
@@ -76,8 +58,7 @@ class ProductInSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framewor
         $this->stubBlockRenderer = $this->getMock(ProductInSearchAutosuggestionBlockRenderer::class, [], [], '', false);
         $this->stubBlockRenderer->method('render')->willReturn('dummy content');
 
-        $this->snippetRenderer = $this->createInstanceUnderTest(
-            new SnippetList(),
+        $this->snippetRenderer = new ProductInSearchAutosuggestionSnippetRenderer(
             $this->stubBlockRenderer,
             $this->mockSnippetKeyGenerator
         );
@@ -111,17 +92,10 @@ class ProductInSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framewor
         $dummyProductId = 'foo';
         $stubProduct = $this->getStubProductView($dummyProductId);
 
-        $mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
-        $mockSnippetKeyGenerator->expects($this->once())->method('getKeyForContext')
+        $this->mockSnippetKeyGenerator->expects($this->once())->method('getKeyForContext')
             ->with($this->anything(), [Product::ID => $stubProduct->getId()])
             ->willReturn('stub-content-key');
-        
-        $snippetRenderer = $this->createInstanceUnderTest(
-            new SnippetList,
-            $this->stubBlockRenderer,
-            $mockSnippetKeyGenerator
-        );
 
-        $snippetRenderer->render($stubProduct);
+        $this->snippetRenderer->render($stubProduct);
     }
 }

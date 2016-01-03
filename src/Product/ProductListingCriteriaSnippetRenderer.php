@@ -30,18 +30,11 @@ class ProductListingCriteriaSnippetRenderer implements SnippetRenderer
      */
     private $contextBuilder;
 
-    /**
-     * @var SnippetList
-     */
-    private $snippetList;
-
     public function __construct(
-        SnippetList $snippetList,
         ProductListingBlockRenderer $blockRenderer,
         SnippetKeyGenerator $snippetKeyGenerator,
         ContextBuilder $contextBuilder
     ) {
-        $this->snippetList = $snippetList;
         $this->blockRenderer = $blockRenderer;
         $this->snippetKeyGenerator = $snippetKeyGenerator;
         $this->contextBuilder = $contextBuilder;
@@ -62,9 +55,7 @@ class ProductListingCriteriaSnippetRenderer implements SnippetRenderer
         $metaDataSnippetContent = $this->getProductListingPageMetaInfoSnippetContent($productListingCriteria);
         $snippet = Snippet::create($metaDataSnippetKey, $metaDataSnippetContent);
 
-        $this->snippetList->add($snippet);
-
-        return $this->snippetList;
+        return new SnippetList($snippet);
     }
 
     /**

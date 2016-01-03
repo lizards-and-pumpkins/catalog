@@ -29,8 +29,6 @@ class ProductSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framework_
 
     protected function setUp()
     {
-        $testSnippetList = new SnippetList;
-
         /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $stubSnippetKeyGenerator */
         $stubSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $stubSnippetKeyGenerator->method('getKeyForContext')->willReturn('foo');
@@ -43,7 +41,6 @@ class ProductSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framework_
         $this->stubContextSource->method('getAllAvailableContexts')->willReturn([$stubContext]);
 
         $this->snippetRenderer = new ProductSearchAutosuggestionSnippetRenderer(
-            $testSnippetList,
             $stubSnippetKeyGenerator,
             $stubBlockRenderer,
             $this->stubContextSource

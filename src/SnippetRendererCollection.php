@@ -5,23 +5,16 @@ namespace LizardsAndPumpkins;
 class SnippetRendererCollection
 {
     /**
-     * @var SnippetList
-     */
-    private $snippetList;
-
-    /**
      * @var SnippetRenderer[]
      */
     private $renderers = [];
 
     /**
      * @param SnippetRenderer[] $renderers
-     * @param SnippetList $snippetList
      */
-    public function __construct(array $renderers, SnippetList $snippetList)
+    public function __construct(array $renderers)
     {
         $this->renderers = $renderers;
-        $this->snippetList = $snippetList;
     }
     
     /**
@@ -30,10 +23,12 @@ class SnippetRendererCollection
      */
     public function render($projectionSourceData)
     {
+        $snippetList = new SnippetList();
+
         foreach ($this->renderers as $renderer) {
-            $this->snippetList->merge($renderer->render($projectionSourceData));
+            $snippetList->merge($renderer->render($projectionSourceData));
         }
 
-        return $this->snippetList;
+        return $snippetList;
     }
 }

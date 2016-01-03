@@ -24,75 +24,61 @@ class SnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
     private $rendererCollection;
 
     /**
-     * @var SnippetList|\PHPUnit_Framework_MockObject_MockObject
+     * @param Snippet[] ...$snippets
+     * @return SnippetList|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubSnippetList;
+    private function createStubSnippetList(Snippet ...$snippets)
+    {
+        $stubSnippetList = $this->getMock(SnippetList::class);
+        $stubSnippetList->method('getIterator')->willReturn(new \ArrayIterator($snippets));
+
+        return $stubSnippetList;
+    }
 
     public function setUp()
     {
-        $this->stubSnippetList = $this->getMockBuilder(SnippetList::class)
-            ->setMethods(['merge'])
-            ->getMock();
-        $this->mockRenderer = $this->getMockBuilder(SnippetRenderer::class)
-            ->setMethods(['render'])
-            ->getMock();
-        $this->mockRenderer2 = $this->getMockBuilder(SnippetRenderer::class)
-            ->setMethods(['render'])
-            ->getMock();
+        $this->mockRenderer = $this->getMockBuilder(SnippetRenderer::class)->setMethods(['render'])->getMock();
+        $this->mockRenderer2 = $this->getMockBuilder(SnippetRenderer::class)->setMethods(['render'])->getMock();
 
-        $this->rendererCollection = new SnippetRendererCollection(
-            [$this->mockRenderer, $this->mockRenderer2],
-            $this->stubSnippetList
-        );
+        $this->rendererCollection = new SnippetRendererCollection([$this->mockRenderer, $this->mockRenderer2]);
     }
 
     public function testRenderedSnippetListIsReturned()
     {
-        $this->mockRenderer->method('render')->willReturn($this->getMock(SnippetList::class));
-        $this->mockRenderer2->method('render')->willReturn($this->getMock(SnippetList::class));
+        $stubSnippetList = $this->createStubSnippetList();
+        $this->mockRenderer->method('render')->willReturn($stubSnippetList);
+        $this->mockRenderer2->method('render')->willReturn($stubSnippetList);
 
-        $snippetList = $this->rendererCollection->render('test-projection-source-data');
+        $result = $this->rendererCollection->render('test-projection-source-data');
 
-        $this->assertInstanceOf(SnippetList::class, $snippetList);
-        $this->assertSame($this->stubSnippetList, $snippetList);
+        $this->assertInstanceOf(SnippetList::class, $result);
     }
 
     public function testRenderingIsDelegatedToSnippetRenderers()
     {
         $testProjectionSourceData = 'test-projection-source-data';
-        $stubSnippetListFromRenderer = $this->getMock(SnippetList::class);
+        $stubSnippetListFromRenderer = $this->createStubSnippetList();
 
-        $this->mockRenderer->expects($this->once())
-            ->method('render')
-            ->willReturn($stubSnippetListFromRenderer);
-
-        $this->mockRenderer2->expects($this->once())
-            ->method('render')
-            ->willReturn($stubSnippetListFromRenderer);
+        $this->mockRenderer->expects($this->once())->method('render')->willReturn($stubSnippetListFromRenderer);
+        $this->mockRenderer2->expects($this->once())->method('render')->willReturn($stubSnippetListFromRenderer);
 
         $this->rendererCollection->render($testProjectionSourceData);
     }
 
     public function testResultsOfRenderersAreMerged()
     {
+        $stubSnippet = $this->getMock(Snippet::class, [], [], '', false);
+
         $testProjectionSourceData = 'test-projection-source-data';
 
-        $stubSnippetListFromRenderer = $this->getMock(SnippetList::class);
-        $stubSnippetListFromRenderer2 = $this->getMock(SnippetList::class);
+        $stubSnippetList = $this->createStubSnippetList($stubSnippet);
+        $stubSnippetList2 = $this->createStubSnippetList($stubSnippet);
 
-        $this->mockRenderer->method('render')
-            ->willReturn($stubSnippetListFromRenderer);
+        $this->mockRenderer->method('render')->willReturn($stubSnippetList);
+        $this->mockRenderer2->method('render')->willReturn($stubSnippetList2);
 
-        $this->mockRenderer2->method('render')
-            ->willReturn($stubSnippetListFromRenderer2);
+        $result = $this->rendererCollection->render($testProjectionSourceData);
 
-        $this->stubSnippetList->expects($this->exactly(2))
-            ->method('merge')
-            ->withConsecutive(
-                [$this->identicalTo($stubSnippetListFromRenderer)],
-                [$this->identicalTo($stubSnippetListFromRenderer2)]
-            );
-
-        $this->rendererCollection->render($testProjectionSourceData);
+        $this->assertEquals([$stubSnippet, $stubSnippet], iterator_to_array($result));
     }
 }
