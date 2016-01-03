@@ -125,6 +125,7 @@ abstract class AbstractProductView implements ProductView
     }
 
     /**
+     * @param string $variantCode
      * @return HttpUrl
      */
     public function getMainImageUrl($variantCode)
@@ -163,7 +164,7 @@ abstract class AbstractProductView implements ProductView
 
     /**
      * @param string $variantCode
-     * @return string
+     * @return HttpUrl
      */
     protected function getPlaceholderImageUrl($variantCode)
     {

@@ -28,7 +28,7 @@ class FilesystemImageStorage implements ImageStorage, ImageToImageStorage
 
     /**
      * @param FilesystemFileStorage $fileStorage
-     * @param HttpUrl $mediaBaseUrlBuilder
+     * @param MediaBaseUrlBuilder $mediaBaseUrlBuilder
      * @param string $mediaBaseDirectory
      */
     public function __construct(

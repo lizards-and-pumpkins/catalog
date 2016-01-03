@@ -68,6 +68,7 @@ abstract class BaseCliCommand
     }
 
     /**
+     * @param CLImate $climate
      * @return array[]
      */
     protected function getCommandLineArgumentsArray(CLImate $climate)
@@ -102,6 +103,7 @@ abstract class BaseCliCommand
     }
 
     /**
+     * @param CLImate $climate
      * @return void
      */
     abstract protected function execute(CLImate $climate);

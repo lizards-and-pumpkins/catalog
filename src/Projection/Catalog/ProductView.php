@@ -79,8 +79,9 @@ interface ProductView extends \JsonSerializable
      * @return string
      */
     public function getImageLabelByNumber($imageNumber);
-    
+
     /**
+     * @param string $variation
      * @return HttpUrl
      */
     public function getMainImageUrl($variation);
