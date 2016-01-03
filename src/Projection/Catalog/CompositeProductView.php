@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog;
 
-use LizardsAndPumpkins\Product\Composite\AssociatedProductList;
 use LizardsAndPumpkins\Product\Composite\ProductVariationAttributeList;
 
 interface CompositeProductView extends ProductView
