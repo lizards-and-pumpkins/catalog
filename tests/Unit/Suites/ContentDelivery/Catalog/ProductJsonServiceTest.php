@@ -9,6 +9,9 @@ use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 
+/**
+ * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService
+ */
 class ProductJsonServiceTest extends \PHPUnit_Framework_TestCase
 {
     private $dummyProductData = ['attributes' => []];
