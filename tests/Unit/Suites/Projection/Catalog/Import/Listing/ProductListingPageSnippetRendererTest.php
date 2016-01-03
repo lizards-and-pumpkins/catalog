@@ -13,15 +13,14 @@ use LizardsAndPumpkins\SnippetKeyGenerator;
  */
 class ProductListingPageSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
-    public function testSnippetListIsReturned()
+    public function testArrayOfSnippetsIsReturned()
     {
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->getMock(Context::class);
         
         /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $mockSnippetKeyGenerator */
         $mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
-        $mockSnippetKeyGenerator->expects($this->atLeastOnce())
-            ->method('getKeyForContext')
-            ->with($stubContext)
+        $mockSnippetKeyGenerator->expects($this->atLeastOnce())->method('getKeyForContext')->with($stubContext)
             ->willReturn('foo');
 
         /** @var ProductListingBlockRenderer|\PHPUnit_Framework_MockObject_MockObject $mockBlockRenderer */
@@ -34,6 +33,6 @@ class ProductListingPageSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
         $result = $snippetRenderer->render($stubContext);
 
-        $this->assertInstanceOf(Snippet::class, $result);
+        $this->assertContainsOnly(Snippet::class, $result);
     }
 }

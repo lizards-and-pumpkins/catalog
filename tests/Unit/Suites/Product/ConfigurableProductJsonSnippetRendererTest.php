@@ -10,11 +10,9 @@ use LizardsAndPumpkins\Projection\Catalog\InternalToPublicProductJsonData;
 use LizardsAndPumpkins\Projection\Catalog\ProductView;
 use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetKeyGenerator;
-use LizardsAndPumpkins\SnippetList;
 
 /**
  * @covers \LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer
- * @uses   \LizardsAndPumpkins\SnippetList
  * @uses   \LizardsAndPumpkins\Snippet
  */
 class ConfigurableProductJsonSnippetRendererTest extends \PHPUnit_Framework_TestCase
@@ -41,17 +39,17 @@ class ConfigurableProductJsonSnippetRendererTest extends \PHPUnit_Framework_Test
 
     /**
      * @param string $snippetKey
-     * @param SnippetList $snippetList
+     * @param Snippet[] $snippets
      * @return Snippet
      */
-    private function getSnippetWithKey($snippetKey, SnippetList $snippetList)
+    private function getSnippetWithKey($snippetKey, Snippet ...$snippets)
     {
-        /** @var Snippet $snippet */
-        foreach ($snippetList as $snippet) {
+        foreach ($snippets as $snippet) {
             if ($snippet->getKey() === $snippetKey) {
                 return $snippet;
             }
         }
+
         $this->fail(sprintf('No snippet with key "%s" found in snippet list', $snippetKey));
     }
 
@@ -104,9 +102,9 @@ class ConfigurableProductJsonSnippetRendererTest extends \PHPUnit_Framework_Test
         $stubNonCompositeProduct = $this->getMock(ProductView::class);
         $stubNonCompositeProduct->method('getContext')->willReturn($this->getMock(Context::class));
 
-        $snippetList = $this->renderer->render($stubNonCompositeProduct);
+        $snippets = $this->renderer->render($stubNonCompositeProduct);
 
-        $snippet = $this->getSnippetWithKey($this->testVariationAttributesSnippetKey, $snippetList);
+        $snippet = $this->getSnippetWithKey($this->testVariationAttributesSnippetKey, ...$snippets);
         $this->assertSnippetContent(json_encode([]), $snippet);
     }
 
@@ -116,26 +114,24 @@ class ConfigurableProductJsonSnippetRendererTest extends \PHPUnit_Framework_Test
         $stubNonCompositeProduct = $this->getMock(ProductView::class);
         $stubNonCompositeProduct->method('getContext')->willReturn($this->getMock(Context::class));
 
-        $snippetList = $this->renderer->render($stubNonCompositeProduct);
+        $snippets = $this->renderer->render($stubNonCompositeProduct);
 
-        $snippet = $this->getSnippetWithKey($this->testAssociatedProductsSnippetKey, $snippetList);
+        $snippet = $this->getSnippetWithKey($this->testAssociatedProductsSnippetKey, ...$snippets);
         $this->assertSnippetContent(json_encode([]), $snippet);
     }
 
-    public function testItAddsTheVariationAttributesJsonSnippetToTheResultingSnippetList()
+    public function testVariationAttributesJsonSnippetIsReturned()
     {
-        $snippetList = $this->renderer->render($this->stubCompositeProductView);
-
-        $snippet = $this->getSnippetWithKey($this->testVariationAttributesSnippetKey, $snippetList);
+        $snippets = $this->renderer->render($this->stubCompositeProductView);
+        $snippet = $this->getSnippetWithKey($this->testVariationAttributesSnippetKey, ...$snippets);
 
         $this->assertSnippetContent(json_encode($this->testVariationAttributesJsonData), $snippet);
     }
 
-    public function testItAddsTheAssociatedProductsJsonSnippetToTheResultingSnippetList()
+    public function testAssociatedProductsJsonSnippetIsReturned()
     {
-        $snippetList = $this->renderer->render($this->stubCompositeProductView);
-
-        $snippet = $this->getSnippetWithKey($this->testAssociatedProductsSnippetKey, $snippetList);
+        $snippets = $this->renderer->render($this->stubCompositeProductView);
+        $snippet = $this->getSnippetWithKey($this->testAssociatedProductsSnippetKey, ...$snippets);
 
         $this->assertSnippetContent(json_encode($this->testAssociatedAttributesJsonData), $snippet);
     }

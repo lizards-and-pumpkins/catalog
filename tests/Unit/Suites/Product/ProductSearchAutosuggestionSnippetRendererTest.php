@@ -7,13 +7,11 @@ use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Renderer\BlockRenderer;
 use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetKeyGenerator;
-use LizardsAndPumpkins\SnippetList;
 use LizardsAndPumpkins\SnippetRenderer;
 
 /**
  * @covers \LizardsAndPumpkins\Product\ProductSearchAutosuggestionSnippetRenderer
  * @uses   \LizardsAndPumpkins\Snippet
- * @uses   \LizardsAndPumpkins\SnippetList
  */
 class ProductSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
@@ -52,23 +50,11 @@ class ProductSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framework_
         $this->assertInstanceOf(SnippetRenderer::class, $this->snippetRenderer);
     }
 
-    public function testSnippetListIsReturned()
+    public function testArrayOfSnippetsIsReturned()
     {
-        $stubProductsPerPageForContextList = $this->getMock(ProductsPerPageForContextList::class, [], [], '', false);
+        $dataObject = [];
+        $result = $this->snippetRenderer->render($dataObject);
 
-        $result = $this->snippetRenderer->render($stubProductsPerPageForContextList);
-
-        $this->assertInstanceOf(SnippetList::class, $result);
-    }
-
-    public function testSnippetIsAddedToSnippetList()
-    {
-        $stubProductsPerPageForContextList = $this->getMock(ProductsPerPageForContextList::class, [], [], '', false);
-
-        $result = $this->snippetRenderer->render($stubProductsPerPageForContextList);
-
-        $this->assertInstanceOf(SnippetList::class, $result);
-        $this->assertCount(1, $result);
         $this->assertContainsOnly(Snippet::class, $result);
     }
 }

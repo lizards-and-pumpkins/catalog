@@ -7,7 +7,6 @@ use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Renderer\BlockRenderer;
 use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetKeyGenerator;
-use LizardsAndPumpkins\SnippetList;
 use LizardsAndPumpkins\SnippetRenderer;
 
 class ProductSearchAutosuggestionSnippetRenderer implements SnippetRenderer
@@ -41,16 +40,14 @@ class ProductSearchAutosuggestionSnippetRenderer implements SnippetRenderer
 
     /**
      * @param mixed $dataObject
-     * @return SnippetList
+     * @return Snippet[]
      */
     public function render($dataObject)
     {
         // todo: important! use the data version from $dataObject, whatever that is
-        $snippets = array_map(function(Context $context) use ($dataObject) {
+        return array_map(function(Context $context) use ($dataObject) {
             return $this->createSearchAutosuggestionSnippetForContext($dataObject, $context);
         }, $this->contextSource->getAllAvailableContexts());
-
-        return new SnippetList(...$snippets);
     }
 
     /**

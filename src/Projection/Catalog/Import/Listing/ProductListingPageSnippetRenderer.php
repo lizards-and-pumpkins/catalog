@@ -37,6 +37,8 @@ class ProductListingPageSnippetRenderer implements SnippetRenderer
         $content = $this->blockRenderer->render(null, $context);
         $key = $this->snippetKeyGenerator->getKeyForContext($context, []);
         
-        return Snippet::create($key, $content);
+        return [
+            Snippet::create($key, $content)
+        ];
     }
 }

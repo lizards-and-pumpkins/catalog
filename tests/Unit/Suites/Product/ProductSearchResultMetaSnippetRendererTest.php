@@ -7,14 +7,12 @@ use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Renderer\BlockRenderer;
 use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetKeyGenerator;
-use LizardsAndPumpkins\SnippetList;
 use LizardsAndPumpkins\SnippetRenderer;
 
 /**
  * @covers \LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetContent
  * @uses   \LizardsAndPumpkins\Snippet
- * @uses   \LizardsAndPumpkins\SnippetList
  */
 class ProductSearchResultMetaSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
@@ -65,12 +63,12 @@ class ProductSearchResultMetaSnippetRendererTest extends \PHPUnit_Framework_Test
         $this->assertInstanceOf(SnippetRenderer::class, $this->renderer);
     }
 
-    public function testSnippetListIsReturned()
+    public function testArrayOfSnippetsIsReturned()
     {
         $dataObject = [];
         $result = $this->renderer->render($dataObject);
 
-        $this->assertInstanceOf(SnippetList::class, $result);
+        $this->assertContainsOnly(Snippet::class, $result);
     }
 
     public function testSnippetWithValidJsonAsContentAddedToList()
@@ -84,9 +82,6 @@ class ProductSearchResultMetaSnippetRendererTest extends \PHPUnit_Framework_Test
         $dataObject = [];
         $result = $this->renderer->render($dataObject);
 
-        $this->assertInstanceOf(SnippetList::class, $result);
-        $this->assertCount(1, $result);
-        $this->assertContainsOnly(Snippet::class, $result);
-        $this->assertEquals($expectedSnippet, $result->getIterator()->current());
+        $this->assertEquals([$expectedSnippet], $result);
     }
 }

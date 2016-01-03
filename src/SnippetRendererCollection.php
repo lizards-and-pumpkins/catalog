@@ -18,17 +18,13 @@ class SnippetRendererCollection
     }
     
     /**
-     * @param mixed $projectionSourceData
-     * @return SnippetList
+     * @param mixed $projectionData
+     * @return Snippet[]
      */
-    public function render($projectionSourceData)
+    public function render($projectionData)
     {
-        $snippetList = new SnippetList();
-
-        foreach ($this->renderers as $renderer) {
-            $snippetList->merge($renderer->render($projectionSourceData));
-        }
-
-        return $snippetList;
+        return array_reduce($this->renderers, function (array $carry, SnippetRenderer $renderer) use ($projectionData) {
+            return array_merge($carry, $renderer->render($projectionData));
+        }, []);
     }
 }

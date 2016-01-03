@@ -6,7 +6,6 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\SnippetKeyGenerator;
-use LizardsAndPumpkins\SnippetList;
 use LizardsAndPumpkins\SnippetRenderer;
 use LizardsAndPumpkins\Snippet;
 
@@ -14,7 +13,6 @@ use LizardsAndPumpkins\Snippet;
  * @covers \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetContent
  * @uses   \LizardsAndPumpkins\Snippet
- * @uses   \LizardsAndPumpkins\SnippetList
  */
 class ProductListingCriteriaSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
@@ -83,7 +81,6 @@ class ProductListingCriteriaSnippetRendererTest extends \PHPUnit_Framework_TestC
 
         $expectedSnippet = Snippet::create($testSnippetKey, $expectedSnippetContents);
 
-        $this->assertInstanceOf(SnippetList::class, $result);
-        $this->assertEquals([$expectedSnippet], iterator_to_array($result));
+        $this->assertEquals([$expectedSnippet], $result);
     }
 }

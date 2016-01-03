@@ -6,13 +6,11 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Projection\Catalog\ProductView;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\Snippet;
-use LizardsAndPumpkins\SnippetList;
 use LizardsAndPumpkins\SnippetRenderer;
 
 /**
  * @covers \LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer
  * @uses   \LizardsAndPumpkins\Snippet
- * @uses   \LizardsAndPumpkins\SnippetList
  * @uses   \LizardsAndPumpkins\Product\ProductDetailPageMetaInfoSnippetContent
  */
 class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
@@ -51,13 +49,12 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param SnippetList $snippetList
      * @param string $expectedKey
+     * @param Snippet[] $snippets
      */
-    private function assertSnippetListContainsSnippetWithGivenKey(SnippetList $snippetList, $expectedKey)
+    private function assertContainsSnippetWithGivenKey($expectedKey, Snippet ...$snippets)
     {
-        /** @var Snippet $snippet */
-        foreach ($snippetList as $snippet) {
+        foreach ($snippets as $snippet) {
             if ($snippet->getKey() === $expectedKey) {
                 $this->assertTrue(true);
                 return;
@@ -99,8 +96,8 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->renderer->render($this->stubProductView);
 
-        $this->assertSnippetListContainsSnippetWithGivenKey($result, $testContentSnippetKey);
-        $this->assertSnippetListContainsSnippetWithGivenKey($result, $testMetaSnippetKey);
+        $this->assertContainsSnippetWithGivenKey($testContentSnippetKey, ...$result);
+        $this->assertContainsSnippetWithGivenKey($testMetaSnippetKey, ...$result);
     }
 
     public function testContextPartsFetchingIsDelegatedToKeyGenerator()

@@ -6,7 +6,6 @@ use LizardsAndPumpkins\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Projection\Catalog\ProductView;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\Snippet;
-use LizardsAndPumpkins\SnippetList;
 use LizardsAndPumpkins\SnippetRenderer;
 
 class ProductDetailViewSnippetRenderer implements SnippetRenderer
@@ -40,14 +39,14 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
 
     /**
      * @param ProductView $productView
-     * @return SnippetList
+     * @return Snippet[]
      */
     public function render(ProductView $productView)
     {
-        $contentSnippet = $this->createdContentMetaSnippet($productView);
-        $pageMetaDataSnippet = $this->createProductDetailPageMetaSnippet($productView);
-
-        return new SnippetList($contentSnippet, $pageMetaDataSnippet);
+        return [
+            $this->createdContentMetaSnippet($productView),
+            $this->createProductDetailPageMetaSnippet($productView)
+        ];
     }
 
     /**

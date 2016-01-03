@@ -13,7 +13,6 @@ use LizardsAndPumpkins\SnippetRenderer;
 /**
  * @covers \LizardsAndPumpkins\Content\ContentBlockSnippetRenderer
  * @uses   \LizardsAndPumpkins\Snippet
- * @uses   \LizardsAndPumpkins\SnippetList
  */
 class ContentBlockSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
@@ -81,6 +80,6 @@ class ContentBlockSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $expectedSnippet = Snippet::create($stubSnippetKey, $dummyContentBlockContent);
         $result = $this->renderer->render($stubContentBlockSource);
 
-        $this->assertEquals([$expectedSnippet], iterator_to_array($result));
+        $this->assertEquals([$expectedSnippet], $result);
     }
 }

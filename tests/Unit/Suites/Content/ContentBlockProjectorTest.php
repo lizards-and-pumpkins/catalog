@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\Content;
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\Exception\InvalidProjectionSourceDataTypeException;
 use LizardsAndPumpkins\Projection\Projector;
-use LizardsAndPumpkins\SnippetList;
+use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetRendererCollection;
 
 /**
@@ -50,12 +50,12 @@ class ContentBlockProjectorTest extends \PHPUnit_Framework_TestCase
         $this->projector->project($stubProjectionSourceData);
     }
 
-    public function testSnippetListIsWrittenIntoDataPool()
+    public function testSnippetIsWrittenIntoDataPool()
     {
-        $stubSnippetList = $this->getMock(SnippetList::class, [], [], '', false);
+        $stubSnippet = $this->getMock(Snippet::class, [], [], '', false);
 
-        $this->mockSnippetRendererCollection->method('render')->willReturn($stubSnippetList);
-        $this->mockDataPoolWriter->expects($this->once())->method('writeSnippetList')->with($stubSnippetList);
+        $this->mockSnippetRendererCollection->method('render')->willReturn([$stubSnippet]);
+        $this->mockDataPoolWriter->expects($this->once())->method('writeSnippets')->with($stubSnippet);
 
         $stubContentBlockSource = $this->getMock(ContentBlockSource::class, [], [], '', false);
 

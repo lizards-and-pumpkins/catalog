@@ -8,13 +8,11 @@ use LizardsAndPumpkins\Projection\Catalog\InternalToPublicProductJsonData;
 use LizardsAndPumpkins\Projection\Catalog\ProductView;
 use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetKeyGenerator;
-use LizardsAndPumpkins\SnippetList;
 use LizardsAndPumpkins\SnippetRenderer;
 
 /**
  * @covers \LizardsAndPumpkins\Product\ProductInListingSnippetRenderer
  * @uses   \LizardsAndPumpkins\Snippet
- * @uses   \LizardsAndPumpkins\SnippetList
  */
 class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
@@ -98,7 +96,6 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->snippetRenderer->render($stubProduct);
 
-        $this->assertInstanceOf(SnippetList::class, $result);
         $this->assertCount(1, $result);
         $this->assertContainsOnly(Snippet::class, $result);
     }
@@ -108,6 +105,7 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $dummyProductId = 'foo';
         $stubProduct = $this->getStubProductView($dummyProductId);
 
+        /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $mockSnippetKeyGenerator */
         $mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $mockSnippetKeyGenerator->expects($this->once())->method('getKeyForContext')
             ->with($this->anything(), [Product::ID => $stubProduct->getId()])

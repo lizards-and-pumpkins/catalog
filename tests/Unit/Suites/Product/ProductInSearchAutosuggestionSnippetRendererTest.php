@@ -7,13 +7,11 @@ use LizardsAndPumpkins\Exception\InvalidProjectionSourceDataTypeException;
 use LizardsAndPumpkins\Projection\Catalog\ProductView;
 use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetKeyGenerator;
-use LizardsAndPumpkins\SnippetList;
 use LizardsAndPumpkins\SnippetRenderer;
 
 /**
  * @covers \LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer
  * @uses   \LizardsAndPumpkins\Snippet
- * @uses   \LizardsAndPumpkins\SnippetList
  */
 class ProductInSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
@@ -82,7 +80,6 @@ class ProductInSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framewor
 
         $result = $this->snippetRenderer->render($stubProductView);
 
-        $this->assertInstanceOf(SnippetList::class, $result);
         $this->assertCount(1, $result);
         $this->assertContainsOnly(Snippet::class, $result);
     }

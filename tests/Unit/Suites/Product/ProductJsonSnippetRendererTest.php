@@ -1,18 +1,15 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Projection\Catalog\InternalToPublicProductJsonData;
 use LizardsAndPumpkins\Projection\Catalog\ProductView;
-use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetKeyGenerator;
-use LizardsAndPumpkins\SnippetList;
+use LizardsAndPumpkins\SnippetRenderer;
 
 /**
  * @covers \LizardsAndPumpkins\Product\ProductJsonSnippetRenderer
- * @uses   \LizardsAndPumpkins\SnippetList
  * @uses   \LizardsAndPumpkins\Snippet
  */
 class ProductJsonSnippetRendererTest extends \PHPUnit_Framework_TestCase
@@ -27,46 +24,13 @@ class ProductJsonSnippetRendererTest extends \PHPUnit_Framework_TestCase
      */
     private $stubProductView;
 
-    /**
-     * @param \Iterator $iterator
-     * @param int $indexToGet
-     * @return mixed
-     */
-    private function getItemByIndexFromIterator(\Iterator $iterator, $indexToGet)
-    {
-        for ($i = 0; $i < $indexToGet; $i++) {
-            $iterator->next();
-        }
-        return $iterator->current();
-    }
-
-    /**
-     * @param SnippetList $snippetList
-     * @param int $number
-     * @return Snippet
-     */
-    private function getSnippetNumber(SnippetList $snippetList, $number)
-    {
-        return $this->getItemByIndexFromIterator($snippetList->getIterator(), $number);
-    }
-
-    /**
-     * @param mixed $expectedContent
-     * @param SnippetList $snippetList
-     * @param int $snippetNumber
-     */
-    private function assertSnippetNumberContent($expectedContent, SnippetList $snippetList, $snippetNumber)
-    {
-        $snippet = $this->getSnippetNumber($snippetList, $snippetNumber);
-        $this->assertSame($expectedContent, $snippet->getContent());
-    }
-
     protected function setUp()
     {
         /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $stubProductJsonKeyGenerator */
         $stubProductJsonKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $stubProductJsonKeyGenerator->method('getKeyForContext')->willReturn('test-key');
-        
+
+        /** @var InternalToPublicProductJsonData|\PHPUnit_Framework_MockObject_MockObject $stubInternalToPublicJson */
         $stubInternalToPublicJson = $this->getMock(InternalToPublicProductJsonData::class);
         $stubInternalToPublicJson->method('transformProduct')->willReturnArgument(0);
         
@@ -79,16 +43,20 @@ class ProductJsonSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->stubProductView->method('getContext')->willReturn($this->getMock(Context::class));
     }
 
-    public function testItReturnsTheJsonSerializedProduct()
+    public function testSnippetRendererInterfaceIsImplemented()
     {
-        $expectedJsonContent = ['product_id' => 'test-dummy'];
+        $this->assertInstanceOf(SnippetRenderer::class, $this->snippetRenderer);
+    }
+
+    public function testItReturnsJsonSerializedProduct()
+    {
+        $expectedSnippetContent = ['product_id' => 'test-dummy'];
         
-        $this->stubProductView->method('jsonSerialize')->willReturn($expectedJsonContent);
+        $this->stubProductView->method('jsonSerialize')->willReturn($expectedSnippetContent);
         
-        $snippetList = $this->snippetRenderer->render($this->stubProductView);
+        $result = $this->snippetRenderer->render($this->stubProductView);
         
-        $this->assertInstanceOf(SnippetList::class, $snippetList);
-        $this->assertCount(1, $snippetList);
-        $this->assertSnippetNumberContent(json_encode($expectedJsonContent), $snippetList, 0);
+        $this->assertCount(1, $result);
+        $this->assertEquals(json_encode($expectedSnippetContent), $result[0]->getContent());
     }
 }

@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\Projection\Projector;
-use LizardsAndPumpkins\SnippetList;
 use LizardsAndPumpkins\SnippetRendererCollection;
 
 /**
@@ -26,11 +25,9 @@ class ProductSearchAutosuggestionTemplateProjectorTest extends \PHPUnit_Framewor
     {
         $this->mockDataPoolWriter = $this->getMock(DataPoolWriter::class, [], [], '', false);
 
-        $stubSnippetList = $this->getMock(SnippetList::class, [], [], '', false);
-
         /** @var SnippetRendererCollection|\PHPUnit_Framework_MockObject_MockObject $stubSnippetRendererCollection */
         $stubSnippetRendererCollection = $this->getMock(SnippetRendererCollection::class, [], [], '', false);
-        $stubSnippetRendererCollection->method('render')->willReturn($stubSnippetList);
+        $stubSnippetRendererCollection->method('render')->willReturn([]);
 
         $this->projector = new ProductSearchAutosuggestionTemplateProjector(
             $this->mockDataPoolWriter,
@@ -43,11 +40,11 @@ class ProductSearchAutosuggestionTemplateProjectorTest extends \PHPUnit_Framewor
         $this->assertInstanceOf(Projector::class, $this->projector);
     }
 
-    public function testSnippetListIsWrittenIntoDataPool()
+    public function testSnippetsAreWrittenIntoDataPool()
     {
         $projectionSourceDataJson = 'whatever';
 
-        $this->mockDataPoolWriter->expects($this->once())->method('writeSnippetList');
+        $this->mockDataPoolWriter->expects($this->once())->method('writeSnippets');
 
         $this->projector->project($projectionSourceDataJson);
     }
