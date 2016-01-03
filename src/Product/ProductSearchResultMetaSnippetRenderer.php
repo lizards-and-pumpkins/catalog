@@ -7,17 +7,11 @@ use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Renderer\BlockRenderer;
 use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetKeyGenerator;
-use LizardsAndPumpkins\SnippetList;
 use LizardsAndPumpkins\SnippetRenderer;
 
 class ProductSearchResultMetaSnippetRenderer implements SnippetRenderer
 {
     const CODE = 'product_search_result';
-
-    /**
-     * @var SnippetList
-     */
-    private $snippetList;
 
     /**
      * @var SnippetKeyGenerator
@@ -35,12 +29,10 @@ class ProductSearchResultMetaSnippetRenderer implements SnippetRenderer
     private $contextSource;
 
     public function __construct(
-        SnippetList $snippetList,
         SnippetKeyGenerator $snippetKeyGenerator,
         BlockRenderer $blockRenderer,
         ContextSource $contextSource
     ) {
-        $this->snippetList = $snippetList;
         $this->snippetKeyGenerator = $snippetKeyGenerator;
         $this->blockRenderer = $blockRenderer;
         $this->contextSource = $contextSource;
@@ -48,21 +40,20 @@ class ProductSearchResultMetaSnippetRenderer implements SnippetRenderer
 
     /**
      * @param mixed $dataObject
-     * @return SnippetList
+     * @return Snippet[]
      */
     public function render($dataObject)
     {
         // todo: important! Use data version from $dataObject
-        foreach ($this->contextSource->getAllAvailableContexts() as $context) {
-            $this->renderMetaInfoSnippetForContext($dataObject, $context);
-        }
-
-        return $this->snippetList;
+        return array_map(function (Context $context) use ($dataObject) {
+            return $this->renderMetaInfoSnippetForContext($dataObject, $context);
+        }, $this->contextSource->getAllAvailableContexts());
     }
 
     /**
      * @param mixed $dataObject
      * @param Context $context
+     * @return Snippet
      */
     private function renderMetaInfoSnippetForContext($dataObject, Context $context)
     {
@@ -73,7 +64,8 @@ class ProductSearchResultMetaSnippetRenderer implements SnippetRenderer
 
         $metaSnippetKey = $this->snippetKeyGenerator->getKeyForContext($context, []);
         $metaSnippetContent = $this->getMetaSnippetContentJson($rootSnippetCode, $pageSnippetCodes);
-        $this->snippetList->add(Snippet::create($metaSnippetKey, $metaSnippetContent));
+
+        return Snippet::create($metaSnippetKey, $metaSnippetContent);
     }
 
     /**

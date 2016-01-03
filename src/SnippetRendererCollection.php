@@ -5,35 +5,26 @@ namespace LizardsAndPumpkins;
 class SnippetRendererCollection
 {
     /**
-     * @var SnippetList
-     */
-    private $snippetList;
-
-    /**
      * @var SnippetRenderer[]
      */
     private $renderers = [];
 
     /**
      * @param SnippetRenderer[] $renderers
-     * @param SnippetList $snippetList
      */
-    public function __construct(array $renderers, SnippetList $snippetList)
+    public function __construct(array $renderers)
     {
         $this->renderers = $renderers;
-        $this->snippetList = $snippetList;
     }
     
     /**
-     * @param mixed $projectionSourceData
-     * @return SnippetList
+     * @param mixed $projectionData
+     * @return Snippet[]
      */
-    public function render($projectionSourceData)
+    public function render($projectionData)
     {
-        foreach ($this->renderers as $renderer) {
-            $this->snippetList->merge($renderer->render($projectionSourceData));
-        }
-
-        return $this->snippetList;
+        return array_reduce($this->renderers, function (array $carry, SnippetRenderer $renderer) use ($projectionData) {
+            return array_merge($carry, $renderer->render($projectionData));
+        }, []);
     }
 }

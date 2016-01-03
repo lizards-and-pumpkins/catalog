@@ -2,13 +2,11 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\Product\Composite\AssociatedProductList;
 use LizardsAndPumpkins\Projection\Catalog\CompositeProductView;
 use LizardsAndPumpkins\Projection\Catalog\InternalToPublicProductJsonData;
 use LizardsAndPumpkins\Projection\Catalog\ProductView;
 use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetKeyGenerator;
-use LizardsAndPumpkins\SnippetList;
 use LizardsAndPumpkins\SnippetRenderer;
 
 class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
@@ -43,19 +41,14 @@ class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
 
     /**
      * @param ProductView $product
-     * @return SnippetList
+     * @return Snippet[]
      */
     public function render(ProductView $product)
     {
-        $snippetList = new SnippetList();
-
-        $variationAttributesJsonSnippet = $this->createVariationAttributesJsonSnippet($product);
-        $snippetList->add($variationAttributesJsonSnippet);
-
-        $associatedProductsJsonSnippet = $this->createAssociatedProductsJsonSnippet($product);
-        $snippetList->add($associatedProductsJsonSnippet);
-
-        return $snippetList;
+        return [
+            $this->createVariationAttributesJsonSnippet($product),
+            $this->createAssociatedProductsJsonSnippet($product)
+        ];
     }
 
     /**

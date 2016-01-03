@@ -143,7 +143,6 @@ use LizardsAndPumpkins\Website\HostToWebsiteMap;
  * @uses   \LizardsAndPumpkins\Renderer\ThemeLocator
  * @uses   \LizardsAndPumpkins\Renderer\Translation\CsvTranslator
  * @uses   \LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry
- * @uses   \LizardsAndPumpkins\SnippetList
  * @uses   \LizardsAndPumpkins\EnvironmentConfigReader
  * @uses   \LizardsAndPumpkins\Utils\LocalFilesystem
  * @uses   \LizardsAndPumpkins\Website\ConfigurableHostToWebsiteMap
@@ -202,12 +201,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createProductProjector();
         $this->assertInstanceOf(ProductProjector::class, $result);
-    }
-
-    public function testSnippetListIsReturned()
-    {
-        $result = $this->commonFactory->createSnippetList();
-        $this->assertInstanceOf(SnippetList::class, $result);
     }
 
     public function testProductDetailViewSnippetKeyGeneratorIsReturned()

@@ -9,7 +9,6 @@ use LizardsAndPumpkins\DataPool\Stub\ClearableStubUrlKeyStore;
 use LizardsAndPumpkins\Projection\UrlKeyForContext;
 use LizardsAndPumpkins\Projection\UrlKeyForContextCollection;
 use LizardsAndPumpkins\Snippet;
-use LizardsAndPumpkins\SnippetList;
 use LizardsAndPumpkins\Utils\Clearable;
 
 /**
@@ -37,23 +36,16 @@ class DataPoolWriterTest extends AbstractDataPoolTest
         );
     }
 
-    public function testSnippetListIsWrittenToDataPool()
+    public function testSnippetsIsWrittenToDataPool()
     {
         $testKey = 'test-key';
         $testContent = 'test-content';
 
-        $mockSnippet = $this->getMockSnippet($testKey, $testContent);
+        $stubSnippet = $this->getMockSnippet($testKey, $testContent);
 
-        $mockSnippetList = $this->getMock(SnippetList::class, [], [], '', false);
-        $mockSnippetList->expects($this->once())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$mockSnippet]));
+        $this->getMockKeyValueStore()->expects($this->once())->method('set')->with($testKey, $testContent);
 
-        $this->getMockKeyValueStore()->expects($this->once())
-            ->method('set')
-            ->with($testKey, $testContent);
-
-        $this->dataPoolWriter->writeSnippetList($mockSnippetList);
+        $this->dataPoolWriter->writeSnippets($stubSnippet);
     }
 
     public function testSearchDocumentCollectionIsWrittenToDataPool()
@@ -65,20 +57,6 @@ class DataPoolWriterTest extends AbstractDataPoolTest
             ->with($stubSearchDocumentCollection);
 
         $this->dataPoolWriter->writeSearchDocumentCollection($stubSearchDocumentCollection);
-    }
-
-    public function testSnippetIsWrittenToDataPool()
-    {
-        $testKey = 'test-key';
-        $testContent = 'test-content';
-
-        $mockSnippet = $this->getMockSnippet($testKey, $testContent);
-
-        $this->getMockKeyValueStore()->expects($this->once())
-            ->method('set')
-            ->with($testKey, $testContent);
-
-        $this->dataPoolWriter->writeSnippet($mockSnippet);
     }
 
     /**

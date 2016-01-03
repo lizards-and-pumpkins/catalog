@@ -7,7 +7,6 @@ use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer;
 use LizardsAndPumpkins\SnippetKeyGenerator;
-use LizardsAndPumpkins\SnippetList;
 use LizardsAndPumpkins\SnippetRenderer;
 use LizardsAndPumpkins\Snippet;
 
@@ -30,18 +29,11 @@ class ProductListingCriteriaSnippetRenderer implements SnippetRenderer
      */
     private $contextBuilder;
 
-    /**
-     * @var SnippetList
-     */
-    private $snippetList;
-
     public function __construct(
-        SnippetList $snippetList,
         ProductListingBlockRenderer $blockRenderer,
         SnippetKeyGenerator $snippetKeyGenerator,
         ContextBuilder $contextBuilder
     ) {
-        $this->snippetList = $snippetList;
         $this->blockRenderer = $blockRenderer;
         $this->snippetKeyGenerator = $snippetKeyGenerator;
         $this->contextBuilder = $contextBuilder;
@@ -49,7 +41,7 @@ class ProductListingCriteriaSnippetRenderer implements SnippetRenderer
 
     /**
      * @param ProductListingCriteria $productListingCriteria
-     * @return SnippetList
+     * @return Snippet[]
      */
     public function render(ProductListingCriteria $productListingCriteria)
     {
@@ -60,11 +52,10 @@ class ProductListingCriteriaSnippetRenderer implements SnippetRenderer
 
         $metaDataSnippetKey = $this->getProductListingMetaDataSnippetKey($productListingCriteria, $context);
         $metaDataSnippetContent = $this->getProductListingPageMetaInfoSnippetContent($productListingCriteria);
-        $snippet = Snippet::create($metaDataSnippetKey, $metaDataSnippetContent);
 
-        $this->snippetList->add($snippet);
-
-        return $this->snippetList;
+        return [
+            Snippet::create($metaDataSnippetKey, $metaDataSnippetContent)
+        ];
     }
 
     /**

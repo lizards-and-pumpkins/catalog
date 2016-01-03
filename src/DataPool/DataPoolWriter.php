@@ -10,7 +10,6 @@ use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 use LizardsAndPumpkins\Projection\UrlKeyForContext;
 use LizardsAndPumpkins\Projection\UrlKeyForContextCollection;
 use LizardsAndPumpkins\Snippet;
-use LizardsAndPumpkins\SnippetList;
 use LizardsAndPumpkins\Utils\Clearable;
 
 class DataPoolWriter implements Clearable
@@ -37,14 +36,12 @@ class DataPoolWriter implements Clearable
         $this->urlKeyStorage = $urlKeyStorage;
     }
 
-    public function writeSnippetList(SnippetList $snippetList)
+    public function writeSnippets(Snippet ...$snippets)
     {
-        foreach ($snippetList as $snippet) {
-            $this->writeSnippet($snippet);
-        }
+        array_map([$this, 'writeSnippet'], $snippets);
     }
 
-    public function writeSnippet(Snippet $snippet)
+    private function writeSnippet(Snippet $snippet)
     {
         $this->keyValueStore->set($snippet->getKey(), $snippet->getContent());
     }

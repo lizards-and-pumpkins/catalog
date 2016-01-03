@@ -29,7 +29,7 @@ class ProductSearchAutosuggestionTemplateProjector implements Projector
      */
     public function project($projectionSourceData)
     {
-        $snippetList = $this->snippetRendererCollection->render($projectionSourceData);
-        $this->dataPoolWriter->writeSnippetList($snippetList);
+        $snippets = $this->snippetRendererCollection->render($projectionSourceData);
+        $this->dataPoolWriter->writeSnippets(...$snippets);
     }
 }

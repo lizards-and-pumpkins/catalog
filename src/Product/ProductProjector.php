@@ -65,8 +65,8 @@ class ProductProjector implements Projector
 
     private function projectProductView(ProductView $product)
     {
-        $snippetList = $this->rendererCollection->render($product);
-        $this->dataPoolWriter->writeSnippetList($snippetList);
+        $snippets = $this->rendererCollection->render($product);
+        $this->dataPoolWriter->writeSnippets(...$snippets);
     }
 
     private function aggregateSearchDocuments(Product $product)
